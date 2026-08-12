@@ -1,0 +1,115 @@
+---
+import '@busy-office/ui/css';
+const { title } = Astro.props;
+const pages = [
+  { href: '/', label: 'Overview', icon: '⌂' },
+  { href: '/tokens', label: 'Tokens', icon: '◧' },
+  { href: '/primitives', label: 'Primitives', icon: '▦' },
+  { href: '/components/button', label: 'Button', icon: '▢' },
+  { href: '/components/badge', label: 'Badge', icon: '◉' },
+  { href: '/components/form', label: 'Forms', icon: '✎' },
+  { href: '/components/data-table', label: 'Data table', icon: '▤' },
+  { href: '/components/pagination', label: 'Pagination', icon: '⋯' },
+  { href: '/components/filters', label: 'Filters', icon: '◪' },
+  { href: '/components/tabs', label: 'Tabs', icon: '⊟' },
+  { href: '/components/dropdown', label: 'Dropdown', icon: '▾' },
+  { href: '/components/alerts', label: 'Alerts & toasts', icon: '◈' },
+  { href: '/components/nav', label: 'Navigation', icon: '☰' },
+  { href: '/components/dialog', label: 'Dialog', icon: '❐' },
+  { href: '/components/dashboard', label: 'Dashboard', icon: '▥' },
+  { href: '/patterns/invoice-list', label: 'Pattern: Invoices', icon: '⧉' },
+  { href: '/patterns/approval', label: 'Pattern: Approval', icon: '✓' },
+  { href: '/htmx', label: 'Using with HTMX', icon: '⇄' },
+  { href: '/theming', label: 'Theming guide', icon: '◨' },
+  { href: '/printing', label: 'Print & reports', icon: '⎙' },
+];
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<html lang="en" data-density="comfortable">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · busy-office-ui</title>
+  </head>
+  <body>
+    <div class="eof-app-shell">
+      <header class="eof-navbar eof-app-shell__header">
+        <a class="eof-navbar__brand" href="/">busy-office-ui</a>
+        <span class="eof-badge eof-badge--accent">v0.1.0</span>
+        <span class="eof-navbar__spacer"></span>
+        <label class="eof-choice" for="density">Density
+          <select class="eof-select" id="density" style="inline-size: auto">
+            <option value="compact">Compact</option>
+            <option value="comfortable" selected>Comfortable</option>
+            <option value="spacious">Spacious</option>
+          </select>
+        </label>
+        <label class="eof-choice" for="theme">Theme
+          <select class="eof-select" id="theme" style="inline-size: auto">
+            <option value="light" selected>Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </header>
+      <nav class="eof-sidebar-nav eof-app-shell__sidebar" aria-label="Docs">
+        <div class="eof-sidebar-nav__section">
+          <div class="eof-sidebar-nav__heading">Gallery</div>
+          <ul>
+            {pages.map((p) => (
+              <li>
+                <a
+                  class="eof-sidebar-nav__link"
+                  href={p.href}
+                  aria-current={current === p.href ? 'page' : undefined}
+                >
+                  <span class="eof-sidebar-nav__icon" aria-hidden="true">{p.icon}</span>
+                  <span class="eof-sidebar-nav__label">{p.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+      <main class="eof-app-shell__main">
+        <div class="eof-stack eof-stack--loose">
+          <h1>{title}</h1>
+          <slot />
+        </div>
+      </main>
+    </div>
+    <script>
+      // The documented 3-line density-toggle recipe.
+      const sel = document.getElementById('density') as HTMLSelectElement;
+      sel.value = localStorage.getItem('eof-density') ?? 'comfortable';
+      document.documentElement.dataset.density = sel.value;
+      sel.addEventListener('change', () => {
+        document.documentElement.dataset.density = sel.value;
+        localStorage.setItem('eof-density', sel.value);
+      });
+      // Theme toggle: same shape — one attribute, one storage key.
+      const theme = document.getElementById('theme') as HTMLSelectElement;
+      theme.value = localStorage.getItem('eof-theme') ?? 'light';
+      document.documentElement.dataset.theme = theme.value;
+      theme.addEventListener('change', () => {
+        document.documentElement.dataset.theme = theme.value;
+        localStorage.setItem('eof-theme', theme.value);
+      });
+    </script>
+  </body>
+</html>
+<style is:global>
+  /* Docs-only chrome, written unlayered on purpose to demo the override rule. */
+  .demo-note {
+    padding: 0.75rem 1rem;
+    border-inline-start: 3px solid var(--eof-color-accent);
+    background: var(--eof-color-accent-subtle);
+    border-radius: var(--eof-radius-sm);
+    font-size: var(--eof-font-size-sm);
+  }
+  section.demo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .demo h2 { font-size: var(--eof-font-size-lg); }
+</style>

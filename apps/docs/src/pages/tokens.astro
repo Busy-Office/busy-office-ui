@@ -1,0 +1,37 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+const colors = [
+  'bg-canvas', 'bg-surface', 'bg-muted', 'bg-selected', 'border-default', 'border-strong',
+  'text-primary', 'text-secondary', 'text-muted', 'accent', 'accent-subtle',
+  'danger', 'danger-subtle', 'warning', 'warning-subtle', 'success', 'success-subtle',
+];
+const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12];
+---
+<Gallery title="Design tokens">
+  <section class="demo">
+    <h2>Semantic colors</h2>
+    <div class="eof-grid" style="--eof-grid-min: 11rem">
+      {colors.map((c) => (
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <span style={`inline-size:2rem;block-size:2rem;border-radius:var(--eof-radius-sm);border:1px solid var(--eof-color-border-strong);background:var(--eof-color-${c})`}></span>
+          <code style="font-size:var(--eof-font-size-xs)">--eof-color-{c}</code>
+        </div>
+      ))}
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Spacing scale</h2>
+    {spaces.map((s) => (
+      <div style="display:flex;align-items:center;gap:1rem">
+        <code style="inline-size:8rem;font-size:var(--eof-font-size-xs)">--eof-space-{s}</code>
+        <span style={`display:inline-block;block-size:0.75rem;background:var(--eof-color-accent);inline-size:var(--eof-space-${s})`}></span>
+      </div>
+    ))}
+  </section>
+  <section class="demo">
+    <h2>Density aliases</h2>
+    <p class="demo-note">Components size themselves from <code>--eof-density-*</code>
+    aliases only. Flip the header selector and watch the control below.</p>
+    <button class="eof-btn">Density-aware control</button>
+  </section>
+</Gallery>

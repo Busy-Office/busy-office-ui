@@ -1,0 +1,112 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const statMarkup = `<div class="eof-widget">
+  <div class="eof-stat">
+    <span class="eof-stat__label">Open invoices</span>
+    <span class="eof-stat__value">1,284</span>
+    <span class="eof-stat__delta eof-stat__delta--bad">
+      <span aria-hidden="true">▲</span> +12%
+      <span aria-hidden="true">⚠</span>
+      <span class="eof-visually-hidden">increase, worse,</span> vs July
+    </span>
+  </div>
+</div>
+<!-- Valence has two channels: the visible ⚠ on BAD deltas (arrow + sign only
+     carry direction — a colorblind reader can't tell good ▲ from bad ▲) and
+     the visually-hidden text for screen readers. Glyphs are aria-hidden so
+     AT hears "+12%, increase, worse, vs July" without triangle noise. -->`;
+---
+<Gallery title="Dashboard">
+  <p class="demo-note">
+    Widgets are named containers: a table inside a half-width widget auto-compacts
+    while the same table full-width does not. Stat values use proportional figures
+    (<code>tabular-nums</code> is reserved for columns); compact big values
+    server-side (12.9K, $4.2M). One hero figure per view, maximum.
+  </p>
+  <section class="demo">
+    <div class="eof-widget-grid" style="--eof-widget-min: 13rem">
+      <div class="eof-widget">
+        <div class="eof-stat">
+          <span class="eof-stat__label">Open invoices</span>
+          <span class="eof-stat__value">1,284</span>
+          <span class="eof-stat__delta eof-stat__delta--bad"><span aria-hidden="true">▲</span> +12% <span aria-hidden="true">⚠</span><span class="eof-visually-hidden">increase, worse,</span> vs July</span>
+        </div>
+      </div>
+      <div class="eof-widget">
+        <div class="eof-stat">
+          <span class="eof-stat__label">Approved this week</span>
+          <span class="eof-stat__value">$412K</span>
+          <span class="eof-stat__delta eof-stat__delta--good"><span aria-hidden="true">▲</span> +8% <span class="eof-visually-hidden">increase, better,</span> vs last week</span>
+        </div>
+      </div>
+      <div class="eof-widget">
+        <div class="eof-stat">
+          <span class="eof-stat__label">Avg. approval time</span>
+          <span class="eof-stat__value">2.4d</span>
+          <span class="eof-stat__delta eof-stat__delta--good"><span aria-hidden="true">▼</span> −0.6d <span class="eof-visually-hidden">decrease, better,</span> vs Q2</span>
+        </div>
+      </div>
+      <div class="eof-widget">
+        <div class="eof-stat">
+          <span class="eof-stat__label">Blocked</span>
+          <span class="eof-stat__value">17</span>
+          <span class="eof-stat__delta">unchanged vs July</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Hero figure + span-2 widget</h2>
+    <div class="eof-widget-grid" style="--eof-widget-min: 13rem">
+      <div class="eof-widget eof-widget--span-2">
+        <div class="eof-stat eof-stat--hero">
+          <span class="eof-stat__label">Awaiting your approval</span>
+          <span class="eof-stat__value">23</span>
+          <span class="eof-stat__delta eof-stat__delta--bad"><span aria-hidden="true">▲</span> +6 <span aria-hidden="true">⚠</span><span class="eof-visually-hidden">increase, worse,</span> since yesterday</span>
+        </div>
+      </div>
+      <div class="eof-widget">
+        <div class="eof-stat">
+          <span class="eof-stat__label">Oldest waiting</span>
+          <span class="eof-stat__value">9d</span>
+        </div>
+      </div>
+    </div>
+    <p class="eof-u-text-muted">The hero tile spans two columns
+    (<code>.eof-widget--span-2</code>) and collapses to one when the <em>grid</em>
+    (a named container) drops below its two-column width. One hero per view, max.</p>
+  </section>
+  <section class="demo">
+    <h2>Widget with an embedded table (container-driven compaction)</h2>
+    <div class="eof-widget-grid">
+      <div class="eof-widget">
+        <div class="eof-widget__header">
+          <span class="eof-widget__title">Pending approvals</span>
+          <a href="#" class="eof-u-text-muted" style="font-size: var(--eof-font-size-xs)">View all</a>
+        </div>
+        <div class="eof-widget__body eof-widget__body--flush">
+          <div class="eof-data-table-container" style="border: none">
+            <table class="eof-data-table">
+              <thead><tr><th scope="col">Invoice #</th><th scope="col">Vendor</th><th scope="col" class="eof-data-table__col--secondary">Cost center</th><th scope="col" class="eof-data-table__col--numeric">Amount</th></tr></thead>
+              <tbody>
+                <tr><td class="eof-data-table__col--code">INV-10234</td><td>Acme Supply Co.</td><td class="eof-data-table__col--secondary">CC-4021</td><td class="eof-data-table__col--numeric">$4,208.00</td></tr>
+                <tr><td class="eof-data-table__col--code">INV-10237</td><td>Umbrella Logistics</td><td class="eof-data-table__col--secondary">CC-2205</td><td class="eof-data-table__col--numeric">$2,110.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="eof-widget">
+        <div class="eof-widget__header"><span class="eof-widget__title">Notes</span></div>
+        <div class="eof-widget__body">
+          <p class="eof-u-text-muted">Resize the window: the table's secondary column
+          hides when its <em>widget</em> gets narrow — container queries, not media queries.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{statMarkup}</code></pre>
+  </section>
+</Gallery>

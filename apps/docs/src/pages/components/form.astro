@@ -1,0 +1,89 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const fieldMarkup = `<div class="eof-form-field">
+  <label class="eof-form-field__label" for="cc">Cost center</label>
+  <input class="eof-input eof-input--code" id="cc" required
+         aria-invalid="true" aria-describedby="cc-error" value="CC-XXXX" />
+  <span class="eof-form-field__message" id="cc-error" role="alert">
+    Unknown cost center code
+  </span>
+</div>
+<!-- CSS shows the error visuals; aria-describedby + role="alert" make it
+     announced. Both halves are the contract, not just the :has() trick. -->`;
+---
+<Gallery title="Forms">
+  <section class="demo">
+    <h2>Fields (error styling is pure CSS via <code>:has()</code>)</h2>
+    <form class="eof-form-row" novalidate>
+      <div class="eof-form-field">
+        <label class="eof-form-field__label" for="vendor">Vendor</label>
+        <input class="eof-input" id="vendor" required aria-describedby="vendor-hint" placeholder="Acme Supply Co." />
+        <span class="eof-form-field__hint" id="vendor-hint">Registered vendor name (required — note the automatic asterisk)</span>
+      </div>
+      <div class="eof-form-field">
+        <label class="eof-form-field__label" for="amount">Amount</label>
+        <input class="eof-input eof-input--numeric" id="amount" inputmode="decimal" value="4,208.00" />
+      </div>
+      <div class="eof-form-field">
+        <label class="eof-form-field__label" for="cc">Cost center</label>
+        <input class="eof-input eof-input--code" id="cc" required aria-invalid="true" aria-describedby="cc-error" value="CC-XXXX" />
+        <span class="eof-form-field__message" id="cc-error" role="alert">Unknown cost center code</span>
+      </div>
+      <div class="eof-form-field">
+        <label class="eof-form-field__label" for="status">Status</label>
+        <select class="eof-select" id="status">
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+        </select>
+      </div>
+    </form>
+  </section>
+  <section class="demo">
+    <h2>Markup — the canonical field recipe</h2>
+    <pre><code>{fieldMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Detail-form sections (real fieldsets) + sticky action bar</h2>
+    <form>
+      <fieldset class="eof-form-section">
+        <legend class="eof-form-section__legend">Vendor details</legend>
+        <div class="eof-form-row">
+          <div class="eof-form-field">
+            <label class="eof-form-field__label" for="fs-name">Name</label>
+            <input class="eof-input" id="fs-name" />
+          </div>
+          <div class="eof-form-field">
+            <label class="eof-form-field__label" for="fs-vat">VAT ID</label>
+            <input class="eof-input eof-input--code" id="fs-vat" />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="eof-form-section">
+        <legend class="eof-form-section__legend">Payment terms</legend>
+        <div class="eof-form-row">
+          <div class="eof-form-field">
+            <label class="eof-form-field__label" for="fs-terms">Terms</label>
+            <select class="eof-select" id="fs-terms"><option>Net 30</option><option>Net 60</option></select>
+          </div>
+        </div>
+      </fieldset>
+      <div class="eof-form-actions">
+        <button class="eof-btn eof-btn--secondary" type="button">Cancel</button>
+        <button class="eof-btn" type="submit">Save vendor</button>
+      </div>
+    </form>
+    <p class="eof-u-text-muted">The action bar is sticky; the framework sets
+    <code>scroll-padding-block-end</code> on the scroll container so keyboard focus is
+    never hidden underneath it.</p>
+  </section>
+  <section class="demo">
+    <h2>Choices</h2>
+    <div class="eof-cluster">
+      <label class="eof-choice"><input type="checkbox" class="eof-checkbox" checked /> Notify approver</label>
+      <label class="eof-choice"><input type="checkbox" class="eof-checkbox" disabled /> Disabled option</label>
+      <label class="eof-choice"><input type="radio" name="pri" class="eof-radio" checked /> Normal</label>
+      <label class="eof-choice"><input type="radio" name="pri" class="eof-radio" /> Urgent</label>
+    </div>
+  </section>
+</Gallery>

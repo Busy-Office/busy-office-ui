@@ -1,0 +1,46 @@
+@layer eof-components {
+  /* Detail-form structure: fieldset-based sections for multi-column ERP
+     detail screens. Pair with .eof-form-row for the column grid. */
+  .eof-form-section {
+    border: var(--eof-border-width) solid var(--eof-color-border-default);
+    border-radius: var(--eof-radius-md);
+    background: var(--eof-color-bg-surface);
+    padding: var(--eof-space-4) var(--eof-space-6) var(--eof-space-2);
+    margin: 0 0 var(--eof-density-field-gap);
+    min-inline-size: 0;
+  }
+
+  .eof-form-section__legend {
+    padding-inline: var(--eof-space-2);
+    font-size: var(--eof-font-size-sm);
+    font-weight: var(--eof-font-weight-semibold);
+    color: var(--eof-color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Sticky action bar for long detail forms. The scroll-padding rules keep a
+     keyboard-focused field from scrolling UNDER the opaque bar (WCAG 2.4.11
+     Focus Not Obscured). */
+  html:has(.eof-form-actions),
+  .eof-app-shell__main:has(.eof-form-actions) {
+    scroll-padding-block-end: 6rem;
+  }
+
+  .eof-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--eof-space-2);
+    padding: var(--eof-space-3) 0;
+    position: sticky;
+    inset-block-end: 0;
+    background: var(--eof-color-bg-canvas);
+    border-block-start: var(--eof-border-width) solid var(--eof-color-border-default);
+  }
+
+  @media print {
+    .eof-form-actions {
+      display: none;
+    }
+  }
+}

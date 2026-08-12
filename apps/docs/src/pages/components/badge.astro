@@ -1,0 +1,31 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const badgeMarkup = `<span class="eof-badge">Neutral (default)</span>
+<span class="eof-badge eof-badge--success">Approved</span>
+<span class="eof-badge eof-badge--warning">Pending</span>
+<span class="eof-badge eof-badge--danger">Rejected</span>
+<span class="eof-badge eof-badge--accent">In review</span>`;
+---
+<Gallery title="Badge">
+  <p class="demo-note">
+    Status badges for approval states and document statuses. The bare
+    <code>.eof-badge</code> is the neutral tone. Foregrounds use the
+    <code>--eof-color-*-text</code> tokens, which remap in dark mode to stay AA.
+    A badge is decoration for sighted users — the status text itself is the
+    accessible signal, so never encode status as color alone.
+  </p>
+  <section class="demo">
+    <h2>Tones</h2>
+    <div class="eof-cluster">
+      <span class="eof-badge">Neutral</span>
+      <span class="eof-badge eof-badge--success">Approved</span>
+      <span class="eof-badge eof-badge--warning">Pending</span>
+      <span class="eof-badge eof-badge--danger">Rejected</span>
+      <span class="eof-badge eof-badge--accent">In review</span>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{badgeMarkup}</code></pre>
+  </section>
+</Gallery>

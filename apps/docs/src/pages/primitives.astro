@@ -1,0 +1,47 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+const shellMarkup = `<div class="eof-app-shell">          <!-- container: eof-shell -->
+  <header class="eof-navbar eof-app-shell__header">…</header>
+  <nav class="eof-sidebar-nav eof-app-shell__sidebar">…</nav>
+  <main class="eof-app-shell__main">…</main>
+</div>`;
+---
+<Gallery title="Layout primitives">
+  <p class="demo-note">
+    Every screen is composed from four primitives plus the app shell. Knobs are
+    custom properties set inline or in your own CSS:
+    <code>--eof-stack-gap</code>, <code>--eof-cluster-gap</code>,
+    <code>--eof-grid-min</code>, <code>--eof-grid-gap</code>.
+  </p>
+  <section class="demo">
+    <h2><code>.eof-stack</code> — vertical flow (<code>--tight</code>/<code>--loose</code>)</h2>
+    <div class="eof-stack eof-stack--tight" style="max-inline-size: 20rem">
+      <button class="eof-btn eof-btn--secondary">One</button>
+      <button class="eof-btn eof-btn--secondary">Two</button>
+    </div>
+  </section>
+  <section class="demo">
+    <h2><code>.eof-cluster</code> — wrapping toolbar row (<code>--split</code>/<code>--end</code>)</h2>
+    <div class="eof-cluster">
+      <button class="eof-btn">Save</button>
+      <button class="eof-btn eof-btn--secondary">Cancel</button>
+      <span class="eof-badge eof-badge--warning">Draft</span>
+    </div>
+  </section>
+  <section class="demo">
+    <h2><code>.eof-grid</code> — auto-fill card grid (<code>--eof-grid-min</code>)</h2>
+    <div class="eof-grid" style="--eof-grid-min: 10rem">
+      {[1, 2, 3, 4].map((n) => (
+        <div style="border:1px solid var(--eof-color-border-default);border-radius:var(--eof-radius-md);padding:var(--eof-space-4)">Card {n}</div>
+      ))}
+    </div>
+  </section>
+  <section class="demo">
+    <h2><code>.eof-app-shell</code> — header/sidebar/main + container queries</h2>
+    <pre><code>{shellMarkup}</code></pre>
+    <p class="eof-u-text-muted">The shell is a named container (<code>eof-shell</code>);
+    the sidebar collapses to icon-only below 900px of <em>shell</em> width. Labels stay
+    in the accessibility tree when collapsed. <code>.eof-visually-hidden</code> is also
+    available for your own screen-reader-only text.</p>
+  </section>
+</Gallery>

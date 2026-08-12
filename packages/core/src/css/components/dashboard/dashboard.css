@@ -1,0 +1,115 @@
+@layer eof-components {
+  /* Widget grid. BOTH levels are NAMED containers (build rule: every
+     @container in this codebase is named — bare queries resolve against
+     surprise ancestors):
+     - eof-widget-grid: the grid itself, queried by layout rules like the
+       span-2 collapse (an item cannot query its own grid otherwise);
+     - eof-widget: each widget, so components inside (tables!) respond to
+       WIDGET width — a table in a half-width widget auto-compacts while the
+       same table full-width does not. */
+  .eof-widget-grid {
+    container-type: inline-size;
+    container-name: eof-widget-grid;
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(var(--eof-widget-min, 20rem), 100%), 1fr)
+    );
+    gap: var(--eof-space-4);
+  }
+
+  .eof-widget {
+    container-type: inline-size;
+    container-name: eof-widget;
+    display: flex;
+    flex-direction: column;
+    border: var(--eof-border-width) solid var(--eof-color-border-default);
+    border-radius: var(--eof-radius-md);
+    background: var(--eof-color-bg-surface);
+    min-inline-size: 0;
+  }
+
+  .eof-widget--span-2 {
+    grid-column: span 2;
+  }
+
+  .eof-widget__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--eof-space-2);
+    padding: var(--eof-space-3) var(--eof-space-4);
+    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+  }
+
+  .eof-widget__title {
+    font-size: var(--eof-font-size-sm);
+    font-weight: var(--eof-font-weight-semibold);
+    color: var(--eof-color-text-secondary);
+  }
+
+  .eof-widget__body {
+    padding: var(--eof-space-4);
+    min-block-size: 0;
+  }
+
+  .eof-widget__body--flush {
+    padding: 0;
+  }
+
+  /* Collapse span-2 when the GRID drops below two columns (2 x 20rem min
+     + 1rem gap = 41rem) — otherwise span 2 in a 1-column auto-fill grid
+     forces a phantom implicit track. */
+  @container eof-widget-grid (max-width: 41rem) {
+    .eof-widget--span-2 {
+      grid-column: auto;
+    }
+  }
+
+  /* Stat tile. Contract: label (sentence case) · value (semibold,
+     PROPORTIONAL figures — tabular-nums makes standalone numbers look loose;
+     compact the value server-side: 12.9K, $4.2M) · optional delta (signed,
+     vs a named period; tone = direction x whether up is GOOD).
+     Valence needs TWO channels: arrow+sign carry direction only, so BAD
+     deltas add a visible ⚠ glyph (aria-hidden) for sighted colorblind users
+     AND visually-hidden text ("increase, worse,") for screen readers. */
+  .eof-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--eof-space-1);
+    padding: var(--eof-space-4);
+  }
+
+  .eof-stat__label {
+    font-size: var(--eof-font-size-sm);
+    color: var(--eof-color-text-secondary);
+  }
+
+  .eof-stat__value {
+    font-size: var(--eof-font-size-xl);
+    font-weight: var(--eof-font-weight-semibold);
+    line-height: var(--eof-line-height-tight);
+    color: var(--eof-color-text-primary);
+    font-variant-numeric: normal;
+  }
+
+  .eof-stat--hero .eof-stat__value {
+    font-size: 3rem;
+  }
+
+  .eof-stat__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--eof-space-1);
+    font-size: var(--eof-font-size-xs);
+    color: var(--eof-color-text-secondary);
+  }
+
+  .eof-stat__delta--good {
+    color: var(--eof-color-success-text);
+  }
+
+  .eof-stat__delta--bad {
+    color: var(--eof-color-danger-text);
+  }
+}

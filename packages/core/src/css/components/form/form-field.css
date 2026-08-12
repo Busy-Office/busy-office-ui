@@ -1,0 +1,80 @@
+@layer eof-components {
+  /* Field wrapper: label + control + optional hint/error message.
+     Error visuals are driven by :has() over native validity or aria-invalid —
+     no JS class toggling needed. */
+  .eof-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--eof-space-1);
+    margin-block-end: var(--eof-density-field-gap);
+  }
+
+  .eof-form-field__label {
+    font-size: var(--eof-density-font-size);
+    font-weight: var(--eof-font-weight-medium);
+    color: var(--eof-color-text-primary);
+  }
+
+  /* Required marker: driven by a real [required]/[aria-required] control
+     anywhere inside the field (matches label+input siblings AND wrapped
+     controls), or by the explicit --required modifier. The alt-text form
+     keeps "star" noise out of screen readers — requiredness must ALSO be on
+     the control itself (required or aria-required), which these selectors
+     presuppose. */
+  .eof-form-field:has(:required, [aria-required="true"]) .eof-form-field__label::after,
+  .eof-form-field--required .eof-form-field__label::after {
+    content: " *" / "";
+    color: var(--eof-color-danger);
+  }
+
+  .eof-form-field__hint {
+    font-size: var(--eof-font-size-xs);
+    color: var(--eof-color-text-muted);
+  }
+
+  .eof-form-field__message {
+    display: none;
+    font-size: var(--eof-font-size-xs);
+    color: var(--eof-state-error-color);
+  }
+
+  /* Error visuals. Two SEPARATE :has() rules on purpose: :has() argument
+     lists are unforgiving, so putting :user-invalid in the same list as
+     [aria-invalid] would kill the aria path in browsers that support :has()
+     but not :user-invalid (Chrome 105-118, Safari 15.4-17.3).
+     NOTE (a11y contract): CSS only covers the VISUALS. The message element
+     must carry an id referenced by the control's aria-describedby, and
+     role="alert" if it appears dynamically — see the form docs recipe. */
+  .eof-form-field:has([aria-invalid="true"]),
+  .eof-form-field:has(input:user-invalid, select:user-invalid, textarea:user-invalid) {
+    .eof-form-field__message {
+      display: block;
+    }
+
+    .eof-input,
+    .eof-select {
+      --eof-input-border: var(--eof-state-error-color);
+      --eof-select-border: var(--eof-state-error-color);
+    }
+
+    .eof-form-field__label {
+      color: var(--eof-state-error-color);
+    }
+  }
+
+  /* No-:has() fallback: server-rendered aria-invalid still reveals the
+     message when it follows the control as a sibling. */
+  [aria-invalid="true"] ~ .eof-form-field__message {
+    display: block;
+  }
+
+  /* Horizontal form row for dense detail screens. */
+  .eof-form-row {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(14rem, 100%), 1fr)
+    );
+    column-gap: var(--eof-space-4);
+  }
+}

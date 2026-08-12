@@ -1,0 +1,60 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search" sits on it. -->
+<form class="eof-filter-bar" role="search" aria-label="Invoice filters">
+  <input class="eof-input" type="search" name="q" aria-label="Search invoices" />
+  <select class="eof-select" name="status" aria-label="Status">…</select>
+  <span class="eof-chip eof-chip--active">Status: Pending
+    <button class="eof-chip__remove" type="button"
+            aria-label="Remove filter Status: Pending">✕</button>
+  </span>
+  <button class="eof-btn eof-btn--ghost" type="reset">Clear all</button>
+</form>`;
+---
+<Gallery title="Filters">
+  <p class="demo-note">
+    Filter bar + applied-filter chips. Each chip's remove button names its filter in
+    the <code>aria-label</code>. Filtering itself is your code (form submit or HTMX).
+  </p>
+  <section class="demo">
+    <form class="eof-filter-bar" role="search" aria-label="Invoice filters">
+      <input class="eof-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
+      <select class="eof-select" name="status" style="inline-size:auto" aria-label="Status">
+        <option>All statuses</option><option>Pending</option><option>Approved</option>
+      </select>
+      <span class="eof-chip eof-chip--active">Status: Pending
+        <button class="eof-chip__remove" type="button" aria-label="Remove filter Status: Pending">✕</button>
+      </span>
+      <span class="eof-chip eof-chip--active">CC-4021
+        <button class="eof-chip__remove" type="button" aria-label="Remove filter CC-4021">✕</button>
+      </span>
+      <button class="eof-btn eof-btn--ghost" type="reset">Clear all</button>
+    </form>
+  </section>
+  <section class="demo">
+    <h2>Saved views</h2>
+    <div class="eof-cluster">
+      <nav class="eof-cluster" aria-label="Saved views" style="--eof-cluster-gap: var(--eof-space-1)">
+        <a class="eof-chip eof-chip--active" href="#" aria-current="page">My pending</a>
+        <a class="eof-chip" href="#">Overdue &gt; 30d</a>
+        <a class="eof-chip" href="#">All CC-4021</a>
+      </nav>
+      <button class="eof-btn eof-btn--ghost" popovertarget="view-menu">Save view ▾</button>
+      <div class="eof-dropdown__menu" id="view-menu" popover>
+        <button class="eof-dropdown__item" type="button">Save current filters…</button>
+        <button class="eof-dropdown__item" type="button">Manage views…</button>
+      </div>
+    </div>
+    <p class="eof-u-text-muted">A saved view is just a link that restores a filter
+    querystring — chips with <code>aria-current="page"</code> for the active view, plus
+    a dropdown for save/manage. Server-rendered, zero new CSS.</p>
+  </section>
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{filterMarkup}</code></pre>
+  </section>
+  <script>
+    import { initDropdowns } from '@busy-office/ui/js';
+    initDropdowns();
+  </script>
+</Gallery>

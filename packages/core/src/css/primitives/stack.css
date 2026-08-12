@@ -1,0 +1,16 @@
+@layer eof-primitives {
+  /* Vertical flow with a controllable gap. */
+  .eof-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--eof-stack-gap, var(--eof-space-4));
+  }
+
+  .eof-stack--tight {
+    --eof-stack-gap: var(--eof-space-2);
+  }
+
+  .eof-stack--loose {
+    --eof-stack-gap: var(--eof-space-6);
+  }
+}

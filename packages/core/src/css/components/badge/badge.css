@@ -1,0 +1,47 @@
+@layer eof-components {
+  /* Status badges: approval states, document statuses. */
+  .eof-badge {
+    --eof-badge-bg: var(--eof-color-bg-muted);
+    --eof-badge-fg: var(--eof-color-text-secondary);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--eof-space-1);
+    padding: 0.125rem var(--eof-space-2);
+    border-radius: var(--eof-radius-full);
+    background: var(--eof-badge-bg);
+    color: var(--eof-badge-fg);
+    font-size: var(--eof-font-size-xs);
+    font-weight: var(--eof-font-weight-medium);
+    line-height: var(--eof-line-height-normal);
+    white-space: nowrap;
+  }
+
+  .eof-badge--success {
+    --eof-badge-bg: var(--eof-color-success-subtle);
+    --eof-badge-fg: var(--eof-color-success-text);
+  }
+
+  .eof-badge--warning {
+    --eof-badge-bg: var(--eof-color-warning-subtle);
+    --eof-badge-fg: var(--eof-color-warning-text);
+  }
+
+  .eof-badge--danger {
+    --eof-badge-bg: var(--eof-color-danger-subtle);
+    --eof-badge-fg: var(--eof-color-danger-text);
+  }
+
+  .eof-badge--accent {
+    --eof-badge-bg: var(--eof-color-accent-subtle);
+    --eof-badge-fg: var(--eof-color-accent-text);
+  }
+
+  @media print {
+    .eof-badge {
+      background: none;
+      border: 1px solid #000;
+      color: #000;
+    }
+  }
+}

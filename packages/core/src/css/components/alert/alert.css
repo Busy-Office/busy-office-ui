@@ -1,0 +1,78 @@
+@layer eof-components {
+  /* Inline alerts and toasts. Announcement is the markup's job:
+     role="alert" for errors, role="status" (or aria-live="polite") for the
+     rest; the toast region carries aria-live so injected toasts announce. */
+  .eof-alert {
+    --eof-alert-accent: var(--eof-color-accent);
+    --eof-alert-bg: var(--eof-color-accent-subtle);
+    --eof-alert-fg: var(--eof-color-text-primary);
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--eof-space-2);
+    padding: var(--eof-space-3) var(--eof-space-4);
+    border-inline-start: 3px solid var(--eof-alert-accent);
+    border-radius: var(--eof-radius-sm);
+    background: var(--eof-alert-bg);
+    color: var(--eof-alert-fg);
+    font-size: var(--eof-density-font-size);
+  }
+
+  .eof-alert--success {
+    --eof-alert-accent: var(--eof-color-success);
+    --eof-alert-bg: var(--eof-color-success-subtle);
+  }
+
+  .eof-alert--warning {
+    --eof-alert-accent: var(--eof-color-warning);
+    --eof-alert-bg: var(--eof-color-warning-subtle);
+  }
+
+  .eof-alert--danger {
+    --eof-alert-accent: var(--eof-color-danger);
+    --eof-alert-bg: var(--eof-color-danger-subtle);
+  }
+
+  .eof-alert__title {
+    font-weight: var(--eof-font-weight-semibold);
+  }
+
+  .eof-alert__dismiss {
+    margin-inline-start: auto;
+  }
+
+  /* Toast region: fixed stack, bottom end corner. Put aria-live="polite"
+     (or role="status") ON the region in markup so injected toasts announce.
+     LIMIT: z-index cannot beat the browser top layer — toasts will NOT float
+     above an open modal <dialog>. Render confirmations inside the dialog. */
+  .eof-toast-region {
+    position: fixed;
+    inset-block-end: var(--eof-space-4);
+    inset-inline-end: var(--eof-space-4);
+    z-index: var(--eof-z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--eof-space-2);
+    max-inline-size: 24rem;
+  }
+
+  .eof-toast {
+    box-shadow: var(--eof-shadow-lg);
+    background: var(--eof-color-bg-surface-raised);
+    animation: eof-toast-in var(--eof-motion-duration-base)
+      var(--eof-motion-easing-standard);
+  }
+
+  @keyframes eof-toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  @media print {
+    .eof-toast-region {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+@layer eof-primitives {
+  /* App shell: header + sidebar + main. A container so children (sidebar nav)
+     can respond to shell width, not viewport width. */
+  .eof-app-shell {
+    container-type: inline-size;
+    container-name: eof-shell;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "header header"
+      "sidebar main";
+    min-height: 100dvh;
+  }
+
+  .eof-app-shell__header {
+    grid-area: header;
+  }
+
+  .eof-app-shell__sidebar {
+    grid-area: sidebar;
+  }
+
+  .eof-app-shell__main {
+    grid-area: main;
+    padding: var(--eof-space-6);
+    background: var(--eof-color-bg-canvas);
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-gutter: stable;
+  }
+
+  @media print {
+    .eof-app-shell {
+      display: block;
+    }
+
+    .eof-app-shell__header,
+    .eof-app-shell__sidebar {
+      display: none;
+    }
+  }
+}

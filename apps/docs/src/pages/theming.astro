@@ -1,0 +1,61 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+const brandMarkup = `/* brand.css — imported AFTER the framework, outside any @layer,
+   so it wins by the cascade contract. Re-skin by remapping the SEMANTIC
+   tier only — never touch component files.
+
+   THE DARK RULE: an unlayered :root declaration beats the framework's
+   LAYERED [data-theme="dark"] remap of the same token. So every token you
+   set on :root must be re-set in your own dark block if dark differs —
+   otherwise your light value leaks into dark mode. */
+:root {
+  --eof-color-accent: #0f766e;        /* your brand teal */
+  --eof-color-accent-strong: #115e59;
+  --eof-color-accent-solid: #0f766e;  /* must keep >= 4.5:1 under white text */
+  --eof-color-accent-subtle: #f0fdfa;
+  --eof-color-accent-text: #115e59;   /* >= 4.5:1 on accent-subtle */
+  /* A full accent swap also includes the accent-adjacent tokens the
+     framework colors blue by default: */
+  --eof-color-focus-ring: #0d9488;    /* else focus rings stay blue */
+  --eof-color-bg-selected: #f0fdfa;   /* else selected rows stay blue */
+  --eof-font-sans: "Your Corporate Sans", system-ui, sans-serif;
+  --eof-radius-md: 0.25rem;           /* sharper corporate corners */
+}
+
+[data-theme="dark"] {
+  --eof-color-accent: #14b8a6;        /* REQUIRED: re-set every :root token */
+  --eof-color-accent-text: #5eead4;   /* light step for dark surfaces */
+  --eof-color-accent-subtle: #134e4a;
+  --eof-color-bg-selected: #134e4a;
+}`;
+---
+<Gallery title="Theming guide">
+  <p class="demo-note">
+    Re-skin the whole framework by remapping the <strong>semantic token tier</strong> in
+    your own unlayered stylesheet — the cascade contract guarantees it wins. Never
+    override component classes; never touch the raw palette tier.
+  </p>
+  <section class="demo">
+    <h2>The contract</h2>
+    <ul class="eof-stack eof-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Remap semantic tokens only</strong> (<code>--eof-color-*</code>, fonts, radii). Component-local tokens (<code>--eof-btn-*</code>) are for per-instance tweaks, not brand.</li>
+      <li><strong>Keep the token roles honest</strong>: <code>*-solid</code> carries white text in both themes (≥ 4.5:1); <code>*-text</code> sits on <code>*-subtle</code> (≥ 4.5:1); dark mode remaps <code>*-text</code>/<code>*-subtle</code>, never <code>*-solid</code>.</li>
+      <li><strong>Verify contrast when you swap hues</strong> — the roles encode the ratios, your values must honor them.</li>
+      <li><strong>The dark rule</strong>: unlayered <code>:root</code> beats the framework's <em>layered</em> dark remaps — every token you set must be re-set in your own <code>[data-theme="dark"]</code> block if dark differs.</li>
+      <li><strong>An accent swap is a family swap</strong>: <code>accent</code>, <code>accent-strong</code>, <code>accent-solid</code>, <code>accent-subtle</code>, <code>accent-text</code>, plus <code>focus-ring</code> and <code>bg-selected</code> — miss one and the UI is two-toned.</li>
+    </ul>
+  </section>
+  <section class="demo">
+    <h2>brand.css</h2>
+    <pre><code>{brandMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Versioning policy</h2>
+    <p>Semantic tokens, documented class names, and <code>data-*</code>/ARIA contracts
+    are the public API — breaking any of them is a major version. Component-internal
+    selectors and the raw palette are not API. <strong>Per-component dist file
+    placement is explicitly not API until v1.0</strong> — granular importers should
+    pin versions; moves are recorded in the CHANGELOG. New components/tokens are
+    minors; visual-only tweaks within the same contracts are patches.</p>
+  </section>
+</Gallery>

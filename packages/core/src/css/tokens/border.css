@@ -1,0 +1,11 @@
+@layer eof-tokens {
+  :root {
+    --eof-radius-sm: 0.25rem;
+    --eof-radius-md: 0.375rem;
+    --eof-radius-lg: 0.5rem;
+    --eof-radius-full: 9999px;
+    --eof-border-width: 1px;
+    --eof-focus-ring-width: 2px;
+    --eof-focus-ring-offset: 2px;
+  }
+}

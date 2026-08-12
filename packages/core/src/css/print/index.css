@@ -1,0 +1,88 @@
+@layer eof-utilities {
+  /* Report-grade printing, beyond the per-component print rules.
+     ERP screens get printed constantly: approvals for signatures, tables as
+     reports, detail forms for filing. */
+  @media print {
+    @page {
+      margin: 1.6cm;
+    }
+
+    /* Typography: slightly smaller body, controlled widows/orphans. */
+    body {
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    p,
+    li {
+      orphans: 3;
+      widows: 3;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      break-after: avoid;
+    }
+
+    /* Tables: repeat headers on every page, never split a row. */
+    .eof-data-table thead {
+      display: table-header-group;
+    }
+
+    .eof-data-table tr {
+      break-inside: avoid;
+    }
+
+    /* Keep logical units together. */
+    .eof-form-section,
+    .eof-widget,
+    .eof-timeline__step,
+    .eof-audit__entry,
+    .eof-stat {
+      break-inside: avoid;
+    }
+
+    /* Top-layer/overlay elements never print. */
+    dialog,
+    [popover] {
+      display: none !important;
+    }
+
+    /* Links: show the destination for absolute URLs in printed reports —
+       opt-in via the report wrapper so app chrome links stay clean. */
+    .eof-print-report a[href^="http"]::after {
+      content: " (" attr(href) ")" / "";
+      font-size: 0.85em;
+      color: #555;
+    }
+
+    /* Status colors are data in a printed approval — force them where it
+       matters (badges, timeline markers) for browsers that honor it. */
+    .eof-badge,
+    .eof-timeline__marker,
+    .eof-stepper__marker {
+      print-color-adjust: exact;
+    }
+  }
+
+  /* Print-visibility utilities (complement .eof-u-print-hidden). */
+  .eof-u-print-only {
+    display: none;
+  }
+
+  @media print {
+    .eof-u-print-only {
+      display: revert;
+    }
+
+    .eof-u-break-before {
+      break-before: page;
+    }
+
+    .eof-u-avoid-break {
+      break-inside: avoid;
+    }
+  }
+}

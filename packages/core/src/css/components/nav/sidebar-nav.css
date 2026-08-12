@@ -1,0 +1,90 @@
+@layer eof-components {
+  .eof-sidebar-nav {
+    inline-size: 14rem;
+    padding: var(--eof-space-2);
+    background: var(--eof-color-bg-surface);
+    border-inline-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    transition: inline-size var(--eof-motion-duration-base)
+      var(--eof-motion-easing-standard);
+  }
+
+  .eof-sidebar-nav__section {
+    margin-block-end: var(--eof-space-4);
+  }
+
+  .eof-sidebar-nav__heading {
+    padding: var(--eof-space-2) var(--eof-space-3);
+    font-size: var(--eof-font-size-xs);
+    font-weight: var(--eof-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--eof-color-text-muted);
+  }
+
+  .eof-sidebar-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .eof-sidebar-nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--eof-space-2);
+    padding: var(--eof-space-2) var(--eof-space-3);
+    border-radius: var(--eof-radius-sm);
+    color: var(--eof-color-text-secondary);
+    text-decoration: none;
+    font-size: var(--eof-density-font-size);
+    white-space: nowrap;
+  }
+
+  .eof-sidebar-nav__link:hover {
+    background: var(--eof-state-hover-overlay);
+    color: var(--eof-color-text-primary);
+  }
+
+  .eof-sidebar-nav__link[aria-current="page"] {
+    background: var(--eof-color-accent-subtle);
+    color: var(--eof-color-accent-text);
+    font-weight: var(--eof-font-weight-medium);
+  }
+
+  .eof-sidebar-nav__icon {
+    flex: none;
+    inline-size: 1.125rem;
+    text-align: center;
+  }
+
+  /* Collapse to icon-only when the app shell is narrow (container width,
+     not viewport width — works when the shell is embedded anywhere).
+     Labels are visually hidden, NOT display:none — display:none removes them
+     from the accessibility tree and, with aria-hidden icons, would leave every
+     link with an empty accessible name. */
+  @container eof-shell (max-width: 900px) {
+    .eof-sidebar-nav {
+      inline-size: 3.25rem;
+    }
+
+    .eof-sidebar-nav__label,
+    .eof-sidebar-nav__heading {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  @media print {
+    .eof-sidebar-nav {
+      display: none;
+    }
+  }
+}

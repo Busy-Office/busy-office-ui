@@ -1,0 +1,41 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+---
+<Gallery title="busy-office-ui">
+  <p class="demo-note">
+    CSS-first ERP UI framework. Semantic components, density-aware tokens, modern CSS
+    (<code>@layer</code>, <code>:has()</code>, container queries, native
+    <code>&lt;dialog&gt;</code>), HTMX-ready without depending on HTMX.
+  </p>
+  <section class="demo">
+    <h2>Install</h2>
+    <pre><code>npm i @busy-office/ui
+
+# all-in-one
+import "@busy-office/ui/css";
+
+# or à la carte — import order matters: tokens, then reset, then components
+import "@busy-office/ui/css/tokens";
+import "@busy-office/ui/css/reset";
+import "@busy-office/ui/css/components/data-table";
+
+# JS behaviors (dialogs, table selection) — call once, delegation handles swaps
+import {"{ initDialogs, initDataTables }"} from "@busy-office/ui/js";
+initDialogs(); initDataTables();</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Browser support</h2>
+    <p class="demo-note">
+      Floor: <strong>Chrome/Edge 119 · Firefox 128 · Safari 17.4</strong> (the framework
+      relies on <code>:has()</code>, <code>:user-invalid</code>, container queries,
+      <code>@layer</code>, the <code>popover</code> attribute, and
+      <code>content</code> alt-text). Server-set <code>aria-invalid</code> error messages degrade
+      gracefully below the floor; interactive `:has()` reveals do not.
+    </p>
+  </section>
+  <section class="demo">
+    <h2>Try it</h2>
+    <p>Use the density selector in the header — every component on every page resizes
+    from one <code>data-density</code> attribute. Browse the gallery via the sidebar.</p>
+  </section>
+</Gallery>

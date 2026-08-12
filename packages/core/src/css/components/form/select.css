@@ -1,0 +1,38 @@
+@layer eof-components {
+  .eof-select {
+    --eof-select-border: var(--eof-color-border-control);
+
+    inline-size: 100%;
+    height: var(--eof-density-control-height);
+    padding-inline: var(--eof-space-3) var(--eof-space-8);
+    border: var(--eof-border-width) solid var(--eof-select-border);
+    border-radius: var(--eof-radius-md);
+    background-color: var(--eof-color-bg-surface);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--eof-space-3) center;
+    font-size: var(--eof-density-font-size);
+    appearance: none;
+  }
+
+  /* Chevron color is frozen in the data URI, so dark mode needs its own URI
+     (gray-300), and RTL needs a physical position flip — background-position
+     has no logical keywords. */
+  [data-theme="dark"] .eof-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+  }
+
+  [dir="rtl"] .eof-select {
+    background-position: left var(--eof-space-3) center;
+  }
+
+  .eof-select:disabled {
+    background-color: var(--eof-color-bg-muted);
+    color: var(--eof-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .eof-select[aria-invalid="true"] {
+    --eof-select-border: var(--eof-state-error-color);
+  }
+}

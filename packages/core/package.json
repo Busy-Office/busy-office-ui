@@ -1,0 +1,46 @@
+{
+  "name": "@busy-office/ui",
+  "version": "0.1.0",
+  "description": "CSS-first ERP UI framework: semantic components, density-aware tokens, modern CSS, HTMX-ready.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "files": ["dist"],
+  "exports": {
+    "./css": "./dist/css/index.css",
+    "./css/min": "./dist/css/index.min.css",
+    "./css/tokens": "./dist/css/tokens.css",
+    "./css/reset": "./dist/css/reset.css",
+    "./css/primitives": "./dist/css/primitives.css",
+    "./css/components/*": "./dist/css/components/*.css",
+    "./css/htmx": "./dist/css/htmx.css",
+    "./css/*": "./dist/css/*.css",
+    "./js": {
+      "types": "./dist/js/index.d.ts",
+      "import": "./dist/js/index.js"
+    },
+    "./js/behaviors/*": "./dist/js/behaviors/*.js"
+  },
+  "scripts": {
+    "build:css": "node scripts/build-component-css.mjs",
+    "build:js": "tsc -p tsconfig.json",
+    "build": "npm run build:css && npm run build:js",
+    "lint:css": "stylelint \"src/css/**/*.css\""
+  },
+  "browserslist": [
+    "chrome >= 119",
+    "edge >= 119",
+    "firefox >= 128",
+    "safari >= 17.4"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "cssnano": "^7.0.6",
+    "postcss": "^8.4.47",
+    "postcss-custom-media": "^11.0.5",
+    "postcss-import": "^16.1.0",
+    "postcss-nesting": "^13.0.1",
+    "stylelint": "^16.10.0",
+    "typescript": "^5.6.3"
+  }
+}

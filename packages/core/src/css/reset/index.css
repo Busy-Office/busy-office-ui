@@ -1,0 +1,102 @@
+@layer eof-reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-family: var(--eof-font-sans);
+    font-size: var(--eof-font-size-base);
+    line-height: var(--eof-line-height-normal);
+    color: var(--eof-color-text-primary);
+    background: var(--eof-color-bg-canvas);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: var(--eof-line-height-tight);
+    font-weight: var(--eof-font-weight-semibold);
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  a {
+    color: var(--eof-color-accent);
+  }
+
+  /* Fallbacks matter here: if tokens.css is missing (wrong à-la-carte import
+     order), an invalid-at-computed-value outline would DELETE the focus ring
+     rather than fall back to the UA one. */
+  :focus-visible {
+    outline: var(--eof-focus-ring-width, 2px) solid
+      var(--eof-color-focus-ring, Highlight);
+    outline-offset: var(--eof-focus-ring-offset, 2px);
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  /* Stable scrollbar gutters: dense layouts must not shift when content grows. */
+  .eof-scroll,
+  [data-scroll] {
+    scrollbar-gutter: stable;
+  }
+
+  @media print {
+    body {
+      background: #fff;
+      color: #000;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const pgMarkup = `<div class="eof-data-table__footer">
+  <label class="eof-choice">Rows
+    <select class="eof-select" style="inline-size:auto" aria-label="Rows per page">
+      <option>25</option><option>50</option><option>100</option>
+    </select>
+  </label>
+  <nav class="eof-pagination" aria-label="Pagination">
+    <button class="eof-pagination__btn" type="button" disabled aria-label="Previous page">‹</button>
+    <a class="eof-pagination__btn" aria-current="page" href="#">1</a>
+    <a class="eof-pagination__btn" href="#">2</a>
+    <a class="eof-pagination__btn" href="#">3</a>
+    <button class="eof-pagination__btn" type="button" aria-label="Next page">›</button>
+    <span class="eof-pagination__info">1–25 of 312</span>
+  </nav>
+</div>`;
+---
+<Gallery title="Pagination">
+  <p class="demo-note">
+    A <code>&lt;nav aria-label="Pagination"&gt;</code> of links/buttons; the current
+    page carries <code>aria-current="page"</code>. Pairs with
+    <code>.eof-data-table__footer</code> under a table. Navigation is your code's job
+    (links or HTMX) — the framework styles state.
+  </p>
+  <section class="demo">
+    <div class="eof-data-table-container">
+      <div class="eof-data-table__footer">
+        <label class="eof-choice">Rows
+          <select class="eof-select" style="inline-size:auto" aria-label="Rows per page">
+            <option>25</option><option>50</option><option>100</option>
+          </select>
+        </label>
+        <nav class="eof-pagination" aria-label="Pagination">
+          <button class="eof-pagination__btn" type="button" disabled aria-label="Previous page">‹</button>
+          <a class="eof-pagination__btn" aria-current="page" href="#">1</a>
+          <a class="eof-pagination__btn" href="#">2</a>
+          <a class="eof-pagination__btn" href="#">3</a>
+          <span aria-hidden="true">…</span>
+          <a class="eof-pagination__btn" href="#">13</a>
+          <button class="eof-pagination__btn" type="button" aria-label="Next page">›</button>
+          <span class="eof-pagination__info">1–25 of 312</span>
+        </nav>
+      </div>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{pgMarkup}</code></pre>
+  </section>
+</Gallery>

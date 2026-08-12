@@ -1,0 +1,68 @@
+@layer eof-components {
+  .eof-btn {
+    --eof-btn-bg: var(--eof-color-accent-solid);
+    --eof-btn-bg-hover: var(--eof-color-accent-strong);
+    --eof-btn-fg: var(--eof-color-text-inverse);
+    --eof-btn-border: transparent;
+    --eof-btn-height: var(--eof-density-control-height);
+    --eof-btn-padding-x: var(--eof-space-4);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--eof-space-2);
+    height: var(--eof-btn-height);
+    padding-inline: var(--eof-btn-padding-x);
+    border: var(--eof-border-width) solid var(--eof-btn-border);
+    border-radius: var(--eof-radius-md);
+    background: var(--eof-btn-bg);
+    color: var(--eof-btn-fg);
+    font-size: var(--eof-density-font-size);
+    font-weight: var(--eof-font-weight-medium);
+    white-space: nowrap;
+    user-select: none;
+    transition: background-color var(--eof-motion-duration-fast)
+      var(--eof-motion-easing-standard);
+  }
+
+  .eof-btn:hover {
+    background: var(--eof-btn-bg-hover);
+  }
+
+  .eof-btn:disabled,
+  .eof-btn[aria-disabled="true"] {
+    opacity: var(--eof-state-disabled-opacity);
+    pointer-events: none;
+  }
+
+  .eof-btn--secondary {
+    --eof-btn-bg: var(--eof-color-bg-surface);
+    --eof-btn-bg-hover: var(--eof-color-bg-muted);
+    --eof-btn-fg: var(--eof-color-text-primary);
+    --eof-btn-border: var(--eof-color-border-strong);
+  }
+
+  .eof-btn--ghost {
+    --eof-btn-bg: transparent;
+    --eof-btn-bg-hover: var(--eof-state-hover-overlay);
+    --eof-btn-fg: var(--eof-color-text-primary);
+  }
+
+  .eof-btn--danger {
+    --eof-btn-bg: var(--eof-color-danger-solid);
+    --eof-btn-bg-hover: var(--eof-color-danger-strong);
+  }
+
+  .eof-btn--icon {
+    --eof-btn-padding-x: 0;
+    inline-size: var(--eof-btn-height);
+  }
+
+  /* Loading state: JS or HTMX flips the attribute; CSS does the rest. */
+  .eof-btn[data-loading="true"],
+  .eof-btn[aria-busy="true"] {
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: progress;
+  }
+}

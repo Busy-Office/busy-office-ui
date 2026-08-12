@@ -1,0 +1,13 @@
+@layer eof-tokens {
+  :root {
+    /* Dropdowns must beat sticky table headers, hence 1200 > 1100. */
+    --eof-z-sticky-col: 1050;
+    --eof-z-sticky-header: 1100;
+    --eof-z-dropdown: 1200;
+    --eof-z-toast: 1600;
+    /* NOTE: there are deliberately no dialog z-index tokens. Native <dialog>
+       renders in the browser top layer, which no z-index can beat or
+       interleave — a toast that must appear above an open dialog has to be
+       rendered inside the dialog or use a popover (also top layer). */
+  }
+}

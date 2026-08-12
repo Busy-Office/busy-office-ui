@@ -1,0 +1,48 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+const reportMarkup = `<!-- A printable report region: -->
+<main class="eof-print-report">
+  <header class="eof-u-print-only">
+    <h1>Invoice report — CC-4021</h1>
+    <p>Generated <time datetime="2026-08-12">2026-08-12</time> · busy-office ERP</p>
+  </header>
+
+  <div class="eof-data-table-container">…dense table…</div>
+
+  <section class="eof-u-break-before">
+    <h2>Approval history</h2>
+    <ol class="eof-timeline" role="list">…</ol>
+  </section>
+</main>`;
+---
+<Gallery title="Print & reports">
+  <p class="demo-note">
+    Every component ships its own <code>@media print</code> rules (nav/toolbars/
+    filters hidden, black-on-white tables, outlined markers). The print layer adds
+    report plumbing on top. Try it: <kbd>⌘P</kbd> on the
+    <a href="/patterns/invoice-list">invoice list</a> or
+    <a href="/patterns/approval">approval pattern</a>.
+  </p>
+  <section class="demo">
+    <h2>What the print layer does</h2>
+    <ul class="eof-stack eof-stack--tight" style="padding-inline-start: 1.25rem">
+      <li>Page margins (<code>@page</code>), 10pt body, widow/orphan control, headings keep their content.</li>
+      <li>Table headers repeat on every page; rows, form sections, widgets, timeline steps never split across pages.</li>
+      <li>Dialogs, popovers, and toasts never print.</li>
+      <li>Status colors are forced (<code>print-color-adjust: exact</code>) on badges and timeline/stepper markers — status is data on a printed approval.</li>
+      <li>Inside <code>.eof-print-report</code>, absolute links print their URL.</li>
+    </ul>
+  </section>
+  <section class="demo">
+    <h2>Utilities</h2>
+    <ul class="eof-stack eof-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><code>.eof-u-print-only</code> — report headers, generated-on stamps (hidden on screen).</li>
+      <li><code>.eof-u-print-hidden</code> — screen-only chrome.</li>
+      <li><code>.eof-u-break-before</code> / <code>.eof-u-avoid-break</code> — page-break control.</li>
+    </ul>
+  </section>
+  <section class="demo">
+    <h2>Markup — a report region</h2>
+    <pre><code>{reportMarkup}</code></pre>
+  </section>
+</Gallery>

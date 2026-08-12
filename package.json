@@ -1,0 +1,13 @@
+{
+  "name": "busy-office-ui",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @busy-office/ui",
+    "docs:dev": "npm run dev -w docs",
+    "docs:build": "npm run build -w docs"
+  }
+}

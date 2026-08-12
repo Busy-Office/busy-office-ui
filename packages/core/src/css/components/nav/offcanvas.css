@@ -1,0 +1,75 @@
+@layer eof-components {
+  /* Off-canvas panel: a native <dialog> styled as an edge sheet. Opens with
+     the SAME wiring as any dialog ([data-dialog-trigger] + initDialogs()),
+     so backdrop, Esc, focus-return, and the Tab loop all come along free.
+     Put an .eof-sidebar-nav inside for the drawer-nav pattern. */
+  .eof-offcanvas {
+    margin: 0;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    inset-block: 0;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+    inline-size: min(18rem, 85vw);
+    max-inline-size: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    background: var(--eof-color-bg-surface);
+    color: var(--eof-color-text-primary);
+    box-shadow: var(--eof-shadow-lg);
+  }
+
+  .eof-offcanvas--end {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+  }
+
+  .eof-offcanvas::backdrop {
+    background: rgb(0 0 0 / 0.4);
+  }
+
+  .eof-offcanvas[data-state="open"] {
+    animation: eof-offcanvas-in var(--eof-motion-duration-slow)
+      var(--eof-motion-easing-standard);
+  }
+
+  .eof-offcanvas--end[data-state="open"] {
+    animation-name: eof-offcanvas-in-end;
+  }
+
+  /* translate is physical; RTL gets explicit overrides. */
+  @keyframes eof-offcanvas-in {
+    from {
+      translate: -100% 0;
+    }
+  }
+
+  @keyframes eof-offcanvas-in-end {
+    from {
+      translate: 100% 0;
+    }
+  }
+
+  [dir="rtl"] .eof-offcanvas[data-state="open"] {
+    animation-name: eof-offcanvas-in-end;
+  }
+
+  [dir="rtl"] .eof-offcanvas--end[data-state="open"] {
+    animation-name: eof-offcanvas-in;
+  }
+
+  .eof-offcanvas__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--eof-space-2);
+    padding: var(--eof-space-3) var(--eof-space-4);
+    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+  }
+
+  .eof-offcanvas .eof-sidebar-nav {
+    inline-size: 100%;
+    border-inline-end: none;
+  }
+}

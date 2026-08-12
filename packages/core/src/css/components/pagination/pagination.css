@@ -1,0 +1,54 @@
+@layer eof-components {
+  /* <nav class="eof-pagination" aria-label="Pagination"> with buttons/links;
+     the current page carries aria-current="page". */
+  .eof-pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--eof-space-1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .eof-pagination__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--eof-density-control-height);
+    height: var(--eof-density-control-height);
+    padding-inline: var(--eof-space-2);
+    border-radius: var(--eof-radius-sm);
+    color: var(--eof-color-text-secondary);
+    font-size: var(--eof-density-font-size);
+    text-decoration: none;
+  }
+
+  .eof-pagination__btn:hover {
+    background: var(--eof-state-hover-overlay);
+    color: var(--eof-color-text-primary);
+  }
+
+  .eof-pagination__btn[aria-current="page"] {
+    background: var(--eof-color-accent-subtle);
+    color: var(--eof-color-accent-text);
+    font-weight: var(--eof-font-weight-semibold);
+  }
+
+  .eof-pagination__btn:disabled {
+    opacity: var(--eof-state-disabled-opacity);
+    pointer-events: none;
+  }
+
+  .eof-pagination__info {
+    margin-inline-start: var(--eof-space-2);
+    color: var(--eof-color-text-secondary);
+    font-size: var(--eof-font-size-sm);
+  }
+
+  /* NOTE: .eof-data-table__footer lives in data-table.css (its namespace
+     owner) — pagination composes into it but does not define it. */
+
+  @media print {
+    .eof-pagination {
+      display: none;
+    }
+  }
+}

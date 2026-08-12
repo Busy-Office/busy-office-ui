@@ -1,0 +1,57 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+const cssImport = `/* extra, opt-in stylesheet — core CSS never references HTMX */
+import "@busy-office/ui/css/htmx";`;
+const swapRecipe = `<!-- Styles the classes HTMX itself toggles: -->
+<!--   .htmx-indicator  → fades in while a request is in flight            -->
+<!--   .htmx-swapping   → outgoing content fades                           -->
+<!--   .htmx-settling   → flash-on-update highlight (reduced-motion aware) -->
+<!--   [aria-busy=true] → progress cursor                                  -->
+
+<tbody hx-get="/invoices" hx-trigger="every 30s" hx-swap="outerHTML settle:300ms">
+  …rows…
+</tbody>`;
+const jsRecipe = `import { initDialogs, initDataTables } from "@busy-office/ui/js";
+
+initDialogs();      // once, ever — event delegation survives ALL swap patterns
+initDataTables();   // binds existing containers; row/tbody swaps INSIDE a bound
+                    // container re-derive selection state automatically
+                    // (the container listens for htmx:afterSwap)
+
+// only NEW .eof-data-table-container elements swapped in later need a call:
+document.body.addEventListener("htmx:afterSwap", (e) =>
+  initDataTables(e.target)
+);
+
+// non-HTMX swap mechanism? re-derive manually:
+// import { refreshDataTable } from "@busy-office/ui/js";
+// refreshDataTable(container);`;
+const stateRecipe = `<!-- The framework-agnostic loading convention: -->
+<table class="eof-data-table"
+       hx-on::before-request="this.dataset.loading='true'"
+       hx-on::after-request="this.dataset.loading='false'">`;
+---
+<Gallery title="Using with HTMX">
+  <p class="demo-note">
+    HTMX support is a separate stylesheet plus conventions — the core CSS has zero
+    HTMX references, and the same <code>data-loading</code>/<code>data-state</code>
+    attributes work with Alpine or vanilla JS.
+  </p>
+  <section class="demo">
+    <h2>1. Add the integration stylesheet</h2>
+    <pre><code>{cssImport}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>2. Swap lifecycle styling</h2>
+    <pre><code>{swapRecipe}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>3. JS behaviors and swaps</h2>
+    <pre><code>{jsRecipe}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>4. Loading states</h2>
+    <pre><code>{stateRecipe}</code></pre>
+    <p class="eof-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
+  </section>
+</Gallery>

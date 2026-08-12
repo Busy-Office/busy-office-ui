@@ -1,0 +1,17 @@
+@layer eof-primitives {
+  /* Horizontal grouping that wraps: toolbars, button rows, filter chips. */
+  .eof-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--eof-cluster-gap, var(--eof-space-2));
+  }
+
+  .eof-cluster--split {
+    justify-content: space-between;
+  }
+
+  .eof-cluster--end {
+    justify-content: flex-end;
+  }
+}

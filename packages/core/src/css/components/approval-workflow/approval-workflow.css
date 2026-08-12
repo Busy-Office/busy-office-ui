@@ -1,0 +1,131 @@
+@layer eof-components {
+  /* Status timeline: <ol class="eof-timeline"> of workflow steps. State via
+     data-state="done|current|pending|rejected" on the <li>; the current step
+     also carries aria-current="step". The marker glyph (✓ ✕ ●) is REAL
+     MARKUP inside .eof-timeline__marker, so state is never color-alone. */
+  .eof-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .eof-timeline__step {
+    --eof-timeline-marker-bg: var(--eof-color-bg-muted);
+    --eof-timeline-marker-fg: var(--eof-color-text-muted);
+
+    position: relative;
+    display: flex;
+    gap: var(--eof-space-3);
+    padding-block-end: var(--eof-space-5);
+  }
+
+  /* Connector line between markers. */
+  .eof-timeline__step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    inset-block: 1.5rem 0;
+    inset-inline-start: calc(0.75rem - 1px);
+    inline-size: 2px;
+    background: var(--eof-color-border-default);
+  }
+
+  .eof-timeline__marker {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: var(--eof-radius-full);
+    background: var(--eof-timeline-marker-bg);
+    color: var(--eof-timeline-marker-fg);
+    font-size: var(--eof-font-size-xs);
+    font-weight: var(--eof-font-weight-semibold);
+  }
+
+  .eof-timeline__step[data-state="done"] {
+    --eof-timeline-marker-bg: var(--eof-color-success-subtle);
+    --eof-timeline-marker-fg: var(--eof-color-success-text);
+  }
+
+  .eof-timeline__step[data-state="current"] {
+    --eof-timeline-marker-bg: var(--eof-color-accent-subtle);
+    --eof-timeline-marker-fg: var(--eof-color-accent-text);
+  }
+
+  .eof-timeline__step[data-state="rejected"] {
+    --eof-timeline-marker-bg: var(--eof-color-danger-subtle);
+    --eof-timeline-marker-fg: var(--eof-color-danger-text);
+  }
+
+  .eof-timeline__title {
+    font-weight: var(--eof-font-weight-medium);
+    color: var(--eof-color-text-primary);
+  }
+
+  .eof-timeline__step[data-state="pending"] .eof-timeline__title {
+    color: var(--eof-color-text-muted);
+    font-weight: var(--eof-font-weight-normal);
+  }
+
+  .eof-timeline__step[data-state="rejected"] .eof-timeline__title {
+    color: var(--eof-color-danger-text);
+  }
+
+  .eof-timeline__meta {
+    font-size: var(--eof-font-size-xs);
+    color: var(--eof-color-text-muted);
+  }
+
+  /* Audit trail: compact chronological list. Timestamps tabular so columns
+     of times align. */
+  .eof-audit {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--eof-font-size-sm);
+  }
+
+  .eof-audit__entry {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--eof-space-2);
+    padding-block: var(--eof-space-2);
+    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+  }
+
+  .eof-audit__entry:last-child {
+    border-block-end: none;
+  }
+
+  /* Time column width is a token so the detail indent below always aligns —
+     widen it (e.g. 8rem) when timestamps carry the year. */
+  .eof-audit__time {
+    flex: none;
+    inline-size: var(--eof-audit-time-width, 5rem);
+    font-family: var(--eof-font-mono);
+    font-size: var(--eof-font-size-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--eof-color-text-muted);
+    padding-block-start: 0.125rem;
+  }
+
+  .eof-audit__actor {
+    font-weight: var(--eof-font-weight-medium);
+  }
+
+  .eof-audit__detail {
+    inline-size: 100%;
+    color: var(--eof-color-text-secondary);
+    font-size: var(--eof-font-size-xs);
+    padding-inline-start: calc(
+      var(--eof-audit-time-width, 5rem) + var(--eof-space-2)
+    );
+  }
+
+  @media print {
+    .eof-timeline__step:not(:last-child)::before {
+      background: #999;
+    }
+  }
+}

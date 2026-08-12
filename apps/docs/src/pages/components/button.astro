@@ -1,0 +1,29 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+---
+<Gallery title="Button">
+  <section class="demo">
+    <h2>Variants</h2>
+    <div class="eof-cluster">
+      <button class="eof-btn">Primary</button>
+      <button class="eof-btn eof-btn--secondary">Secondary</button>
+      <button class="eof-btn eof-btn--ghost">Ghost</button>
+      <button class="eof-btn eof-btn--danger">Danger</button>
+      <button class="eof-btn eof-btn--icon" aria-label="Settings">⚙</button>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>States</h2>
+    <div class="eof-cluster">
+      <button class="eof-btn" disabled>Disabled</button>
+      <button class="eof-btn" data-loading="true">Saving…</button>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Per-region density override</h2>
+    <div class="eof-cluster" data-density="compact">
+      <button class="eof-btn eof-btn--secondary">Compact</button>
+      <span>← this cluster is <code>data-density="compact"</code> regardless of the global setting</span>
+    </div>
+  </section>
+</Gallery>

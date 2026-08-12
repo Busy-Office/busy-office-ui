@@ -1,0 +1,11 @@
+@layer eof-primitives {
+  /* Auto-responsive card/field grid: columns adapt to available space. */
+  .eof-grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(var(--eof-grid-min, 16rem), 100%), 1fr)
+    );
+    gap: var(--eof-grid-gap, var(--eof-space-4));
+  }
+}

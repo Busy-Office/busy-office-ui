@@ -1,0 +1,72 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const rows = Array.from({ length: 14 }, (_, i) => ({
+  no: `INV-10${234 + i}`,
+  vendor: ['Acme Supply Co.', 'Globex Industrial', 'Initech GmbH', 'Umbrella Logistics', 'Stark Components'][i % 5],
+  cc: ['CC-4021', 'CC-1180', 'CC-2205'][i % 3],
+  due: `2026-08-${String(12 + (i % 15)).padStart(2, '0')}`,
+  amount: `$${(Math.abs(Math.sin(i + 1)) * 20000 + 500).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+  status: ['Pending', 'Approved', 'Rejected'][i % 3],
+  tone: ['warning', 'success', 'danger'][i % 3],
+}));
+---
+<Gallery title="Pattern: dense invoice list">
+  <p class="demo-note">
+    A composed ERP screen: filter bar (form components) + dense selectable table with
+    sticky header, frozen first data column, bulk actions, and status badges. Set
+    density to <em>compact</em> for the full back-office experience.
+  </p>
+  <section class="demo">
+    <form class="eof-cluster" data-density="compact">
+      <input class="eof-input" type="search" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
+      <select class="eof-select" style="inline-size: auto" aria-label="Status filter">
+        <option>All statuses</option><option>Pending</option><option>Approved</option><option>Rejected</option>
+      </select>
+      <select class="eof-select" style="inline-size: auto" aria-label="Cost center filter">
+        <option>All cost centers</option><option>CC-4021</option><option>CC-1180</option><option>CC-2205</option>
+      </select>
+      <button class="eof-btn eof-btn--secondary" type="button">Apply</button>
+      <button class="eof-btn eof-btn--ghost" type="reset">Clear</button>
+    </form>
+    <div class="eof-data-table-container" style="max-block-size: 24rem" data-density="compact">
+      <div class="eof-data-table__toolbar">
+        <div class="eof-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+          <button class="eof-btn eof-btn--secondary" type="button">Approve selected</button>
+          <button class="eof-btn eof-btn--danger" type="button">Reject selected</button>
+        </div>
+        <span class="eof-data-table__selection-count"></span>
+        <span class="eof-u-text-muted">14 invoices</span>
+      </div>
+      <table class="eof-data-table eof-data-table--sticky-col">
+        <thead>
+          <tr>
+            <th scope="col"><input type="checkbox" class="eof-checkbox eof-data-table__select-all" aria-label="Select all" /></th>
+            <th scope="col" aria-sort="ascending"><button class="eof-data-table__sort-btn" type="button">Invoice #</button></th>
+            <th scope="col">Vendor</th>
+            <th scope="col" class="eof-data-table__col--secondary">Cost center</th>
+            <th scope="col">Due</th>
+            <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <td><input type="checkbox" class="eof-checkbox eof-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
+              <td class="eof-data-table__col--code">{r.no}</td>
+              <td class="eof-u-text-truncate">{r.vendor}</td>
+              <td class="eof-data-table__col--secondary eof-data-table__col--code">{r.cc}</td>
+              <td class="eof-u-tabular">{r.due}</td>
+              <td class="eof-data-table__col--numeric">{r.amount}</td>
+              <td><span class={`eof-badge eof-badge--${r.tone}`}>{r.status}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <script>
+    import { initDataTables } from '@busy-office/ui/js';
+    initDataTables();
+  </script>
+</Gallery>

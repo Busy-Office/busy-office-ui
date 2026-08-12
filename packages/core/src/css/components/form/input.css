@@ -1,0 +1,64 @@
+@layer eof-components {
+  .eof-input {
+    --eof-input-border: var(--eof-color-border-control);
+
+    inline-size: 100%;
+    height: var(--eof-density-control-height);
+    padding-inline: var(--eof-space-3);
+    border: var(--eof-border-width) solid var(--eof-input-border);
+    border-radius: var(--eof-radius-md);
+    background: var(--eof-color-bg-surface);
+    font-size: var(--eof-density-font-size);
+    transition: border-color var(--eof-motion-duration-fast)
+      var(--eof-motion-easing-standard);
+  }
+
+  textarea.eof-input {
+    height: auto;
+    min-height: calc(var(--eof-density-control-height) * 2);
+    padding-block: var(--eof-space-2);
+    resize: vertical;
+  }
+
+  .eof-input::placeholder {
+    color: var(--eof-color-text-muted);
+  }
+
+  .eof-input:disabled {
+    background: var(--eof-color-bg-muted);
+    color: var(--eof-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .eof-input[aria-invalid="true"] {
+    --eof-input-border: var(--eof-state-error-color);
+  }
+
+  /* Inline-edit (seamless) input: reads as text until hovered/focused —
+     the standard ERP click-to-edit cell. Always a real input, so keyboard
+     and AT semantics never change between "display" and "edit" modes. */
+  .eof-input--seamless {
+    --eof-input-border: transparent;
+    background: transparent;
+    padding-inline: var(--eof-space-1);
+  }
+
+  .eof-input--seamless:hover {
+    --eof-input-border: var(--eof-color-border-default);
+  }
+
+  .eof-input--seamless:focus {
+    --eof-input-border: var(--eof-color-border-control);
+    background: var(--eof-color-bg-surface);
+  }
+
+  /* Numeric/code inputs: tabular figures, right alignment. */
+  .eof-input--numeric {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .eof-input--code {
+    font-family: var(--eof-font-mono);
+  }
+}
