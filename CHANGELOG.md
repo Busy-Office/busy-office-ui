@@ -17,6 +17,12 @@ pin.
 - `initDialogs()` no longer accepts a root argument (delegation made it a no-op).
 - Firefox floor raised 121 → 128 (`content` alt-text syntax).
 
+### Fixed (consumer-gauntlet findings, examples/po-app)
+- `./package.json` added to the exports map (`require.resolve` from consumers
+  failed with ERR_PACKAGE_PATH_NOT_EXPORTED).
+- Canonical table recipe now shows `name`/`value` on row checkboxes so
+  selections are actually POSTable via `hx-include` or a form.
+
 ### Added
 - Slices 1–3: tokens/density/dark theme, primitives, button, badge, forms
   (fields/sections/inline edit), dense data table (selection/pagination/filters/

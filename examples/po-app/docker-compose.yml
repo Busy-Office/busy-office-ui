@@ -1,0 +1,7 @@
+services:
+  po-app:
+    build:
+      context: ../..
+      dockerfile: examples/po-app/Dockerfile
+    ports:
+      - "8080:8080"

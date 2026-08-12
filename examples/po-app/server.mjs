@@ -1,0 +1,258 @@
+/**
+ * PO mini-app — the Devi test. A dependency-free Node server rendering a
+ * 3-screen ERP slice with @busy-office/ui installed FROM THE TARBALL, using
+ * only markup documented in the gallery. HTMX drives bulk approve and the
+ * detail-page approval; the framework's own JS behaviors run unmodified.
+ */
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { dirname, join, normalize } from 'node:path';
+
+const require = createRequire(import.meta.url);
+const uiDist = join(
+  dirname(require.resolve('@busy-office/ui/package.json')),
+  'dist',
+);
+
+// ---------- in-memory data ----------
+const pos = [
+  { id: 'PO-88210', vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: 4208.0, status: 'Pending' },
+  { id: 'PO-88211', vendor: 'Globex Industrial', cc: 'CC-4021', amount: 18940.5, status: 'Approved' },
+  { id: 'PO-88212', vendor: 'Initech GmbH', cc: 'CC-1180', amount: 730.25, status: 'Rejected' },
+  { id: 'PO-88213', vendor: 'Umbrella Logistics', cc: 'CC-2205', amount: 12400.0, status: 'Pending' },
+  { id: 'PO-88214', vendor: 'Stark Components', cc: 'CC-1180', amount: 56000.0, status: 'Pending' },
+];
+const audit = [];
+const money = (n) =>
+  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2 });
+const tone = { Pending: 'warning', Approved: 'success', Rejected: 'danger' };
+
+// ---------- layout ----------
+const page = (title, current, main) => `<!doctype html>
+<html lang="en" data-density="compact">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title} · PO demo</title>
+<link rel="stylesheet" href="/assets/css/index.min.css">
+<link rel="stylesheet" href="/assets/css/htmx.min.css">
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+<div class="eof-app-shell">
+  <header class="eof-navbar eof-app-shell__header">
+    <a class="eof-navbar__brand" href="/">PO demo</a>
+    <span class="eof-badge eof-badge--accent">tarball build</span>
+    <span class="eof-navbar__spacer"></span>
+  </header>
+  <nav class="eof-sidebar-nav eof-app-shell__sidebar" aria-label="Main">
+    <ul>
+      <li><a class="eof-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="eof-sidebar-nav__icon" aria-hidden="true">▥</span><span class="eof-sidebar-nav__label">Dashboard</span></a></li>
+      <li><a class="eof-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="eof-sidebar-nav__icon" aria-hidden="true">▤</span><span class="eof-sidebar-nav__label">Purchase orders</span></a></li>
+    </ul>
+  </nav>
+  <main class="eof-app-shell__main"><div class="eof-stack eof-stack--loose">${main}</div></main>
+</div>
+<script type="module">
+  import { initDialogs, initDataTables, initAlerts } from '/assets/js/index.js';
+  initDialogs(); initDataTables(); initAlerts();
+  document.body.addEventListener('htmx:afterSwap', (e) => initDataTables(e.target));
+</script>
+<div class="eof-toast-region" role="status" aria-live="polite" id="toasts"></div>
+</body></html>`;
+
+// ---------- fragments ----------
+const rowHtml = (p) => `<tr id="row-${p.id}">
+  <td><input type="checkbox" class="eof-checkbox eof-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
+  <td class="eof-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
+  <td class="eof-u-text-truncate">${p.vendor}</td>
+  <td class="eof-data-table__col--secondary eof-data-table__col--code">${p.cc}</td>
+  <td class="eof-data-table__col--numeric">${money(p.amount)}</td>
+  <td><span class="eof-badge eof-badge--${tone[p.status]}">${p.status}</span></td>
+</tr>`;
+
+const tbodyHtml = (list) =>
+  `<tbody id="po-rows">${list.map(rowHtml).join('')}</tbody>`;
+
+const listScreen = () => `
+<h1>Purchase orders</h1>
+<form class="eof-filter-bar" role="search" aria-label="PO filters" method="get" action="/pos">
+  <input class="eof-input" type="search" name="q" aria-label="Search POs" placeholder="Search…" style="max-inline-size: 12rem">
+  <select class="eof-select" name="status" style="inline-size:auto" aria-label="Status">
+    <option>All</option><option>Pending</option><option>Approved</option><option>Rejected</option>
+  </select>
+  <button class="eof-btn eof-btn--secondary" type="submit">Apply</button>
+</form>
+<div class="eof-data-table-container">
+  <div class="eof-data-table__toolbar">
+    <div class="eof-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+      <button class="eof-btn" type="button"
+        hx-post="/pos/bulk-approve" hx-target="#po-rows" hx-swap="outerHTML"
+        hx-include=".eof-data-table__row-select:checked">Approve selected</button>
+    </div>
+    <span class="eof-data-table__selection-count"></span>
+  </div>
+  <table class="eof-data-table eof-data-table--sticky-col">
+    <thead><tr>
+      <th scope="col"><input type="checkbox" class="eof-checkbox eof-data-table__select-all" aria-label="Select all"></th>
+      <th scope="col" aria-sort="ascending"><button class="eof-data-table__sort-btn" type="button">PO #</button></th>
+      <th scope="col">Vendor</th>
+      <th scope="col" class="eof-data-table__col--secondary">Cost center</th>
+      <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+      <th scope="col">Status</th>
+    </tr></thead>
+    ${tbodyHtml(pos)}
+  </table>
+  <div class="eof-data-table__footer">
+    <span class="eof-pagination__info">${pos.length} POs</span>
+  </div>
+</div>`;
+
+const timelineHtml = (p) => `<ol class="eof-timeline" role="list" id="timeline-${p.id}">
+  <li class="eof-timeline__step" data-state="done">
+    <span class="eof-timeline__marker" aria-hidden="true">✓</span>
+    <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Completed: </span>Submitted</div>
+    <div class="eof-timeline__meta">system · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div></div>
+  </li>
+  ${p.status === 'Approved'
+    ? `<li class="eof-timeline__step" data-state="done">
+        <span class="eof-timeline__marker" aria-hidden="true">✓</span>
+        <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Completed: </span>Approved</div></div></li>`
+    : p.status === 'Rejected'
+      ? `<li class="eof-timeline__step" data-state="rejected">
+          <span class="eof-timeline__marker" aria-hidden="true">✕</span>
+          <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Rejected: </span>Approval</div></div></li>`
+      : `<li class="eof-timeline__step" data-state="current" aria-current="step">
+          <span class="eof-timeline__marker" aria-hidden="true">●</span>
+          <div><div class="eof-timeline__title">Awaiting approval</div></div></li>`}
+</ol>`;
+
+const detailScreen = (p) => `
+<h1>${p.id} <span class="eof-badge eof-badge--${tone[p.status]}">${p.status}</span></h1>
+<div class="eof-grid" style="--eof-grid-min: 18rem">
+  <fieldset class="eof-form-section">
+    <legend class="eof-form-section__legend">Order</legend>
+    <div class="eof-form-row">
+      <div class="eof-form-field">
+        <label class="eof-form-field__label" for="vendor">Vendor</label>
+        <input class="eof-input" id="vendor" value="${p.vendor}" readonly>
+      </div>
+      <div class="eof-form-field">
+        <label class="eof-form-field__label" for="amount">Amount</label>
+        <input class="eof-input eof-input--numeric" id="amount" value="${money(p.amount)}" readonly>
+      </div>
+    </div>
+  </fieldset>
+  <div>${timelineHtml(p)}</div>
+</div>
+${p.status === 'Pending' ? `
+<div class="eof-cluster">
+  <button class="eof-btn" data-dialog-trigger="approve-dlg">Approve…</button>
+</div>
+<dialog class="eof-dialog" id="approve-dlg" aria-labelledby="adlg-t" data-state="closed">
+  <form method="dialog">
+    <header class="eof-dialog__header">
+      <h2 class="eof-dialog__title" id="adlg-t">Approve ${p.id}</h2>
+      <button class="eof-btn eof-btn--ghost eof-btn--icon" value="cancel" aria-label="Close">✕</button>
+    </header>
+    <div class="eof-dialog__body"><p>Approve ${p.id} for <span class="eof-u-tabular">${money(p.amount)}</span>?</p></div>
+    <footer class="eof-dialog__footer">
+      <button class="eof-btn eof-btn--secondary" value="cancel">Cancel</button>
+      <button class="eof-btn" value="confirm"
+        hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML">Approve</button>
+    </footer>
+  </form>
+</dialog>` : ''}`;
+
+const dashScreen = () => {
+  const pending = pos.filter((p) => p.status === 'Pending');
+  const total = pending.reduce((s, p) => s + p.amount, 0);
+  return `
+<h1>Dashboard</h1>
+<div class="eof-widget-grid" style="--eof-widget-min: 13rem">
+  <div class="eof-widget eof-widget--span-2">
+    <div class="eof-stat eof-stat--hero">
+      <span class="eof-stat__label">Awaiting your approval</span>
+      <span class="eof-stat__value">${pending.length}</span>
+      <span class="eof-stat__delta eof-stat__delta--bad"><span aria-hidden="true">▲</span> +2 <span aria-hidden="true">⚠</span><span class="eof-visually-hidden">increase, worse,</span> since yesterday</span>
+    </div>
+  </div>
+  <div class="eof-widget"><div class="eof-stat">
+    <span class="eof-stat__label">Pending value</span>
+    <span class="eof-stat__value">${money(total)}</span>
+  </div></div>
+  <div class="eof-widget">
+    <div class="eof-widget__header"><span class="eof-widget__title">Queue</span>
+      <a href="/pos" class="eof-u-text-muted" style="font-size: var(--eof-font-size-xs)">View all</a></div>
+    <div class="eof-widget__body eof-widget__body--flush">
+      <div class="eof-data-table-container" style="border:none">
+        <table class="eof-data-table">
+          <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="eof-data-table__col--code">${p.id}</td><td class="eof-data-table__col--numeric">${money(p.amount)}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>`;
+};
+
+// ---------- server ----------
+const server = createServer(async (req, res) => {
+  const url = new URL(req.url, 'http://x');
+  const path = url.pathname;
+  try {
+    if (path.startsWith('/assets/')) {
+      const file = normalize(join(uiDist, path.slice(8)));
+      if (!file.startsWith(uiDist)) throw new Error('path');
+      const body = await readFile(file);
+      const type = file.endsWith('.css')
+        ? 'text/css'
+        : file.endsWith('.js')
+          ? 'text/javascript'
+          : 'application/octet-stream';
+      res.writeHead(200, { 'content-type': type });
+      return res.end(body);
+    }
+    if (path === '/' ) {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Dashboard', '/', dashScreen()));
+    }
+    if (path === '/pos' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Purchase orders', '/pos', listScreen()));
+    }
+    if (path === '/pos/bulk-approve' && req.method === 'POST') {
+      let body = '';
+      for await (const c of req) body += c;
+      const ids = new URLSearchParams(body).getAll('on'); // unnamed checkboxes post nothing useful — see findings
+      pos.forEach((p) => {
+        if (p.status === 'Pending') p.status = 'Approved';
+      });
+      audit.push({ t: new Date().toISOString(), what: 'bulk approve' });
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(tbodyHtml(pos));
+    }
+    const m = path.match(/^\/pos\/(PO-\d+)(\/approve)?$/);
+    if (m) {
+      const p = pos.find((x) => x.id === m[1]);
+      if (!p) {
+        res.writeHead(404);
+        return res.end('not found');
+      }
+      if (m[2] && req.method === 'POST') {
+        p.status = 'Approved';
+        audit.push({ t: new Date().toISOString(), what: `approved ${p.id}` });
+        res.writeHead(200, { 'content-type': 'text/html' });
+        return res.end(timelineHtml(p));
+      }
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page(p.id, '/pos', detailScreen(p)));
+    }
+    res.writeHead(404);
+    res.end('not found');
+  } catch (e) {
+    res.writeHead(500);
+    res.end('error');
+  }
+});
+
+server.listen(8080, () => console.log('po-app on :8080 · ui dist:', uiDist));

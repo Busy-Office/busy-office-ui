@@ -18,8 +18,10 @@ const tableMarkup = `<div class="eof-data-table-container">
       <th scope="col" class="eof-data-table__col--numeric">Amount</th>
     </tr></thead>
     <tbody><tr>
-      <td><input type="checkbox"
+      <td><input type="checkbox" name="id" value="INV-1"
           class="eof-checkbox eof-data-table__row-select" aria-label="Select INV-1" /></td>
+      <!-- name/value make the selection POSTable:
+           hx-include=".eof-data-table__row-select:checked" or a plain form. -->
       <td class="eof-data-table__col--code">INV-1</td>
       <td class="eof-data-table__col--numeric">$4,208.00</td>
     </tr></tbody>

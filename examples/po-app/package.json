@@ -1,0 +1,12 @@
+{
+  "name": "po-app",
+  "private": true,
+  "type": "module",
+  "description": "Reference consumer: installs @busy-office/ui from the packed tarball and uses ONLY documented APIs.",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@busy-office/ui": "file:./busy-office-ui-0.1.0.tgz"
+  }
+}

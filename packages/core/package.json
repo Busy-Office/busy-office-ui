@@ -7,6 +7,7 @@
   "sideEffects": ["*.css"],
   "files": ["dist"],
   "exports": {
+    "./package.json": "./package.json",
     "./css": "./dist/css/index.css",
     "./css/min": "./dist/css/index.min.css",
     "./css/tokens": "./dist/css/tokens.css",
