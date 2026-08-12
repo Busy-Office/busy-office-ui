@@ -47,13 +47,20 @@ const htmxSnippet = `<tbody hx-get="/invoices" hx-trigger="every 30s"
        hx-swap="outerHTML settle:300ms">
 <!-- .htmx-settling rows flash on update; selection state
      re-derives automatically on htmx:afterSwap -->`;
-const pilotSnippet = `import "@busy-office/ui/css/tokens";
-import "@busy-office/ui/css/reset";
+const pilotKb = (
+  gzipSync(
+    Buffer.from(
+      readFileSync(require.resolve('@busy-office/ui/css/tokens.min'), 'utf8') +
+        readFileSync(require.resolve('@busy-office/ui/css/reset.min'), 'utf8') +
+        readFileSync(require.resolve('@busy-office/ui/css/components/data-table.min'), 'utf8'),
+    ),
+  ).length / 1024
+).toFixed(1);
+const pilotSnippet = `import "@busy-office/ui/css/tokens.min";
+import "@busy-office/ui/css/reset.min";
 import "@busy-office/ui/css/components/data-table.min";
-/* one screen, ~${(
-  (gzipSync(Buffer.from(readFileSync(require.resolve('@busy-office/ui/css/tokens'), 'utf8') + readFileSync(require.resolve('@busy-office/ui/css/reset'), 'utf8'))).length +
-  gzipSync(Buffer.from(readFileSync(require.resolve('@busy-office/ui/css/components/data-table'), 'utf8'))).length) / 1024
-).toFixed(1)} kB gzipped. Your unlayered CSS already outranks all of it. */`;
+/* one screen, ~${pilotKb} kB gzipped — the exact files above.
+   Your unlayered CSS already outranks all of it. */`;
 
 const invoices = [
   ['INV-10234', 'Acme Supply Co.', 'CC-4021', '$4,208.00', 'Pending', 'warning'],
@@ -101,10 +108,11 @@ const invoices = [
           </div>
           <pre class="install"><code>npm i @busy-office/ui</code></pre>
           <dl class="meta">
-            <div><dt>Bundle</dt><dd><a href="https://github.com/Busy-Office/busy-office-ui/blob/main/packages/core/scripts/extract-api.mjs" title="computed at build">{gzipKb} kB gz</a> <span class="meta__sub">({minKb} kB min, tree-shakable)</span></dd></div>
+            <div><dt>Bundle</dt><dd><a href="https://github.com/Busy-Office/busy-office-ui/blob/main/apps/docs/src/pages/index.astro">{gzipKb} kB gz</a> <span class="meta__sub">{minKb} kB min · per-component files · computed at build</span></dd></div>
             <div><dt>Dependencies</dt><dd>0 <span class="meta__sub">JS optional — 5 call-once behaviors</span></dd></div>
-            <div><dt>Contrast</dt><dd><a href={base + '/base/colors'}>{contrastPairs} AA pairs</a> <span class="meta__sub">both themes, CI-gated</span></dd></div>
-            <div><dt>Floor</dt><dd>Chrome 119 · FF 128 · Safari 17.4 <span class="meta__sub">that's why there's no JS</span></dd></div>
+            <div><dt>Contrast</dt><dd><a href={base + '/base/colors'}>{contrastPairs / 2} pairs × 2 themes</a> <span class="meta__sub">all AA, CI-gated</span></dd></div>
+            <div><dt>API</dt><dd><a href={base + '/getting-started/versioning'}>Versioned</a> <span class="meta__sub">classes, tokens, ARIA are semver surface</span></dd></div>
+            <div><dt>Floor</dt><dd>Chrome 119 · FF 128 · Safari 17.4 <span class="meta__sub">modern CSS instead of a runtime</span></dd></div>
           </dl>
         </div>
 

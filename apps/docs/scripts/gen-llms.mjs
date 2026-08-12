@@ -55,8 +55,12 @@ import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts,
 
 `;
 
+// Page slug for a component = where its classes are indexed (handles the
+// alert -> alerts slug difference in one place).
+const slugOf = (name, c) => api.index[c.classes[0]] ?? `components/${name}`;
+
 for (const [name, c] of Object.entries(api.components)) {
-  out += `### ${name} — ${site}/components/${name}/\n`;
+  out += `### ${name} — ${site}/${slugOf(name, c)}/\n`;
   out += `classes: ${c.classes.join(' ')}\n`;
   if (c.dataAttrs.length) out += `data attrs: ${c.dataAttrs.join(' ')}\n`;
   if (c.ariaAttrs.length) out += `aria styled: ${c.ariaAttrs.join(' ')}\n`;
@@ -77,5 +81,17 @@ for (const p of [
   'base/colors', 'reference/classes', 'patterns/invoice-list', 'patterns/approval',
 ]) out += `${site}/${p}/\n`;
 
+// Assert every URL we publish resolves to a built page (site-grill S-2:
+// generated links must be verified against output, not assumed).
+const { access } = await import('node:fs/promises');
+const urls = [...out.matchAll(new RegExp(`${site}/([a-z0-9/-]+)/`, 'g'))].map((m) => m[1]);
+for (const slug of new Set(urls)) {
+  try {
+    await access(join(docsRoot, 'dist', slug, 'index.html'));
+  } catch {
+    throw new Error(`llms.txt links to a page that was not built: /${slug}/`);
+  }
+}
+
 await writeFile(join(docsRoot, 'dist/llms.txt'), out);
-console.log(`llms.txt generated (${(out.length / 1024).toFixed(1)} kB)`);
+console.log(`llms.txt generated (${(out.length / 1024).toFixed(1)} kB, ${new Set(urls).size} URLs verified)`);

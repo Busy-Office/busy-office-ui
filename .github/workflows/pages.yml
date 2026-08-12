@@ -28,6 +28,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -w @busy-office/ui
+      - name: Behavior tests gate the deploy
+        run: npx vitest run --root packages/core
       - name: Build docs with Pages base path
         run: npm run build -w docs
         env:

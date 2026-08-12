@@ -82,9 +82,13 @@ for (const f of (await readdir(primDir)).filter((f) => f.endsWith('.css') && f !
 
 api.utilities = shape(await analyze([join(srcCss, 'utilities/index.css'), join(srcCss, 'print/index.css')]));
 
-// Global class index: class -> owning page slug
+// Global class index: class -> owning page slug. Docs page slugs differ from
+// CSS dir names in one case (site-grill S-2); gen-llms.mjs asserts every slug
+// resolves to a built page.
+const PAGE_SLUG = { alert: 'alerts' };
 const index = {};
-for (const [name, c] of Object.entries(api.components)) for (const cls of c.classes) index[cls] = `components/${name}`;
+for (const [name, c] of Object.entries(api.components))
+  for (const cls of c.classes) index[cls] = `components/${PAGE_SLUG[name] ?? name}`;
 for (const [name, p] of Object.entries(api.primitives)) for (const cls of p.classes) index[cls] ??= 'base/primitives';
 for (const cls of api.utilities.classes) index[cls] ??= 'base/utilities';
 api.index = index;

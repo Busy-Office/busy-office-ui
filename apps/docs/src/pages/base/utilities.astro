@@ -1,0 +1,41 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import api from '@busy-office/ui/api';
+const utils = api.utilities.classes;
+const DESC: Record<string, string> = {
+  'bo-u-hidden': 'display: none — the blunt instrument',
+  'bo-u-text-truncate': 'single-line ellipsis truncation',
+  'bo-u-text-right': 'text-align: end (logical)',
+  'bo-u-text-muted': 'muted ink (AA on surface and muted backgrounds)',
+  'bo-u-mono': 'the mono stack — IDs, codes',
+  'bo-u-tabular': 'tabular numerals — columns that must align',
+  'bo-u-print-hidden': 'screen-only chrome',
+  'bo-u-print-only': 'print-only content (report headers, generated-on stamps)',
+  'bo-u-break-before': 'page break before (print)',
+  'bo-u-avoid-break': 'keep together across pages (print)',
+  'bo-print-report': 'report region: absolute links print their URLs inside it',
+  'bo-visually-hidden': 'screen-reader-only text — the two-channel state pattern',
+};
+---
+<Gallery title="Utilities">
+  <p class="demo-note">
+    A small, curated escape-hatch set — deliberately not a utility system. They live
+    in the last cascade layer, so they win over component styles. The list below is
+    generated from the shipped CSS.
+  </p>
+  <section class="demo">
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Class</th><th scope="col">Does</th></tr></thead>
+        <tbody>
+          {utils.map((u: string) => (
+            <tr>
+              <td class="bo-data-table__col--code">.{u}</td>
+              <td>{DESC[u] ?? '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Gallery>

@@ -22,5 +22,7 @@ jobs:
         run: npm run lint:css -w @busy-office/ui
       - name: Behavior tests (against compiled dist)
         run: npx vitest run --root packages/core
-      - name: Build docs gallery
+      - name: Build docs gallery at the Pages base path (incl. dist link check)
         run: npm run build -w docs
+        env:
+          DOCS_BASE: /busy-office-ui
