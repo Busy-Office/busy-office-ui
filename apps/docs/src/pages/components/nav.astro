@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
         data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
 
@@ -65,4 +66,7 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     import { initDialogs } from '@busy-office/ui/js';
     initDialogs();
   </script>
+  <ApiTable component="nav"
+    notes={['Current page carries <code>aria-current="page"</code>; icons are <code>aria-hidden</code>, labels stay in the accessibility tree when the rail collapses.',
+            'The off-canvas drawer is a dialog variant — it inherits initDialogs() wiring (backdrop, Esc, focus-return, Tab loop).']} />
 </Gallery>

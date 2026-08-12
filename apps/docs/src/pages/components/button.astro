@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 ---
 <Gallery title="Button">
   <section class="demo">
@@ -26,4 +27,7 @@ import Gallery from '../../layouts/Gallery.astro';
       <span>← this cluster is <code>data-density="compact"</code> regardless of the global setting</span>
     </div>
   </section>
+  <ApiTable component="button"
+    notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
+            'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.']} />
 </Gallery>

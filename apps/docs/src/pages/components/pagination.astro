@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const pgMarkup = `<div class="bo-data-table__footer">
   <label class="bo-choice">Rows
     <select class="bo-select" style="inline-size:auto" aria-label="Rows per page">
@@ -48,4 +49,7 @@ const pgMarkup = `<div class="bo-data-table__footer">
     <h2>Markup</h2>
     <pre><code>{pgMarkup}</code></pre>
   </section>
+  <ApiTable component="pagination"
+    notes={['Current page carries <code>aria-current="page"</code>; navigation itself is your links/HTMX.',
+            'The table footer (<code>.bo-data-table__footer</code>) is owned by data-table — import that file too when going à la carte.']} />
 </Gallery>

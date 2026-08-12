@@ -1,0 +1,66 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const auditMarkup = `<ol class="bo-audit" role="list">
+  <li class="bo-audit__entry">
+    <time class="bo-audit__time" datetime="2026-08-10T15:02">08-10 15:02</time>
+    <span><span class="bo-audit__actor">J. Kim</span> approved</span>
+    <span class="bo-audit__detail">"Within Q3 budget."</span>
+  </li>
+</ol>
+<!-- Grid-aligned: the time column self-sizes; details land in the content
+     column automatically — no width tuning when formats change. -->`;
+---
+<Gallery title="Timeline & audit trail">
+  <p class="demo-note">
+    The approval-workflow pair: a status timeline (done / current / pending /
+    rejected) and a chronological audit trail. Two-channel state throughout —
+    glyphs are aria-hidden, state reaches AT via visually-hidden text and
+    <code>aria-current</code>. Composed example:
+    <a href={base + '/patterns/approval'}>the approval-workflow pattern</a>.
+  </p>
+  <section class="demo">
+    <h2>Timeline states</h2>
+    <ol class="bo-timeline" role="list" style="max-inline-size: 24rem">
+      <li class="bo-timeline__step" data-state="done">
+        <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+        <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Submitted</div><div class="bo-timeline__meta">R. Vance · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div></div>
+      </li>
+      <li class="bo-timeline__step" data-state="current" aria-current="step">
+        <span class="bo-timeline__marker" aria-hidden="true">●</span>
+        <div><div class="bo-timeline__title">Cost-center approval</div><div class="bo-timeline__meta">waiting · 2 days</div></div>
+      </li>
+      <li class="bo-timeline__step" data-state="rejected">
+        <span class="bo-timeline__marker" aria-hidden="true">✕</span>
+        <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Rejected: </span>Finance release</div><div class="bo-timeline__meta">budget hold</div></div>
+      </li>
+      <li class="bo-timeline__step" data-state="pending">
+        <span class="bo-timeline__marker" aria-hidden="true">4</span>
+        <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Not started: </span>Archive</div></div>
+      </li>
+    </ol>
+  </section>
+  <section class="demo">
+    <h2>Audit trail</h2>
+    <ol class="bo-audit" role="list" style="max-inline-size: 28rem">
+      <li class="bo-audit__entry">
+        <time class="bo-audit__time" datetime="2026-08-10T09:14">08-10 09:14</time>
+        <span><span class="bo-audit__actor">R. Vance</span> submitted PO-88213</span>
+      </li>
+      <li class="bo-audit__entry">
+        <time class="bo-audit__time" datetime="2026-08-10T15:02">08-10 15:02</time>
+        <span><span class="bo-audit__actor">J. Kim</span> approved</span>
+        <span class="bo-audit__detail">"Within Q3 budget."</span>
+      </li>
+    </ol>
+  </section>
+  <section class="demo">
+    <h2>Markup — audit entry</h2>
+    <pre><code>{auditMarkup}</code></pre>
+  </section>
+  <ApiTable component="approval-workflow"
+    notes={['State text pattern is mandatory: <code>Completed:</code> / <code>Rejected:</code> / <code>Not started:</code> visually-hidden in the title — done vs rejected must be distinguishable non-visually.',
+            'Use <code>&lt;time datetime&gt;</code> for audit timestamps.',
+            'Markers are fixed-size status graphics (not controls) — they deliberately ignore density.']} />
+</Gallery>

@@ -1,0 +1,52 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const stepperMarkup = `<ol class="bo-stepper" role="list">
+  <li class="bo-stepper__step" data-state="done">
+    <span class="bo-stepper__marker" aria-hidden="true">✓</span>
+    <span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Header</span>
+  </li>
+  <li class="bo-stepper__step" aria-current="step">
+    <span class="bo-stepper__marker">2</span>
+    <span class="bo-stepper__label">Line items</span>
+  </li>
+  <li class="bo-stepper__step">
+    <span class="bo-stepper__marker">3</span>
+    <span class="bo-stepper__label"><span class="bo-visually-hidden">Not started: </span>Review</span>
+  </li>
+</ol>`;
+---
+<Gallery title="Stepper">
+  <p class="demo-note">
+    Wizard progress for multi-step documents. State has two channels, always: the
+    marker glyph (aria-hidden) AND visually-hidden state text / <code>aria-current</code>.
+    The stepper is its own named container — labels collapse to screen-reader-only when
+    it narrows; markers stay.
+  </p>
+  <section class="demo">
+    <ol class="bo-stepper" role="list" style="max-inline-size: 40rem">
+      <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Header</span></li>
+      <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Line items</span></li>
+      <li class="bo-stepper__step" aria-current="step"><span class="bo-stepper__marker">3</span><span class="bo-stepper__label">Approvers</span></li>
+      <li class="bo-stepper__step"><span class="bo-stepper__marker">4</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Not started: </span>Review</span></li>
+    </ol>
+  </section>
+  <section class="demo">
+    <h2>Narrow container (labels collapse, names retained)</h2>
+    <div style="max-inline-size: 22rem">
+      <ol class="bo-stepper" role="list">
+        <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Header</span></li>
+        <li class="bo-stepper__step" aria-current="step"><span class="bo-stepper__marker">2</span><span class="bo-stepper__label">Line items</span></li>
+        <li class="bo-stepper__step"><span class="bo-stepper__marker">3</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Not started: </span>Review</span></li>
+      </ol>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{stepperMarkup}</code></pre>
+  </section>
+  <ApiTable component="stepper"
+    notes={['<code>aria-current="step"</code> marks the current step; do not combine with <code>data-state="done"</code> (current wins by source order but the combination is out of contract).',
+            'Steps are inert <code>&lt;li&gt;</code> by contract — interactive (clickable) steps are not yet specified.',
+            'Print: markers render outlined black-on-white automatically.']} />
+</Gallery>

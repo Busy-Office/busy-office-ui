@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const fieldMarkup = `<div class="bo-form-field">
   <label class="bo-form-field__label" for="cc">Cost center</label>
   <input class="bo-input bo-input--code" id="cc" required
@@ -86,4 +87,7 @@ const fieldMarkup = `<div class="bo-form-field">
       <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" /> Urgent</label>
     </div>
   </section>
+  <ApiTable component="form"
+    notes={['Error semantics are YOUR markup: <code>aria-invalid</code> + <code>aria-describedby</code> pointing at the message (with <code>role="alert"</code> if dynamic) — CSS covers visuals only.',
+            'Required marker needs a real <code>required</code>/<code>aria-required</code> on the control (or the <code>--required</code> modifier).']} />
 </Gallery>

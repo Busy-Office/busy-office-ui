@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search" sits on it. -->
 <form class="bo-filter-bar" role="search" aria-label="Invoice filters">
   <input class="bo-input" type="search" name="q" aria-label="Search invoices" />
@@ -57,4 +58,7 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
     import { initDropdowns } from '@busy-office/ui/js';
     initDropdowns();
   </script>
+  <ApiTable component="filters"
+    notes={['Make the bar a real <code>&lt;form role="search"&gt;</code> so <code>type="reset"</code> works.',
+            'Chip remove buttons name their filter in <code>aria-label</code>; 24px hit area is built in.']} />
 </Gallery>

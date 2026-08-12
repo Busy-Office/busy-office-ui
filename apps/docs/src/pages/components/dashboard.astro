@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const statMarkup = `<div class="bo-widget">
   <div class="bo-stat">
     <span class="bo-stat__label">Open invoices</span>
@@ -109,4 +110,8 @@ const statMarkup = `<div class="bo-widget">
     <h2>Markup</h2>
     <pre><code>{statMarkup}</code></pre>
   </section>
+  <ApiTable component="dashboard"
+    notes={['Delta valence needs two channels: the visible <code>⚠</code> on bad deltas AND visually-hidden text ("increase, worse,").',
+            'Stat values use proportional figures; compact big numbers server-side (12.9K, $4.2M). One hero per view.',
+            'Widgets are named containers (<code>bo-widget</code>); the grid is <code>bo-widget-grid</code> — span-2 collapses at the grid&#39;s 2-column threshold.']} />
 </Gallery>

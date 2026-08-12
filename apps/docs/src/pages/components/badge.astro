@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
 <span class="bo-badge bo-badge--success">Approved</span>
 <span class="bo-badge bo-badge--warning">Pending</span>
@@ -28,4 +29,6 @@ const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
     <h2>Markup</h2>
     <pre><code>{badgeMarkup}</code></pre>
   </section>
+  <ApiTable component="badge"
+    notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />
 </Gallery>
