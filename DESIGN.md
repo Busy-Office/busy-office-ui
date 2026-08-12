@@ -68,6 +68,41 @@ Class naming: `.eof-<block>`, `.eof-<block>--<variant>`, `.eof-<block>__<part>` 
 only when a bare element selector isn't enough; a table row is `tr`, not a class).
 Behavioral state via `data-state` / `data-loading` attributes and native ARIA.
 
+## Unit doctrine (grill-audited 2026-08-12)
+
+1. **`rem` for space and size** — spacing, density aliases, component dimensions.
+   Density is rem-only and px overrides of density tokens are UNSUPPORTED: anchored
+   rows clip when a low-vision user raises the root font (the failure users
+   escalate); the `data-density` toggle is the density lever, giving that user
+   compact rows at their readable text size. Control/row heights are MINIMUMS
+   (`min-height`, or table-cell `height` — a minimum by spec) — never fixed heights
+   on wrappable content (WCAG 1.4.12).
+2. **`px` only for hairlines** — borders, focus rings, connectors, shadow offsets.
+   Integer px + single-edge borders is also the 125% display-scaling mitigation; a
+   `0.0625rem` border smears. `9999px` radius is an allowed sentinel.
+3. **`ch` for character-measured mono content and docs prose only** — always a
+   minimum width, never a clipping width; +1ch slack (fleet mono fonts differ);
+   NEVER stored in a custom property consumed across font contexts (ch resolves per
+   consuming element). The docs prose measure (~70ch) is documentation typography —
+   never inside application screens.
+4. **Container-query thresholds in `rem`** — beyond-conformance support for
+   text-only scaling (~3% of users set a non-default browser font size; full-page
+   zoom scales px and rem identically, so this is NOT a WCAG 1.4.4 mechanism).
+   Never suppress zoom (`user-scalable=no`) — that IS the 1.4.4 kill switch.
+   Constraint this introduces: the framework assumes an unmodified root font-size;
+   injection into a host document that rescales `html` (legacy 62.5% hacks) rescales
+   every rem — embed via iframe (safe: own root) instead. Email templates: out of
+   scope.
+5. **Compaction may compact, not delete** — container queries may tighten padding
+   and density but may not `display:none` data columns unless an in-page reveal
+   exists (WCAG 1.4.10 Reflow); the `col--secondary` hide requires the consumer to
+   keep hidden data reachable (e.g. the row's detail view).
+6. **`pt` only inside `@media print`** (10-11pt body); no `ch` widths in print
+   (font substitution wraps amounts on signed approvals) — nowrap numeric/time
+   columns instead. Unitless `line-height` only. `100dvh` accepted for shells
+   (svh trade-off recorded). Interactive target floor: 1.5rem in every density
+   tier; bare checkboxes/radios sit in a padded label or cell restoring 24px.
+
 ## Two standing build rules (grill-derived)
 
 1. **Never-color-alone has two audiences.** Every state signal ships BOTH a visible

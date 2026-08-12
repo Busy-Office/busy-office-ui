@@ -86,10 +86,15 @@
     font-size: var(--eof-font-size-sm);
   }
 
+  /* Grid alignment: the time column self-sizes (max-content) and the detail
+     line lands in the content column by grid placement — no width token, so
+     there is nothing to drift when timestamp formats change, and no ch/rem
+     cross-font-context hazard (unit-doctrine grill, Kofi F1). */
   .eof-audit__entry {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--eof-space-2);
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: var(--eof-space-2);
+    row-gap: var(--eof-space-1);
     padding-block: var(--eof-space-2);
     border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
   }
@@ -98,16 +103,13 @@
     border-block-end: none;
   }
 
-  /* Time column width is a token so the detail indent below always aligns —
-     widen it (e.g. 8rem) when timestamps carry the year. */
   .eof-audit__time {
-    flex: none;
-    inline-size: var(--eof-audit-time-width, 5rem);
     font-family: var(--eof-font-mono);
     font-size: var(--eof-font-size-xs);
     font-variant-numeric: tabular-nums;
     color: var(--eof-color-text-muted);
     padding-block-start: 0.125rem;
+    white-space: nowrap;
   }
 
   .eof-audit__actor {
@@ -115,12 +117,9 @@
   }
 
   .eof-audit__detail {
-    inline-size: 100%;
+    grid-column: 2;
     color: var(--eof-color-text-secondary);
     font-size: var(--eof-font-size-xs);
-    padding-inline-start: calc(
-      var(--eof-audit-time-width, 5rem) + var(--eof-space-2)
-    );
   }
 
   @media print {

@@ -90,7 +90,7 @@
 
   /* Narrow STEPPER (its own named container): labels collapse to
      screen-reader-only, markers remain. */
-  @container eof-stepper (max-width: 480px) {
+  @container eof-stepper (max-width: 30rem) {
     .eof-stepper__label {
       position: absolute;
       width: 1px;

@@ -63,7 +63,7 @@
      Labels are visually hidden, NOT display:none — display:none removes them
      from the accessibility tree and, with aria-hidden icons, would leave every
      link with an empty accessible name. */
-  @container eof-shell (max-width: 900px) {
+  @container eof-shell (max-width: 56rem) {
     .eof-sidebar-nav {
       inline-size: 3.25rem;
     }

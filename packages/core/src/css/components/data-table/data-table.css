@@ -188,7 +188,7 @@
      Precedence: an EXPLICIT data-density on the table or its container wins —
      compaction only applies when neither declares one. All density aliases
      are overridden together so the result is coherent compact, not a mix. */
-  @container eof-table (max-width: 480px) {
+  @container eof-table (max-width: 30rem) {
     .eof-data-table-container:not([data-density])
       > .eof-data-table:not([data-density]) {
       --eof-density-cell-padding-x: var(--eof-space-1);

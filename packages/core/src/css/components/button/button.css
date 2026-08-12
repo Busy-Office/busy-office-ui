@@ -11,7 +11,9 @@
     align-items: center;
     justify-content: center;
     gap: var(--eof-space-2);
-    height: var(--eof-btn-height);
+    /* min-height, not height: fixed heights clip under WCAG 1.4.12 text-
+       spacing overrides the moment a label wraps. */
+    min-height: var(--eof-btn-height);
     padding-inline: var(--eof-btn-padding-x);
     border: var(--eof-border-width) solid var(--eof-btn-border);
     border-radius: var(--eof-radius-md);

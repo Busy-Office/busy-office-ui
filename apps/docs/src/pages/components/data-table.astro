@@ -111,7 +111,10 @@ const rows = [
         </table>
       </div>
     </div>
-    <p class="eof-u-text-muted">The cost-center column hides itself; rows tighten — driven by the container's width, not the viewport.</p>
+    <p class="eof-u-text-muted">The cost-center column hides itself; rows tighten — driven by the container's width, not the viewport.
+    <strong>Reflow requirement (WCAG 1.4.10):</strong> data hidden by compaction must stay
+    reachable — give rows a detail view (like the PO # link pattern) or don't mark
+    columns <code>--secondary</code>.</p>
   </section>
   <section class="demo">
     <h2>Inline edit — seamless inputs in cells</h2>
