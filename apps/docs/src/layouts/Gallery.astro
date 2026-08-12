@@ -96,6 +96,7 @@ const current =
         </label>
       </header>
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs">
+        <div class="bo-sidebar-nav__section" id="docsearch"></div>
         {sections.map((s) => (
           <div class="bo-sidebar-nav__section">
             <div class="bo-sidebar-nav__heading">{s.label}</div>
@@ -122,6 +123,18 @@ const current =
         </div>
       </main>
     </div>
+    <script is:inline define:vars={{ base }}>
+      // Pagefind exists only in the built site; degrade silently in dev.
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = `${base}/pagefind/pagefind-ui.css`;
+      document.head.append(css);
+      const s = document.createElement('script');
+      s.src = `${base}/pagefind/pagefind-ui.js`;
+      s.onload = () => new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
+      s.onerror = () => document.getElementById('docsearch')?.remove();
+      document.head.append(s);
+    </script>
     <script>
       // The documented 3-line density-toggle recipe.
       const sel = document.getElementById('density') as HTMLSelectElement;
