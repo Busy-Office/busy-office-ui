@@ -406,7 +406,12 @@ const invoices = [
     margin-block: var(--bo-space-3);
   }
   .bo-widget__body p { margin-block: 0 var(--bo-space-3); }
+  /* min-width:0 lets each pre's overflow-x:auto contain wide code instead of
+     forcing the grid track (and the page) wider — no horizontal body scroll. */
+  .bo-widget__body { min-inline-size: 0; }
+  .bo-widget__body > * { min-width: 0; }
   .compare { display: grid; grid-template-columns: 1fr 1fr; gap: var(--bo-space-4); }
+  .compare > * { min-width: 0; }
   .compare__label {
     font-family: var(--bo-font-mono);
     font-size: var(--bo-font-size-xs);
