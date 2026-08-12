@@ -1,0 +1,28 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+---
+<Gallery title="Versioning & upgrades">
+  <section class="demo">
+    <h2>What is API</h2>
+    <p><strong>Semantic tokens, documented class names, and
+    <code>data-*</code>/ARIA contracts are the public API</strong> — breaking any of
+    them is a major version. The API tables on every component page are generated
+    from the shipped CSS, so what's documented is exactly what's contractual.
+    Component-internal selectors and the raw palette tier are not API.
+    <strong>Per-component dist file placement is not API until v1.0</strong> —
+    à-la-carte importers should pin versions.</p>
+  </section>
+  <section class="demo">
+    <h2>Docs policy</h2>
+    <p>Docs describe the latest version; pinned users read the
+    <a href="https://github.com/Busy-Office/busy-office-ui/blob/main/CHANGELOG.md">CHANGELOG</a>,
+    which records every pre-1.0 breaking change (including the <code>eof-</code> →
+    <code>bo-</code> prefix rename). Versioned docs arrive with 1.0.</p>
+  </section>
+  <section class="demo">
+    <h2>Leaving is cheap — by design</h2>
+    <p>The cascade contract means your unlayered CSS already outranks the framework;
+    a migration away is incremental overrides, not a rewrite. That's deliberate:
+    an exit story you can verify beats a lock-in you have to trust.</p>
+  </section>
+</Gallery>

@@ -1,0 +1,117 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const step1 = `<!doctype html>
+<html lang="en" data-density="compact">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoices</title>
+  <link rel="stylesheet" href="/assets/busy-office-ui/index.min.css">
+</head>
+<body>
+  <div class="bo-app-shell">
+    <header class="bo-navbar bo-app-shell__header">
+      <a class="bo-navbar__brand" href="/">Acme ERP</a>
+    </header>
+    <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
+      <ul>
+        <li><a class="bo-sidebar-nav__link" href="/invoices" aria-current="page">
+          <span class="bo-sidebar-nav__icon" aria-hidden="true">▤</span>
+          <span class="bo-sidebar-nav__label">Invoices</span></a></li>
+      </ul>
+    </nav>
+    <main class="bo-app-shell__main"><!-- steps 2-4 go here --></main>
+  </div>
+  <script type="module">
+    import { initDialogs, initDataTables } from "/assets/busy-office-ui/js/index.js";
+    initDialogs(); initDataTables();
+  </script>
+</body>
+</html>`;
+const step2 = `<form class="bo-filter-bar" role="search" aria-label="Invoice filters"
+      method="get" action="/invoices">
+  <input class="bo-input" type="search" name="q" aria-label="Search invoices">
+  <select class="bo-select" name="status" aria-label="Status">
+    <option>All</option><option>Pending</option><option>Approved</option>
+  </select>
+  <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
+</form>`;
+const step3 = `<div class="bo-data-table-container">
+  <div class="bo-data-table__toolbar">
+    <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+      <button class="bo-btn" type="button">Approve selected</button>
+    </div>
+    <span class="bo-data-table__selection-count"></span>
+  </div>
+  <table class="bo-data-table">
+    <thead><tr>
+      <th scope="col"><input type="checkbox"
+        class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>
+      <th scope="col" aria-sort="ascending">
+        <button class="bo-data-table__sort-btn" type="button">Invoice #</button></th>
+      <th scope="col">Vendor</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+      <th scope="col">Status</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" name="id" value="INV-1"
+          class="bo-checkbox bo-data-table__row-select" aria-label="Select INV-1"></td>
+        <td class="bo-data-table__col--code"><a href="/invoices/INV-1">INV-1</a></td>
+        <td>Acme Supply Co.</td>
+        <td class="bo-data-table__col--numeric">$4,208.00</td>
+        <td><span class="bo-badge bo-badge--warning">Pending</span></td>
+      </tr>
+      <!-- …your rows… -->
+    </tbody>
+  </table>
+  <div class="bo-data-table__footer">
+    <nav class="bo-pagination" aria-label="Pagination">
+      <a class="bo-pagination__btn" aria-current="page" href="?page=1">1</a>
+      <a class="bo-pagination__btn" href="?page=2">2</a>
+      <span class="bo-pagination__info">1–25 of 312</span>
+    </nav>
+  </div>
+</div>`;
+---
+<Gallery title="Your first screen">
+  <p class="demo-note">
+    From empty file to a working dense invoice list — the flagship ERP pattern — in
+    four steps. Copy each block verbatim; the end state is the
+    <a href={base + '/patterns/invoice-list'}>invoice-list pattern</a>, live.
+  </p>
+  <section class="demo">
+    <h2>Step 1 — the page skeleton</h2>
+    <p>Density on <code>&lt;html&gt;</code>, one stylesheet, two init calls (once,
+    ever). Get the files per <a href="./installation">Installation</a>.</p>
+    <pre><code>{step1}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Step 2 — the filter bar (into <code>&lt;main&gt;</code>)</h2>
+    <p>A real <code>&lt;form&gt;</code>: submit and reset work without JS.</p>
+    <pre><code>{step2}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Step 3 — the table, with selection, sorting hooks, and pagination</h2>
+    <pre><code>{step3}</code></pre>
+    <p class="bo-u-text-muted">What you get for free: check a row and the bulk bar +
+    live "n selected" count appear; select-all works (initDataTables); sticky header;
+    the amount column aligns via tabular numerals. What stays yours: the sort button
+    re-orders rows server-side and updates <code>aria-sort</code>; pagination links
+    carry your querystring; row checkboxes POST via their <code>name/value</code>.</p>
+  </section>
+  <section class="demo">
+    <h2>Step 4 — verify</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li>Keyboard-only: Tab reaches every control; focus rings visible.</li>
+      <li>Flip <code>data-density</code> to <code>comfortable</code> — everything resizes from the one attribute.</li>
+      <li>⌘P — nav and toolbars disappear, the table prints black-on-white with repeating headers.</li>
+      <li>Compare against the <a href={base + '/patterns/invoice-list'}>live pattern</a>; if yours differs, diff your markup against its Markup block.</li>
+    </ul>
+    <p>Next: the detail screen — <a href={base + '/components/form'}>form sections</a>,
+    <a href={base + '/components/approval-workflow'}>timeline</a>, and an
+    <a href={base + '/components/dialog'}>approve dialog</a> — composed in the
+    <a href={base + '/patterns/approval'}>approval pattern</a>.</p>
+  </section>
+</Gallery>

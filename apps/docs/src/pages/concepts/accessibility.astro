@@ -1,0 +1,49 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const twoChannel = `<!-- BOTH channels, every state signal: -->
+<li class="bo-timeline__step" data-state="rejected">
+  <span class="bo-timeline__marker" aria-hidden="true">✕</span>   <!-- visible, non-color -->
+  <div class="bo-timeline__title">
+    <span class="bo-visually-hidden">Rejected: </span>Finance release <!-- programmatic -->
+  </div>
+</li>`;
+---
+<Gallery title="Accessibility model">
+  <p class="demo-note">
+    The framework's rule, learned the hard way across three design reviews:
+    <strong>never-color-alone has two audiences.</strong> Every state signal ships a
+    visible non-color cue (glyph, text) for sighted colorblind users AND a
+    programmatic channel (visually-hidden text, ARIA state) for assistive tech.
+    Satisfying one audience is a defect.
+  </p>
+  <section class="demo">
+    <h2>The two-channel pattern</h2>
+    <pre><code>{twoChannel}</code></pre>
+    <p>Same pattern everywhere: stat deltas pair a visible <code>⚠</code> with hidden
+    "increase, worse," text; error rows pair a background tint with an inset border
+    and expect a badge/message in the row; badges are decoration — the status
+    <em>text</em> is the signal.</p>
+  </section>
+  <section class="demo">
+    <h2>The framework's job vs yours</h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">The framework guarantees</th><th scope="col">Your markup must supply</th></tr></thead>
+        <tbody>
+          <tr><td>AA contrast for every token-role pair, both themes — <a href={base + '/base/colors'}>computed and CI-gated</a></td><td><code>aria-invalid</code> + <code>aria-describedby</code> on form errors (+ <code>role="alert"</code> if dynamic)</td></tr>
+          <tr><td>Visible <code>:focus-visible</code> rings everywhere; Tab loop in dialogs; roving tabindex in tabs</td><td><code>aria-labelledby</code> on dialogs; <code>aria-label</code> on icon-only buttons and search inputs</td></tr>
+          <tr><td>Heights as minimums (text-spacing-safe); 24px target floor in every density; state styled from ARIA (<code>aria-sort</code>, <code>aria-current</code>, <code>aria-busy</code>)</td><td>The two-channel state text (<code>Completed:</code>/<code>Rejected:</code>…); <code>role="list"</code> on styled lists; <code>name</code>/<code>value</code> on selection checkboxes</td></tr>
+          <tr><td>Live "n selected" count via <code>initDataTables()</code>; reduced-motion zeroing on all animations</td><td>Keeping compaction-hidden columns reachable (row detail view — WCAG 1.4.10); never <code>user-scalable=no</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Honest status</h2>
+    <p>Contrast is verified per token pair in both themes on every build. Screen-reader
+    runtime passes (VoiceOver/NVDA verbalization) sit on an open ledger in the public
+    <a href="https://github.com/Busy-Office/busy-office-ui/tree/main/.roundtable">review trail</a> —
+    designed to WCAG 2.2 AA, with the unverified parts named rather than claimed.</p>
+  </section>
+</Gallery>

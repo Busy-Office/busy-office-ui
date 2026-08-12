@@ -1,0 +1,33 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const layers = `/* declared once, first, in every dist file: */
+@layer bo-reset, bo-tokens, bo-primitives, bo-components, bo-utilities;
+
+/* YOUR css — written outside any layer — always wins: */
+.bo-btn { border-radius: 0; }   /* beats the component layer, no !important */`;
+---
+<Gallery title="The cascade contract">
+  <p class="demo-note">
+    Every framework rule lives inside a named <code>@layer</code>. Unlayered CSS
+    beats all layered CSS regardless of specificity — so <strong>your stylesheet is
+    the escape hatch</strong>, by design, forever. No specificity wars, no
+    <code>!important</code>, and leaving the framework is cheap: your overrides
+    already outrank it.
+  </p>
+  <section class="demo">
+    <h2>The order</h2>
+    <pre><code>{layers}</code></pre>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>reset → tokens → primitives → components → utilities</strong>: utilities win over components (the one Tailwind-ism kept — a small curated set, not a system).</li>
+      <li>The layer-order statement is byte-identical in every dist file, and re-declaring an existing order is a no-op — any à-la-carte import combination yields the same cascade.</li>
+      <li>Re-branding = remapping the semantic token tier in your unlayered file; see <a href="./theming">Theming</a>. Never override component classes for brand.</li>
+    </ul>
+  </section>
+  <section class="demo">
+    <h2>What this buys at screen #200</h2>
+    <p>Overrides stay one-liners instead of specificity ladders; framework upgrades
+    can't silently outrank app CSS (layered can never beat unlayered); and audits are
+    mechanical — anything inside <code>@layer bo-*</code> is ours, anything outside
+    is yours.</p>
+  </section>
+</Gallery>

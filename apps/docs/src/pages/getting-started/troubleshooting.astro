@@ -1,0 +1,28 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+---
+<Gallery title="Troubleshooting">
+  <p class="demo-note">
+    This framework's failure modes are unusually <em>silent</em> — modern CSS
+    degrades by doing nothing, not by erroring. Symptom → cause:
+  </p>
+  <section class="demo">
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Symptom</th><th scope="col">Cause &amp; fix</th></tr></thead>
+        <tbody>
+          <tr><td>Dialogs / tabs / dropdowns do nothing</td><td>The behavior init was never called. <code>initDialogs()</code>, <code>initTabs()</code>, <code>initDropdowns()</code> — once each, anywhere, any time. See <a href="../concepts/js-behaviors">JS behaviors</a>.</td></tr>
+          <tr><td>Components render unstyled or half-styled à la carte</td><td>Import order: <strong>tokens, then reset, then components</strong>. Components carry only their own layer.</td></tr>
+          <tr><td>Your overrides don't apply</td><td>They're inside an <code>@layer</code>. Write app CSS <em>unlayered</em> — unlayered always wins. Never <code>!important</code>.</td></tr>
+          <tr><td>Form error messages never appear</td><td>Below the browser floor (<code>:has()</code>/<code>:user-invalid</code>), interactive reveals are fail-closed. Server-set <code>aria-invalid</code> + message-as-sibling still works. Floor: Chrome/Edge 119 · FF 128 · Safari 17.4.</td></tr>
+          <tr><td>Bulk-actions bar stale after an HTMX row swap</td><td>Only <code>htmx:afterSwap</code> re-derives automatically. Other swap mechanisms: call <code>refreshDataTable(container)</code>.</td></tr>
+          <tr><td>Everything is 40% too small</td><td>The host page sets <code>html {'{'} font-size: 62.5% {'}'}</code>. The framework assumes an unmodified root — embed via iframe.</td></tr>
+          <tr><td>Density attribute seems ignored on one table</td><td>It's on a wrapper while the table sits in a narrow container — explicit density wins only when set on the table or its container element itself.</td></tr>
+          <tr><td>Sort arrows render but clicking does nothing</td><td>By contract: your code re-orders rows and sets <code>aria-sort</code>; the CSS only draws the indicator.</td></tr>
+          <tr><td>Toast appears behind an open dialog</td><td>The dialog owns the browser top layer; z-index can't beat it. Render confirmations inside the dialog.</td></tr>
+          <tr><td>Checked rows POST nothing</td><td>Row checkboxes need <code>name</code>/<code>value</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Gallery>

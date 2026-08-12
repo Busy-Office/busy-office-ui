@@ -1,0 +1,35 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const registry = `bo-shell        the app shell     → sidebar collapses to icon rail  (≤ 56rem)
+bo-table        table container   → density compaction + col hiding  (≤ 30rem)
+bo-widget-grid  dashboard grid    → span-2 widgets collapse          (≤ 41rem)
+bo-widget       each widget       → components inside adapt to WIDGET width
+bo-stepper      the stepper       → labels collapse to SR-only       (≤ 30rem)`;
+---
+<Gallery title="Container queries">
+  <p class="demo-note">
+    Components respond to their <em>container's</em> width, never the viewport — a
+    table in a half-width dashboard widget compacts while the same table full-width
+    doesn't. And a build rule with teeth: <strong>every <code>@container</code> query
+    is named; the build fails on a bare one.</strong>
+  </p>
+  <section class="demo">
+    <h2>The named-container registry</h2>
+    <pre><code>{registry}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Why bare queries are banned</h2>
+    <p>An element cannot query itself: a bare <code>@container</code> resolves against
+    the <em>nearest ancestor</em> container — whatever that happens to be — or falls
+    back to the small viewport when none exists. The same rule then means different
+    things in different placements. This bug class recurred twice in review (a widget
+    rule that keyed off the app shell; a stepper that collapsed on shell width);
+    naming the container makes the dependency explicit and the mistake impossible,
+    so the build enforces it mechanically.</p>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li>Thresholds are in <strong>rem</strong> (beyond-conformance support for users who raise the browser default font size).</li>
+      <li>Explicit <code>data-density</code> always beats auto-compaction.</li>
+      <li>Compaction may compact — it may not delete data without an in-page reveal (WCAG 1.4.10).</li>
+    </ul>
+  </section>
+</Gallery>

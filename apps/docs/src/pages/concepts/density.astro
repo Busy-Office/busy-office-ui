@@ -1,0 +1,41 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const recipe = `<html data-density="compact">          <!-- app-wide default -->
+…
+<div class="bo-data-table-container" data-density="spacious">
+  <!-- one table, locally more readable — density CASCADES -->
+</div>
+
+<script>
+  // The complete persistence recipe:
+  const d = localStorage.getItem('density') ?? 'comfortable';
+  document.documentElement.dataset.density = d;
+</script>`;
+---
+<Gallery title="Density">
+  <p class="demo-note">
+    ERP users live in dense grids, so density is a first-class dimension, not a
+    theme afterthought: <code>data-density="compact | comfortable | spacious"</code>
+    on <code>&lt;html&gt;</code> or ANY wrapper remaps one token tier — rows go
+    30 / 40 / 48px, controls 28 / 36 / 44px, and every component follows, because
+    components consume <em>only</em> density aliases for internal sizing.
+  </p>
+  <section class="demo">
+    <h2>Try it (this page is live)</h2>
+    <p>The header's density selector drives this whole site. Per-region override:</p>
+    <div class="bo-cluster" data-density="compact">
+      <button class="bo-btn bo-btn--secondary">This cluster is compact</button>
+      <span>regardless of the global setting — the attribute cascades.</span>
+    </div>
+    <pre><code>{recipe}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Rules that keep density safe</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li>Density tokens are <strong>rem-only</strong> — they scale with the user's root font, so raised text never clips. The low-vision power user runs large text + compact and gets density at a readable size; that combination is the point.</li>
+      <li>Explicit <code>data-density</code> always beats container-query auto-compaction.</li>
+      <li>No density tier takes an interactive target below 1.5rem (24px).</li>
+      <li>Font size and row height move <em>together</em> per tier — never mix a density font token with a hand-set height.</li>
+    </ul>
+  </section>
+</Gallery>

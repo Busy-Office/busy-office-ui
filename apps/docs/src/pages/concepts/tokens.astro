@@ -1,0 +1,48 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const tiers = `/* Tier 1 — raw palette: never consumed by components */
+--bo-palette-blue-600: #2563eb;
+
+/* Tier 2 — semantic roles: what components reference; dark theme
+   redefines THIS tier under [data-theme="dark"] */
+--bo-color-accent: var(--bo-palette-blue-600);
+--bo-color-accent-solid: var(--bo-palette-blue-600); /* carries white text, both themes */
+--bo-color-accent-text: var(--bo-palette-blue-700);  /* sits on accent-subtle, >= 4.5:1 */
+
+/* Tier 3 — density aliases: remapped by [data-density], the ONLY sizing
+   source components use internally */
+--bo-density-row-height: 2.5rem;
+
+/* Tier 4 — component-local: defaults to globals, variants override locally */
+.bo-btn { --bo-btn-bg: var(--bo-color-accent-solid); }`;
+---
+<Gallery title="Design tokens">
+  <p class="demo-note">
+    Four tiers, each with one job. Components never touch the raw palette; brands
+    never touch component files. The tier boundaries are what make dark mode,
+    density, and re-branding one-attribute or one-file operations.
+  </p>
+  <section class="demo">
+    <h2>The four tiers</h2>
+    <pre><code>{tiers}</code></pre>
+    <p>Token <strong>roles encode contrast guarantees</strong>: <code>*-solid</code>
+    backgrounds carry white text in both themes (≥ 4.5:1, never dark-remapped);
+    <code>*-text</code> foregrounds sit on <code>*-subtle</code> backgrounds
+    (≥ 4.5:1, remapped to light steps in dark mode). Every pair is
+    <a href={base + '/base/colors'}>computed and CI-gated on every build</a>.</p>
+  </section>
+  <section class="demo">
+    <h2>Unit doctrine</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>rem</strong> for space and size — tracks the user's font preference. Density is rem-only; px overrides of density tokens are unsupported (they clip text when users raise the root font).</li>
+      <li><strong>px</strong> only for hairlines (borders, focus rings, connectors) — visual weight must not scale; integer px + single-edge borders is also the 125% display-scaling mitigation.</li>
+      <li><strong>ch</strong> for mono-measured content and docs prose only — always a minimum width, never in a token consumed across font contexts, never in print.</li>
+      <li>Container-query thresholds in <strong>rem</strong>; <code>pt</code> only inside <code>@media print</code>; line-height unitless.</li>
+      <li>Heights are <strong>minimums</strong> (<code>min-height</code>) — fixed heights clip under WCAG text-spacing overrides.</li>
+    </ul>
+    <p class="bo-u-text-muted">Constraint: the framework assumes an unmodified root
+    font-size. Hosts that rescale <code>html</code> (legacy 62.5% hacks) rescale
+    everything — embed via iframe instead.</p>
+  </section>
+</Gallery>
