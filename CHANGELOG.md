@@ -29,6 +29,12 @@ pin.
   selections are actually POSTable via `hx-include` or a form.
 
 ### Added
+- Behaviors manifest (`dist/behaviors.json`, `./behaviors-manifest` export):
+  the JS API surface — exports, contracts, DOM hooks — generated from source and
+  asserted against `dist/js/index.d.ts`; drives llms.txt and the landing count
+  (closes the CSS-true-but-not-JS-true gap).
+- Contrast coverage guard: build fails if a component pairs text on a background
+  token (incl. via `--bo-cell-bg` indirection) not in the checked PAIRS list.
 - Slices 1–3: tokens/density/dark theme, primitives, button, badge, forms
   (fields/sections/inline edit), dense data table (selection/pagination/filters/
   saved views), tabs, dropdown, alerts/toasts, navigation (sidebar/off-canvas),

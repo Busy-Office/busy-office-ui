@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const api = JSON.parse(await readFile(require.resolve('@busy-office/ui/api'), 'utf8'));
+const bh = JSON.parse(await readFile(require.resolve('@busy-office/ui/behaviors-manifest'), 'utf8'));
 const pkg = JSON.parse(await readFile(require.resolve('@busy-office/ui/package.json'), 'utf8'));
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const site = 'https://busy-office.github.io/busy-office-ui';
@@ -39,6 +40,11 @@ import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts,
 - initTabs(): REQUIRED for tabs (roving tabindex, RTL-aware arrows).
 - initDropdowns(): anchors [popover] menus to their invoker; close-on-select.
 - initAlerts(): .bo-alert__dismiss removes its alert/toast.
+
+## Behavior hooks (generated — the DOM each init reads)
+${Object.entries(bh.behaviors)
+  .map(([name, b]) => `- ${name}(): ${b.summary ?? ''}${b.hooks?.length ? ` [hooks: ${b.hooks.join(' ')}]` : ''}`)
+  .join('\n')}
 
 ## Rules your markup must follow
 

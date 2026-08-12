@@ -61,9 +61,15 @@ const PAIRS = [
   ['--bo-color-warning-text', '--bo-color-warning-subtle', 4.5],
   ['--bo-color-success-text', '--bo-color-success-subtle', 4.5],
   ['--bo-color-accent', '--bo-color-bg-surface', 4.5], // links
+  ['--bo-color-text-primary', '--bo-color-bg-hover', 4.5], // table hover rows
+  ['--bo-color-text-primary', '--bo-color-bg-selected', 4.5], // selected rows
+  ['--bo-color-text-primary', '--bo-color-bg-surface-raised', 4.5], // dialog/menu
+  ['--bo-color-text-secondary', '--bo-color-bg-canvas', 4.5], // muted-on-canvas
   ['--bo-color-border-control', '--bo-color-bg-surface', 3],
   ['--bo-color-focus-ring', '--bo-color-bg-canvas', 3],
 ];
+const PAIR_KEY = (fg, bg) => `${fg}|${bg}`;
+const KNOWN = new Set(PAIRS.map(([f, b]) => PAIR_KEY(f, b)));
 
 const report = { generated: 'by scripts/check-contrast.mjs — do not edit', themes: {} };
 let failures = 0;
@@ -85,11 +91,62 @@ for (const [theme, vars] of [['light', light], ['dark', dark]]) {
   }
 }
 
+// Coverage guard (site-grill S-4): a component that pairs a text token on a
+// background token the PAIRS list doesn't cover is a silent contrast gap.
+// Scan component + primitive CSS for `color:` and `background*:` token usage
+// within the same rule and assert each fg/bg combination is a KNOWN pair.
+import { readdir } from 'node:fs/promises';
+import postcss from 'postcss';
+const IGNORE_BG = new Set([
+  '--bo-color-bg-muted', // header cells carry secondary text, covered
+]);
+async function* cssFiles(dir) {
+  for (const e of await readdir(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) yield* cssFiles(p);
+    else if (e.name.endsWith('.css')) yield p;
+  }
+}
+const uncovered = new Set();
+// Row/surface backgrounds are often applied by CUSTOM-PROPERTY INDIRECTION
+// (e.g. --bo-cell-bg: var(--bo-color-bg-selected) on a <tr>, text inherited) —
+// those pairs never co-occur in one rule, so also require body text (text-
+// primary) coverage for any surface token assigned to a *-bg custom property.
+const INDIRECT_BG_PROP = /--bo-[a-z-]*(?:cell-)?bg[a-z-]*$/;
+for (const dir of ['components', 'primitives']) {
+  for await (const f of cssFiles(join(pkgRoot, 'src/css', dir))) {
+    const rel = f.replace(pkgRoot + '/', '');
+    const root = postcss.parse(await readFile(f, 'utf8'));
+    root.walkRules((rule) => {
+      let fg, bg;
+      rule.walkDecls((d) => {
+        const m = d.value.match(/var\((--bo-color-[a-z0-9-]+)/);
+        if (!m) return;
+        if (d.prop === 'color') fg = m[1];
+        else if (/^background/.test(d.prop)) bg = m[1];
+        // indirection: a bg-ish custom prop assigned a surface token
+        else if (INDIRECT_BG_PROP.test(d.prop) && /bg-/.test(m[1]) && !IGNORE_BG.has(m[1])) {
+          if (!KNOWN.has(PAIR_KEY('--bo-color-text-primary', m[1])))
+            uncovered.add(`--bo-color-text-primary on ${m[1]} [via ${d.prop}] (${rel})`);
+        }
+      });
+      if (fg && bg && /text|accent|danger|warning|success/.test(fg) && /bg-/.test(bg) && !IGNORE_BG.has(bg)) {
+        if (!KNOWN.has(PAIR_KEY(fg, bg))) uncovered.add(`${fg} on ${bg} (${rel})`);
+      }
+    });
+  }
+}
+
 await mkdir(join(pkgRoot, 'dist'), { recursive: true });
 await writeFile(join(pkgRoot, 'dist/contrast.json'), JSON.stringify(report, null, 2));
 
+if (uncovered.size) {
+  console.error(`\ncontrast COVERAGE gap: ${uncovered.size} token pair(s) used in CSS but not in the checked PAIRS list:`);
+  for (const u of uncovered) console.error('  ' + u);
+  process.exit(1);
+}
 if (failures) {
   console.error(`\ncontrast check FAILED: ${failures} pair(s) below threshold`);
   process.exit(1);
 }
-console.log('contrast check passed — dist/contrast.json written');
+console.log(`contrast check passed — ${PAIRS.length} pairs x 2 themes, coverage verified against component CSS`);

@@ -216,6 +216,16 @@ describe('initAlerts', () => {
   });
 });
 
+describe('behaviors manifest (generated)', () => {
+  it('lists exactly the runtime exports and counts init* correctly', async () => {
+    // @ts-expect-error — generated artifact
+    const manifest = (await import('../dist/behaviors.json')).default;
+    const runtimeExports = Object.keys(ui).sort();
+    expect(manifest.exports).toEqual(runtimeExports);
+    expect(manifest.initCount).toBe(runtimeExports.filter((n) => n.startsWith('init')).length);
+  });
+});
+
 describe('trapFocus', () => {
   it('skips hidden elements when wrapping (grill finding R9)', () => {
     html`

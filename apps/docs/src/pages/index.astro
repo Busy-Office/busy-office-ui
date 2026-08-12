@@ -8,6 +8,7 @@ import { createRequire } from 'node:module';
 import '@busy-office/ui/css';
 import api from '@busy-office/ui/api';
 import contrast from '@busy-office/ui/contrast';
+import behaviors from '@busy-office/ui/behaviors-manifest';
 
 const require = createRequire(import.meta.url);
 const minCss = readFileSync(
@@ -115,7 +116,7 @@ const invoices = [
             the package lands as-is when it ships.</p>
           <dl class="meta">
             <div><dt>Bundle</dt><dd><a href="https://github.com/Busy-Office/busy-office-ui/blob/main/apps/docs/src/pages/index.astro">{gzipKb} kB gz</a> <span class="meta__sub">{minKb} kB min · per-component files · computed at build</span></dd></div>
-            <div><dt>Dependencies</dt><dd>0 <span class="meta__sub">JS optional — 5 call-once behaviors</span></dd></div>
+            <div><dt>Dependencies</dt><dd>0 <span class="meta__sub">JS optional — {behaviors.initCount} call-once behaviors</span></dd></div>
             <div><dt>Contrast</dt><dd><a href={base + '/base/colors'}>{contrastPairs / 2} pairs × 2 themes</a> <span class="meta__sub">all AA, CI-gated</span></dd></div>
             <div><dt>API</dt><dd><a href={base + '/getting-started/versioning'}>Versioned</a> <span class="meta__sub">classes, tokens, ARIA are semver surface</span></dd></div>
             <div><dt>Floor</dt><dd>Chrome 119 · FF 128 · Safari 17.4 <span class="meta__sub">modern CSS instead of a runtime</span></dd></div>
