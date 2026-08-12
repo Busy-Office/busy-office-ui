@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
         aria-labelledby="approve-title" data-state="closed">
   <form method="dialog">
@@ -51,6 +52,15 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
       </form>
     </dialog>
   </section>
+  <ApiTable
+    component="dialog"
+    js="REQUIRED: initDialogs() — dialogs never open without it. Call once; delegation survives all swaps."
+    notes={[
+      'ARIA contract: <code>aria-labelledby</code> pointing at the title is YOUR markup; backdrop, Esc, and focus-return come free from native <code>showModal()</code>.',
+      'The Tab focus loop and <code>data-state</code> animation sync are supplied by the behavior.',
+      'Toasts cannot float above an open modal (top layer) — render confirmations inside the dialog.',
+    ]}
+  />
   <section class="demo">
     <h2>Markup — the canonical dialog recipe</h2>
     <pre><code>{dialogMarkup}</code></pre>

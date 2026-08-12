@@ -1,0 +1,30 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import api from '@busy-office/ui/api';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entries = Object.entries(api.index).sort(([a], [b]) => a.localeCompare(b));
+---
+<Gallery title="Class index">
+  <p class="demo-note">
+    Every documented class, generated from the shipped CSS at build time
+    ({entries.length} classes) — the reverse lookup for "what is
+    <code>.bo-toolbar--sticky</code> in this diff?". Behavioral state uses
+    <code>data-*</code> and ARIA attributes, not classes; those live on each
+    component's API table.
+  </p>
+  <section class="demo">
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Class</th><th scope="col">Documented on</th></tr></thead>
+        <tbody>
+          {entries.map(([cls, page]) => (
+            <tr>
+              <td class="bo-data-table__col--code">.{cls}</td>
+              <td><a href={`${base}/${page}`}>{page}</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Gallery>

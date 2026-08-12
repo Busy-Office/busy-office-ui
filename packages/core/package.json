@@ -16,6 +16,8 @@
     "./css/components/*": "./dist/css/components/*.css",
     "./css/htmx": "./dist/css/htmx.css",
     "./css/*": "./dist/css/*.css",
+    "./api": "./dist/api.json",
+    "./contrast": "./dist/contrast.json",
     "./js": {
       "types": "./dist/js/index.d.ts",
       "import": "./dist/js/index.js"
@@ -24,8 +26,10 @@
   },
   "scripts": {
     "build:css": "node scripts/build-component-css.mjs",
+    "build:api": "node scripts/extract-api.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "npm run build:css && npm run build:js",
+    "build": "npm run build:css && npm run build:api && npm run check:contrast && npm run build:js",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "pretest": "npm run build:js",
     "test": "vitest run"

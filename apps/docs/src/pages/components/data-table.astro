@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ApiTable from '../../components/ApiTable.astro';
 const tableMarkup = `<div class="bo-data-table-container">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
@@ -142,6 +143,15 @@ const rows = [
     and screen-reader semantics never flip between display and edit modes. Persist with
     a form submit or <code>hx-patch</code> on change.</p>
   </section>
+  <ApiTable
+    component="data-table"
+    js="Optional but recommended: initDataTables() — select-all, live count, O(1) toolbar reveal, swap re-derive. Without it: selection visuals work via :has(); select-all is inert."
+    notes={[
+      'Sorting contract: the framework paints the indicator from <code>aria-sort</code> on the <code>&lt;th&gt;</code>; re-ordering rows and updating the attribute is YOUR code (server or client).',
+      'Row checkboxes need <code>name</code>/<code>value</code> to POST selections (via <code>hx-include</code> or a form).',
+      'Columns marked <code>__col--secondary</code> hide under container compaction — keep that data reachable (row detail view) per WCAG 1.4.10.',
+    ]}
+  />
   <section class="demo">
     <h2>Markup — the canonical table recipe</h2>
     <pre><code>{tableMarkup}</code></pre>

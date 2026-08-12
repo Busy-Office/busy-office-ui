@@ -1,0 +1,51 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const refresh = `// Bound table containers re-derive selection state automatically when an
+// htmx:afterSwap bubbles through them. Any OTHER swap mechanism calls:
+import { refreshDataTable } from "@busy-office/ui/js";
+refreshDataTable(container);
+
+// Only NEW containers swapped in later need re-binding:
+document.body.addEventListener("htmx:afterSwap", (e) => initDataTables(e.target));`;
+---
+<Gallery title="JS behaviors">
+  <p class="demo-note">
+    The framework is CSS-first, not CSS-only. Five small behaviors
+    (~2 kB total, zero dependencies) cover what the platform can't do or what
+    accessibility demands: each is a <strong>call-once init</strong> using
+    document-level event delegation, so DOM swaps (HTMX, Alpine, anything)
+    never require re-binding.
+  </p>
+  <section class="demo">
+    <h2>The five inits</h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Init</th><th scope="col">What it adds</th><th scope="col">Without it</th></tr></thead>
+        <tbody>
+          <tr><td><code>initDialogs()</code></td><td>Trigger wiring (<code>data-dialog-trigger</code>), Tab focus loop, <code>data-state</code> sync</td><td>Dialogs never open</td></tr>
+          <tr><td><code>initDataTables()</code></td><td>Select-all (+indeterminate), live "n selected" count, O(1) toolbar reveal, swap re-derive</td><td>Select-all inert; toolbar reveal falls back to O(rows) <code>:has()</code>; no live count for AT</td></tr>
+          <tr><td><code>initTabs()</code></td><td>Roving tabindex, arrow keys (RTL-aware), panel switching</td><td>Tabs 2+ keyboard-unreachable and inert — no CSS-only fallback</td></tr>
+          <tr><td><code>initDropdowns()</code></td><td>Anchors the popover menu to its invoker; close-on-select</td><td>Menu opens centered (top layer default), stays open after picking</td></tr>
+          <tr><td><code>initAlerts()</code></td><td>Dismiss buttons remove their alert/toast</td><td>Dismiss buttons do nothing</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>The delegation model</h2>
+    <p>Each init installs one document-level listener and resolves its target at
+    event time; element-level listeners (a dialog's close handler) bind lazily on
+    first use, tracked in a <code>WeakSet</code> — never serialized into the DOM.
+    Consequences you can rely on: triggers may render before their dialog exists;
+    swapped-in content works without re-init; clone/morph swaps can't strand stale
+    state. <strong>Event wiring is swap-proof; derived state is re-computed</strong> —
+    the one HTMX-aware line in core JS is the <code>htmx:afterSwap</code> event
+    <em>name</em> a table container listens for:</p>
+    <pre><code>{refresh}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Import paths</h2>
+    <pre><code>import {'{ initDialogs }'} from "@busy-office/ui/js";          // barrel
+import {'{ initDialogs }'} from "@busy-office/ui/js/behaviors/dialog.js"; // granular</code></pre>
+  </section>
+</Gallery>

@@ -1,0 +1,76 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const npmInstall = `npm i @busy-office/ui
+
+# all-in-one
+import "@busy-office/ui/css";
+
+# à la carte — ORDER MATTERS: tokens, then reset, then components
+import "@busy-office/ui/css/tokens";
+import "@busy-office/ui/css/reset";
+import "@busy-office/ui/css/components/data-table";
+# .min variants exist for every file: "@busy-office/ui/css/components/data-table.min"`;
+const jsInit = `import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts }
+  from "@busy-office/ui/js";
+
+// Call each ONCE, ever — document-level delegation survives all DOM swaps.
+initDialogs(); initDataTables(); initTabs(); initDropdowns(); initAlerts();`;
+const skeleton = `<!doctype html>
+<html lang="en" data-density="comfortable"> <!-- or "compact" for back-office -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- NEVER add user-scalable=no — zoom is the WCAG 1.4.4 mechanism -->
+  <link rel="stylesheet" href="/vendor/busy-office-ui/index.min.css">
+</head>
+<body>
+  <div class="bo-app-shell">
+    <header class="bo-navbar bo-app-shell__header">…</header>
+    <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">…</nav>
+    <main class="bo-app-shell__main">…your screen…</main>
+  </div>
+  <script type="module">
+    import { initDialogs, initDataTables } from "/vendor/busy-office-ui/js/index.js";
+    initDialogs(); initDataTables();
+  </script>
+</body>
+</html>`;
+---
+<Gallery title="Installation">
+  <section class="demo">
+    <h2>npm</h2>
+    <pre><code>{npmInstall}</code></pre>
+    <p class="bo-u-text-muted">The framework assumes an unmodified root font-size
+    (user preference only). Injecting into a host page that rescales
+    <code>html</code> (legacy <code>62.5%</code> hacks) rescales every rem —
+    embed via iframe instead.</p>
+  </section>
+  <section class="demo">
+    <h2>No-npm path</h2>
+    <p>Copy <code>dist/css/index.min.css</code> and <code>dist/js/</code> from the
+    <a href="https://github.com/Busy-Office/busy-office-ui">repo</a> (or
+    <code>npm pack @busy-office/ui</code> and unpack the tarball) into your static
+    assets — the page skeleton below consumes them as plain files. No build step
+    exists in the framework's output: it's CSS and standard ES modules.</p>
+  </section>
+  <section class="demo">
+    <h2>JS behaviors (five call-once inits)</h2>
+    <pre><code>{jsInit}</code></pre>
+    <p class="bo-u-text-muted">What each does and why — see
+    <a href="../concepts/js-behaviors">Core concepts → JS behaviors</a>. Components
+    whose page says "JS required" are inert without their init.</p>
+  </section>
+  <section class="demo">
+    <h2>Copy-paste page skeleton</h2>
+    <pre><code>{skeleton}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Browser floor</h2>
+    <p><strong>Chrome/Edge 119 · Firefox 128 · Safari 17.4.</strong> The framework
+    relies on <code>@layer</code>, <code>:has()</code>, named container queries,
+    <code>popover</code>, and <code>content</code> alt-text. Server-set
+    <code>aria-invalid</code> error messages degrade gracefully below the floor;
+    interactive <code>:has()</code> reveals do not. Class prefix is
+    <code>bo-</code> (busy-office) — short, collision-safe, greppable.</p>
+  </section>
+</Gallery>

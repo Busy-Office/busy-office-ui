@@ -1,0 +1,47 @@
+---
+/**
+ * Renders a component's API surface FROM the generated dist/api.json —
+ * classes, data-* hooks, ARIA attributes styled, and tokens. Because the
+ * data is extracted from the shipped CSS at build time, this table cannot
+ * drift from the artifact (the API tables define the semver contract).
+ * The `js` and `notes` props carry the hand-written halves: JS requirement
+ * and the ARIA contract prose.
+ */
+import api from '@busy-office/ui/api';
+const { component, js = 'None — CSS-only.', notes = [] } = Astro.props;
+const c = api.components[component];
+if (!c) throw new Error(`ApiTable: unknown component "${component}"`);
+const rows = [
+  ['Blocks', c.blocks],
+  ['Parts', c.parts],
+  ['Variants', c.variants],
+  ['data-* hooks', c.dataAttrs],
+  ['ARIA styled', c.ariaAttrs],
+  ['Component tokens', c.tokensDefined],
+  ['Named containers', c.containers],
+].filter(([, v]) => v.length);
+---
+<section class="demo">
+  <h2>API <span class="bo-badge">generated from CSS</span></h2>
+  <div class="bo-data-table-container">
+    <table class="bo-data-table">
+      <tbody>
+        {rows.map(([label, values]) => (
+          <tr>
+            <th scope="row" style="white-space: nowrap">{label}</th>
+            <td>{values.map((v: string) => <code style="margin-inline-end: 0.5rem">{v}</code>)}</td>
+          </tr>
+        ))}
+        <tr>
+          <th scope="row">JS required</th>
+          <td>{js}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {notes.length > 0 && (
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      {notes.map((n: string) => <li set:html={n} />)}
+    </ul>
+  )}
+</section>

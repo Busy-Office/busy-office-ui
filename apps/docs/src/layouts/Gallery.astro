@@ -1,27 +1,58 @@
 ---
 import '@busy-office/ui/css';
 const { title } = Astro.props;
-const pages = [
-  { href: '/', label: 'Overview', icon: '⌂' },
-  { href: '/tokens', label: 'Tokens', icon: '◧' },
-  { href: '/primitives', label: 'Primitives', icon: '▦' },
-  { href: '/components/button', label: 'Button', icon: '▢' },
-  { href: '/components/badge', label: 'Badge', icon: '◉' },
-  { href: '/components/form', label: 'Forms', icon: '✎' },
-  { href: '/components/data-table', label: 'Data table', icon: '▤' },
-  { href: '/components/pagination', label: 'Pagination', icon: '⋯' },
-  { href: '/components/filters', label: 'Filters', icon: '◪' },
-  { href: '/components/tabs', label: 'Tabs', icon: '⊟' },
-  { href: '/components/dropdown', label: 'Dropdown', icon: '▾' },
-  { href: '/components/alerts', label: 'Alerts & toasts', icon: '◈' },
-  { href: '/components/nav', label: 'Navigation', icon: '☰' },
-  { href: '/components/dialog', label: 'Dialog', icon: '❐' },
-  { href: '/components/dashboard', label: 'Dashboard', icon: '▥' },
-  { href: '/patterns/invoice-list', label: 'Pattern: Invoices', icon: '⧉' },
-  { href: '/patterns/approval', label: 'Pattern: Approval', icon: '✓' },
-  { href: '/htmx', label: 'Using with HTMX', icon: '⇄' },
-  { href: '/theming', label: 'Theming guide', icon: '◨' },
-  { href: '/printing', label: 'Print & reports', icon: '⎙' },
+const sections = [
+  {
+    label: 'Getting started',
+    items: [
+      { href: '/', label: 'Overview' },
+      { href: '/getting-started/installation', label: 'Installation' },
+      { href: '/getting-started/htmx', label: 'Using with HTMX' },
+    ],
+  },
+  {
+    label: 'Core concepts',
+    items: [
+      { href: '/concepts/js-behaviors', label: 'JS behaviors' },
+      { href: '/concepts/theming', label: 'Theming & dark mode' },
+    ],
+  },
+  {
+    label: 'Base styles',
+    items: [
+      { href: '/base/colors', label: 'Colors & tokens' },
+      { href: '/base/primitives', label: 'Layout primitives' },
+      { href: '/base/print', label: 'Print & reports' },
+    ],
+  },
+  {
+    label: 'Components',
+    items: [
+      { href: '/components/button', label: 'Button' },
+      { href: '/components/badge', label: 'Badge' },
+      { href: '/components/form', label: 'Forms' },
+      { href: '/components/data-table', label: 'Data table' },
+      { href: '/components/pagination', label: 'Pagination' },
+      { href: '/components/filters', label: 'Filters' },
+      { href: '/components/tabs', label: 'Tabs' },
+      { href: '/components/dropdown', label: 'Dropdown' },
+      { href: '/components/alerts', label: 'Alerts & toasts' },
+      { href: '/components/nav', label: 'Navigation' },
+      { href: '/components/dialog', label: 'Dialog' },
+      { href: '/components/dashboard', label: 'Dashboard' },
+    ],
+  },
+  {
+    label: 'Patterns',
+    items: [
+      { href: '/patterns/invoice-list', label: 'Invoice list' },
+      { href: '/patterns/approval', label: 'Approval workflow' },
+    ],
+  },
+  {
+    label: 'Reference',
+    items: [{ href: '/reference/classes', label: 'Class index' }],
+  },
 ];
 // Base-aware links so the site works at / (dev) and /busy-office-ui (Pages).
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -55,23 +86,24 @@ const current =
         </label>
       </header>
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs">
-        <div class="bo-sidebar-nav__section">
-          <div class="bo-sidebar-nav__heading">Gallery</div>
-          <ul>
-            {pages.map((p) => (
-              <li>
-                <a
-                  class="bo-sidebar-nav__link"
-                  href={base + p.href}
-                  aria-current={current === p.href ? 'page' : undefined}
-                >
-                  <span class="bo-sidebar-nav__icon" aria-hidden="true">{p.icon}</span>
-                  <span class="bo-sidebar-nav__label">{p.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {sections.map((s) => (
+          <div class="bo-sidebar-nav__section">
+            <div class="bo-sidebar-nav__heading">{s.label}</div>
+            <ul>
+              {s.items.map((p) => (
+                <li>
+                  <a
+                    class="bo-sidebar-nav__link"
+                    href={base + p.href}
+                    aria-current={current === p.href ? 'page' : undefined}
+                  >
+                    <span class="bo-sidebar-nav__label">{p.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </nav>
       <main class="bo-app-shell__main">
         <div class="bo-stack bo-stack--loose">
