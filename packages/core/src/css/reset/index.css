@@ -1,4 +1,4 @@
-@layer eof-reset {
+@layer bo-reset {
   *,
   *::before,
   *::after {
@@ -16,11 +16,11 @@
 
   body {
     min-height: 100dvh;
-    font-family: var(--eof-font-sans);
-    font-size: var(--eof-font-size-base);
-    line-height: var(--eof-line-height-normal);
-    color: var(--eof-color-text-primary);
-    background: var(--eof-color-bg-canvas);
+    font-family: var(--bo-font-sans);
+    font-size: var(--bo-font-size-base);
+    line-height: var(--bo-line-height-normal);
+    color: var(--bo-color-text-primary);
+    background: var(--bo-color-bg-canvas);
     -webkit-font-smoothing: antialiased;
   }
 
@@ -55,8 +55,8 @@
   h2,
   h3,
   h4 {
-    line-height: var(--eof-line-height-tight);
-    font-weight: var(--eof-font-weight-semibold);
+    line-height: var(--bo-line-height-tight);
+    font-weight: var(--bo-font-weight-semibold);
   }
 
   table {
@@ -71,16 +71,16 @@
   }
 
   a {
-    color: var(--eof-color-accent);
+    color: var(--bo-color-accent);
   }
 
   /* Fallbacks matter here: if tokens.css is missing (wrong à-la-carte import
      order), an invalid-at-computed-value outline would DELETE the focus ring
      rather than fall back to the UA one. */
   :focus-visible {
-    outline: var(--eof-focus-ring-width, 2px) solid
-      var(--eof-color-focus-ring, Highlight);
-    outline-offset: var(--eof-focus-ring-offset, 2px);
+    outline: var(--bo-focus-ring-width, 2px) solid
+      var(--bo-color-focus-ring, Highlight);
+    outline-offset: var(--bo-focus-ring-offset, 2px);
   }
 
   [hidden] {
@@ -88,7 +88,7 @@
   }
 
   /* Stable scrollbar gutters: dense layouts must not shift when content grows. */
-  .eof-scroll,
+  .bo-scroll,
   [data-scroll] {
     scrollbar-gutter: stable;
   }

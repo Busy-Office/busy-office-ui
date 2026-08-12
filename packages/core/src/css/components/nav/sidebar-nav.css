@@ -1,58 +1,58 @@
-@layer eof-components {
-  .eof-sidebar-nav {
+@layer bo-components {
+  .bo-sidebar-nav {
     inline-size: 14rem;
-    padding: var(--eof-space-2);
-    background: var(--eof-color-bg-surface);
-    border-inline-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    padding: var(--bo-space-2);
+    background: var(--bo-color-bg-surface);
+    border-inline-end: var(--bo-border-width) solid var(--bo-color-border-default);
     overflow-y: auto;
     scrollbar-gutter: stable;
-    transition: inline-size var(--eof-motion-duration-base)
-      var(--eof-motion-easing-standard);
+    transition: inline-size var(--bo-motion-duration-base)
+      var(--bo-motion-easing-standard);
   }
 
-  .eof-sidebar-nav__section {
-    margin-block-end: var(--eof-space-4);
+  .bo-sidebar-nav__section {
+    margin-block-end: var(--bo-space-4);
   }
 
-  .eof-sidebar-nav__heading {
-    padding: var(--eof-space-2) var(--eof-space-3);
-    font-size: var(--eof-font-size-xs);
-    font-weight: var(--eof-font-weight-semibold);
+  .bo-sidebar-nav__heading {
+    padding: var(--bo-space-2) var(--bo-space-3);
+    font-size: var(--bo-font-size-xs);
+    font-weight: var(--bo-font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--eof-color-text-muted);
+    color: var(--bo-color-text-muted);
   }
 
-  .eof-sidebar-nav ul {
+  .bo-sidebar-nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .eof-sidebar-nav__link {
+  .bo-sidebar-nav__link {
     display: flex;
     align-items: center;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-2) var(--eof-space-3);
-    border-radius: var(--eof-radius-sm);
-    color: var(--eof-color-text-secondary);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border-radius: var(--bo-radius-sm);
+    color: var(--bo-color-text-secondary);
     text-decoration: none;
-    font-size: var(--eof-density-font-size);
+    font-size: var(--bo-density-font-size);
     white-space: nowrap;
   }
 
-  .eof-sidebar-nav__link:hover {
-    background: var(--eof-state-hover-overlay);
-    color: var(--eof-color-text-primary);
+  .bo-sidebar-nav__link:hover {
+    background: var(--bo-state-hover-overlay);
+    color: var(--bo-color-text-primary);
   }
 
-  .eof-sidebar-nav__link[aria-current="page"] {
-    background: var(--eof-color-accent-subtle);
-    color: var(--eof-color-accent-text);
-    font-weight: var(--eof-font-weight-medium);
+  .bo-sidebar-nav__link[aria-current="page"] {
+    background: var(--bo-color-accent-subtle);
+    color: var(--bo-color-accent-text);
+    font-weight: var(--bo-font-weight-medium);
   }
 
-  .eof-sidebar-nav__icon {
+  .bo-sidebar-nav__icon {
     flex: none;
     inline-size: 1.125rem;
     text-align: center;
@@ -63,13 +63,13 @@
      Labels are visually hidden, NOT display:none — display:none removes them
      from the accessibility tree and, with aria-hidden icons, would leave every
      link with an empty accessible name. */
-  @container eof-shell (max-width: 56rem) {
-    .eof-sidebar-nav {
+  @container bo-shell (max-width: 56rem) {
+    .bo-sidebar-nav {
       inline-size: 3.25rem;
     }
 
-    .eof-sidebar-nav__label,
-    .eof-sidebar-nav__heading {
+    .bo-sidebar-nav__label,
+    .bo-sidebar-nav__heading {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -83,7 +83,7 @@
   }
 
   @media print {
-    .eof-sidebar-nav {
+    .bo-sidebar-nav {
       display: none;
     }
   }

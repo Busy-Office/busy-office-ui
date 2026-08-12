@@ -1,50 +1,50 @@
-@layer eof-components {
+@layer bo-components {
   /* Popover-based dropdown menu: renders in the top layer, so it is never
      clipped by overflow:auto containers (data tables!) and never loses a
      z-index fight with sticky headers or frozen columns. Native Esc + light
      dismiss. initDropdowns() anchors the menu to its invoker and closes on
      item select. */
-  .eof-dropdown__menu {
+  .bo-dropdown__menu {
     position: fixed;
     inset: auto;
     margin: 0;
     min-inline-size: 12rem;
-    padding: var(--eof-space-1);
-    border: var(--eof-border-width) solid var(--eof-color-border-default);
-    border-radius: var(--eof-radius-md);
-    background: var(--eof-color-bg-surface-raised);
-    color: var(--eof-color-text-primary);
-    box-shadow: var(--eof-shadow-md);
+    padding: var(--bo-space-1);
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface-raised);
+    color: var(--bo-color-text-primary);
+    box-shadow: var(--bo-shadow-md);
   }
 
   /* --end: menu aligns to the invoker's end edge (handled by initDropdowns). */
 
-  .eof-dropdown__item {
+  .bo-dropdown__item {
     display: flex;
     inline-size: 100%;
     align-items: center;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-2) var(--eof-space-3);
-    border-radius: var(--eof-radius-sm);
-    color: var(--eof-color-text-primary);
-    font-size: var(--eof-density-font-size);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border-radius: var(--bo-radius-sm);
+    color: var(--bo-color-text-primary);
+    font-size: var(--bo-density-font-size);
     text-align: start;
     text-decoration: none;
     white-space: nowrap;
   }
 
-  .eof-dropdown__item:hover {
-    background: var(--eof-state-hover-overlay);
+  .bo-dropdown__item:hover {
+    background: var(--bo-state-hover-overlay);
   }
 
   /* danger-text stays >= 4.5:1 on the hover overlay in both themes. */
-  .eof-dropdown__item--danger {
-    color: var(--eof-color-danger-text);
+  .bo-dropdown__item--danger {
+    color: var(--bo-color-danger-text);
   }
 
-  .eof-dropdown__separator {
+  .bo-dropdown__separator {
     border: none;
-    border-block-start: var(--eof-border-width) solid var(--eof-color-border-default);
-    margin-block: var(--eof-space-1);
+    border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+    margin-block: var(--bo-space-1);
   }
 }

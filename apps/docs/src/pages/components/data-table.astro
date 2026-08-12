@@ -1,29 +1,29 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
-const tableMarkup = `<div class="eof-data-table-container">
-  <div class="eof-data-table__toolbar">
-    <div class="eof-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-      <button class="eof-btn eof-btn--secondary" type="button">Approve</button>
+const tableMarkup = `<div class="bo-data-table-container">
+  <div class="bo-data-table__toolbar">
+    <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+      <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
     </div>
-    <span class="eof-data-table__selection-count"></span> <!-- live "n selected" -->
-    <input class="eof-input" type="search" aria-label="Filter invoices" />
+    <span class="bo-data-table__selection-count"></span> <!-- live "n selected" -->
+    <input class="bo-input" type="search" aria-label="Filter invoices" />
   </div>
-  <table class="eof-data-table">
+  <table class="bo-data-table">
     <thead><tr>
       <th scope="col"><input type="checkbox"
-          class="eof-checkbox eof-data-table__select-all" aria-label="Select all" /></th>
+          class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
       <th scope="col" aria-sort="ascending">
-        <button class="eof-data-table__sort-btn" type="button">Invoice #</button>
+        <button class="bo-data-table__sort-btn" type="button">Invoice #</button>
       </th>
-      <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th>
     </tr></thead>
     <tbody><tr>
       <td><input type="checkbox" name="id" value="INV-1"
-          class="eof-checkbox eof-data-table__row-select" aria-label="Select INV-1" /></td>
+          class="bo-checkbox bo-data-table__row-select" aria-label="Select INV-1" /></td>
       <!-- name/value make the selection POSTable:
-           hx-include=".eof-data-table__row-select:checked" or a plain form. -->
-      <td class="eof-data-table__col--code">INV-1</td>
-      <td class="eof-data-table__col--numeric">$4,208.00</td>
+           hx-include=".bo-data-table__row-select:checked" or a plain form. -->
+      <td class="bo-data-table__col--code">INV-1</td>
+      <td class="bo-data-table__col--numeric">$4,208.00</td>
     </tr></tbody>
   </table>
 </div>
@@ -48,37 +48,37 @@ const rows = [
     auto-compaction below 480px container width.
   </p>
   <section class="demo">
-    <div class="eof-data-table-container">
-      <div class="eof-data-table__toolbar">
-        <div class="eof-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-          <button class="eof-btn eof-btn--secondary" type="button">Approve</button>
-          <button class="eof-btn eof-btn--danger" type="button">Reject</button>
+    <div class="bo-data-table-container">
+      <div class="bo-data-table__toolbar">
+        <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+          <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
+          <button class="bo-btn bo-btn--danger" type="button">Reject</button>
         </div>
-        <span class="eof-data-table__selection-count"></span>
-        <input class="eof-input" type="search" aria-label="Filter invoices" placeholder="Filter invoices…" style="max-inline-size: 16rem" />
+        <span class="bo-data-table__selection-count"></span>
+        <input class="bo-input" type="search" aria-label="Filter invoices" placeholder="Filter invoices…" style="max-inline-size: 16rem" />
       </div>
-      <table class="eof-data-table">
+      <table class="bo-data-table">
         <thead>
           <tr>
-            <th scope="col"><input type="checkbox" class="eof-checkbox eof-data-table__select-all" aria-label="Select all" /></th>
+            <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
             <th scope="col" aria-sort="ascending">
-              <button class="eof-data-table__sort-btn" type="button">Invoice #</button>
+              <button class="bo-data-table__sort-btn" type="button">Invoice #</button>
             </th>
             <th scope="col">Vendor</th>
-            <th scope="col" class="eof-data-table__col--secondary">Cost center</th>
-            <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+            <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
+            <th scope="col" class="bo-data-table__col--numeric">Amount</th>
             <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr>
-              <td><input type="checkbox" class="eof-checkbox eof-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
-              <td class="eof-data-table__col--code">{r.no}</td>
+              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
+              <td class="bo-data-table__col--code">{r.no}</td>
               <td>{r.vendor}</td>
-              <td class="eof-data-table__col--secondary eof-data-table__col--code">{r.cc}</td>
-              <td class="eof-data-table__col--numeric">{r.amount}</td>
-              <td><span class={`eof-badge eof-badge--${r.tone}`}>{r.status}</span></td>
+              <td class="bo-data-table__col--secondary bo-data-table__col--code">{r.cc}</td>
+              <td class="bo-data-table__col--numeric">{r.amount}</td>
+              <td><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
             </tr>
           ))}
         </tbody>
@@ -88,57 +88,57 @@ const rows = [
   <section class="demo">
     <h2>Narrow container → auto-compaction</h2>
     <div style="max-inline-size: 420px">
-      <div class="eof-data-table-container">
-        <table class="eof-data-table eof-data-table--striped">
+      <div class="bo-data-table-container">
+        <table class="bo-data-table bo-data-table--striped">
           <thead>
             <tr>
               <th scope="col">Invoice #</th>
               <th scope="col">Vendor</th>
-              <th scope="col" class="eof-data-table__col--secondary">Cost center</th>
-              <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+              <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
+              <th scope="col" class="bo-data-table__col--numeric">Amount</th>
             </tr>
           </thead>
           <tbody>
             {rows.slice(0, 3).map((r) => (
               <tr>
-                <td class="eof-data-table__col--code">{r.no}</td>
+                <td class="bo-data-table__col--code">{r.no}</td>
                 <td>{r.vendor}</td>
-                <td class="eof-data-table__col--secondary">{r.cc}</td>
-                <td class="eof-data-table__col--numeric">{r.amount}</td>
+                <td class="bo-data-table__col--secondary">{r.cc}</td>
+                <td class="bo-data-table__col--numeric">{r.amount}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     </div>
-    <p class="eof-u-text-muted">The cost-center column hides itself; rows tighten — driven by the container's width, not the viewport.
+    <p class="bo-u-text-muted">The cost-center column hides itself; rows tighten — driven by the container's width, not the viewport.
     <strong>Reflow requirement (WCAG 1.4.10):</strong> data hidden by compaction must stay
     reachable — give rows a detail view (like the PO # link pattern) or don't mark
     columns <code>--secondary</code>.</p>
   </section>
   <section class="demo">
     <h2>Inline edit — seamless inputs in cells</h2>
-    <div class="eof-data-table-container" style="max-inline-size: 24rem">
-      <table class="eof-data-table">
-        <thead><tr><th scope="col">Item</th><th scope="col" class="eof-data-table__col--numeric">Qty</th></tr></thead>
+    <div class="bo-data-table-container" style="max-inline-size: 24rem">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th></tr></thead>
         <tbody>
           <tr>
             <td>Widget A</td>
-            <td class="eof-data-table__col--numeric">
-              <input class="eof-input eof-input--seamless eof-input--numeric" value="12" aria-label="Quantity for Widget A" />
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
             </td>
           </tr>
           <tr>
             <td>Widget B</td>
-            <td class="eof-data-table__col--numeric">
-              <input class="eof-input eof-input--seamless eof-input--numeric" value="4" aria-label="Quantity for Widget B" />
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B" />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="eof-u-text-muted">The cell is <em>always</em> a real input
-    (<code>.eof-input--seamless</code>): it reads as text until hover/focus, so keyboard
+    <p class="bo-u-text-muted">The cell is <em>always</em> a real input
+    (<code>.bo-input--seamless</code>): it reads as text until hover/focus, so keyboard
     and screen-reader semantics never flip between display and edit modes. Persist with
     a form submit or <code>hx-patch</code> on change.</p>
   </section>

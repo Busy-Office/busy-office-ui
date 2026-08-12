@@ -1,4 +1,4 @@
-@layer eof-utilities {
+@layer bo-utilities {
   /* Report-grade printing, beyond the per-component print rules.
      ERP screens get printed constantly: approvals for signatures, tables as
      reports, detail forms for filing. */
@@ -27,20 +27,20 @@
     }
 
     /* Tables: repeat headers on every page, never split a row. */
-    .eof-data-table thead {
+    .bo-data-table thead {
       display: table-header-group;
     }
 
-    .eof-data-table tr {
+    .bo-data-table tr {
       break-inside: avoid;
     }
 
     /* Keep logical units together. */
-    .eof-form-section,
-    .eof-widget,
-    .eof-timeline__step,
-    .eof-audit__entry,
-    .eof-stat {
+    .bo-form-section,
+    .bo-widget,
+    .bo-timeline__step,
+    .bo-audit__entry,
+    .bo-stat {
       break-inside: avoid;
     }
 
@@ -52,7 +52,7 @@
 
     /* Links: show the destination for absolute URLs in printed reports —
        opt-in via the report wrapper so app chrome links stay clean. */
-    .eof-print-report a[href^="http"]::after {
+    .bo-print-report a[href^="http"]::after {
       content: " (" attr(href) ")" / "";
       font-size: 0.85em;
       color: #555;
@@ -60,28 +60,28 @@
 
     /* Status colors are data in a printed approval — force them where it
        matters (badges, timeline markers) for browsers that honor it. */
-    .eof-badge,
-    .eof-timeline__marker,
-    .eof-stepper__marker {
+    .bo-badge,
+    .bo-timeline__marker,
+    .bo-stepper__marker {
       print-color-adjust: exact;
     }
   }
 
-  /* Print-visibility utilities (complement .eof-u-print-hidden). */
-  .eof-u-print-only {
+  /* Print-visibility utilities (complement .bo-u-print-hidden). */
+  .bo-u-print-only {
     display: none;
   }
 
   @media print {
-    .eof-u-print-only {
+    .bo-u-print-only {
       display: revert;
     }
 
-    .eof-u-break-before {
+    .bo-u-break-before {
       break-before: page;
     }
 
-    .eof-u-avoid-break {
+    .bo-u-avoid-break {
       break-inside: avoid;
     }
   }

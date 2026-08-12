@@ -1,11 +1,11 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
-const ddMarkup = `<button class="eof-btn eof-btn--secondary" popovertarget="row-actions">Actions ▾</button>
-<div class="eof-dropdown__menu" id="row-actions" popover>
-  <button class="eof-dropdown__item" type="button">Duplicate</button>
-  <button class="eof-dropdown__item" type="button">Export PDF</button>
-  <hr class="eof-dropdown__separator" />
-  <button class="eof-dropdown__item eof-dropdown__item--danger" type="button">Void</button>
+const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-actions">Actions ▾</button>
+<div class="bo-dropdown__menu" id="row-actions" popover>
+  <button class="bo-dropdown__item" type="button">Duplicate</button>
+  <button class="bo-dropdown__item" type="button">Export PDF</button>
+  <hr class="bo-dropdown__separator" />
+  <button class="bo-dropdown__item bo-dropdown__item--danger" type="button">Void</button>
 </div>
 <script type="module">
   import { initDropdowns } from "@busy-office/ui/js";
@@ -21,41 +21,41 @@ const ddMarkup = `<button class="eof-btn eof-btn--secondary" popovertarget="row-
     <code>initDropdowns()</code> adds invoker anchoring and close-on-select.
   </p>
   <section class="demo">
-    <div class="eof-cluster">
-      <button class="eof-btn eof-btn--secondary" popovertarget="demo-actions">Actions ▾</button>
-      <div class="eof-dropdown__menu" id="demo-actions" popover>
-        <button class="eof-dropdown__item" type="button">Duplicate</button>
-        <button class="eof-dropdown__item" type="button">Export PDF</button>
-        <hr class="eof-dropdown__separator" />
-        <button class="eof-dropdown__item eof-dropdown__item--danger" type="button">Void</button>
+    <div class="bo-cluster">
+      <button class="bo-btn bo-btn--secondary" popovertarget="demo-actions">Actions ▾</button>
+      <div class="bo-dropdown__menu" id="demo-actions" popover>
+        <button class="bo-dropdown__item" type="button">Duplicate</button>
+        <button class="bo-dropdown__item" type="button">Export PDF</button>
+        <hr class="bo-dropdown__separator" />
+        <button class="bo-dropdown__item bo-dropdown__item--danger" type="button">Void</button>
       </div>
-      <button class="eof-btn eof-btn--ghost" popovertarget="demo-end">End-aligned ▾</button>
-      <div class="eof-dropdown__menu eof-dropdown__menu--end" id="demo-end" popover>
-        <a class="eof-dropdown__item" href="#">Open in new tab</a>
+      <button class="bo-btn bo-btn--ghost" popovertarget="demo-end">End-aligned ▾</button>
+      <div class="bo-dropdown__menu bo-dropdown__menu--end" id="demo-end" popover>
+        <a class="bo-dropdown__item" href="#">Open in new tab</a>
       </div>
     </div>
   </section>
   <section class="demo">
     <h2>Inside a data table (the point of the top layer)</h2>
-    <div class="eof-data-table-container" style="max-inline-size: 28rem">
-      <table class="eof-data-table eof-data-table--sticky-col">
+    <div class="bo-data-table-container" style="max-inline-size: 28rem">
+      <table class="bo-data-table bo-data-table--sticky-col">
         <thead><tr><th scope="col">Invoice #</th><th scope="col">Vendor</th><th scope="col"></th></tr></thead>
         <tbody>
           <tr>
-            <td class="eof-data-table__col--code">INV-10234</td>
+            <td class="bo-data-table__col--code">INV-10234</td>
             <td>Acme Supply Co.</td>
             <td>
-              <button class="eof-btn eof-btn--ghost eof-btn--icon" popovertarget="row-1-menu" aria-label="Actions for INV-10234">⋯</button>
-              <div class="eof-dropdown__menu" id="row-1-menu" popover>
-                <button class="eof-dropdown__item" type="button">Approve</button>
-                <button class="eof-dropdown__item eof-dropdown__item--danger" type="button">Reject</button>
+              <button class="bo-btn bo-btn--ghost bo-btn--icon" popovertarget="row-1-menu" aria-label="Actions for INV-10234">⋯</button>
+              <div class="bo-dropdown__menu" id="row-1-menu" popover>
+                <button class="bo-dropdown__item" type="button">Approve</button>
+                <button class="bo-dropdown__item bo-dropdown__item--danger" type="button">Reject</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="eof-u-text-muted">The row menu escapes the scrolling container — with an
+    <p class="bo-u-text-muted">The row menu escapes the scrolling container — with an
     absolutely-positioned menu this would be clipped.</p>
   </section>
   <section class="demo">

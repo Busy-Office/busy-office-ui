@@ -9,24 +9,24 @@ const brandMarkup = `/* brand.css — imported AFTER the framework, outside any 
    set on :root must be re-set in your own dark block if dark differs —
    otherwise your light value leaks into dark mode. */
 :root {
-  --eof-color-accent: #0f766e;        /* your brand teal */
-  --eof-color-accent-strong: #115e59;
-  --eof-color-accent-solid: #0f766e;  /* must keep >= 4.5:1 under white text */
-  --eof-color-accent-subtle: #f0fdfa;
-  --eof-color-accent-text: #115e59;   /* >= 4.5:1 on accent-subtle */
+  --bo-color-accent: #0f766e;        /* your brand teal */
+  --bo-color-accent-strong: #115e59;
+  --bo-color-accent-solid: #0f766e;  /* must keep >= 4.5:1 under white text */
+  --bo-color-accent-subtle: #f0fdfa;
+  --bo-color-accent-text: #115e59;   /* >= 4.5:1 on accent-subtle */
   /* A full accent swap also includes the accent-adjacent tokens the
      framework colors blue by default: */
-  --eof-color-focus-ring: #0d9488;    /* else focus rings stay blue */
-  --eof-color-bg-selected: #f0fdfa;   /* else selected rows stay blue */
-  --eof-font-sans: "Your Corporate Sans", system-ui, sans-serif;
-  --eof-radius-md: 0.25rem;           /* sharper corporate corners */
+  --bo-color-focus-ring: #0d9488;    /* else focus rings stay blue */
+  --bo-color-bg-selected: #f0fdfa;   /* else selected rows stay blue */
+  --bo-font-sans: "Your Corporate Sans", system-ui, sans-serif;
+  --bo-radius-md: 0.25rem;           /* sharper corporate corners */
 }
 
 [data-theme="dark"] {
-  --eof-color-accent: #14b8a6;        /* REQUIRED: re-set every :root token */
-  --eof-color-accent-text: #5eead4;   /* light step for dark surfaces */
-  --eof-color-accent-subtle: #134e4a;
-  --eof-color-bg-selected: #134e4a;
+  --bo-color-accent: #14b8a6;        /* REQUIRED: re-set every :root token */
+  --bo-color-accent-text: #5eead4;   /* light step for dark surfaces */
+  --bo-color-accent-subtle: #134e4a;
+  --bo-color-bg-selected: #134e4a;
 }`;
 ---
 <Gallery title="Theming guide">
@@ -37,8 +37,8 @@ const brandMarkup = `/* brand.css — imported AFTER the framework, outside any 
   </p>
   <section class="demo">
     <h2>The contract</h2>
-    <ul class="eof-stack eof-stack--tight" style="padding-inline-start: 1.25rem">
-      <li><strong>Remap semantic tokens only</strong> (<code>--eof-color-*</code>, fonts, radii). Component-local tokens (<code>--eof-btn-*</code>) are for per-instance tweaks, not brand.</li>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Remap semantic tokens only</strong> (<code>--bo-color-*</code>, fonts, radii). Component-local tokens (<code>--bo-btn-*</code>) are for per-instance tweaks, not brand.</li>
       <li><strong>Keep the token roles honest</strong>: <code>*-solid</code> carries white text in both themes (≥ 4.5:1); <code>*-text</code> sits on <code>*-subtle</code> (≥ 4.5:1); dark mode remaps <code>*-text</code>/<code>*-subtle</code>, never <code>*-solid</code>.</li>
       <li><strong>Verify contrast when you swap hues</strong> — the roles encode the ratios, your values must honor them.</li>
       <li><strong>The dark rule</strong>: unlayered <code>:root</code> beats the framework's <em>layered</em> dark remaps — every token you set must be re-set in your own <code>[data-theme="dark"]</code> block if dark differs.</li>

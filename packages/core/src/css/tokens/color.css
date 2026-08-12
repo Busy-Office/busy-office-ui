@@ -1,114 +1,114 @@
-@layer eof-tokens {
+@layer bo-tokens {
   :root {
     /* Raw palette — never referenced by components directly. */
-    --eof-palette-gray-50: #f9fafb;
-    --eof-palette-gray-100: #f3f4f6;
-    --eof-palette-gray-200: #e5e7eb;
-    --eof-palette-gray-300: #d1d5db;
-    --eof-palette-gray-400: #9ca3af;
-    --eof-palette-gray-500: #6b7280;
-    --eof-palette-gray-600: #4b5563;
-    --eof-palette-gray-700: #374151;
-    --eof-palette-gray-800: #1f2937;
-    --eof-palette-gray-900: #111827;
-    --eof-palette-blue-50: #eff6ff;
-    --eof-palette-blue-100: #dbeafe;
-    --eof-palette-blue-300: #93c5fd;
-    --eof-palette-blue-500: #3b82f6;
-    --eof-palette-blue-600: #2563eb;
-    --eof-palette-blue-700: #1d4ed8;
-    --eof-palette-red-50: #fef2f2;
-    --eof-palette-red-300: #fca5a5;
-    --eof-palette-red-400: #f87171;
-    --eof-palette-red-500: #ef4444;
-    --eof-palette-red-600: #dc2626;
-    --eof-palette-red-700: #b91c1c;
-    --eof-palette-amber-50: #fffbeb;
-    --eof-palette-amber-300: #fcd34d;
-    --eof-palette-amber-500: #f59e0b;
-    --eof-palette-amber-700: #b45309;
-    --eof-palette-green-50: #f0fdf4;
-    --eof-palette-green-300: #86efac;
-    --eof-palette-green-500: #22c55e;
-    --eof-palette-green-700: #15803d;
+    --bo-palette-gray-50: #f9fafb;
+    --bo-palette-gray-100: #f3f4f6;
+    --bo-palette-gray-200: #e5e7eb;
+    --bo-palette-gray-300: #d1d5db;
+    --bo-palette-gray-400: #9ca3af;
+    --bo-palette-gray-500: #6b7280;
+    --bo-palette-gray-600: #4b5563;
+    --bo-palette-gray-700: #374151;
+    --bo-palette-gray-800: #1f2937;
+    --bo-palette-gray-900: #111827;
+    --bo-palette-blue-50: #eff6ff;
+    --bo-palette-blue-100: #dbeafe;
+    --bo-palette-blue-300: #93c5fd;
+    --bo-palette-blue-500: #3b82f6;
+    --bo-palette-blue-600: #2563eb;
+    --bo-palette-blue-700: #1d4ed8;
+    --bo-palette-red-50: #fef2f2;
+    --bo-palette-red-300: #fca5a5;
+    --bo-palette-red-400: #f87171;
+    --bo-palette-red-500: #ef4444;
+    --bo-palette-red-600: #dc2626;
+    --bo-palette-red-700: #b91c1c;
+    --bo-palette-amber-50: #fffbeb;
+    --bo-palette-amber-300: #fcd34d;
+    --bo-palette-amber-500: #f59e0b;
+    --bo-palette-amber-700: #b45309;
+    --bo-palette-green-50: #f0fdf4;
+    --bo-palette-green-300: #86efac;
+    --bo-palette-green-500: #22c55e;
+    --bo-palette-green-700: #15803d;
 
     /* Semantic tokens — what components consume. */
-    --eof-color-bg-canvas: var(--eof-palette-gray-50);
-    --eof-color-bg-surface: #ffffff;
-    --eof-color-bg-surface-raised: #ffffff;
-    --eof-color-bg-muted: var(--eof-palette-gray-100);
-    --eof-color-bg-selected: var(--eof-palette-blue-50);
+    --bo-color-bg-canvas: var(--bo-palette-gray-50);
+    --bo-color-bg-surface: #ffffff;
+    --bo-color-bg-surface-raised: #ffffff;
+    --bo-color-bg-muted: var(--bo-palette-gray-100);
+    --bo-color-bg-selected: var(--bo-palette-blue-50);
     /* Opaque hover surface — used where translucent overlays can't work
        (e.g. sticky table cells that must stay opaque over scrolled content). */
-    --eof-color-bg-hover: var(--eof-palette-gray-100);
-    --eof-color-border-default: var(--eof-palette-gray-200);
-    --eof-color-border-strong: var(--eof-palette-gray-300);
+    --bo-color-bg-hover: var(--bo-palette-gray-100);
+    --bo-color-border-default: var(--bo-palette-gray-200);
+    --bo-color-border-strong: var(--bo-palette-gray-300);
     /* Control boundaries (inputs/selects) need >= 3:1 against the surface
        when the border is the only affordance — gray-500 gives ~4.8:1. */
-    --eof-color-border-control: var(--eof-palette-gray-500);
-    --eof-color-text-primary: var(--eof-palette-gray-900);
-    --eof-color-text-secondary: var(--eof-palette-gray-700);
+    --bo-color-border-control: var(--bo-palette-gray-500);
+    --bo-color-text-primary: var(--bo-palette-gray-900);
+    --bo-color-text-secondary: var(--bo-palette-gray-700);
     /* gray-600 stays >= 4.5:1 on bg-muted/striped rows; gray-500 did not. */
-    --eof-color-text-muted: var(--eof-palette-gray-600);
-    --eof-color-text-disabled: var(--eof-palette-gray-400);
-    --eof-color-text-inverse: #ffffff;
-    --eof-color-accent: var(--eof-palette-blue-600);
-    --eof-color-accent-strong: var(--eof-palette-blue-700);
-    --eof-color-accent-subtle: var(--eof-palette-blue-50);
-    --eof-color-danger: var(--eof-palette-red-600);
-    --eof-color-danger-strong: var(--eof-palette-red-700);
-    --eof-color-danger-subtle: var(--eof-palette-red-50);
-    --eof-color-warning: var(--eof-palette-amber-500);
-    --eof-color-warning-strong: var(--eof-palette-amber-700);
-    --eof-color-warning-subtle: var(--eof-palette-amber-50);
-    --eof-color-success: var(--eof-palette-green-500);
-    --eof-color-success-strong: var(--eof-palette-green-700);
-    --eof-color-success-subtle: var(--eof-palette-green-50);
+    --bo-color-text-muted: var(--bo-palette-gray-600);
+    --bo-color-text-disabled: var(--bo-palette-gray-400);
+    --bo-color-text-inverse: #ffffff;
+    --bo-color-accent: var(--bo-palette-blue-600);
+    --bo-color-accent-strong: var(--bo-palette-blue-700);
+    --bo-color-accent-subtle: var(--bo-palette-blue-50);
+    --bo-color-danger: var(--bo-palette-red-600);
+    --bo-color-danger-strong: var(--bo-palette-red-700);
+    --bo-color-danger-subtle: var(--bo-palette-red-50);
+    --bo-color-warning: var(--bo-palette-amber-500);
+    --bo-color-warning-strong: var(--bo-palette-amber-700);
+    --bo-color-warning-subtle: var(--bo-palette-amber-50);
+    --bo-color-success: var(--bo-palette-green-500);
+    --bo-color-success-strong: var(--bo-palette-green-700);
+    --bo-color-success-subtle: var(--bo-palette-green-50);
     /* Solid-control backgrounds carry white text in BOTH themes — never
        theme-remapped to a light tint. */
-    --eof-color-accent-solid: var(--eof-palette-blue-600);
-    --eof-color-danger-solid: var(--eof-palette-red-600);
+    --bo-color-accent-solid: var(--bo-palette-blue-600);
+    --bo-color-danger-solid: var(--bo-palette-red-600);
     /* Status text on the matching *-subtle background. Light mode: 700-weights;
        dark mode remaps to 300-weights so badges stay >= 4.5:1. */
-    --eof-color-accent-text: var(--eof-palette-blue-700);
-    --eof-color-danger-text: var(--eof-palette-red-700);
-    --eof-color-warning-text: var(--eof-palette-amber-700);
-    --eof-color-success-text: var(--eof-palette-green-700);
-    --eof-color-focus-ring: var(--eof-palette-blue-500);
+    --bo-color-accent-text: var(--bo-palette-blue-700);
+    --bo-color-danger-text: var(--bo-palette-red-700);
+    --bo-color-warning-text: var(--bo-palette-amber-700);
+    --bo-color-success-text: var(--bo-palette-green-700);
+    --bo-color-focus-ring: var(--bo-palette-blue-500);
 
     /* Interaction-state tokens. */
-    --eof-state-hover-overlay: rgb(0 0 0 / 0.04);
-    --eof-state-active-overlay: rgb(0 0 0 / 0.08);
-    --eof-state-disabled-opacity: 0.5;
-    --eof-state-error-color: var(--eof-color-danger);
-    --eof-state-error-bg: var(--eof-color-danger-subtle);
+    --bo-state-hover-overlay: rgb(0 0 0 / 0.04);
+    --bo-state-active-overlay: rgb(0 0 0 / 0.08);
+    --bo-state-disabled-opacity: 0.5;
+    --bo-state-error-color: var(--bo-color-danger);
+    --bo-state-error-bg: var(--bo-color-danger-subtle);
   }
 
   [data-theme="dark"] {
-    --eof-color-bg-canvas: #0f1115;
-    --eof-color-bg-surface: #1a1d23;
-    --eof-color-bg-surface-raised: #22262e;
-    --eof-color-bg-muted: #262a33;
-    --eof-color-bg-selected: #1e2a44;
-    --eof-color-border-default: #2e333d;
-    --eof-color-border-strong: #3d434f;
-    --eof-color-border-control: var(--eof-palette-gray-500);
-    --eof-color-text-primary: var(--eof-palette-gray-50);
-    --eof-color-text-secondary: var(--eof-palette-gray-300);
-    --eof-color-text-muted: var(--eof-palette-gray-400);
-    --eof-color-text-disabled: var(--eof-palette-gray-600);
-    --eof-color-bg-hover: #262a33;
-    --eof-color-accent: var(--eof-palette-blue-500);
-    --eof-color-accent-subtle: #1e2a44;
-    --eof-color-danger: var(--eof-palette-red-400);
-    --eof-color-danger-subtle: #3a1d1d;
-    --eof-color-warning-subtle: #3a2e14;
-    --eof-color-success-subtle: #14301d;
-    --eof-color-accent-text: var(--eof-palette-blue-300);
-    --eof-color-danger-text: var(--eof-palette-red-300);
-    --eof-color-warning-text: var(--eof-palette-amber-300);
-    --eof-color-success-text: var(--eof-palette-green-300);
-    --eof-state-hover-overlay: rgb(255 255 255 / 0.06);
-    --eof-state-active-overlay: rgb(255 255 255 / 0.1);
+    --bo-color-bg-canvas: #0f1115;
+    --bo-color-bg-surface: #1a1d23;
+    --bo-color-bg-surface-raised: #22262e;
+    --bo-color-bg-muted: #262a33;
+    --bo-color-bg-selected: #1e2a44;
+    --bo-color-border-default: #2e333d;
+    --bo-color-border-strong: #3d434f;
+    --bo-color-border-control: var(--bo-palette-gray-500);
+    --bo-color-text-primary: var(--bo-palette-gray-50);
+    --bo-color-text-secondary: var(--bo-palette-gray-300);
+    --bo-color-text-muted: var(--bo-palette-gray-400);
+    --bo-color-text-disabled: var(--bo-palette-gray-600);
+    --bo-color-bg-hover: #262a33;
+    --bo-color-accent: var(--bo-palette-blue-500);
+    --bo-color-accent-subtle: #1e2a44;
+    --bo-color-danger: var(--bo-palette-red-400);
+    --bo-color-danger-subtle: #3a1d1d;
+    --bo-color-warning-subtle: #3a2e14;
+    --bo-color-success-subtle: #14301d;
+    --bo-color-accent-text: var(--bo-palette-blue-300);
+    --bo-color-danger-text: var(--bo-palette-red-300);
+    --bo-color-warning-text: var(--bo-palette-amber-300);
+    --bo-color-success-text: var(--bo-palette-green-300);
+    --bo-state-hover-overlay: rgb(255 255 255 / 0.06);
+    --bo-state-active-overlay: rgb(255 255 255 / 0.1);
   }
 }

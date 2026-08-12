@@ -2,12 +2,12 @@
 import Gallery from '../../layouts/Gallery.astro';
 const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exists,
      so injected toasts are announced: -->
-<div class="eof-toast-region" role="status" aria-live="polite"></div>
+<div class="bo-toast-region" role="status" aria-live="polite"></div>
 
 <!-- Server/HTMX/JS injects: -->
-<div class="eof-alert eof-alert--success eof-toast">
-  <div><span class="eof-alert__title">Saved.</span> PO-88213 was approved.</div>
-  <button class="eof-btn eof-btn--ghost eof-btn--icon eof-alert__dismiss"
+<div class="bo-alert bo-alert--success bo-toast">
+  <div><span class="bo-alert__title">Saved.</span> PO-88213 was approved.</div>
+  <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss"
           aria-label="Dismiss">✕</button>
 </div>`;
 ---
@@ -19,24 +19,24 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
   </p>
   <section class="demo">
     <h2>Inline alerts</h2>
-    <div class="eof-alert" role="status">
-      <div><span class="eof-alert__title">Heads up.</span> Approvals sync runs at 18:00.</div>
+    <div class="bo-alert" role="status">
+      <div><span class="bo-alert__title">Heads up.</span> Approvals sync runs at 18:00.</div>
     </div>
-    <div class="eof-alert eof-alert--success" role="status">
-      <div><span class="eof-alert__title">Saved.</span> All changes stored.</div>
+    <div class="bo-alert bo-alert--success" role="status">
+      <div><span class="bo-alert__title">Saved.</span> All changes stored.</div>
     </div>
-    <div class="eof-alert eof-alert--warning" role="status">
-      <div><span class="eof-alert__title">Budget at 92%.</span> CC-4021 nears its limit.</div>
+    <div class="bo-alert bo-alert--warning" role="status">
+      <div><span class="bo-alert__title">Budget at 92%.</span> CC-4021 nears its limit.</div>
     </div>
-    <div class="eof-alert eof-alert--danger" role="alert">
-      <div><span class="eof-alert__title">Posting failed.</span> Period 2026-07 is closed.</div>
-      <button class="eof-btn eof-btn--ghost eof-btn--icon eof-alert__dismiss" aria-label="Dismiss">✕</button>
+    <div class="bo-alert bo-alert--danger" role="alert">
+      <div><span class="bo-alert__title">Posting failed.</span> Period 2026-07 is closed.</div>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
     </div>
   </section>
   <section class="demo">
     <h2>Toast recipe</h2>
     <pre><code>{toastMarkup}</code></pre>
-    <p class="eof-u-text-muted">Dismiss buttons work via <code>initAlerts()</code>
+    <p class="bo-u-text-muted">Dismiss buttons work via <code>initAlerts()</code>
     (document delegation — injected toasts covered automatically). If you auto-dismiss,
     keep toasts visible ≥ 5s and pause the timer on hover/focus (WCAG 2.2.1). Toasts do
     <strong>not</strong> float above an open modal dialog (the dialog owns the top

@@ -1,18 +1,18 @@
-@layer eof-components {
+@layer bo-components {
   /* Field wrapper: label + control + optional hint/error message.
      Error visuals are driven by :has() over native validity or aria-invalid —
      no JS class toggling needed. */
-  .eof-form-field {
+  .bo-form-field {
     display: flex;
     flex-direction: column;
-    gap: var(--eof-space-1);
-    margin-block-end: var(--eof-density-field-gap);
+    gap: var(--bo-space-1);
+    margin-block-end: var(--bo-density-field-gap);
   }
 
-  .eof-form-field__label {
-    font-size: var(--eof-density-font-size);
-    font-weight: var(--eof-font-weight-medium);
-    color: var(--eof-color-text-primary);
+  .bo-form-field__label {
+    font-size: var(--bo-density-font-size);
+    font-weight: var(--bo-font-weight-medium);
+    color: var(--bo-color-text-primary);
   }
 
   /* Required marker: driven by a real [required]/[aria-required] control
@@ -21,21 +21,21 @@
      keeps "star" noise out of screen readers — requiredness must ALSO be on
      the control itself (required or aria-required), which these selectors
      presuppose. */
-  .eof-form-field:has(:required, [aria-required="true"]) .eof-form-field__label::after,
-  .eof-form-field--required .eof-form-field__label::after {
+  .bo-form-field:has(:required, [aria-required="true"]) .bo-form-field__label::after,
+  .bo-form-field--required .bo-form-field__label::after {
     content: " *" / "";
-    color: var(--eof-color-danger);
+    color: var(--bo-color-danger);
   }
 
-  .eof-form-field__hint {
-    font-size: var(--eof-font-size-xs);
-    color: var(--eof-color-text-muted);
+  .bo-form-field__hint {
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-muted);
   }
 
-  .eof-form-field__message {
+  .bo-form-field__message {
     display: none;
-    font-size: var(--eof-font-size-xs);
-    color: var(--eof-state-error-color);
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-state-error-color);
   }
 
   /* Error visuals. Two SEPARATE :has() rules on purpose: :has() argument
@@ -45,36 +45,36 @@
      NOTE (a11y contract): CSS only covers the VISUALS. The message element
      must carry an id referenced by the control's aria-describedby, and
      role="alert" if it appears dynamically — see the form docs recipe. */
-  .eof-form-field:has([aria-invalid="true"]),
-  .eof-form-field:has(input:user-invalid, select:user-invalid, textarea:user-invalid) {
-    .eof-form-field__message {
+  .bo-form-field:has([aria-invalid="true"]),
+  .bo-form-field:has(input:user-invalid, select:user-invalid, textarea:user-invalid) {
+    .bo-form-field__message {
       display: block;
     }
 
-    .eof-input,
-    .eof-select {
-      --eof-input-border: var(--eof-state-error-color);
-      --eof-select-border: var(--eof-state-error-color);
+    .bo-input,
+    .bo-select {
+      --bo-input-border: var(--bo-state-error-color);
+      --bo-select-border: var(--bo-state-error-color);
     }
 
-    .eof-form-field__label {
-      color: var(--eof-state-error-color);
+    .bo-form-field__label {
+      color: var(--bo-state-error-color);
     }
   }
 
   /* No-:has() fallback: server-rendered aria-invalid still reveals the
      message when it follows the control as a sibling. */
-  [aria-invalid="true"] ~ .eof-form-field__message {
+  [aria-invalid="true"] ~ .bo-form-field__message {
     display: block;
   }
 
   /* Horizontal form row for dense detail screens. */
-  .eof-form-row {
+  .bo-form-row {
     display: grid;
     grid-template-columns: repeat(
       auto-fit,
       minmax(min(14rem, 100%), 1fr)
     );
-    column-gap: var(--eof-space-4);
+    column-gap: var(--bo-space-4);
   }
 }

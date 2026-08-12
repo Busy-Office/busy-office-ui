@@ -1,5 +1,5 @@
-@layer eof-primitives {
-  .eof-visually-hidden {
+@layer bo-primitives {
+  .bo-visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;

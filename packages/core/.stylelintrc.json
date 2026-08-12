@@ -1,15 +1,15 @@
 {
   "rules": {
     "selector-class-pattern": [
-      "^eof-[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      "^bo-[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
       {
-        "message": "Class names must follow .eof-block, .eof-block__part, .eof-block--variant (also allows htmx-* via ignore)",
+        "message": "Class names must follow .bo-block, .bo-block__part, .bo-block--variant (also allows htmx-* via ignore)",
         "severity": "error"
       }
     ],
     "custom-property-pattern": [
-      "^eof-[a-z0-9]+(-[a-z0-9]+)*$",
-      { "message": "Custom properties must be --eof-*" }
+      "^bo-[a-z0-9]+(-[a-z0-9]+)*$",
+      { "message": "Custom properties must be --bo-*" }
     ]
   },
   "overrides": [

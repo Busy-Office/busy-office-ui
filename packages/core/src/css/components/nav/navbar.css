@@ -1,27 +1,27 @@
-@layer eof-components {
-  .eof-navbar {
+@layer bo-components {
+  .bo-navbar {
     display: flex;
     align-items: center;
-    gap: var(--eof-space-4);
+    gap: var(--bo-space-4);
     height: 3rem;
-    padding-inline: var(--eof-space-4);
-    background: var(--eof-color-bg-surface);
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    padding-inline: var(--bo-space-4);
+    background: var(--bo-color-bg-surface);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
   }
 
-  .eof-navbar__brand {
-    font-weight: var(--eof-font-weight-semibold);
-    color: var(--eof-color-text-primary);
+  .bo-navbar__brand {
+    font-weight: var(--bo-font-weight-semibold);
+    color: var(--bo-color-text-primary);
     text-decoration: none;
     white-space: nowrap;
   }
 
-  .eof-navbar__spacer {
+  .bo-navbar__spacer {
     flex: 1;
   }
 
   @media print {
-    .eof-navbar {
+    .bo-navbar {
       display: none;
     }
   }

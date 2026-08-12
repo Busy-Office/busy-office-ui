@@ -5,10 +5,10 @@
  * screen readers.
  *
  * Markup contract:
- *   .eof-data-table-container
- *     .eof-data-table__select-all      (header checkbox, optional)
- *     .eof-data-table__row-select     (row checkboxes)
- *     .eof-data-table__selection-count (live region target, optional —
+ *   .bo-data-table-container
+ *     .bo-data-table__select-all      (header checkbox, optional)
+ *     .bo-data-table__row-select     (row checkboxes)
+ *     .bo-data-table__selection-count (live region target, optional —
  *                                       aria-live="polite" is added if absent)
  *
  * Event delegation on the container; call initDataTables() once. Swapped-in
@@ -18,16 +18,16 @@ const boundContainers = new WeakSet<Element>();
 
 function update(container: Element): void {
   const rows = container.querySelectorAll<HTMLInputElement>(
-    '.eof-data-table__row-select',
+    '.bo-data-table__row-select',
   );
   const checked = container.querySelectorAll<HTMLInputElement>(
-    '.eof-data-table__row-select:checked',
+    '.bo-data-table__row-select:checked',
   );
   (container as HTMLElement).dataset.anySelected =
     checked.length > 0 ? 'true' : 'false';
 
   const selectAll = container.querySelector<HTMLInputElement>(
-    '.eof-data-table__select-all',
+    '.bo-data-table__select-all',
   );
   if (selectAll) {
     selectAll.checked = rows.length > 0 && checked.length === rows.length;
@@ -36,7 +36,7 @@ function update(container: Element): void {
   }
 
   const count = container.querySelector<HTMLElement>(
-    '.eof-data-table__selection-count',
+    '.bo-data-table__selection-count',
   );
   if (count) {
     if (!count.hasAttribute('aria-live')) {
@@ -62,17 +62,17 @@ function bindContainer(container: Element): void {
   container.addEventListener('htmx:afterSwap', () => update(container));
   container.addEventListener('change', (e) => {
     const target = e.target as HTMLElement;
-    if (target.matches('.eof-data-table__select-all')) {
+    if (target.matches('.bo-data-table__select-all')) {
       const on = (target as HTMLInputElement).checked;
       container
-        .querySelectorAll<HTMLInputElement>('.eof-data-table__row-select')
+        .querySelectorAll<HTMLInputElement>('.bo-data-table__row-select')
         .forEach((box) => {
           box.checked = on;
         });
     }
     if (
       target.matches(
-        '.eof-data-table__select-all, .eof-data-table__row-select',
+        '.bo-data-table__select-all, .bo-data-table__row-select',
       )
     ) {
       update(container);
@@ -83,6 +83,6 @@ function bindContainer(container: Element): void {
 
 export function initDataTables(root: ParentNode = document): void {
   root
-    .querySelectorAll('.eof-data-table-container')
+    .querySelectorAll('.bo-data-table-container')
     .forEach(bindContainer);
 }

@@ -12,8 +12,8 @@ ERP screens.
    where accessibility demands state the CSS can't announce (table selection: live
    "n selected" count, functional select-all). CSS-only patterns cover visuals, never
    semantics — the docs recipes always show both halves.
-2. **Semantic components over utilities.** `.eof-data-table`, not forty utility classes
-   per cell. A tiny curated utility set (`.eof-u-*`) exists as an escape hatch.
+2. **Semantic components over utilities.** `.bo-data-table`, not forty utility classes
+   per cell. A tiny curated utility set (`.bo-u-*`) exists as an escape hatch.
 3. **Native elements first.** `<dialog>`, `<button>`, real `<form>`s, ARIA attributes
    styled directly (`aria-invalid`, `aria-sort`, `aria-busy`) — no parallel state-class
    system.
@@ -43,14 +43,14 @@ server-set `aria-invalid` error messages have a non-`:has()` fallback rule.
 
 ## Token system (4 tiers)
 
-Prefix `--eof-`.
+Prefix `--bo-`.
 
 | Tier | Example | Rule |
 |------|---------|------|
-| Raw palette | `--eof-palette-blue-500` | never consumed by components |
-| Semantic global | `--eof-color-bg-surface`, `--eof-space-4`, `--eof-radius-md` | what components reference; dark theme redefines this tier under `[data-theme="dark"]` |
-| Density aliases | `--eof-density-row-height`, `--eof-density-cell-padding-x` | remapped by `[data-density="compact|comfortable|spacious"]`; components use ONLY these for internal sizing |
-| Component-local | `--eof-btn-bg` | declared on the component root, defaulting to globals; variants override locally |
+| Raw palette | `--bo-palette-blue-500` | never consumed by components |
+| Semantic global | `--bo-color-bg-surface`, `--bo-space-4`, `--bo-radius-md` | what components reference; dark theme redefines this tier under `[data-theme="dark"]` |
+| Density aliases | `--bo-density-row-height`, `--bo-density-cell-padding-x` | remapped by `[data-density="compact|comfortable|spacious"]`; components use ONLY these for internal sizing |
+| Component-local | `--bo-btn-bg` | declared on the component root, defaulting to globals; variants override locally |
 
 Density row heights: compact 30px · comfortable 40px · spacious 48px (matches published
 enterprise-table guidance; fixed heights keep rows virtualization-friendly).
@@ -58,13 +58,13 @@ enterprise-table guidance; fixed heights keep rows virtualization-friendly).
 ## Cascade architecture
 
 ```css
-@layer eof-reset, eof-tokens, eof-primitives, eof-components, eof-utilities;
+@layer bo-reset, bo-tokens, bo-primitives, bo-components, bo-utilities;
 ```
 
 Declared once in `layers.css`. Every framework rule lives in its layer. Consumer CSS
 written outside any layer always wins — that is the official override escape hatch.
 
-Class naming: `.eof-<block>`, `.eof-<block>--<variant>`, `.eof-<block>__<part>` (parts
+Class naming: `.bo-<block>`, `.bo-<block>--<variant>`, `.bo-<block>__<part>` (parts
 only when a bare element selector isn't enough; a table row is `tr`, not a class).
 Behavioral state via `data-state` / `data-loading` attributes and native ARIA.
 
@@ -120,19 +120,19 @@ the mandatory semantic counterpart (aria-describedby + role=alert for errors, a 
 selection count for bulk actions).
 
 - **Form error visuals, CSS-only**: two separate rules —
-  `.eof-form-field:has([aria-invalid="true"])` and
-  `.eof-form-field:has(input:user-invalid, …)` — kept apart so browsers without
+  `.bo-form-field:has([aria-invalid="true"])` and
+  `.bo-form-field:has(input:user-invalid, …)` — kept apart so browsers without
   `:user-invalid` still honor the aria path; a sibling-selector fallback covers
   non-`:has()` browsers for server-rendered errors.
 - **Bulk-action toolbar**: revealed by `data-any-selected` (set by the optional
   `initDataTables()`, O(1), plus live count) or by a pure-CSS `:has(:checked)`
   fallback for zero-JS pages (documented as O(rows) on uncheck — fine for hundreds
   of rows, use the behavior for thousands).
-- **Table auto-compaction**: container query on `.eof-data-table-container` tightens
-  ALL density tokens coherently and hides `.eof-data-table__col--secondary` under
+- **Table auto-compaction**: container query on `.bo-data-table-container` tightens
+  ALL density tokens coherently and hides `.bo-data-table__col--secondary` under
   480px. Precedence: an explicit `data-density` on the table or its container always
   wins — compaction only applies when neither declares one.
-- **Sidebar collapse**: container query on `.eof-app-shell` collapses nav to icon-only
+- **Sidebar collapse**: container query on `.bo-app-shell` collapses nav to icon-only
   under 900px of shell width (not viewport width).
 
 ## ERP optimizations (acceptance criteria)
@@ -142,11 +142,11 @@ selection count for bulk actions).
 - `font-variant-numeric: tabular-nums` in tables; `__col--numeric` right-aligned;
   mono token for IDs.
 - User-adjustable density: 3-line toggle recipe (attribute + localStorage) in docs.
-- Keyboard-first: `:focus-visible` rings from `--eof-focus-ring-*`,
+- Keyboard-first: `:focus-visible` rings from `--bo-focus-ring-*`,
   `scrollbar-gutter: stable` on scroll containers.
-- `.eof-badge` status tones (success/warning/danger/accent/neutral); foregrounds use
-  `--eof-color-*-text` tokens that remap in dark mode to hold 4.5:1. Solid control
-  backgrounds (`--eof-color-accent-solid`/`-danger-solid`) never theme-remap, so white
+- `.bo-badge` status tones (success/warning/danger/accent/neutral); foregrounds use
+  `--bo-color-*-text` tokens that remap in dark mode to hold 4.5:1. Solid control
+  backgrounds (`--bo-color-accent-solid`/`-danger-solid`) never theme-remap, so white
   button text stays AA in both themes.
 - `@media print` rules: hide nav/toolbars, full-width black-on-white tables.
 - All animations are token-duration-driven and zeroed under `prefers-reduced-motion`
@@ -177,10 +177,10 @@ app-shell/visually-hidden). Components: button, badge, form (field/input incl.
 seamless inline-edit/select/checkbox-radio/section+sticky actions), data table
 (selection, sticky header/column, footer), pagination, filters (bar/chips/saved
 views), tabs, dropdown (popover), alerts/toasts, navbar, sidebar nav, off-canvas
-drawer, dialog, dashboard (widget grid — named containers `eof-widget-grid`/
-`eof-widget` — and stat tiles with two-channel delta valence), approval timeline,
-audit trail, wizard stepper. Named container registry: `eof-shell`, `eof-table`,
-`eof-widget-grid`, `eof-widget`, `eof-stepper`.
+drawer, dialog, dashboard (widget grid — named containers `bo-widget-grid`/
+`bo-widget` — and stat tiles with two-channel delta valence), approval timeline,
+audit trail, wizard stepper. Named container registry: `bo-shell`, `bo-table`,
+`bo-widget-grid`, `bo-widget`, `bo-stepper`.
 
 ## JS surface
 
@@ -202,6 +202,6 @@ audit trail, wizard stepper. Named container registry: `eof-shell`, `eof-table`,
 ## Tooling
 
 PostCSS (postcss-import, postcss-nesting as polyfill only — native syntax authored,
-postcss-custom-media, autoprefixer; cssnano for `.min`). Stylelint enforces the `eof-`
+postcss-custom-media, autoprefixer; cssnano for `.min`). Stylelint enforces the `bo-`
 prefix for class names and custom properties (`@layer` wrapping is convention, not yet
 lint-enforced). `scripts/build-component-css.mjs` emits the per-file dist.

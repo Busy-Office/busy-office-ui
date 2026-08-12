@@ -18,7 +18,7 @@ jobs:
       # Core build includes the named-@container check — a bare query fails here.
       - name: Build core (CSS dist + TS)
         run: npm run build -w @busy-office/ui
-      - name: Stylelint (eof- naming conventions)
+      - name: Stylelint (bo- naming conventions)
         run: npm run lint:css -w @busy-office/ui
       - name: Behavior tests (against compiled dist)
         run: npx vitest run --root packages/core

@@ -1,11 +1,11 @@
-@layer eof-tokens {
+@layer bo-tokens {
   :root {
-    --eof-radius-sm: 0.25rem;
-    --eof-radius-md: 0.375rem;
-    --eof-radius-lg: 0.5rem;
-    --eof-radius-full: 9999px;
-    --eof-border-width: 1px;
-    --eof-focus-ring-width: 2px;
-    --eof-focus-ring-offset: 2px;
+    --bo-radius-sm: 0.25rem;
+    --bo-radius-md: 0.375rem;
+    --bo-radius-lg: 0.5rem;
+    --bo-radius-full: 9999px;
+    --bo-border-width: 1px;
+    --bo-focus-ring-width: 2px;
+    --bo-focus-ring-offset: 2px;
   }
 }

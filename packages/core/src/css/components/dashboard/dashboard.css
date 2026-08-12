@@ -1,67 +1,67 @@
-@layer eof-components {
+@layer bo-components {
   /* Widget grid. BOTH levels are NAMED containers (build rule: every
      @container in this codebase is named — bare queries resolve against
      surprise ancestors):
-     - eof-widget-grid: the grid itself, queried by layout rules like the
+     - bo-widget-grid: the grid itself, queried by layout rules like the
        span-2 collapse (an item cannot query its own grid otherwise);
-     - eof-widget: each widget, so components inside (tables!) respond to
+     - bo-widget: each widget, so components inside (tables!) respond to
        WIDGET width — a table in a half-width widget auto-compacts while the
        same table full-width does not. */
-  .eof-widget-grid {
+  .bo-widget-grid {
     container-type: inline-size;
-    container-name: eof-widget-grid;
+    container-name: bo-widget-grid;
     display: grid;
     grid-template-columns: repeat(
       auto-fill,
-      minmax(min(var(--eof-widget-min, 20rem), 100%), 1fr)
+      minmax(min(var(--bo-widget-min, 20rem), 100%), 1fr)
     );
-    gap: var(--eof-space-4);
+    gap: var(--bo-space-4);
   }
 
-  .eof-widget {
+  .bo-widget {
     container-type: inline-size;
-    container-name: eof-widget;
+    container-name: bo-widget;
     display: flex;
     flex-direction: column;
-    border: var(--eof-border-width) solid var(--eof-color-border-default);
-    border-radius: var(--eof-radius-md);
-    background: var(--eof-color-bg-surface);
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface);
     min-inline-size: 0;
   }
 
-  .eof-widget--span-2 {
+  .bo-widget--span-2 {
     grid-column: span 2;
   }
 
-  .eof-widget__header {
+  .bo-widget__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-3) var(--eof-space-4);
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-3) var(--bo-space-4);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
   }
 
-  .eof-widget__title {
-    font-size: var(--eof-font-size-sm);
-    font-weight: var(--eof-font-weight-semibold);
-    color: var(--eof-color-text-secondary);
+  .bo-widget__title {
+    font-size: var(--bo-font-size-sm);
+    font-weight: var(--bo-font-weight-semibold);
+    color: var(--bo-color-text-secondary);
   }
 
-  .eof-widget__body {
-    padding: var(--eof-space-4);
+  .bo-widget__body {
+    padding: var(--bo-space-4);
     min-block-size: 0;
   }
 
-  .eof-widget__body--flush {
+  .bo-widget__body--flush {
     padding: 0;
   }
 
   /* Collapse span-2 when the GRID drops below two columns (2 x 20rem min
      + 1rem gap = 41rem) — otherwise span 2 in a 1-column auto-fill grid
      forces a phantom implicit track. */
-  @container eof-widget-grid (max-width: 41rem) {
-    .eof-widget--span-2 {
+  @container bo-widget-grid (max-width: 41rem) {
+    .bo-widget--span-2 {
       grid-column: auto;
     }
   }
@@ -73,43 +73,43 @@
      Valence needs TWO channels: arrow+sign carry direction only, so BAD
      deltas add a visible ⚠ glyph (aria-hidden) for sighted colorblind users
      AND visually-hidden text ("increase, worse,") for screen readers. */
-  .eof-stat {
+  .bo-stat {
     display: flex;
     flex-direction: column;
-    gap: var(--eof-space-1);
-    padding: var(--eof-space-4);
+    gap: var(--bo-space-1);
+    padding: var(--bo-space-4);
   }
 
-  .eof-stat__label {
-    font-size: var(--eof-font-size-sm);
-    color: var(--eof-color-text-secondary);
+  .bo-stat__label {
+    font-size: var(--bo-font-size-sm);
+    color: var(--bo-color-text-secondary);
   }
 
-  .eof-stat__value {
-    font-size: var(--eof-font-size-xl);
-    font-weight: var(--eof-font-weight-semibold);
-    line-height: var(--eof-line-height-tight);
-    color: var(--eof-color-text-primary);
+  .bo-stat__value {
+    font-size: var(--bo-font-size-xl);
+    font-weight: var(--bo-font-weight-semibold);
+    line-height: var(--bo-line-height-tight);
+    color: var(--bo-color-text-primary);
     font-variant-numeric: normal;
   }
 
-  .eof-stat--hero .eof-stat__value {
+  .bo-stat--hero .bo-stat__value {
     font-size: 3rem;
   }
 
-  .eof-stat__delta {
+  .bo-stat__delta {
     display: inline-flex;
     align-items: center;
-    gap: var(--eof-space-1);
-    font-size: var(--eof-font-size-xs);
-    color: var(--eof-color-text-secondary);
+    gap: var(--bo-space-1);
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-secondary);
   }
 
-  .eof-stat__delta--good {
-    color: var(--eof-color-success-text);
+  .bo-stat__delta--good {
+    color: var(--bo-color-success-text);
   }
 
-  .eof-stat__delta--bad {
-    color: var(--eof-color-danger-text);
+  .bo-stat__delta--bad {
+    color: var(--bo-color-danger-text);
   }
 }

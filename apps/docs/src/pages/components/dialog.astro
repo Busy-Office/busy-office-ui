@@ -1,21 +1,21 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
-const dialogMarkup = `<dialog class="eof-dialog" id="approve-dialog"
+const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
         aria-labelledby="approve-title" data-state="closed">
   <form method="dialog">
-    <header class="eof-dialog__header">
-      <h2 class="eof-dialog__title" id="approve-title">Approve purchase order</h2>
-      <button class="eof-btn eof-btn--ghost eof-btn--icon" value="cancel"
+    <header class="bo-dialog__header">
+      <h2 class="bo-dialog__title" id="approve-title">Approve purchase order</h2>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel"
               aria-label="Close">✕</button>
     </header>
-    <div class="eof-dialog__body">…</div>
-    <footer class="eof-dialog__footer">
-      <button class="eof-btn eof-btn--secondary" value="cancel">Cancel</button>
-      <button class="eof-btn" value="confirm">Approve</button>
+    <div class="bo-dialog__body">…</div>
+    <footer class="bo-dialog__footer">
+      <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
+      <button class="bo-btn" value="confirm">Approve</button>
     </footer>
   </form>
 </dialog>
-<button class="eof-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>
+<button class="bo-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>
 
 <script type="module">
   import { initDialogs } from "@busy-office/ui/js";
@@ -29,24 +29,24 @@ const dialogMarkup = `<dialog class="eof-dialog" id="approve-dialog"
     <code>data-state</code> for the enter animation.
   </p>
   <section class="demo">
-    <button class="eof-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>
+    <button class="bo-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>
 
-    <dialog class="eof-dialog" id="approve-dialog" aria-labelledby="approve-title" data-state="closed">
+    <dialog class="bo-dialog" id="approve-dialog" aria-labelledby="approve-title" data-state="closed">
       <form method="dialog">
-        <header class="eof-dialog__header">
-          <h2 class="eof-dialog__title" id="approve-title">Approve purchase order</h2>
-          <button class="eof-btn eof-btn--ghost eof-btn--icon" value="cancel" aria-label="Close">✕</button>
+        <header class="bo-dialog__header">
+          <h2 class="bo-dialog__title" id="approve-title">Approve purchase order</h2>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
         </header>
-        <div class="eof-dialog__body eof-stack">
-          <p>Approve <strong>PO-88213</strong> for <span class="eof-u-tabular">$12,400.00</span>?</p>
-          <div class="eof-form-field">
-            <label class="eof-form-field__label" for="comment">Comment (optional)</label>
-            <textarea class="eof-input" id="comment" rows="2"></textarea>
+        <div class="bo-dialog__body bo-stack">
+          <p>Approve <strong>PO-88213</strong> for <span class="bo-u-tabular">$12,400.00</span>?</p>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="comment">Comment (optional)</label>
+            <textarea class="bo-input" id="comment" rows="2"></textarea>
           </div>
         </div>
-        <footer class="eof-dialog__footer">
-          <button class="eof-btn eof-btn--secondary" value="cancel">Cancel</button>
-          <button class="eof-btn" value="confirm">Approve</button>
+        <footer class="bo-dialog__footer">
+          <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
+          <button class="bo-btn" value="confirm">Approve</button>
         </footer>
       </form>
     </dialog>

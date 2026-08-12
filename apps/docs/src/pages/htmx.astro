@@ -18,7 +18,7 @@ initDataTables();   // binds existing containers; row/tbody swaps INSIDE a bound
                     // container re-derive selection state automatically
                     // (the container listens for htmx:afterSwap)
 
-// only NEW .eof-data-table-container elements swapped in later need a call:
+// only NEW .bo-data-table-container elements swapped in later need a call:
 document.body.addEventListener("htmx:afterSwap", (e) =>
   initDataTables(e.target)
 );
@@ -27,7 +27,7 @@ document.body.addEventListener("htmx:afterSwap", (e) =>
 // import { refreshDataTable } from "@busy-office/ui/js";
 // refreshDataTable(container);`;
 const stateRecipe = `<!-- The framework-agnostic loading convention: -->
-<table class="eof-data-table"
+<table class="bo-data-table"
        hx-on::before-request="this.dataset.loading='true'"
        hx-on::after-request="this.dataset.loading='false'">`;
 ---
@@ -52,6 +52,6 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
   <section class="demo">
     <h2>4. Loading states</h2>
     <pre><code>{stateRecipe}</code></pre>
-    <p class="eof-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
+    <p class="bo-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
   </section>
 </Gallery>

@@ -1,24 +1,24 @@
-@layer eof-components {
+@layer bo-components {
   /* Dense ERP data table. Container so the table can respond to ITS width
      (dashboard widget vs full screen), independent of global density. */
-  .eof-data-table-container {
+  .bo-data-table-container {
     container-type: inline-size;
-    container-name: eof-table;
-    background: var(--eof-color-bg-surface);
-    border: var(--eof-border-width) solid var(--eof-color-border-default);
-    border-radius: var(--eof-radius-md);
+    container-name: bo-table;
+    background: var(--bo-color-bg-surface);
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
     overflow: auto;
     scrollbar-gutter: stable;
   }
 
-  .eof-data-table__toolbar {
+  .bo-data-table__toolbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-2) var(--eof-density-cell-padding-x);
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-density-cell-padding-x);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
     position: sticky;
     inset-inline-start: 0;
   }
@@ -31,117 +31,117 @@
         the container, so un-checking the LAST selected row re-scans every row
         checkbox — fine at hundreds of rows, measurable at thousands; use
         initDataTables() for big grids. */
-  .eof-data-table__bulk-actions {
+  .bo-data-table__bulk-actions {
     display: none;
     align-items: center;
-    gap: var(--eof-space-2);
+    gap: var(--bo-space-2);
   }
 
-  .eof-data-table-container[data-any-selected="true"] .eof-data-table__bulk-actions,
-  .eof-data-table-container:not([data-any-selected]):has(.eof-data-table__row-select:checked)
-    .eof-data-table__bulk-actions {
+  .bo-data-table-container[data-any-selected="true"] .bo-data-table__bulk-actions,
+  .bo-data-table-container:not([data-any-selected]):has(.bo-data-table__row-select:checked)
+    .bo-data-table__bulk-actions {
     display: flex;
   }
 
-  .eof-data-table__selection-count {
-    font-size: var(--eof-font-size-xs);
-    color: var(--eof-color-text-secondary);
+  .bo-data-table__selection-count {
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-secondary);
     font-variant-numeric: tabular-nums;
   }
 
   /* Footer (page-size select + pagination). Sticky-inline like the toolbar,
      so it holds still while a wide table scrolls horizontally. */
-  .eof-data-table__footer {
+  .bo-data-table__footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-2) var(--eof-density-cell-padding-x);
-    border-block-start: var(--eof-border-width) solid var(--eof-color-border-default);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-density-cell-padding-x);
+    border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
     position: sticky;
     inset-inline-start: 0;
   }
 
-  .eof-data-table {
+  .bo-data-table {
     inline-size: 100%;
-    font-size: var(--eof-density-font-size);
+    font-size: var(--bo-density-font-size);
     font-variant-numeric: tabular-nums;
   }
 
-  /* Row states set --eof-cell-bg on the <tr>; every cell paints it. All state
+  /* Row states set --bo-cell-bg on the <tr>; every cell paints it. All state
      colors are OPAQUE so sticky (frozen) cells — which must be opaque to mask
      scrolled content — show exactly the same state as the rest of their row. */
-  .eof-data-table th,
-  .eof-data-table td {
-    height: var(--eof-density-row-height);
-    padding-block: var(--eof-density-cell-padding-y);
-    padding-inline: var(--eof-density-cell-padding-x);
+  .bo-data-table th,
+  .bo-data-table td {
+    height: var(--bo-density-row-height);
+    padding-block: var(--bo-density-cell-padding-y);
+    padding-inline: var(--bo-density-cell-padding-x);
     text-align: start;
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
-    background-color: var(--eof-cell-bg, transparent);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+    background-color: var(--bo-cell-bg, transparent);
   }
 
-  .eof-data-table thead th {
+  .bo-data-table thead th {
     position: sticky;
     inset-block-start: 0;
-    z-index: var(--eof-z-sticky-header);
-    background: var(--eof-color-bg-muted);
-    color: var(--eof-color-text-secondary);
-    font-size: var(--eof-font-size-xs);
-    font-weight: var(--eof-font-weight-semibold);
+    z-index: var(--bo-z-sticky-header);
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-secondary);
+    font-size: var(--bo-font-size-xs);
+    font-weight: var(--bo-font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.03em;
     white-space: nowrap;
   }
 
-  .eof-data-table--striped tbody tr:nth-child(even) {
-    --eof-cell-bg: var(--eof-color-bg-muted);
+  .bo-data-table--striped tbody tr:nth-child(even) {
+    --bo-cell-bg: var(--bo-color-bg-muted);
   }
 
-  .eof-data-table tbody tr:hover {
-    --eof-cell-bg: var(--eof-color-bg-hover);
+  .bo-data-table tbody tr:hover {
+    --bo-cell-bg: var(--bo-color-bg-hover);
   }
 
-  .eof-data-table tbody tr:has(.eof-data-table__row-select:checked) {
-    --eof-cell-bg: var(--eof-color-bg-selected);
+  .bo-data-table tbody tr:has(.bo-data-table__row-select:checked) {
+    --bo-cell-bg: var(--bo-color-bg-selected);
   }
 
-  .eof-data-table tbody tr:last-child th,
-  .eof-data-table tbody tr:last-child td {
+  .bo-data-table tbody tr:last-child th,
+  .bo-data-table tbody tr:last-child td {
     border-block-end: none;
   }
 
   /* Frozen first column (opt-in). Falls back to the surface color only when
      the row sets no state background. */
-  .eof-data-table--sticky-col th:first-child,
-  .eof-data-table--sticky-col td:first-child {
+  .bo-data-table--sticky-col th:first-child,
+  .bo-data-table--sticky-col td:first-child {
     position: sticky;
     inset-inline-start: 0;
-    z-index: var(--eof-z-sticky-col);
-    background-color: var(--eof-cell-bg, var(--eof-color-bg-surface));
+    z-index: var(--bo-z-sticky-col);
+    background-color: var(--bo-cell-bg, var(--bo-color-bg-surface));
   }
 
-  .eof-data-table--sticky-col thead th:first-child {
-    z-index: calc(var(--eof-z-sticky-header) + 1);
-    background-color: var(--eof-color-bg-muted);
+  .bo-data-table--sticky-col thead th:first-child {
+    z-index: calc(var(--bo-z-sticky-header) + 1);
+    background-color: var(--bo-color-bg-muted);
   }
 
   /* Column semantics */
-  .eof-data-table__col--numeric {
+  .bo-data-table__col--numeric {
     text-align: end;
   }
 
-  .eof-data-table__col--code {
-    font-family: var(--eof-font-mono);
+  .bo-data-table__col--code {
+    font-family: var(--bo-font-mono);
     font-size: 0.9em;
   }
 
   /* Sorting: aria-sort on <th> drives the indicator; the button is the target. */
-  .eof-data-table__sort-btn {
+  .bo-data-table__sort-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--eof-space-1);
+    gap: var(--bo-space-1);
     font: inherit;
     text-transform: inherit;
     letter-spacing: inherit;
@@ -149,24 +149,24 @@
     padding: 0;
   }
 
-  .eof-data-table th[aria-sort] .eof-data-table__sort-btn::after {
+  .bo-data-table th[aria-sort] .bo-data-table__sort-btn::after {
     content: "↕" / "";
-    color: var(--eof-color-text-muted);
+    color: var(--bo-color-text-muted);
   }
 
-  .eof-data-table th[aria-sort="ascending"] .eof-data-table__sort-btn::after {
+  .bo-data-table th[aria-sort="ascending"] .bo-data-table__sort-btn::after {
     content: "↑" / "";
     color: inherit;
   }
 
-  .eof-data-table th[aria-sort="descending"] .eof-data-table__sort-btn::after {
+  .bo-data-table th[aria-sort="descending"] .bo-data-table__sort-btn::after {
     content: "↓" / "";
     color: inherit;
   }
 
   /* Loading: attribute flipped by JS/HTMX. */
-  .eof-data-table[data-loading="true"],
-  .eof-data-table[aria-busy="true"] {
+  .bo-data-table[data-loading="true"],
+  .bo-data-table[aria-busy="true"] {
     opacity: 0.6;
     pointer-events: none;
   }
@@ -176,60 +176,60 @@
      row for screen-reader users. Selector matches stripe/hover specificity
      (0,2,2) and sits after both in source order, so the error tint survives
      striping and hovering. */
-  .eof-data-table tbody tr[data-row-state="error"] {
-    --eof-cell-bg: var(--eof-state-error-bg);
+  .bo-data-table tbody tr[data-row-state="error"] {
+    --bo-cell-bg: var(--bo-state-error-bg);
   }
 
-  .eof-data-table tr[data-row-state="error"] > :first-child {
-    box-shadow: inset 3px 0 0 var(--eof-color-danger);
+  .bo-data-table tr[data-row-state="error"] > :first-child {
+    box-shadow: inset 3px 0 0 var(--bo-color-danger);
   }
 
   /* Auto-compaction when the table lives in a narrow container.
      Precedence: an EXPLICIT data-density on the table or its container wins —
      compaction only applies when neither declares one. All density aliases
      are overridden together so the result is coherent compact, not a mix. */
-  @container eof-table (max-width: 30rem) {
-    .eof-data-table-container:not([data-density])
-      > .eof-data-table:not([data-density]) {
-      --eof-density-cell-padding-x: var(--eof-space-1);
-      --eof-density-cell-padding-y: var(--eof-space-1);
-      --eof-density-row-height: 1.75rem;
-      --eof-density-control-height: 1.75rem;
-      --eof-density-font-size: var(--eof-font-size-sm);
-      --eof-density-field-gap: var(--eof-space-2);
+  @container bo-table (max-width: 30rem) {
+    .bo-data-table-container:not([data-density])
+      > .bo-data-table:not([data-density]) {
+      --bo-density-cell-padding-x: var(--bo-space-1);
+      --bo-density-cell-padding-y: var(--bo-space-1);
+      --bo-density-row-height: 1.75rem;
+      --bo-density-control-height: 1.75rem;
+      --bo-density-font-size: var(--bo-font-size-sm);
+      --bo-density-field-gap: var(--bo-space-2);
     }
 
-    .eof-data-table-container:not([data-density]) .eof-data-table__toolbar {
-      padding-block: var(--eof-space-1);
+    .bo-data-table-container:not([data-density]) .bo-data-table__toolbar {
+      padding-block: var(--bo-space-1);
     }
 
-    .eof-data-table-container:not([data-density])
-      .eof-data-table:not([data-density])
-      .eof-data-table__col--secondary {
+    .bo-data-table-container:not([data-density])
+      .bo-data-table:not([data-density])
+      .bo-data-table__col--secondary {
       display: none;
     }
   }
 
   @media print {
-    .eof-data-table-container {
+    .bo-data-table-container {
       border: none;
       overflow: visible;
     }
 
-    .eof-data-table__toolbar,
-    .eof-data-table__footer {
+    .bo-data-table__toolbar,
+    .bo-data-table__footer {
       display: none;
     }
 
-    .eof-data-table thead th {
+    .bo-data-table thead th {
       position: static;
       background: none;
       color: #000;
       border-block-end: 2px solid #000;
     }
 
-    .eof-data-table th,
-    .eof-data-table td {
+    .bo-data-table th,
+    .bo-data-table td {
       border-block-end: 1px solid #999;
     }
   }

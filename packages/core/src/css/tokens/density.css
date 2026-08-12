@@ -1,32 +1,32 @@
-@layer eof-tokens {
+@layer bo-tokens {
   /* Density is a cascading token remap. Components consume ONLY these aliases
      for internal sizing, so density can be set on <html> or overridden on any
      wrapper (e.g. one compact table inside a comfortable page). */
   :root,
   [data-density="comfortable"] {
-    --eof-density-control-height: 2.25rem; /* 36px */
-    --eof-density-row-height: 2.5rem; /* 40px */
-    --eof-density-cell-padding-y: var(--eof-space-2);
-    --eof-density-cell-padding-x: var(--eof-space-4);
-    --eof-density-field-gap: var(--eof-space-4);
-    --eof-density-font-size: var(--eof-font-size-base);
+    --bo-density-control-height: 2.25rem; /* 36px */
+    --bo-density-row-height: 2.5rem; /* 40px */
+    --bo-density-cell-padding-y: var(--bo-space-2);
+    --bo-density-cell-padding-x: var(--bo-space-4);
+    --bo-density-field-gap: var(--bo-space-4);
+    --bo-density-font-size: var(--bo-font-size-base);
   }
 
   [data-density="compact"] {
-    --eof-density-control-height: 1.75rem; /* 28px */
-    --eof-density-row-height: 1.875rem; /* 30px */
-    --eof-density-cell-padding-y: var(--eof-space-1);
-    --eof-density-cell-padding-x: var(--eof-space-2);
-    --eof-density-field-gap: var(--eof-space-2);
-    --eof-density-font-size: var(--eof-font-size-sm);
+    --bo-density-control-height: 1.75rem; /* 28px */
+    --bo-density-row-height: 1.875rem; /* 30px */
+    --bo-density-cell-padding-y: var(--bo-space-1);
+    --bo-density-cell-padding-x: var(--bo-space-2);
+    --bo-density-field-gap: var(--bo-space-2);
+    --bo-density-font-size: var(--bo-font-size-sm);
   }
 
   [data-density="spacious"] {
-    --eof-density-control-height: 2.75rem; /* 44px */
-    --eof-density-row-height: 3rem; /* 48px */
-    --eof-density-cell-padding-y: var(--eof-space-3);
-    --eof-density-cell-padding-x: var(--eof-space-6);
-    --eof-density-field-gap: var(--eof-space-6);
-    --eof-density-font-size: var(--eof-font-size-md);
+    --bo-density-control-height: 2.75rem; /* 44px */
+    --bo-density-row-height: 3rem; /* 48px */
+    --bo-density-cell-padding-y: var(--bo-space-3);
+    --bo-density-cell-padding-x: var(--bo-space-6);
+    --bo-density-field-gap: var(--bo-space-6);
+    --bo-density-font-size: var(--bo-font-size-md);
   }
 }

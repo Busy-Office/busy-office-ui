@@ -3,7 +3,7 @@
  * Roving tabindex, Left/Right/Home/End navigation, automatic activation.
  *
  * Markup contract:
- *   .eof-tabs > .eof-tabs__list[role=tablist] > .eof-tabs__tab[role=tab]
+ *   .bo-tabs > .bo-tabs__list[role=tablist] > .bo-tabs__tab[role=tab]
  *   panels: [role=tabpanel][id] referenced by each tab's aria-controls;
  *   inactive panels carry [hidden].
  */
@@ -29,14 +29,14 @@ export function initTabs(): void {
 
   document.addEventListener('click', (e) => {
     const tab = (e.target as Element | null)?.closest<HTMLElement>(
-      '.eof-tabs__tab[role="tab"]',
+      '.bo-tabs__tab[role="tab"]',
     );
     if (tab) activate(tab);
   });
 
   document.addEventListener('keydown', (e) => {
     const tab = (e.target as Element | null)?.closest<HTMLElement>(
-      '.eof-tabs__tab[role="tab"]',
+      '.bo-tabs__tab[role="tab"]',
     );
     if (!tab) return;
     const list = tab.closest('[role="tablist"]');

@@ -1,14 +1,14 @@
 /* Opt-in HTMX integration. Styles ONLY classes/attributes HTMX itself sets.
    Never imported by index.css — add via @busy-office/ui/css/htmx. */
-@layer eof-utilities {
+@layer bo-utilities {
   [aria-busy="true"] {
     cursor: progress;
   }
 
   .htmx-indicator {
     opacity: 0;
-    transition: opacity var(--eof-motion-duration-fast)
-      var(--eof-motion-easing-standard);
+    transition: opacity var(--bo-motion-duration-fast)
+      var(--bo-motion-easing-standard);
   }
 
   .htmx-request .htmx-indicator,
@@ -18,20 +18,20 @@
 
   .htmx-swapping {
     opacity: 0.5;
-    transition: opacity var(--eof-motion-duration-base) ease-out;
+    transition: opacity var(--bo-motion-duration-base) ease-out;
   }
 
   /* Flash-on-update: classic ERP grid feedback after a row/cell refresh.
      Duration is token-driven so prefers-reduced-motion zeroes it like every
      other animation in the framework. */
   .htmx-settling {
-    animation: eof-htmx-settle
-      calc(var(--eof-motion-duration-slow) * 2) ease-out;
+    animation: bo-htmx-settle
+      calc(var(--bo-motion-duration-slow) * 2) ease-out;
   }
 
-  @keyframes eof-htmx-settle {
+  @keyframes bo-htmx-settle {
     from {
-      background-color: var(--eof-color-accent-subtle);
+      background-color: var(--bo-color-accent-subtle);
     }
   }
 

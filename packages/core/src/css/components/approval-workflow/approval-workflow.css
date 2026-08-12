@@ -1,129 +1,129 @@
-@layer eof-components {
-  /* Status timeline: <ol class="eof-timeline"> of workflow steps. State via
+@layer bo-components {
+  /* Status timeline: <ol class="bo-timeline"> of workflow steps. State via
      data-state="done|current|pending|rejected" on the <li>; the current step
      also carries aria-current="step". The marker glyph (✓ ✕ ●) is REAL
-     MARKUP inside .eof-timeline__marker, so state is never color-alone. */
-  .eof-timeline {
+     MARKUP inside .bo-timeline__marker, so state is never color-alone. */
+  .bo-timeline {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .eof-timeline__step {
-    --eof-timeline-marker-bg: var(--eof-color-bg-muted);
-    --eof-timeline-marker-fg: var(--eof-color-text-muted);
+  .bo-timeline__step {
+    --bo-timeline-marker-bg: var(--bo-color-bg-muted);
+    --bo-timeline-marker-fg: var(--bo-color-text-muted);
 
     position: relative;
     display: flex;
-    gap: var(--eof-space-3);
-    padding-block-end: var(--eof-space-5);
+    gap: var(--bo-space-3);
+    padding-block-end: var(--bo-space-5);
   }
 
   /* Connector line between markers. */
-  .eof-timeline__step:not(:last-child)::before {
+  .bo-timeline__step:not(:last-child)::before {
     content: "";
     position: absolute;
     inset-block: 1.5rem 0;
     inset-inline-start: calc(0.75rem - 1px);
     inline-size: 2px;
-    background: var(--eof-color-border-default);
+    background: var(--bo-color-border-default);
   }
 
-  .eof-timeline__marker {
+  .bo-timeline__marker {
     flex: none;
     display: flex;
     align-items: center;
     justify-content: center;
     inline-size: 1.5rem;
     block-size: 1.5rem;
-    border-radius: var(--eof-radius-full);
-    background: var(--eof-timeline-marker-bg);
-    color: var(--eof-timeline-marker-fg);
-    font-size: var(--eof-font-size-xs);
-    font-weight: var(--eof-font-weight-semibold);
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-timeline-marker-bg);
+    color: var(--bo-timeline-marker-fg);
+    font-size: var(--bo-font-size-xs);
+    font-weight: var(--bo-font-weight-semibold);
   }
 
-  .eof-timeline__step[data-state="done"] {
-    --eof-timeline-marker-bg: var(--eof-color-success-subtle);
-    --eof-timeline-marker-fg: var(--eof-color-success-text);
+  .bo-timeline__step[data-state="done"] {
+    --bo-timeline-marker-bg: var(--bo-color-success-subtle);
+    --bo-timeline-marker-fg: var(--bo-color-success-text);
   }
 
-  .eof-timeline__step[data-state="current"] {
-    --eof-timeline-marker-bg: var(--eof-color-accent-subtle);
-    --eof-timeline-marker-fg: var(--eof-color-accent-text);
+  .bo-timeline__step[data-state="current"] {
+    --bo-timeline-marker-bg: var(--bo-color-accent-subtle);
+    --bo-timeline-marker-fg: var(--bo-color-accent-text);
   }
 
-  .eof-timeline__step[data-state="rejected"] {
-    --eof-timeline-marker-bg: var(--eof-color-danger-subtle);
-    --eof-timeline-marker-fg: var(--eof-color-danger-text);
+  .bo-timeline__step[data-state="rejected"] {
+    --bo-timeline-marker-bg: var(--bo-color-danger-subtle);
+    --bo-timeline-marker-fg: var(--bo-color-danger-text);
   }
 
-  .eof-timeline__title {
-    font-weight: var(--eof-font-weight-medium);
-    color: var(--eof-color-text-primary);
+  .bo-timeline__title {
+    font-weight: var(--bo-font-weight-medium);
+    color: var(--bo-color-text-primary);
   }
 
-  .eof-timeline__step[data-state="pending"] .eof-timeline__title {
-    color: var(--eof-color-text-muted);
-    font-weight: var(--eof-font-weight-normal);
+  .bo-timeline__step[data-state="pending"] .bo-timeline__title {
+    color: var(--bo-color-text-muted);
+    font-weight: var(--bo-font-weight-normal);
   }
 
-  .eof-timeline__step[data-state="rejected"] .eof-timeline__title {
-    color: var(--eof-color-danger-text);
+  .bo-timeline__step[data-state="rejected"] .bo-timeline__title {
+    color: var(--bo-color-danger-text);
   }
 
-  .eof-timeline__meta {
-    font-size: var(--eof-font-size-xs);
-    color: var(--eof-color-text-muted);
+  .bo-timeline__meta {
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-muted);
   }
 
   /* Audit trail: compact chronological list. Timestamps tabular so columns
      of times align. */
-  .eof-audit {
+  .bo-audit {
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: var(--eof-font-size-sm);
+    font-size: var(--bo-font-size-sm);
   }
 
   /* Grid alignment: the time column self-sizes (max-content) and the detail
      line lands in the content column by grid placement — no width token, so
      there is nothing to drift when timestamp formats change, and no ch/rem
      cross-font-context hazard (unit-doctrine grill, Kofi F1). */
-  .eof-audit__entry {
+  .bo-audit__entry {
     display: grid;
     grid-template-columns: max-content 1fr;
-    column-gap: var(--eof-space-2);
-    row-gap: var(--eof-space-1);
-    padding-block: var(--eof-space-2);
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    column-gap: var(--bo-space-2);
+    row-gap: var(--bo-space-1);
+    padding-block: var(--bo-space-2);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
   }
 
-  .eof-audit__entry:last-child {
+  .bo-audit__entry:last-child {
     border-block-end: none;
   }
 
-  .eof-audit__time {
-    font-family: var(--eof-font-mono);
-    font-size: var(--eof-font-size-xs);
+  .bo-audit__time {
+    font-family: var(--bo-font-mono);
+    font-size: var(--bo-font-size-xs);
     font-variant-numeric: tabular-nums;
-    color: var(--eof-color-text-muted);
+    color: var(--bo-color-text-muted);
     padding-block-start: 0.125rem;
     white-space: nowrap;
   }
 
-  .eof-audit__actor {
-    font-weight: var(--eof-font-weight-medium);
+  .bo-audit__actor {
+    font-weight: var(--bo-font-weight-medium);
   }
 
-  .eof-audit__detail {
+  .bo-audit__detail {
     grid-column: 2;
-    color: var(--eof-color-text-secondary);
-    font-size: var(--eof-font-size-xs);
+    color: var(--bo-color-text-secondary);
+    font-size: var(--bo-font-size-xs);
   }
 
   @media print {
-    .eof-timeline__step:not(:last-child)::before {
+    .bo-timeline__step:not(:last-child)::before {
       background: #999;
     }
   }

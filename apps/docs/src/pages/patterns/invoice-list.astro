@@ -17,48 +17,48 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     density to <em>compact</em> for the full back-office experience.
   </p>
   <section class="demo">
-    <form class="eof-cluster" data-density="compact">
-      <input class="eof-input" type="search" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
-      <select class="eof-select" style="inline-size: auto" aria-label="Status filter">
+    <form class="bo-cluster" data-density="compact">
+      <input class="bo-input" type="search" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
+      <select class="bo-select" style="inline-size: auto" aria-label="Status filter">
         <option>All statuses</option><option>Pending</option><option>Approved</option><option>Rejected</option>
       </select>
-      <select class="eof-select" style="inline-size: auto" aria-label="Cost center filter">
+      <select class="bo-select" style="inline-size: auto" aria-label="Cost center filter">
         <option>All cost centers</option><option>CC-4021</option><option>CC-1180</option><option>CC-2205</option>
       </select>
-      <button class="eof-btn eof-btn--secondary" type="button">Apply</button>
-      <button class="eof-btn eof-btn--ghost" type="reset">Clear</button>
+      <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+      <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
     </form>
-    <div class="eof-data-table-container" style="max-block-size: 24rem" data-density="compact">
-      <div class="eof-data-table__toolbar">
-        <div class="eof-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-          <button class="eof-btn eof-btn--secondary" type="button">Approve selected</button>
-          <button class="eof-btn eof-btn--danger" type="button">Reject selected</button>
+    <div class="bo-data-table-container" style="max-block-size: 24rem" data-density="compact">
+      <div class="bo-data-table__toolbar">
+        <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+          <button class="bo-btn bo-btn--secondary" type="button">Approve selected</button>
+          <button class="bo-btn bo-btn--danger" type="button">Reject selected</button>
         </div>
-        <span class="eof-data-table__selection-count"></span>
-        <span class="eof-u-text-muted">14 invoices</span>
+        <span class="bo-data-table__selection-count"></span>
+        <span class="bo-u-text-muted">14 invoices</span>
       </div>
-      <table class="eof-data-table eof-data-table--sticky-col">
+      <table class="bo-data-table bo-data-table--sticky-col">
         <thead>
           <tr>
-            <th scope="col"><input type="checkbox" class="eof-checkbox eof-data-table__select-all" aria-label="Select all" /></th>
-            <th scope="col" aria-sort="ascending"><button class="eof-data-table__sort-btn" type="button">Invoice #</button></th>
+            <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
+            <th scope="col" aria-sort="ascending"><button class="bo-data-table__sort-btn" type="button">Invoice #</button></th>
             <th scope="col">Vendor</th>
-            <th scope="col" class="eof-data-table__col--secondary">Cost center</th>
+            <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
             <th scope="col">Due</th>
-            <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+            <th scope="col" class="bo-data-table__col--numeric">Amount</th>
             <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr>
-              <td><input type="checkbox" class="eof-checkbox eof-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
-              <td class="eof-data-table__col--code">{r.no}</td>
-              <td class="eof-u-text-truncate">{r.vendor}</td>
-              <td class="eof-data-table__col--secondary eof-data-table__col--code">{r.cc}</td>
-              <td class="eof-u-tabular">{r.due}</td>
-              <td class="eof-data-table__col--numeric">{r.amount}</td>
-              <td><span class={`eof-badge eof-badge--${r.tone}`}>{r.status}</span></td>
+              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
+              <td class="bo-data-table__col--code">{r.no}</td>
+              <td class="bo-u-text-truncate">{r.vendor}</td>
+              <td class="bo-data-table__col--secondary bo-data-table__col--code">{r.cc}</td>
+              <td class="bo-u-tabular">{r.due}</td>
+              <td class="bo-data-table__col--numeric">{r.amount}</td>
+              <td><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
             </tr>
           ))}
         </tbody>

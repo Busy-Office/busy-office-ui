@@ -1,16 +1,16 @@
-@layer eof-primitives {
+@layer bo-primitives {
   /* Vertical flow with a controllable gap. */
-  .eof-stack {
+  .bo-stack {
     display: flex;
     flex-direction: column;
-    gap: var(--eof-stack-gap, var(--eof-space-4));
+    gap: var(--bo-stack-gap, var(--bo-space-4));
   }
 
-  .eof-stack--tight {
-    --eof-stack-gap: var(--eof-space-2);
+  .bo-stack--tight {
+    --bo-stack-gap: var(--bo-space-2);
   }
 
-  .eof-stack--loose {
-    --eof-stack-gap: var(--eof-space-6);
+  .bo-stack--loose {
+    --bo-stack-gap: var(--bo-space-6);
   }
 }

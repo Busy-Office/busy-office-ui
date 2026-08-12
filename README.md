@@ -28,7 +28,7 @@ initDialogs(); initDataTables();
 - **Density is a first-class dimension.** `data-density="compact|comfortable|spacious"`
   on `<html>` or any wrapper remaps a token tier — 30/40/48px rows, cascading,
   overridable per-region. ERP users live in dense grids.
-- **Semantic HTML + one class.** `.eof-data-table`, `.eof-form-field`, `.eof-timeline`.
+- **Semantic HTML + one class.** `.bo-data-table`, `.bo-form-field`, `.bo-timeline`.
   State via ARIA (`aria-invalid`, `aria-sort`, `aria-current`) and `data-*` — styled
   directly, no invented state classes.
 - **The cascade is the API.** All framework CSS lives in `@layer`; anything you write

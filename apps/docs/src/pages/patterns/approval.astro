@@ -4,37 +4,37 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (aria-hidden)
      AND visually-hidden state text. role="list" restores list semantics
      that list-style:none strips in some AT. -->
-<ol class="eof-timeline" role="list">
-  <li class="eof-timeline__step" data-state="done">
-    <span class="eof-timeline__marker" aria-hidden="true">✓</span>
+<ol class="bo-timeline" role="list">
+  <li class="bo-timeline__step" data-state="done">
+    <span class="bo-timeline__marker" aria-hidden="true">✓</span>
     <div>
-      <div class="eof-timeline__title">
-        <span class="eof-visually-hidden">Completed: </span>Submitted
+      <div class="bo-timeline__title">
+        <span class="bo-visually-hidden">Completed: </span>Submitted
       </div>
-      <div class="eof-timeline__meta">R. Vance ·
+      <div class="bo-timeline__meta">R. Vance ·
         <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div>
     </div>
   </li>
-  <li class="eof-timeline__step" data-state="current" aria-current="step">
-    <span class="eof-timeline__marker" aria-hidden="true">●</span>
+  <li class="bo-timeline__step" data-state="current" aria-current="step">
+    <span class="bo-timeline__marker" aria-hidden="true">●</span>
     <div>
-      <div class="eof-timeline__title">Cost-center approval</div>
-      <div class="eof-timeline__meta">waiting on M. Okafor</div>
+      <div class="bo-timeline__title">Cost-center approval</div>
+      <div class="bo-timeline__meta">waiting on M. Okafor</div>
     </div>
   </li>
-  <li class="eof-timeline__step" data-state="rejected">
-    <span class="eof-timeline__marker" aria-hidden="true">✕</span>
+  <li class="bo-timeline__step" data-state="rejected">
+    <span class="bo-timeline__marker" aria-hidden="true">✕</span>
     <div>
-      <div class="eof-timeline__title">
-        <span class="eof-visually-hidden">Rejected: </span>Finance release
+      <div class="bo-timeline__title">
+        <span class="bo-visually-hidden">Rejected: </span>Finance release
       </div>
     </div>
   </li>
-  <li class="eof-timeline__step" data-state="pending">
-    <span class="eof-timeline__marker" aria-hidden="true">4</span>
+  <li class="bo-timeline__step" data-state="pending">
+    <span class="bo-timeline__marker" aria-hidden="true">4</span>
     <div>
-      <div class="eof-timeline__title">
-        <span class="eof-visually-hidden">Not started: </span>Archive
+      <div class="bo-timeline__title">
+        <span class="bo-visually-hidden">Not started: </span>Archive
       </div>
     </div>
   </li>
@@ -50,52 +50,52 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
   </p>
   <section class="demo">
     <h2>Wizard stepper (document creation)</h2>
-    <ol class="eof-stepper" role="list" style="max-inline-size: 40rem">
-      <li class="eof-stepper__step" data-state="done"><span class="eof-stepper__marker" aria-hidden="true">✓</span><span class="eof-stepper__label"><span class="eof-visually-hidden">Completed: </span>Header</span></li>
-      <li class="eof-stepper__step" data-state="done"><span class="eof-stepper__marker" aria-hidden="true">✓</span><span class="eof-stepper__label"><span class="eof-visually-hidden">Completed: </span>Line items</span></li>
-      <li class="eof-stepper__step" aria-current="step"><span class="eof-stepper__marker">3</span><span class="eof-stepper__label">Approvers</span></li>
-      <li class="eof-stepper__step"><span class="eof-stepper__marker">4</span><span class="eof-stepper__label"><span class="eof-visually-hidden">Not started: </span>Review</span></li>
+    <ol class="bo-stepper" role="list" style="max-inline-size: 40rem">
+      <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Header</span></li>
+      <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Line items</span></li>
+      <li class="bo-stepper__step" aria-current="step"><span class="bo-stepper__marker">3</span><span class="bo-stepper__label">Approvers</span></li>
+      <li class="bo-stepper__step"><span class="bo-stepper__marker">4</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Not started: </span>Review</span></li>
     </ol>
   </section>
   <section class="demo">
     <h2>Status timeline (incl. rejected) + audit trail</h2>
-    <div class="eof-grid" style="--eof-grid-min: 18rem">
+    <div class="bo-grid" style="--bo-grid-min: 18rem">
       <div>
-        <h3 class="eof-u-text-muted" style="font-size: var(--eof-font-size-sm)">PO-88213 status</h3>
-        <ol class="eof-timeline" role="list">
-          <li class="eof-timeline__step" data-state="done">
-            <span class="eof-timeline__marker" aria-hidden="true">✓</span>
-            <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Completed: </span>Submitted</div><div class="eof-timeline__meta">R. Vance · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div></div>
+        <h3 class="bo-u-text-muted" style="font-size: var(--bo-font-size-sm)">PO-88213 status</h3>
+        <ol class="bo-timeline" role="list">
+          <li class="bo-timeline__step" data-state="done">
+            <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+            <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Submitted</div><div class="bo-timeline__meta">R. Vance · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div></div>
           </li>
-          <li class="eof-timeline__step" data-state="done">
-            <span class="eof-timeline__marker" aria-hidden="true">✓</span>
-            <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Completed: </span>Manager approval</div><div class="eof-timeline__meta">J. Kim · <time datetime="2026-08-10T15:02">2026-08-10 15:02</time></div></div>
+          <li class="bo-timeline__step" data-state="done">
+            <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+            <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Manager approval</div><div class="bo-timeline__meta">J. Kim · <time datetime="2026-08-10T15:02">2026-08-10 15:02</time></div></div>
           </li>
-          <li class="eof-timeline__step" data-state="current" aria-current="step">
-            <span class="eof-timeline__marker" aria-hidden="true">●</span>
-            <div><div class="eof-timeline__title">Cost-center approval</div><div class="eof-timeline__meta">waiting on M. Okafor · 2 days</div></div>
+          <li class="bo-timeline__step" data-state="current" aria-current="step">
+            <span class="bo-timeline__marker" aria-hidden="true">●</span>
+            <div><div class="bo-timeline__title">Cost-center approval</div><div class="bo-timeline__meta">waiting on M. Okafor · 2 days</div></div>
           </li>
-          <li class="eof-timeline__step" data-state="rejected">
-            <span class="eof-timeline__marker" aria-hidden="true">✕</span>
-            <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Rejected: </span>Finance release</div><div class="eof-timeline__meta">returned by A. Chen · budget hold</div></div>
+          <li class="bo-timeline__step" data-state="rejected">
+            <span class="bo-timeline__marker" aria-hidden="true">✕</span>
+            <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Rejected: </span>Finance release</div><div class="bo-timeline__meta">returned by A. Chen · budget hold</div></div>
           </li>
         </ol>
       </div>
       <div>
-        <h3 class="eof-u-text-muted" style="font-size: var(--eof-font-size-sm)">Audit trail</h3>
-        <ol class="eof-audit" role="list">
-          <li class="eof-audit__entry">
-            <time class="eof-audit__time" datetime="2026-08-10T09:14">08-10 09:14</time>
-            <span><span class="eof-audit__actor">R. Vance</span> submitted PO-88213</span>
+        <h3 class="bo-u-text-muted" style="font-size: var(--bo-font-size-sm)">Audit trail</h3>
+        <ol class="bo-audit" role="list">
+          <li class="bo-audit__entry">
+            <time class="bo-audit__time" datetime="2026-08-10T09:14">08-10 09:14</time>
+            <span><span class="bo-audit__actor">R. Vance</span> submitted PO-88213</span>
           </li>
-          <li class="eof-audit__entry">
-            <time class="eof-audit__time" datetime="2026-08-10T15:02">08-10 15:02</time>
-            <span><span class="eof-audit__actor">J. Kim</span> approved</span>
-            <span class="eof-audit__detail">"Within Q3 budget."</span>
+          <li class="bo-audit__entry">
+            <time class="bo-audit__time" datetime="2026-08-10T15:02">08-10 15:02</time>
+            <span><span class="bo-audit__actor">J. Kim</span> approved</span>
+            <span class="bo-audit__detail">"Within Q3 budget."</span>
           </li>
-          <li class="eof-audit__entry">
-            <time class="eof-audit__time" datetime="2026-08-11T08:30">08-11 08:30</time>
-            <span><span class="eof-audit__actor">System</span> reminded M. Okafor</span>
+          <li class="bo-audit__entry">
+            <time class="bo-audit__time" datetime="2026-08-11T08:30">08-11 08:30</time>
+            <span><span class="bo-audit__actor">System</span> reminded M. Okafor</span>
           </li>
         </ol>
       </div>
@@ -103,7 +103,7 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
   </section>
   <section class="demo">
     <h2>Approval queue</h2>
-    <p class="eof-u-text-muted">The queue is the standard selectable data table with
+    <p class="bo-u-text-muted">The queue is the standard selectable data table with
     bulk Approve/Reject — see <a href={base + '/patterns/invoice-list'}>the invoice-list pattern</a>;
     nothing new to learn.</p>
   </section>

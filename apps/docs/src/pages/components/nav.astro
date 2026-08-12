@@ -1,17 +1,17 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
-const offcanvasMarkup = `<button class="eof-btn eof-btn--secondary"
+const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
         data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
 
-<dialog class="eof-offcanvas" id="drawer-nav" data-state="closed"
+<dialog class="bo-offcanvas" id="drawer-nav" data-state="closed"
         aria-labelledby="drawer-title">
-  <div class="eof-offcanvas__header">
-    <span id="drawer-title" class="eof-navbar__brand">busy-office</span>
+  <div class="bo-offcanvas__header">
+    <span id="drawer-title" class="bo-navbar__brand">busy-office</span>
     <form method="dialog">
-      <button class="eof-btn eof-btn--ghost eof-btn--icon" aria-label="Close">✕</button>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button>
     </form>
   </div>
-  <nav class="eof-sidebar-nav" aria-label="Main">…same markup as the sidebar…</nav>
+  <nav class="bo-sidebar-nav" aria-label="Main">…same markup as the sidebar…</nav>
 </dialog>
 <!-- Opens via initDialogs() — same wiring as any dialog: backdrop, Esc,
      focus-return and Tab loop are all inherited. -->`;
@@ -19,42 +19,42 @@ const offcanvasMarkup = `<button class="eof-btn eof-btn--secondary"
 <Gallery title="Navigation">
   <p class="demo-note">
     The docs site itself is the live demo: navbar + sidebar inside
-    <code>.eof-app-shell</code>. Narrow the window below 900px of shell width and the
+    <code>.bo-app-shell</code>. Narrow the window below 900px of shell width and the
     sidebar collapses to icon-only via a container query.
   </p>
   <section class="demo">
     <h2>Embedded shell (independent container)</h2>
-    <div class="eof-app-shell" style="min-height: 16rem; max-inline-size: 700px; border: 1px solid var(--eof-color-border-default); border-radius: var(--eof-radius-md); overflow: hidden">
-      <header class="eof-navbar eof-app-shell__header">
-        <span class="eof-navbar__brand">Embedded app</span>
+    <div class="bo-app-shell" style="min-height: 16rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+      <header class="bo-navbar bo-app-shell__header">
+        <span class="bo-navbar__brand">Embedded app</span>
       </header>
-      <nav class="eof-sidebar-nav eof-app-shell__sidebar" aria-label="Embedded">
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Embedded">
         <ul>
-          <li><a class="eof-sidebar-nav__link" href="#" aria-current="page"><span class="eof-sidebar-nav__icon">▤</span><span class="eof-sidebar-nav__label">Invoices</span></a></li>
-          <li><a class="eof-sidebar-nav__link" href="#"><span class="eof-sidebar-nav__icon">✓</span><span class="eof-sidebar-nav__label">Approvals</span></a></li>
-          <li><a class="eof-sidebar-nav__link" href="#"><span class="eof-sidebar-nav__icon">⚙</span><span class="eof-sidebar-nav__label">Settings</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-sidebar-nav__icon">▤</span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">✓</span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">⚙</span><span class="bo-sidebar-nav__label">Settings</span></a></li>
         </ul>
       </nav>
-      <main class="eof-app-shell__main">
-        <p class="eof-u-text-muted">This shell is 700px wide → its sidebar is already collapsed to icons, while the page's own sidebar may not be. Container queries, not media queries.</p>
+      <main class="bo-app-shell__main">
+        <p class="bo-u-text-muted">This shell is 700px wide → its sidebar is already collapsed to icons, while the page's own sidebar may not be. Container queries, not media queries.</p>
       </main>
     </div>
   </section>
   <section class="demo">
     <h2>Off-canvas drawer (mobile / narrow shells)</h2>
-    <button class="eof-btn eof-btn--secondary" data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
-    <dialog class="eof-offcanvas" id="drawer-nav" data-state="closed" aria-labelledby="drawer-title">
-      <div class="eof-offcanvas__header">
-        <span id="drawer-title" class="eof-navbar__brand">busy-office</span>
+    <button class="bo-btn bo-btn--secondary" data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
+    <dialog class="bo-offcanvas" id="drawer-nav" data-state="closed" aria-labelledby="drawer-title">
+      <div class="bo-offcanvas__header">
+        <span id="drawer-title" class="bo-navbar__brand">busy-office</span>
         <form method="dialog">
-          <button class="eof-btn eof-btn--ghost eof-btn--icon" aria-label="Close">✕</button>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button>
         </form>
       </div>
-      <nav class="eof-sidebar-nav" aria-label="Drawer demo">
+      <nav class="bo-sidebar-nav" aria-label="Drawer demo">
         <ul>
-          <li><a class="eof-sidebar-nav__link" href="#" aria-current="page"><span class="eof-sidebar-nav__icon" aria-hidden="true">▤</span><span class="eof-sidebar-nav__label">Invoices</span></a></li>
-          <li><a class="eof-sidebar-nav__link" href="#"><span class="eof-sidebar-nav__icon" aria-hidden="true">✓</span><span class="eof-sidebar-nav__label">Approvals</span></a></li>
-          <li><a class="eof-sidebar-nav__link" href="#"><span class="eof-sidebar-nav__icon" aria-hidden="true">⚙</span><span class="eof-sidebar-nav__label">Settings</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-sidebar-nav__icon" aria-hidden="true">▤</span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon" aria-hidden="true">✓</span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon" aria-hidden="true">⚙</span><span class="bo-sidebar-nav__label">Settings</span></a></li>
         </ul>
       </nav>
     </dialog>

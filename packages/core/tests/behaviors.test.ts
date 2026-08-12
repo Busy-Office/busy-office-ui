@@ -70,37 +70,37 @@ describe('initDialogs (delegation)', () => {
 describe('initDataTables', () => {
   function table(): HTMLElement {
     html`
-      <div class="eof-data-table-container">
-        <div class="eof-data-table__toolbar">
-          <span class="eof-data-table__selection-count"></span>
-          <input class="eof-input" type="search" aria-label="Filter" />
+      <div class="bo-data-table-container">
+        <div class="bo-data-table__toolbar">
+          <span class="bo-data-table__selection-count"></span>
+          <input class="bo-input" type="search" aria-label="Filter" />
         </div>
         <table>
           <thead><tr><th>
-            <input type="checkbox" class="eof-checkbox eof-data-table__select-all" aria-label="Select all" />
+            <input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" />
           </th></tr></thead>
           <tbody>
-            <tr><td><input type="checkbox" class="eof-data-table__row-select" aria-label="r1" /></td></tr>
-            <tr><td><input type="checkbox" class="eof-data-table__row-select" aria-label="r2" /></td></tr>
-            <tr><td><input type="checkbox" class="eof-data-table__row-select" aria-label="r3" /></td></tr>
+            <tr><td><input type="checkbox" class="bo-data-table__row-select" aria-label="r1" /></td></tr>
+            <tr><td><input type="checkbox" class="bo-data-table__row-select" aria-label="r2" /></td></tr>
+            <tr><td><input type="checkbox" class="bo-data-table__row-select" aria-label="r3" /></td></tr>
           </tbody>
         </table>
       </div>
     `;
-    const container = document.querySelector('.eof-data-table-container')!;
+    const container = document.querySelector('.bo-data-table-container')!;
     ui.initDataTables();
     return container as HTMLElement;
   }
 
   const rows = (c: Element) =>
-    Array.from(c.querySelectorAll<HTMLInputElement>('.eof-data-table__row-select'));
+    Array.from(c.querySelectorAll<HTMLInputElement>('.bo-data-table__row-select'));
   const change = (el: Element) =>
     el.dispatchEvent(new Event('change', { bubbles: true }));
 
   it('select-all checks all rows, sets count, any-selected, indeterminate', () => {
     const c = table();
-    const all = c.querySelector<HTMLInputElement>('.eof-data-table__select-all')!;
-    const count = c.querySelector('.eof-data-table__selection-count')!;
+    const all = c.querySelector<HTMLInputElement>('.bo-data-table__select-all')!;
+    const count = c.querySelector('.bo-data-table__selection-count')!;
 
     all.checked = true;
     change(all);
@@ -134,13 +134,13 @@ describe('initDataTables', () => {
 
     // Simulate an HTMX tbody swap to fresh, unchecked rows.
     c.querySelector('tbody')!.innerHTML =
-      '<tr><td><input type="checkbox" class="eof-data-table__row-select" aria-label="n1" /></td></tr>';
+      '<tr><td><input type="checkbox" class="bo-data-table__row-select" aria-label="n1" /></td></tr>';
     c.dispatchEvent(new Event('htmx:afterSwap', { bubbles: true }));
     expect((c as HTMLElement).dataset.anySelected).toBe('false');
-    expect(c.querySelector('.eof-data-table__selection-count')!.textContent).toBe('');
+    expect(c.querySelector('.bo-data-table__selection-count')!.textContent).toBe('');
 
     // Manual path for non-HTMX swappers.
-    c.querySelector<HTMLInputElement>('.eof-data-table__row-select')!.checked = true;
+    c.querySelector<HTMLInputElement>('.bo-data-table__row-select')!.checked = true;
     ui.refreshDataTable(c);
     expect((c as HTMLElement).dataset.anySelected).toBe('true');
   });
@@ -149,10 +149,10 @@ describe('initDataTables', () => {
 describe('initTabs', () => {
   function tabs(): HTMLElement[] {
     html`
-      <div class="eof-tabs">
-        <div class="eof-tabs__list" role="tablist" aria-label="t">
-          <button class="eof-tabs__tab" role="tab" id="t1" aria-selected="true" aria-controls="p1">One</button>
-          <button class="eof-tabs__tab" role="tab" id="t2" tabindex="-1" aria-selected="false" aria-controls="p2">Two</button>
+      <div class="bo-tabs">
+        <div class="bo-tabs__list" role="tablist" aria-label="t">
+          <button class="bo-tabs__tab" role="tab" id="t1" aria-selected="true" aria-controls="p1">One</button>
+          <button class="bo-tabs__tab" role="tab" id="t2" tabindex="-1" aria-selected="false" aria-controls="p2">Two</button>
         </div>
         <div role="tabpanel" id="p1" tabindex="0"></div>
         <div role="tabpanel" id="p2" tabindex="0" hidden></div>
@@ -191,8 +191,8 @@ describe('initDropdowns (popover)', () => {
     ui.initDropdowns();
     html`
       <button popovertarget="m1">open</button>
-      <div class="eof-dropdown__menu" id="m1" popover>
-        <button class="eof-dropdown__item" type="button">Pick</button>
+      <div class="bo-dropdown__menu" id="m1" popover>
+        <button class="bo-dropdown__item" type="button">Pick</button>
       </div>
     `;
     const menu = document.getElementById('m1') as HTMLElement & {
@@ -200,7 +200,7 @@ describe('initDropdowns (popover)', () => {
     };
     // jsdom has no popover implementation — stub the API surface.
     menu.hidePopover = vi.fn();
-    document.querySelector<HTMLElement>('.eof-dropdown__item')!.click();
+    document.querySelector<HTMLElement>('.bo-dropdown__item')!.click();
     expect(menu.hidePopover).toHaveBeenCalledTimes(1);
   });
 });
@@ -208,11 +208,11 @@ describe('initDropdowns (popover)', () => {
 describe('initAlerts', () => {
   it('dismiss removes the enclosing alert — including injected toasts', () => {
     ui.initAlerts();
-    html`<div class="eof-toast-region" role="status" aria-live="polite"></div>`;
-    document.querySelector('.eof-toast-region')!.innerHTML =
-      '<div class="eof-alert eof-toast">saved <button class="eof-alert__dismiss" aria-label="Dismiss">x</button></div>';
-    document.querySelector<HTMLElement>('.eof-alert__dismiss')!.click();
-    expect(document.querySelector('.eof-alert')).toBeNull();
+    html`<div class="bo-toast-region" role="status" aria-live="polite"></div>`;
+    document.querySelector('.bo-toast-region')!.innerHTML =
+      '<div class="bo-alert bo-toast">saved <button class="bo-alert__dismiss" aria-label="Dismiss">x</button></div>';
+    document.querySelector<HTMLElement>('.bo-alert__dismiss')!.click();
+    expect(document.querySelector('.bo-alert')).toBeNull();
   });
 });
 

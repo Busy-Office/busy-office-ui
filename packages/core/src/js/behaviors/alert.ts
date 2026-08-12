@@ -1,6 +1,6 @@
 /**
- * Dismiss behavior for alerts and toasts: any .eof-alert__dismiss button
- * removes its enclosing .eof-alert. Document-level delegation — call
+ * Dismiss behavior for alerts and toasts: any .bo-alert__dismiss button
+ * removes its enclosing .bo-alert. Document-level delegation — call
  * initAlerts() once; injected toasts are covered automatically.
  */
 let installed = false;
@@ -9,8 +9,8 @@ export function initAlerts(): void {
   if (installed) return;
   installed = true;
   document.addEventListener('click', (e) => {
-    const btn = (e.target as Element | null)?.closest('.eof-alert__dismiss');
+    const btn = (e.target as Element | null)?.closest('.bo-alert__dismiss');
     if (!btn) return;
-    btn.closest('.eof-alert')?.remove();
+    btn.closest('.bo-alert')?.remove();
   });
 }

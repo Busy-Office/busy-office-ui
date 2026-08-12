@@ -35,46 +35,46 @@ const current =
     <title>{title} · busy-office-ui</title>
   </head>
   <body>
-    <div class="eof-app-shell">
-      <header class="eof-navbar eof-app-shell__header">
-        <a class="eof-navbar__brand" href={base + '/'}>busy-office-ui</a>
-        <span class="eof-badge eof-badge--accent">v0.1.0</span>
-        <span class="eof-navbar__spacer"></span>
-        <label class="eof-choice" for="density">Density
-          <select class="eof-select" id="density" style="inline-size: auto">
+    <div class="bo-app-shell">
+      <header class="bo-navbar bo-app-shell__header">
+        <a class="bo-navbar__brand" href={base + '/'}>busy-office-ui</a>
+        <span class="bo-badge bo-badge--accent">v0.1.0</span>
+        <span class="bo-navbar__spacer"></span>
+        <label class="bo-choice" for="density">Density
+          <select class="bo-select" id="density" style="inline-size: auto">
             <option value="compact">Compact</option>
             <option value="comfortable" selected>Comfortable</option>
             <option value="spacious">Spacious</option>
           </select>
         </label>
-        <label class="eof-choice" for="theme">Theme
-          <select class="eof-select" id="theme" style="inline-size: auto">
+        <label class="bo-choice" for="theme">Theme
+          <select class="bo-select" id="theme" style="inline-size: auto">
             <option value="light" selected>Light</option>
             <option value="dark">Dark</option>
           </select>
         </label>
       </header>
-      <nav class="eof-sidebar-nav eof-app-shell__sidebar" aria-label="Docs">
-        <div class="eof-sidebar-nav__section">
-          <div class="eof-sidebar-nav__heading">Gallery</div>
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs">
+        <div class="bo-sidebar-nav__section">
+          <div class="bo-sidebar-nav__heading">Gallery</div>
           <ul>
             {pages.map((p) => (
               <li>
                 <a
-                  class="eof-sidebar-nav__link"
+                  class="bo-sidebar-nav__link"
                   href={base + p.href}
                   aria-current={current === p.href ? 'page' : undefined}
                 >
-                  <span class="eof-sidebar-nav__icon" aria-hidden="true">{p.icon}</span>
-                  <span class="eof-sidebar-nav__label">{p.label}</span>
+                  <span class="bo-sidebar-nav__icon" aria-hidden="true">{p.icon}</span>
+                  <span class="bo-sidebar-nav__label">{p.label}</span>
                 </a>
               </li>
             ))}
           </ul>
         </div>
       </nav>
-      <main class="eof-app-shell__main">
-        <div class="eof-stack eof-stack--loose">
+      <main class="bo-app-shell__main">
+        <div class="bo-stack bo-stack--loose">
           <h1>{title}</h1>
           <slot />
         </div>
@@ -83,19 +83,19 @@ const current =
     <script>
       // The documented 3-line density-toggle recipe.
       const sel = document.getElementById('density') as HTMLSelectElement;
-      sel.value = localStorage.getItem('eof-density') ?? 'comfortable';
+      sel.value = localStorage.getItem('bo-density') ?? 'comfortable';
       document.documentElement.dataset.density = sel.value;
       sel.addEventListener('change', () => {
         document.documentElement.dataset.density = sel.value;
-        localStorage.setItem('eof-density', sel.value);
+        localStorage.setItem('bo-density', sel.value);
       });
       // Theme toggle: same shape — one attribute, one storage key.
       const theme = document.getElementById('theme') as HTMLSelectElement;
-      theme.value = localStorage.getItem('eof-theme') ?? 'light';
+      theme.value = localStorage.getItem('bo-theme') ?? 'light';
       document.documentElement.dataset.theme = theme.value;
       theme.addEventListener('change', () => {
         document.documentElement.dataset.theme = theme.value;
-        localStorage.setItem('eof-theme', theme.value);
+        localStorage.setItem('bo-theme', theme.value);
       });
     </script>
   </body>
@@ -104,15 +104,15 @@ const current =
   /* Docs-only chrome, written unlayered on purpose to demo the override rule. */
   .demo-note {
     padding: 0.75rem 1rem;
-    border-inline-start: 3px solid var(--eof-color-accent);
-    background: var(--eof-color-accent-subtle);
-    border-radius: var(--eof-radius-sm);
-    font-size: var(--eof-font-size-sm);
+    border-inline-start: 3px solid var(--bo-color-accent);
+    background: var(--bo-color-accent-subtle);
+    border-radius: var(--bo-radius-sm);
+    font-size: var(--bo-font-size-sm);
   }
   section.demo {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
-  .demo h2 { font-size: var(--eof-font-size-lg); }
+  .demo h2 { font-size: var(--bo-font-size-lg); }
 </style>

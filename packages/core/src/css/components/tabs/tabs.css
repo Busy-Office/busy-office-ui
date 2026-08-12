@@ -1,37 +1,37 @@
-@layer eof-components {
+@layer bo-components {
   /* ARIA tabs pattern. CSS styles aria-selected; initTabs() supplies roving
      tabindex + arrow-key navigation. Panels: role="tabpanel" tabindex="0". */
-  .eof-tabs__list {
+  .bo-tabs__list {
     display: flex;
-    gap: var(--eof-space-1);
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    gap: var(--bo-space-1);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
     /* 8-10 tabs in a narrow container scroll rather than clip. */
     overflow-x: auto;
     scrollbar-width: thin;
   }
 
-  .eof-tabs__tab {
-    padding: var(--eof-space-2) var(--eof-space-4);
-    margin-block-end: calc(var(--eof-border-width) * -1);
+  .bo-tabs__tab {
+    padding: var(--bo-space-2) var(--bo-space-4);
+    margin-block-end: calc(var(--bo-border-width) * -1);
     border-block-end: 2px solid transparent;
-    color: var(--eof-color-text-secondary);
-    font-size: var(--eof-density-font-size);
-    font-weight: var(--eof-font-weight-medium);
+    color: var(--bo-color-text-secondary);
+    font-size: var(--bo-density-font-size);
+    font-weight: var(--bo-font-weight-medium);
     white-space: nowrap;
   }
 
-  .eof-tabs__tab:hover {
-    color: var(--eof-color-text-primary);
-    background: var(--eof-state-hover-overlay);
+  .bo-tabs__tab:hover {
+    color: var(--bo-color-text-primary);
+    background: var(--bo-state-hover-overlay);
   }
 
-  .eof-tabs__tab[aria-selected="true"] {
-    color: var(--eof-color-accent-text);
-    border-block-end-color: var(--eof-color-accent);
+  .bo-tabs__tab[aria-selected="true"] {
+    color: var(--bo-color-accent-text);
+    border-block-end-color: var(--bo-color-accent);
   }
 
-  .eof-tabs__panel {
-    padding-block: var(--eof-space-4);
+  .bo-tabs__panel {
+    padding-block: var(--bo-space-4);
   }
 
   /* Panels are hidden via the [hidden] attribute (reset handles display) —

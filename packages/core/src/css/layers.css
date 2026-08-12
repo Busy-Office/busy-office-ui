@@ -1,4 +1,4 @@
 /* Single source of truth for cascade layer order. Import first, exactly once.
    Consumer CSS written OUTSIDE any layer always beats framework CSS — that is
    the supported override mechanism. */
-@layer eof-reset, eof-tokens, eof-primitives, eof-components, eof-utilities;
+@layer bo-reset, bo-tokens, bo-primitives, bo-components, bo-utilities;

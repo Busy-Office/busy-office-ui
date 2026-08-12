@@ -1,39 +1,39 @@
-@layer eof-components {
+@layer bo-components {
   /* Filter bar above tables/lists; chips show applied filters. */
-  .eof-filter-bar {
+  .bo-filter-bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-2) var(--eof-space-3);
-    border: var(--eof-border-width) solid var(--eof-color-border-default);
-    border-radius: var(--eof-radius-md);
-    background: var(--eof-color-bg-surface);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface);
   }
 
-  .eof-chip {
+  .bo-chip {
     display: inline-flex;
     align-items: center;
-    gap: var(--eof-space-1);
-    padding: 0.125rem var(--eof-space-2);
-    border: var(--eof-border-width) solid var(--eof-color-border-strong);
-    border-radius: var(--eof-radius-full);
-    background: var(--eof-color-bg-muted);
-    color: var(--eof-color-text-primary);
-    font-size: var(--eof-font-size-xs);
+    gap: var(--bo-space-1);
+    padding: 0.125rem var(--bo-space-2);
+    border: var(--bo-border-width) solid var(--bo-color-border-strong);
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-primary);
+    font-size: var(--bo-font-size-xs);
     white-space: nowrap;
   }
 
-  .eof-chip--active {
-    border-color: var(--eof-color-accent);
-    background: var(--eof-color-accent-subtle);
-    color: var(--eof-color-accent-text);
+  .bo-chip--active {
+    border-color: var(--bo-color-accent);
+    background: var(--bo-color-accent-subtle);
+    color: var(--bo-color-accent-text);
   }
 
-  /* <button class="eof-chip__remove" aria-label="Remove filter …">✕</button>
+  /* <button class="bo-chip__remove" aria-label="Remove filter …">✕</button>
      Visual size 16px, hit area 24px (WCAG 2.5.8) via padding + negative
      margin — no visual change. */
-  .eof-chip__remove {
+  .bo-chip__remove {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -42,18 +42,18 @@
     block-size: 1rem;
     padding: 0.25rem;
     margin: -0.25rem;
-    border-radius: var(--eof-radius-full);
+    border-radius: var(--bo-radius-full);
     color: inherit;
-    font-size: var(--eof-font-size-xs);
+    font-size: var(--bo-font-size-xs);
     line-height: 1;
   }
 
-  .eof-chip__remove:hover {
-    background: var(--eof-state-active-overlay);
+  .bo-chip__remove:hover {
+    background: var(--bo-state-active-overlay);
   }
 
   @media print {
-    .eof-filter-bar {
+    .bo-filter-bar {
       display: none;
     }
   }

@@ -1,43 +1,43 @@
-@layer eof-components {
+@layer bo-components {
   /* Inline alerts and toasts. Announcement is the markup's job:
      role="alert" for errors, role="status" (or aria-live="polite") for the
      rest; the toast region carries aria-live so injected toasts announce. */
-  .eof-alert {
-    --eof-alert-accent: var(--eof-color-accent);
-    --eof-alert-bg: var(--eof-color-accent-subtle);
-    --eof-alert-fg: var(--eof-color-text-primary);
+  .bo-alert {
+    --bo-alert-accent: var(--bo-color-accent);
+    --bo-alert-bg: var(--bo-color-accent-subtle);
+    --bo-alert-fg: var(--bo-color-text-primary);
 
     display: flex;
     align-items: flex-start;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-3) var(--eof-space-4);
-    border-inline-start: 3px solid var(--eof-alert-accent);
-    border-radius: var(--eof-radius-sm);
-    background: var(--eof-alert-bg);
-    color: var(--eof-alert-fg);
-    font-size: var(--eof-density-font-size);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-3) var(--bo-space-4);
+    border-inline-start: 3px solid var(--bo-alert-accent);
+    border-radius: var(--bo-radius-sm);
+    background: var(--bo-alert-bg);
+    color: var(--bo-alert-fg);
+    font-size: var(--bo-density-font-size);
   }
 
-  .eof-alert--success {
-    --eof-alert-accent: var(--eof-color-success);
-    --eof-alert-bg: var(--eof-color-success-subtle);
+  .bo-alert--success {
+    --bo-alert-accent: var(--bo-color-success);
+    --bo-alert-bg: var(--bo-color-success-subtle);
   }
 
-  .eof-alert--warning {
-    --eof-alert-accent: var(--eof-color-warning);
-    --eof-alert-bg: var(--eof-color-warning-subtle);
+  .bo-alert--warning {
+    --bo-alert-accent: var(--bo-color-warning);
+    --bo-alert-bg: var(--bo-color-warning-subtle);
   }
 
-  .eof-alert--danger {
-    --eof-alert-accent: var(--eof-color-danger);
-    --eof-alert-bg: var(--eof-color-danger-subtle);
+  .bo-alert--danger {
+    --bo-alert-accent: var(--bo-color-danger);
+    --bo-alert-bg: var(--bo-color-danger-subtle);
   }
 
-  .eof-alert__title {
-    font-weight: var(--eof-font-weight-semibold);
+  .bo-alert__title {
+    font-weight: var(--bo-font-weight-semibold);
   }
 
-  .eof-alert__dismiss {
+  .bo-alert__dismiss {
     margin-inline-start: auto;
   }
 
@@ -45,25 +45,25 @@
      (or role="status") ON the region in markup so injected toasts announce.
      LIMIT: z-index cannot beat the browser top layer — toasts will NOT float
      above an open modal <dialog>. Render confirmations inside the dialog. */
-  .eof-toast-region {
+  .bo-toast-region {
     position: fixed;
-    inset-block-end: var(--eof-space-4);
-    inset-inline-end: var(--eof-space-4);
-    z-index: var(--eof-z-toast);
+    inset-block-end: var(--bo-space-4);
+    inset-inline-end: var(--bo-space-4);
+    z-index: var(--bo-z-toast);
     display: flex;
     flex-direction: column;
-    gap: var(--eof-space-2);
+    gap: var(--bo-space-2);
     max-inline-size: 24rem;
   }
 
-  .eof-toast {
-    box-shadow: var(--eof-shadow-lg);
-    background: var(--eof-color-bg-surface-raised);
-    animation: eof-toast-in var(--eof-motion-duration-base)
-      var(--eof-motion-easing-standard);
+  .bo-toast {
+    box-shadow: var(--bo-shadow-lg);
+    background: var(--bo-color-bg-surface-raised);
+    animation: bo-toast-in var(--bo-motion-duration-base)
+      var(--bo-motion-easing-standard);
   }
 
-  @keyframes eof-toast-in {
+  @keyframes bo-toast-in {
     from {
       opacity: 0;
       transform: translateY(0.5rem);
@@ -71,7 +71,7 @@
   }
 
   @media print {
-    .eof-toast-region {
+    .bo-toast-region {
       display: none;
     }
   }

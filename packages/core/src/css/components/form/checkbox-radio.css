@@ -1,30 +1,30 @@
-@layer eof-components {
-  .eof-checkbox,
-  .eof-radio {
+@layer bo-components {
+  .bo-checkbox,
+  .bo-radio {
     inline-size: 1rem;
     block-size: 1rem;
     margin: 0;
-    accent-color: var(--eof-color-accent);
+    accent-color: var(--bo-color-accent);
     cursor: pointer;
   }
 
-  .eof-checkbox:disabled,
-  .eof-radio:disabled {
+  .bo-checkbox:disabled,
+  .bo-radio:disabled {
     cursor: not-allowed;
-    opacity: var(--eof-state-disabled-opacity);
+    opacity: var(--bo-state-disabled-opacity);
   }
 
   /* Label + control pairing. */
-  .eof-choice {
+  .bo-choice {
     display: inline-flex;
     align-items: center;
-    gap: var(--eof-space-2);
-    font-size: var(--eof-density-font-size);
+    gap: var(--bo-space-2);
+    font-size: var(--bo-density-font-size);
     cursor: pointer;
   }
 
-  .eof-choice:has(:disabled) {
-    color: var(--eof-color-text-disabled);
+  .bo-choice:has(:disabled) {
+    color: var(--bo-color-text-disabled);
     cursor: not-allowed;
   }
 }

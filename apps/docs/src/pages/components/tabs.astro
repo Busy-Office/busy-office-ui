@@ -1,15 +1,15 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
-const tabsMarkup = `<div class="eof-tabs">
-  <div class="eof-tabs__list" role="tablist" aria-label="Purchase order">
-    <button class="eof-tabs__tab" role="tab" id="t-details"
+const tabsMarkup = `<div class="bo-tabs">
+  <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
+    <button class="bo-tabs__tab" role="tab" id="t-details"
             aria-selected="true" aria-controls="p-details">Details</button>
-    <button class="eof-tabs__tab" role="tab" id="t-lines" tabindex="-1"
+    <button class="bo-tabs__tab" role="tab" id="t-lines" tabindex="-1"
             aria-selected="false" aria-controls="p-lines">Lines</button>
   </div>
-  <div class="eof-tabs__panel" role="tabpanel" id="p-details"
+  <div class="bo-tabs__panel" role="tabpanel" id="p-details"
        aria-labelledby="t-details" tabindex="0">…</div>
-  <div class="eof-tabs__panel" role="tabpanel" id="p-lines"
+  <div class="bo-tabs__panel" role="tabpanel" id="p-lines"
        aria-labelledby="t-lines" tabindex="0" hidden>…</div>
 </div>
 <script type="module">
@@ -24,19 +24,19 @@ const tabsMarkup = `<div class="eof-tabs">
     arrow-key navigation with automatic activation.
   </p>
   <section class="demo">
-    <div class="eof-tabs">
-      <div class="eof-tabs__list" role="tablist" aria-label="Purchase order">
-        <button class="eof-tabs__tab" role="tab" id="t-details" aria-selected="true" aria-controls="p-details">Details</button>
-        <button class="eof-tabs__tab" role="tab" id="t-lines" tabindex="-1" aria-selected="false" aria-controls="p-lines">Lines</button>
-        <button class="eof-tabs__tab" role="tab" id="t-history" tabindex="-1" aria-selected="false" aria-controls="p-history">History</button>
+    <div class="bo-tabs">
+      <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
+        <button class="bo-tabs__tab" role="tab" id="t-details" aria-selected="true" aria-controls="p-details">Details</button>
+        <button class="bo-tabs__tab" role="tab" id="t-lines" tabindex="-1" aria-selected="false" aria-controls="p-lines">Lines</button>
+        <button class="bo-tabs__tab" role="tab" id="t-history" tabindex="-1" aria-selected="false" aria-controls="p-history">History</button>
       </div>
-      <div class="eof-tabs__panel" role="tabpanel" id="p-details" aria-labelledby="t-details" tabindex="0">
+      <div class="bo-tabs__panel" role="tabpanel" id="p-details" aria-labelledby="t-details" tabindex="0">
         <p>Vendor, dates, totals — the detail form lives here.</p>
       </div>
-      <div class="eof-tabs__panel" role="tabpanel" id="p-lines" aria-labelledby="t-lines" tabindex="0" hidden>
+      <div class="bo-tabs__panel" role="tabpanel" id="p-lines" aria-labelledby="t-lines" tabindex="0" hidden>
         <p>Line items table.</p>
       </div>
-      <div class="eof-tabs__panel" role="tabpanel" id="p-history" aria-labelledby="t-history" tabindex="0" hidden>
+      <div class="bo-tabs__panel" role="tabpanel" id="p-history" aria-labelledby="t-history" tabindex="0" hidden>
         <p>Audit trail.</p>
       </div>
     </div>
@@ -44,7 +44,7 @@ const tabsMarkup = `<div class="eof-tabs">
   <section class="demo">
     <h2>Markup</h2>
     <pre><code>{tabsMarkup}</code></pre>
-    <p class="eof-u-text-muted"><strong>Tabs require <code>initTabs()</code> — there is
+    <p class="bo-u-text-muted"><strong>Tabs require <code>initTabs()</code> — there is
     no CSS-only fallback.</strong> Without it the pre-set <code>tabindex="-1"</code>
     leaves tabs 2+ keyboard-unreachable. Arrow keys are direction-aware in RTL.</p>
   </section>

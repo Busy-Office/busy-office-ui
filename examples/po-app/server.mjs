@@ -39,36 +39,36 @@ const page = (title, current, main) => `<!doctype html>
 <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
 <body>
-<div class="eof-app-shell">
-  <header class="eof-navbar eof-app-shell__header">
-    <a class="eof-navbar__brand" href="/">PO demo</a>
-    <span class="eof-badge eof-badge--accent">tarball build</span>
-    <span class="eof-navbar__spacer"></span>
+<div class="bo-app-shell">
+  <header class="bo-navbar bo-app-shell__header">
+    <a class="bo-navbar__brand" href="/">PO demo</a>
+    <span class="bo-badge bo-badge--accent">tarball build</span>
+    <span class="bo-navbar__spacer"></span>
   </header>
-  <nav class="eof-sidebar-nav eof-app-shell__sidebar" aria-label="Main">
+  <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
     <ul>
-      <li><a class="eof-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="eof-sidebar-nav__icon" aria-hidden="true">▥</span><span class="eof-sidebar-nav__label">Dashboard</span></a></li>
-      <li><a class="eof-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="eof-sidebar-nav__icon" aria-hidden="true">▤</span><span class="eof-sidebar-nav__label">Purchase orders</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▥</span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▤</span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
     </ul>
   </nav>
-  <main class="eof-app-shell__main"><div class="eof-stack eof-stack--loose">${main}</div></main>
+  <main class="bo-app-shell__main"><div class="bo-stack bo-stack--loose">${main}</div></main>
 </div>
 <script type="module">
   import { initDialogs, initDataTables, initAlerts } from '/assets/js/index.js';
   initDialogs(); initDataTables(); initAlerts();
   document.body.addEventListener('htmx:afterSwap', (e) => initDataTables(e.target));
 </script>
-<div class="eof-toast-region" role="status" aria-live="polite" id="toasts"></div>
+<div class="bo-toast-region" role="status" aria-live="polite" id="toasts"></div>
 </body></html>`;
 
 // ---------- fragments ----------
 const rowHtml = (p) => `<tr id="row-${p.id}">
-  <td><input type="checkbox" class="eof-checkbox eof-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
-  <td class="eof-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
-  <td class="eof-u-text-truncate">${p.vendor}</td>
-  <td class="eof-data-table__col--secondary eof-data-table__col--code">${p.cc}</td>
-  <td class="eof-data-table__col--numeric">${money(p.amount)}</td>
-  <td><span class="eof-badge eof-badge--${tone[p.status]}">${p.status}</span></td>
+  <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
+  <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
+  <td class="bo-u-text-truncate">${p.vendor}</td>
+  <td class="bo-data-table__col--secondary bo-data-table__col--code">${p.cc}</td>
+  <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
+  <td><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
 </tr>`;
 
 const tbodyHtml = (list) =>
@@ -76,89 +76,89 @@ const tbodyHtml = (list) =>
 
 const listScreen = () => `
 <h1>Purchase orders</h1>
-<form class="eof-filter-bar" role="search" aria-label="PO filters" method="get" action="/pos">
-  <input class="eof-input" type="search" name="q" aria-label="Search POs" placeholder="Search…" style="max-inline-size: 12rem">
-  <select class="eof-select" name="status" style="inline-size:auto" aria-label="Status">
+<form class="bo-filter-bar" role="search" aria-label="PO filters" method="get" action="/pos">
+  <input class="bo-input" type="search" name="q" aria-label="Search POs" placeholder="Search…" style="max-inline-size: 12rem">
+  <select class="bo-select" name="status" style="inline-size:auto" aria-label="Status">
     <option>All</option><option>Pending</option><option>Approved</option><option>Rejected</option>
   </select>
-  <button class="eof-btn eof-btn--secondary" type="submit">Apply</button>
+  <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
 </form>
-<div class="eof-data-table-container">
-  <div class="eof-data-table__toolbar">
-    <div class="eof-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-      <button class="eof-btn" type="button"
+<div class="bo-data-table-container">
+  <div class="bo-data-table__toolbar">
+    <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+      <button class="bo-btn" type="button"
         hx-post="/pos/bulk-approve" hx-target="#po-rows" hx-swap="outerHTML"
-        hx-include=".eof-data-table__row-select:checked">Approve selected</button>
+        hx-include=".bo-data-table__row-select:checked">Approve selected</button>
     </div>
-    <span class="eof-data-table__selection-count"></span>
+    <span class="bo-data-table__selection-count"></span>
   </div>
-  <table class="eof-data-table eof-data-table--sticky-col">
+  <table class="bo-data-table bo-data-table--sticky-col">
     <thead><tr>
-      <th scope="col"><input type="checkbox" class="eof-checkbox eof-data-table__select-all" aria-label="Select all"></th>
-      <th scope="col" aria-sort="ascending"><button class="eof-data-table__sort-btn" type="button">PO #</button></th>
+      <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>
+      <th scope="col" aria-sort="ascending"><button class="bo-data-table__sort-btn" type="button">PO #</button></th>
       <th scope="col">Vendor</th>
-      <th scope="col" class="eof-data-table__col--secondary">Cost center</th>
-      <th scope="col" class="eof-data-table__col--numeric">Amount</th>
+      <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th>
       <th scope="col">Status</th>
     </tr></thead>
     ${tbodyHtml(pos)}
   </table>
-  <div class="eof-data-table__footer">
-    <span class="eof-pagination__info">${pos.length} POs</span>
+  <div class="bo-data-table__footer">
+    <span class="bo-pagination__info">${pos.length} POs</span>
   </div>
 </div>`;
 
-const timelineHtml = (p) => `<ol class="eof-timeline" role="list" id="timeline-${p.id}">
-  <li class="eof-timeline__step" data-state="done">
-    <span class="eof-timeline__marker" aria-hidden="true">✓</span>
-    <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Completed: </span>Submitted</div>
-    <div class="eof-timeline__meta">system · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div></div>
+const timelineHtml = (p) => `<ol class="bo-timeline" role="list" id="timeline-${p.id}">
+  <li class="bo-timeline__step" data-state="done">
+    <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+    <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Submitted</div>
+    <div class="bo-timeline__meta">system · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div></div>
   </li>
   ${p.status === 'Approved'
-    ? `<li class="eof-timeline__step" data-state="done">
-        <span class="eof-timeline__marker" aria-hidden="true">✓</span>
-        <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Completed: </span>Approved</div></div></li>`
+    ? `<li class="bo-timeline__step" data-state="done">
+        <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+        <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Approved</div></div></li>`
     : p.status === 'Rejected'
-      ? `<li class="eof-timeline__step" data-state="rejected">
-          <span class="eof-timeline__marker" aria-hidden="true">✕</span>
-          <div><div class="eof-timeline__title"><span class="eof-visually-hidden">Rejected: </span>Approval</div></div></li>`
-      : `<li class="eof-timeline__step" data-state="current" aria-current="step">
-          <span class="eof-timeline__marker" aria-hidden="true">●</span>
-          <div><div class="eof-timeline__title">Awaiting approval</div></div></li>`}
+      ? `<li class="bo-timeline__step" data-state="rejected">
+          <span class="bo-timeline__marker" aria-hidden="true">✕</span>
+          <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Rejected: </span>Approval</div></div></li>`
+      : `<li class="bo-timeline__step" data-state="current" aria-current="step">
+          <span class="bo-timeline__marker" aria-hidden="true">●</span>
+          <div><div class="bo-timeline__title">Awaiting approval</div></div></li>`}
 </ol>`;
 
 const detailScreen = (p) => `
-<h1>${p.id} <span class="eof-badge eof-badge--${tone[p.status]}">${p.status}</span></h1>
-<div class="eof-grid" style="--eof-grid-min: 18rem">
-  <fieldset class="eof-form-section">
-    <legend class="eof-form-section__legend">Order</legend>
-    <div class="eof-form-row">
-      <div class="eof-form-field">
-        <label class="eof-form-field__label" for="vendor">Vendor</label>
-        <input class="eof-input" id="vendor" value="${p.vendor}" readonly>
+<h1>${p.id} <span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></h1>
+<div class="bo-grid" style="--bo-grid-min: 18rem">
+  <fieldset class="bo-form-section">
+    <legend class="bo-form-section__legend">Order</legend>
+    <div class="bo-form-row">
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="vendor">Vendor</label>
+        <input class="bo-input" id="vendor" value="${p.vendor}" readonly>
       </div>
-      <div class="eof-form-field">
-        <label class="eof-form-field__label" for="amount">Amount</label>
-        <input class="eof-input eof-input--numeric" id="amount" value="${money(p.amount)}" readonly>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="amount">Amount</label>
+        <input class="bo-input bo-input--numeric" id="amount" value="${money(p.amount)}" readonly>
       </div>
     </div>
   </fieldset>
   <div>${timelineHtml(p)}</div>
 </div>
 ${p.status === 'Pending' ? `
-<div class="eof-cluster">
-  <button class="eof-btn" data-dialog-trigger="approve-dlg">Approve…</button>
+<div class="bo-cluster">
+  <button class="bo-btn" data-dialog-trigger="approve-dlg">Approve…</button>
 </div>
-<dialog class="eof-dialog" id="approve-dlg" aria-labelledby="adlg-t" data-state="closed">
+<dialog class="bo-dialog" id="approve-dlg" aria-labelledby="adlg-t" data-state="closed">
   <form method="dialog">
-    <header class="eof-dialog__header">
-      <h2 class="eof-dialog__title" id="adlg-t">Approve ${p.id}</h2>
-      <button class="eof-btn eof-btn--ghost eof-btn--icon" value="cancel" aria-label="Close">✕</button>
+    <header class="bo-dialog__header">
+      <h2 class="bo-dialog__title" id="adlg-t">Approve ${p.id}</h2>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
     </header>
-    <div class="eof-dialog__body"><p>Approve ${p.id} for <span class="eof-u-tabular">${money(p.amount)}</span>?</p></div>
-    <footer class="eof-dialog__footer">
-      <button class="eof-btn eof-btn--secondary" value="cancel">Cancel</button>
-      <button class="eof-btn" value="confirm"
+    <div class="bo-dialog__body"><p>Approve ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p></div>
+    <footer class="bo-dialog__footer">
+      <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
+      <button class="bo-btn" value="confirm"
         hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML">Approve</button>
     </footer>
   </form>
@@ -169,25 +169,25 @@ const dashScreen = () => {
   const total = pending.reduce((s, p) => s + p.amount, 0);
   return `
 <h1>Dashboard</h1>
-<div class="eof-widget-grid" style="--eof-widget-min: 13rem">
-  <div class="eof-widget eof-widget--span-2">
-    <div class="eof-stat eof-stat--hero">
-      <span class="eof-stat__label">Awaiting your approval</span>
-      <span class="eof-stat__value">${pending.length}</span>
-      <span class="eof-stat__delta eof-stat__delta--bad"><span aria-hidden="true">▲</span> +2 <span aria-hidden="true">⚠</span><span class="eof-visually-hidden">increase, worse,</span> since yesterday</span>
+<div class="bo-widget-grid" style="--bo-widget-min: 13rem">
+  <div class="bo-widget bo-widget--span-2">
+    <div class="bo-stat bo-stat--hero">
+      <span class="bo-stat__label">Awaiting your approval</span>
+      <span class="bo-stat__value">${pending.length}</span>
+      <span class="bo-stat__delta bo-stat__delta--bad"><span aria-hidden="true">▲</span> +2 <span aria-hidden="true">⚠</span><span class="bo-visually-hidden">increase, worse,</span> since yesterday</span>
     </div>
   </div>
-  <div class="eof-widget"><div class="eof-stat">
-    <span class="eof-stat__label">Pending value</span>
-    <span class="eof-stat__value">${money(total)}</span>
+  <div class="bo-widget"><div class="bo-stat">
+    <span class="bo-stat__label">Pending value</span>
+    <span class="bo-stat__value">${money(total)}</span>
   </div></div>
-  <div class="eof-widget">
-    <div class="eof-widget__header"><span class="eof-widget__title">Queue</span>
-      <a href="/pos" class="eof-u-text-muted" style="font-size: var(--eof-font-size-xs)">View all</a></div>
-    <div class="eof-widget__body eof-widget__body--flush">
-      <div class="eof-data-table-container" style="border:none">
-        <table class="eof-data-table">
-          <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="eof-data-table__col--code">${p.id}</td><td class="eof-data-table__col--numeric">${money(p.amount)}</td></tr>`).join('')}</tbody>
+  <div class="bo-widget">
+    <div class="bo-widget__header"><span class="bo-widget__title">Queue</span>
+      <a href="/pos" class="bo-u-text-muted" style="font-size: var(--bo-font-size-xs)">View all</a></div>
+    <div class="bo-widget__body bo-widget__body--flush">
+      <div class="bo-data-table-container" style="border:none">
+        <table class="bo-data-table">
+          <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="bo-data-table__col--code">${p.id}</td><td class="bo-data-table__col--numeric">${money(p.amount)}</td></tr>`).join('')}</tbody>
         </table>
       </div>
     </div>

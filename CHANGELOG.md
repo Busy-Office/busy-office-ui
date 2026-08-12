@@ -9,6 +9,11 @@ pin.
 ## Unreleased (0.1.0 development)
 
 ### Breaking (pre-release churn)
+- **Prefix renamed `eof-` → `bo-`** (classes, custom properties, layer names,
+  container names, keyframes). "eof" was a placeholder ("Enterprise/Office
+  Framework") that read as End-Of-File; `bo-` matches the busy-office brand and
+  is shorter in dense markup. Historical documents (.roundtable/, older CHANGELOG
+  entries) intentionally keep the old spelling.
 - `.eof-data-table__footer` moved from `pagination.css` to `data-table.css` (its
   namespace owner). Pagination-only importers must also import the data-table file
   to style the footer.

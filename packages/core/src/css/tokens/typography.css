@@ -1,18 +1,18 @@
-@layer eof-tokens {
+@layer bo-tokens {
   :root {
-    --eof-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --eof-font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
-    --eof-font-size-xs: 0.75rem;
-    --eof-font-size-sm: 0.8125rem;
+    --bo-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --bo-font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+    --bo-font-size-xs: 0.75rem;
+    --bo-font-size-sm: 0.8125rem;
     /* ERP default is smaller than marketing-site default. */
-    --eof-font-size-base: 0.875rem;
-    --eof-font-size-md: 1rem;
-    --eof-font-size-lg: 1.125rem;
-    --eof-font-size-xl: 1.5rem;
-    --eof-font-weight-normal: 400;
-    --eof-font-weight-medium: 500;
-    --eof-font-weight-semibold: 600;
-    --eof-line-height-tight: 1.25;
-    --eof-line-height-normal: 1.5;
+    --bo-font-size-base: 0.875rem;
+    --bo-font-size-md: 1rem;
+    --bo-font-size-lg: 1.125rem;
+    --bo-font-size-xl: 1.5rem;
+    --bo-font-weight-normal: 400;
+    --bo-font-weight-medium: 500;
+    --bo-font-weight-semibold: 600;
+    --bo-line-height-tight: 1.25;
+    --bo-line-height-normal: 1.5;
   }
 }

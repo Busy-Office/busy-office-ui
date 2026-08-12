@@ -1,9 +1,9 @@
-@layer eof-primitives {
+@layer bo-primitives {
   /* App shell: header + sidebar + main. A container so children (sidebar nav)
      can respond to shell width, not viewport width. */
-  .eof-app-shell {
+  .bo-app-shell {
     container-type: inline-size;
-    container-name: eof-shell;
+    container-name: bo-shell;
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto 1fr;
@@ -13,30 +13,30 @@
     min-height: 100dvh;
   }
 
-  .eof-app-shell__header {
+  .bo-app-shell__header {
     grid-area: header;
   }
 
-  .eof-app-shell__sidebar {
+  .bo-app-shell__sidebar {
     grid-area: sidebar;
   }
 
-  .eof-app-shell__main {
+  .bo-app-shell__main {
     grid-area: main;
-    padding: var(--eof-space-6);
-    background: var(--eof-color-bg-canvas);
+    padding: var(--bo-space-6);
+    background: var(--bo-color-bg-canvas);
     min-width: 0;
     overflow-x: auto;
     scrollbar-gutter: stable;
   }
 
   @media print {
-    .eof-app-shell {
+    .bo-app-shell {
       display: block;
     }
 
-    .eof-app-shell__header,
-    .eof-app-shell__sidebar {
+    .bo-app-shell__header,
+    .bo-app-shell__sidebar {
       display: none;
     }
   }

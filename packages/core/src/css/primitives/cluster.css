@@ -1,17 +1,17 @@
-@layer eof-primitives {
+@layer bo-primitives {
   /* Horizontal grouping that wraps: toolbars, button rows, filter chips. */
-  .eof-cluster {
+  .bo-cluster {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--eof-cluster-gap, var(--eof-space-2));
+    gap: var(--bo-cluster-gap, var(--bo-space-2));
   }
 
-  .eof-cluster--split {
+  .bo-cluster--split {
     justify-content: space-between;
   }
 
-  .eof-cluster--end {
+  .bo-cluster--end {
     justify-content: flex-end;
   }
 }

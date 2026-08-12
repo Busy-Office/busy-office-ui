@@ -1,32 +1,32 @@
-@layer eof-utilities {
+@layer bo-utilities {
   /* Small curated set — escape hatches, not a utility system. */
-  .eof-u-hidden {
+  .bo-u-hidden {
     display: none !important;
   }
 
-  .eof-u-text-truncate {
+  .bo-u-text-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .eof-u-text-right {
+  .bo-u-text-right {
     text-align: end;
   }
 
-  .eof-u-text-muted {
-    color: var(--eof-color-text-muted);
+  .bo-u-text-muted {
+    color: var(--bo-color-text-muted);
   }
 
-  .eof-u-mono {
-    font-family: var(--eof-font-mono);
+  .bo-u-mono {
+    font-family: var(--bo-font-mono);
   }
 
-  .eof-u-tabular {
+  .bo-u-tabular {
     font-variant-numeric: tabular-nums;
   }
 
-  .eof-u-print-hidden {
+  .bo-u-print-hidden {
     @media print {
       display: none !important;
     }

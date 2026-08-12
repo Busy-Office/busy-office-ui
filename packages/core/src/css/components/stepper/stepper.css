@@ -1,97 +1,97 @@
-@layer eof-components {
-  /* Wizard stepper: <ol class="eof-stepper"> — numbered steps for multi-step
+@layer bo-components {
+  /* Wizard stepper: <ol class="bo-stepper"> — numbered steps for multi-step
      documents. Current step carries aria-current="step"; completed steps get
      data-state="done" and show a real ✓ in the marker markup. */
-  .eof-stepper {
+  .bo-stepper {
     container-type: inline-size;
-    container-name: eof-stepper;
+    container-name: bo-stepper;
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .eof-stepper__step {
-    --eof-stepper-marker-bg: var(--eof-color-bg-muted);
-    --eof-stepper-marker-fg: var(--eof-color-text-muted);
+  .bo-stepper__step {
+    --bo-stepper-marker-bg: var(--bo-color-bg-muted);
+    --bo-stepper-marker-fg: var(--bo-color-text-muted);
 
     flex: 1;
     display: flex;
     align-items: center;
-    gap: var(--eof-space-2);
+    gap: var(--bo-space-2);
     min-inline-size: 0;
   }
 
   /* Connector between steps. min-inline-size keeps a visible line even when
      labels squeeze the free space. */
-  .eof-stepper__step:not(:first-child)::before {
+  .bo-stepper__step:not(:first-child)::before {
     content: "";
     flex: 1;
-    min-inline-size: var(--eof-space-4);
+    min-inline-size: var(--bo-space-4);
     block-size: 2px;
-    background: var(--eof-color-border-default);
-    margin-inline: var(--eof-space-2);
+    background: var(--bo-color-border-default);
+    margin-inline: var(--bo-space-2);
   }
 
-  .eof-stepper__step[data-state="done"]:not(:first-child)::before {
-    background: var(--eof-color-success);
+  .bo-stepper__step[data-state="done"]:not(:first-child)::before {
+    background: var(--bo-color-success);
   }
 
-  .eof-stepper__marker {
+  .bo-stepper__marker {
     flex: none;
     display: flex;
     align-items: center;
     justify-content: center;
     inline-size: 1.75rem;
     block-size: 1.75rem;
-    border-radius: var(--eof-radius-full);
-    background: var(--eof-stepper-marker-bg);
-    color: var(--eof-stepper-marker-fg);
-    font-size: var(--eof-font-size-sm);
-    font-weight: var(--eof-font-weight-semibold);
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-stepper-marker-bg);
+    color: var(--bo-stepper-marker-fg);
+    font-size: var(--bo-font-size-sm);
+    font-weight: var(--bo-font-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
 
-  .eof-stepper__step[data-state="done"] {
-    --eof-stepper-marker-bg: var(--eof-color-success-subtle);
-    --eof-stepper-marker-fg: var(--eof-color-success-text);
+  .bo-stepper__step[data-state="done"] {
+    --bo-stepper-marker-bg: var(--bo-color-success-subtle);
+    --bo-stepper-marker-fg: var(--bo-color-success-text);
   }
 
-  .eof-stepper__step[aria-current="step"] {
-    --eof-stepper-marker-bg: var(--eof-color-accent-solid);
-    --eof-stepper-marker-fg: var(--eof-color-text-inverse);
+  .bo-stepper__step[aria-current="step"] {
+    --bo-stepper-marker-bg: var(--bo-color-accent-solid);
+    --bo-stepper-marker-fg: var(--bo-color-text-inverse);
   }
 
-  .eof-stepper__label {
-    font-size: var(--eof-density-font-size);
-    color: var(--eof-color-text-secondary);
+  .bo-stepper__label {
+    font-size: var(--bo-density-font-size);
+    color: var(--bo-color-text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .eof-stepper__step[aria-current="step"] .eof-stepper__label {
-    color: var(--eof-color-text-primary);
-    font-weight: var(--eof-font-weight-medium);
+  .bo-stepper__step[aria-current="step"] .bo-stepper__label {
+    color: var(--bo-color-text-primary);
+    font-weight: var(--bo-font-weight-medium);
   }
 
   /* Backgrounds don't print: give markers a printable outline and ink. */
   @media print {
-    .eof-stepper__marker {
+    .bo-stepper__marker {
       border: 1px solid #000;
       background: none !important;
       color: #000 !important;
     }
 
-    .eof-stepper__step:not(:first-child)::before {
+    .bo-stepper__step:not(:first-child)::before {
       background: #999;
     }
   }
 
   /* Narrow STEPPER (its own named container): labels collapse to
      screen-reader-only, markers remain. */
-  @container eof-stepper (max-width: 30rem) {
-    .eof-stepper__label {
+  @container bo-stepper (max-width: 30rem) {
+    .bo-stepper__label {
       position: absolute;
       width: 1px;
       height: 1px;

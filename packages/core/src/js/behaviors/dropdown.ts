@@ -5,9 +5,9 @@
  * and Esc closes the innermost layer first when nested in a <dialog>.
  *
  * Markup contract:
- *   <button class="eof-btn" popovertarget="menu-1">Actions</button>
- *   <div class="eof-dropdown__menu" id="menu-1" popover>
- *     <button class="eof-dropdown__item">…</button>
+ *   <button class="bo-btn" popovertarget="menu-1">Actions</button>
+ *   <div class="bo-dropdown__menu" id="menu-1" popover>
+ *     <button class="bo-dropdown__item">…</button>
  *   </div>
  *
  * initDropdowns() adds the two things the platform doesn't: anchoring the
@@ -24,7 +24,7 @@ function position(menu: HTMLElement): void {
   const r = invoker.getBoundingClientRect();
   const menuWidth = Math.max(menu.offsetWidth, r.width);
   const rtl = getComputedStyle(menu).direction === 'rtl';
-  const end = menu.classList.contains('eof-dropdown__menu--end');
+  const end = menu.classList.contains('bo-dropdown__menu--end');
   let left = end !== rtl ? r.right - menuWidth : r.left;
   left = Math.max(4, Math.min(left, window.innerWidth - menuWidth - 4));
   let top = r.bottom + 4;
@@ -45,15 +45,15 @@ export function initDropdowns(): void {
     'toggle',
     (e) => {
       const menu = e.target as HTMLElement;
-      if (!menu.classList?.contains('eof-dropdown__menu')) return;
+      if (!menu.classList?.contains('bo-dropdown__menu')) return;
       if ((e as ToggleEvent).newState === 'open') position(menu);
     },
     true,
   );
 
   document.addEventListener('click', (e) => {
-    const item = (e.target as Element | null)?.closest('.eof-dropdown__item');
-    const menu = item?.closest<HTMLElement>('.eof-dropdown__menu[popover]');
+    const item = (e.target as Element | null)?.closest('.bo-dropdown__item');
+    const menu = item?.closest<HTMLElement>('.bo-dropdown__menu[popover]');
     if (menu) menu.hidePopover();
   });
 }

@@ -2,17 +2,17 @@
 import Gallery from '../layouts/Gallery.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const reportMarkup = `<!-- A printable report region: -->
-<main class="eof-print-report">
-  <header class="eof-u-print-only">
+<main class="bo-print-report">
+  <header class="bo-u-print-only">
     <h1>Invoice report — CC-4021</h1>
     <p>Generated <time datetime="2026-08-12">2026-08-12</time> · busy-office ERP</p>
   </header>
 
-  <div class="eof-data-table-container">…dense table…</div>
+  <div class="bo-data-table-container">…dense table…</div>
 
-  <section class="eof-u-break-before">
+  <section class="bo-u-break-before">
     <h2>Approval history</h2>
-    <ol class="eof-timeline" role="list">…</ol>
+    <ol class="bo-timeline" role="list">…</ol>
   </section>
 </main>`;
 ---
@@ -26,20 +26,20 @@ const reportMarkup = `<!-- A printable report region: -->
   </p>
   <section class="demo">
     <h2>What the print layer does</h2>
-    <ul class="eof-stack eof-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li>Page margins (<code>@page</code>), 10pt body, widow/orphan control, headings keep their content.</li>
       <li>Table headers repeat on every page; rows, form sections, widgets, timeline steps never split across pages.</li>
       <li>Dialogs, popovers, and toasts never print.</li>
       <li>Status colors are forced (<code>print-color-adjust: exact</code>) on badges and timeline/stepper markers — status is data on a printed approval.</li>
-      <li>Inside <code>.eof-print-report</code>, absolute links print their URL.</li>
+      <li>Inside <code>.bo-print-report</code>, absolute links print their URL.</li>
     </ul>
   </section>
   <section class="demo">
     <h2>Utilities</h2>
-    <ul class="eof-stack eof-stack--tight" style="padding-inline-start: 1.25rem">
-      <li><code>.eof-u-print-only</code> — report headers, generated-on stamps (hidden on screen).</li>
-      <li><code>.eof-u-print-hidden</code> — screen-only chrome.</li>
-      <li><code>.eof-u-break-before</code> / <code>.eof-u-avoid-break</code> — page-break control.</li>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><code>.bo-u-print-only</code> — report headers, generated-on stamps (hidden on screen).</li>
+      <li><code>.bo-u-print-hidden</code> — screen-only chrome.</li>
+      <li><code>.bo-u-break-before</code> / <code>.bo-u-avoid-break</code> — page-break control.</li>
     </ul>
   </section>
   <section class="demo">

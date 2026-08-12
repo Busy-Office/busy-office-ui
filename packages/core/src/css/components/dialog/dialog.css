@@ -1,63 +1,63 @@
-@layer eof-components {
+@layer bo-components {
   /* Native <dialog>: browser provides backdrop, ESC, focus return.
      behaviors/dialog.ts adds trigger wiring, Tab loop, and data-state sync. */
-  .eof-dialog {
+  .bo-dialog {
     margin: auto;
     padding: 0;
     border: none;
-    border-radius: var(--eof-radius-lg);
-    background: var(--eof-color-bg-surface-raised);
-    color: var(--eof-color-text-primary);
-    box-shadow: var(--eof-shadow-dialog);
-    max-inline-size: min(32rem, calc(100vw - var(--eof-space-8)));
+    border-radius: var(--bo-radius-lg);
+    background: var(--bo-color-bg-surface-raised);
+    color: var(--bo-color-text-primary);
+    box-shadow: var(--bo-shadow-dialog);
+    max-inline-size: min(32rem, calc(100vw - var(--bo-space-8)));
     inline-size: 100%;
   }
 
-  .eof-dialog--wide {
-    max-inline-size: min(56rem, calc(100vw - var(--eof-space-8)));
+  .bo-dialog--wide {
+    max-inline-size: min(56rem, calc(100vw - var(--bo-space-8)));
   }
 
-  .eof-dialog::backdrop {
+  .bo-dialog::backdrop {
     background: rgb(0 0 0 / 0.4);
   }
 
-  .eof-dialog[data-state="open"] {
-    animation: eof-dialog-in var(--eof-motion-duration-base)
-      var(--eof-motion-easing-standard);
+  .bo-dialog[data-state="open"] {
+    animation: bo-dialog-in var(--bo-motion-duration-base)
+      var(--bo-motion-easing-standard);
   }
 
-  @keyframes eof-dialog-in {
+  @keyframes bo-dialog-in {
     from {
       opacity: 0;
       transform: translateY(0.5rem) scale(0.98);
     }
   }
 
-  .eof-dialog__header {
+  .bo-dialog__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--eof-space-4);
-    padding: var(--eof-space-4) var(--eof-space-6);
-    border-block-end: var(--eof-border-width) solid var(--eof-color-border-default);
+    gap: var(--bo-space-4);
+    padding: var(--bo-space-4) var(--bo-space-6);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
   }
 
-  .eof-dialog__title {
-    font-size: var(--eof-font-size-md);
-    font-weight: var(--eof-font-weight-semibold);
+  .bo-dialog__title {
+    font-size: var(--bo-font-size-md);
+    font-weight: var(--bo-font-weight-semibold);
   }
 
-  .eof-dialog__body {
-    padding: var(--eof-space-6);
+  .bo-dialog__body {
+    padding: var(--bo-space-6);
   }
 
-  .eof-dialog__footer {
+  .bo-dialog__footer {
     display: flex;
     justify-content: flex-end;
-    gap: var(--eof-space-2);
-    padding: var(--eof-space-4) var(--eof-space-6);
-    border-block-start: var(--eof-border-width) solid var(--eof-color-border-default);
-    background: var(--eof-color-bg-muted);
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-4) var(--bo-space-6);
+    border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+    background: var(--bo-color-bg-muted);
     border-end-start-radius: inherit;
     border-end-end-radius: inherit;
   }
