@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (aria-hidden)
      AND visually-hidden state text. role="list" restores list semantics
      that list-style:none strips in some AT. -->
@@ -103,7 +104,7 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
   <section class="demo">
     <h2>Approval queue</h2>
     <p class="eof-u-text-muted">The queue is the standard selectable data table with
-    bulk Approve/Reject — see <a href="/patterns/invoice-list">the invoice-list pattern</a>;
+    bulk Approve/Reject — see <a href={base + '/patterns/invoice-list'}>the invoice-list pattern</a>;
     nothing new to learn.</p>
   </section>
   <section class="demo">

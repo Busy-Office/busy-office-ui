@@ -23,7 +23,10 @@ const pages = [
   { href: '/theming', label: 'Theming guide', icon: '◨' },
   { href: '/printing', label: 'Print & reports', icon: '⎙' },
 ];
-const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+// Base-aware links so the site works at / (dev) and /busy-office-ui (Pages).
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const current =
+  (Astro.url.pathname.slice(base.length) || '/').replace(/\/$/, '') || '/';
 ---
 <html lang="en" data-density="comfortable">
   <head>
@@ -34,7 +37,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
   <body>
     <div class="eof-app-shell">
       <header class="eof-navbar eof-app-shell__header">
-        <a class="eof-navbar__brand" href="/">busy-office-ui</a>
+        <a class="eof-navbar__brand" href={base + '/'}>busy-office-ui</a>
         <span class="eof-badge eof-badge--accent">v0.1.0</span>
         <span class="eof-navbar__spacer"></span>
         <label class="eof-choice" for="density">Density
@@ -59,7 +62,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
               <li>
                 <a
                   class="eof-sidebar-nav__link"
-                  href={p.href}
+                  href={base + p.href}
                   aria-current={current === p.href ? 'page' : undefined}
                 >
                   <span class="eof-sidebar-nav__icon" aria-hidden="true">{p.icon}</span>
