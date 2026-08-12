@@ -64,6 +64,14 @@ function shape(sets) {
 
 const api = { generated: 'by scripts/extract-api.mjs — do not edit', components: {}, primitives: {}, utilities: {} };
 
+// JS-only hook classes: consumed by the behaviors, never styled, so the CSS
+// walk cannot see them (site-grill A-4/S-3 — the CSS-true API wasn't JS-true).
+// Kept here until the behaviors manifest generates them.
+const JS_HOOKS = {
+  'data-table': { classes: ['bo-data-table__select-all'], dataAttrs: [] },
+  dialog: { classes: [], dataAttrs: ['data-dialog-trigger', 'data-dismissible'] },
+};
+
 const componentsDir = join(srcCss, 'components');
 for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory())) {
   const files = (await readdir(join(componentsDir, dir.name)))
@@ -71,6 +79,8 @@ for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter
     .map((f) => join(componentsDir, dir.name, f));
   const sets = await analyze(files);
   if (!sets.classes.size) continue; // slice stubs
+  for (const c of JS_HOOKS[dir.name]?.classes ?? []) sets.classes.add(c);
+  for (const d of JS_HOOKS[dir.name]?.dataAttrs ?? []) sets.dataAttrs.add(d);
   api.components[dir.name] = shape(sets);
 }
 
@@ -80,16 +90,25 @@ for (const f of (await readdir(primDir)).filter((f) => f.endsWith('.css') && f !
   api.primitives[f.replace('.css', '')] = shape(sets);
 }
 
-api.utilities = shape(await analyze([join(srcCss, 'utilities/index.css'), join(srcCss, 'print/index.css')]));
+// Utilities: the print layer REFERENCES component classes in its rules —
+// filter to the utility namespaces so the listing isn't contaminated.
+const utilSets = await analyze([join(srcCss, 'utilities/index.css'), join(srcCss, 'print/index.css')]);
+utilSets.classes = new Set(
+  [...utilSets.classes].filter((c) => /^bo-(u-|print|visually-hidden)/.test(c)),
+);
+api.utilities = shape(utilSets);
 
 // Global class index: class -> owning page slug. Docs page slugs differ from
 // CSS dir names in one case (site-grill S-2); gen-llms.mjs asserts every slug
 // resolves to a built page.
 const PAGE_SLUG = { alert: 'alerts' };
 const index = {};
+// Primitives claim first: components REFERENCE primitive classes (e.g. a
+// form-section rule mentioning the app shell) but primitives define them —
+// attribution follows definition (site-grill A-3 mis-attribution).
+for (const [, p] of Object.entries(api.primitives)) for (const cls of p.classes) index[cls] = 'base/primitives';
 for (const [name, c] of Object.entries(api.components))
-  for (const cls of c.classes) index[cls] = `components/${PAGE_SLUG[name] ?? name}`;
-for (const [name, p] of Object.entries(api.primitives)) for (const cls of p.classes) index[cls] ??= 'base/primitives';
+  for (const cls of c.classes) index[cls] ??= `components/${PAGE_SLUG[name] ?? name}`;
 for (const cls of api.utilities.classes) index[cls] ??= 'base/utilities';
 api.index = index;
 

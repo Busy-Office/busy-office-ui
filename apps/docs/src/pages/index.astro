@@ -22,12 +22,15 @@ const contrastPairs = Object.values(contrast.themes)
   .filter((p: any) => p.pass).length;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const brandCss = `/* brand.css — unlayered, so it wins. Re-skin = remap the semantic tier. */
+const brandCss = `/* brand.css — unlayered, so it wins. An accent swap is a FAMILY swap: */
 :root {
   --bo-color-accent-solid: #0f766e;   /* your teal, >= 4.5:1 under white */
   --bo-color-accent-strong: #115e59;
+  --bo-color-focus-ring: #0d9488;     /* else focus stays blue */
+  --bo-color-bg-selected: #f0fdfa;    /* else selected rows stay blue */
   --bo-font-sans: "Your Corporate Sans", system-ui, sans-serif;
-}`;
+}
+/* full recipe incl. the dark-mode rule -> Theming guide */`;
 const semanticSide = `<table class="bo-data-table">
   <thead><tr>
     <th scope="col" aria-sort="ascending">
@@ -107,6 +110,9 @@ const invoices = [
             <a class="bo-btn bo-btn--secondary" href={base + '/components/button'}>Components</a>
           </div>
           <pre class="install"><code>npm i @busy-office/ui</code></pre>
+          <p class="install__note">Not on npm yet — pre-publish hardening. Pilot today by
+            <a href={base + '/getting-started/installation'}>copying <code>dist/</code> from the repo</a>;
+            the package lands as-is when it ships.</p>
           <dl class="meta">
             <div><dt>Bundle</dt><dd><a href="https://github.com/Busy-Office/busy-office-ui/blob/main/apps/docs/src/pages/index.astro">{gzipKb} kB gz</a> <span class="meta__sub">{minKb} kB min · per-component files · computed at build</span></dd></div>
             <div><dt>Dependencies</dt><dd>0 <span class="meta__sub">JS optional — 5 call-once behaviors</span></dd></div>
@@ -347,8 +353,13 @@ const invoices = [
     max-inline-size: 34ch;
     margin-block-end: var(--bo-space-5);
   }
+  .install__note {
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-muted);
+    max-inline-size: 36ch;
+  }
   .install {
-    margin-block: var(--bo-space-5);
+    margin-block: var(--bo-space-5) var(--bo-space-2);
     padding: var(--bo-space-3) var(--bo-space-4);
     background: var(--bo-color-bg-muted);
     border: 1px solid var(--bo-color-border-default);

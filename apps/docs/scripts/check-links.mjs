@@ -35,8 +35,14 @@ let checked = 0;
 const failures = [];
 for await (const file of htmlFiles(dist)) {
   const html = await readFile(file, 'utf8');
+  // Relative hrefs resolve against the page URL — the site grill's A-5 found
+  // four broken ./ and ../ links the absolute-only check missed.
+  const pageDir = '/' + dirname(file.replace(dist + '/', '')).replace(/^\.$/, '');
+  const resolveRel = (u) =>
+    new URL(u, `http://x${pageDir.endsWith('/') ? pageDir : pageDir + '/'}`).pathname;
   const targets = [
     ...[...html.matchAll(/href="(\/[^"]*)"/g)].map((m) => m[1]),
+    ...[...html.matchAll(/href="(\.[^"]*)"/g)].map((m) => resolveRel(m[1])),
     ...[...html.matchAll(/content="0;url=([^"]+)"/g)].map((m) => m[1]),
   ].filter((u) => !u.startsWith('//'));
   for (const t of new Set(targets)) {

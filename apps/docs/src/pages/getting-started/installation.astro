@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const npmInstall = `npm i @busy-office/ui
 
 # all-in-one
@@ -57,7 +58,7 @@ const skeleton = `<!doctype html>
     <h2>JS behaviors (five call-once inits)</h2>
     <pre><code>{jsInit}</code></pre>
     <p class="bo-u-text-muted">What each does and why — see
-    <a href="../concepts/js-behaviors">Core concepts → JS behaviors</a>. Components
+    <a href={base + '/concepts/js-behaviors'}>Core concepts → JS behaviors</a>. Components
     whose page says "JS required" are inert without their init.</p>
   </section>
   <section class="demo">

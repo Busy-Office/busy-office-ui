@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Troubleshooting">
   <p class="demo-note">
@@ -11,7 +12,7 @@ import Gallery from '../../layouts/Gallery.astro';
       <table class="bo-data-table">
         <thead><tr><th scope="col">Symptom</th><th scope="col">Cause &amp; fix</th></tr></thead>
         <tbody>
-          <tr><td>Dialogs / tabs / dropdowns do nothing</td><td>The behavior init was never called. <code>initDialogs()</code>, <code>initTabs()</code>, <code>initDropdowns()</code> — once each, anywhere, any time. See <a href="../concepts/js-behaviors">JS behaviors</a>.</td></tr>
+          <tr><td>Dialogs / tabs / dropdowns do nothing</td><td>The behavior init was never called. <code>initDialogs()</code>, <code>initTabs()</code>, <code>initDropdowns()</code> — once each, anywhere, any time. See <a href={base + '/concepts/js-behaviors'}>JS behaviors</a>.</td></tr>
           <tr><td>Components render unstyled or half-styled à la carte</td><td>Import order: <strong>tokens, then reset, then components</strong>. Components carry only their own layer.</td></tr>
           <tr><td>Your overrides don't apply</td><td>They're inside an <code>@layer</code>. Write app CSS <em>unlayered</em> — unlayered always wins. Never <code>!important</code>.</td></tr>
           <tr><td>Form error messages never appear</td><td>Below the browser floor (<code>:has()</code>/<code>:user-invalid</code>), interactive reveals are fail-closed. Server-set <code>aria-invalid</code> + message-as-sibling still works. Floor: Chrome/Edge 119 · FF 128 · Safari 17.4.</td></tr>

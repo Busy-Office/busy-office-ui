@@ -72,6 +72,11 @@ for (const [name, p] of Object.entries(api.primitives)) {
   out += `${name}: ${p.classes.join(' ')}\n`;
 }
 out += `\n## Utilities\n${api.utilities.classes.join(' ')}\n`;
+
+// Semantic token vocabulary — what a re-brand remaps (from the shipped tokens).
+const tokensCss = await readFile(require.resolve('@busy-office/ui/css/tokens'), 'utf8');
+const tokenNames = [...new Set([...tokensCss.matchAll(/(--bo-(?!palette)[a-z0-9-]+)\s*:/g)].map((m) => m[1]))].sort();
+out += `\n## Semantic tokens (re-brand = remap these in UNLAYERED :root; re-set in your [data-theme="dark"] block — unlayered beats the framework's dark remaps)\n${tokenNames.join(' ')}\n`;
 out += `\n## Key docs\n`;
 for (const p of [
   'getting-started/installation', 'getting-started/first-screen',
