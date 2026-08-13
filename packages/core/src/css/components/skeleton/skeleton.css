@@ -1,0 +1,46 @@
+/* Loading placeholder. Pair with aria-busy="true" on the region being
+   loaded — the shimmer is the visual channel, aria-busy is the programmatic
+   one (two-channel state, same as everywhere else in the framework).
+   The shimmer isn't duration-token-driven (a continuous loop, not a
+   one-shot transition — same reasoning as .bo-motion-spin), so it gets an
+   explicit prefers-reduced-motion override instead: the block stays visible
+   as a static placeholder, only the animation stops. */
+@layer bo-components {
+  .bo-skeleton {
+    display: block;
+    inline-size: 100%;
+    block-size: 1em;
+    border-radius: var(--bo-radius-sm);
+    background: linear-gradient(
+      90deg,
+      var(--bo-color-bg-muted) 25%,
+      var(--bo-color-bg-hover) 50%,
+      var(--bo-color-bg-muted) 75%
+    );
+    background-size: 200% 100%;
+    animation: bo-skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+
+  .bo-skeleton--circle {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: 50%;
+  }
+
+  .bo-skeleton--block {
+    block-size: 4rem;
+    border-radius: var(--bo-radius-md);
+  }
+
+  @keyframes bo-skeleton-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bo-skeleton {
+      animation: none;
+      background: var(--bo-color-bg-muted);
+    }
+  }
+}

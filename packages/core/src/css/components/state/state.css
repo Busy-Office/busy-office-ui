@@ -1,0 +1,41 @@
+/* One component, two settings: empty (no modifier — the neutral "nothing
+   here yet" state) and --error ("something went wrong"). Two-channel:
+   the icon SHAPE differs (not just its color) and the title/description
+   text always says which state it is — color is never the only signal. */
+@layer bo-components {
+  .bo-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--bo-space-3);
+    padding: var(--bo-space-8) var(--bo-space-4);
+    text-align: center;
+  }
+
+  .bo-state__icon {
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--bo-color-text-muted);
+  }
+
+  .bo-state--error .bo-state__icon {
+    color: var(--bo-color-danger-text);
+  }
+
+  .bo-state__title {
+    font-size: var(--bo-font-size-lg);
+    font-weight: var(--bo-font-weight-semibold);
+    color: var(--bo-color-text-primary);
+  }
+
+  .bo-state__description {
+    max-inline-size: 32ch;
+    color: var(--bo-color-text-secondary);
+  }
+
+  .bo-state__actions {
+    display: flex;
+    gap: var(--bo-space-2);
+    margin-block-start: var(--bo-space-2);
+  }
+}

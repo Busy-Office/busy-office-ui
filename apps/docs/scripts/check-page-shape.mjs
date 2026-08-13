@@ -18,7 +18,7 @@ const pagesDir = join(docsRoot, 'src/pages/components');
 const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
 
 // Mirrors extract-api.mjs's PAGE_SLUG — keep in sync if that alias grows.
-const PAGE_SLUG = { alert: 'alerts' };
+const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
 
 const componentsDir = join(coreRoot, 'src/css/components');
 const dirs = (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory());

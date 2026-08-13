@@ -107,7 +107,7 @@ api.motion = shape(motionSets);
 // Global class index: class -> owning page slug. Docs page slugs differ from
 // CSS dir names in one case (site-grill S-2); gen-llms.mjs asserts every slug
 // resolves to a built page.
-const PAGE_SLUG = { alert: 'alerts' };
+const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
 const index = {};
 // Primitives claim first: components REFERENCE primitive classes (e.g. a
 // form-section rule mentioning the app shell) but primitives define them —

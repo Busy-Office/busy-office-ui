@@ -1,0 +1,87 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const skeletonRows = `<div class="bo-stack bo-stack--tight" aria-busy="true" aria-label="Loading purchase orders">
+  <span class="bo-skeleton" style="inline-size: 40%"></span>
+  <span class="bo-skeleton" style="inline-size: 90%"></span>
+  <span class="bo-skeleton" style="inline-size: 75%"></span>
+</div>`;
+
+const skeletonCard = `<div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-3); align-items: center" aria-busy="true" aria-label="Loading vendor">
+  <span class="bo-skeleton bo-skeleton--circle"></span>
+  <div class="bo-stack bo-stack--tight" style="flex: 1">
+    <span class="bo-skeleton" style="inline-size: 50%"></span>
+    <span class="bo-skeleton bo-skeleton--block"></span>
+  </div>
+</div>`;
+
+const emptyState = `<div class="bo-state">
+  <span class="bo-state__icon" aria-hidden="true">📭</span>
+  <p class="bo-state__title">No purchase orders yet</p>
+  <p class="bo-state__description">Orders you create will show up here.</p>
+  <div class="bo-state__actions">
+    <button class="bo-btn">Create purchase order</button>
+  </div>
+</div>`;
+
+const errorState = `<div class="bo-state bo-state--error">
+  <span class="bo-state__icon" aria-hidden="true">⚠</span>
+  <p class="bo-state__title">Couldn't load purchase orders</p>
+  <p class="bo-state__description">Something went wrong on our end. Try again, or check back shortly.</p>
+  <div class="bo-state__actions">
+    <button class="bo-btn bo-btn--secondary">Retry</button>
+  </div>
+</div>`;
+---
+<Gallery title="Loading, empty &amp; error states">
+  <p class="demo-note">
+    Three states every data view needs: loading (<code>.bo-skeleton</code>),
+    nothing to show (<code>.bo-state</code>), and something went wrong
+    (<code>.bo-state--error</code>) — one component, two settings, not two
+    separate components. The icon <em>shape</em> differs, not just its color,
+    and the title always says which state it is.
+  </p>
+
+  <ClassRef component="skeleton" />
+  <section class="demo">
+    <h2>Skeleton — text lines</h2>
+    <p class="bo-u-text-muted">
+      Pair with <code>aria-busy="true"</code> on the loading region — the
+      shimmer is the visual channel, <code>aria-busy</code> is the
+      programmatic one. Widths are set inline per line so the placeholder
+      roughly matches the real content's ragged edge.
+    </p>
+    <Demo code={skeletonRows} />
+  </section>
+  <section class="demo">
+    <h2><code>--circle</code> / <code>--block</code></h2>
+    <p class="bo-u-text-muted">An avatar + two-line card placeholder.</p>
+    <Demo code={skeletonCard} />
+  </section>
+  <ApiTable component="skeleton" notes={[
+    'The shimmer is a continuous loop, not a one-shot transition, so it is NOT driven by the --bo-motion-duration-* tokens — it gets an explicit prefers-reduced-motion override instead (same reasoning as .bo-motion-spin in the Motion module).',
+  ]} />
+
+  <ClassRef component="state" />
+  <section class="demo">
+    <h2>Empty</h2>
+    <Demo code={emptyState} />
+  </section>
+  <section class="demo">
+    <h2><code>--error</code></h2>
+    <Demo code={errorState} />
+  </section>
+  <ApiTable component="state" notes={[
+    'A .bo-state is decoration around a message — the title/description TEXT is the accessible signal; the icon carries aria-hidden="true" so it is never announced as unlabeled content.',
+  ]} />
+
+  <Related links={[
+    ["/base/motion", "Motion"],
+    ["/components/dashboard", "Dashboard"],
+    ["/concepts/accessibility", "Accessibility model"],
+  ]} />
+</Gallery>

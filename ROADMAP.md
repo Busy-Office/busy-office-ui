@@ -60,11 +60,22 @@ Ordered by value × effort; `npm publish` is intentionally last — it's
 owner-gated, not something a loop iteration can close.
 
 **Queued (priority order)**
-1. [ ] **Skeleton / empty / error states** — a first-class component set
-       (`.bo-skeleton` shimmer blocks, `.bo-empty-state`, `.bo-error-state`),
-       token-driven, reduced-motion-safe (reuse the Motion module's guard
-       pattern). *Accept:* one docs page, all three states demoed, AA in both
-       themes, no new dependency.
+1. [x] **Skeleton / empty / error states** — shipped as two components (not
+       three classes): `.bo-skeleton` (`--circle`/`--block` shimmer
+       placeholders, `aria-busy` is the programmatic channel) and `.bo-state`
+       with an `--error` modifier for empty/error — one component, two
+       settings, per the standing "one component, many settings" principle,
+       rather than the literal `.bo-empty-state`/`.bo-error-state` split
+       first sketched. Icon *shape* differs per state, not just color. Both
+       continuous-loop shimmer, guarded by an explicit reduced-motion
+       override (not duration-token-driven, same reasoning as
+       `.bo-motion-spin`). Docs: `/components/state-patterns` (one page, all
+       three states, via a shared `PAGE_SLUG` alias — which turned out to be
+       tracked in **three** separate places: `extract-api.mjs`,
+       `check-page-shape.mjs`, `gen-llms.mjs`; updated all three, worth
+       consolidating in a future Standardize pass). Verified live via Podman
+       (`bo-docs-run`): light + dark at 1440px, and narrow-viewport reflow
+       confirmed (no overflow/clipping). All 7 gates green, 11 tests pass.
 2. [ ] **Data-table ARIA grid pattern** — the real fix for keyboard row
        navigation (see the 2026-08-14 Explore spike below `## Done` — mechanics
        work, but it needs the full WAI-ARIA APG "Grid" pattern: `role="grid"`/
