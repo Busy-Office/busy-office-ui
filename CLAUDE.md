@@ -47,6 +47,42 @@ in sync. Query the mirror to steer prioritization.
   settings.
 - Adversarially grill a slice before sign-off; record findings in `.roundtable/`.
 
+## How to document a component (the recipe)
+
+Docs are **generated from the shipped CSS**, then wrapped in a fixed page skeleton.
+Never hand-write API/contrast tables. To add or document a component:
+
+1. **Source of truth = the CSS.** `packages/core/src/css/components/<name>/<name>.css`,
+   one `@layer bo-components` block: `.bo-<name>`, `__part`, `--modifier`. Add its
+   `@import` to `src/css/index.css`. The build globs the dir, so no other registration
+   is needed for `api.json` / per-file dist.
+2. **Docs page** = `apps/docs/src/pages/components/<name>.astro`, always this skeleton:
+   ```
+   <Gallery title="Name">
+     <p class="demo-note"> one line: what it is + when to use </p>
+     <ClassRef component="<name>" />            {/* generated quick-ref table */}
+     <section class="demo"><h2>…</h2><Demo code={oneString} /><p class="bo-u-text-muted">…</p></section>
+     …one demo section per setting/variant…
+     <section class="demo"><h2>Markup</h2><pre><code>{canonical}</code></pre></section>
+     <ApiTable component="<name>" notes={[…]} />  {/* generated API + AA contrast */}
+     <Related links={[["/components/x","X"], …]} />
+   </Gallery>
+   ```
+   `Demo` renders a preview **and** its copyable code from ONE string — never write the
+   preview and code twice. Keep captions short and user-facing (say what it does).
+3. **Sidebar**: add `{ href: '/components/<name>', label: '…' }` to the Components group
+   in `apps/docs/src/layouts/Gallery.astro`. The page slug must equal the CSS dir name,
+   or add a `PAGE_SLUG` alias in `extract-api.mjs` (see `alert`→`alerts`).
+4. **New colour pairing?** Add it to `PAIRS` in `scripts/check-contrast.mjs` so the gate
+   validates it in both themes (e.g. the Amount field added danger/success-text on
+   surface + canvas).
+5. **Rebuild** — `api.json` / `contrast.json` / `llms.txt` regenerate; the link checker
+   and slug assertion gate the result. Concept/guide pages are plain `.astro` in
+   `concepts/` `base/` `getting-started/` + a sidebar entry; same "simple for users" bar.
+
+Write for a first-time user: plain verbs, one component / many settings, and note the
+two-channel cue wherever colour carries meaning.
+
 ## Don't
 
 - Don't hand-edit generated docs (api.json, contrast.json, behaviors.json, class
