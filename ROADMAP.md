@@ -82,7 +82,22 @@ starts.
        existing Pagefind index, with fuzzy page nav and full keyboard operation.
        *Accept:* native `<dialog>`, focus-trapped, ESC/backdrop close, reduced-motion
        clean; graduates the long-term "command palette" item.
-5. [ ] **Section-by-section docs simplicity pass** (ongoing) — walk each doc section,
+5. [ ] **Sidebar scroll position** (UX bug) — the left index jumps back to the top on
+       every navigation; the active item and scroll position aren't preserved. *Accept:*
+       sidebar keeps its scroll across page loads (persist scrollTop, or scroll the
+       active link into view) so deep nav items stay reachable without re-scrolling.
+6. [ ] **Motion module** (opt-in, split — see the combine/split decision) — ship
+       `@busy-office/ui/css/motion`: a curated ~8–10 *functional* animations (fade,
+       slide, collapse, pulse-once) driven by the existing motion tokens and
+       reduced-motion-guarded, NOT a decorative Animate.css clone. Core keeps the
+       mechanics (tokens + state transitions) it already has.
+7. [ ] **Visual identity cluster** — (a) **favicon**; (b) **busy-office-ui logo** as an
+       inline SVG (currency/back-office motif, mono-friendly, works at 16px and in the
+       navbar, theme-aware via `currentColor`); (c) **brand palette** — a distinctive
+       accent family beyond the default neutral+blue, every step validated through the
+       contrast gate, shipped as a `brand-*.css` preset demonstrating the semantic
+       re-skin. Do the palette first; logo + favicon derive from it.
+8. [ ] **Section-by-section docs simplicity pass** (ongoing) — walk each doc section,
        cut anything more complex than a first-time user needs, verify in the container.
 
 ## Near term (pre-1.0)
