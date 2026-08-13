@@ -153,6 +153,16 @@ const current =
         </div>
       </main>
     </div>
+    <dialog id="cmdk" class="bo-cmdk" aria-label="Search the docs">
+      <div class="bo-cmdk__panel">
+        <div id="cmdk-search"></div>
+        <div class="bo-cmdk__hint">
+          <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+          <span><kbd>↵</kbd> open</span>
+          <span><kbd>esc</kbd> close</span>
+        </div>
+      </div>
+    </dialog>
     <script is:inline define:vars={{ base }}>
       // Pagefind exists only in the built site; degrade silently in dev.
       const css = document.createElement('link');
@@ -161,9 +171,39 @@ const current =
       document.head.append(css);
       const s = document.createElement('script');
       s.src = `${base}/pagefind/pagefind-ui.js`;
-      s.onload = () => new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
-      s.onerror = () => document.getElementById('docsearch')?.remove();
+      s.onload = () => {
+        new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
+        // Cmd/Ctrl+K command palette — a second Pagefind instance in a dialog.
+        const dlg = document.getElementById('cmdk');
+        if (dlg) {
+          new PagefindUI({ element: '#cmdk-search', showSubResults: true, showImages: false });
+          const input = () => dlg.querySelector('.pagefind-ui__search-input');
+          const links = () => [...dlg.querySelectorAll('.pagefind-ui__result-link')];
+          const open = () => {
+            if (dlg.open) return;
+            dlg.showModal();
+            const i = input(); if (i) { i.focus(); i.select?.(); }
+          };
+          document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dlg.open ? dlg.close() : open(); }
+          });
+          // Arrow keys move focus through results; Enter follows the focused link.
+          dlg.addEventListener('keydown', (e) => {
+            if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+            const l = links(); if (!l.length) return;
+            e.preventDefault();
+            const i = l.indexOf(document.activeElement);
+            const next = e.key === 'ArrowDown' ? (i + 1) % l.length : (i <= 0 ? l.length - 1 : i - 1);
+            l[next].focus();
+          });
+          // Backdrop click closes (native dialog doesn't by default).
+          dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+        }
+      };
+      s.onerror = () => { document.getElementById('docsearch')?.remove(); document.getElementById('cmdk')?.remove(); };
       document.head.append(s);
+      // A visible affordance: the sidebar search shows the shortcut hint.
+      document.getElementById('docsearch')?.setAttribute('data-shortcut', '⌘K');
     </script>
     <script>
       import { initDialogs } from '@busy-office/ui/js';
@@ -311,6 +351,59 @@ const current =
   .docs-drawer .bo-sidebar-nav__heading {
     position: static; inline-size: auto; block-size: auto; margin: 0;
     overflow: visible; clip-path: none; white-space: normal; border: 0;
+  }
+
+  /* Cmd/Ctrl+K command palette. Native <dialog> in the top layer, so it escapes
+     the app-shell's overflow. Pagefind's own variables are mapped to our tokens
+     so the palette is theme-aware (light/dark) like the rest of the docs. */
+  .bo-cmdk {
+    --pagefind-ui-primary: var(--bo-color-accent);
+    --pagefind-ui-text: var(--bo-color-text-primary);
+    --pagefind-ui-background: var(--bo-color-bg-surface-raised);
+    --pagefind-ui-border: var(--bo-color-border-default);
+    --pagefind-ui-tag: var(--bo-color-bg-muted);
+    --pagefind-ui-border-radius: var(--bo-radius-md);
+
+    margin-block-start: 12vh;
+    margin-inline: auto;
+    inline-size: min(40rem, calc(100vw - 2rem));
+    padding: 0;
+    border: 1px solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-lg);
+    background: var(--bo-color-bg-surface-raised);
+    color: var(--bo-color-text-primary);
+    box-shadow: var(--bo-shadow-lg);
+    overflow: hidden;
+  }
+  .bo-cmdk::backdrop { background: rgb(0 0 0 / 0.45); }
+  .bo-cmdk__panel { display: flex; flex-direction: column; max-block-size: 70vh; }
+  #cmdk-search { padding: var(--bo-space-3); overflow: auto; }
+  .bo-cmdk__hint {
+    display: flex; gap: var(--bo-space-4);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border-block-start: 1px solid var(--bo-color-border-default);
+    font-size: var(--bo-font-size-xs); color: var(--bo-color-text-muted);
+  }
+  .bo-cmdk__hint kbd {
+    font-family: var(--bo-font-mono); font-size: 0.9em;
+    padding: 0.05rem 0.3rem; margin-inline-end: 0.15rem;
+    border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-sm);
+    background: var(--bo-color-bg-muted);
+  }
+  @media (min-width: 56.01rem) {
+    /* Shortcut hint chip on the sidebar search box. */
+    #docsearch { position: relative; }
+    #docsearch::after {
+      content: attr(data-shortcut);
+      position: absolute; inset-block-start: 0.55rem; inset-inline-end: 0.6rem;
+      font-size: var(--bo-font-size-xs); color: var(--bo-color-text-muted);
+      border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-sm);
+      padding: 0 0.3rem; pointer-events: none;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .bo-cmdk[open] { animation: cmdk-in var(--bo-motion-duration-fast) var(--bo-motion-easing-standard); }
+    @keyframes cmdk-in { from { opacity: 0; transform: translateY(-0.5rem); } }
   }
 
   /* Copy button, top-end of any code block. */

@@ -13,3 +13,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-13 00:00 · Meta · meta · loops.db telemetry mirror + record/rebuild scripts · committed · -
 - 2026-08-13 22:39 · Continue · bug · dark-theme text flash on theme switch (P0) · fixed; push pending (GitHub 500) · d18f756
 - 2026-08-13 23:06 · Continue · build · ERP Amount component (money/quantity/UOM, two-channel signs) · shipped · e8f2de0
+- 2026-08-13 23:25 · Continue · build · data-table column alignment (--left/center/right) + fix latent --numeric specificity bug · shipped · 6afe400

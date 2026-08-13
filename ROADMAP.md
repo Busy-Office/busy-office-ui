@@ -78,10 +78,13 @@ starts.
        right-aligned — moved the default to `:where(th, td)` (0,1,0) so one class per
        cell reliably wins. Verified live: numeric column now `text-align:end`; all
        four modifiers correct; documented on the data-table page.
-4. [ ] **Cmd/Ctrl+K command palette** — keyboard-triggered search overlay over the
-       existing Pagefind index, with fuzzy page nav and full keyboard operation.
-       *Accept:* native `<dialog>`, focus-trapped, ESC/backdrop close, reduced-motion
-       clean; graduates the long-term "command palette" item.
+4. [x] **Cmd/Ctrl+K command palette** — a native `<dialog>` mounting a second Pagefind
+       instance; Cmd/Ctrl+K toggles (preventDefault beats the browser omnibox), ↑/↓
+       move focus through results, Enter follows, ESC/backdrop close (showModal gives
+       focus containment free). Pagefind's variables mapped to our tokens so it's
+       theme-aware (verified dark: `#22262e` bg / `#f9fafb` text). Reduced-motion-guarded
+       entrance; a `⌘K` hint chip on the sidebar search. Verified live: opens, "dialog"
+       → 13 results, arrow-nav Dialog→Navigation. Graduates the long-term palette item.
 5. [ ] **Sidebar scroll position** (UX bug) — the left index jumps back to the top on
        every navigation; the active item and scroll position aren't preserved. *Accept:*
        sidebar keeps its scroll across page loads (persist scrollTop, or scroll the
