@@ -19,3 +19,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-14 00:05 · Continue · build · Brand palette: Ledger teal accent (gate-validated both themes) · shipped · 5bb5c16
 - 2026-08-14 00:30 · Continue · build · SVG logo (ledger-record mark, theme-aware teal, 16px navbar) · shipped · 5db529d
 - 2026-08-14 00:53 · Continue · build · favicon (ledger-record mark, filled/inverse) + logged top long-term bets · shipped · 9ee1286
+- 2026-08-14 01:16 · Continue · build · docs simplicity: Installation page (lead-simple, demote caveats) · shipped · f03d937

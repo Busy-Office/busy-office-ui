@@ -93,13 +93,16 @@ const step3 = `<div class="bo-data-table-container">
     <pre><code>{step2}</code></pre>
   </section>
   <section class="demo">
-    <h2>Step 3 — the table, with selection, sorting hooks, and pagination</h2>
+    <h2>Step 3 — the table</h2>
     <pre><code>{step3}</code></pre>
-    <p class="bo-u-text-muted">What you get for free: check a row and the bulk bar +
-    live "n selected" count appear; select-all works (initDataTables); sticky header;
-    the amount column aligns via tabular numerals. What stays yours: the sort button
-    re-orders rows server-side and updates <code>aria-sort</code>; pagination links
-    carry your querystring; row checkboxes POST via their <code>name/value</code>.</p>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Free</strong> (CSS + <code>initDataTables</code>): check a row → the
+      bulk bar and live "n selected" count appear; select-all works; sticky header;
+      the amount column aligns on tabular numerals.</li>
+      <li><strong>Yours to wire</strong>: the sort button re-orders rows server-side and
+      updates <code>aria-sort</code>; pagination links carry your querystring; row
+      checkboxes POST via their <code>name/value</code>.</li>
+    </ul>
   </section>
   <section class="demo">
     <h2>Step 4 — verify</h2>
