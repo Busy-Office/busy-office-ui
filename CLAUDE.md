@@ -35,7 +35,10 @@ in sync. Query the mirror to steer prioritization.
 
 - Verify **live** before committing — the docs run in a Podman container on `:8081`
   (`podman build -f apps/docs/Containerfile -t bo-docs . && podman run …`); screenshot
-  at 1440px **and** 390px, in **both** light and dark themes.
+  at 1440px **and** 390px, in **both** light and dark themes. Podman can serve a
+  **stale image from cache** — confirm the served CSS actually contains your change
+  (`curl …/_astro/*.css | grep <new-class>`) and rebuild with `--no-cache` if not,
+  before trusting a screenshot.
 - Keep the six build gates green: named `@container`, contrast threshold **+ coverage**,
   behaviors-vs-`.d.ts`, dist link resolution, stylelint naming, behavior tests.
 - Every documented surface is **generated** from the shipped artifact, not hand-written.

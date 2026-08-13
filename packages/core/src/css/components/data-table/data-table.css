@@ -77,9 +77,15 @@
     height: var(--bo-density-row-height);
     padding-block: var(--bo-density-cell-padding-y);
     padding-inline: var(--bo-density-cell-padding-x);
-    text-align: start;
     border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
     background-color: var(--bo-cell-bg, transparent);
+  }
+
+  /* Default alignment kept at :where() (0,1,0) specificity so a per-column
+     alignment modifier — one class — reliably wins. (Before this, the base
+     rule outranked __col--numeric and it silently never right-aligned.) */
+  .bo-data-table :where(th, td) {
+    text-align: start;
   }
 
   .bo-data-table thead th {
@@ -127,9 +133,23 @@
     background-color: var(--bo-color-bg-muted);
   }
 
-  /* Column semantics */
+  /* Column alignment — put the same modifier on the <th> and every <td> in the
+     column. --numeric is --right plus the tabular-figure intent for amounts. */
+  .bo-data-table__col--left {
+    text-align: start;
+  }
+
+  .bo-data-table__col--center {
+    text-align: center;
+  }
+
+  .bo-data-table__col--right,
   .bo-data-table__col--numeric {
     text-align: end;
+  }
+
+  .bo-data-table__col--numeric {
+    font-variant-numeric: tabular-nums;
   }
 
   .bo-data-table__col--code {

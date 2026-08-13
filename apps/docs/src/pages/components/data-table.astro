@@ -146,6 +146,40 @@ const rows = [
     and screen-reader semantics never flip between display and edit modes. Persist with
     a form submit or <code>hx-patch</code> on change.</p>
   </section>
+  <section class="demo">
+    <h2>Column alignment</h2>
+    <p>Put the same modifier on the <code>&lt;th&gt;</code> and every <code>&lt;td&gt;</code>
+    in a column: <code>--left</code>, <code>--center</code>, <code>--right</code>, or
+    <code>--numeric</code> (right-aligned <em>and</em> tabular figures, for amounts).</p>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead>
+          <tr>
+            <th scope="col" class="bo-data-table__col--left">Item (left)</th>
+            <th scope="col" class="bo-data-table__col--center">Status (center)</th>
+            <th scope="col" class="bo-data-table__col--right">Weight (right)</th>
+            <th scope="col" class="bo-data-table__col--numeric">Amount (numeric)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bo-data-table__col--left">Standing desk</td>
+            <td class="bo-data-table__col--center"><span class="bo-badge bo-badge--success">Approved</span></td>
+            <td class="bo-data-table__col--right">12 kg</td>
+            <td class="bo-data-table__col--numeric">1,208.00</td>
+          </tr>
+          <tr>
+            <td class="bo-data-table__col--left">Monitor arm</td>
+            <td class="bo-data-table__col--center"><span class="bo-badge bo-badge--warning">Pending</span></td>
+            <td class="bo-data-table__col--right">3 kg</td>
+            <td class="bo-data-table__col--numeric">92.50</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Alignment is a single class per cell and wins over the
+    default (start) reliably — headers and body cells align together.</p>
+  </section>
   <ApiTable
     component="data-table"
     js="Optional but recommended: initDataTables() — select-all, live count, O(1) toolbar reveal, swap re-derive. Without it: selection visuals work via :has(); select-all is inert."

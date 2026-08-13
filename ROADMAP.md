@@ -72,9 +72,12 @@ starts.
        or parentheses in the markup; colour second). Verified AA in both themes — added
        4 gate pairs (danger/success text on surface + canvas, all ≥4.8); tabular
        alignment holds down a table column. Docs page shipped (0.9 kB min).
-3. [ ] **Data-table column alignment** — explicit `--left` / `--center` / `--right`
-       column modifiers, generalizing today's `--numeric` right-align. *Accept:*
-       header and body cells align together; documented on the data-table page.
+3. [x] **Data-table column alignment** — `__col--left` / `--center` / `--right`
+       (+ `--numeric` = right + tabular). **Also fixed a latent bug**: the base
+       `th, td` rule (0,1,1) outranked `--numeric` (0,1,0), so amounts silently never
+       right-aligned — moved the default to `:where(th, td)` (0,1,0) so one class per
+       cell reliably wins. Verified live: numeric column now `text-align:end`; all
+       four modifiers correct; documented on the data-table page.
 4. [ ] **Cmd/Ctrl+K command palette** — keyboard-triggered search overlay over the
        existing Pagefind index, with fuzzy page nav and full keyboard operation.
        *Accept:* native `<dialog>`, focus-trapped, ESC/backdrop close, reduced-motion
