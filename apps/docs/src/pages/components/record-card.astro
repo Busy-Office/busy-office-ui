@@ -1,0 +1,128 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const recordMarkup = `<!-- The card is a widget: header (type chip + byline + status) /
+     body / band (workflow state OR actions). Standard bo- components only. -->
+<article class="bo-widget">
+  <header class="bo-widget__header">
+    <span class="bo-badge bo-badge--type">Transport Request #1</span>
+    <span class="bo-byline"><strong>Tom Brady</strong> · Consultant · 11 Aug 2026</span>
+    <span class="bo-badge bo-badge--warning">Pending</span>
+  </header>
+  <div class="bo-widget__body">
+    <ol class="bo-ordered-list">
+      <li>DEVK900412
+        <span class="bo-ordered-list__actions">
+          <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move down">↓</button>
+          <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove">×</button>
+        </span>
+      </li>
+      <li>DEVK900413</li>
+    </ol>
+  </div>
+  <footer class="bo-widget__band">
+    <button class="bo-btn">Approve for implementation</button>
+    <button class="bo-btn bo-btn--danger-ghost">Reject</button>
+  </footer>
+</article>`;
+---
+<Gallery title="Record card">
+  <p class="demo-note">
+    The detail/approval surface: a <strong>record card</strong> built entirely from
+    standard components — a <code>.bo-widget</code> with a record-type chip
+    (<code>.bo-badge--type</code>), a <code>.bo-byline</code>, a status badge, a
+    <code>.bo-ordered-list</code> of line items, and a <code>.bo-widget__band</code>
+    footer that carries either workflow state or actions. No new primitives — it
+    composes the existing ones, so density, dark mode, and the cascade all apply.
+  </p>
+
+  <section class="demo">
+    <h2>New request — the card is the create form</h2>
+    <article class="bo-widget">
+      <header class="bo-widget__header">
+        <span class="bo-badge bo-badge--type">Transport Request</span>
+      </header>
+      <div class="bo-widget__body bo-stack">
+        <p class="bo-u-text-muted">No transports listed.</p>
+        <div class="bo-cluster">
+          <input class="bo-input bo-input--code" placeholder="Paste one or several, e.g. DEVK900302" />
+          <button class="bo-btn bo-btn--secondary">Add</button>
+        </div>
+        <div class="bo-cluster">
+          <input class="bo-input" placeholder="Backout plan — required before approval" />
+          <button class="bo-btn bo-btn--secondary">Save</button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="demo">
+    <h2>Pending — consultant editing (per-row actions)</h2>
+    <article class="bo-widget">
+      <header class="bo-widget__header">
+        <span class="bo-badge bo-badge--type">Transport Request #1</span>
+        <span class="bo-byline"><strong>Tom Brady</strong> · Consultant · 11 Aug 2026, 9:08</span>
+        <span class="bo-badge bo-badge--warning">Pending</span>
+      </header>
+      <div class="bo-widget__body">
+        <ol class="bo-ordered-list">
+          <li>DEVK900412<span class="bo-ordered-list__actions"><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move down">↓</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove DEVK900412">×</button></span></li>
+          <li>DEVK900413<span class="bo-ordered-list__actions"><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move up">↑</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move down">↓</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove DEVK900413">×</button></span></li>
+          <li>DEVK900418<span class="bo-ordered-list__actions"><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move up">↑</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove DEVK900418">×</button></span></li>
+        </ol>
+      </div>
+      <footer class="bo-widget__band bo-widget__band--msg">Awaiting the Delivery Manager's approval.</footer>
+    </article>
+  </section>
+
+  <section class="demo">
+    <h2>Pending, approvable — delivery manager (read-only + actions)</h2>
+    <article class="bo-widget">
+      <header class="bo-widget__header">
+        <span class="bo-badge bo-badge--type">Transport Request #1</span>
+        <span class="bo-byline"><strong>Tom Brady</strong> · Consultant · 11 Aug 2026, 9:08</span>
+        <span class="bo-badge bo-badge--warning">Pending</span>
+      </header>
+      <div class="bo-widget__body">
+        <ol class="bo-ordered-list"><li>DEVK900412</li><li>DEVK900413</li><li>DEVK900418</li></ol>
+        <p class="bo-u-text-muted">Backout plan: Rollback DEVK900412 via transport of copies.</p>
+      </div>
+      <footer class="bo-widget__band">
+        <button class="bo-btn">Approve for implementation</button>
+        <button class="bo-btn bo-btn--danger-ghost">Reject</button>
+      </footer>
+    </article>
+  </section>
+
+  <section class="demo">
+    <h2>Decided — frozen</h2>
+    <article class="bo-widget">
+      <header class="bo-widget__header">
+        <span class="bo-badge bo-badge--type">Transport Request #1</span>
+        <span class="bo-byline"><strong>Tom Brady</strong> · Consultant · 11 Aug 2026, 9:08</span>
+        <span class="bo-badge bo-badge--success">Approved</span>
+      </header>
+      <div class="bo-widget__body">
+        <ol class="bo-ordered-list"><li>DEVK900412</li><li>DEVK900413</li><li>DEVK900418</li></ol>
+        <p class="bo-u-text-muted">Backout plan: Rollback DEVK900412 via transport of copies.</p>
+      </div>
+      <footer class="bo-widget__band bo-widget__band--msg">Approved by Dana Whitfield · 12 Aug 2026, 10:15</footer>
+    </article>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{recordMarkup}</code></pre>
+    <p class="bo-u-text-muted">Every class here is a standard component — the header
+    layout (type chip · flexible byline · end-aligned status) is built into
+    <code>.bo-widget__header</code> when a <code>.bo-badge--type</code> is present.
+    No page-level CSS.</p>
+  </section>
+  <ApiTable component="record-card"
+    notes={['The card is a <code>.bo-widget</code>: <code>__header</code> / <code>__body</code> / <code>__band</code>. The band carries workflow state (<code>--msg</code>) or actions — one durable strip, never a buried note.',
+            'Frozen (decided) records drop the per-row actions and the action band; the list they approved is the list that ships.',
+            '<code>.bo-ordered-list</code> is a native <code>&lt;ol&gt;</code> — order is real semantics; the number is the list marker, not CSS content.']} />
+  <Related links={[["/components/dashboard", "Dashboard & widgets"], ["/components/approval-workflow", "Timeline & audit"], ["/components/badge", "Badge"], ["/patterns/approval", "Approval pattern"]]} />
+</Gallery>
+

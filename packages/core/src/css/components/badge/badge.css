@@ -37,6 +37,18 @@
     --bo-badge-fg: var(--bo-color-accent-text);
   }
 
+  /* Record-type chip: an inverted-surface tag naming the record a card holds
+     (e.g. "Transport Request #1"). A rectangle, not a pill; auto-inverts in
+     dark mode because it reads from the text/surface roles. */
+  .bo-badge--type {
+    --bo-badge-bg: var(--bo-color-text-primary);
+    --bo-badge-fg: var(--bo-color-bg-surface);
+    border-radius: var(--bo-radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: var(--bo-font-weight-semibold);
+  }
+
   @media print {
     .bo-badge {
       background: none;

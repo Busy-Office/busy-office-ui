@@ -56,6 +56,8 @@ const PAIRS = [
   ['--bo-color-text-muted', '--bo-color-bg-muted', 4.5],
   ['--bo-color-text-inverse', '--bo-color-accent-solid', 4.5],
   ['--bo-color-text-inverse', '--bo-color-danger-solid', 4.5],
+  ['--bo-color-bg-surface', '--bo-color-text-primary', 4.5], // inverted type chip
+
   ['--bo-color-accent-text', '--bo-color-accent-subtle', 4.5],
   ['--bo-color-danger-text', '--bo-color-danger-subtle', 4.5],
   ['--bo-color-warning-text', '--bo-color-warning-subtle', 4.5],

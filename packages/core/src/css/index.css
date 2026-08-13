@@ -23,5 +23,6 @@
 @import "./components/dashboard/dashboard.css";
 @import "./components/approval-workflow/approval-workflow.css";
 @import "./components/stepper/stepper.css";
+@import "./components/record-card/record-card.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

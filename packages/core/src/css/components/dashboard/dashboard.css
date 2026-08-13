@@ -57,6 +57,24 @@
     padding: 0;
   }
 
+  /* Band footer: a persistent strip carrying either workflow STATE (--msg) or
+     the record's ACTIONS. The counterpart to __header; used by record/approval
+     cards so decision history lives in a durable band, not a buried note. */
+  .bo-widget__band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-3) var(--bo-space-4);
+    border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+    background: var(--bo-color-bg-muted);
+  }
+
+  .bo-widget__band--msg {
+    color: var(--bo-color-text-secondary);
+    font-size: var(--bo-font-size-sm);
+  }
+
   /* Collapse span-2 when the GRID drops below two columns (2 x 20rem min
      + 1rem gap = 41rem) — otherwise span 2 in a 1-column auto-fill grid
      forces a phantom implicit track. */

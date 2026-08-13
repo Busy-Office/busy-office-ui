@@ -55,9 +55,26 @@
     --bo-btn-bg-hover: var(--bo-color-danger-strong);
   }
 
+  /* Ghost destructive action (Reject/Delete beside a solid primary) — danger
+     ink on transparent, so it reads as destructive without competing with the
+     primary button's weight. */
+  .bo-btn--danger-ghost {
+    --bo-btn-bg: transparent;
+    --bo-btn-bg-hover: var(--bo-color-danger-subtle);
+    --bo-btn-fg: var(--bo-color-danger-text);
+  }
+
   .bo-btn--icon {
     --bo-btn-padding-x: 0;
     inline-size: var(--bo-btn-height);
+  }
+
+  /* Small size: quieter affordances (row/inline actions, reorder controls).
+     Height stays a min-height and above the 1.5rem target floor. */
+  .bo-btn--sm {
+    --bo-btn-height: 1.5rem;
+    --bo-btn-padding-x: var(--bo-space-2);
+    font-size: var(--bo-font-size-xs);
   }
 
   /* Loading state: JS or HTMX flips the attribute; CSS does the rest. */
