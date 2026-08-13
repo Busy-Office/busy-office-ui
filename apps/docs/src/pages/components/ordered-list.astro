@@ -1,0 +1,73 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const markup = `<!-- default: mono, for codes/amounts -->
+<ol class="bo-ordered-list">
+  <li>SKU-3391 · Standing desk (×4)</li>
+  <li>SKU-1180 · Monitor arm (×8)</li>
+</ol>
+
+<!-- --plain: prose items -->
+<ol class="bo-ordered-list bo-ordered-list--plain">
+  <li>Line manager</li>
+  <li>Finance department</li>
+</ol>
+
+<!-- __actions: optional per-row controls (wire them yourself) -->
+<li>SKU-3391 · Standing desk (×4)
+  <span class="bo-ordered-list__actions">
+    <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move Standing desk up">↑</button>
+    <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove Standing desk">×</button>
+  </span>
+</li>`;
+---
+<Gallery title="Ordered list">
+  <p class="demo-note">
+    A native <code>&lt;ol&gt;</code> of items — line items, an approval route, release
+    steps, ranked entries. Order is real semantics; the number is the list marker, not
+    CSS content, so it survives copy and screen readers. One component, driven by
+    settings.
+  </p>
+
+  <section class="demo">
+    <h2>Default — codes &amp; amounts (mono, tabular)</h2>
+    <ol class="bo-ordered-list">
+      <li>SKU-3391 · Standing desk (×4)</li>
+      <li>SKU-1180 · Monitor arm (×8)</li>
+      <li>SKU-2205 · Desk lamp (×4)</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2><code>--plain</code> — prose items</h2>
+    <ol class="bo-ordered-list bo-ordered-list--plain">
+      <li>Line manager</li>
+      <li>Finance department</li>
+      <li>Chief Financial Officer</li>
+    </ol>
+    <p class="bo-u-text-muted">Drops the monospace so named steps read as words, not code.</p>
+  </section>
+
+  <section class="demo">
+    <h2><code>__actions</code> — editable rows (reorder / remove)</h2>
+    <ol class="bo-ordered-list">
+      <li>SKU-3391 · Standing desk (×4)<span class="bo-ordered-list__actions"><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move Standing desk down">↓</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove Standing desk">×</button></span></li>
+      <li>SKU-1180 · Monitor arm (×8)<span class="bo-ordered-list__actions"><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move Monitor arm up">↑</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move Monitor arm down">↓</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove Monitor arm">×</button></span></li>
+      <li>SKU-2205 · Desk lamp (×4)<span class="bo-ordered-list__actions"><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move Desk lamp up">↑</button><button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove Desk lamp">×</button></span></li>
+    </ol>
+    <p class="bo-u-text-muted">The <code>↑↓×</code> buttons are inert markup — bind the
+    reorder/remove in your app or HTMX. Each carries a row-specific
+    <code>aria-label</code>.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+  <ApiTable component="ordered-list"
+    notes={['Native <code>&lt;ol&gt;</code> — order is real semantics; the marker is the number, not CSS content.',
+            'Default is monospace for codes/amounts; add <code>--plain</code> for prose.',
+            'Row action buttons are inert markup — wire reorder/remove yourself; give each a row-specific aria-label.']} />
+  <Related links={[["/components/byline", "Byline"], ["/components/badge", "Badge"], ["/patterns/record-detail", "Record detail pattern"]]} />
+</Gallery>

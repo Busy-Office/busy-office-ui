@@ -1,0 +1,21 @@
+@layer bo-components {
+  /* Byline: an author · role · timestamp provenance line — for a record
+     header, a comment, a feed item, an audit note. Name is emphasis ink;
+     the rest is secondary. Domain-neutral; plain markup, one class. */
+  .bo-byline {
+    font-size: var(--bo-font-size-sm);
+    color: var(--bo-color-text-secondary);
+    min-inline-size: 0;
+  }
+
+  .bo-byline strong,
+  .bo-byline b {
+    color: var(--bo-color-text-primary);
+    font-weight: var(--bo-font-weight-medium);
+  }
+
+  /* --compact: xs, for dense feeds and table cells. */
+  .bo-byline--compact {
+    font-size: var(--bo-font-size-xs);
+  }
+}

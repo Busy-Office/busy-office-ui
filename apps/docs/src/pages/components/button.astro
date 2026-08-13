@@ -11,7 +11,19 @@ import ApiTable from '../../components/ApiTable.astro';
       <button class="bo-btn bo-btn--secondary">Secondary</button>
       <button class="bo-btn bo-btn--ghost">Ghost</button>
       <button class="bo-btn bo-btn--danger">Danger</button>
+      <button class="bo-btn bo-btn--danger-ghost">Reject</button>
       <button class="bo-btn bo-btn--icon" aria-label="Settings">⚙</button>
+    </div>
+    <p class="bo-u-text-muted"><code>--danger-ghost</code> is a destructive action
+    that sits beside a solid primary without competing with it (Approve / Reject).</p>
+  </section>
+  <section class="demo">
+    <h2>Sizes</h2>
+    <div class="bo-cluster">
+      <button class="bo-btn">Default</button>
+      <button class="bo-btn bo-btn--sm">Small</button>
+      <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move up">↑</button>
+      <span>← <code>--sm</code> is a 24px control (the WCAG target floor) for inline / row actions.</span>
     </div>
   </section>
   <section class="demo">

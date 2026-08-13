@@ -1,0 +1,39 @@
+@layer bo-components {
+  /* Ordered list: a native <ol> of items — line items, approval route, release
+     steps, ranked entries. Order is real semantics; the number is the list
+     marker (not CSS content) so it survives copy and assistive tech.
+
+     Settings:
+     - default: mono + tabular figures, for codes/amounts (SKU-3391, $4,208.00)
+     - --plain: prose items (named steps/people), drops the mono
+     - __actions: optional per-row reorder/remove group (pair with
+       .bo-btn--sm --ghost --icon; the buttons are inert markup — wire the
+       reorder/remove in your app or HTMX). */
+  .bo-ordered-list {
+    margin: 0;
+    padding-inline-start: 1.75rem;
+  }
+
+  .bo-ordered-list > li {
+    font-family: var(--bo-font-mono);
+    font-size: var(--bo-font-size-sm);
+    font-variant-numeric: tabular-nums;
+    padding-block: 0.15rem;
+  }
+
+  .bo-ordered-list--plain > li {
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .bo-ordered-list > li::marker {
+    color: var(--bo-color-text-muted);
+  }
+
+  .bo-ordered-list__actions {
+    display: inline-flex;
+    gap: var(--bo-space-1);
+    margin-inline-start: var(--bo-space-2);
+    vertical-align: middle;
+  }
+}

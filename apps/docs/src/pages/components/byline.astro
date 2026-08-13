@@ -1,0 +1,33 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester · 10 Aug 2026</span>`;
+---
+<Gallery title="Byline">
+  <p class="demo-note">
+    An author · role · timestamp provenance line — for a record header, a comment, a
+    feed item, an audit note. The name is emphasis ink; the rest is secondary. One
+    class, plain markup, domain-neutral.
+  </p>
+
+  <section class="demo">
+    <h2>Default</h2>
+    <p><span class="bo-byline"><strong>R. Vance</strong> · Requester · 10 Aug 2026, 9:08</span></p>
+    <p><span class="bo-byline"><strong>J. Kim</strong> · Cost-centre manager</span></p>
+  </section>
+
+  <section class="demo">
+    <h2><code>--compact</code> — dense feeds &amp; table cells</h2>
+    <p><span class="bo-byline bo-byline--compact"><strong>M. Okafor</strong> · Warehouse · 13 Aug</span></p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+  <ApiTable component="byline"
+    notes={['Just markup + one class — wrap the name in <code>&lt;strong&gt;</code> for emphasis ink.',
+            'Pairs with a record-type chip (<code>.bo-badge--type</code>) in a widget header — see the record-detail pattern.']} />
+  <Related links={[["/components/badge", "Badge"], ["/components/ordered-list", "Ordered list"], ["/patterns/record-detail", "Record detail pattern"]]} />
+</Gallery>

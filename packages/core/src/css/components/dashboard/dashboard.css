@@ -68,11 +68,29 @@
     padding: var(--bo-space-3) var(--bo-space-4);
     border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
     background: var(--bo-color-bg-muted);
+    /* Inherit the card's bottom radius so the muted fill doesn't paint square
+       corners past the rounded border (same fix as .bo-dialog__footer). */
+    border-end-start-radius: inherit;
+    border-end-end-radius: inherit;
   }
 
   .bo-widget__band--msg {
     color: var(--bo-color-text-secondary);
     font-size: var(--bo-font-size-sm);
+  }
+
+  /* Record-header layout: when a widget header holds a record-type chip
+     (.bo-badge--type), pack left, let the byline flex, and push a single
+     trailing status badge to the end. Scoped by :has() so plain dashboard
+     widgets (title + one action, space-between) are untouched. Markup
+     contract: the status badge is the last child; use at most one. */
+  .bo-widget__header:has(.bo-badge--type) {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .bo-widget__header:has(.bo-badge--type) > .bo-badge:last-child:not(.bo-badge--type) {
+    margin-inline-start: auto;
   }
 
   /* Collapse span-2 when the GRID drops below two columns (2 x 20rem min

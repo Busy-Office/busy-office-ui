@@ -1,0 +1,75 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: record detail">
+  <p class="demo-note">
+    The composed detail screen behind any list row: record cards, a status timeline,
+    and an audit trail stacked in a feed — all standard components, generic to any ERP.
+    This example is a purchase order; the shape is the same for an invoice, a change
+    request, or a leave request.
+  </p>
+
+  <section class="demo">
+    <div class="bo-grid" style="--bo-grid-min: 20rem">
+      <!-- Left: the record feed -->
+      <div class="bo-stack">
+        <article class="bo-widget">
+          <header class="bo-widget__header">
+            <span class="bo-badge bo-badge--type">Purchase Order #4021</span>
+            <span class="bo-byline"><strong>R. Vance</strong> · Requester</span>
+            <span class="bo-badge bo-badge--success">Approved</span>
+          </header>
+          <div class="bo-widget__body">
+            <ol class="bo-ordered-list"><li>SKU-3391 · Standing desk (×4)</li><li>SKU-1180 · Monitor arm (×8)</li></ol>
+          </div>
+          <footer class="bo-widget__band bo-widget__band--msg">Approved by J. Kim · 12 Aug 2026, 10:15</footer>
+        </article>
+
+        <article class="bo-widget">
+          <header class="bo-widget__header">
+            <span class="bo-badge bo-badge--type">Goods Receipt #GR-88</span>
+            <span class="bo-byline"><strong>M. Okafor</strong> · Warehouse</span>
+            <span class="bo-badge bo-badge--warning">Partial</span>
+          </header>
+          <div class="bo-widget__body">
+            <ol class="bo-ordered-list"><li>SKU-3391 · 4 of 4 received</li><li>SKU-1180 · 5 of 8 received</li></ol>
+          </div>
+          <footer class="bo-widget__band bo-widget__band--msg">Awaiting the remaining 3 monitor arms.</footer>
+        </article>
+
+        <!-- Trailing composer: the empty card IS the create form -->
+        <article class="bo-widget">
+          <header class="bo-widget__header"><span class="bo-badge bo-badge--type">Add record</span></header>
+          <div class="bo-widget__body bo-cluster">
+            <input class="bo-input" aria-label="Add a record to this order" placeholder="New goods receipt, invoice, or note…" />
+            <button class="bo-btn bo-btn--secondary">Add</button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Right: status + audit -->
+      <div class="bo-stack">
+        <div>
+          <h2 style="font-size: var(--bo-font-size-sm); color: var(--bo-color-text-muted)">Status</h2>
+          <ol class="bo-timeline" role="list">
+            <li class="bo-timeline__step" data-state="done"><span class="bo-timeline__marker" aria-hidden="true">✓</span><div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Requested</div><div class="bo-timeline__meta">R. Vance · 10 Aug</div></div></li>
+            <li class="bo-timeline__step" data-state="done"><span class="bo-timeline__marker" aria-hidden="true">✓</span><div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Approved</div><div class="bo-timeline__meta">J. Kim · 12 Aug</div></div></li>
+            <li class="bo-timeline__step" data-state="current" aria-current="step"><span class="bo-timeline__marker" aria-hidden="true">●</span><div><div class="bo-timeline__title">Receiving</div><div class="bo-timeline__meta">partial · 5 of 8</div></div></li>
+            <li class="bo-timeline__step" data-state="pending"><span class="bo-timeline__marker" aria-hidden="true">4</span><div><div class="bo-timeline__title"><span class="bo-visually-hidden">Not started: </span>Invoiced</div></div></li>
+          </ol>
+        </div>
+        <div>
+          <h2 style="font-size: var(--bo-font-size-sm); color: var(--bo-color-text-muted)">Audit trail</h2>
+          <ol class="bo-audit" role="list">
+            <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-10T09:08">08-10 09:08</time><span><span class="bo-audit__actor">R. Vance</span> raised PO-4021</span></li>
+            <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-12T10:15">08-12 10:15</time><span><span class="bo-audit__actor">J. Kim</span> approved</span><span class="bo-audit__detail">"Within CC-4021 budget."</span></li>
+            <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-13T14:02">08-13 14:02</time><span><span class="bo-audit__actor">M. Okafor</span> received 5 of 8 monitor arms</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+  <Related links={[["/components/ordered-list", "Ordered list"], ["/components/byline", "Byline"], ["/components/approval-workflow", "Timeline & audit"], ["/patterns/approval", "Approval workflow"], ["/patterns/invoice-list", "Invoice list"]]} />
+</Gallery>

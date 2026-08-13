@@ -108,6 +108,24 @@ const statMarkup = `<div class="bo-widget">
     </div>
   </section>
   <section class="demo">
+    <h2>Widget parts — header, body, band</h2>
+    <p>A widget is <code>__header</code> / <code>__body</code> / <code>__band</code>.
+    The band footer carries a status message (<code>--msg</code>) or actions — one
+    durable strip. This is what record and approval cards are built from.</p>
+    <div class="bo-widget-grid" style="--bo-widget-min: 15rem">
+      <article class="bo-widget">
+        <header class="bo-widget__header"><span class="bo-widget__title">Actions band</span></header>
+        <div class="bo-widget__body">Body content.</div>
+        <footer class="bo-widget__band"><button class="bo-btn">Approve</button><button class="bo-btn bo-btn--danger-ghost">Reject</button></footer>
+      </article>
+      <article class="bo-widget">
+        <header class="bo-widget__header"><span class="bo-widget__title">Message band</span></header>
+        <div class="bo-widget__body">Body content.</div>
+        <footer class="bo-widget__band bo-widget__band--msg">Approved by J. Kim · 12 Aug 2026</footer>
+      </article>
+    </div>
+  </section>
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{statMarkup}</code></pre>
   </section>
