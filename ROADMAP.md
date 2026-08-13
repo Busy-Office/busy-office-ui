@@ -128,6 +128,17 @@ starts.
 - [ ] Slice-4 continuation — avatar byline, collapsible cards, a real `.bo-composer`,
       skeleton/empty/loading states.
 - [ ] Saved-view persistence; multi-column detail-form patterns.
+- [ ] **Data-table ARIA grid pattern** (graduated from an Explore spike, 2026-08-14) —
+      keyboard row navigation for dense tables is a real ERP need, but it needs the
+      full WAI-ARIA APG "Grid" pattern (`role="grid"`/`"row"`/`"gridcell"`,
+      `aria-rowindex`/`aria-colindex`, two-axis roving tabindex, `aria-selected`
+      wired to the existing row-select checkboxes) — NOT a quick roving-tabindex
+      hack on a plain `<table>`. The spike proved the mechanics work (j/k moves
+      focus, Enter fires an activate event) but a plain table's implicit
+      `role="row"`/`"cell"` semantics conflict with screen-reader browse-mode table
+      navigation once you hijack Tab order onto one row — AT users would lose
+      native per-cell/column-header association. Scope as its own milestone with
+      an a11y-runtime verification pass (VoiceOver/NVDA), not a one-tick add-on.
 
 ## Long term (post-1.0)
 

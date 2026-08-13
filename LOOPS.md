@@ -119,7 +119,11 @@ The markdown/jsonl files are the source of truth; rebuild the DB any time with
 ## Ideas backlog (for Explore)
 
 Seed list — Explore pulls from here or adds to it:
-- Keyboard-driven row actions (j/k navigation on dense tables).
+- ~~Keyboard-driven row actions (j/k navigation on dense tables)~~ — spiked
+  2026-08-14, mechanics work but a plain `<table>` can't safely take roving
+  tabindex without breaking screen-reader table browse mode. Graduated as a
+  real milestone (ARIA grid pattern) in ROADMAP.md — don't re-spike the naive
+  version; the next attempt starts from `role="grid"`, not a `<table>` hack.
 - Skeleton / empty / error states as a first-class component set.
 - A `.bo-composer` (comment + action) for approval threads.
 - Inline validation summary that scrolls to the first bad field.
