@@ -104,7 +104,9 @@ starts.
    - [x] **busy-office-ui logo** — inline SVG ledger-record mark (rounded frame +
          rows, last short); currentColor + accent token → theme-aware teal, legible at
          16px; in the docs + landing navbar brand. `.bo-navbar__brand` made a flex row.
-   - [ ] **favicon** — derived from the logo (ledger-record mark).
+   - [x] **favicon** — `public/favicon.svg`, the ledger-record mark in a filled/inverse
+         treatment (teal ground `#0f766e`, light rows) so it reads at 16px in a tab;
+         linked (base-aware) in both docs + landing heads. Verified served + rendered.
 8. [ ] **Section-by-section docs simplicity pass** (ongoing) — walk each doc section,
        cut anything more complex than a first-time user needs, verify in the container.
 
@@ -121,6 +123,24 @@ starts.
 - [ ] Saved-view persistence; multi-column detail-form patterns.
 
 ## Long term (post-1.0)
+
+Highest-leverage bets (2026-08-14 review — ranked):
+
+- [ ] **Scaffold generator + page-shape gate** *(top pick)* — `npm run new:component
+      <name>` stamps the CSS file, the `@import`, the docs-page skeleton, the sidebar
+      entry, and a stub test in one command; plus a build gate that FAILS a component
+      page missing its `ClassRef` / `ApiTable` / `Related`. Turns the CLAUDE.md "how to
+      document" prose into something that can't be gotten wrong — the same
+      generate-and-gate discipline that already makes the docs trustworthy, applied to
+      page structure. Compounds: every future component (or loop iteration) gets cheaper
+      and more consistent. Do this before 1.0.
+- [ ] **1.0 exit checklist, then ship** — the real risk isn't technical, it's that
+      "owner-gated on *perfect*" never resolves. Write a short, checkable list (N
+      components, a11y ledger cleared, API frozen, ≥1 real consumer), hit it, publish
+      1.0, iterate under semver. Perfection is the enemy of adoption.
+- [ ] **Real ERP pilot (dogfood)** — build one real back-office screen (an approval
+      queue, a PO form) with the framework and feel where it fights. The only test of
+      "good for hundreds of ERP screens" that synthetic demos + grills can't give.
 
 - [ ] **Framework adapters** (`integrations/`) — a Vite plugin for à-la-carte imports,
       a thin React/Vue wrapper set, a Rails/Django asset recipe. Opt-in, never a core
