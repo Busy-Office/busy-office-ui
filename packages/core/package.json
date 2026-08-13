@@ -15,6 +15,7 @@
     "./css/primitives": "./dist/css/primitives.css",
     "./css/components/*": "./dist/css/components/*.css",
     "./css/htmx": "./dist/css/htmx.css",
+    "./css/motion": "./dist/css/motion.css",
     "./css/*": "./dist/css/*.css",
     "./api": "./dist/api.json",
     "./contrast": "./dist/contrast.json",

@@ -98,6 +98,12 @@ utilSets.classes = new Set(
 );
 api.utilities = shape(utilSets);
 
+// Motion module: opt-in, never in index.css, so it gets its own section
+// rather than folding into api.utilities (which the class index attributes
+// to base/utilities).
+const motionSets = await analyze([join(srcCss, 'motion/motion.css')]);
+api.motion = shape(motionSets);
+
 // Global class index: class -> owning page slug. Docs page slugs differ from
 // CSS dir names in one case (site-grill S-2); gen-llms.mjs asserts every slug
 // resolves to a built page.
@@ -110,6 +116,7 @@ for (const [, p] of Object.entries(api.primitives)) for (const cls of p.classes)
 for (const [name, c] of Object.entries(api.components))
   for (const cls of c.classes) index[cls] ??= `components/${PAGE_SLUG[name] ?? name}`;
 for (const cls of api.utilities.classes) index[cls] ??= 'base/utilities';
+for (const cls of api.motion.classes) index[cls] ??= 'base/motion';
 api.index = index;
 
 await mkdir(join(pkgRoot, 'dist'), { recursive: true });

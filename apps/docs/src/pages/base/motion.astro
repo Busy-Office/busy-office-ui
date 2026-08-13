@@ -1,0 +1,132 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import api from '@busy-office/ui/api';
+const classes = api.motion.classes;
+const DESC: Record<string, string> = {
+  'bo-motion-fade-in': 'opacity 0 → 1 on mount',
+  'bo-motion-fade-out': 'opacity 1 → 0, then gone',
+  'bo-motion-scale-in': 'fade + a subtle 0.96 → 1 scale — menu/popover entrance',
+  'bo-motion-slide-in-inline-start': 'fade + slide from the start edge',
+  'bo-motion-slide-in-block-start': 'fade + slide from the top — toast entrance',
+  'bo-motion-collapse': 'expand/collapse via grid-template-rows; toggle data-state="open"',
+  'bo-motion-pulse-once': 'a single background flash — "this row just changed"',
+  'bo-motion-spin': 'continuous rotation for loading indicators',
+};
+const entranceMarkup = `<div class="bo-motion-fade-in">fade-in</div>
+<div class="bo-motion-scale-in">scale-in</div>
+<div class="bo-motion-slide-in-inline-start">slide-in-inline-start</div>
+<div class="bo-motion-slide-in-block-start">slide-in-block-start</div>`;
+const collapseMarkup = `<button class="bo-btn bo-btn--secondary" id="collapse-toggle" aria-expanded="false" aria-controls="collapse-demo">Toggle</button>
+<div class="bo-motion-collapse" id="collapse-demo" data-state="closed">
+  <div>Collapsible content — height animates via grid-template-rows, no JS measurement.</div>
+</div>`;
+const pulseMarkup = `<button class="bo-btn bo-btn--secondary" id="pulse-trigger">Simulate update</button>
+<div class="bo-motion-pulse-once" id="pulse-demo">Row total: $12,400.00</div>`;
+const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <span aria-live="polite">Loading…</span>`;
+---
+<Gallery title="Motion">
+  <p class="demo-note">
+    Opt-in, functional animations — not a decorative Animate.css clone. Import
+    separately: <code>@busy-office/ui/css/motion</code>. Never in the default
+    bundle. Every duration comes from the <code>--bo-motion-duration-*</code> tokens,
+    already zeroed under <code>prefers-reduced-motion</code>, so every class here is
+    reduced-motion-safe with no extra markup.
+  </p>
+  <section class="demo">
+    <h2>Quick reference <span class="bo-badge">generated</span></h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Class</th><th scope="col">Does</th></tr></thead>
+        <tbody>
+          {classes.map((c: string) => (
+            <tr>
+              <td class="bo-data-table__col--code">.{c}</td>
+              <td class="bo-u-text-muted">{DESC[c] ?? '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Entrance</h2>
+    <p class="bo-u-text-muted">Play once on mount. Click Replay to see them again.</p>
+    <div class="bo-cluster" id="entrance-demo" style="--bo-cluster-gap: var(--bo-space-4)">
+      <div class="bo-motion-fade-in">fade-in</div>
+      <div class="bo-motion-scale-in">scale-in</div>
+      <div class="bo-motion-slide-in-inline-start">slide-in-inline-start</div>
+      <div class="bo-motion-slide-in-block-start">slide-in-block-start</div>
+    </div>
+    <button class="bo-btn bo-btn--sm bo-btn--secondary" id="entrance-replay" type="button">Replay</button>
+    <pre><code>{entranceMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2><code>--collapse</code> — expand/collapse</h2>
+    <p class="bo-u-text-muted">
+      Toggle <code>data-state="open"</code>/<code>"closed"</code> — the same
+      convention dialog/offcanvas already use. Pure CSS: no JS height measurement.
+    </p>
+    <button class="bo-btn bo-btn--secondary" id="collapse-toggle" aria-expanded="false" aria-controls="collapse-demo" type="button">Toggle</button>
+    <div class="bo-motion-collapse" id="collapse-demo" data-state="closed">
+      <div>Collapsible content — height animates via grid-template-rows, no JS measurement.</div>
+    </div>
+    <pre><code>{collapseMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Pulse-once — "this just changed"</h2>
+    <p class="bo-u-text-muted">
+      Generalizes the HTMX settle flash (<a href="/getting-started/htmx">Using with
+      HTMX</a>) for any element, not just HTMX swaps.
+    </p>
+    <button class="bo-btn bo-btn--secondary" id="pulse-trigger" type="button">Simulate update</button>
+    <div id="pulse-demo" style="padding: var(--bo-space-2) 0">Row total: $12,400.00</div>
+    <pre><code>{pulseMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Spin — loading indicator</h2>
+    <p class="bo-u-text-muted">
+      Continuous, so it isn't token-duration-driven — guarded by an explicit
+      <code>prefers-reduced-motion</code> override instead (stops rotating;
+      <code>aria-live</code> on the label is the programmatic channel either way).
+    </p>
+    <span class="bo-motion-spin" aria-hidden="true" style="display: inline-block; font-size: 1.5rem">⟳</span>
+    <span aria-live="polite">Loading…</span>
+    <pre><code>{spinMarkup}</code></pre>
+  </section>
+  <Related links={[
+    ["/concepts/accessibility", "Accessibility model"],
+    ["/getting-started/htmx", "Using with HTMX"],
+    ["/base/utilities", "Utilities"],
+  ]} />
+</Gallery>
+<script>
+  // Replay: forcing a reflow between removing and re-adding the class
+  // restarts the CSS animation (the standard no-JS-animation-lib trick).
+  const replayBtn = document.getElementById('entrance-replay');
+  const entranceItems = document.querySelectorAll('#entrance-demo > *');
+  replayBtn?.addEventListener('click', () => {
+    for (const el of entranceItems) {
+      const cls = [...el.classList].filter((c) => c.startsWith('bo-motion-'));
+      el.classList.remove(...cls);
+      void (el as HTMLElement).offsetWidth;
+      el.classList.add(...cls);
+    }
+  });
+
+  const collapseToggle = document.getElementById('collapse-toggle');
+  const collapseDemo = document.getElementById('collapse-demo');
+  collapseToggle?.addEventListener('click', () => {
+    const open = collapseDemo?.dataset.state === 'open';
+    if (collapseDemo) collapseDemo.dataset.state = open ? 'closed' : 'open';
+    collapseToggle.setAttribute('aria-expanded', String(!open));
+  });
+
+  const pulseTrigger = document.getElementById('pulse-trigger');
+  const pulseDemo = document.getElementById('pulse-demo');
+  pulseTrigger?.addEventListener('click', () => {
+    pulseDemo?.classList.remove('bo-motion-pulse-once');
+    void (pulseDemo as HTMLElement)?.offsetWidth;
+    pulseDemo?.classList.add('bo-motion-pulse-once');
+  });
+</script>

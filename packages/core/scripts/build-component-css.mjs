@@ -4,6 +4,7 @@
  *  - dist/css/{tokens,reset,primitives}.css    (+ .min) — one layer each
  *  - dist/css/components/<name>.css            (+ .min) — component layer only
  *  - dist/css/htmx.css                         (+ .min)
+ *  - dist/css/motion.css                       (+ .min)
  *
  * À-la-carte files deliberately do NOT embed the token layer (that cost more
  * than the full bundle after ~3 imports). Import order contract, documented
@@ -86,5 +87,8 @@ for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter
 
 // 4. HTMX integration
 await build(`${layers}@import "${srcCss}/integrations/htmx.css";\n`, from, join(outCss, 'htmx.css'));
+
+// 5. Motion module (opt-in)
+await build(`${layers}@import "${srcCss}/motion/motion.css";\n`, from, join(outCss, 'motion.css'));
 
 console.log('CSS dist complete.');

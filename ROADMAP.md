@@ -91,11 +91,16 @@ starts.
        isn't visible, center it. Verified: deep item (Class index) scrolls to 1181 and
        shows; upper item re-centers to top; adjacent items keep position. Active is
        always in view.
-6. [ ] **Motion module** (opt-in, split — see the combine/split decision) — ship
-       `@busy-office/ui/css/motion`: a curated ~8–10 *functional* animations (fade,
-       slide, collapse, pulse-once) driven by the existing motion tokens and
-       reduced-motion-guarded, NOT a decorative Animate.css clone. Core keeps the
-       mechanics (tokens + state transitions) it already has.
+6. [x] **Motion module** (opt-in, split) — shipped `@busy-office/ui/css/motion`
+       (`src/css/motion/motion.css`, `@layer bo-utilities`, never in the default
+       bundle): 8 functional animations (fade-in/out, scale-in, slide-in ×2,
+       collapse via grid-template-rows + the existing `data-state` convention,
+       pulse-once generalizing the htmx settle flash, spin). All duration-token-driven
+       so `prefers-reduced-motion` zeroes them automatically; spin gets an explicit
+       override since it's continuous. Docs page `/base/motion` — generated quick-ref
+       (extended `extract-api.mjs` with an `api.motion` section) + 3 live interactive
+       demos (replay, collapse toggle, pulse trigger). Verified live: light + dark,
+       toggle/pulse confirmed via DOM state, all gates green, 11 tests pass.
 7. Visual identity cluster (palette → logo → favicon):
    - [x] **Brand palette** — the "Ledger" teal accent (deep teal-green, ledger ink)
          replaces generic blue as the default identity. Teal scale added; accent family

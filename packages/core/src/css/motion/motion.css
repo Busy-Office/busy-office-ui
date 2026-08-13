@@ -1,0 +1,93 @@
+/* Opt-in motion module: a curated set of FUNCTIONAL animations (entrance,
+   exit, expand/collapse, "this changed" feedback) — not a decorative
+   Animate.css clone. Never imported by index.css — add via
+   @busy-office/ui/css/motion. Core keeps the mechanics (state-transition
+   tokens, the htmx settle flash) it already has; this module is for markup
+   that opts a specific element into one of these effects by class or
+   data-state.
+
+   Every duration comes from the --bo-motion-duration-* tokens, which are
+   already zeroed under prefers-reduced-motion (tokens/motion.css) — so every
+   class below is reduced-motion-safe with no extra work, except the two
+   infinite/looping effects (spin, pulse-once uses a finite run so it's
+   covered), which get an explicit override below. */
+@layer bo-utilities {
+  .bo-motion-fade-in {
+    animation: bo-motion-fade-in var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+  @keyframes bo-motion-fade-in {
+    from { opacity: 0; }
+  }
+
+  .bo-motion-fade-out {
+    animation: bo-motion-fade-out var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+  @keyframes bo-motion-fade-out {
+    to { opacity: 0; }
+  }
+
+  .bo-motion-scale-in {
+    animation: bo-motion-scale-in var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+  @keyframes bo-motion-scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+  }
+
+  .bo-motion-slide-in-inline-start {
+    animation: bo-motion-slide-in-inline-start var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+  @keyframes bo-motion-slide-in-inline-start {
+    from { opacity: 0; transform: translateX(-0.5rem); }
+  }
+
+  .bo-motion-slide-in-block-start {
+    animation: bo-motion-slide-in-block-start var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+  @keyframes bo-motion-slide-in-block-start {
+    from { opacity: 0; transform: translateY(-0.5rem); }
+  }
+
+  /* Expand/collapse via the grid-template-rows 0fr/1fr technique — no JS
+     height measurement needed. The child needs min-block-size: 0 or the
+     grid track can't shrink past its content. Toggle with the framework's
+     existing data-state="open"/"closed" convention (same as dialog/offcanvas). */
+  .bo-motion-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows var(--bo-motion-duration-slow) var(--bo-motion-easing-standard);
+  }
+  .bo-motion-collapse > * {
+    min-block-size: 0;
+    overflow: hidden;
+  }
+  .bo-motion-collapse[data-state="open"] {
+    grid-template-rows: 1fr;
+  }
+
+  /* "This just changed" feedback — a background flash, e.g. after a row
+     updates via HTMX or a live patch. Generalizes the htmx-settle flash
+     (integrations/htmx.css) for any element, not just htmx swaps. */
+  .bo-motion-pulse-once {
+    animation: bo-motion-pulse calc(var(--bo-motion-duration-slow) * 2) var(--bo-motion-easing-standard);
+  }
+  @keyframes bo-motion-pulse {
+    from { background-color: var(--bo-color-accent-subtle); }
+  }
+
+  /* Continuous loading spinner. Not token-duration-driven (a spinner's rate
+     isn't a one-shot transition) — reduced-motion is guarded explicitly
+     below instead of via the duration tokens. */
+  .bo-motion-spin {
+    animation: bo-motion-spin 1s linear infinite;
+  }
+  @keyframes bo-motion-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bo-motion-spin {
+      animation: none;
+    }
+  }
+}
