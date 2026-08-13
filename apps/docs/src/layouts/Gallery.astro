@@ -82,6 +82,7 @@ const current =
   <body>
     <div class="bo-app-shell">
       <header class="bo-navbar bo-app-shell__header">
+        <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>
         <a class="bo-navbar__brand" href={base + '/'}>busy-office-ui</a>
         <span class="bo-badge bo-badge--accent">v0.1.0</span>
         <span class="bo-navbar__spacer"></span>
@@ -120,6 +121,24 @@ const current =
           </div>
         ))}
       </nav>
+      <dialog class="bo-offcanvas docs-drawer" id="nav-drawer" data-state="closed" aria-label="Navigation">
+        <div class="bo-offcanvas__header">
+          <span class="bo-navbar__brand">Menu</span>
+          <form method="dialog"><button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button></form>
+        </div>
+        <nav class="bo-sidebar-nav" aria-label="Docs">
+          {sections.map((s) => (
+            <div class="bo-sidebar-nav__section">
+              <div class="bo-sidebar-nav__heading">{s.label}</div>
+              <ul>
+                {s.items.map((p) => (
+                  <li><a class="bo-sidebar-nav__link" href={base + p.href} aria-current={current === p.href ? 'page' : undefined}><span class="bo-sidebar-nav__label">{p.label}</span></a></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </dialog>
       <main class="bo-app-shell__main">
         <div class="docs-main">
           <div class="bo-stack bo-stack--loose docs-content">
@@ -144,6 +163,10 @@ const current =
       s.onload = () => new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
       s.onerror = () => document.getElementById('docsearch')?.remove();
       document.head.append(s);
+    </script>
+    <script>
+      import { initDialogs } from '@busy-office/ui/js';
+      initDialogs(); // the mobile nav drawer (off-canvas dialog)
     </script>
     <script>
       // On-this-page: slugify every content h2, make it an anchor target, and
@@ -260,6 +283,25 @@ const current =
   @media (max-width: 60rem) { .docs-main { grid-template-columns: 1fr; } .toc { display: none; } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   @media print { .toc { display: none; } }
+
+  /* Responsive nav: persistent sidebar on wide; a Menu button opening an
+     off-canvas drawer on narrow. Overrides the app-shell's icon-rail collapse,
+     which doesn't suit a labels-only docs nav. */
+  .docs-menu-btn { display: none; }
+  @media (max-width: 56rem) {
+    .docs-menu-btn { display: inline-flex; }
+    .bo-app-shell__sidebar { display: none; }
+    .bo-app-shell { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 56.01rem) { .docs-drawer { display: none; } }
+  .docs-drawer .bo-sidebar-nav { padding: var(--bo-space-2); overflow-y: auto; inline-size: 100%; }
+  /* The drawer lives inside the bo-shell container, so the sidebar's icon-rail
+     collapse hides its labels too — undo that inside the drawer. */
+  .docs-drawer .bo-sidebar-nav__label,
+  .docs-drawer .bo-sidebar-nav__heading {
+    position: static; inline-size: auto; block-size: auto; margin: 0;
+    overflow: visible; clip-path: none; white-space: normal; border: 0;
+  }
 
   /* Copy button, top-end of any code block. */
   .docs-content pre.has-copy { position: relative; }
