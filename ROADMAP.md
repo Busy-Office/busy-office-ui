@@ -57,11 +57,14 @@ starts.
       align to the header edges.
 
 **Queued (priority order)**
-1. [ ] **P0 — Dark-theme text visibility bug.** Text disappears on some surfaces in
-       dark mode. Root-cause: find colors set without a paired dark token, or
-       unlayered overrides escaping the theme. *Accept:* every text/background pair
-       renders in dark mode; add the offending pair(s) to the contrast gate so the
-       regression can't return.
+1. [x] **P0 — Dark-theme text visibility bug.** Diagnosed (browser contrast sweep,
+       37 pages): **no** persistent invisible text — steady-state dark is clean and
+       the contrast gate already guards `text-primary`/`bg-surface` in both themes.
+       The real defect was the **theme-switch transition flash**: `background-color`
+       animates on the flip while `color` snaps, so text sits on a still-light bg for
+       ~150ms (near-invisible → dark). Fixed with a `data-bo-theming` transition-freeze
+       utility (core) applied by the docs toggles; recipe documented in the theming
+       guide. Verified: guarded flip has `transition:none`, bg jumps to final, ratio 16.
 2. [ ] **ERP Amount field** — one settings-driven component: currency symbol/code,
        decimal precision, thousands grouping, right-aligned tabular figures,
        negative/credit treatment, and unit-of-measure (UOM) pairing (`4 × EA`,

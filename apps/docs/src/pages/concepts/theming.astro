@@ -51,6 +51,23 @@ const brandMarkup = `/* brand.css — imported AFTER the framework, outside any 
     <pre><code>{brandMarkup}</code></pre>
   </section>
   <section class="demo">
+    <h2>Switching themes at runtime</h2>
+    <p>Flip <code>data-theme</code> on the root. One catch: a component's
+    <code>background-color</code> transition animates on the switch while the text
+    <code>color</code> snaps instantly, so text can flash on a still-light background
+    (near-invisible going to dark). Freeze transitions for the one frame of the flip
+    with <code>data-bo-theming</code> (shipped in the utilities layer):</p>
+    <pre><code>{`function setTheme(value) {
+  const html = document.documentElement;
+  html.setAttribute('data-bo-theming', '');   // freeze transitions
+  html.dataset.theme = value;
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => html.removeAttribute('data-bo-theming')));
+}`}</code></pre>
+    <p class="bo-u-text-muted">Two frames: one to paint the new theme with transitions
+    off, the next to re-enable them. Hover/focus transitions are unaffected.</p>
+  </section>
+  <section class="demo">
     <h2>Versioning policy</h2>
     <p>Semantic tokens, documented class names, and <code>data-*</code>/ARIA contracts
     are the public API — breaking any of them is a major version. Component-internal

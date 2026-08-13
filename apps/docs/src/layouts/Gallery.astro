@@ -222,12 +222,21 @@ const current =
         document.documentElement.dataset.density = sel.value;
         localStorage.setItem('bo-density', sel.value);
       });
-      // Theme toggle: same shape — one attribute, one storage key.
+      // Theme toggle: same shape — one attribute, one storage key. The
+      // data-bo-theming guard freezes transitions for the frame of the flip so
+      // text doesn't flash on a mismatched (still-animating) background.
+      const html = document.documentElement;
+      const setTheme = (v: string) => {
+        html.setAttribute('data-bo-theming', '');
+        html.dataset.theme = v;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => html.removeAttribute('data-bo-theming')));
+      };
       const theme = document.getElementById('theme') as HTMLSelectElement;
       theme.value = localStorage.getItem('bo-theme') ?? 'light';
-      document.documentElement.dataset.theme = theme.value;
+      setTheme(theme.value);
       theme.addEventListener('change', () => {
-        document.documentElement.dataset.theme = theme.value;
+        setTheme(theme.value);
         localStorage.setItem('bo-theme', theme.value);
       });
     </script>

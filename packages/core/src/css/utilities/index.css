@@ -31,4 +31,16 @@
       display: none !important;
     }
   }
+
+  /* Theme-switch flash guard. On a theme flip the text `color` snaps to its new
+     value while any transitioned `background-color` animates from the old one —
+     leaving text briefly on a mismatched background (near-invisible switching to
+     dark). Set `data-bo-theming` on the root for one frame around the flip to
+     freeze transitions, then remove it. Recipe in the theming guide. */
+  [data-bo-theming],
+  [data-bo-theming] *,
+  [data-bo-theming] *::before,
+  [data-bo-theming] *::after {
+    transition: none !important;
+  }
 }

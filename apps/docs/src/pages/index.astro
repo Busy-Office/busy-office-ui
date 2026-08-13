@@ -307,8 +307,12 @@ const invoices = [
         table.dataset.density = density.value;
       });
       const theme = document.getElementById('hero-theme') as HTMLSelectElement;
+      const demo = document.querySelector('.hero__demo') as HTMLElement;
       theme.addEventListener('change', () => {
-        (document.querySelector('.hero__demo') as HTMLElement).dataset.theme = theme.value;
+        demo.setAttribute('data-bo-theming', '');   // freeze transitions for the flip
+        demo.dataset.theme = theme.value;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => demo.removeAttribute('data-bo-theming')));
       });
     </script>
   </body>
