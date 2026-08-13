@@ -107,8 +107,10 @@ starts.
    - [x] **favicon** — `public/favicon.svg`, the ledger-record mark in a filled/inverse
          treatment (teal ground `#0f766e`, light rows) so it reads at 16px in a tab;
          linked (base-aware) in both docs + landing heads. Verified served + rendered.
-8. [ ] **Section-by-section docs simplicity pass** (ongoing) — walk each doc section,
-       cut anything more complex than a first-time user needs, verify in the container.
+8. [x] **Section-by-section docs simplicity pass** — surveyed Getting Started, Core
+       Concepts, Base styles, all 17 component pages, and the 3 pattern pages;
+       simplified the genuinely-dense ones (Installation, Your first screen,
+       Versioning, js-behaviors) and left concise prose as-is elsewhere. Pass complete.
 
 ## Near term (pre-1.0)
 
