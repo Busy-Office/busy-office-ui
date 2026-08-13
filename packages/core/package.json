@@ -33,6 +33,7 @@
     "build:js": "tsc -p tsconfig.json",
     "build": "npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run check:contrast",
     "lint:css": "stylelint \"src/css/**/*.css\"",
+    "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
     "test": "vitest run"
   },

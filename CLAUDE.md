@@ -39,8 +39,9 @@ in sync. Query the mirror to steer prioritization.
   **stale image from cache** — confirm the served CSS actually contains your change
   (`curl …/_astro/*.css | grep <new-class>`) and rebuild with `--no-cache` if not,
   before trusting a screenshot.
-- Keep the six build gates green: named `@container`, contrast threshold **+ coverage**,
-  behaviors-vs-`.d.ts`, dist link resolution, stylelint naming, behavior tests.
+- Keep the seven build gates green: named `@container`, contrast threshold **+ coverage**,
+  behaviors-vs-`.d.ts`, dist link resolution, stylelint naming, behavior tests, page-shape
+  (every component docs page has its opener/`ClassRef`/demo/`ApiTable`/`Related`/sidebar entry).
 - Every documented surface is **generated** from the shipped artifact, not hand-written.
 - Every state signal is two-channel (visible non-color cue + programmatic).
 - Small & general over specific — compose existing primitives; one component, many
@@ -50,7 +51,10 @@ in sync. Query the mirror to steer prioritization.
 ## How to document a component (the recipe)
 
 Docs are **generated from the shipped CSS**, then wrapped in a fixed page skeleton.
-Never hand-write API/contrast tables. To add or document a component:
+Never hand-write API/contrast tables. `npm run new:component -w @busy-office/ui -- <name>`
+stamps steps 1-3 below (CSS file + import, docs page, sidebar entry) in one shot; the
+page-shape gate (build gate 7) then fails the build if the result drifts from this shape.
+To add or document a component manually:
 
 1. **Source of truth = the CSS.** `packages/core/src/css/components/<name>/<name>.css`,
    one `@layer bo-components` block: `.bo-<name>`, `__part`, `--modifier`. Add its

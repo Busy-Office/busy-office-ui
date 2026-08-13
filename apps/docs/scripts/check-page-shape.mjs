@@ -1,0 +1,74 @@
+/**
+ * Fails the build if a shipped component's docs page is missing, or missing
+ * a piece of the CLAUDE.md "how to document a component" skeleton (opener,
+ * ClassRef, a hand-authored demo section, ApiTable, a non-empty Related
+ * footer) or its sidebar entry. Turns that documented convention into
+ * something a page literally cannot violate — the roadmap's "scaffold
+ * generator + page-shape gate" pairing (new-component.mjs stamps the shape,
+ * this gate guards it).
+ */
+import { readFile, readdir } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const repoRoot = join(docsRoot, '..', '..');
+const coreRoot = join(repoRoot, 'packages/core');
+const pagesDir = join(docsRoot, 'src/pages/components');
+const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
+
+// Mirrors extract-api.mjs's PAGE_SLUG — keep in sync if that alias grows.
+const PAGE_SLUG = { alert: 'alerts' };
+
+const componentsDir = join(coreRoot, 'src/css/components');
+const dirs = (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory());
+const gallery = await readFile(galleryPath, 'utf8');
+
+const failures = [];
+let checked = 0;
+
+for (const d of dirs) {
+  const cssFileNames = (await readdir(join(componentsDir, d.name))).filter((f) => f.endsWith('.css'));
+  const cssBodies = await Promise.all(
+    cssFileNames.map((f) => readFile(join(componentsDir, d.name, f), 'utf8')),
+  );
+  // A component with no rules yet is a slice stub, not shipped — extract-api.mjs
+  // skips these too (`if (!sets.classes.size) continue`), so the docs can't
+  // exist yet either.
+  const hasRules = cssBodies.some((css) => /\.bo-[a-z0-9]/i.test(css));
+  if (!hasRules) continue;
+  checked++;
+
+  const slug = PAGE_SLUG[d.name] ?? d.name;
+  const pagePath = join(pagesDir, `${slug}.astro`);
+  let page;
+  try {
+    page = await readFile(pagePath, 'utf8');
+  } catch {
+    failures.push(`${d.name}: no docs page at apps/docs/src/pages/components/${slug}.astro`);
+    continue;
+  }
+
+  const checks = [
+    [/<Gallery[\s>]/, 'wraps its content in <Gallery>'],
+    [/class="demo-note"/, 'a one-line <p class="demo-note"> opener'],
+    [new RegExp(`<ClassRef\\s+component="${d.name}"`), `<ClassRef component="${d.name}" />`],
+    [/<section\s+class="demo"/, 'at least one hand-authored <section class="demo"> block'],
+    [new RegExp(`<ApiTable[\\s\\S]{0,40}?component="${d.name}"`), `<ApiTable component="${d.name}" ... />`],
+    [/<Related[\s\S]{0,10}?links=\{\[\s*\[/, 'a <Related> footer with at least one link'],
+  ];
+  for (const [re, desc] of checks) {
+    if (!re.test(page)) failures.push(`${slug}.astro: missing ${desc}`);
+  }
+
+  if (!gallery.includes(`href: '/components/${slug}'`)) {
+    failures.push(`${slug}.astro: no sidebar entry in Gallery.astro (Components group)`);
+  }
+}
+
+if (failures.length) {
+  console.error(`page-shape check FAILED (${failures.length}):`);
+  for (const f of failures) console.error('  ' + f);
+  process.exit(1);
+}
+console.log(`page-shape check passed: ${checked} component page(s) verified against the CLAUDE.md skeleton`);

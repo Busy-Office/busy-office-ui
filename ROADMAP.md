@@ -126,14 +126,14 @@ starts.
 
 Highest-leverage bets (2026-08-14 review — ranked):
 
-- [ ] **Scaffold generator + page-shape gate** *(top pick)* — `npm run new:component
-      <name>` stamps the CSS file, the `@import`, the docs-page skeleton, the sidebar
-      entry, and a stub test in one command; plus a build gate that FAILS a component
-      page missing its `ClassRef` / `ApiTable` / `Related`. Turns the CLAUDE.md "how to
-      document" prose into something that can't be gotten wrong — the same
-      generate-and-gate discipline that already makes the docs trustworthy, applied to
-      page structure. Compounds: every future component (or loop iteration) gets cheaper
-      and more consistent. Do this before 1.0.
+- [x] **Scaffold generator + page-shape gate** *(top pick)* — `npm run new:component
+      <name> [--behavior]` (packages/core/scripts/new-component.mjs) stamps the CSS
+      file + `@import`, the docs-page skeleton, the sidebar entry, and (with
+      `--behavior`) a stub test in one command; `apps/docs/scripts/check-page-shape.mjs`
+      is build gate 7, FAILING a component page missing its opener/`ClassRef`/demo/
+      `ApiTable`/non-empty `Related`/sidebar entry. Caught two real drifts (button.astro,
+      form.astro missing the demo-note opener) on first run — fixed. Turns the CLAUDE.md
+      "how to document" prose into something that can't be gotten wrong.
 - [ ] **1.0 exit checklist, then ship** — the real risk isn't technical, it's that
       "owner-gated on *perfect*" never resolves. Write a short, checkable list (N
       components, a11y ledger cleared, API frozen, ≥1 real consumer), hit it, publish
