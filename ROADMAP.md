@@ -85,10 +85,12 @@ starts.
        theme-aware (verified dark: `#22262e` bg / `#f9fafb` text). Reduced-motion-guarded
        entrance; a `⌘K` hint chip on the sidebar search. Verified live: opens, "dialog"
        → 13 results, arrow-nav Dialog→Navigation. Graduates the long-term palette item.
-5. [ ] **Sidebar scroll position** (UX bug) — the left index jumps back to the top on
-       every navigation; the active item and scroll position aren't preserved. *Accept:*
-       sidebar keeps its scroll across page loads (persist scrollTop, or scroll the
-       active link into view) so deep nav items stay reachable without re-scrolling.
+5. [x] **Sidebar scroll position** (UX bug) — static MPA reloaded the sidebar at
+       scrollTop 0 each navigation, hiding the active item. Fixed: persist the sidebar
+       scrollTop in sessionStorage (restore on load) and, if the current page's item
+       isn't visible, center it. Verified: deep item (Class index) scrolls to 1181 and
+       shows; upper item re-centers to top; adjacent items keep position. Active is
+       always in view.
 6. [ ] **Motion module** (opt-in, split — see the combine/split decision) — ship
        `@busy-office/ui/css/motion`: a curated ~8–10 *functional* animations (fade,
        slide, collapse, pulse-once) driven by the existing motion tokens and

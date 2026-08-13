@@ -163,6 +163,25 @@ const current =
         </div>
       </div>
     </dialog>
+    <script is:inline>
+      // Keep the left index in place across navigations. The docs are a static
+      // MPA, so each page load re-renders the sidebar at scrollTop 0 — restore
+      // the last position, and if the current page's item isn't visible (deep
+      // link, or a far jump), center it. Runs synchronously to avoid a flash.
+      (() => {
+        const sb = document.querySelector('.bo-app-shell__sidebar');
+        if (!sb) return;
+        const KEY = 'bo-sidebar-scroll';
+        const saved = sessionStorage.getItem(KEY);
+        if (saved !== null) sb.scrollTop = parseInt(saved, 10) || 0;
+        const active = sb.querySelector('[aria-current="page"]');
+        if (active) {
+          const a = active.getBoundingClientRect(), s = sb.getBoundingClientRect();
+          if (s.height && (a.top < s.top || a.bottom > s.bottom)) active.scrollIntoView({ block: 'center' });
+        }
+        sb.addEventListener('scroll', () => sessionStorage.setItem(KEY, String(sb.scrollTop)), { passive: true });
+      })();
+    </script>
     <script is:inline define:vars={{ base }}>
       // Pagefind exists only in the built site; degrade silently in dev.
       const css = document.createElement('link');
