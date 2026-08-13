@@ -18,3 +18,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-13 23:56 · Continue · bug · sidebar scroll-position persistence (active item always visible) · fixed · c21ee5c
 - 2026-08-14 00:05 · Continue · build · Brand palette: Ledger teal accent (gate-validated both themes) · shipped · 5bb5c16
 - 2026-08-14 00:30 · Continue · build · SVG logo (ledger-record mark, theme-aware teal, 16px navbar) · shipped · 5db529d
+- 2026-08-14 00:53 · Continue · build · favicon (ledger-record mark, filled/inverse) + logged top long-term bets · shipped · 9ee1286

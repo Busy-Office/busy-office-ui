@@ -1,16 +1,11 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const npmInstall = `npm i @busy-office/ui
-
-# all-in-one
-import "@busy-office/ui/css";
-
-# à la carte — ORDER MATTERS: tokens, then reset, then components
+const aLaCarte = `# ORDER MATTERS: tokens, then reset, then components
 import "@busy-office/ui/css/tokens";
 import "@busy-office/ui/css/reset";
 import "@busy-office/ui/css/components/data-table";
-# .min variants exist for every file: "@busy-office/ui/css/components/data-table.min"`;
+# a .min variant exists for every file (…/data-table.min)`;
 const jsInit = `import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts }
   from "@busy-office/ui/js";
 
@@ -38,40 +33,46 @@ const skeleton = `<!doctype html>
 </html>`;
 ---
 <Gallery title="Installation">
+  <p class="demo-note">Install the package and import one stylesheet — that's it. No
+  build step: the output is plain CSS and standard ES modules.</p>
+
   <section class="demo">
-    <h2>npm</h2>
-    <pre><code>{npmInstall}</code></pre>
-    <p class="bo-u-text-muted">The framework assumes an unmodified root font-size
-    (user preference only). Injecting into a host page that rescales
-    <code>html</code> (legacy <code>62.5%</code> hacks) rescales every rem —
-    embed via iframe instead.</p>
-  </section>
-  <section class="demo">
-    <h2>No-npm path</h2>
-    <p>Copy <code>dist/css/index.min.css</code> and <code>dist/js/</code> from the
+    <h2>Install</h2>
+    <pre><code>npm i @busy-office/ui</code></pre>
+    <pre><code>import "@busy-office/ui/css";   /* everything, one line */</code></pre>
+    <p class="bo-u-text-muted"><strong>No npm?</strong> Copy
+    <code>dist/css/index.min.css</code> and <code>dist/js/</code> from the
     <a href="https://github.com/Busy-Office/busy-office-ui">repo</a> (or
-    <code>npm pack @busy-office/ui</code> and unpack the tarball) into your static
-    assets — the page skeleton below consumes them as plain files. No build step
-    exists in the framework's output: it's CSS and standard ES modules.</p>
+    <code>npm pack @busy-office/ui</code>) into your assets and link them as plain
+    files — see the skeleton below.</p>
   </section>
+
   <section class="demo">
-    <h2>JS behaviors (five call-once inits)</h2>
-    <pre><code>{jsInit}</code></pre>
-    <p class="bo-u-text-muted">What each does and why — see
-    <a href={base + '/concepts/js-behaviors'}>Core concepts → JS behaviors</a>. Components
-    whose page says "JS required" are inert without their init.</p>
+    <h2>Import only what you use <span class="bo-u-text-muted">(optional)</span></h2>
+    <pre><code>{aLaCarte}</code></pre>
   </section>
+
+  <section class="demo">
+    <h2>Turn on interactive components</h2>
+    <pre><code>{jsInit}</code></pre>
+    <p class="bo-u-text-muted">Components whose page says "JS required" are inert until
+    you call their init. What each does →
+    <a href={base + '/concepts/js-behaviors'}>JS behaviors</a>.</p>
+  </section>
+
   <section class="demo">
     <h2>Copy-paste page skeleton</h2>
     <pre><code>{skeleton}</code></pre>
   </section>
+
   <section class="demo">
     <h2>Browser floor</h2>
-    <p><strong>Chrome/Edge 119 · Firefox 128 · Safari 17.4.</strong> The framework
-    relies on <code>@layer</code>, <code>:has()</code>, named container queries,
-    <code>popover</code>, and <code>content</code> alt-text. Server-set
-    <code>aria-invalid</code> error messages degrade gracefully below the floor;
-    interactive <code>:has()</code> reveals do not. Class prefix is
-    <code>bo-</code> (busy-office) — short, collision-safe, greppable.</p>
+    <p><strong>Chrome/Edge 119 · Firefox 128 · Safari 17.4.</strong> The framework uses
+    <code>@layer</code>, <code>:has()</code>, named container queries, and
+    <code>popover</code>. Server-set <code>aria-invalid</code> error messages degrade
+    gracefully below the floor; interactive <code>:has()</code> reveals do not.</p>
+    <p class="bo-u-text-muted">One caveat: it assumes an unmodified root font-size. A
+    host page that rescales <code>html</code> (legacy <code>62.5%</code> hacks) rescales
+    every rem — embed via iframe instead.</p>
   </section>
 </Gallery>
