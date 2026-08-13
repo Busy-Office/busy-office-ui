@@ -96,12 +96,14 @@ starts.
        slide, collapse, pulse-once) driven by the existing motion tokens and
        reduced-motion-guarded, NOT a decorative Animate.css clone. Core keeps the
        mechanics (tokens + state transitions) it already has.
-7. [ ] **Visual identity cluster** — (a) **favicon**; (b) **busy-office-ui logo** as an
-       inline SVG (currency/back-office motif, mono-friendly, works at 16px and in the
-       navbar, theme-aware via `currentColor`); (c) **brand palette** — a distinctive
-       accent family beyond the default neutral+blue, every step validated through the
-       contrast gate, shipped as a `brand-*.css` preset demonstrating the semantic
-       re-skin. Do the palette first; logo + favicon derive from it.
+7. Visual identity cluster (palette → logo → favicon):
+   - [x] **Brand palette** — the "Ledger" teal accent (deep teal-green, ledger ink)
+         replaces generic blue as the default identity. Teal scale added; accent family
+         repointed in both themes; every pair re-validated by the contrast gate.
+         Verified light + dark on the landing.
+   - [ ] **busy-office-ui logo** — an inline SVG mark (back-office/ledger motif,
+         `currentColor` so it's theme-aware, legible at 16px and in the navbar).
+   - [ ] **favicon** — derived from the logo.
 8. [ ] **Section-by-section docs simplicity pass** (ongoing) — walk each doc section,
        cut anything more complex than a first-time user needs, verify in the container.
 
