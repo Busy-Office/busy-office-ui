@@ -3,3 +3,6 @@ dist/
 .astro/
 graphify-out/
 .DS_Store
+
+# Derived loop-telemetry mirror — rebuild with scripts/loops/rebuild_from_log.py
+.roundtable/loops.db

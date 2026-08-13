@@ -38,8 +38,9 @@ Evaluate top-to-bottom; run the first that matches.
    into the plan.
 5. **Milestone reached / user asked?** → **Objective** grill.
 
-The host logs each routing decision to `.roundtable/loop-log.md` (one line:
-timestamp · loop · item · outcome) so the trail is auditable.
+The host records each iteration with `scripts/loops/record_iteration.py`, which
+writes both the human line in `.roundtable/loop-log.md` and a row in the derived
+`.roundtable/loops.db` mirror — so the trail is both readable and queryable.
 
 ---
 
@@ -54,8 +55,21 @@ timestamp · loop · item · outcome) so the trail is auditable.
    check dark + light.
 5. Adjust until it passes the standing gates (contrast, named `@container`, links,
    behaviors, stylelint, tests).
-6. `verifier` on the staged diff → commit → tick the roadmap box → log the line.
+6. `verifier` on the staged diff → commit → tick the roadmap box → **record the
+   iteration** (see below).
 **Exit:** queue empty → hand to Explore.
+
+**Recording an iteration (every loop, after the commit):**
+```
+python3 scripts/loops/record_iteration.py \
+  --loop <Loop> --mode <mode> --item "<what>" --outcome <outcome>
+```
+This appends the human line to `.roundtable/loop-log.md` **and** inserts the row
+into the derived `.roundtable/loops.db`. Capture any measured number too, e.g.
+`python3 scripts/loops/record_metric.py --name bundle-gz-kb --value 7.0 --unit kB`.
+The markdown/jsonl files are the source of truth; rebuild the DB any time with
+`python3 scripts/loops/rebuild_from_log.py`. Query it for prioritization
+(`sqlite3 .roundtable/loops.db "select item,count(*) from iterations group by item"`).
 
 ### 2. Standardize (DRY, tidy)
 **Trigger:** every 4th Continue iteration, or when a one-off/duplication is spotted.
@@ -118,6 +132,8 @@ Seed list — Explore pulls from here or adds to it:
 - **Verify before commit** — live in the container, both themes, both breakpoints.
 - **Gates are the floor** — a loop that reddens a gate isn't done.
 - **Small & general over specific** — new work composes existing primitives.
-- **Log every iteration** to `.roundtable/loop-log.md`.
+- **Record every iteration** via `scripts/loops/record_iteration.py` (writes the
+  markdown log + the `loops.db` mirror). Files are source of truth; the DB is
+  rebuildable telemetry.
 - **Session-scoped** — these run while this session is open; closing it stops them.
   For durable cloud cadence, promote to `/schedule`.

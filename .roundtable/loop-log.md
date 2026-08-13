@@ -1,9 +1,13 @@
 # Loop log
 
-One line per autonomous iteration: `date time · loop · item · outcome`.
-See `LOOPS.md` for the playbooks and router.
+Source of truth for loop iterations. `loops.db` is a **derived mirror** — rebuild
+it any time with `python3 scripts/loops/rebuild_from_log.py`. New lines are written
+by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and router.
 
-- 2026-08-13 · Continue · responsive nav drawer (mobile) · shipped, verified 390px
-- 2026-08-13 · Continue · fixed header + independent panes + full-width landing · shipped, verified 1440px
-- 2026-08-13 · Roadmap · folded backlog into Slice 5 (prioritized, Accept criteria) · committed
-- 2026-08-13 · Meta · designed the six-loop system (LOOPS.md) · committed
+**Line format:** `- <YYYY-MM-DD HH:MM> · <loop> · <mode> · <item> · <outcome> · <commit>`
+
+- 2026-08-13 00:00 · Continue · build · responsive nav drawer (mobile) · shipped · -
+- 2026-08-13 00:00 · Continue · build · fixed header + independent panes + full-width landing · shipped · -
+- 2026-08-13 00:00 · Roadmap · plan · folded backlog into Slice 5 · committed · -
+- 2026-08-13 00:00 · Meta · meta · designed the six-loop system (LOOPS.md) · committed · -
+- 2026-08-13 00:00 · Meta · meta · loops.db telemetry mirror + record/rebuild scripts · committed · -
