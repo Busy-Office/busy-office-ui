@@ -47,7 +47,9 @@ writes both the human line in `.roundtable/loop-log.md` and a row in the derived
 ## Playbooks
 
 ### 1. Continue (improvement) — the default host
-**Trigger:** every 20 min. **Input:** top of the Slice-5 queue in `ROADMAP.md`.
+**Trigger:** every 20 min. **Input:** top of the current in-progress slice's queue
+in `ROADMAP.md` (whichever slice is under "## In progress" — Slice 6 as of
+2026-08-14; the Roadmap loop opens the next slice when one completes).
 1. Pick the top item. If it's a bug → `diagnosing-bugs`; if UI/visual → `frontend-design`.
 2. `Explore` (or read directly) to locate the code and precedents.
 3. Make the smallest change that satisfies the item's *Accept* criteria.

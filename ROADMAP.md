@@ -30,115 +30,57 @@ Grilled and decomposed into small general components per the "one component, man
 settings" principle.
 
 ### Engineering & docs discipline
-- 6 build-enforced gates: named `@container`, contrast threshold **+ coverage**,
-  behaviors-vs-`.d.ts`, dist link resolution, stylelint naming, 11 behavior tests.
+- 7 build-enforced gates: named `@container`, contrast threshold **+ coverage**,
+  behaviors-vs-`.d.ts`, dist link resolution, stylelint naming, 11 behavior tests,
+  page-shape (every component page has its opener/`ClassRef`/demo/`ApiTable`/
+  `Related`/sidebar entry — `check-page-shape.mjs`, added in Slice 5).
 - Generated-from-artifact docs: API tables, contrast tables, class index, `llms.txt`,
   quick-reference cheat sheets, AA-per-component — none hand-maintained, all CI-gated
   against drift.
 - CI + GitHub Pages deploy (gated on tests); Docker consumer app; Podman docs image.
 - Four adversarial multi-seat design reviews, every gate finding fixed or ledgered.
 
-## In progress — Slice 5: Docs UX polish + ERP data-entry fields
+### Slice 5 — Docs UX polish + ERP data-entry fields
+Fixed app chrome (independent-scroll shell) + responsive nav drawer + full-width
+landing; the theme-switch-flash P0; ERP Amount field; data-table column alignment
+(+ a latent specificity bug fix); Cmd/Ctrl+K command palette; sidebar scroll
+persistence; the opt-in Motion module (8 reduced-motion-safe animations); the
+Ledger teal brand palette + SVG logo + favicon; a section-by-section docs
+simplicity pass; the `new:component` scaffold generator + page-shape build gate
+(gate 7); copy buttons + the `Demo` wrapper component (site-wide, satisfying the
+"Docs UX cluster 2" ask — full migration of all 17 component pages onto the
+`Demo` wrapper specifically is optional polish, not tracked further since
+hand-authored demo sections are already gate-compliant and already copyable).
+Full detail: `.roundtable/loop-log.md`.
 
-The current focus, driven autonomously by the build loop (see `.roundtable/` for
-the running log). Ordered by priority — a broken state outranks any enhancement.
-Each item lands with its docs page and passes the standing gates before the next
-starts.
+## In progress — Slice 6: Component depth + a11y hardening
 
-**Done this slice**
-- [x] **Fixed app chrome** — `.bo-app-shell` fills the viewport; header stays put,
-      sidebar and main scroll independently (correct back-office behavior for every
-      consumer, not just the docs). Print resets height/overflow. *Pending a grill —
-      it's a behavior change to a shipped primitive.*
-- [x] **Responsive docs nav** — Menu button → off-canvas drawer on narrow screens
-      (replaces the empty icon-rail the app-shell collapse produced for a
-      labels-only nav).
-- [x] **Full-width landing** — dropped the centered 74rem column; hero + live table
-      align to the header edges.
+Reconciled 2026-08-14 (Roadmap loop, after the ARIA-grid Explore graduation).
+Ordered by value × effort; `npm publish` is intentionally last — it's
+owner-gated, not something a loop iteration can close.
 
 **Queued (priority order)**
-1. [x] **P0 — Dark-theme text visibility bug.** Diagnosed (browser contrast sweep,
-       37 pages): **no** persistent invisible text — steady-state dark is clean and
-       the contrast gate already guards `text-primary`/`bg-surface` in both themes.
-       The real defect was the **theme-switch transition flash**: `background-color`
-       animates on the flip while `color` snaps, so text sits on a still-light bg for
-       ~150ms (near-invisible → dark). Fixed with a `data-bo-theming` transition-freeze
-       utility (core) applied by the docs toggles; recipe documented in the theming
-       guide. Verified: guarded flip has `transition:none`, bg jumps to final, ratio 16.
-2. [x] **ERP Amount field** — `.bo-amount` with parts (`__currency`, `__value`,
-       `__fraction`, `__unit`) and modifiers (`--negative`, `--positive`, `--strong`,
-       `--muted`, `--block`). CSS-first: the app formats the number, the component
-       styles + aligns it with tabular figures. Negative/credit is two-channel (sign
-       or parentheses in the markup; colour second). Verified AA in both themes — added
-       4 gate pairs (danger/success text on surface + canvas, all ≥4.8); tabular
-       alignment holds down a table column. Docs page shipped (0.9 kB min).
-3. [x] **Data-table column alignment** — `__col--left` / `--center` / `--right`
-       (+ `--numeric` = right + tabular). **Also fixed a latent bug**: the base
-       `th, td` rule (0,1,1) outranked `--numeric` (0,1,0), so amounts silently never
-       right-aligned — moved the default to `:where(th, td)` (0,1,0) so one class per
-       cell reliably wins. Verified live: numeric column now `text-align:end`; all
-       four modifiers correct; documented on the data-table page.
-4. [x] **Cmd/Ctrl+K command palette** — a native `<dialog>` mounting a second Pagefind
-       instance; Cmd/Ctrl+K toggles (preventDefault beats the browser omnibox), ↑/↓
-       move focus through results, Enter follows, ESC/backdrop close (showModal gives
-       focus containment free). Pagefind's variables mapped to our tokens so it's
-       theme-aware (verified dark: `#22262e` bg / `#f9fafb` text). Reduced-motion-guarded
-       entrance; a `⌘K` hint chip on the sidebar search. Verified live: opens, "dialog"
-       → 13 results, arrow-nav Dialog→Navigation. Graduates the long-term palette item.
-5. [x] **Sidebar scroll position** (UX bug) — static MPA reloaded the sidebar at
-       scrollTop 0 each navigation, hiding the active item. Fixed: persist the sidebar
-       scrollTop in sessionStorage (restore on load) and, if the current page's item
-       isn't visible, center it. Verified: deep item (Class index) scrolls to 1181 and
-       shows; upper item re-centers to top; adjacent items keep position. Active is
-       always in view.
-6. [x] **Motion module** (opt-in, split) — shipped `@busy-office/ui/css/motion`
-       (`src/css/motion/motion.css`, `@layer bo-utilities`, never in the default
-       bundle): 8 functional animations (fade-in/out, scale-in, slide-in ×2,
-       collapse via grid-template-rows + the existing `data-state` convention,
-       pulse-once generalizing the htmx settle flash, spin). All duration-token-driven
-       so `prefers-reduced-motion` zeroes them automatically; spin gets an explicit
-       override since it's continuous. Docs page `/base/motion` — generated quick-ref
-       (extended `extract-api.mjs` with an `api.motion` section) + 3 live interactive
-       demos (replay, collapse toggle, pulse trigger). Verified live: light + dark,
-       toggle/pulse confirmed via DOM state, all gates green, 11 tests pass.
-7. Visual identity cluster (palette → logo → favicon):
-   - [x] **Brand palette** — the "Ledger" teal accent (deep teal-green, ledger ink)
-         replaces generic blue as the default identity. Teal scale added; accent family
-         repointed in both themes; every pair re-validated by the contrast gate.
-         Verified light + dark on the landing.
-   - [x] **busy-office-ui logo** — inline SVG ledger-record mark (rounded frame +
-         rows, last short); currentColor + accent token → theme-aware teal, legible at
-         16px; in the docs + landing navbar brand. `.bo-navbar__brand` made a flex row.
-   - [x] **favicon** — `public/favicon.svg`, the ledger-record mark in a filled/inverse
-         treatment (teal ground `#0f766e`, light rows) so it reads at 16px in a tab;
-         linked (base-aware) in both docs + landing heads. Verified served + rendered.
-8. [x] **Section-by-section docs simplicity pass** — surveyed Getting Started, Core
-       Concepts, Base styles, all 17 component pages, and the 3 pattern pages;
-       simplified the genuinely-dense ones (Installation, Your first screen,
-       Versioning, js-behaviors) and left concise prose as-is elsewhere. Pass complete.
-
-## Near term (pre-1.0)
-
-- [ ] **Docs UX cluster 2** — pair each demo with its own copyable code block
-      (a `Demo` wrapper), enforce one component-page skeleton, copy buttons.
-- [ ] **npm publish** `@busy-office/ui@0.1.x` — the package is structurally ready
-      (exports audited, tarball-tested via the consumer app); owner-gated on "perfect".
-- [ ] **Runtime a11y pass** — VoiceOver/NVDA verbalization, 200% zoom geometry,
-      print preview: clear the standing NEEDS-RUNTIME ledger, then claim AA outright.
-- [ ] Slice-4 continuation — avatar byline, collapsible cards, a real `.bo-composer`,
-      skeleton/empty/loading states.
-- [ ] Saved-view persistence; multi-column detail-form patterns.
-- [ ] **Data-table ARIA grid pattern** (graduated from an Explore spike, 2026-08-14) —
-      keyboard row navigation for dense tables is a real ERP need, but it needs the
-      full WAI-ARIA APG "Grid" pattern (`role="grid"`/`"row"`/`"gridcell"`,
-      `aria-rowindex`/`aria-colindex`, two-axis roving tabindex, `aria-selected`
-      wired to the existing row-select checkboxes) — NOT a quick roving-tabindex
-      hack on a plain `<table>`. The spike proved the mechanics work (j/k moves
-      focus, Enter fires an activate event) but a plain table's implicit
-      `role="row"`/`"cell"` semantics conflict with screen-reader browse-mode table
-      navigation once you hijack Tab order onto one row — AT users would lose
-      native per-cell/column-header association. Scope as its own milestone with
-      an a11y-runtime verification pass (VoiceOver/NVDA), not a one-tick add-on.
+1. [ ] **Skeleton / empty / error states** — a first-class component set
+       (`.bo-skeleton` shimmer blocks, `.bo-empty-state`, `.bo-error-state`),
+       token-driven, reduced-motion-safe (reuse the Motion module's guard
+       pattern). *Accept:* one docs page, all three states demoed, AA in both
+       themes, no new dependency.
+2. [ ] **Data-table ARIA grid pattern** — the real fix for keyboard row
+       navigation (see the 2026-08-14 Explore spike below `## Done` — mechanics
+       work, but it needs the full WAI-ARIA APG "Grid" pattern: `role="grid"`/
+       `"row"`/`"gridcell"`, `aria-rowindex`/`aria-colindex`, two-axis roving
+       tabindex, `aria-selected` wired to the existing row-select checkboxes.
+       *Accept:* VoiceOver-verified (this env can drive it via macOS
+       automation), doesn't regress existing selection/sort behavior.
+3. [ ] **Slice-4 continuation** — avatar byline, collapsible cards, a real
+       `.bo-composer` (comment + action) for approval threads.
+4. [ ] **Saved-view persistence**; multi-column detail-form patterns.
+5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
+       print preview are checkable from this environment (macOS); NVDA
+       (Windows-only) stays a standing NEEDS-RUNTIME ledger entry, not claimed.
+6. [ ] **npm publish** `@busy-office/ui@0.1.x` — structurally ready (exports
+       audited, tarball-tested via the consumer app); **owner-gated on
+       "perfect"** — a loop iteration should not self-approve this.
 
 ## Long term (post-1.0)
 
@@ -152,6 +94,10 @@ Highest-leverage bets (2026-08-14 review — ranked):
       `ApiTable`/non-empty `Related`/sidebar entry. Caught two real drifts (button.astro,
       form.astro missing the demo-note opener) on first run — fixed. Turns the CLAUDE.md
       "how to document" prose into something that can't be gotten wrong.
+- [x] **Keyboard row navigation — Explore spike (2026-08-14)** — j/k/Enter roving
+      focus on a plain `<table>`; mechanics confirmed live, but discarded as unsafe
+      (breaks screen-reader table browse mode). Graduated into Slice 6 item 2 above
+      as the properly-scoped ARIA grid pattern.
 - [ ] **1.0 exit checklist, then ship** — the real risk isn't technical, it's that
       "owner-gated on *perfect*" never resolves. Write a short, checkable list (N
       components, a11y ledger cleared, API frozen, ≥1 real consumer), hit it, publish
