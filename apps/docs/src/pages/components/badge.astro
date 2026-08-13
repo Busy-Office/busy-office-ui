@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
 <span class="bo-badge bo-badge--success">Approved</span>
@@ -31,4 +32,5 @@ const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
   </section>
   <ApiTable component="badge"
     notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />
+  <Related links={[["/concepts/accessibility", "Accessibility model"], ["/components/data-table", "Data table"]]} />
 </Gallery>

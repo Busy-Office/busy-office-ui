@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const auditMarkup = `<ol class="bo-audit" role="list">
@@ -63,4 +64,5 @@ const auditMarkup = `<ol class="bo-audit" role="list">
     notes={['State text pattern is mandatory: <code>Completed:</code> / <code>Rejected:</code> / <code>Not started:</code> visually-hidden in the title — done vs rejected must be distinguishable non-visually.',
             'Use <code>&lt;time datetime&gt;</code> for audit timestamps.',
             'Markers are fixed-size status graphics (not controls) — they deliberately ignore density.']} />
+  <Related links={[["/concepts/accessibility", "Accessibility model"], ["/patterns/approval", "Approval pattern"], ["/components/stepper", "Stepper"]]} />
 </Gallery>

@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exists,
      so injected toasts are announced: -->
@@ -52,4 +53,5 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
     notes={['Inline alerts: <code>role="alert"</code> for errors, <code>role="status"</code> otherwise.',
             'The toast region must exist (with <code>aria-live</code>) BEFORE the first toast is injected.',
             'Toasts do not float above an open modal dialog (top layer).']} />
+  <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/getting-started/htmx", "Using with HTMX"]]} />
 </Gallery>

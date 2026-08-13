@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const tableMarkup = `<div class="bo-data-table-container">
   <div class="bo-data-table__toolbar">
@@ -160,4 +161,5 @@ const rows = [
     import { initDataTables } from '@busy-office/ui/js';
     initDataTables();
   </script>
+  <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"]]} />
 </Gallery>

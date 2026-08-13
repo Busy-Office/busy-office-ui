@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 ---
 <Gallery title="Button">
@@ -30,4 +31,5 @@ import ApiTable from '../../components/ApiTable.astro';
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
             'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.']} />
+  <Related links={[["/concepts/tokens", "Design tokens"], ["/base/colors", "Colors"]]} />
 </Gallery>

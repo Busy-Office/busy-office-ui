@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const rows = Array.from({ length: 14 }, (_, i) => ({
   no: `INV-10${234 + i}`,
   vendor: ['Acme Supply Co.', 'Globex Industrial', 'Initech GmbH', 'Umbrella Logistics', 'Stark Components'][i % 5],
@@ -69,4 +70,5 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     import { initDataTables } from '@busy-office/ui/js';
     initDataTables();
   </script>
+  <Related links={[["/getting-started/first-screen", "Build this step by step"], ["/components/data-table", "Data table"], ["/components/filters", "Filters"]]} />
 </Gallery>

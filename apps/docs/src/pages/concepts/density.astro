@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const recipe = `<html data-density="compact">          <!-- app-wide default -->
 …
 <div class="bo-data-table-container" data-density="spacious">
@@ -38,4 +39,5 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
       <li>Font size and row height move <em>together</em> per tier — never mix a density font token with a hand-set height.</li>
     </ul>
   </section>
+  <Related links={[["/concepts/tokens", "Design tokens"], ["/concepts/container-queries", "Container queries"]]} />
 </Gallery>

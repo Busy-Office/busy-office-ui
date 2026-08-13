@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import api from '@busy-office/ui/api';
 const utils = api.utilities.classes;
 const DESC: Record<string, string> = {
@@ -38,4 +39,5 @@ const DESC: Record<string, string> = {
       </table>
     </div>
   </section>
+  <Related links={[["/base/print", "Print & reports"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const brandMarkup = `/* brand.css — imported AFTER the framework, outside any @layer,
    so it wins by the cascade contract. Re-skin by remapping the SEMANTIC
    tier only — never touch component files.
@@ -58,4 +59,5 @@ const brandMarkup = `/* brand.css — imported AFTER the framework, outside any 
     pin versions; moves are recorded in the CHANGELOG. New components/tokens are
     minors; visual-only tweaks within the same contracts are patches.</p>
   </section>
+  <Related links={[["/concepts/cascade", "Cascade contract"], ["/base/colors", "Colors & tokens"], ["/getting-started/versioning", "Versioning"]]} />
 </Gallery>

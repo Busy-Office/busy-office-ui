@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const registry = `bo-shell        the app shell     → sidebar collapses to icon rail  (≤ 56rem)
 bo-table        table container   → density compaction + col hiding  (≤ 30rem)
 bo-widget-grid  dashboard grid    → span-2 widgets collapse          (≤ 41rem)
@@ -32,4 +33,5 @@ bo-stepper      the stepper       → labels collapse to SR-only       (≤ 30re
       <li>Compaction may compact — it may not delete data without an in-page reveal (WCAG 1.4.10).</li>
     </ul>
   </section>
+  <Related links={[["/concepts/density", "Density"], ["/components/data-table", "Data table"]]} />
 </Gallery>

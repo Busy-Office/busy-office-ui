@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const reportMarkup = `<!-- A printable report region: -->
 <main class="bo-print-report">
@@ -46,4 +47,5 @@ const reportMarkup = `<!-- A printable report region: -->
     <h2>Markup — a report region</h2>
     <pre><code>{reportMarkup}</code></pre>
   </section>
+  <Related links={[["/patterns/invoice-list", "Invoice-list pattern"], ["/base/utilities", "Utilities"]]} />
 </Gallery>

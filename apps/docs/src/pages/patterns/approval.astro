@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (aria-hidden)
      AND visually-hidden state text. role="list" restores list semantics
@@ -111,4 +112,5 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
     <h2>Markup — timeline</h2>
     <pre><code>{timelineMarkup}</code></pre>
   </section>
+  <Related links={[["/components/approval-workflow", "Timeline & audit"], ["/components/stepper", "Stepper"], ["/components/dialog", "Dialog"]]} />
 </Gallery>

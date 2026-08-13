@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
         aria-labelledby="approve-title" data-state="closed">
@@ -69,4 +70,5 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
     import { initDialogs } from '@busy-office/ui/js';
     initDialogs();
   </script>
+  <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const twoChannel = `<!-- BOTH channels, every state signal: -->
 <li class="bo-timeline__step" data-state="rejected">
@@ -46,4 +47,5 @@ const twoChannel = `<!-- BOTH channels, every state signal: -->
     <a href="https://github.com/Busy-Office/busy-office-ui/tree/main/.roundtable">review trail</a> —
     designed to WCAG 2.2 AA, with the unverified parts named rather than claimed.</p>
   </section>
+  <Related links={[["/base/colors", "Contrast tables"], ["/concepts/density", "Density"]]} />
 </Gallery>

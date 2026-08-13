@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-actions">Actions ▾</button>
 <div class="bo-dropdown__menu" id="row-actions" popover>
@@ -70,4 +71,5 @@ const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-ac
   <ApiTable component="dropdown"
     js="Recommended: initDropdowns() — anchors the top-layer popover to its invoker and closes on select. Without it the menu opens centered."
     notes={['The menu is a native <code>[popover]</code>: never clipped by scroll containers, never z-fought by sticky headers; Esc and light dismiss are native.']} />
+  <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>

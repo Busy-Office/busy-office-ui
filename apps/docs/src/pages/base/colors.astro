@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import contrast from '@busy-office/ui/contrast';
 const tok = (t: string) => t.replace('--bo-color-', '');
 const colors = [
@@ -61,4 +62,5 @@ const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12];
     aliases only. Flip the header selector and watch the control below.</p>
     <button class="bo-btn">Density-aware control</button>
   </section>
+  <Related links={[["/concepts/tokens", "Design tokens"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

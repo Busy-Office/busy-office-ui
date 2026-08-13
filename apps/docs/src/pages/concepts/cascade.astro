@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const layers = `/* declared once, first, in every dist file: */
 @layer bo-reset, bo-tokens, bo-primitives, bo-components, bo-utilities;
@@ -31,4 +32,5 @@ const layers = `/* declared once, first, in every dist file: */
     mechanical — anything inside <code>@layer bo-*</code> is ours, anything outside
     is yours.</p>
   </section>
+  <Related links={[["/concepts/theming", "Theming"], ["/concepts/tokens", "Design tokens"]]} />
 </Gallery>

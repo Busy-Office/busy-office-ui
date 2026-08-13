@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shell -->
   <header class="bo-navbar bo-app-shell__header">…</header>
   <nav class="bo-sidebar-nav bo-app-shell__sidebar">…</nav>
@@ -44,4 +45,5 @@ const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shel
     in the accessibility tree when collapsed. <code>.bo-visually-hidden</code> is also
     available for your own screen-reader-only text.</p>
   </section>
+  <Related links={[["/components/nav", "Navigation"], ["/components/dashboard", "Dashboard"]]} />
 </Gallery>

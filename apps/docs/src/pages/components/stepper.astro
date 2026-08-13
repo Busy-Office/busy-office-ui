@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const stepperMarkup = `<ol class="bo-stepper" role="list">
   <li class="bo-stepper__step" data-state="done">
@@ -49,4 +50,5 @@ const stepperMarkup = `<ol class="bo-stepper" role="list">
     notes={['<code>aria-current="step"</code> marks the current step; do not combine with <code>data-state="done"</code> (current wins by source order but the combination is out of contract).',
             'Steps are inert <code>&lt;li&gt;</code> by contract — interactive (clickable) steps are not yet specified.',
             'Print: markers render outlined black-on-white automatically.']} />
+  <Related links={[["/concepts/accessibility", "Accessibility model"], ["/components/approval-workflow", "Timeline & audit"]]} />
 </Gallery>
