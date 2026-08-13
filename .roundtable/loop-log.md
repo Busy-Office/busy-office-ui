@@ -22,3 +22,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-14 01:16 · Continue · build · docs simplicity: Installation page (lead-simple, demote caveats) · shipped · f03d937
 - 2026-08-14 01:38 · Continue · build · docs simplicity: Your first screen (Step 3 free/yours split) · shipped · 98255d3
 - 2026-08-14 02:01 · Continue · build · docs simplicity: Versioning (API/Not-API split); HTMX+Troubleshooting reviewed, no change · shipped · 77487fc
+- 2026-08-14 02:24 · Continue · build · docs simplicity: Core Concepts (js-behaviors list; tokens/density/cascade/a11y/CQ/theming reviewed) · shipped · 94670ed
+- 2026-08-14 02:46 · Continue · build · docs simplicity: Base styles + Components + Patterns reviewed — already simple (openers everywhere, no run-ons); pass COMPLETE · reviewed · 94670ed
