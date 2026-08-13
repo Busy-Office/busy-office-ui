@@ -168,6 +168,27 @@ const current =
         }
         toc.hidden = false;
       }
+
+      // Copy button on every code block — zero per-page work.
+      for (const pre of content ? content.querySelectorAll('pre') : []) {
+        const code = pre.querySelector('code');
+        if (!code) continue;
+        pre.classList.add('has-copy');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'copy-btn bo-btn bo-btn--sm bo-btn--secondary';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(code.textContent || '');
+            btn.textContent = 'Copied';
+            setTimeout(() => (btn.textContent = 'Copy'), 1200);
+          } catch {
+            btn.textContent = 'Press ⌘C';
+          }
+        });
+        pre.append(btn);
+      }
     </script>
     <script>
       // The documented 3-line density-toggle recipe.
@@ -239,4 +260,29 @@ const current =
   @media (max-width: 60rem) { .docs-main { grid-template-columns: 1fr; } .toc { display: none; } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   @media print { .toc { display: none; } }
+
+  /* Copy button, top-end of any code block. */
+  .docs-content pre.has-copy { position: relative; }
+  .copy-btn {
+    position: absolute;
+    inset-block-start: var(--bo-space-2);
+    inset-inline-end: var(--bo-space-2);
+    opacity: 0;
+    transition: opacity var(--bo-motion-duration-fast) var(--bo-motion-easing-standard);
+  }
+  pre.has-copy:hover .copy-btn,
+  .copy-btn:focus-visible { opacity: 1; }
+  @media (hover: none) { .copy-btn { opacity: 1; } }
+
+  /* Paired demo: rendered preview on top, its exact code below. */
+  .demo-pair { display: flex; flex-direction: column; gap: 0; }
+  .demo-pair__preview {
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    border-radius: var(--bo-radius-md) var(--bo-radius-md) 0 0;
+    background: var(--bo-color-bg-surface);
+    padding: var(--bo-space-4);
+  }
+  .demo-pair pre { margin-block: 0; border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); border-block-start: none; }
 </style>

@@ -1,0 +1,14 @@
+---
+/**
+ * Paired example: a rendered preview on top, its EXACT markup below (with the
+ * site-wide copy button). Both come from the same `code` string — the live
+ * preview via set:html, the shown code escaped — so the demo and its code can
+ * never drift apart. Use for static markup examples; keep hand-built <section>
+ * demos for anything needing Astro expressions (.map over data).
+ */
+const { code } = Astro.props;
+---
+<div class="demo-pair">
+  <div class="demo-pair__preview" set:html={code} />
+  <pre><code>{code}</code></pre>
+</div>

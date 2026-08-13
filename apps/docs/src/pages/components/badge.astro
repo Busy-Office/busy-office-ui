@@ -3,11 +3,15 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
-const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
+import Demo from '../../components/Demo.astro';
+const tones = `<span class="bo-badge">Neutral</span>
 <span class="bo-badge bo-badge--success">Approved</span>
 <span class="bo-badge bo-badge--warning">Pending</span>
 <span class="bo-badge bo-badge--danger">Rejected</span>
 <span class="bo-badge bo-badge--accent">In review</span>`;
+const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</span>
+<span class="bo-badge bo-badge--type">Invoice</span>
+<span class="bo-badge bo-badge--type">Change Request</span>`;
 ---
 <Gallery title="Badge">
   <p class="demo-note">
@@ -20,27 +24,13 @@ const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
   <ClassRef component="badge" />
   <section class="demo">
     <h2>Tones</h2>
-    <div class="bo-cluster">
-      <span class="bo-badge">Neutral</span>
-      <span class="bo-badge bo-badge--success">Approved</span>
-      <span class="bo-badge bo-badge--warning">Pending</span>
-      <span class="bo-badge bo-badge--danger">Rejected</span>
-      <span class="bo-badge bo-badge--accent">In review</span>
-    </div>
+    <Demo code={tones} />
   </section>
   <section class="demo">
     <h2><code>--type</code> — record-type chip</h2>
     <p>An inverted-surface tag naming the record a card holds. A rectangle, not a
     pill; auto-inverts in dark mode.</p>
-    <div class="bo-cluster">
-      <span class="bo-badge bo-badge--type">Purchase Order #4021</span>
-      <span class="bo-badge bo-badge--type">Invoice</span>
-      <span class="bo-badge bo-badge--type">Change Request</span>
-    </div>
-  </section>
-  <section class="demo">
-    <h2>Markup</h2>
-    <pre><code>{badgeMarkup}</code></pre>
+    <Demo code={typeChip} />
   </section>
   <ApiTable component="badge"
     notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />

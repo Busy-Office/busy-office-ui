@@ -3,6 +3,17 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const defaultList = `<ol class="bo-ordered-list">
+  <li>SKU-3391 · Standing desk (×4)</li>
+  <li>SKU-1180 · Monitor arm (×8)</li>
+  <li>SKU-2205 · Desk lamp (×4)</li>
+</ol>`;
+const plainList = `<ol class="bo-ordered-list bo-ordered-list--plain">
+  <li>Line manager</li>
+  <li>Finance department</li>
+  <li>Chief Financial Officer</li>
+</ol>`;
 const markup = `<!-- default: mono, for codes/amounts -->
 <ol class="bo-ordered-list">
   <li>SKU-3391 · Standing desk (×4)</li>
@@ -34,20 +45,12 @@ const markup = `<!-- default: mono, for codes/amounts -->
   <ClassRef component="ordered-list" />
   <section class="demo">
     <h2>Default — codes &amp; amounts (mono, tabular)</h2>
-    <ol class="bo-ordered-list">
-      <li>SKU-3391 · Standing desk (×4)</li>
-      <li>SKU-1180 · Monitor arm (×8)</li>
-      <li>SKU-2205 · Desk lamp (×4)</li>
-    </ol>
+    <Demo code={defaultList} />
   </section>
 
   <section class="demo">
     <h2><code>--plain</code> — prose items</h2>
-    <ol class="bo-ordered-list bo-ordered-list--plain">
-      <li>Line manager</li>
-      <li>Finance department</li>
-      <li>Chief Financial Officer</li>
-    </ol>
+    <Demo code={plainList} />
     <p class="bo-u-text-muted">Drops the monospace so named steps read as words, not code.</p>
   </section>
 
