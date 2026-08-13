@@ -101,9 +101,10 @@ starts.
          replaces generic blue as the default identity. Teal scale added; accent family
          repointed in both themes; every pair re-validated by the contrast gate.
          Verified light + dark on the landing.
-   - [ ] **busy-office-ui logo** — an inline SVG mark (back-office/ledger motif,
-         `currentColor` so it's theme-aware, legible at 16px and in the navbar).
-   - [ ] **favicon** — derived from the logo.
+   - [x] **busy-office-ui logo** — inline SVG ledger-record mark (rounded frame +
+         rows, last short); currentColor + accent token → theme-aware teal, legible at
+         16px; in the docs + landing navbar brand. `.bo-navbar__brand` made a flex row.
+   - [ ] **favicon** — derived from the logo (ledger-record mark).
 8. [ ] **Section-by-section docs simplicity pass** (ongoing) — walk each doc section,
        cut anything more complex than a first-time user needs, verify in the container.
 
