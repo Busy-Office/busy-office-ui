@@ -37,10 +37,14 @@ document.body.addEventListener("htmx:afterSwap", (e) => initDataTables(e.target)
     <p>Each init installs one document-level listener and resolves its target at
     event time; element-level listeners (a dialog's close handler) bind lazily on
     first use, tracked in a <code>WeakSet</code> — never serialized into the DOM.
-    Consequences you can rely on: triggers may render before their dialog exists;
-    swapped-in content works without re-init; clone/morph swaps can't strand stale
-    state. <strong>Event wiring is swap-proof; derived state is re-computed</strong> —
-    the one HTMX-aware line in core JS is the <code>htmx:afterSwap</code> event
+    What you can rely on:</p>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li>Triggers may render before their dialog exists.</li>
+      <li>Swapped-in content works without re-init.</li>
+      <li>Clone / morph swaps can't strand stale state.</li>
+    </ul>
+    <p><strong>Event wiring is swap-proof; derived state is re-computed.</strong> The
+    one HTMX-aware line in core JS is the <code>htmx:afterSwap</code> event
     <em>name</em> a table container listens for:</p>
     <pre><code>{refresh}</code></pre>
   </section>
