@@ -1,6 +1,9 @@
 @layer bo-primitives {
   /* App shell: header + sidebar + main. A container so children (sidebar nav)
-     can respond to shell width, not viewport width. */
+     can respond to shell width, not viewport width. Fixed to the viewport
+     height so the header stays put and the sidebar and main scroll
+     INDEPENDENTLY — standard back-office chrome (fixed header, scrolling
+     panes), which is what ERP screens expect. */
   .bo-app-shell {
     container-type: inline-size;
     container-name: bo-shell;
@@ -10,7 +13,8 @@
     grid-template-areas:
       "header header"
       "sidebar main";
-    min-height: 100dvh;
+    block-size: 100dvh;
+    overflow: hidden;
   }
 
   .bo-app-shell__header {
@@ -19,6 +23,8 @@
 
   .bo-app-shell__sidebar {
     grid-area: sidebar;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
   }
 
   .bo-app-shell__main {
@@ -26,13 +32,19 @@
     padding: var(--bo-space-6);
     background: var(--bo-color-bg-canvas);
     min-width: 0;
-    overflow-x: auto;
+    overflow: auto;
     scrollbar-gutter: stable;
   }
 
   @media print {
     .bo-app-shell {
       display: block;
+      block-size: auto;
+      overflow: visible;
+    }
+
+    .bo-app-shell__main {
+      overflow: visible;
     }
 
     .bo-app-shell__header,
