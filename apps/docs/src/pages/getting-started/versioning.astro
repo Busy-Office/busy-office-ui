@@ -2,15 +2,19 @@
 import Gallery from '../../layouts/Gallery.astro';
 ---
 <Gallery title="Versioning & upgrades">
+  <p class="demo-note">What counts as the public API — the surface a version bump can
+  break — and why moving off the framework stays cheap.</p>
   <section class="demo">
-    <h2>What is API</h2>
-    <p><strong>Semantic tokens, documented class names, and
-    <code>data-*</code>/ARIA contracts are the public API</strong> — breaking any of
-    them is a major version. The API tables on every component page are generated
-    from the shipped CSS, so what's documented is exactly what's contractual.
-    Component-internal selectors and the raw palette tier are not API.
-    <strong>Per-component dist file placement is not API until v1.0</strong> —
-    à-la-carte importers should pin versions.</p>
+    <h2>What is (and isn't) API</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>API</strong> (breaking it = a major version): semantic tokens,
+      documented class names, and <code>data-*</code>/ARIA contracts. The API tables on
+      every component page are generated from the shipped CSS, so what's documented is
+      exactly what's contractual.</li>
+      <li><strong>Not API</strong>: component-internal selectors and the raw palette
+      tier. Per-component dist file placement is also not API until v1.0 — à-la-carte
+      importers should pin versions.</li>
+    </ul>
   </section>
   <section class="demo">
     <h2>Docs policy</h2>
