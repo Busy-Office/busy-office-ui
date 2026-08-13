@@ -1,0 +1,82 @@
+@layer bo-components {
+  /* Amount: a monetary or quantity value, laid out for scanning down a column.
+     CSS-first — your app formats the number (locale, grouping, precision, sign)
+     and supplies the parts as markup; this component only styles and aligns
+     them. Tabular figures so every row lines up digit-for-digit. One component,
+     driven by settings. Domain-neutral: money, quantities, rates, unit prices.
+
+       <span class="bo-amount">
+         <span class="bo-amount__currency">$</span>
+         <span class="bo-amount__value">18,940<span class="bo-amount__fraction">.50</span></span>
+       </span>
+
+     Negative/credit MUST carry the sign or parentheses in the markup — colour is
+     the second channel, never the only one (two-channel state rule). */
+  .bo-amount {
+    --bo-amount-fg: var(--bo-color-text-primary);
+    --bo-amount-affix-fg: var(--bo-color-text-muted);
+
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--bo-space-1);
+    color: var(--bo-amount-fg);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    white-space: nowrap;
+  }
+
+  /* The number. Tabular is inherited; restated so a bare __value is safe alone. */
+  .bo-amount__value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Currency symbol ($) or ISO code (USD) — quieter than the number, either side
+     of it (source order decides prefix vs suffix). */
+  .bo-amount__currency {
+    color: var(--bo-amount-affix-fg);
+    font-size: 0.875em;
+  }
+
+  /* Minor units (cents). Optional — de-emphasise so the whole-number part reads
+     first when scanning a column. */
+  .bo-amount__fraction {
+    color: var(--bo-amount-affix-fg);
+  }
+
+  /* Unit of measure: "× EA", "/ kg", "pcs", "hrs". Follows the value, muted. */
+  .bo-amount__unit {
+    color: var(--bo-amount-affix-fg);
+    font-size: 0.875em;
+  }
+
+  /* Right-align a standalone amount (in a data-table use the cell's
+     __col--numeric; this is for amounts outside a table — cards, totals). */
+  .bo-amount--block {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* Negative / debit. Danger ink; the markup still carries the − or (parentheses)
+     so colourblind and screen-reader users get the sign too. */
+  .bo-amount--negative {
+    --bo-amount-fg: var(--bo-color-danger-text);
+    --bo-amount-affix-fg: var(--bo-color-danger-text);
+  }
+
+  /* Positive / credit emphasis (a gain, a refund). Success ink; markup carries
+     the + sign. Use sparingly — most positives need no colour. */
+  .bo-amount--positive {
+    --bo-amount-fg: var(--bo-color-success-text);
+    --bo-amount-affix-fg: var(--bo-color-success-text);
+  }
+
+  /* Total / summary row — heavier so a summed figure stands out from line items. */
+  .bo-amount--strong {
+    font-weight: var(--bo-font-weight-semibold);
+  }
+
+  /* Secondary amount — a unit price beside a line total, a struck original. */
+  .bo-amount--muted {
+    --bo-amount-fg: var(--bo-color-text-muted);
+  }
+}

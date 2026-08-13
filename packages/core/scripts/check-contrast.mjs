@@ -62,6 +62,12 @@ const PAIRS = [
   ['--bo-color-danger-text', '--bo-color-danger-subtle', 4.5],
   ['--bo-color-warning-text', '--bo-color-warning-subtle', 4.5],
   ['--bo-color-success-text', '--bo-color-success-subtle', 4.5],
+  // Amount negative/positive ink sits on plain surfaces (cards, table cells),
+  // not just the tinted *-subtle backgrounds — verify it stays readable there.
+  ['--bo-color-danger-text', '--bo-color-bg-surface', 4.5],
+  ['--bo-color-danger-text', '--bo-color-bg-canvas', 4.5],
+  ['--bo-color-success-text', '--bo-color-bg-surface', 4.5],
+  ['--bo-color-success-text', '--bo-color-bg-canvas', 4.5],
   ['--bo-color-accent', '--bo-color-bg-surface', 4.5], // links
   ['--bo-color-text-primary', '--bo-color-bg-hover', 4.5], // table hover rows
   ['--bo-color-text-primary', '--bo-color-bg-selected', 4.5], // selected rows

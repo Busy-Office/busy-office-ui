@@ -1,0 +1,154 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const money = `<span class="bo-amount">
+  <span class="bo-amount__currency">$</span>
+  <span class="bo-amount__value">18,940<span class="bo-amount__fraction">.50</span></span>
+</span>`;
+
+const codeSuffix = `<span class="bo-amount">
+  <span class="bo-amount__value">1,234.00</span>
+  <span class="bo-amount__currency">EUR</span>
+</span>`;
+
+const precision = `<!-- 0 decimals (whole units) -->
+<span class="bo-amount"><span class="bo-amount__currency">¥</span><span class="bo-amount__value">56,000</span></span>
+
+<!-- 2 decimals (money) -->
+<span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,208.00</span></span>
+
+<!-- 4 decimals (unit price / FX rate) -->
+<span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">0.0725</span></span>`;
+
+const signed = `<!-- debit: parentheses OR a minus sign carry the meaning; red is the 2nd channel -->
+<span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">(2,110.00)</span></span>
+<span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">&minus;730.25</span></span>
+
+<!-- credit: a + sign carries the meaning; green is the 2nd channel -->
+<span class="bo-amount bo-amount--positive"><span class="bo-amount__currency">$</span><span class="bo-amount__value">+9,320.75</span></span>`;
+
+const uom = `<!-- quantity × unit -->
+<span class="bo-amount"><span class="bo-amount__value">4</span><span class="bo-amount__unit">&times; EA</span></span>
+
+<!-- rate per unit -->
+<span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">12.50</span><span class="bo-amount__unit">/ kg</span></span>
+
+<!-- unit price beside a quantity -->
+<span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">3.10</span><span class="bo-amount__unit">/ pc</span></span>`;
+
+const markup = `<span class="bo-amount">
+  <span class="bo-amount__currency">$</span>              <!-- symbol or ISO code, either side -->
+  <span class="bo-amount__value">18,940                 <!-- your app formats grouping + precision -->
+    <span class="bo-amount__fraction">.50</span>         <!-- optional: quiet the minor units -->
+  </span>
+  <span class="bo-amount__unit">/ kg</span>              <!-- optional unit of measure -->
+</span>
+
+<!-- modifiers: --negative  --positive  --strong  --muted  --block -->`;
+---
+<Gallery title="Amount">
+  <p class="demo-note">
+    A money or quantity value, laid out to scan down a column. This is CSS-first:
+    <strong>your app formats the number</strong> (locale grouping, decimal precision,
+    sign) and supplies the parts as markup — the component styles and aligns them, with
+    tabular figures so every row lines up digit-for-digit. One component, driven by
+    settings.
+  </p>
+
+  <ClassRef component="amount" />
+
+  <section class="demo">
+    <h2>Money — symbol, grouping, minor units</h2>
+    <Demo code={money} />
+    <p class="bo-u-text-muted"><code>__currency</code> and <code>__fraction</code> are
+    quieted so the whole-number part reads first.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Currency as an ISO code (either side)</h2>
+    <Demo code={codeSuffix} />
+    <p class="bo-u-text-muted">Source order decides prefix vs suffix — <code>$</code>
+    before, <code>EUR</code>/<code>kr</code> after. No modifier needed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Precision — a setting, not a variant</h2>
+    <Demo code={precision} />
+    <p class="bo-u-text-muted">Whole units, money, or 4-dp unit prices — same component;
+    the digits come from your formatter.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Negative &amp; credit — two-channel</h2>
+    <Demo code={signed} />
+    <p class="bo-u-text-muted">The sign or parentheses live in the <em>text</em>, so
+    colourblind and screen-reader users get the meaning without the colour.
+    <code>--negative</code>/<code>--positive</code> only add the hue (both AA on surface
+    and canvas, CI-gated).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Unit of measure</h2>
+    <Demo code={uom} />
+    <p class="bo-u-text-muted"><code>__unit</code> carries <code>× EA</code>,
+    <code>/ kg</code>, <code>pcs</code>, <code>hrs</code> — a quantity’s unit or a rate’s
+    denominator.</p>
+  </section>
+
+  <section class="demo">
+    <h2>In a column — totals align, subtotal is strong</h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead>
+          <tr><th>Line item</th><th class="bo-data-table__col--numeric">Qty</th><th class="bo-data-table__col--numeric">Unit price</th><th class="bo-data-table__col--numeric">Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Standing desk</td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__value">4</span><span class="bo-amount__unit">× EA</span></span></td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">1,052.00</span></span></td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,208.00</span></span></td>
+          </tr>
+          <tr>
+            <td>Monitor arm</td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__value">8</span><span class="bo-amount__unit">× EA</span></span></td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">92.50</span></span></td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">740.00</span></span></td>
+          </tr>
+          <tr>
+            <td>Restocking fee</td>
+            <td class="bo-data-table__col--numeric">—</td>
+            <td class="bo-data-table__col--numeric">—</td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">(120.00)</span></span></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td class="bo-data-table__col--numeric"></td>
+            <td class="bo-data-table__col--numeric"></td>
+            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--strong"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,828.00</span></span></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Amounts inherit the cell’s right-align
+    (<code>__col--numeric</code>); tabular figures keep the decimal points stacked.
+    <code>--strong</code> weights the total, <code>--muted</code> quiets the unit price.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <ApiTable component="amount"
+    notes={['CSS-first: your app formats the number (locale, grouping, precision, sign); the component styles the parts and aligns them with tabular figures.',
+            'Negative/credit is two-channel — the sign or parentheses MUST be in the markup; <code>--negative</code>/<code>--positive</code> only add colour.',
+            'Currency and unit are muted affixes; put the currency before or after the value by source order.']} />
+  <Related links={[["/components/data-table", "Data table"], ["/base/utilities", "Utilities (tabular)"], ["/patterns/invoice-list", "Invoice list pattern"]]} />
+</Gallery>

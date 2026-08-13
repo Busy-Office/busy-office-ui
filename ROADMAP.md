@@ -65,12 +65,13 @@ starts.
        ~150ms (near-invisible → dark). Fixed with a `data-bo-theming` transition-freeze
        utility (core) applied by the docs toggles; recipe documented in the theming
        guide. Verified: guarded flip has `transition:none`, bg jumps to final, ratio 16.
-2. [ ] **ERP Amount field** — one settings-driven component: currency symbol/code,
-       decimal precision, thousands grouping, right-aligned tabular figures,
-       negative/credit treatment, and unit-of-measure (UOM) pairing (`4 × EA`,
-       `12.50 / kg`). *Accept:* AA in both themes; tabular-nums alignment holds in a
-       column; UOM is a modifier, not a second component; docs page with the settings
-       matrix. Graduates the "number field components" long-term item.
+2. [x] **ERP Amount field** — `.bo-amount` with parts (`__currency`, `__value`,
+       `__fraction`, `__unit`) and modifiers (`--negative`, `--positive`, `--strong`,
+       `--muted`, `--block`). CSS-first: the app formats the number, the component
+       styles + aligns it with tabular figures. Negative/credit is two-channel (sign
+       or parentheses in the markup; colour second). Verified AA in both themes — added
+       4 gate pairs (danger/success text on surface + canvas, all ≥4.8); tabular
+       alignment holds down a table column. Docs page shipped (0.9 kB min).
 3. [ ] **Data-table column alignment** — explicit `--left` / `--center` / `--right`
        column modifiers, generalizing today's `--numeric` right-align. *Accept:*
        header and body cells align together; documented on the data-table page.

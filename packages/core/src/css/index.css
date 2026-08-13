@@ -23,6 +23,7 @@
 @import "./components/dashboard/dashboard.css";
 @import "./components/approval-workflow/approval-workflow.css";
 @import "./components/stepper/stepper.css";
+@import "./components/amount/amount.css";
 @import "./components/byline/byline.css";
 @import "./components/ordered-list/ordered-list.css";
 @import "./utilities/index.css";
