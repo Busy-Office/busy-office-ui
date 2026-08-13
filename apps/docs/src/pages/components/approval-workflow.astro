@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -21,6 +22,7 @@ const auditMarkup = `<ol class="bo-audit" role="list">
     <code>aria-current</code>. Composed example:
     <a href={base + '/patterns/approval'}>the approval-workflow pattern</a>.
   </p>
+  <ClassRef component="approval-workflow" />
   <section class="demo">
     <h2>Timeline states</h2>
     <ol class="bo-timeline" role="list" style="max-inline-size: 24rem">

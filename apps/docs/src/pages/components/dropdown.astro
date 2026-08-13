@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-actions">Actions ▾</button>
@@ -22,6 +23,7 @@ const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-ac
     native (and Esc closes the innermost layer first inside a dialog).
     <code>initDropdowns()</code> adds invoker anchoring and close-on-select.
   </p>
+  <ClassRef component="dropdown" />
   <section class="demo">
     <div class="bo-cluster">
       <button class="bo-btn bo-btn--secondary" popovertarget="demo-actions">Actions ▾</button>

@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
@@ -30,6 +31,7 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
     backdrop, ESC, and focus return; the behavior adds trigger wiring, a Tab loop, and
     <code>data-state</code> for the enter animation.
   </p>
+  <ClassRef component="dialog" />
   <section class="demo">
     <button class="bo-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>
 

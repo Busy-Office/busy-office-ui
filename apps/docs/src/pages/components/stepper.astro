@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const stepperMarkup = `<ol class="bo-stepper" role="list">
@@ -24,6 +25,7 @@ const stepperMarkup = `<ol class="bo-stepper" role="list">
     The stepper is its own named container — labels collapse to screen-reader-only when
     it narrows; markers stay.
   </p>
+  <ClassRef component="stepper" />
   <section class="demo">
     <ol class="bo-stepper" role="list" style="max-inline-size: 40rem">
       <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Header</span></li>

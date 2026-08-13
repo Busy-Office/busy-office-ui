@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const fieldMarkup = `<div class="bo-form-field">
@@ -14,6 +15,7 @@ const fieldMarkup = `<div class="bo-form-field">
      announced. Both halves are the contract, not just the :has() trick. -->`;
 ---
 <Gallery title="Forms">
+  <ClassRef component="form" />
   <section class="demo">
     <h2>Fields (error styling is pure CSS via <code>:has()</code>)</h2>
     <form class="bo-form-row" novalidate>

@@ -1,0 +1,16 @@
+# Build the docs site and serve it statically. Build context = repo root.
+#   podman build -f apps/docs/Containerfile -t bo-docs .
+#   podman run --rm -p 8081:80 bo-docs   ->  http://localhost:8081/
+FROM node:22-alpine AS build
+WORKDIR /repo
+COPY package.json package-lock.json tsconfig.base.json ./
+COPY packages ./packages
+COPY apps/docs ./apps/docs
+RUN npm ci --ignore-scripts
+RUN npm run build -w @busy-office/ui
+# No base path: served at the container root, so links resolve at "/".
+RUN npm run build -w docs
+
+FROM docker.io/library/nginx:alpine
+COPY --from=build /repo/apps/docs/dist /usr/share/nginx/html
+EXPOSE 80

@@ -8,6 +8,7 @@
  * and the ARIA contract prose.
  */
 import api from '@busy-office/ui/api';
+import contrast from '@busy-office/ui/contrast';
 const { component, js = 'None — CSS-only.', notes = [] } = Astro.props;
 const c = api.components[component];
 if (!c) throw new Error(`ApiTable: unknown component "${component}"`);
@@ -20,6 +21,18 @@ const rows = [
   ['Component tokens', c.tokensDefined],
   ['Named containers', c.containers],
 ].filter(([, v]) => v.length);
+
+// AA pairs this component touches: any checked contrast pair whose fg or bg is
+// a token the component consumes. Generated from contrast.json — cannot drift.
+const consumed = new Set(c.tokensConsumed);
+const seen = new Set();
+const aa = (contrast.themes.light as any[])
+  .filter((p) => !p.skipped && (consumed.has(p.fg) || consumed.has(p.bg)))
+  .filter((p) => { const k = p.fg + '|' + p.bg; if (seen.has(k)) return false; seen.add(k); return true; })
+  .map((p) => {
+    const dark = (contrast.themes.dark as any[]).find((d) => d.fg === p.fg && d.bg === p.bg);
+    return { fg: p.fg.replace('--bo-color-', ''), bg: p.bg.replace('--bo-color-', ''), light: p.ratio, dark: dark?.ratio };
+  });
 ---
 <section class="demo">
   <h2>API <span class="bo-badge">generated from CSS</span></h2>
@@ -43,5 +56,27 @@ const rows = [
     <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       {notes.map((n: string) => <li set:html={n} />)}
     </ul>
+  )}
+  {aa.length > 0 && (
+    <details>
+      <summary class="bo-u-text-muted" style="font-size: var(--bo-font-size-sm); cursor: pointer">
+        Contrast — {aa.length} AA pair{aa.length > 1 ? 's' : ''} this component uses (generated, CI-gated)
+      </summary>
+      <div class="bo-data-table-container" style="margin-block-start: var(--bo-space-2)">
+        <table class="bo-data-table" data-density="compact">
+          <thead><tr><th scope="col">Text</th><th scope="col">on</th><th scope="col" class="bo-data-table__col--numeric">Light</th><th scope="col" class="bo-data-table__col--numeric">Dark</th></tr></thead>
+          <tbody>
+            {aa.map((p) => (
+              <tr>
+                <td class="bo-data-table__col--code">{p.fg}</td>
+                <td class="bo-data-table__col--code">{p.bg}</td>
+                <td class="bo-data-table__col--numeric">{p.light}</td>
+                <td class="bo-data-table__col--numeric">{p.dark}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
   )}
 </section>

@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const pgMarkup = `<div class="bo-data-table__footer">
@@ -25,6 +26,7 @@ const pgMarkup = `<div class="bo-data-table__footer">
     <code>.bo-data-table__footer</code> under a table. Navigation is your code's job
     (links or HTMX) — the framework styles state.
   </p>
+  <ClassRef component="pagination" />
   <section class="demo">
     <div class="bo-data-table-container">
       <div class="bo-data-table__footer">

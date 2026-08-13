@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
@@ -24,6 +25,7 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     <code>.bo-app-shell</code>. Narrow the window below 900px of shell width and the
     sidebar collapses to icon-only via a container query.
   </p>
+  <ClassRef component="nav" />
   <section class="demo">
     <h2>Embedded shell (independent container)</h2>
     <div class="bo-app-shell" style="min-height: 16rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">

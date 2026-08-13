@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const statMarkup = `<div class="bo-widget">
@@ -25,6 +26,7 @@ const statMarkup = `<div class="bo-widget">
     (<code>tabular-nums</code> is reserved for columns); compact big values
     server-side (12.9K, $4.2M). One hero figure per view, maximum.
   </p>
+  <ClassRef component="dashboard" />
   <section class="demo">
     <div class="bo-widget-grid" style="--bo-widget-min: 13rem">
       <div class="bo-widget">

@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
@@ -16,6 +17,7 @@ const badgeMarkup = `<span class="bo-badge">Neutral (default)</span>
     A badge is decoration for sighted users — the status text itself is the
     accessible signal, so never encode status as color alone.
   </p>
+  <ClassRef component="badge" />
   <section class="demo">
     <h2>Tones</h2>
     <div class="bo-cluster">

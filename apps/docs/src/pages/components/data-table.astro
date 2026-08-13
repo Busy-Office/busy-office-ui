@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const tableMarkup = `<div class="bo-data-table-container">
@@ -49,6 +50,7 @@ const rows = [
     Sticky header, tabular numerals, density-aware row heights, container-query
     auto-compaction below 480px container width.
   </p>
+  <ClassRef component="data-table" />
   <section class="demo">
     <div class="bo-data-table-container">
       <div class="bo-data-table__toolbar">

@@ -121,9 +121,15 @@ const current =
         ))}
       </nav>
       <main class="bo-app-shell__main">
-        <div class="bo-stack bo-stack--loose">
-          <h1>{title}</h1>
-          <slot />
+        <div class="docs-main">
+          <div class="bo-stack bo-stack--loose docs-content">
+            <h1>{title}</h1>
+            <slot />
+          </div>
+          <aside class="toc" aria-label="On this page" hidden>
+            <div class="toc__heading">On this page</div>
+            <nav id="toc-nav"></nav>
+          </aside>
         </div>
       </main>
     </div>
@@ -138,6 +144,30 @@ const current =
       s.onload = () => new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
       s.onerror = () => document.getElementById('docsearch')?.remove();
       document.head.append(s);
+    </script>
+    <script>
+      // On-this-page: slugify every content h2, make it an anchor target, and
+      // build the right-rail TOC. Deep-links (#slug) then work for every
+      // section. Hidden when a page has fewer than 2 sections.
+      const content = document.querySelector('.docs-content');
+      const headings = content ? [...content.querySelectorAll('h2')] : [];
+      const toc = document.querySelector('.toc') as HTMLElement | null;
+      const nav = document.getElementById('toc-nav');
+      if (toc && nav && headings.length >= 2) {
+        for (const h of headings) {
+          if (!h.id) {
+            h.id = (h.textContent || '')
+              .toLowerCase()
+              .replace(/[^\w]+/g, '-')
+              .replace(/^-+|-+$/g, '');
+          }
+          const a = document.createElement('a');
+          a.href = '#' + h.id;
+          a.textContent = h.textContent;
+          nav.append(a);
+        }
+        toc.hidden = false;
+      }
     </script>
     <script>
       // The documented 3-line density-toggle recipe.
@@ -174,4 +204,39 @@ const current =
     gap: 0.75rem;
   }
   .demo h2 { font-size: var(--bo-font-size-lg); }
+
+  /* Content + on-this-page rail. Rail drops out below its breakpoint and in
+     print; content always keeps full width when the rail is gone. */
+  .docs-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: var(--bo-space-8);
+    align-items: start;
+  }
+  .docs-content { min-inline-size: 0; }
+  .toc {
+    position: sticky;
+    inset-block-start: var(--bo-space-4);
+    font-size: var(--bo-font-size-sm);
+  }
+  .toc__heading {
+    font-size: var(--bo-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--bo-color-text-muted);
+    margin-block-end: var(--bo-space-2);
+  }
+  #toc-nav { display: flex; flex-direction: column; gap: var(--bo-space-1); }
+  #toc-nav a {
+    color: var(--bo-color-text-secondary);
+    text-decoration: none;
+    border-inline-start: 2px solid var(--bo-color-border-default);
+    padding-inline-start: var(--bo-space-3);
+    padding-block: 0.1rem;
+  }
+  #toc-nav a:hover { color: var(--bo-color-text-primary); border-color: var(--bo-color-accent); }
+  html { scroll-behavior: smooth; scroll-padding-block-start: var(--bo-space-4); }
+  @media (max-width: 60rem) { .docs-main { grid-template-columns: 1fr; } .toc { display: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media print { .toc { display: none; } }
 </style>

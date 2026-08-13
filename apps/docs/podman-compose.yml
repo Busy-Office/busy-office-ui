@@ -1,0 +1,9 @@
+# podman-compose -f apps/docs/podman-compose.yml up --build
+# then open http://localhost:8081/
+services:
+  docs:
+    build:
+      context: ../..
+      dockerfile: apps/docs/Containerfile
+    ports:
+      - "8081:80"

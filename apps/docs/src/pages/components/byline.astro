@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester · 10 Aug 2026</span>`;
@@ -11,6 +12,7 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
     class, plain markup, domain-neutral.
   </p>
 
+  <ClassRef component="byline" />
   <section class="demo">
     <h2>Default</h2>
     <p><span class="bo-byline"><strong>R. Vance</strong> · Requester · 10 Aug 2026, 9:08</span></p>

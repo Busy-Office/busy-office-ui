@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 const tabsMarkup = `<div class="bo-tabs">
@@ -25,6 +26,7 @@ const tabsMarkup = `<div class="bo-tabs">
     <code>hidden</code> attribute, <code>initTabs()</code> adds roving tabindex and
     arrow-key navigation with automatic activation.
   </p>
+  <ClassRef component="tabs" />
   <section class="demo">
     <div class="bo-tabs">
       <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
