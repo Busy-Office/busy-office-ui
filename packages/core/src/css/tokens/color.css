@@ -17,6 +17,16 @@
     --bo-palette-blue-500: #3b82f6;
     --bo-palette-blue-600: #2563eb;
     --bo-palette-blue-700: #1d4ed8;
+    /* Teal — the "Ledger" brand accent (ledger ink / in-the-black), kept clearly
+       cyan-teal so it stays distinct from the reserved success-green. */
+    --bo-palette-teal-50: #f0fdfa;
+    --bo-palette-teal-100: #ccfbf1;
+    --bo-palette-teal-300: #5eead4;
+    --bo-palette-teal-400: #2dd4bf;
+    --bo-palette-teal-500: #14b8a6;
+    --bo-palette-teal-600: #0d9488;
+    --bo-palette-teal-700: #0f766e;
+    --bo-palette-teal-800: #115e59;
     --bo-palette-red-50: #fef2f2;
     --bo-palette-red-300: #fca5a5;
     --bo-palette-red-400: #f87171;
@@ -37,7 +47,7 @@
     --bo-color-bg-surface: #ffffff;
     --bo-color-bg-surface-raised: #ffffff;
     --bo-color-bg-muted: var(--bo-palette-gray-100);
-    --bo-color-bg-selected: var(--bo-palette-blue-50);
+    --bo-color-bg-selected: var(--bo-palette-teal-50);
     /* Opaque hover surface — used where translucent overlays can't work
        (e.g. sticky table cells that must stay opaque over scrolled content). */
     --bo-color-bg-hover: var(--bo-palette-gray-100);
@@ -52,9 +62,9 @@
     --bo-color-text-muted: var(--bo-palette-gray-600);
     --bo-color-text-disabled: var(--bo-palette-gray-400);
     --bo-color-text-inverse: #ffffff;
-    --bo-color-accent: var(--bo-palette-blue-600);
-    --bo-color-accent-strong: var(--bo-palette-blue-700);
-    --bo-color-accent-subtle: var(--bo-palette-blue-50);
+    --bo-color-accent: var(--bo-palette-teal-700);
+    --bo-color-accent-strong: var(--bo-palette-teal-800);
+    --bo-color-accent-subtle: var(--bo-palette-teal-50);
     --bo-color-danger: var(--bo-palette-red-600);
     --bo-color-danger-strong: var(--bo-palette-red-700);
     --bo-color-danger-subtle: var(--bo-palette-red-50);
@@ -66,15 +76,15 @@
     --bo-color-success-subtle: var(--bo-palette-green-50);
     /* Solid-control backgrounds carry white text in BOTH themes — never
        theme-remapped to a light tint. */
-    --bo-color-accent-solid: var(--bo-palette-blue-600);
+    --bo-color-accent-solid: var(--bo-palette-teal-700);
     --bo-color-danger-solid: var(--bo-palette-red-600);
     /* Status text on the matching *-subtle background. Light mode: 700-weights;
        dark mode remaps to 300-weights so badges stay >= 4.5:1. */
-    --bo-color-accent-text: var(--bo-palette-blue-700);
+    --bo-color-accent-text: var(--bo-palette-teal-800);
     --bo-color-danger-text: var(--bo-palette-red-700);
     --bo-color-warning-text: var(--bo-palette-amber-700);
     --bo-color-success-text: var(--bo-palette-green-700);
-    --bo-color-focus-ring: var(--bo-palette-blue-500);
+    --bo-color-focus-ring: var(--bo-palette-teal-600);
 
     /* Interaction-state tokens. */
     --bo-state-hover-overlay: rgb(0 0 0 / 0.04);
@@ -89,7 +99,7 @@
     --bo-color-bg-surface: #1a1d23;
     --bo-color-bg-surface-raised: #22262e;
     --bo-color-bg-muted: #262a33;
-    --bo-color-bg-selected: #1e2a44;
+    --bo-color-bg-selected: #0b3b37;
     --bo-color-border-default: #2e333d;
     --bo-color-border-strong: #3d434f;
     --bo-color-border-control: var(--bo-palette-gray-500);
@@ -98,13 +108,13 @@
     --bo-color-text-muted: var(--bo-palette-gray-400);
     --bo-color-text-disabled: var(--bo-palette-gray-600);
     --bo-color-bg-hover: #262a33;
-    --bo-color-accent: var(--bo-palette-blue-500);
-    --bo-color-accent-subtle: #1e2a44;
+    --bo-color-accent: var(--bo-palette-teal-400);
+    --bo-color-accent-subtle: #0b3b37;
     --bo-color-danger: var(--bo-palette-red-400);
     --bo-color-danger-subtle: #3a1d1d;
     --bo-color-warning-subtle: #3a2e14;
     --bo-color-success-subtle: #14301d;
-    --bo-color-accent-text: var(--bo-palette-blue-300);
+    --bo-color-accent-text: var(--bo-palette-teal-300);
     --bo-color-danger-text: var(--bo-palette-red-300);
     --bo-color-warning-text: var(--bo-palette-amber-300);
     --bo-color-success-text: var(--bo-palette-green-300);
