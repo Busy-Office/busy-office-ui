@@ -10,6 +10,9 @@
   }
 
   .bo-navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bo-space-2);
     font-weight: var(--bo-font-weight-semibold);
     color: var(--bo-color-text-primary);
     text-decoration: none;

@@ -1,5 +1,6 @@
 ---
 import '@busy-office/ui/css';
+import Logo from '../components/Logo.astro';
 const { title } = Astro.props;
 const sections = [
   {
@@ -84,7 +85,7 @@ const current =
     <div class="bo-app-shell">
       <header class="bo-navbar bo-app-shell__header">
         <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>
-        <a class="bo-navbar__brand" href={base + '/'}>busy-office-ui</a>
+        <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
         <span class="bo-badge bo-badge--accent">v0.1.0</span>
         <span class="bo-navbar__spacer"></span>
         <label class="bo-choice" for="density">Density
