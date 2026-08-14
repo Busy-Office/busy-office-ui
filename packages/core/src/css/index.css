@@ -30,5 +30,6 @@
 @import "./components/skeleton/skeleton.css";
 @import "./components/state/state.css";
 @import "./components/quantity/quantity.css";
+@import "./components/date/date.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

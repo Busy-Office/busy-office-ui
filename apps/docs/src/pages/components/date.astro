@@ -1,0 +1,121 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const basic = `<span class="bo-date">
+  <span class="bo-date__value">Aug 21, 2026</span>
+  <span class="bo-date__relative">(in 7 days)</span>
+</span>`;
+
+const today = `<span class="bo-date">
+  <span class="bo-date__value">Aug 14, 2026</span>
+  <span class="bo-date__relative">(today)</span>
+</span>`;
+
+const overdue = `<!-- two-channel, same contract as Amount's --negative — the word
+     "Overdue" is in the text; colour only adds the hue. -->
+<span class="bo-date bo-date--overdue">
+  <span class="bo-date__value">Aug 10, 2026</span>
+  <span class="bo-date__relative">(Overdue by 4 days)</span>
+</span>`;
+
+const muted = `<!-- no --muted modifier — .bo-u-text-muted (existing utility)
+     already does this -->
+<span class="bo-date bo-u-text-muted">
+  <span class="bo-date__value">Jul 1, 2026</span>
+</span>`;
+
+const editable = `<!-- .bo-date is DISPLAY only, like .bo-amount. For an editable
+     date, use a plain native input — nothing to add, a native date
+     picker is already good. -->
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="dt-due">Due date</label>
+  <input class="bo-input" id="dt-due" type="date" value="2026-08-21" />
+</div>`;
+
+const table = `<table class="bo-data-table">
+  <thead><tr><th>PO</th><th>Due date</th></tr></thead>
+  <tbody>
+    <tr><td>PO-88213</td><td><span class="bo-date"><span class="bo-date__value">Aug 21, 2026</span><span class="bo-date__relative">(in 7 days)</span></span></td></tr>
+    <tr><td>PO-88214</td><td><span class="bo-date bo-date--overdue"><span class="bo-date__value">Aug 10, 2026</span><span class="bo-date__relative">(Overdue by 4 days)</span></span></td></tr>
+  </tbody>
+</table>`;
+
+const markup = `<span class="bo-date">
+  <span class="bo-date__value">Aug 21, 2026</span>       <!-- your app formats the date -->
+  <span class="bo-date__relative">(in 7 days)</span>     <!-- optional -->
+</span>
+
+<!-- modifiers: --overdue -->`;
+---
+<Gallery title="Date">
+  <p class="demo-note">
+    A read-only date value, the <a href="/components/amount">Amount</a>/<a href="/components/quantity">Quantity</a>
+    counterpart for dates: your app formats the absolute date and the optional
+    relative text; this styles and aligns them. There's no editable variant —
+    for data entry, use a plain native <code>&lt;input type="date"&gt;</code>.
+  </p>
+
+  <ClassRef component="date" />
+
+  <section class="demo">
+    <h2>Basic</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted"><code>__relative</code> is optional, muted, plain
+    text — your app decides the wording ("in 7 days", "3 weeks ago").</p>
+  </section>
+
+  <section class="demo">
+    <h2>Today</h2>
+    <Demo code={today} />
+  </section>
+
+  <section class="demo">
+    <h2>Overdue — two-channel</h2>
+    <Demo code={overdue} />
+    <p class="bo-u-text-muted">The word "Overdue" lives in the <em>text</em>, so
+    colourblind and screen-reader users get the meaning without the colour —
+    same contract as Amount's <code>--negative</code>. <code>--overdue</code>
+    only adds the hue.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Muted (no dedicated modifier)</h2>
+    <Demo code={muted} />
+    <p class="bo-u-text-muted">There's no <code>--muted</code> modifier — the
+    existing <a href="/base/utilities">utility</a> <code>.bo-u-text-muted</code>
+    already does this; a component modifier would just duplicate it.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Editable date — a plain input, not <code>.bo-date</code></h2>
+    <Demo code={editable} />
+    <p class="bo-u-text-muted"><code>.bo-date</code> is read-only display, like
+    <code>.bo-amount</code>. There's deliberately no input variant — a native
+    date picker already covers entry well; nothing to add at this layer.</p>
+  </section>
+
+  <section class="demo">
+    <h2>In a table column</h2>
+    <div class="bo-data-table-container">
+      <Demo code={table} />
+    </div>
+    <p class="bo-u-text-muted">Same component, dropped straight into a table
+    cell — no table-specific variant needed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <ApiTable component="date"
+    notes={['Read-only display, like Amount — your app formats the date and the optional relative text.',
+            'Overdue is two-channel — the word "Overdue" MUST be in the markup; <code>--overdue</code> only adds colour.',
+            'No <code>--muted</code> modifier — use the existing <code>.bo-u-text-muted</code> utility instead.',
+            'No editable variant — use a plain native <code>&lt;input type="date"&gt;</code> for data entry.']} />
+  <Related links={[["/components/amount", "Amount"], ["/components/quantity", "Quantity"], ["/base/utilities", "Utilities"]]} />
+</Gallery>

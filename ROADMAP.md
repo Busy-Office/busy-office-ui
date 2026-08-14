@@ -670,31 +670,26 @@ detail-form patterns).
         `.bo-widget__toggle-icon` (no explicit size, inherits contextual
         font-size already). Stylelint, contrast gate, page-shape gate,
         and 33 tests all pass unchanged (CSS-only, no new class).
-21. [ ] **Date field (display)** — Explore spike run in an isolated git
-        worktree (`explore/date-component`, discarded after evaluation,
-        nothing merged directly). Seeded from the Long-term backlog's own
-        "date-field component" note (Ideas seed list is exhausted — this
-        is the "generate from an ERP gap" fallback the dispatcher's own
-        playbook calls for). SPIKE SUCCEEDED, graduating as a real build
-        item. `.bo-date` — the Amount/Quantity counterpart for dates:
+21. [x] **Date field (display)** — shipped for real (the worktree spike
+        itself was discarded, per the Explore playbook). `.bo-date`
+        (`packages/core/src/css/components/date/date.css`, scaffolded via
+        `new:component`) — the Amount/Quantity counterpart for dates:
         `__value` (app-formatted absolute date) + optional `__relative`
         (muted, small — "in 7 days", "Overdue by 4 days"), one modifier
-        `--overdue` (two-channel like Amount's `--negative` — the word
-        "Overdue" MUST be in the text, color only adds the hue). Editing
-        still uses a plain native `<input type="date">` directly — no
-        `--input` variant, same reasoning as Amount (nothing to add for
-        entry, only for display). **Real design refinement the spike
-        itself surfaced:** a `--muted` modifier was drafted first, then
-        DROPPED once the spike revealed it exactly duplicates the
-        existing `.bo-u-text-muted` utility — shipping it would have
-        violated "don't invent narrow variants" against something that
-        already exists. Verified in the spike: renders correctly in a
-        table column and standalone, both themes; contrast passes reusing
-        the existing `--bo-color-danger-text` pairing (no new colour
-        pairing needed). Accept: `.bo-date` shipped + documented on a
-        real component docs page (via `new:component`), `--overdue`
-        two-channel contract verified, no `--muted` modifier (point to
-        the utility instead), verified live both themes.
+        `--overdue` (two-channel like Amount's `--negative` — "Overdue" is
+        in the text, color only adds the hue). Editing stays a plain
+        native `<input type="date">` — no `--input` variant, same
+        reasoning as Amount. **No `--muted` modifier**, on purpose — the
+        spike caught that it would have exactly duplicated the existing
+        `.bo-u-text-muted` utility; the docs page demonstrates composing
+        the utility directly instead. Zero new colour pairing (reuses
+        `--bo-color-danger-text`). New docs page `/components/date` — 7
+        demo sections (basic, today, overdue, muted-via-utility, editable
+        input, table column, markup), 21 component pages now gate-verified
+        (page-shape). Verified live via Podman: all demos render
+        correctly in both themes, spacious density carries through
+        consistently, overdue red + text both present. 33 tests pass
+        (unchanged — no JS), gates green.
 
 ## Long term (post-1.0)
 

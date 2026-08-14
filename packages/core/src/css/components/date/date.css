@@ -1,0 +1,30 @@
+@layer bo-components {
+  /* A read-only date value — the Amount/Quantity counterpart for dates:
+     your app formats the absolute date and the optional relative text;
+     this styles and aligns them. Editing still uses a native
+     <input type="date"> directly — no --input variant, same reasoning as
+     Amount (a native date picker is already good; nothing to add for
+     entry, only for display). */
+  .bo-date {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--bo-space-1);
+  }
+
+  .bo-date__relative {
+    color: var(--bo-color-text-muted);
+    font-size: var(--bo-font-size-xs);
+  }
+
+  /* Overdue: two-channel, same contract as Amount's --negative — the word
+     "Overdue" MUST be in the text (see the docs demo), color only adds
+     the hue. No --muted modifier: .bo-u-text-muted (existing utility)
+     already does that; a component modifier would just duplicate it. */
+  .bo-date--overdue {
+    color: var(--bo-color-danger-text);
+  }
+
+  .bo-date--overdue .bo-date__relative {
+    color: inherit;
+  }
+}
