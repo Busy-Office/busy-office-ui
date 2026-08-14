@@ -91,4 +91,12 @@ await build(`${layers}@import "${srcCss}/integrations/htmx.css";\n`, from, join(
 // 5. Motion module (opt-in)
 await build(`${layers}@import "${srcCss}/motion/motion.css";\n`, from, join(outCss, 'motion.css'));
 
+// 6. Brand presets (opt-in, one file per preset) — deliberately UNLAYERED
+// content (no @layer wrapper in the source), so it wins the cascade
+// contract over layered component styles per /concepts/theming.
+for (const f of await readdir(join(srcCss, 'brand')).catch(() => [])) {
+  if (!f.endsWith('.css')) continue;
+  await build(`${layers}@import "${srcCss}/brand/${f}";\n`, from, join(outCss, f));
+}
+
 console.log('CSS dist complete.');

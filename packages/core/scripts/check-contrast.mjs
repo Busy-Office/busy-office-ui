@@ -99,6 +99,48 @@ for (const [theme, vars] of [['light', light], ['dark', dark]]) {
   }
 }
 
+// Brand presets (src/css/brand/*.css) re-skin the accent family via an
+// unlayered override — validate each one the SAME way as the base theme:
+// merge its declared tokens over the base light/dark vars, then re-run
+// every PAIR. A brand file that doesn't touch a given pair just reproduces
+// the already-passing base result, so re-checking all of them is cheap and
+// correct rather than trying to guess which pairs a given file touches.
+report.brands = {};
+try {
+  const brandDir = join(pkgRoot, 'src/css/brand');
+  const brandFiles = (await readdir(brandDir)).filter((f) => f.endsWith('.css'));
+  for (const file of brandFiles) {
+    const name = file.replace(/\.css$/, '');
+    const brandCss = await readFile(join(brandDir, file), 'utf8');
+    const brandDarkStart = brandCss.indexOf('[data-theme="dark"]');
+    const brandLight = parseScope(brandDarkStart === -1 ? brandCss : brandCss.slice(0, brandDarkStart));
+    const brandDark =
+      brandDarkStart === -1 ? {} : parseScope(brandCss.slice(brandDarkStart));
+
+    for (const [theme, base, override] of [
+      ['light', light, brandLight],
+      ['dark', dark, brandDark],
+    ]) {
+      const vars = { ...base, ...override };
+      const key = `${name}-${theme}`;
+      report.brands[key] = [];
+      for (const [fgTok, bgTok, threshold] of PAIRS) {
+        const fg = resolve(vars, vars[fgTok] ?? '');
+        const bg = resolve(vars, vars[bgTok] ?? '');
+        if (!fg?.startsWith('#') || !bg?.startsWith('#')) continue;
+        const r = Math.round(ratio(fg, bg) * 100) / 100;
+        const pass = r >= threshold;
+        if (!pass) failures++;
+        report.brands[key].push({ fg: fgTok, bg: bgTok, fgValue: fg, bgValue: bg, ratio: r, threshold, pass });
+        if (!pass) console.log(`FAIL [brand:${key}] ${fgTok} on ${bgTok}: ${r} (>= ${threshold})`);
+      }
+      console.log(`  ok [brand:${key}] ${report.brands[key].length} pairs checked`);
+    }
+  }
+} catch (e) {
+  if (e.code !== 'ENOENT') throw e; // no src/css/brand dir yet is fine
+}
+
 // Coverage guard (site-grill S-4): a component that pairs a text token on a
 // background token the PAIRS list doesn't cover is a silent contrast gap.
 // Scan component + primitive CSS for `color:` and `background*:` token usage

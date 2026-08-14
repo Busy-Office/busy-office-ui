@@ -878,8 +878,31 @@ Highest-leverage bets (2026-08-14 review — ranked):
       dependency.
 - [ ] **Versioned docs** — the CHANGELOG covers pre-1.0 churn; at 1.0, snapshot docs
       per major so pinned users read their version.
-- [ ] **Theme presets** — a small set of validated brand palettes (each passing the
-      contrast gate) as `brand-*.css`, demonstrating the semantic-tier re-skin.
+- [x] **Theme presets** — shipped one real preset (not the whole "small
+      set" — see below), generated via the Explore fallback (backlog +
+      Ideas seed list both empty, same pattern as items 21/6).
+      `packages/core/src/css/brand/brand-indigo.css`: a genuinely
+      importable file (`@busy-office/ui/css/brand-indigo`, resolved by
+      the existing `./css/*` wildcard export — no new export entry
+      needed), following the exact recipe already documented in
+      `/concepts/theming` (accent family + focus-ring + bg-selected,
+      both light/dark blocks, deliberately unlayered so the cascade
+      contract lets it win). **Genuinely validated, not asserted:**
+      extended `scripts/check-contrast.mjs` to discover and check every
+      file in `src/css/brand/` the same way it checks the base theme —
+      all 24 pairs pass in both light and dark for the indigo values.
+      Wired into `build-component-css.mjs` (mirrors the existing
+      htmx.css/motion.css opt-in-module pattern). Live demo added to
+      `/concepts/theming` — a scoped `.brand-preview` box (same token
+      values, targeted at a class instead of `:root` so it doesn't
+      re-skin the whole live docs site) showing a real button/badge/link
+      re-skinned correctly in both themes, verified live via Podman.
+      **Deliberately scoped to one preset, not "a small set"** — the
+      mechanism (file format, build wiring, contrast validation, docs
+      demo) is now proven and reusable; a second/third preset is a
+      cheap follow-up once wanted, not something to speculate additional
+      hues for right now. 33 tests unchanged (no JS touched), gates
+      green including the new brand-contrast check.
 - [ ] **Visual-regression harness** — screenshot diffing across density × theme in CI,
       so the "looks right" pass becomes mechanical like the rest.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).

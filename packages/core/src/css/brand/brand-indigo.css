@@ -1,0 +1,35 @@
+/**
+ * A real, importable brand preset — not just the theming guide's prose
+ * example. Re-skins the accent family only (never component files, never
+ * the raw palette tier), following the exact recipe documented in
+ * /concepts/theming: accent + accent-strong + accent-solid + accent-subtle
+ * + accent-text, plus the accent-adjacent focus-ring/bg-selected tokens the
+ * framework colors by default. Import AFTER @busy-office/ui/css, outside
+ * any @layer, so the cascade contract lets it win.
+ *
+ * Values validated by scripts/check-contrast.mjs (same gate as the base
+ * theme, extended to check every packages/core/src/css/brand/*.css file) —
+ * not asserted, checked. Both light and dark blocks are required per the
+ * cascade contract's "dark rule": an unlayered :root beats the framework's
+ * layered dark remap of the same token, so a light-only override would
+ * leak into dark mode.
+ */
+:root {
+  --bo-color-accent: #4338ca;
+  --bo-color-accent-strong: #3730a3;
+  --bo-color-accent-solid: #4338ca;
+  --bo-color-accent-subtle: #eef2ff;
+  --bo-color-accent-text: #3730a3;
+  --bo-color-focus-ring: #4f46e5;
+  --bo-color-bg-selected: #eef2ff;
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: #818cf8;
+  --bo-color-accent-strong: #a5b4fc;
+  --bo-color-accent-solid: #4f46e5;
+  --bo-color-accent-subtle: #312e81;
+  --bo-color-accent-text: #c7d2fe;
+  --bo-color-focus-ring: #818cf8;
+  --bo-color-bg-selected: #312e81;
+}

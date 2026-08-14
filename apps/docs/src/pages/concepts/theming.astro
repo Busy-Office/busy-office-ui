@@ -51,6 +51,42 @@ const brandMarkup = `/* brand.css — imported AFTER the framework, outside any 
     <pre><code>{brandMarkup}</code></pre>
   </section>
   <section class="demo">
+    <h2>A real, shipped preset — <code>@busy-office/ui/css/brand-indigo</code></h2>
+    <p>Not just this page's prose example — an actual importable file
+    (<code>packages/core/src/css/brand/brand-indigo.css</code>), validated by the
+    same contrast gate as the base theme (<code>scripts/check-contrast.mjs</code>
+    now checks every file in <code>src/css/brand/</code>, not asserted by hand).
+    The live preview below applies the identical token values scoped to just this
+    box (for a real app, they'd go on <code>:root</code> as shown above — this
+    page keeps its own default teal everywhere else on purpose):</p>
+    <div class="brand-preview" style="padding: var(--bo-space-4); border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); display: flex; gap: var(--bo-space-2); align-items: center; flex-wrap: wrap;">
+      <button class="bo-btn">Approve</button>
+      <button class="bo-btn bo-btn--secondary">Cancel</button>
+      <span class="bo-badge bo-badge--accent">In review</span>
+      <a href="#" class="bo-u-text-muted" style="color: var(--bo-color-accent)">A link, for focus-ring/link-color coverage</a>
+    </div>
+    <style>
+      .brand-preview {
+        --bo-color-accent: #4338ca;
+        --bo-color-accent-strong: #3730a3;
+        --bo-color-accent-solid: #4338ca;
+        --bo-color-accent-subtle: #eef2ff;
+        --bo-color-accent-text: #3730a3;
+        --bo-color-focus-ring: #4f46e5;
+        --bo-color-bg-selected: #eef2ff;
+      }
+      [data-theme="dark"] .brand-preview {
+        --bo-color-accent: #818cf8;
+        --bo-color-accent-strong: #a5b4fc;
+        --bo-color-accent-solid: #4f46e5;
+        --bo-color-accent-subtle: #312e81;
+        --bo-color-accent-text: #c7d2fe;
+        --bo-color-focus-ring: #818cf8;
+        --bo-color-bg-selected: #312e81;
+      }
+    </style>
+  </section>
+  <section class="demo">
     <h2>Switching themes at runtime</h2>
     <p>Flip <code>data-theme</code> on the root. One catch: a component's
     <code>background-color</code> transition animates on the switch while the text
