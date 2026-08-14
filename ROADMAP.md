@@ -60,49 +60,57 @@ Ordered by value × effort; `npm publish` is intentionally last — it's
 owner-gated, not something a loop iteration can close.
 
 **Queued (priority order)**
-0. [ ] **P0 — REOPENED: navigation flash/flicker, still happening**
-       (2026-08-14 user report, second report after the fix below — still
-       flickers when navigating via the menu). The earlier fix (blocking
-       `is:inline` head script setting `data-theme` before first paint,
-       commit `12e60b8`) verifiably made `data-theme` correct at first
-       paint of the NEW document — that part is confirmed still working.
-       So the residual flicker the user is seeing is likely a DIFFERENT
-       mechanism than late theme application within one page: candidates
-       to investigate next Continue-bug tick, in order:
-       1. The inherent MPA cross-document navigation gap — this is a
-          static multi-page site (every link is a real navigation, not
-          client routing); browsers can paint a blank/default frame
-          between unloading the old document and first-painting the new
-          one, and no CSS *inside* either document can fully control that
-          gap. Check whether a `<meta name="color-scheme">` (hints the
-          UA's own default background before any stylesheet loads) helps.
-       2. The density selector has the SAME late-application pattern the
-          theme one used to have (still applied in the body-end script,
-          never audited) — a layout/spacing jump on every nav, separate
-          from a color flash, could read as "flicker" too.
-       3. Cross-document View Transitions (`@view-transition` / the
-          browser API) as a real fix if the browser floor (Chrome 119)
-          supports them — needs a compat check, may not be available at
-          the stated floor.
-       *Do not re-ship the same head-script fix* — that mechanism is
-       confirmed working for what it targets; this needs actual
-       diagnosis of what's flickering now, not a repeat.
-       <details><summary>History — the theme-application-timing fix (still valid, just not sufficient)</summary>
-       Fixed: a blocking `is:inline` script in `<head>` (before both
-       stylesheets, confirmed via the built HTML) sets
-       `document.documentElement.dataset.theme` from `localStorage`
-       synchronously, before first paint — the standard FOUC-prevention
-       pattern. The old body-end script no longer re-applies the theme (that
-       was the redundant, late, flash-causing call); it now only syncs the
-       `<select>` display and wires the change handler. Verified live
-       (bind-mounted Podman): navigated across 3 pages with dark preference
-       stored — `data-theme` was already `"dark"` at first check on every
-       one, no light-default fallback. Confirmed no regression: a fresh
-       visitor with no stored preference still gets light by default, and
-       the manual toggle (with its `data-bo-theming` transition guard) still
-       works. Landing page (`index.astro`) is unaffected/out of scope — its
-       theme control is scoped to the demo widget only, doesn't read the
-       global `bo-theme` key.</details>
+0. [ ] **P0 — navigation flash/flicker: root-caused, fix shipped, needs your
+       eyes to confirm.** Built a real diagnostic harness (Puppeteer +
+       Chrome, in `scratchpad/`, deleted after use — not committed) instead
+       of guessing:
+       - **Timing instrumentation** (`evaluateOnNewDocument` + a
+         MutationObserver on `<html>` + a `PerformanceObserver` for paint
+         timing) proved a real unpainted gap on every navigation: theme AND
+         density both resolve to their correct values by **~30ms** after
+         navigation start, but **first paint doesn't happen until ~80ms**.
+         Something is on screen for that ~50ms window, and with zero
+         `color-scheme` hint anywhere in the codebase (grepped, confirmed
+         absent), the browser's own default during that window is a
+         light/white canvas — regardless of the user's saved dark
+         preference. This is the well-documented "flash of white on MPA
+         navigation" failure class, now confirmed to structurally exist
+         here, not assumed.
+       - **Fix:** `color-scheme: light dark` on `:root` (tokens/color.css),
+         narrowed to `dark`/`light` under `[data-theme="dark"/"light"]` once
+         that resolves — plus the matching `<meta name="color-scheme">` in
+         `<head>` (Gallery.astro) as a belt-and-suspenders per-spec hint.
+         Tells the browser's OWN pre-paint rendering to follow the OS
+         preference instead of hard-defaulting to white; once `data-theme`
+         resolves (already confirmed to happen before paint), the more
+         specific rule locks it to the actual saved choice — this also
+         fixes native form-control chrome (scrollbars, date-input calendar
+         icon) to match the theme, a real secondary bug this incidentally
+         closes. Landing page (`index.astro`) deliberately excluded — no
+         sidebar/menu exists there, and its chrome is hard-coded light
+         regardless of the global preference, so the same fix there would
+         create a NEW mismatch (native controls following OS dark while the
+         page stays light), not close one.
+       - **What I could NOT directly confirm:** a pixel-level capture of
+         the actual white frame. Tried CDP screencast capture (both
+         headless and headed Chrome) — it coalesces/throttles frames too
+         aggressively to catch a sub-100ms transition; 2–3 frames total
+         were delivered across the whole navigation, none mid-transition.
+         That's a real tooling limit, not evidence the fix is wrong — the
+         timing data and the well-established root-cause mechanism both
+         point the same direction, and the fix is purely additive (cannot
+         make anything worse, only affects the browser's pre-paint
+         default) — but genuine visual confirmation needs a human watching
+         a real navigation, the same category of limit already logged for
+         VoiceOver. **Please check whether it's actually gone** — if it
+         persists, that's real signal the mechanism is something else
+         (density's own late body-script application is still a live,
+         un-ruled-out candidate; noted for the next pass if needed).
+       - No dedicated regression-test seam added: this is static HTML/CSS
+         served by a container, not something the Vitest/jsdom suite
+         reaches, and a whole new gate script for one CSS property would be
+         disproportionate — the reasoning is documented in the CSS comment
+         itself instead, for whoever next considers touching it.
 1. [x] **Skeleton / empty / error states** — shipped as two components (not
        three classes): `.bo-skeleton` (`--circle`/`--block` shimmer
        placeholders, `aria-busy` is the programmatic channel) and `.bo-state`

@@ -92,9 +92,30 @@
     --bo-state-disabled-opacity: 0.5;
     --bo-state-error-color: var(--bo-color-danger);
     --bo-state-error-bg: var(--bo-color-danger-subtle);
+
+    /* Tells the browser's OWN default rendering (before ANY author CSS or
+       script runs) to follow the OS light/dark preference rather than
+       hard-defaulting to a light/white canvas. This is a static MPA — every
+       link click is a full document navigation — and there's a real
+       unpainted gap between the old document unloading and the new one's
+       first paint (measured: theme/density resolve by ~30ms, first paint
+       isn't until ~80ms) during which the browser paints its OWN default,
+       not ours. Root cause of the 2026-08-14 "still flickers after the
+       theme-timing fix" report: that fix made data-theme correct BEFORE
+       paint, but said nothing about what's shown DURING the gap before
+       paint even happens. Once data-theme resolves, the two rules below
+       lock color-scheme to the ACTUAL saved preference (also fixes native
+       form-control chrome — scrollbars, date-input calendar icon — to
+       match the theme, not just the page background). */
+    color-scheme: light dark;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
   }
 
   [data-theme="dark"] {
+    color-scheme: dark;
     --bo-color-bg-canvas: #0f1115;
     --bo-color-bg-surface: #1a1d23;
     --bo-color-bg-surface-raised: #22262e;
