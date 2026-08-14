@@ -649,6 +649,27 @@ detail-form patterns).
         fieldset), focus lands on summary, link click focuses the exact
         field, survives the boosted page, both themes correct. Gates
         green, 20 component pages / 47 total pages built.
+20. [x] **Density-aware icon sizing** — Explore idea, evaluated and fixed
+        directly (small, unambiguous CSS-only change; no worktree
+        ceremony needed — no interaction-model uncertainty the way
+        RF-scanner/validation-summary had). Audited every icon-sizing
+        rule in the codebase for a `rem`-vs-`em` mismatch (the actual bug
+        shape this idea was chasing): found and confirmed exactly one,
+        `.bo-sidebar-nav__icon`'s `inline-size: 1.125rem` — measured live
+        (not assumed) that it stayed a fixed 18px across all three
+        density tiers while the sibling label's font-size correctly
+        ranged 13px (compact) → 14px (comfortable) → 16px (spacious), a
+        real, visible disproportion. Fixed: `1.125rem` → `1.3em`, which
+        inherits the link's own `--bo-density-font-size` and now measures
+        16.9px → 18.2px → 20.8px across the three tiers — proportional,
+        not fixed. Checked and left alone: `.bo-state__icon` (`font-size:
+        2rem`, a large centered empty/error-state illustration, not list
+        content — deliberately NOT density-scaled, same reasoning a hero
+        graphic wouldn't shrink); `.bo-btn--icon` (already fully
+        density-aware via `--bo-btn-height`/`--bo-density-font-size`);
+        `.bo-widget__toggle-icon` (no explicit size, inherits contextual
+        font-size already). Stylelint, contrast gate, page-shape gate,
+        and 33 tests all pass unchanged (CSS-only, no new class).
 
 ## Long term (post-1.0)
 

@@ -195,7 +195,12 @@ Seed list — Explore pulls from here or adds to it:
   directly). Succeeded cleanly: `initValidationSummary()`, zero new CSS
   (the existing `:user-invalid` field styling + `.bo-alert` cover
   everything). Graduated as ROADMAP.md item 19.
-- Density-aware icon set sizing.
+- ~~Density-aware icon set sizing~~ — evaluated 2026-08-14, fixed directly
+  (small CSS-only change, no worktree needed). Found and fixed one real
+  `rem`-vs-`em` mismatch: `.bo-sidebar-nav__icon` stayed a fixed 18px
+  across every density tier while its label scaled 13-16px — measured
+  live, not assumed. Graduated as ROADMAP.md item 20. Audited the other
+  icon-sizing rules in the codebase; none had the same bug.
 - ~~RF-scanner / warehouse-scan components~~ — spiked 2026-08-14 in an
   isolated worktree (discarded, nothing merged directly). Scan-input
   mechanics work well and graduated as a real build item (ROADMAP.md Slice
@@ -205,6 +210,14 @@ Seed list — Explore pulls from here or adds to it:
   library-wide gap (no `forced-colors` support anywhere), not RF-scanner-
   specific — split into its own item (9c / item 18), don't re-bundle it
   into a future warehouse-screen item.
+
+**Seed list is now exhausted** (2026-08-14) — every idea above has been
+spiked/shipped/discarded. The next Explore dispatch with an empty seed
+list should generate a fresh idea from an ERP gap (per this playbook's
+own step 1: "or generate one from ERP gaps") rather than stalling — but
+the deeper prioritization question (what's actually worth exploring next)
+is exactly what the still-open Objective review (`/round-table`, see
+ROADMAP.md's Slice 6 note) is for. Ask the user to run it when ready.
 
 ---
 

@@ -52,9 +52,13 @@
     font-weight: var(--bo-font-weight-medium);
   }
 
+  /* em, not rem: scales with the link's own font-size (--bo-density-
+     font-size), so the icon stays proportional to its label across
+     density instead of a fixed 18px at every tier (measured: was 18px
+     unchanged from 13px compact text through 16px spacious text). */
   .bo-sidebar-nav__icon {
     flex: none;
-    inline-size: 1.125rem;
+    inline-size: 1.3em;
     text-align: center;
   }
 
