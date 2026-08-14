@@ -84,4 +84,16 @@
     opacity: 0.7;
     cursor: progress;
   }
+
+  /* Forced-colors (Windows High Contrast Mode): backgrounds get flattened
+     to the system palette, so the solid/ghost/danger variants — whose
+     ONLY boundary is --bo-btn-border: transparent relying on the fill —
+     would lose their button shape entirely. A real border in a system
+     color keeps every variant identifiable as a button; normal theming
+     is untouched since this only applies under forced-colors. */
+  @media (forced-colors: active) {
+    .bo-btn {
+      border-color: ButtonText;
+    }
+  }
 }

@@ -561,24 +561,49 @@ detail-form patterns).
         page-shape gate, quantity.css/ts vs. sibling components) came back
         clean — one real finding, fixed, no further instances. 26 tests
         pass (unchanged), gates green.
-18. [ ] **`forced-colors` (Windows High Contrast Mode) support** —
-        surfaced by the RF-scanner Explore spike (item 9c) as a
-        pre-existing, library-wide gap: zero `@media (forced-colors:
-        active)` handling anywhere in `packages/core/src/css`. Not
-        RF-scanner-specific — every component that relies on background
-        color alone for a boundary (button fills, badge tints, focus
-        rings drawn as `box-shadow` rather than a real `outline`) is a
-        candidate for disappearing under forced-colors, where the OS
-        overrides author backgrounds/borders to a small system palette.
-        Needs a real audit pass (which components use `outline` vs
-        `box-shadow` for focus, which rely on a filled background as the
-        ONLY boundary) before scoping a fix — likely a small `forced-
-        colors: active` media block adding `outline`/`border` fallbacks
-        at the primitive/token layer, not per-component. Accept (draft,
-        refine at build time): every interactive/focusable element stays
-        visually distinguishable under forced-colors (verified via the
-        `forced-colors: active` emulation in Chrome DevTools — the same
-        environment already used for theme/density testing).
+18. [x] **`forced-colors` (Windows High Contrast Mode) support** — real
+        audit run, not just the spike's grep. Focus rings were **already
+        correct**: the one global `:focus-visible` rule (`reset/index.css`)
+        already uses a real `outline`, not `box-shadow` — nothing to fix
+        there. The audit found 5 real gaps, all sharing the same shape
+        (background/box-shadow is the ONLY boundary, no real border) and
+        all fixed the same way (a scoped `@media (forced-colors: active)`
+        block adding a real `border`/`border-color` in a CSS System Color
+        keyword — `ButtonText`/`CanvasText` — so it adapts to whatever
+        palette the user's OS high-contrast theme uses, never hardcoded):
+        - `.bo-btn` — solid/ghost/danger variants have `--bo-btn-border:
+          transparent`, relying entirely on the fill.
+        - `.bo-badge` — no border in any variant, ever (color-only status
+          tint) — same problem the existing `@media print` block already
+          solved for print; same fix, forced-colors version added
+          alongside it.
+        - `.bo-dialog` / `.bo-offcanvas` — both `border: none` by design
+          (shadow-only edge look); their panel would have NO boundary
+          against the page under forced-colors, since `box-shadow` isn't
+          rendered in that mode at all.
+        - `.bo-data-table tr[data-row-state="error"]` — the existing
+          "non-color channel" for error rows is drawn with `box-shadow`,
+          which would silently disappear under forced-colors, defeating
+          the exact thing that CSS comment says it's for. Swapped to a
+          real `border-inline-start` inside the forced-colors block only
+          (kept `box-shadow` for normal rendering, unchanged).
+        Checked and found ALREADY correct (no fix needed): `.bo-dropdown__menu`
+        and `.bo-alert` both already have real borders, not just shadows.
+        **Verification method:** this environment's Chrome automation
+        cannot literally toggle `forced-colors: active` (no CDP media-
+        feature emulation surface, no OS-level Windows HCM available) —
+        same class of limitation as VoiceOver/NVDA earlier this session,
+        flagged honestly rather than claimed. Verified instead by
+        temporarily injecting the exact same rules under an always-true
+        selector (not gated behind the media query) and screenshotting
+        live: buttons/badges/dialog/data-table error row all render a
+        correct, visible boundary. **NEEDS-RUNTIME:** a final pass on
+        real Windows High Contrast Mode or a browser capable of true
+        `forced-colors` emulation remains open — the CSS is spec-correct
+        (`box-shadow` is documented as not rendered under forced-colors;
+        borders/outlines are) but hasn't been seen under the real feature.
+        Zero visual change to normal rendering (media-gated); contrast
+        gate, stylelint, and 30 tests all pass unchanged.
 
 ## Long term (post-1.0)
 

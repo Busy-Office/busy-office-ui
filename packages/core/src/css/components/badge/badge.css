@@ -56,4 +56,13 @@
       color: #000;
     }
   }
+
+  /* Forced-colors: every status variant is color-only (background tint),
+     so under a flattened system palette a badge is invisible text with no
+     boundary — same problem print solves, same fix: add a real border. */
+  @media (forced-colors: active) {
+    .bo-badge {
+      border: 1px solid ButtonText;
+    }
+  }
 }

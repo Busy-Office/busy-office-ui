@@ -212,6 +212,19 @@
     box-shadow: inset 3px 0 0 var(--bo-color-danger);
   }
 
+  /* Forced-colors: box-shadow isn't rendered under forced-colors, which
+     would silently remove the ONE non-color channel this state has (the
+     comment above explains why it exists). Swap to a real border instead
+     — inset box-shadow doesn't affect layout but border does, which is an
+     acceptable trade-off under forced-colors (a special-purpose reading
+     mode, not a design-fidelity concern). */
+  @media (forced-colors: active) {
+    .bo-data-table tr[data-row-state="error"] > :first-child {
+      box-shadow: none;
+      border-inline-start: 3px solid CanvasText;
+    }
+  }
+
   /* Auto-compaction when the table lives in a narrow container.
      Precedence: an EXPLICIT data-density on the table or its container wins —
      compaction only applies when neither declares one. All density aliases

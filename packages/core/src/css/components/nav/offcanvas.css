@@ -72,4 +72,15 @@
     inline-size: 100%;
     border-inline-end: none;
   }
+
+  /* Forced-colors: same issue as .bo-dialog — border: none by design (the
+     edge-sheet look relies on box-shadow alone), which isn't rendered
+     under forced-colors. The panel is flush to 3 viewport edges, so only
+     the inner edge (facing the page content) actually shows, but a full
+     border is simplest and correct either way. */
+  @media (forced-colors: active) {
+    .bo-offcanvas {
+      border: 1px solid ButtonText;
+    }
+  }
 }

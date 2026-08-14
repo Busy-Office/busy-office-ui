@@ -61,4 +61,14 @@
     border-end-start-radius: inherit;
     border-end-end-radius: inherit;
   }
+
+  /* Forced-colors: the panel's ONLY edge is box-shadow (border: none, by
+     design, for the shadow-only elevation look) — box-shadow isn't
+     rendered under forced-colors, so without this the panel has no
+     visible boundary against the page behind it. */
+  @media (forced-colors: active) {
+    .bo-dialog {
+      border: 1px solid ButtonText;
+    }
+  }
 }
