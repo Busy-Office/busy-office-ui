@@ -223,13 +223,22 @@ detail-form patterns).
        narrow screens — simpler, and a reachable ancestor beats an
        ellipsis that hides one. Wired into `/patterns/record-detail`, the
        exact use case this item named. Verified live, both themes.
-8. [ ] **More patterns** (`apps/docs/src/pages/patterns/`) — 4 exist now
-       (invoice-list, approval, record-detail, detail-form — the last one
-       closed the "multi-step data-entry form" idea originally listed here,
-       via a multi-*section* single-screen form; a true multi-*step* wizard
-       flow using the existing stepper component is still open). Remaining
-       ideas: a dashboard/reporting layout, a settings/admin screen — each
-       composing existing components, not new CSS.
+8. More patterns (`apps/docs/src/pages/patterns/`):
+   - [x] **Reporting dashboard** — `/patterns/reporting-dashboard`. Composes
+         the breadcrumb (shipped last tick) + filter bar/saved views + a
+         stat-tile row + a widget grid mixing a compact data table, an
+         audit-style activity feed, and a collapsible notes card — nearly
+         every piece built this session, in one realistic screen. Zero new
+         CSS. Verified live: collapse toggle and theme switching both work
+         correctly on the composed page (state persists through the theme
+         change), both themes.
+   - [ ] A settings/admin screen pattern is still open.
+   - [ ] A true multi-*step* wizard-flow pattern (using the existing
+         stepper component across actual page/panel transitions, not just
+         a static progress indicator) is still open — distinct from
+         `/patterns/detail-form`'s multi-*section* single screen.
+9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
+       receipt (GR) / goods issue (GI) screens driven by a handheld RF
 9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
        receipt (GR) / goods issue (GI) screens driven by a handheld RF
        scanner, not a mouse. Large-target scan-input field (auto-focus,

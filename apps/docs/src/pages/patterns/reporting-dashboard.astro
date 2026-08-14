@@ -1,0 +1,136 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const rows = [
+  { no: 'INV-10234', vendor: 'Acme Supply Co.', amount: '$4,208.00', status: 'Pending', tone: 'warning' },
+  { no: 'INV-10235', vendor: 'Globex Industrial', amount: '$18,940.50', status: 'Approved', tone: 'success' },
+  { no: 'INV-10236', vendor: 'Initech GmbH', amount: '$730.25', status: 'Rejected', tone: 'danger' },
+];
+---
+<Gallery title="Pattern: reporting dashboard">
+  <p class="demo-note">
+    A full reporting screen, composed entirely from existing components: breadcrumb,
+    filter bar + saved views, a stat-tile row, and a widget grid mixing a data table,
+    an audit-style activity feed, and a collapsible notes card. Zero new CSS —
+    everything here already has its own component page.
+  </p>
+
+  <nav aria-label="Breadcrumb">
+    <ol class="bo-breadcrumb">
+      <li><a href="#">Reports</a></li>
+      <li aria-current="page">Purchase orders</li>
+    </ol>
+  </nav>
+
+  <section class="demo">
+    <form class="bo-filter-bar" role="search" aria-label="Report filters">
+      <input class="bo-input" type="search" name="q" aria-label="Search" placeholder="Search…" style="max-inline-size: 12rem" />
+      <select class="bo-select" name="range" style="inline-size:auto" aria-label="Date range">
+        <option>This quarter</option><option>This month</option><option>Last 7 days</option>
+      </select>
+    </form>
+    <nav class="bo-cluster" aria-label="Saved views" data-saved-views style="--bo-cluster-gap: var(--bo-space-1); margin-block-start: var(--bo-space-2)">
+      <a class="bo-chip bo-chip--active" href="?range=quarter" aria-current="page">This quarter</a>
+      <a class="bo-chip" href="?range=overdue">Overdue only</a>
+    </nav>
+  </section>
+
+  <section class="demo">
+    <div class="bo-widget-grid" style="--bo-widget-min: 13rem">
+      <div class="bo-widget">
+        <div class="bo-stat">
+          <span class="bo-stat__label">Open invoices</span>
+          <span class="bo-stat__value">1,284</span>
+          <span class="bo-stat__delta bo-stat__delta--bad"><span aria-hidden="true">▲</span> +12% <span aria-hidden="true">⚠</span><span class="bo-visually-hidden">increase, worse,</span> vs last quarter</span>
+        </div>
+      </div>
+      <div class="bo-widget">
+        <div class="bo-stat">
+          <span class="bo-stat__label">Total spend</span>
+          <span class="bo-stat__value">$412K</span>
+          <span class="bo-stat__delta bo-stat__delta--good"><span aria-hidden="true">▲</span> +8% <span class="bo-visually-hidden">increase, better,</span> vs plan</span>
+        </div>
+      </div>
+      <div class="bo-widget">
+        <div class="bo-stat">
+          <span class="bo-stat__label">Overdue</span>
+          <span class="bo-stat__value">17</span>
+          <span class="bo-stat__delta">unchanged</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo">
+    <div class="bo-widget-grid" style="--bo-widget-min: 18rem">
+      <article class="bo-widget bo-widget--span-2">
+        <header class="bo-widget__header"><span class="bo-widget__title">Recent invoices</span></header>
+        <div class="bo-widget__body bo-widget__body--flush">
+          <div class="bo-data-table-container">
+            <table class="bo-data-table" data-density="compact">
+              <thead><tr><th scope="col">Invoice #</th><th scope="col">Vendor</th><th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr>
+                    <td class="bo-data-table__col--code">{r.no}</td>
+                    <td>{r.vendor}</td>
+                    <td class="bo-data-table__col--numeric">{r.amount}</td>
+                    <td><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <footer class="bo-widget__band"><a class="bo-chip" href={base + '/patterns/invoice-list'}>View all →</a></footer>
+      </article>
+
+      <article class="bo-widget">
+        <header class="bo-widget__header"><span class="bo-widget__title">Recent activity</span></header>
+        <div class="bo-widget__body bo-widget__body--flush">
+          <ol class="bo-audit" role="list" style="padding: var(--bo-space-4)">
+            <li class="bo-audit__entry">
+              <time class="bo-audit__time" datetime="2026-08-13T14:02">08-13 14:02</time>
+              <span><span class="bo-audit__actor">M. Okafor</span> received 5 of 8 monitor arms</span>
+            </li>
+            <li class="bo-audit__entry">
+              <time class="bo-audit__time" datetime="2026-08-12T10:15">08-12 10:15</time>
+              <span><span class="bo-audit__actor">J. Kim</span> approved PO-4021</span>
+            </li>
+          </ol>
+        </div>
+      </article>
+
+      <article class="bo-widget">
+        <header class="bo-widget__header">
+          <span class="bo-widget__title">Notes</span>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" data-collapse-trigger
+                  aria-expanded="true" aria-controls="report-notes" aria-label="Toggle">
+            <span class="bo-widget__toggle-icon">▾</span>
+          </button>
+        </header>
+        <div class="bo-widget__collapse" id="report-notes" data-state="open">
+          <div class="bo-widget__body">
+            <p class="bo-u-text-muted">Q3 spend is trending 8% under plan — mostly the
+            delayed monitor-arm shipment. Revisit at month close.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    import { initDataTables, initSavedViews, initCollapsibleCards } from '@busy-office/ui/js';
+    initDataTables();
+    initSavedViews();
+    initCollapsibleCards();
+  </script>
+
+  <Related links={[
+    ["/components/dashboard", "Dashboard"],
+    ["/components/filters", "Filters"],
+    ["/components/nav", "Navigation (breadcrumb)"],
+    ["/patterns/invoice-list", "Invoice list"],
+  ]} />
+</Gallery>
