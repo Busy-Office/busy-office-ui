@@ -212,12 +212,14 @@ Seed list — Explore pulls from here or adds to it:
   into a future warehouse-screen item.
 
 **Seed list is now exhausted** (2026-08-14) — every idea above has been
-spiked/shipped/discarded. The next Explore dispatch with an empty seed
-list should generate a fresh idea from an ERP gap (per this playbook's
-own step 1: "or generate one from ERP gaps") rather than stalling — but
-the deeper prioritization question (what's actually worth exploring next)
-is exactly what the still-open Objective review (`/round-table`, see
-ROADMAP.md's Slice 6 note) is for. Ask the user to run it when ready.
+spiked/shipped/discarded. Per this playbook's own fallback ("or generate
+one from ERP gaps"), the next Explore dispatch generated one from the
+Long-term backlog's own "date-field component" note — ~~Date field
+(display)~~ spiked, succeeded, graduated as ROADMAP.md Slice 6 item 21.
+The deeper prioritization question (what's actually worth exploring
+next, once THIS is also built and shipped) is exactly what the
+still-open Objective review (`/round-table`, see ROADMAP.md's Slice 6
+note) is for. Ask the user to run it when ready.
 
 ---
 

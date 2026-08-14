@@ -670,6 +670,31 @@ detail-form patterns).
         `.bo-widget__toggle-icon` (no explicit size, inherits contextual
         font-size already). Stylelint, contrast gate, page-shape gate,
         and 33 tests all pass unchanged (CSS-only, no new class).
+21. [ ] **Date field (display)** — Explore spike run in an isolated git
+        worktree (`explore/date-component`, discarded after evaluation,
+        nothing merged directly). Seeded from the Long-term backlog's own
+        "date-field component" note (Ideas seed list is exhausted — this
+        is the "generate from an ERP gap" fallback the dispatcher's own
+        playbook calls for). SPIKE SUCCEEDED, graduating as a real build
+        item. `.bo-date` — the Amount/Quantity counterpart for dates:
+        `__value` (app-formatted absolute date) + optional `__relative`
+        (muted, small — "in 7 days", "Overdue by 4 days"), one modifier
+        `--overdue` (two-channel like Amount's `--negative` — the word
+        "Overdue" MUST be in the text, color only adds the hue). Editing
+        still uses a plain native `<input type="date">` directly — no
+        `--input` variant, same reasoning as Amount (nothing to add for
+        entry, only for display). **Real design refinement the spike
+        itself surfaced:** a `--muted` modifier was drafted first, then
+        DROPPED once the spike revealed it exactly duplicates the
+        existing `.bo-u-text-muted` utility — shipping it would have
+        violated "don't invent narrow variants" against something that
+        already exists. Verified in the spike: renders correctly in a
+        table column and standalone, both themes; contrast passes reusing
+        the existing `--bo-color-danger-text` pairing (no new colour
+        pairing needed). Accept: `.bo-date` shipped + documented on a
+        real component docs page (via `new:component`), `--overdue`
+        two-channel contract verified, no `--muted` modifier (point to
+        the utility instead), verified live both themes.
 
 ## Long term (post-1.0)
 
@@ -705,9 +730,9 @@ Highest-leverage bets (2026-08-14 review — ranked):
 - [ ] **Visual-regression harness** — screenshot diffing across density × theme in CI,
       so the "looks right" pass becomes mechanical like the rest.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
-- [ ] Component depth: data-grid virtualization hooks, date-field component,
-      tree/nav for deep ERP hierarchies. (Amount field and command palette pulled
-      forward into Slice 5.)
+- [ ] Component depth: data-grid virtualization hooks, tree/nav for deep
+      ERP hierarchies. (Amount field and command palette pulled forward
+      into Slice 5; date-field graduated into Slice 6 item 21.)
 - [ ] Localization/RTL audit as a first-class pass (logical properties already
       throughout; verify end-to-end).
 
