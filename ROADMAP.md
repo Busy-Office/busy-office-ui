@@ -716,20 +716,22 @@ are genuine open design questions the still-pending **Objective review
 flagged per-item below. Where a question was answerable by reading the
 current codebase rather than guessing, answered inline.
 
-1. [ ] **"Data type" docs section** — group Amount/Quantity/Date under a
-       shared sidebar category instead of scattering them alphabetically
-       among Button/Badge/Forms. Low-risk, mechanical (`Gallery.astro`
-       sidebar restructure only, no CSS/JS change) — this one IS ready to
-       build without further review. **"Any other?" — candidates for the
-       same family, not yet built:** Percentage (a rate/ratio value,
-       distinct from Amount's currency framing), Duration (elapsed/
-       remaining time — "2h 15m", "3 days"), Boolean/flag display (a
-       named yes/no state, likely just a Badge composition, not a new
-       component), File size. Don't build any of these speculatively —
-       each needs its own real ERP use case identified first, same
-       discipline as Amount/Quantity/Date. Accept: sidebar has a "Data
-       display" (or similar) group containing Amount/Quantity/Date; no
-       new CSS/JS.
+1. [x] **"Data type" docs section** — shipped. New top-level "Data
+       display" sidebar group (`Gallery.astro`, between Components and
+       Patterns) containing Amount/Quantity/Date, pulled out of the
+       alphabetical Components list. Mechanical change, zero new CSS/JS
+       — same `sections` array feeds both the desktop sidebar and the
+       mobile off-canvas drawer, so both stay in sync automatically.
+       Verified live via Podman: boosted nav to `/components/amount`
+       correctly highlights "Amount" under the new "Data display"
+       heading (`aria-current` sync unaffected), both themes render
+       correctly, page-shape gate still passes (21 pages — the gate
+       checks link presence, not which sidebar group it's under). 33
+       tests unchanged. **"Any other?" candidates for the same family,
+       NOT built** — need a real ERP use case each before scoping:
+       Percentage (rate/ratio, distinct from Amount's currency framing),
+       Duration (elapsed/remaining time), Boolean/flag display (likely
+       just a Badge composition), File size.
 2. [ ] **Device/platform coverage — Web / Mobile (app) / RF / Tablet
        (Bento UI / app)** — real open question, needs Objective input:
        does this mean (a) auditing + documenting how EXISTING components
