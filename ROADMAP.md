@@ -212,10 +212,17 @@ detail-form patterns).
 6. [ ] **npm publish** `@busy-office/ui@0.1.x` — structurally ready (exports
        audited, tarball-tested via the consumer app); **owner-gated on
        "perfect"** — a loop iteration should not self-approve this.
-7. [ ] **Breadcrumb** — a new component. Record-detail and deep ERP hierarchies
-       (nested cost centers, PO → line item) need a path trail; nothing in the
-       library covers it today. `<nav aria-label="Breadcrumb"><ol>…` per the
-       standard pattern, current page non-interactive + `aria-current="page"`.
+7. [x] **Breadcrumb** — `.bo-breadcrumb`, added to `components/nav/` (folded
+       into the existing "nav" umbrella component/docs page — navbar,
+       sidebar-nav, and offcanvas already share one page there; consistent,
+       not a new component dir). `<nav aria-label="Breadcrumb"><ol>` — a
+       real landmark, not just styled links, so it's directly reachable by
+       screen-reader landmark navigation. Current page is plain text (never
+       a link) with `aria-current="page"` as the programmatic channel,
+       emphasis ink as the visible one. Wraps rather than truncates on
+       narrow screens — simpler, and a reachable ancestor beats an
+       ellipsis that hides one. Wired into `/patterns/record-detail`, the
+       exact use case this item named. Verified live, both themes.
 8. [ ] **More patterns** (`apps/docs/src/pages/patterns/`) — 4 exist now
        (invoice-list, approval, record-detail, detail-form — the last one
        closed the "multi-step data-entry form" idea originally listed here,

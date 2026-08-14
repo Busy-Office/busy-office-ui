@@ -3,6 +3,17 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const breadcrumbMarkup = `<nav aria-label="Breadcrumb">
+  <ol class="bo-breadcrumb">
+    <li><a href="/cost-centers">Cost centers</a></li>
+    <li><a href="/cost-centers/cc-4021">CC-4021</a></li>
+    <li aria-current="page">PO-88213</li>
+  </ol>
+</nav>
+<!-- The current page is plain text, not a link — you don't link to where
+     you already are. aria-current is the programmatic channel; the ol's
+     list semantics + aria-label="Breadcrumb" are what make it a landmark
+     a screen reader can jump to directly. -->`;
 const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
         data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
 
@@ -26,6 +37,22 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     sidebar collapses to icon-only via a container query.
   </p>
   <ClassRef component="nav" />
+  <section class="demo">
+    <h2>Breadcrumb — path trail</h2>
+    <p class="bo-u-text-muted">
+      For deep ERP hierarchies (cost center → PO → line item) — a landmark
+      <code>&lt;nav&gt;</code>, not just styled links, so it's directly reachable
+      by screen-reader landmark navigation.
+    </p>
+    <nav aria-label="Breadcrumb">
+      <ol class="bo-breadcrumb">
+        <li><a href="#">Cost centers</a></li>
+        <li><a href="#">CC-4021</a></li>
+        <li aria-current="page">PO-88213</li>
+      </ol>
+    </nav>
+    <pre><code>{breadcrumbMarkup}</code></pre>
+  </section>
   <section class="demo">
     <h2>Embedded shell (independent container)</h2>
     <div class="bo-app-shell" style="min-height: 16rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
@@ -71,6 +98,7 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
   </script>
   <ApiTable component="nav"
     notes={['Current page carries <code>aria-current="page"</code>; icons are <code>aria-hidden</code>, labels stay in the accessibility tree when the rail collapses.',
-            'The off-canvas drawer is a dialog variant — it inherits initDialogs() wiring (backdrop, Esc, focus-return, Tab loop).']} />
-  <Related links={[["/concepts/container-queries", "Container queries"], ["/components/dialog", "Dialog"]]} />
+            'The off-canvas drawer is a dialog variant — it inherits initDialogs() wiring (backdrop, Esc, focus-return, Tab loop).',
+            'Breadcrumb: the current page is plain text, never a link — wrap the whole thing in <code>&lt;nav aria-label="Breadcrumb"&gt;</code> so it is a landmark.']} />
+  <Related links={[["/concepts/container-queries", "Container queries"], ["/components/dialog", "Dialog"], ["/patterns/record-detail", "Record detail"]]} />
 </Gallery>

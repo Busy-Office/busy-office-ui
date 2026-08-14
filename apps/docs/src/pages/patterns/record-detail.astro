@@ -11,6 +11,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     request, or a leave request.
   </p>
 
+  <nav aria-label="Breadcrumb">
+    <ol class="bo-breadcrumb">
+      <li><a href={base + '/patterns/invoice-list'}>Cost centers</a></li>
+      <li><a href="#">CC-4021</a></li>
+      <li aria-current="page">PO-88213</li>
+    </ol>
+  </nav>
   <section class="demo">
     <div class="bo-grid" style="--bo-grid-min: 20rem">
       <!-- Left: the record feed -->
