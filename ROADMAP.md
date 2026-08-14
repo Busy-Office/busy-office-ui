@@ -192,11 +192,13 @@ detail-form patterns).
        (nested cost centers, PO → line item) need a path trail; nothing in the
        library covers it today. `<nav aria-label="Breadcrumb"><ol>…` per the
        standard pattern, current page non-interactive + `aria-current="page"`.
-8. [ ] **More patterns** (`apps/docs/src/pages/patterns/`) — only 3 exist
-       (invoice-list, approval, record-detail). Add professional ERP-shaped
-       compositions: a dashboard/reporting layout, a multi-step data-entry
-       form, a settings/admin screen — each composing existing components,
-       not new CSS.
+8. [ ] **More patterns** (`apps/docs/src/pages/patterns/`) — 4 exist now
+       (invoice-list, approval, record-detail, detail-form — the last one
+       closed the "multi-step data-entry form" idea originally listed here,
+       via a multi-*section* single-screen form; a true multi-*step* wizard
+       flow using the existing stepper component is still open). Remaining
+       ideas: a dashboard/reporting layout, a settings/admin screen — each
+       composing existing components, not new CSS.
 9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
        receipt (GR) / goods issue (GI) screens driven by a handheld RF
        scanner, not a mouse. Large-target scan-input field (auto-focus,

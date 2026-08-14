@@ -68,9 +68,9 @@ const api = { generated: 'by scripts/extract-api.mjs — do not edit', component
 // walk cannot see them (site-grill A-4/S-3 — the CSS-true API wasn't JS-true).
 // Kept here until the behaviors manifest generates them.
 const JS_HOOKS = {
+  dashboard: { classes: [], dataAttrs: ['data-collapse-trigger'] },
   'data-table': { classes: ['bo-data-table__select-all'], dataAttrs: ['data-grid-nav'] },
   dialog: { classes: [], dataAttrs: ['data-dialog-trigger', 'data-dismissible'] },
-  dashboard: { classes: [], dataAttrs: ['data-collapse-trigger'] },
   filters: { classes: [], dataAttrs: ['data-saved-views'] },
 };
 

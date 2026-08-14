@@ -128,8 +128,8 @@ Seed list — Explore pulls from here or adds to it:
   version; the next attempt starts from `role="grid"`, not a `<table>` hack.
 - ~~Skeleton / empty / error states as a first-class component set~~ — shipped
   Slice 6 item 1 (`.bo-skeleton` + `.bo-state`), `/components/state-patterns`.
-- A `.bo-composer` (comment + action) for approval threads — queued directly
-  in ROADMAP.md Slice 6 item 3 now (Explore isn't needed, the shape is known).
+- ~~A `.bo-composer` (comment + action) for approval threads~~ — shipped
+  Slice 6 item 3, lives in `approval-workflow.css` next to `.bo-audit`.
 - Inline validation summary that scrolls to the first bad field.
 - Density-aware icon set sizing.
 - **RF-scanner / warehouse-scan components** (2026-08-14 user direction) — GR/GI
