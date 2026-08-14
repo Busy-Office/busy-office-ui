@@ -39,6 +39,10 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
   </section>
   <section class="demo">
     <h2>Toast recipe</h2>
+    <p class="bo-u-text-muted">Toasts are ephemeral, so the sample is a trigger, not a
+    static block — click it to see the real thing render, dismiss, and go away.</p>
+    <button class="bo-btn bo-btn--secondary" type="button" id="toast-demo-trigger">Show toast</button>
+    <div class="bo-toast-region" id="toast-demo-region" role="status" aria-live="polite"></div>
     <pre><code>{toastMarkup}</code></pre>
     <p class="bo-u-text-muted">Dismiss buttons work via <code>initAlerts()</code>
     (document delegation — injected toasts covered automatically). If you auto-dismiss,
@@ -49,6 +53,16 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
   <script>
     import { initAlerts } from '@busy-office/ui/js';
     initAlerts();
+    document.getElementById('toast-demo-trigger')?.addEventListener('click', () => {
+      const region = document.getElementById('toast-demo-region')!;
+      region.insertAdjacentHTML(
+        'beforeend',
+        `<div class="bo-alert bo-alert--success bo-toast">
+          <div><span class="bo-alert__title">Saved.</span> PO-88213 was approved.</div>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
+        </div>`,
+      );
+    });
   </script>
   <ApiTable component="alert"
     js="Optional: initAlerts() — dismiss buttons remove their alert/toast (delegation covers injected toasts)."

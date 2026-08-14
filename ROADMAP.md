@@ -165,12 +165,20 @@ owner-gated, not something a loop iteration can close.
        backlog) — the interaction model is different enough from the rest of
        the library that it needs a try/error pass before committing to an
        API.
-10. [ ] **Demo-section ordering audit** (Standardize) — the recipe's `Demo`
-        wrapper already renders preview-above-code, satisfying "sample
-        first, then code," but only 4/17 component pages use it; the other
-        13 hand-author `<section class="demo">` blocks, where ordering is
-        convention, not gate-enforced. Audit those for consistent
-        preview-before-code ordering (worth checking, not assumed broken).
+10. [x] **Demo-section ordering audit** (Standardize) — scripted a check
+        across all 16 hand-authored pages (13 components + 3 patterns):
+        found exactly one real violation, `alerts.astro`'s "Toast recipe"
+        section — code-only, no live example at all (toasts are ephemeral,
+        so the original author skipped rendering one). Fixed: a "Show
+        toast" trigger button + `.bo-toast-region` now render a REAL toast
+        above the code, matching what the code shows. Verified live: click
+        renders the toast (bottom-end, both themes), dismiss removes it via
+        the existing `initAlerts()` delegation — no regression. Every other
+        flagged page was a false positive: either the sanctioned trailing
+        "Markup" reference section (matches the recipe exactly) or a case
+        where the live example lives in an earlier section on the same
+        page. Clean pass otherwise — most of the codebase already follows
+        the convention.
 11. [ ] **Responsive audit (mobile + desktop)** — container queries already
         drive auto-compaction on data-table and a few others; audit that
         EVERY component looks intentional (not just "doesn't overflow") at
