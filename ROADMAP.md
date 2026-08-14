@@ -60,8 +60,34 @@ Ordered by value × effort; `npm publish` is intentionally last — it's
 owner-gated, not something a loop iteration can close.
 
 **Queued (priority order)**
-0. [x] **P0 — Navigation flash/flicker in dark theme** (2026-08-14 user report:
-       "screen flicking when click on the link, especially on the left sidebar").
+0. [ ] **P0 — REOPENED: navigation flash/flicker, still happening**
+       (2026-08-14 user report, second report after the fix below — still
+       flickers when navigating via the menu). The earlier fix (blocking
+       `is:inline` head script setting `data-theme` before first paint,
+       commit `12e60b8`) verifiably made `data-theme` correct at first
+       paint of the NEW document — that part is confirmed still working.
+       So the residual flicker the user is seeing is likely a DIFFERENT
+       mechanism than late theme application within one page: candidates
+       to investigate next Continue-bug tick, in order:
+       1. The inherent MPA cross-document navigation gap — this is a
+          static multi-page site (every link is a real navigation, not
+          client routing); browsers can paint a blank/default frame
+          between unloading the old document and first-painting the new
+          one, and no CSS *inside* either document can fully control that
+          gap. Check whether a `<meta name="color-scheme">` (hints the
+          UA's own default background before any stylesheet loads) helps.
+       2. The density selector has the SAME late-application pattern the
+          theme one used to have (still applied in the body-end script,
+          never audited) — a layout/spacing jump on every nav, separate
+          from a color flash, could read as "flicker" too.
+       3. Cross-document View Transitions (`@view-transition` / the
+          browser API) as a real fix if the browser floor (Chrome 119)
+          supports them — needs a compat check, may not be available at
+          the stated floor.
+       *Do not re-ship the same head-script fix* — that mechanism is
+       confirmed working for what it targets; this needs actual
+       diagnosis of what's flickering now, not a repeat.
+       <details><summary>History — the theme-application-timing fix (still valid, just not sufficient)</summary>
        Fixed: a blocking `is:inline` script in `<head>` (before both
        stylesheets, confirmed via the built HTML) sets
        `document.documentElement.dataset.theme` from `localStorage`
@@ -76,7 +102,7 @@ owner-gated, not something a loop iteration can close.
        the manual toggle (with its `data-bo-theming` transition guard) still
        works. Landing page (`index.astro`) is unaffected/out of scope — its
        theme control is scoped to the demo widget only, doesn't read the
-       global `bo-theme` key.
+       global `bo-theme` key.</details>
 1. [x] **Skeleton / empty / error states** — shipped as two components (not
        three classes): `.bo-skeleton` (`--circle`/`--block` shimmer
        placeholders, `aria-busy` is the programmatic channel) and `.bo-state`
