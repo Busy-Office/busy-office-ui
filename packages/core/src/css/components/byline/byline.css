@@ -18,4 +18,36 @@
   .bo-byline--compact {
     font-size: var(--bo-font-size-xs);
   }
+
+  /* Avatar (optional part). Scoped to :has() so a plain text-only byline
+     (the common case) gets ZERO layout change — only a byline that actually
+     contains the avatar part switches to flex. em-sized, so it shrinks with
+     --compact automatically instead of needing its own size modifier. */
+  .bo-byline:has(.bo-byline__avatar) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bo-space-2);
+  }
+
+  .bo-byline__avatar {
+    inline-size: 1.8em;
+    block-size: 1.8em;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-secondary);
+    font-size: 0.7em;
+    font-weight: var(--bo-font-weight-semibold);
+    line-height: 1;
+  }
+
+  .bo-byline__avatar img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
 }

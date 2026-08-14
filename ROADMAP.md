@@ -102,8 +102,15 @@ owner-gated, not something a loop iteration can close.
        pass — that's Slice 6 item 5 (Runtime a11y pass); this item shipped
        the correct ARIA semantics and keyboard mechanics but hasn't been
        listened to yet, so "AA outright" isn't claimed until that pass runs.
-3. [ ] **Slice-4 continuation** — avatar byline, collapsible cards, a real
-       `.bo-composer` (comment + action) for approval threads.
+3. Slice-4 continuation:
+   - [x] **Avatar byline** — `.bo-byline__avatar` (optional part): initials or an
+         `<img>`, em-sized so it scales with `--compact` automatically instead of
+         its own size modifier. Scoped via `:has(.bo-byline__avatar)` so a
+         plain-text byline (the common case) gets zero layout change. Always
+         `aria-hidden` — decoration, the name is already text in the byline.
+         Verified live (Podman, light + dark).
+   - [ ] Collapsible cards; a real `.bo-composer` (comment + action) for
+         approval threads.
 4. [ ] **Saved-view persistence**; multi-column detail-form patterns.
 5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
        print preview are checkable from this environment (macOS); NVDA

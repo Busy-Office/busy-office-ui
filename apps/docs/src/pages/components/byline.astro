@@ -25,11 +25,32 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
   </section>
 
   <section class="demo">
+    <h2><code>__avatar</code> — initials or a photo</h2>
+    <p class="bo-u-text-muted">
+      Optional part — a plain-text byline (above) gets no layout change; adding
+      <code>.bo-byline__avatar</code> switches that one byline to a flex row. The name
+      already carries the identity as text, so the avatar is <code>aria-hidden</code> —
+      decoration, not a second copy of the same information.
+    </p>
+    <p><span class="bo-byline">
+      <span class="bo-byline__avatar" aria-hidden="true">RV</span>
+      <strong>R. Vance</strong> · Requester · 10 Aug 2026
+    </span></p>
+    <p><span class="bo-byline">
+      <span class="bo-byline__avatar" aria-hidden="true">
+        <img src="/favicon.svg" alt="" />
+      </span>
+      <strong>J. Kim</strong> · Cost-centre manager
+    </span></p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>
   <ApiTable component="byline"
     notes={['Just markup + one class — wrap the name in <code>&lt;strong&gt;</code> for emphasis ink.',
-            'Pairs with a record-type chip (<code>.bo-badge--type</code>) in a widget header — see the record-detail pattern.']} />
+            'Pairs with a record-type chip (<code>.bo-badge--type</code>) in a widget header — see the record-detail pattern.',
+            'The <code>__avatar</code> part is decoration, not a caption — <code>aria-hidden="true"</code> always, since the name is already text in the byline itself.']} />
   <Related links={[["/components/badge", "Badge"], ["/components/ordered-list", "Ordered list"], ["/patterns/record-detail", "Record detail pattern"]]} />
 </Gallery>
