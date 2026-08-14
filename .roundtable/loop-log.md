@@ -98,3 +98,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-15 07:04 · Roadmap · plan · Wake check: no new input, backlog state unchanged · no dispatch, 13th consecutive identical wake -- backlog still dry, all open items blocked · e3458f1
 - 2026-08-15 07:24 · Roadmap · plan · Wake check: no new input, backlog state unchanged · no dispatch, 14th consecutive identical wake -- backlog still dry, all open items blocked · ee5a4d4
 - 2026-08-15 07:27 · Roadmap · plan · Wake check: no new input, backlog state unchanged · no dispatch, 15th consecutive identical wake -- backlog still dry, all open items blocked. User active again (typed 'next' directly rather than cron firing) · 201096d
+- 2026-08-15 07:33 · Roadmap · plan · Triage Slice 8: editable table, multi-select dropdown, searchable dropdown · 3 items scoped with Accept criteria; ready to Continue-dispatch, none blocked on Objective · efdf4af
