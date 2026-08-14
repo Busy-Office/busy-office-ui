@@ -45,6 +45,26 @@ const custom = `<!-- an app-defined currency (points, credits, store scrip) work
 <span class="bo-amount"><span class="bo-amount__value">2,400</span><span class="bo-amount__currency">PTS</span></span>
 <span class="bo-amount"><span class="bo-amount__currency">₡</span><span class="bo-amount__value">18.50</span></span> <!-- an internal "credit" symbol -->`;
 
+const editable = `<!-- Amount (.bo-amount) is a DISPLAY value — a <span>, not a form control;
+     there is no ".bo-amount--input" variant, on purpose (an <input> can't host
+     __currency/__fraction as nested markup and stay a single accessible value).
+     For an EDITABLE money field, compose .bo-form-field + .bo-input--numeric
+     directly — the currency belongs in the label, not invented affix markup. -->
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="am-unit-price">Unit price (USD)</label>
+  <input class="bo-input bo-input--numeric" type="number" id="am-unit-price" value="12.50" min="0" step="0.01" inputmode="decimal" />
+</div>`;
+
+const mixedCurrency = `<table class="bo-data-table">
+  <thead><tr><th>Invoice</th><th>Vendor</th><th class="bo-data-table__col--numeric">Amount</th></tr></thead>
+  <tbody>
+    <tr><td>INV-3391</td><td>Acme Supply Co. (US)</td><td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,208.00</span></span></td></tr>
+    <tr><td>INV-3392</td><td>Ling Freight Pte Ltd (SG)</td><td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">SGD</span><span class="bo-amount__value">1,052.00</span></span></td></tr>
+    <tr><td>INV-3393</td><td>Nakamura Parts KK (JP)</td><td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">¥</span><span class="bo-amount__value">92,500</span></span></td></tr>
+    <tr><td>INV-3394</td><td>Al-Rashid Trading (BH)</td><td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">BHD</span><span class="bo-amount__value">120.500</span></span></td></tr>
+  </tbody>
+</table>`;
+
 const markup = `<span class="bo-amount">
   <span class="bo-amount__currency">$</span>              <!-- symbol or ISO code, either side -->
   <span class="bo-amount__value">18,940                 <!-- your app formats grouping + precision -->
@@ -134,6 +154,32 @@ const markup = `<span class="bo-amount">
     its own unit, see <a href="/components/quantity">Quantity</a> — same
     <code>__unit</code> convention, plus increment/decrement and native
     validation.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Editable money — a plain input, not <code>.bo-amount</code></h2>
+    <Demo code={editable} />
+    <p class="bo-u-text-muted"><code>.bo-amount</code> is read-only display; it's
+    a <code>&lt;span&gt;</code>, not a form control, and there's deliberately no
+    input variant of it (the nested <code>__currency</code>/<code>__fraction</code>
+    parts can't live inside a native <code>&lt;input&gt;</code> and still be one
+    accessible value). For data entry, use a plain <code>.bo-input--numeric</code>
+    field — put the currency in the label, the same way <a href="/components/quantity">Quantity</a>
+    puts the unit in <code>__unit</code> text next to an editable control.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Mixed currencies in one table</h2>
+    <div class="bo-data-table-container">
+      <Demo code={mixedCurrency} />
+    </div>
+    <p class="bo-u-text-muted">Right-alignment (<code>__col--numeric</code>) plus
+    tabular figures keep every row's <em>digits</em> stacked even though the
+    <code>__currency</code> affix text differs per row (<code>$</code>, <code>SGD</code>,
+    <code>¥</code>, <code>BHD</code>) — verified live, not assumed: the affix sits
+    outside the tabular-figure run, so a 3-letter code next to a 1-character symbol
+    doesn't shift where the digits land. No dedicated fixed-width affix column
+    needed for this case.</p>
   </section>
 
   <section class="demo">

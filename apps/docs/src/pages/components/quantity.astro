@@ -53,6 +53,28 @@ const spacious = `<div data-density="spacious">
   </div>
 </div>`;
 
+const tableColumn = `<table class="bo-data-table">
+  <thead><tr><th>Item</th><th class="bo-data-table__col--numeric">Qty</th></tr></thead>
+  <tbody>
+    <tr><td>Standing desk</td><td class="bo-data-table__col--numeric">
+      <div class="bo-quantity">
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+        <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+        <span class="bo-quantity__unit">ea</span>
+      </div>
+    </td></tr>
+    <tr><td>Bulk cable (kg)</td><td class="bo-data-table__col--numeric">
+      <div class="bo-quantity">
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+        <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity" />
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+        <span class="bo-quantity__unit">kg</span>
+      </div>
+    </td></tr>
+  </tbody>
+</table>`;
+
 const markup = `<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" min="0" max="99" step="1" inputmode="numeric" />
@@ -131,6 +153,17 @@ const markup = `<div class="bo-quantity">
     <p class="bo-u-text-muted">Composes with <code>.bo-form-field</code> like any other
     control — the same two-channel error state (border + message + <code>aria-invalid</code>
     or <code>:user-invalid</code>) applies for free, nothing quantity-specific needed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>In a table column</h2>
+    <div class="bo-data-table-container">
+      <Demo code={tableColumn} />
+    </div>
+    <p class="bo-u-text-muted">Same component, dropped straight into a
+    <code>__col--numeric</code> cell — no table-specific variant needed. Editable
+    line-item quantities (a whole-count row and a fractional-unit row here) work
+    the same as any other <code>.bo-quantity</code>, increment/decrement included.</p>
   </section>
 
   <section class="demo">
