@@ -190,7 +190,11 @@ Seed list — Explore pulls from here or adds to it:
   Slice 6 item 1 (`.bo-skeleton` + `.bo-state`), `/components/state-patterns`.
 - ~~A `.bo-composer` (comment + action) for approval threads~~ — shipped
   Slice 6 item 3, lives in `approval-workflow.css` next to `.bo-audit`.
-- Inline validation summary that scrolls to the first bad field.
+- ~~Inline validation summary that scrolls to the first bad field~~ —
+  spiked 2026-08-14 in an isolated worktree (discarded, nothing merged
+  directly). Succeeded cleanly: `initValidationSummary()`, zero new CSS
+  (the existing `:user-invalid` field styling + `.bo-alert` cover
+  everything). Graduated as ROADMAP.md item 19.
 - Density-aware icon set sizing.
 - ~~RF-scanner / warehouse-scan components~~ — spiked 2026-08-14 in an
   isolated worktree (discarded, nothing merged directly). Scan-input

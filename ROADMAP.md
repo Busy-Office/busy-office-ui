@@ -59,6 +59,20 @@ Reconciled 2026-08-14 (Roadmap loop, after the ARIA-grid Explore graduation).
 Ordered by value × effort; `npm publish` is intentionally last — it's
 owner-gated, not something a loop iteration can close.
 
+**Slice 6 is functionally complete** (2026-08-14) — every item below is
+`[x]` except the owner-gated publish. Per the dispatcher's own rule, a
+slice closing is the trigger for the **Objective** loop (grill the product
+vision, decide what Slice 7 should actually be) — attempted this wake, but
+`/round-table` is reserved for explicit user invocation and can't be run
+autonomously (`disable-model-invocation`); the dispatcher correctly did
+NOT attempt to replicate that workflow by other means. **Falling back to
+Explore** per the priority order instead (backlog empty of Continue-
+sized work). One idea graduated below (item 19) — small, independently
+justified, doesn't need the deeper product review to be worth building.
+**Objective review itself stays open** — ask the user to run `/round-table`
+when they want Slice 7 properly scoped; until then, new items land here
+as they're identified, same as Slice 6's own items 12-18 did mid-slice.
+
 **Queued (priority order)**
 0. [x] **P0 — navigation flash/flicker, real root cause: whole-page reload,
        not a paint-timing issue.** Two earlier passes fixed real but
@@ -604,6 +618,30 @@ detail-form patterns).
         borders/outlines are) but hasn't been seen under the real feature.
         Zero visual change to normal rendering (media-gated); contrast
         gate, stylelint, and 30 tests all pass unchanged.
+19. [ ] **Inline validation summary** — Explore spike run in an isolated
+        git worktree (`explore/validation-summary`, discarded after
+        evaluation, nothing merged directly). SPIKE SUCCEEDED cleanly,
+        graduating as a real build item. `initValidationSummary()`: on a
+        `<form data-validation-summary>` submit, if `form.checkValidity()`
+        fails, prevent submission, build a list of every `:invalid` field
+        (label text + `href="#fieldId"`) inside a
+        `[data-validation-summary-box]` element, move focus to the
+        SUMMARY first (not straight into the first field — WCAG/GOV.UK
+        precedent: a screen-reader user hears the overview before jumping
+        into any one field), and each link click focuses its field.
+        **Zero new CSS** — the summary box is just `.bo-alert
+        bo-alert--danger`, and the existing `:user-invalid`/`aria-invalid`
+        styling in `form-field.css` already puts every field into its
+        error state automatically once the browser marks it invalid — no
+        extra wiring needed for that part, confirmed live in the spike
+        (all three fields showed red border + label + required asterisk
+        with zero additional code). Verified in the spike: submitting an
+        empty required form correctly lists all 3 invalid fields, focus
+        lands on the summary, clicking a summary link focuses the exact
+        field, both themes render correctly. Accept: `initValidationSummary()`
+        shipped + tested + documented on a real docs page (a pattern, most
+        likely — this is closer to a workflow recipe than a standalone
+        component), verified live both themes.
 
 ## Long term (post-1.0)
 
