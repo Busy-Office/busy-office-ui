@@ -40,6 +40,11 @@ const uom = `<!-- quantity × unit -->
 <!-- unit price beside a quantity -->
 <span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">3.10</span><span class="bo-amount__unit">/ pc</span></span>`;
 
+const custom = `<!-- an app-defined currency (points, credits, store scrip) works exactly
+     like ISO codes and symbols — __currency accepts any text -->
+<span class="bo-amount"><span class="bo-amount__value">2,400</span><span class="bo-amount__currency">PTS</span></span>
+<span class="bo-amount"><span class="bo-amount__currency">₡</span><span class="bo-amount__value">18.50</span></span> <!-- an internal "credit" symbol -->`;
+
 const markup = `<span class="bo-amount">
   <span class="bo-amount__currency">$</span>              <!-- symbol or ISO code, either side -->
   <span class="bo-amount__value">18,940                 <!-- your app formats grouping + precision -->
@@ -76,10 +81,39 @@ const markup = `<span class="bo-amount">
   </section>
 
   <section class="demo">
+    <h2>Custom / non-ISO currency</h2>
+    <Demo code={custom} />
+    <p class="bo-u-text-muted">Loyalty points, internal credits, any app-defined
+    unit of value — <code>__currency</code> is plain text with no ISO allowlist.
+    Same component, same alignment, no special-casing needed.</p>
+  </section>
+
+  <section class="demo">
     <h2>Precision — a setting, not a variant</h2>
     <Demo code={precision} />
     <p class="bo-u-text-muted">Whole units, money, or 4-dp unit prices — same component;
     the digits come from your formatter.</p>
+    <p class="bo-u-text-muted">
+      <strong>Decimal precision is app/domain data, not a CSS rule</strong> — there's no
+      <code>--decimals</code> modifier, because "how many decimals does this currency
+      get" varies by currency, not by design choice. A starting reference (override per
+      field, never hardcode as a single app-wide constant):
+    </p>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Currency</th><th scope="col" class="bo-data-table__col--numeric">Default decimals</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>USD, SGD, EUR</td><td class="bo-data-table__col--numeric">2</td><td>$4,208.00</td></tr>
+          <tr><td>JPY, KRW</td><td class="bo-data-table__col--numeric">0</td><td>¥56,000</td></tr>
+          <tr><td>BHD, KWD, OMR</td><td class="bo-data-table__col--numeric">3</td><td>BHD 12.500</td></tr>
+          <tr><td>App-defined (points, credits, FX rates)</td><td class="bo-data-table__col--numeric">your call</td><td>2,400 PTS</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank" rel="noopener">ISO 4217</a>
+    publishes the standard minor-unit table if you need it beyond this reference — most
+    apps already get this from an <code>Intl.NumberFormat</code> call or a currency-master
+    table, which is exactly where this belongs (not this CSS layer).</p>
   </section>
 
   <section class="demo">
@@ -149,6 +183,8 @@ const markup = `<span class="bo-amount">
   <ApiTable component="amount"
     notes={['CSS-first: your app formats the number (locale, grouping, precision, sign); the component styles the parts and aligns them with tabular figures.',
             'Negative/credit is two-channel — the sign or parentheses MUST be in the markup; <code>--negative</code>/<code>--positive</code> only add colour.',
-            'Currency and unit are muted affixes; put the currency before or after the value by source order.']} />
+            'Currency and unit are muted affixes; put the currency before or after the value by source order.',
+            '<code>__currency</code> accepts a symbol, an ISO 4217 code, or an app-defined currency (points, credits) — no allowlist or validation in CSS.',
+            'Decimal precision is per-currency domain data, not a CSS setting — there is no <code>--decimals</code> modifier; your app (or an <code>Intl.NumberFormat</code> call) decides and formats the digits before they reach this component.']} />
   <Related links={[["/components/data-table", "Data table"], ["/base/utilities", "Utilities (tabular)"], ["/patterns/invoice-list", "Invoice list pattern"]]} />
 </Gallery>

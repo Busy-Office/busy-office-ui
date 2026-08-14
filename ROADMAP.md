@@ -419,34 +419,28 @@ detail-form patterns).
         (index, reference/classes, base/utilities, base/motion,
         base/colors) — all already correctly generated; clean pass, no
         further instances. 23 tests pass (unchanged), gates green.
-14. [ ] **Amount: currency symbol/ISO code / custom currency, with
+14. [x] **Amount: currency symbol/ISO code / custom currency, with
         per-currency default (but overridable) decimal precision**
-        (2026-08-14 user direction, wishlist) — `.bo-amount__currency`
-        today is a plain text affix (`$`, `EUR`, whatever the app passes
-        in — see `/components/amount`); the ask is a first-class way to
-        render a currency **symbol or ISO code** (USD, SGD, ...),
-        including currencies the app defines itself (custom currency, e.g.
-        an internal points/credit system) — **plus** each currency
-        carrying a sensible default decimal precision (USD/SGD -> 2, JPY
-        -> 0, some crypto/points systems -> more) that the app can still
-        override per field. Same shape as item 15's Quantity precision
-        ask: the symbol/code affix is likely a markup-convention question
-        (`__currency` already accepts any text — `Intl.NumberFormat`/
-        `Intl.DisplayNames` is the *app's* job, matching the existing
-        "CSS-first, your app formats the number" contract), but the
-        per-currency decimal-default table is real domain data, not CSS —
-        likely documented guidance or an app-owned lookup, not new
-        CSS/JS surface (`.bo-amount__fraction` already exists purely to
-        visually quiet whatever decimal digits the app already decided to
-        render — see the current Amount page). Confirm the actual
-        CSS/JS-vs-convention-vs-app-data split in a real Continue round
-        rather than assuming here — same open question as item 15, worth
-        resolving both together since they're the same shape. Accept
-        (draft, refine at build time): existing AA/two-channel contract
-        unaffected; custom (non-ISO) currency strings render exactly like
-        any other `__currency` value today (no allowlist/validation baked
-        into CSS); per-currency decimal defaults are overridable, never a
-        silent app-wide constant.
+        (2026-08-14 user direction, wishlist) — scoped and resolved: this
+        was almost entirely a **documentation gap, not a CSS/JS gap**.
+        `/components/amount` already had an ISO-code demo (`__currency`
+        holding `EUR`, not just `$`); what was genuinely missing:
+        1. A **custom / non-ISO currency** demo — points, credits, an
+           app-defined symbol — making explicit that `__currency` has no
+           ISO allowlist (it's plain text, always was).
+        2. A **decimal-precision reference table**, documented as
+           app/domain data (USD/SGD/EUR → 2, JPY/KRW → 0, BHD/KWD/OMR → 3,
+           app-defined → "your call"), explicit that there is and should
+           be no `--decimals` CSS modifier — precision is an
+           `Intl.NumberFormat`/currency-master-table concern, not this
+           layer's. Linked out to ISO 4217 for the authoritative table
+           rather than trying to embed one.
+        Zero new CSS/JS shipped — confirms the scoping question the item
+        itself raised (markup-convention vs. new surface) landed on
+        "convention," consistent with Amount's existing "your app formats
+        the number" contract. `ApiTable` notes updated to state both
+        points explicitly. Verified live via Podman, both themes — no
+        gate impact (no new classes, no new colour pairing).
 15. [ ] **Quantity: base-unit symbol / standard &amp; custom units, with
         per-unit default (but overridable) decimal precision**
         (2026-08-14 user direction, wishlist) — the mirror ask for
