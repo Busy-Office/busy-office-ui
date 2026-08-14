@@ -118,6 +118,39 @@ owner-gated, not something a loop iteration can close.
 6. [ ] **npm publish** `@busy-office/ui@0.1.x` — structurally ready (exports
        audited, tarball-tested via the consumer app); **owner-gated on
        "perfect"** — a loop iteration should not self-approve this.
+7. [ ] **Breadcrumb** — a new component. Record-detail and deep ERP hierarchies
+       (nested cost centers, PO → line item) need a path trail; nothing in the
+       library covers it today. `<nav aria-label="Breadcrumb"><ol>…` per the
+       standard pattern, current page non-interactive + `aria-current="page"`.
+8. [ ] **More patterns** (`apps/docs/src/pages/patterns/`) — only 3 exist
+       (invoice-list, approval, record-detail). Add professional ERP-shaped
+       compositions: a dashboard/reporting layout, a multi-step data-entry
+       form, a settings/admin screen — each composing existing components,
+       not new CSS.
+9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
+       receipt (GR) / goods issue (GI) screens driven by a handheld RF
+       scanner, not a mouse. Large-target scan-input field (auto-focus,
+       auto-advance on a terminator character), a big-number quantity
+       stepper, high-contrast/high-density variants for warehouse-floor
+       screens. Seed it as an **Explore** spike first (see `LOOPS.md` Ideas
+       backlog) — the interaction model is different enough from the rest of
+       the library that it needs a try/error pass before committing to an
+       API.
+10. [ ] **Demo-section ordering audit** (Standardize) — the recipe's `Demo`
+        wrapper already renders preview-above-code, satisfying "sample
+        first, then code," but only 4/17 component pages use it; the other
+        13 hand-author `<section class="demo">` blocks, where ordering is
+        convention, not gate-enforced. Audit those for consistent
+        preview-before-code ordering (worth checking, not assumed broken).
+11. [ ] **Responsive audit (mobile + desktop)** — container queries already
+        drive auto-compaction on data-table and a few others; audit that
+        EVERY component looks intentional (not just "doesn't overflow") at
+        both narrow and wide, not only the ones that happened to get a
+        `@container` rule. Note: this session's browser tooling has a
+        window-resize floor (~600px) that blocks testing true 390px in the
+        live browser — verify affected components some other way (Podman +
+        a real device/simulator, or a headless viewport tool) before
+        checking this off.
 
 ## Long term (post-1.0)
 
@@ -165,4 +198,10 @@ Highest-leverage bets (2026-08-14 review — ranked):
 - Every state signal is two-channel (visible non-color cue + programmatic).
 - Every `@container` is named; heights are minimums; density is rem-only.
 - New components compose existing primitives; small and general over specific.
+- Before adding a class, ask whether it's a genuinely reusable ERP setting (an
+  existing component's new part/modifier) or a one-off — prefer widening what
+  exists over shipping a narrow variant (2026-08-14 user direction).
+- Every component is responsive by construction (container queries, relative
+  units) at both narrow and wide — not verified only at whatever width
+  happened to be open when it shipped.
 - Each slice is adversarially grilled before sign-off.
