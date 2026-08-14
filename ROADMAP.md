@@ -273,8 +273,6 @@ detail-form patterns).
          `/patterns/detail-form`'s multi-*section* single screen.
 9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
        receipt (GR) / goods issue (GI) screens driven by a handheld RF
-9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
-       receipt (GR) / goods issue (GI) screens driven by a handheld RF
        scanner, not a mouse. Large-target scan-input field (auto-focus,
        auto-advance on a terminator character), a big-number quantity
        stepper, high-contrast/high-density variants for warehouse-floor
