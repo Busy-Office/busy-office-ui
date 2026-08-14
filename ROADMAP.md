@@ -290,7 +290,21 @@ detail-form patterns).
          CSS. Verified live: collapse toggle and theme switching both work
          correctly on the composed page (state persists through the theme
          change), both themes.
-   - [ ] A settings/admin screen pattern is still open.
+   - [x] **Settings & admin** — `/patterns/settings-admin`. Composes
+         `.bo-tabs` (General/Users/Notifications), `.bo-form-section` +
+         `.bo-form-row` fieldsets, `.bo-checkbox` for on/off preferences
+         (no separate "switch" component invented — a labeled checkbox
+         already covers the same setting, per the standing "one component,
+         many settings" principle), and the data table + byline avatars
+         for the user list. Zero new CSS. Verified live via Podman: all
+         three tabs render correctly light + dark at 1440px; forced the
+         main pane to 350px and confirmed via computed layout that
+         `.bo-form-row` genuinely collapses every field to one column
+         (single shared left edge) and the user table scrolls within its
+         own container (`overflow-x: auto`) rather than blowing out the
+         page — same verification method used for `/patterns/detail-form`,
+         since this session's browser-resize floor still won't reach a
+         literal 390px viewport. 20 tests pass, gates green.
    - [ ] A true multi-*step* wizard-flow pattern (using the existing
          stepper component across actual page/panel transitions, not just
          a static progress indicator) is still open — distinct from

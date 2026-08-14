@@ -1,0 +1,135 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+---
+<Gallery title="Pattern: settings &amp; admin">
+  <p class="demo-note">
+    An admin screen composed entirely from existing components — <code>.bo-tabs</code>
+    to split General/Users/Notifications, <code>.bo-form-section</code> fieldsets,
+    <code>.bo-checkbox</code> for on/off preferences (there is no separate "switch"
+    component — a labeled checkbox already covers the same setting, per the "one
+    component, many settings" principle), and the data table for the user list.
+    Nothing new to learn.
+  </p>
+  <section class="demo">
+    <div class="bo-tabs">
+      <div class="bo-tabs__list" role="tablist" aria-label="Workspace settings">
+        <button class="bo-tabs__tab" role="tab" id="sa-t-general" aria-selected="true" aria-controls="sa-p-general">General</button>
+        <button class="bo-tabs__tab" role="tab" id="sa-t-users" tabindex="-1" aria-selected="false" aria-controls="sa-p-users">Users</button>
+        <button class="bo-tabs__tab" role="tab" id="sa-t-notifications" tabindex="-1" aria-selected="false" aria-controls="sa-p-notifications">Notifications</button>
+      </div>
+
+      <div class="bo-tabs__panel" role="tabpanel" id="sa-p-general" aria-labelledby="sa-t-general" tabindex="0">
+        <form novalidate>
+          <fieldset class="bo-form-section">
+            <legend class="bo-form-section__legend">Workspace</legend>
+            <div class="bo-form-row">
+              <div class="bo-form-field">
+                <label class="bo-form-field__label" for="sa-name">Workspace name</label>
+                <input class="bo-input" id="sa-name" value="Acme Logistics" />
+              </div>
+              <div class="bo-form-field">
+                <label class="bo-form-field__label" for="sa-tz">Time zone</label>
+                <select class="bo-select" id="sa-tz">
+                  <option>UTC</option>
+                  <option selected>America/New_York</option>
+                  <option>Asia/Singapore</option>
+                </select>
+              </div>
+              <div class="bo-form-field">
+                <label class="bo-form-field__label" for="sa-density">Default density</label>
+                <select class="bo-select" id="sa-density">
+                  <option>Comfortable</option>
+                  <option selected>Compact</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="bo-form-section">
+            <legend class="bo-form-section__legend">Defaults</legend>
+            <div class="bo-choice">
+              <input class="bo-checkbox" type="checkbox" id="sa-require-2fa" checked />
+              <label for="sa-require-2fa">Require two-factor authentication for all members</label>
+            </div>
+            <div class="bo-choice">
+              <input class="bo-checkbox" type="checkbox" id="sa-auto-archive" />
+              <label for="sa-auto-archive">Auto-archive closed purchase orders after 90 days</label>
+            </div>
+          </fieldset>
+          <div class="bo-form-actions">
+            <button class="bo-btn bo-btn--secondary" type="button">Cancel</button>
+            <button class="bo-btn" type="submit">Save changes</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bo-tabs__panel" role="tabpanel" id="sa-p-users" aria-labelledby="sa-t-users" tabindex="0" hidden>
+        <div class="bo-data-table-container">
+          <table class="bo-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <p class="bo-byline"><span class="bo-byline__avatar" aria-hidden="true">JD</span> Jordan Diaz</p>
+                </td>
+                <td><span class="bo-badge bo-badge--accent">Admin</span></td>
+                <td><span class="bo-badge bo-badge--success">Active</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="bo-byline"><span class="bo-byline__avatar" aria-hidden="true">RK</span> Rina Kapoor</p>
+                </td>
+                <td><span class="bo-badge">Member</span></td>
+                <td><span class="bo-badge bo-badge--success">Active</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="bo-byline"><span class="bo-byline__avatar" aria-hidden="true">TS</span> Tom Silva</p>
+                </td>
+                <td><span class="bo-badge">Member</span></td>
+                <td><span class="bo-badge bo-badge--warning">Invited</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="bo-tabs__panel" role="tabpanel" id="sa-p-notifications" aria-labelledby="sa-t-notifications" tabindex="0" hidden>
+        <fieldset class="bo-form-section">
+          <legend class="bo-form-section__legend">Email alerts</legend>
+          <div class="bo-choice">
+            <input class="bo-checkbox" type="checkbox" id="sa-notify-po" checked />
+            <label for="sa-notify-po">New purchase order submitted for approval</label>
+          </div>
+          <div class="bo-choice">
+            <input class="bo-checkbox" type="checkbox" id="sa-notify-overdue" checked />
+            <label for="sa-notify-overdue">Order overdue for receipt</label>
+          </div>
+          <div class="bo-choice">
+            <input class="bo-checkbox" type="checkbox" id="sa-notify-digest" />
+            <label for="sa-notify-digest">Weekly digest summary</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <p class="bo-u-text-muted"><strong>Tabs require <code>initTabs()</code></strong> —
+      wired below, same as every other tabbed page.</p>
+  </section>
+  <script>
+    import { initTabs } from '@busy-office/ui/js';
+    initTabs();
+  </script>
+  <Related links={[
+    ["/components/tabs", "Tabs"],
+    ["/components/form", "Forms"],
+    ["/components/data-table", "Data table"],
+    ["/components/byline", "Byline"],
+    ["/patterns/detail-form", "Detail form (edit-screen counterpart)"],
+  ]} />
+</Gallery>
