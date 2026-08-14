@@ -1,0 +1,85 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+---
+<Gallery title="Pattern: inline validation summary">
+  <p class="demo-note">
+    On submit, if the form is invalid: list every problem field up top, move focus to
+    that summary first (not straight into a field — a screen-reader user hears the
+    overview before jumping in), and let each link focus its exact field. Composed
+    entirely from existing components — the summary box is just <code>.bo-alert
+    bo-alert--danger</code>, and every field's error state (red border, red label,
+    required asterisk) comes free from the existing <code>:user-invalid</code> styling
+    already in <code>.bo-form-field</code>. Try it: submit the empty form below.
+  </p>
+
+  <section class="demo">
+    <form data-validation-summary novalidate hx-boost="false">
+      <div class="bo-alert bo-alert--danger" data-validation-summary-box hidden role="alert">
+        <p><strong>There is a problem</strong></p>
+        <ul></ul>
+      </div>
+
+      <fieldset class="bo-form-section">
+        <legend class="bo-form-section__legend">New purchase order</legend>
+        <div class="bo-form-row">
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="vs-vendor">Vendor</label>
+            <input class="bo-input" id="vs-vendor" required />
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="vs-amount">Amount</label>
+            <input class="bo-input bo-input--numeric" id="vs-amount" type="number" min="0" step="0.01" required />
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="vs-email">Approver email</label>
+            <input class="bo-input" id="vs-email" type="email" required />
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="bo-form-actions">
+        <button class="bo-btn" type="submit">Submit</button>
+      </div>
+    </form>
+  </section>
+
+  <script>
+    import { initValidationSummary } from '@busy-office/ui/js';
+    initValidationSummary();
+  </script>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<form data-validation-summary>
+  <div class="bo-alert bo-alert--danger" data-validation-summary-box hidden role="alert">
+    <p>There is a problem</p>
+    <ul></ul>  <!-- populated on an invalid submit -->
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="vendor">Vendor</label>
+    <input class="bo-input" id="vendor" required />
+  </div>
+  ...
+</form>
+
+<script type="module">
+  import { initValidationSummary } from "@busy-office/ui/js";
+  initValidationSummary(); // once — wires the [data-validation-summary] form
+</script>`}</code></pre>
+    <p class="bo-u-text-muted">Field labels come from each field's own <code>&lt;label
+    for&gt;</code> text — no extra markup needed to name a field in the summary list.</p>
+    <p class="bo-u-text-muted"><strong>If your app boosts forms with <code>htmx</code>'s
+    <code>hx-boost</code></strong> (as this docs site does — found live while building
+    this demo): add <code>hx-boost="false"</code> to any
+    <code>[data-validation-summary]</code> form. Without it, htmx's own submit
+    interception races this behavior's — htmx fetches and swaps the page before (or
+    instead of) the summary rendering, so the failed-validation state never sticks.</p>
+  </section>
+
+  <Related links={[
+    ["/components/alerts", "Alerts & toasts"],
+    ["/components/form", "Forms"],
+    ["/concepts/js-behaviors", "JS behaviors"],
+  ]} />
+</Gallery>

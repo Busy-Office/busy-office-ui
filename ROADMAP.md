@@ -618,30 +618,37 @@ detail-form patterns).
         borders/outlines are) but hasn't been seen under the real feature.
         Zero visual change to normal rendering (media-gated); contrast
         gate, stylelint, and 30 tests all pass unchanged.
-19. [ ] **Inline validation summary** — Explore spike run in an isolated
-        git worktree (`explore/validation-summary`, discarded after
-        evaluation, nothing merged directly). SPIKE SUCCEEDED cleanly,
-        graduating as a real build item. `initValidationSummary()`: on a
-        `<form data-validation-summary>` submit, if `form.checkValidity()`
-        fails, prevent submission, build a list of every `:invalid` field
-        (label text + `href="#fieldId"`) inside a
-        `[data-validation-summary-box]` element, move focus to the
-        SUMMARY first (not straight into the first field — WCAG/GOV.UK
-        precedent: a screen-reader user hears the overview before jumping
-        into any one field), and each link click focuses its field.
-        **Zero new CSS** — the summary box is just `.bo-alert
-        bo-alert--danger`, and the existing `:user-invalid`/`aria-invalid`
-        styling in `form-field.css` already puts every field into its
-        error state automatically once the browser marks it invalid — no
-        extra wiring needed for that part, confirmed live in the spike
-        (all three fields showed red border + label + required asterisk
-        with zero additional code). Verified in the spike: submitting an
-        empty required form correctly lists all 3 invalid fields, focus
-        lands on the summary, clicking a summary link focuses the exact
-        field, both themes render correctly. Accept: `initValidationSummary()`
-        shipped + tested + documented on a real docs page (a pattern, most
-        likely — this is closer to a workflow recipe than a standalone
-        component), verified live both themes.
+19. [x] **Inline validation summary** — shipped for real (the worktree
+        spike itself was discarded, per the Explore playbook). New pattern
+        page `/patterns/validation-summary` + `initValidationSummary()`
+        (`packages/core/src/js/behaviors/validation-summary.ts`): on a
+        `[data-validation-summary]` form submit, if invalid, prevent
+        submission, list every invalid field (label text + `#fieldId`
+        link) in a `[data-validation-summary-box]` (`.bo-alert
+        bo-alert--danger`, zero new CSS), move focus to the summary first
+        — WCAG/GOV.UK precedent — and each link click focuses its field.
+        3 new tests (33 total, pass).
+        **Two real bugs live verification caught that the spike/jsdom
+        tests didn't:**
+        1. `:invalid` also matches a `<fieldset>` wrapping an invalid
+           control in real browsers (not present in jsdom's simpler
+           `<div>`-only test markup) — the summary was listing the
+           fieldset itself as an unlabeled "Field". Fixed by scoping the
+           query to `input:invalid, select:invalid, textarea:invalid`.
+        2. This docs site boosts forms via `hx-boost="true"` on `<body>`
+           (same as links) — htmx's own submit interception raced this
+           behavior's, fetching and swapping `#main-content` with a fresh
+           (pristine, summary-hidden) copy of the page right after our
+           handler correctly showed the summary, silently wiping the
+           validation state. Fixed with `hx-boost="false"` on the demo
+           form (same pattern already used for `#toc-nav`); documented as
+           a real integration note on the pattern page itself, since any
+           htmx-boosted app using this behavior would hit the identical
+           bug.
+        Re-verified after both fixes: exactly 3 fields listed (no
+        fieldset), focus lands on summary, link click focuses the exact
+        field, survives the boosted page, both themes correct. Gates
+        green, 20 component pages / 47 total pages built.
 
 ## Long term (post-1.0)
 
