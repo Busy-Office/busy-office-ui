@@ -815,6 +815,14 @@ answered inline.
        `/patterns/invoice-list` (~ Report/Output Form family). Accept:
        draft only, refine after Objective review — do not start building
        from this raw list without re-checking against what already ships.
+       **Reference added 2026-08-15** (user supplied macOS Launchpad/
+       Favourites screenshots for "App Launch"): concrete shape is an
+       icon-grid launcher — categorized sections (e.g. "Favourites"),
+       each tile a large icon + label, tiles group into folders/stacks
+       for related apps, a filter/category tab row above the grid for the
+       full view. Useful evidence for scoping this sub-item once the
+       Objective review greenlights the gallery — not built now, still
+       gated the same as the rest of item 5.
 6. [x] **Localization/RTL audit** (dispatched via the Explore fallback —
        backlog and Ideas seed list both empty, generated from this
        Long-term backlog's own note, same pattern as item 21's date-field)
@@ -866,20 +874,32 @@ the current codebase for each before scoping rather than assuming a gap,
 per dispatcher discipline. All three are ready to Continue-dispatch, none
 need the Objective review.
 
-1. [ ] **Editable table (inline change)** — mostly already shipped, not a
-       green-field ask. `.bo-input--seamless` (Slice 2) already gives
-       per-cell inline editing, demoed on `/components/data-table` ("Inline
-       edit — seamless inputs in cells") and used for single-field edits in
-       `/patterns/detail-form`. Real gap: no documented pattern for
-       **multi-row** inline edit with row-level dirty-state (which rows
-       changed) and save/cancel affordance — today's demo is a bare grid of
-       always-editable inputs with no state tracking. Accept: a pattern
-       page (or data-table docs section) showing seamless inputs +
-       existing badge (dirty indicator) + button (save/cancel) composed
-       together, with a small opt-in behavior if dirty-tracking needs JS
-       (e.g. `input`-event delegation marking the row `data-dirty`) —
-       compose existing primitives first, only add new CSS/JS if composing
-       genuinely can't express it.
+1. [x] **Editable table (inline change)** — shipped. New "Multi-row inline
+       edit — dirty state + save/cancel" section on `/components/data-table`,
+       composed from existing primitives (`.bo-input--seamless`, badge,
+       button) plus one small opt-in behavior: `data-row-edit` +
+       `initRowEdit()` (`packages/core/src/js/behaviors/row-edit.ts`).
+       Typing in a row sets `data-row-state="dirty"` on the `<tr>` — reuses
+       the SAME visual channel the existing error-row state uses (amber
+       tint + start border instead of red, `--bo-color-warning-subtle`,
+       already contrast-checked) — and reveals that row's "Unsaved" badge +
+       Save/Cancel. Cancel resets inputs to `defaultValue`; Save dispatches
+       `bo:row-save` (bubbling, `{row, rowId}`) and clears dirty state —
+       persistence is the consumer's code, this behavior only tracks state.
+       3 new behavior tests (36 total, all pass); contrast/stylelint/build
+       gates green; verified live via Podman (`--no-cache` rebuild, 48
+       pages / 2417 links) in both themes — light and dark both render the
+       dirty tint/badge/buttons correctly — and at a narrow (390px) isolated
+       container width (table reflows without overflow or clipped buttons).
+       **Real bug found and fixed along the way, not pre-existing scope**:
+       inline `<script type="module">` blocks embedded mid-page silently
+       fail in the built site (bare npm specifiers aren't browser-resolvable
+       without an import map; Astro only bundles untyped `<script>` tags,
+       not `type="module"` ones) — the adjacent `initDataGrid()` demo had
+       the same latent bug. Fixed by consolidating all three demo behaviors
+       (`initDataTables`, `initDataGrid`, `initRowEdit`) into the one
+       untyped `<script>` block that Astro actually bundles, rather than
+       one broken inline script per demo section.
 2. [ ] **Multiple-selections dropdown** — genuine gap. Checked
        `packages/core/src/css/components/dropdown/dropdown.css`: it's a
        single-action popover menu (`.bo-dropdown__item`, click-to-close),

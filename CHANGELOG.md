@@ -60,6 +60,12 @@ pin.
   first real theme preset (`@busy-office/ui/css/brand-indigo`) with its own
   contrast-gate validation; "Data display" docs grouping.
 
+- **Slice 8 (in progress) — editable table, multi-select dropdown, searchable
+  dropdown**: multi-row inline edit (`data-row-edit` + opt-in
+  `initRowEdit()`) — per-row dirty state (reuses the error-row visual
+  channel, amber instead of red) with Save/Cancel, `bo:row-save` event for
+  the consumer to persist.
+
 ### API freeze audit (2026-08-15)
 
 Prompted by the 1.0 exit checklist's own finding — the public API had never

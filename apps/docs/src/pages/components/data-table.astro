@@ -52,6 +52,29 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
   import { initDataGrid } from "@busy-office/ui/js";
   initDataGrid(); // role=grid, two-axis roving tabindex, Enter/Escape into-and-out-of a cell's widget
 </script>`;
+const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
+  <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"></th></tr></thead>
+  <tbody>
+    <tr data-row-id="WIDGET-A">
+      <td>Widget A</td>
+      <td class="bo-data-table__col--numeric">
+        <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
+      </td>
+      <td class="bo-data-table__row-edit-actions">
+        <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<script type="module">
+  import { initRowEdit } from "@busy-office/ui/js";
+  initRowEdit();
+  document.addEventListener("bo:row-save", (e) => {
+    // persist e.detail.rowId / e.detail.row here (fetch, hx-patch, form submit)
+  });
+</script>`;
 const rows = [
   { no: 'INV-10234', vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: '$4,208.00', status: 'Pending', tone: 'warning' },
   { no: 'INV-10235', vendor: 'Globex Industrial', cc: 'CC-4021', amount: '$18,940.50', status: 'Approved', tone: 'success' },
@@ -138,10 +161,6 @@ const rows = [
       </table>
     </div>
     <pre><code>{gridMarkup}</code></pre>
-    <script>
-      import { initDataGrid } from '@busy-office/ui/js';
-      initDataGrid();
-    </script>
   </section>
   <section class="demo">
     <h2>Narrow container → auto-compaction</h2>
@@ -201,6 +220,46 @@ const rows = [
     a form submit or <code>hx-patch</code> on change.</p>
   </section>
   <section class="demo">
+    <h2>Multi-row inline edit — dirty state + save/cancel</h2>
+    <div class="bo-data-table-container" style="max-inline-size: 28rem">
+      <table class="bo-data-table" data-row-edit>
+        <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"></th></tr></thead>
+        <tbody>
+          <tr data-row-id="WIDGET-A">
+            <td>Widget A</td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A (editable row)" />
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+          <tr data-row-id="WIDGET-B">
+            <td>Widget B</td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B (editable row)" />
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Same seamless input as above, plus
+    <code>data-row-edit</code> on the table: typing marks the row
+    <code>data-row-state="dirty"</code> (amber tint, same visual channel the
+    error row state uses) and reveals that row's badge + Save/Cancel. Cancel
+    resets the row's inputs to their last-saved value; Save dispatches a
+    <code>bo:row-save</code> event with the row and its <code>data-row-id</code>
+    — your code persists it (fetch, <code>hx-patch</code>, form submit), this
+    behavior only tracks dirty state. Try it: edit a quantity below.</p>
+  </section>
+  <section class="demo">
     <h2>Column alignment</h2>
     <p>Put the same modifier on the <code>&lt;th&gt;</code> and every <code>&lt;td&gt;</code>
     in a column: <code>--left</code>, <code>--center</code>, <code>--right</code>, or
@@ -242,15 +301,22 @@ const rows = [
       'Row checkboxes need <code>name</code>/<code>value</code> to POST selections (via <code>hx-include</code> or a form).',
       'Columns marked <code>__col--secondary</code> hide under container compaction — keep that data reachable (row detail view) per WCAG 1.4.10.',
       'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
+      'Separately opt-in: <code>data-row-edit</code> + <code>initRowEdit()</code> for multi-row inline edit with per-row dirty state and Save/Cancel. Tracks state only — persistence is your code, via the <code>bo:row-save</code> event.',
     ]}
   />
   <section class="demo">
     <h2>Markup — the canonical table recipe</h2>
     <pre><code>{tableMarkup}</code></pre>
   </section>
+  <section class="demo">
+    <h2>Markup — multi-row inline edit</h2>
+    <pre><code>{rowEditMarkup}</code></pre>
+  </section>
   <script>
-    import { initDataTables } from '@busy-office/ui/js';
+    import { initDataTables, initDataGrid, initRowEdit } from '@busy-office/ui/js';
     initDataTables();
+    initDataGrid();
+    initRowEdit();
   </script>
   <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

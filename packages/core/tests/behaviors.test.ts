@@ -592,6 +592,70 @@ describe('initValidationSummary', () => {
   });
 });
 
+describe('initRowEdit', () => {
+  function table(): HTMLTableElement {
+    html`
+      <table class="bo-data-table" data-row-edit>
+        <tbody>
+          <tr data-row-id="WIDGET-A">
+            <td><input class="bo-input bo-input--seamless" value="12" /></td>
+            <td>
+              <span data-row-edit-dirty hidden>Unsaved</span>
+              <button type="button" data-row-edit-save hidden>Save</button>
+              <button type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+    ui.initRowEdit();
+    return document.querySelector('table')!;
+  }
+
+  it('typing in a row reveals its dirty badge and save/cancel, and marks data-row-state', () => {
+    const t = table();
+    const input = t.querySelector('input') as HTMLInputElement;
+    const row = t.querySelector('tr') as HTMLTableRowElement;
+    input.value = '99';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(row.getAttribute('data-row-state')).toBe('dirty');
+    expect((t.querySelector('[data-row-edit-dirty]') as HTMLElement).hidden).toBe(false);
+    expect((t.querySelector('[data-row-edit-save]') as HTMLElement).hidden).toBe(false);
+    expect((t.querySelector('[data-row-edit-cancel]') as HTMLElement).hidden).toBe(false);
+  });
+
+  it('cancel resets the input to its last-saved value and clears dirty state', () => {
+    const t = table();
+    const input = t.querySelector('input') as HTMLInputElement;
+    const row = t.querySelector('tr') as HTMLTableRowElement;
+    input.value = '99';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    (t.querySelector('[data-row-edit-cancel]') as HTMLElement).click();
+    expect(input.value).toBe('12');
+    expect(row.hasAttribute('data-row-state')).toBe(false);
+    expect((t.querySelector('[data-row-edit-dirty]') as HTMLElement).hidden).toBe(true);
+  });
+
+  it('save dispatches bo:row-save with the row id and clears dirty state', () => {
+    const t = table();
+    const input = t.querySelector('input') as HTMLInputElement;
+    const row = t.querySelector('tr') as HTMLTableRowElement;
+    let detail: any = null;
+    t.addEventListener('bo:row-save', (e: any) => { detail = e.detail; });
+    input.value = '99';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    (t.querySelector('[data-row-edit-save]') as HTMLElement).click();
+    expect(detail.rowId).toBe('WIDGET-A');
+    expect(detail.row).toBe(row);
+    expect(row.hasAttribute('data-row-state')).toBe(false);
+    // Saved value becomes the new baseline — a later cancel reverts to it, not the original.
+    input.value = '100';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    (t.querySelector('[data-row-edit-cancel]') as HTMLElement).click();
+    expect(input.value).toBe('99');
+  });
+});
+
 describe('trapFocus', () => {
   it('skips hidden elements when wrapping (grill finding R9)', () => {
     html`

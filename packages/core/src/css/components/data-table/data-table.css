@@ -43,6 +43,15 @@
     display: flex;
   }
 
+  /* Per-row dirty badge + Save/Cancel, revealed by initRowEdit() when the
+     row has unsaved changes. */
+  .bo-data-table__row-edit-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--bo-space-2);
+    justify-content: flex-end;
+  }
+
   .bo-data-table__selection-count {
     font-size: var(--bo-font-size-xs);
     color: var(--bo-color-text-secondary);
@@ -220,6 +229,24 @@
      mode, not a design-fidelity concern). */
   @media (forced-colors: active) {
     .bo-data-table tr[data-row-state="error"] > :first-child {
+      box-shadow: none;
+      border-inline-start: 3px solid CanvasText;
+    }
+  }
+
+  /* Dirty (unsaved inline edit): same shape as the error state above, amber
+     instead of red. Set by initRowEdit() on `input` inside a row's seamless
+     cells; cleared on save/cancel. */
+  .bo-data-table tbody tr[data-row-state="dirty"] {
+    --bo-cell-bg: var(--bo-color-warning-subtle);
+  }
+
+  .bo-data-table tr[data-row-state="dirty"] > :first-child {
+    box-shadow: inset 3px 0 0 var(--bo-color-warning);
+  }
+
+  @media (forced-colors: active) {
+    .bo-data-table tr[data-row-state="dirty"] > :first-child {
       box-shadow: none;
       border-inline-start: 3px solid CanvasText;
     }
