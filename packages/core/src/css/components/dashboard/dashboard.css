@@ -48,6 +48,38 @@
     color: var(--bo-color-text-secondary);
   }
 
+  /* Collapsible (optional): initCollapsibleCards() toggles a trigger button's
+     aria-expanded + this element's data-state. Uses the SAME
+     grid-template-rows 0fr/1fr technique as .bo-motion-collapse (duplicated
+     here rather than imported — a component's own CSS shouldn't have to pull
+     in the opt-in Motion module just for this; --bo-motion-* are core tokens,
+     available regardless). Default (no data-state) is open, so a card with
+     the markup but without the behavior wired up still shows its content. */
+  .bo-widget__collapse {
+    display: grid;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+    transition: grid-template-rows var(--bo-motion-duration-slow) var(--bo-motion-easing-standard);
+  }
+
+  .bo-widget__collapse > * {
+    min-block-size: 0;
+    overflow: hidden;
+  }
+
+  .bo-widget__collapse[data-state="closed"] {
+    grid-template-rows: 0fr;
+  }
+
+  .bo-widget__toggle-icon {
+    display: inline-block;
+    transition: transform var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+
+  [aria-expanded="false"] > .bo-widget__toggle-icon {
+    transform: rotate(-90deg);
+  }
+
   .bo-widget__body {
     padding: var(--bo-space-4);
     min-block-size: 0;

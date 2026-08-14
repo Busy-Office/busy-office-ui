@@ -3,6 +3,22 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const collapseMarkup = `<div class="bo-widget">
+  <header class="bo-widget__header">
+    <span class="bo-widget__title">Shipping details</span>
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" data-collapse-trigger
+            aria-expanded="true" aria-controls="ship-body" aria-label="Toggle">
+      <span class="bo-widget__toggle-icon">▾</span>
+    </button>
+  </header>
+  <div class="bo-widget__collapse" id="ship-body" data-state="open">
+    <div class="bo-widget__body">123 Warehouse Rd, Dock 4</div>
+  </div>
+</div>
+<script type="module">
+  import { initCollapsibleCards } from "@busy-office/ui/js";
+  initCollapsibleCards(); // once, ever — event delegation
+</script>`;
 const statMarkup = `<div class="bo-widget">
   <div class="bo-stat">
     <span class="bo-stat__label">Open invoices</span>
@@ -128,12 +144,45 @@ const statMarkup = `<div class="bo-widget">
     </div>
   </section>
   <section class="demo">
+    <h2>Collapsible <span class="bo-badge">opt-in</span></h2>
+    <p class="bo-u-text-muted">
+      <code>data-collapse-trigger</code> + <code>initCollapsibleCards()</code>: the
+      trigger's <code>aria-expanded</code> and the panel's <code>data-state</code> are the
+      two-channel contract (chevron rotation is decoration on top). CSS does the
+      height transition — same <code>grid-template-rows</code> 0fr/1fr technique as
+      the Motion module's <code>.bo-motion-collapse</code>. No <code>data-state</code>
+      at all defaults to open, so this degrades to a plain always-open widget without
+      the behavior wired up.
+    </p>
+    <div class="bo-widget" style="max-inline-size: 24rem">
+      <header class="bo-widget__header">
+        <span class="bo-widget__title">Shipping details</span>
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" data-collapse-trigger
+                aria-expanded="true" aria-controls="collapse-demo-body" aria-label="Toggle">
+          <span class="bo-widget__toggle-icon">▾</span>
+        </button>
+      </header>
+      <div class="bo-widget__collapse" id="collapse-demo-body" data-state="open">
+        <div class="bo-widget__body">
+          <p class="bo-u-text-muted">123 Warehouse Rd, Dock 4 · Carrier: Freightline ·
+          ETA 14 Aug</p>
+        </div>
+      </div>
+    </div>
+    <pre><code>{collapseMarkup}</code></pre>
+    <script>
+      import { initCollapsibleCards } from '@busy-office/ui/js';
+      initCollapsibleCards();
+    </script>
+  </section>
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{statMarkup}</code></pre>
   </section>
   <ApiTable component="dashboard"
     notes={['Delta valence needs two channels: the visible <code>⚠</code> on bad deltas AND visually-hidden text ("increase, worse,").',
             'Stat values use proportional figures; compact big numbers server-side (12.9K, $4.2M). One hero per view.',
-            'Widgets are named containers (<code>bo-widget</code>); the grid is <code>bo-widget-grid</code> — span-2 collapses at the grid&#39;s 2-column threshold.']} />
+            'Widgets are named containers (<code>bo-widget</code>); the grid is <code>bo-widget-grid</code> — span-2 collapses at the grid&#39;s 2-column threshold.',
+            'Collapsible is opt-in: <code>data-collapse-trigger</code> + <code>initCollapsibleCards()</code>. Without the behavior, a <code>.bo-widget__collapse</code> with no <code>data-state</code> just renders open.']} />
   <Related links={[["/concepts/container-queries", "Container queries"], ["/base/colors", "Colors & tokens"], ["/patterns/approval", "Approval pattern"]]} />
 </Gallery>

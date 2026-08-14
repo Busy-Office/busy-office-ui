@@ -109,8 +109,20 @@ owner-gated, not something a loop iteration can close.
          plain-text byline (the common case) gets zero layout change. Always
          `aria-hidden` — decoration, the name is already text in the byline.
          Verified live (Podman, light + dark).
-   - [ ] Collapsible cards; a real `.bo-composer` (comment + action) for
-         approval threads.
+   - [x] **Collapsible cards** — extends `.bo-widget` (not a new component):
+         `.bo-widget__collapse` wraps `__body` using the same
+         grid-template-rows 0fr/1fr technique as the Motion module's
+         `.bo-motion-collapse` (duplicated locally — a component shouldn't
+         have to import the opt-in Motion module for this; the tokens are
+         core). New opt-in behavior `initCollapsibleCards()` +
+         `data-collapse-trigger`: toggles the trigger's `aria-expanded` and
+         the panel's `data-state`, the two-channel contract (chevron
+         rotation is decoration). No `data-state` at all defaults to open —
+         degrades to a plain widget without the behavior wired up. Docs: new
+         "Collapsible" demo on `/components/dashboard`. 2 new tests (18
+         total, pass). Verified live: light + dark, toggle confirmed via
+         screenshot (chevron rotates, panel visibly collapses).
+   - [ ] A real `.bo-composer` (comment + action) for approval threads.
 4. [ ] **Saved-view persistence**; multi-column detail-form patterns.
 5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
        print preview are checkable from this environment (macOS); NVDA

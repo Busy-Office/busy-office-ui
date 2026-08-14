@@ -144,6 +144,14 @@ Seed list — Explore pulls from here or adds to it:
 ## Operating rules (every loop obeys)
 
 - **Verify before commit** — live in the container, both themes, both breakpoints.
+  Routine ticks (2026-08-14 user direction): run a **bind-mounted** nginx serving
+  `apps/docs/dist` directly (`podman run -d --name bo-docs-run -p 8081:80 -v
+  apps/docs/dist:/usr/share/nginx/html:ro -v apps/docs/nginx.conf:/etc/nginx/
+  conf.d/default.conf:ro nginx:alpine`) — `npm run build -w @busy-office/ui &&
+  npm run docs:build` on the host, nginx picks it up immediately, no image
+  rebuild. Do a full `podman build -f apps/docs/Containerfile` (validates the
+  whole build path — clean `npm ci`, the Containerfile itself) only at
+  checkpoints: a slice closing, or after touching the Containerfile/deps.
 - **Gates are the floor** — a loop that reddens a gate isn't done.
 - **Small & general over specific** — new work composes existing primitives.
 - **Record every iteration** via `scripts/loops/record_iteration.py` (writes the
