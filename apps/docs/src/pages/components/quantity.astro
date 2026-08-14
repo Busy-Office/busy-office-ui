@@ -1,0 +1,126 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const basic = `<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+</div>`;
+
+const unit = `<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <input class="bo-quantity__input" type="number" value="12" min="0" max="500" step="1" inputmode="numeric" aria-label="Quantity" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <span class="bo-quantity__unit">kg</span>
+</div>`;
+
+const boundary = `<!-- render the correct disabled state server-side when the starting value is already at a boundary -->
+<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity" disabled>&minus;</button>
+  <input class="bo-quantity__input" type="number" value="0" min="0" max="10" step="1" inputmode="numeric" aria-label="Quantity" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+</div>`;
+
+const field = `<div class="bo-form-field">
+  <label class="bo-form-field__label" for="qf-1">Quantity</label>
+  <div class="bo-quantity">
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+    <input class="bo-quantity__input" type="number" id="qf-1" value="150" min="0" max="100" step="1" inputmode="numeric" aria-invalid="true" aria-describedby="qf-1-msg" />
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+    <span class="bo-quantity__unit">ea</span>
+  </div>
+  <p class="bo-form-field__message" id="qf-1-msg" role="alert">Only 100 in stock.</p>
+</div>`;
+
+const spacious = `<div data-density="spacious">
+  <div class="bo-quantity">
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+    <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  </div>
+</div>`;
+
+const markup = `<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <input class="bo-quantity__input" type="number" min="0" max="99" step="1" inputmode="numeric" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <span class="bo-quantity__unit">ea</span>  <!-- optional -->
+</div>
+
+<script type="module">
+  import { initQuantity } from "@busy-office/ui/js";
+  initQuantity(); // once — wires the step buttons; ArrowUp/Down + typing already work natively
+</script>`;
+---
+<Gallery title="Quantity">
+  <p class="demo-note">
+    A count field, not a currency one — see <a href="/components/amount">Amount</a> for
+    money. A real <code>type="number"</code> input with increment/decrement buttons;
+    <code>min</code>/<code>max</code>/<code>step</code> are native attributes, so
+    validation, keyboard behavior, and the buttons' clamping all read from the same
+    source of truth.
+  </p>
+  <ClassRef component="quantity" />
+
+  <section class="demo">
+    <h2>Basic</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted"><strong>Requires <code>initQuantity()</code></strong> —
+      without it the buttons are inert, but the input itself still works (native number
+      keyboard behavior, and it's a real form field either way).</p>
+  </section>
+
+  <section class="demo">
+    <h2>With a unit</h2>
+    <Demo code={unit} />
+    <p class="bo-u-text-muted"><code>__unit</code> is optional, plain text — <code>ea</code>,
+    <code>kg</code>, <code>box</code>, whatever your app's unit of measure is.</p>
+  </section>
+
+  <section class="demo">
+    <h2>At a boundary</h2>
+    <Demo code={boundary} />
+    <p class="bo-u-text-muted">Buttons disable at <code>min</code>/<code>max</code> —
+    render the correct <code>disabled</code> server-side for the starting value;
+    <code>initQuantity()</code> keeps it in sync reactively after that (clicking,
+    typing, or the native spinner keys).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Inside a form field (validation)</h2>
+    <Demo code={field} />
+    <p class="bo-u-text-muted">Composes with <code>.bo-form-field</code> like any other
+    control — the same two-channel error state (border + message + <code>aria-invalid</code>
+    or <code>:user-invalid</code>) applies for free, nothing quantity-specific needed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Large-target (warehouse-floor) variant</h2>
+    <Demo code={spacious} />
+    <p class="bo-u-text-muted">There's no separate "large" modifier — density IS the
+    size variant. <code>data-density="spacious"</code> (44px controls) already meets the
+    WCAG 2.5.8 minimum target size; scope it to a warehouse-floor screen the same way
+    you'd scope <code>compact</code> to a dense table.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <script>
+    import { initQuantity } from '@busy-office/ui/js';
+    initQuantity();
+  </script>
+
+  <ApiTable component="quantity"
+    notes={['A count, not currency — see Amount for money values.',
+            '<code>min</code>/<code>max</code>/<code>step</code> live on the native <code>&lt;input type="number"&gt;</code>; the step buttons read the same attributes, so there is only one source of truth for the valid range.',
+            'Button disabled state at a boundary is kept in sync reactively by <code>initQuantity()</code> — render the correct initial <code>disabled</code> server-side if the starting value is already at min/max.',
+            'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.']} />
+  <Related links={[["/components/amount", "Amount"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
+</Gallery>

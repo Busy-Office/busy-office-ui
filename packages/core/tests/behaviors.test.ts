@@ -431,6 +431,62 @@ describe('initWizard', () => {
   });
 });
 
+describe('initQuantity', () => {
+  function quantity(attrs = 'min="0" max="10" step="1" value="4"'): {
+    root: HTMLElement;
+    input: HTMLInputElement;
+    dec: HTMLButtonElement;
+    inc: HTMLButtonElement;
+  } {
+    html`
+      <div class="bo-quantity">
+        <button class="bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease">−</button>
+        <input class="bo-quantity__input" type="number" ${attrs} />
+        <button class="bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase">+</button>
+      </div>
+    `;
+    ui.initQuantity();
+    return {
+      root: document.querySelector('.bo-quantity')!,
+      input: document.querySelector('.bo-quantity__input')!,
+      dec: document.querySelector('[data-quantity-step="-1"]')!,
+      inc: document.querySelector('[data-quantity-step="1"]')!,
+    };
+  }
+
+  it('increment/decrement buttons step the value and fire input+change', () => {
+    const { input, dec, inc } = quantity();
+    let changed = 0;
+    input.addEventListener('change', () => changed++);
+    inc.click();
+    expect(input.value).toBe('5');
+    dec.click();
+    dec.click();
+    expect(input.value).toBe('3');
+    expect(changed).toBe(3);
+  });
+
+  it('clamps at min/max and disables the corresponding button once reached', () => {
+    const { input, dec, inc } = quantity('min="0" max="5" step="1" value="4"');
+    inc.click();
+    expect(input.value).toBe('5');
+    expect(inc.disabled).toBe(true); // reactively synced after the click
+    inc.click();
+    expect(input.value).toBe('5'); // unchanged, button is disabled
+    dec.click();
+    expect(inc.disabled).toBe(false); // re-enabled once off the boundary
+    for (let i = 0; i < 10; i++) dec.click();
+    expect(input.value).toBe('0');
+    expect(dec.disabled).toBe(true);
+  });
+
+  it('respects a non-1 step', () => {
+    const { input, inc } = quantity('min="0" max="20" step="5" value="0"');
+    inc.click();
+    expect(input.value).toBe('5');
+  });
+});
+
 describe('trapFocus', () => {
   it('skips hidden elements when wrapping (grill finding R9)', () => {
     html`

@@ -4,6 +4,7 @@ export { initDataGrid, refreshDataGrid } from './behaviors/data-grid.js';
 export { initCollapsibleCards } from './behaviors/collapsible-card.js';
 export { initSavedViews } from './behaviors/saved-views.js';
 export { initWizard } from './behaviors/wizard.js';
+export { initQuantity } from './behaviors/quantity.js';
 export { initTabs } from './behaviors/tabs.js';
 export { initDropdowns } from './behaviors/dropdown.js';
 export { initAlerts } from './behaviors/alert.js';

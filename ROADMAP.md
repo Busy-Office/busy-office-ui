@@ -363,23 +363,43 @@ detail-form patterns).
         a real device/simulator, or a headless viewport tool) before
         checking this off.
 
-12. [ ] **Quantity field** (2026-08-14 user direction, wishlist) — a dedicated
-        ERP field for entering counts, not currency: numeric input +
-        increment/decrement buttons, optional unit suffix (`ea`, `kg`,
-        `box`), `min`/`max`/`step` validation, large-target variant for
-        warehouse/RF-scanner use. Compose from existing primitives
-        (`.bo-input--numeric` + `.bo-btn`) rather than a from-scratch
-        control. **Name collision to avoid:** `.bo-stepper` is already the
-        wizard progress-indicator component — call this `.bo-quantity` (or
-        fold the increment/decrement buttons into `.bo-input` as a new
-        part) so it doesn't clash. Overlaps with the RF-scanner item's
-        "big-number quantity stepper" (item 9) — build this as the general
-        field first, then the RF-scanner large-target variant reuses it
-        instead of duplicating. Accept: one component/field usable both in
-        a normal form row and (with a density/size variant) as a
-        warehouse-floor large-target control; two-channel state for
-        min/max validation errors; AA contrast; keyboard-operable
-        increment/decrement (not just click-only).
+12. [x] **Quantity field** (2026-08-14 user direction, wishlist) — shipped as
+        `.bo-quantity` (`/components/quantity`), scaffolded via
+        `new:component` to keep the docs-page shape gate-honest. Composes
+        `.bo-btn`/`.bo-input--numeric` rather than inventing new visual
+        primitives — the increment/decrement buttons ARE `.bo-btn
+        bo-btn--secondary`, styled for free. A real `type="number"` input
+        is the single source of truth for `min`/`max`/`step`; the new
+        opt-in behavior `initQuantity()` reads those same attributes to
+        clamp the buttons and keeps their `disabled` state in sync
+        reactively (author renders the correct initial `disabled` if the
+        starting value is already at a boundary — no eager DOM scan, same
+        "swap-proof, not scan-proof" shape as the other behaviors). No
+        `.bo-stepper` name collision (that's the wizard component).
+        Warehouse-floor "large-target" variant is **not a new modifier** —
+        `data-density="spacious"` (44px controls) already meets WCAG 2.5.8,
+        so item 9's RF-scanner stepper can reuse this directly. Composes
+        with `.bo-form-field` for the two-channel validation-error state
+        (border + message + `aria-invalid`) — nothing quantity-specific
+        needed there. 3 new behavior tests (26 total, pass).
+        **Bug found and fixed during live verification, not caught by
+        gates:** the docs-page demo markup omitted `.bo-btn` on the step
+        buttons — CSS-valid, gates all passed, but the buttons rendered as
+        unstyled native `<button>`s at the wrong size (spot-checked
+        computed height: 27px vs. the intended ~36px). Caught by measuring
+        computed height live rather than trusting the screenshot alone;
+        fixed by adding `.bo-btn bo-btn--secondary` to every occurrence.
+        Verified live via Podman: comfortable (36px) vs. spacious (44px)
+        step-button height confirmed via `getComputedStyle`, light + dark
+        both correct, boundary/unit/validation demos all render as
+        intended, clicking the buttons live in-browser increments/
+        decrements and clamps correctly. Narrow-width check used an
+        isolated 320px off-DOM container instead of the usual
+        forced-main-width technique (this page's right-rail TOC grid
+        didn't shrink under that technique the way patterns pages did —
+        a docs-shell quirk, not a component bug — confirmed the component
+        itself has no fixed-pixel dependency: `max-inline-size: 12rem`
+        plus flex content, same shape already used safely elsewhere).
 13. [x] **Standardize: generated-docs drift** (dispatched after 4 Continue
         rounds) — `/concepts/js-behaviors`'s "five inits" table was
         genuinely wrong (hand-typed, actually 9 behaviors, 4 undocumented:
