@@ -111,11 +111,30 @@ owner-gated, not something a loop iteration can close.
          touched). Confirmed `Tabs` (document-delegated) still works.
          Confirmed the drawer-close fix. Zero console errors across all of
          it. All gates green, 20 tests pass.
-       - **Not independently verified:** Pagefind search-result clicks
-         (dynamically injected after the page loads) getting boosted —
-         htmx 2.x's MutationObserver auto-processes new DOM by default, so
-         this should work without extra wiring, but wasn't click-tested
-         directly. Flagging rather than silently assuming.
+       - **Follow-up round (same wake, before moving to a new item):**
+         click-tested the previously-flagged Pagefind gap directly instead
+         of trusting the "should work" assumption — it didn't. Two real
+         bugs found and fixed:
+         1. `import 'htmx.org'` (ESM build) only default-exports `htmx`; it
+            never sets `window.htmx`. Fixed: `import htmx from 'htmx.org';
+            window.htmx = htmx;` — needed so other scripts can call
+            `htmx.process()` at all.
+         2. Even with that fixed, `htmx.process(container)` does NOT
+            retroactively re-derive an ANCESTOR's `hx-boost` for newly-
+            added descendants — that inheritance is only computed at the
+            initial page-load scan (confirmed empirically by testing both
+            ways, not assumed from docs). Fixed: a `MutationObserver` on
+            the Pagefind results containers (`#docsearch`, `#cmdk-search`)
+            sets `hx-boost="true"` explicitly on each fresh result link
+            before calling `htmx.process()`.
+         Re-verified after both fixes: tagged the header before a search
+         + click and confirmed it persists, URL/title/sidebar
+         `aria-current` all update correctly — same standard as every
+         other boosted path. Also re-ran the full component-page sweep
+         (Dialog, Alerts/toasts trigger+dismiss, Dropdown) after the
+         earlier hx-boost commit specifically to broaden coverage beyond
+         the 2 pages tested there — all confirmed working, zero console
+         errors, gates green, 20 tests pass.
 1. [x] **Skeleton / empty / error states** — shipped as two components (not
        three classes): `.bo-skeleton` (`--circle`/`--block` shimmer
        placeholders, `aria-busy` is the programmatic channel) and `.bo-state`

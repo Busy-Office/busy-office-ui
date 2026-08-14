@@ -212,12 +212,27 @@ const current =
       document.head.append(css);
       const s = document.createElement('script');
       s.src = `${base}/pagefind/pagefind-ui.js`;
+      // Pagefind re-renders its result links on every keystroke. htmx.process()
+      // re-scans a subtree for hx-* attributes but does NOT retroactively
+      // re-derive an ANCESTOR's hx-boost for newly-added descendants (that
+      // inheritance is only computed at the initial page-load scan, confirmed
+      // empirically) — so each fresh link needs hx-boost set explicitly, or
+      // clicking a search result falls through to a full page reload.
+      function keepBoosted(container) {
+        if (!window.htmx) return;
+        new MutationObserver(() => {
+          container.querySelectorAll('a[href]:not([hx-boost])').forEach((a) => a.setAttribute('hx-boost', 'true'));
+          htmx.process(container);
+        }).observe(container, { childList: true, subtree: true });
+      }
       s.onload = () => {
         new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
+        keepBoosted(document.getElementById('docsearch'));
         // Cmd/Ctrl+K command palette — a second Pagefind instance in a dialog.
         const dlg = document.getElementById('cmdk');
         if (dlg) {
           new PagefindUI({ element: '#cmdk-search', showSubResults: true, showImages: false });
+          keepBoosted(document.getElementById('cmdk-search'));
           const input = () => dlg.querySelector('.pagefind-ui__search-input');
           const links = () => [...dlg.querySelectorAll('.pagefind-ui__result-link')];
           const open = () => {
@@ -247,7 +262,10 @@ const current =
       document.getElementById('docsearch')?.setAttribute('data-shortcut', '⌘K');
     </script>
     <script>
-      import 'htmx.org';
+      import htmx from 'htmx.org';
+      window.htmx = htmx; // the ESM build only default-exports; other
+                           // is:inline scripts (the Pagefind result-boost
+                           // fix below) need window.htmx to call .process().
       import { initDialogs } from '@busy-office/ui/js';
       initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
                       // delegation, so it keeps working across boosted swaps
