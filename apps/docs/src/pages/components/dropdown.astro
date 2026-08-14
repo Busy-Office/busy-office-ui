@@ -14,6 +14,16 @@ const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-ac
   import { initDropdowns } from "@busy-office/ui/js";
   initDropdowns(); // anchors the menu to its invoker + close-on-select
 </script>`;
+const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="cc-menu" data-multiselect-label="Cost center">Cost center</button>
+<div class="bo-dropdown__menu" id="cc-menu" popover data-multiselect>
+  <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-1180" /> CC-1180</label>
+  <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-2205" /> CC-2205</label>
+  <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-4021" /> CC-4021</label>
+</div>
+<script type="module">
+  import { initDropdowns } from "@busy-office/ui/js";
+  initDropdowns(); // same call — multi-select is data-multiselect on the menu, no separate init
+</script>`;
 ---
 <Gallery title="Dropdown">
   <p class="demo-note">
@@ -63,6 +73,23 @@ const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-ac
     absolutely-positioned menu this would be clipped.</p>
   </section>
   <section class="demo">
+    <h2>Multi-select</h2>
+    <div class="bo-cluster">
+      <button class="bo-btn bo-btn--secondary" popovertarget="demo-cc" data-multiselect-label="Cost center">Cost center</button>
+      <div class="bo-dropdown__menu" id="demo-cc" popover data-multiselect>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-1180" /> CC-1180</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-2205" /> CC-2205</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-4021" /> CC-4021</label>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Real checkboxes, not a custom widget —
+    <code>data-multiselect</code> on the menu keeps it open across selections and
+    updates the trigger's label ("Cost center" → "Cost center (2)") from
+    <code>data-multiselect-label</code>. Tab + Space, no extra keyboard wiring
+    needed. Every other menu on the page still closes on select.</p>
+    <pre><code>{multiselectMarkup}</code></pre>
+  </section>
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{ddMarkup}</code></pre>
   </section>
@@ -72,6 +99,9 @@ const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-ac
   </script>
   <ApiTable component="dropdown"
     js="Recommended: initDropdowns() — anchors the top-layer popover to its invoker and closes on select. Without it the menu opens centered."
-    notes={['The menu is a native <code>[popover]</code>: never clipped by scroll containers, never z-fought by sticky headers; Esc and light dismiss are native.']} />
+    notes={[
+      'The menu is a native <code>[popover]</code>: never clipped by scroll containers, never z-fought by sticky headers; Esc and light dismiss are native.',
+      'Multi-select: add <code>data-multiselect</code> to the menu and use real <code>&lt;input type="checkbox"&gt;</code> items (wrapped in a <code>&lt;label&gt;</code>, not a button). Same <code>initDropdowns()</code> call — no separate init function.',
+    ]} />
   <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>

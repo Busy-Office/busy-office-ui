@@ -37,6 +37,17 @@
     background: var(--bo-state-hover-overlay);
   }
 
+  /* Multi-select variant: item is a <label> wrapping a real checkbox — no
+     ARIA needed, native semantics carry the state. Checked items get the
+     same selected tint the data-table uses for checked rows. */
+  label.bo-dropdown__item {
+    cursor: pointer;
+  }
+
+  .bo-dropdown__item:has(input:checked) {
+    background: var(--bo-color-bg-selected);
+  }
+
   /* danger-text stays >= 4.5:1 on the hover overlay in both themes. */
   .bo-dropdown__item--danger {
     color: var(--bo-color-danger-text);

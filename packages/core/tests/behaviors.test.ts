@@ -203,6 +203,30 @@ describe('initDropdowns (popover)', () => {
     document.querySelector<HTMLElement>('.bo-dropdown__item')!.click();
     expect(menu.hidePopover).toHaveBeenCalledTimes(1);
   });
+
+  it('multi-select: checking an item does not close the menu, and updates the trigger label with a count', () => {
+    ui.initDropdowns();
+    html`
+      <button popovertarget="m2" data-multiselect-label="Cost center">Cost center</button>
+      <div class="bo-dropdown__menu" id="m2" popover data-multiselect>
+        <label class="bo-dropdown__item"><input type="checkbox" value="CC-1180" /> CC-1180</label>
+        <label class="bo-dropdown__item"><input type="checkbox" value="CC-2205" /> CC-2205</label>
+      </div>
+    `;
+    const menu = document.getElementById('m2') as HTMLElement & { hidePopover: () => void };
+    menu.hidePopover = vi.fn();
+    const [first, second] = [...document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+
+    first.click();
+    expect(menu.hidePopover).not.toHaveBeenCalled();
+    expect(document.querySelector('[popovertarget="m2"]')!.textContent).toBe('Cost center (1)');
+
+    second.click();
+    expect(document.querySelector('[popovertarget="m2"]')!.textContent).toBe('Cost center (2)');
+
+    first.click();
+    expect(document.querySelector('[popovertarget="m2"]')!.textContent).toBe('Cost center (1)');
+  });
 });
 
 describe('initCollapsibleCards', () => {

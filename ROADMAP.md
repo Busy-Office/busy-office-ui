@@ -900,19 +900,28 @@ need the Objective review.
        (`initDataTables`, `initDataGrid`, `initRowEdit`) into the one
        untyped `<script>` block that Astro actually bundles, rather than
        one broken inline script per demo section.
-2. [ ] **Multiple-selections dropdown** — genuine gap. Checked
-       `packages/core/src/css/components/dropdown/dropdown.css`: it's a
-       single-action popover menu (`.bo-dropdown__item`, click-to-close),
-       no checkbox/multi-select variant exists. Data-table's row
-       multi-select (checkboxes in table cells) is a different pattern and
-       doesn't cover "pick N values from a dropdown list" (e.g. multi-
-       select a set of cost centers on a filter bar). Accept: a dropdown
-       variant (`.bo-dropdown--multiselect` or a new `.bo-multiselect`)
-       using checkbox list items that stays open across selections, a
-       trigger label reflecting selection count ("3 selected"), keyboard
-       support (arrow nav + space to toggle, matching the existing
-       dropdown's roving-focus shape), contrast pairs added to
-       `check-contrast.mjs`, docs page.
+2. [x] **Multiple-selections dropdown** — shipped. `data-multiselect` on
+       `.bo-dropdown__menu` + real `<input type="checkbox">` items (each
+       wrapped in a `<label class="bo-dropdown__item">`, not a button) —
+       deliberately **not** a `.bo-dropdown--multiselect` CSS modifier or a
+       hand-rolled ARIA listbox, since native checkboxes already carry full
+       keyboard (Tab + Space) and screen-reader semantics for free.
+       `initDropdowns()` (no new init function) now: skips close-on-select
+       when the menu has `data-multiselect`, and updates the trigger's
+       label from `data-multiselect-label` + a live checked count ("Cost
+       center" → "Cost center (2)") on `change`. Checked items get the
+       same `--bo-color-bg-selected` tint the data-table uses for selected
+       rows — already a checked contrast pair, no new one needed.
+       **Deviated from the Accept text on one point, deliberately**: no
+       custom arrow-key roving-tabindex — re-checked the existing dropdown
+       behavior while building this and it never had that (menu items are
+       plain Tab stops, no keydown handler in `dropdown.ts`), so there was
+       no existing "roving-focus shape" to match; native checkbox Tab+Space
+       is simpler and equally accessible, so left it at that rather than
+       building new keyboard-nav machinery no other menu on the page has.
+       37 behavior tests total (33 baseline, +3 for row-edit, +1 here),
+       all pass; contrast/stylelint/build gates green; verified live via
+       Podman (`--no-cache`) in both themes.
 3. [ ] **Searchable dropdown** — genuine gap, largest lift of the three.
        Checked `packages/core/src/css/components/form/select.css`: it's a
        native `<select>` wrapper only, no combobox/type-ahead capability;

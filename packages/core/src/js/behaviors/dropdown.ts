@@ -13,8 +13,33 @@
  * initDropdowns() adds the two things the platform doesn't: anchoring the
  * menu to its invoker (top-layer popovers are not anchor-positioned at our
  * browser floor), and close-on-item-select. Call once.
+ *
+ * Multi-select variant — real checkboxes, no new ARIA role, stays open
+ * across selections:
+ *   <button class="bo-btn bo-btn--secondary" popovertarget="menu-2"
+ *       data-multiselect-label="Cost center">Cost center</button>
+ *   <div class="bo-dropdown__menu" id="menu-2" popover data-multiselect>
+ *     <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" value="CC-1180" /> CC-1180</label>
+ *   </div>
+ * The trigger's label becomes "Cost center (2)" once >=1 box is checked,
+ * and reverts to `data-multiselect-label` at zero. Clicking a checkbox
+ * item does not close the menu (every other menu still closes on select).
  */
 let installed = false;
+
+function findInvoker(menuId: string): HTMLElement | null {
+  return [...document.querySelectorAll<HTMLElement>('[popovertarget]')].find(
+    (el) => el.getAttribute('popovertarget') === menuId,
+  ) ?? null;
+}
+
+function updateMultiselectLabel(menu: HTMLElement): void {
+  const invoker = findInvoker(menu.id);
+  const base = invoker?.getAttribute('data-multiselect-label');
+  if (!invoker || !base) return;
+  const count = menu.querySelectorAll('input[type="checkbox"]:checked').length;
+  invoker.textContent = count > 0 ? `${base} (${count})` : base;
+}
 
 function position(menu: HTMLElement): void {
   const invoker = document.querySelector<HTMLElement>(
@@ -54,6 +79,13 @@ export function initDropdowns(): void {
   document.addEventListener('click', (e) => {
     const item = (e.target as Element | null)?.closest('.bo-dropdown__item');
     const menu = item?.closest<HTMLElement>('.bo-dropdown__menu[popover]');
-    if (menu) menu.hidePopover();
+    if (menu && !menu.hasAttribute('data-multiselect')) menu.hidePopover();
+  });
+
+  document.addEventListener('change', (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.type !== 'checkbox') return;
+    const menu = input.closest<HTMLElement>('.bo-dropdown__menu[data-multiselect]');
+    if (menu) updateMultiselectLabel(menu);
   });
 }
