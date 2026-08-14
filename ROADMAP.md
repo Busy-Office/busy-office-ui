@@ -857,6 +857,61 @@ items 2, 3, and 5 (device coverage, component tiers, patterns gallery)
 still need it before scoping further — those are the ones actually
 blocking further autonomous progress on this slice.
 
+## Slice 8 (candidate) — editable table, multi-select dropdown, searchable dropdown
+
+Triaged 2026-08-15 (user direction, wishlist — three concrete component
+asks). Unlike Slice 7 items 2/3/5, these describe specific buildable UI
+controls rather than open-ended device/pattern-gallery questions — checked
+the current codebase for each before scoping rather than assuming a gap,
+per dispatcher discipline. All three are ready to Continue-dispatch, none
+need the Objective review.
+
+1. [ ] **Editable table (inline change)** — mostly already shipped, not a
+       green-field ask. `.bo-input--seamless` (Slice 2) already gives
+       per-cell inline editing, demoed on `/components/data-table` ("Inline
+       edit — seamless inputs in cells") and used for single-field edits in
+       `/patterns/detail-form`. Real gap: no documented pattern for
+       **multi-row** inline edit with row-level dirty-state (which rows
+       changed) and save/cancel affordance — today's demo is a bare grid of
+       always-editable inputs with no state tracking. Accept: a pattern
+       page (or data-table docs section) showing seamless inputs +
+       existing badge (dirty indicator) + button (save/cancel) composed
+       together, with a small opt-in behavior if dirty-tracking needs JS
+       (e.g. `input`-event delegation marking the row `data-dirty`) —
+       compose existing primitives first, only add new CSS/JS if composing
+       genuinely can't express it.
+2. [ ] **Multiple-selections dropdown** — genuine gap. Checked
+       `packages/core/src/css/components/dropdown/dropdown.css`: it's a
+       single-action popover menu (`.bo-dropdown__item`, click-to-close),
+       no checkbox/multi-select variant exists. Data-table's row
+       multi-select (checkboxes in table cells) is a different pattern and
+       doesn't cover "pick N values from a dropdown list" (e.g. multi-
+       select a set of cost centers on a filter bar). Accept: a dropdown
+       variant (`.bo-dropdown--multiselect` or a new `.bo-multiselect`)
+       using checkbox list items that stays open across selections, a
+       trigger label reflecting selection count ("3 selected"), keyboard
+       support (arrow nav + space to toggle, matching the existing
+       dropdown's roving-focus shape), contrast pairs added to
+       `check-contrast.mjs`, docs page.
+3. [ ] **Searchable dropdown** — genuine gap, largest lift of the three.
+       Checked `packages/core/src/css/components/form/select.css`: it's a
+       native `<select>` wrapper only, no combobox/type-ahead capability;
+       `dropdown.css` has no search input either. No ARIA combobox pattern
+       exists anywhere in the package today. Accept: new `.bo-combobox`
+       component + opt-in `initCombobox()` behavior implementing the
+       WAI-ARIA APG combobox (single-select, list autocomplete) pattern —
+       `role="combobox"` input + filtered `role="listbox"` popup, type-ahead
+       narrows the list, arrow keys navigate filtered results, Enter
+       commits, Escape closes without changing value. Mirrors the existing
+       ARIA-grid precedent (Slice 6): document-delegation behavior, opt-in,
+       doesn't change any existing contract. Needs its own contrast pairs
+       and docs page; largest new-surface item here, do last of the three.
+
+Smallest-scoped first: item 1 is mostly composition of existing primitives
+(smallest lift), item 2 is a real but contained new variant, item 3 is a
+full new ARIA pattern + behavior (largest). Dispatch in that order across
+Continue rounds.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
