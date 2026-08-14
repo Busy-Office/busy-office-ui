@@ -71,6 +71,7 @@ const JS_HOOKS = {
   'data-table': { classes: ['bo-data-table__select-all'], dataAttrs: ['data-grid-nav'] },
   dialog: { classes: [], dataAttrs: ['data-dialog-trigger', 'data-dismissible'] },
   dashboard: { classes: [], dataAttrs: ['data-collapse-trigger'] },
+  filters: { classes: [], dataAttrs: ['data-saved-views'] },
 };
 
 const componentsDir = join(srcCss, 'components');

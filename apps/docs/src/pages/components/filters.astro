@@ -36,12 +36,30 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
     </form>
   </section>
   <section class="demo">
-    <h2>Saved views</h2>
+    <h2>Saved views <span class="bo-badge">opt-in</span></h2>
+    <p class="bo-u-text-muted">
+      Views are just links (server-rendered, zero new CSS) — but which one is
+      "active" and what the filter bar's fields show shouldn't be hand-set per
+      page. <code>initSavedViews()</code> derives both from the URL: it reads
+      <code>location.search</code>, fills matching <code>.bo-filter-bar</code>
+      fields, and marks whichever <code>[data-saved-views]</code> link's own
+      querystring matches the current one <code>aria-current="page"</code> —
+      clearing it from the others. Try it: click a saved view below, watch the
+      filter bar and the active chip update to match.
+    </p>
+    <form class="bo-filter-bar" role="search" aria-label="Invoice filters" style="margin-block-end: var(--bo-space-2)">
+      <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
+      <select class="bo-select" name="status" style="inline-size:auto" aria-label="Status">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="overdue">Overdue</option>
+      </select>
+    </form>
     <div class="bo-cluster">
-      <nav class="bo-cluster" aria-label="Saved views" style="--bo-cluster-gap: var(--bo-space-1)">
-        <a class="bo-chip bo-chip--active" href="#" aria-current="page">My pending</a>
-        <a class="bo-chip" href="#">Overdue &gt; 30d</a>
-        <a class="bo-chip" href="#">All CC-4021</a>
+      <nav class="bo-cluster" aria-label="Saved views" data-saved-views style="--bo-cluster-gap: var(--bo-space-1)">
+        <a class="bo-chip" href="?status=pending">My pending</a>
+        <a class="bo-chip" href="?status=overdue">Overdue</a>
+        <a class="bo-chip" href="?q=CC-4021">All CC-4021</a>
       </nav>
       <button class="bo-btn bo-btn--ghost" popovertarget="view-menu">Save view ▾</button>
       <div class="bo-dropdown__menu" id="view-menu" popover>
@@ -49,20 +67,20 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
         <button class="bo-dropdown__item" type="button">Manage views…</button>
       </div>
     </div>
-    <p class="bo-u-text-muted">A saved view is just a link that restores a filter
-    querystring — chips with <code>aria-current="page"</code> for the active view, plus
-    a dropdown for save/manage. Server-rendered, zero new CSS.</p>
   </section>
   <section class="demo">
     <h2>Markup</h2>
     <pre><code>{filterMarkup}</code></pre>
   </section>
   <script>
-    import { initDropdowns } from '@busy-office/ui/js';
+    import { initDropdowns, initSavedViews } from '@busy-office/ui/js';
     initDropdowns();
+    initSavedViews();
   </script>
   <ApiTable component="filters"
+    js="Optional: initSavedViews() — populates a .bo-filter-bar's fields from the URL querystring and marks the matching [data-saved-views] link aria-current."
     notes={['Make the bar a real <code>&lt;form role="search"&gt;</code> so <code>type="reset"</code> works.',
-            'Chip remove buttons name their filter in <code>aria-label</code>; 24px hit area is built in.']} />
+            'Chip remove buttons name their filter in <code>aria-label</code>; 24px hit area is built in.',
+            'Saved views are just links — persistence (naming, saving, deleting a view) is your code; the behavior only keeps the UI in sync with whichever view the URL says is active.']} />
   <Related links={[["/components/data-table", "Data table"], ["/components/dropdown", "Dropdown"]]} />
 </Gallery>

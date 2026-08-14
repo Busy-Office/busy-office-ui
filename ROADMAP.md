@@ -152,7 +152,21 @@ owner-gated, not something a loop iteration can close.
 
 Slice-4 continuation is now fully done (avatar byline, collapsible cards,
 `.bo-composer` — all three shipped and verified).
-4. [ ] **Saved-view persistence**; multi-column detail-form patterns.
+4. Filters/detail-forms:
+   - [x] **Saved-view persistence** — the Slice 2 saved-views markup was
+         static (hardcoded active chip, hardcoded field values); the real
+         gap was that nothing DERIVED either from the URL. New opt-in
+         behavior `initSavedViews()`: populates `.bo-filter-bar` fields from
+         `location.search`, and marks whichever `[data-saved-views]` link's
+         own querystring matches the current URL `aria-current="page"`
+         (clearing it from the others). Doesn't invent a storage backend —
+         views stay server-rendered links, this only keeps the UI honest
+         about which one is active. 2 new tests (20 total, pass). Verified
+         live: navigated with `?status=pending` in the URL, the select
+         showed "Pending" and the matching chip was active — clicked
+         "Overdue", URL/select/active-chip all updated together, both
+         themes.
+   - [ ] Multi-column detail-form patterns.
 5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
        print preview are checkable from this environment (macOS); NVDA
        (Windows-only) stays a standing NEEDS-RUNTIME ledger entry, not claimed.
