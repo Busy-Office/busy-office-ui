@@ -474,6 +474,38 @@ detail-form patterns).
         (non-standard) units render like any other `__unit` value today;
         per-unit decimal defaults are overridable, never hardcoded as a
         silent app-wide constant.
+16. [ ] **Quantity + Amount: input-field and table samples, incl. mixed
+        units/currency per row** (2026-08-14 user direction, wishlist) —
+        both components are documented today as isolated controls
+        (`/components/quantity`, `/components/amount`); the ask is real
+        USAGE samples: (a) each one inside an actual form field/input
+        context (already partly covered — Quantity has a "form field"
+        validation demo; Amount has none showing it as an editable input
+        rather than a read-only display value — worth checking whether
+        Amount is meant to be edit-time at all, or strictly a display
+        component, before building this), (b) each one as a **table
+        column** (Amount already has this in its "In a column" demo and
+        in `/patterns/detail-form`'s line-items table; Quantity does not
+        yet have a table-column demo), and (c) a table with **multiple
+        rows using DIFFERENT currencies/units** — e.g. a multi-currency
+        invoice or a multi-UOM inventory list — which is the genuinely new
+        design question here: does `__col--numeric` right-alignment plus
+        per-row `__currency`/`__unit` affixes already read cleanly when
+        the affix text varies row-to-row (a $ column next to a SGD column
+        next to a ¥ column), or does mixed-unit tabular data need a
+        dedicated layout (e.g. the currency/unit pinned to a narrower
+        fixed-width sub-column so amounts still align on the decimal even
+        when the affix width varies)? Needs a real look at real data
+        before assuming the existing component handles it — candidate for
+        a small live spike (a few rows, 3+ distinct currencies) as part of
+        the build round rather than guessed at here. Depends on items
+        14/15 (currency-code/unit-code + precision) landing first if this
+        ships the ISO-code form of the affix rather than symbols — order:
+        14/15 before 16. Accept (draft, refine at build time): a documented
+        table-column demo for Quantity (matching Amount's existing one); a
+        documented mixed-currency/mixed-unit multi-row table demo for
+        both, with alignment verified live, not just asserted; input-field
+        usage samples for both components in their real docs pages.
 
 ## Long term (post-1.0)
 
