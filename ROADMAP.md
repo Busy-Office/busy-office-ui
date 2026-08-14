@@ -330,15 +330,44 @@ detail-form patterns).
          missing before this tick, initWizard makes it 4 undocumented);
          flagging for the next Standardize pass rather than scope-creeping
          it into this item.
-9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
-       receipt (GR) / goods issue (GI) screens driven by a handheld RF
-       scanner, not a mouse. Large-target scan-input field (auto-focus,
-       auto-advance on a terminator character), a big-number quantity
-       stepper, high-contrast/high-density variants for warehouse-floor
-       screens. Seed it as an **Explore** spike first (see `LOOPS.md` Ideas
-       backlog) — the interaction model is different enough from the rest of
-       the library that it needs a try/error pass before committing to an
-       API.
+9. **RF-scanner / warehouse-scan components** — Explore spike run in an
+   isolated git worktree (`explore/rf-scanner-scan-input`, discarded after
+   evaluation — nothing merged from it directly, per the Explore playbook).
+   Findings, split into three now-separate, properly-scoped pieces instead
+   of one bundled item:
+   - [ ] **9a. Scan-input field** — spike SUCCEEDED, graduating as a real
+         build item. A new opt-in behavior, `initScanInput()` (~25 lines,
+         same document-delegation shape as every other behavior): listens
+         for a configurable terminator key (`data-scan-terminator`,
+         defaults to `Enter` — a scanner is a keyboard wedge that types the
+         barcode fast then sends a terminator), dispatches a `bo:scan`
+         `CustomEvent` with the value, clears the field, and refocuses it
+         so the next scan is immediate. **Zero new CSS** — reuses
+         `.bo-input`/`.bo-input--code`/`.bo-form-field` as-is; markup
+         contract is just `data-scan-input` on a plain input. Verified in
+         the spike: auto-focus on load, back-to-back scans work without
+         re-clicking the field, both themes render correctly. **Explicit
+         design decision worth recording:** refocus happens only
+         POST-terminator (after the user's own Enter), never on `blur` —
+         a blur-triggered auto-refocus would trap keyboard/AT focus and
+         was deliberately rejected as an anti-pattern during the spike,
+         not just not-gotten-to. Accept: `initScanInput()` shipped +
+         tested + documented on a real docs page (not the throwaway spike
+         markup), `bo:scan` event contract in the API notes, verified live
+         both themes.
+   - [x] **9b. Big-number quantity stepper** — already fully solved,
+         nothing to build. `.bo-quantity` (Slice 6 item 12) composed with
+         `data-density="spacious"` (44px controls, WCAG 2.5.8) already IS
+         the large-target quantity control; confirmed working in the
+         spike page as-is. No RF-scanner-specific variant needed.
+   - [ ] **9c. High-contrast warehouse-floor mode** — genuinely NOT
+         addressed by this spike, and turned out to be broader than
+         RF-scanner: the codebase has **no `forced-colors: active` /
+         Windows High Contrast Mode handling anywhere** (checked — zero
+         matches across all component CSS). That's a pre-existing gap
+         across the whole library, not something specific to warehouse
+         screens, so scoping it as an RF-scanner sub-item would have been
+         wrong — split out as its own item, see below.
 10. [x] **Demo-section ordering audit** (Standardize) — scripted a check
         across all 16 hand-authored pages (13 components + 3 patterns):
         found exactly one real violation, `alerts.astro`'s "Toast recipe"
@@ -531,6 +560,24 @@ detail-form patterns).
         page-shape gate, quantity.css/ts vs. sibling components) came back
         clean — one real finding, fixed, no further instances. 26 tests
         pass (unchanged), gates green.
+18. [ ] **`forced-colors` (Windows High Contrast Mode) support** —
+        surfaced by the RF-scanner Explore spike (item 9c) as a
+        pre-existing, library-wide gap: zero `@media (forced-colors:
+        active)` handling anywhere in `packages/core/src/css`. Not
+        RF-scanner-specific — every component that relies on background
+        color alone for a boundary (button fills, badge tints, focus
+        rings drawn as `box-shadow` rather than a real `outline`) is a
+        candidate for disappearing under forced-colors, where the OS
+        overrides author backgrounds/borders to a small system palette.
+        Needs a real audit pass (which components use `outline` vs
+        `box-shadow` for focus, which rely on a filled background as the
+        ONLY boundary) before scoping a fix — likely a small `forced-
+        colors: active` media block adding `outline`/`border` fallbacks
+        at the primitive/token layer, not per-component. Accept (draft,
+        refine at build time): every interactive/focusable element stays
+        visually distinguishable under forced-colors (verified via the
+        `forced-colors: active` emulation in Chrome DevTools — the same
+        environment already used for theme/density testing).
 
 ## Long term (post-1.0)
 

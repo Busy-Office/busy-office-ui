@@ -192,12 +192,15 @@ Seed list — Explore pulls from here or adds to it:
   Slice 6 item 3, lives in `approval-workflow.css` next to `.bo-audit`.
 - Inline validation summary that scrolls to the first bad field.
 - Density-aware icon set sizing.
-- **RF-scanner / warehouse-scan components** (2026-08-14 user direction) — GR/GI
-  screens driven by a handheld scanner: large-target scan-input (auto-focus,
-  auto-advance on a terminator char), big-number quantity stepper,
-  high-contrast/high-density warehouse-floor variants. Different enough
-  interaction model to need a try/error pass before committing to an API —
-  see ROADMAP.md Slice 6 item 9.
+- ~~RF-scanner / warehouse-scan components~~ — spiked 2026-08-14 in an
+  isolated worktree (discarded, nothing merged directly). Scan-input
+  mechanics work well and graduated as a real build item (ROADMAP.md Slice
+  6 item 9a: `initScanInput()`, zero new CSS). The quantity-stepper piece
+  needed nothing — already solved by `.bo-quantity` + `data-density=
+  "spacious"` (item 9b). High-contrast turned out to be a pre-existing
+  library-wide gap (no `forced-colors` support anywhere), not RF-scanner-
+  specific — split into its own item (9c / item 18), don't re-bundle it
+  into a future warehouse-screen item.
 
 ---
 
