@@ -690,6 +690,21 @@ detail-form patterns).
         correctly in both themes, spacious density carries through
         consistently, overdue red + text both present. 33 tests pass
         (unchanged — no JS), gates green.
+22. [x] **Standardize: 4-tick scan across items 9a/18/19/21** (dispatched
+        after 4 Continue rounds) — audited the new behaviors
+        (`initScanInput`/`initValidationSummary`) against the established
+        shape, demo-section ordering on the 3 new pages, consistency of
+        the 5 new `forced-colors` blocks, sidebar placement, and the
+        page-shape gate. **Clean pass — nothing to fix.** Every new
+        behavior matches the existing document-delegation shape exactly;
+        every new demo section renders live before its code; the
+        `data-table`'s `CanvasText` stripe (vs. the other 4 files'
+        `ButtonText` panel border) is a deliberate, correct distinction
+        (a status-marker stripe vs. a widget boundary), not drift; sidebar
+        entries are positioned consistently with siblings. Gates green,
+        33 tests unchanged. A genuinely clean Standardize round is itself
+        a useful signal — the last several Continue rounds held the line
+        without accumulating debt.
 
 ## Long term (post-1.0)
 
