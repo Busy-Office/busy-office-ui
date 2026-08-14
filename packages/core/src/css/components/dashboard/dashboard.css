@@ -180,4 +180,12 @@
   .bo-stat__delta--bad {
     color: var(--bo-color-danger-text);
   }
+
+  /* A collapsed card's content must not silently vanish from a printout —
+     force it open regardless of data-state (runtime a11y pass, 2026-08-14). */
+  @media print {
+    .bo-widget__collapse {
+      grid-template-rows: 1fr !important;
+    }
+  }
 }

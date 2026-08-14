@@ -1,9 +1,11 @@
 @layer bo-components {
   .bo-navbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--bo-space-4);
-    height: 3rem;
+    min-block-size: 3rem;
+    padding-block: var(--bo-space-2);
     padding-inline: var(--bo-space-4);
     background: var(--bo-color-bg-surface);
     border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);

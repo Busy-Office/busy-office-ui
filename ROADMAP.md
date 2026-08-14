@@ -182,9 +182,33 @@ Slice-4 continuation is now fully done (avatar byline, collapsible cards,
 
 Slice 6 item 4 is now fully done (saved-view persistence + multi-column
 detail-form patterns).
-5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
-       print preview are checkable from this environment (macOS); NVDA
-       (Windows-only) stays a standing NEEDS-RUNTIME ledger entry, not claimed.
+5. Runtime a11y pass — split into what this environment can and can't
+   actually do (corrects an earlier assumption: VoiceOver was thought
+   checkable here; it isn't — no AppleScript/System Events/Accessibility
+   API access is available to drive it, only browser automation):
+   - [x] **200% zoom geometry** — simulated via `document.documentElement.
+         style.zoom` (real `Ctrl/Cmd +` shortcuts aren't scriptable through
+         this session's browser tool either). Found and fixed a REAL bug:
+         `.bo-navbar` had a fixed `height: 3rem` with no wrap, so at 200%
+         zoom the Theme select was rendered fully off-screen (`right: 1189px`
+         in a `757px` viewport) with no horizontal scrollbar to reach it —
+         a genuine WCAG 1.4.10 Reflow failure, not hypothetical. Fixed:
+         `flex-wrap: wrap` + `min-block-size` instead of a fixed `height`;
+         verified live, re-measured (`right: 692px`, now on-screen), and
+         confirmed zero regression at normal 100% zoom (still one line).
+   - [x] **Print CSS static audit** — grepped every `@media print` rule
+         across the codebase (can't render a literal print-preview
+         screenshot without opening the native OS print dialog, which risks
+         hanging browser automation the same way a JS `alert()` would).
+         Found two real gaps from this session's own additions: a collapsed
+         `.bo-widget__collapse` card would have silently vanished from a
+         printout (fixed: forced open under `@media print`); an empty
+         `.bo-composer` comment form would print as noise (fixed: hidden,
+         same treatment as `.bo-filter-bar`/`.bo-form-actions`).
+   - [ ] **VoiceOver verbalization** — NOT verified. No tool available in
+         this session can drive VoiceOver; this needs a human on real
+         hardware. NEEDS-RUNTIME.
+   - [ ] **NVDA** — Windows-only, NEEDS-RUNTIME, unchanged from before.
 6. [ ] **npm publish** `@busy-office/ui@0.1.x` — structurally ready (exports
        audited, tarball-tested via the consumer app); **owner-gated on
        "perfect"** — a loop iteration should not self-approve this.

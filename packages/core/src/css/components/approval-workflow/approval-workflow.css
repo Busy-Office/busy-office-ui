@@ -151,5 +151,11 @@
     .bo-timeline__step:not(:last-child)::before {
       background: #999;
     }
+
+    /* An empty comment-input form is noise on paper, same treatment as
+       .bo-filter-bar / .bo-form-actions (runtime a11y pass, 2026-08-14). */
+    .bo-composer {
+      display: none;
+    }
   }
 }
