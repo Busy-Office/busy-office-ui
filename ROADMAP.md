@@ -865,13 +865,47 @@ Highest-leverage bets (2026-08-14 review — ranked):
       focus on a plain `<table>`; mechanics confirmed live, but discarded as unsafe
       (breaks screen-reader table browse mode). Graduated into Slice 6 item 2 above
       as the properly-scoped ARIA grid pattern.
-- [ ] **1.0 exit checklist, then ship** — the real risk isn't technical, it's that
-      "owner-gated on *perfect*" never resolves. Write a short, checkable list (N
-      components, a11y ledger cleared, API frozen, ≥1 real consumer), hit it, publish
-      1.0, iterate under semver. Perfection is the enemy of adoption.
-- [ ] **Real ERP pilot (dogfood)** — build one real back-office screen (an approval
-      queue, a PO form) with the framework and feel where it fights. The only test of
-      "good for hundreds of ERP screens" that synthetic demos + grills can't give.
+- [x] **1.0 exit checklist** — written, with real verified numbers (not
+      aspirational placeholders), via the Explore fallback (backlog +
+      Ideas seed list both empty). While writing it, actually re-ran the
+      `examples/po-app` tarball consumer end-to-end for the first time
+      this session (see below) rather than trusting the CHANGELOG's
+      description of it. The checklist itself:
+
+      | # | Item | Status | Evidence |
+      |---|------|--------|----------|
+      | 1 | Component surface | ✅ 21 components, 20 documented patterns/behaviors | `check-page-shape.mjs`: 21 pages |
+      | 2 | JS behaviors | ✅ 12 opt-in behaviors, generated docs table | `dist/behaviors.json`: `initCount: 12` |
+      | 3 | Test coverage | ✅ 33 behavior tests, all passing | `npm test` |
+      | 4 | Build gates | ✅ 7 gates, all green | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |
+      | 5 | Contrast | ✅ 24 pairs × 2 themes + 1 brand preset, all AA | `check-contrast.mjs` |
+      | 6 | Zero runtime deps (shipped pkg) | ✅ confirmed, `htmx.org` is a **docs-app-only** dep | `packages/core/package.json` |
+      | 7 | Dark mode / density / print / forced-colors | ✅ shipped, live-verified this session | Slices 5-6, item 18 |
+      | 8 | RTL | ✅ audited — logical properties genuinely hold; 1 open product question flagged (numeric column alignment), not a bug | Slice 7 item 6 |
+      | 9 | ≥1 real consumer | ✅ `examples/po-app` — **re-verified live THIS round**: `podman build` from current source, ran the container, clicked through dashboard → PO list → filter → select-all/bulk-approve → detail page → approval timeline. Everything worked. One visual anomaly investigated (an unchecked `.bo-checkbox` rendered as a solid square in this session's automated-Chrome screenshot) — confirmed via computed style (`accent-color` correctly resolved) and by checking it live (renders a proper checkmark) that this is an environment rendering quirk, not a library bug. | `examples/po-app`, this round |
+      | 10 | a11y ledger | 🟡 2 items genuinely NEEDS-RUNTIME (VoiceOver, NVDA — no tool in this environment can drive either); everything else closed | Slice 6 item 5, item 18 |
+      | 11 | API frozen | 🟡 **NOT started** — semantic tokens/classes/data-*/ARIA contracts are already documented as the public API (`/concepts/theming` versioning policy), but nobody has done a deliberate "freeze and commit" pass (diff current surface against what changed across Slices 1-7, decide what's still churning) |
+      | 12 | Real independent adopter | 🔴 **Not met, and `po-app` does NOT count** — it's a reference app built by this project's own team to test packaging, not an external team choosing to adopt it. This is the one item on the list that can't be closed by more loop iterations; it needs an actual second party. |
+
+      **Net: 9 of 12 done, 2 environment-blocked (not fixable by more
+      work here), 1 real gap (API freeze pass) that's genuinely
+      actionable next.** This is NOT "hit the list, ship" — it's an
+      honest snapshot for whoever (the owner) decides when "good enough"
+      is reached; a loop iteration should not self-approve publish
+      regardless of how this list reads.
+- [x] **Real ERP pilot (dogfood)** — already substantially satisfied by
+      `examples/po-app` (item 9 above) — a real 3-screen ERP slice
+      (dashboard, PO list with filter/bulk-select, detail + approval
+      timeline) built with the framework, not synthetic docs demos.
+      **Worth being honest about the distinction from item 12 above**:
+      this WAS built by the framework's own team dogfooding it (exactly
+      what this bullet asked for — "feel where it fights"), which is
+      different from and does not substitute for an independent adopter.
+      No fresh "where it fights" friction found this round (the
+      checkbox-render investigation was an environment quirk, not a
+      framework gap) — but this hadn't been re-run against the CURRENT
+      component set (post Slice 6/7) until this round confirmed it still
+      builds and works end-to-end.
 
 - [ ] **Framework adapters** (`integrations/`) — a Vite plugin for à-la-carte imports,
       a thin React/Vue wrapper set, a Rails/Django asset recipe. Opt-in, never a core
