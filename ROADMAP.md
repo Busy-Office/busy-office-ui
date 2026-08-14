@@ -419,6 +419,54 @@ detail-form patterns).
         (index, reference/classes, base/utilities, base/motion,
         base/colors) — all already correctly generated; clean pass, no
         further instances. 23 tests pass (unchanged), gates green.
+14. [ ] **Amount: currency ISO code / custom currency** (2026-08-14 user
+        direction, wishlist) — `.bo-amount__currency` today is a plain
+        text affix (`$`, `EUR`, whatever the app passes in — see
+        `/components/amount`); the ask is a first-class way to render a
+        currency **symbol or ISO code** (USD, SGD, ...), including
+        currencies the app defines itself (custom currency, e.g. an
+        internal points/credit system). Needs scoping before a build
+        round: is this purely a documentation/markup-convention update
+        (e.g. a demo section showing `__currency` holding an ISO code,
+        `Intl.NumberFormat`/`Intl.DisplayNames` as the *app's*
+        responsibility to format — matching the existing "CSS-first, your
+        app formats the number" contract), or does it need real new CSS/JS
+        surface (e.g. a `title`/tooltip for the expanded currency name, a
+        `--code` modifier so ISO codes get different tabular spacing than
+        symbols)? Likely the former — Amount is already explicitly
+        markup-driven for this exact reason — but flagging for a real
+        Continue round to confirm rather than assuming. Accept (draft,
+        refine at build time): existing AA/two-channel contract
+        unaffected; custom (non-ISO) currency strings render exactly like
+        any other `__currency` value today (no allowlist/validation baked
+        into CSS).
+15. [ ] **Quantity: base-unit symbol / standard &amp; custom units, with
+        per-unit default (but overridable) decimal precision**
+        (2026-08-14 user direction, wishlist) — the mirror ask for
+        `.bo-quantity__unit`: today it's plain text (`ea`, `kg`, `box` —
+        see `/components/quantity`); the ask is explicit support for a
+        base-unit **symbol or code**, covering ISO/standard units (kg, m,
+        L) AND units an ERP customer defines itself (a custom UOM) —
+        **plus** each unit type carrying a sensible default decimal
+        precision (e.g. `ea`/`box` default to 0 decimals, `kg`/`L` default
+        to 2-3) that the app can still override per field. That precision
+        piece is the one part of this ask that is NOT just a markup
+        convention — a real "which unit -> how many decimals" default
+        table is application/domain data, not CSS, so this is likely an
+        **app-level lookup + `step`/formatting convention we document**
+        (e.g. `step="0.01"` on the `<input>` already expresses precision
+        natively; the open question is whether busy-office-ui ships a
+        reference default-precision table for common units as documented
+        guidance, or leaves that entirely to the consuming app). Confirm
+        the split (CSS/JS surface vs. documented convention vs. app-owned
+        data) in a real Continue round rather than assuming here. Also
+        check whether `.bo-quantity__unit` and `.bo-amount__unit` should
+        cross-reference each other's docs (both exist independently,
+        added in different slices) — candidate for a future Standardize
+        pass if they drift. Accept (draft, refine at build time): custom
+        (non-standard) units render like any other `__unit` value today;
+        per-unit decimal defaults are overridable, never hardcoded as a
+        silent app-wide constant.
 
 ## Long term (post-1.0)
 
