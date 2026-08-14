@@ -706,6 +706,97 @@ detail-form patterns).
         a useful signal — the last several Continue rounds held the line
         without accumulating debt.
 
+## Slice 7 (candidate) — docs IA, device coverage, component tiers, pattern gallery
+
+Triaged 2026-08-15 (user direction, wishlist — five distinct asks, logged
+together since they're related but NOT all equally ready to build). None
+of this is scoped enough to dispatch a Continue round yet — several items
+are genuine open design questions the still-pending **Objective review
+(`/round-table`)** should weigh in on before committing an approach,
+flagged per-item below. Where a question was answerable by reading the
+current codebase rather than guessing, answered inline.
+
+1. [ ] **"Data type" docs section** — group Amount/Quantity/Date under a
+       shared sidebar category instead of scattering them alphabetically
+       among Button/Badge/Forms. Low-risk, mechanical (`Gallery.astro`
+       sidebar restructure only, no CSS/JS change) — this one IS ready to
+       build without further review. **"Any other?" — candidates for the
+       same family, not yet built:** Percentage (a rate/ratio value,
+       distinct from Amount's currency framing), Duration (elapsed/
+       remaining time — "2h 15m", "3 days"), Boolean/flag display (a
+       named yes/no state, likely just a Badge composition, not a new
+       component), File size. Don't build any of these speculatively —
+       each needs its own real ERP use case identified first, same
+       discipline as Amount/Quantity/Date. Accept: sidebar has a "Data
+       display" (or similar) group containing Amount/Quantity/Date; no
+       new CSS/JS.
+2. [ ] **Device/platform coverage — Web / Mobile (app) / RF / Tablet
+       (Bento UI / app)** — real open question, needs Objective input:
+       does this mean (a) auditing + documenting how EXISTING components
+       already respond via density + container queries across these four
+       device archetypes (cheap, mostly verification — similar to the
+       Slice 6 responsive-audit item), or (b) genuinely separate
+       device-specific component variants/demos (expensive, real new
+       surface, risks fragmenting "one component, many settings")? RF is
+       partially precedented already (scan-input + goods-receipt
+       pattern, Slice 6 item 9a) — that's the one device archetype with
+       real shipped groundwork. Don't scope the rest until (a) vs (b) is
+       decided. Accept: draft only, refine after Objective review.
+3. [ ] **Simple -> Advanced component tiers** — Simple Table -> Advanced
+       Table, Simple Card -> Advanced Card, Process Bar, Filter Control.
+       Checked the current codebase rather than assuming: `.bo-data-table`
+       already has a two-tier shape (`initDataTables()` basic selection
+       vs. opt-in `initDataGrid()` ARIA-grid keyboard nav) — the "simple
+       -> advanced" framing may already exist for tables and just need
+       better docs framing, not new code. `.bo-widget` (filed under
+       "Dashboard") is functionally the card primitive today but isn't
+       discoverable as "Card" — worth a docs/naming pass, NOT a rename
+       (would break the shipped class). `.bo-filters`/`.bo-filter-bar`
+       already exist — "advanced" filter control (saved views, multi-
+       condition builders?) needs a concrete use case before scoping.
+       "Process Bar" is new — distinct from the existing `.bo-stepper`
+       (discrete named steps) — likely a continuous progress/percentage
+       indicator; needs a real ERP scenario (import job progress? budget
+       consumption?) before designing. Accept: draft only per sub-item;
+       each needs its own Accept criteria once scoped individually — this
+       entry is a container, not one buildable unit.
+4. [ ] **Demo layout: side-by-side vs. stacked** — real, answerable-now
+       question. **Current state (checked, not assumed):** every demo is
+       already stacked (`Demo.astro` / `.demo-pair` — preview on top,
+       code below, `flex-direction: column`) — the user's "demo on top,
+       follow technical" option is what's shipped today. Side-by-side
+       (demo left / code right, one row per variant) is NOT implemented.
+       Worth a real trade-off note: side-by-side uses the wide desktop
+       viewport better (every screenshot this session shows a ~700-900px
+       content column in a 1440-1600px window, wasted margin), but
+       degrades on narrow/tablet viewports where it would need to
+       collapse back to stacked anyway (a container-query candidate, not
+       a media-query one — consistent with the rest of the framework).
+       Needs a live side-by-side prototype on 2-3 real component pages to
+       judge before converting all of them — a good candidate for a
+       Continue round once picked up (not a full redesign in one sitting).
+       Accept: prototype `Demo.astro` with a container-query-driven
+       side-by-side layout on ≥2 pages, verified live at both wide and
+       narrow widths before deciding to roll out further.
+5. [ ] **Patterns gallery expansion across device archetypes** — Login,
+       Landing, App Launch, Bento UI, Boardroom, App Style 1/2, Report,
+       Output Form, Dashboard, etc. Large scope, genuinely needs
+       Objective-level prioritization (which patterns are highest-value
+       for an ERP audience, which device targets matter most) before
+       queuing individual Continue rounds — don't build speculatively
+       off a bare list. Some overlap with existing patterns worth
+       checking first before treating as new: `/patterns/reporting-
+       dashboard` (~ Dashboard), `/patterns/settings-admin` (~ App Style),
+       `/patterns/invoice-list` (~ Report/Output Form family). Accept:
+       draft only, refine after Objective review — do not start building
+       from this raw list without re-checking against what already ships.
+
+**This Slice 7 candidate list is exactly what the Objective review
+(`/round-table`) is for** — five real directions, different readiness
+levels, real trade-offs neither guessed nor ignored. Items 1 and 4 (data
+section, demo layout) are concrete enough to Continue-dispatch without
+further review; items 2, 3, and 5 need it before scoping further.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
