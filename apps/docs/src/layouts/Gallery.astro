@@ -102,7 +102,7 @@ const current =
       document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? 'light';
     </script>
   </head>
-  <body>
+  <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML">
     <div class="bo-app-shell">
       <header class="bo-navbar bo-app-shell__header">
         <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>
@@ -162,7 +162,7 @@ const current =
           ))}
         </nav>
       </dialog>
-      <main class="bo-app-shell__main">
+      <main class="bo-app-shell__main" id="main-content">
         <div class="docs-main">
           <div class="bo-stack bo-stack--loose docs-content">
             <h1>{title}</h1>
@@ -170,7 +170,7 @@ const current =
           </div>
           <aside class="toc" aria-label="On this page" hidden>
             <div class="toc__heading">On this page</div>
-            <nav id="toc-nav"></nav>
+            <nav id="toc-nav" hx-boost="false"></nav>
           </aside>
         </div>
       </main>
@@ -247,53 +247,89 @@ const current =
       document.getElementById('docsearch')?.setAttribute('data-shortcut', '⌘K');
     </script>
     <script>
+      import 'htmx.org';
       import { initDialogs } from '@busy-office/ui/js';
-      initDialogs(); // the mobile nav drawer (off-canvas dialog)
+      initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
+                      // delegation, so it keeps working across boosted swaps
+                      // with no re-init needed.
     </script>
-    <script>
-      // On-this-page: slugify every content h2, make it an anchor target, and
-      // build the right-rail TOC. Deep-links (#slug) then work for every
-      // section. Hidden when a page has fewer than 2 sections.
-      const content = document.querySelector('.docs-content');
-      const headings = content ? [...content.querySelectorAll('h2')] : [];
-      const toc = document.querySelector('.toc') as HTMLElement | null;
-      const nav = document.getElementById('toc-nav');
-      if (toc && nav && headings.length >= 2) {
-        for (const h of headings) {
-          if (!h.id) {
-            h.id = (h.textContent || '')
-              .toLowerCase()
-              .replace(/[^\w]+/g, '-')
-              .replace(/^-+|-+$/g, '');
-          }
-          const a = document.createElement('a');
-          a.href = '#' + h.id;
-          a.textContent = h.textContent;
-          nav.append(a);
-        }
-        toc.hidden = false;
-      }
-
-      // Copy button on every code block — zero per-page work.
-      for (const pre of content ? content.querySelectorAll('pre') : []) {
-        const code = pre.querySelector('code');
-        if (!code) continue;
-        pre.classList.add('has-copy');
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'copy-btn bo-btn bo-btn--sm bo-btn--secondary';
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          try {
-            await navigator.clipboard.writeText(code.textContent || '');
-            btn.textContent = 'Copied';
-            setTimeout(() => (btn.textContent = 'Copy'), 1200);
-          } catch {
-            btn.textContent = 'Press ⌘C';
-          }
+    <script is:inline define:vars={{ base }}>
+      // hx-boost (2026-08-14): only #main-content swaps on an internal link
+      // click — header/sidebar/scripts persist, closing the "whole screen
+      // refresh instead of just the main area" gap the color-scheme fix
+      // (also 2026-08-14) didn't touch. Everything below re-derives the
+      // per-page state that used to come free from a full document reload.
+      function onPageReady() {
+        // Sidebar aria-current: server-rendered per page on a full load;
+        // after a boosted swap the sidebar itself never re-renders, so it
+        // has to be corrected by hand from the URL that's now current.
+        const path = (location.pathname.slice(base.length) || '/').replace(/\/$/, '') || '/';
+        document.querySelectorAll('.bo-sidebar-nav__link').forEach((a) => {
+          const href = (a.getAttribute('href') || '').slice(base.length).replace(/\/$/, '') || '/';
+          if (href === path) a.setAttribute('aria-current', 'page');
+          else a.removeAttribute('aria-current');
         });
-        pre.append(btn);
+
+        // On-this-page: slugify every content h2, make it an anchor target,
+        // and build the right-rail TOC. Hidden when a page has fewer than 2
+        // sections. Re-run every time #main-content is replaced — the toc
+        // nav itself is INSIDE the swapped region, so it's already empty.
+        const content = document.querySelector('.docs-content');
+        const headings = content ? [...content.querySelectorAll('h2')] : [];
+        const toc = document.querySelector('.toc');
+        const nav = document.getElementById('toc-nav');
+        if (toc && nav && headings.length >= 2) {
+          for (const h of headings) {
+            if (!h.id) {
+              h.id = (h.textContent || '')
+                .toLowerCase()
+                .replace(/[^\w]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            }
+            const a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = h.textContent;
+            nav.append(a);
+          }
+          toc.hidden = false;
+        }
+
+        // Copy button on every code block — zero per-page work.
+        for (const pre of content ? content.querySelectorAll('pre') : []) {
+          const code = pre.querySelector('code');
+          if (!code) continue;
+          pre.classList.add('has-copy');
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'copy-btn bo-btn bo-btn--sm bo-btn--secondary';
+          btn.textContent = 'Copy';
+          btn.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(code.textContent || '');
+              btn.textContent = 'Copied';
+              setTimeout(() => (btn.textContent = 'Copy'), 1200);
+            } catch {
+              btn.textContent = 'Press ⌘C';
+            }
+          });
+          pre.append(btn);
+        }
       }
+      onPageReady();
+      document.body.addEventListener('htmx:afterSwap', (e) => {
+        if (e.target && e.target.id === 'main-content') {
+          onPageReady();
+          document.querySelector('.bo-app-shell__main')?.scrollTo(0, 0);
+          // The mobile drawer and cmd-k palette live OUTSIDE #main-content,
+          // so unlike everything else they now persist across a swap where
+          // a full reload used to reset them for free — close both so
+          // navigating from inside either doesn't leave it hanging open.
+          const drawer = document.getElementById('nav-drawer');
+          if (drawer && drawer.open) { drawer.close(); drawer.dataset.state = 'closed'; }
+          const cmdk = document.getElementById('cmdk');
+          if (cmdk && cmdk.open) cmdk.close();
+        }
+      });
     </script>
     <script>
       // The documented 3-line density-toggle recipe.
