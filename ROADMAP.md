@@ -762,24 +762,42 @@ current codebase rather than guessing, answered inline.
        consumption?) before designing. Accept: draft only per sub-item;
        each needs its own Accept criteria once scoped individually — this
        entry is a container, not one buildable unit.
-4. [ ] **Demo layout: side-by-side vs. stacked** — real, answerable-now
-       question. **Current state (checked, not assumed):** every demo is
-       already stacked (`Demo.astro` / `.demo-pair` — preview on top,
-       code below, `flex-direction: column`) — the user's "demo on top,
-       follow technical" option is what's shipped today. Side-by-side
-       (demo left / code right, one row per variant) is NOT implemented.
-       Worth a real trade-off note: side-by-side uses the wide desktop
-       viewport better (every screenshot this session shows a ~700-900px
-       content column in a 1440-1600px window, wasted margin), but
-       degrades on narrow/tablet viewports where it would need to
-       collapse back to stacked anyway (a container-query candidate, not
-       a media-query one — consistent with the rest of the framework).
-       Needs a live side-by-side prototype on 2-3 real component pages to
-       judge before converting all of them — a good candidate for a
-       Continue round once picked up (not a full redesign in one sitting).
-       Accept: prototype `Demo.astro` with a container-query-driven
-       side-by-side layout on ≥2 pages, verified live at both wide and
-       narrow widths before deciding to roll out further.
+4. [x] **Demo layout: side-by-side vs. stacked — prototyped, NOT rolled
+       out further yet** (pending a decision, not blocked). Shipped an
+       opt-in `layout="row"` prop on `Demo.astro`: unset stays the
+       original stacked layout untouched everywhere; `layout="row"` adds
+       a `.demo-pair--row` class that only activates inside a new
+       `@container bo-demo (min-width: 34rem)` rule (`section.demo` is
+       now a named container) — narrower than that, or the default case,
+       renders exactly as before. Tried on 4 real demos across 2 pages
+       (`/components/badge` both sections, `/components/amount`'s
+       "Money" and "Precision" sections) — deliberately picked one short
+       single-line case and one taller multi-example case to see both
+       ends. Verified live: wide (1440px, both themes) shows a clean
+       two-panel layout, code panel gets its own border/background/
+       padding (previously bare/unstyled — a real gap in the original
+       stacked design, now fixed for the `--row` variant) with
+       `overflow-x: auto` for lines wider than the panel; forced-narrow
+       (isolated 320px container, this session's usual workaround)
+       collapses back to the exact original stacked appearance,
+       confirmed pixel-for-pixel comparable.
+       **Real trade-off found live, not assumed — this is why the Accept
+       criteria asked for a prototype before a rollout decision:**
+       side-by-side reads well when the preview and code are similar
+       heights ("Money", "Tones"), but when code is much taller than the
+       preview (Amount's "Precision" section — 3 commented examples vs.
+       one line of visual output), `align-items: stretch` stretches the
+       short preview panel to match the tall code panel's height,
+       leaving visible dead space on the left. Not a bug — a genuine
+       per-demo judgment call (some demos suit side-by-side, some don't),
+       which argues AGAINST a blanket site-wide rollout and FOR keeping
+       this as a per-`<Demo>` opt-in exactly as built, used selectively
+       where the two panels are naturally similar heights.
+       **Decision on further rollout deliberately left open** — the
+       prototype answers "does the mechanism work," not "which of the
+       ~90 existing `<Demo>` call sites should use it," which is a
+       page-by-page editorial call, not something to blitz through
+       mechanically. 33 tests pass (unchanged, no JS), gates green.
 5. [ ] **Patterns gallery expansion across device archetypes** — Login,
        Landing, App Launch, Bento UI, Boardroom, App Style 1/2, Report,
        Output Form, Dashboard, etc. Large scope, genuinely needs

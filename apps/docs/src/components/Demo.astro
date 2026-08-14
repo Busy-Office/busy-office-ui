@@ -5,10 +5,17 @@
  * preview via set:html, the shown code escaped — so the demo and its code can
  * never drift apart. Use for static markup examples; keep hand-built <section>
  * demos for anything needing Astro expressions (.map over data).
+ *
+ * layout="row" — SPIKE (Slice 7 item 4): opt-in side-by-side (preview left,
+ * code right) once the enclosing section.demo container is wide enough
+ * (@container bo-demo, not a media query — consistent with the rest of the
+ * framework). Default (omitted) stays the original stacked layout untouched.
+ * Scoped per-Demo instance on purpose — a live, reversible trial on a
+ * couple of pages before deciding whether to roll it out further.
  */
-const { code } = Astro.props;
+const { code, layout } = Astro.props;
 ---
-<div class="demo-pair">
+<div class:list={['demo-pair', layout === 'row' && 'demo-pair--row']}>
   <div class="demo-pair__preview" set:html={code} />
   <pre><code>{code}</code></pre>
 </div>

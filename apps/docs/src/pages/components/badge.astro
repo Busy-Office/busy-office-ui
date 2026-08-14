@@ -24,13 +24,13 @@ const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</sp
   <ClassRef component="badge" />
   <section class="demo">
     <h2>Tones</h2>
-    <Demo code={tones} />
+    <Demo code={tones} layout="row" />
   </section>
   <section class="demo">
     <h2><code>--type</code> — record-type chip</h2>
     <p>An inverted-surface tag naming the record a card holds. A rectangle, not a
     pill; auto-inverts in dark mode.</p>
-    <Demo code={typeChip} />
+    <Demo code={typeChip} layout="row" />
   </section>
   <ApiTable component="badge"
     notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />

@@ -404,6 +404,8 @@ const current =
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    container-type: inline-size;
+    container-name: bo-demo;
   }
   .demo h2 { font-size: var(--bo-font-size-lg); }
 
@@ -538,4 +540,36 @@ const current =
     padding: var(--bo-space-4);
   }
   .demo-pair pre { margin-block: 0; border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); border-block-start: none; }
+
+  /* SPIKE (Slice 7 item 4) — opt-in side-by-side once the section.demo
+     container is wide enough for both panels to breathe; narrower than
+     that (or the default, non-"row" pairs) stays the original stacked
+     layout. Container query, not a media query — the same "wide enough
+     in ITS OWN box" test the rest of the framework already uses (e.g.
+     data-table's compaction), so it responds to the actual content
+     column, not the viewport. */
+  @container bo-demo (min-width: 34rem) {
+    .demo-pair--row {
+      flex-direction: row;
+      align-items: stretch;
+    }
+    .demo-pair--row .demo-pair__preview {
+      flex: 1 1 50%;
+      min-inline-size: 0;
+      border-end-end-radius: 0;
+      border-start-end-radius: 0;
+      border-inline-end: none;
+    }
+    .demo-pair--row pre {
+      flex: 1 1 50%;
+      min-inline-size: 0;
+      border: var(--bo-border-width) solid var(--bo-color-border-default);
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+      border-radius: 0 var(--bo-radius-md) var(--bo-radius-md) 0;
+      background: var(--bo-color-bg-muted);
+      padding: var(--bo-space-4);
+      overflow-x: auto;
+    }
+  }
 </style>

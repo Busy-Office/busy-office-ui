@@ -124,7 +124,7 @@ const markup = `<span class="bo-amount">
 
   <section class="demo">
     <h2>Money — symbol, grouping, minor units</h2>
-    <Demo code={money} />
+    <Demo code={money} layout="row" />
     <p class="bo-u-text-muted"><code>__currency</code> and <code>__fraction</code> are
     quieted so the whole-number part reads first.</p>
   </section>
@@ -146,7 +146,7 @@ const markup = `<span class="bo-amount">
 
   <section class="demo">
     <h2>Precision — a setting, not a variant</h2>
-    <Demo code={precision} />
+    <Demo code={precision} layout="row" />
     <p class="bo-u-text-muted">Whole units, money, or 4-dp unit prices — same component;
     the digits come from your formatter.</p>
     <p class="bo-u-text-muted">
