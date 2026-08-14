@@ -249,3 +249,22 @@ note) is for. Ask the user to run it when ready.
   rebuildable telemetry.
 - **Session-scoped** — these run while this session is open; closing it stops them.
   For durable cloud cadence, promote to `/schedule`.
+- **Recognize steady state; don't manufacture busywork** (2026-08-15) — once
+  the Ideas seed list AND the Long-term backlog's directly-actionable items
+  are genuinely exhausted (checked, not assumed — re-read `ROADMAP.md` fresh
+  every wake per the dispatcher's own instructions), further wakes will
+  keep finding smaller and smaller things to justify activity: a stale
+  checkbox, an ignored lockfile, a doc-count typo. Fixing a REAL one found
+  in passing is legitimate (Roadmap hygiene, a clean-room health check, a
+  reconciliation pass are all genuine dispatcher duties, not busywork) —
+  but the moment a wake starts *searching* for something to fix rather than
+  *noticing* one, that's the signal to stop and say so plainly instead of
+  escalating the search. State it in the wake's summary — "no new input,
+  same blocked state as last N wakes, here's exactly what's still blocking
+  progress and why more loop iterations can't close it" — rather than
+  silently keeping busy. This is what happened 2026-08-14→15: after Slice
+  6/7's directly-buildable items, the Ideas seed list, and 5 Long-term
+  bullets (icon-sizing, RTL, theme presets, the 1.0 checklist, the API
+  freeze) were all closed via the Explore fallback, the honest and correct
+  move was reporting the backlog as dry and naming `/round-table` as the
+  actual unblock — not inventing a 6th, 7th, 8th speculative item.
