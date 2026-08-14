@@ -1,0 +1,87 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+---
+<Gallery title="Pattern: multi-step wizard">
+  <p class="demo-note">
+    A real multi-<em>step</em> flow — one panel visible at a time, Back/Next move
+    between them — as opposed to <a href="/patterns/detail-form">detail form</a>'s
+    multi-<em>section</em> single screen. Composed from the existing
+    <code>.bo-stepper</code> progress indicator plus a new opt-in behavior,
+    <code>initWizard()</code>, that keeps the stepper and the visible panel in sync
+    and moves focus to each new panel — the panels themselves are plain
+    <code>.bo-form-section</code> fieldsets, nothing new to learn there.
+  </p>
+  <section class="demo">
+    <div data-wizard data-wizard-current="0">
+      <ol class="bo-stepper" role="list" style="max-inline-size: 40rem">
+        <li class="bo-stepper__step" aria-current="step">
+          <span class="bo-stepper__marker">1</span>
+          <span class="bo-stepper__label">Vendor</span>
+        </li>
+        <li class="bo-stepper__step">
+          <span class="bo-stepper__marker">2</span>
+          <span class="bo-stepper__label">Line items</span>
+        </li>
+        <li class="bo-stepper__step">
+          <span class="bo-stepper__marker">3</span>
+          <span class="bo-stepper__label">Review</span>
+        </li>
+      </ol>
+
+      <div data-wizard-panel>
+        <fieldset class="bo-form-section">
+          <legend class="bo-form-section__legend">Vendor</legend>
+          <div class="bo-form-row">
+            <div class="bo-form-field">
+              <label class="bo-form-field__label" for="wz-vendor">Vendor</label>
+              <input class="bo-input" id="wz-vendor" value="Acme Supply Co." />
+            </div>
+            <div class="bo-form-field">
+              <label class="bo-form-field__label" for="wz-terms">Terms</label>
+              <select class="bo-select" id="wz-terms"><option>Net 30</option><option>Net 60</option></select>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div data-wizard-panel hidden>
+        <fieldset class="bo-form-section">
+          <legend class="bo-form-section__legend">Line items</legend>
+          <div class="bo-form-row">
+            <div class="bo-form-field">
+              <label class="bo-form-field__label" for="wz-item">Item</label>
+              <input class="bo-input" id="wz-item" value="SKU-3391 · Standing desk" />
+            </div>
+            <div class="bo-form-field">
+              <label class="bo-form-field__label" for="wz-qty">Qty</label>
+              <input class="bo-input bo-input--numeric" id="wz-qty" value="4" />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div data-wizard-panel hidden>
+        <fieldset class="bo-form-section">
+          <legend class="bo-form-section__legend">Review</legend>
+          <p class="bo-u-text-muted">Everything above, read-only, before submitting.</p>
+        </fieldset>
+      </div>
+
+      <div class="bo-form-actions">
+        <button class="bo-btn bo-btn--secondary" type="button" data-wizard-back>Back</button>
+        <button class="bo-btn" type="button" data-wizard-next>Next</button>
+        <button class="bo-btn" type="submit" data-wizard-submit hidden>Submit</button>
+      </div>
+    </div>
+    <p class="bo-u-text-muted"><strong>Wizards require <code>initWizard()</code></strong> —
+      wired below. Without it every panel would render at once and Back/Next would be inert.</p>
+  </section>
+  <script>
+    import { initWizard } from '@busy-office/ui/js';
+    initWizard();
+  </script>
+  <Related links={[
+    ["/components/stepper", "Stepper"],
+    ["/components/form", "Forms"],
+    ["/patterns/detail-form", "Detail form (multi-section, single screen)"],
+  ]} />
+</Gallery>

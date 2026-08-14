@@ -305,10 +305,31 @@ detail-form patterns).
          page — same verification method used for `/patterns/detail-form`,
          since this session's browser-resize floor still won't reach a
          literal 390px viewport. 20 tests pass, gates green.
-   - [ ] A true multi-*step* wizard-flow pattern (using the existing
-         stepper component across actual page/panel transitions, not just
-         a static progress indicator) is still open — distinct from
-         `/patterns/detail-form`'s multi-*section* single screen.
+   - [x] **Multi-step wizard** — `/patterns/wizard`. A real Back/Next flow,
+         one panel visible at a time, distinct from `/patterns/detail-form`'s
+         multi-*section* single screen. Needed a new opt-in behavior
+         (`initWizard()`, `packages/core/src/js/behaviors/wizard.ts`) since
+         the existing `.bo-stepper` is presentation-only (no JS): the new
+         behavior keeps the stepper (`data-state="done"` / `aria-current`)
+         and the visible `[data-wizard-panel]` in sync, disables Back on
+         the first step, swaps Next for Submit on the last, and moves
+         focus to each new panel (WCAG 4.1.3-style status handling for a
+         panel swap that isn't a real navigation). Panels are plain
+         `.bo-form-section` fieldsets — no new CSS. 3 new behavior tests
+         (23 total, pass). Verified live via Podman: stepped through all 3
+         panels in both themes at 1440px, confirmed focus lands on each
+         new panel, confirmed Back re-enables/disables correctly at the
+         edges, confirmed Submit only appears on the last step; forced the
+         main pane to 350px and confirmed via computed layout the form row
+         collapses to one column and the page doesn't horizontally
+         overflow (this session's browser-resize floor still won't reach a
+         literal 390px viewport, same workaround as the other patterns).
+         **Not addressed this tick:** the `/concepts/js-behaviors` page's
+         "five inits" table is now stale (lists 5, there are 8 —
+         initDataGrid/initCollapsibleCards/initSavedViews were already
+         missing before this tick, initWizard makes it 4 undocumented);
+         flagging for the next Standardize pass rather than scope-creeping
+         it into this item.
 9. [ ] **RF-scanner / warehouse-scan components** — a real ERP gap: goods
        receipt (GR) / goods issue (GI) screens driven by a handheld RF
        scanner, not a mouse. Large-target scan-input field (auto-focus,
