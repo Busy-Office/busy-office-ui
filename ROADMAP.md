@@ -335,26 +335,27 @@ detail-form patterns).
    evaluation — nothing merged from it directly, per the Explore playbook).
    Findings, split into three now-separate, properly-scoped pieces instead
    of one bundled item:
-   - [ ] **9a. Scan-input field** — spike SUCCEEDED, graduating as a real
-         build item. A new opt-in behavior, `initScanInput()` (~25 lines,
-         same document-delegation shape as every other behavior): listens
-         for a configurable terminator key (`data-scan-terminator`,
-         defaults to `Enter` — a scanner is a keyboard wedge that types the
-         barcode fast then sends a terminator), dispatches a `bo:scan`
-         `CustomEvent` with the value, clears the field, and refocuses it
-         so the next scan is immediate. **Zero new CSS** — reuses
-         `.bo-input`/`.bo-input--code`/`.bo-form-field` as-is; markup
-         contract is just `data-scan-input` on a plain input. Verified in
-         the spike: auto-focus on load, back-to-back scans work without
-         re-clicking the field, both themes render correctly. **Explicit
-         design decision worth recording:** refocus happens only
-         POST-terminator (after the user's own Enter), never on `blur` —
-         a blur-triggered auto-refocus would trap keyboard/AT focus and
-         was deliberately rejected as an anti-pattern during the spike,
-         not just not-gotten-to. Accept: `initScanInput()` shipped +
-         tested + documented on a real docs page (not the throwaway spike
-         markup), `bo:scan` event contract in the API notes, verified live
-         both themes.
+   - [x] **9a. Scan-input field** — shipped for real (the worktree spike
+         itself was discarded, per the Explore playbook — this is a clean
+         rebuild in main, not the throwaway code). `initScanInput()`
+         (`packages/core/src/js/behaviors/scan-input.ts`): configurable
+         terminator key (`data-scan-terminator`, defaults to `Enter`),
+         dispatches `bo:scan` with the value, clears the field, refocuses
+         it — POST-terminator only, never on `blur` (the anti-pattern
+         rejected during the spike). **Zero new CSS**, confirmed again —
+         `.bo-input`/`.bo-input--code`/`.bo-form-field` as-is. 4 new
+         behavior tests (30 total, pass): scan dispatch + clear + refocus,
+         empty-field guard (no accidental empty scans), custom terminator
+         key, back-to-back scans. Docs: new pattern page
+         `/patterns/goods-receipt` — scan input + `.bo-quantity` at
+         `data-density="spacious"` + a REAL receiving log (data-table rows
+         appended live on each `bo:scan`, not a static mockup). Verified
+         live via Podman: two consecutive scans correctly logged with the
+         quantity captured at scan time (3, not stuck at 1), both themes.
+         Also confirmed the js-behaviors generated table
+         (`/concepts/js-behaviors`, Standardize item 17's fix) picked up
+         `initScanInput()` automatically with zero manual doc edit —
+         the earlier Standardize round already paying for itself.
    - [x] **9b. Big-number quantity stepper** — already fully solved,
          nothing to build. `.bo-quantity` (Slice 6 item 12) composed with
          `data-density="spacious"` (44px controls, WCAG 2.5.8) already IS

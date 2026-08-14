@@ -1,0 +1,79 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+---
+<Gallery title="Pattern: goods receipt (RF scanner)">
+  <p class="demo-note">
+    A GR (goods receipt) screen driven by a handheld RF scanner, not a mouse — the
+    scanner types the barcode fast and sends Enter, so the field needs to stay
+    focused and clear itself between scans. Composed from <code>data-scan-input</code>
+    (new opt-in behavior, no new CSS — a plain <code>.bo-input</code>), the existing
+    <code>.bo-quantity</code> at <code>data-density="spacious"</code> for a
+    warehouse-floor large target, and the data table for the receiving log.
+  </p>
+
+  <section class="demo" data-density="spacious">
+    <h2>Scan to receive</h2>
+    <div class="bo-form-field">
+      <label class="bo-form-field__label" for="gr-scan">Scan barcode</label>
+      <input class="bo-input bo-input--code" id="gr-scan" data-scan-input autofocus placeholder="Waiting for scan…" />
+    </div>
+    <div class="bo-form-field">
+      <label class="bo-form-field__label" for="gr-qty">Quantity</label>
+      <div class="bo-quantity">
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+        <input class="bo-quantity__input" type="number" id="gr-qty" value="1" min="1" max="9999" step="1" inputmode="numeric" aria-label="Quantity" />
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+        <span class="bo-quantity__unit">ea</span>
+      </div>
+    </div>
+
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Barcode</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col">Received</th></tr></thead>
+        <tbody id="gr-log">
+          <tr><td colspan="3" class="bo-u-text-muted">No scans yet — try the live demo above.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    import { initScanInput, initQuantity } from '@busy-office/ui/js';
+    initScanInput();
+    initQuantity();
+
+    const scanInput = document.getElementById('gr-scan');
+    const qtyInput = document.getElementById('gr-qty') as HTMLInputElement | null;
+    const log = document.getElementById('gr-log');
+    let placeholderCleared = false;
+
+    scanInput?.addEventListener('bo:scan', (e) => {
+      if (!log) return;
+      if (!placeholderCleared) { log.innerHTML = ''; placeholderCleared = true; }
+      const value = (e as CustomEvent).detail.value;
+      const qty = qtyInput?.value || '1';
+      const row = document.createElement('tr');
+      row.innerHTML = `<td class="bo-data-table__col--code">${value}</td><td class="bo-data-table__col--numeric">${qty}</td><td>${new Date().toLocaleTimeString()}</td>`;
+      log.prepend(row);
+    });
+  </script>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<input class="bo-input bo-input--code" data-scan-input autofocus />
+
+<script type="module">
+  import { initScanInput } from "@busy-office/ui/js";
+  initScanInput(); // once — clears + refocuses on Enter, fires bo:scan
+  document.querySelector('[data-scan-input]')
+    .addEventListener('bo:scan', (e) => console.log(e.detail.value));
+</script>`}</code></pre>
+  </section>
+
+  <Related links={[
+    ["/concepts/js-behaviors", "JS behaviors"],
+    ["/components/quantity", "Quantity"],
+    ["/components/data-table", "Data table"],
+  ]} />
+</Gallery>
