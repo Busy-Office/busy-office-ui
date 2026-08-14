@@ -166,7 +166,22 @@ Slice-4 continuation is now fully done (avatar byline, collapsible cards,
          showed "Pending" and the matching chip was active — clicked
          "Overdue", URL/select/active-chip all updated together, both
          themes.
-   - [ ] Multi-column detail-form patterns.
+   - [x] **Multi-column detail-form patterns** — new pattern page
+         `/patterns/detail-form`, the edit-screen counterpart to
+         `/patterns/record-detail`. The CSS was already complete and
+         already demonstrated on the Forms component page
+         (`.bo-form-section`/`.bo-form-row`/`.bo-form-actions`); the actual
+         gap was a missing COMPOSED pattern — a full multi-section purchase-
+         order edit screen (header + payment/delivery fieldsets, a
+         line-items table with seamless inline-edit inputs, a sticky action
+         bar), matching the shape of the other 3 pattern pages. Zero new
+         CSS. Verified live: 3-column layout at 1440px in both themes;
+         forced a 300px container width and confirmed via computed layout
+         that all 3 header fields stack into one column each (the
+         `auto-fit` grid genuinely collapses, not just claimed to).
+
+Slice 6 item 4 is now fully done (saved-view persistence + multi-column
+detail-form patterns).
 5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
        print preview are checkable from this environment (macOS); NVDA
        (Windows-only) stays a standing NEEDS-RUNTIME ledger entry, not claimed.

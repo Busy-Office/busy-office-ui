@@ -1,0 +1,96 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+---
+<Gallery title="Pattern: multi-column detail form">
+  <p class="demo-note">
+    The edit-screen counterpart to <a href="/patterns/record-detail">record detail</a>:
+    a full purchase-order edit form, composed entirely from existing components —
+    <code>.bo-form-section</code> fieldsets, the <code>.bo-form-row</code> auto-fit
+    column grid, the line-items data table, and a sticky <code>.bo-form-actions</code>
+    bar. Nothing new to learn; <code>.bo-form-row</code> already collapses to one
+    column on narrow screens by construction (<code>auto-fit</code>, not a fixed
+    column count) — resize the window to see it.
+  </p>
+  <section class="demo">
+    <form novalidate>
+      <fieldset class="bo-form-section">
+        <legend class="bo-form-section__legend">Header</legend>
+        <div class="bo-form-row">
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="df-vendor">Vendor</label>
+            <input class="bo-input" id="df-vendor" value="Acme Supply Co." required />
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="df-cc">Cost center</label>
+            <input class="bo-input bo-input--code" id="df-cc" value="CC-4021" />
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="df-date">Order date</label>
+            <input class="bo-input" id="df-date" type="date" value="2026-08-10" />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="bo-form-section">
+        <legend class="bo-form-section__legend">Payment &amp; delivery</legend>
+        <div class="bo-form-row">
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="df-terms">Terms</label>
+            <select class="bo-select" id="df-terms">
+              <option>Net 30</option><option>Net 60</option><option>Due on receipt</option>
+            </select>
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="df-ship">Ship via</label>
+            <select class="bo-select" id="df-ship"><option>Freightline</option><option>Standard courier</option></select>
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="df-notes">Notes</label>
+            <input class="bo-input" id="df-notes" placeholder="Optional" />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="bo-form-section">
+        <legend class="bo-form-section__legend">Line items</legend>
+        <div class="bo-data-table-container">
+          <table class="bo-data-table">
+            <thead><tr>
+              <th scope="col">Item</th>
+              <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+              <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+              <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td>SKU-3391 · Standing desk</td>
+                <td class="bo-data-table__col--numeric">
+                  <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Standing desk" />
+                </td>
+                <td class="bo-data-table__col--numeric">302.00</td>
+                <td class="bo-data-table__col--numeric">1,208.00</td>
+              </tr>
+              <tr>
+                <td>SKU-1180 · Monitor arm</td>
+                <td class="bo-data-table__col--numeric">
+                  <input class="bo-input bo-input--seamless bo-input--numeric" value="8" aria-label="Quantity for Monitor arm" />
+                </td>
+                <td class="bo-data-table__col--numeric">115.50</td>
+                <td class="bo-data-table__col--numeric">924.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+      <div class="bo-form-actions">
+        <button class="bo-btn bo-btn--secondary" type="button">Cancel</button>
+        <button class="bo-btn" type="submit">Save purchase order</button>
+      </div>
+    </form>
+  </section>
+  <Related links={[
+    ["/components/form", "Forms"],
+    ["/components/data-table", "Data table"],
+    ["/patterns/record-detail", "Record detail (read-only counterpart)"],
+    ["/concepts/container-queries", "Container queries"],
+  ]} />
+</Gallery>
