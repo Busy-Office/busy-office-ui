@@ -76,13 +76,32 @@ owner-gated, not something a loop iteration can close.
        consolidating in a future Standardize pass). Verified live via Podman
        (`bo-docs-run`): light + dark at 1440px, and narrow-viewport reflow
        confirmed (no overflow/clipping). All 7 gates green, 11 tests pass.
-2. [ ] **Data-table ARIA grid pattern** — the real fix for keyboard row
-       navigation (see the 2026-08-14 Explore spike below `## Done` — mechanics
-       work, but it needs the full WAI-ARIA APG "Grid" pattern: `role="grid"`/
-       `"row"`/`"gridcell"`, `aria-rowindex`/`aria-colindex`, two-axis roving
-       tabindex, `aria-selected` wired to the existing row-select checkboxes.
-       *Accept:* VoiceOver-verified (this env can drive it via macOS
-       automation), doesn't regress existing selection/sort behavior.
+2. [x] **Data-table ARIA grid pattern** — shipped as a new opt-in behavior,
+       `initDataGrid()` + `data-grid-nav` (packages/core/src/js/behaviors/
+       data-grid.ts), separate from `initDataTables()` so selection/sort are
+       untouched for every existing consumer. Sets `role="grid"` on the
+       table — `td`/`th` get their `gridcell`/`columnheader` roles
+       *implicitly* from the HTML-AAM mapping once the table has that role,
+       so no per-cell markup is needed. `aria-multiselectable` (when the
+       table has row-select checkboxes), 1-based `aria-rowindex`/
+       `aria-colindex` (supplementary — this table is never virtualized, so
+       they're not load-bearing the way they are for a virtualized grid, but
+       included per the accept criteria). Two-level roving tabindex per the
+       APG "Data Grid" (interactive-widgets) example: one Tab stop for the
+       whole grid, arrow keys move the cell cursor (clamped, no wrap, incl.
+       Home/End and Ctrl+Home/Ctrl+End), Enter focuses a cell's one
+       interactive descendant (checkbox/button/input), Escape hands focus
+       back to the cell. `aria-selected` synced on the row from the
+       checkbox's `change` event. Docs: a new "Keyboard grid navigation"
+       demo section on `/components/data-table`. 5 new behavior tests (16
+       total, all pass) plus live verification in a real Chromium DOM via
+       Podman — role/multiselectable/rowindex, focus mechanics (ArrowRight
+       moves the cursor, Enter/Escape into-and-out-of the checkbox,
+       aria-selected on check) all confirmed against the actual browser, not
+       just jsdom. **Not done this tick:** an actual VoiceOver verbalization
+       pass — that's Slice 6 item 5 (Runtime a11y pass); this item shipped
+       the correct ARIA semantics and keyboard mechanics but hasn't been
+       listened to yet, so "AA outright" isn't claimed until that pass runs.
 3. [ ] **Slice-4 continuation** — avatar byline, collapsible cards, a real
        `.bo-composer` (comment + action) for approval threads.
 4. [ ] **Saved-view persistence**; multi-column detail-form patterns.

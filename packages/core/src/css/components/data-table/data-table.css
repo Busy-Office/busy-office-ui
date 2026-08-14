@@ -184,6 +184,14 @@
     color: inherit;
   }
 
+  /* Grid keyboard nav (initDataGrid, opt-in via [data-grid-nav]): an inset
+     ring so the focused cell's outline doesn't bleed into its neighbor —
+     the default 2px outward offset from reset.css reads ambiguously in a
+     dense grid of adjacent cells. */
+  .bo-data-table[role="grid"] :focus-visible {
+    outline-offset: -2px;
+  }
+
   /* Loading: attribute flipped by JS/HTMX. */
   .bo-data-table[data-loading="true"],
   .bo-data-table[aria-busy="true"] {

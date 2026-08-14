@@ -36,6 +36,22 @@ const tableMarkup = `<div class="bo-data-table-container">
 </script>
 <!-- Sorting contract: YOUR code (server or client) re-orders rows and sets
      aria-sort on the <th>; the CSS draws the indicator from aria-sort. -->`;
+const gridMarkup = `<table class="bo-data-table" data-grid-nav>
+  <thead><tr>
+    <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
+    <th scope="col">Invoice #</th>
+    <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+  </tr></thead>
+  <tbody><tr>
+    <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select INV-1" /></td>
+    <td class="bo-data-table__col--code">INV-1</td>
+    <td class="bo-data-table__col--numeric">$4,208.00</td>
+  </tr></tbody>
+</table>
+<script type="module">
+  import { initDataGrid } from "@busy-office/ui/js";
+  initDataGrid(); // role=grid, two-axis roving tabindex, Enter/Escape into-and-out-of a cell's widget
+</script>`;
 const rows = [
   { no: 'INV-10234', vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: '$4,208.00', status: 'Pending', tone: 'warning' },
   { no: 'INV-10235', vendor: 'Globex Industrial', cc: 'CC-4021', amount: '$18,940.50', status: 'Approved', tone: 'success' },
@@ -88,6 +104,44 @@ const rows = [
         </tbody>
       </table>
     </div>
+  </section>
+  <section class="demo">
+    <h2>Keyboard grid navigation <span class="bo-badge">opt-in</span></h2>
+    <p class="bo-u-text-muted">
+      <code>data-grid-nav</code> + <code>initDataGrid()</code> turns the table into a
+      WAI-ARIA APG "Grid": <code>role="grid"</code> (cells get their <code>gridcell</code>/
+      <code>columnheader</code> roles implicitly — no per-cell markup needed),
+      <code>aria-selected</code> synced from the row checkboxes, and two-axis roving
+      tabindex — Tab enters the grid at ONE cell, arrow keys move the cursor
+      (clamped, no wrap), <kbd>Enter</kbd> focuses a cell's single widget (the
+      checkbox), <kbd>Esc</kbd> hands focus back to the cell. Click into the table
+      below, then try arrow keys.
+    </p>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-grid-nav id="grid-nav-demo">
+        <thead>
+          <tr>
+            <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
+            <th scope="col">Invoice #</th>
+            <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.slice(0, 3).map((r) => (
+            <tr>
+              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
+              <td class="bo-data-table__col--code">{r.no}</td>
+              <td class="bo-data-table__col--numeric">{r.amount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <pre><code>{gridMarkup}</code></pre>
+    <script>
+      import { initDataGrid } from '@busy-office/ui/js';
+      initDataGrid();
+    </script>
   </section>
   <section class="demo">
     <h2>Narrow container → auto-compaction</h2>
@@ -187,6 +241,7 @@ const rows = [
       'Sorting contract: the framework paints the indicator from <code>aria-sort</code> on the <code>&lt;th&gt;</code>; re-ordering rows and updating the attribute is YOUR code (server or client).',
       'Row checkboxes need <code>name</code>/<code>value</code> to POST selections (via <code>hx-include</code> or a form).',
       'Columns marked <code>__col--secondary</code> hide under container compaction — keep that data reachable (row detail view) per WCAG 1.4.10.',
+      'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
     ]}
   />
   <section class="demo">
@@ -197,5 +252,5 @@ const rows = [
     import { initDataTables } from '@busy-office/ui/js';
     initDataTables();
   </script>
-  <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"]]} />
+  <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>
