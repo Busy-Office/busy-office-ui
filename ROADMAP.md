@@ -53,7 +53,7 @@ simplicity pass; the `new:component` scaffold generator + page-shape build gate
 hand-authored demo sections are already gate-compliant and already copyable).
 Full detail: `.roundtable/loop-log.md`.
 
-## In progress — Slice 6: Component depth + a11y hardening
+## Done — Slice 6: Component depth + a11y hardening (publish still owner-gated)
 
 Reconciled 2026-08-14 (Roadmap loop, after the ARIA-grid Explore graduation).
 Ordered by value × effort; `npm publish` is intentionally last — it's
@@ -710,13 +710,16 @@ detail-form patterns).
 
 ## Slice 7 (candidate) — docs IA, device coverage, component tiers, pattern gallery
 
-Triaged 2026-08-15 (user direction, wishlist — five distinct asks, logged
-together since they're related but NOT all equally ready to build). None
-of this is scoped enough to dispatch a Continue round yet — several items
-are genuine open design questions the still-pending **Objective review
-(`/round-table`)** should weigh in on before committing an approach,
-flagged per-item below. Where a question was answerable by reading the
-current codebase rather than guessing, answered inline.
+Triaged 2026-08-14 (user direction, wishlist — five distinct asks, logged
+together since they're related but NOT all equally ready to build); item 6
+added 2026-08-15 via the Explore fallback (backlog + Ideas seed list both
+empty — generated from the Long-term backlog's own "Localization/RTL
+audit" note, same shape as the other five). **Three of six are now done**
+(items 1, 4, 6); the other three are genuine open design questions the
+still-pending **Objective review (`/round-table`)** should weigh in on
+before committing an approach — flagged per-item below. Where a question
+was answerable by reading the current codebase rather than guessing,
+answered inline.
 
 1. [x] **"Data type" docs section** — shipped. New top-level "Data
        display" sidebar group (`Gallery.astro`, between Components and
@@ -846,10 +849,13 @@ current codebase rather than guessing, answered inline.
        to rebuild).
 
 **This Slice 7 candidate list is exactly what the Objective review
-(`/round-table`) is for** — five real directions, different readiness
-levels, real trade-offs neither guessed nor ignored. Items 1 and 4 (data
-section, demo layout) are concrete enough to Continue-dispatch without
-further review; items 2, 3, and 5 need it before scoping further.
+(`/round-table`) is for** — six real directions, different readiness
+levels, real trade-offs neither guessed nor ignored. Items 1, 4, and 6
+(data section, demo layout, RTL audit) were concrete enough to
+Continue/Explore-dispatch without further review, and are now done;
+items 2, 3, and 5 (device coverage, component tiers, patterns gallery)
+still need it before scoping further — those are the ones actually
+blocking further autonomous progress on this slice.
 
 ## Long term (post-1.0)
 
@@ -945,8 +951,8 @@ Highest-leverage bets (2026-08-14 review — ranked):
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
 - [ ] Component depth: data-grid virtualization hooks, tree/nav for deep
       ERP hierarchies. (Amount field and command palette pulled forward
-      into Slice 5; date-field graduated into Slice 6 item 21.)
-- [x] Localization/RTL audit — done, see Slice 7 item 6 below (2026-08-15).
+      into Slice 5; date-field graduated into Slice 6 item 21; RTL audit
+      graduated into Slice 7 item 6 above.)
 
 ## Standing principles (not a phase — the bar every slice meets)
 
