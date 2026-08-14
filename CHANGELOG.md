@@ -42,6 +42,66 @@ pin.
 - JS behaviors (delegation, call-once): dialogs, data tables (+`refreshDataTable`),
   tabs, dropdowns, alerts.
 - Build rule: every `@container` query is named (enforced at build time).
+- **Slice 4 — Records & approval**: byline, ordered list (mono/`--plain`/
+  editable rows), record-type badge, small & danger-ghost button variants,
+  widget band footer; `.bo-composer` for approval-thread comments.
+- **Slice 5 — Docs UX + ERP data-entry**: Amount field (`.bo-amount`); Cmd/Ctrl+K
+  command palette; opt-in Motion module (8 reduced-motion-safe animations);
+  the `new:component` scaffold generator + page-shape build gate (gate 7).
+- **Slice 6 — Component depth + a11y hardening**: Skeleton/State (empty/error)
+  components; ARIA-grid keyboard nav (opt-in `initDataGrid()`/`refreshDataGrid`
+  on `.bo-data-table`); Quantity field (`.bo-quantity`, opt-in `initQuantity()`);
+  Breadcrumb (`.bo-breadcrumb`); Multi-step wizard (opt-in `initWizard()`);
+  Saved-view URL persistence (opt-in `initSavedViews()`); RF-scanner scan-input
+  (opt-in `initScanInput()`, `bo:scan` event); `forced-colors` (Windows High
+  Contrast Mode) fallbacks on button/badge/dialog/offcanvas/data-table.
+- **Slice 7 — docs IA + polish**: Date field (`.bo-date`, display-only, mirrors
+  Amount/Quantity); inline validation summary (opt-in `initValidationSummary()`);
+  first real theme preset (`@busy-office/ui/css/brand-indigo`) with its own
+  contrast-gate validation; "Data display" docs grouping.
+
+### API freeze audit (2026-08-15)
+
+Prompted by the 1.0 exit checklist's own finding — the public API had never
+had a deliberate "diff the surface, decide what's still churning" pass; this
+is that pass. Result: 21 components / 165 CSS classes / 56 semantic color
+tokens / 12 JS behaviors reviewed. **No renames, no removals — additive
+only** since the `eof-`→`bo-` rename above (the one real breaking change
+this project has made). Per-item calls on everything added in Slices 6-7
+(the newest, least battle-tested surface):
+
+- **Stable, freeze now**: Quantity (`.bo-quantity`, `initQuantity()`) and
+  Date (`.bo-date`) — both deliberately mirror Amount's already-stable
+  shape, already used in 2+ real docs/pattern pages each, no open design
+  questions.
+- **Stable, freeze now**: ARIA-grid (`initDataGrid()`), Wizard
+  (`initWizard()`), Saved-views (`initSavedViews()`) — each is additive
+  (opt-in, doesn't change `initDataTables()`'s existing contract), verified
+  against real DOM (not just jsdom) during their own build rounds.
+- **Freeze the mechanism, not the specific values**: theme presets
+  (`src/css/brand/*.css`) — the FILE FORMAT and build/validation wiring are
+  stable (proven this session, reusable for any future hue), but the one
+  shipped preset (`brand-indigo`) is a demonstration, not a commitment to
+  keep exactly that hue forever — presets are additive opt-in files, so this
+  is low-risk regardless.
+- **Hold one more cycle before hard-freezing**: `initScanInput()` (`bo:scan`
+  event name, `data-scan-terminator` attribute) and `initValidationSummary()`
+  (`data-validation-summary`/`data-validation-summary-box` attributes) — both
+  are only proven on ONE real pattern page each so far (goods-receipt,
+  validation-summary). The *shape* (document-delegation, same as every other
+  behavior) is consistent with the frozen set, but the specific attribute/
+  event names have had zero real-world usage pressure yet. Recommendation:
+  treat as stable-but-not-yet-guaranteed for one more slice; revisit at the
+  next freeze pass or before 1.0, whichever comes first.
+- **Explicitly NOT API** (per the existing versioning policy, restated here
+  for the audit's completeness): per-component dist file paths, the raw
+  palette tier (`--bo-palette-*`), component-internal custom properties
+  (`--bo-btn-*` etc.).
+
+No code changed by this audit — it's a documentation/decision pass. If a
+1.0 push happens before `initScanInput`/`initValidationSummary` get a real
+second consumer, that's an acceptable risk to accept explicitly, not a
+blocker — noting it here so it's a deliberate choice, not an oversight.
 
 ### Design reviews
 - `.roundtable/grill-2026-08-11.md` (slice 1), `grill-2026-08-12.md` (slice 2),

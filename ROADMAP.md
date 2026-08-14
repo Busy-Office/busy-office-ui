@@ -884,14 +884,15 @@ Highest-leverage bets (2026-08-14 review — ranked):
       | 8 | RTL | ✅ audited — logical properties genuinely hold; 1 open product question flagged (numeric column alignment), not a bug | Slice 7 item 6 |
       | 9 | ≥1 real consumer | ✅ `examples/po-app` — **re-verified live THIS round**: `podman build` from current source, ran the container, clicked through dashboard → PO list → filter → select-all/bulk-approve → detail page → approval timeline. Everything worked. One visual anomaly investigated (an unchecked `.bo-checkbox` rendered as a solid square in this session's automated-Chrome screenshot) — confirmed via computed style (`accent-color` correctly resolved) and by checking it live (renders a proper checkmark) that this is an environment rendering quirk, not a library bug. | `examples/po-app`, this round |
       | 10 | a11y ledger | 🟡 2 items genuinely NEEDS-RUNTIME (VoiceOver, NVDA — no tool in this environment can drive either); everything else closed | Slice 6 item 5, item 18 |
-      | 11 | API frozen | 🟡 **NOT started** — semantic tokens/classes/data-*/ARIA contracts are already documented as the public API (`/concepts/theming` versioning policy), but nobody has done a deliberate "freeze and commit" pass (diff current surface against what changed across Slices 1-7, decide what's still churning) |
+      | 11 | API frozen | ✅ Done — see `CHANGELOG.md`'s "API freeze audit (2026-08-15)": 21 components/165 classes/56 tokens/12 behaviors reviewed, additive-only since the one real breaking change (`eof-`→`bo-`). Two items (`initScanInput`, `initValidationSummary`) explicitly held as "stable-but-not-yet-guaranteed" pending a second real consumer, not silently frozen | `CHANGELOG.md` |
       | 12 | Real independent adopter | 🔴 **Not met, and `po-app` does NOT count** — it's a reference app built by this project's own team to test packaging, not an external team choosing to adopt it. This is the one item on the list that can't be closed by more loop iterations; it needs an actual second party. |
 
-      **Net: 9 of 12 done, 2 environment-blocked (not fixable by more
-      work here), 1 real gap (API freeze pass) that's genuinely
-      actionable next.** This is NOT "hit the list, ship" — it's an
-      honest snapshot for whoever (the owner) decides when "good enough"
-      is reached; a loop iteration should not self-approve publish
+      **Net: 10 of 12 done, 2 genuinely NOT closeable by more loop
+      iterations** — the a11y NEEDS-RUNTIME items need real assistive-tech
+      hardware, and the independent-adopter item needs an actual second
+      party. This is NOT "hit the list, ship" — it's an honest snapshot
+      for whoever (the owner) decides when "good enough" is reached; a
+      loop iteration should not self-approve publish
       regardless of how this list reads.
 - [x] **Real ERP pilot (dogfood)** — already substantially satisfied by
       `examples/po-app` (item 9 above) — a real 3-screen ERP slice
