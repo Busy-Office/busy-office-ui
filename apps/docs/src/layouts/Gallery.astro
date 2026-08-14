@@ -83,6 +83,16 @@ const current =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
     <title>{title} · busy-office-ui</title>
+    <script is:inline>
+      // Blocking, in <head>, before any paint — the ONLY way to avoid a
+      // light-then-dark flash on every navigation. This is a static MPA (a
+      // link click is a full page reload, not client routing), and the
+      // <html> tag has no data-theme statically, so without this the page
+      // always painted light first and flashed to dark once the body-end
+      // script finally ran (site bug, 2026-08-14 user report — distinct
+      // from the theme-TOGGLE transition flash, already fixed separately).
+      document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? 'light';
+    </script>
   </head>
   <body>
     <div class="bo-app-shell">
@@ -289,6 +299,9 @@ const current =
       // Theme toggle: same shape — one attribute, one storage key. The
       // data-bo-theming guard freezes transitions for the frame of the flip so
       // text doesn't flash on a mismatched (still-animating) background.
+      // The INITIAL value is already applied — a blocking inline script in
+      // <head> set it before first paint (site bug fix, 2026-08-14) — this
+      // only syncs the <select> to match and wires the change handler.
       const html = document.documentElement;
       const setTheme = (v: string) => {
         html.setAttribute('data-bo-theming', '');
@@ -297,8 +310,7 @@ const current =
           requestAnimationFrame(() => html.removeAttribute('data-bo-theming')));
       };
       const theme = document.getElementById('theme') as HTMLSelectElement;
-      theme.value = localStorage.getItem('bo-theme') ?? 'light';
-      setTheme(theme.value);
+      theme.value = html.dataset.theme ?? 'light';
       theme.addEventListener('change', () => {
         setTheme(theme.value);
         localStorage.setItem('bo-theme', theme.value);

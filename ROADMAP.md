@@ -60,24 +60,23 @@ Ordered by value × effort; `npm publish` is intentionally last — it's
 owner-gated, not something a loop iteration can close.
 
 **Queued (priority order)**
-0. [ ] **P0 — Navigation flash/flicker in dark theme** (2026-08-14 user report:
+0. [x] **P0 — Navigation flash/flicker in dark theme** (2026-08-14 user report:
        "screen flicking when click on the link, especially on the left sidebar").
-       Root cause diagnosed: `apps/docs/src/layouts/Gallery.astro` sets
-       `<html data-density="comfortable">` with NO `data-theme` — theme is
-       applied by a script near the *bottom* of `<body>` (reads
-       `localStorage`, sets `data-theme` there). This is a static MPA (every
-       link click is a full page reload, not client routing), so EVERY
-       navigation paints light-first, then flashes to dark once that late
-       script finally runs. Site-wide, not sidebar-specific — sidebar just
-       gets clicked most. This is a DIFFERENT bug from the earlier
-       theme-*toggle* transition-flash P0 (already fixed, `data-bo-theming`)
-       — that one only covered switching themes on an already-loaded page.
-       *Fix sketch:* a small blocking inline script in `<head>`, before any
-       stylesheet/content, reading `localStorage` and setting
-       `document.documentElement.dataset.theme` synchronously (the standard
-       FOUC-prevention pattern) — NOT deferred, NOT at the body's end.
-       *Accept:* click through several sidebar links with dark theme active,
-       confirm zero visible light flash on any of them.
+       Fixed: a blocking `is:inline` script in `<head>` (before both
+       stylesheets, confirmed via the built HTML) sets
+       `document.documentElement.dataset.theme` from `localStorage`
+       synchronously, before first paint — the standard FOUC-prevention
+       pattern. The old body-end script no longer re-applies the theme (that
+       was the redundant, late, flash-causing call); it now only syncs the
+       `<select>` display and wires the change handler. Verified live
+       (bind-mounted Podman): navigated across 3 pages with dark preference
+       stored — `data-theme` was already `"dark"` at first check on every
+       one, no light-default fallback. Confirmed no regression: a fresh
+       visitor with no stored preference still gets light by default, and
+       the manual toggle (with its `data-bo-theming` transition guard) still
+       works. Landing page (`index.astro`) is unaffected/out of scope — its
+       theme control is scoped to the demo widget only, doesn't read the
+       global `bo-theme` key.
 1. [x] **Skeleton / empty / error states** — shipped as two components (not
        three classes): `.bo-skeleton` (`--circle`/`--block` shimmer
        placeholders, `aria-busy` is the programmatic channel) and `.bo-state`
