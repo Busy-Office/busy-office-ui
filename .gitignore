@@ -6,3 +6,9 @@ graphify-out/
 
 # Derived loop-telemetry mirror — rebuild with scripts/loops/rebuild_from_log.py
 .roundtable/loops.db
+
+# Claude Code session-lock state (session id/PID/timestamp) — ephemeral
+# runtime state, not project content; was accidentally tracked once and
+# has shown a perpetual uncommitted diff on every autonomous-loop wake
+# since (a new session claims the lock each time).
+.claude/scheduled_tasks.lock
