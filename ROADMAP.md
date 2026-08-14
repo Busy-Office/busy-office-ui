@@ -496,6 +496,20 @@ detail-form patterns).
         Zero new CSS/JS surface — three real docs additions, one of them
         (mixed-currency alignment) backed by a live measurement, not an
         assumption. Verified both themes via Podman; gates unaffected.
+17. [x] **Standardize: Amount's "In a column" demo wasn't using
+        `Demo.astro`** (dispatched after 4 Continue rounds) — an Explore-
+        agent scan of the Amount/Quantity docs cluster (items 14-16) found
+        one real gap: the pre-existing "In a column" section was raw
+        hand-written markup with no copyable code listing at all, unlike
+        every sibling section (including "Mixed currencies," added
+        directly above it this session, which made the inconsistency
+        newly visible sitting right next to it). Converted to
+        `<Demo code={...}>` like the rest — zero visual change, preview
+        and code can no longer drift apart. Broader scan (demo-ordering,
+        duplicated markup between Amount/Quantity's table-column demos,
+        page-shape gate, quantity.css/ts vs. sibling components) came back
+        clean — one real finding, fixed, no further instances. 26 tests
+        pass (unchanged), gates green.
 
 ## Long term (post-1.0)
 
