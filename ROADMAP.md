@@ -375,14 +375,16 @@ detail-form patterns).
          `data-density="spacious"` (44px controls, WCAG 2.5.8) already IS
          the large-target quantity control; confirmed working in the
          spike page as-is. No RF-scanner-specific variant needed.
-   - [ ] **9c. High-contrast warehouse-floor mode** — genuinely NOT
+   - [x] **9c. High-contrast warehouse-floor mode** — genuinely NOT
          addressed by this spike, and turned out to be broader than
          RF-scanner: the codebase has **no `forced-colors: active` /
          Windows High Contrast Mode handling anywhere** (checked — zero
          matches across all component CSS). That's a pre-existing gap
          across the whole library, not something specific to warehouse
          screens, so scoping it as an RF-scanner sub-item would have been
-         wrong — split out as its own item, see below.
+         wrong — split out as its own item (18), done there. This
+         checkbox was left stale after item 18 shipped — fixed while
+         doing Roadmap hygiene, not a re-open.
 10. [x] **Demo-section ordering audit** (Standardize) — scripted a check
         across all 16 hand-authored pages (13 components + 3 patterns):
         found exactly one real violation, `alerts.astro`'s "Toast recipe"
