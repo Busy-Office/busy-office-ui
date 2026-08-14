@@ -810,6 +810,38 @@ current codebase rather than guessing, answered inline.
        `/patterns/invoice-list` (~ Report/Output Form family). Accept:
        draft only, refine after Objective review — do not start building
        from this raw list without re-checking against what already ships.
+6. [x] **Localization/RTL audit** (dispatched via the Explore fallback —
+       backlog and Ideas seed list both empty, generated from this
+       Long-term backlog's own note, same pattern as item 21's date-field)
+       — verification-only round, zero code changes needed. Mechanical
+       scan first: `grep` for physical CSS properties (`margin-left`,
+       `padding-right`, bare `left:`/`right:`, `text-align: left/right`)
+       across every component AND the docs shell (`Gallery.astro`) —
+       **zero matches**, confirming the "logical properties throughout"
+       claim was actually true, not just asserted. Live verification
+       (`dir="rtl"` toggled on real pages, not assumed from the grep
+       alone): the **entire app shell mirrors correctly** — sidebar
+       flips to the right, TOC to the left, navbar brand/hamburger swap
+       sides, breadcrumb reads right-to-left — with **zero shell-specific
+       RTL CSS**, purely from consistent logical-property use throughout
+       the shipped package. Confirmed the two places that already HAD
+       deliberate `[dir="rtl"]` overrides actually work: `.bo-select`'s
+       chevron (background-position has no logical keyword, needs an
+       explicit physical flip — computed style confirmed it resolves
+       correctly under RTL) and `.bo-offcanvas`'s slide-in animation
+       direction.
+       **One genuine open question surfaced, documented rather than
+       silently "fixed":** `.bo-data-table__col--numeric` uses
+       `text-align: end`, so numeric/currency columns visually flip to
+       LEFT-aligned under RTL — technically correct logical-property
+       behavior, but real-world RTL accounting/ERP UIs often keep
+       monetary columns visually right-aligned as a numeral convention
+       distinct from prose direction. This is a genuine market/product
+       decision this session can't authoritatively make (varies by
+       target market), not a bug — flagging for whoever has real RTL-market
+       requirements, not changing behavior speculatively.
+       No CSS/JS changed; 33 tests unchanged, gates unaffected (nothing
+       to rebuild).
 
 **This Slice 7 candidate list is exactly what the Objective review
 (`/round-table`) is for** — five real directions, different readiness
@@ -854,8 +886,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
 - [ ] Component depth: data-grid virtualization hooks, tree/nav for deep
       ERP hierarchies. (Amount field and command palette pulled forward
       into Slice 5; date-field graduated into Slice 6 item 21.)
-- [ ] Localization/RTL audit as a first-class pass (logical properties already
-      throughout; verify end-to-end).
+- [x] Localization/RTL audit — done, see Slice 7 item 6 below (2026-08-15).
 
 ## Standing principles (not a phase — the bar every slice meets)
 
