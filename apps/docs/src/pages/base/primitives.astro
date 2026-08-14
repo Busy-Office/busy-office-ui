@@ -1,6 +1,10 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import api from '@busy-office/ui/api';
+// The app shell (sidebar-layout) is demoed separately below; the rest are
+// counted here so this prose can't silently drift the way js-behaviors did.
+const primitiveCount = Object.keys(api.primitives).filter((p) => p !== 'sidebar-layout').length;
 const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shell -->
   <header class="bo-navbar bo-app-shell__header">…</header>
   <nav class="bo-sidebar-nav bo-app-shell__sidebar">…</nav>
@@ -9,7 +13,7 @@ const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shel
 ---
 <Gallery title="Layout primitives">
   <p class="demo-note">
-    Every screen is composed from four primitives plus the app shell. Knobs are
+    Every screen is composed from {primitiveCount} primitives plus the app shell. Knobs are
     custom properties set inline or in your own CSS:
     <code>--bo-stack-gap</code>, <code>--bo-cluster-gap</code>,
     <code>--bo-grid-min</code>, <code>--bo-grid-gap</code>.

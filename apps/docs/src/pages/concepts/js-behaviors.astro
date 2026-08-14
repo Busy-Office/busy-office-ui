@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import manifest from '@busy-office/ui/behaviors-manifest';
 const refresh = `// Bound table containers re-derive selection state automatically when an
 // htmx:afterSwap bubbles through them. Any OTHER swap mechanism calls:
 import { refreshDataTable } from "@busy-office/ui/js";
@@ -8,26 +9,31 @@ refreshDataTable(container);
 
 // Only NEW containers swapped in later need re-binding:
 document.body.addEventListener("htmx:afterSwap", (e) => initDataTables(e.target));`;
+const inits = Object.entries(manifest.behaviors)
+  .filter(([name]) => name.startsWith('init'))
+  .map(([name, b]: [string, any]) => [name, b.summary, b.hooks]);
 ---
 <Gallery title="JS behaviors">
   <p class="demo-note">
-    The framework is CSS-first, not CSS-only. Five small behaviors
-    (~2 kB total, zero dependencies) cover what the platform can't do or what
+    The framework is CSS-first, not CSS-only. {inits.length} small behaviors
+    (zero dependencies) cover what the platform can't do or what
     accessibility demands: each is a <strong>call-once init</strong> using
     document-level event delegation, so DOM swaps (HTMX, Alpine, anything)
     never require re-binding.
   </p>
   <section class="demo">
-    <h2>The five inits</h2>
+    <h2>The inits <span class="bo-badge">generated</span></h2>
     <div class="bo-data-table-container">
       <table class="bo-data-table">
-        <thead><tr><th scope="col">Init</th><th scope="col">What it adds</th><th scope="col">Without it</th></tr></thead>
+        <thead><tr><th scope="col">Init</th><th scope="col">What it adds</th><th scope="col">DOM hooks it reads</th></tr></thead>
         <tbody>
-          <tr><td><code>initDialogs()</code></td><td>Trigger wiring (<code>data-dialog-trigger</code>), Tab focus loop, <code>data-state</code> sync</td><td>Dialogs never open</td></tr>
-          <tr><td><code>initDataTables()</code></td><td>Select-all (+indeterminate), live "n selected" count, O(1) toolbar reveal, swap re-derive</td><td>Select-all inert; toolbar reveal falls back to O(rows) <code>:has()</code>; no live count for AT</td></tr>
-          <tr><td><code>initTabs()</code></td><td>Roving tabindex, arrow keys (RTL-aware), panel switching</td><td>Tabs 2+ keyboard-unreachable and inert — no CSS-only fallback</td></tr>
-          <tr><td><code>initDropdowns()</code></td><td>Anchors the popover menu to its invoker; close-on-select</td><td>Menu opens centered (top layer default), stays open after picking</td></tr>
-          <tr><td><code>initAlerts()</code></td><td>Dismiss buttons remove their alert/toast</td><td>Dismiss buttons do nothing</td></tr>
+          {inits.map(([name, summary, hooks]: [string, string, string[]]) => (
+            <tr>
+              <td class="bo-data-table__col--code">{name}()</td>
+              <td>{summary}{summary.endsWith('…') ? '' : '.'}</td>
+              <td class="bo-u-text-muted">{hooks.map((h) => (h.startsWith('data-') ? h : `.${h}`)).join(', ')}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

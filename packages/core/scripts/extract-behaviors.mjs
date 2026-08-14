@@ -35,12 +35,16 @@ for (const e of exported) {
   }
   // Leading block comment = the contract; first sentence is the summary.
   const doc = source.match(/\/\*\*([\s\S]*?)\*\//)?.[1] ?? '';
-  const summary = doc
+  const firstSentence = doc
     .replace(/\n\s*\*/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .split(/\.\s/)[0]
-    .slice(0, 200);
+    .split(/\.\s/)[0];
+  // Cut on a word boundary (never mid-word) and mark truncation explicitly.
+  const summary =
+    firstSentence.length <= 200
+      ? firstSentence
+      : firstSentence.slice(0, firstSentence.lastIndexOf(' ', 200)) + '…';
   // Hooks the behavior reads: string/selector literals + dataset.* access.
   const hooks = new Set();
   for (const lit of source.matchAll(/['"`]([^'"`]*(?:data-|bo-)[^'"`]*)['"`]/g))

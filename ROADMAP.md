@@ -380,6 +380,25 @@ detail-form patterns).
         warehouse-floor large-target control; two-channel state for
         min/max validation errors; AA contrast; keyboard-operable
         increment/decrement (not just click-only).
+13. [x] **Standardize: generated-docs drift** (dispatched after 4 Continue
+        rounds) — `/concepts/js-behaviors`'s "five inits" table was
+        genuinely wrong (hand-typed, actually 9 behaviors, 4 undocumented:
+        `initDataGrid`/`initCollapsibleCards`/`initSavedViews`/`initWizard`).
+        Rewrote it to generate from `@busy-office/ui/behaviors-manifest`
+        (`dist/behaviors.json`), same pattern `ClassRef.astro` already uses
+        for `dist/api.json` — marked `generated` so it can't drift again.
+        Fixed a real bug surfaced by making the table honest: the
+        generator (`extract-behaviors.mjs`) truncated long summaries
+        mid-word at a hard 200-char cut; now cuts on a word boundary with
+        an explicit `…`. Broader scan (Explore agent) found one more
+        instance of the same anti-pattern: `/base/primitives.astro`
+        hardcoded "four primitives plus the app shell" in prose — correct
+        today but drift-prone (didn't consume the already-available
+        `api.primitives`, unlike its sibling generated pages). Fixed the
+        same way. Re-scanned the rest of the non-component docs pages
+        (index, reference/classes, base/utilities, base/motion,
+        base/colors) — all already correctly generated; clean pass, no
+        further instances. 23 tests pass (unchanged), gates green.
 
 ## Long term (post-1.0)
 
