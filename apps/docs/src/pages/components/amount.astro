@@ -65,6 +65,42 @@ const mixedCurrency = `<table class="bo-data-table">
   </tbody>
 </table>`;
 
+const columnDemo = `<div class="bo-data-table-container">
+  <table class="bo-data-table">
+    <thead>
+      <tr><th>Line item</th><th class="bo-data-table__col--numeric">Qty</th><th class="bo-data-table__col--numeric">Unit price</th><th class="bo-data-table__col--numeric">Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Standing desk</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__value">4</span><span class="bo-amount__unit">&times; EA</span></span></td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">1,052.00</span></span></td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,208.00</span></span></td>
+      </tr>
+      <tr>
+        <td>Monitor arm</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__value">8</span><span class="bo-amount__unit">&times; EA</span></span></td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">92.50</span></span></td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">740.00</span></span></td>
+      </tr>
+      <tr>
+        <td>Restocking fee</td>
+        <td class="bo-data-table__col--numeric">&mdash;</td>
+        <td class="bo-data-table__col--numeric">&mdash;</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">(120.00)</span></span></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td class="bo-data-table__col--numeric"></td>
+        <td class="bo-data-table__col--numeric"></td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--strong"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,828.00</span></span></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>`;
+
 const markup = `<span class="bo-amount">
   <span class="bo-amount__currency">$</span>              <!-- symbol or ISO code, either side -->
   <span class="bo-amount__value">18,940                 <!-- your app formats grouping + precision -->
@@ -184,41 +220,7 @@ const markup = `<span class="bo-amount">
 
   <section class="demo">
     <h2>In a column — totals align, subtotal is strong</h2>
-    <div class="bo-data-table-container">
-      <table class="bo-data-table">
-        <thead>
-          <tr><th>Line item</th><th class="bo-data-table__col--numeric">Qty</th><th class="bo-data-table__col--numeric">Unit price</th><th class="bo-data-table__col--numeric">Amount</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Standing desk</td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__value">4</span><span class="bo-amount__unit">× EA</span></span></td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">1,052.00</span></span></td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,208.00</span></span></td>
-          </tr>
-          <tr>
-            <td>Monitor arm</td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__value">8</span><span class="bo-amount__unit">× EA</span></span></td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--muted"><span class="bo-amount__currency">$</span><span class="bo-amount__value">92.50</span></span></td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">740.00</span></span></td>
-          </tr>
-          <tr>
-            <td>Restocking fee</td>
-            <td class="bo-data-table__col--numeric">—</td>
-            <td class="bo-data-table__col--numeric">—</td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">(120.00)</span></span></td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Total</td>
-            <td class="bo-data-table__col--numeric"></td>
-            <td class="bo-data-table__col--numeric"></td>
-            <td class="bo-data-table__col--numeric"><span class="bo-amount bo-amount--strong"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,828.00</span></span></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+    <Demo code={columnDemo} />
     <p class="bo-u-text-muted">Amounts inherit the cell’s right-align
     (<code>__col--numeric</code>); tabular figures keep the decimal points stacked.
     <code>--strong</code> weights the total, <code>--muted</code> quiets the unit price.</p>
