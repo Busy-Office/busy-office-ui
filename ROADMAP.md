@@ -139,7 +139,19 @@ owner-gated, not something a loop iteration can close.
          "Collapsible" demo on `/components/dashboard`. 2 new tests (18
          total, pass). Verified live: light + dark, toggle confirmed via
          screenshot (chevron rotates, panel visibly collapses).
-   - [ ] A real `.bo-composer` (comment + action) for approval threads.
+   - [x] **`.bo-composer`** — how a new `.bo-audit` entry gets *written*, not
+         just read. Layout-only, composing existing primitives rather than
+         inventing controls: `.bo-byline__avatar` for the "who", a plain
+         `.bo-input` textarea (already styles `textarea.bo-input`), an
+         actions row. Lives in `approval-workflow.css` next to
+         `.bo-timeline`/`.bo-audit` (the thematic file, not a new component
+         dir). Docs: new demo section on `/components/approval-workflow`,
+         inserted sample-before-code per the ordering audit two ticks ago.
+         Verified live: typed into the textarea, confirmed it persists
+         through a theme switch, both themes render correctly.
+
+Slice-4 continuation is now fully done (avatar byline, collapsible cards,
+`.bo-composer` — all three shipped and verified).
 4. [ ] **Saved-view persistence**; multi-column detail-form patterns.
 5. [ ] **Runtime a11y pass** — VoiceOver verbalization + 200% zoom geometry +
        print preview are checkable from this environment (macOS); NVDA

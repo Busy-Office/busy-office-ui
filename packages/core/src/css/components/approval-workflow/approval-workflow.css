@@ -122,6 +122,31 @@
     font-size: var(--bo-font-size-xs);
   }
 
+  /* Composer: how a new .bo-audit entry gets written, not just read. Pairs
+     with .bo-byline__avatar (byline.css) for the "who" — composed, not
+     duplicated. The textarea is plain .bo-input (form/input.css already
+     styles textarea.bo-input); this component is only the layout: avatar +
+     body (input + actions row). */
+  .bo-composer {
+    display: flex;
+    gap: var(--bo-space-3);
+    align-items: flex-start;
+  }
+
+  .bo-composer__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bo-space-2);
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .bo-composer__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--bo-space-2);
+  }
+
   @media print {
     .bo-timeline__step:not(:last-child)::before {
       background: #999;
