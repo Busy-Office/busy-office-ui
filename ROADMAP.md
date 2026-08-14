@@ -342,6 +342,24 @@ detail-form patterns).
         a real device/simulator, or a headless viewport tool) before
         checking this off.
 
+12. [ ] **Quantity field** (2026-08-14 user direction, wishlist) — a dedicated
+        ERP field for entering counts, not currency: numeric input +
+        increment/decrement buttons, optional unit suffix (`ea`, `kg`,
+        `box`), `min`/`max`/`step` validation, large-target variant for
+        warehouse/RF-scanner use. Compose from existing primitives
+        (`.bo-input--numeric` + `.bo-btn`) rather than a from-scratch
+        control. **Name collision to avoid:** `.bo-stepper` is already the
+        wizard progress-indicator component — call this `.bo-quantity` (or
+        fold the increment/decrement buttons into `.bo-input` as a new
+        part) so it doesn't clash. Overlaps with the RF-scanner item's
+        "big-number quantity stepper" (item 9) — build this as the general
+        field first, then the RF-scanner large-target variant reuses it
+        instead of duplicating. Accept: one component/field usable both in
+        a normal form row and (with a density/size variant) as a
+        warehouse-floor large-target control; two-channel state for
+        min/max validation errors; AA contrast; keyboard-operable
+        increment/decrement (not just click-only).
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
