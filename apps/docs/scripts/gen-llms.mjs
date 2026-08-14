@@ -64,8 +64,7 @@ ${Object.entries(bh.behaviors)
 // Page slug = the component's OWN page (name, with the alert->alerts alias) —
 // NOT api.index[classes[0]], whose first class may be owned by another
 // component (site-grill slice-4: record-card's classes[0] is bo-badge).
-const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
-const slugOf = (name) => `components/${PAGE_SLUG[name] ?? name}`;
+const slugOf = (name) => `components/${api.pageSlug[name] ?? name}`;
 
 for (const [name, c] of Object.entries(api.components)) {
   out += `### ${name} — ${site}/${slugOf(name)}/\n`;

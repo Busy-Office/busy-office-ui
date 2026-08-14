@@ -105,9 +105,14 @@ const motionSets = await analyze([join(srcCss, 'motion/motion.css')]);
 api.motion = shape(motionSets);
 
 // Global class index: class -> owning page slug. Docs page slugs differ from
-// CSS dir names in one case (site-grill S-2); gen-llms.mjs asserts every slug
-// resolves to a built page.
+// CSS dir names when a component shares a page (site-grill S-2; skeleton +
+// state share one page). Published on api.pageSlug — the SINGLE source of
+// this alias; gen-llms.mjs and check-page-shape.mjs both read it from
+// dist/api.json rather than keeping their own copies (that drifted once
+// already — Slice 6 item 1 added an alias here and missed gen-llms.mjs's
+// copy until its build broke).
 const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
+api.pageSlug = PAGE_SLUG;
 const index = {};
 // Primitives claim first: components REFERENCE primitive classes (e.g. a
 // form-section rule mentioning the app shell) but primitives define them —

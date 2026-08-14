@@ -8,6 +8,7 @@
  * this gate guards it).
  */
 import { readFile, readdir } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -17,8 +18,13 @@ const coreRoot = join(repoRoot, 'packages/core');
 const pagesDir = join(docsRoot, 'src/pages/components');
 const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
 
-// Mirrors extract-api.mjs's PAGE_SLUG — keep in sync if that alias grows.
-const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
+// PAGE_SLUG lives on the generated api.json (extract-api.mjs) — the single
+// source; this used to be a hand-maintained copy that drifted out of sync
+// with a THIRD copy in gen-llms.mjs (Slice 6 item 1 caught it the hard way).
+const require = createRequire(import.meta.url);
+const { pageSlug: PAGE_SLUG } = JSON.parse(
+  await readFile(require.resolve('@busy-office/ui/api'), 'utf8'),
+);
 
 const componentsDir = join(coreRoot, 'src/css/components');
 const dirs = (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory());
