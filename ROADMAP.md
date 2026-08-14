@@ -441,33 +441,32 @@ detail-form patterns).
         the number" contract. `ApiTable` notes updated to state both
         points explicitly. Verified live via Podman, both themes — no
         gate impact (no new classes, no new colour pairing).
-15. [ ] **Quantity: base-unit symbol / standard &amp; custom units, with
+15. [x] **Quantity: base-unit symbol / standard &amp; custom units, with
         per-unit default (but overridable) decimal precision**
-        (2026-08-14 user direction, wishlist) — the mirror ask for
-        `.bo-quantity__unit`: today it's plain text (`ea`, `kg`, `box` —
-        see `/components/quantity`); the ask is explicit support for a
-        base-unit **symbol or code**, covering ISO/standard units (kg, m,
-        L) AND units an ERP customer defines itself (a custom UOM) —
-        **plus** each unit type carrying a sensible default decimal
-        precision (e.g. `ea`/`box` default to 0 decimals, `kg`/`L` default
-        to 2-3) that the app can still override per field. That precision
-        piece is the one part of this ask that is NOT just a markup
-        convention — a real "which unit -> how many decimals" default
-        table is application/domain data, not CSS, so this is likely an
-        **app-level lookup + `step`/formatting convention we document**
-        (e.g. `step="0.01"` on the `<input>` already expresses precision
-        natively; the open question is whether busy-office-ui ships a
-        reference default-precision table for common units as documented
-        guidance, or leaves that entirely to the consuming app). Confirm
-        the split (CSS/JS surface vs. documented convention vs. app-owned
-        data) in a real Continue round rather than assuming here. Also
-        check whether `.bo-quantity__unit` and `.bo-amount__unit` should
-        cross-reference each other's docs (both exist independently,
-        added in different slices) — candidate for a future Standardize
-        pass if they drift. Accept (draft, refine at build time): custom
-        (non-standard) units render like any other `__unit` value today;
-        per-unit decimal defaults are overridable, never hardcoded as a
-        silent app-wide constant.
+        (2026-08-14 user direction, wishlist) — resolved the same shape as
+        item 14, but with one real difference: Quantity is an **editable**
+        input, so unlike Amount's display-only precision, "step IS the
+        precision" is a literal, not just documented, mechanism. Shipped:
+        1. Clarified `__unit`'s existing text-note to explicitly name the
+           ISO/standard-vs-custom-UOM distinction (was already unrestricted
+           text — same as `__currency` — just not spelled out).
+        2. A new **"Fractional units"** demo: `step="0.25"`/`inputmode=
+           "decimal"` on a kg quantity, verified live that clicking `+`
+           correctly increments `2.50 -> 2.75` (the decimal `step` flows
+           straight through `initQuantity()`'s existing clamping math, no
+           behavior change needed).
+        3. A per-unit decimal-precision reference table (whole counts -> 0
+           / `step=1`, kg-L-m -> 2 / `step=0.01`, hrs -> 2 / `step=0.25`,
+           custom -> "your call"), documented as app/domain data with the
+           explicit "no `--decimals` modifier" note, mirroring Amount's.
+        4. Cross-referenced `.bo-quantity` <-> `.bo-amount` in both
+           directions (`Related` links + an inline note on Amount's "Unit
+           of measure" section pointing to Quantity as the editable
+           counterpart) — the item's own "should these cross-reference"
+           question, resolved now rather than left as a future
+           Standardize candidate.
+        Zero new CSS/JS surface (confirms the scoping hypothesis again).
+        Verified live via Podman, both themes; gates unaffected.
 16. [ ] **Quantity + Amount: input-field and table samples, incl. mixed
         units/currency per row** (2026-08-14 user direction, wishlist) —
         both components are documented today as isolated controls

@@ -130,7 +130,10 @@ const markup = `<span class="bo-amount">
     <Demo code={uom} />
     <p class="bo-u-text-muted"><code>__unit</code> carries <code>× EA</code>,
     <code>/ kg</code>, <code>pcs</code>, <code>hrs</code> — a quantity’s unit or a rate’s
-    denominator.</p>
+    denominator. This is a read-only display value; for an <em>editable</em> count with
+    its own unit, see <a href="/components/quantity">Quantity</a> — same
+    <code>__unit</code> convention, plus increment/decrement and native
+    validation.</p>
   </section>
 
   <section class="demo">
@@ -186,5 +189,5 @@ const markup = `<span class="bo-amount">
             'Currency and unit are muted affixes; put the currency before or after the value by source order.',
             '<code>__currency</code> accepts a symbol, an ISO 4217 code, or an app-defined currency (points, credits) — no allowlist or validation in CSS.',
             'Decimal precision is per-currency domain data, not a CSS setting — there is no <code>--decimals</code> modifier; your app (or an <code>Intl.NumberFormat</code> call) decides and formats the digits before they reach this component.']} />
-  <Related links={[["/components/data-table", "Data table"], ["/base/utilities", "Utilities (tabular)"], ["/patterns/invoice-list", "Invoice list pattern"]]} />
+  <Related links={[["/components/quantity", "Quantity (editable counts)"], ["/components/data-table", "Data table"], ["/base/utilities", "Utilities (tabular)"], ["/patterns/invoice-list", "Invoice list pattern"]]} />
 </Gallery>

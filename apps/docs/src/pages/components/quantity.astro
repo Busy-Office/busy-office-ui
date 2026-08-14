@@ -18,6 +18,15 @@ const unit = `<div class="bo-quantity">
   <span class="bo-quantity__unit">kg</span>
 </div>`;
 
+const fractional = `<!-- fractional units (weight, volume, time) need a decimal step AND
+     inputmode="decimal" — "numeric" implies an integer-only keypad on mobile -->
+<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <span class="bo-quantity__unit">kg</span>
+</div>`;
+
 const boundary = `<!-- render the correct disabled state server-side when the starting value is already at a boundary -->
 <div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity" disabled>&minus;</button>
@@ -77,8 +86,34 @@ const markup = `<div class="bo-quantity">
   <section class="demo">
     <h2>With a unit</h2>
     <Demo code={unit} />
-    <p class="bo-u-text-muted"><code>__unit</code> is optional, plain text — <code>ea</code>,
-    <code>kg</code>, <code>box</code>, whatever your app's unit of measure is.</p>
+    <p class="bo-u-text-muted"><code>__unit</code> is optional, plain text — an ISO/standard
+    unit (<code>kg</code>, <code>m</code>, <code>L</code>) or an app-defined custom UOM
+    (<code>box</code>, <code>pallet</code>), same as <a href="/components/amount">Amount</a>'s
+    <code>__currency</code> — no allowlist, just text.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Fractional units — <code>step</code> IS the precision</h2>
+    <Demo code={fractional} />
+    <p class="bo-u-text-muted">Whole-count units (<code>ea</code>, <code>box</code>) use
+    <code>step="1"</code> with <code>inputmode="numeric"</code>; fractional units (weight,
+    volume, time) need a decimal <code>step</code> — <code>0.25</code>, <code>0.01</code> —
+    AND <code>inputmode="decimal"</code>, since <code>numeric</code> implies an
+    integer-only keypad on mobile. <strong>There is no <code>--decimals</code> modifier</strong> —
+    like Amount, precision is app/domain data expressed through the native attribute
+    that already exists for it, not a CSS setting. A starting reference (override per
+    field):</p>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Unit type</th><th scope="col">Default decimals</th><th scope="col"><code>step</code></th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>Each / box / pallet (whole counts)</td><td class="bo-data-table__col--numeric">0</td><td class="bo-data-table__col--code">1</td><td>4 ea</td></tr>
+          <tr><td>kg, L, m (weight/volume/length)</td><td class="bo-data-table__col--numeric">2</td><td class="bo-data-table__col--code">0.01</td><td>2.50 kg</td></tr>
+          <tr><td>hrs (labor/machine time)</td><td class="bo-data-table__col--numeric">2</td><td class="bo-data-table__col--code">0.25</td><td>1.75 hrs</td></tr>
+          <tr><td>App-defined custom UOM</td><td class="bo-data-table__col--numeric">your call</td><td class="bo-data-table__col--code">your call</td><td>3 pallets</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section class="demo">
@@ -121,6 +156,8 @@ const markup = `<div class="bo-quantity">
     notes={['A count, not currency — see Amount for money values.',
             '<code>min</code>/<code>max</code>/<code>step</code> live on the native <code>&lt;input type="number"&gt;</code>; the step buttons read the same attributes, so there is only one source of truth for the valid range.',
             'Button disabled state at a boundary is kept in sync reactively by <code>initQuantity()</code> — render the correct initial <code>disabled</code> server-side if the starting value is already at min/max.',
-            'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.']} />
+            'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.',
+            '<code>__unit</code> accepts an ISO/standard unit or an app-defined custom UOM — no allowlist, same convention as Amount\'s <code>__currency</code>.',
+            'Decimal precision is expressed via the native <code>step</code> attribute, not a CSS modifier — fractional units need <code>inputmode="decimal"</code>, not the default <code>numeric</code>.']} />
   <Related links={[["/components/amount", "Amount"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
 </Gallery>
