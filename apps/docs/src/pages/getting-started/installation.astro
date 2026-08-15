@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import pkg from '@busy-office/ui/package.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const aLaCarte = `# ORDER MATTERS: tokens, then reset, then components
 import "@busy-office/ui/css/tokens";
@@ -17,7 +18,7 @@ const skeleton = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- NEVER add user-scalable=no — zoom is the WCAG 1.4.4 mechanism -->
-  <link rel="stylesheet" href="/vendor/busy-office-ui@0.1.0/index.min.css">
+  <link rel="stylesheet" href="/vendor/busy-office-ui@${pkg.version}/index.min.css">
   <!-- Works in ANY server stack (Rails, Django, PHP, Go): copy dist/ into
        your static/asset pipeline — no bundler, no Node at runtime. Put the
        VERSION in the vendored path: upgrades become an explicit new copy +

@@ -7,6 +7,6 @@
     "start": "node server.mjs"
   },
   "dependencies": {
-    "@busy-office/ui": "file:./busy-office-ui-0.1.0.tgz"
+    "@busy-office/ui": "file:./busy-office-ui.tgz"
   }
 }

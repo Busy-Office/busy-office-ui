@@ -7,6 +7,7 @@ import { gzipSync } from 'node:zlib';
 import { createRequire } from 'node:module';
 import '@busy-office/ui/css';
 import Logo from '../components/Logo.astro';
+import pkg from '@busy-office/ui/package.json';
 import api from '@busy-office/ui/api';
 import contrast from '@busy-office/ui/contrast';
 import behaviors from '@busy-office/ui/behaviors-manifest';
@@ -87,7 +88,7 @@ const invoices = [
   <body>
     <header class="bo-navbar">
       <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
-      <span class="bo-badge">v0.1.0</span>
+      <span class="bo-badge">v{pkg.version}</span>
       <span class="bo-navbar__spacer"></span>
       <nav class="bo-cluster" aria-label="Site">
         <a href={base + '/getting-started/installation'}>Docs</a>
