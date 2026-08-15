@@ -4,7 +4,7 @@
  * inventing new markup — this behavior only owns show/hide and the export
  * intent event.
  *
- * Column visibility markup contract:
+ * Column visibility — Markup contract:
  *   <div class="bo-data-table-container">
  *     <div class="bo-data-table__toolbar">
  *       <button class="bo-btn bo-btn--secondary" popovertarget="cols-menu"
@@ -25,7 +25,7 @@
  * same .bo-data-table-container — call initDropdowns() too for the menu
  * itself (positioning, stays-open, trigger-label count).
  *
- * Export markup contract:
+ * Export — Markup contract:
  *   <button class="bo-btn bo-btn--secondary" type="button" data-table-export
  *       data-table-export-format="csv">Export</button>
  * Click dispatches bo:table-export ({ format }) on the button — this
