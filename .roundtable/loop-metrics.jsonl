@@ -10,3 +10,4 @@
 {"ts": "2026-08-15 19:05", "name": "components", "value": 25.0, "unit": "count"}
 {"ts": "2026-08-16 02:24", "name": "bundle-gz-kb", "value": 9.93, "unit": "kB"}
 {"ts": "2026-08-16 02:24", "name": "components", "value": 28.0, "unit": "count"}
+{"ts": "2026-08-16 05:44", "name": "behaviors_frozen", "value": 18.0, "unit": "count"}
