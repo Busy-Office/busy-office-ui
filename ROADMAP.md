@@ -1279,6 +1279,33 @@ already enabled on `Busy-Office/busy-office-ui` (verified via API).
        README in the tarball. **Shows on npm at the next release** — no
        0.1.2 cut for it alone; it rides along with whatever ships next.
 
+## Slice 13 (in progress) — axe-core engine audit
+
+Triaged 2026-08-15 (Explore find): first full axe-core scan of all 54 built
+docs pages. The hand-built gates (contrast, page-shape, two-channel) held —
+but an engine scan caught 7 pages with violations the gates don't model.
+Accept for every item: fix applied, axe re-scan of the page returns zero
+violations, no visual change (harness green).
+
+1. [ ] **scrollable-region-focusable (serious)** — landing `pre` samples ×4
+       and colors-page `.bo-data-table-container` ×2 scroll without being
+       keyboard-reachable → `tabindex="0"`; document the container rule in
+       the data-table canonical markup (keyboard users must be able to
+       scroll the table region).
+2. [ ] **aria-prohibited-attr (serious)** — state-patterns skeleton rows:
+       `aria-label` on a plain `div` is prohibited → `role="status"`
+       (semantically correct for a loading region anyway).
+3. [ ] **empty-table-header (minor)** — data-table + dropdown pages: the
+       row-actions `th` is empty → `.bo-visually-hidden` label ("Actions").
+4. [ ] **landmark violations (moderate)** — nav page: the embedded demo
+       shell nests a real `<main>` inside `#main-content` (duplicate main
+       landmark) → `div.bo-app-shell__main` in demos; filters page: two
+       same-label `role="search"` landmarks → unique labels.
+5. [ ] **Gate candidate (follow-up, not this slice):** wire the axe scan
+       as a repeatable script; decide whether it becomes build gate 8 or
+       a periodic Standardize check. Accept: decision recorded with the
+       cost (scan adds ~1 min headless-Chrome to a build) weighed.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
