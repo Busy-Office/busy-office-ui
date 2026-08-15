@@ -49,6 +49,7 @@ const page = (title, current, main) => `<!doctype html>
     <ul>
       <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▥</span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▤</span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">Σ</span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
     </ul>
   </nav>
   <main class="bo-app-shell__main"><div class="bo-stack bo-stack--loose">${main}</div></main>
@@ -164,6 +165,52 @@ ${p.status === 'Pending' ? `
   </form>
 </dialog>` : ''}`;
 
+// Dogfood probe (2026-08-15): the canonical grouped-with-subtotals ERP view,
+// built with ONLY documented markup — to find out whether ROADMAP Slice 9
+// items 8-9 (grouping, subtotal/total) compose from shipped primitives or
+// genuinely fight. One <tbody> per group; the group header is a
+// <th scope="colgroup" colspan>; subtotal/grand-total are plain rows.
+const spendScreen = () => {
+  const byCc = new Map();
+  for (const p of pos) {
+    if (!byCc.has(p.cc)) byCc.set(p.cc, []);
+    byCc.get(p.cc).push(p);
+  }
+  const grand = pos.reduce((s, p) => s + p.amount, 0);
+  const groups = [...byCc.entries()].sort(([a], [b]) => a.localeCompare(b));
+  return `
+<h1>Spend by cost center</h1>
+<div class="bo-data-table-container">
+  <table class="bo-data-table">
+    <thead><tr>
+      <th scope="col">PO #</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Status</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+    </tr></thead>
+    ${groups.map(([cc, list]) => `<tbody>
+      <tr><th scope="colgroup" colspan="4">${cc}</th></tr>
+      ${list.map((p) => `<tr>
+        <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
+        <td class="bo-u-text-truncate">${p.vendor}</td>
+        <td><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
+        <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
+      </tr>`).join('')}
+      <tr>
+        <td colspan="3" class="bo-data-table__col--right">Subtotal ${cc}</td>
+        <td class="bo-data-table__col--numeric">${money(list.reduce((s, p) => s + p.amount, 0))}</td>
+      </tr>
+    </tbody>`).join('')}
+    <tbody>
+      <tr>
+        <td colspan="3" class="bo-data-table__col--right"><strong>Grand total</strong></td>
+        <td class="bo-data-table__col--numeric"><strong>${money(grand)}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>`;
+};
+
 const dashScreen = () => {
   const pending = pos.filter((p) => p.status === 'Pending');
   const total = pending.reduce((s, p) => s + p.amount, 0);
@@ -219,6 +266,10 @@ const server = createServer(async (req, res) => {
     if (path === '/pos' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Purchase orders', '/pos', listScreen()));
+    }
+    if (path === '/spend' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Spend by cost center', '/spend', spendScreen()));
     }
     if (path === '/pos/bulk-approve' && req.method === 'POST') {
       let body = '';

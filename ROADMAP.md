@@ -1078,25 +1078,30 @@ recommendation not to build speculatively.
        it cleanly (header + every row), Export fires with the configured
        format, trigger label reflects the live count.
 
-8. [ ] **Table row grouping** — from the same 2026-08-15 wishlist
-       ("grouping"). Genuinely new, no existing precedent anywhere in the
-       package. Not scoped yet — needs a real cited ERP scenario before
-       design starts, same discipline as every other parked item here:
-       group by which field (cost center? status? vendor?), single-level
-       or nested, collapsible or always-expanded, does a group header row
-       need its own markup semantics (`<tbody>` per group? ARIA
-       treegrid?). Draft-only Accept until a concrete scenario narrows
-       these questions — building blind here risks exactly the kind of
-       premature ARIA-widget over-engineering the Objective review's
-       Auditor seat flagged for the "Advanced" component tiers.
-9. [ ] **Table subtotal / total rows** — from the same wishlist. Two
-       different possible shapes depending on whether item 8 (grouping)
-       ships first: a per-group subtotal row (needs grouping to exist) vs.
-       a standalone table-footer total row (`.bo-data-table__footer`
-       already exists as a CSS part per the generated ClassRef — check
-       whether it already covers this before building anything new).
-       Not scoped yet — same "needs a concrete use case" gate as item 8;
-       likely sequenced after item 8 if the two turn out to be coupled.
+8. [x] **Table row grouping** — closed, together with item 9, via the
+       dogfood loop rather than new code. The "needs a real cited ERP
+       scenario" gate was satisfied the honest way: built the canonical
+       grouped view ("Spend by cost center" — POs grouped by CC with
+       per-group subtotals and a grand total) as a real screen in
+       `examples/po-app` (`/spend`), using ONLY documented markup, to
+       find out whether it composes or fights. **It composes** — better
+       than the CSS audit predicted: one `<tbody>` per group, group
+       header as `<th scope="colgroup" colspan>` (bold by default,
+       correct group-header semantics for AT), subtotal/grand-total as
+       ordinary rows with `__col--right`/`__col--numeric`. Verified live
+       in both themes. The premature-ARIA-treegrid risk the Objective
+       review flagged never materialized because no widget was needed at
+       all. Zero new CSS/JS; the deliverable is the new "Grouped rows +
+       subtotals" docs section on `/components/data-table` (with the
+       real caveats found while building: don't combine with `--striped`,
+       regroup server-side rather than sorting across grouped bodies).
+       Collapsible groups remain unbuilt — nothing in the scenario needed
+       them; if a future screen does, that's the next concrete ask.
+9. [x] **Table subtotal / total rows** — closed with item 8 above (the
+       two turned out to be one composition, not two components): subtotal
+       rows are per-group ordinary rows, the grand total is a final
+       single-row `<tbody>`. Documented in the same data-table section;
+       proven in po-app's `/spend` screen, both themes, zero new CSS.
 10. [x] **Pagination — "pull up to see more" (load-more)** — shipped.
        New opt-in `initLoadMore()` behavior (`packages/core/src/js/
        behaviors/load-more.ts`): a `[data-table-load-more]` button

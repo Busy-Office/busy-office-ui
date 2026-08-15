@@ -315,6 +315,42 @@ const rows = [
     behavior only tracks dirty state. Try it: edit a quantity below.</p>
   </section>
   <section class="demo">
+    <h2>Grouped rows + subtotals</h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr>
+          <th scope="col">PO #</th>
+          <th scope="col">Vendor</th>
+          <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+        </tr></thead>
+        <tbody>
+          <tr><th scope="colgroup" colspan="3">CC-1180 — Facilities</th></tr>
+          <tr><td class="bo-data-table__col--code">PO-88212</td><td>Initech GmbH</td><td class="bo-data-table__col--numeric">$730.25</td></tr>
+          <tr><td class="bo-data-table__col--code">PO-88214</td><td>Stark Components</td><td class="bo-data-table__col--numeric">$56,000.00</td></tr>
+          <tr><td colspan="2" class="bo-data-table__col--right">Subtotal CC-1180</td><td class="bo-data-table__col--numeric">$56,730.25</td></tr>
+        </tbody>
+        <tbody>
+          <tr><th scope="colgroup" colspan="3">CC-4021 — Warehouse</th></tr>
+          <tr><td class="bo-data-table__col--code">PO-88210</td><td>Acme Supply Co.</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
+          <tr><td colspan="2" class="bo-data-table__col--right">Subtotal CC-4021</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
+        </tbody>
+        <tbody>
+          <tr><td colspan="2" class="bo-data-table__col--right"><strong>Grand total</strong></td><td class="bo-data-table__col--numeric"><strong>$60,938.25</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">No grouping component exists because none is needed —
+    this composes from plain HTML table semantics the CSS already styles: one
+    <code>&lt;tbody&gt;</code> per group, the group header a
+    <code>&lt;th scope="colgroup" colspan&gt;</code> row (bold by default, announced
+    as a header for the group's rows), subtotal and grand-total rows are ordinary
+    rows using <code>__col--right</code>/<code>__col--numeric</code>. Proven in the
+    <code>examples/po-app</code> "Spend by cost center" screen, both themes.
+    Don't combine with <code>--striped</code> (stripes land arbitrarily on summary
+    rows) or with row-select/sort (sorting across grouped bodies is your code's
+    problem — regroup server-side instead).</p>
+  </section>
+  <section class="demo">
     <h2>Column alignment</h2>
     <p>Put the same modifier on the <code>&lt;th&gt;</code> and every <code>&lt;td&gt;</code>
     in a column: <code>--left</code>, <code>--center</code>, <code>--right</code>, or
