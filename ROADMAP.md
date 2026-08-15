@@ -1317,12 +1317,16 @@ From the 2026-08-15 Objective review (`.roundtable/grill-objective-next-arc-
 2026-08-15.md`). All four seats voted **Harden**: the public contract lags the
 internal discipline. Ordered by severity; confirmed defects first.
 
-1. [ ] **Generated README claims + drift gate** (Rex; the "37 kB" claim is
+1. [x] **Generated README claims + drift gate** (Rex; the "37 kB" claim is
        FALSE — shipped min CSS is 57.4 kB). Size, behavior count, and the
        event list in `packages/core/README.md` stamped from dist at build,
        with a check that fails on drift (same doctrine as every other
        generated surface). Accept: README numbers regenerate; gate red when
        hand-edited; npm copy corrected at next release.
+       **Done 2026-08-15**: `stamp-readme.mjs` stamps size/behaviors/events
+       into BOTH READMEs from dist (56 kB min / 9.3 kB gz / 16 / 5 events);
+       `--check` is now the core build's 8th step, proven red on a
+       hand-edit; corrected claim ships to npm with the next release.
 2. [ ] **JS contract becomes semver surface** (Devi BLOCKER + Rex). The five
        `bo:*` intent events' payload shapes + the 19 exports documented in a
        GENERATED events/API table on the js-behaviors page, and the
@@ -1331,10 +1335,14 @@ internal discipline. Ordered by severity; confirmed defects first.
        table generated from source (like the `.d.ts` gate), versioning page
        lists JS events, `bo:row-save` payload documented beyond a code
        comment.
-3. [ ] **form-field `:has()` source fix** (Kofi; latent). Split the comma
+3. [x] **form-field `:has()` source fix** (Kofi; latent). Split the comma
        list into the two separate rules the comment already mandates; correct
        the comment. Accept: dist output equivalent-or-better; a source-level
        note explains why the split is load-bearing.
+       **Done 2026-08-15**: explicit forgiving `:is()` wrapper in source
+       (better than the split: one block, same guarantee), comment rewritten
+       to say the :is() is load-bearing; dist byte-equivalent semantics,
+       55 tests + 32 baselines green untouched.
 4. [ ] **Combobox `aria-controls` collision test** (Rex). Two comboboxes +
        partial swap; fix the reverse lookup if the test reds. Accept: test in
        the behaviors suite either passing against current code or with a fix.

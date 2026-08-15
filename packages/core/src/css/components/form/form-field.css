@@ -38,15 +38,20 @@
     color: var(--bo-state-error-color);
   }
 
-  /* Error visuals. Two SEPARATE :has() rules on purpose: :has() argument
-     lists are unforgiving, so putting :user-invalid in the same list as
-     [aria-invalid] would kill the aria path in browsers that support :has()
-     but not :user-invalid (Chrome 105-118, Safari 15.4-17.3).
+  /* Error visuals. The :is() wrapper is LOAD-BEARING, not style: a plain
+     selector list is unforgiving, so an unsupported :user-invalid (Chrome
+     105-118, Safari 15.4-17.3) would invalidate the whole list and kill the
+     [aria-invalid] path with it. :is() parses forgivingly — the unsupported
+     arm drops, the aria arm survives. (Before 2026-08-15 the source was a
+     bare list and only worked because postcss-nesting happened to emit an
+     :is(); the safety now lives in the source, not the pipeline.)
      NOTE (a11y contract): CSS only covers the VISUALS. The message element
      must carry an id referenced by the control's aria-describedby, and
      role="alert" if it appears dynamically — see the form docs recipe. */
-  .bo-form-field:has([aria-invalid="true"]),
-  .bo-form-field:has(input:user-invalid, select:user-invalid, textarea:user-invalid) {
+  :is(
+    .bo-form-field:has([aria-invalid="true"]),
+    .bo-form-field:has(input:user-invalid, select:user-invalid, textarea:user-invalid)
+  ) {
     .bo-form-field__message {
       display: block;
     }

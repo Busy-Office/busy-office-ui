@@ -55,7 +55,7 @@
     "build:behaviors": "node scripts/extract-behaviors.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run check:contrast",
+    "build": "npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run check:contrast && node scripts/stamp-readme.mjs --check",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
