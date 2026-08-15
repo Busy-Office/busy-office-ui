@@ -31,7 +31,6 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
     backdrop, ESC, and focus return; the behavior adds trigger wiring, a Tab loop, and
     <code>data-state</code> for the enter animation.
   </p>
-  <ClassRef component="dialog" />
   <section class="demo">
     <button class="bo-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>
 
@@ -111,6 +110,7 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
     work, only the accidental backdrop click is disarmed. Pair the destructive
     action with <code>.bo-btn--danger</code> and lead with the safe choice.</p>
   </section>
+  <ClassRef component="dialog" />
   <ApiTable
     component="dialog"
     js="REQUIRED: initDialogs() — dialogs never open without it. Call once; delegation survives all swaps."

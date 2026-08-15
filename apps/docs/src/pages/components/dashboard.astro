@@ -45,7 +45,6 @@ const statMarkup = `<div class="bo-widget">
     header/body/band composition, independent of dashboards; see
     "<a href="#card">Widget parts</a>" below.
   </p>
-  <ClassRef component="dashboard" />
   <section class="demo">
     <div class="bo-widget-grid" style="--bo-widget-min: 13rem">
       <div class="bo-widget">
@@ -185,6 +184,7 @@ const statMarkup = `<div class="bo-widget">
     <h2>Markup</h2>
     <pre><code>{statMarkup}</code></pre>
   </section>
+  <ClassRef component="dashboard" />
   <ApiTable component="dashboard"
     notes={['Delta valence needs two channels: the visible <code>⚠</code> on bad deltas AND visually-hidden text ("increase, worse,").',
             'Stat values use proportional figures; compact big numbers server-side (12.9K, $4.2M). One hero per view.',

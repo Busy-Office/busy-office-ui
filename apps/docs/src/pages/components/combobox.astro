@@ -29,7 +29,6 @@ const markup = `<div class="bo-combobox">
     picking <strong>several</strong> values, use the
     <a href={base + '/components/dropdown'}>multi-select dropdown</a> instead — different job.
   </p>
-  <ClassRef component="combobox" />
 
   <section class="demo">
     <h2>Basic</h2>
@@ -124,6 +123,7 @@ const markup = `<div class="bo-combobox">
     initCombobox();
   </script>
 
+  <ClassRef component="combobox" />
   <ApiTable
     component="combobox"
     js="Required: initCombobox() — without it the field is a plain text input; typing does not filter or open the list."

@@ -47,7 +47,6 @@ const errorState = `<div class="bo-state bo-state--error">
     and the title always says which state it is.
   </p>
 
-  <ClassRef component="skeleton" />
   <section class="demo">
     <h2>Skeleton — text lines</h2>
     <p class="bo-u-text-muted">
@@ -63,11 +62,11 @@ const errorState = `<div class="bo-state bo-state--error">
     <p class="bo-u-text-muted">An avatar + two-line card placeholder.</p>
     <Demo code={skeletonCard} />
   </section>
+  <ClassRef component="skeleton" />
   <ApiTable component="skeleton" notes={[
     'The shimmer is a continuous loop, not a one-shot transition, so it is NOT driven by the --bo-motion-duration-* tokens — it gets an explicit prefers-reduced-motion override instead (same reasoning as .bo-motion-spin in the Motion module).',
   ]} />
 
-  <ClassRef component="state" />
   <section class="demo">
     <h2>Table first-load — skeleton rows</h2>
     <div class="bo-data-table-container" tabindex="0">
@@ -120,6 +119,7 @@ const errorState = `<div class="bo-state bo-state--error">
     <h2><code>--error</code></h2>
     <Demo code={errorState} />
   </section>
+  <ClassRef component="state" />
   <ApiTable component="state" notes={[
     'A .bo-state is decoration around a message — the title/description TEXT is the accessible signal; the icon carries aria-hidden="true" so it is never announced as unlabeled content.',
   ]} />

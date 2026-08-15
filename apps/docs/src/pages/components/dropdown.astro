@@ -33,7 +33,6 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     native (and Esc closes the innermost layer first inside a dialog).
     <code>initDropdowns()</code> adds invoker anchoring and close-on-select.
   </p>
-  <ClassRef component="dropdown" />
   <section class="demo">
     <div class="bo-cluster">
       <button class="bo-btn bo-btn--secondary" popovertarget="demo-actions">Actions ▾</button>
@@ -97,6 +96,7 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     import { initDropdowns } from '@busy-office/ui/js';
     initDropdowns();
   </script>
+  <ClassRef component="dropdown" />
   <ApiTable component="dropdown"
     js="Recommended: initDropdowns() — anchors the top-layer popover to its invoker and closes on select. Without it the menu opens centered."
     notes={[

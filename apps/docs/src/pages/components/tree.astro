@@ -45,7 +45,6 @@ const markup = `<nav aria-label="Cost centers">
     zero JS, zero ARIA wiring. This is <em>navigation</em> (links + disclosures),
     not a WAI-ARIA TreeView — see the note below for when you'd need that instead.
   </p>
-  <ClassRef component="tree" />
 
   <section class="demo">
     <h2>Basic — try it (keyboard: Tab, then Enter/Space)</h2>
@@ -105,6 +104,7 @@ const markup = `<nav aria-label="Cost centers">
     <pre><code>{markup}</code></pre>
   </section>
 
+  <ClassRef component="tree" />
   <ApiTable
     component="tree"
     notes={[

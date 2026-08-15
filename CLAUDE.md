@@ -64,14 +64,20 @@ To add or document a component manually:
    ```
    <Gallery title="Name">
      <p class="demo-note"> one line: what it is + when to use </p>
-     <ClassRef component="<name>" />            {/* generated quick-ref table */}
      <section class="demo"><h2>…</h2><Demo code={oneString} /><p class="bo-u-text-muted">…</p></section>
      …one demo section per setting/variant…
      <section class="demo"><h2>Markup</h2><pre><code>{canonical}</code></pre></section>
+     <ClassRef component="<name>" />            {/* generated quick-ref table */}
      <ApiTable component="<name>" notes={[…]} />  {/* generated API + AA contrast */}
      <Related links={[["/components/x","X"], …]} />
    </Gallery>
    ```
+   **Demo-first, spec-last** (2026-08-16, docs-IA comparison against Tailwind/
+   shadcn/Bootstrap/DaisyUI): `ClassRef` and `ApiTable` sit together at the
+   END, right before `Related` — a first-time visitor sees what the thing
+   looks like before the full class/API surface. Every well-regarded
+   framework docs site studied does this with zero exceptions; leading with
+   the spec table was the single highest-leverage structural fix found.
    `Demo` renders a preview **and** its copyable code from ONE string — never write the
    preview and code twice. Keep captions short and user-facing (say what it does).
 3. **Sidebar**: add `{ href: '/components/<name>', label: '…' }` to the Components group

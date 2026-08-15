@@ -26,7 +26,6 @@ const tabsMarkup = `<div class="bo-tabs">
     <code>hidden</code> attribute, <code>initTabs()</code> adds roving tabindex and
     arrow-key navigation with automatic activation.
   </p>
-  <ClassRef component="tabs" />
   <section class="demo">
     <div class="bo-tabs">
       <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
@@ -79,6 +78,7 @@ const tabsMarkup = `<div class="bo-tabs">
     import { initTabs } from '@busy-office/ui/js';
     initTabs();
   </script>
+  <ClassRef component="tabs" />
   <ApiTable component="tabs"
     js="REQUIRED: initTabs() — without it tabs 2+ are keyboard-unreachable and inert; there is no CSS-only fallback."
     notes={['ARIA contract: role=tablist/tab/tabpanel, aria-controls/aria-labelledby, panels hidden via the <code>hidden</code> attribute; add <code>role="list"</code> where lists are styled.',

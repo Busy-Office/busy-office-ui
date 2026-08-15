@@ -1,8 +1,9 @@
 /**
  * Fails the build if a shipped component's docs page is missing, or missing
  * a piece of the CLAUDE.md "how to document a component" skeleton (opener,
- * ClassRef, a hand-authored demo section, ApiTable, a non-empty Related
- * footer) or its sidebar entry. Turns that documented convention into
+ * a hand-authored demo section, ClassRef, ApiTable, a non-empty Related
+ * footer — demo-first, spec-last) or its sidebar entry. Turns that documented
+ * convention into
  * something a page literally cannot violate — the roadmap's "scaffold
  * generator + page-shape gate" pairing (new-component.mjs stamps the shape,
  * this gate guards it).
@@ -68,7 +69,7 @@ for (const d of dirs) {
   }
 
   if (!gallery.includes(`href: '/components/${slug}'`)) {
-    failures.push(`${slug}.astro: no sidebar entry in Gallery.astro (Components group)`);
+    failures.push(`${slug}.astro: no sidebar entry in Gallery.astro`);
   }
 }
 

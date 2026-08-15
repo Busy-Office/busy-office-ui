@@ -121,7 +121,6 @@ const markup = `<span class="bo-amount">
     settings.
   </p>
 
-  <ClassRef component="amount" />
 
   <section class="demo">
     <h2>Money — symbol, grouping, minor units</h2>
@@ -252,6 +251,7 @@ const markup = `<span class="bo-amount">
     <pre><code>{markup}</code></pre>
   </section>
 
+  <ClassRef component="amount" />
   <ApiTable component="amount"
     notes={['CSS-first: your app formats the number (locale, grouping, precision, sign); the component styles the parts and aligns them with tabular figures.',
             'Negative/credit is two-channel — the sign or parentheses MUST be in the markup; <code>--negative</code>/<code>--positive</code> only add colour.',

@@ -60,7 +60,6 @@ const markup = `<span class="bo-date">
     for data entry, use a plain native <code>&lt;input type="date"&gt;</code>.
   </p>
 
-  <ClassRef component="date" />
 
   <section class="demo">
     <h2>Basic</h2>
@@ -113,6 +112,7 @@ const markup = `<span class="bo-date">
     <pre><code>{markup}</code></pre>
   </section>
 
+  <ClassRef component="date" />
   <ApiTable component="date"
     notes={['Read-only display, like Amount — your app formats the date and the optional relative text.',
             'Overdue is two-channel — the word "Overdue" MUST be in the markup; <code>--overdue</code> only adds colour.',

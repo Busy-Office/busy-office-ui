@@ -25,7 +25,6 @@ const stepperMarkup = `<ol class="bo-stepper" role="list">
     The stepper is its own named container — labels collapse to screen-reader-only when
     it narrows; markers stay.
   </p>
-  <ClassRef component="stepper" />
   <section class="demo">
     <ol class="bo-stepper" role="list" style="max-inline-size: 40rem">
       <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker" aria-hidden="true">✓</span><span class="bo-stepper__label"><span class="bo-visually-hidden">Completed: </span>Header</span></li>
@@ -48,6 +47,7 @@ const stepperMarkup = `<ol class="bo-stepper" role="list">
     <h2>Markup</h2>
     <pre><code>{stepperMarkup}</code></pre>
   </section>
+  <ClassRef component="stepper" />
   <ApiTable component="stepper"
     notes={['<code>aria-current="step"</code> marks the current step; do not combine with <code>data-state="done"</code> (current wins by source order but the combination is out of contract).',
             'Steps are inert <code>&lt;li&gt;</code> by contract — interactive (clickable) steps are not yet specified.',

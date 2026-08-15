@@ -36,7 +36,6 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     <code>.bo-app-shell</code>. Narrow the window below 900px of shell width and the
     sidebar collapses to icon-only via a container query.
   </p>
-  <ClassRef component="nav" />
   <section class="demo">
     <h2>Breadcrumb — path trail</h2>
     <p class="bo-u-text-muted">
@@ -155,6 +154,7 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     import { initDialogs } from '@busy-office/ui/js';
     initDialogs();
   </script>
+  <ClassRef component="nav" />
   <ApiTable component="nav"
     notes={['Current page carries <code>aria-current="page"</code>; icons are <code>aria-hidden</code>, labels stay in the accessibility tree when the rail collapses.',
             'The off-canvas drawer is a dialog variant — it inherits initDialogs() wiring (backdrop, Esc, focus-return, Tab loop).',

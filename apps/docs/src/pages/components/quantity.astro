@@ -101,7 +101,6 @@ const markup = `<div class="bo-quantity">
     validation, keyboard behavior, and the buttons' clamping all read from the same
     source of truth.
   </p>
-  <ClassRef component="quantity" />
 
   <section class="demo">
     <h2>Basic</h2>
@@ -191,6 +190,7 @@ const markup = `<div class="bo-quantity">
     initQuantity();
   </script>
 
+  <ClassRef component="quantity" />
   <ApiTable component="quantity"
     notes={['A count, not currency — see Amount for money values.',
             '<code>min</code>/<code>max</code>/<code>step</code> live on the native <code>&lt;input type="number"&gt;</code>; the step buttons read the same attributes, so there is only one source of truth for the valid range.',

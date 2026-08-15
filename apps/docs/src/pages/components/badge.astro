@@ -21,7 +21,6 @@ const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</sp
     A badge is decoration for sighted users — the status text itself is the
     accessible signal, so never encode status as color alone.
   </p>
-  <ClassRef component="badge" />
   <section class="demo">
     <h2>Tones</h2>
     <Demo code={tones} layout="row" />
@@ -48,6 +47,7 @@ const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</sp
     where badges actually live in an ERP. The tone word IS the text, so the meaning
     never depends on the hue alone.</p>
   </section>
+  <ClassRef component="badge" />
   <ApiTable component="badge"
     notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />
   <Related links={[["/concepts/accessibility", "Accessibility model"], ["/components/data-table", "Data table"]]} />

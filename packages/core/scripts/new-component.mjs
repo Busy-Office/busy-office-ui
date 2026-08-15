@@ -87,8 +87,10 @@ lines.splice(lastComponentImportLine[1] + 1, 0, importLine);
 await writeFile(indexPath, lines.join('\n'));
 
 // 3. Docs page skeleton — the fixed shape from CLAUDE.md's "how to document a
-// component" recipe: opener, ClassRef, >=1 demo section, Markup, ApiTable,
-// Related. The gate checks for exactly these pieces.
+// component" recipe: opener, >=1 demo section, Markup, ClassRef, ApiTable,
+// Related. Demo-first, spec-last (2026-08-16) — the gate checks for exactly
+// these pieces, not their order, but ClassRef/ApiTable stay together at the
+// end so a first-time visitor sees the thing before the full API surface.
 await mkdir(dirname(pagePath), { recursive: true });
 await writeFile(
   pagePath,
@@ -107,7 +109,6 @@ const canonical = \`<div class="bo-${name}">
   <p class="demo-note">
     TODO: one line — what it is + when to use.
   </p>
-  <ClassRef component="${name}" />
   <section class="demo">
     <h2>TODO</h2>
     <Demo code={example} />
@@ -116,6 +117,7 @@ const canonical = \`<div class="bo-${name}">
     <h2>Markup</h2>
     <pre><code>{canonical}</code></pre>
   </section>
+  <ClassRef component="${name}" />
   <ApiTable component="${name}" notes={[]} />
   <Related links={[["/reference/classes", "Class index"]]} />
 </Gallery>

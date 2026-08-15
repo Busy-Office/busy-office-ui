@@ -13,7 +13,6 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
     class, plain markup, domain-neutral.
   </p>
 
-  <ClassRef component="byline" />
   <section class="demo">
     <h2>Default</h2>
     <p><span class="bo-byline"><strong>R. Vance</strong> · Requester · 10 Aug 2026, 9:08</span></p>
@@ -64,6 +63,7 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
     note on a record card, next to the <a href={base + '/components/approval-workflow'}>audit
     trail</a> that logs the same event in one line.</p>
   </section>
+  <ClassRef component="byline" />
   <ApiTable component="byline"
     notes={['Just markup + one class — wrap the name in <code>&lt;strong&gt;</code> for emphasis ink.',
             'Pairs with a record-type chip (<code>.bo-badge--type</code>) in a widget header — see the record-detail pattern.',

@@ -22,7 +22,6 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
     The action primitive: variants for emphasis, a small size for dense
     toolbars, and disabled/loading states.
   </p>
-  <ClassRef component="button" />
   <section class="demo">
     <h2>Variants</h2>
     <Demo code={variants} />
@@ -68,6 +67,7 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
     <code>aria-label</code> ("Edit INV-10234", never just "Edit"); for more than
     two actions, collapse into a <a href={base + '/components/dropdown'}>row dropdown</a>.</p>
   </section>
+  <ClassRef component="button" />
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
             'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.']} />

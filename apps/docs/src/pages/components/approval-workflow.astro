@@ -34,7 +34,6 @@ const composerMarkup = `<form class="bo-composer">
     <code>aria-current</code>. Composed example:
     <a href={base + '/patterns/approval'}>the approval-workflow pattern</a>.
   </p>
-  <ClassRef component="approval-workflow" />
   <section class="demo">
     <h2>Timeline states</h2>
     <ol class="bo-timeline" role="list" style="max-inline-size: 24rem">
@@ -141,6 +140,7 @@ const composerMarkup = `<form class="bo-composer">
     <h2>Markup — audit entry</h2>
     <pre><code>{auditMarkup}</code></pre>
   </section>
+  <ClassRef component="approval-workflow" />
   <ApiTable component="approval-workflow"
     notes={['State text pattern is mandatory: <code>Completed:</code> / <code>Rejected:</code> / <code>Not started:</code> visually-hidden in the title — done vs rejected must be distinguishable non-visually.',
             'Use <code>&lt;time datetime&gt;</code> for audit timestamps.',

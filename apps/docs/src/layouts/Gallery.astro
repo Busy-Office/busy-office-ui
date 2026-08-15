@@ -37,39 +37,57 @@ const sections = [
       { href: '/base/print', label: 'Print & reports' },
     ],
   },
+  // Components grouped by TASK (2026-08-16 docs-IA pass, after DaisyUI/
+  // Tailwind comparison) — "what am I trying to do" beats one flat 22-item
+  // list or internal file layout. Kept to 2 nesting levels, 3-10 items/group.
   {
-    label: 'Components',
+    label: 'Actions',
     items: [
       { href: '/components/button', label: 'Button' },
-      { href: '/components/badge', label: 'Badge' },
-      { href: '/components/icon', label: 'Icon' },
-      { href: '/components/form', label: 'Forms' },
-      { href: '/components/data-table', label: 'Data table' },
-      { href: '/components/pagination', label: 'Pagination' },
-      { href: '/components/filters', label: 'Filters' },
-      { href: '/components/tabs', label: 'Tabs' },
       { href: '/components/dropdown', label: 'Dropdown' },
       { href: '/components/combobox', label: 'Combobox' },
-      { href: '/components/alerts', label: 'Alerts & toasts' },
-      { href: '/components/nav', label: 'Navigation' },
-      { href: '/components/tree', label: 'Tree' },
-      { href: '/components/dialog', label: 'Dialog' },
-      { href: '/components/dashboard', label: 'Dashboard' },
-      { href: '/components/dashboard#card', label: 'Card' },
-      { href: '/components/stepper', label: 'Stepper' },
-      { href: '/components/progress', label: 'Progress' },
-      { href: '/components/approval-workflow', label: 'Timeline & audit' },
-      { href: '/components/byline', label: 'Byline' },
-      { href: '/components/ordered-list', label: 'Ordered list' },
-      { href: '/components/state-patterns', label: 'Loading, empty & error' },
+    ],
+  },
+  {
+    label: 'Data input',
+    items: [
+      { href: '/components/form', label: 'Forms' },
+      { href: '/components/filters', label: 'Filters' },
     ],
   },
   {
     label: 'Data display',
     items: [
+      { href: '/components/data-table', label: 'Data table' },
+      { href: '/components/pagination', label: 'Pagination' },
       { href: '/components/amount', label: 'Amount' },
       { href: '/components/quantity', label: 'Quantity' },
       { href: '/components/date', label: 'Date' },
+      { href: '/components/tree', label: 'Tree' },
+      { href: '/components/ordered-list', label: 'Ordered list' },
+      { href: '/components/dashboard', label: 'Dashboard' },
+      { href: '/components/dashboard#card', label: 'Card' },
+      { href: '/components/byline', label: 'Byline' },
+    ],
+  },
+  {
+    label: 'Feedback',
+    items: [
+      { href: '/components/badge', label: 'Badge' },
+      { href: '/components/alerts', label: 'Alerts & toasts' },
+      { href: '/components/progress', label: 'Progress' },
+      { href: '/components/stepper', label: 'Stepper' },
+      { href: '/components/approval-workflow', label: 'Timeline & audit' },
+      { href: '/components/state-patterns', label: 'Loading, empty & error' },
+    ],
+  },
+  {
+    label: 'Navigation & layout',
+    items: [
+      { href: '/components/nav', label: 'Navigation' },
+      { href: '/components/tabs', label: 'Tabs' },
+      { href: '/components/dialog', label: 'Dialog' },
+      { href: '/components/icon', label: 'Icon' },
     ],
   },
   {

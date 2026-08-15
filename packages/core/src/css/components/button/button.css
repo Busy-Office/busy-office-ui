@@ -77,11 +77,15 @@
     font-size: var(--bo-font-size-xs);
   }
 
-  /* Loading state: JS or HTMX flips the attribute; CSS does the rest. */
+  /* Loading state: JS or HTMX flips the attribute; CSS does the rest. The
+     visible channel is the CONSUMER's own text change ("Save" -> "Saving…",
+     per the documented contract) plus the cursor below — never opacity: a
+     dimmed solid-fill button (e.g. white-on-accent) drops well under 4.5:1
+     text contrast (measured ~3.24:1 at 0.7; axe color-contrast, 2026-08-16).
+     aria-busy is the programmatic channel. */
   .bo-btn[data-loading="true"],
   .bo-btn[aria-busy="true"] {
     pointer-events: none;
-    opacity: 0.7;
     cursor: progress;
   }
 

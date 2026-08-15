@@ -97,7 +97,6 @@ const rows = [
     further down this page) only when a screen genuinely needs full two-axis
     keyboard navigation — most tables don't.
   </p>
-  <ClassRef component="data-table" />
   <section class="demo">
     <h2>Simple — select, sort, filter</h2>
     <div class="bo-data-table-container" tabindex="0">
@@ -501,6 +500,7 @@ const rows = [
     <p class="bo-u-text-muted">Alignment is a single class per cell and wins over the
     default (start) reliably — headers and body cells align together.</p>
   </section>
+  <ClassRef component="data-table" />
   <ApiTable
     component="data-table"
     js="Optional but recommended: initDataTables() — select-all, live count, O(1) toolbar reveal, swap re-derive. Without it: selection visuals work via :has(); select-all is inert."

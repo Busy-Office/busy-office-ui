@@ -1450,6 +1450,36 @@ the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
        VoiceOver + NVDA; results recorded in `.roundtable/` and cited by the
        ACR.
 
+## Slice 16 — docs IA, compared against 5 CSS frameworks (user wishlist)
+
+Triaged 2026-08-16 (user: "well structure framework document - pls compare
+with other CSS framework... make the user like to use it, easy to
+navigate"). Full comparison: `.roundtable/docs-ia-comparison-2026-08-16.md`.
+Fetched Tailwind, shadcn/ui, Bootstrap, Pico CSS, DaisyUI live; found 6 of 8
+well-regarded patterns already in place (search, quantified landing pitch,
+live interactive hero, ≤2-level nesting, philosophy/how split, install-to-
+result flow) and two real gaps.
+
+1. [x] **Demo-first, spec-last on every component page** — `ClassRef` moved
+       from right after the opener to immediately before `ApiTable`, across
+       all 24 pages (mechanical, content untouched); CLAUDE.md skeleton,
+       `check-page-shape.mjs`, and `new-component.mjs` updated so new pages
+       follow the corrected order by default. Zero exceptions across the 4
+       frameworks studied that have a component catalog — this was the
+       single highest-ranked finding.
+2. [x] **Sidebar regrouped by task** (DaisyUI-style: Actions / Data input /
+       Data display / Feedback / Navigation & layout) — replaces one flat
+       22-item "Components" list plus an inconsistent 3-item "Data display"
+       side-group.
+3. [x] **Found + fixed while verifying**: button loading state's whole-
+       element `opacity: 0.7` dropped white-on-accent text to ~3.24:1
+       (axe color-contrast, serious). Removed — the documented contract
+       already relies on the consumer's text change ("Saving…") as the
+       visible signal, so the dimming was decorative, not load-bearing.
+
+**Verified**: both link checks, axe zero (56 pages × 2 widths), 32 visual
+baselines, 57 tests, stylelint, live both themes.
+
 ## Explore log
 
 - [x] **2026-08-15 — po-app consumer image broken by the README-stamp gate**

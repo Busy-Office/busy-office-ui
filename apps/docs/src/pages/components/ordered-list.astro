@@ -42,7 +42,6 @@ const markup = `<!-- default: mono, for codes/amounts -->
     settings.
   </p>
 
-  <ClassRef component="ordered-list" />
   <section class="demo">
     <h2>Default — codes &amp; amounts (mono, tabular)</h2>
     <Demo code={defaultList} />
@@ -70,6 +69,7 @@ const markup = `<!-- default: mono, for codes/amounts -->
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>
+  <ClassRef component="ordered-list" />
   <ApiTable component="ordered-list"
     notes={['Native <code>&lt;ol&gt;</code> — order is real semantics; the marker is the number, not CSS content.',
             'Default is monospace for codes/amounts; add <code>--plain</code> for prose.',

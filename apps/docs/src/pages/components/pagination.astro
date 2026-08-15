@@ -26,7 +26,6 @@ const pgMarkup = `<div class="bo-data-table__footer">
     <code>.bo-data-table__footer</code> under a table. Navigation is your code's job
     (links or HTMX) — the framework styles state.
   </p>
-  <ClassRef component="pagination" />
   <section class="demo">
     <div class="bo-data-table-container" tabindex="0">
       <div class="bo-data-table__footer">
@@ -111,6 +110,7 @@ const pgMarkup = `<div class="bo-data-table__footer">
       }
     });
   </script>
+  <ClassRef component="pagination" />
   <ApiTable component="pagination"
     js="Optional: initLoadMore() — dispatches bo:table-load-more on a [data-table-load-more] button (click, or scroll-into-view with data-load-more-auto). Fetching/appending is your code."
     notes={['Current page carries <code>aria-current="page"</code>; navigation itself is your links/HTMX.',
