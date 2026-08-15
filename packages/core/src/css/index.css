@@ -36,5 +36,6 @@
 @import "./components/quantity/quantity.css";
 @import "./components/date/date.css";
 @import "./components/segmented/segmented.css";
+@import "./components/file-upload/file-upload.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

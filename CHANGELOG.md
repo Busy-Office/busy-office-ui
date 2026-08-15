@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Added: File upload (`.bo-file-input`, `.bo-file-dropzone`, `.bo-file-list`)
+  — styled native `<input type="file">` via `::file-selector-button`, a
+  bigger drag-target composition, and consumer-rendered selected-file row
+  styling. Optional `initFileDropzone()` behavior adds drag-over
+  highlighting and forwards a drop anywhere in the zone into the input's
+  FileList (dispatching a real `change` event).
+
 - Added: Segmented control (`.bo-segmented`) — a toggle between 2-5
   mutually exclusive views (My approvals / Team approvals, report-range
   switcher), built on real radio inputs (zero JS, native keyboard

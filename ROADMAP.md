@@ -1473,10 +1473,26 @@ one correction to the research agent's claims:
        demo markup gave inputs `.bo-visually-hidden` but forgot
        `.bo-segmented__input`, so the state-selector CSS never matched —
        fixed across all 9 markup instances (3 demos + canonical + template).
-2. [ ] **File upload** — Carbon/Ant/Salesforce; scenario: attach a signed
-       goods-receipt PDF or vendor contract to a record. Queued, not built —
-       real CSS surface (drag-drop zone, file list, progress), deserves its
-       own round rather than a rushed addition alongside item 1.
+2. [x] **File upload** — Carbon/Ant/Salesforce; scenario: attach a signed
+       goods-receipt PDF or vendor contract to a record.
+       **Done 2026-08-16**: `.bo-file-input` styles the native
+       `&lt;input type="file"&gt;` (only `::file-selector-button` is
+       CSS-restylable — the rest stays honest UA rendering, not fought).
+       `.bo-file-dropzone` composes a bigger label-wrapped drag target;
+       `.bo-file-list` styles consumer-rendered selected-file rows. One
+       small opt-in behavior, `initFileDropzone()` — drag-over highlight +
+       forwarding a drop anywhere in the box (not just the tiny native
+       input) into `input.files`, dispatching a real `change` event so
+       existing listeners see it exactly like a dialog pick. No custom file
+       list, upload, or progress shipped — same "framework does visuals,
+       you do the data" split as every other field component; pairs with
+       the existing Progress component for an in-flight upload.
+       Verified live: synthetic dragover/drop cycle confirmed
+       `data-dragover` sets/clears correctly, `input.files` populates with
+       the real dropped File, and `change` fires — not just read from the
+       code. Both link checks, axe zero (58 pages), 32 baselines (verified
+       stable across 2 independent re-runs after last wake's harness-race
+       lesson), 57 tests, stylelint, live both themes.
 3. [ ] **Tag/chip (token) input** — Fiori Token/MultiInput, Ant, Carbon;
        scenario: multi-tag cost centers on a record, multiple approval-
        routing recipients. Queued — real CSS+JS surface (chip removal,
@@ -1575,7 +1591,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
 
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
-      | 1 | Component surface | ✅ 26 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-16 after Slice 17: Segmented control) | `check-page-shape.mjs`: 26 component pages |
+      | 1 | Component surface | ✅ 27 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-16 after Slice 17: Segmented control, File upload) | `check-page-shape.mjs`: 27 component pages |
       | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, all 16 **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda + correction |
       | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green + 2 advisory harnesses (`test:visual` 32 shots, `test:axe` 54 pages) | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |

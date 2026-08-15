@@ -9,6 +9,7 @@ export { initSavedViews } from './behaviors/saved-views.js';
 export { initWizard } from './behaviors/wizard.js';
 export { initQuantity } from './behaviors/quantity.js';
 export { initScanInput } from './behaviors/scan-input.js';
+export { initFileDropzone } from './behaviors/file-dropzone.js';
 export { initValidationSummary } from './behaviors/validation-summary.js';
 export { initTabs } from './behaviors/tabs.js';
 export { initDropdowns } from './behaviors/dropdown.js';

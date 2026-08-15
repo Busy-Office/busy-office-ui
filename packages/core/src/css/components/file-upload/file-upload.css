@@ -1,0 +1,108 @@
+@layer bo-components {
+  /* A real <input type="file"> — the platform's own file picker, keyboard
+     access, and (in Chrome/Firefox) native drag-drop onto the control all
+     come free. ::file-selector-button is the one part of a file input a
+     browser lets you restyle; everything else (the "no file chosen" text)
+     stays native UA text, not something CSS can theme. */
+  .bo-file-input {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bo-space-2);
+    font-size: var(--bo-density-font-size);
+    color: var(--bo-color-text-secondary);
+  }
+
+  .bo-file-input::file-selector-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--bo-density-control-height);
+    padding-inline: var(--bo-space-4);
+    margin-inline-end: var(--bo-space-2);
+    border: var(--bo-border-width) solid var(--bo-color-border-strong);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface);
+    color: var(--bo-color-text-primary);
+    font-size: var(--bo-density-font-size);
+    font-weight: var(--bo-font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--bo-motion-duration-fast)
+      var(--bo-motion-easing-standard);
+  }
+
+  .bo-file-input:hover::file-selector-button {
+    background: var(--bo-color-bg-muted);
+  }
+
+  .bo-file-input:disabled::file-selector-button {
+    opacity: var(--bo-state-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* Dropzone: a bigger drag-target around the same native input, wrapped in
+     a <label> so a click anywhere in the box opens the file picker (labels
+     don't need JS to forward clicks to their control). data-dragover is the
+     ONE thing this needs opt-in JS for (initFileDropzone()) — everything
+     else, including the actual drop-to-select, is native browser behavior
+     on a file input. */
+  .bo-file-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-6);
+    border: var(--bo-border-width) dashed var(--bo-color-border-strong);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-muted);
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .bo-file-dropzone:has(.bo-file-input:focus-visible) {
+    outline: var(--bo-focus-ring-width) solid var(--bo-color-focus-ring);
+    outline-offset: var(--bo-focus-ring-offset);
+  }
+
+  .bo-file-dropzone[data-dragover="true"] {
+    border-color: var(--bo-color-accent-solid);
+    background: var(--bo-color-bg-selected);
+  }
+
+  .bo-file-dropzone__hint {
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-muted);
+  }
+
+  /* A selected-file row — YOUR code renders one per File after reading
+     input.files; this only styles it. Matches .bo-form-field__message's
+     "framework does visuals, you do the data" split. */
+  .bo-file-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bo-space-1);
+    margin-block-start: var(--bo-space-2);
+  }
+
+  .bo-file-list__item {
+    display: flex;
+    align-items: center;
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-sm);
+    font-size: var(--bo-density-font-size);
+  }
+
+  .bo-file-list__name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bo-file-list__size {
+    color: var(--bo-color-text-muted);
+    font-size: var(--bo-font-size-xs);
+  }
+}

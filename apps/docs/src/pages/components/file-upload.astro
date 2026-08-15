@@ -1,0 +1,126 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<input class="bo-file-input" type="file" aria-label="Attach a file">`;
+
+const multiple = `<input class="bo-file-input" type="file" multiple accept=".pdf,.jpg,.png" aria-label="Attach receipts">`;
+
+const dropzone = `<label class="bo-file-dropzone" data-file-dropzone>
+  <input class="bo-file-input bo-visually-hidden" type="file" multiple aria-label="Attach vendor documents">
+  <span>Drop files here, or click to browse</span>
+  <span class="bo-file-dropzone__hint">PDF, JPG, or PNG — up to 10 MB each</span>
+</label>`;
+
+const withList = `<label class="bo-file-dropzone" data-file-dropzone>
+  <input class="bo-file-input bo-visually-hidden" type="file" multiple aria-label="Attach goods-receipt documents">
+  <span>Drop files here, or click to browse</span>
+  <span class="bo-file-dropzone__hint">PDF, JPG, or PNG — up to 10 MB each</span>
+</label>
+<ul class="bo-file-list" aria-live="polite">
+  <li class="bo-file-list__item">
+    <span class="bo-file-list__name">goods-receipt-88213.pdf</span>
+    <span class="bo-file-list__size">412 KB</span>
+    <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" aria-label="Remove goods-receipt-88213.pdf">✕</button>
+  </li>
+  <li class="bo-file-list__item">
+    <span class="bo-file-list__name">vendor-signature.jpg</span>
+    <span class="bo-file-list__size">1.1 MB</span>
+    <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" aria-label="Remove vendor-signature.jpg">✕</button>
+  </li>
+</ul>`;
+
+const canonical = `<!-- The input is the real control — the label makes the whole box
+     clickable and gives the input its accessible name. initFileDropzone()
+     is optional: only adds drag-over highlighting + forwarding a drop
+     anywhere in the box into the input (native drop-on-input already
+     works without it, just only over the small native control). -->
+<label class="bo-file-dropzone" data-file-dropzone>
+  <input class="bo-file-input bo-visually-hidden" type="file" multiple
+      aria-label="Attach vendor documents">
+  <span>Drop files here, or click to browse</span>
+</label>
+<script type="module">
+  import { initFileDropzone } from "@busy-office/ui/js";
+  initFileDropzone();
+</script>
+<!-- File list + progress are YOUR code: read input.files on 'change',
+     render .bo-file-list rows, upload however you upload. -->`;
+---
+<Gallery title="File upload">
+  <p class="demo-note">
+    Attach a signed goods-receipt PDF, a vendor contract, a photo of a
+    damaged shipment. A real <code>&lt;input type="file"&gt;</code> — the
+    platform's own picker, keyboard access, and (Chrome/Firefox) native
+    drag-drop onto the control come free; the framework styles it and adds
+    one small opt-in behavior for a bigger drop target.
+  </p>
+
+  <section class="demo">
+    <h2>Basic</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted"><code>::file-selector-button</code> is the one
+    part of a file input CSS can restyle — the "No file chosen" text stays
+    native UA rendering, not something to fight.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Multiple files, restricted types</h2>
+    <Demo code={multiple} />
+    <p class="bo-u-text-muted"><code>multiple</code> and <code>accept</code>
+    are native attributes — no framework API for them, because there's
+    nothing to add.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Dropzone — bigger drag target <span class="bo-badge">opt-in</span></h2>
+    <Demo code={dropzone} />
+    <p class="bo-u-text-muted">Try dragging a file over the box. Click
+    anywhere in it to open the picker (a <code>&lt;label&gt;</code> wrapping
+    an input forwards clicks — no JS needed for that part).
+    <code>initFileDropzone()</code> only adds the highlight-while-dragging
+    state and lets a drop anywhere in the box (not just the tiny native
+    input) populate the file list.</p>
+  </section>
+
+  <section class="demo">
+    <h2>With a selected-file list</h2>
+    <Demo code={withList} />
+    <p class="bo-u-text-muted"><code>.bo-file-list</code> styles rows YOUR
+    code renders after reading <code>input.files</code> on <code>change</code>
+    — same "framework does visuals, you do the data" split as everywhere
+    else. No upload progress bar shipped here either: pair with the
+    <a href={base + '/components/progress'}>Progress</a> component once a
+    real upload is in flight — this framework doesn't do XHR for you.</p>
+  </section>
+
+  <script>
+    import { initFileDropzone } from '@busy-office/ui/js';
+    initFileDropzone();
+  </script>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="file-upload" />
+  <ApiTable
+    component="file-upload"
+    js="Optional: initFileDropzone() — adds drag-over highlighting to a [data-file-dropzone] label and forwards a drop anywhere in it into the input's FileList (dispatching a real change event). The input works without it; drops just only land on the small native control."
+    notes={[
+      'Always give the input an accessible name — <code>aria-label</code>, or a visible <code>&lt;label&gt;</code> (which a dropzone already needs, to make the whole box clickable).',
+      'File type/size limits are native attributes (<code>accept</code>) or your own validation after reading <code>input.files</code> — nothing this component enforces.',
+      'No file list, upload, or progress bar shipped — read <code>input.files</code> on <code>change</code> and render <code>.bo-file-list</code> rows yourself; pair with <a href="' + base + '/components/progress">Progress</a> for an in-flight upload.',
+    ]}
+  />
+  <Related links={[
+    ['/components/form', 'Forms'],
+    ['/components/progress', 'Progress'],
+    ['/patterns/goods-receipt', 'Goods receipt (RF scanner)'],
+  ]} />
+</Gallery>
