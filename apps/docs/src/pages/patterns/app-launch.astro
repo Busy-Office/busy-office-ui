@@ -3,21 +3,21 @@ import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 
 const favourites = [
-  { icon: 'PO', label: 'Purchasing' },
-  { icon: 'IV', label: 'Invoices' },
-  { icon: 'GR', label: 'Goods receipt' },
-  { icon: 'RP', label: 'Reports' },
+  { icon: 'cart', label: 'Purchasing' },
+  { icon: 'invoice', label: 'Invoices' },
+  { icon: 'barcode', label: 'Goods receipt' },
+  { icon: 'chart', label: 'Reports' },
 ];
 const finance = [
-  { icon: 'GL', label: 'General ledger' },
-  { icon: 'AP', label: 'Payables' },
-  { icon: 'AR', label: 'Receivables' },
-  { icon: 'FX', label: 'Currencies' },
+  { icon: 'doc', label: 'General ledger' },
+  { icon: 'invoice', label: 'Payables' },
+  { icon: 'check-circle', label: 'Receivables' },
+  { icon: 'building', label: 'Currencies' },
 ];
 const logistics = [
-  { icon: 'WH', label: 'Warehouse' },
-  { icon: 'SH', label: 'Shipping' },
-  { icon: 'ST', label: 'Stock counts' },
+  { icon: 'box', label: 'Warehouse' },
+  { icon: 'truck', label: 'Shipping' },
+  { icon: 'grid', label: 'Stock counts' },
 ];
 ---
 <Gallery title="Pattern: app launch">
@@ -27,7 +27,9 @@ const logistics = [
     <a href="/concepts/density">device-coverage table</a> — same
     <code>.bo-widget-grid</code> container-query mechanism as a dashboard, at a
     smaller tile size, <strong>not</strong> a new grid component). Tiles are plain
-    links composed into <code>.bo-widget</code> cards; the category row is the
+    links composed into <code>.bo-widget</code> cards with real
+    <a href="/components/icon">CSS icons</a> (themable <code>currentColor</code>
+    glyphs — upgraded from initials after review); the category row is the
     ordinary <a href="/components/tabs">tabs</a> pattern; a "folder" tile is just a
     widget whose body holds a cluster of small tiles. Zero new CSS.
   </p>
@@ -37,7 +39,7 @@ const logistics = [
     <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
       {favourites.map((a) => (
         <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
-          <span aria-hidden="true" style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">{a.icon}</span>
+          <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
           <span style="color: var(--bo-color-text-primary)">{a.label}</span>
         </a>
       ))}
@@ -55,7 +57,7 @@ const logistics = [
         <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
           {finance.map((a) => (
             <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
-              <span aria-hidden="true" style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">{a.icon}</span>
+              <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
               <span style="color: var(--bo-color-text-primary)">{a.label}</span>
             </a>
           ))}
@@ -65,7 +67,7 @@ const logistics = [
         <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
           {logistics.map((a) => (
             <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
-              <span aria-hidden="true" style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">{a.icon}</span>
+              <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
               <span style="color: var(--bo-color-text-primary)">{a.label}</span>
             </a>
           ))}
@@ -113,8 +115,8 @@ const logistics = [
 <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
   <a href="/purchasing" class="bo-widget"
       style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
-    <span aria-hidden="true"
-        style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">PO</span>
+    <span class="bo-icon bo-icon--cart" aria-hidden="true"
+        style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto"></span>
     <span style="color: var(--bo-color-text-primary)">Purchasing</span>
   </a>
   …

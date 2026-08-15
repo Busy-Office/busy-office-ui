@@ -1,0 +1,84 @@
+@layer bo-components {
+  /* CSS-rendered icons: an inline-SVG data URI as a mask, painted by
+     background-color: currentColor — real themable glyphs with zero JS,
+     zero font files, no external requests. 1em square, so icons track
+     the surrounding font size (and therefore density) automatically;
+     set font-size on the icon (or a wrapper) to scale.
+
+     Decorative icons (next to a visible label) carry aria-hidden="true";
+     an icon-only control labels ITSELF (aria-label on the button/link),
+     never the icon. The set is deliberately small — 12 ERP glyphs prove
+     the mechanism; add your own in one line:
+       .my-icon { mask-image: url("data:image/svg+xml,…"); }
+     or skip this component entirely and paste inline SVG with
+     fill="currentColor" — both are first-class answers. */
+  .bo-icon {
+    display: inline-block;
+    inline-size: 1em;
+    block-size: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+  }
+
+  /* Glyphs — original geometric line art, 24×24, stroke 2, round caps.
+     %23 = '#'. Keep paths simple: every byte ships in every page. */
+  .bo-icon--doc {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3h9l4 4v14H6z'/><path d='M15 3v4h4'/></svg>");
+  }
+
+  .bo-icon--invoice {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3h9l4 4v14H6z'/><path d='M15 3v4h4'/><path d='M9 12h6M9 16h6'/></svg>");
+  }
+
+  .bo-icon--cart {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 5h2l2.5 11h11L21 8H7'/><circle cx='10' cy='20' r='1.5'/><circle cx='17' cy='20' r='1.5'/></svg>");
+  }
+
+  .bo-icon--check-circle {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='m8 12 3 3 5-6'/></svg>");
+  }
+
+  .bo-icon--truck {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 6h12v10H2z'/><path d='M14 10h4l3 3v3h-7'/><circle cx='7' cy='18.5' r='1.5'/><circle cx='17' cy='18.5' r='1.5'/></svg>");
+  }
+
+  .bo-icon--box {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 4 7v10l8 4 8-4V7z'/><path d='M4 7l8 4 8-4M12 11v10'/></svg>");
+  }
+
+  .bo-icon--chart {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4v16h16'/><path d='M8 16v-5M13 16V8M18 16v-8'/></svg>");
+  }
+
+  .bo-icon--settings {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 7h16M4 12h16M4 17h16'/><circle cx='9' cy='7' r='2' fill='%23000' stroke='none'/><circle cx='15' cy='12' r='2' fill='%23000' stroke='none'/><circle cx='7' cy='17' r='2' fill='%23000' stroke='none'/></svg>");
+  }
+
+  .bo-icon--grid {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='7' rx='1'/><rect x='13' y='4' width='7' height='7' rx='1'/><rect x='4' y='13' width='7' height='7' rx='1'/><rect x='13' y='13' width='7' height='7' rx='1'/></svg>");
+  }
+
+  .bo-icon--barcode {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'><path d='M4 6v12M8 6v12M11 6v12M15 6v12M20 6v12M17.5 6v12'/></svg>");
+  }
+
+  .bo-icon--building {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 21V4h10v17M15 9h4v12M3 21h18'/><path d='M8 8h1M11 8h1M8 12h1M11 12h1M8 16h1M11 16h1'/></svg>");
+  }
+
+  .bo-icon--user {
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><path d='M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5'/></svg>");
+  }
+
+  /* Forced-colors: masks are painted by background-color, which forced
+     colors overrides to Canvas — icons would silently VANISH. Opt this
+     one box out and paint with the system text color instead. */
+  @media (forced-colors: active) {
+    .bo-icon {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+  }
+}

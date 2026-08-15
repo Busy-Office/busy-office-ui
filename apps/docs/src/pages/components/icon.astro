@@ -1,0 +1,109 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+
+const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'settings', 'grid', 'barcode', 'building', 'user'];
+
+const markup = `<!-- Decorative (label carries the meaning): -->
+<a class="bo-sidebar-nav__link" href="/invoices">
+  <span class="bo-icon bo-icon--invoice" aria-hidden="true"></span>
+  <span class="bo-sidebar-nav__label">Invoices</span>
+</a>
+
+<!-- Icon-only control labels ITSELF, never the icon: -->
+<button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Settings">
+  <span class="bo-icon bo-icon--settings" aria-hidden="true"></span>
+</button>
+
+<!-- Add your own glyph in one line (any single-color SVG works): -->
+<style>
+  .my-icon--rocket { mask-image: url("data:image/svg+xml,<svg …></svg>"); }
+</style>`;
+---
+<Gallery title="Icon">
+  <p class="demo-note">
+    CSS-rendered icons: an inline-SVG <code>mask-image</code> painted by
+    <code>currentColor</code> — real, <strong>themable</strong> glyphs with zero
+    JS, zero font files, no network requests. Sized <code>1em</code>, so they track
+    the surrounding font size (and density) automatically. The set is deliberately
+    small: twelve ERP glyphs prove the mechanism; adding your own is one line of
+    CSS — or paste inline SVG with <code>fill="currentColor"</code>, which is an
+    equally first-class answer.
+  </p>
+  <ClassRef component="icon" />
+
+  <section class="demo">
+    <h2>The set</h2>
+    <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-4); font-size: 1.5rem">
+      {glyphs.map((g) => (
+        <span style="display: inline-flex; flex-direction: column; align-items: center; gap: var(--bo-space-1)">
+          <span class={`bo-icon bo-icon--${g}`} aria-hidden="true"></span>
+          <code style="font-size: var(--bo-font-size-xs)">--{g}</code>
+        </span>
+      ))}
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Themable — it's just <code>currentColor</code></h2>
+    <p style="font-size: 1.5rem">
+      <span class="bo-icon bo-icon--check-circle" aria-hidden="true" style="color: var(--bo-color-success-text)"></span>
+      <span class="bo-icon bo-icon--truck" aria-hidden="true" style="color: var(--bo-color-accent)"></span>
+      <span class="bo-icon bo-icon--box" aria-hidden="true" style="color: var(--bo-color-danger-text)"></span>
+      <span class="bo-icon bo-icon--chart" aria-hidden="true"></span>
+    </p>
+    <p class="bo-u-text-muted">Set <code>color</code> (or inherit it) and the glyph
+    follows — semantic tokens, dark mode, and brand presets all work with no
+    icon-specific wiring. Under forced-colors the icons repaint in the system text
+    color instead of vanishing (mask icons need an explicit opt-out; shipped).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Sizes — font-size IS the size</h2>
+    <p>
+      <span class="bo-icon bo-icon--invoice" aria-hidden="true"></span>
+      <span class="bo-icon bo-icon--invoice" aria-hidden="true" style="font-size: 1.5rem"></span>
+      <span class="bo-icon bo-icon--invoice" aria-hidden="true" style="font-size: 2rem"></span>
+      <span class="bo-icon bo-icon--invoice" aria-hidden="true" style="font-size: 3rem"></span>
+    </p>
+    <p class="bo-u-text-muted">No size modifiers: <code>1em</code> means an icon in
+    a compact table row is smaller than one in a spacious header for free.</p>
+  </section>
+
+  <section class="demo">
+    <h2>In context — sidebar links and icon buttons</h2>
+    <nav class="bo-sidebar-nav" aria-label="Icon demo" style="max-inline-size: 14rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)">
+      <ul>
+        <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+        <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--check-circle bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+        <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--truck bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Shipments</span></a></li>
+      </ul>
+    </nav>
+    <p style="margin-block-start: var(--bo-space-3)">
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Settings"><span class="bo-icon bo-icon--settings" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Reports"><span class="bo-icon bo-icon--chart" aria-hidden="true"></span></button>
+    </p>
+    <p class="bo-u-text-muted">Composes with the existing
+    <code>.bo-sidebar-nav__icon</code> slot and <code>.bo-btn--icon</code> —
+    decorative icons carry <code>aria-hidden</code>; an icon-only button labels
+    <em>itself</em> with <code>aria-label</code>, never the icon.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <ApiTable
+    component="icon"
+    notes={[
+      'Painted by <code>currentColor</code> via <code>mask-image</code> — themes, dark mode, and brand presets apply with zero icon-specific wiring; no new contrast pairs needed (an icon inherits the already-gated color of its text context).',
+      'Decorative icons (next to a visible label) are <code>aria-hidden="true"</code>; icon-only controls label THEMSELVES (<code>aria-label</code> on the button/link).',
+      'Deliberately 12 glyphs, not a library — add your own with one <code>mask-image</code> line, or paste inline SVG with <code>fill="currentColor"</code>; both are first-class.',
+      'Forced-colors: mask icons vanish by default (the paint is a background-color, which forced colors override) — the shipped opt-out repaints them in <code>CanvasText</code>.',
+    ]}
+  />
+  <Related links={[["/components/nav", "Navigation"], ["/patterns/app-launch", "App launch pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
+</Gallery>

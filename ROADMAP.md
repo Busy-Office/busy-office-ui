@@ -1205,7 +1205,7 @@ THEMABLE icons with zero JS, zero font files, `em` sizing that tracks
 density. Initials/emoji were the weak point of the launcher tiles (emoji
 don't take `color`; initials read as placeholders).
 
-1. [ ] **`.bo-icon`** — base class (1em square, currentColor fill via
+1. [x] **`.bo-icon`** — SHIPPED. Base class (1em square, currentColor fill via
        mask) + a SMALL curated set (~12 ERP glyphs: document, invoice,
        cart, check-circle, truck, box, chart, settings, grid, barcode,
        building, user), each an original simple geometric SVG authored
@@ -1219,6 +1219,17 @@ don't take `color`; initials read as placeholders).
        Launch tiles upgraded from initials to icons; gates + baselines.
        NOT a general icon library — 12 glyphs prove the mechanism;
        more graduate per real need, same gate as everything else.
+       **Done**: 12 original geometric glyphs (doc, invoice, cart,
+       check-circle, truck, box, chart, settings, grid, barcode,
+       building, user) as mask-image data URIs, 1em/currentColor;
+       forced-colors opt-out VERIFIED via CDP emulation (adjust:none +
+       CanvasText paint, mask intact — not assumed); new `/components/
+       icon` page (25 pages, 3094 links, page-shape green); App Launch
+       tiles upgraded from initials to icons (demo-note + markup block
+       synced); composes with the existing `.bo-sidebar-nav__icon` slot
+       and `.bo-btn--icon`. No new contrast pairs (currentColor inherits
+       gated text colors). 55 tests unchanged; 32 visual baselines
+       regenerated, green twice.
 
 ## Long term (post-1.0)
 

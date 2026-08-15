@@ -94,6 +94,13 @@ pin.
   `<details>/<summary>` (zero JS/ARIA), explicitly navigation rather
   than an APG TreeView.
 
+- **Slice 11 — CSS icon set**: `.bo-icon` — mask-image data-URI glyphs
+  painted by `currentColor` (themable, zero JS/fonts/requests, `1em`
+  density-tracking); 12 original ERP glyphs; explicit forced-colors
+  opt-out (mask icons otherwise vanish); App Launch upgraded from
+  initials to icons. Deliberately not a library — one-line extension
+  documented, inline `fill="currentColor"` SVG equally first-class.
+
 ### API freeze audit (2026-08-15)
 
 Prompted by the 1.0 exit checklist's own finding — the public API had never

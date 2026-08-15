@@ -5,6 +5,7 @@
 @import "./primitives/index.css";
 @import "./components/button/button.css";
 @import "./components/badge/badge.css";
+@import "./components/icon/icon.css";
 @import "./components/form/form-field.css";
 @import "./components/form/input.css";
 @import "./components/form/select.css";
