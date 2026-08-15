@@ -42,8 +42,14 @@ const money = (n) =>
 const tone = { Pending: 'warning', Approved: 'success', Rejected: 'danger' };
 
 // ---------- layout ----------
-const page = (title, current, main) => `<!doctype html>
-<html lang="en" data-density="compact">
+const DENSITIES = ['compact', 'comfortable', 'spacious'];
+const densityFromCookie = (req) => {
+  const m = /(?:^|;\s*)density=(\w+)/.exec(req.headers.cookie || '');
+  return m && DENSITIES.includes(m[1]) ? m[1] : 'compact';
+};
+
+const page = (title, current, main, density = 'compact') => `<!doctype html>
+<html lang="en" data-density="${density}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} · PO demo</title>
@@ -57,6 +63,11 @@ const page = (title, current, main) => `<!doctype html>
     <a class="bo-navbar__brand" href="/">PO demo</a>
     <span class="bo-badge bo-badge--accent">tarball build</span>
     <span class="bo-navbar__spacer"></span>
+    <div class="bo-segmented" role="group" aria-label="Density" id="density-switch">
+      ${DENSITIES.map((d) => `<input class="bo-segmented__input bo-visually-hidden" type="radio"
+          name="density" id="density-${d}" value="${d}"${d === density ? ' checked' : ''}>
+      <label class="bo-segmented__option" for="density-${d}">${d[0].toUpperCase()}${d.slice(1)}</label>`).join('\n      ')}
+    </div>
   </header>
   <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
     <ul>
@@ -72,6 +83,11 @@ const page = (title, current, main) => `<!doctype html>
   import { initDialogs, initDataTables, initAlerts } from '/assets/js/index.js';
   initDialogs(); initDataTables(); initAlerts();
   document.body.addEventListener('htmx:afterSwap', (e) => { initDataTables(e.target); window.__btt?.(); });
+  document.getElementById('density-switch').addEventListener('change', (e) => {
+    const d = e.target.value;
+    document.documentElement.dataset.density = d;
+    document.cookie = 'density=' + d + '; path=/; max-age=31536000';
+  });
 </script>
 <div class="bo-toast-region" role="status" aria-live="polite" id="toasts"></div>
 </body></html>`;
@@ -425,6 +441,7 @@ const dashScreen = () => {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const path = url.pathname;
+  const density = densityFromCookie(req);
   try {
     if (path.startsWith('/assets/')) {
       const file = normalize(join(uiDist, path.slice(8)));
@@ -440,11 +457,11 @@ const server = createServer(async (req, res) => {
     }
     if (path === '/' ) {
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(page('Dashboard', '/', dashScreen()));
+      return res.end(page('Dashboard', '/', dashScreen(), density));
     }
     if (path === '/pos' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(page('Purchase orders', '/pos', listScreen()));
+      return res.end(page('Purchase orders', '/pos', listScreen(), density));
     }
     if (path === '/pos/rows' && req.method === 'GET') {
       const offset = Number(url.searchParams.get('offset')) || 0;
@@ -501,11 +518,11 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
     }
     if (path === '/receive' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(page('Receive', '/receive', receiveScreen()));
+      return res.end(page('Receive', '/receive', receiveScreen(), density));
     }
     if (path === '/spend' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(page('Spend by cost center', '/spend', spendScreen()));
+      return res.end(page('Spend by cost center', '/spend', spendScreen(), density));
     }
     if (path === '/pos/bulk-approve' && req.method === 'POST') {
       let body = '';
@@ -535,7 +552,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
         return res.end(timelineHtml(p));
       }
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(page(p.id, '/pos', detailScreen(p)));
+      return res.end(page(p.id, '/pos', detailScreen(p), density));
     }
     res.writeHead(404);
     res.end('not found');

@@ -1689,6 +1689,57 @@ disabled-segment state.
       code. Zero new CSS/JS — pure consumption of already-shipped surface.
       Graduated directly, same precedent as the File-upload round.
 
+- [x] **2026-08-16 — Dogfood: Segmented control as a real density switcher in
+      po-app — graduated** (Explore, dogfood-loop fallback, closes out all
+      three Slice 17 components). The obvious literal scenario ("My
+      Approvals / Team Approvals") needed a multi-user concept po-app
+      doesn't model — rather than force that, found a genuinely uncontrived
+      fit already latent in the codebase: po-app hardcoded `data-density=
+      "compact"` and never let a user switch it, even though the framework's
+      own warehouse-floor precedent (RF-scanner's `data-density="spacious"`
+      quantity stepper) is exactly the back-office-vs-warehouse-floor
+      density split a real ERP needs switchable at runtime — something
+      neither po-app nor even the docs site had ever actually wired live
+      (docs only ever demos density statically per example). Built: a
+      3-option `.bo-segmented` ("Compact / Comfortable / Spacious") in the
+      app-shell header, server-rendered from a `density` cookie
+      (`densityFromCookie()`, default `compact`, unchanged from before),
+      client JS setting `document.documentElement.dataset.density` on
+      `change` for instant reflow **and** writing the cookie so it survives
+      a real full-page navigation (po-app has no htmx-boost — every nav is
+      a genuine reload, so this only works if the server actually reads the
+      cookie back, not just client-side state).
+      **Verified against the real npm tarball boundary**: rebuilt, packed,
+      `podman build`'d, ran, drove it live — clicking Spacious visibly
+      reflowed the data table (taller rows, larger checkboxes/buttons),
+      correctly persisted across a real navigation to `/spend` (confirmed
+      `document.documentElement.dataset.density` still `spacious` after a
+      fresh page load, not just in-memory), and the header wraps cleanly at
+      390px (isolated-clone technique, on-screen this time to confirm it
+      *looks* intentional, not just doesn't overflow) — brand row on top,
+      switcher on its own row below.
+      **Real automation-tooling lesson, correctly isolated from the
+      component under test before concluding anything**: a stale/corrupted
+      browser tab silently no-op'd every synthetic click on the hidden
+      radio input AND on its visible label — confirmed NOT a framework bug
+      by reproducing the exact same click in a **freshly created tab**,
+      where it worked correctly first try (same class of tab-corruption
+      previously noted this session for a different bug; the fix is a new
+      tab, not code). Also reconfirmed (independently, this round) that
+      `.bo-segmented__input`'s hidden `<input>` itself is never a valid
+      click target — real interaction always goes through the visible
+      `<label>`, consistent with the component's own design and the
+      Slice 17 item 1 bug it already caught once. `resize_window` was
+      re-confirmed unreliable in this session (didn't change the reported
+      viewport) — narrow-width verification used the established
+      off-screen/on-screen clone-measurement technique instead, same as
+      every other narrow-width check this session.
+      Zero new CSS/JS surface shipped — pure consumption plus one small,
+      genuinely useful po-app server addition (the cookie helper). No
+      dark-theme check: po-app has never had a theme toggle (confirmed in
+      an earlier dogfood round), so this is consistent with that existing,
+      already-noted scope boundary, not a gap introduced here.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
