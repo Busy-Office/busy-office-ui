@@ -43,4 +43,13 @@
       background: var(--bo-color-bg-muted);
     }
   }
+
+  /* Forced colors strip backgrounds — without this the loading placeholders
+     VANISH and a Windows-HCM user sees blank space where content is coming.
+     An outlined box is the visible "something loads here" channel. */
+  @media (forced-colors: active) {
+    .bo-skeleton {
+      border: 1px solid GrayText;
+    }
+  }
 }

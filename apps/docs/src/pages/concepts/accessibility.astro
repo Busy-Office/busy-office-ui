@@ -41,6 +41,21 @@ const twoChannel = `<!-- BOTH channels, every state signal: -->
     </div>
   </section>
   <section class="demo">
+    <h2>Forced colors (Windows High Contrast)</h2>
+    <p>Under <code>forced-colors: active</code> the system repaints text,
+    borders, and controls in its own palette — most components survive
+    automatically because state rides on text, glyphs, and borders (the
+    two-channel rule again). Explicit <code>@media (forced-colors: active)</code>
+    rules exist exactly where a state's only visible channel was a background
+    or a mask: <strong>icons</strong> (mask repainted <code>CanvasText</code>),
+    <strong>skeleton</strong> (bars become outlined boxes instead of
+    vanishing), <strong>combobox</strong> (active option repaints with
+    <code>SelectedItem</code>), <strong>stepper</strong> (current marker gains
+    a ring), plus button, badge, dialog, off-canvas, data-table, and progress.
+    Verified via CDP forced-colors emulation — screenshots in the review
+    ledger, 2026-08-15.</p>
+  </section>
+  <section class="demo">
     <h2>Honest status</h2>
     <p>Contrast is verified per token pair in both themes on every build. Screen-reader
     runtime passes (VoiceOver/NVDA verbalization) sit on an open ledger in the public

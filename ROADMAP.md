@@ -1396,10 +1396,19 @@ internal discipline. Ordered by severity; confirmed defects first.
        item-9 "solid square checkbox" mystery — our own visual baselines had
        the mixed-mode bug on camera (headless prefers dark); baselines now
        show correct checkboxes.
-7. [ ] **Forced-colors sweep** (Rex M). 7/25 components have forced-colors
+7. [x] **Forced-colors sweep** (Rex M). 7/25 components have forced-colors
        rules; sweep the remaining 18 (or publicly scope the claim). Accept:
        every component either covered or named in a documented scope list;
        CDP forced-colors spot-verification on the worst three.
+       **Done 2026-08-15**: evidence-first — CDP screenshots of the 6
+       highest-risk components. Tabs (border indicator) and timeline
+       (per-state glyphs) survive with no rules; three real breaks fixed
+       (skeleton vanished entirely; combobox active option
+       indistinguishable; stepper current-vs-pending color-only) and
+       re-verified fixed under emulation. Accessibility page documents the
+       strategy + the explicit-rules list (10 components) — the honest scope
+       statement instead of a blanket claim. README size gate self-triggered
+       on the CSS growth and was re-stamped (9.4 kB gz).
 8. [ ] **Generated keyboard map + docs skip link** (Ines M). Per-behavior
        Arrow/Esc/Home/End table extracted from source onto js-behaviors +
        component pages; skip link targeting the existing `#main-content`.

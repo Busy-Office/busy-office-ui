@@ -103,4 +103,14 @@
       border: 0;
     }
   }
+
+  /* Forced colors: done (checkmark glyph) vs pending (number) survives, but
+     CURRENT was color-only — give the current marker a double-thick outline
+     so "you are here" stays visible. */
+  @media (forced-colors: active) {
+    .bo-stepper__step[aria-current="step"] .bo-stepper__marker {
+      outline: 3px solid CanvasText;
+      outline-offset: 1px;
+    }
+  }
 }

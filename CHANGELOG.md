@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Fixed (forced-colors): three states whose only visible channel was a
+  background now survive Windows High Contrast — skeleton bars render as
+  outlined boxes instead of vanishing, the combobox active option repaints
+  with `SelectedItem`/`SelectedItemText`, and the stepper's current marker
+  gains a `CanvasText` ring (done/pending already differed by glyph).
+  CDP-emulation verified.
+
 - Fixed: the library no longer ships `color-scheme: light dark` on `:root` —
   a CSS-only page with no `data-theme` under a dark OS got a light page with
   dark native scrollbars/form chrome/date pickers (mixed mode). Default is
