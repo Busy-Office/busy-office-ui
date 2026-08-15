@@ -1,0 +1,60 @@
+name: Bug report
+description: Something renders or behaves wrong in @busy-office/ui
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `npm ls @busy-office/ui`, or the vendored file version.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser + version
+      placeholder: "Chrome 126, Safari 17.4, …"
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      description: Does it happen in one theme or both?
+      options:
+        - Light
+        - Dark
+        - Both
+        - Forced colors / high contrast
+    validations:
+      required: true
+  - type: dropdown
+    id: density
+    attributes:
+      label: Density
+      options:
+        - Default
+        - Compact
+        - Spacious
+        - All / not density-related
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal HTML repro
+      description: >
+        The smallest markup that shows the problem — a snippet using bo- classes
+        is ideal. If a JS behavior is involved, say which init* you called.
+      render: html
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected vs what happened
+      description: A screenshot helps a lot, especially for visual bugs.
+    validations:
+      required: true

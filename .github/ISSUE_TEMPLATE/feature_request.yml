@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose a component, variant, or behavior
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Real ERP scenario
+      description: >
+        The concrete screen or workflow where you need this — busy-office-ui
+        builds against real scenarios, not hypothetical ones, so this field
+        decides whether the request can be picked up.
+      placeholder: "On our goods-receipt screen, warehouse staff need to …"
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: What's missing
+      description: >
+        What you tried with the existing components and where it fell short.
+        (Composing existing primitives is the preferred answer — say why it
+        doesn't work here.)
+    validations:
+      required: true
+  - type: textarea
+    id: sketch
+    attributes:
+      label: Rough shape (optional)
+      description: Markup sketch, screenshot of a comparable UI, or a prose description.
