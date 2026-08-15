@@ -285,9 +285,10 @@ detail-form patterns).
        published by the owner (busy-office org, 2FA), verified via clean-room
        registry install. Follow-up shipped same day: Trusted Publishing
        pipeline (`.github/workflows/publish.yml`, OIDC + provenance) and a
-       staged `0.1.1` metadata patch (repository-URL fix) — releasing it is
-       owner-gated (npm Trusted Publisher registration + GitHub Release
-       `v0.1.1`).
+       staged `0.1.1` metadata patch (repository-URL fix). **0.1.1 released
+       2026-08-15** via the pipeline's first run: owner registered the
+       Trusted Publisher, release v0.1.1 cut, publish.yml green — npm now
+       serves 0.1.1 with SLSA provenance and the corrected repository URL.
 7. [x] **Breadcrumb** — `.bo-breadcrumb`, added to `components/nav/` (folded
        into the existing "nav" umbrella component/docs page — navbar,
        sidebar-nav, and offcanvas already share one page there; consistent,

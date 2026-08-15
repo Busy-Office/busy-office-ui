@@ -6,7 +6,7 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
-## 0.1.1 (unreleased)
+## 0.1.1 (2026-08-15)
 
 Metadata-only patch — no CSS/JS changes.
 
