@@ -123,6 +123,14 @@ Run **try → verify → adjust** as many rounds as it takes to satisfy the item
    the same nginx.conf mount; browse `localhost:8082/busy-office-ui/…`
    (github.io itself is browser-blocked in this session). Audited green
    2026-08-15 post-0.1.1.
+   If a round adds a new `build:*` step to `packages/core/package.json`,
+   verify it against a TRULY clean `dist/` (`rm -rf packages/core/dist &&
+   npm run build -w @busy-office/ui`) before trusting it — a local run
+   reusing a stale `dist/` from earlier in the session can mask an
+   ordering bug that only CI's clean checkout catches (learned 2026-08-15:
+   `build:acr` shipped reading `dist/contrast.json` one step before the
+   script that writes it, passed locally on stale artifacts, broke CI and
+   the Pages deploy the very next wake).
 5. **Round check** — does it satisfy *Accept* AND pass the standing gates
    (contrast, named `@container`, links, behaviors, stylelint, tests)? If
    not, adjust and go back to step 3. If a round reveals the item was
