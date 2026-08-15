@@ -281,9 +281,13 @@ detail-form patterns).
          this session can drive VoiceOver; this needs a human on real
          hardware. NEEDS-RUNTIME.
    - [ ] **NVDA** — Windows-only, NEEDS-RUNTIME, unchanged from before.
-6. [ ] **npm publish** `@busy-office/ui@0.1.x` — structurally ready (exports
-       audited, tarball-tested via the consumer app); **owner-gated on
-       "perfect"** — a loop iteration should not self-approve this.
+6. [x] **npm publish** `@busy-office/ui@0.1.x` — DONE 2026-08-15: `0.1.0`
+       published by the owner (busy-office org, 2FA), verified via clean-room
+       registry install. Follow-up shipped same day: Trusted Publishing
+       pipeline (`.github/workflows/publish.yml`, OIDC + provenance) and a
+       staged `0.1.1` metadata patch (repository-URL fix) — releasing it is
+       owner-gated (npm Trusted Publisher registration + GitHub Release
+       `v0.1.1`).
 7. [x] **Breadcrumb** — `.bo-breadcrumb`, added to `components/nav/` (folded
        into the existing "nav" umbrella component/docs page — navbar,
        sidebar-nav, and offcanvas already share one page there; consistent,
@@ -1165,7 +1169,7 @@ its own real use case, same discipline as every other item here.
 has received is now shipped, closed as a documented composition, or
 explicitly resolved.
 
-## Slice 10 (in progress) — showcase depth grill
+## Done — Slice 10: showcase depth grill
 
 Triaged 2026-08-15 (user direction): "grill each component & its doc page
 to give enough sample & variation for showcase." Two layers:
@@ -1178,10 +1182,12 @@ to give enough sample & variation for showcase." Two layers:
        lives on the data-table page only); nav `__spacer`, offcanvas
        `--end`, sidebar `__heading`/`__section`. (dashboard's
        `bo-badge--type` is extraction noise — badge's class.)
-2. [ ] **Judgment-layer grill** (panel, Consumer seat) — per page: are
+2. [x] **Judgment-layer grill** (panel, Consumer seat) — per page: are
        the demos enough to SHOWCASE the component's range (states,
        density behavior, realistic ERP compositions, not just the happy
        path)? Accept: a per-page gap list ranked by showcase value.
+       **Done** (commit `fe5c3d8`): per-page gap list produced and
+       closed the same round.
 **Component gap surfaced by the grill, parked with a scenario**: the
 stepper has no rejected/error step state in CSS (only `done`/`current`/
 `pending` via `data-state`) — ERP wizards fail steps. The timeline
@@ -1190,13 +1196,17 @@ real failed-wizard scenario before building (same gate as every parked
 item). Meanwhile the docs show the supported answer: a returned-for-rework
 flow re-marks the step `current`.
 
-3. [ ] **Fix rounds** — close the ranked gaps: every documented variant
+3. [x] **Fix rounds** — close the ranked gaps: every documented variant
        demoed on its own page, plus the highest-value state/composition
        samples the grill names. Accept: mechanical scan returns zero
        undemoed classes; each touched page verified live both themes;
        gates + visual baselines updated.
+       **Done** (commit `fe5c3d8`): 16 pages, ~20 demos, 2 real defects
+       fixed (date `__value` drift; docs drawer hiding embedded demo
+       sidebars); mechanical scan returns zero undemoed classes; gates +
+       32 visual baselines green.
 
-## Slice 11 (in progress) — CSS icon set
+## Done — Slice 11: CSS icon set
 
 Triaged 2026-08-15 (user, while reviewing App Launch: "can CSS render
 icons? for better display"). Answer: yes — `mask-image` with inline-SVG
@@ -1230,6 +1240,29 @@ don't take `color`; initials read as placeholders).
        and `.bo-btn--icon`. No new contrast pairs (currentColor inherits
        gated text colors). 55 tests unchanged; 32 visual baselines
        regenerated, green twice.
+
+## Slice 12 (in progress) — public feedback intake
+
+Triaged 2026-08-15 (user: "shall we start using linear or github to feedback
+the issue?"). Decision: **GitHub Issues** — the package is public on npm and
+the npm page links the repo; strangers need a public intake, and issues are
+`gh`-triageable by the dispatcher (issue → ROADMAP with Accept criteria →
+close with commit link). Linear stays a non-goal: no public intake, and a
+second backlog would drift from this file (storage doctrine). Issues are
+already enabled on `Busy-Office/busy-office-ui` (verified via API).
+
+1. [ ] **Issue templates + docs pointer** — `.github/ISSUE_TEMPLATE/`:
+       bug report form (version, browser, light/dark theme, density,
+       minimal HTML repro) + feature request form (ERP scenario required —
+       matches the "real scenario before building" gate) + `config.yml`
+       (blank issues on, docs link). Docs site gets a visible "Report an
+       issue" link. Accept: templates render on GitHub's "New issue"
+       chooser; docs link verified live at 1440px + 390px, both themes;
+       gates green.
+2. [ ] **Dispatcher intake wiring** — LOOPS.md Step 1 names `gh issue list`
+       as a triage input source, so wakes see new issues without being told.
+       Accept: LOOPS.md updated; one dry-run triage of the (currently empty)
+       issue list recorded in the loop log.
 
 ## Long term (post-1.0)
 
