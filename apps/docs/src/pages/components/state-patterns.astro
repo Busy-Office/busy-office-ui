@@ -6,13 +6,13 @@ import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const skeletonRows = `<div class="bo-stack bo-stack--tight" aria-busy="true" aria-label="Loading purchase orders">
+const skeletonRows = `<div class="bo-stack bo-stack--tight" role="status" aria-busy="true" aria-label="Loading purchase orders">
   <span class="bo-skeleton" style="inline-size: 40%"></span>
   <span class="bo-skeleton" style="inline-size: 90%"></span>
   <span class="bo-skeleton" style="inline-size: 75%"></span>
 </div>`;
 
-const skeletonCard = `<div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-3); align-items: center" aria-busy="true" aria-label="Loading vendor">
+const skeletonCard = `<div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-3); align-items: center" role="status" aria-busy="true" aria-label="Loading vendor">
   <span class="bo-skeleton bo-skeleton--circle"></span>
   <div class="bo-stack bo-stack--tight" style="flex: 1">
     <span class="bo-skeleton" style="inline-size: 50%"></span>

@@ -114,9 +114,9 @@ const invoices = [
             <a class="bo-btn bo-btn--secondary" href={base + '/components/button'}>Components</a>
           </div>
           <pre class="install"><code>npm i @busy-office/ui</code></pre>
-          <p class="install__note">Not on npm yet — pre-publish hardening. Pilot today by
-            <a href={base + '/getting-started/installation'}>copying <code>dist/</code> from the repo</a>;
-            the package lands as-is when it ships.</p>
+          <p class="install__note">On npm as <code>@busy-office/ui</code> — or pilot without a
+            bundler by <a href={base + '/getting-started/installation'}>copying
+            <code>dist/</code></a> into any server stack; the output is plain CSS.</p>
           <dl class="meta">
             <div><dt>Bundle</dt><dd><a href="https://github.com/Busy-Office/busy-office-ui/blob/main/apps/docs/src/pages/index.astro">{gzipKb} kB gz</a> <span class="meta__sub">{minKb} kB min · per-component files · computed at build</span></dd></div>
             <div><dt>Dependencies</dt><dd>0 <span class="meta__sub">JS optional — {behaviors.initCount} call-once behaviors</span></dd></div>
@@ -205,7 +205,7 @@ const invoices = [
             <div class="bo-widget__body">
               <p>All framework CSS lives in <code>@layer</code>; your unlayered CSS
               always wins. Re-brand by remapping tokens — live:</p>
-              <pre><code>{brandCss}</code></pre>
+              <pre tabindex="0"><code>{brandCss}</code></pre>
               <div class="brand-demo bo-cluster">
                 <button class="bo-btn" type="button">Re-skinned button</button>
                 <a href={base + '/concepts/cascade'}>The contract →</a>
@@ -219,11 +219,11 @@ const invoices = [
               <div class="compare">
                 <div>
                   <p class="compare__label">Semantic components</p>
-                  <pre><code>{semanticSide}</code></pre>
+                  <pre tabindex="0"><code>{semanticSide}</code></pre>
                 </div>
                 <div>
                   <p class="compare__label">Utility classes</p>
-                  <pre><code>{utilitySide}</code></pre>
+                  <pre tabindex="0"><code>{utilitySide}</code></pre>
                 </div>
               </div>
               <p class="bo-u-text-muted">Markup you can read in a diff at screen #200. State lives in
@@ -247,7 +247,7 @@ const invoices = [
           <div class="bo-widget">
             <div class="bo-widget__header"><span class="bo-widget__title">HTMX-ready, not HTMX-coupled</span></div>
             <div class="bo-widget__body">
-              <pre><code>{htmxSnippet}</code></pre>
+              <pre tabindex="0"><code>{htmxSnippet}</code></pre>
               <p><a href={base + '/getting-started/htmx'}>The integration →</a></p>
             </div>
           </div>
@@ -269,7 +269,7 @@ const invoices = [
         <h2>Pilot one screen</h2>
         <p>No framework earns 200 screens on a landing page. Take one screen —
         à la carte, into your existing app:</p>
-        <pre><code>{pilotSnippet}</code></pre>
+        <pre tabindex="0"><code>{pilotSnippet}</code></pre>
         <p>What you're <em>not</em> signing up for: semantic tokens, documented
         class names, and <code>data-*</code>/ARIA contracts are
         <a href={base + '/getting-started/versioning'}>the versioned API</a>; the

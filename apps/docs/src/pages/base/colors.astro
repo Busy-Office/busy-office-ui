@@ -37,7 +37,7 @@ const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12];
     <code>check-contrast.mjs</code> on every build — the build fails if any pair
     drops below its threshold, so these numbers cannot drift.</p>
     {Object.entries(contrast.themes).map(([theme, pairs]) => (
-      <div class="bo-data-table-container">
+      <div class="bo-data-table-container" tabindex="0">
         <table class="bo-data-table" data-density="compact">
           <caption class="bo-visually-hidden">{theme} theme contrast ratios</caption>
           <thead><tr><th scope="col">{theme}</th><th scope="col">on</th><th scope="col" class="bo-data-table__col--numeric">ratio</th><th scope="col" class="bo-data-table__col--numeric">min</th><th scope="col">result</th></tr></thead>
