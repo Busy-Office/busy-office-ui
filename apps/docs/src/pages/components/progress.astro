@@ -1,0 +1,68 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const basic = `<progress class="bo-progress" max="100" value="71"></progress>
+<span class="bo-u-text-muted">71% consumed</span>`;
+
+const tones = `<progress class="bo-progress" max="100" value="42"></progress>
+<span class="bo-u-text-muted">42% consumed</span><br>
+<progress class="bo-progress bo-progress--warning" max="100" value="83"></progress>
+<span class="bo-u-text-muted">83% consumed — approaching budget</span><br>
+<progress class="bo-progress bo-progress--danger" max="100" value="97"></progress>
+<span class="bo-u-text-muted">97% consumed — review before approving</span>`;
+
+const markup = `<!-- A real <progress> element — value/max semantics and the progressbar
+     role come from the platform; the class only re-skins it. ALWAYS pair
+     with visible text: the fill and its tone are one channel each. -->
+<progress class="bo-progress" max="100" value="71"></progress>
+<span class="bo-u-text-muted">71% consumed</span>`;
+---
+<Gallery title="Progress">
+  <p class="demo-note">
+    Continuous progress — budget consumption, import jobs, storage quotas. A styled
+    <strong>native <code>&lt;progress&gt;</code></strong> element (the platform's
+    value/max semantics and implicit <code>progressbar</code> role come free — zero
+    JS, zero ARIA). Distinct from <a href="/components/stepper">Stepper</a>, which is
+    for discrete named steps. Always pair it with visible text ("71% consumed") —
+    the fill is one channel.
+  </p>
+  <ClassRef component="progress" />
+
+  <section class="demo">
+    <h2>Basic</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">Born from a real dogfood finding: unstyled native
+    <code>&lt;progress&gt;</code> renders platform-blue chrome that ignores the
+    theme in both light and dark — this class is the token-true re-skin.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Tones — threshold states</h2>
+    <Demo code={tones} />
+    <p class="bo-u-text-muted"><code>--warning</code> / <code>--danger</code> for
+    approaching/exceeded thresholds. The tone is decoration on top of the text —
+    the accompanying text must say it ("approaching budget"), never the color
+    alone. Fill-on-track contrast for all three tones is gate-checked at 3:1
+    (WCAG 1.4.11) in both themes.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <ApiTable
+    component="progress"
+    notes={[
+      'A native <code>&lt;progress&gt;</code> element, not a div — <code>value</code>/<code>max</code> and the <code>progressbar</code> role are platform semantics; the framework only styles it.',
+      'Always pair with visible text ("71% consumed") — the fill is one channel, and tones are decoration on top of the text, never a substitute for it.',
+      'Under forced-colors the element reverts to platform rendering (<code>appearance: auto</code>) — custom fills would otherwise vanish entirely.',
+      'For discrete named steps (Submitted → Approved → Paid), use <a href="/components/stepper">Stepper</a> instead.',
+    ]}
+  />
+  <Related links={[["/components/stepper", "Stepper"], ["/components/dashboard", "Dashboard"], ["/concepts/accessibility", "Accessibility model"]]} />
+</Gallery>

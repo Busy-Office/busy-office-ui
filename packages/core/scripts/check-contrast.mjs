@@ -75,6 +75,10 @@ const PAIRS = [
   ['--bo-color-text-secondary', '--bo-color-bg-canvas', 4.5], // muted-on-canvas
   ['--bo-color-border-control', '--bo-color-bg-surface', 3],
   ['--bo-color-focus-ring', '--bo-color-bg-canvas', 3],
+  // .bo-progress fill on its track — non-text UI component (WCAG 1.4.11, 3:1)
+  ['--bo-color-accent', '--bo-color-bg-muted', 3],
+  ['--bo-color-warning-strong', '--bo-color-bg-muted', 3],
+  ['--bo-color-danger', '--bo-color-bg-muted', 3],
 ];
 const PAIR_KEY = (fg, bg) => `${fg}|${bg}`;
 const KNOWN = new Set(PAIRS.map(([f, b]) => PAIR_KEY(f, b)));

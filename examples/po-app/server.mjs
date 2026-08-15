@@ -178,6 +178,12 @@ const spendScreen = () => {
   }
   const grand = pos.reduce((s, p) => s + p.amount, 0);
   const groups = [...byCc.entries()].sort(([a], [b]) => a.localeCompare(b));
+  // Dogfood probe #2 (2026-08-15): budget consumption per CC — the named
+  // continuous-progress scenario the parked "Process Bar" item was waiting
+  // on. Bare NATIVE <progress> first (platform semantics for free); the
+  // question is whether unstyled native rendering is acceptable in a themed
+  // ERP screen or fights.
+  const budgets = { 'CC-1180': 80000, 'CC-2205': 15000, 'CC-4021': 25000 };
   return `
 <h1>Spend by cost center</h1>
 <div class="bo-data-table-container">
@@ -188,8 +194,17 @@ const spendScreen = () => {
       <th scope="col">Status</th>
       <th scope="col" class="bo-data-table__col--numeric">Amount</th>
     </tr></thead>
-    ${groups.map(([cc, list]) => `<tbody>
-      <tr><th scope="colgroup" colspan="4">${cc}</th></tr>
+    ${groups.map(([cc, list]) => {
+      const spent = list.reduce((s, p) => s + p.amount, 0);
+      const budget = budgets[cc] ?? 0;
+      const pct = budget ? Math.round((spent / budget) * 100) : 0;
+      const barTone = pct >= 90 ? ' bo-progress--danger' : pct >= 75 ? ' bo-progress--warning' : '';
+      return `<tbody>
+      <tr><th scope="colgroup" colspan="4">${cc}
+        <span class="bo-u-text-muted" style="font-weight: normal"> — budget ${money(budget)},</span>
+        <progress class="bo-progress${barTone}" max="100" value="${Math.min(pct, 100)}"></progress>
+        <span class="bo-u-text-muted" style="font-weight: normal">${pct}% consumed${pct >= 90 ? ' — review before approving' : ''}</span>
+      </th></tr>
       ${list.map((p) => `<tr>
         <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
         <td class="bo-u-text-truncate">${p.vendor}</td>
@@ -198,9 +213,10 @@ const spendScreen = () => {
       </tr>`).join('')}
       <tr>
         <td colspan="3" class="bo-data-table__col--right">Subtotal ${cc}</td>
-        <td class="bo-data-table__col--numeric">${money(list.reduce((s, p) => s + p.amount, 0))}</td>
+        <td class="bo-data-table__col--numeric">${money(spent)}</td>
       </tr>
-    </tbody>`).join('')}
+    </tbody>`;
+    }).join('')}
     <tbody>
       <tr>
         <td colspan="3" class="bo-data-table__col--right"><strong>Grand total</strong></td>

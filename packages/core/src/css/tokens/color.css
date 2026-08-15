@@ -138,6 +138,9 @@
     --bo-color-accent-text: var(--bo-palette-teal-300);
     --bo-color-danger-text: var(--bo-palette-red-300);
     --bo-color-warning-text: var(--bo-palette-amber-300);
+    /* Dark previously never remapped warning-strong (amber-700 — too dark
+       for dark surfaces); surfaced by the .bo-progress fill contrast pair. */
+    --bo-color-warning-strong: var(--bo-palette-amber-500);
     --bo-color-success-text: var(--bo-palette-green-300);
     --bo-state-hover-overlay: rgb(255 255 255 / 0.06);
     --bo-state-active-overlay: rgb(255 255 255 / 0.1);

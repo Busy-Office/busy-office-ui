@@ -1,0 +1,63 @@
+@layer bo-components {
+  /* Continuous progress (budget consumption, import jobs) — styles the
+     NATIVE <progress> element, so value/max semantics and the implicit
+     progressbar role come from the platform, zero JS/ARIA. Distinct from
+     .bo-stepper (discrete named steps). ALWAYS pair with visible text
+     ("93% consumed") — the fill alone is one channel; tone variants are
+     one channel too. Born from the po-app budget-consumption dogfood:
+     unstyled native <progress> renders platform-blue chrome that ignores
+     the theme in both light and dark. */
+  progress.bo-progress {
+    appearance: none;
+    inline-size: 10rem;
+    block-size: 0.5rem;
+    vertical-align: middle;
+    border: none;
+    border-radius: var(--bo-radius-sm);
+    overflow: hidden;
+    background: var(--bo-color-bg-muted);
+  }
+
+  /* Track: Safari/Chrome paint it on ::-webkit-progress-bar; Firefox uses
+     the element background above. */
+  progress.bo-progress::-webkit-progress-bar {
+    background: var(--bo-color-bg-muted);
+  }
+
+  progress.bo-progress::-webkit-progress-value {
+    background: var(--bo-color-accent);
+    border-radius: var(--bo-radius-sm);
+  }
+
+  progress.bo-progress::-moz-progress-bar {
+    background: var(--bo-color-accent);
+    border-radius: var(--bo-radius-sm);
+  }
+
+  /* Tones for threshold states (approaching / over budget). Color is one
+     channel — the accompanying text must say it too ("93% consumed",
+     "over budget"). */
+  progress.bo-progress--warning::-webkit-progress-value {
+    background: var(--bo-color-warning-strong);
+  }
+
+  progress.bo-progress--warning::-moz-progress-bar {
+    background: var(--bo-color-warning-strong);
+  }
+
+  progress.bo-progress--danger::-webkit-progress-value {
+    background: var(--bo-color-danger);
+  }
+
+  progress.bo-progress--danger::-moz-progress-bar {
+    background: var(--bo-color-danger);
+  }
+
+  /* Forced-colors: appearance:none + custom fills would vanish; hand the
+     element back to the platform, which renders it correctly there. */
+  @media (forced-colors: active) {
+    progress.bo-progress {
+      appearance: auto;
+    }
+  }
+}

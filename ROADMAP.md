@@ -1134,12 +1134,36 @@ added; if a genuinely new *kind* of per-table configuration surfaces
 later (something `data-*` attributes can't express), scope it then with
 its own real use case, same discipline as every other item here.
 
-**Parked, not scoped — do not build speculatively** (per the review's
-explicit recommendation): **Process Bar** (genuinely distinct from
-`.bo-stepper`, genuinely greenfield CSS surface, but no named use case —
-import job progress? budget consumption? — can graduate into a real
-Slice 9 item the moment a concrete scenario shows up, same pattern as
-item 7 above just did for table toolbar actions).
+11. [x] **Process Bar → `.bo-progress`** — the last parked item,
+       graduated and shipped via the same dogfood method that closed
+       items 8-9. The named scenario turned out to be one of the two the
+       parking note itself hypothesized: **budget consumption** — added
+       per-CC budget bars to po-app's `/spend` group headers using bare
+       native `<progress>` first, and the evidence was decisive: platform-
+       blue chrome ignoring every theme token, both light and dark.
+       Shipped `.bo-progress` (`packages/core/src/css/components/
+       progress/progress.css`) as CSS-first styling of the NATIVE
+       `<progress>` element — value/max semantics and the implicit
+       `progressbar` role come from the platform, zero JS/ARIA. Base +
+       `--warning`/`--danger` threshold tones, documented as decoration
+       on top of required visible text ("93% consumed"), never a
+       substitute. Forced-colors reverts to `appearance: auto` (platform
+       rendering) rather than losing the fills. Three new non-text 3:1
+       contrast pairs added to the gate (WCAG 1.4.11) — which immediately
+       caught two real failures: amber-500 on the track was 1.95:1 in
+       light (fixed by using `warning-strong`), and dark mode had NEVER
+       remapped `--bo-color-warning-strong` (a latent token-tier
+       oversight — amber-700 at 2.86:1 on dark muted; fixed with a dark
+       remap to amber-500, zero other consumers affected). New
+       `/components/progress` docs page (page-shape gate: 23 pages);
+       po-app `/spend` upgraded to the shipped class with threshold
+       tones. Verified live via Podman in both themes, docs + po-app
+       both; 27 contrast pairs × 2 themes + brand presets all pass; 55
+       tests unchanged.
+
+**Nothing parked remains.** Every item from every wishlist this project
+has received is now shipped, closed as a documented composition, or
+explicitly resolved.
 
 ## Long term (post-1.0)
 
