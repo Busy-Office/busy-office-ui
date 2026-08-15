@@ -63,6 +63,7 @@ const page = (title, current, main) => `<!doctype html>
       <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▥</span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▤</span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">Σ</span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/receive" ${current === '/receive' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">⌾</span><span class="bo-sidebar-nav__label">Receive</span></a></li>
     </ul>
   </nav>
   <main class="bo-app-shell__main"><div class="bo-stack bo-stack--loose">${main}</div></main>
@@ -275,6 +276,55 @@ const spendScreen = () => {
 </div>`;
 };
 
+// Receiving screen — second real consumer of initScanInput (incl. the
+// data-scan-status live region): scan a PO number, receive against it.
+const receiveScreen = () => `
+<h1>Receive against PO</h1>
+<div class="bo-form-field" style="max-inline-size: 22rem">
+  <label class="bo-form-field__label" for="rcv-scan">Scan PO barcode</label>
+  <input class="bo-input bo-input--code" id="rcv-scan" data-scan-input autofocus
+    placeholder="Waiting for scan…" aria-describedby="rcv-scan-status">
+  <p id="rcv-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+</div>
+<div class="bo-data-table-container" style="max-inline-size: 36rem">
+  <table class="bo-data-table">
+    <thead><tr><th scope="col">PO #</th><th scope="col">Vendor</th><th scope="col">Received</th></tr></thead>
+    <tbody id="rcv-log">
+      <tr><td colspan="3" class="bo-u-text-muted">No receipts yet — scan a PO number (try PO-88210).</td></tr>
+    </tbody>
+  </table>
+</div>
+<script type="module">
+  import { initScanInput } from '/assets/js/index.js';
+  initScanInput();
+  const known = new Map(${JSON.stringify(pos.map((p) => [p.id, p.vendor]))});
+  let cleared = false;
+  document.getElementById('rcv-scan').addEventListener('bo:scan', (e) => {
+    const id = e.detail.value.trim().toUpperCase();
+    const log = document.getElementById('rcv-log');
+    if (!known.has(id)) {
+      const toasts = document.getElementById('toasts');
+      const t = document.createElement('div');
+      t.className = 'bo-alert bo-alert--warning';
+      t.textContent = 'Unknown PO: ' + id;
+      toasts.append(t);
+      setTimeout(() => t.remove(), 3000);
+      return;
+    }
+    if (!cleared) { log.textContent = ''; cleared = true; }
+    const tr = document.createElement('tr');
+    const c1 = document.createElement('td');
+    c1.className = 'bo-data-table__col--code';
+    c1.textContent = id;
+    const c2 = document.createElement('td');
+    c2.textContent = known.get(id);
+    const c3 = document.createElement('td');
+    c3.textContent = new Date().toLocaleTimeString();
+    tr.append(c1, c2, c3);
+    log.prepend(tr);
+  });
+</script>`;
+
 const dashScreen = () => {
   const pending = pos.filter((p) => p.status === 'Pending');
   const total = pending.reduce((s, p) => s + p.amount, 0);
@@ -383,6 +433,10 @@ ${loose ? tableHtml : `<div class="bo-data-table-container">
   </div>
   ${tableHtml}
 </div>`}`));
+    }
+    if (path === '/receive' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Receive', '/receive', receiveScreen()));
     }
     if (path === '/spend' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });

@@ -196,9 +196,13 @@ was hidden came back visible) whose fix was already shipped in the
 re-runnable init (re-call `initTableToolbar()` after appending, now
 documented in the JSDoc and the data-table docs as the same re-call
 convention as `initDataTables()`). With the gap found, documented, and
-verified live, **both graduate to frozen**. `initScanInput` remains the
-single held behavior — goods-receipt is still its only real consumer.
-Net: 15 of 16 frozen, 1 held.
+verified live, **both graduate to frozen**. And in the same round,
+po-app gained a Receive screen (`/receive` — scan a PO number, receipt
+logged, unknown POs toast a warning) as `initScanInput`'s second real
+consumer, exercising the full contract including the `data-scan-status`
+live region (verified live: "Scanned PO-88210" announced, input cleared,
+next scan immediate). **`initScanInput` graduates too. Net: 16 of 16
+behaviors frozen — the freeze program is complete.**
 
 ### Design reviews
 - `.roundtable/grill-2026-08-11.md` (slice 1), `grill-2026-08-12.md` (slice 2),
