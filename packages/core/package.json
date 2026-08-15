@@ -1,6 +1,6 @@
 {
   "name": "@busy-office/ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CSS-first ERP UI framework: semantic components, density-aware tokens, modern CSS, zero runtime dependencies.",
   "keywords": [
     "css",

@@ -6,6 +6,17 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
+## 0.1.1 (unreleased)
+
+Metadata-only patch — no CSS/JS changes.
+
+- Fixed: `repository` URL in package metadata pointed at a nonexistent repo
+  (`ThePFMind/…`); corrected to `Busy-Office/busy-office-ui`, so the npm
+  package page's Repository link resolves.
+- Added: `.github/workflows/publish.yml` — releases now publish via npm
+  Trusted Publishing (OIDC, provenance attestation). Owner-triggered as
+  before: publishing a GitHub Release with tag `v<version>` is the trigger.
+
 ## 0.1.0 (2026-08-15)
 
 **First published release** — `@busy-office/ui@0.1.0` on npm (public,

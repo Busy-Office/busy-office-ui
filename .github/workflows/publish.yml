@@ -1,0 +1,53 @@
+# Publishes @busy-office/ui to npm via Trusted Publishing (OIDC) — no token,
+# no OTP. Owner-triggered: publishing a GitHub Release (tag v<version>) is the
+# trigger; CI builds from a clean checkout and the registry gets provenance.
+#
+# One-time setup on npmjs.com (package → Settings → Trusted Publisher):
+#   org Busy-Office · repo busy-office-ui · workflow publish.yml
+# Renaming this file breaks publishing until that setting is updated.
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  id-token: write # OIDC token for npm Trusted Publishing
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest # OIDC requires GitHub-hosted runners
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # Trusted Publishing needs npm >= 11.5.1; the runner's bundled npm may lag.
+      - run: npm install -g npm@latest
+
+      - name: Tag must match package.json version
+        run: |
+          PKG_VERSION=$(node -p "require('./packages/core/package.json').version")
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ "$TAG" != "$PKG_VERSION" ]; then
+            echo "Release tag v$TAG != package version $PKG_VERSION" >&2
+            exit 1
+          fi
+
+      - run: npm ci
+      # Same gates as ci.yml — a release must never publish what CI wouldn't pass.
+      - name: Build core (CSS dist + TS + api/behaviors/contrast gates)
+        run: npm run build -w @busy-office/ui
+      - name: Stylelint (bo- naming conventions)
+        run: npm run lint:css -w @busy-office/ui
+      - name: Behavior tests (against compiled dist)
+        run: npx vitest run --root packages/core
+      - name: Build docs (dist link resolution + page-shape gates)
+        run: npm run build -w docs
+        env:
+          DOCS_BASE: /busy-office-ui
+
+      - name: Publish to npm (OIDC, with provenance)
+        run: npm publish -w @busy-office/ui
