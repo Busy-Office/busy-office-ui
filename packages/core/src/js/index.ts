@@ -10,5 +10,6 @@ export { initScanInput } from './behaviors/scan-input.js';
 export { initValidationSummary } from './behaviors/validation-summary.js';
 export { initTabs } from './behaviors/tabs.js';
 export { initDropdowns } from './behaviors/dropdown.js';
+export { initCombobox } from './behaviors/combobox.js';
 export { initAlerts } from './behaviors/alert.js';
 export { trapFocus } from './utils/focus-trap.js';

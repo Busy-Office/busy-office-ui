@@ -865,14 +865,14 @@ items 2, 3, and 5 (device coverage, component tiers, patterns gallery)
 still need it before scoping further — those are the ones actually
 blocking further autonomous progress on this slice.
 
-## Slice 8 (candidate) — editable table, multi-select dropdown, searchable dropdown
+## Done — Slice 8: editable table, multi-select dropdown, searchable dropdown
 
 Triaged 2026-08-15 (user direction, wishlist — three concrete component
 asks). Unlike Slice 7 items 2/3/5, these describe specific buildable UI
 controls rather than open-ended device/pattern-gallery questions — checked
 the current codebase for each before scoping rather than assuming a gap,
-per dispatcher discipline. All three are ready to Continue-dispatch, none
-need the Objective review.
+per dispatcher discipline. All three shipped same-day across three Continue
+rounds, smallest-scoped first, each verified live before moving to the next.
 
 1. [x] **Editable table (inline change)** — shipped. New "Multi-row inline
        edit — dirty state + save/cancel" section on `/components/data-table`,
@@ -922,24 +922,44 @@ need the Objective review.
        37 behavior tests total (33 baseline, +3 for row-edit, +1 here),
        all pass; contrast/stylelint/build gates green; verified live via
        Podman (`--no-cache`) in both themes.
-3. [ ] **Searchable dropdown** — genuine gap, largest lift of the three.
-       Checked `packages/core/src/css/components/form/select.css`: it's a
-       native `<select>` wrapper only, no combobox/type-ahead capability;
-       `dropdown.css` has no search input either. No ARIA combobox pattern
-       exists anywhere in the package today. Accept: new `.bo-combobox`
-       component + opt-in `initCombobox()` behavior implementing the
-       WAI-ARIA APG combobox (single-select, list autocomplete) pattern —
-       `role="combobox"` input + filtered `role="listbox"` popup, type-ahead
-       narrows the list, arrow keys navigate filtered results, Enter
-       commits, Escape closes without changing value. Mirrors the existing
-       ARIA-grid precedent (Slice 6): document-delegation behavior, opt-in,
-       doesn't change any existing contract. Needs its own contrast pairs
-       and docs page; largest new-surface item here, do last of the three.
+3. [x] **Searchable dropdown** — shipped as a new `.bo-combobox` component +
+       opt-in `initCombobox()` behavior
+       (`packages/core/src/js/behaviors/combobox.ts`), implementing the
+       WAI-ARIA APG combobox pattern (single-select, list autocomplete):
+       `role="combobox"` input + `role="listbox"` popup, type-ahead
+       (case-insensitive substring match) narrows the visible options,
+       ArrowDown/Up move `aria-activedescendant` across the filtered set
+       only, Enter commits and dispatches `bo:combobox-select`
+       (`{value, text}`). The listbox is a real `[popover]` — same top-layer
+       reasoning as `.bo-dropdown__menu` — so Escape and click-outside close
+       it without touching the field's value **at no extra cost**: verified
+       live that a direct `hidePopover()` call (simulating native Esc/
+       light-dismiss) fires the `toggle` event asynchronously, which the
+       behavior's `toggle` listener catches to resync `aria-expanded` and
+       clear the active option — no code needed beyond that one listener.
+       New docs page `/components/combobox`, linked from the sidebar and
+       from Dropdown's demo-note (this vs. multi-select — different job).
+       No new contrast pairs needed — the active-option highlight reuses
+       `--bo-color-bg-selected`, already checked.
+       **One implementation note for future maintainers**: initially wrote
+       state checks against the `:popover-open` CSS pseudo-class (matching
+       a natural read of the Popover API), but that pseudo-class isn't
+       implemented in jsdom (the test runtime) and threw on `.matches()` —
+       switched to tracking open/closed via a plain `data-bo-open` attribute
+       set by our own `open()`/`close()` helpers instead, which is both
+       testable and avoids a dependency on the runtime's CSS selector
+       support for a value the code already knows internally.
+       42 behavior tests total (37 + 5 here), all pass; contrast/stylelint/
+       build gates green; verified live via Podman (`--no-cache`) in both
+       themes and at a 390px isolated container width (filtering, arrow-key
+       nav, and Esc/light-dismiss resync all confirmed working against the
+       real, non-cloned demo widget — a `cloneNode`-based narrow-width test
+       harness hit a one-off `showPopover()` hiccup specific to cloned
+       popover nodes, not a real usage pattern, so not treated as a
+       product bug).
 
-Smallest-scoped first: item 1 is mostly composition of existing primitives
-(smallest lift), item 2 is a real but contained new variant, item 3 is a
-full new ARIA pattern + behavior (largest). Dispatch in that order across
-Continue rounds.
+**Slice 8 is now complete — all three items shipped, verified live,
+committed.** No further Continue rounds queued for this slice.
 
 ## Long term (post-1.0)
 

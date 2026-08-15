@@ -1,0 +1,45 @@
+@layer bo-components {
+  /* Editable combobox with list autocomplete (WAI-ARIA APG combobox
+     pattern). The listbox is a [popover]: renders in the top layer, so
+     it's never clipped by scrolling containers — same reasoning as
+     .bo-dropdown__menu. initCombobox() filters on input, positions the
+     listbox under the field, and syncs aria-expanded on open/close. */
+  .bo-combobox {
+    position: relative;
+    display: block;
+  }
+
+  .bo-combobox__listbox {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    min-inline-size: 12rem;
+    max-block-size: 16rem;
+    overflow-y: auto;
+    padding: var(--bo-space-1);
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface-raised);
+    color: var(--bo-color-text-primary);
+    box-shadow: var(--bo-shadow-md);
+    list-style: none;
+  }
+
+  .bo-combobox__option {
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border-radius: var(--bo-radius-sm);
+    font-size: var(--bo-density-font-size);
+    cursor: pointer;
+  }
+
+  .bo-combobox__option:hover {
+    background: var(--bo-state-hover-overlay);
+  }
+
+  /* The active (arrow-key-highlighted) option — ephemeral, not a persisted
+     "chosen" marker. Single-select: the committed value lives in the
+     input, not on any option. */
+  .bo-combobox__option[aria-selected="true"] {
+    background: var(--bo-color-bg-selected);
+  }
+}

@@ -229,6 +229,82 @@ describe('initDropdowns (popover)', () => {
   });
 });
 
+describe('initCombobox', () => {
+  function combobox(): { input: HTMLInputElement; listbox: HTMLElement } {
+    html`
+      <div class="bo-combobox">
+        <input class="bo-input" type="text" role="combobox" id="cb-input"
+            aria-expanded="false" aria-controls="cb-list" aria-autocomplete="list" autocomplete="off" />
+        <ul class="bo-combobox__listbox" id="cb-list" role="listbox" popover>
+          <li class="bo-combobox__option" role="option" id="cb-opt-1" data-value="CC-1180">CC-1180</li>
+          <li class="bo-combobox__option" role="option" id="cb-opt-2" data-value="CC-2205">CC-2205</li>
+          <li class="bo-combobox__option" role="option" id="cb-opt-3" data-value="CC-4021">CC-4021</li>
+        </ul>
+      </div>
+    `;
+    ui.initCombobox();
+    return {
+      input: document.getElementById('cb-input') as HTMLInputElement,
+      listbox: document.getElementById('cb-list') as HTMLElement,
+    };
+  }
+  const type = (input: HTMLInputElement, value: string) => {
+    input.value = value;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  const key = (input: HTMLInputElement, k: string) =>
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
+
+  it('typing filters options case-insensitively and opens the list', () => {
+    const { input, listbox } = combobox();
+    type(input, '2205');
+    expect(input.getAttribute('aria-expanded')).toBe('true');
+    const hidden = [...listbox.querySelectorAll('[role="option"]')].map((o) => (o as HTMLElement).hidden);
+    expect(hidden).toEqual([true, false, true]);
+  });
+
+  it('no matches closes the list', () => {
+    const { input } = combobox();
+    type(input, 'zzz');
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('ArrowDown moves aria-activedescendant across the filtered options only', () => {
+    const { input } = combobox();
+    type(input, 'cc');
+    key(input, 'ArrowDown');
+    expect(input.getAttribute('aria-activedescendant')).toBe('cb-opt-1');
+    key(input, 'ArrowDown');
+    expect(input.getAttribute('aria-activedescendant')).toBe('cb-opt-2');
+    // ArrowUp clamps at the top rather than wrapping.
+    key(input, 'ArrowUp');
+    key(input, 'ArrowUp');
+    key(input, 'ArrowUp');
+    expect(input.getAttribute('aria-activedescendant')).toBe('cb-opt-1');
+  });
+
+  it('Enter commits the active option, closes the list, and dispatches bo:combobox-select', () => {
+    const { input } = combobox();
+    let detail: any = null;
+    input.addEventListener('bo:combobox-select', (e: any) => { detail = e.detail; });
+    type(input, 'cc');
+    key(input, 'ArrowDown');
+    key(input, 'ArrowDown');
+    key(input, 'Enter');
+    expect(input.value).toBe('CC-2205');
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    expect(detail).toEqual({ value: 'CC-2205', text: 'CC-2205' });
+  });
+
+  it('clicking an option commits it the same way as Enter', () => {
+    const { input, listbox } = combobox();
+    type(input, 'cc');
+    (listbox.querySelector('#cb-opt-3') as HTMLElement).click();
+    expect(input.value).toBe('CC-4021');
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+  });
+});
+
 describe('initCollapsibleCards', () => {
   function card(): { trigger: HTMLElement; body: HTMLElement } {
     html`

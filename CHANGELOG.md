@@ -60,14 +60,17 @@ pin.
   first real theme preset (`@busy-office/ui/css/brand-indigo`) with its own
   contrast-gate validation; "Data display" docs grouping.
 
-- **Slice 8 (in progress) — editable table, multi-select dropdown, searchable
-  dropdown**: multi-row inline edit (`data-row-edit` + opt-in
-  `initRowEdit()`) — per-row dirty state (reuses the error-row visual
-  channel, amber instead of red) with Save/Cancel, `bo:row-save` event for
-  the consumer to persist. Multi-select dropdown (`data-multiselect` on
+- **Slice 8 — editable table, multi-select dropdown, searchable dropdown**:
+  multi-row inline edit (`data-row-edit` + opt-in `initRowEdit()`) —
+  per-row dirty state (reuses the error-row visual channel, amber instead
+  of red) with Save/Cancel, `bo:row-save` event for the consumer to
+  persist. Multi-select dropdown (`data-multiselect` on
   `.bo-dropdown__menu` + real checkbox items) — stays open across
   selections, trigger label reflects a live selection count, no new init
-  function (folded into `initDropdowns()`).
+  function (folded into `initDropdowns()`). Combobox (`.bo-combobox` +
+  opt-in `initCombobox()`) — WAI-ARIA APG combobox pattern, single-select
+  list autocomplete with a top-layer `[popover]` listbox, `bo:combobox-
+  select` event on commit.
 
 ### API freeze audit (2026-08-15)
 

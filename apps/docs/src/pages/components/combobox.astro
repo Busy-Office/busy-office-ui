@@ -1,0 +1,87 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+
+const markup = `<div class="bo-combobox">
+  <input class="bo-input" type="text" role="combobox" id="cb-input"
+      aria-expanded="false" aria-controls="cb-list" aria-autocomplete="list"
+      autocomplete="off" placeholder="Search cost centers…" />
+  <ul class="bo-combobox__listbox" id="cb-list" role="listbox" popover>
+    <li class="bo-combobox__option" role="option" id="cb-opt-1" data-value="CC-1180">CC-1180 — Warehouse</li>
+    <li class="bo-combobox__option" role="option" id="cb-opt-2" data-value="CC-2205">CC-2205 — Logistics</li>
+    <li class="bo-combobox__option" role="option" id="cb-opt-3" data-value="CC-4021">CC-4021 — Procurement</li>
+  </ul>
+</div>
+
+<script type="module">
+  import { initCombobox } from "@busy-office/ui/js";
+  initCombobox(); // once — filtering, arrow-key nav, Enter-to-commit, Esc/light-dismiss are already native
+</script>`;
+---
+<Gallery title="Combobox">
+  <p class="demo-note">
+    A single-select text field that filters a list as you type — for picking one value
+    out of a longer list than a plain <a href="/components/form">select</a> reads
+    well, without the overhead of asking "which of these N do I want" up front. For
+    picking <strong>several</strong> values, use the
+    <a href="/components/dropdown">multi-select dropdown</a> instead — different job.
+  </p>
+  <ClassRef component="combobox" />
+
+  <section class="demo">
+    <h2>Basic</h2>
+    <div class="bo-combobox">
+      <input class="bo-input" type="text" role="combobox" id="demo-cb-input"
+          aria-expanded="false" aria-controls="demo-cb-list" aria-autocomplete="list"
+          autocomplete="off" placeholder="Search cost centers…" />
+      <ul class="bo-combobox__listbox" id="demo-cb-list" role="listbox" popover>
+        <li class="bo-combobox__option" role="option" id="demo-cb-opt-1" data-value="CC-1180">CC-1180 — Warehouse</li>
+        <li class="bo-combobox__option" role="option" id="demo-cb-opt-2" data-value="CC-2205">CC-2205 — Logistics</li>
+        <li class="bo-combobox__option" role="option" id="demo-cb-opt-3" data-value="CC-4021">CC-4021 — Procurement</li>
+        <li class="bo-combobox__option" role="option" id="demo-cb-opt-4" data-value="CC-3390">CC-3390 — Facilities</li>
+      </ul>
+    </div>
+    <p class="bo-u-text-muted">Type to filter (case-insensitive substring match against
+    each option's full text — try "log" or "cc-33"), <kbd>↓</kbd>/<kbd>↑</kbd> to move
+    through the filtered results, <kbd>Enter</kbd> to commit. The listbox is a real
+    <code>[popover]</code> — <kbd>Esc</kbd> and clicking outside close it without
+    changing the field's value, for free.</p>
+  </section>
+
+  <section class="demo">
+    <h2>WAI-ARIA APG combobox pattern, not a custom widget</h2>
+    <p>The input carries <code>role="combobox"</code>, <code>aria-expanded</code>,
+    <code>aria-controls</code>, and <code>aria-autocomplete="list"</code>; the popup is
+    a real <code>role="listbox"</code> with <code>role="option"</code> children.
+    <code>initCombobox()</code> keeps <code>aria-activedescendant</code> in sync as the
+    active option changes — nothing is simulated with generic <code>&lt;div&gt;</code>s.
+    On commit, it fires <code>bo:combobox-select</code>
+    (<code>detail: {'{'} value, text {'}'}</code>) — your code reads
+    <code>e.detail.value</code> for the machine value (<code>data-value</code> on the
+    chosen option) and persists it (a hidden input, a form submit, an <code>hx-patch</code>).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <script>
+    import { initCombobox } from '@busy-office/ui/js';
+    initCombobox();
+  </script>
+
+  <ApiTable
+    component="combobox"
+    js="Required: initCombobox() — without it the field is a plain text input; typing does not filter or open the list."
+    notes={[
+      'Single-select only — the committed value lives in the input\'s text, not on any option (options never carry a persisted "chosen" marker across reopens). For choosing several values, use the <a href="/components/dropdown">multi-select dropdown</a> instead.',
+      'The listbox is a native <code>[popover]</code> — never clipped by scrolling containers, and <kbd>Esc</kbd>/light-dismiss close it without touching the field value at no extra cost.',
+      'Filtering is a case-insensitive substring match against each option\'s full text, computed client-side against the options already in the markup — for a server-driven / async result list, swap the options\' <code>hidden</code> state yourself in response to your own fetch instead of relying on the built-in filter.',
+      'Commit dispatches <code>bo:combobox-select</code> with <code>{ value, text }</code> — <code>value</code> comes from the chosen option\'s <code>data-value</code> (falls back to its text if absent).',
+    ]}
+  />
+  <Related links={[["/components/dropdown", "Dropdown"], ["/components/form", "Forms"], ["/concepts/accessibility", "Accessibility model"]]} />
+</Gallery>

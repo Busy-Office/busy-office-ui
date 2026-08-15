@@ -19,6 +19,7 @@
 @import "./components/tabs/tabs.css";
 @import "./components/alert/alert.css";
 @import "./components/dropdown/dropdown.css";
+@import "./components/combobox/combobox.css";
 @import "./components/pagination/pagination.css";
 @import "./components/filters/filters.css";
 @import "./components/dashboard/dashboard.css";
