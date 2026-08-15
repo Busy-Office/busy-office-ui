@@ -127,3 +127,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-15 12:16 · Continue · build · Second-consumer round: po-app adopts initTableToolbar + initLoadMore · both graduate to frozen (15/16); usage pressure surfaced + resolved the appended-rows column-state gap, documented as the re-call convention; verified live · 3627d83
 - 2026-08-15 12:19 · Continue · build · initScanInput second consumer: po-app /receive screen · full contract incl. live region verified live; last held behavior graduates -- 16/16 frozen, freeze program complete · 3678dca
 - 2026-08-15 12:19 · Roadmap · plan · 1.0 checklist evidence re-sync · 24 pages / 16 behaviors all frozen / 55 tests / 27 pairs · abcf1b0
+- 2026-08-15 12:27 · Continue · build · Visual-regression harness (test:visual, 32-shot matrix) · shipped advisory; validated deterministic + red-capable (accent-swap failed exactly the 6 accent-visible shots); baselines committed (3.2MB) · 8a69f0d
