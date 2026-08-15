@@ -350,13 +350,13 @@ const rows = [
           <th scope="col" class="bo-data-table__col--numeric">Amount</th>
         </tr></thead>
         <tbody>
-          <tr><th scope="colgroup" colspan="3">CC-1180 — Facilities</th></tr>
+          <tr><th scope="rowgroup" colspan="3">CC-1180 — Facilities</th></tr>
           <tr><td class="bo-data-table__col--code">PO-88212</td><td>Initech GmbH</td><td class="bo-data-table__col--numeric">$730.25</td></tr>
           <tr><td class="bo-data-table__col--code">PO-88214</td><td>Stark Components</td><td class="bo-data-table__col--numeric">$56,000.00</td></tr>
           <tr><td colspan="2" class="bo-data-table__col--right">Subtotal CC-1180</td><td class="bo-data-table__col--numeric">$56,730.25</td></tr>
         </tbody>
         <tbody>
-          <tr><th scope="colgroup" colspan="3">CC-4021 — Warehouse</th></tr>
+          <tr><th scope="rowgroup" colspan="3">CC-4021 — Warehouse</th></tr>
           <tr><td class="bo-data-table__col--code">PO-88210</td><td>Acme Supply Co.</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
           <tr><td colspan="2" class="bo-data-table__col--right">Subtotal CC-4021</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
         </tbody>
@@ -368,8 +368,10 @@ const rows = [
     <p class="bo-u-text-muted">No grouping component exists because none is needed —
     this composes from plain HTML table semantics the CSS already styles: one
     <code>&lt;tbody&gt;</code> per group, the group header a
-    <code>&lt;th scope="colgroup" colspan&gt;</code> row (bold by default, announced
-    as a header for the group's rows), subtotal and grand-total rows are ordinary
+    <code>&lt;th scope="rowgroup" colspan&gt;</code> row (bold by default; the
+    <code>scope</code> declares it heads its <code>&lt;tbody&gt;</code> — screen-reader
+    support for rowgroup association varies, so keep group names ALSO in prose/
+    captions when the grouping is load-bearing), subtotal and grand-total rows are ordinary
     rows using <code>__col--right</code>/<code>__col--numeric</code>. Proven in the
     <code>examples/po-app</code> "Spend by cost center" screen, both themes.
     Don't combine with <code>--striped</code> (stripes land arbitrarily on summary

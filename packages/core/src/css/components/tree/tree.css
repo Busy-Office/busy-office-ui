@@ -71,6 +71,17 @@
     rotate: 90deg;
   }
 
+  /* RTL: the closed chevron must point INTO the reading direction (same
+     explicit flip precedent as .bo-select's chevron — glyphs don't mirror
+     with logical properties). The open state rotates to pointing-down
+     from either side. */
+  [dir="rtl"] .bo-tree__label::before {
+    content: "◂" / "";
+  }
+  [dir="rtl"] .bo-tree__branch[open] > .bo-tree__label::before {
+    rotate: -90deg;
+  }
+
   /* Leaves align their text with sibling branch labels: pad by the same
      1em chevron slot + gap the summary carries. */
   .bo-tree__link {

@@ -47,9 +47,11 @@ const PAGES = [
 ];
 const THEMES = ['light', 'dark'];
 const WIDTHS = [1440, 390];
-// >0.1% changed pixels fails — loose enough for font antialiasing noise,
-// tight enough to catch real layout/theme regressions.
-const FAIL_RATIO = 0.001;
+// Absolute changed-pixel budget: same-machine runs measured ~0px noise, so
+// 100px catches even a single broken badge (~1,300px) regardless of how
+// tall a full page is — a ratio threshold silently scaled the allowance
+// with page height (grill finding, Rex).
+const FAIL_PX = 100;
 
 const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.woff2': 'font/woff2' };
 const server = createServer(async (req, res) => {
@@ -57,7 +59,9 @@ const server = createServer(async (req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';
     if (!extname(p)) p += '/index.html';
-    const body = await readFile(join(dist, p));
+    const resolved = join(dist, p);
+    if (!resolved.startsWith(dist)) throw new Error('traversal');
+    const body = await readFile(resolved);
     res.writeHead(200, { 'content-type': MIME[extname(p)] ?? 'application/octet-stream' });
     res.end(body);
   } catch {
@@ -92,7 +96,16 @@ for (const theme of THEMES) {
       // Full-page shot; disable animations/caret for stability.
       await page.evaluate(() => {
         const s = document.createElement('style');
-        s.textContent = '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}';
+        s.textContent = '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}' +
+          // The app shell is 100dvh/overflow-hidden with an inner scroller —
+          // fullPage:true only ever saw the first viewport (grill finding,
+          // Rex). Unlock it so the document itself carries the full height.
+          // Known trade-off: at 390px the unlocked shell lays sidebar+main
+          // side-by-side, so narrow shots verify CONTENT rendering, not the
+          // shell's mobile chrome; element-scoped shots are the follow-up.
+          '.bo-app-shell{block-size:auto!important;overflow:visible!important}' +
+          '.bo-app-shell__main{block-size:auto!important;overflow:visible!important}' +
+          '.bo-app-shell__sidebar{position:static!important;block-size:auto!important}';
         document.head.append(s);
       });
       const shot = await page.screenshot({ fullPage: true });
@@ -114,10 +127,9 @@ for (const theme of THEMES) {
       }
       const diff = new PNG({ width: a.width, height: a.height });
       const changed = pixelmatch(a.data, b.data, diff.data, a.width, a.height, { threshold: 0.1 });
-      const ratio = changed / (a.width * a.height);
-      if (ratio > FAIL_RATIO) {
+      if (changed > FAIL_PX) {
         failures++;
-        console.log(`FAIL ${name}: ${(ratio * 100).toFixed(3)}% pixels changed`);
+        console.log(`FAIL ${name}: ${changed}px changed (budget ${FAIL_PX})`);
         await writeFile(join(diffDir, name), PNG.sync.write(diff));
       } else {
         console.log(`  ok ${name}${changed ? ` (${changed}px noise)` : ''}`);

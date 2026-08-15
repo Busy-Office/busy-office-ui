@@ -5,7 +5,7 @@ import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
 
-const basic = `<progress class="bo-progress" max="100" value="71"></progress>
+const basic = `<progress class="bo-progress" max="100" value="71" aria-label="71% of budget consumed"></progress>
 <span class="bo-u-text-muted">71% consumed</span>`;
 
 const tones = `<progress class="bo-progress" max="100" value="42"></progress>
@@ -58,9 +58,10 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
   <ApiTable
     component="progress"
     notes={[
-      'A native <code>&lt;progress&gt;</code> element, not a div — <code>value</code>/<code>max</code> and the <code>progressbar</code> role are platform semantics; the framework only styles it.',
+      'A native <code>&lt;progress&gt;</code> element, not a div — <code>value</code>/<code>max</code> and the <code>progressbar</code> role are platform semantics; the framework only styles it. Give it an accessible name (<code>aria-label</code> or a <code>&lt;label&gt;</code>) — adjacent prose text is NOT programmatically associated, and the name can carry the real value when you visually cap the bar ("112% of budget consumed" with <code>value="100"</code>).',
       'Always pair with visible text ("71% consumed") — the fill is one channel, and tones are decoration on top of the text, never a substitute for it.',
       'Under forced-colors the element reverts to platform rendering (<code>appearance: auto</code>) — custom fills would otherwise vanish entirely.',
+      'Always set <code>value</code> — indeterminate (<code>value</code>-less) progress is NOT supported by this styling (<code>appearance: none</code> suppresses the platform\'s indeterminate animation, so "unknown" would render as an empty bar). For unknown-duration work, use <a href="/components/state-patterns">Skeleton</a> instead.',
       'For discrete named steps (Submitted → Approved → Paid), use <a href="/components/stepper">Stepper</a> instead.',
     ]}
   />

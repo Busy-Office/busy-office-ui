@@ -71,14 +71,14 @@ const page = (title, current, main) => `<!doctype html>
 <script type="module">
   import { initDialogs, initDataTables, initAlerts } from '/assets/js/index.js';
   initDialogs(); initDataTables(); initAlerts();
-  document.body.addEventListener('htmx:afterSwap', (e) => initDataTables(e.target));
+  document.body.addEventListener('htmx:afterSwap', (e) => { initDataTables(e.target); window.__btt?.(); });
 </script>
 <div class="bo-toast-region" role="status" aria-live="polite" id="toasts"></div>
 </body></html>`;
 
 // ---------- fragments ----------
 const rowHtml = (p) => `<tr id="row-${p.id}">
-  <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
+  <td><input type="checkbox" name="id" value="${p.id}" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
   <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
   <td class="bo-u-text-truncate" data-col="vendor">${p.vendor}</td>
   <td class="bo-data-table__col--secondary bo-data-table__col--code" data-col="cc">${p.cc}</td>
@@ -128,13 +128,14 @@ const listScreen = () => `
     ${tbodyHtml(pos.slice(0, PAGE_SIZE))}
   </table>
   <div class="bo-data-table__footer" style="justify-content: center">
-    <button class="bo-btn bo-btn--secondary" type="button" data-table-load-more
+    <button class="bo-btn bo-btn--secondary" type="button" data-table-load-more id="po-load-more"
       data-po-offset="${PAGE_SIZE}">Load more (${pos.length - PAGE_SIZE} of ${pos.length} remaining)</button>
   </div>
 </div>
 <script type="module">
   import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
   initDropdowns(); initTableToolbar(); initLoadMore();
+  window.__btt = initTableToolbar; // layout's afterSwap re-applies column state
   document.addEventListener('bo:table-export', () => {
     const toasts = document.getElementById('toasts');
     const t = document.createElement('div');
@@ -249,10 +250,11 @@ const spendScreen = () => {
       const pct = budget ? Math.round((spent / budget) * 100) : 0;
       const barTone = pct >= 90 ? ' bo-progress--danger' : pct >= 75 ? ' bo-progress--warning' : '';
       return `<tbody>
-      <tr><th scope="colgroup" colspan="4">${cc}
+      <tr><th scope="rowgroup" colspan="4">${cc}
         <span class="bo-u-text-muted" style="font-weight: normal"> — budget ${money(budget)},</span>
-        <progress class="bo-progress${barTone}" max="100" value="${Math.min(pct, 100)}"></progress>
-        <span class="bo-u-text-muted" style="font-weight: normal">${pct}% consumed${pct >= 90 ? ' — review before approving' : ''}</span>
+        <progress class="bo-progress${barTone}" max="100" value="${Math.min(pct, 100)}"
+          aria-label="${pct}% of ${cc} budget consumed"></progress>
+        <span class="bo-u-text-muted" style="font-weight: normal">${pct}% consumed${pct >= 90 ? ' — review before approving' : pct >= 75 ? ' — approaching budget' : ''}</span>
       </th></tr>
       ${list.map((p) => `<tr>
         <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
@@ -445,13 +447,16 @@ ${loose ? tableHtml : `<div class="bo-data-table-container">
     if (path === '/pos/bulk-approve' && req.method === 'POST') {
       let body = '';
       for await (const c of req) body += c;
-      const ids = new URLSearchParams(body).getAll('on'); // unnamed checkboxes post nothing useful — see findings
+      const ids = new Set(new URLSearchParams(body).getAll('id'));
       pos.forEach((p) => {
-        if (p.status === 'Pending') p.status = 'Approved';
+        if (ids.has(p.id) && p.status === 'Pending') p.status = 'Approved';
       });
       audit.push({ t: new Date().toISOString(), what: 'bulk approve' });
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(tbodyHtml(pos));
+      // The swap returns ALL rows, which would desync the load-more offset
+      // and duplicate rows on the next click (grill finding) — remove the
+      // button out-of-band in the same response.
+      return res.end(tbodyHtml(pos) + '<button id="po-load-more" hx-swap-oob="delete"></button>');
     }
     const m = path.match(/^\/pos\/(PO-\d+)(\/approve)?$/);
     if (m) {
