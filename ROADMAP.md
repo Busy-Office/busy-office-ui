@@ -1450,6 +1450,23 @@ the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
        VoiceOver + NVDA; results recorded in `.roundtable/` and cited by the
        ACR.
 
+## Explore log
+
+- [x] **2026-08-15 — po-app consumer image broken by the README-stamp gate**
+      (Explore find, triaged and fixed same wake). `stamp-readme.mjs`
+      required the repo-root README.md, but `examples/po-app`'s Dockerfile
+      build stage deliberately copies only `packages/core` — the minimal
+      context that exists specifically to prove the real npm package
+      boundary. That context legitimately has no root README (it never
+      ships to npm anyway). Fixed: the root README participates only if
+      present; its absence in an isolated build is not an error, only
+      `packages/core/README.md` (`requireAll: true`) still gates. Verified
+      both ways: full-repo `--check` still stamps/verifies both files;
+      `podman build` of the po-app image now succeeds end-to-end (built,
+      ran, served `/pos` 200 with real content). This had been silently
+      broken since Slice 14 item 1 shipped — po-app isn't in CI, so nothing
+      caught it until this Explore wake actually ran the build.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):

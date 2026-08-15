@@ -39,7 +39,17 @@ const stats = {
 const check = process.argv.includes('--check');
 let drifted = false;
 for (const { path, requireAll } of readmePaths) {
-  const src = readFileSync(path, 'utf8');
+  let src;
+  try {
+    src = readFileSync(path, 'utf8');
+  } catch (err) {
+    if (err.code === 'ENOENT' && !requireAll) continue; // repo root README is
+    // outside packages/core's own contract (never ships to npm) — an
+    // isolated build context that copies only packages/core (e.g. the
+    // po-app consumer image, which exists specifically to prove the real
+    // npm package boundary) legitimately won't have it.
+    throw err;
+  }
   const out = src.replace(
     /<!-- stat:([a-z]+) -->[\s\S]*?<!-- \/stat -->/g,
     (whole, name) => {
