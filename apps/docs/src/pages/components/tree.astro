@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const markup = `<nav aria-label="Cost centers">
   <ul class="bo-tree">
@@ -95,7 +96,7 @@ const markup = `<nav aria-label="Cost centers">
     roving tabindex) that this framework doesn't ship — and it's what a BOM <em>picker</em>
     (select components, check for costing, drag to restructure) actually needs,
     which is why BOM explorers are deliberately NOT claimed above. The split mirrors the
-    <a href="/components/data-table">data table's</a> Simple vs. Advanced tiers —
+    <a href={base + '/components/data-table'}>data table's</a> Simple vs. Advanced tiers —
     don't take the heavy widget when links and disclosures already do the job.</p>
   </section>
 

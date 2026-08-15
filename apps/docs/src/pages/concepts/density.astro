@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const recipe = `<html data-density="compact">          <!-- app-wide default -->
 …
 <div class="bo-data-table-container" data-density="spacious">
@@ -35,7 +36,7 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
     <p>Audited 2026-08-15 as a follow-up to the Slice 7 Objective review — the
     question was whether "Web / Mobile app / RF / Tablet (Bento UI)" needs
     dedicated component variants. It doesn't: density + the named
-    <a href="/concepts/container-queries">container-query registry</a> already
+    <a href={base + '/concepts/container-queries'}>container-query registry</a> already
     cover every one of these archetypes with the SAME components, just
     configured differently. No new CSS/JS came out of this — it's a
     verification pass, not a build.</p>
@@ -46,22 +47,22 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
           <tr>
             <td>Web</td>
             <td><code>data-density="comfortable"</code> (the default) + ordinary container-query response</td>
-            <td><a href="/components/data-table">Data table</a>, <a href="/components/dashboard">Dashboard</a></td>
+            <td><a href={base + '/components/data-table'}>Data table</a>, <a href={base + '/components/dashboard'}>Dashboard</a></td>
           </tr>
           <tr>
             <td>Mobile app</td>
             <td><code>data-density="compact"</code> + the app shell's own <code>bo-shell</code> container query (sidebar collapses to an icon rail ≤ 56rem) — this docs site does exactly that</td>
-            <td>Resize this page's window below 56rem, or see <a href="/concepts/container-queries">the container-query registry</a></td>
+            <td>Resize this page's window below 56rem, or see <a href={base + '/concepts/container-queries'}>the container-query registry</a></td>
           </tr>
           <tr>
             <td>Tablet (Bento UI)</td>
             <td><code>bo-widget-grid</code>'s container query (span-2 widgets collapse ≤ 41rem) — a Bento-style icon/tile grid is this SAME mechanism at a different breakpoint, not a new component. The forthcoming "App Launch" pattern (Slice 9, queued) uses it directly rather than inventing a separate grid.</td>
-            <td><a href="/components/dashboard">Dashboard</a> widget grid</td>
+            <td><a href={base + '/components/dashboard'}>Dashboard</a> widget grid</td>
           </tr>
           <tr>
             <td>RF / warehouse</td>
             <td><code>data-density="spacious"</code> (44px targets, meets WCAG 2.5.8) + <code>initScanInput()</code>'s keyboard-wedge input mode — the one archetype that genuinely needed a new input pattern, not just a layout setting</td>
-            <td><a href="/patterns/goods-receipt">Goods receipt pattern</a></td>
+            <td><a href={base + '/patterns/goods-receipt'}>Goods receipt pattern</a></td>
           </tr>
         </tbody>
       </table>

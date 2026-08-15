@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const variants = `<button class="bo-btn">Primary</button>
 <button class="bo-btn bo-btn--secondary">Secondary</button>
 <button class="bo-btn bo-btn--ghost">Ghost</button>
@@ -65,7 +66,7 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
     <p class="bo-u-text-muted">What <code>--sm --ghost --icon</code> exists for:
     per-row actions that don't shout. Each icon button names its ROW in the
     <code>aria-label</code> ("Edit INV-10234", never just "Edit"); for more than
-    two actions, collapse into a <a href="/components/dropdown">row dropdown</a>.</p>
+    two actions, collapse into a <a href={base + '/components/dropdown'}>row dropdown</a>.</p>
   </section>
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',

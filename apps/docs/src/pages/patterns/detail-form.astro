@@ -1,10 +1,11 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: multi-column detail form">
   <p class="demo-note">
-    The edit-screen counterpart to <a href="/patterns/record-detail">record detail</a>:
+    The edit-screen counterpart to <a href={base + '/patterns/record-detail'}>record detail</a>:
     a full purchase-order edit form, composed entirely from existing components —
     <code>.bo-form-section</code> fieldsets, the <code>.bo-form-row</code> auto-fit
     column grid, the line-items data table, and a sticky <code>.bo-form-actions</code>

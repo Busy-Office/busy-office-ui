@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const money = `<span class="bo-amount">
   <span class="bo-amount__currency">$</span>
@@ -207,7 +208,7 @@ const markup = `<span class="bo-amount">
     <p class="bo-u-text-muted"><code>__unit</code> carries <code>× EA</code>,
     <code>/ kg</code>, <code>pcs</code>, <code>hrs</code> — a quantity’s unit or a rate’s
     denominator. This is a read-only display value; for an <em>editable</em> count with
-    its own unit, see <a href="/components/quantity">Quantity</a> — same
+    its own unit, see <a href={base + '/components/quantity'}>Quantity</a> — same
     <code>__unit</code> convention, plus increment/decrement and native
     validation.</p>
   </section>
@@ -220,7 +221,7 @@ const markup = `<span class="bo-amount">
     input variant of it (the nested <code>__currency</code>/<code>__fraction</code>
     parts can't live inside a native <code>&lt;input&gt;</code> and still be one
     accessible value). For data entry, use a plain <code>.bo-input--numeric</code>
-    field — put the currency in the label, the same way <a href="/components/quantity">Quantity</a>
+    field — put the currency in the label, the same way <a href={base + '/components/quantity'}>Quantity</a>
     puts the unit in <code>__unit</code> text next to an editable control.</p>
   </section>
 

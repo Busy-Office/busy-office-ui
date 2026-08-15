@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search" sits on it. -->
 <form class="bo-filter-bar" role="search" aria-label="Invoice filters">
   <input class="bo-input" type="search" name="q" aria-label="Search invoices" />
@@ -58,7 +59,7 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
       </table>
     </div>
     <p class="bo-u-text-muted">The full loop: the
-    <a href="/components/dropdown">multi-select dropdown</a> is where chip values
+    <a href={base + '/components/dropdown'}>multi-select dropdown</a> is where chip values
     come from, the active chip echoes the applied filter, the rows below match it.
     Also the base vs <code>--active</code> chip contrast — an inactive chip
     ("Overdue only") is an available filter, an active one is applied and

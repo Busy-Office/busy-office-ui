@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const skeletonRows = `<div class="bo-stack bo-stack--tight" aria-busy="true" aria-label="Loading purchase orders">
   <span class="bo-skeleton" style="inline-size: 40%"></span>
@@ -87,7 +88,7 @@ const errorState = `<div class="bo-state bo-state--error">
     known), skeleton rows sized like the data they stand in for,
     <code>aria-busy</code> on the <code>&lt;tbody&gt;</code>. For a mid-session
     re-fetch of a table that already has rows, use
-    <a href="/components/data-table"><code>data-loading</code></a> instead — keep
+    <a href={base + '/components/data-table'}><code>data-loading</code></a> instead — keep
     the stale rows visible and dimmed.</p>
     <pre><code>{`<tbody aria-busy="true">
   <tr>

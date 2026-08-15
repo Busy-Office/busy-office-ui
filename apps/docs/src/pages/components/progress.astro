@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const basic = `<progress class="bo-progress" max="100" value="71" aria-label="71% of budget consumed"></progress>
 <span class="bo-u-text-muted">71% consumed</span>`;
@@ -26,7 +27,7 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
     Continuous progress — budget consumption, import jobs, storage quotas. A styled
     <strong>native <code>&lt;progress&gt;</code></strong> element (the platform's
     value/max semantics and implicit <code>progressbar</code> role come free — zero
-    JS, zero ARIA). Distinct from <a href="/components/stepper">Stepper</a>, which is
+    JS, zero ARIA). Distinct from <a href={base + '/components/stepper'}>Stepper</a>, which is
     for discrete named steps. Always pair it with visible text ("71% consumed") —
     the fill is one channel.
   </p>
@@ -64,7 +65,7 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
       </div>
     </div>
     <p class="bo-u-text-muted">The dashboard pairing: a
-    <a href="/components/dashboard#card">stat tile</a> carries the number, the bar
+    <a href={base + '/components/dashboard#card'}>stat tile</a> carries the number, the bar
     makes the trend scannable at a glance across a grid of cost centers.</p>
   </section>
   <section class="demo">
@@ -78,8 +79,8 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
       'A native <code>&lt;progress&gt;</code> element, not a div — <code>value</code>/<code>max</code> and the <code>progressbar</code> role are platform semantics; the framework only styles it. Give it an accessible name (<code>aria-label</code> or a <code>&lt;label&gt;</code>) — adjacent prose text is NOT programmatically associated, and the name can carry the real value when you visually cap the bar ("112% of budget consumed" with <code>value="100"</code>).',
       'Always pair with visible text ("71% consumed") — the fill is one channel, and tones are decoration on top of the text, never a substitute for it.',
       'Under forced-colors the element reverts to platform rendering (<code>appearance: auto</code>) — custom fills would otherwise vanish entirely.',
-      'Always set <code>value</code> — indeterminate (<code>value</code>-less) progress is NOT supported by this styling (<code>appearance: none</code> suppresses the platform\'s indeterminate animation, so "unknown" would render as an empty bar). For unknown-duration work, use <a href="/components/state-patterns">Skeleton</a> instead. If a determinate flow LOSES its value mid-stream (an import stalls, the server stops reporting), keep the bar at its last value and let the paired text say so ("stalled at 93%") — don\'t swap components mid-flow.',
-      'For discrete named steps (Submitted → Approved → Paid), use <a href="/components/stepper">Stepper</a> instead.',
+      'Always set <code>value</code> — indeterminate (<code>value</code>-less) progress is NOT supported by this styling (<code>appearance: none</code> suppresses the platform\'s indeterminate animation, so "unknown" would render as an empty bar). For unknown-duration work, use <a href="' + base + '/components/state-patterns">Skeleton</a> instead. If a determinate flow LOSES its value mid-stream (an import stalls, the server stops reporting), keep the bar at its last value and let the paired text say so ("stalled at 93%") — don\'t swap components mid-flow.',
+      'For discrete named steps (Submitted → Approved → Paid), use <a href="' + base + '/components/stepper">Stepper</a> instead.',
     ]}
   />
   <Related links={[["/components/stepper", "Stepper"], ["/components/dashboard", "Dashboard"], ["/concepts/accessibility", "Accessibility model"]]} />

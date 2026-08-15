@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const markup = `<div class="bo-combobox">
   <input class="bo-input" type="text" role="combobox" id="cb-input"
@@ -23,10 +24,10 @@ const markup = `<div class="bo-combobox">
 <Gallery title="Combobox">
   <p class="demo-note">
     A single-select text field that filters a list as you type — for picking one value
-    out of a longer list than a plain <a href="/components/form">select</a> reads
+    out of a longer list than a plain <a href={base + '/components/form'}>select</a> reads
     well, without the overhead of asking "which of these N do I want" up front. For
     picking <strong>several</strong> values, use the
-    <a href="/components/dropdown">multi-select dropdown</a> instead — different job.
+    <a href={base + '/components/dropdown'}>multi-select dropdown</a> instead — different job.
   </p>
   <ClassRef component="combobox" />
 
@@ -74,8 +75,8 @@ const markup = `<div class="bo-combobox">
     <strong>closes the listbox</strong> (<code>aria-expanded="false"</code>) rather
     than showing an empty popup — the typed text stays in the field. If "must match
     a known value" matters, validate on commit/submit: pair the field with the
-    standard <a href="/components/form">error message</a> ("Unknown cost center")
-    or the <a href="/patterns/validation-summary">validation summary</a> — don't
+    standard <a href={base + '/components/form'}>error message</a> ("Unknown cost center")
+    or the <a href={base + '/patterns/validation-summary'}>validation summary</a> — don't
     invent an in-popup empty state the pattern doesn't have.</p>
   </section>
   <section class="demo">
@@ -96,7 +97,7 @@ const markup = `<div class="bo-combobox">
       <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
     </form>
     <p class="bo-u-text-muted">The real placement: inside a
-    <a href="/components/filters">filter bar</a>, wrapped in a
+    <a href={base + '/components/filters'}>filter bar</a>, wrapped in a
     <code>.bo-form-field</code> with a proper <code>&lt;label for&gt;</code> —
     the combobox is a form control first.</p>
   </section>
@@ -127,7 +128,7 @@ const markup = `<div class="bo-combobox">
     component="combobox"
     js="Required: initCombobox() — without it the field is a plain text input; typing does not filter or open the list."
     notes={[
-      'Single-select only — the committed value lives in the input\'s text, not on any option (options never carry a persisted "chosen" marker across reopens). For choosing several values, use the <a href="/components/dropdown">multi-select dropdown</a> instead.',
+      'Single-select only — the committed value lives in the input\'s text, not on any option (options never carry a persisted "chosen" marker across reopens). For choosing several values, use the <a href="' + base + '/components/dropdown">multi-select dropdown</a> instead.',
       'The listbox is a native <code>[popover]</code> — never clipped by scrolling containers, and <kbd>Esc</kbd>/light-dismiss close it without touching the field value at no extra cost.',
       'Filtering is a case-insensitive substring match against each option\'s full text, computed client-side against the options already in the markup — for a server-driven / async result list, swap the options\' <code>hidden</code> state yourself in response to your own fetch instead of relying on the built-in filter.',
       'Commit dispatches <code>bo:combobox-select</code> with <code>{ value, text }</code> — <code>value</code> comes from the chosen option\'s <code>data-value</code> (falls back to its text if absent).',

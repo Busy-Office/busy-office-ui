@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const favourites = [
   { icon: 'cart', label: 'Purchasing' },
@@ -24,13 +25,13 @@ const logistics = [
   <p class="demo-note">
     A suite entry screen — the icon-grid launcher an ERP user lands on before picking
     an app (the "Bento UI" / tablet-launcher archetype from the
-    <a href="/concepts/density">device-coverage table</a> — same
+    <a href={base + '/concepts/density'}>device-coverage table</a> — same
     <code>.bo-widget-grid</code> container-query mechanism as a dashboard, at a
     smaller tile size, <strong>not</strong> a new grid component). Tiles are plain
     links composed into <code>.bo-widget</code> cards with real
-    <a href="/components/icon">CSS icons</a> (themable <code>currentColor</code>
+    <a href={base + '/components/icon'}>CSS icons</a> (themable <code>currentColor</code>
     glyphs — upgraded from initials after review); the category row is the
-    ordinary <a href="/components/tabs">tabs</a> pattern; a "folder" tile is just a
+    ordinary <a href={base + '/components/tabs'}>tabs</a> pattern; a "folder" tile is just a
     widget whose body holds a cluster of small tiles. Zero new CSS.
   </p>
 

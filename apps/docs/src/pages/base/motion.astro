@@ -2,6 +2,7 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import api from '@busy-office/ui/api';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const classes = api.motion.classes;
 const DESC: Record<string, string> = {
   'bo-motion-fade-in': 'opacity 0 → 1 on mount',
@@ -76,7 +77,7 @@ const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <
   <section class="demo">
     <h2>Pulse-once — "this just changed"</h2>
     <p class="bo-u-text-muted">
-      Generalizes the HTMX settle flash (<a href="/getting-started/htmx">Using with
+      Generalizes the HTMX settle flash (<a href={base + '/getting-started/htmx'}>Using with
       HTMX</a>) for any element, not just HTMX swaps.
     </p>
     <button class="bo-btn bo-btn--secondary" id="pulse-trigger" type="button">Simulate update</button>

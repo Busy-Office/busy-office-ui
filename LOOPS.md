@@ -111,7 +111,12 @@ Run **try → verify → adjust** as many rounds as it takes to satisfy the item
 2. `Explore` (or read directly) to locate the code and precedents.
 3. Make a change aimed at the item's *Accept* criteria.
 4. **Verify live**: rebuild core + docs container, screenshot at 1440px **and**
-   390px, check dark + light.
+   390px, check dark + light. If the round touched docs pages, ALSO run
+   `DOCS_BASE=/busy-office-ui npm run build -w docs` — the local container
+   serves base-less URLs, so a raw `<a href="/x">` (instead of
+   `{base + '/x'}`) passes every local check and still 404s on Pages; only
+   the base-path build catches it (learned 2026-08-15: 31 such links, 8
+   straight red CI runs). Then rebuild plain before the container check.
 5. **Round check** — does it satisfy *Accept* AND pass the standing gates
    (contrast, named `@container`, links, behaviors, stylelint, tests)? If
    not, adjust and go back to step 3. If a round reveals the item was

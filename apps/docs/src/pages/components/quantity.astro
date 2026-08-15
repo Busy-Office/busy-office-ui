@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const basic = `<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
@@ -94,7 +95,7 @@ const markup = `<div class="bo-quantity">
 ---
 <Gallery title="Quantity">
   <p class="demo-note">
-    A count field, not a currency one — see <a href="/components/amount">Amount</a> for
+    A count field, not a currency one — see <a href={base + '/components/amount'}>Amount</a> for
     money. A real <code>type="number"</code> input with increment/decrement buttons;
     <code>min</code>/<code>max</code>/<code>step</code> are native attributes, so
     validation, keyboard behavior, and the buttons' clamping all read from the same
@@ -115,7 +116,7 @@ const markup = `<div class="bo-quantity">
     <Demo code={unit} />
     <p class="bo-u-text-muted"><code>__unit</code> is optional, plain text — an ISO/standard
     unit (<code>kg</code>, <code>m</code>, <code>L</code>) or an app-defined custom UOM
-    (<code>box</code>, <code>pallet</code>), same as <a href="/components/amount">Amount</a>'s
+    (<code>box</code>, <code>pallet</code>), same as <a href={base + '/components/amount'}>Amount</a>'s
     <code>__currency</code> — no allowlist, just text.</p>
   </section>
 

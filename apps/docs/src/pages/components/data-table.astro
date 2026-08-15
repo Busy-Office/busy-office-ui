@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const tableMarkup = `<div class="bo-data-table-container">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
@@ -358,7 +359,7 @@ const rows = [
     <p class="bo-u-text-muted">Everything on one screen the way a real invoice list
     ships: toolbar + <code>--sticky-col</code> (the selection column stays put when
     the table scrolls sideways) + the <code>__footer</code> carrying rows-per-page
-    and <a href="/components/pagination">pagination</a>. Scroll the table
+    and <a href={base + '/components/pagination'}>pagination</a>. Scroll the table
     horizontally in a narrow window to see the sticky column earn its keep.</p>
   </section>
   <section class="demo">
@@ -375,7 +376,7 @@ const rows = [
     <p class="bo-u-text-muted"><code>data-loading="true"</code> (or
     <code>aria-busy</code>) dims the table and blocks interaction mid-swap — flip it
     from your fetch/HTMX code. For first-load, prefer
-    <a href="/components/state-patterns">skeleton rows</a>.</p>
+    <a href={base + '/components/state-patterns'}>skeleton rows</a>.</p>
     <div class="bo-data-table-container" style="margin-block-start: var(--bo-space-4)">
       <table class="bo-data-table">
         <thead><tr><th scope="col">Invoice #</th><th scope="col">Problem</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
@@ -415,7 +416,7 @@ const rows = [
     re-evaluating per row) — it repeats on EVERY bulk toggle, staying under 700 ms
     even throttled. The genuine pain point is initial render at 20k rows on slow
     hardware (~3.8 s). Practical guidance: a few thousand rows are fine as-is;
-    beyond that, paginate server-side (<a href="/components/pagination">page
+    beyond that, paginate server-side (<a href={base + '/components/pagination'}>page
     numbers or load-more</a>) — which dense ERP screens want anyway for
     findability. <strong>There are no virtualization hooks</strong>: windowing
     breaks Ctrl-F, select-all semantics, and screen-reader row counts, and

@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester · 10 Aug 2026</span>`;
 ---
 <Gallery title="Byline">
@@ -60,7 +61,7 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
       </div>
     </div>
     <p class="bo-u-text-muted">Where bylines live: heading a comment or approval
-    note on a record card, next to the <a href="/components/approval-workflow">audit
+    note on a record card, next to the <a href={base + '/components/approval-workflow'}>audit
     trail</a> that logs the same event in one line.</p>
   </section>
   <ApiTable component="byline"
