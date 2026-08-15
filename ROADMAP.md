@@ -931,11 +931,14 @@ committed.** No further Continue rounds queued for this slice.
 ## Slice 9 (candidate) — from the Slice 7 Objective review
 
 Direct output of the 2026-08-15 design-panel review (`.roundtable/grill-
-slice7-scoping-2026-08-15.md`) — six independently-scoped items replacing
-Slice 7's three blocked entries. Four are ready to Continue-dispatch now
-(no open design questions); two stay parked pending a real cited ERP
-scenario, per the panel's explicit recommendation not to build
-speculatively.
+slice7-scoping-2026-08-15.md`) — originally six independently-scoped items
+replacing Slice 7's three blocked entries; item 7 added same-day once the
+user supplied a concrete cited scenario (an ERP case-management list-view
+screenshot) that graduated part of the parked "Filter Control advanced"
+sub-item. Items 1-4 shipped (see below); items 5-7 are ready to
+Continue-dispatch (no open design questions); **Process Bar** stays
+parked pending a real cited ERP scenario, per the panel's explicit
+recommendation not to build speculatively.
 
 1. [x] **Device/platform coverage audit** — shipped, verification-only
        (zero CSS/JS, 44 tests unchanged, same shape as Slice 7 item 6's
@@ -1025,15 +1028,40 @@ speculatively.
        needed, that's a real finding to surface during the build, not to
        assume up front.
 
+7. [ ] **Advanced table toolbar — column visibility + export** — triaged
+       2026-08-15 (user wishlist "advance table / search" + a real
+       screenshot of an ERP case-management list view). Checked the
+       screenshot against what's already shipped rather than assuming a
+       gap: the search input, removable filter chips (`Assignee:
+       Unassigned ×`), sortable column headers (`aria-sort`), and status
+       badges are **already covered** by `.bo-filter-bar`/`.bo-chip`
+       (`/components/filters`) and `.bo-data-table`'s existing sort
+       contract — not new work, don't rebuild. Two things in the reference
+       genuinely don't exist anywhere yet: a **Columns** button (toggle
+       which columns are visible) and an **Export** button (download the
+       current view). This is the concrete cited scenario the Objective
+       review's parked "Filter Control advanced" sub-item was waiting on
+       — graduating that scope specifically to these two toolbar actions,
+       not the broader "multi-condition builder" framing (still no cited
+       need for that part). Accept: extend `.bo-data-table__toolbar` with
+       two opt-in toolbar actions — a Columns popover (reuse
+       `.bo-dropdown__menu`'s multi-select checkbox pattern from Slice 8
+       item 2, one checkbox per column, toggling a `hidden`/`data-col-
+       hidden` state) and an Export action (a `.bo-dropdown__menu` with
+       format choices, or a single button dispatching a `bo:table-export`
+       event — the actual file generation is the consumer's code, same
+       "behavior tracks state/intent, consumer persists" split as
+       `bo:row-save`/`bo:scan`). Compose from existing dropdown/multi-
+       select primitives first; only add new CSS if composing genuinely
+       can't express it. Docs page: extend `/components/data-table`
+       (a new toolbar section), not a separate page.
+
 **Parked, not scoped — do not build speculatively** (per the review's
-explicit recommendation): **Filter Control "advanced"** variant (saved
-views / multi-condition builders — `.bo-filters`/`.bo-filter-bar` already
-exist, no cited ERP scenario beyond what's shipped) and **Process Bar**
-(genuinely distinct from `.bo-stepper`, genuinely greenfield CSS surface,
-but no named use case — import job progress? budget consumption? — either
-sub-item can graduate into a real Slice 9 item the moment a concrete
-scenario shows up, same pattern as every other Explore-fallback item this
-project has shipped).
+explicit recommendation): **Process Bar** (genuinely distinct from
+`.bo-stepper`, genuinely greenfield CSS surface, but no named use case —
+import job progress? budget consumption? — can graduate into a real
+Slice 9 item the moment a concrete scenario shows up, same pattern as
+item 7 above just did for table toolbar actions).
 
 ## Long term (post-1.0)
 
