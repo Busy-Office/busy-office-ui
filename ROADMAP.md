@@ -1092,13 +1092,18 @@ recommendation not to build speculatively.
        and appends them; this behavior never owns data fetching. Ready to
        scope further and build once dispatched.
 
-**Ambiguous, not scoped — flagged rather than guessed**: the wishlist's
-"setting" (the screenshot shows a gear-icon "Settings" button, separate
-from Columns) has no clear referent — could mean density override,
-export-format defaults, saved-column-layout persistence, or something
-else entirely. Not building this blind; needs a one-line answer from
-whoever wants it (what should the Settings button actually open?) before
-it gets Accept criteria.
+**"Settings" — resolved, no new build needed.** Asked the user directly
+what the reference screenshot's gear-icon button should open; the answer
+was that the screenshot was just a sample to react to, not a spec to
+replicate, and the real ask is "general purpose & configurable for
+different purposes." That's already this framework's standing answer —
+declarative attributes (`data-density`, `data-multiselect`, opt-in
+behaviors) ARE the configurability mechanism, not a runtime settings
+popup layered on top. A dedicated per-table "Settings" UI would be a
+second, redundant way to do what `data-density` already does. No item
+added; if a genuinely new *kind* of per-table configuration surfaces
+later (something `data-*` attributes can't express), scope it then with
+its own real use case, same discipline as every other item here.
 
 **Parked, not scoped — do not build speculatively** (per the review's
 explicit recommendation): **Process Bar** (genuinely distinct from
