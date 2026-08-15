@@ -419,7 +419,7 @@ const rows = [
       'Columns marked <code>__col--secondary</code> hide under container compaction — keep that data reachable (row detail view) per WCAG 1.4.10.',
       'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
       'Separately opt-in: <code>data-row-edit</code> + <code>initRowEdit()</code> for multi-row inline edit with per-row dirty state and Save/Cancel. Tracks state only — persistence is your code, via the <code>bo:row-save</code> event.',
-      'Separately opt-in: <code>data-col-toggle</code>/<code>data-table-export</code> + <code>initTableToolbar()</code> for column visibility (composes with the multi-select dropdown, no new markup) and an export intent (<code>bo:table-export</code> — generating the file is your code).',
+      'Separately opt-in: <code>data-col-toggle</code>/<code>data-table-export</code> + <code>initTableToolbar()</code> for column visibility (composes with the multi-select dropdown, no new markup) and an export intent (<code>bo:table-export</code> — generating the file is your code). Rows appended later (load-more, swaps) don\'t inherit hidden columns — call <code>initTableToolbar()</code> again after appending, same re-call convention as <code>initDataTables()</code>.',
     ]}
   />
   <section class="demo">

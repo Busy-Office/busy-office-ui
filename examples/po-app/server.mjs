@@ -23,6 +23,19 @@ const pos = [
   { id: 'PO-88213', vendor: 'Umbrella Logistics', cc: 'CC-2205', amount: 12400.0, status: 'Pending' },
   { id: 'PO-88214', vendor: 'Stark Components', cc: 'CC-1180', amount: 56000.0, status: 'Pending' },
 ];
+// Backfill a longer history so the list screen has something real to
+// load-more over (second-consumer round for initLoadMore).
+for (let i = 0; i < 25; i++) {
+  const vendors = ['Acme Supply Co.', 'Globex Industrial', 'Initech GmbH', 'Umbrella Logistics', 'Stark Components'];
+  pos.push({
+    id: `PO-88${String(190 - i).padStart(3, '0')}`,
+    vendor: vendors[i % 5],
+    cc: ['CC-4021', 'CC-1180', 'CC-2205'][i % 3],
+    amount: (i % 40) * 517 + 380,
+    status: ['Approved', 'Rejected', 'Approved'][i % 3],
+  });
+}
+const PAGE_SIZE = 10;
 const audit = [];
 const money = (n) =>
   '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -66,10 +79,10 @@ const page = (title, current, main) => `<!doctype html>
 const rowHtml = (p) => `<tr id="row-${p.id}">
   <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
   <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
-  <td class="bo-u-text-truncate">${p.vendor}</td>
-  <td class="bo-data-table__col--secondary bo-data-table__col--code">${p.cc}</td>
+  <td class="bo-u-text-truncate" data-col="vendor">${p.vendor}</td>
+  <td class="bo-data-table__col--secondary bo-data-table__col--code" data-col="cc">${p.cc}</td>
   <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
-  <td><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
+  <td data-col="status"><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
 </tr>`;
 
 const tbodyHtml = (list) =>
@@ -92,22 +105,57 @@ const listScreen = () => `
         hx-include=".bo-data-table__row-select:checked">Approve selected</button>
     </div>
     <span class="bo-data-table__selection-count"></span>
+    <span class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
+      <button class="bo-btn bo-btn--secondary" popovertarget="po-cols" data-multiselect-label="Columns">Columns</button>
+      <div class="bo-dropdown__menu" id="po-cols" popover data-multiselect>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="vendor" checked> Vendor</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="cc" checked> Cost center</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="status" checked> Status</label>
+      </div>
+      <button class="bo-btn bo-btn--secondary" type="button" data-table-export data-table-export-format="csv">Export</button>
+    </span>
   </div>
   <table class="bo-data-table bo-data-table--sticky-col">
     <thead><tr>
       <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>
       <th scope="col" aria-sort="ascending"><button class="bo-data-table__sort-btn" type="button">PO #</button></th>
-      <th scope="col">Vendor</th>
-      <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
+      <th scope="col" data-col="vendor">Vendor</th>
+      <th scope="col" class="bo-data-table__col--secondary" data-col="cc">Cost center</th>
       <th scope="col" class="bo-data-table__col--numeric">Amount</th>
-      <th scope="col">Status</th>
+      <th scope="col" data-col="status">Status</th>
     </tr></thead>
-    ${tbodyHtml(pos)}
+    ${tbodyHtml(pos.slice(0, PAGE_SIZE))}
   </table>
-  <div class="bo-data-table__footer">
-    <span class="bo-pagination__info">${pos.length} POs</span>
+  <div class="bo-data-table__footer" style="justify-content: center">
+    <button class="bo-btn bo-btn--secondary" type="button" data-table-load-more
+      data-po-offset="${PAGE_SIZE}">Load more (${pos.length - PAGE_SIZE} of ${pos.length} remaining)</button>
   </div>
-</div>`;
+</div>
+<script type="module">
+  import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
+  initDropdowns(); initTableToolbar(); initLoadMore();
+  document.addEventListener('bo:table-export', () => {
+    const toasts = document.getElementById('toasts');
+    const t = document.createElement('div');
+    t.className = 'bo-alert bo-alert--success';
+    t.textContent = 'Export started — CSV will download when ready.';
+    toasts.append(t);
+    setTimeout(() => t.remove(), 3000);
+  });
+  document.addEventListener('bo:table-load-more', async (e) => {
+    const btn = e.target;
+    btn.disabled = true;
+    const offset = Number(btn.dataset.poOffset);
+    const res = await fetch('/pos/rows?offset=' + offset);
+    const html = await res.text();
+    document.getElementById('po-rows').insertAdjacentHTML('beforeend', html);
+    initTableToolbar(); // re-apply column visibility to the appended rows
+    const remaining = Number(res.headers.get('x-remaining'));
+    btn.dataset.poOffset = String(offset + ${PAGE_SIZE});
+    if (remaining <= 0) btn.remove();
+    else { btn.textContent = 'Load more (' + remaining + ' remaining)'; btn.disabled = false; }
+  });
+</script>`;
 
 const timelineHtml = (p) => `<ol class="bo-timeline" role="list" id="timeline-${p.id}">
   <li class="bo-timeline__step" data-state="done">
@@ -282,6 +330,15 @@ const server = createServer(async (req, res) => {
     if (path === '/pos' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Purchase orders', '/pos', listScreen()));
+    }
+    if (path === '/pos/rows' && req.method === 'GET') {
+      const offset = Number(url.searchParams.get('offset')) || 0;
+      const slice = pos.slice(offset, offset + PAGE_SIZE);
+      res.writeHead(200, {
+        'content-type': 'text/html',
+        'x-remaining': String(Math.max(0, pos.length - offset - slice.length)),
+      });
+      return res.end(slice.map(rowHtml).join(''));
     }
     if (path === '/stress' && req.method === 'GET') {
       // Perf probe (2026-08-15): the virtualization question needs numbers,

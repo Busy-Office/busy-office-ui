@@ -187,6 +187,19 @@ Net: 16 behaviors, 13 frozen, 3 held (`initScanInput`,
 `initTableToolbar`, `initLoadMore`) on the same explicit, dated revisit
 condition. No code changed by this addendum.
 
+**Second revisit (2026-08-15, later the same day)**: po-app's PO list
+became a real second consumer of BOTH `initTableToolbar` and
+`initLoadMore` (columns toggle + export + load-more against a 30-row
+paged dataset) — and the usage pressure did exactly what the hold
+existed for: it surfaced a contract gap (rows appended after a column
+was hidden came back visible) whose fix was already shipped in the
+re-runnable init (re-call `initTableToolbar()` after appending, now
+documented in the JSDoc and the data-table docs as the same re-call
+convention as `initDataTables()`). With the gap found, documented, and
+verified live, **both graduate to frozen**. `initScanInput` remains the
+single held behavior — goods-receipt is still its only real consumer.
+Net: 15 of 16 frozen, 1 held.
+
 ### Design reviews
 - `.roundtable/grill-2026-08-11.md` (slice 1), `grill-2026-08-12.md` (slice 2),
   `grill-2026-08-12-slice3.md` (slice 3) — findings, gates, and fix outcomes.

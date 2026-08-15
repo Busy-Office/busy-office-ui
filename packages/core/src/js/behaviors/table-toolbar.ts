@@ -23,7 +23,10 @@
  * Toggling a [data-col-toggle] checkbox shows/hides every [data-col] cell
  * (th and td, header and body) with the matching value, scoped to the
  * same .bo-data-table-container — call initDropdowns() too for the menu
- * itself (positioning, stays-open, trigger-label count).
+ * itself (positioning, stays-open, trigger-label count). Rows appended
+ * or swapped in later don't inherit hidden state — call initTableToolbar()
+ * again after appending (safe: listeners install once, the reconciliation
+ * pass re-runs) — same re-call convention as initDataTables(root).
  *
  * Export — Markup contract:
  *   <button class="bo-btn bo-btn--secondary" type="button" data-table-export
