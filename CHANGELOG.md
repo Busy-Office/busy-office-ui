@@ -66,6 +66,7 @@ pin.
   self-contained instead of widget #2 silently driving widget #1. The
   documented `aria-controls` contract is unchanged; the document-wide lookup
   remains as fallback. (Objective-review find; regression test added.)
+
 - Docs/meta: `bo:*` intent-event payloads are now generated, versioned API
   (`dist/events.json`, `@busy-office/ui/events`, two-way parity gate);
   README claims (size/behaviors/events) are stamped from dist behind a
