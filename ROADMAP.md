@@ -1766,8 +1766,8 @@ Highest-leverage bets (2026-08-14 review — ranked):
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
       | 1 | Component surface | ✅ 28 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-16 after Slice 17: Segmented control, File upload, Tag input) | `check-page-shape.mjs`: 28 component pages |
-      | 2 | JS behaviors | ✅ 18 opt-in behaviors total (`dist/behaviors.json`), generated docs table. The original 16 remain **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries). `initFileDropzone`/`initTagInput` (Slice 17, 2026-08-16) are NOT yet in that audited set — single-context so far, not claimed stable | `dist/behaviors.json`: `initCount: 18`; CHANGELOG freeze addenda + correction |
-      | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
+      | 2 | JS behaviors | ✅ 18 opt-in behaviors total (`dist/behaviors.json`), generated docs table. **All 18 now stable against internal usage** (re-synced 2026-08-16 — each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries). `initFileDropzone`/`initTagInput` graduated into that audited set this round: each had only the docs demo as its one context until the po-app dogfood rounds (Documents section, Approve-dialog "notify additional approvers") gave both a second, independent in-repo composition — the same bar the other 16 originally used | `dist/behaviors.json`: `initCount: 18`; CHANGELOG freeze addenda + correction |
+      | 3 | Test coverage | ✅ 61 behavior tests, all passing (re-synced 2026-08-16 — was 55 as of 2026-08-15, Slice 17 item 3 added 4) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green + 2 advisory harnesses (`test:visual` 32 shots, `test:axe` 54 pages) | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |
       | 5 | Contrast | ✅ 27 pairs × 2 themes + 1 brand preset, all AA (incl. three non-text 3:1 fill pairs) | `check-contrast.mjs` |
       | 6 | Zero runtime deps (shipped pkg) | ✅ confirmed, `htmx.org` is a **docs-app-only** dep | `packages/core/package.json` |
@@ -1775,7 +1775,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
       | 8 | RTL | ✅ audited — logical properties genuinely hold; 1 open product question flagged (numeric column alignment), not a bug | Slice 7 item 6 |
       | 9 | ≥1 real consumer | ✅ `examples/po-app` — **re-verified live THIS round**: `podman build` from current source, ran the container, clicked through dashboard → PO list → filter → select-all/bulk-approve → detail page → approval timeline. Everything worked. One visual anomaly investigated (an unchecked `.bo-checkbox` rendered as a solid square in this session's automated-Chrome screenshot) — **root cause found 2026-08-15 by Slice 14 item 6**: NOT an environment quirk after all, but the library's `color-scheme: light dark` + headless-Chrome dark preference + no `data-theme` = dark native checkboxes on a light page (the exact mixed-mode bug the Platform seat later named). Fixed by the library defaulting `color-scheme: light`. | `examples/po-app`, this round |
       | 10 | a11y ledger | 🟡 2 items genuinely NEEDS-RUNTIME (VoiceOver, NVDA — no tool in this environment can drive either); everything else closed, and the first full axe-core engine scan (2026-08-15, Slice 13) is zero violations across all 54 docs pages | Slice 6 item 5, item 18; `test:axe` |
-      | 11 | API frozen | 🟡 **Provisional** (downgraded by the 2026-08-15 decisions grill): all 16 behaviors stable against internal usage — the audits are per-item and dated — but the terminal "frozen" claim required the *external* usage pressure the audit itself named, and po-app is not external (the same reasoning item 12 uses to refuse po-app as an adopter — the two items now agree: 12 = market validation, 11 = contract robustness, and 11's final grade waits on 12's adopter) | `CHANGELOG.md` freeze addenda + correction; `.roundtable/grill-decisions-2026-08-15.md` |
+      | 11 | API frozen | 🟡 **Provisional** (downgraded by the 2026-08-15 decisions grill): all 18 behaviors now stable against internal usage (item 2, re-synced 2026-08-16) — the audits are per-item and dated — but the terminal "frozen" claim required the *external* usage pressure the audit itself named, and po-app is not external (the same reasoning item 12 uses to refuse po-app as an adopter — the two items now agree: 12 = market validation, 11 = contract robustness, and 11's final grade waits on 12's adopter) | `CHANGELOG.md` freeze addenda + correction; `.roundtable/grill-decisions-2026-08-15.md` |
       | 12 | Real independent adopter | 🔴 **Not met, and `po-app` does NOT count** — it's a reference app built by this project's own team to test packaging, not an external team choosing to adopt it. This is the one item on the list that can't be closed by more loop iterations; it needs an actual second party. |
 
       **Net: 10 of 12 done, 2 genuinely NOT closeable by more loop
@@ -1798,6 +1798,20 @@ Highest-leverage bets (2026-08-14 review — ranked):
       framework gap) — but this hadn't been re-run against the CURRENT
       component set (post Slice 6/7) until this round confirmed it still
       builds and works end-to-end.
+      **Extended 2026-08-16** (three Explore dogfood rounds, post Slice 17):
+      po-app grew a real "Documents" section (File upload on the PO detail
+      screen), a "Notify additional approvers" field (Tag input inside the
+      Approve dialog's `<form method="dialog">`), and a real density
+      switcher (Segmented control, cookie-persisted across full-page
+      navigation — po-app has no htmx-boost, so this only works if the
+      server genuinely honors it back). Genuine friction found and
+      resolved this round, not just re-verification: the Tag input's Enter
+      keydown inside a native `<form method="dialog">` needed confirming
+      it doesn't trigger the form's submit-on-Enter (it doesn't —
+      `initTagInput()` already calls `preventDefault()`), which is exactly
+      the kind of composition risk a synthetic docs demo (no surrounding
+      `<form>`) can't surface. See the Explore log entries below for full
+      verification detail.
 
 - [x] **Framework adapters — resolved by splitting (2026-08-15)**: the
       Rails/Django asset recipe turned out to already exist — the
