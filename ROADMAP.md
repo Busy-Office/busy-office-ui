@@ -958,17 +958,20 @@ speculatively.
        add a short framing section (or reframe the existing "Keyboard
        grid navigation" section heading/intro) explicitly naming the
        two tiers and when to reach for each — zero new CSS/JS, docs-only.
-3. [ ] **`bo:scan` live-region announcement** — real a11y gap found by
-       the Auditor seat during the review, independent of the broader
-       device-coverage question: `initScanInput()` (`packages/core/src/
-       js/behaviors/scan-input.ts`) fires `bo:scan` on a successful scan
-       with no live-region status text, so a screen-reader/low-vision RF
-       user gets no non-visual confirmation a scan registered. Accept: a
-       small opt-in status-announcement addition (e.g. an
-       `aria-live="polite"` region `initScanInput()` updates on each
-       `bo:scan`, or a documented pattern for consumers to wire one
-       themselves) — verify with the existing `/patterns/goods-receipt`
-       demo, both themes.
+3. [x] **`bo:scan` live-region announcement** — shipped. Opt-in markup
+       contract: link the scan input's `aria-describedby` to a
+       `data-scan-status` element (`aria-live="polite"`, visually hidden
+       via the existing `.bo-visually-hidden` primitive) — `initScanInput()`
+       (`packages/core/src/js/behaviors/scan-input.ts`) writes "Scanned
+       {value}" to it on every successful scan. Fully backward compatible:
+       an input without `aria-describedby` behaves exactly as before
+       (verified with a dedicated test). Wired into `/patterns/
+       goods-receipt`'s live demo. 2 new behavior tests (44 total, all
+       pass); contrast/stylelint/build gates green (no new CSS — reused
+       the existing visually-hidden primitive); verified live via Podman
+       (`--no-cache`) in both themes: dispatched real scan events,
+       confirmed the status text updates and re-announces on a second
+       scan, confirmed zero visual change (region is invisible by design).
 4. [ ] **Card discoverability fix** — `.bo-widget` (`packages/core/src/
        css/components/dashboard/dashboard.css`) is already a fully
        capable card primitive (header/collapse/band/badge composition)

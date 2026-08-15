@@ -9,14 +9,20 @@ import Related from '../../components/Related.astro';
     focused and clear itself between scans. Composed from <code>data-scan-input</code>
     (new opt-in behavior, no new CSS — a plain <code>.bo-input</code>), the existing
     <code>.bo-quantity</code> at <code>data-density="spacious"</code> for a
-    warehouse-floor large target, and the data table for the receiving log.
+    warehouse-floor large target, and the data table for the receiving log. A
+    visually-hidden <code>aria-live="polite"</code> region (linked via the field's
+    own <code>aria-describedby</code>) announces each successful scan — a
+    screen-reader/low-vision RF user gets non-visual confirmation without it
+    being read for every sighted user.
   </p>
 
   <section class="demo" data-density="spacious">
     <h2>Scan to receive</h2>
     <div class="bo-form-field">
       <label class="bo-form-field__label" for="gr-scan">Scan barcode</label>
-      <input class="bo-input bo-input--code" id="gr-scan" data-scan-input autofocus placeholder="Waiting for scan…" />
+      <input class="bo-input bo-input--code" id="gr-scan" data-scan-input autofocus
+          placeholder="Waiting for scan…" aria-describedby="gr-scan-status" />
+      <p id="gr-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
     </div>
     <div class="bo-form-field">
       <label class="bo-form-field__label" for="gr-qty">Quantity</label>
@@ -61,11 +67,14 @@ import Related from '../../components/Related.astro';
 
   <section class="demo">
     <h2>Markup</h2>
-    <pre><code>{`<input class="bo-input bo-input--code" data-scan-input autofocus />
+    <pre><code>{`<input class="bo-input bo-input--code" data-scan-input autofocus
+    aria-describedby="scan-status" />
+<p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
 
 <script type="module">
   import { initScanInput } from "@busy-office/ui/js";
-  initScanInput(); // once — clears + refocuses on Enter, fires bo:scan
+  initScanInput(); // once — clears + refocuses on Enter, fires bo:scan,
+                    // announces "Scanned <value>" in data-scan-status if linked
   document.querySelector('[data-scan-input]')
     .addEventListener('bo:scan', (e) => console.log(e.detail.value));
 </script>`}</code></pre>

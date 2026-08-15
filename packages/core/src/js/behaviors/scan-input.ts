@@ -9,10 +9,25 @@
  * deliberately not done here.
  *
  * Markup contract:
- *   <input class="bo-input bo-input--code" data-scan-input autofocus />
+ *   <input class="bo-input bo-input--code" data-scan-input autofocus
+ *       aria-describedby="scan-status" />
+ *   <p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
  *   document.addEventListener('bo:scan', (e) => e.detail.value)
+ *
+ * The status paragraph is optional — link it via the input's own
+ * aria-describedby (the same pattern already used for field hints/errors
+ * elsewhere) and initScanInput() announces each scan there, so a
+ * screen-reader/low-vision RF user gets non-visual confirmation a scan
+ * registered. Without it, behavior is unchanged from before this existed.
  */
 let installed = false;
+
+function announceScan(input: HTMLInputElement, value: string): void {
+  const describedBy = input.getAttribute('aria-describedby');
+  const status = describedBy && document.getElementById(describedBy);
+  if (!status || !status.hasAttribute('data-scan-status')) return;
+  status.textContent = `Scanned ${value}`;
+}
 
 export function initScanInput(): void {
   if (installed) return;
@@ -28,6 +43,7 @@ export function initScanInput(): void {
     const value = input.value;
     input.value = '';
     input.dispatchEvent(new CustomEvent('bo:scan', { bubbles: true, detail: { value } }));
+    announceScan(input, value);
     input.focus();
   });
 

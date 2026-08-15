@@ -635,6 +635,27 @@ describe('initScanInput', () => {
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     expect(scans).toEqual(['AAA', 'BBB']);
   });
+
+  it('announces the scanned value in the linked data-scan-status element', () => {
+    html`
+      <input class="bo-input bo-input--code" data-scan-input aria-describedby="scan-status" />
+      <p id="scan-status" data-scan-status aria-live="polite"></p>
+    `;
+    ui.initScanInput();
+    const input = document.querySelector('[data-scan-input]') as HTMLInputElement;
+    const status = document.getElementById('scan-status')!;
+    input.value = '8901234567890';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(status.textContent).toBe('Scanned 8901234567890');
+  });
+
+  it('without aria-describedby, behaves exactly as before (no error, no announcement)', () => {
+    const input = scanInput();
+    input.value = 'AAA';
+    expect(() =>
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })),
+    ).not.toThrow();
+  });
 });
 
 describe('initValidationSummary', () => {

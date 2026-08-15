@@ -72,6 +72,11 @@ pin.
   list autocomplete with a top-layer `[popover]` listbox, `bo:combobox-
   select` event on commit.
 
+- **Slice 9 (in progress) — Objective-review scoping follow-ups**: `bo:scan`
+  live-region announcement — opt-in `aria-describedby` + `data-scan-status`
+  markup contract, `initScanInput()` announces "Scanned {value}" on each
+  scan for screen-reader/low-vision RF users; fully backward compatible.
+
 ### API freeze audit (2026-08-15)
 
 Prompted by the 1.0 exit checklist's own finding — the public API had never
