@@ -6,6 +6,20 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
+## Unreleased
+
+- Fixed: combobox input↔listbox resolution now prefers the shared
+  `.bo-combobox` container over document-wide id lookup, so two widgets left
+  with identical ids by a duplicated partial-swap fragment stay
+  self-contained instead of widget #2 silently driving widget #1. The
+  documented `aria-controls` contract is unchanged; the document-wide lookup
+  remains as fallback. (Objective-review find; regression test added.)
+- Docs/meta: `bo:*` intent-event payloads are now generated, versioned API
+  (`dist/events.json`, `@busy-office/ui/events`, two-way parity gate);
+  README claims (size/behaviors/events) are stamped from dist behind a
+  build gate — the hand-written "37 kB" claim is corrected to the generated
+  56 kB min / 9.3 kB gz.
+
 ## 0.1.1 (2026-08-15)
 
 Metadata-only patch — no CSS/JS changes.

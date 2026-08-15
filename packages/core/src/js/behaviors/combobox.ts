@@ -23,12 +23,23 @@
  */
 let installed = false;
 
+// Resolution prefers the shared .bo-combobox container over document-wide
+// id lookup: a duplicated fragment (the classic partial-swap accident)
+// leaves two widgets with identical ids, and getElementById/first-match
+// would silently wire widget #2's input to widget #1's list. The id-based
+// document fallback keeps the documented aria-controls contract working
+// for markup that skips the wrapper.
 function listboxFor(input: HTMLElement): HTMLElement | null {
   const id = input.getAttribute('aria-controls');
-  return id ? document.getElementById(id) : null;
+  if (!id) return null;
+  const scoped = input.closest('.bo-combobox')?.querySelector<HTMLElement>('[role="listbox"]');
+  if (scoped?.id === id) return scoped;
+  return document.getElementById(id);
 }
 
 function inputFor(listbox: HTMLElement): HTMLInputElement | null {
+  const scoped = listbox.closest('.bo-combobox')?.querySelector<HTMLInputElement>('[role="combobox"]');
+  if (scoped?.getAttribute('aria-controls') === listbox.id) return scoped;
   return (
     [...document.querySelectorAll<HTMLInputElement>('[role="combobox"]')].find(
       (el) => el.getAttribute('aria-controls') === listbox.id,

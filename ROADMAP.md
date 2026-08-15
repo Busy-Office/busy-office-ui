@@ -1354,9 +1354,17 @@ internal discipline. Ordered by severity; confirmed defects first.
        (better than the split: one block, same guarantee), comment rewritten
        to say the :is() is load-bearing; dist byte-equivalent semantics,
        55 tests + 32 baselines green untouched.
-4. [ ] **Combobox `aria-controls` collision test** (Rex). Two comboboxes +
+4. [x] **Combobox `aria-controls` collision test** (Rex). Two comboboxes +
        partial swap; fix the reverse lookup if the test reds. Accept: test in
        the behaviors suite either passing against current code or with a fix.
+       **Done 2026-08-15**: test went RED against current code (widget #2
+       silently drove widget #1 under duplicated ids) — Rex's bug was real.
+       Fix: resolution prefers the shared `.bo-combobox` container, with the
+       documented id-based lookup kept as fallback; 56/56 tests green;
+       CHANGELOG Unreleased Fixed entry per the freeze rules. Live-verified
+       by driving the DIST page markup + DIST JS in jsdom (the browser
+       extension's CDP session degraded to 45s timeouts mid-wake — noted,
+       not retried).
 5. [ ] **Unlayered-CSS interop recipe** (Kofi HIGH). Tailwind-v3-preflight /
        normalize coexistence: documented recipe (wrap resets in a layer,
        stated layer order for mixed stacks) + a demoed interop page or

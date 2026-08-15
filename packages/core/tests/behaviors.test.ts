@@ -303,6 +303,47 @@ describe('initCombobox', () => {
     expect(input.value).toBe('CC-4021');
     expect(input.getAttribute('aria-expanded')).toBe('false');
   });
+
+  it('survives duplicated ids from a partial swap: each widget stays self-contained', () => {
+    // A naive fragment duplication (the classic HTMX partial-swap accident)
+    // leaves two widgets with IDENTICAL ids and aria-controls. Resolution
+    // must prefer the shared .bo-combobox container over document-wide id
+    // lookup, or widget #2 silently drives widget #1.
+    html`
+      <div class="bo-combobox" data-t="one">
+        <input class="bo-input" type="text" role="combobox"
+            aria-expanded="false" aria-controls="cb-dup" aria-autocomplete="list" autocomplete="off" />
+        <ul class="bo-combobox__listbox" id="cb-dup" role="listbox" popover>
+          <li class="bo-combobox__option" role="option" id="dup-a" data-value="A1">Alpha</li>
+        </ul>
+      </div>
+      <div class="bo-combobox" data-t="two">
+        <input class="bo-input" type="text" role="combobox"
+            aria-expanded="false" aria-controls="cb-dup" aria-autocomplete="list" autocomplete="off" />
+        <ul class="bo-combobox__listbox" id="cb-dup" role="listbox" popover>
+          <li class="bo-combobox__option" role="option" id="dup-b" data-value="B1">Bravo</li>
+        </ul>
+      </div>
+    `;
+    ui.initCombobox();
+    const second = document.querySelector('[data-t="two"]') as HTMLElement;
+    const input2 = second.querySelector('input') as HTMLInputElement;
+    const listbox2 = second.querySelector('[role="listbox"]') as HTMLElement;
+    const listbox1 = document.querySelector('[data-t="one"] [role="listbox"]') as HTMLElement;
+
+    type(input2, 'br');
+    // widget #2 filters its OWN list; widget #1 is untouched
+    expect(input2.getAttribute('aria-expanded')).toBe('true');
+    expect((listbox2.querySelector('#dup-b') as HTMLElement).hidden).toBe(false);
+    expect(listbox1.hasAttribute('data-bo-open')).toBe(false);
+
+    let detail: any = null;
+    input2.addEventListener('bo:combobox-select', (e: any) => { detail = e.detail; });
+    (listbox2.querySelector('#dup-b') as HTMLElement).click();
+    // the commit lands in input #2, not the first id match in the document
+    expect(input2.value).toBe('Bravo');
+    expect(detail).toEqual({ value: 'B1', text: 'Bravo' });
+  });
 });
 
 describe('initCollapsibleCards', () => {
