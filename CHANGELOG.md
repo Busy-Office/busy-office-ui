@@ -8,6 +8,15 @@ pin.
 
 ## Unreleased
 
+- Fixed: the library no longer ships `color-scheme: light dark` on `:root` —
+  a CSS-only page with no `data-theme` under a dark OS got a light page with
+  dark native scrollbars/form chrome/date pickers (mixed mode). Default is
+  now `light`; `[data-theme="dark"]` still switches to `dark`. Apps that
+  want the pre-paint gap to honor a dark preference add
+  `<meta name="color-scheme" content="light dark">` themselves (the docs
+  site does). This was also the root cause of the long-mystified "solid
+  square checkbox" in automated screenshots.
+
 - Fixed: combobox input↔listbox resolution now prefers the shared
   `.bo-combobox` container over document-wide id lookup, so two widgets left
   with identical ids by a duplicated partial-swap fragment stay

@@ -1380,12 +1380,22 @@ internal discipline. Ordered by severity; confirmed defects first.
        Framework CSS now copied to `public/assets/` at docs build for plain
        linking; symptom row added; cascade page cross-links the sharp edge.
        Verified live 1440 both themes; 32 baselines untouched-green.
-6. [ ] **No-JS dark decision** (Kofi M-H). `color-scheme: light dark` on
+6. [x] **No-JS dark decision** (Kofi M-H). `color-scheme: light dark` on
        `:root` ships a docs-app assumption: CSS-only consumers under dark OS
        get light page + dark native chrome. Fix (`:root:not([data-theme])
        { color-scheme: light }` or a real auto tier) + boot-snippet doc in
        installation. Accept: no-JS link-the-CSS page renders coherently under
        dark OS emulation.
+       **Done 2026-08-15**: library default is now `color-scheme: light`
+       (`light dark` was the docs-MPA gap fix leaking into the library — an
+       app-level decision via `<meta name="color-scheme">`, which the docs
+       already carry); `[data-theme]` rules unchanged. CDP-verified: dark-OS
+       no-JS page computes colorScheme `light` (coherent); opting in via
+       data-theme=dark computes `dark` + dark tokens. Installation skeleton
+       gains the pre-paint boot snippet. BONUS: this closed the 1.0-list
+       item-9 "solid square checkbox" mystery — our own visual baselines had
+       the mixed-mode bug on camera (headless prefers dark); baselines now
+       show correct checkboxes.
 7. [ ] **Forced-colors sweep** (Rex M). 7/25 components have forced-colors
        rules; sweep the remaining 18 (or publicly scope the claim). Accept:
        every component either covered or named in a documented scope list;
@@ -1451,7 +1461,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
       | 6 | Zero runtime deps (shipped pkg) | ✅ confirmed, `htmx.org` is a **docs-app-only** dep | `packages/core/package.json` |
       | 7 | Dark mode / density / print / forced-colors | ✅ shipped, live-verified this session | Slices 5-6, item 18 |
       | 8 | RTL | ✅ audited — logical properties genuinely hold; 1 open product question flagged (numeric column alignment), not a bug | Slice 7 item 6 |
-      | 9 | ≥1 real consumer | ✅ `examples/po-app` — **re-verified live THIS round**: `podman build` from current source, ran the container, clicked through dashboard → PO list → filter → select-all/bulk-approve → detail page → approval timeline. Everything worked. One visual anomaly investigated (an unchecked `.bo-checkbox` rendered as a solid square in this session's automated-Chrome screenshot) — confirmed via computed style (`accent-color` correctly resolved) and by checking it live (renders a proper checkmark) that this is an environment rendering quirk, not a library bug. | `examples/po-app`, this round |
+      | 9 | ≥1 real consumer | ✅ `examples/po-app` — **re-verified live THIS round**: `podman build` from current source, ran the container, clicked through dashboard → PO list → filter → select-all/bulk-approve → detail page → approval timeline. Everything worked. One visual anomaly investigated (an unchecked `.bo-checkbox` rendered as a solid square in this session's automated-Chrome screenshot) — **root cause found 2026-08-15 by Slice 14 item 6**: NOT an environment quirk after all, but the library's `color-scheme: light dark` + headless-Chrome dark preference + no `data-theme` = dark native checkboxes on a light page (the exact mixed-mode bug the Platform seat later named). Fixed by the library defaulting `color-scheme: light`. | `examples/po-app`, this round |
       | 10 | a11y ledger | 🟡 2 items genuinely NEEDS-RUNTIME (VoiceOver, NVDA — no tool in this environment can drive either); everything else closed, and the first full axe-core engine scan (2026-08-15, Slice 13) is zero violations across all 54 docs pages | Slice 6 item 5, item 18; `test:axe` |
       | 11 | API frozen | 🟡 **Provisional** (downgraded by the 2026-08-15 decisions grill): all 16 behaviors stable against internal usage — the audits are per-item and dated — but the terminal "frozen" claim required the *external* usage pressure the audit itself named, and po-app is not external (the same reasoning item 12 uses to refuse po-app as an adopter — the two items now agree: 12 = market validation, 11 = contract robustness, and 11's final grade waits on 12's adopter) | `CHANGELOG.md` freeze addenda + correction; `.roundtable/grill-decisions-2026-08-15.md` |
       | 12 | Real independent adopter | 🔴 **Not met, and `po-app` does NOT count** — it's a reference app built by this project's own team to test packaging, not an external team choosing to adopt it. This is the one item on the list that can't be closed by more loop iterations; it needs an actual second party. |

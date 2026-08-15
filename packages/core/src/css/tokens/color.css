@@ -103,11 +103,20 @@
        not ours. Root cause of the 2026-08-14 "still flickers after the
        theme-timing fix" report: that fix made data-theme correct BEFORE
        paint, but said nothing about what's shown DURING the gap before
-       paint even happens. Once data-theme resolves, the two rules below
-       lock color-scheme to the ACTUAL saved preference (also fixes native
+       paint even happens. Once data-theme resolves, the rules below lock
+       color-scheme to the ACTUAL saved preference (also fixes native
        form-control chrome — scrollbars, date-input calendar icon — to
-       match the theme, not just the page background). */
-    color-scheme: light dark;
+       match the theme, not just the page background).
+       The LIBRARY default is plain `light`, NOT `light dark`: tokens only
+       flip on [data-theme="dark"], so a CSS-only consumer with no
+       theme-setter JS under a dark OS would otherwise get a light page
+       wearing dark scrollbars/form chrome/date pickers — a mixed-mode mess
+       (2026-08-15 Objective review, Platform seat). An app that DOES offer
+       dark sets data-theme (see the installation skeleton), and an MPA that
+       wants the pre-paint gap to match a dark preference adds
+       <meta name="color-scheme" content="light dark"> itself — an app-level
+       decision the docs site makes, not one the library may impose. */
+    color-scheme: light;
   }
 
   [data-theme="light"] {
