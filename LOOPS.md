@@ -36,8 +36,14 @@ router now, and it acts on what it finds instead of just reading it.
 ### Step 1 — Triage new input
 
 New input = a user-reported issue, a new requirement, direction, or constraint
-surfaced since the last wake (in chat, or added to `ROADMAP.md`'s backlog by
-someone else). If there is any:
+surfaced since the last wake — in chat, added to `ROADMAP.md`'s backlog by
+someone else, or **filed on GitHub**: check
+`gh issue list -R Busy-Office/busy-office-ui --state open` every wake (public
+intake since 0.1.0 shipped on npm; templates enforce version/browser/theme/
+density + minimal repro on bugs, a real ERP scenario on features). An issue
+triages like any other input — P0 if it's a bug, ranked into a slice with
+Accept criteria otherwise — and gets closed with a comment linking the fixing
+commit once its item ships. If there is any:
 
 1. Classify it: a **bug** (something that used to work / should work and
    doesn't) gets flagged **P0** and jumps the queue; a **feature/requirement**
