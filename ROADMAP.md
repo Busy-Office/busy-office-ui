@@ -1365,11 +1365,21 @@ internal discipline. Ordered by severity; confirmed defects first.
        by driving the DIST page markup + DIST JS in jsdom (the browser
        extension's CDP session degraded to 45s timeouts mid-wake — noted,
        not retried).
-5. [ ] **Unlayered-CSS interop recipe** (Kofi HIGH). Tailwind-v3-preflight /
+5. [x] **Unlayered-CSS interop recipe** (Kofi HIGH). Tailwind-v3-preflight /
        normalize coexistence: documented recipe (wrap resets in a layer,
        stated layer order for mixed stacks) + a demoed interop page or
        troubleshooting section. Accept: a Tailwind-preflight-style unlayered
        reset demonstrably not nuking `.bo-btn` in the documented setup.
+       **Done 2026-08-15**: Troubleshooting gains the recipe (order statement
+       first, reset into `layer(app-reset)`, v4-coexists/v3-preflight-off
+       notes) + a two-iframe LIVE proof running the identical hostile reset
+       — raw frame strips `.bo-btn` (computed bg transparent/0 padding),
+       recipe frame renders it fully (accent bg, 16px padding); iframes are
+       isolated documents because on the docs page itself a late-declared
+       `app-reset` would OUTRANK the framework (the very trap being taught).
+       Framework CSS now copied to `public/assets/` at docs build for plain
+       linking; symptom row added; cascade page cross-links the sharp edge.
+       Verified live 1440 both themes; 32 baselines untouched-green.
 6. [ ] **No-JS dark decision** (Kofi M-H). `color-scheme: light dark` on
        `:root` ships a docs-app assumption: CSS-only consumers under dark OS
        get light page + dark native chrome. Fix (`:root:not([data-theme])

@@ -31,6 +31,10 @@ const layers = `/* declared once, first, in every dist file: */
     can't silently outrank app CSS (layered can never beat unlayered); and audits are
     mechanical — anything inside <code>@layer bo-*</code> is ours, anything outside
     is yours.</p>
+    <p class="bo-u-text-muted">One sharp edge: an unlayered <em>reset you didn't
+    write</em> (Tailwind v3 preflight, normalize) wins by the same rule and strips
+    components — wrap it in a lower layer; recipe + live proof in
+    <a href={base + '/getting-started/troubleshooting'}>Troubleshooting</a>.</p>
   </section>
-  <Related links={[["/concepts/theming", "Theming"], ["/concepts/tokens", "Design tokens"]]} />
+  <Related links={[["/concepts/theming", "Theming"], ["/concepts/tokens", "Design tokens"], ["/getting-started/troubleshooting", "Troubleshooting (reset interop)"]]} />
 </Gallery>

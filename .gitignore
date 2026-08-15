@@ -13,3 +13,4 @@ graphify-out/
 # since (a new session claims the lock each time).
 .claude/scheduled_tasks.lock
 visual-diffs/
+apps/docs/public/assets/
