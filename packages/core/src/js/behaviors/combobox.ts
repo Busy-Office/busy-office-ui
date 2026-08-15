@@ -106,6 +106,13 @@ function filter(input: HTMLInputElement, listbox: HTMLElement): void {
   setActive(input, listbox, null);
 }
 
+/**
+ * @event bo:combobox-select
+ * @target the combobox `<input>` (bubbles)
+ * @when an option is committed — click, or Enter on the active option
+ * @detail value {string} the option's `data-value`, falling back to its text
+ * @detail text {string} the option's visible text, now in the input
+ */
 function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLElement): void {
   input.value = option.textContent?.trim() ?? '';
   close(listbox);

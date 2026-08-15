@@ -46,6 +46,13 @@ export function initScanInput(): void {
     e.preventDefault();
     const value = input.value;
     input.value = '';
+    /**
+     * @event bo:scan
+     * @target the `[data-scan-input]` field (bubbles)
+     * @when the terminator key arrives (default Enter, `data-scan-terminator`
+     *   to override); the field is cleared and refocused for the next scan
+     * @detail value {string} the scanned string, exactly as entered
+     */
     input.dispatchEvent(new CustomEvent('bo:scan', { bubbles: true, detail: { value } }));
     announceScan(input, value);
     input.focus();

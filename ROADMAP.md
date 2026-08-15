@@ -1327,7 +1327,7 @@ internal discipline. Ordered by severity; confirmed defects first.
        into BOTH READMEs from dist (56 kB min / 9.3 kB gz / 16 / 5 events);
        `--check` is now the core build's 8th step, proven red on a
        hand-edit; corrected claim ships to npm with the next release.
-2. [ ] **JS contract becomes semver surface** (Devi BLOCKER + Rex). The five
+2. [x] **JS contract becomes semver surface** (Devi BLOCKER + Rex). The five
        `bo:*` intent events' payload shapes + the 19 exports documented in a
        GENERATED events/API table on the js-behaviors page, and the
        versioning policy amended to name them API (matching the internal
@@ -1335,6 +1335,17 @@ internal discipline. Ordered by severity; confirmed defects first.
        table generated from source (like the `.d.ts` gate), versioning page
        lists JS events, `bo:row-save` payload documented beyond a code
        comment.
+       **Done 2026-08-15**: structured `@event` JSDoc at every dispatch site;
+       `extract-events.mjs` emits `dist/events.json` behind a two-way parity
+       gate (dispatched-but-undocumented AND documented-but-not-dispatched
+       both red — proven) wired into the core build; exported as
+       `@busy-office/ui/events`; js-behaviors page renders the generated
+       Intent-events table (payload fields typed + a listener recipe);
+       versioning policy amends API to include init/refresh signatures and
+       `bo:*` payload shapes with the Breaking rule; palette vars explicitly
+       declared not-API (HUMAN CALL #2's recommended default applied in
+       docs — owner may veto). En route: fixed an HTML-injection bug where
+       `<tr>`/`<input>` in event docs broke the rendered table.
 3. [x] **form-field `:has()` source fix** (Kofi; latent). Split the comma
        list into the two separate rules the comment already mandates; correct
        the comment. Accept: dist output equivalent-or-better; a source-level

@@ -2,6 +2,18 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import manifest from '@busy-office/ui/behaviors-manifest';
+import eventsManifest from '@busy-office/ui/events';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// escape first, THEN backticks→<code> — event docs mention literal tags
+// (`<tr>`, `<input>`) that must never reach set:html raw
+const fmt = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+   .replace(/`([^`]+)`/g, '<code>$1</code>');
+const listen = `document.addEventListener("bo:row-save", (e) => {
+  const { row, rowId } = e.detail;          // typed shape: see the table above
+  const values = Object.fromEntries(new FormData(row.closest("form")) );
+  fetch(\`/pos/\${rowId}\`, { method: "PATCH", body: JSON.stringify(values) });
+});`;
 const refresh = `// Bound table containers re-derive selection state automatically when an
 // htmx:afterSwap bubbles through them. Any OTHER swap mechanism calls:
 import { refreshDataTable } from "@busy-office/ui/js";
@@ -53,6 +65,39 @@ const inits = Object.entries(manifest.behaviors)
     one HTMX-aware line in core JS is the <code>htmx:afterSwap</code> event
     <em>name</em> a table container listens for:</p>
     <pre><code>{refresh}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>Intent events — the integration API <span class="bo-badge">generated</span></h2>
+    <p>Behaviors never talk to your server; they dispatch an intent event and
+    your app owns the data layer. These payloads are <strong>versioned API</strong>
+    (see <a href={base + '/getting-started/versioning'}>Versioning</a>): a field
+    changing shape or meaning is a Breaking change. This table is generated
+    from the dispatch sites in source — it cannot drift.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Event</th><th scope="col">Dispatched on</th><th scope="col">When</th><th scope="col">detail</th></tr></thead>
+        <tbody>
+          {eventsManifest.events.map((ev: any) => (
+            <tr>
+              <td class="bo-data-table__col--code">{ev.name}</td>
+              <td set:html={fmt(ev.target)} />
+              <td set:html={fmt(ev.when)} />
+              <td>
+                {ev.noPayload ? <span class="bo-u-text-muted">— none</span> :
+                  <ul style="margin: 0; padding-inline-start: 1rem">
+                    {ev.detail.map((d: any) => (
+                      <li><code>{d.name}</code> <span class="bo-u-text-muted">{'{'}{d.type}{'}'}</span> — <span set:html={fmt(d.desc)} /></li>
+                    ))}
+                  </ul>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">All bubble, so one document-level listener works
+    per event type — the same delegation model the inits use:</p>
+    <pre><code>{listen}</code></pre>
   </section>
   <section class="demo">
     <h2>Import paths</h2>

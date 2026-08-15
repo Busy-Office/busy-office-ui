@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Versioning & upgrades">
   <p class="demo-note">What counts as the public API — the surface a version bump can
@@ -11,9 +12,16 @@ import Gallery from '../../layouts/Gallery.astro';
       documented class names, and <code>data-*</code>/ARIA contracts. The API tables on
       every component page are generated from the shipped CSS, so what's documented is
       exactly what's contractual.</li>
+      <li><strong>JS is API too</strong>: the exported <code>init*</code>/<code>refresh*</code>
+      function signatures and the <code>bo:*</code> intent-event payload shapes
+      (the generated table on <a href={base + '/concepts/js-behaviors'}>JS behaviors</a>).
+      Removing or reshaping an event's <code>detail</code> field is a Breaking
+      change and gets a CHANGELOG Breaking entry — pre-1.0 that means a minor
+      bump with the entry; post-1.0, a major.</li>
       <li><strong>Not API</strong>: component-internal selectors and the raw palette
-      tier. Per-component dist file placement is also not API until v1.0 — à-la-carte
-      importers should pin versions.</li>
+      tier (<code>--bo-palette-*</code> may change in any release — style against the
+      semantic tier). Per-component dist file placement is also not API until v1.0 —
+      à-la-carte importers should pin versions.</li>
     </ul>
   </section>
   <section class="demo">

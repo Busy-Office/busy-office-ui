@@ -43,6 +43,7 @@
     "./api": "./dist/api.json",
     "./contrast": "./dist/contrast.json",
     "./behaviors-manifest": "./dist/behaviors.json",
+    "./events": "./dist/events.json",
     "./js": {
       "types": "./dist/js/index.d.ts",
       "import": "./dist/js/index.js"
@@ -55,11 +56,12 @@
     "build:behaviors": "node scripts/extract-behaviors.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run check:contrast && node scripts/stamp-readme.mjs --check",
+    "build": "npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run check:contrast && node scripts/stamp-readme.mjs --check",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:events": "node scripts/extract-events.mjs"
   },
   "browserslist": [
     "chrome >= 119",

@@ -69,6 +69,15 @@ export function initRowEdit(): void {
       return;
     }
 
+    /**
+     * @event bo:row-save
+     * @target the edited `<tr>` (bubbles)
+     * @when Save is activated on a dirty row; after the event, current field
+     *   values become the new baseline (Cancel restores to them)
+     * @detail row {HTMLTableRowElement} the live row — read committed values
+     *   from its inputs/selects by `name`
+     * @detail rowId {string|null} the row's `data-row-id`, or null if unset
+     */
     const saveBtn = target.closest<HTMLElement>('[data-row-edit-save]');
     if (saveBtn) {
       const row = saveBtn.closest<HTMLElement>('table[data-row-edit] tbody tr');

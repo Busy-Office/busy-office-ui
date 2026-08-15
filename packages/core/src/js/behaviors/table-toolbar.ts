@@ -69,6 +69,13 @@ export function initTableToolbar(): void {
     const btn = (e.target as Element | null)?.closest<HTMLElement>('[data-table-export]');
     if (!btn) return;
     const format = btn.dataset.tableExportFormat || 'csv';
+    /**
+     * @event bo:table-export
+     * @target the `[data-table-export]` button (bubbles)
+     * @when the export button is clicked; the listener produces the file
+     *   (server round-trip or client-side) — the framework only signals
+     * @detail format {string} `data-table-export-format`, default "csv"
+     */
     btn.dispatchEvent(
       new CustomEvent('bo:table-export', { bubbles: true, detail: { format } }),
     );

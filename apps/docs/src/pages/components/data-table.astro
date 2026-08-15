@@ -75,7 +75,7 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
   import { initRowEdit } from "@busy-office/ui/js";
   initRowEdit();
   document.addEventListener("bo:row-save", (e) => {
-    // persist e.detail.rowId / e.detail.row here (fetch, hx-patch, form submit)
+    // e.detail = { row, rowId } — versioned payload, see JS behaviors → Intent events
   });
 </script>`;
 const rows = [

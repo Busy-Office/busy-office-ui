@@ -27,6 +27,13 @@
 let installed = false;
 let observer: IntersectionObserver | undefined;
 
+/**
+ * @event bo:table-load-more
+ * @target the `[data-table-load-more]` button (bubbles)
+ * @when the button is clicked, or scrolls into view (IntersectionObserver)
+ * @detail — no payload; the listener fetches the next page and removes or
+ *   disables the button when exhausted
+ */
 function fire(btn: HTMLElement): void {
   if ((btn as HTMLButtonElement).disabled) return;
   btn.dispatchEvent(new CustomEvent('bo:table-load-more', { bubbles: true }));
