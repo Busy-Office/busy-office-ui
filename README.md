@@ -51,9 +51,10 @@ Browser floor: **Chrome/Edge 119 · Firefox 128 · Safari 17.4**.
 
 ## Docs
 
-`npm install && npm run docs:dev` → a 20-page gallery with live demos, canonical
-markup for every component, a theming guide, and composed ERP patterns (dense
-invoice list, approval workflow).
+**Live site:** https://busy-office.github.io/busy-office-ui/ — component gallery
+with live demos, canonical markup for every component, a theming guide, and
+composed ERP patterns (dense invoice list, approval workflow, goods receipt).
+Local: `npm install && npm run docs:dev`.
 
 ## Design reviews
 
@@ -65,7 +66,7 @@ state signal ships both a visible non-color cue and a programmatic channel.
 ## Project docs
 
 [DESIGN.md](DESIGN.md) — architecture and contracts · [ROADMAP.md](ROADMAP.md) —
-slices 1–3 (complete) · [CHANGELOG.md](CHANGELOG.md) — including pre-1.0 breaking
-changes.
+the living slice backlog · [CHANGELOG.md](CHANGELOG.md) — including pre-1.0
+breaking changes.
 
 MIT

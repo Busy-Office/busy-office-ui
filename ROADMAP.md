@@ -1270,6 +1270,14 @@ already enabled on `Busy-Office/busy-office-ui` (verified via API).
        github.com is blocked for this session's browser — owner should
        glance at it once (GraphQL `issueTemplates` only reflects legacy
        .md templates, so it can't confirm YAML forms).
+3. [x] **npm README** (Explore find, 2026-08-15 post-0.1.1 wake): the npm
+       page showed "No README data found!" — npm packs README from
+       `packages/core/`, which had none (the root README is repo-facing).
+       Consumer-facing `packages/core/README.md` written (install, no-npm
+       path, behaviors quickstart, live docs URL, issue link); root README
+       de-staled (live Pages URL, slice count). Pack verified: 3.3 kB
+       README in the tarball. **Shows on npm at the next release** — no
+       0.1.2 cut for it alone; it rides along with whatever ships next.
 
 ## Long term (post-1.0)
 
