@@ -1034,18 +1034,23 @@ recommendation not to build speculatively.
        bites again. Verified live via Podman (`--no-cache`) in both
        themes and at a 390px isolated container width; 48 tests
        unchanged.
-6. [ ] **App Launch pattern** — the one Slice 7 item 5 sub-item that
-       already had a concrete, evidenced Accept criterion (2026-08-15
-       reference screenshots, macOS Launchpad/Favourites): an icon-grid
-       app launcher — categorized sections (e.g. "Favourites"), each tile
-       a large icon + label, tiles group into folders/stacks, a filter/
-       category tab row above the full grid. Also closes the Tablet-Bento
-       precedent gap flagged in item 1 above — same pattern, don't build
-       twice. Accept: a pattern page composed from existing primitives
-       (badge/button/card-via-`.bo-widget` grid, `@container`-driven
-       reflow) — if a genuinely new grid-tile primitive turns out to be
-       needed, that's a real finding to surface during the build, not to
-       assume up front.
+6. [x] **App Launch pattern** — shipped (`/patterns/app-launch`, zero new
+       CSS — the "genuinely new grid-tile primitive" contingency was NOT
+       needed). Matches the reference screenshots' shape: a "Favourites"
+       icon-tile grid (tiles are plain `<a class="bo-widget">` links —
+       initials-as-icon, `aria-hidden` on the decorative initial so the
+       accessible name is the label), a category tab row (the ordinary
+       tabs pattern, one `.bo-widget-grid` per panel — verified live that
+       switching tabs swaps grids correctly), and "folder" tiles (a
+       widget whose face previews members as `aria-hidden` badges — one
+       link, one navigation; deliberately NOT a hover-expanding stack).
+       Also closes item 1's Tablet-Bento precedent gap as planned:
+       verified live at a 390px isolated container that the SAME
+       `bo-widget-grid` container query reflows the tile grid to two
+       columns — no launcher-specific responsive code. Sidebar entry
+       added; `Related` links to Card/tabs/container-queries/density.
+       Verified live via Podman (`--no-cache`) in both themes; 48 tests
+       unchanged.
 
 7. [x] **Advanced table toolbar — column visibility + export** — shipped.
        Triaged 2026-08-15 (user wishlist "advance table / search" + a real

@@ -1,0 +1,131 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+
+const favourites = [
+  { icon: 'PO', label: 'Purchasing' },
+  { icon: 'IV', label: 'Invoices' },
+  { icon: 'GR', label: 'Goods receipt' },
+  { icon: 'RP', label: 'Reports' },
+];
+const finance = [
+  { icon: 'GL', label: 'General ledger' },
+  { icon: 'AP', label: 'Payables' },
+  { icon: 'AR', label: 'Receivables' },
+  { icon: 'FX', label: 'Currencies' },
+];
+const logistics = [
+  { icon: 'WH', label: 'Warehouse' },
+  { icon: 'SH', label: 'Shipping' },
+  { icon: 'ST', label: 'Stock counts' },
+];
+---
+<Gallery title="Pattern: app launch">
+  <p class="demo-note">
+    A suite entry screen — the icon-grid launcher an ERP user lands on before picking
+    an app (the "Bento UI" / tablet-launcher archetype from the
+    <a href="/concepts/density">device-coverage table</a> — same
+    <code>.bo-widget-grid</code> container-query mechanism as a dashboard, at a
+    smaller tile size, <strong>not</strong> a new grid component). Tiles are plain
+    links composed into <code>.bo-widget</code> cards; the category row is the
+    ordinary <a href="/components/tabs">tabs</a> pattern; a "folder" tile is just a
+    widget whose body holds a cluster of small tiles. Zero new CSS.
+  </p>
+
+  <section class="demo">
+    <h2>Favourites</h2>
+    <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
+      {favourites.map((a) => (
+        <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+          <span aria-hidden="true" style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">{a.icon}</span>
+          <span style="color: var(--bo-color-text-primary)">{a.label}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>All applications — category tabs</h2>
+    <div class="bo-tabs">
+      <div class="bo-tabs__list" role="tablist" aria-label="Application categories">
+        <button class="bo-tabs__tab" role="tab" id="al-t-fin" aria-selected="true" aria-controls="al-p-fin">Finance</button>
+        <button class="bo-tabs__tab" role="tab" id="al-t-log" tabindex="-1" aria-selected="false" aria-controls="al-p-log">Logistics</button>
+      </div>
+      <div class="bo-tabs__panel" role="tabpanel" id="al-p-fin" aria-labelledby="al-t-fin" tabindex="0">
+        <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
+          {finance.map((a) => (
+            <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+              <span aria-hidden="true" style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">{a.icon}</span>
+              <span style="color: var(--bo-color-text-primary)">{a.label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="bo-tabs__panel" role="tabpanel" id="al-p-log" aria-labelledby="al-t-log" tabindex="0" hidden>
+        <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
+          {logistics.map((a) => (
+            <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+              <span aria-hidden="true" style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">{a.icon}</span>
+              <span style="color: var(--bo-color-text-primary)">{a.label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>A "folder" tile — grouped apps</h2>
+    <div class="bo-widget-grid" style="--bo-widget-min: 12rem">
+      <a href="#" class="bo-widget" style="text-decoration: none">
+        <div class="bo-widget__body" style="text-align: center">
+          <span class="bo-cluster" aria-hidden="true" style="justify-content: center; --bo-cluster-gap: var(--bo-space-1)">
+            <span class="bo-badge">GL</span><span class="bo-badge">AP</span><span class="bo-badge">AR</span><span class="bo-badge">FX</span>
+          </span>
+          <span style="display: block; margin-block-start: var(--bo-space-2); color: var(--bo-color-text-primary)">Finance apps</span>
+        </div>
+      </a>
+      <a href="#" class="bo-widget" style="text-decoration: none">
+        <div class="bo-widget__body" style="text-align: center">
+          <span class="bo-cluster" aria-hidden="true" style="justify-content: center; --bo-cluster-gap: var(--bo-space-1)">
+            <span class="bo-badge">WH</span><span class="bo-badge">SH</span><span class="bo-badge">ST</span>
+          </span>
+          <span style="display: block; margin-block-start: var(--bo-space-2); color: var(--bo-color-text-primary)">Logistics apps</span>
+        </div>
+      </a>
+    </div>
+    <p class="bo-u-text-muted">A folder is a single link to a category page (or a
+    dialog listing its apps) whose face previews the members as badges — not a
+    hover-expanding stack. One click, one navigation; the preview is
+    <code>aria-hidden</code> so the link's accessible name is just "Finance apps".</p>
+  </section>
+
+  <script>
+    import { initTabs } from '@busy-office/ui/js';
+    initTabs();
+  </script>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- A tile is a link styled as a card. The grid is the SAME .bo-widget-grid
+     a dashboard uses — --bo-widget-min sets the tile size; the grid's own
+     container query reflows it on tablet/narrow widths for free. -->
+<div class="bo-widget-grid" style="--bo-widget-min: 9rem">
+  <a href="/purchasing" class="bo-widget"
+      style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+    <span aria-hidden="true"
+        style="display: block; font-size: 2rem; font-weight: 700; color: var(--bo-color-accent)">PO</span>
+    <span style="color: var(--bo-color-text-primary)">Purchasing</span>
+  </a>
+  …
+</div>
+<!-- Category row = the ordinary tabs pattern; each panel holds its own grid. -->`}</code></pre>
+  </section>
+
+  <Related links={[
+    ["/components/dashboard#card", "Card (.bo-widget)"],
+    ["/components/tabs", "Tabs"],
+    ["/concepts/container-queries", "Container queries"],
+    ["/concepts/density", "Density & device coverage"],
+  ]} />
+</Gallery>
