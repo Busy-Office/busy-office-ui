@@ -928,7 +928,7 @@ rounds, smallest-scoped first, each verified live before moving to the next.
 **Slice 8 is now complete — all three items shipped, verified live,
 committed.** No further Continue rounds queued for this slice.
 
-## Slice 9 (candidate) — from the Slice 7 Objective review
+## Done — Slice 9: from the Slice 7 Objective review (all 11 items)
 
 Direct output of the 2026-08-15 design-panel review (`.roundtable/grill-
 slice7-scoping-2026-08-15.md`) — originally six independently-scoped items

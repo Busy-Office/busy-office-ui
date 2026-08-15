@@ -216,10 +216,15 @@ spiked/shipped/discarded. Per this playbook's own fallback ("or generate
 one from ERP gaps"), the next Explore dispatch generated one from the
 Long-term backlog's own "date-field component" note — ~~Date field
 (display)~~ spiked, succeeded, graduated as ROADMAP.md Slice 6 item 21.
-The deeper prioritization question (what's actually worth exploring
-next, once THIS is also built and shipped) is exactly what the
-still-open Objective review (`/round-table`, see ROADMAP.md's Slice 6
-note) is for. Ask the user to run it when ready.
+The deeper prioritization question was answered 2026-08-15 by the
+Objective review — run as the project-local design panel
+(`.roundtable/grill-slice7-scoping-2026-08-15.md`), NOT `/round-table`
+(wrong instrument: that's market/feasibility, not design scoping). Its
+output became Slice 9, fully shipped the same day. The next Explore
+fallback source, with the Ideas list AND the Long-term backlog now both
+exhausted, is new user input or the dogfood loop (extend
+`examples/po-app` and feel where it fights — this produced the grouping,
+progress, and freeze-graduation rounds).
 
 ---
 
