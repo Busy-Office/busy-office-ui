@@ -1661,6 +1661,34 @@ disabled-segment state.
       the icon-sizing fix: a small, unambiguous consumption of an existing
       primitive, not an open interaction-model question).
 
+- [x] **2026-08-16 — Dogfood: Tag input on the po-app Approve dialog —
+      graduated** (Explore, dogfood-loop fallback continued — Segmented and
+      Tag input, Slice 17's other two new components, still had never been
+      used outside isolated docs demos). Added a "Notify additional
+      approvers" `.bo-tag-input` to the Approve dialog's `<form
+      method="dialog">` — the exact scenario the roadmap cites for Tag input
+      ("multiple approval-routing recipients"), a real ERP need (route the
+      approval notification to more people than the default approver) with
+      no invented data model. **Verified against the real npm tarball
+      boundary**, same as the File-upload round: rebuilt core, packed a
+      fresh tarball, `podman build`'d po-app, ran it, drove it live.
+      Add-tag (Enter), add-second, Backspace-removes-last, and
+      click-to-remove all confirmed via real DOM interaction, zero console
+      errors, and — the actual risk this scenario tests — the tag field's
+      Enter keydown does NOT trigger the surrounding `<form method="dialog">`'s
+      native submit-on-Enter (confirmed `defaultPrevented: true` on the
+      keydown, dialog stays open); Approve still correctly fires the
+      existing `hx-post` and swaps the timeline. **One tooling artifact
+      caught and correctly not misattributed to the framework**: an early
+      click aimed at the remove button landed on the dialog backdrop instead
+      (viewport-size drift between an earlier screenshot's coordinates and
+      the live click, a known class of automation-tool imprecision, not
+      anything programmatic) and closed the dialog — resolved by clicking
+      via the element's live bounding-rect / accessibility-tree ref instead
+      of stale screenshot pixel coordinates, not by changing any shipped
+      code. Zero new CSS/JS — pure consumption of already-shipped surface.
+      Graduated directly, same precedent as the File-upload round.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):

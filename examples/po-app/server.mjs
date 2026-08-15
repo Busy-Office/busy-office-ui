@@ -242,14 +242,41 @@ ${p.status === 'Pending' ? `
       <h2 class="bo-dialog__title" id="adlg-t">Approve ${p.id}</h2>
       <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
     </header>
-    <div class="bo-dialog__body"><p>Approve ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p></div>
+    <div class="bo-dialog__body">
+      <p>Approve ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p>
+      <div class="bo-form-field">
+        <span class="bo-form-field__label" id="adlg-notify-label">Notify additional approvers</span>
+        <div class="bo-tag-input" id="adlg-notify" role="group" aria-labelledby="adlg-notify-label">
+          <input class="bo-tag-input__field" id="adlg-notify-field" type="text"
+              placeholder="Type a name, press Enter">
+        </div>
+      </div>
+    </div>
     <footer class="bo-dialog__footer">
       <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
       <button class="bo-btn" value="confirm"
         hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML">Approve</button>
     </footer>
   </form>
-</dialog>` : ''}`;
+</dialog>
+<script type="module">
+  import { initTagInput } from '/assets/js/index.js';
+  initTagInput();
+  const notify = document.getElementById('adlg-notify');
+  const field = document.getElementById('adlg-notify-field');
+  notify.addEventListener('bo:tag-add', (e) => {
+    const tag = document.createElement('span');
+    tag.className = 'bo-tag-input__tag';
+    tag.textContent = e.detail.value;
+    const rm = document.createElement('button');
+    rm.className = 'bo-tag-input__remove';
+    rm.type = 'button';
+    rm.setAttribute('aria-label', 'Remove ' + e.detail.value);
+    rm.textContent = '×';
+    tag.append(rm);
+    notify.insertBefore(tag, field);
+  });
+</script>` : ''}`;
 
 // Dogfood probe (2026-08-15): the canonical grouped-with-subtotals ERP view,
 // built with ONLY documented markup — to find out whether ROADMAP Slice 9
