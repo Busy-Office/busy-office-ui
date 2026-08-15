@@ -49,7 +49,11 @@ const canonical = `<!-- The input is the real control — the label makes the wh
   initFileDropzone();
 </script>
 <!-- File list + progress are YOUR code: read input.files on 'change',
-     render .bo-file-list rows, upload however you upload. -->`;
+     render .bo-file-list rows, upload however you upload. Put
+     aria-live="polite" on the <ul> — a screen-reader user who just
+     dropped or removed a file otherwise gets no confirmation it
+     registered (same live-region need as the data-table selection
+     count). -->`;
 ---
 <Gallery title="File upload">
   <p class="demo-note">
@@ -116,6 +120,7 @@ const canonical = `<!-- The input is the real control — the label makes the wh
       'Always give the input an accessible name — <code>aria-label</code>, or a visible <code>&lt;label&gt;</code> (which a dropzone already needs, to make the whole box clickable).',
       'File type/size limits are native attributes (<code>accept</code>) or your own validation after reading <code>input.files</code> — nothing this component enforces.',
       'No file list, upload, or progress bar shipped — read <code>input.files</code> on <code>change</code> and render <code>.bo-file-list</code> rows yourself; pair with <a href="' + base + '/components/progress">Progress</a> for an in-flight upload.',
+      'Put <code>aria-live="polite"</code> on the <code>.bo-file-list</code> — a screen-reader user who just dropped or removed a file gets no confirmation it registered otherwise (same live-region need as the data-table selection count).',
     ]}
   />
   <Related links={[
