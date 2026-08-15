@@ -140,9 +140,16 @@ let gallery = await readFile(galleryPath, 'utf8');
 const marker = `label: '${group}',\n    items: [`;
 const markerIndex = gallery.indexOf(marker);
 if (markerIndex === -1) throw new Error(`Couldn't find the '${group}' sidebar section in Gallery.astro`);
-const insertAt = markerIndex + marker.length;
-const entry = `\n      { href: '/components/${name}', label: '${label}' },`;
-gallery = gallery.slice(0, insertAt) + entry + gallery.slice(insertAt);
+// Insert at the END of the group's items, not right after `items: [` —
+// scaffolding always dropped new entries first, which silently pushed the
+// most-established component (Button, Forms, ...) out of pole position
+// every time something newer was added (drift found + fixed 2026-08-16
+// Standardize sweep: Segmented control had displaced Button in "Actions").
+const closeMarker = '\n    ],';
+const closeIndex = gallery.indexOf(closeMarker, markerIndex + marker.length);
+if (closeIndex === -1) throw new Error(`Couldn't find the closing "],\` for the '${group}' section`);
+const entry = `      { href: '/components/${name}', label: '${label}' },\n`;
+gallery = gallery.slice(0, closeIndex + 1) + entry + gallery.slice(closeIndex + 1);
 await writeFile(galleryPath, gallery);
 
 // 5. Stub behavior test — only interactive components get one; there's no

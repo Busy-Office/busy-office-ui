@@ -65,4 +65,14 @@
   .bo-tag-input__field::placeholder {
     color: var(--bo-color-text-muted);
   }
+
+  /* Forced colors flatten the chip's background — text stays readable, but
+     the pill BOUNDARY (what marks "these words + this × are one removable
+     tag" vs. plain inline text) vanishes without an explicit border. Same
+     gap class as skeleton/combobox/stepper (Slice 14 item 7). */
+  @media (forced-colors: active) {
+    .bo-tag-input__tag {
+      border: 1px solid CanvasText;
+    }
+  }
 }
