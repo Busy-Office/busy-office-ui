@@ -1592,6 +1592,50 @@ disabled-segment state.
       broken since Slice 14 item 1 shipped — po-app isn't in CI, so nothing
       caught it until this Explore wake actually ran the build.
 
+- [x] **2026-08-16 — `npm audit`'s 7 vulnerabilities (1 critical, 3 high, 3
+      moderate) audited per-advisory; confirmed inert, deliberately deferred**
+      (Explore find). All 7 land in devDependencies only — confirmed
+      `packages/core/package.json` has zero runtime `dependencies`, so npm
+      never installs any of them for a consumer of `@busy-office/ui`. Went
+      past that blanket fact to check each advisory's actual exploit
+      precondition against how this repo really uses the tool:
+      - **vitest (critical, GHSA-5xrq-8626-4rwp)** — "arbitrary file read/
+        execute when the Vitest UI server is listening." This repo only ever
+        invokes `vitest run` (headless); the `--ui` server is never started
+        anywhere in scripts or CI.
+      - **astro (high ×2 + moderate/low)** — Host-header SSRF in prerendered
+        error-page fetch, reflected XSS via unescaped slot name, plus several
+        dev-feature XSS advisories. `apps/docs` builds `output: 'static'`
+        and ships via nginx — no Astro server/SSR runtime in production, and
+        the affected dev-only features aren't used.
+      - **vite (high + moderate ×2)** — `server.fs.deny` bypass, NTLMv2 hash
+        disclosure via UNC path (Windows-only), optimized-deps path
+        traversal — all three are `vite dev`-server-only. CI and local both
+        only ever run `astro build` / `vite build`; no dev server is ever
+        exposed to a network.
+      - **esbuild (moderate + low)** — "dev server accepts any-origin
+        requests," Windows-only dev-server file read — same shape, dev-
+        server-only, never invoked here.
+      - **sharp (high, inherited libvips CVEs)** — the one advisory with a
+        genuinely different risk shape (native-library CVE reachable via
+        *build-time* image processing, not a dev server). Checked whether
+        it's actually exercised: no `astro:assets`/`<Image>` usage anywhere
+        in `apps/docs/src`, and no raster (`.jpg`/`.png`/`.webp`) source
+        assets in the repo — only visual-regression *test output* PNGs,
+        which aren't inputs to any build step. `sharp` is a dormant
+        transitive dependency of Astro's optional image service, never
+        actually invoked by this build.
+      Verdict: every one of the 7 advisories' exploit preconditions (a
+      listening Vitest UI server, a network-exposed Vite/esbuild dev server,
+      Astro SSR runtime, image processing via astro:assets) is absent from
+      how this repo builds and ships. All `fixAvailable` require semver-MAJOR
+      bumps (vitest, astro, vite chains) — upgrading now would trade a real
+      risk of breaking the build/test toolchain for zero realized risk
+      reduction. Deliberately deferred, not fixed: re-check each advisory
+      the next time its package needs a major bump for an unrelated reason,
+      or if any of the newly-absent preconditions (dev server exposed to a
+      network, `astro:assets` adopted, `vitest --ui` used) becomes true.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
