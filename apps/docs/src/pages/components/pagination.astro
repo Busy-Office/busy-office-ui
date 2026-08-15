@@ -49,11 +49,72 @@ const pgMarkup = `<div class="bo-data-table__footer">
     </div>
   </section>
   <section class="demo">
+    <h2>Load more — the infinite-scroll alternative <span class="bo-badge">opt-in</span></h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Invoice #</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+        <tbody id="lm-rows">
+          <tr><td class="bo-data-table__col--code">INV-10234</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
+          <tr><td class="bo-data-table__col--code">INV-10235</td><td class="bo-data-table__col--numeric">$18,940.50</td></tr>
+        </tbody>
+      </table>
+      <div class="bo-data-table__footer" style="justify-content: center">
+        <button class="bo-btn bo-btn--secondary" type="button" data-table-load-more>Load more</button>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">When page numbers don't fit the interaction (activity
+    feeds, mobile lists): <code>data-table-load-more</code> +
+    <code>initLoadMore()</code> dispatches <code>bo:table-load-more</code> on click —
+    your code fetches the next batch and appends the rows (fetch, <code>hx-get</code>),
+    this behavior only tracks intent, same split as <code>bo:table-export</code>.
+    Add <code>data-load-more-auto</code> and an <code>IntersectionObserver</code>
+    fires the same event when the button scrolls into view — once per approach, so a
+    consumer that fails to append doesn't loop. Disable the button while a fetch is
+    in flight; remove it when there's nothing left. Try it: the demo appends two
+    stub rows per click.</p>
+    <pre><code>{`<div class="bo-data-table__footer">
+  <button class="bo-btn bo-btn--secondary" type="button"
+      data-table-load-more data-load-more-auto>Load more</button>
+</div>
+<script type="module">
+  import { initLoadMore } from "@busy-office/ui/js";
+  initLoadMore(); // once — click + auto-fire when the button scrolls into view
+  document.addEventListener("bo:table-load-more", async (e) => {
+    e.target.disabled = true;           // in flight
+    const rows = await fetchNextPage(); // YOUR code
+    tbody.append(...rows);
+    e.target.disabled = false;          // or remove it when exhausted
+  });
+</script>`}</code></pre>
+  </section>
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{pgMarkup}</code></pre>
   </section>
+  <script>
+    import { initLoadMore } from '@busy-office/ui/js';
+    initLoadMore();
+    let n = 10236;
+    document.addEventListener('bo:table-load-more', () => {
+      const tbody = document.getElementById('lm-rows');
+      if (!tbody) return;
+      for (let i = 0; i < 2; i++) {
+        const tr = document.createElement('tr');
+        const code = document.createElement('td');
+        code.className = 'bo-data-table__col--code';
+        code.textContent = `INV-${n++}`;
+        const amt = document.createElement('td');
+        amt.className = 'bo-data-table__col--numeric';
+        amt.textContent = `$${(Math.random() * 9000 + 500).toFixed(2)}`;
+        tr.append(code, amt);
+        tbody.append(tr);
+      }
+    });
+  </script>
   <ApiTable component="pagination"
+    js="Optional: initLoadMore() — dispatches bo:table-load-more on a [data-table-load-more] button (click, or scroll-into-view with data-load-more-auto). Fetching/appending is your code."
     notes={['Current page carries <code>aria-current="page"</code>; navigation itself is your links/HTMX.',
-            'The table footer (<code>.bo-data-table__footer</code>) is owned by data-table — import that file too when going à la carte.']} />
+            'The table footer (<code>.bo-data-table__footer</code>) is owned by data-table — import that file too when going à la carte.',
+            'Load more vs page numbers: load-more suits feeds and mobile lists; page numbers suit "jump to page 13" reference tables. Both compose with the same footer.']} />
   <Related links={[["/components/data-table", "Data table"], ["/getting-started/htmx", "Using with HTMX"]]} />
 </Gallery>

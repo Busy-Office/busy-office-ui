@@ -1097,18 +1097,24 @@ recommendation not to build speculatively.
        whether it already covers this before building anything new).
        Not scoped yet — same "needs a concrete use case" gate as item 8;
        likely sequenced after item 8 if the two turn out to be coupled.
-10. [ ] **Pagination — "pull up to see more" (infinite scroll / load-more)**
-       — from the same wishlist. Distinct from the existing
-       `.bo-pagination` component (`/components/pagination`, page-number
-       navigation) — this is a different interaction pattern entirely.
-       Reasonably scoped without more input, following the established
-       "behavior tracks intent, consumer fetches" split already proven
-       for `bo:table-export`/`bo:row-save`/`bo:scan`: an opt-in behavior
-       that dispatches a `bo:table-load-more` event (e.g. on a "Load
-       more" button click, or optionally on near-bottom scroll via
-       `IntersectionObserver`) — the consumer's code fetches more rows
-       and appends them; this behavior never owns data fetching. Ready to
-       scope further and build once dispatched.
+10. [x] **Pagination — "pull up to see more" (load-more)** — shipped.
+       New opt-in `initLoadMore()` behavior (`packages/core/src/js/
+       behaviors/load-more.ts`): a `[data-table-load-more]` button
+       dispatches `bo:table-load-more` on click; adding
+       `data-load-more-auto` arms an `IntersectionObserver` that fires
+       the same event when the button scrolls into view — once per
+       approach, so a consumer that fails to append rows doesn't get an
+       infinite loop. A disabled button (fetch in flight) neither clicks
+       nor auto-fires; guarded for environments without
+       IntersectionObserver (jsdom). Behavior tracks intent only —
+       fetching/appending is the consumer's code, same split as
+       `bo:table-export`/`bo:row-save`/`bo:scan`. Zero new CSS (composes
+       with the existing `.bo-data-table__footer`). New "Load more"
+       section on `/components/pagination` with a working append demo
+       plus a "load-more vs page-numbers: when to use which" note.
+       3 new behavior tests (55 total, all pass); verified live via
+       Podman (`--no-cache`) in both themes and at a 390px isolated
+       container width — two clicks appended four rows live.
 
 **"Settings" — resolved, no new build needed.** Asked the user directly
 what the reference screenshot's gear-icon button should open; the answer

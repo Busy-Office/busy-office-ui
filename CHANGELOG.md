@@ -80,7 +80,11 @@ pin.
   `data-col-toggle` checkboxes (composed with the existing multi-select
   dropdown) show/hide matching `data-col` cells; `data-table-export`
   dispatches `bo:table-export {format}` for the consumer to persist. Zero
-  new CSS.
+  new CSS. Load-more pagination (`initLoadMore()`): `[data-table-load-more]`
+  dispatches `bo:table-load-more` on click, or on scroll-into-view with
+  `data-load-more-auto` — consumer fetches/appends; zero new CSS. Login
+  and App Launch pattern pages (both zero new CSS). Nine ultrareview
+  findings fixed in one batch (see that commit for the list).
 
 ### API freeze audit (2026-08-15)
 
