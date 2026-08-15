@@ -92,4 +92,4 @@ two-channel cue wherever colour carries meaning.
 - Don't hand-edit generated docs (api.json, contrast.json, behaviors.json, class
   index, llms.txt) — change the source and regenerate.
 - Don't commit derived mirrors (`loops.db`, `graph.db`) — they're git-ignored.
-- Don't publish to npm — owner-gated until "perfect".
+- npm publishing: `@busy-office/ui` is LIVE (0.1.0, published 2026-08-15 by the owner). Every release from here is a real version bump with a CHANGELOG entry — contract-shape changes to stable behaviors are Breaking entries per the freeze-audit correction. Publishing remains owner-triggered.

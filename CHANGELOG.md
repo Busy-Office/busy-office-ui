@@ -6,7 +6,15 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
-## Unreleased (0.1.0 development)
+## 0.1.0 (2026-08-15)
+
+**First published release** — `@busy-office/ui@0.1.0` on npm (public,
+`busy-office` org), published by the owner after the session's freeze
+audits, three review passes, and the registry-install smoke test
+(93.9 kB tarball, dist-only, 16 behaviors, brand preset, icon set all
+verified present from the registry). Pre-1.0 semver: minors may still
+break, per the policy above. Everything below was developed unreleased
+and ships in this version.
 
 ### Breaking (pre-release churn)
 - **Prefix renamed `eof-` → `bo-`** (classes, custom properties, layer names,
