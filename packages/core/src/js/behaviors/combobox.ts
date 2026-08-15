@@ -137,6 +137,12 @@ function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLEleme
   );
 }
 
+/**
+ * @keymap initCombobox
+ * @key ArrowDown / ArrowUp — open the list (filtering first if closed), then move the active option; clamps at the ends
+ * @key Enter — commit the active option (dispatches bo:combobox-select)
+ * @key Escape — close without changing the value (native popover light-dismiss)
+ */
 export function initCombobox(): void {
   if (installed) return;
   installed = true;

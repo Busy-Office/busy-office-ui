@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import manifest from '@busy-office/ui/behaviors-manifest';
 import eventsManifest from '@busy-office/ui/events';
+import keymapManifest from '@busy-office/ui/keymap';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // escape first, THEN backticks→<code> — event docs mention literal tags
 // (`<tr>`, `<input>`) that must never reach set:html raw
@@ -46,6 +47,28 @@ const inits = Object.entries(manifest.behaviors)
               <td class="bo-u-text-muted">{hooks.map((h) => (h.startsWith('data-') ? h : `.${h}`)).join(', ')}</td>
             </tr>
           ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="demo">
+    <h2>Keyboard support <span class="bo-badge">generated</span></h2>
+    <p>The four behaviors that own their own key handling — everything else
+    is native (a plain <code>&lt;input&gt;</code>, a native <code>&lt;dialog&gt;</code>'s
+    own focus trap) or has no keyboard surface (delegation-only behaviors like
+    alerts). Extracted from source, so it can't drift from what's actually
+    wired.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Behavior</th><th scope="col">Key</th><th scope="col">Does</th></tr></thead>
+        <tbody>
+          {keymapManifest.behaviors.flatMap((b: any) => b.keys.map((k: any, i: number) => (
+            <tr>
+              <td class="bo-data-table__col--code">{i === 0 ? `${b.name}()` : ''}</td>
+              <td class="bo-data-table__col--code">{k.key}</td>
+              <td set:html={fmt(k.does)} />
+            </tr>
+          )))}
         </tbody>
       </table>
     </div>

@@ -1409,10 +1409,21 @@ internal discipline. Ordered by severity; confirmed defects first.
        strategy + the explicit-rules list (10 components) — the honest scope
        statement instead of a blanket claim. README size gate self-triggered
        on the CSS growth and was re-stamped (9.4 kB gz).
-8. [ ] **Generated keyboard map + docs skip link** (Ines M). Per-behavior
+8. [x] **Generated keyboard map + docs skip link** (Ines M). Per-behavior
        Arrow/Esc/Home/End table extracted from source onto js-behaviors +
        component pages; skip link targeting the existing `#main-content`.
        Accept: map generated not hand-written; skip link first-focusable.
+       **Done 2026-08-15**: `@keymap`/`@key` JSDoc on the 4 behaviors that
+       own real key handling (combobox, data-grid, tabs, dialog — Esc +
+       focus-trap); `extract-keymap.mjs` -> `dist/keymap.json`
+       (`@busy-office/ui/keymap`), gated (a `@keymap` naming a non-existent
+       init fails the build — proven). js-behaviors page renders the
+       generated table (11 rows), scoping honestly to "everything else is
+       native or has no keyboard surface" rather than padding the list.
+       Skip link added to the docs shell: DOM-verified first-focusable,
+       hidden off-screen unfocused / visible on focus, targets the real
+       `#main-content`; screenshotted live. 56 tests, both link checks,
+       32 baselines untouched.
 9. [ ] **Editable-grid recipe** (Devi HIGH). The screen-#40 page: combobox
        in a cell, cell-level error pattern, add/remove line, what
        `data-grid-nav` does and doesn't compose with. Accept: one recipe page

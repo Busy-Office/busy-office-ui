@@ -126,6 +126,27 @@ const current =
     </script>
   </head>
   <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <style>
+      /* First focusable element in the DOM, visually hidden until focused —
+         the standard skip-link pattern; not a framework component (it's a
+         one-off for this specific docs shell, not a reusable API). */
+      .skip-link {
+        position: absolute;
+        inset-block-start: -3rem;
+        inset-inline-start: var(--bo-space-2);
+        z-index: 1000;
+        padding: var(--bo-space-2) var(--bo-space-3);
+        background: var(--bo-color-bg-surface);
+        color: var(--bo-color-text-primary);
+        border: 1px solid var(--bo-color-border-default);
+        border-radius: var(--bo-radius-md);
+        text-decoration: none;
+      }
+      .skip-link:focus-visible {
+        inset-block-start: var(--bo-space-2);
+      }
+    </style>
     <div class="bo-app-shell">
       <header class="bo-navbar bo-app-shell__header">
         <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>

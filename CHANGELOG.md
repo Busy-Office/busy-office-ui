@@ -8,6 +8,10 @@ pin.
 
 ## Unreleased
 
+- Docs/meta: per-behavior keyboard support is now generated, gated API
+  documentation (`dist/keymap.json`, `@busy-office/ui/keymap`) rendered as a
+  table on the JS behaviors page; the docs site gained a skip-to-content link.
+
 - Fixed (forced-colors): three states whose only visible channel was a
   background now survive Windows High Contrast — skeleton bars render as
   outlined boxes instead of vanishing, the combobox active option repaints

@@ -153,6 +153,13 @@ function bindGrid(table: HTMLTableElement): void {
   });
 }
 
+/**
+ * @keymap initDataGrid
+ * @key ArrowRight / ArrowLeft / ArrowDown / ArrowUp — move the cell cursor; clamps at the grid edges
+ * @key Home / End — jump to the first/last cell in the row; with Ctrl/Cmd, the first/last cell in the grid
+ * @key Enter — focus the cell's one interactive widget, if it has one
+ * @key Escape — return focus from a widget to its parent cell
+ */
 export function initDataGrid(root: ParentNode = document): void {
   root.querySelectorAll<HTMLTableElement>('.bo-data-table[data-grid-nav]').forEach(bindGrid);
 }

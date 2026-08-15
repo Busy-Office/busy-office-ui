@@ -9,6 +9,11 @@
  */
 let installed = false;
 
+/**
+ * @keymap initTabs
+ * @key ArrowRight / ArrowLeft — move to the next/previous tab, wrapping; activates immediately
+ * @key Home / End — jump to the first/last tab; activates immediately
+ */
 function activate(tab: HTMLElement): void {
   const list = tab.closest('[role="tablist"]');
   if (!list) return;

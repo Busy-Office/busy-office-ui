@@ -14,6 +14,11 @@ import { trapFocus } from '../utils/focus-trap.js';
 const boundDialogs = new WeakSet<HTMLDialogElement>();
 let delegationInstalled = false;
 
+/**
+ * @keymap initDialogs
+ * @key Escape — close (native `showModal()`; skipped if `data-dismissible="false"`)
+ * @key Tab / Shift+Tab — cycle focus inside the dialog, wrapping at the ends (focus trap)
+ */
 function bindDialog(dialog: HTMLDialogElement): void {
   if (boundDialogs.has(dialog)) return;
   boundDialogs.add(dialog);
