@@ -170,7 +170,15 @@ Swap-proofness has two distinct layers, and the contract distinguishes them:
   container; for any other swap mechanism call `refreshDataTable(container)`. Only
   newly swapped-in *containers* need an `initDataTables(e.target)` call.
 
-## Component inventory (slices 1–3)
+## Component inventory (slices 1–3 snapshot)
+
+> **Historical snapshot.** These two inventory sections describe the
+> surface as of slice 3 and are kept for design rationale, not as a
+> current census — the live inventory is GENERATED from the shipped
+> artifact: `dist/behaviors.json` (16 behaviors as of 2026-08-15), the
+> docs ClassRef/ApiTable tables, and `llms.txt` (24 component pages).
+> Adding a component/behavior updates those automatically; this file
+> only changes when the *architecture* changes.
 
 Foundation: tokens (4 tiers + density + dark), reset, primitives (stack/cluster/grid/
 app-shell/visually-hidden). Components: button, badge, form (field/input incl.

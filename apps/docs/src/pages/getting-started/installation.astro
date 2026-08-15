@@ -18,6 +18,8 @@ const skeleton = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- NEVER add user-scalable=no — zoom is the WCAG 1.4.4 mechanism -->
   <link rel="stylesheet" href="/vendor/busy-office-ui/index.min.css">
+  <!-- Works in ANY server stack (Rails, Django, PHP, Go): copy dist/ into
+       your static/asset pipeline — no bundler, no Node at runtime. -->
 </head>
 <body>
   <div class="bo-app-shell">
