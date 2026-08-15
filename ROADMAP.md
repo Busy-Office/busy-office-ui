@@ -708,18 +708,13 @@ detail-form patterns).
         a useful signal — the last several Continue rounds held the line
         without accumulating debt.
 
-## Slice 7 (candidate) — docs IA, device coverage, component tiers, pattern gallery
+## Done — Slice 7: docs IA, device coverage, component tiers, pattern gallery
 
 Triaged 2026-08-14 (user direction, wishlist — five distinct asks, logged
 together since they're related but NOT all equally ready to build); item 6
 added 2026-08-15 via the Explore fallback (backlog + Ideas seed list both
 empty — generated from the Long-term backlog's own "Localization/RTL
-audit" note, same shape as the other five). **Three of six are now done**
-(items 1, 4, 6); the other three are genuine open design questions the
-still-pending **Objective review (`/round-table`)** should weigh in on
-before committing an approach — flagged per-item below. Where a question
-was answerable by reading the current codebase rather than guessing,
-answered inline.
+audit" note, same shape as the other five).
 
 1. [x] **"Data type" docs section** — shipped. New top-level "Data
        display" sidebar group (`Gallery.astro`, between Components and
@@ -737,36 +732,18 @@ answered inline.
        Percentage (rate/ratio, distinct from Amount's currency framing),
        Duration (elapsed/remaining time), Boolean/flag display (likely
        just a Badge composition), File size.
-2. [ ] **Device/platform coverage — Web / Mobile (app) / RF / Tablet
-       (Bento UI / app)** — real open question, needs Objective input:
-       does this mean (a) auditing + documenting how EXISTING components
-       already respond via density + container queries across these four
-       device archetypes (cheap, mostly verification — similar to the
-       Slice 6 responsive-audit item), or (b) genuinely separate
-       device-specific component variants/demos (expensive, real new
-       surface, risks fragmenting "one component, many settings")? RF is
-       partially precedented already (scan-input + goods-receipt
-       pattern, Slice 6 item 9a) — that's the one device archetype with
-       real shipped groundwork. Don't scope the rest until (a) vs (b) is
-       decided. Accept: draft only, refine after Objective review.
-3. [ ] **Simple -> Advanced component tiers** — Simple Table -> Advanced
-       Table, Simple Card -> Advanced Card, Process Bar, Filter Control.
-       Checked the current codebase rather than assuming: `.bo-data-table`
-       already has a two-tier shape (`initDataTables()` basic selection
-       vs. opt-in `initDataGrid()` ARIA-grid keyboard nav) — the "simple
-       -> advanced" framing may already exist for tables and just need
-       better docs framing, not new code. `.bo-widget` (filed under
-       "Dashboard") is functionally the card primitive today but isn't
-       discoverable as "Card" — worth a docs/naming pass, NOT a rename
-       (would break the shipped class). `.bo-filters`/`.bo-filter-bar`
-       already exist — "advanced" filter control (saved views, multi-
-       condition builders?) needs a concrete use case before scoping.
-       "Process Bar" is new — distinct from the existing `.bo-stepper`
-       (discrete named steps) — likely a continuous progress/percentage
-       indicator; needs a real ERP scenario (import job progress? budget
-       consumption?) before designing. Accept: draft only per sub-item;
-       each needs its own Accept criteria once scoped individually — this
-       entry is a container, not one buildable unit.
+2. [x] **Device/platform coverage** — closed via the 2026-08-15 Objective
+       review (project design panel, see `.roundtable/grill-slice7-
+       scoping-2026-08-15.md`); superseded by Slice 9 items 1 and 3 below
+       (device/platform audit doc + `bo:scan` live-region fix). Panel
+       verdict was unanimous: option (a), document existing density +
+       container-query coverage, not device-specific component variants.
+3. [x] **Simple -> Advanced component tiers** — closed via the 2026-08-15
+       Objective review; split into four independently-scoped items,
+       superseded by Slice 9 items 2 and 4 below (table-tiering docs,
+       Card discoverability fix — both ready now) plus two parked items
+       (Filter Control "advanced", Process Bar — both need a real cited
+       ERP scenario before design starts, not scoped as of this review).
 4. [x] **Demo layout: side-by-side vs. stacked — prototyped, NOT rolled
        out further yet** (pending a decision, not blocked). Shipped an
        opt-in `layout="row"` prop on `Demo.astro`: unset stays the
@@ -803,26 +780,17 @@ answered inline.
        ~90 existing `<Demo>` call sites should use it," which is a
        page-by-page editorial call, not something to blitz through
        mechanically. 33 tests pass (unchanged, no JS), gates green.
-5. [ ] **Patterns gallery expansion across device archetypes** — Login,
-       Landing, App Launch, Bento UI, Boardroom, App Style 1/2, Report,
-       Output Form, Dashboard, etc. Large scope, genuinely needs
-       Objective-level prioritization (which patterns are highest-value
-       for an ERP audience, which device targets matter most) before
-       queuing individual Continue rounds — don't build speculatively
-       off a bare list. Some overlap with existing patterns worth
-       checking first before treating as new: `/patterns/reporting-
-       dashboard` (~ Dashboard), `/patterns/settings-admin` (~ App Style),
-       `/patterns/invoice-list` (~ Report/Output Form family). Accept:
-       draft only, refine after Objective review — do not start building
-       from this raw list without re-checking against what already ships.
-       **Reference added 2026-08-15** (user supplied macOS Launchpad/
-       Favourites screenshots for "App Launch"): concrete shape is an
-       icon-grid launcher — categorized sections (e.g. "Favourites"),
-       each tile a large icon + label, tiles group into folders/stacks
-       for related apps, a filter/category tab row above the grid for the
-       full view. Useful evidence for scoping this sub-item once the
-       Objective review greenlights the gallery — not built now, still
-       gated the same as the rest of item 5.
+5. [x] **Patterns gallery expansion across device archetypes** — closed
+       via the 2026-08-15 Objective review; superseded by Slice 9 items 5
+       and 6 below (Login pattern, App Launch pattern — both scoped and
+       ready now). Panel cross-checked all ~10 proposed archetypes against
+       the 9 already-shipped pattern pages: Dashboard/Report overlaps
+       `/patterns/reporting-dashboard`, App Style overlaps `/patterns/
+       settings-admin`, Output Form overlaps `/patterns/invoice-list` —
+       marked satisfied, not rebuilt as new. Boardroom and undifferentiated
+       "App Style 1/2" cut — no testable Accept criterion, vague labels
+       rather than scoped work; can be re-opened if a concrete shape like
+       App Launch's reference screenshots ever grounds one of them.
 6. [x] **Localization/RTL audit** (dispatched via the Explore fallback —
        backlog and Ideas seed list both empty, generated from this
        Long-term backlog's own note, same pattern as item 21's date-field)
@@ -856,14 +824,13 @@ answered inline.
        No CSS/JS changed; 33 tests unchanged, gates unaffected (nothing
        to rebuild).
 
-**This Slice 7 candidate list is exactly what the Objective review
-(`/round-table`) is for** — six real directions, different readiness
-levels, real trade-offs neither guessed nor ignored. Items 1, 4, and 6
-(data section, demo layout, RTL audit) were concrete enough to
-Continue/Explore-dispatch without further review, and are now done;
-items 2, 3, and 5 (device coverage, component tiers, patterns gallery)
-still need it before scoping further — those are the ones actually
-blocking further autonomous progress on this slice.
+**All six items now closed.** Items 1, 4, and 6 (data section, demo
+layout, RTL audit) were concrete enough to Continue/Explore-dispatch
+without further review. Items 2, 3, and 5 (device coverage, component
+tiers, patterns gallery) needed the Objective review before scoping
+further — got it 2026-08-15 (see `.roundtable/grill-slice7-
+scoping-2026-08-15.md`), and their outcome is the six scoped items in
+Slice 9 immediately below.
 
 ## Done — Slice 8: editable table, multi-select dropdown, searchable dropdown
 
@@ -960,6 +927,91 @@ rounds, smallest-scoped first, each verified live before moving to the next.
 
 **Slice 8 is now complete — all three items shipped, verified live,
 committed.** No further Continue rounds queued for this slice.
+
+## Slice 9 (candidate) — from the Slice 7 Objective review
+
+Direct output of the 2026-08-15 design-panel review (`.roundtable/grill-
+slice7-scoping-2026-08-15.md`) — six independently-scoped items replacing
+Slice 7's three blocked entries. Four are ready to Continue-dispatch now
+(no open design questions); two stay parked pending a real cited ERP
+scenario, per the panel's explicit recommendation not to build
+speculatively.
+
+1. [ ] **Device/platform coverage audit** — verification-only doc pass
+       (same shape as Slice 7 item 6's RTL audit): confirm and document
+       that density (`data-density`) + the named `@container` registry
+       already cover Web/Mobile-app/Tablet responsively, with concrete
+       examples from `/components/data-table` and `/components/dashboard`.
+       Also fold in Tablet-Bento's connection to item 6 below (App
+       Launch's icon-grid IS the Bento pattern — don't treat as separate).
+       Accept: a doc page or section (candidate: extend `/concepts/
+       density` or `/concepts/container-queries`) showing, per archetype,
+       which existing mechanism covers it and a live example — zero new
+       CSS/JS expected. **[HUMAN CALL], noted not resolved**: whether RF/
+       Mobile/Tablet are real target markets worth more than this
+       documentation pass — panel's shared recommendation is to document
+       regardless, since the cost is low and the value doesn't depend on
+       the answer.
+2. [ ] **Table tiering docs framing** — `/components/data-table` already
+       ships the "simple -> advanced" shape (`initDataTables()` vs.
+       opt-in `initDataGrid()`) but doesn't narrate it that way. Accept:
+       add a short framing section (or reframe the existing "Keyboard
+       grid navigation" section heading/intro) explicitly naming the
+       two tiers and when to reach for each — zero new CSS/JS, docs-only.
+3. [ ] **`bo:scan` live-region announcement** — real a11y gap found by
+       the Auditor seat during the review, independent of the broader
+       device-coverage question: `initScanInput()` (`packages/core/src/
+       js/behaviors/scan-input.ts`) fires `bo:scan` on a successful scan
+       with no live-region status text, so a screen-reader/low-vision RF
+       user gets no non-visual confirmation a scan registered. Accept: a
+       small opt-in status-announcement addition (e.g. an
+       `aria-live="polite"` region `initScanInput()` updates on each
+       `bo:scan`, or a documented pattern for consumers to wire one
+       themselves) — verify with the existing `/patterns/goods-receipt`
+       demo, both themes.
+4. [ ] **Card discoverability fix** — `.bo-widget` (`packages/core/src/
+       css/components/dashboard/dashboard.css`) is already a fully
+       capable card primitive (header/collapse/band/badge composition)
+       but every one of the four review seats independently hit the same
+       finding: it's undiscoverable as "Card" — no sidebar entry, filed
+       only under "Dashboard." Accept: docs/naming fix only, NOT a class
+       rename (would break the shipped `.bo-widget` contract) — add a
+       "Card" sidebar entry/page (or a prominent cross-link + alias
+       section on the existing dashboard page) pointing at `.bo-widget`,
+       framed as the card primitive independent of dashboards.
+5. [ ] **Login pattern** — highest-value gap identified by every review
+       seat: an authentication entry-screen pattern, composed from
+       existing form/dialog/button primitives (no new CSS expected).
+       Currently 404s (`/patterns/login`). Accept: a pattern page
+       (`apps/docs/src/pages/patterns/login.astro`) — email/username +
+       password fields with proper `autocomplete` attributes, inline
+       validation summary (reuse `initValidationSummary()`), a clear
+       error-recovery path, following the same "composed entirely from
+       existing components, zero new CSS" bar the other pattern pages
+       hit. Add to the Patterns sidebar group and to `Related` links on
+       relevant component pages (form, dialog, validation-summary).
+6. [ ] **App Launch pattern** — the one Slice 7 item 5 sub-item that
+       already had a concrete, evidenced Accept criterion (2026-08-15
+       reference screenshots, macOS Launchpad/Favourites): an icon-grid
+       app launcher — categorized sections (e.g. "Favourites"), each tile
+       a large icon + label, tiles group into folders/stacks, a filter/
+       category tab row above the full grid. Also closes the Tablet-Bento
+       precedent gap flagged in item 1 above — same pattern, don't build
+       twice. Accept: a pattern page composed from existing primitives
+       (badge/button/card-via-`.bo-widget` grid, `@container`-driven
+       reflow) — if a genuinely new grid-tile primitive turns out to be
+       needed, that's a real finding to surface during the build, not to
+       assume up front.
+
+**Parked, not scoped — do not build speculatively** (per the review's
+explicit recommendation): **Filter Control "advanced"** variant (saved
+views / multi-condition builders — `.bo-filters`/`.bo-filter-bar` already
+exist, no cited ERP scenario beyond what's shipped) and **Process Bar**
+(genuinely distinct from `.bo-stepper`, genuinely greenfield CSS surface,
+but no named use case — import job progress? budget consumption? — either
+sub-item can graduate into a real Slice 9 item the moment a concrete
+scenario shows up, same pattern as every other Explore-fallback item this
+project has shipped).
 
 ## Long term (post-1.0)
 
