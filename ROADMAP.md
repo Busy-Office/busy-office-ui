@@ -937,21 +937,26 @@ Slice 7's three blocked entries. Four are ready to Continue-dispatch now
 scenario, per the panel's explicit recommendation not to build
 speculatively.
 
-1. [ ] **Device/platform coverage audit** — verification-only doc pass
-       (same shape as Slice 7 item 6's RTL audit): confirm and document
-       that density (`data-density`) + the named `@container` registry
-       already cover Web/Mobile-app/Tablet responsively, with concrete
-       examples from `/components/data-table` and `/components/dashboard`.
-       Also fold in Tablet-Bento's connection to item 6 below (App
-       Launch's icon-grid IS the Bento pattern — don't treat as separate).
-       Accept: a doc page or section (candidate: extend `/concepts/
-       density` or `/concepts/container-queries`) showing, per archetype,
-       which existing mechanism covers it and a live example — zero new
-       CSS/JS expected. **[HUMAN CALL], noted not resolved**: whether RF/
-       Mobile/Tablet are real target markets worth more than this
-       documentation pass — panel's shared recommendation is to document
-       regardless, since the cost is low and the value doesn't depend on
-       the answer.
+1. [x] **Device/platform coverage audit** — shipped, verification-only
+       (zero CSS/JS, 44 tests unchanged, same shape as Slice 7 item 6's
+       RTL audit). New "Device/platform coverage" section on `/concepts/
+       density`: a table mapping each archetype (Web, Mobile app, Tablet/
+       Bento UI, RF/warehouse) to the existing mechanism that already
+       covers it, with a live-example link per row (`/components/
+       data-table`, `/components/dashboard`, `/patterns/goods-receipt`).
+       Confirms the Objective review's finding live rather than just
+       asserting it: Tablet-Bento is explicitly framed as the SAME
+       `bo-widget-grid` container-query mechanism as Dashboard, not a
+       separate component, and cross-referenced forward to the queued App
+       Launch pattern (item 6) rather than treated as independent. RF is
+       the one archetype confirmed to have genuinely needed new work
+       (`initScanInput()`, not just a density setting). **[HUMAN CALL]
+       carried forward, not resolved by this audit**: whether RF/Mobile/
+       Tablet are real target markets worth more investment — noted
+       explicitly on the page itself, not silently dropped. Verified live
+       via Podman (`--no-cache`) in both themes; all four cited links
+       resolve (confirmed both by the build's link checker and by reading
+       their `href`s live).
 2. [x] **Table tiering docs framing** — shipped, docs-only (zero CSS/JS
        changed, 44 tests unchanged). `/components/data-table`'s demo-note
        now names the two tiers up front ("Simple... covers selection/sort/

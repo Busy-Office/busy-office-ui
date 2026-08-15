@@ -31,6 +31,48 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
     <pre><code>{recipe}</code></pre>
   </section>
   <section class="demo">
+    <h2>Device/platform coverage</h2>
+    <p>Audited 2026-08-15 as a follow-up to the Slice 7 Objective review — the
+    question was whether "Web / Mobile app / RF / Tablet (Bento UI)" needs
+    dedicated component variants. It doesn't: density + the named
+    <a href="/concepts/container-queries">container-query registry</a> already
+    cover every one of these archetypes with the SAME components, just
+    configured differently. No new CSS/JS came out of this — it's a
+    verification pass, not a build.</p>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Archetype</th><th scope="col">Mechanism</th><th scope="col">Live example</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Web</td>
+            <td><code>data-density="comfortable"</code> (the default) + ordinary container-query response</td>
+            <td><a href="/components/data-table">Data table</a>, <a href="/components/dashboard">Dashboard</a></td>
+          </tr>
+          <tr>
+            <td>Mobile app</td>
+            <td><code>data-density="compact"</code> + the app shell's own <code>bo-shell</code> container query (sidebar collapses to an icon rail ≤ 56rem) — this docs site does exactly that</td>
+            <td>Resize this page's window below 56rem, or see <a href="/concepts/container-queries">the container-query registry</a></td>
+          </tr>
+          <tr>
+            <td>Tablet (Bento UI)</td>
+            <td><code>bo-widget-grid</code>'s container query (span-2 widgets collapse ≤ 41rem) — a Bento-style icon/tile grid is this SAME mechanism at a different breakpoint, not a new component. The forthcoming "App Launch" pattern (Slice 9, queued) uses it directly rather than inventing a separate grid.</td>
+            <td><a href="/components/dashboard">Dashboard</a> widget grid</td>
+          </tr>
+          <tr>
+            <td>RF / warehouse</td>
+            <td><code>data-density="spacious"</code> (44px targets, meets WCAG 2.5.8) + <code>initScanInput()</code>'s keyboard-wedge input mode — the one archetype that genuinely needed a new input pattern, not just a layout setting</td>
+            <td><a href="/patterns/goods-receipt">Goods receipt pattern</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>Open question, not resolved here</strong>: whether
+    RF/Mobile/Tablet are real target markets worth more investment than this
+    documentation pass is a product decision, not something a coverage audit can
+    settle — the recommendation is to keep documenting the mechanism regardless,
+    since the cost is low and the value doesn't depend on the answer.</p>
+  </section>
+  <section class="demo">
     <h2>Rules that keep density safe</h2>
     <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li>Density tokens are <strong>rem-only</strong> — they scale with the user's root font, so raised text never clips. The low-vision power user runs large text + compact and gets density at a readable size; that combination is the point.</li>
