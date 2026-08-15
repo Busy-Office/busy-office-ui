@@ -932,11 +932,17 @@ committed.** No further Continue rounds queued for this slice.
 
 Direct output of the 2026-08-15 design-panel review (`.roundtable/grill-
 slice7-scoping-2026-08-15.md`) — originally six independently-scoped items
-replacing Slice 7's three blocked entries; item 7 added same-day once the
-user supplied a concrete cited scenario (an ERP case-management list-view
-screenshot) that graduated part of the parked "Filter Control advanced"
-sub-item. Items 1-4 shipped (see below); items 5-7 are ready to
-Continue-dispatch (no open design questions); **Process Bar** stays
+replacing Slice 7's three blocked entries; items 7-10 added same-day from
+a follow-up user wishlist ("advance table": search, filter, columns,
+export, settings, pagination, grouping, subtotal/total) plus its reference
+screenshot. Checked every sub-ask against what's already shipped before
+scoping anything new — search/filter/sort were already covered, item 7
+(columns + export) was the genuinely new, concretely-scoped part and is
+now shipped. Items 1-4 and 7 shipped (see below); item 5-6 are ready to
+Continue-dispatch (no open design questions); items 8-10 (grouping,
+subtotal/total, load-more pagination) are drafted but need either a
+concrete scenario or further scoping before building; "Settings" is
+flagged as ambiguous, not guessed at. **Process Bar** stays
 parked pending a real cited ERP scenario, per the panel's explicit
 recommendation not to build speculatively.
 
@@ -1028,33 +1034,71 @@ recommendation not to build speculatively.
        needed, that's a real finding to surface during the build, not to
        assume up front.
 
-7. [ ] **Advanced table toolbar — column visibility + export** — triaged
-       2026-08-15 (user wishlist "advance table / search" + a real
+7. [x] **Advanced table toolbar — column visibility + export** — shipped.
+       Triaged 2026-08-15 (user wishlist "advance table / search" + a real
        screenshot of an ERP case-management list view). Checked the
        screenshot against what's already shipped rather than assuming a
        gap: the search input, removable filter chips (`Assignee:
        Unassigned ×`), sortable column headers (`aria-sort`), and status
-       badges are **already covered** by `.bo-filter-bar`/`.bo-chip`
+       badges were **already covered** by `.bo-filter-bar`/`.bo-chip`
        (`/components/filters`) and `.bo-data-table`'s existing sort
-       contract — not new work, don't rebuild. Two things in the reference
-       genuinely don't exist anywhere yet: a **Columns** button (toggle
-       which columns are visible) and an **Export** button (download the
-       current view). This is the concrete cited scenario the Objective
-       review's parked "Filter Control advanced" sub-item was waiting on
-       — graduating that scope specifically to these two toolbar actions,
-       not the broader "multi-condition builder" framing (still no cited
-       need for that part). Accept: extend `.bo-data-table__toolbar` with
-       two opt-in toolbar actions — a Columns popover (reuse
-       `.bo-dropdown__menu`'s multi-select checkbox pattern from Slice 8
-       item 2, one checkbox per column, toggling a `hidden`/`data-col-
-       hidden` state) and an Export action (a `.bo-dropdown__menu` with
-       format choices, or a single button dispatching a `bo:table-export`
-       event — the actual file generation is the consumer's code, same
-       "behavior tracks state/intent, consumer persists" split as
-       `bo:row-save`/`bo:scan`). Compose from existing dropdown/multi-
-       select primitives first; only add new CSS if composing genuinely
-       can't express it. Docs page: extend `/components/data-table`
-       (a new toolbar section), not a separate page.
+       contract — not rebuilt. Two things in the reference genuinely
+       didn't exist yet, now shipped: new opt-in `initTableToolbar()`
+       behavior (`packages/core/src/js/behaviors/table-toolbar.ts`) —
+       **Columns** (`data-col-toggle` on a checkbox inside the existing
+       multi-select dropdown pattern from Slice 8 item 2, `data-col` on
+       matching `<th>`/`<td>`; toggling shows/hides every cell with that
+       value, scoped to its `.bo-data-table-container`) and **Export**
+       (`data-table-export` button dispatches `bo:table-export`
+       `{format}` — this behavior only tracks intent, generating/
+       downloading the file is the consumer's code, same split as
+       `bo:row-save`/`bo:scan`). Zero new CSS — fully composed from
+       existing dropdown/checkbox/button primitives. New "Toolbar —
+       column visibility & export" section on `/components/data-table`.
+       4 new behavior tests (48 total, all pass); verified live via
+       Podman (`--no-cache`) in both themes — unchecking a column hides
+       it cleanly (header + every row), Export fires with the configured
+       format, trigger label reflects the live count.
+
+8. [ ] **Table row grouping** — from the same 2026-08-15 wishlist
+       ("grouping"). Genuinely new, no existing precedent anywhere in the
+       package. Not scoped yet — needs a real cited ERP scenario before
+       design starts, same discipline as every other parked item here:
+       group by which field (cost center? status? vendor?), single-level
+       or nested, collapsible or always-expanded, does a group header row
+       need its own markup semantics (`<tbody>` per group? ARIA
+       treegrid?). Draft-only Accept until a concrete scenario narrows
+       these questions — building blind here risks exactly the kind of
+       premature ARIA-widget over-engineering the Objective review's
+       Auditor seat flagged for the "Advanced" component tiers.
+9. [ ] **Table subtotal / total rows** — from the same wishlist. Two
+       different possible shapes depending on whether item 8 (grouping)
+       ships first: a per-group subtotal row (needs grouping to exist) vs.
+       a standalone table-footer total row (`.bo-data-table__footer`
+       already exists as a CSS part per the generated ClassRef — check
+       whether it already covers this before building anything new).
+       Not scoped yet — same "needs a concrete use case" gate as item 8;
+       likely sequenced after item 8 if the two turn out to be coupled.
+10. [ ] **Pagination — "pull up to see more" (infinite scroll / load-more)**
+       — from the same wishlist. Distinct from the existing
+       `.bo-pagination` component (`/components/pagination`, page-number
+       navigation) — this is a different interaction pattern entirely.
+       Reasonably scoped without more input, following the established
+       "behavior tracks intent, consumer fetches" split already proven
+       for `bo:table-export`/`bo:row-save`/`bo:scan`: an opt-in behavior
+       that dispatches a `bo:table-load-more` event (e.g. on a "Load
+       more" button click, or optionally on near-bottom scroll via
+       `IntersectionObserver`) — the consumer's code fetches more rows
+       and appends them; this behavior never owns data fetching. Ready to
+       scope further and build once dispatched.
+
+**Ambiguous, not scoped — flagged rather than guessed**: the wishlist's
+"setting" (the screenshot shows a gear-icon "Settings" button, separate
+from Columns) has no clear referent — could mean density override,
+export-format defaults, saved-column-layout persistence, or something
+else entirely. Not building this blind; needs a one-line answer from
+whoever wants it (what should the Settings button actually open?) before
+it gets Accept criteria.
 
 **Parked, not scoped — do not build speculatively** (per the review's
 explicit recommendation): **Process Bar** (genuinely distinct from

@@ -134,6 +134,54 @@ const rows = [
     </div>
   </section>
   <section class="demo">
+    <h2>Toolbar — column visibility &amp; export <span class="bo-badge">opt-in</span></h2>
+    <div class="bo-data-table-container">
+      <div class="bo-data-table__toolbar">
+        <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
+          <button class="bo-btn bo-btn--secondary" popovertarget="cols-menu-demo" data-multiselect-label="Columns">Columns</button>
+          <div class="bo-dropdown__menu" id="cols-menu-demo" popover data-multiselect>
+            <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="vendor" checked /> Vendor</label>
+            <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="cc" checked /> Cost center</label>
+            <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="status" checked /> Status</label>
+          </div>
+          <button class="bo-btn bo-btn--secondary" type="button" data-table-export data-table-export-format="csv">Export</button>
+        </div>
+      </div>
+      <table class="bo-data-table">
+        <thead>
+          <tr>
+            <th scope="col" data-col="no">Invoice #</th>
+            <th scope="col" data-col="vendor">Vendor</th>
+            <th scope="col" data-col="cc">Cost center</th>
+            <th scope="col" class="bo-data-table__col--numeric" data-col="amount">Amount</th>
+            <th scope="col" data-col="status">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.slice(0, 3).map((r) => (
+            <tr>
+              <td class="bo-data-table__col--code" data-col="no">{r.no}</td>
+              <td data-col="vendor">{r.vendor}</td>
+              <td class="bo-data-table__col--code" data-col="cc">{r.cc}</td>
+              <td class="bo-data-table__col--numeric" data-col="amount">{r.amount}</td>
+              <td data-col="status"><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>Columns</strong> is the same multi-select
+    dropdown pattern as elsewhere (<code>data-multiselect</code>, real checkboxes)
+    — checking/unchecking a <code>data-col-toggle</code> box shows/hides every
+    <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> with the matching
+    <code>data-col</code>, scoped to this table only. <strong>Export</strong>
+    dispatches <code>bo:table-export</code> with a <code>format</code> — this
+    behavior only tracks the intent, generating and downloading the actual file
+    is your code (fetch a server export endpoint, or build a client-side CSV/PDF)
+    — same split as <code>bo:row-save</code> and <code>bo:scan</code>. Try it:
+    uncheck a column, then click Export.</p>
+  </section>
+  <section class="demo">
     <h2>Advanced — keyboard grid navigation <span class="bo-badge">opt-in</span></h2>
     <p class="bo-u-text-muted">
       The second tier: <code>data-grid-nav</code> + <code>initDataGrid()</code> turns
@@ -309,6 +357,7 @@ const rows = [
       'Columns marked <code>__col--secondary</code> hide under container compaction — keep that data reachable (row detail view) per WCAG 1.4.10.',
       'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
       'Separately opt-in: <code>data-row-edit</code> + <code>initRowEdit()</code> for multi-row inline edit with per-row dirty state and Save/Cancel. Tracks state only — persistence is your code, via the <code>bo:row-save</code> event.',
+      'Separately opt-in: <code>data-col-toggle</code>/<code>data-table-export</code> + <code>initTableToolbar()</code> for column visibility (composes with the multi-select dropdown, no new markup) and an export intent (<code>bo:table-export</code> — generating the file is your code).',
     ]}
   />
   <section class="demo">
@@ -320,10 +369,12 @@ const rows = [
     <pre><code>{rowEditMarkup}</code></pre>
   </section>
   <script>
-    import { initDataTables, initDataGrid, initRowEdit } from '@busy-office/ui/js';
+    import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar } from '@busy-office/ui/js';
     initDataTables();
     initDataGrid();
     initRowEdit();
+    initDropdowns();
+    initTableToolbar();
   </script>
   <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

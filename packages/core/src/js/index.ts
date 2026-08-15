@@ -2,6 +2,7 @@ export { initDialogs } from './behaviors/dialog.js';
 export { initDataTables, refreshDataTable } from './behaviors/data-table.js';
 export { initDataGrid, refreshDataGrid } from './behaviors/data-grid.js';
 export { initRowEdit } from './behaviors/row-edit.js';
+export { initTableToolbar } from './behaviors/table-toolbar.js';
 export { initCollapsibleCards } from './behaviors/collapsible-card.js';
 export { initSavedViews } from './behaviors/saved-views.js';
 export { initWizard } from './behaviors/wizard.js';

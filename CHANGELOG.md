@@ -76,6 +76,11 @@ pin.
   live-region announcement — opt-in `aria-describedby` + `data-scan-status`
   markup contract, `initScanInput()` announces "Scanned {value}" on each
   scan for screen-reader/low-vision RF users; fully backward compatible.
+  Data-table toolbar — column visibility + export (`initTableToolbar()`):
+  `data-col-toggle` checkboxes (composed with the existing multi-select
+  dropdown) show/hide matching `data-col` cells; `data-table-export`
+  dispatches `bo:table-export {format}` for the consumer to persist. Zero
+  new CSS.
 
 ### API freeze audit (2026-08-15)
 
