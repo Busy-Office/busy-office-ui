@@ -131,7 +131,7 @@ const markup = `<div class="bo-quantity">
     like Amount, precision is app/domain data expressed through the native attribute
     that already exists for it, not a CSS setting. A starting reference (override per
     field):</p>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">Unit type</th><th scope="col">Default decimals</th><th scope="col"><code>step</code></th><th scope="col">Example</th></tr></thead>
         <tbody>
@@ -163,7 +163,7 @@ const markup = `<div class="bo-quantity">
 
   <section class="demo">
     <h2>In a table column</h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <Demo code={tableColumn} />
     </div>
     <p class="bo-u-text-muted">Same component, dropped straight into a

@@ -98,7 +98,7 @@ const listScreen = () => `
   </select>
   <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
 </form>
-<div class="bo-data-table-container">
+<div class="bo-data-table-container" tabindex="0">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
       <button class="bo-btn" type="button"
@@ -236,7 +236,7 @@ const spendScreen = () => {
   const budgets = { 'CC-1180': 80000, 'CC-2205': 15000, 'CC-4021': 25000 };
   return `
 <h1>Spend by cost center</h1>
-<div class="bo-data-table-container">
+<div class="bo-data-table-container" tabindex="0">
   <table class="bo-data-table">
     <thead><tr>
       <th scope="col">PO #</th>
@@ -288,7 +288,7 @@ const receiveScreen = () => `
     placeholder="Waiting for scan…" aria-describedby="rcv-scan-status">
   <p id="rcv-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
 </div>
-<div class="bo-data-table-container" style="max-inline-size: 36rem">
+<div class="bo-data-table-container" tabindex="0" style="max-inline-size: 36rem">
   <table class="bo-data-table">
     <thead><tr><th scope="col">PO #</th><th scope="col">Vendor</th><th scope="col">Received</th></tr></thead>
     <tbody id="rcv-log">
@@ -348,7 +348,7 @@ const dashScreen = () => {
     <div class="bo-widget__header"><span class="bo-widget__title">Queue</span>
       <a href="/pos" class="bo-u-text-muted" style="font-size: var(--bo-font-size-xs)">View all</a></div>
     <div class="bo-widget__body bo-widget__body--flush">
-      <div class="bo-data-table-container" style="border:none">
+      <div class="bo-data-table-container" tabindex="0" style="border:none">
         <table class="bo-data-table">
           <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="bo-data-table__col--code">${p.id}</td><td class="bo-data-table__col--numeric">${money(p.amount)}</td></tr>`).join('')}</tbody>
         </table>
@@ -426,7 +426,7 @@ const server = createServer(async (req, res) => {
   </table>`;
       return res.end(page(`Stress ${n}`, '/stress', `
 <h1>Stress: ${n} rows${nocheck ? ', no checkboxes' : ''}${nobadge ? ', no badges' : ''}${loose ? ', no container' : ''}</h1>
-${loose ? tableHtml : `<div class="bo-data-table-container">
+${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
       <button class="bo-btn" type="button">Approve selected</button>

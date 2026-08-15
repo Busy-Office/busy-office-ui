@@ -99,7 +99,7 @@ const rows = [
   <ClassRef component="data-table" />
   <section class="demo">
     <h2>Simple — select, sort, filter</h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
           <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
@@ -138,7 +138,7 @@ const rows = [
   </section>
   <section class="demo">
     <h2>Toolbar — column visibility &amp; export <span class="bo-badge">opt-in</span></h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <div class="bo-data-table__toolbar">
         <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
           <button class="bo-btn bo-btn--secondary" popovertarget="cols-menu-demo" data-multiselect-label="Columns">Columns</button>
@@ -198,7 +198,7 @@ const rows = [
       the Simple tier above is enough for most tables, including ones with sort and
       bulk-select. Click into the table below, then try arrow keys.
     </p>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-grid-nav id="grid-nav-demo">
         <thead>
           <tr>
@@ -223,7 +223,7 @@ const rows = [
   <section class="demo">
     <h2>Narrow container → auto-compaction</h2>
     <div style="max-inline-size: 420px">
-      <div class="bo-data-table-container">
+      <div class="bo-data-table-container" tabindex="0">
         <table class="bo-data-table bo-data-table--striped">
           <thead>
             <tr>
@@ -253,7 +253,7 @@ const rows = [
   </section>
   <section class="demo">
     <h2>Inline edit — seamless inputs in cells</h2>
-    <div class="bo-data-table-container" style="max-inline-size: 24rem">
+    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 24rem">
       <table class="bo-data-table">
         <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th></tr></thead>
         <tbody>
@@ -279,7 +279,7 @@ const rows = [
   </section>
   <section class="demo">
     <h2>Multi-row inline edit — dirty state + save/cancel</h2>
-    <div class="bo-data-table-container" style="max-inline-size: 28rem">
+    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 28rem">
       <table class="bo-data-table" data-row-edit>
         <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
         <tbody>
@@ -319,7 +319,7 @@ const rows = [
   </section>
   <section class="demo">
     <h2>The full list screen, assembled</h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
           <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
@@ -366,7 +366,7 @@ const rows = [
   </section>
   <section class="demo">
     <h2>Loading & error rows</h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-loading="true" aria-busy="true">
         <thead><tr><th scope="col">Invoice #</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
         <tbody>
@@ -379,7 +379,7 @@ const rows = [
     <code>aria-busy</code>) dims the table and blocks interaction mid-swap — flip it
     from your fetch/HTMX code. For first-load, prefer
     <a href={base + '/components/state-patterns'}>skeleton rows</a>.</p>
-    <div class="bo-data-table-container" style="margin-block-start: var(--bo-space-4)">
+    <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-4)">
       <table class="bo-data-table">
         <thead><tr><th scope="col">Invoice #</th><th scope="col">Problem</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
         <tbody>
@@ -399,7 +399,7 @@ const rows = [
     <p>Measured 2026-08-15 against the full table stack (sticky header, row
     checkboxes, badges, container query, <code>initDataTables()</code>) in the
     <code>examples/po-app</code> stress harness (<code>/stress?n=…</code>):</p>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Initial render</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
         <tbody>
@@ -430,7 +430,7 @@ const rows = [
   </section>
   <section class="demo">
     <h2>Grouped rows + subtotals</h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
         <thead><tr>
           <th scope="col">PO #</th>
@@ -471,7 +471,7 @@ const rows = [
     <p>Put the same modifier on the <code>&lt;th&gt;</code> and every <code>&lt;td&gt;</code>
     in a column: <code>--left</code>, <code>--center</code>, <code>--right</code>, or
     <code>--numeric</code> (right-aligned <em>and</em> tabular figures, for amounts).</p>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
         <thead>
           <tr>

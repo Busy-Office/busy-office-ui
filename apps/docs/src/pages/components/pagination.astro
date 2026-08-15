@@ -28,7 +28,7 @@ const pgMarkup = `<div class="bo-data-table__footer">
   </p>
   <ClassRef component="pagination" />
   <section class="demo">
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <div class="bo-data-table__footer">
         <label class="bo-choice">Rows
           <select class="bo-select" style="inline-size:auto" aria-label="Rows per page">
@@ -50,7 +50,7 @@ const pgMarkup = `<div class="bo-data-table__footer">
   </section>
   <section class="demo">
     <h2>Load more — the infinite-scroll alternative <span class="bo-badge">opt-in</span></h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
         <thead><tr><th scope="col">Invoice #</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
         <tbody id="lm-rows">

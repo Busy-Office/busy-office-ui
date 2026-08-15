@@ -267,6 +267,14 @@ const current =
       s.onload = () => {
         new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
         keepBoosted(document.getElementById('docsearch'));
+        // Pagefind's input ships title/placeholder only — no accessible name
+        // (axe label-title-only, serious, every page). Label both instances;
+        // deferred so the cmdk instance (constructed below) is also mounted.
+        setTimeout(() => {
+          document.querySelectorAll('.pagefind-ui__search-input').forEach((i) => {
+            i.setAttribute('aria-label', 'Search the docs');
+          });
+        }, 0);
         // Cmd/Ctrl+K command palette — a second Pagefind instance in a dialog.
         const dlg = document.getElementById('cmdk');
         if (dlg) {

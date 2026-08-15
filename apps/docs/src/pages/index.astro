@@ -146,7 +146,7 @@ const invoices = [
             </span>
           </div>
           <div class="bo-widget__body bo-widget__body--flush hero__tablewrap">
-            <div class="bo-data-table-container" style="border:none" id="hero-table">
+            <div class="bo-data-table-container" tabindex="0" style="border:none" id="hero-table">
               <div class="bo-data-table__toolbar">
                 <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
                   <button class="bo-btn" type="button">Approve selected</button>
@@ -364,6 +364,11 @@ const invoices = [
     font-size: var(--bo-font-size-xs);
     color: var(--bo-color-text-muted);
     max-inline-size: 36ch;
+  }
+  /* xs muted text is right at the AA edge — the link inside must carry
+     full-strength link ink (axe color-contrast find, 2026-08-15 sweep) */
+  .install__note a {
+    color: var(--bo-color-accent-strong);
   }
   .install {
     margin-block: var(--bo-space-5) var(--bo-space-2);

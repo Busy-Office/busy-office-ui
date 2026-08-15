@@ -24,17 +24,24 @@ const pages = [];
 const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: 'new' });
 const page = await browser.newPage();
 const summary = {};
+// Both harness widths: violations can be width-gated (a table container only
+// becomes a scrollable region — and needs to be focusable — once it overflows,
+// which mostly happens at 390).
+const WIDTHS = [1440, 390];
 for (const path of pages.sort()) {
-  const res = await page.goto('http://localhost:8081' + path, { waitUntil: 'networkidle0', timeout: 20000 });
-  if (!res || res.status() !== 200) { summary[path] = [{ id: 'HTTP-' + (res && res.status()) }]; continue; }
-  await page.evaluate(AXE);
-  const r = await page.evaluate(async () =>
-    (await window.axe.run(document, { resultTypes: ['violations'] })).violations
-      .map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length,
-                   sample: v.nodes[0]?.target?.join(' ') }))
-  );
-  if (r.length) summary[path] = r;
-  process.stderr.write('.');
+  for (const width of WIDTHS) {
+    await page.setViewport({ width, height: 900 });
+    const res = await page.goto('http://localhost:8081' + path, { waitUntil: 'networkidle0', timeout: 20000 });
+    if (!res || res.status() !== 200) { summary[`${path}@${width}`] = [{ id: 'HTTP-' + (res && res.status()) }]; continue; }
+    await page.evaluate(AXE);
+    const r = await page.evaluate(async () =>
+      (await window.axe.run(document, { resultTypes: ['violations'] })).violations
+        .map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length,
+                     sample: v.nodes[0]?.target?.join(' ') }))
+    );
+    if (r.length) summary[`${path}@${width}`] = r;
+    process.stderr.write('.');
+  }
 }
 await browser.close();
 console.log('\npages scanned:', pages.length);

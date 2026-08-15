@@ -4,7 +4,7 @@ import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const recipe = `<html data-density="compact">          <!-- app-wide default -->
 …
-<div class="bo-data-table-container" data-density="spacious">
+<div class="bo-data-table-container" tabindex="0" data-density="spacious">
   <!-- one table, locally more readable — density CASCADES -->
 </div>
 
@@ -40,7 +40,7 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
     cover every one of these archetypes with the SAME components, just
     configured differently. No new CSS/JS came out of this — it's a
     verification pass, not a build.</p>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">Archetype</th><th scope="col">Mechanism</th><th scope="col">Live example</th></tr></thead>
         <tbody>

@@ -66,7 +66,7 @@ const mixedCurrency = `<table class="bo-data-table">
   </tbody>
 </table>`;
 
-const columnDemo = `<div class="bo-data-table-container">
+const columnDemo = `<div class="bo-data-table-container" tabindex="0">
   <table class="bo-data-table">
     <thead>
       <tr><th>Line item</th><th class="bo-data-table__col--numeric">Qty</th><th class="bo-data-table__col--numeric">Unit price</th><th class="bo-data-table__col--numeric">Amount</th></tr>
@@ -156,7 +156,7 @@ const markup = `<span class="bo-amount">
       get" varies by currency, not by design choice. A starting reference (override per
       field, never hardcode as a single app-wide constant):
     </p>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">Currency</th><th scope="col" class="bo-data-table__col--numeric">Default decimals</th><th scope="col">Example</th></tr></thead>
         <tbody>
@@ -227,7 +227,7 @@ const markup = `<span class="bo-amount">
 
   <section class="demo">
     <h2>Mixed currencies in one table</h2>
-    <div class="bo-data-table-container">
+    <div class="bo-data-table-container" tabindex="0">
       <Demo code={mixedCurrency} />
     </div>
     <p class="bo-u-text-muted">Right-alignment (<code>__col--numeric</code>) plus
