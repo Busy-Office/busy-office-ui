@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Added: Tag input (`.bo-tag-input`) — multi-value entry for cost centers,
+  approval-routing recipients. Real JS (no native element covers this,
+  same class as Combobox): `initTagInput()` dispatches `bo:tag-add` on
+  Enter (you validate/dedupe and render the chip) and owns removal
+  directly (`bo:tag-remove` + deletes its own rendered chip) on a
+  remove-button click or Backspace-in-an-empty-field.
+
 - Added: File upload (`.bo-file-input`, `.bo-file-dropzone`, `.bo-file-list`)
   — styled native `<input type="file">` via `::file-selector-button`, a
   bigger drag-target composition, and consumer-rendered selected-file row

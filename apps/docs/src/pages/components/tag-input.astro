@@ -1,0 +1,135 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const canonical = `<!-- The framework owns REMOVAL (it's the framework's own rendered
+     chip) but not ADDITION: Enter dispatches bo:tag-add with the typed
+     text and clears the field — YOUR code validates/dedupes and appends
+     the actual .bo-tag-input__tag markup if accepted. -->
+<div class="bo-tag-input" role="group" aria-label="Cost centers">
+  <span class="bo-tag-input__tag">CC-4021
+    <button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button>
+  </span>
+  <input class="bo-tag-input__field" type="text" placeholder="Add a cost center…">
+</div>
+<script type="module">
+  import { initTagInput } from "@busy-office/ui/js";
+  initTagInput();
+
+  document.addEventListener("bo:tag-add", (e) => {
+    const group = e.target.closest(".bo-tag-input");
+    // Your validation/dedup goes here — this demo just rejects blanks
+    // (already guarded by the behavior) and exact duplicates.
+    const existing = [...group.querySelectorAll(".bo-tag-input__tag")]
+      .map((t) => t.firstChild.textContent.trim());
+    if (existing.includes(e.detail.value)) return;
+
+    const tag = document.createElement("span");
+    tag.className = "bo-tag-input__tag";
+    tag.append(e.detail.value + " ");
+    const remove = document.createElement("button");
+    remove.className = "bo-tag-input__remove";
+    remove.type = "button";
+    remove.setAttribute("aria-label", \`Remove \${e.detail.value}\`);
+    remove.textContent = "×";
+    tag.append(remove);
+    group.querySelector(".bo-tag-input__field").before(tag);
+  });
+</script>`;
+---
+<Gallery title="Tag input">
+  <p class="demo-note">
+    Multiple discrete values on one field — cost centers tagged on a record,
+    several recipients on an approval-routing rule. No native element covers
+    this (unlike file/date/segmented), so it's real JS — the same class as
+    <a href={base + '/components/combobox'}>Combobox</a>. The framework owns removal
+    (it's deleting its own rendered chip); addition is yours: Enter dispatches
+    an event with the typed text, you decide whether to accept it.
+  </p>
+
+  <section class="demo">
+    <h2>Basic — cost centers</h2>
+    <div class="bo-tag-input" role="group" aria-label="Cost centers" id="ti-basic">
+      <span class="bo-tag-input__tag">CC-4021
+        <button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button>
+      </span>
+      <span class="bo-tag-input__tag">CC-2205
+        <button class="bo-tag-input__remove" type="button" aria-label="Remove CC-2205">×</button>
+      </span>
+      <input class="bo-tag-input__field" type="text" placeholder="Add a cost center…">
+    </div>
+    <p class="bo-u-text-muted">Type a value and press Enter to add it; click
+    a tag's × (or press Backspace in the empty field) to remove the last
+    one. Try it — this demo rejects exact duplicates, same as a real
+    consumer would.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Approval-routing recipients</h2>
+    <div class="bo-tag-input" role="group" aria-label="Route to" id="ti-recipients">
+      <span class="bo-tag-input__tag">j.kim@busy-office.example
+        <button class="bo-tag-input__remove" type="button" aria-label="Remove j.kim@busy-office.example">×</button>
+      </span>
+      <input class="bo-tag-input__field" type="text" placeholder="Add an approver…">
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Empty</h2>
+    <div class="bo-tag-input" role="group" aria-label="Tags (empty)">
+      <input class="bo-tag-input__field" type="text" placeholder="Add a cost center…">
+    </div>
+    <p class="bo-u-text-muted">The container works with zero tags — no
+    special empty-state markup needed.</p>
+  </section>
+
+  <script>
+    import { initTagInput } from '@busy-office/ui/js';
+    initTagInput();
+
+    document.addEventListener('bo:tag-add', (e) => {
+      const group = (e.target as HTMLElement).closest('.bo-tag-input');
+      if (!group) return;
+      const existing = [...group.querySelectorAll('.bo-tag-input__tag')].map(
+        (t) => t.firstChild?.textContent?.trim(),
+      );
+      if (existing.includes((e as CustomEvent).detail.value)) return;
+
+      const tag = document.createElement('span');
+      tag.className = 'bo-tag-input__tag';
+      tag.append((e as CustomEvent).detail.value + ' ');
+      const remove = document.createElement('button');
+      remove.className = 'bo-tag-input__remove';
+      remove.type = 'button';
+      remove.setAttribute('aria-label', `Remove ${(e as CustomEvent).detail.value}`);
+      remove.textContent = '×';
+      tag.append(remove);
+      group.querySelector('.bo-tag-input__field')!.before(tag);
+    });
+  </script>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="tag-input" />
+  <ApiTable
+    component="tag-input"
+    js="Required: initTagInput() — without it, Enter/Backspace do nothing and remove buttons don't remove their tag."
+    notes={[
+      'The framework owns REMOVAL only — a remove-button click or Backspace-on-empty deletes the framework\'s own rendered `.bo-tag-input__tag` and dispatches `bo:tag-remove`. Addition is yours: Enter dispatches `bo:tag-add` with the typed text and clears the field; validate/dedupe and append the tag markup yourself.',
+      'Keyboard access to remove buttons is plain Tab order — they\'re real `<button>`s, no reimplemented roving-tabindex needed.',
+      'Wrap the group in `role="group"` with an `aria-label` naming what the tags represent (cost centers, recipients) — a native group has no accessible name of its own.',
+      'Works with zero tags — no special empty-state markup.',
+    ]}
+  />
+  <Related links={[
+    ['/components/combobox', 'Combobox'],
+    ['/components/form', 'Forms'],
+    ['/components/badge', 'Badge'],
+  ]} />
+</Gallery>

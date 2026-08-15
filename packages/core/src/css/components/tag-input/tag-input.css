@@ -1,0 +1,68 @@
+@layer bo-components {
+  /* Multi-value entry — cost centers, approval-routing recipients. Looks
+     like one input; is really a flex-wrap row of committed tags plus a
+     plain text field for the next one. */
+  .bo-tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--bo-space-1);
+    min-height: var(--bo-density-control-height);
+    padding: calc(var(--bo-space-1) - 1px) var(--bo-space-2);
+    border: var(--bo-border-width) solid var(--bo-color-border-control);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface);
+  }
+
+  .bo-tag-input:focus-within {
+    border-color: var(--bo-color-focus-ring);
+  }
+
+  .bo-tag-input__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bo-space-1);
+    padding-inline: var(--bo-space-2);
+    padding-block: 0.125rem;
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-secondary);
+    font-size: var(--bo-font-size-xs);
+    font-weight: var(--bo-font-weight-medium);
+    white-space: nowrap;
+  }
+
+  .bo-tag-input__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1rem;
+    block-size: 1rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--bo-radius-full);
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .bo-tag-input__remove:hover {
+    background: var(--bo-state-hover-overlay);
+  }
+
+  .bo-tag-input__field {
+    flex: 1;
+    min-inline-size: 6rem;
+    padding: var(--bo-space-1) 0;
+    border: 0;
+    background: transparent;
+    color: var(--bo-color-text-primary);
+    font-size: var(--bo-density-font-size);
+  }
+
+  .bo-tag-input__field::placeholder {
+    color: var(--bo-color-text-muted);
+  }
+}

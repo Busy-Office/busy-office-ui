@@ -1493,10 +1493,36 @@ one correction to the research agent's claims:
        code. Both link checks, axe zero (58 pages), 32 baselines (verified
        stable across 2 independent re-runs after last wake's harness-race
        lesson), 57 tests, stylelint, live both themes.
-3. [ ] **Tag/chip (token) input** — Fiori Token/MultiInput, Ant, Carbon;
+3. [x] **Tag/chip (token) input** — Fiori Token/MultiInput, Ant, Carbon;
        scenario: multi-tag cost centers on a record, multiple approval-
-       routing recipients. Queued — real CSS+JS surface (chip removal,
-       keyboard nav between chips and the text entry).
+       routing recipients.
+       **Done 2026-08-16**: `.bo-tag-input` (real JS, same class as
+       Combobox — no native element covers this). `initTagInput()`: Enter
+       dispatches `bo:tag-add` with the typed text and clears the field
+       (you validate/dedupe and append the actual chip); a remove-button
+       click or Backspace-on-empty deletes the framework's OWN rendered
+       chip and dispatches `bo:tag-remove` — deterministic, so the
+       framework can own it, unlike addition. Keyboard access to remove
+       buttons is plain Tab order (real `&lt;button&gt;`s), no reimplemented
+       roving-tabindex.
+       **Real bug caught by the test I wrote, not by reading the code**:
+       `removeTag()` read `tag.textContent` for the removed value, which
+       also picked up the remove button's own "×" label
+       (`"CC-4021\n  ×"` instead of `"CC-4021"`) — fixed by cloning the
+       tag and stripping the button before reading text. **Second bug
+       caught live** (not by the code): `outline: none` on the field,
+       intended to defer to the container's `:focus-within` border tint,
+       actually removed the ONLY visible focus indicator from the
+       focused element itself — a border-color change on a container is
+       not a substitute for the element's own ring. Removed the override
+       before it ever shipped; the plain global `:focus-visible` rule
+       (same as every other input) is what actually renders now.
+       Verified live: typed-and-Enter add, duplicate rejection, Backspace
+       removal, and remove-button click all confirmed via real
+       interaction in the browser, not just DOM assertions. 61 tests (was
+       57), both link checks, axe zero (59 pages), 32 baselines (one
+       harness capture flake — the same documented class as before —
+       resolved by 5 consecutive clean re-runs), live both themes.
 4. [ ] **Standalone Avatar** — Fiori/Ant/Salesforce; scenario: approval-chain
        "who's next" stack, assignee identification. Partially covered
        already — `.bo-byline__avatar` exists but is scoped inside Byline.
@@ -1591,8 +1617,8 @@ Highest-leverage bets (2026-08-14 review — ranked):
 
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
-      | 1 | Component surface | ✅ 27 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-16 after Slice 17: Segmented control, File upload) | `check-page-shape.mjs`: 27 component pages |
-      | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, all 16 **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda + correction |
+      | 1 | Component surface | ✅ 28 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-16 after Slice 17: Segmented control, File upload, Tag input) | `check-page-shape.mjs`: 28 component pages |
+      | 2 | JS behaviors | ✅ 18 opt-in behaviors total (`dist/behaviors.json`), generated docs table. The original 16 remain **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries). `initFileDropzone`/`initTagInput` (Slice 17, 2026-08-16) are NOT yet in that audited set — single-context so far, not claimed stable | `dist/behaviors.json`: `initCount: 18`; CHANGELOG freeze addenda + correction |
       | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green + 2 advisory harnesses (`test:visual` 32 shots, `test:axe` 54 pages) | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |
       | 5 | Contrast | ✅ 27 pairs × 2 themes + 1 brand preset, all AA (incl. three non-text 3:1 fill pairs) | `check-contrast.mjs` |

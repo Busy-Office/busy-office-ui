@@ -37,5 +37,6 @@
 @import "./components/date/date.css";
 @import "./components/segmented/segmented.css";
 @import "./components/file-upload/file-upload.css";
+@import "./components/tag-input/tag-input.css";
 @import "./utilities/index.css";
 @import "./print/index.css";
