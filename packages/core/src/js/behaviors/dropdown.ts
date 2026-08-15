@@ -24,6 +24,9 @@
  * The trigger's label becomes "Cost center (2)" once >=1 box is checked,
  * and reverts to `data-multiselect-label` at zero. Clicking a checkbox
  * item does not close the menu (every other menu still closes on select).
+ * A trigger with element children (icon + label) must nest a
+ * `<span data-multiselect-count>` for the label text — the behavior never
+ * rewrites a trigger's children, only that span or a plain-text trigger.
  */
 let installed = false;
 
@@ -38,7 +41,14 @@ function updateMultiselectLabel(menu: HTMLElement): void {
   const base = invoker?.getAttribute('data-multiselect-label');
   if (!invoker || !base) return;
   const count = menu.querySelectorAll('input[type="checkbox"]:checked').length;
-  invoker.textContent = count > 0 ? `${base} (${count})` : base;
+  const text = count > 0 ? `${base} (${count})` : base;
+  // Never write textContent on a trigger with element children — that
+  // would destroy an icon/badge inside the button. Prefer a dedicated
+  // [data-multiselect-count] child when one exists; otherwise only
+  // rewrite a plain-text trigger.
+  const target = invoker.querySelector<HTMLElement>('[data-multiselect-count]');
+  if (target) target.textContent = text;
+  else if (invoker.childElementCount === 0) invoker.textContent = text;
 }
 
 function position(menu: HTMLElement): void {

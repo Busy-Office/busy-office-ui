@@ -21,7 +21,16 @@ export function initSavedViews(root: ParentNode = document): void {
     for (const el of Array.from(form.elements)) {
       if (!(el instanceof HTMLInputElement || el instanceof HTMLSelectElement)) continue;
       if (!el.name || !params.has(el.name)) continue;
-      el.value = params.get(el.name)!;
+      // Checkboxes/radios toggle via .checked — writing .value on them
+      // only sets the submit-when-checked attribute, silently a no-op.
+      if (el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio')) {
+        el.checked = params.getAll(el.name).includes(el.value);
+      } else if (el instanceof HTMLSelectElement && el.multiple) {
+        const values = params.getAll(el.name);
+        for (const opt of Array.from(el.options)) opt.selected = values.includes(opt.value);
+      } else {
+        el.value = params.get(el.name)!;
+      }
     }
   });
 

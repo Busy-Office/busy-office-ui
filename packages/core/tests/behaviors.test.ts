@@ -474,6 +474,23 @@ describe('initSavedViews', () => {
     expect(match.getAttribute('aria-current')).toBe('page');
     expect(other.hasAttribute('aria-current')).toBe(false);
   });
+
+  it('checks a checkbox filter via .checked, not .value (ultrareview bug_012)', () => {
+    window.history.pushState({}, '', '/invoices?published=true&status=pending');
+    html`
+      <form class="bo-filter-bar">
+        <input type="checkbox" name="published" value="true" />
+        <input type="checkbox" name="archived" value="true" checked />
+        <select name="status"><option value="">All</option><option value="pending">Pending</option></select>
+      </form>
+    `;
+    ui.initSavedViews();
+    const form = document.querySelector('form')!;
+    expect((form.elements.namedItem('published') as HTMLInputElement).checked).toBe(true);
+    // 'archived' isn't in the URL — params.has() is false, left untouched.
+    expect((form.elements.namedItem('archived') as HTMLInputElement).checked).toBe(true);
+    expect((form.elements.namedItem('status') as HTMLSelectElement).value).toBe('pending');
+  });
 });
 
 describe('initWizard', () => {
@@ -585,6 +602,25 @@ describe('initQuantity', () => {
     inc.click();
     expect(input.value).toBe('5');
   });
+
+  it('fractional step never leaves floating-point artifacts (ultrareview bug_003)', () => {
+    const { input, inc } = quantity('min="0" max="5" step="0.01" value="0.28"');
+    inc.click();
+    expect(input.value).toBe('0.29'); // not 0.29000000000000004
+    const { input: input2, inc: inc2 } = (() => {
+      html`
+        <div class="bo-quantity">
+          <button class="bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease">−</button>
+          <input class="bo-quantity__input" type="number" min="0" max="5" step="0.1" value="0.2" />
+          <button class="bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase">+</button>
+        </div>
+      `;
+      return { input: document.querySelector<HTMLInputElement>('.bo-quantity__input')!, inc: document.querySelector<HTMLButtonElement>('[data-quantity-step="1"]')! };
+    })();
+    inc2.click();
+    expect(input2.value).toBe('0.3'); // not 0.30000000000000004
+    void input;
+  });
 });
 
 describe('initScanInput', () => {
@@ -655,6 +691,20 @@ describe('initScanInput', () => {
     expect(() =>
       input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })),
     ).not.toThrow();
+  });
+
+  it('finds the status element when aria-describedby lists multiple IDs (ultrareview bug_005)', () => {
+    html`
+      <input class="bo-input bo-input--code" data-scan-input aria-describedby="scan-hint scan-status" />
+      <p id="scan-hint">Focus the field and scan.</p>
+      <p id="scan-status" data-scan-status aria-live="polite"></p>
+    `;
+    ui.initScanInput();
+    const input = document.querySelector('[data-scan-input]') as HTMLInputElement;
+    input.value = 'ITEM-42';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(document.getElementById('scan-status')!.textContent).toBe('Scanned ITEM-42');
+    expect(document.getElementById('scan-hint')!.textContent).toBe('Focus the field and scan.');
   });
 });
 
@@ -832,6 +882,21 @@ describe('initTableToolbar', () => {
     document.addEventListener('bo:table-export', (e: any) => { detail = e.detail; }, { once: true });
     (document.querySelector('[data-table-export]') as HTMLElement).click();
     expect(detail).toEqual({ format: 'csv' });
+  });
+
+  it('applies the initial checked state at init — a server-rendered unchecked box hides its column (ultrareview bug_013)', () => {
+    html`
+      <div class="bo-data-table-container">
+        <input type="checkbox" data-col-toggle="cc" />
+        <table class="bo-data-table">
+          <thead><tr><th data-col="cc">Cost center</th></tr></thead>
+          <tbody><tr><td data-col="cc">CC-4021</td></tr></tbody>
+        </table>
+      </div>
+    `;
+    ui.initTableToolbar();
+    const cells = [...document.querySelectorAll('[data-col="cc"]')] as HTMLElement[];
+    expect(cells.every((c) => c.hidden)).toBe(true);
   });
 });
 

@@ -27,6 +27,13 @@ if (!rawName || !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(rawName)) {
 const name = rawName;
 const pascal = name.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase());
 const label = labelFlag ? labelFlag.slice('--label='.length) : pascal.replace(/([a-z])([A-Z])/g, '$1 $2');
+// The label is interpolated into an Astro attribute and a JS string literal
+// in Gallery.astro — a quote would emit invalid output into a SHARED file
+// (breaking every docs build until hand-fixed), so refuse rather than escape.
+if (/["'`\\]/.test(label)) {
+  console.error(`--label must not contain quotes or backslashes (got: ${label})`);
+  process.exit(1);
+}
 
 async function exists(p) {
   try {

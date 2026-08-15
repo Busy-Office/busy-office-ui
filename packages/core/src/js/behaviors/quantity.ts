@@ -44,7 +44,12 @@ export function initQuantity(): void {
     const min = input.min !== '' ? Number(input.min) : -Infinity;
     const max = input.max !== '' ? Number(input.max) : Infinity;
     const current = Number(input.value) || 0;
-    const next = Math.min(max, Math.max(min, current + step * inputStep));
+    // Quantize to the step's own decimal places — binary floats make
+    // 0.28 + 0.01 print as 0.29000000000000004 otherwise (the docs
+    // recommend step="0.01" for weight/volume, so this path is real).
+    const decimals = (input.step.split('.')[1] ?? '').length;
+    const raw = Math.min(max, Math.max(min, current + step * inputStep));
+    const next = Number(raw.toFixed(decimals));
 
     if (next !== current) {
       input.value = String(next);

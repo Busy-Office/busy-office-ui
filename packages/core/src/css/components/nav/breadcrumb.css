@@ -43,7 +43,7 @@
      empty accessible name, not text a screen reader would read aloud
      between every crumb. */
   .bo-breadcrumb li:not(:first-child)::before {
-    content: "/";
+    content: "/" / "";
     color: var(--bo-color-text-muted);
   }
 

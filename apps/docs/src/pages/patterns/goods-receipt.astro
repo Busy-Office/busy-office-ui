@@ -59,8 +59,18 @@ import Related from '../../components/Related.astro';
       if (!placeholderCleared) { log.innerHTML = ''; placeholderCleared = true; }
       const value = (e as CustomEvent).detail.value;
       const qty = qtyInput?.value || '1';
+      // textContent, never innerHTML: barcode content is untrusted
+      // physical-world input (adversary-printed labels exist).
       const row = document.createElement('tr');
-      row.innerHTML = `<td class="bo-data-table__col--code">${value}</td><td class="bo-data-table__col--numeric">${qty}</td><td>${new Date().toLocaleTimeString()}</td>`;
+      const codeCell = document.createElement('td');
+      codeCell.className = 'bo-data-table__col--code';
+      codeCell.textContent = value;
+      const qtyCell = document.createElement('td');
+      qtyCell.className = 'bo-data-table__col--numeric';
+      qtyCell.textContent = qty;
+      const timeCell = document.createElement('td');
+      timeCell.textContent = new Date().toLocaleTimeString();
+      row.append(codeCell, qtyCell, timeCell);
       log.prepend(row);
     });
   </script>

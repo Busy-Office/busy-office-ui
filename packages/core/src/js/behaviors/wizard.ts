@@ -55,20 +55,24 @@ function show(root: HTMLElement, index: number, moveFocus = true): void {
 }
 
 export function initWizard(): void {
-  if (installed) return;
-  installed = true;
+  if (!installed) {
+    installed = true;
+    document.addEventListener('click', (e) => {
+      const trigger = (e.target as Element | null)?.closest<HTMLElement>(
+        '[data-wizard-next], [data-wizard-back]',
+      );
+      if (!trigger) return;
+      const root = trigger.closest<HTMLElement>('[data-wizard]');
+      if (!root) return;
+      const current = Number(root.dataset.wizardCurrent ?? '0');
+      show(root, trigger.hasAttribute('data-wizard-next') ? current + 1 : current - 1);
+    });
+  }
 
-  document.addEventListener('click', (e) => {
-    const trigger = (e.target as Element | null)?.closest<HTMLElement>(
-      '[data-wizard-next], [data-wizard-back]',
-    );
-    if (!trigger) return;
-    const root = trigger.closest<HTMLElement>('[data-wizard]');
-    if (!root) return;
-    const current = Number(root.dataset.wizardCurrent ?? '0');
-    show(root, trigger.hasAttribute('data-wizard-next') ? current + 1 : current - 1);
-  });
-
+  // The normalization pass runs on EVERY call — it's a pure re-derivation
+  // from data-wizard-current, and a wizard swapped in after the first call
+  // (hx-boost revisit, client-side mount) needs it to disable Back at
+  // step 0. Only the document listener above is install-once.
   document.querySelectorAll<HTMLElement>('[data-wizard]').forEach((root) => {
     show(root, Number(root.dataset.wizardCurrent ?? '0'), false);
   });

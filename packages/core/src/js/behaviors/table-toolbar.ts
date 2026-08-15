@@ -34,19 +34,32 @@
  */
 let installed = false;
 
+function applyColToggle(checkbox: HTMLInputElement): void {
+  const col = checkbox.dataset.colToggle;
+  if (col === undefined) return;
+  const container = checkbox.closest('.bo-data-table-container');
+  if (!container) return;
+  container.querySelectorAll<HTMLElement>('[data-col]').forEach((cell) => {
+    if (cell.dataset.col === col) cell.hidden = !checkbox.checked;
+  });
+}
+
 export function initTableToolbar(): void {
+  // The initial reconciliation runs on EVERY call (a server rendering a
+  // persisted "column hidden" preference renders the checkbox unchecked
+  // — the column must match it on load, not after a phantom toggle);
+  // only the document-level listeners are install-once.
+  document
+    .querySelectorAll<HTMLInputElement>('[data-col-toggle]')
+    .forEach(applyColToggle);
+
   if (installed) return;
   installed = true;
 
   document.addEventListener('change', (e) => {
     const checkbox = e.target as HTMLInputElement;
-    const col = checkbox.dataset.colToggle;
-    if (col === undefined) return;
-    const container = checkbox.closest('.bo-data-table-container');
-    if (!container) return;
-    container.querySelectorAll<HTMLElement>('[data-col]').forEach((cell) => {
-      if (cell.dataset.col === col) cell.hidden = !checkbox.checked;
-    });
+    if (checkbox.dataset?.colToggle === undefined) return;
+    applyColToggle(checkbox);
   });
 
   document.addEventListener('click', (e) => {

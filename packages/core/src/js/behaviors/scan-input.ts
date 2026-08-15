@@ -23,9 +23,13 @@
 let installed = false;
 
 function announceScan(input: HTMLInputElement, value: string): void {
-  const describedBy = input.getAttribute('aria-describedby');
-  const status = describedBy && document.getElementById(describedBy);
-  if (!status || !status.hasAttribute('data-scan-status')) return;
+  // aria-describedby is a space-separated ID LIST (WAI-ARIA 6.6.1) — a
+  // field routinely carries a hint/error ID alongside the status ID.
+  const status = (input.getAttribute('aria-describedby') ?? '')
+    .split(/\s+/)
+    .map((id) => document.getElementById(id))
+    .find((el) => el?.hasAttribute('data-scan-status'));
+  if (!status) return;
   status.textContent = `Scanned ${value}`;
 }
 
