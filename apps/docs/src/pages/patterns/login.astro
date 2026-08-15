@@ -1,0 +1,116 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+---
+<Gallery title="Pattern: login">
+  <p class="demo-note">
+    An authentication entry screen — the one screen every ERP app has and the one
+    where getting the details wrong locks real users out. Composed entirely from
+    existing components, zero new CSS: <code>.bo-widget</code> (the card primitive)
+    centers the form on the canvas, fields are plain <code>.bo-form-field</code>s
+    with the <strong>correct <code>autocomplete</code> tokens</strong>
+    (<code>username</code> / <code>current-password</code> — this is what lets
+    password managers fill the form), and errors use the same
+    <a href="/patterns/validation-summary">validation-summary pattern</a> as any
+    other form. Try it: submit the empty form.
+  </p>
+
+  <section class="demo" style="background: var(--bo-color-bg-canvas); padding: var(--bo-space-8) var(--bo-space-4)">
+    <div class="bo-widget" style="inline-size: 100%; max-inline-size: 24rem; margin-inline: auto">
+      <div class="bo-widget__header">
+        <span class="bo-widget__title">Sign in to busy-office</span>
+      </div>
+      <div class="bo-widget__body">
+        <form data-validation-summary novalidate hx-boost="false" class="bo-stack bo-stack--tight">
+          <div class="bo-alert bo-alert--danger" data-validation-summary-box hidden role="alert">
+            <p><strong>There is a problem</strong></p>
+            <ul></ul>
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="login-user">Email or username</label>
+            <input class="bo-input" id="login-user" name="username" autocomplete="username" required />
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="login-pass">Password</label>
+            <input class="bo-input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <label class="bo-choice"><input type="checkbox" class="bo-checkbox" name="remember" /> Keep me signed in</label>
+          <div class="bo-form-actions">
+            <button class="bo-btn" type="submit">Sign in</button>
+            <a href="#" class="bo-u-text-muted">Forgot password?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { initValidationSummary } from '@busy-office/ui/js';
+    initValidationSummary();
+  </script>
+
+  <section class="demo">
+    <h2>The details that matter on a login screen</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong><code>autocomplete="username"</code> / <code>"current-password"</code></strong> —
+      the standardized tokens password managers key on. Omitting them (or using
+      <code>off</code>) breaks credential autofill, which hurts the users who rely
+      on managers for strong unique passwords.</li>
+      <li><strong>Server-error recovery uses the same summary box</strong> — on a
+      failed sign-in your server re-renders the form with the
+      <code>data-validation-summary-box</code> alert visible and a message like
+      "The email or password you entered is incorrect." Say which <em>action</em>
+      failed, never which field was wrong (that's credential enumeration).</li>
+      <li><strong>No premature lockout messaging</strong> — if you rate-limit or
+      lock accounts, tell the user how to recover ("try again in 15 minutes" /
+      "reset your password"), in the same alert, as text — not a dead end.</li>
+      <li><strong>The password field never blocks paste</strong> — paste-blocking
+      breaks password managers; nothing here does it and nothing should.</li>
+      <li><strong>One column, one card</strong> — <code>.bo-widget</code> with
+      <code>max-inline-size</code> centered on the canvas; no new "login layout"
+      CSS exists because none is needed.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- inline-size: 100% matters: .bo-widget is a size container
+     (container-type: inline-size), so outside a .bo-widget-grid it needs an
+     explicit width — max-inline-size alone collapses it. -->
+<div class="bo-widget" style="inline-size: 100%; max-inline-size: 24rem; margin-inline: auto">
+  <div class="bo-widget__header"><span class="bo-widget__title">Sign in</span></div>
+  <div class="bo-widget__body">
+    <form method="post" action="/session" data-validation-summary class="bo-stack bo-stack--tight">
+      <div class="bo-alert bo-alert--danger" data-validation-summary-box hidden role="alert">
+        <p>There is a problem</p>
+        <ul></ul>
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="user">Email or username</label>
+        <input class="bo-input" id="user" name="username" autocomplete="username" required />
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="pass">Password</label>
+        <input class="bo-input" id="pass" name="password" type="password"
+            autocomplete="current-password" required />
+      </div>
+      <div class="bo-form-actions">
+        <button class="bo-btn" type="submit">Sign in</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { initValidationSummary } from "@busy-office/ui/js";
+  initValidationSummary(); // client-side empty-field summary; server errors
+                            // re-render the same alert box with their message
+</script>`}</code></pre>
+  </section>
+
+  <Related links={[
+    ["/components/form", "Forms"],
+    ["/patterns/validation-summary", "Validation summary"],
+    ["/components/dashboard#card", "Card (.bo-widget)"],
+  ]} />
+</Gallery>

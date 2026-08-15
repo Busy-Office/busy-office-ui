@@ -1010,17 +1010,30 @@ recommendation not to build speculatively.
        the `#card` fragment (strips fragments before validating). 44
        tests unchanged, page count unchanged (49 — no new page), 2564
        links (+48, one new sidebar entry × pages).
-5. [ ] **Login pattern** — highest-value gap identified by every review
-       seat: an authentication entry-screen pattern, composed from
-       existing form/dialog/button primitives (no new CSS expected).
-       Currently 404s (`/patterns/login`). Accept: a pattern page
-       (`apps/docs/src/pages/patterns/login.astro`) — email/username +
-       password fields with proper `autocomplete` attributes, inline
-       validation summary (reuse `initValidationSummary()`), a clear
-       error-recovery path, following the same "composed entirely from
-       existing components, zero new CSS" bar the other pattern pages
-       hit. Add to the Patterns sidebar group and to `Related` links on
-       relevant component pages (form, dialog, validation-summary).
+5. [x] **Login pattern** — shipped (`/patterns/login`, zero new CSS).
+       A centered `.bo-widget` card (the Card primitive, cross-linked to
+       the Slice 9 item 4 alias) with email/username + password fields
+       carrying the correct `autocomplete="username"`/`"current-password"`
+       tokens, the existing validation-summary pattern for errors
+       (`initValidationSummary()` — verified live: empty submit lists
+       both fields and moves focus to the summary first), and a "details
+       that matter" section covering server-error recovery (say which
+       ACTION failed, never which field — credential enumeration),
+       lockout messaging, and never blocking paste. Sidebar entry added
+       (top of Patterns group); `Related` links added on `/components/
+       form` and `/patterns/validation-summary`.
+       **Real component finding surfaced by building this** (exactly what
+       the pattern-page bar is for): `.bo-widget` is a size container
+       (`container-type: inline-size`), so used standalone outside a
+       `.bo-widget-grid` it needs an explicit `inline-size` — with only a
+       `max-inline-size` it collapses to ~1px (size containment means
+       width can't come from content). Found live on first render, fixed
+       with `inline-size: 100%`, and documented as a comment in the
+       pattern's markup block so the next consumer doesn't rediscover it.
+       Worth considering a docs note on the Card/dashboard page too if it
+       bites again. Verified live via Podman (`--no-cache`) in both
+       themes and at a 390px isolated container width; 48 tests
+       unchanged.
 6. [ ] **App Launch pattern** — the one Slice 7 item 5 sub-item that
        already had a concrete, evidenced Accept criterion (2026-08-15
        reference screenshots, macOS Launchpad/Favourites): an icon-grid
