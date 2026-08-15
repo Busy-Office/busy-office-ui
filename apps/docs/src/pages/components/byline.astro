@@ -48,6 +48,21 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>
+  <section class="demo">
+    <h2>In context — heading an approval comment</h2>
+    <div class="bo-widget" style="inline-size: 100%; max-inline-size: 24rem">
+      <div class="bo-widget__body">
+        <span class="bo-byline">
+          <span class="bo-byline__avatar" aria-hidden="true">JK</span>
+          <span><strong>J. Kim</strong> · approved · <time datetime="2026-08-10T15:02">Aug 10, 15:02</time></span>
+        </span>
+        <p style="margin-block-start: var(--bo-space-2)">"Within Q3 budget — released for payment."</p>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Where bylines live: heading a comment or approval
+    note on a record card, next to the <a href="/components/approval-workflow">audit
+    trail</a> that logs the same event in one line.</p>
+  </section>
   <ApiTable component="byline"
     notes={['Just markup + one class — wrap the name in <code>&lt;strong&gt;</code> for emphasis ink.',
             'Pairs with a record-type chip (<code>.bo-badge--type</code>) in a widget header — see the record-detail pattern.',

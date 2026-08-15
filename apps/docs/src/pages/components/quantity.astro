@@ -32,6 +32,11 @@ const boundary = `<!-- render the correct disabled state server-side when the st
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity" disabled>&minus;</button>
   <input class="bo-quantity__input" type="number" value="0" min="0" max="10" step="1" inputmode="numeric" aria-label="Quantity" />
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+</div>
+<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <input class="bo-quantity__input" type="number" value="10" min="0" max="10" step="1" inputmode="numeric" aria-label="Quantity (at max)" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity" disabled>+</button>
 </div>`;
 
 const field = `<div class="bo-form-field">

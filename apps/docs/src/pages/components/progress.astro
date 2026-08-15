@@ -51,6 +51,23 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
   </section>
 
   <section class="demo">
+    <h2>On a dashboard card</h2>
+    <div class="bo-widget" style="inline-size: 100%; max-inline-size: 16rem">
+      <div class="bo-widget__header"><span class="bo-widget__title">Budget — CC-4021</span></div>
+      <div class="bo-widget__body">
+        <div class="bo-stat">
+          <span class="bo-stat__label">consumed</span>
+          <span class="bo-stat__value">93%</span>
+        </div>
+        <progress class="bo-progress bo-progress--danger" max="100" value="93"
+          aria-label="93% of CC-4021 budget consumed" style="inline-size: 100%; margin-block-start: var(--bo-space-2)"></progress>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">The dashboard pairing: a
+    <a href="/components/dashboard#card">stat tile</a> carries the number, the bar
+    makes the trend scannable at a glance across a grid of cost centers.</p>
+  </section>
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>

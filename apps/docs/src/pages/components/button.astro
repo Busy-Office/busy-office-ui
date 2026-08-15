@@ -45,6 +45,28 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
       <span>← this cluster is <code>data-density="compact"</code> regardless of the global setting</span>
     </div>
   </section>
+  <section class="demo">
+    <h2>Row actions — small ghosts in a table cell</h2>
+    <div class="bo-data-table-container" style="max-inline-size: 26rem">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Invoice #</th><th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="bo-data-table__col--code">INV-10234</td>
+            <td class="bo-data-table__col--numeric">$4,208.00</td>
+            <td>
+              <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" type="button" aria-label="Edit INV-10234">✎</button>
+              <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" type="button" aria-label="Duplicate INV-10234">⧉</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">What <code>--sm --ghost --icon</code> exists for:
+    per-row actions that don't shout. Each icon button names its ROW in the
+    <code>aria-label</code> ("Edit INV-10234", never just "Edit"); for more than
+    two actions, collapse into a <a href="/components/dropdown">row dropdown</a>.</p>
+  </section>
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
             'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.']} />

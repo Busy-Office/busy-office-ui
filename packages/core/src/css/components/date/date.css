@@ -11,6 +11,14 @@
     gap: var(--bo-space-1);
   }
 
+  /* The absolute date — named part for parity with .bo-amount__value;
+     tabular numerals keep date columns aligned. (Was used by the docs
+     before the rule existed — drift caught by the 2026-08-15 showcase
+     grill.) */
+  .bo-date__value {
+    font-variant-numeric: tabular-nums;
+  }
+
   .bo-date__relative {
     color: var(--bo-color-text-muted);
     font-size: var(--bo-font-size-xs);

@@ -456,8 +456,11 @@ const current =
   .docs-menu-btn { display: none; }
   @media (max-width: 56rem) {
     .docs-menu-btn { display: inline-flex; }
-    .bo-app-shell__sidebar { display: none; }
-    .bo-app-shell { grid-template-columns: 1fr; }
+    /* Scoped to the DOCS shell (body > direct child) — an unscoped selector
+       here hid the sidebar of EMBEDDED demo shells too (nav page), found
+       by the 2026-08-15 showcase grill at tablet viewport widths. */
+    body > .bo-app-shell > .bo-app-shell__sidebar { display: none; }
+    body > .bo-app-shell { grid-template-columns: 1fr; }
   }
   @media (min-width: 56.01rem) { .docs-drawer { display: none; } }
   .docs-drawer .bo-sidebar-nav { padding: var(--bo-space-2); overflow-y: auto; inline-size: 100%; }

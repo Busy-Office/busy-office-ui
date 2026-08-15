@@ -68,8 +68,52 @@ const errorState = `<div class="bo-state bo-state--error">
 
   <ClassRef component="state" />
   <section class="demo">
+    <h2>Table first-load — skeleton rows</h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Invoice #</th><th scope="col">Vendor</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+        <tbody aria-busy="true">
+          {[1, 2, 3].map(() => (
+            <tr>
+              <td><span class="bo-skeleton" style="inline-size: 6rem"></span></td>
+              <td><span class="bo-skeleton" style="inline-size: 10rem"></span></td>
+              <td class="bo-data-table__col--numeric"><span class="bo-skeleton" style="inline-size: 5rem"></span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The #1 ERP loading case: real header (columns are
+    known), skeleton rows sized like the data they stand in for,
+    <code>aria-busy</code> on the <code>&lt;tbody&gt;</code>. For a mid-session
+    re-fetch of a table that already has rows, use
+    <a href="/components/data-table"><code>data-loading</code></a> instead — keep
+    the stale rows visible and dimmed.</p>
+    <pre><code>{`<tbody aria-busy="true">
+  <tr>
+    <td><span class="bo-skeleton" style="inline-size: 6rem"></span></td>
+    <td><span class="bo-skeleton" style="inline-size: 10rem"></span></td>
+    <td class="bo-data-table__col--numeric"><span class="bo-skeleton" style="inline-size: 5rem"></span></td>
+  </tr>
+  …
+</tbody>`}</code></pre>
+  </section>
+  <section class="demo">
     <h2>Empty</h2>
     <Demo code={emptyState} />
+  </section>
+  <section class="demo">
+    <h2>Empty — "no results match your filters"</h2>
+    <div class="bo-state" style="max-inline-size: 28rem">
+      <span class="bo-state__icon" aria-hidden="true">🔍</span>
+      <p class="bo-state__title">No POs match these filters</p>
+      <p class="bo-state__description">Status "Rejected" + CC-4021 has no results in this period.</p>
+      <div class="bo-state__actions">
+        <button class="bo-btn bo-btn--secondary" type="button">Clear filters</button>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Distinct from first-run empty: name the filters that
+    caused it and offer the one-click way out — otherwise users assume data loss.</p>
   </section>
   <section class="demo">
     <h2><code>--error</code></h2>

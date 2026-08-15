@@ -33,9 +33,13 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
       <div><span class="bo-alert__title">Budget at 92%.</span> CC-4021 nears its limit.</div>
     </div>
     <div class="bo-alert bo-alert--danger" role="alert">
-      <div><span class="bo-alert__title">Posting failed.</span> Period 2026-07 is closed.</div>
+      <div><span class="bo-alert__title">Posting failed.</span> Period 2026-07 is closed.
+        <a href="#">Open period settings</a></div>
       <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
     </div>
+    <p class="bo-u-text-muted">The most-copied real variant after plain text: an
+    alert whose body carries the way out — a link or retry, in the text where a
+    screen reader meets it.</p>
   </section>
   <section class="demo">
     <h2>Toast recipe</h2>
@@ -55,10 +59,16 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
     initAlerts();
     document.getElementById('toast-demo-trigger')?.addEventListener('click', () => {
       const region = document.getElementById('toast-demo-region')!;
+      // Two toasts per click so stacking order and spacing are visible —
+      // ERP reality is bursts (a save + a follow-on warning), not singles.
       region.insertAdjacentHTML(
         'beforeend',
         `<div class="bo-alert bo-alert--success bo-toast">
           <div><span class="bo-alert__title">Saved.</span> PO-88213 was approved.</div>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
+        </div>
+        <div class="bo-alert bo-alert--warning bo-toast">
+          <div><span class="bo-alert__title">Budget at 92%.</span> CC-4021 nears its limit.</div>
           <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
         </div>`,
       );

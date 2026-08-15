@@ -55,6 +55,30 @@ const composerMarkup = `<form class="bo-composer">
         <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Not started: </span>Archive</div></div>
       </li>
     </ol>
+    <pre><code>{`<ol class="bo-timeline" role="list">
+  <li class="bo-timeline__step" data-state="done">
+    <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+    <div>
+      <div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Submitted</div>
+      <div class="bo-timeline__meta">R. Vance · <time datetime="2026-08-10T09:14">2026-08-10 09:14</time></div>
+    </div>
+  </li>
+  <li class="bo-timeline__step" data-state="current" aria-current="step">
+    <span class="bo-timeline__marker" aria-hidden="true">●</span>
+    <div><div class="bo-timeline__title">Cost-center approval</div></div>
+  </li>
+  <li class="bo-timeline__step" data-state="rejected">
+    <span class="bo-timeline__marker" aria-hidden="true">✕</span>
+    <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Rejected: </span>Finance release</div></div>
+  </li>
+  <li class="bo-timeline__step" data-state="pending">
+    <span class="bo-timeline__marker" aria-hidden="true">4</span>
+    <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Not started: </span>Archive</div></div>
+  </li>
+</ol>
+<!-- Two-channel per state: the marker glyph + tint is one channel; the
+     visually-hidden "Completed:/Rejected:/Not started:" prefix (and
+     aria-current on the active step) is the announced one. -->`}</code></pre>
   </section>
   <section class="demo">
     <h2>Audit trail</h2>
@@ -69,6 +93,29 @@ const composerMarkup = `<form class="bo-composer">
         <span class="bo-audit__detail">"Within Q3 budget."</span>
       </li>
     </ol>
+  </section>
+  <section class="demo">
+    <h2>Rejected → resubmitted — the real approval loop</h2>
+    <ol class="bo-audit" role="list" style="max-inline-size: 28rem">
+      <li class="bo-audit__entry">
+        <time class="bo-audit__time" datetime="2026-08-11T10:20">08-11 10:20</time>
+        <span><span class="bo-audit__actor">M. Osei</span> rejected</span>
+        <span class="bo-audit__detail">"Wrong cost center — should be CC-2205, not CC-4021."</span>
+      </li>
+      <li class="bo-audit__entry">
+        <time class="bo-audit__time" datetime="2026-08-11T11:05">08-11 11:05</time>
+        <span><span class="bo-audit__actor">R. Vance</span> updated cost center and resubmitted</span>
+      </li>
+      <li class="bo-audit__entry">
+        <time class="bo-audit__time" datetime="2026-08-11T14:41">08-11 14:41</time>
+        <span><span class="bo-audit__actor">M. Osei</span> approved</span>
+      </li>
+    </ol>
+    <p class="bo-u-text-muted">The loop every ERP actually runs: rejection with a
+    reason in <code>__detail</code>, a fix, a resubmit. In the paired timeline the
+    step flips <code>data-state="rejected"</code> → back to
+    <code>current</code> on resubmit — the audit trail keeps the full history while
+    the timeline shows only the present.</p>
   </section>
   <section class="demo">
     <h2><code>.bo-composer</code> — writing a new entry</h2>

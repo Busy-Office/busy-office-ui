@@ -54,20 +54,48 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     <pre><code>{breadcrumbMarkup}</code></pre>
   </section>
   <section class="demo">
-    <h2>Embedded shell (independent container)</h2>
-    <div class="bo-app-shell" style="min-height: 16rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+    <h2>Navbar — brand, spacer, actions</h2>
+    <header class="bo-navbar" style="border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)">
+      <span class="bo-navbar__brand">busy-office ERP</span>
+      <span class="bo-badge bo-badge--accent">UAT</span>
+      <span class="bo-navbar__spacer"></span>
+      <input class="bo-input" type="search" aria-label="Search everywhere" placeholder="Search… (⌘K)" style="max-inline-size: 12rem" />
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Notifications">🔔</button>
+      <button class="bo-btn bo-btn--ghost" aria-label="Account menu">J. Kim ▾</button>
+    </header>
+    <p class="bo-u-text-muted">The header every app starts with:
+    <code>__brand</code> left, <code>__spacer</code> pushing everything after it to
+    the end — search, notifications, account. An environment badge next to the brand
+    is the cheapest "which system am I in" safeguard.</p>
+  </section>
+  <section class="demo">
+    <h2>Embedded shell (independent container) — with grouped sidebar</h2>
+    <div class="bo-app-shell" style="min-height: 18rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
       <header class="bo-navbar bo-app-shell__header">
         <span class="bo-navbar__brand">Embedded app</span>
+        <span class="bo-navbar__spacer"></span>
       </header>
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Embedded">
-        <ul>
-          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-sidebar-nav__icon">▤</span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
-          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">✓</span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
-          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">⚙</span><span class="bo-sidebar-nav__label">Settings</span></a></li>
-        </ul>
+        <div class="bo-sidebar-nav__section">
+          <div class="bo-sidebar-nav__heading">Purchasing</div>
+          <ul>
+            <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-sidebar-nav__icon">▤</span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+            <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">✓</span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+          </ul>
+        </div>
+        <div class="bo-sidebar-nav__section">
+          <div class="bo-sidebar-nav__heading">Finance</div>
+          <ul>
+            <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">Σ</span><span class="bo-sidebar-nav__label">Ledger</span></a></li>
+            <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon">⚙</span><span class="bo-sidebar-nav__label">Settings</span></a></li>
+          </ul>
+        </div>
       </nav>
       <main class="bo-app-shell__main">
-        <p class="bo-u-text-muted">This shell is 700px wide → its sidebar is already collapsed to icons, while the page's own sidebar may not be. Container queries, not media queries.</p>
+        <p class="bo-u-text-muted">Sections (<code>__section</code> +
+        <code>__heading</code>) group a real ERP's modules — headings hide with the
+        labels when this 700px shell collapses to icons. Container queries, not
+        media queries.</p>
       </main>
     </div>
   </section>
@@ -91,6 +119,35 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     </dialog>
     <h3>Markup</h3>
     <pre><code>{offcanvasMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>End-side drawer — filters & detail panels</h2>
+    <button class="bo-btn bo-btn--secondary" data-dialog-trigger="filter-drawer">Filters…</button>
+    <dialog class="bo-offcanvas bo-offcanvas--end" id="filter-drawer" data-state="closed" aria-labelledby="fd-title">
+      <div class="bo-offcanvas__header">
+        <span id="fd-title" class="bo-navbar__brand">Filters</span>
+        <form method="dialog">
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button>
+        </form>
+      </div>
+      <div class="bo-stack" style="padding: var(--bo-space-4)">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="fd-status">Status</label>
+          <select class="bo-select" id="fd-status"><option>All</option><option>Pending</option></select>
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="fd-cc">Cost center</label>
+          <input class="bo-input bo-input--code" id="fd-cc" placeholder="CC-…" />
+        </div>
+        <div class="bo-form-actions">
+          <button class="bo-btn" type="button">Apply</button>
+          <button class="bo-btn bo-btn--ghost" type="button">Clear</button>
+        </div>
+      </div>
+    </dialog>
+    <p class="bo-u-text-muted"><code>--end</code> slides the drawer in from the end
+    edge — the home for filter panels and record previews (start side stays the
+    navigation convention). Same dialog wiring, mirrored slide animation, RTL-aware.</p>
   </section>
   <script>
     import { initDialogs } from '@busy-office/ui/js';

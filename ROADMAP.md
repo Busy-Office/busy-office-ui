@@ -1182,6 +1182,14 @@ to give enough sample & variation for showcase." Two layers:
        the demos enough to SHOWCASE the component's range (states,
        density behavior, realistic ERP compositions, not just the happy
        path)? Accept: a per-page gap list ranked by showcase value.
+**Component gap surfaced by the grill, parked with a scenario**: the
+stepper has no rejected/error step state in CSS (only `done`/`current`/
+`pending` via `data-state`) — ERP wizards fail steps. The timeline
+component HAS a rejected state; whether stepper should mirror it needs a
+real failed-wizard scenario before building (same gate as every parked
+item). Meanwhile the docs show the supported answer: a returned-for-rework
+flow re-marks the step `current`.
+
 3. [ ] **Fix rounds** — close the ranked gaps: every documented variant
        demoed on its own page, plus the highest-value state/composition
        samples the grill names. Accept: mechanical scan returns zero

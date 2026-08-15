@@ -31,17 +31,40 @@ const tabsMarkup = `<div class="bo-tabs">
     <div class="bo-tabs">
       <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
         <button class="bo-tabs__tab" role="tab" id="t-details" aria-selected="true" aria-controls="p-details">Details</button>
-        <button class="bo-tabs__tab" role="tab" id="t-lines" tabindex="-1" aria-selected="false" aria-controls="p-lines">Lines</button>
+        <button class="bo-tabs__tab" role="tab" id="t-lines" tabindex="-1" aria-selected="false" aria-controls="p-lines">Lines <span class="bo-badge">3</span></button>
         <button class="bo-tabs__tab" role="tab" id="t-history" tabindex="-1" aria-selected="false" aria-controls="p-history">History</button>
       </div>
       <div class="bo-tabs__panel" role="tabpanel" id="p-details" aria-labelledby="t-details" tabindex="0">
-        <p>Vendor, dates, totals — the detail form lives here.</p>
+        <div class="bo-form-row">
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="tab-vendor">Vendor</label>
+            <input class="bo-input" id="tab-vendor" value="Umbrella Logistics" readonly />
+          </div>
+          <div class="bo-form-field">
+            <label class="bo-form-field__label" for="tab-total">Total</label>
+            <input class="bo-input bo-input--numeric" id="tab-total" value="$12,400.00" readonly />
+          </div>
+        </div>
       </div>
       <div class="bo-tabs__panel" role="tabpanel" id="p-lines" aria-labelledby="t-lines" tabindex="0" hidden>
-        <p>Line items table.</p>
+        <div class="bo-data-table-container">
+          <table class="bo-data-table" data-density="compact">
+            <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col" class="bo-data-table__col--numeric">Total</th></tr></thead>
+            <tbody>
+              <tr><td>Pallet jack</td><td class="bo-data-table__col--numeric">2</td><td class="bo-data-table__col--numeric">$5,600.00</td></tr>
+              <tr><td>Shrink wrap (roll)</td><td class="bo-data-table__col--numeric">40</td><td class="bo-data-table__col--numeric">$1,800.00</td></tr>
+              <tr><td>Labels</td><td class="bo-data-table__col--numeric">12</td><td class="bo-data-table__col--numeric">$5,000.00</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="bo-tabs__panel" role="tabpanel" id="p-history" aria-labelledby="t-history" tabindex="0" hidden>
-        <p>Audit trail.</p>
+        <ol class="bo-audit" role="list">
+          <li class="bo-audit__entry">
+            <time class="bo-audit__time" datetime="2026-08-10T09:14">08-10 09:14</time>
+            <span><span class="bo-audit__actor">R. Vance</span> submitted</span>
+          </li>
+        </ol>
       </div>
     </div>
   </section>

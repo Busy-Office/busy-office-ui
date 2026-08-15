@@ -315,6 +315,83 @@ const rows = [
     behavior only tracks dirty state. Try it: edit a quantity below.</p>
   </section>
   <section class="demo">
+    <h2>The full list screen, assembled</h2>
+    <div class="bo-data-table-container">
+      <div class="bo-data-table__toolbar">
+        <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+          <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
+        </div>
+        <span class="bo-data-table__selection-count"></span>
+        <input class="bo-input" type="search" aria-label="Filter" placeholder="Filter…" style="max-inline-size: 14rem" />
+      </div>
+      <table class="bo-data-table bo-data-table--sticky-col">
+        <thead><tr>
+          <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
+          <th scope="col">Invoice #</th><th scope="col">Vendor</th>
+          <th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col">Status</th>
+        </tr></thead>
+        <tbody>
+          {rows.slice(0, 3).map((r) => (
+            <tr>
+              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
+              <td class="bo-data-table__col--code">{r.no}</td>
+              <td>{r.vendor}</td>
+              <td class="bo-data-table__col--numeric">{r.amount}</td>
+              <td><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div class="bo-data-table__footer">
+        <label class="bo-choice">Rows
+          <select class="bo-select" style="inline-size:auto" aria-label="Rows per page"><option>25</option><option>50</option></select>
+        </label>
+        <nav class="bo-pagination" aria-label="Pagination">
+          <button class="bo-pagination__btn" type="button" disabled aria-label="Previous page">‹</button>
+          <a class="bo-pagination__btn" aria-current="page" href="#">1</a>
+          <a class="bo-pagination__btn" href="#">2</a>
+          <button class="bo-pagination__btn" type="button" aria-label="Next page">›</button>
+          <span class="bo-pagination__info">1–25 of 312</span>
+        </nav>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Everything on one screen the way a real invoice list
+    ships: toolbar + <code>--sticky-col</code> (the selection column stays put when
+    the table scrolls sideways) + the <code>__footer</code> carrying rows-per-page
+    and <a href="/components/pagination">pagination</a>. Scroll the table
+    horizontally in a narrow window to see the sticky column earn its keep.</p>
+  </section>
+  <section class="demo">
+    <h2>Loading & error rows</h2>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-loading="true" aria-busy="true">
+        <thead><tr><th scope="col">Invoice #</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">INV-10234</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
+          <tr><td class="bo-data-table__col--code">INV-10235</td><td class="bo-data-table__col--numeric">$18,940.50</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><code>data-loading="true"</code> (or
+    <code>aria-busy</code>) dims the table and blocks interaction mid-swap — flip it
+    from your fetch/HTMX code. For first-load, prefer
+    <a href="/components/state-patterns">skeleton rows</a>.</p>
+    <div class="bo-data-table-container" style="margin-block-start: var(--bo-space-4)">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Invoice #</th><th scope="col">Problem</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">INV-10240</td><td>—</td><td class="bo-data-table__col--numeric">$1,120.00</td></tr>
+          <tr data-row-state="error"><td class="bo-data-table__col--code">INV-10241</td><td><span class="bo-badge bo-badge--danger">Duplicate</span> already posted as INV-10198</td><td class="bo-data-table__col--numeric">$5,300.00</td></tr>
+          <tr><td class="bo-data-table__col--code">INV-10242</td><td>—</td><td class="bo-data-table__col--numeric">$980.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><code>data-row-state="error"</code> — the tint plus a
+    start border, and the badge/message in the row carries the reason (two-channel:
+    never the color alone). This is the visual channel the dirty row state
+    above reuses in amber.</p>
+  </section>
+  <section class="demo">
     <h2>Performance at scale — measured, not guessed</h2>
     <p>Measured 2026-08-15 against the full table stack (sticky header, row
     checkboxes, badges, container query, <code>initDataTables()</code>) in the

@@ -182,6 +182,26 @@ const markup = `<span class="bo-amount">
   </section>
 
   <section class="demo">
+    <h2>Block — right-aligned totals on cards</h2>
+    <div class="bo-widget" style="inline-size: 100%; max-inline-size: 18rem">
+      <div class="bo-widget__header"><span class="bo-widget__title">PO-88213 total</span></div>
+      <div class="bo-widget__body">
+        <span class="bo-amount bo-amount--block bo-amount--strong">
+          <span class="bo-amount__currency">$</span>
+          <span class="bo-amount__value">12,400<span class="bo-amount__fraction">.00</span></span>
+        </span>
+        <span class="bo-amount bo-amount--block bo-amount--muted" style="margin-block-start: var(--bo-space-1)">
+          <span class="bo-amount__currency">$</span>
+          <span class="bo-amount__value">1,240<span class="bo-amount__fraction">.00</span></span>
+          <span class="bo-amount__unit">tax</span>
+        </span>
+      </div>
+    </div>
+    <p class="bo-u-text-muted"><code>--block</code> right-aligns a standalone amount
+    — card totals, summary panels. Inside a table you don't need it: the cell's
+    <code>__col--numeric</code> already aligns the column.</p>
+  </section>
+  <section class="demo">
     <h2>Unit of measure</h2>
     <Demo code={uom} />
     <p class="bo-u-text-muted"><code>__unit</code> carries <code>× EA</code>,

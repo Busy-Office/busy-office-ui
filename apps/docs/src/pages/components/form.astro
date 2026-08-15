@@ -49,6 +49,68 @@ const fieldMarkup = `<div class="bo-form-field">
     </form>
   </section>
   <section class="demo">
+    <h2>Required & disabled</h2>
+    <form class="bo-form-row" novalidate>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="req-native">Vendor</label>
+        <input class="bo-input" id="req-native" required placeholder="required attribute" />
+        <span class="bo-form-field__hint">Asterisk from the native <code>required</code> attribute.</span>
+      </div>
+      <div class="bo-form-field bo-form-field--required">
+        <label class="bo-form-field__label" for="req-class">Approver</label>
+        <input class="bo-input" id="req-class" placeholder="--required class" />
+        <span class="bo-form-field__hint"><code>--required</code> class — for fields whose requiredness is enforced server-side only.</span>
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="dis-input">PO number</label>
+        <input class="bo-input bo-input--code" id="dis-input" value="PO-88213" disabled />
+        <span class="bo-form-field__hint">Disabled — system-assigned, never editable here.</span>
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="dis-select">Currency</label>
+        <select class="bo-select" id="dis-select" disabled><option>USD</option></select>
+        <span class="bo-form-field__hint">Disabled select — fixed by company policy.</span>
+      </div>
+    </form>
+  </section>
+  <section class="demo">
+    <h2>Density — the same row at compact vs spacious</h2>
+    <div data-density="compact">
+      <form class="bo-form-row" novalidate aria-label="Compact density">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="den-c1">Vendor (compact)</label>
+          <input class="bo-input" id="den-c1" placeholder="28px controls" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="den-c2">Status</label>
+          <select class="bo-select" id="den-c2"><option>Pending</option></select>
+        </div>
+      </form>
+    </div>
+    <div data-density="spacious" style="margin-block-start: var(--bo-space-4)">
+      <form class="bo-form-row" novalidate aria-label="Spacious density">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="den-s1">Vendor (spacious)</label>
+          <input class="bo-input" id="den-s1" placeholder="44px controls" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="den-s2">Status</label>
+          <select class="bo-select" id="den-s2"><option>Pending</option></select>
+        </div>
+      </form>
+    </div>
+    <p class="bo-u-text-muted">One attribute on any wrapper — control heights, font
+    sizes, and field gaps move together. Compact for back-office grids, spacious for
+    touch/warehouse screens.</p>
+  </section>
+  <section class="demo">
+    <h2>Seamless — inline edit that reads as text</h2>
+    <p>Recorded value until hover/focus, then visibly a field:
+      <input class="bo-input bo-input--seamless" value="Acme Supply Co." aria-label="Vendor (inline edit)" />
+      — the same input the <a href="/components/data-table">data table</a> uses for
+      cell editing; it's a form input first, at home in prose and detail views too.</p>
+  </section>
+  <section class="demo">
     <h2>Markup — the canonical field recipe</h2>
     <pre><code>{fieldMarkup}</code></pre>
   </section>

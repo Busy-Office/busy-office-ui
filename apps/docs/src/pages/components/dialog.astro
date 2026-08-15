@@ -55,6 +55,62 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
       </form>
     </dialog>
   </section>
+  <section class="demo">
+    <h2>Wide — for tables and two-column forms</h2>
+    <button class="bo-btn bo-btn--secondary" data-dialog-trigger="lines-dialog">Review line items…</button>
+    <dialog class="bo-dialog bo-dialog--wide" id="lines-dialog" aria-labelledby="lines-title" data-state="closed">
+      <form method="dialog">
+        <header class="bo-dialog__header">
+          <h2 class="bo-dialog__title" id="lines-title">PO-88213 — line items</h2>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
+        </header>
+        <div class="bo-dialog__body">
+          <div class="bo-data-table-container">
+            <table class="bo-data-table" data-density="compact">
+              <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col" class="bo-data-table__col--numeric">Unit</th><th scope="col" class="bo-data-table__col--numeric">Total</th></tr></thead>
+              <tbody>
+                <tr><td>Standing desk</td><td class="bo-data-table__col--numeric">4</td><td class="bo-data-table__col--numeric">$1,208.00</td><td class="bo-data-table__col--numeric">$4,832.00</td></tr>
+                <tr><td>Monitor arm</td><td class="bo-data-table__col--numeric">8</td><td class="bo-data-table__col--numeric">$92.50</td><td class="bo-data-table__col--numeric">$740.00</td></tr>
+                <tr><td>Cable tray</td><td class="bo-data-table__col--numeric">12</td><td class="bo-data-table__col--numeric">$18.90</td><td class="bo-data-table__col--numeric">$226.80</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <footer class="bo-dialog__footer">
+          <button class="bo-btn bo-btn--secondary" value="cancel">Close</button>
+        </footer>
+      </form>
+    </dialog>
+    <p class="bo-u-text-muted"><code>--wide</code> raises the max width for content
+    that genuinely needs it — an embedded table (compact density pairs well here) or
+    a two-column form. Default width is right for confirmations; don't reach for
+    wide by default.</p>
+  </section>
+  <section class="demo">
+    <h2>Destructive confirm — no accidental dismiss</h2>
+    <button class="bo-btn bo-btn--danger" data-dialog-trigger="reject-dialog">Reject PO…</button>
+    <dialog class="bo-dialog" id="reject-dialog" aria-labelledby="reject-title" data-state="closed" data-dismissible="false">
+      <form method="dialog">
+        <header class="bo-dialog__header">
+          <h2 class="bo-dialog__title" id="reject-title">Reject PO-88213?</h2>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
+        </header>
+        <div class="bo-dialog__body">
+          <p>The requester will be notified and the PO returns to draft. This can't
+          be undone from this screen.</p>
+        </div>
+        <footer class="bo-dialog__footer">
+          <button class="bo-btn bo-btn--secondary" value="cancel">Keep it</button>
+          <button class="bo-btn bo-btn--danger" value="confirm">Reject</button>
+        </footer>
+      </form>
+    </dialog>
+    <p class="bo-u-text-muted">Clicking the backdrop closes a dialog <strong>by
+    default</strong> (light dismiss). For destructive or must-choose flows, opt out
+    with <code>data-dismissible="false"</code> — Esc and the explicit buttons still
+    work, only the accidental backdrop click is disarmed. Pair the destructive
+    action with <code>.bo-btn--danger</code> and lead with the safe choice.</p>
+  </section>
   <ApiTable
     component="dialog"
     js="REQUIRED: initDialogs() — dialogs never open without it. Call once; delegation survives all swaps."

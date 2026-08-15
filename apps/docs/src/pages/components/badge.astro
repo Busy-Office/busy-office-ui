@@ -32,6 +32,22 @@ const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</sp
     pill; auto-inverts in dark mode.</p>
     <Demo code={typeChip} layout="row" />
   </section>
+  <section class="demo">
+    <h2>In a table — the number-one placement</h2>
+    <div class="bo-data-table-container" style="max-inline-size: 28rem">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Invoice #</th><th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">INV-10234</td><td class="bo-data-table__col--numeric">$4,208.00</td><td><span class="bo-badge bo-badge--warning">Pending</span></td></tr>
+          <tr><td class="bo-data-table__col--code">INV-10235</td><td class="bo-data-table__col--numeric">$18,940.50</td><td><span class="bo-badge bo-badge--success">Approved</span></td></tr>
+          <tr><td class="bo-data-table__col--code">INV-10236</td><td class="bo-data-table__col--numeric">$730.25</td><td><span class="bo-badge bo-badge--danger">Rejected</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">A status column of badges next to numeric cells —
+    where badges actually live in an ERP. The tone word IS the text, so the meaning
+    never depends on the hue alone.</p>
+  </section>
   <ApiTable component="badge"
     notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />
   <Related links={[["/concepts/accessibility", "Accessibility model"], ["/components/data-table", "Data table"]]} />

@@ -36,6 +36,35 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
     </form>
   </section>
   <section class="demo">
+    <h2>Filtering something — bar + multi-select + matching rows</h2>
+    <form class="bo-filter-bar" role="search" aria-label="PO filters">
+      <button class="bo-btn bo-btn--secondary" popovertarget="flt-cc" data-multiselect-label="Cost center" type="button">Cost center</button>
+      <div class="bo-dropdown__menu" id="flt-cc" popover data-multiselect>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" checked /> CC-4021</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" /> CC-1180</label>
+      </div>
+      <span class="bo-chip bo-chip--active">CC-4021
+        <button class="bo-chip__remove" type="button" aria-label="Remove filter CC-4021">✕</button>
+      </span>
+      <span class="bo-chip">Overdue only</span>
+    </form>
+    <div class="bo-data-table-container" style="margin-block-start: var(--bo-space-2); max-inline-size: 28rem">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">PO #</th><th scope="col">Cost center</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">PO-88210</td><td class="bo-data-table__col--code">CC-4021</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
+          <tr><td class="bo-data-table__col--code">PO-88211</td><td class="bo-data-table__col--code">CC-4021</td><td class="bo-data-table__col--numeric">$18,940.50</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The full loop: the
+    <a href="/components/dropdown">multi-select dropdown</a> is where chip values
+    come from, the active chip echoes the applied filter, the rows below match it.
+    Also the base vs <code>--active</code> chip contrast — an inactive chip
+    ("Overdue only") is an available filter, an active one is applied and
+    removable.</p>
+  </section>
+  <section class="demo">
     <h2>Saved views <span class="bo-badge">opt-in</span></h2>
     <p class="bo-u-text-muted">
       Views are just links (server-rendered, zero new CSS) — but which one is
