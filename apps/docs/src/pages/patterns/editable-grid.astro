@@ -1,0 +1,238 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<table class="bo-data-table" data-row-edit>
+  <thead><tr>
+    <th scope="col">Item</th>
+    <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+    <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+    <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+  </tr></thead>
+  <tbody>
+    <tr data-row-id="LINE-1">
+      <td>
+        <!-- Combobox in a cell: no special wiring, just the normal markup -->
+        <div class="bo-combobox">
+          <input class="bo-input bo-input--seamless" role="combobox" id="line-1-item"
+              aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
+              autocomplete="off" aria-label="Item" value="Steel bracket, 40mm" />
+          <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
+            <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+            <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+          </ul>
+        </div>
+      </td>
+      <td class="bo-data-table__col--numeric">
+        <!-- Cell-level error: .bo-form-field wraps the input + message pair
+             (the SAME contract as a standalone form field — no new CSS) -->
+        <div class="bo-form-field" style="margin-block-end: 0">
+          <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+              value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
+              aria-label="Quantity" />
+          <span class="bo-form-field__message" id="line-1-qty-err" role="alert">Exceeds on-hand (200)</span>
+        </div>
+      </td>
+      <td class="bo-data-table__col--numeric">
+        <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+            step="0.01" value="3.40" aria-label="Unit price" />
+      </td>
+      <td class="bo-data-table__row-edit-actions">
+        <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+        <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button class="bo-btn bo-btn--secondary" type="button" data-line-add>+ Add line</button>
+
+<script type="module">
+  import { initRowEdit, initCombobox } from "@busy-office/ui/js";
+  initRowEdit(); initCombobox();     // once — delegation covers rows added later
+
+  // Add/remove a line is plain app logic, not a framework behavior — the
+  // framework has no opinion on WHERE new rows come from (a <template>
+  // clone here; your app might fetch a fragment from the server instead).
+  let n = 1;
+  document.querySelector("[data-line-add]").addEventListener("click", () => {
+    n += 1;
+    const tbody = document.querySelector("[data-row-edit] tbody");
+    const row = document.getElementById("line-template").content.cloneNode(true);
+    const tr = row.querySelector("tr");
+    tr.dataset.rowId = \`LINE-\${n}\`;
+    // Combobox listbox ids must be unique per row — reusing one id across
+    // cloned rows is the exact collision bug fixed 2026-08-15 (widget #2
+    // silently driving widget #1). Give each clone its own pair.
+    const list = row.querySelector("ul");
+    list.id = \`line-\${n}-list\`;
+    row.querySelector('[role="combobox"]').setAttribute("aria-controls", list.id);
+    tbody.appendChild(row);
+    tbody.lastElementChild.querySelector("input").focus();
+    // No re-init call: initRowEdit()/initCombobox() are document-level
+    // delegation — the new row's input and combobox work immediately.
+  });
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-line-remove]");
+    if (btn) btn.closest("tr").remove();
+  });
+</script>`;
+---
+<Gallery title="Pattern: editable grid">
+  <p class="demo-note">
+    Line-item entry — a PO, an invoice, a pick list — composed entirely from
+    existing pieces: <a href={base + '/components/data-table'}>multi-row inline edit</a>
+    for dirty/save-per-row, a <a href={base + '/components/combobox'}>combobox</a> in a
+    cell for item lookup, the standard <a href={base + '/components/form'}>form-field
+    error contract</a> at cell granularity, and plain app code for add/remove
+    line (the framework has no opinion on where a new row comes from). Zero
+    new CSS, zero new JS behaviors.
+  </p>
+
+  <section class="demo">
+    <table class="bo-data-table" data-row-edit id="eg-table">
+      <thead><tr>
+        <th scope="col">Item</th>
+        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+        <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+      </tr></thead>
+      <tbody>
+        <tr data-row-id="LINE-1">
+          <td>
+            <div class="bo-combobox">
+              <input class="bo-input bo-input--seamless" role="combobox" id="line-1-item"
+                  aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
+                  autocomplete="off" aria-label="Item" value="Steel bracket, 40mm" />
+              <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
+                <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+                <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+              </ul>
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-form-field" style="margin-block-end: 0">
+              <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+                  value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
+                  aria-label="Quantity" />
+              <span class="bo-form-field__message" id="line-1-qty-err" role="alert">Exceeds on-hand (200)</span>
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+                step="0.01" value="3.40" aria-label="Unit price" />
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+            <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <template id="eg-template">
+      <tr data-row-id="">
+        <td>
+          <div class="bo-combobox">
+            <input class="bo-input bo-input--seamless" role="combobox"
+                aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
+                autocomplete="off" aria-label="Item" placeholder="Search items…" />
+            <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
+              <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+              <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+            </ul>
+          </div>
+        </td>
+        <td class="bo-data-table__col--numeric">
+          <input class="bo-input bo-input--seamless bo-input--numeric" type="number" value="0" aria-label="Quantity" />
+        </td>
+        <td class="bo-data-table__col--numeric">
+          <input class="bo-input bo-input--seamless bo-input--numeric" type="number" step="0.01" value="0.00" aria-label="Unit price" />
+        </td>
+        <td class="bo-data-table__row-edit-actions">
+          <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+          <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+          <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+          <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+        </td>
+      </tr>
+    </template>
+    <p style="margin-block-start: var(--bo-space-3)">
+      <button class="bo-btn bo-btn--secondary" type="button" id="eg-add">+ Add line</button>
+    </p>
+    <p class="bo-u-text-muted">Try it: the Qty cell above starts invalid (exceeds
+    on-hand) — the message is a normal <code>.bo-form-field__message</code>, just
+    at cell granularity. Pick an option in the Item combobox: it marks the row
+    dirty exactly like typing does (2026-08-15 fix — committing an option now
+    fires a real <code>input</code> event, not just <code>bo:combobox-select</code>,
+    so it composes with any generic field listener). Add a line: the new row's
+    combobox and inline edit work immediately, no re-init call.</p>
+  </section>
+
+  <script>
+    import { initRowEdit, initCombobox } from '@busy-office/ui/js';
+    initRowEdit();
+    initCombobox();
+    let n = 1;
+    document.getElementById('eg-add').addEventListener('click', () => {
+      n += 1;
+      const tpl = document.getElementById('eg-template') as HTMLTemplateElement;
+      const frag = tpl.content.cloneNode(true) as DocumentFragment;
+      const row = frag.querySelector('tr')!;
+      row.dataset.rowId = `LINE-${n}`;
+      const list = row.querySelector('ul')!;
+      const combo = row.querySelector('input[role="combobox"]')!;
+      list.id = `line-${n}-list`;
+      combo.setAttribute('aria-controls', list.id);
+      document.querySelector('#eg-table tbody')!.appendChild(row);
+      (row.querySelector('input') as HTMLElement).focus();
+    });
+    document.getElementById('eg-table')!.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest('[data-line-remove]');
+      if (btn) btn.closest('tr')!.remove();
+    });
+  </script>
+
+  <section class="demo">
+    <h2>What composes, and what doesn't (out of the box)</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Combobox in a cell</strong> — no special markup; it's the same
+      <code>.bo-combobox</code> as anywhere else. <code>initCombobox()</code> and
+      <code>initRowEdit()</code> are independent document-level delegations —
+      call both once, in any order.</li>
+      <li><strong>Cell-level error</strong> — wrap the cell's input + message in
+      <code>.bo-form-field</code> (a plain div; nothing form-specific about it)
+      and it gets the exact same <code>:has([aria-invalid])</code> reveal as a
+      standalone field. <code>margin-block-end: 0</code> cancels the field
+      wrapper's normal stacking gap, which fights a dense cell.</li>
+      <li><strong><code>data-grid-nav</code> — deliberately NOT used above.</strong>
+      It pulls every cell's input out of the Tab sequence (roving tabindex, one
+      cell tabbable at a time; Enter re-enters the widget) — the right model for
+      a mostly-read, occasionally-edited grid, but it fights rapid sequential
+      entry, which wants every input directly tabbable. Combining them is
+      possible (an input is still <code>FOCUSABLE</code> by <code>data-grid-nav</code>'s
+      definition, so Enter-to-focus works) but changes the interaction model
+      app-wide — pick one per table, don't mix without a reason.</li>
+      <li><strong>Add/remove line</strong> is plain app code, not a behavior —
+      shown here as a <code>&lt;template&gt;</code> clone; a real app might fetch
+      the row markup from the server instead (HTMX <code>hx-get</code> +
+      <code>hx-swap="beforeend"</code>). Either way, delegation means the new
+      row works with zero re-init.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <Related links={[
+    ["/components/data-table", "Data table"],
+    ["/components/combobox", "Combobox"],
+    ["/components/form", "Forms"],
+    ["/patterns/invoice-list", "Invoice list"],
+  ]} />
+</Gallery>

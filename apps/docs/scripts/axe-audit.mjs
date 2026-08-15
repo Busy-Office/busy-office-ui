@@ -32,7 +32,13 @@ for (const path of pages.sort()) {
   for (const width of WIDTHS) {
     await page.setViewport({ width, height: 900 });
     const res = await page.goto('http://localhost:8081' + path, { waitUntil: 'networkidle0', timeout: 20000 });
-    if (!res || res.status() !== 200) { summary[`${path}@${width}`] = [{ id: 'HTTP-' + (res && res.status()) }]; continue; }
+    // 304 = browser cache revalidation (legitimate on a repeat same-session
+    // navigation, e.g. re-running the scan after a fix) — only a real
+    // non-2xx/304 status means the page didn't actually load.
+    if (!res || ![200, 304].includes(res.status())) {
+      summary[`${path}@${width}`] = [{ id: 'HTTP-' + (res && res.status()) }];
+      continue;
+    }
     await page.evaluate(AXE);
     const r = await page.evaluate(async () =>
       (await window.axe.run(document, { resultTypes: ['violations'] })).violations

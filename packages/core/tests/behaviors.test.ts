@@ -866,6 +866,37 @@ describe('initRowEdit', () => {
     (t.querySelector('[data-row-edit-cancel]') as HTMLElement).click();
     expect(input.value).toBe('99');
   });
+
+  it('composes with a combobox cell: committing an option marks the row dirty', () => {
+    html`
+      <table class="bo-data-table" data-row-edit>
+        <tbody>
+          <tr data-row-id="PO-1">
+            <td>
+              <div class="bo-combobox">
+                <input class="bo-input bo-input--seamless" role="combobox" id="grid-cb"
+                    aria-expanded="false" aria-controls="grid-cb-list" aria-autocomplete="list" autocomplete="off" />
+                <ul class="bo-combobox__listbox" id="grid-cb-list" role="listbox" popover>
+                  <li class="bo-combobox__option" role="option" id="grid-opt-1" data-value="CC-1180">CC-1180</li>
+                </ul>
+              </div>
+            </td>
+            <td>
+              <span data-row-edit-dirty hidden>Unsaved</span>
+              <button type="button" data-row-edit-save hidden>Save</button>
+              <button type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+    ui.initRowEdit();
+    ui.initCombobox();
+    const row = document.querySelector('tr') as HTMLTableRowElement;
+    (document.getElementById('grid-opt-1') as HTMLElement).click();
+    expect(row.getAttribute('data-row-state')).toBe('dirty');
+    expect((row.querySelector('[data-row-edit-save]') as HTMLElement).hidden).toBe(false);
+  });
 });
 
 describe('initTableToolbar', () => {

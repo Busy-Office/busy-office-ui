@@ -8,6 +8,12 @@ pin.
 
 ## Unreleased
 
+- Fixed: combobox `commit()` now dispatches a real `input` event (in
+  addition to `bo:combobox-select`), so committing an option composes with
+  any generic form-field listener — e.g. `data-row-edit`'s dirty tracking,
+  which previously never saw a combobox-in-a-cell commit. Guarded against
+  re-triggering the combobox's own filter listener.
+
 - Docs/meta: per-behavior keyboard support is now generated, gated API
   documentation (`dist/keymap.json`, `@busy-office/ui/keymap`) rendered as a
   table on the JS behaviors page; the docs site gained a skip-to-content link.

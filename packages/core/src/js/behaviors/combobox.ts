@@ -22,6 +22,10 @@
  * behavior, no extra code. Call once.
  */
 let installed = false;
+// commit() dispatches a synthetic `input` for generic form-field listeners
+// (see commit()) — the combobox's OWN `input` listener must ignore that one
+// event, or it re-filters the just-committed text and reopens the list.
+const suppressNextInput = new WeakSet<HTMLInputElement>();
 
 // Resolution prefers the shared .bo-combobox container over document-wide
 // id lookup: a duplicated fragment (the classic partial-swap accident)
@@ -129,6 +133,14 @@ function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLEleme
   close(listbox);
   input.setAttribute('aria-expanded', 'false');
   setActive(input, listbox, null);
+  // Programmatic .value assignment fires no native events — dispatch a real
+  // `input` first so any generic form-field listener (row-edit's dirty
+  // tracking, native form validation, a plain onChange handler) sees the
+  // commit exactly like it would see typed input. bo:combobox-select is the
+  // richer, combobox-specific event for consumers who want the option's
+  // data-value directly.
+  suppressNextInput.add(input);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
   input.dispatchEvent(
     new CustomEvent('bo:combobox-select', {
       bubbles: true,
@@ -150,6 +162,7 @@ export function initCombobox(): void {
   document.addEventListener('input', (e) => {
     const input = e.target as HTMLInputElement;
     if (input.getAttribute?.('role') !== 'combobox') return;
+    if (suppressNextInput.delete(input)) return;
     const listbox = listboxFor(input);
     if (listbox) filter(input, listbox);
   });

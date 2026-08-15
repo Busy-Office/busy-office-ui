@@ -1424,12 +1424,14 @@ internal discipline. Ordered by severity; confirmed defects first.
        hidden off-screen unfocused / visible on focus, targets the real
        `#main-content`; screenshotted live. 56 tests, both link checks,
        32 baselines untouched.
-9. [ ] **Editable-grid recipe** (Devi HIGH). The screen-#40 page: combobox
+9. [x] **Editable-grid recipe** (Devi HIGH). The screen-#40 page: combobox
        in a cell, cell-level error pattern, add/remove line, what
        `data-grid-nav` does and doesn't compose with. Accept: one recipe page
        with a working demo + honest limits, linked from data-table.
-10. [ ] **po-app reachability** (Devi M). Link `examples/po-app` wherever the
+10. [x] **po-app reachability** (Devi M). Link `examples/po-app` wherever the
        docs cite it. Accept: every textual mention is a link.
+       **Done 2026-08-15**: all 3 textual mentions on data-table now link
+       the GitHub tree (200 verified).
 
 **[HUMAN CALL]s from the review** (owner, whenever ready — defaults proposed
 in the grill doc): keep `data-theme`/`data-density` unprefixed and commit, or
