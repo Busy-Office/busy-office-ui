@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Added: a generated Accessibility Conformance Report (`dist/acr.json`,
+  `@busy-office/ui/acr`, rendered at `/reference/acr`) -- 16 WCAG 2.2 A/AA
+  criteria with verdicts and remarks assembled from the same evidence the
+  other build gates already produce (contrast, keyboard map, event/ARIA
+  coverage, a forced-colors source scan). Gated: a remark citing a
+  nonexistent component fails the build.
+
 - Fixed: combobox `commit()` now dispatches a real `input` event (in
   addition to `bo:combobox-select`), so committing an option composes with
   any generic form-field listener — e.g. `data-row-edit`'s dirty tracking,

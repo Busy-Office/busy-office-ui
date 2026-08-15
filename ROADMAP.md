@@ -1440,7 +1440,7 @@ the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
 
 ## Slice 15 (queued) — conformance artifacts (partially owner-gated)
 
-11. [ ] **Generated ACR** (Ines). VPAT-2.5-shaped page: WCAG 2.2 AA criterion
+11. [x] **Generated ACR** (Ines). VPAT-2.5-shaped page: WCAG 2.2 AA criterion
        × component, verdicts Supports / Conditional-on-adopter / Not
        Evaluated, generated from api.json + contrast.json + behaviors.json +
        the guarantees split. Accept: page generated, gated, linked from the

@@ -1,0 +1,92 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import acr from '@busy-office/ui/acr';
+import api from '@busy-office/ui/api';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const componentCount = Object.keys(api.components).length;
+
+const verdictBadge = {
+  Supports: 'bo-badge--success',
+  'Conditional-on-adopter': 'bo-badge--warning',
+  'Not Evaluated': 'bo-badge--type',
+};
+const counts = acr.criteria.reduce((c, r) => ((c[r.verdict] = (c[r.verdict] ?? 0) + 1), c), {} as Record<string, number>);
+---
+<Gallery title="Accessibility Conformance Report">
+  <p class="demo-note">
+    A VPAT-2.5-shaped report — {acr.standard} — <span class="bo-badge">generated</span>
+    from the same facts the build gates already produce (contrast pairs, keyboard
+    map, event/ARIA coverage, forced-colors emulation), not typed by hand. This is
+    <strong>not a substitute for a licensed accessibility auditor's ACR</strong> —
+    it's the honest, machine-checkable slice: automated evidence is cited by number
+    and regenerates every build, and a row with no automated evidence is marked
+    <strong>Not Evaluated</strong>, never inferred as Supports.
+  </p>
+
+  <section class="demo">
+    <h2>Summary</h2>
+    <p>
+      <span class="bo-badge bo-badge--success">{counts.Supports ?? 0} Supports</span>{' '}
+      <span class="bo-badge bo-badge--warning">{counts['Conditional-on-adopter'] ?? 0} Conditional-on-adopter</span>{' '}
+      <span class="bo-badge bo-badge--type">{counts['Not Evaluated'] ?? 0} Not Evaluated</span>
+    </p>
+    <p class="bo-u-text-muted">{acr.methodology}</p>
+  </section>
+
+  <section class="demo">
+    <h2>Criteria <span class="bo-badge">generated</span></h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr>
+          <th scope="col">SC</th>
+          <th scope="col">Criterion</th>
+          <th scope="col">Level</th>
+          <th scope="col">Conformance</th>
+          <th scope="col">Remarks</th>
+        </tr></thead>
+        <tbody>
+          {acr.criteria.map((c: any) => (
+            <tr>
+              <td class="bo-data-table__col--code">{c.id}</td>
+              <td>{c.name}</td>
+              <td>{c.level}</td>
+              <td><span class={`bo-badge ${verdictBadge[c.verdict]}`}>{c.verdict}</span></td>
+              <td set:html={c.remarks.replace(/</g, '&lt;').replace(/>/g, '&gt;')} />
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Forced colors — components with explicit rules <span class="bo-badge">generated</span></h2>
+    <p>{acr.forcedColorsComponents.length} of {componentCount} components
+    carry an explicit <code>forced-colors</code> rule (most others survive on structure
+    alone — border, glyph, or text state that forced colors doesn't touch; see the
+    <a href={base + '/concepts/accessibility'}>accessibility model</a> for the two-channel
+    reasoning). Scanned from source, not asserted:</p>
+    <p class="bo-cluster">
+      {acr.forcedColorsComponents.map((name: string) => (
+        <a href={`${base}/components/${api.pageSlug[name] ?? name}`} class="bo-badge">{name}</a>
+      ))}
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>What "Not Evaluated" means here</h2>
+    <p>Two criteria above, plus the broader assistive-technology ledger (VoiceOver,
+    NVDA verbalization), require a human running real AT hardware — nothing this
+    build environment can automate. They stay Not Evaluated rather than being
+    inferred Supports from adjacent automated passes. Runtime evidence, once
+    gathered, gets recorded and cited here — see the
+    <a href={base + '/concepts/accessibility'}>honest-status ledger</a>.</p>
+  </section>
+
+  <Related links={[
+    ['/concepts/accessibility', 'Accessibility model'],
+    ['/base/colors', 'Contrast'],
+    ['/concepts/js-behaviors', 'JS behaviors (keymap + events)'],
+  ]} />
+</Gallery>
