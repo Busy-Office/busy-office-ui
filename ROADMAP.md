@@ -1311,6 +1311,76 @@ violations, no visual change (harness green).
 yet — pre-publish hardening" — post-publish staleness the earlier sweep
 missed (it grepped installation.astro, not the landing). Fixed.
 
+## Slice 14 (in progress) — public-contract hardening
+
+From the 2026-08-15 Objective review (`.roundtable/grill-objective-next-arc-
+2026-08-15.md`). All four seats voted **Harden**: the public contract lags the
+internal discipline. Ordered by severity; confirmed defects first.
+
+1. [ ] **Generated README claims + drift gate** (Rex; the "37 kB" claim is
+       FALSE — shipped min CSS is 57.4 kB). Size, behavior count, and the
+       event list in `packages/core/README.md` stamped from dist at build,
+       with a check that fails on drift (same doctrine as every other
+       generated surface). Accept: README numbers regenerate; gate red when
+       hand-edited; npm copy corrected at next release.
+2. [ ] **JS contract becomes semver surface** (Devi BLOCKER + Rex). The five
+       `bo:*` intent events' payload shapes + the 19 exports documented in a
+       GENERATED events/API table on the js-behaviors page, and the
+       versioning policy amended to name them API (matching the internal
+       freeze-audit Breaking rule that CLAUDE.md already carries). Accept:
+       table generated from source (like the `.d.ts` gate), versioning page
+       lists JS events, `bo:row-save` payload documented beyond a code
+       comment.
+3. [ ] **form-field `:has()` source fix** (Kofi; latent). Split the comma
+       list into the two separate rules the comment already mandates; correct
+       the comment. Accept: dist output equivalent-or-better; a source-level
+       note explains why the split is load-bearing.
+4. [ ] **Combobox `aria-controls` collision test** (Rex). Two comboboxes +
+       partial swap; fix the reverse lookup if the test reds. Accept: test in
+       the behaviors suite either passing against current code or with a fix.
+5. [ ] **Unlayered-CSS interop recipe** (Kofi HIGH). Tailwind-v3-preflight /
+       normalize coexistence: documented recipe (wrap resets in a layer,
+       stated layer order for mixed stacks) + a demoed interop page or
+       troubleshooting section. Accept: a Tailwind-preflight-style unlayered
+       reset demonstrably not nuking `.bo-btn` in the documented setup.
+6. [ ] **No-JS dark decision** (Kofi M-H). `color-scheme: light dark` on
+       `:root` ships a docs-app assumption: CSS-only consumers under dark OS
+       get light page + dark native chrome. Fix (`:root:not([data-theme])
+       { color-scheme: light }` or a real auto tier) + boot-snippet doc in
+       installation. Accept: no-JS link-the-CSS page renders coherently under
+       dark OS emulation.
+7. [ ] **Forced-colors sweep** (Rex M). 7/25 components have forced-colors
+       rules; sweep the remaining 18 (or publicly scope the claim). Accept:
+       every component either covered or named in a documented scope list;
+       CDP forced-colors spot-verification on the worst three.
+8. [ ] **Generated keyboard map + docs skip link** (Ines M). Per-behavior
+       Arrow/Esc/Home/End table extracted from source onto js-behaviors +
+       component pages; skip link targeting the existing `#main-content`.
+       Accept: map generated not hand-written; skip link first-focusable.
+9. [ ] **Editable-grid recipe** (Devi HIGH). The screen-#40 page: combobox
+       in a cell, cell-level error pattern, add/remove line, what
+       `data-grid-nav` does and doesn't compose with. Accept: one recipe page
+       with a working demo + honest limits, linked from data-table.
+10. [ ] **po-app reachability** (Devi M). Link `examples/po-app` wherever the
+       docs cite it. Accept: every textual mention is a link.
+
+**[HUMAN CALL]s from the review** (owner, whenever ready — defaults proposed
+in the grill doc): keep `data-theme`/`data-density` unprefixed and commit, or
+prefix now; declare `--bo-palette-*` internal in the versioning policy; run
+the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
+
+## Slice 15 (queued) — conformance artifacts (partially owner-gated)
+
+11. [ ] **Generated ACR** (Ines). VPAT-2.5-shaped page: WCAG 2.2 AA criterion
+       × component, verdicts Supports / Conditional-on-adopter / Not
+       Evaluated, generated from api.json + contrast.json + behaviors.json +
+       the guarantees split. Accept: page generated, gated, linked from the
+       accessibility concept; Not-Evaluated rows cite the AT gate.
+12. [ ] **AT runtime evidence** — NEEDS-RUNTIME (owner hardware): combobox
+       activedescendant, data-grid implicit roles, selection live-region on
+       VoiceOver + NVDA; results recorded in `.roundtable/` and cited by the
+       ACR.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
