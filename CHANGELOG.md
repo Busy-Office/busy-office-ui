@@ -129,6 +129,56 @@ No code changed by this audit — it's a documentation/decision pass. If a
 second consumer, that's an acceptable risk to accept explicitly, not a
 blocker — noting it here so it's a deliberate choice, not an oversight.
 
+### API freeze audit — addendum (2026-08-15, post-Slices 8-9)
+
+The first audit's own revisit condition fired: it held two items "pending
+a second real consumer; revisit at the next freeze pass," and Slices 8-9
+shipped both a second consumer for one of them and a batch of new surface
+(4 behaviors, 1 component, several attribute contracts) the audit never
+covered. Per-item calls, same honesty bar as the original:
+
+- **Graduated to frozen**: `initValidationSummary()` — the condition was
+  met exactly as stated: the Login pattern (`/patterns/login`) is now a
+  second real consumer of the `data-validation-summary`/
+  `data-validation-summary-box` contract, exercised live during its own
+  build round. The attribute names survived a second composition without
+  needing changes; freeze them.
+- **Still held, one more cycle**: `initScanInput()` — goods-receipt
+  remains its only real consumer. The contract was *hardened* since the
+  first audit (the `data-scan-status` live-region addition, and the
+  multi-ID `aria-describedby` fix from the ultrareview) — both additive,
+  neither breaking — but hardening under review pressure is not the same
+  as a second consumer exercising it. Same recommendation as before,
+  unchanged.
+- **Stable, freeze now**: multi-select dropdown (`data-multiselect`,
+  `data-multiselect-label`, `data-multiselect-count`) — already TWO real
+  consumers (the dropdown page's cost-center picker and the data-table
+  toolbar's Columns menu), and the contract survived an ultrareview
+  finding (icon-children triggers) with an additive fix.
+- **Stable, freeze now**: `initRowEdit()` (`data-row-edit`,
+  `data-row-state="dirty"`, `bo:row-save`) — deliberately reuses the
+  already-frozen error-row-state channel, and the "behavior tracks
+  intent, consumer persists" event split is now the established pattern
+  across four behaviors; the shape has real precedent pressure even
+  where the consumer count is one.
+- **Freeze the mechanism, hold the names one cycle**: `initTableToolbar()`
+  (`data-col-toggle`/`data-col`, `bo:table-export`) and `initLoadMore()`
+  (`data-table-load-more`, `data-load-more-auto`, `bo:table-load-more`)
+  — both mirror the frozen intent-event split, but each has exactly one
+  docs demo and zero external usage pressure; same "stable-but-not-yet-
+  guaranteed" bucket `initScanInput` sits in, same revisit condition.
+- **Stable, freeze now**: `.bo-combobox` + `initCombobox()`
+  (`bo:combobox-select`, `data-value`, `data-bo-open` is internal) — the
+  markup contract is the WAI-ARIA APG combobox pattern, i.e. externally
+  specified rather than invented here; the framework-specific surface is
+  small and mirrors the dropdown's popover mechanics. `data-bo-open` is
+  explicitly INTERNAL state, not API — consumers must not style or read
+  it (restated under "Explicitly NOT API").
+
+Net: 16 behaviors, 13 frozen, 3 held (`initScanInput`,
+`initTableToolbar`, `initLoadMore`) on the same explicit, dated revisit
+condition. No code changed by this addendum.
+
 ### Design reviews
 - `.roundtable/grill-2026-08-11.md` (slice 1), `grill-2026-08-12.md` (slice 2),
   `grill-2026-08-12-slice3.md` (slice 3) — findings, gates, and fix outcomes.
