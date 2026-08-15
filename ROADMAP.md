@@ -1242,7 +1242,7 @@ don't take `color`; initials read as placeholders).
        gated text colors). 55 tests unchanged; 32 visual baselines
        regenerated, green twice.
 
-## Slice 12 (in progress) — public feedback intake
+## Done — Slice 12: public feedback intake
 
 Triaged 2026-08-15 (user: "shall we start using linear or github to feedback
 the issue?"). Decision: **GitHub Issues** — the package is public on npm and
@@ -1311,7 +1311,7 @@ violations, no visual change (harness green).
 yet — pre-publish hardening" — post-publish staleness the earlier sweep
 missed (it grepped installation.astro, not the landing). Fixed.
 
-## Slice 14 (in progress) — public-contract hardening
+## Done — Slice 14: public-contract hardening
 
 From the 2026-08-15 Objective review (`.roundtable/grill-objective-next-arc-
 2026-08-15.md`). All four seats voted **Harden**: the public contract lags the
@@ -1438,7 +1438,7 @@ in the grill doc): keep `data-theme`/`data-density` unprefixed and commit, or
 prefix now; declare `--bo-palette-*` internal in the versioning policy; run
 the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
 
-## Slice 15 (queued) — conformance artifacts (partially owner-gated)
+## Slice 15 (in progress — item 12 owner-gated) — conformance artifacts
 
 11. [x] **Generated ACR** (Ines). VPAT-2.5-shaped page: WCAG 2.2 AA criterion
        × component, verdicts Supports / Conditional-on-adopter / Not
@@ -1449,6 +1449,36 @@ the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
        activedescendant, data-grid implicit roles, selection live-region on
        VoiceOver + NVDA; results recorded in `.roundtable/` and cited by the
        ACR.
+
+## Slice 16 — docs IA, compared against 5 CSS frameworks (user wishlist)
+
+Triaged 2026-08-16 (user: "well structure framework document - pls compare
+with other CSS framework... make the user like to use it, easy to
+navigate"). Full comparison: `.roundtable/docs-ia-comparison-2026-08-16.md`.
+Fetched Tailwind, shadcn/ui, Bootstrap, Pico CSS, DaisyUI live; found 6 of 8
+well-regarded patterns already in place (search, quantified landing pitch,
+live interactive hero, ≤2-level nesting, philosophy/how split, install-to-
+result flow) and two real gaps.
+
+1. [x] **Demo-first, spec-last on every component page** — `ClassRef` moved
+       from right after the opener to immediately before `ApiTable`, across
+       all 24 pages (mechanical, content untouched); CLAUDE.md skeleton,
+       `check-page-shape.mjs`, and `new-component.mjs` updated so new pages
+       follow the corrected order by default. Zero exceptions across the 4
+       frameworks studied that have a component catalog — this was the
+       single highest-ranked finding.
+2. [x] **Sidebar regrouped by task** (DaisyUI-style: Actions / Data input /
+       Data display / Feedback / Navigation & layout) — replaces one flat
+       22-item "Components" list plus an inconsistent 3-item "Data display"
+       side-group.
+3. [x] **Found + fixed while verifying**: button loading state's whole-
+       element `opacity: 0.7` dropped white-on-accent text to ~3.24:1
+       (axe color-contrast, serious). Removed — the documented contract
+       already relies on the consumer's text change ("Saving…") as the
+       visible signal, so the dimming was decorative, not load-bearing.
+
+**Verified**: both link checks, axe zero (56 pages × 2 widths), 32 visual
+baselines, 57 tests, stylelint, live both themes.
 
 ## Slice 17 — ERP component gaps, compared against 4 enterprise design systems
 
@@ -1544,36 +1574,6 @@ already fully covered (live-demoed on `/components/date`) — same correction.
 baselines, 57 tests, stylelint, live in both themes — click-toggle, real
 keyboard arrow-navigation between radios, focus ring on the correct element,
 disabled-segment state.
-
-## Slice 16 — docs IA, compared against 5 CSS frameworks (user wishlist)
-
-Triaged 2026-08-16 (user: "well structure framework document - pls compare
-with other CSS framework... make the user like to use it, easy to
-navigate"). Full comparison: `.roundtable/docs-ia-comparison-2026-08-16.md`.
-Fetched Tailwind, shadcn/ui, Bootstrap, Pico CSS, DaisyUI live; found 6 of 8
-well-regarded patterns already in place (search, quantified landing pitch,
-live interactive hero, ≤2-level nesting, philosophy/how split, install-to-
-result flow) and two real gaps.
-
-1. [x] **Demo-first, spec-last on every component page** — `ClassRef` moved
-       from right after the opener to immediately before `ApiTable`, across
-       all 24 pages (mechanical, content untouched); CLAUDE.md skeleton,
-       `check-page-shape.mjs`, and `new-component.mjs` updated so new pages
-       follow the corrected order by default. Zero exceptions across the 4
-       frameworks studied that have a component catalog — this was the
-       single highest-ranked finding.
-2. [x] **Sidebar regrouped by task** (DaisyUI-style: Actions / Data input /
-       Data display / Feedback / Navigation & layout) — replaces one flat
-       22-item "Components" list plus an inconsistent 3-item "Data display"
-       side-group.
-3. [x] **Found + fixed while verifying**: button loading state's whole-
-       element `opacity: 0.7` dropped white-on-accent text to ~3.24:1
-       (axe color-contrast, serious). Removed — the documented contract
-       already relies on the consumer's text change ("Saving…") as the
-       visible signal, so the dimming was decorative, not load-bearing.
-
-**Verified**: both link checks, axe zero (56 pages × 2 widths), 32 visual
-baselines, 57 tests, stylelint, live both themes.
 
 ## Explore log
 
