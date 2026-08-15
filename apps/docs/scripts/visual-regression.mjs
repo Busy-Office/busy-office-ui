@@ -100,11 +100,11 @@ for (const theme of THEMES) {
           // The app shell is 100dvh/overflow-hidden with an inner scroller —
           // fullPage:true only ever saw the first viewport (grill finding,
           // Rex). Unlock it so the document itself carries the full height.
-          // Known trade-off: at 390px the unlocked shell lays sidebar+main
-          // side-by-side, so narrow shots verify CONTENT rendering, not the
-          // shell's mobile chrome; element-scoped shots are the follow-up.
+          // overflow-x:clip keeps content wider than the viewport clipped
+          // exactly as the real scroller would — without it, wide code
+          // blocks blew the 390px document out to 858px (grill follow-up).
           '.bo-app-shell{block-size:auto!important;overflow:visible!important}' +
-          '.bo-app-shell__main{block-size:auto!important;overflow:visible!important}' +
+          '.bo-app-shell__main{block-size:auto!important;overflow:visible!important;overflow-x:clip!important}' +
           '.bo-app-shell__sidebar{position:static!important;block-size:auto!important}';
         document.head.append(s);
       });

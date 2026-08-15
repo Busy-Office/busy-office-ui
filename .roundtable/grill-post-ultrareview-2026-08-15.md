@@ -46,10 +46,11 @@ not harm AT exposure and the forced-colors fallback is right.
    Related below the fold were never screenshotted; "32 shots checked"
    overstated coverage. **FIXED**: the harness's injected style now
    unlocks the shell (`block-size:auto/overflow:visible`), baselines
-   regenerated — data-table now 1440×6442. Documented trade-off: at
-   390px the unlocked shell renders sidebar+main side-by-side, so narrow
-   shots verify content, not mobile shell chrome (element-scoped shots
-   are the follow-up).
+   regenerated — data-table now 1440×6442. The 390px trade-off was then
+   closed same-session: the 858px-wide narrow shots were horizontal
+   CONTENT overflow escaping the unlocked scroller (wide code blocks),
+   not shell layout — `overflow-x: clip` on the main scroller keeps
+   narrow baselines at a true 390px while capturing full height.
 2. **WORKING/HIGH — ratio threshold scaled with page height**: 0.1% of a
    1.44M-px shot = 1,440px budget; a broken badge (~1,300px) passed
    silently. **FIXED**: absolute 100px changed-pixel budget (same-machine
@@ -84,9 +85,12 @@ not harm AT exposure and the forced-colors fallback is right.
    compounding; `evaluateOnNewDocument` accumulation is deterministic
    (fragile — noted); pagefind doesn't break `networkidle0`; /receive's
    vendor Map can't go stale (id→vendor only); /stress clamp holds.
-   Accepted LOWs: `.bo-progress` fixed 10rem width (wraps in narrow
-   `<th>`, NEEDS-RUNTIME); `JSON.stringify`-into-script pattern in
-   /receive (safe with current data).
+   Accepted LOWs: `.bo-progress` fixed 10rem width — its NEEDS-RUNTIME
+   was then resolved same-session: verified live at 390px inside the
+   /spend group header, the cell wraps to two clean lines with zero
+   overflow, and the over-budget path (134%: capped bar, real value in
+   text and aria-label) renders as documented; `JSON.stringify`-into-
+   script pattern in /receive (safe with current data).
 
 ## Outcome
 
