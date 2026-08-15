@@ -60,10 +60,10 @@ const page = (title, current, main) => `<!doctype html>
   </header>
   <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
     <ul>
-      <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▥</span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
-      <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">▤</span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
-      <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">Σ</span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
-      <li><a class="bo-sidebar-nav__link" href="/receive" ${current === '/receive' ? 'aria-current="page"' : ''}><span class="bo-sidebar-nav__icon" aria-hidden="true">⌾</span><span class="bo-sidebar-nav__label">Receive</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--grid bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--chart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/receive" ${current === '/receive' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--barcode bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Receive</span></a></li>
     </ul>
   </nav>
   <main class="bo-app-shell__main"><div class="bo-stack bo-stack--loose">${main}</div></main>
