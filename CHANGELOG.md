@@ -84,7 +84,15 @@ pin.
   dispatches `bo:table-load-more` on click, or on scroll-into-view with
   `data-load-more-auto` — consumer fetches/appends; zero new CSS. Login
   and App Launch pattern pages (both zero new CSS). Nine ultrareview
-  findings fixed in one batch (see that commit for the list).
+  findings fixed in one batch (see that commit for the list). Grouped
+  rows + subtotals documented as a composition (no component needed —
+  proven in po-app's `/spend`). `.bo-progress` — styled NATIVE
+  `<progress>` (platform value/max + progressbar role, zero JS/ARIA),
+  base + `--warning`/`--danger` tones, three new 3:1 fill-on-track
+  contrast pairs (which caught a latent dark-theme `warning-strong`
+  token gap, now remapped). `.bo-tree` — hierarchy navigation on native
+  `<details>/<summary>` (zero JS/ARIA), explicitly navigation rather
+  than an APG TreeView.
 
 ### API freeze audit (2026-08-15)
 

@@ -1,0 +1,115 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+
+const markup = `<nav aria-label="Cost centers">
+  <ul class="bo-tree">
+    <li>
+      <details class="bo-tree__branch" open>
+        <summary class="bo-tree__label">Operations</summary>
+        <ul>
+          <li><a class="bo-tree__link" href="#" aria-current="page">CC-4021 — Warehouse</a></li>
+          <li><a class="bo-tree__link" href="#">CC-2205 — Logistics</a></li>
+          <li>
+            <details class="bo-tree__branch">
+              <summary class="bo-tree__label">Facilities</summary>
+              <ul>
+                <li><a class="bo-tree__link" href="#">CC-1180 — Maintenance</a></li>
+                <li><a class="bo-tree__link" href="#">CC-1181 — Security</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </details>
+    </li>
+    <li>
+      <details class="bo-tree__branch">
+        <summary class="bo-tree__label">Finance</summary>
+        <ul>
+          <li><a class="bo-tree__link" href="#">CC-3390 — Accounting</a></li>
+        </ul>
+      </details>
+    </li>
+  </ul>
+</nav>`;
+---
+<Gallery title="Tree">
+  <p class="demo-note">
+    Hierarchy navigation for deep ERP structures — cost-center trees, BOM
+    explorers, org units. Built on native
+    <strong><code>&lt;details&gt;/&lt;summary&gt;</code></strong>: open/closed
+    state, Enter/Space toggling, and keyboard focus come from the platform —
+    zero JS, zero ARIA wiring. This is <em>navigation</em> (links + disclosures),
+    not a WAI-ARIA TreeView — see the note below for when you'd need that instead.
+  </p>
+  <ClassRef component="tree" />
+
+  <section class="demo">
+    <h2>Basic — try it (keyboard: Tab, then Enter/Space)</h2>
+    <nav aria-label="Cost centers">
+      <ul class="bo-tree" style="max-inline-size: 20rem">
+        <li>
+          <details class="bo-tree__branch" open>
+            <summary class="bo-tree__label">Operations</summary>
+            <ul>
+              <li><a class="bo-tree__link" href="#" aria-current="page">CC-4021 — Warehouse</a></li>
+              <li><a class="bo-tree__link" href="#">CC-2205 — Logistics</a></li>
+              <li>
+                <details class="bo-tree__branch">
+                  <summary class="bo-tree__label">Facilities</summary>
+                  <ul>
+                    <li><a class="bo-tree__link" href="#">CC-1180 — Maintenance</a></li>
+                    <li><a class="bo-tree__link" href="#">CC-1181 — Security</a></li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details class="bo-tree__branch">
+            <summary class="bo-tree__label">Finance</summary>
+            <ul>
+              <li><a class="bo-tree__link" href="#">CC-3390 — Accounting</a></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+    <p class="bo-u-text-muted">The active node carries <code>aria-current="page"</code>
+    — same convention as the sidebar. Branch state is two-channel for free: the
+    chevron rotation is the visible cue, the native <code>&lt;details&gt;</code>
+    open/closed semantics are the programmatic one. Server-render <code>open</code>
+    on every ancestor of the current node so a deep link lands expanded.</p>
+  </section>
+
+  <section class="demo">
+    <h2>When you'd need a real TreeView instead</h2>
+    <p>This component covers hierarchy <em>navigation</em>: each label and link is
+    an ordinary Tab stop, clicking a leaf navigates. If you're building a
+    file-manager-style <em>selection</em> tree — single Tab stop, arrow-key
+    traversal, multi-select, typeahead — that's the WAI-ARIA APG TreeView
+    pattern: a genuinely different, heavier composite widget (<code>role="tree"</code>,
+    roving tabindex) that this framework doesn't ship. The split mirrors the
+    <a href="/components/data-table">data table's</a> Simple vs. Advanced tiers —
+    don't take the heavy widget when links and disclosures already do the job.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <ApiTable
+    component="tree"
+    notes={[
+      'Native <code>&lt;details&gt;/&lt;summary&gt;</code> carries the open/closed contract — no JS behavior exists because none is needed.',
+      'Server-render <code>open</code> on every ancestor <code>&lt;details&gt;</code> of the <code>aria-current</code> node so deep links land expanded.',
+      'Indentation is an <code>em</code>-based logical property — it scales with density and mirrors under RTL for free.',
+      'Navigation, not selection: for a single-tab-stop, arrow-key, multi-select tree (file managers), use the WAI-ARIA APG TreeView pattern — deliberately not shipped here.',
+    ]}
+  />
+  <Related links={[["/components/nav", "Navigation"], ["/concepts/accessibility", "Accessibility model"]]} />
+</Gallery>

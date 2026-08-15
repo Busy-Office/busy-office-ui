@@ -1257,10 +1257,26 @@ Highest-leverage bets (2026-08-14 review — ranked):
 - [ ] **Visual-regression harness** — screenshot diffing across density × theme in CI,
       so the "looks right" pass becomes mechanical like the rest.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
-- [ ] Component depth: data-grid virtualization hooks, tree/nav for deep
-      ERP hierarchies. (Amount field and command palette pulled forward
-      into Slice 5; date-field graduated into Slice 6 item 21; RTL audit
-      graduated into Slice 7 item 6 above.)
+- [ ] Component depth: data-grid virtualization hooks. (Amount field and
+      command palette pulled forward into Slice 5; date-field graduated
+      into Slice 6 item 21; RTL audit graduated into Slice 7 item 6;
+      **tree/nav shipped 2026-08-15 via the Explore fallback** — `.bo-tree`,
+      `packages/core/src/css/components/tree/tree.css`, built on native
+      `<details>/<summary>` so open/closed state, Enter/Space toggling and
+      Tab stops are platform semantics, zero JS/ARIA — the same
+      native-element-first call as `.bo-progress`. Explicitly navigation,
+      not an APG TreeView; the docs page states when the heavier
+      single-tab-stop selection-tree pattern would be needed instead and
+      that it's deliberately not shipped. `aria-current` active-node
+      convention shared with the sidebar; em-based logical-property
+      indentation verified mirroring under RTL live; chevron uses the
+      `content` alt-text idiom; reduced-motion honored. New
+      `/components/tree` docs page (page-shape: 24 pages, 2984 links);
+      verified live via Podman `--no-cache`, both themes, 390px, RTL,
+      and a real branch toggle. No new contrast pairs needed — reuses
+      already-gated sidebar pairings. Virtualization hooks remain open:
+      genuinely needs a perf scenario + design decision, not buildable
+      from composition.)
 
 ## Standing principles (not a phase — the bar every slice meets)
 

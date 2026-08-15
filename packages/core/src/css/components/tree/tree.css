@@ -1,0 +1,85 @@
+@layer bo-components {
+  /* Hierarchy navigation for deep ERP structures — cost-center trees, BOM
+     explorers, org units. Built on native <details>/<summary>: open/closed
+     state, Enter/Space toggling, and per-branch Tab stops come from the
+     platform, zero JS/ARIA. This is NAVIGATION (links + disclosures), not
+     a WAI-ARIA APG TreeView — reach for that heavier single-tab-stop
+     composite widget only for file-manager-style selection trees.
+
+     Markup: <ul class="bo-tree"> of <li>; a branch <li> holds
+     <details class="bo-tree__branch"> with a <summary class="bo-tree__label">
+     and a nested <ul>; a leaf <li> holds <a class="bo-tree__link">.
+     Active node: aria-current="page" on the link. */
+  .bo-tree,
+  .bo-tree ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Indent nested levels; em so it tracks the density font size. Logical
+     property, so RTL mirrors for free. */
+  .bo-tree ul {
+    padding-inline-start: 1.25em;
+  }
+
+  .bo-tree__label,
+  .bo-tree__link {
+    display: flex;
+    align-items: center;
+    gap: var(--bo-space-2);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border-radius: var(--bo-radius-sm);
+    color: var(--bo-color-text-secondary);
+    font-size: var(--bo-density-font-size);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .bo-tree__label:hover,
+  .bo-tree__link:hover {
+    background: var(--bo-state-hover-overlay);
+    color: var(--bo-color-text-primary);
+  }
+
+  .bo-tree__link[aria-current="page"] {
+    background: var(--bo-color-accent-subtle);
+    color: var(--bo-color-accent-text);
+    font-weight: var(--bo-font-weight-medium);
+  }
+
+  /* Chevron replaces the summary's default marker. Empty alt-text: the
+     open/closed state is already programmatic via <details>; the glyph is
+     the visible channel, not the announced one. */
+  .bo-tree__label {
+    list-style: none;
+  }
+
+  .bo-tree__label::-webkit-details-marker {
+    display: none;
+  }
+
+  .bo-tree__label::before {
+    content: "▸" / "";
+    flex: none;
+    inline-size: 1em;
+    text-align: center;
+    transition: rotate var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+
+  .bo-tree__branch[open] > .bo-tree__label::before {
+    rotate: 90deg;
+  }
+
+  /* Leaves align their text with sibling branch labels: pad by the same
+     1em chevron slot + gap the summary carries. */
+  .bo-tree__link {
+    padding-inline-start: calc(var(--bo-space-3) + 1em + var(--bo-space-2));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bo-tree__label::before {
+      transition: none;
+    }
+  }
+}
