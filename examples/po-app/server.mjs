@@ -196,6 +196,42 @@ const detailScreen = (p) => `
   </fieldset>
   <div>${timelineHtml(p)}</div>
 </div>
+<fieldset class="bo-form-section">
+  <legend class="bo-form-section__legend">Documents</legend>
+  <label class="bo-file-dropzone" data-file-dropzone>
+    <input class="bo-file-input bo-visually-hidden" type="file" multiple
+        id="po-doc-input" aria-label="Attach vendor documents">
+    <span>Drop files here, or click to browse</span>
+    <span class="bo-file-dropzone__hint">PDF, JPG, or PNG — up to 10 MB each</span>
+  </label>
+  <ul class="bo-file-list" id="po-doc-list" aria-live="polite"></ul>
+</fieldset>
+<script type="module">
+  import { initFileDropzone } from '/assets/js/index.js';
+  initFileDropzone();
+  document.getElementById('po-doc-input').addEventListener('change', (e) => {
+    const list = document.getElementById('po-doc-list');
+    for (const f of e.target.files) {
+      const li = document.createElement('li');
+      li.className = 'bo-file-list__item';
+      const name = document.createElement('span');
+      name.className = 'bo-file-list__name';
+      name.textContent = f.name;
+      const size = document.createElement('span');
+      size.className = 'bo-file-list__size';
+      size.textContent = (f.size / 1024).toFixed(0) + ' KB';
+      const rm = document.createElement('button');
+      rm.className = 'bo-btn bo-btn--sm bo-btn--danger-ghost';
+      rm.type = 'button';
+      rm.setAttribute('aria-label', 'Remove ' + f.name);
+      rm.textContent = '✕';
+      rm.addEventListener('click', () => li.remove());
+      li.append(name, size, rm);
+      list.append(li);
+    }
+    e.target.value = '';
+  });
+</script>
 ${p.status === 'Pending' ? `
 <div class="bo-cluster">
   <button class="bo-btn" data-dialog-trigger="approve-dlg">Approve…</button>

@@ -1636,6 +1636,31 @@ disabled-segment state.
       or if any of the newly-absent preconditions (dev server exposed to a
       network, `astro:assets` adopted, `vitest --ui` used) becomes true.
 
+- [x] **2026-08-16 — Dogfood: File upload on the po-app PO detail screen —
+      graduated** (Explore, dogfood-loop fallback). The Ideas seed list and
+      Long-term backlog are both exhausted of ready items, and the sanctioned
+      fallback is "extend `examples/po-app` and feel where it fights." The
+      three Slice 17 components (Segmented, File upload, Tag input, shipped
+      earlier the same day) had only ever been exercised in isolated docs
+      demos — never in the real tarball-consumer app. Added a "Documents"
+      `<fieldset>` to the PO detail screen (`.bo-file-dropzone` +
+      `initFileDropzone()`, client JS rendering `.bo-file-list` rows on
+      `change`, exactly the documented recipe) — the real scenario Slice 17
+      item 2 was scoped for ("attach a signed goods-receipt PDF, vendor
+      contract to a record"), not a contrived one; no new data model needed.
+      **Verified against the real npm package boundary**, not the docs
+      container: rebuilt `@busy-office/ui`, `podman build`'d the po-app
+      image fresh from a packed tarball, ran it, and drove the live page —
+      a synthetic `DataTransfer`-based file add through the real `input`
+      dispatched `change` correctly, rendered the file row, the remove
+      button removed it (zero console errors); confirmed the section
+      composes cleanly on both a Pending PO (next to the Approve dialog) and
+      an Approved one (no dialog) — no layout conflict either way. Zero new
+      CSS/JS — pure consumption of already-shipped, already-tested surface.
+      **Graduated directly** (no worktree spike needed — same precedent as
+      the icon-sizing fix: a small, unambiguous consumption of an existing
+      primitive, not an open interaction-model question).
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
