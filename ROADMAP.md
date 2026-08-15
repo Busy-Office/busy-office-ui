@@ -1191,7 +1191,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
       | 1 | Component surface | ✅ 24 component pages, 11 pattern pages (re-synced 2026-08-15 after Slices 8-9: combobox, progress, tree, Card alias, login, app-launch) | `check-page-shape.mjs`: 24 pages |
-      | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, **all 16 frozen** (freeze program complete — every graduation earned by a real second consumer) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda |
+      | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, all 16 **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda + correction |
       | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |
       | 5 | Contrast | ✅ 27 pairs × 2 themes + 1 brand preset, all AA (incl. three non-text 3:1 fill pairs) | `check-contrast.mjs` |
@@ -1200,7 +1200,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
       | 8 | RTL | ✅ audited — logical properties genuinely hold; 1 open product question flagged (numeric column alignment), not a bug | Slice 7 item 6 |
       | 9 | ≥1 real consumer | ✅ `examples/po-app` — **re-verified live THIS round**: `podman build` from current source, ran the container, clicked through dashboard → PO list → filter → select-all/bulk-approve → detail page → approval timeline. Everything worked. One visual anomaly investigated (an unchecked `.bo-checkbox` rendered as a solid square in this session's automated-Chrome screenshot) — confirmed via computed style (`accent-color` correctly resolved) and by checking it live (renders a proper checkmark) that this is an environment rendering quirk, not a library bug. | `examples/po-app`, this round |
       | 10 | a11y ledger | 🟡 2 items genuinely NEEDS-RUNTIME (VoiceOver, NVDA — no tool in this environment can drive either); everything else closed | Slice 6 item 5, item 18 |
-      | 11 | API frozen | ✅ Done — see `CHANGELOG.md`'s "API freeze audit (2026-08-15)" plus its post-Slices-8-9 addendum: `initValidationSummary` graduated to frozen once the Login pattern became its second real consumer (the audit's own stated condition); now 13 of 16 behaviors frozen, 3 held (`initScanInput`, `initTableToolbar`, `initLoadMore`) on the same explicit revisit condition, not silently frozen | `CHANGELOG.md` |
+      | 11 | API frozen | 🟡 **Provisional** (downgraded by the 2026-08-15 decisions grill): all 16 behaviors stable against internal usage — the audits are per-item and dated — but the terminal "frozen" claim required the *external* usage pressure the audit itself named, and po-app is not external (the same reasoning item 12 uses to refuse po-app as an adopter — the two items now agree: 12 = market validation, 11 = contract robustness, and 11's final grade waits on 12's adopter) | `CHANGELOG.md` freeze addenda + correction; `.roundtable/grill-decisions-2026-08-15.md` |
       | 12 | Real independent adopter | 🔴 **Not met, and `po-app` does NOT count** — it's a reference app built by this project's own team to test packaging, not an external team choosing to adopt it. This is the one item on the list that can't be closed by more loop iterations; it needs an actual second party. |
 
       **Net: 10 of 12 done, 2 genuinely NOT closeable by more loop
@@ -1228,7 +1228,11 @@ Highest-leverage bets (2026-08-14 review — ranked):
       Rails/Django asset recipe turned out to already exist — the
       installation page's skeleton IS the no-Node story (vendor the dist
       into any static/asset pipeline; now says so explicitly, naming
-      Rails/Django/PHP/Go). The Vite plugin and React/Vue wrapper set
+      Rails/Django/PHP/Go, and — per the decisions grill — recommending a
+      VERSIONED vendor path (`/vendor/busy-office-ui@0.1.0/`) so copied
+      assets have an explicit upgrade step and a tell-which-version
+      story; the fuller update-path answer folds into the versioned-docs
+      item at 1.0). The Vite plugin and React/Vue wrapper set
       stay **parked as speculative**: zero consumer demand to date, and
       the framework's plain-class + `data-*` contract already works
       unwrapped in every framework (po-app proves the no-framework path;
@@ -1283,7 +1287,12 @@ Highest-leverage bets (2026-08-14 review — ranked):
       regenerated from a verified-fresh build.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
 - [x] **Data-grid virtualization hooks — investigated with measurements,
-      closed as WON'T BUILD (2026-08-15).** The "needs a perf scenario"
+      closed as WON'T BUILD (2026-08-15; evidence extended same day after
+      the decisions grill challenged the single-machine data — 4× CPU
+      throttling approximating older corporate hardware: interactions
+      stay <700ms even at 20k rows, initial render is the real pain at
+      ~3.8s/20k throttled, reinforcing "paginate beyond a few thousand";
+      re-open condition published in the docs section).** The "needs a perf scenario"
       gate was satisfied by a stress harness added to po-app
       (`/stress?n=…`, kept for future re-measurement): N unvirtualized
       rows through the full table stack. Measured — 1k: 85ms render /

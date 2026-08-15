@@ -37,8 +37,8 @@ const markup = `<nav aria-label="Cost centers">
 ---
 <Gallery title="Tree">
   <p class="demo-note">
-    Hierarchy navigation for deep ERP structures — cost-center trees, BOM
-    explorers, org units. Built on native
+    Hierarchy navigation for deep ERP structures — cost-center trees, org
+    units, category drill-downs. Built on native
     <strong><code>&lt;details&gt;/&lt;summary&gt;</code></strong>: open/closed
     state, Enter/Space toggling, and keyboard focus come from the platform —
     zero JS, zero ARIA wiring. This is <em>navigation</em> (links + disclosures),
@@ -92,7 +92,9 @@ const markup = `<nav aria-label="Cost centers">
     file-manager-style <em>selection</em> tree — single Tab stop, arrow-key
     traversal, multi-select, typeahead — that's the WAI-ARIA APG TreeView
     pattern: a genuinely different, heavier composite widget (<code>role="tree"</code>,
-    roving tabindex) that this framework doesn't ship. The split mirrors the
+    roving tabindex) that this framework doesn't ship — and it's what a BOM <em>picker</em>
+    (select components, check for costing, drag to restructure) actually needs,
+    which is why BOM explorers are deliberately NOT claimed above. The split mirrors the
     <a href="/components/data-table">data table's</a> Simple vs. Advanced tiers —
     don't take the heavy widget when links and disclosures already do the job.</p>
   </section>

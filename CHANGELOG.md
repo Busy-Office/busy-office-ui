@@ -201,8 +201,21 @@ po-app gained a Receive screen (`/receive` — scan a PO number, receipt
 logged, unknown POs toast a warning) as `initScanInput`'s second real
 consumer, exercising the full contract including the `data-scan-status`
 live region (verified live: "Scanned PO-88210" announced, input cleared,
-next scan immediate). **`initScanInput` graduates too. Net: 16 of 16
-behaviors frozen — the freeze program is complete.**
+next scan immediate). **`initScanInput` graduates too.**
+
+**Terminal claim, corrected by the decisions grill (same day)**: 16 of 16
+behaviors are **stable against internal usage** — every contract survived
+at least two in-repo compositions, with the holds released by real (if
+in-house) usage pressure. Calling that "frozen" overreached on two
+counts the grill caught: the hold criterion was stated as *external*
+usage pressure and po-app is not external; and behaviors frozen by the
+morning audit were modified the same afternoon under a "fix" label
+(including an observable contract-semantics change: `initWizard()`
+install-once → re-runnable). So: **the freeze is provisional until the
+1.0-checklist item-12 independent adopter exercises the API. Until
+then, any contract-shape change to a stable behavior requires a
+CHANGELOG "Breaking" entry — not a fix note.** The per-item audit
+machinery stands; only the guarantee language was wrong.
 
 ### Design reviews
 - `.roundtable/grill-2026-08-11.md` (slice 1), `grill-2026-08-12.md` (slice 2),

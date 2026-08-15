@@ -326,19 +326,27 @@ const rows = [
           <tr><td class="bo-data-table__col--numeric">1,000</td><td class="bo-data-table__col--numeric">85 ms</td><td class="bo-data-table__col--numeric">4 ms</td><td class="bo-data-table__col--numeric">negligible</td></tr>
           <tr><td class="bo-data-table__col--numeric">5,000</td><td class="bo-data-table__col--numeric">174 ms</td><td class="bo-data-table__col--numeric">18 ms</td><td class="bo-data-table__col--numeric">231 ms</td></tr>
           <tr><td class="bo-data-table__col--numeric">20,000</td><td class="bo-data-table__col--numeric">558 ms</td><td class="bo-data-table__col--numeric">49 ms</td><td class="bo-data-table__col--numeric">610 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">5,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">1,625 ms</td><td class="bo-data-table__col--numeric">15 ms</td><td class="bo-data-table__col--numeric">174 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">20,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">3,783 ms</td><td class="bo-data-table__col--numeric">60 ms</td><td class="bo-data-table__col--numeric">686 ms</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="bo-u-text-muted">Render and scroll scale linearly with no cliff — the
-    first thing that visibly hurts is the <em>bulk-select style recalculation</em>
-    (the selected-row tint re-evaluating per row), a one-time hitch per bulk toggle.
-    Practical guidance: a few thousand rows are fine as-is; beyond that, paginate
-    server-side (<a href="/components/pagination">page numbers or load-more</a>) —
-    which dense ERP screens want anyway for findability. <strong>There are no
-    virtualization hooks, deliberately</strong>: the measurements don't justify the
-    complexity (windowing breaks Ctrl-F, select-all semantics, and screen-reader
-    row counts), and pagination is the answer at the scale where tables stop being
-    scannable.</p>
+    <p class="bo-u-text-muted">The 4×-throttle rows approximate older corporate
+    hardware (added after the decisions grill challenged the single-machine
+    evidence). Render and scroll scale linearly with no cliff; the recurring cost
+    is the <em>bulk-select style recalculation</em> (the selected-row tint
+    re-evaluating per row) — it repeats on EVERY bulk toggle, staying under 700 ms
+    even throttled. The genuine pain point is initial render at 20k rows on slow
+    hardware (~3.8 s). Practical guidance: a few thousand rows are fine as-is;
+    beyond that, paginate server-side (<a href="/components/pagination">page
+    numbers or load-more</a>) — which dense ERP screens want anyway for
+    findability. <strong>There are no virtualization hooks</strong>: windowing
+    breaks Ctrl-F, select-all semantics, and screen-reader row counts, and
+    pagination is the answer at the scale where tables stop being scannable.
+    Re-open condition, not dogma: if a real deployment measures interaction costs
+    breaching ~1 s at row counts it genuinely cannot paginate, the
+    <code>/stress</code> harness in <code>examples/po-app</code> is kept for
+    exactly that re-measurement.</p>
   </section>
   <section class="demo">
     <h2>Grouped rows + subtotals</h2>
