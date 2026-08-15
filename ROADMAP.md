@@ -1165,6 +1165,29 @@ its own real use case, same discipline as every other item here.
 has received is now shipped, closed as a documented composition, or
 explicitly resolved.
 
+## Slice 10 (in progress) — showcase depth grill
+
+Triaged 2026-08-15 (user direction): "grill each component & its doc page
+to give enough sample & variation for showcase." Two layers:
+
+1. [x] **Mechanical gap scan** — every class in the generated `api.json`
+       diffed against actual usage on its own docs page. Undemoed
+       variants found on 6 pages: dialog `--wide`; amount `--block`;
+       data-table `--sticky-col` + `__footer` (demoed elsewhere, never
+       on its own page); form `--required` + `--seamless` (seamless
+       lives on the data-table page only); nav `__spacer`, offcanvas
+       `--end`, sidebar `__heading`/`__section`. (dashboard's
+       `bo-badge--type` is extraction noise — badge's class.)
+2. [ ] **Judgment-layer grill** (panel, Consumer seat) — per page: are
+       the demos enough to SHOWCASE the component's range (states,
+       density behavior, realistic ERP compositions, not just the happy
+       path)? Accept: a per-page gap list ranked by showcase value.
+3. [ ] **Fix rounds** — close the ranked gaps: every documented variant
+       demoed on its own page, plus the highest-value state/composition
+       samples the grill names. Accept: mechanical scan returns zero
+       undemoed classes; each touched page verified live both themes;
+       gates + visual baselines updated.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
