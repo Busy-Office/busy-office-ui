@@ -1190,11 +1190,11 @@ Highest-leverage bets (2026-08-14 review — ranked):
 
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
-      | 1 | Component surface | ✅ 21 components, 20 documented patterns/behaviors | `check-page-shape.mjs`: 21 pages |
-      | 2 | JS behaviors | ✅ 12 opt-in behaviors, generated docs table | `dist/behaviors.json`: `initCount: 12` |
-      | 3 | Test coverage | ✅ 33 behavior tests, all passing | `npm test` |
+      | 1 | Component surface | ✅ 24 component pages, 11 pattern pages (re-synced 2026-08-15 after Slices 8-9: combobox, progress, tree, Card alias, login, app-launch) | `check-page-shape.mjs`: 24 pages |
+      | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, **all 16 frozen** (freeze program complete — every graduation earned by a real second consumer) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda |
+      | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |
-      | 5 | Contrast | ✅ 24 pairs × 2 themes + 1 brand preset, all AA | `check-contrast.mjs` |
+      | 5 | Contrast | ✅ 27 pairs × 2 themes + 1 brand preset, all AA (incl. three non-text 3:1 fill pairs) | `check-contrast.mjs` |
       | 6 | Zero runtime deps (shipped pkg) | ✅ confirmed, `htmx.org` is a **docs-app-only** dep | `packages/core/package.json` |
       | 7 | Dark mode / density / print / forced-colors | ✅ shipped, live-verified this session | Slices 5-6, item 18 |
       | 8 | RTL | ✅ audited — logical properties genuinely hold; 1 open product question flagged (numeric column alignment), not a bug | Slice 7 item 6 |
