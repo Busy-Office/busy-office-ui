@@ -1,0 +1,61 @@
+@layer bo-components {
+  /* A toggle between a handful of mutually-exclusive views (My approvals vs
+     Team approvals, compact vs comfortable) — the button-group alternative
+     to a <select> when there are only 2-5 options worth showing at once.
+     Native-element-first: real radio inputs (visually hidden via the
+     .bo-visually-hidden primitive, not display:none) carry the actual
+     semantics — group membership, "n of m", arrow-key navigation between
+     options — all for free from the platform. Zero JS. */
+  .bo-segmented {
+    display: inline-flex;
+    gap: 2px;
+    padding: 2px;
+    background: var(--bo-color-bg-muted);
+    border: 1px solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+  }
+
+  .bo-segmented__option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: calc(var(--bo-density-control-height) - 4px);
+    padding-inline: var(--bo-space-3);
+    border-radius: var(--bo-radius-sm);
+    font-size: var(--bo-density-font-size);
+    color: var(--bo-color-text-secondary);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* The checked option is the visible channel; aria-checked (native, free)
+     is the programmatic one. */
+  .bo-segmented__input:checked + .bo-segmented__option {
+    background: var(--bo-color-bg-surface);
+    color: var(--bo-color-text-primary);
+    font-weight: var(--bo-font-weight-medium);
+    box-shadow: var(--bo-shadow-sm);
+  }
+
+  /* The input is visually hidden (.bo-visually-hidden in the markup) but
+     still the real focus target — move the ring to its label sibling so it
+     traces the visible segment, not an invisible 1x1px box. */
+  .bo-segmented__input:focus-visible + .bo-segmented__option {
+    outline: var(--bo-focus-ring-width) solid var(--bo-color-focus-ring);
+    outline-offset: var(--bo-focus-ring-offset);
+  }
+
+  .bo-segmented__input:disabled + .bo-segmented__option {
+    color: var(--bo-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  @media (forced-colors: active) {
+    .bo-segmented__input:checked + .bo-segmented__option {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+}

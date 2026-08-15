@@ -1450,6 +1450,59 @@ the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
        VoiceOver + NVDA; results recorded in `.roundtable/` and cited by the
        ACR.
 
+## Slice 17 — ERP component gaps, compared against 4 enterprise design systems
+
+Triaged 2026-08-16 (user: "after research anything to triage the docs or add
+to components that may need for ERP"). Researched SAP Fiori, IBM Carbon, Ant
+Design/Pro, Salesforce Lightning (dedicated enterprise/ERP systems, distinct
+comparison set from Slice 16's marketing-framework pass). Full findings +
+one correction to the research agent's claims:
+`.roundtable/erp-gaps-2026-08-16.md`.
+
+1. [x] **Segmented control** (`.bo-segmented`) — appears in Carbon (Content
+       Switcher), Ant (Segmented), Fiori (Segmented Button); real scenario:
+       My Approvals / Team Approvals toggle, report-range switcher. Built:
+       native radio-group under the hood (visually-hidden but focusable
+       inputs, `:checked`/`:focus-visible` moved onto the label sibling so
+       the ring traces the visible segment) — zero JS, keyboard arrow-nav
+       and "n of m" free from the platform. Scaffolded via `new-component.mjs`,
+       which needed a real fix first: it still searched for the pre-Slice-16
+       flat `'Components'` sidebar section (silent drift since that slice) —
+       added a required `--group=` flag naming one of the 5 task groups.
+       **Bug found by actually clicking it, not just reading the code**:
+       demo markup gave inputs `.bo-visually-hidden` but forgot
+       `.bo-segmented__input`, so the state-selector CSS never matched —
+       fixed across all 9 markup instances (3 demos + canonical + template).
+2. [ ] **File upload** — Carbon/Ant/Salesforce; scenario: attach a signed
+       goods-receipt PDF or vendor contract to a record. Queued, not built —
+       real CSS surface (drag-drop zone, file list, progress), deserves its
+       own round rather than a rushed addition alongside item 1.
+3. [ ] **Tag/chip (token) input** — Fiori Token/MultiInput, Ant, Carbon;
+       scenario: multi-tag cost centers on a record, multiple approval-
+       routing recipients. Queued — real CSS+JS surface (chip removal,
+       keyboard nav between chips and the text entry).
+4. [ ] **Standalone Avatar** — Fiori/Ant/Salesforce; scenario: approval-chain
+       "who's next" stack, assignee identification. Partially covered
+       already — `.bo-byline__avatar` exists but is scoped inside Byline.
+       **[HUMAN CALL]**: promote to a reusable `.bo-avatar` primitive (Byline
+       composes it), or leave it byline-scoped and accept the gap? Not built
+       pending the owner's call — a promoted primitive's class name becomes
+       semver surface immediately, not worth guessing at.
+
+**Not queued** (weak evidence or already covered, see the roundtable doc for
+detail): tooltip/popover, comment/activity feed, master-detail split view,
+signature capture, permission matrices, org-chart, kanban, calendar/
+scheduling, audit-diff viewer, rating, notification center. **Saved views /
+variant management** was flagged by the research as a gap but is already
+shipped (`initSavedViews()`, documented on Filters) — corrected before
+queuing, not taken on faith. **Date input** was also flagged and also
+already fully covered (live-demoed on `/components/date`) — same correction.
+
+**Verified** (item 1): both link checks, axe zero (57 pages), 32 visual
+baselines, 57 tests, stylelint, live in both themes — click-toggle, real
+keyboard arrow-navigation between radios, focus ring on the correct element,
+disabled-segment state.
+
 ## Slice 16 — docs IA, compared against 5 CSS frameworks (user wishlist)
 
 Triaged 2026-08-16 (user: "well structure framework document - pls compare
@@ -1522,7 +1575,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
 
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
-      | 1 | Component surface | ✅ 25 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-15 after Slices 14-15: editable-grid pattern, ACR reference) | `check-page-shape.mjs`: 25 component pages |
+      | 1 | Component surface | ✅ 26 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-16 after Slice 17: Segmented control) | `check-page-shape.mjs`: 26 component pages |
       | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, all 16 **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda + correction |
       | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green + 2 advisory harnesses (`test:visual` 32 shots, `test:axe` 54 pages) | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |

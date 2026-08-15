@@ -17,13 +17,23 @@ const docsRoot = join(repoRoot, 'apps/docs');
 const [, , rawName, ...flags] = process.argv;
 const behavior = flags.includes('--behavior');
 const labelFlag = flags.find((f) => f.startsWith('--label='));
+const groupFlag = flags.find((f) => f.startsWith('--group='));
+// Sidebar is grouped by task (2026-08-16, docs-IA pass) — a new component
+// must be placed deliberately, not silently defaulted into the wrong group.
+const GROUPS = ['Actions', 'Data input', 'Data display', 'Feedback', 'Navigation & layout'];
 
 if (!rawName || !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(rawName)) {
   console.error(
-    'Usage: npm run new:component -w @busy-office/ui -- <kebab-case-name> [--behavior] [--label="Human Label"]',
+    'Usage: npm run new:component -w @busy-office/ui -- <kebab-case-name> --group="<one of: '
+      + GROUPS.join(', ') + '>" [--behavior] [--label="Human Label"]',
   );
   process.exit(1);
 }
+if (!groupFlag || !GROUPS.includes(groupFlag.slice('--group='.length))) {
+  console.error(`--group is required, one of: ${GROUPS.join(', ')}`);
+  process.exit(1);
+}
+const group = groupFlag.slice('--group='.length);
 const name = rawName;
 const pascal = name.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase());
 const label = labelFlag ? labelFlag.slice('--label='.length) : pascal.replace(/([a-z])([A-Z])/g, '$1 $2');
@@ -127,9 +137,9 @@ const canonical = \`<div class="bo-${name}">
 // 4. Sidebar entry
 const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
 let gallery = await readFile(galleryPath, 'utf8');
-const marker = "label: 'Components',\n    items: [";
+const marker = `label: '${group}',\n    items: [`;
 const markerIndex = gallery.indexOf(marker);
-if (markerIndex === -1) throw new Error("Couldn't find the Components section in Gallery.astro");
+if (markerIndex === -1) throw new Error(`Couldn't find the '${group}' sidebar section in Gallery.astro`);
 const insertAt = markerIndex + marker.length;
 const entry = `\n      { href: '/components/${name}', label: '${label}' },`;
 gallery = gallery.slice(0, insertAt) + entry + gallery.slice(insertAt);

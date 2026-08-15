@@ -1,0 +1,94 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<div class="bo-segmented" role="group" aria-label="Approval scope">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-scope" id="seg-mine" checked>
+  <label class="bo-segmented__option" for="seg-mine">My approvals</label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-scope" id="seg-team">
+  <label class="bo-segmented__option" for="seg-team">Team approvals</label>
+</div>`;
+
+const three = `<div class="bo-segmented" role="group" aria-label="Report range">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-range" id="seg-week" checked>
+  <label class="bo-segmented__option" for="seg-week">Week</label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-range" id="seg-month">
+  <label class="bo-segmented__option" for="seg-month">Month</label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-range" id="seg-quarter">
+  <label class="bo-segmented__option" for="seg-quarter">Quarter</label>
+</div>`;
+
+const disabled = `<div class="bo-segmented" role="group" aria-label="Export format">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-export" id="seg-csv" checked>
+  <label class="bo-segmented__option" for="seg-csv">CSV</label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-export" id="seg-pdf" disabled>
+  <label class="bo-segmented__option" for="seg-pdf">PDF (Pro)</label>
+</div>`;
+
+const canonical = `<!-- A radiogroup, not styled buttons: keyboard arrow-navigation between
+     options, "n of m" announcement, and mutual exclusivity all come from
+     the platform. Inputs are .bo-visually-hidden (kept focusable), not
+     display:none — the ring moves to the label via the input's sibling
+     selector, so it traces the visible segment. -->
+<div class="bo-segmented" role="group" aria-label="View">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="view-mine" checked>
+  <label class="bo-segmented__option" for="view-mine">My approvals</label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="view-team">
+  <label class="bo-segmented__option" for="view-team">Team approvals</label>
+</div>`;
+---
+<Gallery title="Segmented control">
+  <p class="demo-note">
+    A toggle between 2-5 mutually exclusive views — My approvals vs Team
+    approvals, Week vs Month vs Quarter. The button-group alternative to a
+    <a href={base + '/components/form'}>select</a> when every option should be visible
+    at once, not hidden behind a click. Real radio inputs under the hood
+    (<a href={base + '/concepts/accessibility'}>two-channel</a>: the filled segment is
+    the visible signal, native <code>checked</code>/group semantics are the
+    programmatic one) — zero JS.
+  </p>
+
+  <section class="demo">
+    <h2>Basic — two options</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">Click a segment, or Tab to the group and use
+    arrow keys — real radio-group keyboard navigation, not reimplemented.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Three options</h2>
+    <Demo code={three} />
+  </section>
+
+  <section class="demo">
+    <h2>Disabled option</h2>
+    <Demo code={disabled} />
+    <p class="bo-u-text-muted">A locked-behind-a-plan format, for example —
+    disable the input, not the whole group.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="segmented" />
+  <ApiTable
+    component="segmented"
+    notes={[
+      'A real <code>&lt;input type="radio"&gt;</code> per option, sharing one <code>name</code> — mutual exclusivity, keyboard arrow navigation, and screen-reader group semantics all come from the platform, not from JS.',
+      'The input carries BOTH classes — <code>.bo-segmented__input</code> for the state selectors, <code>.bo-visually-hidden</code> to hide it visually while staying focusable (never <code>display:none</code>, which would drop it from the Tab order entirely). Its <code>:focus-visible</code> ring is moved onto the label sibling via CSS so it traces the visible segment.',
+      'Wrap the group in <code>role="group"</code> with an <code>aria-label</code> naming what the options select (native radio groups have no accessible name of their own).',
+      'No more than ~5 options — beyond that, a select or dropdown reads better than a wide row of segments.',
+    ]}
+  />
+  <Related links={[
+    ['/components/form', 'Forms'],
+    ['/components/tabs', 'Tabs'],
+    ['/components/filters', 'Filters'],
+  ]} />
+</Gallery>

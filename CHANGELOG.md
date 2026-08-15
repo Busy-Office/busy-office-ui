@@ -8,6 +8,11 @@ pin.
 
 ## Unreleased
 
+- Added: Segmented control (`.bo-segmented`) — a toggle between 2-5
+  mutually exclusive views (My approvals / Team approvals, report-range
+  switcher), built on real radio inputs (zero JS, native keyboard
+  arrow-navigation and group semantics).
+
 - Added: a generated Accessibility Conformance Report (`dist/acr.json`,
   `@busy-office/ui/acr`, rendered at `/reference/acr`) -- 16 WCAG 2.2 A/AA
   criteria with verdicts and remarks assembled from the same evidence the
