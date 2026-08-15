@@ -41,6 +41,9 @@ const statMarkup = `<div class="bo-widget">
     while the same table full-width does not. Stat values use proportional figures
     (<code>tabular-nums</code> is reserved for columns); compact big values
     server-side (12.9K, $4.2M). One hero figure per view, maximum.
+    <strong>Looking for a "Card"?</strong> <code>.bo-widget</code> is it —
+    header/body/band composition, independent of dashboards; see
+    "<a href="#card">Widget parts</a>" below.
   </p>
   <ClassRef component="dashboard" />
   <section class="demo">
@@ -126,10 +129,13 @@ const statMarkup = `<div class="bo-widget">
     </div>
   </section>
   <section class="demo">
-    <h2>Widget parts — header, body, band</h2>
-    <p>A widget is <code>__header</code> / <code>__body</code> / <code>__band</code>.
-    The band footer carries a status message (<code>--msg</code>) or actions — one
-    durable strip. This is what record and approval cards are built from.</p>
+    <h2 id="card">Widget parts — header, body, band</h2>
+    <p><strong><code>.bo-widget</code> is the framework's card primitive</strong> —
+    filed under "Dashboard" because that's its most common use, but it composes
+    into any card-shaped UI: a widget is <code>__header</code> / <code>__body</code> /
+    <code>__band</code>. The band footer carries a status message (<code>--msg</code>)
+    or actions — one durable strip. This is what record and approval cards are
+    built from.</p>
     <div class="bo-widget-grid" style="--bo-widget-min: 15rem">
       <article class="bo-widget">
         <header class="bo-widget__header"><span class="bo-widget__title">Actions band</span></header>

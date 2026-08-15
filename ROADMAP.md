@@ -976,16 +976,26 @@ speculatively.
        (`--no-cache`) in both themes: dispatched real scan events,
        confirmed the status text updates and re-announces on a second
        scan, confirmed zero visual change (region is invisible by design).
-4. [ ] **Card discoverability fix** — `.bo-widget` (`packages/core/src/
-       css/components/dashboard/dashboard.css`) is already a fully
-       capable card primitive (header/collapse/band/badge composition)
-       but every one of the four review seats independently hit the same
-       finding: it's undiscoverable as "Card" — no sidebar entry, filed
-       only under "Dashboard." Accept: docs/naming fix only, NOT a class
-       rename (would break the shipped `.bo-widget` contract) — add a
-       "Card" sidebar entry/page (or a prominent cross-link + alias
-       section on the existing dashboard page) pointing at `.bo-widget`,
-       framed as the card primitive independent of dashboards.
+4. [x] **Card discoverability fix** — shipped, docs-only (no class rename
+       — `.bo-widget`'s shipped contract is untouched). Went with the
+       cross-link + alias option rather than a whole new page (a real
+       second page would either duplicate `.bo-widget`'s `ClassRef`/
+       `ApiTable` entries against the same CSS component — a drift risk
+       — or need a `PAGE_SLUG` alias hack for something that isn't
+       actually a distinct concept). New sidebar entry "Card" → `/components/
+       dashboard#card` (Gallery.astro); demo-note now leads with
+       *"Looking for a 'Card'? `.bo-widget` is it"* linking straight to
+       the existing "Widget parts" section, which is now titled with an
+       `id="card"` anchor and opens with *"`.bo-widget` is the framework's
+       card primitive."* Verified live via Podman (`--no-cache`) in both
+       themes: sidebar link present with the correct href, direct
+       navigation to the anchored URL lands exactly on the reframed
+       section (confirmed via a fresh navigation, not a JS reload —
+       reload() doesn't reliably re-trigger native anchor-scroll, a test
+       artifact rather than a site bug). Link checker confirmed fine with
+       the `#card` fragment (strips fragments before validating). 44
+       tests unchanged, page count unchanged (49 — no new page), 2564
+       links (+48, one new sidebar entry × pages).
 5. [ ] **Login pattern** — highest-value gap identified by every review
        seat: an authentication entry-screen pattern, composed from
        existing form/dialog/button primitives (no new CSS expected).
