@@ -952,12 +952,16 @@ speculatively.
        documentation pass — panel's shared recommendation is to document
        regardless, since the cost is low and the value doesn't depend on
        the answer.
-2. [ ] **Table tiering docs framing** — `/components/data-table` already
-       ships the "simple -> advanced" shape (`initDataTables()` vs.
-       opt-in `initDataGrid()`) but doesn't narrate it that way. Accept:
-       add a short framing section (or reframe the existing "Keyboard
-       grid navigation" section heading/intro) explicitly naming the
-       two tiers and when to reach for each — zero new CSS/JS, docs-only.
+2. [x] **Table tiering docs framing** — shipped, docs-only (zero CSS/JS
+       changed, 44 tests unchanged). `/components/data-table`'s demo-note
+       now names the two tiers up front ("Simple... covers selection/sort/
+       filter for free; reach for Advanced... only when a screen genuinely
+       needs full two-axis keyboard navigation — most tables don't"); the
+       previously-unlabeled first demo section got an explicit "Simple —
+       select, sort, filter" heading; "Keyboard grid navigation" retitled
+       to "Advanced — keyboard grid navigation" with its intro paragraph
+       naming the tier and the "when to reach for it" guidance. Verified
+       live via Podman (`--no-cache`) in both themes.
 3. [x] **`bo:scan` live-region announcement** — shipped. Opt-in markup
        contract: link the scan input's `aria-describedby` to a
        `data-scan-status` element (`aria-live="polite"`, visually hidden

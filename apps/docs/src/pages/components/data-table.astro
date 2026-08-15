@@ -87,10 +87,15 @@ const rows = [
   <p class="demo-note">
     Check a row — the bulk-action toolbar appears via <code>:has()</code>, zero JS.
     Sticky header, tabular numerals, density-aware row heights, container-query
-    auto-compaction below 480px container width.
+    auto-compaction below 480px container width. Two tiers, same markup family:
+    <strong>Simple</strong> (below) covers selection/sort/filter for free; reach for
+    <strong>Advanced</strong> (<code>data-grid-nav</code> + <code>initDataGrid()</code>,
+    further down this page) only when a screen genuinely needs full two-axis
+    keyboard navigation — most tables don't.
   </p>
   <ClassRef component="data-table" />
   <section class="demo">
+    <h2>Simple — select, sort, filter</h2>
     <div class="bo-data-table-container">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
@@ -129,16 +134,18 @@ const rows = [
     </div>
   </section>
   <section class="demo">
-    <h2>Keyboard grid navigation <span class="bo-badge">opt-in</span></h2>
+    <h2>Advanced — keyboard grid navigation <span class="bo-badge">opt-in</span></h2>
     <p class="bo-u-text-muted">
-      <code>data-grid-nav</code> + <code>initDataGrid()</code> turns the table into a
-      WAI-ARIA APG "Grid": <code>role="grid"</code> (cells get their <code>gridcell</code>/
-      <code>columnheader</code> roles implicitly — no per-cell markup needed),
-      <code>aria-selected</code> synced from the row checkboxes, and two-axis roving
-      tabindex — Tab enters the grid at ONE cell, arrow keys move the cursor
-      (clamped, no wrap), <kbd>Enter</kbd> focuses a cell's single widget (the
-      checkbox), <kbd>Esc</kbd> hands focus back to the cell. Click into the table
-      below, then try arrow keys.
+      The second tier: <code>data-grid-nav</code> + <code>initDataGrid()</code> turns
+      the table into a WAI-ARIA APG "Grid": <code>role="grid"</code> (cells get their
+      <code>gridcell</code>/<code>columnheader</code> roles implicitly — no per-cell
+      markup needed), <code>aria-selected</code> synced from the row checkboxes, and
+      two-axis roving tabindex — Tab enters the grid at ONE cell, arrow keys move the
+      cursor (clamped, no wrap), <kbd>Enter</kbd> focuses a cell's single widget (the
+      checkbox), <kbd>Esc</kbd> hands focus back to the cell. Reach for this when a
+      screen is genuinely spreadsheet-like (dense data entry, heavy keyboard use) —
+      the Simple tier above is enough for most tables, including ones with sort and
+      bulk-select. Click into the table below, then try arrow keys.
     </p>
     <div class="bo-data-table-container">
       <table class="bo-data-table" data-grid-nav id="grid-nav-demo">
