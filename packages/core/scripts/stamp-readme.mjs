@@ -22,6 +22,17 @@ const readmePaths = [
 
 const minCss = readFileSync(join(root, 'dist/css/index.min.css'));
 const behaviors = JSON.parse(readFileSync(join(root, 'dist/behaviors.json'), 'utf8'));
+const minKb = Math.round(minCss.length / 1024);
+// gzip byte count is NOT purely a function of the input: Node's zlib
+// backend (classic zlib vs zlib-ng) can legitimately compress the SAME
+// bytes to a handful of bytes more or fewer depending on the Node build —
+// this genuinely differs between environments (a real CI failure,
+// 2026-08-16: identical committed source, passed locally on Node 26,
+// failed on CI's Node 22 — not a stale stamp, verified against the exact
+// pushed tree). A human-readable size claim should not be a byte-exact
+// cross-environment contract, so `size` compares within a tolerance
+// instead of exact string equality — see isSizeMatch() below.
+const gzipKb = gzipSync(minCss).length / 1024;
 
 const events = new Set();
 for (const f of readdirSync(join(root, 'dist/js/behaviors'))) {
@@ -31,10 +42,23 @@ for (const f of readdirSync(join(root, 'dist/js/behaviors'))) {
 }
 
 const stats = {
-  size: `${Math.round(minCss.length / 1024)} kB minified (${(gzipSync(minCss).length / 1024).toFixed(1)} kB gzipped)`,
+  size: `${minKb} kB minified (${gzipKb.toFixed(1)} kB gzipped)`,
   behaviors: String(behaviors.initCount),
   events: [...events].sort().map((e) => `\`${e}\``).join(', '),
 };
+
+// Tolerance band, kB: covers observed zlib/zlib-ng cross-build drift (a
+// handful of bytes) without masking a REAL size change from added CSS.
+const GZIP_TOLERANCE_KB = 0.3;
+function isSizeMatch(existing) {
+  const m = /^(\d+) kB minified \(([\d.]+) kB gzipped\)$/.exec(existing);
+  if (!m) return false;
+  const [, existingMinKb, existingGzipKb] = m;
+  return (
+    Number(existingMinKb) === minKb &&
+    Math.abs(Number(existingGzipKb) - gzipKb) <= GZIP_TOLERANCE_KB
+  );
+}
 
 const check = process.argv.includes('--check');
 let drifted = false;
@@ -50,10 +74,18 @@ for (const { path, requireAll } of readmePaths) {
     // npm package boundary) legitimately won't have it.
     throw err;
   }
+  let fileDrifted = false;
   const out = src.replace(
-    /<!-- stat:([a-z]+) -->[\s\S]*?<!-- \/stat -->/g,
-    (whole, name) => {
+    /<!-- stat:([a-z]+) -->([\s\S]*?)<!-- \/stat -->/g,
+    (whole, name, existing) => {
       if (!(name in stats)) throw new Error(`${path} references unknown stat "${name}"`);
+      if (name === 'size') {
+        if (!isSizeMatch(existing)) fileDrifted = true;
+        // Within tolerance: keep the EXISTING text so re-stamping on a
+        // different machine doesn't create no-op diffs every run.
+        return isSizeMatch(existing) ? whole : `<!-- stat:size -->${stats.size}<!-- /stat -->`;
+      }
+      if (existing !== stats[name]) fileDrifted = true;
       return `<!-- stat:${name} -->${stats[name]}<!-- /stat -->`;
     },
   );
@@ -62,7 +94,7 @@ for (const { path, requireAll } of readmePaths) {
       if (!out.includes(`<!-- stat:${name} -->`))
         throw new Error(`${path} is missing the stat:${name} marker`);
   if (check) {
-    if (out !== src) { console.error(`${path}: claims drifted from dist — run: node scripts/stamp-readme.mjs`); drifted = true; }
+    if (fileDrifted) { console.error(`${path}: claims drifted from dist — run: node scripts/stamp-readme.mjs`); drifted = true; }
   } else if (out !== src) {
     writeFileSync(path, out);
     console.log(`stamped ${path}`);

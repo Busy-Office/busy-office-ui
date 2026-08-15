@@ -131,6 +131,16 @@ Run **try → verify → adjust** as many rounds as it takes to satisfy the item
    `build:acr` shipped reading `dist/contrast.json` one step before the
    script that writes it, passed locally on stale artifacts, broke CI and
    the Pages deploy the very next wake).
+   A clean local build passing is still not sufficient proof for any gate
+   built on a COMPRESSED byte count: `gzipSync()` output can legitimately
+   differ by a few bytes across Node/zlib builds (classic zlib vs
+   zlib-ng), so a byte-exact `--check` on a "kB gzipped" figure can pass
+   on a clean local Node 26 build and fail on CI's Node 22 with the
+   IDENTICAL committed source (learned 2026-08-16 — verified against the
+   exact pushed tree before concluding this, not assumed). `stamp-
+   readme.mjs`'s size stat now compares within a tolerance for this
+   reason; any future stat derived from `gzipSync`/`brotliCompress`
+   needs the same treatment, not an exact-string gate.
 5. **Round check** — does it satisfy *Accept* AND pass the standing gates
    (contrast, named `@container`, links, behaviors, stylelint, tests)? If
    not, adjust and go back to step 3. If a round reveals the item was
