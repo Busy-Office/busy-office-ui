@@ -1224,9 +1224,16 @@ Highest-leverage bets (2026-08-14 review — ranked):
       component set (post Slice 6/7) until this round confirmed it still
       builds and works end-to-end.
 
-- [ ] **Framework adapters** (`integrations/`) — a Vite plugin for à-la-carte imports,
-      a thin React/Vue wrapper set, a Rails/Django asset recipe. Opt-in, never a core
-      dependency.
+- [x] **Framework adapters — resolved by splitting (2026-08-15)**: the
+      Rails/Django asset recipe turned out to already exist — the
+      installation page's skeleton IS the no-Node story (vendor the dist
+      into any static/asset pipeline; now says so explicitly, naming
+      Rails/Django/PHP/Go). The Vite plugin and React/Vue wrapper set
+      stay **parked as speculative**: zero consumer demand to date, and
+      the framework's plain-class + `data-*` contract already works
+      unwrapped in every framework (po-app proves the no-framework path;
+      JSX consumers use the classes directly). Either graduates the
+      moment a real consumer asks — same gate as every parked item.
 - [ ] **Versioned docs** — the CHANGELOG covers pre-1.0 churn; at 1.0, snapshot docs
       per major so pinned users read their version.
 - [x] **Theme presets** — shipped one real preset (not the whole "small
@@ -1269,7 +1276,11 @@ Highest-leverage bets (2026-08-14 review — ranked):
       accent is visible; restoring returned all green). Deliberately
       advisory for now — cross-machine antialiasing variance needs a
       baseline-per-environment policy before it can hard-fail CI; that
-      wiring is the follow-up, not the harness.
+      wiring is the follow-up, not the harness. **Hardened same day**:
+      the first baseline run silently captured 404 pages from a stale
+      dist (the "96% changed" failures on the next run exposed it) —
+      the script now refuses any non-200 response, and baselines were
+      regenerated from a verified-fresh build.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
 - [x] **Data-grid virtualization hooks — investigated with measurements,
       closed as WON'T BUILD (2026-08-15).** The "needs a perf scenario"

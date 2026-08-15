@@ -81,7 +81,14 @@ for (const theme of THEMES) {
     await page.setViewport({ width, height: 1000 });
     for (const path of PAGES) {
       const name = `${path.replaceAll('/', '_') || '_'}-${theme}-${width}.png`;
-      await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'networkidle0' });
+      const resp = await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'networkidle0' });
+      if (!resp || resp.status() !== 200) {
+        // Never baseline or diff an error page — a stale/missing dist must
+        // fail loudly (learned the hard way: a stale dist baselined 404s).
+        failures++;
+        console.log(`FAIL ${name}: HTTP ${resp?.status()} for ${path}`);
+        continue;
+      }
       // Full-page shot; disable animations/caret for stability.
       await page.evaluate(() => {
         const s = document.createElement('style');
