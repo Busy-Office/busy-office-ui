@@ -1251,7 +1251,7 @@ close with commit link). Linear stays a non-goal: no public intake, and a
 second backlog would drift from this file (storage doctrine). Issues are
 already enabled on `Busy-Office/busy-office-ui` (verified via API).
 
-1. [ ] **Issue templates + docs pointer** — `.github/ISSUE_TEMPLATE/`:
+1. [x] **Issue templates + docs pointer** — `.github/ISSUE_TEMPLATE/`:
        bug report form (version, browser, light/dark theme, density,
        minimal HTML repro) + feature request form (ERP scenario required —
        matches the "real scenario before building" gate) + `config.yml`
@@ -1259,10 +1259,16 @@ already enabled on `Busy-Office/busy-office-ui` (verified via API).
        issue" link. Accept: templates render on GitHub's "New issue"
        chooser; docs link verified live at 1440px + 390px, both themes;
        gates green.
-2. [ ] **Dispatcher intake wiring** — LOOPS.md Step 1 names `gh issue list`
+2. [x] **Dispatcher intake wiring** — LOOPS.md Step 1 names `gh issue list`
        as a triage input source, so wakes see new issues without being told.
        Accept: LOOPS.md updated; one dry-run triage of the (currently empty)
        issue list recorded in the loop log.
+       **Done 2026-08-15** (commits `17f796f`, `52420ce`): forms schema-
+       validated (js-yaml) and pushed; `gh issue list` dry run: 0 open.
+       Residual: the /issues/new/choose chooser renders client-side and
+       github.com is blocked for this session's browser — owner should
+       glance at it once (GraphQL `issueTemplates` only reflects legacy
+       .md templates, so it can't confirm YAML forms).
 
 ## Long term (post-1.0)
 
