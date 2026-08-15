@@ -1475,7 +1475,7 @@ Highest-leverage bets (2026-08-14 review — ranked):
 
       | # | Item | Status | Evidence |
       |---|------|--------|----------|
-      | 1 | Component surface | ✅ 25 component pages, 11 pattern pages (re-synced 2026-08-15 after Slices 8-11: combobox, progress, tree, icon, Card alias, login, app-launch) | `check-page-shape.mjs`: 25 pages |
+      | 1 | Component surface | ✅ 25 component pages, 12 pattern pages, 2 reference pages (re-synced 2026-08-15 after Slices 14-15: editable-grid pattern, ACR reference) | `check-page-shape.mjs`: 25 component pages |
       | 2 | JS behaviors | ✅ 16 opt-in behaviors, generated docs table, all 16 **stable against internal usage** (each survived ≥2 in-repo compositions; freeze PROVISIONAL until the item-12 independent adopter — per the decisions grill, contract-shape changes before then are CHANGELOG-Breaking entries) | `dist/behaviors.json`: `initCount: 16`; CHANGELOG freeze addenda + correction |
       | 3 | Test coverage | ✅ 55 behavior tests, all passing (re-synced 2026-08-15) | `npm test` |
       | 4 | Build gates | ✅ 7 gates, all green + 2 advisory harnesses (`test:visual` 32 shots, `test:axe` 54 pages) | named `@container`, contrast+coverage, behaviors-vs-`.d.ts`, dist links, stylelint, tests, page-shape |
