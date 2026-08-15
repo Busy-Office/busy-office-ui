@@ -129,3 +129,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-15 12:19 · Roadmap · plan · 1.0 checklist evidence re-sync · 24 pages / 16 behaviors all frozen / 55 tests / 27 pairs · abcf1b0
 - 2026-08-15 12:27 · Continue · build · Visual-regression harness (test:visual, 32-shot matrix) · shipped advisory; validated deterministic + red-capable (accent-swap failed exactly the 6 accent-visible shots); baselines committed (3.2MB) · 8a69f0d
 - 2026-08-15 12:33 · Continue · fix · Visual harness hardening: 404 guard + baseline regeneration · stale-dist 404s were silently baselined; script now refuses non-200; 32 real baselines committed, green twice · 8e0b354
+- 2026-08-15 12:34 · Roadmap · plan · Session closure: Slice 9 Done, LOOPS.md fallback re-pointed, 5 metrics recorded · every actionable item project-wide is shipped/closed/resolved; remaining opens need AT hardware, an independent adopter, a 1.0 decision, or consumer demand · a1d6c36
