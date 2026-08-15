@@ -1196,6 +1196,30 @@ flow re-marks the step `current`.
        undemoed classes; each touched page verified live both themes;
        gates + visual baselines updated.
 
+## Slice 11 (in progress) — CSS icon set
+
+Triaged 2026-08-15 (user, while reviewing App Launch: "can CSS render
+icons? for better display"). Answer: yes — `mask-image` with inline-SVG
+data URIs painted by `background-color: currentColor` gives real,
+THEMABLE icons with zero JS, zero font files, `em` sizing that tracks
+density. Initials/emoji were the weak point of the launcher tiles (emoji
+don't take `color`; initials read as placeholders).
+
+1. [ ] **`.bo-icon`** — base class (1em square, currentColor fill via
+       mask) + a SMALL curated set (~12 ERP glyphs: document, invoice,
+       cart, check-circle, truck, box, chart, settings, grid, barcode,
+       building, user), each an original simple geometric SVG authored
+       in-repo. Accept: new component + docs page per the recipe
+       (mechanism documented as extensible — "add your own glyph in one
+       CSS line, or paste inline SVG with fill=currentColor"); a11y note
+       (decorative icons aria-hidden, the LABEL carries meaning);
+       forced-colors handled explicitly (mask icons vanish under forced
+       colors without `forced-color-adjust: none` + a system color —
+       verify via CDP forced-colors emulation, not assumption); App
+       Launch tiles upgraded from initials to icons; gates + baselines.
+       NOT a general icon library — 12 glyphs prove the mechanism;
+       more graduate per real need, same gate as everything else.
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
