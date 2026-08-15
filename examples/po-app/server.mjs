@@ -283,6 +283,50 @@ const server = createServer(async (req, res) => {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Purchase orders', '/pos', listScreen()));
     }
+    if (path === '/stress' && req.method === 'GET') {
+      // Perf probe (2026-08-15): the virtualization question needs numbers,
+      // not vibes. N unvirtualized rows through the full data-table stack
+      // (sticky header, checkboxes, badges, container query, initDataTables).
+      const n = Math.min(Number(url.searchParams.get('n')) || 5000, 20000);
+      // Isolation flags: ?nocheck=1 (no row checkboxes → no :has() subject),
+      // ?nobadge=1, ?loose=1 (table NOT in the overflow container).
+      const nocheck = url.searchParams.has('nocheck');
+      const nobadge = url.searchParams.has('nobadge');
+      const loose = url.searchParams.has('loose');
+      const vendors = ['Acme Supply Co.', 'Globex Industrial', 'Initech GmbH', 'Umbrella Logistics', 'Stark Components'];
+      const statuses = ['Pending', 'Approved', 'Rejected'];
+      let rows = '';
+      for (let i = 0; i < n; i++) {
+        const st = statuses[i % 3];
+        rows += `<tr>
+          ${nocheck ? '' : `<td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select STR-${i}"></td>`}
+          <td class="bo-data-table__col--code">STR-${String(i).padStart(5, '0')}</td>
+          <td>${vendors[i % 5]}</td>
+          <td class="bo-data-table__col--numeric">${money((i % 900) * 61 + 250)}</td>
+          <td>${nobadge ? st : `<span class="bo-badge bo-badge--${tone[st]}">${st}</span>`}</td>
+        </tr>`;
+      }
+      res.writeHead(200, { 'content-type': 'text/html' });
+      const tableHtml = `<table class="bo-data-table">
+    <thead><tr>
+      ${nocheck ? '' : '<th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>'}
+      <th scope="col">Ref</th><th scope="col">Vendor</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col">Status</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+      return res.end(page(`Stress ${n}`, '/stress', `
+<h1>Stress: ${n} rows${nocheck ? ', no checkboxes' : ''}${nobadge ? ', no badges' : ''}${loose ? ', no container' : ''}</h1>
+${loose ? tableHtml : `<div class="bo-data-table-container">
+  <div class="bo-data-table__toolbar">
+    <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+      <button class="bo-btn" type="button">Approve selected</button>
+    </div>
+    <span class="bo-data-table__selection-count"></span>
+  </div>
+  ${tableHtml}
+</div>`}`));
+    }
     if (path === '/spend' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Spend by cost center', '/spend', spendScreen()));

@@ -1257,7 +1257,25 @@ Highest-leverage bets (2026-08-14 review — ranked):
 - [ ] **Visual-regression harness** — screenshot diffing across density × theme in CI,
       so the "looks right" pass becomes mechanical like the rest.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
-- [ ] Component depth: data-grid virtualization hooks. (Amount field and
+- [x] **Data-grid virtualization hooks — investigated with measurements,
+      closed as WON'T BUILD (2026-08-15).** The "needs a perf scenario"
+      gate was satisfied by a stress harness added to po-app
+      (`/stress?n=…`, kept for future re-measurement): N unvirtualized
+      rows through the full table stack. Measured — 1k: 85ms render /
+      4ms select-all; 5k: 174ms / 18ms / 231ms post-bulk-check style
+      flush; 20k: 558ms / 49ms / 610ms. Render and scroll scale linearly
+      with NO cliff; the only visible cost is the bulk-select row-tint
+      recalc, linear and per-toggle. Verdict: virtualization's complexity
+      (breaks Ctrl-F, select-all semantics, SR row counts) is not
+      justified — server-side pagination (already shipped: page numbers +
+      load-more) is the answer at the scale where tables stop being
+      scannable anyway. Published as a "Performance at scale — measured,
+      not guessed" section on `/components/data-table` with the real
+      numbers. **Diagnostic honesty note**: the first measurement pass
+      misread a 45s "renderer freeze" at 5k rows — it was a hidden-tab
+      artifact (background tabs never fire rAF and don't run layout),
+      not the page; re-measured with synchronous forced-layout reads.
+- Component depth (remaining note): (Amount field and
       command palette pulled forward into Slice 5; date-field graduated
       into Slice 6 item 21; RTL audit graduated into Slice 7 item 6;
       **tree/nav shipped 2026-08-15 via the Explore fallback** — `.bo-tree`,

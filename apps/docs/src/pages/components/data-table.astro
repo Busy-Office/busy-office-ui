@@ -315,6 +315,32 @@ const rows = [
     behavior only tracks dirty state. Try it: edit a quantity below.</p>
   </section>
   <section class="demo">
+    <h2>Performance at scale — measured, not guessed</h2>
+    <p>Measured 2026-08-15 against the full table stack (sticky header, row
+    checkboxes, badges, container query, <code>initDataTables()</code>) in the
+    <code>examples/po-app</code> stress harness (<code>/stress?n=…</code>):</p>
+    <div class="bo-data-table-container">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Initial render</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--numeric">1,000</td><td class="bo-data-table__col--numeric">85 ms</td><td class="bo-data-table__col--numeric">4 ms</td><td class="bo-data-table__col--numeric">negligible</td></tr>
+          <tr><td class="bo-data-table__col--numeric">5,000</td><td class="bo-data-table__col--numeric">174 ms</td><td class="bo-data-table__col--numeric">18 ms</td><td class="bo-data-table__col--numeric">231 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">20,000</td><td class="bo-data-table__col--numeric">558 ms</td><td class="bo-data-table__col--numeric">49 ms</td><td class="bo-data-table__col--numeric">610 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Render and scroll scale linearly with no cliff — the
+    first thing that visibly hurts is the <em>bulk-select style recalculation</em>
+    (the selected-row tint re-evaluating per row), a one-time hitch per bulk toggle.
+    Practical guidance: a few thousand rows are fine as-is; beyond that, paginate
+    server-side (<a href="/components/pagination">page numbers or load-more</a>) —
+    which dense ERP screens want anyway for findability. <strong>There are no
+    virtualization hooks, deliberately</strong>: the measurements don't justify the
+    complexity (windowing breaks Ctrl-F, select-all semantics, and screen-reader
+    row counts), and pagination is the answer at the scale where tables stop being
+    scannable.</p>
+  </section>
+  <section class="demo">
     <h2>Grouped rows + subtotals</h2>
     <div class="bo-data-table-container">
       <table class="bo-data-table">
