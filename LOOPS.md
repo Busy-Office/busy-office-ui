@@ -117,6 +117,12 @@ Run **try → verify → adjust** as many rounds as it takes to satisfy the item
    `{base + '/x'}`) passes every local check and still 404s on Pages; only
    the base-path build catches it (learned 2026-08-15: 31 such links, 8
    straight red CI runs). Then rebuild plain before the container check.
+   Full production parity (interactive layer under the prefix — boost swaps,
+   aria-current sync, search, history): copy the DOCS_BASE dist into
+   `<scratch>/base-root/busy-office-ui/` and serve base-root on :8082 with
+   the same nginx.conf mount; browse `localhost:8082/busy-office-ui/…`
+   (github.io itself is browser-blocked in this session). Audited green
+   2026-08-15 post-0.1.1.
 5. **Round check** — does it satisfy *Accept* AND pass the standing gates
    (contrast, named `@container`, links, behaviors, stylelint, tests)? If
    not, adjust and go back to step 3. If a round reveals the item was
