@@ -1254,8 +1254,22 @@ Highest-leverage bets (2026-08-14 review — ranked):
       cheap follow-up once wanted, not something to speculate additional
       hues for right now. 33 tests unchanged (no JS touched), gates
       green including the new brand-contrast check.
-- [ ] **Visual-regression harness** — screenshot diffing across density × theme in CI,
-      so the "looks right" pass becomes mechanical like the rest.
+- [x] **Visual-regression harness** — shipped 2026-08-15 (advisory, not
+      yet a hard build gate). `apps/docs/scripts/visual-regression.mjs`
+      (`npm run test:visual` / `test:visual:update`): 8 key pages ×
+      light/dark × 1440/390px = 32 full-page shots, diffed against
+      committed baselines (`apps/docs/visual-baselines/`, 3.2MB) with
+      pixelmatch at a 0.1%-changed-pixels threshold; failing shots write
+      diff images to the git-ignored `visual-diffs/`. Tooling call:
+      puppeteer-core driving the SYSTEM Chrome (no browser download;
+      `CHROME_PATH` env for CI runners) + pixelmatch/pngjs (pure JS).
+      Validated both directions before committing: deterministic (32/32
+      green on immediate re-run) AND red-capable (swapping the accent
+      teal to red in the built CSS failed exactly the 6 shots where the
+      accent is visible; restoring returned all green). Deliberately
+      advisory for now — cross-machine antialiasing variance needs a
+      baseline-per-environment policy before it can hard-fail CI; that
+      wiring is the follow-up, not the harness.
 - [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
 - [x] **Data-grid virtualization hooks — investigated with measurements,
       closed as WON'T BUILD (2026-08-15).** The "needs a perf scenario"

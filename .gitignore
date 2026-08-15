@@ -12,3 +12,4 @@ graphify-out/
 # has shown a perpetual uncommitted diff on every autonomous-loop wake
 # since (a new session claims the lock each time).
 .claude/scheduled_tasks.lock
+visual-diffs/

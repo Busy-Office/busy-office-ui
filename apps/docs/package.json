@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/check-page-shape.mjs && astro build && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:visual": "node scripts/visual-regression.mjs",
+    "test:visual:update": "node scripts/visual-regression.mjs --update"
   },
   "dependencies": {
     "@busy-office/ui": "*",
@@ -13,6 +15,9 @@
     "htmx.org": "^2.0.10"
   },
   "devDependencies": {
-    "pagefind": "^1.3.0"
+    "pagefind": "^1.3.0",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.7.0"
   }
 }
