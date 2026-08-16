@@ -2085,7 +2085,18 @@ Ranked: user-visible breakage first.
        Accept: landing + theming blocks highlighted live both themes;
        the new gate proven red (attribute a pre, watch it fail); tests/
        gates green; baselines regenerated deliberately.
-2. [ ] **Palettes conformance** (E3 + H4 + H5). The preview ships
+2. [x] **Palettes conformance** — shipped 2026-08-16. The preview now
+       FOLLOWS the ambient theme (light values in light, the palette's
+       dark values under `[data-theme="dark"]`) — more honest than the
+       old light-only box and conformant by construction: the grill's
+       exact failing pairs re-measured live at 7.07:1 (mauve, was 2.10)
+       and 7.73:1 (mist, was 2.11). Parse assertions added and PROVEN
+       RED (a var()-valued token fails the build with a named error;
+       comment-stripping first, exactly-one dark block, all 7 tokens
+       required per theme, hex-only). Swatches aria-hidden; the
+       why-status-colors-are-out-of-scope paragraph added (semantics
+       must read identically across brands). Axe zero across 62 pages;
+       baselines untouched (verified). (E3 + H4 + H5.) The preview ships
        measured 2.10:1 text in dark mode on the very page claiming
        everything is gated. Fix: scope the full light surface set onto
        the preview (or render light+dark boxes each on its own

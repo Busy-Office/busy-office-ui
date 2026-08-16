@@ -25,8 +25,25 @@ function parseBlock(block) {
 }
 const palettes = Object.entries(files).map(([path, css]) => {
   const name = path.match(/brand-([a-z-]+)\.css$/)[1];
-  const [lightBlock, darkBlock] = css.split('[data-theme="dark"]');
-  return { name, light: parseBlock(lightBlock), dark: parseBlock(darkBlock) };
+  // Parse assertions (Slice 21 grill E1-class hardening): the split and
+  // value shapes are load-bearing — fail the BUILD, never render wrong.
+  const stripped = css.replace(/\/\*[\s\S]*?\*\//g, ''); // comments may legally mention the selector
+  const parts = stripped.split('[data-theme="dark"]');
+  if (parts.length !== 2)
+    throw new Error(`palettes: brand-${name}.css must contain exactly one [data-theme="dark"] block outside comments (found ${parts.length - 1})`);
+  const light = parseBlock(parts[0]);
+  const dark = parseBlock(parts[1]);
+  for (const [theme, block] of [['light', light], ['dark', dark]]) {
+    for (const [t, v] of Object.entries(block)) {
+      if (!/^#[0-9a-fA-F]{3,8}$/.test(v))
+        throw new Error(`palettes: brand-${name}.css ${theme} --bo-color-${t} is "${v}" — hex only (var()/etc. would render invisible ungated swatches)`);
+    }
+    for (const t of TOKENS) {
+      if (!(t in block))
+        throw new Error(`palettes: brand-${name}.css ${theme} block is missing --bo-color-${t}`);
+    }
+  }
+  return { name, light, dark };
 }).sort((a, b) => a.name.localeCompare(b.name));
 ---
 <Gallery title="Palettes">
@@ -56,27 +73,28 @@ const palettes = Object.entries(files).map(([path, css]) => {
             {TOKENS.map((t) => (
               <tr>
                 <td class="bo-data-table__col--code">--bo-color-{t}</td>
-                <td><span class="pal-swatch" style={`background:${p.light[t]}`}></span></td>
+                <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
                 <td class="bo-data-table__col--code">{p.light[t]}</td>
-                <td><span class="pal-swatch" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
+                <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
                 <td class="bo-data-table__col--code">{p.dark[t] ?? '(inherits light)'}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div
-        class={'pal-preview pal-' + p.name}
-        style={TOKENS.map((t) => p.light[t] ? `--bo-color-${t}:${p.light[t]}` : '').filter(Boolean).join(';')}
-      >
+      <style set:html={
+        `.pal-${p.name}{${TOKENS.map((t) => `--bo-color-${t}:${p.light[t]}`).join(';')}}` +
+        `[data-theme="dark"] .pal-${p.name}{${TOKENS.map((t) => `--bo-color-${t}:${p.dark[t]}`).join(';')}}`
+      }></style>
+      <div class={'pal-preview pal-' + p.name}>
         <button class="bo-btn" type="button">Primary action</button>
         <span class="bo-badge bo-badge--accent">accent badge</span>
         <a href={base + '/concepts/theming'}>a link</a>
       </div>
-      <p class="bo-u-text-muted">Live preview — the palette's light values
-      scoped to this box only (the token mechanism itself; dark values
-      verified by the gate, not previewed here to keep the page honest
-      about which theme the box is rendering).</p>
+      <p class="bo-u-text-muted">Live preview — the palette scoped to this
+      box only, following your theme toggle (light values in light, the
+      palette's dark values in dark — exactly what an app importing it
+      gets).</p>
     </section>
   ))}
 
@@ -88,7 +106,12 @@ const palettes = Object.entries(files).map(([path, css]) => {
     unlayered, imported after the framework CSS. Copy any file above as a
     starting point, and add your file to the contrast gate's brand scan
     if you vendor the repo — the gate discovers
-    <code>src/css/brand/*.css</code> automatically.</p>
+    <code>src/css/brand/*.css</code> automatically. <strong>Why palettes
+    never touch status colors</strong>: success/warning/danger carry
+    MEANING (approved, on hold, overdue) that must read identically
+    across every brand — a re-skin that made "danger" olive would be a
+    correctness bug, not a theme. Palettes re-skin identity (the accent
+    family); semantics stay framework-owned.</p>
   </section>
 
   <style>
