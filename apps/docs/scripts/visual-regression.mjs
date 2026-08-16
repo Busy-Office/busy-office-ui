@@ -44,6 +44,10 @@ const PAGES = [
   '/patterns/login/',
   '/patterns/app-launch/',
   '/concepts/density/',
+  // Slice 22 sign-off grill: the WYSIWYG "pixel-comparable" claim and
+  // the richtext chrome are PIXEL claims — gate them like one.
+  '/patterns/editable-grid/',
+  '/components/richtext/',
 ];
 const THEMES = ['light', 'dark'];
 const WIDTHS = [1440, 390];

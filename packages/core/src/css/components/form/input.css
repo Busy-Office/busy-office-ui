@@ -44,7 +44,8 @@
   }
 
   .bo-input--seamless:hover {
-    --bo-input-border: var(--bo-color-border-default);
+    /* border-control — the only-affordance case, same as select (gated). */
+    --bo-input-border: var(--bo-color-border-control);
   }
 
   .bo-input--seamless:focus {

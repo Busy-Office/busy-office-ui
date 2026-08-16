@@ -97,7 +97,10 @@
     --bo-color-bg-selected: #0b3b37;
     --bo-color-border-default: #2e333d;
     --bo-color-border-strong: #3d434f;
-    --bo-color-border-control: var(--bo-palette-gray-500);
+    /* gray-400, not 500: on dark muted/hover fills the control border is
+       sometimes the ONLY affordance (seamless cells) and gray-500 sat at
+       2.97:1 there — surfaced by the Slice 22 sign-off grill's new pairs. */
+    --bo-color-border-control: var(--bo-palette-gray-400);
     --bo-color-text-primary: var(--bo-palette-gray-50);
     --bo-color-text-secondary: var(--bo-palette-gray-300);
     --bo-color-text-muted: var(--bo-palette-gray-400);

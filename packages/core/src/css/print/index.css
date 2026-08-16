@@ -26,12 +26,16 @@
       break-after: avoid;
     }
 
-    /* Tables: repeat headers on every page, never split a row. */
-    .bo-data-table thead {
+    /* Tables: repeat headers on every page, never split a row.
+       .bo-prose lite tables print as "printed notes" and get the same
+       treatment (Slice 22 sign-off grill). */
+    .bo-data-table thead,
+    .bo-prose thead {
       display: table-header-group;
     }
 
-    .bo-data-table tr {
+    .bo-data-table tr,
+    .bo-prose tr {
       break-inside: avoid;
     }
 

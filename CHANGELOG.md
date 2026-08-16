@@ -8,6 +8,17 @@ pin.
 
 ## Unreleased
 
+- Changed: dark-mode `--bo-color-border-control` steps gray-500 →
+  gray-400 — on dark muted/hover fills the control border can be the
+  ONLY affordance (seamless cells) and gray-500 measured 2.97:1;
+  surfaced by two new contrast-gate pairs (border-control on
+  bg-hover/bg-muted at 3:1). Dark inputs/selects get slightly lighter
+  borders.
+
+- Added: `.bo-btn[aria-pressed="true"]` pressed style (bg-selected +
+  accent-text, contrast-gated) — toggle buttons (formatting toolbars)
+  now have a visible + programmatic ON state.
+
 - Added: WYSIWYG (display-identical) editable-grid mode — the
   `--seamless` setting now covers every cell type:
   `.bo-select--seamless` (chevron/border appear on hover/focus) and

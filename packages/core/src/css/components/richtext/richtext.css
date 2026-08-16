@@ -18,11 +18,12 @@
     border-color: var(--bo-color-focus-ring);
   }
 
+  /* Markup composes the cluster primitive: class="bo-cluster
+     bo-richtext__toolbar" — flex/wrap/align come from .bo-cluster
+     (grill 2026-08-16: this was the third hand-rolled toolbar row). */
   .bo-richtext__toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--bo-space-1);
+    --bo-cluster-gap: var(--bo-space-1);
+
     padding: var(--bo-space-1) var(--bo-space-2);
     border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
     background: var(--bo-color-bg-muted);
@@ -32,23 +33,22 @@
 
   /* Visible group separator inside the toolbar (bold/italic | lists). */
   .bo-richtext__divider {
-    inline-size: var(--bo-border-width);
     align-self: stretch;
     margin-block: var(--bo-space-1);
-    background: var(--bo-color-border-strong);
+    /* A border, not a background — backgrounds are flattened away in
+       forced-colors (the catalogued Slice 14 gap class). */
+    border-inline-start: var(--bo-border-width) solid var(--bo-color-border-strong);
   }
 
   .bo-richtext__content {
     min-block-size: calc(var(--bo-density-row-height) * 3);
-    padding: var(--bo-density-cell-padding-y) var(--bo-density-cell-padding-x);
+    /* Same inline padding as .bo-input/.bo-select — a richtext field
+       sits IN forms, so its text must align with the fields around it
+       (density scales the height, not the text inset). */
+    padding: var(--bo-space-2) var(--bo-space-3);
     font-size: var(--bo-density-font-size);
     overflow-y: auto;
-  }
-
-  /* The container carries the focus ring (focus-within on the border);
-     the contenteditable's own outline would double it. */
-  .bo-richtext__content:focus-visible {
-    outline: none;
+    resize: vertical;
   }
 
   /* Read-only: content stays selectable/copyable, chrome says "not
@@ -56,6 +56,13 @@
      contenteditable="false" + aria-readonly="true" (programmatic). */
   .bo-richtext--readonly .bo-richtext__toolbar {
     display: none;
+  }
+
+  /* Visible half of the read-only signal (muted field, normal text —
+     the classic readonly-vs-disabled distinction). */
+  .bo-richtext--readonly .bo-richtext__content {
+    background: var(--bo-color-bg-muted);
+    resize: none;
   }
 
   /* Disabled: same two-channel contract — visible muted field + the
@@ -80,7 +87,7 @@
     line-height: var(--bo-line-height-normal);
   }
 
-  .bo-prose :is(h1, h2, h3, h4) {
+  .bo-prose :is(h1, h2, h3, h4, h5, h6) {
     margin-block: var(--bo-space-4) var(--bo-space-2);
     line-height: var(--bo-line-height-tight);
   }
@@ -89,6 +96,11 @@
   .bo-prose h2 { font-size: var(--bo-font-size-lg); }
   .bo-prose h3 { font-size: var(--bo-font-size-md); }
   .bo-prose h4 { font-size: var(--bo-font-size-base); }
+  .bo-prose :is(h5, h6) { font-size: var(--bo-font-size-sm); }
+
+  /* Prose slots into padded containers — no stray edge margins. */
+  .bo-prose > :first-child { margin-block-start: 0; }
+  .bo-prose > :last-child { margin-block-end: 0; }
 
   .bo-prose p,
   .bo-prose ul,

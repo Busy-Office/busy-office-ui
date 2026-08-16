@@ -464,10 +464,16 @@ const markup = `<table class="bo-data-table" data-row-edit>
     <em>setting</em> to the remaining cell types —
     <code>.bo-select--seamless</code> and
     <code>.bo-tag-input--seamless</code> (a checkbox already reads
-    identically in both modes). Deliberately <strong>not</strong> a
-    display↔editor swap engine: the control never changes, so the
-    keyboard path and screen-reader semantics never change either —
-    that's the whole trick.</p>
+    identically in both modes; a combobox cell is
+    <code>.bo-input--seamless</code> on its input). Deliberately
+    <strong>not</strong> a display↔editor swap engine: the control never
+    changes, so the keyboard path and screen-reader semantics never
+    change either — that's the whole trick. <strong>Scope</strong>: the
+    compound cells stay chromed on purpose — Money/Quantity's
+    currency/unit selects share an edge with their input, and stepper
+    buttons are actions, not values; a compound control without its
+    boundaries stops reading as one control. WYSIWYG covers the
+    single-control cell types shown below.</p>
     <table class="bo-data-table" data-row-edit id="eg-wys-table">
       <thead><tr>
         <th scope="col">Line</th>

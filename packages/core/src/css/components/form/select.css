@@ -47,7 +47,10 @@
   }
 
   .bo-select--seamless:hover {
-    --bo-select-border: var(--bo-color-border-default);
+    /* border-control, not border-default: on a hovered/striped row this
+       border IS the only affordance, and border-default sits at ~1.1:1
+       there (grill 2026-08-16) — the gate now checks this pairing. */
+    --bo-select-border: var(--bo-color-border-control);
   }
 
   .bo-select--seamless:focus {
@@ -60,6 +63,15 @@
     background-color: var(--bo-color-bg-muted);
     color: var(--bo-color-text-disabled);
     cursor: not-allowed;
+  }
+
+  /* Forced colors: a transparent border is honored (= invisible), but
+     HCM users need control boundaries — restore them at rest. */
+  @media (forced-colors: active) {
+    .bo-select--seamless {
+      border-color: ButtonText;
+      background-image: var(--bo-select-chevron);
+    }
   }
 
   .bo-select[aria-invalid="true"] {

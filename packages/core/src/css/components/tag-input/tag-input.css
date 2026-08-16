@@ -28,12 +28,32 @@
   }
 
   .bo-tag-input--seamless:hover {
-    border-color: var(--bo-color-border-default);
+    border-color: var(--bo-color-border-control);
   }
 
   .bo-tag-input--seamless:focus-within {
-    border-color: var(--bo-color-focus-ring);
+    /* border-control, matching the input/select seamless focus color —
+       one setting, one indicator color across a WYSIWYG row. */
+    border-color: var(--bo-color-border-control);
     background: var(--bo-color-bg-surface);
+  }
+
+  /* Display-identical at rest: the remove buttons and the add-field
+     placeholder are edit chrome — reveal on hover/focus-within like the
+     border (they re-enter the tab order the moment the field is
+     entered; at rest the cell reads as plain chips). */
+  .bo-tag-input--seamless:not(:hover, :focus-within) .bo-tag-input__remove {
+    visibility: hidden;
+  }
+
+  .bo-tag-input--seamless:not(:hover, :focus-within) .bo-tag-input__field::placeholder {
+    color: transparent;
+  }
+
+  @media (forced-colors: active) {
+    .bo-tag-input--seamless {
+      border-color: ButtonText;
+    }
   }
 
   .bo-tag-input__tag {

@@ -50,6 +50,16 @@
     --bo-btn-fg: var(--bo-color-text-primary);
   }
 
+  /* Toggle state (aria-pressed) — a formatting-toolbar Bold that is ON
+     needs a visible pressed look AND the programmatic attribute (two
+     channels; Slice 22 sign-off grill: the toolbar was stateless in
+     both). bg-selected/accent-text is the framework's existing gated
+     selection pairing. */
+  .bo-btn[aria-pressed="true"] {
+    --bo-btn-bg: var(--bo-color-bg-selected);
+    --bo-btn-fg: var(--bo-color-accent-text);
+  }
+
   .bo-btn--danger {
     --bo-btn-bg: var(--bo-color-danger-solid);
     --bo-btn-bg-hover: var(--bo-color-danger-strong);

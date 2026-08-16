@@ -2352,6 +2352,25 @@ engine-shaped sub-ask refused with the reason.
        (Enter to edit, Esc to cancel); composes bo:cell-change/row-save
        unchanged; tests; live-verified.
 
+**OWNER DECISION WANTED (moved out of the closed item 3 where it was
+buried — sign-off grill process finding)**: item 3 was built as
+"display-identical click-to-edit cells" (widened `--seamless`). If you
+instead meant **a table inside the rich-text editor**, that need is
+already served by item 2's `.bo-prose` tables — say so and a dedicated
+editor-integration note gets added. Silence = the shipped reading
+stands.
+
+**Accept-drift note (sign-off grill, 2026-08-16)**: item 3's original
+Accept clauses "Enter to edit, Esc to cancel" and "tests" were
+superseded by the seamless reading in the same commit that shipped it —
+recorded here explicitly rather than only in the rewrite: "Enter/Esc"
+is struck because focus IS edit on a real control (no mode to enter or
+leave); "tests" resolves as the visual-regression matrix now INCLUDING
+/patterns/editable-grid/ and /components/richtext/ (the item's claims
+are pixel claims; the pixel harness is the right test seam for a
+CSS-only change). Process rule going forward: strike Accept clauses
+with a reason, never overwrite them with narrative.
+
 **Open question (from the Slice 22 color-docs grill, 2026-08-16)**:
 dark mode never remaps `--bo-color-danger-solid`/`danger-strong`, so a
 dark `bo-btn--danger` *darkens* on hover (red-600 → red-700) — inverted

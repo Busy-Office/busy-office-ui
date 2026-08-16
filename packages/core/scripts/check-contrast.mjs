@@ -77,9 +77,14 @@ const PAIRS = [
   ['--bo-color-accent', '--bo-color-bg-surface', 4.5], // links
   ['--bo-color-text-primary', '--bo-color-bg-hover', 4.5], // table hover rows
   ['--bo-color-text-primary', '--bo-color-bg-selected', 4.5], // selected rows
+  ['--bo-color-accent-text', '--bo-color-bg-selected', 4.5], // aria-pressed buttons
   ['--bo-color-text-primary', '--bo-color-bg-surface-raised', 4.5], // dialog/menu
   ['--bo-color-text-secondary', '--bo-color-bg-canvas', 4.5], // muted-on-canvas
   ['--bo-color-border-control', '--bo-color-bg-surface', 3],
+  // Seamless (WYSIWYG) cells: on a hovered/striped row the revealed
+  // border is the ONLY editability affordance (grill 2026-08-16).
+  ['--bo-color-border-control', '--bo-color-bg-hover', 3],
+  ['--bo-color-border-control', '--bo-color-bg-muted', 3],
   ['--bo-color-focus-ring', '--bo-color-bg-canvas', 3],
   // .bo-progress fill on its track — non-text UI component (WCAG 1.4.11, 3:1)
   ['--bo-color-accent', '--bo-color-bg-muted', 3],
