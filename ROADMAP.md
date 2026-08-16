@@ -2810,6 +2810,23 @@ applies the Objective per item rather than accepting wholesale.
   large keyboard/focus surface serving no named adopter requirement
   yet. Document the docs-site recipe if asked.
 
+**Explore (dogfood) 2026-08-17 — the new doctrine tested against the
+reference app, and it caught a REAL defect in our own guidance.**
+Spiked a viewer role and a two-tab conflict into examples/po-app in a
+worktree (discarded; nothing merged from it). Permissions doctrine
+held: a viewer gets key-value facts and no approve control, an editor
+gets inputs — omit-not-disable works exactly as written. **The
+concurrency page was WRONG in practice**: htmx discards non-2xx
+responses by default, so the 409-with-re-rendered-record pattern we
+published was a SILENT no-op — verified in the browser: no banner, the
+dialog left open, the record quietly unapproved, and the only trace a
+console error. Adding an `htmx:beforeSwap` opt-in for 409 made the
+banner appear. Fixed on main same wake: the concurrency page now
+carries the opt-in as a prominent warning, and /getting-started/htmx
+gained an "expected non-2xx responses" section covering 409 and 422
+(the validation-summary path has the same hazard). Lesson recorded:
+guidance that has never been run is a hypothesis — dogfood it.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

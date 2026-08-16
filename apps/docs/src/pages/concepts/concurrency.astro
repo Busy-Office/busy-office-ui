@@ -3,6 +3,14 @@ import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
+const beforeSwap = `// Without this, a 409 body is never swapped and the conflict is invisible.
+document.body.addEventListener("htmx:beforeSwap", (e) => {
+  if (e.detail.xhr.status === 409) {
+    e.detail.shouldSwap = true;   // swap the server's current state in
+    e.detail.isError = false;     // it is an expected outcome, not a failure
+  }
+});`;
+
 const conflictMarkup = `<!-- Send what you think you're changing FROM. The server compares and
      refuses if the record moved underneath you. -->
 <form hx-patch="/po/88213" hx-target="#po-88213" hx-swap="outerHTML">
@@ -38,6 +46,15 @@ const conflictMarkup = `<!-- Send what you think you're changing FROM. The serve
     Ship optimistic concurrency instead — let both users edit, and detect
     the collision at save:</p>
     <pre><code>{conflictMarkup}</code></pre>
+    <div class="bo-alert bo-alert--warning" role="note" style="margin-block: var(--bo-space-4)">
+      <p><strong>htmx drops non-2xx responses by default.</strong> Return a
+      409 with a re-rendered record and htmx will discard it — the user
+      sees <em>nothing</em>, the record silently stays unapproved, and the
+      only trace is a console error. Opt the status in (verified in the
+      reference app, 2026-08-17 — the guidance above was a silent no-op
+      without it):</p>
+    </div>
+    <pre><code>{beforeSwap}</code></pre>
     <p class="bo-u-text-muted">The version can be a row version, an
     <code>updated_at</code>, or an ETag — what matters is that the save
     carries the value the user <em>started from</em>, and the server

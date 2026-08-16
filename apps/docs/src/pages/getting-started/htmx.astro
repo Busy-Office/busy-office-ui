@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cssImport = `/* extra, opt-in stylesheet — core CSS never references HTMX */
 import "@busy-office/ui/css/htmx";`;
 const swapRecipe = `<!-- Styles the classes HTMX itself toggles: -->
@@ -55,5 +56,25 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
     <pre><code>{stateRecipe}</code></pre>
     <p class="bo-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
   </section>
+  <section class="demo">
+    <h2>Expected non-2xx responses</h2>
+    <p>htmx swaps 2xx responses and discards everything else. That is the
+    right default for a 500, and the wrong one for statuses your app uses
+    deliberately — a <code>409</code> carrying the current record after a
+    <a href={base + '/concepts/concurrency'}>conflict</a>, or a
+    <code>422</code> carrying a form with validation errors. Without the
+    opt-in below the user sees nothing at all and only the console
+    records it:</p>
+    <pre><code>{`document.body.addEventListener("htmx:beforeSwap", (e) => {
+  if ([409, 422].includes(e.detail.xhr.status)) {
+    e.detail.shouldSwap = true;
+    e.detail.isError = false;
+  }
+});`}</code></pre>
+    <p class="bo-u-text-muted">Found by dogfooding the reference app
+    (2026-08-17): the concurrency guidance rendered a conflict banner the
+    browser then threw away.</p>
+  </section>
+
   <Related links={[["/patterns/editable-grid", "Editable grid (htmx in anger)"], ["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>
