@@ -2713,7 +2713,26 @@ applies the Objective per item rather than accepting wholesale.
 6. [ ] **Split /components/data-table** (1,820 w) into table /
        inline editing / toolbar-columns-export, and
        /concepts/js-behaviors into narrative + generated event index.
-7. [ ] **Foundations gaps that are ERP-specific and genuinely absent**
+7. [x] **ERP foundations gaps — DONE 2026-08-17.** Four pages, each
+       written against what the framework ACTUALLY does (claims
+       verified in source before writing, and the RTL claim
+       smoke-tested live: dir=rtl mirrors with zero overflow).
+       **Permissions & read-only** — the omit / disable / read-only
+       decision table with the "never disabled inputs for display"
+       rule and the server-decides-UI-reflects boundary; closes the
+       review's most damning find ("permission" appeared zero times
+       across 69 pages). **Concurrency & conflicts** — optimistic
+       version checks over pessimistic locks (locks outlive the tab
+       that took them), the 409 reload-or-overwrite contract, per-row
+       conflict isolation, and what initRowEdit already tracks.
+       **Internationalization** — RTL by logical properties (with the
+       three explicit flips named), the never-parse-your-numbers
+       boundary, string expansion at compact density, and timezone
+       policy for audit trails. **Performance at scale** — the
+       measured numbers incl. 4x-throttle, the row/column decisions
+       they imply, and why no virtualiser (it costs find-in-page,
+       native scrolling, print fidelity and SR row counts). Original:
+       **Foundations gaps that are ERP-specific and genuinely absent**
        — i18n/RTL/string expansion, permissions & read-only,
        concurrency & conflicts, performance at scale. The review is
        right that "permission" appearing zero times across 69 pages is

@@ -270,3 +270,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 00:37 · Continue · build · Slice 23 item 3: pattern template on 12 pages + page-shape gate; keyboard help to reference · shipped · e043aa6
 - 2026-08-17 00:37 · Continue · bug · P0 combobox: 5 bugs from owner test report fixed red-first (Enter-submit, focusout, scroll, click focus, aria-disabled); docs claims corrected · shipped · e043aa6
 - 2026-08-17 00:52 · Continue · build · Slice 23 items 9-10: combobox form value + browse-after-commit + live region + pointer sync (4 accepted, 2 deferred, 3 refused); docs depth sections · shipped · 72c10fa
+- 2026-08-17 01:14 · Continue · build · Slice 23 items 4+8: nav regrouped (P7), Related gate red-first (6 pages fixed), /getting-started/scope not-in-scope page · shipped · bdfc3fa

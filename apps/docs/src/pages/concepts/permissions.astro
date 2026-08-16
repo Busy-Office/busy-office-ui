@@ -1,0 +1,84 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const readonlyMarkup = `<!-- A viewer sees FACTS, not disabled inputs. Same data, honest control. -->
+<dl class="bo-kv">
+  <div><dt>Vendor</dt><dd>Umbrella Logistics</dd></div>
+  <div><dt>Amount</dt><dd class="bo-u-tabular">$12,400.00</dd></div>
+</dl>
+
+<!-- An editor sees the form -->
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="vendor">Vendor</label>
+  <input class="bo-input" id="vendor" value="Umbrella Logistics" />
+</div>`;
+---
+<Gallery title="Permissions & read-only">
+  <p class="demo-note">
+    Every ERP screen renders differently for a clerk, an approver and an
+    auditor. The framework ships no permission system — that is your
+    server's job — but it has a clear stance on how a screen should
+    <em>degrade</em>, and getting it wrong is how apps leak both
+    information and support tickets.
+  </p>
+
+  <section class="demo">
+    <h2>The three degradations, and when to use each</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Treatment</th><th scope="col">Use when</th><th scope="col">Never use when</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Omit</strong> — the control is not in the DOM</td>
+            <td>The user can never perform this action in this context (not an approver, wrong role, wrong record state). A control you can never use teaches nothing and invites a ticket.</td>
+            <td>The action is temporarily unavailable — omitting makes the UI look broken or inconsistent between visits.</td>
+          </tr>
+          <tr>
+            <td><strong>Disable</strong> — present, <code>disabled</code></td>
+            <td>The action is possible for this user but blocked right now by state (nothing selected, form invalid, save in flight). Always pair with the reason.</td>
+            <td>The block is permanent for this user — that is what omit is for. A permanently disabled button is a permanent question.</td>
+          </tr>
+          <tr>
+            <td><strong>Read-only</strong> — the value, not the input</td>
+            <td>The user may see the data but not change it. Render <a href={base + '/components/kv'}>key-value facts</a>, not disabled inputs.</td>
+            <td>Never as <code>&lt;input disabled&gt;</code> for display: disabled controls are skipped by keyboard, often fail contrast, and cannot be copied — while claiming to be a form field.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code>{readonlyMarkup}</code></pre>
+    <p class="bo-u-text-muted">The rule of thumb: <strong>the shape of
+    the screen tells the truth about what you can do</strong>. A viewer's
+    record detail is a document; an editor's is a form.</p>
+  </section>
+
+  <section class="demo">
+    <h2>What the framework gives you</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><a href={base + '/components/kv'}>Key-value facts</a> — the read-only counterpart of a form section.</li>
+      <li><code>readonly</code> on <code>.bo-input</code> — for the narrow case where the field must stay a field (it submits, its text is selectable) but cannot be edited.</li>
+      <li><code>--readonly</code> / <code>--disabled</code> on <a href={base + '/components/richtext'}>rich text</a> — with the two-channel rule: the modifier is the visible half, <code>aria-readonly</code>/<code>aria-disabled</code> the programmatic half.</li>
+      <li><a href={base + '/components/state-patterns'}>Empty and error states</a> — including the "you don't have access" screen, which is a state, not an error.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Rules that keep permission bugs out</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>The server decides; the UI reflects.</strong> Never rely on a hidden control as a security boundary — every action needs its own server-side check. A missing button is a courtesy, not a lock.</li>
+      <li><strong>Don't render what you then hide.</strong> Sending a disabled control that contains data the user may not see leaks it in the HTML. Omit it server-side.</li>
+      <li><strong>Say why, once.</strong> A disabled control needs its reason nearby (a hint, a tooltip, or a line above the action bar) — not on hover only, which touch and keyboard users never get.</li>
+      <li><strong>Degrade the screen, not each control.</strong> A viewer's screen should look deliberate — facts and a timeline — rather than an editor's screen with everything greyed out.</li>
+      <li><strong>Field-level permissions are a data contract.</strong> If the server may withhold a field, the pattern's <a href={base + '/patterns/detail-form'}>data contract</a> should say so; a silently missing field reads as a bug.</li>
+    </ol>
+  </section>
+
+  <Related links={[
+    ['/components/kv', 'Key-value facts'],
+    ['/patterns/detail-form', 'Detail form (read-only role)'],
+    ['/patterns/settings-admin', 'Settings & admin'],
+    ['/components/state-patterns', 'Loading, empty & error'],
+  ]} />
+</Gallery>

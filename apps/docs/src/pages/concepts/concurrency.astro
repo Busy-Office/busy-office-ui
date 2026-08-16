@@ -1,0 +1,82 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const conflictMarkup = `<!-- Send what you think you're changing FROM. The server compares and
+     refuses if the record moved underneath you. -->
+<form hx-patch="/po/88213" hx-target="#po-88213" hx-swap="outerHTML">
+  <input type="hidden" name="version" value="7">
+  …fields…
+</form>
+
+<!-- 409 response: the server re-renders the row/record as it NOW is,
+     with a banner naming who changed it. The user chooses. -->
+<div class="bo-alert bo-alert--warning" role="alert">
+  <p><strong>J. Kim changed this record</strong> 2 minutes ago while you were editing.</p>
+  <div class="bo-cluster">
+    <button class="bo-btn bo-btn--secondary" type="button">Discard mine &amp; reload</button>
+    <button class="bo-btn" type="button">Keep mine &amp; overwrite</button>
+  </div>
+</div>`;
+---
+<Gallery title="Concurrency & conflicts">
+  <p class="demo-note">
+    Two clerks open the same purchase order. In a back office this is
+    normal, not an edge case — approval queues, shared cost centres and
+    month-end all concentrate people on the same records. The framework
+    tracks dirty state and gives you the events; the conflict
+    <em>policy</em> is yours, and this page states the one this project
+    recommends.
+  </p>
+
+  <section class="demo">
+    <h2>Optimistic by default, with a version check</h2>
+    <p>Pessimistic locking ("this record is locked by J. Kim") looks
+    safer and behaves worse: locks outlive the browser tab that took
+    them, and someone always has to unlock things on a Monday morning.
+    Ship optimistic concurrency instead — let both users edit, and detect
+    the collision at save:</p>
+    <pre><code>{conflictMarkup}</code></pre>
+    <p class="bo-u-text-muted">The version can be a row version, an
+    <code>updated_at</code>, or an ETag — what matters is that the save
+    carries the value the user <em>started from</em>, and the server
+    refuses when it no longer matches.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Never silently lose an edit</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Situation</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Conflict on save (409)</td><td>Re-render with the server's current values plus a banner naming who changed it and when; offer reload-or-overwrite. Never merge silently, and never discard the user's typing to show them the new state.</td></tr>
+          <tr><td>Row-level conflict in a grid</td><td>Re-render just that row in the error state; the rest of the user's dirty rows survive. The <a href={base + '/patterns/editable-grid'}>editable grid</a> saves per row precisely so one conflict is not a screen-wide rollback.</td></tr>
+          <tr><td>Record decided elsewhere</td><td>An approval that was already approved returns 409 and shows the decision that won — see the <a href={base + '/patterns/approval'}>approval pattern</a>.</td></tr>
+          <tr><td>Stale list</td><td>A list is a snapshot. Say when it was taken, or refresh it; a bulk action on stale rows should report per-row results rather than claiming blanket success.</td></tr>
+          <tr><td>Two tabs, same user</td><td>The same problem with the same fix — a version check does not care whether the other editor is a colleague or yourself.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>What the framework tracks for you</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><code>initRowEdit()</code> keeps per-row dirty state and dispatches <code>bo:row-save</code> with the row and its <code>data-row-id</code> — your save code decides what to send, including the version.</li>
+      <li><code>bo:cell-change</code> fires on every committed cell edit, so you can mark a record dirty the moment anything changes.</li>
+      <li>Cancel restores a row to its last-saved values and re-fires input events, so derived totals revert with it — a cancelled edit never leaves stale numbers on screen.</li>
+      <li>Nothing polls, nothing auto-saves, nothing reloads underneath the user. If your app wants live updates, drive them from your own events and swap fragments — the components survive being replaced.</li>
+    </ul>
+    <p class="bo-u-text-muted">Warn on navigate-away while dirty
+    (<code>beforeunload</code>) — four lines of app code, and the single
+    highest-value guard against lost work.</p>
+  </section>
+
+  <Related links={[
+    ['/patterns/editable-grid', 'Editable grid'],
+    ['/patterns/detail-form', 'Detail form (conflict state)'],
+    ['/patterns/approval', 'Approval workflow'],
+    ['/concepts/js-behaviors', 'JS behaviors & events'],
+  ]} />
+</Gallery>

@@ -1,0 +1,86 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import pkg from '@busy-office/ui/package.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Performance at scale">
+  <p class="demo-note">
+    Where this framework's numbers actually sit, measured rather than
+    claimed, and the honest limits: what to do at 5,000 rows, 200
+    columns, and on the ten-year-old laptop your users are issued.
+  </p>
+
+  <section class="demo">
+    <h2>Measured, not guessed</h2>
+    <p>Full table stack (sticky header, row checkboxes, badges, container
+    query, <code>initDataTables()</code>) in the
+    <code>examples/po-app</code> stress harness — the same numbers on the
+    <a href={base + '/components/data-table'}>data table page</a>, repeated
+    here because they are the framework's scaling story:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Initial render</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--numeric">1,000</td><td class="bo-data-table__col--numeric">85 ms</td><td class="bo-data-table__col--numeric">4 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">5,000</td><td class="bo-data-table__col--numeric">174 ms</td><td class="bo-data-table__col--numeric">18 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">20,000</td><td class="bo-data-table__col--numeric">558 ms</td><td class="bo-data-table__col--numeric">49 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">5,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">1,625 ms</td><td class="bo-data-table__col--numeric">15 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">20,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">3,783 ms</td><td class="bo-data-table__col--numeric">60 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The throttled rows approximate the
+    corporate hardware ERP users actually get. Read them as the real
+    numbers, not the optimistic ones.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The decisions those numbers imply</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Situation</th><th scope="col">Do this</th></tr></thead>
+        <tbody>
+          <tr><td>Up to ~1,000 rows</td><td>Render them. Native scrolling, find-in-page and print all keep working.</td></tr>
+          <tr><td>~1,000–5,000 rows</td><td>Still fine on modern hardware; add <a href={base + '/components/pagination'}>pagination or load-more</a> before it becomes a habit.</td></tr>
+          <tr><td>Beyond ~5,000</td><td>Paginate server-side. The framework ships <strong>no virtualiser</strong> and does not pretend to — see below.</td></tr>
+          <tr><td>200 columns</td><td>Horizontal scroll plus a frozen first column (<code>--sticky-col</code>); offer a column chooser rather than shrinking type past legibility.</td></tr>
+          <tr><td>Bulk select at scale</td><td><code>initDataTables()</code> keeps the selection count O(1) rather than re-counting the DOM; the style flush after checking 20,000 boxes is the cost, and it is the browser's, not ours.</td></tr>
+          <tr><td>Slow aggregates on a dashboard</td><td>Load each widget as its own fragment so one slow query never blocks the screen — the <a href={base + '/patterns/reporting-dashboard'}>dashboard pattern</a>'s data contract.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Why there is no virtualiser</h2>
+    <p>Virtualisation buys smooth scrolling at 50,000 rows and costs
+    find-in-page, native keyboard scrolling, correct print output, and
+    screen-reader row counts — the things back-office users rely on daily.
+    It also forces every consumer into a JS render loop, which is the
+    opposite of this project's stance. Server-side pagination keeps all
+    of it and is what real ERP screens do anyway. If your screen genuinely
+    needs 50,000 rows in the DOM at once, this framework is the wrong
+    tool for that screen — and the <a href={base + '/getting-started/scope'}>scope
+    page</a> says so plainly.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The bytes</h2>
+    <p>The whole framework is <strong>{pkg.version}</strong> at roughly 70 kB
+    minified / 11 kB gzipped of CSS, plus optional behaviors — smaller
+    than most single component libraries' JS runtime, and the CSS is
+    cacheable across every screen. Per-component files ship too, so a
+    single-screen pilot can import three files and nothing else. There is
+    no build step to tune, no tree-shaking to configure, and no runtime
+    cost per component instance: a table with 20,000 rows loads exactly
+    the same stylesheet as a login form.</p>
+  </section>
+
+  <Related links={[
+    ['/components/data-table', 'Data table'],
+    ['/components/pagination', 'Pagination'],
+    ['/patterns/invoice-list', 'Invoice list'],
+    ['/getting-started/scope', "What's in scope"],
+  ]} />
+</Gallery>

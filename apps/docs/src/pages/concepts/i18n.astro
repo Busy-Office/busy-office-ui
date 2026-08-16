@@ -1,0 +1,94 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const rtlMarkup = `<!-- One attribute. The framework's CSS is written in LOGICAL properties
+     (inline-size, padding-inline, inset-inline-start), so layout mirrors
+     without a separate stylesheet. -->
+<html lang="ar" dir="rtl">`;
+
+const numberMarkup = `<!-- Format on the SERVER, in the user's locale, and send the string.
+     The framework aligns and spaces it; it never parses or reformats. -->
+<td class="bo-data-table__col--numeric">1.234,56 €</td>
+
+<!-- Client-side, if you must: -->
+new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(1234.56)
+new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(new Date())`;
+---
+<Gallery title="Internationalization">
+  <p class="demo-note">
+    ERP screens are dense, and dense screens are where translation
+    breaks: German runs ~35% longer than English, Arabic mirrors the
+    whole layout, and a date written the American way is a support call
+    in Europe. What the framework handles, what it deliberately leaves to
+    you, and what to check before shipping a locale.
+  </p>
+
+  <section class="demo">
+    <h2>RTL: one attribute, because the CSS is logical</h2>
+    <pre><code>{rtlMarkup}</code></pre>
+    <p>The stylesheet uses logical properties throughout —
+    <code>inline-size</code>, <code>padding-inline</code>,
+    <code>inset-inline-start</code>, <code>text-align: start</code> — so
+    a right-to-left document mirrors without a mirrored stylesheet. Three
+    places need an explicit flip and already have one: the
+    <a href={base + '/components/form'}>select</a> chevron (a background
+    image has no logical position), the
+    <a href={base + '/components/tree'}>tree</a> disclosure indent, and
+    the off-canvas <a href={base + '/components/nav'}>drawer</a> slide
+    direction.</p>
+    <p class="bo-u-text-muted"><strong>Your CSS must follow.</strong> A
+    single <code>margin-left</code> in app code re-breaks RTL. Numbers
+    stay left-to-right inside RTL text — that is correct, not a bug.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Numbers, currency and dates are your data</h2>
+    <pre><code>{numberMarkup}</code></pre>
+    <p>The framework <strong>never parses or reformats your values</strong>
+    — a deliberate boundary, because a UI that guesses at number formats
+    eventually corrupts an amount. What it does provide:
+    <code>font-variant-numeric: tabular-nums</code> so digits align in
+    columns, right alignment for numeric columns, and — for
+    <em>editing</em> — the <a href={base + '/components/money'}>money</a>
+    and <a href={base + '/components/quantity'}>quantity</a> fields that
+    derive decimal precision from the selected currency or unit, and
+    reformat only losslessly (they pad and trim zeros, never round).</p>
+    <p class="bo-u-text-muted">Two rules that prevent the classic bugs:
+    format on the server where the locale is known, and keep the machine
+    value separate from the display string (that is exactly what
+    <code>data-value</code> does on a
+    <a href={base + '/components/combobox'}>combobox</a> and what a
+    hidden input carries in a form).</p>
+  </section>
+
+  <section class="demo">
+    <h2>String expansion — the dense-screen killer</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Table headers wrap, they do not truncate.</strong> Verify at <em>compact</em> density in your longest locale — that is the combination that breaks first.</li>
+      <li><strong>Buttons size to content</strong>, so a long label grows the button rather than clipping. Fixed-width action columns are the anti-pattern.</li>
+      <li><strong>Don't build sentences from fragments.</strong> "Approve" + n + "invoices" cannot be translated into languages that inflect; pass the whole sentence with a placeholder.</li>
+      <li><strong>Badges and chips are the tightest spaces</strong> — prefer a short status vocabulary you control over free translation.</li>
+      <li><strong>Test with a pseudo-locale</strong> (every string ×1.4, accented) before the first real translation lands; it finds clipping without a translator.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Timezones in an audit trail</h2>
+    <p>Audit timestamps are legal records. Store UTC, render in the
+    viewer's zone, and <strong>say which zone you rendered</strong> —
+    "2026-08-16 15:02 CET" is unambiguous; "15:02" is not. Use a real
+    <code>&lt;time datetime="…"&gt;</code> element so the machine-readable
+    instant travels with the display string, and keep a fixed format in
+    audit trails rather than relative time ("2 hours ago" is unusable in
+    a dispute).</p>
+  </section>
+
+  <Related links={[
+    ['/components/money', 'Money field'],
+    ['/components/quantity', 'Quantity'],
+    ['/components/date', 'Date'],
+    ['/base/print', 'Print & reports'],
+  ]} />
+</Gallery>
