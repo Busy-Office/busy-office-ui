@@ -137,90 +137,6 @@ const rows = [
     </div>
   </section>
   <section class="demo">
-    <h2>Toolbar — column visibility &amp; export <span class="bo-badge">opt-in</span></h2>
-    <div class="bo-data-table-container" tabindex="0">
-      <div class="bo-data-table__toolbar">
-        <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
-          <button class="bo-btn bo-btn--secondary" popovertarget="cols-menu-demo" data-multiselect-label="Columns">Columns</button>
-          <div class="bo-dropdown__menu" id="cols-menu-demo" popover data-multiselect>
-            <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="vendor" checked /> Vendor</label>
-            <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="cc" checked /> Cost center</label>
-            <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="status" checked /> Status</label>
-          </div>
-          <button class="bo-btn bo-btn--secondary" type="button" data-table-export data-table-export-format="csv">Export</button>
-        </div>
-      </div>
-      <table class="bo-data-table">
-        <thead>
-          <tr>
-            <th scope="col" data-col="no">Invoice #</th>
-            <th scope="col" data-col="vendor">Vendor</th>
-            <th scope="col" data-col="cc">Cost center</th>
-            <th scope="col" class="bo-data-table__col--numeric" data-col="amount">Amount</th>
-            <th scope="col" data-col="status">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.slice(0, 3).map((r) => (
-            <tr>
-              <td class="bo-data-table__col--code" data-col="no">{r.no}</td>
-              <td data-col="vendor">{r.vendor}</td>
-              <td class="bo-data-table__col--code" data-col="cc">{r.cc}</td>
-              <td class="bo-data-table__col--numeric" data-col="amount">{r.amount}</td>
-              <td data-col="status"><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    <p class="bo-u-text-muted"><strong>Columns</strong> is the same multi-select
-    dropdown pattern as elsewhere (<code>data-multiselect</code>, real checkboxes)
-    — checking/unchecking a <code>data-col-toggle</code> box shows/hides every
-    <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> with the matching
-    <code>data-col</code>, scoped to this table only. <strong>Export</strong>
-    dispatches <code>bo:table-export</code> with a <code>format</code> — this
-    behavior only tracks the intent, generating and downloading the actual file
-    is your code (fetch a server export endpoint, or build a client-side CSV/PDF)
-    — same split as <code>bo:row-save</code> and <code>bo:scan</code>. Try it:
-    uncheck a column, then click Export.</p>
-  </section>
-  <section class="demo">
-    <h2>Advanced — keyboard grid navigation <span class="bo-badge">opt-in</span></h2>
-    <p class="bo-u-text-muted">
-      The second tier: <code>data-grid-nav</code> + <code>initDataGrid()</code> turns
-      the table into a WAI-ARIA APG "Grid": <code>role="grid"</code> (cells get their
-      <code>gridcell</code>/<code>columnheader</code> roles implicitly — no per-cell
-      markup needed), <code>aria-selected</code> synced from the row checkboxes, and
-      two-axis roving tabindex — Tab enters the grid at ONE cell, arrow keys move the
-      cursor (clamped, no wrap), <kbd>Enter</kbd> focuses a cell's single widget (the
-      checkbox), <kbd>Esc</kbd> hands focus back to the cell. Reach for this when a
-      screen is genuinely spreadsheet-like (dense data entry, heavy keyboard use) —
-      the Simple tier above is enough for most tables, including ones with sort and
-      bulk-select. Click into the table below, then try arrow keys.
-    </p>
-    <div class="bo-data-table-container" tabindex="0">
-      <table class="bo-data-table" data-grid-nav id="grid-nav-demo">
-        <thead>
-          <tr>
-            <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
-            <th scope="col">Invoice #</th>
-            <th scope="col" class="bo-data-table__col--numeric">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.slice(0, 3).map((r) => (
-            <tr>
-              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
-              <td class="bo-data-table__col--code">{r.no}</td>
-              <td class="bo-data-table__col--numeric">{r.amount}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    <pre><code>{gridMarkup}</code></pre>
-  </section>
-  <section class="demo">
     <h2>Narrow container → auto-compaction</h2>
     <div style="max-inline-size: 420px">
       <div class="bo-data-table-container" tabindex="0">
@@ -252,77 +168,16 @@ const rows = [
     columns <code>--secondary</code>.</p>
   </section>
   <section class="demo">
-    <h2>Inline edit — seamless inputs in cells</h2>
-    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 24rem">
-      <table class="bo-data-table">
-        <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th></tr></thead>
-        <tbody>
-          <tr>
-            <td>Widget A</td>
-            <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
-            </td>
-          </tr>
-          <tr>
-            <td>Widget B</td>
-            <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="bo-u-text-muted">The cell is <em>always</em> a real input
-    (<code>.bo-input--seamless</code>): it reads as text until hover/focus, so keyboard
-    and screen-reader semantics never flip between display and edit modes. Persist with
-    a form submit or <code>hx-patch</code> on change.</p>
+    <h2>Editing, toolbars and grid navigation</h2>
+    <p>Two opt-in layers live on their own pages so this one stays the
+    table itself: <a href={base + '/components/inline-editing'}>inline
+    editing</a> (seamless cell inputs, dirty state, Save/Cancel and the
+    events you persist with) and
+    <a href={base + '/components/table-toolbar'}>toolbar, columns &amp;
+    grid navigation</a> (column visibility, export, and the roving
+    keyboard grid model).</p>
   </section>
-  <section class="demo">
-    <h2>Multi-row inline edit — dirty state + save/cancel</h2>
-    <p class="bo-u-text-muted">This is the <strong>simple</strong> starting
-    point of the editable-table path — plain cells, dirty badge,
-    Save/Cancel. The graded continuation (combobox lookup cells, every
-    cell type, realtime totals, save-per-change, a full PO line-items
-    editor) lives on the
-    <a href={base + '/patterns/editable-grid'}>Editable grid pattern</a>.</p>
-    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 28rem">
-      <table class="bo-data-table" data-row-edit>
-        <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
-        <tbody>
-          <tr data-row-id="WIDGET-A">
-            <td>Widget A</td>
-            <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A (editable row)" />
-            </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
-          </tr>
-          <tr data-row-id="WIDGET-B">
-            <td>Widget B</td>
-            <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B (editable row)" />
-            </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="bo-u-text-muted">Same seamless input as above, plus
-    <code>data-row-edit</code> on the table: typing marks the row
-    <code>data-row-state="dirty"</code> (amber tint, same visual channel the
-    error row state uses) and reveals that row's badge + Save/Cancel. Cancel
-    resets the row's inputs to their last-saved value; Save dispatches a
-    <code>bo:row-save</code> event with the row and its <code>data-row-id</code>
-    — your code persists it (fetch, <code>hx-patch</code>, form submit), this
-    behavior only tracks dirty state. Try it: edit a quantity below.</p>
-  </section>
+
   <section class="demo">
     <h2>The assembled screen lives in Patterns</h2>
     <p>Toolbar + sticky column + footer pagination + filter bar composed
@@ -484,10 +339,6 @@ const rows = [
   <section class="demo">
     <h2>Markup — the canonical table recipe</h2>
     <pre><code>{tableMarkup}</code></pre>
-  </section>
-  <section class="demo">
-    <h2>Markup — multi-row inline edit</h2>
-    <pre><code>{rowEditMarkup}</code></pre>
   </section>
   <script>
     import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar } from '@busy-office/ui/js';

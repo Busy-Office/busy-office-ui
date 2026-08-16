@@ -1,0 +1,66 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import eventsManifest from '@busy-office/ui/events';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// same escaping helper the concepts page uses for generated prose
+const listen = `document.addEventListener("bo:row-save", (e) => {
+  const { row, rowId } = e.detail;          // typed shape: see the table above
+  const values = Object.fromEntries(new FormData(row.closest("form")) );
+  fetch(\`/pos/\${rowId}\`, { method: "PATCH", body: JSON.stringify(values) });
+});`;
+const fmt = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+   .replace(/`([^`]+)`/g, '<code>$1</code>');
+---
+<Gallery title="Intent-event index">
+  <p class="demo-note">
+    Every event the shipped behaviors dispatch — name, target, when it
+    fires, and its payload — generated from the source on each build.
+    This is the integration API: your app listens to these and decides
+    what to persist. For how the behaviors work (init-once, delegation,
+    import paths), read
+    <a href={base + '/concepts/js-behaviors'}>JS behaviors</a> once.
+  </p>
+
+  <section class="demo">
+    <h2>Intent events — the integration API <span class="bo-badge">generated</span></h2>
+    <p>Behaviors never talk to your server; they dispatch an intent event and
+    your app owns the data layer. These payloads are <strong>versioned API</strong>
+    (see <a href={base + '/getting-started/versioning'}>Versioning</a>): a field
+    changing shape or meaning is a Breaking change. This table is generated
+    from the dispatch sites in source — it cannot drift.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Event</th><th scope="col">Dispatched on</th><th scope="col">When</th><th scope="col">detail</th></tr></thead>
+        <tbody>
+          {eventsManifest.events.map((ev: any) => (
+            <tr>
+              <td class="bo-data-table__col--code">{ev.name}</td>
+              <td set:html={fmt(ev.target)} />
+              <td set:html={fmt(ev.when)} />
+              <td>
+                {ev.noPayload ? <span class="bo-u-text-muted">— none</span> :
+                  <ul style="margin: 0; padding-inline-start: 1rem">
+                    {ev.detail.map((d: any) => (
+                      <li><code>{d.name}</code> <span class="bo-u-text-muted">{'{'}{d.type}{'}'}</span> — <span set:html={fmt(d.desc)} /></li>
+                    ))}
+                  </ul>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">All bubble, so one document-level listener works
+    per event type — the same delegation model the inits use:</p>
+    <pre><code>{listen}</code></pre>
+  </section>
+
+  <Related links={[
+    ['/concepts/js-behaviors', 'JS behaviors (the model)'],
+    ['/reference/keyboard', 'Keyboard map'],
+    ['/reference/classes', 'Class index'],
+    ['/patterns/editable-grid', 'Editable grid (events in use)'],
+  ]} />
+</Gallery>

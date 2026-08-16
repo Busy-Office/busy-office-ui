@@ -1,0 +1,136 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
+  <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
+  <tbody>
+    <tr data-row-id="WIDGET-A">
+      <td>Widget A</td>
+      <td class="bo-data-table__col--numeric">
+        <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
+      </td>
+      <td class="bo-data-table__row-edit-actions">
+        <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<script type="module">
+  import { initRowEdit } from "@busy-office/ui/js";
+  initRowEdit();
+  document.addEventListener("bo:row-save", (e) => {
+    // e.detail = { row, rowId } — versioned payload, see JS behaviors → Intent events
+  });
+</script>`;
+const rows = [
+  { no: 'INV-10234', vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: '$4,208.00', status: 'Pending', tone: 'warning' },
+  { no: 'INV-10235', vendor: 'Globex Industrial', cc: 'CC-4021', amount: '$18,940.50', status: 'Approved', tone: 'success' },
+  { no: 'INV-10236', vendor: 'Initech GmbH', cc: 'CC-1180', amount: '$730.25', status: 'Rejected', tone: 'danger' },
+  { no: 'INV-10237', vendor: 'Umbrella Logistics', cc: 'CC-2205', amount: '$2,110.00', status: 'Pending', tone: 'warning' },
+  { no: 'INV-10238', vendor: 'Stark Components', cc: 'CC-1180', amount: '$56,000.00', status: 'Approved', tone: 'success' },
+];
+---
+<Gallery title="Inline editing">
+  <p class="demo-note">
+    Editing values in place, inside a
+    <a href={base + '/components/data-table'}>data table</a>: seamless
+    cell inputs, per-row dirty state, Save/Cancel, and the events your
+    app persists with. The component-level how-to — the assembled
+    screen, with its data contract and states, is the
+    <a href={base + '/patterns/editable-grid'}>editable grid pattern</a>.
+  </p>
+
+  <section class="demo">
+    <h2>Inline edit — seamless inputs in cells</h2>
+    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 24rem">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Widget A</td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
+            </td>
+          </tr>
+          <tr>
+            <td>Widget B</td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The cell is <em>always</em> a real input
+    (<code>.bo-input--seamless</code>): it reads as text until hover/focus, so keyboard
+    and screen-reader semantics never flip between display and edit modes. Persist with
+    a form submit or <code>hx-patch</code> on change.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Multi-row inline edit — dirty state + save/cancel</h2>
+    <p class="bo-u-text-muted">This is the <strong>simple</strong> starting
+    point of the editable-table path — plain cells, dirty badge,
+    Save/Cancel. The graded continuation (combobox lookup cells, every
+    cell type, realtime totals, save-per-change, a full PO line-items
+    editor) lives on the
+    <a href={base + '/patterns/editable-grid'}>Editable grid pattern</a>.</p>
+    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 28rem">
+      <table class="bo-data-table" data-row-edit>
+        <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
+        <tbody>
+          <tr data-row-id="WIDGET-A">
+            <td>Widget A</td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A (editable row)" />
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+          <tr data-row-id="WIDGET-B">
+            <td>Widget B</td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B (editable row)" />
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Same seamless input as above, plus
+    <code>data-row-edit</code> on the table: typing marks the row
+    <code>data-row-state="dirty"</code> (amber tint, same visual channel the
+    error row state uses) and reveals that row's badge + Save/Cancel. Cancel
+    resets the row's inputs to their last-saved value; Save dispatches a
+    <code>bo:row-save</code> event with the row and its <code>data-row-id</code>
+    — your code persists it (fetch, <code>hx-patch</code>, form submit), this
+    behavior only tracks dirty state. Try it: edit a quantity below.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup — multi-row inline edit</h2>
+    <pre><code>{rowEditMarkup}</code></pre>
+  </section>
+
+  <script>
+    import { initRowEdit } from '@busy-office/ui/js';
+    initRowEdit();
+  </script>
+
+  <Related links={[
+    ['/patterns/editable-grid', 'Editable grid (the screen)'],
+    ['/components/data-table', 'Data table'],
+    ['/components/money', 'Money field'],
+    ['/concepts/concurrency', 'Concurrency & conflicts'],
+  ]} />
+</Gallery>

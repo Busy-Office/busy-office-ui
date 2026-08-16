@@ -2725,7 +2725,22 @@ applies the Objective per item rather than accepting wholesale.
        split. Original: **P8 — split /components/nav** (breadcrumb, navbar, sidebar
        shell, drawers): 5 components at ~110 words each, the least
        documentation per unit of surface on the site.
-6. [ ] **Split /components/data-table** (1,820 w) into table /
+6. [x] **Split data-table and js-behaviors — DONE 2026-08-17, SLICE 23
+       COMPLETE.** The 1,820-word data-table page ("nobody reads 1,800
+       words to find the sort attribute") is now three: the TABLE
+       itself (structure, sort, select, states, grouping, alignment,
+       measured performance), **Inline editing** (seamless cells, dirty
+       state, Save/Cancel, the events you persist with — pointing at
+       the editable-grid PATTERN for the assembled screen), and
+       **Toolbar & grid navigation** (the two opt-in behaviors). Each
+       is a separate opt-in decision with separate JS and separate
+       risk, exactly as the review argued. js-behaviors keeps the
+       narrative (init-once, delegation, import paths) and its
+       generated event table moved to /reference/events — look-up
+       material out of a read-once page. Verified live: the moved
+       demos still work (dirty badge fires on the new page, toolbar and
+       grid-nav present, 10 events listed). Original: **Split
+       /components/data-table** (1,820 w) into table /
        inline editing / toolbar-columns-export, and
        /concepts/js-behaviors into narrative + generated event index.
 7. [x] **ERP foundations gaps — DONE 2026-08-17.** Four pages, each

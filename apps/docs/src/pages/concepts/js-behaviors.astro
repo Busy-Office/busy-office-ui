@@ -90,37 +90,12 @@ const inits = Object.entries(manifest.behaviors)
     <pre><code>{refresh}</code></pre>
   </section>
   <section class="demo">
-    <h2>Intent events — the integration API <span class="bo-badge">generated</span></h2>
-    <p>Behaviors never talk to your server; they dispatch an intent event and
-    your app owns the data layer. These payloads are <strong>versioned API</strong>
-    (see <a href={base + '/getting-started/versioning'}>Versioning</a>): a field
-    changing shape or meaning is a Breaking change. This table is generated
-    from the dispatch sites in source — it cannot drift.</p>
-    <div class="bo-data-table-container" tabindex="0">
-      <table class="bo-data-table">
-        <thead><tr><th scope="col">Event</th><th scope="col">Dispatched on</th><th scope="col">When</th><th scope="col">detail</th></tr></thead>
-        <tbody>
-          {eventsManifest.events.map((ev: any) => (
-            <tr>
-              <td class="bo-data-table__col--code">{ev.name}</td>
-              <td set:html={fmt(ev.target)} />
-              <td set:html={fmt(ev.when)} />
-              <td>
-                {ev.noPayload ? <span class="bo-u-text-muted">— none</span> :
-                  <ul style="margin: 0; padding-inline-start: 1rem">
-                    {ev.detail.map((d: any) => (
-                      <li><code>{d.name}</code> <span class="bo-u-text-muted">{'{'}{d.type}{'}'}</span> — <span set:html={fmt(d.desc)} /></li>
-                    ))}
-                  </ul>}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    <p class="bo-u-text-muted">All bubble, so one document-level listener works
-    per event type — the same delegation model the inits use:</p>
-    <pre><code>{listen}</code></pre>
+    <h2>Intent events</h2>
+    <p>Behaviors report user intent through DOM events — your code
+    decides what to persist. The full generated list (name, target,
+    when it fires, payload) is the
+    <a href={base + '/reference/events'}>intent-event index</a>; it is
+    look-up material, not something to read once.</p>
   </section>
   <section class="demo">
     <h2>Import paths</h2>
