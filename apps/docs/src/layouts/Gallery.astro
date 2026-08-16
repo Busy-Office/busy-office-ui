@@ -54,9 +54,9 @@ const sections = [
     items: [
       { href: '/components/form', label: 'Forms' },
       { href: '/components/filters', label: 'Filters' },
+      { href: '/components/money', label: 'Money field' },
       { href: '/components/tag-input', label: 'Tag input' },
       { href: '/components/file-upload', label: 'File upload' },
-      { href: '/components/money', label: 'Money field' },
     ],
   },
   {
@@ -67,8 +67,8 @@ const sections = [
       { href: '/components/amount', label: 'Amount' },
       { href: '/components/quantity', label: 'Quantity' },
       { href: '/components/date', label: 'Date' },
-      { href: '/components/tree', label: 'Tree' },
       { href: '/components/ordered-list', label: 'Ordered list' },
+      { href: '/components/tree', label: 'Tree' },
       { href: '/components/dashboard', label: 'Dashboard' },
       { href: '/components/dashboard#card', label: 'Card' },
       { href: '/components/byline', label: 'Byline' },
@@ -79,10 +79,10 @@ const sections = [
     items: [
       { href: '/components/badge', label: 'Badge' },
       { href: '/components/alerts', label: 'Alerts & toasts' },
+      { href: '/components/state-patterns', label: 'Loading, empty & error' },
       { href: '/components/progress', label: 'Progress' },
       { href: '/components/stepper', label: 'Stepper' },
       { href: '/components/approval-workflow', label: 'Timeline & audit' },
-      { href: '/components/state-patterns', label: 'Loading, empty & error' },
     ],
   },
   {
@@ -94,21 +94,33 @@ const sections = [
       { href: '/components/icon', label: 'Icon' },
     ],
   },
+  // Patterns grouped by ERP workflow mode (2026-08-16, docs-IA pass 2 —
+  // .roundtable/docs-ia-2-2026-08-16.md): capture → review → overview.
   {
-    label: 'Patterns',
+    label: 'Patterns: capture & edit',
     items: [
-      { href: '/patterns/login', label: 'Login' },
-      { href: '/patterns/app-launch', label: 'App launch' },
       { href: '/patterns/invoice-list', label: 'Invoice list' },
+      { href: '/patterns/editable-grid', label: 'Editable grid' },
+      { href: '/patterns/goods-receipt', label: 'Goods receipt (RF scanner)' },
+      { href: '/patterns/detail-form', label: 'Multi-column detail form' },
+      { href: '/patterns/validation-summary', label: 'Validation summary' },
+    ],
+  },
+  {
+    label: 'Patterns: review & approve',
+    items: [
       { href: '/patterns/approval', label: 'Approval workflow' },
       { href: '/patterns/record-detail', label: 'Record detail' },
-      { href: '/patterns/detail-form', label: 'Multi-column detail form' },
+      { href: '/patterns/wizard', label: 'Multi-step wizard' },
+    ],
+  },
+  {
+    label: 'Patterns: overview & shell',
+    items: [
       { href: '/patterns/reporting-dashboard', label: 'Reporting dashboard' },
       { href: '/patterns/settings-admin', label: 'Settings & admin' },
-      { href: '/patterns/wizard', label: 'Multi-step wizard' },
-      { href: '/patterns/goods-receipt', label: 'Goods receipt (RF scanner)' },
-      { href: '/patterns/validation-summary', label: 'Validation summary' },
-      { href: '/patterns/editable-grid', label: 'Editable grid' },
+      { href: '/patterns/app-launch', label: 'App launch' },
+      { href: '/patterns/login', label: 'Login' },
     ],
   },
   {

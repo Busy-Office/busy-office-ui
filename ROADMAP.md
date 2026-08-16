@@ -1953,16 +1953,24 @@ Ranked: quick wins that harden every page first, then the two build items.
        highlighted blocks on component + pattern pages in both themes,
        copy buttons still work, axe zero, contrast gate covers the new
        colors, visual baselines regenerated deliberately.
-2. [ ] **Docs IA pass 2: rearrange contents/components/patterns**
-       (wishlist "make it easy to understand"). Method like Slice 16:
-       compare-first (how do Tailwind/Carbon/Ant order WITHIN groups and
-       structure their patterns index), then apply: learning-path
-       ordering inside each sidebar group (workhorse components first,
-       not scaffold-append order), a patterns index grouped by workflow
-       (entry → approval → reporting), and a contents/landing route into
-       each group. Accept: a written before/after rationale in
-       `.roundtable/`; sidebar + patterns ordering changed per it;
-       page-shape + links green; no URL changes (only ordering/grouping).
+2. [x] **Docs IA pass 2: rearrange contents/components/patterns** —
+       shipped 2026-08-16, Accept met. Compare-first evidence fetched
+       live (Tailwind: curated/property-clustered WITHIN sections — its
+       own listing disproves alphabetical; Ant: alphabetical; Carbon:
+       truncates on fetch, recorded as memory not evidence): two
+       legitimate schools, curated wins for 4-10-item groups (a short
+       list reads as a path, not an index). Applied: within-group
+       learning-path ordering (Money field up beside Forms/Filters;
+       data-type family adjacent in Data display; Loading/empty/error up
+       in Feedback), the flat 12-pattern list split into three workflow
+       groups (capture & edit / review & approve / overview & shell),
+       and a "Find it by task" contents block on the landing routing
+       into every group. Rationale + before/after:
+       `.roundtable/docs-ia-2-2026-08-16.md`. Zero URL changes.
+       Verified live: all three pattern groups render, aria-current
+       syncs inside them, both themes, zero console errors; both link
+       checks (plain + DOCS_BASE, 3799 links) green; 32 baselines
+       regenerated (sidebar renders on every page), stable ×2.
 3. [ ] **Docs version switcher** (wishlist + attachment; graduates the
        parked post-1.0 "Versioned docs" item at the user's explicit ask).
        A version dropdown in the docs header (Tailwind-style): current
