@@ -173,9 +173,15 @@ const markup = `<table class="bo-data-table" data-row-edit>
   </section>
 
   <script>
-    import { initRowEdit, initCombobox } from '@busy-office/ui/js';
+    import { initRowEdit, initCombobox, initMoneyField, initQuantity, initTableSum, initTagInput } from '@busy-office/ui/js';
+    // One consolidated init block — this page demos five behaviors, all
+    // document-level delegations, called once each in any order.
     initRowEdit();
     initCombobox();
+    initMoneyField();
+    initQuantity();
+    initTableSum();
+    initTagInput();
     let n = 1;
     document.getElementById('eg-add').addEventListener('click', () => {
       n += 1;
@@ -193,6 +199,50 @@ const markup = `<table class="bo-data-table" data-row-edit>
     document.getElementById('eg-table')!.addEventListener('click', (e) => {
       const btn = (e.target as Element).closest('[data-line-remove]');
       if (btn) btn.closest('tr')!.remove();
+    });
+
+    // Tag chips are consumer data: append on add (rejecting duplicates),
+    // snapshot per row, restore on bo:row-cancel.
+    const snapshots = new Map<string, string>();
+    for (const el of document.querySelectorAll('.bo-tag-input')) {
+      const id = el.id;
+      if (id) snapshots.set(id, el.innerHTML);
+    }
+    document.addEventListener('bo:tag-add', (e) => {
+      const group = (e.target as HTMLElement).closest('.bo-tag-input');
+      if (!group || !group.closest('#eg-adv-table')) return;
+      const value = (e as CustomEvent).detail.value;
+      const exists = [...group.querySelectorAll('.bo-tag-input__tag')]
+        .some((t) => t.textContent!.replace('×', '').trim() === value);
+      if (exists) return;
+      const tag = document.createElement('span');
+      tag.className = 'bo-tag-input__tag';
+      tag.textContent = value;
+      const rm = document.createElement('button');
+      rm.className = 'bo-tag-input__remove';
+      rm.type = 'button';
+      rm.setAttribute('aria-label', 'Remove ' + value);
+      rm.textContent = '×';
+      tag.append(rm);
+      group.insertBefore(tag, group.querySelector('.bo-tag-input__field'));
+    });
+    document.addEventListener('bo:row-cancel', (e) => {
+      const row = (e as CustomEvent).detail.row as HTMLElement;
+      for (const group of row.querySelectorAll('.bo-tag-input')) {
+        const snap = snapshots.get(group.id);
+        if (snap !== undefined) group.innerHTML = snap;
+      }
+    });
+    document.addEventListener('bo:row-save', (e) => {
+      const { row, rowId } = (e as CustomEvent).detail;
+      // re-snapshot saved tag state so a later Cancel returns HERE
+      for (const group of row.querySelectorAll('.bo-tag-input')) {
+        if (group.id) snapshots.set(group.id, group.innerHTML);
+      }
+      if (row.closest('#eg-live-table')) {
+        const log = document.getElementById('eg-live-log')!;
+        log.textContent = `Saved ${rowId} at ${new Date().toLocaleTimeString()} — wire this to fetch/hx-patch in a real app.`;
+      }
     });
   </script>
 
@@ -248,12 +298,6 @@ const markup = `<table class="bo-data-table" data-row-edit>
     the precision re-derives from the restored currency/unit instead of
     sticking at the abandoned one.</p>
   </section>
-
-  <script>
-    import { initMoneyField, initQuantity } from '@busy-office/ui/js';
-    initMoneyField();
-    initQuantity();
-  </script>
 
   <section class="demo">
     <h2>Advanced — every cell type + realtime totals</h2>
@@ -326,7 +370,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
       </tbody>
       <tfoot><tr>
         <td class="bo-data-table__col--right">Total qty</td>
-        <td class="bo-data-table__col--numeric" data-sum-of="qty">7.50</td>
+        <td class="bo-data-table__col--numeric" data-sum-of="qty" aria-live="polite">7.50</td>
         <td colspan="5"></td>
       </tr></tfoot>
     </table>
@@ -338,7 +382,9 @@ const markup = `<table class="bo-data-table" data-row-edit>
     weighted sums, whatever the auto mode can't express. Tag chips are
     consumer-rendered, so Cancel can't restore them natively —
     <code>bo:row-cancel</code> fires after the native fields reset,
-    exactly for that.</p>
+    exactly for that. Put <code>aria-live="polite"</code> on the sum cell —
+    a screen-reader user editing a quantity gets no confirmation the total
+    moved otherwise (same live-region need as the selection count).</p>
   </section>
 
   <section class="demo">
@@ -369,55 +415,6 @@ const markup = `<table class="bo-data-table" data-row-edit>
     <p class="bo-u-text-muted" id="eg-live-log" aria-live="polite">No saves yet —
     change the status or toggle Rush.</p>
   </section>
-
-  <script>
-    import { initTableSum, initTagInput } from '@busy-office/ui/js';
-    initTableSum();
-    initTagInput();
-    // Tag chips are consumer data: append on add (rejecting duplicates),
-    // snapshot per row, restore on bo:row-cancel.
-    const snapshots = new Map<string, string>();
-    for (const el of document.querySelectorAll('.bo-tag-input')) {
-      const id = el.id;
-      if (id) snapshots.set(id, el.innerHTML);
-    }
-    document.addEventListener('bo:tag-add', (e) => {
-      const group = (e.target as HTMLElement).closest('.bo-tag-input');
-      if (!group || !group.closest('#eg-adv-table')) return;
-      const value = (e as CustomEvent).detail.value;
-      const exists = [...group.querySelectorAll('.bo-tag-input__tag')]
-        .some((t) => t.textContent!.replace('×', '').trim() === value);
-      if (exists) return;
-      const tag = document.createElement('span');
-      tag.className = 'bo-tag-input__tag';
-      tag.textContent = value;
-      const rm = document.createElement('button');
-      rm.className = 'bo-tag-input__remove';
-      rm.type = 'button';
-      rm.setAttribute('aria-label', 'Remove ' + value);
-      rm.textContent = '×';
-      tag.append(rm);
-      group.insertBefore(tag, group.querySelector('.bo-tag-input__field'));
-    });
-    document.addEventListener('bo:row-cancel', (e) => {
-      const row = (e as CustomEvent).detail.row as HTMLElement;
-      for (const group of row.querySelectorAll('.bo-tag-input')) {
-        const snap = snapshots.get(group.id);
-        if (snap !== undefined) group.innerHTML = snap;
-      }
-    });
-    document.addEventListener('bo:row-save', (e) => {
-      const { row, rowId } = (e as CustomEvent).detail;
-      // re-snapshot saved tag state so a later Cancel returns HERE
-      for (const group of row.querySelectorAll('.bo-tag-input')) {
-        if (group.id) snapshots.set(group.id, group.innerHTML);
-      }
-      if (row.closest('#eg-live-table')) {
-        const log = document.getElementById('eg-live-log')!;
-        log.textContent = `Saved ${rowId} at ${new Date().toLocaleTimeString()} — wire this to fetch/hx-patch in a real app.`;
-      }
-    });
-  </script>
 
   <section class="demo">
     <h2>What composes, and what doesn't (out of the box)</h2>

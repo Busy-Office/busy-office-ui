@@ -17,6 +17,11 @@
  * values count as 0. Render the correct initial total server-side — this
  * only updates on change, it never does an eager first pass (swap-proof,
  * not scan-proof, like every other behavior here).
+ *
+ * Put `aria-live="polite"` on the sum element — a screen-reader user
+ * editing a quantity gets no confirmation the total moved otherwise
+ * (same live-region need as the data-table selection count and the
+ * file-upload list).
  */
 let installed = false;
 
