@@ -16,7 +16,7 @@ import { readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
-import { resolveChrome } from './resolve-chrome.mjs';
+import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { serveDist } from './serve-dist.mjs';
 
 const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
@@ -32,7 +32,7 @@ async function* walk(dir, base = '') {
 const { server, port, base } = await serveDist(dist);
 const paths = [];
 for await (const p of walk(dist)) paths.push(p);
-const browser = await puppeteer.launch({ executablePath: resolveChrome(), headless: 'new', protocolTimeout: 120000 });
+const browser = await puppeteer.launch({ executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 120000 });
 
 const OVERFLOW_EXEMPT = '.bo-data-table-container, .scale-scroll, pre';
 const findings = [];

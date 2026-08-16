@@ -2967,7 +2967,22 @@ the list lied. Clearing it at the start of each action fixed it
 (verified: 1 error row, then 0 on the next action). That rule belongs
 in the pattern.
 
-11. [ ] **Bulk actions pattern** — build the page from the spike:
+11. [x] **Bulk actions pattern** (2026-08-17) — page shipped at
+       `/patterns/bulk-actions` with all four gated sections plus the
+       TRANSIENT-state rule and keyboard path; po-app carries the working
+       partial-failure implementation. Building it against the reference
+       app found **three defects the page itself surfaced**, all fixed
+       here: (a) `.bo-badge--danger` on an error row was byte-identical
+       to the row tint (measured rgb(254,242,242) light / rgb(58,29,29)
+       dark, 0px border) so the pill vanished — badges now carry an
+       unconditional boundary derived from their own fg, generalising
+       what print and forced-colors already did; (b) the axe sweep had
+       drifted red unnoticed (a demo `<main>` nested in the page's own
+       main, a demo section that had lost its `<h2>`) because it needed a
+       hand-started container — it self-serves and is a CI gate now;
+       (c) the docs container image had been unbuildable since
+       check-boost landed (no Chrome in the build stage). Original text:
+       build the page from the spike:
        anatomy (selection → toolbar action → per-row result), data
        contract (POST ids, response = rows + OOB summary), states
        (all-succeed, partial, all-fail, nothing-selected, no-permission,

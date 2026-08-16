@@ -22,7 +22,7 @@ import { readFile, mkdir, writeFile, access } from 'node:fs/promises';
 import { join, dirname, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
-import { resolveChrome } from './resolve-chrome.mjs';
+import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 
@@ -73,7 +73,7 @@ const server = createServer(async (req, res) => {
 await new Promise((r) => server.listen(0, r));
 const port = server.address().port;
 
-const browser = await puppeteer.launch({ executablePath: resolveChrome(), headless: true });
+const browser = await puppeteer.launch({ executablePath: resolveChrome(), args: chromeArgs(), headless: true });
 const page = await browser.newPage();
 await mkdir(baseDir, { recursive: true });
 await mkdir(diffDir, { recursive: true });

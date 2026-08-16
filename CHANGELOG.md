@@ -8,6 +8,23 @@ pin.
 
 ## Unreleased
 
+- Added: **bulk actions pattern** (`/patterns/bulk-actions`) — selection
+  → toolbar action → per-row result, with the data contract (rows plus an
+  out-of-band summary in one response), all six states including partial
+  failure, and the rule that per-row failure reasons are TRANSIENT and
+  must be cleared before each action or the list starts lying about the
+  record. No new components.
+
+- **Fixed**: `.bo-badge` had no boundary of its own, so a badge whose
+  subtle fill matched the surface behind it disappeared as a shape and
+  left only its word — measurably so for a danger badge on an
+  `[data-row-state="error"]` row, where fill and row tint were the same
+  colour in both themes. Every badge now carries a 1px border derived
+  from its own foreground (`--bo-badge-border`, overridable per
+  variant; the solid `--type` chip opts out). Print and forced-colors
+  already added a border for the same reason — this makes it
+  unconditional. Badges grow 2px in each axis.
+
 - **Fixed** (WCAG 1.4.12 Text Spacing): `.bo-chip` and
   `.bo-file-list__name` truncated with an ellipsis and lost text under a
   user spacing override — both now wrap instead; `.bo-avatar` clips

@@ -3,11 +3,23 @@
   .bo-badge {
     --bo-badge-bg: var(--bo-color-bg-muted);
     --bo-badge-fg: var(--bo-color-text-secondary);
+    /* Derived from the badge's own foreground, so every variant gets a
+       boundary in its own hue without a per-variant token. */
+    --bo-badge-border: color-mix(in oklab, var(--bo-badge-fg) 22%, transparent);
 
     display: inline-flex;
     align-items: center;
     gap: var(--bo-space-1);
     padding: 0.125rem var(--bo-space-2);
+    /* A badge's fill is a *tint* of a status colour — and so is the tint an
+       error/dirty row gets. Put a danger badge on an error row (the whole
+       point of the bulk-actions pattern) and the two are byte-identical:
+       measured rgb(254,242,242) on both in light and rgb(58,29,29) in dark,
+       so the pill vanished and only the word was left. Print and
+       forced-colors already fixed this for their own flattening; screen has
+       the same failure whenever a subtle fill meets its own subtle surface,
+       so the boundary is unconditional now (2026-08-17). */
+    border: 1px solid var(--bo-badge-border);
     border-radius: var(--bo-radius-full);
     background: var(--bo-badge-bg);
     color: var(--bo-badge-fg);
@@ -43,6 +55,9 @@
   .bo-badge--type {
     --bo-badge-bg: var(--bo-color-text-primary);
     --bo-badge-fg: var(--bo-color-bg-surface);
+    /* Solid, fully-contrasting fill — it never disappears into a surface,
+       and a halo derived from its inverted fg would read as an artifact. */
+    --bo-badge-border: transparent;
     border-radius: var(--bo-radius-sm);
     text-transform: uppercase;
     letter-spacing: 0.05em;

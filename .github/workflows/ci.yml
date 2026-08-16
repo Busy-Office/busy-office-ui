@@ -40,3 +40,10 @@ jobs:
       # spacing override. Merged from two serial sweeps that cost 345s.
       - name: Layout sweep (overflow + WCAG 1.4.12 text spacing)
         run: npm run check:layout -w docs
+      # Was run by hand and had drifted red unnoticed: two docs pages had
+      # authoring bugs (a demo <main> nested inside the page's own main, a
+      # demo section that had lost its <h2>). An accessibility framework
+      # cannot ship docs with landmark and heading-order violations, so the
+      # sweep is a gate now rather than a habit (2026-08-17).
+      - name: Axe accessibility audit (81 pages x 2 widths)
+        run: npm run test:axe -w docs

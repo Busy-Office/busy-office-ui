@@ -68,8 +68,11 @@ const grid = `<!-- --bo-grid-min sets the smallest a column may get before
 </div>`;
 
 const composed = `<!-- The whole recipe: shell holds the page, stack gives it
-     vertical rhythm, a split cluster is the toolbar, a grid holds cards. -->
-<main class="bo-app-shell__main">
+     vertical rhythm, a split cluster is the toolbar, a grid holds cards.
+     In a real shell this wrapper is the page's <main> (see the shell
+     markup below); it is a div here so this preview does not add a
+     second main landmark to the docs page. -->
+<div class="bo-app-shell__main">
   <div class="bo-stack">
     <div class="bo-cluster bo-cluster--split">
       <strong style="font-size: var(--bo-font-size-lg)">Cost centre CC-4021</strong>
@@ -90,7 +93,7 @@ const composed = `<!-- The whole recipe: shell holds the page, stack gives it
       </div></div>
     </div>
   </div>
-</main>`;
+</div>`;
 
 const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shell -->
   <header class="bo-navbar bo-app-shell__header">…</header>

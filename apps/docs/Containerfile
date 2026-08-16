@@ -7,6 +7,11 @@ COPY package.json package-lock.json tsconfig.base.json ./
 COPY packages ./packages
 COPY apps/docs ./apps/docs
 RUN npm ci --ignore-scripts
+# The docs build ends in check-boost, which drives a real browser. Without
+# Chrome the image build fails — which it silently did from the moment that
+# gate landed until 2026-08-17. resolve-chrome.mjs finds this path itself.
+# Build stage only: the runtime image below carries none of it.
+RUN apk add --no-cache chromium
 RUN npm run build -w @busy-office/ui
 # No base path: served at the container root, so links resolve at "/".
 RUN npm run build -w docs

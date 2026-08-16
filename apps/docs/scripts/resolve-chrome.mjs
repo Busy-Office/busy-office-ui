@@ -17,6 +17,14 @@ const CANDIDATES = [
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
 ].filter(Boolean);
 
+// Chrome refuses to start as root without --no-sandbox, which is exactly the
+// container-image build (2026-08-17). Gate that on the uid rather than passing
+// it everywhere: dropping the sandbox on a dev machine or a CI runner — neither
+// of which runs as root — would be a real weakening for no benefit.
+export function chromeArgs() {
+  return process.getuid?.() === 0 ? ['--no-sandbox'] : [];
+}
+
 export function resolveChrome() {
   const found = CANDIDATES.find((p) => existsSync(p));
   if (!found) {

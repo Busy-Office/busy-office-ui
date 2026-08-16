@@ -1,0 +1,173 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const rows = [
+  { no: 'INV-10234', vendor: 'Acme Supply Co.', amount: '$4,208.00', status: 'Approved', tone: 'success', error: null },
+  { no: 'INV-10235', vendor: 'Globex Industrial', amount: '$56,000.00', status: 'Pending', tone: 'warning', error: 'Needs a second approver over $20,000.00' },
+  { no: 'INV-10236', vendor: 'Initech GmbH', amount: '$730.25', status: 'Approved', tone: 'success', error: null },
+  { no: 'INV-10237', vendor: 'Umbrella Logistics', amount: '$2,110.00', status: 'Rejected', tone: 'danger', error: 'Already rejected' },
+];
+
+const markup = `<!-- The response to a bulk POST does TWO things: swap the rows, and
+     deliver the summary out of band. One request, both truths. -->
+<tbody id="rows">
+  <tr id="row-INV-10235" data-row-state="error">
+    …cells…
+    <td>
+      <span class="bo-badge bo-badge--warning">Pending</span>
+      <!-- the reason in WORDS — the row tint is never the only signal -->
+      <span class="bo-badge bo-badge--danger">Needs a second approver over $20,000.00</span>
+    </td>
+  </tr>
+</tbody>
+
+<div id="bulk-result" hx-swap-oob="innerHTML">
+  <div class="bo-alert bo-alert--warning" role="alert">
+    <p><strong>18 approved, 2 could not be.</strong> The rows below carry the reason.</p>
+  </div>
+</div>`;
+
+const serverMarkup = `// Partial-failure state is TRANSIENT. Clear last round's reasons before
+// computing this one, or a row keeps advertising an error that is no
+// longer true — the list starts lying about the record.
+records.forEach((r) => { delete r.bulkError; });
+
+const failed = [];
+let ok = 0;
+for (const r of selected) {
+  if (r.status !== "Pending")   { failed.push([r, "Already " + r.status.toLowerCase()]); continue; }
+  if (r.amount > LIMIT)         { failed.push([r, "Needs a second approver"]); continue; }
+  r.status = "Approved"; ok += 1;
+}
+for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
+---
+<Gallery title="Pattern: bulk actions">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: an AP clerk clearing a queue — select
+    many, act once. <strong>What "done" looks like</strong>: every
+    selected record either changed or explained why it didn't. The
+    failure mode this pattern exists to prevent is the silent one: an
+    action that reports success while quietly skipping rows.
+  </p>
+
+  <section class="demo">
+    <h2>The state after a partial failure</h2>
+    <div class="bo-alert bo-alert--warning" role="alert">
+      <p><strong>2 approved, 2 could not be.</strong> The rows below carry the reason.</p>
+    </div>
+    <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-3)">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr>
+          <th scope="col">Invoice #</th><th scope="col">Vendor</th>
+          <th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col">Status</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr data-row-state={r.error ? 'error' : undefined}>
+              <td class="bo-data-table__col--code">{r.no}</td>
+              <td>{r.vendor}</td>
+              <td class="bo-data-table__col--numeric">{r.amount}</td>
+              <td>
+                <span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span>
+                {r.error && <span class="bo-badge bo-badge--danger"> {r.error}</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Zero new components: the summary is an
+    <a href={base + '/components/alerts'}>alert</a>, the failed rows use
+    <code>data-row-state="error"</code>, and each reason is a
+    <a href={base + '/components/badge'}>badge</a> — in words, beside the
+    status, so the tint is never the only signal. A clerk can see which
+    two rows need them and why without opening anything.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Selection</strong> — row checkboxes carrying <code>name</code>/<code>value</code>, so the selection POSTs natively; <code>initDataTables()</code> keeps the count O(1) at scale.</li>
+      <li><strong>Toolbar action</strong> — bulk buttons appear only when something is selected (<a href={base + '/components/table-toolbar'}>toolbar</a>).</li>
+      <li><strong>Summary region</strong> — an empty container above the table that the response fills out of band.</li>
+      <li><strong>Per-row result</strong> — the error state plus the reason, rendered by the same row template as everything else.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /invoices/bulk-approve<br />(ids as repeated form fields)</td><td>the affected <code>&lt;tbody&gt;</code> <strong>plus</strong> an out-of-band summary block — one request, both truths</td></tr>
+          <tr><td class="bo-data-table__col--code">…all succeeded</td><td>same shape, a success alert; do not special-case the happy path into a different mechanism</td></tr>
+          <tr><td class="bo-data-table__col--code">…nothing selected</td><td>the button should not have been reachable; if it was, return the list unchanged and say so</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code>{markup}</code></pre>
+    <p class="bo-u-text-muted">Selection is client state: a swap that
+    replaces rows clears it, which is the honest behaviour after a bulk
+    action — the user's next decision should start from the new truth.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The rule that makes it honest</h2>
+    <pre><code>{serverMarkup}</code></pre>
+    <p class="bo-u-text-muted">Found by building this against the
+    reference app: without the clear, a row kept showing "needs a second
+    approver" after a colleague had approved it. A stale failure reason
+    is worse than none — it sends someone to fix a problem that no
+    longer exists.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>All succeeded</td><td>a success alert with the count; rows re-render in their new status</td></tr>
+          <tr><td>Partial failure</td><td>counts BOTH ways in one sentence, and every failed row carries its own reason</td></tr>
+          <tr><td>All failed</td><td>same shape — never a bare "action failed" with no per-row detail</td></tr>
+          <tr><td>Nothing selected</td><td>bulk actions are hidden until a selection exists, so this should be unreachable</td></tr>
+          <tr><td>No permission</td><td>the bulk buttons are absent, not disabled (<a href={base + '/concepts/permissions'}>permissions</a>)</td></tr>
+          <tr><td>Stale selection</td><td>a record decided by someone else since the page loaded fails with "already approved" — that is the partial-failure path doing its job, not an error</td></tr>
+          <tr><td>Long-running</td><td>past a few seconds, return a job id and poll; a frozen button is not a progress indicator</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Keyboard walkthrough</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox, <kbd class="bo-kbd">Space</kbd> to take the page; the live region announces the count.</li>
+      <li><kbd class="bo-kbd">Tab</kbd> through rows, <kbd class="bo-kbd">Space</kbd> to deselect the ones you are not ready for.</li>
+      <li><kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> to the toolbar — the bulk action is now revealed — and <kbd class="bo-kbd">Enter</kbd>.</li>
+      <li>The summary is <code>role="alert"</code>, so the outcome is announced without moving focus; the failed rows are still in document order below it.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/table-toolbar'}>Toolbar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/concepts/permissions'}>Permissions</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ['/patterns/invoice-list', 'Invoice list'],
+    ['/components/table-toolbar', 'Toolbar & grid navigation'],
+    ['/concepts/concurrency', 'Concurrency & conflicts'],
+    ['/getting-started/htmx', 'Using with HTMX'],
+  ]} />
+</Gallery>

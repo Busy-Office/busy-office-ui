@@ -106,13 +106,15 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 </body></html>`;
 
 // ---------- fragments ----------
-const rowHtml = (p) => `<tr id="row-${p.id}">
+const rowHtml = (p) => `<tr id="row-${p.id}"${p.bulkError ? ' data-row-state="error"' : ''}>
   <td><input type="checkbox" name="id" value="${p.id}" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
   <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
   <td class="bo-u-text-truncate" data-col="vendor">${p.vendor}</td>
   <td class="bo-data-table__col--secondary bo-data-table__col--code" data-col="cc">${p.cc}</td>
   <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
-  <td data-col="status"><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
+  <td data-col="status"><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span>${
+    p.bulkError ? ` <span class="bo-badge bo-badge--danger">${p.bulkError}</span>` : ''
+  }</td>
 </tr>`;
 
 const tbodyHtml = (list) =>
@@ -127,6 +129,7 @@ const listScreen = () => `
   </select>
   <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
 </form>
+<div id="bulk-result"></div>
 <div class="bo-data-table-container" tabindex="0">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
@@ -566,15 +569,35 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       let body = '';
       for await (const c of req) body += c;
       const ids = new Set(new URLSearchParams(body).getAll('id'));
+      // Two real ERP rules, so the action can PARTIALLY fail: over a
+      // limit needs a second approver, and a decided PO cannot be
+      // re-approved. Never claim blanket success.
+      const LIMIT = 20000;
+      // Partial-failure state is TRANSIENT — clear last round's reasons
+      // first, or a row keeps advertising an error that is no longer
+      // true (spike finding, 2026-08-17).
+      pos.forEach((p) => { delete p.bulkError; });
+      const failed = [];
+      let approved = 0;
       pos.forEach((p) => {
-        if (ids.has(p.id) && p.status === 'Pending') p.status = 'Approved';
+        if (!ids.has(p.id)) return;
+        if (p.status !== 'Pending') { failed.push([p, `Already ${p.status.toLowerCase()}`]); return; }
+        if (p.amount > LIMIT) { failed.push([p, `Needs a second approver over ${money(LIMIT)}`]); return; }
+        p.status = 'Approved';
+        approved += 1;
       });
-      audit.push({ t: new Date().toISOString(), what: 'bulk approve' });
+      for (const [p, reason] of failed) p.bulkError = reason;
+      audit.push({ t: new Date().toISOString(), what: `bulk approve: ${approved} ok, ${failed.length} failed` });
       res.writeHead(200, { 'content-type': 'text/html' });
       // The swap returns ALL rows, which would desync the load-more offset
       // and duplicate rows on the next click (grill finding) — remove the
       // button out-of-band in the same response.
-      return res.end(tbodyHtml(pos) + '<button id="po-load-more" hx-swap-oob="delete"></button>');
+      const summary = `<div id="bulk-result" hx-swap-oob="innerHTML">${
+        failed.length
+          ? `<div class="bo-alert bo-alert--warning" role="alert"><p><strong>${approved} approved, ${failed.length} could not be.</strong> The rows below carry the reason.</p></div>`
+          : `<div class="bo-alert bo-alert--success" role="status"><p>${approved} approved.</p></div>`
+      }</div>`;
+      return res.end(tbodyHtml(pos) + summary + '<button id="po-load-more" hx-swap-oob="delete"></button>');
     }
     const m = path.match(/^\/pos\/(PO-\d+)(\/approve|\/reject)?$/);
     if (m) {
