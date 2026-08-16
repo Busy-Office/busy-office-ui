@@ -285,3 +285,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 05:23 · Explore · spike · WCAG 1.4.12 executed site-wide: 5 real failures (2 self-inflicted by the chip ellipsis) fixed by wrapping; gate graduated with before/after baseline · shipped · 607828a
 - 2026-08-17 05:50 · Optimize · fix · CI regression 3.5->7.6min fixed: merged overflow+spacing sweeps with a tab pool, 345s->74s (4.7x), both halves red-proved · shipped · 5026e87
 - 2026-08-17 05:57 · Explore · spike · Bulk-actions partial failure spiked: expressible with zero new CSS; transient-state rule discovered; graduated as roadmap item 11 · shipped · 79f6291
+- 2026-08-17 06:51 · Continue · build · Roadmap item 11: bulk actions pattern page + badge boundary fix + axe gate wired into CI + docs container repaired · shipped · b2b3aa5
