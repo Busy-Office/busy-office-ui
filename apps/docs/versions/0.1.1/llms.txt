@@ -1,0 +1,201 @@
+# busy-office-ui v0.1.1
+
+> CSS-first UI framework for ERP and back-office applications. Semantic components,
+> density as a dimension (data-density="compact|comfortable|spacious" on <html> or any
+> wrapper), dark mode via [data-theme="dark"], all framework CSS in @layer (unlayered
+> consumer CSS always wins). Browser floor: Chrome/Edge 119, Firefox 128, Safari 17.4.
+
+## Install
+
+npm i @busy-office/ui
+import "@busy-office/ui/css";                      # all-in-one
+# a la carte, ORDER MATTERS: tokens -> reset -> components
+import "@busy-office/ui/css/tokens"; import "@busy-office/ui/css/reset";
+import "@busy-office/ui/css/components/data-table";
+
+## JS behaviors (call each ONCE — document delegation survives all DOM swaps)
+
+import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts,
+         refreshDataTable, trapFocus } from "@busy-office/ui/js";
+- initDialogs(): REQUIRED for <dialog class="bo-dialog"> + [data-dialog-trigger].
+- initDataTables(): select-all, live "n selected" count, O(1) toolbar reveal;
+  re-derives on htmx:afterSwap; refreshDataTable(container) for other swaps.
+- initTabs(): REQUIRED for tabs (roving tabindex, RTL-aware arrows).
+- initDropdowns(): anchors [popover] menus to their invoker; close-on-select.
+- initAlerts(): .bo-alert__dismiss removes its alert/toast.
+
+## Behavior hooks (generated — the DOM each init reads)
+- initDialogs(): Dialog behavior via event delegation — no per-element binding, no DOM flags [hooks: data-dialog-trigger data-dismissible data-state]
+- initDataTables(): Optional table behavior (~1 kB): wires select-all, keeps an O(1) data-any-selected attribute on the container (so CSS needn't re-scan every row via :has() on large grids), and maintains a live "n… [hooks: bo-data-table-container bo-data-table__row-select bo-data-table__select-all bo-data-table__selection-count data-any-selected]
+- refreshDataTable(): Optional table behavior (~1 kB): wires select-all, keeps an O(1) data-any-selected attribute on the container (so CSS needn't re-scan every row via :has() on large grids), and maintains a live "n… [hooks: bo-data-table-container bo-data-table__row-select bo-data-table__select-all bo-data-table__selection-count data-any-selected]
+- initDataGrid(): Opt-in ARIA grid pattern for .bo-data-table (WAI-ARIA APG "Grid", the interactive-widgets variant) [hooks: bo-data-table bo-data-table-container bo-data-table__row-select data-grid-nav]
+- refreshDataGrid(): Opt-in ARIA grid pattern for .bo-data-table (WAI-ARIA APG "Grid", the interactive-widgets variant) [hooks: bo-data-table bo-data-table-container bo-data-table__row-select data-grid-nav]
+- initRowEdit(): Multi-row inline edit: tracks which rows have unsaved changes, shows a per-row Save/Cancel affordance, and dispatches a `bo:row-save` event for your code to persist (fetch, hx-patch, form submit —… [hooks: bo-badge bo-badge--warning bo-btn bo-btn--sm bo-data-table bo-data-table__row-edit-actions bo-input bo-input--seamless data-row-edit data-row-edit-cancel data-row-edit-dirty data-row-edit-save data-row-id data-row-state]
+- initTableToolbar(): Optional data-table toolbar actions: column visibility + export [hooks: bo-btn bo-btn--secondary bo-checkbox bo-data-table bo-data-table-container bo-data-table__toolbar bo-dropdown__menu data-col data-col-toggle data-multiselect data-multiselect-label data-table-export data-table-export-format]
+- initTableSum(): Declarative realtime column totals — the auto-sum half of Slice 18's subtotal contract (a deliberate, named exception to "you do the data"; the other half is listening to `bo:cell-change` yourself for… [hooks: bo-data-table__col--numeric data-decimals data-sum-of]
+- initLoadMore(): Load-more pagination ("pull up to see more") — the infinite-scroll alternative to page-number `.bo-pagination` [hooks: bo-btn bo-btn--secondary bo-data-table bo-data-table-container bo-data-table__footer bo-pagination data-load-more-auto data-table-load-more]
+- initCollapsibleCards(): Collapsible card sections (.bo-widget) [hooks: bo-widget__collapse data-collapse-trigger data-state]
+- initSavedViews(): Saved-view / filter-bar persistence [hooks: bo-filter-bar data-saved-views]
+- initWizard(): Multi-step wizard flow — one panel visible at a time, with a bo-stepper kept in sync [hooks: bo-stepper bo-stepper__step data-state data-wizard data-wizard-back data-wizard-current data-wizard-next data-wizard-panel data-wizard-submit]
+- initQuantity(): Increment/decrement buttons for .bo-quantity — document-level delegation, call initQuantity() once [hooks: bo-money__currency bo-quantity bo-quantity__input bo-quantity__step bo-quantity__unit-select data-decimals data-quantity-step]
+- unitDecimals(): Increment/decrement buttons for .bo-quantity — document-level delegation, call initQuantity() once [hooks: bo-money__currency bo-quantity bo-quantity__input bo-quantity__step bo-quantity__unit-select data-decimals data-quantity-step]
+- initMoneyField(): Currency-aware money field — a currency <select> linked to an amount input: changing currency updates the input's `step` (decimal precision) and reformats the current value to that precision [hooks: bo-input bo-input--numeric bo-money bo-money__amount bo-money__currency bo-select data-decimals]
+- currencyDecimals(): Currency-aware money field — a currency <select> linked to an amount input: changing currency updates the input's `step` (decimal precision) and reformats the current value to that precision [hooks: bo-input bo-input--numeric bo-money bo-money__amount bo-money__currency bo-select data-decimals]
+- initScanInput(): RF/handheld barcode-scanner input [hooks: bo-input bo-input--code bo-visually-hidden data-scan-input data-scan-status data-scan-terminator]
+- initFileDropzone(): Drag-and-drop convenience for a `.bo-file-dropzone` [hooks: bo-file-dropzone bo-file-input bo-visually-hidden data-dragover data-file-dropzone]
+- initTagInput(): Multi-value tag/chip entry (Fiori Token/MultiInput; Ant/Carbon Tag) — multi-tag cost centers on a record, multiple approval-routing recipients [hooks: bo-alert bo-tag-input bo-tag-input__field bo-tag-input__remove bo-tag-input__tag data-grid]
+- initValidationSummary(): Inline validation summary [hooks: bo-alert bo-alert--danger data-validation-summary data-validation-summary-box]
+- initTabs(): ARIA tabs behavior via document-level delegation — call initTabs() once [hooks: bo-tabs__tab]
+- initDropdowns(): Popover-based dropdown menus [hooks: bo-btn bo-btn--secondary bo-checkbox bo-dropdown__item bo-dropdown__menu bo-dropdown__menu--end data-multiselect data-multiselect-count data-multiselect-label]
+- initCombobox(): Editable combobox with list autocomplete — WAI-ARIA APG combobox pattern (single-select, list autocomplete, manual selection) [hooks: bo-combobox bo-combobox__listbox bo-combobox__option bo-input data-bo-open data-value]
+- initAlerts(): Dismiss behavior for alerts and toasts: any .bo-alert__dismiss button removes its enclosing .bo-alert [hooks: bo-alert bo-alert__dismiss]
+- trapFocus(): Loop Tab / Shift+Tab within a container
+
+## Rules your markup must follow
+
+- State is two-channel: visible non-color cue (glyph, aria-hidden) AND programmatic
+  (visually-hidden text like "Completed: ", aria-current, ARIA attributes).
+- Forms: aria-invalid + aria-describedby -> message id (+ role="alert" if dynamic).
+- Dialogs: aria-labelledby -> title id. Icon-only buttons: aria-label.
+- Row-select checkboxes need name/value to POST. Styled lists get role="list".
+- Sorting: YOUR code re-orders rows and sets aria-sort on <th>; CSS draws indicator.
+- Never user-scalable=no. Never override html font-size (rem-based framework).
+- Columns hidden by container compaction (__col--secondary) must stay reachable.
+
+## Components (classes generated from shipped CSS)
+
+### alert — https://busy-office.github.io/busy-office-ui/components/alerts/
+classes: bo-alert bo-alert--danger bo-alert--success bo-alert--warning bo-alert__dismiss bo-alert__title bo-toast bo-toast-region
+
+### amount — https://busy-office.github.io/busy-office-ui/components/amount/
+classes: bo-amount bo-amount--block bo-amount--muted bo-amount--negative bo-amount--positive bo-amount--strong bo-amount__currency bo-amount__fraction bo-amount__unit bo-amount__value
+
+### approval-workflow — https://busy-office.github.io/busy-office-ui/components/approval-workflow/
+classes: bo-audit bo-audit__actor bo-audit__detail bo-audit__entry bo-audit__time bo-composer bo-composer__actions bo-composer__body bo-timeline bo-timeline__marker bo-timeline__meta bo-timeline__step bo-timeline__title
+data attrs: data-state
+
+### badge — https://busy-office.github.io/busy-office-ui/components/badge/
+classes: bo-badge bo-badge--accent bo-badge--danger bo-badge--success bo-badge--type bo-badge--warning
+
+### button — https://busy-office.github.io/busy-office-ui/components/button/
+classes: bo-btn bo-btn--danger bo-btn--danger-ghost bo-btn--ghost bo-btn--icon bo-btn--secondary bo-btn--sm
+data attrs: data-loading
+aria styled: aria-busy aria-disabled
+
+### byline — https://busy-office.github.io/busy-office-ui/components/byline/
+classes: bo-byline bo-byline--compact bo-byline__avatar
+
+### combobox — https://busy-office.github.io/busy-office-ui/components/combobox/
+classes: bo-combobox bo-combobox__listbox bo-combobox__option
+aria styled: aria-selected
+
+### dashboard — https://busy-office.github.io/busy-office-ui/components/dashboard/
+classes: bo-badge bo-badge--type bo-stat bo-stat--hero bo-stat__delta bo-stat__delta--bad bo-stat__delta--good bo-stat__label bo-stat__value bo-widget bo-widget--span-2 bo-widget-grid bo-widget__band bo-widget__band--msg bo-widget__body bo-widget__body--flush bo-widget__collapse bo-widget__header bo-widget__title bo-widget__toggle-icon
+data attrs: data-collapse-trigger data-state
+aria styled: aria-expanded
+
+### data-table — https://busy-office.github.io/busy-office-ui/components/data-table/
+classes: bo-data-table bo-data-table--sticky-col bo-data-table--striped bo-data-table-container bo-data-table__bulk-actions bo-data-table__col--center bo-data-table__col--code bo-data-table__col--left bo-data-table__col--numeric bo-data-table__col--right bo-data-table__col--secondary bo-data-table__footer bo-data-table__row-edit-actions bo-data-table__row-select bo-data-table__select-all bo-data-table__selection-count bo-data-table__sort-btn bo-data-table__toolbar
+data attrs: data-any-selected data-density data-grid-nav data-loading data-row-state
+aria styled: aria-busy aria-sort
+
+### date — https://busy-office.github.io/busy-office-ui/components/date/
+classes: bo-date bo-date--overdue bo-date__relative bo-date__value
+
+### dialog — https://busy-office.github.io/busy-office-ui/components/dialog/
+classes: bo-dialog bo-dialog--wide bo-dialog__body bo-dialog__footer bo-dialog__header bo-dialog__title
+data attrs: data-dialog-trigger data-dismissible data-state
+
+### dropdown — https://busy-office.github.io/busy-office-ui/components/dropdown/
+classes: bo-dropdown__item bo-dropdown__item--danger bo-dropdown__menu bo-dropdown__separator
+
+### file-upload — https://busy-office.github.io/busy-office-ui/components/file-upload/
+classes: bo-file-dropzone bo-file-dropzone__hint bo-file-input bo-file-list bo-file-list__item bo-file-list__name bo-file-list__size
+data attrs: data-dragover
+
+### filters — https://busy-office.github.io/busy-office-ui/components/filters/
+classes: bo-chip bo-chip--active bo-chip__remove bo-filter-bar
+data attrs: data-saved-views
+
+### form — https://busy-office.github.io/busy-office-ui/components/form/
+classes: bo-app-shell__main bo-checkbox bo-choice bo-form-actions bo-form-field bo-form-field--required bo-form-field__hint bo-form-field__label bo-form-field__message bo-form-row bo-form-section bo-form-section__legend bo-input bo-input--code bo-input--numeric bo-input--seamless bo-radio bo-select
+data attrs: data-theme
+aria styled: aria-invalid aria-required
+
+### icon — https://busy-office.github.io/busy-office-ui/components/icon/
+classes: bo-icon bo-icon--barcode bo-icon--box bo-icon--building bo-icon--cart bo-icon--chart bo-icon--check-circle bo-icon--doc bo-icon--grid bo-icon--invoice bo-icon--settings bo-icon--truck bo-icon--user
+
+### money — https://busy-office.github.io/busy-office-ui/components/money/
+classes: bo-money bo-money__amount bo-money__currency
+
+### nav — https://busy-office.github.io/busy-office-ui/components/nav/
+classes: bo-breadcrumb bo-navbar bo-navbar__brand bo-navbar__spacer bo-offcanvas bo-offcanvas--end bo-offcanvas__header bo-sidebar-nav bo-sidebar-nav__heading bo-sidebar-nav__icon bo-sidebar-nav__label bo-sidebar-nav__link bo-sidebar-nav__section
+data attrs: data-state
+aria styled: aria-current
+
+### ordered-list — https://busy-office.github.io/busy-office-ui/components/ordered-list/
+classes: bo-ordered-list bo-ordered-list--plain bo-ordered-list__actions
+
+### pagination — https://busy-office.github.io/busy-office-ui/components/pagination/
+classes: bo-pagination bo-pagination__btn bo-pagination__info
+aria styled: aria-current
+
+### progress — https://busy-office.github.io/busy-office-ui/components/progress/
+classes: bo-progress bo-progress--danger bo-progress--warning
+
+### quantity — https://busy-office.github.io/busy-office-ui/components/quantity/
+classes: bo-quantity bo-quantity--display bo-quantity__input bo-quantity__step bo-quantity__unit bo-quantity__unit-select bo-quantity__value
+
+### segmented — https://busy-office.github.io/busy-office-ui/components/segmented/
+classes: bo-segmented bo-segmented__input bo-segmented__option
+
+### skeleton — https://busy-office.github.io/busy-office-ui/components/state-patterns/
+classes: bo-skeleton bo-skeleton--block bo-skeleton--circle
+
+### state — https://busy-office.github.io/busy-office-ui/components/state-patterns/
+classes: bo-state bo-state--error bo-state__actions bo-state__description bo-state__icon bo-state__title
+
+### stepper — https://busy-office.github.io/busy-office-ui/components/stepper/
+classes: bo-stepper bo-stepper__label bo-stepper__marker bo-stepper__step
+data attrs: data-state
+aria styled: aria-current
+
+### tabs — https://busy-office.github.io/busy-office-ui/components/tabs/
+classes: bo-tabs__list bo-tabs__panel bo-tabs__tab
+aria styled: aria-selected
+
+### tag-input — https://busy-office.github.io/busy-office-ui/components/tag-input/
+classes: bo-tag-input bo-tag-input__field bo-tag-input__remove bo-tag-input__tag
+
+### tree — https://busy-office.github.io/busy-office-ui/components/tree/
+classes: bo-tree bo-tree__branch bo-tree__label bo-tree__link
+aria styled: aria-current
+
+## Primitives — https://busy-office.github.io/busy-office-ui/base/primitives/
+cluster: bo-cluster bo-cluster--end bo-cluster--split
+grid: bo-grid
+sidebar-layout: bo-app-shell bo-app-shell__header bo-app-shell__main bo-app-shell__sidebar
+stack: bo-stack bo-stack--loose bo-stack--tight
+visually-hidden: bo-visually-hidden
+
+## Utilities
+bo-print-report bo-u-avoid-break bo-u-break-before bo-u-hidden bo-u-mono bo-u-print-hidden bo-u-print-only bo-u-tabular bo-u-text-muted bo-u-text-right bo-u-text-truncate
+
+## Semantic tokens (re-brand = remap these in UNLAYERED :root; re-set in your [data-theme="dark"] block — unlayered beats the framework's dark remaps)
+--bo-border-width --bo-color-accent --bo-color-accent-solid --bo-color-accent-strong --bo-color-accent-subtle --bo-color-accent-text --bo-color-bg-canvas --bo-color-bg-hover --bo-color-bg-muted --bo-color-bg-selected --bo-color-bg-surface --bo-color-bg-surface-raised --bo-color-border-control --bo-color-border-default --bo-color-border-strong --bo-color-danger --bo-color-danger-solid --bo-color-danger-strong --bo-color-danger-subtle --bo-color-danger-text --bo-color-focus-ring --bo-color-success --bo-color-success-strong --bo-color-success-subtle --bo-color-success-text --bo-color-text-disabled --bo-color-text-inverse --bo-color-text-muted --bo-color-text-primary --bo-color-text-secondary --bo-color-warning --bo-color-warning-strong --bo-color-warning-subtle --bo-color-warning-text --bo-density-cell-padding-x --bo-density-cell-padding-y --bo-density-control-height --bo-density-field-gap --bo-density-font-size --bo-density-row-height --bo-focus-ring-offset --bo-focus-ring-width --bo-font-mono --bo-font-sans --bo-font-size-base --bo-font-size-lg --bo-font-size-md --bo-font-size-sm --bo-font-size-xl --bo-font-size-xs --bo-font-weight-medium --bo-font-weight-normal --bo-font-weight-semibold --bo-line-height-normal --bo-line-height-tight --bo-motion-duration-base --bo-motion-duration-fast --bo-motion-duration-slow --bo-motion-easing-standard --bo-radius-full --bo-radius-lg --bo-radius-md --bo-radius-sm --bo-shadow-dialog --bo-shadow-lg --bo-shadow-md --bo-shadow-sm --bo-space-0 --bo-space-1 --bo-space-10 --bo-space-12 --bo-space-2 --bo-space-3 --bo-space-4 --bo-space-5 --bo-space-6 --bo-space-8 --bo-state-active-overlay --bo-state-disabled-opacity --bo-state-error-bg --bo-state-error-color --bo-state-hover-overlay --bo-z-dropdown --bo-z-sticky-col --bo-z-sticky-header --bo-z-toast
+
+## Key docs
+https://busy-office.github.io/busy-office-ui/getting-started/installation/
+https://busy-office.github.io/busy-office-ui/getting-started/first-screen/
+https://busy-office.github.io/busy-office-ui/getting-started/htmx/
+https://busy-office.github.io/busy-office-ui/getting-started/troubleshooting/
+https://busy-office.github.io/busy-office-ui/concepts/tokens/
+https://busy-office.github.io/busy-office-ui/concepts/density/
+https://busy-office.github.io/busy-office-ui/concepts/cascade/
+https://busy-office.github.io/busy-office-ui/concepts/js-behaviors/
+https://busy-office.github.io/busy-office-ui/concepts/accessibility/
+https://busy-office.github.io/busy-office-ui/concepts/theming/
+https://busy-office.github.io/busy-office-ui/base/colors/
+https://busy-office.github.io/busy-office-ui/reference/classes/
+https://busy-office.github.io/busy-office-ui/patterns/invoice-list/
+https://busy-office.github.io/busy-office-ui/patterns/approval/

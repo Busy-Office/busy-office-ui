@@ -25,11 +25,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </ul>
   </section>
   <section class="demo">
-    <h2>Docs policy</h2>
-    <p>Docs describe the latest version; pinned users read the
-    <a href="https://github.com/Busy-Office/busy-office-ui/blob/main/CHANGELOG.md">CHANGELOG</a>,
-    which records every pre-1.0 breaking change (including the <code>eof-</code> →
-    <code>bo-</code> prefix rename). Versioned docs arrive with 1.0.</p>
+    <h2>Docs policy — versioned snapshots</h2>
+    <p>The root docs always describe the latest version; the version
+    switcher in the header serves pinned readers a frozen snapshot at
+    <code>/v/&lt;version&gt;/</code> (search is a latest-docs feature —
+    snapshots ship without it). The
+    <a href="https://github.com/Busy-Office/busy-office-ui/blob/main/CHANGELOG.md">CHANGELOG</a>
+    records every pre-1.0 breaking change either way. <strong>Release
+    flow</strong>: before tagging, run
+    <code>node scripts/cut-version-snapshot.mjs &lt;x.y.z&gt;</code> in
+    <code>apps/docs</code>, add the version to
+    <code>apps/docs/versions.json</code>, rebuild plain, and commit — the
+    Pages deploy copies every committed snapshot to
+    <code>/v/&lt;version&gt;/</code> automatically.</p>
   </section>
   <section class="demo">
     <h2>Leaving is cheap — by design</h2>

@@ -1971,8 +1971,22 @@ Ranked: quick wins that harden every page first, then the two build items.
        syncs inside them, both themes, zero console errors; both link
        checks (plain + DOCS_BASE, 3799 links) green; 32 baselines
        regenerated (sidebar renders on every page), stable ×2.
-3. [ ] **Docs version switcher** (wishlist + attachment; graduates the
-       parked post-1.0 "Versioned docs" item at the user's explicit ask).
+3. [x] **Docs version switcher** — shipped 2026-08-16, all Accept
+       criteria met. Tailwind-style select replaces the static version
+       badge; snapshots serve at `/v/<version>/`; the switcher strips
+       any `/v/<ver>` suffix from its own base to compute the SITE root,
+       so "latest" from inside a snapshot escapes instead of looping
+       (the design's one real trap, verified live both directions on
+       the :8082 production-parity mimic: latest→snapshot→latest).
+       Mechanism: `cut-version-snapshot.mjs` builds with the snapshot's
+       Pages base and commits to `apps/docs/versions/<ver>/` (pagefind
+       stripped — search stays a latest-docs feature, 1MB/version
+       saved); the Pages workflow copies committed snapshots into
+       `dist/v/` on every deploy; `versions.json` feeds the select. A
+       REAL 0.1.1 snapshot cut and verified (200s, switcher state
+       correct inside it, dark theme). Release flow documented on the
+       versioning page. Growth note: ~4.3MB/version committed — revisit
+       storage if the repo feels it after a few majors.
        A version dropdown in the docs header (Tailwind-style): current
        docs at the canonical root, versioned snapshots under
        `/v/<version>/`, the switcher navigating between them; the

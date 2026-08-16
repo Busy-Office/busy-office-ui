@@ -2,6 +2,7 @@
 import '@busy-office/ui/css';
 import Logo from '../components/Logo.astro';
 import pkg from '@busy-office/ui/package.json';
+import versions from '../../versions.json';
 const { title } = Astro.props;
 const sections = [
   {
@@ -137,6 +138,11 @@ const projectLinks = [
   { href: 'https://github.com/Busy-Office/busy-office-ui/issues/new/choose', label: 'Report an issue' },
 ];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Version switcher (Slice 20 item 3): snapshot builds carry a
+// /v/<ver> base suffix — strip it to get the SITE root so "latest"
+// from inside a snapshot escapes the snapshot instead of looping.
+const siteRoot = base.replace(/\/v\/[^/]+$/, '');
+const currentSnapshot = base.match(/\/v\/([^/]+)$/)?.[1] ?? null;
 const current =
   (Astro.url.pathname.slice(base.length) || '/').replace(/\/$/, '') || '/';
 ---
@@ -189,7 +195,14 @@ const current =
       <header class="bo-navbar bo-app-shell__header">
         <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>
         <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
-        <span class="bo-badge bo-badge--accent">v{pkg.version}</span>
+        <label class="bo-choice" for="version"><span class="bo-visually-hidden">Docs version</span>
+          <select class="bo-select" id="version" style="inline-size: auto" aria-label="Docs version">
+            <option value={siteRoot + '/'} selected={currentSnapshot === null}>v{pkg.version} · latest</option>
+            {versions.snapshots.map((v) => (
+              <option value={siteRoot + '/v/' + v + '/'} selected={currentSnapshot === v}>v{v}</option>
+            ))}
+          </select>
+        </label>
         <span class="bo-navbar__spacer"></span>
         <label class="bo-choice" for="density">Density
           <select class="bo-select" id="density" style="inline-size: auto">
@@ -477,6 +490,10 @@ const current =
         requestAnimationFrame(() =>
           requestAnimationFrame(() => html.removeAttribute('data-bo-theming')));
       };
+      const version = document.getElementById('version') as HTMLSelectElement;
+      version?.addEventListener('change', () => {
+        window.location.href = version.value;
+      });
       const theme = document.getElementById('theme') as HTMLSelectElement;
       theme.value = html.dataset.theme ?? 'light';
       theme.addEventListener('change', () => {

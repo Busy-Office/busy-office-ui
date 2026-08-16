@@ -34,6 +34,17 @@ jobs:
         run: npm run build -w docs
         env:
           DOCS_BASE: /busy-office-ui
+      # Versioned snapshots (Slice 20 item 3): committed under
+      # apps/docs/versions/<ver>/ (built at release time with
+      # DOCS_BASE=/busy-office-ui/v/<ver>, pagefind stripped), served at
+      # /v/<ver>/ alongside the latest docs. The switcher in the docs
+      # header reads apps/docs/versions.json.
+      - name: Include versioned doc snapshots
+        run: |
+          if [ -d apps/docs/versions ]; then
+            mkdir -p apps/docs/dist/v
+            cp -R apps/docs/versions/. apps/docs/dist/v/
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
