@@ -2007,6 +2007,30 @@ Ranked: quick wins that harden every page first, then the two build items.
        preview mechanism); docs state the recipe for app-defined
        palettes.
 
+## Triage decisions — refuse/rethink log (per the Objective)
+
+- **2026-08-16 — "Should we enforce only TypeScript?" (user ask) —
+  PARTLY ALREADY TRUE, REMAINDER REFUSED.** Ground truth: everything
+  that ships as JS is ALREADY authored in TypeScript
+  (`packages/core/src/js/**/*.ts` → compiled ESM + generated `.d.ts`,
+  gated by the behaviors-vs-`.d.ts` parity check) — author-side
+  TypeScript is enforced today by construction. The two possible
+  "more" readings both fail the Objective's tests:
+  (a) requiring TypeScript OF CONSUMERS — refused on reusability: the
+  framework's whole contract is plain classes + `data-*` attributes
+  that work with zero build step (po-app consumes the tarball from a
+  dependency-free Node server; the installation page's vendor-the-dist
+  story serves Rails/Django/PHP/Go) — a TS requirement would shrink
+  who can use it while adding nothing a `.d.ts` doesn't already give
+  TS users; (b) converting the ~20 internal build scripts (`.mjs`) to
+  TypeScript — refused on less-for-more: adds a compile step to the
+  build's own tooling for zero shipped-artifact difference; the
+  scripts are small, single-purpose, and already exercised by the
+  gates they implement. Standing rule recorded: new SHIPPED runtime
+  code is TypeScript (as it already is); build tooling stays plain
+  `.mjs`; consumers are never required to use TypeScript. Reopens only
+  if a real defect traces to an untyped build script.
+
 ## Explore log
 
 - [x] **2026-08-15 — po-app consumer image broken by the README-stamp gate**
