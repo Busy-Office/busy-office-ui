@@ -2169,23 +2169,33 @@ versioning policy) — item 1 formalizes and extends what exists rather
 than inventing a parallel system. Objective tests applied per item; one
 engine-shaped sub-ask refused with the reason.
 
-1. [ ] **Pantone-style scale system — separate colors from tokens**
-       (attachment). Extend the raw palette tier with full 50-950 ramps
-       for the four brand hues (mauve / olive / mist / taupe, matching
-       the attachment's shape); re-express the brand preset files as
-       ALIASES to scale steps (the user's "can define alias but should
-       be align" — semantic tokens point at named steps, never at loose
-       hexes, so identity colors and the scale can't drift apart);
-       split the docs: a "Colors" reference showing the ramp grids
-       (generated from the token source, swatch-per-step like the
-       attachment) separate from the "Tokens" page (the semantic tier);
-       palette page cross-links steps. Raw tier REMAINS not-API
-       (documented); the contrast gate keeps gating the semantic tier —
-       scale steps used by presets inherit gating through the aliases.
-       Accept: 4 ramps × 11 steps shipped + generated ramp-grid page;
-       every brand preset value is a step alias (verified by the
-       palettes parse assertions extended to allow/resolve step vars);
-       gates green; live both themes.
+1. [ ] **Pantone-style scale system — 24 general-purpose ranges**
+       (attachment; scope RAISED by the owner 2026-08-16: "not limited
+       to mauve/olive/mist/taupe — make it general purpose, 24 ranges,
+       grouped as palettes for reusability"). Ship 24 hue ranges × 11
+       steps (50-950) = 264 scale tokens as the raw palette tier:
+       **5 neutrals** (gray, slate, zinc, stone, taupe), **3 muted**
+       (mauve, olive, mist), **16 chromatic** (red, orange, amber,
+       yellow, lime, green, emerald, teal, cyan, sky, blue, indigo,
+       violet, purple, fuchsia, rose). 264 hand-picked hexes is not
+       maintainable — GENERATE the ramps from a seed config via a build
+       script (OKLCH ramp math: perceptually-uniform lightness stops
+       shared across all hues, so the same step number carries the same
+       weight in every range — that consistency is what makes
+       step-aliasing reliable), output committed as
+       `tokens/scales.css`, regenerated + drift-gated like every other
+       artifact. Brand presets and the base semantic tokens re-express
+       as ALIASES to named steps ("can define alias but should be
+       align" — identity and scale can't drift apart). Docs: a
+       generated "Colors" ramp-grid reference (24 rows × 11 swatches,
+       the attachment's shape) separate from the semantic "Tokens"
+       page. Raw tier REMAINS not-API (documented); the contrast gate
+       keeps gating the semantic tier — steps inherit gating through
+       aliases. Accept: 24 × 11 generated + gated; shared lightness
+       stops verified (same step ≈ same contrast behavior across
+       hues); presets are step aliases (parse assertions extended to
+       resolve them); ramp-grid page generated from the shipped
+       artifact; gates green; live both themes.
 2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection
