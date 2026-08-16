@@ -601,8 +601,14 @@ const current =
     @keyframes cmdk-in { from { opacity: 0; transform: translateY(-0.5rem); } }
   }
 
-  /* Copy button, top-end of any code block. */
-  .docs-content pre.has-copy { position: relative; }
+  /* Copy button, top-end of any code block. `has-copy` is added to EVERY
+     <pre><code> in .docs-content (both Demo.astro's paired blocks and
+     hand-authored "Markup" sections) — so `overflow-x: auto` belongs here,
+     not duplicated per call site. A long enough line (e.g. a full
+     attribute-laden tag) otherwise bleeds past the column into the
+     right-rail TOC instead of scrolling within its own box (found live on
+     Quantity's "With a unit" example, 2026-08-16). */
+  .docs-content pre.has-copy { position: relative; overflow-x: auto; }
   .copy-btn {
     position: absolute;
     inset-block-start: var(--bo-space-2);
