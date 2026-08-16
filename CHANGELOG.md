@@ -8,6 +8,29 @@ pin.
 
 ## Unreleased
 
+- Added: Tree table (`.bo-tree-table` on a `.bo-data-table` +
+  `initTreeTable()`) — hierarchical rows (BOM explosion, account
+  rollups): expand/collapse via disclosure buttons on a PLAIN table,
+  deliberately not `role="treegrid"` (ADR in `.roundtable/` — native
+  SR table browse mode wins for read-mostly hierarchy). 12 indent
+  levels; collapse spans tbody boundaries; a toggle with no deeper
+  rows is inert (the chevron never lies); nested collapsed state
+  preserved on re-expand; `bo:tree-toggle` dispatched
+  (row/level/expanded — the fetch-on-expand and expand-all hook).
+
+- Added: four brand palettes — `@busy-office/ui/css/brand-mauve`,
+  `brand-olive`, `brand-mist`, `brand-taupe` (joining brand-indigo) —
+  each gated through the full 32-pair AA contrast check in both
+  themes; a generated Palettes reference page documents every
+  swatch/token/hex from the shipped CSS.
+
+- Docs/meta: build-time syntax highlighting on every docs code block
+  (token-mapped to gated core pairs, none-left-behind build gate);
+  versioned docs snapshots with a header version switcher, frozen-docs
+  banner, and a release-flow gate (a versions.json entry without a
+  committed snapshot fails the build); docs sidebar regrouped
+  (learning-path order, workflow-grouped patterns, adjacency pairs).
+
 - **Breaking** (contract shape of a stable behavior, per the freeze
   policy): `initRowEdit()` now tracks, resets, and baselines `<select>`
   elements in editable rows, not just inputs/textareas. If your

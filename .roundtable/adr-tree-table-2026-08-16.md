@@ -58,3 +58,14 @@ workflow needs it — recorded reopen condition).
 Totals interplay (documented): `data-sum-of` keeps counting collapsed
 rows — collapse is a VIEW state, not a filter; totals over a hierarchy
 don't change because a branch is folded.
+
+## Amendment — 2026-08-16 (same day, post-grill)
+
+The Slice 20 close-out grill (Consumer seat) successfully challenged two
+parts of this decision's periphery, and Slice 21 item 3 amended them:
+indent levels extended 6 → 12 (real engineering BOMs run 8-12 deep; the
+"deeper nesting is a modelling smell" line is RETRACTED — depth is the
+customer's data, not the UI's judgment), and `bo:tree-toggle` now
+dispatches on every expand/collapse (the lazy-load / expand-all hook
+this record originally omitted). The core decision — plain table, not
+treegrid — was re-attacked by all four seats and HELD.
