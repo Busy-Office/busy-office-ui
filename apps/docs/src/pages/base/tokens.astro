@@ -67,8 +67,11 @@ const GROUPS: [string, [string, string][]][] = [
   ]],
   ['Status', [
     ['danger', 'errors, destructive actions'],
+    ['danger-solid', 'solid danger fills — destructive buttons'],
+    ['danger-strong', 'hover/active on solid danger'],
     ['danger-subtle', 'danger-tinted backgrounds'],
     ['danger-text', 'danger text on surfaces'],
+    ['warning', 'warning accents — alert stripe, table markers'],
     ['warning-strong', 'warning fills and emphasis'],
     ['warning-subtle', 'warning-tinted backgrounds'],
     ['warning-text', 'warning text on surfaces'],
@@ -81,15 +84,26 @@ for (const [group, rows] of GROUPS)
   for (const [t] of rows)
     if (!(('--bo-color-' + t) in lightVars)) throw new Error(`tokens: documented token --bo-color-${t} (${group}) not found in color.css`);
 
-const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12];
+// Spacing values, parsed from the shipped space.css (never hand-typed).
+const spaceCss = readFileSync(new URL('../../../../../packages/core/src/css/tokens/space.css', import.meta.url), 'utf8');
+const spaces = [...spaceCss.matchAll(/--bo-space-(\d+):\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]);
+if (spaces.length < 8) throw new Error('tokens: space.css parse came up short');
+const DENSITY_ALIASES = ['control-height', 'row-height', 'cell-padding-y', 'cell-padding-x', 'field-gap', 'font-size'];
+const densityCss = readFileSync(new URL('../../../../../packages/core/src/css/tokens/density.css', import.meta.url), 'utf8');
+for (const a of DENSITY_ALIASES)
+  if (!densityCss.includes(`--bo-density-${a}:`)) throw new Error(`tokens: density alias --bo-density-${a} not found in density.css`);
 const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-color-' + t], vars);
 ---
 <Gallery title="Design tokens">
   <p class="demo-note">
-    The semantic tier — what components actually consume. Each token
-    resolves per theme to a <a href={base + '/base/colors'}>scale step</a>
-    (or a deliberate literal); status colors carry meaning and are never
-    re-skinned by <a href={base + '/base/palettes'}>palettes</a>.
+    The semantic tier — what components actually consume, and the tier
+    that is <strong>stable API</strong>: renaming or removing any token
+    below is a major version (see
+    <a href={base + '/getting-started/versioning'}>versioning</a>). Each
+    token resolves per theme to a
+    <a href={base + '/base/colors'}>scale step</a> (or a deliberate
+    literal); status colors carry meaning and are never re-skinned by
+    <a href={base + '/base/palettes'}>palettes</a>.
   </p>
 
   <section class="demo">
@@ -115,11 +129,12 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
                     <td>{role}</td>
                     <td class="bo-data-table__col--code">
                       <span class="tok-sw" aria-hidden="true" style={`background:${l.hex}`}></span>
-                      {l.hex}{l.step && <span class="bo-u-text-muted"> (<a href={base + '/base/colors'}>{l.step}</a>)</span>}
+                      {l.hex}{l.step && <span class="bo-u-text-muted"> (<a href={`${base}/base/colors#${l.step}`}>{l.step}</a>)</span>}
                     </td>
                     <td class="bo-data-table__col--code">
                       <span class="tok-sw" aria-hidden="true" style={`background:${d.hex}`}></span>
-                      {d.hex}{d.step && <span class="bo-u-text-muted"> (<a href={base + '/base/colors'}>{d.step}</a>)</span>}
+                      {d.hex}{d.step && <span class="bo-u-text-muted"> (<a href={`${base}/base/colors#${d.step}`}>{d.step}</a>)</span>}
+                      {d.hex === l.hex && <span class="bo-u-text-muted"> — same in both themes</span>}
                     </td>
                   </tr>
                 );
@@ -137,10 +152,11 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
 
   <section class="demo">
     <h2>Spacing scale</h2>
-    {spaces.map((s) => (
+    {spaces.map(([n, v]) => (
       <div style="display:flex;align-items:center;gap:1rem">
-        <code style="inline-size:8rem;font-size:var(--bo-font-size-xs)">--bo-space-{s}</code>
-        <span style={`display:inline-block;block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${s})`}></span>
+        <code style="inline-size:8rem;font-size:var(--bo-font-size-xs)">--bo-space-{n}</code>
+        <code style="inline-size:5rem;font-size:var(--bo-font-size-xs)" class="bo-u-text-muted">{v}</code>
+        <span style={`display:inline-block;block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${n})`}></span>
       </div>
     ))}
   </section>
@@ -173,8 +189,10 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
 
   <section class="demo">
     <h2>Density aliases</h2>
-    <p class="demo-note">Components size themselves from <code>--bo-density-*</code>
-    aliases only. Flip the header selector and watch the control below.</p>
+    <p class="demo-note">Components never hard-code sizes — they read six
+    aliases ({DENSITY_ALIASES.map((a, i) => <>{i > 0 && ', '}<code>--bo-density-{a}</code></>)})
+    that remap when <code>data-density</code> changes. Try it: the Density
+    picker in this page's header re-sizes the control below.</p>
     <button class="bo-btn">Density-aware control</button>
   </section>
 
@@ -191,5 +209,5 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
     h3 { margin-block: var(--bo-space-4) var(--bo-space-2); }
   </style>
 
-  <Related links={[["/base/colors", "Color scales"], ["/concepts/tokens", "Design tokens (concept)"], ["/concepts/accessibility", "Accessibility model"]]} />
+  <Related links={[["/base/colors", "Color scales"], ["/getting-started/versioning", "Versioning & upgrades"], ["/concepts/tokens", "Design tokens (concept)"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

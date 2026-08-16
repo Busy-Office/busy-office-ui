@@ -2192,7 +2192,7 @@ versioning policy) — item 1 formalizes and extends what exists rather
 than inventing a parallel system. Objective tests applied per item; one
 engine-shaped sub-ask refused with the reason.
 
-1. [ ] **Pantone-style scale system — 24 general-purpose ranges**
+1. [x] **Pantone-style scale system — 24 general-purpose ranges**
        (attachment; scope RAISED by the owner 2026-08-16: "not limited
        to mauve/olive/mist/taupe — make it general purpose, 24 ranges,
        grouped as palettes for reusability"). Ship 24 hue ranges × 11
@@ -2280,9 +2280,14 @@ engine-shaped sub-ask refused with the reason.
        94 tests; docs build + links green; palettes page auto-picked
        up the six (live-verified 1440/390 light/dark); landing
        baselines regenerated for the legitimate bundle-stat restamp,
-       stability ×2. REMAINING: the three docs pages (Colors ramp
-       grid + palettes ERP redesign + tokens table), presentation
-       grill.
+       stability ×2. **Wakes 4-5 (2026-08-16): DONE** — the three docs
+       pages shipped per approved wireframes (Colors 24×11 grid with
+       derived-honest role bands + step→consumer tooltips + click-to-
+       copy; /base/tokens semantic table with per-theme resolution and
+       per-swatch anchor cross-links; /base/palettes ERP-first cards
+       with the default-teal baseline card); presentation grill run (3
+       seats, 24 findings, 6 P1 — all P1s closed same-wake:
+       `.roundtable/grill-slice22-color-docs.md`). Item CLOSED.
 2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection
@@ -2313,6 +2318,14 @@ engine-shaped sub-ask refused with the reason.
        pixel-comparable to a plain data-table; keyboard path stated
        (Enter to edit, Esc to cancel); composes bo:cell-change/row-save
        unchanged; tests; live-verified.
+
+**Open question (from the Slice 22 color-docs grill, 2026-08-16)**:
+dark mode never remaps `--bo-color-danger-solid`/`danger-strong`, so a
+dark `bo-btn--danger` *darkens* on hover (red-600 → red-700) — inverted
+against every other dark hover. Needs a deliberate decision with
+contrast measurement (red-500 under white text fails 4.5, so the naive
+remap is not available); surfaced by adding the two rows to the tokens
+table, where the pairing is now visible.
 
 ## Triage decisions — refuse/rethink log (per the Objective)
 

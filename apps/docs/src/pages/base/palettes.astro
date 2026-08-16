@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 // GENERATED from the shipped brand CSS — swatches, tokens, and hex are
@@ -18,8 +19,10 @@ const TOKENS = [
 function parseBlock(block) {
   const out = {};
   for (const t of TOKENS) {
-    const m = block.match(new RegExp(`--bo-color-${t}:\\s*([^;]+);`));
-    if (m) out[t] = m[1].trim();
+    // matchAll + overwrite: LAST declaration wins, matching CSS custom
+    // property resolution (grill 2026-08-16 — first-match documented the
+    // value the browser discards on a duplicate declaration).
+    for (const m of block.matchAll(new RegExp(`--bo-color-${t}:\\s*([^;]+);`, 'g'))) out[t] = m[1].trim();
   }
   return out;
 }
@@ -81,8 +84,22 @@ const PROFILES: Record<string, string> = {
   </p>
 
   <section class="demo">
-    <h2>The six presets</h2>
+    <h2>The presets — the default and six alternatives</h2>
     <div class="pal-cards">
+      <div class="pal-card">
+        <h3>default (teal)</h3>
+        <div class="pal-preview">
+          <button class="bo-btn" type="button">Approve</button>
+          <div class="pal-preview-row">
+            <span class="bo-badge bo-badge--accent">badge</span>
+            <a href={base + '/concepts/theming'}>a link</a>
+          </div>
+        </div>
+        <p class="pal-profile">the framework itself — what you're comparing against</p>
+        <div class="pal-import">
+          <code>no import</code>
+        </div>
+      </div>
       {palettes.map((p) => (
         <div class="pal-card">
           <h3>{p.name}</h3>
@@ -112,6 +129,12 @@ const PROFILES: Record<string, string> = {
     app importing it gets. Every accent in every card is an alias to a
     <a href={base + '/base/colors'}>scale step</a>; the build fails if one
     drifts to a raw hex.</p>
+    <p><strong>Placement matters</strong>: import the preset
+    <em>after</em> <code>@busy-office/ui/css</code>, outside any
+    <code>@layer</code> — that ordering is what lets it win under the
+    <a href={base + '/concepts/cascade'}>cascade contract</a>. The
+    <a href={base + '/getting-started/installation'}>installation page</a>
+    shows the full stylesheet order.</p>
   </section>
 
   <section class="demo">
@@ -134,7 +157,7 @@ const PROFILES: Record<string, string> = {
                   <td class="bo-data-table__col--code">--bo-color-{t}</td>
                   <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
                   <td class="bo-data-table__col--code">{p.light[t]} <span class="bo-u-text-muted">({p.light[t + '-step']})</span></td>
-                  <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
+                  <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t]}`}></span></td>
                   <td class="bo-data-table__col--code">{p.dark[t]} <span class="bo-u-text-muted">({p.dark[t + '-step']})</span></td>
                 </tr>
               ))}
@@ -238,16 +261,27 @@ const PROFILES: Record<string, string> = {
   </style>
 
   <script>
-    // Copy-the-import (visible toast + aria-live — two channels).
+    // Copy-the-import (visible toast + aria-live — two channels, and
+    // failure is reported, never silent).
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    function toastMsg(msg: string) {
+      const toast = document.querySelector('.pal-toast')!;
+      clearTimeout(timer);
+      toast.textContent = ''; // force a mutation so repeat copies re-announce
+      requestAnimationFrame(() => { toast.textContent = msg; });
+      timer = setTimeout(() => { toast.textContent = ''; }, 2500);
+    }
     document.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLElement>('.pal-copy');
       if (!btn) return;
       const text = btn.dataset.copy!;
-      navigator.clipboard?.writeText(text).then(() => {
-        const toast = document.querySelector('.pal-toast')!;
-        toast.textContent = `copied ${text}`;
-        setTimeout(() => { if (toast.textContent === `copied ${text}`) toast.textContent = ''; }, 2500);
-      });
+      if (!navigator.clipboard) { toastMsg('clipboard unavailable here — copy the line from the card'); return; }
+      navigator.clipboard.writeText(text).then(
+        () => toastMsg(`copied ${text}`),
+        () => toastMsg('copy failed — your browser blocked clipboard access'),
+      );
     });
   </script>
+
+  <Related links={[["/concepts/theming", "Theming guide"], ["/getting-started/installation", "Installation"], ["/base/colors", "Color scales"], ["/base/tokens", "Design tokens"]]} />
 </Gallery>
