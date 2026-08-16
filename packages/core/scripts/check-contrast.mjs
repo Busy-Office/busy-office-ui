@@ -79,6 +79,14 @@ const PAIRS = [
   ['--bo-color-accent', '--bo-color-bg-muted', 3],
   ['--bo-color-warning-strong', '--bo-color-bg-muted', 3],
   ['--bo-color-danger', '--bo-color-bg-muted', 3],
+  // Slice 20 code-highlighting palette sits on bg-muted — every slot is
+  // TEXT, so every pair gates at 4.5 (the pre-existing 3:1 entries for
+  // accent/warning-strong/danger on muted were non-text fills).
+  ['--bo-color-text-primary', '--bo-color-bg-muted', 4.5],
+  ['--bo-color-success-text', '--bo-color-bg-muted', 4.5],
+  ['--bo-color-accent', '--bo-color-bg-muted', 4.5],
+  ['--bo-color-warning-strong', '--bo-color-bg-muted', 4.5],
+  ['--bo-color-danger-text', '--bo-color-bg-muted', 4.5],
 ];
 const PAIR_KEY = (fg, bg) => `${fg}|${bg}`;
 const KNOWN = new Set(PAIRS.map(([f, b]) => PAIR_KEY(f, b)));

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/copy-framework-css.mjs && node scripts/check-page-shape.mjs && astro build && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs",
+    "build": "node scripts/copy-framework-css.mjs && node scripts/check-page-shape.mjs && astro build && node scripts/highlight-code.mjs && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs",
     "preview": "astro preview",
     "test:visual": "node scripts/visual-regression.mjs",
     "test:visual:update": "node scripts/visual-regression.mjs --update",

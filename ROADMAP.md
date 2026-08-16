@@ -1925,8 +1925,25 @@ exactly one brand preset ships (indigo) on a proven contrast-gated
 mechanism; Versioned docs was parked post-1.0 and this ask GRADUATES it.
 Ranked: quick wins that harden every page first, then the two build items.
 
-1. [ ] **Code blocks: syntax highlighting site-wide** (wishlist "code
-       block"). Every `<pre><code>` today is unstyled plain text. Add
+1. [x] **Code blocks: syntax highlighting site-wide** — shipped
+       2026-08-16. Build-time Shiki as a POST-BUILD transform
+       (`highlight-code.mjs`): one mechanism highlights all 114 blocks
+       across 47 pages with zero per-page edits — the less-for-more
+       shape. github-light's palette remapped wholesale to `--bo-code-*`
+       vars defined from existing core tokens on `bg-muted`, so theming
+       rides the normal `data-theme` contract (verified live both
+       themes) and AA is inherited from gated token pairs. Two gates
+       protect it: an unmapped-hex assert in the transform (theme drift
+       fails the build), and 5 new 4.5:1 TEXT pairs in the core contrast
+       gate (32 pairs total) — which matters because **axe caught a real
+       violation the hex-map couldn't**: the first slot choice used
+       `--bo-color-danger` (gated 3:1 as a non-text fill, only 4.39:1 in
+       light) — swapped to `--bo-color-danger-text` (5.88/7.57), axe now
+       zero across all 60 pages at both widths. Copy buttons verified
+       working (spans preserve textContent; copies now get real chars,
+       not escaped entities); Shiki's `tabindex="0"` on pre is an
+       incidental keyboard win. DOCS_BASE build green; 32 baselines
+       regenerated deliberately, stable ×2; 86 tests unchanged. Every `<pre><code>` today is unstyled plain text. Add
        build-time highlighting (Shiki, already in Astro's dependency
        tree — no client JS, no CDN, CSP-safe) wired through `Demo.astro`
        and the hand-authored Markup sections; theme-aware (light/dark via
