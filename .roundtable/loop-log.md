@@ -283,3 +283,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 04:20 · Standardize · fix · Full-site expansion sweep found the class's second instance (.bo-segmented could not wrap); gate widened 8->14 pages, expansion factor raised · shipped · 601bc3d
 - 2026-08-17 04:34 · Explore · spike · Print claims executed: 7/8 held; badge colour-forcing claim was false (badges print outlined) — docs corrected, dead rule removed, 5 print assertions gated · shipped · 88cfc92
 - 2026-08-17 05:23 · Explore · spike · WCAG 1.4.12 executed site-wide: 5 real failures (2 self-inflicted by the chip ellipsis) fixed by wrapping; gate graduated with before/after baseline · shipped · 607828a
+- 2026-08-17 05:50 · Optimize · fix · CI regression 3.5->7.6min fixed: merged overflow+spacing sweeps with a tab pool, 345s->74s (4.7x), both halves red-proved · shipped · 5026e87

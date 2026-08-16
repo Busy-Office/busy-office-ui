@@ -2947,6 +2947,35 @@ trip the overflow half, because that bug only appears under text
 EXPANSION — it belongs to check-pseudo. A gate suite is only as
 trustworthy as knowing which gate owns which failure.
 
+**Explore 2026-08-17 (sixth) — bulk actions spiked; GRADUATED as a
+pattern.** The owner docs review listed "Bulk actions (select 200 rows,
+apply, report partial failure)" as its #2 missing pattern, and our own
+invoice-list States table already promises it ("re-render the failed
+rows and summarise"). Spiked it in the reference app (worktree,
+discarded): two real ERP rules — a second approver required over a
+limit, and an already-decided PO cannot be re-approved. Result: the
+promise is expressible with **zero new CSS** — an out-of-band summary
+alert, `data-row-state="error"` per failed row, and the reason as a
+badge in WORDS beside the status (two-channel, so the tint is never the
+only signal). Verified live: "1 approved, 1 could not be", two error
+rows, reasons legible.
+
+**One rule the spike discovered**: partial-failure state must be
+TRANSIENT. The first version never cleared `bulkError`, so a row kept
+showing "needs a second approver" after someone else had approved it —
+the list lied. Clearing it at the start of each action fixed it
+(verified: 1 error row, then 0 on the next action). That rule belongs
+in the pattern.
+
+11. [ ] **Bulk actions pattern** — build the page from the spike:
+       anatomy (selection → toolbar action → per-row result), data
+       contract (POST ids, response = rows + OOB summary), states
+       (all-succeed, partial, all-fail, nothing-selected, no-permission,
+       stale selection), the TRANSIENT-state rule, keyboard path, and
+       the components-used badge. Accept: page passes the pattern gate,
+       po-app carries the working implementation, live-verified both
+       themes/widths.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

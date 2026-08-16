@@ -20,3 +20,4 @@
 {"ts": "2026-08-16 17:32", "name": "bundle-gz-kb", "value": 10.6, "unit": "kB"}
 {"ts": "2026-08-16 17:33", "name": "bundle-gz-kb", "value": 10.8, "unit": "kB"}
 {"ts": "2026-08-16 18:39", "name": "bundle-size-gzip", "value": 11.1, "unit": "kB"}
+{"ts": "2026-08-17 05:50", "name": "ci-browser-sweep", "value": 74.0, "unit": "s"}
