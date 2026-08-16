@@ -2142,6 +2142,65 @@ highlighting's (correct) absence of a11y claims. The architect's
 "no escape from snapshots" reduced on live re-check to the banner gap
 (docs pages inside snapshots DO carry a working switcher).
 
+## Slice 22 — scale system, rich text, WYSIWYG table (user wishlist, 2026-08-16)
+
+Triaged 2026-08-16 (3-item wishlist + attachment showing Tailwind-style
+50-950 numbered ramps for mauve/olive/mist/taupe). Queued BEHIND Slice
+21's remaining hardening (grill findings outrank new features).
+Ground truth: the raw palette tier ALREADY uses numbered scales
+(`--bo-palette-gray-50…900` etc., 80 tokens, explicitly not-API per the
+versioning policy) — item 1 formalizes and extends what exists rather
+than inventing a parallel system. Objective tests applied per item; one
+engine-shaped sub-ask refused with the reason.
+
+1. [ ] **Pantone-style scale system — separate colors from tokens**
+       (attachment). Extend the raw palette tier with full 50-950 ramps
+       for the four brand hues (mauve / olive / mist / taupe, matching
+       the attachment's shape); re-express the brand preset files as
+       ALIASES to scale steps (the user's "can define alias but should
+       be align" — semantic tokens point at named steps, never at loose
+       hexes, so identity colors and the scale can't drift apart);
+       split the docs: a "Colors" reference showing the ramp grids
+       (generated from the token source, swatch-per-step like the
+       attachment) separate from the "Tokens" page (the semantic tier);
+       palette page cross-links steps. Raw tier REMAINS not-API
+       (documented); the contrast gate keeps gating the semantic tier —
+       scale steps used by presets inherit gating through the aliases.
+       Accept: 4 ramps × 11 steps shipped + generated ramp-grid page;
+       every brand preset value is a step alias (verified by the
+       palettes parse assertions extended to allow/resolve step vars);
+       gates green; live both themes.
+2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
+       The editor ENGINE is refused per simplicity/less-for-more:
+       contenteditable engines (undo stacks, sanitization, selection
+       models) are dedicated-library territory, and shipping one would
+       be the least-simple surface in the codebase. What ships — the
+       same "ready, not coupled" stance as htmx: `.bo-richtext`
+       (container + toolbar + content-area chrome: focus ring, density,
+       dark, disabled/readonly states) styling a native
+       `contenteditable` for the light case, plus a documented
+       integration recipe for a real editor library, and prose styles
+       for rendered rich content (`.bo-prose`-style: headings, lists,
+       tables inside content). Accept: chrome demos live (native
+       contenteditable working with the toolbar posting intent events
+       consumers implement); the engine-refusal reasoning stated on the
+       page; integration recipe with one named library shape; gates
+       green.
+3. [ ] **WYSIWYG editable table — display-identical click-to-edit**
+       [INTERPRETATION — flag to correct]: read as "cells render as
+       plain display text until activated" — a view↔edit mode on top of
+       the existing editable-table stack (seamless inputs already
+       *look* flat; this adds a true display mode: text-only rendering,
+       click/Enter a cell to swap in its editor, commit on
+       blur/Escape-cancel, composing row-edit's dirty/save machinery
+       rather than a parallel grid). If the intent was instead "a table
+       INSIDE the rich-text editor" (item 2 adjacency), say so — that
+       lands as a `.bo-prose` table style + editor-integration note,
+       much smaller. Accept (current reading): display mode
+       pixel-comparable to a plain data-table; keyboard path stated
+       (Enter to edit, Esc to cancel); composes bo:cell-change/row-save
+       unchanged; tests; live-verified.
+
 ## Triage decisions — refuse/rethink log (per the Objective)
 
 - **2026-08-16 — "Should we enforce only TypeScript?" (user ask) —
