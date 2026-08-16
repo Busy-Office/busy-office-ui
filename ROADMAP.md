@@ -2440,7 +2440,17 @@ push-batching operating rule stays as defense in depth. **VERIFIED on
 the first protected deploy (2026-08-16)**: the new generation shipped
 (colors.Drfmq2Zm.css) while the previous generation's hashes —
 including one the new HTML no longer references — still serve 200.
-Failure class closed.
+Failure class closed on Pages. **REOPENED for a second leg
+(owner screenshot, localhost:8081) and closed same-wake**: the local
+nginx served NO Cache-Control, so the browser cached HTML
+heuristically; every docs rebuild renames the hashed CSS, and the
+heuristically-cached HTML pinned dead stylesheet URLs until a hard
+refresh — same class, different cache layer. Fix: nginx now sends
+no-cache on HTML (revalidate every load; ETags make it cheap) and
+immutable/1y on /_astro (content-hashed). Verified live. Residual: a
+load during the seconds a rebuild is writing dist can still catch a
+half-written tree, but it now self-heals on the next NORMAL load — no
+hard refresh, no pinning.
 
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
