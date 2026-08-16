@@ -2522,6 +2522,34 @@ group tables share one fixed column grid (measured identical rails
 across all five), and the step reference moved to its own line with
 the redundant "same in both themes" text dropped.
 
+**Owner layout-primitives review (2026-08-16) — ADOPTED (7 of 8
+items), one refused, one factual correction.** Page rewritten to the
+suggested arrangement: "Choosing one" decision table first, then
+Stack / Cluster / Grid each with a live demo AND copyable code
+(three of four sections previously had no code at all — the docs
+contract every other page follows), modifiers actually demonstrated
+(--tight/--loose side by side; --split as the toolbar shape; --end as
+the dialog footer), app shell gains a live miniature above its markup,
+a new "Composing them" payoff section (shell > stack > split cluster >
+card grid), and a Knobs table with defaults PARSED from the shipped
+primitive CSS (asserted, never hand-typed). Both undocumented gotchas
+written up: auto-fill (not auto-fit — a lone card keeps its column
+width, deliberate so an emptied dashboard doesn't reflow into one
+giant card) and the min(--bo-grid-min, 100%) overflow floor that makes
+the knob safe to set aggressively. Long headings shortened (they ARE
+the TOC); Related gains Container queries + Density. **Factual count
+bug real but subtler than reported**: the "4 primitives" prose was
+GENERATED from api.primitives — it counted visually-hidden as a layout
+primitive; the count now excludes it (and the shell), so it reads 3
+and still can't drift. **Correction to the review**: .bo-visually-
+hidden IS already documented on /base/utilities (its claim of absence
+is wrong); the page now cross-links there instead of describing it.
+**REFUSED — renaming .bo-visually-hidden to bo-u-visually-hidden**:
+documented class names are semver API and it is PUBLISHED; a rename
+costs every consumer a migration to buy cosmetic prefix consistency,
+and "visually-hidden" is the conventional name people search for. The
+naming exception is documented rather than fixed.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

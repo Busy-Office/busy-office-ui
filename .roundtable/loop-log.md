@@ -260,3 +260,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 22:26 · Continue · fix · P0 leg 3 (the real core): hx-boost dropped inlined head styles — head-support shipped, 30/30 -> 0/30 repro loop · shipped · 28de419
 - 2026-08-16 22:26 · Continue · build · Item 8: .bo-kbd + keyboard-help pattern shipped (live ?-wiring verified) · shipped · 28de419
 - 2026-08-16 22:34 · Continue · fix · Owner root-cause doc adopted: inlineStylesheets never + race-free ext load + check-boost gate (red-first; found tree-shaken htmx and a racing probe) · shipped · 15ebd6c
+- 2026-08-16 23:00 · Continue · fix · Owner tokens review adopted: duplicate-main (boost nesting) + phantom scrollbar (shell containing block) fixed; measure/TOC/table alignment; contrast specimens + varying level column · shipped · 315fdec

@@ -1,10 +1,97 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import Demo from '../../components/Demo.astro';
 import api from '@busy-office/ui/api';
-// The app shell (sidebar-layout) is demoed separately below; the rest are
-// counted here so this prose can't silently drift the way js-behaviors did.
-const primitiveCount = Object.keys(api.primitives).filter((p) => p !== 'sidebar-layout').length;
+import { readFileSync } from 'node:fs';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// LAYOUT primitives only: the shell is demoed separately, and
+// visually-hidden is a utility (documented on Utilities) — counting it
+// here is what made this page claim "4 primitives" (owner review
+// 2026-08-16). Generated, so the prose still can't drift.
+const LAYOUT = Object.keys(api.primitives).filter(
+  (p) => p !== 'sidebar-layout' && p !== 'visually-hidden',
+);
+
+// Knob defaults parsed from the shipped CSS — never hand-typed.
+const src = (f: string) =>
+  readFileSync(new URL(`../../../../../packages/core/src/css/primitives/${f}`, import.meta.url), 'utf8');
+const primitivesCss = ['stack.css', 'cluster.css', 'grid.css'].map(src).join('\n');
+const KNOBS = [...primitivesCss.matchAll(/var\((--bo-(?:stack|cluster|grid)-[a-z]+),\s*([^)]+(?:\)[^)]*)?)\)/g)]
+  .map((m) => [m[1], m[2].trim()] as [string, string]);
+const knobs = [...new Map(KNOBS).entries()];
+if (knobs.length < 4) throw new Error('primitives: expected 4 knobs parsed from the primitive CSS');
+
+const stack = `<div class="bo-stack" style="max-inline-size: 20rem">
+  <button class="bo-btn bo-btn--secondary">Default gap</button>
+  <button class="bo-btn bo-btn--secondary">— space-4 between blocks</button>
+</div>
+<div class="bo-stack bo-stack--tight" style="max-inline-size: 20rem; margin-block-start: 1.5rem">
+  <button class="bo-btn bo-btn--secondary">--tight</button>
+  <button class="bo-btn bo-btn--secondary">— space-2, for dense field groups</button>
+</div>
+<div class="bo-stack bo-stack--loose" style="max-inline-size: 20rem; margin-block-start: 1.5rem">
+  <button class="bo-btn bo-btn--secondary">--loose</button>
+  <button class="bo-btn bo-btn--secondary">— space-6, for page sections</button>
+</div>`;
+
+const cluster = `<!-- default: everything packs to the start and wraps -->
+<div class="bo-cluster">
+  <button class="bo-btn">Save</button>
+  <button class="bo-btn bo-btn--secondary">Cancel</button>
+  <span class="bo-badge bo-badge--warning">Draft</span>
+</div>
+
+<!-- --split: first item left, rest right — the toolbar shape -->
+<div class="bo-cluster bo-cluster--split" style="margin-block-start: 1.5rem">
+  <strong>Purchase orders</strong>
+  <span class="bo-cluster">
+    <button class="bo-btn bo-btn--secondary">Export</button>
+    <button class="bo-btn">New order</button>
+  </span>
+</div>
+
+<!-- --end: everything right — dialog footers -->
+<div class="bo-cluster bo-cluster--end" style="margin-block-start: 1.5rem">
+  <button class="bo-btn bo-btn--secondary">Cancel</button>
+  <button class="bo-btn">Approve</button>
+</div>`;
+
+const grid = `<!-- --bo-grid-min sets the smallest a column may get before
+     the grid drops to fewer columns. Resize the window to see it reflow. -->
+<div class="bo-grid" style="--bo-grid-min: 10rem">
+  <div class="bo-widget"><div class="bo-widget__body">Card 1</div></div>
+  <div class="bo-widget"><div class="bo-widget__body">Card 2</div></div>
+  <div class="bo-widget"><div class="bo-widget__body">Card 3</div></div>
+  <div class="bo-widget"><div class="bo-widget__body">Card 4</div></div>
+</div>`;
+
+const composed = `<!-- The whole recipe: shell holds the page, stack gives it
+     vertical rhythm, a split cluster is the toolbar, a grid holds cards. -->
+<main class="bo-app-shell__main">
+  <div class="bo-stack">
+    <div class="bo-cluster bo-cluster--split">
+      <strong style="font-size: var(--bo-font-size-lg)">Cost centre CC-4021</strong>
+      <span class="bo-cluster">
+        <button class="bo-btn bo-btn--secondary">Export</button>
+        <button class="bo-btn">New order</button>
+      </span>
+    </div>
+    <div class="bo-grid" style="--bo-grid-min: 12rem">
+      <div class="bo-widget"><div class="bo-widget__body">
+        <dl class="bo-kv bo-kv--rows"><div><dt>Open</dt><dd class="bo-u-tabular">14</dd></div></dl>
+      </div></div>
+      <div class="bo-widget"><div class="bo-widget__body">
+        <dl class="bo-kv bo-kv--rows"><div><dt>Approved</dt><dd class="bo-u-tabular">62</dd></div></dl>
+      </div></div>
+      <div class="bo-widget"><div class="bo-widget__body">
+        <dl class="bo-kv bo-kv--rows"><div><dt>Spend</dt><dd class="bo-u-tabular">$184,200</dd></div></dl>
+      </div></div>
+    </div>
+  </div>
+</main>`;
+
 const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shell -->
   <header class="bo-navbar bo-app-shell__header">…</header>
   <nav class="bo-sidebar-nav bo-app-shell__sidebar">…</nav>
@@ -13,41 +100,134 @@ const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shel
 ---
 <Gallery title="Layout primitives">
   <p class="demo-note">
-    Every screen is composed from {primitiveCount} primitives plus the app shell. Knobs are
-    custom properties set inline or in your own CSS:
-    <code>--bo-stack-gap</code>, <code>--bo-cluster-gap</code>,
-    <code>--bo-grid-min</code>, <code>--bo-grid-gap</code>.
+    Every screen is built from {LAYOUT.length} layout primitives —
+    <code>.bo-stack</code> (vertical rhythm), <code>.bo-cluster</code>
+    (a row that wraps), <code>.bo-grid</code> (cards that reflow) —
+    inside the app shell. Each takes custom-property knobs you set
+    inline or in your own CSS.
   </p>
+
   <section class="demo">
-    <h2><code>.bo-stack</code> — vertical flow (<code>--tight</code>/<code>--loose</code>)</h2>
-    <div class="bo-stack bo-stack--tight" style="max-inline-size: 20rem">
-      <button class="bo-btn bo-btn--secondary">One</button>
-      <button class="bo-btn bo-btn--secondary">Two</button>
+    <h2>Choosing one</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Use</th><th scope="col">When</th><th scope="col">Knobs</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">.bo-stack</td><td>Vertical rhythm between blocks — form fields, sections, card contents</td><td class="bo-data-table__col--code">--bo-stack-gap</td></tr>
+          <tr><td class="bo-data-table__col--code">.bo-cluster</td><td>A horizontal row that wraps — toolbars, button groups, tag lists</td><td class="bo-data-table__col--code">--bo-cluster-gap</td></tr>
+          <tr><td class="bo-data-table__col--code">.bo-grid</td><td>Equal-width cards that reflow by available width</td><td class="bo-data-table__col--code">--bo-grid-min, --bo-grid-gap</td></tr>
+          <tr><td class="bo-data-table__col--code">.bo-app-shell</td><td>The page skeleton — header, sidebar, main</td><td>container-driven</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
+
   <section class="demo">
-    <h2><code>.bo-cluster</code> — wrapping toolbar row (<code>--split</code>/<code>--end</code>)</h2>
-    <div class="bo-cluster">
-      <button class="bo-btn">Save</button>
-      <button class="bo-btn bo-btn--secondary">Cancel</button>
-      <span class="bo-badge bo-badge--warning">Draft</span>
-    </div>
+    <h2>Stack</h2>
+    <Demo code={stack} />
+    <p class="bo-u-text-muted">One gap, three sizes.
+    <code>--tight</code> and <code>--loose</code> work by <em>setting</em>
+    <code>--bo-stack-gap</code> — so an inline knob on a
+    <code>--tight</code> element wins over the modifier.</p>
   </section>
+
   <section class="demo">
-    <h2><code>.bo-grid</code> — auto-fill card grid (<code>--bo-grid-min</code>)</h2>
-    <div class="bo-grid" style="--bo-grid-min: 10rem">
-      {[1, 2, 3, 4].map((n) => (
-        <div style="border:1px solid var(--bo-color-border-default);border-radius:var(--bo-radius-md);padding:var(--bo-space-4)">Card {n}</div>
-      ))}
-    </div>
+    <h2>Cluster</h2>
+    <Demo code={cluster} />
+    <p class="bo-u-text-muted">Items wrap instead of overflowing, so a
+    toolbar degrades gracefully on narrow screens.
+    <code>--split</code> pushes the last child to the far edge (nest a
+    plain cluster to keep several buttons together);
+    <code>--end</code> right-aligns everything.</p>
   </section>
+
   <section class="demo">
-    <h2><code>.bo-app-shell</code> — header/sidebar/main + container queries</h2>
+    <h2>Grid</h2>
+    <Demo code={grid} />
+    <p class="bo-u-text-muted">Two behaviours worth knowing.
+    <strong>Columns are <code>auto-fill</code>, not
+    <code>auto-fit</code></strong>: a lone card keeps its column width
+    instead of stretching across the row — deliberate, so a dashboard
+    doesn't reflow into one enormous card when a filter empties it (use
+    your own <code>auto-fit</code> grid if you want stretching).
+    And the column floor is <code>min(--bo-grid-min, 100%)</code>, which
+    is what stops a wide minimum from overflowing a narrow container —
+    so you can set <code>--bo-grid-min</code> aggressively and trust it.</p>
+  </section>
+
+  <section class="demo">
+    <h2>App shell</h2>
+    <div class="shell-mini" aria-hidden="true">
+      <div class="shell-mini__header">header</div>
+      <div class="shell-mini__side">sidebar</div>
+      <div class="shell-mini__main">main</div>
+    </div>
     <pre><code>{shellMarkup}</code></pre>
-    <p class="bo-u-text-muted">The shell is a named container (<code>bo-shell</code>);
-    the sidebar collapses to icon-only below 900px of <em>shell</em> width. Labels stay
-    in the accessibility tree when collapsed. <code>.bo-visually-hidden</code> is also
-    available for your own screen-reader-only text.</p>
+    <p class="bo-u-text-muted">The shell is a named container
+    (<code>bo-shell</code>), so the sidebar collapses to icon-only below
+    900px of <em>shell</em> width — not viewport width, which is why it
+    behaves correctly inside a split view. Labels stay in the
+    accessibility tree when collapsed. Details on
+    <a href={base + '/concepts/container-queries'}>Container queries</a>.</p>
   </section>
-  <Related links={[["/components/nav", "Navigation"], ["/components/dashboard", "Dashboard"]]} />
+
+  <section class="demo">
+    <h2>Composing them</h2>
+    <Demo code={composed} />
+    <p class="bo-u-text-muted">This is the whole system: the shell holds
+    the page, a stack gives it rhythm, a split cluster is the toolbar,
+    a grid holds the cards. Every ERP screen in
+    <a href={base + '/patterns/reporting-dashboard'}>Patterns</a> is
+    this shape with more content.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Knobs <span class="bo-badge">generated from the CSS</span></h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Knob</th><th scope="col">Default</th><th scope="col">Applies to</th></tr></thead>
+        <tbody>
+          {knobs.map(([name, def]) => (
+            <tr>
+              <td class="bo-data-table__col--code">{name}</td>
+              <td class="bo-data-table__col--code">{def}</td>
+              <td class="bo-data-table__col--code">.bo-{name.split('-')[3]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Set them inline for a one-off
+    (<code>style="--bo-grid-min: 12rem"</code>) or in your own CSS for a
+    whole region. Screen-reader-only text is
+    <code>.bo-visually-hidden</code>, documented with the other
+    <a href={base + '/base/utilities'}>utilities</a>.</p>
+  </section>
+
+  <style>
+    .shell-mini {
+      display: grid;
+      grid-template-areas: "h h" "s m";
+      grid-template-columns: 8rem 1fr;
+      grid-template-rows: auto 8rem;
+      gap: 2px;
+      border: var(--bo-border-width) solid var(--bo-color-border-default);
+      border-radius: var(--bo-radius-md);
+      overflow: hidden;
+      font-size: var(--bo-font-size-xs);
+      color: var(--bo-color-text-muted);
+      margin-block-end: var(--bo-space-4);
+    }
+    .shell-mini > * { padding: var(--bo-space-2); background: var(--bo-color-bg-muted); }
+    .shell-mini__header { grid-area: h; }
+    .shell-mini__side { grid-area: s; }
+    .shell-mini__main { grid-area: m; background: var(--bo-color-bg-canvas); }
+  </style>
+
+  <Related links={[
+    ['/concepts/container-queries', 'Container queries'],
+    ['/concepts/density', 'Density'],
+    ['/components/nav', 'Navigation'],
+    ['/components/dashboard', 'Dashboard'],
+  ]} />
 </Gallery>

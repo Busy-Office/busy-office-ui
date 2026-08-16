@@ -214,10 +214,20 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
     /* One column grid across ALL five group tables — sized independently
        they staggered down the page (owner, 2026-08-16). Fixed layout, so
        a long token name wraps instead of pushing the rails apart. */
-    .tok-table { table-layout: fixed; }
-    .tok-table :is(th, td):nth-child(1) { inline-size: 15rem; }
+    .tok-table {
+      table-layout: fixed;
+      /* PROPORTIONAL, not fixed rem: with rem widths the ROLE column
+         collapsed to zero and its text overlapped the LIGHT column
+         once the table got narrower than their sum (owner screenshot,
+         zoomed view). Percentages keep the rails aligned across all
+         five tables AND adapt; the min-inline-size makes the container
+         scroll instead of crushing at phone widths. */
+      min-inline-size: 34rem;
+    }
+    .tok-table :is(th, td):nth-child(1) { inline-size: 24%; }
+    .tok-table :is(th, td):nth-child(2) { inline-size: 32%; }
     .tok-table :is(th, td):nth-child(3),
-    .tok-table :is(th, td):nth-child(4) { inline-size: 13rem; }
+    .tok-table :is(th, td):nth-child(4) { inline-size: 22%; }
 
     .doc-specimen {
       font-weight: var(--bo-font-weight-semibold);
