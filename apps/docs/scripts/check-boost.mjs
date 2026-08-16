@@ -15,7 +15,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createServer } from 'node:http';
+import { serveDist } from './serve-dist.mjs';
 import puppeteer from 'puppeteer-core';
 import { resolveChrome } from './resolve-chrome.mjs';
 
@@ -54,26 +54,7 @@ const PROBES = [
   ['/base/palettes/', '.pal-cards', 'grid'],
   ['/components/kv/', '.bo-kv', 'grid'],
 ];
-const server = createServer(async (req, res) => {
-  const url = req.url.split('?')[0];
-  // Mirror nginx's try_files: $uri, then $uri/index.html — boosted
-  // links are extensionless (/base/colors), and 404ing them made this
-  // harness produce false reds (fixed while building the gate).
-  const candidates = url.endsWith('/')
-    ? [join(dist, url, 'index.html')]
-    : [join(dist, url), join(dist, url, 'index.html')];
-  for (const path of candidates) {
-    try {
-      const body = await readFile(path);
-      res.writeHead(200, { 'content-type': path.endsWith('.css') ? 'text/css' : path.endsWith('.js') ? 'text/javascript' : 'text/html' });
-      return res.end(body);
-    } catch { /* try next */ }
-  }
-  res.writeHead(404);
-  res.end('nf');
-});
-await new Promise((r) => server.listen(0, r));
-const port = server.address().port;
+const { server, port, base } = await serveDist(dist);
 
 const browser = await puppeteer.launch({ executablePath: resolveChrome(), headless: 'new' });
 const page = await browser.newPage();
@@ -81,8 +62,8 @@ await page.setViewport({ width: 1440, height: 1000 });
 let liveFails = 0;
 for (const [path, selector, expected] of PROBES) {
   // arrive via an in-shell LINK CLICK (the boosted path), not a load
-  await page.goto(`http://localhost:${port}/concepts/tokens/`, { waitUntil: 'networkidle0' });
-  const href = path.replace(/\/$/, '');
+  await page.goto(`http://localhost:${port}${base}/concepts/tokens/`, { waitUntil: 'networkidle0' });
+  const href = base + path.replace(/\/$/, '');
   // A BOOSTED click is an ajax swap + pushState, not a document
   // navigation — wait for the URL to change and the swap to settle,
   // never on waitForNavigation (it races and yields false greens).

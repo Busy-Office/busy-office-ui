@@ -16,7 +16,7 @@
 // slow for every local build.
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { createServer } from 'node:http';
+import { serveDist } from './serve-dist.mjs';
 import puppeteer from 'puppeteer-core';
 import { resolveChrome } from './resolve-chrome.mjs';
 import { dirname } from 'node:path';
@@ -28,14 +28,7 @@ async function* pages(dir, base = '') {
     else if (e.name === 'index.html') yield (base || '') + '/';
   }
 }
-const server = createServer(async (req, res) => {
-  const url = req.url.split('?')[0];
-  const cands = url.endsWith('/') ? [join(dist, url, 'index.html')] : [join(dist, url), join(dist, url, 'index.html')];
-  for (const p of cands) { try { const b = await readFile(p);
-    res.writeHead(200, { 'content-type': p.endsWith('.css') ? 'text/css' : p.endsWith('.js') ? 'text/javascript' : 'text/html' }); return res.end(b); } catch {} }
-  res.writeHead(404); res.end('nf');
-});
-await new Promise(r => server.listen(0, r)); const port = server.address().port;
+const { server, port, base } = await serveDist(dist);
 import { existsSync } from 'node:fs';
 if (!existsSync(dist)) {
   console.error(`No built docs at ${dist} — run \`npm run build -w docs\` first (this gate sweeps the built output).`);
@@ -48,7 +41,7 @@ const findings = [];
 for (const path of all) {
   for (const [w, zoom, label] of [[390, 1, '390'], [1432, 1.5, '1432@150%']]) {
     await pg.setViewport({ width: w, height: 900 });
-    await pg.goto(`http://localhost:${port}${path}`, { waitUntil: 'networkidle0' });
+    await pg.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0' });
     if (zoom !== 1) { await pg.evaluate((z) => { document.documentElement.style.zoom = String(z); }, zoom); await new Promise(r => setTimeout(r, 120)); }
     const r = await pg.evaluate(() => {
       // Measure the SHELL SCROLLER, not the document: the shell is

@@ -288,6 +288,12 @@ progress, and freeze-graduation rounds).
   (Accept criteria met / clean pass) is actually true, not just once. A round
   that reveals more work is a reason for another round, not an early exit.
 - **Verify before commit** — live in the container, both themes, both breakpoints.
+- **A browser gate must be verified against a DOCS_BASE build** (2026-08-16,
+  three red CI runs in a row): CI builds with `DOCS_BASE=/busy-office-ui`,
+  so a harness that assumes base-less URLs 404s its assets — which broke
+  clicks outright and would have let the overflow sweep pass on
+  CSS-less pages (fail-open). Run `DOCS_BASE=/busy-office-ui npm run
+  build -w docs` and the gate against it before pushing.
 - **Watch CI after a push that touches a build gate** (2026-08-16: a
   hardcoded macOS Chrome path in a new gate turned CI red for three
   commits — verified locally, never checked in Actions). `gh run list
