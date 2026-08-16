@@ -31,18 +31,31 @@ const palettes = Object.entries(files).map(([path, css]) => {
   const parts = stripped.split('[data-theme="dark"]');
   if (parts.length !== 2)
     throw new Error(`palettes: brand-${name}.css must contain exactly one [data-theme="dark"] block outside comments (found ${parts.length - 1})`);
-  const light = parseBlock(parts[0]);
-  const dark = parseBlock(parts[1]);
-  for (const [theme, block] of [['light', light], ['dark', dark]]) {
-    for (const [t, v] of Object.entries(block)) {
-      if (!/^#[0-9a-fA-F]{3,8}$/.test(v))
-        throw new Error(`palettes: brand-${name}.css ${theme} --bo-color-${t} is "${v}" — hex only (var()/etc. would render invisible ungated swatches)`);
-    }
+  // ALIGNMENT ENFORCED (Slice 22): every token must be an ALIAS to a
+  // scale step, resolved through the preset's own local step definitions
+  // — a raw hex or an unresolvable alias fails the build.
+  const localSteps = {};
+  for (const m of stripped.matchAll(/--bo-palette-([a-z]+)-(\d+):\s*(#[0-9a-fA-F]+)/g))
+    localSteps[`${m[1]}-${m[2]}`] = { hex: m[3], step: m[2] };
+  function resolveBlock(block, theme) {
+    const out = {};
     for (const t of TOKENS) {
-      if (!(t in block))
+      const v = block[t];
+      if (v === undefined)
         throw new Error(`palettes: brand-${name}.css ${theme} block is missing --bo-color-${t}`);
+      const alias = v.match(/^var\(--bo-palette-([a-z]+-\d+)\)$/);
+      if (!alias)
+        throw new Error(`palettes: brand-${name}.css ${theme} --bo-color-${t} is "${v}" — must be a scale-step alias (alignment is the contract)`);
+      const step = localSteps[alias[1]];
+      if (!step)
+        throw new Error(`palettes: brand-${name}.css ${theme} --bo-color-${t} aliases ${alias[1]} but the preset doesn't define that step locally`);
+      out[t] = step.hex;
+      out[t + '-step'] = alias[1];
     }
+    return out;
   }
+  const light = resolveBlock(parseBlock(parts[0]), 'light');
+  const dark = resolveBlock(parseBlock(parts[1]), 'dark');
   return { name, light, dark };
 }).sort((a, b) => a.name.localeCompare(b.name));
 ---
@@ -74,9 +87,9 @@ const palettes = Object.entries(files).map(([path, css]) => {
               <tr>
                 <td class="bo-data-table__col--code">--bo-color-{t}</td>
                 <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
-                <td class="bo-data-table__col--code">{p.light[t]}</td>
+                <td class="bo-data-table__col--code">{p.light[t]} <span class="bo-u-text-muted">({p.light[t + '-step']})</span></td>
                 <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
-                <td class="bo-data-table__col--code">{p.dark[t] ?? '(inherits light)'}</td>
+                <td class="bo-data-table__col--code">{p.dark[t]} <span class="bo-u-text-muted">({p.dark[t + '-step']})</span></td>
               </tr>
             ))}
           </tbody>

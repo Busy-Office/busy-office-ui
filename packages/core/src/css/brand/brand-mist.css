@@ -3,24 +3,36 @@
  * Tailwind v4.3's muted palettes). Same recipe and rules as
  * brand-indigo.css: accent family only, unlayered, light AND dark
  * blocks, validated by check-contrast.mjs's brand scan — never
- * asserted, always gated.
+ * asserted, always gated. *
+ * ALIGNED (Slice 22): every token is an ALIAS to a mist scale step;
+ * the steps used are defined locally so the preset stays self-contained
+ * (identical values to the scale system — generator-derived — whether or
+ * not the extended scales file is loaded).
  */
 :root {
-  --bo-color-accent: #4a6b7c;
-  --bo-color-accent-strong: #3a5462;
-  --bo-color-accent-solid: #4a6b7c;
-  --bo-color-accent-subtle: #ecf3f7;
-  --bo-color-accent-text: #3a5462;
-  --bo-color-focus-ring: #5b8093;
-  --bo-color-bg-selected: #ecf3f7;
+  --bo-palette-mist-800: #142c35;
+  --bo-palette-mist-100: #e9f7fc;
+  --bo-palette-mist-300: #c2d9e3;
+  --bo-palette-mist-400: #8ba8b4;
+  --bo-palette-mist-500: #597784;
+  --bo-palette-mist-600: #3c5965;
+  --bo-palette-mist-700: #2a4550;
+
+  --bo-color-accent: var(--bo-palette-mist-700);
+  --bo-color-accent-strong: var(--bo-palette-mist-800);
+  --bo-color-accent-solid: var(--bo-palette-mist-700);
+  --bo-color-accent-subtle: var(--bo-palette-mist-100);
+  --bo-color-accent-text: var(--bo-palette-mist-600);
+  --bo-color-focus-ring: var(--bo-palette-mist-500);
+  --bo-color-bg-selected: var(--bo-palette-mist-100);
 }
 
 [data-theme="dark"] {
-  --bo-color-accent: #8fb5c9;
-  --bo-color-accent-strong: #accbdb;
-  --bo-color-accent-solid: #3e6377;
-  --bo-color-accent-text: #c5dce9;
-  --bo-color-accent-subtle: #2a3b46;
-  --bo-color-focus-ring: #c5dce9;
-  --bo-color-bg-selected: #2a3b46;
+  --bo-color-accent: var(--bo-palette-mist-400);
+  --bo-color-accent-strong: var(--bo-palette-mist-300);
+  --bo-color-accent-solid: var(--bo-palette-mist-600);
+  --bo-color-accent-text: var(--bo-palette-mist-300);
+  --bo-color-accent-subtle: var(--bo-palette-mist-700);
+  --bo-color-focus-ring: var(--bo-palette-mist-300);
+  --bo-color-bg-selected: var(--bo-palette-mist-700);
 }

@@ -12,24 +12,37 @@
  * not asserted, checked. Both light and dark blocks are required per the
  * cascade contract's "dark rule": an unlayered :root beats the framework's
  * layered dark remap of the same token, so a light-only override would
- * leak into dark mode.
+ * leak into dark mode. *
+ * ALIGNED (Slice 22): every token is an ALIAS to a indigo scale step;
+ * the steps used are defined locally so the preset stays self-contained
+ * (identical values to the scale system — generator-derived — whether or
+ * not the extended scales file is loaded).
  */
 :root {
-  --bo-color-accent: #4338ca;
-  --bo-color-accent-strong: #3730a3;
-  --bo-color-accent-solid: #4338ca;
-  --bo-color-accent-subtle: #eef2ff;
-  --bo-color-accent-text: #3730a3;
-  --bo-color-focus-ring: #4f46e5;
-  --bo-color-bg-selected: #eef2ff;
+  --bo-palette-indigo-50: #eef2ff;
+  --bo-palette-indigo-200: #c7d2fe;
+  --bo-palette-indigo-300: #a5b4fc;
+  --bo-palette-indigo-400: #818cf8;
+  --bo-palette-indigo-600: #4f46e5;
+  --bo-palette-indigo-700: #4338ca;
+  --bo-palette-indigo-800: #3730a3;
+  --bo-palette-indigo-900: #312e81;
+
+  --bo-color-accent: var(--bo-palette-indigo-700);
+  --bo-color-accent-strong: var(--bo-palette-indigo-800);
+  --bo-color-accent-solid: var(--bo-palette-indigo-700);
+  --bo-color-accent-subtle: var(--bo-palette-indigo-50);
+  --bo-color-accent-text: var(--bo-palette-indigo-800);
+  --bo-color-focus-ring: var(--bo-palette-indigo-600);
+  --bo-color-bg-selected: var(--bo-palette-indigo-50);
 }
 
 [data-theme="dark"] {
-  --bo-color-accent: #818cf8;
-  --bo-color-accent-strong: #a5b4fc;
-  --bo-color-accent-solid: #4f46e5;
-  --bo-color-accent-subtle: #312e81;
-  --bo-color-accent-text: #c7d2fe;
-  --bo-color-focus-ring: #818cf8;
-  --bo-color-bg-selected: #312e81;
+  --bo-color-accent: var(--bo-palette-indigo-400);
+  --bo-color-accent-strong: var(--bo-palette-indigo-300);
+  --bo-color-accent-solid: var(--bo-palette-indigo-600);
+  --bo-color-accent-subtle: var(--bo-palette-indigo-900);
+  --bo-color-accent-text: var(--bo-palette-indigo-200);
+  --bo-color-focus-ring: var(--bo-palette-indigo-400);
+  --bo-color-bg-selected: var(--bo-palette-indigo-900);
 }

@@ -3,24 +3,36 @@
  * Tailwind v4.3's muted palettes). Same recipe and rules as
  * brand-indigo.css: accent family only, unlayered, light AND dark
  * blocks, validated by check-contrast.mjs's brand scan — never
- * asserted, always gated.
+ * asserted, always gated. *
+ * ALIGNED (Slice 22): every token is an ALIAS to a mauve scale step;
+ * the steps used are defined locally so the preset stays self-contained
+ * (identical values to the scale system — generator-derived — whether or
+ * not the extended scales file is loaded).
  */
 :root {
-  --bo-color-accent: #8b5a6f;
-  --bo-color-accent-strong: #6d4457;
-  --bo-color-accent-solid: #8b5a6f;
-  --bo-color-accent-subtle: #f7eef3;
-  --bo-color-accent-text: #6d4457;
-  --bo-color-focus-ring: #a06880;
-  --bo-color-bg-selected: #f7eef3;
+  --bo-palette-mauve-800: #36212d;
+  --bo-palette-mauve-100: #fef0f7;
+  --bo-palette-mauve-300: #e5cdd9;
+  --bo-palette-mauve-400: #b699a8;
+  --bo-palette-mauve-500: #866878;
+  --bo-palette-mauve-600: #674a5a;
+  --bo-palette-mauve-700: #513746;
+
+  --bo-color-accent: var(--bo-palette-mauve-700);
+  --bo-color-accent-strong: var(--bo-palette-mauve-800);
+  --bo-color-accent-solid: var(--bo-palette-mauve-700);
+  --bo-color-accent-subtle: var(--bo-palette-mauve-100);
+  --bo-color-accent-text: var(--bo-palette-mauve-600);
+  --bo-color-focus-ring: var(--bo-palette-mauve-500);
+  --bo-color-bg-selected: var(--bo-palette-mauve-100);
 }
 
 [data-theme="dark"] {
-  --bo-color-accent: #c99bb0;
-  --bo-color-accent-strong: #dbb8c9;
-  --bo-color-accent-solid: #8b4a68;
-  --bo-color-accent-text: #e8cdd9;
-  --bo-color-accent-subtle: #43303a;
-  --bo-color-focus-ring: #e8cdd9;
-  --bo-color-bg-selected: #43303a;
+  --bo-color-accent: var(--bo-palette-mauve-400);
+  --bo-color-accent-strong: var(--bo-palette-mauve-300);
+  --bo-color-accent-solid: var(--bo-palette-mauve-500);
+  --bo-color-accent-text: var(--bo-palette-mauve-300);
+  --bo-color-accent-subtle: var(--bo-palette-mauve-700);
+  --bo-color-focus-ring: var(--bo-palette-mauve-300);
+  --bo-color-bg-selected: var(--bo-palette-mauve-700);
 }

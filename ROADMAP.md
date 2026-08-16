@@ -2256,9 +2256,17 @@ engine-shaped sub-ask refused with the reason.
        landing baselines regenerated for the legitimate bundle-stat
        change (10.2 → 10.8 kB gz with core scales). Compare-first
        research DONE (`.roundtable/color-docs-presentation-2026-08-16
-       .md` — 5 adopted choices from Tailwind/Radix/Carbon). REMAINING:
-       preset step re-aliasing, the three docs pages (+ palettes
-       redesign), presentation grill.
+       .md` — 5 adopted choices from Tailwind/Radix/Carbon). **Wake-2 progress**: preset re-aliasing SHIPPED — all five
+       presets are now pure step aliases with locally-defined steps
+       (self-contained; indigo aligned with ZERO snaps — its hexes were
+       already exact steps; the muted quartet snapped to its generated
+       ramps, three just-under-4.5 light accents stepped 600→700 and
+       strong→800, gate fully green at 32 pairs × 2 themes × 5
+       presets); the palettes page parser now ENFORCES alignment (a raw
+       hex or unresolvable alias fails the build) and displays each
+       hex's step name; baselines unchanged (verified). REMAINING: the
+       three docs pages (Colors ramp grid + palettes ERP redesign +
+       tokens table), presentation grill.
 2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection
