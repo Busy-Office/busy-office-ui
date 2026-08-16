@@ -98,47 +98,49 @@ const markup = `<table class="bo-data-table" data-row-edit>
 
   <section class="demo">
     <h2>Medium — combobox lookup cells, validation, add/remove lines</h2>
-    <table class="bo-data-table" data-row-edit id="eg-table">
-      <thead><tr>
-        <th scope="col">Item</th>
-        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
-        <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
-        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
-      </tr></thead>
-      <tbody>
-        <tr data-row-id="LINE-1">
-          <td>
-            <div class="bo-combobox">
-              <input class="bo-input bo-input--seamless" role="combobox" id="line-1-item"
-                  aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
-                  autocomplete="off" aria-label="Item" value="Steel bracket, 40mm" />
-              <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
-                <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
-                <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
-              </ul>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-form-field" style="margin-block-end: 0">
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit id="eg-table">
+        <thead><tr>
+          <th scope="col">Item</th>
+          <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+          <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+          <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+        </tr></thead>
+        <tbody>
+          <tr data-row-id="LINE-1">
+            <td>
+              <div class="bo-combobox">
+                <input class="bo-input bo-input--seamless" role="combobox" id="line-1-item"
+                    aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
+                    autocomplete="off" aria-label="Item" value="Steel bracket, 40mm" />
+                <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+                </ul>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-form-field" style="margin-block-end: 0">
+                <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+                    value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
+                    aria-label="Quantity" />
+                <span class="bo-form-field__message" id="line-1-qty-err" role="alert">Exceeds on-hand (200)</span>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
               <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
-                  value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
-                  aria-label="Quantity" />
-              <span class="bo-form-field__message" id="line-1-qty-err" role="alert">Exceeds on-hand (200)</span>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
-                step="0.01" value="3.40" aria-label="Unit price" />
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                  step="0.01" value="3.40" aria-label="Unit price" />
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <template id="eg-template">
       <tr data-row-id="">
         <td>
@@ -316,42 +318,44 @@ const markup = `<table class="bo-data-table" data-row-edit>
     the price reformats to 0 decimals, marks the row dirty, and
     <strong>Cancel restores the currency, the value, and the
     precision</strong> together.</p>
-    <table class="bo-data-table" data-row-edit id="eg-money-table">
-      <thead><tr>
-        <th scope="col">Item</th>
-        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
-        <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
-        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
-      </tr></thead>
-      <tbody>
-        <tr data-row-id="LINE-M1">
-          <td>Hydraulic pump, 20&nbsp;bar</td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-quantity" style="max-inline-size: 14rem">
-              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-              <input class="bo-quantity__input bo-input--seamless" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
-              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
-              <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
-                <option selected>kg</option><option>each</option><option>box</option>
-              </select>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-money">
-              <select class="bo-select bo-money__currency" aria-label="Currency">
-                <option selected>USD</option><option>SGD</option><option>JPY</option><option>KWD</option>
-              </select>
-              <input class="bo-input bo-input--seamless bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Unit price" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit id="eg-money-table">
+        <thead><tr>
+          <th scope="col">Item</th>
+          <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+          <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+          <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+        </tr></thead>
+        <tbody>
+          <tr data-row-id="LINE-M1">
+            <td>Hydraulic pump, 20&nbsp;bar</td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-quantity" style="max-inline-size: 14rem">
+                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+                <input class="bo-quantity__input bo-input--seamless" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
+                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+                <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+                  <option selected>kg</option><option>each</option><option>box</option>
+                </select>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-money">
+                <select class="bo-select bo-money__currency" aria-label="Currency">
+                  <option selected>USD</option><option>SGD</option><option>JPY</option><option>KWD</option>
+                </select>
+                <input class="bo-input bo-input--seamless bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Unit price" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <p class="bo-u-text-muted">Under the hood: the money/unit behaviors
     dispatch a real <code>input</code> event when they reformat, so
     <code>initRowEdit()</code>'s dirty tracking sees precision changes the
@@ -369,72 +373,74 @@ const markup = `<table class="bo-data-table" data-row-edit>
     Edit the Qty fields and watch the total; toggle, retag, then Cancel —
     native fields restore themselves, and the <code>bo:row-cancel</code>
     hook restores the chips.</p>
-    <table class="bo-data-table" data-row-edit id="eg-adv-table">
-      <thead><tr>
-        <th scope="col">Line</th>
-        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
-        <th scope="col">Status</th>
-        <th scope="col">Needed by</th>
-        <th scope="col">Rush</th>
-        <th scope="col">Cost centers</th>
-        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
-      </tr></thead>
-      <tbody>
-        <tr data-row-id="ADV-1">
-          <td><input class="bo-input bo-input--seamless" name="line" value="Bearing kit" aria-label="Line description" /></td>
-          <td class="bo-data-table__col--numeric">
-            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="2.50" aria-label="Quantity" />
-          </td>
-          <td>
-            <select class="bo-select" name="status" aria-label="Status">
-              <option selected>Open</option><option>Approved</option><option>On hold</option>
-            </select>
-          </td>
-          <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-08-30" aria-label="Needed by" /></td>
-          <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
-          <td>
-            <div class="bo-tag-input" id="adv-1-tags" role="group" aria-label="Cost centers — Bearing kit">
-              <span class="bo-tag-input__tag">CC-4021<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button></span>
-              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Bearing kit" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Bearing kit" hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Bearing kit" hidden>Cancel</button>
-          </td>
-        </tr>
-        <tr data-row-id="ADV-2">
-          <td><input class="bo-input bo-input--seamless" name="line" value="Seal ring set" aria-label="Line description" /></td>
-          <td class="bo-data-table__col--numeric">
-            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="5.00" aria-label="Quantity" />
-          </td>
-          <td>
-            <select class="bo-select" name="status" aria-label="Status">
-              <option>Open</option><option selected>Approved</option><option>On hold</option>
-            </select>
-          </td>
-          <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-09-05" aria-label="Needed by" /></td>
-          <td><input class="bo-checkbox" name="rush" type="checkbox" checked aria-label="Rush order" /></td>
-          <td>
-            <div class="bo-tag-input" id="adv-2-tags" role="group" aria-label="Cost centers — Seal ring set">
-              <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
-              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Seal ring set" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Seal ring set" hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Seal ring set" hidden>Cancel</button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot><tr>
-        <td class="bo-data-table__col--right">Total qty</td>
-        <td class="bo-data-table__col--numeric" data-sum-of="qty">7.50</td>
-        <td colspan="5"></td>
-      </tr></tfoot>
-    </table>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit id="eg-adv-table">
+        <thead><tr>
+          <th scope="col">Line</th>
+          <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+          <th scope="col">Status</th>
+          <th scope="col">Needed by</th>
+          <th scope="col">Rush</th>
+          <th scope="col">Cost centers</th>
+          <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+        </tr></thead>
+        <tbody>
+          <tr data-row-id="ADV-1">
+            <td><input class="bo-input bo-input--seamless" name="line" value="Bearing kit" aria-label="Line description" /></td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="2.50" aria-label="Quantity" />
+            </td>
+            <td>
+              <select class="bo-select" name="status" aria-label="Status">
+                <option selected>Open</option><option>Approved</option><option>On hold</option>
+              </select>
+            </td>
+            <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-08-30" aria-label="Needed by" /></td>
+            <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
+            <td>
+              <div class="bo-tag-input" id="adv-1-tags" role="group" aria-label="Cost centers — Bearing kit">
+                <span class="bo-tag-input__tag">CC-4021<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button></span>
+                <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Bearing kit" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Bearing kit" hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Bearing kit" hidden>Cancel</button>
+            </td>
+          </tr>
+          <tr data-row-id="ADV-2">
+            <td><input class="bo-input bo-input--seamless" name="line" value="Seal ring set" aria-label="Line description" /></td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="5.00" aria-label="Quantity" />
+            </td>
+            <td>
+              <select class="bo-select" name="status" aria-label="Status">
+                <option>Open</option><option selected>Approved</option><option>On hold</option>
+              </select>
+            </td>
+            <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-09-05" aria-label="Needed by" /></td>
+            <td><input class="bo-checkbox" name="rush" type="checkbox" checked aria-label="Rush order" /></td>
+            <td>
+              <div class="bo-tag-input" id="adv-2-tags" role="group" aria-label="Cost centers — Seal ring set">
+                <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
+                <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Seal ring set" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Seal ring set" hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Seal ring set" hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot><tr>
+          <td class="bo-data-table__col--right">Total qty</td>
+          <td class="bo-data-table__col--numeric" data-sum-of="qty">7.50</td>
+          <td colspan="5"></td>
+        </tr></tfoot>
+      </table>
+    </div>
     <p class="bo-visually-hidden" id="eg-adv-status" aria-live="polite"></p>
     <p class="bo-u-text-muted">Subtotals come in <strong>both modes</strong>:
     declarative auto-sum (<code>data-sum-of="qty"</code>, shown above — a
@@ -474,61 +480,63 @@ const markup = `<table class="bo-data-table" data-row-edit>
     buttons are actions, not values; a compound control without its
     boundaries stops reading as one control. WYSIWYG covers the
     single-control cell types shown below.</p>
-    <table class="bo-data-table" data-row-edit id="eg-wys-table">
-      <thead><tr>
-        <th scope="col">Line</th>
-        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
-        <th scope="col">Status</th>
-        <th scope="col">Cost centers</th>
-        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
-      </tr></thead>
-      <tbody>
-        <tr data-row-id="WYS-1">
-          <td><input class="bo-input bo-input--seamless" name="line" value="Impeller housing" aria-label="Line description" /></td>
-          <td class="bo-data-table__col--numeric">
-            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="1" value="4" aria-label="Quantity" />
-          </td>
-          <td>
-            <select class="bo-select bo-select--seamless" name="status" aria-label="Status">
-              <option selected>Open</option><option>Approved</option><option>On hold</option>
-            </select>
-          </td>
-          <td>
-            <div class="bo-tag-input bo-tag-input--seamless" role="group" aria-label="Cost centers — Impeller housing">
-              <span class="bo-tag-input__tag">CC-2205<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-2205">×</button></span>
-              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Impeller housing" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Impeller housing" hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Impeller housing" hidden>Cancel</button>
-          </td>
-        </tr>
-        <tr data-row-id="WYS-2">
-          <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
-          <td class="bo-data-table__col--numeric">
-            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="1" value="12" aria-label="Quantity" />
-          </td>
-          <td>
-            <select class="bo-select bo-select--seamless" name="status" aria-label="Status">
-              <option>Open</option><option selected>Approved</option><option>On hold</option>
-            </select>
-          </td>
-          <td>
-            <div class="bo-tag-input bo-tag-input--seamless" role="group" aria-label="Cost centers — Gasket sheet">
-              <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
-              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Gasket sheet" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Gasket sheet" hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Gasket sheet" hidden>Cancel</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit id="eg-wys-table">
+        <thead><tr>
+          <th scope="col">Line</th>
+          <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+          <th scope="col">Status</th>
+          <th scope="col">Cost centers</th>
+          <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+        </tr></thead>
+        <tbody>
+          <tr data-row-id="WYS-1">
+            <td><input class="bo-input bo-input--seamless" name="line" value="Impeller housing" aria-label="Line description" /></td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="1" value="4" aria-label="Quantity" />
+            </td>
+            <td>
+              <select class="bo-select bo-select--seamless" name="status" aria-label="Status">
+                <option selected>Open</option><option>Approved</option><option>On hold</option>
+              </select>
+            </td>
+            <td>
+              <div class="bo-tag-input bo-tag-input--seamless" role="group" aria-label="Cost centers — Impeller housing">
+                <span class="bo-tag-input__tag">CC-2205<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-2205">×</button></span>
+                <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Impeller housing" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Impeller housing" hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Impeller housing" hidden>Cancel</button>
+            </td>
+          </tr>
+          <tr data-row-id="WYS-2">
+            <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
+            <td class="bo-data-table__col--numeric">
+              <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="1" value="12" aria-label="Quantity" />
+            </td>
+            <td>
+              <select class="bo-select bo-select--seamless" name="status" aria-label="Status">
+                <option>Open</option><option selected>Approved</option><option>On hold</option>
+              </select>
+            </td>
+            <td>
+              <div class="bo-tag-input bo-tag-input--seamless" role="group" aria-label="Cost centers — Gasket sheet">
+                <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
+                <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Gasket sheet" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Gasket sheet" hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Gasket sheet" hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <p class="bo-u-text-muted"><strong>Keyboard path</strong>: there is no
     "Enter to edit" — every cell is a real control, so Tab (or a click)
     focuses it and it's immediately editable; commit is the native
@@ -556,24 +564,26 @@ const markup = `<table class="bo-data-table" data-row-edit>
     row-exit instead — if that's your model, keep batch mode and trigger
     Save from your own row-blur logic. Optimistic-update/rollback on a
     failed PATCH is your code's job either way; this demo only logs.</p>
-    <table class="bo-data-table" data-row-edit="live" id="eg-live-table">
-      <thead><tr>
-        <th scope="col">Line</th>
-        <th scope="col">Status</th>
-        <th scope="col">Rush</th>
-      </tr></thead>
-      <tbody>
-        <tr data-row-id="LIVE-1">
-          <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
-          <td>
-            <select class="bo-select" name="status" aria-label="Status">
-              <option selected>Open</option><option>Approved</option>
-            </select>
-          </td>
-          <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit="live" id="eg-live-table">
+        <thead><tr>
+          <th scope="col">Line</th>
+          <th scope="col">Status</th>
+          <th scope="col">Rush</th>
+        </tr></thead>
+        <tbody>
+          <tr data-row-id="LIVE-1">
+            <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
+            <td>
+              <select class="bo-select" name="status" aria-label="Status">
+                <option selected>Open</option><option>Approved</option>
+              </select>
+            </td>
+            <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <p class="bo-u-text-muted" id="eg-live-log" aria-live="polite">No saves yet —
     change the status or toggle Rush.</p>
   </section>
@@ -599,114 +609,116 @@ const markup = `<table class="bo-data-table" data-row-edit>
     currency's amount decimals (JPY prices quoted at 2-4 dp are normal) —
     put <code>data-decimals</code> on the price cell's option or container
     where your price master disagrees with ISO 4217.</p>
-    <table class="bo-data-table" data-row-edit id="eg-comp-table">
-      <thead><tr>
-        <th scope="col">Product</th>
-        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
-        <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
-        <th scope="col" class="bo-data-table__col--numeric">Line total</th>
-        <th scope="col">Cost centers</th>
-        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
-      </tr></thead>
-      <tbody>
-        <tr data-row-id="PO-L1">
-          <td>
-            <div class="bo-combobox">
-              <input class="bo-input bo-input--seamless" role="combobox" name="product"
-                  aria-expanded="false" aria-controls="comp-l1-prod-list" aria-autocomplete="list"
-                  autocomplete="off" aria-label="Product — line 1" value="Steel bracket, 40mm" />
-              <ul class="bo-combobox__listbox" id="comp-l1-prod-list" role="listbox" popover>
-                <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
-                <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
-                <li class="bo-combobox__option" role="option" data-value="SKU-7010">Hydraulic pump, 20 bar</li>
-              </ul>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-quantity" style="max-inline-size: 13rem">
-              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-              <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="4" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
-              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
-              <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
-                <option selected>each</option><option>box</option><option>kg</option>
-              </select>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-money">
-              <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
-                <option selected>USD</option><option>SGD</option><option>JPY</option>
-              </select>
-              <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="12.40" aria-label="Unit price" />
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric" data-line-total>49.60</td>
-          <td>
-            <div class="bo-tag-input" id="comp-1-tags" role="group" aria-label="Cost centers — line 1 (Steel bracket)">
-              <span class="bo-tag-input__tag">CC-4021<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button></span>
-              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — line 1 (Steel bracket)" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — line 1 (Steel bracket)" hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — line 1 (Steel bracket)" hidden>Cancel</button>
-          </td>
-        </tr>
-        <tr data-row-id="PO-L2">
-          <td>
-            <div class="bo-combobox">
-              <input class="bo-input bo-input--seamless" role="combobox" name="product"
-                  aria-expanded="false" aria-controls="comp-l2-prod-list" aria-autocomplete="list"
-                  autocomplete="off" aria-label="Product — line 2" value="Hydraulic pump, 20 bar" />
-              <ul class="bo-combobox__listbox" id="comp-l2-prod-list" role="listbox" popover>
-                <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
-                <li class="bo-combobox__option" role="option" data-value="SKU-7010">Hydraulic pump, 20 bar</li>
-              </ul>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-quantity" style="max-inline-size: 13rem">
-              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-              <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="2" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
-              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
-              <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
-                <option selected>each</option><option>box</option>
-              </select>
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric">
-            <div class="bo-money">
-              <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
-                <option selected>USD</option><option>SGD</option><option>JPY</option>
-              </select>
-              <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="860.00" aria-label="Unit price" />
-            </div>
-          </td>
-          <td class="bo-data-table__col--numeric" data-line-total>1720.00</td>
-          <td>
-            <div class="bo-tag-input" id="comp-2-tags" role="group" aria-label="Cost centers — line 2 (Hydraulic pump)">
-              <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
-              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — line 2 (Hydraulic pump)" />
-            </div>
-          </td>
-          <td class="bo-data-table__row-edit-actions">
-            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — line 2 (Hydraulic pump)" hidden>Save</button>
-            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — line 2 (Hydraulic pump)" hidden>Cancel</button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td class="bo-data-table__col--right">Total qty</td>
-          <td class="bo-data-table__col--numeric" data-sum-of="qty">6</td>
-          <td class="bo-data-table__col--right">Grand total</td>
-          <td class="bo-data-table__col--numeric" id="comp-grand">1769.60</td>
-          <td colspan="2"></td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit id="eg-comp-table">
+        <thead><tr>
+          <th scope="col">Product</th>
+          <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+          <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+          <th scope="col" class="bo-data-table__col--numeric">Line total</th>
+          <th scope="col">Cost centers</th>
+          <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+        </tr></thead>
+        <tbody>
+          <tr data-row-id="PO-L1">
+            <td>
+              <div class="bo-combobox">
+                <input class="bo-input bo-input--seamless" role="combobox" name="product"
+                    aria-expanded="false" aria-controls="comp-l1-prod-list" aria-autocomplete="list"
+                    autocomplete="off" aria-label="Product — line 1" value="Steel bracket, 40mm" />
+                <ul class="bo-combobox__listbox" id="comp-l1-prod-list" role="listbox" popover>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-7010">Hydraulic pump, 20 bar</li>
+                </ul>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-quantity" style="max-inline-size: 13rem">
+                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+                <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="4" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
+                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+                <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+                  <option selected>each</option><option>box</option><option>kg</option>
+                </select>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-money">
+                <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
+                  <option selected>USD</option><option>SGD</option><option>JPY</option>
+                </select>
+                <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="12.40" aria-label="Unit price" />
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric" data-line-total>49.60</td>
+            <td>
+              <div class="bo-tag-input" id="comp-1-tags" role="group" aria-label="Cost centers — line 1 (Steel bracket)">
+                <span class="bo-tag-input__tag">CC-4021<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button></span>
+                <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — line 1 (Steel bracket)" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — line 1 (Steel bracket)" hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — line 1 (Steel bracket)" hidden>Cancel</button>
+            </td>
+          </tr>
+          <tr data-row-id="PO-L2">
+            <td>
+              <div class="bo-combobox">
+                <input class="bo-input bo-input--seamless" role="combobox" name="product"
+                    aria-expanded="false" aria-controls="comp-l2-prod-list" aria-autocomplete="list"
+                    autocomplete="off" aria-label="Product — line 2" value="Hydraulic pump, 20 bar" />
+                <ul class="bo-combobox__listbox" id="comp-l2-prod-list" role="listbox" popover>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+                  <li class="bo-combobox__option" role="option" data-value="SKU-7010">Hydraulic pump, 20 bar</li>
+                </ul>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-quantity" style="max-inline-size: 13rem">
+                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+                <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="2" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
+                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+                <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+                  <option selected>each</option><option>box</option>
+                </select>
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric">
+              <div class="bo-money">
+                <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
+                  <option selected>USD</option><option>SGD</option><option>JPY</option>
+                </select>
+                <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="860.00" aria-label="Unit price" />
+              </div>
+            </td>
+            <td class="bo-data-table__col--numeric" data-line-total>1720.00</td>
+            <td>
+              <div class="bo-tag-input" id="comp-2-tags" role="group" aria-label="Cost centers — line 2 (Hydraulic pump)">
+                <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
+                <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — line 2 (Hydraulic pump)" />
+              </div>
+            </td>
+            <td class="bo-data-table__row-edit-actions">
+              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — line 2 (Hydraulic pump)" hidden>Save</button>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — line 2 (Hydraulic pump)" hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="bo-data-table__col--right">Total qty</td>
+            <td class="bo-data-table__col--numeric" data-sum-of="qty">6</td>
+            <td class="bo-data-table__col--right">Grand total</td>
+            <td class="bo-data-table__col--numeric" id="comp-grand">1769.60</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
     <p class="bo-visually-hidden" id="eg-comp-status" aria-live="polite"></p>
     <p class="bo-u-text-muted">Try it: step a quantity or switch a currency —
     the line total re-derives per that row's currency decimals, the grand

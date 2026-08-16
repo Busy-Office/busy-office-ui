@@ -2550,6 +2550,78 @@ costs every consumer a migration to buy cosmetic prefix consistency,
 and "visually-hidden" is the conventional name people search for. The
 naming exception is documented rather than fixed.
 
+## Slice 23 — docs IA & depth (owner review, 2026-08-16)
+
+Triaged from `busyofficeuidocsreview.md` (69-page crawl with word counts
+and a verdict per page). The review is the most useful input this
+project has received on structure; it is also ~3 phases of work. Triage
+applies the Objective per item rather than accepting wholesale.
+
+**Accepted, high value, queued in order:**
+1. [ ] **P1 — tokens live in five places.** Merge by AUDIENCE, not
+       topic: prose ("four tiers, unit doctrine, density aliases")
+       into ONE Foundations page; the generated tables into Reference.
+       Two pages literally titled "Design tokens" is the clearest
+       possible signal. Accept: one prose page, one reference page, no
+       duplicate titles, every inbound link retargeted, gates green.
+2. [ ] **P6 inversion — component pages own components, patterns own
+       screens.** Move "The full list screen, assembled" from
+       /components/data-table into /patterns/invoice-list, and the
+       detail-form section from /components/form into
+       /patterns/detail-form. Accept: each pattern grows an anatomy +
+       data contract; the component pages shed the screen prose.
+3. [ ] **Pattern template (§5) applied to the ten thin patterns.**
+       The review's highest-value item: anatomy, full markup, data
+       contract, states, keyboard walkthrough, print behaviour,
+       scaling notes, components-used. editable-grid is the model.
+       Accept: template documented in CLAUDE.md + a page-shape gate
+       extension so a thin pattern fails the build.
+4. [ ] **P7 miscategorised nav entries** (Badge→Data display,
+       Dialog→overlays/screen structure, Combobox→Forms & input,
+       Keyboard help→Reference). Cheap, no content change.
+5. [ ] **P8 — split /components/nav** (breadcrumb, navbar, sidebar
+       shell, drawers): 5 components at ~110 words each, the least
+       documentation per unit of surface on the site.
+6. [ ] **Split /components/data-table** (1,820 w) into table /
+       inline editing / toolbar-columns-export, and
+       /concepts/js-behaviors into narrative + generated event index.
+7. [ ] **Foundations gaps that are ERP-specific and genuinely absent**
+       — i18n/RTL/string expansion, permissions & read-only,
+       concurrency & conflicts, performance at scale. The review is
+       right that "permission" appearing zero times across 69 pages is
+       conspicuous for an ERP framework.
+8. [ ] **`Related` on 100% of pages** + a "not in scope" list (the
+       review's point that deciding-and-saying-so is itself a
+       completeness signal).
+
+**Rethink (accept the problem, not the prescription):**
+- **Amount + Quantity merge.** The duplication is real (three pages
+  restate the "editable X is a plain input" caveat), but they are
+  separate components with separate APIs and separate generated
+  tables; merging pages would fight the one-page-per-component
+  contract the review itself calls the site's moat. Do the DEDUPE
+  (state the caveat once, link to it) without the merge.
+- **Avatar + Byline merge.** Avatar was promoted to a standalone
+  primitive by owner call THIS session; merging its page one day
+  later would thrash. Revisit after real adopter feedback.
+- **Full five-section IA rewrite (§3).** Right direction, but a
+  wholesale re-nav in one move breaks every inbound link and every
+  version snapshot. Land it as items 1-6 above, then re-evaluate
+  whether the remaining delta is worth a redirect table.
+
+**Refused (with reason):**
+- **Charts & sparklines component.** Out of scope per the Objective —
+  a CSS-first framework shipping a chart engine is the least-simple
+  surface imaginable, and "bring your own library" without tokens
+  guidance is not a component. ACCEPTED SUBSTITUTE: a short
+  Foundations note giving chart authors the categorical palette,
+  axis/grid ink tokens, and the dark-mode + contrast rules (item 7's
+  neighbourhood, ~1 page, no engine).
+- **Command palette (⌘K) as a shipped component.** The docs site has
+  one; the framework does not, and it is a composite widget with a
+  large keyboard/focus surface serving no named adopter requirement
+  yet. Document the docs-site recipe if asked.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

@@ -261,3 +261,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 22:26 · Continue · build · Item 8: .bo-kbd + keyboard-help pattern shipped (live ?-wiring verified) · shipped · 28de419
 - 2026-08-16 22:34 · Continue · fix · Owner root-cause doc adopted: inlineStylesheets never + race-free ext load + check-boost gate (red-first; found tree-shaken htmx and a racing probe) · shipped · 15ebd6c
 - 2026-08-16 23:00 · Continue · fix · Owner tokens review adopted: duplicate-main (boost nesting) + phantom scrollbar (shell containing block) fixed; measure/TOC/table alignment; contrast specimens + varying level column · shipped · 315fdec
+- 2026-08-16 23:11 · Continue · build · Layout-primitives review adopted (7/8, 1 refused, 1 correction); token-table fixed-width regression fixed proportionally · shipped · f7003d9

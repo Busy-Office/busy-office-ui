@@ -17,6 +17,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
 import puppeteer from 'puppeteer-core';
+import { resolveChrome } from './resolve-chrome.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(docsRoot, 'dist');
@@ -74,8 +75,7 @@ const server = createServer(async (req, res) => {
 await new Promise((r) => server.listen(0, r));
 const port = server.address().port;
 
-const chrome = process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const browser = await puppeteer.launch({ executablePath: chrome, headless: 'new' });
+const browser = await puppeteer.launch({ executablePath: resolveChrome(), headless: 'new' });
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });
 let liveFails = 0;

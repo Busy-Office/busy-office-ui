@@ -6,6 +6,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import puppeteer from 'puppeteer-core';
+import { resolveChrome } from './resolve-chrome.mjs';
 
 const DIST = new URL('../dist', import.meta.url).pathname;
 const AXE = readFileSync(new URL('../../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
@@ -21,7 +22,7 @@ const pages = [];
   }
 })(DIST, '');
 
-const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: 'new' });
+const browser = await puppeteer.launch({ executablePath: resolveChrome(), headless: 'new' });
 const page = await browser.newPage();
 const summary = {};
 // Both harness widths: violations can be width-gated (a table container only

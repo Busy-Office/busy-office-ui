@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "test:visual": "node scripts/visual-regression.mjs",
     "test:visual:update": "node scripts/visual-regression.mjs --update",
-    "test:axe": "node scripts/axe-audit.mjs"
+    "test:axe": "node scripts/axe-audit.mjs",
+    "check:overflow": "node scripts/check-overflow.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

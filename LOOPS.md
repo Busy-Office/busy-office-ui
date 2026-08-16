@@ -288,6 +288,10 @@ progress, and freeze-graduation rounds).
   (Accept criteria met / clean pass) is actually true, not just once. A round
   that reveals more work is a reason for another round, not an early exit.
 - **Verify before commit** — live in the container, both themes, both breakpoints.
+- **Watch CI after a push that touches a build gate** (2026-08-16: a
+  hardcoded macOS Chrome path in a new gate turned CI red for three
+  commits — verified locally, never checked in Actions). `gh run list
+  --workflow=ci.yml --limit 1` before ending the wake.
 - **Batch pushes: one per wake** (2026-08-16, owner-reported unstyled
   first paint) — every push triggers a Pages deploy, and each deploy
   opens a CDN skew window (max-age=600 on Fastly nodes) where fresh
