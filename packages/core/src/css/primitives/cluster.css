@@ -7,6 +7,16 @@
     gap: var(--bo-cluster-gap, var(--bo-space-2));
   }
 
+  /* Flex items default to min-width:auto, so a child with nowrap content
+     (a chip carrying a long label, a translated filter value) refuses to
+     shrink and pushes the page sideways instead of wrapping. Letting
+     children shrink is what makes a cluster safe in a narrow shell —
+     found by the pseudo-locale gate on a phone-width Related row,
+     2026-08-17. */
+  .bo-cluster > * {
+    min-inline-size: 0;
+  }
+
   .bo-cluster--split {
     justify-content: space-between;
   }

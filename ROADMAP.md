@@ -2872,6 +2872,15 @@ selector the page did not use, the second put max-inline-size on a
 table cell (auto AND fixed table layout ignore it), and only the third
 — a badge — actually clipped. Two of my three "proofs" would have
 shipped a detector that could not fail. Recorded in the script header.
+**And the gate paid for itself within the hour**: CI (Linux fonts, wider
+than macOS) failed on /patterns/invoice-list at 390px where my machine
+passed — a REAL framework defect, not gate noise. `.bo-cluster`
+children inherit `min-width: auto`, so a `.bo-chip` with a long label
+would not shrink and pushed the shell sideways. Fixed in the primitive
+(cluster children may shrink) plus a chip width cap with ellipsis;
+reproduced locally at +60% expansion first, verified at 0px overflow
+after. The environment sensitivity is a feature here — CI's fonts are
+a second opinion my laptop cannot give.
 
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is

@@ -21,6 +21,14 @@
     background: var(--bo-color-bg-muted);
     color: var(--bo-color-text-primary);
     font-size: var(--bo-font-size-xs);
+    /* nowrap keeps a chip readable as one token, but it must never push
+       the page sideways: a long label (a translated filter value, a
+       vendor name) overflowed the shell at phone width. Cap the width
+       and ellipsise instead — the full value stays available as the
+       element's title/aria text (pseudo-locale gate, 2026-08-17). */
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
 

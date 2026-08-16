@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- **Fixed**: `.bo-cluster` children could refuse to shrink (flex items
+  default to `min-width: auto`), so a child with nowrap content — a
+  `.bo-chip` carrying a long or translated label — pushed the page
+  sideways at narrow widths instead of wrapping. Cluster children may
+  now shrink, and `.bo-chip` caps at 100% with an ellipsis. Found by a
+  new CI gate that expands every string ~35% and forces compact
+  density.
+
 - Changed (dist placement — explicitly NOT API until v1.0): the `nav`
   component directory split into four real components —
   `breadcrumb`, `navbar`, `sidebar-nav`, `offcanvas`. Class names are

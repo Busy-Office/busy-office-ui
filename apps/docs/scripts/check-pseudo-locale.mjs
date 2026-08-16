@@ -60,7 +60,19 @@ for (const path of PAGES) {
           clipped.push({ cls: (el.className || el.tagName).toString().slice(0, 40), text: el.textContent.trim().slice(0, 25), by: el.scrollWidth - el.clientWidth });
         }
       }
-      return { overflow: scroller.scrollWidth - scroller.clientWidth, clipped };
+      // name the widest offender — "28px of overflow" is unactionable
+      // without it (CI found one my machine's narrower fonts did not).
+      let widest = null;
+      const edge = scroller.getBoundingClientRect().right;
+      for (const el of scroller.querySelectorAll('*')) {
+        const r = el.getBoundingClientRect();
+        if (r.right > edge + 1 && (!widest || r.right > widest.right)) {
+          if (!el.closest('.bo-data-table-container, .scale-scroll, pre')) {
+            widest = { right: Math.round(r.right), cls: (el.className || el.tagName).toString().slice(0, 50), text: el.textContent.trim().slice(0, 30) };
+          }
+        }
+      }
+      return { overflow: scroller.scrollWidth - scroller.clientWidth, clipped, widest };
     });
     if (probe.overflow > 2 || probe.clipped.length) findings.push({ path, width, ...probe });
   }
@@ -70,6 +82,7 @@ server.close();
 
 for (const f of findings) {
   console.log(`FAIL ${f.path} @${f.width}: overflow ${f.overflow}px, ${f.clipped.length} clipped element(s)`);
+  if (f.widest) console.log(`     widest: ${f.widest.cls} "${f.widest.text}" reaching ${f.widest.right}px`);
   for (const c of f.clipped.slice(0, 3)) console.log(`     ${c.cls} "${c.text}" clipped by ${c.by}px`);
 }
 if (findings.length) {
