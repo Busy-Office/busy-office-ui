@@ -22,6 +22,13 @@
  * editing a quantity gets no confirmation the total moved otherwise
  * (same live-region need as the data-table selection count and the
  * file-upload list).
+ *
+ * Boundaries (documented, not silent): only THIS table's own rows sum —
+ * a nested table's same-named fields never leak into the outer total,
+ * and edits inside a nested table don't retrigger the outer sum (put
+ * the sum in the table that owns the fields). Checkboxes/radios sharing
+ * the name are excluded. Steps with no precision info ("any", missing)
+ * fall back to the values' own decimal places.
  */
 let installed = false;
 
@@ -33,9 +40,23 @@ function escapeAttr(s: string): string {
     : s.replace(/["\\]/g, '\\$&');
 }
 
-function decimalsOf(input: Element): number {
+/* Decimals of a numeric step ("0.01" → 2); null when the step carries no
+   precision information ("any", missing) — grill H1: treating those as 0
+   collapsed 7.50 to 8. */
+function stepDecimals(input: Element): number | null {
   const step = input instanceof HTMLInputElement ? input.step : '';
+  if (step === '' || step === 'any' || Number.isNaN(Number(step))) return null;
   return (step.split('.')[1] ?? '').length;
+}
+
+function valueDecimals(value: string): number {
+  return (value.split('.')[1] ?? '').length;
+}
+
+function isSummable(el: HTMLInputElement): boolean {
+  // grill find: a checkbox/radio sharing the summed name contributed its
+  // value attr whether checked or not.
+  return !(el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio'));
 }
 
 function recompute(table: HTMLElement): void {
@@ -47,13 +68,19 @@ function recompute(table: HTMLElement): void {
     for (const el of table.querySelectorAll<HTMLInputElement>(
       `tbody [name="${escapeAttr(field)}"]`,
     )) {
+      // grill H2: a nested table's same-named fields double-counted into
+      // the outer total — only THIS table's own rows participate.
+      if (el.closest('table') !== table) continue;
+      if (!isSummable(el)) continue;
       sum += Number(el.value) || 0;
-      decimals = Math.max(decimals, decimalsOf(el));
+      // Widest known step decides; steps with no precision info ("any",
+      // missing) fall back to the value's own decimal places.
+      decimals = Math.max(decimals, stepDecimals(el) ?? valueDecimals(el.value));
     }
     const override = out.dataset.decimals;
     if (override !== undefined && !Number.isNaN(Number(override)))
       decimals = Math.max(0, Math.trunc(Number(override)));
-    out.textContent = sum.toFixed(decimals);
+    out.textContent = sum.toFixed(Math.min(decimals, 6));
   }
 }
 

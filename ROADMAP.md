@@ -1805,13 +1805,18 @@ seat + code-walk). Ranked by severity: data-integrity first.
        first field on both Save and Cancel paths. Axe zero across all
        60 pages. 83 tests green. CHANGELOG folded into the row-edit
        entry. (H4, H8.)
-4. [ ] **`initTableSum` robustness** (H1/H2 code-confirmed + Architect).
-       `step="any"`/missing step must not collapse to 0 decimals;
-       nested tables: scope the field query to the table's OWN tbody
-       rows (no double-count) and resolve `closest` crossings (inner
-       edits reaching outer sums is fine to leave unsupported IF
-       documented); exclude checkboxes/radios from sums. Accept: tests
-       for each; docs note the nested-table boundary.
+4. [x] **`initTableSum` robustness** — shipped 2026-08-16, red-first
+       (3 tests failing against shipped code). `step="any"`/missing
+       steps carry no precision info and now fall back to the values'
+       own decimal places (7.50 no longer collapses to 8); nested
+       tables: only THIS table's own rows sum (`closest('table') ===
+       table` filter — the 99.00 inner-table field no longer leaks into
+       the outer total), with the inner-edit→outer-sum crossing left
+       unsupported and DOCUMENTED in the behavior contract; checkboxes/
+       radios sharing the summed name are excluded. Decimals capped at
+       6. Live-regression-verified: advanced (9.00 at 2dp) and
+       composite (whole-step 7, grand 1782.00) sums unchanged.
+       86 tests green. (H1/H2 + Architect's checkbox find.)
 5. [ ] **Announcement pass** (E4). Committed-change (not per-keystroke)
        live regions for totals; `data-line-total` parity with the grand
        total; a documented SR story for the money/unit reformat
