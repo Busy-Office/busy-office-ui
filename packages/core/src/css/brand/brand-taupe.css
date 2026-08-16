@@ -1,0 +1,26 @@
+/**
+ * Brand preset: taupe — from the Slice 20 palette system (seeded by
+ * Tailwind v4.3's muted palettes). Same recipe and rules as
+ * brand-indigo.css: accent family only, unlayered, light AND dark
+ * blocks, validated by check-contrast.mjs's brand scan — never
+ * asserted, always gated.
+ */
+:root {
+  --bo-color-accent: #7a6a58;
+  --bo-color-accent-strong: #5f5244;
+  --bo-color-accent-solid: #7a6a58;
+  --bo-color-accent-subtle: #f5f1ec;
+  --bo-color-accent-text: #5f5244;
+  --bo-color-focus-ring: #8f7d69;
+  --bo-color-bg-selected: #f5f1ec;
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: #bba893;
+  --bo-color-accent-strong: #d1c2b0;
+  --bo-color-accent-solid: #6b5c49;
+  --bo-color-accent-text: #dfd3c4;
+  --bo-color-accent-subtle: #3a332b;
+  --bo-color-focus-ring: #dfd3c4;
+  --bo-color-bg-selected: #3a332b;
+}

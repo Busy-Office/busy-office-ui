@@ -1,0 +1,26 @@
+/**
+ * Brand preset: olive — from the Slice 20 palette system (seeded by
+ * Tailwind v4.3's muted palettes). Same recipe and rules as
+ * brand-indigo.css: accent family only, unlayered, light AND dark
+ * blocks, validated by check-contrast.mjs's brand scan — never
+ * asserted, always gated.
+ */
+:root {
+  --bo-color-accent: #5f6b3a;
+  --bo-color-accent-strong: #49522c;
+  --bo-color-accent-solid: #5f6b3a;
+  --bo-color-accent-subtle: #f2f4e8;
+  --bo-color-accent-text: #49522c;
+  --bo-color-focus-ring: #75834a;
+  --bo-color-bg-selected: #f2f4e8;
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: #a8b878;
+  --bo-color-accent-strong: #c2cf96;
+  --bo-color-accent-solid: #55622f;
+  --bo-color-accent-text: #d6dfb4;
+  --bo-color-accent-subtle: #31371f;
+  --bo-color-focus-ring: #d6dfb4;
+  --bo-color-bg-selected: #31371f;
+}

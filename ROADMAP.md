@@ -1912,7 +1912,7 @@ seat + code-walk). Ranked by severity: data-integrity first.
 before): generic `bo:dirty` seam replacing the tag-event allowlist (H6);
 `isLive` value normalization (H5).
 
-## Slice 20 — docs hardening & depth (user wishlist, 2026-08-16)
+## Done — Slice 20: docs hardening & depth (all 5 items shipped 2026-08-16)
 
 Triaged 2026-08-16 from a 5-item user wishlist ("hardness the documents"),
 with an attachment showing Tailwind's docs version-switcher dropdown as the

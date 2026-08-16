@@ -1,0 +1,26 @@
+/**
+ * Brand preset: mist — from the Slice 20 palette system (seeded by
+ * Tailwind v4.3's muted palettes). Same recipe and rules as
+ * brand-indigo.css: accent family only, unlayered, light AND dark
+ * blocks, validated by check-contrast.mjs's brand scan — never
+ * asserted, always gated.
+ */
+:root {
+  --bo-color-accent: #4a6b7c;
+  --bo-color-accent-strong: #3a5462;
+  --bo-color-accent-solid: #4a6b7c;
+  --bo-color-accent-subtle: #ecf3f7;
+  --bo-color-accent-text: #3a5462;
+  --bo-color-focus-ring: #5b8093;
+  --bo-color-bg-selected: #ecf3f7;
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: #8fb5c9;
+  --bo-color-accent-strong: #accbdb;
+  --bo-color-accent-solid: #3e6377;
+  --bo-color-accent-text: #c5dce9;
+  --bo-color-accent-subtle: #2a3b46;
+  --bo-color-focus-ring: #c5dce9;
+  --bo-color-bg-selected: #2a3b46;
+}

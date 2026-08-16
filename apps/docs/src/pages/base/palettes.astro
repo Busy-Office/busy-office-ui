@@ -1,0 +1,114 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// GENERATED from the shipped brand CSS — swatches, tokens, and hex are
+// parsed from packages/core/src/css/brand/*.css at build, never
+// hand-painted; the same files check-contrast.mjs gates (32 pairs × 2
+// themes per palette).
+const files = import.meta.glob('../../../../../packages/core/src/css/brand/*.css', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const TOKENS = [
+  'accent', 'accent-strong', 'accent-solid', 'accent-subtle',
+  'accent-text', 'focus-ring', 'bg-selected',
+];
+function parseBlock(block) {
+  const out = {};
+  for (const t of TOKENS) {
+    const m = block.match(new RegExp(`--bo-color-${t}:\\s*([^;]+);`));
+    if (m) out[t] = m[1].trim();
+  }
+  return out;
+}
+const palettes = Object.entries(files).map(([path, css]) => {
+  const name = path.match(/brand-([a-z-]+)\.css$/)[1];
+  const [lightBlock, darkBlock] = css.split('[data-theme="dark"]');
+  return { name, light: parseBlock(lightBlock), dark: parseBlock(darkBlock) };
+}).sort((a, b) => a.name.localeCompare(b.name));
+---
+<Gallery title="Palettes">
+  <p class="demo-note">
+    Every shipped brand palette — swatches, tokens, and hex generated from
+    the CSS that actually ships (<code>@busy-office/ui/css/brand-&lt;name&gt;</code>),
+    each gated through the full 32-pair AA contrast check in both themes.
+    One import re-skins the whole framework; the
+    <a href={base + '/concepts/theming'}>theming guide</a> has the recipe
+    for defining your own.
+  </p>
+
+  {palettes.map((p) => (
+    <section class="demo">
+      <h2 style="text-transform: capitalize">{p.name}</h2>
+      <p class="bo-u-text-muted"><code>{`@import "@busy-office/ui/css/brand-${p.name}";`}</code></p>
+      <div class="bo-data-table-container" tabindex="0">
+        <table class="bo-data-table" data-density="compact">
+          <thead><tr>
+            <th scope="col">Token</th>
+            <th scope="col">Light</th>
+            <th scope="col" class="bo-data-table__col--code">Hex</th>
+            <th scope="col">Dark</th>
+            <th scope="col" class="bo-data-table__col--code">Hex</th>
+          </tr></thead>
+          <tbody>
+            {TOKENS.map((t) => (
+              <tr>
+                <td class="bo-data-table__col--code">--bo-color-{t}</td>
+                <td><span class="pal-swatch" style={`background:${p.light[t]}`}></span></td>
+                <td class="bo-data-table__col--code">{p.light[t]}</td>
+                <td><span class="pal-swatch" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
+                <td class="bo-data-table__col--code">{p.dark[t] ?? '(inherits light)'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div
+        class={'pal-preview pal-' + p.name}
+        style={TOKENS.map((t) => p.light[t] ? `--bo-color-${t}:${p.light[t]}` : '').filter(Boolean).join(';')}
+      >
+        <button class="bo-btn" type="button">Primary action</button>
+        <span class="bo-badge bo-badge--accent">accent badge</span>
+        <a href={base + '/concepts/theming'}>a link</a>
+      </div>
+      <p class="bo-u-text-muted">Live preview — the palette's light values
+      scoped to this box only (the token mechanism itself; dark values
+      verified by the gate, not previewed here to keep the page honest
+      about which theme the box is rendering).</p>
+    </section>
+  ))}
+
+  <section class="demo">
+    <h2>Your own palette</h2>
+    <p>Same recipe, no framework changes: define the accent family
+    (accent / strong / solid / subtle / text) plus <code>focus-ring</code>
+    and <code>bg-selected</code>, in <em>both</em> light and dark blocks,
+    unlayered, imported after the framework CSS. Copy any file above as a
+    starting point, and add your file to the contrast gate's brand scan
+    if you vendor the repo — the gate discovers
+    <code>src/css/brand/*.css</code> automatically.</p>
+  </section>
+
+  <style>
+    .pal-swatch {
+      display: inline-block;
+      inline-size: 2.5em;
+      block-size: 1.25em;
+      border-radius: var(--bo-radius-sm);
+      border: 1px solid var(--bo-color-border-default);
+      vertical-align: middle;
+    }
+    .pal-preview {
+      display: flex;
+      gap: var(--bo-space-3);
+      align-items: center;
+      padding: var(--bo-space-4);
+      border: var(--bo-border-width) solid var(--bo-color-border-default);
+      border-radius: var(--bo-radius-md);
+      background: var(--bo-color-bg-surface);
+      margin-block-start: var(--bo-space-3);
+    }
+  </style>
+</Gallery>

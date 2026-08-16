@@ -1,0 +1,26 @@
+/**
+ * Brand preset: mauve — from the Slice 20 palette system (seeded by
+ * Tailwind v4.3's muted palettes). Same recipe and rules as
+ * brand-indigo.css: accent family only, unlayered, light AND dark
+ * blocks, validated by check-contrast.mjs's brand scan — never
+ * asserted, always gated.
+ */
+:root {
+  --bo-color-accent: #8b5a6f;
+  --bo-color-accent-strong: #6d4457;
+  --bo-color-accent-solid: #8b5a6f;
+  --bo-color-accent-subtle: #f7eef3;
+  --bo-color-accent-text: #6d4457;
+  --bo-color-focus-ring: #a06880;
+  --bo-color-bg-selected: #f7eef3;
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: #c99bb0;
+  --bo-color-accent-strong: #dbb8c9;
+  --bo-color-accent-solid: #8b4a68;
+  --bo-color-accent-text: #e8cdd9;
+  --bo-color-accent-subtle: #43303a;
+  --bo-color-focus-ring: #e8cdd9;
+  --bo-color-bg-selected: #43303a;
+}
