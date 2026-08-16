@@ -2707,7 +2707,22 @@ applies the Objective per item rather than accepting wholesale.
        **P7 miscategorised nav entries** (Badge→Data display,
        Dialog→overlays/screen structure, Combobox→Forms & input,
        Keyboard help→Reference). Cheap, no content change.
-5. [ ] **P8 — split /components/nav** (breadcrumb, navbar, sidebar
+5. [x] **P8 — split /components/nav — DONE 2026-08-17.** The review
+       called it the least documentation per unit of surface on the
+       site: five components at ~110 words each. The four CSS files
+       were ALREADY separate — only the directory bundled them — so the
+       split is real, not cosmetic: breadcrumb / navbar / sidebar-nav /
+       offcanvas each now have their own component directory, dist
+       file, generated API table and docs page, each with content the
+       old page had no room for (navbar: the environment-badge guard
+       against approving in a test system; sidebar-nav: why a container
+       query beats a media query for a rail inside a split view;
+       offcanvas: which side to use and why, plus the RTL note;
+       breadcrumb: keep trails under four levels). /components/nav
+       redirects to sidebar-nav, inbound links retargeted, dist
+       placement change noted in the CHANGELOG (not API pre-1.0).
+       Verified live: redirect lands, drawer still opens after the
+       split. Original: **P8 — split /components/nav** (breadcrumb, navbar, sidebar
        shell, drawers): 5 components at ~110 words each, the least
        documentation per unit of surface on the site.
 6. [ ] **Split /components/data-table** (1,820 w) into table /

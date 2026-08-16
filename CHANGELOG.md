@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Changed (dist placement — explicitly NOT API until v1.0): the `nav`
+  component directory split into four real components —
+  `breadcrumb`, `navbar`, `sidebar-nav`, `offcanvas`. Class names are
+  unchanged; granular importers of `dist/css/components/nav/*` must
+  update their paths, and each now has its own docs page and generated
+  API table. `/components/nav` redirects to `/components/sidebar-nav`.
+
 - Added (combobox): `data-name` on the widget root mirrors each
   committed option's `data-value` into a generated hidden input, so a
   plain form POST carries the machine value rather than the display

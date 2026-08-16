@@ -1,0 +1,57 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const breadcrumbMarkup = `<nav aria-label="Breadcrumb">
+  <ol class="bo-breadcrumb">
+    <li><a href="/cost-centers">Cost centers</a></li>
+    <li><a href="/cost-centers/cc-4021">CC-4021</a></li>
+    <li aria-current="page">PO-88213</li>
+  </ol>
+</nav>
+<!-- The current page is plain text, not a link — you don't link to where
+     you already are. aria-current is the programmatic channel; the ol's
+     list semantics + aria-label="Breadcrumb" are what make it a landmark
+     a screen reader can jump to directly. -->`;
+---
+<Gallery title="Breadcrumb">
+  <p class="demo-note">
+    The path trail for deep ERP hierarchies — cost center → PO → line
+    item. A landmark <code>&lt;nav&gt;</code> wrapping an ordered list,
+    not styled links, so screen-reader users can jump straight to it.
+  </p>
+
+  <section class="demo">
+    <h2>Path trail</h2>
+    <nav aria-label="Breadcrumb">
+      <ol class="bo-breadcrumb">
+        <li><a href="#">Cost centers</a></li>
+        <li><a href="#">CC-4021</a></li>
+        <li aria-current="page">PO-88213</li>
+      </ol>
+    </nav>
+    <p class="bo-u-text-muted">The current page is plain text, not a
+    link — you don't link to where you already are. Keep trails short:
+    if yours runs past four levels, the hierarchy is the problem, not
+    the component.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{breadcrumbMarkup}</code></pre>
+  </section>
+
+  <ClassRef component="breadcrumb" />
+  <ApiTable component="breadcrumb" notes={[
+    'Wrap it in <code>&lt;nav aria-label="Breadcrumb"&gt;</code> — that is what makes it a landmark; the class only paints the separators.',
+    'Mark the current page with <code>aria-current="page"</code> and render it as text, not a link.',
+    'Separators are CSS, not characters in your markup — so they never end up in a screen reader\'s output or a copy-paste.',
+  ]} />
+  <Related links={[
+    ['/components/navbar', 'Navbar'],
+    ['/components/sidebar-nav', 'Sidebar navigation'],
+    ['/patterns/record-detail', 'Record detail'],
+  ]} />
+</Gallery>

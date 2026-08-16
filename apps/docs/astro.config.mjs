@@ -25,6 +25,7 @@ export default defineConfig({
     '/tokens': `${base}/reference/tokens`,
     '/base/tokens': `${base}/reference/tokens`,
     '/patterns/keyboard-help': `${base}/reference/keyboard`,
+    '/components/nav': `${base}/components/sidebar-nav`,
     '/primitives': `${base}/base/primitives`,
   },
 });

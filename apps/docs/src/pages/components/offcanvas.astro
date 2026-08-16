@@ -1,0 +1,109 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
+        data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
+
+<dialog class="bo-offcanvas" id="drawer-nav" data-state="closed"
+        aria-labelledby="drawer-title">
+  <div class="bo-offcanvas__header">
+    <span id="drawer-title" class="bo-navbar__brand">busy-office</span>
+    <form method="dialog">
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button>
+    </form>
+  </div>
+  <nav class="bo-sidebar-nav" aria-label="Main">…same markup as the sidebar…</nav>
+</dialog>
+<!-- Opens via initDialogs() — same wiring as any dialog: backdrop, Esc,
+     focus-return and Tab loop are all inherited. -->`;
+---
+<Gallery title="Drawers (off-canvas)">
+  <p class="demo-note">
+    A panel that slides in over the screen: navigation on narrow shells
+    (start side) and filters or record previews on wide ones
+    (<code>--end</code>). It is a native <code>&lt;dialog&gt;</code>
+    variant, so the focus trap, Esc, backdrop and focus-return come from
+    the platform.
+  </p>
+
+    <div class="bo-cluster">
+      <button class="bo-btn bo-btn--secondary" data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
+    </div>
+    <dialog class="bo-offcanvas" id="drawer-nav" data-state="closed" aria-labelledby="drawer-title">
+      <div class="bo-offcanvas__header">
+        <span id="drawer-title" class="bo-navbar__brand">busy-office</span>
+        <form method="dialog">
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button>
+        </form>
+      </div>
+      <nav class="bo-sidebar-nav" aria-label="Drawer demo">
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--check-circle bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--settings bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Settings</span></a></li>
+        </ul>
+      </nav>
+    </dialog>
+    <h3>Markup</h3>
+    <pre><code>{offcanvasMarkup}</code></pre>
+  </section>
+  <section class="demo">
+    <h2>End-side drawer — filters & detail panels</h2>
+    <div class="bo-cluster">
+      <button class="bo-btn bo-btn--secondary" data-dialog-trigger="filter-drawer">Filters…</button>
+    </div>
+    <dialog class="bo-offcanvas bo-offcanvas--end" id="filter-drawer" data-state="closed" aria-labelledby="fd-title">
+      <div class="bo-offcanvas__header">
+        <span id="fd-title" class="bo-navbar__brand">Filters</span>
+        <form method="dialog">
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button>
+        </form>
+      </div>
+      <div class="bo-stack" style="padding: var(--bo-space-4)">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="fd-status">Status</label>
+          <select class="bo-select" id="fd-status"><option>All</option><option>Pending</option></select>
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="fd-cc">Cost center</label>
+          <input class="bo-input bo-input--code" id="fd-cc" placeholder="CC-…" />
+        </div>
+        <div class="bo-form-actions">
+          <button class="bo-btn" type="button">Apply</button>
+          <button class="bo-btn bo-btn--ghost" type="button">Clear</button>
+        </div>
+      </div>
+    </dialog>
+    <p class="bo-u-text-muted"><code>--end</code> slides the drawer in from the end
+    edge — the home for filter panels and record previews (start side stays the
+    navigation convention). Same dialog wiring, mirrored slide animation, RTL-aware.</p>
+  </section>
+  <section class="demo">
+    <h2>Which side, and when</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Start side</strong> — navigation, because that is where the sidebar lives; a drawer that replaces the rail should come from where the rail was.</li>
+      <li><strong><code>--end</code></strong> — filters, detail previews, anything that supplements the screen you are on rather than taking you elsewhere.</li>
+      <li>Both mirror correctly under <code>dir="rtl"</code>: "start" and "end" are logical, not left and right.</li>
+    </ul>
+  </section>
+
+  <script>
+    import { initDialogs } from '@busy-office/ui/js';
+    initDialogs();
+  </script>
+
+  <ClassRef component="offcanvas" />
+  <ApiTable component="offcanvas" notes={[
+    'It is a <code>&lt;dialog&gt;</code>: <code>initDialogs()</code> wires it exactly like any other — backdrop, Esc, focus-return and the Tab loop are inherited, not reimplemented.',
+    'Give it an accessible name with <code>aria-labelledby</code> pointing at the header title.',
+    'A drawer is modal: while it is open the page behind is inert. For a panel that must stay open alongside the content, use a layout column, not a drawer.',
+  ]} />
+  <Related links={[
+    ['/components/dialog', 'Dialog'],
+    ['/components/sidebar-nav', 'Sidebar navigation'],
+    ['/components/filters', 'Filters'],
+  ]} />
+</Gallery>

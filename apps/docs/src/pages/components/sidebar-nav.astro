@@ -1,0 +1,80 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
+  <div class="bo-sidebar-nav__section">
+    <div class="bo-sidebar-nav__heading">Purchasing</div>
+    <ul>
+      <li><a class="bo-sidebar-nav__link" href="/invoices" aria-current="page">
+        <span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span>
+        <span class="bo-sidebar-nav__label">Invoices</span>
+      </a></li>
+    </ul>
+  </div>
+</nav>`;
+---
+<Gallery title="Sidebar navigation">
+  <p class="demo-note">
+    The module rail of an ERP — grouped links that collapse to icons when
+    the <em>shell</em> is narrow, not when the viewport is. This page's own
+    sidebar is the live demo; the embedded shell below proves the
+    container-query behaviour independently.
+  </p>
+
+  <section class="demo">
+    <h2>Grouped sections in an embedded shell</h2>
+    <div class="bo-app-shell" style="min-height: 18rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+      <header class="bo-navbar bo-app-shell__header">
+        <span class="bo-navbar__brand">Embedded app</span>
+        <span class="bo-navbar__spacer"></span>
+      </header>
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Embedded">
+        <div class="bo-sidebar-nav__section">
+          <div class="bo-sidebar-nav__heading">Purchasing</div>
+          <ul>
+            <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+            <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--check-circle bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+          </ul>
+        </div>
+        <div class="bo-sidebar-nav__section">
+          <div class="bo-sidebar-nav__heading">Finance</div>
+          <ul>
+            <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--chart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Ledger</span></a></li>
+            <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--settings bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Settings</span></a></li>
+          </ul>
+        </div>
+      </nav>
+      {/* div, not <main>: a second main landmark inside the docs page is an
+          axe violation — the demo shows layout, not landmark semantics */}
+      <div class="bo-app-shell__main">
+        <p class="bo-u-text-muted">Sections (<code>__section</code> +
+        <code>__heading</code>) group a real ERP's modules — headings hide with the
+        labels when this 700px shell collapses to icons. Container queries, not
+        media queries.</p>
+      </div>
+    </div>
+  </section>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{sidebarMarkup}</code></pre>
+  </section>
+
+  <ClassRef component="sidebar-nav" />
+  <ApiTable component="sidebar-nav" notes={[
+    'The current page carries <code>aria-current="page"</code> — that is the programmatic channel; the visual highlight is the other half.',
+    'Icons are <code>aria-hidden</code> and labels stay in the accessibility tree when the rail collapses, so a screen-reader user never loses the link text.',
+    'Collapse is driven by a named container query on the shell — the same sidebar behaves correctly inside a split view, which a media query cannot do.',
+    'Sections (<code>__section</code> + <code>__heading</code>) group modules; headings hide with the labels when the rail collapses.',
+  ]} />
+  <Related links={[
+    ['/base/primitives', 'App shell'],
+    ['/concepts/container-queries', 'Container queries'],
+    ['/components/offcanvas', 'Drawers'],
+    ['/components/navbar', 'Navbar'],
+  ]} />
+</Gallery>

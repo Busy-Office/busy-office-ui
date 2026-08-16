@@ -12,10 +12,10 @@
 @import "./components/form/checkbox-radio.css";
 @import "./components/form/form-section.css";
 @import "./components/data-table/data-table.css";
-@import "./components/nav/navbar.css";
-@import "./components/nav/sidebar-nav.css";
-@import "./components/nav/offcanvas.css";
-@import "./components/nav/breadcrumb.css";
+@import "./components/navbar/navbar.css";
+@import "./components/sidebar-nav/sidebar-nav.css";
+@import "./components/offcanvas/offcanvas.css";
+@import "./components/breadcrumb/breadcrumb.css";
 @import "./components/tree/tree.css";
 @import "./components/dialog/dialog.css";
 @import "./components/tabs/tabs.css";
