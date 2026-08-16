@@ -1,0 +1,110 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const initials = `<span class="bo-avatar" aria-hidden="true">RV</span>
+<span class="bo-avatar" aria-hidden="true">JK</span>`;
+
+const photo = `<span class="bo-avatar" aria-hidden="true">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f766e'/%3E%3Ccircle cx='16' cy='12' r='6' fill='%23ccfbf1'/%3E%3Cellipse cx='16' cy='27' rx='10' ry='8' fill='%23ccfbf1'/%3E%3C/svg%3E" alt="">
+</span>`;
+
+const stack = `<!-- approval chain: DOM order = approval order -->
+<div class="bo-avatar-stack" role="img" aria-label="Approvers: R. Vasquez, J. Kim, then M. Osei">
+  <span class="bo-avatar" aria-hidden="true">RV</span>
+  <span class="bo-avatar" aria-hidden="true">JK</span>
+  <span class="bo-avatar" aria-hidden="true">MO</span>
+</div>`;
+
+const inTable = `<table class="bo-data-table" data-density="compact">
+  <thead><tr><th scope="col">Invoice</th><th scope="col">Assignee</th></tr></thead>
+  <tbody>
+    <tr><td>INV-10234</td><td><span class="bo-byline"><span class="bo-avatar bo-byline__avatar" aria-hidden="true">RV</span>R. Vasquez</span></td></tr>
+    <tr><td>INV-10235</td><td><span class="bo-byline"><span class="bo-avatar bo-byline__avatar" aria-hidden="true">JK</span>J. Kim</span></td></tr>
+  </tbody>
+</table>`;
+
+const canonical = `<!-- Decoration, not a caption: aria-hidden always, the NAME is real
+     text nearby (a byline, a cell, a stack's aria-label). em-sized —
+     it scales with the surrounding text, no size modifiers. -->
+<span class="bo-avatar" aria-hidden="true">RV</span>
+
+<!-- photo variant: img fills the disc; alt stays empty -->
+<span class="bo-avatar" aria-hidden="true"><img src="…" alt=""></span>
+
+<!-- inside a byline, compose both classes (byline's :has() keys on the
+     second one to switch to a flex row) -->
+<span class="bo-byline">
+  <span class="bo-avatar bo-byline__avatar" aria-hidden="true">RV</span>
+  R. Vasquez · <time datetime="2026-08-16">today</time>
+</span>`;
+---
+<Gallery title="Avatar">
+  <p class="demo-note">
+    Who a thing belongs to, at a glance — initials or a photo in a disc:
+    assignee columns, approval chains, bylines. Always decoration
+    (<code>aria-hidden</code>) with the name as real text nearby; it
+    scales with the text it sits beside.
+  </p>
+
+  <section class="demo">
+    <h2>Initials</h2>
+    <Demo code={initials} />
+    <p class="bo-u-text-muted">A span with two letters. The disc is
+    em-sized, so it follows the font size of its context — put it in a
+    compact table and it shrinks with the rows, no modifier needed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Photo</h2>
+    <Demo code={photo} />
+    <p class="bo-u-text-muted">An <code>img</code> fills the disc
+    (<code>object-fit: cover</code>). Keep <code>alt=""</code> — the
+    identity belongs in the adjacent text, not in the picture.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Approval-chain stack</h2>
+    <Demo code={stack} />
+    <p class="bo-u-text-muted">The "who's next" strip: discs overlap
+    with a surface-colored ring, DOM order is approval order. The stack
+    itself carries the accessible name
+    (<code>role="img"</code> + <code>aria-label</code> listing the
+    chain) — one announcement, not three fragments.</p>
+  </section>
+
+  <section class="demo">
+    <h2>In context — assignee column</h2>
+    <Demo code={inTable} />
+    <p class="bo-u-text-muted">Composed with
+    <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + '/components/byline'}>Byline</a>:
+    the avatar takes both classes — <code>.bo-avatar</code> paints the
+    disc, <code>.bo-byline__avatar</code> tells the byline to lay out as
+    a flex row.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="avatar" />
+  <ApiTable
+    component="avatar"
+    notes={[
+      'Always <code>aria-hidden="true"</code> — the avatar is decoration; the name is real text beside it (byline, cell) or on the stack (<code>role="img"</code> + <code>aria-label</code>).',
+      'No size modifiers by design: the disc is em-sized and inherits scale from its context (density, byline <code>--compact</code>, headings).',
+      'Stack order is DOM order — put the current/next approver first and say so in the <code>aria-label</code>.',
+      'Forced colors: the disc keeps a real border, so stacked avatars stay separable when backgrounds flatten.',
+      'Promoted from Byline (owner call 2026-08-16): markup that carried only <code>.bo-byline__avatar</code> must add <code>.bo-avatar</code> — listed as Breaking in the CHANGELOG.',
+    ]}
+  />
+  <Related links={[
+    ['/components/byline', 'Byline'],
+    ['/patterns/approval', 'Approval workflow'],
+    ['/components/data-table', 'Data table'],
+  ]} />
+</Gallery>

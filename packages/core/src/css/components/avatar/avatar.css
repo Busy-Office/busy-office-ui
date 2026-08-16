@@ -1,0 +1,53 @@
+@layer bo-components {
+  /* Avatar — initials or a photo in a disc. Promoted from Byline's
+     __avatar part (owner call 2026-08-16): one primitive, composed by
+     Byline and usable standalone (assignee columns, approval chains).
+     em-sized on purpose: it scales with the text it sits next to
+     (byline --compact, table density) instead of needing size modifiers.
+     Decoration, not a caption — always aria-hidden with the name as
+     real text nearby. */
+  .bo-avatar {
+    inline-size: 1.8em;
+    block-size: 1.8em;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-secondary);
+    font-size: 0.7em;
+    font-weight: var(--bo-font-weight-semibold);
+    line-height: 1;
+  }
+
+  .bo-avatar img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Approval-chain "who's next" stack — the scenario that promoted the
+     primitive. Overlap with a surface-colored ring so discs read as
+     separate; DOM order = approval order (first approver on top). */
+  .bo-avatar-stack {
+    display: inline-flex;
+  }
+
+  .bo-avatar-stack .bo-avatar {
+    border: 2px solid var(--bo-color-bg-surface);
+  }
+
+  .bo-avatar-stack .bo-avatar + .bo-avatar {
+    margin-inline-start: -0.5em;
+  }
+
+  @media (forced-colors: active) {
+    /* The disc boundary is the only thing separating stacked avatars —
+       backgrounds flatten, borders survive. */
+    .bo-avatar {
+      border: 1px solid CanvasText;
+    }
+  }
+}

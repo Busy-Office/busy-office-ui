@@ -29,25 +29,10 @@
     gap: var(--bo-space-2);
   }
 
-  .bo-byline__avatar {
-    inline-size: 1.8em;
-    block-size: 1.8em;
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 50%;
-    background: var(--bo-color-bg-muted);
-    color: var(--bo-color-text-secondary);
-    font-size: 0.7em;
-    font-weight: var(--bo-font-weight-semibold);
-    line-height: 1;
-  }
-
-  .bo-byline__avatar img {
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-  }
+  /* The avatar LOOK now lives in the promoted .bo-avatar primitive
+     (avatar.css, owner call 2026-08-16) — markup composes both classes:
+     class="bo-avatar bo-byline__avatar". The __avatar class remains as
+     the layout marker the :has() rule above keys on. Breaking (listed
+     in the CHANGELOG): markup carrying only .bo-byline__avatar no
+     longer paints the disc. */
 }

@@ -27,17 +27,20 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
   <section class="demo">
     <h2><code>__avatar</code> — initials or a photo</h2>
     <p class="bo-u-text-muted">
-      Optional part — a plain-text byline (above) gets no layout change; adding
-      <code>.bo-byline__avatar</code> switches that one byline to a flex row. The name
-      already carries the identity as text, so the avatar is <code>aria-hidden</code> —
-      decoration, not a second copy of the same information.
+      Optional part, composed from the standalone
+      <a href={base + '/components/avatar'}>Avatar</a>: the disc takes
+      BOTH classes — <code>.bo-avatar</code> paints it,
+      <code>.bo-byline__avatar</code> switches that one byline to a flex
+      row. The name already carries the identity as text, so the avatar
+      is <code>aria-hidden</code> — decoration, not a second copy of the
+      same information.
     </p>
     <p><span class="bo-byline">
-      <span class="bo-byline__avatar" aria-hidden="true">RV</span>
+      <span class="bo-avatar bo-byline__avatar" aria-hidden="true">RV</span>
       <strong>R. Vance</strong> · Requester · 10 Aug 2026
     </span></p>
     <p><span class="bo-byline">
-      <span class="bo-byline__avatar" aria-hidden="true">
+      <span class="bo-avatar bo-byline__avatar" aria-hidden="true">
         <img src="/favicon.svg" alt="" />
       </span>
       <strong>J. Kim</strong> · Cost-centre manager
@@ -53,7 +56,7 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
     <div class="bo-widget" style="inline-size: 100%; max-inline-size: 24rem">
       <div class="bo-widget__body">
         <span class="bo-byline">
-          <span class="bo-byline__avatar" aria-hidden="true">JK</span>
+          <span class="bo-avatar bo-byline__avatar" aria-hidden="true">JK</span>
           <span><strong>J. Kim</strong> · approved · <time datetime="2026-08-10T15:02">Aug 10, 15:02</time></span>
         </span>
         <p style="margin-block-start: var(--bo-space-2)">"Within Q3 budget — released for payment."</p>

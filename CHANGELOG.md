@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- **Breaking** + Added: `.bo-avatar` promoted from Byline's `__avatar`
+  part (owner call) — a standalone initials/photo disc plus
+  `.bo-avatar-stack` for approval chains, em-sized, forced-colors
+  border. Byline now COMPOSES it: markup that carried only
+  `.bo-byline__avatar` must add `.bo-avatar`
+  (`class="bo-avatar bo-byline__avatar"`) — the old class remains as
+  the byline's flex-layout marker but no longer paints the disc.
+
 - Changed: dark-mode `--bo-color-border-control` steps gray-500 →
   gray-400 — on dark muted/hover fills the control border can be the
   ONLY affordance (seamless cells) and gray-500 measured 2.97:1;

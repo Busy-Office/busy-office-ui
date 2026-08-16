@@ -1615,13 +1615,17 @@ one correction to the research agent's claims:
        57), both link checks, axe zero (59 pages), 32 baselines (one
        harness capture flake — the same documented class as before —
        resolved by 5 consecutive clean re-runs), live both themes.
-4. [ ] **Standalone Avatar** — Fiori/Ant/Salesforce; scenario: approval-chain
-       "who's next" stack, assignee identification. Partially covered
-       already — `.bo-byline__avatar` exists but is scoped inside Byline.
-       **[HUMAN CALL]**: promote to a reusable `.bo-avatar` primitive (Byline
-       composes it), or leave it byline-scoped and accept the gap? Not built
-       pending the owner's call — a promoted primitive's class name becomes
-       semver surface immediately, not worth guessing at.
+4. [x] **Standalone Avatar — PROMOTED (owner call 2026-08-16)**:
+       `.bo-avatar` shipped (initials/photo disc, em-sized — no size
+       modifiers by design, forced-colors border) + `.bo-avatar-stack`
+       for the approval-chain scenario that motivated it; Byline now
+       COMPOSES it (markup adds .bo-avatar next to .bo-byline__avatar —
+       the old class stays as the flex-layout marker; **Breaking**
+       CHANGELOG entry per the freeze policy). Docs page with
+       stack/assignee-column demos; all composition sites updated
+       (byline, approval-workflow, settings-admin); gates green,
+       live-verified both themes/widths; one richtext-page capture
+       flake resolved by the documented 5-consecutive-clean protocol.
 
 **Not queued** (weak evidence or already covered, see the roundtable doc for
 detail): tooltip/popover, comment/activity feed, master-detail split view,

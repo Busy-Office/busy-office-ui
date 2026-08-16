@@ -41,5 +41,6 @@
 @import "./components/money/money.css";
 @import "./components/tree-table/tree-table.css";
 @import "./components/richtext/richtext.css";
+@import "./components/avatar/avatar.css";
 @import "./utilities/index.css";
 @import "./print/index.css";
