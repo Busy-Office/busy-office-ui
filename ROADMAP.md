@@ -2550,6 +2550,21 @@ costs every consumer a migration to buy cosmetic prefix consistency,
 and "visually-hidden" is the conventional name people search for. The
 naming exception is documented rather than fixed.
 
+**P0 — CI red for five commits (2026-08-16), CLOSED, green at
+3d2f64c.** Three distinct defects in gates I added, each found only by
+CI because I verified them the easy way: (1) hardcoded macOS Chrome
+path — the gate couldn't launch in Actions (fixed: resolve-chrome.mjs,
+candidate list, fails loudly rather than skipping); (2) the overflow
+step ran before the docs build, scandir'ing a dist that didn't exist
+(moved after; script now prints "run npm run build first" instead of a
+stack); (3) CI builds with DOCS_BASE=/busy-office-ui, so a base-less
+harness 404'd every asset — which broke check-boost's clicks and would
+have made check-overflow FAIL OPEN on CSS-less pages (fixed: shared
+base-aware serve-dist.mjs). Two rules added to LOOPS: verify a browser
+gate against a DOCS_BASE build, and watch CI after any push touching a
+gate. Root lesson: a gate verified only in the environment it was
+written in is not a gate.
+
 ## Slice 23 — docs IA & depth (owner review, 2026-08-16)
 
 Triaged from `busyofficeuidocsreview.md` (69-page crawl with word counts
