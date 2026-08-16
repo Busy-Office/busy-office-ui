@@ -36,6 +36,11 @@ const server = createServer(async (req, res) => {
   res.writeHead(404); res.end('nf');
 });
 await new Promise(r => server.listen(0, r)); const port = server.address().port;
+import { existsSync } from 'node:fs';
+if (!existsSync(dist)) {
+  console.error(`No built docs at ${dist} — run \`npm run build -w docs\` first (this gate sweeps the built output).`);
+  process.exit(1);
+}
 const all = []; for await (const p of pages(dist)) all.push(p);
 const b = await puppeteer.launch({ executablePath: resolveChrome(), headless: 'new' });
 const pg = await b.newPage();

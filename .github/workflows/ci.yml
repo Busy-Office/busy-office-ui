@@ -18,11 +18,6 @@ jobs:
       # Core build includes the named-@container check — a bare query fails here.
       - name: Build core (CSS dist + TS)
         run: npm run build -w @busy-office/ui
-      - name: Overflow sweep (390 + 150% zoom, all pages)
-        run: npm run check:overflow -w docs
-        env:
-          CHROME_PATH: /usr/bin/google-chrome
-
       - name: Stylelint (bo- naming conventions)
         run: npm run lint:css -w @busy-office/ui
       - name: Behavior tests (against compiled dist)
@@ -31,3 +26,7 @@ jobs:
         run: npm run build -w docs
         env:
           DOCS_BASE: /busy-office-ui
+      # AFTER the docs build — it sweeps the built dist. (Ordering bug on
+      # first landing: placed before the build, so dist did not exist.)
+      - name: Overflow sweep (390 + 150% zoom, all pages)
+        run: npm run check:overflow -w docs
