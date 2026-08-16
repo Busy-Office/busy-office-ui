@@ -146,6 +146,7 @@ const canonical = `<!-- Two real form controls working as one field: the select 
       'Both controls need accessible names — <code>aria-label</code> on each, or a wrapping <code>.bo-form-field</code> label naming the pair.',
       'Read-only display stays <code>.bo-amount</code> — this component is the editable counterpart, the same split as Quantity (edit) vs Amount (display).',
       'Formatting for display (thousands separators, symbol placement) remains your app’s job — the input holds a plain number; <code>Intl.NumberFormat</code> at render time is the tool.',
+      'The reformat is a programmatic value change with no reliable screen-reader announcement channel (WCAG 4.1.3) — when totals or other UI depend on it, announce the consequence in a committed-change <code>aria-live</code> status (the editable-grid pattern shows the recipe); the field itself reads its new value on next focus/arrow.',
     ]}
   />
   <Related links={[

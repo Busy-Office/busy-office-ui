@@ -1817,11 +1817,21 @@ seat + code-walk). Ranked by severity: data-integrity first.
        6. Live-regression-verified: advanced (9.00 at 2dp) and
        composite (whole-step 7, grand 1782.00) sums unchanged.
        86 tests green. (H1/H2 + Architect's checkbox find.)
-5. [ ] **Announcement pass** (E4). Committed-change (not per-keystroke)
-       live regions for totals; `data-line-total` parity with the grand
-       total; a documented SR story for the money/unit reformat
-       (WCAG 4.1.3). Accept: one polite announcement per committed edit
-       in the composite, not two-plus per keystroke; documented recipe.
+5. [x] **Announcement pass** — shipped 2026-08-16 (demos + contract
+       docs, no framework code). Visible totals keep realtime updates
+       for sighted users; `aria-live` moved OFF the per-keystroke-
+       updating cells onto one visually-hidden status per table, written
+       by a `change` listener — exactly one polite announcement per
+       committed edit (blur for text, immediate for select/checkbox/
+       stepper), summary includes the edited line's total (parity with
+       the grand total). table-sum's contract doc now documents this
+       recipe instead of the aria-live-on-cell advice it replaced;
+       money's ApiTable documents the 4.1.3 story (a programmatic value
+       change has no reliable SR channel — announce the consequence in
+       the committed-change status; the field reads its new value on
+       next focus). Live-verified: two keystrokes → status empty while
+       the visible total updates; commit → one full summary; stepper →
+       announces; zero aria-live left on visible cells. (E4.)
 6. [ ] **Docs batch** (H7/H8/H9 + E2's docs half). Currency-lives-on-
        the-document callout (per-line shown only to demo the behavior);
        intro progression map names all five sections; money/quantity

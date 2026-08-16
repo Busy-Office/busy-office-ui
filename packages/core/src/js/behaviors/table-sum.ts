@@ -18,10 +18,15 @@
  * only updates on change, it never does an eager first pass (swap-proof,
  * not scan-proof, like every other behavior here).
  *
- * Put `aria-live="polite"` on the sum element — a screen-reader user
- * editing a quantity gets no confirmation the total moved otherwise
- * (same live-region need as the data-table selection count and the
- * file-upload list).
+ * Announce totals on COMMITTED change, not per keystroke (a screen-
+ * reader user editing a quantity still needs confirmation the total
+ * moved — the same live-region need as the selection count — but
+ * `aria-live` directly on this cell speaks on EVERY keystroke, since
+ * sums recompute on input). Recipe: leave the visible cell plain, add a
+ * visually-hidden `aria-live="polite"` status near the table, and write
+ * one summary into it from a `change` listener (blur for text,
+ * immediate for select/checkbox/stepper) — see the editable-grid
+ * pattern's script for the working version.
  *
  * Boundaries (documented, not silent): only THIS table's own rows sum —
  * a nested table's same-named fields never leak into the outer total,

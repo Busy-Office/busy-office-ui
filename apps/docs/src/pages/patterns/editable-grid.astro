@@ -280,6 +280,29 @@ const markup = `<table class="bo-data-table" data-row-edit>
     document.addEventListener('bo:cell-change', (e) => {
       if ((e.target as Element).closest('#eg-comp-table')) recomputeComposite();
     });
+
+    // Committed-change announcements (grill E4): visible totals update per
+    // keystroke for sighted users; the hidden status speaks ONE summary per
+    // committed edit (change = blur for text, immediate for select/
+    // checkbox/stepper) — never a queue of per-keystroke announcements.
+    document.addEventListener('change', (e) => {
+      const target = e.target as Element;
+      const adv = target.closest('#eg-adv-table');
+      if (adv) {
+        const status = document.getElementById('eg-adv-status')!;
+        status.textContent = `Total quantity ${adv.querySelector('[data-sum-of="qty"]')!.textContent}`;
+      }
+      const comp = target.closest('#eg-comp-table');
+      if (comp) {
+        const row = target.closest('tr');
+        const line = row?.querySelector('[data-line-total]')?.textContent;
+        const status = document.getElementById('eg-comp-status')!;
+        status.textContent =
+          (line ? `Line total ${line}; ` : '') +
+          `total quantity ${comp.querySelector('[data-sum-of="qty"]')!.textContent}; ` +
+          `grand total ${document.getElementById('comp-grand')!.textContent}`;
+      }
+    });
   </script>
 
   <section class="demo">
@@ -406,10 +429,11 @@ const markup = `<table class="bo-data-table" data-row-edit>
       </tbody>
       <tfoot><tr>
         <td class="bo-data-table__col--right">Total qty</td>
-        <td class="bo-data-table__col--numeric" data-sum-of="qty" aria-live="polite">7.50</td>
+        <td class="bo-data-table__col--numeric" data-sum-of="qty">7.50</td>
         <td colspan="5"></td>
       </tr></tfoot>
     </table>
+    <p class="bo-visually-hidden" id="eg-adv-status" aria-live="polite"></p>
     <p class="bo-u-text-muted">Subtotals come in <strong>both modes</strong>:
     declarative auto-sum (<code>data-sum-of="qty"</code>, shown above — a
     deliberate, documented exception to "you do the data") or listen to
@@ -418,9 +442,14 @@ const markup = `<table class="bo-data-table" data-row-edit>
     weighted sums, whatever the auto mode can't express. Tag chips are
     consumer-rendered, so Cancel can't restore them natively —
     <code>bo:row-cancel</code> fires after the native fields reset,
-    exactly for that. Put <code>aria-live="polite"</code> on the sum cell —
-    a screen-reader user editing a quantity gets no confirmation the total
-    moved otherwise (same live-region need as the selection count).</p>
+    exactly for that. <strong>Announce totals on COMMITTED change, not per
+    keystroke</strong>: the visible cells update in realtime for sighted
+    users, while a visually-hidden <code>aria-live="polite"</code> status
+    (see this page's script) speaks one summary per committed edit —
+    <code>change</code> fires on blur for text, immediately for
+    select/checkbox/stepper — instead of a queue of announcements on every
+    keystroke. The summary includes the edited line's total, giving line
+    totals the same announcement parity as the grand total.</p>
   </section>
 
   <section class="demo">
@@ -555,13 +584,14 @@ const markup = `<table class="bo-data-table" data-row-edit>
       <tfoot>
         <tr>
           <td class="bo-data-table__col--right">Total qty</td>
-          <td class="bo-data-table__col--numeric" data-sum-of="qty" aria-live="polite">6</td>
+          <td class="bo-data-table__col--numeric" data-sum-of="qty">6</td>
           <td class="bo-data-table__col--right">Grand total</td>
-          <td class="bo-data-table__col--numeric" id="comp-grand" aria-live="polite">1769.60</td>
+          <td class="bo-data-table__col--numeric" id="comp-grand">1769.60</td>
           <td colspan="2"></td>
         </tr>
       </tfoot>
     </table>
+    <p class="bo-visually-hidden" id="eg-comp-status" aria-live="polite"></p>
     <p class="bo-u-text-muted">Try it: step a quantity or switch a currency —
     the line total re-derives per that row's currency decimals, the grand
     total follows, and Cancel walks everything back including the computed
