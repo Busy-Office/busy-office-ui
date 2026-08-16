@@ -103,6 +103,16 @@ responses, so the documented 409 pattern did nothing at all. Drive real
 key/mouse events in those checks — a synthetic `keydown` on `document`
 matches no delegated handler and reports a false failure.
 
+## Red-proving a gate: verify the INJECTION, not just the red result
+
+A gate is only trustworthy if you have watched it fail. Two traps hit
+repeatedly (2026-08-17): an injected rule whose selector the page never
+uses, and `max-inline-size` on a table cell — table layout ignores it,
+so nothing clips and the gate looks fine. Both produce a green "red
+test" and a detector that can never fail. Confirm the injection took
+effect (grep the built output, or assert the computed style) before
+believing a passing gate.
+
 ## How to document a PATTERN (the second recipe)
 
 A pattern page documents a SCREEN, not a component — ten of thirteen

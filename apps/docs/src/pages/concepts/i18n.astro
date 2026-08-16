@@ -70,7 +70,7 @@ new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(new Date())`;
       <li><strong>Buttons size to content</strong>, so a long label grows the button rather than clipping. Fixed-width action columns are the anti-pattern.</li>
       <li><strong>Don't build sentences from fragments.</strong> "Approve" + n + "invoices" cannot be translated into languages that inflect; pass the whole sentence with a placeholder.</li>
       <li><strong>Badges and chips are the tightest spaces</strong> — prefer a short status vocabulary you control over free translation.</li>
-      <li><strong>Test with a pseudo-locale</strong> (every string ×1.4, accented) before the first real translation lands; it finds clipping without a translator.</li>
+      <li><strong>Test with a pseudo-locale</strong> (every string ×1.4, accented) before the first real translation lands; it finds clipping without a translator. <strong>This framework does</strong>: a CI gate expands every visible string ~35% with accents, forces compact density, and fails the build if anything clips or the shell scrolls sideways — eight text-dense pages at desktop and phone width. The claims above are measured, not asserted.</li>
     </ul>
   </section>
 

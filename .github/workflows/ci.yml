@@ -34,3 +34,7 @@ jobs:
       # behaviour is a hypothesis until something runs it (2026-08-17).
       - name: Documented-claims check
         run: npm run check:claims -w docs
+      # The i18n page claims long translations wrap rather than clip —
+      # run that claim at compact density in a +35% pseudo-locale.
+      - name: Pseudo-locale expansion check
+        run: npm run check:pseudo -w docs

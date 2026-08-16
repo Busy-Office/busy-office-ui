@@ -2859,6 +2859,20 @@ documented on /patterns/validation-summary as "Two swap targets, one
 endpoint". Pattern holding: every dogfood round so far has found a
 real defect in guidance that read fine on the page.
 
+**Explore 2026-08-17 (third) — pseudo-locale gate, GRADUATED.** Tested
+the i18n page's own claim ("headers wrap, they do not truncate";
+"buttons size to content") by expanding every visible string ~35% with
+accents at COMPACT density — the combination that page names as the
+first to break. Result: eight text-dense pages at 1440 and 390, zero
+clipped elements, zero horizontal overflow. The claim is now measured,
+and the i18n page says so instead of asserting it. Graduated as
+check-pseudo-locale.mjs in CI. **Red-proving it took three attempts and
+that is the finding worth keeping**: the first injection targeted a
+selector the page did not use, the second put max-inline-size on a
+table cell (auto AND fixed table layout ignore it), and only the third
+— a badge — actually clipped. Two of my three "proofs" would have
+shipped a detector that could not fail. Recorded in the script header.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
