@@ -37,7 +37,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <code>apps/docs</code>, add the version to
     <code>apps/docs/versions.json</code>, rebuild plain, and commit — the
     Pages deploy copies every committed snapshot to
-    <code>/v/&lt;version&gt;/</code> automatically.</p>
+    <code>/v/&lt;version&gt;/</code> automatically. <em>Known gap</em>:
+    the current 0.1.1 snapshot was cut late as a mechanism proof and
+    includes docs for later unreleased work — it gets re-cut correctly
+    at the next release; snapshots are only version-faithful when cut AT
+    their release, which is the documented flow above.</p>
   </section>
   <section class="demo">
     <h2>Leaving is cheap — by design</h2>
