@@ -1232,6 +1232,11 @@ describe('initRowEdit advanced cells + save models (Slice 18 item 4)', () => {
   });
 });
 
+function pick(select: HTMLSelectElement, value: string): void {
+  select.value = value;
+  select.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
 describe('initTableSum robustness (Slice 19 item 4, grill H1/H2 + checkbox)', () => {
   it('step="any" or missing step derives decimals from the values, not 0', () => {
     html`
@@ -1519,11 +1524,6 @@ describe('initQuantity unit select (embedded unit table)', () => {
     };
   }
 
-  function pick(select: HTMLSelectElement, value: string): void {
-    select.value = value;
-    select.dispatchEvent(new Event('change', { bubbles: true }));
-  }
-
   it('unit change adjusts step; value only reformats losslessly (Slice 19 grill fix)', () => {
     const { select, input } = unitQuantity();
     pick(select, 'each');
@@ -1571,11 +1571,6 @@ describe('initMoneyField', () => {
       select: document.querySelector('.bo-money__currency')!,
       amount: document.querySelector('.bo-money__amount')!,
     };
-  }
-
-  function pick(select: HTMLSelectElement, value: string): void {
-    select.value = value;
-    select.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   it('reformats ONLY losslessly: pads/trims, never rounds (Slice 19 grill fix)', () => {

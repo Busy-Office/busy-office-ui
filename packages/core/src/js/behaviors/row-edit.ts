@@ -27,7 +27,9 @@
  * YOUR code can restore consumer-rendered cell content the framework
  * doesn't own (tag-input chips). Save dispatches `bo:row-save`
  * (bubbling, `detail: { row, rowId }`) and clears the dirty state —
- * your listener does the actual persistence.
+ * your listener does the actual persistence. When the activated
+ * Save/Cancel button held keyboard focus, focus moves to the row's
+ * first usable field before the button hides (never stolen otherwise).
  *
  * Every committed cell edit also dispatches `bo:cell-change` — the
  * realtime feed for subtotal math (see initTableSum for the declarative

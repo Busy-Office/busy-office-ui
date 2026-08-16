@@ -107,7 +107,7 @@ const CRITERIA = [
   {
     id: '2.4.3', name: 'Focus Order', level: 'A',
     verdict: 'Not Evaluated',
-    remarks: 'DOM order matches visual order everywhere audited manually this session, but a systematic focus-order sweep across all 25 components has not been performed.',
+    remarks: `DOM order matches visual order everywhere audited manually this session, but a systematic focus-order sweep across all components has not been performed. ${cite('data-table')}'s row-edit Save/Cancel move focus to the row's first field before hiding themselves (an adversarial-review find: focus previously dropped to <body> mid-table).`,
   },
   {
     id: '2.4.7', name: 'Focus Visible', level: 'AA',
