@@ -1094,6 +1094,56 @@ describe('initTagInput', () => {
   });
 });
 
+describe('initQuantity unit select (embedded unit table)', () => {
+  function unitQuantity(opts = ''): { root: HTMLElement; select: HTMLSelectElement; input: HTMLInputElement } {
+    html`
+      <div class="bo-quantity" ${opts}>
+        <button class="bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease">−</button>
+        <input class="bo-quantity__input" type="number" min="0" step="0.01" value="2.5" aria-label="Quantity" />
+        <button class="bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase">+</button>
+        <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+          <option>kg</option>
+          <option>each</option>
+          <option>mg</option>
+          <option data-decimals="4">kg — lab</option>
+        </select>
+      </div>
+    `;
+    ui.initQuantity();
+    return {
+      root: document.querySelector('.bo-quantity')!,
+      select: document.querySelector('.bo-quantity__unit-select')!,
+      input: document.querySelector('.bo-quantity__input')!,
+    };
+  }
+
+  function pick(select: HTMLSelectElement, value: string): void {
+    select.value = value;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  it('unit change re-derives step + reformats per the embedded table (each=0, mg=3)', () => {
+    const { select, input } = unitQuantity();
+    pick(select, 'each');
+    expect(input.step).toBe('1');
+    expect(input.value).toBe('3'); // 2.5 → 0 decimals (rounds)
+    pick(select, 'mg');
+    expect(input.step).toBe('0.001');
+    expect(input.value).toBe('3.000');
+  });
+
+  it('data-decimals override on the option wins; unknown units default to 0', () => {
+    const { select, input } = unitQuantity();
+    select.selectedIndex = 3; // "kg — lab", data-decimals=4
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(input.step).toBe('0.0001');
+    expect(input.value).toBe('2.5000');
+    expect(ui.unitDecimals('bundle-of-widgets')).toBe(0);
+    expect(ui.unitDecimals(' KG ')).toBe(2);
+    expect(ui.unitDecimals('hr')).toBe(2);
+  });
+});
+
 describe('initMoneyField', () => {
   function money(opts = ''): { root: HTMLElement; select: HTMLSelectElement; amount: HTMLInputElement } {
     html`

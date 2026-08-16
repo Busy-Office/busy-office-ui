@@ -54,4 +54,34 @@
     font-size: var(--bo-density-font-size);
     white-space: nowrap;
   }
+
+  /* Interactive unit: a real <select> (compose .bo-select) — changing it
+     re-derives the input's step/decimals via initQuantity()'s embedded
+     unit table. A distinct part from the static __unit span so the muted
+     text styling never applies to an interactive control. */
+  .bo-quantity__unit-select {
+    inline-size: auto;
+    flex: 0 0 auto;
+    margin-inline-start: var(--bo-space-2);
+  }
+
+  /* Read-only display — the counterpart to the editable stepper, closing
+     the asymmetry with Amount (which always had a display form). A span
+     composition, no JS, no fixed width. */
+  .bo-quantity--display {
+    display: inline-flex;
+    align-items: baseline;
+    inline-size: auto;
+    max-inline-size: none;
+  }
+
+  .bo-quantity__value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bo-quantity--display .bo-quantity__unit {
+    display: inline;
+    padding-inline: 0;
+    margin-inline-start: var(--bo-space-1);
+  }
 }

@@ -23,6 +23,8 @@
  *            type="number" step="0.01" aria-label="Amount" />
  *   </div>
  */
+import { setInputDecimals, decimalsOverride } from '../utils/decimal-input.js';
+
 let installed = false;
 
 /* ISO 4217 minor-units exceptions (current amendments). Everything not
@@ -42,31 +44,6 @@ export function currencyDecimals(code: string): number {
   return 2;
 }
 
-function applyDecimals(root: Element, select: HTMLSelectElement): void {
-  const amount = root.querySelector<HTMLInputElement>('.bo-money__amount');
-  if (!amount) return;
-  const option = select.selectedOptions[0];
-  const override = option?.dataset.decimals ?? (root as HTMLElement).dataset.decimals;
-  const decimals =
-    override !== undefined && override !== '' && !Number.isNaN(Number(override))
-      ? Math.max(0, Math.trunc(Number(override)))
-      : currencyDecimals(select.value);
-  amount.step = decimals === 0 ? '1' : (10 ** -decimals).toFixed(decimals);
-  if (amount.value !== '') {
-    const n = Number(amount.value);
-    if (!Number.isNaN(n)) {
-      const next = n.toFixed(decimals);
-      if (next !== amount.value) {
-        amount.value = next;
-        // Reformatting is a programmatic value change — dispatch a real
-        // input event so listeners (row-edit dirty tracking) see it, the
-        // same lesson the combobox commit fix established.
-        amount.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-    }
-  }
-}
-
 export function initMoneyField(): void {
   if (installed) return;
   installed = true;
@@ -74,7 +51,9 @@ export function initMoneyField(): void {
   document.addEventListener('change', (e) => {
     const select = (e.target as Element | null)?.closest<HTMLSelectElement>('.bo-money__currency');
     if (!select) return;
-    const root = select.closest('.bo-money');
-    if (root) applyDecimals(root, select);
+    const root = select.closest<HTMLElement>('.bo-money');
+    const amount = root?.querySelector<HTMLInputElement>('.bo-money__amount');
+    if (!root || !amount) return;
+    setInputDecimals(amount, decimalsOverride(select, root) ?? currencyDecimals(select.value));
   });
 }

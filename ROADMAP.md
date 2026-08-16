@@ -1629,7 +1629,26 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        Accept: behavior + component CSS + docs page shipped; tests cover
        default/exception/override/input-event; reference table documented;
        all gates green; live-verified 1440+390, light+dark.
-2. [ ] **Quantity display variant + embedded unit table** — read-only
+2. [x] **Quantity display variant + embedded unit table** — shipped
+       2026-08-16, all Accept criteria met: `--display` span variant
+       (`__value` + `__unit`, no JS) closes the display/edit asymmetry
+       with Amount; embedded unit table shipped inside `initQuantity()`
+       (`unitDecimals()` exported, ~30 common-ERP units, unknown → 0)
+       driving a new interactive `select.bo-quantity__unit-select` part —
+       change unit, step/decimals re-derive and the value reformats, same
+       mechanics as Money (shared `decimal-input` util extracted so the
+       two behaviors don't duplicate the reformat+dispatch logic);
+       `data-decimals` override verified; complete built-in table
+       documented on the page (every unit listed + the default-0 rule);
+       cross-linked Amount ↔ Quantity ↔ Money in all directions. 2 new
+       tests (68 total). Live-verified: real unit switches (kg 2.50 →
+       each 3 → g 3.00 → box 3), step-button still correct after a unit
+       change (+0.01 → 3.01), display variant renders inline, both
+       themes, 192px control fits 390 trivially, zero console errors.
+       test:visual caught exactly the landing page's regenerated stat
+       line (61→62 kB min) — pixel-diff-confirmed as the stats text, not
+       a regression; baselines regenerated, stable across 2 re-runs.
+       Original scope text (superseded by the user's follow-up): read-only
        quantity+unit display closing the asymmetry with Amount (which has
        both a read-only span and an editable recipe; Quantity today is
        edit-only). **Scope updated 2026-08-16 (user follow-up: "units

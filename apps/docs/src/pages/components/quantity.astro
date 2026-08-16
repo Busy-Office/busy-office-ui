@@ -59,6 +59,26 @@ const spacious = `<div data-density="spacious">
   </div>
 </div>`;
 
+const display = `<p>Received <span class="bo-quantity bo-quantity--display">
+  <span class="bo-quantity__value">2.50</span>
+  <span class="bo-quantity__unit">kg</span>
+</span> of <span class="bo-quantity bo-quantity--display">
+  <span class="bo-quantity__value">5.00</span>
+  <span class="bo-quantity__unit">kg</span>
+</span> ordered.</p>`;
+
+const unitSelect = `<div class="bo-quantity">
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <input class="bo-quantity__input" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+    <option>kg</option>
+    <option>g</option>
+    <option>each</option>
+    <option>box</option>
+  </select>
+</div>`;
+
 const tableColumn = `<table class="bo-data-table">
   <thead><tr><th>Item</th><th class="bo-data-table__col--numeric">Qty</th></tr></thead>
   <tbody>
@@ -120,6 +140,28 @@ const markup = `<div class="bo-quantity">
   </section>
 
   <section class="demo">
+    <h2>Read-only display</h2>
+    <Demo code={display} />
+    <p class="bo-u-text-muted"><code>--display</code> is the read-only
+    counterpart to the editable stepper — a span composition, no JS, sits
+    inline in running text or a table cell. The same split as
+    <a href={base + '/components/amount'}>Amount</a> (display) vs this
+    component (edit): pick by whether the user changes the number here.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Interactive unit — precision follows it</h2>
+    <Demo code={unitSelect} />
+    <p class="bo-u-text-muted">Swap the static <code>__unit</code> span for a
+    real <code>&lt;select class="bo-select bo-quantity__unit-select"&gt;</code>:
+    changing unit re-derives the input's <code>step</code>/decimals from the
+    built-in unit table (kg 2.50 → each 3 → g 3.00) and reformats the value —
+    the same mechanics as the <a href={base + '/components/money'}>Money
+    field</a>'s currency select. <code>data-decimals</code> on an option or
+    the container overrides the table.</p>
+  </section>
+
+  <section class="demo">
     <h2>Fractional units — <code>step</code> IS the precision</h2>
     <Demo code={fractional} />
     <p class="bo-u-text-muted">Whole-count units (<code>ea</code>, <code>box</code>) use
@@ -127,20 +169,39 @@ const markup = `<div class="bo-quantity">
     volume, time) need a decimal <code>step</code> — <code>0.25</code>, <code>0.01</code> —
     AND <code>inputmode="decimal"</code>, since <code>numeric</code> implies an
     integer-only keypad on mobile. <strong>There is no <code>--decimals</code> modifier</strong> —
-    like Amount, precision is app/domain data expressed through the native attribute
-    that already exists for it, not a CSS setting. A starting reference (override per
-    field):</p>
-    <div class="bo-data-table-container" tabindex="0">
+    a static field's precision is the <code>step</code> you write; a
+    <code>__unit-select</code> field derives it from the built-in unit table
+    below, with <code>data-decimals</code> overriding either way.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Unit decimals reference — the complete built-in table</h2>
+    <p>Every unit the built-in table knows, case-insensitive.
+    <strong>Anything not listed defaults to 0 decimals</strong> (whole
+    counts are the common case for app-defined UOM: <code>bundle</code>,
+    <code>drum</code>, <code>ream</code>…). Unlike currencies there is no
+    ISO-closed list of units, so this is a pragmatic common-ERP set —
+    your <code>data-decimals</code> override extends it per field without
+    waiting for the table.</p>
+    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 44rem">
       <table class="bo-data-table" data-density="compact">
-        <thead><tr><th scope="col">Unit type</th><th scope="col">Default decimals</th><th scope="col"><code>step</code></th><th scope="col">Example</th></tr></thead>
+        <thead><tr><th scope="col">Category</th><th scope="col">Units</th><th scope="col" class="bo-data-table__col--numeric">Decimals</th><th scope="col">Example</th></tr></thead>
         <tbody>
-          <tr><td>Each / box / pallet (whole counts)</td><td class="bo-data-table__col--numeric">0</td><td class="bo-data-table__col--code">1</td><td>4 ea</td></tr>
-          <tr><td>kg, L, m (weight/volume/length)</td><td class="bo-data-table__col--numeric">2</td><td class="bo-data-table__col--code">0.01</td><td>2.50 kg</td></tr>
-          <tr><td>hrs (labor/machine time)</td><td class="bo-data-table__col--numeric">2</td><td class="bo-data-table__col--code">0.25</td><td>1.75 hrs</td></tr>
-          <tr><td>App-defined custom UOM</td><td class="bo-data-table__col--numeric">your call</td><td class="bo-data-table__col--code">your call</td><td>3 pallets</td></tr>
+          <tr><td>Whole counts</td><td class="bo-data-table__col--code">ea each pc pcs unit item box carton pallet</td><td class="bo-data-table__col--numeric">0</td><td>4 ea</td></tr>
+          <tr><td>Weight</td><td class="bo-data-table__col--code">kg g t lb oz</td><td class="bo-data-table__col--numeric">2</td><td>2.50 kg</td></tr>
+          <tr><td>Weight (fine)</td><td class="bo-data-table__col--code">mg</td><td class="bo-data-table__col--numeric">3</td><td>12.500 mg</td></tr>
+          <tr><td>Volume</td><td class="bo-data-table__col--code">L mL gal</td><td class="bo-data-table__col--numeric">2</td><td>3.75 L</td></tr>
+          <tr><td>Length / area / cubic</td><td class="bo-data-table__col--code">m cm mm ft in m² m³ (m2 m3)</td><td class="bo-data-table__col--numeric">2</td><td>1.20 m</td></tr>
+          <tr><td>Time — labor/machine</td><td class="bo-data-table__col--code">hr hrs h</td><td class="bo-data-table__col--numeric">2</td><td>1.75 hrs</td></tr>
+          <tr><td>Time — whole minutes</td><td class="bo-data-table__col--code">min</td><td class="bo-data-table__col--numeric">0</td><td>45 min</td></tr>
+          <tr><td>Everything else</td><td>any app-defined UOM</td><td class="bo-data-table__col--numeric">0</td><td>3 pallets</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted">Programmatic access:
+    <code>unitDecimals('kg') → 2</code>, exported next to
+    <code>initQuantity</code> — the same shape as the Money field's
+    <code>currencyDecimals</code>.</p>
   </section>
 
   <section class="demo">
@@ -197,6 +258,8 @@ const markup = `<div class="bo-quantity">
             'Button disabled state at a boundary is kept in sync reactively by <code>initQuantity()</code> — render the correct initial <code>disabled</code> server-side if the starting value is already at min/max.',
             'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.',
             '<code>__unit</code> accepts an ISO/standard unit or an app-defined custom UOM — no allowlist, same convention as Amount\'s <code>__currency</code>.',
-            'Decimal precision is expressed via the native <code>step</code> attribute, not a CSS modifier — fractional units need <code>inputmode="decimal"</code>, not the default <code>numeric</code>.']} />
-  <Related links={[["/components/amount", "Amount"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
+            'Decimal precision is expressed via the native <code>step</code> attribute, not a CSS modifier — fractional units need <code>inputmode="decimal"</code>, not the default <code>numeric</code>.',
+            'With a <code>__unit-select</code>, precision follows the built-in unit table (see the reference above) — a deliberate, overridable exception to "your app owns the data", mirroring the Money field\'s currency table; <code>data-decimals</code> always wins.',
+            '<code>--display</code> is the read-only form — a span composition with <code>__value</code> + <code>__unit</code>, no JS; the same display-vs-edit split as Amount vs this component.']} />
+  <Related links={[["/components/amount", "Amount"], ["/components/money", "Money field"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
 </Gallery>

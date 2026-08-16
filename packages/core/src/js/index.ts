@@ -7,7 +7,7 @@ export { initLoadMore } from './behaviors/load-more.js';
 export { initCollapsibleCards } from './behaviors/collapsible-card.js';
 export { initSavedViews } from './behaviors/saved-views.js';
 export { initWizard } from './behaviors/wizard.js';
-export { initQuantity } from './behaviors/quantity.js';
+export { initQuantity, unitDecimals } from './behaviors/quantity.js';
 export { initMoneyField, currencyDecimals } from './behaviors/money-field.js';
 export { initScanInput } from './behaviors/scan-input.js';
 export { initFileDropzone } from './behaviors/file-dropzone.js';
