@@ -191,7 +191,7 @@ const markup = `<div class="bo-quantity">
         <thead><tr><th scope="col">Category</th><th scope="col">Units</th><th scope="col" class="bo-data-table__col--numeric">Decimals</th><th scope="col">Example</th></tr></thead>
         <tbody>
           <tr><td>Whole counts</td><td class="bo-data-table__col--code">ea each pc pcs unit item box carton pallet</td><td class="bo-data-table__col--numeric">0</td><td>4 ea</td></tr>
-          <tr><td>Weight</td><td class="bo-data-table__col--code">kg g t lb oz</td><td class="bo-data-table__col--numeric">2</td><td>2.50 kg</td></tr>
+          <tr><td>Weight</td><td class="bo-data-table__col--code">kg g t lb oz</td><td class="bo-data-table__col--numeric">2</td><td>2.50 kg — bulk trade often quotes <code>t</code> at 3 dp, pharma/food <code>kg</code> at 3: override per field</td></tr>
           <tr><td>Weight (fine)</td><td class="bo-data-table__col--code">mg</td><td class="bo-data-table__col--numeric">3</td><td>12.500 mg</td></tr>
           <tr><td>Volume</td><td class="bo-data-table__col--code">L mL gal</td><td class="bo-data-table__col--numeric">2</td><td>3.75 L</td></tr>
           <tr><td>Length / area / cubic</td><td class="bo-data-table__col--code">m cm mm ft in m² m³ (m2 m3)</td><td class="bo-data-table__col--numeric">2</td><td>1.20 m</td></tr>
@@ -264,5 +264,5 @@ const markup = `<div class="bo-quantity">
             'Decimal precision is expressed via the native <code>step</code> attribute, not a CSS modifier — fractional units need <code>inputmode="decimal"</code>, not the default <code>numeric</code>.',
             'With a <code>__unit-select</code>, precision follows the built-in unit table (see the reference above) — a deliberate, overridable exception to "your app owns the data", mirroring the Money field\'s currency table; <code>data-decimals</code> always wins.',
             '<code>--display</code> is the read-only form — a span composition with <code>__value</code> + <code>__unit</code>, no JS; the same display-vs-edit split as Amount vs this component.']} />
-  <Related links={[["/components/amount", "Amount"], ["/components/money", "Money field"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
+  <Related links={[["/components/amount", "Amount"], ["/components/money", "Money field"], ["/patterns/editable-grid", "Editable grid (composite editor)"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
 </Gallery>

@@ -88,9 +88,11 @@ const markup = `<table class="bo-data-table" data-row-edit>
     <a href={base + '/components/data-table'}>data-table page's multi-row
     inline edit</a>, start there. <strong>Medium</strong> (first demo below):
     a combobox lookup cell, cell-level validation, add/remove lines.
-    <strong>Advanced</strong>: every cell type, realtime totals, and the
-    save-per-change mode. <strong>The full picture</strong>: a composite PO
-    line-items editor putting all of it in one table. Zero new CSS at every
+    <strong>Money &amp; unit cells</strong>: currency and unit as real
+    separate fields inside a row. <strong>Advanced</strong>: every cell
+    type, realtime totals, and the save-per-change mode. <strong>The full
+    picture</strong>: a composite PO line-items editor putting all of it
+    in one table. Zero new CSS at every
     step — the grid is the same primitives, composed harder.
   </p>
 
@@ -458,7 +460,12 @@ const markup = `<table class="bo-data-table" data-row-edit>
     change (blur for text, immediate for select/checkbox/tag) dispatches
     <code>bo:row-save</code> at once and re-baselines — wire the listener
     to a <code>fetch</code>/<code>hx-patch</code> and edits persist as
-    they happen. Same markup minus the actions cell:</p>
+    they happen. Same markup minus the actions cell. <strong>Trade-off to
+    know</strong>: this commits per <em>field</em> (a half-typed new line
+    hits your server validation mid-row); many real ERPs commit per
+    row-exit instead — if that's your model, keep batch mode and trigger
+    Save from your own row-blur logic. Optimistic-update/rollback on a
+    failed PATCH is your code's job either way; this demo only logs.</p>
     <table class="bo-data-table" data-row-edit="live" id="eg-live-table">
       <thead><tr>
         <th scope="col">Line</th>
@@ -493,6 +500,15 @@ const markup = `<table class="bo-data-table" data-row-edit>
     <strong>auto-sum</strong> (<code>data-sum-of</code>). Grand total shows
     "mixed" if row currencies differ — a totals decision the framework
     correctly leaves to you.</p>
+    <p class="bo-u-text-muted"><strong>Two real-ERP notes</strong> before
+    copying this shape: currency normally lives on the <em>document</em>
+    (vendor/PO header), not per line — per-line selects here exist to demo
+    the behavior; multi-currency documents need an FX rate to a document
+    currency, and "mixed" should be a validation error in most systems.
+    And unit <em>prices</em> often carry more precision than the
+    currency's amount decimals (JPY prices quoted at 2-4 dp are normal) —
+    put <code>data-decimals</code> on the price cell's option or container
+    where your price master disagrees with ISO 4217.</p>
     <table class="bo-data-table" data-row-edit id="eg-comp-table">
       <thead><tr>
         <th scope="col">Product</th>
@@ -505,11 +521,16 @@ const markup = `<table class="bo-data-table" data-row-edit>
       <tbody>
         <tr data-row-id="PO-L1">
           <td>
-            <select class="bo-select" name="product" aria-label="Product">
-              <option selected>Steel bracket, 40mm</option>
-              <option>Steel bracket, 60mm</option>
-              <option>Hydraulic pump, 20 bar</option>
-            </select>
+            <div class="bo-combobox">
+              <input class="bo-input bo-input--seamless" role="combobox" name="product"
+                  aria-expanded="false" aria-controls="comp-l1-prod-list" aria-autocomplete="list"
+                  autocomplete="off" aria-label="Product — line 1" value="Steel bracket, 40mm" />
+              <ul class="bo-combobox__listbox" id="comp-l1-prod-list" role="listbox" popover>
+                <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+                <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+                <li class="bo-combobox__option" role="option" data-value="SKU-7010">Hydraulic pump, 20 bar</li>
+              </ul>
+            </div>
           </td>
           <td class="bo-data-table__col--numeric">
             <div class="bo-quantity" style="max-inline-size: 13rem">
@@ -544,10 +565,15 @@ const markup = `<table class="bo-data-table" data-row-edit>
         </tr>
         <tr data-row-id="PO-L2">
           <td>
-            <select class="bo-select" name="product" aria-label="Product">
-              <option>Steel bracket, 40mm</option>
-              <option selected>Hydraulic pump, 20 bar</option>
-            </select>
+            <div class="bo-combobox">
+              <input class="bo-input bo-input--seamless" role="combobox" name="product"
+                  aria-expanded="false" aria-controls="comp-l2-prod-list" aria-autocomplete="list"
+                  autocomplete="off" aria-label="Product — line 2" value="Hydraulic pump, 20 bar" />
+              <ul class="bo-combobox__listbox" id="comp-l2-prod-list" role="listbox" popover>
+                <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+                <li class="bo-combobox__option" role="option" data-value="SKU-7010">Hydraulic pump, 20 bar</li>
+              </ul>
+            </div>
           </td>
           <td class="bo-data-table__col--numeric">
             <div class="bo-quantity" style="max-inline-size: 13rem">

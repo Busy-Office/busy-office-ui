@@ -1738,7 +1738,7 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        Both themes, zero console errors, both link checks (plain +
        DOCS_BASE), page-shape gate green.
 
-## Slice 19 — hardening from the Slice 18 grill (Objective review, 2026-08-16)
+## Done — Slice 19: hardening from the Slice 18 grill (all 6 items shipped 2026-08-16)
 
 Queued by the milestone-rule Objective review at Slice 18's close — four
 adversarial seats (Architect / ERP domain / Skeptic / A11y+Docs), full
@@ -1832,15 +1832,19 @@ seat + code-walk). Ranked by severity: data-integrity first.
        next focus). Live-verified: two keystrokes → status empty while
        the visible total updates; commit → one full summary; stepper →
        announces; zero aria-live left on visible cells. (E4.)
-6. [ ] **Docs batch** (H7/H8/H9 + E2's docs half). Currency-lives-on-
-       the-document callout (per-line shown only to demo the behavior);
-       intro progression map names all five sections; money/quantity
-       pages cross-link the editable-grid composite; composite product
-       cell becomes a combobox (consistent with the Medium teaching);
-       price-precision-independent-of-amount caveat; `t`/`kg` convention
-       notes on the unit table; live-mode per-field vs row-exit
-       trade-off note. Accept: page reads as one path; links resolve
-       both ways; page-shape green.
+6. [x] **Docs batch** — shipped 2026-08-16; **Slice 19 complete, all
+       grill Evidence findings closed**. All seven fixes landed:
+       "Two real-ERP notes" callout on the composite (currency lives on
+       the document, "mixed" should be a validation error in most
+       systems; unit prices often need MORE precision than the
+       currency's amount decimals — data-decimals is the vehicle); the
+       intro progression map names all five sections; money AND
+       quantity cross-link the composite; the composite's product cell
+       is now a real combobox (consistent with the Medium teaching —
+       live-verified: type-to-filter, pick, dirty, Cancel restores);
+       t/kg convention note on the unit table; live-mode per-field vs
+       row-exit trade-off note with the batch-mode alternative named.
+       Both link checks green, page-shape green, zero console errors.
 
 **Deferred, recorded** (revisit at the next contract-shape change, not
 before): generic `bo:dirty` seam replacing the tag-event allowlist (H6);
