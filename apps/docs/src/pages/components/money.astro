@@ -74,9 +74,11 @@ const canonical = `<!-- Two real form controls working as one field: the select 
   <section class="demo">
     <h2>Basic — precision follows the currency</h2>
     <Demo code={basic} />
-    <p class="bo-u-text-muted">Switch to JPY: the value reformats to 0
-    decimals and <code>step</code> becomes 1. Switch to BHD: 3 decimals.
-    Everything not in the built-in exception table uses 2.</p>
+    <p class="bo-u-text-muted">Switch to JPY: <code>step</code> becomes 1
+    and 1250.00 trims to 1250 — a <em>lossless</em> reformat. Values that
+    don't fit the new precision keep their digits (nothing is ever
+    rounded away); switch to BHD and it pads to 3 decimals. Everything
+    not in the built-in exception table uses 2.</p>
   </section>
 
   <section class="demo">
@@ -138,7 +140,7 @@ const canonical = `<!-- Two real form controls working as one field: the select 
   <ClassRef component="money" />
   <ApiTable
     component="money"
-    js="initMoneyField() — on currency change, re-derives the amount input's step/decimals (option data-decimals ▸ container data-decimals ▸ built-in ISO 4217 table ▸ 2) and reformats the current value, dispatching a real input event so dirty-tracking (row-edit) sees the change."
+    js="initMoneyField() — on currency change, re-derives the amount input's step/decimals (option data-decimals ▸ container data-decimals ▸ built-in ISO 4217 table ▸ 2) and reformats the current value LOSSLESSLY only: pads or trims zeros, never rounds — a value that doesn't fit the new precision (a JPY-priced 12.40) keeps its digits and surfaces through the native step-mismatch channel instead. A lossless reformat dispatches a real input event so dirty-tracking (row-edit) sees the change."
     notes={[
       'The built-in currency table is a deliberate exception to the "your app owns the data" rule — kept tiny (exceptions only, everything else 2) and always overridable via <code>data-decimals</code>.',
       'Both controls need accessible names — <code>aria-label</code> on each, or a wrapping <code>.bo-form-field</code> label naming the pair.',

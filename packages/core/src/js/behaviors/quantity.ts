@@ -22,8 +22,11 @@ let installed = false;
    built-in but overridable — the same deliberate exception as the money
    field's currency table). Unlike ISO 4217 there is NO closed list of
    units, so this is a pragmatic common-ERP set, case-insensitive, and an
-   app's `step`/`data-decimals` always wins. Units not listed default
-   to 0 (whole counts are the common case for anything app-defined). */
+   app's `step`/`data-decimals` always wins. Units not listed return
+   undefined and the field's precision is left ENTIRELY alone (Slice 19
+   grill fix — real master-data UOM codes are almost never these exact
+   strings, so unknown is the normal case; the old `?? 0` default
+   silently rewrote fractional quantities). */
 const UNIT_DECIMALS: Record<string, number> = {
   // whole counts
   ea: 0, each: 0, pc: 0, pcs: 0, unit: 0, item: 0,
@@ -38,8 +41,8 @@ const UNIT_DECIMALS: Record<string, number> = {
   hr: 2, hrs: 2, h: 2,
 };
 
-export function unitDecimals(unit: string): number {
-  return UNIT_DECIMALS[unit.trim().toLowerCase()] ?? 0;
+export function unitDecimals(unit: string): number | undefined {
+  return UNIT_DECIMALS[unit.trim().toLowerCase()];
 }
 
 function syncButtons(root: Element): void {
@@ -102,7 +105,9 @@ export function initQuantity(): void {
     const root = select.closest<HTMLElement>('.bo-quantity');
     const input = root?.querySelector<HTMLInputElement>('.bo-quantity__input');
     if (!root || !input) return;
-    setInputDecimals(input, decimalsOverride(select, root) ?? unitDecimals(select.value));
+    const decimals = decimalsOverride(select, root) ?? unitDecimals(select.value);
+    if (decimals === undefined) return; // unknown unit: no opinion, leave the field alone
+    setInputDecimals(input, decimals);
     syncButtons(root);
   });
 }

@@ -177,9 +177,12 @@ const markup = `<div class="bo-quantity">
   <section class="demo">
     <h2>Unit decimals reference — the complete built-in table</h2>
     <p>Every unit the built-in table knows, case-insensitive.
-    <strong>Anything not listed defaults to 0 decimals</strong> (whole
-    counts are the common case for app-defined UOM: <code>bundle</code>,
-    <code>drum</code>, <code>ream</code>…). Unlike currencies there is no
+    <strong>Anything not listed leaves the field's precision entirely
+    alone</strong> — real master-data UOM codes (<code>MT</code>,
+    <code>ltr</code>, <code>cbm</code>, <code>bundle</code>…) are almost
+    never these exact strings, and an unknown unit must never rewrite your
+    value (Slice 19 hardening: the earlier default-0 silently rounded
+    fractional quantities). Unlike currencies there is no
     ISO-closed list of units, so this is a pragmatic common-ERP set —
     your <code>data-decimals</code> override extends it per field without
     waiting for the table.</p>
@@ -194,12 +197,12 @@ const markup = `<div class="bo-quantity">
           <tr><td>Length / area / cubic</td><td class="bo-data-table__col--code">m cm mm ft in m² m³ (m2 m3)</td><td class="bo-data-table__col--numeric">2</td><td>1.20 m</td></tr>
           <tr><td>Time — labor/machine</td><td class="bo-data-table__col--code">hr hrs h</td><td class="bo-data-table__col--numeric">2</td><td>1.75 hrs</td></tr>
           <tr><td>Time — whole minutes</td><td class="bo-data-table__col--code">min</td><td class="bo-data-table__col--numeric">0</td><td>45 min</td></tr>
-          <tr><td>Everything else</td><td>any app-defined UOM</td><td class="bo-data-table__col--numeric">0</td><td>3 pallets</td></tr>
+          <tr><td>Everything else</td><td>any app-defined UOM</td><td class="bo-data-table__col--numeric">left alone</td><td>2.5 MT stays 2.5</td></tr>
         </tbody>
       </table>
     </div>
     <p class="bo-u-text-muted">Programmatic access:
-    <code>unitDecimals('kg') → 2</code>, exported next to
+    <code>unitDecimals('kg') → 2</code> (<code>undefined</code> for unknown units), exported next to
     <code>initQuantity</code> — the same shape as the Money field's
     <code>currencyDecimals</code>.</p>
   </section>

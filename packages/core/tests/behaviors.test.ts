@@ -1325,25 +1325,31 @@ describe('initQuantity unit select (embedded unit table)', () => {
     select.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
-  it('unit change re-derives step + reformats per the embedded table (each=0, mg=3)', () => {
+  it('unit change adjusts step; value only reformats losslessly (Slice 19 grill fix)', () => {
     const { select, input } = unitQuantity();
     pick(select, 'each');
     expect(input.step).toBe('1');
-    expect(input.value).toBe('3'); // 2.5 → 0 decimals (rounds)
+    expect(input.value).toBe('2.5'); // 2.5 does NOT fit 0 decimals → untouched, never rounds
     pick(select, 'mg');
     expect(input.step).toBe('0.001');
-    expect(input.value).toBe('3.000');
+    expect(input.value).toBe('2.500'); // pad — lossless
   });
 
-  it('data-decimals override on the option wins; unknown units default to 0', () => {
+  it('unknown units leave precision entirely alone; override still wins', () => {
     const { select, input } = unitQuantity();
-    select.selectedIndex = 3; // "kg — lab", data-decimals=4
-    select.dispatchEvent(new Event('change', { bubbles: true }));
-    expect(input.step).toBe('0.0001');
-    expect(input.value).toBe('2.5000');
-    expect(ui.unitDecimals('bundle-of-widgets')).toBe(0);
+    // inject an unknown master-data-style unit code
+    const opt = document.createElement('option');
+    opt.textContent = 'MT';
+    select.append(opt);
+    pick(select, 'MT');
+    expect(input.step).toBe('0.01'); // untouched — unknown unit, no opinion
+    expect(input.value).toBe('2.5');
+    expect(ui.unitDecimals('bundle-of-widgets')).toBeUndefined();
     expect(ui.unitDecimals(' KG ')).toBe(2);
     expect(ui.unitDecimals('hr')).toBe(2);
+    pick(select, 'kg — lab'); // data-decimals=4 (value-based select: jsdom's selectedIndex setter is unreliable post-value-set)
+    expect(input.step).toBe('0.0001');
+    expect(input.value).toBe('2.5000');
   });
 });
 
@@ -1373,43 +1379,50 @@ describe('initMoneyField', () => {
     select.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
-  it('reformats value + step per the embedded ISO table (JPY=0, BHD=3, default 2)', () => {
+  it('reformats ONLY losslessly: pads/trims, never rounds (Slice 19 grill fix)', () => {
     const { select, amount } = money();
     pick(select, 'JPY');
     expect(amount.step).toBe('1');
-    expect(amount.value).toBe('1235'); // 1234.5 → 0 decimals
+    expect(amount.value).toBe('1234.5'); // does NOT fit 0 decimals → value untouched
     pick(select, 'BHD');
     expect(amount.step).toBe('0.001');
-    expect(amount.value).toBe('1235.000');
+    expect(amount.value).toBe('1234.500'); // pad — numerically identical, applies
+    pick(select, 'JPY');
+    expect(amount.value).toBe('1234.500'); // still lossy → untouched again
+    amount.value = '1250.00';
     pick(select, 'USD');
-    expect(amount.step).toBe('0.01');
-    expect(amount.value).toBe('1235.00');
+    pick(select, 'JPY');
+    expect(amount.value).toBe('1250'); // trim — lossless, applies
   });
 
-  it('data-decimals on the selected option overrides the table', () => {
+  it('data-decimals on the selected option overrides the table (lossless pad)', () => {
     const { select, amount } = money();
     pick(select, 'USD-4');
     expect(amount.step).toBe('0.0001');
     expect(amount.value).toBe('1234.5000');
   });
 
-  it('data-decimals on the container overrides the table for every currency', () => {
+  it('container override still never rounds a non-fitting value', () => {
     const { select, amount } = money('data-decimals="0"');
-    pick(select, 'USD'); // table says 2, container says 0
+    pick(select, 'USD'); // table says 2, container says 0 — but 1234.5 doesn't fit 0
     expect(amount.step).toBe('1');
-    expect(amount.value).toBe('1235');
+    expect(amount.value).toBe('1234.5');
   });
 
-  it('reformatting dispatches a bubbling input event (row-edit dirty tracking)', () => {
-    const { root, select } = money();
+  it('lossless reformat dispatches input; skipped (lossy) reformat does not', () => {
+    const { root, select, amount } = money();
     let inputs = 0;
     root.addEventListener('input', () => inputs++);
-    pick(select, 'JPY'); // value changes 1234.5 → 1235
+    pick(select, 'JPY'); // lossy → skipped → no synthetic input
+    expect(inputs).toBe(0);
+    pick(select, 'BHD'); // pad 1234.5 → 1234.500 → input
     expect(inputs).toBe(1);
-    pick(select, 'USD'); // 1235 → 1235.00
-    expect(inputs).toBe(2);
-    pick(select, 'USD'); // no value change → no synthetic input
-    expect(inputs).toBe(2);
+    pick(select, 'BHD'); // no change → no input
+    expect(inputs).toBe(1);
+    amount.value = '9e21'; // beyond safe range → always left alone
+    pick(select, 'USD');
+    expect(amount.value).toBe('9e21');
+    expect(inputs).toBe(1);
   });
 
   it('currencyDecimals is exported and case/space tolerant', () => {

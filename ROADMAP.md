@@ -1746,8 +1746,22 @@ scored report: `.roundtable/grill-slice18-money-editable-2026-08-16.md`.
 Every item below is Evidence-graded there (≥2 independent seats, or
 seat + code-walk). Ranked by severity: data-integrity first.
 
-1. [ ] **Non-destructive `setInputDecimals`** (E1 — all three technical
-       seats independently). Reformatting must never change the numeric
+1. [x] **Non-destructive `setInputDecimals`** — shipped 2026-08-16
+       (red-first: 5 tests flipped to the new contract and confirmed
+       failing against shipped code before the fix). Reformat applies
+       only when numerically identical (pad/trim); lossy cases leave the
+       value and surface via native step mismatch; unknown units leave
+       precision ENTIRELY alone (`unitDecimals()` now returns
+       `undefined`, the change listener no-ops); >MAX_SAFE_INTEGER /
+       non-finite left alone. Docs + CHANGELOG amended (both Unreleased
+       entries now state the lossless contract; unit-table docs no
+       longer claim the default-0). Live-verified the exact grill
+       scenarios: JPY on a 12.40 price keeps 12.40 (line total still
+       computes at 0 dp); unknown unit `MT` touches nothing; `each` on
+       2.50 no longer rounds. 76 tests green. One test-harness find:
+       jsdom's `selectedIndex` setter silently no-ops after a value
+       set — value-based selection used instead. (E1 — all three
+       technical seats independently). Reformatting must never change the numeric
        value: pad/trim only when numerically equal; otherwise adjust
        `step` and leave the value untouched. Unknown units leave
        precision alone (today's `?? 0` silently rewrites 2.5 → 3 for any

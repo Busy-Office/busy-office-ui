@@ -44,8 +44,12 @@ pin.
 - Added: Money field (`.bo-money` + `initMoneyField()`) — a currency
   select linked to an amount input; changing currency re-derives the
   input's `step`/decimals from a built-in ISO 4217 minor-units table
-  (exceptions only, everything else 2) and reformats the value,
-  dispatching a real `input` event. `data-decimals` on the selected
+  (exceptions only, everything else 2) and reformats the value
+  **losslessly only** (pads/trims zeros, never rounds — hardened by the
+  Slice 18 close-out grill: a value that doesn't fit the new precision
+  keeps its digits and surfaces via native step mismatch; values beyond
+  MAX_SAFE_INTEGER are left alone), dispatching a real `input` event on
+  an applied reformat. `data-decimals` on the selected
   option or container overrides the table. `currencyDecimals()` exported.
   A deliberate, documented exception to "your app owns the data" —
   built-in but always overridable.
@@ -53,9 +57,12 @@ pin.
 - Added: Quantity read-only display (`.bo-quantity--display` with
   `__value` + `__unit`) and an interactive unit select
   (`select.bo-quantity__unit-select`): changing unit re-derives
-  `step`/decimals from a built-in common-ERP unit table (unknown units
-  default to 0) with the same `data-decimals` override contract.
-  `unitDecimals()` exported.
+  `step`/decimals from a built-in common-ERP unit table with the same
+  `data-decimals` override contract and the same lossless-only
+  reformat. **Unknown units leave the field's precision entirely
+  alone** (hardened by the grill — real master-data UOM codes are
+  rarely the table's exact strings, and an unknown unit must never
+  rewrite a value; `unitDecimals()` returns `undefined` for them).
 
 - Added: Tag input (`.bo-tag-input`) — multi-value entry for cost centers,
   approval-routing recipients. Real JS (no native element covers this,
