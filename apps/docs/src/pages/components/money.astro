@@ -1,0 +1,154 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<div class="bo-money">
+  <select class="bo-select bo-money__currency" aria-label="Currency">
+    <option>USD</option>
+    <option>EUR</option>
+    <option>JPY</option>
+    <option>BHD</option>
+  </select>
+  <input class="bo-input bo-input--numeric bo-money__amount" type="number"
+      step="0.01" value="1250.00" aria-label="Amount">
+</div>`;
+
+const override = `<div class="bo-money">
+  <select class="bo-select bo-money__currency" aria-label="Currency">
+    <option>USD</option>
+    <option data-decimals="4">USD — FX rate</option>
+  </select>
+  <input class="bo-input bo-input--numeric bo-money__amount" type="number"
+      step="0.01" value="1.0842" aria-label="Rate">
+</div>`;
+
+const inField = `<div class="bo-form-field" style="max-inline-size: 20rem">
+  <label class="bo-form-field__label" for="po-total-amount">Order total</label>
+  <div class="bo-money">
+    <select class="bo-select bo-money__currency" aria-label="Currency">
+      <option>SGD</option>
+      <option>THB</option>
+      <option>JPY</option>
+      <option>KWD</option>
+    </select>
+    <input class="bo-input bo-input--numeric bo-money__amount" id="po-total-amount"
+        type="number" step="0.01" value="18940.50" aria-label="Amount">
+  </div>
+  <p class="bo-form-field__hint">Precision follows the currency — try JPY (0) or KWD (3).</p>
+</div>`;
+
+const canonical = `<!-- Two real form controls working as one field: the select picks the
+     currency, the behavior re-derives the input's step/decimals from it.
+     Decimal source, in priority order:
+       1. data-decimals on the selected <option>   (your override)
+       2. data-decimals on the .bo-money container (your override)
+       3. the built-in ISO 4217 minor-units table  (default 2) -->
+<div class="bo-money">
+  <select class="bo-select bo-money__currency" aria-label="Currency">
+    <option>USD</option>
+    <option>JPY</option>
+  </select>
+  <input class="bo-input bo-input--numeric bo-money__amount" type="number"
+      step="0.01" value="0.00" aria-label="Amount">
+</div>
+<script type="module">
+  import { initMoneyField } from "@busy-office/ui/js";
+  initMoneyField();
+</script>
+<!-- Read-only display of the result stays .bo-amount — same
+     editable-vs-display split as Quantity vs Amount. -->`;
+---
+<Gallery title="Money field">
+  <p class="demo-note">
+    Editable money: a currency select and amount input working as one
+    field. Changing currency updates the input's decimal precision live
+    (USD 1250.00 → JPY 1250 → BHD 1250.000) from a built-in ISO 4217
+    table — overridable when your app supplies its own. The read-only
+    counterpart is <a href={base + '/components/amount'}>Amount</a>.
+  </p>
+
+  <section class="demo">
+    <h2>Basic — precision follows the currency</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">Switch to JPY: the value reformats to 0
+    decimals and <code>step</code> becomes 1. Switch to BHD: 3 decimals.
+    Everything not in the built-in exception table uses 2.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Your data wins — <code>data-decimals</code> override</h2>
+    <Demo code={override} />
+    <p class="bo-u-text-muted">An option (or the container) carrying
+    <code>data-decimals</code> beats the built-in table — here an FX-rate
+    field forces 4 decimals on USD. Supply it wherever your currency
+    master data disagrees with ISO 4217.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Inside a form field</h2>
+    <Demo code={inField} />
+    <p class="bo-u-text-muted">Composes <code>.bo-form-field</code>
+    normally — label, hint, and validation states all apply. The two
+    controls keep their own focus rings and accessible names.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Currency decimals reference</h2>
+    <p>The built-in table stores only the ISO 4217 exceptions —
+    <strong>every currency not listed here uses 2 decimals</strong>
+    (USD, EUR, GBP, SGD, THB, …).</p>
+    <div class="bo-data-table-container" tabindex="0" style="max-inline-size: 40rem">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Decimals</th><th scope="col">Currencies</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--numeric">0</td>
+            <td class="bo-data-table__col--code">BIF CLP DJF GNF ISK JPY KMF KRW PYG RWF UGX UYI VND VUV XAF XOF XPF</td></tr>
+          <tr><td class="bo-data-table__col--numeric">3</td>
+            <td class="bo-data-table__col--code">BHD IQD JOD KWD LYD OMR TND</td></tr>
+          <tr><td class="bo-data-table__col--numeric">4</td>
+            <td class="bo-data-table__col--code">CLF UYW</td></tr>
+          <tr><td class="bo-data-table__col--numeric">2</td>
+            <td>All other ISO 4217 currencies (the default)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Programmatic access:
+    <code>currencyDecimals('JPY') → 0</code>, exported next to
+    <code>initMoneyField</code>. The authoritative source is the
+    <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO 4217
+    amendment list</a> — if an amendment moves a currency, your
+    <code>data-decimals</code> override covers the gap until the table
+    catches up.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <script>
+    import { initMoneyField } from '@busy-office/ui/js';
+    initMoneyField();
+  </script>
+
+  <ClassRef component="money" />
+  <ApiTable
+    component="money"
+    js="initMoneyField() — on currency change, re-derives the amount input's step/decimals (option data-decimals ▸ container data-decimals ▸ built-in ISO 4217 table ▸ 2) and reformats the current value, dispatching a real input event so dirty-tracking (row-edit) sees the change."
+    notes={[
+      'The built-in currency table is a deliberate exception to the "your app owns the data" rule — kept tiny (exceptions only, everything else 2) and always overridable via <code>data-decimals</code>.',
+      'Both controls need accessible names — <code>aria-label</code> on each, or a wrapping <code>.bo-form-field</code> label naming the pair.',
+      'Read-only display stays <code>.bo-amount</code> — this component is the editable counterpart, the same split as Quantity (edit) vs Amount (display).',
+      'Formatting for display (thousands separators, symbol placement) remains your app’s job — the input holds a plain number; <code>Intl.NumberFormat</code> at render time is the tool.',
+    ]}
+  />
+  <Related links={[
+    ['/components/amount', 'Amount'],
+    ['/components/quantity', 'Quantity'],
+    ['/components/form', 'Forms'],
+  ]} />
+</Gallery>

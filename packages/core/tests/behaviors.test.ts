@@ -1093,3 +1093,76 @@ describe('initTagInput', () => {
     expect(c.querySelector('.bo-tag-input__tag')).toBeNull();
   });
 });
+
+describe('initMoneyField', () => {
+  function money(opts = ''): { root: HTMLElement; select: HTMLSelectElement; amount: HTMLInputElement } {
+    html`
+      <div class="bo-money" ${opts}>
+        <select class="bo-select bo-money__currency" aria-label="Currency">
+          <option>USD</option>
+          <option>JPY</option>
+          <option>BHD</option>
+          <option data-decimals="4">USD-4</option>
+        </select>
+        <input class="bo-input bo-input--numeric bo-money__amount" type="number" step="0.01" value="1234.5" aria-label="Amount" />
+      </div>
+    `;
+    ui.initMoneyField();
+    return {
+      root: document.querySelector('.bo-money')!,
+      select: document.querySelector('.bo-money__currency')!,
+      amount: document.querySelector('.bo-money__amount')!,
+    };
+  }
+
+  function pick(select: HTMLSelectElement, value: string): void {
+    select.value = value;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  it('reformats value + step per the embedded ISO table (JPY=0, BHD=3, default 2)', () => {
+    const { select, amount } = money();
+    pick(select, 'JPY');
+    expect(amount.step).toBe('1');
+    expect(amount.value).toBe('1235'); // 1234.5 → 0 decimals
+    pick(select, 'BHD');
+    expect(amount.step).toBe('0.001');
+    expect(amount.value).toBe('1235.000');
+    pick(select, 'USD');
+    expect(amount.step).toBe('0.01');
+    expect(amount.value).toBe('1235.00');
+  });
+
+  it('data-decimals on the selected option overrides the table', () => {
+    const { select, amount } = money();
+    pick(select, 'USD-4');
+    expect(amount.step).toBe('0.0001');
+    expect(amount.value).toBe('1234.5000');
+  });
+
+  it('data-decimals on the container overrides the table for every currency', () => {
+    const { select, amount } = money('data-decimals="0"');
+    pick(select, 'USD'); // table says 2, container says 0
+    expect(amount.step).toBe('1');
+    expect(amount.value).toBe('1235');
+  });
+
+  it('reformatting dispatches a bubbling input event (row-edit dirty tracking)', () => {
+    const { root, select } = money();
+    let inputs = 0;
+    root.addEventListener('input', () => inputs++);
+    pick(select, 'JPY'); // value changes 1234.5 → 1235
+    expect(inputs).toBe(1);
+    pick(select, 'USD'); // 1235 → 1235.00
+    expect(inputs).toBe(2);
+    pick(select, 'USD'); // no value change → no synthetic input
+    expect(inputs).toBe(2);
+  });
+
+  it('currencyDecimals is exported and case/space tolerant', () => {
+    expect(ui.currencyDecimals('jpy')).toBe(0);
+    expect(ui.currencyDecimals(' KWD ')).toBe(3);
+    expect(ui.currencyDecimals('THB')).toBe(2);
+    expect(ui.currencyDecimals('CLF')).toBe(4);
+  });
+});

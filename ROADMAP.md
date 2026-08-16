@@ -1594,7 +1594,25 @@ each is the only workable reading of the user's explicit ask, not drift.
 SQLite-for-roadmap considered and declined per the storage doctrine
 (markdown = reviewed/diffed source of truth; SQLite = derived mirrors only).
 
-1. [ ] **Currency-aware Money field** (`.bo-money` + `initMoneyField()`).
+1. [x] **Currency-aware Money field** (`.bo-money` + `initMoneyField()`) —
+       shipped 2026-08-16. All Accept criteria met: behavior + CSS + docs
+       page (`/components/money`, Data input group); 5 new tests (66
+       total) covering default/exception/override/input-event +
+       `currencyDecimals` export; currency-decimals reference documented
+       (exception table + default-2 rule + ISO amendment caveat);
+       live-verified in the bind-mounted container with REAL currency
+       switches (USD→JPY→BHD→EUR reformat + step, option-level
+       `data-decimals="4"` override, JPY/KWD inside a form field), both
+       themes, component measured 222px wide (fits 390 trivially), zero
+       console errors. Two build-infra finds along the way:
+       `extract-behaviors.mjs`'s `.d.ts` assert only caught the FIRST
+       name per export brace + init/refresh/trap-prefixed names — parsing
+       the full brace list now (would have silently missed any future
+       non-init export); README stamp updated (19 behaviors, 10.0 kB gz).
+       Per the LOOPS.md shared-selector lesson: the new sidebar entry
+       renders on every page, so test:visual was run — all 32 baselines
+       legitimately shifted (~37px taller sidebar), regenerated, stable
+       across 2 clean re-runs.
        A currency `<select>` linked to an amount input: changing currency
        updates the input's `step`/decimal precision live and reformats the
        current value. Decimals come from an embedded ISO 4217 minor-units
@@ -1611,14 +1629,22 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        Accept: behavior + component CSS + docs page shipped; tests cover
        default/exception/override/input-event; reference table documented;
        all gates green; live-verified 1440+390, light+dark.
-2. [ ] **Quantity display variant** — read-only quantity+unit display
-       closing the asymmetry with Amount (which has both a read-only span
-       and an editable recipe; Quantity today is edit-only). Plus an
-       expanded common-UOM reference table on the Quantity page (each, kg,
-       L, m, hr, box, pallet + precision conventions) — documented
-       reference, not embedded data; precision stays `step`-driven.
-       Accept: display markup documented with demos; cross-links both ways
-       with Amount; UOM reference expanded; gates green, live-verified.
+2. [ ] **Quantity display variant + embedded unit table** — read-only
+       quantity+unit display closing the asymmetry with Amount (which has
+       both a read-only span and an editable recipe; Quantity today is
+       edit-only). **Scope updated 2026-08-16 (user follow-up: "units
+       embedded but we also need to ensure documented for all types")**:
+       units ALSO get an embedded default-decimals table (common-UOM set:
+       each/box/pallet/pcs → 0; kg/g/t/L/mL/m/cm/mm/m²/m³ → 2; hr → 2,
+       min → 0; …), same override-wins contract as currency (`step`/
+       `data-decimals` supplied by the app beats the table), PLUS full
+       documentation of every embedded unit type on the Quantity page.
+       Unlike ISO 4217 there is no closed unit list, so the table is a
+       pragmatic common-ERP set, documented as extensible via override —
+       not a claim of completeness. Accept: display markup documented with
+       demos; embedded unit table shipped + fully documented (every unit
+       type listed); override verified; cross-links both ways with Amount;
+       gates green, live-verified.
 3. [ ] **Editable Amount+Currency and Quantity+Unit table cells** —
        composition demos: item 1's money field and the existing quantity
        stepper inside editable data-table rows, unit/currency as real

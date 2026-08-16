@@ -38,5 +38,6 @@
 @import "./components/segmented/segmented.css";
 @import "./components/file-upload/file-upload.css";
 @import "./components/tag-input/tag-input.css";
+@import "./components/money/money.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

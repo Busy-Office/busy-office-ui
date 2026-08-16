@@ -1,0 +1,28 @@
+@layer bo-components {
+  /* Editable money: a currency select + amount input working as ONE field.
+     The read-only counterpart is .bo-amount — same split as Quantity
+     (editable) vs Amount (display). Composes .bo-select/.bo-input rules;
+     this file only joins them visually into a single control. */
+  .bo-money {
+    display: inline-flex;
+    align-items: stretch;
+  }
+
+  /* Parts */
+  .bo-money__currency {
+    inline-size: auto;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    /* Single shared edge between the two halves — the input's own border
+       carries the joint so focus rings stay per-element and uncut. */
+    border-inline-end: none;
+  }
+
+  .bo-money__amount {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+    max-inline-size: 9rem;
+  }
+}

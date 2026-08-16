@@ -73,9 +73,14 @@ await writeFile(join(pkgRoot, 'dist/behaviors.json'), JSON.stringify(manifest, n
 // Assert the manifest matches the compiled type surface (nothing shipped that
 // the manifest missed, nothing manifested that isn't exported).
 const dts = await readFile(join(pkgRoot, 'dist/js/index.d.ts'), 'utf8');
-const dtsExports = new Set([...dts.matchAll(/export\s*\{\s*([A-Za-z]+)/g)].map((m) => m[1]));
-// (index.d.ts re-exports may list one name per line; also catch `export { X }`)
-for (const m of dts.matchAll(/\b([a-zA-Z]+)\s*(?:,|\})/g)) if (/^(init|refresh|trap)/.test(m[1])) dtsExports.add(m[1]);
+// Every name inside every `export { A, B, … }` block — parse the full brace
+// list rather than first-name + a prefix allowlist (the old heuristic missed
+// any non-init-prefixed name listed after a comma, e.g. currencyDecimals).
+const dtsExports = new Set(
+  [...dts.matchAll(/export\s*\{([^}]*)\}/g)].flatMap((m) =>
+    m[1].split(',').map((n) => n.trim().split(/\s+as\s+/).pop().trim()).filter(Boolean),
+  ),
+);
 const missing = manifest.exports.filter((n) => !dtsExports.has(n));
 if (missing.length) {
   console.error(`behaviors manifest: exports not found in dist/js/index.d.ts: ${missing.join(', ')}`);
