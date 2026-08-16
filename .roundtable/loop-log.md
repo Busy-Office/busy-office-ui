@@ -259,3 +259,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 22:06 · Explore · spike · .bo-kbd + shortcuts-help: spike succeeded (dialog + kv--rows composition, both themes) — graduated as item 8 · shipped · b9501b7
 - 2026-08-16 22:26 · Continue · fix · P0 leg 3 (the real core): hx-boost dropped inlined head styles — head-support shipped, 30/30 -> 0/30 repro loop · shipped · 28de419
 - 2026-08-16 22:26 · Continue · build · Item 8: .bo-kbd + keyboard-help pattern shipped (live ?-wiring verified) · shipped · 28de419
+- 2026-08-16 22:34 · Continue · fix · Owner root-cause doc adopted: inlineStylesheets never + race-free ext load + check-boost gate (red-first; found tree-shaken htmx and a racing probe) · shipped · 15ebd6c

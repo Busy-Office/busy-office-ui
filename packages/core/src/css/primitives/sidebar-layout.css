@@ -23,12 +23,22 @@
 
   .bo-app-shell__sidebar {
     grid-area: sidebar;
+    /* Same containing-block rule as __main below. */
+    position: relative;
     overflow-y: auto;
     scrollbar-gutter: stable;
   }
 
   .bo-app-shell__main {
     grid-area: main;
+    /* A scroll container must also be a containing block: absolutely
+       positioned descendants (the .bo-visually-hidden primitive, most
+       commonly a table caption) otherwise resolve against <body>,
+       escape this scroller, and stretch the DOCUMENT to their static
+       flow position — a phantom second scrollbar that slides the whole
+       fixed shell off-screen (owner review 2026-08-16: 4025px document
+       in a 740px viewport). */
+    position: relative;
     padding: var(--bo-space-6);
     background: var(--bo-color-bg-canvas);
     min-width: 0;

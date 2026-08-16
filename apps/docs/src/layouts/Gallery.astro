@@ -181,7 +181,12 @@ const current =
       document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? 'light';
     </script>
   </head>
-  <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML"
+  <!-- hx-select selects the incoming main's CHILDREN, not the main
+       itself: selecting "#main-content" with innerHTML nested a second
+       <main id="main-content"> inside the first on every boosted swap —
+       duplicate id, doubled landmark, and doubled 24px padding (owner
+       tokens review, 2026-08-16). -->
+  <body hx-boost="true" hx-target="#main-content" hx-select="#main-content > *" hx-swap="innerHTML"
         hx-ext="head-support">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <style>
@@ -561,9 +566,20 @@ const current =
     align-items: start;
   }
   .docs-content { min-inline-size: 0; }
+  /* Cap the reading MEASURE, not the column (owner review: prose ran
+     ~175ch on a 1920px display). Capping the grid column instead would
+     squeeze the wide demos — full app screens, data tables, the scale
+     grid — which are the point of the component and pattern pages. */
+  .docs-content :is(p, ul, ol, blockquote):not(.demo-note) {
+    max-inline-size: 46rem;
+  }
   .toc {
     position: sticky;
-    inset-block-start: var(--bo-space-4);
+    /* 0, not space-4: the scroll container's own padding already
+       provides the gap, so a threshold pinned the rail 16px BELOW the
+       h1 from the very first paint — the stagger the owner review
+       flagged (measured 77 vs 93). */
+    inset-block-start: 0;
     font-size: var(--bo-font-size-sm);
   }
   .toc__heading {

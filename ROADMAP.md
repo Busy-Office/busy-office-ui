@@ -2462,7 +2462,24 @@ dynamically imported after window.htmx exists (a static import hoists
 above the assignment and throws, proven by pageerror capture). Repro
 loop after fix: 0/30; boosted 7-hop tour incl. the exact
 away-and-back path: all pages styled, zero page errors. The two
-caching legs were real defects but not this bug's core.
+caching legs were real defects but not this bug's core. **FOURTH PASS
+— owner root-cause doc (`colorscalesrootcause.md`) adopted, and it was
+right where I was incomplete**: head-support fixed the merge but left
+page LAYOUT depending on a runtime merge that can silently not run.
+Adopted its recommended fix — `inlineStylesheets: 'never'` (page CSS
+ships as <link> in the shared bundles, which boosted swaps leave in
+place by construction, killing the class on every page, not just
+colors) — plus its hardening: (a) registration race closed by loading
+htmx and head-support as SIDE-EFFECT module imports in dependency
+order (synchronous, no async gap); (b) new build gate
+`check-boost.mjs` = static scan (no layout-bearing inline <style> in
+any page head; the doc's exact 1911/1637-char blocks were what it
+caught) + LIVE boosted-click probes asserting computed layout.
+Red-first discipline found two of my own defects while building it:
+the probe raced pushState (false green), and a bound-but-unused htmx
+import was TREE-SHAKEN so htmx never loaded at all — caught by the
+gate's "navigation was NOT boosted" assertion. Repro loop 0/30, gate
+wired into `npm run build`.
 
 8. [x] **Keyboard chip (`.bo-kbd`) + shortcuts-help pattern** — DONE 2026-08-16 (own recipe page; pattern page with live "?" wiring incl. the input guard, verified: ? opens / field-typed ? ignored / Esc closes / case preserved; trigger wrapped in cluster after a stretch find). —
        graduated from the 2026-08-16 Explore spike (static spike
@@ -2480,6 +2497,30 @@ caching legs were real defects but not this bug's core.
        the page-shape gate); pattern page with the dialog demo wired
        to "?" via app-code snippet; forced-colors story (border
        survives); gates green; live-verified both themes/widths.
+
+**Owner tokens-page review (2026-08-16) — ADOPTED, all six items.**
+Two real bugs: (1) duplicate `<main id="main-content">` was a RUNTIME
+artifact — `hx-select="#main-content"` + innerHTML nested the incoming
+main inside the existing one on every boosted swap (invalid duplicate
+id, doubled landmark, doubled 24px padding); fixed by selecting the
+incoming main's CHILDREN. (2) Phantom second scrollbar: the
+`.bo-visually-hidden` primitive is `position: absolute` and the shell's
+scrollers were `position: static`, so hidden captions resolved against
+<body>, escaped the scroller and stretched the document to 4025px in a
+740px viewport — fixed in the SHELL (`position: relative` on
+`__main`/`__sidebar`), which closes it for every page, per the review's
+own reasoning. Layout: reading measure capped on PROSE elements rather
+than the grid column (capping the column squeezed pattern pages' full
+app-screen demos — deviation from the review, verified); TOC stagger
+traced to the sticky threshold pinning the rail 16px below the h1 from
+first paint (`inset-block-start: 0`, measured 77 = 77). Contrast
+tables: live specimens render each certified pair as itself (a
+mis-wired token now LOOKS wrong), the dead 70-identical-badge column
+became the highest level MET (AAA / AA / AA Large — all three values
+occur), summary line above each table. Owner follow-ups same wake:
+group tables share one fixed column grid (measured identical rails
+across all five), and the step reference moved to its own line with
+the redundant "same in both themes" text dropped.
 
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is

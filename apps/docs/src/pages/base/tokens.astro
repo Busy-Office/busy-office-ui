@@ -103,7 +103,7 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
       <>
         <h3>{group}</h3>
         <div class="bo-data-table-container" tabindex="0">
-          <table class="bo-data-table" data-density="compact">
+          <table class="bo-data-table tok-table" data-density="compact">
             <caption class="bo-visually-hidden">{group} tokens</caption>
             <thead><tr>
               <th scope="col">Token</th>
@@ -120,12 +120,11 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
                     <td>{role}</td>
                     <td class="bo-data-table__col--code">
                       <span class="doc-swatch" aria-hidden="true" style={`background:${l.hex}`}></span>
-                      {l.hex}{l.step && <span class="bo-u-text-muted"> (<a href={`${base}/base/colors#${l.step}`}>{l.step}</a>)</span>}
+                      {l.hex}{l.step && <><br /><span class="bo-u-text-muted">(<a href={`${base}/base/colors#${l.step}`}>{l.step}</a>)</span></>}
                     </td>
                     <td class="bo-data-table__col--code">
                       <span class="doc-swatch" aria-hidden="true" style={`background:${d.hex}`}></span>
-                      {d.hex}{d.step && <span class="bo-u-text-muted"> (<a href={`${base}/base/colors#${d.step}`}>{d.step}</a>)</span>}
-                      {d.hex === l.hex && <span class="bo-u-text-muted"> — same in both themes</span>}
+                      {d.hex}{d.step && <><br /><span class="bo-u-text-muted">(<a href={`${base}/base/colors#${d.step}`}>{d.step}</a>)</span></>}
                     </td>
                   </tr>
                 );
@@ -157,21 +156,44 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
     <p class="bo-u-text-muted">Computed from the shipped token values by
     <code>check-contrast.mjs</code> on every build — the build fails if any pair
     drops below its threshold, so these numbers cannot drift.</p>
-    {Object.entries(contrast.themes).map(([theme, pairs]) => (
-      <div class="bo-data-table-container" tabindex="0">
+    {Object.entries(contrast.themes).map(([theme, pairs]) => {
+      const rows = (pairs as any[]).filter((p) => !p.skipped);
+      // Highest level actually met — the pass/fail column was 35 identical
+      // badges (owner review): dead information. AAA is 7:1 (4.5 for large
+      // text); everything here is normal-size UI text or a non-text pair.
+      const level = (p: any) => (p.threshold >= 4.5
+        ? (p.ratio >= 7 ? 'AAA' : 'AA')
+        : (p.ratio >= 4.5 ? 'AA' : 'AA Large'));
+      const aaa = rows.filter((p) => level(p) === 'AAA').length;
+      return (
+      <>
+        <p class="bo-u-text-muted"><strong>{rows.length}/{rows.length}</strong> {theme}-theme
+        pairs pass their required minimum — {aaa} with AAA headroom.</p>
+        <div class="bo-data-table-container" tabindex="0">
         <table class="bo-data-table" data-density="compact">
           <caption class="bo-visually-hidden">{theme} theme contrast ratios</caption>
-          <thead><tr><th scope="col">{theme}</th><th scope="col">on</th><th scope="col" class="bo-data-table__col--numeric">ratio</th><th scope="col" class="bo-data-table__col--numeric">min</th><th scope="col">result</th></tr></thead>
+          <thead><tr><th scope="col">{theme}</th><th scope="col">on</th><th scope="col">sample</th><th scope="col" class="bo-data-table__col--numeric">ratio</th><th scope="col" class="bo-data-table__col--numeric">min</th><th scope="col">level</th></tr></thead>
           <tbody>
-            {pairs.filter((p: any) => !p.skipped).map((p: any) => (
+            {rows.map((p: any) => (
               <tr>
                 <td class="bo-data-table__col--code">{p.fg.replace('--bo-color-', '')} <span class="bo-u-text-muted">{p.fgValue}</span></td>
                 <td class="bo-data-table__col--code">{p.bg.replace('--bo-color-', '')} <span class="bo-u-text-muted">{p.bgValue}</span></td>
+                {/* Live specimen: the certified pair rendered as itself, so a
+                    mis-wired token LOOKS wrong instead of quietly reporting a
+                    ratio for colors nobody can see. Decorative — the token
+                    names above carry the meaning. */}
+                <td class="doc-specimen" style={`background:${p.bgValue};color:${p.fgValue}`} aria-hidden="true">Aa</td>
                 <td class="bo-data-table__col--numeric">{p.ratio}</td>
                 <td class="bo-data-table__col--numeric">{p.threshold}</td>
-                <td><span class={`bo-badge bo-badge--${p.pass ? 'success' : 'danger'}`}>{p.pass ? 'AA pass' : 'FAIL'}</span></td>
+                <td><span class={`bo-badge bo-badge--${p.pass ? (level(p) === 'AAA' ? 'success' : 'type') : 'danger'}`}>{p.pass ? level(p) : 'FAIL'}</span></td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+      </>
+      );
+    })}
           </tbody>
         </table>
       </div>
@@ -189,6 +211,19 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
 
   <style>
     h3 { margin-block: var(--bo-space-4) var(--bo-space-2); }
+    /* One column grid across ALL five group tables — sized independently
+       they staggered down the page (owner, 2026-08-16). Fixed layout, so
+       a long token name wraps instead of pushing the rails apart. */
+    .tok-table { table-layout: fixed; }
+    .tok-table :is(th, td):nth-child(1) { inline-size: 15rem; }
+    .tok-table :is(th, td):nth-child(3),
+    .tok-table :is(th, td):nth-child(4) { inline-size: 13rem; }
+
+    .doc-specimen {
+      font-weight: var(--bo-font-weight-semibold);
+      text-align: center;
+      border-radius: var(--bo-radius-sm);
+    }
   </style>
 
   <Related links={[["/base/colors", "Color scales"], ["/getting-started/versioning", "Versioning & upgrades"], ["/concepts/tokens", "Design tokens (concept)"], ["/concepts/accessibility", "Accessibility model"]]} />
