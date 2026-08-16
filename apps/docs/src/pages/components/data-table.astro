@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import { invoiceRows } from '../../lib/fixtures';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
@@ -40,52 +41,7 @@ const tableMarkup = `<!-- tabindex="0": the container scrolls when the table
 </script>
 <!-- Sorting contract: YOUR code (server or client) re-orders rows and sets
      aria-sort on the <th>; the CSS draws the indicator from aria-sort. -->`;
-const gridMarkup = `<table class="bo-data-table" data-grid-nav>
-  <thead><tr>
-    <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
-    <th scope="col">Invoice #</th>
-    <th scope="col" class="bo-data-table__col--numeric">Amount</th>
-  </tr></thead>
-  <tbody><tr>
-    <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select INV-1" /></td>
-    <td class="bo-data-table__col--code">INV-1</td>
-    <td class="bo-data-table__col--numeric">$4,208.00</td>
-  </tr></tbody>
-</table>
-<script type="module">
-  import { initDataGrid } from "@busy-office/ui/js";
-  initDataGrid(); // role=grid, two-axis roving tabindex, Enter/Escape into-and-out-of a cell's widget
-</script>`;
-const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
-  <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
-  <tbody>
-    <tr data-row-id="WIDGET-A">
-      <td>Widget A</td>
-      <td class="bo-data-table__col--numeric">
-        <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
-      </td>
-      <td class="bo-data-table__row-edit-actions">
-        <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<script type="module">
-  import { initRowEdit } from "@busy-office/ui/js";
-  initRowEdit();
-  document.addEventListener("bo:row-save", (e) => {
-    // e.detail = { row, rowId } — versioned payload, see JS behaviors → Intent events
-  });
-</script>`;
-const rows = [
-  { no: 'INV-10234', vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: '$4,208.00', status: 'Pending', tone: 'warning' },
-  { no: 'INV-10235', vendor: 'Globex Industrial', cc: 'CC-4021', amount: '$18,940.50', status: 'Approved', tone: 'success' },
-  { no: 'INV-10236', vendor: 'Initech GmbH', cc: 'CC-1180', amount: '$730.25', status: 'Rejected', tone: 'danger' },
-  { no: 'INV-10237', vendor: 'Umbrella Logistics', cc: 'CC-2205', amount: '$2,110.00', status: 'Pending', tone: 'warning' },
-  { no: 'INV-10238', vendor: 'Stark Components', cc: 'CC-1180', amount: '$56,000.00', status: 'Approved', tone: 'success' },
-];
+const rows = invoiceRows;
 ---
 <Gallery title="Data table">
   <p class="demo-note">

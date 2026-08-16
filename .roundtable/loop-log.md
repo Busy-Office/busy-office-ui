@@ -273,3 +273,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 01:14 · Continue · build · Slice 23 items 4+8: nav regrouped (P7), Related gate red-first (6 pages fixed), /getting-started/scope not-in-scope page · shipped · bdfc3fa
 - 2026-08-17 01:35 · Continue · build · Slice 23 item 7: four ERP foundations pages (permissions, concurrency, i18n, scale) — claims source-verified, RTL smoke-tested · shipped · cd44a14
 - 2026-08-17 02:03 · Continue · build · Slice 23 item 5: nav split into breadcrumb/navbar/sidebar-nav/offcanvas (real component dirs, own API tables, redirect) · shipped · 893a551
+- 2026-08-17 02:19 · Continue · build · Slice 23 item 6: data-table split into 3 pages + js-behaviors event index to /reference/events — SLICE 23 COMPLETE · shipped · bb4ece7

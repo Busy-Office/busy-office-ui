@@ -10,11 +10,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const fmt = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    .replace(/`([^`]+)`/g, '<code>$1</code>');
-const listen = `document.addEventListener("bo:row-save", (e) => {
-  const { row, rowId } = e.detail;          // typed shape: see the table above
-  const values = Object.fromEntries(new FormData(row.closest("form")) );
-  fetch(\`/pos/\${rowId}\`, { method: "PATCH", body: JSON.stringify(values) });
-});`;
 const refresh = `// Bound table containers re-derive selection state automatically when an
 // htmx:afterSwap bubbles through them. Any OTHER swap mechanism calls:
 import { refreshDataTable } from "@busy-office/ui/js";

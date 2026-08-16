@@ -25,13 +25,6 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
     // e.detail = { row, rowId } — versioned payload, see JS behaviors → Intent events
   });
 </script>`;
-const rows = [
-  { no: 'INV-10234', vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: '$4,208.00', status: 'Pending', tone: 'warning' },
-  { no: 'INV-10235', vendor: 'Globex Industrial', cc: 'CC-4021', amount: '$18,940.50', status: 'Approved', tone: 'success' },
-  { no: 'INV-10236', vendor: 'Initech GmbH', cc: 'CC-1180', amount: '$730.25', status: 'Rejected', tone: 'danger' },
-  { no: 'INV-10237', vendor: 'Umbrella Logistics', cc: 'CC-2205', amount: '$2,110.00', status: 'Pending', tone: 'warning' },
-  { no: 'INV-10238', vendor: 'Stark Components', cc: 'CC-1180', amount: '$56,000.00', status: 'Approved', tone: 'success' },
-];
 ---
 <Gallery title="Inline editing">
   <p class="demo-note">
