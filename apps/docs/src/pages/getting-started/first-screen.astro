@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const step1 = `<!doctype html>
 <html lang="en" data-density="compact">
@@ -117,4 +118,5 @@ const step3 = `<div class="bo-data-table-container" tabindex="0">
     <a href={base + '/components/dialog'}>approve dialog</a> — composed in the
     <a href={base + '/patterns/approval'}>approval pattern</a>.</p>
   </section>
+  <Related links={[["/patterns/invoice-list", "The finished screen as a pattern"], ["/components/data-table", "Data table"], ["/base/primitives", "Layout primitives"]]} />
 </Gallery>

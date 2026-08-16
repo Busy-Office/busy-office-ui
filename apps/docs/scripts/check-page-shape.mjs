@@ -105,9 +105,31 @@ for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro'))
   }
 }
 
+/* ---------- EVERY docs page ends with Related (Slice 23 item 8) ----------
+   The owner review measured Related on ~75% of pages and asked for 100%:
+   it is the only outward path from a page, and the pages missing it were
+   the thin ones nobody could navigate away from. Landing pages and the
+   generated 404 are exempt (they have their own navigation). */
+const RELATED_EXEMPT = new Set(['index.astro', '404.astro']);
+async function* allPages(dir, rel = '') {
+  for (const e of await readdir(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) yield* allPages(join(dir, e.name), `${rel}${e.name}/`);
+    else if (e.name.endsWith('.astro')) yield [rel + e.name, join(dir, e.name)];
+  }
+}
+let relatedChecked = 0;
+for await (const [rel, file] of allPages(join(docsRoot, 'src/pages'))) {
+  if (RELATED_EXEMPT.has(rel)) continue;
+  const page = await readFile(file, 'utf8');
+  relatedChecked++;
+  if (!/<Related[\s\S]{0,10}?links=\{\[\s*\[/.test(page)) {
+    failures.push(`${rel}: missing a <Related> footer with at least one link`);
+  }
+}
+
 if (failures.length) {
   console.error(`page-shape check FAILED (${failures.length}):`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }
-console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s) verified against the CLAUDE.md skeletons`);
+console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s) verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer`);

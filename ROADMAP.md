@@ -2698,7 +2698,13 @@ applies the Objective per item rather than accepting wholesale.
        scaling notes, components-used. editable-grid is the model.
        Accept: template documented in CLAUDE.md + a page-shape gate
        extension so a thin pattern fails the build.
-4. [ ] **P7 miscategorised nav entries** (Badge→Data display,
+4. [x] **P7 miscategorised nav entries — DONE 2026-08-17**: Combobox
+       Actions→Data input, Badge Feedback→Data display, Keyboard key
+       Navigation→Data display; Keyboard help had already moved to
+       Reference. Dialog stays under Navigation & layout — that group
+       IS the review's "screen structure", so the entry was already
+       where the review wanted it, under a different label. Original:
+       **P7 miscategorised nav entries** (Badge→Data display,
        Dialog→overlays/screen structure, Combobox→Forms & input,
        Keyboard help→Reference). Cheap, no content change.
 5. [ ] **P8 — split /components/nav** (breadcrumb, navbar, sidebar
@@ -2712,7 +2718,18 @@ applies the Objective per item rather than accepting wholesale.
        concurrency & conflicts, performance at scale. The review is
        right that "permission" appearing zero times across 69 pages is
        conspicuous for an ERP framework.
-8. [ ] **`Related` on 100% of pages** + a "not in scope" list (the
+8. [x] **`Related` on 100% of pages + a "not in scope" list — DONE
+       2026-08-17.** Gated, red-first: the check found exactly 6 pages
+       without an onward path (five of the six Getting-started pages
+       and the class index — the reader's earliest journey), each given
+       real links rather than filler. check-page-shape now fails the
+       build for any docs page lacking a Related footer (68 pages
+       carry one; index and 404 exempt with their own navigation). New
+       /getting-started/scope page states what ships and what does NOT
+       with the reason and the alternative for each refusal (charts,
+       rich-text engine, virtualised table, JS framework, kanban/page
+       builders, icon set, state management) plus how a refusal
+       reopens. Original: **`Related` on 100% of pages** + a "not in scope" list (the
        review's point that deciding-and-saying-so is itself a
        completeness signal).
 

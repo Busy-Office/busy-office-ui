@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import pkg from '@busy-office/ui/package.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const aLaCarte = `# ORDER MATTERS: tokens, then reset, then components
@@ -87,4 +88,5 @@ const skeleton = `<!doctype html>
     host page that rescales <code>html</code> (legacy <code>62.5%</code> hacks) rescales
     every rem — embed via iframe instead.</p>
   </section>
+  <Related links={[["/getting-started/first-screen", "Your first screen"], ["/concepts/cascade", "The cascade contract"], ["/getting-started/troubleshooting", "Troubleshooting"]]} />
 </Gallery>

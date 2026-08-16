@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 // The interop demo needs ISOLATED documents: on this page the framework's
@@ -87,4 +88,5 @@ const recipe = `/* app.css — the ONE statement that matters comes first: it fi
     <code>@layer</code> statement. (Frames pin a white background: they don't
     inherit the docs theme.)</p>
   </section>
+  <Related links={[["/concepts/cascade", "The cascade contract"], ["/getting-started/installation", "Installation"], ["/concepts/theming", "Theming & dark mode"]]} />
 </Gallery>

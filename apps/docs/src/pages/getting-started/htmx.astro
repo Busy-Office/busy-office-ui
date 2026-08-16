@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const cssImport = `/* extra, opt-in stylesheet — core CSS never references HTMX */
 import "@busy-office/ui/css/htmx";`;
 const swapRecipe = `<!-- Styles the classes HTMX itself toggles: -->
@@ -54,4 +55,5 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
     <pre><code>{stateRecipe}</code></pre>
     <p class="bo-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
   </section>
+  <Related links={[["/patterns/editable-grid", "Editable grid (htmx in anger)"], ["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>

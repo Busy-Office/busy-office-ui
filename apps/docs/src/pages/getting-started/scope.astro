@@ -1,0 +1,89 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="What's in scope">
+  <p class="demo-note">
+    What this framework covers, what it deliberately doesn't, and where
+    the line is. A "not in scope" list is a completeness signal: it says
+    the gap was decided, not forgotten (owner docs review, 2026-08-16).
+  </p>
+
+  <section class="demo">
+    <h2>In scope</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Semantic components for back-office screens</strong> —
+      tables, forms, money and quantity fields, approval timelines: the
+      surfaces an ERP actually spends its day in.</li>
+      <li><strong>Density as a first-class dimension</strong> — one
+      attribute re-sizes a whole screen, because clerks and casual users
+      need different row heights from the same app.</li>
+      <li><strong>The cascade as the API</strong> — layered CSS you
+      override from your own unlayered stylesheet, no build step
+      required.</li>
+      <li><strong>Behaviors, not a framework</strong> — a small set of
+      call-once, delegated JS behaviors for what CSS cannot do
+      (dirty-state tracking, combobox ARIA, tree toggling). Everything
+      else is your app's code.</li>
+      <li><strong>Print, accessibility, and dark mode as contracts</strong>
+      — gated in CI, not aspirations.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Not in scope — decided, not forgotten</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Not shipped</th><th scope="col">Why, and what to do instead</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>A charting engine</td>
+            <td>Charts are a library decision (data joins, scales, animation) that would dwarf this codebase. Bring your own; the <a href={base + '/base/colors'}>scale system</a> gives you a categorical palette and the contrast rules to keep it legible in both themes.</td>
+          </tr>
+          <tr>
+            <td>A rich-text editing engine</td>
+            <td>Undo stacks, sanitization and selection models are dedicated-library territory. The <a href={base + '/components/richtext'}>chrome ships</a> — container, toolbar, prose styles — plus a recipe for mounting a real editor inside it.</td>
+          </tr>
+          <tr>
+            <td>A virtualised table</td>
+            <td>Virtualisation trades away find-in-page, native scrolling and print fidelity. Measured render costs are on the <a href={base + '/components/data-table'}>data table page</a>; past ~5k rows, paginate server-side.</td>
+          </tr>
+          <tr>
+            <td>A JS component framework</td>
+            <td>No components-as-JS, no virtual DOM, no build step. HTML you can read in a diff, styled by cascade layers — <a href={base + '/getting-started/htmx'}>htmx-ready, not htmx-coupled</a>.</td>
+          </tr>
+          <tr>
+            <td>Kanban boards, page builders, WYSIWYG layout</td>
+            <td>Authoring tools, not back-office screens. Different product.</td>
+          </tr>
+          <tr>
+            <td>Icons as a shipped set</td>
+            <td>Icon sets are opinionated and heavy; <a href={base + '/components/icon'}>the sizing contract</a> ships so any set works at every density.</td>
+          </tr>
+          <tr>
+            <td>State management, routing, i18n runtime</td>
+            <td>Application concerns. The framework never owns your data or your URLs — it styles what your server renders.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>How a gap gets closed</h2>
+    <p>Everything above was decided against the project's objective —
+    <em>simplicity, less-for-more, reusability</em> — and each decision is
+    recorded with its reasoning in the roadmap. A refusal is not
+    permanent: a real adopter requirement reopens it. What will not
+    happen is a feature landing because it seemed nice, or a gap
+    persisting because nobody wrote down the decision.</p>
+  </section>
+
+  <Related links={[
+    ['/getting-started/versioning', 'Versioning & upgrades'],
+    ['/concepts/cascade', 'The cascade contract'],
+    ['/getting-started/htmx', 'Using with HTMX'],
+    ['/components/richtext', 'Rich text (chrome, not an engine)'],
+  ]} />
+</Gallery>

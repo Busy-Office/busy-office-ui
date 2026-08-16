@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Versioning & upgrades">
@@ -54,4 +55,5 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     a migration away is incremental overrides, not a rewrite. That's deliberate:
     an exit story you can verify beats a lock-in you have to trust.</p>
   </section>
+  <Related links={[["/reference/tokens", "Token reference (the stable tier)"], ["/concepts/tokens", "Design tokens"], ["/reference/classes", "Class index"]]} />
 </Gallery>

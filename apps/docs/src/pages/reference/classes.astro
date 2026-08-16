@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
 import api from '@busy-office/ui/api';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const entries = Object.entries(api.index).sort(([a], [b]) => a.localeCompare(b));
@@ -27,4 +28,5 @@ const entries = Object.entries(api.index).sort(([a], [b]) => a.localeCompare(b))
       </table>
     </div>
   </section>
+  <Related links={[["/reference/tokens", "Token reference"], ["/base/utilities", "Utilities"], ["/concepts/cascade", "The cascade contract"]]} />
 </Gallery>
