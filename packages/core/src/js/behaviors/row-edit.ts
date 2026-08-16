@@ -20,11 +20,27 @@
  *
  * Sets `data-row-state="dirty"` on the <tr> (same visual channel the
  * error row state uses) and reveals the row's dirty badge + save/cancel
- * buttons. Cancel resets every input/textarea to its `defaultValue` and
- * every select to its default selection (re-firing change so dependent
- * behaviors like money/unit precision re-derive). Save dispatches
- * `bo:row-save` (bubbling, `detail: { row, rowId }`) and clears the
- * dirty state — your listener does the actual persistence.
+ * buttons. Cancel resets every input/textarea to its `defaultValue`,
+ * every checkbox/radio to `defaultChecked`, and every select to its
+ * default selection (re-firing change so dependent behaviors like
+ * money/unit precision re-derive), then dispatches `bo:row-cancel` so
+ * YOUR code can restore consumer-rendered cell content the framework
+ * doesn't own (tag-input chips). Save dispatches `bo:row-save`
+ * (bubbling, `detail: { row, rowId }`) and clears the dirty state —
+ * your listener does the actual persistence.
+ *
+ * Every committed cell edit also dispatches `bo:cell-change` — the
+ * realtime feed for subtotal math (see initTableSum for the declarative
+ * auto-sum counterpart, or listen yourself for custom math like
+ * qty × price line totals).
+ *
+ * Save models — BOTH supported (Slice 18, user's explicit call):
+ *   data-row-edit          batch: dirty state + explicit Save/Cancel
+ *   data-row-edit="live"   save-per-change: every committed change
+ *                          (change event — blur for text, immediate for
+ *                          select/checkbox) dispatches bo:row-save and
+ *                          re-baselines at once; no dirty UI, omit the
+ *                          Save/Cancel buttons in your markup.
  */
 let installed = false;
 
@@ -34,14 +50,18 @@ function rowFields(row: HTMLElement): RowField[] {
   return [...row.querySelectorAll<RowField>('input, textarea, select')];
 }
 
+function isCheckable(f: RowField): f is HTMLInputElement {
+  return f instanceof HTMLInputElement && (f.type === 'checkbox' || f.type === 'radio');
+}
+
 /* Selects have no defaultValue — their baseline lives per-option in
-   defaultSelected (needed once money/unit-select cells sit inside
-   editable rows, Slice 18 item 3). A genuinely-reset select re-fires
-   change so dependent behaviors (money/unit precision) re-derive from
-   the restored selection — otherwise Cancel would restore the VALUE but
-   leave the input's step at the abandoned currency/unit's precision.
-   Safe ordering: the cancel branch calls setDirty(false) after this, so
-   the re-derivation's own input/change events never leave the row dirty. */
+   defaultSelected; checkboxes/radios in defaultChecked. A genuinely-reset
+   select re-fires change so dependent behaviors (money/unit precision)
+   re-derive from the restored selection — otherwise Cancel would restore
+   the VALUE but leave the input's step at the abandoned currency/unit's
+   precision. Safe ordering: the cancel branch calls setDirty(false) after
+   this, so the re-derivation's own input/change events never leave the
+   row dirty. */
 function resetField(field: RowField): void {
   if (field instanceof HTMLSelectElement) {
     let changed = false;
@@ -50,14 +70,27 @@ function resetField(field: RowField): void {
       opt.selected = opt.defaultSelected;
     }
     if (changed) field.dispatchEvent(new Event('change', { bubbles: true }));
+  } else if (isCheckable(field)) {
+    const changed = field.checked !== field.defaultChecked;
+    field.checked = field.defaultChecked;
+    if (changed) field.dispatchEvent(new Event('input', { bubbles: true }));
   } else {
+    const changed = field.value !== field.defaultValue;
     field.value = field.defaultValue;
+    // Announce genuine restores (input, bubbling) — realtime listeners
+    // (auto-sum, custom subtotal math) must see values revert, or a
+    // cancelled edit leaves their totals stale. Same doctrine as the
+    // combobox/money reformats; cancel's trailing setDirty(false) keeps
+    // the row clean.
+    if (changed) field.dispatchEvent(new Event('input', { bubbles: true }));
   }
 }
 
 function baselineField(field: RowField): void {
   if (field instanceof HTMLSelectElement) {
     for (const opt of field.options) opt.defaultSelected = opt.selected;
+  } else if (isCheckable(field)) {
+    field.defaultChecked = field.checked;
   } else {
     field.defaultValue = field.value;
   }
@@ -77,25 +110,92 @@ function setDirty(row: HTMLElement, dirty: boolean): void {
   if (cancel) cancel.hidden = !dirty;
 }
 
+function tableOf(row: HTMLElement): HTMLElement | null {
+  return row.closest<HTMLElement>('table[data-row-edit]');
+}
+
+function isLive(table: HTMLElement): boolean {
+  return table.getAttribute('data-row-edit') === 'live';
+}
+
+function fieldName(field: RowField): string | null {
+  return field.name || field.getAttribute('aria-label') || null;
+}
+
+function dispatchCellChange(field: RowField, row: HTMLElement): void {
+  field.dispatchEvent(
+    /**
+     * @event bo:cell-change
+     * @target the edited field (input/select/textarea; bubbles)
+     * @when a cell in a `data-row-edit` row changes — typing, a select
+     *   pick, a checkbox toggle, or a behavior-driven reformat
+     *   (money/unit precision). The realtime feed for subtotal math.
+     * @detail rowId {string|null} the row's `data-row-id`
+     * @detail field {string|null} the field's `name`, falling back to its `aria-label`
+     * @detail value {string|boolean} the field's current value (`checked` for a checkbox/radio)
+     */
+    new CustomEvent('bo:cell-change', {
+      bubbles: true,
+      detail: {
+        rowId: row.getAttribute('data-row-id'),
+        field: fieldName(field),
+        value: isCheckable(field) ? field.checked : field.value,
+      },
+    }),
+  );
+}
+
+function saveRow(row: HTMLElement): void {
+  row.dispatchEvent(
+    /**
+     * @event bo:row-save
+     * @target the edited `<tr>` (bubbles)
+     * @when Save is activated on a dirty row (batch mode), or any change
+     *   commits in `data-row-edit="live"` mode; after the event, current
+     *   field values become the new baseline (Cancel restores to them)
+     * @detail row {HTMLTableRowElement} the live row — read committed values
+     *   from its inputs/selects by `name`
+     * @detail rowId {string|null} the row's `data-row-id`, or null if unset
+     */
+    new CustomEvent('bo:row-save', {
+      bubbles: true,
+      detail: { row, rowId: row.getAttribute('data-row-id') },
+    }),
+  );
+  rowFields(row).forEach(baselineField);
+  setDirty(row, false);
+}
+
 export function initRowEdit(): void {
   if (installed) return;
   installed = true;
 
+  // Typing/toggling. Selects are handled in the change listener only —
+  // real browsers fire input for them too, and double-dispatching
+  // bo:cell-change would double any consumer's subtotal math.
   document.addEventListener('input', (e) => {
     const target = e.target as HTMLElement;
+    if (target instanceof HTMLSelectElement) return;
     const row = target.closest<HTMLElement>('table[data-row-edit] tbody tr');
-    if (!row) return;
-    setDirty(row, true);
+    const table = row && tableOf(row);
+    if (!row || !table) return;
+    if (!isLive(table)) setDirty(row, true);
+    dispatchCellChange(target as RowField, row);
   });
 
-  // Selects fire input in real browsers, but synthetic/legacy paths may
-  // only fire change — listen for both so a currency/unit cell always
-  // marks its row dirty (setDirty is idempotent, double-fire is harmless).
+  // Committed edits: selects/checkboxes commit immediately, text on blur.
+  // Live mode saves here; batch mode only needs the select dirty-marking
+  // (inputs were already marked on input).
   document.addEventListener('change', (e) => {
     const target = e.target as HTMLElement;
-    if (!(target instanceof HTMLSelectElement)) return;
     const row = target.closest<HTMLElement>('table[data-row-edit] tbody tr');
-    if (row) setDirty(row, true);
+    const table = row && tableOf(row);
+    if (!row || !table) return;
+    if (target instanceof HTMLSelectElement) {
+      if (!isLive(table)) setDirty(row, true);
+      dispatchCellChange(target, row);
+    }
+    if (isLive(table)) saveRow(row);
   });
 
   document.addEventListener('click', (e) => {
@@ -107,30 +207,48 @@ export function initRowEdit(): void {
       if (!row) return;
       rowFields(row).forEach(resetField);
       setDirty(row, false);
-      return;
-    }
-
-    /**
-     * @event bo:row-save
-     * @target the edited `<tr>` (bubbles)
-     * @when Save is activated on a dirty row; after the event, current field
-     *   values become the new baseline (Cancel restores to them)
-     * @detail row {HTMLTableRowElement} the live row — read committed values
-     *   from its inputs/selects by `name`
-     * @detail rowId {string|null} the row's `data-row-id`, or null if unset
-     */
-    const saveBtn = target.closest<HTMLElement>('[data-row-edit-save]');
-    if (saveBtn) {
-      const row = saveBtn.closest<HTMLElement>('table[data-row-edit] tbody tr');
-      if (!row) return;
       row.dispatchEvent(
-        new CustomEvent('bo:row-save', {
+        /**
+         * @event bo:row-cancel
+         * @target the cancelled `<tr>` (bubbles)
+         * @when Cancel is activated; native fields are already restored —
+         *   listen to restore consumer-rendered cell content the
+         *   framework doesn't own (e.g. tag-input chips)
+         * @detail row {HTMLTableRowElement} the live row
+         * @detail rowId {string|null} the row's `data-row-id`, or null if unset
+         */
+        new CustomEvent('bo:row-cancel', {
           bubbles: true,
           detail: { row, rowId: row.getAttribute('data-row-id') },
         }),
       );
-      rowFields(row).forEach(baselineField);
-      setDirty(row, false);
+      return;
+    }
+
+    const saveBtn = target.closest<HTMLElement>('[data-row-edit-save]');
+    if (saveBtn) {
+      const row = saveBtn.closest<HTMLElement>('table[data-row-edit] tbody tr');
+      if (row) saveRow(row);
     }
   });
+
+  // Consumer-rendered cells (tag-input chips) never fire input/change on
+  // the row's native fields — their intent events stand in. Removal is
+  // framework-owned and always real. bo:tag-add fires on Enter BEFORE
+  // your listener decides to append or reject, so a rejected duplicate
+  // still marks the row dirty in batch mode (harmless — Cancel/Save both
+  // resolve it); in live mode the save is deferred a microtask so your
+  // append (same tick) lands before the save handler reads the row — a
+  // rejected add then saves an unchanged row, a no-op for your backend.
+  for (const type of ['bo:tag-add', 'bo:tag-remove']) {
+    document.addEventListener(type, (e) => {
+      const row = (e.target as Element | null)?.closest<HTMLElement>(
+        'table[data-row-edit] tbody tr',
+      );
+      const table = row && tableOf(row);
+      if (!row || !table) return;
+      if (isLive(table)) queueMicrotask(() => saveRow(row));
+      else setDirty(row, true);
+    });
+  }
 }

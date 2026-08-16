@@ -17,6 +17,29 @@ pin.
   Save now baselines their selection. A select `change` also marks the
   row dirty. Needed so money (currency) and quantity (unit) selects
   compose into editable rows with correct Cancel/Save semantics.
+  Extended in the same release: checkboxes/radios reset to
+  `defaultChecked` and baseline symmetrically; Cancel announces every
+  genuinely-restored field with a real bubbling `input` event (realtime
+  listeners — auto-sum, custom subtotal math — must see values revert,
+  or a cancelled edit leaves totals stale).
+
+- Added: `initRowEdit()` advanced-table surface (Slice 18): a
+  `bo:cell-change` event on every committed cell edit (rowId / field /
+  value — the realtime feed for custom subtotal math), a
+  `bo:row-cancel` event after native fields restore (the hook for
+  restoring consumer-rendered cell content like tag-input chips), tag
+  events (`bo:tag-add`/`bo:tag-remove`) marking their row dirty, and a
+  second save model: `data-row-edit="live"` dispatches `bo:row-save` on
+  every committed change and re-baselines immediately — no Save/Cancel
+  buttons (batch mode unchanged, still the default).
+
+- Added: `initTableSum()` — declarative realtime column totals: any
+  element with `data-sum-of="<field>"` inside a table live-updates to
+  the sum of tbody fields with that `name`; decimals from the widest
+  step among summed inputs, `data-decimals` overriding. The auto-sum
+  half of Slice 18's subtotal contract (a deliberate, documented
+  exception to "you do the data"; the custom-math half is
+  `bo:cell-change`).
 
 - Added: Money field (`.bo-money` + `initMoneyField()`) — a currency
   select linked to an amount input; changing currency re-derives the

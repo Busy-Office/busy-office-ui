@@ -1687,21 +1687,36 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        (later Cancel keeps SGD, not the original USD), `bo:row-save`
        fires with the right rowId, both themes, zero console errors, 32
        baselines untouched (verified, not assumed).
-4. [ ] **Advanced editable table** (extend `row-edit`, not a parallel
-       grid — lean per the user's explicit ask). (a) Cell types: `<select>`
-       dropdown (net-new — `rowFields()` today queries only
-       `input, textarea`), tag-input cell, date cell, checkbox cell
-       (text/number and combobox already work). (b) A richer per-change
-       event (`bo:cell-change`: row id, field name, value) fired live as
-       any cell changes. (c) Subtotal/total in BOTH modes: declarative
-       auto-sum via data attribute for the common case AND the event for
-       custom math. (d) BOTH save models: existing batch Save/Cancel, plus
-       a save-per-change mode (each change dispatches immediately for
-       server-side realtime persistence). Accept: all four cell types
-       editable in a live demo; subtotal updates in realtime in both
-       modes; both save models demonstrated; events documented (two-way
-       parity gate); tests for each new cell type + the event; gates
-       green, live-verified.
+4. [x] **Advanced editable table** — shipped 2026-08-16, all Accept
+       criteria met, lean as asked (row-edit extended + one small general
+       `initTableSum()`, no parallel grid). (a) All cell types live in the
+       new "Advanced" demo: text, select (item 3), date, checkbox
+       (reset/baseline via `defaultChecked`), tag-input cell (dirty via
+       the bubbling tag intent events; chips restored on Cancel through
+       the consumer `bo:row-cancel` hook, since the framework doesn't own
+       chip data). (b) `bo:cell-change` (rowId/field/value) on every
+       committed edit — selects handled in the change listener only, so
+       real browsers' double input+change never double-fires a consumer's
+       subtotal math. (c) Subtotals in BOTH modes: `data-sum-of` auto-sum
+       (decimals from the widest summed step, `data-decimals` override)
+       AND the event for custom math. (d) BOTH save models:
+       batch (unchanged default) and `data-row-edit="live"` — committed
+       changes dispatch `bo:row-save` + re-baseline instantly; tag adds
+       defer a microtask so the consumer's chip append lands first.
+       **Two real bugs caught by the live verify-adjust cycle, not by the
+       passing tests**: (1) Cancel restored values silently, leaving the
+       auto-sum total stale — fixed by announcing genuinely-restored
+       fields with a real `input` event (the combobox-lesson doctrine
+       applied to restores), regression-tested; (2) `CSS.escape` missing
+       in jsdom — fallback added. 6 new tests (76 total). Events gate
+       picked up `bo:cell-change`/`bo:row-cancel` automatically (9
+       events). CHANGELOG: Breaking entry extended (checkbox +
+       announce-on-restore), Added entries for the new surface.
+       Live-verified end-to-end both themes: realtime total on edit AND
+       on cancel-restore, tag add via real Enter keydown (dedupe
+       working), chips restored on Cancel, live-mode save log firing,
+       zero console errors; landing-page baselines regenerated (stat
+       line: 20 behaviors · 9 events), stable across 2 re-runs.
 5. [ ] **Docs progression: simple → medium → complex** — restructure the
        editable-table story as a graded sequence (per the user: reflect
        real ERP usage, keep samples generic), ending in a composite

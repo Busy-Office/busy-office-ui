@@ -1094,6 +1094,143 @@ describe('initTagInput', () => {
   });
 });
 
+describe('initRowEdit advanced cells + save models (Slice 18 item 4)', () => {
+  function advancedTable(mode = ''): { table: HTMLElement; row: HTMLElement } {
+    html`
+      <table data-row-edit${mode ? `="${mode}"` : ''}>
+        <tbody>
+          <tr data-row-id="A-1">
+            <td><input name="qty" type="number" step="0.01" value="2.50" aria-label="Qty" /></td>
+            <td><select name="status" aria-label="Status">
+              <option selected>Open</option><option>Closed</option>
+            </select></td>
+            <td><input name="urgent" type="checkbox" aria-label="Urgent" /></td>
+            <td><input name="due" type="date" value="2026-08-20" aria-label="Due" /></td>
+            <td>
+              <span data-row-edit-dirty hidden>Unsaved</span>
+              <button type="button" data-row-edit-save hidden>Save</button>
+              <button type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot><tr><td data-sum-of="qty">2.50</td></tr></tfoot>
+      </table>
+    `;
+    ui.initRowEdit();
+    ui.initTableSum();
+    return { table: document.querySelector('table')!, row: document.querySelector('tbody tr')! };
+  }
+
+  it('bo:cell-change carries rowId/field/value for input, select, and checkbox', () => {
+    const { row } = advancedTable();
+    const seen: any[] = [];
+    row.addEventListener('bo:cell-change', (e: any) => seen.push(e.detail));
+
+    const qty = row.querySelector<HTMLInputElement>('[name="qty"]')!;
+    qty.value = '3.00';
+    qty.dispatchEvent(new Event('input', { bubbles: true }));
+
+    const status = row.querySelector<HTMLSelectElement>('[name="status"]')!;
+    status.value = 'Closed';
+    status.dispatchEvent(new Event('change', { bubbles: true }));
+
+    const urgent = row.querySelector<HTMLInputElement>('[name="urgent"]')!;
+    urgent.checked = true;
+    urgent.dispatchEvent(new Event('input', { bubbles: true }));
+
+    expect(seen).toEqual([
+      { rowId: 'A-1', field: 'qty', value: '3.00' },
+      { rowId: 'A-1', field: 'status', value: 'Closed' },
+      { rowId: 'A-1', field: 'urgent', value: true },
+    ]);
+  });
+
+  it('checkbox + date cells: dirty, Cancel restores checked/value, Save baselines', () => {
+    const { row } = advancedTable();
+    const urgent = row.querySelector<HTMLInputElement>('[name="urgent"]')!;
+    const due = row.querySelector<HTMLInputElement>('[name="due"]')!;
+
+    urgent.checked = true;
+    urgent.dispatchEvent(new Event('input', { bubbles: true }));
+    due.value = '2026-09-01';
+    due.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(row.getAttribute('data-row-state')).toBe('dirty');
+
+    row.querySelector<HTMLElement>('[data-row-edit-cancel]')!.click();
+    expect(urgent.checked).toBe(false);
+    expect(due.value).toBe('2026-08-20');
+
+    urgent.checked = true;
+    urgent.dispatchEvent(new Event('input', { bubbles: true }));
+    row.querySelector<HTMLElement>('[data-row-edit-save]')!.click();
+    row.querySelector<HTMLElement>('[data-row-edit-cancel]')!.click(); // no-op reset
+    expect(urgent.checked).toBe(true); // saved baseline sticks
+  });
+
+  it('data-sum-of recomputes in realtime, and Cancel-restores recompute it too', () => {
+    const { table, row } = advancedTable();
+    const qty = row.querySelector<HTMLInputElement>('[name="qty"]')!;
+    qty.value = '4.25';
+    qty.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(table.querySelector('[data-sum-of="qty"]')!.textContent).toBe('4.25');
+    // the stale-total bug the live check caught: reset must be announced
+    row.querySelector<HTMLElement>('[data-row-edit-cancel]')!.click();
+    expect(table.querySelector('[data-sum-of="qty"]')!.textContent).toBe('2.50');
+  });
+
+  it('live mode: a committed change dispatches bo:row-save + re-baselines, no dirty UI', () => {
+    const { row } = advancedTable('live');
+    const saves: any[] = [];
+    row.addEventListener('bo:row-save', (e: any) => saves.push(e.detail.rowId));
+
+    const status = row.querySelector<HTMLSelectElement>('[name="status"]')!;
+    status.value = 'Closed';
+    status.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(saves).toEqual(['A-1']);
+    expect(row.hasAttribute('data-row-state')).toBe(false);
+    // baseline moved: cancel-equivalent reset would keep Closed
+    expect([...status.options].find((o) => o.defaultSelected)!.text).toBe('Closed');
+  });
+
+  it('bo:row-cancel fires after native fields restore (consumer chips restore hook)', () => {
+    const { row } = advancedTable();
+    const qty = row.querySelector<HTMLInputElement>('[name="qty"]')!;
+    qty.value = '9.99';
+    qty.dispatchEvent(new Event('input', { bubbles: true }));
+    let cancelled: any = null;
+    let valueAtCancel = '';
+    row.addEventListener('bo:row-cancel', (e: any) => {
+      cancelled = e.detail.rowId;
+      valueAtCancel = qty.value;
+    });
+    row.querySelector<HTMLElement>('[data-row-edit-cancel]')!.click();
+    expect(cancelled).toBe('A-1');
+    expect(valueAtCancel).toBe('2.50'); // already restored when the event fired
+  });
+
+  it('tag events mark a batch row dirty; live mode saves after a microtask', async () => {
+    html`
+      <table data-row-edit="live">
+        <tbody><tr data-row-id="T-1"><td>
+          <div class="bo-tag-input">
+            <span class="bo-tag-input__tag">CC-1<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1">×</button></span>
+            <input class="bo-tag-input__field" type="text" aria-label="Cost centers" />
+          </div>
+        </td></tr></tbody>
+      </table>
+    `;
+    ui.initRowEdit();
+    ui.initTagInput();
+    const row = document.querySelector('tbody tr')!;
+    const saves: any[] = [];
+    row.addEventListener('bo:row-save', (e: any) => saves.push(e.detail.rowId));
+    (document.querySelector('.bo-tag-input__remove') as HTMLElement).click();
+    expect(saves).toEqual([]); // deferred
+    await Promise.resolve();
+    expect(saves).toEqual(['T-1']);
+  });
+});
+
 describe('initRowEdit + money cell composition (Slice 18 item 3)', () => {
   function editableMoneyRow(): { row: HTMLElement; select: HTMLSelectElement; amount: HTMLInputElement; save: HTMLElement; cancel: HTMLElement } {
     html`

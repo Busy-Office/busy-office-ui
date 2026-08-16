@@ -256,6 +256,170 @@ const markup = `<table class="bo-data-table" data-row-edit>
   </script>
 
   <section class="demo">
+    <h2>Advanced — every cell type + realtime totals</h2>
+    <p>All the common ERP column types in one editable table: text, a
+    native <code>&lt;select&gt;</code>, date, checkbox, and a tag-input
+    cell — plus a footer total that recomputes in realtime
+    (<code>initTableSum()</code>, declarative <code>data-sum-of</code>).
+    Edit the Qty fields and watch the total; toggle, retag, then Cancel —
+    native fields restore themselves, and the <code>bo:row-cancel</code>
+    hook restores the chips.</p>
+    <table class="bo-data-table" data-row-edit id="eg-adv-table">
+      <thead><tr>
+        <th scope="col">Line</th>
+        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+        <th scope="col">Status</th>
+        <th scope="col">Needed by</th>
+        <th scope="col">Rush</th>
+        <th scope="col">Cost centers</th>
+        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+      </tr></thead>
+      <tbody>
+        <tr data-row-id="ADV-1">
+          <td><input class="bo-input bo-input--seamless" name="line" value="Bearing kit" aria-label="Line description" /></td>
+          <td class="bo-data-table__col--numeric">
+            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="2.50" aria-label="Quantity" />
+          </td>
+          <td>
+            <select class="bo-select" name="status" aria-label="Status">
+              <option selected>Open</option><option>Approved</option><option>On hold</option>
+            </select>
+          </td>
+          <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-08-30" aria-label="Needed by" /></td>
+          <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
+          <td>
+            <div class="bo-tag-input" id="adv-1-tags" role="group" aria-label="Cost centers">
+              <span class="bo-tag-input__tag">CC-4021<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button></span>
+              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+          </td>
+        </tr>
+        <tr data-row-id="ADV-2">
+          <td><input class="bo-input bo-input--seamless" name="line" value="Seal ring set" aria-label="Line description" /></td>
+          <td class="bo-data-table__col--numeric">
+            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="5.00" aria-label="Quantity" />
+          </td>
+          <td>
+            <select class="bo-select" name="status" aria-label="Status">
+              <option>Open</option><option selected>Approved</option><option>On hold</option>
+            </select>
+          </td>
+          <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-09-05" aria-label="Needed by" /></td>
+          <td><input class="bo-checkbox" name="rush" type="checkbox" checked aria-label="Rush order" /></td>
+          <td>
+            <div class="bo-tag-input" id="adv-2-tags" role="group" aria-label="Cost centers">
+              <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
+              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot><tr>
+        <td class="bo-data-table__col--right">Total qty</td>
+        <td class="bo-data-table__col--numeric" data-sum-of="qty">7.50</td>
+        <td colspan="5"></td>
+      </tr></tfoot>
+    </table>
+    <p class="bo-u-text-muted">Subtotals come in <strong>both modes</strong>:
+    declarative auto-sum (<code>data-sum-of="qty"</code>, shown above — a
+    deliberate, documented exception to "you do the data") or listen to
+    <code>bo:cell-change</code> (<code>rowId</code>/<code>field</code>/<code>value</code>
+    on every committed edit) and do custom math — qty × price line totals,
+    weighted sums, whatever the auto mode can't express. Tag chips are
+    consumer-rendered, so Cancel can't restore them natively —
+    <code>bo:row-cancel</code> fires after the native fields reset,
+    exactly for that.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Save-per-change — <code>data-row-edit="live"</code></h2>
+    <p>The second save model: no Save/Cancel buttons, every committed
+    change (blur for text, immediate for select/checkbox/tag) dispatches
+    <code>bo:row-save</code> at once and re-baselines — wire the listener
+    to a <code>fetch</code>/<code>hx-patch</code> and edits persist as
+    they happen. Same markup minus the actions cell:</p>
+    <table class="bo-data-table" data-row-edit="live" id="eg-live-table">
+      <thead><tr>
+        <th scope="col">Line</th>
+        <th scope="col">Status</th>
+        <th scope="col">Rush</th>
+      </tr></thead>
+      <tbody>
+        <tr data-row-id="LIVE-1">
+          <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
+          <td>
+            <select class="bo-select" name="status" aria-label="Status">
+              <option selected>Open</option><option>Approved</option>
+            </select>
+          </td>
+          <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="bo-u-text-muted" id="eg-live-log" aria-live="polite">No saves yet —
+    change the status or toggle Rush.</p>
+  </section>
+
+  <script>
+    import { initTableSum, initTagInput } from '@busy-office/ui/js';
+    initTableSum();
+    initTagInput();
+    // Tag chips are consumer data: append on add (rejecting duplicates),
+    // snapshot per row, restore on bo:row-cancel.
+    const snapshots = new Map<string, string>();
+    for (const el of document.querySelectorAll('.bo-tag-input')) {
+      const id = el.id;
+      if (id) snapshots.set(id, el.innerHTML);
+    }
+    document.addEventListener('bo:tag-add', (e) => {
+      const group = (e.target as HTMLElement).closest('.bo-tag-input');
+      if (!group || !group.closest('#eg-adv-table')) return;
+      const value = (e as CustomEvent).detail.value;
+      const exists = [...group.querySelectorAll('.bo-tag-input__tag')]
+        .some((t) => t.textContent!.replace('×', '').trim() === value);
+      if (exists) return;
+      const tag = document.createElement('span');
+      tag.className = 'bo-tag-input__tag';
+      tag.textContent = value;
+      const rm = document.createElement('button');
+      rm.className = 'bo-tag-input__remove';
+      rm.type = 'button';
+      rm.setAttribute('aria-label', 'Remove ' + value);
+      rm.textContent = '×';
+      tag.append(rm);
+      group.insertBefore(tag, group.querySelector('.bo-tag-input__field'));
+    });
+    document.addEventListener('bo:row-cancel', (e) => {
+      const row = (e as CustomEvent).detail.row as HTMLElement;
+      for (const group of row.querySelectorAll('.bo-tag-input')) {
+        const snap = snapshots.get(group.id);
+        if (snap !== undefined) group.innerHTML = snap;
+      }
+    });
+    document.addEventListener('bo:row-save', (e) => {
+      const { row, rowId } = (e as CustomEvent).detail;
+      // re-snapshot saved tag state so a later Cancel returns HERE
+      for (const group of row.querySelectorAll('.bo-tag-input')) {
+        if (group.id) snapshots.set(group.id, group.innerHTML);
+      }
+      if (row.closest('#eg-live-table')) {
+        const log = document.getElementById('eg-live-log')!;
+        log.textContent = `Saved ${rowId} at ${new Date().toLocaleTimeString()} — wire this to fetch/hx-patch in a real app.`;
+      }
+    });
+  </script>
+
+  <section class="demo">
     <h2>What composes, and what doesn't (out of the box)</h2>
     <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li><strong>Combobox in a cell</strong> — no special markup; it's the same
