@@ -1738,6 +1738,65 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        Both themes, zero console errors, both link checks (plain +
        DOCS_BASE), page-shape gate green.
 
+## Slice 19 — hardening from the Slice 18 grill (Objective review, 2026-08-16)
+
+Queued by the milestone-rule Objective review at Slice 18's close — four
+adversarial seats (Architect / ERP domain / Skeptic / A11y+Docs), full
+scored report: `.roundtable/grill-slice18-money-editable-2026-08-16.md`.
+Every item below is Evidence-graded there (≥2 independent seats, or
+seat + code-walk). Ranked by severity: data-integrity first.
+
+1. [ ] **Non-destructive `setInputDecimals`** (E1 — all three technical
+       seats independently). Reformatting must never change the numeric
+       value: pad/trim only when numerically equal; otherwise adjust
+       `step` and leave the value untouched. Unknown units leave
+       precision alone (today's `?? 0` silently rewrites 2.5 → 3 for any
+       UOM outside the table — the NORMAL case for real master data).
+       Guard `-0`, `1e21`+, and >MAX_SAFE_INTEGER artifacts. Accept:
+       JPY-switch on 12.40 no longer rounds it; unknown unit leaves
+       2.5 alone; tests for each; CHANGELOG entry (contract fix).
+2. [ ] **Live-mode save integrity** (E3, H3). (a) Cancel re-entrancy
+       guard — today a select-reset's `change` fires `saveRow`
+       mid-cancel, persisting and baselining the values the user asked
+       to discard; (b) defer live saves a microtask so same-tick
+       reformats (money/unit) land before the save reads the row —
+       today `bo:row-save` carries the old-precision value; (c) guard
+       the deferred save against a row detached in the same tick
+       (today: silently lost). Accept: red-first tests for all three;
+       live+batch behavior verified live.
+3. [ ] **Focus management on Save/Cancel** (H4, code-confirmed —
+       WCAG 2.4.3, keyboard-blocking, every consumer). The clicked
+       button hides itself and focus drops to `<body>`. Move focus to a
+       stable per-row anchor before hiding. Also per-row distinguishable
+       labels in the composite (H8). Accept: focus lands predictably
+       after save/cancel (verified live with real Tab-key walk); axe
+       clean.
+4. [ ] **`initTableSum` robustness** (H1/H2 code-confirmed + Architect).
+       `step="any"`/missing step must not collapse to 0 decimals;
+       nested tables: scope the field query to the table's OWN tbody
+       rows (no double-count) and resolve `closest` crossings (inner
+       edits reaching outer sums is fine to leave unsupported IF
+       documented); exclude checkboxes/radios from sums. Accept: tests
+       for each; docs note the nested-table boundary.
+5. [ ] **Announcement pass** (E4). Committed-change (not per-keystroke)
+       live regions for totals; `data-line-total` parity with the grand
+       total; a documented SR story for the money/unit reformat
+       (WCAG 4.1.3). Accept: one polite announcement per committed edit
+       in the composite, not two-plus per keystroke; documented recipe.
+6. [ ] **Docs batch** (H7/H8/H9 + E2's docs half). Currency-lives-on-
+       the-document callout (per-line shown only to demo the behavior);
+       intro progression map names all five sections; money/quantity
+       pages cross-link the editable-grid composite; composite product
+       cell becomes a combobox (consistent with the Medium teaching);
+       price-precision-independent-of-amount caveat; `t`/`kg` convention
+       notes on the unit table; live-mode per-field vs row-exit
+       trade-off note. Accept: page reads as one path; links resolve
+       both ways; page-shape green.
+
+**Deferred, recorded** (revisit at the next contract-shape change, not
+before): generic `bo:dirty` seam replacing the tag-event allowlist (H6);
+`isLive` value normalization (H5).
+
 ## Explore log
 
 - [x] **2026-08-15 — po-app consumer image broken by the README-stamp gate**
