@@ -141,6 +141,17 @@ Run **try → verify → adjust** as many rounds as it takes to satisfy the item
    readme.mjs`'s size stat now compares within a tolerance for this
    reason; any future stat derived from `gzipSync`/`brotliCompress`
    needs the same treatment, not an exact-string gate.
+   A fix scoped to a SHARED selector (anything matching more than the one
+   page that surfaced the bug — `.docs-content pre.has-copy`, a reset
+   rule, a token) needs `test:visual` run as part of this step, not just a
+   live spot-check of the reported page: the fix can legitimately change
+   rendering on other pages the report never mentioned (learned
+   2026-08-16 — a code-block overflow fix correctly changed 6 of the 8
+   visual-regression baseline pages, most only visible at 390px, which a
+   single-viewport click-through sweep hadn't surfaced). Confirm any
+   resulting diff is the fix's real, intended effect — not a regression —
+   before regenerating baselines, e.g. via pixel-diff inspection or a live
+   spot-check of one instance; don't blind `--update` away every failure.
 5. **Round check** — does it satisfy *Accept* AND pass the standing gates
    (contrast, named `@container`, links, behaviors, stylelint, tests)? If
    not, adjust and go back to step 3. If a round reveals the item was

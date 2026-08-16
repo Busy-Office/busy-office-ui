@@ -1762,6 +1762,19 @@ disabled-segment state.
       internal scroll, confirmed via `getComputedStyle`), 390px (off-screen
       clone technique, clips cleanly, no bleed). Zero console errors. Full
       gate suite green (61 tests, build, page-shape, link check).
+      **Follow-up (next wake, same day)**: since the fix touches a
+      site-wide CSS selector, ran `test:visual` as a real verification the
+      original wake skipped — it correctly caught that the fix changes
+      rendering on MORE pages than the click-through sweep flagged (6 of
+      the 8 baseline-tracked pages had their own silently-overflowing code
+      line, mostly only visible at 390px, which the sweep's single-
+      viewport check didn't surface). Confirmed via pixel-diff inspection
+      this was real, correct text-clipping at each `<pre>`'s right edge
+      (identical magnitude in light and dark, zero diff on pages without
+      an overflowing block) — not a regression or antialiasing noise — by
+      live-verifying one instance (`/components/data-table`'s "multi-row
+      inline edit" markup) before touching anything. Regenerated all 32
+      baselines, stable across 2 clean re-runs.
 
 ## Long term (post-1.0)
 
