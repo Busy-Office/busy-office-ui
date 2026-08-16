@@ -1793,13 +1793,18 @@ seat + code-walk). Ranked by severity: data-integrity first.
        the deferred save against a row detached in the same tick
        (today: silently lost). Accept: red-first tests for all three;
        live+batch behavior verified live.
-3. [ ] **Focus management on Save/Cancel** (H4, code-confirmed —
-       WCAG 2.4.3, keyboard-blocking, every consumer). The clicked
-       button hides itself and focus drops to `<body>`. Move focus to a
-       stable per-row anchor before hiding. Also per-row distinguishable
-       labels in the composite (H8). Accept: focus lands predictably
-       after save/cancel (verified live with real Tab-key walk); axe
-       clean.
+3. [x] **Focus management on Save/Cancel** — shipped 2026-08-16,
+       red-first (2 tests failing against shipped code: activeElement
+       stayed on the hidden button). `refocusIntoRow()`: when the
+       activated Save/Cancel button held focus, move it to the row's
+       first usable field BEFORE hiding — focus held anywhere else is
+       never stolen (third test pins that). Per-row distinguishable
+       labels added across both multi-row demos (tag groups, add-fields,
+       Save/Cancel now all name their line). Live-verified with a real
+       focus walk: focus button → click → activeElement is the row's
+       first field on both Save and Cancel paths. Axe zero across all
+       60 pages. 83 tests green. CHANGELOG folded into the row-edit
+       entry. (H4, H8.)
 4. [ ] **`initTableSum` robustness** (H1/H2 code-confirmed + Architect).
        `step="any"`/missing step must not collapse to 0 decimals;
        nested tables: scope the field query to the table's OWN tbody

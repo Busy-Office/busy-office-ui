@@ -21,7 +21,11 @@ pin.
   `defaultChecked` and baseline symmetrically; Cancel announces every
   genuinely-restored field with a real bubbling `input` event (realtime
   listeners — auto-sum, custom subtotal math — must see values revert,
-  or a cancelled edit leaves totals stale).
+  or a cancelled edit leaves totals stale). Save/Cancel now move focus
+  to the row's first usable field before hiding themselves when the
+  activated button held focus — previously keyboard focus silently
+  dropped to `<body>` mid-table on every save/cancel (WCAG 2.4.3,
+  grill find).
 
 - Added: `initRowEdit()` advanced-table surface (Slice 18): a
   `bo:cell-change` event on every committed cell edit (rowId / field /

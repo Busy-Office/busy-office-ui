@@ -1232,6 +1232,60 @@ describe('initRowEdit advanced cells + save models (Slice 18 item 4)', () => {
   });
 });
 
+describe('initRowEdit focus management (Slice 19 item 3, grill H4 / WCAG 2.4.3)', () => {
+  function focusRow(): { row: HTMLElement; field: HTMLInputElement; save: HTMLElement; cancel: HTMLElement } {
+    html`
+      <table data-row-edit>
+        <tbody>
+          <tr data-row-id="F-1">
+            <td><input name="qty" value="4" aria-label="Qty" /></td>
+            <td>
+              <span data-row-edit-dirty hidden>Unsaved</span>
+              <button type="button" data-row-edit-save hidden>Save</button>
+              <button type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+    ui.initRowEdit();
+    return {
+      row: document.querySelector('tbody tr')!,
+      field: document.querySelector('[name="qty"]')!,
+      save: document.querySelector('[data-row-edit-save]')!,
+      cancel: document.querySelector('[data-row-edit-cancel]')!,
+    };
+  }
+
+  it('Save moves focus to the row instead of dropping it with the hidden button', () => {
+    const { row, field, save } = focusRow();
+    field.value = '5';
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    (save as HTMLButtonElement).focus();
+    save.click();
+    expect(save.hidden).toBe(true);
+    expect(document.activeElement).toBe(field); // not the hidden button, not <body>
+  });
+
+  it('Cancel moves focus the same way', () => {
+    const { field, cancel } = focusRow();
+    field.value = '9';
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    (cancel as HTMLButtonElement).focus();
+    cancel.click();
+    expect(document.activeElement).toBe(field);
+  });
+
+  it('focus is left alone when the action was not keyboard/pointer-focused within the row', () => {
+    const { field, save } = focusRow();
+    field.value = '5';
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    field.focus(); // user is in the field; save clicked programmatically elsewhere
+    save.click();
+    expect(document.activeElement).toBe(field); // unchanged, no focus theft
+  });
+});
+
 describe('initRowEdit live-mode save integrity (Slice 19 item 2, grill E3/H3)', () => {
   function liveMoneyRow(): { row: HTMLElement; select: HTMLSelectElement; amount: HTMLInputElement; notes: HTMLInputElement } {
     html`

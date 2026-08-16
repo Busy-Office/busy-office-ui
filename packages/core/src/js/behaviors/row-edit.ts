@@ -114,6 +114,17 @@ function setDirty(row: HTMLElement, dirty: boolean): void {
   if (cancel) cancel.hidden = !dirty;
 }
 
+/* Grill H4 (WCAG 2.4.3): Save/Cancel hide themselves on activation, so a
+   keyboard user's focus silently dropped to <body> mid-table. When the
+   activated control is the focused element, move focus to the row's first
+   usable field BEFORE it hides — a stable, predictable anchor. Focus held
+   anywhere else (programmatic clicks, live mode) is never stolen. */
+function refocusIntoRow(row: HTMLElement, activated: HTMLElement): void {
+  if (document.activeElement !== activated) return;
+  const target = rowFields(row).find((f) => !f.disabled);
+  target?.focus();
+}
+
 function tableOf(row: HTMLElement): HTMLElement | null {
   return row.closest<HTMLElement>('table[data-row-edit]');
 }
@@ -239,6 +250,7 @@ export function initRowEdit(): void {
       } finally {
         cancelling = null;
       }
+      refocusIntoRow(row, cancelBtn);
       setDirty(row, false);
       row.dispatchEvent(
         /**
@@ -261,7 +273,9 @@ export function initRowEdit(): void {
     const saveBtn = target.closest<HTMLElement>('[data-row-edit-save]');
     if (saveBtn) {
       const row = saveBtn.closest<HTMLElement>('table[data-row-edit] tbody tr');
-      if (row) saveRow(row);
+      if (!row) return;
+      refocusIntoRow(row, saveBtn);
+      saveRow(row);
     }
   });
 
