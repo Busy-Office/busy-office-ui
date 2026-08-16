@@ -1626,3 +1626,56 @@ describe('initMoneyField', () => {
     expect(ui.currencyDecimals('CLF')).toBe(4);
   });
 });
+
+describe('initTreeTable', () => {
+  function treeTable(): Record<string, HTMLTableRowElement> {
+    html`
+      <table data-tree-table>
+        <tbody>
+          <tr data-tree-level="1" id="a"><td>
+            <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Collapse Assembly A"></button>Assembly A</td></tr>
+          <tr data-tree-level="2" id="a1"><td>
+            <button class="bo-tree-table__toggle" type="button" aria-expanded="false" aria-label="Expand Sub-assembly A1"></button>Sub-assembly A1</td></tr>
+          <tr data-tree-level="3" id="a1x" hidden><td><span class="bo-tree-table__spacer"></span>Part A1-x</td></tr>
+          <tr data-tree-level="2" id="a2"><td><span class="bo-tree-table__spacer"></span>Part A2</td></tr>
+          <tr data-tree-level="1" id="b"><td><span class="bo-tree-table__spacer"></span>Assembly B</td></tr>
+        </tbody>
+      </table>
+    `;
+    ui.initTreeTable();
+    const rows: Record<string, HTMLTableRowElement> = {};
+    for (const id of ['a', 'a1', 'a1x', 'a2', 'b']) rows[id] = document.getElementById(id) as HTMLTableRowElement;
+    return rows;
+  }
+
+  function toggle(row: HTMLTableRowElement): void {
+    row.querySelector<HTMLElement>('.bo-tree-table__toggle')!.click();
+  }
+
+  it('collapse hides ALL descendants and stops at the next sibling branch', () => {
+    const r = treeTable();
+    toggle(r.a); // collapse Assembly A
+    expect(r.a.querySelector('.bo-tree-table__toggle')!.getAttribute('aria-expanded')).toBe('false');
+    expect(r.a1.hidden).toBe(true);
+    expect(r.a1x.hidden).toBe(true);
+    expect(r.a2.hidden).toBe(true);
+    expect(r.b.hidden).toBe(false); // sibling untouched
+  });
+
+  it('expand reveals direct children but preserves a nested collapsed branch', () => {
+    const r = treeTable();
+    toggle(r.a); // collapse all
+    toggle(r.a); // expand again
+    expect(r.a1.hidden).toBe(false);
+    expect(r.a2.hidden).toBe(false);
+    expect(r.a1x.hidden).toBe(true); // A1 is itself collapsed — grandchild stays hidden
+  });
+
+  it('expanding the nested branch reveals its own children', () => {
+    const r = treeTable();
+    toggle(r.a1);
+    expect(r.a1x.hidden).toBe(false);
+    toggle(r.a1);
+    expect(r.a1x.hidden).toBe(true);
+  });
+});

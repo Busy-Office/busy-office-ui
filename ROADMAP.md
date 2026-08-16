@@ -1998,7 +1998,27 @@ Ranked: quick wins that harden every page first, then the two build items.
        (verified in the container, both themes); base-path (DOCS_BASE)
        build verified — this item is maximally exposed to the base-URL
        class of bug; release-flow doc updated.
-4. [ ] **Tree table** (wishlist "tree & tree table"). The existing
+4. [x] **Tree table** — shipped 2026-08-16, all Accept criteria met.
+       ADR decided FIRST with evidence
+       (`.roundtable/adr-tree-table-2026-08-16.md`): plain `<table>` +
+       disclosure buttons, deliberately NOT `role="treegrid"` — native
+       table browse mode beats the weakest-supported APG composite for
+       read-mostly hierarchy (three project precedents cited; reopen
+       condition: a real adopter's AT workflow needing aria-level).
+       `.bo-tree-table` on a `.bo-data-table`: 6 explicit indent levels
+       (attr()-calc unsafe at the FF128 floor), `__toggle` (chevron
+       rotation decorative, aria-expanded + genuinely-hidden rows are
+       the contract, forced-colors border, reduced-motion), `__spacer`
+       for leaf alignment. `initTreeTable()` (21 behaviors): collapse
+       hides ALL descendants; expand preserves nested collapsed state.
+       3 tests pass FIRST TRY incl. the grandchild-stays-hidden case
+       (89 total). Docs: graded demos (BOM, pre-collapsed budgets), the
+       when-to-use-which + why-not-treegrid section, totals-interplay
+       note; Tree page cross-linked both ways with guidance. Verified
+       live: full collapse/expand cycle incl. the nested-preservation
+       subtlety, both themes, 32px level-2 indent measured, zero
+       console errors; baselines regenerated (new sidebar entry),
+       stable ×2. The existing
        `.bo-tree` covers hierarchy NAVIGATION; a tree-table is
        hierarchical ROWS in a data table — BOM explosion, account
        rollups, org-unit budgets: expand/collapse parent rows,

@@ -1,0 +1,68 @@
+@layer bo-components {
+  /* Hierarchical rows in a data table — BOM explosion, account rollups,
+     org-unit budgets. A PLAIN table + disclosure buttons, deliberately
+     NOT role="treegrid" (ADR: .roundtable/adr-tree-table-2026-08-16.md —
+     native table browse mode beats the weakest-supported APG composite
+     for read-mostly ERP hierarchy). Apply ON a .bo-data-table:
+       <table class="bo-data-table bo-tree-table" data-tree-table>
+     Rows carry data-tree-level="1..6"; parent rows put
+     .bo-tree-table__toggle first in their first cell. */
+
+  /* Indent by level — explicit rules, not attr()-driven calc (FF128
+     floor). Six levels; deeper nesting is a modelling smell. */
+  .bo-tree-table [data-tree-level='2'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 1.25em); }
+  .bo-tree-table [data-tree-level='3'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 2.5em); }
+  .bo-tree-table [data-tree-level='4'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 3.75em); }
+  .bo-tree-table [data-tree-level='5'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 5em); }
+  .bo-tree-table [data-tree-level='6'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 6.25em); }
+
+  /* Disclosure button: composes the ghost-button look at row scale.
+     Chevron rotation is decoration — aria-expanded is the contract. */
+  .bo-tree-table__toggle {
+    inline-size: 1.5em;
+    block-size: 1.5em;
+    padding: 0;
+    margin-inline-end: var(--bo-space-2);
+    border: none;
+    border-radius: var(--bo-radius-sm);
+    background: transparent;
+    color: var(--bo-color-text-secondary);
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .bo-tree-table__toggle:hover {
+    background: var(--bo-color-bg-hover);
+    color: var(--bo-color-text-primary);
+  }
+
+  .bo-tree-table__toggle::before {
+    content: '▸';
+    display: inline-block;
+    transition: rotate var(--bo-motion-duration-fast, 0s) ease;
+  }
+
+  .bo-tree-table__toggle[aria-expanded='true']::before {
+    rotate: 90deg;
+  }
+
+  /* Leaf rows keep column alignment with parents: reserve the toggle's
+     footprint without rendering a control. */
+  .bo-tree-table__spacer {
+    display: inline-block;
+    inline-size: 1.5em;
+    margin-inline-end: var(--bo-space-2);
+  }
+
+  @media (forced-colors: active) {
+    .bo-tree-table__toggle {
+      border: 1px solid ButtonText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bo-tree-table__toggle::before {
+      transition: none;
+    }
+  }
+}

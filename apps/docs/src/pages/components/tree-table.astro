@@ -1,0 +1,138 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<table class="bo-data-table bo-tree-table" data-tree-table>
+  <thead><tr><th scope="col">Component</th><th scope="col" class="bo-data-table__col--numeric">Qty</th></tr></thead>
+  <tbody>
+    <tr data-tree-level="1"><td>
+      <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Collapse Pump assembly"></button>Pump assembly</td>
+      <td class="bo-data-table__col--numeric">1</td></tr>
+    <tr data-tree-level="2"><td><span class="bo-tree-table__spacer"></span>Impeller</td>
+      <td class="bo-data-table__col--numeric">1</td></tr>
+    <tr data-tree-level="2"><td><span class="bo-tree-table__spacer"></span>Seal ring set</td>
+      <td class="bo-data-table__col--numeric">2</td></tr>
+    <tr data-tree-level="1"><td><span class="bo-tree-table__spacer"></span>Mounting plate</td>
+      <td class="bo-data-table__col--numeric">1</td></tr>
+  </tbody>
+</table>`;
+
+const nested = `<!-- a branch rendered PRE-COLLAPSED: aria-expanded="false" on its
+     toggle + hidden on every descendant row, server-side -->
+<table class="bo-data-table bo-tree-table" data-tree-table>
+  <thead><tr><th scope="col">Cost center</th><th scope="col" class="bo-data-table__col--numeric">Budget</th></tr></thead>
+  <tbody>
+    <tr data-tree-level="1"><td>
+      <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Collapse Operations"></button>Operations</td>
+      <td class="bo-data-table__col--numeric">120,000.00</td></tr>
+    <tr data-tree-level="2"><td>
+      <button class="bo-tree-table__toggle" type="button" aria-expanded="false" aria-label="Expand Warehouse"></button>Warehouse</td>
+      <td class="bo-data-table__col--numeric">80,000.00</td></tr>
+    <tr data-tree-level="3" hidden><td><span class="bo-tree-table__spacer"></span>CC-1180 — Facilities</td>
+      <td class="bo-data-table__col--numeric">56,000.00</td></tr>
+    <tr data-tree-level="3" hidden><td><span class="bo-tree-table__spacer"></span>CC-2205 — Logistics</td>
+      <td class="bo-data-table__col--numeric">24,000.00</td></tr>
+    <tr data-tree-level="2"><td><span class="bo-tree-table__spacer"></span>Front office</td>
+      <td class="bo-data-table__col--numeric">40,000.00</td></tr>
+  </tbody>
+</table>`;
+
+const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
+     role="treegrid" (native table browse mode beats the weakest-supported
+     APG composite for read-mostly hierarchy; full reasoning in the ADR).
+     Rows: data-tree-level="1..6". Parent rows: the toggle button, named
+     for its branch. Leaf rows: the spacer keeps columns aligned.
+     Hierarchy = document order (descendants are the following rows with
+     a higher level). -->
+<table class="bo-data-table bo-tree-table" data-tree-table>
+  <tbody>
+    <tr data-tree-level="1"><td>
+      <button class="bo-tree-table__toggle" type="button"
+          aria-expanded="true" aria-label="Collapse Assembly A"></button>Assembly A</td></tr>
+    <tr data-tree-level="2"><td><span class="bo-tree-table__spacer"></span>Part A-1</td></tr>
+  </tbody>
+</table>
+<script type="module">
+  import { initTreeTable } from "@busy-office/ui/js";
+  initTreeTable();
+</script>`;
+---
+<Gallery title="Tree table">
+  <p class="demo-note">
+    Hierarchical rows in a data table — a BOM explosion, account rollups,
+    org-unit budgets: expand and collapse branches while every row keeps
+    real table columns. A plain table with disclosure buttons, so screen
+    readers keep native table browse mode. For hierarchy
+    <em>navigation</em> (links, no columns) use
+    <a href={base + '/components/tree'}>Tree</a> instead.
+  </p>
+
+  <section class="demo">
+    <h2>Basic — a two-level BOM</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">Click the chevron: descendants hide via the
+    real <code>hidden</code> attribute, and <code>aria-expanded</code>
+    tracks it — chevron rotation is decoration, two channels carry the
+    state. Leaf rows use <code>__spacer</code> so the first column stays
+    aligned.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Nested branches — collapsed state is preserved</h2>
+    <Demo code={nested} />
+    <p class="bo-u-text-muted">Warehouse renders pre-collapsed
+    (<code>aria-expanded="false"</code> + <code>hidden</code> children,
+    server-side). Collapse and re-expand Operations: Warehouse's own
+    children stay hidden until Warehouse itself is expanded — a folded
+    sub-branch never springs open by side effect.</p>
+  </section>
+
+  <section class="demo">
+    <h2>When to use which — and why not <code>treegrid</code></h2>
+    <p>This component is deliberately a plain <code>&lt;table&gt;</code> +
+    disclosure buttons, <strong>not</strong> ARIA
+    <code>role="treegrid"</code>: treegrid is the weakest-supported APG
+    composite, and adopting it forfeits native screen-reader table browse
+    mode — the wrong trade for read-mostly ERP hierarchy. The visible
+    channel is the indent; the programmatic channel is each toggle's
+    <code>aria-expanded</code> plus genuinely-<code>hidden</code> rows.
+    Programmatic <em>level</em> semantics (<code>aria-level</code>) are a
+    treegrid feature and are honestly not claimed — if a real adopter's
+    assistive-tech workflow needs them, that reopens the ADR
+    (<code>.roundtable/adr-tree-table-2026-08-16.md</code>).
+    Totals note: <a href={base + '/patterns/editable-grid'}>data-sum-of</a>
+    keeps counting collapsed rows — collapse is a view state, not a
+    filter.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <script>
+    import { initTreeTable } from '@busy-office/ui/js';
+    initTreeTable();
+  </script>
+
+  <ClassRef component="tree-table" />
+  <ApiTable
+    component="tree-table"
+    js="initTreeTable() — delegated toggle handling: collapse hides ALL descendant rows; expand reveals direct children and only those deeper rows whose own parents are expanded (nested collapsed state preserved). Hierarchy is document order via data-tree-level."
+    notes={[
+      'Six indent levels ship (<code>data-tree-level="1..6"</code>) — deeper nesting is usually a modelling smell; compose your own padding if you truly need more.',
+      'Name each toggle for its branch (<code>aria-label="Collapse Pump assembly"</code>) — the button is the programmatic surface.',
+      'Render a pre-collapsed branch server-side: <code>aria-expanded="false"</code> on the toggle + <code>hidden</code> on every descendant row.',
+      'Composes with everything .bo-data-table has — numeric columns, badges, row states; it IS a data table.',
+    ]}
+  />
+  <Related links={[
+    ['/components/tree', 'Tree (hierarchy navigation)'],
+    ['/components/data-table', 'Data table'],
+    ['/patterns/editable-grid', 'Editable grid'],
+  ]} />
+</Gallery>
