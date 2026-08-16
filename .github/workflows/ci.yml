@@ -28,8 +28,6 @@ jobs:
           DOCS_BASE: /busy-office-ui
       # AFTER the docs build — it sweeps the built dist. (Ordering bug on
       # first landing: placed before the build, so dist did not exist.)
-      - name: Overflow sweep (390 + 150% zoom, all pages)
-        run: npm run check:overflow -w docs
       # Documented behaviour must be true — prose that asserts runtime
       # behaviour is a hypothesis until something runs it (2026-08-17).
       - name: Documented-claims check
@@ -38,6 +36,7 @@ jobs:
       # run that claim at compact density in a +35% pseudo-locale.
       - name: Pseudo-locale expansion check
         run: npm run check:pseudo -w docs
-      # WCAG 1.4.12: a user's spacing override must lose no content.
-      - name: Text-spacing (WCAG 1.4.12) check
-        run: npm run check:spacing -w docs
+      # One concurrent sweep: narrow/zoom overflow AND the WCAG 1.4.12
+      # spacing override. Merged from two serial sweeps that cost 345s.
+      - name: Layout sweep (overflow + WCAG 1.4.12 text spacing)
+        run: npm run check:layout -w docs

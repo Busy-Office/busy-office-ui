@@ -9,10 +9,9 @@
     "test:visual": "node scripts/visual-regression.mjs",
     "test:visual:update": "node scripts/visual-regression.mjs --update",
     "test:axe": "node scripts/axe-audit.mjs",
-    "check:overflow": "node scripts/check-overflow.mjs",
     "check:claims": "node scripts/check-claims.mjs",
     "check:pseudo": "node scripts/check-pseudo-locale.mjs",
-    "check:spacing": "node scripts/check-text-spacing.mjs"
+    "check:layout": "node scripts/check-layout.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

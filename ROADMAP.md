@@ -2934,6 +2934,19 @@ never cut, palette import rows wrap. Re-sweep: 0 content loss across 88
 pages. Graduated as check-text-spacing.mjs in CI; the accessibility
 page now says the criterion is CI-verified instead of asserting it.
 
+**Optimize 2026-08-17 — CI duration regressed 3.5min → 7.6min; fixed.**
+Five straight gate-adding rounds had a cost nobody was watching, which
+is exactly what the metric rule exists for. Measured before touching
+anything: the two full-site sweeps were 168s + 177s of a ~390s total,
+and between them loaded every page FOUR times. Merged into one
+`check-layout.mjs` that loads each page three times (390 serves both
+stresses) with a 4-tab pool: **345s → 74s, a 4.7× improvement**, with
+both halves red-proved independently. Note the red-proof itself
+corrected a wrong assumption: removing the cluster-shrink fix did NOT
+trip the overflow half, because that bug only appears under text
+EXPANSION — it belongs to check-pseudo. A gate suite is only as
+trustworthy as knowing which gate owns which failure.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
