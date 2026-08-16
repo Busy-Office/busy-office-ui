@@ -5,16 +5,23 @@
      native table browse mode beats the weakest-supported APG composite
      for read-mostly ERP hierarchy). Apply ON a .bo-data-table:
        <table class="bo-data-table bo-tree-table" data-tree-table>
-     Rows carry data-tree-level="1..6"; parent rows put
+     Rows carry data-tree-level="1..12"; parent rows put
      .bo-tree-table__toggle first in their first cell. */
 
   /* Indent by level — explicit rules, not attr()-driven calc (FF128
-     floor). Six levels; deeper nesting is a modelling smell. */
+     floor). Twelve levels: real engineering BOMs routinely run 8-12
+     deep (machine → sub-assembly → weldment → part → raw). */
   .bo-tree-table [data-tree-level='2'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 1.25em); }
   .bo-tree-table [data-tree-level='3'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 2.5em); }
   .bo-tree-table [data-tree-level='4'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 3.75em); }
   .bo-tree-table [data-tree-level='5'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 5em); }
   .bo-tree-table [data-tree-level='6'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 6.25em); }
+  .bo-tree-table [data-tree-level='7'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 7.5em); }
+  .bo-tree-table [data-tree-level='8'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 8.75em); }
+  .bo-tree-table [data-tree-level='9'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 10em); }
+  .bo-tree-table [data-tree-level='10'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 11.25em); }
+  .bo-tree-table [data-tree-level='11'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 12.5em); }
+  .bo-tree-table [data-tree-level='12'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 13.75em); }
 
   /* Disclosure button: composes the ghost-button look at row scale.
      Chevron rotation is decoration — aria-expanded is the contract. */

@@ -2105,7 +2105,23 @@ Ranked: user-visible breakage first.
        swatches; add the why-status-colors-are-out-of-scope paragraph.
        Accept: axe + manual ratio check clean in dark; parse assertions
        proven red; live-verified.
-3. [ ] **Tree-table structural seams** (E2). descendants() spans
+3. [x] **Tree-table structural seams** — shipped 2026-08-16, red-first
+       (3 of 6 new tests failed against shipped code; 2 paths held and
+       are now pinned). descendants() walks the TABLE's tbody rows in
+       document order — collapse spans `</tbody>` boundaries (verified
+       live with a constructed two-tbody table); a toggle with no
+       following deeper rows is INERT, so the chevron never lies over a
+       missing/typo'd `data-tree-level` (the silent-desync case
+       converted to visible inertness, documented); indent extended to
+       level 12 with the "modelling smell" claim retracted (real BOMs
+       run 8-12); `bo:tree-toggle` dispatched (row/level/expanded — the
+       fetch-on-expand + expand-all/to-level hook; events gate at 10);
+       every demo renamed verb-less (aria-expanded carries state — a
+       baked-in Collapse/Expand prefix goes stale on first toggle);
+       keyboard story + volume/lazy-load guidance + inert-toggle
+       debugging note on the page; ADR now a clickable repo link.
+       94 tests; live-verified event/labels/cross-tbody/inert; landing
+       baselines regenerated (64 kB stat), stable ×2. (E2.) descendants() spans
        tbodies; missing/invalid `data-tree-level` handled honestly
        (documented behavior, not silent truncation); indent to level 12
        (real BOMs hit 8-12 — the "modelling smell" claim retracted);

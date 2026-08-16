@@ -1678,4 +1678,86 @@ describe('initTreeTable', () => {
     toggle(r.a1);
     expect(r.a1x.hidden).toBe(true);
   });
+
+  it('descendants span tbody boundaries (grill E2: per-tbody grouping is normal ERP shape)', () => {
+    html`
+      <table data-tree-table>
+        <tbody>
+          <tr data-tree-level="1" id="p1"><td>
+            <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Group A"></button>Group A</td></tr>
+          <tr data-tree-level="2" id="c1"><td>child in tbody 1</td></tr>
+        </tbody>
+        <tbody>
+          <tr data-tree-level="2" id="c2"><td>child in tbody 2</td></tr>
+          <tr data-tree-level="1" id="p2"><td>sibling group</td></tr>
+        </tbody>
+      </table>
+    `;
+    ui.initTreeTable();
+    document.querySelector<HTMLElement>('#p1 .bo-tree-table__toggle')!.click();
+    expect((document.getElementById('c1') as HTMLTableRowElement).hidden).toBe(true);
+    expect((document.getElementById('c2') as HTMLTableRowElement).hidden).toBe(true); // crossed the tbody boundary
+    expect((document.getElementById('p2') as HTMLTableRowElement).hidden).toBe(false);
+  });
+
+  it('a toggle with no following deeper rows is INERT — the chevron never lies (grill E2 missing-level case)', () => {
+    html`
+      <table data-tree-table>
+        <tbody>
+          <tr data-tree-level="1" id="p"><td>
+            <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Parent"></button>Parent</td></tr>
+          <tr id="orphan"><td>child that FORGOT data-tree-level (reads as level 1)</td></tr>
+        </tbody>
+      </table>
+    `;
+    ui.initTreeTable();
+    const btn = document.querySelector<HTMLElement>('#p .bo-tree-table__toggle')!;
+    btn.click();
+    expect(btn.getAttribute('aria-expanded')).toBe('true'); // did NOT flip over nothing
+    expect((document.getElementById('orphan') as HTMLTableRowElement).hidden).toBe(false);
+  });
+
+  it('skipped levels (1 → 3, no toggle between) still collapse and re-expand', () => {
+    html`
+      <table data-tree-table>
+        <tbody>
+          <tr data-tree-level="1" id="p"><td>
+            <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="P"></button>P</td></tr>
+          <tr data-tree-level="3" id="deep"><td>grand-child directly</td></tr>
+        </tbody>
+      </table>
+    `;
+    ui.initTreeTable();
+    const btn = document.querySelector<HTMLElement>('#p .bo-tree-table__toggle')!;
+    const deep = document.getElementById('deep') as HTMLTableRowElement;
+    btn.click();
+    expect(deep.hidden).toBe(true);
+    btn.click();
+    expect(deep.hidden).toBe(false);
+  });
+
+  it('a toggle outside any [data-tree-table] does nothing at all', () => {
+    html`
+      <table>
+        <tbody>
+          <tr data-tree-level="1"><td>
+            <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="X"></button>X</td></tr>
+          <tr data-tree-level="2" id="c"><td>child</td></tr>
+        </tbody>
+      </table>
+    `;
+    ui.initTreeTable();
+    const btn = document.querySelector<HTMLElement>('.bo-tree-table__toggle')!;
+    btn.click();
+    expect(btn.getAttribute('aria-expanded')).toBe('true'); // untouched
+    expect((document.getElementById('c') as HTMLTableRowElement).hidden).toBe(false);
+  });
+
+  it('dispatches bo:tree-toggle with expanded state and level', () => {
+    const r = treeTable();
+    const seen: any[] = [];
+    document.addEventListener('bo:tree-toggle', (e: any) => seen.push(e.detail), { once: true });
+    toggle(r.a);
+    expect(seen).toEqual([{ row: r.a, level: 1, expanded: false }]);
+  });
 });

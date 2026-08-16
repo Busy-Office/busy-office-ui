@@ -10,7 +10,7 @@ const basic = `<table class="bo-data-table bo-tree-table" data-tree-table>
   <thead><tr><th scope="col">Component</th><th scope="col" class="bo-data-table__col--numeric">Qty</th></tr></thead>
   <tbody>
     <tr data-tree-level="1"><td>
-      <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Collapse Pump assembly"></button>Pump assembly</td>
+      <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Pump assembly"></button>Pump assembly</td>
       <td class="bo-data-table__col--numeric">1</td></tr>
     <tr data-tree-level="2"><td><span class="bo-tree-table__spacer"></span>Impeller</td>
       <td class="bo-data-table__col--numeric">1</td></tr>
@@ -27,10 +27,10 @@ const nested = `<!-- a branch rendered PRE-COLLAPSED: aria-expanded="false" on i
   <thead><tr><th scope="col">Cost center</th><th scope="col" class="bo-data-table__col--numeric">Budget</th></tr></thead>
   <tbody>
     <tr data-tree-level="1"><td>
-      <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Collapse Operations"></button>Operations</td>
+      <button class="bo-tree-table__toggle" type="button" aria-expanded="true" aria-label="Operations"></button>Operations</td>
       <td class="bo-data-table__col--numeric">120,000.00</td></tr>
     <tr data-tree-level="2"><td>
-      <button class="bo-tree-table__toggle" type="button" aria-expanded="false" aria-label="Expand Warehouse"></button>Warehouse</td>
+      <button class="bo-tree-table__toggle" type="button" aria-expanded="false" aria-label="Warehouse"></button>Warehouse</td>
       <td class="bo-data-table__col--numeric">80,000.00</td></tr>
     <tr data-tree-level="3" hidden><td><span class="bo-tree-table__spacer"></span>CC-1180 — Facilities</td>
       <td class="bo-data-table__col--numeric">56,000.00</td></tr>
@@ -44,7 +44,7 @@ const nested = `<!-- a branch rendered PRE-COLLAPSED: aria-expanded="false" on i
 const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
      role="treegrid" (native table browse mode beats the weakest-supported
      APG composite for read-mostly hierarchy; full reasoning in the ADR).
-     Rows: data-tree-level="1..6". Parent rows: the toggle button, named
+     Rows: data-tree-level="1..12". Parent rows: the toggle button, named
      for its branch. Leaf rows: the spacer keeps columns aligned.
      Hierarchy = document order (descendants are the following rows with
      a higher level). -->
@@ -52,7 +52,7 @@ const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
   <tbody>
     <tr data-tree-level="1"><td>
       <button class="bo-tree-table__toggle" type="button"
-          aria-expanded="true" aria-label="Collapse Assembly A"></button>Assembly A</td></tr>
+          aria-expanded="true" aria-label="Assembly A"></button>Assembly A</td></tr>
     <tr data-tree-level="2"><td><span class="bo-tree-table__spacer"></span>Part A-1</td></tr>
   </tbody>
 </table>
@@ -102,8 +102,8 @@ const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
     <code>aria-expanded</code> plus genuinely-<code>hidden</code> rows.
     Programmatic <em>level</em> semantics (<code>aria-level</code>) are a
     treegrid feature and are honestly not claimed — if a real adopter's
-    assistive-tech workflow needs them, that reopens the ADR
-    (<code>.roundtable/adr-tree-table-2026-08-16.md</code>).
+    assistive-tech workflow needs them, that reopens the
+    <a href="https://github.com/Busy-Office/busy-office-ui/blob/main/.roundtable/adr-tree-table-2026-08-16.md">ADR</a>.
     Totals note: <a href={base + '/patterns/editable-grid'}>data-sum-of</a>
     keeps counting collapsed rows — collapse is a view state, not a
     filter.</p>
@@ -124,8 +124,11 @@ const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
     component="tree-table"
     js="initTreeTable() — delegated toggle handling: collapse hides ALL descendant rows; expand reveals direct children and only those deeper rows whose own parents are expanded (nested collapsed state preserved). Hierarchy is document order via data-tree-level."
     notes={[
-      'Six indent levels ship (<code>data-tree-level="1..6"</code>) — deeper nesting is usually a modelling smell; compose your own padding if you truly need more.',
-      'Name each toggle for its branch (<code>aria-label="Collapse Pump assembly"</code>) — the button is the programmatic surface.',
+      'Twelve indent levels ship (<code>data-tree-level="1..12"</code>) — real engineering BOMs run 8-12 deep; past that, compose your own padding rule.',
+      'Name each toggle for its BRANCH, without a verb (<code>aria-label="Pump assembly"</code>) — <code>aria-expanded</code> carries the state, so a baked-in Collapse/Expand prefix would go stale the moment it toggles.',
+      'Keyboard: plain Tab reaches each toggle; Enter/Space activates — native buttons, nothing reimplemented.',
+      'A toggle with no following deeper rows is INERT (the chevron never flips over nothing) — if a branch will not open, check its children have <code>data-tree-level</code>.',
+      'Big hierarchies: render deep branches collapsed server-side and lazy-load on <code>bo:tree-toggle</code> (fetch/htmx append child rows on first expand); a 10k-node BOM should not ship 10k rows up front. Expand-all / expand-to-level are app code over the same event — loop the toggles below level N and click the collapsed ones.',
       'Render a pre-collapsed branch server-side: <code>aria-expanded="false"</code> on the toggle + <code>hidden</code> on every descendant row.',
       'Composes with everything .bo-data-table has — numeric columns, badges, row states; it IS a data table.',
     ]}

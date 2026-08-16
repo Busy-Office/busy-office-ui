@@ -33,13 +33,17 @@ function level(row: HTMLTableRowElement): number {
 }
 
 function descendants(row: HTMLTableRowElement): HTMLTableRowElement[] {
+  // Walk the TABLE's tbody rows in document order, not siblings — a
+  // per-tbody-grouped table (normal ERP shape) must not stop the subtree
+  // at a </tbody> boundary (Slice 21 grill E2).
+  const table = row.closest('table');
+  if (!table) return [];
+  const rows = [...table.querySelectorAll<HTMLTableRowElement>(':scope > tbody > tr')];
+  const start = rows.indexOf(row);
+  if (start === -1) return [];
   const out: HTMLTableRowElement[] = [];
   const base = level(row);
-  let next = row.nextElementSibling;
-  while (next instanceof HTMLTableRowElement && level(next) > base) {
-    out.push(next);
-    next = next.nextElementSibling;
-  }
+  for (let i = start + 1; i < rows.length && level(rows[i]) > base; i++) out.push(rows[i]);
   return out;
 }
 
@@ -58,11 +62,33 @@ export function initTreeTable(): void {
     const table = btn.closest('[data-tree-table]');
     if (!(row instanceof HTMLTableRowElement) || !table) return;
 
+    const kids = descendants(row);
+    // A toggle with no following deeper rows is INERT — flipping the
+    // chevron over nothing would desync the two channels (the exact lie
+    // a missing/typo'd data-tree-level otherwise produces, grill E2).
+    if (kids.length === 0) return;
+
     const expanding = btn.getAttribute('aria-expanded') !== 'true';
     btn.setAttribute('aria-expanded', String(expanding));
+    btn.dispatchEvent(
+      /**
+       * @event bo:tree-toggle
+       * @target the branch's toggle button (bubbles)
+       * @when a branch expands or collapses — the hook for fetch-on-expand
+       *   (lazy-load a big branch's rows, htmx or fetch) and for
+       *   expand-all / expand-to-level controls built in app code
+       * @detail row {HTMLTableRowElement} the branch's own row
+       * @detail level {number} the branch's data-tree-level
+       * @detail expanded {boolean} the NEW state
+       */
+      new CustomEvent('bo:tree-toggle', {
+        bubbles: true,
+        detail: { row, level: level(row), expanded: expanding },
+      }),
+    );
 
     if (!expanding) {
-      for (const d of descendants(row)) d.hidden = true;
+      for (const d of kids) d.hidden = true;
       return;
     }
     // Expand: reveal each descendant only when every intermediate parent
@@ -70,7 +96,7 @@ export function initTreeTable(): void {
     // branch stays collapsed.
     const base = level(row);
     let hideBelow = Infinity; // levels deeper than this stay hidden
-    for (const d of descendants(row)) {
+    for (const d of kids) {
       const l = level(d);
       if (l > hideBelow) continue; // inside a collapsed sub-branch
       hideBelow = Infinity;
