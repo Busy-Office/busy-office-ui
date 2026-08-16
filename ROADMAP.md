@@ -1769,7 +1769,22 @@ seat + code-walk). Ranked by severity: data-integrity first.
        Guard `-0`, `1e21`+, and >MAX_SAFE_INTEGER artifacts. Accept:
        JPY-switch on 12.40 no longer rounds it; unknown unit leaves
        2.5 alone; tests for each; CHANGELOG entry (contract fix).
-2. [ ] **Live-mode save integrity** (E3, H3). (a) Cancel re-entrancy
+2. [x] **Live-mode save integrity** — shipped 2026-08-16, red-first (4
+       tests written to the grill's exact repro mechanics, all confirmed
+       failing against shipped code): (a) a `cancelling` flag suppresses
+       save/dirty from mid-Cancel restore events (the select-reset change
+       previously turned Cancel into a Save of the abandoned values);
+       (b) live saves are microtask-deferred + coalesced per row per
+       tick, so same-tick money/unit reformats land before the save
+       reads the row (the sync save previously captured the
+       pre-reformat value); (c) a row detached before the deferred save
+       runs is never saved or mutated (the tag-save path unified onto
+       the same helper). Contract docs + CHANGELOG amended. Live-
+       verified: live-mode demo saves per committed change; batch
+       Cancel on the composite still fully restores. 80 tests green.
+       One test-design lesson recorded in the test itself: a live-mode
+       select change legitimately saves+baselines, so the Cancel repro
+       needs mid-edit state with NO committed change. (E3, H3). (a) Cancel re-entrancy
        guard — today a select-reset's `change` fires `saveRow`
        mid-cancel, persisting and baselining the values the user asked
        to discard; (b) defer live saves a microtask so same-tick

@@ -30,8 +30,14 @@ pin.
   restoring consumer-rendered cell content like tag-input chips), tag
   events (`bo:tag-add`/`bo:tag-remove`) marking their row dirty, and a
   second save model: `data-row-edit="live"` dispatches `bo:row-save` on
-  every committed change and re-baselines immediately — no Save/Cancel
-  buttons (batch mode unchanged, still the default).
+  every committed change and re-baselines — no Save/Cancel buttons
+  (batch mode unchanged, still the default). Hardened by the Slice 18
+  close-out grill: live saves are microtask-deferred and coalesced per
+  row per tick (so same-tick money/unit reformats land before the save
+  reads the row, and a row removed in the same tick is never saved or
+  mutated), and a mid-Cancel restore can never trigger a save or dirty
+  state (the select-reset change previously turned Cancel into a Save
+  of the abandoned values).
 
 - Added: `initTableSum()` — declarative realtime column totals: any
   element with `data-sum-of="<field>"` inside a table live-updates to

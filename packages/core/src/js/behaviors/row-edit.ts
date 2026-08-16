@@ -39,8 +39,12 @@
  *   data-row-edit="live"   save-per-change: every committed change
  *                          (change event — blur for text, immediate for
  *                          select/checkbox) dispatches bo:row-save and
- *                          re-baselines at once; no dirty UI, omit the
- *                          Save/Cancel buttons in your markup.
+ *                          re-baselines; no dirty UI, omit the
+ *                          Save/Cancel buttons in your markup. Saves are
+ *                          deferred one microtask and coalesced per row
+ *                          per tick, so same-tick reformats (money/unit)
+ *                          land before the save reads the row and a
+ *                          row removed in the same tick is never saved.
  */
 let installed = false;
 
@@ -114,6 +118,30 @@ function tableOf(row: HTMLElement): HTMLElement | null {
   return row.closest<HTMLElement>('table[data-row-edit]');
 }
 
+/* Grill E3 fixes (Slice 19 item 2): the row currently mid-Cancel — its
+   restore-driven change/input events must never trigger a live save or
+   dirty state (a select-reset's change otherwise turned Cancel into a
+   Save that persisted the abandoned values). */
+let cancelling: HTMLElement | null = null;
+
+/* Live saves are deferred one microtask so every same-tick synchronous
+   re-derivation (money/unit reformat listeners on the same change event)
+   lands BEFORE the save reads the row — a sync save captured the
+   pre-reformat value. Coalesces multiple same-tick changes into one
+   save; a row detached before the microtask runs is skipped entirely
+   (never dispatched-into-nothing, never baselined while detached — the
+   consumer who removed the row owns its fate). */
+const pendingLiveSave = new WeakSet<HTMLElement>();
+
+function queueLiveSave(row: HTMLElement): void {
+  if (pendingLiveSave.has(row)) return;
+  pendingLiveSave.add(row);
+  queueMicrotask(() => {
+    pendingLiveSave.delete(row);
+    if (row.isConnected && cancelling !== row) saveRow(row);
+  });
+}
+
 function isLive(table: HTMLElement): boolean {
   return table.getAttribute('data-row-edit') === 'live';
 }
@@ -179,7 +207,7 @@ export function initRowEdit(): void {
     const row = target.closest<HTMLElement>('table[data-row-edit] tbody tr');
     const table = row && tableOf(row);
     if (!row || !table) return;
-    if (!isLive(table)) setDirty(row, true);
+    if (!isLive(table) && cancelling !== row) setDirty(row, true);
     dispatchCellChange(target as RowField, row);
   });
 
@@ -192,10 +220,10 @@ export function initRowEdit(): void {
     const table = row && tableOf(row);
     if (!row || !table) return;
     if (target instanceof HTMLSelectElement) {
-      if (!isLive(table)) setDirty(row, true);
+      if (!isLive(table) && cancelling !== row) setDirty(row, true);
       dispatchCellChange(target, row);
     }
-    if (isLive(table)) saveRow(row);
+    if (isLive(table) && cancelling !== row) queueLiveSave(row);
   });
 
   document.addEventListener('click', (e) => {
@@ -205,7 +233,12 @@ export function initRowEdit(): void {
     if (cancelBtn) {
       const row = cancelBtn.closest<HTMLElement>('table[data-row-edit] tbody tr');
       if (!row) return;
-      rowFields(row).forEach(resetField);
+      cancelling = row;
+      try {
+        rowFields(row).forEach(resetField);
+      } finally {
+        cancelling = null;
+      }
       setDirty(row, false);
       row.dispatchEvent(
         /**
@@ -247,7 +280,7 @@ export function initRowEdit(): void {
       );
       const table = row && tableOf(row);
       if (!row || !table) return;
-      if (isLive(table)) queueMicrotask(() => saveRow(row));
+      if (isLive(table)) queueLiveSave(row);
       else setDirty(row, true);
     });
   }

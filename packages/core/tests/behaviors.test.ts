@@ -1178,7 +1178,7 @@ describe('initRowEdit advanced cells + save models (Slice 18 item 4)', () => {
     expect(table.querySelector('[data-sum-of="qty"]')!.textContent).toBe('2.50');
   });
 
-  it('live mode: a committed change dispatches bo:row-save + re-baselines, no dirty UI', () => {
+  it('live mode: a committed change dispatches bo:row-save + re-baselines, no dirty UI', async () => {
     const { row } = advancedTable('live');
     const saves: any[] = [];
     row.addEventListener('bo:row-save', (e: any) => saves.push(e.detail.rowId));
@@ -1186,6 +1186,7 @@ describe('initRowEdit advanced cells + save models (Slice 18 item 4)', () => {
     const status = row.querySelector<HTMLSelectElement>('[name="status"]')!;
     status.value = 'Closed';
     status.dispatchEvent(new Event('change', { bubbles: true }));
+    await Promise.resolve(); // live saves are microtask-deferred (Slice 19 item 2)
     expect(saves).toEqual(['A-1']);
     expect(row.hasAttribute('data-row-state')).toBe(false);
     // baseline moved: cancel-equivalent reset would keep Closed
@@ -1228,6 +1229,91 @@ describe('initRowEdit advanced cells + save models (Slice 18 item 4)', () => {
     expect(saves).toEqual([]); // deferred
     await Promise.resolve();
     expect(saves).toEqual(['T-1']);
+  });
+});
+
+describe('initRowEdit live-mode save integrity (Slice 19 item 2, grill E3/H3)', () => {
+  function liveMoneyRow(): { row: HTMLElement; select: HTMLSelectElement; amount: HTMLInputElement; notes: HTMLInputElement } {
+    html`
+      <table data-row-edit="live">
+        <tbody>
+          <tr data-row-id="LV-1">
+            <td>
+              <div class="bo-money">
+                <select class="bo-select bo-money__currency" aria-label="Currency">
+                  <option selected>USD</option>
+                  <option>JPY</option>
+                </select>
+                <input class="bo-input bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Amount" />
+              </div>
+            </td>
+            <td><input name="notes" value="original" aria-label="Notes" /></td>
+            <td>
+              <!-- docs suggest omitting these in live mode; nothing enforces it -->
+              <button type="button" data-row-edit-cancel>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+    ui.initRowEdit();
+    ui.initMoneyField();
+    return {
+      row: document.querySelector('tbody tr')!,
+      select: document.querySelector('.bo-money__currency')!,
+      amount: document.querySelector('.bo-money__amount')!,
+      notes: document.querySelector('[name="notes"]')!,
+    };
+  }
+
+  it('Cancel on a live table never fires a save; every field restores (Cancel-becomes-Save bug)', async () => {
+    const { row, select, amount, notes } = liveMoneyRow();
+    // mid-edit state: fields differ from their baselines with NO committed
+    // change yet (typing in progress / consumer-set values) — the exact
+    // precondition under which Cancel's select-restore change fired a save
+    notes.value = 'edited';
+    amount.value = '999.00';
+    select.value = 'JPY';
+    const saves: string[] = [];
+    row.addEventListener('bo:row-save', (e: any) => saves.push(e.detail.rowId));
+    row.querySelector<HTMLElement>('[data-row-edit-cancel]')!.click();
+    await Promise.resolve();
+    expect(saves).toEqual([]); // the select-reset change must NOT save mid-cancel
+    expect(select.value).toBe('USD');
+    expect(notes.value).toBe('original'); // restored, not baselined-away
+  });
+
+  it('live save carries the post-reformat value (save-before-reformat bug)', async () => {
+    const { row, select, amount } = liveMoneyRow();
+    let valueAtSave: string | null = null;
+    row.addEventListener('bo:row-save', () => { valueAtSave = amount.value; });
+    select.value = 'JPY';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    await Promise.resolve(); // deferred save
+    expect(valueAtSave).toBe('1250'); // trimmed by the reformat BEFORE the save read it
+  });
+
+  it('same-tick changes coalesce into one save', async () => {
+    const { row, select, notes } = liveMoneyRow();
+    const saves: string[] = [];
+    row.addEventListener('bo:row-save', (e: any) => saves.push(e.detail.rowId));
+    notes.dispatchEvent(new Event('change', { bubbles: true }));
+    select.value = 'JPY';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    await Promise.resolve();
+    expect(saves).toEqual(['LV-1']);
+  });
+
+  it('a row detached in the same tick is never saved or mutated (lost-save guard)', async () => {
+    const { row, notes } = liveMoneyRow();
+    const saves: string[] = [];
+    document.addEventListener('bo:row-save', (e: any) => saves.push(e.detail.rowId));
+    notes.value = 'edited';
+    notes.dispatchEvent(new Event('change', { bubbles: true }));
+    row.remove(); // consumer removes the line in the same tick
+    await Promise.resolve();
+    expect(saves).toEqual([]);
+    expect(notes.defaultValue).toBe('original'); // detached row must not be baselined
   });
 });
 
