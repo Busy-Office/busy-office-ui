@@ -1775,6 +1775,18 @@ disabled-segment state.
       live-verifying one instance (`/components/data-table`'s "multi-row
       inline edit" markup) before touching anything. Regenerated all 32
       baselines, stable across 2 clean re-runs.
+      **Second follow-up (next wake)**: `overflow-x: auto` on `<pre>` with
+      no `tabindex` raises a real WCAG 2.1.1 question — is the
+      horizontally-scrolled content reachable by a keyboard-only user?
+      Checked rather than assumed either way: ran `test:axe` (already
+      widths-aware specifically for this scrollable-region-focusable class
+      of issue, per its own header comment) against the freshly-rebuilt
+      container — zero violations across all 59 pages at both widths.
+      Confirmed the `<pre>` elements genuinely have no `tabindex` (grepped
+      the built HTML), so this is axe's own trusted judgment that the
+      current shape doesn't cross its violation threshold, not an
+      unchecked gap. No code change — the established a11y gate is the
+      bar this project holds itself to, and it's held.
 
 ## Long term (post-1.0)
 
