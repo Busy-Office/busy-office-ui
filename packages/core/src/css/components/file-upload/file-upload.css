@@ -96,9 +96,12 @@
 
   .bo-file-list__name {
     flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    min-inline-size: 0;
+    /* A truncated file name is a real problem — "vendor-signature.jpg"
+       and "vendor-signature-final.jpg" look identical when clipped — and
+       it loses text under the WCAG 1.4.12 spacing override. Break the
+       name instead; long names wrap onto a second line. */
+    overflow-wrap: anywhere;
   }
 
   .bo-file-list__size {

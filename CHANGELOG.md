@@ -8,6 +8,12 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (WCAG 1.4.12 Text Spacing): `.bo-chip` and
+  `.bo-file-list__name` truncated with an ellipsis and lost text under a
+  user spacing override — both now wrap instead; `.bo-avatar` clips
+  only when it contains a photo, so initials are never cut. Verified on
+  every page at two widths by a new CI gate.
+
 - Removed: a dead `print-color-adjust: exact` rule targeting
   `.bo-badge` — badges deliberately print as black text in a black
   border with no background, so the rule forced a colour that had

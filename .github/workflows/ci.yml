@@ -38,3 +38,6 @@ jobs:
       # run that claim at compact density in a +35% pseudo-locale.
       - name: Pseudo-locale expansion check
         run: npm run check:pseudo -w docs
+      # WCAG 1.4.12: a user's spacing override must lose no content.
+      - name: Text-spacing (WCAG 1.4.12) check
+        run: npm run check:spacing -w docs

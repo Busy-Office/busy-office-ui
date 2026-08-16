@@ -27,9 +27,11 @@
        and ellipsise instead — the full value stays available as the
        element's title/aria text (pseudo-locale gate, 2026-08-17). */
     max-inline-size: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* WRAP rather than ellipsise: truncation loses text under the WCAG
+       1.4.12 user spacing override (found by executing that criterion,
+       2026-08-17 — the ellipsis added the day before was itself the
+       regression). A wrapped chip is taller; a truncated one is wrong. */
+    overflow-wrap: anywhere;
   }
 
   .bo-chip--active {

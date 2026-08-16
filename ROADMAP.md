@@ -2916,6 +2916,24 @@ assertions added to check-claims (now 10), red-proved by giving the
 badge a print background and confirming the injection landed in the
 built CSS first.
 
+**Explore 2026-08-17 (fifth) — WCAG 1.4.12 executed, gate GRADUATED.**
+The docs claim "heights are minimums, text-spacing-safe" but nobody had
+applied the actual user override (line-height 1.5, letter-spacing
+0.12em, word-spacing 0.16em, paragraph spacing 2em). Applied it to all
+88 pages at both widths and compact density. Raw result: 40 findings —
+but the probe could not tell "clips anyway" from "clips BECAUSE of the
+override", and 35 were pre-existing ellipsis truncation in nav and
+stepper labels (a design choice, not a 1.4.12 failure). Added a
+before/after baseline; five genuine failures remained, two of them
+SELF-INFLICTED the previous day: the `.bo-chip` ellipsis added to fix
+horizontal overflow itself lost text under spacing. Fixes: chip and
+file-name WRAP instead of truncating (a truncated file name —
+"vendor-signature.jpg" vs "vendor-signature-final.jpg" — is its own
+bug), `.bo-avatar` clips only when it holds a photo so initials are
+never cut, palette import rows wrap. Re-sweep: 0 content loss across 88
+pages. Graduated as check-text-spacing.mjs in CI; the accessibility
+page now says the criterion is CI-verified instead of asserting it.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

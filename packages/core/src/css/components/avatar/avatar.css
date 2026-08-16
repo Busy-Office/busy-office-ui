@@ -13,13 +13,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     border-radius: 50%;
     background: var(--bo-color-bg-muted);
     color: var(--bo-color-text-secondary);
     font-size: 0.7em;
     font-weight: var(--bo-font-weight-semibold);
     line-height: 1;
+  }
+
+  /* Clip only when there is a photo to clip: initials under the WCAG
+     1.4.12 letter-spacing override were being cut by the disc. */
+  .bo-avatar:has(img) {
+    overflow: hidden;
   }
 
   .bo-avatar img {

@@ -281,3 +281,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 03:52 · Explore · spike · Pseudo-locale gate graduated: i18n wrapping claim measured (8 pages, +35% text, compact) — red-proof took 3 attempts, trap documented · shipped · 7935101
 - 2026-08-17 04:03 · Continue · fix · Pseudo-locale gate caught a real defect in CI: cluster children could not shrink; long chips overflowed at 390px — fixed in the primitive · shipped · e121623
 - 2026-08-17 04:20 · Standardize · fix · Full-site expansion sweep found the class's second instance (.bo-segmented could not wrap); gate widened 8->14 pages, expansion factor raised · shipped · 601bc3d
+- 2026-08-17 04:34 · Explore · spike · Print claims executed: 7/8 held; badge colour-forcing claim was false (badges print outlined) — docs corrected, dead rule removed, 5 print assertions gated · shipped · 88cfc92

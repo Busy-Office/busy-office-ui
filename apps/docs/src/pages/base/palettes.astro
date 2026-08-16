@@ -116,7 +116,7 @@ const PROFILES: Record<string, string> = {
           </div>
           <p class="pal-profile">{PROFILES[p.name] ?? ''}</p>
           <div class="pal-import">
-            <code>{`brand-${p.name}`}</code>
+            <code style="overflow-wrap: anywhere">{`brand-${p.name}`}</code>
             <button type="button" class="pal-copy bo-btn bo-btn--ghost"
               data-copy={`@import "@busy-office/ui/css/brand-${p.name}";`}>copy @import</button>
           </div>
@@ -228,6 +228,10 @@ const PROFILES: Record<string, string> = {
     }
     .pal-import {
       display: flex;
+      /* wrap + shrink: the import name and the copy button could not fit
+         side by side under the WCAG 1.4.12 spacing override and the card
+         clipped them */
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: var(--bo-space-2);
