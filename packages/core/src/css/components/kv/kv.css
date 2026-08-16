@@ -1,0 +1,42 @@
+@layer bo-components {
+  /* Key-value facts — the record-header staple (Vendor · Cost center ·
+     Terms · Total). A native <dl> with <div> pair wrappers: one
+     responsive grid, density-aware values, no readonly-input abuse for
+     display data. Graduated from the 2026-08-16 Explore spike. */
+  .bo-kv {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--bo-space-3) var(--bo-space-4);
+    margin: 0;
+  }
+
+  .bo-kv dt {
+    font-size: var(--bo-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bo-color-text-muted);
+  }
+
+  .bo-kv dd {
+    margin: 0;
+    font-size: var(--bo-density-font-size);
+    color: var(--bo-color-text-primary);
+  }
+
+  /* Numeric facts line up when stacked (pair with .bo-u-tabular). */
+
+  /* Dense single-column variant for sidebars/cards: label and value on
+     one line, label column fixed. */
+  .bo-kv--rows {
+    grid-template-columns: max-content 1fr;
+    row-gap: var(--bo-space-2);
+  }
+
+  .bo-kv--rows > div {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    align-items: baseline;
+    column-gap: var(--bo-space-3);
+  }
+}

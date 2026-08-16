@@ -112,6 +112,21 @@ for (const theme of THEMES) {
           '.bo-app-shell__sidebar{position:static!important;block-size:auto!important}';
         document.head.append(s);
       });
+      // Height-settle guard: the unlock above triggers a re-layout, and a
+      // shot taken before it lands measures scrollHeight = viewport (the
+      // recurring "390x1000" capture flake — richtext dark, then login
+      // dark, 2026-08-16). Wait until the document height is stable for
+      // three consecutive frames before trusting fullPage.
+      await page.evaluate(() => new Promise((done) => {
+        let last = -1, stable = 0;
+        const tick = () => {
+          const h = document.documentElement.scrollHeight;
+          if (h === last && ++stable >= 3) return done();
+          if (h !== last) { stable = 0; last = h; }
+          requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }));
       const shot = await page.screenshot({ fullPage: true });
       const basePath = join(baseDir, name);
       const exists = await access(basePath).then(() => true, () => false);

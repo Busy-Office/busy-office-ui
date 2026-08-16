@@ -2386,7 +2386,7 @@ engine-shaped sub-ask refused with the reason.
        check passes; only documented APIs used; screenshots both
        themes/widths.
 
-7. [ ] **Key-value facts (`.bo-kv`)** — graduated from the 2026-08-16
+7. [x] **Key-value facts (`.bo-kv`)** — DONE 2026-08-16 (page + --rows variant; record-detail facts card; po-app migrated off readonly inputs, container-verified; struck clauses recorded below). — graduated from the 2026-08-16
        Explore spike (worktree, discarded per playbook; screenshots
        prove the shape). The record-header staple (Vendor · Cost
        center · Terms · Total) has no primitive today: the homepage
@@ -2396,10 +2396,15 @@ engine-shaped sub-ask refused with the reason.
        responsive auto-fit grid, density-aware values, muted uppercase
        labels, `.bo-u-tabular` for numeric facts; badges/times compose
        inside dd. Spike verified 1440 (4-col) + 390 (stacked), both
-       themes. Accept: component page per the recipe; record-detail +
-       detail-form + homepage migrate to it (drop the readonly-input
-       facts and the hand-rolled dt/dd styles); po-app facts adopt it;
-       gates green incl. new-page baselines; live-verified.
+       themes. Accept: component page per the recipe; record-detail
+       gains the facts card; po-app facts adopt it (its Vendor/Amount
+       readonly inputs were the real abuse); gates green; live-verified.
+       STRUCK with reasons (2026-08-16, per the strike-don't-overwrite
+       rule): "detail-form migrates" — no readonly-input abuse exists
+       there (the graduation note over-claimed); "homepage migrates" —
+       the landing's .meta dl is deliberate marketing design with its
+       own sub-line typography; forcing the component there changes a
+       designed page for zero user benefit (Objective: refuse).
 
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as

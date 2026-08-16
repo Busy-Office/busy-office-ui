@@ -42,5 +42,6 @@
 @import "./components/tree-table/tree-table.css";
 @import "./components/richtext/richtext.css";
 @import "./components/avatar/avatar.css";
+@import "./components/kv/kv.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

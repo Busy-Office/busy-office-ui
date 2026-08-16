@@ -202,16 +202,11 @@ const detailScreen = (p) => `
 <div class="bo-grid" style="--bo-grid-min: 18rem">
   <fieldset class="bo-form-section">
     <legend class="bo-form-section__legend">Order</legend>
-    <div class="bo-form-row">
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="vendor">Vendor</label>
-        <input class="bo-input" id="vendor" value="${p.vendor}" readonly>
-      </div>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="amount">Amount</label>
-        <input class="bo-input bo-input--numeric" id="amount" value="${money(p.amount)}" readonly>
-      </div>
-    </div>
+    <dl class="bo-kv">
+      <div><dt>Vendor</dt><dd>${p.vendor}</dd></div>
+      <div><dt>Cost center</dt><dd>${p.cc}</dd></div>
+      <div><dt>Amount</dt><dd class="bo-u-tabular">${money(p.amount)}</dd></div>
+    </dl>
   </fieldset>
   <div>${timelineHtml(p)}</div>
 </div>

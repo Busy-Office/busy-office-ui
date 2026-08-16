@@ -1,0 +1,95 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<dl class="bo-kv">
+  <div><dt>Vendor</dt><dd>Umbrella Logistics</dd></div>
+  <div><dt>Cost center</dt><dd>CC-4021</dd></div>
+  <div><dt>Payment terms</dt><dd>Net 30</dd></div>
+  <div><dt>Total</dt><dd class="bo-u-tabular">$12,400.00</dd></div>
+  <div><dt>Requested</dt><dd><time datetime="2026-08-10">10 Aug 2026</time></dd></div>
+  <div><dt>Status</dt><dd><span class="bo-badge bo-badge--success">Approved</span></dd></div>
+</dl>`;
+
+const rows = `<dl class="bo-kv bo-kv--rows">
+  <div><dt>Warehouse</dt><dd>HAM-02</dd></div>
+  <div><dt>Bin</dt><dd>A-14-3</dd></div>
+  <div><dt>On hand</dt><dd class="bo-u-tabular">1,240</dd></div>
+  <div><dt>Reserved</dt><dd class="bo-u-tabular">380</dd></div>
+</dl>`;
+
+const canonical = `<!-- A native description list: each fact is a <div>-wrapped dt/dd
+     pair (valid HTML, and the pair is the grid item). Values are real
+     content — badges, times, links all compose inside dd. -->
+<dl class="bo-kv">
+  <div><dt>Vendor</dt><dd>Umbrella Logistics</dd></div>
+  <div><dt>Total</dt><dd class="bo-u-tabular">$12,400.00</dd></div>
+</dl>
+
+<!-- Dense sidebar/card variant: one fact per line, aligned columns -->
+<dl class="bo-kv bo-kv--rows">
+  <div><dt>Bin</dt><dd>A-14-3</dd></div>
+</dl>`;
+---
+<Gallery title="Key-value facts">
+  <p class="demo-note">
+    The record-header staple: labeled facts (Vendor · Cost center ·
+    Terms · Total) as a real description list — not readonly inputs, not
+    hand-rolled markup. One grid, responsive by construction; values are
+    normal content, so badges and dates compose.
+  </p>
+
+  <section class="demo">
+    <h2>Facts strip — a record header</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">Columns pack to the space
+    (<code>auto-fit</code>): four across a detail header, a single stack
+    at phone width — no breakpoints to manage. Give money and counts
+    <code>.bo-u-tabular</code> so digits align.</p>
+  </section>
+
+  <section class="demo">
+    <h2><code>--rows</code> — dense sidebar facts</h2>
+    <Demo code={rows} />
+    <p class="bo-u-text-muted">One fact per line with the label column
+    auto-sized and aligned — inventory panels, filter summaries, print
+    footers. Same markup, one modifier.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Why a description list</h2>
+    <p>Display data in a disabled or readonly <code>&lt;input&gt;</code>
+    tells assistive tech "this is a form control you can't use" — wrong
+    semantics and heavier chrome for something the user only reads. A
+    <code>&lt;dl&gt;</code> says exactly what it is: terms and their
+    values. Screen readers announce the pairing; nothing pretends to be
+    editable. Use the <a href={base + '/patterns/detail-form'}>detail
+    form</a> when values ARE editable — this component is for facts.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="kv" />
+  <ApiTable
+    component="kv"
+    notes={[
+      'Each pair is a <code>&lt;div&gt;&lt;dt&gt;…&lt;/dt&gt;&lt;dd&gt;…&lt;/dd&gt;&lt;/div&gt;</code> — the div wrapper is valid HTML inside a dl and is what the grid lays out.',
+      'Values are content, not strings: badges, <code>&lt;time&gt;</code>, links, and avatars compose inside <code>dd</code>.',
+      'Numeric facts want <code>.bo-u-tabular</code> on the dd so digits align across the strip.',
+      'For editable values use form fields (detail form pattern) — a fact that is secretly an input misleads assistive tech in both directions.',
+      'Density-aware: values track <code>--bo-density-font-size</code>; the grid itself needs no density hooks.',
+    ]}
+  />
+  <Related links={[
+    ['/patterns/record-detail', 'Record detail'],
+    ['/patterns/detail-form', 'Multi-column detail form'],
+    ['/components/badge', 'Badge'],
+  ]} />
+</Gallery>
