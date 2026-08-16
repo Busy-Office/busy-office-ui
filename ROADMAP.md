@@ -2035,7 +2035,12 @@ Ranked: quick wins that harden every page first, then the two build items.
        component + behavior (if JS needed) + docs page with the graded
        recipe; keyboard + SR story stated; tests; gates green;
        live-verified both themes/widths.
-5. [ ] **Palette system** (wishlist, seeded by Tailwind v4.3's
+5. [x] **SUPERSEDED — delivered by Slice 22 item 1** (reconciliation
+       2026-08-16): the scale system shipped six ERP presets (graphite/
+       cobalt/navy/forest/indigo/violet, step-aliased and contrast-
+       gated) plus the generated Palettes reference page — everything
+       this item asked for and more. Original text kept for the record:
+       **Palette system** (wishlist, seeded by Tailwind v4.3's
        mauve/olive/mist/taupe). Grow the proven brand-preset mechanism
        into a small named-palette SYSTEM: 3-4 new presets built the
        brand-indigo way (accent family + focus-ring + bg-selected,
