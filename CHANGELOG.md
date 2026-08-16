@@ -8,6 +8,32 @@ pin.
 
 ## Unreleased
 
+- **Breaking** (contract shape of a stable behavior, per the freeze
+  policy): `initRowEdit()` now tracks, resets, and baselines `<select>`
+  elements in editable rows, not just inputs/textareas. If your
+  `data-row-edit` rows already contain selects, Cancel now restores them
+  to their default selection (previously untouched) and re-fires
+  `change` on a genuinely-reset select so dependent behaviors re-derive;
+  Save now baselines their selection. A select `change` also marks the
+  row dirty. Needed so money (currency) and quantity (unit) selects
+  compose into editable rows with correct Cancel/Save semantics.
+
+- Added: Money field (`.bo-money` + `initMoneyField()`) — a currency
+  select linked to an amount input; changing currency re-derives the
+  input's `step`/decimals from a built-in ISO 4217 minor-units table
+  (exceptions only, everything else 2) and reformats the value,
+  dispatching a real `input` event. `data-decimals` on the selected
+  option or container overrides the table. `currencyDecimals()` exported.
+  A deliberate, documented exception to "your app owns the data" —
+  built-in but always overridable.
+
+- Added: Quantity read-only display (`.bo-quantity--display` with
+  `__value` + `__unit`) and an interactive unit select
+  (`select.bo-quantity__unit-select`): changing unit re-derives
+  `step`/decimals from a built-in common-ERP unit table (unknown units
+  default to 0) with the same `data-decimals` override contract.
+  `unitDecimals()` exported.
+
 - Added: Tag input (`.bo-tag-input`) — multi-value entry for cost centers,
   approval-routing recipients. Real JS (no native element covers this,
   same class as Combobox): `initTagInput()` dispatches `bo:tag-add` on

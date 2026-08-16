@@ -1094,6 +1094,72 @@ describe('initTagInput', () => {
   });
 });
 
+describe('initRowEdit + money cell composition (Slice 18 item 3)', () => {
+  function editableMoneyRow(): { row: HTMLElement; select: HTMLSelectElement; amount: HTMLInputElement; save: HTMLElement; cancel: HTMLElement } {
+    html`
+      <table data-row-edit>
+        <tbody>
+          <tr data-row-id="L-1">
+            <td>
+              <div class="bo-money">
+                <select class="bo-select bo-money__currency" aria-label="Currency">
+                  <option selected>USD</option>
+                  <option>JPY</option>
+                </select>
+                <input class="bo-input bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Amount" />
+              </div>
+            </td>
+            <td>
+              <span data-row-edit-dirty hidden>Unsaved</span>
+              <button type="button" data-row-edit-save hidden>Save</button>
+              <button type="button" data-row-edit-cancel hidden>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+    ui.initRowEdit();
+    ui.initMoneyField();
+    return {
+      row: document.querySelector('tr')!,
+      select: document.querySelector('.bo-money__currency')!,
+      amount: document.querySelector('.bo-money__amount')!,
+      save: document.querySelector('[data-row-edit-save]')!,
+      cancel: document.querySelector('[data-row-edit-cancel]')!,
+    };
+  }
+
+  it('currency change marks the row dirty; Cancel restores selection, value AND step', () => {
+    const { row, select, amount, cancel } = editableMoneyRow();
+    select.value = 'JPY';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(row.getAttribute('data-row-state')).toBe('dirty'); // via the change listener (jsdom fires no input for selects)
+    expect(amount.value).toBe('1250'); // reformatted to 0 decimals
+    expect(amount.step).toBe('1');
+
+    cancel.click();
+    expect(row.hasAttribute('data-row-state')).toBe(false);
+    expect(select.value).toBe('USD');
+    expect(amount.value).toBe('1250.00'); // defaultValue restored
+    expect(amount.step).toBe('0.01'); // re-derived from the restored currency
+  });
+
+  it('Save re-baselines the select — a later Cancel keeps the saved currency', () => {
+    const { row, select, amount, save, cancel } = editableMoneyRow();
+    select.value = 'JPY';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    save.click();
+    expect(row.hasAttribute('data-row-state')).toBe(false);
+
+    amount.value = '900';
+    amount.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(row.getAttribute('data-row-state')).toBe('dirty');
+    cancel.click();
+    expect(select.value).toBe('JPY'); // saved baseline, not the original USD
+    expect(amount.value).toBe('1250'); // the value saved alongside it
+  });
+});
+
 describe('initQuantity unit select (embedded unit table)', () => {
   function unitQuantity(opts = ''): { root: HTMLElement; select: HTMLSelectElement; input: HTMLInputElement } {
     html`

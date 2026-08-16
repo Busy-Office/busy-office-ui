@@ -1664,12 +1664,29 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        demos; embedded unit table shipped + fully documented (every unit
        type listed); override verified; cross-links both ways with Amount;
        gates green, live-verified.
-3. [ ] **Editable Amount+Currency and Quantity+Unit table cells** —
-       composition demos: item 1's money field and the existing quantity
-       stepper inside editable data-table rows, unit/currency as real
-       separate fields in the cell. Accept: demos on the data-table or
-       editable-grid docs; row-edit dirty tracking confirmed to catch
-       changes from both compositions; live-verified.
+3. [x] **Editable Amount+Currency and Quantity+Unit table cells** —
+       shipped 2026-08-16, Accept met. New "Money & unit cells" section on
+       `/patterns/editable-grid`: money field + quantity-with-unit-select
+       inside a `data-row-edit` row, currency/unit as real separate
+       fields. Meeting the Accept honestly required pulling ONE small
+       piece of item 4 forward: `rowFields()` only handled
+       input/textarea, so a changed currency/unit select would have
+       survived Cancel and been skipped by Save's re-baseline — extended
+       to selects (reset via per-option `defaultSelected`, baseline
+       symmetrically), a `change` listener marks select-only edits dirty,
+       and a genuinely-reset select re-fires `change` so precision
+       re-derives from the restored currency/unit instead of sticking at
+       the abandoned one (found by reasoning through the Cancel corner,
+       confirmed live: JPY step=1 → Cancel → step back to 0.01).
+       CHANGELOG **Breaking** entry added — `initRowEdit` is one of the
+       18 stable behaviors, and selects-now-tracked is an observable
+       contract-shape change per the freeze policy. 2 new composition
+       tests (70 total). Live-verified end-to-end: currency change →
+       dirty + reformat, unit change → reformat, Cancel restores
+       selection+value+precision on BOTH compositions, Save re-baselines
+       (later Cancel keeps SGD, not the original USD), `bo:row-save`
+       fires with the right rowId, both themes, zero console errors, 32
+       baselines untouched (verified, not assumed).
 4. [ ] **Advanced editable table** (extend `row-edit`, not a parallel
        grid — lean per the user's explicit ask). (a) Cell types: `<select>`
        dropdown (net-new — `rowFields()` today queries only

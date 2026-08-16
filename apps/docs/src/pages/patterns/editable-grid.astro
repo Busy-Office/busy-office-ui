@@ -197,6 +197,65 @@ const markup = `<table class="bo-data-table" data-row-edit>
   </script>
 
   <section class="demo">
+    <h2>Money &amp; unit cells — currency/unit as real separate fields</h2>
+    <p>An editable line often needs the currency or unit editable <em>next
+    to</em> the number, not baked into a label. Both compose into a
+    <code>data-row-edit</code> row with zero special wiring — and their
+    precision behaviors keep working: switch this row's currency to JPY and
+    the price reformats to 0 decimals, marks the row dirty, and
+    <strong>Cancel restores the currency, the value, and the
+    precision</strong> together.</p>
+    <table class="bo-data-table" data-row-edit id="eg-money-table">
+      <thead><tr>
+        <th scope="col">Item</th>
+        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+        <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+      </tr></thead>
+      <tbody>
+        <tr data-row-id="LINE-M1">
+          <td>Hydraulic pump, 20&nbsp;bar</td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-quantity" style="max-inline-size: 14rem">
+              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+              <input class="bo-quantity__input bo-input--seamless" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
+              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+              <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+                <option selected>kg</option><option>each</option><option>box</option>
+              </select>
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-money">
+              <select class="bo-select bo-money__currency" aria-label="Currency">
+                <option selected>USD</option><option>SGD</option><option>JPY</option><option>KWD</option>
+              </select>
+              <input class="bo-input bo-input--seamless bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Unit price" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="bo-u-text-muted">Under the hood: the money/unit behaviors
+    dispatch a real <code>input</code> event when they reformat, so
+    <code>initRowEdit()</code>'s dirty tracking sees precision changes the
+    same as typing; Cancel re-fires <code>change</code> on a reset select so
+    the precision re-derives from the restored currency/unit instead of
+    sticking at the abandoned one.</p>
+  </section>
+
+  <script>
+    import { initMoneyField, initQuantity } from '@busy-office/ui/js';
+    initMoneyField();
+    initQuantity();
+  </script>
+
+  <section class="demo">
     <h2>What composes, and what doesn't (out of the box)</h2>
     <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li><strong>Combobox in a cell</strong> — no special markup; it's the same
@@ -232,6 +291,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
   <Related links={[
     ["/components/data-table", "Data table"],
     ["/components/combobox", "Combobox"],
+    ["/components/money", "Money field"],
+    ["/components/quantity", "Quantity"],
     ["/components/form", "Forms"],
     ["/patterns/invoice-list", "Invoice list"],
   ]} />
