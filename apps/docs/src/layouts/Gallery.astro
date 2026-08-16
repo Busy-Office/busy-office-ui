@@ -402,18 +402,20 @@ const current =
       document.getElementById('docsearch')?.setAttribute('data-shortcut', '⌘K');
     </script>
     <script>
-      import htmx from 'htmx.org';
-      window.htmx = htmx; // the ESM build only default-exports; other
-                           // is:inline scripts (the Pagefind result-boost
-                           // fix below) need window.htmx to call .process().
-      // head-support: boosted swaps replace #main-content but DROP the
-      // incoming page's <head> — and Astro inlines small page styles into
-      // head, so pages like /base/colors arrived unstyled on every sidebar
-      // navigation (owner P0, third leg; the caching fixes were real but
-      // this was the reproducible core). DYNAMIC import: a static import
-      // hoists above the window.htmx assignment and the ext throws
-      // "htmx is not defined" (proven by the repro loop's pageerror).
-      await import('htmx.org/dist/ext/head-support.js');
+      // Order matters and is enforced by module dependency, not statement
+      // position: htmx-setup sets window.htmx during ITS evaluation, then
+      // head-support evaluates — synchronous, no race window for a fast
+      // boosted click (owner root-cause doc, 2026-08-16). head-support
+      // stays as belt-and-suspenders for head merging (title, etc.);
+      // page STYLES no longer depend on it (inlineStylesheets: 'never').
+      // SIDE-EFFECT imports, both of them: a bound-but-unused default
+      // import (import htmx from …) gets TREE-SHAKEN by the bundler and
+      // htmx silently never loads — caught by the boost gate's
+      // "navigation was NOT boosted" assertion while building it.
+      // htmx-setup sets window.htmx during its evaluation; head-support
+      // then evaluates against that global, synchronously, no race.
+      import '../lib/htmx-setup';
+      import 'htmx.org/dist/ext/head-support.js';
       import { initDialogs } from '@busy-office/ui/js';
       initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
                       // delegation, so it keeps working across boosted swaps

@@ -253,3 +253,9 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 21:03 · Continue · fix · P0 root-caused: browser-cached HTML + deleted hashed CSS; pages.yml asset carryover shipped (first diagnosis falsified and corrected) · shipped · 29ec2e8
 - 2026-08-16 21:06 · Standardize · fix · Tidy: shared doc-swatch chip (zero-diff verified); toolbar consolidation deferred to Breaking batch with reason · shipped · ed89568
 - 2026-08-16 21:09 · Continue · fix · P0 verification: first carryover deploy keeps previous _astro generation live (200) — unstyled-first-paint class closed · shipped · 05986c5
+- 2026-08-16 21:31 · Continue · build · Items 5+5a: prose extracted standalone (non-breaking); toolbar consolidation refused per part contract — backlog clear · shipped · 16d47fa
+- 2026-08-16 21:45 · Roadmap · plan · Reconciliation: 2 CHANGELOG gaps fixed (scale system, bo-kv); 0.2.0 release-readiness recorded with owner checklist · shipped · 1a26d1d
+- 2026-08-16 22:04 · Continue · fix · P0 leg 2 (localhost): heuristic HTML caching pinned dead hashed CSS — nginx no-cache/immutable headers shipped, verified live · shipped · 5a169b1
+- 2026-08-16 22:06 · Explore · spike · .bo-kbd + shortcuts-help: spike succeeded (dialog + kv--rows composition, both themes) — graduated as item 8 · shipped · b9501b7
+- 2026-08-16 22:26 · Continue · fix · P0 leg 3 (the real core): hx-boost dropped inlined head styles — head-support shipped, 30/30 -> 0/30 repro loop · shipped · 28de419
+- 2026-08-16 22:26 · Continue · build · Item 8: .bo-kbd + keyboard-help pattern shipped (live ?-wiring verified) · shipped · 28de419
