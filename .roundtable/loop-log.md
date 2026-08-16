@@ -276,3 +276,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 02:19 · Continue · build · Slice 23 item 6: data-table split into 3 pages + js-behaviors event index to /reference/events — SLICE 23 COMPLETE · shipped · bb4ece7
 - 2026-08-17 02:37 · Standardize · fix · Post-Slice-23 tidy: shared demo fixture (visual suite caught a 6-vs-5 row drift), 3 dead markup constants, 1 unused import — clean re-scan · shipped · dfeff96
 - 2026-08-17 03:02 · Explore · spike · Dogfood: permissions doctrine held; concurrency 409 guidance proven a silent no-op under htmx — beforeSwap opt-in documented on concurrency + htmx pages · shipped · 28a0797
+- 2026-08-17 03:10 · Explore · spike · Claims gate graduated: 5 doc behaviours executed in CI (red-proved); probe's own false-failure fixed by driving real key events · shipped · f399777

@@ -2,6 +2,19 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const oobMarkup = `<!-- The button posts and swaps the FORM area -->
+<button hx-post="/po/88213/reject" hx-target="#dialog-body" hx-swap="innerHTML">Reject</button>
+
+<!-- 422: the form comes back, values kept, error wired to the field -->
+<div class="bo-alert bo-alert--danger" role="alert" id="err">A reason is required.</div>
+<div class="bo-richtext__content" contenteditable="true"
+     aria-invalid="true" aria-describedby="err">…</div>
+
+<!-- 200: the dialog body gets a confirmation, and the timeline OUTSIDE
+     the dialog updates out of band in the same response -->
+<p>Rejected — reason recorded.</p>
+<ol id="timeline-88213" hx-swap-oob="outerHTML" class="bo-timeline">…</ol>`;
 ---
 <Gallery title="Pattern: inline validation summary">
   <p class="demo-note">
@@ -101,6 +114,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section class="demo">
+    <h2>Two swap targets, one endpoint</h2>
+    <p>A validating endpoint answers in two places: the <strong>422</strong>
+    re-renders the form where the user is looking, while the
+    <strong>success</strong> usually has to update something else — a
+    timeline, a row, a list behind the dialog. Point
+    <code>hx-target</code> at the form, and let the success response
+    carry the other update out of band:</p>
+    <pre><code>{oobMarkup}</code></pre>
+    <p class="bo-u-text-muted">Verified by dogfooding the reference app
+    (2026-08-17): without the out-of-band swap the success response
+    replaced the dialog body with a timeline and the real timeline never
+    changed — the action appeared to do nothing. And remember htmx
+    discards non-2xx by default, so a 422 needs the
+    <a href={base + '/getting-started/htmx'}>beforeSwap opt-in</a> or the
+    user never sees the error at all.</p>
   </section>
 
   <section class="demo">

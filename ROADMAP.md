@@ -2843,6 +2843,22 @@ added last wake — it needs a server that returns 422, so it belongs in
 a po-app harness; recorded as the next dogfood target rather than
 asserted.
 
+**Dogfood 2026-08-17 (422 verification) — the claim held, and a SECOND
+gap surfaced.** The 422 guidance added two wakes ago was still
+unverified, so the reference app grew a real rejection flow: a reason
+is required, an empty one returns 422 with the form re-rendered, values
+kept, error wired via aria-describedby, dialog left open. Verified in
+the browser end-to-end (the beforeSwap opt-in is now in po-app's shell
+for 409 AND 422). **New finding**: one validating endpoint answers in
+TWO places — the 422 lands in the form the user is looking at, the
+success has to update something else (a timeline outside the dialog).
+Without an out-of-band swap the success response replaced the dialog
+body with a timeline and the real timeline never changed: the action
+appeared to do nothing. Fixed in po-app with `hx-swap-oob` and
+documented on /patterns/validation-summary as "Two swap targets, one
+endpoint". Pattern holding: every dogfood round so far has found a
+real defect in guidance that read fine on the page.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

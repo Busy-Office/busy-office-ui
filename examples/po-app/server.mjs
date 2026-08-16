@@ -56,6 +56,18 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 <link rel="stylesheet" href="/assets/css/index.min.css">
 <link rel="stylesheet" href="/assets/css/htmx.min.css">
 <link rel="stylesheet" href="/assets/css/brand-cobalt.min.css">
+<script>
+  // htmx DISCARDS non-2xx responses by default — a 422 carrying a
+  // re-rendered form, or a 409 carrying the current record, would never
+  // reach the user (docs: /concepts/concurrency, /getting-started/htmx).
+  // Opt the statuses this app uses deliberately back in.
+  document.addEventListener("htmx:beforeSwap", (e) => {
+    if ([409, 422].includes(e.detail.xhr.status)) {
+      e.detail.shouldSwap = true;
+      e.detail.isError = false;
+    }
+  });
+</script>
 <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
 <body>
@@ -256,7 +268,7 @@ ${p.status === 'Pending' ? `
       <h2 class="bo-dialog__title" id="adlg-t">Approve ${p.id}</h2>
       <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
     </header>
-    <div class="bo-dialog__body">
+    <div class="bo-dialog__body" id="adlg-body">
       <p>Approve ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p>
       <div class="bo-form-field">
         <span class="bo-form-field__label" id="adlg-note-label">Approval note</span>
@@ -281,6 +293,9 @@ ${p.status === 'Pending' ? `
     </div>
     <footer class="bo-dialog__footer">
       <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
+      <button class="bo-btn bo-btn--danger-ghost" type="button"
+        hx-post="/pos/${p.id}/reject" hx-target="#adlg-body" hx-swap="innerHTML"
+        hx-vals='js:{note: document.getElementById("adlg-note").innerHTML}'>Reject</button>
       <button class="bo-btn" value="confirm"
         hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML"
         hx-vals='js:{note: document.getElementById("adlg-note").innerHTML}'>Approve</button>
@@ -561,14 +576,51 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       // button out-of-band in the same response.
       return res.end(tbodyHtml(pos) + '<button id="po-load-more" hx-swap-oob="delete"></button>');
     }
-    const m = path.match(/^\/pos\/(PO-\d+)(\/approve)?$/);
+    const m = path.match(/^\/pos\/(PO-\d+)(\/approve|\/reject)?$/);
     if (m) {
       const p = pos.find((x) => x.id === m[1]);
       if (!p) {
         res.writeHead(404);
         return res.end('not found');
       }
-      if (m[2] && req.method === 'POST') {
+      if (m[2] === '/reject' && req.method === 'POST') {
+        const body = await new Promise((ok) => { let b=''; req.on('data',(c)=>b+=c); req.on('end',()=>ok(b)); });
+        const note = (new URLSearchParams(body).get('note') ?? '').replace(/<[^>]*>/g, '').trim();
+        if (!note) {
+          // 422: re-render the SAME body with values kept and the error
+          // wired to the field — the contract on /patterns/validation-summary.
+          res.writeHead(422, { 'content-type': 'text/html' });
+          return res.end(`
+            <div class="bo-alert bo-alert--danger" role="alert" id="adlg-error">
+              <p><strong>A reason is required to reject.</strong> Say what the requester should change.</p>
+            </div>
+            <p>Reject ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p>
+            <div class="bo-form-field">
+              <span class="bo-form-field__label" id="adlg-note-label">Approval note</span>
+              <div class="bo-richtext">
+                <div class="bo-cluster bo-richtext__toolbar" role="group" aria-label="Formatting">
+                  <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
+                </div>
+                <div class="bo-richtext__content bo-prose" contenteditable="true" id="adlg-note"
+                     role="textbox" aria-multiline="true" aria-labelledby="adlg-note-label"
+                     aria-invalid="true" aria-describedby="adlg-error"></div>
+              </div>
+            </div>`);
+        }
+        p.status = 'Rejected';
+        p.note = note;
+        audit.push({ t: new Date().toISOString(), what: `rejected ${p.id}` });
+        // ONE endpoint, TWO swap targets: the 422 lands in the dialog body
+        // (hx-target), the success has to update the timeline OUTSIDE the
+        // dialog. Out-of-band swap solves it — without this the success
+        // response replaced the dialog body with a timeline and the real
+        // timeline never changed (found by dogfooding, 2026-08-17).
+        res.writeHead(200, { 'content-type': 'text/html' });
+        return res.end(`
+          <p>Rejected — <span class="bo-u-text-muted">reason recorded in the audit trail.</span></p>
+          <div id="timeline-${p.id}" hx-swap-oob="outerHTML">${timelineHtml(p).replace(`<ol class="bo-timeline" role="list" id="timeline-${p.id}">`, '<ol class="bo-timeline" role="list">')}</div>`);
+      }
+      if (m[2] === '/approve' && req.method === 'POST') {
         p.status = 'Approved';
         // Sanitize per the richtext docs: drop script/style elements WITH
         // their content first (a tag-only allowlist leaks the text — the
