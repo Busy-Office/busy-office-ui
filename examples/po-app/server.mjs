@@ -261,7 +261,7 @@ ${p.status === 'Pending' ? `
       <div class="bo-form-field">
         <span class="bo-form-field__label" id="adlg-note-label">Approval note</span>
         <div class="bo-richtext">
-          <div class="bo-cluster bo-richtext__toolbar" role="group" aria-label="Formatting">
+          <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
             <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
             <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
             <span class="bo-richtext__divider"></span>

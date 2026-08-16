@@ -1,0 +1,97 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<div class="bo-prose">
+  <h2>Return authorization RMA-2210</h2>
+  <p>Customer reports <strong>intermittent fault</strong> after firmware
+  2.4; unit powers off under load.</p>
+  <ul>
+    <li>Serial verified against the delivery</li>
+    <li>Warranty valid until 2027-03-01</li>
+  </ul>
+  <table>
+    <thead><tr><th>Item</th><th>Qty</th><th>Disposition</th></tr></thead>
+    <tbody>
+      <tr><td>Controller unit</td><td>1</td><td>Replace</td></tr>
+      <tr><td>Power cable</td><td>1</td><td>Keep</td></tr>
+    </tbody>
+  </table>
+  <blockquote>Customer prefers replacement over repair — confirmed by
+  phone 2026-08-12.</blockquote>
+</div>`;
+
+const inCard = `<article class="bo-widget">
+  <header class="bo-widget__header">
+    <span class="bo-badge bo-badge--type">Approval note</span>
+    <span class="bo-byline"><strong>J. Kim</strong> · Cost-centre manager</span>
+  </header>
+  <div class="bo-widget__body bo-prose">
+    <p>Approved with <em>one exception</em> — line 3 ships from
+    <strong>Hamburg</strong> instead:</p>
+    <ol><li>Confirm HAM-02 stock</li><li>Update the delivery date</li></ol>
+  </div>
+</article>`;
+
+const canonical = `<!-- One class on the wrapper; the CONTENT is native elements
+     (headings, lists, blockquote, code, tables) exactly as stored.
+     No per-element opt-in, no markup transformation. -->
+<div class="bo-prose">
+  <h2>…</h2>
+  <p>… <strong>…</strong> …</p>
+  <table>…</table>
+</div>`;
+---
+<Gallery title="Prose">
+  <p class="demo-note">
+    Stored rich text, displayed — approval notes, comments, return
+    instructions rendered on record detail, in cards, or in print. One
+    class styles the native elements; pairs with the
+    <a href={base + '/components/richtext'}>rich text editor chrome</a>
+    but needs none of it.
+  </p>
+
+  <section class="demo">
+    <h2>Rendered content</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">Headings, lists, blockquotes, inline
+    code, and a bordered lite table — stored content just needs to read
+    well; real data screens use the
+    <a href={base + '/components/data-table'}>data table</a>. First and
+    last children drop their outer margins, so prose sits flush inside
+    padded containers.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Inside a card</h2>
+    <Demo code={inCard} />
+    <p class="bo-u-text-muted">Compose freely — a widget body, a
+    timeline entry, a dialog. The class carries no chrome of its own, so
+    the container's padding and background stay in charge.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="prose" />
+  <ApiTable
+    component="prose"
+    notes={[
+      'Sanitize stored HTML on the server before it ever reaches this class — rendered rich text is untrusted input (the <a href="' + base + '/components/richtext">rich text page</a> has the full guidance, including why a tag allowlist alone leaks script text).',
+      'Stored content may contain <code>h1</code>s or skipped levels: demote server-side so your page outline stays sane.',
+      'Prose tables print like data tables — headers repeat per page, rows never split (print/index.css).',
+      'Displaying inside the editor chrome? Put the class on <code>.bo-richtext__content</code> — same styles while editing and when rendered.',
+    ]}
+  />
+  <Related links={[
+    ['/components/richtext', 'Rich text (editor chrome)'],
+    ['/patterns/record-detail', 'Record detail'],
+    ['/components/data-table', 'Data table'],
+  ]} />
+</Gallery>

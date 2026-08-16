@@ -252,3 +252,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 20:58 · Continue · fix · Owner report diagnosed: unstyled first paint = Pages CDN deploy skew (404-cached in max-age window); push-batching rule adopted; asset-carryover queued · shipped · 69bf460
 - 2026-08-16 21:03 · Continue · fix · P0 root-caused: browser-cached HTML + deleted hashed CSS; pages.yml asset carryover shipped (first diagnosis falsified and corrected) · shipped · 29ec2e8
 - 2026-08-16 21:06 · Standardize · fix · Tidy: shared doc-swatch chip (zero-diff verified); toolbar consolidation deferred to Breaking batch with reason · shipped · ed89568
+- 2026-08-16 21:09 · Continue · fix · P0 verification: first carryover deploy keeps previous _astro generation live (200) — unstyled-first-paint class closed · shipped · 05986c5

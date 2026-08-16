@@ -4,9 +4,10 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const basic = `<div class="bo-richtext">
-  <div class="bo-cluster bo-richtext__toolbar" role="group" aria-label="Formatting">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
     <span class="bo-richtext__divider"></span>
@@ -29,7 +30,7 @@ const readonly = `<div class="bo-richtext bo-richtext--readonly">
 </div>`;
 
 const disabled = `<div class="bo-richtext bo-richtext--disabled">
-  <div class="bo-cluster bo-richtext__toolbar" role="group" aria-label="Formatting">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
     <button class="bo-btn bo-btn--ghost" type="button" disabled><strong>B</strong></button>
     <button class="bo-btn bo-btn--ghost" type="button" disabled><em>I</em></button>
   </div>
@@ -39,31 +40,13 @@ const disabled = `<div class="bo-richtext bo-richtext--disabled">
   </div>
 </div>`;
 
-const prose = `<div class="bo-prose">
-  <h2>Return authorization RMA-2210</h2>
-  <p>Customer reports <strong>intermittent fault</strong> after firmware
-  2.4; unit powers off under load.</p>
-  <ul>
-    <li>Serial verified against the delivery</li>
-    <li>Warranty valid until 2027-03-01</li>
-  </ul>
-  <table>
-    <thead><tr><th>Item</th><th>Qty</th><th>Disposition</th></tr></thead>
-    <tbody>
-      <tr><td>Controller unit</td><td>1</td><td>Replace</td></tr>
-      <tr><td>Power cable</td><td>1</td><td>Keep</td></tr>
-    </tbody>
-  </table>
-  <blockquote>Customer prefers replacement over repair — confirmed by
-  phone 2026-08-12.</blockquote>
-</div>`;
 
 const canonical = `<!-- CHROME, not an engine: the framework styles the container,
      toolbar, and content area. What the toolbar DOES is your code —
      the light case below wires native contenteditable; a real editor
      library mounts inside __content instead. -->
 <div class="bo-richtext">
-  <div class="bo-cluster bo-richtext__toolbar" role="group" aria-label="Formatting">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
     <span class="bo-richtext__divider"></span>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
@@ -127,13 +110,13 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
   </section>
 
   <section class="demo">
-    <h2>Displaying stored content — <code>.bo-prose</code></h2>
-    <Demo code={prose} />
-    <p class="bo-u-text-muted">One class on the wrapper styles native
-    elements — headings, lists, blockquotes, code, and a bordered lite
-    table (real data screens use the
-    <a href="#related">data table</a>; stored content just needs to read
-    well). Use it on record detail, comments, print.</p>
+    <h2>Displaying stored content</h2>
+    <p>Rendering a STORED note (record detail, comments, print) needs
+    none of this chrome — that is the standalone
+    <a href={base + '/components/prose'}>Prose</a> component: one class
+    on a wrapper, native elements inside. Put the same class on
+    <code>.bo-richtext__content</code> so content looks identical while
+    being edited and when displayed.</p>
   </section>
 
   <section class="demo">
@@ -196,7 +179,7 @@ const view = new EditorView(host, {
       'Two-channel states: <code>--readonly</code>/<code>--disabled</code> are the visible half; pair them with <code>contenteditable="false"</code> and <code>aria-readonly</code>/<code>aria-disabled</code> — and DISABLED toolbars need <code>disabled</code> on the buttons themselves (<code>pointer-events</code> stops the mouse, not Tab/Enter). Read-only content needs <code>tabindex="0"</code> to stay reachable and scrollable by keyboard.',
       'Give the content area an <code>aria-label</code> always. <code>role="textbox" aria-multiline="true"</code> fits PLAIN notes (bold/italic in a paragraph); drop the role when the content is structured prose (headings, tables) or when you mount an engine — a textbox role flattens structure for screen readers.',
       'Toggle buttons carry <code>aria-pressed</code> (the wiring syncs it via <code>queryCommandState</code>) — <code>.bo-btn[aria-pressed="true"]</code> ships a gated pressed style, so Bold-is-on is visible and announced.',
-      '<code>.bo-prose</code> works anywhere, not just inside the editor — record detail, comment threads, printed notes all render stored rich text with the one class. Stored content may contain <code>h1</code>s: demote server-side (or start your app pages at a known level) so document outlines stay sane.',
+      'Displaying stored notes is the standalone Prose component — this page is only the EDITOR chrome.',
       'Sanitize stored HTML on the server no matter which editor produced it — rich text is untrusted input, and execCommand output varies by engine (see the caveats above). A tag allowlist alone is NOT enough: stripping <code>&lt;script&gt;</code> tags leaves their text behind ("alert(1)" prints in the note) — remove script/style elements <em>with their content</em>, then filter the rest (dogfood-verified against the reference PO app).',
       'Sizing: the min-height scales with density (<code>--bo-density-row-height</code> × 3) and the field is vertically resizable like a textarea; text inset matches <code>.bo-input</code> so it aligns with the fields around it.',
     ]}

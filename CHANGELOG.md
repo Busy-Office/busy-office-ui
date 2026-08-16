@@ -8,6 +8,12 @@ pin.
 
 ## Unreleased
 
+- Changed (not breaking — dist placement is not API pre-1.0):
+  `.bo-prose` extracted from the richtext component into its own
+  `prose` component (own docs page, own granular dist file) — display-
+  only consumers import prose without the editor chrome. Class names
+  and behavior unchanged.
+
 - **Breaking** + Added: `.bo-avatar` promoted from Byline's `__avatar`
   part (owner call) — a standalone initials/photo disc plus
   `.bo-avatar-stack` for approval chains, em-sized, forced-colors

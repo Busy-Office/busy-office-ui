@@ -2365,13 +2365,23 @@ engine-shaped sub-ask refused with the reason.
        dotfile and reported a false negative. Real sliver fixed: the
        local build chain now runs lint:css too (local = CI). Correction
        appended to the grill report.
-5a. [ ] **Toolbar idiom consolidation** (deferred from two Standardize
-       passes with reason): `.bo-data-table__toolbar` hand-rolls the
-       cluster declarations with its own gap scale; richtext's toolbar
-       already composes `.bo-cluster`. Aligning data-table means a
-       markup-contract change on a stable component — batch it with the
-       next Breaking set rather than leaking it from a tidy pass.
-5. [ ] **`.bo-prose` packaging** — cross-cutting surface parked in the
+5a. [x] **Toolbar idiom consolidation — REFUSED with reason
+       (2026-08-16, Objective: simplicity for consumers)**: the
+       framework's part contract is that every `__part` works with its
+       own class alone; requiring `.bo-cluster` beside a part class
+       pushes composition burden into every consumer's markup to save
+       four internal flex declarations. Resolution went the OTHER way:
+       richtext's toolbar (the outlier, unreleased) reverted to
+       self-sufficient; `.bo-data-table__toolbar` unchanged; the
+       duplication of one flex recipe across two parts is accepted as
+       the cost of the contract. No Breaking change needed.
+5. [x] **`.bo-prose` packaging — DONE 2026-08-16**: extracted to its
+       own `prose` component (file, granular dist, docs page in Data
+       display; richtext page keeps a pointer section); class names
+       unchanged, non-breaking per the pre-1.0 dist-placement policy;
+       print rules stay in print/index.css; live-verified both
+       themes/widths incl. prose-inside-richtext still styled.
+       Original: **`.bo-prose` packaging** — cross-cutting surface parked in the
        richtext component file (granular importers must pull editor
        chrome to get prose styles). Waits for a deliberate dist-layout
        pass (dist placement is explicitly not API until v1.0). Accept:
