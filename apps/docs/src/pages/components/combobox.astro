@@ -20,6 +20,80 @@ const markup = `<div class="bo-combobox">
   import { initCombobox } from "@busy-office/ui/js";
   initCombobox(); // once — filtering, arrow-key nav, Enter-to-commit, Esc/light-dismiss are already native
 </script>`;
+const formMarkup = `<div class="bo-form-field">
+  <label class="bo-form-field__label" for="cc">Cost center</label>
+  <!-- data-name: the behavior mirrors the committed data-value into a
+       hidden input, so a plain form POST carries CC-1180, not the label -->
+  <div class="bo-combobox" data-name="cost_center">
+    <input class="bo-input" type="text" role="combobox" id="cc"
+        aria-expanded="false" aria-controls="cc-list" aria-autocomplete="list" autocomplete="off" />
+    <ul class="bo-combobox__listbox" id="cc-list" role="listbox" popover>
+      <li class="bo-combobox__option" role="option" data-value="CC-1180">CC-1180 — Warehouse</li>
+    </ul>
+  </div>
+</div>
+
+<script type="module">
+  // "must match a known value" — the list has just closed on focusout,
+  // so this is the natural moment to validate.
+  document.addEventListener("focusout", (e) => {
+    const input = e.target.closest?.('[role="combobox"]');
+    if (!input) return;
+    const hidden = input.closest(".bo-combobox").querySelector('input[type="hidden"]');
+    const ok = input.value === "" || (hidden && hidden.value);
+    input.setAttribute("aria-invalid", String(!ok));
+  });
+</script>`;
+
+const filterMarkup = [
+  '// Own the matcher — the behavior only navigates options that are not hidden',
+  'const fold = (t) => t.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");',
+  '',
+  'document.addEventListener("input", (e) => {',
+  '  const input = e.target.closest?.("[role=combobox][data-custom-filter]");',
+  '  if (!input) return;',
+  '  const words = fold(input.value).split(/\\s+/).filter(Boolean);   // token-based',
+  '  for (const li of input.closest(".bo-combobox").querySelectorAll("[role=option]")) {',
+  '    li.hidden = !words.every((w) => fold(li.textContent).includes(w));',
+  '  }',
+  '});',
+].join("\n");
+
+const asyncMarkup = [
+  '<script type="module">',
+  '  import { initCombobox } from "@busy-office/ui/js";',
+  '  initCombobox();',
+  '',
+  '  const input = document.querySelector("#vendor");',
+  '  const list = document.querySelector("#vendor-list");',
+  '  let seq = 0;',
+  '',
+  '  input.addEventListener("input", debounce(async () => {',
+  '    const mine = ++seq;                       // ignore out-of-order responses',
+  '    list.innerHTML = option("Searching…", { disabled: true });',
+  '    try {',
+  '      const res = await fetch("/vendors?q=" + encodeURIComponent(input.value));',
+  '      if (mine !== seq) return;               // a newer keystroke already won',
+  '      const vendors = await res.json();',
+  '      list.innerHTML = vendors.length',
+  '        ? vendors.map((v) => option(v.name, { value: v.id })).join("")',
+  '        : option("No matches", { disabled: true });',
+  '    } catch {',
+  '      if (mine !== seq) return;',
+  '      list.innerHTML = option("Search unavailable — retry", { disabled: true });',
+  '    }',
+  '  }, 200));',
+  '',
+  '  // ids are minted by the behavior if you omit them, so a template',
+  '  // render is safe; aria-disabled rows are skipped by the arrows.',
+  '  function option(text, { value, disabled } = {}) {',
+  '    return "<li class=\'bo-combobox__option\' role=\'option\'"',
+  '      + (value ? " data-value=\'" + value + "\'" : "")',
+  '      + (disabled ? " aria-disabled=\'true\'" : "")',
+  '      + ">" + text + "</li>";',
+  '  }',
+  '</script>',
+].join("\n");
 ---
 <Gallery title="Combobox">
   <p class="demo-note">
@@ -132,6 +206,82 @@ const markup = `<div class="bo-combobox">
     initCombobox();
   </script>
 
+
+  <section class="demo">
+    <h2>Form integration — the machine value</h2>
+    <div class="bo-form-field" style="margin-block-end: 0">
+      <label class="bo-form-field__label" for="fi-cb">Cost center</label>
+      <div class="bo-combobox" data-name="cost_center">
+        <input class="bo-input" type="text" role="combobox" id="fi-cb"
+            aria-expanded="false" aria-controls="fi-list" aria-autocomplete="list"
+            autocomplete="off" placeholder="Search cost centers…" />
+        <ul class="bo-combobox__listbox" id="fi-list" role="listbox" popover>
+          <li class="bo-combobox__option" role="option" id="fi-o1" data-value="CC-1180">CC-1180 — Warehouse</li>
+          <li class="bo-combobox__option" role="option" id="fi-o2" data-value="CC-2205">CC-2205 — Logistics</li>
+          <li class="bo-combobox__option" role="option" id="fi-o3" data-value="CC-4021">CC-4021 — Procurement</li>
+        </ul>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Pick one, then inspect the DOM: the widget
+    carries <code>data-name="cost_center"</code>, so committing writes
+    <code>&lt;input type="hidden" name="cost_center" value="CC-1180"&gt;</code>
+    inside it. A plain form POST now sends the <strong>machine value</strong>,
+    not the display label — no JavaScript of your own, no framework.</p>
+    <pre><code>{formMarkup}</code></pre>
+    <p class="bo-u-text-muted">Validation for "must match a known value":
+    the field can hold free text the user typed, so check it on
+    <code>focusout</code> — the list has just closed, which is the
+    natural moment. Server-side, treat the hidden value as authoritative
+    and re-render with <code>aria-invalid</code> if it is missing.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Field states</h2>
+    <div class="bo-stack" style="max-inline-size: 26rem">
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="st-1">Disabled</label>
+        <input class="bo-input" id="st-1" role="combobox" aria-expanded="false" value="CC-1180 — Warehouse" disabled />
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="st-2">Read-only</label>
+        <input class="bo-input" id="st-2" role="combobox" aria-expanded="false" value="CC-2205 — Logistics" readonly />
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="st-3">Required &amp; invalid</label>
+        <input class="bo-input" id="st-3" role="combobox" aria-expanded="false" required
+            aria-invalid="true" aria-describedby="st-3-err" value="CC-9999" />
+        <span class="bo-form-field__message" id="st-3-err" role="alert">No such cost center — pick one from the list</span>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Nothing combobox-specific: the field is a
+    <code>.bo-input</code>, so every <a href={base + '/components/form'}>form
+    field state</a> applies unchanged. Disabled and read-only differ —
+    read-only text stays selectable and still submits.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Filtering semantics</h2>
+    <p>Exactly what the built-in filter does, so you can predict it:
+    <strong>case-insensitive</strong>, <strong>single substring</strong>,
+    matched against the option's <strong>full text content</strong>, with
+    the query trimmed. It is <strong>not</strong> token-based
+    (<code>cc warehouse</code> matches nothing), <strong>not</strong>
+    accent-folded (<code>zurich</code> does not match <code>Zürich</code>),
+    and not fuzzy. When you need more, own the filter: hide and show
+    options yourself on <code>input</code> — the behavior only ever
+    considers non-<code>hidden</code> options, so your matcher composes
+    with its keyboard and ARIA handling.</p>
+    <pre><code>{filterMarkup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Async / server-driven options</h2>
+    <p>The common ERP case: too many options to ship up front. Fetch on
+    input, replace the <code>&lt;li&gt;</code>s, and let the behavior keep
+    doing keyboard and ARIA. Ids are minted automatically if you omit
+    them, so a template render is safe.</p>
+    <pre><code>{asyncMarkup}</code></pre>
+  </section>
 
   <section class="demo">
     <h2>Keyboard reference</h2>

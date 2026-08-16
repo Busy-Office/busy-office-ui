@@ -93,6 +93,44 @@ function position(input: HTMLElement, listbox: HTMLElement): void {
   listbox.style.minWidth = `${r.width}px`;
 }
 
+/**
+ * Form value (owner test report §4.2): a combobox's visible text is the
+ * DISPLAY label ("CC-1180 — Warehouse"); a plain form POST needs the
+ * machine value. Put `data-name` on the root and the behavior mirrors
+ * each commit into a generated hidden input — no app code, works with a
+ * no-JS-framework form submit.
+ */
+function syncFormValue(root: HTMLElement, value: string): void {
+  const name = root.dataset.name;
+  if (!name) return;
+  let hidden = root.querySelector<HTMLInputElement>(':scope > input[type="hidden"][data-bo-value]');
+  if (!hidden) {
+    hidden = document.createElement('input');
+    hidden.type = 'hidden';
+    hidden.setAttribute('data-bo-value', '');
+    root.append(hidden);
+  }
+  hidden.name = name;
+  hidden.value = value;
+}
+
+/**
+ * Result count for screen readers (owner test report §4.4, APG): typing
+ * used to be silent — no "3 results", and critically no announcement
+ * when the list closed on zero matches. The region is visually hidden;
+ * the visible channel is the list itself.
+ */
+function announce(root: HTMLElement, count: number): void {
+  let status = root.querySelector<HTMLElement>(':scope > [role="status"]');
+  if (!status) {
+    status = document.createElement('span');
+    status.setAttribute('role', 'status');
+    status.className = 'bo-visually-hidden';
+    root.append(status);
+  }
+  status.textContent = count === 0 ? 'No results' : `${count} result${count === 1 ? '' : 's'} available`;
+}
+
 let autoId = 0;
 function setActive(input: HTMLElement, listbox: HTMLElement, option: HTMLElement | null): void {
   options(listbox).forEach((o) => o.removeAttribute('aria-selected'));
@@ -117,6 +155,8 @@ function filter(input: HTMLInputElement, listbox: HTMLElement): void {
     o.hidden = !match;
     if (match) anyVisible = true;
   });
+  const root = input.closest<HTMLElement>('.bo-combobox');
+  const count = visibleOptions(listbox).length;
   if (anyVisible) {
     open(listbox);
     input.setAttribute('aria-expanded', 'true');
@@ -125,6 +165,7 @@ function filter(input: HTMLInputElement, listbox: HTMLElement): void {
     close(listbox);
     input.setAttribute('aria-expanded', 'false');
   }
+  if (root) announce(root, count);
   setActive(input, listbox, null);
 }
 
@@ -135,8 +176,13 @@ function filter(input: HTMLInputElement, listbox: HTMLElement): void {
  * @detail value {string} the option's `data-value`, falling back to its text
  * @detail text {string} the option's visible text, now in the input
  */
+const committed = new WeakSet<HTMLInputElement>();
+
 function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLElement): void {
   input.value = option.textContent?.trim() ?? '';
+  const root = input.closest<HTMLElement>('.bo-combobox');
+  if (root) syncFormValue(root, option.getAttribute('data-value') ?? input.value);
+  committed.add(input);
   close(listbox);
   input.setAttribute('aria-expanded', 'false');
   setActive(input, listbox, null);
@@ -163,6 +209,7 @@ function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLEleme
  * @key Enter (list open, nothing active) — swallowed, never submits the form; commits the sole match if there is exactly one
  * @key Escape — close without changing the value (native popover light-dismiss)
  * @key Tab — focus leaves the widget: the list closes and the active option clears
+ * @key (focus after a commit) — the committed text is selected, so typing browses the full list again
  */
 export function initCombobox(): void {
   if (installed) return;
@@ -214,6 +261,33 @@ export function initCombobox(): void {
         if (visible.length === 1) commit(input, listbox, visible[0]);
       }
     }
+  });
+
+  // Browse-after-commit (owner test report §4.1, the biggest usability
+  // hole): after a commit the field holds the full option text, so
+  // reopening filtered to exactly the row the user already had. Selecting
+  // the text on focus means the next keystroke REPLACES it and the whole
+  // list is reachable again — without destroying the value for someone
+  // who just wants to read it.
+  document.addEventListener('focusin', (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.getAttribute?.('role') !== 'combobox') return;
+    if (!committed.has(input)) return;
+    input.select?.();
+  });
+
+  // Pointer and keyboard must agree on the active option (owner test
+  // report §4.9): with no pointer listener, :hover and aria-selected
+  // could highlight two different rows and Enter committed the one the
+  // mouse was NOT over — a named APG anti-pattern.
+  document.addEventListener('pointermove', (e) => {
+    const option = (e.target as Element | null)?.closest<HTMLElement>('[role="option"]');
+    if (!option || option.hidden || option.getAttribute('aria-disabled') === 'true') return;
+    const listbox = option.closest<HTMLElement>('[role="listbox"]');
+    const input = listbox && inputFor(listbox);
+    if (!listbox || !input || !isOpen(listbox)) return;
+    if (option.getAttribute('aria-selected') === 'true') return;
+    setActive(input, listbox, option);
   });
 
   // Focus leaving the combobox closes the list. Without this the popover

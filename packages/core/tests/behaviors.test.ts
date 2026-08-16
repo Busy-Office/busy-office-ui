@@ -318,6 +318,50 @@ describe('initCombobox', () => {
     expect(input.getAttribute('aria-activedescendant')).toBeTruthy();
   });
 
+  // --- owner report §4: the four gaps accepted per the Objective ---
+  it('data-name mirrors the committed machine value into a hidden input', () => {
+    const { input, listbox } = combobox();
+    (input.closest('.bo-combobox') as HTMLElement).dataset.name = 'cost_center';
+    type(input, 'CC');
+    key(input, 'ArrowDown');
+    key(input, 'Enter');
+    const hidden = input.closest('.bo-combobox')!.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hidden).toBeTruthy();
+    expect(hidden.name).toBe('cost_center');
+    expect(hidden.value).toBe('CC-1180'); // data-value, not the display text
+  });
+
+  it('focusing a committed field selects its text so the next keystroke browses', () => {
+    const { input, listbox } = combobox();
+    type(input, 'CC');
+    key(input, 'ArrowDown');
+    key(input, 'Enter');
+    expect(input.value).toBe('CC-1180');
+    input.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe(input.value.length);
+  });
+
+  it('announces the result count in a live region', () => {
+    const { input } = combobox();
+    type(input, 'CC');
+    const status = input.closest('.bo-combobox')!.querySelector('[role="status"]') as HTMLElement;
+    expect(status).toBeTruthy();
+    expect(status.textContent).toMatch(/3/);
+    type(input, 'zzz');
+    expect(status.textContent).toMatch(/no|0/i);
+  });
+
+  it('pointer movement over an option makes it the active option', () => {
+    const { input, listbox } = combobox();
+    type(input, 'CC');
+    key(input, 'ArrowDown');
+    expect(input.getAttribute('aria-activedescendant')).toBe('cb-opt-1');
+    const third = listbox.querySelector('#cb-opt-3') as HTMLElement;
+    third.dispatchEvent(new MouseEvent('pointermove', { bubbles: true }));
+    expect(input.getAttribute('aria-activedescendant')).toBe('cb-opt-3');
+  });
+
   it('no matches closes the list', () => {
     const { input } = combobox();
     type(input, 'zzz');

@@ -2590,7 +2590,15 @@ and the Basic demo — which had NO accessible name and is the snippet
 people copy — now carries a real label.
 
 **Queued from the same report** (documentation depth, not defects):
-9. [ ] **Combobox page depth** — Form integration section (hidden input
+9. [x] **Combobox page depth — DONE 2026-08-17**: form-integration
+       section (a live `data-name` demo whose hidden input carries
+       CC-1180 while the field shows the label, plus the focusout
+       "must match" validation the page previously only told you to
+       write), field-states section, filtering-semantics callout
+       (single substring, not token-based, not accent-folded — with the
+       override recipe), async/server-driven options recipe (debounce,
+       out-of-order guard, loading and error rows), keyboard reference
+       (shipped last wake). Original: **Combobox page depth** — Form integration section (hidden input
        carrying the machine value + commit-time "must match" validation;
        the page currently says "persist it" and ships no code), States
        section (disabled/read-only/required/invalid/loading), async
@@ -2598,7 +2606,27 @@ people copy — now carries a real label.
        substring, not token-based, not accent-folded), content
        guidelines, when-to-use decision table, live no-matches demo,
        testing snippet with the toggle-timing caveat.
-10. [ ] **Combobox features worth adding** (ranked by the report):
+10. [x] **Combobox features — Objective-tested one by one, 2026-08-17.**
+       ACCEPTED and shipped (4): `data-name` → generated hidden input
+       (without it a combobox cannot participate in a plain form POST —
+       a core ERP requirement); browse-after-commit via select-on-focus
+       (the report's biggest usability hole: the committed text filtered
+       the list to the one row you already had); a `role="status"` live
+       region announcing result counts and "No results" (APG names it,
+       and the project's two-channel rule demands it); pointer/keyboard
+       active-option sync (hover and aria-selected could highlight
+       different rows, so Enter committed the row the mouse was NOT
+       over). All red-first, 103 tests, verified live.
+       DEFERRED (2): accent folding behind a flag, option grouping —
+       real but unproven demand; the filtering-semantics section now
+       documents the limit and ships the override recipe.
+       REFUSED (3): match highlighting (mutating option text to wrap
+       `<mark>` risks the data-value/text contract for a visual
+       nicety); a clear button (app code — one button beside the field;
+       select-on-focus already covers recovery); wrap-around and
+       PageUp/PageDown (APG-defensible as-is — documented as a
+       deliberate choice in the keyboard table instead of coded).
+       Original: **Combobox features worth adding** (ranked by the report):
        browse-after-commit (the single biggest usability hole — the
        committed text filters the list to one row), form value via
        `data-name` → hidden input, result-count live region, accent

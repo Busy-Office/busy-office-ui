@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- Added (combobox): `data-name` on the widget root mirrors each
+  committed option's `data-value` into a generated hidden input, so a
+  plain form POST carries the machine value rather than the display
+  label; focusing a committed field selects its text so typing browses
+  the full list again; a visually-hidden `role="status"` region
+  announces result counts and "No results"; pointer movement syncs the
+  active option with the keyboard's.
+
 - **Fixed** (combobox, from an owner test report): Enter with the list
   open but no active option no longer submits the surrounding form (it
   commits the sole match, or does nothing); focus leaving the widget
