@@ -2316,7 +2316,23 @@ engine-shaped sub-ask refused with the reason.
        consumers implement); the engine-refusal reasoning stated on the
        page; integration recipe with one named library shape; gates
        green.
-3. [ ] **WYSIWYG editable table — display-identical click-to-edit**
+3. [x] **WYSIWYG editable table — display-identical click-to-edit**
+       **DONE 2026-08-16 (wake 7), via the Objective's lean path**: NOT
+       a display↔editor swap engine — the existing `--seamless` SETTING
+       widened to the remaining cell types (`.bo-select--seamless` with
+       hover/focus chevron reveal incl. dark URIs,
+       `.bo-tag-input--seamless`; checkbox already display-identical),
+       so at rest the grid is pixel-comparable to a read-only table
+       while every control stays REAL — keyboard/AT semantics never
+       change between modes (no "Enter to edit" needed: focus IS edit).
+       Zero JS change — bo:cell-change/dirty/row-save/live compose
+       unchanged, exactly as Accept required. New WYSIWYG section on
+       /patterns/editable-grid (demo + keyboard path + two-channel
+       statement), live-verified 1440/390 light/dark incl. hover
+       reveal. If the OTHER reading was intended (a table inside the
+       rich-text editor), that is already served by item 2's .bo-prose
+       tables — say so and a dedicated note gets added. Original spec
+       below for the record:
        [INTERPRETATION — flag to correct]: read as "cells render as
        plain display text until activated" — a view↔edit mode on top of
        the existing editable-table stack (seamless inputs already

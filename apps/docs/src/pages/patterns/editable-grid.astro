@@ -455,6 +455,90 @@ const markup = `<table class="bo-data-table" data-row-edit>
   </section>
 
   <section class="demo">
+    <h2>WYSIWYG — display-identical until you touch it</h2>
+    <p>Every control seamless: at rest the table is pixel-comparable to a
+    plain read-only data table — no borders, no chevrons, no field
+    chrome. Hover a cell and its affordance appears; focus it and the
+    field wakes fully. <code>.bo-input--seamless</code> has done this for
+    text/number/date since the first editable grid; this adds the same
+    <em>setting</em> to the remaining cell types —
+    <code>.bo-select--seamless</code> and
+    <code>.bo-tag-input--seamless</code> (a checkbox already reads
+    identically in both modes). Deliberately <strong>not</strong> a
+    display↔editor swap engine: the control never changes, so the
+    keyboard path and screen-reader semantics never change either —
+    that's the whole trick.</p>
+    <table class="bo-data-table" data-row-edit id="eg-wys-table">
+      <thead><tr>
+        <th scope="col">Line</th>
+        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+        <th scope="col">Status</th>
+        <th scope="col">Cost centers</th>
+        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+      </tr></thead>
+      <tbody>
+        <tr data-row-id="WYS-1">
+          <td><input class="bo-input bo-input--seamless" name="line" value="Impeller housing" aria-label="Line description" /></td>
+          <td class="bo-data-table__col--numeric">
+            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="1" value="4" aria-label="Quantity" />
+          </td>
+          <td>
+            <select class="bo-select bo-select--seamless" name="status" aria-label="Status">
+              <option selected>Open</option><option>Approved</option><option>On hold</option>
+            </select>
+          </td>
+          <td>
+            <div class="bo-tag-input bo-tag-input--seamless" role="group" aria-label="Cost centers — Impeller housing">
+              <span class="bo-tag-input__tag">CC-2205<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-2205">×</button></span>
+              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Impeller housing" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Impeller housing" hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Impeller housing" hidden>Cancel</button>
+          </td>
+        </tr>
+        <tr data-row-id="WYS-2">
+          <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
+          <td class="bo-data-table__col--numeric">
+            <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="1" value="12" aria-label="Quantity" />
+          </td>
+          <td>
+            <select class="bo-select bo-select--seamless" name="status" aria-label="Status">
+              <option>Open</option><option selected>Approved</option><option>On hold</option>
+            </select>
+          </td>
+          <td>
+            <div class="bo-tag-input bo-tag-input--seamless" role="group" aria-label="Cost centers — Gasket sheet">
+              <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
+              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center — Gasket sheet" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Gasket sheet" hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Gasket sheet" hidden>Cancel</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="bo-u-text-muted"><strong>Keyboard path</strong>: there is no
+    "Enter to edit" — every cell is a real control, so Tab (or a click)
+    focuses it and it's immediately editable; commit is the native
+    <code>change</code> (blur for text, immediate for select/checkbox),
+    Save/Cancel are the next Tab stops in the row, and inside a composite
+    widget Escape returns focus to the cell when
+    <code>data-grid-nav</code> is in play. Everything composes unchanged:
+    <code>bo:cell-change</code>, dirty tracking, <code>bo:row-save</code>,
+    live mode — this is a <em>skin</em> on the same machinery, not a mode.
+    <strong>Two channels</strong>: the hover/focus reveal is the visible
+    affordance; the always-real controls are the programmatic one (a
+    screen reader announces "edit text", "combo box" at rest exactly as in
+    the chromed version).</p>
+  </section>
+
+  <section class="demo">
     <h2>Save-per-change — <code>data-row-edit="live"</code></h2>
     <p>The second save model: no Save/Cancel buttons, every committed
     change (blur for text, immediate for select/checkbox/tag) dispatches

@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Added: WYSIWYG (display-identical) editable-grid mode — the
+  `--seamless` setting now covers every cell type:
+  `.bo-select--seamless` (chevron/border appear on hover/focus) and
+  `.bo-tag-input--seamless` join `.bo-input--seamless`. Controls stay
+  real in both "modes", so keyboard/AT semantics never change; all
+  row-edit machinery composes unchanged.
+
 - Added: Rich text chrome (`.bo-richtext` — container, toolbar,
   content area, `--readonly`/`--disabled`) and `.bo-prose` (rendered
   rich content: headings, lists, blockquote, code, lite tables).

@@ -18,6 +18,24 @@
     border-color: var(--bo-color-focus-ring);
   }
 
+  /* Inline-edit (seamless) tag input — same setting as
+     .bo-input--seamless (Slice 22 WYSIWYG mode): the committed tags
+     read as plain content until hovered/focused. Real controls
+     throughout, so semantics never change between modes. */
+  .bo-tag-input--seamless {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .bo-tag-input--seamless:hover {
+    border-color: var(--bo-color-border-default);
+  }
+
+  .bo-tag-input--seamless:focus-within {
+    border-color: var(--bo-color-focus-ring);
+    background: var(--bo-color-bg-surface);
+  }
+
   .bo-tag-input__tag {
     display: inline-flex;
     align-items: center;

@@ -26,6 +26,44 @@
     background-position: left var(--bo-space-3) center;
   }
 
+  /* Inline-edit (seamless) select — same setting as .bo-input--seamless
+     (Slice 22 WYSIWYG mode): reads as plain text until hovered/focused,
+     then the border and chevron appear. Always a real <select>, so
+     keyboard and AT semantics never change between "display" and "edit". */
+  .bo-select--seamless {
+    --bo-select-border: transparent;
+
+    background-color: transparent;
+    background-image: none;
+    padding-inline: var(--bo-space-1) var(--bo-space-6);
+  }
+
+  .bo-select--seamless:hover,
+  .bo-select--seamless:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+  }
+
+  .bo-select--seamless:hover {
+    --bo-select-border: var(--bo-color-border-default);
+  }
+
+  .bo-select--seamless:focus {
+    --bo-select-border: var(--bo-color-border-control);
+
+    background-color: var(--bo-color-bg-surface);
+  }
+
+  /* Dark's rest-state chevron rule above outranks the seamless reset
+     (attr + class beats one class), so re-hide and re-reveal per theme. */
+  [data-theme="dark"] .bo-select--seamless {
+    background-image: none;
+  }
+
+  [data-theme="dark"] .bo-select--seamless:hover,
+  [data-theme="dark"] .bo-select--seamless:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+  }
+
   .bo-select:disabled {
     background-color: var(--bo-color-bg-muted);
     color: var(--bo-color-text-disabled);
