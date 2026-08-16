@@ -2565,6 +2565,47 @@ gate against a DOCS_BASE build, and watch CI after any push touching a
 gate. Root lesson: a gate verified only in the environment it was
 written in is not a gate.
 
+**P0 (owner test report, 2026-08-16) — combobox: 5 confirmed bugs,
+FIXED same wake.** A live-interaction audit of a SHIPPED component
+found the module registered only four listeners, and every defect
+traced to what was missing from that list. All five reproduced as
+failing tests first, then fixed: (1) **Enter with the list open but
+nothing active submitted the enclosing form** — clearing the user's
+typed filter in exactly the filter-bar shape the docs recommend; now
+swallowed, and commits the sole match when only one remains.
+(2) **No focusout handling** — the popover stayed open over unrelated
+content after Tab with a stale active option; now closes and clears.
+(3) **The open list did not follow its input on scroll** (measured 404px
+adrift); now closes on scroll — re-anchoring needs CSS anchor
+positioning, which is below the browser floor. (4) **Clicking an option
+dropped focus to `<body>`**; now refocuses the input per APG.
+(5) **`aria-disabled` options were fully selectable**; now skipped by
+the arrows and rejected by Enter and click. Plus options with no `id`
+no longer yield `aria-activedescendant=""`. 99 tests (was 94); all four
+behavioural fixes re-verified in a real browser. Docs corrected where
+the report showed them over-claiming (popover placement is NOT
+anchoring; `aria-expanded` resyncs on the `toggle` event, so assert
+after a task), keyboard reference table added with the negative rows,
+and the Basic demo — which had NO accessible name and is the snippet
+people copy — now carries a real label.
+
+**Queued from the same report** (documentation depth, not defects):
+9. [ ] **Combobox page depth** — Form integration section (hidden input
+       carrying the machine value + commit-time "must match" validation;
+       the page currently says "persist it" and ships no code), States
+       section (disabled/read-only/required/invalid/loading), async
+       server-driven options recipe, filtering-semantics callout (single
+       substring, not token-based, not accent-folded), content
+       guidelines, when-to-use decision table, live no-matches demo,
+       testing snippet with the toggle-timing caveat.
+10. [ ] **Combobox features worth adding** (ranked by the report):
+       browse-after-commit (the single biggest usability hole — the
+       committed text filters the list to one row), form value via
+       `data-name` → hidden input, result-count live region, accent
+       folding behind a flag, match highlighting, clear button,
+       pointer/keyboard active-option sync, option grouping. Each is a
+       separate Objective test — several may be refused as app code.
+
 ## Slice 23 — docs IA & depth (owner review, 2026-08-16)
 
 Triaged from `busyofficeuidocsreview.md` (69-page crawl with word counts
@@ -2608,7 +2649,22 @@ applies the Objective per item rather than accepting wholesale.
        detail-form section from /components/form into
        /patterns/detail-form. Accept: each pattern grows an anatomy +
        data contract; the component pages shed the screen prose.
-3. [ ] **Pattern template (§5) applied to the ten thin patterns.**
+3. [x] **Pattern template — DONE 2026-08-16.** All 12 pattern pages
+       now carry Anatomy / Data contract / States / Components used,
+       written per-screen (not boilerplate): approval gains the
+       already-decided 409 path and the delegation-audit note;
+       goods-receipt the offline scan queue and over-receipt tolerance;
+       wizard partial persistence and double-submit; validation-summary
+       the server-only-error case; app-launch the counts-may-lag rule;
+       settings-admin the read-only-role and danger-zone rules;
+       record-detail the stale-decision failure mode;
+       reporting-dashboard per-widget independence. Gate: check-page-
+       shape now enforces those four sections on every pattern page
+       (red-first: 44 failures across 11 pages before the fill).
+       Keyboard help moved to /reference/keyboard (it is a lookup
+       table, not a screen) with a redirect. Template documented in
+       CLAUDE.md. Original: **Pattern template (§5) applied to the ten
+       thin patterns.**
        The review's highest-value item: anatomy, full markup, data
        contract, states, keyboard walkthrough, print behaviour,
        scaling notes, components-used. editable-grid is the model.

@@ -266,3 +266,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 23:35 · Roadmap · plan · Docs review triaged into Slice 23: 8 accepted, 3 rethink, 2 refused with reasons · shipped · 41fcfea
 - 2026-08-16 23:48 · Continue · bug · P0: CI red 5 commits — 3 gate defects fixed (Chrome resolver, step order, base-aware harness); CI green at 3d2f64c · shipped · b66577b
 - 2026-08-16 23:59 · Continue · build · Slice 23 item 1: tokens split by audience (concepts prose + /reference/tokens tables, redirect, links retargeted) · shipped · 026311b
+- 2026-08-17 00:16 · Continue · build · Slice 23 item 2: screens inverted onto patterns; invoice-list + detail-form built to the pattern template (exemplar for item 3) · shipped · 3503c49

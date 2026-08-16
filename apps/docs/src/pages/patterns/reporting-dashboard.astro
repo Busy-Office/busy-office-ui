@@ -127,6 +127,60 @@ const rows = [
     initCollapsibleCards();
   </script>
 
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Period control</strong> — one filter governing every widget; it belongs in the URL so a dashboard is linkable.</li>
+      <li><strong>Widget grid</strong> — <code>.bo-grid</code>; each widget is independently swappable.</li>
+      <li><strong>Stat tiles</strong> — one number, its delta, and the comparison basis spelled out.</li>
+      <li><strong>Container queries</strong> — widgets respond to THEIR box, not the viewport, so the same widget works in a half-width column.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /dashboard?period=</td><td>the grid shell with each widget as a lazy fragment</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /dashboard/widget/:id?period=</td><td>one widget — so a slow query never blocks the others</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /dashboard/export?period=</td><td>CSV/XLSX; long exports return a job id (see the long-running-jobs note below)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Loading</td><td>per-widget skeletons — the grid layout is known before the data, so the page must not reflow as widgets land</td></tr>
+          <tr><td>Empty widget</td><td>name the reason ("no invoices in this period"), not a bare zero</td></tr>
+          <tr><td>Error in one widget</td><td>that widget shows its own retry; the rest of the dashboard stays usable</td></tr>
+          <tr><td>Stale data</td><td>a timestamp ("as of 09:12") on cached aggregates — an unlabelled number is assumed live</td></tr>
+          <tr><td>No permission for a metric</td><td>omit the widget; a redacted tile invites a support ticket</td></tr>
+          <tr><td>Export running</td><td>a progress affordance and a completion signal; never a frozen button</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Dashboard & cards</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/base/primitives'}>Grid</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/concepts/container-queries'}>Container queries</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/progress'}>Progress</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/dashboard", "Dashboard"],
     ["/components/filters", "Filters"],

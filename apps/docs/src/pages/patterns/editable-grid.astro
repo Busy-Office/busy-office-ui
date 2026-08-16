@@ -759,6 +759,60 @@ const markup = `<table class="bo-data-table" data-row-edit>
     <pre><code>{markup}</code></pre>
   </section>
 
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Header row</strong> — column types decide the cell control: text, number, select, date, checkbox, tag.</li>
+      <li><strong>Editable cells</strong> — always real controls; <code>--seamless</code> makes them read as display text until hovered or focused.</li>
+      <li><strong>Row actions</strong> — the dirty badge plus Save/Cancel, revealed per row by <code>initRowEdit()</code>.</li>
+      <li><strong>Totals footer</strong> — <code>data-sum-of</code> for declarative sums, or your own math on <code>bo:cell-change</code>.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">PATCH /po/:id/lines/:lineId</td><td>the saved row re-rendered (authoritative values — rounding, derived fields); 422 → the same row with cell errors</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /po/:id/lines</td><td>a new row fragment appended to the tbody</td></tr>
+          <tr><td class="bo-data-table__col--code">DELETE /po/:id/lines/:lineId</td><td>204 and remove the row client-side; 409 if the line was already invoiced</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Clean</td><td>no badge, no buttons — the row looks like a read-only row</td></tr>
+          <tr><td>Dirty</td><td>the Unsaved badge plus Save/Cancel; Cancel restores last-saved values and re-fires input events so totals revert</td></tr>
+          <tr><td>Saving (live mode)</td><td>saves are coalesced per row per tick; a row removed in the same tick is never saved</td></tr>
+          <tr><td>Cell error</td><td><code>aria-invalid</code> + the message inside that cell&rsquo;s form field, with the row tinted</td></tr>
+          <tr><td>Conflict</td><td>409 → re-render that row with the server values and say who changed it; never merge silently</td></tr>
+          <tr><td>Read-only line</td><td>render the value as text — an invoiced line that looks editable is a support call</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 4 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/money'}>Money field</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/quantity'}>Quantity</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/combobox'}>Combobox</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/tag-input'}>Tag input</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/data-table", "Data table"],
     ["/components/combobox", "Combobox"],

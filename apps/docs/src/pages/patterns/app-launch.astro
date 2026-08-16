@@ -125,6 +125,58 @@ const logistics = [
 <!-- Category row = the ordinary tabs pattern; each panel holds its own grid. -->`}</code></pre>
   </section>
 
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>App shell</strong> — header + sidebar + main; the shell is the pattern.</li>
+      <li><strong>Entry tiles</strong> — a <code>.bo-grid</code> of cards, each a task the user starts here.</li>
+      <li><strong>Counts / badges</strong> — "12 awaiting approval" on a tile: the reason this screen exists rather than a static menu.</li>
+      <li><strong>Recent items</strong> — a short list back into records the user touched last.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /home</td><td>the tile grid; counts may be computed asynchronously</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /home/counts</td><td>a fragment swapped into the badges once available — tiles must render WITHOUT it</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /recent</td><td>the recent-items list; empty for a new user</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Loading</td><td>tiles render immediately; only the counts show skeletons — never block the whole screen on a slow aggregate</td></tr>
+          <tr><td>Counts unavailable</td><td>drop the badge silently; a tile with no number still works, an error toast for a count is noise</td></tr>
+          <tr><td>Empty (new tenant)</td><td>a first-run state naming the one setup action, not an empty grid</td></tr>
+          <tr><td>No permission</td><td>omit tiles the user cannot open — a disabled tile teaches nothing</td></tr>
+          <tr><td>Error</td><td>inline alert above the grid with retry; keep whatever tiles did load</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/base/primitives'}>App shell & grid</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/nav'}>Navigation</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Cards</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/dashboard#card", "Card (.bo-widget)"],
     ["/components/tabs", "Tabs"],

@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: inline validation summary">
   <p class="demo-note">
@@ -75,6 +76,59 @@ import Related from '../../components/Related.astro';
     <code>[data-validation-summary]</code> form. Without it, htmx's own submit
     interception races this behavior's — htmx fetches and swaps the page before (or
     instead of) the summary rendering, so the failed-validation state never sticks.</p>
+  </section>
+
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Summary alert</strong> — at the top of the form, listing every error as a link to its field.</li>
+      <li><strong>Field-level messages</strong> — the same text beside the control, wired with <code>aria-describedby</code>.</li>
+      <li><strong>Focus move</strong> — on submit failure focus goes to the summary, so screen-reader users hear the count first.</li>
+      <li><strong>Live region</strong> — the summary is <code>role="alert"</code>, so a dynamic failure announces without a page change.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /form (invalid)</td><td>422 with a field→message map; re-render the SAME form with values preserved and both channels populated</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /form (valid)</td><td>redirect or the success fragment — never leave a stale summary on screen</td></tr>
+          <tr><td class="bo-data-table__col--code">client-side</td><td>native constraint validation runs first; the server contract is identical either way</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>No errors</td><td>the summary is absent from the DOM, not hidden — an empty alert region confuses assistive tech</td></tr>
+          <tr><td>One error</td><td>still use the summary; the consistent path beats a special case</td></tr>
+          <tr><td>Many errors</td><td>list all of them, each linking to its field; do not truncate</td></tr>
+          <tr><td>Server-only error</td><td>e.g. "vendor is blocked" — the summary is the ONLY place it can appear</td></tr>
+          <tr><td>Fixed as you go</td><td>remove entries as fields become valid, but keep the summary until resubmit &mdash; the count is the user&rsquo;s progress bar</td></tr>
+          <tr><td>Cross-field error</td><td>attach it to the field the user should change, not to a phantom "form" field</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/concepts/js-behaviors'}>initValidationSummary()</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/patterns/detail-form'}>Detail form</a></li>
+    </ul>
   </section>
 
   <Related links={[

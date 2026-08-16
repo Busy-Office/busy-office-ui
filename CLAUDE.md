@@ -92,6 +92,28 @@ To add or document a component manually:
    and slug assertion gate the result. Concept/guide pages are plain `.astro` in
    `concepts/` `base/` `getting-started/` + a sidebar entry; same "simple for users" bar.
 
+## How to document a PATTERN (the second recipe)
+
+A pattern page documents a SCREEN, not a component — ten of thirteen
+used to stop at "live demo + one caption" (owner docs review,
+2026-08-16). Build-gated shape (`check-page-shape.mjs`, pattern half):
+
+1. Opener: **who uses it, how often, what "done" looks like**.
+2. The live screen.
+3. **Anatomy** — an ordered list mapping each region to the component
+   that provides it, linked.
+4. **Data contract** — the request/response/swap-target boundary. What
+   the server must return, and what a 4xx returns. The HTMX story is
+   meaningless without this.
+5. **States** — a table. Loading, empty (and the DIFFERENT empty when
+   filters exclude everything), error, partial failure, permission,
+   conflict. Screens spend most of their life in these.
+6. **Components used** — linked badges + a complexity badge (1-4).
+
+Not gated but expected where they have something to say: keyboard
+walkthrough, print behaviour, scaling notes. `/patterns/invoice-list`
+is the exemplar.
+
 Write for a first-time user: plain verbs, one component / many settings, and note the
 two-channel cue wherever colour carries meaning.
 

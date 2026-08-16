@@ -24,6 +24,7 @@ export default defineConfig({
     '/printing': `${base}/base/print`,
     '/tokens': `${base}/reference/tokens`,
     '/base/tokens': `${base}/reference/tokens`,
+    '/patterns/keyboard-help': `${base}/reference/keyboard`,
     '/primitives': `${base}/base/primitives`,
   },
 });

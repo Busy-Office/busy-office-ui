@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (combobox, from an owner test report): Enter with the list
+  open but no active option no longer submits the surrounding form (it
+  commits the sole match, or does nothing); focus leaving the widget
+  now closes the list and clears `aria-activedescendant`; the list
+  closes on scroll instead of drifting away from its field; clicking an
+  option keeps focus on the input (was dropping to `<body>`);
+  `aria-disabled` options are skipped by the arrows and rejected by
+  Enter/click; options without an `id` get one minted so
+  `aria-activedescendant` is never an empty string.
+
 - Added: Keyboard key (`.bo-kbd`) — a keycap chip for the native
   `<kbd>` element (weighted bottom edge, mono, case-preserving even
   under uppercasing containers) + the "Keyboard help" pattern: the "?"

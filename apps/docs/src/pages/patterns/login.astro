@@ -109,6 +109,57 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </script>`}</code></pre>
   </section>
 
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Brand block</strong> — your mark; the framework ships no logo component, it is your <code>&lt;img&gt;</code>.</li>
+      <li><strong>Form</strong> — a real <code>&lt;form&gt;</code> posting to your endpoint; native validation first, server validation authoritative.</li>
+      <li><strong>Error region</strong> — <code>.bo-alert--danger</code> above the fields, rendered by the SERVER on failure (not JS), so it survives a hard reload.</li>
+      <li><strong>Secondary links</strong> — reset password, SSO — a cluster below the submit.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /login</td><td>redirect to the app on success</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /login (bad credentials)</td><td>401 → the same form re-rendered with the alert and the USERNAME preserved; never the password</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /login?next=…</td><td>the form, carrying the post-login destination in a hidden field</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Idle</td><td>submit enabled; autofocus the first empty field only</td></tr>
+          <tr><td>Invalid credentials</td><td>one generic message — never "no such user" (account enumeration)</td></tr>
+          <tr><td>Account locked</td><td>a distinct message with the unlock path; do NOT reuse the invalid-credentials copy</td></tr>
+          <tr><td>Session expired</td><td>arrive with an info alert explaining why, and the original destination preserved</td></tr>
+          <tr><td>Submitting</td><td>button disabled + <code>aria-busy</code>; the form is the only thing on screen, so no skeleton</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/form", "Forms"],
     ["/patterns/validation-summary", "Validation summary"],

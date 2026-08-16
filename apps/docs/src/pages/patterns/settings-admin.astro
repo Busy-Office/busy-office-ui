@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: settings &amp; admin">
   <p class="demo-note">
@@ -125,6 +126,59 @@ import Related from '../../components/Related.astro';
     import { initTabs } from '@busy-office/ui/js';
     initTabs();
   </script>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Section navigation</strong> — tabs or a sub-sidebar; each section is its own form and saves independently.</li>
+      <li><strong>Form sections</strong> — <code>.bo-form-section</code> fieldsets grouping related settings.</li>
+      <li><strong>Save bar</strong> — sticky <code>.bo-form-actions</code>, scoped to the current section.</li>
+      <li><strong>Danger zone</strong> — destructive settings visually separated, each behind a confirm dialog.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /settings/:section</td><td>the section form with current values</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /settings/:section</td><td>the section re-rendered with a success banner; 422 → the same form with field errors and values kept</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /settings/:section/reset</td><td>defaults restored — behind a confirm dialog, never a bare button</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Saved</td><td>a success alert in the section, not a global toast — the user needs to know WHICH section saved</td></tr>
+          <tr><td>Unsaved changes</td><td>a dirty marker in the save bar; warn on section switch, not just on unload</td></tr>
+          <tr><td>Validation error</td><td>field-level messages; focus the first invalid control</td></tr>
+          <tr><td>Read-only (non-admin)</td><td>render values as <a href={base + '/components/kv'}>key-value facts</a> and omit the save bar</td></tr>
+          <tr><td>Destructive action</td><td>confirm dialog naming the exact consequence and requiring the object name typed for irreversible ones</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/tabs'}>Tabs</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/tabs", "Tabs"],
     ["/components/form", "Forms"],

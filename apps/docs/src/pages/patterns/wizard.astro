@@ -80,6 +80,59 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     import { initWizard } from '@busy-office/ui/js';
     initWizard();
   </script>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Stepper</strong> — where you are, what is done, what is left; completed steps are navigable.</li>
+      <li><strong>Step panel</strong> — one form per step, each independently valid.</li>
+      <li><strong>Footer navigation</strong> &mdash; Back / Next, with Next as the form&rsquo;s submit so Enter works.</li>
+      <li><strong>Resume affordance</strong> — a wizard nobody can resume is a wizard people abandon.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /wizard/:id/step/:n</td><td>the NEXT step fragment on success; 422 → this step re-rendered with errors and values</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /wizard/:id</td><td>resume at the furthest completed step</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /wizard/:id/finish</td><td>the created record; wizard state is discarded server-side only after this succeeds</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Step invalid</td><td>stay on the step; focus the first invalid field — never advance and report later</td></tr>
+          <tr><td>Partial persistence</td><td>each step posts as it completes, so a closed tab loses at most one step</td></tr>
+          <tr><td>Back navigation</td><td>values preserved; going back must never clear later steps silently</td></tr>
+          <tr><td>Abandoned / resumed</td><td>reopening lands on the furthest completed step with a note of what remains</td></tr>
+          <tr><td>Final submit</td><td>disable the whole footer while posting — a double-submitted wizard creates two records</td></tr>
+          <tr><td>Cross-step validation</td><td>if step 3 invalidates step 1, say WHICH step and link back to it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/stepper'}>Stepper</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/patterns/validation-summary'}>Validation summary</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/stepper", "Stepper"],
     ["/components/form", "Forms"],

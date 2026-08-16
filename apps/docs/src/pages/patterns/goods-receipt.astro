@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: goods receipt (RF scanner)">
   <p class="demo-note">
@@ -88,6 +89,59 @@ import Related from '../../components/Related.astro';
   document.querySelector('[data-scan-input]')
     .addEventListener('bo:scan', (e) => console.log(e.detail.value));
 </script>`}</code></pre>
+  </section>
+
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Scan field</strong> — always focused; a hardware scanner types then presses Enter, which <code>initScanInput()</code> treats as a submit.</li>
+      <li><strong>Expected vs received list</strong> — every line with its ordered quantity and a running received count.</li>
+      <li><strong>Quantity control</strong> — spacious density and big steppers: this screen is used one-handed, often gloved.</li>
+      <li><strong>Confirm bar</strong> — post the receipt; disabled until at least one line has a quantity.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /receipts/:id/scan</td><td>the matched line fragment with its updated count; 404 → an unknown-barcode alert that does NOT steal focus from the scan field</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /receipts/:id</td><td>the posted receipt; 422 for over-receipt beyond tolerance</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /receipts/:id</td><td>resume a partially entered receipt — warehouse sessions get interrupted</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Waiting for scan</td><td>the field holds focus permanently; every state change must return focus to it</td></tr>
+          <tr><td>Unknown barcode</td><td>an alert plus an audible or visible cue — the user is looking at the goods, not the screen</td></tr>
+          <tr><td>Over-receipt</td><td>a warning with the tolerance stated; block only past the policy limit</td></tr>
+          <tr><td>Partial receipt</td><td>the line shows received/ordered; posting a partial is normal and must not warn</td></tr>
+          <tr><td>Complete</td><td>a clear terminal state — the next scan starts a NEW receipt rather than silently appending</td></tr>
+          <tr><td>Offline / flaky wifi</td><td>queue scans locally and replay; a dropped scan in a warehouse is a stock discrepancy later</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/quantity'}>Quantity</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/concepts/density'}>Density (spacious)</a></li>
+    </ul>
   </section>
 
   <Related links={[

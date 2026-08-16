@@ -32,7 +32,9 @@ const markup = `<div class="bo-combobox">
 
   <section class="demo">
     <h2>Basic</h2>
-    <div class="bo-combobox">
+    <div class="bo-form-field" style="margin-block-end: 0">
+      <label class="bo-form-field__label" for="demo-cb-input">Cost center</label>
+      <div class="bo-combobox">
       <input class="bo-input" type="text" role="combobox" id="demo-cb-input"
           aria-expanded="false" aria-controls="demo-cb-list" aria-autocomplete="list"
           autocomplete="off" placeholder="Search cost centers…" />
@@ -42,12 +44,19 @@ const markup = `<div class="bo-combobox">
         <li class="bo-combobox__option" role="option" id="demo-cb-opt-3" data-value="CC-4021">CC-4021 — Procurement</li>
         <li class="bo-combobox__option" role="option" id="demo-cb-opt-4" data-value="CC-3390">CC-3390 — Facilities</li>
       </ul>
+      </div>
     </div>
     <p class="bo-u-text-muted">Type to filter (case-insensitive substring match against
     each option's full text — try "log" or "cc-33"), <kbd>↓</kbd>/<kbd>↑</kbd> to move
     through the filtered results, <kbd>Enter</kbd> to commit. The listbox is a real
     <code>[popover]</code> — <kbd>Esc</kbd> and clicking outside close it without
-    changing the field's value, for free.</p>
+    changing the field's value, for free. Two honest caveats (owner test
+    report, 2026-08-16): the popover is never <em>clipped</em> by a scroll
+    container, but it is positioned once at open time and is not
+    re-anchored — so the list <strong>closes on scroll</strong> rather than
+    drifting away from its field; and <code>aria-expanded</code> is
+    resynced on the listbox's <code>toggle</code> event, so a test must
+    assert after a task, not synchronously in the keypress.</p>
   </section>
 
   <section class="demo">
@@ -123,16 +132,40 @@ const markup = `<div class="bo-combobox">
     initCombobox();
   </script>
 
+
+  <section class="demo">
+    <h2>Keyboard reference</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Key</th><th scope="col">Behaviour</th></tr></thead>
+        <tbody>
+          <tr><td>Printable characters</td><td>Filter; open the list if anything matches</td></tr>
+          <tr><td><kbd class="bo-kbd">↓</kbd> / <kbd class="bo-kbd">↑</kbd></td><td>Move the active option; <strong>clamps at the ends</strong> — deliberately no wrap-around</td></tr>
+          <tr><td><kbd class="bo-kbd">Home</kbd> / <kbd class="bo-kbd">End</kbd></td><td>Move the text caret, not the active option (correct for an editable combobox)</td></tr>
+          <tr><td><kbd class="bo-kbd">PageUp</kbd> / <kbd class="bo-kbd">PageDown</kbd></td><td>Not handled</td></tr>
+          <tr><td><kbd class="bo-kbd">Enter</kbd> (option active)</td><td>Commit, close, dispatch <code>bo:combobox-select</code></td></tr>
+          <tr><td><kbd class="bo-kbd">Enter</kbd> (open, nothing active)</td><td>Swallowed — never submits the surrounding form; commits the sole match if exactly one remains</td></tr>
+          <tr><td><kbd class="bo-kbd">Enter</kbd> (list closed)</td><td>Submits the form natively, as any text input would</td></tr>
+          <tr><td><kbd class="bo-kbd">Esc</kbd></td><td>Close, keep the typed text</td></tr>
+          <tr><td><kbd class="bo-kbd">Tab</kbd></td><td>Close, clear the active option, move on</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <ClassRef component="combobox" />
   <ApiTable
     component="combobox"
     js="Required: initCombobox() — without it the field is a plain text input; typing does not filter or open the list."
     notes={[
       'Single-select only — the committed value lives in the input\'s text, not on any option (options never carry a persisted "chosen" marker across reopens). For choosing several values, use the <a href="' + base + '/components/dropdown">multi-select dropdown</a> instead.',
-      'The listbox is a native <code>[popover]</code> — never clipped by scrolling containers, and <kbd>Esc</kbd>/light-dismiss close it without touching the field value at no extra cost.',
+      'The listbox is a native <code>[popover]</code> — never clipped by scrolling containers, and <kbd>Esc</kbd>/light-dismiss close it without touching the field value at no extra cost. It is NOT re-anchored on scroll (CSS anchor positioning is below the browser floor), so it closes instead.',
+      'Focus leaving the widget closes the list and clears the active option — that is also the natural moment to run "must match a known value" validation.',
+      'Options carrying <code>aria-disabled="true"</code> are shown but skipped by the arrows and rejected by Enter and click.',
+      'Options rendered without an <code>id</code> get one minted at activation time, so <code>aria-activedescendant</code> is never an empty string.',
       'Filtering is a case-insensitive substring match against each option\'s full text, computed client-side against the options already in the markup — for a server-driven / async result list, swap the options\' <code>hidden</code> state yourself in response to your own fetch instead of relying on the built-in filter.',
       'Commit dispatches <code>bo:combobox-select</code> with <code>{ value, text }</code> — <code>value</code> comes from the chosen option\'s <code>data-value</code> (falls back to its text if absent).',
     ]}
   />
-  <Related links={[["/components/dropdown", "Dropdown"], ["/components/form", "Forms"], ["/concepts/accessibility", "Accessibility model"]]} />
+  <Related links={[["/components/dropdown", "Dropdown (multi-select)"], ["/components/form", "Forms"], ["/components/filters", "Filters"], ["/components/tag-input", "Tag input"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

@@ -73,9 +73,41 @@ for (const d of dirs) {
   }
 }
 
+
+/* ---------- PATTERN pages (Slice 23 item 3) ----------
+   A pattern page is documentation of a SCREEN, not a gallery entry: ten
+   of thirteen used to stop at "live demo + one caption" (owner docs
+   review, 2026-08-16). Four sections are load-bearing and gated here —
+   Anatomy (which component provides which region), Data contract (what
+   the server must return; the HTMX story is meaningless without it),
+   States (loading/empty/error/permission — the states real screens
+   spend most of their life in), and Components used (the checklist a
+   reader follows outward). Keyboard walkthrough, print behaviour and
+   scaling notes are in the template but NOT gated: some screens
+   genuinely have nothing to say about print, and a gate that forces
+   filler buys nothing. */
+const patternsDir = join(docsRoot, 'src/pages/patterns');
+const PATTERN_SECTIONS = [
+  [/<h2>\s*Anatomy/i, 'an <h2>Anatomy</h2> section'],
+  [/<h2>\s*Data contract/i, 'an <h2>Data contract</h2> section'],
+  [/<h2>\s*States/i, 'an <h2>States</h2> section'],
+  [/<h2>\s*Components used/i, 'an <h2>Components used</h2> section'],
+];
+let patternsChecked = 0;
+for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro'))) {
+  const page = await readFile(join(patternsDir, f), 'utf8');
+  patternsChecked++;
+  for (const [re, desc] of PATTERN_SECTIONS) {
+    if (!re.test(page)) failures.push(`patterns/${f}: missing ${desc}`);
+  }
+  if (!/<Related[\s\S]{0,10}?links=\{\[\s*\[/.test(page)) {
+    failures.push(`patterns/${f}: missing a <Related> footer with at least one link`);
+  }
+}
+
 if (failures.length) {
   console.error(`page-shape check FAILED (${failures.length}):`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }
-console.log(`page-shape check passed: ${checked} component page(s) verified against the CLAUDE.md skeleton`);
+console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s) verified against the CLAUDE.md skeletons`);

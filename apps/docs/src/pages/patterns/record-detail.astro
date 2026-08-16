@@ -90,5 +90,58 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </div>
   </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Breadcrumb</strong> — where this record sits; the parent link is how users get back to the filtered list.</li>
+      <li><strong>Facts strip</strong> — <code>.bo-kv</code> for the header facts (vendor, cost centre, total): display data, never readonly inputs.</li>
+      <li><strong>Record feed</strong> — one card per related document (order, receipt, invoice) in chronological order.</li>
+      <li><strong>Status timeline + audit trail</strong> — where it is now, and every state change with actor and timestamp.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /po/:id</td><td>the full screen</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /po/:id/records</td><td>one new card fragment appended to the feed</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /po/:id/audit?after=…</td><td>newer audit entries for polling; empty body when nothing changed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Loading</td><td>skeleton cards in the feed; the facts strip renders from the record itself, so it never blanks</td></tr>
+          <tr><td>Empty feed</td><td>the record exists with no related documents yet — say so and offer the first action</td></tr>
+          <tr><td>Error loading a section</td><td>a per-section alert; one failed audit fetch must not blank the record</td></tr>
+          <tr><td>Read-only</td><td>no composer, no action buttons — the timeline and facts are the whole screen</td></tr>
+          <tr><td>Stale (someone else acted)</td><td>poll or push the timeline fragment; a decided record showing "awaiting approval" is the failure mode to avoid</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Cards</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/approval-workflow'}>Timeline & audit</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/byline'}>Byline</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/prose'}>Prose</a></li>
+    </ul>
+  </section>
+
   <Related links={[["/components/ordered-list", "Ordered list"], ["/components/byline", "Byline"], ["/components/approval-workflow", "Timeline & audit"], ["/patterns/approval", "Approval workflow"], ["/patterns/invoice-list", "Invoice list"], ["/patterns/detail-form", "Multi-column detail form (the edit counterpart)"]]} />
 </Gallery>

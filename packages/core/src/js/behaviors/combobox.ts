@@ -75,7 +75,9 @@ function close(listbox: HTMLElement): void {
 }
 
 function visibleOptions(listbox: HTMLElement): HTMLElement[] {
-  return options(listbox).filter((o) => !o.hidden);
+  // aria-disabled options are shown but never navigable or committable
+  // (owner test report 3.5, 2026-08-16 — they used to be fully selectable).
+  return options(listbox).filter((o) => !o.hidden && o.getAttribute('aria-disabled') !== 'true');
 }
 
 function position(input: HTMLElement, listbox: HTMLElement): void {
@@ -91,10 +93,15 @@ function position(input: HTMLElement, listbox: HTMLElement): void {
   listbox.style.minWidth = `${r.width}px`;
 }
 
+let autoId = 0;
 function setActive(input: HTMLElement, listbox: HTMLElement, option: HTMLElement | null): void {
   options(listbox).forEach((o) => o.removeAttribute('aria-selected'));
   if (option) {
     option.setAttribute('aria-selected', 'true');
+    // An option rendered from a template may have no id — aria-activedescendant
+    // would then be set to "" and the highlight becomes invisible to AT while
+    // staying visible to sighted users (owner test report 4.5). Mint one.
+    if (!option.id) option.id = `bo-cb-opt-${++autoId}`;
     input.setAttribute('aria-activedescendant', option.id);
     option.scrollIntoView?.({ block: 'nearest' });
   } else {
@@ -153,7 +160,9 @@ function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLEleme
  * @keymap initCombobox
  * @key ArrowDown / ArrowUp — open the list (filtering first if closed), then move the active option; clamps at the ends
  * @key Enter — commit the active option (dispatches bo:combobox-select)
+ * @key Enter (list open, nothing active) — swallowed, never submits the form; commits the sole match if there is exactly one
  * @key Escape — close without changing the value (native popover light-dismiss)
+ * @key Tab — focus leaves the widget: the list closes and the active option clears
  */
 export function initCombobox(): void {
   if (installed) return;
@@ -192,15 +201,69 @@ export function initCombobox(): void {
       if (active) {
         e.preventDefault();
         commit(input, listbox, active);
+        return;
+      }
+      // List open, nothing active: swallow Enter. Previously it fell
+      // through to the enclosing <form>, which submitted an unfiltered
+      // form and cleared the user's typed text — in the filter-bar shape
+      // the docs recommend (owner test report 3.1, high). Commit the sole
+      // match if there is exactly one; otherwise just don't submit.
+      if (isOpen(listbox)) {
+        e.preventDefault();
+        const visible = visibleOptions(listbox);
+        if (visible.length === 1) commit(input, listbox, visible[0]);
       }
     }
   });
+
+  // Focus leaving the combobox closes the list. Without this the popover
+  // stayed open over unrelated content after Tab, with aria-expanded="true"
+  // and an active option in a list the user had left (owner test report
+  // 3.2, high) — and "must match a known value" validation had no natural
+  // moment to run.
+  document.addEventListener('focusout', (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.getAttribute?.('role') !== 'combobox') return;
+    const root = input.closest('.bo-combobox');
+    const to = (e as FocusEvent).relatedTarget as Node | null;
+    if (to && root?.contains(to)) return; // moved within the widget
+    const listbox = listboxFor(input);
+    if (!listbox) return;
+    close(listbox);
+    input.setAttribute('aria-expanded', 'false');
+    setActive(input, listbox, null);
+  });
+
+  // An open list is positioned once, at open time — it does not follow its
+  // input on scroll (owner test report 3.3: the input scrolled away while
+  // the list stayed pinned, orphaned over unrelated content). Closing is
+  // the simple, correct behaviour; re-anchoring needs CSS anchor
+  // positioning, which is below this project's browser floor.
+  window.addEventListener(
+    'scroll',
+    (e) => {
+      const open = document.querySelector<HTMLElement>('[role="listbox"][data-bo-open="true"]');
+      if (!open || open.contains(e.target as Node)) return;
+      const input = inputFor(open);
+      if (!input) return;
+      close(open);
+      input.setAttribute('aria-expanded', 'false');
+      setActive(input, open, null);
+    },
+    true,
+  );
 
   document.addEventListener('click', (e) => {
     const option = (e.target as Element | null)?.closest<HTMLElement>('[role="option"]');
     const listbox = option?.closest<HTMLElement>('[role="listbox"]');
     const input = listbox && inputFor(listbox);
-    if (listbox && input && option) commit(input, listbox, option);
+    if (!listbox || !input || !option) return;
+    if (option.getAttribute('aria-disabled') === 'true') return; // report 3.5
+    commit(input, listbox, option);
+    // APG: focus must never leave the combobox during selection. Clicking
+    // an option used to drop activeElement to <body>, so the next Tab
+    // restarted from the top of the document (owner test report 3.4).
+    input.focus();
   });
 
   // Native popover close (Esc, light-dismiss) doesn't know about the

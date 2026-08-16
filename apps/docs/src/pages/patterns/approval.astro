@@ -112,5 +112,60 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
     <h2>Markup — timeline</h2>
     <pre><code>{timelineMarkup}</code></pre>
   </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Record summary</strong> — enough to decide without leaving: amount, vendor, cost centre.</li>
+      <li><strong>Status timeline</strong> — the chain so far, with the current step marked <code>aria-current="step"</code>.</li>
+      <li><strong>Decision cluster</strong> — Approve / Reject; Reject requires a reason, so both open the dialog.</li>
+      <li><strong>Dialog</strong> — the note (<a href={base + '/components/richtext'}>rich text</a>) plus optional extra approvers.</li>
+      <li><strong>Audit trail</strong> — every decision with actor, timestamp and note; append-only.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /po/:id/approve</td><td>the updated timeline + audit fragment</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /po/:id/reject</td><td>same, with the reason recorded; reason is REQUIRED server-side, not just in the UI</td></tr>
+          <tr><td class="bo-data-table__col--code">any decision on a decided record</td><td>409 → re-render the timeline as it now is, with a banner naming who decided and when</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Awaiting your decision</td><td>buttons visible and enabled — this is the only state where they appear</td></tr>
+          <tr><td>Awaiting someone else</td><td>the timeline shows whose turn it is; no buttons for you</td></tr>
+          <tr><td>Already decided (409)</td><td>never silently overwrite — show the decision that won and let the user re-read</td></tr>
+          <tr><td>Submitting</td><td>dialog buttons disabled; the dialog stays open until the swap lands so a failure keeps the typed note</td></tr>
+          <tr><td>Not an approver</td><td>the screen is read-only; approval controls are absent, not disabled</td></tr>
+          <tr><td>Delegated / out of office</td><td>name the delegate in the timeline — an approval chain that silently reroutes is an audit problem</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/approval-workflow'}>Timeline & audit</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/richtext'}>Rich text</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/avatar'}>Avatar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+    </ul>
+  </section>
+
   <Related links={[["/components/approval-workflow", "Timeline & audit"], ["/components/stepper", "Stepper"], ["/components/dialog", "Dialog"]]} />
 </Gallery>

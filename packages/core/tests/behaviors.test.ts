@@ -263,6 +263,61 @@ describe('initCombobox', () => {
     expect(hidden).toEqual([true, false, true]);
   });
 
+  // --- owner combobox test report, 2026-08-16: five confirmed bugs ---
+  it('Enter with the list open but nothing active does not submit the form', () => {
+    const { input } = combobox();
+    type(input, 'CC');
+    expect(input.getAttribute('aria-expanded')).toBe('true');
+    const ev = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+    input.dispatchEvent(ev);
+    // must be swallowed: otherwise the enclosing <form> submits and the
+    // user loses their typed filter (report 3.1, high)
+    expect(ev.defaultPrevented).toBe(true);
+  });
+
+  it('focusout closes the list and clears the active option', () => {
+    const { input, listbox } = combobox();
+    type(input, 'CC');
+    key(input, 'ArrowDown');
+    expect(input.getAttribute('aria-activedescendant')).toBeTruthy();
+    input.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body }));
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    expect(input.hasAttribute('aria-activedescendant')).toBe(false);
+    expect(listbox.dataset.boOpen).not.toBe('true');
+  });
+
+  it('clicking an option returns focus to the input', () => {
+    const { input, listbox } = combobox();
+    type(input, 'CC');
+    const opt = listbox.querySelector('#cb-opt-2') as HTMLElement;
+    opt.click();
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('aria-disabled options are skipped by arrows and reject commit', () => {
+    const { input, listbox } = combobox();
+    const disabled = listbox.querySelector('#cb-opt-2') as HTMLElement;
+    disabled.setAttribute('aria-disabled', 'true');
+    type(input, 'CC');
+    key(input, 'ArrowDown');
+    key(input, 'ArrowDown');
+    // second option is disabled -> the active option must skip to the third
+    expect(input.getAttribute('aria-activedescendant')).toBe('cb-opt-3');
+    const fired: string[] = [];
+    input.addEventListener('bo:combobox-select', (e) => fired.push((e as CustomEvent).detail.value));
+    disabled.click();
+    expect(fired).toEqual([]);
+    expect(input.value).not.toBe('CC-2205');
+  });
+
+  it('options without an id never yield an empty aria-activedescendant', () => {
+    const { input, listbox } = combobox();
+    listbox.querySelectorAll('[role="option"]').forEach((o) => o.removeAttribute('id'));
+    type(input, 'CC');
+    key(input, 'ArrowDown');
+    expect(input.getAttribute('aria-activedescendant')).toBeTruthy();
+  });
+
   it('no matches closes the list', () => {
     const { input } = combobox();
     type(input, 'zzz');
