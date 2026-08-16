@@ -8,6 +8,14 @@
      options — all for free from the platform. Zero JS. */
   .bo-segmented {
     display: inline-flex;
+    /* Options wrap rather than push the page sideways: 2-5 translated
+       labels ("Meine Genehmigungen") overflow a phone-width shell
+       otherwise. Wrapping keeps every option reachable — the group stays
+       one control because the background and border wrap with it
+       (pseudo-locale sweep, 2026-08-17; same class of bug as the
+       cluster's non-shrinking children). */
+    flex-wrap: wrap;
+    max-inline-size: 100%;
     gap: 2px;
     padding: 2px;
     background: var(--bo-color-bg-muted);

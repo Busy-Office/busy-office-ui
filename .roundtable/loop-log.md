@@ -279,3 +279,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-17 03:10 · Explore · spike · Claims gate graduated: 5 doc behaviours executed in CI (red-proved); probe's own false-failure fixed by driving real key events · shipped · f399777
 - 2026-08-17 03:31 · Continue · build · 422 claim dogfood-verified in po-app; found+fixed+documented the two-swap-target gap (hx-swap-oob) · shipped · 4ac1ece
 - 2026-08-17 03:52 · Explore · spike · Pseudo-locale gate graduated: i18n wrapping claim measured (8 pages, +35% text, compact) — red-proof took 3 attempts, trap documented · shipped · 7935101
+- 2026-08-17 04:03 · Continue · fix · Pseudo-locale gate caught a real defect in CI: cluster children could not shrink; long chips overflowed at 390px — fixed in the primitive · shipped · e121623

@@ -2882,6 +2882,21 @@ reproduced locally at +60% expansion first, verified at 0px overflow
 after. The environment sensitivity is a feature here — CI's fonts are
 a second opinion my laptop cannot give.
 
+**Standardize 2026-08-17 (post-gate sweep).** The cluster fix was one
+instance of a CLASS — flex children that cannot shrink or wrap — so the
+sweep ran the pseudo-locale expansion across ALL 88 pages at phone
+width rather than the gate's eight. Found exactly one more:
+`.bo-segmented` could not wrap, so translated labels overflowed.
+Fixed (options wrap, group caps at 100%; verified normal labels still
+sit on one row, so today's rendering is unchanged). Re-sweep: 0
+overflows across 88 pages at +60% text. The gate's page list grew from
+8 to 14 in response — a hand-picked list only guards the pages someone
+thought of — and the per-word expansion factor rose to 55% because
+pages heavy in short words diluted the page-level ratio below the
+German case the gate claims to model. Gate boilerplate: already shared
+(serve-dist + resolve-chrome across all four browser gates), nothing
+left to consolidate.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups

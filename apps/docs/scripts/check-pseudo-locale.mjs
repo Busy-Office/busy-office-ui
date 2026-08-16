@@ -3,8 +3,9 @@
 // /concepts/i18n claims "table headers wrap, they do not truncate" and
 // "buttons size to content", and names compact density in the longest
 // locale as the combination that breaks first. This runs that exact
-// combination: every visible string expanded ~35-45% with accents (the
-// German/Finnish worst case), density forced to compact, at desktop and
+// combination: every visible string expanded (the German/Finnish worst case;
+// the per-word factor is deliberately higher than 35% because pages
+// heavy in short words and code blocks dilute the page-level ratio), density forced to compact, at desktop and
 // phone width. A failure is either real clipping (content wider than a
 // box that hides its overflow) or the shell scroller overflowing.
 //
@@ -24,10 +25,17 @@ const browser = await puppeteer.launch({ executablePath: resolveChrome(), headle
 const page = await browser.newPage();
 
 // Text-dense screens where expansion bites: tables, forms, toolbars, nav.
+// Widened after a full-site sweep (Standardize 2026-08-17) found a
+// SECOND instance of the class on a page this list did not cover —
+// .bo-segmented could not wrap. A hand-picked list only guards the
+// pages someone thought of; these are the component/pattern families
+// where expansion actually bites, plus the two that already failed.
 const PAGES = [
   '/components/data-table/', '/components/form/', '/patterns/invoice-list/',
   '/components/dashboard/', '/components/navbar/', '/patterns/approval/',
-  '/reference/tokens/', '/components/kv/',
+  '/reference/tokens/', '/components/kv/', '/components/segmented/',
+  '/components/filters/', '/components/tabs/', '/components/stepper/',
+  '/patterns/settings-admin/', '/patterns/record-detail/',
 ];
 const findings = [];
 let minExpansion = Infinity;
@@ -39,7 +47,7 @@ for (const path of PAGES) {
     const before = await page.evaluate(() => document.querySelector('main')?.innerText.length ?? 0);
     const after = await page.evaluate(() => {
       document.documentElement.setAttribute('data-density', 'compact');
-      const EXPAND = (t) => t.replace(/\b(\w{3,})\b/g, (w) => w + 'ë' + w.slice(0, Math.ceil(w.length * 0.35)));
+      const EXPAND = (t) => t.replace(/\b(\w{3,})\b/g, (w) => w + 'ë' + w.slice(0, Math.ceil(w.length * 0.55)));
       const walker = document.createTreeWalker(document.querySelector('main'), NodeFilter.SHOW_TEXT);
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);

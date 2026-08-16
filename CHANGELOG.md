@@ -8,6 +8,11 @@ pin.
 
 ## Unreleased
 
+- **Fixed**: `.bo-segmented` options now wrap instead of pushing the
+  page sideways — 2-5 translated labels ("Meine Genehmigungen")
+  overflowed a phone-width shell. Normal-length labels still render on
+  one row; the fix only engages when the group would not fit.
+
 - **Fixed**: `.bo-cluster` children could refuse to shrink (flex items
   default to `min-width: auto`), so a child with nowrap content — a
   `.bo-chip` carrying a long or translated label — pushed the page
