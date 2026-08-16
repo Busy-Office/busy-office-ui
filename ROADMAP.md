@@ -2219,6 +2219,21 @@ engine-shaped sub-ask refused with the reason.
        hues); presets are step aliases (parse assertions extended to
        resolve them); ramp-grid page generated from the shipped
        artifact; gates green; live both themes.
+       **Spec finalized 2026-08-16 (owner agreed)** — two tiers:
+       (a) **Core scales** in the default bundle — only the ~8 ranges
+       the semantic tokens and presets actually alias (gray, slate,
+       stone, mauve, olive, mist + the status-hue parents), so every
+       shipped byte is load-bearing; (b) **Extended scales** as an
+       opt-in import (`@busy-office/ui/css/scales`, the motion/htmx
+       pattern) carrying the remaining chromatic ranges; the Colors
+       reference shows ALL 24 ramps, marking core vs extended.
+       **Plus (owner ask): grill the color/scales/tokens docs for
+       PRESENTATION** — compare-first (how Tailwind, Radix Colors, and
+       Carbon present color systems: ramp grids, copy-to-clipboard
+       hexes, usage guidance placement, scales-vs-semantic separation),
+       apply to our three pages (Colors ramp grid / Palettes / Tokens),
+       then a dedicated presentation-focused adversarial pass on the
+       BUILT pages before calling the item done.
 2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection
