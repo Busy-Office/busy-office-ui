@@ -2442,6 +2442,22 @@ the first protected deploy (2026-08-16)**: the new generation shipped
 including one the new HTML no longer references — still serve 200.
 Failure class closed.
 
+**RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
+pass — publishing stays owner-triggered).** The Unreleased cycle is
+complete and coherent: Slices 18–22 shipped and grilled, follow-ups
+1–7 closed, backlog empty. Version: **0.2.0** (pre-1.0 minor; the
+cycle carries two Breaking entries — initRowEdit select/checkbox
+contract, Avatar promotion — both listed with migration lines).
+CHANGELOG coverage audited this pass (two gaps found and fixed: the
+24-range scale system and .bo-kv had no entries). Release checklist
+when the owner triggers: (1) version bump + `npm publish` (owner);
+(2) cut the docs snapshot — `node apps/docs/scripts/
+cut-version-snapshot.mjs 0.2.0`, rebuild plain, commit both;
+(3) verify the published tarball with the po-app Devi test (its
+Dockerfile packs from source — swap to the registry tarball for the
+one-off check). All gates green at head; bundle 70 kB min /
+11.5 kB gz stamped.
+
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as
 "display-identical click-to-edit cells" (widened `--seamless`). If you

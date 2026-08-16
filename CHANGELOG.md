@@ -8,6 +8,24 @@ pin.
 
 ## Unreleased
 
+- Added: the 24-range scale system — `--bo-palette-<range>-<step>` raw
+  tokens, 11 steps (50–950) per range, generated in OKLCH on a shared
+  lightness ladder (generator drift-gated). Two tiers: 9 core ranges in
+  the default bundle (semantic five + slate/indigo/violet), 15 extended
+  ranges via the opt-in `@busy-office/ui/css/scales` module; manifest
+  exported as `@busy-office/ui/scales`. The raw tier is explicitly NOT
+  semver API (values may retune in any release); the semantic tier is
+  the stable contract. Docs: /base/colors grid (click-to-copy,
+  derived-honest role bands, per-swatch consumer tooltips), /base/tokens
+  (per-theme resolution, step cross-links), /base/palettes (ERP-first
+  preset cards).
+
+- Added: Key-value facts (`.bo-kv` + `--rows`) — record-header facts as
+  a native description list: responsive auto-fit grid, density-aware
+  values, tabular-numeric alignment, badges/times compose in `dd`.
+  Replaces the readonly-input-as-display-data anti-pattern (the docs
+  page states why).
+
 - Changed (not breaking — dist placement is not API pre-1.0):
   `.bo-prose` extracted from the richtext component into its own
   `prose` component (own docs page, own granular dist file) — display-
