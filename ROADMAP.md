@@ -1850,6 +1850,84 @@ seat + code-walk). Ranked by severity: data-integrity first.
 before): generic `bo:dirty` seam replacing the tag-event allowlist (H6);
 `isLive` value normalization (H5).
 
+## Slice 20 — docs hardening & depth (user wishlist, 2026-08-16)
+
+Triaged 2026-08-16 from a 5-item user wishlist ("hardness the documents"),
+with an attachment showing Tailwind's docs version-switcher dropdown as the
+reference for item 3, and Tailwind v4.3's new palettes
+(mauve/olive/mist/taupe) as the seed for item 5. Ground-truthed against the
+codebase before queuing: no syntax highlighting exists anywhere (Demo and
+Markup blocks are plain escaped `<pre><code>` — Astro's shiki only touches
+markdown); Tree is a native-details NAVIGATION tree with no tree-table;
+exactly one brand preset ships (indigo) on a proven contrast-gated
+mechanism; Versioned docs was parked post-1.0 and this ask GRADUATES it.
+Ranked: quick wins that harden every page first, then the two build items.
+
+1. [ ] **Code blocks: syntax highlighting site-wide** (wishlist "code
+       block"). Every `<pre><code>` today is unstyled plain text. Add
+       build-time highlighting (Shiki, already in Astro's dependency
+       tree — no client JS, no CDN, CSP-safe) wired through `Demo.astro`
+       and the hand-authored Markup sections; theme-aware (light/dark via
+       the existing data-theme contract, not a separate highlighter
+       theme flip); AA contrast for token colors in both themes (extend
+       the contrast gate's PAIRS if new colour pairings ship). Accept:
+       highlighted blocks on component + pattern pages in both themes,
+       copy buttons still work, axe zero, contrast gate covers the new
+       colors, visual baselines regenerated deliberately.
+2. [ ] **Docs IA pass 2: rearrange contents/components/patterns**
+       (wishlist "make it easy to understand"). Method like Slice 16:
+       compare-first (how do Tailwind/Carbon/Ant order WITHIN groups and
+       structure their patterns index), then apply: learning-path
+       ordering inside each sidebar group (workhorse components first,
+       not scaffold-append order), a patterns index grouped by workflow
+       (entry → approval → reporting), and a contents/landing route into
+       each group. Accept: a written before/after rationale in
+       `.roundtable/`; sidebar + patterns ordering changed per it;
+       page-shape + links green; no URL changes (only ordering/grouping).
+3. [ ] **Docs version switcher** (wishlist + attachment; graduates the
+       parked post-1.0 "Versioned docs" item at the user's explicit ask).
+       A version dropdown in the docs header (Tailwind-style): current
+       docs at the canonical root, versioned snapshots under
+       `/v/<version>/`, the switcher navigating between them; the
+       snapshot mechanism wired into the release flow (Pages deploy
+       keeps prior snapshots). Pre-1.0 reality: one live version (0.1.x)
+       + the mechanism proven with a real snapshot cut at the next
+       release. Accept: switcher renders + navigates live; a snapshot of
+       the current docs actually built and served under its version path
+       (verified in the container, both themes); base-path (DOCS_BASE)
+       build verified — this item is maximally exposed to the base-URL
+       class of bug; release-flow doc updated.
+4. [ ] **Tree table** (wishlist "tree & tree table"). The existing
+       `.bo-tree` covers hierarchy NAVIGATION; a tree-table is
+       hierarchical ROWS in a data table — BOM explosion, account
+       rollups, org-unit budgets: expand/collapse parent rows,
+       indent-by-level cell, ARIA per the APG treegrid-vs-table
+       decision (start from the honest question of whether
+       `role="treegrid"` or a plain table + disclosure buttons +
+       `aria-expanded` serves ERP row-hierarchy better — the Tree
+       component's own "navigation, not APG TreeView" reasoning
+       suggests the lighter shape; decide with evidence, record the
+       ADR). Composes with existing row primitives (badges, numeric
+       cols, row-edit where sensible); auto-sum interplay documented
+       (subtotal rows vs data-sum-of). Also: harden the existing Tree
+       page with a cross-link + when-to-use-which guidance. Accept:
+       component + behavior (if JS needed) + docs page with the graded
+       recipe; keyboard + SR story stated; tests; gates green;
+       live-verified both themes/widths.
+5. [ ] **Palette system** (wishlist, seeded by Tailwind v4.3's
+       mauve/olive/mist/taupe). Grow the proven brand-preset mechanism
+       into a small named-palette SYSTEM: 3-4 new presets built the
+       brand-indigo way (accent family + focus-ring + bg-selected,
+       light+dark, contrast-gated automatically by the existing brand
+       scan), plus a "Palettes" reference page — every palette's
+       swatches, token values, and hex rendered from the shipped CSS
+       (generated, not hand-painted), the pantone-style reference the
+       user named. Accept: each new palette passes the full 27-pair
+       contrast gate in both themes; reference page generated from the
+       artifact; live demo per palette (the theming page's scoped
+       preview mechanism); docs state the recipe for app-defined
+       palettes.
+
 ## Explore log
 
 - [x] **2026-08-15 — po-app consumer image broken by the README-stamp gate**
@@ -2150,8 +2228,10 @@ Highest-leverage bets (2026-08-14 review — ranked):
       unwrapped in every framework (po-app proves the no-framework path;
       JSX consumers use the classes directly). Either graduates the
       moment a real consumer asks — same gate as every parked item.
-- [ ] **Versioned docs** — the CHANGELOG covers pre-1.0 churn; at 1.0, snapshot docs
-      per major so pinned users read their version.
+- [x] **Versioned docs** — graduated 2026-08-16 into Slice 20 item 3 at
+      the user's explicit ask (Tailwind-style version switcher attachment);
+      originally parked until 1.0, the mechanism now ships early with the
+      switcher and a real snapshot proven at the next release.
 - [x] **Theme presets** — shipped one real preset (not the whole "small
       set" — see below), generated via the Explore fallback (backlog +
       Ideas seed list both empty, same pattern as items 21/6).
