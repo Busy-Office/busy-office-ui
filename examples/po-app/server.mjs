@@ -55,6 +55,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 <title>${title} · PO demo</title>
 <link rel="stylesheet" href="/assets/css/index.min.css">
 <link rel="stylesheet" href="/assets/css/htmx.min.css">
+<link rel="stylesheet" href="/assets/css/brand-cobalt.min.css">
 <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
 <body>
@@ -184,7 +185,9 @@ const timelineHtml = (p) => `<ol class="bo-timeline" role="list" id="timeline-${
   ${p.status === 'Approved'
     ? `<li class="bo-timeline__step" data-state="done">
         <span class="bo-timeline__marker" aria-hidden="true">✓</span>
-        <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Approved</div></div></li>`
+        <div><div class="bo-timeline__title"><span class="bo-visually-hidden">Completed: </span>Approved</div>${
+          p.note ? `<div class="bo-prose bo-u-text-sm">${p.note}</div>` : ''
+        }</div></li>`
     : p.status === 'Rejected'
       ? `<li class="bo-timeline__step" data-state="rejected">
           <span class="bo-timeline__marker" aria-hidden="true">✕</span>
@@ -261,6 +264,19 @@ ${p.status === 'Pending' ? `
     <div class="bo-dialog__body">
       <p>Approve ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p>
       <div class="bo-form-field">
+        <span class="bo-form-field__label" id="adlg-note-label">Approval note</span>
+        <div class="bo-richtext">
+          <div class="bo-cluster bo-richtext__toolbar" role="group" aria-label="Formatting">
+            <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
+            <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
+            <span class="bo-richtext__divider"></span>
+            <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+          </div>
+          <div class="bo-richtext__content bo-prose" contenteditable="true" id="adlg-note"
+               role="textbox" aria-multiline="true" aria-labelledby="adlg-note-label"></div>
+        </div>
+      </div>
+      <div class="bo-form-field">
         <span class="bo-form-field__label" id="adlg-notify-label">Notify additional approvers</span>
         <div class="bo-tag-input" id="adlg-notify" role="group" aria-labelledby="adlg-notify-label">
           <input class="bo-tag-input__field" id="adlg-notify-field" type="text"
@@ -271,13 +287,25 @@ ${p.status === 'Pending' ? `
     <footer class="bo-dialog__footer">
       <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
       <button class="bo-btn" value="confirm"
-        hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML">Approve</button>
+        hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML"
+        hx-vals='js:{note: document.getElementById("adlg-note").innerHTML}'>Approve</button>
     </footer>
   </form>
 </dialog>
 <script type="module">
   import { initTagInput } from '/assets/js/index.js';
   initTagInput();
+  // richtext light case — straight from /components/richtext Markup
+  document.addEventListener('mousedown', (e) => {
+    if (e.target.closest('[data-richtext-cmd]')) e.preventDefault();
+  });
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-richtext-cmd]');
+    if (!btn) return;
+    document.execCommand(btn.dataset.richtextCmd);
+    if (btn.hasAttribute('aria-pressed'))
+      btn.setAttribute('aria-pressed', String(document.queryCommandState(btn.dataset.richtextCmd)));
+  });
   const notify = document.getElementById('adlg-notify');
   const field = document.getElementById('adlg-notify-field');
   notify.addEventListener('bo:tag-add', (e) => {
@@ -547,6 +575,15 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       }
       if (m[2] && req.method === 'POST') {
         p.status = 'Approved';
+        // Sanitize per the richtext docs: drop script/style elements WITH
+        // their content first (a tag-only allowlist leaks the text — the
+        // dogfood round proved it), then allowlist tags, then strip attrs.
+        const body = await new Promise((ok) => { let b=''; req.on('data',(c)=>b+=c); req.on('end',()=>ok(b)); });
+        const rawNote = new URLSearchParams(body).get('note') ?? '';
+        p.note = rawNote
+          .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
+          .replace(/<(?!\/?(b|strong|i|em|ul|ol|li|p|br)\b)[^>]*>/gi, '')
+          .replace(/<(\w+)[^>]*>/g, '<$1>');
         audit.push({ t: new Date().toISOString(), what: `approved ${p.id}` });
         res.writeHead(200, { 'content-type': 'text/html' });
         return res.end(timelineHtml(p));

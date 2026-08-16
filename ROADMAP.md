@@ -2368,7 +2368,7 @@ engine-shaped sub-ask refused with the reason.
        prose importable standalone; api.json placement matches; no
        breaking entry needed pre-v1.0.
 
-6. [ ] **PO app: adopt Slice 22 surfaces** (graduated from the
+6. [x] **PO app: adopt Slice 22 surfaces** — DONE 2026-08-16 (container-verified: hostile-note check green incl. the content-leak fix, both themes/widths, tarball-only APIs). (graduated from the
        2026-08-16 dogfood Explore — spiked in a worktree, verified
        end-to-end, discarded per playbook; re-apply on main). Add to
        examples/po-app: brand-cobalt via the documented placement rule,
