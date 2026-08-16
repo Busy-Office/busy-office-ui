@@ -2406,6 +2406,23 @@ engine-shaped sub-ask refused with the reason.
        own sub-line typography; forcing the component there changes a
        designed page for zero user benefit (Objective: refuse).
 
+**Bug (owner report, 2026-08-16): first load of /base/colors unstyled
+until refresh.** DIAGNOSED as GitHub Pages CDN deploy skew, not a CSS
+bug — Evidence: the screenshot shows SHARED styles applied (demo-note)
+with only the PAGE-scoped bundle missing (.scale-grid rules), i.e. one
+hashed /_astro/colors.*.css request failed; both stylesheets serve 200
+now; Pages fronts Fastly with cache-control: max-age=600 on every
+response, so during a deploy window a node can serve fresh HTML while
+404ing the not-yet-propagated hashed CSS — and cache that 404 for up
+to 10 minutes (Hypothesis on the exact sequence; self-heals, which
+matches "refresh fixed it"). Aggravator: today's cadence pushed ~12
+separate Pages deploys. Mitigations: (a) ADOPTED operating rule —
+batch pushes to one per wake unless a fix is urgent, shrinking skew
+windows; (b) queued: evaluate carrying the previous deploy's /_astro
+assets forward one release in pages.yml so stale-HTML/fresh-node and
+fresh-HTML/stale-node both resolve (kills the class, small workflow
+change).
+
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as
 "display-identical click-to-edit cells" (widened `--seamless`). If you

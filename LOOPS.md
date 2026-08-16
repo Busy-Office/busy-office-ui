@@ -288,6 +288,11 @@ progress, and freeze-graduation rounds).
   (Accept criteria met / clean pass) is actually true, not just once. A round
   that reveals more work is a reason for another round, not an early exit.
 - **Verify before commit** — live in the container, both themes, both breakpoints.
+- **Batch pushes: one per wake** (2026-08-16, owner-reported unstyled
+  first paint) — every push triggers a Pages deploy, and each deploy
+  opens a CDN skew window (max-age=600 on Fastly nodes) where fresh
+  HTML can 404 its hashed CSS and cache the 404. Commit per round;
+  push once at wake end unless a fix is urgent.
   Routine ticks (2026-08-14 user direction): run a **bind-mounted** nginx serving
   `apps/docs/dist` directly (`podman run -d --name bo-docs-run -p 8081:80 -v
   apps/docs/dist:/usr/share/nginx/html:ro -v apps/docs/nginx.conf:/etc/nginx/
