@@ -207,6 +207,12 @@ const current =
           </select>
         </label>
         <span class="bo-navbar__spacer"></span>
+        {currentSnapshot && (
+          <p class="version-banner" role="note">
+            You're reading the <strong>v{currentSnapshot}</strong> snapshot —
+            it does not update. <a href={siteRoot + '/'}>Switch to the latest docs</a>.
+          </p>
+        )}
         <label class="bo-choice" for="density">Density
           <select class="bo-select" id="density" style="inline-size: auto">
             <option value="compact">Compact</option>
@@ -222,7 +228,7 @@ const current =
         </label>
       </header>
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs">
-        <div class="bo-sidebar-nav__section" id="docsearch"></div>
+        {!currentSnapshot && <div class="bo-sidebar-nav__section" id="docsearch"></div>}
         {sections.map((s) => (
           <div class="bo-sidebar-nav__section">
             <div class="bo-sidebar-nav__heading">{s.label}</div>
@@ -289,6 +295,7 @@ const current =
         </div>
       </main>
     </div>
+    {!currentSnapshot && (
     <dialog id="cmdk" class="bo-cmdk" aria-label="Search the docs">
       <div class="bo-cmdk__panel">
         <div id="cmdk-search"></div>
@@ -299,6 +306,7 @@ const current =
         </div>
       </div>
     </dialog>
+    )}
     <script is:inline>
       // Keep the left index in place across navigations. The docs are a static
       // MPA, so each page load re-renders the sidebar at scrollTop 0 — restore
@@ -641,6 +649,17 @@ const current =
   /* Box + token slots live in ../styles/code-hl.css (shared with the
      landing page, which is outside .docs-content). Shell-specific bits: */
   .demo-pair pre.code-hl { border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); }
+
+  .version-banner {
+    margin: 0;
+    margin-inline-end: var(--bo-space-3);
+    padding: var(--bo-space-1) var(--bo-space-3);
+    background: var(--bo-color-warning-subtle);
+    color: var(--bo-color-warning-text);
+    font-size: var(--bo-font-size-sm);
+    border-radius: var(--bo-radius-md);
+  }
+  .version-banner a { color: inherit; }
 
   /* Copy button, top-end of any code block. `has-copy` is added to EVERY
      <pre><code> in .docs-content (both Demo.astro's paired blocks and

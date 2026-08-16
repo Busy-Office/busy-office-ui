@@ -48,6 +48,13 @@ for await (const file of htmlFiles(dist)) {
   for (const t of new Set(targets)) {
     checked++;
     if (base && !t.startsWith(base + '/') && t !== base) {
+      // Sanctioned exception (Slice 21 item 4): a snapshot build's base
+      // carries a /v/<ver> suffix, and its frozen-docs banner DELIBERATELY
+      // links to the site root outside its own base — that escape link is
+      // the feature. Only that exact target is allowed; everything else
+      // outside base is still a failure.
+      const siteRoot = base.replace(/\/v\/[^/]+$/, '');
+      if (siteRoot !== base && t === siteRoot + '/') continue;
       failures.push(`${file.replace(dist, '')}: link outside base path: ${t}`);
       continue;
     }

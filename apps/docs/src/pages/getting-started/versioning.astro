@@ -41,7 +41,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     the current 0.1.1 snapshot was cut late as a mechanism proof and
     includes docs for later unreleased work — it gets re-cut correctly
     at the next release; snapshots are only version-faithful when cut AT
-    their release, which is the documented flow above.</p>
+    their release, which is the documented flow above. Also by nature of
+    static snapshots: a snapshot's own version dropdown freezes at cut
+    time (a v0.1.1 reader won't see versions released later listed
+    inside it) — the banner on every snapshot page links back to the
+    always-current latest docs.</p>
   </section>
   <section class="demo">
     <h2>Leaving is cheap — by design</h2>

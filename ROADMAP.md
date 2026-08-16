@@ -2134,7 +2134,27 @@ Ranked: user-visible breakage first.
        levels, toggle-less branch, double init). Accept: red-first
        tests for each; events gate picks up the new event; live-verify
        incl. a two-tbody table.
-4. [ ] **Switcher operations** (E4). One-command release:
+4. [x] **Switcher operations** — shipped 2026-08-16, all Accept met.
+       One-command release: `cut-version-snapshot.mjs` writes
+       `versions.json` itself (sorted, idempotent); new
+       `check-versions.mjs` gate in every docs build asserts each entry
+       has a committed snapshot index — PROVEN RED with a fake 9.9.9
+       entry (the exact human slip that previously shipped an uncaught
+       live 404). Frozen-docs banner renders in the snapshot header
+       (amber pill: "v0.1.1 snapshot — does not update — switch to
+       latest"), absent on latest, escape link verified by real click
+       on the production-parity mimic (one false alarm en route
+       correctly diagnosed as browser bfcache, confirmed by hard
+       reload); first banner placement rendered OFF-viewport above the
+       fixed app-shell — caught live, moved into the header's wrap row.
+       Search UI (sidebar box + Cmd/K dialog) is build-time absent in
+       snapshots (their pagefind is stripped; only null-guarded script
+       refs remain, zero console errors). The banner's deliberate
+       outside-base escape link needed a NARROW sanctioned exception in
+       check-links (only exactly siteRoot from a /v/ base — everything
+       else outside base still fails). Frozen-dropdown reality
+       documented on the versioning page. Snapshot re-cut via the new
+       one-command flow. (E4.) One-command release:
        `cut-version-snapshot.mjs` writes `versions.json` itself; a gate
        asserts every entry has a committed `versions/<v>/index.html`
        (the likeliest human slip currently ships a live 404 nothing

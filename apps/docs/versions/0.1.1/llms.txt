@@ -33,6 +33,7 @@ import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts,
 - initRowEdit(): Multi-row inline edit: tracks which rows have unsaved changes, shows a per-row Save/Cancel affordance, and dispatches a `bo:row-save` event for your code to persist (fetch, hx-patch, form submit —… [hooks: bo-badge bo-badge--warning bo-btn bo-btn--sm bo-data-table bo-data-table__row-edit-actions bo-input bo-input--seamless data-row-edit data-row-edit-cancel data-row-edit-dirty data-row-edit-save data-row-id data-row-state]
 - initTableToolbar(): Optional data-table toolbar actions: column visibility + export [hooks: bo-btn bo-btn--secondary bo-checkbox bo-data-table bo-data-table-container bo-data-table__toolbar bo-dropdown__menu data-col data-col-toggle data-multiselect data-multiselect-label data-table-export data-table-export-format]
 - initTableSum(): Declarative realtime column totals — the auto-sum half of Slice 18's subtotal contract (a deliberate, named exception to "you do the data"; the other half is listening to `bo:cell-change` yourself for… [hooks: bo-data-table__col--numeric data-decimals data-sum-of]
+- initTreeTable(): Expand/collapse for hierarchical table rows — document-level delegation, call initTreeTable() once [hooks: bo-data-table bo-tree-table bo-tree-table__toggle data-sum-of data-tree-level data-tree-table]
 - initLoadMore(): Load-more pagination ("pull up to see more") — the infinite-scroll alternative to page-number `.bo-pagination` [hooks: bo-btn bo-btn--secondary bo-data-table bo-data-table-container bo-data-table__footer bo-pagination data-load-more-auto data-table-load-more]
 - initCollapsibleCards(): Collapsible card sections (.bo-widget) [hooks: bo-widget__collapse data-collapse-trigger data-state]
 - initSavedViews(): Saved-view / filter-bar persistence [hooks: bo-filter-bar data-saved-views]
@@ -170,6 +171,11 @@ classes: bo-tag-input bo-tag-input__field bo-tag-input__remove bo-tag-input__tag
 ### tree — https://busy-office.github.io/busy-office-ui/components/tree/
 classes: bo-tree bo-tree__branch bo-tree__label bo-tree__link
 aria styled: aria-current
+
+### tree-table — https://busy-office.github.io/busy-office-ui/components/tree-table/
+classes: bo-tree-table bo-tree-table__spacer bo-tree-table__toggle
+data attrs: data-tree-level
+aria styled: aria-expanded
 
 ## Primitives — https://busy-office.github.io/busy-office-ui/base/primitives/
 cluster: bo-cluster bo-cluster--end bo-cluster--split
