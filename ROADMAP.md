@@ -2352,6 +2352,19 @@ engine-shaped sub-ask refused with the reason.
        (Enter to edit, Esc to cancel); composes bo:cell-change/row-save
        unchanged; tests; live-verified.
 
+**Slice 22 follow-ups (from the sign-off grill, queued)**:
+4. [ ] **Adopt a real stylelint naming gate** — CLAUDE.md cites one;
+       none exists (grill Evidence: no .stylelintrc anywhere). Accept:
+       stylelint wired into the build with the bo-BEM pattern rule;
+       existing CSS passes or exceptions are recorded; CLAUDE.md claim
+       becomes true.
+5. [ ] **`.bo-prose` packaging** — cross-cutting surface parked in the
+       richtext component file (granular importers must pull editor
+       chrome to get prose styles). Waits for a deliberate dist-layout
+       pass (dist placement is explicitly not API until v1.0). Accept:
+       prose importable standalone; api.json placement matches; no
+       breaking entry needed pre-v1.0.
+
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as
 "display-identical click-to-edit cells" (widened `--seamless`). If you
