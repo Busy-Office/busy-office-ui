@@ -1,0 +1,176 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+
+const basic = `<div class="bo-richtext">
+  <div class="bo-richtext__toolbar" role="toolbar" aria-label="Formatting">
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic"><em>I</em></button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList">1. List</button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true"
+       role="textbox" aria-multiline="true" aria-label="Delivery notes">
+    <p>Pallet 2 arrived <strong>damp on one corner</strong> — photos attached
+    to the receipt. Count verified against the ASN.</p>
+  </div>
+</div>`;
+
+const readonly = `<div class="bo-richtext bo-richtext--readonly">
+  <div class="bo-richtext__content bo-prose" contenteditable="false"
+       role="textbox" aria-multiline="true" aria-readonly="true" aria-label="Approval note">
+    <p>Approved with <em>one exception</em>: line 3 ships from the Hamburg
+    warehouse instead.</p>
+  </div>
+</div>`;
+
+const disabled = `<div class="bo-richtext bo-richtext--disabled">
+  <div class="bo-richtext__toolbar" role="toolbar" aria-label="Formatting">
+    <button class="bo-btn bo-btn--ghost" type="button" disabled><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" disabled><em>I</em></button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="false"
+       role="textbox" aria-multiline="true" aria-disabled="true" aria-label="Notes (locked)">
+    <p>Posting period closed — notes are locked.</p>
+  </div>
+</div>`;
+
+const prose = `<div class="bo-prose">
+  <h2>Return authorization RMA-2210</h2>
+  <p>Customer reports <strong>intermittent fault</strong> after firmware
+  2.4; unit powers off under load.</p>
+  <ul>
+    <li>Serial verified against the delivery</li>
+    <li>Warranty valid until 2027-03-01</li>
+  </ul>
+  <table>
+    <thead><tr><th>Item</th><th>Qty</th><th>Disposition</th></tr></thead>
+    <tbody>
+      <tr><td>Controller unit</td><td>1</td><td>Replace</td></tr>
+      <tr><td>Power cable</td><td>1</td><td>Keep</td></tr>
+    </tbody>
+  </table>
+  <blockquote>Customer prefers replacement over repair — confirmed by
+  phone 2026-08-12.</blockquote>
+</div>`;
+
+const canonical = `<!-- CHROME, not an engine: the framework styles the container,
+     toolbar, and content area. What the toolbar DOES is your code —
+     the light case below wires native contenteditable; a real editor
+     library mounts inside __content instead. -->
+<div class="bo-richtext">
+  <div class="bo-richtext__toolbar" role="toolbar" aria-label="Formatting">
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold"><strong>B</strong></button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true"
+       role="textbox" aria-multiline="true" aria-label="Notes"></div>
+</div>
+<script type="module">
+  // The light case, in full — this IS the consumer's entire wiring:
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-richtext-cmd]');
+    if (!btn) return;
+    btn.closest('.bo-richtext')?.querySelector('.bo-richtext__content')?.focus();
+    document.execCommand(btn.dataset.richtextCmd);
+  });
+</script>`;
+---
+<Gallery title="Rich text">
+  <p class="demo-note">
+    Formatted text in a form — delivery notes, approval comments, return
+    instructions: a field-shaped container with a formatting toolbar and
+    a content area, plus <code>.bo-prose</code> for displaying stored
+    rich content anywhere. The framework ships the <strong>chrome, not
+    an editing engine</strong> — see "Why no engine" below.
+  </p>
+
+  <section class="demo">
+    <h2>Basic — the light case (native <code>contenteditable</code>)</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">The toolbar buttons are plain ghost
+    buttons carrying <code>data-richtext-cmd</code> — this page wires
+    them to native <code>execCommand</code> in six lines (the Markup
+    section shows the full script). Try bold/italic/lists; the field
+    border picks up the focus ring via <code>:focus-within</code>.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Read-only and disabled</h2>
+    <Demo code={readonly} />
+    <Demo code={disabled} />
+    <p class="bo-u-text-muted">Read-only hides the toolbar and keeps the
+    text selectable; disabled mutes the whole field. Both are two-channel:
+    the visible chrome change plus <code>contenteditable="false"</code>
+    with <code>aria-readonly</code>/<code>aria-disabled</code> in the
+    markup — the modifier class alone is only the visible half.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Displaying stored content — <code>.bo-prose</code></h2>
+    <Demo code={prose} />
+    <p class="bo-u-text-muted">One class on the wrapper styles native
+    elements — headings, lists, blockquotes, code, and a bordered lite
+    table (real data screens use the
+    <a href="#related">data table</a>; stored content just needs to read
+    well). Use it on record detail, comments, print.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Why no engine — and how to mount a real one</h2>
+    <p>Undo stacks, HTML sanitization, and selection models are
+    dedicated-library territory; shipping a half-engine would be the
+    least-simple surface in this framework (the same reasoning as the
+    htmx stance: ready, not coupled). The light case above is genuinely
+    native — <code>execCommand</code> plus <code>contenteditable</code>,
+    zero framework JS. When you need more, mount an editor inside the
+    chrome; the shape for ProseMirror-style libraries:</p>
+    <pre><code>{`import { EditorView } from "prosemirror-view";
+// keep the framework chrome; hand the CONTENT AREA to the engine
+const host = document.querySelector(".bo-richtext__content");
+host.removeAttribute("contenteditable");   // the engine manages its own
+const view = new EditorView(host, { state /* your schema/plugins */ });
+// your toolbar buttons dispatch the engine's commands instead of execCommand
+// SANITIZE ON THE SERVER regardless of editor — stored HTML is untrusted input.`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <script>
+    // Docs-page wiring for the live demo — identical to the consumer
+    // snippet in the Markup section.
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-cmd]');
+      if (!btn) return;
+      (btn.closest('.bo-richtext')?.querySelector('.bo-richtext__content') as HTMLElement | null)?.focus();
+      document.execCommand(btn.dataset.richtextCmd!);
+    });
+  </script>
+
+  <ClassRef component="richtext" />
+  <ApiTable
+    component="richtext"
+    js="None shipped — deliberately. The chrome is CSS-only; the toolbar's actions are consumer code (six lines for the native light case, or a mounted editor library's commands)."
+    notes={[
+      'The engine is refused, not forgotten: undo, sanitization, and selection belong to a dedicated editor library — mount one inside <code>__content</code> (recipe above) when notes outgrow bold/italic/lists.',
+      'Two-channel states: <code>--readonly</code>/<code>--disabled</code> are the visible half; pair them with <code>contenteditable="false"</code> and <code>aria-readonly</code>/<code>aria-disabled</code>.',
+      'Give the content area <code>role="textbox" aria-multiline="true"</code> and a real <code>aria-label</code> — a bare contenteditable div has no accessible name.',
+      '<code>.bo-prose</code> works anywhere, not just inside the editor — record detail, comment threads, printed notes all render stored rich text with the one class.',
+      'Sanitize stored HTML on the server no matter which editor produced it — rich text is untrusted input.',
+      'Density-aware: the content area sizes from <code>--bo-density-*</code> aliases like every other field.',
+    ]}
+  />
+  <Related links={[
+    ['/components/form', 'Forms'],
+    ['/components/data-table', 'Data table'],
+    ['/patterns/record-detail', 'Record detail'],
+  ]} />
+</Gallery>

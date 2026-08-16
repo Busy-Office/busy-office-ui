@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Added: Rich text chrome (`.bo-richtext` — container, toolbar,
+  content area, `--readonly`/`--disabled`) and `.bo-prose` (rendered
+  rich content: headings, lists, blockquote, code, lite tables).
+  Deliberately NO editing engine — the docs show the native
+  contenteditable light case (six consumer lines) and the
+  mount-a-real-editor recipe; sanitize stored HTML server-side.
+
 - Added: Tree table (`.bo-tree-table` on a `.bo-data-table` +
   `initTreeTable()`) — hierarchical rows (BOM explosion, account
   rollups): expand/collapse via disclosure buttons on a PLAIN table,

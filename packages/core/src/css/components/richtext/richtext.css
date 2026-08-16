@@ -1,0 +1,153 @@
+@layer bo-components {
+  /* Rich text — CHROME, not an engine (Slice 22 ADR-in-roadmap): the
+     container/toolbar/content styling for a rich-text surface. The
+     editing engine (undo, sanitization, selection) is deliberately NOT
+     shipped — style a native contenteditable for the light case, or
+     mount a real editor library inside __content (same "ready, not
+     coupled" stance as htmx). Toolbar buttons are plain .bo-btn
+     .bo-btn--ghost; what they DO is the consumer's code. */
+  .bo-richtext {
+    display: flex;
+    flex-direction: column;
+    border: var(--bo-border-width) solid var(--bo-color-border-control);
+    border-radius: var(--bo-radius-md);
+    background: var(--bo-color-bg-surface);
+  }
+
+  .bo-richtext:focus-within {
+    border-color: var(--bo-color-focus-ring);
+  }
+
+  .bo-richtext__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--bo-space-1);
+    padding: var(--bo-space-1) var(--bo-space-2);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+    background: var(--bo-color-bg-muted);
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+  }
+
+  /* Visible group separator inside the toolbar (bold/italic | lists). */
+  .bo-richtext__divider {
+    inline-size: var(--bo-border-width);
+    align-self: stretch;
+    margin-block: var(--bo-space-1);
+    background: var(--bo-color-border-strong);
+  }
+
+  .bo-richtext__content {
+    min-block-size: calc(var(--bo-density-row-height) * 3);
+    padding: var(--bo-density-cell-padding-y) var(--bo-density-cell-padding-x);
+    font-size: var(--bo-density-font-size);
+    overflow-y: auto;
+  }
+
+  /* The container carries the focus ring (focus-within on the border);
+     the contenteditable's own outline would double it. */
+  .bo-richtext__content:focus-visible {
+    outline: none;
+  }
+
+  /* Read-only: content stays selectable/copyable, chrome says "not
+     editable" two ways — muted toolbar (visible) and the consumer sets
+     contenteditable="false" + aria-readonly="true" (programmatic). */
+  .bo-richtext--readonly .bo-richtext__toolbar {
+    display: none;
+  }
+
+  /* Disabled: same two-channel contract — visible muted field + the
+     consumer sets contenteditable="false" + aria-disabled="true". */
+  .bo-richtext--disabled {
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .bo-richtext--disabled .bo-richtext__toolbar .bo-btn {
+    pointer-events: none;
+    color: var(--bo-color-text-disabled);
+  }
+
+  /* ---- Prose: rendered rich content, inside __content or anywhere a
+     stored rich-text value is DISPLAYED (record detail, comments,
+     printed notes). One class, native elements — no per-element
+     opt-in. ---- */
+  .bo-prose {
+    color: var(--bo-color-text-primary);
+    line-height: var(--bo-line-height-normal);
+  }
+
+  .bo-prose :is(h1, h2, h3, h4) {
+    margin-block: var(--bo-space-4) var(--bo-space-2);
+    line-height: var(--bo-line-height-tight);
+  }
+
+  .bo-prose h1 { font-size: var(--bo-font-size-xl); }
+  .bo-prose h2 { font-size: var(--bo-font-size-lg); }
+  .bo-prose h3 { font-size: var(--bo-font-size-md); }
+  .bo-prose h4 { font-size: var(--bo-font-size-base); }
+
+  .bo-prose p,
+  .bo-prose ul,
+  .bo-prose ol,
+  .bo-prose blockquote,
+  .bo-prose pre,
+  .bo-prose table {
+    margin-block: 0 var(--bo-space-3);
+  }
+
+  .bo-prose :is(ul, ol) {
+    padding-inline-start: var(--bo-space-6);
+  }
+
+  .bo-prose blockquote {
+    margin-inline: 0;
+    padding-inline-start: var(--bo-space-3);
+    border-inline-start: 3px solid var(--bo-color-border-strong);
+    color: var(--bo-color-text-secondary);
+  }
+
+  .bo-prose :is(code, pre) {
+    font-family: var(--bo-font-mono);
+    font-size: 0.9em;
+    background: var(--bo-color-bg-muted);
+    border-radius: var(--bo-radius-sm);
+  }
+
+  .bo-prose code { padding: 0.1em 0.35em; }
+
+  .bo-prose pre {
+    padding: var(--bo-space-3);
+    overflow-x: auto;
+  }
+
+  .bo-prose pre code { padding: 0; background: none; }
+
+  .bo-prose hr {
+    border: 0;
+    border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+    margin-block: var(--bo-space-4);
+  }
+
+  /* Tables inside rich content: bordered lite-table, not the full
+     .bo-data-table machinery — stored content composes, real data
+     screens use the data table. */
+  .bo-prose table {
+    border-collapse: collapse;
+    inline-size: 100%;
+  }
+
+  .bo-prose :is(th, td) {
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    padding: var(--bo-space-1) var(--bo-space-2);
+    text-align: start;
+  }
+
+  .bo-prose th {
+    background: var(--bo-color-bg-muted);
+    font-weight: var(--bo-font-weight-medium);
+  }
+}

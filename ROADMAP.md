@@ -2288,7 +2288,19 @@ engine-shaped sub-ask refused with the reason.
        with the default-teal baseline card); presentation grill run (3
        seats, 24 findings, 6 P1 — all P1s closed same-wake:
        `.roundtable/grill-slice22-color-docs.md`). Item CLOSED.
-2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
+2. [x] **Rich text area — chrome, NOT an engine** (Objective-scoped).
+       **DONE 2026-08-16 (wake 6)**: `.bo-richtext` chrome shipped
+       (container/toolbar/divider/content, focus-within ring,
+       density-aware sizing, --readonly/--disabled two-channel states)
+       + `.bo-prose` for stored rich content (headings/lists/quote/
+       code/hr + bordered lite table); zero framework JS — the docs
+       demo wires native contenteditable via a six-line consumer
+       snippet (live-verified: toolbar Bold click toggles markup in
+       the running page); engine refusal reasoned on the page;
+       ProseMirror-shape mounting recipe + server-side sanitization
+       warning; gates green (68 kB stamped), baselines regenerated for
+       the sidebar row, stability ×2. Remaining spec text below for
+       the record:
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection
        models) are dedicated-library territory, and shipping one would
