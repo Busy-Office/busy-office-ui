@@ -2426,8 +2426,11 @@ new hashes. Fix shipped in pages.yml: each deploy carries the PREVIOUS
 generation of /_astro forward (cache restore → union without
 overwrite → save fresh-only), so one-deploy-stale HTML always
 resolves; older HTML is past max-age and revalidates anyway. The
-push-batching operating rule stays as defense in depth. Verify on the
-next two deploys: old hashes must keep serving 200 for one generation.
+push-batching operating rule stays as defense in depth. **VERIFIED on
+the first protected deploy (2026-08-16)**: the new generation shipped
+(colors.Drfmq2Zm.css) while the previous generation's hashes —
+including one the new HTML no longer references — still serve 200.
+Failure class closed.
 
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as
