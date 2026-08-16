@@ -1,46 +1,11 @@
 @layer bo-tokens {
   :root {
-    /* Raw palette — never referenced by components directly. */
-    --bo-palette-gray-50: #f9fafb;
-    --bo-palette-gray-100: #f3f4f6;
-    --bo-palette-gray-200: #e5e7eb;
-    --bo-palette-gray-300: #d1d5db;
-    --bo-palette-gray-400: #9ca3af;
-    --bo-palette-gray-500: #6b7280;
-    --bo-palette-gray-600: #4b5563;
-    --bo-palette-gray-700: #374151;
-    --bo-palette-gray-800: #1f2937;
-    --bo-palette-gray-900: #111827;
-    --bo-palette-blue-50: #eff6ff;
-    --bo-palette-blue-100: #dbeafe;
-    --bo-palette-blue-300: #93c5fd;
-    --bo-palette-blue-500: #3b82f6;
-    --bo-palette-blue-600: #2563eb;
-    --bo-palette-blue-700: #1d4ed8;
+    /* Raw palette steps now live in scales.css (generated, 24-range
+   scale system — Slice 22); this file holds the SEMANTIC tier that
+   aliases them. */
+/* Raw palette — never referenced by components directly. */
     /* Teal — the "Ledger" brand accent (ledger ink / in-the-black), kept clearly
        cyan-teal so it stays distinct from the reserved success-green. */
-    --bo-palette-teal-50: #f0fdfa;
-    --bo-palette-teal-100: #ccfbf1;
-    --bo-palette-teal-300: #5eead4;
-    --bo-palette-teal-400: #2dd4bf;
-    --bo-palette-teal-500: #14b8a6;
-    --bo-palette-teal-600: #0d9488;
-    --bo-palette-teal-700: #0f766e;
-    --bo-palette-teal-800: #115e59;
-    --bo-palette-red-50: #fef2f2;
-    --bo-palette-red-300: #fca5a5;
-    --bo-palette-red-400: #f87171;
-    --bo-palette-red-500: #ef4444;
-    --bo-palette-red-600: #dc2626;
-    --bo-palette-red-700: #b91c1c;
-    --bo-palette-amber-50: #fffbeb;
-    --bo-palette-amber-300: #fcd34d;
-    --bo-palette-amber-500: #f59e0b;
-    --bo-palette-amber-700: #b45309;
-    --bo-palette-green-50: #f0fdf4;
-    --bo-palette-green-300: #86efac;
-    --bo-palette-green-500: #22c55e;
-    --bo-palette-green-700: #15803d;
 
     /* Semantic tokens — what components consume. */
     --bo-color-bg-canvas: var(--bo-palette-gray-50);

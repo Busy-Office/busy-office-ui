@@ -90,6 +90,7 @@ await build(`${layers}@import "${srcCss}/integrations/htmx.css";\n`, from, join(
 
 // 5. Motion module (opt-in)
 await build(`${layers}@import "${srcCss}/motion/motion.css";\n`, from, join(outCss, 'motion.css'));
+await build(`@import "${srcCss}/scales/extended.css";\n`, from, join(outCss, 'scales.css'));
 
 // 6. Brand presets (opt-in, one file per preset) — deliberately UNLAYERED
 // content (no @layer wrapper in the source), so it wins the cascade

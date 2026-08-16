@@ -2233,7 +2233,32 @@ engine-shaped sub-ask refused with the reason.
        hexes, usage guidance placement, scales-vs-semantic separation),
        apply to our three pages (Colors ramp grid / Palettes / Tokens),
        then a dedicated presentation-focused adversarial pass on the
-       BUILT pages before calling the item done.
+       BUILT pages before calling the item done. **Also (owner ask,
+       2026-08-16): grill /base/palettes for ERP-usefulness and
+       REDESIGN it** — the per-palette token tables may serve the
+       framework author more than the ERP builder, whose actual jobs
+       are: pick a preset, verify it's AA, copy the import line.
+       **Wake-1 progress (2026-08-16)**: generator + wiring SHIPPED —
+       `generate-scales.mjs` emits core (10 ranges, default bundle) /
+       extended (14 ranges, opt-in `@busy-office/ui/css/scales`,
+       5.8 kB standalone) / `dist/scales.json` (+ `./scales` export);
+       20 ranges seed from the Tailwind v3.4 palette, the muted quartet
+       OKLCH-generated on gray's measured lightness ladder; the old
+       partial palette block removed from color.css (hexes now
+       generator-owned, single source); reference assert verifies all
+       42 in-src palette references resolve to CORE steps (an
+       extended-tier reference from the default bundle fails the
+       build); --check drift gate wired into the build. **One real
+       fail-open caught by test:visual and fixed**: check-contrast read
+       only color.css, so semantic aliases into scales.css silently
+       dropped per-component pair rows from contrast.json — the scan
+       now reads both files; component pages back to zero visual diff,
+       landing baselines regenerated for the legitimate bundle-stat
+       change (10.2 → 10.8 kB gz with core scales). Compare-first
+       research DONE (`.roundtable/color-docs-presentation-2026-08-16
+       .md` — 5 adopted choices from Tailwind/Radix/Carbon). REMAINING:
+       preset step re-aliasing, the three docs pages (+ palettes
+       redesign), presentation grill.
 2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection
