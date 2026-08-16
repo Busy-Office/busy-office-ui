@@ -1575,6 +1575,80 @@ baselines, 57 tests, stylelint, live in both themes — click-toggle, real
 keyboard arrow-navigation between radios, focus ring on the correct element,
 disabled-segment state.
 
+## Slice 18 — money & editable-table depth (user wishlist, 2026-08-16)
+
+Triaged 2026-08-16 from a 4-item user wishlist, refined interactively before
+queuing (4 design forks put to the user + a codebase audit of what already
+exists — see the audit summary in the triage conversation). User's calls:
+currency→decimals table **built into the framework with app override**;
+subtotal recalculation offered in **both** modes (declarative auto-sum AND
+event-driven); advanced cell types include **date + checkbox** beyond
+text/dropdown/tag; docs must progress **simple → medium → complex** ending in
+a realistic generic-ERP composite. Two scoping defaults taken by the
+dispatcher (flagged, challengeable at the next Objective review): (a) units
+get a documented common-UOM reference, NOT an embedded table — no ISO-closed
+list of units exists (UN/ECE Rec 20 alone is ~2,000 codes), unlike ISO 4217;
+(b) the embedded currency table and the auto-sum mode are BOTH deliberate,
+named exceptions to the "framework does visuals, you do the data" split —
+each is the only workable reading of the user's explicit ask, not drift.
+SQLite-for-roadmap considered and declined per the storage doctrine
+(markdown = reviewed/diffed source of truth; SQLite = derived mirrors only).
+
+1. [ ] **Currency-aware Money field** (`.bo-money` + `initMoneyField()`).
+       A currency `<select>` linked to an amount input: changing currency
+       updates the input's `step`/decimal precision live and reformats the
+       current value. Decimals come from an embedded ISO 4217 minor-units
+       exception table (0-decimal: JPY, KRW, VND, ISK, CLP, PYG, XAF, XOF,
+       XPF, BIF, DJF, GNF, KMF, RWF, UGX, VUV, UYI; 3-decimal: BHD, IQD,
+       JOD, KWD, LYD, OMR, TND; 4-decimal: CLF, UYW; **everything else 2**)
+       — kept tiny by storing only exceptions + the default-2 rule, so the
+       shipped JS stays lean; a `data-decimals` attribute (on the selected
+       option or container) **overrides** the table when the app supplies
+       its own. Reformatting dispatches a bubbling `input` event so
+       row-edit's dirty tracking sees it (the combobox-commit lesson).
+       Docs: full currency-decimals reference documented as the exception
+       table + the explicit "all other ISO 4217 currencies use 2" rule.
+       Accept: behavior + component CSS + docs page shipped; tests cover
+       default/exception/override/input-event; reference table documented;
+       all gates green; live-verified 1440+390, light+dark.
+2. [ ] **Quantity display variant** — read-only quantity+unit display
+       closing the asymmetry with Amount (which has both a read-only span
+       and an editable recipe; Quantity today is edit-only). Plus an
+       expanded common-UOM reference table on the Quantity page (each, kg,
+       L, m, hr, box, pallet + precision conventions) — documented
+       reference, not embedded data; precision stays `step`-driven.
+       Accept: display markup documented with demos; cross-links both ways
+       with Amount; UOM reference expanded; gates green, live-verified.
+3. [ ] **Editable Amount+Currency and Quantity+Unit table cells** —
+       composition demos: item 1's money field and the existing quantity
+       stepper inside editable data-table rows, unit/currency as real
+       separate fields in the cell. Accept: demos on the data-table or
+       editable-grid docs; row-edit dirty tracking confirmed to catch
+       changes from both compositions; live-verified.
+4. [ ] **Advanced editable table** (extend `row-edit`, not a parallel
+       grid — lean per the user's explicit ask). (a) Cell types: `<select>`
+       dropdown (net-new — `rowFields()` today queries only
+       `input, textarea`), tag-input cell, date cell, checkbox cell
+       (text/number and combobox already work). (b) A richer per-change
+       event (`bo:cell-change`: row id, field name, value) fired live as
+       any cell changes. (c) Subtotal/total in BOTH modes: declarative
+       auto-sum via data attribute for the common case AND the event for
+       custom math. (d) BOTH save models: existing batch Save/Cancel, plus
+       a save-per-change mode (each change dispatches immediately for
+       server-side realtime persistence). Accept: all four cell types
+       editable in a live demo; subtotal updates in realtime in both
+       modes; both save models demonstrated; events documented (two-way
+       parity gate); tests for each new cell type + the event; gates
+       green, live-verified.
+5. [ ] **Docs progression: simple → medium → complex** — restructure the
+       editable-table story as a graded sequence (per the user: reflect
+       real ERP usage, keep samples generic), ending in a composite
+       generic-ERP line-items editor: dropdown product, qty+unit,
+       price+currency, tag cost-centers, live totals, choice of save
+       model. Accept: the sequence reads as one coherent path across the
+       data-table/editable-grid pages; the composite demo works live
+       end-to-end; page-shape gate green.
+
 ## Explore log
 
 - [x] **2026-08-15 — po-app consumer image broken by the README-stamp gate**
