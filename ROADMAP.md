@@ -2049,6 +2049,72 @@ Ranked: quick wins that harden every page first, then the two build items.
        preview mechanism); docs state the recipe for app-defined
        palettes.
 
+## Slice 21 — hardening from the Slice 20 grill (Objective review, 2026-08-16)
+
+Queued by the milestone-rule Objective review at Slice 20's close — four
+adversarial seats, full scored report:
+`.roundtable/grill-slice20-docs-depth-2026-08-16.md`. The meta-finding
+names the slice's shared defect: mechanisms that fail OPEN and SILENT —
+this slice adds the assertions that make Slice 20's depth verifiable.
+Ranked: user-visible breakage first.
+
+1. [ ] **Highlight integrity** (E1 + H1). The homepage shipped
+       UNHIGHLIGHTED code while the build printed green: the transform's
+       regex requires a zero-attribute `<pre>`, skipping the six
+       hand-written landing blocks + theming's two. Fix: match
+       attributed pres (or normalize hand-written blocks through the
+       transform), add the none-left-behind gate (fail on any surviving
+       `<pre...><code` in dist), make the strip fail loudly when it
+       doesn't strip, fix the `&#38;`-before-`&amp;` decode order.
+       Accept: landing + theming blocks highlighted live both themes;
+       the new gate proven red (attribute a pre, watch it fail); tests/
+       gates green; baselines regenerated deliberately.
+2. [ ] **Palettes conformance** (E3 + H4 + H5). The preview ships
+       measured 2.10:1 text in dark mode on the very page claiming
+       everything is gated. Fix: scope the full light surface set onto
+       the preview (or render light+dark boxes each on its own
+       background); assert the brand parse (exactly two blocks,
+       hex-only values — fail the build otherwise); aria-hidden
+       swatches; add the why-status-colors-are-out-of-scope paragraph.
+       Accept: axe + manual ratio check clean in dark; parse assertions
+       proven red; live-verified.
+3. [ ] **Tree-table structural seams** (E2). descendants() spans
+       tbodies; missing/invalid `data-tree-level` handled honestly
+       (documented behavior, not silent truncation); indent to level 12
+       (real BOMs hit 8-12 — the "modelling smell" claim retracted);
+       dispatch `bo:tree-toggle` (rowId-ish detail; the fetch-on-expand
+       / expand-all hook) + docs volume guidance + expand-to-level
+       recipe; verb-less disclosure naming in every demo (name the
+       branch, let aria-expanded carry state — retires the stale
+       "Collapse X" label pattern); cover the six untested paths
+       (missing level, second tbody, no-data-tree-table guard, skipped
+       levels, toggle-less branch, double init). Accept: red-first
+       tests for each; events gate picks up the new event; live-verify
+       incl. a two-tbody table.
+4. [ ] **Switcher operations** (E4). One-command release:
+       `cut-version-snapshot.mjs` writes `versions.json` itself; a gate
+       asserts every entry has a committed `versions/<v>/index.html`
+       (the likeliest human slip currently ships a live 404 nothing
+       catches); a frozen-docs banner on snapshot pages (from the
+       already-computed `currentSnapshot`); hide the search UI where
+       pagefind is absent (snapshots currently ship a dead search
+       dialog); document the frozen-dropdown reality. Accept: gate
+       proven red; banner + hidden search verified in the snapshot via
+       the base-root mimic; release-flow doc updated to one command.
+5. [ ] **Docs/IA batch** (H2 + H3 + held-notes). Tree table moves
+       beside Tree; Palettes beside Colors & tokens; the tree-table
+       page states its keyboard story (its sibling Tree page's own
+       standard); the ADR reference becomes a clickable repo link; the
+       versioning known-gap note surfaced. Accept: links/page-shape
+       green; baselines regenerated once for the sidebar moves.
+
+**Held under attack** (recorded): idempotent re-highlight, node-walk
+correctness, guard ordering, hidden-rows-summed doc/code agreement,
+switcher listener scoping, detectLang in practice, swatch hex adjacency,
+highlighting's (correct) absence of a11y claims. The architect's
+"no escape from snapshots" reduced on live re-check to the banner gap
+(docs pages inside snapshots DO carry a working switcher).
+
 ## Triage decisions — refuse/rethink log (per the Objective)
 
 - **2026-08-16 — "Should we enforce only TypeScript?" (user ask) —
