@@ -2368,6 +2368,20 @@ engine-shaped sub-ask refused with the reason.
        prose importable standalone; api.json placement matches; no
        breaking entry needed pre-v1.0.
 
+6. [ ] **PO app: adopt Slice 22 surfaces** (graduated from the
+       2026-08-16 dogfood Explore — spiked in a worktree, verified
+       end-to-end, discarded per playbook; re-apply on main). Add to
+       examples/po-app: brand-cobalt via the documented placement rule,
+       and a rich-text approval note in the approve dialog (documented
+       light-case wiring, hx-vals POST, server-side allowlist that
+       drops script/style CONTENT, timeline renders the note as
+       .bo-prose). Spike evidence: preset + note flow worked from the
+       TARBALL with only documented APIs; hostile note (script tag +
+       img onerror) stored safely once the sanitizer dropped element
+       content. Accept: flow works live in the container; hostile-note
+       check passes; only documented APIs used; screenshots both
+       themes/widths.
+
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as
 "display-identical click-to-edit cells" (widened `--seamless`). If you

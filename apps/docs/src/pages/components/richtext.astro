@@ -197,7 +197,7 @@ const view = new EditorView(host, {
       'Give the content area an <code>aria-label</code> always. <code>role="textbox" aria-multiline="true"</code> fits PLAIN notes (bold/italic in a paragraph); drop the role when the content is structured prose (headings, tables) or when you mount an engine — a textbox role flattens structure for screen readers.',
       'Toggle buttons carry <code>aria-pressed</code> (the wiring syncs it via <code>queryCommandState</code>) — <code>.bo-btn[aria-pressed="true"]</code> ships a gated pressed style, so Bold-is-on is visible and announced.',
       '<code>.bo-prose</code> works anywhere, not just inside the editor — record detail, comment threads, printed notes all render stored rich text with the one class. Stored content may contain <code>h1</code>s: demote server-side (or start your app pages at a known level) so document outlines stay sane.',
-      'Sanitize stored HTML on the server no matter which editor produced it — rich text is untrusted input, and execCommand output varies by engine (see the caveats above).',
+      'Sanitize stored HTML on the server no matter which editor produced it — rich text is untrusted input, and execCommand output varies by engine (see the caveats above). A tag allowlist alone is NOT enough: stripping <code>&lt;script&gt;</code> tags leaves their text behind ("alert(1)" prints in the note) — remove script/style elements <em>with their content</em>, then filter the rest (dogfood-verified against the reference PO app).',
       'Sizing: the min-height scales with density (<code>--bo-density-row-height</code> × 3) and the field is vertically resizable like a textarea; text inset matches <code>.bo-input</code> so it aligns with the fields around it.',
     ]}
   />
