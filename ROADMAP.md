@@ -2264,9 +2264,25 @@ engine-shaped sub-ask refused with the reason.
        strong→800, gate fully green at 32 pairs × 2 themes × 5
        presets); the palettes page parser now ENFORCES alignment (a raw
        hex or unresolvable alias fails the build) and displays each
-       hex's step name; baselines unchanged (verified). REMAINING: the
-       three docs pages (Colors ramp grid + palettes ERP redesign +
-       tokens table), presentation grill.
+       hex's step name; baselines unchanged (verified). **Wake-3
+       progress (2026-08-16)**: wireframes approved via artifact; two
+       owner decisions locked — (a) step count stays 11 (19-by-50
+       considered, owner confirmed 11 after the perf/surface
+       comparison), (b) preset LINEUP replaced: the sample five give
+       way to six ERP-profile presets — graphite (slate monochrome),
+       cobalt (enterprise blue), navy (deep blue: 900/950 light
+       accents, 300/200 dark), forest (green; dark solid stepped
+       600→700 for white-text AA), indigo (unchanged), violet
+       (analytics). Core tier re-cut to 9 ranges (semantic five +
+       slate/indigo/violet); muted quartet demoted to extended RANGES
+       (no longer presets — all within the unreleased cycle, so no
+       breaking entry). Gate green 32 pairs × 2 themes × 6 presets;
+       94 tests; docs build + links green; palettes page auto-picked
+       up the six (live-verified 1440/390 light/dark); landing
+       baselines regenerated for the legitimate bundle-stat restamp,
+       stability ×2. REMAINING: the three docs pages (Colors ramp
+       grid + palettes ERP redesign + tokens table), presentation
+       grill.
 2. [ ] **Rich text area — chrome, NOT an engine** (Objective-scoped).
        The editor ENGINE is refused per simplicity/less-for-more:
        contenteditable engines (undo stacks, sanitization, selection

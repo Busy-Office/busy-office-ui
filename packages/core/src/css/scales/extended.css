@@ -6,18 +6,6 @@
    Import as @busy-office/ui/css/scales — one file, zero cost unless used.
    Raw palette tier — explicitly NOT semver API (see versioning). */
 :root {
-  --bo-palette-slate-50: #f8fafc;
-  --bo-palette-slate-100: #f1f5f9;
-  --bo-palette-slate-200: #e2e8f0;
-  --bo-palette-slate-300: #cbd5e1;
-  --bo-palette-slate-400: #94a3b8;
-  --bo-palette-slate-500: #64748b;
-  --bo-palette-slate-600: #475569;
-  --bo-palette-slate-700: #334155;
-  --bo-palette-slate-800: #1e293b;
-  --bo-palette-slate-900: #0f172a;
-  --bo-palette-slate-950: #020617;
-
   --bo-palette-zinc-50: #fafafa;
   --bo-palette-zinc-100: #f4f4f5;
   --bo-palette-zinc-200: #e4e4e7;
@@ -114,30 +102,6 @@
   --bo-palette-sky-900: #0c4a6e;
   --bo-palette-sky-950: #082f49;
 
-  --bo-palette-indigo-50: #eef2ff;
-  --bo-palette-indigo-100: #e0e7ff;
-  --bo-palette-indigo-200: #c7d2fe;
-  --bo-palette-indigo-300: #a5b4fc;
-  --bo-palette-indigo-400: #818cf8;
-  --bo-palette-indigo-500: #6366f1;
-  --bo-palette-indigo-600: #4f46e5;
-  --bo-palette-indigo-700: #4338ca;
-  --bo-palette-indigo-800: #3730a3;
-  --bo-palette-indigo-900: #312e81;
-  --bo-palette-indigo-950: #1e1b4b;
-
-  --bo-palette-violet-50: #f5f3ff;
-  --bo-palette-violet-100: #ede9fe;
-  --bo-palette-violet-200: #ddd6fe;
-  --bo-palette-violet-300: #c4b5fd;
-  --bo-palette-violet-400: #a78bfa;
-  --bo-palette-violet-500: #8b5cf6;
-  --bo-palette-violet-600: #7c3aed;
-  --bo-palette-violet-700: #6d28d9;
-  --bo-palette-violet-800: #5b21b6;
-  --bo-palette-violet-900: #4c1d95;
-  --bo-palette-violet-950: #2e1065;
-
   --bo-palette-purple-50: #faf5ff;
   --bo-palette-purple-100: #f3e8ff;
   --bo-palette-purple-200: #e9d5ff;
@@ -173,4 +137,52 @@
   --bo-palette-rose-800: #9f1239;
   --bo-palette-rose-900: #881337;
   --bo-palette-rose-950: #4c0519;
+
+  --bo-palette-mauve-50: #fff8fb;
+  --bo-palette-mauve-100: #fef0f7;
+  --bo-palette-mauve-200: #f4e1eb;
+  --bo-palette-mauve-300: #e5cdd9;
+  --bo-palette-mauve-400: #b699a8;
+  --bo-palette-mauve-500: #866878;
+  --bo-palette-mauve-600: #674a5a;
+  --bo-palette-mauve-700: #513746;
+  --bo-palette-mauve-800: #36212d;
+  --bo-palette-mauve-900: #23121c;
+  --bo-palette-mauve-950: #0d0409;
+
+  --bo-palette-olive-50: #f9fbf2;
+  --bo-palette-olive-100: #f3f6e7;
+  --bo-palette-olive-200: #e6ead5;
+  --bo-palette-olive-300: #d4d8be;
+  --bo-palette-olive-400: #a1a687;
+  --bo-palette-olive-500: #717654;
+  --bo-palette-olive-600: #535837;
+  --bo-palette-olive-700: #404426;
+  --bo-palette-olive-800: #282b11;
+  --bo-palette-olive-900: #181a06;
+  --bo-palette-olive-950: #070801;
+
+  --bo-palette-mist-50: #f5fbfe;
+  --bo-palette-mist-100: #e9f7fc;
+  --bo-palette-mist-200: #d8ebf2;
+  --bo-palette-mist-300: #c2d9e3;
+  --bo-palette-mist-400: #8ba8b4;
+  --bo-palette-mist-500: #597784;
+  --bo-palette-mist-600: #3c5965;
+  --bo-palette-mist-700: #2a4550;
+  --bo-palette-mist-800: #142c35;
+  --bo-palette-mist-900: #081b22;
+  --bo-palette-mist-950: #01090d;
+
+  --bo-palette-taupe-50: #fef9f4;
+  --bo-palette-taupe-100: #fbf2eb;
+  --bo-palette-taupe-200: #f1e5da;
+  --bo-palette-taupe-300: #e1d2c4;
+  --bo-palette-taupe-400: #b19f8f;
+  --bo-palette-taupe-500: #816e5d;
+  --bo-palette-taupe-600: #625040;
+  --bo-palette-taupe-700: #4d3d2e;
+  --bo-palette-taupe-800: #332519;
+  --bo-palette-taupe-900: #20160c;
+  --bo-palette-taupe-950: #0c0602;
 }

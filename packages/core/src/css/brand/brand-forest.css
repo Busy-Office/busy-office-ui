@@ -1,0 +1,48 @@
+/**
+ * A real, importable brand preset — not just the theming guide's prose
+ * example. Re-skins the accent family only (never component files, never
+ * the raw palette tier), following the exact recipe documented in
+ * /concepts/theming: accent + accent-strong + accent-solid + accent-subtle
+ * + accent-text, plus the accent-adjacent focus-ring/bg-selected tokens the
+ * framework colors by default. Import AFTER @busy-office/ui/css, outside
+ * any @layer, so the cascade contract lets it win.
+ *
+ * Values validated by scripts/check-contrast.mjs (same gate as the base
+ * theme, extended to check every packages/core/src/css/brand/*.css file) —
+ * not asserted, checked. Both light and dark blocks are required per the
+ * cascade contract's "dark rule": an unlayered :root beats the framework's
+ * layered dark remap of the same token, so a light-only override would
+ * leak into dark mode. *
+ * ALIGNED (Slice 22): every token is an ALIAS to a green scale step;
+ * the steps used are defined locally so the preset stays self-contained
+ * (identical values to the scale system — generator-derived — whether or
+ * not the extended scales file is loaded).
+ */
+:root {
+  --bo-palette-green-50: #f0fdf4;
+  --bo-palette-green-200: #bbf7d0;
+  --bo-palette-green-300: #86efac;
+  --bo-palette-green-400: #4ade80;
+  --bo-palette-green-600: #16a34a;
+  --bo-palette-green-700: #15803d;
+  --bo-palette-green-800: #166534;
+  --bo-palette-green-900: #14532d;
+
+  --bo-color-accent: var(--bo-palette-green-700);
+  --bo-color-accent-strong: var(--bo-palette-green-800);
+  --bo-color-accent-solid: var(--bo-palette-green-700);
+  --bo-color-accent-subtle: var(--bo-palette-green-50);
+  --bo-color-accent-text: var(--bo-palette-green-800);
+  --bo-color-focus-ring: var(--bo-palette-green-600);
+  --bo-color-bg-selected: var(--bo-palette-green-50);
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: var(--bo-palette-green-400);
+  --bo-color-accent-strong: var(--bo-palette-green-300);
+  --bo-color-accent-solid: var(--bo-palette-green-700);
+  --bo-color-accent-subtle: var(--bo-palette-green-900);
+  --bo-color-accent-text: var(--bo-palette-green-200);
+  --bo-color-focus-ring: var(--bo-palette-green-400);
+  --bo-color-bg-selected: var(--bo-palette-green-900);
+}

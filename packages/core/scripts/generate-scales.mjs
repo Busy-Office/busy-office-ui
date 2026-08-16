@@ -99,7 +99,11 @@ for (const [name, { H, peak }] of Object.entries(MUTED)) {
 }
 
 /* ---------------- tiers ---------------- */
-const CORE = ['gray', 'red', 'amber', 'green', 'teal', 'blue', 'mauve', 'olive', 'mist', 'taupe'];
+// Core = the semantic tier's five ramps + the ramps the six ERP brand
+// presets alias (owner decision 2026-08-16: presets are graphite/cobalt/
+// navy/forest/indigo/violet — the muted quartet stays available as
+// extended RANGES but no longer ships as presets).
+const CORE = ['slate', 'gray', 'red', 'amber', 'green', 'teal', 'blue', 'indigo', 'violet'];
 const EXTENDED = Object.keys(ramps).filter((h) => !CORE.includes(h));
 
 /* ---- REFERENCE ASSERT: hexes are generator-owned now (the old palette

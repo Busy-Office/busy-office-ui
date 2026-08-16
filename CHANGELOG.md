@@ -18,11 +18,15 @@ pin.
   preserved on re-expand; `bo:tree-toggle` dispatched
   (row/level/expanded — the fetch-on-expand and expand-all hook).
 
-- Added: four brand palettes — `@busy-office/ui/css/brand-mauve`,
-  `brand-olive`, `brand-mist`, `brand-taupe` (joining brand-indigo) —
-  each gated through the full 32-pair AA contrast check in both
-  themes; a generated Palettes reference page documents every
-  swatch/token/hex from the shipped CSS.
+- Added: six ERP brand palettes — `@busy-office/ui/css/brand-graphite`
+  (monochrome slate), `brand-cobalt` (enterprise blue), `brand-navy`
+  (deep conservative blue), `brand-forest` (green), `brand-indigo`,
+  `brand-violet` — each gated through the full 32-pair AA contrast
+  check in both themes; a generated Palettes reference page documents
+  every swatch/token/hex from the shipped CSS. (The muted quartet —
+  mauve/olive/mist/taupe — briefly existed as presets within this
+  unreleased cycle; they remain available as extended scale RANGES,
+  owner lineup decision 2026-08-16.)
 
 - Docs/meta: build-time syntax highlighting on every docs code block
   (token-mapped to gated core pairs, none-left-behind build gate);

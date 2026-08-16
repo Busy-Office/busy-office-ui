@@ -1,0 +1,48 @@
+/**
+ * A real, importable brand preset — not just the theming guide's prose
+ * example. Re-skins the accent family only (never component files, never
+ * the raw palette tier), following the exact recipe documented in
+ * /concepts/theming: accent + accent-strong + accent-solid + accent-subtle
+ * + accent-text, plus the accent-adjacent focus-ring/bg-selected tokens the
+ * framework colors by default. Import AFTER @busy-office/ui/css, outside
+ * any @layer, so the cascade contract lets it win.
+ *
+ * Values validated by scripts/check-contrast.mjs (same gate as the base
+ * theme, extended to check every packages/core/src/css/brand/*.css file) —
+ * not asserted, checked. Both light and dark blocks are required per the
+ * cascade contract's "dark rule": an unlayered :root beats the framework's
+ * layered dark remap of the same token, so a light-only override would
+ * leak into dark mode. *
+ * ALIGNED (Slice 22): every token is an ALIAS to a violet scale step;
+ * the steps used are defined locally so the preset stays self-contained
+ * (identical values to the scale system — generator-derived — whether or
+ * not the extended scales file is loaded).
+ */
+:root {
+  --bo-palette-violet-50: #f5f3ff;
+  --bo-palette-violet-200: #ddd6fe;
+  --bo-palette-violet-300: #c4b5fd;
+  --bo-palette-violet-400: #a78bfa;
+  --bo-palette-violet-600: #7c3aed;
+  --bo-palette-violet-700: #6d28d9;
+  --bo-palette-violet-800: #5b21b6;
+  --bo-palette-violet-900: #4c1d95;
+
+  --bo-color-accent: var(--bo-palette-violet-700);
+  --bo-color-accent-strong: var(--bo-palette-violet-800);
+  --bo-color-accent-solid: var(--bo-palette-violet-700);
+  --bo-color-accent-subtle: var(--bo-palette-violet-50);
+  --bo-color-accent-text: var(--bo-palette-violet-800);
+  --bo-color-focus-ring: var(--bo-palette-violet-600);
+  --bo-color-bg-selected: var(--bo-palette-violet-50);
+}
+
+[data-theme="dark"] {
+  --bo-color-accent: var(--bo-palette-violet-400);
+  --bo-color-accent-strong: var(--bo-palette-violet-300);
+  --bo-color-accent-solid: var(--bo-palette-violet-600);
+  --bo-color-accent-subtle: var(--bo-palette-violet-900);
+  --bo-color-accent-text: var(--bo-palette-violet-200);
+  --bo-color-focus-ring: var(--bo-palette-violet-400);
+  --bo-color-bg-selected: var(--bo-palette-violet-900);
+}
