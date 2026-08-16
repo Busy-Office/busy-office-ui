@@ -85,13 +85,17 @@ for (const a of DENSITY_ALIASES)
   if (!densityCss.includes(`--bo-density-${a}:`)) throw new Error(`tokens: density alias --bo-density-${a} not found in density.css`);
 const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-color-' + t], vars);
 ---
-<Gallery title="Design tokens">
+<Gallery title="Token reference">
   <p class="demo-note">
-    The semantic tier — what components actually consume, and the tier
-    that is <strong>stable API</strong>: renaming or removing any token
-    below is a major version (see
-    <a href={base + '/getting-started/versioning'}>versioning</a>). Each
-    token resolves per theme to a
+    Look-up tables for every shipped token, generated from the CSS on
+    each build: resolved values per theme, spacing, density aliases, and
+    the CI-gated contrast ratios. For what the tiers MEAN and when to
+    reach for which, read
+    <a href={base + '/concepts/tokens'}>Design tokens</a> once — this
+    page is the reference you come back to. The semantic tier is
+    <strong>stable API</strong>: renaming or removing any token below is
+    a major version (<a href={base + '/getting-started/versioning'}>versioning</a>).
+    Each token resolves per theme to a
     <a href={base + '/base/colors'}>scale step</a> (or a deliberate
     literal); status colors carry meaning and are never re-skinned by
     <a href={base + '/base/palettes'}>palettes</a>.
@@ -236,5 +240,5 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
     }
   </style>
 
-  <Related links={[["/base/colors", "Color scales"], ["/getting-started/versioning", "Versioning & upgrades"], ["/concepts/tokens", "Design tokens (concept)"], ["/concepts/accessibility", "Accessibility model"]]} />
+  <Related links={[["/concepts/tokens", "Design tokens (the concept)"], ["/base/colors", "Color scales"], ["/reference/classes", "Class index"], ["/getting-started/versioning", "Versioning & upgrades"]]} />
 </Gallery>

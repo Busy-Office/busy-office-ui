@@ -45,7 +45,7 @@ const swatch = (name: string, r: { steps: Record<string, string> }, s: number) =
     in every range. Click any swatch to copy its variable
     (<kbd>Shift</kbd>+click, or <kbd>Shift</kbd>+<kbd>Enter</kbd> from the
     keyboard, for the hex). Semantic
-    <a href={base + '/base/tokens'}>design tokens</a> and
+    <a href={base + '/concepts/tokens'}>design tokens</a> and
     <a href={base + '/base/palettes'}>brand palettes</a> are aliases into
     these steps.
   </p>
@@ -105,7 +105,7 @@ const swatch = (name: string, r: { steps: Record<string, string> }, s: number) =
 
   <section class="demo">
     <h2>How to use a step</h2>
-    <p>Reach for a <a href={base + '/base/tokens'}>semantic token</a> first
+    <p>Reach for a <a href={base + '/reference/tokens'}>semantic token</a> first
     — it already resolves to the right step in both themes, and every
     semantic pairing is contrast-gated. Use a raw step directly only for
     app-specific surfaces the semantic tier doesn't name (a chart series,
@@ -208,5 +208,5 @@ const swatch = (name: string, r: { steps: Record<string, string> }, s: number) =
     });
   </script>
 
-  <Related links={[["/base/tokens", "Design tokens"], ["/base/palettes", "Palettes"], ["/concepts/theming", "Theming & dark mode"]]} />
+  <Related links={[["/reference/tokens", "Token reference"], ["/base/palettes", "Palettes"], ["/concepts/theming", "Theming & dark mode"]]} />
 </Gallery>

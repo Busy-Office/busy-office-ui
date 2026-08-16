@@ -22,7 +22,8 @@ export default defineConfig({
     '/htmx': `${base}/getting-started/htmx`,
     '/theming': `${base}/concepts/theming`,
     '/printing': `${base}/base/print`,
-    '/tokens': `${base}/base/colors`,
+    '/tokens': `${base}/reference/tokens`,
+    '/base/tokens': `${base}/reference/tokens`,
     '/primitives': `${base}/base/primitives`,
   },
 });

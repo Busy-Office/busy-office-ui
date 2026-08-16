@@ -262,3 +262,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-16 22:34 · Continue · fix · Owner root-cause doc adopted: inlineStylesheets never + race-free ext load + check-boost gate (red-first; found tree-shaken htmx and a racing probe) · shipped · 15ebd6c
 - 2026-08-16 23:00 · Continue · fix · Owner tokens review adopted: duplicate-main (boost nesting) + phantom scrollbar (shell containing block) fixed; measure/TOC/table alignment; contrast specimens + varying level column · shipped · 315fdec
 - 2026-08-16 23:11 · Continue · build · Layout-primitives review adopted (7/8, 1 refused, 1 correction); token-table fixed-width regression fixed proportionally · shipped · f7003d9
+- 2026-08-16 23:35 · Standardize · fix · Overflow gate (red-proved, found 6 unwrapped tables) + CI-red Chrome path fixed across 4 scripts · shipped · 41fcfea
+- 2026-08-16 23:35 · Roadmap · plan · Docs review triaged into Slice 23: 8 accepted, 3 rethink, 2 refused with reasons · shipped · 41fcfea
+- 2026-08-16 23:48 · Continue · bug · P0: CI red 5 commits — 3 gate defects fixed (Chrome resolver, step order, base-aware harness); CI green at 3d2f64c · shipped · b66577b

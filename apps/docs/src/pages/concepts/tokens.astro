@@ -31,7 +31,9 @@ const tiers = `/* Tier 1 — raw palette: never consumed by components */
     backgrounds carry white text in both themes (≥ 4.5:1, never dark-remapped);
     <code>*-text</code> foregrounds sit on <code>*-subtle</code> backgrounds
     (≥ 4.5:1, remapped to light steps in dark mode). Every pair is
-    <a href={base + '/base/tokens'}>computed and CI-gated on every build</a>.</p>
+    <a href={base + '/reference/tokens'}>computed and CI-gated on every build</a>
+    — every resolved value, both themes, in the
+    <a href={base + '/reference/tokens'}>token reference</a>.</p>
   </section>
   <section class="demo">
     <h2>Unit doctrine</h2>
@@ -46,5 +48,5 @@ const tiers = `/* Tier 1 — raw palette: never consumed by components */
     font-size. Hosts that rescale <code>html</code> (legacy 62.5% hacks) rescale
     everything — embed via iframe instead.</p>
   </section>
-  <Related links={[["/concepts/density", "Density"], ["/concepts/cascade", "Cascade contract"], ["/base/colors", "Color scales"]]} />
+  <Related links={[["/reference/tokens", "Token reference (all values)"], ["/concepts/density", "Density"], ["/concepts/cascade", "Cascade contract"], ["/base/colors", "Color scales"]]} />
 </Gallery>

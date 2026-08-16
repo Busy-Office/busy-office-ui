@@ -32,7 +32,7 @@ const twoChannel = `<!-- BOTH channels, every state signal: -->
       <table class="bo-data-table">
         <thead><tr><th scope="col">The framework guarantees</th><th scope="col">Your markup must supply</th></tr></thead>
         <tbody>
-          <tr><td>AA contrast for every token-role pair, both themes — <a href={base + '/base/tokens'}>computed and CI-gated</a></td><td><code>aria-invalid</code> + <code>aria-describedby</code> on form errors (+ <code>role="alert"</code> if dynamic)</td></tr>
+          <tr><td>AA contrast for every token-role pair, both themes — <a href={base + '/reference/tokens'}>computed and CI-gated</a></td><td><code>aria-invalid</code> + <code>aria-describedby</code> on form errors (+ <code>role="alert"</code> if dynamic)</td></tr>
           <tr><td>Visible <code>:focus-visible</code> rings everywhere; Tab loop in dialogs; roving tabindex in tabs</td><td><code>aria-labelledby</code> on dialogs; <code>aria-label</code> on icon-only buttons and search inputs</td></tr>
           <tr><td>Heights as minimums (text-spacing-safe); 24px target floor in every density; state styled from ARIA (<code>aria-sort</code>, <code>aria-current</code>, <code>aria-busy</code>)</td><td>The two-channel state text (<code>Completed:</code>/<code>Rejected:</code>…); <code>role="list"</code> on styled lists; <code>name</code>/<code>value</code> on selection checkboxes</td></tr>
           <tr><td>Live "n selected" count via <code>initDataTables()</code>; reduced-motion zeroing on all animations</td><td>Keeping compaction-hidden columns reachable (row detail view — WCAG 1.4.10); never <code>user-scalable=no</code></td></tr>
@@ -64,5 +64,5 @@ const twoChannel = `<!-- BOTH channels, every state signal: -->
     <a href={base + '/reference/acr'}>Accessibility Conformance Report</a> turns this
     into a per-criterion table, generated from the same evidence.</p>
   </section>
-  <Related links={[["/base/tokens", "Contrast tables"], ["/concepts/density", "Density"], ["/reference/acr", "Accessibility Conformance Report"]]} />
+  <Related links={[["/reference/tokens", "Contrast tables"], ["/concepts/density", "Density"], ["/reference/acr", "Accessibility Conformance Report"]]} />
 </Gallery>

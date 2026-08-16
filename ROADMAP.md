@@ -2573,7 +2573,17 @@ project has received on structure; it is also ~3 phases of work. Triage
 applies the Objective per item rather than accepting wholesale.
 
 **Accepted, high value, queued in order:**
-1. [ ] **P1 — tokens live in five places.** Merge by AUDIENCE, not
+1. [x] **P1 — tokens live in five places — DONE 2026-08-16.** Split
+       by AUDIENCE as the review prescribed: /concepts/tokens is now
+       the single prose home (four tiers, unit doctrine, role/contrast
+       guarantees) and the generated tables moved to a new
+       /reference/tokens titled "Token reference" — no two pages share
+       a title. /base/tokens redirects there (published links keep
+       working); every inbound link retargeted BY INTENT (values and
+       contrast → reference; concept → concepts). Sidebar: Base styles
+       loses the duplicate, Reference gains it. Verified live both
+       themes/widths, gates green incl. a DOCS_BASE build. Original:
+       **P1 — tokens live in five places.** Merge by AUDIENCE, not
        topic: prose ("four tiers, unit doctrine, density aliases")
        into ONE Foundations page; the generated tables into Reference.
        Two pages literally titled "Design tokens" is the clearest
