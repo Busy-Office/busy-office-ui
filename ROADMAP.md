@@ -2049,7 +2049,7 @@ Ranked: quick wins that harden every page first, then the two build items.
        preview mechanism); docs state the recipe for app-defined
        palettes.
 
-## Slice 21 — hardening from the Slice 20 grill (Objective review, 2026-08-16)
+## Done — Slice 21: hardening from the Slice 20 grill (all 5 items shipped 2026-08-16)
 
 Queued by the milestone-rule Objective review at Slice 20's close — four
 adversarial seats, full scored report:
@@ -2164,12 +2164,15 @@ Ranked: user-visible breakage first.
        dialog); document the frozen-dropdown reality. Accept: gate
        proven red; banner + hidden search verified in the snapshot via
        the base-root mimic; release-flow doc updated to one command.
-5. [ ] **Docs/IA batch** (H2 + H3 + held-notes). Tree table moves
-       beside Tree; Palettes beside Colors & tokens; the tree-table
-       page states its keyboard story (its sibling Tree page's own
-       standard); the ADR reference becomes a clickable repo link; the
-       versioning known-gap note surfaced. Accept: links/page-shape
-       green; baselines regenerated once for the sidebar moves.
+5. [x] **Docs/IA batch** — shipped 2026-08-16; **SLICE 21 COMPLETE,
+       every Slice 20 grill finding closed**. Tree table now sits
+       directly beside Tree (the disambiguation pair, verified live);
+       Palettes beside Colors & tokens; the versioning known-gap note
+       got its own emphasized paragraph (was buried mid-paragraph). The
+       keyboard story + clickable ADR shipped early with item 3 and are
+       noted here for the audit trail. Links/page-shape green, both
+       themes verified, baselines regenerated for the sidebar moves,
+       stable ×2, zero console errors. (H2 + H3.)
 
 **Held under attack** (recorded): idempotent re-highlight, node-walk
 correctness, guard ordering, hidden-rows-summed doc/code agreement,
