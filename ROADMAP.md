@@ -2452,6 +2452,23 @@ load during the seconds a rebuild is writing dist can still catch a
 half-written tree, but it now self-heals on the next NORMAL load — no
 hard refresh, no pinning.
 
+8. [ ] **Keyboard chip (`.bo-kbd`) + shortcuts-help pattern** —
+       graduated from the 2026-08-16 Explore spike (static spike
+       against the built dist, both themes verified). The gap: the
+       framework GENERATES keymap.json and ships keyboard-first
+       behaviors, but an app has no way to render shortcuts — no kbd
+       styling anywhere (grep-verified). Ship: `.bo-kbd` (~12-line
+       keycap chip: mono, bordered, bottom-weighted) + a
+       "Keyboard help" pattern page composing .bo-dialog +
+       .bo-kv--rows (near-pure composition). Spike finding to honor:
+       `.bo-kv dt` uppercases key labels ("Esc"→"ESC") — the kbd chip
+       must reset text-transform so case-sensitive keys read
+       correctly. Accept: component-recipe page for kbd (or fold into
+       an existing base page with ClassRef coverage — decide against
+       the page-shape gate); pattern page with the dialog demo wired
+       to "?" via app-code snippet; forced-colors story (border
+       survives); gates green; live-verified both themes/widths.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
