@@ -4,7 +4,7 @@ import Related from '../../components/Related.astro';
 // GENERATED from the shipped manifest (dist/scales.json, the same file
 // the generator drift-gates) — the grid IS the palette, never hand-painted.
 import scales from '@busy-office/ui/scales';
-import { readFileSync } from 'node:fs';
+import { usedByMap } from '../../lib/semantic-css';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const steps: number[] = scales.steps;
@@ -13,19 +13,11 @@ const core = ranges.filter(([, r]) => r.tier === 'core');
 const extended = ranges.filter(([, r]) => r.tier === 'extended');
 
 // Which semantic tokens consume each step — parsed from the shipped
-// semantic tier so the grid can answer "who uses this?" per swatch
-// (cross-link choice 5, the colors→tokens direction). Build-parsed,
-// never hand-written; grill 2026-08-16 killed the hand-typed role
-// spans this replaces (3 of 5 were wrong against color.css).
-const semCss = readFileSync(new URL('../../../../../packages/core/src/css/tokens/color.css', import.meta.url), 'utf8')
-  .replace(/\/\*[\s\S]*?\*\//g, '');
-const usedBy: Record<string, string[]> = {};
-const darkAt = semCss.indexOf('[data-theme="dark"]');
-for (const [scope, block] of [['', semCss.slice(0, darkAt)], ['dark ', semCss.slice(darkAt)]] as const) {
-  for (const m of block.matchAll(/(--bo-color-[a-z-]+):\s*var\(--bo-palette-([a-z]+-\d+)\)/g))
-    (usedBy[m[2]] ??= []).push(scope + m[1].replace('--bo-color-', ''));
-}
-if (Object.keys(usedBy).length === 0) throw new Error('colors: parsed zero semantic references from color.css');
+// semantic tier (shared reader: lib/semantic-css) so the grid can answer
+// "who uses this?" per swatch (cross-link choice 5, the colors→tokens
+// direction). Build-parsed, never hand-written; grill 2026-08-16 killed
+// the hand-typed role spans this replaces.
+const usedBy = usedByMap();
 
 // Role bands, derived-honest against the shipped semantic tier (see
 // usedBy): light-theme backgrounds/hover/selected sit at 50–100, borders
@@ -60,7 +52,7 @@ const swatch = (name: string, r: { steps: Record<string, string> }, s: number) =
 
   <section class="demo">
     <h2>The scale grid</h2>
-    <div class="scale-toast" role="status" aria-live="polite"></div>
+    <div class="copy-toast" role="status" aria-live="polite"></div>
     <a class="bo-visually-hidden scale-skip" href="#after-grid">Skip the swatch grid</a>
     <div class="scale-scroll" tabindex="0">
       <div class="scale-grid" style={`--cols: ${steps.length}`}>
@@ -201,43 +193,18 @@ const swatch = (name: string, r: { steps: Record<string, string> }, s: number) =
       white-space: normal;
       display: inline-block;
     }
-    .scale-toast {
-      font-family: var(--bo-font-mono);
-      font-size: var(--bo-font-size-xs);
-      min-block-size: 1.75em;
-      margin-block-end: var(--bo-space-2);
-      color: var(--bo-color-text-secondary);
-    }
-    .scale-toast:not(:empty) {
-      background: var(--bo-color-bg-muted);
-      border: 1px solid var(--bo-color-border-default);
-      border-radius: var(--bo-radius-sm);
-      padding: var(--bo-space-1) var(--bo-space-2);
-      display: inline-block;
-    }
   </style>
 
   <script>
     // Click-to-copy (research choice 2): default copies the VAR NAME,
-    // shift+click/shift+Enter the hex; the toast (visible + aria-live)
-    // reports success AND failure — a silent no-op is not an outcome.
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    function toastMsg(msg: string) {
-      const toast = document.querySelector('.scale-toast')!;
-      clearTimeout(timer);
-      toast.textContent = ''; // force a mutation so repeat copies re-announce
-      requestAnimationFrame(() => { toast.textContent = msg; });
-      timer = setTimeout(() => { toast.textContent = ''; }, 2500);
-    }
+    // shift+click/shift+Enter the hex; feedback via the shared copy-toast
+    // (success AND failure — a silent no-op is not an outcome).
+    import { copyWithToast } from '../../lib/copy-toast';
     document.addEventListener('click', (e) => {
       const sw = (e.target as HTMLElement).closest<HTMLElement>('.scale-sw');
       if (!sw) return;
       const text = (e as MouseEvent).shiftKey ? sw.dataset.hex! : sw.dataset.var!;
-      if (!navigator.clipboard) { toastMsg('clipboard unavailable here — the tooltip shows the hex'); return; }
-      navigator.clipboard.writeText(text).then(
-        () => toastMsg(`copied ${text}`),
-        () => toastMsg('copy failed — your browser blocked clipboard access'),
-      );
+      copyWithToast(text, 'clipboard unavailable here — the tooltip shows the hex');
     });
   </script>
 

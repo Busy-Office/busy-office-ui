@@ -4,23 +4,14 @@ import Related from '../../components/Related.astro';
 import contrast from '@busy-office/ui/contrast';
 import scales from '@busy-office/ui/scales';
 import { readFileSync } from 'node:fs';
+import { lightVars, darkVars } from '../../lib/semantic-css';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// GENERATED from the shipped semantic tier (tokens/color.css) — each
-// token row shows its resolved value per theme, cross-linked to the raw
-// scale step it aliases (research choice 5: close the palette↔token
-// page-hop gap). Parsed at build; an unresolvable alias fails the build.
-const css = readFileSync(new URL('../../../../../packages/core/src/css/tokens/color.css', import.meta.url), 'utf8')
-  .replace(/\/\*[\s\S]*?\*\//g, '');
-const darkStart = css.indexOf('[data-theme="dark"]');
-if (darkStart === -1) throw new Error('tokens: color.css lost its dark block');
-const parseVars = (block: string) => {
-  const out: Record<string, string> = {};
-  for (const m of block.matchAll(/(--bo-color-[a-z-]+):\s*([^;]+);/g)) out[m[1]] = m[2].trim();
-  return out;
-};
-const lightVars = parseVars(css.slice(0, darkStart));
-const darkVars = { ...lightVars, ...parseVars(css.slice(darkStart)) };
+// GENERATED from the shipped semantic tier (tokens/color.css, via the
+// shared reader in lib/semantic-css) — each token row shows its resolved
+// value per theme, cross-linked to the raw scale step it aliases
+// (research choice 5: close the palette↔token page-hop gap). Parsed at
+// build; an unresolvable alias fails the build.
 function resolve(value: string, vars: Record<string, string>): { hex: string; step?: string } {
   const pal = value.match(/^var\(--bo-palette-([a-z]+)-(\d+)\)$/);
   if (pal) {

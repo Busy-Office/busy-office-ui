@@ -1,0 +1,16 @@
+/* Shared copy-feedback toast (see src/lib/copy-toast.ts — the two are a
+   pair). Empty = reserved line height only; content brings the pill. */
+.copy-toast {
+  font-family: var(--bo-font-mono);
+  font-size: var(--bo-font-size-xs);
+  min-block-size: 1.75em;
+  color: var(--bo-color-text-secondary);
+}
+
+.copy-toast:not(:empty) {
+  background: var(--bo-color-bg-muted);
+  border: 1px solid var(--bo-color-border-default);
+  border-radius: var(--bo-radius-sm);
+  padding: var(--bo-space-1) var(--bo-space-2);
+  display: inline-block;
+}

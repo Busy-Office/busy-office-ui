@@ -1,6 +1,7 @@
 @layer bo-components {
   .bo-select {
     --bo-select-border: var(--bo-color-border-control);
+    --bo-select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
 
     inline-size: 100%;
     height: var(--bo-density-control-height);
@@ -8,18 +9,20 @@
     border: var(--bo-border-width) solid var(--bo-select-border);
     border-radius: var(--bo-radius-md);
     background-color: var(--bo-color-bg-surface);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+    background-image: var(--bo-select-chevron);
     background-repeat: no-repeat;
     background-position: right var(--bo-space-3) center;
     font-size: var(--bo-density-font-size);
     appearance: none;
   }
 
-  /* Chevron color is frozen in the data URI, so dark mode needs its own URI
-     (gray-300), and RTL needs a physical position flip — background-position
-     has no logical keywords. */
+  /* Chevron color is frozen in the data URI, so dark remaps the
+     --bo-select-chevron property (gray-300 URI) — one definition per
+     theme, every variant (incl. --seamless reveal) reads the property.
+     RTL needs a physical position flip — background-position has no
+     logical keywords. */
   [data-theme="dark"] .bo-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+    --bo-select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
   }
 
   [dir="rtl"] .bo-select {
@@ -40,7 +43,7 @@
 
   .bo-select--seamless:hover,
   .bo-select--seamless:focus {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+    background-image: var(--bo-select-chevron);
   }
 
   .bo-select--seamless:hover {
@@ -51,17 +54,6 @@
     --bo-select-border: var(--bo-color-border-control);
 
     background-color: var(--bo-color-bg-surface);
-  }
-
-  /* Dark's rest-state chevron rule above outranks the seamless reset
-     (attr + class beats one class), so re-hide and re-reveal per theme. */
-  [data-theme="dark"] .bo-select--seamless {
-    background-image: none;
-  }
-
-  [data-theme="dark"] .bo-select--seamless:hover,
-  [data-theme="dark"] .bo-select--seamless:focus {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
   }
 
   .bo-select:disabled {

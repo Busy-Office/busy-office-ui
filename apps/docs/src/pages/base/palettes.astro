@@ -123,7 +123,7 @@ const PROFILES: Record<string, string> = {
         </div>
       ))}
     </div>
-    <div class="pal-toast" role="status" aria-live="polite"></div>
+    <div class="copy-toast" role="status" aria-live="polite"></div>
     <p class="bo-u-text-muted">Previews follow your theme toggle — light
     values in light, the palette's dark values in dark, exactly what an
     app importing it gets. Every accent in every card is an alias to a
@@ -242,44 +242,17 @@ const PROFILES: Record<string, string> = {
       border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
       font-size: var(--bo-font-size-xs);
     }
-    .pal-toast {
-      font-family: var(--bo-font-mono);
-      font-size: var(--bo-font-size-xs);
-      min-block-size: 1.5em;
-      margin-block-start: var(--bo-space-2);
-      color: var(--bo-color-text-secondary);
-    }
-    .pal-toast:not(:empty) {
-      display: inline-block;
-      background: var(--bo-color-bg-muted);
-      border: 1px solid var(--bo-color-border-default);
-      border-radius: var(--bo-radius-sm);
-      padding: var(--bo-space-1) var(--bo-space-2);
-    }
     .pal-details { margin-block-end: var(--bo-space-2); }
     .pal-details summary { cursor: pointer; }
   </style>
 
   <script>
-    // Copy-the-import (visible toast + aria-live — two channels, and
-    // failure is reported, never silent).
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    function toastMsg(msg: string) {
-      const toast = document.querySelector('.pal-toast')!;
-      clearTimeout(timer);
-      toast.textContent = ''; // force a mutation so repeat copies re-announce
-      requestAnimationFrame(() => { toast.textContent = msg; });
-      timer = setTimeout(() => { toast.textContent = ''; }, 2500);
-    }
+    // Copy-the-import — shared copy-toast (two channels, failure reported).
+    import { copyWithToast } from '../../lib/copy-toast';
     document.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLElement>('.pal-copy');
       if (!btn) return;
-      const text = btn.dataset.copy!;
-      if (!navigator.clipboard) { toastMsg('clipboard unavailable here — copy the line from the card'); return; }
-      navigator.clipboard.writeText(text).then(
-        () => toastMsg(`copied ${text}`),
-        () => toastMsg('copy failed — your browser blocked clipboard access'),
-      );
+      copyWithToast(btn.dataset.copy!, 'clipboard unavailable here — copy the line from the card');
     });
   </script>
 
