@@ -45,7 +45,9 @@ in sync. Query the mirror to steer prioritization.
 - Every documented surface is **generated** from the shipped artifact, not hand-written.
 - Every state signal is two-channel (visible non-color cue + programmatic).
 - Small & general over specific — compose existing primitives; one component, many
-  settings.
+  settings. Every add/remove passes the **Objective** at the top of
+  `ROADMAP.md` (simplicity / less-for-more / reusability, with explicit
+  accept/refuse/rethink tests) — refusing is a valid outcome.
 - Adversarially grill a slice before sign-off; record findings in `.roundtable/`.
 
 ## How to document a component (the recipe)

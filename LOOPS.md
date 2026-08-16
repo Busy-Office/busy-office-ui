@@ -47,9 +47,12 @@ commit once its item ships. If there is any:
 
 1. Classify it: a **bug** (something that used to work / should work and
    doesn't) gets flagged **P0** and jumps the queue; a **feature/requirement**
-   gets ranked by value × effort into the current slice's queue (or a future
-   one if it's not this slice's shape); a **process/direction change** (like
-   this file) gets edited directly.
+   is first tested against the **Objective** (ROADMAP.md top — simplicity /
+   less-for-more / reusability, each with accept/refuse/rethink tests;
+   refuse and rethink are valid triage outcomes, recorded with the reason)
+   and only then ranked by value × effort into the current slice's queue
+   (or a future one if it's not this slice's shape); a **process/direction
+   change** (like this file) gets edited directly.
 2. Write it into `ROADMAP.md` with *Accept* criteria if it doesn't have any —
    an item without a checkable definition of done can't be dispatched
    correctly in Step 2.

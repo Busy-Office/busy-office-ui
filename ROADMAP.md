@@ -5,6 +5,68 @@ generated-and-verified docs. This file is the long-term plan; per-slice detail a
 design-review trail live in `.roundtable/`, and every breaking change is in
 `CHANGELOG.md`.
 
+## Objective — the direction (set by the owner, 2026-08-16)
+
+**Make complex ERP UI simple: the framework absorbs the hard problems so
+the app doesn't have to.** Every proposal to add, change, or remove
+anything passes the three principles below — each carries explicit
+**accept / refuse / rethink** tests so decisions are made against the
+direction, not against momentum. Anything that fails a test is refused
+outright or sent to the design panel; "it would be useful" is never
+sufficient on its own.
+
+### 1. Simplicity — simple is the best; make the complex simple
+
+The framework's job is to take on genuinely hard problems (accessibility
+contracts, precision, density, theming, focus, save semantics) and hand
+back something that reads obvious. Power that complicates the consumer's
+markup or mental model is failure, not capability.
+
+- **Accept** when it lets a consumer *delete* code, markup, or decisions.
+- **Refuse** when using it correctly requires understanding more than its
+  own docs page, or when its explanation needs a caveat list to be honest.
+- **Rethink** when a docs explanation keeps growing to cover a surface —
+  the fix is simplifying the thing, never the prose. (Precedent: the
+  lossless-reformat fix — the simple contract "never change the number"
+  replaced a growing pile of rounding caveats.)
+
+### 2. Less for more — fewer options, more possibility
+
+One component, many settings. Composition over variants. Native elements
+over invented widgets. Every new option must open more use-cases than the
+one that asked for it.
+
+- **Accept** when one general mechanism replaces N specific asks
+  (precedent: `data-density="spacious"` IS the warehouse-floor variant —
+  no `--large` modifier ever shipped).
+- **Refuse** a modifier/part/attribute that serves exactly one scenario,
+  and any second way to do something that already works.
+- **Rethink** when two surfaces start growing toward each other — merge
+  them or extract the shared primitive (precedent: the `decimal-input`
+  util under money + quantity).
+
+### 3. Reusability is the key
+
+Nothing ships for one screen. A piece earns its place by surviving ≥2
+real, independent compositions (the same bar behaviors already meet
+before being called stable). Prefer the primitive that composes over the
+composite that locks.
+
+- **Accept** when it works, unchanged, in a context it wasn't designed
+  for.
+- **Refuse** when it embeds app/domain decisions — data, workflow,
+  policy stay with the consumer ("framework does visuals, you do the
+  data"); the rare deliberate exception is named, documented, and always
+  overridable (precedent: the currency/unit tables).
+- **Rethink** when reuse requires copy-paste-modify — extract the
+  reusable core instead of shipping the copy.
+
+**How it binds the loops:** Roadmap triage tests every new ask against
+these before queuing (refuse/rethink are valid triage outcomes, recorded
+with the reason); the design panel grills slices against them; removals
+face the same tests as additions — deleting a surface consumers compose
+against is a Breaking-entry decision, not a tidy-up.
+
 ## Done
 
 ### Slice 1 — Foundation + core components
