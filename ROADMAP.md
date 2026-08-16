@@ -1740,6 +1740,29 @@ disabled-segment state.
       an earlier dogfood round), so this is consistent with that existing,
       already-noted scope boundary, not a gap introduced here.
 
+- [x] **2026-08-16 — Code blocks bled into the right-rail TOC on long
+      lines — fixed** (user-requested click-through sweep: "can you use AI
+      Agents to run thru the web?" — 4 parallel Explore agents, one per
+      ~14-page batch, covering all 58 docs pages with screenshots + console
+      checks). 57/58 pages came back clean; one real, verified finding on
+      `/components/quantity`'s "With a unit" section — a long attribute-
+      laden line in a `<pre><code>` block had no horizontal scroll and
+      bled past its own column into "ON THIS PAGE", confirmed via
+      `elementFromPoint`/bounding-rect inspection, not just eyeballing the
+      screenshot. Root cause: `has-copy` (the copy-button class) is applied
+      to EVERY `<pre><code>` in `.docs-content` via JS — both `Demo.astro`'s
+      paired blocks and hand-authored "Markup" sections — but
+      `overflow-x: auto` had only ever been added to the opt-in
+      `.demo-pair--row` layout variant; the default stacked layout and
+      every hand-authored Markup block never got it. This is a latent gap
+      that could resurface on any page with a long enough code line, not
+      just Quantity — fixed on the general `.docs-content pre.has-copy`
+      selector so it's closed everywhere at once, not re-patched per call
+      site. Verified live: 1440px light + dark (clean boundary, correct
+      internal scroll, confirmed via `getComputedStyle`), 390px (off-screen
+      clone technique, clips cleanly, no bleed). Zero console errors. Full
+      gate suite green (61 tests, build, page-shape, link check).
+
 ## Long term (post-1.0)
 
 Highest-leverage bets (2026-08-14 review — ranked):
