@@ -85,6 +85,39 @@ await new Promise((r) => setTimeout(r, 150));
 const otherwise = await page.evaluate(() => document.getElementById('shortcuts-dlg').open);
 check('"?" opens shortcuts, never while typing', whileTyping === false && otherwise === true, JSON.stringify({ whileTyping, otherwise }));
 
+// ---- the print layer, executed under print media emulation ----
+// Claims from /base/print and the pattern pages: headers repeat, rows
+// never split, chrome disappears, badges print as outlines (NOT as
+// forced colour — that claim was wrong until 2026-08-17), and markers
+// keep the fill that carries their meaning.
+await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
+await page.emulateMediaType('print');
+await new Promise((r) => setTimeout(r, 200));
+const print = await page.evaluate(() => {
+  const g = (sel, prop) => { const el = document.querySelector(sel); return el ? getComputedStyle(el)[prop] : 'NO ELEMENT'; };
+  return {
+    thead: g('.bo-data-table thead', 'display'),
+    row: g('.bo-data-table tbody tr', 'breakInside'),
+    toolbar: g('.bo-data-table__toolbar', 'display'),
+    sidebar: g('.bo-app-shell__sidebar', 'display'),
+    badgeBg: g('.bo-badge', 'backgroundColor'),
+    badgeBorder: g('.bo-badge', 'borderTopWidth'),
+  };
+});
+check('print: table header repeats per page', print.thead === 'table-header-group', print.thead);
+check('print: rows never split', print.row === 'avoid', print.row);
+check('print: app chrome and toolbars are dropped', print.toolbar === 'none' && print.sidebar === 'none', `${print.toolbar}/${print.sidebar}`);
+check('print: badges are outlined, not filled', print.badgeBg === 'rgba(0, 0, 0, 0)' && print.badgeBorder !== '0px', `bg ${print.badgeBg}, border ${print.badgeBorder}`);
+
+await page.goto(url('/components/approval-workflow/'), { waitUntil: 'networkidle0' });
+await page.emulateMediaType('print');
+await new Promise((r) => setTimeout(r, 200));
+const marker = await page.evaluate(() => {
+  const m = document.querySelector('.bo-timeline__marker');
+  return m ? { bg: getComputedStyle(m).backgroundColor, adjust: getComputedStyle(m).printColorAdjust } : { bg: 'NO ELEMENT' };
+});
+check('print: timeline markers keep their fill', marker.bg !== 'rgba(0, 0, 0, 0)' && marker.adjust === 'exact', JSON.stringify(marker));
+
 await browser.close();
 server.close();
 

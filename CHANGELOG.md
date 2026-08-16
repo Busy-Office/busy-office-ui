@@ -8,6 +8,12 @@ pin.
 
 ## Unreleased
 
+- Removed: a dead `print-color-adjust: exact` rule targeting
+  `.bo-badge` — badges deliberately print as black text in a black
+  border with no background, so the rule forced a colour that had
+  already been removed. Timeline and stepper markers keep it, where the
+  fill is the signal. No visual change.
+
 - **Fixed**: `.bo-segmented` options now wrap instead of pushing the
   page sideways — 2-5 translated labels ("Meine Genehmigungen")
   overflowed a phone-width shell. Normal-length labels still render on

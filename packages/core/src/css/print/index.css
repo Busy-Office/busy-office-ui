@@ -62,9 +62,12 @@
       color: #555;
     }
 
-    /* Status colors are data in a printed approval — force them where it
-       matters (badges, timeline markers) for browsers that honor it. */
-    .bo-badge,
+    /* Elements whose FILL carries meaning and is kept in print. Badges
+       are deliberately NOT here: they print as black text in a black
+       border (badge.css) — an outline reads on any printer and spends
+       no toner, and the status word carries the meaning anyway. Listing
+       them here forced a colour that had already been removed (dead
+       rule found by executing the print claims, 2026-08-17). */
     .bo-timeline__marker,
     .bo-stepper__marker {
       print-color-adjust: exact;

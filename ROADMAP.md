@@ -2897,6 +2897,25 @@ German case the gate claims to model. Gate boilerplate: already shared
 (serve-dist + resolve-chrome across all four browser gates), nothing
 left to consolidate.
 
+**Explore 2026-08-17 (fourth) — the print layer executed.** Print is
+billed as an ERP differentiator and had never been run. Emulated print
+media and asserted the contract: headers repeat (table-header-group),
+rows never split, app chrome and toolbars drop, prose tables inherit
+the same treatment, a real PDF renders. Seven of eight held. The
+eighth was a DOCS defect: two pages claimed print "forces status
+colors so a badge survives a monochrome printer" — badges actually
+print as black text in a black border with NO background (badge.css,
+deliberately), so `print-color-adjust: exact` on `.bo-badge` in
+print/index.css was dead code forcing a colour that had already been
+removed. Corrected both claims (badges survive as OUTLINES, and the
+status word carries the meaning — the two-channel rule paying off on
+paper), dropped .bo-badge from the rule, and kept it for timeline and
+stepper markers where the fill genuinely is the signal (verified: the
+marker keeps rgb(240,253,244) under print emulation). Five print
+assertions added to check-claims (now 10), red-proved by giving the
+badge a print background and confirming the injection landed in the
+built CSS first.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
