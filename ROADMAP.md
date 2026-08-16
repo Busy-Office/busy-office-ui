@@ -2058,7 +2058,23 @@ names the slice's shared defect: mechanisms that fail OPEN and SILENT —
 this slice adds the assertions that make Slice 20's depth verifiable.
 Ranked: user-visible breakage first.
 
-1. [ ] **Highlight integrity** (E1 + H1). The homepage shipped
+1. [x] **Highlight integrity** — shipped 2026-08-16, red-first at
+       every step. The none-left-behind gate was built BEFORE the fix
+       and went red on the shipped defect (exactly the 8 blocks the
+       Skeptic predicted); mid-fix it flushed out 3 MORE
+       (`<code>`-attributed theming blocks the seats hadn't counted);
+       green now at 125 blocks / 50 pages. Matcher accepts attributed
+       pres (class merged into code-hl, tabindex/data-astro-cid
+       carried verbatim; own output excluded for idempotency); the
+       strip fails loudly if Shiki's pre shape drifts; zero-blocks is a
+       failure; the `&#38;`/`&amp;` decode order fixed (H1). Token
+       slots + box moved to a shared stylesheet imported by BOTH the
+       docs shell and the landing page (landing pres are outside
+       .docs-content — without this the newly-highlighted homepage
+       would have had unstyled vars). Live-verified: all 6 landing
+       blocks highlighted with attrs preserved, spans measured, both
+       link checks green, baselines regenerated (landing/theming
+       changed), stable ×2. (E1 + H1.) The homepage shipped
        UNHIGHLIGHTED code while the build printed green: the transform's
        regex requires a zero-attribute `<pre>`, skipping the six
        hand-written landing blocks + theming's two. Fix: match

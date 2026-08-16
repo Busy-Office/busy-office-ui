@@ -48,8 +48,8 @@ function unescapeHtml(s) {
     .replaceAll('&quot;', '"')
     .replaceAll('&#39;', "'")
     .replaceAll('&#x27;', "'")
-    .replaceAll('&#38;', '&')
-    .replaceAll('&amp;', '&'); // last — it guards double-escapes
+    .replaceAll('&amp;', '&')
+    .replaceAll('&#38;', '&'); // both ampersand forms last — they guard double-escapes (grill H1: &#38; before &amp; double-decoded '&#38;amp;')
 }
 
 async function* htmlFiles(dir) {
@@ -60,7 +60,19 @@ async function* htmlFiles(dir) {
   }
 }
 
-const BLOCK = /<pre><code>([\s\S]*?)<\/code><\/pre>/g;
+// Attributed pres included (grill E1: the zero-attribute shape silently
+// skipped six hand-written landing blocks + theming's two). Our own
+// output (class contains code-hl) is excluded for idempotency.
+const BLOCK = /<pre((?![^>]*\bcode-hl\b)[^>]*)><code[^>]*>([\s\S]*?)<\/code><\/pre>/g;
+
+/* Merge a matched pre's original attributes into the highlighted pre:
+   its class joins code-hl; everything else (tabindex, data-astro-cid-*)
+   is carried over verbatim. */
+function mergeAttrs(attrs) {
+  const cls = attrs.match(/\sclass="([^"]*)"/);
+  const rest = attrs.replace(/\sclass="[^"]*"/, '');
+  return { classes: cls ? ' ' + cls[1] : '', rest };
+}
 let blocks = 0;
 let files = 0;
 const unmapped = new Set();
@@ -73,7 +85,8 @@ for await (const file of htmlFiles(DIST)) {
   let out = '';
   let last = 0;
   for (const m of html.matchAll(BLOCK)) {
-    const code = unescapeHtml(m[1]);
+    const { classes, rest } = mergeAttrs(m[1]);
+    const code = unescapeHtml(m[2]);
     const lang = detectLang(code);
     let hl = await codeToHtml(code, {
       lang,
@@ -81,8 +94,18 @@ for await (const file of htmlFiles(DIST)) {
       colorReplacements: COLOR_MAP,
     });
     // our CSS owns the pre's box (bg, padding, radius, overflow) — strip
-    // shiki's inline style; keep tabindex (keyboard-reachable scroll).
-    hl = hl.replace(/^<pre class="shiki[^"]*" style="[^"]*"/, '<pre class="code-hl"');
+    // shiki's inline style, merging the source pre's own attributes back
+    // in. The strip must actually strip (grill E1: a silent no-op would
+    // leak shiki's inline box styles while every gate stayed green).
+    const stripped = hl.replace(
+      /^<pre class="shiki[^"]*" style="[^"]*"/,
+      `<pre class="code-hl${classes}"${rest}`,
+    );
+    if (stripped === hl) {
+      console.error(`highlight-code: strip failed — shiki's <pre> shape changed:\n${hl.slice(0, 120)}`);
+      process.exit(1);
+    }
+    hl = stripped;
     for (const hex of hl.matchAll(/(?:color|background-color):(#[0-9a-fA-F]{3,6})/g)) unmapped.add(hex[1]);
     out += html.slice(last, m.index) + hl;
     last = m.index + m[0].length;
@@ -100,4 +123,24 @@ if (unmapped.size) {
   console.error(`highlight-code: unmapped theme colors (add to COLOR_MAP): ${[...unmapped].join(', ')}`);
   process.exit(1);
 }
-console.log(`highlight-code: ${blocks} block(s) highlighted across ${files} page(s) — all colors token-mapped`);
+
+// None-left-behind gate (Slice 21 grill E1): the success counter above is
+// structurally unable to report blocks the matcher SKIPPED — so re-scan
+// the whole dist for any surviving un-highlighted <pre><code> and fail
+// loudly, listing where. Zero blocks total is equally a failure.
+const leftovers = [];
+for await (const file of htmlFiles(DIST)) {
+  const html = await readFile(file, 'utf8');
+  for (const m of html.matchAll(/<pre(?![^>]*\bcode-hl\b)[^>]*><code[\s>]/g)) {
+    leftovers.push(`${file.replace(DIST, '')} @${m.index}`);
+  }
+}
+if (leftovers.length || blocks === 0) {
+  console.error(
+    blocks === 0
+      ? 'highlight-code: matched ZERO blocks — the matcher or the page shapes drifted'
+      : `highlight-code: ${leftovers.length} un-highlighted block(s) left behind:\n  ${leftovers.join('\n  ')}`,
+  );
+  process.exit(1);
+}
+console.log(`highlight-code: ${blocks} block(s) highlighted across ${files} page(s) — all colors token-mapped, none left behind`);

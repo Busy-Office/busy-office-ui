@@ -1,5 +1,6 @@
 ---
 import '@busy-office/ui/css';
+import '../styles/code-hl.css';
 import Logo from '../components/Logo.astro';
 import pkg from '@busy-office/ui/package.json';
 import versions from '../../versions.json';
@@ -637,20 +638,9 @@ const current =
      every slot maps to an existing contrast-gated core token pair on the
      bg-muted the block sits on — highlighting inherits AA and theme
      switching from the token contract, no highlighter-specific themes. */
-  .docs-content pre.has-copy {
-    background: var(--bo-color-bg-muted);
-    border-radius: var(--bo-radius-md);
-    padding: var(--bo-space-3);
-    --bo-code-fg: var(--bo-color-text-primary);
-    --bo-code-comment: var(--bo-color-text-muted);
-    --bo-code-keyword: var(--bo-color-accent);
-    --bo-code-tag: var(--bo-color-success-text);
-    --bo-code-string: var(--bo-color-warning-strong);
-    --bo-code-constant: var(--bo-color-danger-text);
-    --bo-code-function: var(--bo-color-text-secondary);
-    color: var(--bo-code-fg);
-  }
-  .demo-pair pre.has-copy { border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); }
+  /* Box + token slots live in ../styles/code-hl.css (shared with the
+     landing page, which is outside .docs-content). Shell-specific bits: */
+  .demo-pair pre.code-hl { border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); }
 
   /* Copy button, top-end of any code block. `has-copy` is added to EVERY
      <pre><code> in .docs-content (both Demo.astro's paired blocks and

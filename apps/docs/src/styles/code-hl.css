@@ -1,0 +1,19 @@
+/* Highlighted-code box + token slots — shared by every page that can
+   contain a transformed block (the docs shell AND the custom landing
+   page, which is not under .docs-content; grill E1 follow-through).
+   Every slot maps to a contrast-gated core token pair on the bg-muted
+   the block sits on, so AA and theme switching ride the token contract. */
+pre.code-hl {
+  background: var(--bo-color-bg-muted);
+  border-radius: var(--bo-radius-md);
+  padding: var(--bo-space-3);
+  overflow-x: auto;
+  --bo-code-fg: var(--bo-color-text-primary);
+  --bo-code-comment: var(--bo-color-text-muted);
+  --bo-code-keyword: var(--bo-color-accent);
+  --bo-code-tag: var(--bo-color-success-text);
+  --bo-code-string: var(--bo-color-warning-strong);
+  --bo-code-constant: var(--bo-color-danger-text);
+  --bo-code-function: var(--bo-color-text-secondary);
+  color: var(--bo-code-fg);
+}
