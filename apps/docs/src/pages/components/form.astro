@@ -115,7 +115,7 @@ const fieldMarkup = `<div class="bo-form-field">
     <pre><code>{fieldMarkup}</code></pre>
   </section>
   <section class="demo">
-    <h2>Detail-form sections (real fieldsets) + sticky action bar</h2>
+    <h2>Sections &amp; the action bar</h2>
     <form>
       <fieldset class="bo-form-section">
         <legend class="bo-form-section__legend">Vendor details</legend>
@@ -130,23 +130,18 @@ const fieldMarkup = `<div class="bo-form-field">
           </div>
         </div>
       </fieldset>
-      <fieldset class="bo-form-section">
-        <legend class="bo-form-section__legend">Payment terms</legend>
-        <div class="bo-form-row">
-          <div class="bo-form-field">
-            <label class="bo-form-field__label" for="fs-terms">Terms</label>
-            <select class="bo-select" id="fs-terms"><option>Net 30</option><option>Net 60</option></select>
-          </div>
-        </div>
-      </fieldset>
       <div class="bo-form-actions">
         <button class="bo-btn bo-btn--secondary" type="button">Cancel</button>
         <button class="bo-btn" type="submit">Save vendor</button>
       </div>
     </form>
-    <p class="bo-u-text-muted">The action bar is sticky; the framework sets
-    <code>scroll-padding-block-end</code> on the scroll container so keyboard focus is
-    never hidden underneath it.</p>
+    <p class="bo-u-text-muted">A <code>.bo-form-section</code> is a real
+    <code>&lt;fieldset&gt;</code> (its legend is the group's accessible name), and
+    <code>.bo-form-actions</code> sticks to the bottom — the framework sets
+    <code>scroll-padding-block-end</code> on the scroll container so keyboard focus
+    is never hidden underneath it. The full multi-section edit screen, with its
+    data contract and dirty-state handling, is
+    <a href={base + '/patterns/detail-form'}>the detail-form pattern</a>.</p>
   </section>
   <section class="demo">
     <h2>Choices</h2>

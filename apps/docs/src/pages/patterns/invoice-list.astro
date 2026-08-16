@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const rows = Array.from({ length: 14 }, (_, i) => ({
   no: `INV-10${234 + i}`,
   vendor: ['Acme Supply Co.', 'Globex Industrial', 'Initech GmbH', 'Umbrella Logistics', 'Stark Components'][i % 5],
@@ -13,9 +14,12 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
 ---
 <Gallery title="Pattern: dense invoice list">
   <p class="demo-note">
-    A composed ERP screen: filter bar (form components) + dense selectable table with
-    sticky header, frozen first data column, bulk actions, and status badges. Set
-    density to <em>compact</em> for the full back-office experience.
+    <strong>Who uses it</strong>: AP clerks, all day — the screen they
+    live in. <strong>What "done" looks like</strong>: find the invoices
+    that need action, act on them in bulk, and never lose your place.
+    Composed entirely from shipped components; the
+    <a href={base + '/components/data-table'}>data table page</a>
+    documents the table itself, this page documents the screen.
   </p>
   <section class="demo">
     <form class="bo-cluster" data-density="compact">
@@ -66,9 +70,129 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
       </table>
     </div>
   </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Filter bar</strong> — a plain <code>&lt;form&gt;</code> in a
+      <a href={base + '/base/primitives'}>cluster</a> with
+      <a href={base + '/components/filters'}>filter</a> controls. Submits on Apply;
+      Clear is a native <code>type="reset"</code>.</li>
+      <li><strong>Toolbar</strong> (<code>.bo-data-table__toolbar</code>) — bulk
+      actions appear only when rows are selected; the selection count is filled by
+      <code>initDataTables()</code>.</li>
+      <li><strong>Table</strong> (<code>.bo-data-table--sticky-col</code>) — sticky
+      header, frozen select column, <code>aria-sort</code> on the sorted header,
+      <a href={base + '/components/badge'}>status badges</a> carrying text, not just
+      color.</li>
+      <li><strong>Footer</strong> — rows-per-page +
+      <a href={base + '/components/pagination'}>pagination</a>, or a load-more
+      button; pick one and keep it (see Scaling).</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <p>What the server must return for this screen to work — the HTMX/fetch
+    boundary:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns</th><th scope="col">Swaps into</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /invoices?status=&amp;cc=&amp;q=&amp;page=</td><td>the <code>&lt;tbody&gt;</code> rows + an out-of-band footer</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /invoices/bulk-approve</td><td>the affected rows, re-rendered with new badges</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /invoices?page=n</td><td>next page rows (append) or a full replace</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Rows carry <code>data-row-id</code> so partial
+    responses can target one row. Selection state is CLIENT state — a swap that
+    replaces rows clears it, which is the honest behaviour after a bulk action.
+    Filters belong in the URL query so a filtered list is linkable and survives
+    reload.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Loading (first paint)</td><td><a href={base + '/components/state-patterns'}>Skeleton rows</a> — never an empty table that fills in</td></tr>
+          <tr><td>Loading (refetch)</td><td><code>data-loading="true"</code> + <code>aria-busy</code> on the table: dims and blocks interaction mid-swap</td></tr>
+          <tr><td>Empty (no data yet)</td><td><code>.bo-state--empty</code> with the primary action (Create invoice)</td></tr>
+          <tr><td>Empty (filters exclude everything)</td><td>a DIFFERENT message — offer "Clear filters", not "Create"</td></tr>
+          <tr><td>Error</td><td><code>.bo-alert--danger</code> above the table with a retry; keep the last good rows visible</td></tr>
+          <tr><td>Row error</td><td><code>data-row-state="error"</code> + a badge naming the reason (two-channel)</td></tr>
+          <tr><td>Partial failure after bulk</td><td>re-render the failed rows in the error state and summarise: "8 approved, 2 failed"</td></tr>
+          <tr><td>No permission</td><td>bulk buttons absent (not disabled) — a control you can never use is noise</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Keyboard walkthrough</h2>
+    <p>The path an AP clerk actually takes, with nothing custom bound:</p>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><kbd class="bo-kbd">Tab</kbd> into the filter bar, type, <kbd class="bo-kbd">Enter</kbd> to apply — a native form submit.</li>
+      <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox; <kbd class="bo-kbd">Space</kbd> toggles the page's rows and announces the count via the live region.</li>
+      <li><kbd class="bo-kbd">Tab</kbd> through row checkboxes, <kbd class="bo-kbd">Space</kbd> to pick individual invoices.</li>
+      <li><kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> back to the toolbar — bulk actions are now revealed and reachable.</li>
+      <li>Sorting: the header is a real <code>&lt;button&gt;</code>; <kbd class="bo-kbd">Enter</kbd> sorts and <code>aria-sort</code> announces the new direction.</li>
+    </ol>
+    <p class="bo-u-text-muted">The table deliberately does NOT take a roving
+    tabindex — screen-reader table browse mode is worth more than 2-D arrow
+    navigation on a read-mostly list (<code>data-grid-nav</code> is opt-in per
+    table when a screen really is grid-first).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Print behaviour</h2>
+    <p>ERP lists get printed and signed. The
+    <a href={base + '/base/print'}>print layer</a> repeats the table header on every
+    page, never splits a row, drops the toolbar/pagination/filter chrome, and forces
+    status colors so a badge survives a monochrome printer. Print the page to see
+    it — no print-specific markup required.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Scaling notes</h2>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Rows</strong>: measured render costs (1k → 20k, including a 4×
+      CPU throttle) are on the
+      <a href={base + '/components/data-table'}>data table page</a>. Past ~5k rows,
+      paginate server-side — the framework has no virtualiser and does not pretend
+      to.</li>
+      <li><strong>Pagination vs load-more</strong>: pagination when clerks cite
+      "page 3" and need a stable position; load-more for scanning feeds. Don't ship
+      both on one screen.</li>
+      <li><strong>Columns</strong>: past ~10, the frozen select column plus
+      horizontal scroll carries it; consider a column chooser rather than shrinking
+      type.</li>
+      <li><strong>Languages</strong>: German column labels run ~35% longer —
+      headers wrap by design, so verify at compact density in the longest locale
+      you ship.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span> —
+    read-many-records tier.</p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/filters'}>Filters</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/pagination'}>Pagination</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/state-patterns'}>Loading &amp; empty</a></li>
+    </ul>
+  </section>
+
   <script>
     import { initDataTables } from '@busy-office/ui/js';
     initDataTables();
   </script>
-  <Related links={[["/getting-started/first-screen", "Build this step by step"], ["/components/data-table", "Data table"], ["/components/filters", "Filters"]]} />
+  <Related links={[["/getting-started/first-screen", "Build this step by step"], ["/components/data-table", "Data table"], ["/components/filters", "Filters"], ["/patterns/record-detail", "Record detail (the row's destination)"]]} />
 </Gallery>

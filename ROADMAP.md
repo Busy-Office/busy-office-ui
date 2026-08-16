@@ -2589,8 +2589,21 @@ applies the Objective per item rather than accepting wholesale.
        Two pages literally titled "Design tokens" is the clearest
        possible signal. Accept: one prose page, one reference page, no
        duplicate titles, every inbound link retargeted, gates green.
-2. [ ] **P6 inversion — component pages own components, patterns own
-       screens.** Move "The full list screen, assembled" from
+2. [x] **P6 inversion — DONE 2026-08-16.** The assembled list screen
+       left /components/data-table (which now points at the pattern in
+       one line) and the detail-form screen left /components/form (which
+       keeps a MINIMAL fieldset + action-bar demo — those classes are
+       genuinely form components and would otherwise be undemoed). Both
+       destination patterns grew the review's §5 template:
+       invoice-list gained screen intent, anatomy, data contract (the
+       HTMX request/response boundary), 8 states incl. the two DIFFERENT
+       empties and partial bulk failure, keyboard walkthrough, print
+       behaviour, scaling notes, components-used with a complexity
+       badge; detail-form gained the same with a conflict/409 state and
+       the read-only-role rule (render facts, not disabled inputs).
+       invoice-list is the EXEMPLAR for item 3's template rollout.
+       Original: **P6 inversion — component pages own components,
+       patterns own screens.** Move "The full list screen, assembled" from
        /components/data-table into /patterns/invoice-list, and the
        detail-form section from /components/form into
        /patterns/detail-form. Accept: each pattern grows an anatomy +

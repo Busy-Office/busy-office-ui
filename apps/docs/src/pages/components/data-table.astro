@@ -324,51 +324,13 @@ const rows = [
     behavior only tracks dirty state. Try it: edit a quantity below.</p>
   </section>
   <section class="demo">
-    <h2>The full list screen, assembled</h2>
-    <div class="bo-data-table-container" tabindex="0">
-      <div class="bo-data-table__toolbar">
-        <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-          <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
-        </div>
-        <span class="bo-data-table__selection-count"></span>
-        <input class="bo-input" type="search" aria-label="Filter" placeholder="Filter…" style="max-inline-size: 14rem" />
-      </div>
-      <table class="bo-data-table bo-data-table--sticky-col">
-        <thead><tr>
-          <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
-          <th scope="col">Invoice #</th><th scope="col">Vendor</th>
-          <th scope="col" class="bo-data-table__col--numeric">Amount</th><th scope="col">Status</th>
-        </tr></thead>
-        <tbody>
-          {rows.slice(0, 3).map((r) => (
-            <tr>
-              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
-              <td class="bo-data-table__col--code">{r.no}</td>
-              <td>{r.vendor}</td>
-              <td class="bo-data-table__col--numeric">{r.amount}</td>
-              <td><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div class="bo-data-table__footer">
-        <label class="bo-choice">Rows
-          <select class="bo-select" style="inline-size:auto" aria-label="Rows per page"><option>25</option><option>50</option></select>
-        </label>
-        <nav class="bo-pagination" aria-label="Pagination">
-          <button class="bo-pagination__btn" type="button" disabled aria-label="Previous page">‹</button>
-          <a class="bo-pagination__btn" aria-current="page" href="#">1</a>
-          <a class="bo-pagination__btn" href="#">2</a>
-          <button class="bo-pagination__btn" type="button" aria-label="Next page">›</button>
-          <span class="bo-pagination__info">1–25 of 312</span>
-        </nav>
-      </div>
-    </div>
-    <p class="bo-u-text-muted">Everything on one screen the way a real invoice list
-    ships: toolbar + <code>--sticky-col</code> (the selection column stays put when
-    the table scrolls sideways) + the <code>__footer</code> carrying rows-per-page
-    and <a href={base + '/components/pagination'}>pagination</a>. Scroll the table
-    horizontally in a narrow window to see the sticky column earn its keep.</p>
+    <h2>The assembled screen lives in Patterns</h2>
+    <p>Toolbar + sticky column + footer pagination + filter bar composed
+    into a real invoice list — with its anatomy, data contract, states,
+    and keyboard walkthrough — is
+    <a href={base + '/patterns/invoice-list'}>the invoice-list pattern</a>.
+    This page documents the table itself; the pattern documents the
+    screen.</p>
   </section>
   <section class="demo">
     <h2>Loading & error rows</h2>

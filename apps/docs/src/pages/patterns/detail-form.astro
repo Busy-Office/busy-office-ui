@@ -5,7 +5,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: multi-column detail form">
   <p class="demo-note">
-    The edit-screen counterpart to <a href={base + '/patterns/record-detail'}>record detail</a>:
+    <strong>Who uses it</strong>: whoever owns the record — a buyer
+    editing a PO, an admin fixing vendor details; occasional, high-stakes
+    edits where losing work is unacceptable. <strong>What "done" looks
+    like</strong>: every change saved (or explicitly discarded) with no
+    silent loss. The edit-screen counterpart to
+    <a href={base + '/patterns/record-detail'}>record detail</a>:
     a full purchase-order edit form, composed entirely from existing components —
     <code>.bo-form-section</code> fieldsets, the <code>.bo-form-row</code> auto-fit
     column grid, the line-items data table, and a sticky <code>.bo-form-actions</code>
@@ -88,6 +93,87 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </form>
   </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><strong>Sections</strong> — real <code>&lt;fieldset&gt;</code>s
+      (<code>.bo-form-section</code>); the legend is the group's accessible name, so
+      a screen reader announces "Header, group" before the fields.</li>
+      <li><strong>Rows</strong> — <code>.bo-form-row</code> is an auto-fit grid, so
+      columns collapse by available width with no breakpoint to maintain.</li>
+      <li><strong>Line items</strong> — the
+      <a href={base + '/patterns/editable-grid'}>editable grid</a> nested inside the
+      form; its dirty state is per-row and independent of the header fields.</li>
+      <li><strong>Action bar</strong> — sticky <code>.bo-form-actions</code>;
+      the framework sets <code>scroll-padding-block-end</code> so focus never lands
+      under it.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns</th><th scope="col">On failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /po/:id/edit</td><td>the full form, values filled server-side</td><td>404 → the not-found screen</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /po/:id</td><td>redirect to the record on success</td><td>422 → the SAME form re-rendered with <code>aria-invalid</code> + messages, values preserved</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /po/:id/lines</td><td>one row fragment (editable-grid save)</td><td>422 → that row with its cell error</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Server-side validation is the contract behind
+    <code>aria-invalid</code>: re-render with the user's values, never a blank form,
+    and point <code>aria-describedby</code> at the message. Pair with the
+    <a href={base + '/patterns/validation-summary'}>validation summary</a> when more
+    than two fields can fail at once.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Pristine</td><td>Save enabled (a no-op save is harmless and simpler than tracking every field)</td></tr>
+          <tr><td>Dirty</td><td>an unsaved marker near the action bar; warn on navigate-away via <code>beforeunload</code> — app code, four lines</td></tr>
+          <tr><td>Saving</td><td>action bar buttons disabled + <code>aria-busy</code> on the form</td></tr>
+          <tr><td>Field error</td><td><code>aria-invalid</code> + message, focus moved to the first invalid field</td></tr>
+          <tr><td>Read-only (viewer role)</td><td>render <a href={base + '/components/kv'}>key-value facts</a> instead of inputs — not disabled inputs</td></tr>
+          <tr><td>Conflict (someone else saved)</td><td>409 → banner naming who and when, with reload-or-overwrite; never silently clobber</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Keyboard walkthrough &amp; print</h2>
+    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><kbd class="bo-kbd">Tab</kbd> runs header fields → line items → action bar; the sticky bar never hides the focused field.</li>
+      <li>Inside line items, each cell is a real control — focus IS edit (see <a href={base + '/patterns/editable-grid'}>editable grid</a>).</li>
+      <li><kbd class="bo-kbd">Enter</kbd> in a text field submits the form natively; keep Save as the form's submit button so that stays true.</li>
+      <li>After a failed save, move focus to the first invalid field — the browser does this for native validation; do it yourself for server errors.</li>
+    </ol>
+    <p class="bo-u-text-muted"><strong>Print</strong>: the
+    <a href={base + '/base/print'}>print layer</a> drops the action bar and renders
+    fields as values, so a printed edit screen reads as a document rather than a
+    form.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span> —
+    capture &amp; edit tier.</p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/patterns/editable-grid'}>Editable grid</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/money'}>Money field</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/patterns/validation-summary'}>Validation summary</a></li>
+    </ul>
+  </section>
+
   <Related links={[
     ["/components/form", "Forms"],
     ["/components/data-table", "Data table"],
