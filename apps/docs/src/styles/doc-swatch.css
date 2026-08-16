@@ -1,0 +1,11 @@
+/* Shared color-chip for docs tables (Standardize 2026-08-16: tokens.astro
+   and palettes.astro each hand-rolled one). Width via --doc-swatch-w. */
+.doc-swatch {
+  display: inline-block;
+  inline-size: var(--doc-swatch-w, 1.5em);
+  block-size: calc(var(--doc-swatch-w, 1.5em) * 0.6);
+  border-radius: var(--bo-radius-sm);
+  border: 1px solid var(--bo-color-border-default);
+  vertical-align: -0.15em;
+  margin-inline-end: var(--bo-space-1);
+}

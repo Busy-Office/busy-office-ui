@@ -2365,6 +2365,12 @@ engine-shaped sub-ask refused with the reason.
        dotfile and reported a false negative. Real sliver fixed: the
        local build chain now runs lint:css too (local = CI). Correction
        appended to the grill report.
+5a. [ ] **Toolbar idiom consolidation** (deferred from two Standardize
+       passes with reason): `.bo-data-table__toolbar` hand-rolls the
+       cluster declarations with its own gap scale; richtext's toolbar
+       already composes `.bo-cluster`. Aligning data-table means a
+       markup-contract change on a stable component — batch it with the
+       next Breaking set rather than leaking it from a tidy pass.
 5. [ ] **`.bo-prose` packaging** — cross-cutting surface parked in the
        richtext component file (granular importers must pull editor
        chrome to get prose styles). Waits for a deliberate dist-layout

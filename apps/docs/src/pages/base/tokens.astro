@@ -119,11 +119,11 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
                     <td class="bo-data-table__col--code">--bo-color-{t}</td>
                     <td>{role}</td>
                     <td class="bo-data-table__col--code">
-                      <span class="tok-sw" aria-hidden="true" style={`background:${l.hex}`}></span>
+                      <span class="doc-swatch" aria-hidden="true" style={`background:${l.hex}`}></span>
                       {l.hex}{l.step && <span class="bo-u-text-muted"> (<a href={`${base}/base/colors#${l.step}`}>{l.step}</a>)</span>}
                     </td>
                     <td class="bo-data-table__col--code">
-                      <span class="tok-sw" aria-hidden="true" style={`background:${d.hex}`}></span>
+                      <span class="doc-swatch" aria-hidden="true" style={`background:${d.hex}`}></span>
                       {d.hex}{d.step && <span class="bo-u-text-muted"> (<a href={`${base}/base/colors#${d.step}`}>{d.step}</a>)</span>}
                       {d.hex === l.hex && <span class="bo-u-text-muted"> — same in both themes</span>}
                     </td>
@@ -188,15 +188,6 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
   </section>
 
   <style>
-    .tok-sw {
-      display: inline-block;
-      inline-size: 1.5em;
-      block-size: 1em;
-      border-radius: var(--bo-radius-sm);
-      border: 1px solid var(--bo-color-border-default);
-      vertical-align: -0.15em;
-      margin-inline-end: var(--bo-space-1);
-    }
     h3 { margin-block: var(--bo-space-4) var(--bo-space-2); }
   </style>
 

@@ -155,9 +155,9 @@ const PROFILES: Record<string, string> = {
               {TOKENS.map((t) => (
                 <tr>
                   <td class="bo-data-table__col--code">--bo-color-{t}</td>
-                  <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
+                  <td><span class="doc-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
                   <td class="bo-data-table__col--code">{p.light[t]} <span class="bo-u-text-muted">({p.light[t + '-step']})</span></td>
-                  <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t]}`}></span></td>
+                  <td><span class="doc-swatch" aria-hidden="true" style={`background:${p.dark[t]}`}></span></td>
                   <td class="bo-data-table__col--code">{p.dark[t]} <span class="bo-u-text-muted">({p.dark[t + '-step']})</span></td>
                 </tr>
               ))}
@@ -185,14 +185,7 @@ const PROFILES: Record<string, string> = {
   </section>
 
   <style>
-    .pal-swatch {
-      display: inline-block;
-      inline-size: 2.5em;
-      block-size: 1.25em;
-      border-radius: var(--bo-radius-sm);
-      border: 1px solid var(--bo-color-border-default);
-      vertical-align: middle;
-    }
+    .pal-details .doc-swatch { --doc-swatch-w: 2.5em; vertical-align: middle; }
     .pal-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
