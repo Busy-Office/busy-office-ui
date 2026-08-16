@@ -1,0 +1,82 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const wiring = `// App code, in full: "?" opens the dialog (skip when typing in a field).
+const dlg = document.getElementById('shortcuts-dlg');
+document.addEventListener('keydown', (e) => {
+  if (e.key !== '?' || e.target.closest('input, textarea, select, [contenteditable]')) return;
+  dlg.showModal();
+});`;
+---
+<Gallery title="Pattern: keyboard help">
+  <p class="demo-note">
+    The "?" overlay every keyboard-first tool has: a dialog listing what
+    the keys do, composed entirely from existing pieces —
+    <a href={base + '/components/dialog'}>Dialog</a>,
+    <a href={base + '/components/kv'}>Key-value facts</a> in
+    <code>--rows</code> mode, and the
+    <a href={base + '/components/kbd'}>keycap chip</a>. No new layout,
+    no behavior — one app-code listener.
+  </p>
+
+  <section class="demo">
+    <h2>The dialog</h2>
+    <div class="bo-cluster">
+      <button class="bo-btn bo-btn--secondary" data-dialog-trigger="shortcuts-dlg">
+        Keyboard shortcuts <kbd class="bo-kbd">?</kbd>
+      </button>
+    </div>
+    <dialog class="bo-dialog" id="shortcuts-dlg" aria-labelledby="sh-title" data-state="closed">
+      <form method="dialog">
+        <header class="bo-dialog__header">
+          <h2 class="bo-dialog__title" id="sh-title">Keyboard shortcuts</h2>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
+        </header>
+        <div class="bo-dialog__body">
+          <dl class="bo-kv bo-kv--rows">
+            <div><dt><kbd class="bo-kbd">/</kbd></dt><dd>Focus the filter</dd></div>
+            <div><dt><kbd class="bo-kbd">Enter</kbd></dt><dd>Open the selected row</dd></div>
+            <div><dt><kbd class="bo-kbd">Shift</kbd> + <kbd class="bo-kbd">Enter</kbd></dt><dd>Approve without opening</dd></div>
+            <div><dt><kbd class="bo-kbd">Esc</kbd></dt><dd>Back to the cell</dd></div>
+            <div><dt><kbd class="bo-kbd">?</kbd></dt><dd>This dialog</dd></div>
+          </dl>
+        </div>
+      </form>
+    </dialog>
+    <p class="bo-u-text-muted">Click the button — or press
+    <kbd class="bo-kbd">?</kbd> anywhere on this page (the wiring below
+    runs here). Native <code>&lt;dialog&gt;</code>: focus trap, Esc to
+    close, backdrop for free.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The wiring — app code, not a behavior</h2>
+    <pre><code>{wiring}</code></pre>
+    <p class="bo-u-text-muted">Deliberately not a shipped behavior: which
+    keys an app binds is the app's contract, and a global "?" listener
+    is four lines. The guard matters — never steal
+    <kbd class="bo-kbd">?</kbd> from someone typing in a field. List the
+    shortcuts you actually bind; the framework's own behavior keys are
+    documented (generated) on
+    <a href={base + '/concepts/js-behaviors'}>JS behaviors</a>.</p>
+  </section>
+
+  <script>
+    import { initDialogs } from '@busy-office/ui/js';
+    initDialogs();
+    const dlg = document.getElementById('shortcuts-dlg') as HTMLDialogElement;
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== '?' || (e.target as HTMLElement).closest('input, textarea, select, [contenteditable]')) return;
+      dlg.showModal();
+    });
+  </script>
+
+  <Related links={[
+    ['/components/kbd', 'Keyboard key'],
+    ['/components/dialog', 'Dialog'],
+    ['/components/kv', 'Key-value facts'],
+    ['/concepts/js-behaviors', 'JS behaviors'],
+  ]} />
+</Gallery>

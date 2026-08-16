@@ -44,5 +44,6 @@
 @import "./components/prose/prose.css";
 @import "./components/avatar/avatar.css";
 @import "./components/kv/kv.css";
+@import "./components/kbd/kbd.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

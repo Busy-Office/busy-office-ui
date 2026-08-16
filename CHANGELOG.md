@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- Added: Keyboard key (`.bo-kbd`) — a keycap chip for the native
+  `<kbd>` element (weighted bottom edge, mono, case-preserving even
+  under uppercasing containers) + the "Keyboard help" pattern: the "?"
+  shortcuts dialog composed from Dialog + Key-value facts + the chip,
+  with the four-line app wiring (and its don't-steal-"?"-from-inputs
+  guard) shown, deliberately not shipped as a behavior.
+
 - Added: the 24-range scale system — `--bo-palette-<range>-<step>` raw
   tokens, 11 steps (50–950) per range, generated in OKLCH on a shared
   lightness ladder (generator drift-gated). Two tiers: 9 core ranges in

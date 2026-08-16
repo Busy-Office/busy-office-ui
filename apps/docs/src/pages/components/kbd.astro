@@ -1,0 +1,73 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const basic = `<p>Press <kbd class="bo-kbd">/</kbd> to filter, or
+<kbd class="bo-kbd">Shift</kbd> + <kbd class="bo-kbd">Enter</kbd> to
+approve without opening.</p>`;
+
+const list = `<dl class="bo-kv bo-kv--rows">
+  <div><dt><kbd class="bo-kbd">/</kbd></dt><dd>Focus the filter</dd></div>
+  <div><dt><kbd class="bo-kbd">Enter</kbd></dt><dd>Open the selected row</dd></div>
+  <div><dt><kbd class="bo-kbd">Shift</kbd> + <kbd class="bo-kbd">Enter</kbd></dt><dd>Approve without opening</dd></div>
+  <div><dt><kbd class="bo-kbd">Esc</kbd></dt><dd>Back to the cell</dd></div>
+</dl>`;
+
+const canonical = `<!-- Always on the native <kbd> element — the semantics come free;
+     the class only paints the keycap. Combos are separate chips joined
+     by plain "+" text. -->
+<kbd class="bo-kbd">Shift</kbd> + <kbd class="bo-kbd">Enter</kbd>`;
+---
+<Gallery title="Keyboard key">
+  <p class="demo-note">
+    A keycap chip for the native <code>&lt;kbd&gt;</code> element —
+    shortcut hints in captions, help dialogs, empty states. Em-sized, so
+    it follows the text it sits in; case is preserved
+    (<kbd class="bo-kbd">j</kbd> is not <kbd class="bo-kbd">J</kbd>).
+  </p>
+
+  <section class="demo">
+    <h2>Inline — a hint in running text</h2>
+    <Demo code={basic} />
+    <p class="bo-u-text-muted">The weighted bottom edge is what makes it
+    read as a key. Combos are separate chips joined by a plain
+    <code>+</code> — one chip per physical key.</p>
+  </section>
+
+  <section class="demo">
+    <h2>A shortcut list — composed with Key-value facts</h2>
+    <Demo code={list} />
+    <p class="bo-u-text-muted">
+    <a href={base + '/components/kv'}>.bo-kv --rows</a> aligns keys and
+    descriptions; the chip resets the label uppercase so
+    <kbd class="bo-kbd">Esc</kbd> stays <em>Esc</em>. The full overlay
+    version is the
+    <a href={base + '/patterns/keyboard-help'}>Keyboard help pattern</a>.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <ClassRef component="kbd" />
+  <ApiTable
+    component="kbd"
+    notes={[
+      'Use the native <code>&lt;kbd&gt;</code> element, not a span — screen readers and reader modes already know what it means; the class only paints.',
+      'One chip per physical key; join combos with plain text (<code>+</code>, <code>then</code>) so AT reads the sequence naturally.',
+      'Case is meaningful and preserved — the chip resets any inherited <code>text-transform</code> (a grid label context uppercases otherwise).',
+      'Forced colors: the border is the boundary and borders survive — no special-casing needed.',
+      'Show the keys your app actually binds — the framework documents its own behavior keys on <a href="' + base + '/concepts/js-behaviors">JS behaviors</a> (generated from the same source the behaviors use).',
+    ]}
+  />
+  <Related links={[
+    ['/patterns/keyboard-help', 'Keyboard help dialog'],
+    ['/components/kv', 'Key-value facts'],
+    ['/concepts/js-behaviors', 'JS behaviors (generated keymap)'],
+  ]} />
+</Gallery>

@@ -2450,9 +2450,21 @@ no-cache on HTML (revalidate every load; ETags make it cheap) and
 immutable/1y on /_astro (content-hashed). Verified live. Residual: a
 load during the seconds a rebuild is writing dist can still catch a
 half-written tree, but it now self-heals on the next NORMAL load — no
-hard refresh, no pinning.
+hard refresh, no pinning. **THIRD LEG — the reproducible core (owner
+report: recurs after refresh + navigate-away-and-back, Safari AND
+Chrome) — root-caused and fixed**: the docs shell navigates with
+hx-boost swapping only #main-content, and Astro INLINES small page
+styles into <head> — so every boosted sidebar navigation delivered the
+colors grid markup without its styles (repro loop: 30/30 broken on
+link-click arrival, 0/30 on direct loads). Fix: htmx head-support
+extension merges the incoming page's head on boosted swaps —
+dynamically imported after window.htmx exists (a static import hoists
+above the assignment and throws, proven by pageerror capture). Repro
+loop after fix: 0/30; boosted 7-hop tour incl. the exact
+away-and-back path: all pages styled, zero page errors. The two
+caching legs were real defects but not this bug's core.
 
-8. [ ] **Keyboard chip (`.bo-kbd`) + shortcuts-help pattern** —
+8. [x] **Keyboard chip (`.bo-kbd`) + shortcuts-help pattern** — DONE 2026-08-16 (own recipe page; pattern page with live "?" wiring incl. the input guard, verified: ? opens / field-typed ? ignored / Esc closes / case preserved; trigger wrapped in cluster after a stretch find). —
        graduated from the 2026-08-16 Explore spike (static spike
        against the built dist, both themes verified). The gap: the
        framework GENERATES keymap.json and ships keyboard-first

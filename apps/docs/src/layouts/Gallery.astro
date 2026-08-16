@@ -103,6 +103,7 @@ const sections = [
       { href: '/components/tabs', label: 'Tabs' },
       { href: '/components/dialog', label: 'Dialog' },
       { href: '/components/icon', label: 'Icon' },
+      { href: '/components/kbd', label: 'Keyboard key' },
     ],
   },
   // Patterns grouped by ERP workflow mode (2026-08-16, docs-IA pass 2 —
@@ -132,6 +133,7 @@ const sections = [
       { href: '/patterns/settings-admin', label: 'Settings & admin' },
       { href: '/patterns/app-launch', label: 'App launch' },
       { href: '/patterns/login', label: 'Login' },
+      { href: '/patterns/keyboard-help', label: 'Keyboard help' },
     ],
   },
   {
@@ -179,7 +181,8 @@ const current =
       document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? 'light';
     </script>
   </head>
-  <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML">
+  <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML"
+        hx-ext="head-support">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <style>
       /* First focusable element in the DOM, visually hidden until focused —
@@ -403,6 +406,14 @@ const current =
       window.htmx = htmx; // the ESM build only default-exports; other
                            // is:inline scripts (the Pagefind result-boost
                            // fix below) need window.htmx to call .process().
+      // head-support: boosted swaps replace #main-content but DROP the
+      // incoming page's <head> — and Astro inlines small page styles into
+      // head, so pages like /base/colors arrived unstyled on every sidebar
+      // navigation (owner P0, third leg; the caching fixes were real but
+      // this was the reproducible core). DYNAMIC import: a static import
+      // hoists above the window.htmx assignment and the ext throws
+      // "htmx is not defined" (proven by the repro loop's pageerror).
+      await import('htmx.org/dist/ext/head-support.js');
       import { initDialogs } from '@busy-office/ui/js';
       initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
                       // delegation, so it keeps working across boosted swaps
