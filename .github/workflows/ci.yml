@@ -30,3 +30,7 @@ jobs:
       # first landing: placed before the build, so dist did not exist.)
       - name: Overflow sweep (390 + 150% zoom, all pages)
         run: npm run check:overflow -w docs
+      # Documented behaviour must be true — prose that asserts runtime
+      # behaviour is a hypothesis until something runs it (2026-08-17).
+      - name: Documented-claims check
+        run: npm run check:claims -w docs

@@ -2827,6 +2827,22 @@ gained an "expected non-2xx responses" section covering 409 and 422
 (the validation-summary path has the same hazard). Lesson recorded:
 guidance that has never been run is a hypothesis — dogfood it.
 
+**Explore 2026-08-17 (second) — documented-claims gate, GRADUATED.**
+Follow-on from the dogfood find: turned five load-bearing doc claims
+into live assertions (Cancel reverts derived totals; data-loading
+blocks interaction; the skip link lands after the 264-swatch grid;
+read-only rich text stays keyboard-reachable; "?" opens the shortcuts
+dialog but never while typing). All five hold — but the FIRST version
+of the probe reported a false failure because it dispatched a
+synthetic keydown on `document`, which no delegated handler matches;
+fixed to drive real key events, and that lesson is now in the file's
+header and CLAUDE.md. Red-proved (removed a tabindex → gate failed with
+the exact reason), wired into CI as `check:claims`. Cheap to extend:
+one entry per behavioural claim. Not yet covered: the 422 swap claim
+added last wake — it needs a server that returns 422, so it belongs in
+a po-app harness; recorded as the next dogfood target rather than
+asserted.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
