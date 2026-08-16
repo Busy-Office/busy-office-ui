@@ -83,15 +83,19 @@ const markup = `<table class="bo-data-table" data-row-edit>
 <Gallery title="Pattern: editable grid">
   <p class="demo-note">
     Line-item entry — a PO, an invoice, a pick list — composed entirely from
-    existing pieces: <a href={base + '/components/data-table'}>multi-row inline edit</a>
-    for dirty/save-per-row, a <a href={base + '/components/combobox'}>combobox</a> in a
-    cell for item lookup, the standard <a href={base + '/components/form'}>form-field
-    error contract</a> at cell granularity, and plain app code for add/remove
-    line (the framework has no opinion on where a new row comes from). Zero
-    new CSS, zero new JS behaviors.
+    existing pieces, presented as a graded path. <strong>Simple</strong>:
+    plain text/number cells with dirty-state + Save/Cancel — that's the
+    <a href={base + '/components/data-table'}>data-table page's multi-row
+    inline edit</a>, start there. <strong>Medium</strong> (first demo below):
+    a combobox lookup cell, cell-level validation, add/remove lines.
+    <strong>Advanced</strong>: every cell type, realtime totals, and the
+    save-per-change mode. <strong>The full picture</strong>: a composite PO
+    line-items editor putting all of it in one table. Zero new CSS at every
+    step — the grid is the same primitives, composed harder.
   </p>
 
   <section class="demo">
+    <h2>Medium — combobox lookup cells, validation, add/remove lines</h2>
     <table class="bo-data-table" data-row-edit id="eg-table">
       <thead><tr>
         <th scope="col">Item</th>
@@ -173,7 +177,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
   </section>
 
   <script>
-    import { initRowEdit, initCombobox, initMoneyField, initQuantity, initTableSum, initTagInput } from '@busy-office/ui/js';
+    import { initRowEdit, initCombobox, initMoneyField, initQuantity, initTableSum, initTagInput, currencyDecimals } from '@busy-office/ui/js';
     // One consolidated init block — this page demos five behaviors, all
     // document-level delegations, called once each in any order.
     initRowEdit();
@@ -243,6 +247,38 @@ const markup = `<table class="bo-data-table" data-row-edit>
         const log = document.getElementById('eg-live-log')!;
         log.textContent = `Saved ${rowId} at ${new Date().toLocaleTimeString()} — wire this to fetch/hx-patch in a real app.`;
       }
+    });
+
+    // Composite editor: line totals + grand total are CUSTOM math on the
+    // bo:cell-change feed (qty × price, formatted per that row's currency
+    // via the exported currencyDecimals) — the half of the subtotal
+    // contract data-sum-of can't express. Restores announce themselves,
+    // so Cancel walks the computed cells back through this same listener.
+    const compTable = document.getElementById('eg-comp-table');
+    function recomputeComposite() {
+      if (!compTable) return;
+      const currencies = new Set<string>();
+      let grand = 0;
+      let grandDecimals = 0;
+      for (const row of compTable.querySelectorAll('tbody tr')) {
+        const qty = Number((row.querySelector('[name="qty"]') as HTMLInputElement)?.value) || 0;
+        const price = Number((row.querySelector('[name="price"]') as HTMLInputElement)?.value) || 0;
+        const cur = (row.querySelector('[name="cur"]') as HTMLSelectElement)?.value ?? 'USD';
+        const d = currencyDecimals(cur);
+        const total = qty * price;
+        const cell = row.querySelector('[data-line-total]');
+        if (cell) cell.textContent = total.toFixed(d);
+        currencies.add(cur);
+        grand += total;
+        grandDecimals = Math.max(grandDecimals, d);
+      }
+      const grandCell = document.getElementById('comp-grand');
+      if (grandCell)
+        grandCell.textContent =
+          currencies.size === 1 ? grand.toFixed(grandDecimals) : 'mixed';
+    }
+    document.addEventListener('bo:cell-change', (e) => {
+      if ((e.target as Element).closest('#eg-comp-table')) recomputeComposite();
     });
   </script>
 
@@ -414,6 +450,122 @@ const markup = `<table class="bo-data-table" data-row-edit>
     </table>
     <p class="bo-u-text-muted" id="eg-live-log" aria-live="polite">No saves yet —
     change the status or toggle Rush.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The full picture — a PO line-items editor</h2>
+    <p>Everything above in one table, the generic shape of real ERP line
+    entry: product dropdown, quantity with a unit select, price with a
+    currency select, computed line totals, tag cost centers — dirty
+    tracking, Cancel, and both subtotal modes all working together. Line
+    totals are <strong>custom math</strong> (qty × price via
+    <code>bo:cell-change</code>, formatted with the exported
+    <code>currencyDecimals()</code>); the Qty column total is
+    <strong>auto-sum</strong> (<code>data-sum-of</code>). Grand total shows
+    "mixed" if row currencies differ — a totals decision the framework
+    correctly leaves to you.</p>
+    <table class="bo-data-table" data-row-edit id="eg-comp-table">
+      <thead><tr>
+        <th scope="col">Product</th>
+        <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+        <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+        <th scope="col" class="bo-data-table__col--numeric">Line total</th>
+        <th scope="col">Cost centers</th>
+        <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
+      </tr></thead>
+      <tbody>
+        <tr data-row-id="PO-L1">
+          <td>
+            <select class="bo-select" name="product" aria-label="Product">
+              <option selected>Steel bracket, 40mm</option>
+              <option>Steel bracket, 60mm</option>
+              <option>Hydraulic pump, 20 bar</option>
+            </select>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-quantity" style="max-inline-size: 13rem">
+              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+              <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="4" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
+              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+              <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+                <option selected>each</option><option>box</option><option>kg</option>
+              </select>
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-money">
+              <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
+                <option selected>USD</option><option>SGD</option><option>JPY</option>
+              </select>
+              <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="12.40" aria-label="Unit price" />
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric" data-line-total>49.60</td>
+          <td>
+            <div class="bo-tag-input" id="comp-1-tags" role="group" aria-label="Cost centers">
+              <span class="bo-tag-input__tag">CC-4021<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button></span>
+              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+          </td>
+        </tr>
+        <tr data-row-id="PO-L2">
+          <td>
+            <select class="bo-select" name="product" aria-label="Product">
+              <option>Steel bracket, 40mm</option>
+              <option selected>Hydraulic pump, 20 bar</option>
+            </select>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-quantity" style="max-inline-size: 13rem">
+              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+              <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="2" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
+              <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+              <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+                <option selected>each</option><option>box</option>
+              </select>
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric">
+            <div class="bo-money">
+              <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
+                <option selected>USD</option><option>SGD</option><option>JPY</option>
+              </select>
+              <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="860.00" aria-label="Unit price" />
+            </div>
+          </td>
+          <td class="bo-data-table__col--numeric" data-line-total>1720.00</td>
+          <td>
+            <div class="bo-tag-input" id="comp-2-tags" role="group" aria-label="Cost centers">
+              <span class="bo-tag-input__tag">CC-1180<button class="bo-tag-input__remove" type="button" aria-label="Remove CC-1180">×</button></span>
+              <input class="bo-tag-input__field" type="text" placeholder="Add…" aria-label="Add cost center" />
+            </div>
+          </td>
+          <td class="bo-data-table__row-edit-actions">
+            <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+            <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
+            <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="bo-data-table__col--right">Total qty</td>
+          <td class="bo-data-table__col--numeric" data-sum-of="qty" aria-live="polite">6</td>
+          <td class="bo-data-table__col--right">Grand total</td>
+          <td class="bo-data-table__col--numeric" id="comp-grand" aria-live="polite">1769.60</td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+    <p class="bo-u-text-muted">Try it: step a quantity or switch a currency —
+    the line total re-derives per that row's currency decimals, the grand
+    total follows, and Cancel walks everything back including the computed
+    cells (restores announce themselves, so the same listener recomputes).</p>
   </section>
 
   <section class="demo">

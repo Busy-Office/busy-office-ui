@@ -1575,7 +1575,7 @@ baselines, 57 tests, stylelint, live in both themes — click-toggle, real
 keyboard arrow-navigation between radios, focus ring on the correct element,
 disabled-segment state.
 
-## Slice 18 — money & editable-table depth (user wishlist, 2026-08-16)
+## Done — Slice 18: money & editable-table depth (user wishlist, all 5 items shipped 2026-08-16)
 
 Triaged 2026-08-16 from a 4-item user wishlist, refined interactively before
 queuing (4 design forks put to the user + a codebase audit of what already
@@ -1717,14 +1717,26 @@ SQLite-for-roadmap considered and declined per the storage doctrine
        working), chips restored on Cancel, live-mode save log firing,
        zero console errors; landing-page baselines regenerated (stat
        line: 20 behaviors · 9 events), stable across 2 re-runs.
-5. [ ] **Docs progression: simple → medium → complex** — restructure the
-       editable-table story as a graded sequence (per the user: reflect
-       real ERP usage, keep samples generic), ending in a composite
-       generic-ERP line-items editor: dropdown product, qty+unit,
-       price+currency, tag cost-centers, live totals, choice of save
-       model. Accept: the sequence reads as one coherent path across the
-       data-table/editable-grid pages; the composite demo works live
-       end-to-end; page-shape gate green.
+5. [x] **Docs progression: simple → medium → complex** — shipped
+       2026-08-16, Accept met; **Slice 18 complete**. The editable-table
+       story now reads as one graded path: the data-table page's inline-
+       edit section is framed as the *simple* start and forward-links the
+       continuation; the editable-grid pattern opens with the progression
+       map (simple → medium → advanced → full picture), its first demo
+       titled *Medium*; and a new composite **PO line-items editor**
+       closes it: product dropdown, quantity+unit-select, price+currency,
+       computed line totals (custom math on `bo:cell-change`, formatted
+       per-row via the exported `currencyDecimals()`), tag cost centers,
+       auto-sum qty total, and a grand total that honestly shows "mixed"
+       when row currencies differ (a totals decision the framework
+       correctly leaves to the app). Live-verified end-to-end with real
+       interactions: stepping qty via the button recomputed line 49.60 →
+       62.00 and grand 1769.60 → 1782.00; switching a row to JPY
+       reformatted price AND line total to 0 decimals with grand →
+       "mixed"; Cancel walked every computed cell back (the
+       announce-on-restore feed doing exactly what it was built for).
+       Both themes, zero console errors, both link checks (plain +
+       DOCS_BASE), page-shape gate green.
 
 ## Explore log
 
