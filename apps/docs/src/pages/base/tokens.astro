@@ -1,0 +1,195 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import contrast from '@busy-office/ui/contrast';
+import scales from '@busy-office/ui/scales';
+import { readFileSync } from 'node:fs';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// GENERATED from the shipped semantic tier (tokens/color.css) — each
+// token row shows its resolved value per theme, cross-linked to the raw
+// scale step it aliases (research choice 5: close the palette↔token
+// page-hop gap). Parsed at build; an unresolvable alias fails the build.
+const css = readFileSync(new URL('../../../../../packages/core/src/css/tokens/color.css', import.meta.url), 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '');
+const darkStart = css.indexOf('[data-theme="dark"]');
+if (darkStart === -1) throw new Error('tokens: color.css lost its dark block');
+const parseVars = (block: string) => {
+  const out: Record<string, string> = {};
+  for (const m of block.matchAll(/(--bo-color-[a-z-]+):\s*([^;]+);/g)) out[m[1]] = m[2].trim();
+  return out;
+};
+const lightVars = parseVars(css.slice(0, darkStart));
+const darkVars = { ...lightVars, ...parseVars(css.slice(darkStart)) };
+function resolve(value: string, vars: Record<string, string>): { hex: string; step?: string } {
+  const pal = value.match(/^var\(--bo-palette-([a-z]+)-(\d+)\)$/);
+  if (pal) {
+    const hex = scales.ranges[pal[1]]?.steps[pal[2]];
+    if (!hex) throw new Error(`tokens: ${value} does not resolve to a scale step`);
+    return { hex, step: `${pal[1]}-${pal[2]}` };
+  }
+  const sem = value.match(/^var\((--bo-color-[a-z-]+)\)$/);
+  if (sem) return resolve(vars[sem[1]], vars);
+  return { hex: value };
+}
+
+// Role text keyed by token; grouped for the table. Only documented
+// (component-consumed) tokens are listed — the CSS stays the source of
+// the VALUES, this page adds the role words.
+const GROUPS: [string, [string, string][]][] = [
+  ['Backgrounds', [
+    ['bg-canvas', 'the page itself, behind everything'],
+    ['bg-surface', 'cards, panels, table bodies'],
+    ['bg-surface-raised', 'popovers, dropdowns, dialogs'],
+    ['bg-muted', 'subdued fills: table stripes, wells, disabled fields'],
+    ['bg-hover', 'opaque hover fill (sticky cells that must cover content)'],
+    ['bg-selected', 'the selected row/item fill'],
+  ]],
+  ['Borders', [
+    ['border-default', 'hairlines: table rules, card edges'],
+    ['border-strong', 'emphasized dividers'],
+    ['border-control', 'input/select boundaries (≥3:1 against surface)'],
+  ]],
+  ['Text', [
+    ['text-primary', 'body text'],
+    ['text-secondary', 'supporting text'],
+    ['text-muted', 'captions, hints (still AA on muted fills)'],
+    ['text-disabled', 'disabled labels — decorative only'],
+    ['text-inverse', 'text on solid accent/status fills'],
+  ]],
+  ['Accent (brand)', [
+    ['accent', 'the brand color — links, active nav'],
+    ['accent-strong', 'hover/active accent'],
+    ['accent-solid', 'solid fills carrying text-inverse'],
+    ['accent-subtle', 'tinted accent backgrounds'],
+    ['accent-text', 'accent-colored text on surfaces'],
+    ['focus-ring', 'the keyboard focus indicator'],
+  ]],
+  ['Status', [
+    ['danger', 'errors, destructive actions'],
+    ['danger-subtle', 'danger-tinted backgrounds'],
+    ['danger-text', 'danger text on surfaces'],
+    ['warning-strong', 'warning fills and emphasis'],
+    ['warning-subtle', 'warning-tinted backgrounds'],
+    ['warning-text', 'warning text on surfaces'],
+    ['success', 'confirmations, positive states'],
+    ['success-subtle', 'success-tinted backgrounds'],
+    ['success-text', 'success text on surfaces'],
+  ]],
+];
+for (const [group, rows] of GROUPS)
+  for (const [t] of rows)
+    if (!(('--bo-color-' + t) in lightVars)) throw new Error(`tokens: documented token --bo-color-${t} (${group}) not found in color.css`);
+
+const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12];
+const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-color-' + t], vars);
+---
+<Gallery title="Design tokens">
+  <p class="demo-note">
+    The semantic tier — what components actually consume. Each token
+    resolves per theme to a <a href={base + '/base/colors'}>scale step</a>
+    (or a deliberate literal); status colors carry meaning and are never
+    re-skinned by <a href={base + '/base/palettes'}>palettes</a>.
+  </p>
+
+  <section class="demo">
+    <h2>Color tokens</h2>
+    {GROUPS.map(([group, rows]) => (
+      <>
+        <h3>{group}</h3>
+        <div class="bo-data-table-container" tabindex="0">
+          <table class="bo-data-table" data-density="compact">
+            <caption class="bo-visually-hidden">{group} tokens</caption>
+            <thead><tr>
+              <th scope="col">Token</th>
+              <th scope="col">Role</th>
+              <th scope="col">Light</th>
+              <th scope="col">Dark</th>
+            </tr></thead>
+            <tbody>
+              {rows.map(([t, role]) => {
+                const l = cell(t, lightVars); const d = cell(t, darkVars);
+                return (
+                  <tr>
+                    <td class="bo-data-table__col--code">--bo-color-{t}</td>
+                    <td>{role}</td>
+                    <td class="bo-data-table__col--code">
+                      <span class="tok-sw" aria-hidden="true" style={`background:${l.hex}`}></span>
+                      {l.hex}{l.step && <span class="bo-u-text-muted"> (<a href={base + '/base/colors'}>{l.step}</a>)</span>}
+                    </td>
+                    <td class="bo-data-table__col--code">
+                      <span class="tok-sw" aria-hidden="true" style={`background:${d.hex}`}></span>
+                      {d.hex}{d.step && <span class="bo-u-text-muted"> (<a href={base + '/base/colors'}>{d.step}</a>)</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>
+    ))}
+    <p class="bo-u-text-muted">Dark literals (the <code>#1a1d23</code>-family
+    surfaces) are deliberate: dark surfaces are tuned as a set rather than
+    aliased to gray steps, so elevation reads as a ladder. That tuning is
+    inside the semantic contract — apps never need to reproduce it.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Spacing scale</h2>
+    {spaces.map((s) => (
+      <div style="display:flex;align-items:center;gap:1rem">
+        <code style="inline-size:8rem;font-size:var(--bo-font-size-xs)">--bo-space-{s}</code>
+        <span style={`display:inline-block;block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${s})`}></span>
+      </div>
+    ))}
+  </section>
+
+  <section class="demo">
+    <h2>Contrast ratios <span class="bo-badge">generated & CI-gated</span></h2>
+    <p class="bo-u-text-muted">Computed from the shipped token values by
+    <code>check-contrast.mjs</code> on every build — the build fails if any pair
+    drops below its threshold, so these numbers cannot drift.</p>
+    {Object.entries(contrast.themes).map(([theme, pairs]) => (
+      <div class="bo-data-table-container" tabindex="0">
+        <table class="bo-data-table" data-density="compact">
+          <caption class="bo-visually-hidden">{theme} theme contrast ratios</caption>
+          <thead><tr><th scope="col">{theme}</th><th scope="col">on</th><th scope="col" class="bo-data-table__col--numeric">ratio</th><th scope="col" class="bo-data-table__col--numeric">min</th><th scope="col">result</th></tr></thead>
+          <tbody>
+            {pairs.filter((p: any) => !p.skipped).map((p: any) => (
+              <tr>
+                <td class="bo-data-table__col--code">{p.fg.replace('--bo-color-', '')} <span class="bo-u-text-muted">{p.fgValue}</span></td>
+                <td class="bo-data-table__col--code">{p.bg.replace('--bo-color-', '')} <span class="bo-u-text-muted">{p.bgValue}</span></td>
+                <td class="bo-data-table__col--numeric">{p.ratio}</td>
+                <td class="bo-data-table__col--numeric">{p.threshold}</td>
+                <td><span class={`bo-badge bo-badge--${p.pass ? 'success' : 'danger'}`}>{p.pass ? 'AA pass' : 'FAIL'}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+  </section>
+
+  <section class="demo">
+    <h2>Density aliases</h2>
+    <p class="demo-note">Components size themselves from <code>--bo-density-*</code>
+    aliases only. Flip the header selector and watch the control below.</p>
+    <button class="bo-btn">Density-aware control</button>
+  </section>
+
+  <style>
+    .tok-sw {
+      display: inline-block;
+      inline-size: 1.5em;
+      block-size: 1em;
+      border-radius: var(--bo-radius-sm);
+      border: 1px solid var(--bo-color-border-default);
+      vertical-align: -0.15em;
+      margin-inline-end: var(--bo-space-1);
+    }
+    h3 { margin-block: var(--bo-space-4) var(--bo-space-2); }
+  </style>
+
+  <Related links={[["/base/colors", "Color scales"], ["/concepts/tokens", "Design tokens (concept)"], ["/concepts/accessibility", "Accessibility model"]]} />
+</Gallery>

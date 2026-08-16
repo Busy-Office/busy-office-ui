@@ -1,66 +1,178 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
-import contrast from '@busy-office/ui/contrast';
-const tok = (t: string) => t.replace('--bo-color-', '');
-const colors = [
-  'bg-canvas', 'bg-surface', 'bg-muted', 'bg-selected', 'border-default', 'border-strong',
-  'text-primary', 'text-secondary', 'text-muted', 'accent', 'accent-subtle',
-  'danger', 'danger-subtle', 'warning', 'warning-subtle', 'success', 'success-subtle',
+// GENERATED from the shipped manifest (dist/scales.json, the same file
+// the generator drift-gates) — the grid IS the palette, never hand-painted.
+import scales from '@busy-office/ui/scales';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const steps: number[] = scales.steps;
+const ranges = Object.entries(scales.ranges) as [string, { tier: string; steps: Record<string, string> }][];
+const core = ranges.filter(([, r]) => r.tier === 'core');
+const extended = ranges.filter(([, r]) => r.tier === 'extended');
+
+// Every step has a documented ROLE, adjacent to the grid (research
+// choice 3): the annotation row spans step columns so the grid
+// self-explains. Spans are [firstStep, lastStep, label].
+const ROLES: [number, number, string][] = [
+  [50, 100, 'backgrounds'],
+  [200, 300, 'hover · selected'],
+  [400, 400, 'borders'],
+  [500, 600, 'solid · action'],
+  [700, 950, 'text'],
 ];
-const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12];
+const colFor = (s: number) => steps.indexOf(s) + 2; // col 1 = range name
 ---
-<Gallery title="Design tokens">
+<Gallery title="Color scales">
+  <p class="demo-note">
+    The raw palette: 24 ranges × 11 steps, generated in OKLCH on a shared
+    lightness ladder — the same step number carries the same visual weight
+    in every range. Click any swatch to copy its variable
+    (<kbd>Shift</kbd>+click for the hex). Semantic
+    <a href={base + '/base/tokens'}>design tokens</a> and
+    <a href={base + '/base/palettes'}>brand palettes</a> are aliases into
+    these steps.
+  </p>
+
   <section class="demo">
-    <h2>Semantic colors</h2>
-    <div class="bo-grid" style="--bo-grid-min: 11rem">
-      {colors.map((c) => (
-        <div style="display:flex;align-items:center;gap:.5rem">
-          <span style={`inline-size:2rem;block-size:2rem;border-radius:var(--bo-radius-sm);border:1px solid var(--bo-color-border-strong);background:var(--bo-color-${c})`}></span>
-          <code style="font-size:var(--bo-font-size-xs)">--bo-color-{c}</code>
+    <h2>The scale grid</h2>
+    <div class="scale-scroll" tabindex="0">
+      <div class="scale-grid" style={`--cols: ${steps.length}`}>
+        <div class="scale-roles" aria-hidden="true">
+          {ROLES.map(([a, b, label]) => (
+            <span class="scale-role" style={`grid-column: ${colFor(a)} / ${colFor(b) + 1}`}>{label}</span>
+          ))}
         </div>
-      ))}
-    </div>
-  </section>
-  <section class="demo">
-    <h2>Spacing scale</h2>
-    {spaces.map((s) => (
-      <div style="display:flex;align-items:center;gap:1rem">
-        <code style="inline-size:8rem;font-size:var(--bo-font-size-xs)">--bo-space-{s}</code>
-        <span style={`display:inline-block;block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${s})`}></span>
-      </div>
-    ))}
-  </section>
-  <section class="demo">
-    <h2>Contrast ratios <span class="bo-badge">generated & CI-gated</span></h2>
-    <p class="bo-u-text-muted">Computed from the shipped token values by
-    <code>check-contrast.mjs</code> on every build — the build fails if any pair
-    drops below its threshold, so these numbers cannot drift.</p>
-    {Object.entries(contrast.themes).map(([theme, pairs]) => (
-      <div class="bo-data-table-container" tabindex="0">
-        <table class="bo-data-table" data-density="compact">
-          <caption class="bo-visually-hidden">{theme} theme contrast ratios</caption>
-          <thead><tr><th scope="col">{theme}</th><th scope="col">on</th><th scope="col" class="bo-data-table__col--numeric">ratio</th><th scope="col" class="bo-data-table__col--numeric">min</th><th scope="col">result</th></tr></thead>
-          <tbody>
-            {pairs.filter((p: any) => !p.skipped).map((p: any) => (
-              <tr>
-                <td class="bo-data-table__col--code">{tok(p.fg)} <span class="bo-u-text-muted">{p.fgValue}</span></td>
-                <td class="bo-data-table__col--code">{tok(p.bg)} <span class="bo-u-text-muted">{p.bgValue}</span></td>
-                <td class="bo-data-table__col--numeric">{p.ratio}</td>
-                <td class="bo-data-table__col--numeric">{p.threshold}</td>
-                <td><span class={`bo-badge bo-badge--${p.pass ? 'success' : 'danger'}`}>{p.pass ? 'AA pass' : 'FAIL'}</span></td>
-              </tr>
+        <div class="scale-head" aria-hidden="true">
+          <span></span>
+          {steps.map((s) => <span>{s}</span>)}
+        </div>
+        <div class="scale-tier"><strong>Core</strong> — in the default bundle</div>
+        {core.map(([name, r]) => (
+          <div class="scale-row">
+            <span class="scale-name">{name}</span>
+            {steps.map((s) => (
+              <button type="button" class="scale-sw" style={`background:${r.steps[s]}`}
+                data-var={`var(--bo-palette-${name}-${s})`} data-hex={r.steps[s]}
+                title={`${name}-${s} · ${r.steps[s]}`}
+                aria-label={`Copy ${name} ${s} (${r.steps[s]})`}></button>
             ))}
-          </tbody>
-        </table>
+          </div>
+        ))}
+        <div class="scale-tier"><strong>Extended</strong> — opt-in:
+          <code>@import "@busy-office/ui/css/scales";</code></div>
+        {extended.map(([name, r]) => (
+          <div class="scale-row">
+            <span class="scale-name">{name}</span>
+            {steps.map((s) => (
+              <button type="button" class="scale-sw" style={`background:${r.steps[s]}`}
+                data-var={`var(--bo-palette-${name}-${s})`} data-hex={r.steps[s]}
+                title={`${name}-${s} · ${r.steps[s]}`}
+                aria-label={`Copy ${name} ${s} (${r.steps[s]})`}></button>
+            ))}
+          </div>
+        ))}
       </div>
-    ))}
+    </div>
+    <div class="scale-toast" role="status" aria-live="polite"></div>
+    <p class="bo-u-text-muted">Step roles, in words: <strong>50–100</strong>
+    page and panel backgrounds · <strong>200–300</strong> hover and selected
+    fills · <strong>400</strong> borders and dividers ·
+    <strong>500–600</strong> solid fills that carry white text ·
+    <strong>700–950</strong> text on light backgrounds. The extremes flip
+    roles in dark mode — that pairing is the semantic tier's job, not
+    yours.</p>
   </section>
+
   <section class="demo">
-    <h2>Density aliases</h2>
-    <p class="demo-note">Components size themselves from <code>--bo-density-*</code>
-    aliases only. Flip the header selector and watch the control below.</p>
-    <button class="bo-btn">Density-aware control</button>
+    <h2>How to use a step</h2>
+    <p>Reach for a <a href={base + '/base/tokens'}>semantic token</a> first
+    — it already resolves to the right step in both themes. Use a raw step
+    directly only for app-specific surfaces the semantic tier doesn't name
+    (a chart series, a calendar category, a tag color). The raw tier is
+    <strong>explicitly not semver API</strong> (see
+    <a href={base + '/getting-started/versioning'}>versioning</a>): step
+    values may be retuned in minor versions; the semantic tier is the
+    stable contract.</p>
+    <pre><code>{`.chart-series--revenue { stroke: var(--bo-palette-blue-500); }
+.tag--logistics { background: var(--bo-palette-mist-100); color: var(--bo-palette-mist-800); }`}</code></pre>
   </section>
-  <Related links={[["/concepts/tokens", "Design tokens"], ["/concepts/accessibility", "Accessibility model"]]} />
+
+  <style>
+    .scale-scroll { overflow-x: auto; }
+    .scale-grid {
+      display: grid;
+      grid-template-columns: max-content repeat(var(--cols), minmax(3rem, 1fr));
+      gap: 2px;
+      min-inline-size: 46rem;
+    }
+    .scale-roles, .scale-head, .scale-row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; gap: 2px; }
+    .scale-roles .scale-role {
+      border-block-start: 2px solid var(--bo-color-border-strong);
+      color: var(--bo-color-text-muted);
+      font-size: var(--bo-font-size-xs);
+      text-align: center;
+      padding-block-start: var(--bo-space-1);
+    }
+    .scale-head span {
+      font-family: var(--bo-font-mono);
+      font-size: var(--bo-font-size-xs);
+      color: var(--bo-color-text-muted);
+      text-align: center;
+    }
+    .scale-tier {
+      grid-column: 1 / -1;
+      font-size: var(--bo-font-size-sm);
+      color: var(--bo-color-text-muted);
+      border-block-end: 1px dashed var(--bo-color-border-default);
+      padding-block: var(--bo-space-2) var(--bo-space-1);
+    }
+    .scale-name {
+      font-family: var(--bo-font-mono);
+      font-size: var(--bo-font-size-xs);
+      text-align: end;
+      padding-inline-end: var(--bo-space-2);
+      align-self: center;
+    }
+    .scale-sw {
+      aspect-ratio: 2.1 / 1;
+      border: none;
+      border-radius: var(--bo-radius-sm);
+      cursor: pointer;
+      padding: 0;
+    }
+    .scale-sw:hover { outline: 2px solid var(--bo-color-accent); outline-offset: 1px; }
+    .scale-toast {
+      font-family: var(--bo-font-mono);
+      font-size: var(--bo-font-size-xs);
+      min-block-size: 1.5em;
+      margin-block-start: var(--bo-space-2);
+      color: var(--bo-color-text-secondary);
+    }
+    .scale-toast:not(:empty) {
+      display: inline-block;
+      background: var(--bo-color-bg-muted);
+      border: 1px solid var(--bo-color-border-default);
+      border-radius: var(--bo-radius-sm);
+      padding: var(--bo-space-1) var(--bo-space-2);
+    }
+  </style>
+
+  <script>
+    // Click-to-copy (research choice 2): default copies the VAR NAME,
+    // shift+click the hex; the toast (visible + aria-live) always shows
+    // exactly what landed on the clipboard.
+    document.addEventListener('click', (e) => {
+      const sw = (e.target as HTMLElement).closest<HTMLElement>('.scale-sw');
+      if (!sw) return;
+      const text = (e as MouseEvent).shiftKey ? sw.dataset.hex! : sw.dataset.var!;
+      navigator.clipboard?.writeText(text).then(() => {
+        const toast = document.querySelector('.scale-toast')!;
+        toast.textContent = `copied ${text}`;
+        setTimeout(() => { if (toast.textContent === `copied ${text}`) toast.textContent = ''; }, 2500);
+      });
+    });
+  </script>
+
+  <Related links={[["/base/tokens", "Design tokens"], ["/base/palettes", "Palettes"], ["/concepts/theming", "Theming & dark mode"]]} />
 </Gallery>

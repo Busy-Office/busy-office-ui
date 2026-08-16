@@ -58,58 +58,92 @@ const palettes = Object.entries(files).map(([path, css]) => {
   const dark = resolveBlock(parseBlock(parts[1]), 'dark');
   return { name, light, dark };
 }).sort((a, b) => a.name.localeCompare(b.name));
+// ERP buyer profile per preset — the words a builder picks WITH, shown
+// on the card (owner lineup decision 2026-08-16).
+const PROFILES: Record<string, string> = {
+  graphite: 'monochrome premium — modern back-office',
+  cobalt: 'the enterprise blue',
+  navy: 'deep, conservative — banking & government',
+  forest: 'operations green — finance & logistics',
+  indigo: 'modern SaaS',
+  violet: 'analytics & BI',
+};
 ---
 <Gallery title="Palettes">
   <p class="demo-note">
-    Every shipped brand palette — swatches, tokens, and hex generated from
-    the CSS that actually ships (<code>@busy-office/ui/css/brand-&lt;name&gt;</code>),
-    each gated through the full 32-pair AA contrast check in both themes.
-    One import re-skins the whole framework; the
-    <a href={base + '/concepts/theming'}>theming guide</a> has the recipe
-    for defining your own.
+    Pick a brand in one look: every card is a live preview of a shipped
+    preset (<code>@busy-office/ui/css/brand-&lt;name&gt;</code>), each gated
+    through the full 32-pair AA contrast check in both themes — swatches,
+    tokens, and hex generated from the CSS that actually ships. One import
+    re-skins the whole framework; teal is the built-in default (no
+    import). The <a href={base + '/concepts/theming'}>theming guide</a>
+    has the recipe for defining your own.
   </p>
 
-  {palettes.map((p) => (
-    <section class="demo">
-      <h2 style="text-transform: capitalize">{p.name}</h2>
-      <p class="bo-u-text-muted"><code>{`@import "@busy-office/ui/css/brand-${p.name}";`}</code></p>
-      <div class="bo-data-table-container" tabindex="0">
-        <table class="bo-data-table" data-density="compact">
-          <thead><tr>
-            <th scope="col">Token</th>
-            <th scope="col">Light</th>
-            <th scope="col" class="bo-data-table__col--code">Hex</th>
-            <th scope="col">Dark</th>
-            <th scope="col" class="bo-data-table__col--code">Hex</th>
-          </tr></thead>
-          <tbody>
-            {TOKENS.map((t) => (
-              <tr>
-                <td class="bo-data-table__col--code">--bo-color-{t}</td>
-                <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
-                <td class="bo-data-table__col--code">{p.light[t]} <span class="bo-u-text-muted">({p.light[t + '-step']})</span></td>
-                <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
-                <td class="bo-data-table__col--code">{p.dark[t]} <span class="bo-u-text-muted">({p.dark[t + '-step']})</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <style set:html={
-        `.pal-${p.name}{${TOKENS.map((t) => `--bo-color-${t}:${p.light[t]}`).join(';')}}` +
-        `[data-theme="dark"] .pal-${p.name}{${TOKENS.map((t) => `--bo-color-${t}:${p.dark[t]}`).join(';')}}`
-      }></style>
-      <div class={'pal-preview pal-' + p.name}>
-        <button class="bo-btn" type="button">Primary action</button>
-        <span class="bo-badge bo-badge--accent">accent badge</span>
-        <a href={base + '/concepts/theming'}>a link</a>
-      </div>
-      <p class="bo-u-text-muted">Live preview — the palette scoped to this
-      box only, following your theme toggle (light values in light, the
-      palette's dark values in dark — exactly what an app importing it
-      gets).</p>
-    </section>
-  ))}
+  <section class="demo">
+    <h2>The six presets</h2>
+    <div class="pal-cards">
+      {palettes.map((p) => (
+        <div class="pal-card">
+          <h3>{p.name}</h3>
+          <style set:html={
+            `.pal-${p.name}{${TOKENS.map((t) => `--bo-color-${t}:${p.light[t]}`).join(';')}}` +
+            `[data-theme="dark"] .pal-${p.name}{${TOKENS.map((t) => `--bo-color-${t}:${p.dark[t]}`).join(';')}}`
+          }></style>
+          <div class={'pal-preview pal-' + p.name}>
+            <button class="bo-btn" type="button">Approve</button>
+            <div class="pal-preview-row">
+              <span class="bo-badge bo-badge--accent">badge</span>
+              <a href={base + '/concepts/theming'}>a link</a>
+            </div>
+          </div>
+          <p class="pal-profile">{PROFILES[p.name] ?? ''}</p>
+          <div class="pal-import">
+            <code>{`brand-${p.name}`}</code>
+            <button type="button" class="pal-copy bo-btn bo-btn--ghost"
+              data-copy={`@import "@busy-office/ui/css/brand-${p.name}";`}>copy @import</button>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="pal-toast" role="status" aria-live="polite"></div>
+    <p class="bo-u-text-muted">Previews follow your theme toggle — light
+    values in light, the palette's dark values in dark, exactly what an
+    app importing it gets. Every accent in every card is an alias to a
+    <a href={base + '/base/colors'}>scale step</a>; the build fails if one
+    drifts to a raw hex.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Full token values</h2>
+    {palettes.map((p) => (
+      <details class="pal-details">
+        <summary><span style="text-transform: capitalize">{p.name}</span> — all seven tokens, both themes</summary>
+        <div class="bo-data-table-container" tabindex="0">
+          <table class="bo-data-table" data-density="compact">
+            <thead><tr>
+              <th scope="col">Token</th>
+              <th scope="col">Light</th>
+              <th scope="col" class="bo-data-table__col--code">Hex</th>
+              <th scope="col">Dark</th>
+              <th scope="col" class="bo-data-table__col--code">Hex</th>
+            </tr></thead>
+            <tbody>
+              {TOKENS.map((t) => (
+                <tr>
+                  <td class="bo-data-table__col--code">--bo-color-{t}</td>
+                  <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.light[t]}`}></span></td>
+                  <td class="bo-data-table__col--code">{p.light[t]} <span class="bo-u-text-muted">({p.light[t + '-step']})</span></td>
+                  <td><span class="pal-swatch" aria-hidden="true" style={`background:${p.dark[t] ?? p.light[t]}`}></span></td>
+                  <td class="bo-data-table__col--code">{p.dark[t]} <span class="bo-u-text-muted">({p.dark[t + '-step']})</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    ))}
+  </section>
 
   <section class="demo">
     <h2>Your own palette</h2>
@@ -136,15 +170,84 @@ const palettes = Object.entries(files).map(([path, css]) => {
       border: 1px solid var(--bo-color-border-default);
       vertical-align: middle;
     }
-    .pal-preview {
-      display: flex;
+    .pal-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
       gap: var(--bo-space-3);
-      align-items: center;
-      padding: var(--bo-space-4);
+    }
+    .pal-card {
       border: var(--bo-border-width) solid var(--bo-color-border-default);
       border-radius: var(--bo-radius-md);
-      background: var(--bo-color-bg-surface);
-      margin-block-start: var(--bo-space-3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
+    .pal-card h3 {
+      margin: 0;
+      padding: var(--bo-space-2) var(--bo-space-3);
+      font-size: var(--bo-font-size-sm);
+      text-transform: capitalize;
+      border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+    }
+    .pal-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--bo-space-2);
+      padding: var(--bo-space-3);
+      background: var(--bo-color-bg-surface);
+      flex: 1;
+    }
+    .pal-preview-row {
+      display: flex;
+      gap: var(--bo-space-2);
+      align-items: center;
+      font-size: var(--bo-font-size-sm);
+    }
+    .pal-profile {
+      margin: 0;
+      padding: 0 var(--bo-space-3) var(--bo-space-2);
+      color: var(--bo-color-text-muted);
+      font-size: var(--bo-font-size-xs);
+    }
+    .pal-import {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--bo-space-2);
+      padding: var(--bo-space-1) var(--bo-space-2) var(--bo-space-1) var(--bo-space-3);
+      border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+      font-size: var(--bo-font-size-xs);
+    }
+    .pal-toast {
+      font-family: var(--bo-font-mono);
+      font-size: var(--bo-font-size-xs);
+      min-block-size: 1.5em;
+      margin-block-start: var(--bo-space-2);
+      color: var(--bo-color-text-secondary);
+    }
+    .pal-toast:not(:empty) {
+      display: inline-block;
+      background: var(--bo-color-bg-muted);
+      border: 1px solid var(--bo-color-border-default);
+      border-radius: var(--bo-radius-sm);
+      padding: var(--bo-space-1) var(--bo-space-2);
+    }
+    .pal-details { margin-block-end: var(--bo-space-2); }
+    .pal-details summary { cursor: pointer; }
   </style>
+
+  <script>
+    // Copy-the-import (visible toast + aria-live — two channels).
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('.pal-copy');
+      if (!btn) return;
+      const text = btn.dataset.copy!;
+      navigator.clipboard?.writeText(text).then(() => {
+        const toast = document.querySelector('.pal-toast')!;
+        toast.textContent = `copied ${text}`;
+        setTimeout(() => { if (toast.textContent === `copied ${text}`) toast.textContent = ''; }, 2500);
+      });
+    });
+  </script>
 </Gallery>
