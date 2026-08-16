@@ -112,3 +112,16 @@ event-order traps (mousedown vs click), and a gate hole that had been
 green forever because the pair was never listed. The new-pair discipline
 (add the pair BEFORE trusting the claim) caught a real shipped defect
 (dark border-control) within minutes of being written.
+
+## Correction — 2026-08-16, next wake
+
+The Objective seat's finding "no stylelint naming gate exists / no
+.stylelintrc anywhere" was **wrong**: `packages/core/.stylelintrc.json`
+exists (selector-class-pattern enforcing bo-BEM + custom-property-pattern
+--bo-*, with htmx/reset overrides) and CI runs `lint:css` in both
+ci.yml and publish.yml. The seat's `find -name "stylelint*"` cannot
+match a dotfile named `.stylelintrc.json` — a search-tool artifact
+presented as Evidence. Lesson for future grills: verify a NEGATIVE
+claim with a second method before grading it Evidence. The only real
+sliver: the local `npm run build` chain didn't run lint:css (CI-only)
+— now it does, so local = CI. ROADMAP follow-up 4 closed accordingly.

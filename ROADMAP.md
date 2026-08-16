@@ -2353,11 +2353,14 @@ engine-shaped sub-ask refused with the reason.
        unchanged; tests; live-verified.
 
 **Slice 22 follow-ups (from the sign-off grill, queued)**:
-4. [ ] **Adopt a real stylelint naming gate** — CLAUDE.md cites one;
-       none exists (grill Evidence: no .stylelintrc anywhere). Accept:
-       stylelint wired into the build with the bo-BEM pattern rule;
-       existing CSS passes or exceptions are recorded; CLAUDE.md claim
-       becomes true.
+4. [x] **Stylelint naming gate — CLOSED as grill-finding CORRECTION**
+       (2026-08-16): the gate already existed — packages/core/
+       .stylelintrc.json (bo-BEM selector pattern + --bo-* property
+       pattern, htmx/reset overrides) and CI runs lint:css in ci.yml
+       AND publish.yml; the grill seat's find pattern couldn't match a
+       dotfile and reported a false negative. Real sliver fixed: the
+       local build chain now runs lint:css too (local = CI). Correction
+       appended to the grill report.
 5. [ ] **`.bo-prose` packaging** — cross-cutting surface parked in the
        richtext component file (granular importers must pull editor
        chrome to get prose styles). Waits for a deliberate dist-layout

@@ -59,7 +59,7 @@
     "build:behaviors": "node scripts/extract-behaviors.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "node scripts/generate-scales.mjs --check && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run build:acr && node scripts/stamp-readme.mjs --check",
+    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run build:acr && node scripts/stamp-readme.mjs --check",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
