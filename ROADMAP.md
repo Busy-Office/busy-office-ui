@@ -2406,22 +2406,22 @@ engine-shaped sub-ask refused with the reason.
        own sub-line typography; forcing the component there changes a
        designed page for zero user benefit (Objective: refuse).
 
-**Bug (owner report, 2026-08-16): first load of /base/colors unstyled
-until refresh.** DIAGNOSED as GitHub Pages CDN deploy skew, not a CSS
-bug — Evidence: the screenshot shows SHARED styles applied (demo-note)
-with only the PAGE-scoped bundle missing (.scale-grid rules), i.e. one
-hashed /_astro/colors.*.css request failed; both stylesheets serve 200
-now; Pages fronts Fastly with cache-control: max-age=600 on every
-response, so during a deploy window a node can serve fresh HTML while
-404ing the not-yet-propagated hashed CSS — and cache that 404 for up
-to 10 minutes (Hypothesis on the exact sequence; self-heals, which
-matches "refresh fixed it"). Aggravator: today's cadence pushed ~12
-separate Pages deploys. Mitigations: (a) ADOPTED operating rule —
-batch pushes to one per wake unless a fix is urgent, shrinking skew
-windows; (b) queued: evaluate carrying the previous deploy's /_astro
-assets forward one release in pages.yml so stale-HTML/fresh-node and
-fresh-HTML/stale-node both resolve (kills the class, small workflow
-change).
+**Bug (owner report, 2026-08-16): pages render unstyled until
+refresh — CLOSED, root-caused and fixed.** First diagnosis (transient
+CDN skew) was falsified by the owner's second sighting; the real
+mechanism is deterministic and BROWSER-side: Pages serves HTML with
+cache-control: max-age=600, every deploy renames the hashed /_astro
+CSS and deletes the old names, so any page whose HTML the browser
+cached before the latest deploy requests deleted CSS and renders
+half-styled; refresh revalidates and heals. Smoking gun (Evidence):
+colors.Cm6zY1ab.css — referenced by the live HTML one hour earlier —
+returned 404 after the next deploy while the current HTML referenced
+new hashes. Fix shipped in pages.yml: each deploy carries the PREVIOUS
+generation of /_astro forward (cache restore → union without
+overwrite → save fresh-only), so one-deploy-stale HTML always
+resolves; older HTML is past max-age and revalidates anyway. The
+push-batching operating rule stays as defense in depth. Verify on the
+next two deploys: old hashes must keep serving 200 for one generation.
 
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as

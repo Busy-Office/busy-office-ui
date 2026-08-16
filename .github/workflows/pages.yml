@@ -45,6 +45,39 @@ jobs:
             mkdir -p apps/docs/dist/v
             cp -R apps/docs/versions/. apps/docs/dist/v/
           fi
+      # Hashed-asset carryover (owner-reported bug, 2026-08-16): Pages
+      # serves HTML with cache-control: max-age=600, so a browser reuses
+      # a page's HTML for up to 10 minutes — and every deploy RENAMES the
+      # hashed /_astro files and deletes the old ones, so cached HTML
+      # 404s its own CSS and renders half-styled until a refresh
+      # (verified live: an hour-old hash returned 404 while the current
+      # HTML referenced new names). Fix: each deploy also ships the
+      # PREVIOUS deploy's /_astro generation (restore last run's cache,
+      # union without overwriting, save only the fresh generation for the
+      # next run) — cached HTML older than one deploy is already past
+      # max-age and revalidates on its own.
+      - name: Restore previous deploy's hashed assets
+        uses: actions/cache/restore@v4
+        with:
+          path: prev-astro
+          key: astro-assets-${{ github.run_id }}
+          restore-keys: astro-assets-
+      - name: Carry previous hashed assets forward one generation
+        run: |
+          # snapshot the FRESH generation before the union — the saved
+          # cache must hold only this deploy's files, or generations
+          # would accumulate without bound
+          cp -R apps/docs/dist/_astro fresh-astro
+          if [ -d prev-astro ]; then
+            cp -Rn prev-astro/. apps/docs/dist/_astro/ || true
+          fi
+          rm -rf prev-astro
+          mv fresh-astro prev-astro
+      - name: Save this deploy's hashed assets for the next run
+        uses: actions/cache/save@v4
+        with:
+          path: prev-astro
+          key: astro-assets-${{ github.run_id }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
