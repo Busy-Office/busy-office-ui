@@ -2386,6 +2386,21 @@ engine-shaped sub-ask refused with the reason.
        check passes; only documented APIs used; screenshots both
        themes/widths.
 
+7. [ ] **Key-value facts (`.bo-kv`)** — graduated from the 2026-08-16
+       Explore spike (worktree, discarded per playbook; screenshots
+       prove the shape). The record-header staple (Vendor · Cost
+       center · Terms · Total) has no primitive today: the homepage
+       hand-rolls dt/dd with custom styles, and detail screens abuse
+       readonly `.bo-input`s for non-editable display data. Ship a
+       native `<dl class="bo-kv">` (div-wrapped dt/dd pairs):
+       responsive auto-fit grid, density-aware values, muted uppercase
+       labels, `.bo-u-tabular` for numeric facts; badges/times compose
+       inside dd. Spike verified 1440 (4-col) + 390 (stacked), both
+       themes. Accept: component page per the recipe; record-detail +
+       detail-form + homepage migrate to it (drop the readonly-input
+       facts and the hand-rolled dt/dd styles); po-app facts adopt it;
+       gates green incl. new-page baselines; live-verified.
+
 **OWNER DECISION WANTED (moved out of the closed item 3 where it was
 buried — sign-off grill process finding)**: item 3 was built as
 "display-identical click-to-edit cells" (widened `--seamless`). If you
