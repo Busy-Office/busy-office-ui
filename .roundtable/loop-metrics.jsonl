@@ -23,3 +23,4 @@
 {"ts": "2026-08-17 05:50", "name": "ci-browser-sweep", "value": 74.0, "unit": "s"}
 {"ts": "2026-08-17 06:51", "name": "axe-violations", "value": 0.0, "unit": "pages"}
 {"ts": "2026-08-17 06:51", "name": "ci-gates", "value": 8.0, "unit": "gates"}
+{"ts": "2026-08-17 09:17", "name": "executable-claims", "value": 16.0, "unit": "claims"}
