@@ -105,13 +105,57 @@ matches no delegated handler and reports a false failure.
 
 ## Red-proving a gate: verify the INJECTION, not just the red result
 
-A gate is only trustworthy if you have watched it fail. Two traps hit
-repeatedly (2026-08-17): an injected rule whose selector the page never
-uses, and `max-inline-size` on a table cell — table layout ignores it,
-so nothing clips and the gate looks fine. Both produce a green "red
-test" and a detector that can never fail. Confirm the injection took
-effect (grep the built output, or assert the computed style) before
-believing a passing gate.
+A gate is only trustworthy if you have watched it fail. Every trap below
+produced a green "red test" — a detector that can never fail — and each
+cost real time before it was caught. Confirm the injection took effect
+(grep the BUILT output, or assert the computed style) before believing a
+passing gate.
+
+- An injected rule whose selector the page never uses (2026-08-17).
+- `max-inline-size` on a table cell — table layout ignores it, so
+  nothing clips (2026-08-17).
+- An injected element that is **invisible**: an alt-less
+  `<img src="/x.png">` 404s, renders 0x0, and axe skips it as not
+  visible. It must be *rendered* to be caught (2026-08-18).
+- An injection that **lands in a comment**. Two attempts at the axe gate
+  inserted after the first `<main` in a built page — which is inside an
+  HTML comment about skip links. The served HTML contained the markup
+  while the DOM held zero matching elements. If the injection is real,
+  the DOM shows it: assert that, not the file (2026-08-18).
+- Grepping the **source spelling in minified output**:
+  `print-color-adjust: exact` is emitted without the space, so the check
+  found nothing while the gate was correctly red (2026-08-18).
+
+The same discipline applies to measurement, not just injection: **measure
+the box that carries the constraint.** A sidebar label that shrink-wraps
+its text has `scrollWidth === clientWidth` always, so its own overflow can
+never be non-zero — three consecutive measurements reported "not clipped"
+while the label was spilling 15.7px past the rail. Only its right edge
+against the RAIL's client edge showed it (2026-08-18).
+
+## A gate that only runs in CI is not known to work
+
+**CI's full checkout is the most permissive environment the build sees.**
+Every file is present, the network is up, and nothing else is competing.
+A gate verified only there has been proven to work in the easiest case
+and nowhere else — that is not portability, it is one data point.
+
+Verify a new gate in the **narrowest context that must run it**. Twice in
+one session a gate was green in CI and wrong elsewhere: `check:rtl`'s
+DESIGN.md assertion broke the po-app image build, because that context
+copies only `packages/` and the file simply is not there; and the axe
+sweep drifted red for a week unnoticed because it needed a hand-started
+container, so nobody ran it.
+
+Two consequences worth stating outright:
+
+- **A gate that cannot run must fail loudly, never skip quietly.** If an
+  input is legitimately absent, say so in the output — `check:rtl` warns
+  that "DESIGN.md is not in this build context, so its flip-site count
+  was NOT verified" rather than reporting a clean pass it did not earn.
+- **A gate that needs a human to start something is not a gate.** If it
+  depends on a container, a server, or a port, it must start that itself
+  (see `serveDist` in `apps/docs/scripts/serve-dist.mjs`).
 
 ## How to document a PATTERN (the second recipe)
 

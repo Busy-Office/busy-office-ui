@@ -336,7 +336,27 @@ reaches.
        not repeatable. Accept: CI boots the po-app, asserts those behaviours
        end-to-end, and runs axe over its routes; the added cost is stated and
        measured against the 288s budget (estimate +30-60s); red-proved.
-2. [ ] **26.2 — Write the CI-reach rule into CLAUDE.md.** Twice in one session
+2. [x] **26.2 — CI-reach rule written into CLAUDE.md** (2026-08-18) — new
+       section "A gate that only runs in CI is not known to work": CI's full
+       checkout is the most permissive environment the build sees, so verify a
+       new gate in the **narrowest context that must run it**. Two consequences
+       stated outright — a gate that cannot run must fail loudly rather than
+       skip quietly, and a gate needing a human to start something is not a
+       gate.
+
+       Followed the rule on the way out rather than only writing it: rebuilt
+       the po-app image (the narrowest context — it copies only `packages/`,
+       so `DESIGN.md` genuinely is not there) and confirmed the core gates are
+       portable today. It passes, and says so honestly: "DESIGN.md count NOT
+       CHECKED (file absent)".
+
+       Also folded this session's four new red-proof traps into the
+       red-proving section, since each one produced a green "red test": an
+       injected element that renders 0x0 (axe skips it), an injection landing
+       inside an HTML comment, grepping a source spelling against minified
+       output, and — the measurement counterpart — reading overflow off a box
+       that shrink-wraps its own content, which reports zero forever.
+       Original text: Twice in one session
        a gate was green in CI and wrong elsewhere: `check:rtl`'s DESIGN.md
        assertion broke the po-app image build (that context copies only
        `packages/`), and the axe sweep drifted red for a week because it
@@ -350,7 +370,9 @@ reaches.
 Patterns / Reference). Without them 14 group summaries are always on screen,
 which is why the nav lands at ~1100px rather than the 600-900px the review
 estimated. Tabs would also let the "Patterns:" prefix go, buying back ~70px of
-label width and fixing the clipped ACR label (P3-2) for free. Not queued yet:
+label width. (That prefix is no longer load-bearing for P3-2 — 27.8 fixed the
+clipped label at the framework level, so long labels wrap instead of spilling
+whatever the group names are.) Not queued yet:
 it is a second IA change on top of one just shipped, and worth living with the
 collapsible version first.
 
