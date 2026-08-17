@@ -196,7 +196,30 @@ technically correct and substantively blind here. That blind spot is 27.5.
        `<label for>` or `aria-label`, **and** a gate rejects an input whose
        only accessible name comes from `placeholder` — axe cannot see this, so
        the check is ours to write. Red-proved.
-6. [ ] **27.6 — Collapsible two-level sidebar (section 4).** Measured today:
+6. [x] **27.6 — Collapsible nav groups** (2026-08-18) — native
+       `<details>`/`<summary>`, one group open (the one holding the current
+       page), item counts per group, and "Data display" (18) split into
+       Tables & lists (7) / Values (4) / Display (7). Extracted `SidebarNav`
+       so the sidebar and drawer stop being two copies. **Cost line: 0
+       framework selectors, 0 framework CSS; ~20 lines of persistence JS,
+       docs-local only** — the item's condition that this must not grow the
+       public API is met.
+
+       **Measured: 3932px → 1066-1214px** depending on which group is open;
+       85 links preserved (verified), one group open, current page visible,
+       `aria-current` intact, Enter toggles from the platform, closed state
+       persisted in `bo-navgroups`. **The ~1000px sub-criterion is NOT met**
+       and I am not claiming it: 14 group summaries are the floor without the
+       top-level tabs the review also proposed, which I deferred. 5.5 screens
+       → ~1.6 at the review's 692px viewport is the real gain.
+
+       Two self-inflicted findings on the way: my regex replacement left
+       orphaned `</ul></div>))}` fragments that BUILT FINE but silently
+       dropped the Project group's 2 links — caught only by counting links,
+       not by any gate; and the boost probe broke because it clicks sidebar
+       links that now sit inside closed groups, fixed by opening the group
+       first rather than weakening the probe into a direct goto. Original
+       text: Measured today:
        **85 links, 3932px tall, 0 collapsible sections** — 5.5 screens in a
        692px viewport, and the "Patterns:" prefix repeated three times is the
        tell that a second level was faked with text. Accept: `<details>`-based
@@ -264,6 +287,14 @@ reaches.
        environment the build sees, so a gate that only ever runs there is not
        known to be portable — verify a new gate in the narrowest context that
        must run it.
+
+**DEFERRED (27.6b):** the review's four top-level tabs (Docs / Components /
+Patterns / Reference). Without them 14 group summaries are always on screen,
+which is why the nav lands at ~1100px rather than the 600-900px the review
+estimated. Tabs would also let the "Patterns:" prefix go, buying back ~70px of
+label width and fixing the clipped ACR label (P3-2) for free. Not queued yet:
+it is a second IA change on top of one just shipped, and worth living with the
+collapsible version first.
 
 **DEFERRED, with a trigger (not a queue item):** extracting the document
 identity line into a component. It is the one composed shape that is pure

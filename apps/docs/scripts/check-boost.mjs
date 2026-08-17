@@ -73,6 +73,16 @@ for (const [path, selector, expected] of PROBES) {
   // pass while testing nothing (the fail-open trap this project keeps
   // finding). That's a FAIL, not a pass.
   await page.evaluate(() => { window.__boostMarker = true; });
+  /* Nav groups are collapsible since 27.6, so the target link may sit inside a
+     closed <details> and not be clickable. Open its group first — which is what
+     a reader does — rather than weakening the probe into a direct goto, since
+     the whole point is to exercise a BOOSTED click. */
+  await page.evaluate((h) => {
+    const link = document.querySelector(`a[href="${h}"]`);
+    for (let n = link?.parentElement; n; n = n.parentElement) {
+      if (n.tagName === 'DETAILS') n.open = true;
+    }
+  }, href);
   await page.click(`a[href="${href}"]`);
   await page.waitForFunction(
     (want) => location.pathname.replace(/\/$/, '') === want,

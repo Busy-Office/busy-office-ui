@@ -5,6 +5,7 @@ import '../styles/copy-toast.css';
 import '../styles/doc-swatch.css';
 import Logo from '../components/Logo.astro';
 import PrefBootstrap from '../components/PrefBootstrap.astro';
+import SidebarNav from '../components/SidebarNav.astro';
 import pkg from '@busy-office/ui/package.json';
 import versions from '../../versions.json';
 const { title } = Astro.props;
@@ -72,25 +73,35 @@ const sections = [
     ],
   },
   {
-    label: 'Data display',
+    label: 'Tables & lists',
     items: [
       { href: '/components/data-table', label: 'Data table' },
       { href: '/components/inline-editing', label: 'Inline editing' },
       { href: '/components/table-toolbar', label: 'Toolbar & grid nav' },
       { href: '/components/pagination', label: 'Pagination' },
+      { href: '/components/tree', label: 'Tree' },
+      { href: '/components/tree-table', label: 'Tree table' },
+      { href: '/components/ordered-list', label: 'Ordered list' },
+    ],
+  },
+  {
+    label: 'Values',
+    items: [
       { href: '/components/amount', label: 'Amount' },
       { href: '/components/quantity', label: 'Quantity' },
       { href: '/components/date', label: 'Date' },
-      { href: '/components/ordered-list', label: 'Ordered list' },
-      { href: '/components/tree', label: 'Tree' },
-      { href: '/components/tree-table', label: 'Tree table' },
+      { href: '/components/kv', label: 'Key-value facts' },
+    ],
+  },
+  {
+    label: 'Display',
+    items: [
       { href: '/components/dashboard', label: 'Dashboard' },
       { href: '/components/dashboard#card', label: 'Card' },
       { href: '/components/byline', label: 'Byline' },
       { href: '/components/badge', label: 'Badge' },
       { href: '/components/kbd', label: 'Keyboard key' },
       { href: '/components/avatar', label: 'Avatar' },
-      { href: '/components/kv', label: 'Key-value facts' },
       { href: '/components/prose', label: 'Prose' },
     ],
   },
@@ -272,24 +283,7 @@ const current =
             </button>
           </div>
         )}
-        {sections.map((s) => (
-          <div class="bo-sidebar-nav__section">
-            <div class="bo-sidebar-nav__heading">{s.label}</div>
-            <ul>
-              {s.items.map((p) => (
-                <li>
-                  <a
-                    class="bo-sidebar-nav__link"
-                    href={base + p.href}
-                    aria-current={current === p.href ? 'page' : undefined}
-                  >
-                    <span class="bo-sidebar-nav__label">{p.label}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        <SidebarNav sections={sections} current={current} base={base} idPrefix="side" />
         <div class="bo-sidebar-nav__section">
           <div class="bo-sidebar-nav__heading">Project</div>
           <ul>
@@ -305,16 +299,7 @@ const current =
           <form method="dialog"><button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">✕</button></form>
         </div>
         <nav class="bo-sidebar-nav" aria-label="Docs">
-          {sections.map((s) => (
-            <div class="bo-sidebar-nav__section">
-              <div class="bo-sidebar-nav__heading">{s.label}</div>
-              <ul>
-                {s.items.map((p) => (
-                  <li><a class="bo-sidebar-nav__link" href={base + p.href} aria-current={current === p.href ? 'page' : undefined}><span class="bo-sidebar-nav__label">{p.label}</span></a></li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <SidebarNav sections={sections} current={current} base={base} idPrefix="drawer" />
           <div class="bo-sidebar-nav__section">
             <div class="bo-sidebar-nav__heading">Project</div>
             <ul>
@@ -416,7 +401,25 @@ const current =
           });
           // The sidebar and mobile-header triggers are the pointer/touch entry
           // points to this same dialog — one instance, three ways in.
-          document.querySelectorAll('[data-cmdk-open]').forEach((btn) => {
+          /* Persist which nav groups the reader left open, alongside bo-theme and
+         bo-density. Open/close itself is native — this only remembers. The
+         group holding the current page is force-opened server-side, so a
+         stored "closed" never hides where you are. */
+      try {
+        const KEY = 'bo-navgroups';
+        const closed = new Set(JSON.parse(localStorage.getItem(KEY) ?? '[]'));
+        document.querySelectorAll('[data-navgroup]').forEach((d) => {
+          const key = d.dataset.navgroup;
+          if (closed.has(key) && !d.querySelector('[aria-current="page"]')) d.open = false;
+          d.addEventListener('toggle', () => {
+            const set = new Set(JSON.parse(localStorage.getItem(KEY) ?? '[]'));
+            d.open ? set.delete(key) : set.add(key);
+            localStorage.setItem(KEY, JSON.stringify([...set]));
+          });
+        });
+      } catch (e) { /* storage disabled: groups just don't persist */ }
+
+      document.querySelectorAll('[data-cmdk-open]').forEach((btn) => {
             btn.addEventListener('click', open);
           });
           // Arrow keys move focus through results; Enter follows the focused link.
@@ -720,6 +723,40 @@ const current =
      you typed. STICKY, because the sidebar auto-scrolls to the active item and
      the old box sat 681px above the viewport on most pages — measurably
      invisible, which is what made search look inconsistent between pages. */
+  /* Collapsible nav groups (roadmap 27.6). Native <details>, so the marker,
+     keyboard behaviour and expanded state come from the platform. */
+  .docs-navgroup__summary {
+    display: flex;
+    align-items: center;
+    gap: var(--bo-space-2);
+    cursor: pointer;
+    list-style: none;                 /* hide the default marker; ::before below */
+  }
+  .docs-navgroup__summary::-webkit-details-marker { display: none; }
+  .docs-navgroup__summary::before {
+    content: "";
+    flex: none;
+    inline-size: 0.5em;
+    block-size: 0.5em;
+    border-inline-end: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    rotate: -45deg;                   /* points end-ward when closed */
+    transition: rotate var(--bo-motion-duration-fast) var(--bo-motion-easing-standard);
+  }
+  .docs-navgroup[open] > .docs-navgroup__summary::before { rotate: 45deg; }
+  [dir="rtl"] .docs-navgroup__summary::before { rotate: 225deg; }
+  [dir="rtl"] .docs-navgroup[open] > .docs-navgroup__summary::before { rotate: 135deg; }
+  .docs-navgroup__summary:focus-visible {
+    outline: var(--bo-focus-ring-width) solid var(--bo-color-focus-ring);
+    outline-offset: 2px;
+  }
+  .docs-navgroup__count {
+    margin-inline-start: auto;
+    font-variant-numeric: tabular-nums;
+    color: var(--bo-color-text-muted);
+    font-size: var(--bo-font-size-xs);
+  }
+
   .docs-searchbtn-wrap {
     position: sticky;
     inset-block-start: 0;

@@ -1,0 +1,59 @@
+---
+/**
+ * The docs nav, rendered identically in the sidebar and the mobile drawer.
+ *
+ * Was two copies of the same map() in Gallery.astro; making the groups
+ * collapsible would have duplicated the change, so it is one component now
+ * (roadmap 27.6).
+ *
+ * Collapsible because it was measured unusable: 85 links, 3932px tall in a
+ * 692px viewport — 5.5 screens, nothing collapsible, so a reader on
+ * /components/button paid for 40+ pattern and reference links permanently
+ * (owner QA review, 2026-08-17).
+ *
+ * `<details>`/`<summary>` on purpose: native disclosure, so keyboard support,
+ * ARIA expanded state and the no-JS case all come from the platform. The only
+ * script is persistence. This is docs-shell IA — it adds no framework surface,
+ * which the roadmap item made an explicit condition.
+ */
+interface Props {
+  sections: { label: string; items: { href: string; label: string }[] }[];
+  current: string;
+  base: string;
+  /** Distinguishes the two instances so their open-state keys don't collide. */
+  idPrefix: string;
+}
+const { sections, current, base, idPrefix } = Astro.props;
+---
+{sections.map((s) => {
+  /* Only the group holding the current page opens by default. Everything else
+     starts closed, which is where the height saving comes from. */
+  const holdsCurrent = s.items.some((p) => p.href === current);
+  return (
+    <details
+      class="bo-sidebar-nav__section docs-navgroup"
+      open={holdsCurrent}
+      data-navgroup={`${idPrefix}:${s.label}`}
+    >
+      <summary class="bo-sidebar-nav__heading docs-navgroup__summary">
+        <span>{s.label}</span>
+        {/* Count so a reader can judge before expanding. aria-hidden: the
+            group name is the label, the number is a scanning aid. */}
+        <span class="docs-navgroup__count" aria-hidden="true">{s.items.length}</span>
+      </summary>
+      <ul>
+        {s.items.map((p) => (
+          <li>
+            <a
+              class="bo-sidebar-nav__link"
+              href={base + p.href}
+              aria-current={current === p.href ? 'page' : undefined}
+            >
+              <span class="bo-sidebar-nav__label">{p.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+})}
