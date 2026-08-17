@@ -8,6 +8,15 @@ pin.
 
 ## Unreleased
 
+- Added (docs + gate): worked SG/TH formatting examples and an
+  "entry precision is not display precision" section on `/concepts/i18n`,
+  with every string produced by running `Intl`. A new browser-free gate
+  (`check:formatting`) reproduces those strings and watches the ISO-4217
+  vs CLDR minor-unit divergence (currently IQD, IDR, HUF, COP, PKR, MMK,
+  LAK), so an ICU upgrade cannot silently make the page wrong. No API
+  change: `currencyDecimals()` follows ISO minor units by design, which is
+  the correct authority for what a user may type.
+
 - Added (docs): the **document-level message strip** on
   `/patterns/validation-summary` — for messages about no field at all
   ("posting period closed"), with the test that keeps them rare and the

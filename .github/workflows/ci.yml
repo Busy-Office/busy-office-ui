@@ -32,6 +32,11 @@ jobs:
       # behaviour is a hypothesis until something runs it (2026-08-17).
       - name: Documented-claims check
         run: npm run check:claims -w docs
+      # Pure Intl, milliseconds: the SG/TH strings printed on /concepts/i18n
+      # and the ISO-vs-CLDR precision divergence it names are facts about the
+      # platform, so an ICU upgrade can make the page wrong on its own.
+      - name: Formatting claims (Intl / ISO-vs-CLDR)
+        run: npm run check:formatting -w docs
       # The i18n page claims long translations wrap rather than clip —
       # run that claim at compact density in a +35% pseudo-locale.
       - name: Pseudo-locale expansion check

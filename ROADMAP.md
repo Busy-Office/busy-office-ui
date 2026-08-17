@@ -188,7 +188,20 @@ outcome below. Verified against the tree, not assumed.
        not about any one field ("posting period closed"). Accept: composes
        `.bo-alert`; explicitly does NOT become a message centre, and the
        page says why field-first stays the contract.
-5. [ ] **24.5 — Formatting contract docs.** SG/TH worked examples for
+5. [x] **24.5 — Formatting contract docs** (2026-08-17) — two sections on
+       `/concepts/i18n`, every string produced by RUNNING Intl. **Cost line
+       (24.R2): 0 new selectors, 0 new CSS, 0 new behaviors; one new
+       browser-free gate (`check:formatting`, milliseconds).** Executing it
+       instead of writing it found three real traps: `th-TH` resolves to the
+       **Buddhist calendar**, so 2026 renders as 2569 in audit timestamps
+       (`-u-ca-gregory` fixes it); `en-SG` gives SGD a bare `$` while USD gets
+       `US$`, so a multi-currency column needs
+       `currencyDisplay: "code"`; and **ISO 4217 minor units diverge from
+       CLDR display digits for 7 codes** (IQD, IDR, HUF, COP, PKR, MMK, LAK),
+       so deriving an input's `step` from `Intl` silently truncates cents. The
+       framework's `currencyDecimals()` follows ISO on purpose and is
+       CORRECT — the gate now watches that divergence so it stays a
+       documented list rather than a surprise. Original text:
        `Intl` formatting against the existing `data-currency`/UoM slots.
        Docs-only; no new API.
 6. [ ] **24.6 — Document frame — SCOPE FIRST, may collapse to nothing.**

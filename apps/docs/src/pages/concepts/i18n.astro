@@ -8,6 +8,35 @@ const rtlMarkup = `<!-- One attribute. The framework's CSS is written in LOGICAL
      without a separate stylesheet. -->
 <html lang="ar" dir="rtl">`;
 
+const sgThExamples = `// Every string below was produced by running Intl, not written by hand,
+// and a build check re-runs them so an ICU update cannot make this page lie.
+
+new Intl.NumberFormat("en-SG", { style: "currency", currency: "SGD" }).format(1234567.5)
+// "$1,234,567.50"   <- a BARE dollar sign
+
+new Intl.NumberFormat("en-SG", { style: "currency", currency: "USD" }).format(1234.5)
+// "US$1,234.50"     <- the foreign one gets disambiguated, the local one does not
+
+new Intl.NumberFormat("en-SG", { style: "currency", currency: "SGD",
+                                 currencyDisplay: "code" }).format(1234.5)
+// "SGD 1,234.50"    <- what a multi-currency column wants
+
+new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" }).format(1234567.5)
+// "฿1,234,567.50"
+
+new Intl.DateTimeFormat("th-TH", { dateStyle: "medium" }).format(new Date("2026-08-17"))
+// "17 ส.ค. 2569"    <- the BUDDHIST era: 2569, not 2026
+
+new Intl.DateTimeFormat("th-TH-u-ca-gregory", { dateStyle: "medium" }).format(new Date("2026-08-17"))
+// "17 ส.ค. 2026"    <- what an audit trail needs`;
+
+const precisionExample = `// Two DIFFERENT questions, two different answers:
+currencyDecimals("IDR")   // 2  — ISO 4217 minor units: what you may ENTER and store
+new Intl.NumberFormat("en", { style: "currency", currency: "IDR" })
+  .resolvedOptions().maximumFractionDigits   // 0 — CLDR display convention
+
+// Using the display answer to set entry precision silently truncates cents.`;
+
 const numberMarkup = `<!-- Format on the SERVER, in the user's locale, and send the string.
      The framework aligns and spaces it; it never parses or reformats. -->
 <td class="bo-data-table__col--numeric">1.234,56 €</td>
@@ -72,6 +101,58 @@ new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(new Date())`;
     <code>data-value</code> does on a
     <a href={base + '/components/combobox'}>combobox</a> and what a
     hidden input carries in a form).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Worked examples — Singapore and Thailand</h2>
+    <p>Two locales that between them contain most of the traps an ERP hits in
+    the region. Every output below was produced by <em>running</em>
+    <code>Intl</code>:</p>
+    <pre><code>{sgThExamples}</code></pre>
+    <div class="bo-alert bo-alert--warning" role="note" style="margin-block: var(--bo-space-4)">
+      <p><strong>Thai dates default to the Buddhist era.</strong>
+      <code>th-TH</code> resolves to <code>calendar: "buddhist"</code>, so a
+      2026 date renders as <strong>2569</strong> — a 543-year offset, in the
+      timestamps an audit trail is built on. Ask for
+      <code>th-TH-u-ca-gregory</code> wherever the year is a record rather
+      than a courtesy. (Thai <em>digits</em> are not a default: the numbering
+      system resolves to <code>latn</code>, and opting into
+      <code>-u-nu-thai</code> gives <code>฿๑,๒๓๔.๕๐</code>, which no amount
+      column should use — it defeats tabular alignment and any parsing.)</p>
+    </div>
+    <p class="bo-u-text-muted">The Singapore case is subtler: in
+    <code>en-SG</code>, SGD gets a bare <code>$</code> while USD gets
+    <code>US$</code>. That is <code>Intl</code> being correct about the local
+    currency, and wrong for a <strong>multi-currency</strong> column, where
+    the reader cannot tell which dollar they are looking at. Use
+    <code>currencyDisplay: "code"</code> for any column that can hold more
+    than one currency — <code>SGD 1,234.50</code> is unambiguous and, being
+    the same width for every code, keeps the column aligned.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Entry precision is not display precision</h2>
+    <p>The framework's <code>currencyDecimals()</code> (used by the
+    <a href={base + '/components/money'}>money field</a> to set an input's
+    <code>step</code>) follows <strong>ISO 4217 minor units</strong> — what a
+    currency formally subdivides into, and therefore what a user may type and
+    the system may store. <code>Intl</code> reports something else: the
+    <strong>CLDR display convention</strong>, which drops the minor unit for
+    currencies where it exists on paper but not in shops.</p>
+    <pre><code>{precisionExample}</code></pre>
+    <p>Both are right about their own question, and they disagree for exactly
+    seven codes at the time of writing — <code>IQD</code>,
+    <code>IDR</code>, <code>HUF</code>, <code>COP</code>, <code>PKR</code>,
+    <code>MMK</code>, <code>LAK</code>. Measured, not assumed: a build check
+    walks the framework's table against ICU and reports the divergence, so it
+    stays a documented list rather than a surprise.</p>
+    <p class="bo-u-text-muted"><strong>The rule:</strong> take entry and
+    storage precision from ISO minor units (the framework already does), and
+    take the rendered string from <code>Intl</code>. Deriving <code>step</code>
+    from <code>Intl</code> is the bug this section exists to prevent — on an
+    IDR or HUF amount it silently truncates whatever the user typed after the
+    decimal point. And <code>JPY</code> really is zero-decimal in both
+    answers, so "always two" is wrong even before you reach the edge cases.</p>
   </section>
 
   <section class="demo">
