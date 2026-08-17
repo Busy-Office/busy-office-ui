@@ -135,6 +135,51 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
   </section>
 
   <section class="demo">
+    <h2>Document-level messages — the one thing the summary is not for</h2>
+    <p>Some messages are about no field at all. "Posting period closed",
+    "this vendor is on hold", "the month-end run is in progress" — there is
+    nothing for the user to retype, so listing them in a field summary sends
+    them hunting for an input that does not exist. Those get a strip at the
+    top of the document instead:</p>
+    <div class="bo-alert bo-alert--warning" role="alert">
+      <p><strong>Posting period 2026-07 is closed.</strong> This purchase
+      order can be edited and saved, but not posted until the period reopens
+      or a controller reverses the close.</p>
+    </div>
+    <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-3)">
+    That is an ordinary <a href={base + '/components/alerts'}>alert</a> placed
+    in the document header — <strong>no new component, no new class</strong>.
+    A strip earns its place by being about the <em>document</em>; the moment a
+    message names a field, it belongs on that field and in the summary above.</p>
+
+    <h3>The test, and why it stays this way</h3>
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Can the user fix it by changing a value on this screen?</strong>
+      Then it is a field error — attach it to the field, list it in the
+      summary. "Vendor is blocked" is a field error even though only the
+      server could know it.</li>
+      <li><strong>Is it a condition of the document or the system?</strong>
+      Then it is a strip: it explains why an action is unavailable, and the
+      user's next step is elsewhere (a different period, a different
+      approver, waiting).</li>
+      <li><strong>Say what is still possible.</strong> A strip that only says
+      "closed" invites a support call; one that says "you can still save,
+      just not post" does not.</li>
+      <li><strong>One strip, not a feed.</strong> If two document-level
+      conditions hold, the one that blocks the user's likely next action goes
+      first — and if you find yourself needing scroll, paging or filters in
+      here, the screen is doing too much. That is the signal to split the
+      screen, not to build a message centre.</li>
+    </ul>
+    <p class="bo-u-text-muted"><strong>Deliberately not a message centre.</strong>
+    A collected inbox of everything the server wanted to say is what a screen
+    grows when errors sit far from where the user is looking. Field-first
+    keeps them where the eyes already are; a document strip is the narrow
+    exception for messages that have no field to sit on. The framework ships
+    no message-manager component, and that is a boundary rather than a gap.</p>
+  </section>
+
+  <section class="demo">
     <h2>States</h2>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">

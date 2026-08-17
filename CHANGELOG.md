@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- Added (docs): the **document-level message strip** on
+  `/patterns/validation-summary` — for messages about no field at all
+  ("posting period closed"), with the test that keeps them rare and the
+  explicit refusal to grow a message centre. No new component: it is
+  `.bo-alert` in the document header. The reference app's import screen
+  demonstrates one (a batch total exceeding the period budget), enforced
+  server-side as well as by the disabled button.
+
 - Added: `data-row-state="warning"` on data-table rows — a row that is valid
   but qualified, for staging and batch-result views. It shares the `dirty`
   state's declarations (same amber treatment, different meaning) rather than

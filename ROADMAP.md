@@ -174,7 +174,17 @@ outcome below. Verified against the tree, not assumed.
        `/patterns/bulk-actions` or a sibling page reusing its data
        contract, the TRANSIENT-state rule holds, po-app carries a working
        upload→validate→apply flow, live-verified.
-4. [ ] **24.4 — Document-level message strip.** Only for messages that are
+4. [x] **24.4 — Document-level message strip** (2026-08-17) — documented on
+       `/patterns/validation-summary` (the page that already owns how errors
+       reach the user), and exercised in po-app's import screen. **Cost line
+       (24.R2): 0 new selectors, 0 new CSS, 0 new behaviors** — it is
+       `.bo-alert` placed in the document header, which is the whole point.
+       Ships the TEST that keeps it narrow: if the user can fix it by
+       changing a value on this screen it is a field error (even a
+       server-only one like "vendor is blocked"); if it is a condition of the
+       document or system it is a strip. Explicitly refuses a message centre,
+       and says a strip needing scroll or filters means the screen should be
+       split. Original text:
        not about any one field ("posting period closed"). Accept: composes
        `.bo-alert`; explicitly does NOT become a message centre, and the
        page says why field-first stays the contract.

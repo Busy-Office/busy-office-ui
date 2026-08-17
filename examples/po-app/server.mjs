@@ -345,12 +345,29 @@ const validateStagedRow = (line, i) => {
 const STATE_TONE = { ok: 'success', warning: 'warning', error: 'danger' };
 const STATE_WORD = { ok: 'Ready', warning: 'Check', error: 'Cannot import' };
 
+/* A DOCUMENT-level condition: about the whole submission, not any one row.
+   No row is wrong, so nothing here belongs on a row or in a field summary —
+   it gets the strip at the top (see /patterns/validation-summary). The strip
+   says what is still possible, not just what is blocked. */
+const PERIOD_BUDGET_REMAINING = 60000;
+
 const stagingScreen = (rows = null, applied = 0) => {
   const counts = rows ? rows.reduce((a, r) => ({ ...a, [r.state]: (a[r.state] || 0) + 1 }), {}) : {};
-  const applicable = rows ? rows.filter((r) => r.state !== 'error').length : 0;
+  const applyable = rows ? rows.filter((r) => r.state !== 'error') : [];
+  const applicable = applyable.length;
+  const batchTotal = applyable.reduce((t, r) => t + (Number.isFinite(r.amount) ? r.amount : 0), 0);
+  const overBudget = batchTotal > PERIOD_BUDGET_REMAINING;
   return `
 <h1>Import purchase orders</h1>
 ${applied ? `<div class="bo-alert bo-alert--success" role="alert"><p><strong>${applied} imported.</strong> Rows that could not be imported are still listed below.</p></div>` : ''}
+${
+  overBudget
+    ? `<div class="bo-alert bo-alert--warning" role="alert">
+    <p><strong>This batch totals ${money(batchTotal)}; only ${money(PERIOD_BUDGET_REMAINING)} is left in the period.</strong>
+    No individual row is wrong — you can still validate and fix rows, but applying is blocked until the batch fits or the budget is raised.</p>
+  </div>`
+    : ''
+}
 <form method="post" action="/import" class="bo-stack">
   <div class="bo-form-field">
     <label class="bo-form-field__label" for="csv">Paste rows — vendor, cost centre, amount</label>
@@ -400,7 +417,7 @@ ${
 </div>
 <form method="post" action="/import" class="bo-form-actions">
   <input type="hidden" name="csv" value="${esc(rows.map((r) => r.raw).join('\n'))}">
-  <button class="bo-btn" type="submit" name="action" value="apply"${applicable ? '' : ' disabled'}>
+  <button class="bo-btn" type="submit" name="action" value="apply"${applicable && !overBudget ? '' : ' disabled'}>
     Apply ${applicable} valid row${applicable === 1 ? '' : 's'}
   </button>
   <a class="bo-btn bo-btn--ghost" href="/import">Start over</a>
@@ -738,6 +755,14 @@ const server = createServer(async (req, res) => {
       const lines = (form.get('csv') ?? '').split('\n').map((l) => l.trim()).filter(Boolean);
       const rows = lines.map(validateStagedRow);
       if (form.get('action') !== 'apply') {
+        res.writeHead(200, { 'content-type': 'text/html' });
+        return res.end(page('Import', '/import', stagingScreen(rows), density));
+      }
+      // The document-level condition is enforced HERE too, not only by the
+      // disabled button: a disabled control is a hint, never a guarantee.
+      const applyableRows = rows.filter((r) => r.state !== 'error');
+      const total = applyableRows.reduce((t, r) => t + (Number.isFinite(r.amount) ? r.amount : 0), 0);
+      if (total > PERIOD_BUDGET_REMAINING) {
         res.writeHead(200, { 'content-type': 'text/html' });
         return res.end(page('Import', '/import', stagingScreen(rows), density));
       }
