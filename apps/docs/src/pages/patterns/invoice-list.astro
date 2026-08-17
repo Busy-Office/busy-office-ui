@@ -138,8 +138,19 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
       <li><kbd class="bo-kbd">Tab</kbd> into the filter bar, type, <kbd class="bo-kbd">Enter</kbd> to apply — a native form submit.</li>
       <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox; <kbd class="bo-kbd">Space</kbd> toggles the page's rows and announces the count via the live region.</li>
       <li><kbd class="bo-kbd">Tab</kbd> through row checkboxes, <kbd class="bo-kbd">Space</kbd> to pick individual invoices.</li>
-      <li><kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> back to the toolbar — bulk actions are now revealed and reachable.</li>
-      <li>Sorting: the header is a real <code>&lt;button&gt;</code>; <kbd class="bo-kbd">Enter</kbd> sorts and <code>aria-sort</code> announces the new direction.</li>
+      <li>The bulk actions really are revealed by the first selection
+      (<code>display: none</code> → <code>flex</code>), but they sit
+      <em>above</em> the table: getting back to them is one
+      <kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> per row
+      checkbox you passed, plus two more for the sort header and select-all.
+      Measured from the first row: three presses. From row 30: thirty-two.
+      Budget for that when you put bulk actions on a long list.</li>
+      <li>Sorting: the header is a real <code>&lt;button&gt;</code>, so it is
+      keyboard-reachable and announced as a control — but <strong>sorting
+      itself is your code</strong>. The framework ships none. Your handler
+      sets <code>aria-sort</code> on the <code>&lt;th&gt;</code>; leaving a
+      hardcoded <code>aria-sort</code> on a header that never sorts announces
+      an order that isn't real.</li>
     </ol>
     <p class="bo-u-text-muted">The table deliberately does NOT take a roving
     tabindex — screen-reader table browse mode is worth more than 2-D arrow

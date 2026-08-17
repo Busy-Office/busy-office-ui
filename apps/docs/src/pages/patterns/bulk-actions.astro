@@ -147,7 +147,14 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
     <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox, <kbd class="bo-kbd">Space</kbd> to take the page; the live region announces the count.</li>
       <li><kbd class="bo-kbd">Tab</kbd> through rows, <kbd class="bo-kbd">Space</kbd> to deselect the ones you are not ready for.</li>
-      <li><kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> to the toolbar — the bulk action is now revealed — and <kbd class="bo-kbd">Enter</kbd>.</li>
+      <li>Back to the toolbar, where the first selection has revealed the bulk
+      action, and <kbd class="bo-kbd">Enter</kbd>. Note the cost:
+      <kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> steps back
+      one checkbox at a time, so a selection deep in the list is many presses
+      from the toolbar above it — see the
+      <a href={base + '/patterns/invoice-list'}>invoice list</a> for the
+      measured count. Budget for it; it is the one rough edge in this
+      pattern's keyboard path.</li>
       <li>The summary is <code>role="alert"</code>, so the outcome is announced without moving focus; the failed rows are still in document order below it.</li>
     </ol>
   </section>

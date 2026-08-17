@@ -118,6 +118,129 @@ const marker = await page.evaluate(() => {
 });
 check('print: timeline markers keep their fill', marker.bg !== 'rgba(0, 0, 0, 0)' && marker.adjust === 'exact', JSON.stringify(marker));
 
+// Media emulation is per-PAGE and sticky: leaving it on 'print' silently
+// corrupts every claim added below. It cost a real debugging round —
+// @media print hides .bo-data-table__toolbar, so a keyboard claim counting
+// tab stops to the bulk actions measured zero and looked like a page bug.
+await page.emulateMediaType('screen');
+
+/* ---------- Keyboard walkthroughs (2026-08-17) ----------
+   Pattern pages narrate a keyboard path step by step. Every step is a
+   runtime assertion, and none had ever been executed: the sweep that
+   added these found two of five steps on the exemplar page flatly
+   wrong — "Shift+Tab back to the toolbar" actually lands on the
+   previous row checkbox, and "Enter sorts and aria-sort announces the
+   new direction" described sorting the framework does not ship at all.
+   A walkthrough is a promise a keyboard-only clerk depends on; it gets
+   executed like any other claim. */
+
+// "Space on select-all toggles the page's rows and announces the count
+//  via the live region." — invoice-list step 2
+await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
+const selectAll = await page.evaluate(async () => {
+  document.querySelector('.bo-data-table__select-all').focus();
+  return { focused: document.activeElement.classList.contains('bo-data-table__select-all') };
+});
+await page.keyboard.press('Space');            // a REAL key, not a synthetic event
+await new Promise((r) => setTimeout(r, 250));
+const selected = await page.evaluate(() => {
+  const boxes = [...document.querySelectorAll('tbody .bo-data-table__row-select')];
+  const region = [...document.querySelectorAll('[aria-live],[role="status"]')]
+    .map((n) => n.textContent.trim()).filter(Boolean);
+  return { checked: boxes.filter((b) => b.checked).length, total: boxes.length, region };
+});
+check(
+  'select-all checks every row and announces the count',
+  selected.total > 0 && selected.checked === selected.total &&
+    selected.region.some((t) => t.includes(String(selected.total))),
+  JSON.stringify({ ...selectAll, ...selected }),
+);
+
+// "The first selection reveals the bulk actions." — the display flip is
+// real even though the Shift+Tab step above it was not.
+const revealed = await page.evaluate(() => {
+  const g = document.querySelector('.bo-data-table__bulk-actions');
+  return { display: getComputedStyle(g).display };
+});
+check('selection reveals the bulk actions', revealed.display !== 'none', JSON.stringify(revealed));
+
+// "Shift+Tab steps back one checkbox at a time" — the CORRECTED claim.
+// Gated because the wrong version ("back to the toolbar") shipped on two
+// pages and read as plausible to every reviewer who never pressed the key.
+await page.evaluate(() => document.querySelectorAll('tbody .bo-data-table__row-select')[1].focus());
+await page.keyboard.down('Shift');
+await page.keyboard.press('Tab');
+await page.keyboard.up('Shift');
+const back = await page.evaluate(() => {
+  const a = document.activeElement;
+  const boxes = [...document.querySelectorAll('tbody .bo-data-table__row-select')];
+  return { isRowCheckbox: boxes.includes(a), index: boxes.indexOf(a), label: a.getAttribute('aria-label') };
+});
+check(
+  'Shift+Tab from a row checkbox lands on the previous row checkbox, not the toolbar',
+  back.isRowCheckbox && back.index === 0,
+  JSON.stringify(back),
+);
+
+// "Measured from the first row: three presses" — the page states a NUMBER,
+// so the number is gated. Adding any focusable control to the toolbar or the
+// header row changes it, and a stale count in a keyboard walkthrough is the
+// same defect as a stale sort direction. (My first version of this sentence
+// said "two, the scroll container is a stop" — inferred from the CSS and
+// wrong; the real path is sort button → select-all → toolbar.)
+// Fresh load: the assertions above leave selection and focus state behind,
+// and this one counts tab stops, which that state changes.
+await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
+await page.evaluate(() => {
+  document.querySelectorAll('tbody .bo-data-table__row-select')[0].click();
+});
+await new Promise((r) => setTimeout(r, 200));
+await page.evaluate(() => document.querySelectorAll('tbody .bo-data-table__row-select')[0].focus());
+let presses = 0;
+for (let i = 1; i <= 10; i++) {
+  await page.keyboard.down('Shift');
+  await page.keyboard.press('Tab');
+  await page.keyboard.up('Shift');
+  const inBulk = await page.evaluate(() => !!document.activeElement.closest('.bo-data-table__bulk-actions'));
+  if (inBulk) { presses = i; break; }
+}
+check('first row is three Shift+Tabs from the bulk actions, as documented', presses === 3, `presses=${presses}`);
+
+// "Sorting is your code — the framework ships none." Guards the corrected
+// text: if a sort behaviour is ever added, this fails and the page that
+// says "the framework ships none" must be rewritten in the same commit.
+const sortInert = await page.evaluate(async () => {
+  const th = document.querySelector('.bo-data-table__sort-btn').closest('th');
+  const before = th.getAttribute('aria-sort');
+  document.querySelector('.bo-data-table__sort-btn').focus();
+  return { before };
+});
+await page.keyboard.press('Enter');
+await new Promise((r) => setTimeout(r, 250));
+const sortAfter = await page.evaluate(() =>
+  document.querySelector('.bo-data-table__sort-btn').closest('th').getAttribute('aria-sort'));
+check(
+  'the sort header is inert without app code (docs say so)',
+  sortInert.before === sortAfter,
+  JSON.stringify({ ...sortInert, after: sortAfter }),
+);
+
+// "The sticky action bar never hides the focused field." — detail-form
+await page.goto(url('/patterns/detail-form/'), { waitUntil: 'networkidle0' });
+const hidden = await page.evaluate(() => {
+  const bar = document.querySelector('.bo-form-actions');
+  if (!bar || !['sticky', 'fixed'].includes(getComputedStyle(bar).position)) return ['bar not sticky'];
+  const out = [];
+  for (const f of document.querySelectorAll('#main-content form input, #main-content form select')) {
+    f.focus();
+    const a = f.getBoundingClientRect(), b = bar.getBoundingClientRect();
+    if (a.bottom > b.top && a.top < b.bottom && a.right > b.left && a.left < b.right)
+      out.push(f.name || f.id || f.className);
+  }
+  return out;
+});
+check('sticky action bar never covers the focused field', Array.isArray(hidden) && hidden.length === 0, JSON.stringify(hidden));
+
 await browser.close();
 server.close();
 
