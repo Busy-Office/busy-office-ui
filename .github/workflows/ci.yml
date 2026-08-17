@@ -64,3 +64,8 @@ jobs:
       # a size floor — the docs claimed a 24px floor and were wrong.
       - name: Target size (WCAG 2.5.8)
         run: npm run check:target-size -w docs
+      # The reference app is what adopters copy and what four docs pages cite as
+      # the working implementation, and nothing tested it until 26.1. Boots the
+      # app on a free port; ~12s, no container needed.
+      - name: Reference app smoke + axe
+        run: npm run check:po-app -w docs

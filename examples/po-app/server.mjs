@@ -1023,4 +1023,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
   }
 });
 
-server.listen(8080, () => console.log('po-app on :8080 · ui dist:', uiDist));
+/* PORT is overridable so the smoke gate can boot this on a free port without
+   colliding with a running container (roadmap 26.1). Default unchanged. */
+const PORT = Number(process.env.PORT) || 8080;
+server.listen(PORT, () => console.log(`po-app on :${PORT} · ui dist:`, uiDist));

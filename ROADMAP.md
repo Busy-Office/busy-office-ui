@@ -73,7 +73,16 @@ Both items come from `.roundtable/grill-objective-slices23-25-2026-08-17.md`.
 Neither is a defect in shipped code; both are gaps in how far verification
 reaches.
 
-1. [ ] **26.1 — Smoke-gate the reference app.** `examples/po-app` is what
+1. [x] **26.1 — Reference app smoke-gated** (2026-08-17) — `check:po-app`
+       boots the app on a free port (no container) and verifies **7**
+       behaviours the docs assert plus axe over 6 routes x 2 widths.
+       **Measured cost: 11.9s**, not the +30-60s I estimated in the grill —
+       the estimate assumed a container boot the gate turned out not to need.
+       Both halves red-proved: removing the invalid-target guard fails the
+       behaviour half, removing a row checkbox's `aria-label` fails the axe
+       half. **Cost line (24.R2): 0 selectors, 0 CSS, 0 behaviors; +1 env var
+       (`PORT`, default unchanged) so the gate needs no fixed port.**
+       Original text: `examples/po-app` is what
        24.R1 requires work to be exercised in and what four docs pages cite as
        the working implementation, and **nothing tests it**. Measured this
        wake: axe over 6 routes x 2 widths is clean today, and several

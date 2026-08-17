@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- Added (gate): `check:po-app` — the reference app is verified in CI for the
+  first time. Boots `examples/po-app` on a free port and asserts seven
+  behaviours the docs cite it for (href-only filter removal, unknown token keys
+  staying free text, an invalid mass-change target changing nothing, staging's
+  disabled Apply, apply-and-keep-errors, bulk partial failure) plus axe over
+  six routes at two widths. 11.9s. `examples/po-app` honours a `PORT` env var;
+  default unchanged.
+
 - Added (docs + reference app): **mass change** (M3) on
   `/patterns/bulk-actions` — select N rows, set one field, in one validated
   operation. No new component: `formaction` re-points the existing bulk form's
