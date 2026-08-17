@@ -26,9 +26,31 @@ const url = (p) => `http://localhost:${port}${base}${p}`;
 const results = [];
 const check = (claim, pass, detail) => results.push({ claim, pass, detail });
 
+/* Every sticky per-page setting, reset on EVERY navigation.
+   emulateMediaType, emulateMediaFeatures and the viewport all persist across
+   goto, and three separate bugs in this file came from a claim silently
+   inheriting a previous claim's state — print media hiding a toolbar a
+   keyboard claim was counting, and a viewport left at 390. Each was patched
+   with another reactive reset; this removes the class instead. Pass the
+   emulation a claim NEEDS; anything unset returns to the default. */
+const cdp = await page.createCDPSession();
+
+async function visit(path, { media = 'screen', features = [], width = 1440, height = 1000 } = {}) {
+  /* ONE CDP call for both. puppeteer's emulateMediaType and
+     emulateMediaFeatures each map onto Emulation.setEmulatedMedia, so calling
+     them in sequence makes the second WIPE the first — print claims fell back
+     to screen one way round, reduced-motion stopped applying the other. That
+     interaction is exactly why this file kept needing reactive resets.
+     Setting media and features together removes the ambiguity. */
+  await cdp.send('Emulation.setEmulatedMedia', { media, features });
+  await page.setViewport({ width, height });
+  await page.goto(url(path), { waitUntil: 'networkidle0' });
+}
+
+
 // "Cancel restores the row's values and re-fires input events, so
 //  derived totals revert with it." — editable-grid / concurrency
-await page.goto(url('/patterns/editable-grid/'), { waitUntil: 'networkidle0' });
+await visit('/patterns/editable-grid/');
 const cancel = await page.evaluate(async () => {
   const table = document.querySelector('#eg-adv-table');
   const total = table.querySelector('[data-sum-of="qty"]');
@@ -46,7 +68,7 @@ const cancel = await page.evaluate(async () => {
 check('Cancel reverts derived totals', cancel.after === cancel.before && cancel.during !== cancel.before, JSON.stringify(cancel));
 
 // "data-loading=true dims the table and blocks interaction mid-swap."
-await page.goto(url('/components/data-table/'), { waitUntil: 'networkidle0' });
+await visit('/components/data-table/');
 const loading = await page.evaluate(() => {
   const t = document.querySelector('table[data-loading="true"]');
   return t ? { pointerEvents: getComputedStyle(t).pointerEvents, ariaBusy: t.getAttribute('aria-busy') } : { missing: true };
@@ -54,7 +76,7 @@ const loading = await page.evaluate(() => {
 check('data-loading blocks interaction', loading.pointerEvents === 'none', JSON.stringify(loading));
 
 // "Skip the swatch grid" — the 264-button bypass must land after the grid.
-await page.goto(url('/base/colors/'), { waitUntil: 'networkidle0' });
+await visit('/base/colors/');
 const skip = await page.evaluate(() => {
   const link = document.querySelector('.scale-skip');
   const target = document.getElementById(link?.getAttribute('href')?.slice(1) ?? '');
@@ -64,14 +86,14 @@ const skip = await page.evaluate(() => {
 check('Skip link bypasses the swatch grid', skip.hasLink && skip.targetExists && skip.after, JSON.stringify(skip));
 
 // "Read-only content needs tabindex=0 to stay reachable and scrollable."
-await page.goto(url('/components/richtext/'), { waitUntil: 'networkidle0' });
+await visit('/components/richtext/');
 const ro = await page.evaluate(() => ({
   tabindex: document.querySelector('.bo-richtext--readonly .bo-richtext__content')?.getAttribute('tabindex'),
 }));
 check('Read-only rich text is keyboard-reachable', ro.tabindex === '0', JSON.stringify(ro));
 
 // "? opens the shortcuts dialog — and never steals the key while typing."
-await page.goto(url('/reference/keyboard/'), { waitUntil: 'networkidle0' });
+await visit('/reference/keyboard/');
 await page.evaluate(() => { const i = document.createElement('input'); i.id = 'probe-field'; document.querySelector('main').append(i); i.focus(); });
 await page.keyboard.press('?');
 await new Promise((r) => setTimeout(r, 150));
@@ -90,8 +112,7 @@ check('"?" opens shortcuts, never while typing', whileTyping === false && otherw
 // never split, chrome disappears, badges print as outlines (NOT as
 // forced colour — that claim was wrong until 2026-08-17), and markers
 // keep the fill that carries their meaning.
-await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
-await page.emulateMediaType('print');
+await visit('/patterns/invoice-list/', { media: 'print' });
 await new Promise((r) => setTimeout(r, 200));
 const print = await page.evaluate(() => {
   const g = (sel, prop) => { const el = document.querySelector(sel); return el ? getComputedStyle(el)[prop] : 'NO ELEMENT'; };
@@ -109,8 +130,7 @@ check('print: rows never split', print.row === 'avoid', print.row);
 check('print: app chrome and toolbars are dropped', print.toolbar === 'none' && print.sidebar === 'none', `${print.toolbar}/${print.sidebar}`);
 check('print: badges are outlined, not filled', print.badgeBg === 'rgba(0, 0, 0, 0)' && print.badgeBorder !== '0px', `bg ${print.badgeBg}, border ${print.badgeBorder}`);
 
-await page.goto(url('/components/approval-workflow/'), { waitUntil: 'networkidle0' });
-await page.emulateMediaType('print');
+await visit('/components/approval-workflow/', { media: 'print' });
 await new Promise((r) => setTimeout(r, 200));
 const marker = await page.evaluate(() => {
   const m = document.querySelector('.bo-timeline__marker');
@@ -118,11 +138,8 @@ const marker = await page.evaluate(() => {
 });
 check('print: timeline markers keep their fill', marker.bg !== 'rgba(0, 0, 0, 0)' && marker.adjust === 'exact', JSON.stringify(marker));
 
-// Media emulation is per-PAGE and sticky: leaving it on 'print' silently
-// corrupts every claim added below. It cost a real debugging round —
-// @media print hides .bo-data-table__toolbar, so a keyboard claim counting
-// tab stops to the bulk actions measured zero and looked like a page bug.
-await page.emulateMediaType('screen');
+// (The reactive `emulateMediaType('screen')` reset that used to live here is
+// gone: visit() resets media on every navigation, so it cannot leak.)
 
 /* ---------- Keyboard walkthroughs (2026-08-17) ----------
    Pattern pages narrate a keyboard path step by step. Every step is a
@@ -136,7 +153,7 @@ await page.emulateMediaType('screen');
 
 // "Space on select-all toggles the page's rows and announces the count
 //  via the live region." — invoice-list step 2
-await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
+await visit('/patterns/invoice-list/');
 const selectAll = await page.evaluate(async () => {
   document.querySelector('.bo-data-table__select-all').focus();
   return { focused: document.activeElement.classList.contains('bo-data-table__select-all') };
@@ -187,7 +204,7 @@ check(
    the answer was native implicit submission, so what gets gated now is the
    mechanism itself. Fresh load: the assertions above leave selection and
    focus state behind, and this one depends on both. */
-await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
+await visit('/patterns/invoice-list/');
 const enterActs = await page.evaluate(() => {
   const form = document.getElementById('il-bulk');
   if (!form) return { error: 'no bulk form' };
@@ -245,7 +262,7 @@ check(
 );
 
 // "The sticky action bar never hides the focused field." — detail-form
-await page.goto(url('/patterns/detail-form/'), { waitUntil: 'networkidle0' });
+await visit('/patterns/detail-form/');
 const hidden = await page.evaluate(() => {
   const bar = document.querySelector('.bo-form-actions');
   if (!bar || !['sticky', 'fixed'].includes(getComputedStyle(bar).position)) return ['bar not sticky'];
@@ -275,7 +292,7 @@ check('sticky action bar never covers the focused field', Array.isArray(hidden) 
 for (const w of [1440, 390]) {
   await page.setViewport({ width: w, height: 900 });
   for (const pat of ['record-detail', 'detail-form']) {
-    await page.goto(url(`/patterns/${pat}/`), { waitUntil: 'networkidle0' });
+    await visit(`/patterns/${pat}/`, { width: w, height: 900 });
     const frame = await page.evaluate(() => {
       const demo = document.querySelector('section.demo');
       const line = demo?.querySelector('.bo-cluster--split');
@@ -295,10 +312,7 @@ for (const w of [1440, 390]) {
     );
   }
 }
-await page.setViewport({ width: 1440, height: 1000 });
-
-await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-await page.goto(url('/components/state-patterns/'), { waitUntil: 'networkidle0' });
+await visit('/components/state-patterns/', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 const reduced = await page.evaluate(() => {
   const root = getComputedStyle(document.documentElement);
   const sk = document.querySelector('.bo-skeleton');
@@ -313,10 +327,6 @@ check(
   reduced.base === '0ms' && reduced.slow === '0ms' && reduced.skeleton === 'none',
   JSON.stringify(reduced),
 );
-// Sticky per page, exactly like emulateMediaType above — reset so anything
-// added below this line is not silently measured under reduced motion.
-await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
-
 await browser.close();
 server.close();
 

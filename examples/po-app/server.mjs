@@ -107,6 +107,16 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 </body></html>`;
 
 // ---------- fragments ----------
+/* One way to read a request body. There were two idioms across four
+   handlers — `for await (const c of req)` and a Promise wrapping
+   req.on('data') — doing the same job with different failure behaviour
+   (Standardize sweep, 2026-08-17). Four call sites, one helper. */
+const readBody = async (req) => {
+  let body = '';
+  for await (const chunk of req) body += chunk;
+  return body;
+};
+
 const rowHtml = (p) => `<tr id="row-${p.id}"${p.bulkError ? ' data-row-state="error"' : ''}>
   <!-- The id is load-bearing: the bulk swap replaces this very row, so the
        checkbox the user pressed Enter on is destroyed. htmx restores focus
@@ -749,8 +759,7 @@ const server = createServer(async (req, res) => {
       return res.end(page('Import', '/import', stagingScreen(), density));
     }
     if (path === '/import' && req.method === 'POST') {
-      let body = '';
-      for await (const c of req) body += c;
+      const body = await readBody(req);
       const form = new URLSearchParams(body);
       const lines = (form.get('csv') ?? '').split('\n').map((l) => l.trim()).filter(Boolean);
       const rows = lines.map(validateStagedRow);
@@ -843,8 +852,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       return res.end(page('Spend by cost center', '/spend', spendScreen(), density));
     }
     if (path === '/pos/bulk-approve' && req.method === 'POST') {
-      let body = '';
-      for await (const c of req) body += c;
+      const body = await readBody(req);
       const ids = new Set(new URLSearchParams(body).getAll('id'));
       // Two real ERP rules, so the action can PARTIALLY fail: over a
       // limit needs a second approver, and a decided PO cannot be
@@ -884,7 +892,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
         return res.end('not found');
       }
       if (m[2] === '/reject' && req.method === 'POST') {
-        const body = await new Promise((ok) => { let b=''; req.on('data',(c)=>b+=c); req.on('end',()=>ok(b)); });
+        const body = await readBody(req);
         const note = (new URLSearchParams(body).get('note') ?? '').replace(/<[^>]*>/g, '').trim();
         if (!note) {
           // 422: re-render the SAME body with values kept and the error
@@ -925,7 +933,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
         // Sanitize per the richtext docs: drop script/style elements WITH
         // their content first (a tag-only allowlist leaks the text — the
         // dogfood round proved it), then allowlist tags, then strip attrs.
-        const body = await new Promise((ok) => { let b=''; req.on('data',(c)=>b+=c); req.on('end',()=>ok(b)); });
+        const body = await readBody(req);
         const rawNote = new URLSearchParams(body).get('note') ?? '';
         p.note = rawNote
           .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
