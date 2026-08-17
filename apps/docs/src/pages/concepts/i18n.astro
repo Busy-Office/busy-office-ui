@@ -76,7 +76,7 @@ new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(new Date())`;
 
   <section class="demo">
     <h2>String expansion — the dense-screen killer</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>Table headers wrap, they do not truncate.</strong> Verify at <em>compact</em> density in your longest locale — that is the combination that breaks first.</li>
       <li><strong>Buttons size to content</strong>, so a long label grows the button rather than clipping. Fixed-width action columns are the anti-pattern.</li>
       <li><strong>Don't build sentences from fragments.</strong> "Approve" + n + "invoices" cannot be translated into languages that inflect; pass the whole sentence with a placeholder.</li>

@@ -22,29 +22,19 @@
  *   (b) has a `@media (prefers-reduced-motion: reduce)` rule that sets
  *       `animation: none` for a selector matching the one that declares it.
  */
-import { readFile, readdir } from 'node:fs/promises';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFile } from 'node:fs/promises';
+import { join, relative } from 'node:path';
+import { distCssFiles, distCssRoot } from './dist-css.mjs';
 import postcss from 'postcss';
 
-const distCss = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist', 'css');
-
-async function* cssFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* cssFiles(p);
-    // .min.css is the same CSS; scanning both double-counts every finding.
-    else if (e.name.endsWith('.css') && !e.name.endsWith('.min.css')) yield p;
-  }
-}
 
 const LITERAL_DURATION = /(?:^|[\s,])\d*\.?\d+m?s(?:\s|$|,)/;
 const failures = [];
 let tokenDriven = 0;
 let explicitlyOverridden = 0;
 
-for await (const file of cssFiles(distCss)) {
-  const rel = relative(join(distCss, '..', '..'), file).replace(/^dist\//, '');
+for await (const file of distCssFiles()) {
+  const rel = relative(join(distCssRoot, '..', '..'), file).replace(/^dist\//, '');
   const root = postcss.parse(await readFile(file, 'utf8'));
 
   // Selectors switched off under reduced motion, in this same file.

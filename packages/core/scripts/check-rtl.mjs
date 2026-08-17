@@ -21,20 +21,10 @@
  *     the way. Extending the allowlist is a deliberate act, and the docs
  *     count has to move with it.
  */
-import { readFile, readdir } from 'node:fs/promises';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFile } from 'node:fs/promises';
+import { join, relative } from 'node:path';
+import { distCssFiles, distCssRoot } from './dist-css.mjs';
 
-const distCss = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist', 'css');
-
-async function* cssFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* cssFiles(p);
-    // .min.css is the same CSS — scanning both doubles every finding.
-    else if (e.name.endsWith('.css') && !e.name.endsWith('.min.css')) yield p;
-  }
-}
 
 /* Physical box properties. `left:`/`right:` must be anchored to a declaration
    start so `inset-inline-left`-ish names and shorthand values don't match. */
@@ -88,8 +78,8 @@ const RTL_RULE = /\[dir=["']?rtl["']?\]/;
 const failures = [];
 const flipSites = new Set();
 
-for await (const file of cssFiles(distCss)) {
-  const rel = relative(join(distCss, '..', '..'), file).replace(/^dist\//, '');
+for await (const file of distCssFiles()) {
+  const rel = relative(join(distCssRoot, '..', '..'), file).replace(/^dist\//, '');
   const css = await readFile(file, 'utf8');
 
   for (const re of PHYSICAL) {

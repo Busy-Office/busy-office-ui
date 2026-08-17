@@ -39,7 +39,7 @@ const brandMarkup = `/* brand.css — imported AFTER the framework, outside any 
    Ready-made palettes ship — see the <a href={base + '/base/palettes'}>Palettes reference</a>.</p>
   <section class="demo">
     <h2>The contract</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>Remap semantic tokens only</strong> (<code>--bo-color-*</code>, fonts, radii). Component-local tokens (<code>--bo-btn-*</code>) are for per-instance tweaks, not brand.</li>
       <li><strong>Keep the token roles honest</strong>: <code>*-solid</code> carries white text in both themes (≥ 4.5:1); <code>*-text</code> sits on <code>*-subtle</code> (≥ 4.5:1); dark mode remaps <code>*-text</code>/<code>*-subtle</code>, never <code>*-solid</code>.</li>
       <li><strong>Verify contrast when you swap hues</strong> — the roles encode the ratios, your values must honor them.</li>

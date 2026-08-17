@@ -88,7 +88,7 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Selection</strong> — row checkboxes carrying <code>name</code>/<code>value</code>, so the selection POSTs natively; <code>initDataTables()</code> keeps the count O(1) at scale.</li>
       <li><strong>Toolbar action</strong> — bulk buttons appear only when something is selected (<a href={base + '/components/table-toolbar'}>toolbar</a>).</li>
       <li><strong>Summary region</strong> — an empty container above the table that the response fills out of band.</li>
@@ -144,7 +144,7 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
 
   <section class="demo">
     <h2>Keyboard walkthrough</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox, <kbd class="bo-kbd">Space</kbd> to take the page; the live region announces the count.</li>
       <li><kbd class="bo-kbd">Tab</kbd> through rows, <kbd class="bo-kbd">Space</kbd> to deselect the ones you are not ready for.</li>
       <li>Back to the toolbar, where the first selection has revealed the bulk
@@ -165,7 +165,7 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/table-toolbar'}>Toolbar</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>

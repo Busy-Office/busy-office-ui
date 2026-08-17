@@ -26,6 +26,13 @@
     border: var(--bo-border-width) solid var(--bo-color-border-default);
     border-radius: var(--bo-radius-md);
     background: var(--bo-color-bg-surface);
+    /* A widget is a surface, and a launchpad tile is that surface on an <a>
+       (see /patterns/app-launch). Without this it wears the browser's link
+       underline — the same gap already fixed on .bo-btn/.bo-badge/.bo-chip.
+       Found because the pattern page carried four hand-written copies of
+       `text-decoration: none` as a workaround (Standardize sweep,
+       2026-08-17); a repeated workaround IS the missing framework rule. */
+    text-decoration: none;
     min-inline-size: 0;
   }
 

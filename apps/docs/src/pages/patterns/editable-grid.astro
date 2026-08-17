@@ -728,7 +728,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
 
   <section class="demo">
     <h2>What composes, and what doesn't (out of the box)</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>Combobox in a cell</strong> — no special markup; it's the same
       <code>.bo-combobox</code> as anywhere else. <code>initCombobox()</code> and
       <code>initRowEdit()</code> are independent document-level delegations —
@@ -762,7 +762,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Header row</strong> — column types decide the cell control: text, number, select, date, checkbox, tag.</li>
       <li><strong>Editable cells</strong> — always real controls; <code>--seamless</code> makes them read as display text until hovered or focused.</li>
       <li><strong>Row actions</strong> — the dirty badge plus Save/Cancel, revealed per row by <code>initRowEdit()</code>.</li>
@@ -804,7 +804,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 4 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/money'}>Money field</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/quantity'}>Quantity</a></li>

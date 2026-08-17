@@ -37,7 +37,7 @@ const tiers = `/* Tier 1 — raw palette: never consumed by components */
   </section>
   <section class="demo">
     <h2>Unit doctrine</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>rem</strong> for space and size — tracks the user's font preference. Density is rem-only; px overrides of density tokens are unsupported (they clip text when users raise the root font).</li>
       <li><strong>px</strong> only for hairlines (borders, focus rings, connectors) — visual weight must not scale; integer px + single-edge borders is also the 125% display-scaling mitigation.</li>
       <li><strong>ch</strong> for mono-measured content and docs prose only — always a minimum width, never in a token consumed across font contexts, never in print.</li>

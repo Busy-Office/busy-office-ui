@@ -56,7 +56,7 @@ const readonlyMarkup = `<!-- A viewer sees FACTS, not disabled inputs. Same data
 
   <section class="demo">
     <h2>What the framework gives you</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><a href={base + '/components/kv'}>Key-value facts</a> — the read-only counterpart of a form section.</li>
       <li><code>readonly</code> on <code>.bo-input</code> — for the narrow case where the field must stay a field (it submits, its text is selectable) but cannot be edited.</li>
       <li><code>--readonly</code> / <code>--disabled</code> on <a href={base + '/components/richtext'}>rich text</a> — with the two-channel rule: the modifier is the visible half, <code>aria-readonly</code>/<code>aria-disabled</code> the programmatic half.</li>
@@ -66,7 +66,7 @@ const readonlyMarkup = `<!-- A viewer sees FACTS, not disabled inputs. Same data
 
   <section class="demo">
     <h2>Rules that keep permission bugs out</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>The server decides; the UI reflects.</strong> Never rely on a hidden control as a security boundary — every action needs its own server-side check. A missing button is a courtesy, not a lock.</li>
       <li><strong>Don't render what you then hide.</strong> Sending a disabled control that contains data the user may not see leaks it in the HTML. Omit it server-side.</li>
       <li><strong>Say why, once.</strong> A disabled control needs its reason nearby (a hint, a tooltip, or a line above the action bar) — not on hover only, which touch and keyboard users never get.</li>

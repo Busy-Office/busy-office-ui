@@ -19,7 +19,7 @@ const layers = `/* declared once, first, in every dist file: */
   <section class="demo">
     <h2>The order</h2>
     <pre><code>{layers}</code></pre>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>reset → tokens → primitives → components → utilities</strong>: utilities win over components (the one Tailwind-ism kept — a small curated set, not a system).</li>
       <li>The layer-order statement is byte-identical in every dist file, and re-declaring an existing order is a no-op — any à-la-carte import combination yields the same cascade.</li>
       <li>Re-branding = remapping the semantic token tier in your unlayered file; see <a href={base + '/concepts/theming'}>Theming</a>. Never override component classes for brand.</li>

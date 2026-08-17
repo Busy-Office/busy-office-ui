@@ -39,7 +39,7 @@ const logistics = [
     <h2>Favourites</h2>
     <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
       {favourites.map((a) => (
-        <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+        <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
           <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
           <span style="color: var(--bo-color-text-primary)">{a.label}</span>
         </a>
@@ -57,7 +57,7 @@ const logistics = [
       <div class="bo-tabs__panel" role="tabpanel" id="al-p-fin" aria-labelledby="al-t-fin" tabindex="0">
         <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
           {finance.map((a) => (
-            <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+            <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
               <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
               <span style="color: var(--bo-color-text-primary)">{a.label}</span>
             </a>
@@ -67,7 +67,7 @@ const logistics = [
       <div class="bo-tabs__panel" role="tabpanel" id="al-p-log" aria-labelledby="al-t-log" tabindex="0" hidden>
         <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
           {logistics.map((a) => (
-            <a href="#" class="bo-widget" style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+            <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
               <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
               <span style="color: var(--bo-color-text-primary)">{a.label}</span>
             </a>
@@ -80,7 +80,7 @@ const logistics = [
   <section class="demo">
     <h2>A "folder" tile — grouped apps</h2>
     <div class="bo-widget-grid" style="--bo-widget-min: 12rem">
-      <a href="#" class="bo-widget" style="text-decoration: none">
+      <a href="#" class="bo-widget">
         <div class="bo-widget__body" style="text-align: center">
           <span class="bo-cluster" aria-hidden="true" style="justify-content: center; --bo-cluster-gap: var(--bo-space-1)">
             <span class="bo-badge">GL</span><span class="bo-badge">AP</span><span class="bo-badge">AR</span><span class="bo-badge">FX</span>
@@ -88,7 +88,7 @@ const logistics = [
           <span style="display: block; margin-block-start: var(--bo-space-2); color: var(--bo-color-text-primary)">Finance apps</span>
         </div>
       </a>
-      <a href="#" class="bo-widget" style="text-decoration: none">
+      <a href="#" class="bo-widget">
         <div class="bo-widget__body" style="text-align: center">
           <span class="bo-cluster" aria-hidden="true" style="justify-content: center; --bo-cluster-gap: var(--bo-space-1)">
             <span class="bo-badge">WH</span><span class="bo-badge">SH</span><span class="bo-badge">ST</span>
@@ -115,7 +115,7 @@ const logistics = [
      container query reflows it on tablet/narrow widths for free. -->
 <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
   <a href="/purchasing" class="bo-widget"
-      style="text-decoration: none; text-align: center; padding-block: var(--bo-space-4)">
+      style="text-align: center; padding-block: var(--bo-space-4)">
     <span class="bo-icon bo-icon--cart" aria-hidden="true"
         style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto"></span>
     <span style="color: var(--bo-color-text-primary)">Purchasing</span>
@@ -128,7 +128,7 @@ const logistics = [
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>App shell</strong> — header + sidebar + main; the shell is the pattern.</li>
       <li><strong>Entry tiles</strong> — a <code>.bo-grid</code> of cards, each a task the user starts here.</li>
       <li><strong>Counts / badges</strong> — "12 awaiting approval" on a tile: the reason this screen exists rather than a static menu.</li>
@@ -169,7 +169,7 @@ const logistics = [
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/base/primitives'}>App shell & grid</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/sidebar-nav'}>Navigation</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Cards</a></li>

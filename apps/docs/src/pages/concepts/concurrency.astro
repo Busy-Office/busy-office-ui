@@ -79,7 +79,7 @@ const conflictMarkup = `<!-- Send what you think you're changing FROM. The serve
 
   <section class="demo">
     <h2>What the framework tracks for you</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><code>initRowEdit()</code> keeps per-row dirty state and dispatches <code>bo:row-save</code> with the row and its <code>data-row-id</code> — your save code decides what to send, including the version.</li>
       <li><code>bo:cell-change</code> fires on every committed cell edit, so you can mark a record dirty the moment anything changes.</li>
       <li>Cancel restores a row to its last-saved values and re-fires input events, so derived totals revert with it — a cancelled edit never leaves stale numbers on screen.</li>

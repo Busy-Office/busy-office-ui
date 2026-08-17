@@ -75,7 +75,7 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
   </section>
   <section class="demo">
     <h2>Rules that keep density safe</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li>Density tokens are <strong>rem-only</strong> — they scale with the user's root font, so raised text never clips. The low-vision power user runs large text + compact and gets density at a readable size; that combination is the point.</li>
       <li>Explicit <code>data-density</code> always beats container-query auto-compaction.</li>
       <li><strong>Density moves row height and font size, not control boxes.</strong>

@@ -106,7 +106,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     being bookmarked because it is all in the URL.</p>
 
     <h3>The parse contract is the server's</h3>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><code>key:value</code> where <code>key</code> is one your server
       recognises; everything else is free text.</li>
       <li><strong>An unknown key stays free text</strong> — it is not a
@@ -127,7 +127,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Filter bar</strong> — a plain <code>&lt;form&gt;</code> in a
       <a href={base + '/base/primitives'}>cluster</a> with
       <a href={base + '/components/filters'}>filter</a> controls. Submits on Apply;
@@ -188,7 +188,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
   <section class="demo">
     <h2>Keyboard walkthrough</h2>
     <p>The path an AP clerk actually takes, with nothing custom bound:</p>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><kbd class="bo-kbd">Tab</kbd> into the filter bar, type, <kbd class="bo-kbd">Enter</kbd> to apply — a native form submit.</li>
       <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox; <kbd class="bo-kbd">Space</kbd> toggles the page's rows and announces the count via the live region.</li>
       <li><kbd class="bo-kbd">Tab</kbd> through row checkboxes, <kbd class="bo-kbd">Space</kbd> to pick individual invoices.</li>
@@ -224,7 +224,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
 
   <section class="demo">
     <h2>Scaling notes</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>Rows</strong>: measured render costs (1k → 20k, including a 4×
       CPU throttle) are on the
       <a href={base + '/components/data-table'}>data table page</a>. Past ~5k rows,
@@ -246,7 +246,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span> —
     read-many-records tier.</p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/filters'}>Filters</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/pagination'}>Pagination</a></li>

@@ -578,6 +578,16 @@ const current =
     align-items: start;
   }
   .docs-content { min-inline-size: 0; }
+  /* Marker indent for prose lists on docs pages. Was an identical inline
+     style="padding-inline-start: 1.25rem" repeated 37 times across 27 pages
+     (Standardize sweep, 2026-08-17). Docs-local on purpose: this is page
+     styling, not framework API, and the Standardize rule is to consolidate
+     WITHOUT widening the public surface. */
+  .docs-list { padding-inline-start: 1.25rem; }
+  /* A <ul> used purely as a cluster of badges/links — the list semantics are
+     wanted, the markers are not. Was style="list-style: none; padding: 0"
+     repeated 14 times (same Standardize sweep). */
+  .docs-list-bare { list-style: none; padding: 0; }
   /* Cap the reading MEASURE, not the column (owner review: prose ran
      ~175ch on a 1920px display). Capping the grid column instead would
      squeeze the wide demos — full app screens, data tables, the scale

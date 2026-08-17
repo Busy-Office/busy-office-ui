@@ -96,7 +96,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Sections</strong> — real <code>&lt;fieldset&gt;</code>s
       (<code>.bo-form-section</code>); the legend is the group's accessible name, so
       a screen reader announces "Header, group" before the fields.</li>
@@ -149,7 +149,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Keyboard walkthrough &amp; print</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><kbd class="bo-kbd">Tab</kbd> runs header fields → line items → action bar; the sticky bar never hides the focused field.</li>
       <li>Inside line items, each cell is a real control — focus IS edit (see <a href={base + '/patterns/editable-grid'}>editable grid</a>).</li>
       <li><kbd class="bo-kbd">Enter</kbd> in a text field submits the form natively; keep Save as the form's submit button so that stays true.</li>
@@ -165,7 +165,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span> —
     capture &amp; edit tier.</p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/patterns/editable-grid'}>Editable grid</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/money'}>Money field</a></li>

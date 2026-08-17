@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- **Fixed**: `.bo-widget` did not reset `text-decoration`, so a launchpad
+  tile — a widget on an `<a>` — wore the browser's link underline. Same gap
+  already fixed on `.bo-btn`/`.bo-badge`/`.bo-chip`; found because the
+  app-launch pattern carried six hand-written `text-decoration: none`
+  workarounds, and a repeated workaround is the missing framework rule. The
+  underline gate now covers `bo-widget` too.
+
 - Added (combobox value help): rich result rows —
   `.bo-combobox__option-code` / `__option-label` / `__option-meta` — plus
   `.bo-combobox__group` headings and `data-open-on-focus`, which shows

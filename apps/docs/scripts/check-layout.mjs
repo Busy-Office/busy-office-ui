@@ -128,7 +128,7 @@ async function sweep(path, page) {
 /* Component classes that paint a control/chip surface. On an <a> they must
    suppress the underline; content links (prose, docs body) must keep it, so
    this is a deliberate list rather than "every anchor with a bo- class". */
-const CONTROL_ON_ANCHOR = ['bo-btn', 'bo-badge', 'bo-chip'];
+const CONTROL_ON_ANCHOR = ['bo-btn', 'bo-badge', 'bo-chip', 'bo-widget'];
 
 async function underlineProbe(page) {
   return page.evaluate((classes) => {

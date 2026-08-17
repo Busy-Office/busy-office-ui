@@ -52,7 +52,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>The details that matter on a login screen</h2>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong><code>autocomplete="username"</code> / <code>"current-password"</code></strong> —
       the standardized tokens password managers key on. Omitting them (or using
       <code>off</code>) breaks credential autofill, which hurts the users who rely
@@ -112,7 +112,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Brand block</strong> — your mark; the framework ships no logo component, it is your <code>&lt;img&gt;</code>.</li>
       <li><strong>Form</strong> — a real <code>&lt;form&gt;</code> posting to your endpoint; native validation first, server validation authoritative.</li>
       <li><strong>Error region</strong> — <code>.bo-alert--danger</code> above the fields, rendered by the SERVER on failure (not JS), so it survives a hard reload.</li>
@@ -153,7 +153,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>

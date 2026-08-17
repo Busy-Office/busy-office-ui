@@ -94,7 +94,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Scan field</strong> — always focused; a hardware scanner types then presses Enter, which <code>initScanInput()</code> treats as a submit.</li>
       <li><strong>Expected vs received list</strong> — every line with its ordered quantity and a running received count.</li>
       <li><strong>Quantity control</strong> — spacious density and big steppers: this screen is used one-handed, often gloved.</li>
@@ -136,7 +136,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/quantity'}>Quantity</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>

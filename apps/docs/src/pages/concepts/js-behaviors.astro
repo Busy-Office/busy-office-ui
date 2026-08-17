@@ -74,7 +74,7 @@ const inits = Object.entries(manifest.behaviors)
     event time; element-level listeners (a dialog's close handler) bind lazily on
     first use, tracked in a <code>WeakSet</code> — never serialized into the DOM.
     What you can rely on:</p>
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight docs-list">
       <li>Triggers may render before their dialog exists.</li>
       <li>Swapped-in content works without re-init.</li>
       <li>Clone / morph swaps can't strand stale state.</li>

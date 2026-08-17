@@ -93,7 +93,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Breadcrumb</strong> — where this record sits; the parent link is how users get back to the filtered list.</li>
       <li><strong>Facts strip</strong> — <code>.bo-kv</code> for the header facts (vendor, cost centre, total): display data, never readonly inputs.</li>
       <li><strong>Record feed</strong> — one card per related document (order, receipt, invoice) in chronological order.</li>
@@ -134,7 +134,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Cards</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/approval-workflow'}>Timeline & audit</a></li>

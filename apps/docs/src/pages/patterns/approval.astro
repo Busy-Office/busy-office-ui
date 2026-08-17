@@ -115,7 +115,7 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
 
   <section class="demo">
     <h2>Anatomy</h2>
-    <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Record summary</strong> — enough to decide without leaving: amount, vendor, cost centre.</li>
       <li><strong>Status timeline</strong> — the chain so far, with the current step marked <code>aria-current="step"</code>.</li>
       <li><strong>Decision cluster</strong> — Approve / Reject; Reject requires a reason, so both open the dialog.</li>
@@ -158,7 +158,7 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
   <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
-    <ul class="bo-cluster" style="list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/approval-workflow'}>Timeline & audit</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/richtext'}>Rich text</a></li>
