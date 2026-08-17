@@ -129,13 +129,70 @@ const tbodyHtml = (list) =>
    also meant the "filters exclude everything" empty state — which the
    invoice-list pattern requires as a distinct state — could never occur in
    the reference app, so nobody had ever built it. */
+/* QUERY TOKENS (roadmap 24.1). One search field carries typed tokens —
+   `status:pending vendor:acme` — plus any free text. The SERVER parses;
+   the framework contributes nothing new, because active tokens render as
+   the .bo-chip that already ships. No new component, no new behavior.
+   Unknown keys are deliberately NOT treated as tokens: they stay free
+   text, so a vendor literally called "ref:99" still searches instead of
+   silently matching nothing. */
+const TOKEN_KEYS = { status: 'status', vendor: 'vendor', cc: 'cc' };
+
+const parseQuery = (raw) => {
+  const tokens = [];
+  const free = [];
+  for (const word of String(raw).trim().split(/\s+/).filter(Boolean)) {
+    const m = /^([a-z]+):(.+)$/i.exec(word);
+    const key = m && TOKEN_KEYS[m[1].toLowerCase()];
+    if (key) tokens.push({ key, value: m[2] });
+    else free.push(word);
+  }
+  return { tokens, free: free.join(' ') };
+};
+
+/* Rebuild the q string without one token — that is the chip's remove link,
+   so removing a filter is a plain <a href>, not a click handler. */
+const queryWithout = (raw, i) => {
+  const { tokens, free } = parseQuery(raw);
+  const kept = tokens.filter((_, n) => n !== i).map((t) => `${t.key}:${t.value}`);
+  return [...kept, free].filter(Boolean).join(' ');
+};
+
 const filterPos = ({ q = '', status = '' }) => {
-  const needle = q.trim().toLowerCase();
+  const { tokens, free } = parseQuery(q);
+  const needle = free.toLowerCase();
   return pos.filter((p) => {
     if (status && status !== 'All' && p.status !== status) return false;
+    for (const t of tokens) {
+      const field = String(p[t.key] ?? '').toLowerCase();
+      if (!field.includes(t.value.toLowerCase())) return false;
+    }
     if (!needle) return true;
     return `${p.id} ${p.vendor} ${p.cc}`.toLowerCase().includes(needle);
   });
+};
+
+const tokenChipsHtml = (q, status) => {
+  const { tokens } = parseQuery(q);
+  if (!tokens.length) return '';
+  const qs = (newQ) => {
+    const u = new URLSearchParams();
+    if (newQ) u.set('q', newQ);
+    if (status && status !== 'All') u.set('status', status);
+    const str = u.toString();
+    return '/pos' + (str ? '?' + str : '');
+  };
+  return `
+<div class="bo-cluster" role="group" aria-label="Active filters" style="--bo-cluster-gap: var(--bo-space-2)">
+  <span class="bo-u-text-muted bo-u-text-sm">Filtering by</span>
+  ${tokens
+    .map(
+      (t, i) => `<span class="bo-chip">${esc(t.key)}: ${esc(t.value)}
+    <a class="bo-chip__remove" href="${esc(qs(queryWithout(q, i)))}"
+       aria-label="Remove filter ${esc(t.key)} ${esc(t.value)}">&times;</a></span>`,
+    )
+    .join('')}
+</div>`;
 };
 
 const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -179,6 +236,9 @@ const listScreen = (query = {}) => {
   </select>
   <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
 </form>
+<p class="bo-u-text-muted bo-u-text-sm">Type tokens in the search box:
+<code>status:pending</code> <code>vendor:acme</code> <code>cc:4021</code> — plus any free text.</p>
+${tokenChipsHtml(query.q || '', query.status || 'All')}
 <div id="bulk-result"></div>
 ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the selection, not hx-include on the button. Both
      POST the same ids, but only the form gets native implicit submission:

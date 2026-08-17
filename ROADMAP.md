@@ -126,7 +126,7 @@ outcome below. Verified against the tree, not assumed.
 
 ### Accepted and queued
 
-1. [ ] **24.1 — Query-token filtering, as a pattern not a component.** A
+1. [x] **24.1 — Query-token filtering, as a pattern not a component.** (2026-08-17) — shipped in po-app + documented on `/patterns/invoice-list`. **Cost line (24.R2): 0 new selectors, 0 new behaviors, 0 new CSS** — active tokens are the existing `.bo-chip`/`.bo-chip__remove`, removal is a plain `<a href>` carrying `q` minus that token, and the server owns parsing. Verified: `status:Pending vendor:Stark` → 1 row, dropping the status token → 6, unknown key `ref:99` stays free text rather than becoming a token that matches nothing. Original text: A
        single search field taking `status:open vendor:acme`, server-parsed,
        with active tokens rendered as existing `.bo-chip`s and cleared
        individually. Chosen first: highest leverage per unit of new debt of

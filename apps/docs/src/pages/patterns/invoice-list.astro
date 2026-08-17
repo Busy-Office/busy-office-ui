@@ -86,6 +86,46 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
   </section>
 
   <section class="demo">
+    <h2>Filtering: typed tokens, not a filter dialog</h2>
+    <p>ERP users live in a handful of named views and rarely compose
+    filters from scratch. So the ad-hoc case gets <strong>one search
+    field</strong> that accepts typed tokens, and there is deliberately no
+    adapt-filters dialog:</p>
+    <div class="bo-cluster" role="group" aria-label="Active filters" style="--bo-cluster-gap: var(--bo-space-2)">
+      <span class="bo-u-text-muted bo-u-text-sm">Filtering by</span>
+      <span class="bo-chip">status: pending
+        <a class="bo-chip__remove" href="#" aria-label="Remove filter status pending">&times;</a></span>
+      <span class="bo-chip">vendor: acme
+        <a class="bo-chip__remove" href="#" aria-label="Remove filter vendor acme">&times;</a></span>
+    </div>
+    <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-3)">Zero
+    new framework surface: the field is a plain
+    <code>&lt;input type="search"&gt;</code> and each active token is the
+    <a href={base + '/components/filters'}><code>.bo-chip</code></a> that
+    already ships. Reads as a sentence, stays keyboardable, and survives
+    being bookmarked because it is all in the URL.</p>
+
+    <h3>The parse contract is the server's</h3>
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+      <li><code>key:value</code> where <code>key</code> is one your server
+      recognises; everything else is free text.</li>
+      <li><strong>An unknown key stays free text</strong> — it is not a
+      token with no matches. A vendor genuinely called
+      <code>ref:99</code> must still be findable, so guessing is worse than
+      not tokenising.</li>
+      <li>Multiple tokens are AND; free text searches the columns you
+      choose. Both live in the single <code>q</code> parameter.</li>
+      <li>Each chip's remove control is a plain <code>&lt;a href&gt;</code>
+      carrying <code>q</code> minus that token — removing a filter needs no
+      JavaScript, and works with the back button.</li>
+    </ul>
+    <p class="bo-u-text-muted">Working implementation in
+    <a href="https://github.com/Busy-Office/busy-office-ui/tree/main/examples/po-app">examples/po-app</a>:
+    <code>status:pending vendor:stark</code> narrows to one row, dropping
+    the status token widens it to six, and the chips track both.</p>
+  </section>
+
+  <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li><strong>Filter bar</strong> — a plain <code>&lt;form&gt;</code> in a
