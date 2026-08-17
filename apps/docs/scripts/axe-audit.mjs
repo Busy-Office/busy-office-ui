@@ -1,4 +1,7 @@
-// axe-core scan of every docs page, at both harness widths.
+// axe-core scan of every docs page, at both harness widths, PLUS one rule axe
+// cannot express: an input whose only accessible name comes from `placeholder`
+// (see the in-page comment below — placeholder feeds the name computation, so
+// axe passes it).
 //   npm run build -w docs && npm run test:axe -w docs
 // Exits 1 on any violation. First run 2026-08-15 found 7 pages; all fixed.
 //
@@ -52,11 +55,36 @@ async function scan(path, page) {
       summary[`${path}@${width}`] = [{ id: 'HTTP-' + (res && res.status()) }];
       continue;
     }
-    const r = await page.evaluate(async () =>
-      (await window.axe.run(document, { resultTypes: ['violations'] })).violations
+    const r = await page.evaluate(async () => {
+      const out = (await window.axe.run(document, { resultTypes: ['violations'] })).violations
         .map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length,
-                     sample: v.nodes[0]?.target?.join(' ') }))
-    );
+                     sample: v.nodes[0]?.target?.join(' ') }));
+      /* One rule axe cannot express (roadmap 27.5). `placeholder` CONTRIBUTES
+         to the accessible name computation, so axe's label rule passes an
+         input whose only name is a placeholder — and it did, on four inputs
+         across two component pages, one of which I had shipped myself. A
+         placeholder is not a label: it is not reliably announced and it
+         disappears the moment the user types (WCAG 3.3.2, 4.1.2). */
+      const unnamed = [];
+      for (const el of document.querySelectorAll('#main-content input, #main-content textarea, #main-content select')) {
+        if (el.closest('pre')) continue;                 // code samples are text
+        if (el.type === 'hidden' || el.type === 'submit' || el.type === 'button') continue;
+        const named =
+          el.getAttribute('aria-label')?.trim() ||
+          el.getAttribute('aria-labelledby') ||
+          el.closest('label') ||
+          (el.id && document.querySelector(`label[for="${CSS.escape(el.id)}"]`));
+        if (named) continue;
+        const leaning = el.getAttribute('placeholder') || el.getAttribute('title');
+        unnamed.push({
+          id: 'placeholder-only-name',
+          impact: 'serious',
+          nodes: 1,
+          sample: `${el.className || el.tagName}${leaning ? ` (placeholder: "${leaning}")` : ' (no name at all)'}`,
+        });
+      }
+      return [...out, ...unnamed];
+    });
     if (r.length) summary[`${path}@${width}`] = r;
     process.stderr.write('.');
   }

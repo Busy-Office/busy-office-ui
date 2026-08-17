@@ -178,7 +178,19 @@ technically correct and substantively blind here. That blind spot is 27.5.
        one by breaking the other is what this item exists to avoid. Low
        priority: excerpt noise is cosmetic next to the rest of Slice 27.
 
-5. [ ] **27.5 — Real labels on tag-input and combobox (P2-4), and close the
+5. [x] **27.5 — Real labels, and the blind spot closed** (2026-08-18) — the
+       four inputs fixed in the DOCS MARKUP, so the copy-paste path carries the
+       fix: tag-input's three fields get `aria-label` (a visible label belongs
+       to the enclosing form field, not inside a chip group), and the combobox
+       value-help gets a real `<label for="vh-input">`, matching the pattern
+       that page's other demos already use. **The gate is the durable half:**
+       `axe-audit` now also rejects an input whose only accessible name comes
+       from `placeholder`, which axe passes because placeholder CONTRIBUTES to
+       the name computation. Red-proved by removing the label again — it flags
+       the input at both widths, on the same page axe reports clean. Added to
+       the existing 82-page sweep rather than a new gate, so it costs nothing.
+       82 pages come back clean, so no other page had the problem. Original
+       text:
        gate's blind spot.** Fix the four inputs in the DOCS MARKUP so the
        copy-paste path is correct. Accept: every documented form control has a
        `<label for>` or `aria-label`, **and** a gate rejects an input whose

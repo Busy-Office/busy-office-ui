@@ -13,7 +13,7 @@ const canonical = `<!-- The framework owns REMOVAL (it's the framework's own ren
   <span class="bo-tag-input__tag">CC-4021
     <button class="bo-tag-input__remove" type="button" aria-label="Remove CC-4021">×</button>
   </span>
-  <input class="bo-tag-input__field" type="text" placeholder="Add a cost center…">
+  <input class="bo-tag-input__field" type="text" aria-label="Add a cost center" placeholder="Add a cost center…">
 </div>
 <script type="module">
   import { initTagInput } from "@busy-office/ui/js";
@@ -59,7 +59,7 @@ const canonical = `<!-- The framework owns REMOVAL (it's the framework's own ren
       <span class="bo-tag-input__tag">CC-2205
         <button class="bo-tag-input__remove" type="button" aria-label="Remove CC-2205">×</button>
       </span>
-      <input class="bo-tag-input__field" type="text" placeholder="Add a cost center…">
+      <input class="bo-tag-input__field" type="text" aria-label="Add a cost center" placeholder="Add a cost center…">
     </div>
     <p class="bo-u-text-muted">Type a value and press Enter to add it; click
     a tag's × (or press Backspace in the empty field) to remove the last
@@ -73,14 +73,14 @@ const canonical = `<!-- The framework owns REMOVAL (it's the framework's own ren
       <span class="bo-tag-input__tag">j.kim@busy-office.example
         <button class="bo-tag-input__remove" type="button" aria-label="Remove j.kim@busy-office.example">×</button>
       </span>
-      <input class="bo-tag-input__field" type="text" placeholder="Add an approver…">
+      <input class="bo-tag-input__field" type="text" aria-label="Add an approver" placeholder="Add an approver…">
     </div>
   </section>
 
   <section class="demo">
     <h2>Empty</h2>
     <div class="bo-tag-input" role="group" aria-label="Tags (empty)">
-      <input class="bo-tag-input__field" type="text" placeholder="Add a cost center…">
+      <input class="bo-tag-input__field" type="text" aria-label="Add a cost center" placeholder="Add a cost center…">
     </div>
     <p class="bo-u-text-muted">The container works with zero tags — no
     special empty-state markup needed.</p>

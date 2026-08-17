@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (docs): four documented form controls had no accessible name of
+  their own — three `.bo-tag-input__field` and the combobox value-help input,
+  all relying on `placeholder`. Fixed in the copy-paste markup so adopters do
+  not inherit it. The accessibility sweep now rejects placeholder-only names, a
+  rule axe cannot express because `placeholder` feeds the accessible-name
+  computation.
+
 - **Fixed** (docs search): the index covered whole page bodies, so every result
   excerpt began with the app shell ("busy-office-ui Menu Pattern: …") and raw
   HTML from code samples surfaced as prose. `<main>` is now the indexed body,
