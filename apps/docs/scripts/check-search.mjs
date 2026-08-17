@@ -19,7 +19,7 @@
  * decorative text.
  */
 import { join } from 'node:path';
-import { serveDist } from './serve-DIST.mjs';
+import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';

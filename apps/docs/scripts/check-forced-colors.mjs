@@ -22,7 +22,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
-import { serveDist } from './serve-DIST.mjs';
+import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';

@@ -13,7 +13,7 @@
 // produced 10 findings. Note that auto table layout IGNORES max-width on
 // cells — an early red test injected there, saw nothing, and would have
 // shipped a detector that could not fail.
-import { serveDist } from './serve-DIST.mjs';
+import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
 

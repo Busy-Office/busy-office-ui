@@ -12,7 +12,7 @@
 //    shell never grows, so document scrollWidth silently reports nothing)
 //  - spacing compares clipping BEFORE and AFTER the override, so
 //    deliberate ellipsis truncation is not reported as a 1.4.12 failure
-import { serveDist } from './serve-DIST.mjs';
+import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';

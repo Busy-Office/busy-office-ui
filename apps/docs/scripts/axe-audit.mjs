@@ -11,7 +11,7 @@
 // and a gate may not depend on a human having started something.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { serveDist } from './serve-DIST.mjs';
+import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
