@@ -2991,6 +2991,29 @@ in the pattern.
        po-app carries the working implementation, live-verified both
        themes/widths.
 
+13. [ ] **Return path from a selection to the bulk toolbar** — graduated
+       from the 2026-08-17 keyboard-walkthrough execution, which measured
+       the real cost: the bulk toolbar sits above the table, so
+       `Shift`+`Tab` back to it is one press per row checkbox passed plus
+       two (sort header, select-all) — three from row 1, thirty-two from
+       row 30. Docs now state this honestly; the ergonomic gap itself is
+       untriaged. **Objective test first, and refusing is a valid
+       outcome**: *simplicity* — is a second focus mechanism worth it when
+       the browser already offers one path? *less-for-more* — could an
+       existing primitive carry it (the `.bo-data-table-container` is
+       already a tab stop; the skip-link pattern already exists on
+       `/base/colors` for the 264-swatch grid, and this is the same shape
+       of problem)? *reusability* — the same "act on what you selected"
+       return path applies to any long selectable list, not just
+       invoices. Candidate answers, cheapest first: reuse the existing
+       skip-link pattern; move the toolbar below the table on long lists;
+       a documented `accesskey`. **Do not** invent a roving-tabindex or
+       focus-stealing behaviour — the invoice-list page already commits
+       to keeping screen-reader table browse mode, and this must not
+       reopen that. Accept: either a shipped mechanism that makes a
+       measured, gated claim true, or a recorded refusal naming which
+       Objective test it failed and why the docs note is sufficient.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
