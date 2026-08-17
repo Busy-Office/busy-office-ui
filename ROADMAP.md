@@ -67,6 +67,37 @@ with the reason); the design panel grills slices against them; removals
 face the same tests as additions — deleting a surface consumers compose
 against is a Breaking-entry decision, not a tidy-up.
 
+## Slice 25 — carried forward (2026-08-17 reconciliation)
+
+Two pieces of work were accepted during Slice 24 but never given a
+checkbox, which made them invisible to the dispatcher — recorded as real
+items now rather than left as prose.
+
+1. [ ] **25.1 — Write the M1-M4 data-maintenance doctrine into DESIGN.md.**
+       Accepted as doctrine in Slice 24 (row-swap inline edit /
+       master-detail / mass change / Excel round-trip) and referenced from
+       `/patterns/staging`, but DESIGN.md still does not answer "how do I
+       maintain data here", which is why the grid question keeps recurring.
+       Accept: DESIGN.md names all four, says which ship today (M1 largely
+       does; M4 landed as 24.3) and which do not (M2 master-detail, M3 mass
+       change), and links the patterns that implement them. Docs-only.
+2. [ ] **25.2 — M3 mass change (select N rows, set field X).** The one
+       genuinely absent pattern from M1-M4, and the honest answer to
+       "update 200 records" that people reach for cell editing to solve.
+       Accept: extends the existing selection + bulk-action contract rather
+       than adding a component; one validated operation instead of N
+       hand-edits; po-app carries it; live-verified.
+
+**OPEN OWNER DECISION (unchanged, carried from Slice 24):** autosave
+reverses `/concepts/concurrency`'s published "nothing auto-saves"
+guarantee and leaves 409-during-autosave undefined. Silence leaves the
+current guarantee standing.
+
+**MILESTONE PENDING:** Slice 24 closed 2026-08-17, so an **Objective**
+pass is due (LOOPS.md rule 6). It has been deferred twice by the 4-tick
+Standardize rule taking precedence; it should run on the next wake where
+the counter is clear.
+
 ## Slice 24 — triaged from "ROADMAP DIRECTION v1.2" (external review, 2026-08-17)
 
 An outside reviewer submitted a direction document (transactional-core
