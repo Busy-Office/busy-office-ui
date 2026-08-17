@@ -110,6 +110,27 @@ if (realPlaces.length !== DOCUMENTED_PLACES) {
   );
 }
 
+/* DESIGN.md states the same count in prose, and nothing was reading it — it
+   still said "the one physical exception" months after there were five
+   (found while writing the M1-M4 doctrine, 2026-08-17). A number repeated in
+   two places drifts; assert both. */
+const designMd = await readFile(join(distCssRoot, '..', '..', '..', '..', 'DESIGN.md'), 'utf8').catch(() => null);
+if (designMd === null) {
+  failures.push('DESIGN.md not readable — it states the flip-site count and must agree with this gate');
+} else {
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+  const word = WORDS[DOCUMENTED_PLACES];
+  const rtlPara = designMd.match(/Logical properties throughout[\s\S]{0,600}/)?.[0] ?? '';
+  const statesCount =
+    new RegExp(`\\b(${DOCUMENTED_PLACES}|\\*\\*${word}\\*\\*|${word})\\b`, 'i').test(rtlPara);
+  if (!statesCount) {
+    failures.push(
+      `DESIGN.md's logical-properties paragraph does not state ${DOCUMENTED_PLACES} (${word}) flip sites — ` +
+        `it is the third place this count lives and the one nothing was checking.`,
+    );
+  }
+}
+
 if (failures.length) {
   console.error(`rtl check FAILED (${failures.length}):`);
   for (const f of failures) console.error('  ' + f);

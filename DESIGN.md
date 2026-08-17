@@ -150,9 +150,42 @@ selection count for bulk actions).
   button text stays AA in both themes.
 - `@media print` rules: hide nav/toolbars, full-width black-on-white tables.
 - All animations are token-duration-driven and zeroed under `prefers-reduced-motion`
-  (including the HTMX settle flash). Logical properties throughout; the one physical
-  exception (select chevron `background-position`) ships an explicit `[dir="rtl"]`
-  override because background-position has no logical keywords.
+  (including the HTMX settle flash) — `check:motion` refuses any animation with a
+  literal duration and no override. Logical properties throughout, with **five**
+  physical exceptions that each ship an explicit `[dir="rtl"]` flip, because CSS
+  offers no logical form for what they use: the select chevron and tree/tree-table
+  disclosure glyphs (`background-position` and `content` have no logical keywords),
+  the off-canvas slide direction, and the `slide-in-inline-start` animation
+  (`transform` is physical). `check:rtl` gates that count — a sixth unflipped case
+  fails the build. (This bullet said "the one physical exception" until 2026-08-17,
+  when executing the claim found the other four.)
+
+## Data maintenance: four patterns, no grid (2026-08-17)
+
+"How do I let users maintain this data?" kept resolving to "we need an editable
+grid", which is the most expensive answer available and the wrong one for most
+screens. A grid conflates two needs — **viewing** many rows, which the dense
+data table already does, and **editing** many rows, which splits four ways.
+Naming the four is what stops the question recurring:
+
+| | Pattern | Use when | Status |
+|---|---|---|---|
+| **M1** | **Row-swap inline edit.** Edit swaps a display `<tr>` for a form `<tr>`; save swaps it back. One row in edit mode at a time. | Config and lookup tables, master-data upkeep — the SM30 case. | **Ships.** `initRowEdit()`, `data-row-state="dirty"`, `/components/inline-editing`, `/patterns/editable-grid`. |
+| **M2** | **Master-detail.** Row opens the record in a dialog or side panel. | A record has more fields than fit a row, or has dependent fields and value helps. Most master-data maintenance in practice. | **Composable today** (`/patterns/record-detail` + dialog), not yet documented as one named pattern. |
+| **M3** | **Mass change.** Select N rows, set field X = Y in one validated operation. | "Update 200 records" — the request people reach for cell editing to satisfy. | **Absent.** Queued as roadmap 25.2. |
+| **M4** | **Excel round-trip.** Download, edit in real Excel, upload, validate every row, apply the valid ones. | True bulk work. Excel beats any web grid at being Excel; the web's job is to validate and report. | **Ships.** `/patterns/staging` + the `/import` flow in `examples/po-app` (roadmap 24.3). |
+
+Two consequences worth stating plainly:
+
+- **M3 is the honest answer to the grid request.** One validated operation over
+  200 rows is simpler *and* safer than 200 hand-edits, and it leaves an audit
+  trail a grid does not.
+- **Residual grid cases are real but rare** — planning layouts, price matrices,
+  allocation grids, where a user tabs across cells all day. Roughly one screen
+  in twenty. Those get a **token-themed AG Grid recipe** in the docs, never a
+  grid engine of our own: owning virtual scroll and cell editing would double
+  the maintenance surface for a solved problem. Same reasoning as charts
+  (tokens → ECharts theme, documented, not owned).
 
 ## HTMX integration
 

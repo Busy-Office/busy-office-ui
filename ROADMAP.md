@@ -73,7 +73,17 @@ Two pieces of work were accepted during Slice 24 but never given a
 checkbox, which made them invisible to the dispatcher — recorded as real
 items now rather than left as prose.
 
-1. [ ] **25.1 — Write the M1-M4 data-maintenance doctrine into DESIGN.md.**
+1. [x] **25.1 — M1-M4 doctrine in DESIGN.md** (2026-08-17) — new
+       "Data maintenance: four patterns, no grid" section: a table naming all
+       four, what each is for, and its real status (M1 ships, M2 composable
+       but unnamed, M3 absent → 25.2, M4 shipped as 24.3). Every claim in it
+       verified against the tree, not asserted. **Cost line (24.R2): docs
+       only, 0 selectors, 0 CSS, 0 behaviors; +6 lines in check-rtl.**
+       Found while writing it: DESIGN.md still said logical properties had
+       "the one physical exception" months after there were five — stale
+       because **nothing read DESIGN.md**. Corrected, and `check:rtl` now
+       asserts the count appears there too, so the third copy of that number
+       cannot drift again (red-proved). Original text:
        Accepted as doctrine in Slice 24 (row-swap inline edit /
        master-detail / mass change / Excel round-trip) and referenced from
        `/patterns/staging`, but DESIGN.md still does not answer "how do I
