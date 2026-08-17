@@ -24,6 +24,7 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { distPages } from './dist-pages.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(docsRoot, 'dist');
@@ -41,16 +42,7 @@ postcss.parse(await readFile(coreCss, 'utf8')).walkAtRules('media', (at) => {
 });
 
 /* ---- 2. one built page per rule, picked by string-matching its classes ---- */
-async function* pages(dir, rel = '') {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    if (e.isDirectory()) {
-      if (['_astro', 'pagefind', 'v'].includes(e.name)) continue;
-      yield* pages(join(dir, e.name), `${rel}/${e.name}`);
-    } else if (e.name === 'index.html') yield [`${rel}/`, join(dir, e.name)];
-  }
-}
-const built = [];
-for await (const p of pages(dist)) built.push(p);
+const built = (await distPages(dist)).map((p) => [p.url, p.file, p.html]);
 
 const CLASS_RE = /\.(bo-[a-z0-9-]+)/g;
 
@@ -58,7 +50,7 @@ const CLASS_RE = /\.(bo-[a-z0-9-]+)/g;
 // every class in a rule's selector — good enough to locate a live example,
 // and far cheaper than driving a browser over the whole site.
 const htmlCache = new Map();
-for (const [path, file] of built) htmlCache.set(path, await readFile(file, 'utf8'));
+for (const [path, , html] of built) htmlCache.set(path, html);
 
 for (const rule of rules) {
   const classes = [...rule.sel.matchAll(CLASS_RE)].map((m) => m[1]);

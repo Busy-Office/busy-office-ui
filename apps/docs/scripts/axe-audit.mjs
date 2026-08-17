@@ -9,24 +9,16 @@
 // hand-started container on :8081, which is why it could only ever be run by
 // hand — and it duly drifted red unnoticed (2026-08-17). It is a CI gate now,
 // and a gate may not depend on a human having started something.
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { distPages } from './dist-pages.mjs';
 
 const DIST = new URL('../dist', import.meta.url).pathname;
 const AXE = readFileSync(new URL('../../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 
-// enumerate all index.html pages in dist
-const pages = [];
-(function walk(dir, rel) {
-  for (const e of readdirSync(dir)) {
-    const p = join(dir, e);
-    if (statSync(p).isDirectory()) walk(p, rel + '/' + e);
-    else if (e === 'index.html' && !readFileSync(p, 'utf8').includes('http-equiv="refresh"'))
-      pages.push(rel + '/');
-  }
-})(DIST, '');
+const pages = (await distPages(DIST)).map((p) => p.url);
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();

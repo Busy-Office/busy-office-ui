@@ -12,25 +12,16 @@
 //    shell never grows, so document scrollWidth silently reports nothing)
 //  - spacing compares clipping BEFORE and AFTER the override, so
 //    deliberate ellipsis truncation is not reported as a 1.4.12 failure
-import { readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { distPages } from './dist-pages.mjs';
 
 const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-async function* walk(dir, base = '') {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    if (e.isDirectory()) {
-      if (['v', '_astro', 'pagefind'].includes(e.name)) continue;
-      yield* walk(join(dir, e.name), `${base}/${e.name}`);
-    } else if (e.name === 'index.html') yield `${base}/`;
-  }
-}
 
 const { server, port, base } = await serveDist(dist);
-const paths = [];
-for await (const p of walk(dist)) paths.push(p);
+const paths = (await distPages(dist)).map((p) => p.url);
 const browser = await launchDocsBrowser();
 
 const OVERFLOW_EXEMPT = '.bo-data-table-container, .scale-scroll, pre';
