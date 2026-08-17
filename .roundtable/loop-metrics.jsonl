@@ -35,3 +35,4 @@
 {"ts": "2026-08-17 11:55", "name": "ci-gates", "value": 11.0, "unit": "gates"}
 {"ts": "2026-08-17 13:54", "name": "ci-gates", "value": 12.0, "unit": "gates"}
 {"ts": "2026-08-17 13:54", "name": "acr-criteria", "value": 20.0, "unit": "criteria"}
+{"ts": "2026-08-17 16:38", "name": "ci-total-s", "value": 288.0, "unit": "s"}
