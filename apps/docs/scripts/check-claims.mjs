@@ -260,6 +260,32 @@ const hidden = await page.evaluate(() => {
 });
 check('sticky action bar never covers the focused field', Array.isArray(hidden) && hidden.length === 0, JSON.stringify(hidden));
 
+/* "reduced-motion zeroing on all animations" — /concepts/accessibility.
+   The mechanism is that prefers-reduced-motion zeroes the duration TOKENS,
+   so both halves get asserted: the token really is 0ms under emulation, and
+   the one animation that cannot use a token (the skeleton shimmer, which is
+   infinite and literal) is switched off outright. check-motion.mjs guards
+   the CSS structure statically; this proves the browser actually honours it. */
+await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+await page.goto(url('/components/state-patterns/'), { waitUntil: 'networkidle0' });
+const reduced = await page.evaluate(() => {
+  const root = getComputedStyle(document.documentElement);
+  const sk = document.querySelector('.bo-skeleton');
+  return {
+    base: root.getPropertyValue('--bo-motion-duration-base').trim(),
+    slow: root.getPropertyValue('--bo-motion-duration-slow').trim(),
+    skeleton: sk ? getComputedStyle(sk).animationName : 'MISSING',
+  };
+});
+check(
+  'prefers-reduced-motion zeroes the duration tokens and stops the infinite shimmer',
+  reduced.base === '0ms' && reduced.slow === '0ms' && reduced.skeleton === 'none',
+  JSON.stringify(reduced),
+);
+// Sticky per page, exactly like emulateMediaType above — reset so anything
+// added below this line is not silently measured under reduced motion.
+await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
+
 await browser.close();
 server.close();
 

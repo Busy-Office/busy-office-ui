@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- Added (gates, no behaviour change): `check:motion` refuses any shipped
+  animation that uses a literal duration without a
+  `prefers-reduced-motion` override, and the documented-claims gate now
+  executes the reduced-motion promise under emulation. The claim
+  ("reduced-motion zeroing on all animations") was verified TRUE when
+  executed — this keeps the next animation added from becoming the first
+  exception.
+
 - **Fixed**: `.bo-btn`, `.bo-badge` and `.bo-chip` never reset
   `text-decoration`, so any of them used on an `<a>` wore the browser's link
   underline inside the pill. This hit every page of the docs site — the
