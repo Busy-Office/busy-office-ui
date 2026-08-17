@@ -3053,6 +3053,24 @@ every page at 390. If an RTL screenshot sweep is ever wanted, note that it
 is a THIRD full-site browser pass — weigh it against the CI budget above,
 which is the reason the layout/pseudo/axe merge was refused.
 
+**Graduated, not shipped: density-aware control boxes (2026-08-17).**
+Executing SC 2.5.8 found `.bo-checkbox`, `.bo-radio` and
+`.bo-tag-input__remove` are a hard-coded `1rem` in all three density tiers —
+density moves rows and type, never the control box. That is not a
+conformance failure (the spacing exception carries it, now CI-gated) and the
+docs state the real contract, so nothing is broken. But it IS a gap in the
+density model's own story: "density as a first-class dimension" that does not
+reach the controls. **Objective test before any work**: *simplicity* — does a
+consumer delete anything, or is this just a bigger checkbox? *less-for-more* —
+one density-aware sizing token vs per-component overrides. *reusability* —
+does it serve the warehouse/tablet archetype `spacious` exists for, which is
+the strongest argument in favour. **Refusing is valid**: native controls
+rendered via `accent-color` do not scale cleanly, and forcing 24px+ boxes at
+compact density may fight the dense-table archetype that is the framework's
+core case. Accept: either shipped density-aware sizing that keeps the
+contrast/target gates green and is live-verified in all three tiers, or a
+recorded refusal naming which test it failed.
+
 **Claim-execution seam status (2026-08-17).** The dogfood/claim-execution
 loop has been the main source of work while the backlog sits on the single
 owner-gated item, and it has been productive: htmx 409 discard, the
