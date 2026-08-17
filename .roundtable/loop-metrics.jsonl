@@ -39,3 +39,4 @@
 {"ts": "2026-08-17 17:28", "name": "bundle-gz-kb", "value": 11.7, "unit": "kB"}
 {"ts": "2026-08-17 17:28", "name": "behavior-tests", "value": 110.0, "unit": "tests"}
 {"ts": "2026-08-17 21:13", "name": "ci-gates", "value": 13.0, "unit": "gates"}
+{"ts": "2026-08-17 21:34", "name": "executable-claims", "value": 22.0, "unit": "claims"}
