@@ -434,6 +434,35 @@ queued, and F4 was fixed in the same wake it was found.
        transient network error. Red-proof by pointing it at the known-stale
        deploy.
 
+## Slice 29 — owner bug report (2026-08-18)
+
+1. [x] **29.1 — P0: dropdown locked to the viewport on scroll** (2026-08-18) —
+       reported by the owner mid-release with a screenshot showing the filters
+       "Save view" menu floating over unrelated content. Triaged P0 per the
+       dispatcher (a bug jumps the queue) and fixed before publishing rather
+       than shipping a known-broken control.
+
+       Root cause: `.bo-dropdown__menu` is a popover in the top layer at
+       `position: fixed`, positioned by `initDropdowns()` in VIEWPORT
+       coordinates — and `position()` ran once, on the `toggle` open event.
+       Scrolling moved the trigger and left the menu behind. **Measured: the
+       menu's top stayed at 720px while its trigger's bottom travelled 844 ->
+       594.** Resize was unhandled for the same reason.
+
+       Fix: reposition on scroll and resize while a menu is open, listeners
+       attached only for that window. Scroll is captured, because the trigger
+       usually sits inside a scrolling container (the app shell's main region)
+       and a non-capturing window listener never sees it. **Cost line: 0
+       selectors, 0 CSS; +2 listeners, live only while open.**
+
+       Red-proved twice over. The first repro was WRONG and passed identically
+       with and without the fix — it set `scrollTop` and read the rectangles in
+       the same synchronous block, before the scroll event had dispatched.
+       Corrected, it separates them. `check:claims` is now **25**, and the case
+       scrolls TWICE on purpose: with the bug present one of the two movements
+       happened to land 6px from correct, which a single-scroll assertion would
+       have reported as a pass.
+
 ## STATE — no dispatchable work; two owner calls (2026-08-18)
 
 From the Slice 28 grill: `.roundtable/grill-objective-slice28-2026-08-18.md`.

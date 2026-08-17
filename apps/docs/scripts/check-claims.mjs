@@ -370,6 +370,33 @@ check(
   JSON.stringify(rail),
 );
 
+/* An open dropdown must FOLLOW its trigger through scroll and resize (owner
+   bug report, 2026-08-18). The menu is `position: fixed` in the top layer with
+   viewport coordinates written by JS, and those coordinates used to be written
+   once, on open — so scrolling left the menu nailed to the screen while its
+   trigger moved away underneath it. Real events, and MORE THAN ONE movement:
+   with the bug present a single scroll happened to land within 6px of correct,
+   which would have read as a pass. */
+await visit('/components/filters/', { width: 1440 });
+await page.click('[popovertarget="view-menu"]');
+await new Promise((r) => setTimeout(r, 200));
+const anchored = [];
+for (const by of [250, -120]) {
+  await page.evaluate((by) => { document.querySelector('.bo-app-shell__main').scrollTop += by; }, by);
+  await new Promise((r) => setTimeout(r, 200));
+  anchored.push(await page.evaluate(() => {
+    const t = document.querySelector('[popovertarget="view-menu"]').getBoundingClientRect();
+    const m = document.getElementById('view-menu').getBoundingClientRect();
+    // the menu may sit above or below its trigger (it flips when short of room)
+    return Math.round(Math.min(Math.abs(m.top - t.bottom), Math.abs(t.top - m.bottom)));
+  }));
+}
+check(
+  'an open dropdown stays anchored to its trigger while the page scrolls',
+  anchored.every((gap) => gap <= 8),
+  `gaps after each scroll: ${JSON.stringify(anchored)}`,
+);
+
 await browser.close();
 server.close();
 

@@ -8,6 +8,22 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.2.0 (2026-08-18)
+
+- **Fixed** (`.bo-dropdown`): an open menu stayed nailed to the viewport while
+  the page scrolled, drifting away from the control that opened it (owner bug
+  report, 2026-08-18). The menu is `position: fixed` in the top layer with
+  viewport coordinates written by `initDropdowns()`, and those were written
+  once, on open — measured on the filters page, the menu's top stayed at 720px
+  while its trigger's bottom travelled from 844px to 594px. It now repositions
+  on scroll and on resize, which was equally unhandled. Scroll is captured
+  because the trigger usually sits in a scrolling container rather than the
+  window. Listeners are attached only while a menu is open. Guarded by a
+  `check:claims` case that scrolls twice, since with the bug present a single
+  scroll landed within 6px of correct and would have read as a pass.
+
 - **Fixed** (`.bo-sidebar-nav`): a nav label wider than the rail spilled past
   it and, because the rail is `overflow-x: auto`, put a horizontal scrollbar
   inside the navigation — measured at 15.7px of spill for a 32-character label

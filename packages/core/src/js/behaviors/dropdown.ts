@@ -71,6 +71,36 @@ function position(menu: HTMLElement): void {
   menu.style.top = `${top}px`;
 }
 
+/* An open menu must FOLLOW its trigger (owner bug report, 2026-08-18).
+   `position()` writes viewport coordinates onto a `position: fixed` element in
+   the top layer, and it used to run once, on open. Scrolling then moved the
+   trigger while the menu stayed nailed to the screen: measured on
+   /components/filters, the menu's top stayed at 720px while its trigger's
+   bottom travelled 844 -> 594, so the menu ended up floating over unrelated
+   content 250px from the control that opened it. Resizing had the same effect
+   and was equally unhandled.
+
+   Listeners live only while a menu is open, and scroll is captured because the
+   trigger is usually inside a scrolling container (the app shell's main
+   region), not the window — a non-capturing window listener never sees it. */
+let openMenu: HTMLElement | null = null;
+
+function reposition(): void {
+  if (openMenu) position(openMenu);
+}
+
+function trackWhileOpen(menu: HTMLElement): void {
+  openMenu = menu;
+  document.addEventListener('scroll', reposition, true);
+  window.addEventListener('resize', reposition);
+}
+
+function stopTracking(): void {
+  openMenu = null;
+  document.removeEventListener('scroll', reposition, true);
+  window.removeEventListener('resize', reposition);
+}
+
 export function initDropdowns(): void {
   if (installed) return;
   installed = true;
@@ -81,7 +111,12 @@ export function initDropdowns(): void {
     (e) => {
       const menu = e.target as HTMLElement;
       if (!menu.classList?.contains('bo-dropdown__menu')) return;
-      if ((e as ToggleEvent).newState === 'open') position(menu);
+      if ((e as ToggleEvent).newState === 'open') {
+        position(menu);
+        trackWhileOpen(menu);
+      } else {
+        stopTracking();
+      }
     },
     true,
   );
