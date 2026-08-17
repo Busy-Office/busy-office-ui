@@ -66,9 +66,13 @@ const violations = [];
 const exempted = new Map();
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });
-for (const density of DENSITIES) {
-  for (const path of PAGES) {
-    await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
+/* Page OUTER, density INNER — not the other way round. Density is an attribute
+   set after the page loads, so looping densities outside meant loading the same
+   7 pages three times over for nothing. Coverage is identical: every page is
+   still probed at every density (roadmap 28.1). */
+for (const path of PAGES) {
+  await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
+  for (const density of DENSITIES) {
     await page.evaluate((d) => document.documentElement.setAttribute('data-density', d), density);
     await new Promise((r) => setTimeout(r, 120));
     for (const f of await probe(page)) {

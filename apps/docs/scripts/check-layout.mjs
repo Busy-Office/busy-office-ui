@@ -90,6 +90,18 @@ async function spacingProbe(page) {
 }
 function exemptSelector() { return '.bo-data-table-container,.scale-scroll,pre'; }
 
+/* ONE navigation, three viewports — not three navigations.
+   This was the single most expensive step in CI (79s, more than the axe sweep),
+   because it loaded every one of 90 pages three times at networkidle0 just to
+   look at it at a different width. Resizing reflows the page; container queries
+   and the layout under test respond to it live, so the reload bought nothing.
+   Coverage is IDENTICAL — same three configurations, same probes, same pages;
+   this is not sampling and nothing stopped being checked (roadmap 28.1).
+   The settle wait after each resize replaces the navigation's networkidle0:
+   reflow is synchronous, but container queries and any resize-driven layout
+   need a frame to land. */
+const settle = (ms = 80) => new Promise((r) => setTimeout(r, ms));
+
 async function sweep(path, page) {
   const url = `http://localhost:${port}${base}${path}`;
   // 390 wide: both stresses share this load
@@ -101,10 +113,10 @@ async function sweep(path, page) {
   const s390 = await spacingProbe(page);
   if (s390) findings.push({ kind: 'spacing', path, cfg: '390', clipped: s390 });
 
-  // desktop: spacing again (different wrap points)
+  // desktop: spacing again (different wrap points). No reload — the density
+  // attribute set above survives, since only a navigation would clear it.
   await page.setViewport({ width: 1440, height: 1000 });
-  await page.goto(url, { waitUntil: 'networkidle0' });
-  await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+  await settle();
   const s1440 = await spacingProbe(page);
   if (s1440) findings.push({ kind: 'spacing', path, cfg: '1440', clipped: s1440 });
   // Rides this already-loaded page: a component that paints its own control
@@ -115,13 +127,15 @@ async function sweep(path, page) {
   const underlined = await underlineProbe(page);
   if (underlined.length) findings.push({ kind: 'underline', path, cfg: '1440', els: underlined });
 
-  // browser zoom: overflow only
+  // browser zoom: overflow only. Zoom is cleared explicitly afterwards because
+  // the page object is reused for the next path from the pool — previously the
+  // next navigation reset it, and nothing else does.
   await page.setViewport({ width: 1432, height: 1000 });
-  await page.goto(url, { waitUntil: 'networkidle0' });
   await page.evaluate(() => { document.documentElement.style.zoom = '1.5'; });
-  await new Promise((r) => setTimeout(r, 120));
+  await settle(120);
   const oZoom = await overflowProbe(page);
   if (oZoom) findings.push({ kind: 'overflow', path, cfg: '1432@150%', ...oZoom });
+  await page.evaluate(() => { document.documentElement.style.zoom = ''; });
 }
 
 /* Component classes that paint a control/chip surface. On an <a> they must
