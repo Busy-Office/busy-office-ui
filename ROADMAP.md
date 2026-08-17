@@ -67,6 +67,93 @@ with the reason); the design panel grills slices against them; removals
 face the same tests as additions — deleting a surface consumers compose
 against is a Breaking-entry decision, not a tidy-up.
 
+## Slice 27 — triaged from the owner QA review (2026-08-17)
+
+External QA review of the running docs site: 82 pages crawled, contrast
+measured on computed styles, both themes, desktop + mobile. **Unusually good
+input** — it self-corrects four of its own initial suspicions, and its numbers
+reproduce. I re-measured every load-bearing claim before queueing it, per the
+standing rule that a review's findings are hypotheses until executed.
+
+**Verified independently this wake (all five reproduce):**
+
+| Claim | My measurement | Verdict |
+|---|---|---|
+| Sidebar search results 1.46:1 in dark | `rgb(57,57,57)` on `rgb(26,29,35)` = **1.46:1**; light = 11.55:1; identical fg in both themes | CONFIRMED exactly |
+| No search on mobile | at 420px both instances measure 0x0; 0 header controls, 0 drawer widgets | CONFIRMED |
+| Landing page drops saved theme | `bo-theme=dark` stored, `data-theme` **absent**, `data-density="compact"` **present** | CONFIRMED — asymmetric, so an oversight |
+| Sidebar search scrolls out of view | `position: relative`, top **-681px**, nav scrollTop 742 on /components/button | CONFIRMED |
+| Placeholder-only inputs | 1 on combobox + 3 on tag-input, no label/aria-label | CONFIRMED |
+
+**Two things worth naming before the items.** First, the combobox
+placeholder-only input is **mine — I introduced it in 24.2** and the Objective
+grill I ran the same day did not catch it. Second, **axe passes all four
+because `placeholder` contributes to the accessible name**, so the gate is
+technically correct and substantively blind here. That blind spot is 27.5.
+
+1. [ ] **27.1 — One search, not two (closes P1-1, P1-2, P2-1, P2-3, P3-4).**
+       Delete the `#docsearch` sidebar instance; replace with a full-width
+       button that opens the already-themed `#cmdk` dialog, and ship the same
+       button in the mobile header. Accept: one Pagefind instance site-wide;
+       search reachable at 420px; the ⌘K hint is a real element so it can read
+       Ctrl on non-Mac; measured contrast of every result element ≥4.5:1 in
+       both themes; live-verified 1440 + 390, both themes.
+2. [ ] **27.2 — Bring third-party CSS into the contrast gate.** The reviewer's
+       sharpest structural point: our gate covers 35 token pairs and found
+       nothing, because it cannot see vendored Pagefind CSS. Accept: the
+       contrast gate (or a sibling) measures the rendered search widget in
+       both themes so a Pagefind upgrade cannot silently regress it;
+       red-proved.
+3. [ ] **27.3 — Scope the Pagefind index (P2-2).** Index `<main>` only;
+       `data-pagefind-ignore` on navbar, sidebar, TOC, live demos and every
+       `<pre>`. Accept: an excerpt for "invoice" starts at content rather than
+       nav chrome, and code-block matches stop inflating counts ("table"
+       currently returns 54).
+4. [ ] **27.4 — Landing page honours the saved theme (P1-3).** Accept: the
+       docs shell's blocking inline theme script runs on the home layout too;
+       no white flash when navigating home with dark stored; the hero's local
+       control either becomes the global one or is removed so two controls do
+       not mean different things.
+5. [ ] **27.5 — Real labels on tag-input and combobox (P2-4), and close the
+       gate's blind spot.** Fix the four inputs in the DOCS MARKUP so the
+       copy-paste path is correct. Accept: every documented form control has a
+       `<label for>` or `aria-label`, **and** a gate rejects an input whose
+       only accessible name comes from `placeholder` — axe cannot see this, so
+       the check is ours to write. Red-proved.
+6. [ ] **27.6 — Collapsible two-level sidebar (section 4).** Measured today:
+       **85 links, 3932px tall, 0 collapsible sections** — 5.5 screens in a
+       692px viewport, and the "Patterns:" prefix repeated three times is the
+       tell that a second level was faked with text. Accept: `<details>`-based
+       two-level nav, no new component and no JS beyond persisting open state;
+       only the current page's group auto-opens; default height under ~1000px;
+       "Data display" (18 items) split; keyboard nav and `aria-current`
+       unchanged. **Objective test first** — this is docs-shell IA, not
+       framework surface, so it must not grow the public API.
+7. [ ] **27.7 — App-launch icon inventory (section 5).** The reviewer verified
+       our mask+data-URI mechanism is right and explicitly says keep it — the
+       problem is glyph inventory: Invoices and Payables render the SAME mark,
+       Currencies gets a building, and the barcode is illegible at 32px.
+       Accept: the four demo tiles get distinct, semantically right marks; the
+       Anatomy section states "one glyph per app, never reused in a launcher —
+       if no distinct glyph exists, use the initials chip rather than an
+       approximate one"; and the page documents inline `<svg>` as the
+       extensible per-tenant slot. **Explicitly REFUSED: growing `.bo-icon`
+       into an app-icon library** — app icons are product content, and every
+       consumer would ship glyphs they never use.
+8. [ ] **27.8 — Polish sweep (P3-1, P3-2, P3-3).** htmx-1 extension warning on
+       every page load; "Accessibility Conformance Report" clipped at 217px in
+       a 207px box (the only one of 85 links that overflows, and it forces a
+       horizontal scrollbar); `.bo-icon` has no `@media print` rule so icons
+       vanish on paper. Accept: warning gone, label fits without clipping,
+       print rule added **and confirmed in a real print preview** — the print
+       claim is the kind this project has already had wrong once.
+
+**Recorded as already-cleared by the reviewer (do NOT action):** Cmd-K binding
+works (it failed under automation, not in the product); the select chevron is
+NOT hardcoded (two data URIs, correct per theme); the mobile drawer renders in
+the right theme; the hero CTA was mid-animation when first measured. Recording
+these so nobody re-opens them.
+
 ## Slice 26 — from the Objective grill (2026-08-17)
 
 Both items come from `.roundtable/grill-objective-slices23-25-2026-08-17.md`.
