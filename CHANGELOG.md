@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (docs search): the index covered whole page bodies, so every result
+  excerpt began with the app shell ("busy-office-ui Menu Pattern: …") and raw
+  HTML from code samples surfaced as prose. `<main>` is now the indexed body,
+  the shell and TOC are excluded, and a post-build step excludes 169 code
+  samples and 67 demo previews. Demo table cells remain indexed on purpose:
+  they share a class with the generated reference tables, and excluding both
+  made class names like `bo-data-table` unfindable. Gated by `check:search`.
+
 - Added (gate): `check:vendor-contrast` measures the contrast of RENDERED
   third-party UI, which the token-pair gate structurally cannot see. It was
   `check:contrast` passing on the very page where vendored Pagefind CSS

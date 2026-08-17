@@ -72,5 +72,5 @@ jobs:
       # The token contrast gate is static analysis over OUR pairs; it passed on
       # the page where vendored Pagefind CSS rendered at 1.46:1. This measures
       # rendered third-party UI, which is the only way to see it.
-      - name: Vendor contrast (rendered third-party UI)
-        run: npm run check:vendor-contrast -w docs
+      - name: Search — rendered contrast + index scope
+        run: npm run check:search -w docs

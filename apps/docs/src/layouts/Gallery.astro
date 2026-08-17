@@ -215,7 +215,7 @@ const current =
       }
     </style>
     <div class="bo-app-shell">
-      <header class="bo-navbar bo-app-shell__header">
+      <header class="bo-navbar bo-app-shell__header" data-pagefind-ignore>
         <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>
         {/* Search was completely unreachable below the sidebar breakpoint
             (roadmap 27.1): both instances measured 0x0 at 420px and Cmd-K is
@@ -254,7 +254,7 @@ const current =
           </select>
         </label>
       </header>
-      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs">
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs" data-pagefind-ignore>
         {/* ONE search instance site-wide (roadmap 27.1). This used to be a
             second PagefindUI mounted here, which inherited Pagefind's stock
             #393939 text because the token mapping is scoped to .bo-cmdk —
@@ -325,13 +325,13 @@ const current =
           </div>
         </nav>
       </dialog>
-      <main class="bo-app-shell__main" id="main-content">
+      <main class="bo-app-shell__main" id="main-content" data-pagefind-body>
         <div class="docs-main">
           <div class="bo-stack bo-stack--loose docs-content">
             <h1>{title}</h1>
             <slot />
           </div>
-          <aside class="toc" aria-label="On this page" hidden>
+          <aside class="toc" aria-label="On this page" hidden data-pagefind-ignore>
             <div class="toc__heading">On this page</div>
             <nav id="toc-nav" hx-boost="false"></nav>
           </aside>

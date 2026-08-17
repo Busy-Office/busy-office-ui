@@ -1,5 +1,8 @@
 /**
- * Gate: contrast of RENDERED third-party UI, which the token gate cannot see.
+ * Gate: the docs search is readable AND its index is scoped.
+ *
+ * Two concerns, one widget, one browser boot — renamed from
+ * check-vendor-contrast when index-quality assertions landed (roadmap 27.3).
  *
  * `check:contrast` in the core package is static analysis over our own token
  * pairs — 35 pairs x 2 themes, and it passed on the very page where the docs
@@ -30,7 +33,7 @@ const browser = await puppeteer.launch({
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 900 });
 
-const g = gate('vendor-contrast check', 'third-party regions');
+const g = gate('search check', 'search assertions');
 
 /* Third-party regions to measure, and how to bring them on screen. */
 const REGIONS = [
@@ -38,9 +41,12 @@ const REGIONS = [
     name: 'Pagefind search results',
     selector: '.pagefind-ui',
     async open() {
+      await this.openWith('invoice');
+    },
+    async openWith(query) {
       await page.click('.docs-searchbtn');
       await new Promise((r) => setTimeout(r, 300));
-      await page.type('#cmdk .pagefind-ui__search-input', 'invoice');
+      await page.type('#cmdk .pagefind-ui__search-input', query);
       /* Wait for the SETTLED state, not merely for results to exist.
          Pagefind renders skeleton placeholders first whose text colour equals
          their background on purpose (invisible text inside a loading block) —
@@ -110,6 +116,73 @@ for (const region of REGIONS) {
   }
 }
 
+/* ---- index scope (roadmap 27.3) ----
+   Pagefind indexed whole page bodies, so every excerpt began with the app
+   shell and code samples surfaced as prose. The ASSERTION here is the chrome
+   prefix, because that is unambiguous. Deliberately NOT asserted: a raw-HTML
+   pattern like /<[a-z]+>/ flags legitimate prose — the first-screen page says
+   "the filter bar (into <main>)" — and a result COUNT, because "table"
+   returning ~52 turned out to be honest prose across the pages that discuss
+   tables, not code-block inflation. */
+for (const q of ['invoice', 'table', 'approve']) {
+  await page.goto(`http://localhost:${port}${base}/components/button/`, { waitUntil: 'networkidle0' });
+  await REGIONS[0].openWith(q);
+  const r = await page.evaluate(() => {
+    const ex = [...document.querySelectorAll('.pagefind-ui__result-excerpt')].map((e) => e.textContent.trim());
+    const titles = [...document.querySelectorAll('.pagefind-ui__result-title')].map((e) => e.textContent.trim());
+    return { n: ex.length, chrome: ex.filter((t) => /^busy-office-ui|^Menu\b/.test(t)), titles };
+  });
+  g.check(
+    `"${q}": no excerpt starts at the app shell instead of the content`,
+    r.n > 0 && r.chrome.length === 0,
+    r.n === 0 ? 'no results — proves nothing' : `chrome-prefixed: ${r.chrome.slice(0, 2).join(' | ')}`,
+  );
+}
+
+/* Relevance guard: ignoring code samples must not take the GENERATED reference
+   tables with it. An earlier version of scope-search-index.mjs ignored every
+   <table>, which dropped `bo-data-table` from 9 hits to 3 and put Pagination
+   above the data-table page. */
+await page.goto(`http://localhost:${port}${base}/components/button/`, { waitUntil: 'networkidle0' });
+await REGIONS[0].openWith('bo-data-table');
+const cls = await page.evaluate(() =>
+  [...document.querySelectorAll('.pagefind-ui__result-title')].slice(0, 3).map((e) => e.textContent.trim()));
+g.check(
+  'a class name still finds the class index or its own component page in the top 3',
+  cls.some((t) => /class index|data table|table/i.test(t)),
+  `top 3: ${cls.join(' | ')}`,
+);
+
+/* Static guard for scope-search-index.mjs itself. The rendered assertions
+   above are carried by `data-pagefind-body` on <main>, so they stay green even
+   if the post-build ignore step is removed — verified by removing it. Every
+   <pre> carrying the attribute is the exact, tokenization-proof signal that the
+   step ran; searching for code-only strings is not, because Pagefind splits
+   camelCase and matches sub-tokens. */
+{
+  const { readdir, readFile } = await import('node:fs/promises');
+  async function* pages(dir) {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) { if (!['_astro', 'pagefind'].includes(e.name)) yield* pages(p); }
+      else if (e.name.endsWith('.html')) yield p;
+    }
+  }
+  let pre = 0, ignored = 0;
+  for await (const file of pages(dist)) {
+    const html = await readFile(file, 'utf8');
+    for (const m of html.matchAll(/<pre([^>]*)>/g)) {
+      pre += 1;
+      if (/data-pagefind-ignore/.test(m[1])) ignored += 1;
+    }
+  }
+  g.check(
+    'every code sample in the built output is excluded from the search index',
+    pre > 0 && ignored === pre,
+    `${ignored}/${pre} <pre> elements carry data-pagefind-ignore`,
+  );
+}
+
 await browser.close();
 server.close();
-g.report('measured on rendered output');
+g.report('verified on rendered output');

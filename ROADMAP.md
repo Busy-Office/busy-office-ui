@@ -125,7 +125,29 @@ technically correct and substantively blind here. That blind spot is 27.5.
        contrast gate (or a sibling) measures the rendered search widget in
        both themes so a Pagefind upgrade cannot silently regress it;
        red-proved.
-3. [ ] **27.3 — Scope the Pagefind index (P2-2).** Index `<main>` only;
+3. [x] **27.3 — Search index scoped** (2026-08-18) — `data-pagefind-body` on
+       `<main>`, ignore on navbar/sidebar/TOC, and a post-build step
+       (`scope-search-index.mjs`) that ignored **169 code samples + 67 Demo
+       previews across 68 pages**. Gated by `check:search` (renamed from
+       check-vendor-contrast; contrast + index scope, one browser boot).
+
+       **Honest scorecard — two of the review's three examples fixed, one
+       traded:** nav-chrome prefixes are gone (0 across every query tested,
+       previously on every excerpt) and raw HTML no longer surfaces as prose.
+       Demo TABLE cells still appear ("vs plan Overdue 17 unchanged Recent
+       invoices…"), because ignoring `<table>` also took the generated
+       ClassRef/ApiTable reference tables with it: `bo-data-table` dropped 9→3
+       hits and surfaced Pagination above the data-table page. They share a
+       class, so no selector separates them. Class-name findability wins.
+
+       **And a premise correction:** the criterion "code-block matches stop
+       inflating counts (table returns 54)" was wrong, and I wrote it. After
+       code samples left the index "table" returns 52 — the count was almost
+       entirely legitimate prose across the pages that discuss tables, not
+       code-block inflation.
+
+       **Cost line: 0 framework changes; +1 post-build step, +4 gate
+       assertions.** Original text: Index `<main>` only;
        `data-pagefind-ignore` on navbar, sidebar, TOC, live demos and every
        `<pre>`. Accept: an excerpt for "invoice" starts at content rather than
        nav chrome, and code-block matches stop inflating counts ("table"
@@ -147,6 +169,15 @@ technically correct and substantively blind here. That blind spot is 27.5.
        no white flash when navigating home with dark stored; the hero's local
        control either becomes the global one or is removed so two controls do
        not mean different things.
+4a. [ ] **27.3b — Reference tables marked at generation time, so demo tables
+       can be ignored.** The residual half of P2-2. ClassRef/ApiTable would
+       carry an explicit keep-marker, letting `scope-search-index.mjs` ignore
+       demo-fixture tables without taking the reference tables with them.
+       Accept: demo table cells stop appearing in excerpts AND `bo-data-table`
+       still finds the class index in the top 3 — both measured, since fixing
+       one by breaking the other is what this item exists to avoid. Low
+       priority: excerpt noise is cosmetic next to the rest of Slice 27.
+
 5. [ ] **27.5 — Real labels on tag-input and combobox (P2-4), and close the
        gate's blind spot.** Fix the four inputs in the DOCS MARKUP so the
        copy-paste path is correct. Accept: every documented form control has a
