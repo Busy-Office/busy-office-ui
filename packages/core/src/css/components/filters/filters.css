@@ -21,6 +21,10 @@
     background: var(--bo-color-bg-muted);
     color: var(--bo-color-text-primary);
     font-size: var(--bo-font-size-xs);
+    /* Chips are anchors in the Related footer on EVERY page — without this
+       reset the whole site wore a link underline inside the pill
+       (2026-08-17). */
+    text-decoration: none;
     /* nowrap keeps a chip readable as one token, but it must never push
        the page sideways: a long label (a translated filter value, a
        vendor name) overflowed the shell at phone width. Cap the width

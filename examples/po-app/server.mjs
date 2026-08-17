@@ -124,17 +124,63 @@ const rowHtml = (p) => `<tr id="row-${p.id}"${p.bulkError ? ' data-row-state="er
 const tbodyHtml = (list) =>
   `<tbody id="po-rows">${list.map(rowHtml).join('')}</tbody>`;
 
-const listScreen = () => `
+/* The filter bar used to be pure decoration: the form submitted q/status and
+   the server read neither, so Apply silently did nothing (2026-08-17). It
+   also meant the "filters exclude everything" empty state — which the
+   invoice-list pattern requires as a distinct state — could never occur in
+   the reference app, so nobody had ever built it. */
+const filterPos = ({ q = '', status = '' }) => {
+  const needle = q.trim().toLowerCase();
+  return pos.filter((p) => {
+    if (status && status !== 'All' && p.status !== status) return false;
+    if (!needle) return true;
+    return `${p.id} ${p.vendor} ${p.cc}`.toLowerCase().includes(needle);
+  });
+};
+
+const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* TWO empties, deliberately different. First-run empty offers the action
+   that creates data; filtered empty must NOT — the records exist, the
+   filters are hiding them, so the way out is clearing the filters. Getting
+   this wrong sends a clerk off to re-key a PO that is already in the
+   system. */
+const emptyHtml = (filtered) => `
+<div class="bo-state">
+  <span class="bo-state__icon" aria-hidden="true">${filtered ? '\u{1F50D}' : '\u{1F4ED}'}</span>
+  <p class="bo-state__title">${
+    filtered ? 'No purchase orders match these filters' : 'No purchase orders yet'
+  }</p>
+  <p class="bo-state__description">${
+    filtered
+      ? `All ${pos.length} orders are hidden by the current search or status.`
+      : 'Purchase orders will appear here once they are raised.'
+  }</p>
+  <div class="bo-state__actions">
+    ${
+      filtered
+        ? '<a class="bo-btn bo-btn--secondary" href="/pos">Clear filters</a>'
+        : '<a class="bo-btn" href="/pos/new">New purchase order</a>'
+    }
+  </div>
+</div>`;
+
+const listScreen = (query = {}) => {
+  const rows = filterPos(query);
+  const filtering = Boolean((query.q || '').trim() || (query.status && query.status !== 'All'));
+  return `
 <h1>Purchase orders</h1>
 <form class="bo-filter-bar" role="search" aria-label="PO filters" method="get" action="/pos">
-  <input class="bo-input" type="search" name="q" aria-label="Search POs" placeholder="Search…" style="max-inline-size: 12rem">
+  <input class="bo-input" type="search" name="q" aria-label="Search POs" placeholder="Search…" style="max-inline-size: 12rem" value="${esc(query.q || '')}">
   <select class="bo-select" name="status" style="inline-size:auto" aria-label="Status">
-    <option>All</option><option>Pending</option><option>Approved</option><option>Rejected</option>
+    ${['All', 'Pending', 'Approved', 'Rejected']
+      .map((o) => `<option${o === (query.status || 'All') ? ' selected' : ''}>${o}</option>`)
+      .join('')}
   </select>
   <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
 </form>
 <div id="bulk-result"></div>
-<!-- A real <form> around the selection, not hx-include on the button. Both
+${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the selection, not hx-include on the button. Both
      POST the same ids, but only the form gets native implicit submission:
      Enter from ANY row checkbox runs the bulk action, instead of
      Shift+Tab-ing back up to a toolbar that sits above the table (measured
@@ -168,14 +214,14 @@ const listScreen = () => `
       <th scope="col" class="bo-data-table__col--numeric">Amount</th>
       <th scope="col" data-col="status">Status</th>
     </tr></thead>
-    ${tbodyHtml(pos.slice(0, PAGE_SIZE))}
+    ${tbodyHtml(rows.slice(0, PAGE_SIZE))}
   </table>
-  <div class="bo-data-table__footer" style="justify-content: center">
+  ${rows.length > PAGE_SIZE ? `<div class="bo-data-table__footer" style="justify-content: center">
     <button class="bo-btn bo-btn--secondary" type="button" data-table-load-more id="po-load-more"
-      data-po-offset="${PAGE_SIZE}">Load more (${pos.length - PAGE_SIZE} of ${pos.length} remaining)</button>
-  </div>
+      data-po-offset="${PAGE_SIZE}">Load more (${rows.length - PAGE_SIZE} of ${rows.length} remaining)</button>
+  </div>` : ''}
 </div>
-</form>
+</form>`}
 <script type="module">
   import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
   initDropdowns(); initTableToolbar(); initLoadMore();
@@ -202,6 +248,7 @@ const listScreen = () => `
     else { btn.textContent = 'Load more (' + remaining + ' remaining)'; btn.disabled = false; }
   });
 </script>`;
+};
 
 const timelineHtml = (p) => `<ol class="bo-timeline" role="list" id="timeline-${p.id}">
   <li class="bo-timeline__step" data-state="done">
@@ -514,7 +561,11 @@ const server = createServer(async (req, res) => {
     }
     if (path === '/pos' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
-      return res.end(page('Purchase orders', '/pos', listScreen(), density));
+      const query = {
+        q: url.searchParams.get('q') || '',
+        status: url.searchParams.get('status') || 'All',
+      };
+      return res.end(page('Purchase orders', '/pos', listScreen(query), density));
     }
     if (path === '/pos/rows' && req.method === 'GET') {
       const offset = Number(url.searchParams.get('offset')) || 0;

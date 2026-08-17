@@ -26,6 +26,9 @@
     font-size: var(--bo-font-size-xs);
     font-weight: var(--bo-font-weight-medium);
     line-height: var(--bo-line-height-normal);
+    /* Badges are used as links in the docs' own "components used" and
+       generated component lists; without this they render underlined. */
+    text-decoration: none;
     white-space: nowrap;
   }
 

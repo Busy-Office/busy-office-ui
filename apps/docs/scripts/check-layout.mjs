@@ -108,6 +108,13 @@ async function sweep(path, page) {
   await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
   const s1440 = await spacingProbe(page);
   if (s1440) findings.push({ kind: 'spacing', path, cfg: '1440', clipped: s1440 });
+  // Rides this already-loaded page: a component that paints its own control
+  // surface must not also wear the browser's link underline. Found by
+  // dogfooding (2026-08-17) — the landing page's own CTAs and every
+  // "components used" badge were anchors, and .bo-btn/.bo-badge never reset
+  // text-decoration while six other anchor-bearing components did.
+  const underlined = await underlineProbe(page);
+  if (underlined.length) findings.push({ kind: 'underline', path, cfg: '1440', els: underlined });
 
   // browser zoom: overflow only
   await page.setViewport({ width: 1432, height: 1000 });
@@ -116,6 +123,25 @@ async function sweep(path, page) {
   await new Promise((r) => setTimeout(r, 120));
   const oZoom = await overflowProbe(page);
   if (oZoom) findings.push({ kind: 'overflow', path, cfg: '1432@150%', ...oZoom });
+}
+
+/* Component classes that paint a control/chip surface. On an <a> they must
+   suppress the underline; content links (prose, docs body) must keep it, so
+   this is a deliberate list rather than "every anchor with a bo- class". */
+const CONTROL_ON_ANCHOR = ['bo-btn', 'bo-badge', 'bo-chip'];
+
+async function underlineProbe(page) {
+  return page.evaluate((classes) => {
+    const out = [];
+    for (const a of document.querySelectorAll('a[class*="bo-"]')) {
+      const hit = classes.find((c) => a.classList.contains(c));
+      if (!hit) continue;
+      if (getComputedStyle(a).textDecorationLine.includes('underline')) {
+        out.push({ cls: hit, text: a.textContent.trim().slice(0, 30) });
+      }
+    }
+    return out;
+  }, CONTROL_ON_ANCHOR);
 }
 
 const POOL = 4;
@@ -133,7 +159,10 @@ await browser.close();
 server.close();
 
 for (const f of findings) {
-  if (f.kind === 'overflow') console.log(`FAIL overflow ${f.path} @${f.cfg}: ${f.overflow}px — widest: ${f.worst.cls}`);
+  if (f.kind === 'underline') {
+    console.log(`FAIL underline ${f.path}: ${f.els.length} anchor(s) styled as a control keep a link underline`);
+    for (const e of f.els) console.log(`     a.${e.cls} "${e.text}"`);
+  } else if (f.kind === 'overflow') console.log(`FAIL overflow ${f.path} @${f.cfg}: ${f.overflow}px — widest: ${f.worst.cls}`);
   else {
     console.log(`FAIL spacing ${f.path} @${f.cfg}: ${f.clipped.length} element(s) lose content under WCAG 1.4.12`);
     for (const c of f.clipped) console.log(`     ${c.cls} "${c.text}" cut by ${c.by}px (${c.axis})`);
@@ -143,4 +172,4 @@ if (findings.length) {
   console.error(`layout check FAILED — ${findings.length} finding(s) across ${paths.length} pages`);
   process.exit(1);
 }
-console.log(`layout check passed — ${paths.length} pages: no overflow at 390 or 150% zoom, no content lost under WCAG 1.4.12 spacing`);
+console.log(`layout check passed — ${paths.length} pages: no overflow at 390 or 150% zoom, no content lost under WCAG 1.4.12 spacing, no control-styled anchor wearing a link underline`);

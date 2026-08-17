@@ -8,6 +8,22 @@ pin.
 
 ## Unreleased
 
+- **Fixed**: `.bo-btn`, `.bo-badge` and `.bo-chip` never reset
+  `text-decoration`, so any of them used on an `<a>` wore the browser's link
+  underline inside the pill. This hit every page of the docs site — the
+  Related footer is chips — plus the landing page's own two CTAs. Six other
+  components that expect to be anchors (navbar, sidebar-nav, pagination,
+  breadcrumb, dropdown, tree) already did this; the three that are only
+  SOMETIMES a link were the ones that slipped. Content links are unaffected
+  and still underline. The layout sweep now gates it.
+
+- Added (reference app): the PO list's filter bar actually filters. It
+  submitted `q`/`status` and the server read neither, so Apply was a silent
+  no-op — which also meant the "filters exclude everything" empty state
+  could never occur and had never been built. Both empties now ship and are
+  deliberately different: first-run offers "New purchase order", filtered
+  offers "Clear filters" and says how many records are hidden.
+
 - Added (generated docs surface): `api.json` now records `forcedColors` per
   component, and /concepts/accessibility renders its Windows High Contrast
   component list from it. The hand-written list had drifted to 10 of 15

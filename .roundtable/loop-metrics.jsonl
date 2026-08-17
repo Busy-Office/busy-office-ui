@@ -29,3 +29,4 @@
 {"ts": "2026-08-17 10:20", "name": "ci-axe-step-s", "value": 56.0, "unit": "s"}
 {"ts": "2026-08-17 10:39", "name": "ci-gates", "value": 9.0, "unit": "gates"}
 {"ts": "2026-08-17 11:06", "name": "ci-gates", "value": 10.0, "unit": "gates"}
+{"ts": "2026-08-17 11:13", "name": "ci-total-s", "value": 267.0, "unit": "s"}

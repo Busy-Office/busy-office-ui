@@ -21,6 +21,13 @@
     color: var(--bo-btn-fg);
     font-size: var(--bo-density-font-size);
     font-weight: var(--bo-font-weight-medium);
+    /* A button is a button on an <a> too — the docs' own landing-page CTAs
+       are anchors, and shipped underlined until 2026-08-17. Every other
+       component that expects to be an anchor (navbar, sidebar-nav,
+       pagination, breadcrumb, dropdown, tree) already does this; button and
+       badge were the two that are only SOMETIMES a link, which is exactly
+       why the gap survived. */
+    text-decoration: none;
     white-space: nowrap;
     user-select: none;
     transition: background-color var(--bo-motion-duration-fast)
