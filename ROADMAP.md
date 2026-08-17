@@ -311,6 +311,44 @@ NOT hardcoded (two data URIs, correct per theme); the mobile drawer renders in
 the right theme; the hero CTA was mid-animation when first measured. Recording
 these so nobody re-opens them.
 
+## Slice 28 — from the Objective grill of Slices 26-27 (2026-08-18)
+
+Full report: `.roundtable/grill-objective-slices26-27-2026-08-18.md`. Three of
+five findings queued; F1 (verification-to-product ratio) deliberately NOT
+queued, and F4 was fixed in the same wake it was found.
+
+1. [ ] **28.1 — CI wall time is over budget and untracked (F2).** Measured
+       318s -> 330s across Slices 26-27 against the **288s budget** item 26.1
+       measured itself against — ~15% over and drifting up. The sharper half of
+       the finding: CI time was never recorded through `record_metric.py`, so
+       dispatcher rule 4 ("a tracked metric regressed") was structurally blind
+       to the one number that bounds every future gate. A budget stated once in
+       prose and never measured again is not a budget.
+       Accept: `ci-wall-time` recorded every wake; CI back to **≤288s**; the
+       lever chosen is *measured* before being believed, not assumed — the two
+       candidates are the axe sweep (82 pages x 2 widths) and the 40-shot
+       visual suite, either of which could sample on commits touching no CSS.
+       **Any sampling must state what it stopped checking** (no silent caps).
+
+2. [ ] **28.2 — Document label overflow on `/components/sidebar-nav` (F3).**
+       27.8 changed the behaviour (long labels wrap rather than spill) and it
+       is in the CHANGELOG, but the component page mentions the icon-rail
+       collapse four times and says nothing about label overflow — and Devi
+       reads the page, not the CHANGELOG. Accept: one paragraph plus a demo
+       showing a label longer than the rail wrapping. **Cost line: 0 selectors,
+       0 CSS, 0 behaviors.**
+
+3. [ ] **28.3 — Gate that the published site matches HEAD (F5).** Slice 27's
+       accessibility fixes are verified, gated, and undeployed; the site sat
+       four commits stale and it was noticed by accident while investigating
+       something else. A project this careful about whether a gate runs in the
+       narrowest context has no measurement of whether its published artefact
+       matches HEAD. Accept: a check fetches the published site and asserts a
+       marker from the current build, failing loudly when stale; it must
+       distinguish "stale" from "unreachable" and must not fail the build for a
+       transient network error. Red-proof by pointing it at the known-stale
+       deploy.
+
 ## OPEN — Pages deploy blocked, owner-side (2026-08-18)
 
 **The published site is four commits stale** (live: `35c38eb`/27.6,

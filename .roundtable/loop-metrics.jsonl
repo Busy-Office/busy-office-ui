@@ -43,3 +43,5 @@
 {"ts": "2026-08-17 23:09", "name": "ci-gates", "value": 14.0, "unit": "gates"}
 {"ts": "2026-08-18 00:21", "name": "ci-gates", "value": 15.0, "unit": "gates"}
 {"ts": "2026-08-18 01:29", "name": "docs-sidebar-height", "value": 1140.0, "unit": "px"}
+{"ts": "2026-08-18 02:48", "name": "ci-wall-time", "value": 330.0, "unit": "s"}
+{"ts": "2026-08-18 02:48", "name": "framework-css-vs-gate-code", "value": 25.0, "unit": "ratio"}
