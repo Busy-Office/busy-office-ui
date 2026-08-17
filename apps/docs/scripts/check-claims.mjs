@@ -359,9 +359,14 @@ const rail = await page.evaluate(() => {
     truncated: label.scrollWidth > label.clientWidth + 1,
   };
 });
+/* `lines >= 2`, NOT `=== 2`. The first version asserted exactly two lines and
+   was green locally and red in CI: Linux font metrics wrap the same label onto
+   three. The page claims the label WRAPS, is not truncated, and does not widen
+   the rail — it never claims a line count, and a count is a property of the
+   font, not of the behaviour being documented. */
 check(
-  'sidebar-nav: an over-long label wraps to 2 lines, untruncated, without widening the rail',
-  !rail.missing && rail.lines === 2 && rail.railOverflow <= 0 && rail.truncated === false,
+  'sidebar-nav: an over-long label wraps, untruncated, without widening the rail',
+  !rail.missing && rail.lines >= 2 && rail.railOverflow <= 0 && rail.truncated === false,
   JSON.stringify(rail),
 );
 
