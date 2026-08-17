@@ -434,6 +434,53 @@ queued, and F4 was fixed in the same wake it was found.
        transient network error. Red-proof by pointing it at the known-stale
        deploy.
 
+## STATE — no dispatchable work; two owner calls (2026-08-18)
+
+From the Slice 28 grill: `.roundtable/grill-objective-slice28-2026-08-18.md`.
+
+**Every unchecked item in this file is undispatchable.** Three are NEEDS-RUNTIME
+on owner hardware (VoiceOver, NVDA, AT runtime evidence); the fourth (Turbo) is
+a conditional that has not fired. There is also no 1.0 definition anywhere in
+the plan.
+
+That is structural, not a lull: from here the dispatcher can only reach
+Standardize, Objective and Explore — all of which generate work *about the
+project*. It will keep producing self-referential improvement indefinitely and
+look healthy doing it, because each piece of that work is genuinely good. The
+Objective charter is a **filter, not a direction**: simplicity / less-for-more /
+reusability say what to refuse, never what to build. Choosing a direction is
+structurally an owner call, not something a loop can derive.
+
+1. [ ] **OWNER CALL — 0.2.0 release.** **64 unreleased CHANGELOG entries**
+       against a published **0.1.1** (`npm view` confirms). Slices 24-28 —
+       query tokens, staging, mass change, four placeholder-only accessible
+       names, the 1.46:1 search contrast, icons vanishing in print, the
+       nav-label spill — are shipped, gated, and in nobody's `node_modules`.
+       `npm install @busy-office/ui` today still gets the accessibility defects
+       fixed two days ago. This is the previous grill's F5 one level up: the
+       stale *site* was fixed, the stale *package* was not. Publishing is
+       owner-triggered by policy; the work itself is done.
+
+2. [ ] **OWNER CALL — direction.** Recommended default: **ship 0.2.0 first,
+       then choose from real adopter feedback rather than from this room** —
+       the cost being that feedback takes time, against the alternative risk of
+       building the next twelve components for nobody. Candidates if the owner
+       prefers to choose now: (a) adoption/DX — starter template, copy-paste
+       screen kit, migration note; (b) depth on data maintenance — M2
+       master-detail and M4 Excel round-trip are only partly done; (c) the
+       autosave decision below, the one genuine product question already in the
+       plan; (d) define 1.0 and close the gap to it.
+
+**RETIRED — F1 (verification-to-product ratio).** The previous grill deferred it
+with the trigger "revisit if the next window pushes past ~30:1". It fired:
+framework CSS grew **+25 lines across 45 commits, and zero in two of three
+15-commit windows**, so the denominator is zero and the ratio is meaningless.
+The honest conclusion is that the **metric was wrong**, not that things are 30x
+worse — zero CSS growth is the charter working, and a ratio that reads "added no
+CSS" as failure would push toward adding CSS for its own sake. What it was
+gesturing at is captured properly by the two owner calls above. Not to be
+re-raised as a new finding.
+
 ## OPEN — Pages deploy blocked, owner-side (2026-08-18)
 
 **The published site is four commits stale** (live: `35c38eb`/27.6,
