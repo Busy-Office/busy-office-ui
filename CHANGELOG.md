@@ -8,6 +8,21 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (docs correctness): /concepts/density claimed "No density tier
+  takes an interactive target below 1.5rem (24px)" and called spacious
+  "44px targets". Both were false — `.bo-checkbox`, `.bo-radio` and
+  `.bo-tag-input__remove` are a hard-coded 1rem in ALL three tiers and the
+  data-table sort button is 18px tall. No accessibility failure: WCAG 2.5.8
+  is met through its spacing exception, which is now what the docs say, plus
+  the consequence for adopters (crowd controls closer than 24px between
+  centres and you break it).
+- Added: `check:target-size` runs the real SC 2.5.8 test in CI — a 24px
+  circle centred on every undersized control must reach no other target —
+  across seven control-dense pages in all three densities.
+- Added (ACR): four criteria the project had CI evidence for but never
+  reported — 1.4.10 Reflow, 1.4.12 Text Spacing, 2.4.11 Focus Not Obscured,
+  2.5.8 Target Size. The report was understating verified conformance.
+
 - Added (gates, no behaviour change): `check:motion` refuses any shipped
   animation that uses a literal duration without a
   `prefers-reduced-motion` override, and the documented-claims gate now

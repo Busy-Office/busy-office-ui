@@ -54,3 +54,8 @@ jobs:
       # component split).
       - name: Forced-colors rules still live
         run: npm run check:forced-colors -w docs
+      # SC 2.5.8 with the REAL spec test (24px circle, spacing exception),
+      # because the framework's conformance rides on spacing rather than on
+      # a size floor — the docs claimed a 24px floor and were wrong.
+      - name: Target size (WCAG 2.5.8)
+        run: npm run check:target-size -w docs

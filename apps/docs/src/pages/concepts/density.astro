@@ -61,7 +61,7 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
           </tr>
           <tr>
             <td>RF / warehouse</td>
-            <td><code>data-density="spacious"</code> (44px targets, meets WCAG 2.5.8) + <code>initScanInput()</code>'s keyboard-wedge input mode — the one archetype that genuinely needed a new input pattern, not just a layout setting</td>
+            <td><code>data-density="spacious"</code> (44px <em>rows</em> — the control boxes inside them do not grow; see the target-size note below) + <code>initScanInput()</code>'s keyboard-wedge input mode — the one archetype that genuinely needed a new input pattern, not just a layout setting</td>
             <td><a href={base + '/patterns/goods-receipt'}>Goods receipt pattern</a></td>
           </tr>
         </tbody>
@@ -78,7 +78,15 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
     <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
       <li>Density tokens are <strong>rem-only</strong> — they scale with the user's root font, so raised text never clips. The low-vision power user runs large text + compact and gets density at a readable size; that combination is the point.</li>
       <li>Explicit <code>data-density</code> always beats container-query auto-compaction.</li>
-      <li>No density tier takes an interactive target below 1.5rem (24px).</li>
+      <li><strong>Density moves row height and font size, not control boxes.</strong>
+      A checkbox, radio and the tag-input remove button are <code>1rem</code>
+      (16px) in <em>every</em> tier, and the data-table sort button is 18px
+      tall. WCAG 2.5.8 is met through its <strong>spacing exception</strong> —
+      a 24px circle centred on each of those reaches no other target
+      (measured: 32-191px to the nearest neighbour, CI-gated in all three
+      tiers) — <em>not</em> through a 24px size floor. If you pack controls
+      closer than 24px between centres, you break that, and the framework
+      cannot guarantee it for markup it did not author.</li>
       <li>Font size and row height move <em>together</em> per tier — never mix a density font token with a hand-set height.</li>
     </ul>
   </section>

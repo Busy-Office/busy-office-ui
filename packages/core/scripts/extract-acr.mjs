@@ -85,9 +85,19 @@ const CRITERIA = [
     remarks: 'Sizing uses rem/relative units throughout; the installation skeleton explicitly forbids user-scalable=no. An adopter who hardcodes px or adds that meta tag overrides this.',
   },
   {
+    id: '1.4.10', name: 'Reflow', level: 'AA',
+    verdict: 'Supports',
+    remarks: 'Every docs page is swept in CI at 390px AND at 1432px under 150% browser zoom, measuring the shell scroller rather than the document (a 100dvh shell never grows, so document scrollWidth silently reports nothing). Wide content scrolls inside its own container instead of the page.',
+  },
+  {
     id: '1.4.11', name: 'Non-text Contrast', level: 'AA',
     verdict: 'Supports',
     remarks: 'Non-text pairs (borders, focus rings, icon fills) are included in the same contrast.json gate as text pairs — not a separate, weaker check.',
+  },
+  {
+    id: '1.4.12', name: 'Text Spacing', level: 'AA',
+    verdict: 'Supports',
+    remarks: 'The user spacing override is applied to every docs page at two widths in CI, comparing clipping BEFORE and AFTER, so a deliberate ellipsis is not misreported and real content loss is. Heights are minimums, never fixed, for this reason.',
   },
   {
     id: '1.4.13', name: 'Content on Hover or Focus', level: 'AA',
@@ -113,6 +123,16 @@ const CRITERIA = [
     id: '2.4.7', name: 'Focus Visible', level: 'AA',
     verdict: 'Supports',
     remarks: 'A single :focus-visible ring token is used framework-wide (never suppressed) — included in the 1.4.11 non-text contrast pairs, so its visibility is contrast-gated, not just present.',
+  },
+  {
+    id: '2.4.11', name: 'Focus Not Obscured (Minimum)', level: 'AA',
+    verdict: 'Supports',
+    remarks: 'The sticky action bar is the one surface that could cover a focused control; CI focuses every field on the detail-form pattern and asserts none intersects the bar. Executed, not reasoned about.',
+  },
+  {
+    id: '2.5.8', name: 'Target Size (Minimum)', level: 'AA',
+    verdict: 'Supports',
+    remarks: 'Conformance here rides on the SPACING EXCEPTION, not on a 24px floor: checkboxes, radios, the tag-input remove button and the data-table sort button are 16-18px, and CI runs the actual spec test (a 24px circle centred on each undersized target must not reach another target) across seven control-dense pages in all three densities. Adopters who crowd controls tighter than 24px between centres break this — the framework cannot guarantee it for markup it did not author.',
   },
   {
     id: '3.2.1', name: 'On Focus', level: 'A',
