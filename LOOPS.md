@@ -77,11 +77,19 @@ match to its full playbook below:
    Continue itself, or spotted during triage)? → dispatch **Standardize**.
 4. **A tracked metric regressed** (bundle size, gate coverage, a number from
    `record_metric.py` trending the wrong way)? → dispatch **Optimize**.
-5. **Backlog empty** (no unchecked item in the current slice)? → dispatch
+5. **A slice closed since the last Objective ran**, **or user asked**? →
+   dispatch **Objective**.
+
+   This sits ABOVE backlog-empty deliberately, and the ordering is the whole
+   point: a slice closing is *exactly* what empties the backlog, so when
+   backlog-empty came first it matched every single time and the milestone
+   trigger could never fire. That starved twice before it was fixed — Slices
+   23-25 were eventually grilled under an entry that says "overdue... rule 6
+   starved by", and Slices 26-27 were heading the same way (2026-08-18).
+   Diagnosing it once and working around it is not fixing it.
+6. **Backlog empty** (no unchecked item in the current slice)? → dispatch
    **Explore** for one idea, then run Roadmap's own triage again on the
    result (graduate into the plan, or log the discard).
-6. **Milestone reached** (a slice just closed) **or user asked**? → dispatch
-   **Objective**.
 
 Record the dispatch decision itself as part of the iteration log — the outcome
 line already names which loop ran; that's the audit trail for *why*.
