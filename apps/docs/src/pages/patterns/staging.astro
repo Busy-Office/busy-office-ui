@@ -1,0 +1,156 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const rows = [
+  { n: 1, vendor: 'Acme Supply Co.', cc: 'CC-4021', amount: '$4,200.00', state: 'ok', tone: 'success', word: 'Ready', msg: 'Ready to import' },
+  { n: 2, vendor: 'Globex Industrial', cc: 'CC-1180', amount: '$56,000.00', state: 'warning', tone: 'warning', word: 'Check', msg: 'Matched "Globex" to Globex Industrial' },
+  { n: 3, vendor: 'Nobody Ltd', cc: 'CC-1180', amount: '$900.00', state: 'error', tone: 'danger', word: 'Cannot import', msg: 'No vendor matches "Nobody Ltd"' },
+  { n: 4, vendor: 'Initech GmbH', cc: 'CC-99', amount: '$100.00', state: 'error', tone: 'danger', word: 'Cannot import', msg: 'Cost centre "CC-99" is not CC-nnnn' },
+];
+
+const contract = `POST /import   action=validate   csv=<pasted rows>
+  -> 200, the SAME screen with every row classified. Nothing is created.
+
+POST /import   action=apply      csv=<the validated rows>
+  -> 200, a success alert with the count APPLIED, and the rows that could
+     not be applied still listed. Never a bare "done".
+
+Row classification is the SERVER's, and only two of the three states put a
+tint on the row:
+  ok      -> no data-row-state. A normal row; its confirmation is the badge.
+  warning -> data-row-state="warning"   applied, with a caveat
+  error   -> data-row-state="error"     not applied, ever`;
+---
+<Gallery title="Pattern: staging / batch result">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever maintains data in bulk — an
+    uploaded file, an interface run, a mass posting.
+    <strong>How often</strong>: month-end and whenever a supplier sends a
+    spreadsheet. <strong>What "done" looks like</strong>: every submitted
+    row either became a record or is still on screen saying why it didn't.
+    This is the landing place that makes the
+    <a href={base + '/patterns/bulk-actions'}>bulk action</a> contract work
+    for data the user has not seen yet.
+  </p>
+
+  <section class="demo">
+    <h2>The state after validation</h2>
+    <div class="bo-alert bo-alert--warning" role="alert">
+      <p><strong>1 ready, 1 to check, 2 cannot import.</strong> Every row
+      below says which it is and why.</p>
+    </div>
+    <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-3)">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr>
+          <th scope="col">#</th><th scope="col">Vendor</th>
+          <th scope="col">Cost centre</th>
+          <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+          <th scope="col">Result</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr data-row-state={r.state === 'ok' ? undefined : r.state}>
+              <td class="bo-data-table__col--numeric">{r.n}</td>
+              <td>{r.vendor}</td>
+              <td class="bo-data-table__col--code">{r.cc}</td>
+              <td class="bo-data-table__col--numeric">{r.amount}</td>
+              <td>
+                <span class={`bo-badge bo-badge--${r.tone}`}>{r.word}</span>
+                <span class="bo-u-text-muted"> {r.msg}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="bo-form-actions">
+      <button class="bo-btn" type="button">Apply 2 valid rows</button>
+      <a class="bo-btn bo-btn--ghost" href="#">Start over</a>
+    </div>
+    <p class="bo-u-text-muted">Zero new components. The row tints are the
+    data table's existing <code>data-row-state</code>; the reason on each
+    row is a <a href={base + '/components/badge'}>badge</a> plus words, so
+    the tint is never the only signal. <strong>There is no "ok" tint</strong>
+    — a row with nothing wrong is a normal row, and a third colour would
+    make the two that need attention harder to find.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Intake</strong> — a paste box or
+      <a href={base + '/components/file-upload'}>file upload</a>. Whatever the
+      source, the rows arrive as text the server can parse.</li>
+      <li><strong>Validate action</strong> — explicitly separate from apply,
+      because the whole point is seeing the outcome before committing to it.</li>
+      <li><strong>Summary</strong> — an <a href={base + '/components/alerts'}>alert</a>
+      counting all three outcomes in one sentence.</li>
+      <li><strong>Staging table</strong> — one row per submitted line, in the
+      order submitted, each carrying its own verdict.</li>
+      <li><strong>Apply action</strong> — names the number it will act on
+      ("Apply 2 valid rows"), and is disabled when that number is zero.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <pre><code>{contract}</code></pre>
+    <p class="bo-u-text-muted">Two posts to one endpoint, distinguished by an
+    action field — not two endpoints, because validate and apply must agree
+    on the parse exactly, and the cheapest way to guarantee that is one code
+    path. The validated rows travel back in the second request, so the server
+    never holds per-user staging state between them.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing pasted yet</td><td>just the intake box — no empty table, no zero-count summary</td></tr>
+          <tr><td>Validated, all ready</td><td>a success alert; the apply button names the count</td></tr>
+          <tr><td>Validated, mixed</td><td>counts for all three outcomes, and the two that need attention are tinted</td></tr>
+          <tr><td>Validated, none applicable</td><td>the apply button is <strong>disabled</strong> — the one place disabled beats absent, because the control's whole job is to tell you the count is zero</td></tr>
+          <tr><td>Empty submission</td><td>the "nothing to validate" empty state, not a table with no rows</td></tr>
+          <tr><td>After apply</td><td>a success alert with the number APPLIED, and every un-appliable row still listed to fix and re-submit</td></tr>
+          <tr><td>Re-validated</td><td>verdicts are recomputed from scratch. Like bulk actions, per-row results are TRANSIENT — a stale "cannot import" on a row the user just fixed is worse than no message</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Why this instead of an editable grid</h2>
+    <p>Bulk data maintenance splits into four patterns, and only one of them
+    wants a grid. Row-swap inline edit covers config tables
+    (<a href={base + '/components/inline-editing'}>inline editing</a>);
+    master-detail covers records with more fields than fit a row;
+    <em>mass change</em> covers "set field X for N rows"; and this pattern
+    covers true bulk work, where the editing happens in Excel — which beats
+    any web grid at being Excel — and the web's job is to validate and
+    report. Reaching for a grid to avoid building this one is how a screen
+    ends up with 200 hand-edits and no audit of what failed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/file-upload'}>File upload</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/state-patterns'}>Empty state</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ['/patterns/bulk-actions', 'Bulk actions'],
+    ['/components/data-table', 'Data table'],
+    ['/components/file-upload', 'File upload'],
+    ['/patterns/validation-summary', 'Validation summary'],
+  ]} />
+</Gallery>

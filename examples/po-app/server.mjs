@@ -87,6 +87,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
       <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--grid bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--chart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/import" ${current === '/import' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--box bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Import</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/receive" ${current === '/receive' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--barcode bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Receive</span></a></li>
     </ul>
   </nav>
@@ -308,6 +309,105 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
     else { btn.textContent = 'Load more (' + remaining + ' remaining)'; btn.disabled = false; }
   });
 </script>`;
+};
+
+
+/* ---------- STAGING / batch result (roadmap 24.3) ----------
+   The Excel round-trip (M4) needs somewhere for rows to LAND before they
+   become records: upload, validate every row, show what would happen, then
+   apply only the rows that can be applied. The framework contributes only
+   row states and badges — the validation and the apply are the server's.
+
+   Tri-state, but only TWO row tints: an `error` row cannot be applied, a
+   `warning` row can be applied with a caveat, and an OK row is a normal row
+   whose confirmation is a success badge. A third tint for "nothing wrong"
+   would be noise. */
+const VENDORS = ['Acme Supply Co.', 'Globex Industrial', 'Initech GmbH', 'Umbrella Logistics', 'Stark Components'];
+const LIMIT = 20000;
+
+const validateStagedRow = (line, i) => {
+  const [vendor = '', cc = '', amountRaw = ''] = line.split(',').map((c) => c.trim());
+  const amount = Number(amountRaw.replace(/[^0-9.-]/g, ''));
+  const row = { n: i + 1, vendor, cc, amount, raw: line };
+  if (!vendor || !cc || !amountRaw) return { ...row, state: 'error', msg: 'Needs vendor, cost centre and amount' };
+  if (!Number.isFinite(amount) || amount <= 0) return { ...row, state: 'error', msg: `"${amountRaw}" is not an amount` };
+  if (!/^CC-\d{4}$/.test(cc)) return { ...row, state: 'error', msg: `Cost centre "${cc}" is not CC-nnnn` };
+  const exact = VENDORS.find((v) => v.toLowerCase() === vendor.toLowerCase());
+  if (!exact) {
+    const near = VENDORS.find((v) => v.toLowerCase().startsWith(vendor.toLowerCase().slice(0, 4)));
+    if (near) return { ...row, state: 'warning', vendor: near, msg: `Matched "${vendor}" to ${near}` };
+    return { ...row, state: 'error', msg: `No vendor matches "${vendor}"` };
+  }
+  if (amount > LIMIT) return { ...row, state: 'warning', msg: `Over ${money(LIMIT)} — will need a second approver` };
+  return { ...row, state: 'ok', msg: 'Ready to import' };
+};
+
+const STATE_TONE = { ok: 'success', warning: 'warning', error: 'danger' };
+const STATE_WORD = { ok: 'Ready', warning: 'Check', error: 'Cannot import' };
+
+const stagingScreen = (rows = null, applied = 0) => {
+  const counts = rows ? rows.reduce((a, r) => ({ ...a, [r.state]: (a[r.state] || 0) + 1 }), {}) : {};
+  const applicable = rows ? rows.filter((r) => r.state !== 'error').length : 0;
+  return `
+<h1>Import purchase orders</h1>
+${applied ? `<div class="bo-alert bo-alert--success" role="alert"><p><strong>${applied} imported.</strong> Rows that could not be imported are still listed below.</p></div>` : ''}
+<form method="post" action="/import" class="bo-stack">
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="csv">Paste rows — vendor, cost centre, amount</label>
+    <textarea class="bo-input" id="csv" name="csv" rows="5"
+      placeholder="Acme Supply Co., CC-4021, 4200">${rows ? esc(rows.map((r) => r.raw).join('\n')) : ''}</textarea>
+    <p class="bo-form-field__hint">One row per line. Nothing is created until you apply.</p>
+  </div>
+  <div class="bo-form-actions">
+    <button class="bo-btn bo-btn--secondary" type="submit" name="action" value="validate">Validate</button>
+  </div>
+</form>
+${
+  rows === null
+    ? ''
+    : rows.length === 0
+      ? `<div class="bo-state"><span class="bo-state__icon" aria-hidden="true">\u{1F4C4}</span>
+           <p class="bo-state__title">Nothing to validate</p>
+           <p class="bo-state__description">Paste at least one row above.</p></div>`
+      : `
+<div class="bo-alert bo-alert--${counts.error ? 'warning' : 'success'}" role="alert">
+  <p><strong>${counts.ok || 0} ready, ${counts.warning || 0} to check, ${counts.error || 0} cannot import.</strong>
+  Every row below says which it is and why.</p>
+</div>
+<div class="bo-data-table-container" tabindex="0">
+  <table class="bo-data-table" data-density="compact">
+    <thead><tr>
+      <th scope="col">#</th><th scope="col">Vendor</th>
+      <th scope="col">Cost centre</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+      <th scope="col">Result</th>
+    </tr></thead>
+    <tbody>
+      ${rows
+        .map(
+          (r) => `<tr${r.state === 'ok' ? '' : ` data-row-state="${r.state}"`}>
+        <td class="bo-data-table__col--numeric">${r.n}</td>
+        <td>${esc(r.vendor || '—')}</td>
+        <td class="bo-data-table__col--code">${esc(r.cc || '—')}</td>
+        <td class="bo-data-table__col--numeric">${Number.isFinite(r.amount) && r.amount > 0 ? money(r.amount) : '—'}</td>
+        <td><span class="bo-badge bo-badge--${STATE_TONE[r.state]}">${STATE_WORD[r.state]}</span>
+            <span class="bo-u-text-muted"> ${esc(r.msg)}</span></td>
+      </tr>`,
+        )
+        .join('')}
+    </tbody>
+  </table>
+</div>
+<form method="post" action="/import" class="bo-form-actions">
+  <input type="hidden" name="csv" value="${esc(rows.map((r) => r.raw).join('\n'))}">
+  <button class="bo-btn" type="submit" name="action" value="apply"${applicable ? '' : ' disabled'}>
+    Apply ${applicable} valid row${applicable === 1 ? '' : 's'}
+  </button>
+  <a class="bo-btn bo-btn--ghost" href="/import">Start over</a>
+</form>
+<p class="bo-u-text-muted bo-u-text-sm">The ${counts.error || 0} row(s) that cannot import are left for you to fix
+and re-paste — applying valid rows never silently drops the rest.</p>`
+}`;
 };
 
 const timelineHtml = (p) => `<ol class="bo-timeline" role="list" id="timeline-${p.id}">
@@ -626,6 +726,35 @@ const server = createServer(async (req, res) => {
         status: url.searchParams.get('status') || 'All',
       };
       return res.end(page('Purchase orders', '/pos', listScreen(query), density));
+    }
+    if (path === '/import' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Import', '/import', stagingScreen(), density));
+    }
+    if (path === '/import' && req.method === 'POST') {
+      let body = '';
+      for await (const c of req) body += c;
+      const form = new URLSearchParams(body);
+      const lines = (form.get('csv') ?? '').split('\n').map((l) => l.trim()).filter(Boolean);
+      const rows = lines.map(validateStagedRow);
+      if (form.get('action') !== 'apply') {
+        res.writeHead(200, { 'content-type': 'text/html' });
+        return res.end(page('Import', '/import', stagingScreen(rows), density));
+      }
+      // Apply only what CAN be applied, and keep the rest on screen. Errors
+      // are never silently dropped — the clerk has to see what did not land.
+      let applied = 0;
+      for (const r of rows) {
+        if (r.state === 'error') continue;
+        pos.unshift({
+          id: `PO-9${String(1000 + pos.length).slice(-4)}`,
+          vendor: r.vendor, cc: r.cc, amount: r.amount, status: 'Pending',
+        });
+        applied += 1;
+      }
+      const remaining = rows.filter((r) => r.state === 'error');
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Import', '/import', stagingScreen(remaining.length ? remaining : [], applied), density));
     }
     if (path === '/pos/rows' && req.method === 'GET') {
       const offset = Number(url.searchParams.get('offset')) || 0;

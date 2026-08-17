@@ -234,19 +234,30 @@
     }
   }
 
-  /* Dirty (unsaved inline edit): same shape as the error state above, amber
-     instead of red. Set by initRowEdit() on `input` inside a row's seamless
-     cells; cleared on save/cancel. */
-  .bo-data-table tbody tr[data-row-state="dirty"] {
+  /* Two DIFFERENT meanings, one visual treatment — same shape as the error
+     state above, amber instead of red:
+       dirty   — unsaved inline edit, set by initRowEdit() on `input` inside a
+                 row's seamless cells; cleared on save/cancel.
+       warning — the row is valid but qualified: it WILL import, with a caveat
+                 (staging/batch-result views, roadmap 24.3).
+     Deliberately one rule with two selectors rather than a second block:
+     duplicating the declarations so they could drift apart would be the
+     drift. There is no "ok" state — a row with nothing wrong is a normal
+     row, and its positive confirmation is a success badge in the status
+     cell, not a third tint. */
+  .bo-data-table tbody tr[data-row-state="dirty"],
+  .bo-data-table tbody tr[data-row-state="warning"] {
     --bo-cell-bg: var(--bo-color-warning-subtle);
   }
 
-  .bo-data-table tr[data-row-state="dirty"] > :first-child {
+  .bo-data-table tr[data-row-state="dirty"] > :first-child,
+  .bo-data-table tr[data-row-state="warning"] > :first-child {
     box-shadow: inset 3px 0 0 var(--bo-color-warning);
   }
 
   @media (forced-colors: active) {
-    .bo-data-table tr[data-row-state="dirty"] > :first-child {
+    .bo-data-table tr[data-row-state="dirty"] > :first-child,
+    .bo-data-table tr[data-row-state="warning"] > :first-child {
       box-shadow: none;
       border-inline-start: 3px solid CanvasText;
     }

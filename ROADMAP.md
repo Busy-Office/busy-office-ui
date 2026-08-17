@@ -157,7 +157,17 @@ outcome below. Verified against the tree, not assumed.
        name + one context column without breaking the existing
        `aria-activedescendant` contract, browse is a plain link not a
        modal, combobox behavior tests stay green.
-3. [ ] **24.3 — Staging / batch-result view, extending bulk-actions.** The
+3. [x] **24.3 — Staging / batch-result view** (2026-08-17) — sibling page
+       `/patterns/staging`, po-app carries a working
+       paste→validate→apply flow at `/import`. **Cost line (24.R2): 1 new
+       `data-row-state` value (`warning`), 0 new selectors, 0 new behaviors,
+       0 new JS.** `warning` SHARES the `dirty` declarations rather than
+       duplicating them — two meanings, one visual treatment, no chance of
+       drifting apart. Refused a third `ok` tint: a row with nothing wrong is
+       a normal row, and a third colour would make the two that need
+       attention harder to find. Verified live: a 4-row mixed batch reports
+       "1 ready, 1 to check, 2 cannot import", apply lands 2 and leaves both
+       error rows on screen. Original text:
        genuinely-new half of v1.2 item 8, and what M4 (Excel round-trip)
        depends on. Adds tri-state per row (ok / warning / error) and an
        "apply valid rows" action to the existing pattern. Accept: extends

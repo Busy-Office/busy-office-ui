@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+- Added: `data-row-state="warning"` on data-table rows — a row that is valid
+  but qualified, for staging and batch-result views. It shares the `dirty`
+  state's declarations (same amber treatment, different meaning) rather than
+  duplicating them. There is deliberately no `ok` state: a row with nothing
+  wrong is a normal row, and its confirmation is a success badge.
+- Added: **staging / batch-result pattern** (`/patterns/staging`) — the
+  landing place for bulk data before it becomes records: validate every row,
+  show all three outcomes, then apply only what can be applied and leave the
+  rest on screen. What the Excel round-trip needs from the web side.
+
 - **Fixed**: `.bo-widget` did not reset `text-decoration`, so a launchpad
   tile — a widget on an `<a>` — wore the browser's link underline. Same gap
   already fixed on `.bo-btn`/`.bo-badge`/`.bo-chip`; found because the
