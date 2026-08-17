@@ -71,10 +71,20 @@ Evaluate top-to-bottom against the now-current `ROADMAP.md`; dispatch the first
 match to its full playbook below:
 
 1. **Open P0 bug?** → dispatch **Continue**, bug mode.
-2. **Build item queued** in the current in-progress slice? → dispatch
-   **Continue**, build mode.
-3. **4+ Continue rounds since the last Standardize, or drift flagged** (by
+2. **4+ Continue rounds since the last Standardize, or drift flagged** (by
    Continue itself, or spotted during triage)? → dispatch **Standardize**.
+
+   Above the queued build item deliberately, and for the same reason the
+   Objective rule sits above backlog-empty: with this below it, a queued item
+   always won, so the counter could only ever fire once the backlog emptied —
+   which is precisely when the codebase is largest and accumulated drift is
+   worst. It was also the only ordering that contradicted the rest of this
+   file: Continue's own **Exit** line says the dispatcher may pick "every 4th
+   round — Standardize", and the loop table says Standardize is "dispatched
+   every 4th Continue round". Two statements against one; the counter
+   preempts (2026-08-18).
+3. **Build item queued** in the current in-progress slice? → dispatch
+   **Continue**, build mode.
 4. **A tracked metric regressed** (bundle size, gate coverage, a number from
    `record_metric.py` trending the wrong way)? → dispatch **Optimize**.
 5. **A slice closed since the last Objective ran**, **or user asked**? →
