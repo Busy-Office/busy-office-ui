@@ -1,0 +1,54 @@
+---
+/**
+ * One launcher tile, in the three marks a real launcher actually needs.
+ *
+ * The tile markup was three identical copies in app-launch.astro (favourites,
+ * finance, logistics), so adding a second kind of mark would have been the same
+ * edit three times.
+ *
+ * The three kinds exist because an icon set cannot cover a tenant's app list,
+ * and pretending otherwise is what produced the bugs this replaces: Payables
+ * and Invoices rendered the SAME `invoice` glyph, and Currencies got an office
+ * building — a vendor mark — because no currency glyph existed and something
+ * had to go in the slot (owner QA review, 2026-08-17).
+ *
+ *   icon      — a shipped `.bo-icon` glyph, when one is genuinely right.
+ *   initials  — a `.bo-badge` chip. The HONEST fallback: AP and AR have no
+ *               distinct mark anyone would recognise, so they get letters
+ *               rather than two nearly-identical documents.
+ *   svg       — inline `<svg>`, the per-tenant extension slot. Nothing needs
+ *               to ship in the framework for a tenant to use their own mark.
+ *
+ * All three are `aria-hidden` — the tile's visible label is already the
+ * accessible name, and "AP Payables" is worse than "Payables".
+ *
+ * No new framework CSS: `.bo-icon`, `.bo-badge` and `.bo-widget` already exist,
+ * and the inline `<svg>` inherits `currentColor` like the icons do.
+ */
+interface Props {
+  label: string;
+  icon?: string;
+  initials?: string;
+}
+const { label, icon, initials } = Astro.props;
+/* One shared box for every mark so tiles line up whichever kind they use.
+   The height is FIXED rather than left to the content: a `.bo-badge` chip is
+   37px tall against an icon's 32px, which pushed the initials tiles' labels 5px
+   below their neighbours' in the same row (measured, not eyeballed). */
+const MARK = 'font-size: 2rem; line-height: 1; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)';
+const BOX = `${MARK}; display: flex; align-items: center; justify-content: center; block-size: 2rem`;
+---
+<a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
+  {icon && <span class={`bo-icon bo-icon--${icon}`} aria-hidden="true" style={MARK}></span>}
+  {initials && (
+    <span aria-hidden="true" style={BOX}>
+      <span class="bo-badge" style="font-size: 1rem">{initials}</span>
+    </span>
+  )}
+  {!icon && !initials && (
+    <span aria-hidden="true" style={BOX}>
+      <slot />
+    </span>
+  )}
+  <span style="color: var(--bo-color-text-primary)">{label}</span>
+</a>

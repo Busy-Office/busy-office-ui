@@ -1,19 +1,25 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import AppTile from '../../components/AppTile.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const favourites = [
   { icon: 'cart', label: 'Purchasing' },
   { icon: 'invoice', label: 'Invoices' },
-  { icon: 'barcode', label: 'Goods receipt' },
+  { icon: 'check-circle', label: 'Goods receipt' },
   { icon: 'chart', label: 'Reports' },
 ];
+/* Payables and Receivables carry INITIALS, not glyphs. There is no mark an ERP
+   user reliably reads as "accounts payable", and the two nearest candidates —
+   `invoice` and `doc` — are both a page outline, which is how Payables ended up
+   wearing the same mark as Invoices. AP/AR is what the folder tile below
+   already calls them. */
 const finance = [
   { icon: 'doc', label: 'General ledger' },
-  { icon: 'invoice', label: 'Payables' },
-  { icon: 'check-circle', label: 'Receivables' },
-  { icon: 'building', label: 'Currencies' },
+  { initials: 'AP', label: 'Payables' },
+  { initials: 'AR', label: 'Receivables' },
+  { label: 'Currencies' },   // inline <svg>, see the tile below
 ];
 const logistics = [
   { icon: 'box', label: 'Warehouse' },
@@ -30,7 +36,8 @@ const logistics = [
     smaller tile size, <strong>not</strong> a new grid component). Tiles are plain
     links composed into <code>.bo-widget</code> cards with real
     <a href={base + '/components/icon'}>CSS icons</a> (themable <code>currentColor</code>
-    glyphs — upgraded from initials after review); the category row is the
+    glyphs) where a glyph is genuinely right, an initials chip where none is, and
+    inline <code>&lt;svg&gt;</code> where a tenant brings their own; the category row is the
     ordinary <a href={base + '/components/tabs'}>tabs</a> pattern; a "folder" tile is just a
     widget whose body holds a cluster of small tiles. Zero new CSS.
   </p>
@@ -38,12 +45,7 @@ const logistics = [
   <section class="demo">
     <h2>Favourites</h2>
     <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
-      {favourites.map((a) => (
-        <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
-          <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
-          <span style="color: var(--bo-color-text-primary)">{a.label}</span>
-        </a>
-      ))}
+      {favourites.map((a) => <AppTile {...a} />)}
     </div>
   </section>
 
@@ -56,22 +58,26 @@ const logistics = [
       </div>
       <div class="bo-tabs__panel" role="tabpanel" id="al-p-fin" aria-labelledby="al-t-fin" tabindex="0">
         <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
-          {finance.map((a) => (
-            <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
-              <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
-              <span style="color: var(--bo-color-text-primary)">{a.label}</span>
-            </a>
-          ))}
+          {finance.filter((a) => a.label !== 'Currencies').map((a) => <AppTile {...a} />)}
+          {/* The per-tenant slot: any inline <svg> works, and inherits
+              currentColor exactly like a shipped glyph. This is the international
+              currency sign (¤) — deliberately not "$", which would bake one
+              locale into a screen this framework expects to ship worldwide. */}
+          <AppTile label="Currencies">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="6" />
+              <line x1="7.8" y1="7.8" x2="5" y2="5" />
+              <line x1="16.2" y1="7.8" x2="19" y2="5" />
+              <line x1="7.8" y1="16.2" x2="5" y2="19" />
+              <line x1="16.2" y1="16.2" x2="19" y2="19" />
+            </svg>
+          </AppTile>
         </div>
       </div>
       <div class="bo-tabs__panel" role="tabpanel" id="al-p-log" aria-labelledby="al-t-log" tabindex="0" hidden>
         <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
-          {logistics.map((a) => (
-            <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
-              <span class={`bo-icon bo-icon--${a.icon}`} aria-hidden="true" style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)"></span>
-              <span style="color: var(--bo-color-text-primary)">{a.label}</span>
-            </a>
-          ))}
+          {logistics.map((a) => <AppTile {...a} />)}
         </div>
       </div>
     </div>
@@ -134,6 +140,31 @@ const logistics = [
       <li><strong>Counts / badges</strong> — "12 awaiting approval" on a tile: the reason this screen exists rather than a static menu.</li>
       <li><strong>Recent items</strong> — a short list back into records the user touched last.</li>
     </ol>
+    <p>
+      <strong>One glyph per app, never reused in a launcher.</strong> A tile grid is
+      scanned by shape before it is read, so two apps wearing the same mark cost the
+      user the whole benefit of the grid. If no distinct glyph exists, use the
+      initials chip rather than an approximate one — an approximate mark is worse
+      than letters, because it is confidently wrong. This page practises that:
+      Payables and Receivables are <span class="bo-badge">AP</span> and
+      <span class="bo-badge">AR</span> rather than two near-identical document
+      outlines, which is exactly the bug this section now rules out.
+    </p>
+    <p>
+      <strong>The icon set is not the limit.</strong> A launcher is product content —
+      your app list is yours, and no framework can ship the right twelve glyphs for
+      it. Any inline <code>&lt;svg&gt;</code> drops into the same slot and inherits
+      <code>currentColor</code>, so it themes with everything else for free.
+      Currencies above is one: the international currency sign, hand-drawn in six
+      lines of SVG, with nothing added to the framework.
+    </p>
+    <pre><code>{`<a href="/currencies" class="bo-widget">
+  <svg viewBox="0 0 24 24" width="32" height="32" fill="none"
+       stroke="currentColor" stroke-width="2" aria-hidden="true">
+    …your mark…
+  </svg>
+  <span>Currencies</span>
+</a>`}</code></pre>
   </section>
 
   <section class="demo">

@@ -228,7 +228,33 @@ technically correct and substantively blind here. That blind spot is 27.5.
        "Data display" (18 items) split; keyboard nav and `aria-current`
        unchanged. **Objective test first** — this is docs-shell IA, not
        framework surface, so it must not grow the public API.
-7. [ ] **27.7 — App-launch icon inventory (section 5).** The reviewer verified
+7. [x] **27.7 — App-launch icon inventory** (2026-08-18) — all eleven launcher
+       tiles now carry a distinct mark, in the three kinds a real launcher
+       needs: a shipped `.bo-icon` glyph where one is genuinely right, a
+       `.bo-badge` initials chip where none is (**AP** / **AR** — no mark reads
+       as "accounts payable", and the two nearest candidates are both a page
+       outline, which is exactly how Payables ended up wearing Invoices'
+       glyph), and inline `<svg>` for the per-tenant slot (Currencies, drawn as
+       the international currency sign — deliberately not `$`, which would bake
+       one locale into a worldwide screen). Anatomy now states the rule and the
+       page practises it. **Cost line: 0 framework selectors, 0 framework CSS,
+       0 behaviors** — the refusal to grow `.bo-icon` into an app-icon library
+       stands, and the extension slot needed nothing shipped to work.
+
+       Verified both review claims by eye before acting: Payables did render
+       the identical `invoice` mark, and Currencies was an office building.
+       The barcode claim I'd restate — it is not illegible at 32px so much as
+       *generic*: six evenly-spaced uniform bars read as "bars", not as a
+       barcode. Goods receipt moved to `check-circle` either way. **`barcode`
+       remains a shipped glyph with that weakness (27.7b, not queued):** it is
+       an icon-quality question, not a launcher one.
+
+       Also extracted `AppTile.astro` — the tile markup was three identical
+       copies, so adding a second kind of mark would have been the same edit
+       three times. Its fixed 2rem mark box came from a measurement, not a
+       guess: a `.bo-badge` chip is 37px against an icon's 32px, which pushed
+       the initials tiles' labels 5px below their neighbours' in the same row.
+       Original text: The reviewer verified
        our mask+data-URI mechanism is right and explicitly says keep it — the
        problem is glyph inventory: Invoices and Payables render the SAME mark,
        Currencies gets a building, and the barcode is illegible at 32px.
