@@ -257,11 +257,16 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
      Shift+Tab-ing back up to a toolbar that sits above the table (measured
      at 32 presses from row 30). The safe action is FIRST because implicit
      submission activates the first submit button in the form. -->
-<form hx-post="/pos/bulk-approve" hx-target="#po-rows" hx-swap="outerHTML">
+<form id="po-bulk" hx-post="/pos/bulk-approve" hx-target="#po-rows" hx-swap="outerHTML">
 <div class="bo-data-table-container" tabindex="0">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
       <button class="bo-btn" type="submit">Approve selected</button>
+      <!-- MASS CHANGE shares this form's selection. formaction points the same
+           checkboxes at a different endpoint, so there is one selection and no
+           duplicate state — and it stays type="submit" so the keyboard path
+           (Enter from any row) still reaches the SAFE action first. -->
+      <button class="bo-btn bo-btn--secondary" type="button" data-dialog-trigger="mass-cc">Change cost centre…</button>
     </div>
     <span class="bo-data-table__selection-count"></span>
     <span class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
@@ -293,6 +298,26 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
   </div>` : ''}
 </div>
 </form>`}
+<dialog class="bo-dialog" id="mass-cc" data-state="closed" aria-labelledby="mass-cc-title">
+  <div class="bo-dialog__header"><h2 class="bo-dialog__title" id="mass-cc-title">Change cost centre</h2></div>
+  <div class="bo-dialog__body">
+    <p class="bo-u-text-muted">Applies to the rows selected in the list — one
+    validated operation, not one edit per row. A purchase order that is already
+    decided needs a reversal, so it will be reported rather than changed.</p>
+    <div class="bo-form-field" style="margin-block-start: var(--bo-space-3)">
+      <label class="bo-form-field__label" for="mass-cc-value">New cost centre</label>
+      <input class="bo-input bo-input--code" id="mass-cc-value" name="cc" placeholder="CC-4021" form="po-bulk">
+      <p class="bo-form-field__hint">Format CC-nnnn. An invalid value changes nothing at all.</p>
+    </div>
+  </div>
+  <div class="bo-dialog__footer">
+    <form method="dialog"><button class="bo-btn bo-btn--ghost" value="cancel">Cancel</button></form>
+    <!-- formaction re-points the SAME form (and therefore the same selected
+         ids) at the mass-change endpoint. -->
+    <button class="bo-btn" type="submit" form="po-bulk" formaction="/pos/mass-change"
+      hx-post="/pos/mass-change" hx-target="#po-rows" hx-swap="outerHTML" hx-include="#po-bulk">Change selected</button>
+  </div>
+</dialog>
 <script type="module">
   import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
   initDropdowns(); initTableToolbar(); initLoadMore();
@@ -850,6 +875,50 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
     if (path === '/spend' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Spend by cost center', '/spend', spendScreen(), density));
+    }
+    /* MASS CHANGE (roadmap 25.2 / M3): select N rows, set ONE field, in ONE
+       validated operation. This is the honest answer to "update 200 records" —
+       the request people reach for cell editing to satisfy. It reuses the
+       bulk-action contract exactly: same rows + out-of-band summary response,
+       same per-row error state, same TRANSIENT-reason rule. Nothing new. */
+    if (path === '/pos/mass-change' && req.method === 'POST') {
+      const form = new URLSearchParams(await readBody(req));
+      const ids = new Set(form.getAll('id'));
+      const cc = (form.get('cc') ?? '').trim().toUpperCase();
+      pos.forEach((p) => { delete p.bulkError; });
+
+      // Validate the OPERATION once, before touching any row. A bad target
+      // value is not a per-row failure — it is the whole request being wrong,
+      // so it gets the document-level treatment, not 200 identical row errors.
+      if (!/^CC-\d{4}$/.test(cc)) {
+        res.writeHead(422, { 'content-type': 'text/html' });
+        return res.end(
+          `<div id="bulk-result" hx-swap-oob="innerHTML"><div class="bo-alert bo-alert--danger" role="alert">` +
+            `<p><strong>"${esc(form.get('cc') ?? '')}" is not a cost centre.</strong> Expected CC-nnnn — nothing was changed.</p>` +
+            `</div></div>${tbodyHtml(pos)}`,
+        );
+      }
+
+      const failed = [];
+      let changed = 0;
+      pos.forEach((p) => {
+        if (!ids.has(p.id)) return;
+        // A decided PO cannot be re-costed: the posting already referenced the
+        // old cost centre, so this needs a reversal, not an edit.
+        if (p.status !== 'Pending') { failed.push([p, `Already ${p.status.toLowerCase()} — needs a reversal, not a re-cost`]); return; }
+        if (p.cc === cc) { failed.push([p, `Already on ${cc}`]); return; }
+        p.cc = cc;
+        changed += 1;
+      });
+      for (const [p, reason] of failed) p.bulkError = reason;
+      audit.push({ t: new Date().toISOString(), what: `mass change cc=${cc}: ${changed} ok, ${failed.length} failed` });
+      res.writeHead(200, { 'content-type': 'text/html' });
+      const summary = `<div id="bulk-result" hx-swap-oob="innerHTML">${
+        failed.length
+          ? `<div class="bo-alert bo-alert--warning" role="alert"><p><strong>${changed} moved to ${cc}, ${failed.length} could not be.</strong> The rows below carry the reason.</p></div>`
+          : `<div class="bo-alert bo-alert--success" role="status"><p>${changed} moved to ${cc}.</p></div>`
+      }</div>`;
+      return res.end(tbodyHtml(pos) + summary + '<button id="po-load-more" hx-swap-oob="delete"></button>');
     }
     if (path === '/pos/bulk-approve' && req.method === 'POST') {
       const body = await readBody(req);

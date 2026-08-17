@@ -91,7 +91,20 @@ items now rather than left as prose.
        Accept: DESIGN.md names all four, says which ship today (M1 largely
        does; M4 landed as 24.3) and which do not (M2 master-detail, M3 mass
        change), and links the patterns that implement them. Docs-only.
-2. [ ] **25.2 — M3 mass change (select N rows, set field X).** The one
+2. [x] **25.2 — M3 mass change** (2026-08-17) — documented on
+       `/patterns/bulk-actions` as a second action on the SAME contract;
+       po-app carries a working cost-centre mass change. **Cost line (24.R2):
+       0 new selectors, 0 new CSS, 0 new behaviors** — `formaction` re-points
+       the existing form's checked ids at a second endpoint and the dialog's
+       field joins it via `form="po-bulk"`, so there is one selection and no
+       duplicate state. Rule that came out of building it: **validate the
+       OPERATION before touching a row** — a bad target value is the whole
+       request being wrong, so it returns 422 with a document-level message
+       and changes nothing, rather than N identical row errors. No-op rows
+       ("already on CC-9002") are reported rather than counted as changed,
+       because a count including no-ops lies about what happened.
+       **This closes M1-M4** — all four data-maintenance patterns now ship or
+       are documented as composable. Original text:
        genuinely absent pattern from M1-M4, and the honest answer to
        "update 200 records" that people reach for cell editing to solve.
        Accept: extends the existing selection + bulk-action contract rather

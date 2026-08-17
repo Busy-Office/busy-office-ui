@@ -29,6 +29,25 @@ const markup = `<!-- The response to a bulk POST does TWO things: swap the rows,
   </div>
 </div>`;
 
+const massChange = `<!-- ONE form, ONE selection, two endpoints. formaction re-points the same
+     checked ids at the mass-change handler, so there is no second selection
+     to keep in sync. The safe action stays the form's submit button, so the
+     keyboard path (Enter from any row) still cannot reach a destructive one. -->
+<form id="po-bulk" hx-post="/pos/bulk-approve" hx-target="#rows" hx-swap="outerHTML">
+  <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+    <button class="bo-btn" type="submit">Approve selected</button>
+    <button class="bo-btn bo-btn--secondary" type="button"
+            data-dialog-trigger="mass-cc">Change cost centre…</button>
+  </div>
+  …table with name="id" row checkboxes…
+</form>
+
+<!-- The dialog's field JOINS the form above via form="po-bulk"; its submit
+     button re-targets with formaction. -->
+<input class="bo-input bo-input--code" name="cc" form="po-bulk" placeholder="CC-4021">
+<button class="bo-btn" type="submit" form="po-bulk"
+        formaction="/pos/mass-change">Change selected</button>`;
+
 const serverMarkup = `// Partial-failure state is TRANSIENT. Clear last round's reasons before
 // computing this one, or a row keeps advertising an error that is no
 // longer true — the list starts lying about the record.
@@ -122,6 +141,45 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
     approver" after a colleague had approved it. A stale failure reason
     is worse than none — it sends someone to fix a problem that no
     longer exists.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Mass change — the honest answer to "update 200 records"</h2>
+    <p>Select N rows, set <strong>one</strong> field, in <strong>one</strong>
+    validated operation. This is the request that usually arrives as "we need
+    editable cells", and it is worth pushing back on: 200 hand-edits is 200
+    chances to fumble a value, and it leaves no record of what was intended.
+    One operation is simpler <em>and</em> safer, and it produces a single audit
+    entry.</p>
+    <pre><code>{massChange}</code></pre>
+    <p class="bo-u-text-muted">Same contract as the action above — rows plus an
+    out-of-band summary, per-row reasons in words, the TRANSIENT-state rule.
+    <strong>No new component and no second selection:</strong>
+    <code>formaction</code> re-points the same checked ids at a different
+    endpoint, and the dialog's field joins the table's form with
+    <code>form="po-bulk"</code>.</p>
+
+    <h3>Validate the operation before you touch a row</h3>
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong>A bad target value is not a per-row failure.</strong>
+      "CC-nonsense" is the whole request being wrong, so it returns
+      <code>422</code> with a document-level message and changes
+      <em>nothing</em> — not 200 identical row errors the user has to read
+      past.</li>
+      <li><strong>Per-row rules still apply per row.</strong> A purchase order
+      that is already approved needs a reversal, not a re-cost, so it is
+      reported in its own row with that reason while the others go through.</li>
+      <li><strong>Say the count and the value.</strong> "1 moved to CC-9002, 1
+      could not be" — a bare "done" hides which half happened.</li>
+      <li><strong>No-op rows are failures worth naming.</strong> A row already
+      on the target cost centre is reported ("Already on CC-9002") rather than
+      counted as changed, because a count that includes no-ops is a lie about
+      what the operation did.</li>
+    </ul>
+    <p class="bo-u-text-muted">This is <strong>M3</strong> of the four data
+    maintenance patterns in <code>DESIGN.md</code>; the working implementation
+    is in
+    <a href="https://github.com/Busy-Office/busy-office-ui/tree/main/examples/po-app">examples/po-app</a>.</p>
   </section>
 
   <section class="demo">

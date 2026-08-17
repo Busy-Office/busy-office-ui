@@ -8,6 +8,18 @@ pin.
 
 ## Unreleased
 
+- Added (docs + reference app): **mass change** (M3) on
+  `/patterns/bulk-actions` — select N rows, set one field, in one validated
+  operation. No new component: `formaction` re-points the existing bulk form's
+  checked ids at a second endpoint, and the dialog's field joins that form.
+  Ships the rule that a bad target value is a document-level 422 changing
+  nothing, not N identical row errors. Completes the four data-maintenance
+  patterns now named in DESIGN.md.
+- **Fixed** (build): `check:rtl`'s DESIGN.md assertion broke the po-app
+  container image, which copies only `packages/`. The check now reports
+  loudly that it was skipped when the file is absent instead of failing —
+  CI has the full checkout and still enforces it.
+
 - Added (docs): the **document frame** — a compact identity line (type badge,
   record number, status, actions) on `/patterns/record-detail` and
   `/patterns/detail-form`, composed from a split `.bo-cluster` with no new
