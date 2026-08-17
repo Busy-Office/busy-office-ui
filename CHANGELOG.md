@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (RTL): `.bo-motion-slide-in-inline-start` had a logical NAME and
+  a physical implementation (`transform: translateX(-0.5rem)`), so in a
+  right-to-left document it slid in from the wrong edge — the opposite of
+  what its own name promises. `.bo-tree-table`'s disclosure chevron was
+  missing the `[dir="rtl"]` glyph flip that `.bo-tree` already carried, so
+  it pointed the wrong way in RTL. Both fixed, and a new build gate
+  (`check:rtl`) now refuses any physical box property in the shipped CSS
+  and any new direction-sensitive construct — transform, background-position
+  keyword, or a chevron glyph in `content` — that lacks a flip.
+
 - **Changed** (guidance): a bulk-action list should wrap its rows AND its
   bulk buttons in one `<form>` rather than putting `hx-include` on the
   button. Both POST the same ids, but only the form gets native implicit

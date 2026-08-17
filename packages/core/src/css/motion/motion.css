@@ -40,6 +40,20 @@
     from { opacity: 0; transform: translateX(-0.5rem); }
   }
 
+  /* The class name promises INLINE-start, but transform is physical and no
+     logical translate exists — so in RTL this slid in from the wrong edge,
+     contradicting its own name and the i18n page's "logical throughout"
+     claim (found 2026-08-17 by executing that claim). Flipped the way
+     offcanvas already flips: swap to a mirrored keyframe, rather than
+     inventing a second mechanism. */
+  @keyframes bo-motion-slide-in-inline-start-rtl {
+    from { opacity: 0; transform: translateX(0.5rem); }
+  }
+
+  [dir="rtl"] .bo-motion-slide-in-inline-start {
+    animation-name: bo-motion-slide-in-inline-start-rtl;
+  }
+
   .bo-motion-slide-in-block-start {
     animation: bo-motion-slide-in-block-start var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
   }

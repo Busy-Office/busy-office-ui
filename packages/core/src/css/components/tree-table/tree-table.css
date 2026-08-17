@@ -53,6 +53,19 @@
     rotate: 90deg;
   }
 
+  /* RTL: same flip the tree already carries — a glyph does not mirror with
+     logical properties, so the closed chevron must be turned to point into
+     the reading direction. tree-table was missing it while tree had it
+     (found 2026-08-17 by the rtl gate, which exists because the i18n page
+     claimed every such site was already handled). */
+  [dir='rtl'] .bo-tree-table__toggle::before {
+    content: '◂';
+  }
+
+  [dir='rtl'] .bo-tree-table__toggle[aria-expanded='true']::before {
+    rotate: -90deg;
+  }
+
   /* Leaf rows keep column alignment with parents: reserve the toggle's
      footprint without rendering a control. */
   .bo-tree-table__spacer {
