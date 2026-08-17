@@ -225,6 +225,13 @@ const current =
     <div class="bo-app-shell">
       <header class="bo-navbar bo-app-shell__header">
         <button class="bo-btn bo-btn--secondary bo-btn--icon docs-menu-btn" data-dialog-trigger="nav-drawer" aria-label="Open navigation">☰</button>
+        {/* Search was completely unreachable below the sidebar breakpoint
+            (roadmap 27.1): both instances measured 0x0 at 420px and Cmd-K is
+            not a phone gesture. Same dialog, second entry point. */}
+        <button class="bo-btn bo-btn--secondary bo-btn--icon docs-search-btn" type="button"
+            data-cmdk-open aria-label="Search the docs">
+          <span class="bo-icon bo-icon--doc" aria-hidden="true"></span>
+        </button>
         <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
         <label class="bo-choice" for="version"><span class="bo-visually-hidden">Docs version</span>
           <select class="bo-select" id="version" style="inline-size: auto" aria-label="Docs version">
@@ -256,7 +263,23 @@ const current =
         </label>
       </header>
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs">
-        {!currentSnapshot && <div class="bo-sidebar-nav__section" id="docsearch"></div>}
+        {/* ONE search instance site-wide (roadmap 27.1). This used to be a
+            second PagefindUI mounted here, which inherited Pagefind's stock
+            #393939 text because the token mapping is scoped to .bo-cmdk —
+            measured at 1.46:1 in dark, a WCAG 1.4.3 failure. A button that
+            opens the already-themed dialog fixes that, reaches mobile, keeps
+            the shortcut hint as a REAL element, and stays short enough to pin.
+            The `hint` is filled in by script from the actual platform. */}
+        {!currentSnapshot && (
+          <div class="bo-sidebar-nav__section docs-searchbtn-wrap">
+            <button class="bo-btn bo-btn--secondary docs-searchbtn" type="button"
+                data-cmdk-open aria-label="Search the docs">
+              <span class="bo-icon bo-icon--doc" aria-hidden="true"></span>
+              <span class="docs-searchbtn__label">Search docs…</span>
+              <kbd class="bo-kbd docs-searchbtn__hint" data-cmdk-hint aria-hidden="true">⌘K</kbd>
+            </button>
+          </div>
+        )}
         {sections.map((s) => (
           <div class="bo-sidebar-nav__section">
             <div class="bo-sidebar-nav__heading">{s.label}</div>
@@ -376,11 +399,9 @@ const current =
         }).observe(container, { childList: true, subtree: true });
       }
       s.onload = () => {
-        new PagefindUI({ element: '#docsearch', showSubResults: true, showImages: false });
-        keepBoosted(document.getElementById('docsearch'));
-        // Pagefind's input ships title/placeholder only — no accessible name
-        // (axe label-title-only, serious, every page). Label both instances;
-        // deferred so the cmdk instance (constructed below) is also mounted.
+        // ONE instance, constructed below inside the dialog. Pagefind's input
+        // ships title/placeholder only — no accessible name (axe
+        // label-title-only) — so it is labelled after mount.
         setTimeout(() => {
           document.querySelectorAll('.pagefind-ui__search-input').forEach((i) => {
             i.setAttribute('aria-label', 'Search the docs');
@@ -401,6 +422,11 @@ const current =
           document.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dlg.open ? dlg.close() : open(); }
           });
+          // The sidebar and mobile-header triggers are the pointer/touch entry
+          // points to this same dialog — one instance, three ways in.
+          document.querySelectorAll('[data-cmdk-open]').forEach((btn) => {
+            btn.addEventListener('click', open);
+          });
           // Arrow keys move focus through results; Enter follows the focused link.
           dlg.addEventListener('keydown', (e) => {
             if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
@@ -414,10 +440,22 @@ const current =
           dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
         }
       };
-      s.onerror = () => { document.getElementById('docsearch')?.remove(); document.getElementById('cmdk')?.remove(); };
+      s.onerror = () => {
+        // No search at all beats a button that opens an empty dialog.
+        document.querySelectorAll('[data-cmdk-open]').forEach((b) => b.remove());
+        document.getElementById('cmdk')?.remove();
+      };
       document.head.append(s);
       // A visible affordance: the sidebar search shows the shortcut hint.
-      document.getElementById('docsearch')?.setAttribute('data-shortcut', '⌘K');
+      /* A real element, so the hint can be platform-correct — the old CSS
+         ::after hardcoded "⌘K" for Windows and Linux users too, who are the
+         majority for a back-office framework. */
+      {
+        const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+        document.querySelectorAll('[data-cmdk-hint]').forEach((k) => {
+          k.textContent = mac ? '\u2318K' : 'Ctrl K';
+        });
+      }
     </script>
     <script>
       // Order matters and is enforced by module dependency, not statement
@@ -685,16 +723,30 @@ const current =
     border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-sm);
     background: var(--bo-color-bg-muted);
   }
-  @media (min-width: 56.01rem) {
-    /* Shortcut hint chip on the sidebar search box. */
-    #docsearch { position: relative; }
-    #docsearch::after {
-      content: attr(data-shortcut);
-      position: absolute; inset-block-start: 0.55rem; inset-inline-end: 0.6rem;
-      font-size: var(--bo-font-size-xs); color: var(--bo-color-text-muted);
-      border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-sm);
-      padding: 0 0.3rem; pointer-events: none;
-    }
+  /* Search trigger (roadmap 27.1). Replaces a second Pagefind instance and the
+     ::after badge that collided with Pagefind's own Clear button the moment
+     you typed. STICKY, because the sidebar auto-scrolls to the active item and
+     the old box sat 681px above the viewport on most pages — measurably
+     invisible, which is what made search look inconsistent between pages. */
+  .docs-searchbtn-wrap {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    padding-block-end: var(--bo-space-2);
+    background: var(--bo-color-bg-canvas);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+  }
+  .docs-searchbtn {
+    inline-size: 100%;
+    justify-content: start;
+    gap: var(--bo-space-2);
+  }
+  .docs-searchbtn__label { flex: 1; text-align: start; }
+  .docs-searchbtn__hint { flex: none; }
+  /* Mobile-only header trigger; the sidebar button is unreachable there. */
+  .docs-search-btn { display: none; }
+  @media (max-width: 56rem) {
+    .docs-search-btn { display: inline-flex; }
   }
   @media (prefers-reduced-motion: no-preference) {
     .bo-cmdk[open] { animation: cmdk-in var(--bo-motion-duration-fast) var(--bo-motion-easing-standard); }

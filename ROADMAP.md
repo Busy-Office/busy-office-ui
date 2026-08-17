@@ -91,7 +91,16 @@ grill I ran the same day did not catch it. Second, **axe passes all four
 because `placeholder` contributes to the accessible name**, so the gate is
 technically correct and substantively blind here. That blind spot is 27.5.
 
-1. [ ] **27.1 — One search, not two (closes P1-1, P1-2, P2-1, P2-3, P3-4).**
+1. [x] **27.1 — One search, not two** (2026-08-17) — sidebar instance deleted;
+       one PagefindUI site-wide reached three ways (sidebar button, mobile
+       header button, Cmd/Ctrl-K). **Measured: dark result text 1.46:1 →
+       14.51:1**, light 11.55:1 → 17.74:1, instances 2 → 1, mobile 0x0 →
+       a 36x36 header button that opens the dialog, sidebar search
+       `relative`/-681px → `sticky`/top 61, and the hint is a real `<kbd>`
+       reading "Ctrl K" on Win32 (verified by faking `navigator.platform`).
+       Closes P1-1, P1-2, P2-1, P2-3, P3-4 as predicted. **Cost line: 0
+       framework selectors, 0 CSS in the framework — all docs-shell.**
+       Original text:
        Delete the `#docsearch` sidebar instance; replace with a full-width
        button that opens the already-themed `#cmdk` dialog, and ship the same
        button in the mobile header. Accept: one Pagefind instance site-wide;
