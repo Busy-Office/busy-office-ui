@@ -25,3 +25,5 @@
 {"ts": "2026-08-17 06:51", "name": "ci-gates", "value": 8.0, "unit": "gates"}
 {"ts": "2026-08-17 09:17", "name": "executable-claims", "value": 16.0, "unit": "claims"}
 {"ts": "2026-08-17 09:46", "name": "executable-claims", "value": 17.0, "unit": "claims"}
+{"ts": "2026-08-17 10:20", "name": "ci-total-s", "value": 230.0, "unit": "s"}
+{"ts": "2026-08-17 10:20", "name": "ci-axe-step-s", "value": 56.0, "unit": "s"}

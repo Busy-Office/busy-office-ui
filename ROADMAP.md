@@ -3040,6 +3040,19 @@ in the pattern.
        Docs guidance changed from "hx-include or a plain form" (presented
        as equals) to preferring the form, with the reason.
 
+**CI budget (2026-08-17).** `ci-total-s` and `ci-axe-step-s` are tracked
+metrics now. They exist because the axe gate landed at 178s and pushed CI
+2m50s -> 5m55s, and nothing noticed for three wakes — no metric watched
+the number the dispatcher's rule 4 is supposed to fire on. Current: 230s
+total (docs build 19s, claims 12s, pseudo 36s, layout 80s, axe 56s).
+Residual candidate, deliberately NOT taken: layout + pseudo + axe each
+load the same ~85 pages separately, so merging them into one pass could
+save 60-80s. Refused for now — unlike the overflow+spacing merge (same
+property class, same viewport configs, genuinely duplicate loads), these
+three measure different things at different configs, and coupling them
+would trade clarity and independent failure reporting for time that is
+no longer the constraint. Revisit only if CI passes ~5min again.
+
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is
 complete and coherent: Slices 18–22 shipped and grilled, follow-ups
