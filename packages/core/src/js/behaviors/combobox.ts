@@ -155,6 +155,12 @@ function filter(input: HTMLInputElement, listbox: HTMLElement): void {
     o.hidden = !match;
     if (match) anyVisible = true;
   });
+  // Group headings ("Recent") describe the unfiltered order. Once the user
+  // types, results are ranked by match rather than by group, so a stale
+  // heading above filtered rows would be a lie.
+  listbox.querySelectorAll<HTMLElement>('.bo-combobox__group').forEach((g) => {
+    g.hidden = q !== '';
+  });
   const root = input.closest<HTMLElement>('.bo-combobox');
   const count = visibleOptions(listbox).length;
   if (anyVisible) {
@@ -178,8 +184,17 @@ function filter(input: HTMLInputElement, listbox: HTMLElement): void {
  */
 const committed = new WeakSet<HTMLInputElement>();
 
+/* A rich option row holds a code, a label and meta — committing its whole
+   textContent would drop "CC-1180 Warehouse Hamburg Cost centre" into the
+   field. The LABEL part is the display value; plain text options keep the
+   old behaviour, so existing consumers are unaffected. */
+function displayText(option: HTMLElement): string {
+  const label = option.querySelector<HTMLElement>('.bo-combobox__option-label');
+  return (label ?? option).textContent?.trim() ?? '';
+}
+
 function commit(input: HTMLInputElement, listbox: HTMLElement, option: HTMLElement): void {
-  input.value = option.textContent?.trim() ?? '';
+  input.value = displayText(option);
   const root = input.closest<HTMLElement>('.bo-combobox');
   if (root) syncFormValue(root, option.getAttribute('data-value') ?? input.value);
   committed.add(input);
@@ -272,8 +287,22 @@ export function initCombobox(): void {
   document.addEventListener('focusin', (e) => {
     const input = e.target as HTMLInputElement;
     if (input.getAttribute?.('role') !== 'combobox') return;
-    if (!committed.has(input)) return;
-    input.select?.();
+    if (committed.has(input)) {
+      input.select?.();
+      return;
+    }
+    /* Recents-first (roadmap 24.2). ERP selection is Zipfian — users pick the
+       same handful of values — so the useful list is the one shown BEFORE any
+       keystroke. Opt-in per widget: opening on focus unprompted would be a
+       behaviour change for every existing consumer, and a form full of
+       lists popping open while tabbing through is worse than no recents.
+       The recents themselves are server-supplied markup; nothing is stored
+       client-side. */
+    const root = input.closest<HTMLElement>('.bo-combobox');
+    if (!root?.hasAttribute('data-open-on-focus')) return;
+    if (input.value.trim() !== '') return;
+    const lb = listboxFor(input);
+    if (lb) filter(input, lb);
   });
 
   // Pointer and keyboard must agree on the active option (owner test
@@ -317,9 +346,30 @@ export function initCombobox(): void {
     'scroll',
     (e) => {
       const open = document.querySelector<HTMLElement>('[role="listbox"][data-bo-open="true"]');
-      if (!open || open.contains(e.target as Node)) return;
+      // e.target is not always a Node (a window-targeted scroll event is
+      // not), and Node.contains() THROWS on a non-Node — which silently
+      // aborted the whole handler. Caught by a test that expected the list
+      // to close and instead found it left open by the exception.
+      const target = e.target;
+      if (!open || (target instanceof Node && open.contains(target))) return;
       const input = inputFor(open);
       if (!input) return;
+      /* While the field is still focused AND on screen, FOLLOW it rather than
+         closing. Closing was the cheap answer to the list drifting away from
+         its field, and it made focus-to-open impossible: focusing an
+         off-screen field scrolls it into view, and that scroll closed the
+         list focus had just opened — worse on a site with
+         `scroll-behavior: smooth`, where one focus emits scroll events for
+         ~300ms. Found live 2026-08-17; jsdom never scrolls, so no unit test
+         could have caught it. Once the field leaves the viewport there is
+         nothing to anchor to, so then we close. */
+      const r = input.getBoundingClientRect();
+      const measurable = r.width > 0 || r.height > 0;
+      const onScreen = r.bottom > 0 && r.top < window.innerHeight;
+      if (document.activeElement === input && measurable && onScreen) {
+        position(input, open);
+        return;
+      }
       close(open);
       input.setAttribute('aria-expanded', 'false');
       setActive(input, open, null);

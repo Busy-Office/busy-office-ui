@@ -3,7 +3,7 @@
 CSS-first UI framework for ERP and back-office screens. Semantic components — not
 utility soup — built on modern CSS: `@layer` cascade contract, `:has()`, named
 container queries, native `<dialog>` and `popover`.
-<!-- stat:size -->71 kB minified (11.5 kB gzipped)<!-- /stat --> for the whole
+<!-- stat:size -->72 kB minified (11.7 kB gzipped)<!-- /stat --> for the whole
 framework, zero runtime dependencies, tree-shakable per-component files.
 
 **Docs & live demos:** https://busy-office.github.io/busy-office-ui/

@@ -136,7 +136,20 @@ outcome below. Verified against the tree, not assumed.
        list pattern with the parse contract stated server-side, active
        tokens removable, live-verified both themes/widths, no new CSS
        component and no new behavior unless the docs prove one is needed.
-2. [ ] **24.2 — Combobox: recents-first + rich result rows + browse escape
+2. [x] **24.2 — Combobox: recents-first + rich result rows + browse escape
+       hatch** (2026-08-17). **Cost line (24.R2): 4 new selectors
+       (`__option-code`, `__option-label`, `__option-meta`, `__group`), 1 new
+       opt-in attribute (`data-open-on-focus`), ~14 lines of behavior, 0 new
+       behaviors.** Building it found and fixed a real interaction bug:
+       focus-to-open was impossible because `.focus()` scrolls the field into
+       view and that scroll hit the close-on-scroll handler, so the list
+       opened and instantly closed — worse under `scroll-behavior: smooth`.
+       Scroll now FOLLOWS the focused field and only closes once it leaves the
+       viewport, which is a better answer to list-drift than closing was. Also
+       hardened the same handler: `Node.contains()` throws on a non-Node
+       target, which was silently aborting it. jsdom never scrolls, so no unit
+       test could have caught either — live verification did. 7 tests added
+       (103 → 110). Original text:
        hatch.** The genuinely-new half of v1.2 item 1. ERP selection is
        Zipfian, so showing the ~20 repeat values before any keystroke is
        the real win. Accept: recents render before typing from

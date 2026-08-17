@@ -36,6 +36,49 @@
     background: var(--bo-state-hover-overlay);
   }
 
+  /* Rich result rows (roadmap 24.2). An ERP picker needs the ID *and* the
+     name to be recognisable — a list of bare codes is unusable and a list
+     of bare names is ambiguous. Three parts, one row: code, label, meta.
+     Every part is inside the option, so initCombobox()'s substring filter
+     matches on all three — typing a cost-centre number OR its city finds
+     the row. The LABEL is what gets committed to the field. */
+  .bo-combobox__option {
+    display: flex;
+    align-items: baseline;
+    gap: var(--bo-space-2);
+  }
+
+  .bo-combobox__option-code {
+    flex: none;
+    font-family: var(--bo-font-family-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--bo-color-text-secondary);
+  }
+
+  .bo-combobox__option-label {
+    flex: 1;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .bo-combobox__option-meta {
+    flex: none;
+    font-size: var(--bo-font-size-xs);
+    color: var(--bo-color-text-muted);
+  }
+
+  /* A group heading inside the listbox — "Recent", "All vendors".
+     role="presentation" in the markup, so it is never an arrow-key stop
+     and never counted in the result announcement. */
+  .bo-combobox__group {
+    padding: var(--bo-space-2) var(--bo-space-3) var(--bo-space-1);
+    color: var(--bo-color-text-muted);
+    font-size: var(--bo-font-size-xs);
+    font-weight: var(--bo-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   /* The active (arrow-key-highlighted) option — ephemeral, not a persisted
      "chosen" marker. Single-select: the committed value lives in the
      input, not on any option. */

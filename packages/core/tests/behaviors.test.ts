@@ -255,6 +255,111 @@ describe('initCombobox', () => {
   const key = (input: HTMLInputElement, k: string) =>
     input.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
 
+  /* --- roadmap 24.2: rich rows, recents-first, group headings --- */
+
+  function richCombobox(openOnFocus: boolean): { input: HTMLInputElement; listbox: HTMLElement } {
+    html`
+      <div class="bo-combobox"${openOnFocus ? ' data-open-on-focus' : ''}>
+        <input class="bo-input" type="text" role="combobox" id="rb-input"
+            aria-expanded="false" aria-controls="rb-list" aria-autocomplete="list" autocomplete="off" />
+        <ul class="bo-combobox__listbox" id="rb-list" role="listbox" popover>
+          <li class="bo-combobox__group" role="presentation">Recent</li>
+          <li class="bo-combobox__option" role="option" id="rb-opt-1" data-value="CC-1180">
+            <span class="bo-combobox__option-code">CC-1180</span>
+            <span class="bo-combobox__option-label">Warehouse Hamburg</span>
+            <span class="bo-combobox__option-meta">Logistics</span>
+          </li>
+          <li class="bo-combobox__option" role="option" id="rb-opt-2" data-value="CC-4021">
+            <span class="bo-combobox__option-code">CC-4021</span>
+            <span class="bo-combobox__option-label">Assembly Line 2</span>
+            <span class="bo-combobox__option-meta">Production</span>
+          </li>
+        </ul>
+      </div>
+    `;
+    ui.initCombobox();
+    return {
+      input: document.getElementById('rb-input') as HTMLInputElement,
+      listbox: document.getElementById('rb-list') as HTMLElement,
+    };
+  }
+
+  it('commits the LABEL part of a rich row, not the whole row text', () => {
+    const { input, listbox } = richCombobox(false);
+    type(input, 'Hamburg');
+    key(input, 'ArrowDown');
+    key(input, 'Enter');
+    // Not "CC-1180 Warehouse Hamburg Logistics"
+    expect(input.value).toBe('Warehouse Hamburg');
+    const hidden = listbox.closest('.bo-combobox')!.querySelector('input[type="hidden"][data-bo-value]');
+    expect(hidden).toBeNull(); // no data-name on this widget, so no hidden input
+  });
+
+  it('a rich row is findable by its code OR its meta, not just its label', () => {
+    const { input, listbox } = richCombobox(false);
+    const shown = () =>
+      [...listbox.querySelectorAll('[role="option"]')].filter((o) => !(o as HTMLElement).hidden).length;
+    type(input, '4021');       // the code
+    expect(shown()).toBe(1);
+    type(input, 'Production'); // the meta column
+    expect(shown()).toBe(1);
+  });
+
+  it('data-open-on-focus shows server-supplied recents before any keystroke', () => {
+    const { input } = richCombobox(true);
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    input.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(input.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('without the opt-in, focus does NOT open the list', () => {
+    const { input } = richCombobox(false);
+    input.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('the group heading is hidden once filtering starts, and is never an arrow stop', () => {
+    const { input, listbox } = richCombobox(true);
+    const group = listbox.querySelector('.bo-combobox__group') as HTMLElement;
+    input.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(group.hidden).toBe(false);
+    type(input, 'Hamburg');
+    expect(group.hidden).toBe(true);
+    // arrow keys land on a real option, never the heading
+    key(input, 'ArrowDown');
+    expect(input.getAttribute('aria-activedescendant')).toBe('rb-opt-1');
+  });
+
+  it('scrolling FOLLOWS the focused field instead of closing the list', () => {
+    // The live bug: .focus() scrolls an off-screen field into view, and that
+    // scroll used to close the list focus had just opened. jsdom never
+    // scrolls and reports a zero rect, so the viewport check is stubbed.
+    const { input, listbox } = richCombobox(true);
+    input.getBoundingClientRect = () =>
+      ({ top: 100, bottom: 130, left: 0, right: 200, width: 200, height: 30 }) as DOMRect;
+    input.focus();
+    input.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(input.getAttribute('aria-expanded')).toBe('true');
+    window.dispatchEvent(new Event('scroll'));
+    expect(input.getAttribute('aria-expanded')).toBe('true');
+    expect(listbox.getAttribute('data-bo-open')).toBe('true');
+  });
+
+  it('scrolling the field OUT of view still closes the list', () => {
+    const { input, listbox } = richCombobox(true);
+    input.getBoundingClientRect = () =>
+      ({ top: 100, bottom: 130, left: 0, right: 200, width: 200, height: 30 }) as DOMRect;
+    input.focus();
+    input.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(input.getAttribute('aria-expanded')).toBe('true');
+    // now off the top of the viewport
+    input.getBoundingClientRect = () =>
+      ({ top: -200, bottom: -170, left: 0, right: 200, width: 200, height: 30 }) as DOMRect;
+    window.dispatchEvent(new Event('scroll'));
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    expect(listbox.getAttribute('data-bo-open')).not.toBe('true');
+  });
+
   it('typing filters options case-insensitively and opens the list', () => {
     const { input, listbox } = combobox();
     type(input, '2205');

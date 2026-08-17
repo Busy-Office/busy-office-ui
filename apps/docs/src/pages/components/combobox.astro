@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const markup = `<div class="bo-combobox">
@@ -20,6 +21,41 @@ const markup = `<div class="bo-combobox">
   import { initCombobox } from "@busy-office/ui/js";
   initCombobox(); // once — filtering, arrow-key nav, Enter-to-commit, Esc/light-dismiss are already native
 </script>`;
+const valueHelp = `<!-- ERP selection is Zipfian: users pick the same ~20 values, so the
+     useful list is the one shown BEFORE any keystroke. data-open-on-focus
+     opens on focus while the field is empty; the recents are ordinary
+     server-rendered markup — nothing is stored client-side. -->
+<div class="bo-combobox" data-name="cost_center" data-open-on-focus>
+  <input class="bo-input" type="text" role="combobox" id="vh-input"
+      aria-expanded="false" aria-controls="vh-list" aria-autocomplete="list"
+      autocomplete="off" placeholder="Cost centre — code, name or city" />
+  <ul class="bo-combobox__listbox" id="vh-list" role="listbox" popover>
+    <!-- role="presentation": a heading, never an arrow-key stop, never
+         counted in the "n results" announcement -->
+    <li class="bo-combobox__group" role="presentation">Recent</li>
+    <li class="bo-combobox__option" role="option" id="vh-1" data-value="CC-1180">
+      <span class="bo-combobox__option-code">CC-1180</span>
+      <span class="bo-combobox__option-label">Warehouse Hamburg</span>
+      <span class="bo-combobox__option-meta">Logistics</span>
+    </li>
+    <li class="bo-combobox__option" role="option" id="vh-2" data-value="CC-4021">
+      <span class="bo-combobox__option-code">CC-4021</span>
+      <span class="bo-combobox__option-label">Assembly Line 2</span>
+      <span class="bo-combobox__option-meta">Production</span>
+    </li>
+    <li class="bo-combobox__group" role="presentation">All cost centres</li>
+    <li class="bo-combobox__option" role="option" id="vh-3" data-value="CC-2205">
+      <span class="bo-combobox__option-code">CC-2205</span>
+      <span class="bo-combobox__option-label">Inbound Rotterdam</span>
+      <span class="bo-combobox__option-meta">Logistics</span>
+    </li>
+  </ul>
+</div>
+<!-- The escape hatch is a plain link BELOW the field, not a modal and not
+     inside the listbox: the list closes on focusout, so a link inside it
+     could never be tabbed to. -->
+<p class="bo-u-text-sm"><a href="#">Browse all cost centres</a></p>   <!-- your route -->`;
+
 const formMarkup = `<div class="bo-form-field">
   <label class="bo-form-field__label" for="cc">Cost center</label>
   <!-- data-name: the behavior mirrors the committed data-value into a
@@ -301,6 +337,23 @@ const asyncMarkup = [
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section class="demo">
+    <h2>Value help — recents first, rich rows, browse as a link</h2>
+    <Demo code={valueHelp} />
+    <p class="bo-u-text-muted">Three parts make a row recognisable:
+    <code>__option-code</code> (the ID, monospace and tabular),
+    <code>__option-label</code> (the name) and <code>__option-meta</code>
+    (one context column). All three sit inside the option, so the substring
+    filter matches on any of them — typing <code>4021</code>,
+    <code>Assembly</code> or <code>Production</code> all find the same row.
+    <strong>The label is what gets committed</strong> to the field;
+    <code>data-value</code> still carries the machine value to the hidden
+    input. A plain-text option behaves exactly as before.</p>
+    <p class="bo-u-text-muted">Group headings describe the unfiltered order,
+    so they disappear the moment you type — once results are ranked by match,
+    a "Recent" heading above them would be a lie.</p>
   </section>
 
   <ClassRef component="combobox" />
