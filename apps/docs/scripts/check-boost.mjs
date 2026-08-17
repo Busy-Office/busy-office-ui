@@ -15,11 +15,11 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { DIST } from './paths.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dist = join(docsRoot, 'dist');
 
 /* ---------- 1. static: no layout-bearing inline styles ---------- */
 async function* htmlFiles(dir) {
@@ -33,7 +33,7 @@ async function* htmlFiles(dir) {
 const LAYOUT = /(display\s*:\s*(grid|flex)|grid-template|position\s*:\s*sticky)/;
 let staticFails = 0;
 let scanned = 0;
-for await (const file of htmlFiles(dist)) {
+for await (const file of htmlFiles(DIST)) {
   if (file.includes('/v/')) continue; // frozen version snapshots
   const html = await readFile(file, 'utf8');
   scanned++;
@@ -41,7 +41,7 @@ for await (const file of htmlFiles(dist)) {
   for (const [, css] of head.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
     if (LAYOUT.test(css)) {
       staticFails++;
-      console.log(`FAIL inline layout style in head: ${file.replace(dist, '')} (${css.length} chars)`);
+      console.log(`FAIL inline layout style in head: ${file.replace(DIST, '')} (${css.length} chars)`);
     }
   }
 }
@@ -53,7 +53,7 @@ const PROBES = [
   ['/base/palettes/', '.pal-cards', 'grid'],
   ['/components/kv/', '.bo-kv', 'grid'],
 ];
-const { server, port, base } = await serveDist(dist);
+const { server, port, base } = await serveDist(DIST);
 
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();

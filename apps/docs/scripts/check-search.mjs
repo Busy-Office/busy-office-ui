@@ -18,14 +18,13 @@
  * rendered contrast overlaps `check:contrast` and drowns real findings in
  * decorative text.
  */
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { serveDist } from './serve-dist.mjs';
+import { join } from 'node:path';
+import { serveDist } from './serve-DIST.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-const { server, port, base } = await serveDist(dist);
+const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 900 });
@@ -166,7 +165,7 @@ g.check(
     }
   }
   let pre = 0, ignored = 0;
-  for await (const file of pages(dist)) {
+  for await (const file of pages(DIST)) {
     const html = await readFile(file, 'utf8');
     for (const m of html.matchAll(/<pre([^>]*)>/g)) {
       pre += 1;

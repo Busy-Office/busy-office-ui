@@ -6,9 +6,8 @@
  */
 import { readFile, readdir, access } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 const base = (process.env.DOCS_BASE ?? '').replace(/\/$/, '');
 
 async function* htmlFiles(dir) {
@@ -24,7 +23,7 @@ async function exists(urlPath) {
   const rel = clean === '' ? 'index.html' : clean.replace(/^\//, '');
   for (const candidate of [rel, `${rel}/index.html`, `${rel}.html`]) {
     try {
-      await access(join(dist, candidate));
+      await access(join(DIST, candidate));
       return true;
     } catch {}
   }
@@ -33,11 +32,11 @@ async function exists(urlPath) {
 
 let checked = 0;
 const failures = [];
-for await (const file of htmlFiles(dist)) {
+for await (const file of htmlFiles(DIST)) {
   const html = await readFile(file, 'utf8');
   // Relative hrefs resolve against the page URL — the site grill's A-5 found
   // four broken ./ and ../ links the absolute-only check missed.
-  const pageDir = '/' + dirname(file.replace(dist + '/', '')).replace(/^\.$/, '');
+  const pageDir = '/' + dirname(file.replace(DIST + '/', '')).replace(/^\.$/, '');
   const resolveRel = (u) =>
     new URL(u, `http://x${pageDir.endsWith('/') ? pageDir : pageDir + '/'}`).pathname;
   const targets = [
@@ -55,12 +54,12 @@ for await (const file of htmlFiles(dist)) {
       // outside base is still a failure.
       const siteRoot = base.replace(/\/v\/[^/]+$/, '');
       if (siteRoot !== base && t === siteRoot + '/') continue;
-      failures.push(`${file.replace(dist, '')}: link outside base path: ${t}`);
+      failures.push(`${file.replace(DIST, '')}: link outside base path: ${t}`);
       continue;
     }
     const pathInSite = base ? t.slice(base.length) : t;
     if (!(await exists(pathInSite))) {
-      failures.push(`${file.replace(dist, '')}: broken internal link: ${t}`);
+      failures.push(`${file.replace(DIST, '')}: broken internal link: ${t}`);
     }
   }
 }

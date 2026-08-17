@@ -17,10 +17,10 @@
  *   note  — undersized but adequately spaced: conformant via the exception,
  *           and the reason the docs may not claim a blanket 24px floor.
  */
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { DIST } from './paths.mjs';
 
-const DIST = new URL('../dist', import.meta.url).pathname;
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 

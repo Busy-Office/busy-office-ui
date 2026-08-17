@@ -12,16 +12,14 @@
 //    shell never grows, so document scrollWidth silently reports nothing)
 //  - spacing compares clipping BEFORE and AFTER the override, so
 //    deliberate ellipsis truncation is not reported as a 1.4.12 failure
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 
-const { server, port, base } = await serveDist(dist);
-const paths = (await distPages(dist)).map((p) => p.url);
+const { server, port, base } = await serveDist(DIST);
+const paths = (await distPages(DIST)).map((p) => p.url);
 const browser = await launchDocsBrowser();
 
 const OVERFLOW_EXEMPT = '.bo-data-table-container, .scale-scroll, pre';

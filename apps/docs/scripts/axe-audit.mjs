@@ -11,11 +11,11 @@
 // and a gate may not depend on a human having started something.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
+import { DIST } from './paths.mjs';
 
-const DIST = new URL('../dist', import.meta.url).pathname;
 const AXE = readFileSync(new URL('../../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 
 const pages = (await distPages(DIST)).map((p) => p.url);

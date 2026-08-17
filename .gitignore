@@ -17,3 +17,12 @@ apps/docs/public/assets/
 
 # serena MCP workspace cache (derived, per-machine)
 .serena/
+
+# Throwaway probe scripts. They must live in scripts/ (they import
+# ./browser-harness.mjs and ./serve-dist.mjs by relative path), so they cannot
+# be kept in a scratch directory elsewhere — and hand-deleting them is exactly
+# what failed: _repro.mjs was committed in the 0.2.0 release commit because the
+# cleanup `rm` ran from the wrong directory. Ignored rather than gated: the file
+# existing locally is the point, only committing it is the defect.
+apps/docs/scripts/_*.mjs
+packages/core/scripts/_*.mjs

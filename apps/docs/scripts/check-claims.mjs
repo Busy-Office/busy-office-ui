@@ -11,14 +11,12 @@
 // Drive REAL key/mouse events: an early version dispatched a synthetic
 // keydown on `document`, which no delegated handler matches, and
 // reported a false failure against a feature that worked.
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-const { server, port, base } = await serveDist(dist);
+const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });

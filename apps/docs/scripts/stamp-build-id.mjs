@@ -13,10 +13,9 @@
  */
 import { writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 
 function git(...args) {
   try {
@@ -31,7 +30,7 @@ const sha = process.env.GITHUB_SHA || git('rev-parse', 'HEAD');
 const dirty = process.env.GITHUB_SHA ? false : git('status', '--porcelain') !== '';
 
 await writeFile(
-  join(dist, 'build-id.json'),
+  join(DIST, 'build-id.json'),
   `${JSON.stringify({ sha, dirty, builtAt: new Date().toISOString() }, null, 2)}\n`,
 );
 

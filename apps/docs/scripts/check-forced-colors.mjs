@@ -22,12 +22,12 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
+import { DIST } from './paths.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dist = join(docsRoot, 'dist');
 const coreCss = join(docsRoot, '..', '..', 'packages/core/dist/css/index.css');
 
 /* ---- 1. every forced-colors rule the framework ships ---- */
@@ -42,7 +42,7 @@ postcss.parse(await readFile(coreCss, 'utf8')).walkAtRules('media', (at) => {
 });
 
 /* ---- 2. one built page per rule, picked by string-matching its classes ---- */
-const built = (await distPages(dist)).map((p) => [p.url, p.file, p.html]);
+const built = (await distPages(DIST)).map((p) => [p.url, p.file, p.html]);
 
 const CLASS_RE = /\.(bo-[a-z0-9-]+)/g;
 
@@ -76,7 +76,7 @@ for (const rule of rules) {
 }
 
 /* ---- 3. control vs emulated ---- */
-const { server, port, base } = await serveDist(dist);
+const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 
 async function measure(forced) {

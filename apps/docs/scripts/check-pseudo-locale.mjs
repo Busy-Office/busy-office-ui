@@ -13,13 +13,11 @@
 // produced 10 findings. Note that auto table layout IGNORES max-width on
 // cells — an early red test injected there, saw nothing, and would have
 // shipped a detector that could not fail.
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { serveDist } from './serve-dist.mjs';
+import { serveDist } from './serve-DIST.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-const { server, port, base } = await serveDist(dist);
+const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 

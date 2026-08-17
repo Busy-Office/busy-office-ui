@@ -13,8 +13,8 @@
 import { readFile, writeFile, readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { codeToHtml } from 'shiki';
+import { DIST } from './paths.mjs';
 
-const DIST = new URL('../dist', import.meta.url).pathname;
 
 // github-light hexes → semantic slots (many→few on purpose; the docs need
 // legible, token-driven code, not a 40-color rainbow).

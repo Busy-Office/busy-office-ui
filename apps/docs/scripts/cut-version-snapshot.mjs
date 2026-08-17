@@ -8,6 +8,7 @@
 import { execSync } from 'node:child_process';
 import { rm, cp, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
+import { DIST } from './paths.mjs';
 
 const version = process.argv[2];
 if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
@@ -23,7 +24,7 @@ execSync('npm run build', {
 const dest = join(docsRoot, 'versions', version);
 await rm(dest, { recursive: true, force: true });
 await mkdir(dest, { recursive: true });
-await cp(join(docsRoot, 'dist'), dest, { recursive: true });
+await cp(DIST, dest, { recursive: true });
 await rm(join(dest, 'pagefind'), { recursive: true, force: true });
 
 // One-command release (Slice 21 grill E4): the script maintains

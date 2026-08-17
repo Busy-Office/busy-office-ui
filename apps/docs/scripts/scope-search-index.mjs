@@ -25,10 +25,9 @@
  *    the deliberate trade for class names staying findable.
  */
 import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { DIST } from './paths.mjs';
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 
 /* Regions whose TEXT is chrome or rendered-widget noise, never prose. Each
    entry is [description, matcher] where matcher adds the ignore attribute to
@@ -51,7 +50,7 @@ async function* pages(dir) {
   }
 }
 
-for await (const file of pages(dist)) {
+for await (const file of pages(DIST)) {
   let html = await readFile(file, 'utf8');
   const before = html;
   for (const [desc, re] of IGNORE) {
