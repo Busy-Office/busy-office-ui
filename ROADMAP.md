@@ -118,7 +118,19 @@ technically correct and substantively blind here. That blind spot is 27.5.
        `<pre>`. Accept: an excerpt for "invoice" starts at content rather than
        nav chrome, and code-block matches stop inflating counts ("table"
        currently returns 54).
-4. [ ] **27.4 — Landing page honours the saved theme (P1-3).** Accept: the
+4. [x] **27.4 — Landing page honours the saved preferences** (2026-08-17) —
+       blocking inline `<head>` script, same mechanism as the docs shell.
+       **Correction to the review AND to my own triage:** the report said the
+       page "honours one persisted preference and drops the other", and I
+       repeated that. Tested with `bo-density=spacious` stored: docs rendered
+       spacious, home rendered **compact** — the hardcoded
+       `data-density="compact"` in the markup, which merely matched the
+       default. Home honoured **neither**; the asymmetry was an artifact. The
+       fix covers both keys. The hero switchers stay **demo-scoped** (that is
+       documented intent — "zero layout shift below") but now initialise from
+       the page's resolved values, which removes the real mismatch the review
+       measured (`#hero-theme` reading "light" on a dark page). **Cost line: 0
+       framework changes; docs-shell only.** Original text: Accept: the
        docs shell's blocking inline theme script runs on the home layout too;
        no white flash when navigating home with dark stored; the hero's local
        control either becomes the global one or is removed so two controls do

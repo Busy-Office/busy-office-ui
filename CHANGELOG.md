@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (docs site): the landing page ignored BOTH persisted preferences —
+  a dark-mode reader clicking the logo got a light page with no way to recover,
+  and `bo-density` was ignored too (the static `data-density="compact"` merely
+  matched the default). It now runs the same blocking inline theme/density
+  script as the docs shell. The hero switchers remain deliberately scoped to
+  the demo card, but initialise from the page's resolved values so they no
+  longer contradict it.
+
 - **Fixed** (docs site, WCAG 1.4.3): the docs ran TWO Pagefind instances and
   only the Cmd-K one was themed — the sidebar box inherited Pagefind's stock
   `#393939` and rendered result text at **1.46:1 in dark**. Consolidated to a

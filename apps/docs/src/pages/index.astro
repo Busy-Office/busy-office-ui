@@ -80,6 +80,26 @@ const invoices = [
 ---
 <html lang="en" data-density="compact">
   <head>
+    <script is:inline>
+      /* Landing honours the SAME persisted preferences as the docs shell
+         (roadmap 27.4). Blocking and in <head>, because this is a static MPA:
+         clicking the logo from a dark docs page is a full reload, and without
+         this the landing painted light and stayed light — no recovery, since
+         the hero's switchers are deliberately demo-scoped.
+
+         Both keys, not just theme. The static data-density="compact" above is
+         the no-JS default and looked like "density is honoured" when measured
+         (it matched the default by coincidence); with bo-density=spacious
+         stored, this page rendered compact while every docs page rendered
+         spacious. So neither preference was honoured here — the asymmetry was
+         an artifact of the default, which is why this script sets both. */
+      try {
+        var t = localStorage.getItem('bo-theme');
+        if (t) document.documentElement.dataset.theme = t;
+        var d = localStorage.getItem('bo-density');
+        if (d) document.documentElement.dataset.density = d;
+      } catch (e) { /* private mode: keep the static defaults */ }
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
@@ -324,6 +344,10 @@ const invoices = [
       import { initDataTables } from '@busy-office/ui/js';
       initDataTables();
       // Hero switchers scope to the demo card only — zero layout shift below.
+      // That is deliberate, so they are NOT the page's theme control. They do
+      // have to START in agreement with the page though: the QA review found
+      // #hero-theme reading "light" on a page the user had set to dark, which
+      // is the mismatch that made the local scope look like a bug.
       const table = document.getElementById('hero-table')!;
       const density = document.getElementById('hero-density') as HTMLSelectElement;
       density.addEventListener('change', () => {
@@ -331,6 +355,13 @@ const invoices = [
       });
       const theme = document.getElementById('hero-theme') as HTMLSelectElement;
       const demo = document.querySelector('.hero__demo') as HTMLElement;
+      // Sync both selects (and the demo card) to whatever the page resolved to.
+      const active = document.documentElement.dataset.theme ?? 'light';
+      theme.value = active;
+      demo.dataset.theme = active;
+      const activeDensity = document.documentElement.dataset.density ?? 'compact';
+      density.value = activeDensity;
+      table.dataset.density = activeDensity;
       theme.addEventListener('change', () => {
         demo.setAttribute('data-bo-theming', '');   // freeze transitions for the flip
         demo.dataset.theme = theme.value;
