@@ -67,6 +67,130 @@ with the reason); the design panel grills slices against them; removals
 face the same tests as additions — deleting a surface consumers compose
 against is a Breaking-entry decision, not a tidy-up.
 
+## Slice 24 — triaged from "ROADMAP DIRECTION v1.2" (external review, 2026-08-17)
+
+An outside reviewer submitted a direction document (transactional-core
+depth, anti-Fiori reasoning, a data-maintenance decomposition, and process
+rules). Reviewed against the Objective and against **what actually
+ships** — that second half mattered: roughly half the proposed items were
+already built, and three contradicted shipped, gated decisions. Triage
+outcome below. Verified against the tree, not assumed.
+
+### Closed on arrival — already shipped
+
+- **v1.2 item 7 (empty / loading / error states) — DONE, no work.**
+  `.bo-skeleton` + `.bo-state` + `/components/state-patterns` ship, and
+  both empty variants (first-run vs filters-exclude-everything) were
+  verified live in `examples/po-app` on 2026-08-17.
+- **v1.2 item 6 (formatting contract) — substantially DONE.** `.bo-amount`
+  already sets `tabular-nums`; `money` / `date` / `quantity` components and
+  `money-field.ts` ship. Residual is a docs-only task, queued as 24.5.
+- **v1.2 item 3 (field-first validation) — the field-first half is DONE.**
+  `/patterns/validation-summary` + `initValidationSummary()` ship. Only the
+  document-level message strip is new; queued as 24.4.
+- **v1.2 M1 (row-swap inline edit) — substantially DONE.** `row-edit.ts`,
+  `/components/inline-editing`, `/patterns/editable-grid`, plus
+  `data-row-state="dirty"` and `.bo-data-table__row-edit-actions`.
+
+### REFUSED, with reasons
+
+- **B3's "no RTL until a consumer needs it" — REFUSED.** Contradicts
+  shipped reality: the stylesheet is logical throughout, five flip sites
+  are documented, and `check:rtl` gates it in CI as of 2026-08-17.
+  Adopting this non-goal means deleting working, gated functionality.
+  The rest of B3 (no client-side routing, no data layer, no i18n engine,
+  no command palette) is accepted and already consistent with DESIGN.md.
+- **New components `.bo-value-help` and `.bo-staging-table` — REFUSED as
+  named.** Fails *less-for-more*'s refuse test ("any second way to do
+  something that already works"): entity selection is `.bo-combobox`, and
+  per-row batch results are `/patterns/bulk-actions`. The *capabilities*
+  behind both are accepted — as extensions, below.
+- **v1.2 item 3's "badge that scrolls to the first error" — REFUSED.**
+  `initValidationSummary()` deliberately focuses the SUMMARY first, citing
+  WCAG/GOV.UK precedent so a screen-reader user hears the overview before
+  being dropped into a field. The proposal reverses a considered
+  accessibility decision; the shipped behaviour stands.
+- **v1.2 R1 as written ("live in a production screen") — REFUSED, rewritten
+  as 24.R1.** This project has no production screens; as written the rule
+  halts the roadmap permanently.
+
+### OWNER DECISION required — not queued as work
+
+- **v1.2 item 2 (autosave / draft contract).** `/concepts/concurrency`
+  states plainly: "Nothing polls, nothing auto-saves, nothing reloads
+  underneath the user." Autosave is defensible but *reverses a published
+  guarantee*, and it collides with the optimistic-concurrency policy — what
+  a 409 version conflict means mid-autosave is undefined. Needs an explicit
+  call before any work; silence leaves the current no-autosave guarantee
+  standing.
+
+### Accepted and queued
+
+1. [ ] **24.1 — Query-token filtering, as a pattern not a component.** A
+       single search field taking `status:open vendor:acme`, server-parsed,
+       with active tokens rendered as existing `.bo-chip`s and cleared
+       individually. Chosen first: highest leverage per unit of new debt of
+       anything in v1.2 — **zero new components**, it extends the filter
+       bar that `saved-views.ts` already syncs to the URL, and it completes
+       the filter work started 2026-08-17. Accept: documented on a real
+       list pattern with the parse contract stated server-side, active
+       tokens removable, live-verified both themes/widths, no new CSS
+       component and no new behavior unless the docs prove one is needed.
+2. [ ] **24.2 — Combobox: recents-first + rich result rows + browse escape
+       hatch.** The genuinely-new half of v1.2 item 1. ERP selection is
+       Zipfian, so showing the ~20 repeat values before any keystroke is
+       the real win. Accept: recents render before typing from
+       server-supplied markup (no client store), option rows carry ID +
+       name + one context column without breaking the existing
+       `aria-activedescendant` contract, browse is a plain link not a
+       modal, combobox behavior tests stay green.
+3. [ ] **24.3 — Staging / batch-result view, extending bulk-actions.** The
+       genuinely-new half of v1.2 item 8, and what M4 (Excel round-trip)
+       depends on. Adds tri-state per row (ok / warning / error) and an
+       "apply valid rows" action to the existing pattern. Accept: extends
+       `/patterns/bulk-actions` or a sibling page reusing its data
+       contract, the TRANSIENT-state rule holds, po-app carries a working
+       upload→validate→apply flow, live-verified.
+4. [ ] **24.4 — Document-level message strip.** Only for messages that are
+       not about any one field ("posting period closed"). Accept: composes
+       `.bo-alert`; explicitly does NOT become a message centre, and the
+       page says why field-first stays the contract.
+5. [ ] **24.5 — Formatting contract docs.** SG/TH worked examples for
+       `Intl` formatting against the existing `data-currency`/UoM slots.
+       Docs-only; no new API.
+6. [ ] **24.6 — Document frame — SCOPE FIRST, may collapse to nothing.**
+       v1.2 item 4 wants a compact document shape (identity + status in one
+       line, <80px chrome, actions fixed). `/patterns/record-detail` and
+       `/patterns/detail-form` may already be it. Accept: either a measured
+       gap that justifies a new shape, or a recorded refusal saying the
+       existing patterns cover it.
+
+### Accepted framing and process (no build work)
+
+- **M1–M4 data-maintenance decomposition — ACCEPTED as doctrine.** The
+  strongest content in v1.2: it dissolves "we need a grid" into row-swap
+  edit / master-detail / mass-change / Excel round-trip. M2 (master-detail)
+  and M3 (mass change: select N, set field X) are genuinely absent and feed
+  24.3; M1 largely ships. To be written into DESIGN.md as the answer to
+  "how do I maintain data here", so the grid question stops recurring.
+- **B1 / B2 boundaries — ACCEPTED.** One token-themed AG Grid recipe and a
+  tokens→ECharts theme generator, documented, never owned. Matches the
+  existing non-goals discipline and is correct economics.
+- **24.R1 (rewritten one-in rule) — ACCEPTED.** No new component starts
+  until the previous one is exercised end-to-end in `examples/po-app`. That
+  is the dogfood discipline that has produced nearly every real defect
+  found on 2026-08-17, stated as a rule.
+- **24.R2 (cost line per slice) — ACCEPTED.** Every item states its debt up
+  front: selectors added, JS lines, new behaviors. The Objective tests value
+  but not cost; this closes that gap.
+
+**Note on the guiding filter.** v1.2 proposes its own two-part filter
+(removes a decision from every transactional screen; survives with
+near-zero JS). Compatible with the Objective but not identical — the
+Objective also requires surviving ≥2 independent compositions. The
+Objective remains the gate; v1.2's filter is supporting rationale, so the
+project does not run two competing tests.
+
 ## Done
 
 ### Slice 1 — Foundation + core components
