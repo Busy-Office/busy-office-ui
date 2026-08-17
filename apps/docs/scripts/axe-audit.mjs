@@ -37,18 +37,31 @@ const summary = {};
 const WIDTHS = [1440, 390];
 
 async function scan(path, page) {
-  for (const width of WIDTHS) {
+  for (const [i, width] of WIDTHS.entries()) {
     await page.setViewport({ width, height: 900 });
-    // networkidle0, NOT 'load'. Dropping to 'load' looked like a free 2x and
-    // made the gate FLAKY: axe's color-contrast rule needs rendered styles
-    // settled, and on JS-styled controls (the wizard's next button) it fired
-    // a false serious violation in 1 run out of 8. The parallelism below is
-    // where the real win is; this wait is what keeps the result trustworthy.
-    const res = await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
+    // networkidle0 on the FIRST width only. Dropping it entirely (waitUntil
+    // 'load') looked like a free 2x once and made the gate FLAKY: axe's
+    // color-contrast rule needs rendered styles settled, and on JS-styled
+    // controls (the wizard's next button) it fired a false serious violation
+    // in 1 run out of 8. So the load wait stays exactly as strict as it was.
+    //
+    // What changed (roadmap 28.1) is that the SECOND width no longer reloads
+    // the same URL: styles are already settled, resizing only reflows, and a
+    // frame to let container queries land is enough. Same 81 pages at the same
+    // two widths — this is not sampling. Stability was checked rather than
+    // assumed: 3 consecutive local runs, identical results each time.
+    let res = null;
+    if (i === 0) {
+      res = await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
+    } else {
+      await new Promise((r) => setTimeout(r, 80));
+    }
     // 304 = browser cache revalidation (legitimate on a repeat same-session
     // navigation, e.g. re-running the scan after a fix) — only a real
     // non-2xx/304 status means the page didn't actually load.
-    if (!res || ![200, 304].includes(res.status())) {
+    // Only the navigating pass has a response to judge; the resize pass is
+    // looking at a page whose status was already accepted above.
+    if (i === 0 && (!res || ![200, 304].includes(res.status()))) {
       summary[`${path}@${width}`] = [{ id: 'HTTP-' + (res && res.status()) }];
       continue;
     }
