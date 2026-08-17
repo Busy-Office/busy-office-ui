@@ -27,16 +27,23 @@ const pages = [];
 })(DIST, '');
 
 const { server, port, base } = await serveDist(DIST);
-const browser = await puppeteer.launch({ executablePath: resolveChrome(), args: chromeArgs(), headless: 'new' });
-const page = await browser.newPage();
+const browser = await puppeteer.launch({
+  executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 120000,
+});
 const summary = {};
 // Both harness widths: violations can be width-gated (a table container only
 // becomes a scrollable region — and needs to be focusable — once it overflows,
 // which mostly happens at 390).
 const WIDTHS = [1440, 390];
-for (const path of pages.sort()) {
+
+async function scan(path, page) {
   for (const width of WIDTHS) {
     await page.setViewport({ width, height: 900 });
+    // networkidle0, NOT 'load'. Dropping to 'load' looked like a free 2x and
+    // made the gate FLAKY: axe's color-contrast rule needs rendered styles
+    // settled, and on JS-styled controls (the wizard's next button) it fired
+    // a false serious violation in 1 run out of 8. The parallelism below is
+    // where the real win is; this wait is what keeps the result trustworthy.
     const res = await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
     // 304 = browser cache revalidation (legitimate on a repeat same-session
     // navigation, e.g. re-running the scan after a fix) — only a real
@@ -45,7 +52,6 @@ for (const path of pages.sort()) {
       summary[`${path}@${width}`] = [{ id: 'HTTP-' + (res && res.status()) }];
       continue;
     }
-    await page.evaluate(AXE);
     const r = await page.evaluate(async () =>
       (await window.axe.run(document, { resultTypes: ['violations'] })).violations
         .map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length,
@@ -55,6 +61,25 @@ for (const path of pages.sort()) {
     process.stderr.write('.');
   }
 }
+
+/* Same tab pool the layout sweep uses — this gate was written serially and
+   became the single most expensive step in CI (178s of a 348s run, over half
+   the total, and the reason CI went 2m50s -> 5m55s when it landed). One
+   pattern for both browser sweeps, not a second invention.
+   axe-core is also injected via evaluateOnNewDocument ONCE PER TAB instead of
+   re-parsing ~500kB on all 162 navigations. */
+const POOL = 4;
+const queue = [...pages.sort()];
+await Promise.all(Array.from({ length: POOL }, async () => {
+  const page = await browser.newPage();
+  await page.evaluateOnNewDocument(AXE);
+  while (queue.length) {
+    const path = queue.shift();
+    if (path) await scan(path, page);
+  }
+  await page.close();
+}));
+
 await browser.close();
 server.close();
 console.log('\npages scanned:', pages.length);
