@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (docs site, WCAG 1.4.3): the docs ran TWO Pagefind instances and
+  only the Cmd-K one was themed — the sidebar box inherited Pagefind's stock
+  `#393939` and rendered result text at **1.46:1 in dark**. Consolidated to a
+  single instance reached from a sidebar button, a mobile header button and
+  Cmd/Ctrl-K: dark result text is now **14.51:1**. Also fixes search being
+  entirely unreachable on mobile (both instances measured 0x0 at 420px), the
+  shortcut badge colliding with Pagefind's Clear button, the search box
+  scrolling 681px out of view, and two indexes loading per page. The shortcut
+  hint is a real element now, so it reads "Ctrl K" off macOS.
+
 - Added (gate): `check:po-app` — the reference app is verified in CI for the
   first time. Boots `examples/po-app` on a free port and asserts seven
   behaviours the docs cite it for (href-only filter removal, unknown token keys
