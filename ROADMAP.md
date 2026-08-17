@@ -317,7 +317,41 @@ Full report: `.roundtable/grill-objective-slices26-27-2026-08-18.md`. Three of
 five findings queued; F1 (verification-to-product ratio) deliberately NOT
 queued, and F4 was fixed in the same wake it was found.
 
-1. [ ] **28.1 — CI wall time is over budget and untracked (F2).** Measured
+1. [x] **28.1 — CI back under budget** (2026-08-18) — **330s -> 265s**,
+       against the 288s budget. Two rounds, because round 1 landed at 294s and
+       "better" is not the Accept criterion.
+
+       The grill's guessed levers were both wrong, which is the useful part:
+       it named the axe sweep and the visual suite; measurement showed the
+       LAYOUT sweep was the most expensive step (79s vs axe's 56s) and that the
+       visual suite **does not run in CI at all**. Guessing would have
+       optimised a gate that costs nothing.
+
+       All three wins were the same mistake in three places — reloading a page
+       to look at it in a different configuration:
+       `check-layout` loaded 90 pages three times (390 / 1440 / 1432@150%),
+       **79s -> 47s**; `check-target-size` looped densities OUTER of pages,
+       reloading 7 pages per density, **22s -> 10s**; `axe-audit` loaded 81
+       pages once per width, **61s -> ~35s**. Resizing reflows; only the first
+       visit needs `networkidle0`.
+
+       **Coverage is identical everywhere — same pages, same configurations,
+       same probes. Nothing was sampled and nothing stopped being checked**,
+       which is what the Accept criteria demanded be stated outright.
+
+       Each red-proof targeted the configuration that no longer reloads, since
+       that is precisely where detection could vanish silently: a fault scoped
+       to >=900px was caught at 1432@150% and correctly NOT at 390; two 12x12
+       controls 4px apart produced 6 violations (2 x 3 densities), while a
+       single ISOLATED 12x12 control correctly passed via SC 2.5.8's spacing
+       exception at "nearest 466px" — proving the probe reached it; and an
+       alt-less image was caught at both axe widths. Axe's flakiness history
+       (a false contrast violation in 1 run of 8) was respected by leaving its
+       load wait untouched and measuring stability over 3 consecutive runs.
+
+       `ci-wall-time` is now recorded through `record_metric.py`, closing the
+       half of the finding that mattered more: rule 4 was blind to it.
+       Original text: Measured
        318s -> 330s across Slices 26-27 against the **288s budget** item 26.1
        measured itself against — ~15% over and drifting up. The sharper half of
        the finding: CI time was never recorded through `record_metric.py`, so
