@@ -47,3 +47,10 @@ jobs:
       # sweep is a gate now rather than a habit (2026-08-17).
       - name: Axe accessibility audit (81 pages x 2 widths)
         run: npm run test:axe -w docs
+      # Windows High Contrast support is a documented promise and the
+      # component list on /concepts/accessibility is generated from the CSS.
+      # This catches the half generation cannot: a forced-colors rule whose
+      # selector no longer matches anything (left behind by a rename or a
+      # component split).
+      - name: Forced-colors rules still live
+        run: npm run check:forced-colors -w docs

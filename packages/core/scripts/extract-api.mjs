@@ -28,6 +28,11 @@ async function analyze(files) {
     tokensConsumed: new Set(),
     tokensDefined: new Set(),
     containers: new Set(),
+    // Which components ship an explicit forced-colors (Windows High
+    // Contrast) rule. The accessibility page used to hand-list these and
+    // had drifted to 10 of 15 while claiming the list was exhaustive
+    // (2026-08-17) — generated now, like every other documented surface.
+    forcedColors: false,
   };
   for (const file of files) {
     const css = await readFile(file, 'utf8');
@@ -36,6 +41,9 @@ async function analyze(files) {
       for (const m of rule.selector.matchAll(CLASS_RE)) out.classes.add(m[1]);
       for (const m of rule.selector.matchAll(DATA_RE)) out.dataAttrs.add(m[1]);
       for (const m of rule.selector.matchAll(ARIA_RE)) out.ariaAttrs.add(m[1]);
+    });
+    root.walkAtRules('media', (at) => {
+      if (/forced-colors\s*:\s*active/.test(at.params)) out.forcedColors = true;
     });
     root.walkDecls((decl) => {
       if (decl.prop.startsWith('--bo-')) out.tokensDefined.add(decl.prop);
@@ -59,6 +67,7 @@ function shape(sets) {
     tokensConsumed: [...sets.tokensConsumed].sort(),
     tokensDefined: [...sets.tokensDefined].sort(),
     containers: [...sets.containers].sort(),
+    forcedColors: sets.forcedColors,
   };
 }
 

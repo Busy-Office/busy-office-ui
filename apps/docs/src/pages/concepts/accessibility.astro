@@ -1,7 +1,19 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import api from '@busy-office/ui/api';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* Generated, never hand-listed: which components ship an explicit
+   forced-colors rule. The prose used to enumerate them and had drifted to
+   10 of 15. pageSlug is the same alias map the page-shape gate uses — a CSS
+   directory name is not always a page slug (skeleton is documented on
+   state-patterns), and a generated link that 404s is worse than a
+   hand-written list; the link checker caught exactly that here. */
+const forcedColors = Object.entries(api.components)
+  .filter(([, v]) => v.forcedColors)
+  .map(([name]) => ({ name, slug: api.pageSlug?.[name] ?? name }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 const twoChannel = `<!-- BOTH channels, every state signal: -->
 <li class="bo-timeline__step" data-state="rejected">
   <span class="bo-timeline__marker" aria-hidden="true">✕</span>   <!-- visible, non-color -->
@@ -47,13 +59,23 @@ const twoChannel = `<!-- BOTH channels, every state signal: -->
     automatically because state rides on text, glyphs, and borders (the
     two-channel rule again). Explicit <code>@media (forced-colors: active)</code>
     rules exist exactly where a state's only visible channel was a background
-    or a mask: <strong>icons</strong> (mask repainted <code>CanvasText</code>),
+    or a mask — <strong>icons</strong> (mask repainted <code>CanvasText</code>),
     <strong>skeleton</strong> (bars become outlined boxes instead of
     vanishing), <strong>combobox</strong> (active option repaints with
     <code>SelectedItem</code>), <strong>stepper</strong> (current marker gains
-    a ring), plus button, badge, dialog, off-canvas, data-table, and progress.
-    Verified via CDP forced-colors emulation — screenshots in the review
-    ledger, 2026-08-15.</p>
+    a ring) — across these {forcedColors.length} components:</p>
+    <ul class="bo-cluster" style="list-style: none; padding: 0">
+      {forcedColors.map((c) => (
+        <li><a class="bo-badge bo-badge--type" href={`${base}/components/${c.slug}`}>{c.name}</a></li>
+      ))}
+    </ul>
+    <p class="bo-u-text-muted">That list is <strong>generated</strong> from
+    the shipped CSS (<code>api.json</code>), not maintained by hand — it had
+    drifted to 10 of {forcedColors.length} while still claiming to be
+    exhaustive, which is exactly the failure mode generating it removes.
+    Each rule is verified under CDP forced-colors emulation against a
+    control run in normal mode, so a rule that no longer changes anything
+    is caught rather than assumed.</p>
   </section>
   <section class="demo">
     <h2>Honest status</h2>

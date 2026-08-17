@@ -11,7 +11,8 @@
     "test:axe": "node scripts/axe-audit.mjs",
     "check:claims": "node scripts/check-claims.mjs",
     "check:pseudo": "node scripts/check-pseudo-locale.mjs",
-    "check:layout": "node scripts/check-layout.mjs"
+    "check:layout": "node scripts/check-layout.mjs",
+    "check:forced-colors": "node scripts/check-forced-colors.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

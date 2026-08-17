@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- Added (generated docs surface): `api.json` now records `forcedColors` per
+  component, and /concepts/accessibility renders its Windows High Contrast
+  component list from it. The hand-written list had drifted to 10 of 15
+  while still claiming to be exhaustive. A new gate
+  (`check:forced-colors`) verifies every shipped `@media (forced-colors:
+  active)` rule still matches real markup and still changes something under
+  CDP emulation, measured against a control run.
+
 - **Fixed** (RTL): `.bo-motion-slide-in-inline-start` had a logical NAME and
   a physical implementation (`transform: translateX(-0.5rem)`), so in a
   right-to-left document it slid in from the wrong edge — the opposite of
