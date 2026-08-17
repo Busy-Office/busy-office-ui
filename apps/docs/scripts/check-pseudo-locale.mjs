@@ -13,15 +13,14 @@
 // produced 10 findings. Note that auto table layout IGNORES max-width on
 // cells — an early red test injected there, saw nothing, and would have
 // shipped a detector that could not fail.
-import puppeteer from 'puppeteer-core';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { serveDist } from './serve-dist.mjs';
+import { launchDocsBrowser } from './browser-harness.mjs';
 
 const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 const { server, port, base } = await serveDist(dist);
-const browser = await puppeteer.launch({ executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 60000 });
+const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 
 // Text-dense screens where expansion bites: tables, forms, toolbars, nav.

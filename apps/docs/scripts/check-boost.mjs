@@ -16,8 +16,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveDist } from './serve-dist.mjs';
-import puppeteer from 'puppeteer-core';
-import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
+import { launchDocsBrowser } from './browser-harness.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(docsRoot, 'dist');
@@ -56,7 +55,7 @@ const PROBES = [
 ];
 const { server, port, base } = await serveDist(dist);
 
-const browser = await puppeteer.launch({ executablePath: resolveChrome(), args: chromeArgs(), headless: 'new' });
+const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });
 let liveFails = 0;

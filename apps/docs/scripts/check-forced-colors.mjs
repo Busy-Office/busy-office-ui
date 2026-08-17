@@ -22,9 +22,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
-import puppeteer from 'puppeteer-core';
-import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { serveDist } from './serve-dist.mjs';
+import { launchDocsBrowser } from './browser-harness.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(docsRoot, 'dist');
@@ -86,9 +85,7 @@ for (const rule of rules) {
 
 /* ---- 3. control vs emulated ---- */
 const { server, port, base } = await serveDist(dist);
-const browser = await puppeteer.launch({
-  executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 120000,
-});
+const browser = await launchDocsBrowser();
 
 async function measure(forced) {
   const page = await browser.newPage();

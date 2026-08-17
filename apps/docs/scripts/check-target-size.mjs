@@ -17,15 +17,12 @@
  *   note  — undersized but adequately spaced: conformant via the exception,
  *           and the reason the docs may not claim a blanket 24px floor.
  */
-import puppeteer from 'puppeteer-core';
-import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { serveDist } from './serve-dist.mjs';
+import { launchDocsBrowser } from './browser-harness.mjs';
 
 const DIST = new URL('../dist', import.meta.url).pathname;
 const { server, port, base } = await serveDist(DIST);
-const browser = await puppeteer.launch({
-  executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 120000,
-});
+const browser = await launchDocsBrowser();
 
 // Control-dense pages; the sweep is deliberately small because CI cost is tracked.
 const PAGES = [

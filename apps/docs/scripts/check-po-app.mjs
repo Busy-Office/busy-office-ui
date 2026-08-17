@@ -19,9 +19,8 @@ import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import puppeteer from 'puppeteer-core';
-import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { gate } from './gate-report.mjs';
+import { launchDocsBrowser } from './browser-harness.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const AXE = readFileSync(join(repoRoot, 'node_modules/axe-core/axe.min.js'), 'utf8');
@@ -133,9 +132,7 @@ try {
   );
 
   /* ---- accessibility over the app's own routes ---- */
-  const browser = await puppeteer.launch({
-    executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 60000,
-  });
+  const browser = await launchDocsBrowser();
   const page = await browser.newPage();
   await page.evaluateOnNewDocument(AXE);
   const ROUTES = ['/', '/pos', '/import', '/spend', '/receive', '/pos/PO-88210'];

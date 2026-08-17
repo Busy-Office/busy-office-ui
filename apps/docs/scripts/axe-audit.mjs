@@ -11,9 +11,8 @@
 // and a gate may not depend on a human having started something.
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import puppeteer from 'puppeteer-core';
-import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { serveDist } from './serve-dist.mjs';
+import { launchDocsBrowser } from './browser-harness.mjs';
 
 const DIST = new URL('../dist', import.meta.url).pathname;
 const AXE = readFileSync(new URL('../../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
@@ -30,9 +29,7 @@ const pages = [];
 })(DIST, '');
 
 const { server, port, base } = await serveDist(DIST);
-const browser = await puppeteer.launch({
-  executablePath: resolveChrome(), args: chromeArgs(), headless: 'new', protocolTimeout: 120000,
-});
+const browser = await launchDocsBrowser();
 const summary = {};
 // Both harness widths: violations can be width-gated (a table container only
 // becomes a scrollable region — and needs to be focusable — once it overflows,
@@ -110,7 +107,18 @@ await Promise.all(Array.from({ length: POOL }, async () => {
 
 await browser.close();
 server.close();
-console.log('\npages scanned:', pages.length);
-console.log(JSON.stringify(summary, null, 1));
 
-process.exit(Object.keys(summary).length ? 1 : 0)
+/* Every sibling gate ends with an explicit "FAILED — n" or "passed — n" line.
+   This one used to print `pages scanned: 82` followed by a bare `{}` and exit,
+   so a clean run's only evidence of success was an empty JSON object — you had
+   to know that meant "no violations" rather than "the scan produced nothing"
+   (Standardize sweep, 2026-08-18). */
+const failedPages = Object.keys(summary);
+if (failedPages.length) {
+  console.log(JSON.stringify(summary, null, 1));
+  console.error(
+    `axe audit FAILED — violations on ${failedPages.length} of ${pages.length} page/width combination(s)`,
+  );
+  process.exit(1);
+}
+console.log(`axe audit passed — ${pages.length} pages x 2 widths, zero violations`);
