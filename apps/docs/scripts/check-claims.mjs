@@ -266,6 +266,37 @@ check('sticky action bar never covers the focused field', Array.isArray(hidden) 
    the one animation that cannot use a token (the skeleton shimmer, which is
    infinite and literal) is switched off outright. check-motion.mjs guards
    the CSS structure statically; this proves the browser actually honours it. */
+/* The document frame (roadmap 24.6). /patterns/record-detail states a
+   measured chrome budget, so the budget is gated rather than the exact
+   pixels: an identity line that creeps past 80px is the regression the
+   measurement existed to prevent. Also asserts status is not duplicated
+   between the line and the facts strip — it was, and cost 54px at phone
+   width for a fact the reader had already seen. */
+for (const w of [1440, 390]) {
+  await page.setViewport({ width: w, height: 900 });
+  for (const pat of ['record-detail', 'detail-form']) {
+    await page.goto(url(`/patterns/${pat}/`), { waitUntil: 'networkidle0' });
+    const frame = await page.evaluate(() => {
+      const demo = document.querySelector('section.demo');
+      const line = demo?.querySelector('.bo-cluster--split');
+      if (!line) return { missing: true };
+      const kv = demo.querySelector('.bo-kv');
+      return {
+        h: Math.round(line.getBoundingClientRect().height),
+        type: !!line.querySelector('.bo-badge--type'),
+        status: !!line.querySelector('.bo-badge--success, .bo-badge--warning, .bo-badge--danger'),
+        statusInFacts: kv ? /status/i.test(kv.textContent || '') : false,
+      };
+    });
+    check(
+      `${pat} identity line is within the 80px chrome budget at ${w} (type + status, status not duplicated in facts)`,
+      !frame.missing && frame.h > 0 && frame.h <= 80 && frame.type && frame.status && !frame.statusInFacts,
+      JSON.stringify({ width: w, ...frame }),
+    );
+  }
+}
+await page.setViewport({ width: 1440, height: 1000 });
+
 await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
 await page.goto(url('/components/state-patterns/'), { waitUntil: 'networkidle0' });
 const reduced = await page.evaluate(() => {

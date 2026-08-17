@@ -8,6 +8,14 @@ pin.
 
 ## Unreleased
 
+- Added (docs): the **document frame** — a compact identity line (type badge,
+  record number, status, actions) on `/patterns/record-detail` and
+  `/patterns/detail-form`, composed from a split `.bo-cluster` with no new
+  CSS. Measured at 36px/68px and 24px/53px against an 80px chrome budget that
+  is now gated, and Status no longer appears in both the identity line and the
+  facts strip (which cost 54px at phone width). `detail-form` previously had
+  no identity region at all.
+
 - Added (docs + gate): worked SG/TH formatting examples and an
   "entry precision is not display precision" section on `/concepts/i18n`,
   with every string produced by running `Intl`. A new browser-free gate

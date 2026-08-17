@@ -19,6 +19,25 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </ol>
   </nav>
   <section class="demo">
+    {/* IDENTITY LINE — what the document is, and what state it is in, on one
+        line with the actions. MEASURED: 36px at 1440 (one row) and 68px at
+        390, where the actions wrap to a second row — both inside the 80px
+        budget (roadmap 24.6).
+        Composed entirely from shipped primitives — a split cluster, the type
+        badge and a status badge — so it is a documented shape, not a new
+        component. Status lives HERE and is deliberately not repeated in the
+        facts strip below. */}
+    <div class="bo-cluster bo-cluster--split" style="margin-block-end: var(--bo-space-3)">
+      <span class="bo-cluster">
+        <span class="bo-badge bo-badge--type">Purchase order</span>
+        <strong class="bo-u-tabular">PO-88213</strong>
+        <span class="bo-badge bo-badge--success">Approved</span>
+      </span>
+      <span class="bo-cluster">
+        <button class="bo-btn bo-btn--secondary" type="button">Print</button>
+        <button class="bo-btn bo-btn--secondary" type="button">Copy</button>
+      </span>
+    </div>
     <article class="bo-widget" style="margin-block-end: var(--bo-space-4)">
       <div class="bo-widget__body">
         <dl class="bo-kv">
@@ -27,7 +46,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <div><dt>Payment terms</dt><dd>Net 30</dd></div>
           <div><dt>Total</dt><dd class="bo-u-tabular">$12,400.00</dd></div>
           <div><dt>Requested</dt><dd><time datetime="2026-08-10">10 Aug 2026</time></dd></div>
-          <div><dt>Status</dt><dd><span class="bo-badge bo-badge--success">Approved</span></dd></div>
         </dl>
       </div>
     </article>
@@ -89,6 +107,44 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="demo">
+    <h2>The document frame — measured, not asserted</h2>
+    <p>An ERP document screen is read far more often than it is edited, so the
+    chrome above the content is a recurring tax. The shape here is
+    <strong>one identity line</strong> — what the document is, which one, what
+    state it is in, and the actions — then the facts, then the content:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr>
+          <th scope="col">Region</th>
+          <th scope="col" class="bo-data-table__col--numeric">1440px</th>
+          <th scope="col" class="bo-data-table__col--numeric">390px</th>
+          <th scope="col">Note</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Identity line</td><td class="bo-data-table__col--numeric">36px</td><td class="bo-data-table__col--numeric">68px</td><td>one row on desktop; actions wrap to a second row on a phone</td></tr>
+          <tr><td>Facts strip</td><td class="bo-data-table__col--numeric">124px</td><td class="bo-data-table__col--numeric">277px</td><td>five facts, auto-fit — this is content, not chrome, and it scrolls</td></tr>
+          <tr><td>Facts strip <em>before</em></td><td class="bo-data-table__col--numeric">127px</td><td class="bo-data-table__col--numeric">331px</td><td>six facts: Status was repeated here and in the line above</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-3)">
+    <strong>Zero new components.</strong> The identity line is a split
+    <a href={base + '/base/primitives'}>cluster</a> holding the
+    <a href={base + '/components/badge'}>type badge</a>, the record number and
+    a status badge — all shipped. A dedicated document-header component would
+    be a second way to do what a cluster already does.</p>
+    <p class="bo-u-text-muted">Two rules worth keeping: <strong>status lives in
+    the identity line, not in the facts</strong> — it was in both, which cost
+    54px at phone width for a fact the reader had already seen; and
+    <strong>put the actions in the line, not in a bar of their own</strong>,
+    because a separate action bar is another band of chrome competing for the
+    same vertical space. The
+    <a href={base + '/patterns/detail-form'}>detail form</a> uses the same
+    line; before this it had no identity region at all, so nothing on screen
+    said which purchase order you were editing.</p>
   </section>
 
   <section class="demo">

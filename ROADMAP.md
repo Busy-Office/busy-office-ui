@@ -204,7 +204,21 @@ outcome below. Verified against the tree, not assumed.
        documented list rather than a surprise. Original text:
        `Intl` formatting against the existing `data-currency`/UoM slots.
        Docs-only; no new API.
-6. [ ] **24.6 — Document frame — SCOPE FIRST, may collapse to nothing.**
+6. [x] **24.6 — Document frame** (2026-08-17) — scoped by MEASUREMENT, and
+       the gap was real, so this did not collapse to a refusal. Before:
+       `/patterns/record-detail`'s header was **127px at 1440 and 331px at
+       390** — most of a phone viewport before any content — against v1.2's
+       80px target, and `/patterns/detail-form` had **no identity region at
+       all**, so nothing said which purchase order you were editing. After: an
+       identity line measuring **36px / 68px** on record-detail and **24px /
+       53px** on detail-form, all inside the budget, and the facts strip fell
+       331px → 277px at phone width because Status had been duplicated in both
+       places. **Cost line (24.R2): 0 new selectors, 0 new CSS, 0 new
+       behaviors** — a split `.bo-cluster` holding the type badge, the record
+       number and a status badge. A dedicated document-header component was
+       REFUSED: it would be a second way to do what a cluster already does.
+       Budget and the no-duplicate-status rule are gated (claims 18 → 22).
+       Original text:
        v1.2 item 4 wants a compact document shape (identity + status in one
        line, <80px chrome, actions fixed). `/patterns/record-detail` and
        `/patterns/detail-form` may already be it. Accept: either a measured
