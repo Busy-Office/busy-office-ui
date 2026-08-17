@@ -8,6 +8,22 @@ pin.
 
 ## Unreleased
 
+- Added (combobox value help): rich result rows —
+  `.bo-combobox__option-code` / `__option-label` / `__option-meta` — plus
+  `.bo-combobox__group` headings and `data-open-on-focus`, which shows
+  server-supplied recents before any keystroke. The LABEL part is what
+  commits to the field; plain-text options behave exactly as before. All
+  three parts are inside the option, so the existing filter matches on code,
+  name or context alike.
+- **Fixed** (combobox): scrolling now REPOSITIONS an open list under its
+  focused field instead of closing it, closing only once the field leaves
+  the viewport. Closing on any scroll made focus-to-open impossible —
+  focusing an off-screen field scrolls it, and that scroll closed the list
+  focus had just opened.
+- **Fixed** (combobox): the scroll handler called `Node.contains()` on an
+  event target that is not always a Node, which throws and silently aborted
+  the handler.
+
 - **Fixed** (docs correctness): /concepts/density claimed "No density tier
   takes an interactive target below 1.5rem (24px)" and called spacious
   "44px targets". Both were false — `.bo-checkbox`, `.bo-radio` and
