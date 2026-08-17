@@ -67,6 +67,40 @@ with the reason); the design panel grills slices against them; removals
 face the same tests as additions — deleting a surface consumers compose
 against is a Breaking-entry decision, not a tidy-up.
 
+## Slice 26 — from the Objective grill (2026-08-17)
+
+Both items come from `.roundtable/grill-objective-slices23-25-2026-08-17.md`.
+Neither is a defect in shipped code; both are gaps in how far verification
+reaches.
+
+1. [ ] **26.1 — Smoke-gate the reference app.** `examples/po-app` is what
+       24.R1 requires work to be exercised in and what four docs pages cite as
+       the working implementation, and **nothing tests it**. Measured this
+       wake: axe over 6 routes x 2 widths is clean today, and several
+       documented po-app behaviours (the disabled apply button at zero
+       applicable rows, "an invalid value changes nothing at all", href-based
+       filter removal surviving the back button) were verified by hand and are
+       not repeatable. Accept: CI boots the po-app, asserts those behaviours
+       end-to-end, and runs axe over its routes; the added cost is stated and
+       measured against the 288s budget (estimate +30-60s); red-proved.
+2. [ ] **26.2 — Write the CI-reach rule into CLAUDE.md.** Twice in one session
+       a gate was green in CI and wrong elsewhere: `check:rtl`'s DESIGN.md
+       assertion broke the po-app image build (that context copies only
+       `packages/`), and the axe sweep drifted red for a week because it
+       needed a hand-started container. Accept: CLAUDE.md's gate-discipline
+       section states that CI's full checkout is the most permissive
+       environment the build sees, so a gate that only ever runs there is not
+       known to be portable — verify a new gate in the narrowest context that
+       must run it.
+
+**DEFERRED, with a trigger (not a queue item):** extracting the document
+identity line into a component. It is the one composed shape that is pure
+repeated markup with no app-specific logic, so the charter's "lets a consumer
+delete code" test arguably fails for it. Both current uses are ours, and the
+reusability rule needs >=2 *independent* compositions. **Revisit on a third
+use, or the first consumer report of copying it** — recorded so this stays a
+trigger rather than a mood.
+
 ## Slice 25 — carried forward (2026-08-17 reconciliation)
 
 Two pieces of work were accepted during Slice 24 but never given a
@@ -116,10 +150,14 @@ reverses `/concepts/concurrency`'s published "nothing auto-saves"
 guarantee and leaves 409-during-autosave undefined. Silence leaves the
 current guarantee standing.
 
-**MILESTONE PENDING:** Slice 24 closed 2026-08-17, so an **Objective**
-pass is due (LOOPS.md rule 6). It has been deferred twice by the 4-tick
-Standardize rule taking precedence; it should run on the next wake where
-the counter is clear.
+**MILESTONE DONE:** the overdue **Objective** pass ran 2026-08-17 covering
+Slices 23-25 —
+`.roundtable/grill-objective-slices23-25-2026-08-17.md`. It found **no defect
+in what those three slices shipped**; both real findings are about
+*verification reach* rather than code, and are queued as Slice 26 below.
+Precedence note for the dispatcher: rule 5 (backlog empty → Explore) fires on
+the same wake a slice closes, so it will starve rule 6 forever unless the
+milestone is taken first. It was overdue by three slices before anyone noticed.
 
 ## Slice 24 — triaged from "ROADMAP DIRECTION v1.2" (external review, 2026-08-17)
 
