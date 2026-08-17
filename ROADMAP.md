@@ -311,6 +311,28 @@ NOT hardcoded (two data URIs, correct per theme); the mobile drawer renders in
 the right theme; the hero CTA was mid-animation when first measured. Recording
 these so nobody re-opens them.
 
+## OPEN — Pages deploy blocked, owner-side (2026-08-18)
+
+**The published site is four commits stale** (live: `35c38eb`/27.6,
+last-modified 17:25 GMT). `actions/deploy-pages@v4` has returned **HTTP 503 on
+four consecutive commits** — `162553b`, `c02f663`, `effe7a9`, `47f7ea0` — always
+at "Creating Pages deployment". CI itself is green on every one of them; only
+the deploy step fails, so nothing is wrong with the build.
+
+What I checked, because the action's own error asks: **githubstatus.com reports
+Pages, Actions and API Requests all operational**, so this is not a
+broadly-reported outage, which is what I assumed for the first two failures.
+The repo's Pages config is correct and unchanged (`build_type: "workflow"`,
+public, HTTPS enforced), and the same workflow deployed successfully at 17:25.
+`GET /repos/.../pages` reports `"status": null`. Re-running via `gh run rerun`
+is itself refused with 503, so it cannot be retried from here.
+
+Accept: a deploy run completes and the live site serves the collapsible-nav
++ launcher-marks + print-rule build. **Owner action** — this needs repo
+settings/GitHub support access; there is no code change that fixes it. Retry
+`gh run rerun <id> --failed` on the newest "Deploy docs to Pages" run once
+Pages accepts deployments again.
+
 ## Slice 26 — from the Objective grill (2026-08-17)
 
 Both items come from `.roundtable/grill-objective-slices23-25-2026-08-17.md`.
