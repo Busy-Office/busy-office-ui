@@ -3053,6 +3053,29 @@ every page at 390. If an RTL screenshot sweep is ever wanted, note that it
 is a THIRD full-site browser pass — weigh it against the CI budget above,
 which is the reason the layout/pseudo/axe merge was refused.
 
+**Claim-execution seam status (2026-08-17).** The dogfood/claim-execution
+loop has been the main source of work while the backlog sits on the single
+owner-gated item, and it has been productive: htmx 409 discard, the
+two-swap-target gap, a false print claim, five WCAG 1.4.12 failures, two
+false keyboard-walkthrough steps, an RTL animation contradicting its own
+name, tree-table's missing RTL flip, a forced-colors list drifted to 10 of
+15, an inert filter bar, and `.bo-btn`/`.bo-badge`/`.bo-chip` underlining
+controls on all 89 pages. **The reduced-motion pass (this wake) was the
+first to find nothing** — the claim was simply true.
+
+Executed and now gated: concurrency 409/422, print, WCAG text spacing,
+pseudo-locale expansion, keyboard walkthroughs, RTL logical properties,
+forced-colors, reduced-motion, bulk partial-failure, empty states,
+control-anchor underlines. **Not yet executed:** the pattern-page States
+tables beyond empty (loading / error / permission / conflict), density
+claims, and the ACR's per-criterion verdicts — though several of those now
+rest on gates above. **Blocked, not exhaustible by this loop:** item 12,
+which needs owner hardware.
+
+If the next one or two Explore passes also come back clean, treat that as
+the seam being worked out rather than as a reason to hunt smaller targets,
+and say so plainly per the steady-state rule in LOOPS.md.
+
 **CI budget (2026-08-17).** `ci-total-s` and `ci-axe-step-s` are tracked
 metrics now. They exist because the axe gate landed at 178s and pushed CI
 2m50s -> 5m55s, and nothing noticed for three wakes — no metric watched
