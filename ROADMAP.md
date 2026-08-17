@@ -3040,6 +3040,19 @@ in the pattern.
        Docs guidance changed from "hx-include or a plain form" (presented
        as equals) to preferring the form, with the reason.
 
+**RTL is gated now (2026-08-17, Explore graduation).** The i18n page's
+"logical throughout, three places flipped" claim was prose; executing it
+found two real defects (a motion utility with a logical name and a physical
+body; tree-table missing the glyph flip its sibling tree had) and the count
+was wrong — it is five. `check:rtl` runs in the core build and refuses any
+physical box property plus any new unflipped direction-sensitive construct.
+**Still NOT covered, and deliberately not claimed anywhere:** RTL is
+verified structurally (does the stylesheet mirror) and spot-checked live,
+but no gate walks every page in `dir="rtl"` the way the layout sweep walks
+every page at 390. If an RTL screenshot sweep is ever wanted, note that it
+is a THIRD full-site browser pass — weigh it against the CI budget above,
+which is the reason the layout/pseudo/axe merge was refused.
+
 **CI budget (2026-08-17).** `ci-total-s` and `ci-axe-step-s` are tracked
 metrics now. They exist because the axe gate landed at 178s and pushed CI
 2m50s -> 5m55s, and nothing noticed for three wakes — no metric watched
