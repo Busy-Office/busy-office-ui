@@ -16,6 +16,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
 import { serveDist } from './serve-dist.mjs';
+import { gate } from './gate-report.mjs';
 
 const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 const { server, port, base } = await serveDist(dist);
@@ -23,8 +24,8 @@ const browser = await puppeteer.launch({ executablePath: resolveChrome(), args: 
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });
 const url = (p) => `http://localhost:${port}${base}${p}`;
-const results = [];
-const check = (claim, pass, detail) => results.push({ claim, pass, detail });
+const g = gate('claims check', 'documented behaviours');
+const check = g.check;
 
 /* Every sticky per-page setting, reset on EVERY navigation.
    emulateMediaType, emulateMediaFeatures and the viewport all persist across
@@ -330,10 +331,4 @@ check(
 await browser.close();
 server.close();
 
-const failed = results.filter((r) => !r.pass);
-for (const r of failed) console.log(`FAIL ${r.claim}\n     ${r.detail}`);
-if (failed.length) {
-  console.error(`claims check FAILED — ${failed.length} of ${results.length} documented behaviours do not hold`);
-  process.exit(1);
-}
-console.log(`claims check passed — ${results.length} documented behaviours verified live`);
+g.report('verified live');

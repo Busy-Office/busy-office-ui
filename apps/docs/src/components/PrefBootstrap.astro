@@ -1,0 +1,37 @@
+---
+/**
+ * The ONE place the docs site resolves persisted theme/density before paint.
+ *
+ * Why it is a component and not two copies: the logic was duplicated into
+ * index.astro's head (roadmap 27.4) and the two immediately disagreed — Gallery
+ * defaulted density to `comfortable` while the landing fell back to a static
+ * `compact`, so a first-time visitor measurably got a different density on the
+ * landing page than on every docs page (Standardize sweep, 2026-08-18). One
+ * definition, one default, no chance of the two drifting again.
+ *
+ * Must stay `is:inline` and live in <head>: this is a static MPA, so every link
+ * click is a full reload. A bundled or deferred script paints light first and
+ * flashes, which is the bug this mechanism exists to prevent.
+ *
+ * `density` lets a surface state a deliberate override (the landing was authored
+ * compact). Passing it makes that a choice rather than a fallback accident.
+ */
+interface Props {
+  /** Default when nothing is stored. Framework default is comfortable. */
+  density?: 'compact' | 'comfortable' | 'spacious';
+  /** Default when nothing is stored. */
+  theme?: 'light' | 'dark';
+}
+const { density = 'comfortable', theme = 'light' } = Astro.props;
+---
+<script is:inline define:vars={{ fallbackDensity: density, fallbackTheme: theme }}>
+  try {
+    document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? fallbackTheme;
+    document.documentElement.dataset.density = localStorage.getItem('bo-density') ?? fallbackDensity;
+  } catch (e) {
+    /* private mode / storage disabled: fall back to the declared defaults so
+       the page still resolves a theme instead of inheriting nothing. */
+    document.documentElement.dataset.theme = fallbackTheme;
+    document.documentElement.dataset.density = fallbackDensity;
+  }
+</script>

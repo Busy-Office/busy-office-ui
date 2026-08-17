@@ -4,6 +4,7 @@ import '../styles/code-hl.css';
 import '../styles/copy-toast.css';
 import '../styles/doc-swatch.css';
 import Logo from '../components/Logo.astro';
+import PrefBootstrap from '../components/PrefBootstrap.astro';
 import pkg from '@busy-office/ui/package.json';
 import versions from '../../versions.json';
 const { title } = Astro.props;
@@ -183,16 +184,7 @@ const current =
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
     <title>{title} · busy-office-ui</title>
-    <script is:inline>
-      // Blocking, in <head>, before any paint — the ONLY way to avoid a
-      // light-then-dark flash on every navigation. This is a static MPA (a
-      // link click is a full page reload, not client routing), and the
-      // <html> tag has no data-theme statically, so without this the page
-      // always painted light first and flashed to dark once the body-end
-      // script finally ran (site bug, 2026-08-14 user report — distinct
-      // from the theme-TOGGLE transition flash, already fixed separately).
-      document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? 'light';
-    </script>
+    <PrefBootstrap />
   </head>
   <!-- hx-select selects the incoming main's CHILDREN, not the main
        itself: selecting "#main-content" with innerHTML nested a second

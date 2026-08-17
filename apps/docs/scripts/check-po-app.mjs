@@ -21,6 +21,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import { resolveChrome, chromeArgs } from './resolve-chrome.mjs';
+import { gate } from './gate-report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const AXE = readFileSync(join(repoRoot, 'node_modules/axe-core/axe.min.js'), 'utf8');
@@ -50,8 +51,8 @@ await new Promise((res, rej) => {
   app.on('exit', (code) => { clearTimeout(t); rej(new Error(`po-app exited (${code})\n${appErr}`)); });
 });
 
-const results = [];
-const check = (claim, pass, detail) => results.push({ claim, pass, detail });
+const g = gate('po-app smoke check', 'behaviours');
+const check = g.check;
 const post = (path, pairs) =>
   fetch(base + path, {
     method: 'POST',
@@ -160,10 +161,4 @@ try {
   app.kill();
 }
 
-const failed = results.filter((r) => !r.pass);
-for (const r of failed) console.log(`FAIL ${r.claim}\n     ${r.detail}`);
-if (failed.length) {
-  console.error(`po-app smoke check FAILED — ${failed.length} of ${results.length} behaviours do not hold`);
-  process.exit(1);
-}
-console.log(`po-app smoke check passed — ${results.length} reference-app behaviours verified end to end`);
+g.report('verified end to end');

@@ -8,6 +8,7 @@ import { createRequire } from 'node:module';
 import '@busy-office/ui/css';
 import '../styles/code-hl.css';
 import Logo from '../components/Logo.astro';
+import PrefBootstrap from '../components/PrefBootstrap.astro';
 import pkg from '@busy-office/ui/package.json';
 import api from '@busy-office/ui/api';
 import contrast from '@busy-office/ui/contrast';
@@ -80,26 +81,7 @@ const invoices = [
 ---
 <html lang="en" data-density="compact">
   <head>
-    <script is:inline>
-      /* Landing honours the SAME persisted preferences as the docs shell
-         (roadmap 27.4). Blocking and in <head>, because this is a static MPA:
-         clicking the logo from a dark docs page is a full reload, and without
-         this the landing painted light and stayed light — no recovery, since
-         the hero's switchers are deliberately demo-scoped.
-
-         Both keys, not just theme. The static data-density="compact" above is
-         the no-JS default and looked like "density is honoured" when measured
-         (it matched the default by coincidence); with bo-density=spacious
-         stored, this page rendered compact while every docs page rendered
-         spacious. So neither preference was honoured here — the asymmetry was
-         an artifact of the default, which is why this script sets both. */
-      try {
-        var t = localStorage.getItem('bo-theme');
-        if (t) document.documentElement.dataset.theme = t;
-        var d = localStorage.getItem('bo-density');
-        if (d) document.documentElement.dataset.density = d;
-      } catch (e) { /* private mode: keep the static defaults */ }
-    </script>
+    <PrefBootstrap density="compact" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
