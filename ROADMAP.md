@@ -397,7 +397,33 @@ queued, and F4 was fixed in the same wake it was found.
        showing a label longer than the rail wrapping. **Cost line: 0 selectors,
        0 CSS, 0 behaviors.**
 
-3. [ ] **28.3 — Gate that the published site matches HEAD (F5).** Slice 27's
+3. [x] **28.3 — Published site is gated against HEAD** (2026-08-18) —
+       `stamp-build-id.mjs` writes `dist/build-id.json` (sha + builtAt, from
+       `GITHUB_SHA` or `git rev-parse`, recording a dirty tree as dirty), and
+       `check-published.mjs` fetches it from the live site and compares.
+
+       **Placement is the whole design.** It cannot live in CI: during CI for
+       commit X the published site is still X-1 by definition, so it would fail
+       on every run. It runs as a post-deploy step in `pages.yml`, the only
+       moment "published == HEAD" is supposed to be true, and by hand as
+       `npm run check:published -w docs` — which is the question I answered by
+       accident two wakes ago.
+
+       Three outcomes, deliberately not two — **STALE** (site answers, wrong
+       commit) exits 1; **UNREACHABLE** (no answer at all) exits 0 with a loud
+       "nothing was checked", because a DNS blip is not evidence of a bad
+       deploy and a gate that reds on someone else's network is one people
+       learn to ignore; **NO MARKER** (site answers 404) exits 1, since after a
+       deploy that means the deploy did not land. Retries exist because the
+       Pages CDN can serve the previous build for a few seconds.
+
+       That third case was this script's own first bug, found by running it
+       against the REAL site rather than only the local harness where every
+       failure was a dead port: it filed a reachable 404 under "unreachable".
+       All four paths red-proved, including the one the item asked for — aimed
+       at the live site it correctly reports FAILED, because the site genuinely
+       does not have this build. **Cost line: 0 selectors, 0 CSS, 0 behaviors;
+       +1 build step, +1 deploy step, +1 file in dist.** Original text: Slice 27's
        accessibility fixes are verified, gated, and undeployed; the site sat
        four commits stale and it was noticed by accident while investigating
        something else. A project this careful about whether a gate runs in the

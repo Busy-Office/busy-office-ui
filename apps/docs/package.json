@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/copy-framework-css.mjs && node scripts/check-page-shape.mjs && node scripts/check-versions.mjs && astro build && node scripts/highlight-code.mjs && node scripts/scope-search-index.mjs && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs && node scripts/check-boost.mjs",
+    "build": "node scripts/copy-framework-css.mjs && node scripts/check-page-shape.mjs && node scripts/check-versions.mjs && astro build && node scripts/highlight-code.mjs && node scripts/scope-search-index.mjs && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs && node scripts/stamp-build-id.mjs && node scripts/check-boost.mjs",
     "preview": "astro preview",
     "test:visual": "node scripts/visual-regression.mjs",
     "test:visual:update": "node scripts/visual-regression.mjs --update",
@@ -16,7 +16,8 @@
     "check:target-size": "node scripts/check-target-size.mjs",
     "check:formatting": "node scripts/check-formatting.mjs",
     "check:po-app": "node scripts/check-po-app.mjs",
-    "check:search": "node scripts/check-search.mjs"
+    "check:search": "node scripts/check-search.mjs",
+    "check:published": "node scripts/check-published.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

@@ -84,3 +84,12 @@ jobs:
           path: apps/docs/dist
       - id: deployment
         uses: actions/deploy-pages@v4
+      # The only moment "published == HEAD" is supposed to be true. It cannot
+      # live in CI: during CI for commit X the site is still serving X-1 by
+      # definition, so it would fail on every run. STALE reds this job;
+      # UNREACHABLE does not — see check-published.mjs for why.
+      - name: Published site is the site we just built
+        env:
+          PUBLISHED_URL: ${{ steps.deployment.outputs.page_url }}
+          EXPECTED_SHA: ${{ github.sha }}
+        run: node apps/docs/scripts/check-published.mjs
