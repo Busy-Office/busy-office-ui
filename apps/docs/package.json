@@ -15,7 +15,8 @@
     "check:forced-colors": "node scripts/check-forced-colors.mjs",
     "check:target-size": "node scripts/check-target-size.mjs",
     "check:formatting": "node scripts/check-formatting.mjs",
-    "check:po-app": "node scripts/check-po-app.mjs"
+    "check:po-app": "node scripts/check-po-app.mjs",
+    "check:vendor-contrast": "node scripts/check-vendor-contrast.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

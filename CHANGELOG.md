@@ -8,6 +8,12 @@ pin.
 
 ## Unreleased
 
+- Added (gate): `check:vendor-contrast` measures the contrast of RENDERED
+  third-party UI, which the token-pair gate structurally cannot see. It was
+  `check:contrast` passing on the very page where vendored Pagefind CSS
+  rendered at 1.46:1 that motivated it; reinstating that CSS now fails the new
+  gate in dark while the token gate still passes.
+
 - **Fixed** (docs site): the landing page ignored BOTH persisted preferences —
   a dark-mode reader clicking the logo got a light page with no way to recover,
   and `bo-density` was ignored too (the static `data-density="compact"` merely

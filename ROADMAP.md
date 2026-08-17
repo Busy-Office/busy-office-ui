@@ -107,7 +107,19 @@ technically correct and substantively blind here. That blind spot is 27.5.
        search reachable at 420px; the ⌘K hint is a real element so it can read
        Ctrl on non-Mac; measured contrast of every result element ≥4.5:1 in
        both themes; live-verified 1440 + 390, both themes.
-2. [ ] **27.2 — Bring third-party CSS into the contrast gate.** The reviewer's
+2. [x] **27.2 — Third-party CSS is now measured** (2026-08-18) —
+       `check:vendor-contrast` renders the search widget, types a query, waits
+       for the SETTLED state and measures computed contrast of every
+       text-bearing element in both themes (AA, with the large-text 3:1 rule
+       applied correctly). **Red-proof demonstrates the structural point
+       rather than just the fix:** reinstating Pagefind's stock `#393939` makes
+       the new gate FAIL in dark while `check:contrast` PASSES on the identical
+       tree — 35 pairs, still green, still blind. It fails only in dark, which
+       is exactly how the original defect behaved. One false positive found and
+       fixed on the way: measuring before Pagefind's skeleton placeholders
+       resolve reports 1:1 on every row, because placeholder text matches its
+       background on purpose. **Cost line: 0 framework changes; third user of
+       the shared `gate-report` contract.** Original text: The reviewer's
        sharpest structural point: our gate covers 35 token pairs and found
        nothing, because it cannot see vendored Pagefind CSS. Accept: the
        contrast gate (or a sibling) measures the rendered search widget in

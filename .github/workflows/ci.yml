@@ -69,3 +69,8 @@ jobs:
       # app on a free port; ~12s, no container needed.
       - name: Reference app smoke + axe
         run: npm run check:po-app -w docs
+      # The token contrast gate is static analysis over OUR pairs; it passed on
+      # the page where vendored Pagefind CSS rendered at 1.46:1. This measures
+      # rendered third-party UI, which is the only way to see it.
+      - name: Vendor contrast (rendered third-party UI)
+        run: npm run check:vendor-contrast -w docs
