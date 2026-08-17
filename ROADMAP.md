@@ -265,7 +265,39 @@ technically correct and substantively blind here. That blind spot is 27.5.
        extensible per-tenant slot. **Explicitly REFUSED: growing `.bo-icon`
        into an app-icon library** — app icons are product content, and every
        consumer would ship glyphs they never use.
-8. [ ] **27.8 — Polish sweep (P3-1, P3-2, P3-3).** htmx-1 extension warning on
+8. [x] **27.8 — Polish sweep** (2026-08-18) — all three fixed, and two of the
+       three turned out to be more interesting than "polish".
+
+       **P3-1 (htmx-1 warning)** — the extension was imported from
+       `htmx.org/dist/ext/`, which in 2.0.10 is still the htmx-1-era directory;
+       htmx 2 moved extensions into their own packages. Now on
+       `htmx-ext-head-support` 2.0.5, warning gone. I first tried DELETING it,
+       on the reasoning that `inlineStylesheets:'never'` had made it redundant
+       — the boost gate failed instantly with `.scale-grid` and `.pal-cards` at
+       `display:block`. The static check only guarantees no page ships layout
+       in an INLINE head `<style>`; page-scoped CSS still arrives as its own
+       `<link>`, which a boosted swap never adds without the head merge. The
+       gate earned its keep.
+
+       **P3-2 (clipped ACR label)** — real, and my first three measurements all
+       missed it. The label shrink-wraps its text, so its own
+       `scrollWidth`/`clientWidth` are always equal and can never show
+       overflow; only its right edge against the RAIL's client edge reveals it
+       (15.7px past, in a 223px rail, producing a scrollbar inside the nav).
+       27.6 also masked it by default by closing the Reference group. Fixed in
+       the framework rather than by renaming one link: `.bo-sidebar-nav__link`
+       no longer forces `nowrap`, so any over-long label wraps instead of
+       spilling. **Cost line: +1 selector (`.bo-sidebar-nav__label`), 2
+       declarations, -1 declaration; 0 behaviors. CHANGELOG entry as a
+       behaviour change.**
+
+       **P3-3 (icons vanish in print)** — confirmed in a real print preview as
+       the item demanded, with a matched before/after PDF at
+       `printBackground:false`: without the rule all five mask icons disappear
+       while badge and inline-`<svg>` marks still print. `check:claims` is now
+       23 and red-proves this one (injection verified in the built CSS, not
+       just the red result).
+       Original text: htmx-1 extension warning on
        every page load; "Accessibility Conformance Report" clipped at 217px in
        a 207px box (the only one of 85 links that overflows, and it forces a
        horizontal scrollbar); `.bo-icon` has no `@media print` rule so icons

@@ -453,20 +453,34 @@ const current =
       }
     </script>
     <script>
+      // SIDE-EFFECT import, deliberately: a bound-but-unused default import
+      // (import htmx from …) gets TREE-SHAKEN by the bundler and htmx silently
+      // never loads — caught by the boost gate's "navigation was NOT boosted"
+      // assertion while building it.
+      //
+      // head-support now comes from htmx-ext-head-support, NOT from
+      // htmx.org/dist/ext/. htmx.org 2.0.10 still ships an htmx-1-era dist/ext/
+      // directory, so the old import made every page log "You are using an
+      // htmx 1 extension with htmx 2.0.10"; htmx 2 moved extensions into their
+      // own packages (2026-08-18).
+      //
+      // It is NOT optional, which I established by deleting it: the boost gate
+      // immediately failed with .scale-grid and .pal-cards rendering
+      // display:block on /base/colors/ and /base/palettes/. The static check
+      // only guarantees no page ships layout in an INLINE head <style>;
+      // page-scoped CSS still arrives as its own <link>, and without the head
+      // merge a boosted swap never adds it.
+      //
       // Order matters and is enforced by module dependency, not statement
       // position: htmx-setup sets window.htmx during ITS evaluation, then
-      // head-support evaluates — synchronous, no race window for a fast
-      // boosted click (owner root-cause doc, 2026-08-16). head-support
-      // stays as belt-and-suspenders for head merging (title, etc.);
-      // page STYLES no longer depend on it (inlineStylesheets: 'never').
-      // SIDE-EFFECT imports, both of them: a bound-but-unused default
-      // import (import htmx from …) gets TREE-SHAKEN by the bundler and
-      // htmx silently never loads — caught by the boost gate's
-      // "navigation was NOT boosted" assertion while building it.
-      // htmx-setup sets window.htmx during its evaluation; head-support
-      // then evaluates against that global, synchronously, no race.
+      // head-support evaluates against that global — synchronous, no race
+      // window for a fast boosted click (owner root-cause doc, 2026-08-16).
+      //
+      // SIDE-EFFECT imports, both of them: a bound-but-unused default import
+      // (import htmx from …) gets TREE-SHAKEN by the bundler and htmx silently
+      // never loads — caught by the boost gate while building it.
       import '../lib/htmx-setup';
-      import 'htmx.org/dist/ext/head-support.js';
+      import 'htmx-ext-head-support';
       import { initDialogs } from '@busy-office/ui/js';
       initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
                       // delegation, so it keeps working across boosted swaps

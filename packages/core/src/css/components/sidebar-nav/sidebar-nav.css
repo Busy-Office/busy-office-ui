@@ -38,7 +38,19 @@
     color: var(--bo-color-text-secondary);
     text-decoration: none;
     font-size: var(--bo-density-font-size);
-    white-space: nowrap;
+  }
+
+  /* Long labels WRAP; they do not spill. A label wider than the rail used to
+     push past it and, because the rail is overflow-x:auto, put a horizontal
+     scrollbar inside the navigation — measured at 15.7px of spill for
+     "Accessibility Conformance Report" in a 223px rail (owner QA review,
+     2026-08-17). Wrapping is the right degradation for a nav: an ellipsis
+     would hide the part of the name that distinguishes it, and a scrollbar
+     makes the user drag to read a link. min-inline-size:0 is what lets the
+     flex item shrink below its content width at all. */
+  .bo-sidebar-nav__label {
+    min-inline-size: 0;
+    overflow-wrap: break-word;
   }
 
   .bo-sidebar-nav__link:hover {

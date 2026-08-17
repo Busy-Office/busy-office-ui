@@ -8,6 +8,26 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`.bo-sidebar-nav`): a nav label wider than the rail spilled past
+  it and, because the rail is `overflow-x: auto`, put a horizontal scrollbar
+  inside the navigation — measured at 15.7px of spill for a 32-character label
+  in a 223px rail. `.bo-sidebar-nav__link` no longer sets `white-space: nowrap`;
+  long labels wrap instead. **Behaviour change for consumers with labels longer
+  than their rail**: such a link now occupies two lines rather than producing a
+  scrollbar. Wrapping is the right degradation for a nav — an ellipsis hides
+  the part of a name that distinguishes it, and a scrollbar makes the reader
+  drag to finish reading a link. The icon-rail mode is unaffected: its labels
+  are visually hidden, and that pattern's own `nowrap` is untouched.
+
+- **Fixed** (`.bo-icon`): icons vanished when printed. They are a mask painted
+  with `background-color`, and a UA drops backgrounds on paper unless told the
+  colour is content, so every icon left an empty box behind. A `@media print`
+  rule now sets `print-color-adjust: exact`. Confirmed in a real print preview
+  rather than by computed style alone: the launcher rendered to PDF at
+  `printBackground: false` shows every glyph, and neutralising the rule makes
+  all five mask icons disappear while badge and inline-`<svg>` marks still
+  print. Guarded by a `check:claims` assertion.
+
 - **Fixed** (docs): four documented form controls had no accessible name of
   their own — three `.bo-tag-input__field` and the combobox value-help input,
   all relying on `placeholder`. Fixed in the copy-paste markup so adopters do

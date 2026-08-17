@@ -85,4 +85,16 @@
       background-color: CanvasText;
     }
   }
+
+  /* Icons are painted with background-color through a mask, and browsers drop
+     backgrounds when printing by default — so every icon vanished on paper
+     while its layout box stayed, leaving a labelless gap (owner QA review,
+     2026-08-17). print-color-adjust:exact tells the UA this background IS the
+     content, not decoration. */
+  @media print {
+    .bo-icon {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
 }

@@ -130,6 +130,20 @@ check('print: rows never split', print.row === 'avoid', print.row);
 check('print: app chrome and toolbars are dropped', print.toolbar === 'none' && print.sidebar === 'none', `${print.toolbar}/${print.sidebar}`);
 check('print: badges are outlined, not filled', print.badgeBg === 'rgba(0, 0, 0, 0)' && print.badgeBorder !== '0px', `bg ${print.badgeBg}, border ${print.badgeBorder}`);
 
+/* Icons are a mask painted with background-color, and a UA drops backgrounds
+   when printing unless told the colour IS the content — so every icon used to
+   vanish on paper, leaving its layout box behind (2026-08-18). Confirmed the
+   fix in a real print preview, not just here: rendering the launcher to PDF at
+   printBackground:false shows the glyphs, and neutralising this one rule to
+   `economy` makes all five mask icons disappear while the badge and inline
+   <svg> marks still print. This assertion guards the rule that makes that
+   true. */
+const iconPrint = await page.evaluate(() => {
+  const el = document.querySelector('.bo-icon');
+  return el ? getComputedStyle(el).printColorAdjust || getComputedStyle(el).webkitPrintColorAdjust : 'NO ELEMENT';
+});
+check('print: mask icons keep their paint', iconPrint === 'exact', String(iconPrint));
+
 await visit('/components/approval-workflow/', { media: 'print' });
 await new Promise((r) => setTimeout(r, 200));
 const marker = await page.evaluate(() => {
