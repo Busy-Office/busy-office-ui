@@ -364,7 +364,32 @@ queued, and F4 was fixed in the same wake it was found.
        visual suite, either of which could sample on commits touching no CSS.
        **Any sampling must state what it stopped checking** (no silent caps).
 
-2. [ ] **28.2 — Document label overflow on `/components/sidebar-nav` (F3).**
+2. [x] **28.2 — Label overflow documented on `/components/sidebar-nav`**
+       (2026-08-18) — a demo showing a label longer than the rail wrapping,
+       plus why wrapping rather than an ellipsis (an ellipsis hides the part of
+       a name that distinguishes it) or a wider rail (a scrollbar inside the
+       navigation). **Cost line: 0 selectors, 0 CSS, 0 behaviors** as the item
+       required.
+
+       The first attempt was wrong and measuring caught it: the demo used an
+       embedded `.bo-app-shell` like the section above it, but the icon-only
+       collapse is a `@container bo-shell (max-width: 56rem)` query, so a shell
+       narrow enough to fit this page hides every label — the nav measured
+       **51px wide with a 1px label**, demonstrating nothing. The rail is
+       standalone now.
+
+       A second measurement then contradicted the caption: at 390 the labels
+       collapse anyway, because the demo sits inside the DOCS' own app shell.
+       Expanded mode needs a >=56rem shell, which cannot exist at phone width —
+       so rather than quietly ship a caption that is false for mobile readers,
+       the page states what a narrow reader is seeing and why it is the same
+       rule. **Measured: 1440 expanded / 2 lines / 0 rail overflow; 390
+       icon-rail.**
+
+       The page asserts runtime behaviour, so it is executable per CLAUDE.md:
+       `check:claims` is now **24**, red-proved by putting `white-space:
+       nowrap` back on the label (injection verified in the BUILT css, not just
+       the red result). Original text:
        27.8 changed the behaviour (long labels wrap rather than spill) and it
        is in the CHANGELOG, but the component page mentions the icon-rail
        collapse four times and says nothing about label overflow — and Devi

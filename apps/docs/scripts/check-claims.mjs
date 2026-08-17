@@ -341,6 +341,30 @@ check(
   reduced.base === '0ms' && reduced.slow === '0ms' && reduced.skeleton === 'none',
   JSON.stringify(reduced),
 );
+/* /components/sidebar-nav claims a long label "wraps onto another line… is not
+   truncated and does not widen the rail". That is a runtime assertion about the
+   rendered box, so it is executable here rather than trusted. Checked at 1440:
+   at narrow widths the docs shell collapses the rail to icon-only and there is
+   no label to wrap, which the page itself now says. */
+await visit('/components/sidebar-nav/', { width: 1440 });
+const rail = await page.evaluate(() => {
+  const nav = document.querySelector('nav[aria-label="Long labels"]');
+  if (!nav) return { missing: true };
+  const label = nav.querySelector('.bo-sidebar-nav__label');
+  const r = label.getBoundingClientRect();
+  const line = parseFloat(getComputedStyle(label).lineHeight) || 21;
+  return {
+    lines: Math.round(r.height / line),
+    railOverflow: nav.scrollWidth - nav.clientWidth,
+    truncated: label.scrollWidth > label.clientWidth + 1,
+  };
+});
+check(
+  'sidebar-nav: an over-long label wraps to 2 lines, untruncated, without widening the rail',
+  !rail.missing && rail.lines === 2 && rail.railOverflow <= 0 && rail.truncated === false,
+  JSON.stringify(rail),
+);
+
 await browser.close();
 server.close();
 

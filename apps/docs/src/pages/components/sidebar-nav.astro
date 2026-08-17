@@ -60,6 +60,41 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
   </section>
 
   <section class="demo">
+    <h2>A label longer than the rail</h2>
+    {/* The rail STANDALONE, not inside .bo-app-shell — deliberately. The
+        icon-only collapse is a `@container bo-shell` query, so inside a demo
+        shell narrow enough to fit this page the labels are visually hidden and
+        there is nothing to show. Outside a shell the query never matches, so
+        this renders the expanded rail at any viewport, including 390. */}
+    <nav class="bo-sidebar-nav" aria-label="Long labels" style="inline-size: 14rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)">
+      <div class="bo-sidebar-nav__section">
+        <div class="bo-sidebar-nav__heading">Reference</div>
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--doc bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Accessibility Conformance Report</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--grid bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Tokens</span></a></li>
+        </ul>
+      </div>
+    </nav>
+    <p class="bo-u-text-muted">
+      A label wider than the rail <strong>wraps onto another line</strong>. It is not
+      truncated and it does not widen the rail. Wrapping is the deliberate choice: an
+      ellipsis hides the part of a name that distinguishes it — "Accessibility
+      Conformance…" and "Accessibility Conformance Report" read alike — and letting the
+      label push the rail wider puts a horizontal scrollbar inside the navigation, so a
+      reader has to drag sideways to finish reading a link. Both were real: this rail
+      spilled 15.7px and scrolled until it was fixed. Nothing here is configurable, so
+      long module names are safe to use without measuring them first.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>On a narrow screen you are seeing icons, not wrapped text</strong>, and
+      that is the same rule as above rather than an exception to it: this demo sits
+      inside the docs' own app shell, so when that shell is narrow the rail collapses
+      to icon-only and every label is visually hidden — wrapping only applies where
+      there are labels to wrap. Widen the window to see it.
+    </p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{sidebarMarkup}</code></pre>
   </section>
