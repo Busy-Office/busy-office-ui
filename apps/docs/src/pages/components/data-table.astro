@@ -28,8 +28,10 @@ const tableMarkup = `<!-- tabindex="0": the container scrolls when the table
     <tbody><tr>
       <td><input type="checkbox" name="id" value="INV-1"
           class="bo-checkbox bo-data-table__row-select" aria-label="Select INV-1" /></td>
-      <!-- name/value make the selection POSTable:
-           hx-include=".bo-data-table__row-select:checked" or a plain form. -->
+      <!-- name/value make the selection POSTable. Prefer a real <form> around
+           the rows AND the bulk buttons over hx-include on the button: both
+           send the same ids, but only the form gives you Enter-from-any-row
+           (native implicit submission). -->
       <td class="bo-data-table__col--code">INV-1</td>
       <td class="bo-data-table__col--numeric">$4,208.00</td>
     </tr></tbody>
@@ -285,7 +287,8 @@ const rows = invoiceRows;
     js="Optional but recommended: initDataTables() — select-all, live count, O(1) toolbar reveal, swap re-derive. Without it: selection visuals work via :has(); select-all is inert."
     notes={[
       'Sorting contract: the framework paints the indicator from <code>aria-sort</code> on the <code>&lt;th&gt;</code>; re-ordering rows and updating the attribute is YOUR code (server or client).',
-      'Row checkboxes need <code>name</code>/<code>value</code> to POST selections (via <code>hx-include</code> or a form).',
+      'Row checkboxes need <code>name</code>/<code>value</code> to POST selections. Wrap the rows and the bulk buttons in one <code>&lt;form&gt;</code> rather than reaching for <code>hx-include</code>: only the form gives native implicit submission, so <kbd>Enter</kbd> from any row runs the bulk action instead of Shift-Tabbing back to a toolbar above the table. Make only the SAFE action <code>type="submit"</code> — implicit submission fires the first submit button, and that must never be a destructive one.',
+      'If the bulk swap replaces the rows, give each row checkbox an <code>id</code>: htmx restores focus after a swap only to a matching id, and without it the keyboard user lands on <code>&lt;body&gt;</code>.',
       'Columns marked <code>__col--secondary</code> hide under container compaction — keep that data reachable (row detail view) per WCAG 1.4.10.',
       'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
       'Separately opt-in: <code>data-row-edit</code> + <code>initRowEdit()</code> for multi-row inline edit with per-row dirty state and Save/Cancel. Tracks state only — persistence is your code, via the <code>bo:row-save</code> event.',

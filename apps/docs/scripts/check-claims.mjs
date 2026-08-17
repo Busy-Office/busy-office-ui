@@ -182,29 +182,48 @@ check(
   JSON.stringify(back),
 );
 
-// "Measured from the first row: three presses" — the page states a NUMBER,
-// so the number is gated. Adding any focusable control to the toolbar or the
-// header row changes it, and a stale count in a keyboard walkthrough is the
-// same defect as a stale sort direction. (My first version of this sentence
-// said "two, the scroll container is a stop" — inferred from the CSS and
-// wrong; the real path is sort button → select-all → toolbar.)
-// Fresh load: the assertions above leave selection and focus state behind,
-// and this one counts tab stops, which that state changes.
+/* "Enter from any row checkbox runs the bulk action" (roadmap item 13).
+   The Shift+Tab distance above is what the page USED to have to explain;
+   the answer was native implicit submission, so what gets gated now is the
+   mechanism itself. Fresh load: the assertions above leave selection and
+   focus state behind, and this one depends on both. */
 await page.goto(url('/patterns/invoice-list/'), { waitUntil: 'networkidle0' });
-await page.evaluate(() => {
-  document.querySelectorAll('tbody .bo-data-table__row-select')[0].click();
+const enterActs = await page.evaluate(() => {
+  const form = document.getElementById('il-bulk');
+  if (!form) return { error: 'no bulk form' };
+  window.__submits = [];
+  form.addEventListener('submit', () => window.__submits.push(document.activeElement?.getAttribute('aria-label')));
+  const boxes = [...document.querySelectorAll('tbody .bo-data-table__row-select')];
+  const last = boxes[boxes.length - 1];
+  last.focus();
+  return { rows: boxes.length, focused: last.getAttribute('aria-label') };
 });
-await new Promise((r) => setTimeout(r, 200));
-await page.evaluate(() => document.querySelectorAll('tbody .bo-data-table__row-select')[0].focus());
-let presses = 0;
-for (let i = 1; i <= 10; i++) {
-  await page.keyboard.down('Shift');
-  await page.keyboard.press('Tab');
-  await page.keyboard.up('Shift');
-  const inBulk = await page.evaluate(() => !!document.activeElement.closest('.bo-data-table__bulk-actions'));
-  if (inBulk) { presses = i; break; }
-}
-check('first row is three Shift+Tabs from the bulk actions, as documented', presses === 3, `presses=${presses}`);
+await page.keyboard.press('Space');
+await page.keyboard.press('Enter');          // zero Shift+Tabs, from the LAST row
+await new Promise((r) => setTimeout(r, 250));
+const acted = await page.evaluate(() => ({
+  // Default to [] so a MISSING form fails this check cleanly instead of
+  // throwing — a gate that crashes hides which claim actually broke.
+  submits: window.__submits ?? [],
+  stillFocused: document.activeElement?.getAttribute('aria-label'),
+}));
+check(
+  'Enter from the last row checkbox runs the bulk action, focus unmoved',
+  !enterActs.error && acted.submits.length === 1 && acted.stillFocused === enterActs.focused,
+  JSON.stringify({ ...enterActs, ...acted }),
+);
+
+// The safe action is the ONLY submit button, so implicit submission can never
+// fire a destructive bulk action. This is the guard on that contract.
+const buttonTypes = await page.evaluate(() =>
+  [...document.querySelectorAll('#il-bulk .bo-data-table__bulk-actions button')]
+    .map((b) => ({ text: b.textContent.trim(), type: b.type })));
+check(
+  'only the safe bulk action is type=submit',
+  buttonTypes.filter((b) => b.type === 'submit').length === 1 &&
+    !/reject|delete|remove/i.test(buttonTypes.find((b) => b.type === 'submit').text),
+  JSON.stringify(buttonTypes),
+);
 
 // "Sorting is your code — the framework ships none." Guards the corrected
 // text: if a sort behaviour is ever added, this fails and the page that

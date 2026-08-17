@@ -8,6 +8,17 @@ pin.
 
 ## Unreleased
 
+- **Changed** (guidance): a bulk-action list should wrap its rows AND its
+  bulk buttons in one `<form>` rather than putting `hx-include` on the
+  button. Both POST the same ids, but only the form gets native implicit
+  submission, so <kbd>Enter</kbd> from any row checkbox runs the bulk
+  action — measured against the alternative at 32 keypresses from row 30.
+  Two contracts ship with it, both gated: make only the SAFE action
+  `type="submit"` (implicit submission fires the first submit button, and
+  it must never be a destructive one), and give each row checkbox an `id`
+  so htmx restores focus after the swap instead of dropping the user on
+  `<body>`. Docs and the reference app updated; no API change.
+
 - Added: **bulk actions pattern** (`/patterns/bulk-actions`) — selection
   → toolbar action → per-row result, with the data contract (rows plus an
   out-of-band summary in one response), all six states including partial

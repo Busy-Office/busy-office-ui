@@ -33,10 +33,15 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
       <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
       <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
     </form>
+    {/* hx-boost="false": this docs site boosts the whole body, and boost
+        intercepts FORM submits too — it swapped #main-content and threw
+        focus to <body>. A real app posts this form with hx-post, which
+        boost leaves alone; a demo form with no server has to opt out. */}
+    <form id="il-bulk" hx-boost="false">
     <div class="bo-data-table-container" tabindex="0" style="max-block-size: 24rem" data-density="compact">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-          <button class="bo-btn bo-btn--secondary" type="button">Approve selected</button>
+          <button class="bo-btn bo-btn--secondary" type="submit">Approve selected</button>
           <button class="bo-btn bo-btn--danger" type="button">Reject selected</button>
         </div>
         <span class="bo-data-table__selection-count"></span>
@@ -69,6 +74,15 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
         </tbody>
       </table>
     </div>
+    </form>
+    <p class="bo-u-text-muted">The rows and the bulk buttons are one
+    <code>&lt;form&gt;</code>, which is what makes step 4 below work:
+    <kbd class="bo-kbd">Enter</kbd> from any row checkbox runs the bulk
+    action, so a selection thirty rows down is zero keypresses from acting
+    instead of thirty-two. Only the safe action is
+    <code>type="submit"</code> — <em>Reject</em> stays
+    <code>type="button"</code>, so implicit submission can never reach a
+    destructive one.</p>
   </section>
 
   <section class="demo">
@@ -138,13 +152,14 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
       <li><kbd class="bo-kbd">Tab</kbd> into the filter bar, type, <kbd class="bo-kbd">Enter</kbd> to apply — a native form submit.</li>
       <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox; <kbd class="bo-kbd">Space</kbd> toggles the page's rows and announces the count via the live region.</li>
       <li><kbd class="bo-kbd">Tab</kbd> through row checkboxes, <kbd class="bo-kbd">Space</kbd> to pick individual invoices.</li>
-      <li>The bulk actions really are revealed by the first selection
-      (<code>display: none</code> → <code>flex</code>), but they sit
-      <em>above</em> the table: getting back to them is one
-      <kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> per row
-      checkbox you passed, plus two more for the sort header and select-all.
-      Measured from the first row: three presses. From row 30: thirty-two.
-      Budget for that when you put bulk actions on a long list.</li>
+      <li><kbd class="bo-kbd">Enter</kbd> from any row checkbox runs the bulk
+      action — no journey back to the toolbar at all. That is native implicit
+      form submission, not framework code: the rows and the buttons are one
+      <code>&lt;form&gt;</code>, and focus stays on the checkbox you pressed.
+      Without the form the toolbar is one
+      <kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> per row you
+      passed plus two — thirty-two presses from row 30, which is what this
+      page measured before the form was added.</li>
       <li>Sorting: the header is a real <code>&lt;button&gt;</code>, so it is
       keyboard-reachable and announced as a control — but <strong>sorting
       itself is your code</strong>. The framework ships none. Your handler
@@ -204,6 +219,10 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
   <script>
     import { initDataTables } from '@busy-office/ui/js';
     initDataTables();
+    // Demo only: the bulk form has no server here, so keep Enter from
+    // navigating. The submit event still fires — which is exactly what the
+    // documented-claims gate asserts.
+    document.getElementById('il-bulk')?.addEventListener('submit', (e) => e.preventDefault());
   </script>
   <Related links={[["/getting-started/first-screen", "Build this step by step"], ["/components/data-table", "Data table"], ["/components/filters", "Filters"], ["/patterns/record-detail", "Record detail (the row's destination)"]]} />
 </Gallery>

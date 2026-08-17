@@ -148,13 +148,16 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
       <li><kbd class="bo-kbd">Tab</kbd> to the select-all checkbox, <kbd class="bo-kbd">Space</kbd> to take the page; the live region announces the count.</li>
       <li><kbd class="bo-kbd">Tab</kbd> through rows, <kbd class="bo-kbd">Space</kbd> to deselect the ones you are not ready for.</li>
       <li>Back to the toolbar, where the first selection has revealed the bulk
-      action, and <kbd class="bo-kbd">Enter</kbd>. Note the cost:
-      <kbd class="bo-kbd">Shift</kbd>+<kbd class="bo-kbd">Tab</kbd> steps back
-      one checkbox at a time, so a selection deep in the list is many presses
-      from the toolbar above it — see the
-      <a href={base + '/patterns/invoice-list'}>invoice list</a> for the
-      measured count. Budget for it; it is the one rough edge in this
-      pattern's keyboard path.</li>
+      <kbd class="bo-kbd">Enter</kbd>, from wherever you are in the list — the
+      rows and the bulk buttons are one <code>&lt;form&gt;</code>, so native
+      implicit submission runs the action without any journey back to the
+      toolbar. Only the safe action is <code>type="submit"</code>; a
+      destructive bulk action stays <code>type="button"</code> and needs a
+      deliberate click.</li>
+      <li>Focus stays on the checkbox you pressed — but only because each one
+      carries an <code>id</code>. The swap replaces those very rows, and htmx
+      restores focus solely to a matching id; without it the clerk is dropped
+      on <code>&lt;body&gt;</code> at the top of the document.</li>
       <li>The summary is <code>role="alert"</code>, so the outcome is announced without moving focus; the failed rows are still in document order below it.</li>
     </ol>
   </section>

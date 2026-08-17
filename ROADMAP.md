@@ -2991,7 +2991,7 @@ in the pattern.
        po-app carries the working implementation, live-verified both
        themes/widths.
 
-13. [ ] **Return path from a selection to the bulk toolbar** — graduated
+13. [x] **Return path from a selection to the bulk toolbar** (2026-08-17) — graduated
        from the 2026-08-17 keyboard-walkthrough execution, which measured
        the real cost: the bulk toolbar sits above the table, so
        `Shift`+`Tab` back to it is one press per row checkbox passed plus
@@ -3013,6 +3013,32 @@ in the pattern.
        reopen that. Accept: either a shipped mechanism that makes a
        measured, gated claim true, or a recorded refusal naming which
        Objective test it failed and why the docs note is sufficient.
+
+       **Objective verdict: all three listed candidates REFUSED; a fourth,
+       unlisted answer ACCEPTED.** Skip-link — refused: it solves *bypass*,
+       not *return*, and a link placed before the table is unreachable from
+       row 30, which is the whole problem. Toolbar-below-on-long-lists —
+       refused: it relocates the asymmetry to selections near the top and
+       adds a "how long is long" decision the consumer must make (fails
+       Simplicity's refuse test). `accesskey` — refused: conflicts with
+       browser and AT shortcuts, no discoverability, platform-dependent; a
+       second way to do something, which Less-for-more refuses outright.
+
+       **Shipped instead: native implicit form submission.** Wrap the rows
+       AND the bulk buttons in one `<form>` and `Enter` from any row
+       checkbox runs the bulk action — zero presses, from row 1 or row 30.
+       Accepts on all three tests: it lets the consumer *delete* code
+       (`hx-include` goes away, no focus mechanism is invented), it is a
+       native element behaviour rather than a new option, and it applies to
+       any selectable list. Focus stays put — verified. Two contracts came
+       out of building it, both gated: only the SAFE action is
+       `type="submit"` (implicit submission fires the first submit button,
+       which must never be destructive), and each row checkbox needs an
+       `id` or htmx's post-swap focus restoration drops the user on
+       `<body>`. Also found: `hx-boost` intercepts form submits, so a
+       server-less demo form on a boosted page needs `hx-boost="false"`.
+       Docs guidance changed from "hx-include or a plain form" (presented
+       as equals) to preferring the form, with the reason.
 
 **RELEASE-READY: 0.2.0 (recommendation, 2026-08-16 reconciliation
 pass — publishing stays owner-triggered).** The Unreleased cycle is

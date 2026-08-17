@@ -107,7 +107,11 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 
 // ---------- fragments ----------
 const rowHtml = (p) => `<tr id="row-${p.id}"${p.bulkError ? ' data-row-state="error"' : ''}>
-  <td><input type="checkbox" name="id" value="${p.id}" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
+  <!-- The id is load-bearing: the bulk swap replaces this very row, so the
+       checkbox the user pressed Enter on is destroyed. htmx restores focus
+       after a swap only to an element with a matching id — without it the
+       keyboard user is dumped on <body>. Verified both ways. -->
+  <td><input type="checkbox" id="sel-${p.id}" name="id" value="${p.id}" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
   <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
   <td class="bo-u-text-truncate" data-col="vendor">${p.vendor}</td>
   <td class="bo-data-table__col--secondary bo-data-table__col--code" data-col="cc">${p.cc}</td>
@@ -130,16 +134,23 @@ const listScreen = () => `
   <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
 </form>
 <div id="bulk-result"></div>
+<!-- A real <form> around the selection, not hx-include on the button. Both
+     POST the same ids, but only the form gets native implicit submission:
+     Enter from ANY row checkbox runs the bulk action, instead of
+     Shift+Tab-ing back up to a toolbar that sits above the table (measured
+     at 32 presses from row 30). The safe action is FIRST because implicit
+     submission activates the first submit button in the form. -->
+<form hx-post="/pos/bulk-approve" hx-target="#po-rows" hx-swap="outerHTML">
 <div class="bo-data-table-container" tabindex="0">
   <div class="bo-data-table__toolbar">
     <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
-      <button class="bo-btn" type="button"
-        hx-post="/pos/bulk-approve" hx-target="#po-rows" hx-swap="outerHTML"
-        hx-include=".bo-data-table__row-select:checked">Approve selected</button>
+      <button class="bo-btn" type="submit">Approve selected</button>
     </div>
     <span class="bo-data-table__selection-count"></span>
     <span class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
-      <button class="bo-btn bo-btn--secondary" popovertarget="po-cols" data-multiselect-label="Columns">Columns</button>
+      <!-- type="button" is load-bearing now: inside a form a button with no
+           type IS a submit button, so this would fire the bulk action. -->
+      <button class="bo-btn bo-btn--secondary" type="button" popovertarget="po-cols" data-multiselect-label="Columns">Columns</button>
       <div class="bo-dropdown__menu" id="po-cols" popover data-multiselect>
         <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="vendor" checked> Vendor</label>
         <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="cc" checked> Cost center</label>
@@ -164,6 +175,7 @@ const listScreen = () => `
       data-po-offset="${PAGE_SIZE}">Load more (${pos.length - PAGE_SIZE} of ${pos.length} remaining)</button>
   </div>
 </div>
+</form>
 <script type="module">
   import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
   initDropdowns(); initTableToolbar(); initLoadMore();
