@@ -434,6 +434,63 @@ queued, and F4 was fixed in the same wake it was found.
        transient network error. Red-proof by pointing it at the known-stale
        deploy.
 
+## Slice 30 — owner wishlist, triaged (2026-08-18)
+
+Grill: `.roundtable/grill-wishlist-2026-08-18.md`. Four requests; **two turned
+out to be already-built-but-unproven rather than missing**, and the fourth was
+already decided against in DESIGN.md — but the alternative that decision
+promised was never written.
+
+1. [ ] **30.1 — Prove and afford scrollable tabs (W1, rethink).**
+       `.bo-tabs__list` already sets `overflow-x: auto` and its CSS claims
+       "8-10 tabs in a narrow container scroll rather than clip" — but the docs
+       demo has **3 tabs and measures scrollWidth === clientWidth === 342 at
+       390px**, so the behaviour has never been shown or tested, and there is
+       no fade, no snap, and nothing scrolls the selected tab into view.
+       **REFUSED: a "slider tabs" component** — the scroll container is one
+       existing declaration. Accept: a demo that actually overflows; a visible
+       overflow affordance; keyboard arrow navigation cannot move focus to an
+       off-screen tab; an executable `check:claims` case, since this asserts
+       runtime behaviour. **Cost line target: 0 components, <=1 selector.**
+       **[OWNER] Arrow buttons too?** They genuinely help a mouse user who
+       cannot swipe, but push past 1 selector — worth saying yes deliberately.
+
+2. [ ] **30.2 — Typed field editor pattern (W2).** One row per field, each a
+       different type (Name/DOB/Age/Amount/Qty) — the SM30 master-data case and
+       the best single screen for showing every typed input at once.
+       **REFUSED: a new component.** It composes `.bo-kv` + M1 row-swap
+       (`initRowEdit()`) + `.bo-amount`/`.bo-date`/`.bo-quantity`/`.bo-input`.
+       Accept: documented as a pattern with **0 new selectors as the pass
+       condition** — if it cannot be built from existing primitives, that is
+       itself the finding and the item returns for rethink. Expect it to surface
+       real alignment/baseline/density bugs, which is a reason to do it.
+
+3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
+       already ships h-scroll + sticky header + sticky first column, so this
+       **tests claims already made**. Accept: a 10x50 demo; the sticky-column
+       boundary holds under horizontal scroll; far columns are keyboard
+       reachable; SC 2.5.8 holds in dense header cells; the layout gate's
+       150%-zoom pass stays green. **Must also carry column-chooser/saved-view
+       guidance** — 50 visible columns is usually a symptom, and shipping a
+       beautiful 50-column demo without saying so quietly endorses the
+       anti-pattern.
+
+4. [ ] **30.4 — Large-list recipe, including the missing AG Grid page (W4).**
+       **REFUSED: a `.bo-*` virtual scroller.** DESIGN.md already decided this
+       on 2026-08-17 ("never a grid engine of our own"); client-side row
+       buffering *is* owning virtual scroll, and a hand-rolled virtualizer also
+       breaks `aria-rowcount`/`aria-rowindex` silently. **The gap the grill
+       found: the token-themed AG Grid recipe that decision promised does not
+       exist — verified, no docs page mentions AG Grid at all.** The framework
+       declined to build virtualization and never wrote down the alternative.
+       Accept: a page covering when to server-page, when to load-more (both
+       ship today), and when to reach for a real grid, plus a token-themed AG
+       Grid setup; fixed row heights are already maintained to keep rows
+       virtualization-friendly (DESIGN.md:56).
+       **[OWNER] Do users READ those 50,000 rows, or SEARCH and act on them?**
+       If the latter — almost always true in ERP — the honest fix is better
+       filtering plus server paging, and no virtualization is needed at all.
+
 ## Slice 29 — owner bug report (2026-08-18)
 
 1. [x] **29.1 — P0: dropdown locked to the viewport on scroll** (2026-08-18) —
