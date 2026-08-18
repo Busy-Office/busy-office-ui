@@ -7,6 +7,7 @@
  * documented convention into something that can't be gotten wrong.
  */
 import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,7 +21,31 @@ const labelFlag = flags.find((f) => f.startsWith('--label='));
 const groupFlag = flags.find((f) => f.startsWith('--group='));
 // Sidebar is grouped by task (2026-08-16, docs-IA pass) — a new component
 // must be placed deliberately, not silently defaulted into the wrong group.
-const GROUPS = ['Actions', 'Data input', 'Data display', 'Feedback', 'Navigation & layout'];
+/* Derived from Gallery.astro, never hardcoded.
+ *
+ * This list said 'Data display' — a group that does not exist — and omitted
+ * 'Tables & lists', 'Values' and 'Display', which do. The sidebar was
+ * reorganised by the 2026-08-16 docs-IA pass and this copy was not, so the
+ * documented way to add a component rejected every valid answer and accepted
+ * one that then failed deeper in the script (roadmap 40.3, found by using it).
+ * A hand-maintained mirror of another file's contents is a stale list waiting
+ * to happen; the sidebar is the source of truth, so read it.
+ *
+ * Only groups that actually contain /components/ links are offered — the
+ * Patterns and Reference groups are real sidebar sections but not places a
+ * component belongs. */
+const GROUPS = (() => {
+  const src = readFileSync(join(docsRoot, 'src/layouts/Gallery.astro'), 'utf8');
+  const groups = [];
+  for (const m of src.matchAll(/label: '([^']+)',\s*items: \[([\s\S]*?)\]/g)) {
+    if (m[2].includes("'/components/")) groups.push(m[1]);
+  }
+  if (!groups.length) {
+    console.error('new:component: could not read any component groups from Gallery.astro — has its shape changed?');
+    process.exit(1);
+  }
+  return groups;
+})();
 
 if (!rawName || !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(rawName)) {
   console.error(

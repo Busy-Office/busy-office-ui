@@ -45,5 +45,6 @@
 @import "./components/avatar/avatar.css";
 @import "./components/kv/kv.css";
 @import "./components/kbd/kbd.css";
+@import "./components/calendar/calendar.css";
 @import "./utilities/index.css";
 @import "./print/index.css";

@@ -1,0 +1,147 @@
+@layer bo-components {
+  /* A month grid whose job is to say WHICH DAYS ARE SPECIAL.
+   *
+   * Deliberately not a date picker. Entry stays on the native
+   * `<input type="date">`, which is already localized, keyboard-accessible and
+   * native on mobile — nothing here replaces it, and `.bo-date` styles the
+   * read-only value. What the native control genuinely cannot do is the reason
+   * this exists: its only constraints are `min`, `max` and `step`, which
+   * express a RANGE. An ERP calendar is a SET — public holidays, a plant
+   * shutdown, period-end, blackout dates — scattered through a year, and there
+   * is no attribute or API for that (roadmap 40.3, measured).
+   *
+   * So the split is: the browser owns picking a date, this owns showing which
+   * dates matter. A real <table> because a month IS tabular data — that buys
+   * the row/column semantics, `scope` headers and caption for free, and a
+   * screen reader announces "Tuesday, 12" without any ARIA of ours.
+   *
+   * One month or three is repetition, not a setting: put several
+   * `.bo-calendar__month` in one `.bo-calendar` and they wrap. There is no
+   * `--months` variant to learn.
+   */
+  .bo-calendar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--bo-space-5);
+  }
+
+  .bo-calendar__month {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bo-calendar__month caption {
+    padding-block-end: var(--bo-space-2);
+    color: var(--bo-color-text-primary);
+    font-size: var(--bo-density-font-size);
+    font-weight: var(--bo-font-weight-medium);
+    text-align: start;
+  }
+
+  .bo-calendar__month th {
+    padding: var(--bo-space-1);
+    color: var(--bo-color-text-muted);
+    font-size: var(--bo-font-size-xs);
+    font-weight: var(--bo-font-weight-medium);
+  }
+
+  .bo-calendar__month td {
+    padding: 0;
+    text-align: center;
+  }
+
+  /* The day box is sized in em so it tracks density like everything else, and
+     is a MINIMUM rather than a fixed size — a day that wraps under the WCAG
+     1.4.12 spacing override must grow, not clip. */
+  .bo-calendar__day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 2.25em;
+    min-block-size: 2.25em;
+    border-radius: var(--bo-radius-sm);
+    color: var(--bo-color-text-primary);
+  }
+
+  .bo-calendar__day--outside {
+    color: var(--bo-color-text-muted);
+  }
+
+  /* ── Marked days ───────────────────────────────────────────────────────────
+     Two channels, without exception: every state below pairs its colour with a
+     shape the eye can see in greyscale, and the MEANING is carried by
+     visually-hidden text the app writes into the cell — never by the colour and
+     never by this CSS. A day marked only by a tint is a day a colourblind user
+     and a screen-reader user both miss.
+
+     `data-day` rather than modifier classes because a day carries app state
+     that changes per render, and that is what the framework already uses
+     attributes for (`data-row-state`, `aria-sort`). */
+  .bo-calendar__day[data-day="today"] {
+    outline: 2px solid var(--bo-color-accent);
+    outline-offset: -2px;
+    font-weight: var(--bo-font-weight-medium);
+  }
+
+  /* Non-working: the diagonal hatch is the non-colour cue, and it survives
+     greyscale and forced-colors where a tint does not. */
+  .bo-calendar__day[data-day="closed"] {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0 3px,
+      var(--bo-color-border-default) 3px 4px
+    );
+    color: var(--bo-color-text-muted);
+  }
+
+  /* Holiday: a dot under the number. Not a background tint — a tinted cell in a
+     grid of tinted cells stops reading as "special". */
+  .bo-calendar__day[data-day="holiday"] {
+    position: relative;
+    color: var(--bo-color-danger-text);
+    font-weight: var(--bo-font-weight-medium);
+  }
+
+  .bo-calendar__day[data-day="holiday"]::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0.15em;
+    inline-size: 0.3em;
+    block-size: 0.3em;
+    border-radius: var(--bo-radius-full);
+    background: currentcolor;
+  }
+
+  /* Selected is the one state that may fill, because it is the user's own
+     choice rather than data about the day — and it keeps a border so it is
+     still distinguishable when a printer drops backgrounds. */
+  .bo-calendar__day[data-day="selected"] {
+    border: var(--bo-border-width) solid var(--bo-color-accent);
+    background: var(--bo-color-bg-selected);
+    color: var(--bo-color-accent-text);
+    font-weight: var(--bo-font-weight-medium);
+  }
+
+  /* A day that is a link or button gets the interactive affordances; a plain
+     display calendar has neither and should not pretend to. */
+  a.bo-calendar__day,
+  button.bo-calendar__day {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  a.bo-calendar__day:hover,
+  button.bo-calendar__day:hover {
+    background-color: var(--bo-state-hover-overlay);
+  }
+
+  /* Forced colours: the hatch and the dot are drawn with currentColor and
+     survive; the selected fill does not, so restore it with a system colour
+     rather than leaving selection invisible. */
+  @media (forced-colors: active) {
+    .bo-calendar__day[data-day="selected"] {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+  }
+}

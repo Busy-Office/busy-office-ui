@@ -558,6 +558,17 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        none — the file would still look complete.
 
 ## Slice 40 — icons, SVG, date picker, filter popup (owner wishlist, 2026-08-19)
+5. [ ] **40.5 — `ApiTable` notes render as HTML, and a note produced a SERIOUS
+       a11y violation.** Writing `A day may be a <span>, an <a> or a <button>`
+       as a note put real elements inside the notes `<ul>`, which axe flagged as
+       `list` (serious) — non-`<li>` children of a list. Caught only because the
+       axe sweep runs on every page; nothing about writing a note warns you.
+
+       Accept: either notes are escaped (the safe default — a note is prose, not
+       markup) or the component states that it takes HTML and a gate rejects
+       block-level tags in a note. Red-proved either way, and the existing note
+       arrays are checked for other instances.
+
 
 Four asks. **Measured before answering**, because the first one has a number that
 decides it.
@@ -629,7 +640,7 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        anything built ships as **one mechanism**, not a set of assets; nothing
        lands that a `<span>` and a token already do.
 
-3. [ ] **40.3 — Date picker: multi-month, with marked dates.**
+3. [x] **40.3 — Date picker: multi-month, with marked dates.**
        The ask: 1- and 3-month views, and highlighting holidays or
        company-specific dates. This is the most genuinely ERP-shaped item in the
        list — period-end, shipment windows and payment terms all need "which
@@ -649,6 +660,39 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        per the APG and an executable claim per interaction. Refusing, and
        documenting the native input plus a marked-date legend instead, is a
        valid outcome.
+
+       **Landed 2026-08-19 — and the picker was refused, the calendar built.**
+
+       **Measured what the native input cannot do**, rather than asserting it:
+       its only constraints are `min`, `max` and `step`, which describe a
+       **range**. An ERP calendar is a **set** — eight public holidays, a
+       two-week shutdown, the last working day of each period — and there is no
+       attribute or API for that. That is the real gap; "it looks plain" is not.
+
+       So the split is deliberate: **the browser owns picking a date, `.bo-calendar`
+       owns showing which dates matter.** Entry stays on the native input, which
+       is already localized, keyboard-accessible and native on a phone — building
+       a popup picker would have replaced a good control with a large
+       accessibility-heavy one, which is what the deliberately-absent table
+       exists to prevent.
+
+       **Cost: 1 component, 11 selectors, 0 behaviors, 71 -> 73 kB minified.**
+       A real `<table>`, so row/column semantics, `scope` and `caption` come
+       free and a screen reader says "Tuesday, 12" with no ARIA of ours. Marked
+       days use `data-day` (app state per render, like `data-row-state`), each
+       pairing a shape with its colour — hatch for non-working, dot for holiday,
+       outline for today — and each writing its meaning as visually-hidden text.
+       **Verified live: 0 marked days without text.**
+
+       **"1 month or 3" is repetition, not a setting.** Three
+       `.bo-calendar__month` in one `.bo-calendar`; measured side-by-side at 1440
+       and stacked at 390, no page overflow. There is no `months` option to learn.
+
+       Found on the way: `npm run new:component` offered a group that does not
+       exist (`Data display`) and omitted three that do — its list had drifted
+       from the sidebar since the 2026-08-16 IA pass, so the documented way to
+       add a component rejected every valid answer. Now derived from
+       Gallery.astro, and it cannot drift again.
 
 4. [x] **40.4 — Advanced filter popup.**
        Today `.bo-filter-bar` is a row of controls. The ask is the pattern where
