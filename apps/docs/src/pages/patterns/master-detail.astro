@@ -1,0 +1,228 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const rows = [
+  { id: 'V-1001', name: 'Umbrella Logistics GmbH', country: 'DE', terms: 'Net 30', status: 'Active' },
+  { id: 'V-1002', name: 'Globex Industrial', country: 'US', terms: 'Net 60', status: 'Active' },
+  { id: 'V-1003', name: 'Acme Supply Co.', country: 'GB', terms: 'Net 14', status: 'Blocked' },
+];
+---
+<Gallery title="Pattern: master-detail">
+  <p class="demo-note">
+    <strong>M2 of the four data-maintenance patterns</strong>
+    (<a href={base + '/concepts/scale'}>and the most common one in practice</a>): a list
+    of records, and clicking a row opens that record's fields in a panel beside the list
+    or a dialog over it. A back-office user uses this all day — find the vendor, fix two
+    fields, move on — and "done" means the list stays put, keeping their scroll position,
+    filters and sort, while only the detail changes.
+  </p>
+
+  <section class="demo">
+    <h2>The screen — side panel</h2>
+    {/* A plain bordered grid, not `.bo-app-shell`: the shell is 100dvh by design,
+        so embedding one in a demo forces a full-viewport box with dead space in it. */}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: var(--bo-space-4); padding: var(--bo-space-4); border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)">
+        <div class="bo-data-table-container" tabindex="0">
+          <table class="bo-data-table" data-density="compact">
+            <caption class="bo-visually-hidden">Vendors — select one to see its detail</caption>
+            <thead><tr><th scope="col">Vendor</th><th scope="col">Country</th><th scope="col">Status</th></tr></thead>
+            <tbody>
+              {rows.map((r, i) => (
+                <tr aria-selected={i === 0 ? 'true' : 'false'}>
+                  <th scope="row">
+                    <a href={`#md-${r.id}`} aria-current={i === 0 ? 'true' : undefined}>{r.name}</a>
+                  </th>
+                  <td>{r.country}</td>
+                  <td>{r.status === 'Blocked'
+                    ? <span class="bo-badge bo-badge--danger">Blocked</span>
+                    : <span class="bo-badge bo-badge--success">Active</span>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <aside class="bo-widget" aria-labelledby="md-title" id="md-V-1001">
+          <div class="bo-widget__header">
+            <h3 class="bo-widget__title" id="md-title">Umbrella Logistics GmbH</h3>
+            <span class="bo-badge bo-badge--success">Active</span>
+          </div>
+          <div class="bo-widget__body">
+            <dl class="bo-kv bo-kv--rows">
+              <div><dt>Vendor no.</dt><dd>V-1001</dd></div>
+              <div><dt>Country</dt><dd>Germany</dd></div>
+              <div><dt>Payment terms</dt><dd>Net 30</dd></div>
+              <div><dt>Credit limit</dt><dd class="bo-amount">250,000.00 <span class="bo-amount__unit">EUR</span></dd></div>
+            </dl>
+            <p style="margin-block-start: var(--bo-space-3)">
+              <button class="bo-btn bo-btn--sm" type="button" data-dialog-trigger="md-edit">Edit</button>
+            </p>
+          </div>
+        </aside>
+    </div>
+    <p class="bo-u-text-muted">
+      The list keeps its scroll, filters and sort while the panel changes — that is the
+      point of the pattern, and it is why the detail is a swap target rather than a
+      navigation.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Which row is open is carried by <code>aria-current</code> on its link, and
+      the framework ships no tint for it.</strong> That is a real gap, stated rather than
+      papered over: <code>data-row-state</code> covers <code>dirty</code>,
+      <code>error</code> and <code>warning</code> — the states the framework owns — and a
+      "currently open record" is application state, so there is no
+      <code>data-row-state="selected"</code> to reach for. Add your own rule against
+      <code>[aria-current]</code> if you want the row tinted; the announcement works
+      either way, which is the half that must not be left to CSS.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>The same record in a dialog</h2>
+    <p>When the detail is an <em>edit</em> rather than a read, a modal keeps the user from
+    losing it behind the list. Same record, same fields, different container — and the
+    same <code>initDialogs()</code> wiring as every other dialog.</p>
+    <button class="bo-btn" type="button" data-dialog-trigger="md-edit">Edit vendor V-1001</button>
+    <dialog class="bo-dialog" id="md-edit" aria-labelledby="md-edit-title">
+      <div class="bo-dialog__header">
+        <h3 class="bo-dialog__title" id="md-edit-title">Edit V-1001</h3>
+      </div>
+      <div class="bo-dialog__body">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="md-name">Vendor name</label>
+          <input class="bo-input" id="md-name" value="Umbrella Logistics GmbH" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="md-terms">Payment terms</label>
+          <select class="bo-select" id="md-terms">
+            <option>Net 14</option><option selected>Net 30</option><option>Net 60</option>
+          </select>
+        </div>
+      </div>
+      <div class="bo-dialog__footer">
+        <button class="bo-btn bo-btn--secondary" type="button" data-dialog-close>Cancel</button>
+        <button class="bo-btn" type="button" data-dialog-close>Save</button>
+      </div>
+    </dialog>
+    <p class="bo-u-text-muted">
+      <strong>Zero new CSS.</strong> This pattern is the
+      <a href={base + '/components/data-table'}>data table</a>, a
+      <a href={base + '/components/dashboard#card'}>card</a> as the panel,
+      <a href={base + '/components/kv'}>key-value facts</a> for the read view, and
+      <a href={base + '/components/dialog'}>dialog</a> or
+      <a href={base + '/components/offcanvas'}>offcanvas</a> as the container. There is no
+      <code>.bo-master-detail</code>, and there should not be.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Which container — and this is the decision that goes wrong</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Use</th><th scope="col">When</th><th scope="col">Why not the others</th></tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row">Side panel</th>
+            <td>reading and light edits, and the user compares records</td>
+            <td>keeps the list visible, so "next record" costs one click and no context</td>
+          </tr>
+          <tr>
+            <th scope="row">Dialog</th>
+            <td>a focused edit that must be finished or abandoned</td>
+            <td>modality is the feature — it stops a half-edited record being forgotten behind the list</td>
+          </tr>
+          <tr>
+            <th scope="row">Full page</th>
+            <td>the record has its own tabs, attachments and audit trail</td>
+            <td>a panel that needs to scroll independently and hold tabs is a page wearing a costume — use <a href={base + '/patterns/record-detail'}>record detail</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Inline row edit</th>
+            <td>one or two fields, and the user is scanning the list</td>
+            <td>opening anything at all is too much ceremony — use <a href={base + '/components/inline-editing'}>M1</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">
+      On narrow screens the choice collapses: below the shell's breakpoint a side panel has
+      nowhere to sit, so it becomes a full-width <a href={base + '/components/offcanvas'}>drawer</a>
+      over the list. Design the panel so that works — one column, no side-by-side fields.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Master list</strong> — <a href={base + '/components/data-table'}>data table</a>;
+        the row's first cell is a <code>&lt;th scope="row"&gt;</code> holding a real link, so the
+        record is reachable, bookmarkable and openable in a new tab.</li>
+      <li><strong>Selection state</strong> — <code>aria-selected</code> plus
+        <code>data-row-state="selected"</code> on the <code>&lt;tr&gt;</code>. Two channels:
+        the tint is visible, the attribute is programmatic.</li>
+      <li><strong>Detail container</strong> — a <a href={base + '/components/dashboard#card'}>card</a>
+        beside the list, or <a href={base + '/components/dialog'}>dialog</a>/<a href={base + '/components/offcanvas'}>offcanvas</a> over it.</li>
+      <li><strong>Detail body</strong> — <a href={base + '/components/kv'}>key-value facts</a> to read,
+        <a href={base + '/patterns/field-editor'}>the field editor</a> to write.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /vendors</td><td>the master list; the detail region renders empty until a row is chosen</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /vendors/:id</td><td><strong>the detail fragment only</strong>, swapped into the panel. Never re-render the list — that is what loses scroll position and selection</td></tr>
+          <tr><td class="bo-data-table__col--code">PATCH /vendors/:id</td><td>the updated detail fragment, <em>and</em> the one changed row, so the list stays truthful without a reload (htmx: an out-of-band swap)</td></tr>
+          <tr><td class="bo-data-table__col--code">404</td><td>the record vanished under the user — replace the panel with an empty state that says so and clears the selection</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing selected</td><td>the panel holds a one-line prompt, not a blank box — this is the screen's first impression</td></tr>
+          <tr><td>Loading the detail</td><td><code>aria-busy</code> on the panel only; the list stays interactive so the user can pick a different row</td></tr>
+          <tr><td>Empty list</td><td>the DIFFERENT empty when filters exclude everything: say which filter, and offer to clear it</td></tr>
+          <tr><td>Detail 404</td><td>panel becomes an empty state; the row is deselected rather than left highlighted pointing at nothing</td></tr>
+          <tr><td>Save conflict</td><td>409 in the panel with both values — see <a href={base + '/concepts/concurrency'}>concurrency</a>; nothing auto-merges</td></tr>
+          <tr><td>No permission to edit</td><td>the panel reads; the Edit control is absent, not disabled</td></tr>
+          <tr><td>Narrow screen</td><td>the panel becomes a drawer over the list; selection survives closing it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard#card'}>Card</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/offcanvas'}>Drawers</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+    </ul>
+  </section>
+
+  <script>
+    import { initDialogs } from '@busy-office/ui/js';
+    initDialogs();
+  </script>
+
+  <Related links={[
+    ["/patterns/record-detail", "Record detail"],
+    ["/patterns/field-editor", "Field editor"],
+    ["/components/inline-editing", "Inline editing"],
+    ["/concepts/concurrency", "Concurrency & conflicts"],
+  ]} />
+</Gallery>

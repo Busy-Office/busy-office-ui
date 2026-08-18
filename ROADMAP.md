@@ -461,7 +461,7 @@ turned up the missing AG Grid recipe. DESIGN.md's "Data maintenance: four
 patterns, no grid" table is the project's answer to "how do I let users maintain
 this data", and two of its four rows are wrong.
 
-1. [ ] **31.1 — M3's status line is stale.** DESIGN.md says mass change is
+1. [x] **31.1 — M3's status line corrected** (2026-08-18) — DESIGN.md said mass change was "Absent, queued as 25.2"; it shipped 2026-08-17 and the row now says so and links to `/patterns/bulk-actions`, the po-app flow and the two `check:po-app` assertions. DESIGN.md says mass change is
        "**Absent.** Queued as roadmap 25.2". It **shipped 2026-08-17**:
        ROADMAP 25.2 is ticked, it is documented on `/patterns/bulk-actions`,
        and `check:po-app` asserts it twice (an invalid target returns 422 and
@@ -469,7 +469,33 @@ this data", and two of its four rows are wrong.
        the honest answer to the grid request does not exist yet.
        Accept: the row states what ships and links to it.
 
-2. [ ] **31.2 — M2 master-detail has no page.** Its own row admits it:
+2. [x] **31.2 — M2 master-detail documented** (2026-08-18) —
+       `/patterns/master-detail`, the six gated sections, and the
+       panel-vs-dialog-vs-page-vs-inline decision table, since choosing wrong is
+       the actual failure mode. DESIGN.md's row now links to it.
+       **Pass condition met: 0 framework CSS changed, and all 34 classes
+       verified present in the shipped CSS.**
+
+       Live verification earned its place three times over. (1) My first
+       measurement said the grid was `display: block` — I had queried
+       `.bo-app-shell__main` and matched the DOCS shell, because the page is
+       itself inside one. (2) Scoped correctly, it showed `0px 292px` at 390:
+       the master list **collapsed to 2px** while the panel took the width,
+       flatly contradicting my own prose about degrading to a drawer. Fixed
+       with an auto-stacking track. (3) The embedded `.bo-app-shell` forced a
+       900px box of dead space, because the shell is `100dvh` by design — the
+       demo is a plain bordered grid now, 261px at 1440.
+
+       And one invented API caught by inspection rather than by a gate: I wrote
+       `data-row-state="selected"`, which does not exist — the framework styles
+       `dirty`, `error` and `warning` only. The prose had promised a highlight
+       that would never appear. Removed, and the page now states plainly that
+       "currently open" is application state with no framework tint, and that
+       `aria-current` carries the announcement regardless. **My class check
+       catches invented CLASSES but not invented ATTRIBUTE VALUES** — worth
+       knowing.
+
+  Original text: Its own row admits it:
        "composable today, **not yet documented as one named pattern**" — and
        DESIGN.md calls M2 "**most master-data maintenance in practice**", so the
        most common case is the only one without a page. Verified the gap rather
