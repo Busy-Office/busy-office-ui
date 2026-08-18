@@ -624,22 +624,21 @@ promised was never written.
 
        **Cost line: 0 selectors, 0 CSS, 0 behaviors, 0 new pages.**
 
-4b. [ ] **30.6 — CI is over its 288s budget, and it is gate growth (Optimize).**
-       Measured across three runs, separating wall time from step time:
-       `7c13f14` 273s wall / **267s steps**, `bb2765b` 280s / **273s**,
-       `04e4434` 290s / **282s** — overhead is a flat ~7s, so the rise is the
-       gates themselves, not runner variance. (Checked because my first reading
-       compared two different runs and wrongly suggested the gates had got
-       faster.)
+4b. [x] **30.6 — NOT REPRODUCED; my own trend call was wrong** (2026-08-18).
+       Raised last wake on three ascending step-time samples (267s, 273s, 282s)
+       read as gate growth. Two more runs settle it: **282 -> 261 -> 257**.
+       There is no growth — 282s was an outlier and ~265s is the level. Wall
+       time agrees (290 -> 267 -> 265, budget 288).
 
-       The cause is ordinary: per-page gates scale with page count, and this
-       slice added a pattern page, a 50-column section and two page extensions.
-       Accept: back under **288s**; the lever measured before it is believed,
-       as in 28.1 where the guessed levers were both wrong; **any sampling
-       states what it stopped checking**. Candidates worth measuring first —
-       axe and layout both sweep every page at multiple configurations, and
-       forced-colors (38s) and pseudo-locale (36s) are now larger than the
-       claims check.
+       I over-fitted to three ascending points, having just corrected a
+       *different* misreading of the same metric in the same wake. Closing it
+       unbuilt is the right outcome: optimising a gate that is not slow would
+       have cost coverage for nothing, which is precisely what 28.1's Accept
+       criteria were written to prevent.
+
+       **Process fix applied**, so this cannot recur by judgement alone: rule 4
+       now requires the metric to breach on **two consecutive runs**, since a
+       single sample cannot distinguish a trend from noise on a shared runner.
 
 5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
        **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,

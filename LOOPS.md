@@ -85,8 +85,17 @@ match to its full playbook below:
    preempts (2026-08-18).
 3. **Build item queued** in the current in-progress slice? → dispatch
    **Continue**, build mode.
-4. **A tracked metric regressed** (bundle size, gate coverage, a number from
-   `record_metric.py` trending the wrong way)? → dispatch **Optimize**.
+4. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
+   coverage, a number from `record_metric.py` trending the wrong way)? →
+   dispatch **Optimize**.
+
+   Two, not one, and the wording is deliberate. CI wall time was declared
+   regressed on a single 290s reading against a 288s budget, an Optimize item
+   was raised, and the next two runs came in at 267s and 265s — the 290 was
+   noise on a shared runner. Three ascending samples were also read as a trend
+   and were not (282 -> 261 -> 257). A metric that moves on its own between
+   identical commits needs more than one point before it can spend a wake
+   (2026-08-18).
 5. **A slice closed since the last Objective ran**, **or user asked**? →
    dispatch **Objective**.
 
