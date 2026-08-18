@@ -557,6 +557,52 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 34 — field editor: per-row save is the wrong idiom (owner report, 2026-08-18)
+
+Owner: "save button in the wrong place… looks like AI slop". Correct, and the
+placement is the symptom rather than the fault.
+
+**Measured on `/patterns/field-editor` at 1440:** the Save button sits **228px
+from the field it saves**, in an actions column **340px wide — 37% of the
+926px table** — that is empty until a row goes dirty. Wider viewports separate
+them further, which is what the owner's screenshot shows.
+
+**Root cause: I applied M1 to a screen that is not M1.** Row-swap inline edit is
+the idiom for a table of RECORDS — each row is independently saveable, so a
+per-row Save belongs to it. A field editor's rows are the FIELDS OF ONE RECORD.
+Per-field save means six round-trips for one logical edit and a Cancel that
+undoes one field of a change the user thinks of as whole. Checked the boundary
+rather than assuming: `/patterns/editable-grid` (9 record rows) and
+`/components/inline-editing` (3) use per-row save **correctly**; only this page
+misapplies it, so the group is one page, not a cluster.
+
+**Proposed, per the owner's two options plus a third:**
+
+- **Default — form-level save (recommended).** One Save/Cancel for the record in
+  a footer; per-row dirty marking stays (the band already works); one request.
+  Drops the actions column entirely, recovering 37% of the table width and
+  removing the 228px separation by removing the control that was separated.
+- **Variant — live save.** `data-row-edit="live"` **already ships**: each
+  committed change saves immediately, no buttons at all. Right for settings-style
+  screens where fields are independent and there is nothing to cancel as a set.
+  Needs per-field success/failure feedback, which is the honest cost.
+- **Rejected — move the buttons into the value cell.** The cheap fix. It puts the
+  control next to the field and keeps the model that caused the problem: six
+  round-trips, and a per-field Cancel.
+
+1. [ ] **34.1 — Rebuild `/patterns/field-editor` around form-level save.**
+       Accept: no per-row action column; one Save/Cancel for the record; dirty
+       fields still marked individually; **0 new selectors** as before; the page
+       states when to use live save instead and links the variant; the executable
+       claim is updated (it currently asserts per-row Save/Cancel appear).
+
+2. [ ] **34.2 — Write the distinction into DESIGN.md's four-pattern table.**
+       M1's row says "config and lookup tables, master-data upkeep — the SM30
+       case", which is what let a single-record form look like M1. Accept: M1
+       states it is for a table of RECORDS, and that a list of one record's
+       FIELDS is a form — with the pointer to whichever save model 34.1 lands on.
+       This is the line that would have prevented the mistake.
+
 ## Slice 33 — using this framework from ANOTHER repo, with AI (owner question, 2026-08-18)
 
 Owner asked how to improve AI comprehension and prevent slop when building an
