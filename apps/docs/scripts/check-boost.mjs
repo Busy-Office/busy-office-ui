@@ -13,6 +13,7 @@
 //   2. LIVE — click through the shell to the layout-heaviest pages and
 //      assert computed layout, i.e. what the user actually sees.
 import { readFile, readdir } from 'node:fs/promises';
+import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveDist } from './serve-dist.mjs';
@@ -112,4 +113,5 @@ if (staticFails || liveFails) {
   console.error(`boost check FAILED — ${staticFails} inline-layout-style page(s), ${liveFails} boosted-layout probe(s)`);
   process.exit(1);
 }
+assertScanned(scanned, 'built pages', 'dist has no pages — run the docs build first');
 console.log(`boost check passed — ${scanned} pages scanned for inline layout styles, ${PROBES.length} boosted probes rendered correctly`);

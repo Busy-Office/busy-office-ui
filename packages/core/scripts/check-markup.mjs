@@ -167,6 +167,24 @@ function nearest(cls) {
   return close.length ? `did you mean: ${close.slice(0, 3).join(', ')}` : 'no such block in this framework';
 }
 
+/* Finding nothing to check is a FAILURE, not a pass.
+ *
+ * `check-markup dist` over an empty or wrong directory used to print
+ * "passed — 0 file(s)" and exit 0. That is the fail-open mode a gate must not
+ * have, and this is the gate most exposed to it: it is the one that ships to
+ * consumers, and 33.2 now tells them to wire it into CI. The two ways to get
+ * here are both ordinary — the directory is named `build` or `public` rather
+ * than `dist`, or the check ran before the build — and both produce a green CI
+ * that has validated nothing. Silence reads as approval, so it must not be
+ * available. See "a gate that cannot run must fail loudly" in CLAUDE.md. */
+if (!files) {
+  console.error(`check-markup FAILED — no HTML files found in: ${roots.join(', ')}`);
+  console.error('  It reads BUILT html, so it must run after your build, and the path must');
+  console.error('  be the directory your build wrote (dist, build, public, out, _site…).');
+  console.error('  Exiting non-zero rather than reporting a pass it did not earn.');
+  process.exit(1);
+}
+
 const unique = [...new Map(findings.map((f) => [`${f.where}|${f.what}`, f])).values()];
 
 if (unique.length) {

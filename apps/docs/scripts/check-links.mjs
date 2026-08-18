@@ -5,6 +5,7 @@
  * with no page) were link-rot in build output nothing re-read (S-1/S-2/S-7).
  */
 import { readFile, readdir, stat } from 'node:fs/promises';
+import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';
 import { DIST } from './paths.mjs';
 
@@ -124,4 +125,5 @@ if (failures.length) {
   for (const f of [...new Set(failures)]) console.error('  ' + f);
   process.exit(1);
 }
+assertScanned(checked, 'internal links', 'dist has no pages — run the docs build first');
 console.log(`link check passed: ${checked} internal links verified against dist`);

@@ -61,5 +61,22 @@ export async function distPages(dist, { skipRedirects = true } = {}) {
   }
   // Stable order: gates print page lists, and a readdir-order diff is noise.
   out.sort((a, b) => a.url.localeCompare(b.url));
+
+  /* Zero pages is never a legitimate answer, so it throws here rather than
+     being returned for each caller to not-check.
+
+     This is the one chokepoint: axe-audit, check-layout and check-forced-colors
+     all derive their entire workload from this call, and each reports a pass
+     phrased as a count — "85 pages x 2 widths", "N pages scanned". With an empty
+     result every one of them prints a cheerful zero and exits 0, which is the
+     fail-open mode a gate must not have (CLAUDE.md: a gate that cannot run must
+     fail loudly, never skip quietly). Guarding it in three callers would leave
+     the fourth to be written without it; guarding it here cannot be forgotten. */
+  if (!out.length) {
+    throw new Error(
+      `distPages: no built pages under ${dist} — the gate that called this would ` +
+        'otherwise "pass" having examined nothing. Run the docs build first.',
+    );
+  }
   return out;
 }

@@ -16,6 +16,7 @@
  * answer here.
  */
 import { readdir, readFile } from 'node:fs/promises';
+import { assertScanned } from './gate-report.mjs';
 import { join, dirname, resolve, basename } from 'node:path';
 import { REPO_ROOT } from './paths.mjs';
 
@@ -74,4 +75,5 @@ if (failures.length) {
   console.error('  macOS resolves these; Linux CI will not.');
   process.exit(1);
 }
+assertScanned(checked, 'relative imports', 'the source walk found no .mjs/.js/.ts files at all');
 console.log(`import-case check passed — ${checked} relative import(s) resolve case-exactly`);

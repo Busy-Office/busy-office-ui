@@ -9,6 +9,7 @@
  * this gate guards it).
  */
 import { readFile, readdir } from 'node:fs/promises';
+import { assertScanned } from './gate-report.mjs';
 import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -132,4 +133,5 @@ if (failures.length) {
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }
+assertScanned(checked, 'component pages', 'the page source directory is empty or moved');
 console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s) verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer`);

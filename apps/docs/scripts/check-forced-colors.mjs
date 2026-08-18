@@ -19,6 +19,7 @@
  * deliberately small because CI budget is tracked (see ROADMAP).
  */
 import { readFile, readdir } from 'node:fs/promises';
+import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
@@ -40,6 +41,12 @@ postcss.parse(await readFile(coreCss, 'utf8')).walkAtRules('media', (at) => {
     for (const sel of r.selector.split(',').map((s) => s.trim())) rules.push({ sel, props });
   });
 });
+
+/* Zero rules means this gate has nothing to verify — the framework ships a
+   forced-colors layer, so an empty parse is a moved/renamed stylesheet or a
+   deleted layer, not a clean bill of health. */
+assertScanned(rules.length, 'forced-colors rules in the shipped CSS',
+  `parsed ${coreCss} — has the stylesheet moved, or the layer been dropped?`);
 
 /* ---- 2. one built page per rule, picked by string-matching its classes ---- */
 const built = (await distPages(DIST)).map((p) => [p.url, p.file, p.html]);
