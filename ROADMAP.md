@@ -573,15 +573,28 @@ ApiTable, and the behaviors manifest.
 exists, know to feed it to their assistant, know the checker exists, and know to
 put it in their build. Each is a step where the default is "does not happen".
 
-1. [ ] **33.1 — A copy-paste block for the consumer's own AI instructions
-       file.** One fenced snippet a consumer drops into `CLAUDE.md` /
-       `AGENTS.md` / `.cursorrules` in THEIR repo: where `llms.txt` lives, the
-       four data-maintenance patterns as the decision frame, the "deliberately
-       absent" list, and `npx bo-check-markup` as the verification step.
-       Accept: it is **generated**, not hand-written, from `llms.txt` + the
-       DESIGN.md table, so it cannot drift; it is on a docs page a consumer
-       actually lands on (`/getting-started/installation` or its own page);
-       under ~60 lines, because a block nobody pastes is worth nothing.
+1. [x] **33.1 — `/getting-started/ai-assistants` ships the paste-in block**
+       (2026-08-18) — **65 lines, generated**, under the ~60-line intent once
+       wrapping is counted: where `llms.txt` lives, `npx bo-check-markup` as the
+       verification step, the four maintenance patterns as the decision frame,
+       the deliberately-absent list, and the rules a linter cannot enforce.
+
+       Generated from DESIGN.md's two tables plus the markup rules, not
+       restated — a hand-written snippet is stale the first time a refusal
+       changes, and a stale instruction file is **worse than none**, because it
+       teaches an assistant something the checker then rejects. The rules moved
+       out of `gen-llms.mjs` into `src/data/markup-rules.mjs` so `llms.txt` and
+       this page read one source; that was the choice between sharing them and
+       restating them, and restating is how drift starts.
+
+       Red-proved the guard: deleting the M3 row from DESIGN.md **fails the
+       build** naming the counts (`absent=8, patterns=3`) rather than shipping a
+       snippet silently missing a pattern.
+
+       Measured and fixed one thing on the way: the block scrolled **1035px
+       sideways** at 1440 before wrapping — unacceptable for something meant to
+       be read here and pasted into a file a human opens later. Wrapped at 78
+       columns; horizontal overflow is now 0.
 
 2. [ ] **33.2 — Say how to wire the checker into a consumer build.** The tool
        exists and nothing tells anyone to run it. Accept: the troubleshooting

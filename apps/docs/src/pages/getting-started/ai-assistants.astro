@@ -1,0 +1,120 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import { MARKUP_RULES } from '../../data/markup-rules.mjs';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const site = 'https://busy-office.github.io/busy-office-ui';
+
+/* The block below is GENERATED from the same sources the framework already
+   maintains — DESIGN.md's two tables and the shared markup rules — so it cannot
+   drift from what is true (roadmap 33.1). A hand-written snippet would be stale
+   the first time a refusal changed, and a stale instruction file is worse than
+   none: it teaches an assistant something the checker will then reject. */
+const designMd = readFileSync(
+  join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..', '..', 'DESIGN.md'),
+  'utf8',
+);
+const rowsOf = (heading: string) => {
+  const section = designMd.split(heading)[1]?.split('\n## ')[0] ?? '';
+  return [...section.matchAll(/^\|(.+)\|\s*$/gm)]
+    .map((m) => m[1].split('|').map((c) => c.replace(/[*`]/g, '').trim()))
+    .filter((cells) => cells.length >= 2 && !/^-+$/.test(cells[0]) && cells[0] !== 'Deliberately absent' && cells[0] !== '');
+};
+const absent = rowsOf('## Deliberately absent').filter((c) => c[0] !== 'Deliberately absent');
+const patterns = rowsOf('## Data maintenance: four patterns, no grid').filter((c) => /^M[1-4]$/.test(c[0]));
+
+if (absent.length < 3 || patterns.length !== 4) {
+  throw new Error(`ai-assistants: DESIGN.md tables did not parse (absent=${absent.length}, patterns=${patterns.length}) — the snippet would ship incomplete`);
+}
+
+/* Wrap at 78 columns. The block is meant to be read here AND pasted into a file
+   a human will open later; a 200-character line scrolls sideways in both places.
+   Measured before wrapping: 1035px of horizontal overflow at 1440. */
+const wrap = (text: string, indent = '  ') => {
+  const out: string[] = [];
+  let line = '';
+  for (const word of text.split(/\s+/)) {
+    if (line && (line + ' ' + word).length > 78) { out.push(line); line = indent + word; }
+    else line = line ? `${line} ${word}` : word;
+  }
+  if (line) out.push(line);
+  return out.join('\n');
+};
+
+const snippet = `# busy-office-ui — rules for this project
+
+## Read this before writing markup
+${site}/llms.txt
+Generated from the shipped CSS: every class, every JS behavior's DOM hooks, and
+the legal VALUES for framework data-* attributes. If it is not in there, it does
+not exist — do not invent a plausible name.
+
+## Verify, do not trust
+npx bo-check-markup dist
+Fails on any bo-* class that does not exist and any framework data-* value the
+CSS never switches on. Run it in CI on BUILT html.
+
+## Choosing how users maintain data — these four, and no grid
+${patterns.map(([id, what, when]) => wrap(`- ${id}: ${what.split('.')[0]}. Use when: ${when}`)).join('\n')}
+
+## Deliberately absent — do not build these
+${absent.map(([thing, instead]) => `${wrap(`- ${thing}`)}\n${wrap(`  -> ${instead}`, '     ')}`).join('\n')}
+
+## Rules a linter cannot check for you
+${MARKUP_RULES.map((r) => wrap(`- ${r.replace(/\n\s+/g, ' ')}`)).join('\n')}
+`;
+const lines = snippet.split('\n').length;
+---
+<Gallery title="Working with AI assistants">
+  <p class="demo-note">
+    If an assistant is writing screens with this framework, give it the two things it
+    cannot infer: <strong>what exists</strong>, and <strong>what was deliberately left
+    out</strong>. A model asked for a data grid will build one — not from carelessness,
+    but because nothing told it the question had already been answered.
+  </p>
+
+  <section class="demo">
+    <h2>Paste this into your project's instructions file</h2>
+    <p><code>CLAUDE.md</code>, <code>AGENTS.md</code>, <code>.cursorrules</code> — whichever
+    your tooling reads. It is {lines} lines and it is generated from this
+    framework's own architecture notes, so it stays true as the framework changes.</p>
+    <pre><code>{snippet}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Why these four things</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong><a href={site + '/llms.txt'}>llms.txt</a></strong> — the surface, generated
+        from the shipped CSS so it cannot disagree with it. It now carries the legal values
+        for <code>data-*</code> attributes, which is the difference between
+        <code>data-row-state="dirty"</code> and a plausible-looking invention that silently
+        does nothing.</li>
+      <li><strong><code>bo-check-markup</code></strong> — because an unknown class renders
+        unstyled and looks like a CSS bug, and an unknown attribute value looks like
+        nothing at all. See <a href={base + '/getting-started/troubleshooting'}>troubleshooting</a>.</li>
+      <li><strong>The four maintenance patterns</strong> — "how do users maintain this data"
+        is the question that most often resolves to "build a grid", which is the most
+        expensive wrong answer available.</li>
+      <li><strong>The absent list</strong> — an absence is invisible. Everything on it was
+        considered and declined, and each row carries what to use instead.</li>
+    </ol>
+    <p class="bo-u-text-muted">
+      Measured rather than assumed: building a realistic screen from <code>llms.txt</code>
+      alone produced exactly one machine-detectable error — an invented
+      <code>data-row-state</code> value — which is why the values are published now. It also
+      produced one error no linter can catch, a scrollable table container missing
+      <code>tabindex="0"</code>, which is why that rule is in the list above.
+    </p>
+  </section>
+
+  <Related links={[
+    ["/getting-started/installation", "Installation"],
+    ["/getting-started/troubleshooting", "Troubleshooting"],
+    ["/concepts/scale", "Performance at scale"],
+    ["/patterns/field-editor", "Field editor"],
+  ]} />
+</Gallery>

@@ -4,6 +4,7 @@
  * contrast.json), so it cannot drift either.
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import { MARKUP_RULES } from '../src/data/markup-rules.mjs';
 import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -48,17 +49,7 @@ ${Object.entries(bh.behaviors)
 
 ## Rules your markup must follow
 
-- State is two-channel: visible non-color cue (glyph, aria-hidden) AND programmatic
-  (visually-hidden text like "Completed: ", aria-current, ARIA attributes).
-- Forms: aria-invalid + aria-describedby -> message id (+ role="alert" if dynamic).
-- Dialogs: aria-labelledby -> title id. Icon-only buttons: aria-label.
-- Row-select checkboxes need name/value to POST. Styled lists get role="list".
-- Sorting: YOUR code re-orders rows and sets aria-sort on <th>; CSS draws indicator.
-- Never user-scalable=no. Never override html font-size (rem-based framework).
-- Columns hidden by container compaction (__col--secondary) must stay reachable.
-- A scrollable region must be keyboard-reachable: .bo-data-table-container needs
-  tabindex="0" (and an aria-label when the table has no caption). axe reports
-  scrollable-region-focusable otherwise, and no markup linter can infer it.
+${MARKUP_RULES.map((r) => `- ${r}`).join('\n')}
 
 ## Components (classes generated from shipped CSS)
 
