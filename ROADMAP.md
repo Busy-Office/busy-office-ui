@@ -640,19 +640,24 @@ promised was never written.
        now requires the metric to breach on **two consecutive runs**, since a
        single sample cannot distinguish a trend from noise on a shared runner.
 
-6. [ ] **30.7 — Write the rendered-artefact rule into CLAUDE.md (grill H2).**
-       From `.roundtable/grill-objective-slices29-30-2026-08-18.md`: across 17
-       iterations there were **3 mechanical-rewrite failures, 3 unverified
-       injections, 2 metrics recorded from failed runs, 1 over-fitted trend and
-       1 CI break warned about in its own commit message.** All were caught,
-       none shipped, and none were design errors — they cluster in **bulk edits
-       and verification shortcuts**. The per-instance fixes are already in
-       (case-exact import check, two-consecutive-breach metric rule, "by hand"
-       on the item that needed it); the class fix is not. Accept: CLAUDE.md
-       states that a bulk or mechanical edit is verified against the **rendered
-       artefact**, not the source diff — reading the source diff missed the
-       editable-grid damage twice, and comparing rendered labels against each
-       row's real content is what caught it.
+6. [x] **30.7 — Rendered-artefact rule written, and the worst case gated**
+       (2026-08-18) — CLAUDE.md gains "A bulk edit is verified against the
+       RENDERED artefact", with the three failures that earned it and the
+       specific instruction that mixed live-markup/code-sample files are edited
+       **by hand, one block at a time**.
+
+       Went past the item's Accept on purpose, because a rule that is only
+       written is a rule that gets forgotten: `check:imports` now asserts every
+       relative import resolves **case-exactly**. This is the one class a
+       developer on macOS cannot catch by running the code — APFS is
+       case-insensitive, so `./serve-DIST.mjs` loads `serve-dist.mjs` and every
+       local gate passes while Linux CI dies with ERR_MODULE_NOT_FOUND.
+
+       Red-proved by reintroducing the exact bug that broke CI: the boost gate
+       **ran and passed** with it in place ("imported fine — macOS resolved
+       it"), while the new gate named the file and the wrong spelling. It runs
+       first in the build chain, since a broken import invalidates everything
+       downstream. **Cost: ~1 second, 73 imports checked, 0 selectors, 0 CSS.**
 
 5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
        **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,

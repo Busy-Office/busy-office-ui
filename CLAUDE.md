@@ -133,6 +133,38 @@ never be non-zero — three consecutive measurements reported "not clipped"
 while the label was spilling 15.7px past the rail. Only its right edge
 against the RAIL's client edge showed it (2026-08-18).
 
+## A bulk edit is verified against the RENDERED artefact
+
+A regex over source is not a refactor. It is a bet that every match means the
+same thing, and in these files it repeatedly did not — pattern pages mix live
+markup with template literals a reader copies, and prose repeats the identifiers
+the code uses.
+
+Three failures in one session (2026-08-18), each caught late or by luck:
+
+- `./serve-dist.mjs` became `./serve-DIST.mjs` in eight import specifiers.
+  **Every gate passed locally** because APFS is case-insensitive; Linux CI
+  failed with `ERR_MODULE_NOT_FOUND`.
+- The same rename rewrote *prose*, including a user-facing gate message that
+  started reporting "internal links verified against DIST".
+- A third put an Astro **component call inside a copy-paste code sample**, and
+  labelled rows with other rows' names (`LINE-1` as "Hydraulic pump"). The file
+  was reverted rather than shipped.
+
+Reading the source diff missed the third one **twice**. What caught it was
+pairing each rendered row against its own content — the label on a Save button
+against the value in that row's first cell. So:
+
+**Verify a bulk edit against what it renders, not against the diff that made
+it.** Compare the built output before and after, and assert the property that
+matters (every row's label matches that row; every relative import resolves
+case-exactly; no component call survives inside a `<pre>`). If the change is
+supposed to be layout-neutral, measure that too — a 42px page growth traced to a
+code sample gaining two lines is a fine answer; not knowing why is not.
+
+When a file mixes live markup with samples, prefer editing by hand, one block at
+a time. It is slower than a regex and faster than a revert.
+
 ## A gate that only runs in CI is not known to work
 
 **CI's full checkout is the most permissive environment the build sees.**
