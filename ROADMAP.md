@@ -558,6 +558,23 @@ promised was never written.
        are byte-identical to HEAD (75/53/54...), so the conversion is
        layout-neutral.
 
+2c. [ ] **30.5 — Drop `Getting started > Overview` from the sidebar (owner
+       feedback, 2026-08-18).** Asked: "do we still need Getting start >
+       Overview?" Checked rather than opined — **no**, and it is worse than
+       redundant:
+       - `/` does not use the `Gallery` layout, so the landing page ships
+         **zero sidebar markup** (a docs page has 3 occurrences). Clicking that
+         entry ejects the reader out of the docs shell and they must navigate
+         back in.
+       - The destination is a marketing hero (`<h1>CSS for screens`), not an
+         overview of the docs — so the label promises something it does not
+         deliver.
+       - The landing page is already reachable from every docs page via the
+         navbar brand link, which is always present.
+       Accept: the entry is gone; "Getting started" now opens on Installation,
+       which is the actual first step; the landing page stays reachable via the
+       brand; link check and the sidebar's own count stay correct.
+
 3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
        already ships h-scroll + sticky header + sticky first column, so this
        **tests claims already made**. Accept: a 10x50 demo; the sticky-column
