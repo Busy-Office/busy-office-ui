@@ -557,6 +557,44 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 42 — from the Objective grill, Slices 39-41 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
+
+1. [ ] **42.1 — A heuristic gate must be able to demonstrate it can fail.**
+       Three detectors in this window could not fail, and 39.2 alone produced
+       **four in a row** that passed 18/18 while measuring nothing. The pattern
+       that caught them is already in the tree — `check-learning-path` and
+       `check-loop-vocab` ship a `--self-test` or an explicit "input absent, NOT
+       verified" path — but it is ad hoc.
+
+       Accept: gates whose signal is a **heuristic** (a position, a pattern, a
+       count of a thing that might be chrome) carry a `--self-test` that runs the
+       detector against synthetic inputs it must classify correctly, and fails if
+       it cannot tell them apart. Gates that check an exact fact — a file exists,
+       a version matches — are explicitly exempt, and the exemption is stated so
+       nobody adds ceremony to a `readdir`. Written into CLAUDE.md next to the
+       red-proof discipline it extends.
+
+2. [ ] **42.2 — Close the picking gap the date-picker refusal left open.**
+       The refusal was right about the widget and wrong about the job. The
+       native input picks but cannot mark; `.bo-calendar` marks but nothing
+       documents picking from it — so a user choosing a delivery date around a
+       plant shutdown gets two controls that each do half.
+
+       **It is already half-built:** `calendar.css` ships
+       `a.bo-calendar__day` and `button.bo-calendar__day` with hover and pointer
+       affordances (lines 127-134) and **no page uses them**. An undocumented
+       interactive affordance is the worst of the three states.
+
+       Accept: document picking from the calendar as a **pattern**, not a new
+       component — days as real links or submit buttons in a form, so it works
+       without JS and the server owns which dates are selectable; state plainly
+       when to use the native input instead (most of the time); keyboard
+       behaviour is whatever real links/buttons already give, with **no roving
+       tabindex and no new ARIA**. If that turns out to need a JS widget, the
+       answer is to say so and stop — not to build one quietly.
+
 ## Slice 41 — from the Objective grill, Slices 31-40 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices31-40-2026-08-19.md`.
