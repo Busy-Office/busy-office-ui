@@ -25,6 +25,8 @@ Roadmap / Objective, chosen per wake by the router (P0 bug > build > tidy > expl
 ```
 python3 scripts/loops/record_iteration.py --loop <Loop> --mode <mode> \
     --item "<what>" --outcome <outcome>
+  # outcome: landed | released | logged | triaged | refused | reverted
+  # "shipped" is rejected — it hid that nothing had reached npm (41.2)
 python3 scripts/loops/record_metric.py --name <metric> --value <n> --unit <u>   # when measured
 ```
 

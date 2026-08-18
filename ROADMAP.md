@@ -561,7 +561,7 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
 
 Full findings: `.roundtable/grill-objective-slices31-40-2026-08-19.md`.
 
-1. [ ] **41.1 — Make dispatcher starvation a number, not a discovery.**
+1. [x] **41.1 — Make dispatcher starvation a number, not a discovery.**
        Three rules have now starved because an always-true condition sat above a
        counter, and **each was found by hand** — the last one after **ten
        slices**. The instances are fixed; the blind spot is not.
@@ -575,7 +575,18 @@ Full findings: `.roundtable/grill-objective-slices31-40-2026-08-19.md`.
        against the known history — it must report the ten-slice Objective gap
        from the log alone.
 
-2. [ ] **41.2 — Stop the loop log saying "shipped" for work nobody can install.**
+       **Landed 2026-08-19.** `scripts/loops/dispatch_status.py`, wired into
+       LOOPS.md as **Step 0b**, before the dispatch decision. Not a gate.
+
+       **The first version FAILED its own historical replay.** It reported
+       **16** slices including "10" and "17", because a free-text scan for
+       `NN.N` reads **"10.3%"** and **"17 screens"** as slice numbers. Anchored
+       to the item's leading token and restricted to `Continue` rows (a Roadmap
+       triage row plans a slice, it does not close one), it reproduces the known
+       **10 — `[27, 30, 32, 33, 34, 36, 37, 38, 39, 40]`**. The instrument built
+       to catch instrument-blindness was itself wrong on first run.
+
+2. [x] **41.2 — Stop the loop log saying "shipped" for work nobody can install.**
        Every iteration in Slices 31-40 is recorded as `shipped`, and the registry
        has served **0.1.1** throughout. Four consecutive grills have recorded
        that gap, and the log's own vocabulary hides it.
@@ -585,6 +596,12 @@ Full findings: `.roundtable/grill-objective-slices31-40-2026-08-19.md`.
        are NOT rewritten — they record what was believed at the time, and
        rewriting history would erase the finding. Cheap, and it makes the
        release gap visible in the place decisions are made.
+
+       **Landed 2026-08-19.** `--outcome` now takes one of **landed · released ·
+       logged · triaged · refused · reverted**, and **"shipped" is rejected**
+       with the reason. Unknown values are rejected too, so the vocabulary
+       cannot grow a synonym by accident. Documented beside the command in
+       CLAUDE.md and LOOPS.md. **368 historical rows untouched.**
 
 ## Slice 40 — icons, SVG, date picker, filter popup (owner wishlist, 2026-08-19)
 5. [x] **40.5 — `ApiTable` notes render as HTML, and a note produced a SERIOUS

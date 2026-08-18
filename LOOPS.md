@@ -44,6 +44,23 @@ A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
 empty `RESUME.md` when it lands.
 
+### Step 0b — Read the counters
+
+```
+python3 scripts/loops/dispatch_status.py
+```
+
+One line per counter-triggered rule: how far it has accumulated toward its
+threshold, and how long since it last fired. **Run it before Step 2**, because
+the two rules it covers are the two that have starved — a counter below an
+always-true condition is dead, and the failure is silent: nothing breaks, a loop
+simply never runs. Three rules starved that way and each was found by hand, the
+last after ten slices (roadmap 41.1).
+
+Not a gate, deliberately. A stale counter is information for whoever is
+dispatching; failing a build over it would block the very work the loop exists
+to do.
+
 ### Step 1 — Triage new input
 
 New input = a user-reported issue, a new requirement, direction, or constraint
@@ -215,6 +232,8 @@ the next wake (which may pick the next item, or — every 4th round — Standard
 ```
 python3 scripts/loops/record_iteration.py \
   --loop <Loop> --mode <mode> --item "<what>" --outcome <outcome>
+  # outcome: landed | released | logged | triaged | refused | reverted
+  # "shipped" is rejected — it hid that nothing had reached npm (41.2)
 ```
 This appends the human line to `.roundtable/loop-log.md` **and** inserts the row
 into the derived `.roundtable/loops.db`. Capture any measured number too, e.g.
