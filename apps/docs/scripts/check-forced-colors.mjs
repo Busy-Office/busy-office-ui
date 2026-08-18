@@ -17,7 +17,10 @@
  *
  * Cost: one page per rule, loaded twice (control + emulated), pooled. Kept
  * deliberately small because CI budget is tracked (see ROADMAP).
- */
+  *
+ * @heuristic — matches rules to pages by string-matching class names — its own header says so.
+ *   OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+*/
 import { readFile, readdir } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';

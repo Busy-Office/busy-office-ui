@@ -12,6 +12,9 @@
 //      loudly if the config regresses or a page hand-writes one).
 //   2. LIVE — click through the shell to the layout-heaviest pages and
 //      assert computed layout, i.e. what the user actually sees.
+//
+// @heuristic — detects "inline layout styles" by pattern, so it can misread what an attribute is for.
+// OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
 import { readFile, readdir } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';

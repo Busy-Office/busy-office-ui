@@ -7,7 +7,10 @@
  * something a page literally cannot violate — the roadmap's "scaffold
  * generator + page-shape gate" pairing (new-component.mjs stamps the shape,
  * this gate guards it).
- */
+  *
+ * @exact — asserts named sections and components are present. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { readFile, readdir } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { createRequire } from 'node:module';

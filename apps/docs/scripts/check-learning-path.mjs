@@ -41,7 +41,10 @@
  * page content lives and where shell chrome never is. A detector this easy to
  * get wrong needs its own proof, so `--self-test` runs it against two synthetic
  * pages and asserts it says the right thing about each.
- */
+  *
+ * @heuristic — position-based (result before code); four detectors passed 18/18 while measuring nothing.
+ *   Carries --self-test: a detector this easy to fool must prove it can fail.
+*/
 import { readFile } from 'node:fs/promises';
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';

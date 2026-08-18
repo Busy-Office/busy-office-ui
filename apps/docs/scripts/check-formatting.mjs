@@ -10,7 +10,10 @@
  * failure mode as any other unexecuted claim, just with a slower fuse.
  *
  * No browser: pure Intl, so this costs milliseconds in CI.
- */
+  *
+ * @exact — runs a formatter and compares output. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 const failures = [];
 
 /* ---- 1. the exact strings the page prints ---- */

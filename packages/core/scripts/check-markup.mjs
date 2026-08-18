@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+//
+// @heuristic — parses HTML with regex; the bare-text rule once caught 5 of 6 injected cases because it consumed the trailing "<".
+// OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
 /**
  * Validate HTML against the framework's GENERATED surface.
  *

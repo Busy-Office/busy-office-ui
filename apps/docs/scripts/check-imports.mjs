@@ -14,7 +14,10 @@
  * Deliberately narrow. It does not lint imports, resolve bare specifiers, or
  * follow package exports; it answers one question that the runtime cannot
  * answer here.
- */
+  *
+ * @exact — compares filenames for case-exact equality. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { readdir, readFile } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { join, dirname, resolve, basename } from 'node:path';

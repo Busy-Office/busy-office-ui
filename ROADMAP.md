@@ -561,7 +561,7 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
 
 Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
 
-1. [ ] **42.1 — A heuristic gate must be able to demonstrate it can fail.**
+1. [x] **42.1 — A heuristic gate must be able to demonstrate it can fail.**
        Three detectors in this window could not fail, and 39.2 alone produced
        **four in a row** that passed 18/18 while measuring nothing. The pattern
        that caught them is already in the tree — `check-learning-path` and
@@ -575,6 +575,34 @@ Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
        a version matches — are explicitly exempt, and the exemption is stated so
        nobody adds ceremony to a `readdir`. Written into CLAUDE.md next to the
        red-proof discipline it extends.
+
+       **Landed 2026-08-19.** All **23 gates classified — 7 `@heuristic`, 16
+       `@exact`** — each with a one-line reason in its own header, so the
+       judgement sits where the next reader is. `check:selftests` fails on an
+       untagged gate and prints the heuristic gates that still owe a self-test.
+
+       **The meta-gate failed its own rule on the first run.** It matched the
+       string `--self-test`, and all 7 heuristic gates passed — because the tag
+       text says "Carries --self-test". The gate written to catch detectors that
+       cannot fail was, for one run, a detector that could not fail. It now
+       requires the `process.argv` branch.
+
+       **Debt stated rather than hidden:** 5 heuristic gates still owe a
+       self-test. The meta-gate REPORTS rather than fails on those, deliberately
+       — failing the build for pre-existing debt would only encourage
+       mislabelling them `@exact` to get green. `check-notes` was retrofitted
+       here to prove the shape generalises beyond `check-learning-path`.
+
+3. [ ] **42.3 — Burn down the five heuristic gates that owe a self-test.**
+       `check-boost`, `check-floor`, `check-forced-colors`, `check-loop-vocab`,
+       `check-markup`. `check-notes` and `check-learning-path` are done and show
+       the shape: extract the classifier into a function, drive it with inputs it
+       must sort correctly, exit non-zero if it cannot.
+
+       Accept: each gains a `--self-test` exercising the case its detector could
+       plausibly miss — for `check-markup` that is the consumed-`<` bug that once
+       hid one of six injected rows. When the list reaches zero, `check:selftests`
+       stops reporting and starts failing on a missing self-test.
 
 2. [x] **42.2 — Close the picking gap the date-picker refusal left open.**
        The refusal was right about the widget and wrong about the job. The

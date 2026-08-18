@@ -11,6 +11,9 @@
 // Drive REAL key/mouse events: an early version dispatched a synthetic
 // keydown on `document`, which no delegated handler matches, and
 // reported a false failure against a feature that worked.
+//
+// @exact — drives a real browser and asserts DOM facts. Exempt from --self-test: there is no
+// judgement to get wrong, and ceremony around a lookup is noise.
 import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';

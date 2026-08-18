@@ -3,7 +3,10 @@
  * including redirect-stub destinations. Run against a DOCS_BASE build in CI:
  * both live 404s the site grill found (base-blind redirects, a generated slug
  * with no page) were link-rot in build output nothing re-read (S-1/S-2/S-7).
- */
+  *
+ * @exact — resolves each link to a file on disk. Exempt from --self-test: there is no
+ *   judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';

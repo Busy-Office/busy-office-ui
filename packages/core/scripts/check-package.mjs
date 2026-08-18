@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+//
+// @exact — asks npm what it would pack and checks membership. Exempt from --self-test: there is no
+// judgement to get wrong, and ceremony around a lookup is noise.
 /**
  * Gate: the workflow the docs tell consumers to run is actually in the tarball.
  *

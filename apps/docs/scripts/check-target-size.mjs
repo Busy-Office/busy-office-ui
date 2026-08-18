@@ -16,7 +16,10 @@
  *   FAIL  — undersized AND crowded: a real 2.5.8 violation.
  *   note  — undersized but adequately spaced: conformant via the exception,
  *           and the reason the docs may not claim a blanket 24px floor.
- */
+  *
+ * @exact — measures geometry in a real browser. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';

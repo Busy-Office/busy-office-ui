@@ -20,7 +20,10 @@
  *     build rather than silently shipping a stylesheet that mirrors most of
  *     the way. Extending the allowlist is a deliberate act, and the docs
  *     count has to move with it.
- */
+  *
+ * @exact — asserts the presence or absence of named CSS properties in dist. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { distCssFiles, distCssRoot } from './dist-css.mjs';

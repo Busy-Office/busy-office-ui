@@ -21,7 +21,10 @@
  *   (a) takes its duration from a --bo-motion-duration-* token, or
  *   (b) has a `@media (prefers-reduced-motion: reduce)` rule that sets
  *       `animation: none` for a selector matching the one that declares it.
- */
+  *
+ * @exact — checks each animation for a reduced-motion rule. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { distCssFiles, distCssRoot } from './dist-css.mjs';

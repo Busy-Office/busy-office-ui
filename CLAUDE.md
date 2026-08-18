@@ -135,6 +135,38 @@ never be non-zero — three consecutive measurements reported "not clipped"
 while the label was spilling 15.7px past the rail. Only its right edge
 against the RAIL's client edge showed it (2026-08-18).
 
+## A heuristic gate must be able to demonstrate it can fail
+
+Red-proving asks "does this gate go red on the bug?". This asks the question
+underneath it: **could this detector go red on anything at all?**
+
+Across Slices 39-41 the dominant failure was not a bug in the framework but a
+detector that could not fail. Slice 39.2 alone produced **four in a row**, each
+passing 18/18 while measuring nothing: `class="demo"` (every section has it),
+the first `bo-*` after `<main` (the `<main>` tag itself matches), the first
+non-chrome `bo-*` (the docs shell's own menu button — the same byte offset on
+all eighteen pages, which is what finally gave it away), and any non-utility
+`bo-*` (counted Related-footer badges as results). None was caught by review.
+One was caught by a number that was too tidy to be true.
+
+So every gate declares its signal in its header, and `check:selftests` enforces
+that the declaration exists:
+
+- **`@heuristic`** — the verdict rests on *recognising* something: a position, a
+  pattern, whether a class is chrome or content. These can be fooled and have
+  been. They ship `--self-test`, which runs the detector against inputs it must
+  classify correctly and exits non-zero if it cannot tell them apart.
+- **`@exact`** — the verdict rests on equality, membership, or a measurement
+  taken in a real browser. Exempt, and the exemption is stated so nobody wraps
+  ceremony around a `readdir`.
+
+**The meta-gate itself failed this on its first run.** It looked for the string
+`--self-test`, and every heuristic gate matched — because the tag text says
+"Carries --self-test". The gate written to catch detectors that cannot fail was,
+for one run, a detector that could not fail. It now requires the `process.argv`
+branch that actually runs one. Assume this failure mode applies to your check
+too, including the check you are writing to catch it.
+
 ## A bulk edit is verified against the RENDERED artefact
 
 A regex over source is not a refactor. It is a bet that every match means the

@@ -27,7 +27,10 @@
  * The retries exist because Pages serves through a CDN: right after a deploy
  * the edge can still hold the previous build for a few seconds, so a single
  * immediate fetch would produce a false STALE.
- */
+  *
+ * @exact — compares the served build id to the built one. Exempt from --self-test: there is no
+ *   judgement to get wrong, and ceremony around a lookup is noise.
+*/
 const SITE = process.env.PUBLISHED_URL || 'https://busy-office.github.io/busy-office-ui/';
 const EXPECTED = process.env.EXPECTED_SHA || process.env.GITHUB_SHA;
 const ATTEMPTS = Number(process.env.PUBLISHED_ATTEMPTS || 6);

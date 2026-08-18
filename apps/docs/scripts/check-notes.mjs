@@ -27,7 +27,10 @@
  * expressions (`<a href={base + '/x'}>…`), so the source is not HTML and cannot
  * be parsed as if it were. The rendered artifact is the only place the question
  * is well posed.
- */
+  *
+ * @heuristic — decides "prose or markup" from regex-extracted <li> innards; a dead hoisting detector already shipped here.
+ * OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+*/
 import { readFile } from 'node:fs/promises';
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
@@ -37,6 +40,49 @@ import { assertScanned } from './gate-report.mjs';
 const ALLOWED = new Set(['code', 'kbd', 'em', 'strong', 'a', 'abbr', 'span', 'br']);
 /** Elements that mean the author's prose was parsed as markup. */
 const NEVER = new Set(['button', 'input', 'select', 'textarea', 'form', 'table', 'ul', 'ol', 'li', 'div', 'p', 'h1', 'h2', 'h3']);
+
+/**
+ * Classify one note's inner HTML. Extracted so `--self-test` can drive it: the
+ * first hoisting detector here was dead code (it searched the built file for a
+ * stray sibling, which parse-time hoisting never produces), and it passed
+ * cleanly against a deliberately broken note.
+ */
+export function classifyNote(inner) {
+  const VOID = new Set(['br', 'hr', 'img', 'input', 'wbr']);
+  const stack = [];
+  const bad = [];
+  for (const t of inner.matchAll(/<(\/?)([a-z][a-z0-9]*)[^>]*?(\/?)>/g)) {
+    const [, closing, name, selfClosing] = t;
+    if (NEVER.has(name)) bad.push(name);
+    if (VOID.has(name) || selfClosing) continue;
+    if (closing) {
+      if (stack.pop() !== name) stack.push('!' + name);
+    } else stack.push(name);
+  }
+  return { unclosed: stack, forbidden: bad };
+}
+
+if (process.argv.includes('--self-test')) {
+  const cases = [
+    ['A day may be a <span>, an <a> or a plain one.', 'unclosed', true],
+    ['they are real <button>x</button> elements', 'forbidden', true],
+    ['use <code>data-day</code> for state', 'clean', true],
+  ];
+  let ok = true;
+  for (const [note, kind] of cases) {
+    const r = classifyNote(note);
+    const got = r.unclosed.length ? 'unclosed' : r.forbidden.length ? 'forbidden' : 'clean';
+    const pass = got === kind;
+    ok &&= pass;
+    console.log(`self-test: ${JSON.stringify(note.slice(0, 34))} -> ${got} (want ${kind}) ${pass ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) {
+    console.error('  the detector cannot tell these apart — it would pass everything');
+    process.exit(1);
+  }
+  console.log('self-test passed — the detector can fail');
+  process.exit(0);
+}
 
 const failures = [];
 let notesChecked = 0;

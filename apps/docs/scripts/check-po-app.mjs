@@ -13,7 +13,10 @@
  * copy in examples/ would be exactly the duplication a Standardize sweep would
  * come back for. It boots the app as a child process on a free port, so it
  * collides with nothing and needs no container.
- */
+  *
+ * @exact — boots the reference app and asserts responses. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';

@@ -13,7 +13,10 @@
  *
  * Compares the documents against the Python constant rather than the other way
  * round: the code is the thing that enforces, so the code is the authority.
- */
+  *
+ * @heuristic — extracts the vocabulary from a prose line with a bare word regex.
+ *   OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+*/
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { REPO_ROOT } from './paths.mjs';

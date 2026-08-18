@@ -17,7 +17,10 @@
  * REGIONS rather than widening this into a whole-page sweep: whole-page
  * rendered contrast overlaps `check:contrast` and drowns real findings in
  * decorative text.
- */
+  *
+ * @exact — measures rendered contrast in a real browser. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { join } from 'node:path';
 import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';

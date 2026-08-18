@@ -2,6 +2,9 @@
 // committed snapshot with an index.html — the likeliest release slip
 // (entry without snapshot) previously shipped a live 404 in the
 // switcher that nothing caught. Runs in every docs build (local + CI).
+//
+// @exact — compares version strings. Exempt from --self-test: there is no
+// judgement to get wrong, and ceremony around a lookup is noise.
 import { readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
 

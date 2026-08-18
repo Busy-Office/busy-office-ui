@@ -13,6 +13,9 @@
 // produced 10 findings. Note that auto table layout IGNORES max-width on
 // cells — an early red test injected there, saw nothing, and would have
 // shipped a detector that could not fail.
+//
+// @exact — measures rendered expansion in a real browser. Exempt from --self-test: there is no
+// judgement to get wrong, and ceremony around a lookup is noise.
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';

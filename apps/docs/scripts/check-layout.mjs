@@ -12,6 +12,9 @@
 //    shell never grows, so document scrollWidth silently reports nothing)
 //  - spacing compares clipping BEFORE and AFTER the override, so
 //    deliberate ellipsis truncation is not reported as a 1.4.12 failure
+//
+// @exact — measures geometry in a real browser. Exempt from --self-test: there is no
+// judgement to get wrong, and ceremony around a lookup is noise.
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';

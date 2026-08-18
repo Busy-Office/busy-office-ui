@@ -10,7 +10,10 @@
  * `derive-floor.mjs` now computes it from the shipped CSS against
  * @mdn/browser-compat-data. This makes sure nobody quietly reintroduces a
  * literal that will rot the moment a feature is added or dropped.
- */
+  *
+ * @heuristic — greps prose for a hand-typed version literal, with an allow-list and stat-block stripping.
+ *   OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+*/
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { REPO_ROOT, SOURCE_SKIP_DIRS as SKIP } from './paths.mjs';

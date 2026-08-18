@@ -4,7 +4,10 @@
  * if a pair drops below its threshold. The docs Colors page renders its
  * ratio tables FROM dist/contrast.json, so published ratios cannot drift
  * (site-proposal grill F3: never hand-typed accessibility claims).
- */
+  *
+ * @exact — computes contrast ratios. Exempt from --self-test: there is no
+ * judgement to get wrong, and ceremony around a lookup is noise.
+*/
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
