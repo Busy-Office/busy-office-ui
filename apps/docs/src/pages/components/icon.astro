@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Demo from '../../components/Demo.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'settings', 'grid', 'barcode', 'building', 'user'];
 
@@ -114,6 +115,51 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
       <strong>129&nbsp;kB</strong> — about twice everything else we ship — to compete with
       icon sets that are better maintained and free. One property is the smaller answer
       and the more general one.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Your own artwork — which mechanism, and when none</h2>
+    <p>Four questions come up as "can we have SVG for this?". Three already have an
+    answer that ships, and the fourth is a no.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">You want</th><th scope="col">Use</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row">A one-colour glyph</th>
+            <td><code>--bo-icon-src</code> on <code>.bo-icon</code></td>
+            <td>It is a <strong>mask</strong>, so it takes your text colour and follows the
+            theme, density and forced-colours handling automatically</td>
+          </tr>
+          <tr>
+            <th scope="row">A multi-colour mark — a logo, a vendor identicon</th>
+            <td>a plain <code>&lt;img&gt;</code>, inside <a href={base + '/components/avatar'}>the avatar</a> if it is a person or an org</td>
+            <td><strong>A mask cannot do this.</strong> It discards the artwork's own colours
+            by design — that is what makes it themable. Multi-colour means an image</td>
+          </tr>
+          <tr>
+            <th scope="row">A per-tenant app tile</th>
+            <td>the app launcher's inline <code>svg</code> slot</td>
+            <td>Already the extension point: an inline <code>&lt;svg&gt;</code> inherits
+            <code>currentColor</code> exactly like the shipped glyphs</td>
+          </tr>
+          <tr>
+            <th scope="row">An initials avatar</th>
+            <td><strong>no SVG at all</strong> — <a href={base + '/components/avatar'}><code>.bo-avatar</code></a> with two letters in it</td>
+            <td>Text scales, translates, is selectable and needs no asset pipeline.
+            Generating an SVG for it would be strictly worse</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">
+      <strong>What this framework will not ship: an illustration set.</strong> Empty
+      states and error screens are the places an ERP feels most broken, and the fix is
+      almost always a clear sentence and the action that resolves it — not a drawing.
+      A picture that has to be redrawn for every tenant's brand, translated for nothing,
+      and downloaded on a warehouse tablet is cost without an answer. If you want one,
+      it is an <code>&lt;img&gt;</code>, and it is <code>alt=""</code>.
     </p>
   </section>
 

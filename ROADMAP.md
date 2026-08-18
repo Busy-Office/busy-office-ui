@@ -697,7 +697,7 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        /dev/null, so a cached image was serving the OLD stylesheet. Comparing the
        served asset hash against the built one is what caught it.
 
-2. [ ] **40.2 — SVG: say where it EARNS its place, and where it does not.**
+2. [x] **40.2 — SVG: say where it EARNS its place, and where it does not.**
        Owner asked about SVG for avatars and app-launch tiles, and for use-case
        suggestions.
 
@@ -715,6 +715,33 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        Accept: a written recommendation per use case with the refusals first;
        anything built ships as **one mechanism**, not a set of assets; nothing
        lands that a `<span>` and a token already do.
+
+       **Landed 2026-08-19. Nothing was built, because all three named cases
+       already ship** — verified rather than assumed:
+
+       - **Initials avatar** — `.bo-avatar` already does it with two letters,
+         em-sized, `aria-hidden` by contract. Measured: square box, no `<svg>`
+         or `<img>` involved. An SVG here would be strictly worse (text scales,
+         translates, is selectable).
+       - **App-launch tile** — `AppTile` already has an inline `svg` slot,
+         documented in its own header as "the per-tenant extension slot.
+         Nothing needs shipping."
+       - **Vendor identicon / logo** — a plain `<img>` inside `.bo-avatar`.
+         Measured live: a multi-colour SVG data URI fills the disc exactly and
+         is clipped round (`overflow: hidden` via the existing `:has(img)` rule).
+
+       **The one thing genuinely missing was a sentence, not a component:**
+       `--bo-icon-src` is a **mask**, so it discards the artwork's colours — that
+       is what makes it themable, and it means a multi-colour mark *cannot* go
+       through it. Nobody had written that down, so "use `--bo-icon-src` for
+       our logo" was a mistake waiting to happen. `/components/icon` now carries
+       a four-row routing table and the refusal.
+
+       **Refused and recorded in the deliberately-absent table: an illustration
+       set.** Empty states are where an ERP feels most broken, and the fix is a
+       clear sentence plus the action that resolves it — not a drawing that must
+       be redrawn per tenant brand, translated for nothing, and downloaded on a
+       warehouse tablet.
 
 3. [x] **40.3 — Date picker: multi-month, with marked dates.**
        The ask: 1- and 3-month views, and highlighting holidays or
