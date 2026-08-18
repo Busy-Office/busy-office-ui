@@ -576,7 +576,7 @@ Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
        nobody adds ceremony to a `readdir`. Written into CLAUDE.md next to the
        red-proof discipline it extends.
 
-2. [ ] **42.2 — Close the picking gap the date-picker refusal left open.**
+2. [x] **42.2 — Close the picking gap the date-picker refusal left open.**
        The refusal was right about the widget and wrong about the job. The
        native input picks but cannot mark; `.bo-calendar` marks but nothing
        documents picking from it — so a user choosing a delivery date around a
@@ -594,6 +594,31 @@ Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
        behaviour is whatever real links/buttons already give, with **no roving
        tabindex and no new ARIA**. If that turns out to need a JS widget, the
        answer is to say so and stop — not to build one quietly.
+
+       **Landed 2026-08-19. Zero new CSS** — the recipe uses the
+       `button.bo-calendar__day` rules that shipped unused in 40.3.
+
+       Each day is a real `<button type="submit" name="date" value="ISO">` inside
+       a plain `<form method="get">`. Clicking one puts the date in the URL with
+       **scripting doing nothing**; the server renders unavailable days
+       `disabled`, so the rule that blocks a plant shutdown lives where the works
+       calendar already lives. No roving `tabindex`, no ARIA, no widget.
+
+       **Measured live, and it corrected my own prose:** 31 days, 11 disabled,
+       **20 tab stops** — not the "roughly thirty" I had written, because
+       disabled buttons are not focusable. The page states the measured number
+       and says plainly that a native input is one tab stop.
+
+       Two contradictions removed: the opener said "not a date picker" and a
+       later section said "the browser owns picking a date". What is still
+       refused is the *widget* — a scripted popup with its own ARIA and
+       month-navigation model — and the page now argues that instead, with the
+       test stated: nothing in the recipe needs it.
+
+       Claim added (39 total), red-proved both ways: days rendered as spans, and
+       blocked days rendered enabled. The first version **crashed** on a null
+       instead of failing the claim; guarded, so a picker that only looks
+       pickable reports a named failure rather than killing the gate.
 
 ## Slice 41 — from the Objective grill, Slices 31-40 (2026-08-19)
 
