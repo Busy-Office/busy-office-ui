@@ -557,6 +557,36 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 35 — P0: tabs worked exactly once (owner report, 2026-08-18)
+
+1. [x] **35.1 — Every tab owns its panel; two mechanisms added** (2026-08-18).
+
+       **Root cause.** The 9-tab overflow demo I added in 30.1 gave every tab
+       `aria-controls="ov-p"` — one shared panel. `initTabs()` loops the tabs
+       setting `panel.hidden = !selected`, so with nine tabs naming one panel
+       the LAST in DOM order decides, and it is unselected. Reproduced: on load
+       the panel is visible; after any click `panelHidden: true`. It worked
+       exactly once because the server-rendered markup starts visible.
+
+       **Why it shipped.** I built that demo to prove the strip *overflows* and
+       measured scroll, fade and keyboard focus — and never clicked a tab. The
+       claim I wrote asserted the things I was thinking about, so it passed.
+       Every class was real and every attribute value legal, so `bo-check-markup`
+       was silent; the ARIA is individually valid and only the RELATIONSHIP is
+       wrong, so axe was silent too.
+
+       **Two mechanisms, deliberately independent.**
+       - *Structure*: `bo-check-markup` now fails when tabs in one tablist share
+         a panel id — it ships to consumers, who can make the identical mistake.
+         Red-proved: reintroducing it fails the build with "9 tabs in one
+         tablist share 1 panel id(s): ov-p-0".
+       - *Behaviour*: `check:claims` (now **31**) clicks tabs 1, 3 and 9 and
+         asserts each reveals its own panel with exactly one visible.
+
+       The pair matters: a static check proves the markup is shaped right, a
+       runtime claim proves the thing actually works, and they fail
+       independently. Either alone would have missed some version of this.
+
 ## Slice 34 — field editor: per-row save is the wrong idiom (owner report, 2026-08-18)
 
 Owner: "save button in the wrong place… looks like AI slop". Correct, and the

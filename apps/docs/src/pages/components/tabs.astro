@@ -19,6 +19,13 @@ const tabsMarkup = `<div class="bo-tabs">
   import { initTabs } from "@busy-office/ui/js";
   initTabs(); // once — arrow keys, Home/End, roving tabindex
 </script>`;
+
+/* One panel PER tab. They shared a single `aria-controls="ov-p"` when this demo
+   was written for 30.1, which looked right and worked exactly once: initTabs()
+   loops every tab setting `panel.hidden = !selected`, so with nine tabs
+   pointing at one panel the last one in DOM order wins and hides it (owner
+   report, 2026-08-18). */
+const overflowTabs = ['Overview','Lines','Schedule','Invoices','Receipts','Approvals','Attachments','Audit trail','Settings'];
 ---
 <Gallery title="Tabs">
   <p class="demo-note">
@@ -71,15 +78,20 @@ const tabsMarkup = `<div class="bo-tabs">
     <h2>More tabs than fit</h2>
     <div class="bo-tabs" style="max-inline-size: 34rem">
       <div class="bo-tabs__list" role="tablist" aria-label="Module areas">
-        {['Overview','Lines','Schedule','Invoices','Receipts','Approvals','Attachments','Audit trail','Settings'].map((label, i) => (
+        {overflowTabs.map((label, i) => (
           <button class="bo-tabs__tab" role="tab" id={`ov-t-${i}`}
                   aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? undefined : '-1'}
-                  aria-controls="ov-p">{label}</button>
+                  aria-controls={`ov-p-${i}`}>{label}</button>
         ))}
       </div>
-      <div class="bo-tabs__panel" role="tabpanel" id="ov-p" aria-labelledby="ov-t-0" tabindex="0">
-        <p class="bo-u-text-muted">Nine tabs in a 34rem strip. The list scrolls; it never wraps and never clips.</p>
-      </div>
+      {overflowTabs.map((label, i) => (
+        <div class="bo-tabs__panel" role="tabpanel" id={`ov-p-${i}`} aria-labelledby={`ov-t-${i}`}
+             tabindex="0" hidden={i !== 0}>
+          <p class="bo-u-text-muted">{label} panel. Nine tabs in a 34rem strip: the list scrolls,
+          it never wraps and never clips, and <strong>each tab owns its own panel</strong> —
+          sharing one panel between tabs looks fine until the second click.</p>
+        </div>
+      ))}
     </div>
     <p class="bo-u-text-muted">
       A tab strip wider than its container <strong>scrolls sideways</strong>. It

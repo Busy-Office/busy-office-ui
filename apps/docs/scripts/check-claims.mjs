@@ -522,6 +522,31 @@ check(
   JSON.stringify(wide),
 );
 
+/* Every tab shows ITS panel — not just the first one (owner report, 2026-08-18).
+   The 9-tab demo shipped with all tabs pointing at one panel: it worked on load
+   and broke on the first click, because initTabs() loops the tabs setting
+   `panel.hidden = !selected` and the last tab in DOM order wins. The static
+   check in bo-check-markup catches the STRUCTURE; this catches the BEHAVIOUR,
+   and the two fail independently. */
+await visit('/components/tabs/', { width: 1440 });
+const tabbing = [];
+for (const n of [1, 3, 9]) {
+  await page.click(`div[aria-label="Module areas"] [role=tab]:nth-child(${n})`);
+  await new Promise((r) => setTimeout(r, 150));
+  tabbing.push(await page.evaluate(() => {
+    const sel = [...document.querySelectorAll('div[aria-label="Module areas"] [role=tab]')]
+      .find((t) => t.getAttribute('aria-selected') === 'true');
+    const panel = document.getElementById(sel.getAttribute('aria-controls'));
+    const showing = [...document.querySelectorAll('[role=tabpanel][id^="ov-p-"]')].filter((x) => !x.hidden).length;
+    return { tab: sel.textContent.trim(), visible: panel ? !panel.hidden : false, showing };
+  }));
+}
+check(
+  'tabs: every tab reveals its own panel, and exactly one is visible',
+  tabbing.every((t) => t.visible && t.showing === 1),
+  JSON.stringify(tabbing),
+);
+
 await browser.close();
 server.close();
 

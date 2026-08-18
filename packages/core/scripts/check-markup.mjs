@@ -98,6 +98,31 @@ for (const root of roots) {
       }
     }
 
+    /* 3. Contracts a BEHAVIOR depends on, which look fine in markup and fail at
+       runtime. First member, and the reason this check exists: within one
+       tablist every tab must control its OWN panel. initTabs() loops the tabs
+       setting `panel.hidden = !selected`, so if several tabs name the same
+       panel the last one in DOM order decides, and the panel disappears on the
+       second click. It works exactly once — which is how it shipped past a
+       review, a build and an axe run (owner report, 2026-08-18).
+
+       Neither of the checks above could see it: every class was real and every
+       attribute value was legal. axe cannot see it either — the ARIA is
+       individually valid, and only the RELATIONSHIP between tabs is wrong. */
+    for (const list of html.matchAll(/<[^>]*role="tablist"[^>]*>([\s\S]*?)<\/(?:div|nav|ul)>/g)) {
+      const controls = [...list[1].matchAll(/role="tab"[^>]*aria-controls="([^"]+)"|aria-controls="([^"]+)"[^>]*role="tab"/g)]
+        .map((m) => m[1] ?? m[2]);
+      if (controls.length < 2) continue;
+      const dupes = controls.filter((c, i) => controls.indexOf(c) !== i);
+      if (dupes.length) {
+        findings.push({
+          where,
+          what: `${controls.length} tabs in one tablist share ${new Set(dupes).size} panel id(s): ${[...new Set(dupes)].join(', ')}`,
+          hint: 'each tab needs its own [role=tabpanel]; sharing one means initTabs() hides it on the second click',
+        });
+      }
+    }
+
     // 2. framework data-* attributes carrying a value the CSS never switches on
     for (const m of html.matchAll(/\s(data-[a-z-]+)="([^"]*)"/g)) {
       const legal = values[m[1]];
