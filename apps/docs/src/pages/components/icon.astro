@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
+import Demo from '../../components/Demo.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 
@@ -21,6 +22,9 @@ const markup = `<!-- Decorative (label carries the meaning): -->
 <style>
   .my-icon--rocket { mask-image: url("data:image/svg+xml,<svg …></svg>"); }
 </style>`;
+const customIcon = `<span class="bo-icon" aria-hidden="true"
+  style="--bo-icon-src: url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;%23000&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;><path d=&quot;M12 5v14M5 12h14&quot;/></svg>')"></span>
+<span>Add line</span>`;
 ---
 <Gallery title="Icon">
   <p class="demo-note">
@@ -91,6 +95,28 @@ const markup = `<!-- Decorative (label carries the meaning): -->
   </section>
 
   <section class="demo">
+  <section class="demo">
+    <h2>Any icon you like — one custom property</h2>
+    <p>The twelve glyphs above are not a privileged list: each one is just a value of
+    <code>--bo-icon-src</code>. Point that property at any SVG and the element gets the
+    framework's sizing, <code>currentColor</code> painting, density tracking and
+    forced-colors handling with <strong>no new class from us</strong>.</p>
+    <Demo code={customIcon} />
+    <p class="bo-u-text-muted">That works with <a href="https://lucide.dev">Lucide</a>,
+    <a href="https://heroicons.com">Heroicons</a> or your own brand mark — copy the SVG,
+    percent-encode <code>#</code> as <code>%23</code>, and set the property. Icons drawn
+    with <code>stroke="currentColor"</code> need no edit at all, because the mask ignores
+    the SVG's own colours and paints with yours.</p>
+    <p class="bo-u-text-muted">
+      <strong>Why there is no 200-icon catalogue here</strong>, since that is the obvious
+      thing to ask for: these twelve are <strong>10.3% of the whole framework</strong> by
+      size, because every glyph is an inlined SVG. Two hundred of them would add roughly
+      <strong>129&nbsp;kB</strong> — about twice everything else we ship — to compete with
+      icon sets that are better maintained and free. One property is the smaller answer
+      and the more general one.
+    </p>
+  </section>
+
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>

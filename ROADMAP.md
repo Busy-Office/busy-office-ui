@@ -577,7 +577,7 @@ But the ask underneath it is real: 12 icons is not enough for an ERP, and today
 the only escape hatch is a comment in `icon.css` telling you to write your own
 `mask-image`. So the answer is a mechanism, not a catalogue.
 
-1. [ ] **40.1 — Any icon, one line: `--bo-icon-src`.**
+1. [x] **40.1 — Any icon, one line: `--bo-icon-src`.**
        Make `.bo-icon` take its glyph from a custom property, so a consumer
        points it at any SVG — Lucide, Heroicons, their own brand mark — and gets
        the framework's sizing, colour, density and forced-colors handling for
@@ -589,6 +589,26 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        a documented one-line recipe for Lucide/Heroicons that is executed, not
        asserted; the "deliberately absent" list gains an entry explaining why
        there is no icon catalogue and what to use instead. Cost line stated.
+
+       **Landed 2026-08-19, and it made the framework SMALLER.** Cost: **1 custom
+       property, 0 new classes, 0 behaviors** — and **75 kB -> 71 kB minified**,
+       a 4 kB / 5.3% reduction. The saving was not the goal and is worth stating:
+       autoprefixer had been emitting `-webkit-mask-image` AND `mask-image` per
+       icon, duplicating the entire inlined SVG data URI twelve times. With the
+       URI held once in a custom property, only the base rule carries the
+       prefixed pair. The more general answer is also the cheaper one.
+
+       Verified live in the container at 1440 and 390 in both themes: 28 icons,
+       zero unmasked. Claim added (37 total) that a **consumer-authored** glyph
+       — one this repo does not ship — paints via `--bo-icon-src` with no new
+       class, in `currentColor`, sized to the font. Red-proved.
+
+       **Nearly shipped on a stale artifact.** Three probes reported the
+       mechanism did not work, and I was about to conclude the premise was
+       wrong. The container was serving `colors.rqbUZGoN.css` while the build had
+       produced `colors.DaAtBaZv.css` — `podman build` output had been sent to
+       /dev/null, so a cached image was serving the OLD stylesheet. Comparing the
+       served asset hash against the built one is what caught it.
 
 2. [ ] **40.2 — SVG: say where it EARNS its place, and where it does not.**
        Owner asked about SVG for avatars and app-launch tiles, and for use-case

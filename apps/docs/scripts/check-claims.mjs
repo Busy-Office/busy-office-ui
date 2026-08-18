@@ -674,6 +674,39 @@ check(
   JSON.stringify(hero),
 );
 
+/* "Point --bo-icon-src at any SVG and the element gets the framework's sizing,
+   currentColor painting and forced-colors handling with no new class from us."
+   (/components/icon, roadmap 40.1)
+
+   The whole justification for refusing an icon catalogue is that this mechanism
+   replaces it. If it does not actually work for a consumer-authored glyph, the
+   refusal is not a trade — it is just twelve icons and a shrug. Asserted here
+   rather than described, and against a glyph this repo does not ship. */
+await visit('/components/icon/', { width: 1440 });
+const iconSrc = await page.evaluate(() => {
+  const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'><path d='M12 5v14M5 12h14'/></svg>";
+  const el = document.createElement('span');
+  el.className = 'bo-icon';
+  el.setAttribute('aria-hidden', 'true');
+  el.style.setProperty('--bo-icon-src', `url("data:image/svg+xml,${svg}")`);
+  document.querySelector('main').append(el);
+  const cs = getComputedStyle(el);
+  const box = el.getBoundingClientRect();
+  const shipped = document.querySelector('.bo-icon--doc');
+  return {
+    consumerGlyphPaints: cs.maskImage !== 'none' && cs.maskImage.includes('M12 5v14'),
+    paintedWithCurrentColor: cs.backgroundColor === getComputedStyle(el.parentElement).color,
+    sizedToFont: Math.round(box.width) === Math.round(box.height) && box.width > 0,
+    shippedStillWorks: shipped ? getComputedStyle(shipped).maskImage !== 'none' : false,
+  };
+});
+check(
+  'icon: --bo-icon-src renders a consumer glyph with no new class',
+  iconSrc.consumerGlyphPaints && iconSrc.paintedWithCurrentColor &&
+    iconSrc.sizedToFont && iconSrc.shippedStillWorks,
+  JSON.stringify(iconSrc),
+);
+
 await browser.close();
 server.close();
 
