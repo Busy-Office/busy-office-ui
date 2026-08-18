@@ -20,7 +20,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { REPO_ROOT } from './paths.mjs';
-import { assertScanned } from './gate-report.mjs';
+import { assertScanned, selfTest } from './gate-report.mjs';
 
 /* Shared by the gate AND its --self-test. They were duplicated at first, which
    makes a self-test worthless: breaking the real extractor leaves the copy
@@ -37,24 +37,14 @@ if (process.argv.includes('--self-test')) {
      authoritative set out of a Python literal, and pulling the documented list
      out of a "# outcome:" line. Either can silently return nothing — and a gate
      comparing two empty lists agrees with itself perfectly. */
-  const fromPy = outcomesFromPython;
-  const fromDoc = outcomesFromDocLine;
   const py = 'OUTCOMES = {"landed", "released", "logged"}\n';
-  const cases = [
-    ['parses the python set', JSON.stringify(fromPy(py)), '["landed","logged","released"]'],
-    ['returns null when the set is gone', String(fromPy('X = 1')), 'null'],
-    ['parses a documented list', JSON.stringify(fromDoc('# outcome: landed | released | logged')), '["landed","logged","released"]'],
-    ['spots an invented outcome', String(fromDoc('# outcome: landed | shipped').includes('shipped')), 'true'],
-    ['spots a missing one', String(fromDoc('# outcome: landed').length !== fromPy(py).length), 'true'],
-  ];
-  let ok = true;
-  for (const [what, got, want] of cases) {
-    ok &&= got === want;
-    console.log(`self-test: ${what.padEnd(34)} ${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
-  }
-  if (!ok) { console.error('  the extractor does not discriminate — two empty lists would agree'); process.exit(1); }
-  console.log('self-test passed — the detector can fail');
-  process.exit(0);
+  selfTest([
+    ['parses the python set', outcomesFromPython(py), ['landed', 'logged', 'released']],
+    ['null when the set is gone', outcomesFromPython('X = 1'), null],
+    ['parses a documented list', outcomesFromDocLine('# outcome: landed | released | logged'), ['landed', 'logged', 'released']],
+    ['spots an invented outcome', outcomesFromDocLine('# outcome: landed | shipped').includes('shipped'), true],
+    ['spots a missing one', outcomesFromDocLine('# outcome: landed').length !== 3, true],
+  ]);
 }
 
 /* The loop scripts are repo tooling, not part of the published docs image, so

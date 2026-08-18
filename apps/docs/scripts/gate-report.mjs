@@ -60,3 +60,42 @@ export function gate(label, noun) {
     },
   };
 }
+
+/**
+ * The shared shape of a `--self-test`: run a heuristic detector against inputs
+ * it must classify correctly, print each verdict, and exit non-zero if it
+ * cannot tell them apart.
+ *
+ * Seven gates grew a self-test in one day (roadmap 42.1/42.3) and six of them
+ * hand-copied the same accumulate-print-exit block — one decision stored seven
+ * times, which is how the source-skip list and the outcome vocabulary drifted
+ * before it (Standardize sweeps, 2026-08-19).
+ *
+ * An EMPTY case list fails. A self-test with nothing in it is precisely the
+ * detector-that-cannot-fail defect these exist to prevent, one level up, and
+ * this helper would otherwise be the perfect place to hide one.
+ *
+ *   selfTest([
+ *     ['two adjacent rows are both reported', bareText(adjacent), 2],
+ *     ['a clean table reports none',          bareText(clean),    0],
+ *   ]);
+ */
+export function selfTest(cases) {
+  if (!Array.isArray(cases) || cases.length === 0) {
+    console.error('self-test FAILED — no cases. A self-test that asserts nothing cannot fail,');
+    console.error('  which is the exact defect --self-test exists to rule out.');
+    process.exit(1);
+  }
+  let ok = true;
+  for (const [label, got, want] of cases) {
+    const pass = JSON.stringify(got) === JSON.stringify(want);
+    ok &&= pass;
+    console.log(`self-test: ${String(label).padEnd(46)} ${JSON.stringify(got)} (want ${JSON.stringify(want)}) ${pass ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) {
+    console.error('  the detector cannot tell these apart — it would pass everything');
+    process.exit(1);
+  }
+  console.log(`self-test passed — the detector can fail (${cases.length} cases)`);
+  process.exit(0);
+}

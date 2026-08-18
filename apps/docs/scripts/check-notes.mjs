@@ -34,7 +34,7 @@
 import { readFile } from 'node:fs/promises';
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
-import { assertScanned } from './gate-report.mjs';
+import { assertScanned, selfTest } from './gate-report.mjs';
 
 /** Inline formatting a note may legitimately contain. */
 const ALLOWED = new Set(['code', 'kbd', 'em', 'strong', 'a', 'abbr', 'span', 'br']);
@@ -63,25 +63,15 @@ export function classifyNote(inner) {
 }
 
 if (process.argv.includes('--self-test')) {
-  const cases = [
-    ['A day may be a <span>, an <a> or a plain one.', 'unclosed', true],
-    ['they are real <button>x</button> elements', 'forbidden', true],
-    ['use <code>data-day</code> for state', 'clean', true],
-  ];
-  let ok = true;
-  for (const [note, kind] of cases) {
+  const kind = (note) => {
     const r = classifyNote(note);
-    const got = r.unclosed.length ? 'unclosed' : r.forbidden.length ? 'forbidden' : 'clean';
-    const pass = got === kind;
-    ok &&= pass;
-    console.log(`self-test: ${JSON.stringify(note.slice(0, 34))} -> ${got} (want ${kind}) ${pass ? 'ok' : 'WRONG'}`);
-  }
-  if (!ok) {
-    console.error('  the detector cannot tell these apart — it would pass everything');
-    process.exit(1);
-  }
-  console.log('self-test passed — the detector can fail');
-  process.exit(0);
+    return r.unclosed.length ? 'unclosed' : r.forbidden.length ? 'forbidden' : 'clean';
+  };
+  selfTest([
+    ['an unclosed inline tag', kind('A day may be a <span>, an <a> or a plain one.'), 'unclosed'],
+    ['a forbidden element', kind('they are real <button>x</button> elements'), 'forbidden'],
+    ['ordinary prose with <code>', kind('use <code>data-day</code> for state'), 'clean'],
+  ]);
 }
 
 const failures = [];

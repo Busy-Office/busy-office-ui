@@ -61,6 +61,11 @@ export const BARE_TEXT_RE = /<(tr|tbody|thead|tfoot|table)\b[^>]*>([^<]+)(?=<)/g
 export const TABLIST_RE = /<[^>]*role="tablist"[^>]*>([\s\S]*?)<\/(?:div|nav|ul)>/g;
 export const TAB_CONTROLS_RE = /role="tab"[^>]*aria-controls="([^"]+)"|aria-controls="([^"]+)"[^>]*role="tab"/g;
 
+/* This block is NOT the shared `selfTest` helper the docs gates use, and that is
+   deliberate: this file SHIPS as the `bo-check-markup` bin (see `files` in
+   package.json), so an import from `apps/docs/scripts` would resolve here and
+   ENOENT in every consumer's node_modules. A duplicated fifteen lines is the
+   cheaper mistake than a published tool that cannot start. */
 if (process.argv.includes('--self-test')) {
   /* Two rules here are pure pattern-matching over HTML text, and BOTH have been
      wrong in production:

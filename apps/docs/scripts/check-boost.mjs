@@ -16,7 +16,7 @@
 // @heuristic — detects "inline layout styles" by pattern, so it can misread what an attribute is for.
 // OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
 import { readFile, readdir } from 'node:fs/promises';
-import { assertScanned } from './gate-report.mjs';
+import { assertScanned, selfTest } from './gate-report.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveDist } from './serve-dist.mjs';
@@ -41,23 +41,14 @@ if (process.argv.includes('--self-test')) {
      fooled in both directions: miss a layout rule written with odd spacing, or
      flag a block that only sets colour. Both are checked, because a boost gate
      that flags everything is as useless as one that flags nothing. */
-  const cases = [
-    ['.a{display:grid}', true],
-    ['.a{ display : flex }', true],
-    ['.a{grid-template-columns:1fr}', true],
-    ['.a{position:sticky;top:0}', true],
-    ['.a{color:red;font-weight:600}', false],
-    ['.a{background:var(--bo-color-bg-surface)}', false],
-  ];
-  let ok = true;
-  for (const [css, want] of cases) {
-    const got = LAYOUT.test(css);
-    ok &&= got === want;
-    console.log(`self-test: ${JSON.stringify(css).padEnd(42)} layout=${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
-  }
-  if (!ok) { console.error('  the detector cannot tell layout from paint'); process.exit(1); }
-  console.log('self-test passed — the detector can fail');
-  process.exit(0);
+  selfTest([
+    ['display:grid is layout', LAYOUT.test('.a{display:grid}'), true],
+    ['odd spacing still matches', LAYOUT.test('.a{ display : flex }'), true],
+    ['grid-template is layout', LAYOUT.test('.a{grid-template-columns:1fr}'), true],
+    ['position:sticky is layout', LAYOUT.test('.a{position:sticky;top:0}'), true],
+    ['paint alone is not layout', LAYOUT.test('.a{color:red;font-weight:600}'), false],
+    ['a token background is not layout', LAYOUT.test('.a{background:var(--bo-color-bg-surface)}'), false],
+  ]);
 }
 let staticFails = 0;
 let scanned = 0;

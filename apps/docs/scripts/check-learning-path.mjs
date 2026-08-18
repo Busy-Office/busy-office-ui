@@ -48,7 +48,7 @@
 import { readFile } from 'node:fs/promises';
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
-import { assertScanned } from './gate-report.mjs';
+import { assertScanned, selfTest } from './gate-report.mjs';
 
 const ON_PATH = /^\/(getting-started|concepts)\//;
 
@@ -75,26 +75,22 @@ export function resultBeforeCode(html) {
 if (process.argv.includes('--self-test')) {
   const shell = (body) => `<main class="bo-app-shell__main">
     <button class="bo-btn docs-menu-btn">menu</button>${body}</main>`;
-  const codeFirst = shell('<section class="demo"><pre><code>x</code></pre>' +
-    '<div class="demo-pair__preview">after</div></section>');
-  const resultFirst = shell('<section class="demo"><div class="demo-pair__preview">first</div>' +
-    '<pre><code>x</code></pre></section>');
-  const noDemo = shell('<section class="demo"><pre><code>npm i</code></pre></section>');
-  const a = resultBeforeCode(codeFirst);
-  const b = resultBeforeCode(resultFirst);
-  const c = resultBeforeCode(noDemo);
-  const aFails = a.rendered >= 0 && a.rendered > a.code;
-  const bPasses = b.rendered >= 0 && b.rendered < b.code;
-  const cExempt = c.rendered < 0;
-  console.log(`self-test: a code-only page is exempt, not failed: ${cExempt}`);
-  console.log(`self-test: code-first page detected as failing: ${aFails}`);
-  console.log(`self-test: result-first page detected as passing: ${bPasses}`);
-  if (!aFails || !bPasses || !cExempt) {
-    console.error('  the detector does not discriminate — it would pass everything');
-    process.exit(1);
-  }
-  console.log('self-test passed — the detector can fail');
-  process.exit(0);
+  const verdict = (html) => {
+    const { code, rendered } = resultBeforeCode(html);
+    if (rendered < 0) return 'exempt';
+    return rendered < code ? 'result-first' : 'code-first';
+  };
+  selfTest([
+    ['a code-first page is caught',
+      verdict(shell('<section class="demo"><pre><code>x</code></pre><div class="demo-pair__preview">after</div></section>')),
+      'code-first'],
+    ['a result-first page passes',
+      verdict(shell('<section class="demo"><div class="demo-pair__preview">first</div><pre><code>x</code></pre></section>')),
+      'result-first'],
+    ['a page with no preview is exempt, not failed',
+      verdict(shell('<section class="demo"><pre><code>npm i</code></pre></section>')),
+      'exempt'],
+  ]);
 }
 
 const failures = [];
