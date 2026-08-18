@@ -600,12 +600,29 @@ promised was never written.
        views, and "all fifty at once" is a report or an export rather than a
        screen.
 
-4. [ ] **30.4a — Large-list recipe page.** The decision page DESIGN.md
-       promised and nobody wrote: when to server-page, when to load-more, when
-       to reach for a real grid, and the token-themed AG Grid setup for the
-       residual cases. **Verified missing** — no docs page mentions AG Grid.
-       Small, ships value immediately, and is the honest answer for most
-       screens. Do this first.
+4. [x] **30.4a — Large-list guidance written** (2026-08-18) — **extended
+       `/concepts/scale` rather than adding a page.** That page already said
+       *why* there is no virtualiser; what was missing was what to do instead,
+       which is the half that turns a documented refusal into an answer.
+
+       Two sections: a decision table, and the token-themed AG Grid recipe
+       DESIGN.md promised on 2026-08-17 and nobody wrote. The table's point is
+       that **two of its rows carry the same row count and different answers** —
+       the deciding question is not "how many rows" but what the user is doing
+       with them. Searching wants filters and page numbers; scanning wants the
+       next batch. Reaching for windowing when the real problem is a missing
+       filter is the common way to make a screen slower and less accessible at
+       once.
+
+       The recipe maps AG Grid's CSS variables onto ten shipped tokens, **each
+       verified to exist in the built CSS** — teaching an invented token would
+       hand an adopter a broken theme — and states what the swap buys (virtual
+       scroll, cell editing) against what it costs (a JS render loop, a second
+       theming system, and the accessibility bill windowing always runs up).
+       `DESIGN.md` now points at it, with a note that the promise sat unwritten
+       for a day, which is how a documented decision quietly becomes no answer.
+
+       **Cost line: 0 selectors, 0 CSS, 0 behaviors, 0 new pages.**
 
 5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
        **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,

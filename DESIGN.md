@@ -182,8 +182,10 @@ Two consequences worth stating plainly:
   trail a grid does not.
 - **Residual grid cases are real but rare** — planning layouts, price matrices,
   allocation grids, where a user tabs across cells all day. Roughly one screen
-  in twenty. Those get a **token-themed AG Grid recipe** in the docs, never a
-  grid engine of our own: owning virtual scroll and cell editing would double
+  in twenty. Those get a **token-themed AG Grid recipe** in the docs
+  (`/concepts/scale`, written 2026-08-18 — the promise sat unwritten for a day,
+  which is exactly how a documented decision quietly becomes no answer at all),
+  never a grid engine of our own: owning virtual scroll and cell editing would double
   the maintenance surface for a solved problem. Same reasoning as charts
   (tokens → ECharts theme, documented, not owned).
 

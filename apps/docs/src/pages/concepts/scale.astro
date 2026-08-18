@@ -3,6 +3,28 @@ import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import pkg from '@busy-office/ui/package.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* Token-mapped AG Grid theme — the recipe DESIGN.md promised ("a token-themed
+   AG Grid recipe in the docs, never a grid engine of our own") and that no page
+   had ever carried (roadmap 30.4a). Every custom property on the right is a
+   real shipped token; the ones on the left are AG Grid's own theming API. */
+const agGridRecipe = `/* your-app.css — after both stylesheets */
+.ag-theme-quartz {
+  --ag-background-color:            var(--bo-color-bg-surface);
+  --ag-foreground-color:            var(--bo-color-text-primary);
+  --ag-secondary-foreground-color:  var(--bo-color-text-secondary);
+  --ag-header-background-color:     var(--bo-color-bg-surface-raised);
+  --ag-border-color:                var(--bo-color-border-default);
+  --ag-row-hover-color:             var(--bo-color-bg-hover);
+  --ag-selected-row-background-color: var(--bo-color-accent-subtle);
+  --ag-font-size:                   var(--bo-density-font-size);
+  --ag-row-height:                  var(--bo-density-row-height);
+  --ag-cell-horizontal-padding:     var(--bo-density-cell-padding-x);
+}
+
+/* Density comes along for free: the tokens above are already
+   density-aware, so data-density="compact" on an ancestor
+   re-sizes the grid with the rest of the screen. */`;
 ---
 <Gallery title="Performance at scale">
   <p class="demo-note">
@@ -63,6 +85,51 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     needs 50,000 rows in the DOM at once, this framework is the wrong
     tool for that screen — and the <a href={base + '/getting-started/scope'}>scope
     page</a> says so plainly.</p>
+  </section>
+
+  <section class="demo">
+    <h2>So what do I use, and when?</h2>
+    <p>The previous section says what this framework will not build. This one
+    says what to do instead, which is the half that was missing.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Rows the user faces</th><th scope="col">What the user is doing</th><th scope="col">Use</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--numeric">up to ~2,000</td><td>reading and acting on a filtered list</td><td>plain <a href={base + '/components/data-table'}>data table</a> — nothing special</td></tr>
+          <tr><td class="bo-data-table__col--numeric">~2,000 – 50,000</td><td><strong>searching</strong>, then acting on a few</td><td><strong>filter server-side and paginate</strong> — <a href={base + '/components/pagination'}>page numbers</a>. The right answer for most ERP lists</td></tr>
+          <tr><td class="bo-data-table__col--numeric">~2,000 – 50,000</td><td>scanning forward through a feed</td><td><a href={base + '/components/pagination'}>load-more</a> (<code>initLoadMore()</code>, with <code>data-load-more-auto</code> for infinite scroll)</td></tr>
+          <tr><td class="bo-data-table__col--numeric">any</td><td>tabbing across cells all day — planning boards, price matrices, allocation grids</td><td>a real grid. Roughly one screen in twenty; see the recipe below</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">
+      The middle two rows are the same row count and different answers, because the
+      question that decides it is not "how many rows" but <strong>what the user is doing
+      with them</strong>. Someone searching wants filters and page numbers; someone
+      scanning wants the next batch to appear. Reaching for windowing when the real
+      problem is a missing filter is the most common way to make a screen slower and
+      less accessible at the same time.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>The residual case: a real grid, themed with these tokens</h2>
+    <p>For the one screen in twenty that genuinely is a spreadsheet, use a grid
+    that already solved virtual scroll, and make it look like the rest of your
+    app by pointing its variables at these tokens. AG Grid is the example
+    because its theming is CSS variables; the same mapping idea works for any
+    grid that exposes them.</p>
+    <pre><code>{agGridRecipe}</code></pre>
+    <p class="bo-u-text-muted">
+      <strong>What you are buying and paying.</strong> You get virtual scroll, column
+      virtualisation and cell editing that this framework deliberately does not own. You
+      pay a JS render loop, a second theming system to keep in sync, and the
+      accessibility work that windowing always costs — find-in-page misses unrendered
+      rows, printing gets only what is rendered, and the grid must publish
+      <code>aria-rowcount</code> itself or a screen reader reports the wrong size. Those
+      are not reasons to avoid it on the screen that needs it; they are reasons not to
+      reach for it on the nineteen that do not.
+    </p>
   </section>
 
   <section class="demo">
