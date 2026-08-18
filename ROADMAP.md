@@ -898,7 +898,7 @@ The page whose job is to show a newcomer what they get shows them source only.
          hand-patched first attempt shipped a second violation immediately
          behind the first.
 
-2. [ ] **39.2 — Make "flawless journey" checkable rather than a feeling.**
+2. [x] **39.2 — Make "flawless journey" checkable rather than a feeling.**
        "Not difficult to learn" is not gate-able as written, so it gets proxies
        that are:
 
@@ -913,6 +913,47 @@ The page whose job is to show a newcomer what they get shows them source only.
        the path recorded in `.roundtable/`, listing every term introduced before
        it is defined. A finding of "none" is only credible if the walk is
        written down.
+
+       **Landed 2026-08-19.** `check:learning-path` ships both gates, each
+       red-proved against the built site; the walk is
+       `.roundtable/learning-path-walk-2026-08-19.md`.
+
+       **Three real jargon gaps found and fixed** — `density`, `token` and
+       `two-channel` were all used on the first pages a newcomer opens with no
+       link to their explanation. Installation's opener now names tokens and
+       density with links; the AI-assistants page states the two-channel rule and
+       links the accessibility model.
+
+       **The term check was built as a GATE and then removed.** Every scoping
+       over-enforced — page-wide it demanded a link from a passing mention of
+       "density" in a changelog, and the honest version needs the sidebar's page
+       ORDER, which would bake docs IA into a build gate. Accept had asked for a
+       walk, not a gate; the walk is what shipped. A human read beat a machine
+       rule here.
+
+       **Four detectors were wrong before one worked**, all passing 18/18 while
+       measuring nothing: `class="demo"` (every section has it), first `bo-*`
+       after `<main` (the `<main>` tag itself matches), first non-chrome `bo-*`
+       (the shell's own mobile menu button, identical offset 536 on all 18
+       pages), and any non-utility `bo-*` (counted Related-footer badges as
+       results). Only `.demo-pair__preview` discriminates. The gate now ships
+       `--self-test`, which runs it against code-first, result-first and
+       code-only synthetic pages and fails if it cannot tell them apart.
+
+3. [ ] **39.3 — Only 1 of 18 learning-path pages shows anything working.**
+       The gate found it while guarding one page: `/getting-started/first-screen`
+       is the only page on the path that uses a live `Demo`. The other 17 explain
+       with prose and code and never show the thing.
+
+       **Not a blanket fix.** Several are correctly code-first —
+       `/getting-started/installation` opens with `npm i` because installation IS
+       a command; `/concepts/cascade` opens with CSS because the subject IS CSS.
+
+       Accept: go page by page and answer one question — *is there a result this
+       page could show that would replace a paragraph?* Where yes, use `Demo`
+       (preview and code from one string). Where no, record why, so the next
+       sweep does not re-ask. A page count is not the goal; a reader who can see
+       what the framework does before reading about it is.
 
 ## Slice 38 — is the browser floor too new? (owner wishlist, 2026-08-18)
 
