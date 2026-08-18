@@ -557,6 +557,57 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 39 — the docs must make the first impression (owner wishlist, 2026-08-18)
+
+Owner: *"Your first screen — only code, which does not create the first
+impression. It should be result first, then if they want to see, they can look
+for the code. Can it be tabs: html | source code? Any better idea let me know.
+The document should make the first impression. Make user feel that it is not
+difficult to learn. Make it a flawless journey to walk through."*
+
+**Measured, and the complaint is exact:**
+`/getting-started/first-screen` contains **10 code blocks and 0 live demos**.
+The page whose job is to show a newcomer what they get shows them source only.
+
+1. [ ] **39.1 — Result first on the tutorial path.**
+       `Demo.astro` already renders a live preview AND its copyable code from
+       ONE string, and every component page uses it. The tutorial does not.
+       This is composition, not new machinery.
+
+       **On the tabs suggestion — grilled, and my recommendation is not tabs,
+       for this page.** shadcn and Tailwind do use Preview/Code tabs, so the
+       idea has good precedent, and it is the right shape on a REFERENCE page
+       where the reader already knows what the thing is and wants one or the
+       other. A tutorial is the opposite case: its whole job is to teach the
+       MAPPING between the markup and the result, and a tab hides one half of
+       the pair the reader is trying to connect. It also costs a click for the
+       code-first reader and takes the code out of Ctrl+F.
+
+       Proposed instead: **result, then its code, directly beneath** — Demo's
+       existing behaviour, which is also what the docs-IA comparison (2026-08-16)
+       already concluded for component pages. Owner may overrule; if tabs are
+       wanted, they must keep the code findable (rendered, not lazily mounted).
+
+       Accept: the first thing on the page is a rendered screen, not a `<pre>`;
+       every step shows its result; the page still teaches in order; verified at
+       1440 and 390 in both themes.
+
+2. [ ] **39.2 — Make "flawless journey" checkable rather than a feeling.**
+       "Not difficult to learn" is not gate-able as written, so it gets proxies
+       that are:
+
+       - **Result before source.** A build gate: on every `getting-started/` and
+         `concepts/` page, a rendered demo appears before the first `<pre>`.
+         This is the owner's complaint generalised, so it cannot come back.
+       - **No dead ends.** Every page on the learning path names its next step.
+       - **Nothing unexplained on arrival.** The first screen a newcomer sees
+         must not use a term the docs have not defined yet.
+
+       Accept: the first two are gates with red-proofs; the third is a walk of
+       the path recorded in `.roundtable/`, listing every term introduced before
+       it is defined. A finding of "none" is only credible if the walk is
+       written down.
+
 ## Slice 38 — is the browser floor too new? (owner wishlist, 2026-08-18)
 
 Owner: *"browser support version is too new? shall we consider to reduce to
