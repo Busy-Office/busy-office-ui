@@ -557,6 +557,69 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 38 — is the browser floor too new? (owner wishlist, 2026-08-18)
+
+Owner: *"browser support version is too new? shall we consider to reduce to
+support more device?"*
+
+A fair question to ask of ERP specifically. Back-office users are exactly the
+population on managed corporate fleets, locked SOEs and kiosk terminals, so a
+floor that is fine for a consumer product can be disqualifying here.
+
+**Measured now, before deciding anything.** Modern features in the shipped CSS:
+
+| feature | uses | |
+|---|--:|---|
+| `@layer` | 60 | the cascade contract — this IS the framework's API |
+| `mask-image` | 45 | the tab overflow fade (30.1) |
+| `:has()` | 27 | interactive reveals, already documented fail-closed |
+| `:user-invalid` | 13 | form validation timing |
+| `:is()` / `:where()` | 14 | selector hygiene, trivially rewritable |
+| `@container` | 6 | density/layout response — a core promise |
+| `popover` | 3 | dropdown/menu layering |
+| `color-mix()` | 1 | |
+| `subgrid` | 1 | |
+| `accent-color` | 1 | |
+
+1. [ ] **38.1 — Derive the floor instead of asserting it.**
+       Today it is hand-written prose — **`Chrome/Edge 119 · Firefox 128 ·
+       Safari 17.4`, repeated in 8 places** (index, installation, troubleshooting,
+       README x2, DESIGN.md, gen-llms, plus versioned snapshots) and computed
+       from nothing. Nobody can check it, and two things already look wrong:
+
+       - **It may be too LOW to be honest.** `mask-image` unprefixed is believed
+         to land later than Chrome 119, and it is used 45 times. If so the
+         framework does not actually work at its own stated floor — the opposite
+         of the owner's concern, and worse, because it is a promise we fail.
+       - **It may be too HIGH to be useful.** Nothing obvious explains Firefox
+         **128** or Safari **17.4** specifically; `popover` is the newest thing
+         here and lands earlier than both. A floor set by guesswork costs reach
+         for nothing.
+
+       Accept: a script computes the floor from the shipped CSS against a
+       **citable** compat dataset (e.g. `@mdn/browser-compat-data`), the answer
+       lives in ONE generated place that every page and README reads, and a gate
+       fails the build if the declared floor is below what the CSS actually
+       requires. Version numbers are never typed by hand again.
+
+2. [ ] **38.2 — Decide, per feature, what the floor is worth.**
+       Only answerable once 38.1 says which feature sets each number. For each
+       one that raises the floor: how much reach it costs, what it buys, and
+       whether a fallback exists.
+
+       **The refuse test is explicit, because the obvious way to lower a floor is
+       the one thing this framework must not do.** "Modern CSS instead of a
+       runtime" is the product; buying reach with a JS polyfill would trade the
+       whole pitch for it. Legitimate moves are: drop the feature, replace it
+       with an older equivalent, or ship a documented **fail-closed** fallback —
+       the pattern `:has()` reveals already use, where the degraded path is
+       server-set `aria-invalid` and still works.
+
+       Accept: a per-feature verdict with its reach cost cited, not estimated;
+       any lowered floor proven by actually rendering at it, not by reading a
+       table; and if the answer is "the floor stays", that is recorded as a
+       decision with its reason rather than left as an open question.
+
 ## Slice 37 — score the surface for real ERP fit (owner wishlist, 2026-08-18)
 
 Owner: *"review and give the score for the existing components/patterns which is
