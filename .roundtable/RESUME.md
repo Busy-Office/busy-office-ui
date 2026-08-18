@@ -13,7 +13,7 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-18 after Slice 34 landed.
+Last updated 2026-08-18 after the gate-vacuity Standardize sweep landed.
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
@@ -29,4 +29,7 @@ Last updated 2026-08-18 after Slice 34 landed.
 
 - **30.0** — the "advanced editable table with different data types" half is
   still ambiguous. (The "horizontal tabs" half was answered 2026-08-18: it meant
-  **vertical** tabs, now queued as 36.1.)
+  **vertical** tabs, shipped as 36.1.)
+- **37.1** — the scoring rubric is written but unagreed. Scoring 55 items against
+  a rubric the owner has not seen risks doing it twice, so the next wake should
+  publish the rubric + baseline first and let it be corrected before 37.2 runs.
