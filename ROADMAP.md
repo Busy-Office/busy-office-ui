@@ -454,6 +454,59 @@ queued, and F4 was fixed in the same wake it was found.
        transient network error. Red-proof by pointing it at the known-stale
        deploy.
 
+## Slice 32 — preventing AI slop when building with this framework (owner wishlist, 2026-08-18)
+
+Grilled before queueing, with unusually direct evidence: **I am an AI using this
+framework, and this session logged exactly the failure modes in question.** The
+Slices 29-30 grill counted them across 17 iterations, and Slice 31 added one
+more the same day.
+
+**What already defends against it, and works:** `llms.txt` (19.8 kB, 53 URLs,
+generated and link-verified) is a real machine entry point; `api.json` is
+generated from the shipped CSS so it cannot drift; and the gates catch a lot —
+axe, claims, page-shape, stylelint naming, and the new import-case check.
+
+**The measured failure modes, from my own output rather than speculation:**
+
+| what went wrong | caught by | would a consumer's AI hit it? |
+|---|---|---|
+| invented CLASS (`.bo-widget__footer`) | my ad-hoc check, not a gate | yes — the classic LLM failure |
+| invented ATTRIBUTE VALUE (`data-row-state="selected"`) | **nothing** — found by reading CSS by hand | yes, and silently |
+| reached for a refused component (arrows, grid, field-editor component) | the Objective charter, by judgement | yes — nothing states the refusals machine-readably |
+| prose asserting behaviour that does not happen | `check:claims`, only for OUR pages | no gate ships to consumers |
+
+1. [ ] **32.1 — `api.json` records attribute VALUES, not just names.** The
+       decisive gap: `data-row-state` is listed, but not that it accepts only
+       `dirty|error|warning`. That is precisely what let me write
+       `data-row-state="selected"` and describe a highlight that could never
+       appear. Accept: `extract-api.mjs` captures the value set for each
+       `data-*` attribute the CSS switches on; `api.json` and the generated
+       `ApiTable` show them; red-proved by adding a bogus value and watching it
+       be absent.
+
+2. [ ] **32.2 — A markup validator consumers can run.** `check:markup <glob>`:
+       unknown `bo-*` classes, unknown `data-*` attributes, and (after 32.1)
+       illegal attribute values, checked against the generated `api.json`.
+       **Not an AI feature** — it is a linter, and it happens to catch exactly
+       what a language model gets wrong because a language model guesses
+       plausible names. Accept: it flags `.bo-card`, `.bo-modal`,
+       `.bo-table` and `data-row-state="selected"`; it exits 0 on every page in
+       this repo; it is documented as a consumer-facing command.
+
+3. [ ] **32.3 — State the refusals where a machine will read them.**
+       `llms.txt` says what exists; it does not say what deliberately does not.
+       An assistant asked for a data grid, tab arrows or a virtual scroller
+       will build one, because nothing tells it those were refused and why.
+       Accept: a short "deliberately absent, and what to use instead" section
+       in `llms.txt`, generated from the refusals already recorded in
+       DESIGN.md/ROADMAP so it cannot drift.
+
+**Deliberately NOT proposed:** an "AI mode", a prompt file, or any
+model-specific artefact. The honest framing is that AI slop here is
+*unvalidated output against an under-specified surface* — the fix is to finish
+specifying the surface and ship a checker, which helps a human typing by hand
+just as much.
+
 ## Slice 31 — DESIGN.md's own four-pattern table is wrong (2026-08-18)
 
 Found by checking the docs for **promises never fulfilled** — the method that
