@@ -749,6 +749,50 @@ check(
   JSON.stringify({ ...panel, ...afterChecking, ...afterEscape }),
 );
 
+/* "Click one and the date is in the URL... the server decides what is
+   selectable" (/components/calendar, roadmap 42.2).
+
+   This is the half the original date-picker refusal left out, so it is asserted
+   rather than described: a real submit button must actually submit its ISO date
+   with scripting doing nothing, and a day the server marked unavailable must be
+   unclickable rather than merely styled. A calendar that only LOOKS pickable is
+   the failure this claim exists to prevent. */
+await visit('/components/calendar/', { width: 1440 });
+const pickable = await page.evaluate(() => {
+  const form = document.querySelector('form.bo-calendar');
+  const days = [...form.querySelectorAll('button.bo-calendar__day')];
+  const blocked = days.filter((d) => d.disabled);
+  return {
+    isForm: form.method === 'get',
+    dayCount: days.length,
+    blockedCount: blocked.length,
+    // every blocked day is a marked day — disabled and unmarked would be a lie
+    blockedAllMarked: blocked.every((d) => d.hasAttribute('data-day')),
+    // and every day carries a real ISO value, not an index
+    allIso: days.every((d) => /^\d{4}-\d{2}-\d{2}$/.test(d.value) && d.name === 'date'),
+  };
+});
+/* Guarded: if the days stop being buttons this must report a FAILED CLAIM, not
+   crash the whole gate on a null. The first version threw here when the days
+   were replaced with spans — a red result either way, but one that names the
+   claim and one that just dies. */
+const target = await page.$('form.bo-calendar button.bo-calendar__day:not([disabled])');
+let wanted = null;
+let submitted = null;
+if (target) {
+  wanted = await target.evaluate((el) => el.value);
+  await target.click();
+  await new Promise((r) => setTimeout(r, 400));
+  submitted = new URL(page.url()).searchParams.get('date');
+}
+check(
+  'calendar: a day is a real submit button that puts its ISO date in the URL, with blocked days disabled',
+  pickable.isForm && pickable.allIso && pickable.dayCount > 27 &&
+    pickable.blockedCount > 0 && pickable.blockedAllMarked &&
+    submitted !== null && submitted === wanted,
+  JSON.stringify({ ...pickable, wanted, submitted }),
+);
+
 await browser.close();
 server.close();
 

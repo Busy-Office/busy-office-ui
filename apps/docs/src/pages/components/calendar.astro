@@ -19,6 +19,20 @@ const single = `<div class="bo-calendar">
     </tbody>
   </table>
 </div>`;
+const picker = `<form method="get" class="bo-calendar">
+  <table class="bo-calendar__month">
+    <caption>Delivery date — August 2026</caption>
+    <thead><tr><th scope="col"><abbr title="Monday">Mo</abbr></th><th scope="col"><abbr title="Tuesday">Tu</abbr></th><th scope="col"><abbr title="Wednesday">We</abbr></th><th scope="col"><abbr title="Thursday">Th</abbr></th><th scope="col"><abbr title="Friday">Fr</abbr></th><th scope="col"><abbr title="Saturday">Sa</abbr></th><th scope="col"><abbr title="Sunday">Su</abbr></th></tr></thead>
+    <tbody>
+      <tr><td><span class="bo-calendar__day bo-calendar__day--outside">27</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">28</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">29</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">30</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">31</span></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-01" data-day="closed" disabled>1<span class="bo-visually-hidden"> — non-working day</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-02" data-day="closed" disabled>2<span class="bo-visually-hidden"> — non-working day</span></button></td></tr>
+      <tr><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-03" data-day="holiday" disabled>3<span class="bo-visually-hidden"> — public holiday, no delivery</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-04">4</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-05">5</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-06">6</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-07">7</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-08" data-day="closed" disabled>8<span class="bo-visually-hidden"> — non-working day</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-09" data-day="closed" disabled>9<span class="bo-visually-hidden"> — non-working day</span></button></td></tr>
+      <tr><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-10">10</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-11">11</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-12">12</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-13">13</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-14">14</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-15" data-day="closed" disabled>15<span class="bo-visually-hidden"> — non-working day</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-16" data-day="closed" disabled>16<span class="bo-visually-hidden"> — non-working day</span></button></td></tr>
+      <tr><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-17">17</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-18">18</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-19">19</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-20">20</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-21">21</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-22" data-day="closed" disabled>22<span class="bo-visually-hidden"> — non-working day</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-23" data-day="closed" disabled>23<span class="bo-visually-hidden"> — non-working day</span></button></td></tr>
+      <tr><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-24" data-day="selected">24<span class="bo-visually-hidden"> — currently chosen</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-25">25</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-26">26</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-27">27</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-28">28</button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-29" data-day="closed" disabled>29<span class="bo-visually-hidden"> — non-working day</span></button></td><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-30" data-day="closed" disabled>30<span class="bo-visually-hidden"> — non-working day</span></button></td></tr>
+      <tr><td><button class="bo-calendar__day" type="submit" name="date" value="2026-08-31">31</button></td><td><span class="bo-calendar__day bo-calendar__day--outside">1</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">2</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">3</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">4</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">5</span></td><td><span class="bo-calendar__day bo-calendar__day--outside">6</span></td></tr>
+    </tbody>
+  </table>
+</form>`;
 const three = `<div class="bo-calendar">
   <table class="bo-calendar__month">
     <caption>August 2026</caption>
@@ -59,10 +73,12 @@ const three = `<div class="bo-calendar">
 <Gallery title="Calendar">
   <p class="demo-note">
     A month grid that says <strong>which days are special</strong> — public holidays, a
-    plant shutdown, period-end, the dates a shipment cannot land on. It is
-    <strong>not a date picker</strong>: entry stays on the native
-    <code>&lt;input type="date"&gt;</code>, which is already localized, keyboard-accessible
-    and native on a phone. Use this where the user needs to <em>see</em> the calendar.
+    plant shutdown, period-end, the dates a shipment cannot land on. Use it to
+    <em>show</em> a calendar, and — with each day as a real submit button — to
+    <strong>pick from one</strong> when which days are special is part of the choice.
+    For a plain date with no such context, use the native
+    <code>&lt;input type="date"&gt;</code>: it is localized, one tab stop, and native on
+    a phone.
   </p>
 
   <section class="demo">
@@ -84,17 +100,44 @@ const three = `<div class="bo-calendar">
   </section>
 
   <section class="demo">
-    <h2>Why this exists, and why it is not a picker</h2>
+    <h2>Picking a date from it — no JavaScript</h2>
+    <Demo code={picker} />
+    <p class="bo-u-text-muted">Each day is a real <code>&lt;button type="submit"&gt;</code>
+    carrying its own ISO date, inside a plain <code>&lt;form method="get"&gt;</code>. Click
+    one and the date is in the URL. <strong>The server decides what is selectable</strong>
+    — weekends and the public holiday are rendered <code>disabled</code>, so the rule that
+    blocks them lives where the works calendar already lives, not in a client-side config
+    you have to keep in sync.</p>
+    <p class="bo-u-text-muted">No roving <code>tabindex</code>, no <code>aria-*</code> from
+    us, no widget: real buttons in a real table already give keyboard operation, disabled
+    semantics and a screen-reader announcement of the column and row. This works with
+    scripting switched off.</p>
+    <p class="bo-u-text-muted">
+      <strong>The honest cost: it is a tab stop per selectable day</strong> — twenty in
+      the month above, once the weekends and the holiday are out. A native
+      <code>&lt;input type="date"&gt;</code> is one. So use the native input for a plain
+      date, and reach for this only when <em>seeing which days are special</em> is part of
+      the decision — a delivery date around a plant shutdown, a period-end close. That is
+      a narrow case, and it is the whole case.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Why the framework does not ship a date-picker widget</h2>
     <p>The native date input is good and this framework keeps recommending it. What it
     cannot do is the whole reason for this component: <strong>its only constraints are
     <code>min</code>, <code>max</code> and <code>step</code></strong> — which describe a
     <em>range</em>. A works calendar is a <em>set</em>: eight public holidays, a two-week
     shutdown, the last working day of each period. There is no attribute for that, and no
     API to mark a day.</p>
-    <p>So the split is deliberate: <strong>the browser owns picking a date, this owns
-    showing which dates matter.</strong> Pair them — the native input for entry, this grid
-    beside or below it for context — and you keep a control that is localized, works on a
-    phone and needs no JavaScript from us.</p>
+    <p>So the division of labour is: <strong>the browser owns the ordinary case, this owns
+    the case where the marks matter.</strong> Most date entry is ordinary — use the native
+    input. When the marks are part of the decision, the section above picks from this grid
+    with real submit buttons and no JavaScript.</p>
+    <p class="bo-u-text-muted">What is still refused is the <em>widget</em>: a scripted
+    popup with roving <code>tabindex</code>, its own ARIA and a month-navigation model to
+    re-implement. That is a large surface to own badly, and nothing above needs it —
+    which is the test for whether refusing was right.</p>
     <p class="bo-u-text-muted">It is a real <code>&lt;table&gt;</code> because a month is
     tabular data. That buys row and column semantics, <code>scope</code> headers and a
     caption for free: a screen reader announces "Tuesday, 12" without a line of ARIA.
