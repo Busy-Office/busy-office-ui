@@ -558,22 +558,21 @@ promised was never written.
        are byte-identical to HEAD (75/53/54...), so the conversion is
        layout-neutral.
 
-2c. [ ] **30.5 — Drop `Getting started > Overview` from the sidebar (owner
-       feedback, 2026-08-18).** Asked: "do we still need Getting start >
-       Overview?" Checked rather than opined — **no**, and it is worse than
-       redundant:
-       - `/` does not use the `Gallery` layout, so the landing page ships
-         **zero sidebar markup** (a docs page has 3 occurrences). Clicking that
-         entry ejects the reader out of the docs shell and they must navigate
-         back in.
-       - The destination is a marketing hero (`<h1>CSS for screens`), not an
-         overview of the docs — so the label promises something it does not
-         deliver.
-       - The landing page is already reachable from every docs page via the
-         navbar brand link, which is always present.
-       Accept: the entry is gone; "Getting started" now opens on Installation,
-       which is the actual first step; the landing page stays reachable via the
-       brand; link check and the sidebar's own count stay correct.
+2c. [x] **30.5 — `Getting started > Overview` removed** (2026-08-18, owner
+       feedback) — the answer to "do we still need it?" was no, for a stronger
+       reason than redundancy: `/` does not use the `Gallery` layout, so the
+       landing page ships **zero sidebar markup** where a docs page has 3.
+       That entry ejected the reader out of the docs shell, and the label
+       promised a docs overview while delivering a marketing hero
+       (`<h1>CSS for screens`). The page was already reachable from every docs
+       page via the always-present navbar brand.
+
+       Verified after: 0 Overview links in the sidebar, brand link still
+       present, the group's count badge recomputed 7 -> 6 on its own, "Getting
+       started" now opens on **Installation** — the actual first step — at 1440
+       and 390 in both themes, and 7194 links still resolve. Visual suite passed
+       without a rebaseline, since only the count digit changed.
+       **Cost line: -1 nav entry, 0 selectors, 0 CSS, 0 behaviors.**
 
 3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
        already ships h-scroll + sticky header + sticky first column, so this
