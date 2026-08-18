@@ -6,6 +6,12 @@ WORKDIR /repo
 COPY package.json package-lock.json tsconfig.base.json ./
 COPY packages ./packages
 COPY apps/docs ./apps/docs
+# DESIGN.md is a BUILD INPUT, not just documentation: /getting-started/ai-assistants
+# generates its paste-in instruction block from the two tables in it, and throws
+# rather than shipping an incomplete one. Leaving it out of the context broke this
+# image from 33.1 until 2026-08-18 — the second time a docs-build dependency rotted
+# here unnoticed, which is why CI now builds this file.
+COPY DESIGN.md ./
 RUN npm ci --ignore-scripts
 # The docs build ends in check-boost, which drives a real browser. Without
 # Chrome the image build fails — which it silently did from the moment that

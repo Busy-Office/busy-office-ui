@@ -1,7 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
-import RowEditActions from '../../components/RowEditActions.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 ---
@@ -9,14 +8,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <p class="demo-note">
     <strong>Master-data maintenance — the SM30 case.</strong> A back-office user opens one
     record and corrects a handful of fields: a name typo, a credit limit, a date. They do it
-    a few times a week, not all day, and "done" means each field saved independently with the
-    input its type deserves — a date picker for a date, a currency field for money, a
-    stepper for a count. One row per <em>field</em>, not one row per record, which is what
+    a few times a week, not all day, and "done" means the whole record committed once, with
+    each field given the input its type deserves — a date picker for a date, a currency field
+    for money, a stepper for a count. One row per <em>field</em>, not one row per record, which is what
     makes this different from <a href={base + '/patterns/editable-grid'}>the editable grid</a>.
   </p>
 
   <section class="demo">
     <h2>The screen</h2>
+    <form method="post" action="/vendors/V-1001">
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-row-edit data-density="compact">
         <caption class="bo-visually-hidden">Vendor master data, one row per field</caption>
@@ -24,30 +24,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr>
             <th scope="col" style="inline-size: 14rem">Field</th>
             <th scope="col">Value</th>
-            <th scope="col"><span class="bo-visually-hidden">Row actions</span></th>
           </tr>
         </thead>
         <tbody>
-          <tr data-row-id="name">name
+          <tr data-row-id="name">
             <th scope="row">Vendor name<br /><span class="bo-u-text-muted" style="font-weight: 400">Legal entity as registered</span></th>
             <td><input class="bo-input bo-input--seamless" id="fe-name" aria-label="Vendor name" value="Umbrella Logistics GmbH" /></td>
-            <RowEditActions row="Vendor name" />
           </tr>
-          <tr data-row-id="incorporated">incorporated
+          <tr data-row-id="incorporated">
             <th scope="row">Incorporated<br /><span class="bo-u-text-muted" style="font-weight: 400">Date of incorporation</span></th>
             <td><input class="bo-input bo-input--seamless" type="date" id="fe-date" aria-label="Incorporated" value="2011-04-18" /></td>
-            <RowEditActions row="Incorporated" />
           </tr>
-          <tr data-row-id="terms">terms
+          <tr data-row-id="terms">
             <th scope="row">Payment terms<br /><span class="bo-u-text-muted" style="font-weight: 400">Net days</span></th>
             <td>
               <select class="bo-select bo-select--seamless" id="fe-terms" aria-label="Payment terms">
                 <option>Net 14</option><option selected>Net 30</option><option>Net 60</option>
               </select>
             </td>
-            <RowEditActions row="Payment terms" />
           </tr>
-          <tr data-row-id="credit">credit
+          <tr data-row-id="credit">
             <th scope="row">Credit limit<br /><span class="bo-u-text-muted" style="font-weight: 400">Per open order</span></th>
             <td>
               <div class="bo-money">
@@ -57,9 +53,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 <input class="bo-input bo-input--numeric bo-input--seamless bo-money__amount" type="number" step="0.01" id="fe-credit" aria-label="Credit limit" value="250000.00" />
               </div>
             </td>
-            <RowEditActions row="Credit limit" />
           </tr>
-          <tr data-row-id="moq">moq
+          <tr data-row-id="moq">
             <th scope="row">Minimum order<br /><span class="bo-u-text-muted" style="font-weight: 400">Units per line</span></th>
             <td>
               <div class="bo-quantity">
@@ -69,20 +64,41 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 <span class="bo-quantity__unit">pcs</span>
               </div>
             </td>
-            <RowEditActions row="Minimum order" />
           </tr>
-          <tr data-row-id="active">active
+          <tr data-row-id="active">
             <th scope="row">Active<br /><span class="bo-u-text-muted" style="font-weight: 400">Blocks new orders when off</span></th>
             <td><input class="bo-checkbox" type="checkbox" id="fe-active" aria-label="Active" checked /></td>
-            <RowEditActions row="Active" />
           </tr>
         </tbody>
       </table>
     </div>
+    <div class="bo-data-table__footer">
+      <span class="bo-badge bo-badge--warning" data-any-dirty hidden>Unsaved changes</span>
+      <button class="bo-btn bo-btn--secondary" type="reset">Cancel</button>
+      <button class="bo-btn" type="submit">Save vendor</button>
+    </div>
+    </form>
     <p class="bo-u-text-muted">
-      Edit any value: the row marks itself unsaved and offers Save/Cancel. Cancel restores the
-      original value — including re-deriving the money field's precision — because
-      <code>initRowEdit()</code> resets to each control's default, not to a snapshot it took.
+      Edit any value: that row marks itself unsaved, and <strong>one Save at the bottom
+      commits the record</strong>. Cancel is a native <code>type="reset"</code>, which
+      restores every control to its default — including re-deriving the money field's
+      precision — and <code>initRowEdit()</code> clears the unsaved marks with it.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Why one Save and not one per row.</strong> These rows are the FIELDS OF ONE
+      RECORD, not a list of records. A Save per field means six requests for one logical
+      edit, a Cancel that undoes a third of what the user changed, and — measured on the
+      first version of this page — a button sitting <strong>228px from the field it saves</strong>
+      in an actions column taking 37% of the table. Per-row Save belongs to
+      <a href={base + '/patterns/editable-grid'}>the editable grid</a>, where each row really
+      is a record.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Prefer saving on change?</strong> Use <code>data-row-edit="live"</code>: every
+      committed change saves immediately and no buttons are needed. It suits settings-style
+      screens where fields are independent and there is nothing to cancel as a set — but you
+      owe the user per-field success and failure feedback, which the batch form gets for free
+      from one response.
     </p>
     <p class="bo-u-text-muted">
       <strong>Zero new CSS.</strong> This screen is
@@ -188,6 +204,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     initRowEdit();
     initMoneyField();
     initQuantity();
+
+    /* The framework marks each ROW dirty; aggregating that into one
+       "unsaved changes" badge is application state, so it lives here rather
+       than in the framework. Three lines, and it is the honest split. */
+    const table = document.querySelector('table[data-row-edit]');
+    const badge = document.querySelector('[data-any-dirty]');
+    const sync = () => { badge.hidden = !table.querySelector('tr[data-row-state="dirty"]'); };
+    document.addEventListener('input', sync);
+    document.addEventListener('change', sync);
+    document.addEventListener('reset', () => setTimeout(sync, 0));
   </script>
 
   <Related links={[

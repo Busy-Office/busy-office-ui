@@ -123,6 +123,31 @@ for (const root of roots) {
       }
     }
 
+    /* 4. Text sitting directly inside table structure. `<tr>foo<th>…` is invalid
+       in a way the HTML parser silently repairs: it HOISTS the text out of the
+       table and renders it above, so the defect appears somewhere the markup
+       never mentioned. Nothing else catches it — the classes are real, the
+       attributes are legal, and axe sees a table that parsed fine.
+
+       Found by looking at a rendered screenshot after an edit that removed a
+       column left each row id duplicated as a bare text node (2026-08-18):
+       six field keys printed above the header. That is the exact failure the
+       Slice 29-30 grill named — a bulk edit verified against the source diff
+       rather than the rendered artefact — so it gets a check rather than a
+       promise to be more careful. */
+    /* Lookahead rather than consuming the `<`: consuming it makes the next match
+       start after that bracket, so two offending tags in a row report as one.
+       Caught by counting — six injected rows reported five. */
+    for (const m of html.matchAll(/<(tr|tbody|thead|tfoot|table)\b[^>]*>([^<]+)(?=<)/g)) {
+      const text = m[2].trim();
+      if (!text) continue;
+      findings.push({
+        where,
+        what: `bare text "${text.slice(0, 40)}" directly inside <${m[1]}>`,
+        hint: 'the parser hoists this out of the table and renders it above — wrap it in a cell or delete it',
+      });
+    }
+
     // 2. framework data-* attributes carrying a value the CSS never switches on
     for (const m of html.matchAll(/\s(data-[a-z-]+)="([^"]*)"/g)) {
       const legal = values[m[1]];

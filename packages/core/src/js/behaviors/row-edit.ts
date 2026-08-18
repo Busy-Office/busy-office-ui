@@ -227,6 +227,22 @@ export function initRowEdit(): void {
   // Committed edits: selects/checkboxes commit immediately, text on blur.
   // Live mode saves here; batch mode only needs the select dirty-marking
   // (inputs were already marked on input).
+  /* A native form reset IS a cancel — it restores every control to its
+     defaultValue, which is exactly what the per-row Cancel does one row at a
+     time. Without this the values revert and the rows stay marked dirty, so the
+     behavior contradicts itself and the screen lies about unsaved work.
+     Needed by form-level save, where there is no per-row Cancel to press
+     (roadmap 34.1). Deferred a tick because `reset` fires BEFORE the controls
+     are restored. */
+  document.addEventListener('reset', (e) => {
+    const form = e.target as HTMLElement;
+    if (!(form instanceof HTMLFormElement)) return;
+    setTimeout(() => {
+      form.querySelectorAll<HTMLElement>('table[data-row-edit] tbody tr[data-row-state="dirty"]')
+        .forEach((row) => setDirty(row, false));
+    }, 0);
+  });
+
   document.addEventListener('change', (e) => {
     const target = e.target as HTMLElement;
     const row = target.closest<HTMLElement>('table[data-row-edit] tbody tr');

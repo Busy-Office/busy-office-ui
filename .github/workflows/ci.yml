@@ -74,3 +74,13 @@ jobs:
       # rendered third-party UI, which is the only way to see it.
       - name: Search — rendered contrast + index scope
         run: npm run check:search -w docs
+      # The container is the tool every change is VERIFIED in — the quality bar
+      # says screenshot it at two widths in both themes before committing — and
+      # nothing verified the container itself. It rotted twice: chromium missing
+      # for check-boost (fixed 2026-08-17), then DESIGN.md missing from the build
+      # context after 33.1 made it a build input. Both were invisible locally,
+      # because a failed `podman build` leaves the PREVIOUS image in place and
+      # `podman run` cheerfully serves it — a stale screenshot that looks green.
+      # Builds the image only; publishing it is a separate question.
+      - name: Docs container builds
+        run: docker build -f apps/docs/Containerfile -t bo-docs .

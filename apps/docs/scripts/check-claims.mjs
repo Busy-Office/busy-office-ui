@@ -459,31 +459,35 @@ check(
   JSON.stringify(reached),
 );
 
-/* /patterns/field-editor claims "the row marks itself unsaved and offers
-   Save/Cancel. Cancel restores the original value". Runtime behaviour, so it is
-   executed rather than trusted (roadmap 30.2). Uses a REAL change event: the
-   dirty state is committed on change, not on keystroke. */
+/* /patterns/field-editor: one Save for the record, and Cancel is a native form
+   reset that must clear the unsaved marks as well as the values (roadmap 34.1).
+   The reset half is the part that would rot silently — the values revert
+   visibly, but a stale "dirty" band lies about unsaved work and nobody would
+   notice from a screenshot. Uses a REAL input event: initRowEdit marks text
+   dirty on input, not on change. */
 await visit('/patterns/field-editor/', { width: 1440 });
 const fe = await page.evaluate(async () => {
-  const tr = document.querySelector('tr[data-row-id="name"]');
-  const input = tr.querySelector('input');
-  const read = () => ({ state: tr.dataset.rowState ?? null, save: !tr.querySelector('[data-row-edit-save]').hidden });
-  const before = { ...read(), value: input.value };
+  const row = document.querySelector('tr[data-row-id="name"]');
+  const input = row.querySelector('input');
+  const read = () => ({
+    dirty: row.getAttribute('data-row-state'),
+    value: input.value,
+    perRowSaveButtons: document.querySelectorAll('[data-row-edit-save]').length,
+  });
+  const before = read();
   input.value = 'Changed Ltd';
-  /* `input`, not `change`: initRowEdit marks a TEXT field dirty on input and
-     only marks SELECTS on change. Dispatching change alone left the row clean
-     and read as a failure of the page rather than of the probe. */
   input.dispatchEvent(new Event('input', { bubbles: true }));
   await new Promise((r) => setTimeout(r, 150));
   const dirty = read();
-  tr.querySelector('[data-row-edit-cancel]').click();
-  await new Promise((r) => setTimeout(r, 200));
-  return { before, dirty, after: { ...read(), value: input.value } };
+  document.querySelector('button[type="reset"]').click();
+  await new Promise((r) => setTimeout(r, 250));
+  return { before, dirty, after: read() };
 });
 check(
-  'field editor: a changed row goes dirty with Save/Cancel, and Cancel restores the value',
-  fe.before.state === null && fe.dirty.state === 'dirty' && fe.dirty.save === true &&
-    fe.after.state === null && fe.after.value === fe.before.value,
+  'field editor: one Save for the record, and Cancel restores values AND clears the unsaved marks',
+  fe.before.dirty === null && fe.before.perRowSaveButtons === 0 &&
+    fe.dirty.dirty === 'dirty' &&
+    fe.after.dirty === null && fe.after.value === fe.before.value,
   JSON.stringify(fe),
 );
 

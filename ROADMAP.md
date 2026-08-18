@@ -557,6 +557,34 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 36 — vertical tabs (owner wishlist, 2026-08-18)
+
+Resolves the "horizontal tabs" note from 30.0: the ask is a **vertical** tab
+list — the left-rail shape ERP settings screens use.
+
+1. [ ] **36.1 — `.bo-tabs--vertical`, one setting rather than a component.**
+       The list is `display: flex`, so vertical is a direction change plus the
+       panel sitting beside it. A modifier, not a second component.
+
+       **Three costs, checked before queueing rather than during:**
+       - **Keyboard.** `initTabs()` handles ArrowLeft/ArrowRight only
+         (`tabs.ts:105`). The APG drives a vertical tablist with
+         **ArrowUp/ArrowDown** and requires `aria-orientation="vertical"`.
+         Shipping the CSS alone gives a rail a keyboard user cannot drive in
+         the direction it points.
+       - **The overflow fade.** 30.1b's mask fades the INLINE edges. A vertical
+         rail overflows on the BLOCK axis, so the fade must follow the
+         orientation or it dims the wrong edges.
+       - **Narrow screens.** A left rail has nowhere to sit below the shell
+         breakpoint; it becomes the horizontal strip — the container-query
+         question `.bo-sidebar-nav` already answers.
+
+       Accept: `aria-orientation` set by the behavior, not asked of the
+       consumer; Up/Down drive vertical, Left/Right still drive horizontal; the
+       fade follows the axis; collapses to horizontal when narrow; **an
+       executable claim per direction**, because 35.1 just proved a tab demo can
+       look right and work exactly once. Cost line stated on landing.
+
 ## Slice 35 — P0: tabs worked exactly once (owner report, 2026-08-18)
 
 1. [x] **35.1 — Every tab owns its panel; two mechanisms added** (2026-08-18).
@@ -620,13 +648,13 @@ misapplies it, so the group is one page, not a cluster.
   control next to the field and keeps the model that caused the problem: six
   round-trips, and a per-field Cancel.
 
-1. [ ] **34.1 — Rebuild `/patterns/field-editor` around form-level save.**
+1. [x] **34.1 — Rebuild `/patterns/field-editor` around form-level save.**
        Accept: no per-row action column; one Save/Cancel for the record; dirty
        fields still marked individually; **0 new selectors** as before; the page
        states when to use live save instead and links the variant; the executable
        claim is updated (it currently asserts per-row Save/Cancel appear).
 
-2. [ ] **34.2 — Write the distinction into DESIGN.md's four-pattern table.**
+2. [x] **34.2 — Write the distinction into DESIGN.md's four-pattern table.**
        M1's row says "config and lookup tables, master-data upkeep — the SM30
        case", which is what let a single-record form look like M1. Accept: M1
        states it is for a table of RECORDS, and that a list of one record's
@@ -838,11 +866,8 @@ promised was never written.
          OWN landing page and nav, or (b) a new ERP pattern page: an
          overview/dashboard screen with a module sidebar. (b) is a slice of
          work; (a) is a review.
-       - *"horizontal tabs"* — `.bo-tabs` is already horizontal, so this most
-         likely means either (a) **vertical** tabs (a left-rail tab list, the
-         common ERP settings-screen shape) or (b) tabs as the top-level page
-         navigation instead of the sidebar. (a) is a component setting; (b) is
-         an IA change to the docs shell.
+       - *"horizontal tabs"* — **ANSWERED 2026-08-18: vertical tabs** (reading
+         (a)). Queued as 36.1; this half of 30.0 is closed.
 
 2. [x] **30.2 — Field editor pattern** (2026-08-18) —
        `/patterns/field-editor`, one row per FIELD with the input each type

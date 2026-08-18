@@ -33,6 +33,17 @@ Two steps, in order. **Both run every wake** — this replaces the old model of 
 separate "host" consulting a static router table; the Roadmap loop *is* the
 router now, and it acts on what it finds instead of just reading it.
 
+### Step 0 — Read the handover
+
+`.roundtable/RESUME.md`, then `git status`. The wake prompt says *don't assume
+prior-turn state*, which only works if state a wake needs is written down rather
+than remembered. `RESUME.md` carries the two things `ROADMAP.md` and the loop log
+cannot: **work left uncommitted**, and decisions taken but not yet recorded.
+
+A dirty tree is a finding, not a starting point — the previous wake was
+interrupted. Finish and land that slice before dispatching anything new, and
+empty `RESUME.md` when it lands.
+
 ### Step 1 — Triage new input
 
 New input = a user-reported issue, a new requirement, direction, or constraint
