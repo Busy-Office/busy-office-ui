@@ -454,6 +454,34 @@ queued, and F4 was fixed in the same wake it was found.
        transient network error. Red-proof by pointing it at the known-stale
        deploy.
 
+## Slice 31 — DESIGN.md's own four-pattern table is wrong (2026-08-18)
+
+Found by checking the docs for **promises never fulfilled** — the method that
+turned up the missing AG Grid recipe. DESIGN.md's "Data maintenance: four
+patterns, no grid" table is the project's answer to "how do I let users maintain
+this data", and two of its four rows are wrong.
+
+1. [ ] **31.1 — M3's status line is stale.** DESIGN.md says mass change is
+       "**Absent.** Queued as roadmap 25.2". It **shipped 2026-08-17**:
+       ROADMAP 25.2 is ticked, it is documented on `/patterns/bulk-actions`,
+       and `check:po-app` asserts it twice (an invalid target returns 422 and
+       changes nothing). A reader deciding how to maintain data is being told
+       the honest answer to the grid request does not exist yet.
+       Accept: the row states what ships and links to it.
+
+2. [ ] **31.2 — M2 master-detail has no page.** Its own row admits it:
+       "composable today, **not yet documented as one named pattern**" — and
+       DESIGN.md calls M2 "**most master-data maintenance in practice**", so the
+       most common case is the only one without a page. Verified the gap rather
+       than trusting the note: `/patterns/record-detail` mentions dialog, side
+       panel, offcanvas and drawer **zero times** — it documents the record
+       FRAME, not the row-opens-a-record interaction.
+       Accept: a pattern page carrying the six gated sections, composing
+       `.bo-dialog`/offcanvas + the record frame + row-edit with **0 new
+       selectors** as the pass condition; it must say when to use a dialog
+       versus a side panel versus a full page, since choosing wrong is the
+       actual failure mode; and the DESIGN.md row links to it.
+
 ## Slice 30 — owner wishlist, triaged (2026-08-18)
 
 Grill: `.roundtable/grill-wishlist-2026-08-18.md`. Four requests; **two turned
