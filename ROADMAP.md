@@ -640,6 +640,20 @@ promised was never written.
        now requires the metric to breach on **two consecutive runs**, since a
        single sample cannot distinguish a trend from noise on a shared runner.
 
+6. [ ] **30.7 — Write the rendered-artefact rule into CLAUDE.md (grill H2).**
+       From `.roundtable/grill-objective-slices29-30-2026-08-18.md`: across 17
+       iterations there were **3 mechanical-rewrite failures, 3 unverified
+       injections, 2 metrics recorded from failed runs, 1 over-fitted trend and
+       1 CI break warned about in its own commit message.** All were caught,
+       none shipped, and none were design errors — they cluster in **bulk edits
+       and verification shortcuts**. The per-instance fixes are already in
+       (case-exact import check, two-consecutive-breach metric rule, "by hand"
+       on the item that needed it); the class fix is not. Accept: CLAUDE.md
+       states that a bulk or mechanical edit is verified against the **rendered
+       artefact**, not the source diff — reading the source diff missed the
+       editable-grid damage twice, and comparing rendered labels against each
+       row's real content is what caught it.
+
 5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
        **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,
        and the ask is that the server serves chunks while the client releases
