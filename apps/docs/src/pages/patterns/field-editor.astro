@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import RowEditActions from '../../components/RowEditActions.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 ---
@@ -27,38 +28,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </tr>
         </thead>
         <tbody>
-          <tr data-row-id="name">
+          <tr data-row-id="name">name
             <th scope="row">Vendor name<br /><span class="bo-u-text-muted" style="font-weight: 400">Legal entity as registered</span></th>
             <td><input class="bo-input bo-input--seamless" id="fe-name" aria-label="Vendor name" value="Umbrella Logistics GmbH" /></td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Vendor name" />
           </tr>
-          <tr data-row-id="incorporated">
+          <tr data-row-id="incorporated">incorporated
             <th scope="row">Incorporated<br /><span class="bo-u-text-muted" style="font-weight: 400">Date of incorporation</span></th>
             <td><input class="bo-input bo-input--seamless" type="date" id="fe-date" aria-label="Incorporated" value="2011-04-18" /></td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Incorporated" />
           </tr>
-          <tr data-row-id="terms">
+          <tr data-row-id="terms">terms
             <th scope="row">Payment terms<br /><span class="bo-u-text-muted" style="font-weight: 400">Net days</span></th>
             <td>
               <select class="bo-select bo-select--seamless" id="fe-terms" aria-label="Payment terms">
                 <option>Net 14</option><option selected>Net 30</option><option>Net 60</option>
               </select>
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Payment terms" />
           </tr>
-          <tr data-row-id="credit">
+          <tr data-row-id="credit">credit
             <th scope="row">Credit limit<br /><span class="bo-u-text-muted" style="font-weight: 400">Per open order</span></th>
             <td>
               <div class="bo-money">
@@ -68,13 +57,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 <input class="bo-input bo-input--numeric bo-input--seamless bo-money__amount" type="number" step="0.01" id="fe-credit" aria-label="Credit limit" value="250000.00" />
               </div>
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Credit limit" />
           </tr>
-          <tr data-row-id="moq">
+          <tr data-row-id="moq">moq
             <th scope="row">Minimum order<br /><span class="bo-u-text-muted" style="font-weight: 400">Units per line</span></th>
             <td>
               <div class="bo-quantity">
@@ -84,20 +69,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 <span class="bo-quantity__unit">pcs</span>
               </div>
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Minimum order" />
           </tr>
-          <tr data-row-id="active">
+          <tr data-row-id="active">active
             <th scope="row">Active<br /><span class="bo-u-text-muted" style="font-weight: 400">Blocks new orders when off</span></th>
             <td><input class="bo-checkbox" type="checkbox" id="fe-active" aria-label="Active" checked /></td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Active" />
           </tr>
         </tbody>
       </table>

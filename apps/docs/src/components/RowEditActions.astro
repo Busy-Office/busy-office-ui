@@ -1,0 +1,39 @@
+---
+/**
+ * The per-row Save / Cancel / dirty-badge cell that `initRowEdit()` drives.
+ *
+ * Extracted because it appeared **19 times across 3 pages** — and the copies had
+ * drifted on the thing that matters most (Standardize sweep, 2026-08-18):
+ *
+ *   editable-grid    6 labelled, 4 unlabelled, 5 with a remove button
+ *   field-editor     6 unlabelled
+ *   inline-editing   3 unlabelled
+ *
+ * So 13 of 19 rows shipped a Save button whose accessible name was just
+ * "Save" — and a table of them gives a screen-reader user six identical
+ * buttons with nothing to tell them apart. axe cannot catch it, because the
+ * buttons ARE named; they are just ambiguous, the same shape as the
+ * placeholder-only-name finding in 27.5.
+ *
+ * `row` is therefore REQUIRED, not optional. The point of this component is
+ * that the next page cannot forget the label, which is exactly what three
+ * pages did when the markup was copy-pasted.
+ *
+ * The slot takes any extra row action (the editable grid's "Remove line"),
+ * so the variants collapse into one definition without losing either.
+ */
+interface Props {
+  /** The row's human name — "Bearing kit", "Credit limit". Used for the
+      per-row accessible names, never displayed. */
+  row: string;
+}
+const { row } = Astro.props;
+---
+<td class="bo-data-table__row-edit-actions">
+  <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
+  <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save
+          aria-label={`Save — ${row}`} hidden>Save</button>
+  <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel
+          aria-label={`Cancel — ${row}`} hidden>Cancel</button>
+  <slot />
+</td>

@@ -536,6 +536,20 @@ promised was never written.
        a text input: `initRowEdit` marks text dirty on **input** and only marks
        selects on change, so the probe was wrong rather than the page.
 
+2b. [ ] **30.2b — Finish the row-action labels on `/patterns/editable-grid`.**
+       Left over from the Standardize sweep that shipped `RowEditActions`.
+       That page still has **10 Save buttons of which 6 carry a per-row
+       `aria-label`**, so 4 rows give a screen-reader user an identical "Save"
+       with nothing to tell them apart — the same ambiguity `RowEditActions`
+       was built to make impossible. It was NOT converted, deliberately: three
+       successive regex edits on a 700-line file with mixed template-literal
+       and live markup produced a component call inside a code sample and rows
+       labelled with another row's name, so the file was reverted rather than
+       shipped mislabelled. Accept: convert by hand, one block at a time, with
+       the rendered HTML diffed per block; the code sample at the top stays
+       literal HTML (a component call there would be uncopyable) and gains the
+       labels too.
+
 3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
        already ships h-scroll + sticky header + sticky first column, so this
        **tests claims already made**. Accept: a 10x50 demo; the sticky-column

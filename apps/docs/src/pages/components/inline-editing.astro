@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import RowEditActions from '../../components/RowEditActions.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
   <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col"><span class="bo-visually-hidden">Actions</span></th></tr></thead>
@@ -12,8 +13,10 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
       </td>
       <td class="bo-data-table__row-edit-actions">
         <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save
+                aria-label="Save — Widget A" hidden>Save</button>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel
+                aria-label="Cancel — Widget A" hidden>Cancel</button>
       </td>
     </tr>
   </tbody>
@@ -80,22 +83,14 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
             <td class="bo-data-table__col--numeric">
               <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A (editable row)" />
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Widget A" />
           </tr>
           <tr data-row-id="WIDGET-B">
             <td>Widget B</td>
             <td class="bo-data-table__col--numeric">
               <input class="bo-input bo-input--seamless bo-input--numeric" value="4" aria-label="Quantity for Widget B (editable row)" />
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Widget B" />
           </tr>
         </tbody>
       </table>
