@@ -557,6 +557,68 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 37 — score the surface for real ERP fit (owner wishlist, 2026-08-18)
+
+Owner: *"review and give the score for the existing components/patterns which is
+best fit for ERP for real use case. If score is low, grill — can it be better?
+should we remove it or need replacement? Run through each."*
+
+39 component pages, 16 pattern pages, 38 CSS components. This is the Objective
+charter applied systematically to what already shipped, instead of only to each
+new proposal — the charter has always been able to refuse an addition, and has
+never once been pointed at the existing surface.
+
+**The failure mode to design against is a scored list that is really just
+opinion.** This repo has spent five slices on exactly that class of defect, so
+every score must cite something checkable or it does not count.
+
+1. [ ] **37.1 — Agree the rubric and publish the measured baseline.**
+       Four dimensions, 0-3 each, each requiring a citation:
+
+       - **Demand** — which of the 17 shipped screens (16 pattern pages + the
+         `examples/po-app` reference) actually use it. Counted, not judged.
+       - **Composition** — could it be built from primitives already shipped?
+         (less-for-more: a component that is three existing parts in a trench
+         coat scores low however nice it looks.)
+       - **Contracts** — does it honour density, two-channel state, RTL, print,
+         forced-colors, and target size? Each is already gate-measurable.
+       - **Evidence** — is its documented behaviour covered by an executable
+         claim or a gate, or is it only asserted in prose?
+
+       **Baseline already measured (2026-08-18), and it is the reason this is
+       worth doing:** six components are used by **zero** of the 17 screens —
+       `date`, `offcanvas`, `pagination`, `skeleton`, `tree`, `tree-table`.
+
+       That count is a *lead, not a verdict*, and the leads point both ways:
+       `offcanvas` is LINKED from master-detail as the answer for narrow
+       screens but never actually used in one, and a `pagination` unused by
+       `invoice-list` says something about the invoice-list pattern rather than
+       about pagination. Stated plainly because "unused therefore delete" is the
+       exact wrong conclusion to draw mechanically.
+
+       Accept: the rubric is written down before any component is scored (so it
+       cannot be fitted to a conclusion), the usage measurement is a script in
+       `scripts/` and not a one-off shell line, and the baseline table is
+       committed.
+
+2. [ ] **37.2 — Score every component and pattern, in batches, with citations.**
+       Roughly 8-10 per round so each gets real attention. Every row carries its
+       four scores, the citation behind each, and one of four outcomes:
+       **keep** · **improve** (queue a specific item) · **merge** (into which,
+       and why that is less surface) · **deprecate**.
+
+       **Removal is a breaking change and the package is published.** 0.1.1 is
+       live and 0.2.0 is tagged, so "remove it" cannot mean deleting a class in a
+       minor. It means: a CHANGELOG Deprecated entry, the docs page saying what
+       to use instead, and the class removed at the next major. Anything else
+       breaks a consumer silently, which is the thing this framework claims not
+       to do.
+
+3. [ ] **37.3 — Feed the results back.** Every "improve" becomes a queued item
+       with its own Accept criteria; every "deprecate" gets its migration note;
+       every "keep" is recorded so the next sweep doesn't re-litigate it. The
+       report lands in `.roundtable/` like the other grills.
+
 ## Slice 36 — vertical tabs (owner wishlist, 2026-08-18)
 
 Resolves the "horizontal tabs" note from 30.0: the ask is a **vertical** tab
