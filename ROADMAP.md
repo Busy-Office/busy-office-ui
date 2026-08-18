@@ -536,19 +536,27 @@ promised was never written.
        a text input: `initRowEdit` marks text dirty on **input** and only marks
        selects on change, so the probe was wrong rather than the page.
 
-2b. [ ] **30.2b — Finish the row-action labels on `/patterns/editable-grid`.**
-       Left over from the Standardize sweep that shipped `RowEditActions`.
-       That page still has **10 Save buttons of which 6 carry a per-row
-       `aria-label`**, so 4 rows give a screen-reader user an identical "Save"
-       with nothing to tell them apart — the same ambiguity `RowEditActions`
-       was built to make impossible. It was NOT converted, deliberately: three
-       successive regex edits on a 700-line file with mixed template-literal
-       and live markup produced a component call inside a code sample and rows
-       labelled with another row's name, so the file was reverted rather than
-       shipped mislabelled. Accept: convert by hand, one block at a time, with
-       the rendered HTML diffed per block; the code sample at the top stays
-       literal HTML (a component call there would be uncopyable) and gains the
-       labels too.
+2b. [x] **30.2b — Row-action labels finished on `/patterns/editable-grid`**
+       (2026-08-18) — **10 of 10 Save buttons now carry a per-row
+       `aria-label`**, up from 6. Three live blocks converted to
+       `RowEditActions`; the code sample stayed literal HTML (a component call
+       there would be uncopyable) and gained the labels so it teaches the right
+       thing.
+
+       Done by hand as the item demanded, after last wake's regex attempt put a
+       component call inside the sample and labelled rows with other rows'
+       names. Each label was then verified against its row's actual content
+       rather than assumed: LINE-1 -> "line 1 (Steel bracket)" with value
+       "Steel bracket, 40mm", LINE-M1 -> "Hydraulic pump", and the
+       `data-row-id=""` row -> "new line", which turned out to be a `<template>`
+       cloned when adding a line — so it is correctly absent from the live DOM.
+
+       Two scares, both measured away rather than argued away: remove buttons
+       looked like 5 -> 4 (it was source-lines against dist-occurrences; source
+       is 5 both sides), and the page grew 42px — traced exactly to the `<pre>`
+       sample going 1620px -> 1662px from the two added label lines. Row heights
+       are byte-identical to HEAD (75/53/54...), so the conversion is
+       layout-neutral.
 
 3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
        already ships h-scroll + sticky header + sticky first column, so this

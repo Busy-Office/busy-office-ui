@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import RowEditActions from '../../components/RowEditActions.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -40,8 +41,10 @@ const markup = `<table class="bo-data-table" data-row-edit>
       </td>
       <td class="bo-data-table__row-edit-actions">
         <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save
+                aria-label="Save — line 1 (Steel bracket)" hidden>Save</button>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel
+                aria-label="Cancel — line 1 (Steel bracket)" hidden>Cancel</button>
         <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
       </td>
     </tr>
@@ -131,12 +134,9 @@ const markup = `<table class="bo-data-table" data-row-edit>
               <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
                   step="0.01" value="3.40" aria-label="Unit price" />
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-              <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
-            </td>
+            <RowEditActions row="line 1 (Steel bracket)">
+                <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+            </RowEditActions>
           </tr>
         </tbody>
       </table>
@@ -160,12 +160,9 @@ const markup = `<table class="bo-data-table" data-row-edit>
         <td class="bo-data-table__col--numeric">
           <input class="bo-input bo-input--seamless bo-input--numeric" type="number" step="0.01" value="0.00" aria-label="Unit price" />
         </td>
-        <td class="bo-data-table__row-edit-actions">
-          <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-          <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-          <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-          <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
-        </td>
+        <RowEditActions row="new line">
+            <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+        </RowEditActions>
       </tr>
     </template>
     <p style="margin-block-start: var(--bo-space-3)">
@@ -347,11 +344,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
                 <input class="bo-input bo-input--seamless bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Unit price" />
               </div>
             </td>
-            <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
-            </td>
+            <RowEditActions row="Hydraulic pump" />
           </tr>
         </tbody>
       </table>
