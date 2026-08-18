@@ -441,31 +441,48 @@ out to be already-built-but-unproven rather than missing**, and the fourth was
 already decided against in DESIGN.md — but the alternative that decision
 promised was never written.
 
-1. [ ] **30.1 — Prove and afford scrollable tabs (W1, rethink).**
-       `.bo-tabs__list` already sets `overflow-x: auto` and its CSS claims
-       "8-10 tabs in a narrow container scroll rather than clip" — but the docs
-       demo has **3 tabs and measures scrollWidth === clientWidth === 342 at
-       390px**, so the behaviour has never been shown or tested, and there is
-       no fade, no snap, and nothing scrolls the selected tab into view.
-       **REFUSED: a "slider tabs" component** — the scroll container is one
-       existing declaration. Accept: a demo that actually overflows; a visible
-       overflow affordance; keyboard arrow navigation cannot move focus to an
-       off-screen tab; an executable `check:claims` case, since this asserts
-       runtime behaviour. **Cost line target: 0 components, <=1 selector.**
-       **[OWNER ANSWERED -> DECIDED: no arrow buttons.]** Grilled four options.
-       Do-nothing is why the item exists. An edge fade/shadow needs a cover
-       colour, and the tab list sits on **canvas** in the docs but on
-       **surface** inside a card (measured: `#f9fafb`/`#0f1115` vs
-       `#ffffff`/`#1a1d23`) — any hardcoded default is wrong in one of the two.
-       Arrow buttons are the strongest *discoverability*, but the deciding
-       question is who is **harmed** without them: touch swipes, keyboard gets
-       arrow-key nav with native scroll-into-view, and a wheel-mouse user needs
-       a control they can operate — which a persistent, draggable scrollbar
-       already is. So arrows add discoverability, not capability, at the cost of
-       markup + JS + ARIA + the component-shaped addition this item refused.
-       Chosen: `scrollbar-color` (1 declaration, 0 selectors, no colour
-       assumption, themable), with arrows documented as a two-button recipe a
-       consumer can add.
+1. [x] **30.1 — Scrollable tabs proven; affordance PARTLY met** (2026-08-18) —
+       **3 of 4 Accept criteria met, and the 4th is not achievable in CSS.**
+       Reported as partial rather than ticked clean.
+
+       MET: a demo that genuinely overflows (9 tabs in a 34rem strip — 315px of
+       overflow at 1440, 517px at 390, strip stays one 39px line, no wrap, no
+       clip); keyboard cannot strand focus off-screen (arrowing to the 9th tab
+       scrolls it fully into view — verified at 1440 and 390 in both themes);
+       and two executable claims, both red-proved with the injection confirmed
+       in the BUILT artefact (`check:claims` 25 -> 27).
+       **Cost line: 0 components, 0 new selectors, 2 declarations — under the
+       <=1-selector budget.**
+
+       NOT MET — **a visible overflow affordance, and no CSS delivers one.**
+       Three rounds measured: `scrollbar-color` did nothing visible, the
+       `::-webkit-scrollbar` pseudo-elements did nothing either (offsetHeight -
+       clientHeight stayed 1px in every variant, and a screenshot showed a strip
+       cut mid-tab with no scrollbar at all). macOS overlay scrollbars stay
+       hidden until something moves and CSS cannot override that. The standard
+       properties are kept because they cost nothing and ARE the affordance on
+       Windows and Linux, but they are not relied on, and the docs page says so
+       instead of pretending.
+
+       **This reverses my own W1 decision, on evidence.** I ruled arrows out on
+       the grounds that they add discoverability but not capability, because a
+       persistent draggable scrollbar already gives a wheel-mouse user a
+       control. That premise was wrong: on macOS there is no visible scrollbar
+       to drag, so arrows are the only affordance that depends on no OS setting.
+       Raised as 30.1b rather than smuggled in, because arrows exceed this
+       item's budget.
+
+1b. [ ] **30.1b — Tab overflow arrows (reopened from the W1 decision).**
+       Justified by 30.1's measurements, not by preference: on macOS the strip
+       has no visible affordance at all, and arrows are the only fix that does
+       not depend on an OS scrollbar setting. Accept: two buttons, `aria-hidden`
+       so they never join the tab sequence, shown only when the strip actually
+       overflows (a `ResizeObserver`, not a media query — the strip overflows by
+       container width, not viewport width); they must not become a second way
+       to change tabs; SC 2.5.8 target size holds; and the existing keyboard
+       path is unchanged. **Cost line to state honestly: +1-2 selectors and a
+       behavior — this is the component-shaped addition 30.1 refused, accepted
+       now because the cheap alternative was measured and does not work.**
 
 2. [ ] **30.2 — Typed field editor pattern (W2).** One row per field, each a
        different type (Name/DOB/Age/Amount/Qty) — the SM30 master-data case and

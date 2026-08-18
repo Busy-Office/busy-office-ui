@@ -395,6 +395,36 @@ check(
   `gaps after each scroll: ${JSON.stringify(anchored)}`,
 );
 
+/* /components/tabs claims an over-long strip "scrolls sideways… never wraps and
+   never clips, so no tab is unreachable", and that arrow keys bring an
+   off-screen tab into view. Both are runtime behaviour (roadmap 30.1). The
+   second is the one that matters: it is what makes the missing macOS scrollbar
+   an inconvenience rather than a keyboard trap. */
+await visit('/components/tabs/', { width: 1440 });
+const strip = 'div[aria-label="Module areas"]';
+const overflows = await page.evaluate((s) => {
+  const l = document.querySelector(s);
+  return { over: l.scrollWidth - l.clientWidth, wraps: l.offsetHeight > 80 };
+}, strip);
+check(
+  'tabs: an over-long strip scrolls rather than wrapping or clipping',
+  overflows.over > 0 && !overflows.wraps,
+  JSON.stringify(overflows),
+);
+await page.click(`${strip} [role=tab]`);
+for (let i = 0; i < 8; i += 1) await page.keyboard.press('ArrowRight');
+await new Promise((r) => setTimeout(r, 250));
+const reached = await page.evaluate((s) => {
+  const l = document.querySelector(s), f = document.activeElement;
+  const lr = l.getBoundingClientRect(), fr = f.getBoundingClientRect();
+  return { focused: f.textContent.trim(), visible: fr.left >= lr.left - 1 && fr.right <= lr.right + 1 };
+}, strip);
+check(
+  'tabs: arrow keys bring an off-screen tab fully into view',
+  reached.focused === 'Settings' && reached.visible,
+  JSON.stringify(reached),
+);
+
 await browser.close();
 server.close();
 

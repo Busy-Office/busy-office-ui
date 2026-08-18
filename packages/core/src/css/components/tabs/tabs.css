@@ -7,7 +7,21 @@
     border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
     /* 8-10 tabs in a narrow container scroll rather than clip. */
     overflow-x: auto;
+    /* Ask for a thin, themed scrollbar. On Windows and Linux, where scrollbars
+       are persistent, this IS the overflow affordance. On macOS it is not:
+       overlay scrollbars stay hidden until something moves, and three rounds of
+       measurement (roadmap 30.1) found no CSS that changes that — neither
+       `scrollbar-color` nor the `::-webkit-scrollbar` pseudo-elements reserved
+       any space (offsetHeight - clientHeight stayed 1px in every variant). Kept
+       because it costs nothing and helps where it works; NOT relied on as the
+       affordance. The open question that leaves — arrow buttons, the only
+       affordance that depends on no OS setting — is roadmap 30.1b. */
     scrollbar-width: thin;
+    scrollbar-color: var(--bo-color-border-strong) transparent;
+    /* The edge-fade alternative was rejected on measurement too: this list
+       sits on the CANVAS in the docs but on a SURFACE inside a card
+       (#f9fafb/#0f1115 vs #ffffff/#1a1d23), so any hardcoded cover colour is
+       wrong in one of the two. */
   }
 
   .bo-tabs__tab {

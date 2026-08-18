@@ -68,6 +68,43 @@ const tabsMarkup = `<div class="bo-tabs">
     </div>
   </section>
   <section class="demo">
+    <h2>More tabs than fit</h2>
+    <div class="bo-tabs" style="max-inline-size: 34rem">
+      <div class="bo-tabs__list" role="tablist" aria-label="Module areas">
+        {['Overview','Lines','Schedule','Invoices','Receipts','Approvals','Attachments','Audit trail','Settings'].map((label, i) => (
+          <button class="bo-tabs__tab" role="tab" id={`ov-t-${i}`}
+                  aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? undefined : '-1'}
+                  aria-controls="ov-p">{label}</button>
+        ))}
+      </div>
+      <div class="bo-tabs__panel" role="tabpanel" id="ov-p" aria-labelledby="ov-t-0" tabindex="0">
+        <p class="bo-u-text-muted">Nine tabs in a 34rem strip. The list scrolls; it never wraps and never clips.</p>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">
+      A tab strip wider than its container <strong>scrolls sideways</strong>. It
+      never wraps and never clips, so no tab is unreachable.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>How obvious that is depends on the platform, and we will not pretend
+      otherwise.</strong> On Windows and Linux the scrollbar is always drawn, and it is
+      the affordance. On macOS, overlay scrollbars stay hidden until something moves,
+      so an overflowing strip looks like a strip with fewer tabs — and no CSS changes
+      that: <code>scrollbar-color</code> and the WebKit scrollbar pseudo-elements were
+      both measured and neither reserves space or forces a persistent bar. Keyboard
+      users are unaffected either way: arrow keys move between tabs and the browser
+      brings the focused one into view, including tabs that are off-screen.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>If your users are on macOS and the tab count is high, add arrow buttons.</strong>
+      They are two buttons and one line of script, and they are the only affordance that
+      depends on no OS setting: call
+      <code>list.scrollBy(&#123; left: 200, behavior: 'smooth' &#125;)</code> on click, and
+      mark them <code>aria-hidden="true"</code> so they never join the tab sequence.
+    </p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{tabsMarkup}</code></pre>
     <p class="bo-u-text-muted"><strong>Tabs require <code>initTabs()</code> — there is
