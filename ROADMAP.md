@@ -452,8 +452,20 @@ promised was never written.
        overflow affordance; keyboard arrow navigation cannot move focus to an
        off-screen tab; an executable `check:claims` case, since this asserts
        runtime behaviour. **Cost line target: 0 components, <=1 selector.**
-       **[OWNER] Arrow buttons too?** They genuinely help a mouse user who
-       cannot swipe, but push past 1 selector — worth saying yes deliberately.
+       **[OWNER ANSWERED -> DECIDED: no arrow buttons.]** Grilled four options.
+       Do-nothing is why the item exists. An edge fade/shadow needs a cover
+       colour, and the tab list sits on **canvas** in the docs but on
+       **surface** inside a card (measured: `#f9fafb`/`#0f1115` vs
+       `#ffffff`/`#1a1d23`) — any hardcoded default is wrong in one of the two.
+       Arrow buttons are the strongest *discoverability*, but the deciding
+       question is who is **harmed** without them: touch swipes, keyboard gets
+       arrow-key nav with native scroll-into-view, and a wheel-mouse user needs
+       a control they can operate — which a persistent, draggable scrollbar
+       already is. So arrows add discoverability, not capability, at the cost of
+       markup + JS + ARIA + the component-shaped addition this item refused.
+       Chosen: `scrollbar-color` (1 declaration, 0 selectors, no colour
+       assumption, themable), with arrows documented as a two-button recipe a
+       consumer can add.
 
 2. [ ] **30.2 — Typed field editor pattern (W2).** One row per field, each a
        different type (Name/DOB/Age/Amount/Qty) — the SM30 master-data case and
@@ -475,21 +487,49 @@ promised was never written.
        beautiful 50-column demo without saying so quietly endorses the
        anti-pattern.
 
-4. [ ] **30.4 — Large-list recipe, including the missing AG Grid page (W4).**
-       **REFUSED: a `.bo-*` virtual scroller.** DESIGN.md already decided this
-       on 2026-08-17 ("never a grid engine of our own"); client-side row
-       buffering *is* owning virtual scroll, and a hand-rolled virtualizer also
-       breaks `aria-rowcount`/`aria-rowindex` silently. **The gap the grill
-       found: the token-themed AG Grid recipe that decision promised does not
-       exist — verified, no docs page mentions AG Grid at all.** The framework
-       declined to build virtualization and never wrote down the alternative.
-       Accept: a page covering when to server-page, when to load-more (both
-       ship today), and when to reach for a real grid, plus a token-themed AG
-       Grid setup; fixed row heights are already maintained to keep rows
-       virtualization-friendly (DESIGN.md:56).
-       **[OWNER] Do users READ those 50,000 rows, or SEARCH and act on them?**
-       If the latter — almost always true in ERP — the honest fix is better
-       filtering plus server paging, and no virtualization is needed at all.
+4. [ ] **30.4a — Large-list recipe page.** The decision page DESIGN.md
+       promised and nobody wrote: when to server-page, when to load-more, when
+       to reach for a real grid, and the token-themed AG Grid setup for the
+       residual cases. **Verified missing** — no docs page mentions AG Grid.
+       Small, ships value immediately, and is the honest answer for most
+       screens. Do this first.
+
+5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
+       **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,
+       and the ask is that the server serves chunks while the client releases
+       memory for what is not visible, via HTMX, with this framework supplying
+       the UI half.
+
+       **What already ships, so the gap is narrower than it looks:**
+       forward chunk loading is `load-more.ts` (intent-only, plus an
+       `IntersectionObserver` on `data-load-more-auto`), and `data-grid.ts`
+       already writes `aria-rowindex`/`aria-colindex`. Missing: eviction of
+       off-screen chunks, height-preserving spacers, re-request on approach,
+       and `aria-rowcount` carrying the TRUE total rather than the loaded
+       subset.
+
+       **Why this is not the grid engine DESIGN.md refused:** it windows ROWS
+       in a read/act list. It does not own cell editing, column virtualisation
+       or a grid API. It works because rows are fixed-height — which
+       `DESIGN.md:56` already maintains deliberately.
+
+       Accept: a documented pattern plus one behavior that keeps N chunks
+       around the viewport, swaps evicted chunks for a spacer of **identical
+       measured height** so scroll position cannot jump, re-requests on
+       approach, sets `aria-rowcount` to the server total, and keeps selection
+       in a Set outside the DOM so windowing a selected row out does not lose
+       it. Red-proof: scroll deep, scroll back, assert no scroll jump and no
+       lost selection.
+
+       **Costs that must be written on the page, not discovered by an adopter:**
+       browser find-in-page cannot find unloaded rows; printing gets only what
+       is loaded; and both are unavoidable consequences of windowing rather
+       than defects. They are also the strongest argument for filtering
+       server-side first, which stays the recommended default.
+
+       **Cost line: +1 behavior — the largest JS addition this framework would
+       have made.** Worth stating plainly, and worth owner confirmation on
+       scope before build.
 
 ## Slice 29 — owner bug report (2026-08-18)
 
