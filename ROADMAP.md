@@ -650,7 +650,7 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        documenting the native input plus a marked-date legend instead, is a
        valid outcome.
 
-4. [ ] **40.4 — Advanced filter popup.**
+4. [x] **40.4 — Advanced filter popup.**
        Today `.bo-filter-bar` is a row of controls. The ask is the pattern where
        filters live behind a trigger, with applied filters shown as chips.
 
@@ -663,6 +663,27 @@ the only escape hatch is a comment in `icon.css` telling you to write your own
        page?" with the composition written out; if it is a pattern, it lands as
        one; the popover must be dismissible by Escape and return focus to its
        trigger, proven by an executable claim, not asserted.
+
+       **Landed 2026-08-19 as a PATTERN. Zero new CSS, zero new behaviors.**
+       `/patterns/filter-panel` = the filter bar (the two controls in constant
+       use) + a `[popover]` dropdown in its existing `data-multiselect` variant
+       per group + chips for what is applied. Every piece already shipped; the
+       ask was a screen, not a component.
+
+       The popover requirement was already met by the platform, not by us: the
+       menu is a native `[popover]`, so Escape, light-dismiss and focus return
+       are the browser's. Claim added (38 total) driving REAL clicks and a real
+       Escape.
+
+       **Two test-quality lessons, both mine:**
+       - The first version used `element.click()`, which does not move focus, so
+         it asked whether focus returned to a trigger that had never held it —
+         and reported a failure against behaviour that works.
+       - The first red-proof was GREEN: removing `data-multiselect` from the
+         menu changed nothing, because the count is driven by the TRIGGER's
+         `data-multiselect-label` (dropdown.ts:41) and close-on-select only
+         gates `.bo-dropdown__item` buttons, not label-wrapped checkboxes.
+         Re-proved against the attribute that actually drives it.
 
 ## Slice 39 — the docs must make the first impression (owner wishlist, 2026-08-18)
 

@@ -707,6 +707,48 @@ check(
   JSON.stringify(iconSrc),
 );
 
+/* /patterns/filter-panel promises four runtime behaviours, and the whole
+   argument for it being a PATTERN rather than a component is that the platform
+   and the shipped dropdown already provide them (roadmap 40.4):
+     - Escape closes the panel and focus returns to its trigger
+     - checking a box does NOT close it (you are picking several)
+     - the trigger counts what you picked, as TEXT
+   If any of that were untrue the page would be recommending a screen that does
+   not work, which is worse than shipping the component it declined to build.
+
+   REAL clicks via page.mouse, not element.click(): a programmatic click does
+   not move focus, so the first version of this check asked whether focus
+   returned to a trigger that had never held it, and reported a failure against
+   behaviour that works. */
+await visit('/patterns/filter-panel/', { width: 1440 });
+const TRIGGER = '[popovertarget="fp-cc"]';
+await page.click(TRIGGER);
+await new Promise((r) => setTimeout(r, 150));
+const panel = await page.evaluate(() => {
+  const menu = document.getElementById('fp-cc');
+  return { opened: menu.matches(':popover-open'), triggerFocused: document.activeElement === document.querySelector('[popovertarget="fp-cc"]') };
+});
+const boxes = await page.$$('#fp-cc input[type=checkbox]');
+await boxes[0].click();
+await boxes[1].click();
+await new Promise((r) => setTimeout(r, 150));
+const afterChecking = await page.evaluate(() => ({
+  stillOpen: document.getElementById('fp-cc').matches(':popover-open'),
+  triggerLabel: document.querySelector('[popovertarget="fp-cc"]').textContent.trim(),
+}));
+await page.keyboard.press('Escape');
+await new Promise((r) => setTimeout(r, 200));
+const afterEscape = await page.evaluate(() => ({
+  closed: !document.getElementById('fp-cc').matches(':popover-open'),
+  focusBackOnTrigger: document.activeElement === document.querySelector('[popovertarget="fp-cc"]'),
+}));
+check(
+  'filter panel: opens, stays open while multi-selecting, counts in text, Escape closes and restores focus',
+  panel.opened && afterChecking.stillOpen && /\(2\)/.test(afterChecking.triggerLabel) &&
+    afterEscape.closed && afterEscape.focusBackOnTrigger,
+  JSON.stringify({ ...panel, ...afterChecking, ...afterEscape }),
+);
+
 await browser.close();
 server.close();
 

@@ -1,0 +1,157 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: advanced filter panel">
+  <p class="demo-note">
+    <strong>The filter set that outgrew the bar.</strong> A finance or purchasing user
+    opens the same list a dozen times a day and narrows it a different way each time —
+    cost centre, status, date range, amount band. They do not want twelve controls
+    permanently across the top; they want the two they use constantly visible and the
+    rest a click away. "Done" means the list reloads and <strong>what is currently
+    filtering it stays visible</strong> after the panel closes — a filter you cannot see
+    is a filter you will forget you set, and then mistrust the numbers.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <form class="bo-filter-bar" role="search" aria-label="Invoice filters" method="get" action="/invoices">
+      <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" />
+      <select class="bo-select" name="status" aria-label="Status">
+        <option>All statuses</option><option>Pending</option><option>Approved</option>
+      </select>
+
+      <button class="bo-btn bo-btn--secondary" type="button" popovertarget="fp-cc"
+              data-multiselect-label="Cost centre">Cost centre</button>
+      <div class="bo-dropdown__menu" id="fp-cc" popover data-multiselect>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-1180" /> CC-1180 · Operations</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-2205" /> CC-2205 · Logistics</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="cc" value="CC-4021" /> CC-4021 · Facilities</label>
+      </div>
+
+      <button class="bo-btn bo-btn--secondary" type="button" popovertarget="fp-more">More filters ▾</button>
+      <div class="bo-dropdown__menu" id="fp-more" popover data-multiselect>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="f" value="overdue" /> Overdue only</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="f" value="nogr" /> No goods receipt</label>
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" name="f" value="hold" /> On payment hold</label>
+      </div>
+
+      <button class="bo-btn bo-btn--secondary" type="submit">Apply</button>
+    </form>
+
+    <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-2)">
+      <strong>Applied filters, always visible</strong> — the answer to "why is this list
+      short?":
+    </p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-chip bo-chip--active" href="#">Status: Pending <span class="bo-chip__remove" aria-hidden="true">×</span><span class="bo-visually-hidden">Remove status filter</span></a></li>
+      <li><a class="bo-chip bo-chip--active" href="#">CC-4021 <span class="bo-chip__remove" aria-hidden="true">×</span><span class="bo-visually-hidden">Remove cost centre filter</span></a></li>
+      <li><a class="bo-chip bo-chip--active" href="#">Overdue only <span class="bo-chip__remove" aria-hidden="true">×</span><span class="bo-visually-hidden">Remove overdue filter</span></a></li>
+      <li><a href="#">Clear all</a></li>
+    </ul>
+
+    <p class="bo-u-text-muted">
+      <strong>Zero new CSS.</strong> This is the <a href={base + '/components/filters'}>filter
+      bar</a> for the two controls in constant use, a <a href={base + '/components/dropdown'}>dropdown
+      menu</a> in its multi-select variant for each group behind a trigger, and
+      <a href={base + '/components/filters'}>chips</a> for what is applied. There is no
+      <code>.bo-filter-panel</code>, and there should not be — the ask was a screen, and
+      the screen is four things that already ship.
+    </p>
+    <p class="bo-u-text-muted">
+      The menu is a native <code>[popover]</code>, so <strong>Escape closes it, clicking
+      away closes it, and focus returns to the trigger</strong> — none of that is our
+      code, which is why it behaves the way the rest of the operating system does.
+      Checking a box does <em>not</em> close the menu (you are picking several), and the
+      trigger counts what you picked: "Cost centre (2)".
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Why the count on the trigger matters</h2>
+    <p>A collapsed filter group hides its own state. Without the count, "Cost centre"
+    looks identical whether it is filtering nothing or excluding 90% of the rows — and the
+    user reads a short list as missing data rather than as filtered data. That is the
+    single most common support ticket this pattern prevents.</p>
+    <p class="bo-u-text-muted">Two channels, as everywhere else: the count is
+    <em>text in the trigger's label</em>, not a coloured dot, so it survives greyscale,
+    forced colours and a screen reader reading the button.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>The bar</strong> — <a href={base + '/components/filters'}>filter bar</a>;
+        a real <code>&lt;form method="get"&gt;</code>, so filters end up in the URL and the
+        screen is shareable and bookmarkable.</li>
+      <li><strong>Always-visible controls</strong> — the one or two people use every time.
+        Search and status here; pick yours from usage, not from symmetry.</li>
+      <li><strong>Grouped filters</strong> — a <a href={base + '/components/dropdown'}>dropdown
+        menu</a> per group with <code>data-multiselect</code>, real checkboxes, and a
+        <code>name</code> so it submits with the form.</li>
+      <li><strong>Applied chips</strong> — <a href={base + '/components/filters'}>chips</a>,
+        each a link that removes that one filter, plus "Clear all".</li>
+      <li><strong>The list</strong> — <a href={base + '/components/data-table'}>data table</a>;
+        only it swaps when filters change.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /invoices?status=…&amp;cc=…</td><td><strong>the list fragment only</strong>, swapped into the table region. The bar is not re-rendered — re-rendering it closes an open menu and loses focus mid-selection</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /invoices (no params)</td><td>the unfiltered list; the chip row renders empty and "Clear all" is absent, not disabled</td></tr>
+          <tr><td class="bo-data-table__col--code">Filter options</td><td>render them server-side into the menu. Fetching options on open costs a round trip on every click and leaves the menu empty at exactly the moment the user is looking at it</td></tr>
+          <tr><td class="bo-data-table__col--code">422</td><td>an impossible combination (date-to before date-from): re-render the bar <em>with the values kept</em> and the message beside the offending control — never silently drop a filter</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing filtered</td><td>no chips, no "Clear all"; triggers show their bare labels</td></tr>
+          <tr><td>Filtered</td><td>a chip per applied filter and a count on each trigger — the list is never short without a visible reason</td></tr>
+          <tr><td>Loading</td><td><code>aria-busy</code> on the table only; the bar stays live so a second filter can be set immediately</td></tr>
+          <tr><td>Empty because of filters</td><td>the DIFFERENT empty: name which filters are active and offer "Clear all" — not the same message as a genuinely empty list</td></tr>
+          <tr><td>Empty, unfiltered</td><td>"No invoices yet" plus the action that creates one</td></tr>
+          <tr><td>Saved view</td><td>chips render from the saved query, so a shared link explains itself on arrival</td></tr>
+          <tr><td>No permission for a filter</td><td>the group is absent, not disabled — a disabled filter tells the user about data they cannot see</td></tr>
+          <tr><td>Narrow screen</td><td>the bar wraps; groups stay behind triggers, which is why this pattern degrades better than twelve inline controls</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/filters'}>Filter bar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dropdown'}>Dropdown</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/filters'}>Chips</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Form controls</a></li>
+    </ul>
+  </section>
+
+  <script>
+    import { initDropdowns } from '@busy-office/ui/js';
+    initDropdowns();
+  </script>
+
+  <Related links={[
+    ["/components/filters", "Filter bar & chips"],
+    ["/components/dropdown", "Dropdown menus"],
+    ["/patterns/invoice-list", "Invoice list"],
+    ["/patterns/bulk-actions", "Bulk actions"],
+  ]} />
+</Gallery>
