@@ -103,6 +103,36 @@ Behavioral state via `data-state` / `data-loading` attributes and native ARIA.
    (svh trade-off recorded). Interactive target floor: 1.5rem in every density
    tier; bare checkboxes/radios sit in a padded label or cell restoring 24px.
 
+## State attributes: when to add one, and why there are three
+
+`data-state`, `data-row-state`, `data-day`. That looks like drift and was
+checked as such (Standardize sweep, 2026-08-19); it is not, and the reason is
+worth writing down before a fourth spelling appears by accident.
+
+**`check-markup` validates attribute VALUES from a GLOBAL map.** Merging the
+calendar's day states into `data-state` would widen that set from six values to
+nine — and a stepper marked `data-state="holiday"` would start passing the
+checker. A separate attribute per state domain is what keeps the value check
+tight. Measured, not assumed: `dataAttrValues` in `api.json` is one map keyed by
+attribute name, and `check-markup.mjs` reads it directly.
+
+So the rule:
+
+- **Reuse `data-state`** when the values are the ones it already carries
+  (`open`, `closed`, `current`, `done`, `pending`, `rejected`) — a lifecycle.
+- **Add `data-<thing>-state`** when the element has its own vocabulary that
+  would pollute the shared one. `data-row-state` (`dirty`/`error`/`warning`) is
+  the precedent.
+- **Never** add an attribute whose values duplicate an existing set under a new
+  name.
+
+`data-day` is the one that does not follow the naming half of that rule — it
+should be `data-day-state`. It is left as-is deliberately: it shipped in an
+unreleased slice, and renaming it now would be churn for consistency's own sake
+while `data-state` itself is the older, larger outlier that CANNOT be renamed —
+both it and `data-row-state` are in published 0.1.1, so either rename is a
+breaking change owed a deprecation cycle, not a sweep.
+
 ## Two standing build rules (grill-derived)
 
 1. **Never-color-alone has two audiences.** Every state signal ships BOTH a visible
