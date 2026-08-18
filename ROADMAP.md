@@ -511,15 +511,30 @@ promised was never written.
          navigation instead of the sidebar. (a) is a component setting; (b) is
          an IA change to the docs shell.
 
-2. [ ] **30.2 — Typed field editor pattern (W2).** One row per field, each a
-       different type (Name/DOB/Age/Amount/Qty) — the SM30 master-data case and
-       the best single screen for showing every typed input at once.
-       **REFUSED: a new component.** It composes `.bo-kv` + M1 row-swap
-       (`initRowEdit()`) + `.bo-amount`/`.bo-date`/`.bo-quantity`/`.bo-input`.
-       Accept: documented as a pattern with **0 new selectors as the pass
-       condition** — if it cannot be built from existing primitives, that is
-       itself the finding and the item returns for rethink. Expect it to surface
-       real alignment/baseline/density bugs, which is a reason to do it.
+2. [x] **30.2 — Field editor pattern** (2026-08-18) —
+       `/patterns/field-editor`, one row per FIELD with the input each type
+       deserves: text, native date, select, money (currency + amount),
+       quantity stepper, checkbox. The SM30 master-data case, and the single
+       screen that exercises every typed input at once.
+
+       **Pass condition met exactly: 0 changes to framework CSS**, and all 29
+       `bo-` classes the page uses were verified to exist in the shipped CSS —
+       so nothing was invented either. It is the data table with
+       `data-row-edit` plus ordinary form primitives; there is deliberately no
+       "field editor" class to learn.
+
+       Predicted in the triage that this would surface real bugs, and it did —
+       a design one. With `--seamless` on only the text fields, three fields
+       read as plain text while money and quantity read as boxes, which tells
+       the user the boxed ones are editable and the others are not: exactly
+       backwards. Fixed by applying the seamless variant to every field
+       (`.bo-input--seamless` composes onto `.bo-money__amount` and
+       `.bo-quantity__input` — still 0 new selectors).
+
+       `check:claims` 28 -> 29, red-proved with the injection verified in the
+       built behavior. The claim first failed because it dispatched `change` on
+       a text input: `initRowEdit` marks text dirty on **input** and only marks
+       selects on change, so the probe was wrong rather than the page.
 
 3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
        already ships h-scroll + sticky header + sticky first column, so this
