@@ -88,6 +88,135 @@
     padding-block: var(--bo-space-4);
   }
 
+  /* ── Vertical: the left-rail shape ERP settings screens use ────────────────
+     A SETTING, not a second component — the list is already `display: flex`,
+     so vertical is a direction change plus the panel sitting beside it. Same
+     markup, same behavior, same parts.
+
+     The rail STRETCHES to the panel's height (the default `align-items`), which
+     is what makes "scrolling tabs" work without asking for a magic number: when
+     there are more tabs than the panel is tall, the rail scrolls; when there
+     are fewer, it doesn't and no affordance appears. A consumer who wants the
+     rail to scroll sooner constrains the block size themselves. */
+  .bo-tabs--vertical {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--bo-space-4);
+    container-type: inline-size;
+    container-name: bo-tabs;
+  }
+
+  .bo-tabs--vertical > .bo-tabs__list {
+    flex-direction: column;
+    /* The divider moves with the rail: it separates list from panel now, not
+       list from content below. */
+    border-block-end: none;
+    border-inline-end: var(--bo-border-width) solid var(--bo-color-border-default);
+    /* The overflow axis moves too. Both are stated rather than inherited,
+       because `overflow-x: auto` from the base rule would otherwise leave a
+       horizontal scrollbar on a strip that can only scroll vertically. */
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Without these the rail does not scroll — it OVERFLOWS. `align-content`
+       only hands out spare space, so a flex line already taller than the box
+       grows past it instead of being clipped, and `overflow-y: auto` never has
+       anything to scroll. Measured at 1440 in the container: scrollHeight minus
+       clientHeight was 0 with twelve tabs in a 15rem box, while the page claimed
+       the rail scrolled — the same shape as 30.1's three-tab demo that could
+       never overflow. `max-block-size: 100%` resolves against the constrained
+       parent and gives the scroll somewhere to happen. */
+    min-block-size: 0;
+    max-block-size: 100%;
+  }
+
+  .bo-tabs--vertical > .bo-tabs__panel {
+    flex: 1;
+    min-inline-size: 0;
+    padding-block: 0;
+  }
+
+  /* The selected marker follows the divider to the inline edge — the side
+     facing the panel, so the accent points at the content it belongs to. */
+  .bo-tabs--vertical > .bo-tabs__list > .bo-tabs__tab {
+    margin-block-end: 0;
+    margin-inline-end: calc(var(--bo-border-width) * -1);
+    border-block-end: none;
+    border-inline-end: 2px solid transparent;
+    text-align: start;
+  }
+
+  .bo-tabs--vertical > .bo-tabs__list > .bo-tabs__tab[aria-selected="true"] {
+    border-inline-end-color: var(--bo-color-accent);
+  }
+
+  /* The fade follows the axis. The base rules fade the INLINE edges; a rail
+     that can only scroll on the BLOCK axis needs its own, or the affordance
+     points at edges that never move. */
+  .bo-tabs--vertical > .bo-tabs__list[data-overflow="end"] {
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  .bo-tabs--vertical > .bo-tabs__list[data-overflow="start"] {
+    mask-image: linear-gradient(to top, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  .bo-tabs--vertical > .bo-tabs__list[data-overflow="both"] {
+    mask-image: linear-gradient(to bottom, transparent, #000 2.5rem calc(100% - 2.5rem), transparent);
+  }
+
+  /* Narrow: a left rail has nowhere to sit, so it becomes the horizontal strip
+     — the same answer `.bo-sidebar-nav` gives. Queried on the tabs' OWN width,
+     not the viewport's: a vertical tab set inside a dashboard widget has to
+     collapse while the page around it is still wide.
+
+     Reached by un-setting the vertical rules rather than by changing the
+     parent's `display`, because an element cannot query its own container. The
+     list becomes a full-width row, the panel wraps below it, and the result is
+     the base horizontal component. The fade has to be restated here rather than
+     left to fall back: `.bo-tabs--vertical > .bo-tabs__list[data-overflow]` is
+     more specific than the base rule, so without these it would keep fading the
+     block axis on a strip that now scrolls on the inline one. `initTabs()`
+     reads the rendered flex-direction, so the keyboard axis and
+     `aria-orientation` follow with no extra signal. */
+  @container bo-tabs (max-width: 30rem) {
+    .bo-tabs--vertical > .bo-tabs__list {
+      flex-direction: row;
+      flex-basis: 100%;
+      border-inline-end: none;
+      border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .bo-tabs--vertical > .bo-tabs__list > .bo-tabs__tab {
+      margin-block-end: calc(var(--bo-border-width) * -1);
+      margin-inline-end: 0;
+      border-inline-end: none;
+      border-block-end: 2px solid transparent;
+    }
+
+    .bo-tabs--vertical > .bo-tabs__list > .bo-tabs__tab[aria-selected="true"] {
+      border-block-end-color: var(--bo-color-accent);
+    }
+
+    .bo-tabs--vertical > .bo-tabs__panel {
+      flex-basis: 100%;
+      padding-block: var(--bo-space-4);
+    }
+
+    .bo-tabs--vertical > .bo-tabs__list[data-overflow="end"] {
+      mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+    }
+
+    .bo-tabs--vertical > .bo-tabs__list[data-overflow="start"] {
+      mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+    }
+
+    .bo-tabs--vertical > .bo-tabs__list[data-overflow="both"] {
+      mask-image: linear-gradient(to right, transparent, #000 2.5rem calc(100% - 2.5rem), transparent);
+    }
+  }
+
   /* Panels are hidden via the [hidden] attribute (reset handles display) —
      state lives in the markup, not in a class. */
 }

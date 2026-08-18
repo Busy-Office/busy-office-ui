@@ -562,7 +562,7 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
 Resolves the "horizontal tabs" note from 30.0: the ask is a **vertical** tab
 list — the left-rail shape ERP settings screens use.
 
-1. [ ] **36.1 — `.bo-tabs--vertical`, one setting rather than a component.**
+1. [x] **36.1 — `.bo-tabs--vertical`, one setting rather than a component.**
        The list is `display: flex`, so vertical is a direction change plus the
        panel sitting beside it. A modifier, not a second component.
 
@@ -584,6 +584,24 @@ list — the left-rail shape ERP settings screens use.
        fade follows the axis; collapses to horizontal when narrow; **an
        executable claim per direction**, because 35.1 just proved a tab demo can
        look right and work exactly once. Cost line stated on landing.
+
+       **Landed 2026-08-18.** Cost: **1 new public class** (`.bo-tabs--vertical`),
+       15 selectors, 0 new behaviors — `initTabs()` gained orientation-awareness
+       rather than a second entry point. Bundle 73 -> 75 kB min (11.8 -> 12.0 kB
+       gzipped). Orientation is read from the RENDERED flex-direction, not the
+       class, which is what makes the narrow collapse carry the keyboard axis and
+       the fade axis with it for free. Four executable claims (35 total): Up/Down
+       drive the rail and Left/Right do not, Left/Right still drive the strip and
+       Up/Down do not, the rail genuinely scrolls with a block-axis fade, and the
+       collapsed rail goes back to Left/Right. Live-verified in the container at
+       1440 and 390 in both themes.
+
+       **Found during, not after:** the rail did NOT scroll on the first build —
+       `align-content` only distributes spare space, so a flex line taller than
+       its box overflows instead of being clipped, and `overflow-y: auto` had
+       nothing to scroll. Measured 0px of scrollable height while the page claimed
+       it scrolled: the same shape as 30.1's three-tab demo that could never
+       overflow. Fixed with `max-block-size: 100%` and gated by a claim.
 
 ## Slice 35 — P0: tabs worked exactly once (owner report, 2026-08-18)
 

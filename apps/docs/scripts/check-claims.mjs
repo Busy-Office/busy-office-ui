@@ -551,6 +551,100 @@ check(
   JSON.stringify(tabbing),
 );
 
+/* The vertical rail, one claim per DIRECTION (roadmap 36.1). Both are needed:
+   the page promises Up/Down in the rail AND Left/Right in the strip, and a
+   behavior that merely swapped the keys would satisfy either claim alone while
+   breaking the other. 35.1 is why this presses keys rather than reading CSS — a
+   tab demo can look right and work exactly once.
+
+   Real `page.keyboard` events, not `dispatchEvent`: these handlers are
+   delegated on `document`, and a hand-built KeyboardEvent is the shortcut that
+   has produced false results here before. */
+const selectedIn = (label) =>
+  page.evaluate((l) => document.querySelector(`div[aria-label="${l}"] [role=tab][aria-selected="true"]`)?.textContent.trim(), label);
+const focusSelected = (label) =>
+  page.evaluate((l) => {
+    const list = document.querySelector(`div[aria-label="${l}"]`);
+    (list.querySelector('[role=tab][tabindex="0"]') ?? list.querySelector('[role=tab]')).focus();
+  }, label);
+async function pressIn(label, key) {
+  await focusSelected(label);
+  await page.keyboard.press(key);
+  await new Promise((r) => setTimeout(r, 60));
+  return selectedIn(label);
+}
+const orientationOf = (label) =>
+  page.evaluate((l) => {
+    const list = document.querySelector(`div[aria-label="${l}"]`);
+    return { orientation: list.getAttribute('aria-orientation'), flexDirection: getComputedStyle(list).flexDirection };
+  }, label);
+
+await visit('/components/tabs/', { width: 1440 });
+
+const vRail = { ...(await orientationOf('Vendor settings')), start: await selectedIn('Vendor settings') };
+vRail.afterDown = await pressIn('Vendor settings', 'ArrowDown');
+vRail.afterUp = await pressIn('Vendor settings', 'ArrowUp');
+vRail.afterRight = await pressIn('Vendor settings', 'ArrowRight');
+check(
+  'tabs (vertical): Up/Down drive the rail, Left/Right do not, aria-orientation is set',
+  vRail.orientation === 'vertical' &&
+    vRail.flexDirection === 'column' &&
+    vRail.afterDown !== vRail.start &&
+    vRail.afterUp === vRail.start &&
+    // Left/Right must NOT drive a vertical tablist — that is the APG contract.
+    vRail.afterRight === vRail.start,
+  JSON.stringify(vRail),
+);
+
+const hStrip = { ...(await orientationOf('Module areas')), start: await selectedIn('Module areas') };
+hStrip.afterRight = await pressIn('Module areas', 'ArrowRight');
+hStrip.afterLeft = await pressIn('Module areas', 'ArrowLeft');
+hStrip.afterDown = await pressIn('Module areas', 'ArrowDown');
+check(
+  'tabs (horizontal): Left/Right still drive the strip, Up/Down do not',
+  hStrip.orientation === 'horizontal' &&
+    hStrip.afterRight !== hStrip.start &&
+    hStrip.afterLeft === hStrip.start &&
+    hStrip.afterDown === hStrip.start,
+  JSON.stringify(hStrip),
+);
+
+/* "The rail scrolls when it is taller than its box, and the fade moves to the
+   top and bottom edges." That was FALSE when first written and the page said it
+   anyway: `align-content` only distributes spare space, so a flex line taller
+   than its container overflows instead of being clipped and `overflow-y: auto`
+   had nothing to scroll — measured 0px of scrollable height with twelve tabs in
+   a 15rem box. Exactly 30.1's three-tab demo that could never overflow, which is
+   why the scrollability is asserted rather than described. */
+const railScroll = await page.evaluate(() => {
+  const list = document.querySelector('.bo-tabs--vertical .bo-tabs__list');
+  return {
+    scrollable: list.scrollHeight - list.clientHeight,
+    overflow: list.dataset.overflow ?? 'none',
+    // A block-axis gradient has no "to <side>" prefix; an inline one says "to right/left".
+    maskIsBlockAxis: !/to (right|left)/.test(getComputedStyle(list).maskImage),
+  };
+});
+check(
+  'tabs (vertical): the rail actually scrolls, and the fade is on the block axis',
+  railScroll.scrollable > 20 && railScroll.overflow === 'end' && railScroll.maskIsBlockAxis,
+  JSON.stringify(railScroll),
+);
+
+/* The narrow collapse — the part a class-based orientation check gets wrong.
+   Below 30rem of the tab set's OWN width the rail becomes a strip, so the
+   keyboard axis has to follow the rendered layout, not the modifier class. */
+await visit('/components/tabs/', { width: 390 });
+const narrow = { ...(await orientationOf('Vendor settings')), start: await selectedIn('Vendor settings') };
+narrow.afterRight = await pressIn('Vendor settings', 'ArrowRight');
+check(
+  'tabs (vertical, narrow): the rail collapses to a strip and Left/Right drive it again',
+  narrow.flexDirection === 'row' &&
+    narrow.orientation === 'horizontal' &&
+    narrow.afterRight !== narrow.start,
+  JSON.stringify(narrow),
+);
+
 await browser.close();
 server.close();
 

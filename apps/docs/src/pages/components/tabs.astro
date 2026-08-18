@@ -26,6 +26,10 @@ const tabsMarkup = `<div class="bo-tabs">
    pointing at one panel the last one in DOM order wins and hides it (owner
    report, 2026-08-18). */
 const overflowTabs = ['Overview','Lines','Schedule','Invoices','Receipts','Approvals','Attachments','Audit trail','Settings'];
+/* Twelve, and a 15rem rail below, so the vertical demo actually overflows —
+   30.1's tab demo was built with three tabs to show scrolling and could never
+   scroll, which is how a defect hid behind a claim for a week. */
+const verticalTabs = ['General','Addresses','Contacts','Payment terms','Bank details','Tax','Purchasing','Invoicing','Approvals','Documents','Notes','Audit trail'];
 ---
 <Gallery title="Tabs">
   <p class="demo-note">
@@ -117,6 +121,50 @@ const overflowTabs = ['Overview','Lines','Schedule','Invoices','Receipts','Appro
       shift+wheel, a trackpad swipe and the arrow keys already do. Keyboard users never
       needed it — arrow keys move between tabs and the browser brings the focused one
       into view, including tabs that are off-screen.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>A left rail instead of a strip</h2>
+    <div class="bo-tabs bo-tabs--vertical" style="max-inline-size: 44rem; block-size: 15rem">
+      <div class="bo-tabs__list" role="tablist" aria-label="Vendor settings">
+        {verticalTabs.map((label, i) => (
+          <button class="bo-tabs__tab" role="tab" id={`vt-t-${i}`}
+                  aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? undefined : '-1'}
+                  aria-controls={`vt-p-${i}`}>{label}</button>
+        ))}
+      </div>
+      {verticalTabs.map((label, i) => (
+        <div class="bo-tabs__panel" role="tabpanel" id={`vt-p-${i}`} aria-labelledby={`vt-t-${i}`}
+             tabindex="0" hidden={i !== 0}>
+          <p class="bo-u-text-muted">{label} settings. Twelve sections in a 15rem box: the
+          tab list scrolls on its own, and this panel stays put.</p>
+        </div>
+      ))}
+    </div>
+    <p class="bo-u-text-muted">
+      Add <code>bo-tabs--vertical</code>. That is the whole change — same markup, same
+      <code>initTabs()</code>, same parts. Settings screens reach for this once there are
+      more sections than fit comfortably across the top, and because the rail runs down
+      the page it holds far more of them.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>The arrow keys follow the rail.</strong> Up and Down move between tabs here;
+      Left and Right do in the horizontal strip above. You do not set
+      <code>aria-orientation</code> — the behavior reads how the list is actually laid out
+      and sets it, which matters because that answer changes with the container width.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>The rail scrolls when it is taller than its box</strong>, and the fade moves to
+      the top and bottom edges to match. Height comes from the panel beside it, so a rail
+      with a few tabs simply doesn't scroll and is never dimmed. This demo pins 15rem to
+      show the overflow; an app usually gets it from the surrounding screen.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Narrow containers get the strip back.</strong> Below 30rem — measured on the
+      tab set's own width, not the window's, so a rail inside a widget collapses while the
+      page around it is still wide — the rail becomes the horizontal strip, the panel moves
+      underneath, and the arrow keys return to Left and Right. Resize this page to see it.
     </p>
   </section>
 

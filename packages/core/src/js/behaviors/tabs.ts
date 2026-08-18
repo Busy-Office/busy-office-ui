@@ -1,17 +1,24 @@
 /**
  * ARIA tabs behavior via document-level delegation — call initTabs() once.
- * Roving tabindex, Left/Right/Home/End navigation, automatic activation.
+ * Roving tabindex, Home/End plus the arrow keys of whichever axis the strip is
+ * laid out on, automatic activation.
  *
  * Markup contract:
  *   .bo-tabs > .bo-tabs__list[role=tablist] > .bo-tabs__tab[role=tab]
  *   panels: [role=tabpanel][id] referenced by each tab's aria-controls;
  *   inactive panels carry [hidden].
+ *
+ * Add `.bo-tabs--vertical` for a left rail. Nothing else changes: the behavior
+ * reads the rendered direction, sets `aria-orientation` itself, and swaps the
+ * arrow keys and the fade axis to match — including when a narrow container
+ * collapses the rail back into a horizontal strip.
  */
 let installed = false;
 
 /**
  * @keymap initTabs
- * @key ArrowRight / ArrowLeft — move to the next/previous tab, wrapping; activates immediately
+ * @key ArrowRight / ArrowLeft — move to the next/previous tab in a horizontal strip, wrapping; activates immediately
+ * @key ArrowDown / ArrowUp — the same, in a vertical rail (`.bo-tabs--vertical`)
  * @key Home / End — jump to the first/last tab; activates immediately
  */
 function activate(tab: HTMLElement): void {
@@ -29,8 +36,24 @@ function activate(tab: HTMLElement): void {
 }
 
 /**
+ * Is this strip laid out as a column right now?
+ *
+ * Read from the RENDERED flex-direction rather than from the `--vertical`
+ * class, and that difference is the whole point: `.bo-tabs--vertical` collapses
+ * back to a row in a narrow container, where a left rail has nowhere to sit. A
+ * class check would still call that vertical and leave a keyboard user pressing
+ * Up/Down on a horizontal strip. The computed style is what the user is
+ * actually looking at, so orientation, the arrow keys and the fade axis all
+ * follow the collapse for free.
+ */
+function isVertical(list: HTMLElement): boolean {
+  return getComputedStyle(list).flexDirection.startsWith('column');
+}
+
+/**
  * Mark which edges a tab strip can still scroll toward, so the CSS can fade
- * exactly those and no others.
+ * exactly those and no others — and keep `aria-orientation` in step with the
+ * axis it is scrolling on.
  *
  * This exists because the strip had NO overflow affordance on macOS: overlay
  * scrollbars stay hidden until something moves, and neither `scrollbar-color`
@@ -39,14 +62,25 @@ function activate(tab: HTMLElement): void {
  *
  * A ResizeObserver rather than a media query: the strip overflows by its own
  * CONTAINER width, not the viewport's, so a shell that narrows around it must
- * re-evaluate even when the viewport never changes.
+ * re-evaluate even when the viewport never changes. That observer is also what
+ * makes the vertical rail's collapse work — the same callback re-reads the
+ * direction, so orientation follows the container query with nothing extra.
  */
 function markOverflow(list: HTMLElement): void {
-  const max = list.scrollWidth - list.clientWidth;
-  // 1px of slack: fractional layout leaves sub-pixel scrollLeft at the ends,
-  // which would otherwise fade an edge the user has already reached.
-  const atStart = list.scrollLeft <= 1;
-  const atEnd = list.scrollLeft >= max - 1;
+  const vertical = isVertical(list);
+  /* `aria-orientation` is set here, not asked of the consumer. It has to agree
+     with the layout at all times, and the layout changes on container width —
+     no consumer can keep an attribute in sync with a container query. */
+  list.setAttribute('aria-orientation', vertical ? 'vertical' : 'horizontal');
+
+  const max = vertical
+    ? list.scrollHeight - list.clientHeight
+    : list.scrollWidth - list.clientWidth;
+  const pos = vertical ? list.scrollTop : list.scrollLeft;
+  // 1px of slack: fractional layout leaves sub-pixel scroll offsets at the
+  // ends, which would otherwise fade an edge the user has already reached.
+  const atStart = pos <= 1;
+  const atEnd = pos >= max - 1;
   if (max <= 1) list.removeAttribute('data-overflow');
   else if (atStart) list.dataset.overflow = 'end';
   else if (atEnd) list.dataset.overflow = 'start';
@@ -96,13 +130,22 @@ export function initTabs(): void {
     if (!list) return;
     const tabs = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]'));
     const i = tabs.indexOf(tab);
+    /* Which arrows drive this strip depends on which way it is pointing. The
+       APG requires Up/Down for a vertical tablist, and a rail that only answers
+       Left/Right cannot be driven in the direction it visibly runs. Vertical is
+       read from the rendered layout, so a `--vertical` set that has collapsed
+       to a row in a narrow container goes back to Left/Right by itself. */
+    const vertical = isVertical(list as HTMLElement);
+    const prevKey = vertical ? 'ArrowUp' : 'ArrowLeft';
+    const nextKey = vertical ? 'ArrowDown' : 'ArrowRight';
     // Direction-aware: in RTL, ArrowRight moves to the previous (visually
-    // right) tab so spatial arrows match the visual order.
-    const rtl = getComputedStyle(list).direction === 'rtl';
+    // right) tab so spatial arrows match the visual order. Block-axis arrows
+    // are unaffected — RTL mirrors the inline axis only.
+    const rtl = !vertical && getComputedStyle(list).direction === 'rtl';
     const forward = rtl ? -1 : 1;
     let next: HTMLElement | undefined;
-    if (e.key === 'ArrowRight') next = tabs[(i + forward + tabs.length) % tabs.length];
-    else if (e.key === 'ArrowLeft') next = tabs[(i - forward + tabs.length) % tabs.length];
+    if (e.key === nextKey) next = tabs[(i + forward + tabs.length) % tabs.length];
+    else if (e.key === prevKey) next = tabs[(i - forward + tabs.length) % tabs.length];
     else if (e.key === 'Home') next = tabs[0];
     else if (e.key === 'End') next = tabs[tabs.length - 1];
     if (next) {
