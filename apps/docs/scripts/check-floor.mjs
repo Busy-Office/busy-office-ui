@@ -13,11 +13,11 @@
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { REPO_ROOT } from './paths.mjs';
+import { REPO_ROOT, SOURCE_SKIP_DIRS as SKIP } from './paths.mjs';
 import { assertScanned } from './gate-report.mjs';
 
 const LITERAL = /(Chrome|Firefox|Safari|Edge)(\/Edge)?\s+\d+(\.\d+)?\s*(·|,)\s*(Chrome|Firefox|FF|Safari|Edge)/i;
-const SKIP = new Set(['node_modules', '.git', 'dist', 'versions', '.astro', 'visual-baselines', 'visual-diffs']);
+
 
 async function* files(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {

@@ -35,3 +35,25 @@ export const DIST = join(DOCS_ROOT, 'dist');
 
 /** the repository root */
 export const REPO_ROOT = join(DOCS_ROOT, '..', '..');
+
+/**
+ * Directories that are NOT our source: generated output, vendored code, and
+ * frozen snapshots.
+ *
+ * `check-imports` and `check-floor` each hand-copied this same seven-entry list
+ * under a different variable name (Standardize sweep, 2026-08-19). That is one
+ * DECISION — "which files does this repo police?" — stored twice, and the
+ * failure mode is silent: add a generated directory, update one gate, and the
+ * two disagree about scope with nothing to say so. The walk itself is not worth
+ * sharing (every other walker here has a different root and filter); the list
+ * is.
+ */
+export const SOURCE_SKIP_DIRS = new Set([
+  'node_modules',
+  '.git',
+  '.astro',
+  'dist',
+  'versions',
+  'visual-baselines',
+  'visual-diffs',
+]);

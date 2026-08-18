@@ -13,6 +13,32 @@
       var(--bo-motion-easing-standard);
   }
 
+  /* …EXCEPT in a horizontal container, where 100% makes every control claim a
+     full row and the "bar" becomes a stack.
+
+     The default above is right in a stacked form column and wrong in a row, so
+     the exception lives here rather than in each container's file — the rule
+     that creates the problem carries its own qualification, and a future
+     horizontal container is one name in this list rather than a bug someone
+     rediscovers.
+
+     Found the long way (roadmap 39.1): the documented filter-bar markup had
+     rendered as a vertical stack for months because no page showed the result,
+     and FOUR docs pages were quietly compensating with an inline `style` on
+     every control — the consumer writing markup the component should own. That
+     fix covered `.bo-filter-bar` alone; the Standardize sweep found the same
+     inline override hand-written 10 more times across clusters, table toolbars
+     and pagination footers, which is the same defect once rather than ten
+     times.
+
+     These four ARE the framework's horizontal containers: each is
+     `display: flex` with `align-items: center`. A consumer who genuinely wants
+     a full-width control in one of them still sets a width. */
+  :is(.bo-cluster, .bo-filter-bar, .bo-data-table__toolbar, .bo-data-table__footer)
+    :is(.bo-input, .bo-select) {
+    inline-size: auto;
+  }
+
   textarea.bo-input {
     height: auto;
     min-height: calc(var(--bo-density-control-height) * 2);

@@ -240,7 +240,7 @@ const current =
         </button>
         <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
         <label class="bo-choice" for="version"><span class="bo-visually-hidden">Docs version</span>
-          <select class="bo-select" id="version" style="inline-size: auto" aria-label="Docs version">
+          <select class="bo-select" id="version" aria-label="Docs version">
             <option value={siteRoot + '/'} selected={currentSnapshot === null}>v{pkg.version} · latest</option>
             {versions.snapshots.map((v) => (
               <option value={siteRoot + '/v/' + v + '/'} selected={currentSnapshot === v}>v{v}</option>
@@ -255,14 +255,14 @@ const current =
           </p>
         )}
         <label class="bo-choice" for="density">Density
-          <select class="bo-select" id="density" style="inline-size: auto">
+          <select class="bo-select" id="density">
             <option value="compact">Compact</option>
             <option value="comfortable" selected>Comfortable</option>
             <option value="spacious">Spacious</option>
           </select>
         </label>
         <label class="bo-choice" for="theme">Theme
-          <select class="bo-select" id="theme" style="inline-size: auto">
+          <select class="bo-select" id="theme">
             <option value="light" selected>Light</option>
             <option value="dark">Dark</option>
           </select>

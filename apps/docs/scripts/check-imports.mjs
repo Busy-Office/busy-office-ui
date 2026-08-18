@@ -18,9 +18,9 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { join, dirname, resolve, basename } from 'node:path';
-import { REPO_ROOT } from './paths.mjs';
+import { REPO_ROOT, SOURCE_SKIP_DIRS as SKIP_DIRS } from './paths.mjs';
 
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'versions', 'visual-baselines', 'visual-diffs', '.astro']);
+
 const EXTS = ['.mjs', '.js', '.ts'];
 
 async function* sourceFiles(dir) {
