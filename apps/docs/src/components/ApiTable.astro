@@ -16,7 +16,15 @@ const rows = [
   ['Blocks', c.blocks],
   ['Parts', c.parts],
   ['Variants', c.variants],
-  ['data-* hooks', c.dataAttrs],
+  /* Show the legal VALUES beside each hook, not just its name (roadmap 32.1).
+     "data-row-state" alone invites an invented value like "selected";
+     "data-row-state=dirty|error|warning" cannot be misread. Attributes the CSS
+     never switches on a value (data-grid-nav, data-dialog-trigger) print bare,
+     which is itself the signal that any value works. */
+  ['data-* hooks', (c.dataAttrs ?? []).map((a: string) => {
+    const vals = (c as any).dataAttrValues?.[a];
+    return vals?.length ? `${a}="${vals.join('|')}"` : a;
+  })],
   ['ARIA styled', c.ariaAttrs],
   ['Component tokens', c.tokensDefined],
   ['Named containers', c.containers],
@@ -36,7 +44,11 @@ const aa = (contrast.themes.light as any[])
 ---
 <section class="demo">
   <h2>API <span class="bo-badge">generated from CSS</span></h2>
-  <div class="bo-data-table-container">
+  {/* tabindex="0": a scrollable region must be keyboard-reachable, which axe
+      checks as scrollable-region-focusable. The hand-written demo tables all
+      carry it; these GENERATED ones did not, and it stayed latent until the
+      data-* hooks column grew long enough to overflow at 390 (roadmap 32.1). */}
+  <div class="bo-data-table-container" tabindex="0">
     <table class="bo-data-table" data-search-keep>
       <tbody>
         {rows.map(([label, values]) => (
@@ -62,7 +74,7 @@ const aa = (contrast.themes.light as any[])
       <summary class="bo-u-text-muted" style="font-size: var(--bo-font-size-sm); cursor: pointer">
         Contrast — {aa.length} AA pair{aa.length > 1 ? 's' : ''} this component uses (generated, CI-gated)
       </summary>
-      <div class="bo-data-table-container" style="margin-block-start: var(--bo-space-2)">
+      <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-2)">
         <table class="bo-data-table" data-density="compact">
           <thead><tr><th scope="col">Text</th><th scope="col">on</th><th scope="col" class="bo-data-table__col--numeric">Light</th><th scope="col" class="bo-data-table__col--numeric">Dark</th></tr></thead>
           <tbody>

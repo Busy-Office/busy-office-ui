@@ -475,14 +475,32 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
 | reached for a refused component (arrows, grid, field-editor component) | the Objective charter, by judgement | yes — nothing states the refusals machine-readably |
 | prose asserting behaviour that does not happen | `check:claims`, only for OUR pages | no gate ships to consumers |
 
-1. [ ] **32.1 — `api.json` records attribute VALUES, not just names.** The
-       decisive gap: `data-row-state` is listed, but not that it accepts only
-       `dirty|error|warning`. That is precisely what let me write
-       `data-row-state="selected"` and describe a highlight that could never
-       appear. Accept: `extract-api.mjs` captures the value set for each
-       `data-*` attribute the CSS switches on; `api.json` and the generated
-       `ApiTable` show them; red-proved by adding a bogus value and watching it
-       be absent.
+1. [x] **32.1 — `api.json` records attribute VALUES** (2026-08-18) — the hole
+       my own slop went through is closed. `extract-api.mjs` already captured
+       the value in its regex and threw it away; it now keeps it, per component
+       **and** as a global union across all shipped CSS including `tokens/`.
+
+       The union is not redundant: `data-density` is switched in
+       `tokens/density.css`, so a component that merely consumes it correctly
+       shows the attribute bare while the real answer is
+       `compact|comfortable|spacious`. A validator without the union would
+       reject the framework's most-used attribute. **9 attributes now carry
+       values**, including `data-row-state=dirty|error|warning` — the set I
+       violated — plus `data-theme`, `data-state` and `data-overflow`.
+       `ApiTable` prints them as `attr="a|b|c"`, and attributes the CSS never
+       switches on stay bare, which is itself the signal that any value works.
+
+       Red-proved in both directions, as the item asked: "selected" is absent
+       today, **appears** when a real `[data-row-state="selected"]` rule is
+       added to the CSS, and is gone again when it is removed — so the list
+       tracks the artefact rather than a hand-kept table.
+
+       **It also surfaced a live accessibility bug.** The longer hooks column
+       made the generated table overflow at 390, and axe caught
+       `scrollable-region-focusable` on three pages: `ApiTable` and `ClassRef`
+       built their scroll containers **without** the `tabindex="0"` that every
+       hand-written demo table carries. Latent until something grew. Fixed in
+       both generated components, so all 38 component pages gained it at once.
 
 2. [ ] **32.2 — A markup validator consumers can run.** `check:markup <glob>`:
        unknown `bo-*` classes, unknown `data-*` attributes, and (after 32.1)

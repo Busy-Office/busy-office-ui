@@ -24,6 +24,12 @@ async function analyze(files) {
   const out = {
     classes: new Set(),
     dataAttrs: new Set(),
+    /* The VALUES each data-* attribute is switched on, not just its name
+       (roadmap 32.1). `data-row-state` alone tells a reader nothing about
+       whether "selected" is legal — it is not; the framework styles dirty,
+       error and warning — and that gap is exactly how an invented value gets
+       written and silently does nothing. */
+    dataAttrValues: new Map(),
     ariaAttrs: new Set(),
     tokensConsumed: new Set(),
     tokensDefined: new Set(),
@@ -39,7 +45,14 @@ async function analyze(files) {
     const root = postcss.parse(css);
     root.walkRules((rule) => {
       for (const m of rule.selector.matchAll(CLASS_RE)) out.classes.add(m[1]);
-      for (const m of rule.selector.matchAll(DATA_RE)) out.dataAttrs.add(m[1]);
+      for (const m of rule.selector.matchAll(DATA_RE)) {
+        out.dataAttrs.add(m[1]);
+        if (!m[2]) continue;                       // bare [data-foo], no value to record
+        const raw = m[2].replace(/^["']|["']$/g, '').trim();
+        if (!raw) continue;
+        if (!out.dataAttrValues.has(m[1])) out.dataAttrValues.set(m[1], new Set());
+        out.dataAttrValues.get(m[1]).add(raw);
+      }
       for (const m of rule.selector.matchAll(ARIA_RE)) out.ariaAttrs.add(m[1]);
     });
     root.walkAtRules('media', (at) => {
@@ -63,6 +76,10 @@ function shape(sets) {
     parts: classes.filter((c) => c.includes('__') && !c.includes('--')),
     variants: classes.filter((c) => c.includes('--')),
     dataAttrs: [...sets.dataAttrs].sort(),
+    dataAttrValues: Object.fromEntries(
+      [...sets.dataAttrValues].sort(([a], [b]) => a.localeCompare(b))
+        .map(([k, v]) => [k, [...v].sort()]),
+    ),
     ariaAttrs: [...sets.ariaAttrs].sort(),
     tokensConsumed: [...sets.tokensConsumed].sort(),
     tokensDefined: [...sets.tokensDefined].sort(),
@@ -123,6 +140,31 @@ api.motion = shape(motionSets);
 // already — Slice 6 item 1 added an alias here and missed gen-llms.mjs's
 // copy until its build broke).
 const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
+/* GLOBAL legal values for every data-* attribute, unioned across all shipped
+   CSS including tokens/ (roadmap 32.1). The per-component maps answer "what
+   does THIS component switch on"; a validator needs "what is legal anywhere",
+   and the two genuinely differ: `data-density` is switched in
+   tokens/density.css, so the data-table entry correctly shows it bare while the
+   real answer is compact|comfortable|spacious. Without this union a checker
+   would reject the framework's single most-used attribute. */
+{
+  const all = [];
+  for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory())) {
+    for (const f of (await readdir(join(componentsDir, dir.name))).filter((f) => f.endsWith('.css'))) {
+      all.push(join(componentsDir, dir.name, f));
+    }
+  }
+  for (const sub of ['tokens', 'primitives', 'utilities', 'motion', 'base', 'print']) {
+    try {
+      for (const f of (await readdir(join(srcCss, sub))).filter((f) => f.endsWith('.css'))) {
+        all.push(join(srcCss, sub, f));
+      }
+    } catch { /* not every dir exists */ }
+  }
+  const globalSets = await analyze(all);
+  api.dataAttrValues = shape(globalSets).dataAttrValues;
+}
+
 api.pageSlug = PAGE_SLUG;
 const index = {};
 // Primitives claim first: components REFERENCE primitive classes (e.g. a
