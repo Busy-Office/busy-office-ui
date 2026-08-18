@@ -33,6 +33,11 @@
      both. Without that gating the first and last tab would be permanently
      dimmed on a strip that fits, which is worse than no affordance.
 
+     Deliberately NOT applied to `.bo-data-table-container`, which has the same
+     hidden-overflow problem: a fade there dims the frozen first column, which
+     is the one thing that must stay readable while the table scrolls. See the
+     note in data-table.css.
+
      Chosen over arrow buttons, which 30.1b was opened to add. Arrows needed
      either an overlay background (the same colour assumption, again) or
      restructuring consumer markup into an injected wrapper, for a control that

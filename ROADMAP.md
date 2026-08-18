@@ -624,6 +624,23 @@ promised was never written.
 
        **Cost line: 0 selectors, 0 CSS, 0 behaviors, 0 new pages.**
 
+4b. [ ] **30.6 — CI is over its 288s budget, and it is gate growth (Optimize).**
+       Measured across three runs, separating wall time from step time:
+       `7c13f14` 273s wall / **267s steps**, `bb2765b` 280s / **273s**,
+       `04e4434` 290s / **282s** — overhead is a flat ~7s, so the rise is the
+       gates themselves, not runner variance. (Checked because my first reading
+       compared two different runs and wrongly suggested the gates had got
+       faster.)
+
+       The cause is ordinary: per-page gates scale with page count, and this
+       slice added a pattern page, a 50-column section and two page extensions.
+       Accept: back under **288s**; the lever measured before it is believed,
+       as in 28.1 where the guessed levers were both wrong; **any sampling
+       states what it stopped checking**. Candidates worth measuring first —
+       axe and layout both sweep every page at multiple configurations, and
+       forced-colors (38s) and pseudo-locale (36s) are now larger than the
+       claims check.
+
 5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
        **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,
        and the ask is that the server serves chunks while the client releases

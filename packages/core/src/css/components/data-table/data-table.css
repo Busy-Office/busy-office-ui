@@ -9,6 +9,16 @@
     border-radius: var(--bo-radius-md);
     overflow: auto;
     scrollbar-gutter: stable;
+    /* NOT the edge-fade that `.bo-tabs__list` uses for the same problem, and
+       this is a deliberate difference rather than drift (Standardize sweep,
+       2026-08-18). A mask fading the inline edges dims the FROZEN first column
+       — the one thing that must stay legible while the rest scrolls past it.
+       Rendered and looked at before deciding: at 1200px of scroll the sticky
+       ITEM header and its LINE-001/002/003 cells wash out at exactly the edge
+       they occupy, which is worse than having no overflow hint at all.
+       A tab strip has nothing pinned to its edge, so it can afford the fade;
+       this container cannot. If a future sweep is tempted to unify the two,
+       that is the reason not to. */
   }
 
   .bo-data-table__toolbar {
