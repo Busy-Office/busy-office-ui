@@ -94,9 +94,27 @@ match to its full playbook below:
    round — Standardize", and the loop table says Standardize is "dispatched
    every 4th Continue round". Two statements against one; the counter
    preempts (2026-08-18).
-3. **Build item queued** in the current in-progress slice? → dispatch
+3. **THREE OR MORE slices closed since the last Objective**, **or user
+   asked**? → dispatch **Objective**.
+
+   Moved above the queued build item on 2026-08-19, for exactly the reason
+   Standardize was moved there: a *counter* can never fire while a rule that is
+   always true sits above it. There is always a queued build item, so Objective
+   could only ever run when the backlog emptied — and the backlog has not
+   emptied once. It starved for **ten slices** (27, 30, 32-34, 36-40) before
+   this was noticed, which is the third time this file has recorded the same
+   shape of bug and the second time it has been recorded about Objective
+   specifically.
+
+   **Three, not one.** The old wording — "a slice closed" — would fire almost
+   every wake from up here and starve the build instead, which is the same
+   mistake pointing the other way. Three is enough material for a grill to find
+   a pattern rather than restate one slice, and the last useful grill covered
+   two. The number is a judgement and is written down so it can be argued with.
+
+4. **Build item queued** in the current in-progress slice? → dispatch
    **Continue**, build mode.
-4. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
+5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
    coverage, a number from `record_metric.py` trending the wrong way)? →
    dispatch **Optimize**.
 
@@ -107,16 +125,6 @@ match to its full playbook below:
    and were not (282 -> 261 -> 257). A metric that moves on its own between
    identical commits needs more than one point before it can spend a wake
    (2026-08-18).
-5. **A slice closed since the last Objective ran**, **or user asked**? →
-   dispatch **Objective**.
-
-   This sits ABOVE backlog-empty deliberately, and the ordering is the whole
-   point: a slice closing is *exactly* what empties the backlog, so when
-   backlog-empty came first it matched every single time and the milestone
-   trigger could never fire. That starved twice before it was fixed — Slices
-   23-25 were eventually grilled under an entry that says "overdue... rule 6
-   starved by", and Slices 26-27 were heading the same way (2026-08-18).
-   Diagnosing it once and working around it is not fixing it.
 6. **Backlog empty** (no unchecked item in the current slice)? → dispatch
    **Explore** for one idea, then run Roadmap's own triage again on the
    result (graduate into the plan, or log the discard).
