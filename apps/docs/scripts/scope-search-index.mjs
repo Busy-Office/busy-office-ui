@@ -66,10 +66,23 @@ async function* pages(dir) {
   }
 }
 
+/* Reference pages ARE their tables. `/reference/tokens`, `/reference/events` and
+   `/reference/acr` exist to be searched by token name, event name and criterion,
+   and the fixture rule below would swallow all three — it did, and it was found
+   by a sweep rather than by anyone searching: `bo:row-save` returned five pages
+   and the intent-event index was not among them (Standardize, 2026-08-18).
+
+   A path rule rather than a fourth keep-marker, deliberately. The marker
+   approach requires whoever adds the next reference page to know it exists;
+   this one is right by default, and the markers stay for the generated tables
+   that appear on ordinary component pages (ClassRef, ApiTable). */
+const REFERENCE_PAGE = /\/reference\//;
+
 for await (const file of pages(DIST)) {
   let html = await readFile(file, 'utf8');
   const before = html;
   for (const [desc, re] of IGNORE) {
+    if (desc === 'fixture tables' && REFERENCE_PAGE.test(file)) continue;
     html = html.replace(re, (m, attrs) => {
       counts[desc] += 1;
       return m.replace(`${attrs}>`, `${attrs} data-pagefind-ignore>`);

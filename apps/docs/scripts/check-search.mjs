@@ -164,7 +164,7 @@ g.check(
       else if (e.name.endsWith('.html')) yield p;
     }
   }
-  let pre = 0, ignored = 0, fixtureTables = 0, keptTables = 0, conflictTables = 0;
+  let pre = 0, ignored = 0, fixtureTables = 0, keptTables = 0, conflictTables = 0, referenceIgnored = 0;
   for await (const file of pages(DIST)) {
     const html = await readFile(file, 'utf8');
     for (const m of html.matchAll(/<pre([^>]*)>/g)) {
@@ -176,7 +176,15 @@ g.check(
        than through the UI, because the DESIRED result for a fixture term is
        ZERO results — and the settle helper above requires at least one, so a
        rendered assertion could never express it. */
+    const isReference = /\/reference\//.test(file);
     for (const m of html.matchAll(/<table([^>]*)>/g)) {
+      /* A reference page IS its tables. When the fixture rule shipped it
+         swallowed /reference/tokens, /reference/events and /reference/acr, and
+         the counts below still looked healthy — searching `bo:row-save`
+         returned five pages without the intent-event index among them. Counting
+         kept-vs-ignored could not see it, so this counts the thing that
+         actually broke. */
+      if (isReference && /data-pagefind-ignore/.test(m[1])) referenceIgnored += 1;
       const keep = /data-search-keep/.test(m[1]);
       const ignored = /data-pagefind-ignore/.test(m[1]);
       if (keep && ignored) conflictTables += 1;   // a kept table that got ignored anyway
@@ -195,6 +203,12 @@ g.check(
      `conflictTables === 0` dies if the rule goes blanket again and swallows the
      generated reference tables (which is how `bo-data-table` once fell from 9
      hits to 3). */
+  g.check(
+    'no table on a /reference/ page is excluded from the index',
+    referenceIgnored === 0,
+    `reference tables ignored: ${referenceIgnored}`,
+  );
+
   g.check(
     'fixture tables are ignored AND generated reference tables survive',
     fixtureTables > 0 && keptTables > 0 && conflictTables === 0,
