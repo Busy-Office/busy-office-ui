@@ -56,6 +56,9 @@ ${Object.entries(bh.behaviors)
 - Sorting: YOUR code re-orders rows and sets aria-sort on <th>; CSS draws indicator.
 - Never user-scalable=no. Never override html font-size (rem-based framework).
 - Columns hidden by container compaction (__col--secondary) must stay reachable.
+- A scrollable region must be keyboard-reachable: .bo-data-table-container needs
+  tabindex="0" (and an aria-label when the table has no caption). axe reports
+  scrollable-region-focusable otherwise, and no markup linter can infer it.
 
 ## Components (classes generated from shipped CSS)
 
@@ -69,7 +72,19 @@ const slugOf = (name) => `components/${api.pageSlug[name] ?? name}`;
 for (const [name, c] of Object.entries(api.components)) {
   out += `### ${name} — ${site}/${slugOf(name)}/\n`;
   out += `classes: ${c.classes.join(' ')}\n`;
-  if (c.dataAttrs.length) out += `data attrs: ${c.dataAttrs.join(' ')}\n`;
+  /* Values, not just names (roadmap 33.3). 32.1 put them in api.json and the
+     rendered ApiTable but not here — and llms.txt is the artefact a consumer's
+     assistant actually reads. Measured: building a screen from this file alone
+     produced exactly one machine-detectable error, an invented
+     data-row-state="approved", because the name was published and the values
+     were not. */
+  if (c.dataAttrs.length) {
+    const withValues = c.dataAttrs.map((a) => {
+      const v = api.dataAttrValues?.[a];
+      return v?.length ? `${a}="${v.join('|')}"` : a;
+    });
+    out += `data attrs: ${withValues.join(' ')}\n`;
+  }
   if (c.ariaAttrs.length) out += `aria styled: ${c.ariaAttrs.join(' ')}\n`;
   out += '\n';
 }

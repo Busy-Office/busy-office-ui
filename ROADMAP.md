@@ -590,12 +590,39 @@ put it in their build. Each is a step where the default is "does not happen".
        the honest limitation — it validates classes and framework attribute
        VALUES, not whether the markup means anything.
 
-3. [ ] **33.3 — Measure whether any of this works.** Everything above is a
-       hypothesis: that a machine-readable surface plus a checker reduces slop.
-       Accept: build one realistic ERP screen in a scratch repo **using only
-       `llms.txt` as the framework input**, run `bo-check-markup` on the
-       result, and record what it got wrong. That number is the only evidence
-       this slice is worth anything, and it is cheap to get.
+3. [x] **33.3 — Measured, and it found two real gaps** (2026-08-18) — taken
+       BEFORE 33.1/33.2 on purpose: the measurement decides whether more
+       machinery is worth building, and this project has twice built on an
+       unmeasured hypothesis.
+
+       **Method, with its limitation stated.** I have worked in this repo for
+       many wakes and cannot unknow it, so this cannot measure a naive agent's
+       error rate. What it CAN measure rigorously is whether `llms.txt` is
+       sufficient on its own: build a realistic PO-list screen using only that
+       file as framework input, then run `bo-check-markup` and record every
+       place the file left me guessing.
+
+       **Result: exactly one machine-detectable error** — an invented
+       `data-row-state="approved"`. The cause was predicted before the build
+       started: `llms.txt` published `data attrs: data-row-state` and **no
+       values**, so 32.1's work reached `api.json` and the rendered `ApiTable`
+       but never the artefact a consumer's assistant actually reads. Twelve
+       components listed attributes; **zero** listed values.
+
+       **And one error the checker structurally cannot catch.** `llms.txt`'s
+       "Rules your markup must follow" never said a scrollable region must be
+       keyboard-reachable — its only mention of `tabindex` concerned
+       `initTabs()`. A fresh agent building a table from it ships
+       `scrollable-region-focusable`, which is not a class or a value, so no
+       markup linter can infer it. I only avoided it from repo knowledge, which
+       is exactly the contamination this method exposes.
+
+       Both fixed in the generator, then **re-measured**: values now publish as
+       `data-row-state="dirty|error|warning"`, the rule is stated, and the same
+       screen passes clean. Also noted, not yet fixed: `data-bo-overflow-watched`
+       (internal bookkeeping) and the truncated `bo-cb-opt-` prefix are
+       published as if they were consumer hooks — noise in the machine surface.
+
 
 ## Slice 31 — DESIGN.md's own four-pattern table is wrong (2026-08-18)
 
