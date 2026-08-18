@@ -35,6 +35,22 @@ import { DIST } from './paths.mjs';
 const IGNORE = [
   ['code samples', /<pre(?![^>]*data-pagefind-ignore)([^>]*)>/g],
   ['Demo previews', /<div(?=[^>]*class="[^"]*demo-pair__preview)(?![^>]*data-pagefind-ignore)([^>]*)>/g],
+  /* Fixture tables: sample ROWS, not prose. Their cells concatenate into
+     nonsense in an excerpt — "Line total Cost centers Actions Steel bracket,
+     40mm" and "$4,208.00. Pending. INV-10235. Globex Industrial." — which was
+     the original complaint (P2-2). The earlier attempt ignored EVERY <table>
+     and took the generated reference tables with it: `bo-data-table` fell from
+     9 hits to 3 and surfaced Pagination ahead of the data-table page. The fix
+     is a keep-marker rather than a blanket rule, so the two are separable:
+     ClassRef, ApiTable and the class index carry `data-search-keep`; every
+     other table is a fixture until someone says otherwise.
+
+     Pattern pages' Data-contract and States tables are ignored under this rule
+     too, and that was checked rather than waved through: searching "409
+     conflict", "partial failure" and "skeleton rows" lands on the PROSE that
+     surrounds them, on /concepts/concurrency and the pattern openers, not on
+     the table cells. The tables restate what the prose already says. */
+  ['fixture tables', /<table(?![^>]*data-search-keep)(?![^>]*data-pagefind-ignore)([^>]*)>/g],
 ];
 
 let files = 0;

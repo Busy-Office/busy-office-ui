@@ -15,7 +15,7 @@ const entries = Object.entries(api.index).sort(([a], [b]) => a.localeCompare(b))
   </p>
   <section class="demo">
     <div class="bo-data-table-container" tabindex="0">
-      <table class="bo-data-table" data-density="compact">
+      <table class="bo-data-table" data-density="compact" data-search-keep>
         <thead><tr><th scope="col">Class</th><th scope="col">Documented on</th></tr></thead>
         <tbody>
           {entries.map(([cls, page]) => (

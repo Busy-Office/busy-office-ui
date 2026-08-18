@@ -169,14 +169,34 @@ technically correct and substantively blind here. That blind spot is 27.5.
        no white flash when navigating home with dark stored; the hero's local
        control either becomes the global one or is removed so two controls do
        not mean different things.
-4a. [ ] **27.3b — Reference tables marked at generation time, so demo tables
-       can be ignored.** The residual half of P2-2. ClassRef/ApiTable would
-       carry an explicit keep-marker, letting `scope-search-index.mjs` ignore
-       demo-fixture tables without taking the reference tables with them.
-       Accept: demo table cells stop appearing in excerpts AND `bo-data-table`
-       still finds the class index in the top 3 — both measured, since fixing
-       one by breaking the other is what this item exists to avoid. Low
-       priority: excerpt noise is cosmetic next to the rest of Slice 27.
+4a. [x] **27.3b — Fixture tables ignored, reference tables kept** (2026-08-18)
+       — the residual half of P2-2, closed with both halves measured because
+       fixing one by breaking the other is what the item existed to prevent.
+
+       `ClassRef`, `ApiTable` and the class index carry `data-search-keep`;
+       every other `<table>` is treated as a fixture and ignored by
+       `scope-search-index.mjs`. **Measured before: excerpts read "Line total
+       Cost centers Actions Steel bracket, 40mm" and "$4,208.00. Pending.
+       INV-10235. Globex Industrial." After: those queries return 1 weak prose
+       hit each, and `bo-data-table` still returns the class index at #1 with
+       the ClassRef content at #2.**
+
+       Pattern pages' Data-contract and States tables are ignored under this
+       rule too. Checked rather than waved through: "409 conflict", "partial
+       failure" and "skeleton rows" all land on the surrounding PROSE, so the
+       tables were restating what was already findable.
+
+       `check:search` is **8** assertions, and the new one is deliberately
+       paired against the existing relevance guard so it **fails in opposite
+       directions** — blanket rule gives `kept: 0, kept-but-ignored: 77`;
+       rule removed gives `ignored fixtures: 0`. Both red-proved with the build
+       output verified, after a first attempt passed both injections because I
+       discarded the build log and the gate ran against a stale `dist`.
+
+       Also removed a special case rather than gating around it: ApiTable's
+       contrast sub-table had a hardcoded `data-pagefind-ignore`, which made the
+       counter meaningless. It now simply lacks the keep-marker, so one
+       mechanism decides every table.
 
 5. [x] **27.5 — Real labels, and the blind spot closed** (2026-08-18) — the
        four inputs fixed in the DOCS MARKUP, so the copy-paste path carries the

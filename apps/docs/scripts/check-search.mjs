@@ -164,18 +164,41 @@ g.check(
       else if (e.name.endsWith('.html')) yield p;
     }
   }
-  let pre = 0, ignored = 0;
+  let pre = 0, ignored = 0, fixtureTables = 0, keptTables = 0, conflictTables = 0;
   for await (const file of pages(DIST)) {
     const html = await readFile(file, 'utf8');
     for (const m of html.matchAll(/<pre([^>]*)>/g)) {
       pre += 1;
       if (/data-pagefind-ignore/.test(m[1])) ignored += 1;
     }
+    /* The other half of the same trade (roadmap 27.3b): fixture tables are
+       ignored, generated reference tables are kept. Checked statically rather
+       than through the UI, because the DESIRED result for a fixture term is
+       ZERO results — and the settle helper above requires at least one, so a
+       rendered assertion could never express it. */
+    for (const m of html.matchAll(/<table([^>]*)>/g)) {
+      const keep = /data-search-keep/.test(m[1]);
+      const ignored = /data-pagefind-ignore/.test(m[1]);
+      if (keep && ignored) conflictTables += 1;   // a kept table that got ignored anyway
+      else if (keep) keptTables += 1;
+      else if (ignored) fixtureTables += 1;
+    }
   }
   g.check(
     'every code sample in the built output is excluded from the search index',
     pre > 0 && ignored === pre,
     `${ignored}/${pre} <pre> elements carry data-pagefind-ignore`,
+  );
+  /* Deliberately fails in BOTH directions, because this trade has two ways to
+     go wrong and fixing one by breaking the other is what 27.3b exists to
+     prevent: `fixtureTables > 0` dies if the ignore rule is dropped, and
+     `conflictTables === 0` dies if the rule goes blanket again and swallows the
+     generated reference tables (which is how `bo-data-table` once fell from 9
+     hits to 3). */
+  g.check(
+    'fixture tables are ignored AND generated reference tables survive',
+    fixtureTables > 0 && keptTables > 0 && conflictTables === 0,
+    `ignored fixtures: ${fixtureTables}, kept: ${keptTables}, kept-but-ignored: ${conflictTables}`,
   );
 }
 
