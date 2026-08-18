@@ -419,6 +419,40 @@ const reached = await page.evaluate((s) => {
   const lr = l.getBoundingClientRect(), fr = f.getBoundingClientRect();
   return { focused: f.textContent.trim(), visible: fr.left >= lr.left - 1 && fr.right <= lr.right + 1 };
 }, strip);
+/* "The edge fades when there is more to reach… only when the strip actually
+   overflows, so a strip that fits is never dimmed." Both halves matter: the
+   gating is what stops a fitting strip being permanently dimmed, which would be
+   worse than no affordance at all (roadmap 30.1b).
+
+   Two traps this claim hit while being written, both already documented at the
+   top of this file and both worth re-stating: it must RESET the scroll position,
+   because the keyboard claim above leaves the strip scrolled to the end; and it
+   must wait between setting scrollLeft and reading, because the attribute is
+   written by a scroll handler that has not run yet in the same synchronous
+   block. */
+const readFade = (sel) => page.evaluate((s) => {
+  const l = document.querySelector(s);
+  return { attr: l.dataset.overflow ?? null, masked: getComputedStyle(l).maskImage !== 'none' };
+}, sel);
+const setScroll = async (sel, x) => {
+  await page.evaluate((s, x) => { const l = document.querySelector(s); l.scrollLeft = x; }, sel, x);
+  await new Promise((r) => setTimeout(r, 150));
+};
+const fits = await readFade('div[aria-label="Purchase order"]');
+await setScroll(strip, 0);
+const atStart = await readFade(strip);
+await setScroll(strip, 99999);
+const atEnd = await readFade(strip);
+await setScroll(strip, 150);
+const midway = await readFade(strip);
+check(
+  'tabs: the overflow fade appears only where there is more to reach',
+  fits.attr === null && fits.masked === false &&
+    atStart.attr === 'end' && atStart.masked === true &&
+    atEnd.attr === 'start' && midway.attr === 'both',
+  JSON.stringify({ fits, atStart, atEnd, midway }),
+);
+
 check(
   'tabs: arrow keys bring an off-screen tab fully into view',
   reached.focused === 'Settings' && reached.visible,

@@ -86,21 +86,25 @@ const tabsMarkup = `<div class="bo-tabs">
       never wraps and never clips, so no tab is unreachable.
     </p>
     <p class="bo-u-text-muted">
-      <strong>How obvious that is depends on the platform, and we will not pretend
-      otherwise.</strong> On Windows and Linux the scrollbar is always drawn, and it is
-      the affordance. On macOS, overlay scrollbars stay hidden until something moves,
-      so an overflowing strip looks like a strip with fewer tabs — and no CSS changes
-      that: <code>scrollbar-color</code> and the WebKit scrollbar pseudo-elements were
-      both measured and neither reserves space or forces a persistent bar. Keyboard
-      users are unaffected either way: arrow keys move between tabs and the browser
-      brings the focused one into view, including tabs that are off-screen.
+      <strong>The edge fades when there is more to reach</strong> — on the right when
+      you are at the start, on the left when you are at the end, both when you are in
+      the middle. It appears only when the strip actually overflows, so a strip that
+      fits is never dimmed.
     </p>
     <p class="bo-u-text-muted">
-      <strong>If your users are on macOS and the tab count is high, add arrow buttons.</strong>
-      They are two buttons and one line of script, and they are the only affordance that
-      depends on no OS setting: call
-      <code>list.scrollBy(&#123; left: 200, behavior: 'smooth' &#125;)</code> on click, and
-      mark them <code>aria-hidden="true"</code> so they never join the tab sequence.
+      It is a <code>mask</code> rather than a gradient background on purpose: a
+      background fade has to know the colour behind it, and this list sits on the page
+      canvas here but on a card surface inside an app. A mask fades to transparency, so
+      it composites correctly over whatever is actually there. The fade is also dropped
+      under <code>forced-colors</code>, where costing contrast to give a hint is the
+      wrong trade.
+    </p>
+    <p class="bo-u-text-muted">
+      Why a fade and not arrow buttons: arrows would need either an overlay background
+      (the same colour problem) or a wrapper injected into your markup, to duplicate what
+      shift+wheel, a trackpad swipe and the arrow keys already do. Keyboard users never
+      needed it — arrow keys move between tabs and the browser brings the focused one
+      into view, including tabs that are off-screen.
     </p>
   </section>
 

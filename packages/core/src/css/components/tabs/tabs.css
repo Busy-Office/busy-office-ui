@@ -18,10 +18,45 @@
        affordance that depends on no OS setting — is roadmap 30.1b. */
     scrollbar-width: thin;
     scrollbar-color: var(--bo-color-border-strong) transparent;
-    /* The edge-fade alternative was rejected on measurement too: this list
-       sits on the CANVAS in the docs but on a SURFACE inside a card
-       (#f9fafb/#0f1115 vs #ffffff/#1a1d23), so any hardcoded cover colour is
-       wrong in one of the two. */
+  }
+
+  /* The overflow affordance, after `scrollbar-color` and the WebKit scrollbar
+     pseudo-elements were both measured and did nothing on macOS (roadmap 30.1).
+     A MASK, not a gradient background: a background fade needs a cover colour,
+     and this list sits on the CANVAS in the docs but on a SURFACE inside a card
+     (#f9fafb/#0f1115 vs #ffffff/#1a1d23), so any hardcoded default is wrong in
+     one of the two. A mask fades to transparency, so it composites correctly
+     over whatever is actually behind it — no colour assumption at all.
+
+     Applied only when there is something to scroll to, which is why the sides
+     are separate attributes: `initTabs()` sets data-overflow to start, end or
+     both. Without that gating the first and last tab would be permanently
+     dimmed on a strip that fits, which is worse than no affordance.
+
+     Chosen over arrow buttons, which 30.1b was opened to add. Arrows needed
+     either an overlay background (the same colour assumption, again) or
+     restructuring consumer markup into an injected wrapper, for a control that
+     duplicates what shift+wheel, swipe and arrow-keys already do. This is one
+     selector, no DOM change, and works on every platform. */
+  .bo-tabs__list[data-overflow="end"] {
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  .bo-tabs__list[data-overflow="start"] {
+    mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  .bo-tabs__list[data-overflow="both"] {
+    mask-image: linear-gradient(to right, transparent, #000 2.5rem calc(100% - 2.5rem), transparent);
+  }
+
+  /* Forced colours: drop the fade entirely. It is a hint, and a hint that costs
+     contrast is the wrong trade for someone who turned high contrast ON. The
+     scrollbar is drawn by the OS in that mode anyway. */
+  @media (forced-colors: active) {
+    .bo-tabs__list[data-overflow] {
+      mask-image: none;
+    }
   }
 
   .bo-tabs__tab {

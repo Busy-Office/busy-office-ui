@@ -472,17 +472,31 @@ promised was never written.
        Raised as 30.1b rather than smuggled in, because arrows exceed this
        item's budget.
 
-1b. [ ] **30.1b — Tab overflow arrows (reopened from the W1 decision).**
-       Justified by 30.1's measurements, not by preference: on macOS the strip
-       has no visible affordance at all, and arrows are the only fix that does
-       not depend on an OS scrollbar setting. Accept: two buttons, `aria-hidden`
-       so they never join the tab sequence, shown only when the strip actually
-       overflows (a `ResizeObserver`, not a media query — the strip overflows by
-       container width, not viewport width); they must not become a second way
-       to change tabs; SC 2.5.8 target size holds; and the existing keyboard
-       path is unchanged. **Cost line to state honestly: +1-2 selectors and a
-       behavior — this is the component-shaped addition 30.1 refused, accepted
-       now because the cheap alternative was measured and does not work.**
+1b. [x] **30.1b — Overflow affordance shipped as a fade, arrows REFUSED**
+       (2026-08-18) — the affordance 30.1 could not deliver now exists, and it
+       is not the arrows this item was opened for.
+
+       Re-grilling the cost is what changed it. Arrows needed either an overlay
+       background — the same colour assumption that killed the gradient fade,
+       since the list sits on canvas in the docs and on a surface inside a card
+       — or restructuring consumer markup into an injected wrapper. Both to
+       duplicate what shift+wheel, a trackpad swipe and the arrow keys already
+       do. A **`mask`** has no colour to assume: it fades to transparency and
+       composites over whatever is behind it.
+
+       Shipped: `mask-image` on three `data-overflow` states, set by
+       `initTabs()` from a `ResizeObserver` (container width, not viewport) plus
+       a passive scroll listener — `end` at the start, `start` at the end,
+       `both` in the middle, and **no attribute at all when the strip fits**, so
+       a short strip is never permanently dimmed. Dropped entirely under
+       `forced-colors`, where costing contrast to give a hint is the wrong
+       trade (the gate now counts **19** live rules, up from 18).
+
+       **Cost line: 3 selectors + 1 forced-colors block, ~40 lines of behavior,
+       0 DOM injected, 0 markup changes for consumers** — against arrows' 2
+       selectors *plus* injected wrapper *plus* restructuring. Verified at 1440
+       and 390 in both themes; `check:claims` 27 -> 28, red-proved with the
+       injection confirmed in the built artefact.
 
 2. [ ] **30.2 — Typed field editor pattern (W2).** One row per field, each a
        different type (Name/DOB/Age/Amount/Qty) — the SM30 master-data case and
