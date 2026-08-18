@@ -569,7 +569,7 @@ difficult to learn. Make it a flawless journey to walk through."*
 `/getting-started/first-screen` contains **10 code blocks and 0 live demos**.
 The page whose job is to show a newcomer what they get shows them source only.
 
-1. [ ] **39.1 — Result first on the tutorial path.**
+1. [x] **39.1 — Result first on the tutorial path.**
        `Demo.astro` already renders a live preview AND its copyable code from
        ONE string, and every component page uses it. The tutorial does not.
        This is composition, not new machinery.
@@ -591,6 +591,37 @@ The page whose job is to show a newcomer what they get shows them source only.
        Accept: the first thing on the page is a rendered screen, not a `<pre>`;
        every step shows its result; the page still teaches in order; verified at
        1440 and 390 in both themes.
+
+       **Landed 2026-08-19.** The page opens with the finished screen, live —
+       composed from the SAME strings steps 2 and 3 teach, so it cannot promise
+       a screen the steps do not build. Steps 2 and 3 are now `<Demo>` (preview
+       + its code). Step 1 stays code-only and says why: it is a whole document,
+       and after it the page is an empty shell. Executable claim added (36 total)
+       asserting the result precedes the first `<pre>` AND that the hero is
+       genuinely live — red-proved by switching the behaviors off.
+
+       **Rendering it exposed three real defects that months of prose had hidden:**
+
+       - **The documented filter-bar markup does not produce a filter bar.**
+         `.bo-input`/`.bo-select` default to `inline-size: 100%`, so in a
+         wrapping `.bo-filter-bar` every control claimed a full row and the
+         "bar" rendered as a vertical stack. `/components/filters` had been
+         compensating with an inline `style` on each control — the consumer
+         writing markup the component should own. Fixed in the framework:
+         `.bo-filter-bar :is(.bo-input, .bo-select) { inline-size: auto }`.
+         **Cost: 1 selector, 0 classes, 0 behaviors**, and 4 inline styles
+         deleted from the docs page.
+       - **A live sample turns illustrative hrefs into real links.**
+         `href="/invoices/INV-1"` was fine inside `<pre>` and a broken link once
+         rendered; the link gate caught it. Now `#` with the record URL
+         explained in prose, matching every other rendered demo on the site.
+       - **Rendering the same markup twice duplicates LANDMARKS.** Two
+         `role="search"` regions and two `<nav aria-label="Pagination">` with
+         identical names — axe's `landmark-unique`, and a real problem for
+         anyone navigating by landmark. Fixed by renaming landmark names in the
+         preview copy only, as a rule rather than per-element after the
+         hand-patched first attempt shipped a second violation immediately
+         behind the first.
 
 2. [ ] **39.2 — Make "flawless journey" checkable rather than a feeling.**
        "Not difficult to learn" is not gate-able as written, so it gets proxies

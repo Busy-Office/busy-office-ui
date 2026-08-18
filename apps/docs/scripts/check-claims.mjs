@@ -645,6 +645,35 @@ check(
   JSON.stringify(narrow),
 );
 
+/* "This is what you will have in four steps... It is live: check a row and the
+   bulk bar appears." (/getting-started/first-screen, roadmap 39.1)
+
+   The tutorial now OPENS with a rendered screen instead of a code block, and
+   that screen is composed from the same strings steps 2 and 3 teach. If the
+   behaviors are not initialised on this page, the hero is a dead mock-up making
+   a live promise — which is exactly the first impression the rebuild exists to
+   fix, only worse. */
+await visit('/getting-started/first-screen/', { width: 1440 });
+const hero = await page.evaluate(async () => {
+  const preview = document.querySelector('.demo-pair__preview');
+  const firstPre = document.querySelector('pre');
+  const box = preview.getBoundingClientRect();
+  const count = preview.querySelector('.bo-data-table__selection-count');
+  const before = count?.textContent.trim() ?? null;
+  preview.querySelector('.bo-data-table__row-select').click();
+  await new Promise((r) => setTimeout(r, 150));
+  return {
+    resultBeforeCode: box.top < firstPre.getBoundingClientRect().top,
+    before,
+    after: count?.textContent.trim() ?? null,
+  };
+});
+check(
+  'first screen: opens with a LIVE result before any code block',
+  hero.resultBeforeCode && hero.before === '' && /1 selected/.test(hero.after ?? ''),
+  JSON.stringify(hero),
+);
+
 await browser.close();
 server.close();
 

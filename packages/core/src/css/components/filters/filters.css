@@ -11,6 +11,21 @@
     background: var(--bo-color-bg-surface);
   }
 
+  /* A filter bar is a ROW of controls, so it sizes them. `.bo-input` and
+     `.bo-select` default to `inline-size: 100%` — right in a stacked form
+     column, wrong here: every control claimed a full row and the "bar" rendered
+     as a vertical stack. The docs page had been compensating with an inline
+     `style` on each control, which is the consumer writing markup the component
+     should own — power that complicates the consumer's markup is failure, not
+     capability (ROADMAP Objective, principle 1).
+
+     Found by rendering it: /getting-started/first-screen documented this exact
+     markup for months and never showed the result, so nobody saw that copying
+     it produces a stack. */
+  .bo-filter-bar :is(.bo-input, .bo-select) {
+    inline-size: auto;
+  }
+
   .bo-chip {
     display: inline-flex;
     align-items: center;

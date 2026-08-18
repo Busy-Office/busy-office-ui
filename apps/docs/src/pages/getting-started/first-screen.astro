@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const step1 = `<!doctype html>
 <html lang="en" data-density="compact">
@@ -32,7 +33,7 @@ const step1 = `<!doctype html>
 </html>`;
 const step2 = `<form class="bo-filter-bar" role="search" aria-label="Invoice filters"
       method="get" action="/invoices">
-  <input class="bo-input" type="search" name="q" aria-label="Search invoices">
+  <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…">
   <select class="bo-select" name="status" aria-label="Status">
     <option>All</option><option>Pending</option><option>Approved</option>
   </select>
@@ -59,7 +60,7 @@ const step3 = `<div class="bo-data-table-container" tabindex="0">
       <tr>
         <td><input type="checkbox" name="id" value="INV-1"
           class="bo-checkbox bo-data-table__row-select" aria-label="Select INV-1"></td>
-        <td class="bo-data-table__col--code"><a href="/invoices/INV-1">INV-1</a></td>
+        <td class="bo-data-table__col--code"><a href="#">INV-1</a></td>   <!-- your record URL -->
         <td>Acme Supply Co.</td>
         <td class="bo-data-table__col--numeric">$4,208.00</td>
         <td><span class="bo-badge bo-badge--warning">Pending</span></td>
@@ -75,32 +76,67 @@ const step3 = `<div class="bo-data-table-container" tabindex="0">
     </nav>
   </div>
 </div>`;
+/* The finished screen, composed from the SAME strings steps 2 and 3 teach —
+   never a hand-built mock. A tutorial that opens with a prettier screen than
+   its steps produce is worse than one that opens with code.
+
+   One deliberate difference: the preview's search landmark is renamed.
+   Rendering the filter bar twice on one page gives two `role="search"`
+   landmarks with the SAME accessible name, which axe flags as
+   `landmark-unique` — correctly, since someone navigating by landmark would
+   find two identically-named regions with no way to tell them apart. Renaming
+   the preview's copy fixes it; the markup the reader copies is untouched. */
+const finished = renamePreviewLandmarks(`${step2}
+${step3}`);
+
+/* LANDMARKS need unique accessible names; controls do not. Renaming every
+   aria-label would make a screen reader announce "Select all — preview of…"
+   on a checkbox, so this touches only the elements that CREATE a landmark:
+   <nav> and role="search". Done as a rule rather than per-element because the
+   first attempt fixed the search form by hand and shipped a second violation
+   on the pagination <nav> immediately behind it. */
+function renamePreviewLandmarks(html) {
+  return html.replace(
+    /(<(?:nav)\b[^>]*?|<[^>]*?role="search"[^>]*?)aria-label="([^"]+)"/g,
+    (_, head, name) => `${head}aria-label="${name} — preview of the finished screen"`,
+  );
+}
 ---
 <Gallery title="Your first screen">
   <p class="demo-note">
-    From empty file to a working dense invoice list — the flagship ERP pattern — in
-    four steps. Copy each block verbatim; the end state is the
-    <a href={base + '/patterns/invoice-list'}>invoice-list pattern</a>, live.
+    <strong>This is what you will have in four steps</strong> — a working dense invoice
+    list, the flagship ERP pattern. It is live: check a row and the bulk bar appears.
+    Every step below shows its own result, with the markup that produced it underneath.
   </p>
+
+  <section class="demo">
+    <div class="demo-pair__preview" set:html={finished} />
+    <p class="bo-u-text-muted">Composed from the exact markup in steps 2 and 3 — nothing
+    here is a mock-up, and no step produces something different from what you just saw.</p>
+  </section>
   <section class="demo">
     <h2>Step 1 — the page skeleton</h2>
     <p>Density on <code>&lt;html&gt;</code>, one stylesheet, two init calls (once,
     ever). Get the files per <a href={base + '/getting-started/installation'}>Installation</a>.</p>
     <pre><code>{step1}</code></pre>
+    <p class="bo-u-text-muted">No preview for this one, deliberately: it is a whole
+    document rather than a fragment, and after this step the page is an empty shell.
+    The screen starts appearing in step 2.</p>
   </section>
   <section class="demo">
     <h2>Step 2 — the filter bar (into <code>&lt;main&gt;</code>)</h2>
     <p>A real <code>&lt;form&gt;</code>: submit and reset work without JS.</p>
-    <pre><code>{step2}</code></pre>
+    <Demo code={step2} />
   </section>
   <section class="demo">
     <h2>Step 3 — the table</h2>
-    <pre><code>{step3}</code></pre>
+    <Demo code={step3} />
     <ul class="bo-stack bo-stack--tight docs-list">
       <li><strong>Free</strong> (CSS + <code>initDataTables</code>): check a row → the
       bulk bar and live "n selected" count appear; select-all works; sticky header;
       the amount column aligns on tabular numerals.</li>
-      <li><strong>Yours to wire</strong>: the sort button re-orders rows server-side and
+      <li><strong>Yours to wire</strong>: the invoice link points at your record URL
+      (<code>#</code> here only because this page renders it live); the sort button re-orders rows server-side and
       updates <code>aria-sort</code>; pagination links carry your querystring; row
       checkboxes POST via their <code>name/value</code>.</li>
     </ul>
@@ -118,5 +154,10 @@ const step3 = `<div class="bo-data-table-container" tabindex="0">
     <a href={base + '/components/dialog'}>approve dialog</a> — composed in the
     <a href={base + '/patterns/approval'}>approval pattern</a>.</p>
   </section>
+  <script>
+    import { initDataTables } from '@busy-office/ui/js';
+    initDataTables();
+  </script>
+
   <Related links={[["/patterns/invoice-list", "The finished screen as a pattern"], ["/components/data-table", "Data table"], ["/base/primitives", "Layout primitives"]]} />
 </Gallery>

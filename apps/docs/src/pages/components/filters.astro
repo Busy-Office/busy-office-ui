@@ -22,8 +22,8 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
   </p>
   <section class="demo">
     <form class="bo-filter-bar" role="search" aria-label="Invoice filters">
-      <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
-      <select class="bo-select" name="status" style="inline-size:auto" aria-label="Status">
+      <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" />
+      <select class="bo-select" name="status" aria-label="Status">
         <option>All statuses</option><option>Pending</option><option>Approved</option>
       </select>
       <span class="bo-chip bo-chip--active">Status: Pending
@@ -77,8 +77,8 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
       filter bar and the active chip update to match.
     </p>
     <form class="bo-filter-bar" role="search" aria-label="Saved-view invoice filters" style="margin-block-end: var(--bo-space-2)">
-      <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
-      <select class="bo-select" name="status" style="inline-size:auto" aria-label="Status">
+      <input class="bo-input" type="search" name="q" aria-label="Search invoices" placeholder="Search…" />
+      <select class="bo-select" name="status" aria-label="Status">
         <option value="">All statuses</option>
         <option value="pending">Pending</option>
         <option value="overdue">Overdue</option>
