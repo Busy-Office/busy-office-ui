@@ -68,7 +68,7 @@ inline edit) · combobox & multi-select dropdown · tabs · alerts/toasts · nav
 tree · CSS icons (`mask-image`, themable via `currentColor`) · approval timelines ·
 audit trails · wizard stepper · print/report layer.
 
-Browser floor: **Chrome/Edge 119 · Firefox 128 · Safari 17.4**.
+Browser floor: **<!-- stat:floor -->Chrome/Edge 119 · Firefox 128 · Safari 17.4<!-- /stat -->**.
 
 ## Links
 

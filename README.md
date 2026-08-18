@@ -48,7 +48,7 @@ pagination, filters, saved views) · tabs · dropdowns (popover) · alerts/toast
 navigation (sidebar, off-canvas) · dialogs · dashboards (widget grid, stat tiles) ·
 approval timelines · audit trails · wizard stepper · print/report layer.
 
-Browser floor: **Chrome/Edge 119 · Firefox 128 · Safari 17.4**.
+Browser floor: **<!-- stat:floor -->Chrome/Edge 119 · Firefox 128 · Safari 17.4<!-- /stat -->**.
 
 ## Docs
 

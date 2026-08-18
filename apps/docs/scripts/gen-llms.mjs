@@ -4,6 +4,8 @@
  * contrast.json), so it cannot drift either.
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import floorData from '@busy-office/ui/floor.json' with { type: 'json' };
+const floorLabel = floorData.label;
 import { MARKUP_RULES } from '../src/data/markup-rules.mjs';
 import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
@@ -21,7 +23,7 @@ let out = `# busy-office-ui v${pkg.version}
 > CSS-first UI framework for ERP and back-office applications. Semantic components,
 > density as a dimension (data-density="compact|comfortable|spacious" on <html> or any
 > wrapper), dark mode via [data-theme="dark"], all framework CSS in @layer (unlayered
-> consumer CSS always wins). Browser floor: Chrome/Edge 119, Firefox 128, Safari 17.4.
+> consumer CSS always wins). Browser floor: ${floorLabel}.
 
 ## Install
 

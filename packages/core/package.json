@@ -52,7 +52,8 @@
       "import": "./dist/js/index.js"
     },
     "./js/behaviors/*": "./dist/js/behaviors/*.js",
-    "./scales": "./dist/scales.json"
+    "./scales": "./dist/scales.json",
+    "./floor.json": "./dist/floor.json"
   },
   "scripts": {
     "build:css": "node scripts/build-component-css.mjs",
@@ -62,7 +63,7 @@
     "check:rtl": "node scripts/check-rtl.mjs",
     "check:motion": "node scripts/check-motion.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run check:rtl && npm run check:motion && npm run build:acr && node scripts/stamp-readme.mjs --check && npm run check:package",
+    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run check:rtl && npm run check:motion && npm run build:acr && npm run build:floor && node scripts/stamp-readme.mjs --check && npm run check:package",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
@@ -72,7 +73,8 @@
     "build:acr": "node scripts/extract-acr.mjs",
     "gen:scales": "node scripts/generate-scales.mjs",
     "check:markup": "node scripts/check-markup.mjs",
-    "check:package": "node scripts/check-package.mjs"
+    "check:package": "node scripts/check-package.mjs",
+    "build:floor": "node scripts/derive-floor.mjs"
   },
   "browserslist": [
     "chrome >= 119",
@@ -81,15 +83,16 @@
     "safari >= 17.4"
   ],
   "devDependencies": {
+    "@mdn/browser-compat-data": "^8.0.11",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
+    "jsdom": "^25.0.1",
     "postcss": "^8.4.47",
     "postcss-custom-media": "^11.0.5",
     "postcss-import": "^16.1.0",
     "postcss-nesting": "^13.0.1",
     "stylelint": "^16.10.0",
     "typescript": "^5.6.3",
-    "jsdom": "^25.0.1",
     "vitest": "^2.1.8"
   },
   "bin": {

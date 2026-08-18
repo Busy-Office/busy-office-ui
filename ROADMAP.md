@@ -581,7 +581,7 @@ floor that is fine for a consumer product can be disqualifying here.
 | `subgrid` | 1 | |
 | `accent-color` | 1 | |
 
-1. [ ] **38.1 — Derive the floor instead of asserting it.**
+1. [x] **38.1 — Derive the floor instead of asserting it.**
        Today it is hand-written prose — **`Chrome/Edge 119 · Firefox 128 ·
        Safari 17.4`, repeated in 8 places** (index, installation, troubleshooting,
        README x2, DESIGN.md, gen-llms, plus versioned snapshots) and computed
@@ -601,6 +601,45 @@ floor that is fine for a consumer product can be disqualifying here.
        lives in ONE generated place that every page and README reads, and a gate
        fails the build if the declared floor is below what the CSS actually
        requires. Version numbers are never typed by hand again.
+
+       **Landed 2026-08-18 — and the headline is that the floor was RIGHT.**
+       `derive-floor.mjs` reproduces `Chrome/Edge 119 · Firefox 128 · Safari 17.4`
+       exactly, from 18 detected features against `@mdn/browser-compat-data@8.0.11`.
+       Both of my triage alarms were wrong, and both were caught by measuring:
+
+       - **"mask-image needs Chrome 120."** True of the unprefixed property, and
+         irrelevant: autoprefixer emits `-webkit-` alongside every real
+         declaration. Verified in the BUILT css — the only unprefixed-without-
+         fallback hit was a `.my-icon` example inside a comment. The first
+         version of the script ignored prefixes and reported Chrome **136**
+         (`print-color-adjust`), which should have been implausible enough to
+         check before it was believed.
+       - **"Nothing needs Firefox 128."** Wrong, and the correction is the most
+         useful thing here: `content: "↕" / ""` — the empty ALT that stops a
+         decorative glyph being announced — needs exactly FF 128, and is used 8
+         times. It was missing from the probe list, so the script confidently
+         reported a floor three versions too low. The tool's stated limitation
+         ("a feature nobody probed does not raise the floor") is real, and this
+         is what it looks like.
+
+       Also corrected a modelling error: not every modern feature is a
+       requirement. `scrollbar-color` lands in Safari **26.2**, and tabs.css says
+       in as many words that it is "NOT relied on as the affordance". Letting a
+       cosmetic hint set the floor would advertise a browser that barely exists.
+       Features are now tiered **core / degrades / polish**, and `floor.json`
+       publishes two numbers: the floor (119 · 128 · 17.4) and full fidelity
+       (121 · 128 · 26.2), where every enhancement also paints.
+
+       Now generated everywhere: 3 docs pages import `floor.json`; README x2 and
+       DESIGN.md are stamped; `gen-llms` reads it. `check:floor` fails the build
+       on any hand-typed literal outside a generated region (red-proved).
+       ROADMAP and the grills are exempt — they record what was believed, and
+       rewriting history would erase the finding.
+
+       **What this buys 38.2:** the levers are now named. Chrome is set by
+       `:user-invalid`; Firefox and Safari by `content` alt-text. Lowering the
+       floor means giving up one of those, both of which are accessibility
+       features with known fallbacks.
 
 2. [ ] **38.2 — Decide, per feature, what the floor is worth.**
        Only answerable once 38.1 says which feature sets each number. For each

@@ -1,4 +1,5 @@
 ---
+import floor from '@busy-office/ui/floor.json';
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import pkg from '@busy-office/ui/package.json';
@@ -113,7 +114,7 @@ const skeleton = `<!doctype html>
 
   <section class="demo">
     <h2>Browser floor</h2>
-    <p><strong>Chrome/Edge 119 · Firefox 128 · Safari 17.4.</strong> The framework uses
+    <p><strong>{floor.label}.</strong> The framework uses
     <code>@layer</code>, <code>:has()</code>, named container queries, and
     <code>popover</code>. Server-set <code>aria-invalid</code> error messages degrade
     gracefully below the floor; interactive <code>:has()</code> reveals do not.</p>

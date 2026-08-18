@@ -1,4 +1,5 @@
 ---
+import floor from '@busy-office/ui/floor.json';
 // Landing — standalone layout (no docs sidebar). Every number below is
 // COMPUTED at build time from the shipped artifacts (site-proposal grill:
 // landing claims are script-derived or they don't ship).
@@ -125,7 +126,7 @@ const invoices = [
             <div><dt>Dependencies</dt><dd>0 <span class="meta__sub">JS optional — {behaviors.initCount} call-once behaviors</span></dd></div>
             <div><dt>Contrast</dt><dd><a href={base + '/reference/tokens'}>{contrastPairs / 2} pairs × 2 themes</a> <span class="meta__sub">all AA, CI-gated</span></dd></div>
             <div><dt>API</dt><dd><a href={base + '/getting-started/versioning'}>Versioned</a> <span class="meta__sub">classes, tokens, ARIA are semver surface</span></dd></div>
-            <div><dt>Floor</dt><dd>Chrome 119 · FF 128 · Safari 17.4 <span class="meta__sub">modern CSS instead of a runtime</span></dd></div>
+            <div><dt>Floor</dt><dd>{floor.label} <span class="meta__sub">modern CSS instead of a runtime</span></dd></div>
           </dl>
         </div>
 
@@ -317,7 +318,7 @@ const invoices = [
           <span>MIT · <a href="https://github.com/Busy-Office/busy-office-ui">GitHub</a> ·
             <a href="https://github.com/Busy-Office/busy-office-ui/blob/main/CHANGELOG.md">Changelog</a> ·
             <a href="https://github.com/Busy-Office/busy-office-ui/tree/main/examples/po-app">Example app (Docker)</a></span>
-          <span class="bo-u-text-muted">Floor: Chrome/Edge 119 · Firefox 128 · Safari 17.4 — modern CSS is the point.</span>
+          <span class="bo-u-text-muted">Floor: {floor.label} — modern CSS is the point.</span>
         </div>
       </footer>
     </main>

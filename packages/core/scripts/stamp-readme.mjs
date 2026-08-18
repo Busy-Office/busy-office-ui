@@ -18,6 +18,10 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const readmePaths = [
   { path: join(root, 'README.md'), requireAll: true },
   { path: join(root, '../../README.md'), requireAll: false },
+  /* DESIGN.md carries the floor too, and used to hand-type it. Not required:
+     container build contexts copy only packages/, so it is legitimately absent
+     there — the same reason the repo-root README is optional. */
+  { path: join(root, '../../DESIGN.md'), requireAll: false },
 ];
 
 const minCss = readFileSync(join(root, 'dist/css/index.min.css'));
@@ -45,6 +49,10 @@ const stats = {
   size: `${minKb} kB minified (${gzipKb.toFixed(1)} kB gzipped)`,
   behaviors: String(behaviors.initCount),
   events: [...events].sort().map((e) => `\`${e}\``).join(', '),
+  /* Derived by derive-floor.mjs from the shipped CSS — never typed. The old
+     hand-written value had Firefox three versions too high and Safari a point
+     release too high, costing reach for nothing. */
+  floor: JSON.parse(readFileSync(new URL('../dist/floor.json', import.meta.url), 'utf8')).label,
 };
 
 // Tolerance band, kB: covers observed zlib/zlib-ng cross-build drift (a
