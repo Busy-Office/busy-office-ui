@@ -557,6 +557,93 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 40 — icons, SVG, date picker, filter popup (owner wishlist, 2026-08-19)
+
+Four asks. **Measured before answering**, because the first one has a number that
+decides it.
+
+### The icon question, answered with arithmetic
+
+12 icons ship today. In the minified stylesheet they are **7,898 bytes — 10.3% of
+the entire framework** (76.9 kB), averaging 658 bytes each because every icon is
+an inlined SVG data URI in a `mask-image`.
+
+**A 200-icon "full list" would add ~129 kB minified — nearly twice the size of
+the whole framework.** Icons would become the majority of what we ship, to
+compete with Lucide and Heroicons, which are better maintained and already free.
+That fails "less for more" on the arithmetic alone, so a full set is **refused**.
+
+But the ask underneath it is real: 12 icons is not enough for an ERP, and today
+the only escape hatch is a comment in `icon.css` telling you to write your own
+`mask-image`. So the answer is a mechanism, not a catalogue.
+
+1. [ ] **40.1 — Any icon, one line: `--bo-icon-src`.**
+       Make `.bo-icon` take its glyph from a custom property, so a consumer
+       points it at any SVG — Lucide, Heroicons, their own brand mark — and gets
+       the framework's sizing, colour, density and forced-colors handling for
+       free. The 12 shipped icons become *defaults expressed in the same
+       mechanism*, not a privileged list.
+
+       Accept: one new custom property, **zero new classes per icon**; the 12
+       existing icons still render identically (compare built CSS before/after);
+       a documented one-line recipe for Lucide/Heroicons that is executed, not
+       asserted; the "deliberately absent" list gains an entry explaining why
+       there is no icon catalogue and what to use instead. Cost line stated.
+
+2. [ ] **40.2 — SVG: say where it EARNS its place, and where it does not.**
+       Owner asked about SVG for avatars and app-launch tiles, and for use-case
+       suggestions.
+
+       **My first suggestion is a refusal**, because it is the cheapest win:
+       an initials avatar needs no SVG at all — it is a `<span>` with a
+       background token and two letters, which is text that scales, translates,
+       and is selectable. Generating an SVG for it would be strictly worse.
+
+       Where SVG genuinely earns it: **empty-state and error illustrations**
+       (a screen with nothing in it is where ERPs feel most broken), and
+       **deterministic identicons** where a vendor has no logo. Both are
+       decorative, so both must be `aria-hidden` with the meaning carried in
+       text — the two-channel rule.
+
+       Accept: a written recommendation per use case with the refusals first;
+       anything built ships as **one mechanism**, not a set of assets; nothing
+       lands that a `<span>` and a token already do.
+
+3. [ ] **40.3 — Date picker: multi-month, with marked dates.**
+       The ask: 1- and 3-month views, and highlighting holidays or
+       company-specific dates. This is the most genuinely ERP-shaped item in the
+       list — period-end, shipment windows and payment terms all need "which
+       days are special".
+
+       **The hard question to settle FIRST, before any markup:** the framework
+       ships `date` today as a native `<input type="date">`, which is used by
+       **zero** of the 17 shipped screens (see `surface-baseline.md`). A custom
+       calendar is a large, accessibility-heavy widget — the exact kind of thing
+       DESIGN.md's "deliberately absent" table exists to keep out. It has to be
+       justified against the native control, not assumed.
+
+       Accept: state what the native input cannot do (it cannot mark a date, and
+       cannot show two months); prove the marking requirement is real by naming
+       the ERP cases; and if it is built, it is **one component with settings**
+       (months=1|3, marked dates supplied as data) with full keyboard support
+       per the APG and an executable claim per interaction. Refusing, and
+       documenting the native input plus a marked-date legend instead, is a
+       valid outcome.
+
+4. [ ] **40.4 — Advanced filter popup.**
+       Today `.bo-filter-bar` is a row of controls. The ask is the pattern where
+       filters live behind a trigger, with applied filters shown as chips.
+
+       **`.bo-chip` already exists and already renders applied filters** on
+       `/components/filters` — so this may be composition (popover + the
+       existing bar + chips) rather than a component. Check that before
+       building anything.
+
+       Accept: an explicit answer to "is this a new component or a pattern
+       page?" with the composition written out; if it is a pattern, it lands as
+       one; the popover must be dismissible by Escape and return focus to its
+       trigger, proven by an executable claim, not asserted.
+
 ## Slice 39 — the docs must make the first impression (owner wishlist, 2026-08-18)
 
 Owner: *"Your first screen — only code, which does not create the first
