@@ -557,6 +557,35 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 41 — from the Objective grill, Slices 31-40 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices31-40-2026-08-19.md`.
+
+1. [ ] **41.1 — Make dispatcher starvation a number, not a discovery.**
+       Three rules have now starved because an always-true condition sat above a
+       counter, and **each was found by hand** — the last one after **ten
+       slices**. The instances are fixed; the blind spot is not.
+
+       Accept: a script reports, per counter-triggered rule (Standardize,
+       Objective), how many qualifying events have accumulated and how long since
+       it last fired — read from `.roundtable/loop-log.md`, which already records
+       every dispatch. It runs in the wake, prints one line per rule, and says
+       plainly when a rule is overdue. Not a gate: this is information for the
+       dispatcher, and failing a build over it would be the wrong lever. Verified
+       against the known history — it must report the ten-slice Objective gap
+       from the log alone.
+
+2. [ ] **41.2 — Stop the loop log saying "shipped" for work nobody can install.**
+       Every iteration in Slices 31-40 is recorded as `shipped`, and the registry
+       has served **0.1.1** throughout. Four consecutive grills have recorded
+       that gap, and the log's own vocabulary hides it.
+
+       Accept: `record_iteration.py` distinguishes committed-to-git from
+       released, or the outcome vocabulary gains a term that does. Existing rows
+       are NOT rewritten — they record what was believed at the time, and
+       rewriting history would erase the finding. Cheap, and it makes the
+       release gap visible in the place decisions are made.
+
 ## Slice 40 — icons, SVG, date picker, filter popup (owner wishlist, 2026-08-19)
 5. [x] **40.5 — `ApiTable` notes render as HTML, and a note produced a SERIOUS
        a11y violation.** Writing `A day may be a <span>, an <a> or a <button>`
