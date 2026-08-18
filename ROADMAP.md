@@ -557,6 +557,46 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 33 — using this framework from ANOTHER repo, with AI (owner question, 2026-08-18)
+
+Owner asked how to improve AI comprehension and prevent slop when building an
+ERP in a different project with this framework. Slice 32 built the machinery;
+this slice is about it actually reaching that repo, which is a different problem
+— everything so far is discoverable only by someone already reading these docs.
+
+**What already ships and is usable from outside today:** `llms.txt` (20.5 kB,
+now including "Deliberately absent"), `api.json` with attribute values,
+`bo-check-markup` as a package bin, the generated per-component ClassRef and
+ApiTable, and the behaviors manifest.
+
+**The gap: none of it is wired up for them.** A consumer must know llms.txt
+exists, know to feed it to their assistant, know the checker exists, and know to
+put it in their build. Each is a step where the default is "does not happen".
+
+1. [ ] **33.1 — A copy-paste block for the consumer's own AI instructions
+       file.** One fenced snippet a consumer drops into `CLAUDE.md` /
+       `AGENTS.md` / `.cursorrules` in THEIR repo: where `llms.txt` lives, the
+       four data-maintenance patterns as the decision frame, the "deliberately
+       absent" list, and `npx bo-check-markup` as the verification step.
+       Accept: it is **generated**, not hand-written, from `llms.txt` + the
+       DESIGN.md table, so it cannot drift; it is on a docs page a consumer
+       actually lands on (`/getting-started/installation` or its own page);
+       under ~60 lines, because a block nobody pastes is worth nothing.
+
+2. [ ] **33.2 — Say how to wire the checker into a consumer build.** The tool
+       exists and nothing tells anyone to run it. Accept: the troubleshooting
+       or installation page shows the npm script and a CI step; states that it
+       needs BUILT html (it reads rendered output, not templates); and states
+       the honest limitation — it validates classes and framework attribute
+       VALUES, not whether the markup means anything.
+
+3. [ ] **33.3 — Measure whether any of this works.** Everything above is a
+       hypothesis: that a machine-readable surface plus a checker reduces slop.
+       Accept: build one realistic ERP screen in a scratch repo **using only
+       `llms.txt` as the framework input**, run `bo-check-markup` on the
+       result, and record what it got wrong. That number is the only evidence
+       this slice is worth anything, and it is cheap to get.
+
 ## Slice 31 — DESIGN.md's own four-pattern table is wrong (2026-08-18)
 
 Found by checking the docs for **promises never fulfilled** — the method that
