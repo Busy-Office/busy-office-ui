@@ -498,6 +498,19 @@ promised was never written.
        and 390 in both themes; `check:claims` 27 -> 28, red-proved with the
        injection confirmed in the built artefact.
 
+0. [ ] **30.0 — AWAITING OWNER CLARIFICATION (2 wishlist notes, 2026-08-18).**
+       Recorded here so they are not lost in chat. Both have two readings that
+       lead to materially different work, so neither is buildable as written.
+       - *"check out overview. the sidebar menu."* — either (a) review the docs'
+         OWN landing page and nav, or (b) a new ERP pattern page: an
+         overview/dashboard screen with a module sidebar. (b) is a slice of
+         work; (a) is a review.
+       - *"horizontal tabs"* — `.bo-tabs` is already horizontal, so this most
+         likely means either (a) **vertical** tabs (a left-rail tab list, the
+         common ERP settings-screen shape) or (b) tabs as the top-level page
+         navigation instead of the sidebar. (a) is a component setting; (b) is
+         an IA change to the docs shell.
+
 2. [ ] **30.2 — Typed field editor pattern (W2).** One row per field, each a
        different type (Name/DOB/Age/Amount/Qty) — the SM30 master-data case and
        the best single screen for showing every typed input at once.
