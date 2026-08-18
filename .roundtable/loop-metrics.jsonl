@@ -71,3 +71,4 @@
 {"ts": "2026-08-18 19:36", "name": "ci-wall-time", "value": 275.0, "unit": "s"}
 {"ts": "2026-08-18 19:54", "name": "ci-wall-time", "value": 275.0, "unit": "s"}
 {"ts": "2026-08-18 22:14", "name": "claims", "value": 35.0, "unit": "count"}
+{"ts": "2026-08-18 22:33", "name": "gates", "value": 19.0, "unit": "count"}
