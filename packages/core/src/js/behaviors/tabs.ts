@@ -58,7 +58,14 @@ function watchOverflow(list: HTMLElement): void {
   list.dataset.boOverflowWatched = '1';
   markOverflow(list);
   list.addEventListener('scroll', () => markOverflow(list), { passive: true });
-  new ResizeObserver(() => markOverflow(list)).observe(list);
+  /* Guarded, not polyfilled: the fade is progressive enhancement, and
+     `initTabs()` must not throw where ResizeObserver does not exist — which is
+     every consumer's jsdom test suite, not just ours. CI caught this as
+     "ResizeObserver is not defined" in the behavior tests; without the guard,
+     anyone unit-testing a page that calls initTabs() would inherit the crash. */
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => markOverflow(list)).observe(list);
+  }
 }
 
 export function initTabs(): void {
