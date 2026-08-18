@@ -65,7 +65,7 @@ const aa = (contrast.themes.light as any[])
     </table>
   </div>
   {notes.length > 0 && (
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem">
+    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem" data-api-notes>
       {notes.map((n: string) => <li set:html={n} />)}
     </ul>
   )}

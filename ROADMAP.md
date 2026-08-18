@@ -558,7 +558,7 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        none — the file would still look complete.
 
 ## Slice 40 — icons, SVG, date picker, filter popup (owner wishlist, 2026-08-19)
-5. [ ] **40.5 — `ApiTable` notes render as HTML, and a note produced a SERIOUS
+5. [x] **40.5 — `ApiTable` notes render as HTML, and a note produced a SERIOUS
        a11y violation.** Writing `A day may be a <span>, an <a> or a <button>`
        as a note put real elements inside the notes `<ul>`, which axe flagged as
        `list` (serious) — non-`<li>` children of a list. Caught only because the
@@ -568,6 +568,36 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        markup) or the component states that it takes HTML and a gate rejects
        block-level tags in a note. Red-proved either way, and the existing note
        arrays are checked for other instances.
+
+       **Landed 2026-08-19 as the gate, not the escape.** Measured first:
+       **`<code>` appears 208 times across 150 notes**, balanced, so escaping
+       wholesale would break the legitimate use that `set:html` exists for.
+       `check:notes` instead asserts that a note renders as PROSE — inline
+       formatting allowed, interactive and structural elements never.
+
+       **Diagnosed the original bug rather than guessing at it.** The unclosed
+       `<a>` triggers the parser's adoption-agency algorithm, which HOISTS an
+       `<a>` out of its `<li>` to sit as a direct child of the `<ul>` — measured
+       in the DOM as `[LI, LI, LI, A]`. That is why axe reported a serious
+       `list` violation several steps from the note that caused it.
+
+       **Found one more, already shipped:** `/components/tag-input` wrote
+       `` `<button>`s `` — backticks are not escaping — putting a real focusable
+       button mid-sentence. axe never complained, because a stray button is
+       valid HTML; it simply is not what the author wrote. Fixed.
+
+       **Two of my own errors, both caught by insisting on a red proof:**
+       - A source-level version of the check reported **six false positives**
+         immediately: notes are assembled from Astro expressions
+         (`<a href={base + '/x'}>`), so the source is not HTML and cannot be
+         parsed as such. The gate runs on BUILT output, where the question is
+         well posed.
+       - My first hoisting detector was **dead code**: hoisting happens at parse
+         time, so the built file still reads `<li>…<a>…</li>` and a text search
+         for a stray sibling can never fire. It passed against a deliberately
+         broken note. Replaced with a per-note tag-balance check, which catches
+         the CAUSE statically and names the sentence; axe still covers the
+         parsed result.
 
 
 Four asks. **Measured before answering**, because the first one has a number that

@@ -122,7 +122,7 @@ const canonical = `<!-- The framework owns REMOVAL (it's the framework's own ren
     js="Required: initTagInput() — without it, Enter/Backspace do nothing and remove buttons don't remove their tag."
     notes={[
       'The framework owns REMOVAL only — a remove-button click or Backspace-on-empty deletes the framework\'s own rendered `.bo-tag-input__tag` and dispatches `bo:tag-remove`. Addition is yours: Enter dispatches `bo:tag-add` with the typed text and clears the field; validate/dedupe and append the tag markup yourself.',
-      'Keyboard access to remove buttons is plain Tab order — they\'re real `<button>`s, no reimplemented roving-tabindex needed.',
+      'Keyboard access to remove buttons is plain Tab order — they\'re real <code>button</code> elements, no reimplemented roving-tabindex needed.',
       'Wrap the group in `role="group"` with an `aria-label` naming what the tags represent (cost centers, recipients) — a native group has no accessible name of its own.',
       'Works with zero tags — no special empty-state markup.',
     ]}
