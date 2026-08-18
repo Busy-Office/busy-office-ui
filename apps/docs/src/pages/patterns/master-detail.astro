@@ -32,7 +32,7 @@ const rows = [
               {rows.map((r, i) => (
                 <tr aria-selected={i === 0 ? 'true' : 'false'}>
                   <th scope="row">
-                    <a href={`#md-${r.id}`} aria-current={i === 0 ? 'true' : undefined}>{r.name}</a>
+                    <a href="#md-detail" aria-current={i === 0 ? 'true' : undefined}>{r.name}</a>
                   </th>
                   <td>{r.country}</td>
                   <td>{r.status === 'Blocked'
@@ -43,7 +43,7 @@ const rows = [
             </tbody>
           </table>
         </div>
-        <aside class="bo-widget" aria-labelledby="md-title" id="md-V-1001">
+        <aside class="bo-widget" aria-labelledby="md-title" id="md-detail">
           <div class="bo-widget__header">
             <h3 class="bo-widget__title" id="md-title">Umbrella Logistics GmbH</h3>
             <span class="bo-badge bo-badge--success">Active</span>

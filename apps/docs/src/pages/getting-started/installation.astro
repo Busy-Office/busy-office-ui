@@ -13,6 +13,17 @@ const jsInit = `import { initDialogs, initDataTables, initTabs, initDropdowns, i
 
 // Call each ONCE, ever — document-level delegation survives all DOM swaps.
 initDialogs(); initDataTables(); initTabs(); initDropdowns(); initAlerts();`;
+const checkScript = `// package.json — runs on the BUILT output, so it goes after your build
+"scripts": {
+  "build": "…",
+  "check:markup": "bo-check-markup dist"
+}
+
+npm run check:markup        # or: npx bo-check-markup dist`;
+const checkCi = `# .github/workflows/ci.yml
+- run: npm ci
+- run: npm run build          # must come first — the check reads rendered HTML
+- run: npm run check:markup`;
 const skeleton = `<!doctype html>
 <html lang="en" data-density="comfortable"> <!-- or "compact" for back-office -->
 <head>
@@ -76,6 +87,28 @@ const skeleton = `<!doctype html>
   <section class="demo">
     <h2>Copy-paste page skeleton</h2>
     <pre><code>{skeleton}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2 id="check-your-markup-in-ci">Check your markup in CI <span class="bo-u-text-muted">(recommended)</span></h2>
+    <p>An unknown class or attribute value fails <em>silently</em> here — modern CSS
+    degrades by doing nothing. One command catches both, against the same
+    <code>api.json</code> the docs are generated from:</p>
+    <pre><code>{checkScript}</code></pre>
+    <p><strong>Point it at built HTML, not templates.</strong> It reads rendered output,
+    so it must run <em>after</em> your build. If your stack renders server-side
+    (Rails, Django, Laravel), point it at whatever HTML you already produce — a
+    static export, or the fixtures your view tests render.</p>
+    <pre><code>{checkCi}</code></pre>
+    <p class="bo-u-text-muted">
+      <strong>What it does not do</strong>, stated plainly so it isn't mistaken for more
+      than it is: it checks that every <code>bo-*</code> class and every framework
+      <code>data-*</code> value <em>exists</em>. It does not check that your markup
+      <em>means</em> anything — a real class on the wrong element, a heading level that
+      skips, a table used for layout all pass. Your own <code>data-*</code> hooks are
+      never flagged, because nothing distinguishes <code>data-row-id</code> from a
+      misspelled framework attribute. Use it as a spell-checker, not a reviewer.
+    </p>
   </section>
 
   <section class="demo">

@@ -54,6 +54,10 @@ const recipe = `/* app.css — the ONE statement that matters comes first: it fi
     tool stays quiet rather than noisy. This repo runs it over its own docs on
     every build; it found an invented <code>.bo-composer__input</code> and a
     <code>.bo-u-text-sm</code> that never existed.</p>
+    <p class="bo-u-text-muted">Better than reaching for it once something is already
+    wrong: <a href={base + '/getting-started/installation#check-your-markup-in-ci'}>wire
+    it into your build</a>. It needs built HTML, so it runs after your build — and it
+    checks that names <em>exist</em>, not that your markup means anything.</p>
   </section>
 
   <section class="demo">

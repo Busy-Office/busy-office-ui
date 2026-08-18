@@ -4,7 +4,7 @@
  * both live 404s the site grill found (base-blind redirects, a generated slug
  * with no page) were link-rot in build output nothing re-read (S-1/S-2/S-7).
  */
-import { readFile, readdir, access } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { DIST } from './paths.mjs';
 
@@ -18,16 +18,52 @@ async function* htmlFiles(dir) {
   }
 }
 
-async function exists(urlPath) {
+/** Resolve a URL path to the built file that serves it, or null. */
+async function resolveFile(urlPath) {
   const clean = urlPath.replace(/[#?].*$/, '').replace(/\/$/, '');
   const rel = clean === '' ? 'index.html' : clean.replace(/^\//, '');
   for (const candidate of [rel, `${rel}/index.html`, `${rel}.html`]) {
     try {
-      await access(join(DIST, candidate));
-      return true;
+      /* stat, not access: `access` succeeds on a DIRECTORY, so `/components`
+         resolved to the directory itself and the link counted as good even if
+         no index.html was ever emitted inside it. Harmless while this returned
+         a boolean; a crash (EISDIR) the moment the file was actually read for
+         its anchors — which is how the looseness came to light. */
+      const s = await stat(join(DIST, candidate));
+      if (s.isFile()) return join(DIST, candidate);
     } catch {}
   }
-  return false;
+  return null;
+}
+
+async function exists(urlPath) {
+  return (await resolveFile(urlPath)) !== null;
+}
+
+/* Fragments were STRIPPED and never checked, so `…/installation#anchor-that-
+   does-not-exist` counted as a verified link — the page resolves, the anchor
+   silently doesn't, and the reader lands at the top of a long page wondering
+   what they were meant to see. Found by writing exactly that link into the
+   troubleshooting page and then checking by hand (roadmap 33.2); 30 distinct
+   cross-page fragment links were riding on an unverified assumption.
+
+   Ids are read once per target page and cached — the same handful of pages are
+   linked from everywhere, and re-reading per link made this gate the slowest
+   in the chain. */
+const idCache = new Map();
+async function idsOf(file) {
+  if (!idCache.has(file)) {
+    const html = await readFile(file, 'utf8');
+    idCache.set(
+      file,
+      new Set([
+        ...[...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]),
+        // <a name> is still a valid anchor target in HTML5 parsing.
+        ...[...html.matchAll(/<a[^>]+name="([^"]+)"/g)].map((m) => m[1]),
+      ]),
+    );
+  }
+  return idCache.get(file);
 }
 
 let checked = 0;
@@ -44,6 +80,19 @@ for await (const file of htmlFiles(DIST)) {
     ...[...html.matchAll(/href="(\.[^"]*)"/g)].map((m) => resolveRel(m[1])),
     ...[...html.matchAll(/content="0;url=([^"]+)"/g)].map((m) => m[1]),
   ].filter((u) => !u.startsWith('//'));
+
+  /* Same-page anchors, which the target list above cannot see: it matches
+     hrefs starting with "/" or ".", and these start with "#". They are the
+     COMMONER place for a dead anchor — skip links, in-page tables of contents,
+     "back to top" — and they were as unchecked as the cross-page ones. */
+  const ownIds = await idsOf(file);
+  for (const m of new Set([...html.matchAll(/href="#([^"]+)"/g)].map((x) => x[1]))) {
+    checked++;
+    const frag = decodeURIComponent(m);
+    if (frag !== 'top' && !ownIds.has(frag)) {
+      failures.push(`${file.replace(DIST, '')}: link to missing anchor #${frag} on this page`);
+    }
+  }
   for (const t of new Set(targets)) {
     checked++;
     if (base && !t.startsWith(base + '/') && t !== base) {
@@ -58,8 +107,14 @@ for await (const file of htmlFiles(DIST)) {
       continue;
     }
     const pathInSite = base ? t.slice(base.length) : t;
-    if (!(await exists(pathInSite))) {
+    const target = await resolveFile(pathInSite);
+    if (!target) {
       failures.push(`${file.replace(DIST, '')}: broken internal link: ${t}`);
+      continue;
+    }
+    const frag = decodeURIComponent(pathInSite.split('#')[1] ?? '');
+    if (frag && !(await idsOf(target)).has(frag)) {
+      failures.push(`${file.replace(DIST, '')}: link to missing anchor #${frag} on ${t.split('#')[0]}`);
     }
   }
 }

@@ -718,12 +718,37 @@ put it in their build. Each is a step where the default is "does not happen".
        be read here and pasted into a file a human opens later. Wrapped at 78
        columns; horizontal overflow is now 0.
 
-2. [ ] **33.2 — Say how to wire the checker into a consumer build.** The tool
+2. [x] **33.2 — Say how to wire the checker into a consumer build.** The tool
        exists and nothing tells anyone to run it. Accept: the troubleshooting
        or installation page shows the npm script and a CI step; states that it
        needs BUILT html (it reads rendered output, not templates); and states
        the honest limitation — it validates classes and framework attribute
        VALUES, not whether the markup means anything.
+
+       **Landed 2026-08-18** on `/getting-started/installation` — the setup page,
+       not troubleshooting: troubleshooting is where you go once something is
+       already broken, and the point of this is to catch it before that. npm
+       script + CI step, the built-HTML requirement stated (with the answer for
+       server-rendered stacks, which have no HTML until they render), and the
+       limitation stated as "a spell-checker, not a reviewer". Troubleshooting
+       links across to it.
+
+       **Two gates came out of writing it**, both for things nothing verified:
+
+       - `check:package` — the page tells consumers to run `npx bo-check-markup`,
+         which works only if the `bin`, its script and `dist/api.json` all survive
+         packing. `files` is a hand-maintained allow-list, and narrowing it is a
+         normal-looking edit that breaks nothing here and everything downstream.
+         Asks npm what it would actually pack. Red-proved both ways.
+       - **anchor verification in `check-links`** — fragments were STRIPPED before
+         checking, so 30 cross-page fragment links and every same-page anchor were
+         unverified. Found by writing a dead `#check-your-markup-in-ci` link into
+         troubleshooting and only catching it by hand. Immediately found 2 real
+         dead links in `/patterns/master-detail` (rows 2 and 3 pointed at panels
+         that never existed). Also tightened `resolveFile` to require a FILE:
+         `access` succeeds on a directory, so a link to a page with no emitted
+         `index.html` had been passing.
+
 
 3. [x] **33.3 — Measured, and it found two real gaps** (2026-08-18) — taken
        BEFORE 33.1/33.2 on purpose: the measurement decides whether more
