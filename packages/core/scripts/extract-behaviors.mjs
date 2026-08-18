@@ -45,13 +45,32 @@ for (const e of exported) {
     firstSentence.length <= 200
       ? firstSentence
       : firstSentence.slice(0, firstSentence.lastIndexOf(' ', 200)) + '…';
-  // Hooks the behavior reads: string/selector literals + dataset.* access.
+  /* Hooks the behavior reads: string/selector literals + dataset.* access.
+     These are published to consumers (llms.txt, the paste-in AI block), so what
+     is EXCLUDED is a contract, not a nicety.
+
+     `data-bo-*` is the framework's INTERNAL convention — attributes a behavior
+     writes on itself as bookkeeping (`data-bo-overflow-watched`,
+     `data-bo-open`, `data-bo-value`). A consumer never writes them, and
+     publishing them as "the DOM each init reads" invites exactly the invented
+     markup this project spent two slices trying to prevent. Verified before
+     making it a rule: 3 internal names carry the prefix, 47 consumer hooks do
+     not, so the convention is real rather than assumed.
+
+     This replaces a hardcoded exclusion of ONE name — three more had
+     accumulated behind it, which is what a hand-maintained exception list does
+     (Standardize, 2026-08-18). */
+  const INTERNAL = /^data-bo-/;
   const hooks = new Set();
+  const add = (h) => {
+    if (INTERNAL.test(h)) return;
+    if (h.endsWith('-')) return;   // generated id prefixes like `bo-cb-opt-`, not a real name
+    hooks.add(h);
+  };
   for (const lit of source.matchAll(/['"`]([^'"`]*(?:data-|bo-)[^'"`]*)['"`]/g))
-    for (const h of lit[1].matchAll(HOOK_RE)) hooks.add(h[1]);
+    for (const h of lit[1].matchAll(HOOK_RE)) add(h[1]);
   for (const ds of source.matchAll(/dataset\.([a-zA-Z]+)/g)) {
-    const kebab = 'data-' + ds[1].replace(/[A-Z]/g, (c) => '-' + c.toLowerCase());
-    if (kebab !== 'data-eof-dialog-bound') hooks.add(kebab);
+    add('data-' + ds[1].replace(/[A-Z]/g, (c) => '-' + c.toLowerCase()));
   }
   behaviors[e.name] = {
     module: e.from,
@@ -84,6 +103,18 @@ const dtsExports = new Set(
 const missing = manifest.exports.filter((n) => !dtsExports.has(n));
 if (missing.length) {
   console.error(`behaviors manifest: exports not found in dist/js/index.d.ts: ${missing.join(', ')}`);
+  process.exit(1);
+}
+
+/* The published surface must contain no framework-internal names. This is the
+   gate for the rule above: an exception list decays silently (one hardcoded
+   name became four), an assertion does not. Anything a behavior writes on
+   itself is `data-bo-*` by convention, and a generated id prefix is not a name
+   at all. */
+const leaked = Object.entries(behaviors)
+  .flatMap(([name, b]) => b.hooks.filter((h) => /^data-bo-/.test(h) || h.endsWith('-')).map((h) => `${name}: ${h}`));
+if (leaked.length) {
+  console.error(`behaviors manifest: framework-internal names published as consumer hooks: ${leaked.join(', ')}`);
   process.exit(1);
 }
 
