@@ -98,7 +98,16 @@ const JS_HOOKS = {
   'data-table': { classes: ['bo-data-table__select-all'], dataAttrs: ['data-grid-nav'] },
   dialog: { classes: [], dataAttrs: ['data-dialog-trigger', 'data-dismissible'] },
   filters: { classes: [], dataAttrs: ['data-saved-views'] },
+  /* Read by initDropdowns() to flip the menu's alignment; it has no CSS of its
+     own, so the walk cannot see it and a markup validator would call it
+     invented (roadmap 32.2). */
+  dropdown: { classes: ['bo-dropdown__menu--end'], dataAttrs: [] },
 };
+
+/* Values that are LEGAL but that the CSS never needs a rule for. Level 1 of a
+   tree is the un-indented default, so `[data-tree-level="1"]` styles nothing —
+   which made a validator built on the CSS call a correct document wrong. */
+const EXTRA_VALUES = { 'data-tree-level': ['1'] };
 
 const componentsDir = join(srcCss, 'components');
 for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory())) {
@@ -163,6 +172,9 @@ const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-p
   }
   const globalSets = await analyze(all);
   api.dataAttrValues = shape(globalSets).dataAttrValues;
+  for (const [attr, extra] of Object.entries(EXTRA_VALUES)) {
+    api.dataAttrValues[attr] = [...new Set([...(api.dataAttrValues[attr] ?? []), ...extra])].sort();
+  }
 }
 
 api.pageSlug = PAGE_SLUG;

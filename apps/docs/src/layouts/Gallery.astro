@@ -269,7 +269,7 @@ const current =
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs" data-pagefind-ignore>
         {/* ONE search instance site-wide (roadmap 27.1). This used to be a
             second PagefindUI mounted here, which inherited Pagefind's stock
-            #393939 text because the token mapping is scoped to .bo-cmdk —
+            #393939 text because the token mapping is scoped to .docs-cmdk —
             measured at 1.46:1 in dark, a WCAG 1.4.3 failure. A button that
             opens the already-themed dialog fixes that, reaches mobile, keeps
             the shortcut hint as a REAL element, and stays short enough to pin.
@@ -325,10 +325,10 @@ const current =
       </main>
     </div>
     {!currentSnapshot && (
-    <dialog id="cmdk" class="bo-cmdk" aria-label="Search the docs">
-      <div class="bo-cmdk__panel">
+    <dialog id="cmdk" class="docs-cmdk" aria-label="Search the docs">
+      <div class="docs-cmdk__panel">
         <div id="cmdk-search"></div>
-        <div class="bo-cmdk__hint">
+        <div class="docs-cmdk__hint">
           <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
           <span><kbd>↵</kbd> open</span>
           <span><kbd>esc</kbd> close</span>
@@ -699,7 +699,7 @@ const current =
   /* Cmd/Ctrl+K command palette. Native <dialog> in the top layer, so it escapes
      the app-shell's overflow. Pagefind's own variables are mapped to our tokens
      so the palette is theme-aware (light/dark) like the rest of the docs. */
-  .bo-cmdk {
+  .docs-cmdk {
     --pagefind-ui-primary: var(--bo-color-accent);
     --pagefind-ui-text: var(--bo-color-text-primary);
     --pagefind-ui-background: var(--bo-color-bg-surface-raised);
@@ -718,16 +718,16 @@ const current =
     box-shadow: var(--bo-shadow-lg);
     overflow: hidden;
   }
-  .bo-cmdk::backdrop { background: rgb(0 0 0 / 0.45); }
-  .bo-cmdk__panel { display: flex; flex-direction: column; max-block-size: 70vh; }
+  .docs-cmdk::backdrop { background: rgb(0 0 0 / 0.45); }
+  .docs-cmdk__panel { display: flex; flex-direction: column; max-block-size: 70vh; }
   #cmdk-search { padding: var(--bo-space-3); overflow: auto; }
-  .bo-cmdk__hint {
+  .docs-cmdk__hint {
     display: flex; gap: var(--bo-space-4);
     padding: var(--bo-space-2) var(--bo-space-3);
     border-block-start: 1px solid var(--bo-color-border-default);
     font-size: var(--bo-font-size-xs); color: var(--bo-color-text-muted);
   }
-  .bo-cmdk__hint kbd {
+  .docs-cmdk__hint kbd {
     font-family: var(--bo-font-mono); font-size: 0.9em;
     padding: 0.05rem 0.3rem; margin-inline-end: 0.15rem;
     border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-sm);
@@ -793,7 +793,7 @@ const current =
     .docs-search-btn { display: inline-flex; }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .bo-cmdk[open] { animation: cmdk-in var(--bo-motion-duration-fast) var(--bo-motion-easing-standard); }
+    .docs-cmdk[open] { animation: cmdk-in var(--bo-motion-duration-fast) var(--bo-motion-easing-standard); }
     @keyframes cmdk-in { from { opacity: 0; transform: translateY(-0.5rem); } }
   }
 

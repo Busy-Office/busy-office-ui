@@ -37,6 +37,26 @@ const recipe = `/* app.css — the ONE statement that matters comes first: it fi
     degrades by doing nothing, not by erroring. Symptom → cause:
   </p>
   <section class="demo">
+    <h2>"My markup looks right but nothing happens"</h2>
+    <p>Usually a class or an attribute value that does not exist. Both fail
+    silently: an unknown class leaves the element unstyled and looks like a CSS
+    bug, and an unknown attribute <em>value</em> is worse — the attribute is
+    present, spelled correctly, and does nothing at all.</p>
+    <pre><code>npx bo-check-markup dist          # or any directory of built HTML</code></pre>
+    <p>It checks your HTML against <code>api.json</code>, which is extracted
+    from the shipped CSS and so cannot disagree with it: every
+    <code>bo-*</code> class must exist, and every framework
+    <code>data-*</code> attribute must carry a value the CSS actually switches
+    on. It reports the file and suggests the nearest real name.</p>
+    <p class="bo-u-text-muted">Your own <code>data-*</code> hooks are never
+    flagged — <code>data-row-id</code> and the like belong to your app, and
+    nothing distinguishes them from a misspelled framework attribute, so the
+    tool stays quiet rather than noisy. This repo runs it over its own docs on
+    every build; it found an invented <code>.bo-composer__input</code> and a
+    <code>.bo-u-text-sm</code> that never existed.</p>
+  </section>
+
+  <section class="demo">
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
         <thead><tr><th scope="col">Symptom</th><th scope="col">Cause &amp; fix</th></tr></thead>

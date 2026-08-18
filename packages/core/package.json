@@ -27,7 +27,8 @@
     "*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "scripts/check-markup.mjs"
   ],
   "exports": {
     "./package.json": "./package.json",
@@ -69,7 +70,8 @@
     "build:events": "node scripts/extract-events.mjs",
     "build:keymap": "node scripts/extract-keymap.mjs",
     "build:acr": "node scripts/extract-acr.mjs",
-    "gen:scales": "node scripts/generate-scales.mjs"
+    "gen:scales": "node scripts/generate-scales.mjs",
+    "check:markup": "node scripts/check-markup.mjs"
   },
   "browserslist": [
     "chrome >= 119",
@@ -88,5 +90,8 @@
     "typescript": "^5.6.3",
     "jsdom": "^25.0.1",
     "vitest": "^2.1.8"
+  },
+  "bin": {
+    "bo-check-markup": "./scripts/check-markup.mjs"
   }
 }

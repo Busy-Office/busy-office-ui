@@ -502,14 +502,39 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        hand-written demo table carries. Latent until something grew. Fixed in
        both generated components, so all 38 component pages gained it at once.
 
-2. [ ] **32.2 — A markup validator consumers can run.** `check:markup <glob>`:
-       unknown `bo-*` classes, unknown `data-*` attributes, and (after 32.1)
-       illegal attribute values, checked against the generated `api.json`.
-       **Not an AI feature** — it is a linter, and it happens to catch exactly
-       what a language model gets wrong because a language model guesses
-       plausible names. Accept: it flags `.bo-card`, `.bo-modal`,
-       `.bo-table` and `data-row-state="selected"`; it exits 0 on every page in
-       this repo; it is documented as a consumer-facing command.
+2. [x] **32.2 — `bo-check-markup` ships** (2026-08-18) — validates HTML against
+       the generated `api.json`: every `bo-*` class must exist, and every
+       framework `data-*` attribute must carry a value the CSS switches on.
+       Exposed as a package `bin`, run over this repo's own docs on every build,
+       and documented on the troubleshooting page.
+
+       **Scope changed on contact, deliberately.** The item asked it to flag
+       unknown `data-*` ATTRIBUTES; that turns out to be unanswerable —
+       `data-row-id` and `data-sum-of` are an application's own hooks and
+       nothing distinguishes them from a misspelled framework one. Flagging
+       them would make the tool noisy enough to ignore, which is worse than not
+       checking. Values are checkable because a known attribute is what makes
+       its value knowable. Verified: app hooks are not flagged.
+
+       **It found five real defects on its first run over our own docs**, which
+       is the argument for it: an invented `.bo-composer__input` (the framework
+       ships `__body` and `__actions`, never `__input`); a `.bo-u-text-sm` that
+       has never existed, used on three pages; `.bo-logo` and `.bo-cmdk*`
+       squatting the framework's `bo-` namespace for docs-local components,
+       renamed to `docs-*`; `.bo-dropdown__menu--end`, which `initDropdowns()`
+       READS but no CSS defines, now declared as a JS hook so it is documented;
+       and `data-tree-level="1"`, legal but unstyled because level 1 is the
+       un-indented default, now declared as such.
+
+       Red-proved on the four cases the item named plus two more: `.bo-card`,
+       `.bo-modal`, `.bo-table`, `.bo-btn--primary` (with "did you mean:
+       bo-btn, bo-btn--danger…"), `data-row-state="selected"` and
+       `data-density="cosy"` — all caught, exit 1; app hooks silent; exit 0 on
+       92 clean files and 45,652 class uses.
+
+       One bug in the tool itself, caught by running it: it read
+       `data-tree-level="1..12"` out of `<code>` PROSE and reported the
+       documentation as a defect. It strips `<pre>`/`<code>` first now.
 
 3. [ ] **32.3 — State the refusals where a machine will read them.**
        `llms.txt` says what exists; it does not say what deliberately does not.
