@@ -487,6 +487,41 @@ check(
   JSON.stringify(fe),
 );
 
+/* /components/data-table claims of the 50-column table: "the Item column stays
+   put, the header stays put, and both stay opaque over the cells passing
+   underneath" (roadmap 30.3). Opacity matters as much as position — a
+   transparent frozen cell shows the scrolling content through itself, which
+   looks like a rendering bug and makes both unreadable. */
+await visit('/components/data-table/', { width: 1440 });
+const wide = await page.evaluate(() => {
+  const table = document.querySelector('table.bo-data-table--sticky-col');
+  const box = table.parentElement;
+  const firstCell = table.querySelector('tbody th[scope="row"]');
+  const head = table.querySelector('thead th');
+  const leftAt = (x) => {
+    box.scrollLeft = x;
+    return Math.round(firstCell.getBoundingClientRect().left - box.getBoundingClientRect().left);
+  };
+  const transparent = (el) => {
+    const bg = getComputedStyle(el).backgroundColor;
+    return bg === 'transparent' || /rgba\(.*,\s*0\)$/.test(bg);
+  };
+  return {
+    cols: table.querySelector('thead tr').children.length,
+    overflow: box.scrollWidth - box.clientWidth,
+    left0: leftAt(0), left1200: leftAt(1200), leftEnd: leftAt(999999),
+    cellTransparent: transparent(firstCell), headTransparent: transparent(head),
+    headSticky: getComputedStyle(head).position === 'sticky',
+  };
+});
+check(
+  'data-table: the frozen column and header hold, opaque, across 50 columns of scroll',
+  wide.cols === 50 && wide.overflow > 1000 &&
+    wide.left0 === wide.left1200 && wide.left1200 === wide.leftEnd &&
+    wide.cellTransparent === false && wide.headTransparent === false && wide.headSticky,
+  JSON.stringify(wide),
+);
+
 await browser.close();
 server.close();
 

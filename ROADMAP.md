@@ -574,15 +574,31 @@ promised was never written.
        without a rebaseline, since only the count digit changed.
        **Cost line: -1 nav entry, 0 selectors, 0 CSS, 0 behaviors.**
 
-3. [ ] **30.3 — 50-column stress case (W3).** Not a feature: `.bo-data-table`
-       already ships h-scroll + sticky header + sticky first column, so this
-       **tests claims already made**. Accept: a 10x50 demo; the sticky-column
-       boundary holds under horizontal scroll; far columns are keyboard
-       reachable; SC 2.5.8 holds in dense header cells; the layout gate's
-       150%-zoom pass stays green. **Must also carry column-chooser/saved-view
-       guidance** — 50 visible columns is usually a symptom, and shipping a
-       beautiful 50-column demo without saying so quietly endorses the
-       anti-pattern.
+3. [x] **30.3 — 50-column stress case** (2026-08-18) — a 10x50 table on
+       `/components/data-table`, next to the rows-at-scale section it is the
+       counterpart to. **Cost line: 0 selectors, 0 CSS, 0 behaviors** — it uses
+       the existing `.bo-data-table--sticky-col`.
+
+       Claims tested rather than admired. The frozen column holds at
+       `left: 1px` through **3046px of horizontal scroll** at 1440 (3632px at
+       390) and stays opaque in both themes; the header stays `sticky`; the page
+       itself never overflows because the scroll lives in the container.
+       SC 2.5.8, the 150%-zoom layout pass and axe all stay green with 50 dense
+       header cells. `check:claims` 29 -> 30, red-proved by flipping the frozen
+       column to `position: static` with the injection confirmed in the built
+       CSS.
+
+       **The stress case earned its keep by finding something.** The container
+       is focusable and arrow keys scroll it, so nobody is stranded behind fifty
+       tab stops — but each press moves ~40px, putting the fiftieth column
+       **~76 presses away**, and `End` does nothing because the container scrolls
+       only horizontally. Reachable is not usable, and the page now says so in
+       those words instead of claiming keyboard access is fine.
+
+       Carries the column-chooser guidance the triage required: fifty visible
+       columns is a symptom, the answer is per-role column choice plus saved
+       views, and "all fifty at once" is a report or an export rather than a
+       screen.
 
 4. [ ] **30.4a — Large-list recipe page.** The decision page DESIGN.md
        promised and nobody wrote: when to server-page, when to load-more, when

@@ -44,6 +44,21 @@ const tableMarkup = `<!-- tabindex="0": the container scrolls when the table
 <!-- Sorting contract: YOUR code (server or client) re-orders rows and sets
      aria-sort on the <th>; the CSS draws the indicator from aria-sort. -->`;
 const rows = invoiceRows;
+
+/* 50 columns x 10 rows — the WIDE counterpart to the rows-at-scale section
+   below it. Generated rather than typed so the demo cannot drift out of the
+   shape it claims to test (roadmap 30.3). */
+const wideCols = [
+  'Item', 'Description', 'Vendor', 'Vendor part', 'UoM', 'Qty', 'Unit price', 'Currency',
+  'Line total', 'Tax code', 'Tax %', 'Discount %', 'Net', 'Cost center', 'GL account',
+  'Project', 'WBS', 'Plant', 'Storage loc', 'Warehouse', 'Bin', 'Batch', 'Serial',
+  'Lead time', 'Requested', 'Confirmed', 'Delivered', 'Goods receipt', 'Invoice',
+  'Payment terms', 'Incoterm', 'Ship-to', 'Bill-to', 'Buyer', 'Requester', 'Approver',
+  'Approved on', 'Status', 'Blocked', 'Reason', 'Contract', 'Agreement', 'Price list',
+  'Condition', 'Rebate', 'Freight', 'Duty', 'Origin', 'HS code', 'Last changed',
+];
+const wideRows = Array.from({ length: 10 }, (_, r) =>
+  wideCols.map((c, i) => (i === 0 ? `LINE-${String(r + 1).padStart(3, '0')}` : `${c.slice(0, 3).toUpperCase()}-${r + 1}${i}`)));
 ---
 <Gallery title="Data table">
   <p class="demo-note">
@@ -209,6 +224,55 @@ const rows = invoiceRows;
     <code>/stress</code> harness in <a href={poAppHref}><code>examples/po-app</code></a> is kept for
     exactly that re-measurement.</p>
   </section>
+  <section class="demo">
+    <h2>Wide tables — 50 columns</h2>
+    <p>The counterpart to the row counts above: an ERP line table that grew
+    sideways. Ten rows, <strong>fifty columns</strong>, first column frozen with
+    <code>.bo-data-table--sticky-col</code>. Scroll it horizontally — the Item
+    column stays put, the header stays put, and both stay opaque over the cells
+    passing underneath.</p>
+    <div class="bo-data-table-container" tabindex="0" aria-label="Fifty-column purchase order lines, scrollable">
+      <table class="bo-data-table bo-data-table--sticky-col" data-density="compact">
+        <caption class="bo-visually-hidden">Purchase order lines, 50 columns</caption>
+        <thead>
+          <tr>{wideCols.map((c, i) => (
+            <th scope="col" class={i >= 5 && i <= 12 ? 'bo-data-table__col--numeric' : undefined}>{c}</th>
+          ))}</tr>
+        </thead>
+        <tbody>
+          {wideRows.map((row) => (
+            <tr>{row.map((cell, i) => (
+              i === 0
+                ? <th scope="row">{cell}</th>
+                : <td class={i >= 5 && i <= 12 ? 'bo-data-table__col--numeric' : undefined}>{cell}</td>
+            ))}</tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">
+      The scroll container is the focusable element (<code>tabindex="0"</code> with an
+      <code>aria-label</code>), so a keyboard user is not stranded behind fifty tab stops:
+      focus the region and the arrow keys scroll it. <strong>Measured, because "reachable"
+      is not the same as "usable":</strong> each press moves about 40px, so the fiftieth
+      column is roughly <strong>76 presses</strong> away, and <kbd class="bo-kbd">End</kbd>
+      does not help — this container scrolls horizontally only, and End acts on the
+      vertical axis. Reachable, then, but tedious by any honest reading, which is the next
+      argument for the column chooser below rather than a defect to paper over.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Fifty visible columns is usually a symptom, and this page will say so
+      rather than just prove it renders.</strong> Nobody reads fifty columns; they read
+      the twelve their job needs. The ERP answer is a <em>column chooser</em> plus
+      <a href={base + '/patterns/invoice-list'}>saved views</a> — let each role pick its
+      columns once and store the choice, so Purchasing sees prices and the warehouse sees
+      bins. Ship the wide table as the <em>source</em> of those views, never as the
+      default screen. If you genuinely need all fifty at once, that is a report or an
+      export, not a screen — see <a href={base + '/patterns/staging'}>the Excel
+      round-trip</a>.
+    </p>
+  </section>
+
   <section class="demo">
     <h2>Grouped rows + subtotals</h2>
     <div class="bo-data-table-container" tabindex="0">
