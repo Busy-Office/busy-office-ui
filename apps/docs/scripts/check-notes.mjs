@@ -102,33 +102,22 @@ for (const page of await distPages(DIST)) {
        caused it, and names the note. */
     for (const li of inner.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)) {
       notesChecked += 1;
-      const VOID = new Set(['br', 'hr', 'img', 'input', 'wbr']);
-      const stack = [];
-      for (const t of li[1].matchAll(/<(\/?)([a-z][a-z0-9]*)[^>]*?(\/?)>/g)) {
-        const [, closing, name, selfClosing] = t;
-        if (VOID.has(name) || selfClosing) continue;
-        if (closing) {
-          if (stack.pop() !== name) stack.push('!' + name);
-        } else stack.push(name);
-      }
-      if (stack.length) {
+      /* The SAME function the --self-test drives. It held a duplicate before,
+         so breaking one left the other happily green. */
+      const { unclosed, forbidden } = classifyNote(li[1]);
+      if (unclosed.length) {
         failures.push(
-          `${page.url}\n     a note leaves <${stack[0].replace('!', '/')}> unclosed` +
+          `${page.url}\n     a note leaves <${unclosed[0].replace('!', '/')}> unclosed` +
             `\n     ${li[1].replace(/<[^>]*>/g, '').trim().slice(0, 80)}` +
             '\n     an unclosed inline tag is hoisted out of its <li> by the parser (axe: list)',
         );
       }
-      for (const tag of li[1].matchAll(/<\/?([a-z][a-z0-9]*)/g)) {
-        const name = tag[1];
-        if (NEVER.has(name)) {
-          failures.push(
-            `${page.url}\n     a note rendered a <${name}> element` +
-              `\n     ${li[1].replace(/<[^>]*>/g, '').trim().slice(0, 80)}` +
-              `\n     write &lt;${name}&gt; or <code>${name}</code> — backticks do not escape HTML`,
-          );
-        } else if (!ALLOWED.has(name)) {
-          failures.push(`${page.url}\n     a note used an unexpected tag <${name}>`);
-        }
+      for (const name of forbidden) {
+        failures.push(
+          `${page.url}\n     a note rendered a <${name}> element` +
+            `\n     ${li[1].replace(/<[^>]*>/g, '').trim().slice(0, 80)}` +
+            `\n     write &lt;${name}&gt; or <code>${name}</code> — backticks do not escape HTML`,
+        );
       }
     }
   }

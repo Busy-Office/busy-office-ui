@@ -34,6 +34,32 @@ async function* files(dir) {
 /* ROADMAP and the .roundtable grills QUOTE the old value as history — that is
    a record of what was believed, not a live claim, and rewriting it would erase
    the finding. Everything a consumer reads is generated. */
+if (process.argv.includes('--self-test')) {
+  /* The detector greps prose for a hand-typed browser floor. Two ways to be
+     wrong: miss a real literal (the thing that rots), or flag ordinary prose
+     that happens to name two browsers. Both are exercised, plus the
+     generated-region case — a value inside a stat marker is written by
+     stamp-readme on every build, and flagging it would fail the build for doing
+     the right thing. */
+  const STRIP = (src) => src.replace(/<!-- stat:[a-z]+ -->[\s\S]*?<!-- \/stat -->/g, '');
+  const cases = [
+    ['Chrome/Edge 119 · Firefox 128 · Safari 17.4', true],
+    ['Chrome 119, Safari 17.4', true],
+    ['Chrome and Firefox both support :has()', false],
+    ['Safari 17.4 is the floor', false],
+    ['<!-- stat:floor -->Chrome/Edge 119 · Firefox 128<!-- /stat -->', false],
+  ];
+  let ok = true;
+  for (const [line, want] of cases) {
+    const got = LITERAL.test(STRIP(line));
+    ok &&= got === want;
+    console.log(`self-test: ${JSON.stringify(line.slice(0, 46)).padEnd(50)} literal=${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) { console.error('  the detector cannot tell a hand-typed floor from prose'); process.exit(1); }
+  console.log('self-test passed — the detector can fail');
+  process.exit(0);
+}
+
 const ALLOW = ['scripts/check-floor.mjs', 'scripts/derive-floor.mjs', 'CHANGELOG.md', 'ROADMAP.md'];
 const bad = [];
 let checked = 0;

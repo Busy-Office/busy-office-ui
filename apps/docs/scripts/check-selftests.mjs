@@ -24,11 +24,14 @@
  *     so nobody wraps ceremony around a `readdir`.
  *
  * This gate FAILS on an untagged gate, because an unclassified detector is one
- * nobody has thought about. It REPORTS, rather than fails, on a heuristic gate
- * that has no self-test yet: six were tagged the day this landed, and failing
- * the build for pre-existing debt would only encourage mislabelling them
- * @exact to get green. The count is printed every run so the debt cannot go
- * quiet, and burning it down is roadmap 42.3.
+ * nobody has thought about, AND on a heuristic gate with no `--self-test`.
+ *
+ * It began as a report rather than a failure: six gates were tagged the day it
+ * landed, and failing the build for pre-existing debt would only have
+ * encouraged relabelling them `@exact` to get green. The list was printed every
+ * run so it could not go quiet, and 42.3 emptied it the next day. Now that it is
+ * zero, the rule is enforced — which is the point of writing debt down instead
+ * of tolerating it.
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -74,17 +77,22 @@ for (const dir of DIRS) {
 
 assertScanned(checked, 'gate scripts', 'no check-*.mjs files were found — have the script directories moved?');
 
-if (untagged.length) {
-  console.error(`self-test check FAILED — ${untagged.length} gate(s) do not say what kind of signal they use:`);
+if (untagged.length || owed.length) {
+  console.error(`self-test check FAILED — ${untagged.length + owed.length} problem(s):`);
   for (const u of untagged) console.error('  ' + u);
-  console.error('  Add "@heuristic — <why it can be fooled>" or "@exact — <what it compares>" to the header.');
+  if (untagged.length) {
+    console.error('  Add "@heuristic — <why it can be fooled>" or "@exact — <what it compares>" to the header.');
+  }
+  for (const o of owed) {
+    console.error(`  ${o}\n     is @heuristic but has no --self-test`);
+  }
+  if (owed.length) {
+    console.error('  A heuristic detector must prove it can fail: run it against inputs it must');
+    console.error('  classify correctly and exit non-zero if it cannot tell them apart.');
+  }
   process.exit(1);
 }
 
 console.log(
-  `self-test check passed — ${checked} gates classified: ${heuristic} heuristic, ${exact} exact`,
+  `self-test check passed — ${checked} gates classified: ${heuristic} heuristic (all self-tested), ${exact} exact`,
 );
-if (owed.length) {
-  console.log(`  ${owed.length} heuristic gate(s) still owe a --self-test (roadmap 42.3):`);
-  for (const o of owed) console.log(`    ${o}`);
-}

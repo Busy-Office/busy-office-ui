@@ -22,6 +22,41 @@ import { join } from 'node:path';
 import { REPO_ROOT } from './paths.mjs';
 import { assertScanned } from './gate-report.mjs';
 
+/* Shared by the gate AND its --self-test. They were duplicated at first, which
+   makes a self-test worthless: breaking the real extractor leaves the copy
+   green. */
+export const outcomesFromPython = (src) => {
+  const m = src.match(/^OUTCOMES = \{([^}]*)\}/m);
+  return m ? [...m[1].matchAll(/"([a-z]+)"/g)].map((x) => x[1]).sort() : null;
+};
+export const outcomesFromDocLine = (line) =>
+  [...line.matchAll(/\b([a-z]+)\b/g)].map((x) => x[1]).filter((w) => w !== 'outcome').sort();
+
+if (process.argv.includes('--self-test')) {
+  /* Both halves of this gate are pattern-matching over prose: pulling the
+     authoritative set out of a Python literal, and pulling the documented list
+     out of a "# outcome:" line. Either can silently return nothing — and a gate
+     comparing two empty lists agrees with itself perfectly. */
+  const fromPy = outcomesFromPython;
+  const fromDoc = outcomesFromDocLine;
+  const py = 'OUTCOMES = {"landed", "released", "logged"}\n';
+  const cases = [
+    ['parses the python set', JSON.stringify(fromPy(py)), '["landed","logged","released"]'],
+    ['returns null when the set is gone', String(fromPy('X = 1')), 'null'],
+    ['parses a documented list', JSON.stringify(fromDoc('# outcome: landed | released | logged')), '["landed","logged","released"]'],
+    ['spots an invented outcome', String(fromDoc('# outcome: landed | shipped').includes('shipped')), 'true'],
+    ['spots a missing one', String(fromDoc('# outcome: landed').length !== fromPy(py).length), 'true'],
+  ];
+  let ok = true;
+  for (const [what, got, want] of cases) {
+    ok &&= got === want;
+    console.log(`self-test: ${what.padEnd(34)} ${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) { console.error('  the extractor does not discriminate — two empty lists would agree'); process.exit(1); }
+  console.log('self-test passed — the detector can fail');
+  process.exit(0);
+}
+
 /* The loop scripts are repo tooling, not part of the published docs image, so
    the docs Containerfile copies only package.json, packages/, apps/docs and
    DESIGN.md. This gate therefore CANNOT run there — and a gate that cannot run
@@ -40,13 +75,12 @@ try {
   );
   process.exit(0);
 }
-const m = py.match(/^OUTCOMES = \{([^}]*)\}/m);
-if (!m) {
+const authoritative = outcomesFromPython(py);
+if (!authoritative) {
   console.error('loop-vocab check FAILED — no OUTCOMES set in record_iteration.py.');
   console.error('  This gate compares the docs against that constant; without it there is no authority.');
   process.exit(1);
 }
-const authoritative = [...m[1].matchAll(/"([a-z]+)"/g)].map((x) => x[1]).sort();
 
 const DOCS = ['CLAUDE.md', 'LOOPS.md'];
 const failures = [];
@@ -60,10 +94,7 @@ for (const doc of DOCS) {
     continue;
   }
   checked += 1;
-  const listed = [...line.matchAll(/\b([a-z]+)\b/g)]
-    .map((x) => x[1])
-    .filter((w) => w !== 'outcome')
-    .sort();
+  const listed = outcomesFromDocLine(line);
   const missing = authoritative.filter((o) => !listed.includes(o));
   const extra = listed.filter((o) => !authoritative.includes(o));
   if (missing.length || extra.length) {

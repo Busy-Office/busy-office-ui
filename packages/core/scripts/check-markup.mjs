@@ -54,6 +54,59 @@ const CONVENTIONAL = new Set([
   'bo-tabs',
 ]);
 
+/* Shared by the gate AND its --self-test, so breaking one breaks the other.
+   The first version of the self-test held a COPY, and reintroducing the real
+   consumed-`<` bug left it happily passing. */
+export const BARE_TEXT_RE = /<(tr|tbody|thead|tfoot|table)\b[^>]*>([^<]+)(?=<)/g;
+export const TABLIST_RE = /<[^>]*role="tablist"[^>]*>([\s\S]*?)<\/(?:div|nav|ul)>/g;
+export const TAB_CONTROLS_RE = /role="tab"[^>]*aria-controls="([^"]+)"|aria-controls="([^"]+)"[^>]*role="tab"/g;
+
+if (process.argv.includes('--self-test')) {
+  /* Two rules here are pure pattern-matching over HTML text, and BOTH have been
+     wrong in production:
+       - bare text inside table structure once reported 5 of 6 injected rows,
+         because the regex consumed the trailing "<" and adjacent matches were
+         skipped. That is the case this test exists for.
+       - shared aria-controls across a tablist shipped as a P0: nine tabs, one
+         panel, worked exactly once. */
+  const bareText = (html) =>
+    [...html.matchAll(BARE_TEXT_RE)]
+      .filter((m) => m[2].trim()).length;
+  const sharedPanels = (html) => {
+    let dupes = 0;
+    for (const list of html.matchAll(TABLIST_RE)) {
+      const c = [...list[1].matchAll(TAB_CONTROLS_RE)]
+        .map((m) => m[1] ?? m[2]);
+      dupes += c.filter((x, i) => c.indexOf(x) !== i).length;
+    }
+    return dupes;
+  };
+  /* TRULY adjacent: the first row's stray text ends exactly at the "<" that
+     opens the second row. That is the only shape the consumed-"<" bug loses —
+     an earlier fixture put a <th> between them, so both matched even with the
+     bug reintroduced, and the test passed while proving nothing. */
+  const adjacent = '<tbody><tr>a<tr>b<th>x</th></tbody>';
+  const clean = '<table><tr><th>x</th></tr><tr><th>y</th></tr></table>';
+  const shared = '<div role="tablist"><button role="tab" aria-controls="p"></button>' +
+    '<button role="tab" aria-controls="p"></button></div>';
+  const distinct = '<div role="tablist"><button role="tab" aria-controls="p1"></button>' +
+    '<button role="tab" aria-controls="p2"></button></div>';
+  const results = [
+    ['two ADJACENT bare-text rows are both reported', bareText(adjacent), 2],
+    ['a clean table reports none', bareText(clean), 0],
+    ['two tabs sharing a panel are reported', sharedPanels(shared), 1],
+    ['two tabs with their own panels are not', sharedPanels(distinct), 0],
+  ];
+  let ok = true;
+  for (const [what, got, want] of results) {
+    ok &&= got === want;
+    console.log(`self-test: ${what.padEnd(46)} ${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) { console.error('  the detector misses cases it is supposed to catch'); process.exit(1); }
+  console.log('self-test passed — the detector can fail');
+  process.exit(0);
+}
+
 const roots = process.argv.slice(2);
 if (!roots.length) {
   console.error('usage: check-markup <dir-or-file> [...]   (HTML files)');
@@ -112,8 +165,8 @@ for (const root of roots) {
        Neither of the checks above could see it: every class was real and every
        attribute value was legal. axe cannot see it either — the ARIA is
        individually valid, and only the RELATIONSHIP between tabs is wrong. */
-    for (const list of html.matchAll(/<[^>]*role="tablist"[^>]*>([\s\S]*?)<\/(?:div|nav|ul)>/g)) {
-      const controls = [...list[1].matchAll(/role="tab"[^>]*aria-controls="([^"]+)"|aria-controls="([^"]+)"[^>]*role="tab"/g)]
+    for (const list of html.matchAll(TABLIST_RE)) {
+      const controls = [...list[1].matchAll(TAB_CONTROLS_RE)]
         .map((m) => m[1] ?? m[2]);
       if (controls.length < 2) continue;
       const dupes = controls.filter((c, i) => controls.indexOf(c) !== i);
@@ -141,7 +194,7 @@ for (const root of roots) {
     /* Lookahead rather than consuming the `<`: consuming it makes the next match
        start after that bracket, so two offending tags in a row report as one.
        Caught by counting — six injected rows reported five. */
-    for (const m of html.matchAll(/<(tr|tbody|thead|tfoot|table)\b[^>]*>([^<]+)(?=<)/g)) {
+    for (const m of html.matchAll(BARE_TEXT_RE)) {
       const text = m[2].trim();
       if (!text) continue;
       findings.push({

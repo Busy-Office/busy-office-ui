@@ -35,6 +35,30 @@ async function* htmlFiles(dir) {
 }
 // Astro's own tiny runtime styles are fine; LAYOUT rules are not.
 const LAYOUT = /(display\s*:\s*(grid|flex)|grid-template|position\s*:\s*sticky)/;
+
+if (process.argv.includes('--self-test')) {
+  /* The detector decides whether an inline <style> block does LAYOUT. It can be
+     fooled in both directions: miss a layout rule written with odd spacing, or
+     flag a block that only sets colour. Both are checked, because a boost gate
+     that flags everything is as useless as one that flags nothing. */
+  const cases = [
+    ['.a{display:grid}', true],
+    ['.a{ display : flex }', true],
+    ['.a{grid-template-columns:1fr}', true],
+    ['.a{position:sticky;top:0}', true],
+    ['.a{color:red;font-weight:600}', false],
+    ['.a{background:var(--bo-color-bg-surface)}', false],
+  ];
+  let ok = true;
+  for (const [css, want] of cases) {
+    const got = LAYOUT.test(css);
+    ok &&= got === want;
+    console.log(`self-test: ${JSON.stringify(css).padEnd(42)} layout=${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) { console.error('  the detector cannot tell layout from paint'); process.exit(1); }
+  console.log('self-test passed — the detector can fail');
+  process.exit(0);
+}
 let staticFails = 0;
 let scanned = 0;
 for await (const file of htmlFiles(DIST)) {

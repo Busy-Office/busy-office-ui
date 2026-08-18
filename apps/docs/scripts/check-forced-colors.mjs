@@ -52,9 +52,41 @@ assertScanned(rules.length, 'forced-colors rules in the shipped CSS',
   `parsed ${coreCss} — has the stylesheet moved, or the layer been dropped?`);
 
 /* ---- 2. one built page per rule, picked by string-matching its classes ---- */
+const CLASS_RE = /\.(bo-[a-z0-9-]+)/g;
+const ATTR_RE = /\[([a-z-]+)=["']([^"']+)["']\]/g;
+
+if (process.argv.includes('--self-test')) {
+  /* This gate finds a live example of each forced-colors rule by string-matching
+     the classes and attributes in its selector — its own header says so, and
+     that is a heuristic in both directions. Miss the attribute and it picks a
+     page that merely MENTIONS `.bo-data-table` (every table page does, in prose
+     and code samples); over-extract and it looks for a class that is not in the
+     selector at all and finds nothing, silently verifying no rule.
+
+     Tested against the real constants rather than copies, which is why they are
+     hoisted above the build-dependent lines below. */
+  const classesOf = (sel) => [...sel.matchAll(CLASS_RE)].map((m) => m[1]);
+  const attrsOf = (sel) => [...sel.matchAll(ATTR_RE)].map((m) => `${m[1]}="${m[2]}"`);
+  const cases = [
+    ['plain class', JSON.stringify(classesOf('.bo-badge')), '["bo-badge"]'],
+    ['modifier is one class', JSON.stringify(classesOf('.bo-badge--danger')), '["bo-badge--danger"]'],
+    ['descendant selector yields both', JSON.stringify(classesOf('.bo-data-table .bo-badge')), '["bo-data-table","bo-badge"]'],
+    ['attribute is extracted', attrsOf('.bo-data-table tr[data-row-state="error"]').join(), 'data-row-state="error"'],
+    ['no attribute yields none', JSON.stringify(attrsOf('.bo-badge')), '[]'],
+    ['a bare element selector yields no class', JSON.stringify(classesOf('tbody tr')), '[]'],
+  ];
+  let ok = true;
+  for (const [what, got, want] of cases) {
+    ok &&= got === want;
+    console.log(`self-test: ${what.padEnd(38)} ${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
+  }
+  if (!ok) { console.error('  the selector reader cannot locate a live example reliably'); process.exit(1); }
+  console.log('self-test passed — the detector can fail');
+  process.exit(0);
+}
+
 const built = (await distPages(DIST)).map((p) => [p.url, p.file, p.html]);
 
-const CLASS_RE = /\.(bo-[a-z0-9-]+)/g;
 
 // Read each built page once, then pick the first page whose markup mentions
 // every class in a rule's selector — good enough to locate a live example,

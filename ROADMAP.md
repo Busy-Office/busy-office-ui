@@ -593,7 +593,7 @@ Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
        mislabelling them `@exact` to get green. `check-notes` was retrofitted
        here to prove the shape generalises beyond `check-learning-path`.
 
-3. [ ] **42.3 — Burn down the five heuristic gates that owe a self-test.**
+3. [x] **42.3 — Burn down the five heuristic gates that owe a self-test.**
        `check-boost`, `check-floor`, `check-forced-colors`, `check-loop-vocab`,
        `check-markup`. `check-notes` and `check-learning-path` are done and show
        the shape: extract the classifier into a function, drive it with inputs it
@@ -603,6 +603,33 @@ Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
        plausibly miss — for `check-markup` that is the consumed-`<` bug that once
        hid one of six injected rows. When the list reaches zero, `check:selftests`
        stops reporting and starts failing on a missing self-test.
+
+       **Landed 2026-08-19. All 7 heuristic gates self-test; the meta-gate now
+       FAILS on a missing one** rather than reporting it — the debt reached zero,
+       so the rule is enforced.
+
+       Proved by breaking each gate's REAL detector in turn and confirming all
+       seven go red: LAYOUT stops matching `display:grid`, the floor literal
+       stops matching two browsers, `CLASS_RE` stops finding `bo-*`, the outcome
+       extractor returns nothing, `classifyNote` returns clean, the bare-text
+       regex consumes its `<` again, the preview index is pinned to 0.
+
+       **Three of the five self-tests were worthless when first written, and the
+       red-proof is the only reason that is known:**
+
+       - `check-markup`, `check-loop-vocab` and `check-notes` each tested a
+         **COPY** of the detector. Breaking the gate's real regex left the copy
+         happily green. All three now share one exported implementation between
+         gate and test, so breaking one breaks the other.
+       - Even after sharing, `check-markup`'s fixture still passed with the bug
+         reintroduced: it put a `<th>` between the two offending rows, so both
+         matched anyway. The consumed-`<` bug only loses a match when one row's
+         stray text ends **exactly** at the `<` opening the next. Fixture
+         corrected; it now reports 1 of 2 with the bug and 2 of 2 without.
+
+       A self-test that tests a copy is the same defect one level up as the
+       detector that cannot fail. Writing the rule did not prevent it — running
+       the proof did.
 
 2. [x] **42.2 — Close the picking gap the date-picker refusal left open.**
        The refusal was right about the widget and wrong about the job. The
