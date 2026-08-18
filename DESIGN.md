@@ -189,6 +189,29 @@ Two consequences worth stating plainly:
   the maintenance surface for a solved problem. Same reasoning as charts
   (tokens → ECharts theme, documented, not owned).
 
+## Deliberately absent (and what to use instead)
+
+The canonical list of component-shaped things this framework refuses to ship.
+It exists because an absence is invisible: a reader — or an assistant — asked
+for a data grid will build one unless something says it was considered and
+declined, and what to reach for instead. `gen-llms.mjs` publishes this table
+into `llms.txt`, so the answer travels with the package rather than living only
+in a commit message.
+
+Process decisions and one-off naming calls stay in ROADMAP's "REFUSED, with
+reasons"; this table is only for things someone would otherwise try to build.
+
+| Deliberately absent | Use instead | Decided |
+|---|---|---|
+| A grid engine — virtual scroll, column virtualisation, cell editing | Server-side paging or load-more for lists; the token-themed AG Grid recipe on `/concepts/scale` for the one screen in twenty that is genuinely a spreadsheet | 2026-08-17, "four patterns, no grid" |
+| A client-side row virtualiser | Filter server-side and paginate; fixed row heights are maintained so a third-party virtualiser drops in cleanly | 2026-08-17 |
+| Tab overflow arrow buttons | The edge fade ships and is conditional on actual overflow; add two buttons calling `scrollBy` if your users expect them | roadmap 30.1b |
+| An app-icon library inside `.bo-icon` | Inline `<svg>` per tenant, or an initials chip — app icons are product content, and every consumer would ship glyphs they never use | roadmap 27.7 |
+| A "field editor" component | `.bo-data-table` + `data-row-edit` + the typed inputs; see `/patterns/field-editor` | roadmap 30.2 |
+| A master-detail component | `.bo-data-table` + a card, dialog or offcanvas; see `/patterns/master-detail` | roadmap 31.2 |
+| `.bo-value-help` and `.bo-staging-table` | Compose combobox + dialog, and the staging pattern | Slice 24 triage |
+| A second toolbar idiom | `.bo-cluster` already does it | roadmap 5a |
+
 ## HTMX integration
 
 `@busy-office/ui/css/htmx` styles what HTMX itself sets (`.htmx-indicator`,

@@ -536,19 +536,26 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        `data-tree-level="1..12"` out of `<code>` PROSE and reported the
        documentation as a defect. It strips `<pre>`/`<code>` first now.
 
-3. [ ] **32.3 — State the refusals where a machine will read them.**
-       `llms.txt` says what exists; it does not say what deliberately does not.
-       An assistant asked for a data grid, tab arrows or a virtual scroller
-       will build one, because nothing tells it those were refused and why.
-       Accept: a short "deliberately absent, and what to use instead" section
-       in `llms.txt`, generated from the refusals already recorded in
-       DESIGN.md/ROADMAP so it cannot drift.
+3. [x] **32.3 — Refusals published to `llms.txt`** (2026-08-18) — the file said
+       what exists and never what deliberately does not, so the most expensive
+       mistakes were the ones it could not warn about.
 
-**Deliberately NOT proposed:** an "AI mode", a prompt file, or any
-model-specific artefact. The honest framing is that AI slop here is
-*unvalidated output against an under-specified surface* — the fix is to finish
-specifying the surface and ship a checker, which helps a human typing by hand
-just as much.
+       DESIGN.md gains a canonical **"Deliberately absent (and what to use
+       instead)"** table — 8 rows, each a component-shaped thing someone would
+       otherwise build, with the alternative and where it was decided.
+       `gen-llms.mjs` parses it into `llms.txt` rather than restating it, so the
+       two cannot drift. Process decisions stay in ROADMAP's "REFUSED, with
+       reasons"; this table is only for things an assistant would try to build.
+
+       **Created the canonical record rather than pretending to scrape one.**
+       The 13 existing REFUSED markers are inconsistently formatted and mostly
+       internal (a class rename, a toolbar idiom); generating from them would
+       have been fragile and would have published noise. Stated plainly because
+       the item said "generated from the refusals already recorded".
+
+       Red-proved the anti-drift guard: deleting the table **fails the build**
+       with an explicit error, because a silently-dropped section is worse than
+       none — the file would still look complete.
 
 ## Slice 31 — DESIGN.md's own four-pattern table is wrong (2026-08-18)
 

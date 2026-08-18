@@ -93,6 +93,29 @@ for (const p of [
   'base/colors', 'reference/classes', 'patterns/invoice-list', 'patterns/approval',
 ]) out += `${site}/${p}/\n`;
 
+/* "Deliberately absent" — generated from DESIGN.md's canonical table (roadmap
+   32.3). An absence is invisible: an assistant asked for a data grid will build
+   one unless something tells it the answer was considered and declined. This
+   is the half `llms.txt` was missing — it said what exists and never what does
+   not, so the most expensive mistakes were the ones it could not warn about.
+
+   Parsed rather than restated, and it THROWS if the table is missing or empty:
+   a silently-dropped section would be worse than none, because the file would
+   still look complete. */
+{
+  const design = await readFile(join(docsRoot, '..', '..', 'DESIGN.md'), 'utf8');
+  const section = design.split('## Deliberately absent')[1]?.split('\n## ')[0] ?? '';
+  const rows = [...section.matchAll(/^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*$/gm)]
+    .filter((m) => !/^-+$/.test(m[1].trim()) && m[1].trim() !== 'Deliberately absent');
+  if (rows.length < 3) {
+    throw new Error('gen-llms: DESIGN.md "Deliberately absent" table is missing or too small — llms.txt would silently lose the refusals section');
+  }
+  const strip = (t) => t.replace(/`/g, '').trim();
+  out += `\n## Deliberately absent — do not build these, use the alternative\n\n`;
+  for (const m of rows) out += `- ${strip(m[1])} -> ${strip(m[2])}\n`;
+  out += `\nThese were considered and declined on purpose; see DESIGN.md and ROADMAP.md for the reasoning.\n`;
+}
+
 // Assert every URL we publish resolves to a built page (site-grill S-2:
 // generated links must be verified against output, not assumed).
 const { access } = await import('node:fs/promises');
