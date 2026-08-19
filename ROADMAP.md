@@ -748,6 +748,50 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 66 — Explore: value-help dogfooded in po-app, backlog empty (2026-08-20)
+
+Dispatched by rule 6 — backlog genuinely empty of anything not owner-blocked
+(52.3, 37.2/37.3, 30.0, 30.4b, the 0.2.0 release, VoiceOver/NVDA/AT runtime
+evidence — all OWNER CALL / AWAITING CLARIFICATION / NEEDS-RUNTIME; Turbo's
+own trigger condition isn't met). Ideas backlog already exhausted
+(2026-08-14) — per its own documented fallback, extended `examples/po-app`
+and felt where it fights. Full report:
+`.roundtable/explore-value-help-po-app-2026-08-20.md`.
+
+1. [x] **66.1 — `/patterns/value-help` dogfooded for real in `po-app`'s
+       mass-change flow.** Spiked in an isolated worktree
+       (`explore/value-help-po-app`), graduated. A real `COST_CENTERS`
+       catalog (didn't exist before — every "CC-nnnn" in the app was an ad-hoc
+       string literal), a server-side `/cost-centers?q=` search endpoint
+       (debounced, matching the docs' own "a real picker asks the server"
+       half the static demo doesn't test), and the picker composed as a
+       SECOND modal opened from inside an already-open one — a stacking
+       case the docs demo never has to handle. Verified live: native
+       `<dialog>` stacking, per-dialog focus trap, and fill/close/refocus
+       all work with **zero framework changes**. `mass-change`'s validation
+       upgraded from format-only regex to real existence-checking, closing
+       a real gap (a well-formed but nonexistent code used to silently
+       "succeed").
+
+2. [x] **66.2 — Found and fixed a real, pre-existing bug in `po-app` while
+       dogfooding.** `/pos/mass-change`'s 422 response put its OOB alert
+       block BEFORE the main `tbody` swap content — the ONE response in the
+       file shaped that way; both success paths already put main content
+       first. After that response, `#po-rows` vanished from the DOM
+       entirely (checked directly: `document.querySelectorAll('tbody').length
+       === 0`), not eyeballed. Confirmed NOT caused by this spike:
+       reproduced on a clean, unmodified checkout running standalone before
+       touching anything. Fixed by reordering to match the working shape;
+       re-verified in both the live `node` process and the real
+       containerized (Podman, tarball-installed) build, both themes.
+       Nobody had tried a well-formed-but-wrong cost centre through a live
+       browser before — the base-rate rule, again: the first real use of an
+       untested path found it broken.
+
+**Exit:** graduated, not discarded — landed directly in `examples/po-app`
+(no `packages/core` changes, so no framework CHANGELOG entry). Verified
+live via the real Podman container build, both themes, the full flow.
+
 ## Slice 65 — Standardize: two framework bugs the design-grill sweep queued (2026-08-20)
 
 Dispatched by the counter at 4/4 (OVERDUE). Both queued items (58.3, 58.4)

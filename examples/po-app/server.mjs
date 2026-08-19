@@ -35,6 +35,20 @@ for (let i = 0; i < 25; i++) {
     status: ['Approved', 'Rejected', 'Approved'][i % 3],
   });
 }
+// Cost-centre master data — did not exist before this spike. Every "CC-nnnn"
+// in the app up to now was an ad-hoc string literal; mass-change validated
+// FORMAT only (/^CC-\d{4}$/), so a well-formed but nonexistent code silently
+// "succeeded". A real catalog is what value-help needs to search against,
+// and it happens to close that correctness gap too.
+const COST_CENTERS = [
+  { code: 'CC-1180', name: 'Operations' },
+  { code: 'CC-2205', name: 'Logistics' },
+  { code: 'CC-4021', name: 'Facilities' },
+  { code: 'CC-3310', name: 'Sales' },
+  { code: 'CC-9002', name: 'R&D' },
+  { code: 'CC-5540', name: 'Customer Support' },
+  { code: 'CC-6610', name: 'IT Infrastructure' },
+];
 const PAGE_SIZE = 10;
 const audit = [];
 const money = (n) =>
@@ -233,6 +247,41 @@ const emptyHtml = (filtered) => `
   </div>
 </div>`;
 
+// Server-side search for the value-help picker — the docs demo filters
+// client-side ("six rows fit in the page") and explicitly says a real
+// picker asks the server. Dogfooding that half for real: debounced via
+// hx-trigger's delay:250ms, one request per pause, not per keystroke.
+const costCenterResults = (q) => {
+  const term = (q || '').trim().toLowerCase();
+  const matches = COST_CENTERS.filter(
+    (c) => !term || c.code.toLowerCase().includes(term) || c.name.toLowerCase().includes(term),
+  );
+  if (!matches.length) {
+    return `<div class="bo-state" id="cc-empty">
+      <p class="bo-state__title">No cost centre matches "${esc(q)}"</p>
+      <p class="bo-state__description">${COST_CENTERS.length} cost centres exist — none of them match.</p>
+    </div>`;
+  }
+  return `<div class="bo-data-table-container" tabindex="0">
+    <table class="bo-data-table" data-density="compact">
+      <caption class="bo-visually-hidden">Cost centres matching your search</caption>
+      <thead><tr><th scope="col">Code</th><th scope="col">Name</th></tr></thead>
+      <tbody>
+        ${matches
+          .map(
+            (c) => `<tr>
+          <td class="bo-data-table__col--code">
+            <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" data-cc-pick="${c.code}">${c.code}</button>
+          </td>
+          <td>${esc(c.name)}</td>
+        </tr>`,
+          )
+          .join('')}
+      </tbody>
+    </table>
+  </div>`;
+};
+
 const listScreen = (query = {}) => {
   const rows = filterPos(query);
   const filtering = Boolean((query.q || '').trim() || (query.status && query.status !== 'All'));
@@ -306,8 +355,19 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
     decided needs a reversal, so it will be reported rather than changed.</p>
     <div class="bo-form-field" style="margin-block-start: var(--bo-space-3)">
       <label class="bo-form-field__label" for="mass-cc-value">New cost centre</label>
-      <input class="bo-input bo-input--code" id="mass-cc-value" name="cc" placeholder="CC-4021" form="po-bulk">
-      <p class="bo-form-field__hint">Format CC-nnnn. An invalid value changes nothing at all.</p>
+      <div class="bo-cluster">
+        <input class="bo-input bo-input--code" id="mass-cc-value" name="cc" placeholder="CC-4021" form="po-bulk">
+        <!-- value-help, dogfooded for real (roadmap Explore spike): a
+             SECOND modal opened from inside an already-open one. The docs
+             demo never has to handle this — it's the only dialog on its
+             page. Native <dialog> stacks fine (each showModal() pushes to
+             the top layer; closing pops back to the one beneath), and
+             focus-trap is per-dialog in dialog.ts, so nothing needed
+             changing in the framework to make this compose. -->
+        <button class="bo-btn bo-btn--secondary" type="button"
+          data-dialog-trigger="cc-picker" aria-label="Find a cost centre">Find…</button>
+      </div>
+      <p class="bo-form-field__hint">Format CC-nnnn. An invalid or unknown value changes nothing at all.</p>
     </div>
   </div>
   <div class="bo-dialog__footer">
@@ -318,10 +378,42 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
       hx-post="/pos/mass-change" hx-target="#po-rows" hx-swap="outerHTML" hx-include="#po-bulk">Change selected</button>
   </div>
 </dialog>
+
+<dialog class="bo-dialog" id="cc-picker" data-state="closed" aria-labelledby="cc-picker-title">
+  <div class="bo-dialog__header">
+    <h2 class="bo-dialog__title" id="cc-picker-title">Find a cost centre</h2>
+    <form method="dialog"><button class="bo-btn bo-btn--sm bo-btn--ghost" type="submit" aria-label="Close">×</button></form>
+  </div>
+  <div class="bo-dialog__body">
+    <form class="bo-filter-bar" role="search" aria-label="Cost centre search" onsubmit="return false">
+      <input class="bo-input" type="search" id="cc-q" name="q" aria-label="Search cost centres"
+        placeholder="Code or name…" hx-get="/cost-centers" hx-trigger="input changed delay:250ms, search"
+        hx-target="#cc-results" hx-swap="innerHTML">
+    </form>
+    <div id="cc-results">${costCenterResults('')}</div>
+  </div>
+</dialog>
 <script type="module">
   import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
   initDropdowns(); initTableToolbar(); initLoadMore();
   window.__btt = initTableToolbar; // layout's afterSwap re-applies column state
+
+  // Cost-centre picker: same "fill field, close, refocus the FIELD (not the
+  // trigger)" behavior the docs' own value-help pattern documents, and the
+  // same measured reason — closing a modal from a click on a button inside
+  // it leaves focus on <body> otherwise.
+  const ccPicker = document.getElementById('cc-picker');
+  if (ccPicker) {
+    ccPicker.addEventListener('click', (e) => {
+      const pick = e.target.closest('[data-cc-pick]');
+      if (!pick) return;
+      const field = document.getElementById('mass-cc-value');
+      field.value = pick.getAttribute('data-cc-pick');
+      field.dispatchEvent(new Event('change', { bubbles: true }));
+      ccPicker.close('picked');
+      field.focus();
+    });
+  }
   document.addEventListener('bo:table-export', () => {
     const toasts = document.getElementById('toasts');
     const t = document.createElement('div');
@@ -779,6 +871,12 @@ const server = createServer(async (req, res) => {
       };
       return res.end(page('Purchase orders', '/pos', listScreen(query), density));
     }
+    if (path === '/cost-centers' && req.method === 'GET') {
+      // Fragment only — the picker's own results region, not a page. Real
+      // server-side narrowing against COST_CENTERS, not a client filter.
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(costCenterResults(url.searchParams.get('q') ?? ''));
+    }
     if (path === '/import' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Import', '/import', stagingScreen(), density));
@@ -890,12 +988,25 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       // Validate the OPERATION once, before touching any row. A bad target
       // value is not a per-row failure — it is the whole request being wrong,
       // so it gets the document-level treatment, not 200 identical row errors.
-      if (!/^CC-\d{4}$/.test(cc)) {
+      // Now checks EXISTENCE against COST_CENTERS, not just format — before
+      // this spike there was no catalog to check against, so "CC-0000" (a
+      // well-formed but nonexistent code, easy to fat-finger without a
+      // picker) silently "succeeded".
+      if (!COST_CENTERS.some((c) => c.code === cc)) {
         res.writeHead(422, { 'content-type': 'text/html' });
+        // MAIN content (the hx-target="#po-rows" swap) FIRST, OOB block
+        // SECOND — matching the success path below. Found by dogfooding
+        // this path for real: with the OOB block first, #po-rows ended up
+        // MISSING from the DOM entirely after the swap (0 <tbody> elements
+        // — checked directly, not eyeballed from a screenshot), even
+        // though this exact 422 branch pre-dates this spike and the OOB
+        // markup itself is correct. Reproduced on a clean, unmodified copy
+        // of the app too, so this was always broken — nobody had tried a
+        // well-formed-but-wrong cost centre in a live browser before.
         return res.end(
-          `<div id="bulk-result" hx-swap-oob="innerHTML"><div class="bo-alert bo-alert--danger" role="alert">` +
+          `${tbodyHtml(pos)}<div id="bulk-result" hx-swap-oob="innerHTML"><div class="bo-alert bo-alert--danger" role="alert">` +
             `<p><strong>"${esc(form.get('cc') ?? '')}" is not a cost centre.</strong> Expected CC-nnnn — nothing was changed.</p>` +
-            `</div></div>${tbodyHtml(pos)}`,
+            `</div></div>`,
         );
       }
 
