@@ -748,6 +748,59 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 71 — Owner ask: server-controlled conditional cell tone (2026-08-20)
+
+Triaged from chat: owner asked to advance "30.0" naming selective editable
+cells, coloring, per-type data format, amount + currency column, total and
+subtotal. Checked against `ROADMAP.md` before scoping — **four of the five
+were already shipped**, and the real `30.0` (Slice 30, `ROADMAP.md:4116`) is
+a different, still-open item (docs overview/sidebar ambiguity), unrelated to
+tables; `RESUME.md` had been carrying a stale description of it (fixed in
+this commit).
+
+**Already shipped, confirmed by reading the code, not assumed:**
+- Selective editable cell (mixed types per row) — "Advanced editable table"
+  (2026-08-16): text/select/date/checkbox/tag-input via `data-row-edit`.
+- Data format per column — same item: money (currency+precision), quantity
+  stepper, native date, all typed per field.
+- Amount + currency column — money component composes currency + amount as
+  real separate fields.
+- Total + subtotal — `/components/data-table` "Grouped rows + subtotals":
+  per-group subtotal rows and a grand-total row, proven live in po-app's
+  "Spend by cost center" screen.
+
+**Genuinely new:** value-conditional cell coloring. Asked to scope it
+(`AskUserQuestion`) — owner wants it **server-controlled**, condition
+decided by the server, not fixed to "negative amount" or any one rule. This
+is exactly principle 3's shape ("framework does visuals, you do the data") —
+refuse baking a business rule (negative-red, threshold, category) into the
+framework; ship a general attribute the server sets per any condition it
+computes.
+
+**Item 71.1 — `data-tone` attribute on data-table cells.** `data-tone=
+"danger|warning|success"` on any `<td>` sets that cell's own `--bo-cell-bg`
+(the same custom property row-state already paints through) to the matching
+`-subtle` token, plus an inline-start inset box-shadow accent in the solid
+tone color — the same two-channel shape (`color + non-color cue`) row-state
+already uses, applied per-cell instead of per-row. Reuses existing tokens
+(`--bo-color-danger-subtle`/`-success-subtle`/`-warning-subtle`, already
+shipped in `tokens/color.css`) — **zero new tokens, zero JS**, pure CSS
+attribute selector so it works on plain server-rendered HTML or an htmx
+swap with no behavior needing to run.
+
+Accept: `data-tone` documented on `/components/data-table` with a demo
+showing a server deciding tone per cell (caption states explicitly "the
+server decides the condition — a negative amount, a threshold, a business
+rule — the framework only paints the result," per principle 3); composes
+correctly with existing row states (a dirty+danger cell doesn't produce a
+broken double-tint — cell-level `--bo-cell-bg` naturally wins over the
+row's since it's set closer to the painted element); AA contrast verified
+both themes for all three tones (added to `check-contrast.mjs`'s `PAIRS`);
+live-verified 1440 + 390, light + dark in the bind-mounted Podman
+container; `check:po-app` and existing gates stay green.
+
+**Exit:** pending — build this wake if the owner confirms scope as written.
+
 ## Slice 70 — Objective grill: the po-app dogfood streak (2026-08-20)
 
 Dispatched ahead of the formal 3/3 counter (2/3 at dispatch), same

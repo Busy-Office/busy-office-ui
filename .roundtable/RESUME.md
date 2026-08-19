@@ -38,9 +38,16 @@ claims against ROADMAP.md before trusting them.**
 
 ## Open questions awaiting the owner
 
-- **30.0** — the "advanced editable table with different data types" half is
-  still ambiguous. (The "horizontal tabs" half was answered 2026-08-18: it meant
-  **vertical** tabs, shipped as 36.1.)
+- **30.0** — **this entry was stale, corrected 2026-08-20.** The real open
+  half is the "*check out overview, the sidebar menu*" note (`ROADMAP.md:4116`):
+  either (a) review the docs' own landing page/nav, or (b) a new ERP
+  overview/dashboard pattern with a module sidebar — still ambiguous, still
+  owner's call. ("Horizontal tabs" was answered 2026-08-18: meant **vertical**
+  tabs, shipped as 36.1.) This entry previously described an "advanced
+  editable table" ambiguity that does not exist in `ROADMAP.md` — that table
+  work shipped 2026-08-16 as its own item, unrelated to 30.0; the owner's
+  2026-08-20 chat ask against that stale description turned into Slice 71
+  instead, once checked.
 - **37.1/37.2 rubric — superseded, not answered.** The original
   Demand/Composition/Contracts/Evidence rubric never got owner sign-off; before
   it did, the owner's own wishlist (Slice 53) produced a different, symmetric
