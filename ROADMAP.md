@@ -698,6 +698,48 @@ principles last one conversation and vanish at the next context clear.
        filter will be judged against: a screen that later fails it has
        REGRESSED, not merely disagreed with taste.
 
+## Slice 62 — from the Objective grill, Slices 56-61 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices56-61-2026-08-19.md`.
+
+1. [x] **62.1 — The dispatcher was running LIFO, not FIFO, and it cost real
+       value.** Nine consecutive Continue dispatches (19:10-23:01 today) each
+       picked a just-triaged item; five older open items — including `53.2`
+       (grill `icon`), queued with the explicit note that its removal window
+       closes at the 0.2.0 publish — sat untouched the whole time. Cause:
+       LOOPS.md's rule 4 said "the current in-progress slice's queue,"
+       undefined anywhere, and in practice meant "whichever slice triage just
+       created" — which, because triage inserts near the top of the file and
+       every wake reads top-to-bottom, made the queue a stack.
+
+       **Fixed directly in LOOPS.md** (process change, Step 1's own rule: edit
+       on sight, don't queue). Rule 4 and Continue's Input line now both name
+       the OLDEST open item across the whole backlog, with `RESUME.md` as the
+       one legitimate override for a slice genuinely mid-build — with a
+       warning to verify RESUME.md is actually current before trusting it,
+       since it had gone stale itself (below).
+
+       Demonstrated, not just asserted: applying the new rule to the current
+       backlog surfaces `51.1` as the next dispatch target — exactly the item
+       the grill found starved, once the two older-numbered but owner-blocked
+       items (`30.0`, `37.2/37.3`) are set aside.
+
+2. [x] **62.2 — `RESUME.md` had gone stale, and it was the SAME failure mode
+       one level up.** Its "Slice 48" open question had already been resolved
+       and shipped (48.4, then the whole object-page pattern) without the file
+       being updated — stale state trusted instead of checked, the identical
+       root cause as 62.1. Corrected: the resolved question moved to a
+       "resolved, not re-litigated" section, the 37.1 rubric note updated to
+       say Slice 53's NEED/COST rubric superseded it, and 52.3 added as a
+       genuine owner-blocked item (not starved — the loop cannot decide it).
+
+3. [x] **62.3 — Recorded, no action: this window shipped zero framework CSS.**
+       Docs, one gate, and its own Standardize conversion — read together with
+       62.1 as the same cause, not a second problem. Expected to self-correct
+       once the FIFO fix lets `53.2` and `58.1` surface.
+
+4. [x] **62.4 — Recorded: npm still serves 0.1.1, tenth consecutive grill.**
+
 ## Slice 61 — Owner wishlist: a generic, fixed review-screen contract (2026-08-19)
 
 Owner asked two things: is the "review" pattern generic rather than

@@ -13,7 +13,13 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-18 after 37.1 landed.
+Last updated 2026-08-19 after the Slice 56-61 Objective grill. This file had
+gone stale since 2026-08-18 — Slice 48's "open question" below had already
+been resolved and shipped (48.4, then the whole object-page pattern) without
+this file being told. Found by the same grill that found the LIFO dispatch
+bug; both are the same root cause (stale state trusted instead of checked).
+**If this file's "last updated" is more than a few wakes old, verify its
+claims against ROADMAP.md before trusting them.**
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
@@ -21,20 +27,28 @@ Last updated 2026-08-18 after 37.1 landed.
   CI-green; the registry still serves **0.1.1**. npm in this environment is
   unauthenticated (E401), so publishing is owner-triggered and cannot be done
   from a wake. Everything from Slice 24 onward is in the repo and in nobody's
-  `node_modules`.
+  `node_modules`. Restated in 10 consecutive Objective grills now.
 - **30.4b** — scope for the windowed list (the 50,000-record ask) is an owner
   call; the framework half is specified, the server-chunking half is not.
+- **52.3 — Object Page naming.** Recommendation given (keep the `object-page`
+  slug, retitle to name the interaction); genuinely the owner's call on taste,
+  not something the loop can decide for itself.
 
 ## Open questions awaiting the owner
 
-- **Slice 48 — SAP Object Page.** Triaged 2026-08-19 with Accept criteria. The
-  open question is SCOPE: the whole floorplan, or just the anchor bar on the
-  existing `/patterns/record-detail`? Queued behind the 45.x items, not started.
 - **30.0** — the "advanced editable table with different data types" half is
   still ambiguous. (The "horizontal tabs" half was answered 2026-08-18: it meant
   **vertical** tabs, shipped as 36.1.)
-- **37.1 rubric — awaiting owner sign-off before 37.2 scores anything.**
-  `.roundtable/surface-review-rubric.md` is committed; the open questions are the
-  weights and the outcome set. Correcting it after 55 rows are scored means
-  scoring them twice, so 37.2 should not start until this is answered — or until
-  the owner says to proceed on the rubric as written.
+- **37.1/37.2 rubric — superseded, not answered.** The original
+  Demand/Composition/Contracts/Evidence rubric never got owner sign-off; before
+  it did, the owner's own wishlist (Slice 53) produced a different, symmetric
+  NEED/COST rubric that has since been used for real decisions (`.bo-date`,
+  `.bo-quantity--display`). Treat 37.1's sign-off question as moot unless the
+  owner wants the original rubric run anyway.
+
+## Resolved, kept here only as a pointer (not re-litigated)
+
+- **Slice 48 — SAP Object Page scope.** Was "whole floorplan vs anchor bar
+  only" — resolved by an Explore spike (2026-08-19): composes from primitives
+  with zero new CSS, so the cheap answer was the whole thing. Shipped as
+  `/patterns/object-page`, 48.1-48.4 and 52.1-52.2. Not open.

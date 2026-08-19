@@ -129,8 +129,22 @@ match to its full playbook below:
    a pattern rather than restate one slice, and the last useful grill covered
    two. The number is a judgement and is written down so it can be argued with.
 
-4. **Build item queued** in the current in-progress slice? → dispatch
-   **Continue**, build mode.
+4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
+   across all slices, not the newest? → dispatch **Continue**, build mode.
+
+   **Oldest, not "current in-progress slice," as of 2026-08-19.** The old
+   wording never defined "current," and in practice it meant "whichever
+   slice a triage step just created" — because triage inserts near the top
+   of `ROADMAP.md` and every wake reads top-to-bottom, that made the queue a
+   LIFO stack. Nine consecutive Continue dispatches (19:10-23:01, 2026-08-19)
+   each picked a just-triaged item while five older items — one with a
+   self-documented time cost (roadmap 53.2: a free removal window that
+   closes at the 0.2.0 publish) — sat untouched despite being open the whole
+   time. Found by the Objective grill built to catch exactly this shape of
+   bug (roadmap 56-61 grill). `RESUME.md`'s "In flight" section is the one
+   legitimate override — a slice genuinely mid-build wins even if it isn't
+   oldest — but check whether it is actually current before trusting it; it
+   has gone stale before.
 5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
    coverage, a number from `record_metric.py` trending the wrong way)? →
    dispatch **Optimize**.
@@ -167,8 +181,9 @@ the next tick if the session is live to receive it).
 and the top item is unambiguous.
 
 ### 2. Continue (build or fix) — multi-round until done
-**Trigger:** dispatched by Roadmap. **Input:** the P0 bug, or the top of the
-current in-progress slice's queue in `ROADMAP.md`.
+**Trigger:** dispatched by Roadmap. **Input:** the P0 bug, or the OLDEST
+still-open item anywhere in `ROADMAP.md`'s backlog — unless `RESUME.md`
+names a genuinely in-progress slice, verified current, not merely present.
 Run **try → verify → adjust** as many rounds as it takes to satisfy the item's
 *Accept* criteria — this is not "one attempt, ship whatever happened":
 1. Pick the item. If it's a bug → `diagnosing-bugs` (build a red-capable repro
