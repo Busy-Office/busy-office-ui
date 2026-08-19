@@ -412,3 +412,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 18:07 · Continue · build · 48.4 — anchor bar decided by rendering 4 variants: horizontal, one line, scrollable; B spills a fixed-height control · landed · 795825e
 - 2026-08-19 18:36 · Continue · build · 48.2 — /patterns/object-page + initAnchorNav shipped; zero framework CSS; 7 claims 65->72 · landed · 34bc6db
 - 2026-08-19 18:36 · Continue · tidy · visual-regression --only matched by substring so it could not narrow; now prefix · landed · 34bc6db
+- 2026-08-19 19:04 · Standardize · tidy · 50.1 — master-detail's 212-char inline layout moved to a scoped style block, matching object-page · landed · 3608463
+- 2026-08-19 19:04 · Standardize · tidy · 50.2 — initAnchorNav listened on a shell class; now capture-phase scroll, proved dead-vs-follows · landed · 3608463
+- 2026-08-19 19:04 · Standardize · tidy · 50.3 — dialog guard name + root-param behaviours judged not-drift, reason recorded · logged · 3608463
