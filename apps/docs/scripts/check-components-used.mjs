@@ -28,7 +28,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { DIST } from './paths.mjs';
-import { distPages } from './dist-pages.mjs';
+import { distPages, demoRegion } from './dist-pages.mjs';
 import { assertScanned, selfTest } from './gate-report.mjs';
 
 const api = JSON.parse(
@@ -72,10 +72,7 @@ for (const page of await distPages(DIST)) {
   if (!section) continue;
   listsChecked += 1;
 
-  const start = page.html.indexOf('<section class="demo"');
-  /* Code samples are stripped: markup a reader COPIES is not markup the screen
-     renders, and counting it is how a page could claim anything by printing it. */
-  const rendered = (start < 0 ? '' : page.html.slice(start)).replace(/<pre[\s\S]*?<\/pre>/g, ' ');
+  const rendered = demoRegion(page.html);
 
   for (const slug of new Set([...section[1].matchAll(/\/components\/([a-z-]+)/g)].map((m) => m[1]))) {
     const blocks = blocksBySlug.get(slug);

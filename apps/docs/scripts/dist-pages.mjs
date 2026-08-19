@@ -80,3 +80,29 @@ export async function distPages(dist, { skipRedirects = true } = {}) {
   }
   return out;
 }
+
+/**
+ * What a page actually RENDERS: everything from the first hand-authored
+ * `<section class="demo">`, with copyable code samples stripped.
+ *
+ * Both halves are load-bearing and both have been got wrong here:
+ *
+ * - **Start at the first demo section.** Before that point is the docs' own
+ *   chrome, which is built from framework classes — a whole-page count reported
+ *   `offcanvas` in 17 of 17 screens when the real figure is 1, because the
+ *   shell's mobile nav IS a `.bo-offcanvas` (roadmap 45.5).
+ * - **Strip `<pre>`.** Markup a reader COPIES is not markup the screen renders,
+ *   and counting it would let a page claim any component by printing it
+ *   (roadmap 46.2).
+ *
+ * `check-components-used` and `component-scores` both need exactly this and had
+ * each spelled it out separately (Standardize sweep, 2026-08-19).
+ * `check-learning-path` deliberately does NOT use it: that gate judges whether a
+ * result appears before code, so it needs the region WITH the `<pre>` blocks in
+ * place.
+ */
+export function demoRegion(html) {
+  const start = html.indexOf('<section class="demo"');
+  if (start < 0) return '';
+  return html.slice(start).replace(/<pre[\s\S]*?<\/pre>/g, ' ');
+}

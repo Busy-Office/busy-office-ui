@@ -640,6 +640,63 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 55 — Standardize sweep: two decisions that had each been written twice (2026-08-19)
+
+Dispatched by the counter at 4/4. Multi-round; exit is a clean re-scan.
+
+1. [x] **55.1 — The month date-maths, extracted.** `/components/calendar` and
+       `/patterns/detail-form` each generated a month, and they had already
+       started to diverge — the same offset spelled two ways:
+
+       ```
+       (first.getUTCDay() - weekStart + 7) % 7      // calendar
+       (first.getUTCDay() + 6) % 7                  // detail-form
+       ```
+
+       Those agree **only while `weekStart` is Monday**. The second is the first
+       with the setting folded in and forgotten, which is exactly how a
+       Sunday-first grid would come out silently wrong — the failure 54.2 had
+       just built a gate for.
+
+       Now `apps/docs/src/lib/month-grid.ts`. Only the DATE MATHS is shared; the
+       cells stay in the pages, because they genuinely differ (plain spans vs
+       disabled submit buttons carrying a delivery date). UTC throughout, with
+       the reason recorded: `new Date(2026, 8, 1)` is local time, and west of UTC
+       `toISOString()` then reports the previous day — a calendar correct in
+       London and off by one in New York.
+
+       Verified against the rendered artefact, not the diff: the delivery grid
+       still renders 30 buttons + 5 outside cells, 9 disabled, same selected and
+       holiday dates as before the change, and `check:calendar-grid` still reads
+       285 cells across 8 calendars.
+
+2. [x] **55.2 — "What this page actually renders", extracted.**
+       `check-components-used` and `component-scores` each spelled out the same
+       two-part decision: start at the first `<section class="demo">`, and strip
+       `<pre>`. Both halves have been got wrong before — a whole-page count
+       reported `offcanvas` in 17 of 17 screens when the true figure is 1
+       (the shell's own mobile nav is a `.bo-offcanvas`), and counting code
+       samples would let a page claim any component by printing it.
+
+       Now `demoRegion()` in `dist-pages.mjs`. Output-neutral, checked row by
+       row: `sidebar-nav` still scores `—` rather than 0, `offcanvas` still 1
+       rather than 17.
+
+       **`check-learning-path` deliberately keeps its own** and says so: that
+       gate judges whether a result appears before code, so it needs the region
+       WITH the `<pre>` blocks in place. Recorded so the next sweep does not
+       "finish the job".
+
+3. [x] **55.3 — A build-tooling trap worth writing down.** An `import` placed
+       after other statements in Astro frontmatter fails the build with
+       `Unexpected ")"` pointing at a **blank line** — the position is
+       meaningless. Imports go with the other imports. Cost two rebuilds to
+       localise because the error location is a lie.
+
+**Exit:** clean re-scan — date maths in one file, demo-region extraction in one
+file, 0 inline flex/grid, 0 raw spacing, 0 hardcoded hex in live markup, and no
+script deriving a path `paths.mjs` exports.
+
 ## Slice 54 — P0 + wishlist from the owner (2026-08-19)
 
 1. [x] **54.1 — P0 (owner report + screenshot): scrolled content showed through

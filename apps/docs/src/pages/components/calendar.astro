@@ -4,36 +4,26 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
+import { monthGrid, DAY_NAMES, DAY_SHORT, weekdayOrder } from '../../lib/month-grid';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 /* Week-start demos are GENERATED, never hand-typed. A month is 35+ cells whose
    date must agree with the column it sits under, and getting that wrong is
    silent — the grid still looks like a calendar. The two demos below come from
    ONE function so they cannot drift apart. */
-const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const SHORT = { Sunday: 'Su', Monday: 'Mo', Tuesday: 'Tu', Wednesday: 'We', Thursday: 'Th', Friday: 'Fr', Saturday: 'Sa' };
 
 function month(year, monthIdx, weekStart /* 0 = Sunday, 1 = Monday */) {
-  const order = Array.from({ length: 7 }, (_, i) => (weekStart + i) % 7);
-  const first = new Date(Date.UTC(year, monthIdx, 1));
-  const start = new Date(first);
-  start.setUTCDate(first.getUTCDate() - ((first.getUTCDay() - weekStart + 7) % 7));
-  const head = order.map((d) => `<th scope="col"><abbr title="${DAY_NAMES[d]}">${SHORT[DAY_NAMES[d]]}</abbr></th>`).join('');
-  const weeks = [];
-  for (let w = 0; w < 5; w += 1) {
-    const cells = [];
-    for (let d = 0; d < 7; d += 1) {
-      const date = new Date(start);
-      date.setUTCDate(start.getUTCDate() + w * 7 + d);
-      const iso = date.toISOString().slice(0, 10);
-      const outside = date.getUTCMonth() !== monthIdx;
-      const weekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
+  const head = weekdayOrder(weekStart)
+    .map((d) => `<th scope="col"><abbr title="${DAY_NAMES[d]}">${DAY_SHORT[d]}</abbr></th>`).join('');
+  const weeks = monthGrid(year, monthIdx, weekStart).map((week) => {
+    const cells = week.map(({ iso, day, weekday, outside }) => {
+      const weekend = weekday === 0 || weekday === 6;
       const cls = `bo-calendar__day${outside ? ' bo-calendar__day--outside' : ''}`;
       const mark = !outside && weekend ? ' data-day="closed"' : '';
       const sr = mark ? '<span class="bo-visually-hidden"> — non-working day</span>' : '';
-      cells.push(`<td><span class="${cls}"${mark}><time datetime="${iso}">${date.getUTCDate()}</time>${sr}</span></td>`);
-    }
-    weeks.push(`      <tr>${cells.join('')}</tr>`);
-  }
+      return `<td><span class="${cls}"${mark}><time datetime="${iso}">${day}</time>${sr}</span></td>`;
+    });
+    return `      <tr>${cells.join('')}</tr>`;
+  });
   return `<div class="bo-calendar">
   <table class="bo-calendar__month">
     <caption>${weekStart === 0 ? 'Week starts Sunday' : 'Week starts Monday'} — September 2026</caption>
@@ -44,6 +34,7 @@ ${weeks.join('\n')}
   </table>
 </div>`;
 }
+
 const weekMonday = month(2026, 8, 1);
 const weekSunday = month(2026, 8, 0);
 

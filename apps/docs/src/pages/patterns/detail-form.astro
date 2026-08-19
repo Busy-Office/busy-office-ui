@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import { monthGrid } from '../../lib/month-grid';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /* The delivery calendar is GENERATED from its own dates, never hand-typed.
@@ -11,42 +12,33 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const CLOSED_WEEKDAYS = new Set([6, 0]);           // Sat, Sun — dock closed
 const HOLIDAYS = new Map([['2026-09-07', 'Company shutdown']]);
 const SELECTED = '2026-09-15';
-const iso = (d) => d.toISOString().slice(0, 10);
 
 function deliveryMonth(year, monthIdx) {
-  const first = new Date(Date.UTC(year, monthIdx, 1));
-  const start = new Date(first);
-  /* Monday-first, matching this grid's own thead. The convention is stated on
-     the page: week start is data, not a component setting, and check:calendar-grid
-     reads every cell's date back against its column so the two cannot drift. */
-  start.setUTCDate(first.getUTCDate() - ((first.getUTCDay() + 6) % 7));
-  const weeks = [];
-  for (let w = 0; w < 5; w += 1) {
-    const days = [];
-    for (let d = 0; d < 7; d += 1) {
-      const date = new Date(start);
-      date.setUTCDate(start.getUTCDate() + w * 7 + d);
-      const key = iso(date);
-      const outside = date.getUTCMonth() !== monthIdx;
+  /* Monday-first, matching this grid's own thead. Where the week starts is a
+     property of the data, not a setting on the component — see
+     /components/calendar. The date maths is shared so the two pages cannot
+     drift; only the CELLS differ here (disabled submit buttons carrying a
+     delivery date, rather than plain spans). */
+  return monthGrid(year, monthIdx, 1).map((week) => {
+    const days = week.map(({ iso: key, day, weekday, outside }) => {
       const holiday = HOLIDAYS.get(key);
-      const closed = CLOSED_WEEKDAYS.has(date.getUTCDay());
+      const closed = CLOSED_WEEKDAYS.has(weekday);
       let cell;
       if (outside) {
-        cell = `<span class="bo-calendar__day bo-calendar__day--outside">${date.getUTCDate()}</span>`;
+        cell = `<span class="bo-calendar__day bo-calendar__day--outside">${day}</span>`;
       } else if (holiday) {
-        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="holiday" disabled>${date.getUTCDate()}<span class="bo-visually-hidden"> — ${holiday}, no receiving</span></button>`;
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="holiday" disabled>${day}<span class="bo-visually-hidden"> — ${holiday}, no receiving</span></button>`;
       } else if (closed) {
-        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="closed" disabled>${date.getUTCDate()}<span class="bo-visually-hidden"> — dock closed</span></button>`;
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="closed" disabled>${day}<span class="bo-visually-hidden"> — dock closed</span></button>`;
       } else if (key === SELECTED) {
-        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="selected" aria-pressed="true">${date.getUTCDate()}<span class="bo-visually-hidden"> — requested delivery date</span></button>`;
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="selected" aria-pressed="true">${day}<span class="bo-visually-hidden"> — requested delivery date</span></button>`;
       } else {
-        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}">${date.getUTCDate()}</button>`;
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}">${day}</button>`;
       }
-      days.push(`<td>${cell}</td>`);
-    }
-    weeks.push(`      <tr>${days.join('')}</tr>`);
-  }
-  return weeks.join('\n');
+      return `<td>${cell}</td>`;
+    });
+    return `      <tr>${days.join('')}</tr>`;
+  }).join('\n');
 }
 
 const DOW = [['Monday','Mo'],['Tuesday','Tu'],['Wednesday','We'],['Thursday','Th'],['Friday','Fr'],['Saturday','Sa'],['Sunday','Su']];

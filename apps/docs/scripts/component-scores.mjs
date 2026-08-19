@@ -23,13 +23,14 @@
 import fs from 'node:fs';
 import { join } from 'node:path';
 import { REPO_ROOT, DIST } from './paths.mjs';
+import { demoRegion } from './dist-pages.mjs';
 const api = JSON.parse(fs.readFileSync(join(REPO_ROOT,'packages/core/dist/api.json'),'utf8'));
 const beh = JSON.parse(fs.readFileSync(join(REPO_ROOT,'packages/core/dist/behaviors.json'),'utf8'));
 const behByBlock = {};
 for (const [n,v] of Object.entries(beh.behaviors)) for (const h of (v.hooks||[])) (behByBlock[h] ??= new Set()).add(n);
 const dirs = fs.readdirSync(join(DIST,'patterns'));
 const demos = dirs.map(d => { try { const h = fs.readFileSync(join(DIST,'patterns',d,'index.html'),'utf8');
-  const i = h.indexOf('<section class="demo"'); return i<0?'':h.slice(i).replace(/<pre[\s\S]*?<\/pre>/g,' '); } catch { return ''; } });
+  return demoRegion(h); } catch { return ''; } });
 const SHELL = new Set(['navbar','sidebar-nav','breadcrumb']);   // demand axis is blind to these
 const rows = [];
 for (const [name,c] of Object.entries(api.components)) {
