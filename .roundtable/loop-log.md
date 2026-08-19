@@ -460,3 +460,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-20 04:48 · Standardize · tidy · 69.1 — consolidated po-app's duplicated PO-field validation (parsePoFields), spotted while orienting for this wake; re-scanned for further drift, clean · landed · fe62190
 - 2026-08-20 05:10 · Objective · grill · Grilled po-app dogfood streak (Slices 66-69) against the four principles; found a two-primary-action defect on the Pending PO detail screen, queued as Slice 70.1 · triaged · bad2ce5
 - 2026-08-20 05:10 · Meta · refusal · Speculative cancel/delete-PO route for po-app — no dogfooding gap surfaced it, would add a third decision to an already two-decision screen · refused · bad2ce5
+- 2026-08-20 05:27 · Continue · build · Slice 70.1: gated po-app's Approve... visibility off the row-edit table's dirty state, resolving the two-primary-action defect the Objective grill found · landed · 1f3f758
