@@ -61,6 +61,32 @@ composite that locks.
 - **Rethink** when reuse requires copy-paste-modify — extract the
   reusable core instead of shipping the copy.
 
+### 4. Design the decision, not the screen (added 2026-08-19, owner input — the Ive filter)
+
+A screen exists to serve **one decision its user must make**, and everything on
+it is ranked by that decision. "The payroll manager needs to know whether
+payroll is safe to release" is a design brief; "we need a payroll screen" is
+not. Complexity lives under the interface, never in the user's mental model —
+the system may run fifty validations, the user reads *Ready · 428 employees ·
+2 exceptions*.
+
+- **Accept** when the screen answers, in order, *what is this / what should I
+  look at / what should I do* — and the primary action is singular and obvious.
+  (Measured 2026-08-19: 18 of 19 pattern screens already have ≤1 visually
+  primary action; the wizard's Next/Submit pair is the legitimate exception —
+  never both visible.)
+- **Refuse** any element whose removal does not materially reduce the user's
+  ability to decide — and any state text that names the mechanism instead of
+  the meaning (`Processing Status: 04` is refused; "Ready to release" with
+  detail underneath is the shape). If an element needs a long explanation to
+  justify existing, that is the signal it should not.
+- **Rethink** when a screen accumulates a second primary action or a second
+  audience — it is usually two decisions sharing one page, and the fix is a
+  split, not a bigger toolbar.
+
+The full 10-question version of this filter runs on demand as `/design-grill`
+against a named screen; this section is the every-wake distillation.
+
 **How it binds the loops:** Roadmap triage tests every new ask against
 these before queuing (refuse/rethink are valid triage outcomes, recorded
 with the reason); the design panel grills slices against them; removals
@@ -639,6 +665,38 @@ scan, not a first fix.
 **Exit:** the re-scan is clean — 0 raw-valued spacing in live markup, 0
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
+
+## Slice 57 — Owner input: the Ive design principles, installed (2026-08-19)
+
+Owner asked HOW to apply the Jony Ive principles — skill, or prompt? Answer:
+**doctrine + skill, split by cadence** — and not a prompt, because pasted
+principles last one conversation and vanish at the next context clear.
+
+1. [x] **57.1 — Doctrine: Objective §4, "Design the decision, not the screen."**
+       The every-wake distillation lives where every add/remove is already
+       tested — ROADMAP's Objective — as a FOURTH principle beside the owner's
+       three. Deliberately not a rewrite: the existing three already encode
+       subtraction (§1), less-for-more (§2) and the design language (§3); what
+       Ive adds that was missing is purpose-before-interface, hierarchy
+       (what is this / look at / do), and meaning-not-mechanism state text.
+       Accept/refuse/rethink tests included, same shape as §1-§3.
+
+2. [x] **57.2 — Skill: `/design-grill <screen>`** — the on-demand deep version:
+       measured inputs first (primary-action count, hierarchy scan, element
+       census, state language, chrome ratio), then the ten questions each
+       carrying its consequence, then a verdict per element. Project-local
+       (`.claude/skills/design-grill/`), so it knows this project's
+       instruments and its rules bind it: measure before judging, verdict per
+       element, refusals recorded, cost-to-remove bounds any removal.
+
+3. [x] **57.3 — The filter was tested before being installed, and the codebase
+       passes its most mechanical question.** Measured across all 19 pattern
+       screens: **19 of 19 have at most one visually primary action in any
+       state.** The two apparent violations dissolve on inspection — wizard's
+       Next/Submit swap (never both visible) and master-detail's Edit/Save,
+       where Save is inside the edit dialog. Recorded as the baseline the
+       filter will be judged against: a screen that later fails it has
+       REGRESSED, not merely disagreed with taste.
 
 ## Slice 56 — from the Objective grill, Slices 52-55 (2026-08-19)
 
