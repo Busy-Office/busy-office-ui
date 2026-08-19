@@ -46,12 +46,19 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
           <span class="bo-widget__title">PO-88213 · Acme Supply Co.</span>
           <span class="bo-badge bo-badge--warning">Pending approval</span>
         </div>
-        <div class="bo-widget__body">
-          <dl class="bo-kv bo-kv--rows">
-            <div><dt>Net value</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">18,940.50</span></span></dd></div>
-            <div><dt>Cost center</dt><dd><span class="bo-u-tabular">CC-4021</span></dd></div>
-            <div><dt>Requested delivery</dt><dd><span class="bo-u-tabular">15 Sep 2026</span></dd></div>
-          </dl>
+        {/* The facts collapse as the reader scrolls into the record — the
+            title and status stay. This is `.bo-widget__collapse`, the same
+            element collapsible cards use, driven by scroll instead of a click:
+            no new CSS, and its transition already runs on a motion token so
+            prefers-reduced-motion zeroes it. */}
+        <div class="bo-widget__collapse" data-anchor-collapse data-state="open">
+          <div class="bo-widget__body">
+            <dl class="bo-kv bo-kv--rows">
+              <div><dt>Net value</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">18,940.50</span></span></dd></div>
+              <div><dt>Cost center</dt><dd><span class="bo-u-tabular">CC-4021</span></dd></div>
+              <div><dt>Requested delivery</dt><dd><span class="bo-u-tabular">15 Sep 2026</span></dd></div>
+            </dl>
+          </div>
         </div>
       </header>
 
@@ -157,7 +164,8 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
     </div>
 
     <p class="bo-u-text-muted">Scroll the sections: the anchor bar follows,
-    marking the section you are in. Every part of this screen is a component
+    marking the section you are in, and the header's facts collapse away so the
+    record gets the screen back — the title and status never leave. Every part of this screen is a component
     that already ships — the only thing added is
     <code>initAnchorNav()</code>, and it writes no CSS.</p>
   </section>
@@ -275,9 +283,14 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
     white-space: nowrap;
   }
 
-  /* Land below the sticky chrome, not underneath it. */
+  /* Land below the sticky chrome — sized for the COLLAPSED header, because
+     that is the state that exists after any jump: scrolling into a section is
+     exactly what collapses the facts. Sized for the expanded header (12rem) the
+     jump overshot by ~110px and the reader landed on the section ABOVE the one
+     they clicked — caught by the existing "anchor bar follows the reader" claim
+     the moment the collapse landed. */
   .op-section {
-    scroll-margin-block-start: 12rem;
+    scroll-margin-block-start: 7rem;
   }
 </style>
 

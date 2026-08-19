@@ -18,7 +18,7 @@ import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
-import { WIDTHS, DESKTOP_WIDTH } from './viewports.mjs';
+import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 
 const { server, port, base } = await serveDist(DIST);
@@ -1454,6 +1454,79 @@ for (const w of WIDTHS) {
     JSON.stringify(op),
   );
 }
+
+/* The scroll-collapse (52.2). Three things, all silent if they break: the facts
+   collapse so the record gets the screen back, the collapse reaches ZERO (a
+   bare `0fr` track cannot shrink below the child's padding — it left a 32px
+   stub), and it does not oscillate at the threshold. */
+await visit('/patterns/object-page/', { width: NARROW_WIDTH, height: 844 });
+const opCollapse = await page.evaluate(async () => {
+  const el = document.querySelector('[data-anchor-collapse]');
+  const sticky = document.querySelector('.op-sticky');
+  const actions = document.querySelector('.bo-form-actions');
+  const chrome = () => Math.round(sticky.getBoundingClientRect().height + actions.getBoundingClientRect().height);
+  const open = { state: el.dataset.state, chrome: chrome() };
+  document.getElementById('items').scrollIntoView();
+  await new Promise((r) => setTimeout(r, 700));
+  const closed = { state: el.dataset.state, chrome: chrome(), h: Math.round(el.getBoundingClientRect().height) };
+  /* Hysteresis: park the reader exactly where collapsing moved the boundary and
+     confirm the state does not flip back and forth. Without the dead band the
+     collapse changes the measurement that caused it, and the header oscillates. */
+  /* Hysteresis, tested AT the boundary — which is the only place it exists.
+     Two earlier versions of this probe could not fail: the first used
+     `window.scrollBy` on a page that scrolls inside the shell's main element,
+     so the reader never moved; the second parked far past the threshold, where
+     a small jiggle cannot flip anything whether or not there is a dead band.
+     This one walks until the state first flips, then jiggles around that exact
+     point, and reports the observed scroll delta so a dead probe is visible. */
+  const scroller = el.closest('.bo-app-shell__main')
+    ?? [...document.querySelectorAll('*')].find((n) => n.scrollHeight > n.clientHeight + 40
+        && ['auto', 'scroll'].includes(getComputedStyle(n).overflowY))
+    ?? document.scrollingElement;
+  scroller.scrollTop = 0;
+  await new Promise((r) => setTimeout(r, 150));
+  let boundary = null;
+  for (let y = 0; y < 1200 && boundary === null; y += 8) {
+    scroller.scrollTop = y;
+    await new Promise((r) => setTimeout(r, 25));
+    if (el.dataset.state === 'closed') boundary = y;
+  }
+  const seen = new Set();
+  let maxDelta = 0;
+  if (boundary !== null) {
+    for (let i = 0; i < 10; i += 1) {
+      scroller.scrollTop = boundary + (i % 2 ? -10 : 10);
+      await new Promise((r) => setTimeout(r, 60));
+      seen.add(el.dataset.state);
+      maxDelta = Math.max(maxDelta, Math.abs(scroller.scrollTop - boundary));
+    }
+  }
+  return { open, closed, statesWhileJiggling: [...seen], vh: innerHeight,
+    boundary, maxDelta, scrollerTag: scroller.tagName + '.' + (scroller.className || '').split(' ')[0] };
+});
+check(
+  'object-page: scrolling collapses the header facts and gives the screen back',
+  opCollapse.open.state === 'open' && opCollapse.closed.state === 'closed' &&
+    opCollapse.closed.chrome < opCollapse.open.chrome,
+  JSON.stringify(collapse),
+);
+check(
+  'object-page: the collapse reaches zero, not the child padding',
+  opCollapse.closed.h === 0,
+  JSON.stringify(opCollapse.closed),
+);
+check(
+  'object-page: chrome drops under 20% of a phone viewport once collapsed',
+  opCollapse.closed.chrome / opCollapse.vh < 0.20,
+  JSON.stringify({ ...opCollapse.closed, vh: opCollapse.vh, pct: Math.round(opCollapse.closed.chrome / opCollapse.vh * 100) }),
+);
+check(
+  'object-page: hysteresis — the header does not oscillate at the threshold',
+  opCollapse.boundary !== null && opCollapse.maxDelta >= 10 &&
+    opCollapse.statesWhileJiggling.length === 1,
+  JSON.stringify({ states: opCollapse.statesWhileJiggling, boundary: opCollapse.boundary,
+    maxDelta: opCollapse.maxDelta, scroller: opCollapse.scrollerTag }),
+);
 
 // print: the sticky chrome and the action bar both drop out.
 await visit('/patterns/object-page/', { media: 'print' });

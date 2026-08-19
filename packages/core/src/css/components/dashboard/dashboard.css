@@ -75,7 +75,14 @@
   }
 
   .bo-widget__collapse[data-state="closed"] {
-    grid-template-rows: 0fr;
+    /* minmax(0, 0fr), not 0fr. An `fr` track's MINIMUM is `auto`, so a bare
+       `0fr` cannot shrink below the child's min-content height — and the child
+       here is a `.bo-widget__body`, whose padding alone is 32px. A closed card
+       was leaving a 32px stub: measured `grid-template-rows: 32px` computed,
+       with the element 32px tall while claiming to be closed (2026-08-19,
+       found while driving this same element from scroll on /patterns/object-page).
+       `min-block-size: 0` on the child does not help: padding is not content. */
+    grid-template-rows: minmax(0, 0fr);
   }
 
   .bo-widget__toggle-icon {

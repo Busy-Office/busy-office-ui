@@ -8,6 +8,22 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`.bo-widget__collapse`): a closed collapsible card did not collapse
+  to zero — it stopped at the inner padding. Measured
+  `grid-template-rows: 32px` computed while the element reported `data-state
+  ="closed"`, because a bare `0fr` track has an `auto` MINIMUM and so cannot
+  shrink below the child's min-content height; `min-block-size: 0` does not help,
+  since padding is not content. Now `minmax(0, 0fr)`. Found while driving the
+  same element from scroll on `/patterns/object-page` (roadmap 52.2).
+
+- **Added** (`initAnchorNav`): opt-in scroll-collapse. With
+  `[data-anchor-collapse]` on an element sharing a parent with the nav, the
+  behavior closes it past a scroll offset and reopens it near the top. It ships
+  **no CSS** — the target is a `.bo-widget__collapse`, whose transition already
+  runs on `--bo-motion-duration-slow` and therefore zeroes under
+  `prefers-reduced-motion`.
+
+
 - **Deprecated** (`.bo-date`): use a `.bo-cluster` with `.bo-u-tabular` and, for
   the overdue case, a `.bo-badge bo-badge--danger` carrying the word "Overdue".
 

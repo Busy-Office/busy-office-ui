@@ -729,7 +729,7 @@ answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
        `record-detail` already demonstrates rather than inventing new fixtures.
        **Do this BEFORE 52.2**, because it changes the measurement 52.2 targets.
 
-2. [ ] **52.2 — Scrolling effect: collapse the header, and the reason is measured.**
+2. [x] **52.2 — Scrolling effect: collapse the header.** — landed 2026-08-19
        While scrolled, sticky chrome consumes **259px of 900 (29%) at 1440** and
        **274px of 844 (33%) at 390**. A third of a phone screen is permanently
        navigation. Fiori collapses its object header for exactly this reason —
@@ -752,6 +752,43 @@ answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
        Target, measured after 52.1 lands: a scrolled phone screen spends
        **under 20%** on chrome, down from 33%. An executable claim asserts the
        collapse, the hysteresis, and that reduced-motion zeroes the transition.
+
+       **Landed 2026-08-19. Target met: 32% → 19% at 390, 29% → 16% at 1440.**
+       Zero new CSS — the header facts sit in `.bo-widget__collapse`, the element
+       collapsible cards already use, driven by scroll instead of a click.
+
+       **It found a shipped framework bug on the way.** A closed
+       `.bo-widget__collapse` did not collapse to zero: it stopped at the child's
+       padding, measured `grid-template-rows: 32px` computed while claiming to be
+       closed. A bare `0fr` track has an `auto` minimum, so it cannot shrink
+       below the child's min-content height, and `min-block-size: 0` does not
+       help because padding is not content. Now `minmax(0, 0fr)` — and that fix
+       is what took the ratio from 23% to 19%. It affects every collapsible card,
+       not just this page.
+
+       **An existing claim caught a real interaction bug.** With the collapse in,
+       clicking an anchor scrolled, collapsed the header mid-flight, shifted the
+       content up ~111px, and landed the reader on the section ABOVE the one they
+       clicked. `scroll-margin-block-start` had been sized for the EXPANDED
+       header; it is now sized for the collapsed one, which is the state that
+       always exists after a jump. A 2px residual at 1440 then needed a named
+       12px tolerance on the spy line.
+
+       **Hysteresis had to be redesigned, and the probe was dead twice before it
+       said so.** The first design compared the nav's bottom edge to the first
+       section's top — both of which the collapse MOVES, by ~111px — so
+       collapsing changed the input that caused it and the header oscillated; a
+       40px dead band could not survive feedback three times its size. The
+       decision is now made on **scroll offset**, which the collapse does not
+       change. Measured proof: jiggling at the boundary moved 121px under the old
+       design and 10px under the new one.
+
+       The probe that found it could not fail twice first: version one used
+       `window.scrollBy` on a page that scrolls inside the shell's main element,
+       so the reader never moved; version two parked far past the threshold,
+       where no jiggle can flip anything. It now walks until the state first
+       flips and jiggles around that exact point — and red-proving it by removing
+       the dead band produces `["closed","open"]`.
 
 3. [ ] **52.3 — The name. OWNER CALL, with the trade-off measured.**
        This project's bar is "write for a first-time user: plain verbs".
