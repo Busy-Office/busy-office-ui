@@ -957,6 +957,57 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        pages accumulate fields), then settings-admin, approval, staging, then
        the rest of the 19.
 
+       **Batch 1 landed 2026-08-20** — reporting-dashboard, app-launch,
+       record-detail. Reports:
+       `.roundtable/design-grill-{reporting-dashboard,app-launch,record-detail}-2026-08-20.md`.
+
+       **record-detail had a real content bug, found and fixed, not just
+       flagged.** A record identified as `PO-88213` in its own breadcrumb
+       called itself `#4021` in its own feed card — `4021` is the numeric
+       suffix of the cost centre, `CC-4021`, three lines below in the same
+       file. Present in **two** places; the second (an audit-trail entry
+       reading "raised PO-4021") was missed by the first grep and caught only
+       by looking at the *rendered* screenshot after the first fix — the same
+       "verify against what renders, not the diff" rule CLAUDE.md already
+       states. Both fixed; verified live that every ID on the page now reads
+       consistently.
+
+       **All three openers named WHAT the screen composes, never WHO uses it
+       or WHAT DECISION it serves** — the one finding common to the whole
+       batch, and the clearest instance yet of Objective §4. Reworded to the
+       "Who uses it / what done looks like" phrasing the strongest patterns
+       (`record-detail`'s own edit, `object-page`, `value-help`) already use.
+
+       **reporting-dashboard**: the stat-tile row — the actual status — sat
+       BEHIND the filter bar in reading order, so a reader scrolled past a
+       search box before reaching the first number; reordered, stats first.
+       The "Overdue" stat's delta read `unchanged` with no comparison basis,
+       contradicting the page's own Anatomy claim that every tile states one
+       ("vs last quarter" / "vs plan"); given one.
+
+       **app-launch**: the States table described a `count` badge capability
+       `AppTile.astro` does not implement — confirmed live, zero count badges
+       exist anywhere on the rendered page, and the component's own doc
+       comment calls its three marks (icon/initials/svg) *"the three marks a
+       real launcher actually needs."* Reworded to say plainly that a count
+       is a fourth kind this component does not ship, not a state it already
+       handles.
+
+       **Two explicit "all keep" verdicts recorded, not searched past**: zero
+       primary actions on both `reporting-dashboard` and `app-launch` is
+       correct, not a defect — an informational screen and a pure-navigation
+       launcher have no commitment to make. The dashboard's good/bad delta
+       glyphs (an extra ⚠ on the bad one, not colour alone) were credited as
+       two-channel done correctly, not silently passed over.
+
+       Verified live at 1440/390, both themes. Every gate green, axe 90 pages
+       x 2 widths zero violations. Four `app-launch` visual baselines
+       accepted after attributing the growth (+38px at 1440, +117px at 390)
+       to the deliberate opener and States-table text added.
+
+       **Batch 2 next: settings-admin, approval, staging** — item stays open
+       until all 19 are through, per its own "then the rest of the 19."
+
        Accept, per screen: the skill's own contract — measured inputs
        (primary-action count, hierarchy scan, element census, state language,
        chrome ratio), the ten questions with evidence, a verdict per element,

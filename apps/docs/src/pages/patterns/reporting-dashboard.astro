@@ -10,10 +10,14 @@ const rows = [
 ---
 <Gallery title="Pattern: reporting dashboard">
   <p class="demo-note">
-    A full reporting screen, composed entirely from existing components: breadcrumb,
-    filter bar + saved views, a stat-tile row, and a widget grid mixing a data table,
-    an audit-style activity feed, and a collapsible notes card. Zero new CSS —
-    everything here already has its own component page.
+    <strong>Who uses it</strong>: a manager checking whether this period's AP
+    activity is on track and where the exceptions are. <strong>What "done"
+    looks like</strong>: three numbers read at a glance, an exception spotted
+    without opening a single invoice. Composed entirely from existing
+    components: breadcrumb, filter bar + saved views, a stat-tile row, and a
+    widget grid mixing a data table, an audit-style activity feed, and a
+    collapsible notes card. Zero new CSS — everything here already has its
+    own component page.
   </p>
 
   <nav aria-label="Breadcrumb">
@@ -22,19 +26,6 @@ const rows = [
       <li aria-current="page">Purchase orders</li>
     </ol>
   </nav>
-
-  <section class="demo">
-    <form class="bo-filter-bar" role="search" aria-label="Report filters">
-      <input class="bo-input" type="search" name="q" aria-label="Search" placeholder="Search…" style="max-inline-size: 12rem" />
-      <select class="bo-select" name="range" aria-label="Date range">
-        <option>This quarter</option><option>This month</option><option>Last 7 days</option>
-      </select>
-    </form>
-    <nav class="bo-cluster" aria-label="Saved views" data-saved-views style="--bo-cluster-gap: var(--bo-space-1); margin-block-start: var(--bo-space-2)">
-      <a class="bo-chip bo-chip--active" href="?range=quarter" aria-current="page">This quarter</a>
-      <a class="bo-chip" href="?range=overdue">Overdue only</a>
-    </nav>
-  </section>
 
   <section class="demo">
     <div class="bo-widget-grid" style="--bo-widget-min: 13rem">
@@ -56,11 +47,25 @@ const rows = [
         <div class="bo-stat">
           <span class="bo-stat__label">Overdue</span>
           <span class="bo-stat__value">17</span>
-          <span class="bo-stat__delta">unchanged</span>
+          <span class="bo-stat__delta">unchanged vs last quarter</span>
         </div>
       </div>
     </div>
   </section>
+
+  <section class="demo">
+    <form class="bo-filter-bar" role="search" aria-label="Report filters">
+      <input class="bo-input" type="search" name="q" aria-label="Search" placeholder="Search…" style="max-inline-size: 12rem" />
+      <select class="bo-select" name="range" aria-label="Date range">
+        <option>This quarter</option><option>This month</option><option>Last 7 days</option>
+      </select>
+    </form>
+    <nav class="bo-cluster" aria-label="Saved views" data-saved-views style="--bo-cluster-gap: var(--bo-space-1); margin-block-start: var(--bo-space-2)">
+      <a class="bo-chip bo-chip--active" href="?range=quarter" aria-current="page">This quarter</a>
+      <a class="bo-chip" href="?range=overdue">Overdue only</a>
+    </nav>
+  </section>
+
 
   <section class="demo">
     <div class="bo-widget-grid" style="--bo-widget-min: 18rem">

@@ -5,10 +5,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: record detail">
   <p class="demo-note">
-    The composed detail screen behind any list row: record cards, a status timeline,
-    and an audit trail stacked in a feed — all standard components, generic to any ERP.
-    This example is a purchase order; the shape is the same for an invoice, a change
-    request, or a leave request.
+    <strong>Who uses it</strong>: whoever owns this record, checking its
+    status or adding to its history — a buyer, an approver, anyone who
+    clicked in from a list row. <strong>What "done" looks like</strong>: the
+    current state is read in one glance, without opening anything else. The
+    composed detail screen behind any list row: record cards, a status
+    timeline, and an audit trail stacked in a feed — all standard components,
+    generic to any ERP. This example is a purchase order; the shape is the
+    same for an invoice, a change request, or a leave request.
   </p>
 
   <nav aria-label="Breadcrumb">
@@ -19,6 +23,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </ol>
   </nav>
   <section class="demo">
+    <h2>The screen</h2>
     {/* IDENTITY LINE — what the document is, and what state it is in, on one
         line with the actions. MEASURED: 36px at 1440 (one row) and 68px at
         390, where the actions wrap to a second row — both inside the 80px
@@ -54,7 +59,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="bo-stack">
         <article class="bo-widget">
           <header class="bo-widget__header">
-            <span class="bo-badge bo-badge--type">Purchase Order #4021</span>
+            <span class="bo-badge bo-badge--type">Purchase Order #88213</span>
             <span class="bo-byline"><strong>R. Vance</strong> · Requester</span>
             <span class="bo-badge bo-badge--success">Approved</span>
           </header>
@@ -100,7 +105,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <div>
           <h2 style="font-size: var(--bo-font-size-sm); color: var(--bo-color-text-muted)">Audit trail</h2>
           <ol class="bo-audit" role="list">
-            <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-10T09:08">08-10 09:08</time><span><span class="bo-audit__actor">R. Vance</span> raised PO-4021</span></li>
+            <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-10T09:08">08-10 09:08</time><span><span class="bo-audit__actor">R. Vance</span> raised PO-88213</span></li>
             <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-12T10:15">08-12 10:15</time><span><span class="bo-audit__actor">J. Kim</span> approved</span><span class="bo-audit__detail">"Within CC-4021 budget."</span></li>
             <li class="bo-audit__entry">
               <time class="bo-audit__time" datetime="2026-08-13T14:02">08-13 14:02</time>

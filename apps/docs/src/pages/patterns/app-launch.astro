@@ -29,8 +29,11 @@ const logistics = [
 ---
 <Gallery title="Pattern: app launch">
   <p class="demo-note">
-    A suite entry screen — the icon-grid launcher an ERP user lands on before picking
-    an app (the "Bento UI" / tablet-launcher archetype from the
+    <strong>Who uses it</strong>: anyone opening the suite, every session —
+    the first screen after sign-in. <strong>What "done" looks like</strong>:
+    the right app is one tap away, whether it's a favourite or three deep in
+    a category. A suite entry screen — the icon-grid launcher (the "Bento UI"
+    / tablet-launcher archetype from the
     <a href={base + '/concepts/density'}>device-coverage table</a> — same
     <code>.bo-widget-grid</code> container-query mechanism as a dashboard, at a
     smaller tile size, <strong>not</strong> a new grid component). Tiles are plain
@@ -187,8 +190,8 @@ const logistics = [
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
         <tbody>
-          <tr><td>Loading</td><td>tiles render immediately; only the counts show skeletons — never block the whole screen on a slow aggregate</td></tr>
-          <tr><td>Counts unavailable</td><td>drop the badge silently; a tile with no number still works, an error toast for a count is noise</td></tr>
+          <tr><td>Loading</td><td>tiles render immediately — nothing here depends on data, only on which apps this user may open</td></tr>
+          <tr><td>Per-tile counts (if your deployment adds them)</td><td>not part of <code>AppTile</code>'s three marks (icon / initials / svg) — a count badge is a fourth kind this component does not ship; add it as a sibling element inside the tile, and drop it silently rather than showing a stale or zero count</td></tr>
           <tr><td>Empty (new tenant)</td><td>a first-run state naming the one setup action, not an empty grid</td></tr>
           <tr><td>No permission</td><td>omit tiles the user cannot open — a disabled tile teaches nothing</td></tr>
           <tr><td>Error</td><td>inline alert above the grid with retry; keep whatever tiles did load</td></tr>
