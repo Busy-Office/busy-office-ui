@@ -420,3 +420,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 19:20 · Continue · build · 52.1 — object page shows a real screen (9 placeholders -> 0); grill's chrome-ratio claim corrected · landed · a5fc5b8
 - 2026-08-19 19:39 · Roadmap · triage · Owner input: component grill rebuilt as symmetric NEED vs COST with an action benchmark; ERP gaps refreshed · triaged · 5be91c5
 - 2026-08-19 19:39 · Objective · grill · 53 — scored components need-vs-cost; icon is the only NET-negative; value-help pattern is the benchmark's answer · logged · 5be91c5
+- 2026-08-19 20:12 · Continue · build · 52.2 — object page header collapses on scroll (32%->19% chrome); fixed .bo-widget__collapse 0fr never reaching zero · landed · 69410da
