@@ -440,3 +440,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 23:09 · Objective · grill · Objective grill 56-61 — found and fixed a LIFO dispatcher bug (9 dispatches starved 5 older items); RESUME.md was stale for the same reason · landed · dc65e96
 - 2026-08-19 23:28 · Continue · build · 51.1 — record_iteration.py gained --also-refused; refusals now attach a queryable Meta-loop row without widening the outcome vocabulary · landed · ab53d36
 - 2026-08-19 23:28 · Meta · refusal · widening the six-outcome vocabulary to add a refused-inline outcome (51.1's own Accept forbade it) — used a second Meta-loop row instead · refused · ab53d36
+- 2026-08-19 23:55 · Continue · build · 53.2 — icon: 8 active / 4 deprecated glyphs by measured demand; fixed a pre-existing duplicate <section> bug · landed · efd4fd0
+- 2026-08-19 23:55 · Meta · refusal · immediate deletion of the 4 zero-demand glyphs — they are published in v0.1.1, so cost-to-remove (45.5) forces the deprecation path instead · refused · efd4fd0
