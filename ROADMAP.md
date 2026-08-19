@@ -698,12 +698,36 @@ principles last one conversation and vanish at the next context clear.
        filter will be judged against: a screen that later fails it has
        REGRESSED, not merely disagreed with taste.
 
+## Slice 58 — Owner ask: run /design-grill across the screens (2026-08-19)
+
+Owner: *"why don't put /design-grill in the plan as well"* — agreed; installing
+the filter (Slice 57) without scheduling its use would make it shelf-ware.
+
+1. [ ] **58.1 — /design-grill sweep, worst-suspect first, in batches of 3-4.**
+       Order chosen by where decoration and mechanism-language hide, not
+       alphabetically: **reporting-dashboard, app-launch, record-detail** first
+       (dashboards accumulate ornament; launchers accumulate icons; long detail
+       pages accumulate fields), then settings-admin, approval, staging, then
+       the rest of the 19.
+
+       Accept, per screen: the skill's own contract — measured inputs
+       (primary-action count, hierarchy scan, element census, state language,
+       chrome ratio), the ten questions with evidence, a verdict per element,
+       report in `.roundtable/`, actionables triaged with Accept criteria.
+       **"All keep" is a valid verdict** and is recorded — the 19/19
+       primary-action baseline predicts several clean passes. Removals are
+       bounded by cost-to-remove (45.5); anything already published waits for
+       the deprecation path.
+
+       One batch per wake at most — a grill that shares a wake with build work
+       gets rushed, and rushed verdicts are taste, not evidence.
+
 ## Slice 56 — from the Objective grill, Slices 52-55 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices52-55-2026-08-19.md`.
 
-1. [ ] **56.1 — Gate that every `data-*` hook in the docs is one the framework
-       documents.** `data-dialog-close` was invented in Slice 31, extended in
+1. [x] **56.1 — Gate that every `data-*` hook in the docs is one the framework
+       documents.** — landed 2026-08-19 `data-dialog-close` was invented in Slice 31, extended in
        45.2 and removed in 53.1 — a hook `initDialogs` never implemented and
        `api.json` never listed, leaving **three dead buttons** in a shipped
        pattern for over a day.
@@ -724,7 +748,20 @@ Full findings: `.roundtable/grill-objective-slices52-55-2026-08-19.md`.
        the list is the point, since adding to it is a decision someone makes.
        Red-prove by re-introducing `data-dialog-close`. `@exact`.
 
-2. [ ] **56.2 — Write the removal-assertion rule into CLAUDE.md.** Three edits
+       **Landed 2026-08-19.** `check:data-hooks`, wired into the build: 51
+       documented hooks, 16 commented exceptions (docs chrome + demo-local
+       wiring), `data-astro-*`/`data-pagefind-*` exempt by prefix. Red-proved by
+       re-introducing `data-dialog-close` into the built page — it names the
+       hook and the page.
+
+       **The gate's own first enumeration was wrong, and the error designed the
+       gate.** Matching `\s(data-…)` over raw HTML reported a phantom
+       `data-table` hook on 7 pages — 116 matches, all PROSE ("the data-table
+       component" has whitespace before `data-`). Attributes are extracted from
+       within tag bounds only; escaped markup in code samples is text and never
+       matches. The 46.1 base rate, holding on the instrument built in its name.
+
+2. [x] **56.2 — Write the removal-assertion rule into CLAUDE.md.** — landed 2026-08-19 Three edits
        in one session asserted `'string' not in source` while the explanatory
        comment written by that same edit contained the string — the `paths.mjs`
        guard (49), the shell class in `anchor-nav` (50), and

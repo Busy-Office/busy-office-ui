@@ -311,6 +311,21 @@ is the exemplar.
 Write for a first-time user: plain verbs, one component / many settings, and note the
 two-channel cue wherever colour carries meaning.
 
+## Verifying a removal: assert on structure, never on raw text
+
+Three edits in one session (Slices 49, 50, 53.1) asserted
+`'the-removed-string' not in source` — and each failed, because **the comment
+written by that same edit legitimately names the thing removed**. One of the
+three silently skipped its import insertion and another landed an import inside
+a template literal that ships to users.
+
+When verifying that something is gone, check the **parsed or structural form**:
+the attribute (`data-foo(?=[\s>=])` on tags), the identifier in
+comment-stripped code, the computed style, the built artifact's DOM — never a
+substring of the raw file. The prose explaining a removal is supposed to
+mention it; an assertion that can be tripped by its own explanation is a
+detector that cannot pass.
+
 ## Don't
 
 - Don't hand-edit generated docs (api.json, contrast.json, behaviors.json, class
