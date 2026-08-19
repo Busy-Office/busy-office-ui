@@ -746,13 +746,34 @@ correct after a jump, no overlap, zero page overflow.
        at any width — the margins guess at viewport shape. Measuring against the
        bar's own bottom edge is viewport-independent and was correct in all four.
 
-4. [ ] **48.4 — OPEN sub-question: horizontal or vertical anchor bar?**
+4. [x] **48.4 — RESOLVED 2026-08-19: horizontal, one line, scrollable.**
        `.bo-sidebar-nav` is a *sidebar*, so used as an anchor bar it stacks
        vertically; the Fiori idiom is horizontal. A horizontal bar means
        `.bo-cluster` + links, which loses the `[aria-current="page"]` styling
        sidebar-nav gives for free. Deliberately unresolved — the spike stopped
        rather than guessing. Accept: decide with a rendered comparison, not in
        prose.
+
+       **Decided by rendering four variants at 1440 and 390, both themes.**
+
+       | variant | verdict |
+       |---|---|
+       | A — vertical `.bo-sidebar-nav` | **148px of links at every width.** At 390, with the ~181px sticky header, that is over 40% of the viewport before any content. |
+       | B — horizontal `.bo-pagination`, wrapping | **Labels spill their own box.** `.bo-pagination__btn` takes `--bo-density-control-height`, a FIXED 36px; a two-line label renders 38px of text inside it. Measured 2px of spill on two of four links at 390. |
+       | C — `.bo-cluster` + `.bo-chip` | **Rejected on measurement.** The `aria-current` chip is byte-identical to a plain one — `rgb(243,244,246)`, weight 400 — in BOTH themes. No active styling ships, so it fails two-channel without new CSS. |
+       | **D — horizontal `.bo-pagination`, one line + `overflow-x: auto`** | **Chosen.** 36px at both widths, zero spill, and `[aria-current="page"]` already gives weight 600 plus accent colour, correct in both themes. |
+
+       Cost of D: three page-level declarations (`flex-wrap: nowrap`,
+       `overflow-x: auto`, `white-space: nowrap` on the links). **No framework
+       CSS and no widened API.** It also becomes a scrollable region, so it takes
+       `tabindex="0"` — the same rule `.bo-data-table-container` follows.
+
+       **B is the finding worth keeping.** Its failure is invisible to a height
+       measurement: the control's height is fixed by the density token, so a
+       wrapped label cannot grow its box and spills instead. Every per-button
+       height read 36px while the render was visibly broken. Only the TEXT box
+       against the BUTTON box showed it — CLAUDE.md's "measure the box that
+       carries the constraint", in a new shape.
 
 ## Slice 47 — Standardize sweep: the widths we verify at (2026-08-19)
 
