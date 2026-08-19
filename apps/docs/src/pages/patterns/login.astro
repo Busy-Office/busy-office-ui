@@ -5,8 +5,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: login">
   <p class="demo-note">
-    An authentication entry screen — the one screen every ERP app has and the one
-    where getting the details wrong locks real users out. Composed entirely from
+    <strong>Who uses it</strong>: every user, before anything else — the
+    first screen and, for anyone who forgets a password, a recurring one.
+    <strong>What "done" looks like</strong>: signed in, or told exactly
+    why not without leaking which part was wrong. The one screen every ERP
+    app has and the one where getting the details wrong locks real users
+    out. Composed entirely from
     existing components, zero new CSS: <code>.bo-widget</code> (the card primitive)
     centers the form on the canvas, fields are plain <code>.bo-form-field</code>s
     with the <strong>correct <code>autocomplete</code> tokens</strong>

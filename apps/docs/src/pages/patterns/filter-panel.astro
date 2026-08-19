@@ -92,7 +92,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <code>name</code> so it submits with the form.</li>
       <li><strong>Applied chips</strong> — <a href={base + '/components/filters'}>chips</a>,
         each a link that removes that one filter, plus "Clear all".</li>
-      <li><strong>The list</strong> — <a href={base + '/components/data-table'}>data table</a>;
+      <li><strong>The list</strong> <span class="bo-u-text-muted">(not in this demo — this page is scoped to the filter bar itself; see <a href={base + '/patterns/invoice-list'}>invoice-list</a> for the paired table)</span> — <a href={base + '/components/data-table'}>data table</a>;
         only it swaps when filters change.</li>
     </ol>
   </section>

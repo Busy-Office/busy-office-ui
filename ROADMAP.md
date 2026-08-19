@@ -1132,10 +1132,59 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        calendar-grid, data-hooks, learning-path, components-used, boost,
        notes), stylelint clean, axe 90 pages x 2 widths zero violations.
 
-       **10 of 19 through. Batch 4 next: the remaining 9** — filter-panel,
-       goods-receipt, invoice-list, login, master-detail, object-page,
-       validation-summary, value-help, wizard — item stays open until all
-       19 are through, per its own "then the rest of the 19."
+       **Batch 4 landed 2026-08-20** — filter-panel, goods-receipt,
+       invoice-list, login. Reports:
+       `.roundtable/design-grill-{filter-panel,goods-receipt,invoice-list,login}-2026-08-20.md`.
+
+       **One suspected defect checked against an existing gate and
+       retracted before being written up** — `filter-panel`'s live form
+       controls (unselected) appeared to contradict its "Applied filters"
+       chip row (claiming Status: Pending / CC-4021 / Overdue active).
+       Checked `check-claims.mjs`'s own `filter panel` check first: it
+       proves the trigger-count behavior with real clicks
+       (`/\(2\)/` against the live label after checking 2 boxes), so the
+       interactive behavior is real; the static chip row is a deliberately
+       separate illustration, not a claim the form above is pre-filled.
+       Not a bug.
+
+       **Two more instances of Anatomy claiming what the demo doesn't
+       show** — `filter-panel`'s "The list" (this page is scoped to the
+       filter bar itself; pointed to `invoice-list`) and, more
+       substantially, `goods-receipt`'s "Expected vs received list" and
+       "Confirm bar." The live scan demo is a flat append-only log (no
+       ordered-quantity column, no running count, no post/confirm button
+       anywhere) — checked by curl on the rendered page and by operating
+       the scan interaction directly (typed a barcode, pressed Enter,
+       confirmed the log row and refocus behavior work as documented).
+       Reworded both Anatomy items rather than building a full
+       expected-lines receiving screen, which would be a second pattern's
+       worth of new markup for a claim this demo doesn't need to make.
+
+       **`invoice-list` graded all-keep** — the third reference-quality
+       page in the sweep (with `staging` and `field-editor`): a real
+       measured regression anchors its keyboard-walkthrough argument
+       ("thirty-two presses from row 30, which is what this page measured
+       before the form was added"), bulk-action button types were checked
+       live against the stated safety rule, and every Scaling-notes claim
+       is a citation, not an opinion. One literal-reading nit (Footer's
+       "rows-per-page + pagination" vs live pagination-only) considered and
+       set aside as over-literal, not manufactured into a finding.
+
+       Also fixed: `goods-receipt`'s opener (explained the RF-scanner input
+       modality but never who/what-done) and `login`'s (a milder instance
+       of the same gap — reworded for sweep consistency even though the
+       gap was near-tautological for a login screen).
+
+       Verified live (bind-mounted container; the scan interaction operated
+       directly, not just read from source), `npm run build` gates green
+       (page-shape, claims, link-check 8525 links, markup, calendar-grid,
+       data-hooks, learning-path, components-used, boost, notes), stylelint
+       clean, axe 90 pages x 2 widths zero violations.
+
+       **14 of 19 through. Batch 5 next: the remaining 5** — master-detail,
+       object-page, validation-summary, value-help, wizard — item stays
+       open until all 19 are through, per its own "then the rest of the
+       19."
 
        Accept, per screen: the skill's own contract — measured inputs
        (primary-action count, hierarchy scan, element census, state language,

@@ -5,7 +5,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: goods receipt (RF scanner)">
   <p class="demo-note">
-    A GR (goods receipt) screen driven by a handheld RF scanner, not a mouse — the
+    <strong>Who uses it</strong>: a warehouse floor worker, one-handed and
+    often gloved, holding a scanner instead of a mouse. <strong>What
+    "done" looks like</strong>: every expected line accounted for — received
+    in full, received partial, or explicitly not received — before the
+    receipt posts. A GR (goods receipt) screen driven by a handheld RF
+    scanner — the
     scanner types the barcode fast and sends Enter, so the field needs to stay
     focused and clear itself between scans. Composed from <code>data-scan-input</code>
     (new opt-in behavior, no new CSS — a plain <code>.bo-input</code>), the existing
@@ -96,9 +101,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Scan field</strong> — always focused; a hardware scanner types then presses Enter, which <code>initScanInput()</code> treats as a submit.</li>
-      <li><strong>Expected vs received list</strong> — every line with its ordered quantity and a running received count.</li>
+      <li><strong>Expected vs received list</strong> <span class="bo-u-text-muted">(the demo above logs scans as a flat list; a real screen pre-seeds one row per expected line — barcode, ordered qty, received-so-far — from the PO, and each scan updates its own row instead of appending a new one)</span> — every line with its ordered quantity and a running received count.</li>
       <li><strong>Quantity control</strong> — spacious density and big steppers: this screen is used one-handed, often gloved.</li>
-      <li><strong>Confirm bar</strong> — post the receipt; disabled until at least one line has a quantity.</li>
+      <li><strong>Confirm bar</strong> <span class="bo-u-text-muted">(not in this demo — the live scan log has no post action)</span> — post the receipt; disabled until at least one line has a quantity.</li>
     </ol>
   </section>
 
