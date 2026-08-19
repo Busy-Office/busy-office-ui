@@ -84,3 +84,4 @@
 {"ts": "2026-08-19 18:36", "name": "claims", "value": 72.0, "unit": "count"}
 {"ts": "2026-08-19 19:10", "name": "framework_classes", "value": 191.0, "unit": "count"}
 {"ts": "2026-08-19 19:10", "name": "claim_call_sites", "value": 64.0, "unit": "count"}
+{"ts": "2026-08-19 19:15", "name": "object_page_chrome_pct_390", "value": 33.0, "unit": "percent"}
