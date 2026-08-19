@@ -640,6 +640,71 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 53 — Owner input: grill components on need vs cost (2026-08-19)
+
+Owner ask, twice: *grill each component on why we should and should not have it
+— ease of work, simplicity, performance — benchmark the score to decide what to
+do next. Also find what ERP needs that we do not ship.*
+
+Instrument + scores: `.roundtable/component-need-cost-rubric-2026-08-19.md`.
+Measured half is re-runnable: `node apps/docs/scripts/component-scores.mjs`.
+
+**Why the old rubric had to change.** Slice 37 scored what a component is
+*worth* (Demand / Composition / Contracts / Evidence) and never stated the case
+*against* keeping it. **A score that only measures value can only ever say
+"keep".** The new one is symmetric — NEED (demand, correctness absorbed, effort
+saved, consistency) minus COST (already composable, payload bytes, runtime,
+surface) — 4 axes each, so neither side can outweigh the other by construction.
+
+It reproduced 45.3's independent decision to deprecate `.bo-date` (NET −3) and
+the controls land +3/+4, so it discriminates.
+
+1. [ ] **53.1 — Build the Value-help (F4) pattern. The benchmark's own answer to
+       "what next".** A searchable dialog for picking one master-data record out
+       of thousands — the single most-used interaction in ERP data entry.
+       `combobox` handles a short list; picking a material from 40,000 needs
+       search + filters + a table + paging.
+
+       **Zero new components**: `dialog` + `filters` + `data-table` +
+       `pagination` all ship. Building it as a component would be the largest,
+       most specific thing in the framework — refuse that.
+
+       It is also the highest-leverage docs work available: **one pattern moves
+       six components off "keep, watch"** by giving `dialog`, `filters`,
+       `pagination`, `combobox`, `state` and `skeleton` the screen demand they
+       currently lack. Accept: full pattern recipe; zero new CSS or a recorded
+       reason; executable claims for search-filter-select and for focus return
+       to the field that opened it.
+
+2. [ ] **53.2 — Grill `icon`'s 12 variants. The only NET-negative live
+       component.** Third-largest component at **4633 bytes with 25 classes** —
+       bigger than `dashboard` — used by **one** screen. The axis to move is
+       **surface, not demand**: do not put icons in more screens to justify 25
+       classes. Accept: decide whether the variant list should be a documented
+       convention rather than a shipped enum, with the bytes and class count
+       re-measured after. Removal of any shipped class is bounded by 45.5.
+
+3. [ ] **53.3 — Queue Change/audit diff, the one component-shaped ERP gap.**
+       Change documents are a legal requirement in ERP. `timeline` shows *that*
+       something happened; nothing shows *what changed*. Genuinely new surface:
+       old/new value pairs, add/remove/modify states, and two-channel without
+       relying on red/green. Accept: score it on the NEED/COST rubric BEFORE
+       building — it must clear NET ≥ +4 with citations, like anything else.
+
+4. [x] **53.4 — Refused, with reasons recorded so they are not re-proposed.**
+       Field-help tooltips (hover-only fails touch and keyboard; the accessible
+       answer is `bo-form-field__hint`, which ships), toast/transient
+       confirmations (`alert` + a live region already covers the accessible
+       case), and kanban / org-chart / permission-matrix (each is one screen in
+       one module, not a framework primitive — high surface, near-zero reuse).
+
+5. [x] **53.5 — Recorded: `file-upload` and `tree-table` scored +4 on ZERO
+       demand, and that is not a fault.** Both absorb genuinely hard correctness
+       — drag-and-drop with a real file input, hierarchical rows with an
+       expand/collapse contract. Their 0 is reading (b), *a screen we have not
+       written*, not (a) *unneeded*. **Do not chase demand for them**; 53.1 is
+       the screen that fixes this class of gap.
+
 ## Slice 52 — Owner wishlist: the Object Page (2026-08-19)
 
 Owner input, three items: *is there a better name? · can we have a scrolling
