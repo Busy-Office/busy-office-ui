@@ -63,15 +63,92 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
     </div>
 
     <div class="bo-stack bo-stack--loose">
-      {SECTIONS.map(([id, label]) => (
-        <section class="bo-widget op-section" id={id}>
-          <div class="bo-widget__header"><span class="bo-widget__title">{label}</span></div>
-          <div class="bo-widget__body">
-            <p class="bo-u-text-muted">Facet content for {label.toLowerCase()} —
-            in a real screen this is a form section, a table, or a timeline.</p>
-          </div>
-        </section>
-      ))}
+      <section class="bo-widget op-section" id="general">
+        <div class="bo-widget__header"><span class="bo-widget__title">General information</span></div>
+        <div class="bo-widget__body">
+          <dl class="bo-kv bo-kv--rows">
+            <div><dt>Vendor</dt><dd>Acme Supply Co.</dd></div>
+            <div><dt>Payment terms</dt><dd>Net 30</dd></div>
+            <div><dt>Buyer</dt><dd>J. Kim</dd></div>
+            <div><dt>Order date</dt><dd><span class="bo-u-tabular">10 Aug 2026</span></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="bo-widget op-section" id="items">
+        <div class="bo-widget__header"><span class="bo-widget__title">Line items</span></div>
+        <div class="bo-data-table-container" tabindex="0">
+          <table class="bo-data-table" data-density="compact">
+            <caption class="bo-visually-hidden">Line items on PO-88213</caption>
+            <thead>
+              <tr>
+                <th scope="col">Material</th>
+                <th scope="col">Description</th>
+                <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+                <th scope="col" class="bo-data-table__col--numeric">Net value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="bo-data-table__col--code">MAT-4471</td>
+                <td>Hydraulic pump, 24V</td>
+                <td class="bo-data-table__col--numeric"><span class="bo-u-tabular">12</span></td>
+                <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">9,240.00</span></span></td>
+              </tr>
+              <tr>
+                <td class="bo-data-table__col--code">MAT-1180</td>
+                <td>Seal kit, 60 mm</td>
+                <td class="bo-data-table__col--numeric"><span class="bo-u-tabular">40</span></td>
+                <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">1,480.50</span></span></td>
+              </tr>
+              <tr>
+                <td class="bo-data-table__col--code">MAT-9002</td>
+                <td>Filter cartridge</td>
+                <td class="bo-data-table__col--numeric"><span class="bo-u-tabular">150</span></td>
+                <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">8,220.00</span></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="bo-widget op-section" id="delivery">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Delivery</span>
+          <span class="bo-badge">Partial</span>
+        </div>
+        <div class="bo-widget__body">
+          <dl class="bo-kv bo-kv--rows">
+            <div><dt>Ship-to</dt><dd>Dock 4, 123 Warehouse Rd</dd></div>
+            <div><dt>Incoterms</dt><dd>DAP</dd></div>
+            <div><dt>Requested</dt><dd><span class="bo-u-tabular">15 Sep 2026</span></dd></div>
+            <div><dt>Confirmed</dt><dd><span class="bo-u-tabular">17 Sep 2026</span> <span class="bo-badge bo-badge--warning">2 days late</span></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="bo-widget op-section" id="approvals">
+        <div class="bo-widget__header"><span class="bo-widget__title">Approvals</span></div>
+        <div class="bo-widget__body">
+          <ol class="bo-timeline" role="list">
+            <li class="bo-timeline__step" data-state="done">
+              <span class="bo-timeline__marker" aria-hidden="true"></span>
+              <div class="bo-timeline__title">Submitted by J. Kim</div>
+              <div class="bo-timeline__meta">10 Aug 2026 · 09:14</div>
+            </li>
+            <li class="bo-timeline__step" data-state="done">
+              <span class="bo-timeline__marker" aria-hidden="true"></span>
+              <div class="bo-timeline__title">Budget check passed</div>
+              <div class="bo-timeline__meta">10 Aug 2026 · 09:15 · automatic</div>
+            </li>
+            <li class="bo-timeline__step" data-state="current">
+              <span class="bo-timeline__marker" aria-hidden="true"></span>
+              <div class="bo-timeline__title">Awaiting cost-centre owner</div>
+              <div class="bo-timeline__meta">assigned to M. Okafor</div>
+            </li>
+          </ol>
+        </div>
+      </section>
     </div>
 
     <div class="bo-form-actions">

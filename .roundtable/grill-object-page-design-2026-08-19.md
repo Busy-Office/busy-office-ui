@@ -42,9 +42,12 @@ in CLAUDE.md says a pattern page documents **a SCREEN**, and the learning-path
 rule says show the result first. `record-detail` shows real cards, a real
 timeline, a real audit trail; this shows four grey boxes.
 
-It also undercuts D1's own evidence: with real content the sections would be
-taller and the chrome ratio would look better — the page is currently flattering
-itself by being empty.
+**Correction (same day, after 52.1 landed):** this paragraph originally claimed
+the empty demo flattered D1's ratio — that with real content the chrome would
+look better. **That was wrong.** The ratio is chrome measured against the
+VIEWPORT, so section content cannot move it: with real content in all four
+sections it is still 259px/29% at 1440 and 274px/33% at 390, unchanged to the
+pixel. D1 stands on its own, and D2 is a docs-quality finding only.
 
 **Counter-evidence:** the page's job is to demonstrate *navigation between*
 sections, and filling four sections with real ERP content would bury that. But
@@ -108,8 +111,10 @@ the owner's call; it is taste with one measurable input, not a defect.**
 ## D5 — The scroll effect: justified, but the modern CSS for it is off our floor
 **Severity: MEDIUM · Evidence (compat data, same source as the floor gate)**
 
-`animation-timeline` (scroll-driven CSS animation) support vs our floor
-(`chrome 119 · edge 119 · firefox 128 · safari 17.4`):
+`animation-timeline` (scroll-driven CSS animation) support, compared against the
+shipped browser floor (`packages/core/dist/floor.json`, derived from the CSS —
+not restated here, because `check:floor` rightly refuses hand-typed floors and
+caught this report doing it):
 
 ```
 chrome 115 ✓   edge 115 ✓   firefox preview ✗   safari 26 ✗

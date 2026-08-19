@@ -646,17 +646,19 @@ Owner input, three items: *is there a better name? · can we have a scrolling
 effect? · grill the design.* The grill ran first, because two of the three are
 answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
 
-1. [ ] **52.1 — The demo is a skeleton where every other pattern shows a screen.**
+1. [x] **52.1 — The demo is a skeleton where every other pattern shows a screen.**
        Measured: **9 placeholder phrases** in the object-page demo, **0** in
        `record-detail`. Every section reads "Facet content for delivery — in a
        real screen this is a form section, a table, or a timeline." That is a
        wireframe, and the pattern recipe says a pattern page documents a SCREEN.
 
-       It also flatters the page's own numbers: with real content the sections
-       would be taller and the chrome ratio in 52.2 would look better than it
-       deserves.
+       **A claim in the grill was wrong and is corrected here.** It said the
+       empty demo flattered 52.2's chrome ratio. It does not: the ratio is chrome
+       against the VIEWPORT, so section content cannot move it — measured after
+       this landed, still 259px/29% at 1440 and 274px/33% at 390, unchanged to
+       the pixel. 52.1 is a docs-quality fix only, and 52.2's target is unaffected.
 
-       Accept: each section carries real ERP content of the kind it names —
+       **Landed 2026-08-19.** Accept: each section carries real ERP content of the kind it names —
        general information as a `kv`/form section, line items as a data table,
        delivery with the dates, approvals as a timeline. Reuse what
        `record-detail` already demonstrates rather than inventing new fixtures.
@@ -669,8 +671,8 @@ answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
        this is not decoration.
 
        **The modern CSS for it is off our floor.** `animation-timeline` needs
-       Safari **26** and is `preview` in Firefox, against a floor of Safari 17.4
-       / Firefox 128 — Chrome-only, i.e. exactly the "cosmetic enhancement that
+       Safari **26** and is `preview` in Firefox, both above the shipped floor in
+       `floor.json` — Chrome-only, i.e. exactly the "cosmetic enhancement that
        quietly opts out" the floor exists to prevent. Checked against the same
        `@mdn/browser-compat-data` the floor gate uses.
 
