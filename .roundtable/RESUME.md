@@ -28,8 +28,10 @@ claims against ROADMAP.md before trusting them.**
   unauthenticated (E401), so publishing is owner-triggered and cannot be done
   from a wake. Everything from Slice 24 onward is in the repo and in nobody's
   `node_modules`. Restated in 10 consecutive Objective grills now.
-- **30.4b** — scope for the windowed list (the 50,000-record ask) is an owner
-  call; the framework half is specified, the server-chunking half is not.
+- **30.4b** — windowed list (the 50,000-record ask). Scope/Accept criteria are
+  fully written (`ROADMAP.md:4274`); owner explicitly **deferred to the next
+  publish cycle** (2026-08-20) rather than building now — not a build-now item
+  until that cycle starts, don't re-surface as ready in the meantime.
 - **52.3 — Object Page naming.** Recommendation given (keep the `object-page`
   slug, retitle to name the interaction); genuinely the owner's call on taste,
   not something the loop can decide for itself.
