@@ -557,6 +557,68 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 45 — surface review, batch 1 outcomes (2026-08-19)
+
+Scores and citations: `.roundtable/surface-scores-batch1-2026-08-19.md`.
+Ran as a **pilot** because 37.2 is gated on rubric sign-off that has not come —
+nine rows risked instead of fifty-five.
+
+1. [ ] **45.1 — Three shipped JS behaviors have no executable claim.**
+       `tree` and `tree-table` ship expand/collapse behavior asserted in **prose
+       only**; the review's Evidence column found it on its first batch. This is
+       the cheapest gap in the framework: the behavior exists, the contract is
+       documented, and nothing executes it.
+
+       Accept: a claim per behavior driving REAL events (the 35.1 lesson — a tab
+       demo can look right and work exactly once), each red-proved by breaking
+       the behavior. `data-tree-level` rendering is already static-checked, so
+       the claims cover the INTERACTION: expanding reveals children, collapsing
+       hides them, and the control's `aria-expanded` follows.
+
+2. [ ] **45.2 — Two patterns promise behaviour no screen shows.**
+       `/patterns/master-detail` says the panel "becomes a full-width drawer over
+       the list" below the shell breakpoint and links to `offcanvas` — no screen
+       renders one. `invoice-list`, the flagship list, does not paginate, which
+       is implausible for an ERP invoice list and is why `pagination` measures
+       zero demand.
+
+       Both are findings about the SCREENS, not the components — rubric reading
+       (c), a screen quietly doing without something it should use.
+
+       Accept: master-detail renders a real drawer at narrow width, verified at
+       390; invoice-list paginates. Neither adds framework CSS — both components
+       already ship. If either turns out to be wrong for the screen, record that
+       instead and fix the prose that promises it.
+
+3. [ ] **45.3 — `.bo-date` scores 1 of 12: merge and deprecate.**
+       `display: inline-flex`, a `gap`, `tabular-nums` and a muted span — a
+       `.bo-cluster` with two utilities. No forced-colors rule, not
+       density-aware, no claim, no behavior, no screen. The one real decision in
+       it is `--overdue`, whose two-channel contract (the word "Overdue" must be
+       in the text) is genuine and belongs somewhere.
+
+       Accept: the overdue guidance moves to `/components/amount`, which already
+       documents exactly that pattern for negative amounts; `.bo-date` gets a
+       **Deprecated** CHANGELOG entry and a docs page naming the replacement.
+       **Removal at the next major, not now** — it is in the published 0.1.1.
+
+4. [ ] **45.4 — `calendar` has zero demand, and that is my doing.**
+       Shipped 2026-08-17 with strong Composition, Contracts and Evidence scores
+       (9 of 12) and used by **no screen** — only its own component page. A
+       component demonstrated but never used in a pattern is documentation, not
+       evidence that it earns its place.
+
+       Accept: it appears in a screen where the marks matter — delivery
+       scheduling or goods receipt — or the review records it as dead weight and
+       says so. Not a new pattern page for its own sake; only if the screen is
+       one a back-office user genuinely sits in front of.
+
+5. [ ] **45.5 — Add a "cost to remove" column before batch 2.**
+       The rubric scores what a component is worth but not what removing it
+       costs a consumer already using it. `date` scored 1 and is still bounded by
+       the deprecation rule because it is published. Accept: the column exists
+       and batch 2 uses it; batch 1 is not rescored.
+
 ## Slice 44 — from the Objective grill, Slices 39/42/43 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices39-42-43-2026-08-19.md`.

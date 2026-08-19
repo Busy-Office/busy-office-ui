@@ -7,8 +7,8 @@ These are the countable inputs to the review, not the review. Every column is a
 may be dead weight, or may be evidence that a screen is missing something it
 should have.
 
-- **Screens using it** — of 17 files that render a real screen
-  (16 pattern pages + the `examples/po-app` reference).
+- **Screens using it** — of 18 files that render a real screen
+  (17 pattern pages + the `examples/po-app` reference).
   Matched on the blocks a component OWNS: `alert` counts `bo-toast` (no
   `toast/` directory exists), but `offcanvas` does not count `bo-sidebar-nav`,
   which `sidebar-nav/` owns. Counting api.json's grouping instead credited
@@ -26,8 +26,9 @@ already ship?" There is no honest proxy for it, so it is scored by hand in 37.2
 rather than given a number that would make this table look more rigorous than it
 is.
 
-## Used by no shipped screen (6 of 38)
+## Used by no shipped screen (7 of 39)
 
+- `calendar` — 4 selectors, 148 lines of CSS
 - `date` — 4 selectors, 39 lines of CSS
 - `offcanvas` — 4 selectors, 87 lines of CSS
 - `pagination` — 3 selectors, 55 lines of CSS
@@ -47,20 +48,21 @@ quietly doing without?
 | `amount` | **1** | 10 | 83 | — | — | — | — |
 | `approval-workflow` | **5** | 13 | 162 | — | yes | — | — |
 | `avatar` | **1** | 2 | 59 | — | — | yes | — |
-| `badge` | **17** | 6 | 87 | — | yes | yes | — |
+| `badge` | **18** | 6 | 87 | — | yes | yes | — |
 | `breadcrumb` | **2** | 1 | 56 | — | — | — | — |
-| `button` | **15** | 7 | 121 | — | — | yes | yes |
+| `button` | **16** | 7 | 121 | — | — | yes | yes |
 | `byline` | **2** | 3 | 39 | — | — | — | — |
+| `calendar` | **0** | 4 | 148 | — | yes | yes | yes |
 | `combobox` | **1** | 7 | 100 | yes | — | yes | yes |
 | `dashboard` | **7** | 20 | 199 | — | — | — | — |
-| `data-table` | **17** | 18 | 326 | yes | yes | yes | yes |
+| `data-table` | **18** | 18 | 337 | yes | yes | yes | yes |
 | `date` | **0** | 4 | 39 | — | — | — | — |
 | `dialog` | **2** | 6 | 75 | yes | — | yes | — |
-| `dropdown` | **1** | 5 | 62 | yes | — | — | yes |
+| `dropdown` | **2** | 5 | 62 | yes | — | — | yes |
 | `file-upload` | **1** | 7 | 112 | — | — | — | yes |
-| `filters` | **3** | 4 | 75 | — | yes | — | — |
-| `form` | **15** | 19 | 311 | — | yes | yes | yes |
-| `icon` | **2** | 13 | 101 | — | yes | yes | — |
+| `filters` | **4** | 4 | 75 | — | yes | — | — |
+| `form` | **18** | 23 | 337 | — | yes | yes | yes |
+| `icon` | **2** | 13 | 115 | — | yes | yes | — |
 | `kbd` | **3** | 1 | 26 | — | — | — | — |
 | `kv` | **3** | 2 | 43 | — | yes | — | yes |
 | `money` | **2** | 3 | 29 | yes | — | — | — |
@@ -71,7 +73,7 @@ quietly doing without?
 | `progress` | **1** | 3 | 64 | — | — | yes | — |
 | `prose` | **1** | 1 | 91 | — | — | — | — |
 | `quantity` | **3** | 7 | 88 | yes | — | — | yes |
-| `richtext` | **15** | 7 | 83 | — | yes | — | yes |
+| `richtext` | **16** | 7 | 83 | — | yes | — | yes |
 | `segmented` | **1** | 3 | 70 | — | — | yes | yes |
 | `sidebar-nav` | **1** | 6 | 107 | — | yes | — | yes |
 | `skeleton` | **0** | 3 | 56 | — | yes | yes | — |
