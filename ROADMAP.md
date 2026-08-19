@@ -557,6 +557,101 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 48 — Owner input: the SAP Object Page floorplan (2026-08-19)
+
+Raised by the owner mid-wake: *"do you know SAP object page?"* Triaged here
+rather than built — the ask is a **new floorplan**, which is a scope decision,
+not a wake-sized item. Queued with the decision logged rather than waited on
+(LOOPS.md: a loop never stalls on a human call).
+
+**What it is.** The Fiori-elements detail floorplan for a single business
+object, and the canonical ERP screen — the "detail" half of the list-report →
+object-page pair. Anatomy: a sticky **object header** (title, subtitle, key
+facts/KPIs, status, global actions), an **anchor bar** of section links that
+scroll-spies as the reader moves, stacked **sections/facets** of forms, tables
+and charts, and a **footer action bar** carrying the primary action and draft
+state.
+
+**What we ship against it — measured across all 39 components, not assumed:**
+
+| region | have it? | from |
+|---|---|---|
+| sections / facets | yes | `.bo-widget`, `.bo-form-section` |
+| key facts strip | yes | `.bo-kv`, `.bo-chip`, `.bo-badge` |
+| in-page section switching | partial | `.bo-tabs--vertical` — tabs, not scroll-spy |
+| multi-step / draft | partial | `.bo-stepper` |
+| **sticky object header** | **no** | — |
+| **anchor bar with scroll-spy** | **no** | — |
+| **page-level footer action bar** | **no** | — |
+
+`position: sticky` appears in exactly two shipped files (`data-table` headers,
+`form-section`), so the sticky-region work is genuinely absent rather than
+merely unnamed.
+
+**The Objective test, before any CSS is written.** Most of this floorplan is
+composable from what ships; the honest gap is **two** primitives.
+
+- **Refuse** a `bo-object-page` component. A floorplan is a PATTERN — a screen
+  assembled from primitives — and shipping it as a component would be the
+  largest, most specific thing in the framework, straight against the Objective.
+- **Accept** at most two new primitives, and only where a pattern page proves
+  each is not composable: an anchor/section nav that scroll-spies, and a
+  page-level action bar. Both are general — any long detail screen wants them —
+  rather than SAP-specific.
+- **Rethink** if the anchor bar turns out to be `.bo-tabs--vertical` plus
+  scroll-spy behaviour, which is the likely answer. Then it is a BEHAVIOR on an
+  existing component, not a new component, and the slice shrinks accordingly.
+
+**Accept:** `/patterns/object-page` exists and follows the pattern recipe in
+full (opener / live screen / anatomy / data contract / states / components used
++ complexity). It is composed from shipped primitives wherever possible, and
+every genuinely new primitive carries a recorded reason why composition failed.
+The scroll-spy and any sticky behaviour are asserted by executable claims — "the
+anchor bar follows the reader" is exactly the runtime prose CLAUDE.md requires
+to be executable, and it fails silently (the page still renders and scrolls).
+Verified at 1440 and 390, both themes.
+
+**OWNER CALL LOGGED, not blocking:** is the target the whole floorplan, or one
+*piece* of it — most likely the anchor bar? The cheap version is the anchor bar
+on the existing `/patterns/record-detail`; the expensive version is the full
+screen. Defaulting to **neither until answered**: this stays queued behind the
+open 45.x items rather than jumping the queue on the strength of a question.
+
+## Slice 47 — Standardize sweep: the widths we verify at (2026-08-19)
+
+1. [x] **47.1 — `[1440, 390]` was one decision stored five times.** — landed
+       axe-audit, visual-regression, check-po-app, check-pseudo-locale and one
+       sweep in check-claims each hand-copied the pair, and the REASON for it
+       was written down in only one of them. Same shape as `paths.mjs` and
+       `SOURCE_SKIP_DIRS`: silent drift, because nothing compares the five.
+       Now `scripts/viewports.mjs` — `WIDTHS`, plus `DESKTOP_WIDTH` for the
+       three gates that set a desktop viewport and never sweep (a different
+       decision, kept separate deliberately).
+
+       Verified by PERTURBATION rather than by reading the diff: setting
+       `NARROW_WIDTH = 377` renamed 20 visual shots, which proves the constant
+       actually drives the gates instead of sitting unused.
+
+2. [x] **47.2 — that perturbation exposed a gate that could not fail.** — landed
+       `visual-regression` treated a MISSING baseline as `update || !exists` —
+       it wrote the shot and counted it as ok. Every shot name encodes page,
+       theme and width, so any drift in a name silently re-baselined the whole
+       matrix and still printed "visual regression passed". The 377 probe wrote
+       20 baselines into the repo and reported 40 shots checked, passing.
+
+       The file already refused to baseline an HTTP error page for exactly this
+       reason ("a stale dist baselined 404s"); the missing-baseline case had the
+       same shape and no guard. A new shot is now a failure with instructions,
+       accepted deliberately via `--update`.
+
+       Red-proved: the identical perturbation now yields 20 loud failures and
+       writes zero baselines, while the real matrix stays green.
+
+       **This is the fourth instrument-that-cannot-fail found by 46.1's rule,
+       and the first found by perturbing a constant rather than injecting CSS.**
+       Worth keeping as a technique: change an input the gate depends on and
+       confirm the OUTPUT changes.
+
 ## Slice 46 — from the Objective grill, Slices 37/38/44 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices37-38-44-2026-08-19.md`.
@@ -767,41 +862,6 @@ nine rows risked instead of fifty-five.
        show. When this item renders them, the entries go back — and
        `check:components-used` now enforces that they cannot be listed again
        without being rendered.
-
-### Slice 47 — Standardize sweep: the widths we verify at (2026-08-19)
-
-1. [x] **47.1 — `[1440, 390]` was one decision stored five times.** — landed
-       axe-audit, visual-regression, check-po-app, check-pseudo-locale and one
-       sweep in check-claims each hand-copied the pair, and the REASON for it
-       was written down in only one of them. Same shape as `paths.mjs` and
-       `SOURCE_SKIP_DIRS`: silent drift, because nothing compares the five.
-       Now `scripts/viewports.mjs` — `WIDTHS`, plus `DESKTOP_WIDTH` for the
-       three gates that set a desktop viewport and never sweep (a different
-       decision, kept separate deliberately).
-
-       Verified by PERTURBATION rather than by reading the diff: setting
-       `NARROW_WIDTH = 377` renamed 20 visual shots, which proves the constant
-       actually drives the gates instead of sitting unused.
-
-2. [x] **47.2 — that perturbation exposed a gate that could not fail.** — landed
-       `visual-regression` treated a MISSING baseline as `update || !exists` —
-       it wrote the shot and counted it as ok. Every shot name encodes page,
-       theme and width, so any drift in a name silently re-baselined the whole
-       matrix and still printed "visual regression passed". The 377 probe wrote
-       20 baselines into the repo and reported 40 shots checked, passing.
-
-       The file already refused to baseline an HTTP error page for exactly this
-       reason ("a stale dist baselined 404s"); the missing-baseline case had the
-       same shape and no guard. A new shot is now a failure with instructions,
-       accepted deliberately via `--update`.
-
-       Red-proved: the identical perturbation now yields 20 loud failures and
-       writes zero baselines, while the real matrix stays green.
-
-       **This is the fourth instrument-that-cannot-fail found by 46.1's rule,
-       and the first found by perturbing a constant rather than injecting CSS.**
-       Worth keeping as a technique: change an input the gate depends on and
-       confirm the OUTPUT changes.
 
 3. [ ] **45.3 — `.bo-date` scores 1 of 12: merge and deprecate.**
        `display: inline-flex`, a `gap`, `tabular-nums` and a muted span — a
