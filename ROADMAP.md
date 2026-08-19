@@ -698,6 +698,54 @@ principles last one conversation and vanish at the next context clear.
        filter will be judged against: a screen that later fails it has
        REGRESSED, not merely disagreed with taste.
 
+## Slice 61 — Owner wishlist: a generic, fixed review-screen contract (2026-08-19)
+
+Owner asked two things: is the "review" pattern generic rather than
+PO/Invoice-specific, and is there a *fixed* way to do it so a backend team
+follows a contract instead of choosing UI. Grilled before building:
+`.roundtable/grill-generic-review-pattern-2026-08-19.md`.
+
+**Premise correction, stated plainly.** There is no page named "review"; the
+closest three are `record-detail`, `object-page`, `approval`, and they differ
+**on purpose** — short record / long record / decision-in-progress are three
+different interactions, not one screen under three names. `record-detail`'s
+own opener already says the genericity the owner is asking for: *"This example
+is a purchase order; the shape is the same for an invoice, a change request,
+or a leave request."* Measured: `approval.astro` uses 9 distinct `bo-*`
+classes, all generic components, none named after a document type. The
+coupling that exists is worked-example data (CLAUDE.md's own demo-first
+recipe), not structural.
+
+**The second ask is the real finding.** Comparing anatomy across all three
+surfaces a skeleton they already converged on independently — Identity
+(status/title) → Facts (kv) → History (timeline/audit) → Action — which is
+stronger evidence than one person designing it top-down.
+
+1. [ ] **61.1 — Write the anatomy contract as its own concept page, not a new
+       pattern.** Four regions, which component fills each, and — the part
+       that actually removes a decision — **which of the three patterns to use,
+       decided by two questions**: is the record short or long (→
+       `record-detail` or `object-page`), and is the current moment itself a
+       decision to make (→ `approval`). That is the "backend doesn't need to
+       think" outcome: the choice to eliminate is *which pattern*, not *what a
+       pattern looks like*.
+
+       Accept: each of `record-detail`, `object-page`, `approval` gets a
+       one-line cross-reference in its own Anatomy section pointing at the
+       contract page. Zero new components, zero new CSS.
+
+2. [x] **61.2 — Refused: merge the three into one pattern.** Would undo the
+       reason `object-page` exists — Slice 52 built its scroll-collapse
+       specifically because a short-record layout breaks once content is long
+       enough to need in-page navigation. A contract loose enough to fit all
+       three as one page would be too vague to save anyone a decision, which
+       is the actual bar (Objective §3).
+
+3. [x] **61.3 — Refused: a new `bo-review` component.** Every region across
+       all three is already `.bo-widget` / `.bo-kv` / `.bo-timeline` /
+       `.bo-badge` / `.bo-form-actions` — the same refusal already made for
+       value-help and object-page, for the same reason.
+
 ## Slice 59 — Owner wishlist: RF-scanner browser floor + a smaller-screen profile (2026-08-19)
 
 Owner asked for (a) an RF-scanner component supporting 5-6-year-old devices,
