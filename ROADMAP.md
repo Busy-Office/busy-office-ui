@@ -557,6 +557,48 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 46 — from the Objective grill, Slices 37/38/44 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices37-38-44-2026-08-19.md`.
+
+1. [ ] **46.1 — A first-draft instrument is wrong. Design around the base rate.**
+       Six new or reworked instruments in this window; **zero correct on first
+       run** — and a seventh went wrong while writing the grill that counted
+       them. Two previous grills recorded this as a discipline problem and
+       changed nothing. Three grills of evidence say it is a **base rate**, not
+       a lapse.
+
+       All six were caught before landing, by three moves that already exist:
+       red-proof with a **verified** injection, share one implementation between
+       gate and test, and treat an implausible number as an instrument defect.
+       What is missing is stating the assumption they follow from.
+
+       Accept: CLAUDE.md says plainly that an instrument's **first output is not
+       evidence** — the adversarial check runs *before* the number is used, not
+       after it looks wrong. Concrete and short: what would make this wrong, try
+       that first; a 0%, a 100%, or an identical value across many inputs is a
+       defect until proven otherwise; reconcile against something independent
+       before quoting. No new gate — this is the rule the existing gates already
+       imply.
+
+2. [ ] **46.2 — 11 of 16 pattern pages claim components they never render.**
+       "Components used" carries a complexity badge and reads as *this screen is
+       built from these*. On 11 pages it lists components — 20 in total —
+       that the page never renders: `invoice-list` claims `pagination`,
+       `master-detail` claims `offcanvas`, `settings-admin` claims `dialog`, and
+       so on. Every existing gate passes, because each page is individually
+       valid; the defect is **documentation disagreeing with its own demo**.
+
+       Accept: each of the 20 is resolved one of two ways — the screen renders
+       it (which is 45.2's job for `pagination` and `offcanvas`), or the claim
+       comes off the list. Where a pattern legitimately references a component
+       in its **data contract** without demoing it, say so in the row rather
+       than silently listing it. Then a gate: a component listed under
+       "Components used" must appear in the page's rendered markup, matched via
+       `api.json` blocks — **not** the page slug, which is what made this
+       measurement wrong twice (`alerts`→`bo-alert`, `button`→`bo-btn`,
+       `dashboard`→`bo-widget`). Red-proved both ways.
+
 ## Slice 45 — surface review, batch 1 outcomes (2026-08-19)
 
 Scores and citations: `.roundtable/surface-scores-batch1-2026-08-19.md`.
