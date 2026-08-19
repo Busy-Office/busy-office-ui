@@ -667,7 +667,7 @@ script deriving a path that `paths.mjs` already exports.
        Docs-only: the sticky element is a docs class. The framework's rail
        padding is correct; the docs' use of it was not.
 
-2. [ ] **54.2 — Calendar: Sunday-first as well as Monday-first.**
+2. [x] **54.2 — Calendar: Sunday-first as well as Monday-first.** — landed 2026-08-19
        The shipped calendar hard-codes a Monday-first grid (`Mo Tu We Th Fr Sa
        Su` in the `thead`, and `/patterns/detail-form` generates its month the
        same way). Monday-first is ISO-8601 and correct for most of Europe and
@@ -686,6 +686,30 @@ script deriving a path that `paths.mjs` already exports.
 
        Note the docs' own generator in `detail-form` builds a Monday-first grid
        in frontmatter; it must follow the same setting or the two disagree.
+
+       **Landed 2026-08-19, and the answer was to REFUSE the setting.** The
+       component needed no change: its CSS contains **no positional rule** — no
+       `nth-child`, and "closed" is a per-cell attribute the consumer sets, not
+       a column. A `data-week-start` attribute would style nothing, and would be
+       public API we could never remove. Week start decides which DATE sits in
+       which cell, which happens where the month is generated.
+
+       What shipped instead: `/components/calendar` now demonstrates both, from
+       **one generator**, and states the rule and the reason. `detail-form`
+       states which convention its own grid uses and why.
+
+       **The real deliverable is `check:calendar-grid`, wired into the build.**
+       It reads every cell's `datetime` back and compares it against the column
+       heading above it — 285 dated cells across 8 calendars. This class of
+       error is invisible: the grid still looks like a calendar, the styling is
+       right, every other gate passes, and a reader copying it ships a screen
+       that puts Tuesday's delivery under Monday. Same shape as the `LINE-1`
+       row-label bug in CLAUDE.md.
+
+       Red-proved twice — once by rewriting a single cell's date (it names that
+       cell), and once by injecting an off-by-one into the generator's week-start
+       maths, which turns the **build** red across a whole month. The existing
+       hand-written months were checked by it and were correct: 0 misplaced.
 
 3. [ ] **54.3 — Grill Amount & Quantity: display vs input.**
        Both are "Values" components and both currently document a **display**

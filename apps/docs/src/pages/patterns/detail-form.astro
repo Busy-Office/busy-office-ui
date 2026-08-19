@@ -16,7 +16,9 @@ const iso = (d) => d.toISOString().slice(0, 10);
 function deliveryMonth(year, monthIdx) {
   const first = new Date(Date.UTC(year, monthIdx, 1));
   const start = new Date(first);
-  // Monday-first grid, matching the component's thead.
+  /* Monday-first, matching this grid's own thead. The convention is stated on
+     the page: week start is data, not a component setting, and check:calendar-grid
+     reads every cell's date back against its column so the two cannot drift. */
   start.setUTCDate(first.getUTCDate() - ((first.getUTCDay() + 6) % 7));
   const weeks = [];
   for (let w = 0; w < 5; w += 1) {
@@ -163,6 +165,11 @@ ${deliveryMonth(2026, 8)}
   <section class="demo">
     <h2>Requested delivery date — the days you cannot pick</h2>
     <div set:html={deliveryCalendar} />
+    <p class="bo-u-text-muted">This grid starts its week on <strong>Monday</strong>
+    (ISO&nbsp;8601), which suits a European buyer. Where the week starts is a
+    property of your data, not a setting on the component — see
+    <a href={base + '/components/calendar'}>calendar</a> for why the framework
+    ships no <code>data-week-start</code>, and generate the month accordingly.</p>
     <p class="bo-u-text-muted">The plain <code>&lt;input type="date"&gt;</code> above is
     right for <em>order date</em> — any day is valid, and the native picker is
     already good. A <em>requested delivery date</em> is a different question: the

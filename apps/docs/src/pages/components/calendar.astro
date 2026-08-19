@@ -5,6 +5,48 @@ import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+/* Week-start demos are GENERATED, never hand-typed. A month is 35+ cells whose
+   date must agree with the column it sits under, and getting that wrong is
+   silent — the grid still looks like a calendar. The two demos below come from
+   ONE function so they cannot drift apart. */
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const SHORT = { Sunday: 'Su', Monday: 'Mo', Tuesday: 'Tu', Wednesday: 'We', Thursday: 'Th', Friday: 'Fr', Saturday: 'Sa' };
+
+function month(year, monthIdx, weekStart /* 0 = Sunday, 1 = Monday */) {
+  const order = Array.from({ length: 7 }, (_, i) => (weekStart + i) % 7);
+  const first = new Date(Date.UTC(year, monthIdx, 1));
+  const start = new Date(first);
+  start.setUTCDate(first.getUTCDate() - ((first.getUTCDay() - weekStart + 7) % 7));
+  const head = order.map((d) => `<th scope="col"><abbr title="${DAY_NAMES[d]}">${SHORT[DAY_NAMES[d]]}</abbr></th>`).join('');
+  const weeks = [];
+  for (let w = 0; w < 5; w += 1) {
+    const cells = [];
+    for (let d = 0; d < 7; d += 1) {
+      const date = new Date(start);
+      date.setUTCDate(start.getUTCDate() + w * 7 + d);
+      const iso = date.toISOString().slice(0, 10);
+      const outside = date.getUTCMonth() !== monthIdx;
+      const weekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
+      const cls = `bo-calendar__day${outside ? ' bo-calendar__day--outside' : ''}`;
+      const mark = !outside && weekend ? ' data-day="closed"' : '';
+      const sr = mark ? '<span class="bo-visually-hidden"> — non-working day</span>' : '';
+      cells.push(`<td><span class="${cls}"${mark}><time datetime="${iso}">${date.getUTCDate()}</time>${sr}</span></td>`);
+    }
+    weeks.push(`      <tr>${cells.join('')}</tr>`);
+  }
+  return `<div class="bo-calendar">
+  <table class="bo-calendar__month">
+    <caption>${weekStart === 0 ? 'Week starts Sunday' : 'Week starts Monday'} — September 2026</caption>
+    <thead><tr>${head}</tr></thead>
+    <tbody>
+${weeks.join('\n')}
+    </tbody>
+  </table>
+</div>`;
+}
+const weekMonday = month(2026, 8, 1);
+const weekSunday = month(2026, 8, 0);
+
 const single = `<div class="bo-calendar">
   <table class="bo-calendar__month">
     <caption>August 2026</caption>
@@ -88,6 +130,31 @@ const three = `<div class="bo-calendar">
     outlined and the chosen day is filled. Every one of those is a shape as well as a
     colour, and each writes its meaning into the cell as visually-hidden text — so the
     grid reads the same in greyscale, under forced colours, and to a screen reader.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Where the week starts is your data, not a setting here</h2>
+    <div class="demo-pair">
+      <div class="demo-pair__preview" set:html={weekMonday} />
+      <div class="demo-pair__preview" set:html={weekSunday} />
+    </div>
+    <p class="bo-u-text-muted">Monday-first is ISO&nbsp;8601 and usual across
+    Europe and much of Asia; <strong>Sunday-first is standard in the US, Canada,
+    Japan and much of Latin America</strong>. An ERP shipped to a US buyer with a
+    Monday-first delivery calendar is simply wrong for them, so both must be
+    possible.</p>
+    <p class="bo-u-text-muted"><strong>The framework deliberately ships no
+    <code>data-week-start</code>.</strong> There is nothing for it to do: this
+    CSS contains no positional rule — no <code>nth-child</code>, and
+    &ldquo;closed&rdquo; is a per-cell attribute you set, not a column. Week
+    start changes which date sits in which cell, which is decided where you
+    generate the month. An attribute that styled nothing would be API we could
+    never remove.</p>
+    <p class="bo-u-text-muted">Generate the grid, do not hand-write it: a month
+    is 35+ cells whose date must agree with its column, and an error there is
+    invisible — the grid still looks like a calendar. Both demos above come from
+    one function, and a build gate checks every calendar in these docs by
+    reading each cell's <code>datetime</code> back against its column heading.</p>
   </section>
 
   <section class="demo">
