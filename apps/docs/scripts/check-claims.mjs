@@ -1292,6 +1292,118 @@ check(
   JSON.stringify(density),
 );
 
+/* ---- Slice 45.6 batch 3 — the last two uncovered behaviours ---------------- */
+
+/* money-field. The page promises a LOSSLESS reformat: switching to JPY trims
+   1250.00 to 1250, switching to BHD pads to 3 decimals, and "values that don't
+   fit the new precision keep their digits — nothing is ever rounded away".
+   That last clause is the one worth a machine: silently rounding money is
+   invisible on screen and wrong in the ledger. */
+await visit('/components/money/');
+const money = await page.evaluate(async () => {
+  const root = document.querySelector('.bo-money');
+  const sel = root.querySelector('.bo-money__currency');
+  const amt = root.querySelector('.bo-money__amount');
+  const pick = async (code) => {
+    sel.value = code;
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 150));
+    return { value: amt.value, step: amt.getAttribute('step') };
+  };
+  const usd = { value: amt.value, step: amt.getAttribute('step') };
+  const jpy = await pick('JPY');
+  const bhd = await pick('BHD');
+  // the lossless guarantee: a value with MORE precision than the currency
+  // allows must keep its digits rather than be rounded away
+  await pick('USD');
+  amt.value = '1250.5678';
+  amt.dispatchEvent(new Event('input', { bubbles: true }));
+  const afterJpy = await pick('JPY');
+  return { usd, jpy, bhd, lossless: afterJpy };
+});
+check(
+  'money: switching currency reformats to that currency precision',
+  money.usd.value === '1250.00' && money.jpy.value === '1250' && money.jpy.step === '1' &&
+    money.bhd.value === '1250.000' && money.bhd.step === '0.001',
+  JSON.stringify(money),
+);
+/* The step assertion is load-bearing, not decoration: `value === 1250.5678`
+   alone is ALSO satisfied by a behavior that does nothing at all, so on its own
+   this claim could not tell "lossless" from "no-op". Requiring step to have
+   moved to the JPY precision proves the reformat ran AND kept the digits. */
+check(
+  'money: the reformat is LOSSLESS — digits that do not fit are never rounded away',
+  Number(money.lossless.value) === 1250.5678 && money.lossless.step === '1',
+  JSON.stringify(money.lossless),
+);
+
+/* file-dropzone. Dropping a file must put it on the INPUT, not merely light up
+   the zone. If the highlight works and the assignment does not, the user sees
+   a successful-looking drop and submits a form with no attachment. */
+await visit('/components/file-upload/');
+const drop = await page.evaluate(async () => {
+  const zone = document.querySelector('[data-file-dropzone]');
+  const input = zone.querySelector('.bo-file-input');
+  const dt = new DataTransfer();
+  dt.items.add(new File(['vendor,amount\nACME,10'], 'invoice.csv', { type: 'text/csv' }));
+  zone.dispatchEvent(new DragEvent('dragover', { dataTransfer: dt, bubbles: true, cancelable: true }));
+  await new Promise((r) => setTimeout(r, 100));
+  const during = zone.getAttribute('data-dragover');
+  zone.dispatchEvent(new DragEvent('drop', { dataTransfer: dt, bubbles: true, cancelable: true }));
+  await new Promise((r) => setTimeout(r, 150));
+  return {
+    dragoverWhileOver: during,
+    dragoverAfterDrop: zone.getAttribute('data-dragover'),
+    files: input.files.length,
+    name: input.files[0]?.name ?? null,
+  };
+});
+check(
+  'file-dropzone: a dropped file lands on the input, and the drag state clears',
+  drop.dragoverWhileOver === 'true' && drop.files === 1 && drop.name === 'invoice.csv' &&
+    drop.dragoverAfterDrop !== 'true',
+  JSON.stringify(drop),
+);
+
+/* load-more. This behavior appends nothing — it dispatches `bo:table-load-more`
+   and the consumer fetches. So its failure is maximally silent: the button
+   still depresses, no rows were ever going to appear from the framework, and
+   the only observable difference is an event nobody hears.
+
+   It was also the last gap, and it was found by RECONCILING the 21 init
+   behaviours against hand-verified selectors rather than by the automated hook
+   match — which had counted it as covered via the static `.bo-pagination`
+   markup added by 45.2 (roadmap 45.6). */
+await visit('/components/pagination/');
+const loadMore = await page.evaluate(async () => {
+  const btn = document.querySelector('[data-table-load-more]');
+  const rowsBefore = document.querySelectorAll('#lm-rows tr').length;
+  const seen = [];
+  document.addEventListener('bo:table-load-more', (e) => seen.push({
+    bubbles: e.bubbles,
+    fromButton: e.target === btn || btn.contains(e.target) || e.target.contains(btn),
+  }));
+  btn.click();
+  await new Promise((r) => setTimeout(r, 150));
+  return { fired: seen.length, detail: seen[0] ?? null, rowsBefore, rowsAfter: document.querySelectorAll('#lm-rows tr').length };
+});
+/* The rows DO grow here — 2 to 4 — and that is the documented split working,
+   not the framework appending. The demo page wires its own listener that
+   fetches and appends, which is what a consumer does; the behavior itself only
+   announces intent. An earlier version of this claim asserted the row count
+   stayed put and went red against correct code. */
+check(
+  'load-more: the button dispatches one bubbling bo:table-load-more per click',
+  loadMore.fired === 1 && loadMore.detail?.bubbles === true &&
+    loadMore.detail?.fromButton === true,
+  JSON.stringify(loadMore),
+);
+check(
+  "load-more: the framework announces intent; the page's own consumer appends",
+  loadMore.rowsAfter > loadMore.rowsBefore,
+  JSON.stringify({ before: loadMore.rowsBefore, after: loadMore.rowsAfter }),
+);
+
 await browser.close();
 server.close();
 

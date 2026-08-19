@@ -852,7 +852,7 @@ nine rows risked instead of fifty-five.
        the step lookup instead of the click handler's, and the alerts claim
        pointed at `/components/alert/` when the slug is `alerts`.
 
-6. [ ] **45.6 — Sixteen behaviors still ship with no executable claim.**
+6. [x] **45.6 — Sixteen behaviors still ship with no executable claim.** — CLOSED 2026-08-19
        The corrected figure from 45.1: 5 of 21 covered. Uncovered include
        `combobox`, `data-grid`, `wizard`, `saved-views`, `scan-input`,
        `tag-input`, `file-dropzone`, `load-more`, `money-field`, `table-sum`,
@@ -924,8 +924,41 @@ nine rows risked instead of fifty-five.
        found nothing while the claim passed. Red-proving forced that discovery;
        a claim that had merely gone green would have left it unknown.
 
-       Still uncovered: `file-dropzone`, `money-field`. Both need their demos
-       located first — neither renders under the hook names in `behaviors.json`.
+       **Batch 3 landed 2026-08-19 — 5 claims, 59 -> 65. ITEM CLOSED: all 21
+       init behaviours now carry an executable claim.**
+
+       - `money-field` ×2 — switching currency reformats to that currency's
+         precision (JPY 0, BHD 3), and the reformat is **LOSSLESS**. The second
+         is the one that matters: silently rounding money is invisible on screen
+         and wrong in the ledger.
+       - `file-dropzone` ×1 — a dropped file lands on the INPUT, not merely
+         lights up the zone. If the highlight works and the assignment does not,
+         the user sees a successful-looking drop and submits nothing.
+       - `load-more` ×2 — one bubbling `bo:table-load-more` per click, and the
+         append comes from the page's own consumer. Maximally silent: the
+         framework appends nothing either way, so a dead event looks identical.
+
+       **The lossless claim was weak when first written and was strengthened
+       before red-proving.** `Number(value) === 1250.5678` is also satisfied by
+       a behavior that does NOTHING, so alone it could not tell lossless from
+       no-op. Requiring `step` to have moved to the JPY precision proves the
+       reformat ran *and* kept the digits. Red-proved by injecting a `toFixed`
+       rounding — only that claim went red.
+
+       **The last gap was found by reconciliation, not by the detector.** All 21
+       init behaviours were checked against HAND-VERIFIED selectors, which
+       surfaced `initLoadMore` as genuinely uncovered — the hook matcher had
+       counted it as covered via the static `.bo-pagination` markup 45.2 added.
+       Fourth disagreement from that measurement, and the reason this slice
+       never published a coverage percentage.
+
+       **One claim went red against correct code and was the claim's fault.**
+       The first `load-more` version asserted the row count stayed put, on the
+       reasoning that the behavior appends nothing. Rows went 2 -> 4, because
+       the demo page wires its own listener — which is the documented split
+       working exactly as described. The claim now asserts both halves
+       separately, and they are independent: renaming the event breaks the
+       dispatch claim while the consumer claim still holds.
 
        **A coverage PERCENTAGE is deliberately not recorded.** Two attempts to
        measure it disagreed in opposite directions — matching behavior hooks
