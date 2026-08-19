@@ -830,8 +830,26 @@ no media query and no interaction with the page's one width-dependent rule
 `--bo-cell-bg`), so there is no plausible width-dependent failure mode
 here.
 
-**Exit:** 71.1 shipped and verified; the "overview/sidebar" half of the
-real 30.0 (Slice 30) remains open, unrelated, and unblocked by this.
+**Item 71.2 — dogfooded `data-tone` in po-app's own "Spend by cost
+center" screen (2026-08-20).** Not a docs-only feature: `spendScreen()`
+already computed a budget percentage server-side for its `<progress>` bar
+tone (danger ≥90%, warning ≥75%) but the meaning stopped at the group
+header — the subtotal cell itself carried no signal. Reused the exact
+same `pct` already computed (zero new business logic) to set
+`data-tone="danger"`/`"warning"` on the subtotal `<td>`, plus an inline
+"— over budget threshold" text cue on the danger case (the two-channel
+requirement the docs page itself states). `check:po-app` unchanged at
+13/13. Verified live in a `--no-cache` Podman rebuild: all three seeded
+cost centres are genuinely over budget (134%/448%/330% consumed), so all
+three subtotals show danger correctly — confirmed against the actual
+percentages, not assumed from a passing gate. Both themes checked; the
+tone composes cleanly with the existing progress-bar signal rather than
+duplicating or fighting it. This is real-consumer validation of 71.1, not
+a new framework surface — `examples/po-app/server.mjs` only.
+
+**Exit:** 71.1 and 71.2 both shipped and verified; the "overview/sidebar"
+half of the real 30.0 (Slice 30) remains open, unrelated, and unblocked
+by this.
 
 ## Slice 70 — Objective grill: the po-app dogfood streak (2026-08-20)
 

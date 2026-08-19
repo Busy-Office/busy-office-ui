@@ -916,7 +916,7 @@ const spendScreen = () => {
       </tr>`).join('')}
       <tr>
         <td colspan="3" class="bo-data-table__col--right">Subtotal ${cc}</td>
-        <td class="bo-data-table__col--numeric">${money(spent)}</td>
+        <td class="bo-data-table__col--numeric"${pct >= 90 ? ' data-tone="danger"' : pct >= 75 ? ' data-tone="warning"' : ''}>${money(spent)}${pct >= 90 ? ' <span class="bo-u-text-muted">— over budget threshold</span>' : ''}</td>
       </tr>
     </tbody>`;
     }).join('')}
