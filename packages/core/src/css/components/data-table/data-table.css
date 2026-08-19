@@ -212,9 +212,20 @@
   }
 
   /* Loading: attribute flipped by JS/HTMX. */
+  /* Dimmed while a swap is in flight. 0.75, not the 0.6 this shipped with: at
+     0.6 the HEADER text composited to **3.28:1** on the light canvas, against a
+     4.5:1 requirement — a serious WCAG 1.4.3 failure in a shipped component,
+     latent because nothing ever measured a dimmed table (roadmap 43.1). Body
+     text passed at 4.61:1 and both dark-theme colours passed, so only the
+     lighter `th` colour was under water, which is exactly the kind of partial
+     failure a glance does not catch. 0.75 gives 4.84:1 with margin.
+
+     The dim is one channel of three — `aria-busy` announces it and
+     `pointer-events: none` enforces it — so weakening the dim slightly costs
+     less than shipping text nobody can read. */
   .bo-data-table[data-loading="true"],
   .bo-data-table[aria-busy="true"] {
-    opacity: 0.6;
+    opacity: 0.75;
     pointer-events: none;
   }
 

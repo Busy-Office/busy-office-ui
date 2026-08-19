@@ -796,6 +796,46 @@ check(
   JSON.stringify({ ...pickable, wanted, submitted }),
 );
 
+/* A dimmed table must still be READABLE (roadmap 43.1).
+   `data-loading="true"` dims with opacity, and opacity composites TEXT as well
+   as background — so the contrast gate, which computes token pairs, cannot see
+   the result. It shipped at 0.6 for months: header text composited to 3.28:1
+   against a 4.5:1 requirement, while body text passed at 4.61:1, which is why
+   nobody noticed by looking. Measured here, in both themes, on the real thing. */
+const luminance = (r, g, b) => {
+  const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+};
+const contrastOf = (fg, bg) => {
+  const L1 = luminance(...fg); const L2 = luminance(...bg);
+  return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+};
+for (const theme of ['light', 'dark']) {
+  await visit('/components/data-table/', { width: 1440 });
+  await page.evaluate((t) => localStorage.setItem('bo-theme', t), theme);
+  await visit('/components/data-table/', { width: 1440 });
+  const dim = await page.evaluate(() => {
+    const t = document.querySelector('table[data-loading="true"]');
+    const bg = getComputedStyle(document.body).backgroundColor.match(/\d+/g).map(Number);
+    const o = Number(getComputedStyle(t).opacity);
+    return {
+      theme: document.documentElement.getAttribute('data-theme'),
+      opacity: o,
+      bg,
+      colors: [...new Set([...t.querySelectorAll('th,td')].map((c) => getComputedStyle(c).color))]
+        .map((c) => c.match(/\d+/g).map(Number)),
+    };
+  });
+  const worst = Math.min(
+    ...dim.colors.map((c) => contrastOf(c.map((v, i) => v * dim.opacity + dim.bg[i] * (1 - dim.opacity)), dim.bg)),
+  );
+  check(
+    `data-loading: a dimmed table stays AA-readable (${theme})`,
+    worst >= 4.5,
+    JSON.stringify({ theme: dim.theme, opacity: dim.opacity, worstRatio: Number(worst.toFixed(2)) }),
+  );
+}
+
 await browser.close();
 server.close();
 

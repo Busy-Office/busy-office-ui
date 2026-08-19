@@ -557,6 +557,31 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 43 — P0 found while doing 39.3 (2026-08-19)
+
+1. [x] **43.1 — P0: `data-loading` dimmed shipped text below AA.**
+       `.bo-data-table[data-loading="true"]` (and `[aria-busy="true"]`) dimmed
+       the whole table with `opacity: 0.6`. Opacity composites TEXT as well as
+       background, and on the light canvas the header colour landed at
+       **3.28:1** against a 4.5:1 requirement — a serious WCAG 1.4.3 failure in
+       a shipped component, in the state a table spends every swap in.
+
+       **Why it stayed hidden.** Body text composited to 4.61:1 and both
+       dark-theme colours passed, so only the lighter `th` colour was under
+       water — a partial failure that survives a glance. `check:contrast`
+       computes token PAIRS and cannot model opacity, so it was never in scope.
+       The axe sweep did not flag the existing loading table on
+       `/components/data-table` either; it only fired once 39.3 added a second
+       instance, which is what surfaced it.
+
+       Fixed at **0.75 → 4.84:1** with margin. The dim is one channel of three —
+       `aria-busy` announces the state and `pointer-events: none` enforces it —
+       so a slightly weaker dim costs far less than unreadable text.
+
+       Gated by an executable claim (41 total) that composites the real
+       computed colours in **both themes** and asserts ≥4.5:1. Red-proved by
+       restoring 0.6: the claim reports 3.28:1 and fails.
+
 ## Slice 42 — from the Objective grill, Slices 39-41 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices39-41-2026-08-19.md`.
@@ -1058,7 +1083,7 @@ The page whose job is to show a newcomer what they get shows them source only.
        `--self-test`, which runs it against code-first, result-first and
        code-only synthetic pages and fails if it cannot tell them apart.
 
-3. [ ] **39.3 — Only 1 of 18 learning-path pages shows anything working.**
+3. [x] **39.3 — Only 1 of 18 learning-path pages shows anything working.**
        The gate found it while guarding one page: `/getting-started/first-screen`
        is the only page on the path that uses a live `Demo`. The other 17 explain
        with prose and code and never show the thing.
@@ -1072,6 +1097,46 @@ The page whose job is to show a newcomer what they get shows them source only.
        (preview and code from one string). Where no, record why, so the next
        sweep does not re-ask. A page count is not the goal; a reader who can see
        what the framework does before reading about it is.
+
+       **Landed 2026-08-19 — and the title of this item was WRONG.**
+
+       **16 of 18 pages already render something live.** The "1 of 18" came from
+       counting uses of the `Demo` *component*, which only `first-screen` had;
+       every other page hand-builds its live examples inline. I conflated "uses
+       Demo" with "shows anything working" and reported the alarming version.
+       Only **`/getting-started/htmx`** and **`/getting-started/installation`**
+       rendered nothing at all.
+
+       **Getting to that number took three broken detectors**, which is the same
+       failure the last two grills named: searching built HTML for
+       `class="bo-` finds nothing, because `highlight-code.mjs` splits every
+       token into `<span>`s — so the literal never survives. Measured against
+       page SOURCE instead, where the raw strings live.
+
+       **One real conversion.** `/getting-started/htmx` now opens with a live
+       `data-loading="true"` table — dimmed and non-interactive, which a reader
+       can click to confirm — instead of opening with a stylesheet import. Step
+       4 keeps the recipe and points at it.
+
+       **Recorded refusals, so the next sweep does not re-ask:**
+       - `installation` — its code is a whole `<!doctype html>` document and a
+         set of shell commands. Nothing to render inline, and `npm i` is not
+         improved by a preview.
+       - `concurrency`, `js-behaviors` — the code is a request contract and a JS
+         call. Rendering it shows a form of hidden inputs, or nothing.
+       - `troubleshooting` — already renders, via two `<iframe srcdoc>` demos
+         that deliberately isolate the cascade. Not a gap.
+       - `accessibility`, `density`, `permissions`, `i18n` — all already render
+         live examples inline (4, 5, 4 and 2 elements). Converting them to
+         `Demo` would pair each with its code, which is a real improvement but a
+         different item from "shows anything working".
+
+       **The gate caught a perverse incentive in itself.** Adding the demo made
+       `check:learning-path` fail htmx, because a page with previews must lead
+       with one and step 1 is legitimately a stylesheet import — i.e. the rule
+       punished *adding* a demo to a code-first page. Resolved the way the owner
+       asked rather than by weakening the rule: the page now opens with the
+       result and the steps follow.
 
 ## Slice 38 — is the browser floor too new? (owner wishlist, 2026-08-18)
 

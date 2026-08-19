@@ -1,5 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
+import Demo from '../../components/Demo.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cssImport = `/* extra, opt-in stylesheet — core CSS never references HTMX */
@@ -28,6 +29,16 @@ document.body.addEventListener("htmx:afterSwap", (e) =>
 // non-HTMX swap mechanism? re-derive manually:
 // import { refreshDataTable } from "@busy-office/ui/js";
 // refreshDataTable(container);`;
+const loadingDemo = `<div class="bo-data-table-container" tabindex="0">
+  <table class="bo-data-table" data-density="compact" data-loading="true">
+    <caption class="bo-visually-hidden">Invoices, reloading</caption>
+    <thead><tr><th scope="col">Invoice #</th><th scope="col">Vendor</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">INV-10234</th><td>Acme Supply Co.</td><td class="bo-data-table__col--numeric">4,208.00</td></tr>
+      <tr><th scope="row">INV-10235</th><td>Globex Industrial</td><td class="bo-data-table__col--numeric">18,940.50</td></tr>
+    </tbody>
+  </table>
+</div>`;
 const stateRecipe = `<!-- The framework-agnostic loading convention: -->
 <table class="bo-data-table"
        hx-on::before-request="this.dataset.loading='true'"
@@ -39,6 +50,14 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
     HTMX references, and the same <code>data-loading</code>/<code>data-state</code>
     attributes work with Alpine or vanilla JS.
   </p>
+  <section class="demo">
+    <h2>What the integration looks like</h2>
+    <p>Mid-swap, a table says so — dimmed and <strong>not interactive</strong>, so nobody
+    clicks a row that is about to be replaced under them. Try clicking it. That is
+    <code>data-loading="true"</code>, and step 4 below is how it gets set.</p>
+    <Demo code={loadingDemo} />
+  </section>
+
   <section class="demo">
     <h2>1. Add the integration stylesheet</h2>
     <pre><code>{cssImport}</code></pre>
@@ -54,6 +73,9 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
   <section class="demo">
     <h2>4. Loading states</h2>
     <pre><code>{stateRecipe}</code></pre>
+    <p class="bo-u-text-muted">The dimmed table at the top of this page is in exactly that
+    state. The attribute is the framework's, not HTMX's — anything that swaps can set it,
+    which is why the recipe above is framework-agnostic.</p>
     <p class="bo-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
   </section>
   <section class="demo">
