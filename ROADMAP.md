@@ -698,6 +698,56 @@ principles last one conversation and vanish at the next context clear.
        filter will be judged against: a screen that later fails it has
        REGRESSED, not merely disagreed with taste.
 
+## Slice 63 — Standardize sweep: finishing last sweep's partial review (2026-08-20)
+
+Dispatched by the counter at 4/4. Established axes (inline flex/grid, raw
+spacing, hardcoded hex, `paths.mjs` adoption) all clean — same result as
+Slice 60, no new instances.
+
+1. [x] **63.1 — The `gate-report.mjs` review from Slice 60 was incomplete, and
+       is finished here.** That sweep reviewed three scripts
+       (`check-layout`, `check-pseudo-locale`, `check-target-size`) and judged
+       them legitimately outside `gate-report.mjs` for collecting
+       heterogeneous finding shapes. It did not enumerate the rest — six more
+       scripts also call `process.exit(1)` without the shared module, and
+       three of those hadn't been looked at before.
+
+       Read all six. They split into two genuinely different reasons to stay
+       outside `gate-report.mjs`, both worth recording so a third sweep does
+       not re-litigate either:
+
+       - **Heterogeneous multi-finding gates** (the Slice 60 category):
+         `check-formatting` (Intl reproduction + ISO/CLDR divergence, two
+         unrelated checks in one `failures` array) and `check-versions` — same
+         shape as the three already reviewed.
+       - **Single-condition guards inside build utilities, not verification
+         gates**: `cut-version-snapshot` (CLI arg validation),
+         `resolve-chrome` (can't find a Chrome binary), `scope-search-index`
+         (index came back empty), `highlight-code` (three independent
+         build-correctness assertions, not accumulated claims), and
+         `check-published` (fail-fast on the first of two sequential checks,
+         not accumulate-then-report). `gate-report.mjs`'s contract is
+         "collect many claims, print all failures, exit once" — forcing that
+         shape onto a single argv guard would be decoration, not
+         consolidation.
+
+       No code changed — this is the review itself being completed, which is
+       the deliverable. `axe-audit` was also on the unconverted list;
+       unreviewed until now, it collects one entry per (page, width, axe
+       violation) — heterogeneous by construction, same category as
+       `check-layout`.
+
+2. [x] **63.2 — Re-verified the design-grill baseline (57.3) after this
+       session's new patterns.** Measured again across all 19 pattern
+       screens, including `object-page` and `value-help` which didn't exist
+       when the baseline was first recorded: **still 19/19 at most one
+       visually primary action**, same two legitimate exceptions
+       (`master-detail`'s Save-inside-its-dialog, `wizard`'s Next/Submit
+       swap). Nothing regressed the filter while building against it.
+
+**Exit:** clean re-scan on every established axis; the `gate-report.mjs`
+adoption question is now fully answered rather than partially answered twice.
+
 ## Slice 62 — from the Objective grill, Slices 56-61 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices56-61-2026-08-19.md`.
