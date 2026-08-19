@@ -640,6 +640,55 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 56 — from the Objective grill, Slices 52-55 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices52-55-2026-08-19.md`.
+
+1. [ ] **56.1 — Gate that every `data-*` hook in the docs is one the framework
+       documents.** `data-dialog-close` was invented in Slice 31, extended in
+       45.2 and removed in 53.1 — a hook `initDialogs` never implemented and
+       `api.json` never listed, leaving **three dead buttons** in a shipped
+       pattern for over a day.
+
+       **What it survived is the point.** 46.2 built `check:components-used`
+       for exactly this defect class — documentation disagreeing with its own
+       demo — and missed it, because that gate compares *components listed*
+       against *components rendered*, and never asks whether what is rendered
+       **works**. The drawer also had a claim, and the claim tested **Escape**,
+       so it passed throughout: **a claim that exercises the adjacent path is
+       worse than no claim**, because it converts an untested control into an
+       apparently tested one.
+
+       Accept: a gate collects every `data-[a-z-]+` attribute used in built docs
+       markup and fails on any not present in `api.json`'s `dataAttrs` or
+       `behaviors.json`'s hooks. Allow an explicit, commented exception list for
+       demo-local hooks (`data-vh-pick`, `data-anchor-collapse` and similar) —
+       the list is the point, since adding to it is a decision someone makes.
+       Red-prove by re-introducing `data-dialog-close`. `@exact`.
+
+2. [ ] **56.2 — Write the removal-assertion rule into CLAUDE.md.** Three edits
+       in one session asserted `'string' not in source` while the explanatory
+       comment written by that same edit contained the string — the `paths.mjs`
+       guard (49), the shell class in `anchor-nav` (50), and
+       `data-dialog-close` (53.1). One of them wrote an import into a template
+       literal that would have shipped in a user-facing artifact.
+
+       Accept: one short rule — **when verifying a removal, assert on the parsed
+       or structural form (the attribute, the identifier, the code with comments
+       stripped), never on raw text**, because the prose explaining a removal
+       legitimately names the thing removed. Keep it to a few lines; CLAUDE.md
+       is already long.
+
+3. [x] **56.3 — Recorded, no action: the surface went DOWN for the first time**
+       (191 → 189), and the mechanism is worth remembering more than the number:
+       removal cost was **zero only because 0.2.0 has not published**. Free
+       removals are perishable.
+
+4. [x] **56.4 — Recorded, no action: four of six defects this window were the
+       loop's own recent work**, all caught before any release, two by
+       instruments rather than review. Healthy, with H3 as the exception that
+       produced 56.1.
+
 ## Slice 55 — Standardize sweep: two decisions that had each been written twice (2026-08-19)
 
 Dispatched by the counter at 4/4. Multi-round; exit is a clean re-scan.
@@ -864,8 +913,12 @@ the controls land +3/+4, so it discriminates.
        row; and picking fills the field, closes the dialog and puts focus back
        **in the field**.
 
-       **Building it exposed a bug I shipped in 45.2.** `data-dialog-close` is an
-       attribute I invented: `initDialogs` implements opening, Escape, backdrop
+       **Building it exposed an invented attribute — older than first credited.**
+       `git log -S` puts its introduction in **Slice 31 (2026-08-18)** with two
+       dead buttons (Cancel, Save); 45.2 added the third (the drawer ×); 53.1
+       removed all three. The commit message for 53.1 credits 45.2 alone and is
+       wrong about that. `data-dialog-close` is an attribute this project
+       invented: `initDialogs` implements opening, Escape, backdrop
        dismiss and the focus trap, and **nothing else**, and the documented API
        is `data-dialog-trigger` / `data-dismissible` / `data-state`. So
        `/patterns/master-detail`'s drawer had **three dead buttons** — ×, Cancel
