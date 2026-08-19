@@ -20,11 +20,17 @@
  * reported a phantom hook on 7 pages (116 matches, all text). Attributes are
  * extracted from within `<tag …>` bounds; escaped markup in code samples is
  * text and never matches.
+ *
+ * Uses the shared `gate()` contract, not a hand-rolled collect/print/exit —
+ * this gate hand-rolled its own on first landing, the one thing
+ * `gate-report.mjs` exists to prevent two copies of (Standardize sweep,
+ * 2026-08-20). `assertScanned` replaces this file's own zero-pages guard.
  */
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
+import { gate, assertScanned } from './gate-report.mjs';
 
 /** Auto-generated / third-party attribute namespaces — not ours to police. */
 const EXEMPT_PREFIXES = ['data-astro-', 'data-pagefind-'];
@@ -52,12 +58,10 @@ const documented = new Set();
 for (const c of Object.values(api.components)) (c.dataAttrs ?? []).forEach((a) => documented.add(a));
 for (const b of Object.values(beh.behaviors)) (b.hooks ?? []).forEach((h) => { if (h.startsWith('data-')) documented.add(h); });
 
-if (!documented.size) {
-  console.error('data-hooks check FAILED — no documented data-* hooks found at all; wrong artifact?');
-  process.exit(1);
-}
+assertScanned(documented.size, 'documented data-* hooks', 'wrong artifact?');
 
-const offenders = new Map();
+const g = gate('data-hooks check', 'data-* hook(s) used in docs markup');
+const seen = new Set();
 let scanned = 0;
 
 for (const page of await distPages(DIST)) {
@@ -65,27 +69,22 @@ for (const page of await distPages(DIST)) {
   for (const tag of page.html.match(/<[a-z][^>]*>/g) ?? []) {
     for (const m of tag.matchAll(/[\s"'](data-[a-z][a-z0-9-]*)(?:=|[\s>/])/g)) {
       const attr = m[1];
-      if (documented.has(attr) || EXCEPTIONS.has(attr)) continue;
       if (EXEMPT_PREFIXES.some((p) => attr.startsWith(p))) continue;
-      if (!offenders.has(attr)) offenders.set(attr, new Set());
-      offenders.get(attr).add(page.url);
+      seen.add(attr);
+      const key = `${attr}@${page.url}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      g.check(
+        `${attr} on ${page.url}`,
+        documented.has(attr) || EXCEPTIONS.has(attr),
+        `${attr} is not in api.json/behaviors.json and not a listed exception.\n     ` +
+          'A hook the framework does not document is a promise nothing keeps — ' +
+          'data-dialog-close shipped three dead buttons this way. Document it in the ' +
+          'component/behavior, or add a commented exception in check-data-hooks.mjs.',
+      );
     }
   }
 }
 
-if (!scanned) {
-  console.error('data-hooks check FAILED — scanned zero pages; is dist built?');
-  process.exit(1);
-}
-
-if (offenders.size) {
-  console.error(`data-hooks check FAILED — ${offenders.size} undocumented data-* hook(s) in docs markup:`);
-  for (const [attr, pages] of offenders) {
-    console.error(`  ${attr}  (${pages.size} page(s), e.g. ${[...pages][0]})`);
-  }
-  console.error('  A hook the framework does not document is a promise nothing keeps —');
-  console.error('  data-dialog-close shipped three dead buttons this way. Document it in the');
-  console.error('  component/behavior, or add a commented exception in check-data-hooks.mjs.');
-  process.exit(1);
-}
-console.log(`data-hooks check passed — ${scanned} page(s): every data-* hook is documented or an explicit exception (${documented.size} documented, ${EXCEPTIONS.size} exceptions)`);
+assertScanned(scanned, 'docs page(s)', 'is dist built?');
+g.report(`checked (${documented.size} documented, ${EXCEPTIONS.size} exceptions)`);

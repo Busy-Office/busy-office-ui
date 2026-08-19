@@ -804,6 +804,37 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        One batch per wake at most — a grill that shares a wake with build work
        gets rushed, and rushed verdicts are taste, not evidence.
 
+## Slice 60 — Standardize sweep: one gate hand-rolled its own exit contract (2026-08-19)
+
+Dispatched by the counter at 4/4.
+
+1. [x] **60.1 — `check-data-hooks.mjs` (56.1) hand-rolled collect/print/exit
+       instead of using `gate-report.mjs`.** That module exists specifically to
+       stop two copies of this contract drifting — its own docstring: "one
+       moved to `process.exitCode`, one left on `process.exit`, or a future
+       third gate copies whichever it happened to find." A fourth gate landing
+       with its own copy, one wake after the module's own warning, was worth
+       fixing immediately rather than letting a second drift point form.
+
+       Converted to `gate()` + `assertScanned()`. Per-hook-per-page checks (680
+       of them) replace the old per-tag scan, which is a more honest coverage
+       number than "89 pages" — it says how many (attribute, page) pairs were
+       actually verified. Re-red-proved on the same historical bug
+       (`data-dialog-close`) after conversion: still names the hook and the
+       page, still fails the build.
+
+2. [x] **60.2 — Reviewed, not converted: `check-layout`, `check-pseudo-locale`,
+       `check-target-size`.** All three `process.exit(1)` outside
+       `gate-report.mjs`, but each collects HETEROGENEOUS finding shapes
+       (overflow / spacing / underline in one array, custom-formatted per
+       kind) rather than uniform `check(claim, pass)` pairs. Converting is a
+       bigger, riskier refactor than one round warrants — recorded so the next
+       sweep does not re-flag them as unexamined.
+
+**Exit:** clean re-scan on every established axis (inline flex/grid, raw
+spacing, hardcoded hex, path re-derivation, shell-class-in-code) plus the new
+one this round found (gate exit-contract duplication).
+
 ## Slice 56 — from the Objective grill, Slices 52-55 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices52-55-2026-08-19.md`.
