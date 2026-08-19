@@ -312,6 +312,49 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     problem — regroup server-side instead).</p>
   </section>
   <section class="demo">
+    <h2>Conditional cell tone</h2>
+    <p><code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code>
+    tints that one cell — subtle background plus an inset accent, same shape
+    as row state above, scoped to a single cell instead of a whole row. The
+    framework never decides <em>why</em> a cell is toned: a negative balance,
+    a budget threshold, any business rule — that condition is computed
+    server-side and rendered as this one attribute. Pair the tone with text
+    that says the same thing (a sign, a word, a badge) — the color is not the
+    only channel.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr>
+          <th scope="col">Cost centre</th>
+          <th scope="col" class="bo-data-table__col--numeric">Budget</th>
+          <th scope="col" class="bo-data-table__col--numeric">Balance</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>CC-1180 — Facilities</td>
+            <td class="bo-data-table__col--numeric">$60,000.00</td>
+            <td class="bo-data-table__col--numeric" data-tone="danger">−$730.25</td>
+          </tr>
+          <tr>
+            <td>CC-4021 — Warehouse</td>
+            <td class="bo-data-table__col--numeric">$5,000.00</td>
+            <td class="bo-data-table__col--numeric" data-tone="warning">$4,780.00</td>
+          </tr>
+          <tr>
+            <td>CC-2200 — IT</td>
+            <td class="bo-data-table__col--numeric">$12,000.00</td>
+            <td class="bo-data-table__col--numeric" data-tone="success">$3,120.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The minus sign on the first Balance cell carries
+    the "over budget" meaning in text, same as the badges elsewhere on this
+    page carry status in text — <code>data-tone="danger"</code> only repeats
+    it visually. Composes with row state: a cell's own <code>--bo-cell-bg</code>
+    wins over its row's, so a toned cell inside a dirty or striped row still
+    reads correctly.</p>
+  </section>
+  <section class="demo">
     <h2>Column alignment</h2>
     <p>Put the same modifier on the <code>&lt;th&gt;</code> and every <code>&lt;td&gt;</code>
     in a column: <code>--left</code>, <code>--center</code>, <code>--right</code>, or
@@ -357,6 +400,7 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
       'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
       'Separately opt-in: <code>data-row-edit</code> + <code>initRowEdit()</code> for multi-row inline edit with per-row dirty state and Save/Cancel. Tracks state only — persistence is your code, via the <code>bo:row-save</code> event.',
       'Separately opt-in: <code>data-col-toggle</code>/<code>data-table-export</code> + <code>initTableToolbar()</code> for column visibility (composes with the multi-select dropdown, no new markup) and an export intent (<code>bo:table-export</code> — generating the file is your code). Rows appended later (load-more, swaps) don\'t inherit hidden columns — call <code>initTableToolbar()</code> again after appending, same re-call convention as <code>initDataTables()</code>.',
+      '<code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code> tints that cell (CSS-only, no JS). The framework paints the tone; deciding which cells get one — a negative balance, a threshold, any rule — is server-side logic, never the framework\'s.',
     ]}
   />
   <section class="demo">

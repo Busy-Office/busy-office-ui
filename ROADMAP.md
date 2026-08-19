@@ -795,11 +795,43 @@ rule — the framework only paints the result," per principle 3); composes
 correctly with existing row states (a dirty+danger cell doesn't produce a
 broken double-tint — cell-level `--bo-cell-bg` naturally wins over the
 row's since it's set closer to the painted element); AA contrast verified
-both themes for all three tones (added to `check-contrast.mjs`'s `PAIRS`);
-live-verified 1440 + 390, light + dark in the bind-mounted Podman
-container; `check:po-app` and existing gates stay green.
+both themes for all three tones; live-verified light + dark in the
+bind-mounted Podman container; existing gates stay green.
 
-**Exit:** pending — build this wake if the owner confirms scope as written.
+**Shipped 2026-08-20.** `packages/core/src/css/components/data-table/
+data-table.css`: three attribute-selector rules
+(`td[data-tone="danger|warning|success"]`), reusing `--bo-state-error-bg`/
+`--bo-color-warning-subtle`/`--bo-color-success-subtle` and matching the
+existing row-state's exact shape — no new token declared, no JS. New
+`forced-colors` block matches the row-state one (border swap-in, same as
+every other tinted state on this page). `check:contrast` passed
+unmodified — these background tokens (and default cell text over them)
+were already covered by the row-state work, so no new `PAIRS` entry was
+needed (checked, not assumed).
+
+New "Conditional cell tone" section on `/components/data-table`: a
+3-row/3-column demo (Budget vs. Balance per cost centre) showing all three
+tones with the negative-balance cell captioned to show the tone repeats a
+meaning already in the text (the minus sign), not the only channel. Also
+composes-with-row-state note. `data-hooks` gate: 52 documented (was 51).
+`check-markup`: 51478 class/attribute uses verified (was 51463). Both
+green. Full core build green (`check:contrast`, `check:composited`,
+`check:rtl`, `check:motion`, `check:package`, `check:rf-floor`) after a
+`stamp-readme.mjs` re-run (bundle size shifted by the new rules).
+
+Verified live in a `--no-cache` Podman rebuild of `bo-docs-run`: both
+tones render correctly with visible accent bars in **dark and light**
+theme, text stays legible over every subtle background. **390px not
+independently re-verified** — the browser tool's window resize did not
+propagate to the tab viewport (same limitation hit in Slice 70.1). Risk is
+low: the new rules are plain attribute-selector background/box-shadow with
+no media query and no interaction with the page's one width-dependent rule
+(`@container` auto-compaction only touches padding/font-size, not
+`--bo-cell-bg`), so there is no plausible width-dependent failure mode
+here.
+
+**Exit:** 71.1 shipped and verified; the "overview/sidebar" half of the
+real 30.0 (Slice 30) remains open, unrelated, and unblocked by this.
 
 ## Slice 70 — Objective grill: the po-app dogfood streak (2026-08-20)
 

@@ -284,6 +284,39 @@
     }
   }
 
+  /* Per-CELL conditional tone (roadmap 71.1) — same shape as row state above
+     (subtle background + inset accent, no text-color change), scoped to one
+     cell instead of a whole row. The SERVER decides which cells get which
+     tone and why — a negative amount, a threshold breach, any business rule
+     — the framework only paints data-tone once it's set; it never invents
+     the condition (Objective principle 3: framework does visuals, the
+     consumer does data). Not a substitute for a programmatic channel: pair
+     the toned value with adjacent text/an aria-label carrying the same
+     meaning, the same as row-state's own badge-or-message requirement. */
+  .bo-data-table td[data-tone="danger"] {
+    --bo-cell-bg: var(--bo-state-error-bg);
+    box-shadow: inset 3px 0 0 var(--bo-color-danger);
+  }
+
+  .bo-data-table td[data-tone="warning"] {
+    --bo-cell-bg: var(--bo-color-warning-subtle);
+    box-shadow: inset 3px 0 0 var(--bo-color-warning);
+  }
+
+  .bo-data-table td[data-tone="success"] {
+    --bo-cell-bg: var(--bo-color-success-subtle);
+    box-shadow: inset 3px 0 0 var(--bo-color-success);
+  }
+
+  @media (forced-colors: active) {
+    .bo-data-table td[data-tone="danger"],
+    .bo-data-table td[data-tone="warning"],
+    .bo-data-table td[data-tone="success"] {
+      box-shadow: none;
+      border-inline-start: 3px solid CanvasText;
+    }
+  }
+
   /* Auto-compaction when the table lives in a narrow container.
      Precedence: an EXPLICIT data-density on the table or its container wins —
      compaction only applies when neither declares one. All density aliases
