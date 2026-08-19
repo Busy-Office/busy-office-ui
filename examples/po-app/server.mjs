@@ -647,16 +647,83 @@ const timelineHtml = (p) => `<ol class="bo-timeline" role="list" id="timeline-${
           <div><div class="bo-timeline__title">Awaiting approval</div></div></li>`}
 </ol>`;
 
-const detailScreen = (p) => `
+// Field-editor, dogfooded for real (roadmap Explore spike). Before this,
+// po-app had NO way to fix a mistake on a record — a typo'd vendor name or
+// wrong amount could only be approved, rejected, or bulk-recosted; nothing
+// let a user correct the record itself. Gated to Pending: an Approved/
+// Rejected PO already has consequences downstream (the same reasoning
+// mass-change uses — "already decided needs a reversal, not a re-cost").
+const editableOrderFields = (p, errors = {}) => `
+<form method="post" action="/pos/${p.id}/edit" data-row-edit>
+  <div class="bo-data-table-container" tabindex="0">
+    <table class="bo-data-table" data-row-edit data-density="compact">
+      <caption class="bo-visually-hidden">${p.id} order fields, one row per field</caption>
+      <thead><tr><th scope="col" style="inline-size: 10rem">Field</th><th scope="col">Value</th></tr></thead>
+      <tbody>
+        <tr data-row-id="vendor">
+          <th scope="row">Vendor</th>
+          <td>
+            <input class="bo-input bo-input--seamless" id="edit-vendor" name="vendor" value="${esc(p.vendor)}"
+              aria-label="Vendor" ${errors.vendor ? `aria-invalid="true" aria-describedby="edit-vendor-err"` : ''}>
+            ${errors.vendor ? `<p class="bo-form-field__message" id="edit-vendor-err" role="alert">${errors.vendor}</p>` : ''}
+          </td>
+        </tr>
+        <tr data-row-id="cc">
+          <th scope="row">Cost centre</th>
+          <td>
+            <div class="bo-cluster">
+              <input class="bo-input bo-input--code bo-input--seamless" id="edit-cc" name="cc" value="${esc(p.cc)}"
+                aria-label="Cost centre" ${errors.cc ? `aria-invalid="true" aria-describedby="edit-cc-err"` : ''}>
+              ${costCenterPickerTrigger('edit-cc')}
+            </div>
+            ${errors.cc ? `<p class="bo-form-field__message" id="edit-cc-err" role="alert">${errors.cc}</p>` : ''}
+          </td>
+        </tr>
+        <tr data-row-id="amount">
+          <th scope="row">Amount</th>
+          <td>
+            <input class="bo-input bo-input--numeric bo-input--seamless" id="edit-amount" name="amount" type="number"
+              min="0.01" step="0.01" value="${p.amount}" aria-label="Amount"
+              ${errors.amount ? `aria-invalid="true" aria-describedby="edit-amount-err"` : ''}>
+            ${errors.amount ? `<p class="bo-form-field__message" id="edit-amount-err" role="alert">${errors.amount}</p>` : ''}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="bo-data-table__footer">
+    <span class="bo-badge bo-badge--warning" data-any-dirty hidden>Unsaved changes</span>
+    <button class="bo-btn bo-btn--secondary" type="reset">Cancel</button>
+    <button class="bo-btn" type="submit">Save changes</button>
+  </div>
+</form>
+${costCenterPickerHtml()}
+<script type="module">
+  import { initRowEdit } from '/assets/js/index.js';
+  initRowEdit();
+  // Same "aggregate per-row dirty into one badge" split field-editor.astro
+  // itself documents: the framework marks each ROW dirty, rolling that into
+  // one page-level indicator is app state, three lines.
+  const table = document.querySelector('table[data-row-edit]');
+  const badge = document.querySelector('[data-any-dirty]');
+  const sync = () => { badge.hidden = !table.querySelector('tr[data-row-state="dirty"]'); };
+  document.addEventListener('input', sync);
+  document.addEventListener('change', sync);
+  document.addEventListener('reset', () => setTimeout(sync, 0));
+</script>`;
+
+const detailScreen = (p, editErrors = null) => `
 <h1>${p.id} <span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></h1>
 <div class="bo-grid" style="--bo-grid-min: 18rem">
   <fieldset class="bo-form-section">
     <legend class="bo-form-section__legend">Order</legend>
-    <dl class="bo-kv">
+    ${p.status === 'Pending'
+      ? editableOrderFields(p, editErrors || {})
+      : `<dl class="bo-kv">
       <div><dt>Vendor</dt><dd>${p.vendor}</dd></div>
       <div><dt>Cost center</dt><dd>${p.cc}</dd></div>
       <div><dt>Amount</dt><dd class="bo-u-tabular">${money(p.amount)}</dd></div>
-    </dl>
+    </dl>`}
   </fieldset>
   <div>${timelineHtml(p)}</div>
 </div>
@@ -1170,7 +1237,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       }</div>`;
       return res.end(tbodyHtml(pos) + summary + '<button id="po-load-more" hx-swap-oob="delete"></button>');
     }
-    const m = path.match(/^\/pos\/(PO-\d+)(\/approve|\/reject)?$/);
+    const m = path.match(/^\/pos\/(PO-\d+)(\/approve|\/reject|\/edit)?$/);
     if (m) {
       const p = pos.find((x) => x.id === m[1]);
       if (!p) {
@@ -1228,6 +1295,47 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
         audit.push({ t: new Date().toISOString(), what: `approved ${p.id}` });
         res.writeHead(200, { 'content-type': 'text/html' });
         return res.end(timelineHtml(p));
+      }
+      if (m[2] === '/edit' && req.method === 'POST') {
+        // A decided PO cannot be re-edited here either — same "needs a
+        // reversal, not a re-cost" rule mass-change already established.
+        // Checked server-side, not just hidden by the client: the form
+        // only renders for Pending records, but a request can still arrive
+        // after someone else approved it in the meantime.
+        if (p.status !== 'Pending') {
+          res.writeHead(409, { 'content-type': 'text/html' });
+          return res.end(page(p.id, '/pos', `
+            <div class="bo-alert bo-alert--danger" role="alert">
+              <p><strong>${p.id} is already ${p.status.toLowerCase()}.</strong> It cannot be edited — nothing was changed.</p>
+            </div>${detailScreen(p)}`, density));
+        }
+        const body = await readBody(req);
+        const form = new URLSearchParams(body);
+        const values = {
+          vendor: (form.get('vendor') ?? '').trim(),
+          cc: (form.get('cc') ?? '').trim().toUpperCase(),
+          amount: (form.get('amount') ?? '').trim(),
+        };
+        const errors = {};
+        if (!values.vendor) errors.vendor = 'Vendor is required.';
+        if (!values.cc) errors.cc = 'Cost centre is required.';
+        else if (!COST_CENTERS.some((c) => c.code === values.cc)) errors.cc = `"${values.cc}" is not a cost centre.`;
+        const amountNum = Number(values.amount);
+        if (!values.amount || !Number.isFinite(amountNum) || amountNum <= 0) errors.amount = 'Enter an amount greater than zero.';
+
+        if (Object.keys(errors).length) {
+          // Field-editor's own contract, re-render with values preserved —
+          // same pattern the mass-change and /pos/new paths already use.
+          const preview = { ...p, vendor: values.vendor, cc: values.cc, amount: amountNum || p.amount };
+          res.writeHead(422, { 'content-type': 'text/html' });
+          return res.end(page(p.id, '/pos', detailScreen(preview, errors), density));
+        }
+        p.vendor = values.vendor;
+        p.cc = values.cc;
+        p.amount = amountNum;
+        audit.push({ t: new Date().toISOString(), what: `${p.id} edited` });
+        res.writeHead(302, { location: `/pos/${p.id}` });
+        return res.end();
       }
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page(p.id, '/pos', detailScreen(p), density));

@@ -192,6 +192,50 @@ try {
     JSON.stringify({ hasLogistics: /CC-2205/.test(ccSearch), hasFacilities: /CC-4021/.test(ccSearch) }),
   );
 
+  // roadmap Explore, po-edit spike: before this, po-app had NO way to fix a
+  // mistake on a record — only approve/reject/mass-recost existed. Field-
+  // editor's own contract: 422 keeps values and marks only the bad field.
+  const badEdit = await post('/pos/PO-88213/edit', [['vendor', ''], ['cc', 'CC-2205'], ['amount', '99']]);
+  const badEditBody = await badEdit.text();
+  check(
+    'editing a PO with a missing vendor returns 422 and marks only that field',
+    badEdit.status === 422 &&
+      /id="edit-vendor"[^>]*aria-invalid="true"/.test(badEditBody) &&
+      !/id="edit-cc"[^>]*aria-invalid/.test(badEditBody),
+    JSON.stringify({ status: badEdit.status }),
+  );
+
+  // The success path: field really changes, and shows up on a fresh GET —
+  // not just in the redirect target's own response. redirect: 'manual' is
+  // load-bearing here: `post()`'s plain fetch() follows redirects by
+  // default, so a first version of this check read the FOLLOWED response's
+  // 200 as the edit's own status — caught immediately (this exact mistake
+  // was already avoided in the /pos/new checks above, missed here first).
+  const goodEdit = await fetch(`${base}/pos/PO-88213/edit`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams([['vendor', 'Gate Edit Vendor'], ['cc', 'CC-2205'], ['amount', '77.25']]).toString(),
+  });
+  const afterEdit = await fetch(`${base}/pos/PO-88213`).then(text);
+  check(
+    'editing a Pending PO with valid values actually changes the record',
+    goodEdit.status === 302 && /Gate Edit Vendor/.test(afterEdit),
+    JSON.stringify({ status: goodEdit.status, vendorChanged: /Gate Edit Vendor/.test(afterEdit) }),
+  );
+
+  // /patterns/staging's "already decided needs a reversal" rule, applied to
+  // single-record edit too — checked server-side, not just hidden by the
+  // client (the edit form only renders for Pending records, but a request
+  // can still arrive after someone else decided it in the meantime).
+  const decidedEdit = await post('/pos/PO-88211/edit', [['vendor', 'Should Not Apply'], ['cc', 'CC-4021'], ['amount', '1']]);
+  const afterDecidedEdit = await fetch(`${base}/pos/PO-88211`).then(text);
+  check(
+    'editing an already-decided PO is refused (409) and changes nothing',
+    decidedEdit.status === 409 && !/Should Not Apply/.test(afterDecidedEdit),
+    JSON.stringify({ status: decidedEdit.status }),
+  );
+
   /* ---- accessibility over the app's own routes ---- */
   const browser = await launchDocsBrowser();
   const page = await browser.newPage();

@@ -748,6 +748,44 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 68 — Explore: record editing dogfooded in po-app (2026-08-20)
+
+Dispatched by rule 6 — backlog still empty of anything not owner-blocked
+(third consecutive wake in this state). Continuing the dogfood-loop
+fallback in a fresh isolated worktree. Full report:
+`.roundtable/explore-po-edit-2026-08-20.md`.
+
+1. [x] **68.1 — `po-app` had no way to fix a mistake on a record at all.**
+       A Pending PO could be approved, rejected, or bulk-recosted, but a
+       typo'd vendor name or wrong amount had no correction path — not
+       even delete-and-recreate (no delete route exists). Applied
+       `/patterns/field-editor`'s shape (one row per field, one Save) to
+       the PO detail screen's Order fieldset, gated to Pending only — same
+       "already decided needs a reversal" rule `mass-change` already
+       established, now server-side-enforced on this path too (409 if the
+       record was decided between page load and submit, not just hidden
+       client-side). `POST /pos/:id/edit` matches field-editor's own
+       contract: 422 keeps values, marks only the bad field; success
+       redirects to the record. The shared cost-centre picker (66.1, then
+       67.2) reused a third time, zero new picker code.
+
+2. [x] **68.2 — Three new checks added to `check-po-app.mjs`**: the 422
+       field-preservation path, the success-and-persist path, and the
+       already-decided 409 guard. **Caught a real bug in the new success
+       check's own first version**: `fetch()`'s default
+       `redirect: 'follow'` silently followed the 302 and reported the
+       FOLLOWED response's 200 as the edit's own status — the exact
+       mistake already avoided one check earlier in the same file (the
+       `/pos/new` success check), missed on the very next similar check
+       anyway. Fixed with `redirect: 'manual'`, same as its neighbor.
+
+**Exit:** graduated — landed directly in `examples/po-app` and
+`apps/docs/scripts/check-po-app.mjs` (no `packages/core` changes, no
+framework CHANGELOG entry). Verified live: edit→save→redirect→persisted,
+edit-with-bad-field→422 values preserved, edit-already-decided→409
+confirmed unchanged via a separate GET, both themes. `check:po-app` 13/13
+(10 pre-existing + 3 new).
+
 ## Slice 67 — Explore: PO creation dogfooded in po-app, a dead link fixed (2026-08-20)
 
 Dispatched by rule 6 — backlog still empty of anything not owner-blocked

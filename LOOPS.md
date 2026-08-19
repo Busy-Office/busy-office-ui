@@ -393,6 +393,19 @@ progress, and freeze-graduation rounds).
   an addition once the list exceeded one page). Full report:
   `.roundtable/explore-po-create-2026-08-20.md`.
 
+- ~~Record editing (field-editor) in po-app~~ — spiked 2026-08-20 in an
+  isolated worktree (removed; finished file copied over). **Graduated.**
+  po-app had NO way to fix a mistake on a Pending record at all before
+  this — only approve/reject/mass-recost existed, and no delete route
+  either. field-editor's own shape (one row per field, one Save) applied
+  to the PO detail screen's Order fieldset, gated to Pending; the shared
+  cost-centre picker reused a third time. Added 3 new checks to
+  `check-po-app.mjs` — one caught a real bug in ITS OWN first version
+  again: `fetch()`'s default `redirect: 'follow'` silently followed a 302
+  and reported the FOLLOWED response's 200, the exact mistake already
+  avoided one check earlier in the same file. Full report:
+  `.roundtable/explore-po-edit-2026-08-20.md`.
+
 ---
 
 ## Operating rules (every loop obeys)
