@@ -1,0 +1,130 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Review-screen anatomy">
+  <p class="demo-note">
+    Three patterns show a record for review — <a href={base + '/patterns/record-detail'}>record
+    detail</a>, <a href={base + '/patterns/object-page'}>object page</a>, and
+    <a href={base + '/patterns/approval'}>approval</a> — and they were built
+    independently, for different reasons, in different slices. Compared
+    afterward, they had already converged on the same four regions. That
+    convergence is the contract on this page: not a new pattern, and not a new
+    component — the decision a screen author no longer has to make twice.
+  </p>
+
+  <section class="demo">
+    <h2>The four regions</h2>
+    <div class="bo-data-table-container" tabindex="0">
+    <table class="bo-data-table">
+      <thead>
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col">What it answers</th>
+          <th scope="col">Built from</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Identity</strong></td>
+          <td>What is this, and what state is it in right now?</td>
+          <td><a href={base + '/components/badge'}>Badge</a> for status, a title</td>
+        </tr>
+        <tr>
+          <td><strong>Facts</strong></td>
+          <td>The small fixed set the reader needs before doing anything else.</td>
+          <td><a href={base + '/components/kv'}>Kv</a></td>
+        </tr>
+        <tr>
+          <td><strong>History</strong></td>
+          <td>How did it get here — what happened, in order?</td>
+          <td><a href={base + '/components/approval-workflow'}>Timeline or audit trail</a></td>
+        </tr>
+        <tr>
+          <td><strong>Action</strong></td>
+          <td>What can the reader do about it, and where does that live on screen?</td>
+          <td><a href={base + '/components/form'}>Form actions</a>, wizard controls, or nothing (read-only)</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="bo-u-text-muted">All four are shipped primitives. This page names
+    an order and a set of slots — it adds no CSS and no component.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Which of the three patterns — decided by two questions, not by taste</h2>
+    <p>The content that actually removes a decision from a screen author isn't
+    the four regions above — every ERP detail screen already has some version
+    of them. It's knowing <strong>which pattern to reach for</strong>, before
+    writing any markup:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Is the current moment itself a decision someone must make</strong>
+      — approve, reject, sign off? Use
+      <a href={base + '/patterns/approval'}>approval</a>. Its anatomy is the
+      same four regions, but History and Action share the screen with a queue,
+      because the reader is choosing, not just reading.</li>
+      <li><strong>Otherwise: how long is the record?</strong> Short enough to
+      take in on one scroll (a handful of facts, a short history) →
+      <a href={base + '/patterns/record-detail'}>record detail</a>. Long enough
+      that the reader needs to jump between sections rather than scroll through
+      all of them → <a href={base + '/patterns/object-page'}>object page</a>,
+      which adds in-page navigation and a collapsing header — built because a
+      short-record layout stops working past a certain length (roadmap 52.2).</li>
+    </ol>
+    <p class="bo-u-text-muted">Answering those two questions is the whole
+    choice. Nothing below this page is a third option — a screen that doesn't
+    fit either fork is a new pattern, not a variant of these three, and earns
+    its own Accept criteria the way every pattern here does.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Where each pattern spends the four regions differently</h2>
+    <div class="bo-data-table-container" tabindex="0">
+    <table class="bo-data-table">
+      <thead>
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col"><a href={base + '/patterns/record-detail'}>Record detail</a></th>
+          <th scope="col"><a href={base + '/patterns/object-page'}>Object page</a></th>
+          <th scope="col"><a href={base + '/patterns/approval'}>Approval</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Identity</td>
+          <td>Breadcrumb + title</td>
+          <td>Sticky header, title + badge</td>
+          <td>Stepper's current step</td>
+        </tr>
+        <tr>
+          <td>Facts</td>
+          <td>Facts strip (<code>.bo-kv</code>)</td>
+          <td>Collapsing kv strip under the header</td>
+          <td>Record summary — just enough to decide without leaving</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>Record feed, then status timeline + audit trail</td>
+          <td>One section among several, reached via the anchor bar</td>
+          <td>Status timeline is the primary content, not a supporting one; audit trail is append-only underneath it</td>
+        </tr>
+        <tr>
+          <td>Action</td>
+          <td>Feed input (add a record: receipt, invoice, or note)</td>
+          <td>Sticky footer action bar</td>
+          <td>Decision cluster (Approve / Reject) opening a dialog, plus the queue for what's next</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <Related links={[
+    ["/patterns/record-detail", "Record detail"],
+    ["/patterns/object-page", "Object page"],
+    ["/patterns/approval", "Approval"],
+    ["/patterns/value-help", "Value help"],
+  ]} />
+</Gallery>

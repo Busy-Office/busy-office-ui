@@ -721,7 +721,7 @@ surfaces a skeleton they already converged on independently — Identity
 (status/title) → Facts (kv) → History (timeline/audit) → Action — which is
 stronger evidence than one person designing it top-down.
 
-1. [ ] **61.1 — Write the anatomy contract as its own concept page, not a new
+1. [x] **61.1 — Write the anatomy contract as its own concept page, not a new
        pattern.** Four regions, which component fills each, and — the part
        that actually removes a decision — **which of the three patterns to use,
        decided by two questions**: is the record short or long (→
@@ -733,6 +733,31 @@ stronger evidence than one person designing it top-down.
        Accept: each of `record-detail`, `object-page`, `approval` gets a
        one-line cross-reference in its own Anatomy section pointing at the
        contract page. Zero new components, zero new CSS.
+
+       **Landed 2026-08-19.** `/concepts/review-anatomy` — the four regions
+       (Identity/Facts/History/Action), which component fills each, and the
+       two-question decision (is the moment itself a decision → approval;
+       otherwise short vs long record → record-detail vs object-page). Each of
+       the three patterns cross-links back.
+
+       **Two claimed table cells were wrong before the page shipped, caught by
+       reading the anatomy prose rather than recalling it.** Facts for
+       `approval` is "Record summary" (amount, vendor, cost centre), not
+       "compact, above the queue" as first drafted; Action for `record-detail`
+       is the feed input, verified present in the live markup before being
+       claimed. Verifying every cell against the source it describes is the
+       same discipline as red-proving a gate, applied to a comparison table.
+
+       Zero new components, zero new CSS, as the Accept required — both tables
+       use `.bo-data-table` + `.bo-data-table-container`, which the layout gate
+       caught missing on first build (5px overflow at 390) before it shipped.
+
+       Verified live at 1440/390, both themes. Every gate green, axe 90 pages x
+       2 widths zero violations. Seven visual baselines shifted from the new
+       sidebar entry — six by ~104px (a row nudged down), one
+       (`concepts/density`) by the full sidebar height because that page's own
+       matrix shot happens to run long enough to touch it; confirmed by
+       screenshot that the page's own content never moved before accepting.
 
 2. [x] **61.2 — Refused: merge the three into one pattern.** Would undo the
        reason `object-page` exists — Slice 52 built its scroll-collapse
