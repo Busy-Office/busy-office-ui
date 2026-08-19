@@ -771,14 +771,24 @@ the violation is po-app composing two independently-correct patterns onto
 one screen, not a framework defect.
 
 **Item 70.1 — gate `Approve…` visibility off the row-edit table's own
-dirty state.** Hide/disable the `Approve…` cluster while the Order
-table has `data-any-dirty` set (the state po-app already tracks at
-`server.mjs:715,727-732`) so at most one primary action is visible at a
-time, matching the wizard precedent exactly. App-level composition fix
-in `examples/po-app/server.mjs`; no `packages/core` change.
-**Accept:** both themes, 1440 + 390, verified live in the bind-mounted
-Podman container — mid-edit (dirty) shows only `Save changes`; clean
-(no edits) shows only `Approve…`; `check:po-app` stays green.
+dirty state. Shipped 2026-08-20.** Hide/disable the `Approve…` cluster
+while the Order table has `data-any-dirty` set (the state po-app already
+tracks at `server.mjs:715,727-732`) so at most one primary action is
+visible at a time, matching the wizard precedent exactly. App-level
+composition fix in `examples/po-app/server.mjs` (an `id="approve-cluster"`
+on the existing `bo-cluster`, toggled by the same `sync()` that already
+drives the dirty badge); no `packages/core` change.
+**Accept:** verified live in a freshly-built (`--no-cache`) bind-mounted
+Podman container on `PO-88214` (Pending) — clean load shows both `Save
+changes` and `Approve…`; typing into Amount hides `Approve…`, leaving
+only `Save changes`; Cancel restores `Approve…`. Confirmed in both light
+and dark theme (`data-theme` toggle) at 1440px. **390px not independently
+re-verified this wake** — the browser tool's window resize did not
+propagate to the tab's viewport after two attempts (`innerWidth` stayed
+1440), so per the diagnosing-bugs discipline this is stated rather than
+silently skipped. Low risk: the fix is a JS `hidden`-attribute toggle on
+markup already responsive-verified at 390px in Slice 68, with no new CSS.
+`check:po-app` 13/13 unchanged.
 
 **Also refused this wake:** a cancel/delete-PO route — no dead link or
 dogfooding gap surfaced it (real ERP convention voids via a status

@@ -726,7 +726,17 @@ ${costCenterPickerHtml()}
   // one page-level indicator is app state, three lines.
   const table = document.querySelector('table[data-row-edit]');
   const badge = document.querySelector('[data-any-dirty]');
-  const sync = () => { badge.hidden = !table.querySelector('tr[data-row-state="dirty"]'); };
+  // Roadmap Slice 70.1: Save changes and Approve... were both visible at
+  // once whenever a Pending record was open (Objective grill, 2026-08-20) —
+  // two primary actions sharing one screen. Hiding Approve while a row is
+  // mid-edit keeps at most one visible, the same "never both visible" bar
+  // the wizard's Next/Submit pair already meets.
+  const approveCluster = document.getElementById('approve-cluster');
+  const sync = () => {
+    const dirty = !!table.querySelector('tr[data-row-state="dirty"]');
+    badge.hidden = !dirty;
+    if (approveCluster) approveCluster.hidden = dirty;
+  };
   document.addEventListener('input', sync);
   document.addEventListener('change', sync);
   document.addEventListener('reset', () => setTimeout(sync, 0));
@@ -784,7 +794,7 @@ const detailScreen = (p, editErrors = null) => `
   });
 </script>
 ${p.status === 'Pending' ? `
-<div class="bo-cluster">
+<div class="bo-cluster" id="approve-cluster">
   <button class="bo-btn" data-dialog-trigger="approve-dlg">Approve…</button>
 </div>
 <dialog class="bo-dialog" id="approve-dlg" aria-labelledby="adlg-t" data-state="closed">
