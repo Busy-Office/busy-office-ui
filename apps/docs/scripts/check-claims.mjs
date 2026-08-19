@@ -829,6 +829,77 @@ for (const theme of ['light', 'dark']) {
   );
 }
 
+/* Three shipped BEHAVIORS with no executable claim (roadmap 45.1).
+   The surface review's Evidence column found them: the code ships, the contract
+   is documented, and nothing ever ran it. That is the exact shape of the tabs
+   P0 — nine tabs sharing one panel worked on load and broke on the first click,
+   past a review, a build and an axe run. Real clicks here, not dispatched
+   events, because a synthetic event on `document` matches no delegated handler.
+
+   Measured while writing these: only 5 of 21 behaviors had any claim coverage
+   at all. The rest are queued; these are the three whose failure would be
+   silent. */
+
+// tree-table: the toggle collapses its subtree and says so.
+await visit('/components/tree-table/', { width: 1440 });
+const treeBefore = await page.evaluate(() => {
+  const t = document.querySelector('table.bo-tree-table');
+  const btn = t.querySelector('.bo-tree-table__toggle');
+  return {
+    expanded: btn.getAttribute('aria-expanded'),
+    visibleRows: [...t.querySelectorAll('tbody tr')].filter((r) => !r.hidden).length,
+  };
+});
+await page.click('table.bo-tree-table .bo-tree-table__toggle');
+await new Promise((r) => setTimeout(r, 150));
+const treeAfter = await page.evaluate(() => {
+  const t = document.querySelector('table.bo-tree-table');
+  const btn = t.querySelector('.bo-tree-table__toggle');
+  return {
+    expanded: btn.getAttribute('aria-expanded'),
+    visibleRows: [...t.querySelectorAll('tbody tr')].filter((r) => !r.hidden).length,
+  };
+});
+check(
+  'tree-table: collapsing a branch hides its children AND flips aria-expanded',
+  treeBefore.expanded === 'true' && treeAfter.expanded === 'false' &&
+    treeAfter.visibleRows < treeBefore.visibleRows,
+  JSON.stringify({ treeBefore, treeAfter }),
+);
+
+// quantity: the stepper actually steps, and respects its own min.
+await visit('/components/quantity/', { width: 1440 });
+const qty = await page.evaluate(() => {
+  const root = document.querySelector('.bo-quantity');
+  const input = root.querySelector('.bo-quantity__input');
+  input.value = String(Number(input.min || 1));
+  return { min: input.min || '1', start: input.value };
+});
+await page.click('.bo-quantity [data-quantity-step="1"]');
+await new Promise((r) => setTimeout(r, 100));
+const afterUp = await page.evaluate(() => document.querySelector('.bo-quantity__input').value);
+await page.click('.bo-quantity [data-quantity-step="-1"]');
+await page.click('.bo-quantity [data-quantity-step="-1"]');
+await new Promise((r) => setTimeout(r, 100));
+const afterDown = await page.evaluate(() => document.querySelector('.bo-quantity__input').value);
+check(
+  'quantity: the stepper steps, and will not go below its own min',
+  Number(afterUp) === Number(qty.start) + 1 && Number(afterDown) >= Number(qty.min),
+  JSON.stringify({ ...qty, afterUp, afterDown }),
+);
+
+// alert: dismiss removes the alert it belongs to, and only that one.
+await visit('/components/alerts/', { width: 1440 });
+const alertBefore = await page.evaluate(() => document.querySelectorAll('.bo-alert').length);
+await page.click('.bo-alert__dismiss');
+await new Promise((r) => setTimeout(r, 150));
+const alertAfter = await page.evaluate(() => document.querySelectorAll('.bo-alert').length);
+check(
+  'alert: dismiss removes exactly one alert',
+  alertBefore > 0 && alertAfter === alertBefore - 1,
+  JSON.stringify({ alertBefore, alertAfter }),
+);
+
 await browser.close();
 server.close();
 

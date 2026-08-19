@@ -41,6 +41,21 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
     screen reader meets it.</p>
   </section>
   <section class="demo">
+    <h2>Dismissible — the button is the whole API</h2>
+    <p>The page said "dismiss buttons work via <code>initAlerts()</code>" and showed
+    none. Here is one, live: click the × and this alert is removed from the DOM.</p>
+    <div class="bo-alert bo-alert--warning" role="status">
+      <strong class="bo-alert__title">Rate card expires in 3 days</strong>
+      Renew it before the next billing run.
+      <button class="bo-alert__dismiss" type="button" aria-label="Dismiss">×</button>
+    </div>
+    <p class="bo-u-text-muted">Any <code>.bo-alert__dismiss</code> inside a
+    <code>.bo-alert</code> removes it — no id, no wiring, no per-alert init. The
+    behaviour is document-delegated, which is why a toast injected a minute from now is
+    covered too.</p>
+  </section>
+
+  <section class="demo">
     <h2>Toast recipe</h2>
     <p class="bo-u-text-muted">Toasts are ephemeral, so the sample is a trigger, not a
     static block — click it to see the real thing render, dismiss, and go away.</p>
