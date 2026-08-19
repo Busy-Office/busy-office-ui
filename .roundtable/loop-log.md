@@ -448,3 +448,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-20 01:03 · Continue · build · 58.1 batch 1 — design-grill on reporting-dashboard/app-launch/record-detail; fixed a real ID mismatch bug in record-detail, reworded 3 openers, reordered dashboard hierarchy · landed · 72fd8c7
 - 2026-08-20 01:09 · Objective · grill · Objective grill: Slices 51-63 — clean window, no new items, base-mistake caught before use · triaged · c05167a
 - 2026-08-20 01:37 · Continue · build · 58.1 batch 2 — design-grill on settings-admin/approval/staging; reworded 2 openers, softened 2 Anatomy/States over-promises, found + queued a measured stepper clipping bug (58.3) · landed · 233981c
+- 2026-08-20 01:52 · Continue · build · 58.1 batch 3 — design-grill on bulk-actions/detail-form/editable-grid/field-editor; 2 all-keep, 2 Anatomy rewords, 1 opener fix, found + queued a real initRowEdit() Cancel/error-state bug (58.4) · landed · f3ce62e
