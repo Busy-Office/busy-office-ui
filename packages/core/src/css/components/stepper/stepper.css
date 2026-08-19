@@ -62,12 +62,16 @@
     --bo-stepper-marker-fg: var(--bo-color-text-inverse);
   }
 
+  /* Wraps rather than truncates: a squeezed mid-range container (measured
+     58.3 — 558px container, 4 steps, "Approvers"/"Line items" both clipped
+     by 2-4px with ellipsis) silently drops the one thing a stepper exists
+     to say — which step you're on. Wrapping to a second line costs layout
+     height, never content; align-items: center on the step keeps the
+     marker centered against however tall the label gets. */
   .bo-stepper__label {
     font-size: var(--bo-density-font-size);
     color: var(--bo-color-text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
   }
 
   .bo-stepper__step[aria-current="step"] .bo-stepper__label {

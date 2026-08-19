@@ -102,9 +102,25 @@ function baselineField(field: RowField): void {
   }
 }
 
+/* aria-invalid is never set by this behavior — it's server/app-rendered
+   content (a 422 re-render, per every pattern's own Data contract) — so
+   reading it live is always accurate regardless of when it's checked. */
+function hasInvalidCell(row: HTMLElement): boolean {
+  return !!row.querySelector('[aria-invalid="true"]');
+}
+
 function setDirty(row: HTMLElement, dirty: boolean): void {
   if (dirty) {
     row.setAttribute('data-row-state', 'dirty');
+  } else if (hasInvalidCell(row)) {
+    // 58.4: going clean must not silently drop a surviving cell error. Cancel
+    // restores fields to their DEFAULT value, which for a row that started
+    // invalid (a 422 re-render) is still invalid — the aria-invalid cell and
+    // its message survive Cancel untouched (this behavior never owns them),
+    // so the row-level tint must survive with them. Save falls through here
+    // too: until the app's own bo:row-save listener confirms success and
+    // clears aria-invalid itself, the error the row had is still real.
+    row.setAttribute('data-row-state', 'error');
   } else {
     row.removeAttribute('data-row-state');
   }

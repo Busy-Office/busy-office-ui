@@ -748,6 +748,57 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 65 — Standardize: two framework bugs the design-grill sweep queued (2026-08-20)
+
+Dispatched by the counter at 4/4 (OVERDUE). Both queued items (58.3, 58.4)
+were explicitly framed when found as needing this treatment — a considered
+fix plus every call-site verified, not a same-wake patch — so this sweep
+resolved them directly rather than scanning for new drift first.
+
+1. [x] **58.3 landed.** `.bo-stepper__label` swapped `white-space: nowrap`
+       + `text-overflow: ellipsis` for `overflow-wrap: anywhere` (no
+       `white-space` override, so the browser wraps naturally first and
+       only breaks mid-word as a last resort). A squeezed label now wraps
+       to a second line instead of silently dropping characters — no
+       silent content loss, the same principle this project applies
+       everywhere else (two-channel state, calendar reasons, etc.).
+       Verified at the exact measured repro (558px container, 4 steps):
+       `scrollWidth === clientWidth` on every label, zero clipping. All 4
+       call sites checked live (`wizard`, `approval`, the `stepper`
+       component page, `container-queries` — prose-only, no live instance)
+       plus the existing 480px hide-labels tier re-verified untouched.
+       Both themes.
+
+       **Re-scan for the same drift class**: grepped every component CSS
+       file for `text-overflow: ellipsis` — stepper was the only user, and
+       it's fixed. Clean.
+
+2. [x] **58.4 landed.** `setDirty(row, false)` in `row-edit.ts` now checks
+       `hasInvalidCell(row)` (any `[aria-invalid="true"]` descendant) before
+       deciding what to leave on `data-row-state`: `"error"` if one
+       survives, cleared entirely otherwise. Fixes Cancel (restores a field
+       to its original — possibly still-invalid — value) and Save
+       (baselines optimistically before any async confirmation) uniformly,
+       since both funnel through the same function. Verified all three
+       paths live: Cancel on an invalid row → `data-row-state="error"`,
+       value restored to 450, message still visible, tint visible in both
+       themes; Cancel on a **valid** row (regression check) → state clears
+       to `null` as before; Save on a still-invalid row → `"error"` persists
+       (correct — nothing confirmed the fix yet). All 5 real call sites
+       (`detail-form`, `editable-grid`, `field-editor`, `inline-editing`,
+       `data-table`) spot-checked live, no regression.
+
+       **Re-scan for the same drift class**: grepped every other behavior
+       for `removeAttribute` calls near a competing state — none share
+       `data-row-state`'s shape (one attribute serving three meanings:
+       dirty/warning/error) combined with an externally-set validation
+       signal. `row-edit.ts` was the only instance. Clean.
+
+**Exit:** both queued items landed, both re-scanned for further instances of
+their own drift class, both scans clean — no third round needed. `npm run
+build` gates green (stylelint, claims, page-shape, link-check, markup, axe
+90 pages x 2 widths zero violations), verified live in both themes.
+
 ## Slice 64 — from the Objective grill, Slices 51-63 (2026-08-20)
 
 Full findings: `.roundtable/grill-objective-slices51-63-2026-08-20.md`. Base
@@ -1198,8 +1249,9 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        One batch per wake at most — a grill that shares a wake with build work
        gets rushed, and rushed verdicts are taste, not evidence.
 
-2. [ ] **58.3 — Standardize the `stepper` component's label-clipping gap at
-       mid-range container widths.** Found during 58.1 batch 2's `approval`
+2. [x] **58.3 — Standardize the `stepper` component's label-clipping gap at
+       mid-range container widths.** — landed 2026-08-20 (Slice 65). Found
+       during 58.1 batch 2's `approval`
        grill: at a `.bo-stepper` container width of 558px (above the
        component's own 480px/30rem "hide labels" threshold), two of four
        step labels still overflow by 2-4px and get ellipsis-truncated,
@@ -1210,8 +1262,9 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        the fix doesn't regress the existing 480px hide-labels tier; verified
        live, both themes.
 
-3. [ ] **58.4 — `initRowEdit()`'s Cancel clears `data-row-state` without
-       checking for a surviving `aria-invalid` cell.** Found during 58.1
+3. [x] **58.4 — `initRowEdit()`'s Cancel clears `data-row-state` without
+       checking for a surviving `aria-invalid` cell.** — landed 2026-08-20
+       (Slice 65). Found during 58.1
        batch 3's `editable-grid` grill, by operating the live demo, not
        reading source: a row with a still-invalid cell restores to its
        ORIGINAL (still-invalid) value on Cancel, yet loses its row-level
