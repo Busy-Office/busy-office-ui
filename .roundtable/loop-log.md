@@ -415,3 +415,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 19:04 · Standardize · tidy · 50.1 — master-detail's 212-char inline layout moved to a scoped style block, matching object-page · landed · 3608463
 - 2026-08-19 19:04 · Standardize · tidy · 50.2 — initAnchorNav listened on a shell class; now capture-phase scroll, proved dead-vs-follows · landed · 3608463
 - 2026-08-19 19:04 · Standardize · tidy · 50.3 — dialog guard name + root-param behaviours judged not-drift, reason recorded · logged · 3608463
+- 2026-08-19 19:10 · Objective · grill · Objective grill 45-50 — surface flat 4 grills, 10:1 instruments:framework, telemetry blind to refusals · logged · 932e2c5
