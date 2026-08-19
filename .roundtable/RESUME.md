@@ -27,6 +27,9 @@ Last updated 2026-08-18 after 37.1 landed.
 
 ## Open questions awaiting the owner
 
+- **Slice 48 — SAP Object Page.** Triaged 2026-08-19 with Accept criteria. The
+  open question is SCOPE: the whole floorplan, or just the anchor bar on the
+  existing `/patterns/record-detail`? Queued behind the 45.x items, not started.
 - **30.0** — the "advanced editable table with different data types" half is
   still ambiguous. (The "horizontal tabs" half was answered 2026-08-18: it meant
   **vertical** tabs, shipped as 36.1.)
