@@ -5,12 +5,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: settings &amp; admin">
   <p class="demo-note">
-    An admin screen composed entirely from existing components — <code>.bo-tabs</code>
-    to split General/Users/Notifications, <code>.bo-form-section</code> fieldsets,
-    <code>.bo-checkbox</code> for on/off preferences (there is no separate "switch"
-    component — a labeled checkbox already covers the same setting, per the "one
-    component, many settings" principle), and the data table for the user list.
-    Nothing new to learn.
+    <strong>Who uses it</strong>: a workspace admin, occasionally a first-time
+    setup wizard. <strong>How often</strong>: rarely per person, but every
+    workspace has one. <strong>What "done" looks like</strong>: a section's
+    values saved, or an unsaved change clearly marked before the admin
+    navigates away. Composed entirely from existing components —
+    <code>.bo-tabs</code> to split General/Users/Notifications,
+    <code>.bo-form-section</code> fieldsets, <code>.bo-checkbox</code> for
+    on/off preferences (there is no separate "switch" component — a labeled
+    checkbox already covers the same setting, per the "one component, many
+    settings" principle), and the data table for the user list. Nothing new
+    to learn.
   </p>
   <section class="demo">
     <div class="bo-tabs">
@@ -133,7 +138,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <li><strong>Section navigation</strong> — tabs or a sub-sidebar; each section is its own form and saves independently.</li>
       <li><strong>Form sections</strong> — <code>.bo-form-section</code> fieldsets grouping related settings.</li>
       <li><strong>Save bar</strong> — sticky <code>.bo-form-actions</code>, scoped to the current section.</li>
-      <li><strong>Danger zone</strong> — destructive settings visually separated, each behind a confirm dialog.</li>
+      <li><strong>Danger zone</strong> — destructive settings visually separated, each behind a confirm dialog. Not shown in the demo below (nothing in this workspace's settings is destructive); the contract is specified in this page's Data contract section, under the reset endpoint, for a screen that needs one.</li>
     </ol>
   </section>
 
@@ -161,7 +166,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Unsaved changes</td><td>a dirty marker in the save bar; warn on section switch, not just on unload</td></tr>
           <tr><td>Validation error</td><td>field-level messages; focus the first invalid control</td></tr>
           <tr><td>Read-only (non-admin)</td><td>render values as <a href={base + '/components/kv'}>key-value facts</a> and omit the save bar</td></tr>
-          <tr><td>Destructive action</td><td>confirm dialog naming the exact consequence and requiring the object name typed for irreversible ones</td></tr>
+          <tr><td>Destructive action <span class="bo-u-text-muted">(not in this demo)</span></td><td>confirm dialog naming the exact consequence and requiring the object name typed for irreversible ones</td></tr>
         </tbody>
       </table>
     </div>

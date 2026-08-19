@@ -43,11 +43,16 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
 ---
 <Gallery title="Pattern: approval workflow">
   <p class="demo-note">
-    The composed slice-3 screen: wizard stepper, status timeline, approval queue
-    (the data-table pattern you already know), and the audit trail. State always has
-    two channels: a visible non-color cue (the glyph) <em>and</em> programmatic state
-    (visually-hidden text / <code>aria-current</code>) — one without the other is a
-    defect.
+    <strong>Who uses it</strong>: an approver named in the chain — a manager,
+    a cost-centre owner, finance. <strong>How often</strong>: whenever a
+    document reaches their step, which for most approvers is a handful of
+    times a week. <strong>What "done" looks like</strong>: the decision
+    recorded, the next person notified, nothing silently stuck. The composed
+    slice-3 screen: wizard stepper, status timeline, approval queue (the
+    data-table pattern you already know), and the audit trail. State always
+    has two channels: a visible non-color cue (the glyph) <em>and</em>
+    programmatic state (visually-hidden text / <code>aria-current</code>) —
+    one without the other is a defect.
   </p>
   <section class="demo">
     <h2>Wizard stepper (document creation)</h2>
@@ -116,10 +121,10 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
   <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
-      <li><strong>Record summary</strong> — enough to decide without leaving: amount, vendor, cost centre.</li>
+      <li><strong>Record summary</strong> <span class="bo-u-text-muted">(not in this demo — see <a href={base + '/patterns/record-detail'}>record-detail</a> for the shape)</span> — enough to decide without leaving: amount, vendor, cost centre.</li>
       <li><strong>Status timeline</strong> — the chain so far, with the current step marked <code>aria-current="step"</code>.</li>
-      <li><strong>Decision cluster</strong> — Approve / Reject; Reject requires a reason, so both open the dialog.</li>
-      <li><strong>Dialog</strong> — the note (<a href={base + '/components/richtext'}>rich text</a>) plus optional extra approvers.</li>
+      <li><strong>Decision cluster</strong> <span class="bo-u-text-muted">(not in this demo)</span> — Approve / Reject; Reject requires a reason, so both open the dialog.</li>
+      <li><strong>Dialog</strong> <span class="bo-u-text-muted">(not in this demo — same shape as <a href={base + '/patterns/master-detail'}>master-detail</a>'s edit dialog)</span> — the note (<a href={base + '/components/richtext'}>rich text</a>) plus optional extra approvers.</li>
       <li><strong>Audit trail</strong> — every decision with actor, timestamp and note; append-only.</li>
     </ol>
     <p class="bo-u-text-muted">Follows the <a href={base + '/concepts/review-anatomy'}>review-screen anatomy</a>

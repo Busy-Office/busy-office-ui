@@ -1026,8 +1026,69 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        accepted after attributing the growth (+38px at 1440, +117px at 390)
        to the deliberate opener and States-table text added.
 
-       **Batch 2 next: settings-admin, approval, staging** — item stays open
-       until all 19 are through, per its own "then the rest of the 19."
+       **Batch 2 landed 2026-08-20** — settings-admin, approval, staging.
+       Reports:
+       `.roundtable/design-grill-{settings-admin,approval,staging}-2026-08-20.md`.
+       Width caveat: `resize_window` would not hold 1440/390 this wake (stuck
+       at ~606px regardless of the requested size — an automation-tooling
+       fault, not a page defect); shared primitives were already proven at
+       true 1440/390 in batch 1 with zero CSS changes since, and the one
+       width-sensitive finding below was measured directly on the DOM
+       (`scrollWidth`/`clientWidth`), not eyeballed from a screenshot.
+
+       **A real, measured clipping bug in the shared `stepper` component,
+       queued rather than hot-fixed.** At a `.bo-stepper` container width of
+       558px — comfortably above the component's own 480px/30rem threshold
+       where it deliberately hides labels — two of four step labels still
+       overflow: "Line items" needs 66px, has 64px; "Approvers" (the CURRENT
+       step) needs 68px, has 64px. `flex: 1` splits width evenly regardless
+       of how much text each label needs, so any 4+-step wizard can hit
+       this at a mid-range width. Not patched here: `text-overflow:
+       ellipsis` is deliberate CSS, markers stay legible, and a real fix
+       (a second container-query tier, or an audit of every `.bo-stepper`
+       call site) deserves a dedicated Standardize pass, not a one-off. New
+       item: **58.3 — Standardize the `stepper` component's label-clipping
+       gap at mid-range container widths** (Accept: every existing
+       `.bo-stepper` call site checked at its own container width; the
+       528-568px band specifically, since that's where this was measured;
+       fix doesn't regress the existing 480px hide-labels tier).
+
+       **settings-admin and approval both had Anatomy/States sections
+       promising elements their own live demo never shows** — the third and
+       fourth instance of the shape `app-launch` had in batch 1. settings-
+       admin's "Danger zone" and States' "Destructive action" row describe a
+       confirm-dialog flow that doesn't exist anywhere on the page, despite
+       the Data contract already specifying the endpoint
+       (`POST /settings/:section/reset`). approval's Anatomy names a "Record
+       summary," "Decision cluster" (Approve/Reject), and "Dialog" that the
+       live demo never renders — the queue section is prose-only, pointing
+       to `invoice-list` for the shared bulk-approve table but nothing for
+       the Dialog, which is unique to this pattern. Reworded rather than
+       built: added an explicit "not in this demo" note plus a live pointer
+       to where the shape actually exists (approval → `record-detail` for
+       the summary shape, `master-detail` for the dialog shape; settings-
+       admin → this page's own Data contract section, named in prose since
+       this docs shell has no heading-anchor IDs to link to — checked first,
+       confirmed no page site-wide has one, so a `#data-contract` href would
+       have shipped a dead link).
+
+       **staging graded all-keep — the strongest page in this batch, and now
+       the reference example for the opener-reword triage**: it already uses
+       the "Who uses it / How often / What done looks like" format the other
+       two were missing. Its "no ok tint" choice, two-channel row verdicts,
+       and named-count Apply button are all stated with their own reasoning
+       in the page's copy, not left for a reader to infer — credited, not
+       searched past for something to flag.
+
+       Verified live (bind-mounted container), `npm run build` gates green
+       (page-shape, claims, link-check 8525 links, markup, calendar-grid,
+       data-hooks, learning-path, components-used, boost, notes), stylelint
+       clean, axe 90 pages x 2 widths zero violations.
+
+       **Batch 3 next: the rest of the 19** (alphabetical from here — no
+       more worst-suspect signal to rank by once the accumulation-prone
+       screens are through) — item stays open until all 19 are through, per
+       its own "then the rest of the 19."
 
        Accept, per screen: the skill's own contract — measured inputs
        (primary-action count, hierarchy scan, element census, state language,
@@ -1040,6 +1101,18 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
 
        One batch per wake at most — a grill that shares a wake with build work
        gets rushed, and rushed verdicts are taste, not evidence.
+
+2. [ ] **58.3 — Standardize the `stepper` component's label-clipping gap at
+       mid-range container widths.** Found during 58.1 batch 2's `approval`
+       grill: at a `.bo-stepper` container width of 558px (above the
+       component's own 480px/30rem "hide labels" threshold), two of four
+       step labels still overflow by 2-4px and get ellipsis-truncated,
+       including the CURRENT step's own label. Measured directly
+       (`scrollWidth`/`clientWidth`), not eyeballed. Accept: every existing
+       `.bo-stepper` call site checked at its own container width, the
+       528-568px band specifically since that's where this was measured;
+       the fix doesn't regress the existing 480px hide-labels tier; verified
+       live, both themes.
 
 ## Slice 60 — Standardize sweep: one gate hand-rolled its own exit contract (2026-08-19)
 
