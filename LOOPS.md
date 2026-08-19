@@ -325,6 +325,15 @@ Seed list — Explore pulls from here or adds to it:
   specific — split into its own item (9c / item 18), don't re-bundle it
   into a future warehouse-screen item.
 
+- ~~SAP Fiori "object page" floorplan~~ — spiked 2026-08-19 in an isolated
+  worktree (removed; nothing merged). **Graduated** as ROADMAP Slice 48.2-48.4.
+  Composes from shipped primitives with ZERO new CSS; the only new thing is a
+  ~20-line scroll-spy behavior. Do NOT re-spike the naive version: two sticky
+  regions at `inset-block-start: 0` collide (one wrapper, not two), and
+  `IntersectionObserver` + `rootMargin` marks the wrong section at 390px — spy
+  by measuring against the bar's own bottom edge. Full report:
+  `.roundtable/explore-object-page-2026-08-19.md`.
+
 **Seed list is now exhausted** (2026-08-14) — every idea above has been
 spiked/shipped/discarded. Per this playbook's own fallback ("or generate
 one from ERP gaps"), the next Explore dispatch generated one from the

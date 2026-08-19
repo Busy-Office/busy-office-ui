@@ -665,7 +665,7 @@ state.
 | multi-step / draft | partial | `.bo-stepper` |
 | **sticky object header** | **no** | — |
 | **anchor bar with scroll-spy** | **no** | — |
-| **page-level footer action bar** | **no** | — |
+| ~~page-level footer action bar~~ | **YES — I was wrong** | `.bo-form-actions` (see 48.1) |
 
 `position: sticky` appears in exactly two shipped files (`data-table` headers,
 `form-section`), so the sticky-region work is genuinely absent rather than
@@ -699,6 +699,60 @@ Verified at 1440 and 390, both themes.
 on the existing `/patterns/record-detail`; the expensive version is the full
 screen. Defaulting to **neither until answered**: this stays queued behind the
 open 45.x items rather than jumping the queue on the strength of a question.
+
+---
+
+**SPIKED 2026-08-19 (Explore, rule 6 — backlog empty). The scope question
+dissolves.** Full report: `.roundtable/explore-object-page-2026-08-19.md`.
+Isolated worktree, nothing merged.
+
+**The cheap version IS the whole thing.** The floorplan composes from shipped
+primitives with **zero new CSS**; the only new thing is one ~20-line scroll-spy
+behavior. Verified live at 1440 and 390 in both themes: correct section on load,
+correct after a jump, no overlap, zero page overflow.
+
+1. [ ] **48.1 — My gap table above was wrong: `.bo-form-actions` already IS the
+       sticky page-level action bar.** It is `position: sticky`,
+       `inset-block-end: 0`, print-suppressed, and sets
+       `scroll-padding-block-end: 6rem` so focus never lands under it.
+       `detail-form`'s own anatomy names it; I wrote "no" from an impression and
+       one grep would have shown otherwise. The row is struck through above.
+       Accept: no work — recorded so the next reader does not inherit the error.
+
+2. [ ] **48.2 — Build `/patterns/object-page` from primitives + `initAnchorNav()`.**
+       The anchor bar is `.bo-sidebar-nav` **unmodified** — it already styles
+       `[aria-current="page"]`, which is exactly the active marker. The object
+       header is `.bo-widget` + `.bo-kv` + `.bo-badge` + `.bo-amount` inside one
+       sticky wrapper.
+
+       **The predicted "rethink" was right about the shape and wrong about the
+       reason.** It is a behavior, not a component — but it is NOT
+       `.bo-tabs--vertical`: tabs HIDE the panels they are not showing, and an
+       object page is one continuous scroll where every section stays present.
+
+       Accept: full pattern recipe (opener / screen / anatomy / data contract /
+       states / components used + complexity); zero new CSS or a recorded reason
+       why composition failed; `initAnchorNav()` documented like every other
+       behavior; executable claims for the spy AND the sticky stack, red-proved.
+       Verified at 1440 and 390, both themes.
+
+3. [ ] **48.3 — Two findings the build item must not re-derive.**
+       (a) **Two sticky regions collide.** Header and bar each at
+       `inset-block-start: 0` both pin to the SAME offset — measured 77px at
+       1440, 181px at 390, overlapping in all four contexts. One sticky WRAPPER
+       around both, not two sticky elements. Invisible until measured.
+       (b) **`IntersectionObserver` + `rootMargin` is the wrong spy.** It worked
+       at 1440 and marked the WRONG section at 390, with nothing current on load
+       at any width — the margins guess at viewport shape. Measuring against the
+       bar's own bottom edge is viewport-independent and was correct in all four.
+
+4. [ ] **48.4 — OPEN sub-question: horizontal or vertical anchor bar?**
+       `.bo-sidebar-nav` is a *sidebar*, so used as an anchor bar it stacks
+       vertically; the Fiori idiom is horizontal. A horizontal bar means
+       `.bo-cluster` + links, which loses the `[aria-current="page"]` styling
+       sidebar-nav gives for free. Deliberately unresolved — the spike stopped
+       rather than guessing. Accept: decide with a rendered comparison, not in
+       prose.
 
 ## Slice 47 — Standardize sweep: the widths we verify at (2026-08-19)
 
