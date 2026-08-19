@@ -409,3 +409,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 17:30 · Standardize · tidy · 49.6 — visual-regression --update was all-or-nothing; added --only, restored 14 unrelated baselines · landed · 50a32ba
 - 2026-08-19 17:47 · Continue · build · 45.6 batch 3 — money (lossless), file-dropzone, load-more; 59->65; all 21 init behaviours claimed, item CLOSED · landed · 0f1ad4b
 - 2026-08-19 17:55 · Explore · explore · SAP Object Page floorplan spiked in a worktree — zero new CSS, one scroll-spy behavior; graduated as 48.2-48.4 · triaged · 9342be6
+- 2026-08-19 18:07 · Continue · build · 48.4 — anchor bar decided by rendering 4 variants: horizontal, one line, scrollable; B spills a fixed-height control · landed · 795825e

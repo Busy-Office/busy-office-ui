@@ -33,7 +33,7 @@ const dist = DIST;
 const baseDir = join(root, 'visual-baselines');
 const diffDir = join(root, 'visual-diffs');
 const update = process.argv.includes('--update');
-/* `--only=<substring>` narrows an update to the shots whose name matches.
+/* `--only=<prefix>` narrows an update to the shots whose NAME STARTS WITH it.
    Without it `--update` is all-or-nothing, and accepting ONE intended change
    rewrites all 40 baselines: the homepage density fix (Standardize, 2026-08-19)
    silently restaged 14 unrelated 1440px shots that differed only by sub-budget
@@ -137,7 +137,12 @@ for (const theme of THEMES) {
       const shot = await page.screenshot({ fullPage: true });
       const basePath = join(baseDir, name);
       const exists = await access(basePath).then(() => true, () => false);
-      if (update && only && !name.includes(only)) {
+      /* PREFIX match, not substring. Substring was the first version and it
+         could not narrow anything: every shot name starts with `_`, so
+         `--only=_-` (the home page) also matched
+         `_components_data-table_-dark-1440.png`, and an update meant to accept
+         4 shots rewrote all 40 (Standardize follow-up, 2026-08-19). */
+      if (update && only && !name.startsWith(only)) {
         console.log(`  skipped (--only=${only}): ${name}`);
         continue;
       }

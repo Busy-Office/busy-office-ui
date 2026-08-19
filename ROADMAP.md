@@ -711,7 +711,7 @@ primitives with **zero new CSS**; the only new thing is one ~20-line scroll-spy
 behavior. Verified live at 1440 and 390 in both themes: correct section on load,
 correct after a jump, no overlap, zero page overflow.
 
-1. [ ] **48.1 — My gap table above was wrong: `.bo-form-actions` already IS the
+1. [x] **48.1 — My gap table above was wrong: `.bo-form-actions` already IS the
        sticky page-level action bar.** It is `position: sticky`,
        `inset-block-end: 0`, print-suppressed, and sets
        `scroll-padding-block-end: 6rem` so focus never lands under it.
@@ -719,7 +719,7 @@ correct after a jump, no overlap, zero page overflow.
        one grep would have shown otherwise. The row is struck through above.
        Accept: no work — recorded so the next reader does not inherit the error.
 
-2. [ ] **48.2 — Build `/patterns/object-page` from primitives + `initAnchorNav()`.**
+2. [x] **48.2 — Build `/patterns/object-page` from primitives + `initAnchorNav()`.**
        The anchor bar is `.bo-sidebar-nav` **unmodified** — it already styles
        `[aria-current="page"]`, which is exactly the active marker. The object
        header is `.bo-widget` + `.bo-kv` + `.bo-badge` + `.bo-amount` inside one
@@ -736,7 +736,36 @@ correct after a jump, no overlap, zero page overflow.
        behavior; executable claims for the spy AND the sticky stack, red-proved.
        Verified at 1440 and 390, both themes.
 
-3. [ ] **48.3 — Two findings the build item must not re-derive.**
+       **Landed 2026-08-19.** `/patterns/object-page` ships with the full recipe.
+       `initAnchorNav()` is a real behavior in core (initCount 21 → 22), exported
+       from `@busy-office/ui/js` and registered in `behaviors.json`.
+
+       **Framework CSS added: none.** The page carries four page-level layout
+       declarations and nothing else — the sticky wrapper, the one-line
+       scrollable bar, and `scroll-margin-block-start` on the sections.
+
+       Seven claims, 65 → 72, each red-proved against the real bug:
+       - the bar follows the reader (breaks when the wrapper goes static),
+       - header and bar stay **stuck AND stacked**,
+       - labels stay inside their fixed-height control,
+       - print drops the action bar and keeps every section.
+
+       **One claim could not fail and was rewritten.** The first stack assertion
+       was `nav.top >= header.bottom`, which is true in ordinary document flow —
+       a static wrapper passed it. It now also requires the header to still be
+       on screen near the top, which fails BOTH ways it can break: chrome
+       scrolling away, and two stickies pinned to the same offset.
+
+       **And one red-proof took three attempts, which was the useful part.**
+       Removing `flex-wrap: nowrap` did NOT reproduce the spill — with wrapping
+       allowed the items move to a second line and each keeps its natural width,
+       so no text wraps. `.bo-pagination` is `display: flex` with no
+       `flex-wrap`, so its default nowrap is what makes items SHRINK and the
+       text wrap inside a fixed-height control. The injection that reproduces it
+       removes `overflow-x` and `white-space: nowrap` while LEAVING the default
+       — and it goes red at 390 only, which is correct.
+
+3. [x] **48.3 — Two findings the build item must not re-derive.** — applied
        (a) **Two sticky regions collide.** Header and bar each at
        `inset-block-start: 0` both pin to the SAME offset — measured 77px at
        1440, 181px at 390, overlapping in all four contexts. One sticky WRAPPER

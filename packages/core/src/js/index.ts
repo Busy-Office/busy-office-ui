@@ -6,6 +6,7 @@ export { initTableToolbar } from './behaviors/table-toolbar.js';
 export { initTableSum } from './behaviors/table-sum.js';
 export { initTreeTable } from './behaviors/tree-table.js';
 export { initLoadMore } from './behaviors/load-more.js';
+export { initAnchorNav } from './behaviors/anchor-nav.js';
 export { initCollapsibleCards } from './behaviors/collapsible-card.js';
 export { initSavedViews } from './behaviors/saved-views.js';
 export { initWizard } from './behaviors/wizard.js';

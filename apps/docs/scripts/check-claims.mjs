@@ -1404,6 +1404,71 @@ check(
   JSON.stringify({ before: loadMore.rowsBefore, after: loadMore.rowsAfter }),
 );
 
+/* object-page. Three runtime promises, each of which fails silently — the page
+   still renders and still scrolls in every failure mode (roadmap 48.2/48.3). */
+for (const w of WIDTHS) {
+  await visit('/patterns/object-page/', { width: w });
+  const op = await page.evaluate(async () => {
+    const nav = document.querySelector('[data-anchor-nav]');
+    const cur = () => nav.querySelector('[aria-current="page"]')?.getAttribute('href');
+    const start = cur();
+    document.getElementById('delivery').scrollIntoView();
+    await new Promise((r) => setTimeout(r, 400));
+    const after = cur();
+    /* The anchor bar's labels must not spill their own control. Height cannot
+       show this: .bo-pagination__btn is a FIXED --bo-density-control-height, so
+       a wrapped label renders taller than the box without changing it. Measure
+       the TEXT against the BUTTON. */
+    const spill = [...nav.querySelectorAll('a')].map((a) => {
+      const rg = document.createRange();
+      rg.selectNodeContents(a);
+      return Math.max(0, Math.round(rg.getBoundingClientRect().height - a.getBoundingClientRect().height));
+    });
+    const hdr = document.querySelector('.op-sticky header').getBoundingClientRect();
+    const nb = nav.getBoundingClientRect();
+    return {
+      start, after, maxSpill: Math.max(...spill),
+      /* Measured AFTER scrolling, and it takes three facts, because
+         `nav.top >= hdr.bottom` alone is true in document flow and so could
+         never fail on the bug it was written for — a static wrapper passed it.
+         Stuck: the header is still on screen near the top. Stacked: the bar
+         sits below it rather than pinned to the same offset. */
+      headerStillStuck: Math.round(hdr.top) >= -1 && Math.round(hdr.top) < 200,
+      barBelowHeader: Math.round(nb.top) >= Math.round(hdr.bottom) - 1,
+      scrollableNavIsFocusable: nav.getAttribute('tabindex') === '0',
+    };
+  });
+  check(
+    `object-page @${w}: the anchor bar follows the reader`,
+    op.start === '#general' && op.after === '#delivery',
+    JSON.stringify(op),
+  );
+  check(
+    `object-page @${w}: header and anchor bar stay stuck AND stacked`,
+    op.headerStillStuck && op.barBelowHeader,
+    JSON.stringify(op),
+  );
+  check(
+    `object-page @${w}: anchor labels stay inside their fixed-height control`,
+    op.maxSpill === 0 && op.scrollableNavIsFocusable,
+    JSON.stringify(op),
+  );
+}
+
+// print: the sticky chrome and the action bar both drop out.
+await visit('/patterns/object-page/', { media: 'print' });
+await new Promise((r) => setTimeout(r, 200));
+const opPrint = await page.evaluate(() => ({
+  actions: getComputedStyle(document.querySelector('.bo-form-actions')).display,
+  sectionsVisible: [...document.querySelectorAll('.op-section')]
+    .every((s) => getComputedStyle(s).display !== 'none'),
+}));
+check(
+  'object-page: print drops the action bar and keeps every section',
+  opPrint.actions === 'none' && opPrint.sectionsVisible,
+  JSON.stringify(opPrint),
+);
+
 await browser.close();
 server.close();
 

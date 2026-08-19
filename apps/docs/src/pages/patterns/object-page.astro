@@ -1,0 +1,210 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SECTIONS = [
+  ['general', 'General information'],
+  ['items', 'Line items'],
+  ['delivery', 'Delivery'],
+  ['approvals', 'Approvals'],
+];
+
+const markup = `<div class="op-sticky">                        <!-- ONE sticky wrapper -->
+  <header class="bo-widget">…object header: title, status, key facts…</header>
+  <nav class="bo-pagination" data-anchor-nav tabindex="0" aria-label="Sections">
+    <a class="bo-pagination__btn" href="#general" aria-current="page">General information</a>
+    <a class="bo-pagination__btn" href="#items">Line items</a>
+  </nav>
+</div>
+
+<section class="bo-widget" id="general">…</section>
+<section class="bo-widget" id="items">…</section>
+
+<div class="bo-form-actions">                     <!-- already sticky + print-hidden -->
+  <button class="bo-btn bo-btn--secondary" type="button">Discard</button>
+  <button class="bo-btn" type="submit">Submit for approval</button>
+</div>`;
+---
+<Gallery title="Pattern: object page">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever owns one record end to end — a buyer
+    opening a PO, an approver checking it before signing; many times a day, one
+    object at a time. <strong>What "done" looks like</strong>: the reader can
+    see the object's status without scrolling, reach any section in one click,
+    and act on it from anywhere on the page. The long-record counterpart to
+    <a href={base + '/patterns/record-detail'}>record detail</a>: same content,
+    but too tall to take in at once, so it gains navigation of its own.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+
+    <div class="op-sticky">
+      <header class="bo-widget">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">PO-88213 · Acme Supply Co.</span>
+          <span class="bo-badge bo-badge--warning">Pending approval</span>
+        </div>
+        <div class="bo-widget__body">
+          <dl class="bo-kv bo-kv--rows">
+            <div><dt>Net value</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">18,940.50</span></span></dd></div>
+            <div><dt>Cost center</dt><dd><span class="bo-u-tabular">CC-4021</span></dd></div>
+            <div><dt>Requested delivery</dt><dd><span class="bo-u-tabular">15 Sep 2026</span></dd></div>
+          </dl>
+        </div>
+      </header>
+
+      <nav class="bo-pagination op-anchors" data-anchor-nav tabindex="0" aria-label="Sections">
+        {SECTIONS.map(([id, label], i) => (
+          <a class="bo-pagination__btn" href={`#${id}`} aria-current={i === 0 ? 'page' : undefined}>{label}</a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="bo-stack bo-stack--loose">
+      {SECTIONS.map(([id, label]) => (
+        <section class="bo-widget op-section" id={id}>
+          <div class="bo-widget__header"><span class="bo-widget__title">{label}</span></div>
+          <div class="bo-widget__body">
+            <p class="bo-u-text-muted">Facet content for {label.toLowerCase()} —
+            in a real screen this is a form section, a table, or a timeline.</p>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <div class="bo-form-actions">
+      <button class="bo-btn bo-btn--secondary" type="button">Discard</button>
+      <button class="bo-btn" type="button">Submit for approval</button>
+    </div>
+
+    <p class="bo-u-text-muted">Scroll the sections: the anchor bar follows,
+    marking the section you are in. Every part of this screen is a component
+    that already ships — the only thing added is
+    <code>initAnchorNav()</code>, and it writes no CSS.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Object header</strong> — a plain
+      <a href={base + '/components/dashboard'}>widget</a> carrying the title,
+      a <a href={base + '/components/badge'}>status badge</a>, and the key facts
+      as a <a href={base + '/components/kv'}>kv</a> list. Status is visible
+      before any scrolling, which is the whole reason the header sticks.</li>
+      <li><strong>Anchor bar</strong> —
+      <a href={base + '/components/pagination'}>pagination</a> markup used as
+      section navigation, because it already styles
+      <code>[aria-current="page"]</code>. Kept to one line and allowed to scroll
+      sideways; it carries <code>tabindex="0"</code> because a scrollable region
+      must be reachable by keyboard.</li>
+      <li><strong>One sticky wrapper</strong> — the header and the bar stick
+      <em>together</em>, in a single sticky element. Two sticky children both at
+      <code>inset-block-start: 0</code> pin to the same offset and overlap.</li>
+      <li><strong>Sections</strong> — one widget per facet, each with the
+      <code>id</code> the anchor bar targets.</li>
+      <li><strong>Action bar</strong> —
+      <code>.bo-form-actions</code>, which is already sticky, already hidden in
+      print, and already sets <code>scroll-padding-block-end</code> so focus
+      never lands under it.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <p>The screen is one <code>GET</code> of one object. Sections are regions of
+    that response, not separate requests — anchor navigation is in-page, so
+    there is no round trip when the reader moves between them.</p>
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong><code>GET /purchase-orders/:id</code></strong> → the whole
+      object. Every section id in the anchor bar must exist in the response, or
+      the link scrolls nowhere.</li>
+      <li><strong>Actions post the whole object</strong> —
+      <code>POST /purchase-orders/:id/submit</code> returns the re-rendered
+      page, or a 4xx with the object plus errors. Swap the whole
+      <code>&lt;main&gt;</code>: a partial swap would drop the sticky wrapper and
+      the reader's scroll position with it.</li>
+      <li><strong>A 409</strong> (someone else edited it) returns the current
+      object and a banner. Remember that htmx discards non-2xx by default —
+      see <a href={base + '/patterns/editable-grid'}>editable grid</a>.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <table class="bo-data-table">
+      <thead><tr><th scope="col">State</th><th scope="col">What the screen shows</th></tr></thead>
+      <tbody>
+        <tr><td>Loading</td><td>The header skeletons first — status is the thing the reader came for. Sections fill in after.</td></tr>
+        <tr><td>Empty section</td><td>The section stays in the anchor bar and says why it is empty. Removing it would make the bar change shape between records.</td></tr>
+        <tr><td>Error in one section</td><td>That section shows the error; the rest of the object stays readable. A whole-page error for one failed facet loses the record.</td></tr>
+        <tr><td>Read-only / no permission</td><td>The action bar is absent, not disabled — there is nothing to explain if the reader can never act.</td></tr>
+        <tr><td>Conflict (409)</td><td>Banner above the sections, object re-rendered, anchor position preserved.</td></tr>
+        <tr><td>Print</td><td>Sticky chrome and the action bar drop out; sections print in order as one continuous document.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span> —
+    overview &amp; shell tier.</p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Widget</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Kv</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/amount'}>Amount</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/pagination'}>Pagination</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/record-detail", "Record detail (short records)"],
+    ["/patterns/detail-form", "Detail form (editing)"],
+    ["/components/pagination", "Pagination"],
+    ["/concepts/js-behaviors", "JS behaviors"],
+  ]} />
+</Gallery>
+
+<style>
+  /* The floorplan's only page-level CSS, and all of it is layout.
+     One sticky wrapper: two sticky children at inset-block-start: 0 pin to the
+     SAME offset and overlap (measured 77px at 1440, 181px at 390). */
+  .op-sticky {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    background: var(--bo-color-bg-canvas);
+  }
+
+  /* One line, scrollable. Allowing the labels to wrap spills them out of the
+     button: .bo-pagination__btn takes --bo-density-control-height, a fixed
+     box, so a two-line label renders taller than the control that holds it
+     (measured 38px of text in a 36px button at 390). */
+  .op-anchors {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .op-anchors > .bo-pagination__btn {
+    white-space: nowrap;
+  }
+
+  /* Land below the sticky chrome, not underneath it. */
+  .op-section {
+    scroll-margin-block-start: 12rem;
+  }
+</style>
+
+<script>
+  import { initAnchorNav } from '@busy-office/ui/js';
+  initAnchorNav();
+</script>
