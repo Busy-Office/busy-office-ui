@@ -27,6 +27,8 @@ python3 scripts/loops/record_iteration.py --loop <Loop> --mode <mode> \
     --item "<what>" --outcome <outcome>
   # outcome: landed | released | logged | triaged | refused | reverted
   # "shipped" is rejected — it hid that nothing had reached npm (41.2)
+  # a refusal decided INSIDE this item, whatever the item's own outcome:
+  #   --also-refused "<what was refused, one line>"   (repeatable; 51.1/62.1)
 python3 scripts/loops/record_metric.py --name <metric> --value <n> --unit <u>   # when measured
 ```
 

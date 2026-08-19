@@ -249,6 +249,8 @@ python3 scripts/loops/record_iteration.py \
   --loop <Loop> --mode <mode> --item "<what>" --outcome <outcome>
   # outcome: landed | released | logged | triaged | refused | reverted
   # "shipped" is rejected — it hid that nothing had reached npm (41.2)
+  # a refusal decided INSIDE this item, whatever the item's own outcome:
+  #   --also-refused "<what was refused, one line>"   (repeatable; 51.1/62.1)
 ```
 This appends the human line to `.roundtable/loop-log.md` **and** inserts the row
 into the derived `.roundtable/loops.db`. Capture any measured number too, e.g.

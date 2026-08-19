@@ -26,6 +26,20 @@ read honestly.
 
 Historical rows are left alone. They record what was believed when written, and
 rewriting them would erase the very finding that motivated this.
+
+REFUSALS INSIDE A LANDED ITEM (roadmap 51.1/62.1). A refusal that happens
+*inside* an item whose overall outcome is "landed" or "triaged" was invisible
+to a query for outcome=refused — ROADMAP.md carried 41 mentions of "refuse" and
+the mirror had zero refused rows. --also-refused adds a SECOND row: same
+timestamp and commit, loop="Meta" (precedented: 2026-08-13's design rows),
+mode="refusal", outcome="refused", item=<what was refused, one line>.
+
+loop="Meta" is deliberate, not incidental: both dispatch counters in
+dispatch_status.py sum rows where loop=="Continue", so recording the refusal
+under the SAME loop as its parent item would double-count one round of work as
+two toward the Standardize/Objective thresholds — the identical silent-drift
+shape this project has been bitten by before. Repeatable: pass --also-refused
+more than once for more than one refusal in the same item.
 """
 import argparse
 import datetime
@@ -54,6 +68,11 @@ def main():
     ap.add_argument("--commit", default=None)
     ap.add_argument("--no-log", action="store_true",
                     help="insert the DB row only; don't append to loop-log.md")
+    ap.add_argument("--also-refused", action="append", default=[],
+                    metavar="TEXT",
+                    help="record a refusal that happened inside this item, as "
+                         "its own queryable row (loop=Meta, outcome=refused). "
+                         "Repeatable.")
     args = ap.parse_args()
 
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -68,23 +87,38 @@ def main():
             f'record_iteration: unknown outcome "{args.outcome}".\n'
             f'  Use one of: {", ".join(sorted(OUTCOMES))}'
         )
+    for text in args.also_refused:
+        if SEP in text:
+            raise SystemExit(
+                f'record_iteration: --also-refused text contains "{SEP.strip()}", '
+                "the log line separator — it would corrupt the markdown row.\n"
+                f"  offending text: {text!r}"
+            )
     commit = args.commit or head_sha()
 
+    rows = [(ts, args.loop, args.mode, args.item, args.outcome, commit)]
+    for text in args.also_refused:
+        rows.append((ts, "Meta", "refusal", text, "refused", commit))
+
     if not args.no_log:
-        line = SEP.join(["- " + ts, args.loop, args.mode or "-",
-                         args.item, args.outcome, commit or "-"])
         with open(LOG, "a", encoding="utf-8") as f:
-            f.write(line + "\n")
+            for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit in rows:
+                line = SEP.join(["- " + r_ts, r_loop, r_mode or "-",
+                                 r_item, r_outcome, r_commit or "-"])
+                f.write(line + "\n")
 
     conn = connect()
-    conn.execute(
-        "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
-        (ts, args.loop, args.mode, args.item, args.outcome, commit),
-    )
+    for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit in rows:
+        conn.execute(
+            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (r_ts, r_loop, r_mode, r_item, r_outcome, r_commit),
+        )
     conn.commit()
     conn.close()
     print(f"recorded: {ts} · {args.loop} · {args.mode} · {args.item} · {args.outcome}")
+    for text in args.also_refused:
+        print(f"  + refused: {text}")
 
 
 if __name__ == "__main__":

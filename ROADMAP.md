@@ -1406,7 +1406,7 @@ answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
 
 Full findings: `.roundtable/grill-objective-slices45-50-2026-08-19.md`.
 
-1. [ ] **51.1 — The loop's telemetry cannot see a refusal.**
+1. [x] **51.1 — The loop's telemetry cannot see a refusal.** — landed 2026-08-19
        `ROADMAP.md` carries 41 mentions of refuse/Refuse; the loop log carries
        **zero** rows with outcome `refused`, across 49 iterations today. Not
        because nothing was refused — **Slice 48 refused a `bo-object-page`
@@ -1433,6 +1433,34 @@ Full findings: `.roundtable/grill-objective-slices45-50-2026-08-19.md`.
        markdown**, per the storage doctrine, and `rebuild_from_log.py` must
        still reproduce the mirror. Red-prove it: a refusal recorded today must
        show up in a query that currently returns 0.
+
+       **Landed 2026-08-19.** `record_iteration.py --also-refused "<text>"`
+       (repeatable) inserts a SECOND row for a refusal decided inside the
+       item — same timestamp and commit, `loop="Meta"`, `mode="refusal"`,
+       `outcome="refused"`. The six-outcome vocabulary is untouched; `refused`
+       already existed, this just gives it a place to attach when it isn't the
+       item's own headline outcome.
+
+       **`loop="Meta"`, not the parent item's loop, and that was deliberate.**
+       Both dispatcher counters in `dispatch_status.py` sum rows where
+       `loop=="Continue"`; recording the refusal under the same loop as its
+       parent would have counted one round of work as two toward the
+       Standardize/Objective thresholds — the identical silent-drift shape
+       already found twice this project (SOURCE_SKIP_DIRS, the outcome
+       vocabulary itself). Verified, not assumed: after a test insert with
+       `--also-refused` twice, `loop='Continue'` rows for that item stayed at
+       1 and `loop='Meta'` rows were 2.
+
+       Rebuildable, per the storage doctrine: the extra row is an ordinary log
+       line, parsed the same way as any other by `parse_log_line`; a full
+       `rebuild_from_log.py` round-trip reproduced it exactly, and
+       `dispatch_status.py`'s counters were unchanged before/after (1/4, 0/3).
+
+       **Red-proved on the actual defect**, not a synthetic one: `SELECT
+       COUNT(*) FROM iterations WHERE outcome='refused'` read 0 immediately
+       before this item's own commit, and the refusal this fix itself made —
+       widening the OUTCOMES vocabulary was ruled out by the item's own
+       Accept, a second Meta row used instead — is what the query now returns.
 
 2. [x] **51.2 — Flat surface + heavy verification: NO action, deliberately.**
        191 classes / 73 CSS files / 39 components, unchanged for four grills,
