@@ -778,8 +778,16 @@ const current =
 
   .docs-searchbtn-wrap {
     position: sticky;
-    inset-block-start: 0;
     z-index: 1;
+    /* Stick ABOVE the rail's own padding, then pad it back. `inset-block-start:
+       0` sticks to the PADDING box, not the scrollport, so the rail's 8px
+       padding-block-start left an 8px strip above the field through which
+       scrolled links were visible — reported 2026-08-19 with a screenshot
+       showing a cut-off "GETTING STARTED" row above the search box. Measured
+       before the fix: scrollport top 53, sticky top 61. */
+    inset-block-start: calc(-1 * var(--bo-space-2));
+    margin-block-start: calc(-1 * var(--bo-space-2));
+    padding-block-start: var(--bo-space-2);
     padding-block-end: var(--bo-space-2);
     background: var(--bo-color-bg-canvas);
     border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);

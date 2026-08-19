@@ -1542,6 +1542,35 @@ check(
   JSON.stringify(opPrint),
 );
 
+/* The docs' sticky search field must sit flush against the rail's scrollport.
+   `inset-block-start: 0` sticks to the PADDING box, not the scrollport, so the
+   rail's 8px padding-block-start left a strip above the field through which
+   scrolled links were visible (owner bug report + screenshot, 2026-08-19).
+   Nothing about it looks broken until you scroll. */
+for (const w of WIDTHS) {
+  await visit('/components/data-table/', { width: w });
+  const searchStrip = await page.evaluate(async () => {
+    const wrap = document.querySelector('.docs-searchbtn-wrap');
+    const scroller = wrap.closest('.bo-app-shell__sidebar');
+    if (!scroller || scroller.scrollHeight <= scroller.clientHeight + 20) return { skipped: 'rail does not scroll' };
+    scroller.scrollTop = 260;
+    await new Promise((r) => setTimeout(r, 250));
+    const s = scroller.getBoundingClientRect();
+    const wr = wrap.getBoundingClientRect();
+    const leaked = [];
+    for (let y = Math.round(s.top) + 1; y < Math.round(wr.top); y += 2) {
+      const el = document.elementFromPoint(Math.round(wr.left + wr.width / 2), y);
+      if (el && !wrap.contains(el)) leaked.push(y);
+    }
+    return { gap: Math.round(wr.top - s.top), leakedPoints: leaked.length, scrolled: scroller.scrollTop };
+  });
+  check(
+    `docs @${w}: nothing scrolls through the strip above the sticky search field`,
+    searchStrip.skipped ? true : (searchStrip.gap === 0 && searchStrip.leakedPoints === 0),
+    JSON.stringify(searchStrip),
+  );
+}
+
 await browser.close();
 server.close();
 

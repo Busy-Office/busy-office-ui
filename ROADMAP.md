@@ -640,6 +640,71 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 54 — P0 + wishlist from the owner (2026-08-19)
+
+1. [x] **54.1 — P0 (owner report + screenshot): scrolled content showed through
+       above the sidebar search field.** — fixed 2026-08-19
+
+       **Cause, measured:** `.docs-searchbtn-wrap` is `position: sticky` with
+       `inset-block-start: 0`, and **that sticks to the PADDING box, not the
+       scrollport.** The rail carries `padding-block-start: 8px`, so an 8px strip
+       sat above the stuck field with scrolled links passing visibly through it.
+       Measured before: scrollport top 53, sticky top 61, 4 sample points in the
+       strip painting non-field content.
+
+       **A first fix did not work and the measurement said so.** Pulling the box
+       up with a negative `margin-block-start` changes where it sits in flow but
+       not where it sticks — when stuck, `inset-block-start: 0` still pins to the
+       padding edge. The gap stayed at exactly 8px. The offset itself has to be
+       negative: `inset-block-start: calc(-1 * var(--bo-space-2))`, with the
+       padding added back so the field keeps its spacing.
+
+       After: sticky top 53 = scrollport top, gap 0, **zero** painted points in
+       the strip. Claim 78 asserts it at both widths and is red-proved by
+       restoring `inset-block-start: 0` — which reproduces the report exactly
+       (gap 8, 4 leaked points).
+
+       Docs-only: the sticky element is a docs class. The framework's rail
+       padding is correct; the docs' use of it was not.
+
+2. [ ] **54.2 — Calendar: Sunday-first as well as Monday-first.**
+       The shipped calendar hard-codes a Monday-first grid (`Mo Tu We Th Fr Sa
+       Su` in the `thead`, and `/patterns/detail-form` generates its month the
+       same way). Monday-first is ISO-8601 and correct for most of Europe and
+       Asia; **Sunday-first is standard in the US, Canada, Japan, and much of
+       Latin America** — an ERP shipped to a US buyer with a Monday-first
+       delivery calendar is simply wrong for them.
+
+       Accept: week start is a setting, not a fork — one component, many
+       settings. Prefer a `data-*` attribute on `.bo-calendar` over a second
+       component or a modifier class per start day. The **header row and the
+       day cells must move together** — a grid whose header says Sunday while
+       the cells start Monday is off by one for every date, and it is silent.
+       An executable claim asserts, for both settings, that each day cell's
+       `datetime` falls under the correct weekday column. Verified at 1440 and
+       390, both themes.
+
+       Note the docs' own generator in `detail-form` builds a Monday-first grid
+       in frontmatter; it must follow the same setting or the two disagree.
+
+3. [ ] **54.3 — Grill Amount & Quantity: display vs input.**
+       Both are "Values" components and both currently document a **display**
+       form, with entry deferred to native inputs (`.bo-amount` has no
+       `--input`; `.bo-date` said the same before it was deprecated). But
+       `.bo-quantity` DOES ship an input (`.bo-quantity__input` with steppers),
+       and `.bo-money` ships a currency select plus an amount input. So the
+       family is inconsistent: three components, three different answers to
+       "does this handle entry?".
+
+       Accept: grill them on the NEED/COST rubric (Slice 53) and answer one
+       question explicitly — **what is the framework's rule for value entry?**
+       Either every value type gets a documented native-input recipe and no
+       component, or the ones with real entry affordances (stepper, currency
+       pairing) are the rule and Amount is the exception that needs one.
+       Whatever the answer, it goes on all three pages in the same words.
+       Refusing to add an Amount input is a valid outcome and must be recorded
+       with the reason.
+
 ## Slice 53 — Owner input: grill components on need vs cost (2026-08-19)
 
 Owner ask, twice: *grill each component on why we should and should not have it
