@@ -640,6 +640,54 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 51 — from the Objective grill, Slices 45-50 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices45-50-2026-08-19.md`.
+
+1. [ ] **51.1 — The loop's telemetry cannot see a refusal.**
+       `ROADMAP.md` carries 41 mentions of refuse/Refuse; the loop log carries
+       **zero** rows with outcome `refused`, across 49 iterations today. Not
+       because nothing was refused — **Slice 48 refused a `bo-object-page`
+       component** against the Objective's own accept/refuse/rethink test, and
+       50.3 refused two consolidations with reasons recorded. Both landed under
+       a different outcome, because the refusal happened *inside* an item that
+       also shipped something.
+
+       So a query against `loops.db` for "how often does this project refuse?"
+       returns 0, and that is false. The outcome vocabulary was tightened in
+       41.2 exactly so outcomes would be queryable; this is the same defect one
+       level up, and it is the "a number you report is load-bearing" rule
+       applied to the loop's own telemetry.
+
+       Severity is capped by the storage doctrine: the refusals ARE recorded, in
+       ROADMAP prose, which is the source of truth. Only the queryable mirror is
+       blind.
+
+       Accept: a refusal made inside a landed item is countable — either a
+       second field on the iteration record, or a rule that a refusal gets its
+       own row. Do NOT widen the six-outcome vocabulary to do it; that
+       vocabulary is enforced by `check:loop-vocab` and 41.2 rejected "shipped"
+       for being ambiguous. Whatever lands must be **rebuildable from the
+       markdown**, per the storage doctrine, and `rebuild_from_log.py` must
+       still reproduce the mirror. Red-prove it: a refusal recorded today must
+       show up in a query that currently returns 0.
+
+2. [x] **51.2 — Flat surface + heavy verification: NO action, deliberately.**
+       191 classes / 73 CSS files / 39 components, unchanged for four grills,
+       measured identically at both commits. Effort ran ~10:1 instruments to
+       framework (+857/−22 vs +82/−1 lines). That is the Objective working, not
+       stalling — and inventing framework work to change a ratio would be the
+       wrong response to a measurement. Recorded so the next grill does not
+       re-open it as if it were new.
+
+3. [x] **51.3 — npm still serves 0.1.1, verified from the registry.** Eighth
+       consecutive grill. `npm view @busy-office/ui version` → `0.1.1`; local is
+       `0.2.0`. The published package still contains the WCAG failure fixed in
+       43.1. Owner-triggered; npm here is unauthenticated. **With the backlog
+       otherwise empty of anything not owner-gated, this is the
+       highest-value action available to the project, and the loop cannot do
+       it.**
+
 ## Slice 50 — Standardize sweep: how pages carry layout, and one behaviour that knew too much (2026-08-19)
 
 Dispatched by the counter at 4/4. Objective is ALSO overdue at 3/3, and rule 2
