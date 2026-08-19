@@ -87,3 +87,4 @@
 {"ts": "2026-08-19 19:15", "name": "object_page_chrome_pct_390", "value": 33.0, "unit": "percent"}
 {"ts": "2026-08-19 19:39", "name": "component_css_bytes_min", "value": 65811.0, "unit": "bytes"}
 {"ts": "2026-08-19 20:12", "name": "object_page_chrome_pct_390", "value": 19.0, "unit": "percent"}
+{"ts": "2026-08-19 20:24", "name": "claims", "value": 78.0, "unit": "count"}
