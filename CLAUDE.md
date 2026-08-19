@@ -135,6 +135,37 @@ never be non-zero — three consecutive measurements reported "not clipped"
 while the label was spilling 15.7px past the rail. Only its right edge
 against the RAIL's client edge showed it (2026-08-18).
 
+## An instrument's first output is not evidence
+
+Six new or reworked measuring instruments landed in one window and **none was
+correct on its first run** (Slices 37/38/44 grill). A seventh went wrong while
+writing the grill that counted the six. Two earlier grills recorded this as a
+discipline problem and it changed nothing, so treat it as a **base rate**: the
+first thing a new detector, script or query tells you is wrong until checked.
+
+That is not pessimism, it is scheduling. The adversarial check goes **before**
+the number is used, not after it looks wrong:
+
+- **Ask what would make this wrong, and try that first.** Every dead detector
+  died to one question — *is this signal present in things I am not counting?*
+  `class="demo"` is on every section; `<main class="bo-app-shell__main">`
+  matches `bo-`; the docs shell's own menu button is a real `.bo-btn`.
+- **A 0%, a 100%, or an identical value across many inputs is a defect until
+  proven otherwise.** All three have occurred here: zero usage for every
+  component (a `find` over a path that did not exist), 16-of-16 pages flagged (a
+  slug-to-class assumption), and the same byte offset on all 18 pages (the
+  shell's markup).
+- **Reconcile against something independent before quoting.** `bo-data-table` is
+  obviously in every pattern page; that is what exposed the zero. The
+  prose-drift sweep was believed only once it reproduced, unprompted, the two
+  pages a human had found by hand.
+- **Derive names from the generated source, never from a convention.** Page
+  slugs are not class names: `alerts` → `bo-alert`, `button` → `bo-btn`,
+  `dashboard` → `bo-widget`. `api.json` knows; a guess does not.
+
+Applies to ad-hoc measurement, not to a gate that has already been red-proved —
+that one has earned its output by construction.
+
 ## A number you report is load-bearing — red-prove it like a gate
 
 Thirteen detectors across three slices could not fail (Slices 39/42/43 grill).

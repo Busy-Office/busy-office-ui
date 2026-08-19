@@ -561,7 +561,7 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
 
 Full findings: `.roundtable/grill-objective-slices37-38-44-2026-08-19.md`.
 
-1. [ ] **46.1 — A first-draft instrument is wrong. Design around the base rate.**
+1. [x] **46.1 — A first-draft instrument is wrong. Design around the base rate.**
        Six new or reworked instruments in this window; **zero correct on first
        run** — and a seventh went wrong while writing the grill that counted
        them. Two previous grills recorded this as a discipline problem and
@@ -581,7 +581,17 @@ Full findings: `.roundtable/grill-objective-slices37-38-44-2026-08-19.md`.
        before quoting. No new gate — this is the rule the existing gates already
        imply.
 
-2. [ ] **46.2 — 11 of 16 pattern pages claim components they never render.**
+       **Landed 2026-08-19** in CLAUDE.md, above the load-bearing-number rule it
+       generalises. Four tests, each traced to an instrument that actually died:
+       ask what would make it wrong and try that first; treat 0%, 100% or an
+       identical value across many inputs as a defect until proven otherwise;
+       reconcile against something independent before quoting; and **derive names
+       from the generated source rather than a convention** — page slugs are not
+       class names (`alerts` → `bo-alert`, `button` → `bo-btn`, `dashboard` →
+       `bo-widget`), which is exactly what made the prose-drift measurement wrong
+       twice.
+
+2. [x] **46.2 — 11 of 16 pattern pages claim components they never render.**
        "Components used" carries a complexity badge and reads as *this screen is
        built from these*. On 11 pages it lists components — 20 in total —
        that the page never renders: `invoice-list` claims `pagination`,
@@ -598,6 +608,29 @@ Full findings: `.roundtable/grill-objective-slices37-38-44-2026-08-19.md`.
        `api.json` blocks — **not** the page slug, which is what made this
        measurement wrong twice (`alerts`→`bo-alert`, `button`→`bo-btn`,
        `dashboard`→`bo-widget`). Red-proved both ways.
+
+       **Landed 2026-08-19.** **18 unrendered claims removed** across 10 pages,
+       so the docs stop overstating themselves today rather than after the
+       screens are built. `check:components-used` now enforces it: a component
+       listed under "Components used" must appear in the page's rendered markup.
+       Red-proved by re-adding `pagination` to `invoice-list` and watching the
+       gate name it.
+
+       **The measurement was wrong three times before it was right** — the base
+       rate 46.1 had just been written about, demonstrated immediately:
+       - **43 claims** — counted every `/components/` link, including Related
+         footers and prose asides.
+       - **16 of 16 pages** — a 100% rate, which 46.1 says to distrust: it used
+         the page SLUG as the class name, so `alerts`→`bo-alert`,
+         `button`→`bo-btn`, `dashboard`→`bo-widget` all read as missing.
+       - **20 claims** — matched exact blocks only, so `filter-panel` rendering
+         `.bo-dropdown__menu` counted as not rendering `dropdown`.
+       - **18** — blocks *and* their parts, names from `api.json`. Believed only
+         after it independently reproduced the two pages the 37.2 pilot had found
+         by hand, and after four rows were verified by direct grep.
+
+       `pagination` and `offcanvas` stay off the lists until **45.2** renders
+       them; the gate makes that ordering enforceable rather than remembered.
 
 ## Slice 45 — surface review, batch 1 outcomes (2026-08-19)
 
@@ -631,6 +664,12 @@ nine rows risked instead of fifty-five.
        390; invoice-list paginates. Neither adds framework CSS — both components
        already ship. If either turns out to be wrong for the screen, record that
        instead and fix the prose that promises it.
+
+       **Note (46.2, 2026-08-19):** both claims have been REMOVED from those
+       pages' "Components used" lists, so the docs no longer overstate what they
+       show. When this item renders them, the entries go back — and
+       `check:components-used` now enforces that they cannot be listed again
+       without being rendered.
 
 3. [ ] **45.3 — `.bo-date` scores 1 of 12: merge and deprecate.**
        `display: inline-flex`, a `gap`, `tabular-nums` and a muted span — a
