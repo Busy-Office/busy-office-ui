@@ -8,6 +8,26 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`.bo-stepper__label`): a squeezed mid-range container silently
+  dropped characters. `text-overflow: ellipsis` truncated labels even above the
+  component's own 480px "hide labels" threshold — measured at a 558px
+  container with 4 steps, "Line items" and "Approvers" (the CURRENT step)
+  both clipped by 2-4px (`scrollWidth` vs `clientWidth`). Now
+  `overflow-wrap: anywhere` with no forced `white-space: nowrap`: a squeezed
+  label wraps to a second line instead of losing text. Found during the
+  `/design-grill` sweep's `approval` grill (roadmap 58.3).
+
+- **Fixed** (`initRowEdit()`): Cancel could clear a row's error tint while the
+  row was still genuinely invalid. A row with `[aria-invalid="true"]` on one
+  cell restores to its ORIGINAL — still-invalid — value on Cancel, but
+  `setDirty(false)` removed `data-row-state` unconditionally, dropping the
+  row-level signal (tint + border) while the cell-level one (border +
+  message) survived untouched. Same gap on Save, which baselines optimistically
+  before any async confirmation. `setDirty(false)` now checks for a surviving
+  `[aria-invalid="true"]` cell first and sets `data-row-state="error"` instead
+  of clearing it when one exists. Found operating the live `editable-grid`
+  demo during the `/design-grill` sweep (roadmap 58.4).
+
 - **Deprecated** (`.bo-icon--settings`, `.bo-icon--barcode`, `.bo-icon--building`,
   `.bo-icon--user`): zero pattern screens in these docs render any of the four —
   only the icon component's own showcase page did. Use
