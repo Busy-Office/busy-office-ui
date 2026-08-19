@@ -557,6 +557,39 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 44 — from the Objective grill, Slices 39/42/43 (2026-08-19)
+
+Full findings: `.roundtable/grill-objective-slices39-42-43-2026-08-19.md`.
+
+1. [ ] **44.1 — A number quoted to the owner is load-bearing.**
+       Thirteen detectors in three slices could not fail. Twelve cost time; one
+       cost accuracy — *"only 1 of 18 learning-path pages shows anything
+       working"* went into a summary to the owner and the real figure is
+       **16 of 18**. The owner cannot check a number like that without redoing
+       the work, so it is only ever caught by the person who made it.
+
+       Accept: written into CLAUDE.md next to the red-proof discipline — before
+       a measured claim goes into a summary, it is checked the way a gate is:
+       does the measurement discriminate, and what would make it wrong? A
+       plausible zero, an implausibly round number, or an identical value across
+       many inputs is treated as a defect in the instrument until shown
+       otherwise. Cheap, and it is the difference between a wasted wake and a
+       false report.
+
+2. [ ] **44.2 — Gate the rendered result of a STATE, not just token pairs.**
+       43.1's WCAG failure shipped in the **initial commit** and survived
+       **43 slices and 31 axe sweeps**, because the gate suite is organised
+       around properties — the contrast of a token pair, the presence of a rule
+       — and not around *what a state actually renders*. `check:contrast` cannot
+       model `opacity`, so a dimmed table was never in scope.
+
+       Accept: enumerate the visual STATES the framework ships (`data-loading`,
+       `data-row-state`, `aria-busy`, `disabled`, `[hidden]` reveals,
+       `forced-colors`) and assert the composited result of each — the claim
+       added in 43.1 is the shape, generalised. Where a state cannot be measured
+       this way, say so and say why. The test of success is that reintroducing
+       0.6 fails, which it now does, and that the OTHER states are covered too.
+
 ## Slice 43 — P0 found while doing 39.3 (2026-08-19)
 
 1. [x] **43.1 — P0: `data-loading` dimmed shipped text below AA.**
