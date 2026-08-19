@@ -638,7 +638,7 @@ Scores and citations: `.roundtable/surface-scores-batch1-2026-08-19.md`.
 Ran as a **pilot** because 37.2 is gated on rubric sign-off that has not come —
 nine rows risked instead of fifty-five.
 
-1. [ ] **45.1 — Three shipped JS behaviors have no executable claim.**
+1. [x] **45.1 — Three shipped JS behaviors have no executable claim.**
        `tree` and `tree-table` ship expand/collapse behavior asserted in **prose
        only**; the review's Evidence column found it on its first batch. This is
        the cheapest gap in the framework: the behavior exists, the contract is
@@ -649,6 +649,42 @@ nine rows risked instead of fifty-five.
        the behavior. `data-tree-level` rendering is already static-checked, so
        the claims cover the INTERACTION: expanding reveals children, collapsing
        hides them, and the control's `aria-expanded` follows.
+
+       **Landed 2026-08-19 — and this item's own number was wrong.** Measured:
+       **only 5 of 21 behaviors have any claim coverage**, so sixteen ship with
+       none, not three. `tree` was wrong too — it has no behavior at all, it is
+       CSS-only; `initTreeTable` is the one that exists.
+
+       Three claims added (41 → 44), each driving REAL clicks and each
+       red-proved by breaking the behavior in source with the injection verified
+       in `dist`:
+       - **tree-table** — collapsing hides its children and flips
+         `aria-expanded`. Broken (`hidden = false`): 4 rows before and after.
+       - **quantity** — the stepper steps and will not pass its own `min`.
+         Broken (`step = 0`): the value never moves.
+       - **alert** — dismiss removes exactly one alert.
+
+       **The alerts page claimed dismissal it never demonstrated:** it said
+       "dismiss buttons work via `initAlerts()`" while rendering **no dismiss
+       button anywhere**. A live dismissible alert was added, so the sentence is
+       demonstrable as well as asserted.
+
+       **Two injection errors while red-proving**, both caught by checking `dist`
+       rather than the diff: the first quantity patch hit `syncButtons`' copy of
+       the step lookup instead of the click handler's, and the alerts claim
+       pointed at `/components/alert/` when the slug is `alerts`.
+
+6. [ ] **45.6 — Sixteen behaviors still ship with no executable claim.**
+       The corrected figure from 45.1: 5 of 21 covered. Uncovered include
+       `combobox`, `data-grid`, `wizard`, `saved-views`, `scan-input`,
+       `tag-input`, `file-dropzone`, `load-more`, `money-field`, `table-sum`,
+       `table-toolbar`, `collapsible-card`, `validation-summary`.
+
+       Accept: claims in batches, each driving real events and each red-proved
+       with the injection verified in `dist` — the two ways it went wrong in
+       45.1. Where a behavior has **no live demo to drive**, that is the finding:
+       add the demo first, as the alerts page needed. Prioritise the ones whose
+       failure is silent.
 
 2. [ ] **45.2 — Two patterns promise behaviour no screen shows.**
        `/patterns/master-detail` says the panel "becomes a full-width drawer over
