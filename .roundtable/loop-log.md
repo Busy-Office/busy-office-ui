@@ -407,3 +407,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 17:30 · Standardize · tidy · 49.3 — home page density demo was faked with inline padding on a non-density component; now real controls + claim 60 · landed · 50a32ba
 - 2026-08-19 17:30 · Standardize · tidy · 49.4 — six scripts adopted paths.mjs; check-versions had the percent-encoded URL.pathname bug · landed · 50a32ba
 - 2026-08-19 17:30 · Standardize · tidy · 49.6 — visual-regression --update was all-or-nothing; added --only, restored 14 unrelated baselines · landed · 50a32ba
+- 2026-08-19 17:47 · Continue · build · 45.6 batch 3 — money (lossless), file-dropzone, load-more; 59->65; all 21 init behaviours claimed, item CLOSED · landed · 0f1ad4b
