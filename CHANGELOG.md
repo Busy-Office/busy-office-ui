@@ -8,7 +8,27 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+- **Deprecated** (`.bo-date`): use a `.bo-cluster` with `.bo-u-tabular` and, for
+  the overdue case, a `.bo-badge bo-badge--danger` carrying the word "Overdue".
+
+  ```html
+  <span class="bo-cluster">
+    <span class="bo-u-tabular">Aug 10, 2026</span>
+    <span class="bo-badge bo-badge--danger">Overdue by 4 days</span>
+  </span>
+  ```
+
+  `.bo-date` is `display: inline-flex`, a `gap`, `tabular-nums` and a muted
+  span — a cluster and two utilities. It ships no forced-colors rule, is not
+  density-aware, carries no behavior or executable claim, and no screen in the
+  docs uses it; a surface review scored it 1 of 12, the lowest in the framework
+  (roadmap 45.3). The one decision it carried that was worth keeping — overdue
+  is **two-channel**, so the word must be in the text, colour only adds hue —
+  now lives on `/components/amount`, which documents the same contract for
+  negative values. It is a rule about values, not about a date widget.
+
+  **Not a breaking change.** The classes still ship and still work; removal is a
+  next-major change, since 0.x is published and consumers may be using them.
 
 ## 0.2.0 (2026-08-18)
 

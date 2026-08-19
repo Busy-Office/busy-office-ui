@@ -25,6 +25,12 @@ const precision = `<!-- 0 decimals (whole units) -->
 <!-- 4 decimals (unit price / FX rate) -->
 <span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">0.0725</span></span>`;
 
+const overdueDate = `<!-- two-channel: the badge carries the word, colour only adds hue -->
+<span class="bo-cluster">
+  <span class="bo-u-tabular">Aug 10, 2026</span>
+  <span class="bo-badge bo-badge--danger">Overdue by 4 days</span>
+</span>`;
+
 const signed = `<!-- debit: parentheses OR a minus sign carry the meaning; red is the 2nd channel -->
 <span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">(2,110.00)</span></span>
 <span class="bo-amount bo-amount--negative"><span class="bo-amount__currency">$</span><span class="bo-amount__value">&minus;730.25</span></span>
@@ -179,6 +185,17 @@ const markup = `<span class="bo-amount">
     colourblind and screen-reader users get the meaning without the colour.
     <code>--negative</code>/<code>--positive</code> only add the hue (both AA on surface
     and canvas, CI-gated).</p>
+  </section>
+
+  <section class="demo">
+    <h2>The same contract for dates</h2>
+    <Demo code={overdueDate} />
+    <p class="bo-u-text-muted">An overdue date is the same decision as a negative
+    amount: the meaning must survive without colour, so the word
+    <em>Overdue</em> belongs in the text. This guidance moved here when
+    <code>.bo-date</code> was deprecated — it was the only real decision that
+    component carried, and it is a rule about <em>values</em>, not about a
+    date-specific widget.</p>
   </section>
 
   <section class="demo">

@@ -863,7 +863,7 @@ nine rows risked instead of fifty-five.
        `check:components-used` now enforces that they cannot be listed again
        without being rendered.
 
-3. [ ] **45.3 — `.bo-date` scores 1 of 12: merge and deprecate.**
+3. [x] **45.3 — `.bo-date` scores 1 of 12: merge and deprecate.** — landed 2026-08-19
        `display: inline-flex`, a `gap`, `tabular-nums` and a muted span — a
        `.bo-cluster` with two utilities. No forced-colors rule, not
        density-aware, no claim, no behavior, no screen. The one real decision in
@@ -874,6 +874,24 @@ nine rows risked instead of fifty-five.
        documents exactly that pattern for negative amounts; `.bo-date` gets a
        **Deprecated** CHANGELOG entry and a docs page naming the replacement.
        **Removal at the next major, not now** — it is in the published 0.1.1.
+
+       **Landed 2026-08-19.** The overdue guidance is on `/components/amount`
+       under "The same contract for dates", framed as a rule about VALUES rather
+       than about a date widget — which is why it belongs beside `--negative`
+       instead of in a component of its own. `.bo-date` carries a deprecation
+       notice naming the replacement, the source CSS carries the same note, and
+       the CHANGELOG has an **Unreleased / Deprecated** entry.
+
+       The replacement is `.bo-cluster` + `.bo-u-tabular` + a
+       `.bo-badge--danger` carrying the word "Overdue". That is better than what
+       it replaces, not merely smaller: the two-channel contract becomes
+       **structural** — the badge holds the word — instead of a rule a consumer
+       has to remember and a reviewer has to catch.
+
+       **Not a breaking change and not a deletion**: the classes still ship and
+       still work. Removal waits for the next major because 0.x is published.
+       Verified live at 1440 and 390 in both themes; every gate green, axe zero
+       violations, 40 visual shots unchanged.
 
 4. [ ] **45.4 — `calendar` has zero demand, and that is my doing.**
        Shipped 2026-08-17 with strong Composition, Contracts and Evidence scores

@@ -1,5 +1,18 @@
 @layer bo-components {
-  /* A read-only date value — the Amount/Quantity counterpart for dates:
+  /* DEPRECATED (2026-08-19, roadmap 45.3). Compose instead:
+       <span class="bo-cluster">
+         <span class="bo-u-tabular">Aug 10, 2026</span>
+         <span class="bo-badge bo-badge--danger">Overdue by 4 days</span>
+       </span>
+     This block is inline-flex + gap + tabular-nums + a muted span, with no
+     forced-colors rule and no density awareness — a .bo-cluster and two
+     utilities. A surface review scored it 1 of 12, the lowest in the framework,
+     and no screen uses it. The one decision worth keeping (overdue is
+     two-channel: the WORD must be in the text) now lives on /components/amount.
+     Kept, not deleted: @busy-office/ui is published, so removal is a next-major
+     change. See CHANGELOG.
+
+     A read-only date value — the Amount/Quantity counterpart for dates:
      your app formats the absolute date and the optional relative text;
      this styles and aligns them. Editing still uses a native
      <input type="date"> directly — no --input variant, same reasoning as
