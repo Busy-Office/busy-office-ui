@@ -430,3 +430,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 21:00 · Continue · build · 54.3 — Values grill: removed .bo-quantity--display (0 screens, NET -3, never published); refused an Amount input; rule stated on all three pages · landed · 2112b0a
 - 2026-08-19 21:31 · Continue · build · 53.1 — value-help pattern (zero new components); exposed and fixed 3 dead data-dialog-close buttons from 45.2 · landed · 299b343
 - 2026-08-19 21:35 · Objective · grill · Objective grill 52-55 — surface down 191->189; 4 of 6 defects self-inflicted; invented data-* hook survived the sweep built for it · logged · ccd6b9a
+- 2026-08-19 21:41 · Roadmap · triage · 57 — Ive principles installed: Objective §4 (every-wake) + /design-grill skill (on-demand); 19/19 baseline measured · triaged · 1c057a4
