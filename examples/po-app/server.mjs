@@ -282,11 +282,68 @@ const costCenterResults = (q) => {
   </div>`;
 };
 
+// A trigger button for the cost-centre picker. data-cc-target names the
+// field THIS button fills — the picker dialog is one shared element per
+// page, so multiple triggers (mass-change, new-PO) need to say which field
+// they're for. Factored out (roadmap Explore, po-create spike) so the
+// dialog markup + wiring exist ONCE, not once per form that needs it —
+// the mass-change dialog had its own inline copy before this.
+const costCenterPickerTrigger = (targetFieldId) => `<button class="bo-btn bo-btn--secondary" type="button"
+  data-dialog-trigger="cc-picker" data-cc-target="${targetFieldId}" aria-label="Find a cost centre">Find…</button>`;
+
+// The shared dialog + its wiring. Include ONCE per page, alongside any
+// number of costCenterPickerTrigger() buttons.
+const costCenterPickerHtml = () => `
+<dialog class="bo-dialog" id="cc-picker" data-state="closed" aria-labelledby="cc-picker-title">
+  <div class="bo-dialog__header">
+    <h2 class="bo-dialog__title" id="cc-picker-title">Find a cost centre</h2>
+    <form method="dialog"><button class="bo-btn bo-btn--sm bo-btn--ghost" type="submit" aria-label="Close">×</button></form>
+  </div>
+  <div class="bo-dialog__body">
+    <form class="bo-filter-bar" role="search" aria-label="Cost centre search" onsubmit="return false">
+      <input class="bo-input" type="search" id="cc-q" name="q" aria-label="Search cost centres"
+        placeholder="Code or name…" hx-get="/cost-centers" hx-trigger="input changed delay:250ms, search"
+        hx-target="#cc-results" hx-swap="innerHTML">
+    </form>
+    <div id="cc-results">${costCenterResults('')}</div>
+  </div>
+</dialog>
+<script type="module">
+  // Same "fill field, close, refocus the FIELD (not the trigger)" behavior
+  // the docs' own value-help pattern documents. Which field to fill is read
+  // from whichever [data-cc-target] trigger was clicked most recently —
+  // captured at click time so it works for any number of triggers on one
+  // page without the dialog needing to know about them in advance.
+  let ccTargetField = null;
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-cc-target]');
+    if (trigger) ccTargetField = trigger.getAttribute('data-cc-target');
+  });
+  const ccPicker = document.getElementById('cc-picker');
+  if (ccPicker) {
+    ccPicker.addEventListener('click', (e) => {
+      const pick = e.target.closest('[data-cc-pick]');
+      if (!pick || !ccTargetField) return;
+      const field = document.getElementById(ccTargetField);
+      field.value = pick.getAttribute('data-cc-pick');
+      field.dispatchEvent(new Event('change', { bubbles: true }));
+      ccPicker.close('picked');
+      field.focus();
+    });
+  }
+</script>`;
+
 const listScreen = (query = {}) => {
   const rows = filterPos(query);
   const filtering = Boolean((query.q || '').trim() || (query.status && query.status !== 'All'));
   return `
-<h1>Purchase orders</h1>
+<div class="bo-cluster bo-cluster--split">
+  <h1>Purchase orders</h1>
+  <!-- The only way to reach /pos/new used to be the empty state, which
+     never fires with seeded data — a real user could never actually find
+     this route. A persistent action here is what a real list screen has. -->
+  <a class="bo-btn" href="/pos/new">New purchase order</a>
+</div>
 <form class="bo-filter-bar" role="search" aria-label="PO filters" method="get" action="/pos">
   <input class="bo-input" type="search" name="q" aria-label="Search POs" placeholder="Search…" style="max-inline-size: 12rem" value="${esc(query.q || '')}">
   <select class="bo-select" name="status" style="inline-size:auto" aria-label="Status">
@@ -364,8 +421,7 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
              the top layer; closing pops back to the one beneath), and
              focus-trap is per-dialog in dialog.ts, so nothing needed
              changing in the framework to make this compose. -->
-        <button class="bo-btn bo-btn--secondary" type="button"
-          data-dialog-trigger="cc-picker" aria-label="Find a cost centre">Find…</button>
+        ${costCenterPickerTrigger('mass-cc-value')}
       </div>
       <p class="bo-form-field__hint">Format CC-nnnn. An invalid or unknown value changes nothing at all.</p>
     </div>
@@ -379,41 +435,12 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
   </div>
 </dialog>
 
-<dialog class="bo-dialog" id="cc-picker" data-state="closed" aria-labelledby="cc-picker-title">
-  <div class="bo-dialog__header">
-    <h2 class="bo-dialog__title" id="cc-picker-title">Find a cost centre</h2>
-    <form method="dialog"><button class="bo-btn bo-btn--sm bo-btn--ghost" type="submit" aria-label="Close">×</button></form>
-  </div>
-  <div class="bo-dialog__body">
-    <form class="bo-filter-bar" role="search" aria-label="Cost centre search" onsubmit="return false">
-      <input class="bo-input" type="search" id="cc-q" name="q" aria-label="Search cost centres"
-        placeholder="Code or name…" hx-get="/cost-centers" hx-trigger="input changed delay:250ms, search"
-        hx-target="#cc-results" hx-swap="innerHTML">
-    </form>
-    <div id="cc-results">${costCenterResults('')}</div>
-  </div>
-</dialog>
+${costCenterPickerHtml()}
 <script type="module">
   import { initDropdowns, initTableToolbar, initLoadMore } from '/assets/js/index.js';
   initDropdowns(); initTableToolbar(); initLoadMore();
   window.__btt = initTableToolbar; // layout's afterSwap re-applies column state
 
-  // Cost-centre picker: same "fill field, close, refocus the FIELD (not the
-  // trigger)" behavior the docs' own value-help pattern documents, and the
-  // same measured reason — closing a modal from a click on a button inside
-  // it leaves focus on <body> otherwise.
-  const ccPicker = document.getElementById('cc-picker');
-  if (ccPicker) {
-    ccPicker.addEventListener('click', (e) => {
-      const pick = e.target.closest('[data-cc-pick]');
-      if (!pick) return;
-      const field = document.getElementById('mass-cc-value');
-      field.value = pick.getAttribute('data-cc-pick');
-      field.dispatchEvent(new Event('change', { bubbles: true }));
-      ccPicker.close('picked');
-      field.focus();
-    });
-  }
   document.addEventListener('bo:table-export', () => {
     const toasts = document.getElementById('toasts');
     const t = document.createElement('div');
@@ -438,6 +465,51 @@ ${rows.length === 0 ? emptyHtml(filtering) : `<!-- A real <form> around the sele
 </script>`;
 };
 
+// The creation screen /pos/new used to point to (a real dead link — see
+// roadmap Explore, po-create spike: reachable only from the empty state,
+// which never fires with seeded data, so nobody had ever actually loaded
+// it). detail-form's own shape (fieldset + bo-form-row), scoped to the
+// fields this app's data model actually has — no line items here, the
+// `pos` records never had them.
+const newPoScreen = (values = {}, errors = {}) => `
+<h1>New purchase order</h1>
+<form method="post" action="/pos/new" novalidate>
+  <fieldset class="bo-form-section">
+    <legend class="bo-form-section__legend">Order</legend>
+    <div class="bo-form-row">
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="new-vendor">Vendor</label>
+        <input class="bo-input" id="new-vendor" name="vendor" required
+          value="${esc(values.vendor || '')}"
+          ${errors.vendor ? `aria-invalid="true" aria-describedby="new-vendor-err"` : ''}>
+        ${errors.vendor ? `<p class="bo-form-field__message" id="new-vendor-err" role="alert">${errors.vendor}</p>` : ''}
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="new-cc">Cost centre</label>
+        <div class="bo-cluster">
+          <input class="bo-input bo-input--code" id="new-cc" name="cc" placeholder="CC-4021" required
+            value="${esc(values.cc || '')}"
+            ${errors.cc ? `aria-invalid="true" aria-describedby="new-cc-err"` : ''}>
+          ${costCenterPickerTrigger('new-cc')}
+        </div>
+        ${errors.cc ? `<p class="bo-form-field__message" id="new-cc-err" role="alert">${errors.cc}</p>` : ''}
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="new-amount">Amount</label>
+        <input class="bo-input bo-input--numeric" id="new-amount" name="amount" type="number" min="0.01" step="0.01" required
+          value="${esc(values.amount || '')}"
+          ${errors.amount ? `aria-invalid="true" aria-describedby="new-amount-err"` : ''}>
+        ${errors.amount ? `<p class="bo-form-field__message" id="new-amount-err" role="alert">${errors.amount}</p>` : ''}
+      </div>
+    </div>
+  </fieldset>
+  <div class="bo-form-actions">
+    <a class="bo-btn bo-btn--secondary" href="/pos">Cancel</a>
+    <button class="bo-btn" type="submit">Create purchase order</button>
+  </div>
+</form>
+${costCenterPickerHtml()}
+`;
 
 /* ---------- STAGING / batch result (roadmap 24.3) ----------
    The Excel round-trip (M4) needs somewhere for rows to LAND before they
@@ -870,6 +942,40 @@ const server = createServer(async (req, res) => {
         status: url.searchParams.get('status') || 'All',
       };
       return res.end(page('Purchase orders', '/pos', listScreen(query), density));
+    }
+    if (path === '/pos/new' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('New purchase order', '/pos', newPoScreen(), density));
+    }
+    if (path === '/pos/new' && req.method === 'POST') {
+      const form = new URLSearchParams(await readBody(req));
+      const values = {
+        vendor: (form.get('vendor') ?? '').trim(),
+        cc: (form.get('cc') ?? '').trim().toUpperCase(),
+        amount: (form.get('amount') ?? '').trim(),
+      };
+      const errors = {};
+      if (!values.vendor) errors.vendor = 'Vendor is required.';
+      if (!values.cc) errors.cc = 'Cost centre is required.';
+      else if (!COST_CENTERS.some((c) => c.code === values.cc)) errors.cc = `"${values.cc}" is not a cost centre.`;
+      const amountNum = Number(values.amount);
+      if (!values.amount || !Number.isFinite(amountNum) || amountNum <= 0) errors.amount = 'Enter an amount greater than zero.';
+
+      if (Object.keys(errors).length) {
+        // Same document-level-vs-field-level split as mass-change: THESE
+        // are field errors (the user can fix them right here), so they go
+        // on the fields and the form re-renders with values preserved —
+        // never a blank form, matching detail-form's own documented
+        // contract ("422 → the SAME form re-rendered... values preserved").
+        res.writeHead(422, { 'content-type': 'text/html' });
+        return res.end(page('New purchase order', '/pos', newPoScreen(values, errors), density));
+      }
+
+      const id = `PO-${88300 + pos.length}`;
+      pos.unshift({ id, vendor: values.vendor, cc: values.cc, amount: amountNum, status: 'Pending' });
+      audit.push({ t: new Date().toISOString(), what: `${id} raised by demo user` });
+      res.writeHead(302, { location: `/pos/${id}` });
+      return res.end();
     }
     if (path === '/cost-centers' && req.method === 'GET') {
       // Fragment only — the picker's own results region, not a page. Real

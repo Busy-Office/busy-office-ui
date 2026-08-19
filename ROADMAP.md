@@ -748,6 +748,58 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 67 — Explore: PO creation dogfooded in po-app, a dead link fixed (2026-08-20)
+
+Dispatched by rule 6 — backlog still empty of anything not owner-blocked
+(same state as Slice 66). Continuing the dogfood-loop fallback in a fresh
+isolated worktree. Full report:
+`.roundtable/explore-po-create-2026-08-20.md`.
+
+1. [x] **67.1 — `/pos/new` was a genuine dead link, shipped in the
+       reference app.** The empty state's own primary action pointed at a
+       route that 404'd — confirmed live, `curl` returned 404. Unreachable
+       in ordinary use: the empty state never fires with 30 seeded
+       records, so nobody had ever actually clicked it. Built the real
+       screen: `/patterns/detail-form`'s shape (fieldset + `bo-form-row`),
+       scoped to the fields `po-app`'s data model actually has (Vendor,
+       Cost centre, Amount — no line items; the `pos` records never
+       modeled them, and inventing that scope now would be a second
+       spike). Server-side validation matches detail-form's own documented
+       contract: 422 re-renders the SAME form with values preserved and
+       `aria-invalid` on only the bad field(s); success redirects to the
+       new record. Added a PERSISTENT "New purchase order" button to the
+       list header — the dead empty-state link was the only path to this
+       route before.
+
+2. [x] **67.2 — The cost-centre picker (66.1's dogfood spike) refactored
+       into a shared helper.** `costCenterPickerTrigger`/
+       `costCenterPickerHtml`, parameterized by target field id via
+       `data-cc-target` (captured at click time, so any number of triggers
+       on one page work without the dialog needing to know about them in
+       advance). The mass-change dialog's own inline copy removed — one
+       dialog + one wiring script now, not two. Verified live: both the
+       new creation form and the existing mass-change dialog fill their
+       own field correctly from the same shared picker.
+
+3. [x] **67.3 — Three new checks added to `check-po-app.mjs`** (Slice
+       26.1's gate): the 422 field-preservation path, the success-and-
+       redirect path, and the picker's server-side search narrowing.
+       `/pos/new` added to the gate's own axe sweep. **One of the new
+       checks caught a real bug in its own first version**: comparing
+       `/pos`'s row count before/after creating a record — `/pos` only
+       ever renders page 1 (`PAGE_SIZE = 10`), so with 30+ records already
+       seeded the count was 10 both times regardless of whether anything
+       was added. Ran it once, watched it report a false failure against
+       genuinely-working code, diagnosed the cap, switched to checking the
+       new record's own row id appears on page 1 — the same base-rate
+       discipline applied to a brand-new test, not just to app code.
+
+**Exit:** graduated — landed directly in `examples/po-app` and
+`apps/docs/scripts/check-po-app.mjs` (no `packages/core` changes, no
+framework CHANGELOG entry). Verified live: full create/reject/success
+flow, both themes, `check:po-app` 10/10 (7 pre-existing + 3 new),
+axe-clean across the new route.
+
 ## Slice 66 — Explore: value-help dogfooded in po-app, backlog empty (2026-08-20)
 
 Dispatched by rule 6 — backlog genuinely empty of anything not owner-blocked

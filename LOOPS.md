@@ -378,6 +378,21 @@ progress, and freeze-graduation rounds).
   unmodified checkout FIRST. Full report:
   `.roundtable/explore-value-help-po-app-2026-08-20.md`.
 
+- ~~PO creation (`/pos/new`) in po-app, dogfooding detail-form~~ — spiked
+  2026-08-20 in an isolated worktree (removed; finished file copied over).
+  **Graduated.** `/pos/new` was a genuine DEAD LINK shipped in the
+  reference app — the empty state's own primary action pointed at a route
+  that 404'd, unreachable in ordinary use because the empty state itself
+  never fires with 30 seeded records. Built the real screen (detail-form's
+  shape, scoped to the fields `po-app`'s data model actually has), added a
+  persistent create button (the dead link was the ONLY way to reach it
+  before), and refactored last wake's cost-centre picker into a shared
+  helper two independent forms now both use. Added 3 new checks to
+  `check-po-app.mjs` (Slice 26.1's gate) — one of which caught a real bug
+  in ITS OWN first version (a row-count assertion that could never detect
+  an addition once the list exceeded one page). Full report:
+  `.roundtable/explore-po-create-2026-08-20.md`.
+
 ---
 
 ## Operating rules (every loop obeys)

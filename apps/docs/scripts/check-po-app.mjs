@@ -136,11 +136,67 @@ try {
     JSON.stringify({ bothCounts: /could not be/.test(bulk), rowReason: /data-row-state="error"/.test(bulk) }),
   );
 
+  // /patterns/detail-form: "422 → the SAME form re-rendered with aria-invalid
+  // + messages, values preserved". /pos/new used to be a dead link (roadmap
+  // Explore, po-create spike) — nothing exercised it until now.
+  const badNewPo = await fetch(`${base}/pos/new`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams([['vendor', ''], ['cc', 'CC-9999'], ['amount', '100']]).toString(),
+  });
+  const badNewPoBody = await badNewPo.text();
+  check(
+    'creating a PO with a bad cost centre returns 422, keeps entered values, marks only the bad fields',
+    badNewPo.status === 422 &&
+      /id="new-cc" name="cc"[^>]*value="CC-9999"[^>]*aria-invalid="true"/.test(badNewPoBody) &&
+      /id="new-amount" name="amount"[^>]*value="100"/.test(badNewPoBody) &&
+      !/id="new-amount"[^>]*aria-invalid/.test(badNewPoBody),
+    JSON.stringify({ status: badNewPo.status }),
+  );
+
+  // Same pattern, the success path: creates the record and redirects to it —
+  // /patterns/detail-form's own contract ("POST /po/:id → redirect to the
+  // record on success"). Checking the list page's ROW COUNT here would
+  // never catch a missing add: /pos only renders page 1 (PAGE_SIZE=10),
+  // capped regardless of how many records exist — caught before trusting
+  // it, an early version of this check compared before/after counts and
+  // both were 10 no matter what. Check the new id actually appears on
+  // page 1 instead — it's unshift()ed to the front, so it must.
+  const goodNewPo = await fetch(`${base}/pos/new`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams([['vendor', 'Gate Test Vendor'], ['cc', 'CC-2205'], ['amount', '42.50']]).toString(),
+  });
+  const location = goodNewPo.headers.get('location') || '';
+  const created = location ? await fetch(base + location).then(text) : '';
+  const newId = location.replace('/pos/', '');
+  const listAfter = await fetch(`${base}/pos`).then(text);
+  check(
+    'creating a valid PO redirects to the new record and it appears in the list',
+    goodNewPo.status === 302 &&
+      /Gate Test Vendor/.test(created) &&
+      /CC-2205/.test(created) &&
+      newId.length > 0 &&
+      listAfter.includes(`row-${newId}`),
+    JSON.stringify({ status: goodNewPo.status, location, foundInList: listAfter.includes(`row-${newId}`) }),
+  );
+
+  // roadmap Explore, value-help spike: the shared cost-centre picker's
+  // server-side search actually narrows, from the real endpoint both
+  // /pos/new and mass-change's dialog point at.
+  const ccSearch = await fetch(`${base}/cost-centers?q=log`).then(text);
+  check(
+    'the cost-centre picker search endpoint narrows server-side',
+    /CC-2205/.test(ccSearch) && !/CC-4021/.test(ccSearch),
+    JSON.stringify({ hasLogistics: /CC-2205/.test(ccSearch), hasFacilities: /CC-4021/.test(ccSearch) }),
+  );
+
   /* ---- accessibility over the app's own routes ---- */
   const browser = await launchDocsBrowser();
   const page = await browser.newPage();
   await page.evaluateOnNewDocument(AXE);
-  const ROUTES = ['/', '/pos', '/import', '/spend', '/receive', '/pos/PO-88210'];
+  const ROUTES = ['/', '/pos', '/pos/new', '/import', '/spend', '/receive', '/pos/PO-88210'];
   const violations = [];
   for (const route of ROUTES) {
     for (const width of WIDTHS) {
