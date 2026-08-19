@@ -182,9 +182,11 @@ ${deliveryMonth(2026, 8)}
       a screen reader announces "Header, group" before the fields.</li>
       <li><strong>Rows</strong> — <code>.bo-form-row</code> is an auto-fit grid, so
       columns collapse by available width with no breakpoint to maintain.</li>
-      <li><strong>Line items</strong> — the
-      <a href={base + '/patterns/editable-grid'}>editable grid</a> nested inside the
-      form; its dirty state is per-row and independent of the header fields.</li>
+      <li><strong>Line items</strong> — a plain table here (one seamless numeric
+      cell per row, no dirty tracking, kept simple for this page's own scope);
+      nest the fully-wired <a href={base + '/patterns/editable-grid'}>editable
+      grid</a> — <code>data-row-edit</code>, per-row dirty state independent of
+      the header fields — where line items need Save/Cancel of their own.</li>
       <li><strong>Delivery calendar</strong> — <a href={base + '/components/calendar'}>calendar</a>
       for the one field whose valid days are constrained; closed and holiday days
       are disabled submit buttons, not styling.</li>

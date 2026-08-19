@@ -1085,10 +1085,57 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        data-hooks, learning-path, components-used, boost, notes), stylelint
        clean, axe 90 pages x 2 widths zero violations.
 
-       **Batch 3 next: the rest of the 19** (alphabetical from here — no
-       more worst-suspect signal to rank by once the accumulation-prone
-       screens are through) — item stays open until all 19 are through, per
-       its own "then the rest of the 19."
+       **Batch 3 landed 2026-08-20** — bulk-actions, detail-form,
+       editable-grid, field-editor (alphabetical, no more worst-suspect
+       signal to rank by). Reports:
+       `.roundtable/design-grill-{bulk-actions,detail-form,editable-grid,field-editor}-2026-08-20.md`.
+
+       **Two "all keep" verdicts** — `bulk-actions` and `field-editor` — both
+       already used the Who/What-done opener format and had every Anatomy
+       claim checked against the live page with nothing found wrong.
+       `field-editor`'s "why one Save, not per-row" argument cites a
+       measured regression from an earlier version of the same page (a
+       button 228px from the field it saves, in an actions column taking
+       37% of the table) — reasoning from this project's own history, not a
+       hypothetical.
+
+       **Two more instances of Anatomy claiming what the live demo doesn't
+       show** — `bulk-actions`' "Selection"/"Toolbar action" items (no
+       checkboxes or toolbar rendered before Anatomy; pointed to
+       `invoice-list`, verified live there first) and `detail-form`'s "Line
+       items" claim (said the nested table has editable-grid's per-row dirty
+       state; it's actually a plain table with no `data-row-edit` at all —
+       pointed to `editable-grid` instead of building the real thing here).
+       `detail-form`'s sticky-action-bar claim was checked against
+       `form-section.css` directly and confirmed accurate, not just assumed.
+
+       **A real, measured framework bug in `initRowEdit()`'s Cancel
+       handling, found operating the live `editable-grid` demo, not by
+       reading source.** A row with a still-invalid cell
+       (`aria-invalid="true"`, "Exceeds on-hand") loses its
+       `data-row-state` entirely on Cancel — even when Cancel restores the
+       field to its ORIGINAL, still-invalid value. Confirmed by direct DOM
+       read after the click: `{rowState: null, qtyValue: "450",
+       ariaInvalid: "true", messageStillThere: true}`. The cell-level signal
+       survives; the row-level tint the States table promises does not — the
+       two channels fall out of sync exactly when a user opens a
+       pre-existing error and cancels out without fixing it. Not patched
+       here (state-machine code three other patterns compose against);
+       queued as 58.4.
+
+       Also fixed: `editable-grid`'s missing Who/What-done opener (the
+       "what, not who" gap this whole sweep keeps finding).
+
+       Verified live (bind-mounted container, direct DOM interaction for
+       the Cancel-state finding, not just a screenshot), `npm run build`
+       gates green (page-shape, claims, link-check 8525 links, markup,
+       calendar-grid, data-hooks, learning-path, components-used, boost,
+       notes), stylelint clean, axe 90 pages x 2 widths zero violations.
+
+       **10 of 19 through. Batch 4 next: the remaining 9** — filter-panel,
+       goods-receipt, invoice-list, login, master-detail, object-page,
+       validation-summary, value-help, wizard — item stays open until all
+       19 are through, per its own "then the rest of the 19."
 
        Accept, per screen: the skill's own contract — measured inputs
        (primary-action count, hierarchy scan, element census, state language,
@@ -1113,6 +1160,26 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        528-568px band specifically since that's where this was measured;
        the fix doesn't regress the existing 480px hide-labels tier; verified
        live, both themes.
+
+3. [ ] **58.4 — `initRowEdit()`'s Cancel clears `data-row-state` without
+       checking for a surviving `aria-invalid` cell.** Found during 58.1
+       batch 3's `editable-grid` grill, by operating the live demo, not
+       reading source: a row with a still-invalid cell restores to its
+       ORIGINAL (still-invalid) value on Cancel, yet loses its row-level
+       error/dirty tint entirely — measured via direct DOM read after the
+       click: `{rowState: null, qtyValue: "450", ariaInvalid: "true",
+       messageStillThere: true}`. The cell-level signal (border + message)
+       survives; the row-level one (the "two channels" the States tables of
+       three patterns — `editable-grid`, `field-editor`, `detail-form` — all
+       promise) does not. Accept: `setDirty(false)` (or its caller) checks
+       the row for any remaining `[aria-invalid="true"]` cell before
+       clearing `data-row-state`, restoring `"error"` instead of `null` when
+       one exists; a small reproduction (invalid cell → edit → Cancel) added
+       as a behavior test; verified live that the row-level tint survives
+       Cancel exactly when the underlying error does. Not a same-wake patch
+       — `row-edit.ts` is composed by `editable-grid`, `field-editor`, and
+       `detail-form`'s own line-items table, so the fix needs the same
+       multi-call-site verification 58.3 requires.
 
 ## Slice 60 — Standardize sweep: one gate hand-rolled its own exit contract (2026-08-19)
 
