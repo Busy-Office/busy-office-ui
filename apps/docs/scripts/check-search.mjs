@@ -64,6 +64,11 @@ const REGIONS = [
 const measure = (selector) =>
   page.evaluate((sel) => {
     const srgb = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+    /* NOT the shared wcag.mjs, deliberately: this runs inside page.evaluate,
+       so it is serialised into the BROWSER and cannot import a Node module.
+       Eight duplicated lines is the cheaper mistake than a gate that throws in
+       a page context. Equivalent by construction — both are the published WCAG
+       formula, and wcag.mjs records the five vectors they were checked on. */
     const lum = (c) => { const [r, g, b] = c.match(/[\d.]+/g).map(Number); return 0.2126 * srgb(r) + 0.7152 * srgb(g) + 0.0722 * srgb(b); };
     const ratio = (a, b) => { const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
     const opaqueBg = (el) => {

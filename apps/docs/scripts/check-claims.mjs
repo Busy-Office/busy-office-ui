@@ -18,6 +18,7 @@ import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
+import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
@@ -802,14 +803,6 @@ check(
    the result. It shipped at 0.6 for months: header text composited to 3.28:1
    against a 4.5:1 requirement, while body text passed at 4.61:1, which is why
    nobody noticed by looking. Measured here, in both themes, on the real thing. */
-const luminance = (r, g, b) => {
-  const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
-  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
-};
-const contrastOf = (fg, bg) => {
-  const L1 = luminance(...fg); const L2 = luminance(...bg);
-  return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
-};
 for (const theme of ['light', 'dark']) {
   await visit('/components/data-table/', { width: 1440 });
   await page.evaluate((t) => localStorage.setItem('bo-theme', t), theme);
@@ -827,7 +820,7 @@ for (const theme of ['light', 'dark']) {
     };
   });
   const worst = Math.min(
-    ...dim.colors.map((c) => contrastOf(c.map((v, i) => v * dim.opacity + dim.bg[i] * (1 - dim.opacity)), dim.bg)),
+    ...dim.colors.map((c) => contrastRatio(composite(c, dim.bg, dim.opacity), dim.bg)),
   );
   check(
     `data-loading: a dimmed table stays AA-readable (${theme})`,

@@ -11,6 +11,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { contrastRatio } from './wcag.mjs';
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 // The raw palette steps live in the generated scales.css since Slice 22;
@@ -43,17 +44,11 @@ function hexToRgb(hex) {
   const full = h.length === 3 ? [...h].map((c) => c + c).join('') : h;
   return [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
 }
-function luminance(hex) {
-  const [r, g, b] = hexToRgb(hex).map((v) => {
-    const s = v / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-function ratio(fg, bg) {
-  const [l1, l2] = [luminance(fg), luminance(bg)].sort((a, b) => b - a);
-  return (l1 + 0.05) / (l2 + 0.05);
-}
+/* The arithmetic lives in wcag.mjs — this gate, check-claims and (necessarily,
+   from inside a page) check-search all needed it, and one formula stored three
+   times is how the source-skip list and the outcome vocabulary drifted before.
+   Proved equivalent on five vectors to 1e-12 before merging. */
+const ratio = (fgHex, bgHex) => contrastRatio(hexToRgb(fgHex), hexToRgb(bgHex));
 
 // The documented role pairs. threshold: 4.5 text, 3 non-text.
 const PAIRS = [
