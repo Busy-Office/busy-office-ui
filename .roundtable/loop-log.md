@@ -396,3 +396,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 14:13 · Continue · build · 45.2 — invoice-list paginates, master-detail drawers; 'full-width' prose corrected to the deliberate 85vw cap · landed · 32b069d
 - 2026-08-19 14:27 · Standardize · tidy · 47.1 — [1440,390] consolidated into viewports.mjs (5 gates); verified by perturbation · landed · efaf3da
 - 2026-08-19 14:27 · Standardize · tidy · 47.2 — visual-regression silently baselined unknown shots and passed; now fails loudly · landed · efaf3da
+- 2026-08-19 14:48 · Continue · build · 45.6 batch 1 — 7 claims for silent-failure behaviours (combobox, scan-input, validation-summary, collapsible-card); 48->55 · landed · a10f679
