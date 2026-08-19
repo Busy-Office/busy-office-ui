@@ -73,6 +73,16 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
           ))}
         </tbody>
       </table>
+      <div class="bo-data-table__footer">
+        <nav class="bo-pagination" aria-label="Invoice pages">
+          <button class="bo-pagination__btn" type="button" disabled aria-label="Previous page">‹</button>
+          <a class="bo-pagination__btn" aria-current="page" href="?page=1">1</a>
+          <a class="bo-pagination__btn" href="?page=2">2</a>
+          <a class="bo-pagination__btn" href="?page=3">3</a>
+          <a class="bo-pagination__btn" href="?page=2" aria-label="Next page">›</a>
+          <span class="bo-pagination__info">1–6 of 312</span>
+        </nav>
+      </div>
     </div>
     </form>
     <p class="bo-u-text-muted">The rows and the bulk buttons are one
@@ -248,6 +258,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     read-many-records tier.</p>
     <ul class="bo-cluster docs-list-bare">
       <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/pagination'}>Pagination</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/filters'}>Filters</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>

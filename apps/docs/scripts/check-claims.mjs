@@ -900,6 +900,77 @@ check(
   JSON.stringify({ alertBefore, alertAfter }),
 );
 
+/* Two screens that promised behaviour they never showed (roadmap 45.2).
+   `invoice-list` discussed paging in four places and rendered none;
+   `master-detail` said the panel "becomes a full-width drawer" and rendered no
+   drawer. Both now show it, and both are asserted so the promise cannot quietly
+   detach from the screen again. */
+
+// The invoice list pages, and print drops the pager with the rest of the chrome.
+await visit('/patterns/invoice-list/', { width: 1440 });
+const pager = await page.evaluate(() => {
+  const nav = document.querySelector('.bo-pagination');
+  return {
+    exists: !!nav,
+    current: nav?.querySelector('[aria-current="page"]')?.textContent.trim(),
+    info: nav?.querySelector('.bo-pagination__info')?.textContent.trim(),
+    inFooter: !!nav?.closest('.bo-data-table__footer'),
+  };
+});
+check(
+  'invoice-list: the flagship list actually paginates',
+  pager.exists && pager.current === '1' && /of \d+/.test(pager.info ?? '') && pager.inFooter,
+  JSON.stringify(pager),
+);
+
+await visit('/patterns/invoice-list/', { media: 'print' });
+await new Promise((r) => setTimeout(r, 200));
+const pagerPrint = await page.evaluate(() => {
+  const nav = document.querySelector('.bo-pagination');
+  return { display: nav ? getComputedStyle(nav.closest('.bo-data-table__footer')).display : 'NO PAGER' };
+});
+check(
+  'invoice-list: print drops the pager, as the page says it does',
+  pagerPrint.display === 'none',
+  JSON.stringify(pagerPrint),
+);
+
+// The detail arrives as a real drawer, and Escape returns focus to its trigger.
+await visit('/patterns/master-detail/', { width: 390 });
+await page.click('[data-dialog-trigger="md-drawer"]');
+await new Promise((r) => setTimeout(r, 200));
+const drawerOpen = await page.evaluate(() => {
+  const d = document.getElementById('md-drawer');
+  return {
+    open: d.open,
+    isOffcanvas: d.classList.contains('bo-offcanvas'),
+    width: Math.round(d.getBoundingClientRect().width),
+    viewport: document.documentElement.clientWidth,
+  };
+});
+/* Width, not `right`: `right` slides in via `translate: 100% 0`, so sampling it
+   on a timer reads a mid-animation number — it returned 395 then 399 at a 390
+   viewport and looked like a THEME difference before it was recognised as the
+   transition. Width is stable throughout the slide. */
+await page.keyboard.press('Escape');
+await new Promise((r) => setTimeout(r, 250));
+const drawerClosed = await page.evaluate(() => ({
+  open: document.getElementById('md-drawer').open,
+  focusBack: document.activeElement === document.querySelector('[data-dialog-trigger="md-drawer"]'),
+}));
+check(
+  'master-detail: the promised drawer opens, and Escape closes it and restores focus',
+  drawerOpen.open && drawerOpen.isOffcanvas && drawerOpen.width > 200 &&
+    !drawerClosed.open && drawerClosed.focusBack,
+  JSON.stringify({ ...drawerOpen, ...drawerClosed }),
+);
+// And it is NOT full-width — the page says a sliver of the list stays visible.
+check(
+  'master-detail: the drawer is capped at 85vw, so the list stays partly visible behind it',
+  drawerOpen.width < drawerOpen.viewport && drawerOpen.width <= Math.round(drawerOpen.viewport * 0.85) + 1,
+  JSON.stringify({ ...drawerOpen, ...drawerClosed }),
+);
+
 await browser.close();
 server.close();
 

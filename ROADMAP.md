@@ -686,7 +686,7 @@ nine rows risked instead of fifty-five.
        add the demo first, as the alerts page needed. Prioritise the ones whose
        failure is silent.
 
-2. [ ] **45.2 — Two patterns promise behaviour no screen shows.**
+2. [x] **45.2 — Two patterns promise behaviour no screen shows.** — landed 2026-08-19
        `/patterns/master-detail` says the panel "becomes a full-width drawer over
        the list" below the shell breakpoint and links to `offcanvas` — no screen
        renders one. `invoice-list`, the flagship list, does not paginate, which
@@ -700,6 +700,30 @@ nine rows risked instead of fifty-five.
        390; invoice-list paginates. Neither adds framework CSS — both components
        already ship. If either turns out to be wrong for the screen, record that
        instead and fix the prose that promises it.
+
+       **Landed 2026-08-19.** `invoice-list` paginates: a `.bo-pagination` in the
+       table FOOTER, which is where placement is load-bearing — `data-table.css`
+       already hides `__toolbar, __footer` in print, so the page's print prose is
+       true by construction rather than by a second rule. `master-detail` renders
+       a real `.bo-offcanvas--end` drawer; `initDialogs()` already ran there, so
+       no new wiring and no new framework CSS. Both `pagination` and `offcanvas`
+       are back on their "Components used" lists, now kept honest by 46.2's gate.
+
+       **The prose was wrong, not the component — corrected, per the Accept's own
+       escape clause.** The page promised a "full-width drawer"; `.bo-offcanvas`
+       is `min(18rem, 85vw)`, which is 288px at a 390 viewport. That cap is
+       deliberate and worth stating: a sliver of the list stays visible so the
+       user keeps their place. The page now says that, and a 48th claim asserts
+       the cap (`width < viewport`), red-proved by forcing `100vw` into the built
+       CSS — exactly one claim went red.
+
+       **A probe artifact nearly became a finding (46.1 in force).** Measuring the
+       drawer's right edge on a 250ms timer returned 395 light / 399 dark at a
+       390 viewport — an impossible *theme* difference that was really the
+       `translate: 100% 0` slide-in sampled mid-flight. Sampling until the rect
+       stopped moving gave 288px flush-right in all four contexts. The claim
+       measures WIDTH, which is stable through the slide; the reason is a comment
+       in `check-claims.mjs` so the next person does not re-derive it.
 
        **Note (46.2, 2026-08-19):** both claims have been REMOVED from those
        pages' "Components used" lists, so the docs no longer overstate what they

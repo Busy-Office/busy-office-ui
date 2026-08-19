@@ -79,6 +79,34 @@ const rows = [
   </section>
 
   <section class="demo">
+    <h2>The same record on a narrow screen — a drawer</h2>
+    <p>Below the shell breakpoint a side panel has nowhere to sit, so the detail arrives
+    as a full-width drawer over the list. <strong>This page used to say that and show
+    nothing</strong> — here it is, at any width, so the promise is inspectable:</p>
+    <button class="bo-btn bo-btn--secondary" type="button" data-dialog-trigger="md-drawer">
+      Open the detail as a drawer
+    </button>
+    <dialog class="bo-offcanvas bo-offcanvas--end" id="md-drawer" data-state="closed" aria-labelledby="md-drawer-title">
+      <div class="bo-offcanvas__header">
+        <h3 class="bo-widget__title" id="md-drawer-title">Umbrella Logistics GmbH</h3>
+        <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" data-dialog-close aria-label="Close">×</button>
+      </div>
+      <dl class="bo-kv bo-kv--rows">
+        <div><dt>Vendor no.</dt><dd>V-1001</dd></div>
+        <div><dt>Country</dt><dd>Germany</dd></div>
+        <div><dt>Payment terms</dt><dd>Net 30</dd></div>
+      </dl>
+    </dialog>
+    <p class="bo-u-text-muted">It is <strong>not</strong> full-width, deliberately:
+    <code>.bo-offcanvas</code> is <code>min(18rem, 85vw)</code>, so a sliver of the list
+    stays visible behind it and the user keeps their place. Same record, same fields, same
+    <code>initDialogs()</code> wiring — only the container changes. It is a real
+    <code>&lt;dialog&gt;</code>, so Escape closes it and focus returns to the trigger
+    without any code of ours. <strong>Selection survives closing it</strong>, which is
+    the whole reason the list is not re-rendered.</p>
+  </section>
+
+  <section class="demo">
     <h2>The same record in a dialog</h2>
     <p>When the detail is an <em>edit</em> rather than a read, a modal keeps the user from
     losing it behind the list. Same record, same fields, different container — and the
@@ -147,7 +175,7 @@ const rows = [
     </div>
     <p class="bo-u-text-muted">
       On narrow screens the choice collapses: below the shell's breakpoint a side panel has
-      nowhere to sit, so it becomes a full-width <a href={base + '/components/offcanvas'}>drawer</a>
+      nowhere to sit, so it becomes a <a href={base + '/components/offcanvas'}>drawer</a>
       over the list. Design the panel so that works — one column, no side-by-side fields.
     </p>
   </section>
@@ -195,7 +223,7 @@ const rows = [
           <tr><td>Detail 404</td><td>panel becomes an empty state; the row is deselected rather than left highlighted pointing at nothing</td></tr>
           <tr><td>Save conflict</td><td>409 in the panel with both values — see <a href={base + '/concepts/concurrency'}>concurrency</a>; nothing auto-merges</td></tr>
           <tr><td>No permission to edit</td><td>the panel reads; the Edit control is absent, not disabled</td></tr>
-          <tr><td>Narrow screen</td><td>the panel becomes a drawer over the list; selection survives closing it</td></tr>
+          <tr><td>Narrow screen</td><td>the panel becomes a drawer over the list — capped at 85vw, so a sliver of the list stays visible and the user keeps their place; selection survives closing it</td></tr>
         </tbody>
       </table>
     </div>
@@ -208,6 +236,7 @@ const rows = [
       <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard#card'}>Card</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/offcanvas'}>Drawers</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
     </ul>
