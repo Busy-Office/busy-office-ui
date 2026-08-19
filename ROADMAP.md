@@ -748,6 +748,27 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 64 — from the Objective grill, Slices 51-63 (2026-08-20)
+
+Full findings: `.roundtable/grill-objective-slices51-63-2026-08-20.md`. Base
+corrected before measuring: the first pass used the wrong (superseded) prior
+grill as the diff base, caught before any number was trusted, per the
+project's own base-rate rule — no measurement was quoted from the wrong base.
+
+**No new items triaged — this window has nothing to correct.** Ten commits
+landed (51.1, 53.2, 53.3, Standardize sweep 63, design-grill batch 1 / 58.1)
+and every one of them either shrank framework surface without breaking a
+call site (53.2, four icon glyphs deprecated in place), was scored and
+REFUSED as new component surface (53.3 — NET −2 for a new component, +1 for
+a bare recipe, both short of the +4 bar; accepted only once anchored to a
+real composition inside `record-detail`), was pure audit with zero code
+changes (Standardize 63), or found and fixed a real content bug instead of
+shipping ornament (58.1's `PO-4021`/`PO-88213` mismatch). Framework class
+count held flat at 189 across the whole window. Checked, not assumed: 53.3's
+accepted diff table is confirmed live at `record-detail.astro:113-123`, not
+just scored on paper. Continue the FIFO backlog: 58.1 batch 2
+(settings-admin, approval, staging) is next.
+
 ## Slice 62 — from the Objective grill, Slices 56-61 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices56-61-2026-08-19.md`.
