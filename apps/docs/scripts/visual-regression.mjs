@@ -5,6 +5,7 @@
  *
  *   node scripts/visual-regression.mjs            # diff against baselines
  *   node scripts/visual-regression.mjs --update   # (re)write baselines
+ *   node scripts/visual-regression.mjs --update --only=_-light   # just those
  *
  * Tooling call (2026-08-15): puppeteer-core driving the SYSTEM Chrome —
  * no 150MB browser download, instant install; the trade-off is that a
@@ -25,12 +26,21 @@ import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { WIDTHS } from './viewports.mjs';
+import { DOCS_ROOT, DIST } from './paths.mjs';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dist = join(root, 'dist');
+const root = DOCS_ROOT;
+const dist = DIST;
 const baseDir = join(root, 'visual-baselines');
 const diffDir = join(root, 'visual-diffs');
 const update = process.argv.includes('--update');
+/* `--only=<substring>` narrows an update to the shots whose name matches.
+   Without it `--update` is all-or-nothing, and accepting ONE intended change
+   rewrites all 40 baselines: the homepage density fix (Standardize, 2026-08-19)
+   silently restaged 14 unrelated 1440px shots that differed only by sub-budget
+   antialiasing noise. Fourteen unexplained binary diffs in a commit is exactly
+   what "verify a bulk edit against what it renders" exists to prevent. */
+const onlyArg = process.argv.find((a) => a.startsWith('--only='));
+const only = onlyArg ? onlyArg.slice('--only='.length) : null;
 
 const PAGES = [
   '/',
@@ -127,6 +137,10 @@ for (const theme of THEMES) {
       const shot = await page.screenshot({ fullPage: true });
       const basePath = join(baseDir, name);
       const exists = await access(basePath).then(() => true, () => false);
+      if (update && only && !name.includes(only)) {
+        console.log(`  skipped (--only=${only}): ${name}`);
+        continue;
+      }
       if (update) {
         await writeFile(basePath, shot);
         written++;

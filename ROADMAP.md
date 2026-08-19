@@ -557,6 +557,89 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
        with an explicit error, because a silently-dropped section is worse than
        none — the file would still look complete.
 
+## Slice 49 — Standardize sweep: inline styles, and the paths sweep's leftovers (2026-08-19)
+
+Dispatched by the counter at 5/4. Multi-round; the exit condition is a clean
+scan, not a first fix.
+
+1. [x] **49.1 — The scan's main output was what NOT to change.** A regex found
+       10 raw-valued spacing declarations in inline styles. Only **one** was
+       live markup; the other nine sit inside copyable code samples, including
+       `<body style="margin:1rem">` in a troubleshooting page that teaches a
+       standalone HTML file, where a raw value is correct. A bulk "fix" would
+       have rewritten nine user-facing samples.
+
+       Also corrected a wrong premise of my own before acting on it: I assumed
+       tokenising would restore density-awareness. It would not — `--bo-space-*`
+       are NOT density-remapped; density remaps the `--bo-density-*` aliases
+       that reference them. `var(--bo-space-4)` and `1rem` are identical. The
+       case for the change is consistency, and saying otherwise would have been
+       a fabricated benefit.
+
+2. [x] **49.2 — Inline flex/grid where a primitive already exists.**
+       `reference/tokens.astro` — the page documenting the spacing scale — laid
+       out its rows with `display:flex;gap:1rem` instead of `.bo-cluster` and a
+       token from that very scale. `concepts/theming.astro` had
+       `display:flex; gap; align-items:center; flex-wrap:wrap`, which is
+       `.bo-cluster` verbatim; its box decoration moved into the `.brand-preview`
+       rule that already existed. Both verified **layout-neutral by
+       measurement** — identical child positions, heights and computed gap in
+       both themes, before and after.
+
+       `patterns/master-detail.astro` keeps its inline grid, and now says why:
+       `.bo-grid` is `auto-fill`, which keeps empty tracks and would shrink both
+       panes at wide widths; that layout needs `auto-fit`. Adding a modifier to
+       express it would widen the public API to remove four lines of inline
+       style, which the Standardize rule forbids.
+
+3. [x] **49.3 — The home page illustrated density with something density does
+       not affect.** Three `.bo-badge`s whose sizes were hand-faked with inline
+       `padding-block`, and `.bo-badge` consumes no density token at all (it
+       sizes from `em`). The "spacious" one did not even set `data-density`. The
+       framework's headline feature, demonstrated by theatre, on the front page.
+
+       Now three `.bo-btn`s, which do consume `--bo-density-control-height`, and
+       they measure **28 / 36 / 44px** because density made them. Claim 60
+       asserts strictly increasing heights AND no inline padding, so the theatre
+       version fails; red-proved by collapsing the tiers to `comfortable`.
+
+4. [x] **49.4 — `paths.mjs` had been created and then not adopted.** Six scripts
+       still derived their own paths. One of them, `check-versions`, used
+       `new URL('..', import.meta.url).pathname` — **the exact broken spelling
+       `paths.mjs` was written to eliminate**, percent-encoded and ENOENT on any
+       checkout whose path contains a space. Demonstrated rather than asserted:
+       `/Users/some%20user/…` vs `/Users/some user/…`. It has never surfaced
+       because no CI or dev path here has a space.
+
+       `check-published` was flagged by the same scan and left alone — its
+       `new URL(...)` is an HTTP URL, not a filesystem path.
+
+5. [x] **49.5 — Two self-inflicted faults, both caught by running the thing.**
+       The import-insertion helper skipped `check-versions` because its guard
+       tested for the string `paths.mjs`, which the comment I had just written
+       contained. And in `gen-llms` the insertion landed **inside a template
+       literal** — the llms.txt content that teaches consumers which CSS to
+       import — because the regex matched an `import` line in generated output.
+       That would have shipped a stray line into a user-facing artifact. Both
+       found by executing the scripts, not by reading the diff; the build went
+       red on the second one.
+
+6. [x] **49.6 — `--update` was all-or-nothing, and that caused a bad diff.**
+       Accepting the four intended homepage baselines rewrote **all 40**,
+       silently restaging 14 unrelated 1440px shots that differed only by
+       sub-budget antialiasing noise. Those were restored by hand, and
+       `visual-regression` now takes `--only=<substring>`, proved by running it
+       with a non-matching filter and confirming it wrote nothing.
+
+       The four homepage baselines were accepted only after the growth was
+       **attributed exactly**: the density cluster goes 32px → 73px, and the
+       document grows 41px — the same 41px the PNGs grew (5029 → 5070), so the
+       whole delta is that one cluster and nothing else moved.
+
+**Exit:** the re-scan is clean — 0 raw-valued spacing in live markup, 0
+hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
+script deriving a path that `paths.mjs` already exports.
+
 ## Slice 48 — Owner input: the SAP Object Page floorplan (2026-08-19)
 
 Raised by the owner mid-wake: *"do you know SAP object page?"* Triaged here

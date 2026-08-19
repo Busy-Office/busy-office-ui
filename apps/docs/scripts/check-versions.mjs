@@ -7,8 +7,13 @@
 // judgement to get wrong, and ceremony around a lookup is noise.
 import { readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
+import { DOCS_ROOT } from './paths.mjs';
 
-const docsRoot = new URL('..', import.meta.url).pathname;
+/* Was `new URL('..', import.meta.url).pathname` — percent-ENCODED, so every
+   readFile under it fails with ENOENT on a checkout whose path contains a
+   space. paths.mjs exists to hold the one correct spelling; this script was
+   left behind by that sweep (Standardize, 2026-08-19). */
+const docsRoot = DOCS_ROOT;
 const { snapshots } = JSON.parse(await readFile(join(docsRoot, 'versions.json'), 'utf8'));
 const missing = [];
 for (const v of snapshots) {

@@ -25,8 +25,9 @@ import { fileURLToPath } from 'node:url';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { WIDTHS } from './viewports.mjs';
+import { REPO_ROOT } from './paths.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
+const repoRoot = REPO_ROOT;
 const AXE = readFileSync(join(repoRoot, 'node_modules/axe-core/axe.min.js'), 'utf8');
 
 const freePort = () =>

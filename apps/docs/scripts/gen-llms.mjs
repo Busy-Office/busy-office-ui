@@ -10,12 +10,13 @@ import { MARKUP_RULES } from '../src/data/markup-rules.mjs';
 import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { DOCS_ROOT } from './paths.mjs';
 
 const require = createRequire(import.meta.url);
 const api = JSON.parse(await readFile(require.resolve('@busy-office/ui/api'), 'utf8'));
 const bh = JSON.parse(await readFile(require.resolve('@busy-office/ui/behaviors-manifest'), 'utf8'));
 const pkg = JSON.parse(await readFile(require.resolve('@busy-office/ui/package.json'), 'utf8'));
-const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const docsRoot = DOCS_ROOT;
 const site = 'https://busy-office.github.io/busy-office-ui';
 
 let out = `# busy-office-ui v${pkg.version}

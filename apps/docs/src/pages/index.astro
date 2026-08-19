@@ -214,10 +214,18 @@ const invoices = [
               <p>One attribute — <code>data-density</code> — remaps a token tier:
               30 / 40 / 48px rows, cascading, overridable per region. Users pick;
               text never clips.</p>
+              {/* Real controls, not badges. This showed three .bo-badges whose
+                  sizes were hand-faked with inline padding-block — and .bo-badge
+                  consumes no density token at all (it sizes from `em`), so the
+                  homepage was illustrating the framework's headline feature with
+                  something the feature does not affect. The "spacious" one did
+                  not even set data-density. Buttons DO consume
+                  --bo-density-control-height, so these three differ because
+                  density made them differ (Standardize sweep, 2026-08-19). */}
               <div class="bo-cluster">
-                <span class="bo-badge bo-badge--accent" data-density="compact" style="padding-block: 0.125rem">compact</span>
-                <span class="bo-badge bo-badge--accent">comfortable</span>
-                <span class="bo-badge bo-badge--accent" style="padding-block: 0.375rem">spacious</span>
+                <span data-density="compact"><button class="bo-btn bo-btn--secondary" type="button">compact</button></span>
+                <span data-density="comfortable"><button class="bo-btn bo-btn--secondary" type="button">comfortable</button></span>
+                <span data-density="spacious"><button class="bo-btn bo-btn--secondary" type="button">spacious</button></span>
                 <a href={base + '/concepts/density'}>Density →</a>
               </div>
             </div>

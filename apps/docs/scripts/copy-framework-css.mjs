@@ -5,8 +5,9 @@ import { copyFileSync, mkdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { DOCS_ROOT } from './paths.mjs';
 
-const here = dirname(fileURLToPath(import.meta.url));
+const here = join(DOCS_ROOT, 'scripts');
 const require = createRequire(import.meta.url);
 const src = require.resolve('@busy-office/ui/css/min');
 const outDir = join(here, '../public/assets');

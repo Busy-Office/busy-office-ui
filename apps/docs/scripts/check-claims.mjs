@@ -1270,6 +1270,28 @@ check(
   JSON.stringify(tags),
 );
 
+/* The home page's density showcase must be produced BY DENSITY. It previously
+   showed three .bo-badges whose sizes were hand-faked with inline padding —
+   and .bo-badge consumes no density token at all, so the framework's headline
+   feature was illustrated with something the feature does not affect. That is
+   invisible: three differently-sized pills look exactly like working density.
+   Asserting strictly increasing heights makes the theatre version fail. */
+await visit('/');
+const density = await page.evaluate(() =>
+  [...document.querySelectorAll('[data-density] > .bo-btn')].map((b) => ({
+    d: b.parentElement.dataset.density,
+    h: Math.round(b.getBoundingClientRect().height),
+    inlinePadding: b.style.paddingBlock || b.parentElement.style.paddingBlock || '',
+  })));
+check(
+  'home: the density samples differ because density made them differ, not inline padding',
+  density.length === 3 &&
+    density.map((x) => x.d).join() === 'compact,comfortable,spacious' &&
+    density[0].h < density[1].h && density[1].h < density[2].h &&
+    density.every((x) => x.inlinePadding === ''),
+  JSON.stringify(density),
+);
+
 await browser.close();
 server.close();
 

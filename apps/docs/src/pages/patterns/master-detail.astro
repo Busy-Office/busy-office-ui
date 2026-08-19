@@ -22,7 +22,13 @@ const rows = [
   <section class="demo">
     <h2>The screen — side panel</h2>
     {/* A plain bordered grid, not `.bo-app-shell`: the shell is 100dvh by design,
-        so embedding one in a demo forces a full-viewport box with dead space in it. */}
+        so embedding one in a demo forces a full-viewport box with dead space in it.
+        Not `.bo-grid` either, and deliberately (Standardize sweep, 2026-08-19):
+        that primitive is `auto-fill`, which keeps empty tracks, so a two-pane
+        split would shrink both panes at wide widths to make room for columns
+        that hold nothing. This needs `auto-fit`. Adding a modifier to `.bo-grid`
+        to express it would widen the public API to remove four lines of inline
+        style, which the Standardize rule forbids. */}
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: var(--bo-space-4); padding: var(--bo-space-4); border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)">
         <div class="bo-data-table-container" tabindex="0">
           <table class="bo-data-table" data-density="compact">

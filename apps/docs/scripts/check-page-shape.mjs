@@ -16,9 +16,10 @@ import { assertScanned } from './gate-report.mjs';
 import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { DOCS_ROOT, REPO_ROOT } from './paths.mjs';
 
-const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const repoRoot = join(docsRoot, '..', '..');
+const docsRoot = DOCS_ROOT;
+const repoRoot = REPO_ROOT;
 const coreRoot = join(repoRoot, 'packages/core');
 const pagesDir = join(docsRoot, 'src/pages/components');
 const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');

@@ -147,7 +147,7 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
   <section class="demo">
     <h2>Spacing scale</h2>
     {spaces.map(([n, v]) => (
-      <div style="display:flex;align-items:center;gap:1rem">
+      <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-4)">
         <code style="inline-size:8rem;font-size:var(--bo-font-size-xs)">--bo-space-{n}</code>
         <code style="inline-size:5rem;font-size:var(--bo-font-size-xs)" class="bo-u-text-muted">{v}</code>
         <span style={`display:inline-block;block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${n})`}></span>
