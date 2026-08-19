@@ -117,10 +117,24 @@ const skeleton = `<!doctype html>
 
   <section class="demo">
     <h2>Browser floor</h2>
-    <p><strong>{floor.label}.</strong> The framework uses
-    <code>@layer</code>, <code>:has()</code>, named container queries, and
-    <code>popover</code>. Server-set <code>aria-invalid</code> error messages degrade
-    gracefully below the floor; interactive <code>:has()</code> reveals do not.</p>
+    <p><strong>{floor.label}</strong> — <strong>{floor.reach}% of tracked browser
+    usage</strong> ({floor.reachSource}). The framework uses <code>@layer</code>,
+    <code>:has()</code>, named container queries, and <code>popover</code>. Server-set
+    <code>aria-invalid</code> error messages degrade gracefully below the floor;
+    interactive <code>:has()</code> reveals do not.</p>
+    <p class="bo-u-text-muted">
+      <strong>The ceiling is {floor.ceiling}%</strong>, because <code>@layer</code> is this
+      framework's API — no version of it can reach further than <code>@layer</code> does.
+      So the whole distance between what we ship and the best any framework of this shape
+      could do is <strong>{(floor.ceiling - floor.reach).toFixed(2)} points</strong>.
+    </p>
+    <p class="bo-u-text-muted">
+      Of that, <strong>0.91 points</strong> is bought by giving up two accessibility
+      features: the empty <code>alt</code> on decorative glyphs
+      (<code>content: "↕" / ""</code>, which stops a screen reader announcing an arrow)
+      and <code>:user-invalid</code> validation styling. We keep both. That trade is
+      recorded rather than assumed — see roadmap 38.2.
+    </p>
     <p class="bo-u-text-muted">One caveat: it assumes an unmodified root font-size. A
     host page that rescales <code>html</code> (legacy <code>62.5%</code> hacks) rescales
     every rem — embed via iframe instead.</p>

@@ -1283,7 +1283,7 @@ floor that is fine for a consumer product can be disqualifying here.
        floor means giving up one of those, both of which are accessibility
        features with known fallbacks.
 
-2. [ ] **38.2 — Decide, per feature, what the floor is worth.**
+2. [x] **38.2 — Decide, per feature, what the floor is worth.**
        Only answerable once 38.1 says which feature sets each number. For each
        one that raises the floor: how much reach it costs, what it buys, and
        whether a fallback exists.
@@ -1300,6 +1300,38 @@ floor that is fine for a consumer product can be disqualifying here.
        any lowered floor proven by actually rendering at it, not by reading a
        table; and if the answer is "the floor stays", that is recorded as a
        decision with its reason rather than left as an open question.
+
+       **Decided 2026-08-19: THE FLOOR STAYS.** Cited from
+       `caniuse-lite@1.0.30001809` via browserslist, now computed in
+       `derive-floor.mjs` and published on `/getting-started/installation`.
+
+       | scenario | reach | gain |
+       |---|--:|--:|
+       | current floor (119 · 128 · 17.4) | **80.20%** | — |
+       | drop `content` alt-text | 80.57% | +0.37 |
+       | drop `:user-invalid` | 80.74% | +0.54 |
+       | drop `popover` | 80.20% | **+0.00** — not the binding constraint |
+       | drop BOTH accessibility features | 81.11% | +0.91 |
+       | **`@layer` ceiling** (99 · 97 · 15.4) | **84.16%** | +3.96 |
+
+       **The decisive number is the ceiling.** `@layer` IS this framework's API,
+       so no version of it can reach past 84.16%. The entire distance between
+       what ships and the best a framework of this shape could do is **3.96
+       points** — and the two accessibility features cost **0.91** of that.
+
+       Giving up the empty `alt` on decorative glyphs (a screen reader would
+       announce "↕") and `:user-invalid` validation styling, to gain 0.91 points
+       of reach, is a bad trade in any product and a worse one in ERP, where the
+       users sit on managed fleets that are updated rather than ancient.
+
+       **The refuse test held without being needed:** no polyfill was
+       considered, because "modern CSS instead of a runtime" is the product.
+
+       **The instrument was wrong first, and the rule written yesterday caught
+       it.** The obvious query reported **27.29%** — browserslist's `chrome` and
+       `safari` ids are DESKTOP ONLY, omitting 53 points of mobile traffic. An
+       implausible number treated as an instrument defect, per 44.1, rather than
+       published.
 
 ## Slice 37 — score the surface for real ERP fit (owner wishlist, 2026-08-18)
 

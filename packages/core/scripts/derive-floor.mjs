@@ -22,6 +22,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bcd from '@mdn/browser-compat-data' with { type: 'json' };
+import browserslist from 'browserslist';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DIST = join(HERE, '..', 'dist');
@@ -168,6 +169,25 @@ const full = floorFor(TIERS);
 const floor = supported.floor;
 const drivenBy = supported.drivenBy;
 
+/* REACH, computed rather than asserted (roadmap 38.2). A floor is two numbers:
+   which browsers, and how many people that is. The second is the one a team
+   evaluating the framework actually cares about, and it is the one nobody
+   publishes.
+
+   Mobile ids are listed explicitly. browserslist's `chrome` and `safari` are
+   DESKTOP only, so the obvious query reports 27.29% for a floor that really
+   reaches 80.20% — a 53-point error, and exactly the implausible number
+   CLAUDE.md now says to treat as an instrument defect. */
+const reachQuery = (c, ff, s) =>
+  `chrome >= ${c}, edge >= ${c}, firefox >= ${ff}, safari >= ${s}, ` +
+  `and_chr >= ${c}, ios_saf >= ${s}, and_ff >= ${ff}, samsung >= 23, op_mob >= 80`;
+const coverage = (q) => Number(browserslist.coverage(browserslist(q)).toFixed(2));
+const reach = coverage(reachQuery(floor.chrome, floor.firefox, floor.safari));
+/* The architectural ceiling: @layer IS this framework's API, so no version of it
+   can reach further than @layer does. Publishing the gap is more honest than
+   publishing the floor alone. */
+const ceiling = coverage(reachQuery(99, 97, 15.4));
+
 const out = {
   generated: 'by scripts/derive-floor.mjs from dist/css — do not edit',
   source: `@mdn/browser-compat-data@${JSON.parse(await readFile(join(HERE, '..', '..', '..', 'node_modules/@mdn/browser-compat-data/package.json'), 'utf8')).version}`,
@@ -178,6 +198,9 @@ const out = {
   fullFidelityDrivenBy: full.drivenBy,
   /** Human-readable, so every page and README prints the same string. */
   label: `Chrome/Edge ${floor.chrome} · Firefox ${floor.firefox} · Safari ${floor.safari}`,
+  reach,
+  ceiling,
+  reachSource: `caniuse-lite@${JSON.parse(await readFile(join(HERE, '..', '..', '..', 'node_modules/caniuse-lite/package.json'), 'utf8')).version}`,
   features: detected,
 };
 await writeFile(join(DIST, 'floor.json'), JSON.stringify(out, null, 2) + '\n');
@@ -185,5 +208,6 @@ await writeFile(join(DIST, 'floor.json'), JSON.stringify(out, null, 2) + '\n');
 console.log(`floor derived — ${out.label}`);
 for (const b of BROWSERS) console.log(`  ${b.padEnd(8)} ${floor[b]}  (set by ${drivenBy[b]})`);
 console.log(`  from ${detected.length} detected feature(s), against ${out.source}`);
+console.log(`  reach ${reach}% of tracked browser usage (${out.reachSource}); @layer ceiling ${ceiling}%`);
 console.log('full fidelity (every cosmetic enhancement painting too):');
 for (const b of BROWSERS) console.log(`  ${b.padEnd(8)} ${full.floor[b]}  (set by ${full.drivenBy[b]})`);

@@ -94,7 +94,9 @@
     "postcss-nesting": "^13.0.1",
     "stylelint": "^16.10.0",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "browserslist": "^4.28.8",
+    "caniuse-lite": "^1.0.30001809"
   },
   "bin": {
     "bo-check-markup": "./scripts/check-markup.mjs"
