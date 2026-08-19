@@ -748,6 +748,61 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 73 — Owner ask: grill a right-click column-header context menu (2026-08-20)
+
+Triaged from chat: "selectable columns, right-click for action (sorting,
+filtering, hide column, set sticky column, etc) — what should be in this
+framework, or should be server side." Not a build ask on its own — graded
+against Objective principles 1-3 first, per-action rather than as one
+bundled feature, since "a right-click menu" bundles four things with four
+different answers.
+
+**Accept — the menu chrome itself.** Positioning, focus, `role="menu"`,
+arrow-key nav, Escape/outside-click dismiss is exactly the kind of hard
+problem this framework already solves for the toolbar's Columns picker
+(`.bo-dropdown__menu` + `popover`). A right-click menu is the SAME
+primitive, triggered by `contextmenu` instead of `click`, positioned at
+the cursor — "one general mechanism, a new trigger event," not a new
+component (principle 2 Accept shape). The menu's items call sort/hide/
+sticky toggles that already exist; no new framework logic, only wiring.
+
+**Refuse — filter logic in the framework.** Per-column filtering (which
+operators, what UI per data type, client vs. server query) is workflow/
+domain logic — principle 3's refuse test exactly ("framework does
+visuals, you do the data"), the same reasoning `data-tone`'s condition
+logic already follows. The framework's job stops at giving the header a
+place to put a filter trigger; the filter form is the consumer's.
+
+**Rethink — "set sticky" as framework-owned RUNTIME state.** Different in
+kind from sort/hide, not degree: which columns are frozen, for which
+user, persisted how, is exactly the state-ownership `DESIGN.md` already
+refused when it refused a full interactive grid. `data-sticky-cols`
+(Slice 72.1) stays a declarative attribute the server or a line of
+consumer JS sets — a "Freeze this column" menu item is legitimate as
+consumer JS toggling that attribute, not new framework state.
+
+**Item 73.1 — build the menu chrome, wired to sort/hide (the two
+mechanisms that don't need a Rethink).** `data-context-menu` on
+`.bo-data-table th`, reusing the existing popover/dropdown primitive,
+opened on `contextmenu` at cursor position instead of the trigger
+button's position. Items: Sort ascending/descending (calls the existing
+`aria-sort` toggle contract), Hide column (calls the existing
+`data-col-toggle` mechanism). No filter item (refused above); "Freeze
+this column" documented as a wiring example, not shipped as a menu item
+by default (the state-ownership question stays the consumer's).
+**Accept:** new behavior (`initColumnMenu()` or folded into
+`initDropdowns()` if the popover primitive already generalizes far
+enough — check before adding a new export), menu keyboard-navigable and
+dismissible, right-clicking a header doesn't ALSO trigger the browser's
+native context menu, works with `initDataTables()`/`initTableToolbar()`
+already on the page without double-triggering. Live-verified 1440 + 390,
+light + dark, in the bind-mounted Podman container. `check:contrast` and
+`check:rtl` (menu positioning) unaffected or explicitly re-verified.
+
+**Exit:** grill verdict recorded; 73.1 queued for the next Continue
+dispatch (not built in this triage step — Step 1 records the decision,
+Step 2 decides whether this wake builds it).
+
 ## Slice 72 — Owner wishlist: multi-sticky columns, tone text, width/font (2026-08-20)
 
 Triaged from chat, five asks against `/components/data-table`:
