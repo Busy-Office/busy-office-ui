@@ -442,3 +442,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 23:28 · Meta · refusal · widening the six-outcome vocabulary to add a refused-inline outcome (51.1's own Accept forbade it) — used a second Meta-loop row instead · refused · ab53d36
 - 2026-08-19 23:55 · Continue · build · 53.2 — icon: 8 active / 4 deprecated glyphs by measured demand; fixed a pre-existing duplicate <section> bug · landed · efd4fd0
 - 2026-08-19 23:55 · Meta · refusal · immediate deletion of the 4 zero-demand glyphs — they are published in v0.1.1, so cost-to-remove (45.5) forces the deprecation path instead · refused · efd4fd0
+- 2026-08-20 00:12 · Continue · build · 53.3 — change/audit diff scored (NET -2 as component, +1 as bare recipe); shipped as a real composition in record-detail's audit trail · landed · 42ec02e
+- 2026-08-20 00:12 · Meta · refusal · a new bo-change-diff component — scored NET -2, trivially composable (C1=3), would be pure surface over an already-solved problem · refused · 42ec02e
