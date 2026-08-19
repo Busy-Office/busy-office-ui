@@ -427,3 +427,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 20:51 · Standardize · tidy · 55.1 — month date-maths extracted to lib/month-grid.ts; the two spellings agreed only for Monday · landed · 6e57799
 - 2026-08-19 20:51 · Standardize · tidy · 55.2 — demoRegion() extracted; learning-path keeps its own with the reason recorded · landed · 6e57799
 - 2026-08-19 20:51 · Standardize · tidy · 55.3 — Astro frontmatter import placement trap recorded · logged · 6e57799
+- 2026-08-19 21:00 · Continue · build · 54.3 — Values grill: removed .bo-quantity--display (0 screens, NET -3, never published); refused an Amount input; rule stated on all three pages · landed · 2112b0a
