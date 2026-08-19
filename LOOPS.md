@@ -366,6 +366,18 @@ exhausted, is new user input or the dogfood loop (extend
 `examples/po-app` and feel where it fights — this produced the grouping,
 progress, and freeze-graduation rounds).
 
+- ~~value-help in po-app's mass-change flow~~ — spiked 2026-08-20 in an
+  isolated worktree (removed; nothing merged directly, the finished file
+  copied over instead). **Graduated.** Nested-dialog composition (a picker
+  opened from inside an already-open dialog) works with ZERO framework
+  changes — native `<dialog>` stacks correctly and each dialog's own focus
+  trap stays scoped to itself. Found and fixed a real, pre-existing bug
+  along the way: mass-change's 422 response put its OOB alert block before
+  the main swap content, which made `#po-rows` vanish from the DOM
+  entirely — confirmed not caused by the spike by reproducing on an
+  unmodified checkout FIRST. Full report:
+  `.roundtable/explore-value-help-po-app-2026-08-20.md`.
+
 ---
 
 ## Operating rules (every loop obeys)
