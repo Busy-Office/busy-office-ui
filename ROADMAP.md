@@ -893,7 +893,7 @@ nine rows risked instead of fifty-five.
        Verified live at 1440 and 390 in both themes; every gate green, axe zero
        violations, 40 visual shots unchanged.
 
-4. [ ] **45.4 — `calendar` has zero demand, and that is my doing.**
+4. [x] **45.4 — `calendar` has zero demand, and that is my doing.** — landed 2026-08-19
        Shipped 2026-08-17 with strong Composition, Contracts and Evidence scores
        (9 of 12) and used by **no screen** — only its own component page. A
        component demonstrated but never used in a pattern is documentation, not
@@ -903,6 +903,37 @@ nine rows risked instead of fifty-five.
        scheduling or goods receipt — or the review records it as dead weight and
        says so. Not a new pattern page for its own sake; only if the screen is
        one a back-office user genuinely sits in front of.
+
+       **Landed 2026-08-19 — used, not removed.** `/patterns/detail-form` now
+       has a **requested delivery date** calendar. That screen was chosen over a
+       new page on purpose: the Accept forbids a pattern page for the
+       component's own sake, and a buyer editing a PO is already someone who
+       picks a delivery date. No new screen, no new CSS.
+
+       **The marks had to be load-bearing or this would have been decoration.**
+       The dock is shut at weekends and closed for a company shutdown on the
+       7th, so those days are `<button disabled>` — the constraint is enforced
+       by the CONTROL, not by a validation message afterwards, and each carries
+       a visually-hidden reason because a greyed-out day tells a screen-reader
+       user nothing. The page keeps the plain `<input type="date">` for *order
+       date* directly above it, which makes the distinction concrete: a native
+       picker is right when every day is valid; the calendar earns its place
+       only where a *set* of days is not on offer.
+
+       The month is GENERATED from its own dates in frontmatter, never
+       hand-typed — 35 cells whose label and submitted value must agree is
+       exactly where this repo has produced rows labelled with another row's
+       name. Verified against the RENDERED page: 30 in-month cells + 5 outside,
+       9 disabled (8 weekend + 1 shutdown), every label matching its own value
+       and mark.
+
+       Claim 56 asserts all of it, red-proved three ways — removing one
+       `disabled`, stripping one visually-hidden reason, and mislabelling one
+       cell each turn it red. `check:target-size` passes: day cells are 32px,
+       clear of WCAG 2.5.8's 24px floor.
+
+       **Rescored in `surface-scores-batch1`: D0 → D2, 9 → 11, improve →
+       keep.** D2 not D3 — one screen, not the eighteen `data-table` earns.
 
 5. [ ] **45.5 — Add a "cost to remove" column before batch 2.**
        The rubric scores what a component is worth but not what removing it

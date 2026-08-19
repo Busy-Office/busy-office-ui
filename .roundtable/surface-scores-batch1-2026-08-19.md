@@ -20,7 +20,7 @@ Scores are Demand / Composition / Contracts / Evidence, 0-3 each.
 |---|--:|--:|--:|--:|--:|---|
 | `data-table` *(control)* | 3 | 3 | 3 | 3 | **12** | keep |
 | `badge` *(control)* | 3 | 2 | 2 | 2 | **9** | keep |
-| `calendar` | 0 | 3 | 3 | 3 | **9** | improve |
+| `calendar` | 0 → **2** | 3 | 3 | 3 | **9 → 11** | improve → **keep** (45.4) |
 | `tree-table` | 0 | 3 | 2 | 0 | **5** | improve |
 | `pagination` | 0 | 2 | 1 | 0 | **3** | improve *(the finding is about `invoice-list`)* |
 | `offcanvas` | 0 | 2 | 1 | 0 | **3** | improve *(contradicts `master-detail`'s own prose)* |
@@ -53,6 +53,17 @@ own component page. A component demonstrated but never used in a pattern is
 documentation, not evidence.
 → **Improve:** put it in a screen where the marks matter (a goods-receipt or
 delivery-scheduling pattern), or it becomes the best-built dead weight here.
+
+**Resolved 2026-08-19 (45.4) — D0 → D2, total 11, outcome now *keep*.**
+`/patterns/detail-form` uses it for **requested delivery date**, where the marks
+are the whole point: the dock is shut at weekends and closed for a company
+shutdown, so those days are disabled submit buttons rather than styling. That is
+the one thing a native date input cannot express — a *set* of unavailable days —
+which is also the argument the component page always made and no screen backed.
+
+D2 rather than D3 deliberately: one screen, not the 18 that `data-table` earns.
+The rescore is recorded here rather than silently edited, because the score
+changed for a real reason — the screen changed, not the rubric.
 
 **`tree-table` — 5, improve.** C3: hierarchical rows with `data-tree-level` is a
 genuinely hard thing to hand-roll, and it has a recorded ADR. E0: **no

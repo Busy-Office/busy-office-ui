@@ -2,6 +2,61 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* The delivery calendar is GENERATED from its own dates, never hand-typed.
+   A month is 35+ cells whose label and submitted value must agree, and
+   hand-written tables are exactly where this repo has produced rows labelled
+   with another row's name. Deriving both from one Date makes that class of bug
+   unrepresentable. */
+const CLOSED_WEEKDAYS = new Set([6, 0]);           // Sat, Sun — dock closed
+const HOLIDAYS = new Map([['2026-09-07', 'Company shutdown']]);
+const SELECTED = '2026-09-15';
+const iso = (d) => d.toISOString().slice(0, 10);
+
+function deliveryMonth(year, monthIdx) {
+  const first = new Date(Date.UTC(year, monthIdx, 1));
+  const start = new Date(first);
+  // Monday-first grid, matching the component's thead.
+  start.setUTCDate(first.getUTCDate() - ((first.getUTCDay() + 6) % 7));
+  const weeks = [];
+  for (let w = 0; w < 5; w += 1) {
+    const days = [];
+    for (let d = 0; d < 7; d += 1) {
+      const date = new Date(start);
+      date.setUTCDate(start.getUTCDate() + w * 7 + d);
+      const key = iso(date);
+      const outside = date.getUTCMonth() !== monthIdx;
+      const holiday = HOLIDAYS.get(key);
+      const closed = CLOSED_WEEKDAYS.has(date.getUTCDay());
+      let cell;
+      if (outside) {
+        cell = `<span class="bo-calendar__day bo-calendar__day--outside">${date.getUTCDate()}</span>`;
+      } else if (holiday) {
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="holiday" disabled>${date.getUTCDate()}<span class="bo-visually-hidden"> — ${holiday}, no receiving</span></button>`;
+      } else if (closed) {
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="closed" disabled>${date.getUTCDate()}<span class="bo-visually-hidden"> — dock closed</span></button>`;
+      } else if (key === SELECTED) {
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}" data-day="selected" aria-pressed="true">${date.getUTCDate()}<span class="bo-visually-hidden"> — requested delivery date</span></button>`;
+      } else {
+        cell = `<button class="bo-calendar__day" type="submit" name="delivery-date" value="${key}">${date.getUTCDate()}</button>`;
+      }
+      days.push(`<td>${cell}</td>`);
+    }
+    weeks.push(`      <tr>${days.join('')}</tr>`);
+  }
+  return weeks.join('\n');
+}
+
+const DOW = [['Monday','Mo'],['Tuesday','Tu'],['Wednesday','We'],['Thursday','Th'],['Friday','Fr'],['Saturday','Sa'],['Sunday','Su']];
+const deliveryCalendar = `<form method="get" class="bo-calendar">
+  <table class="bo-calendar__month">
+    <caption>Requested delivery date — September 2026</caption>
+    <thead><tr>${DOW.map(([full, ab]) => `<th scope="col"><abbr title="${full}">${ab}</abbr></th>`).join('')}</tr></thead>
+    <tbody>
+${deliveryMonth(2026, 8)}
+    </tbody>
+  </table>
+</form>`;
 ---
 <Gallery title="Pattern: multi-column detail form">
   <p class="demo-note">
@@ -106,6 +161,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>Requested delivery date — the days you cannot pick</h2>
+    <div set:html={deliveryCalendar} />
+    <p class="bo-u-text-muted">The plain <code>&lt;input type="date"&gt;</code> above is
+    right for <em>order date</em> — any day is valid, and the native picker is
+    already good. A <em>requested delivery date</em> is a different question: the
+    dock is shut at weekends and closed for the company shutdown on the 7th, so
+    some days are not offers. Those days are real
+    <code>&lt;button disabled&gt;</code>s, so the constraint is enforced by the
+    control rather than by a validation message after the fact — and each carries
+    a visually-hidden reason, because a day that is merely greyed out tells a
+    screen-reader user nothing. This is the one thing a native date input cannot
+    express: a <em>set</em> of marked days.</p>
+  </section>
+
+  <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Sections</strong> — real <code>&lt;fieldset&gt;</code>s
@@ -116,6 +186,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <li><strong>Line items</strong> — the
       <a href={base + '/patterns/editable-grid'}>editable grid</a> nested inside the
       form; its dirty state is per-row and independent of the header fields.</li>
+      <li><strong>Delivery calendar</strong> — <a href={base + '/components/calendar'}>calendar</a>
+      for the one field whose valid days are constrained; closed and holiday days
+      are disabled submit buttons, not styling.</li>
       <li><strong>Action bar</strong> — sticky <code>.bo-form-actions</code>;
       the framework sets <code>scroll-padding-block-end</code> so focus never lands
       under it.</li>
@@ -180,11 +253,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/patterns/editable-grid'}>Editable grid</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/patterns/validation-summary'}>Validation summary</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/calendar'}>Calendar</a></li>
     </ul>
   </section>
 
   <Related links={[
     ["/components/form", "Forms"],
+    ["/components/calendar", "Calendar"],
     ["/components/data-table", "Data table"],
     ["/patterns/record-detail", "Record detail (read-only counterpart)"],
     ["/concepts/container-queries", "Container queries"],

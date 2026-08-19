@@ -1134,6 +1134,40 @@ check(
   JSON.stringify(collapse),
 );
 
+/* detail-form's delivery calendar claims the constraint is enforced BY THE
+   CONTROL — "those days are not offers" — rather than by a validation message
+   afterwards. That is runtime prose, and it fails silently: a day that lost its
+   disabled attribute looks identical (the mark is styling) and simply starts
+   accepting a delivery date the dock cannot honour. */
+await visit('/patterns/detail-form/');
+const cal = await page.evaluate(() => {
+  const form = document.querySelector('form.bo-calendar');
+  const days = [...form.querySelectorAll('button.bo-calendar__day')];
+  const marked = days.filter((d) => ['closed', 'holiday'].includes(d.dataset.day));
+  const plain = days.filter((d) => !d.dataset.day);
+  return {
+    days: days.length,
+    marked: marked.length,
+    allMarkedDisabled: marked.every((d) => d.disabled),
+    anyPlainDisabled: plain.some((d) => d.disabled),
+    // every unavailable day states WHY, not just a colour
+    allMarkedGiveAReason: marked.every((d) => {
+      const sr = d.querySelector('.bo-visually-hidden');
+      return !!sr && sr.textContent.trim().length > 3;
+    }),
+    labelsMatchValues: days.every((d) => {
+      const label = d.firstChild?.textContent?.trim();
+      return label === String(Number(d.value.slice(-2)));
+    }),
+  };
+});
+check(
+  'detail-form: closed and holiday delivery days are disabled, and each says why',
+  cal.days > 25 && cal.marked > 0 && cal.allMarkedDisabled && !cal.anyPlainDisabled &&
+    cal.allMarkedGiveAReason && cal.labelsMatchValues,
+  JSON.stringify(cal),
+);
+
 await browser.close();
 server.close();
 
