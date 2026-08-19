@@ -397,3 +397,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 14:27 · Standardize · tidy · 47.1 — [1440,390] consolidated into viewports.mjs (5 gates); verified by perturbation · landed · efaf3da
 - 2026-08-19 14:27 · Standardize · tidy · 47.2 — visual-regression silently baselined unknown shots and passed; now fails loudly · landed · efaf3da
 - 2026-08-19 14:48 · Continue · build · 45.6 batch 1 — 7 claims for silent-failure behaviours (combobox, scan-input, validation-summary, collapsible-card); 48->55 · landed · a10f679
+- 2026-08-19 15:00 · Roadmap · triage · Slice 48 — SAP Object Page triaged with Accept criteria + Objective test; owner scope call logged · triaged · 9238f54
+- 2026-08-19 15:00 · Continue · build · 45.3 — .bo-date deprecated; overdue two-channel rule moved to /components/amount; cluster+badge replacement · landed · 9238f54
