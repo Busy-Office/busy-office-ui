@@ -1,0 +1,276 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const MATERIALS = [
+  ['MAT-4471', 'Hydraulic pump, 24V', 'Pumps', 'Warehouse A'],
+  ['MAT-1180', 'Seal kit, 60 mm', 'Seals', 'Warehouse A'],
+  ['MAT-9002', 'Filter cartridge, fine', 'Filters', 'Warehouse B'],
+  ['MAT-2245', 'Hydraulic hose, 2 m', 'Hoses', 'Warehouse B'],
+  ['MAT-3310', 'Pressure gauge, 400 bar', 'Instruments', 'Warehouse A'],
+  ['MAT-7788', 'Seal kit, 80 mm', 'Seals', 'Warehouse C'],
+];
+
+const markup = `<!-- the field, and the control that opens the picker -->
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="vh-material">Material</label>
+  <div class="bo-cluster">
+    <input class="bo-input bo-input--code" id="vh-material" value="MAT-4471" />
+    <button class="bo-btn bo-btn--secondary" type="button"
+            data-dialog-trigger="vh-dialog" aria-label="Find a material">Find…</button>
+  </div>
+</div>
+
+<dialog class="bo-dialog bo-dialog--wide" id="vh-dialog" aria-labelledby="vh-title">
+  <div class="bo-dialog__header">
+    <h2 class="bo-dialog__title" id="vh-title">Find a material</h2>
+    <form method="dialog"><button class="bo-btn bo-btn--sm bo-btn--ghost" type="submit">×</button></form>
+  </div>
+  <div class="bo-dialog__body">
+    <form class="bo-filter-bar" role="search">…search + filters…</form>
+    <table class="bo-data-table">…results…</table>
+    <div class="bo-state" hidden>…the empty that means "your filter excluded everything"…</div>
+  </div>
+  <div class="bo-dialog__footer">
+    <nav class="bo-pagination">…</nav>
+  </div>
+</dialog>`;
+---
+<Gallery title="Pattern: value help">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: anyone typing a code they cannot remember — a
+    buyer picking a material out of forty thousand, a clerk choosing a cost
+    centre; dozens of times a day, inside a form they are part-way through.
+    <strong>What "done" looks like</strong>: the right code is in the field, and
+    the reader is back where they were with nothing else lost. The picker is a
+    detour, not a destination — which is why choosing must put focus back in the
+    field they were filling, not leave it at the top of the document.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+
+    <div class="bo-form-field" style="max-inline-size: 26rem">
+      <label class="bo-form-field__label" for="vh-material">Material</label>
+      <div class="bo-cluster">
+        <input class="bo-input bo-input--code" id="vh-material" value="MAT-4471" />
+        <button class="bo-btn bo-btn--secondary" type="button"
+                data-dialog-trigger="vh-dialog" aria-label="Find a material">Find…</button>
+      </div>
+    </div>
+
+    <dialog class="bo-dialog bo-dialog--wide" id="vh-dialog" data-state="closed" aria-labelledby="vh-title">
+      <div class="bo-dialog__header">
+        <h3 class="bo-dialog__title" id="vh-title">Find a material</h3>
+        {/* Native close: a <form method="dialog"> button closes the dialog and
+            returns focus to the trigger with no JavaScript. The behavior ships
+            no close hook — initDialogs handles opening, Escape, backdrop
+            dismiss and the focus trap, and nothing else. */}
+        <form method="dialog"><button class="bo-btn bo-btn--sm bo-btn--ghost" type="submit" aria-label="Close">×</button></form>
+      </div>
+
+      <div class="bo-dialog__body">
+        <form class="bo-filter-bar" role="search" aria-label="Material search" onsubmit="return false">
+          <input class="bo-input" type="search" id="vh-q" aria-label="Search materials" placeholder="Code or description…" />
+          <select class="bo-select" id="vh-group" aria-label="Group">
+            <option value="">All groups</option>
+            <option>Pumps</option>
+            <option>Seals</option>
+            <option>Filters</option>
+            <option>Hoses</option>
+            <option>Instruments</option>
+          </select>
+        </form>
+
+        <div class="bo-data-table-container" tabindex="0">
+          <table class="bo-data-table" data-density="compact" id="vh-table">
+            <caption class="bo-visually-hidden">Materials matching your search</caption>
+            <thead>
+              <tr>
+                <th scope="col">Material</th>
+                <th scope="col">Description</th>
+                <th scope="col">Group</th>
+                <th scope="col">Plant</th>
+              </tr>
+            </thead>
+            <tbody>
+              {MATERIALS.map(([code, desc, group, plant]) => (
+                <tr data-vh-row data-code={code} data-group={group}>
+                  <td class="bo-data-table__col--code">
+                    <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" data-vh-pick={code}>{code}</button>
+                  </td>
+                  <td>{desc}</td>
+                  <td>{group}</td>
+                  <td>{plant}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bo-state" id="vh-empty" hidden>
+          <p class="bo-state__title">No material matches those filters</p>
+          <p class="bo-state__description">Six materials exist — none of them match.
+          Clear the search or pick a different group.</p>
+          <div class="bo-state__actions">
+            <button class="bo-btn bo-btn--secondary" type="button" id="vh-clear">Clear filters</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bo-dialog__footer">
+        <nav class="bo-pagination" aria-label="Result pages">
+          <span class="bo-pagination__info" id="vh-count">6 of 6</span>
+        </nav>
+      </div>
+    </dialog>
+
+    <p class="bo-u-text-muted">Open it, type <code>seal</code>, and pick a row:
+    the code lands in the field, the dialog closes, and focus returns to the
+    control you left. Every part of this is a component that already ships —
+    this pattern adds <strong>no CSS and no new component</strong>.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>The field and its trigger</strong> — a plain
+      <a href={base + '/components/form'}>input</a> beside a button carrying
+      <code>data-dialog-trigger</code>. The field stays editable: someone who
+      knows the code types it and never opens the picker.</li>
+      <li><strong>The picker</strong> — a
+      <a href={base + '/components/dialog'}>dialog</a>, modal because choosing is
+      the only thing to do while it is open.</li>
+      <li><strong>Search &amp; filters</strong> —
+      <a href={base + '/components/filters'}>filter bar</a> at the top of the
+      body, so narrowing happens where the eye already is.</li>
+      <li><strong>Results</strong> — a
+      <a href={base + '/components/data-table'}>data table</a>; the first cell is
+      a button, not a link, because picking changes this form rather than
+      navigating away.</li>
+      <li><strong>The filtered empty</strong> —
+      <a href={base + '/components/state-patterns'}>state</a>, and it says
+      <em>your filter excluded everything</em>, which is a different message from
+      "there is no master data".</li>
+      <li><strong>Result count and paging</strong> —
+      <a href={base + '/components/pagination'}>pagination</a> in the footer,
+      where it does not compete with the results.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <p>The picker is a search endpoint, not a copy of the table. Forty thousand
+    materials never reach the browser.</p>
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong><code>GET /materials?q=&amp;group=&amp;page=</code></strong> →
+      one page of matches plus a total. The total drives both the count and
+      whether paging appears at all.</li>
+      <li><strong>Debounce the search server-side of the keystroke</strong> —
+      one request per pause, not per character. The demo above filters in the
+      browser only because six rows fit in the page.</li>
+      <li><strong>Picking returns the whole record</strong>, not just the code:
+      the form usually needs the description and unit too, and a second request
+      to fetch what the picker already had is a wasted round trip.</li>
+      <li><strong>A 4xx leaves the dialog open</strong> with the error in place
+      of the results. Closing it would discard the reader's search.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <table class="bo-data-table">
+      <thead><tr><th scope="col">State</th><th scope="col">What the screen shows</th></tr></thead>
+      <tbody>
+        <tr><td>Loading</td><td>The table keeps its header and shows <code>data-loading</code>; the filter bar stays usable so a slow query can be narrowed rather than waited out.</td></tr>
+        <tr><td>Empty — no data at all</td><td>"No materials exist yet", with the action that creates one. This is a setup problem.</td></tr>
+        <tr><td>Empty — filtered out</td><td><strong>A different message</strong>: the data exists, the filter excluded it, and the action is <em>clear filters</em>. Showing the setup message here sends the reader to create a duplicate.</td></tr>
+        <tr><td>Too many results</td><td>Page, and say the total. "Showing 1–20 of 4,318" tells the reader to narrow; a bare first page does not.</td></tr>
+        <tr><td>Error</td><td>Inside the dialog, results replaced, search preserved.</td></tr>
+        <tr><td>Permission</td><td>If the reader may not browse master data, the trigger is absent — not disabled. A disabled button invites a support ticket.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span> —
+    capture &amp; edit tier.</p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/filters'}>Filters</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/pagination'}>Pagination</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/state-patterns'}>State</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/components/combobox", "Combobox (when the list is short)"],
+    ["/patterns/detail-form", "Detail form"],
+    ["/components/dialog", "Dialog"],
+    ["/patterns/filter-panel", "Filter panel"],
+  ]} />
+</Gallery>
+
+<script>
+  import { initDialogs } from '@busy-office/ui/js';
+  initDialogs();
+
+  /* Demo-only filtering: six rows fit in the page, so this filters in the
+     browser. A real picker asks the server — see the data contract above. */
+  const dialog = document.getElementById('vh-dialog');
+  if (dialog) {
+    const q = document.getElementById('vh-q');
+    const group = document.getElementById('vh-group');
+    const empty = document.getElementById('vh-empty');
+    const count = document.getElementById('vh-count');
+    const field = document.getElementById('vh-material');
+    const rows = [...dialog.querySelectorAll('[data-vh-row]')];
+
+    const apply = () => {
+      const term = (q.value || '').trim().toLowerCase();
+      const g = group.value;
+      let shown = 0;
+      for (const row of rows) {
+        const hit = (!term || row.textContent.toLowerCase().includes(term))
+          && (!g || row.dataset.group === g);
+        row.hidden = !hit;
+        if (hit) shown += 1;
+      }
+      /* The filtered empty, not the no-data empty: the table is hidden with it
+         so the reader is not left staring at a header row over nothing. */
+      empty.hidden = shown !== 0;
+      dialog.querySelector('.bo-data-table-container').hidden = shown === 0;
+      count.textContent = `${shown} of ${rows.length}`;
+    };
+
+    q.addEventListener('input', apply);
+    group.addEventListener('change', apply);
+    document.getElementById('vh-clear')?.addEventListener('click', () => {
+      q.value = ''; group.value = ''; apply();
+    });
+
+    dialog.addEventListener('click', (e) => {
+      const pick = (e.target as HTMLElement)?.closest('[data-vh-pick]');
+      if (!pick) return;
+      field.value = pick.getAttribute('data-vh-pick');
+      field.dispatchEvent(new Event('change', { bubbles: true }));
+      /* Close, then put focus BACK IN THE FIELD by hand. Measured: closing a
+         modal from a click on a button inside it leaves focus on <body> — the
+         reader has a value but no caret, and a keyboard user is stranded at the
+         top of the document. The field is the right target rather than the
+         "Find…" trigger: they just chose a value and the next thing they do is
+         carry on through the form. */
+      dialog.close('picked');
+      field.focus();
+    });
+  }
+</script>

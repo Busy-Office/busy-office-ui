@@ -8,6 +8,15 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (docs): dialog close buttons that did nothing. `/patterns/master-detail`
+  carried an invented `data-dialog-close` attribute on its ×, Cancel and Save
+  buttons — a hook `initDialogs` never implemented and the API never documented,
+  so all three were dead from the day they shipped. The drawer's claim tested
+  Escape, which is why it went unnoticed. They are native
+  `<form method="dialog">` submits now, which is what the docs' own app shell
+  had been using all along. Guarded by a claim that clicks the button.
+
+
 - **Removed** (`.bo-quantity--display`, `.bo-quantity__value`): a read-only
   variant that existed to mirror this component's name rather than to meet a
   need. **Zero screens used it** — every screen that shows a count uses

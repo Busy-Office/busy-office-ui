@@ -1571,6 +1571,93 @@ for (const w of WIDTHS) {
   );
 }
 
+/* value-help: search → filter → pick, and get the reader back where they were.
+   The focus-return half is the silent one — the code lands in the field either
+   way, so a sighted mouse user sees a working picker while a keyboard user is
+   left on <body> with nothing selected (roadmap 53.1). */
+await visit('/patterns/value-help/');
+const vh = await page.evaluate(async () => {
+  const dialog = document.getElementById('vh-dialog');
+  const trigger = document.querySelector('[data-dialog-trigger="vh-dialog"]');
+  const field = document.getElementById('vh-material');
+  const before = field.value;
+  trigger.click();
+  await new Promise((r) => setTimeout(r, 250));
+  const opened = dialog.open;
+  const visible = () => [...dialog.querySelectorAll('[data-vh-row]')].filter((r) => !r.hidden).length;
+  const all = visible();
+
+  const q = document.getElementById('vh-q');
+  q.value = 'seal';
+  q.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 120));
+  const filtered = visible();
+  const countText = document.getElementById('vh-count').textContent.trim();
+
+  // filter to nothing: the EMPTY must be the filtered one, and the table goes
+  q.value = 'zzzz';
+  q.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 120));
+  const emptyEl = document.getElementById('vh-empty');
+  const emptyShown = !emptyEl.hidden;
+  const emptySaysFiltered = /filter/i.test(emptyEl.textContent);
+  const tableHidden = dialog.querySelector('.bo-data-table-container').hidden;
+
+  // back, then pick
+  document.getElementById('vh-clear').click();
+  await new Promise((r) => setTimeout(r, 120));
+  const restored = visible();
+  dialog.querySelector('[data-vh-pick="MAT-1180"]').click();
+  await new Promise((r) => setTimeout(r, 350));
+  return { before, opened, all, filtered, countText, emptyShown, emptySaysFiltered, tableHidden, restored,
+    picked: field.value, closed: !dialog.open,
+    /* Focus must be back IN THE FIELD, which is what the page promises. It is
+       not automatic: closing a modal from a click inside it leaves focus on
+       <body>, so the reader ends up with a value and no caret. Asserting
+       "not body" would pass on almost anything; assert the field. */
+    focusBack: document.activeElement === field,
+    focusTag: (document.activeElement?.tagName || '') + '#' + (document.activeElement?.id || '') };
+});
+check(
+  'value-help: searching narrows the results and the count follows',
+  vh.opened && vh.all === 6 && vh.filtered === 2 && vh.countText === '2 of 6',
+  JSON.stringify(vh),
+);
+check(
+  'value-help: filtering to nothing shows the FILTERED empty, not a bare header row',
+  vh.emptyShown && vh.emptySaysFiltered && vh.tableHidden && vh.restored === 6,
+  JSON.stringify(vh),
+);
+check(
+  'value-help: picking fills the field, closes the dialog, and puts focus back in the field',
+  vh.picked === 'MAT-1180' && vh.picked !== vh.before && vh.closed && vh.focusBack,
+  JSON.stringify(vh),
+);
+
+/* master-detail's drawer close button. It carried an invented
+   `data-dialog-close` attribute from 45.2 until 2026-08-19 — a hook the
+   behavior never implemented and the API never documented — so the ×, Cancel
+   and Save buttons all did NOTHING. The drawer's existing claim tested Escape,
+   which is why three dead buttons shipped unnoticed. They are native
+   `<form method="dialog">` submits now. */
+await visit('/patterns/master-detail/', { width: NARROW_WIDTH });
+const mdClose = await page.evaluate(async () => {
+  const dialog = document.getElementById('md-drawer');
+  document.querySelector('[data-dialog-trigger="md-drawer"]').click();
+  await new Promise((r) => setTimeout(r, 250));
+  const opened = dialog.open;
+  const closer = dialog.querySelector('form[method="dialog"] button');
+  const hasCloser = !!closer;
+  closer?.click();
+  await new Promise((r) => setTimeout(r, 250));
+  return { opened, hasCloser, closed: !dialog.open };
+});
+check(
+  'master-detail: the drawer close BUTTON closes it, not only Escape',
+  mdClose.opened && mdClose.hasCloser && mdClose.closed,
+  JSON.stringify(mdClose),
+);
+
 await browser.close();
 server.close();
 

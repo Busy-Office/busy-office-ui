@@ -837,7 +837,7 @@ surface) — 4 axes each, so neither side can outweigh the other by construction
 It reproduced 45.3's independent decision to deprecate `.bo-date` (NET −3) and
 the controls land +3/+4, so it discriminates.
 
-1. [ ] **53.1 — Build the Value-help (F4) pattern. The benchmark's own answer to
+1. [x] **53.1 — Build the Value-help (F4) pattern.** — landed 2026-08-19. The benchmark's own answer to
        "what next".** A searchable dialog for picking one master-data record out
        of thousands — the single most-used interaction in ERP data entry.
        `combobox` handles a short list; picking a material from 40,000 needs
@@ -853,6 +853,34 @@ the controls land +3/+4, so it discriminates.
        currently lack. Accept: full pattern recipe; zero new CSS or a recorded
        reason; executable claims for search-filter-select and for focus return
        to the field that opened it.
+
+       **Landed 2026-08-19.** `/patterns/value-help` ships with the full recipe.
+       **Zero new components and zero new CSS** — dialog, filter bar, data table,
+       state and pagination, exactly as the benchmark predicted.
+
+       Three claims: searching narrows the results and the count follows;
+       filtering to nothing shows the **filtered** empty (a different message
+       from "no data exists") with the table hidden rather than a bare header
+       row; and picking fills the field, closes the dialog and puts focus back
+       **in the field**.
+
+       **Building it exposed a bug I shipped in 45.2.** `data-dialog-close` is an
+       attribute I invented: `initDialogs` implements opening, Escape, backdrop
+       dismiss and the focus trap, and **nothing else**, and the documented API
+       is `data-dialog-trigger` / `data-dismissible` / `data-state`. So
+       `/patterns/master-detail`'s drawer had **three dead buttons** — ×, Cancel
+       and Save — from the day it shipped. Its claim tested Escape, which is
+       exactly why nobody noticed.
+
+       The fix is the native mechanism the docs' own app shell was already
+       using: `<form method="dialog">`. Claim 82 clicks the button, and is
+       red-proved by putting the dead hook back.
+
+       **Focus does not return by itself.** Closing a modal from a click inside
+       it leaves focus on `<body>` — measured, twice: once when the invented hook
+       failed, and again after switching to the native close. The pick path
+       restores focus explicitly, and the claim asserts the FIELD rather than
+       "not body", which would have passed on almost anything.
 
 2. [ ] **53.2 — Grill `icon`'s 12 variants. The only NET-negative live
        component.** Third-largest component at **4633 bytes with 25 classes** —

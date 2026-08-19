@@ -87,7 +87,7 @@ const rows = [
     <dialog class="bo-offcanvas bo-offcanvas--end" id="md-drawer" data-state="closed" aria-labelledby="md-drawer-title">
       <div class="bo-offcanvas__header">
         <h3 class="bo-widget__title" id="md-drawer-title">Umbrella Logistics GmbH</h3>
-        <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" data-dialog-close aria-label="Close">×</button>
+        <form method="dialog"><button class="bo-btn bo-btn--sm bo-btn--ghost" type="submit" aria-label="Close">×</button></form>
       </div>
       <dl class="bo-kv bo-kv--rows">
         <div><dt>Vendor no.</dt><dd>V-1001</dd></div>
@@ -127,8 +127,12 @@ const rows = [
         </div>
       </div>
       <div class="bo-dialog__footer">
-        <button class="bo-btn bo-btn--secondary" type="button" data-dialog-close>Cancel</button>
-        <button class="bo-btn" type="button" data-dialog-close>Save</button>
+        {/* method="dialog" closes natively and returns focus to the trigger —
+            no JS, and no invented attribute. */}
+        <form method="dialog" class="bo-cluster">
+          <button class="bo-btn bo-btn--secondary" type="submit" value="cancel">Cancel</button>
+          <button class="bo-btn" type="submit" value="save">Save</button>
+        </form>
       </div>
     </dialog>
     <p class="bo-u-text-muted">
