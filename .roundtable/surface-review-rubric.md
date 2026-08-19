@@ -78,6 +78,60 @@ before scoring whether they are met.
 A **0 here is the cheapest to fix and the most urgent** — the 409/htmx page and
 the nine-tabs-one-panel bug were both this, and both shipped looking correct.
 
+## Cost to remove — 0-3, and it does NOT go in the total
+
+Added 2026-08-19 (roadmap 45.5) after batch 1 found the gap: the four dimensions
+score **what a component is worth**, and nothing scored **what removing it costs
+a consumer who already ships it**. `date` scored 1 of 12, the lowest in the
+framework, and its outcome was still bounded by the deprecation rule — so the
+score was not actually deciding the outcome, and the rubric did not say so.
+
+**It is deliberately not a fifth dimension.** Adding it to the total would mix
+two different questions — *is this good?* and *can we get rid of it?* — into one
+number, and the answer to the second would silently inflate components that are
+merely hard to remove. It would also force batch 1 to be rescored, which the
+Accept forbids. It is a separate column that constrains which **outcomes** are
+available.
+
+Measured, not judged: whether the class shipped in a published tag
+(`git ls-tree v0.1.1`), and how many of the 17 screens use it — counted inside
+the demo region, excluding the docs shell and copyable code samples, because the
+chrome itself uses framework classes (a naive count reported `offcanvas` in 17
+screens; the real figure is 1).
+
+| | |
+|---|---|
+| **0** | Never published, or published and used by nothing. Removable now. |
+| **1** | Published, but the replacement is a documented drop-in a consumer can apply mechanically. |
+| **2** | Published and in real use; replacing it means restructuring markup, not swapping a class. |
+| **3** | Published and load-bearing across many screens, or its `data-*`/ARIA contract is baked into consumer markup and behavior. |
+
+**What the column decides:**
+
+- **cost 0-1** — Deprecate and Merge are both on the table.
+- **cost 2** — Deprecate only with the replacement documented *and* reachable
+  from the deprecated page; otherwise Improve.
+- **cost 3** — Keep or Improve. A low score with a cost of 3 means the churn
+  exceeds the benefit: fix it in place. **A low score is never on its own a
+  reason to remove something.**
+
+Removal still happens at the next major in every case; this column decides
+whether the removal is worth starting, not when it lands.
+
+### Worked examples — the column has to discriminate, like the rubric itself
+
+Not a backfill of batch 1 (those totals stand, per 45.5's Accept) — two rows
+scored on the new column only, to show it separates things the /12 does not:
+
+| component | /12 | screens | in `v0.1.1` | cost | what changes |
+|---|--:|--:|:--:|--:|---|
+| `date` | 1 | 0 | yes | **1** | published, but nothing uses it and the replacement is a documented drop-in → Deprecate was available, and was taken (45.3) |
+| `data-table` | 12 | 17 | yes | **3** | `data-*` contracts are in consumer markup and its behavior module is imported → Keep/Improve only, regardless of any future score |
+
+The two agree with the /12 here. The column earns its place on the row where
+they would **disagree** — a component scoring 3 or 4 that is nonetheless a 3 to
+remove, which is precisely the case batch 1 had no way to express.
+
 ## Outcomes
 
 Every row ends in exactly one, with a reason:

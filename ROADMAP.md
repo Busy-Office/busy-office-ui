@@ -935,11 +935,35 @@ nine rows risked instead of fifty-five.
        **Rescored in `surface-scores-batch1`: D0 → D2, 9 → 11, improve →
        keep.** D2 not D3 — one screen, not the eighteen `data-table` earns.
 
-5. [ ] **45.5 — Add a "cost to remove" column before batch 2.**
+5. [x] **45.5 — Add a "cost to remove" column before batch 2.** — landed 2026-08-19
        The rubric scores what a component is worth but not what removing it
        costs a consumer already using it. `date` scored 1 and is still bounded by
        the deprecation rule because it is published. Accept: the column exists
        and batch 2 uses it; batch 1 is not rescored.
+
+       **Landed 2026-08-19.** The column is **not** a fifth dimension and does
+       not enter the /12 total. Making it additive would mix two different
+       questions — *is this good?* and *can we get rid of it?* — into one
+       number, would let "hard to remove" silently inflate a weak component, and
+       would force batch 1 to be rescored, which this item's own Accept forbids.
+       It is a separate column that constrains which **outcomes** are available:
+       cost 0-1 allows Deprecate/Merge, cost 2 allows Deprecate only with a
+       documented reachable replacement, cost 3 allows Keep/Improve only.
+
+       That last rule is the point of the column: **a low score is never on its
+       own a reason to remove something.** `date` scored 1 and was still bounded
+       by the deprecation rule — the score was not deciding the outcome, and the
+       rubric did not admit it.
+
+       Measured rather than judged: published-tag membership via
+       `git ls-tree v0.1.1`, and screen usage counted INSIDE the demo region.
+       That second detail matters — a naive whole-page count reported `offcanvas`
+       in 17 of 17 screens, because the docs shell's own mobile nav IS a
+       `.bo-offcanvas`. The real figure is 1. Same chrome trap that produced four
+       dead detectors in 39.2, caught this time by the number being implausible.
+
+       Two worked examples are included so the column can be seen to
+       discriminate (`date` 1, `data-table` 3) — not a backfill of batch 1.
 
 ## Slice 44 — from the Objective grill, Slices 39/42/43 (2026-08-19)
 
