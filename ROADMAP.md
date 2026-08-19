@@ -1022,7 +1022,8 @@ same-message add-on to a research study.
 Owner: *"why don't put /design-grill in the plan as well"* — agreed; installing
 the filter (Slice 57) without scheduling its use would make it shelf-ware.
 
-1. [ ] **58.1 — /design-grill sweep, worst-suspect first, in batches of 3-4.**
+1. [x] **58.1 — /design-grill sweep, worst-suspect first, in batches of 3-4.**
+       — landed 2026-08-20, all 5 batches / 19 of 19 patterns.
        Order chosen by where decoration and mechanism-language hide, not
        alphabetically: **reporting-dashboard, app-launch, record-detail** first
        (dashboards accumulate ornament; launchers accumulate icons; long detail
@@ -1232,10 +1233,62 @@ the filter (Slice 57) without scheduling its use would make it shelf-ware.
        data-hooks, learning-path, components-used, boost, notes), stylelint
        clean, axe 90 pages x 2 widths zero violations.
 
-       **14 of 19 through. Batch 5 next: the remaining 5** — master-detail,
-       object-page, validation-summary, value-help, wizard — item stays
-       open until all 19 are through, per its own "then the rest of the
-       19."
+       **Batch 5 landed 2026-08-20 — 19 of 19, the sweep is complete.**
+       master-detail, object-page, validation-summary, value-help, wizard.
+       Reports:
+       `.roundtable/design-grill-{master-detail,object-page,validation-summary,value-help,wizard}-2026-08-20.md`.
+
+       **A real self-contradiction found and fixed in `master-detail`**: its
+       Anatomy claimed `data-row-state="selected"` as a two-channel
+       selection tint, while the SAME page's own prose, a few lines below
+       the live demo, explicitly says the opposite — "the framework ships
+       no tint for it... there is no `data-row-state="selected"` to reach
+       for." Checked the live markup to settle it: only `aria-selected` is
+       ever set. The Anatomy item was flatly wrong and the page's own prose
+       was right; fixed to match.
+
+       **A real capability-overclaim found in `wizard`, caught by reading
+       `wizard.ts` directly rather than trusting the docs prose.** Anatomy
+       said "completed steps are navigable"; `initWizard()` only wires
+       Back/Next, and the step markers are plain `<span>`s, not buttons —
+       there is no click-to-jump anywhere in the shipped behavior. Reworded
+       to name the real gap rather than removing the claim outright, since
+       a reader planning a wizard needs to know this needs building, not
+       that the Anatomy item itself is wrong. Not implemented this wake —
+       a real feature (markup contract change: markers become buttons, plus
+       the accessibility care every other interactive element here gets),
+       not a same-wake docs patch, and outside this batch's accuracy-only
+       Accept criteria.
+
+       **Three of five graded all-keep** — `object-page`, `validation-
+       summary`, `value-help` — each backed by real `check-claims.mjs`
+       coverage (gated, not eyeballed) for its most load-bearing runtime
+       claims. `object-page` in particular already contains its own
+       self-correcting regression story in a code comment (a scroll-margin
+       value first sized wrong, overshot ~110px, caught by the project's
+       own "anchor bar follows the reader" claim, and fixed with the story
+       kept) — the grill's job was already done by the page's own build
+       history.
+
+       Also fixed: `wizard` and `validation-summary`'s missing Who/What-
+       done openers, the last two patterns in the whole sweep with this
+       gap.
+
+       Verified live (bind-mounted container, both themes), `npm run build`
+       gates green (page-shape, claims, link-check 8525 links, markup,
+       calendar-grid, data-hooks, learning-path, components-used, boost,
+       notes), stylelint clean, axe 90 pages x 2 widths zero violations.
+
+       **Sweep totals across 5 batches, 19/19 patterns**: 2 real bugs found
+       and fixed on the spot (record-detail's PO-ID mismatch, master-
+       detail's Anatomy self-contradiction); 2 real framework bugs found,
+       queued, and later landed via a dedicated Standardize sweep (58.3
+       stepper clipping, 58.4 row-edit error-state desync); 1 capability-
+       overclaim found by reading source rather than docs (wizard); every
+       pattern's opener now states who uses it and what done looks like;
+       6 patterns graded all-keep outright (staging, field-editor,
+       invoice-list, object-page, validation-summary, value-help). Item
+       closed — 58.1 is done.
 
        Accept, per screen: the skill's own contract — measured inputs
        (primary-action count, hierarchy scan, element census, state language,

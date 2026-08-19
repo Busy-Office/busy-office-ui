@@ -188,9 +188,11 @@ const rows = [
       <li><strong>Master list</strong> — <a href={base + '/components/data-table'}>data table</a>;
         the row's first cell is a <code>&lt;th scope="row"&gt;</code> holding a real link, so the
         record is reachable, bookmarkable and openable in a new tab.</li>
-      <li><strong>Selection state</strong> — <code>aria-selected</code> plus
-        <code>data-row-state="selected"</code> on the <code>&lt;tr&gt;</code>. Two channels:
-        the tint is visible, the attribute is programmatic.</li>
+      <li><strong>Selection state</strong> — <code>aria-selected</code> on the
+        <code>&lt;tr&gt;</code>, which is the one channel the framework ships.
+        There is no <code>data-row-state="selected"</code> — see the note below
+        the demo above for why, and add your own tint rule against
+        <code>[aria-selected="true"]</code> if you want one.</li>
       <li><strong>Detail container</strong> — a <a href={base + '/components/dashboard#card'}>card</a>
         beside the list, or <a href={base + '/components/dialog'}>dialog</a>/<a href={base + '/components/offcanvas'}>offcanvas</a> over it.</li>
       <li><strong>Detail body</strong> — <a href={base + '/components/kv'}>key-value facts</a> to read,
