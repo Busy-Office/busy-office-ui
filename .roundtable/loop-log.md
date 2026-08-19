@@ -402,3 +402,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 16:37 · Continue · build · 45.4 — calendar used by detail-form (requested delivery date, disabled closed/holiday days); rescored D0->D2 · landed · 2412918
 - 2026-08-19 16:45 · Continue · tidy · 45.5 — cost-to-remove column added to the surface rubric as a non-additive outcome constraint · landed · 9596a7c
 - 2026-08-19 17:01 · Continue · build · 45.6 batch 2 — wizard, saved-views, tag-input claims; 56->59; 2 of 3 probes wrong on first run · landed · 2b6dea3
+- 2026-08-19 17:30 · Standardize · tidy · 49.1 — inline-style scan: 9 of 10 raw-spacing hits are code samples, not drift · logged · 50a32ba
+- 2026-08-19 17:30 · Standardize · tidy · 49.2 — inline flex/grid consolidated to .bo-cluster (tokens, theming); master-detail documented as deliberate · landed · 50a32ba
+- 2026-08-19 17:30 · Standardize · tidy · 49.3 — home page density demo was faked with inline padding on a non-density component; now real controls + claim 60 · landed · 50a32ba
+- 2026-08-19 17:30 · Standardize · tidy · 49.4 — six scripts adopted paths.mjs; check-versions had the percent-encoded URL.pathname bug · landed · 50a32ba
+- 2026-08-19 17:30 · Standardize · tidy · 49.6 — visual-regression --update was all-or-nothing; added --only, restored 14 unrelated baselines · landed · 50a32ba
