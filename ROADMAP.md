@@ -808,8 +808,41 @@ nine rows risked instead of fifty-five.
        bundle because the behavior writes `dataset.state`. The claim was
        unproven, not passing falsely; verifying the injection is what caught it.
 
-       Still uncovered: `saved-views`, `wizard`, `file-dropzone`, `dropdown`,
-       `money-field`, `tag-input`, `table-sum`. Batch 2 continues here.
+       **Batch 2 landed 2026-08-19 — 3 claims, 56 -> 59.**
+
+       - `wizard` — the stepper mark and the visible panel are two views of ONE
+         step index, and focus follows. Red-proved three ways: dropping the
+         `aria-current` setter, leaving every panel visible, and removing the
+         focus call each turn it red independently.
+       - `saved-views` — **the dangerous one.** Applying a view must fill the
+         filter bar AND mark exactly that chip. If it marks the chip without
+         filling the bar, the screen says "Overdue" while showing everything,
+         and nothing about that looks broken.
+       - `tag-input` — removing a tag drops its VALUE, not just its chip. A chip
+         that vanishes while its value survives submits data the user deleted.
+
+       **`dropdown` and `table-sum` were on the uncovered list and were never
+       uncovered.** The dropdown scroll-anchor claim (0.2.0) and the
+       editable-grid Cancel claim already drive them; the hook-matching that
+       produced the list reported `initDropdowns` as 0 of 9. That is the THIRD
+       disagreement from that measurement, which is why no coverage percentage
+       appears anywhere in this slice.
+
+       **Two of three new instruments were wrong on first run — the base rate
+       held.** Both reported a product bug that did not exist: the wizard probe
+       read `querySelector('[data-wizard-panel]')` on a page with FOUR panels,
+       so the legend never changed; the saved-views probe read the first of
+       THREE `.bo-filter-bar` forms and dispatched `popstate`, a code path no
+       user takes (the views are real links). The product was correct both
+       times.
+
+       Also worth recording: the wizard behavior is an **inline minified module
+       in the page HTML**, not a bundle — four greps through `dist/_astro`
+       found nothing while the claim passed. Red-proving forced that discovery;
+       a claim that had merely gone green would have left it unknown.
+
+       Still uncovered: `file-dropzone`, `money-field`. Both need their demos
+       located first — neither renders under the hook names in `behaviors.json`.
 
        **A coverage PERCENTAGE is deliberately not recorded.** Two attempts to
        measure it disagreed in opposite directions — matching behavior hooks

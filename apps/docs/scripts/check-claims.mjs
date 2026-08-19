@@ -1168,6 +1168,108 @@ check(
   JSON.stringify(cal),
 );
 
+/* ---- Slice 45.6 batch 2 ---------------------------------------------------
+   Same selection rule as batch 1: the failure leaves the screen looking right.
+
+   NOTE ON WHAT IS *NOT* HERE. `initDropdowns` and `initTableSum` were on the
+   uncovered list and are not, in fact, uncovered — the dropdown scroll-anchor
+   claim above and the editable-grid Cancel claim already drive them. The
+   automated hook-matching that produced the list reported `initDropdowns` as
+   0-of-9 covered. That is the third time this measurement has been wrong, and
+   the reason no coverage percentage is recorded anywhere in this slice. */
+
+// wizard — the stepper and the panel are two views of ONE step index.
+await visit('/patterns/wizard/');
+const wizard = await page.evaluate(async () => {
+  const root = document.querySelector('[data-wizard]');
+  /* The VISIBLE panel, not the first one. This wizard has four
+     [data-wizard-panel]s and querySelector always returned panel 1, so the
+     legend never changed and the claim read as a product bug. */
+  const visiblePanel = () => [...root.querySelectorAll('[data-wizard-panel]')]
+    .find((el) => el.offsetParent !== null || el.getClientRects().length);
+  const read = () => ({
+    current: root.getAttribute('data-wizard-current'),
+    marked: [...root.querySelectorAll('.bo-stepper__step')]
+      .findIndex((s) => s.getAttribute('aria-current') === 'step'),
+    legend: visiblePanel()?.querySelector('legend')?.textContent.trim(),
+  });
+  const start = read();
+  root.querySelector('[data-wizard-next]')?.click();
+  await new Promise((r) => setTimeout(r, 200));
+  const next = read();
+  const focusInPanel = !!visiblePanel()?.contains(document.activeElement);
+  root.querySelector('[data-wizard-back]')?.click();
+  await new Promise((r) => setTimeout(r, 200));
+  return { start, next, back: read(), focusInPanel };
+});
+check(
+  'wizard: the stepper mark and the visible panel move together, and focus follows',
+  wizard.start.current === '0' && wizard.start.marked === 0 &&
+    wizard.next.current === '1' && wizard.next.marked === 1 &&
+    wizard.next.legend !== wizard.start.legend &&
+    wizard.back.current === '0' && wizard.back.marked === 0 &&
+    wizard.focusInPanel,
+  JSON.stringify(wizard),
+);
+
+/* saved-views — the dangerous one. If applying a view marks the chip active but
+   does NOT fill the filter bar, the user is looking at a screen that says
+   "Overdue" while showing everything. Nothing about that looks broken. */
+/* Driven by a REAL navigation, because that is what the links are: the
+   behavior reads location.search on load. Dispatching popstate asserted a code
+   path no user takes. And the bar is scoped to the nav's own section — this
+   page carries THREE .bo-filter-bar forms, so a bare querySelector measured a
+   different demo entirely. */
+await visit('/components/filters/?status=overdue');
+const views = await page.evaluate(() => {
+  const nav = document.querySelector('[data-saved-views]');
+  const section = nav.closest('section') ?? document;
+  const bar = section.querySelector('form.bo-filter-bar');
+  return {
+    field: bar?.querySelector('[name="status"]')?.value,
+    barsOnPage: document.querySelectorAll('form.bo-filter-bar').length,
+    activeHrefs: [...nav.querySelectorAll('[aria-current="page"]')].map((a) => a.getAttribute('href')),
+  };
+});
+check(
+  'saved-views: applying a view fills the filter bar AND marks exactly that chip',
+  views.field === 'overdue' && views.activeHrefs.length === 1 &&
+    views.activeHrefs[0] === '?status=overdue',
+  JSON.stringify(views),
+);
+
+/* tag-input — removing a tag must remove the VALUE, not just the chip. A chip
+   that disappears while its value survives submits data the user deleted. */
+await visit('/components/tag-input/');
+const tags = await page.evaluate(async () => {
+  const group = document.getElementById('ti-basic');
+  const names = () => [...group.querySelectorAll('.bo-tag-input__tag')]
+    .map((t) => t.textContent.replace('×', '').trim());
+  const before = names();
+  group.querySelector('.bo-tag-input__tag .bo-tag-input__remove').click();
+  await new Promise((r) => setTimeout(r, 150));
+  const after = names();
+  // and adding one round-trips
+  const field = group.querySelector('.bo-tag-input__field');
+  field.focus(); field.value = 'CC-9001';
+  field.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await new Promise((r) => setTimeout(r, 150));
+  return {
+    before, after, added: names(),
+    // nothing removed may survive anywhere in the group's submitted state
+    orphanValues: [...group.querySelectorAll('input[type="hidden"]')]
+      .map((i) => i.value).filter((v) => !names().includes(v)),
+    fieldCleared: field.value === '',
+  };
+});
+check(
+  'tag-input: removing a tag drops its value too, and adding one round-trips',
+  tags.after.length === tags.before.length - 1 &&
+    !tags.after.includes(tags.before[0]) &&
+    tags.added.includes('CC-9001') && tags.orphanValues.length === 0 && tags.fieldCleared,
+  JSON.stringify(tags),
+);
+
 await browser.close();
 server.close();
 
