@@ -8,6 +8,24 @@ pin.
 
 ## Unreleased
 
+- **Removed** (`.bo-quantity--display`, `.bo-quantity__value`): a read-only
+  variant that existed to mirror this component's name rather than to meet a
+  need. **Zero screens used it** — every screen that shows a count uses
+  `.bo-amount` with `__unit`, which already aligns and tabulates every numeric
+  value in a column. Its own source comment gave the reason it was built:
+  "closing the asymmetry with Amount".
+
+  **Not a breaking change:** it was never published. `npm view @busy-office/ui
+  versions` reports `0.1.0, 0.1.1`, and the class is absent from `v0.1.1` — it
+  existed only in the tagged-but-unpublished `v0.2.0`. Removing it now costs no
+  consumer anything; removing it after 0.2.0 reached the registry would have
+  been a next-major job for a class nobody asked for (grill 2026-08-19).
+
+  The family rule is now stated in the same words on Amount, Money and
+  Quantity: **displaying a value is Amount's job; capturing one is Money's
+  (currency) or Quantity's (count).**
+
+
 - **Fixed** (`.bo-widget__collapse`): a closed collapsible card did not collapse
   to zero — it stopped at the inner padding. Measured
   `grid-template-rows: 32px` computed while the element reported `data-state

@@ -768,7 +768,7 @@ script deriving a path `paths.mjs` exports.
        maths, which turns the **build** red across a whole month. The existing
        hand-written months were checked by it and were correct: 0 misplaced.
 
-3. [ ] **54.3 — Grill Amount & Quantity: display vs input.**
+3. [x] **54.3 — Grill Amount & Quantity: display vs input.** — landed 2026-08-19
        Both are "Values" components and both currently document a **display**
        form, with entry deferred to native inputs (`.bo-amount` has no
        `--input`; `.bo-date` said the same before it was deprecated). But
@@ -785,6 +785,38 @@ script deriving a path `paths.mjs` exports.
        Whatever the answer, it goes on all three pages in the same words.
        Refusing to add an Amount input is a valid outcome and must be recorded
        with the reason.
+
+       **Landed 2026-08-19.** Report:
+       `.roundtable/grill-values-family-2026-08-19.md`.
+
+       **The premise in this item was wrong, and that is worth recording.** It
+       said "three components, three different answers to *does this handle
+       entry?*". Reading the pages instead of the class lists, the rule already
+       existed and each page already stated it: Money says "the read-only
+       counterpart is Amount"; Quantity says "a count field, not a currency one
+       — see Amount for money"; and they cross-link both ways. There was no
+       inconsistency to fix.
+
+       **The real defect was two ways to display a count.**
+       `.bo-quantity--display` existed to display a count and **zero screens
+       used it** — every screen that shows one uses `.bo-amount` + `__unit`. Its
+       own source comment named the motive: "closing the asymmetry with Amount".
+       That is a symmetry argument, not a demand argument. Meanwhile the docs
+       recommended it, so documentation and practice disagreed — the 46.2 defect
+       class. Scored **NET −3**.
+
+       **Removed outright rather than deprecated, because cost-to-remove was
+       genuinely 0 and only briefly.** Verified two ways: `npm view` reports
+       only `0.1.0, 0.1.1` published, and the class is absent from `v0.1.1` —
+       it lived only in the tagged-but-unpublished `v0.2.0`. No consumer can
+       have it. **The moment 0.2.0 reaches the registry this becomes a
+       next-major job**, so the free window was now.
+
+       **The Amount input was refused**, as the Accept allowed: the editable
+       counterpart already exists and is called Money. Adding `.bo-amount--input`
+       would be a second way to do one thing — exactly what this grill removed.
+
+       The rule is now on Amount, Money and Quantity in the same words.
 
 ## Slice 53 — Owner input: grill components on need vs cost (2026-08-19)
 

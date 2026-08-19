@@ -5,6 +5,11 @@ import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const readOnly = `<!-- a count, read-only: Amount with a unit -->
+<span class="bo-amount">
+  <span class="bo-amount__value">1,250</span>
+  <span class="bo-amount__unit">ea</span>
+</span>`;
 
 const basic = `<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
@@ -122,6 +127,8 @@ const markup = `<div class="bo-quantity">
     source of truth.
   </p>
 
+  <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em>.</p>
+
   <section class="demo">
     <h2>Basic</h2>
     <Demo code={basic} />
@@ -140,13 +147,15 @@ const markup = `<div class="bo-quantity">
   </section>
 
   <section class="demo">
-    <h2>Read-only display</h2>
-    <Demo code={display} />
-    <p class="bo-u-text-muted"><code>--display</code> is the read-only
-    counterpart to the editable stepper — a span composition, no JS, sits
-    inline in running text or a table cell. The same split as
-    <a href={base + '/components/amount'}>Amount</a> (display) vs this
-    component (edit): pick by whether the user changes the number here.</p>
+    <h2>Read-only display — use Amount</h2>
+    <Demo code={readOnly} />
+    <p class="bo-u-text-muted">There is no <code>.bo-quantity--display</code>.
+    One existed briefly, purely to mirror this component's name, and no screen
+    ever used one — every screen that shows a count uses
+    <a href={base + '/components/amount'}>Amount</a> with its
+    <code>__unit</code> part, which already aligns and tabulates every numeric
+    value in a column. It was removed before it reached a release rather than
+    kept for symmetry (grill 2026-08-19).</p>
   </section>
 
   <section class="demo">
