@@ -698,6 +698,74 @@ principles last one conversation and vanish at the next context clear.
        filter will be judged against: a screen that later fails it has
        REGRESSED, not merely disagreed with taste.
 
+## Slice 59 — Owner wishlist: RF-scanner browser floor + a smaller-screen profile (2026-08-19)
+
+Owner asked for (a) an RF-scanner component supporting 5-6-year-old devices,
+studied to find the right floor, and (b) that support separated for smaller
+screens. Researched before building — three parallel agents (device
+landscape, CSS floor audit, JS floor audit), spot-checked against source
+before trusting any number. Full study:
+`.roundtable/rf-scanner-floor-study-2026-08-19.md`.
+
+**What already exists — nothing to rebuild.** The scanning mechanics shipped
+in Slice 6: `initScanInput()` (zero new CSS) and `.bo-quantity` +
+`data-density="spacious"`, composed in `/patterns/goods-receipt`. This slice is
+about the FLOOR and the PROFILE, not the interaction.
+
+**The literal ask — "a component… separated" — is refused as phrased.** A
+forked RF component/theme fails the Objective's own §2 (refuse a second way to
+do something that already works) and §3 (nothing ships for one screen). What
+the research actually supports is narrower: not a new component, but a
+**derived, lower-floor build profile of the existing source** — the same shape
+as the per-component dist files that already exist, one more build target from
+one source tree, so it cannot drift the way a hand-maintained fork would.
+
+1. [ ] **59.1 — Recommended floor: Chrome/WebView 108, stated at MEDIUM
+       confidence, not asserted as fact.** Every RF vendor's "Enterprise
+       Browser" (Zebra, Honeywell, Ivanti Velocity) renders through the
+       device's Android System WebView — it is the real floor, not a bundled
+       engine. 108 is defensible because it's cleared by any device patched at
+       all in ~3.5 years and still includes container queries + `:has()`
+       (105/106), the two features a density-aware framework needs.
+
+       **Stated honestly**: a fully patch-frozen, Play-blocked fleet sits at
+       the factory image (WebView 61-83) — unquantifiable, and out of scope
+       for any modern-CSS framework, not a floor this project can chase.
+       Accept: this number and its confidence level are published on the docs
+       page the profile ships on, not silently assumed.
+
+2. [ ] **59.2 — `rf-essentials` build profile, targeting 108.** A PostCSS pass
+       over the RF-relevant subset (tokens, button, form, quantity, badge,
+       alert, data-table basics, state, kv), fixing the mechanically-clearable
+       blockers (logical-property shorthands, one `color-mix()` in badge) and
+       adding two HAND-AUTHORED fallback layers where the dependency is
+       behavioral, not cosmetic: `form.css` (error/required/disabled built on
+       `:has()`/`:user-invalid`/`:is()` — needs an `aria-invalid`-class
+       fallback) and `data-table.css` (`@container` density switch and
+       `:has()` row-select highlight — need class-driven replacements).
+
+       Accept: one PostCSS build target, output verified — not claimed — clean
+       at 108.
+
+3. [ ] **59.3 — A floor-verification gate for the profile, same technique as
+       `derive-floor.mjs` in reverse.** Assert nothing in the profile's BUILT
+       output exceeds the 108 target, using `@mdn/browser-compat-data` — a
+       build-time check, not a claim in prose. Red-prove by injecting one
+       feature above 108 into the profile source and confirming the gate
+       catches it.
+
+4. [ ] **59.4 — The "smaller screen" half of the ask, answered as a demo, not a
+       fork.** A narrow-viewport RF screen (360×640, a common scanner
+       resolution) built from the `rf-essentials` profile, composing
+       `goods-receipt`'s existing pattern. This is where "separated and used
+       only on RF scanner / mobile / tablet" is demonstrated — the profile is
+       what's separated (a build target), not the markup or the components.
+       Verified live at 360×640 in addition to the usual 1440/390.
+
+**Not started this turn** — 59.2/59.3 are new build tooling (PostCSS fallback
+authoring), and this project's discipline is to verify a new gate before
+trusting it, which needs its own slice with its own red-proof, not a
+same-message add-on to a research study.
 ## Slice 58 — Owner ask: run /design-grill across the screens (2026-08-19)
 
 Owner: *"why don't put /design-grill in the plan as well"* — agreed; installing
