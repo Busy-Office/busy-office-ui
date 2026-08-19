@@ -70,6 +70,7 @@ const ALLOWED = new Map([
   // Bundles that re-export the above; same rules, same flips.
   ['css/index.css', 'full bundle — contains the component flips above'],
   ['css/components/nav.css', 'nav bundle — contains offcanvas'],
+  ['css/rf-essentials.css', 'RF-floor bundle (roadmap 59.2) — re-exports the select chevron flip from form.css'],
 ]);
 const DOCUMENTED_PLACES = 5;
 
@@ -106,7 +107,7 @@ for await (const file of distCssFiles()) {
 
 /* The docs state a NUMBER. Count the real component files (bundles re-export
    them), so the prose cannot drift away from the stylesheet again. */
-const realPlaces = [...flipSites].filter((f) => !/index\.css$|nav\.css$/.test(f));
+const realPlaces = [...flipSites].filter((f) => !/index\.css$|nav\.css$|rf-essentials\.css$/.test(f));
 if (realPlaces.length !== DOCUMENTED_PLACES) {
   failures.push(
     `/concepts/i18n says ${DOCUMENTED_PLACES} places need a flip; the stylesheet has ${realPlaces.length} (${realPlaces.join(', ')}) — update the page and DOCUMENTED_PLACES together`,

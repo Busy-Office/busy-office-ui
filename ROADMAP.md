@@ -985,25 +985,80 @@ one source tree, so it cannot drift the way a hand-maintained fork would.
        hand-typing THIS project's floor) correctly did not fire. Verified live
        at 1440/390, both themes.
 
-2. [ ] **59.2 — `rf-essentials` build profile, targeting 108.** A PostCSS pass
-       over the RF-relevant subset (tokens, button, form, quantity, badge,
-       alert, data-table basics, state, kv), fixing the mechanically-clearable
-       blockers (logical-property shorthands, one `color-mix()` in badge) and
-       adding two HAND-AUTHORED fallback layers where the dependency is
-       behavioral, not cosmetic: `form.css` (error/required/disabled built on
-       `:has()`/`:user-invalid`/`:is()` — needs an `aria-invalid`-class
-       fallback) and `data-table.css` (`@container` density switch and
-       `:has()` row-select highlight — need class-driven replacements).
+2. [x] **59.2 — `rf-essentials` build profile, targeting 108.** — landed
+       2026-08-20. `scripts/build-rf-essentials.mjs`: a PostCSS pass over
+       tokens, reset, button, form/*, quantity, badge, alert, data-table,
+       state, kv — autoprefixed against `chrome >= 108, and_chr >= 108`
+       specifically (the main bundle stays at 119+; two separate
+       browserslist targets from one source tree, not a fork).
 
-       Accept: one PostCSS build target, output verified — not claimed — clean
-       at 108.
+       **The item's own scoping was checked against BCD before trusting
+       it, and it was wrong about two of the three "needs a fallback"
+       claims.** `:has()` and `@container` are both Chrome 105 — WITHIN
+       108 — so data-table's row-select highlight and density switch need
+       nothing. Checked precisely which features in the actual RF-relevant
+       subset exceed 108: only three — `:user-invalid` (119, in
+       `form-field.css`), `color-mix()` (111, in `badge.css`), and
+       `subgrid` (117, in `kv.css`, not named in the original scoping at
+       all). `form-field.css` already had a documented `:is()`
+       forgiving-list fallback from before this slice — nothing to build.
+       Added real `@supports` progressive-enhancement fallbacks to
+       `badge.css` (flat `--bo-color-border-default` below 111, the hued
+       `color-mix()` boundary above it) and `kv.css` (an own two-column
+       `grid-template-columns` below 117, `subgrid` above it) — source-
+       level fixes, so every consumer benefits, not just this profile.
+       Verified live in a real browser: badge borders still hue-matched
+       per variant, `--type` chips still borderless, `.bo-kv--rows` still
+       aligned — both themes.
 
-3. [ ] **59.3 — A floor-verification gate for the profile, same technique as
-       `derive-floor.mjs` in reverse.** Assert nothing in the profile's BUILT
-       output exceeds the 108 target, using `@mdn/browser-compat-data` — a
-       build-time check, not a claim in prose. Red-prove by injecting one
-       feature above 108 into the profile source and confirming the gate
-       catches it.
+       Registered as a known bundle in `check-rtl.mjs` (it re-exports the
+       select-chevron flip already documented for `form.css`) and excluded
+       from that gate's flip-site COUNT the same way `index.css`/`nav.css`
+       are — a re-export isn't a new site.
+
+       Wired into `packages/core`'s `npm run build` (after `build:floor`).
+       Accept met: one PostCSS build target, output verified — not
+       claimed — clean at 108 (59.3, below).
+
+3. [x] **59.3 — A floor-verification gate for the profile, same technique as
+       `derive-floor.mjs` in reverse.** — landed 2026-08-20.
+       `scripts/check-rf-floor.mjs`: parses the built `rf-essentials.css`
+       (postcss AST, not a grep) and fails on any use of a feature above
+       Chrome 108 that isn't guarded by an `@supports` ancestor or a
+       forgiving `:is()`/`:where()` selector list.
+
+       **A naive substring scan (derive-floor's own technique, tried
+       first) produced exactly the false positives derive-floor doesn't
+       have to worry about**: it flagged all three guarded features as
+       violations, because it can't tell "mentioned" from "mentioned
+       inside a guard that makes the browser skip it." Parsing instead of
+       grepping is the actual content of "in reverse" — not just inverting
+       the pass/fail direction.
+
+       **Red-proving this gate found two real bugs in the gate itself**,
+       both caught by injecting an unguarded `color-mix()` into the real
+       profile source and confirming the gate's own reported violations —
+       not by trusting a green run:
+       - `earliestChrome(compatOf(f.path))` passed the WHOLE multi-browser
+         BCD support object where a single browser's entries were expected
+         — every feature silently came back "not over the limit," so the
+         gate always passed, including against the injected violation.
+         Missing `.chrome`.
+       - Once that was fixed, the gate correctly caught the injection but
+         ALSO flagged the legitimate, already-guarded `:user-invalid` use
+         as a violation: the forgiving-list check used a `[^)]*` regex,
+         which breaks the moment the wrapper contains ITS OWN nested
+         parens — exactly what `form-field.css`'s real
+         `:is(...:has([aria-invalid="true"]), ...:has(...:user-invalid...))`
+         does. Replaced with a real paren-depth scan.
+
+       `findViolations` is the ONE function both the real run and
+       `--self-test` call, on purpose — a first draft duplicated the walk
+       logic between them and the two silently drifted, which is part of
+       why the first bug went unnoticed by its own self-test. `--self-test`
+       now covers the nested-paren shape specifically, not just a flat
+       case. Final red-proof: injected `color-mix()` → gate failed with the
+       exact file:line; reverted → gate passed clean.
 
 4. [ ] **59.4 — The "smaller screen" half of the ask, answered as a demo, not a
        fork.** A narrow-viewport RF screen (360×640, a common scanner
@@ -1013,10 +1068,11 @@ one source tree, so it cannot drift the way a hand-maintained fork would.
        what's separated (a build target), not the markup or the components.
        Verified live at 360×640 in addition to the usual 1440/390.
 
-**Not started this turn** — 59.2/59.3 are new build tooling (PostCSS fallback
-authoring), and this project's discipline is to verify a new gate before
-trusting it, which needs its own slice with its own red-proof, not a
-same-message add-on to a research study.
+       **Not started this wake** — 59.2 and 59.3 landed 2026-08-20 (their
+       own red-proof, including two bugs found in the gate itself, took the
+       full wake). Same discipline as the design-grill sweep's "one batch
+       at most" — new-tooling work gets its own wake, not a rushed add-on.
+
 ## Slice 58 — Owner ask: run /design-grill across the screens (2026-08-19)
 
 Owner: *"why don't put /design-grill in the plan as well"* — agreed; installing

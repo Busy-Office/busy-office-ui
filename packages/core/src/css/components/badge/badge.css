@@ -3,9 +3,14 @@
   .bo-badge {
     --bo-badge-bg: var(--bo-color-bg-muted);
     --bo-badge-fg: var(--bo-color-text-secondary);
-    /* Derived from the badge's own foreground, so every variant gets a
-       boundary in its own hue without a per-variant token. */
-    --bo-badge-border: color-mix(in oklab, var(--bo-badge-fg) 22%, transparent);
+    /* Flat fallback below Chrome 111 / Safari 16.2 (roadmap 59.2, RF floor
+       108): color-mix() isn't supported there, and an invalid custom-property
+       VALUE at use time drops the whole `border` declaration rather than
+       falling back to var()'s second argument — that fallback only applies
+       to a genuinely unset property. A flat neutral border still satisfies
+       the "unconditional boundary" requirement below, just without the
+       per-variant hue. */
+    --bo-badge-border: var(--bo-color-border-default);
 
     display: inline-flex;
     align-items: center;
@@ -30,6 +35,17 @@
        generated component lists; without this they render underlined. */
     text-decoration: none;
     white-space: nowrap;
+  }
+
+  /* Derived from the badge's own foreground, so every variant gets a
+     boundary in its own hue without a per-variant token — progressive
+     enhancement over the flat fallback above. Placed BEFORE --type: that
+     variant's own transparent override must still win by source order,
+     same specificity. */
+  @supports (color: color-mix(in oklab, red, red)) {
+    .bo-badge {
+      --bo-badge-border: color-mix(in oklab, var(--bo-badge-fg) 22%, transparent);
+    }
   }
 
   .bo-badge--success {

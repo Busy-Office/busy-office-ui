@@ -32,11 +32,25 @@
     row-gap: var(--bo-space-2);
   }
 
+  /* Fallback below Chrome 117 / Safari 16 (roadmap 59.2, RF floor 108):
+     subgrid isn't a valid grid-template-columns value there, so the whole
+     declaration is dropped and a row with no explicit columns stacks its
+     dt/dd vertically instead of side by side. An own two-column template
+     restores the pair layout; it just can't align to the WIDEST label
+     across sibling rows the way subgrid does — each row sizes to its own
+     content. Progressive enhancement below upgrades it where subgrid
+     exists. */
   .bo-kv--rows > div {
     display: grid;
-    grid-template-columns: subgrid;
+    grid-template-columns: max-content 1fr;
     grid-column: 1 / -1;
     align-items: baseline;
     column-gap: var(--bo-space-3);
+  }
+
+  @supports (grid-template-columns: subgrid) {
+    .bo-kv--rows > div {
+      grid-template-columns: subgrid;
+    }
   }
 }
