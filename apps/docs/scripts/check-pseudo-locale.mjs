@@ -19,6 +19,7 @@
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
+import { WIDTHS } from './viewports.mjs';
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
@@ -41,7 +42,7 @@ const findings = [];
 let minExpansion = Infinity;
 
 for (const path of PAGES) {
-  for (const width of [1440, 390]) {
+  for (const width of WIDTHS) {
     await page.setViewport({ width, height: 1000 });
     await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0' });
     const before = await page.evaluate(() => document.querySelector('main')?.innerText.length ?? 0);

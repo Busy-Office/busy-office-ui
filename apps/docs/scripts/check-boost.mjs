@@ -22,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
+import { DESKTOP_WIDTH } from './viewports.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -76,7 +77,7 @@ const { server, port, base } = await serveDist(DIST);
 
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
-await page.setViewport({ width: 1440, height: 1000 });
+await page.setViewport({ width: DESKTOP_WIDTH, height: 1000 });
 let liveFails = 0;
 for (const [path, selector, expected] of PROBES) {
   // arrive via an in-shell LINK CLICK (the boosted path), not a load

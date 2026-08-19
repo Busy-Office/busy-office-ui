@@ -24,6 +24,7 @@ import { fileURLToPath } from 'node:url';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { WIDTHS } from './viewports.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -46,7 +47,7 @@ const PAGES = [
   '/components/richtext/',
 ];
 const THEMES = ['light', 'dark'];
-const WIDTHS = [1440, 390];
+
 // Absolute changed-pixel budget: same-machine runs measured ~0px noise, so
 // 100px catches even a single broken badge (~1,300px) regardless of how
 // tall a full page is — a ratio threshold silently scaled the allowance
@@ -126,10 +127,26 @@ for (const theme of THEMES) {
       const shot = await page.screenshot({ fullPage: true });
       const basePath = join(baseDir, name);
       const exists = await access(basePath).then(() => true, () => false);
-      if (update || !exists) {
+      if (update) {
         await writeFile(basePath, shot);
         written++;
         console.log(`  baseline ${exists ? 'updated' : 'written'}: ${name}`);
+        continue;
+      }
+      /* A MISSING baseline is a failure, not a free pass.
+         This branch used to be `update || !exists` — an unknown shot was
+         written and counted as ok. Every shot name encodes the page, theme and
+         WIDTH, so anything that changes a name silently re-baselines the whole
+         matrix and still prints "visual regression passed". Proved, not
+         theorised: perturbing NARROW_WIDTH to 377 during the viewports sweep
+         (2026-08-19) wrote 20 new baselines and reported 40 shots checked and
+         passing — the gate could not fail, and it polluted the repo doing it.
+         Accepting a new shot is now a decision someone makes with --update. */
+      if (!exists) {
+        failures++;
+        console.log(`FAIL ${name}: no committed baseline`);
+        console.log('     Either the page matrix or a viewport changed. If that was intended,');
+        console.log('     accept it explicitly: node scripts/visual-regression.mjs --update');
         continue;
       }
       const a = PNG.sync.read(await readFile(basePath));

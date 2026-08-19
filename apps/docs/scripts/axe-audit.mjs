@@ -15,6 +15,7 @@ import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
+import { WIDTHS } from './viewports.mjs';
 
 const AXE = readFileSync(new URL('../../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 
@@ -23,10 +24,7 @@ const pages = (await distPages(DIST)).map((p) => p.url);
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const summary = {};
-// Both harness widths: violations can be width-gated (a table container only
-// becomes a scrollable region — and needs to be focusable — once it overflows,
-// which mostly happens at 390).
-const WIDTHS = [1440, 390];
+// Both harness widths — see viewports.mjs for why these two.
 
 async function scan(path, page) {
   for (const [i, width] of WIDTHS.entries()) {

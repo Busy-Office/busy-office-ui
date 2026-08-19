@@ -731,6 +731,41 @@ nine rows risked instead of fifty-five.
        `check:components-used` now enforces that they cannot be listed again
        without being rendered.
 
+### Slice 47 — Standardize sweep: the widths we verify at (2026-08-19)
+
+1. [x] **47.1 — `[1440, 390]` was one decision stored five times.** — landed
+       axe-audit, visual-regression, check-po-app, check-pseudo-locale and one
+       sweep in check-claims each hand-copied the pair, and the REASON for it
+       was written down in only one of them. Same shape as `paths.mjs` and
+       `SOURCE_SKIP_DIRS`: silent drift, because nothing compares the five.
+       Now `scripts/viewports.mjs` — `WIDTHS`, plus `DESKTOP_WIDTH` for the
+       three gates that set a desktop viewport and never sweep (a different
+       decision, kept separate deliberately).
+
+       Verified by PERTURBATION rather than by reading the diff: setting
+       `NARROW_WIDTH = 377` renamed 20 visual shots, which proves the constant
+       actually drives the gates instead of sitting unused.
+
+2. [x] **47.2 — that perturbation exposed a gate that could not fail.** — landed
+       `visual-regression` treated a MISSING baseline as `update || !exists` —
+       it wrote the shot and counted it as ok. Every shot name encodes page,
+       theme and width, so any drift in a name silently re-baselined the whole
+       matrix and still printed "visual regression passed". The 377 probe wrote
+       20 baselines into the repo and reported 40 shots checked, passing.
+
+       The file already refused to baseline an HTTP error page for exactly this
+       reason ("a stale dist baselined 404s"); the missing-baseline case had the
+       same shape and no guard. A new shot is now a failure with instructions,
+       accepted deliberately via `--update`.
+
+       Red-proved: the identical perturbation now yields 20 loud failures and
+       writes zero baselines, while the real matrix stays green.
+
+       **This is the fourth instrument-that-cannot-fail found by 46.1's rule,
+       and the first found by perturbing a constant rather than injecting CSS.**
+       Worth keeping as a technique: change an input the gate depends on and
+       confirm the OUTPUT changes.
+
 3. [ ] **45.3 — `.bo-date` scores 1 of 12: merge and deprecate.**
        `display: inline-flex`, a `gap`, `tabular-nums` and a muted span — a
        `.bo-cluster` with two utilities. No forced-colors rule, not

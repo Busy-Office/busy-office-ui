@@ -23,6 +23,7 @@
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
+import { DESKTOP_WIDTH } from './viewports.mjs';
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
@@ -68,7 +69,7 @@ const probe = (page) => page.evaluate(() => {
 const violations = [];
 const exempted = new Map();
 const page = await browser.newPage();
-await page.setViewport({ width: 1440, height: 1000 });
+await page.setViewport({ width: DESKTOP_WIDTH, height: 1000 });
 /* Page OUTER, density INNER — not the other way round. Density is an attribute
    set after the page loads, so looping densities outside meant loading the same
    7 pages three times over for nothing. Coverage is identical: every page is

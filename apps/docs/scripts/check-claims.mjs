@@ -18,12 +18,13 @@ import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
+import { WIDTHS, DESKTOP_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
-await page.setViewport({ width: 1440, height: 1000 });
+await page.setViewport({ width: DESKTOP_WIDTH, height: 1000 });
 const url = (p) => `http://localhost:${port}${base}${p}`;
 const g = gate('claims check', 'documented behaviours');
 const check = g.check;
@@ -37,7 +38,7 @@ const check = g.check;
    emulation a claim NEEDS; anything unset returns to the default. */
 const cdp = await page.createCDPSession();
 
-async function visit(path, { media = 'screen', features = [], width = 1440, height = 1000 } = {}) {
+async function visit(path, { media = 'screen', features = [], width = DESKTOP_WIDTH, height = 1000 } = {}) {
   /* ONE CDP call for both. puppeteer's emulateMediaType and
      emulateMediaFeatures each map onto Emulation.setEmulatedMedia, so calling
      them in sequence makes the second WIPE the first — print claims fell back
@@ -305,7 +306,7 @@ check('sticky action bar never covers the focused field', Array.isArray(hidden) 
    measurement existed to prevent. Also asserts status is not duplicated
    between the line and the facts strip — it was, and cost 54px at phone
    width for a fact the reader had already seen. */
-for (const w of [1440, 390]) {
+for (const w of WIDTHS) {
   await page.setViewport({ width: w, height: 900 });
   for (const pat of ['record-detail', 'detail-form']) {
     await visit(`/patterns/${pat}/`, { width: w, height: 900 });

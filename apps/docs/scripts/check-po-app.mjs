@@ -24,6 +24,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { WIDTHS } from './viewports.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const AXE = readFileSync(join(repoRoot, 'node_modules/axe-core/axe.min.js'), 'utf8');
@@ -141,7 +142,7 @@ try {
   const ROUTES = ['/', '/pos', '/import', '/spend', '/receive', '/pos/PO-88210'];
   const violations = [];
   for (const route of ROUTES) {
-    for (const width of [1440, 390]) {
+    for (const width of WIDTHS) {
       await page.setViewport({ width, height: 900 });
       const res = await page.goto(base + route, { waitUntil: 'networkidle0', timeout: 20000 });
       if (!res || res.status() >= 400) { violations.push(`${route}@${width}: HTTP ${res && res.status()}`); continue; }

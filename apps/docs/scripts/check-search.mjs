@@ -26,11 +26,12 @@ import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
+import { DESKTOP_WIDTH } from './viewports.mjs';
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
-await page.setViewport({ width: 1440, height: 900 });
+await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
 
 const g = gate('search check', 'search assertions');
 
