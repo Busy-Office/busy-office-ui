@@ -9,11 +9,18 @@
  * number on /getting-started/installation).
  *
  * Scope: tokens, reset, button, form/*, quantity, badge, alert, data-table,
- * state, kv — the subset `/patterns/goods-receipt` and a receiving screen
- * actually compose. Two source-level @supports fallbacks (badge's
- * color-mix() border, kv's subgrid row layout) already degrade this subset
- * cleanly below 108 — this build target inherits them for free rather than
- * duplicating the logic here.
+ * state, kv, primitives/visually-hidden — the subset `/patterns/goods-receipt`
+ * and a receiving screen actually compose. Two source-level @supports
+ * fallbacks (badge's color-mix() border, kv's subgrid row layout) already
+ * degrade this subset cleanly below 108 — this build target inherits them
+ * for free rather than duplicating the logic here.
+ *
+ * visually-hidden was missing from the first version of this list — found
+ * building 59.4's actual RF demo page, whose scan-status live region (the
+ * same markup `/patterns/goods-receipt` itself ships) uses
+ * `.bo-visually-hidden` and silently rendered it AS a visible paragraph
+ * without this. A profile is only as complete as something real that
+ * exercises it.
  *
  * Verification is 59.3's job (a floor-verification gate reusing
  * derive-floor.mjs's technique in reverse) — this script only builds.
@@ -60,6 +67,7 @@ const layers = `@import "${srcCss}/layers.css";\n`;
 const imports = [
   `@import "${srcCss}/tokens/index.css";`,
   `@import "${srcCss}/reset/index.css";`,
+  `@import "${srcCss}/primitives/visually-hidden.css";`,
   ...RF_COMPONENTS.map((c) => `@import "${srcCss}/components/${c}.css";`),
 ];
 const entrySource = layers + imports.join('\n') + '\n';

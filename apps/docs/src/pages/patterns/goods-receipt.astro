@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import ScanToReceive from '../../components/ScanToReceive.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: goods receipt (RF scanner)">
@@ -24,62 +25,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo" data-density="spacious">
     <h2>Scan to receive</h2>
-    <div class="bo-form-field">
-      <label class="bo-form-field__label" for="gr-scan">Scan barcode</label>
-      <input class="bo-input bo-input--code" id="gr-scan" data-scan-input autofocus
-          placeholder="Waiting for scan…" aria-describedby="gr-scan-status" />
-      <p id="gr-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
-    </div>
-    <div class="bo-form-field">
-      <label class="bo-form-field__label" for="gr-qty">Quantity</label>
-      <div class="bo-quantity">
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-        <input class="bo-quantity__input" type="number" id="gr-qty" value="1" min="1" max="9999" step="1" inputmode="numeric" aria-label="Quantity" />
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
-        <span class="bo-quantity__unit">ea</span>
-      </div>
-    </div>
-
-    <div class="bo-data-table-container" tabindex="0">
-      <table class="bo-data-table">
-        <thead><tr><th scope="col">Barcode</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col">Received</th></tr></thead>
-        <tbody id="gr-log">
-          <tr><td colspan="3" class="bo-u-text-muted">No scans yet — try the live demo above.</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <ScanToReceive />
   </section>
 
-  <script>
-    import { initScanInput, initQuantity } from '@busy-office/ui/js';
-    initScanInput();
-    initQuantity();
-
-    const scanInput = document.getElementById('gr-scan');
-    const qtyInput = document.getElementById('gr-qty') as HTMLInputElement | null;
-    const log = document.getElementById('gr-log');
-    let placeholderCleared = false;
-
-    scanInput?.addEventListener('bo:scan', (e) => {
-      if (!log) return;
-      if (!placeholderCleared) { log.innerHTML = ''; placeholderCleared = true; }
-      const value = (e as CustomEvent).detail.value;
-      const qty = qtyInput?.value || '1';
-      // textContent, never innerHTML: barcode content is untrusted
-      // physical-world input (adversary-printed labels exist).
-      const row = document.createElement('tr');
-      const codeCell = document.createElement('td');
-      codeCell.className = 'bo-data-table__col--code';
-      codeCell.textContent = value;
-      const qtyCell = document.createElement('td');
-      qtyCell.className = 'bo-data-table__col--numeric';
-      qtyCell.textContent = qty;
-      const timeCell = document.createElement('td');
-      timeCell.textContent = new Date().toLocaleTimeString();
-      row.append(codeCell, qtyCell, timeCell);
-      log.prepend(row);
-    });
-  </script>
+  <section class="demo">
+    <h2>The RF-floor profile, at RF-scanner size</h2>
+    <p>Everything above is the framework's full CSS bundle, at desktop width.
+    Below is the SAME markup — via the shared component, not a hand-typed
+    copy — in an isolated document styled by ONLY the
+    <code>rf-essentials</code> profile (roadmap 59.2, Chrome/WebView 108),
+    at 360×640, a common scanner resolution. This is where "separated and
+    used only on RF scanner / mobile / tablet" is actually demonstrated —
+    the profile is what's separated (a build target), not the markup or the
+    components.</p>
+    <iframe
+      src={base + '/patterns/rf/goods-receipt-rf/'}
+      title="Goods receipt, rf-essentials profile, 360×640"
+      style="inline-size: 360px; block-size: 640px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)"
+    ></iframe>
+    <p class="bo-u-text-muted">Same scan-clear-refocus behavior, same
+    <code>data-density="spacious"</code> steppers — <code>initScanInput()</code>
+    and <code>initQuantity()</code> are JS, unaffected by which CSS profile
+    loads (the RF floor research found JS already safe back to Chrome 80;
+    this profile is the CSS half of the ask). Try it: click into the field
+    and type a barcode, then Enter.</p>
+  </section>
 
   <section class="demo">
     <h2>Markup</h2>

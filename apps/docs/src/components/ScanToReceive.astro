@@ -1,0 +1,62 @@
+---
+/* The "Scan to receive" markup + behavior, shared by /patterns/goods-receipt
+   (the full page, framework's main CSS bundle) and
+   /patterns/goods-receipt-rf (an isolated document, rf-essentials.css only —
+   roadmap 59.4). One source, so the two demos cannot drift apart the way
+   two hand-typed copies would. */
+---
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="gr-scan">Scan barcode</label>
+  <input class="bo-input bo-input--code" id="gr-scan" data-scan-input autofocus
+      placeholder="Waiting for scan…" aria-describedby="gr-scan-status" />
+  <p id="gr-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+</div>
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="gr-qty">Quantity</label>
+  <div class="bo-quantity">
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+    <input class="bo-quantity__input" type="number" id="gr-qty" value="1" min="1" max="9999" step="1" inputmode="numeric" aria-label="Quantity" />
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+    <span class="bo-quantity__unit">ea</span>
+  </div>
+</div>
+
+<div class="bo-data-table-container" tabindex="0">
+  <table class="bo-data-table">
+    <thead><tr><th scope="col">Barcode</th><th scope="col" class="bo-data-table__col--numeric">Qty</th><th scope="col">Received</th></tr></thead>
+    <tbody id="gr-log">
+      <tr><td colspan="3" class="bo-u-text-muted">No scans yet — try the live demo above.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  import { initScanInput, initQuantity } from '@busy-office/ui/js';
+  initScanInput();
+  initQuantity();
+
+  const scanInput = document.getElementById('gr-scan');
+  const qtyInput = document.getElementById('gr-qty') as HTMLInputElement | null;
+  const log = document.getElementById('gr-log');
+  let placeholderCleared = false;
+
+  scanInput?.addEventListener('bo:scan', (e) => {
+    if (!log) return;
+    if (!placeholderCleared) { log.innerHTML = ''; placeholderCleared = true; }
+    const value = (e as CustomEvent).detail.value;
+    const qty = qtyInput?.value || '1';
+    // textContent, never innerHTML: barcode content is untrusted
+    // physical-world input (adversary-printed labels exist).
+    const row = document.createElement('tr');
+    const codeCell = document.createElement('td');
+    codeCell.className = 'bo-data-table__col--code';
+    codeCell.textContent = value;
+    const qtyCell = document.createElement('td');
+    qtyCell.className = 'bo-data-table__col--numeric';
+    qtyCell.textContent = qty;
+    const timeCell = document.createElement('td');
+    timeCell.textContent = new Date().toLocaleTimeString();
+    row.append(codeCell, qtyCell, timeCell);
+    log.prepend(row);
+  });
+</script>

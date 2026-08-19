@@ -114,8 +114,17 @@ for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro'))
    The owner review measured Related on ~75% of pages and asked for 100%:
    it is the only outward path from a page, and the pages missing it were
    the thin ones nobody could navigate away from. Landing pages and the
-   generated 404 are exempt (they have their own navigation). */
-const RELATED_EXEMPT = new Set(['index.astro', '404.astro']);
+   generated 404 are exempt (they have their own navigation).
+
+   patterns/rf/goods-receipt-rf.astro (roadmap 59.4) is exempt for the
+   OPPOSITE reason: it deliberately has NO navigation chrome, because it is
+   an isolated document embedded via <iframe> from /patterns/goods-receipt
+   to prove the rf-essentials CSS profile is sufficient on its own — the
+   docs shell, sidebar, and a Related footer all live in the framework's
+   MAIN bundle, and pulling any of them in would defeat the page's whole
+   purpose. A reader never lands on it directly; the parent page is the
+   navigation. */
+const RELATED_EXEMPT = new Set(['index.astro', '404.astro', 'patterns/rf/goods-receipt-rf.astro']);
 async function* allPages(dir, rel = '') {
   for (const e of await readdir(dir, { withFileTypes: true })) {
     if (e.isDirectory()) yield* allPages(join(dir, e.name), `${rel}${e.name}/`);

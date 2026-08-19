@@ -1060,18 +1060,50 @@ one source tree, so it cannot drift the way a hand-maintained fork would.
        case. Final red-proof: injected `color-mix()` → gate failed with the
        exact file:line; reverted → gate passed clean.
 
-4. [ ] **59.4 — The "smaller screen" half of the ask, answered as a demo, not a
-       fork.** A narrow-viewport RF screen (360×640, a common scanner
-       resolution) built from the `rf-essentials` profile, composing
-       `goods-receipt`'s existing pattern. This is where "separated and used
-       only on RF scanner / mobile / tablet" is demonstrated — the profile is
-       what's separated (a build target), not the markup or the components.
-       Verified live at 360×640 in addition to the usual 1440/390.
+4. [x] **59.4 — The "smaller screen" half of the ask, answered as a demo, not a
+       fork.** — landed 2026-08-20. A 360×640 isolated document,
+       `/patterns/rf/goods-receipt-rf/`, styled by ONLY
+       `assets/rf-essentials.min.css` (never the framework's main bundle —
+       that would prove nothing about the profile), embedded via
+       `<iframe>` from `/patterns/goods-receipt`. Reuses the SAME
+       scan-to-receive markup as the full page — factored into a shared
+       `ScanToReceive.astro` component, so the two demos can't drift the
+       way two hand-typed copies would.
 
-       **Not started this wake** — 59.2 and 59.3 landed 2026-08-20 (their
-       own red-proof, including two bugs found in the gate itself, took the
-       full wake). Same discipline as the design-grill sweep's "one batch
-       at most" — new-tooling work gets its own wake, not a rushed add-on.
+       **Building this for real found two things the profile's own scoping
+       had missed, exactly the value a real consumer is supposed to
+       provide.** `.bo-visually-hidden` (the scan-status live region's
+       class, used by `goods-receipt`'s OWN existing markup) lived in
+       `primitives/`, which 59.2's component list never imported — the
+       announcement rendered as ordinary VISIBLE text instead of being
+       screen-reader-only, caught by actually looking at the rendered page,
+       not by a gate. Added `primitives/visually-hidden.css` to the
+       profile's imports (rebuilt, re-verified against 59.3's gate — still
+       clean). Separately, the isolated page itself needed a real `<h1>`
+       and a named `<main>` landmark — `axe-audit.mjs` flagged both, plus a
+       `landmark-unique` violation once fixed, because the sweep scans INTO
+       same-origin iframes: the RF page's own `<main>` and the parent
+       `/patterns/goods-receipt` page's `#main-content` land in one
+       accessibility tree when embedded together, so the child's landmark
+       needed its own `aria-label` to stay distinct.
+
+       New pattern-page-shape gate exemption, documented with a reason:
+       `check-page-shape.mjs`'s `RELATED_EXEMPT` now includes
+       `patterns/rf/goods-receipt-rf.astro` — the opposite reason
+       index.astro/404.astro are exempt (they have their own navigation;
+       this page deliberately has none, because a reader never lands on it
+       directly).
+
+       Verified live at 1440/390 (the outer page) and 360×640 (the
+       embedded iframe, matched exactly to the RF viewport), both themes,
+       the scan interaction driven for real (typed a barcode, pressed
+       Enter) rather than assumed. `npm run build` gates green in both
+       `packages/core` and `apps/docs` (page-shape, claims, link-check,
+       markup, calendar-grid, data-hooks, learning-path, components-used,
+       boost, notes, 59.3's floor gate), stylelint clean, axe 91 pages x 2
+       widths zero violations.
+
+       **Slice 59 is done — 59.1 through 59.4 all landed.**
 
 ## Slice 58 — Owner ask: run /design-grill across the screens (2026-08-19)
 

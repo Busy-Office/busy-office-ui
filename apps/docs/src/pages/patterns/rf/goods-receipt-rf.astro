@@ -1,0 +1,46 @@
+---
+/* Isolated document, embedded via <iframe> from /patterns/goods-receipt
+   (roadmap 59.4). Deliberately does NOT import the Gallery layout or the
+   docs shell — those pull in the framework's MAIN css bundle (119+
+   floor), which would defeat the entire point: this page must prove the
+   `rf-essentials` profile (Chrome/WebView 108) is sufficient on its own,
+   not that the framework works as usual. Same reasoning as the
+   troubleshooting page's interop iframes — an isolated document is the
+   only way to actually test what a page loading ONLY that file gets. */
+import ScanToReceive from '../../../components/ScanToReceive.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const cssHref = base + '/assets/rf-essentials.min.css';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Goods receipt — rf-essentials profile</title>
+    <link rel="stylesheet" href={cssHref} />
+    <style>
+      /* Page-level only — not part of the profile being tested. font-family
+         already comes from the reset (--bo-font-sans); this just matches
+         the canvas/text tokens so the isolated document doesn't read as
+         unstyled chrome around the component. */
+      body {
+        margin: 0;
+        padding: var(--bo-space-3);
+        background: var(--bo-color-bg-canvas);
+        color: var(--bo-color-text-primary);
+      }
+    </style>
+  </head>
+  <body data-density="spacious">
+    {/* aria-label is load-bearing, not decoration: axe-audit.mjs scans into
+        same-origin iframes, so this <main> and the parent
+        /patterns/goods-receipt page's own #main-content land in ONE
+        accessibility tree when embedded together — two unnamed <main>
+        landmarks there is a real landmark-unique violation, caught by the
+        sweep, not assumed. */}
+    <main aria-label="Goods receipt, rf-essentials profile demo">
+      <h1 class="bo-visually-hidden">Goods receipt — scan to receive</h1>
+      <ScanToReceive />
+    </main>
+  </body>
+</html>
