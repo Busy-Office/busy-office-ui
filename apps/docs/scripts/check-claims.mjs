@@ -972,6 +972,168 @@ check(
   JSON.stringify({ ...drawerOpen, ...drawerClosed }),
 );
 
+/* ---- Slice 45.6: behaviours whose failure is SILENT ------------------------
+   The surface review found behaviours shipping with no executable claim. These
+   three were picked not for being uncovered but for HOW they fail: nothing on
+   screen changes, so a human reviewing the page sees a working demo either way.
+   A combobox that stops setting aria-activedescendant looks identical to a
+   sighted user and goes mute for a screen reader; a scan field that stops
+   clearing concatenates the next barcode into the last one, in a warehouse,
+   silently. */
+
+// combobox — WAI-ARIA APG list autocomplete. Typing opens and filters.
+await visit('/components/combobox/');
+const cbType = await (async () => {
+  await page.click('#demo-cb-input');
+  await page.keyboard.type('log', { delay: 20 });
+  await new Promise((r) => setTimeout(r, 150));
+  return page.evaluate(() => {
+    const input = document.getElementById('demo-cb-input');
+    /* Scope to THIS combobox's listbox. A bare `.bo-combobox__option` selector
+       spans every combobox demo on the page — it reported 15 options with three
+       `null` values belonging to other instances, which looked like a filtering
+       bug and was a measurement bug. */
+    const opts = [...document.querySelectorAll('#demo-cb-list .bo-combobox__option')];
+    const shown = opts.filter((o) => o.offsetParent !== null || o.getClientRects().length);
+    return {
+      expanded: input.getAttribute('aria-expanded'),
+      total: opts.length,
+      shown: shown.length,
+      shownText: shown.map((o) => o.dataset.value),
+    };
+  });
+})();
+check(
+  'combobox: typing opens the listbox and filters it to the matches',
+  cbType.expanded === 'true' && cbType.shown > 0 && cbType.shown < cbType.total &&
+    cbType.shownText.every((v) => v === 'CC-2205'),
+  JSON.stringify(cbType),
+);
+
+/* The silent half: arrowing must move aria-activedescendant to a REAL option id.
+   Without it the listbox is unreadable to a screen reader while looking correct
+   on screen — which is precisely why it needs a machine to assert it. */
+await page.keyboard.press('ArrowDown');
+await new Promise((r) => setTimeout(r, 120));
+const cbActive = await page.evaluate(() => {
+  const input = document.getElementById('demo-cb-input');
+  const id = input.getAttribute('aria-activedescendant');
+  const target = id && document.getElementById(id);
+  return {
+    activedescendant: id,
+    pointsAtAnOption: !!(target && target.classList.contains('bo-combobox__option')),
+    selectedState: target && target.getAttribute('aria-selected'),
+  };
+});
+check(
+  'combobox: ArrowDown moves aria-activedescendant onto a real option',
+  cbActive.pointsAtAnOption,
+  JSON.stringify(cbActive),
+);
+
+// Enter commits that option's value; the listbox closes behind it.
+await page.keyboard.press('Enter');
+await new Promise((r) => setTimeout(r, 150));
+const cbPick = await page.evaluate(() => {
+  const input = document.getElementById('demo-cb-input');
+  return { value: input.value, expanded: input.getAttribute('aria-expanded') };
+});
+check(
+  'combobox: Enter commits the active option and closes the listbox',
+  cbPick.value.includes('CC-2205') && cbPick.expanded === 'false',
+  JSON.stringify(cbPick),
+);
+
+/* scan-input — an RF handheld types the barcode fast and sends its terminator.
+   Three things must hold or the warehouse silently receives garbage: the field
+   CLEARS, it KEEPS focus for the next scan, and the polite live region gets the
+   code so a non-visual user hears the confirmation. */
+await visit('/patterns/goods-receipt/');
+await page.click('#gr-scan');
+await page.keyboard.type('5901234123457', { delay: 5 });
+await page.keyboard.press('Enter');
+await new Promise((r) => setTimeout(r, 200));
+const scan = await page.evaluate(() => ({
+  value: document.getElementById('gr-scan').value,
+  stillFocused: document.activeElement === document.getElementById('gr-scan'),
+  announced: document.querySelector('[data-scan-status]')?.textContent.trim() ?? '',
+}));
+check(
+  'scan-input: the terminator clears the field, keeps focus, and announces the code',
+  scan.value === '' && scan.stillFocused && scan.announced.includes('5901234123457'),
+  JSON.stringify(scan),
+);
+
+/* validation-summary — the page's whole argument is that the summary appears
+   BEFORE the fields and each entry focuses its exact field, so a screen-reader
+   user hears the overview before jumping in. Both halves are invisible to a
+   sighted reviewer scanning the demo: an entry that focuses nothing still looks
+   like a tidy list of errors. */
+await visit('/patterns/validation-summary/');
+const vs = await page.evaluate(async () => {
+  const form = document.querySelector('form[data-validation-summary]');
+  const box = form.querySelector('[data-validation-summary-box]');
+  form.querySelector('button[type="submit"], button:not([type])')?.click();
+  await new Promise((r) => setTimeout(r, 200));
+  const links = [...box.querySelectorAll('a, button')];
+  return {
+    revealed: !box.hasAttribute('hidden'),
+    role: box.getAttribute('role'),
+    entries: links.length,
+    // the summary must precede the fields it describes
+    beforeFields: !!(box.compareDocumentPosition(form.querySelector('#vs-vendor')) &
+      Node.DOCUMENT_POSITION_FOLLOWING),
+  };
+});
+check(
+  'validation-summary: submitting an invalid form reveals the summary above the fields',
+  vs.revealed && vs.entries > 0 && vs.beforeFields && vs.role === 'alert',
+  JSON.stringify(vs),
+);
+
+// And each entry must land focus on its own field — the half nobody can see.
+const vsFocus = await page.evaluate(async () => {
+  const box = document.querySelector('[data-validation-summary-box]');
+  const first = box.querySelector('a, button');
+  first.click();
+  await new Promise((r) => setTimeout(r, 150));
+  const active = document.activeElement;
+  return {
+    clicked: first.getAttribute('href') ?? first.textContent.trim(),
+    focusedId: active?.id ?? null,
+    isAField: !!active && active.classList.contains('bo-input'),
+  };
+});
+check(
+  'validation-summary: an entry moves focus to the field it names',
+  vsFocus.isAField && !!vsFocus.focusedId && vsFocus.clicked.includes(vsFocus.focusedId),
+  JSON.stringify(vsFocus),
+);
+
+/* collapsible-card — the docs state the two-channel contract outright: the
+   trigger's aria-expanded AND the panel's data-state. Drift to one channel is
+   invisible, because the chevron and the height animation both keep working. */
+await visit('/components/dashboard/');
+const collapse = await page.evaluate(async () => {
+  const btn = document.querySelector('[data-collapse-trigger]');
+  const panel = document.getElementById(btn.getAttribute('aria-controls'));
+  const read = () => ({ expanded: btn.getAttribute('aria-expanded'), state: panel.dataset.state });
+  const before = read();
+  btn.click();
+  await new Promise((r) => setTimeout(r, 250));
+  const after = read();
+  btn.click();
+  await new Promise((r) => setTimeout(r, 250));
+  return { before, after, back: read() };
+});
+check(
+  'collapsible-card: both channels move together — aria-expanded and data-state',
+  collapse.before.expanded === 'true' && collapse.before.state === 'open' &&
+    collapse.after.expanded === 'false' && collapse.after.state === 'closed' &&
+    collapse.back.expanded === 'true' && collapse.back.state === 'open',
+  JSON.stringify(collapse),
+);
+
 await browser.close();
 server.close();
 

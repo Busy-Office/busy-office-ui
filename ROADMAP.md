@@ -686,6 +686,43 @@ nine rows risked instead of fifty-five.
        add the demo first, as the alerts page needed. Prioritise the ones whose
        failure is silent.
 
+       **Batch 1 landed 2026-08-19 — 7 claims, 48 -> 55.** Chosen by HOW they
+       fail, not by what was uncovered: every one of these looks correct to a
+       human reviewing the demo.
+
+       - `combobox` ×3 — typing opens and filters the listbox; ArrowDown moves
+         `aria-activedescendant` onto a REAL option id; Enter commits that
+         option and closes. The middle one is the silent case: drift there is
+         invisible on screen and mutes the control for a screen reader.
+       - `scan-input` ×1 — the terminator clears the field, KEEPS focus, and
+         announces the code in the polite region. If clearing regresses, the
+         next barcode concatenates onto the last one, in a warehouse, silently.
+       - `validation-summary` ×2 — an invalid submit reveals the summary ABOVE
+         the fields with `role="alert"`, and an entry moves focus to the field
+         it names. A list of errors that focuses nothing looks fine.
+       - `collapsible-card` ×1 — both channels move together. Red-proved in
+         BOTH directions: breaking `aria-expanded` and breaking `dataset.state`
+         each turn it red, which is the only way a two-channel claim is worth
+         anything.
+
+       **Two instrument failures on the way, per the 46.1 base rate.** A bare
+       `.bo-combobox__option` selector spanned every combobox demo on the page
+       (15 options, three `null` values from other instances) and looked like a
+       filtering bug. And the first red-proof of the collapsible claim PASSED —
+       the injection renamed `data-state`, which appears **zero** times in that
+       bundle because the behavior writes `dataset.state`. The claim was
+       unproven, not passing falsely; verifying the injection is what caught it.
+
+       Still uncovered: `saved-views`, `wizard`, `file-dropzone`, `dropdown`,
+       `money-field`, `tag-input`, `table-sum`. Batch 2 continues here.
+
+       **A coverage PERCENTAGE is deliberately not recorded.** Two attempts to
+       measure it disagreed in opposite directions — matching behavior hooks
+       counted `initLoadMore` as covered via the static `bo-pagination` markup
+       added in 45.2, and restricting to unique hooks called `initTableSum`
+       uncovered while the editable-grid claim drives `[data-sum-of]`. Per the
+       load-bearing-number rule, the deliverable here is claims, not a statistic.
+
 2. [x] **45.2 — Two patterns promise behaviour no screen shows.** — landed 2026-08-19
        `/patterns/master-detail` says the panel "becomes a full-width drawer over
        the list" below the shell breakpoint and links to `offcanvas` — no screen
