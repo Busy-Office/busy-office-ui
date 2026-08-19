@@ -51,6 +51,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
     <p class="bo-u-text-muted">All four are shipped primitives. This page names
     an order and a set of slots — it adds no CSS and no component.</p>
+    <p class="bo-u-text-muted"><strong>History answers THAT something
+    happened; it does not by default answer WHAT changed.</strong> For a
+    single-field edit the audit entry's own text usually says enough
+    ("J. Kim approved"). For a multi-field change, nest a small
+    <code>.bo-data-table</code> (Field / Old / New / a badge reading
+    Added/Removed/Modified) inside the entry's detail slot — see
+    <a href={base + '/patterns/record-detail'}>record detail</a>'s third audit
+    entry for the worked composition. Scored, not shipped as a component: the
+    NEED/COST rubric put it below the bar for new surface (roadmap 53.3).</p>
   </section>
 
   <section class="demo">

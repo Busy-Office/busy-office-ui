@@ -1300,12 +1300,47 @@ the controls land +3/+4, so it discriminates.
        after the fix. Unrelated to the grill; caught because the fix required
        reading the exact section this bug was inside.
 
-3. [ ] **53.3 — Queue Change/audit diff, the one component-shaped ERP gap.**
+3. [x] **53.3 — Queue Change/audit diff, the one component-shaped ERP gap.** — landed 2026-08-20
        Change documents are a legal requirement in ERP. `timeline` shows *that*
        something happened; nothing shows *what changed*. Genuinely new surface:
        old/new value pairs, add/remove/modify states, and two-channel without
        relying on red/green. Accept: score it on the NEED/COST rubric BEFORE
        building — it must clear NET ≥ +4 with citations, like anything else.
+
+       **Scored first, per the Accept.** Full report:
+       `.roundtable/grill-change-diff-2026-08-20.md`. Neither candidate
+       reached NET ≥ +4, and that is stated rather than rounded up: a new
+       `bo-change-diff` component scored **−2** (trivially composable, C1=3 —
+       shipping it anyway would be pure surface over an already-solved
+       problem, refused on the same Objective §2 test as object-page and
+       value-help). A documented recipe with no real composition scored
+       **+1** — short, because a recipe demonstrated nowhere is speculative
+       (N1=0).
+
+       **What actually shipped: the recipe, with a real composition, not a
+       standalone demo.** `record-detail`'s own audit trail already had the
+       right slot (`.bo-audit__detail`, `grid-column: 2`, accepts arbitrary
+       content) and the right worked example — its own third entry, a
+       partial receipt, is exactly a multi-field change with no structured
+       expression. Its vague prose ("received 5 of 8 monitor arms") is now a
+       real `.bo-data-table` (Field / Old / New / a badge reading
+       Added/Removed/Modified) nested in that slot. **Zero new CSS, zero new
+       classes** — `.bo-data-table`, `.bo-badge`, `.bo-u-tabular` all ship
+       already. Two-channel by construction: the badge's TEXT carries the
+       meaning, same rule as Amount's `--negative` and the calendar's
+       `data-day="closed"`.
+
+       Cross-referenced from `/concepts/review-anatomy`'s History row, which
+       already existed and already named this exact region — stating plainly
+       that this is a scored convention, not a shipped surface, and pointing
+       at `record-detail` for the worked composition rather than duplicating
+       it.
+
+       Verified live at 1440/390, both themes — including a direct screenshot
+       of the diff table at 390, not just an overflow-gate pass. Every gate
+       green, axe 90 pages x 2 widths zero violations, 40 visual shots
+       (unaffected — neither touched page is in the visual-regression
+       matrix).
 
 4. [x] **53.4 — Refused, with reasons recorded so they are not re-proposed.**
        Field-help tooltips (hover-only fails touch and keyboard; the accessible

@@ -102,7 +102,39 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <ol class="bo-audit" role="list">
             <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-10T09:08">08-10 09:08</time><span><span class="bo-audit__actor">R. Vance</span> raised PO-4021</span></li>
             <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-12T10:15">08-12 10:15</time><span><span class="bo-audit__actor">J. Kim</span> approved</span><span class="bo-audit__detail">"Within CC-4021 budget."</span></li>
-            <li class="bo-audit__entry"><time class="bo-audit__time" datetime="2026-08-13T14:02">08-13 14:02</time><span><span class="bo-audit__actor">M. Okafor</span> received 5 of 8 monitor arms</span></li>
+            <li class="bo-audit__entry">
+              <time class="bo-audit__time" datetime="2026-08-13T14:02">08-13 14:02</time>
+              <span><span class="bo-audit__actor">M. Okafor</span> changed 2 fields on receipt</span>
+              <span class="bo-audit__detail">
+                {/* A field-level diff: .bo-data-table + badge, zero new CSS.
+                    Two-channel by construction — the badge TEXT carries Added/
+                    Removed/Modified, same rule as Amount's --negative and the
+                    calendar's data-day="closed" (roadmap 53.3: scored, not
+                    built as a component — see the grill for why). */}
+                <div class="bo-data-table-container" tabindex="0">
+                  <table class="bo-data-table" data-density="compact">
+                    <caption class="bo-visually-hidden">Fields changed on this receipt</caption>
+                    <thead>
+                      <tr><th scope="col">Field</th><th scope="col">Old</th><th scope="col">New</th><th scope="col">Change</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Qty received</td>
+                        <td><span class="bo-u-tabular">3</span></td>
+                        <td><span class="bo-u-tabular">5</span></td>
+                        <td><span class="bo-badge bo-badge--warning">Modified</span></td>
+                      </tr>
+                      <tr>
+                        <td>Status</td>
+                        <td>Partial</td>
+                        <td>Partial</td>
+                        <td><span class="bo-badge bo-badge--warning">Modified</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </span>
+            </li>
           </ol>
         </div>
       </div>
