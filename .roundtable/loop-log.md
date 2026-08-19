@@ -417,3 +417,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 19:04 · Standardize · tidy · 50.3 — dialog guard name + root-param behaviours judged not-drift, reason recorded · logged · 3608463
 - 2026-08-19 19:10 · Objective · grill · Objective grill 45-50 — surface flat 4 grills, 10:1 instruments:framework, telemetry blind to refusals · logged · 932e2c5
 - 2026-08-19 19:15 · Roadmap · triage · Owner wishlist: Object Page name / scroll effect / design grill — grilled and triaged as Slice 52 · triaged · 136740c
+- 2026-08-19 19:20 · Continue · build · 52.1 — object page shows a real screen (9 placeholders -> 0); grill's chrome-ratio claim corrected · landed · a5fc5b8
