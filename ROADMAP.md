@@ -640,6 +640,60 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 50 — Standardize sweep: how pages carry layout, and one behaviour that knew too much (2026-08-19)
+
+Dispatched by the counter at 4/4. Objective is ALSO overdue at 3/3, and rule 2
+outranks rule 3 — it fires next wake.
+
+1. [x] **50.1 — Two spellings for "page-layout CSS on a pattern page".**
+       `/patterns/object-page` used a scoped `<style>` block;
+       `/patterns/master-detail` used a **212-character** style attribute, the
+       longest in the docs, with the reasoning buried in a JSX comment above
+       markup a reader is meant to skim. Same decision, two spellings. The
+       layout is now `.md-split` in a scoped block, and the reasoning lives with
+       the rule it explains. Verified layout-neutral by measurement: identical
+       columns, gap, padding, box size and child positions in all four contexts.
+
+       **The other 16 long inline styles were deliberately left.** They are
+       small per-element tweaks (60-145 chars), not page layout, and converting
+       them would be exactly the bulk edit this repo has been burned by. The
+       outlier was the finding; the rest is not drift.
+
+2. [x] **50.2 — `initAnchorNav` was the only behaviour that knew a shell class
+       name, and it was mine, from yesterday.** It listened on
+       `.bo-app-shell__main` plus the window — so an object page scrolling
+       inside anything else (a dialog, an offcanvas, a consumer's own layout)
+       would silently stop updating. `initDropdowns` had already solved this the
+       general way in 0.2.0: scroll does not bubble, but it DOES reach a
+       **capture-phase** listener on `document` from any scrolling ancestor.
+
+       Now `document.addEventListener('scroll', syncAll, true)`. Smaller, and
+       strictly more general — the Objective's "small & general over specific",
+       applied to code I had just written.
+
+       **Proved both ways, in a container that is not the shell:**
+
+       | listener setup | spy after scrolling | |
+       |---|---|---|
+       | capture (new) | `#general` → `#approvals` | follows |
+       | shell + window (pre-sweep) | `#general` → `#general` | **dead** |
+
+       The pre-sweep setup was injected back into the built page to get that
+       second row, and the injection was confirmed present before the result was
+       believed — a first attempt grepped a bundle that does not exist (Astro
+       inlines this module into the page HTML) and produced a green-looking
+       result that meant nothing.
+
+3. [x] **50.3 — Left alone, with the reason recorded.** `dialog.ts` spells its
+       install guard `delegationInstalled` where 17 others use `installed`; that
+       is cosmetic and has no failure mode. `data-table`, `data-grid` and
+       `saved-views` take `root: ParentNode = document` instead of a guard —
+       a different contract (re-runnable per subtree after a swap), not drift.
+
+**Exit:** clean scan — 0 inline flex/grid, 0 raw spacing and 0 hardcoded hex in
+live markup; no behaviour naming a shell class in code; no script deriving a
+path `paths.mjs` exports.
+
 ## Slice 48 — Owner input: the SAP Object Page floorplan (2026-08-19)
 
 Raised by the owner mid-wake: *"do you know SAP object page?"* Triaged here

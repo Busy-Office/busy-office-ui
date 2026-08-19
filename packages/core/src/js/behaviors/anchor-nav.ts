@@ -53,10 +53,15 @@ export function initAnchorNav(): void {
   if (installed) return;
   installed = true;
   syncAll();
-  /* The app shell scrolls its own main region, not the window, so listen on
-     both — the same split initSavedViews and the dropdown re-anchoring hit. */
-  const main = document.querySelector('.bo-app-shell__main');
-  main?.addEventListener('scroll', syncAll, { passive: true });
-  window.addEventListener('scroll', syncAll, { passive: true });
+  /* CAPTURE, not a named container. The first version listened on
+     `.bo-app-shell__main` plus the window, which is the shell this framework
+     ships — and therefore silently stopped updating for an object page that
+     scrolls inside anything else (a dialog, an offcanvas, a consumer's own
+     layout). `initDropdowns` had already solved the same problem the general
+     way in 0.2.0: scroll does not bubble, but it DOES reach a capture-phase
+     listener on document from any scrolling ancestor. This behavior was the
+     only one in the package that knew a shell class name (Standardize sweep,
+     2026-08-19). */
+  document.addEventListener('scroll', syncAll, true);
   window.addEventListener('resize', syncAll, { passive: true });
 }
