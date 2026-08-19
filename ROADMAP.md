@@ -720,7 +720,7 @@ the research actually supports is narrower: not a new component, but a
 as the per-component dist files that already exist, one more build target from
 one source tree, so it cannot drift the way a hand-maintained fork would.
 
-1. [ ] **59.1 — Recommended floor: Chrome/WebView 108, stated at MEDIUM
+1. [x] **59.1 — Recommended floor: Chrome/WebView 108, stated at MEDIUM
        confidence, not asserted as fact.** Every RF vendor's "Enterprise
        Browser" (Zebra, Honeywell, Ivanti Velocity) renders through the
        device's Android System WebView — it is the real floor, not a bundled
@@ -733,6 +733,20 @@ one source tree, so it cannot drift the way a hand-maintained fork would.
        for any modern-CSS framework, not a floor this project can chase.
        Accept: this number and its confidence level are published on the docs
        page the profile ships on, not silently assumed.
+
+       **Landed 2026-08-19.** A "RF scanners and other older handheld devices"
+       section on `/getting-started/installation` — the same page that already
+       states the framework's general floor, so the two live beside each
+       other. States the number, the confidence level, and the pessimistic
+       case (Play-blocked/patch-frozen fleets sit at the factory image and are
+       out of scope) in the same words as the study. Points to
+       `/patterns/goods-receipt` for the scanning interaction itself, which
+       needs no profile — it's Chrome-80-safe today.
+
+       No hand-typed floor: the 108 is a researched *target*, not a claim
+       about this framework's own shipped CSS, so `check:floor` (which forbids
+       hand-typing THIS project's floor) correctly did not fire. Verified live
+       at 1440/390, both themes.
 
 2. [ ] **59.2 — `rf-essentials` build profile, targeting 108.** A PostCSS pass
        over the RF-relevant subset (tokens, button, form, quantity, badge,

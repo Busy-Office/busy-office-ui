@@ -139,5 +139,30 @@ const skeleton = `<!doctype html>
     host page that rescales <code>html</code> (legacy <code>62.5%</code> hacks) rescales
     every rem — embed via iframe instead.</p>
   </section>
+
+  <section class="demo">
+    <h2>RF scanners and other older handheld devices</h2>
+    <p>The floor above is <strong>{floor.label}</strong> — evergreen-desktop
+    territory. A warehouse RF scanner or rugged handheld (Zebra, Honeywell,
+    Datalogic) is a different question: its "Enterprise Browser" wrapper
+    renders through the device's Android System WebView, so the WebView
+    version is the real floor, and a fleet bought in 2018-2020 is not on
+    evergreen Chrome by default.</p>
+    <p><strong>Researched target: Chrome/WebView 108</strong> — stated at
+    <strong>medium confidence</strong>, not as a guarantee. Any device that has
+    taken even one vendor patch (Zebra LifeGuard, Honeywell's guaranteed
+    upgrade path, Datalogic Shield) in the last ~3.5 years clears it; a fleet
+    with Play blocked and no patch pipeline sits at the factory image (WebView
+    61-83 depending on the shipped Android version) and is out of scope for
+    any framework built on modern CSS, not a floor this project chases.</p>
+    <p class="bo-u-text-muted">This framework's current CSS floor
+    ({floor.label}) does not reach 108 — <code>:has()</code>,
+    <code>@container</code> and the logical-property shorthands used
+    throughout sit above it. A lower-floor build profile for the RF-relevant
+    component set is tracked as roadmap 59.2-59.3, not shipped yet. See
+    <a href={base + '/patterns/goods-receipt'}>goods receipt</a> for the
+    scanning interaction itself — <code>initScanInput()</code> and the
+    quantity stepper are already Chrome-80-safe today and need no profile.</p>
+  </section>
   <Related links={[["/getting-started/first-screen", "Your first screen"], ["/concepts/cascade", "The cascade contract"], ["/getting-started/troubleshooting", "Troubleshooting"]]} />
 </Gallery>
