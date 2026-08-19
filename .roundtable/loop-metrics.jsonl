@@ -81,3 +81,4 @@
 {"ts": "2026-08-19 17:30", "name": "claims", "value": 60.0, "unit": "count"}
 {"ts": "2026-08-19 17:47", "name": "claims", "value": 65.0, "unit": "count"}
 {"ts": "2026-08-19 17:47", "name": "behaviours_with_claim", "value": 21.0, "unit": "count"}
+{"ts": "2026-08-19 18:36", "name": "claims", "value": 72.0, "unit": "count"}
