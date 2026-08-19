@@ -640,6 +640,82 @@ scan, not a first fix.
 hardcoded hex, 1 inline grid remaining and documented as deliberate, and no
 script deriving a path that `paths.mjs` already exports.
 
+## Slice 52 — Owner wishlist: the Object Page (2026-08-19)
+
+Owner input, three items: *is there a better name? · can we have a scrolling
+effect? · grill the design.* The grill ran first, because two of the three are
+answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
+
+1. [ ] **52.1 — The demo is a skeleton where every other pattern shows a screen.**
+       Measured: **9 placeholder phrases** in the object-page demo, **0** in
+       `record-detail`. Every section reads "Facet content for delivery — in a
+       real screen this is a form section, a table, or a timeline." That is a
+       wireframe, and the pattern recipe says a pattern page documents a SCREEN.
+
+       It also flatters the page's own numbers: with real content the sections
+       would be taller and the chrome ratio in 52.2 would look better than it
+       deserves.
+
+       Accept: each section carries real ERP content of the kind it names —
+       general information as a `kv`/form section, line items as a data table,
+       delivery with the dates, approvals as a timeline. Reuse what
+       `record-detail` already demonstrates rather than inventing new fixtures.
+       **Do this BEFORE 52.2**, because it changes the measurement 52.2 targets.
+
+2. [ ] **52.2 — Scrolling effect: collapse the header, and the reason is measured.**
+       While scrolled, sticky chrome consumes **259px of 900 (29%) at 1440** and
+       **274px of 844 (33%) at 390**. A third of a phone screen is permanently
+       navigation. Fiori collapses its object header for exactly this reason —
+       this is not decoration.
+
+       **The modern CSS for it is off our floor.** `animation-timeline` needs
+       Safari **26** and is `preview` in Firefox, against a floor of Safari 17.4
+       / Firefox 128 — Chrome-only, i.e. exactly the "cosmetic enhancement that
+       quietly opts out" the floor exists to prevent. Checked against the same
+       `@mdn/browser-compat-data` the floor gate uses.
+
+       Accept: `initAnchorNav` — which already listens to scroll — toggles a
+       state attribute past a threshold; CSS transitions the header on a
+       `--bo-motion-duration-*` token, so `prefers-reduced-motion` zeroes it for
+       free and `check:motion` passes by construction. **Hysteresis is required**
+       (collapse at one offset, expand at a smaller one) or the header
+       flip-flops when the reader rests at the boundary. Collapsing must not
+       move the anchor bar out from under a finger mid-tap.
+
+       Target, measured after 52.1 lands: a scrolled phone screen spends
+       **under 20%** on chrome, down from 33%. An executable claim asserts the
+       collapse, the hysteresis, and that reduced-motion zeroes the transition.
+
+3. [ ] **52.3 — The name. OWNER CALL, with the trade-off measured.**
+       This project's bar is "write for a first-time user: plain verbs".
+       "Object page" is SAP vocabulary — precise for a Fiori user, opaque
+       otherwise — and it names the thing shown rather than what makes the
+       screen different: it has sections you navigate.
+
+       | option | for | against |
+       |---|---|---|
+       | keep `object-page` | what an ERP audience searches for | jargon; names the object, not the interaction |
+       | `sectioned-record` | names the interaction; sorts beside `record-detail` | invented; nobody searches it |
+       | merge into `record-detail` | one screen one page | buries the canonical ERP floorplan |
+
+       Recommendation: **keep the slug, change the human title** to name the
+       interaction ("Object page — a long record, in sections"). Accept: title
+       and opener name the interaction; slug unchanged so links and search hold.
+
+4. [x] **52.4 — Two patterns, one screen? NO MERGE, and here is the number.**
+       Rendered-block overlap: `record-detail` 18 blocks, `object-page` 13,
+       **10 shared**. The entire difference is `bo-form-actions` and
+       `bo-pagination` — an action bar and an anchor bar (`bo-amount` is
+       incidental). Both openers describe the detail screen for a purchase
+       order.
+
+       The distinction is real but *named wrong*: the page draws the line at
+       length ("too tall to take in at once"), and length is not a pattern. The
+       interaction is what differs — you navigate between sections instead of
+       scrolling one feed. Fixed by sharpening the opener (52.3), not by merging:
+       collapsing this into `record-detail` would bury the canonical ERP screen
+       inside another page.
+
 ## Slice 51 — from the Objective grill, Slices 45-50 (2026-08-19)
 
 Full findings: `.roundtable/grill-objective-slices45-50-2026-08-19.md`.
