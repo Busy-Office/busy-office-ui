@@ -401,3 +401,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 15:00 · Continue · build · 45.3 — .bo-date deprecated; overdue two-channel rule moved to /components/amount; cluster+badge replacement · landed · 9238f54
 - 2026-08-19 16:37 · Continue · build · 45.4 — calendar used by detail-form (requested delivery date, disabled closed/holiday days); rescored D0->D2 · landed · 2412918
 - 2026-08-19 16:45 · Continue · tidy · 45.5 — cost-to-remove column added to the surface rubric as a non-additive outcome constraint · landed · 9596a7c
+- 2026-08-19 17:01 · Continue · build · 45.6 batch 2 — wizard, saved-views, tag-input claims; 56->59; 2 of 3 probes wrong on first run · landed · 2b6dea3
