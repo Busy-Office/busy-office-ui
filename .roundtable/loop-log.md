@@ -437,3 +437,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 22:29 · Standardize · tidy · 60.1 — check-data-hooks converted to gate-report.mjs; 60.2 — three heterogeneous-finding gates reviewed, kept as-is · landed · bad21bb
 - 2026-08-19 22:34 · Roadmap · triage · 61 — generic review-pattern grilled: three patterns differ on purpose already, anatomy-contract concept page queued, merge+new-component refused · triaged · 93290db
 - 2026-08-19 23:01 · Continue · build · 61.1 — /concepts/review-anatomy published; record-detail/object-page/approval cross-link back; caught 2 wrong table cells before shipping · landed · 5944bd6
+- 2026-08-19 23:09 · Objective · grill · Objective grill 56-61 — found and fixed a LIFO dispatcher bug (9 dispatches starved 5 older items); RESUME.md was stale for the same reason · landed · dc65e96
