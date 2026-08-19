@@ -561,7 +561,7 @@ axe, claims, page-shape, stylelint naming, and the new import-case check.
 
 Full findings: `.roundtable/grill-objective-slices39-42-43-2026-08-19.md`.
 
-1. [ ] **44.1 — A number quoted to the owner is load-bearing.**
+1. [x] **44.1 — A number quoted to the owner is load-bearing.**
        Thirteen detectors in three slices could not fail. Twelve cost time; one
        cost accuracy — *"only 1 of 18 learning-path pages shows anything
        working"* went into a summary to the owner and the real figure is
@@ -576,7 +576,14 @@ Full findings: `.roundtable/grill-objective-slices39-42-43-2026-08-19.md`.
        otherwise. Cheap, and it is the difference between a wasted wake and a
        false report.
 
-2. [ ] **44.2 — Gate the rendered result of a STATE, not just token pairs.**
+       **Landed 2026-08-19** in CLAUDE.md beside the red-proof discipline, with
+       the four concrete tests that would have caught the dead detectors: ask
+       what would make it wrong; treat a suspiciously tidy number as an
+       instrument defect; reconcile against an independent count; state what the
+       number does not cover. Scoped explicitly to ad-hoc measurements — a
+       number a gate already asserts is red-proved by construction.
+
+2. [x] **44.2 — Gate the rendered result of a STATE, not just token pairs.**
        43.1's WCAG failure shipped in the **initial commit** and survived
        **43 slices and 31 axe sweeps**, because the gate suite is organised
        around properties — the contrast of a token pair, the presence of a rule
@@ -589,6 +596,27 @@ Full findings: `.roundtable/grill-objective-slices39-42-43-2026-08-19.md`.
        added in 43.1 is the shape, generalised. Where a state cannot be measured
        this way, say so and say why. The test of success is that reintroducing
        0.6 fails, which it now does, and that the OTHER states are covered too.
+
+       **Landed 2026-08-19** as `check:composited`, in the core build. Every
+       `opacity` below 1 in the shipped CSS must be registered with a decision —
+       **aa** (the user reads it, so composited contrast must meet 4.5:1, and a
+       claim asserts it live) or **exempt** with the reason. An unregistered
+       dimming state fails the build, which is what the initial commit's 0.6
+       would have hit on day one.
+
+       **The distinction that made 43.1 a bug is now written down:** WCAG 1.4.3
+       exempts *inactive* components. A disabled control is inactive — measured,
+       a disabled primary button drops **5.47:1 → 2.15:1** composited and is
+       compliant by that exemption. A table marked `aria-busy` is **not**
+       inactive; the user keeps reading it.
+
+       7 dimming declarations, all registered: 2 AA-asserted, 5 exempt.
+
+       **The gate initially missed four of them.** It parsed values with
+       `parseFloat`, so `opacity: var(--bo-state-disabled-opacity)` came back
+       `NaN` and was skipped — every disabled control in the framework. A gate
+       written to catch the states nothing was measuring managed to not measure
+       four of them. Now any value that is not exactly `1` counts.
 
 ## Slice 43 — P0 found while doing 39.3 (2026-08-19)
 

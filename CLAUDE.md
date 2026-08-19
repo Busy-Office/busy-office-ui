@@ -135,6 +135,38 @@ never be non-zero — three consecutive measurements reported "not clipped"
 while the label was spilling 15.7px past the rail. Only its right edge
 against the RAIL's client edge showed it (2026-08-18).
 
+## A number you report is load-bearing — red-prove it like a gate
+
+Thirteen detectors across three slices could not fail (Slices 39/42/43 grill).
+Twelve cost time. **One cost accuracy**: "only 1 of 18 learning-path pages shows
+anything working" went into a summary to the owner, and the real figure is
+**16 of 18** — the detector had counted uses of the `Demo` *component*, not
+pages that show anything.
+
+That is a different kind of failure. A dead gate wastes a wake and the next
+wake finds it. A dead measurement quoted in a summary **misinforms the person
+deciding what to build**, and they cannot check it without redoing the work.
+
+So before a measured claim goes into a summary, it gets the gate treatment:
+
+- **Ask what would make it wrong**, and try that first. The four dead detectors
+  in 39.2 all died to the same question: *is this signal present in things I am
+  not counting?* (`class="demo"` is on every section; `<main class="bo-app-shell__main">`
+  matches `bo-`; the shell's own menu button is a real `.bo-btn`.)
+- **Treat a suspiciously tidy number as a defect in the instrument** until shown
+  otherwise. A plain zero, a round fraction, or *the identical value across many
+  different inputs* — an identical byte offset on all 18 pages is what finally
+  exposed one of them.
+- **Reconcile against an independent count** before quoting it. `bo-data-table`
+  appearing in 16 of 16 pattern pages is what proved a usage script that had
+  reported zero for everything.
+- **Say what the number does not cover.** "16 of 18 render something" is not
+  "16 of 18 are good pages"; the measurement was of one specific property.
+
+None of this applies to a number a gate already asserts — that one has been
+red-proved by construction. It applies to the ad-hoc measurement written to
+answer a question, which is exactly the kind that ends up in a summary.
+
 ## A heuristic gate must be able to demonstrate it can fail
 
 Red-proving asks "does this gate go red on the bug?". This asks the question
