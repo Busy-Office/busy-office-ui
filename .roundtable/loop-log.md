@@ -434,3 +434,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-19 21:47 · Continue · build · 56.1 check:data-hooks gate (red-proved on data-dialog-close) + 56.2 removal-assertion rule; 58 design-grill sweep queued · landed · 83dc037
 - 2026-08-19 21:56 · Roadmap · triage · RF-scanner floor study (Chrome/WebView 108, medium confidence) triaged as Slice 59; refused a forked component, queued a build profile instead · triaged · cf78da7
 - 2026-08-19 22:09 · Continue · build · 59.1 — RF-scanner floor (Chrome/WebView 108, medium confidence) published on installation.astro · landed · fee4859
+- 2026-08-19 22:29 · Standardize · tidy · 60.1 — check-data-hooks converted to gate-report.mjs; 60.2 — three heterogeneous-finding gates reviewed, kept as-is · landed · bad21bb
