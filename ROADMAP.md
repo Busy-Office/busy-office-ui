@@ -748,6 +748,76 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 72 — Owner wishlist: multi-sticky columns, tone text, width/font (2026-08-20)
+
+Triaged from chat, five asks against `/components/data-table`:
+
+**72.1 — Multiple frozen columns.** `--sticky-col` only ever froze the
+first column (its offset is always 0, no measurement needed). Freezing 2
+or 3 needs each earlier column's actual rendered width — `table-layout`
+is auto by default, so nothing knows that in advance. Shipped
+`data-sticky-cols="1|2|3"` + `initStickyCols()` (new behavior, 23rd):
+measures the header row, writes `--bo-sticky-w-1`/`-w-2` on the
+`<table>`, CSS positions columns 2/3 via `calc()`, a `ResizeObserver`
+keeps it live across container-query breakpoints and column-visibility
+toggles. Capped at 3 — freezing more is a column-chooser problem, not a
+reason to keep growing this selector list. New "Multiple frozen columns"
+demo (reuses the existing 50-column fixture). `--sticky-col` untouched —
+one frozen column stays the zero-JS answer.
+
+**72.2 — `data-tone` text color.** Opt-in via `data-tone-text` alongside
+`data-tone`, not automatic — forcing text color on every toned cell would
+fight a value that's already bold or already colored by something else.
+Uses the exact `-text`/`-subtle` token pairs already gated in
+`check-contrast`'s `PAIRS` (badge/alert use the same pairs) — zero new
+contrast surface, `check:contrast` passed unmodified.
+
+**72.3 — Auto column width + ellipsis.** Answered mostly by reading the
+code, not building: `table-layout` is never set to `fixed`, so the
+browser's own column-sizing already does "fit the contents" for free.
+The ellipsis half (`.bo-u-text-truncate`) already shipped and is already
+dogfooded in po-app's Vendor column. New "Column width & long content"
+doc section written to explain the pairing — and the FIRST draft of that
+section was wrong: `max-inline-size` directly on the `<td>` is silently
+ignored under `table-layout: auto` unless the row is already under width
+pressure, a documented trap in this project's own `CLAUDE.md`
+("max-inline-size on a table cell — table layout ignores it"). Caught by
+screenshotting the demo and actually reading it, not by trusting the
+markup — the Vendor cell rendered at full width despite the cap. Fixed by
+moving the cap to an inner `<span>` (the standard, pressure-independent
+pattern); re-verified live and it now genuinely clips to "Stark
+Components Inte…". Noted honestly in the docs prose: po-app's own Vendor
+column uses the weaker (table-pressure-dependent) form — tracked as a
+follow-up, not silently fixed in the same pass.
+
+**72.4 — Font styling (bold/normal) utility — refused.** A subtotal/
+grand-total row already uses a real `<strong>` (see "Grouped rows +
+subtotals"), which is simpler and gives a screen reader real semantics a
+utility class wouldn't. A `bo-u-font-bold`-style class would be a second
+way to do something native HTML already does — refused per principle 1
+(this framework ships "semantic components, not utility soup") and
+principle 2 (no second way to do something that already works).
+Documented the refusal and the reasoning directly on the page rather than
+just declining silently.
+
+Full core build green after each change (`check:contrast`,
+`check:composited`, `check:rtl`, `check:motion`, `check:package`,
+`check:rf-floor`, `stamp-readme.mjs`). Docs gates green (`data-hooks`
+55 documented, up from 52; `check-markup` 51594 uses verified). Verified
+live in a `--no-cache` Podman rebuild of `bo-docs-run`: multi-sticky
+columns hold through a horizontal scroll (confirmed both columns stay
+fixed and opaque while the rest scrolls under, both themes); the ellipsis
+fix confirmed genuinely clipping post-fix, both themes. One real
+browser-tool artifact hit and caught during this verification: a
+JS-toggled `data-theme` attribute produced a stale screenshot that still
+showed dark after switching to light — computed `background-color`
+proved the page WAS light; a fresh navigation instead of a JS toggle
+produced a correct screenshot. Not a framework bug — a tooling quirk,
+confirmed by an independent check before being ruled out.
+
+**Exit:** 72.1-72.4 shipped/documented/refused as above; po-app's own
+Vendor-column truncation upgrade is the one open follow-up.
+
 ## Slice 71 — Owner ask: server-controlled conditional cell tone (2026-08-20)
 
 Triaged from chat: owner asked to advance "30.0" naming selective editable

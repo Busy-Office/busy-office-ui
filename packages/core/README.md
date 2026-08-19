@@ -3,7 +3,7 @@
 CSS-first UI framework for ERP and back-office screens. Semantic components — not
 utility soup — built on modern CSS: `@layer` cascade contract, `:has()`, named
 container queries, native `<dialog>` and `popover`.
-<!-- stat:size -->74 kB minified (12.3 kB gzipped)<!-- /stat --> for the whole
+<!-- stat:size -->75 kB minified (12.5 kB gzipped)<!-- /stat --> for the whole
 framework, zero runtime dependencies, tree-shakable per-component files.
 
 **Docs & live demos:** https://busy-office.github.io/busy-office-ui/
@@ -40,7 +40,7 @@ initDialogs(); initDataTables(); initTabs(); initDropdowns(); initAlerts();
 ```
 
 Components whose docs page says "JS required" are inert until you call their init.
-All <!-- stat:behaviors -->22<!-- /stat --> behaviors communicate through intent
+All <!-- stat:behaviors -->23<!-- /stat --> behaviors communicate through intent
 events (<!-- stat:events -->`bo:cell-change`, `bo:combobox-select`, `bo:row-cancel`, `bo:row-save`, `bo:scan`, `bo:table-export`, `bo:table-load-more`, `bo:tag-add`, `bo:tag-remove`, `bo:tree-toggle`<!-- /stat -->) — your app owns the data
 layer.
 

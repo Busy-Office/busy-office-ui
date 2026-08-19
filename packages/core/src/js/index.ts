@@ -3,6 +3,7 @@ export { initDataTables, refreshDataTable } from './behaviors/data-table.js';
 export { initDataGrid, refreshDataGrid } from './behaviors/data-grid.js';
 export { initRowEdit } from './behaviors/row-edit.js';
 export { initTableToolbar } from './behaviors/table-toolbar.js';
+export { initStickyCols } from './behaviors/sticky-cols.js';
 export { initTableSum } from './behaviors/table-sum.js';
 export { initTreeTable } from './behaviors/tree-table.js';
 export { initLoadMore } from './behaviors/load-more.js';

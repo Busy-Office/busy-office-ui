@@ -274,6 +274,42 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
   </section>
 
   <section class="demo">
+    <h2>Multiple frozen columns</h2>
+    <p><code>--sticky-col</code> above freezes ONE column for free — its offset
+    is always 0, no JS needed. Freezing a <strong>second or third</strong> column
+    needs each earlier column's actual rendered width, which nothing knows in
+    advance (columns size to content by default) — so this is the one case in
+    this page's table story that opts into JS: <code>data-sticky-cols="2"</code>
+    plus <code>initStickyCols()</code>, which measures the header row and keeps
+    the offsets live across resizes. Capped at 3 columns — freezing more than
+    that is usually a sign the table needs a column chooser, not more frozen
+    columns.</p>
+    <div class="bo-data-table-container" tabindex="0" aria-label="Fifty-column purchase order lines, two columns frozen">
+      <table class="bo-data-table" data-sticky-cols="2" data-density="compact">
+        <caption class="bo-visually-hidden">Purchase order lines, first two columns frozen</caption>
+        <thead>
+          <tr>{wideCols.map((c, i) => (
+            <th scope="col" class={i >= 5 && i <= 12 ? 'bo-data-table__col--numeric' : undefined}>{c}</th>
+          ))}</tr>
+        </thead>
+        <tbody>
+          {wideRows.map((row) => (
+            <tr>{row.map((cell, i) => (
+              i === 0
+                ? <th scope="row">{cell}</th>
+                : <td class={i >= 5 && i <= 12 ? 'bo-data-table__col--numeric' : undefined}>{cell}</td>
+            ))}</tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Scroll horizontally — Line and the second column
+    both stay put now, not just the first. Both frozen columns and the header
+    stay opaque over the cells passing underneath, same as the single-column
+    case.</p>
+  </section>
+
+  <section class="demo">
     <h2>Grouped rows + subtotals</h2>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
@@ -320,7 +356,10 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     a budget threshold, any business rule — that condition is computed
     server-side and rendered as this one attribute. Pair the tone with text
     that says the same thing (a sign, a word, a badge) — the color is not the
-    only channel.</p>
+    only channel. Background is the default; add <code>data-tone-text</code>
+    to also tint the text (the CC-1180 row below) — opt-in rather than
+    automatic, since forcing text color on every toned cell would fight a
+    value that's already bold or already colored by something else.</p>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
         <thead><tr>
@@ -332,7 +371,7 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
           <tr>
             <td>CC-1180 — Facilities</td>
             <td class="bo-data-table__col--numeric">$60,000.00</td>
-            <td class="bo-data-table__col--numeric" data-tone="danger">−$730.25</td>
+            <td class="bo-data-table__col--numeric" data-tone="danger" data-tone-text>−$730.25</td>
           </tr>
           <tr>
             <td>CC-4021 — Warehouse</td>
@@ -349,8 +388,8 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     </div>
     <p class="bo-u-text-muted">The minus sign on the first Balance cell carries
     the "over budget" meaning in text, same as the badges elsewhere on this
-    page carry status in text — <code>data-tone="danger"</code> only repeats
-    it visually. Composes with row state: a cell's own <code>--bo-cell-bg</code>
+    page carry status in text — <code>data-tone</code> only repeats it
+    visually. Composes with row state: a cell's own <code>--bo-cell-bg</code>
     wins over its row's, so a toned cell inside a dirty or striped row still
     reads correctly.</p>
   </section>
@@ -388,6 +427,54 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <p class="bo-u-text-muted">Alignment is a single class per cell and wins over the
     default (start) reliably — headers and body cells align together.</p>
   </section>
+  <section class="demo">
+    <h2>Column width &amp; long content</h2>
+    <p>Columns already size themselves to their content — the table never sets
+    <code>table-layout: fixed</code>, so the browser's default column-width
+    algorithm does the "fit the contents" work with zero CSS from this
+    framework. What that algorithm doesn't do on its own is stop a column
+    growing forever, and the fix has a real trap in it:
+    <code>max-inline-size</code> on the <code>&lt;td&gt;</code> itself is
+    silently ignored under <code>table-layout: auto</code> unless the row is
+    already under width pressure — a table with room to spare just renders the
+    cell at its natural width, max-width or not. Put the cap on an inner
+    element instead (a <code>&lt;span&gt;</code> is enough) alongside the
+    existing <code>.bo-u-text-truncate</code> utility — plain CSS, not a
+    data-table-specific mechanism.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr>
+          <th scope="col">PO #</th>
+          <th scope="col">Vendor</th>
+          <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="bo-data-table__col--code">PO-88214</td>
+            <td><span class="bo-u-text-truncate" style="display: block; max-inline-size: 10rem">Stark Components International Holdings</span></td>
+            <td class="bo-data-table__col--numeric">$56,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The full vendor name is still in the DOM — this
+    is a visual clip, not a data loss, so a screen reader and <kbd class="bo-kbd">Ctrl</kbd>+<kbd class="bo-kbd">F</kbd>
+    still see the whole string. Give the inner element a <code>title</code>
+    attribute if the clipped tail matters enough to show on hover.
+    <a href={poAppHref}><code>examples/po-app</code></a>'s own Vendor column
+    uses the bare <code>&lt;td&gt;</code> form without a fixed cap — that only
+    truncates once the whole table is genuinely squeezed for space, which is a
+    different, weaker guarantee than this section's deliberate cap; worth
+    fixing there too, tracked as a follow-up rather than folded in silently
+    here.</p>
+    <p class="bo-u-text-muted"><strong>Font styling</strong> (bold, emphasis) is
+    the same story: no utility class exists or is planned for it — a subtotal
+    or grand-total row uses a real <code>&lt;strong&gt;</code> (see "Grouped
+    rows + subtotals" above), which is both simpler and correct HTML semantics
+    a screen reader can act on. Adding a <code>bo-u-font-bold</code>-style
+    class would be a second way to do something native HTML already does —
+    this framework ships "semantic components, not utility soup" on purpose.</p>
+  </section>
   <ClassRef component="data-table" />
   <ApiTable
     component="data-table"
@@ -400,7 +487,8 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
       'Separately opt-in: <code>data-grid-nav</code> + <code>initDataGrid()</code> for the full WAI-ARIA APG Grid pattern (two-axis keyboard navigation). Off by default — a read-only reference table does not need per-cell Tab stops.',
       'Separately opt-in: <code>data-row-edit</code> + <code>initRowEdit()</code> for multi-row inline edit with per-row dirty state and Save/Cancel. Tracks state only — persistence is your code, via the <code>bo:row-save</code> event.',
       'Separately opt-in: <code>data-col-toggle</code>/<code>data-table-export</code> + <code>initTableToolbar()</code> for column visibility (composes with the multi-select dropdown, no new markup) and an export intent (<code>bo:table-export</code> — generating the file is your code). Rows appended later (load-more, swaps) don\'t inherit hidden columns — call <code>initTableToolbar()</code> again after appending, same re-call convention as <code>initDataTables()</code>.',
-      '<code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code> tints that cell (CSS-only, no JS). The framework paints the tone; deciding which cells get one — a negative balance, a threshold, any rule — is server-side logic, never the framework\'s.',
+      '<code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code> tints that cell (CSS-only, no JS). The framework paints the tone; deciding which cells get one — a negative balance, a threshold, any rule — is server-side logic, never the framework\'s. Add <code>data-tone-text</code> alongside it to also tint the text (opt-in, not automatic).',
+      'Separately opt-in: <code>data-sticky-cols="1|2|3"</code> + <code>initStickyCols()</code> freezes that many leading columns. One column needs no JS (<code>--sticky-col</code>, offset always 0); two or three need JS because column widths aren\'t known until rendered — the behavior measures the header row and keeps offsets live via <code>ResizeObserver</code>.',
     ]}
   />
   <section class="demo">
@@ -408,12 +496,13 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <pre><code>{tableMarkup}</code></pre>
   </section>
   <script>
-    import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar } from '@busy-office/ui/js';
+    import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar, initStickyCols } from '@busy-office/ui/js';
     initDataTables();
     initDataGrid();
     initRowEdit();
     initDropdowns();
     initTableToolbar();
+    initStickyCols();
   </script>
   <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/patterns/editable-grid", "Editable grid pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>
