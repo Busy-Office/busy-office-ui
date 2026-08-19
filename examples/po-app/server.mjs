@@ -333,6 +333,26 @@ const costCenterPickerHtml = () => `
   }
 </script>`;
 
+// The vendor/cost-centre/amount validation both /pos/new and /pos/:id/edit
+// need — was two identical copies (the field-editor spike duplicated the
+// PO-creation spike's rules word for word) until a Standardize dispatch,
+// triggered by spotting exactly this while triaging the next wake, not by
+// the round counter. One rule set, used by both POST handlers.
+function parsePoFields(form) {
+  const values = {
+    vendor: (form.get('vendor') ?? '').trim(),
+    cc: (form.get('cc') ?? '').trim().toUpperCase(),
+    amount: (form.get('amount') ?? '').trim(),
+  };
+  const errors = {};
+  if (!values.vendor) errors.vendor = 'Vendor is required.';
+  if (!values.cc) errors.cc = 'Cost centre is required.';
+  else if (!COST_CENTERS.some((c) => c.code === values.cc)) errors.cc = `"${values.cc}" is not a cost centre.`;
+  const amountNum = Number(values.amount);
+  if (!values.amount || !Number.isFinite(amountNum) || amountNum <= 0) errors.amount = 'Enter an amount greater than zero.';
+  return { values, errors, amountNum };
+}
+
 const listScreen = (query = {}) => {
   const rows = filterPos(query);
   const filtering = Boolean((query.q || '').trim() || (query.status && query.status !== 'All'));
@@ -1016,17 +1036,7 @@ const server = createServer(async (req, res) => {
     }
     if (path === '/pos/new' && req.method === 'POST') {
       const form = new URLSearchParams(await readBody(req));
-      const values = {
-        vendor: (form.get('vendor') ?? '').trim(),
-        cc: (form.get('cc') ?? '').trim().toUpperCase(),
-        amount: (form.get('amount') ?? '').trim(),
-      };
-      const errors = {};
-      if (!values.vendor) errors.vendor = 'Vendor is required.';
-      if (!values.cc) errors.cc = 'Cost centre is required.';
-      else if (!COST_CENTERS.some((c) => c.code === values.cc)) errors.cc = `"${values.cc}" is not a cost centre.`;
-      const amountNum = Number(values.amount);
-      if (!values.amount || !Number.isFinite(amountNum) || amountNum <= 0) errors.amount = 'Enter an amount greater than zero.';
+      const { values, errors, amountNum } = parsePoFields(form);
 
       if (Object.keys(errors).length) {
         // Same document-level-vs-field-level split as mass-change: THESE
@@ -1311,17 +1321,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
         }
         const body = await readBody(req);
         const form = new URLSearchParams(body);
-        const values = {
-          vendor: (form.get('vendor') ?? '').trim(),
-          cc: (form.get('cc') ?? '').trim().toUpperCase(),
-          amount: (form.get('amount') ?? '').trim(),
-        };
-        const errors = {};
-        if (!values.vendor) errors.vendor = 'Vendor is required.';
-        if (!values.cc) errors.cc = 'Cost centre is required.';
-        else if (!COST_CENTERS.some((c) => c.code === values.cc)) errors.cc = `"${values.cc}" is not a cost centre.`;
-        const amountNum = Number(values.amount);
-        if (!values.amount || !Number.isFinite(amountNum) || amountNum <= 0) errors.amount = 'Enter an amount greater than zero.';
+        const { values, errors, amountNum } = parsePoFields(form);
 
         if (Object.keys(errors).length) {
           // Field-editor's own contract, re-render with values preserved —

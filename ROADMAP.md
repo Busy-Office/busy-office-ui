@@ -748,6 +748,33 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 69 — Standardize: po-app's own three-Explore-wake drift (2026-08-20)
+
+Dispatched by rule 2's "drift flagged... spotted during triage" clause,
+ahead of the round counter (Standardize was 3/4, not yet overdue) —
+spotted while orienting for this wake, reading back over the last three
+Explore spikes' combined diff.
+
+1. [x] **69.1 — `/pos/new` and `/pos/:id/edit`'s field validation was two
+       identical copies.** The field-editor spike (68.1) duplicated the
+       PO-creation spike's (67.1) rules word for word — same field
+       extraction, same three error messages, same cost-centre existence
+       check, byte-for-byte. Extracted into one `parsePoFields(form)`,
+       used by both POST handlers. Re-scanned the rest of the file for the
+       same shape of drift afterward: the remaining repetition (one line
+       of `aria-invalid`/`aria-describedby` per field — 7 occurrences,
+       each a genuinely different field id; three dialogs' own close-
+       button boilerplate; three separately-shaped "already decided"
+       guards serving different response conventions — batch partial-
+       failure vs. single-request precondition-failed) is the framework's
+       normal per-field/per-dialog shape, not copy-paste drift, and was
+       left alone rather than forced into false uniformity.
+
+**Exit:** clean re-scan after the one real consolidation — no second
+round needed. `check:po-app` 13/13 unchanged (behavior identical, only the
+validation's SOURCE consolidated). Verified live via the real Podman
+container build, both themes, both the creation and edit 422 paths.
+
 ## Slice 68 — Explore: record editing dogfooded in po-app (2026-08-20)
 
 Dispatched by rule 6 — backlog still empty of anything not owner-blocked
