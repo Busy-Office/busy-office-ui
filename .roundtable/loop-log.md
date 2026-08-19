@@ -445,3 +445,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-20 00:12 · Continue · build · 53.3 — change/audit diff scored (NET -2 as component, +1 as bare recipe); shipped as a real composition in record-detail's audit trail · landed · 42ec02e
 - 2026-08-20 00:12 · Meta · refusal · a new bo-change-diff component — scored NET -2, trivially composable (C1=3), would be pure surface over an already-solved problem · refused · 42ec02e
 - 2026-08-20 00:26 · Standardize · tidy · 63.1 — finished the gate-report.mjs review (6 more scripts classified: heterogeneous-gate vs build-utility-guard); 63.2 — re-verified 19/19 primary-action baseline · logged · e8f224d
+- 2026-08-20 01:03 · Continue · build · 58.1 batch 1 — design-grill on reporting-dashboard/app-launch/record-detail; fixed a real ID mismatch bug in record-detail, reworded 3 openers, reordered dashboard hierarchy · landed · 72fd8c7
