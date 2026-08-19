@@ -748,6 +748,50 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 70 — Objective grill: the po-app dogfood streak (2026-08-20)
+
+Dispatched ahead of the formal 3/3 counter (2/3 at dispatch), same
+justification as Slice 69's early Standardize dispatch: four consecutive
+wakes (three Explore + one Standardize) had gone into `examples/po-app`
+with no critical review, and a fifth feature was under consideration.
+Full report: `.roundtable/grill-po-app-streak-2026-08-20.md`.
+
+**Finding:** Slices 66/67/68 each pass principles 1-3 cleanly (zero
+`packages/core` changes across all four commits; the cost-centre picker
+reused by 3 independent forms; `parsePoFields` consolidation caught its
+own duplication within a wake). Principle 4 catches a real composition
+defect: the Pending-PO detail screen shows two simultaneous
+visually-primary actions — `Save changes` (`server.mjs:717`, the
+field-editor table's own footer) and `Approve…` (`server.mjs:788`, below
+Documents) — both plain `.bo-btn`, both visible at once. Breaks the
+2026-08-19 measured bar (18/19 screens ≤1 primary; the wizard's
+Next/Submit pair is the sole exception and even that is never both
+visible). Each button matches its own documented pattern in isolation;
+the violation is po-app composing two independently-correct patterns onto
+one screen, not a framework defect.
+
+**Item 70.1 — gate `Approve…` visibility off the row-edit table's own
+dirty state.** Hide/disable the `Approve…` cluster while the Order
+table has `data-any-dirty` set (the state po-app already tracks at
+`server.mjs:715,727-732`) so at most one primary action is visible at a
+time, matching the wizard precedent exactly. App-level composition fix
+in `examples/po-app/server.mjs`; no `packages/core` change.
+**Accept:** both themes, 1440 + 390, verified live in the bind-mounted
+Podman container — mid-edit (dirty) shows only `Save changes`; clean
+(no edits) shows only `Approve…`; `check:po-app` stays green.
+
+**Also refused this wake:** a cancel/delete-PO route — no dead link or
+dogfooding gap surfaced it (real ERP convention voids via a status
+transition, not a hard delete), and a fifth feature on an already
+two-decision screen would add a third; refused per principles 1 and 4,
+not built speculatively.
+
+**Exit:** report written, one actionable item queued above (not built
+this wake — Objective is a review dispatch, item 70.1 is a normal build
+item for the next Continue/Standardize pass), verdict is Rethink-not-
+refuse on the streak itself: the loop pattern is healthy, the screen
+composition needs one fix.
+
 ## Slice 69 — Standardize: po-app's own three-Explore-wake drift (2026-08-20)
 
 Dispatched by rule 2's "drift flagged... spotted during triage" clause,
