@@ -8,6 +8,19 @@ pin.
 
 ## Unreleased
 
+- **Deprecated** (`.bo-icon--settings`, `.bo-icon--barcode`, `.bo-icon--building`,
+  `.bo-icon--user`): zero pattern screens in these docs render any of the four —
+  only the icon component's own showcase page did. Use
+  `--bo-icon-src: url("data:image/svg+xml,…")` directly instead (the mechanism
+  every named glyph is already just one value of — see `/components/icon`,
+  "Any icon you like"). The other 8 glyphs (`--doc`, `--invoice`, `--cart`,
+  `--check-circle`, `--truck`, `--box`, `--chart`, `--grid`) are demonstrated in
+  a real screen (`/patterns/app-launch`) and are unaffected.
+
+  **Not a breaking change:** the classes still ship and still work; removal is
+  a next-major change, since 0.x is published (roadmap 53.2).
+
+
 - **Fixed** (docs): dialog close buttons that did nothing. `/patterns/master-detail`
   carried an invented `data-dialog-close` attribute on its ×, Cancel and Save
   buttons — a hook `initDialogs` never implemented and the API never documented,

@@ -1258,13 +1258,47 @@ the controls land +3/+4, so it discriminates.
        restores focus explicitly, and the claim asserts the FIELD rather than
        "not body", which would have passed on almost anything.
 
-2. [ ] **53.2 — Grill `icon`'s 12 variants. The only NET-negative live
+2. [x] **53.2 — Grill `icon`'s 12 variants. The only NET-negative live
        component.** Third-largest component at **4633 bytes with 25 classes** —
        bigger than `dashboard` — used by **one** screen. The axis to move is
        **surface, not demand**: do not put icons in more screens to justify 25
        classes. Accept: decide whether the variant list should be a documented
        convention rather than a shipped enum, with the bytes and class count
        re-measured after. Removal of any shipped class is bounded by 45.5.
+
+       **Landed 2026-08-19, and one of my own earlier notes was wrong.** This
+       item was queued with the claim that "any removal is free only until
+       0.2.0 publishes" — checked before acting, and that was false for THIS
+       component specifically: `git show v0.1.1` confirms all 12 glyph classes
+       were already published. Unlike `.bo-quantity--display` (54.3), there
+       was never a free-removal window here; the deprecation path (`.bo-date`,
+       45.3) is the only one available, and that is what shipped.
+
+       **Split 8 active / 4 deprecated, by measured pattern-screen demand.**
+       `--doc`, `--invoice`, `--cart`, `--check-circle`, `--truck`, `--box`,
+       `--chart`, `--grid` are rendered in `/patterns/app-launch`.
+       `--settings`, `--barcode`, `--building`, `--user` render in zero pattern
+       screens — only this component's own showcase used them. Deprecated in
+       source with the same marker style as `.bo-date`, and in the docs page:
+       a separate "Deprecated" section, visually distinct via the shipped
+       `.bo-u-text-muted` utility (not an invented inline `opacity` — verified
+       live that icons dim correctly, since the mask paints with
+       `currentColor` and inherits the muted text color; measured contrast
+       7.56:1, clear of both the 3:1 non-text and 4.5:1 text thresholds).
+
+       **Bytes and class count are UNCHANGED — stated plainly, not hidden.**
+       Deprecation doesn't remove shipped CSS; the 25-class, 4633-byte numbers
+       from the original NET −1 score stand until the next major. What changed
+       is that the docs no longer imply all 12 earned their place equally, and
+       a CHANGELOG entry plus a named replacement exist for when removal
+       becomes possible.
+
+       **Found and fixed a real, already-shipped defect while reading the
+       source for this item.** The docs page had `<section class="demo">
+       <section class="demo">` — a stray duplicate opening tag, live in the
+       built HTML this whole time, confirmed via `grep` on `dist/` before and
+       after the fix. Unrelated to the grill; caught because the fix required
+       reading the exact section this bug was inside.
 
 3. [ ] **53.3 — Queue Change/audit diff, the one component-shaped ERP gap.**
        Change documents are a legal requirement in ERP. `timeline` shows *that*

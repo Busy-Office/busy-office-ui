@@ -70,6 +70,13 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4v16h16'/><path d='M8 16v-5M13 16V8M18 16v-8'/></svg>");
   }
 
+  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
+     docs renders this glyph — only this component's own showcase page
+     does. Kept, not deleted: @busy-office/ui is published, so removal is
+     a next-major change. Compose instead: point --bo-icon-src at your own
+     SVG (see /components/icon, "Any icon you like") — the mechanism is
+     general on purpose; this glyph was never more than one example value
+     of it. See CHANGELOG. */
   .bo-icon--settings {
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 7h16M4 12h16M4 17h16'/><circle cx='9' cy='7' r='2' fill='%23000' stroke='none'/><circle cx='15' cy='12' r='2' fill='%23000' stroke='none'/><circle cx='7' cy='17' r='2' fill='%23000' stroke='none'/></svg>");
   }
@@ -78,14 +85,35 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='7' rx='1'/><rect x='13' y='4' width='7' height='7' rx='1'/><rect x='4' y='13' width='7' height='7' rx='1'/><rect x='13' y='13' width='7' height='7' rx='1'/></svg>");
   }
 
+  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
+     docs renders this glyph — only this component's own showcase page
+     does. Kept, not deleted: @busy-office/ui is published, so removal is
+     a next-major change. Compose instead: point --bo-icon-src at your own
+     SVG (see /components/icon, "Any icon you like") — the mechanism is
+     general on purpose; this glyph was never more than one example value
+     of it. See CHANGELOG. */
   .bo-icon--barcode {
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'><path d='M4 6v12M8 6v12M12 6v12M16 6v12M20 6v12'/></svg>");
   }
 
+  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
+     docs renders this glyph — only this component's own showcase page
+     does. Kept, not deleted: @busy-office/ui is published, so removal is
+     a next-major change. Compose instead: point --bo-icon-src at your own
+     SVG (see /components/icon, "Any icon you like") — the mechanism is
+     general on purpose; this glyph was never more than one example value
+     of it. See CHANGELOG. */
   .bo-icon--building {
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 21V4h10v17M15 9h4v12M3 21h18'/><path d='M8 8h2M8 12h2M8 16h2M12 8h1M12 12h1M12 16h1'/></svg>");
   }
 
+  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
+     docs renders this glyph — only this component's own showcase page
+     does. Kept, not deleted: @busy-office/ui is published, so removal is
+     a next-major change. Compose instead: point --bo-icon-src at your own
+     SVG (see /components/icon, "Any icon you like") — the mechanism is
+     general on purpose; this glyph was never more than one example value
+     of it. See CHANGELOG. */
   .bo-icon--user {
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><path d='M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5'/></svg>");
   }
