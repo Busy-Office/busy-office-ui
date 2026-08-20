@@ -963,7 +963,75 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        resolves to compact's `1.875rem` — explicit density correctly beating
        auto-compaction, which is a live confirmation of 94.3's analysis.
 
-3. [ ] **94.7 — three of the seven DSA dimensions have never varied, and
+3. [x] **94.7 — DONE for `content`, PARTLY for the rest (2026-08-21).** The
+       rubric now carries explicit **scoring definitions** in
+       `dsa-scores.json`'s `rubric.definitions`, which is where a future
+       scorer will look; before this they existed only implicitly inside
+       citations, which is why nobody noticed three dimensions never moving.
+       Each definition names a component in this repo that scores below 3, so
+       the dimension is known to be capable of failing.
+
+       **`content` — saved, and it discriminates.** Sharpened to: *the page
+       names at least one context where this component is the WRONG choice,
+       and what to use instead.* **Six fail**: `approval-workflow`,
+       `file-upload`, `filters`, `offcanvas`, `ordered-list`, `tag-input` —
+       measured across prose AND `ApiTable` notes, then hand-verified on
+       `filters` and `ordered-list`, which genuinely say only what the thing
+       is and how to use it. Re-scored to 2 with citations naming the missing
+       alternative; the work itself is 94.8.
+
+       **`hierarchy` — narrowed, still undemonstrated.** It is now `na` where
+       a component presents fewer than two affordances, because ranking one
+       thing against nothing is vacuous — which is exactly why it read 3 on
+       28 of 28. Eight components moved to `na`. But on the 20 where it still
+       applies it is *still* 3 across the board, so it has not been shown
+       capable of failing. Narrowing made it honest, not discriminating.
+
+       **`interaction` — definition sharpened, NOT re-scored.** New
+       definition: *for a component shipping a behavior, the page states what
+       the PLATFORM provides versus what the behavior adds.* A regex flagged
+       7 of 13 behaviour-backed components as silent; **hand-checking flipped
+       4 of those 7** — `dialog` ("browser handles backdrop, ESC and focus
+       return; the behavior adds trigger wiring"), `offcanvas`, `pagination`
+       and `tag-input` (which says outright that no native element covers it,
+       so JS is required) all draw the line in substance. Only `alert` and
+       `combobox` look like real failures, and two is too thin to re-score on
+       without reading all 13 properly. Left at 3 rather than scored on a
+       detector with a 4-in-7 error rate.
+
+       **`spacing` — kept, relabelled.** It cannot stop being satisfiable by
+       the scorer's own commit, because that IS what it measures. The
+       definition now says so outright: *a debt marker, not a quality signal
+       — read it as "has this file been through a scoring pass".*
+
+       **Effect on the distribution**, which was the point: from
+       `{83:1, 90:2, 94:3, 95:3, 100:19}` to
+       `{80:1, 90:1, 93:4, 94:1, 95:7, 100:14}`. Fourteen at 100% instead of
+       nineteen, and `content` varies for the first time.
+
+       **Batches 5-7 are unblocked** — they will now be scored against
+       definitions that can fail, which was the whole reason for gating them.
+
+4. [ ] **94.8 — write the missing "when this is the wrong choice" guidance**
+       for the six components 94.7 named. Each page gains one sentence naming
+       a context where it is not the right answer and what to use instead —
+       the shape `data-table` (24 contrastive statements) and `combobox` (7)
+       already have. **Accept:** each of the six re-scores to `content: 3`
+       with a citation quoting the new sentence; the sentence names a real
+       alternative that exists in this framework, not a hypothetical.
+       Cheap per page, and it is the kind of guidance a first-time user needs
+       most — the six are currently silent on it.
+
+5. [ ] **94.9 — finish `interaction`, and decide `hierarchy`'s fate.** Read
+       all 13 behaviour-backed pages against 94.7's sharpened `interaction`
+       definition and re-score (the regex is not trustworthy here — it was
+       wrong on 4 of 7). For `hierarchy`: it is now `na` where it is vacuous
+       but still 3 on all 20 where it applies. **Accept:** either name a
+       component that fails it, or retire the dimension and shrink the
+       denominator — the same test 94.7 set, now that its scope is honest.
+
+       Superseded text follows: **three of the seven DSA dimensions have
+       never varied, and
        Spacing is a to-do list. This supersedes 94.4's "no sharpening
        needed".** Measured across all 28 components scored (batch 4):
        `hierarchy` `{3: 28}`, `content` `{3: 28}`, `interaction` `{3: 17}`
