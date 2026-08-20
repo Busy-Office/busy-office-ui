@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const collapseMarkup = `<div class="bo-widget">
   <header class="bo-widget__header">
     <span class="bo-widget__title">Shipping details</span>
@@ -190,5 +191,6 @@ const statMarkup = `<div class="bo-widget">
             'Stat values use proportional figures; compact big numbers server-side (12.9K, $4.2M). One hero per view.',
             'Widgets are named containers (<code>bo-widget</code>); the grid is <code>bo-widget-grid</code> — span-2 collapses at the grid&#39;s 2-column threshold.',
             'Collapsible is opt-in: <code>data-collapse-trigger</code> + <code>initCollapsibleCards()</code>. Without the behavior, a <code>.bo-widget__collapse</code> with no <code>data-state</code> just renders open.']} />
+  <DsaScore component="dashboard" />
   <Related links={[["/concepts/container-queries", "Container queries"], ["/concepts/tokens", "Design tokens"], ["/patterns/approval", "Approval pattern"]]} />
 </Gallery>

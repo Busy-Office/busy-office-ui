@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -65,6 +66,7 @@ const canonical = `<!-- Always on the native <kbd> element — the semantics com
       'Show the keys your app actually binds — the framework documents its own behavior keys on <a href="' + base + '/concepts/js-behaviors">JS behaviors</a> (generated from the same source the behaviors use).',
     ]}
   />
+  <DsaScore component="kbd" />
   <Related links={[
     ['/reference/keyboard', 'Keyboard map'],
     ['/components/kv', 'Key-value facts'],

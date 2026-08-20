@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 import { monthGrid, DAY_NAMES, DAY_SHORT, weekdayOrder } from '../../lib/month-grid';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -214,6 +215,7 @@ const three = `<div class="bo-calendar">
     'Every marked day needs its meaning in text; the colour and shape are the visible half only.',
     'A day may be a plain span, a link or a button. Only the last two get hover and pointer affordances.',
   ]} />
+  <DsaScore component="calendar" />
   <Related links={[
     ["/components/date", "Date value"],
     ["/components/form", "Form controls"],

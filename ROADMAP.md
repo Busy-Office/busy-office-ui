@@ -1084,6 +1084,29 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        second time this concern has been raised and the first time it had
        enough rows to be measured rather than argued.
 
+5. [ ] **94.10 — the wrong-choice guidance gap is systemic, not a one-off.**
+       94.8 wrote it for the six components 94.7 named, and I recorded there
+       that `content`'s discriminating power was "spent until new components
+       arrive". **That was wrong, and batch 5 is the correction**: on the
+       Display family — untouched by 94.8 — `content` failed **7 of 7**. The
+       power was spent only on the population already treated. Not one of
+       `dashboard`, `byline`, `badge`, `kbd`, `avatar`, `prose`, `calendar`
+       names a context where it is the wrong choice.
+
+       Two near-misses are worth naming so a regex does not "fix" them:
+       `kbd`'s "use the native `<kbd>` element, not a span" and `badge`'s
+       "never encode status as colour alone" read as negative guidance but
+       are about markup and accessibility *within* using the component — not
+       a context where the component itself is wrong.
+
+       **Accept:** same shape as 94.8 — each of the seven gains one sentence
+       naming a wrong-choice context and linking a real framework
+       alternative; each re-scores to `content: 3` with a citation quoting
+       it. **Then stop treating this per-batch**: if batches 6-7 also fail
+       7-of-7, the honest conclusion is that the docs recipe in `CLAUDE.md`
+       should require the sentence, so new pages cannot ship without it —
+       raise that rather than writing it a third time by hand.
+
 4. [ ] **94.6 — batch 3's two family-level findings (Navigation & layout).**
        Neither is a per-component defect; both are one habit seen across the
        family, which is why the unit of work is a family.

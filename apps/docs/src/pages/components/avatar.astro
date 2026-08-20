@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 
 const initials = `<span class="bo-avatar" aria-hidden="true">RV</span>
@@ -102,6 +103,7 @@ const canonical = `<!-- Decoration, not a caption: aria-hidden always, the NAME 
       'Promoted from Byline (owner call 2026-08-16): markup that carried only <code>.bo-byline__avatar</code> must add <code>.bo-avatar</code> — listed as Breaking in the CHANGELOG.',
     ]}
   />
+  <DsaScore component="avatar" />
   <Related links={[
     ['/components/byline', 'Byline'],
     ['/patterns/approval', 'Approval workflow'],

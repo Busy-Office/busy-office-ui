@@ -973,6 +973,258 @@
           "cite": "status timeline plus audit trail, the two read-only halves of an approval screen"
         }
       }
+    },
+    "dashboard": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "\"one hero per view\" is stated as a rule, and widget actions are --ghost so nothing competes with the stat"
+        },
+        "typography": {
+          "score": 2,
+          "cite": "font-size: 3rem on the stat value is a raw size off the type scale (dashboard.css:140) — same defect class as amount and data-table"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; delta valence is two-channel — a visible glyph plus visually-hidden text, per its own note"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the four 32px sparkline dimensions and the 20rem/1rem pair at the tail are uncommented; the --bo-widget-min default does carry its reason"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "ships no behavior — auto-compaction is a named container query, not JS"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "named containers whose width drives the density of what they hold; the overview surface the sidebar assigns it"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "byline": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": "na",
+          "cite": "presents no affordance — a provenance line (94.7)"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "sizes from --bo-font-size-sm/xs; no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; name is emphasis ink, remainder secondary, both tokens"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "zero raw dimension literals — the whole file is tokens"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "plain markup, no behavior"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "record headers, comments, feed items, audit notes; composes .bo-avatar rather than owning a disc"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "badge": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": "na",
+          "cite": "decoration beside a status word; introduces no affordance (94.7)"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-font-size-xs and a weight token; the 0.05em letter-spacing is intrinsic, same basis as form/combobox"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "raw hex only inside @media print, where theme tokens would be wrong on paper; status meaning is carried by TEXT, colour never alone"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "the chip hug and the unconditional 1px boundary both carry their reason; the bare numbers a scan flags at badge.css:42 are measurements quoted INSIDE a comment, not declarations"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a static span"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "approval states and document statuses; the --type rectangle is scoped to record-type labels"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "kbd": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": "na",
+          "cite": "a keycap chip; no affordance (94.7)"
+        },
+        "typography": {
+          "score": 2,
+          "cite": "font-size: 0.85em is a raw size off the scale (kbd.css:17), even though its em-relativity is deliberate and explained"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; border/background/text all tokens"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "min-inline-size, padding and the weighted bottom edge all carry their reason — the edge comment names what it buys (\"reads as a KEYCAP\")"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "paints the native <kbd>; ships no behavior"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "shortcut hints in captions, help dialogs and empty states; one chip per physical key"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "avatar": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": "na",
+          "cite": "decoration with the name as real text nearby; no affordance (94.7)"
+        },
+        "typography": {
+          "score": 2,
+          "cite": "font-size: 0.7em on the initials is a raw size off the scale (avatar.css:19)"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; forced-colors adds the disc boundary that separates stacked avatars once backgrounds flatten"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the 2px stack ring and the -0.5em overlap are uncommented as VALUES, though the ring’s purpose is stated"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "decoration; aria-hidden by contract"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "assignee columns, approval chains, bylines; em-sized so it inherits scale instead of shipping size modifiers"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "prose": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": "na",
+          "cite": "renders stored rich text; introduces no affordance of its own (94.7)"
+        },
+        "typography": {
+          "score": 2,
+          "cite": "font-size: 0.9em on inline code is a raw size off the scale (prose.css:52); every heading level does come from the scale"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the 3px blockquote rule and the 0.1em/0.35em code padding are uncommented; block margins are all space tokens"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "display-only; the editor chrome is .bo-richtext"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "stored rich text wherever it is DISPLAYED — record detail, comments, print; split from richtext so display-only consumers skip the editor"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "calendar": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a day may be a span, link or button, and only the last two take hover/pointer affordances — the page states that split"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "no raw font-size; the em literals are dot and cell geometry, not type"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour, and every marked day is required to carry its meaning in text — colour and shape are the visible half only"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the 0.15em/0.3em dot geometry is uncommented; the 2.25em cell and the 3px/4px stripe both carry their reason"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "days can be real submit buttons, so selection posts without JS; data-day is app state written per render, like data-row-state"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "a month grid that says which days are special — holidays, shutdowns, period-end, blocked delivery dates"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
     }
   }
 }

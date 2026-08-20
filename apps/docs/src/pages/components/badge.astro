@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const tones = `<span class="bo-badge">Neutral</span>
 <span class="bo-badge bo-badge--success">Approved</span>
@@ -50,5 +51,6 @@ const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</sp
   <ClassRef component="badge" />
   <ApiTable component="badge"
     notes={['A badge is decoration — the status TEXT is the accessible signal; never encode status as color alone.']} />
+  <DsaScore component="badge" />
   <Related links={[["/concepts/accessibility", "Accessibility model"], ["/components/data-table", "Data table"]]} />
 </Gallery>
