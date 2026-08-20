@@ -21,6 +21,24 @@ bug; both are the same root cause (stale state trusted instead of checked).
 **If this file's "last updated" is more than a few wakes old, verify its
 claims against ROADMAP.md before trusting them.**
 
+## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
+
+The long-running `bo-docs-run` container serves a **baked image with no bind
+mounts**, and it was found serving pre-Slice-94 content this wake. Curl it
+before trusting a screenshot from it. The cheap fix, which needs no image
+rebuild and cannot go stale, is to mount the fresh `dist` directly:
+
+```
+podman run -d --rm --name bo-docs-live -p 8091:80 \
+  -v "$PWD/apps/docs/dist:/usr/share/nginx/html:ro,Z" docker.io/library/nginx:alpine
+```
+
+Also standing: **`resize_window` does not move the viewport** (stuck at
+1280×656 across repeated attempts — the Slice 70.1/71.1 limitation). 390px has
+to be *measured* (constrain the element, read `scrollWidth`/computed styles),
+not screenshotted, and a wake should say so rather than claim a width it did
+not observe.
+
 ## Owner-blocked (re-stated each grill, not re-queued)
 
 - **0.3.0 is PREPARED AND TAGGED, awaiting two owner actions (2026-08-21).**
