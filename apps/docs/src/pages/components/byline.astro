@@ -48,10 +48,6 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> Â· Requester Â
   </section>
 
   <section class="demo">
-    <h2>Markup</h2>
-    <pre><code>{markup}</code></pre>
-  </section>
-  <section class="demo">
     <h2>In context â€” heading an approval comment</h2>
     <div class="bo-widget" style="inline-size: 100%; max-inline-size: 24rem">
       <div class="bo-widget__body">
@@ -65,6 +61,10 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> Â· Requester Â
     <p class="bo-u-text-muted">Where bylines live: heading a comment or approval
     note on a record card, next to the <a href={base + '/components/approval-workflow'}>audit
     trail</a> that logs the same event in one line.</p>
+  </section>
+<section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
   </section>
   <ClassRef component="byline" />
   <ApiTable component="byline"

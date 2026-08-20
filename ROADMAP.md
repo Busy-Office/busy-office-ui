@@ -769,6 +769,40 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 91 — Standardize sweep: the conventions Slices 84-90 established, applied site-wide (2026-08-21)
+
+Dispatched by the overdue counter (4/4). The recent grills established
+three conventions page by page (Demo one-string, Markup-last, the
+affordance/stepper doctrine); this sweep censused the REST of the site
+against them.
+
+**Fixed this round:**
+- **91.1** — one Markup-last violation site-wide: `byline.astro` had its
+  "In context" demo after Markup. Moved. Re-scan across all component
+  pages: clean.
+- **91.2** — the last steppers outside the Quantity page:
+  `field-editor.astro`'s Minimum-order row (an SM30 read-mostly
+  correction screen — exactly where the doctrine says steppers don't
+  belong). Removed; the seamless input + unit text remain. Re-scan
+  across docs + po-app: clean.
+
+**Queued honestly, not silently dropped — 91.3, the Demo-conversion
+backlog:** 19 component pages still hand-write demo markup with no
+`Demo` import (census: alerts 3, breadcrumb 2, approval-workflow 5,
+dialog 4, dashboard 6, dropdown 4, byline 5, inline-editing 4, navbar
+2, data-table 14, pagination 3, filters 4, stepper 3, table-toolbar 2,
+offcanvas 3, tag-input 4, tree 3, sidebar-nav 3, tabs 4 — ~78 demo
+sections). Far too large for one sweep round; conversion continues
+opportunistically as pages get touched (the Forms/Combobox precedent),
+or as dedicated Continue items if the owner wants it batched. Note:
+some sections are deliberate exceptions per the Combobox precedent
+(synthetic snapshots must NOT become copyable code) — each conversion
+needs that judgment, which is why this isn't a mechanical regex pass.
+
+**Exit:** both fixable axes re-scanned clean; the big axis recorded
+with its full census; verified live (byline order, zero steppers
+served).
+
 ## Slice 90 — /design-grill: the three editing designs (2026-08-21)
 
 Owner ask: grill the editable design across standalone field / data
