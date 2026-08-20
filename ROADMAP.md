@@ -829,8 +829,21 @@ stronger existing group and the family relationship is already fully
 cross-linked in prose regardless of sidebar placement — but this is an
 owner call, not built in this grill.
 
-**Exit:** 76.1 queued as a normal build item; 76.2 needs an owner
-decision on (a) vs (b) before it can be built.
+**Shipped 2026-08-20 — owner picked (a).** Moved Quantity from "Values"
+into "Data input", right after Money field
+(`apps/docs/src/layouts/Gallery.astro`). "Values" drops to 3 items
+(Amount, Date, Key-value facts) — still coherent, within the file's own
+stated 3-10 items/group range, no forced merge needed. Group counts are
+computed from array length via `SidebarNav.astro`, not hand-typed, so
+no separate count update was needed or risked going stale. Docs build
+green; live-verified in a `--no-cache` Podman rebuild, both themes —
+confirmed "Data input" now shows 8 with Quantity positioned right after
+Money, and "Values" genuinely shows only 3 (expanded and read, not just
+trusted the badge number).
+
+**Exit:** 76.1 and 76.2 both shipped; the sidebar now groups the
+editable pair together, matching how a consumer actually searches for
+"let someone type X."
 
 ## Slice 75 — Owner ask: apply the full Jony Ive design document (2026-08-20)
 
