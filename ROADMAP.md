@@ -5634,7 +5634,20 @@ Objective charter is a **filter, not a direction**: simplicity / less-for-more /
 reusability say what to refuse, never what to build. Choosing a direction is
 structurally an owner call, not something a loop can derive.
 
-1. [ ] **OWNER CALL — 0.2.0 release.** **64 unreleased CHANGELOG entries**
+1. [x] **OWNER CALL — 0.2.0 release. ANSWERED 2026-08-21: owner triggered the
+       publish, and it was cut as 0.3.0, not 0.2.0.** The tarball built at HEAD
+       was labelled 0.2.0 but carried 304 commits of post-tag work (tabs,
+       anchor-nav, context-menu, sticky-cols), so that number would have
+       permanently described contents it did not have. 0.2.0 stays an accurate
+       record of what was cut on 2026-08-18, annotated "tagged, never
+       published"; the registry goes 0.1.1 → 0.3.0 and consumers get both
+       sections' 83 entries, which the CHANGELOG now says outright. Tagged
+       `v0.3.0` at `24c6e7d`, every gate green at 0.3.0. **Still not on the
+       registry** — publishing runs through Trusted Publishing (OIDC), so it
+       needs the owner to push the tag and publish a GitHub Release; tracked in
+       `RESUME.md`, not here.
+
+       Original text, kept for the record: **64 unreleased CHANGELOG entries**
        against a published **0.1.1** (`npm view` confirms). Slices 24-28 —
        query tokens, staging, mass change, four placeholder-only accessible
        names, the 1.46:1 search contrast, icons vanishing in print, the
@@ -5644,7 +5657,14 @@ structurally an owner call, not something a loop can derive.
        stale *site* was fixed, the stale *package* was not. Publishing is
        owner-triggered by policy; the work itself is done.
 
-2. [ ] **OWNER CALL — direction.** Recommended default: **ship 0.2.0 first,
+2. [ ] **OWNER CALL — direction. STILL OPEN, but its precondition is now met
+       (2026-08-21):** the release is cut as 0.3.0 and awaits only the owner's
+       push + GitHub Release. Once it lands, the recommended default below
+       becomes actionable rather than hypothetical — there is finally a
+       published package recent enough for adopter feedback to be about the
+       current framework. The choice itself remains structurally an owner call.
+
+       Recommended default: **ship 0.2.0 first,
        then choose from real adopter feedback rather than from this room** —
        the cost being that feedback takes time, against the alternative risk of
        building the next twelve components for nobody. Candidates if the owner
