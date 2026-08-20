@@ -769,6 +769,31 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 83 — /design-grill: the "Data input" and "Values" groups (2026-08-21)
+
+Group-level grill after 76.2's taxonomy fix: judge both sidebar groups
+as wholes. Full report:
+`.roundtable/design-grill-input-values-groups-2026-08-21.md`.
+
+**Census:** all 8 Data-input members are editable controls (anatomy-first
+ordering, the Money/Quantity pair adjacent) — keep. Values' Amount and
+Key-value facts verified display-only (kv's `input` mentions are
+anti-pattern warnings, checked not assumed) — keep.
+
+**83.1 — Date sat undifferentiated as a current peer; it's deprecated.**
+`.bo-date` scored 1/12 in the surface review, and its page is an honest
+deprecation notice — but the sidebar presented "Date" mid-list as a
+current Values member. Fixed with the precedented parenthetical label
+style ("Goods receipt (RF scanner)"): now **"Date (deprecated)"**, moved
+LAST in the group. Removing the entry was refused — the page-shape gate
+requires it, and hiding a deprecation defeats the page's purpose.
+Checked the same defect doesn't exist elsewhere: icon.astro's
+"Deprecated" is a glyph section inside a live component, not a
+deprecated page. Also refused: a date-entry demo in Data input — the
+one-sentence answer (native `type="date"`, nothing to add) already has
+a home one click away on the annotated entry's own page. Verified live:
+label renders, order is Amount → Key-value facts → Date.
+
 ## Slice 82 — Owner ask: redundancy review across Amount/Quantity/Money docs (2026-08-20)
 
 Six slices of rapid additions to these three pages (76-81) made
