@@ -804,6 +804,18 @@ Quantity already demos), no large-target/density-variant demo (despite
 same three sections, matching Quantity's coverage; page-shape and
 `data-hooks` gates stay green; live-verified both themes.
 
+**Shipped 2026-08-20.** All three sections added to `money.astro`, same
+order as `quantity.astro`'s own (Read-only display right after Basic;
+In a table column and Large-target variant before Markup). "In a table
+column" demonstrates the actual point that motivated the finding —
+independent per-row currency (a USD line and a JPY line each reformat
+to their own precision, never shared table-wide state). Docs build
+green (`data-hooks` 56 documented unchanged, `check-markup` 52486 uses
+verified, up from 52457); live-verified in a `--no-cache` Podman
+rebuild, both themes — the read-only Amount cross-reference, the
+table-column demo, and the spacious-density variant all render
+correctly and match Quantity's equivalent sections' shape.
+
 **Item 76.2 — sidebar taxonomy splits the editable pair across two
 groups, contradicting the family's own stated rule.** Quantity (editable)
 sits in "Values" next to read-only Amount/Date/Key-value-facts; Money
