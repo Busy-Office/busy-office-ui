@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.3.0 (2026-08-21)
+
+> **Upgrading from 0.1.1? Read the 0.2.0 section below as well.** 0.2.0 was
+> tagged and CHANGELOG'd on 2026-08-18 but never reached the registry — the
+> published versions are `0.1.0` and `0.1.1` only. 0.3.0 is therefore the first
+> release carrying 0.2.0's 65 entries, and they land on you together with the 18
+> below. Nothing is skipped; the version number is.
+
 - **Fixed** (`data-table`): `.bo-data-table__row-edit-actions` was
   `display: flex` on a `<td>`, which destroys table-cell behavior and
   turns the base row height into a FIXED height — whenever a sibling
@@ -182,7 +192,11 @@ pin.
   **Not a breaking change.** The classes still ship and still work; removal is a
   next-major change, since 0.x is published and consumers may be using them.
 
-## 0.2.0 (2026-08-18)
+## 0.2.0 (2026-08-18) — tagged, never published
+
+> This version exists as a git tag and the entries below, but was never
+> published to npm. Its changes shipped to consumers in **0.3.0**. Kept as an
+> accurate record of what was cut on that date rather than folded upward.
 
 - **Fixed** (`.bo-dropdown`): an open menu stayed nailed to the viewport while
   the page scrolled, drifting away from the control that opened it (owner bug

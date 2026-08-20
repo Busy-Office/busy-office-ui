@@ -127,11 +127,13 @@ So the rule:
   name.
 
 `data-day` is the one that does not follow the naming half of that rule — it
-should be `data-day-state`. It is left as-is deliberately: it shipped in an
-unreleased slice, and renaming it now would be churn for consistency's own sake
-while `data-state` itself is the older, larger outlier that CANNOT be renamed —
-both it and `data-row-state` are in published 0.1.1, so either rename is a
-breaking change owed a deprecation cycle, not a sweep.
+should be `data-day-state`. It is left as-is deliberately, and the reason
+CHANGED at the 0.3.0 release (2026-08-21): until then it had only shipped in
+unreleased slices, so renaming it was merely churn. `data-day` is in the 0.3.0
+tarball, so it is now published API on exactly the same footing as `data-state`
+and `data-row-state` (both published since 0.1.1) — renaming any of the three is
+a breaking change owed a deprecation cycle, not a sweep. The window in which
+`data-day` could have been renamed for free closed when 0.3.0 was cut.
 
 ## Two standing build rules (grill-derived)
 
