@@ -814,12 +814,25 @@ on-direction; deductions are three uncommented raw dimension literals
 and two `em` affix sizes.
 
 **Queued from the pilot:**
-- **92.4 — Amount adoption in under-using screens.** Demand citation
-  turned up reading (c): invoice-list, editable-grid's totals, and
-  po-app render amounts as plain text where `.bo-amount` would add
-  grouped/muted-fraction display free — the low count is a defect in
-  the screens, not the component. Accept: those screens adopt Amount
-  for displayed money; visual parity verified live.
+- **92.4 — Amount adoption in under-using screens. SHIPPED 2026-08-21.**
+  invoice-list: all 14 rows adopt Amount (muted `$` affix + muted
+  fraction, digits stacked — verified by computed affix-vs-value colors,
+  dark theme, screenshot). po-app: a `moneyHtml()` helper beside
+  `money()` (same text content, so `check:po-app`'s 13 assertions pass
+  untouched) adopted at 6 display sites — the PO list column, the
+  detail read-only `<dl>`, spend line rows and tone-carrying subtotals,
+  the grand total (`--strong` replacing the hand `<strong>`), and the
+  dashboard widget. Verified live on both containers; the earlier
+  "1 occurrence" scare was `grep -c` counting LINES on single-line
+  minified HTML — reconciled to 14 with `grep -o | wc -l` before
+  trusting. **Two honest exceptions, recorded not skipped silently:**
+  editable-grid's computed totals stay plain text — `initTableSum`
+  writes `textContent` and formatting is the consumer's job per
+  Amount's own CSS-first contract (the consumer recipe is listening to
+  the sum and rendering Amount themselves); and po-app's two prose
+  mentions (the approval-dialog sentence, the budget parenthetical)
+  stay `bo-u-tabular` — Amount's own opener scopes it to scanned
+  columns, not running text.
 - **92.5 — the raw-literal alignment items**: comment or tokenize
   money's 9rem cap, quantity's 3rem/12rem floors and raw 1px;
   consider a token step for amount's 0.875em affixes. Accept: DSA

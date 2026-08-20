@@ -53,6 +53,14 @@ const PAGE_SIZE = 10;
 const audit = [];
 const money = (n) =>
   '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2 });
+// Display money as .bo-amount (roadmap 92.4) — the framework's display
+// component for scanned columns: muted currency affix + muted fraction,
+// tabular figures. Same text content as money(), so nothing that asserts
+// on textContent changes.
+const moneyHtml = (n, strong = false) => {
+  const m = money(n);
+  return `<span class="bo-amount${strong ? ' bo-amount--strong' : ''}"><span class="bo-amount__currency">$</span><span class="bo-amount__value">${m.slice(1, -3)}<span class="bo-amount__fraction">${m.slice(-3)}</span></span></span>`;
+};
 const tone = { Pending: 'warning', Approved: 'success', Rejected: 'danger' };
 
 // ---------- layout ----------
@@ -140,7 +148,7 @@ const rowHtml = (p) => `<tr id="row-${p.id}"${p.bulkError ? ' data-row-state="er
   <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
   <td data-col="vendor"><span class="bo-u-text-truncate" style="display: block; max-inline-size: 14rem">${p.vendor}</span></td>
   <td class="bo-data-table__col--secondary bo-data-table__col--code" data-col="cc">${p.cc}</td>
-  <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
+  <td class="bo-data-table__col--numeric">${moneyHtml(p.amount)}</td>
   <td data-col="status"><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span>${
     p.bulkError ? ` <span class="bo-badge bo-badge--danger">${p.bulkError}</span>` : ''
   }</td>
@@ -752,7 +760,7 @@ const detailScreen = (p, editErrors = null) => `
       : `<dl class="bo-kv">
       <div><dt>Vendor</dt><dd>${p.vendor}</dd></div>
       <div><dt>Cost center</dt><dd>${p.cc}</dd></div>
-      <div><dt>Amount</dt><dd class="bo-u-tabular">${money(p.amount)}</dd></div>
+      <div><dt>Amount</dt><dd>${moneyHtml(p.amount)}</dd></div>
     </dl>`}
   </fieldset>
   <div>${timelineHtml(p)}</div>
@@ -912,18 +920,18 @@ const spendScreen = () => {
         <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
         <td><span class="bo-u-text-truncate" style="display: block; max-inline-size: 14rem">${p.vendor}</span></td>
         <td><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
-        <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
+        <td class="bo-data-table__col--numeric">${moneyHtml(p.amount)}</td>
       </tr>`).join('')}
       <tr>
         <td colspan="3" class="bo-data-table__col--right">Subtotal ${cc}</td>
-        <td class="bo-data-table__col--numeric"${pct >= 90 ? ' data-tone="danger"' : pct >= 75 ? ' data-tone="warning"' : ''}>${money(spent)}${pct >= 90 ? ' <span class="bo-u-text-muted">— over budget threshold</span>' : ''}</td>
+        <td class="bo-data-table__col--numeric"${pct >= 90 ? ' data-tone="danger"' : pct >= 75 ? ' data-tone="warning"' : ''}>${moneyHtml(spent)}${pct >= 90 ? ' <span class="bo-u-text-muted">— over budget threshold</span>' : ''}</td>
       </tr>
     </tbody>`;
     }).join('')}
     <tbody>
       <tr>
         <td colspan="3" class="bo-data-table__col--right"><strong>Grand total</strong></td>
-        <td class="bo-data-table__col--numeric"><strong>${money(grand)}</strong></td>
+        <td class="bo-data-table__col--numeric">${moneyHtml(grand, true)}</td>
       </tr>
     </tbody>
   </table>
@@ -1002,7 +1010,7 @@ const dashScreen = () => {
     <div class="bo-widget__body bo-widget__body--flush">
       <div class="bo-data-table-container" tabindex="0" style="border:none">
         <table class="bo-data-table">
-          <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="bo-data-table__col--code">${p.id}</td><td class="bo-data-table__col--numeric">${money(p.amount)}</td></tr>`).join('')}</tbody>
+          <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="bo-data-table__col--code">${p.id}</td><td class="bo-data-table__col--numeric">${moneyHtml(p.amount)}</td></tr>`).join('')}</tbody>
         </table>
       </div>
     </div>
