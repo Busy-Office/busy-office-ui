@@ -863,9 +863,51 @@ a screenshot, both themes. No token touched, `check:contrast` unaffected.
 — logged as the underlying cause for a future wake if the owner ever
 wants the systemic fix instead.
 
-**Exit:** 73.1 and 73.2 both shipped and verified; the filter-logic
-refusal and sticky-as-runtime-state rethink from the original grill stand
-unbuilt, as scoped.
+**73.3 — plain nowrap utility, shipped 2026-08-20.** Owner asked for
+"text-wrap or nowrap by column or by table." Checked first: wrapping is
+already the free default (`white-space: normal`, no class needed); the
+only existing nowrap-shaped utility is `.bo-u-text-truncate`, which
+ALSO clips + ellipsizes — not a plain "stay on one line, let the table
+grow" option. Shipped `.bo-u-text-nowrap { white-space: nowrap; }` — one
+declaration. Because `white-space` is an inherited property, the SAME
+class answers both halves of the ask for free: on one `<td>`/`<th>` it's
+column-scoped, on the `<table>` itself every cell inherits it — no
+separate "by column" vs "by table" mechanism needed, confirmed by
+placing it on the `<table>` in the demo and checking `getComputedStyle`
+on a body cell. New demo on `/components/data-table` right after the
+truncate example. Live-verified (dark theme; `scrollWidth === clientWidth`
+confirmed the cell genuinely grew rather than silently clipping).
+
+**73.4 — resizable columns, grilled, not built.** Owner asked, then
+clarified: opt-in (on/off), matching how every other advanced behavior
+here works (`data-grid-nav`, `data-row-edit`). Graded against what this
+framework has already refused: `DESIGN.md` refuses "a grid engine of our
+own — virtual scroll, column virtualisation, cell editing," reasoning
+that owning it "would double" the framework's complexity, and redirects
+genuinely spreadsheet-like screens to a documented AG Grid recipe.
+Resizing isn't literally on that refused list, but shares its shape
+(drag-driven, stateful) and collides directly with the deliberate
+auto-width default (72.3) — a resized column has to stop auto-sizing to
+content, for that one column only, which needs a mechanism to hold.
+
+Not refused, not accepted — **needs owner scoping before Accept
+criteria can be written**, same treatment 30.4b already got:
+1. **Persistence** — session-only (simplest, lost on reload) or does a
+   resize need to survive a reload? If it does, WHERE it lives (cookie,
+   localStorage, server round-trip) is a framework-vs-consumer boundary
+   question, not a CSS one.
+2. **Keyboard equivalent** — drag-to-resize is mouse-only by
+   construction; WCAG needs an operable alternative, the same reason
+   `initDataGrid()` exists as a separate opt-in over the plain table.
+
+Recommendation given: likely build-worthy once scoped (a bounded,
+well-precedented pattern, not the refused "grid engine" itself) — but
+not speculatively, pending an answer to question 1 specifically.
+
+**Exit:** 73.1, 73.2, 73.3 shipped and verified; 73.4 grilled and queued
+pending owner scoping (question 1); the filter-logic refusal and
+sticky-as-runtime-state rethink from the original grill stand unbuilt,
+as scoped.
 
 ## Slice 72 — Owner wishlist: multi-sticky columns, tone text, width/font (2026-08-20)
 

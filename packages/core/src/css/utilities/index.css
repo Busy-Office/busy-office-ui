@@ -10,6 +10,17 @@
     white-space: nowrap;
   }
 
+  /* Plain nowrap, no clipping (roadmap 73.3) — distinct from
+     .bo-u-text-truncate above: that one commits to a fixed width and
+     clips overflow, this one just refuses to wrap and lets its container
+     grow instead. white-space is inherited, so this same class placed on
+     a <table> gives every cell table-wide nowrap for free; placed on one
+     <td>/<th> it's column-scoped — no separate "by table" vs "by column"
+     mechanism needed. */
+  .bo-u-text-nowrap {
+    white-space: nowrap;
+  }
+
   .bo-u-text-right {
     text-align: end;
   }

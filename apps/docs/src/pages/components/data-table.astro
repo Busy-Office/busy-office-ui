@@ -525,6 +525,34 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     different, weaker guarantee than this section's deliberate cap; worth
     fixing there too, tracked as a follow-up rather than folded in silently
     here.</p>
+    <p><strong>Nowrap without clipping.</strong> Sometimes a column shouldn't
+    wrap OR truncate — it should just stay on one line and let the table grow
+    wider instead. <code>.bo-u-text-nowrap</code> is that: plain
+    <code>white-space: nowrap</code>, no <code>overflow</code>/
+    <code>text-overflow</code>. Wrapping is already the free default (no class
+    needed) — this utility only exists for the opposite case. Because
+    <code>white-space</code> is inherited, the SAME class works at either
+    granularity: on one <code>&lt;td&gt;</code> it's column-scoped, on the
+    <code>&lt;table&gt;</code> itself every cell inherits it — no separate
+    "by column" vs "by table" mechanism.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table bo-u-text-nowrap">
+        <thead><tr>
+          <th scope="col">PO #</th>
+          <th scope="col">Status detail</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="bo-data-table__col--code">PO-88214</td>
+            <td>Awaiting Finance approval — escalated 2026-08-19</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The whole table has <code>.bo-u-text-nowrap</code>
+    on it, so every cell — not just Status detail — stays single-line; the
+    container's own horizontal scroll (already there for every table on this
+    page) takes over instead of the row growing tall.</p>
     <p class="bo-u-text-muted"><strong>Font styling</strong> (bold, emphasis) is
     the same story: no utility class exists or is planned for it — a subtotal
     or grand-total row uses a real <code>&lt;strong&gt;</code> (see "Grouped
