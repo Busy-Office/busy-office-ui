@@ -471,3 +471,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-20 08:18 · Continue · build · Slice 73.3: shipped bo-u-text-nowrap (answers wrap/nowrap by column or table via CSS inheritance, zero new mechanism) · landed · 871be50
 - 2026-08-20 08:18 · Meta · refusal · Slice 73.4: resizable columns not built - graded against DESIGN.md's existing grid-engine refusal, needs owner scoping on persistence before Accept criteria can be written · refused · 871be50
 - 2026-08-20 09:01 · Standardize · tidy · Slice 74: removed redundant data-sticky-cols=1 (duplicate of --sticky-col), clean re-scan found no other instances · landed · e246f68
+- 2026-08-20 09:07 · Continue · build · Slice 72.5: fixed po-app's Vendor-column truncation (both /pos and /spend) to the robust inner-span recipe, closing a self-tracked follow-up from Slice 72.3 · landed · 790e643
