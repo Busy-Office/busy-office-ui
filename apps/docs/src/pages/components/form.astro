@@ -3,7 +3,113 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const fieldsRow = `<form class="bo-form-row" novalidate>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="vendor">Vendor</label>
+    <input class="bo-input" id="vendor" required aria-describedby="vendor-hint" placeholder="Acme Supply Co." />
+    <span class="bo-form-field__hint" id="vendor-hint">Registered vendor name (required — note the automatic asterisk)</span>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="amount">Amount (USD)</label>
+    <input class="bo-input bo-input--numeric" id="amount" type="number" step="0.01" inputmode="decimal" value="4208.00" />
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="cc">Cost center</label>
+    <input class="bo-input bo-input--code" id="cc" required aria-invalid="true" aria-describedby="cc-error" value="CC-XXXX" />
+    <span class="bo-form-field__message" id="cc-error" role="alert">Unknown cost center code</span>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="status">Status</label>
+    <select class="bo-select" id="status">
+      <option>Pending</option>
+      <option>Approved</option>
+      <option>Rejected</option>
+    </select>
+  </div>
+</form>`;
+
+const reqDisabled = `<form class="bo-form-row" novalidate>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="req-native">Vendor</label>
+    <input class="bo-input" id="req-native" required placeholder="required attribute" />
+    <span class="bo-form-field__hint">Asterisk from the native <code>required</code> attribute.</span>
+  </div>
+  <div class="bo-form-field bo-form-field--required">
+    <label class="bo-form-field__label" for="req-class">Approver</label>
+    <input class="bo-input" id="req-class" placeholder="--required class" />
+    <span class="bo-form-field__hint"><code>--required</code> class — for fields whose requiredness is enforced server-side only.</span>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="dis-input">PO number</label>
+    <input class="bo-input bo-input--code" id="dis-input" value="PO-88213" disabled />
+    <span class="bo-form-field__hint">Disabled — system-assigned, never editable here.</span>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="dis-select">Currency</label>
+    <select class="bo-select" id="dis-select" disabled><option>USD</option></select>
+    <span class="bo-form-field__hint">Disabled select — fixed by company policy.</span>
+  </div>
+</form>`;
+
+const densityDemo = `<div data-density="compact">
+  <form class="bo-form-row" novalidate aria-label="Compact density">
+    <div class="bo-form-field">
+      <label class="bo-form-field__label" for="den-c1">Vendor (compact)</label>
+      <input class="bo-input" id="den-c1" placeholder="28px controls" />
+    </div>
+    <div class="bo-form-field">
+      <label class="bo-form-field__label" for="den-c2">Status</label>
+      <select class="bo-select" id="den-c2"><option>Pending</option></select>
+    </div>
+  </form>
+</div>
+<div data-density="spacious" style="margin-block-start: var(--bo-space-4)">
+  <form class="bo-form-row" novalidate aria-label="Spacious density">
+    <div class="bo-form-field">
+      <label class="bo-form-field__label" for="den-s1">Vendor (spacious)</label>
+      <input class="bo-input" id="den-s1" placeholder="44px controls" />
+    </div>
+    <div class="bo-form-field">
+      <label class="bo-form-field__label" for="den-s2">Status</label>
+      <select class="bo-select" id="den-s2"><option>Pending</option></select>
+    </div>
+  </form>
+</div>`;
+
+const seamless = `<p>Recorded value until hover/focus, then visibly a field:
+  <input class="bo-input bo-input--seamless" value="Acme Supply Co." aria-label="Vendor (inline edit)" />
+  — a form input first, at home in prose and detail views too.</p>`;
+
+const sections = `<form>
+  <fieldset class="bo-form-section">
+    <legend class="bo-form-section__legend">Vendor details</legend>
+    <div class="bo-form-row">
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="fs-name">Name</label>
+        <input class="bo-input" id="fs-name" />
+      </div>
+      <div class="bo-form-field">
+        <label class="bo-form-field__label" for="fs-vat">VAT ID</label>
+        <input class="bo-input bo-input--code" id="fs-vat" />
+      </div>
+    </div>
+  </fieldset>
+  <div class="bo-form-actions">
+    <button class="bo-btn bo-btn--secondary" type="button">Cancel</button>
+    <button class="bo-btn" type="submit">Save vendor</button>
+  </div>
+</form>`;
+
+const choices = `<div class="bo-cluster">
+  <label class="bo-choice"><input type="checkbox" class="bo-checkbox" checked /> Notify approver</label>
+  <label class="bo-choice"><input type="checkbox" class="bo-checkbox" disabled /> Disabled option</label>
+  <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" checked /> Normal</label>
+  <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" /> Urgent</label>
+</div>`;
+
 const fieldMarkup = `<div class="bo-form-field">
   <label class="bo-form-field__label" for="cc">Cost center</label>
   <input class="bo-input bo-input--code" id="cc" required
@@ -22,119 +128,35 @@ const fieldMarkup = `<div class="bo-form-field">
     make it announced.
   </p>
   <section class="demo">
-    <h2>Fields (error styling is pure CSS via <code>:has()</code>)</h2>
-    <form class="bo-form-row" novalidate>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="vendor">Vendor</label>
-        <input class="bo-input" id="vendor" required aria-describedby="vendor-hint" placeholder="Acme Supply Co." />
-        <span class="bo-form-field__hint" id="vendor-hint">Registered vendor name (required — note the automatic asterisk)</span>
-      </div>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="amount">Amount (USD)</label>
-        <input class="bo-input bo-input--numeric" id="amount" type="number" step="0.01" inputmode="decimal" value="4208.00" />
-      </div>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="cc">Cost center</label>
-        <input class="bo-input bo-input--code" id="cc" required aria-invalid="true" aria-describedby="cc-error" value="CC-XXXX" />
-        <span class="bo-form-field__message" id="cc-error" role="alert">Unknown cost center code</span>
-      </div>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="status">Status</label>
-        <select class="bo-select" id="status">
-          <option>Pending</option>
-          <option>Approved</option>
-          <option>Rejected</option>
-        </select>
-      </div>
-    </form>
+    <h2>Fields — label, hint, error</h2>
+    <Demo code={fieldsRow} />
+    <p class="bo-u-text-muted">The error visuals are pure CSS
+    (<code>:has()</code> on the field wrapper reads <code>aria-invalid</code>)
+    — the ARIA half (<code>aria-invalid</code> +
+    <code>aria-describedby</code> + <code>role="alert"</code>) is what makes
+    the error announced. Both halves are the contract.</p>
   </section>
   <section class="demo">
     <h2>Required & disabled</h2>
-    <form class="bo-form-row" novalidate>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="req-native">Vendor</label>
-        <input class="bo-input" id="req-native" required placeholder="required attribute" />
-        <span class="bo-form-field__hint">Asterisk from the native <code>required</code> attribute.</span>
-      </div>
-      <div class="bo-form-field bo-form-field--required">
-        <label class="bo-form-field__label" for="req-class">Approver</label>
-        <input class="bo-input" id="req-class" placeholder="--required class" />
-        <span class="bo-form-field__hint"><code>--required</code> class — for fields whose requiredness is enforced server-side only.</span>
-      </div>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="dis-input">PO number</label>
-        <input class="bo-input bo-input--code" id="dis-input" value="PO-88213" disabled />
-        <span class="bo-form-field__hint">Disabled — system-assigned, never editable here.</span>
-      </div>
-      <div class="bo-form-field">
-        <label class="bo-form-field__label" for="dis-select">Currency</label>
-        <select class="bo-select" id="dis-select" disabled><option>USD</option></select>
-        <span class="bo-form-field__hint">Disabled select — fixed by company policy.</span>
-      </div>
-    </form>
+    <Demo code={reqDisabled} />
   </section>
   <section class="demo">
     <h2>Density — the same row at compact vs spacious</h2>
-    <div data-density="compact">
-      <form class="bo-form-row" novalidate aria-label="Compact density">
-        <div class="bo-form-field">
-          <label class="bo-form-field__label" for="den-c1">Vendor (compact)</label>
-          <input class="bo-input" id="den-c1" placeholder="28px controls" />
-        </div>
-        <div class="bo-form-field">
-          <label class="bo-form-field__label" for="den-c2">Status</label>
-          <select class="bo-select" id="den-c2"><option>Pending</option></select>
-        </div>
-      </form>
-    </div>
-    <div data-density="spacious" style="margin-block-start: var(--bo-space-4)">
-      <form class="bo-form-row" novalidate aria-label="Spacious density">
-        <div class="bo-form-field">
-          <label class="bo-form-field__label" for="den-s1">Vendor (spacious)</label>
-          <input class="bo-input" id="den-s1" placeholder="44px controls" />
-        </div>
-        <div class="bo-form-field">
-          <label class="bo-form-field__label" for="den-s2">Status</label>
-          <select class="bo-select" id="den-s2"><option>Pending</option></select>
-        </div>
-      </form>
-    </div>
+    <Demo code={densityDemo} />
     <p class="bo-u-text-muted">One attribute on any wrapper — control heights, font
     sizes, and field gaps move together. Compact for back-office grids, spacious for
     touch/warehouse screens.</p>
   </section>
   <section class="demo">
     <h2>Seamless — inline edit that reads as text</h2>
-    <p>Recorded value until hover/focus, then visibly a field:
-      <input class="bo-input bo-input--seamless" value="Acme Supply Co." aria-label="Vendor (inline edit)" />
-      — the same input the <a href={base + '/components/data-table'}>data table</a> uses for
-      cell editing; it's a form input first, at home in prose and detail views too.</p>
-  </section>
-  <section class="demo">
-    <h2>Markup — the canonical field recipe</h2>
-    <pre><code>{fieldMarkup}</code></pre>
+    <Demo code={seamless} />
+    <p class="bo-u-text-muted">The same input the
+    <a href={base + '/components/data-table'}>data table</a> uses for cell
+    editing.</p>
   </section>
   <section class="demo">
     <h2>Sections &amp; the action bar</h2>
-    <form>
-      <fieldset class="bo-form-section">
-        <legend class="bo-form-section__legend">Vendor details</legend>
-        <div class="bo-form-row">
-          <div class="bo-form-field">
-            <label class="bo-form-field__label" for="fs-name">Name</label>
-            <input class="bo-input" id="fs-name" />
-          </div>
-          <div class="bo-form-field">
-            <label class="bo-form-field__label" for="fs-vat">VAT ID</label>
-            <input class="bo-input bo-input--code" id="fs-vat" />
-          </div>
-        </div>
-      </fieldset>
-      <div class="bo-form-actions">
-        <button class="bo-btn bo-btn--secondary" type="button">Cancel</button>
-        <button class="bo-btn" type="submit">Save vendor</button>
-      </div>
-    </form>
+    <Demo code={sections} />
     <p class="bo-u-text-muted">A <code>.bo-form-section</code> is a real
     <code>&lt;fieldset&gt;</code> (its legend is the group's accessible name), and
     <code>.bo-form-actions</code> sticks to the bottom — the framework sets
@@ -145,12 +167,11 @@ const fieldMarkup = `<div class="bo-form-field">
   </section>
   <section class="demo">
     <h2>Choices</h2>
-    <div class="bo-cluster">
-      <label class="bo-choice"><input type="checkbox" class="bo-checkbox" checked /> Notify approver</label>
-      <label class="bo-choice"><input type="checkbox" class="bo-checkbox" disabled /> Disabled option</label>
-      <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" checked /> Normal</label>
-      <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" /> Urgent</label>
-    </div>
+    <Demo code={choices} />
+  </section>
+  <section class="demo">
+    <h2>Markup — the canonical field recipe</h2>
+    <pre><code>{fieldMarkup}</code></pre>
   </section>
   <ClassRef component="form" />
   <ApiTable component="form"

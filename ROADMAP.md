@@ -769,6 +769,32 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 86 — /design-grill: the Forms page ("Data Input - forms", clarified by "next") (2026-08-21)
+
+The 85.0 wishlist note resolved to its natural reading: grill the Forms
+page, the remaining Data-input member after the Money/Quantity/Amount
+passes. Full report: `.roundtable/design-grill-forms-2026-08-21.md`.
+
+**86.1 — the page had no `Demo` component at all.** Six hand-written
+live demos with ZERO copyable code, plus a separately hand-maintained
+canonical-recipe string duplicating the error field — the exact
+"never write the preview and code twice" violation the house recipe
+warns about, on the page a first-time user most likely reads first.
+All six sections converted to `Demo` (one string → preview + code);
+the Markup section stays code-only, which IS the house pattern
+(checked against quantity/money before assuming). Verified live:
+`bo-form-row` occurrences doubled in the served page, error styling
+intact on the danger token in both themes.
+
+**86.2 — Markup moved 5/7 → last**, matching every family page.
+**86.3 — the mechanism-named first heading** ("error styling is pure
+CSS via :has()") retitled "Fields — label, hint, error"; the :has()
+fact and the ARIA half now live in a caption (the section previously
+had none — the only one on the page without).
+
+Checked and cleared: the Amount recipe (aligned in 77.4), both ApiTable
+notes, Related links, the opener.
+
 ## Slice 85 — Owner wishlist: joined ( qty | unit ) becomes Quantity's Basic (2026-08-21)
 
 Two wishlist notes, triaged mid-wake:
