@@ -782,6 +782,21 @@ adoption question is now fully answered rather than partially answered twice.
 
 ## Slice 94 — Review, improve and score the remaining 37 components (2026-08-21)
 
+**94.2 — the systemic Spacing finding (supersedes the per-component
+spacing halves of 92.5 and 94.1).** Eleven components scored across
+batches 1-2: **Spacing is 2 on eight of them and is the only dimension
+that has ever scored below 3.** Every instance is the same shape — an
+intrinsic, correct dimension literal (chevron box, chip padding,
+listbox max-height, action-bar clearance) written raw and uncommented.
+That is one habit, not eleven defects. **Resolution: comment each in
+place** stating why the number is intrinsic, rather than adding a token
+tier — these numbers genuinely are intrinsic (tokenizing a chevron's
+`1em` adds indirection without meaning), and the score is reporting
+that the *reasoning* is missing, not the token. Accept: every literal
+flagged by a batch carries its why-comment; affected components
+re-score to 3 on Spacing.
+
+
 Owner: start the loop on the rest of the surface — review, improve,
 score — holding the direction: **simplicity, right presentation to the
 user, make the complex simple**; grill in detail where a score comes
