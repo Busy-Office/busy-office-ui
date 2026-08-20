@@ -1031,6 +1031,13 @@ on the header). `check:po-app` 13/13 unchanged; live-verified in a
 `--no-cache` Podman rebuild — `getComputedStyle` confirmed the span's
 `white-space`/`max-inline-size`, and the column-hide checkbox still
 correctly hides the `<td>` (not just the inner span) post-change.
+Initial verification only covered `/pos` in light theme; a second pass
+closed the gap explicitly — `/spend` checked too, and dark theme
+confirmed by `body`'s computed `background-color` (`rgb(15,17,21)`,
+the dark canvas token) rather than a JS-toggled screenshot alone, since
+`data-theme` doesn't persist across a po-app navigation the way it does
+on the docs site. All four combinations (`/pos`/`/spend` × light/dark)
+verified.
 
 ## Slice 71 — Owner ask: server-controlled conditional cell tone (2026-08-20)
 
