@@ -23,11 +23,37 @@ claims against ROADMAP.md before trusting them.**
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
-- **`npm publish -w @busy-office/ui`** — 0.2.0 is tagged, `npm pack`-verified and
-  CI-green; the registry still serves **0.1.1**. npm in this environment is
-  unauthenticated (E401), so publishing is owner-triggered and cannot be done
-  from a wake. Everything from Slice 24 onward is in the repo and in nobody's
-  `node_modules`. Restated in 10 consecutive Objective grills now.
+- **0.3.0 is PREPARED AND TAGGED, awaiting two owner actions (2026-08-21).**
+  This entry replaces the ten-grill-old "0.2.0 is tagged" one, which had become
+  actively misleading: the tarball built at HEAD was *labelled* 0.2.0 but
+  carried 304 commits of post-tag work, so publishing it would have made the
+  version number permanently wrong. Owner chose 0.3.0.
+
+  Done in-wake: version bumped, CHANGELOG cut as `0.3.0 (2026-08-21)` with the
+  0.1.1-upgrade note, `DESIGN.md`'s `data-day` rationale corrected before the
+  release could falsify it, tag `v0.3.0` created at `24c6e7d`, every gate green
+  at 0.3.0 (core build, 110 tests, docs build), tarball packs as
+  `busy-office-ui-0.3.0.tgz` (173 files, 220.9 kB), and the workflow's
+  tag-vs-package guard simulated green.
+
+  **Not pushed, not published.** The two remaining steps are the owner's:
+
+  ```
+  git push origin main && git push origin v0.3.0
+  gh release create v0.3.0 --title "0.3.0" --notes-from-tag
+  ```
+
+  Publishing does NOT need `npm login` — `.github/workflows/publish.yml` uses
+  **Trusted Publishing (OIDC)**, no token and no OTP; publishing the GitHub
+  Release is the trigger, and it re-runs every gate from a clean checkout
+  before `npm publish`. npm in a wake's environment is unauthenticated (E401)
+  and always will be, so this handoff shape is permanent, not a one-off.
+
+  **Optional, and deliberately not done:** the docs version snapshot
+  (`node apps/docs/scripts/cut-version-snapshot.mjs 0.3.0`, ~4.3 MB committed).
+  0.2.0 skipped it too — `apps/docs/versions/` holds only `0.1.1` — so the
+  version switcher will offer 0.1.1 and latest, not 0.3.0. Cheap to add later;
+  say the word.
 - **30.4b** — windowed list (the 50,000-record ask). Scope/Accept criteria are
   fully written (`ROADMAP.md:4274`); owner explicitly **deferred to the next
   publish cycle** (2026-08-20) rather than building now — not a build-now item
