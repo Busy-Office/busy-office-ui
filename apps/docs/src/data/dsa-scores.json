@@ -634,8 +634,8 @@
           "cite": "no raw font-size"
         },
         "colour": {
-          "score": 2,
-          "cite": "::backdrop hardcodes rgb(0 0 0 / 0.4) — the scrim is the one colour in the framework with no token, and dialog.css repeats the same literal (roadmap 94.6)"
+          "score": 3,
+          "cite": "::backdrop now consumes --bo-color-scrim, the shared token added in the 94.6a sweep; zero raw colour, and the scrim is deliberately not theme-remapped (a scrim pushes the page back rather than tinting a surface)"
         },
         "spacing": {
           "score": 2,
@@ -655,7 +655,6 @@
         }
       },
       "improve": [
-        "Tokenize the shared modal scrim (roadmap 94.6)",
         "Comment the 18rem panel width (roadmap 94.6)"
       ]
     },
@@ -707,8 +706,8 @@
           "cite": "--bo-font-size-md on the title; no raw font-size"
         },
         "colour": {
-          "score": 2,
-          "cite": "::backdrop hardcodes rgb(0 0 0 / 0.4), untokenized and duplicated verbatim in offcanvas.css (roadmap 94.6)"
+          "score": 3,
+          "cite": "::backdrop now consumes --bo-color-scrim, the shared token added in the 94.6a sweep; zero raw colour, and the scrim is deliberately not theme-remapped (a scrim pushes the page back rather than tinting a surface)"
         },
         "spacing": {
           "score": 2,
@@ -728,7 +727,6 @@
         }
       },
       "improve": [
-        "Tokenize the shared modal scrim (roadmap 94.6)",
         "Comment the 32rem/56rem width caps (roadmap 94.6)"
       ]
     },

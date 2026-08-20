@@ -998,6 +998,17 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        Neither is a per-component defect; both are one habit seen across the
        family, which is why the unit of work is a family.
 
+       **(a) DONE 2026-08-21 (Standardize sweep).** `--bo-color-scrim` added
+       to `color.css`; both `::backdrop` rules consume it and no raw scrim
+       literal remains in `src`. Deliberately **not** remapped for dark, and
+       the token's comment says why: the interaction overlays beside it invert
+       because they tint a surface, whereas a scrim pushes the whole page
+       back, so a white scrim in dark mode would lift the background toward
+       the panel. Proved a no-op rather than assumed — computed `::backdrop`
+       is `rgba(0, 0, 0, 0.4)` in **both** themes on a real opened dialog,
+       identical to the literal it replaced. `dialog` and `offcanvas` re-score
+       to `Colour: 3`. Original text follows.
+
        **(a) The modal scrim is the framework's only untokenized colour, and
        it is duplicated.** `rgb(0 0 0 / 0.4)` is written verbatim in
        `dialog.css:20` and `offcanvas.css:28` — the only two `::backdrop`
