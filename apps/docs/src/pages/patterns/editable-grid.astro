@@ -16,7 +16,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
       <td>
         <!-- Combobox in a cell: no special wiring, just the normal markup -->
         <div class="bo-combobox">
-          <input class="bo-input bo-input--seamless" role="combobox" id="line-1-item"
+          <input class="bo-input" role="combobox" id="line-1-item"
               aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
               autocomplete="off" aria-label="Item" value="Steel bracket, 40mm" />
           <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
@@ -29,14 +29,14 @@ const markup = `<table class="bo-data-table" data-row-edit>
         <!-- Cell-level error: .bo-form-field wraps the input + message pair
              (the SAME contract as a standalone form field — no new CSS) -->
         <div class="bo-form-field" style="margin-block-end: 0">
-          <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+          <input class="bo-input bo-input--numeric" type="number"
               value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
               aria-label="Quantity" />
           <span class="bo-form-field__message" id="line-1-qty-err" role="alert">Exceeds on-hand (200)</span>
         </div>
       </td>
       <td class="bo-data-table__col--numeric">
-        <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+        <input class="bo-input bo-input--numeric" type="number"
             step="0.01" value="3.40" aria-label="Unit price" />
       </td>
       <td class="bo-data-table__row-edit-actions">
@@ -117,7 +117,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
           <tr data-row-id="LINE-1">
             <td>
               <div class="bo-combobox">
-                <input class="bo-input bo-input--seamless" role="combobox" id="line-1-item"
+                <input class="bo-input" role="combobox" id="line-1-item"
                     aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
                     autocomplete="off" aria-label="Item" value="Steel bracket, 40mm" />
                 <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
@@ -128,14 +128,14 @@ const markup = `<table class="bo-data-table" data-row-edit>
             </td>
             <td class="bo-data-table__col--numeric">
               <div class="bo-form-field" style="margin-block-end: 0">
-                <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+                <input class="bo-input bo-input--numeric" type="number"
                     value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
                     aria-label="Quantity" />
                 <span class="bo-form-field__message" id="line-1-qty-err" role="alert">Exceeds on-hand (200)</span>
               </div>
             </td>
             <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+              <input class="bo-input bo-input--numeric" type="number"
                   step="0.01" value="3.40" aria-label="Unit price" />
             </td>
             <RowEditActions row="line 1 (Steel bracket)">
@@ -149,7 +149,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
       <tr data-row-id="">
         <td>
           <div class="bo-combobox">
-            <input class="bo-input bo-input--seamless" role="combobox"
+            <input class="bo-input" role="combobox"
                 aria-expanded="false" aria-controls="line-1-list" aria-autocomplete="list"
                 autocomplete="off" aria-label="Item" placeholder="Search items…" />
             <ul class="bo-combobox__listbox" id="line-1-list" role="listbox" popover>
@@ -159,10 +159,10 @@ const markup = `<table class="bo-data-table" data-row-edit>
           </div>
         </td>
         <td class="bo-data-table__col--numeric">
-          <input class="bo-input bo-input--seamless bo-input--numeric" type="number" value="0" aria-label="Quantity" />
+          <input class="bo-input bo-input--numeric" type="number" value="0" aria-label="Quantity" />
         </td>
         <td class="bo-data-table__col--numeric">
-          <input class="bo-input bo-input--seamless bo-input--numeric" type="number" step="0.01" value="0.00" aria-label="Unit price" />
+          <input class="bo-input bo-input--numeric" type="number" step="0.01" value="0.00" aria-label="Unit price" />
         </td>
         <RowEditActions row="new line">
             <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
@@ -332,9 +332,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
             <td>Hydraulic pump, 20&nbsp;bar</td>
             <td class="bo-data-table__col--numeric">
               <div class="bo-quantity" style="max-inline-size: 14rem">
-                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-                <input class="bo-quantity__input bo-input--seamless" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
-                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
+                <input class="bo-quantity__input" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
                 <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
                   <option selected>kg</option><option>each</option><option>box</option>
                 </select>
@@ -345,7 +343,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
                 <select class="bo-select bo-money__currency" aria-label="Currency">
                   <option selected>USD</option><option>SGD</option><option>JPY</option><option>KWD</option>
                 </select>
-                <input class="bo-input bo-input--seamless bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Unit price" />
+                <input class="bo-input bo-input--numeric bo-money__amount" type="number" step="0.01" value="1250.00" aria-label="Unit price" />
               </div>
             </td>
             <RowEditActions row="Hydraulic pump" />
@@ -383,16 +381,16 @@ const markup = `<table class="bo-data-table" data-row-edit>
         </tr></thead>
         <tbody>
           <tr data-row-id="ADV-1">
-            <td><input class="bo-input bo-input--seamless" name="line" value="Bearing kit" aria-label="Line description" /></td>
+            <td><input class="bo-input" name="line" value="Bearing kit" aria-label="Line description" /></td>
             <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="2.50" aria-label="Quantity" />
+              <input class="bo-input bo-input--numeric" name="qty" type="number" step="0.01" value="2.50" aria-label="Quantity" />
             </td>
             <td>
               <select class="bo-select" name="status" aria-label="Status">
                 <option selected>Open</option><option>Approved</option><option>On hold</option>
               </select>
             </td>
-            <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-08-30" aria-label="Needed by" /></td>
+            <td><input class="bo-input" name="due" type="date" value="2026-08-30" aria-label="Needed by" /></td>
             <td><input class="bo-checkbox" name="rush" type="checkbox" aria-label="Rush order" /></td>
             <td>
               <div class="bo-tag-input" id="adv-1-tags" role="group" aria-label="Cost centers — Bearing kit">
@@ -407,16 +405,16 @@ const markup = `<table class="bo-data-table" data-row-edit>
             </td>
           </tr>
           <tr data-row-id="ADV-2">
-            <td><input class="bo-input bo-input--seamless" name="line" value="Seal ring set" aria-label="Line description" /></td>
+            <td><input class="bo-input" name="line" value="Seal ring set" aria-label="Line description" /></td>
             <td class="bo-data-table__col--numeric">
-              <input class="bo-input bo-input--seamless bo-input--numeric" name="qty" type="number" step="0.01" value="5.00" aria-label="Quantity" />
+              <input class="bo-input bo-input--numeric" name="qty" type="number" step="0.01" value="5.00" aria-label="Quantity" />
             </td>
             <td>
               <select class="bo-select" name="status" aria-label="Status">
                 <option>Open</option><option selected>Approved</option><option>On hold</option>
               </select>
             </td>
-            <td><input class="bo-input bo-input--seamless" name="due" type="date" value="2026-09-05" aria-label="Needed by" /></td>
+            <td><input class="bo-input" name="due" type="date" value="2026-09-05" aria-label="Needed by" /></td>
             <td><input class="bo-checkbox" name="rush" type="checkbox" checked aria-label="Rush order" /></td>
             <td>
               <div class="bo-tag-input" id="adv-2-tags" role="group" aria-label="Cost centers — Seal ring set">
@@ -570,7 +568,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
         </tr></thead>
         <tbody>
           <tr data-row-id="LIVE-1">
-            <td><input class="bo-input bo-input--seamless" name="line" value="Gasket sheet" aria-label="Line description" /></td>
+            <td><input class="bo-input" name="line" value="Gasket sheet" aria-label="Line description" /></td>
             <td>
               <select class="bo-select" name="status" aria-label="Status">
                 <option selected>Open</option><option>Approved</option>
@@ -620,7 +618,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
           <tr data-row-id="PO-L1">
             <td>
               <div class="bo-combobox">
-                <input class="bo-input bo-input--seamless" role="combobox" name="product"
+                <input class="bo-input" role="combobox" name="product"
                     aria-expanded="false" aria-controls="comp-l1-prod-list" aria-autocomplete="list"
                     autocomplete="off" aria-label="Product — line 1" value="Steel bracket, 40mm" />
                 <ul class="bo-combobox__listbox" id="comp-l1-prod-list" role="listbox" popover>
@@ -632,9 +630,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
             </td>
             <td class="bo-data-table__col--numeric">
               <div class="bo-quantity" style="max-inline-size: 13rem">
-                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-                <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="4" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
-                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
+                <input class="bo-quantity__input" name="qty" type="number" value="4" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
                 <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
                   <option selected>each</option><option>box</option><option>kg</option>
                 </select>
@@ -645,7 +641,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
                 <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
                   <option selected>USD</option><option>SGD</option><option>JPY</option>
                 </select>
-                <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="12.40" aria-label="Unit price" />
+                <input class="bo-input bo-input--numeric bo-money__amount" name="price" type="number" step="0.01" value="12.40" aria-label="Unit price" />
               </div>
             </td>
             <td class="bo-data-table__col--numeric" data-line-total>49.60</td>
@@ -664,7 +660,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
           <tr data-row-id="PO-L2">
             <td>
               <div class="bo-combobox">
-                <input class="bo-input bo-input--seamless" role="combobox" name="product"
+                <input class="bo-input" role="combobox" name="product"
                     aria-expanded="false" aria-controls="comp-l2-prod-list" aria-autocomplete="list"
                     autocomplete="off" aria-label="Product — line 2" value="Hydraulic pump, 20 bar" />
                 <ul class="bo-combobox__listbox" id="comp-l2-prod-list" role="listbox" popover>
@@ -675,9 +671,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
             </td>
             <td class="bo-data-table__col--numeric">
               <div class="bo-quantity" style="max-inline-size: 13rem">
-                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-                <input class="bo-quantity__input bo-input--seamless" name="qty" type="number" value="2" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
-                <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
+                <input class="bo-quantity__input" name="qty" type="number" value="2" min="0" step="1" inputmode="numeric" aria-label="Quantity" />
                 <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
                   <option selected>each</option><option>box</option>
                 </select>
@@ -688,7 +682,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
                 <select class="bo-select bo-money__currency" name="cur" aria-label="Currency">
                   <option selected>USD</option><option>SGD</option><option>JPY</option>
                 </select>
-                <input class="bo-input bo-input--seamless bo-money__amount" name="price" type="number" step="0.01" value="860.00" aria-label="Unit price" />
+                <input class="bo-input bo-input--numeric bo-money__amount" name="price" type="number" step="0.01" value="860.00" aria-label="Unit price" />
               </div>
             </td>
             <td class="bo-data-table__col--numeric" data-line-total>1720.00</td>

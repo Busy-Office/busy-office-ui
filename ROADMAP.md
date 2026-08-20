@@ -769,6 +769,27 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 90 — /design-grill: the three editing designs (2026-08-21)
+
+Owner ask: grill the editable design across standalone field / data
+table / editable table for simplicity and context-fit. Full report:
+`.roundtable/design-grill-editing-designs-2026-08-21.md`. Verdict on
+the three-way split itself: KEEP — bordered form for entry, seamless +
+row Save/Cancel for read-mostly correction, WYSIWYG grid for entry
+that must look like the read view; each design's reason is the
+affordance rule the design-language page already states. The failures
+were execution: **90.1** editable-grid mixed the designs inside single
+demos (seamless inputs beside bordered selects — the boxed-USD/naked-
+number oddity from the owner's screenshot); every non-WYSIWYG section
+is now bordered, WYSIWYG stays fully seamless as its deliberate
+variant. **90.2** six stepper buttons in dense entry rows contradicted
+Slice 88's own fresh doctrine; removed — qty cells collapse to the
+joined ( qty | unit ). **90.3** no chooser existed across the four
+pages; "Choosing the editing design" added to /components/
+inline-editing (job → design → why, plus the independent save-timing
+axis). All verified live including the bordered-vs-seamless computed
+split on one page load.
+
 ## Slice 89 — Owner screenshot report: two shipped defects in the dirty row-edit row (2026-08-21)
 
 Owner posted a screenshot of the editable-grid "Money & unit cells"
