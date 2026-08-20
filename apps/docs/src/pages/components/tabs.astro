@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const tabsMarkup = `<div class="bo-tabs">
   <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
     <button class="bo-tabs__tab" role="tab" id="t-details"
@@ -184,5 +185,6 @@ const verticalTabs = ['General','Addresses','Contacts','Payment terms','Bank det
     js="REQUIRED: initTabs() — without it tabs 2+ are keyboard-unreachable and inert; there is no CSS-only fallback."
     notes={['ARIA contract: role=tablist/tab/tabpanel, aria-controls/aria-labelledby, panels hidden via the <code>hidden</code> attribute; add <code>role="list"</code> where lists are styled.',
             'Arrow keys are RTL-aware; activation is automatic on focus move.']} />
+  <DsaScore component="tabs" />
   <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

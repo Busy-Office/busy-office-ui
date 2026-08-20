@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
   <div class="bo-sidebar-nav__section">
@@ -106,6 +107,7 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
     'Collapse is driven by a named container query on the shell — the same sidebar behaves correctly inside a split view, which a media query cannot do.',
     'Sections (<code>__section</code> + <code>__heading</code>) group modules; headings hide with the labels when the rail collapses.',
   ]} />
+  <DsaScore component="sidebar-nav" />
   <Related links={[
     ['/base/primitives', 'App shell'],
     ['/concepts/container-queries', 'Container queries'],

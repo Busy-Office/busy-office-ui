@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
         data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
@@ -103,6 +104,7 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     'Give it an accessible name with <code>aria-labelledby</code> pointing at the header title.',
     'A drawer is modal: while it is open the page behind is inert. For a panel that must stay open alongside the content, use a layout column, not a drawer.',
   ]} />
+  <DsaScore component="offcanvas" />
   <Related links={[
     ['/components/dialog', 'Dialog'],
     ['/components/sidebar-nav', 'Sidebar navigation'],

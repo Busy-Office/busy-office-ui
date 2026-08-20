@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const breadcrumbMarkup = `<nav aria-label="Breadcrumb">
   <ol class="bo-breadcrumb">
@@ -49,6 +50,7 @@ const breadcrumbMarkup = `<nav aria-label="Breadcrumb">
     'Mark the current page with <code>aria-current="page"</code> and render it as text, not a link.',
     'Separators are CSS, not characters in your markup — so they never end up in a screen reader\'s output or a copy-paste.',
   ]} />
+  <DsaScore component="breadcrumb" />
   <Related links={[
     ['/components/navbar', 'Navbar'],
     ['/components/sidebar-nav', 'Sidebar navigation'],

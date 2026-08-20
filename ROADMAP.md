@@ -884,7 +884,37 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        resolves to compact's `1.875rem` — explicit density correctly beating
        auto-compaction, which is a live confirmation of 94.3's analysis.
 
-3. [ ] **94.5 — the "not yet scored" line has never rendered on any page.**
+3. [ ] **94.6 — batch 3's two family-level findings (Navigation & layout).**
+       Neither is a per-component defect; both are one habit seen across the
+       family, which is why the unit of work is a family.
+
+       **(a) The modal scrim is the framework's only untokenized colour, and
+       it is duplicated.** `rgb(0 0 0 / 0.4)` is written verbatim in
+       `dialog.css:20` and `offcanvas.css:28` — the only two `::backdrop`
+       rules that exist — and no `--bo-color-scrim` token exists (searched:
+       the only overlay tokens are `--bo-state-hover-overlay` and
+       `--bo-state-active-overlay`). It is also the one colour deliberately
+       outside the theme system, since a scrim should darken in both themes.
+       **Accept:** either add one semantic token both rules consume (which
+       also lets a consumer tune scrim weight, a real ERP ask), or state in
+       both files why the literal is correct and deliberately shared — but
+       not leave the same magic value in two places with no explanation.
+       Scored as `Colour: 2` on both until then.
+
+       **(b) The 94.2 spacing habit is framework-wide, not batch-1-2-wide.**
+       Every component in this family except `breadcrumb` carries an
+       uncommented intrinsic dimension literal: `navbar` 3rem bar height,
+       `sidebar-nav` 14rem/3.25rem rail widths, `offcanvas` 18rem panel,
+       `dialog` 32rem/56rem caps, `tabs` 2.5rem fade + 2px underline, `icon`
+       -0.125em baseline nudge. 94.2 fixed the ten components batches 1-2 had
+       scored and drew the right conclusion — one habit, not N defects — but
+       scoped the fix to the components already scored. **Accept:** comment
+       each in place as 94.2 did, at the point each family is scored rather
+       than as one sweep, so the comment is written by someone who has just
+       read the component. `breadcrumb` is the proof it is achievable: zero
+       raw dimension literals, 100%.
+
+4. [ ] **94.5 — the "not yet scored" line has never rendered on any page.**
        Found while wiring `date`. `DsaScore.astro`'s else-branch is documented
        (93.1) as a deliberate judgment call: "an unscored component renders an
        honest 'not yet scored' line, not nothing — absence should read as 'not

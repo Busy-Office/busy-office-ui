@@ -516,6 +516,257 @@
       "improve": [
         "Removed at the next major; until then the page documents the .bo-cluster replacement (roadmap 45.3, CHANGELOG Deprecated)"
       ]
+    },
+    "navbar": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a layout bar: brand link + flex spacer, introduces no affordance of its own"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "no raw font-size; weight via --bo-font-weight-semibold"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour — surface/border/text all tokens"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "min-block-size: 3rem is an uncommented intrinsic bar height (navbar.css:6) — the 94.2 habit, outside batches 1-2 scope"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a container: it holds controls but introduces none of its own"
+        },
+        "content": {
+          "score": 3,
+          "cite": "@media print drops it — chrome does not belong on paper"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the app top bar; po-app uses it at 3 sites (examples/po-app/server.mjs)"
+        }
+      },
+      "improve": [
+        "Comment the 3rem bar height (roadmap 94.6)"
+      ]
+    },
+    "sidebar-nav": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "links only; current page via aria-current=\"page\" plus weight+fill, never colour alone"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-density-font-size on links; the 0.05em letter-spacing is intrinsic (same basis as combobox/form)"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; hover/current use state + accent tokens"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "14rem rail and the 3.25rem collapsed width are uncommented; the 1.3em icon slot DOES carry its measured reason"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "@container bo-shell collapse hides labels VISUALLY (clip-path), not display:none, so every link keeps its accessible name"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the wrap-not-truncate rule cites the measured 15.7px spill it fixed (owner QA, 2026-08-17)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the shell rail; po-app uses it at 6 sites, and it composes inside .bo-offcanvas for the drawer pattern"
+        }
+      },
+      "improve": [
+        "Comment the 14rem/3.25rem rail widths (roadmap 94.6)"
+      ]
+    },
+    "breadcrumb": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a trail of links; the current crumb is deliberately NOT a link"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-font-size-sm only, no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; current page carries weight + primary ink, not colour alone"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "zero raw dimension literals — every gap from a space token"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "plain links; no behavior ships for it"
+        },
+        "content": {
+          "score": 3,
+          "cite": "separator is content(\"/\" / \"\") with an EMPTY accessible name, so it is not read between every crumb"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "deep ERP hierarchies (cost center -> PO -> line); used in 2 of 19 pattern screens"
+        }
+      }
+    },
+    "offcanvas": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "an edge sheet; its header holds a close control and nothing competes with it"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "no raw font-size"
+        },
+        "colour": {
+          "score": 2,
+          "cite": "::backdrop hardcodes rgb(0 0 0 / 0.4) — the scrim is the one colour in the framework with no token, and dialog.css repeats the same literal (roadmap 94.6)"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "inline-size: min(18rem, 85vw) is an uncommented intrinsic panel width"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "reuses the dialog wiring wholesale (backdrop, Esc, focus-return, Tab loop); translate is physical so RTL gets explicit animation overrides"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the opener states it IS a dialog, so the composition is discoverable rather than a parallel mechanism"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the drawer-nav pattern — a sidebar-nav inside it at phone width; used in 1 pattern screen"
+        }
+      },
+      "improve": [
+        "Tokenize the shared modal scrim (roadmap 94.6)",
+        "Comment the 18rem panel width (roadmap 94.6)"
+      ]
+    },
+    "tabs": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "aria-selected is the contract; the chevron/underline is decoration"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "no raw font-size; sizes from density"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "the nine #000 are MASK alpha inside linear-gradient(), not theme colour — a mask fades to transparency precisely so no cover colour is assumed; reconciled, not a raw-hex defect"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the 2.5rem fade distance and the 2px underline weight are uncommented, though the mask MECHANISM is explained at length"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "ARIA tabs with roving tabindex + arrow keys from initTabs(); the overflow affordance was chosen after measuring that scrollbar-color and ::-webkit-scrollbar reserved no space on macOS (30.1)"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the mask comment states why a background fade would be wrong (list sits on canvas in docs, surface in a card) and why it is NOT applied to data-table"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "vertical variant is the ERP settings left-rail shape (36.1); used in 2 pattern screens"
+        }
+      },
+      "improve": [
+        "Comment the 2.5rem fade distance (roadmap 94.6)"
+      ]
+    },
+    "dialog": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "__footer is end-aligned and holds at most one primary action"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-font-size-md on the title; no raw font-size"
+        },
+        "colour": {
+          "score": 2,
+          "cite": "::backdrop hardcodes rgb(0 0 0 / 0.4), untokenized and duplicated verbatim in offcanvas.css (roadmap 94.6)"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the 32rem / 56rem--wide caps are uncommented intrinsic dialog widths"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "native <dialog>: backdrop, Esc and focus-return come from the platform; behaviors/dialog.ts adds only trigger wiring and data-state sync"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the forced-colors rule states WHY it exists — the panel edge is box-shadow only, which forced-colors does not render"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the modal context; po-app uses it at 13 sites, the heaviest real usage in this family"
+        }
+      },
+      "improve": [
+        "Tokenize the shared modal scrim (roadmap 94.6)",
+        "Comment the 32rem/56rem width caps (roadmap 94.6)"
+      ]
+    },
+    "icon": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "decorative by default (aria-hidden); an icon-only control labels ITSELF, never via the icon"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "1em square, so glyphs track the surrounding font size and therefore density with no per-tier rule"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "painted by background-color: currentcolor; the %23000 inside the data URIs is SVG stroke under a MASK and is never painted"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "vertical-align: -0.125em is an uncommented intrinsic baseline nudge; the 1em box does carry its reason"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a decorative span; it introduces no interaction surface"
+        },
+        "content": {
+          "score": 3,
+          "cite": "names --bo-icon-src as THE mechanism and quantifies the refusal — 12 glyphs are 7,898 bytes (10.3% of the framework); 200 would add ~129 kB (40.1)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "12 ERP glyphs proving a mechanism, not a catalogue; 4 are deprecated with the data-URI replacement documented"
+        }
+      },
+      "improve": [
+        "Comment the -0.125em baseline nudge (roadmap 94.6)"
+      ]
     }
   }
 }

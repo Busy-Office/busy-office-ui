@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Demo from '../../components/Demo.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'grid'];
@@ -200,5 +201,6 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
       'Forced-colors: mask icons vanish by default (the paint is a background-color, which forced colors override) — the shipped opt-out repaints them in <code>CanvasText</code>.',
     ]}
   />
+  <DsaScore component="icon" />
   <Related links={[["/components/sidebar-nav", "Sidebar navigation"], ["/patterns/app-launch", "App launch pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>
