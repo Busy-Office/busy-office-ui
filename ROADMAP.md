@@ -769,6 +769,34 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 84 — wake triage-noticing: Slices 71-81 shipped no CHANGELOG entries (2026-08-21)
+
+Loop re-armed after a pause; first wake found every open item
+owner-blocked, both counters fresh — and one real gap noticed, not
+manufactured: `git log --since` on `CHANGELOG.md` was EMPTY for the
+entire 71-81 stretch, while those slices shipped genuine publishable
+surface: two new behaviors (`initStickyCols`, `initContextMenu`), three
+new attributes (`data-tone`, `data-tone-text`, `data-sticky-cols`,
+`data-context-menu`), a utility (`.bo-u-text-nowrap`), and observable
+rendering fixes (quantity's UA-chrome absorption, the hover ring, the
+tabular inversion, the joined unit). The next `npm publish` would have
+shipped all of it silently — against the project's own policy (every
+release is a real version bump with CHANGELOG entries).
+
+**84.1 — eight entries written into Unreleased**, house style, each with
+roadmap provenance. Every claim spot-checked against CURRENT source
+before landing (a CHANGELOG claim is load-bearing): two anomalies
+surfaced and reconciled rather than trusted — a `data-sticky-cols="1"`
+grep hit turned out to be the comment explaining that value's removal
+(the prose naming a removal is supposed to), and a tabular-figures zero
+turned out to be a too-short grep window (the declaration is present at
+`quantity.css:41`). The 78.1 entry carries an explicit **visible
+change** callout since every existing consumer's quantity inputs gain
+the token box they were always meant to have.
+
+**Exit:** Unreleased now covers the full 71-81 surface; nothing ships
+silently at the next publish.
+
 ## Slice 83 — /design-grill: the "Data input" and "Values" groups (2026-08-21)
 
 Group-level grill after 76.2's taxonomy fix: judge both sidebar groups

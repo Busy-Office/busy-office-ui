@@ -8,6 +8,67 @@ pin.
 
 ## Unreleased
 
+- **Added** (`data-table`): `data-tone="danger|warning|success"` on any
+  `<td>` tints that one cell — subtle background plus an inset accent, the
+  same two-channel shape row-state uses, per-cell. The server decides the
+  condition (a negative balance, a threshold, any rule); the framework only
+  paints it. Opt-in `data-tone-text` alongside it also tints the text with
+  the matching `-text` token. CSS-only, works on server-rendered HTML and
+  htmx swaps with no behavior running. Forced-colors swaps the accent to a
+  real border, same as row-state. (roadmap 71.1, 72.2)
+
+- **Added** (`data-table`): `data-sticky-cols="2|3"` + `initStickyCols()`
+  freeze the first two or three columns. The behavior measures the header
+  row, writes `--bo-sticky-w-1/-w-2` on the `<table>`, and keeps offsets
+  live via `ResizeObserver` — needed because `table-layout` is auto, so
+  column widths aren't known until rendered. ONE frozen column stays the
+  zero-JS `.bo-data-table--sticky-col`; `data-sticky-cols="1"` is
+  deliberately not a value (it would duplicate the modifier). (72.1, 74)
+
+- **Added** (`dropdown`): `initContextMenu()` + `data-context-menu="menu-id"`
+  open an existing `.bo-dropdown__menu` popover at the cursor on
+  right-click (native context menu suppressed). Positioning only — menu
+  items wire to mechanisms that already exist (`data-col-toggle`,
+  `aria-sort` controls); the menu markup must live inside the same
+  container as what it targets, same as any `data-col-toggle`. (73.1)
+
+- **Fixed** (`data-table`): hovered rows now draw a 1px outline ring in
+  addition to the fill change — previously a striped even row showed ZERO
+  visible hover (the hover and stripe fills are the same token by design,
+  for sticky-cell opacity) and a `data-tone` cell never reflected row
+  hover at all (its own `--bo-cell-bg` wins, by design). The ring is a
+  channel independent of fill, so hover survives both. (73.2)
+
+- **Added** (utilities): `.bo-u-text-nowrap` — plain `white-space: nowrap`
+  with no clipping (distinct from `.bo-u-text-truncate`, which commits to
+  a width and ellipsizes). Inherited: on a `<table>` it applies table-wide,
+  on one cell it's column-scoped. (73.3)
+
+- **Fixed** (`quantity`): the input now renders tabular figures — the
+  `font-variant-numeric` declaration sat on the digit-less +/− buttons
+  instead of the element showing the number, exactly inverted from
+  intent. (77.1)
+
+- **Fixed** (`quantity`): `.bo-quantity__input` shipped with NO framework
+  box styling — the browser drew its border (2px inset), background (UA
+  dark gray, not a token), and padding (2px), differing across browsers
+  and off-token in both themes; 15 call sites had drifted into three
+  class compositions, including "seamless" cells whose transparent border
+  had nothing consuming it. Now absorbed into `.bo-input`'s own selectors
+  (base, `::placeholder`, `:disabled`, `[aria-invalid]`), repairing every
+  existing call site with zero markup changes. **Visible change:**
+  quantity inputs gain the token border, surface background, and standard
+  inline padding they were always meant to have. (78.1)
+
+- **Added** (`quantity`): the +/− step buttons are officially optional —
+  a button-less field keeps its rounded corners
+  (`:not(:has(.bo-quantity__step))`), and with a `__unit-select` it joins
+  into one ( qty | unit ) control, the mirror of Money's
+  ( currency | amount ) joint. Documented markup now carries
+  `tabindex="-1"` on the step buttons: ↑/↓ on the input already steps
+  natively, so each field costs one tab stop instead of three; existing
+  markup without it keeps working unchanged. (80.1, 81.1)
+
 - **Fixed** (`.bo-stepper__label`): a squeezed mid-range container silently
   dropped characters. `text-overflow: ellipsis` truncated labels even above the
   component's own 480px "hide labels" threshold — measured at a 558px
