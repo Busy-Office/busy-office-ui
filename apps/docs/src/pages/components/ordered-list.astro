@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const defaultList = `<ol class="bo-ordered-list">
   <li>SKU-3391 · Standing desk (×4)</li>
@@ -74,5 +75,6 @@ const markup = `<!-- default: mono, for codes/amounts -->
     notes={['Native <code>&lt;ol&gt;</code> — order is real semantics; the marker is the number, not CSS content.',
             'Default is monospace for codes/amounts; add <code>--plain</code> for prose.',
             'Row action buttons are inert markup — wire reorder/remove yourself; give each a row-specific aria-label.']} />
+  <DsaScore component="ordered-list" />
   <Related links={[["/components/byline", "Byline"], ["/components/badge", "Badge"], ["/patterns/record-detail", "Record detail pattern"]]} />
 </Gallery>

@@ -4,6 +4,7 @@ import { invoiceRows } from '../../lib/fixtures';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const poAppHref = 'https://github.com/Busy-Office/busy-office-ui/tree/main/examples/po-app';
 const tableMarkup = `<!-- tabindex="0": the container scrolls when the table
@@ -592,5 +593,6 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     initStickyCols();
     initContextMenu();
   </script>
+  <DsaScore component="data-table" />
   <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/patterns/editable-grid", "Editable grid pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

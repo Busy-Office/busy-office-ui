@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -133,6 +134,7 @@ const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
       'Composes with everything .bo-data-table has — numeric columns, badges, row states; it IS a data table.',
     ]}
   />
+  <DsaScore component="tree-table" />
   <Related links={[
     ['/components/tree', 'Tree (hierarchy navigation)'],
     ['/components/data-table', 'Data table'],

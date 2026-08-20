@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const pgMarkup = `<div class="bo-data-table__footer">
   <label class="bo-choice">Rows
     <select class="bo-select" aria-label="Rows per page">
@@ -116,5 +117,6 @@ const pgMarkup = `<div class="bo-data-table__footer">
     notes={['Current page carries <code>aria-current="page"</code>; navigation itself is your links/HTMX.',
             'The table footer (<code>.bo-data-table__footer</code>) is owned by data-table — import that file too when going à la carte.',
             'Load more vs page numbers: load-more suits feeds and mobile lists; page numbers suit "jump to page 13" reference tables. Both compose with the same footer.']} />
+  <DsaScore component="pagination" />
   <Related links={[["/components/data-table", "Data table"], ["/getting-started/htmx", "Using with HTMX"]]} />
 </Gallery>
