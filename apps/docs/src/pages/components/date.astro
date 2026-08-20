@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -155,5 +156,6 @@ const markup = `<span class="bo-date">
             'Overdue is two-channel — the word "Overdue" MUST be in the markup; <code>--overdue</code> only adds colour.',
             'No <code>--muted</code> modifier — use the existing <code>.bo-u-text-muted</code> utility instead.',
             'No editable variant — use a plain native <code>&lt;input type="date"&gt;</code> for data entry.']} />
+  <DsaScore component="date" />
   <Related links={[["/components/amount", "Amount"], ["/components/quantity", "Quantity"], ["/base/utilities", "Utilities"]]} />
 </Gallery>

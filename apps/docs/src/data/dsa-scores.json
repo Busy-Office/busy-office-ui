@@ -480,6 +480,42 @@
           "cite": "'ready, not coupled', the same stance as htmx; the page says when to mount a real editor instead"
         }
       }
+    },
+    "date": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "display-only span; introduces no affordance at all (same basis as amount)"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "tabular-nums on __value, --bo-font-size-xs on __relative; zero raw literals"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw hex; text-muted/danger-text tokens, and the overdue contract is two-channel — the WORD \"Overdue\" is required in the text"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "gap from --bo-space-1; zero raw dimension literals"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "display-only; entry uses a native <input type=\"date\"> directly, so there is no interaction story to score"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the page leads with the deprecation and shows the replacement before the component itself"
+        },
+        "fit": {
+          "score": 0,
+          "cite": "DEPRECATED (45.3) and prescribed in NO context: its own source says compose .bo-cluster + two utilities instead, and zero screens use it — 1 prose mention on /components/amount is the only occurrence outside its own page"
+        }
+      },
+      "improve": [
+        "Removed at the next major; until then the page documents the .bo-cluster replacement (roadmap 45.3, CHANGELOG Deprecated)"
+      ]
     }
   }
 }

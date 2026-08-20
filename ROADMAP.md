@@ -837,8 +837,74 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        with its own row in `density.css`, not three literals hiding in a
        container query). Either outcome removes the duplicated literal.
 
-2. [ ] **94.4 — the DSA rubric no longer discriminates, and 94.2 is what
-       exposed it.** With Spacing resolved, **12 of 14 scored components
+2. [x] **94.4 — DONE, and the premise was WRONG (2026-08-21). The rubric
+       discriminates; the population was uniform.** Ran the test this item
+       specified — score the deprecated `date` and check it ranks below
+       `money`. It does: **`date` 83% (15/18) against `money` 100% (21/21)**,
+       and it fires the trigger on `Fit: 0` — prescribed in no context, its own
+       source says compose `.bo-cluster` + two utilities instead, and zero
+       screens use it (the one hit outside its own page is a prose mention on
+       `/components/amount`).
+
+       **The two-clause trigger is vindicated by the same number.** 83% is
+       ABOVE the 80% threshold, so clause 1 never fires — only clause 2 (any
+       dimension ≤ 1) catches it. A single-clause trigger would have missed
+       this component entirely, which is exactly the failure Slice 94 wrote
+       clause 2 to prevent, in almost the words it used.
+
+       **What nearly went wrong, and the rule it confirms.** The first draft
+       scored `date` at 2 on typography and 2 on colour — no density awareness,
+       no forced-colors rule. Checked against the components already scored
+       before committing to it: `money` and `amount` BOTH have zero
+       `--bo-density` references and zero `@media (forced-colors)` blocks, and
+       both were scored 3 on those dimensions. Penalising `date` for them would
+       have been **manufacturing the discrimination this test was looking
+       for** — the instrument telling me what I went in expecting. Scored on
+       the standard actually in use, `Fit` alone carries the verdict, which is
+       the stronger result. Also caught: `grep -c forced-colors date.css`
+       returns 1, matching the deprecation comment that SAYS there is no
+       forced-colors rule — the same comment trap as the 94.2 citations, twice
+       in two wakes.
+
+       So the honest reading of "12 of 14 read 100%" is not a blind rubric but
+       a **uniformly mature scored population** — all 14 were long-grilled
+       components. Batches 3-7 are unblocked and worth running as planned; no
+       sharpening needed, and the percentage stays.
+
+       Verified live (bind-mounted container on the fresh `dist`, not the
+       cached image — the running `bo-docs-run` was serving stale content, so
+       it was bypassed): 83% and `Fit 0 / 3` render in **both themes**, dark
+       confirmed by computed `background-color` (`rgb(249,250,251)` →
+       `rgb(15,17,21)`) rather than by the toggle appearing to work.
+       `resize_window` did not propagate to the viewport (stuck at 1280 across
+       two attempts — the Slice 70.1/71.1 limitation), so **390px was verified
+       by constraining the section and measuring**, not by a phone-width
+       screenshot: no page-level horizontal overflow, the table reflows inside
+       its own `overflow-x: auto` container, and `--bo-density-row-height`
+       resolves to compact's `1.875rem` — explicit density correctly beating
+       auto-compaction, which is a live confirmation of 94.3's analysis.
+
+3. [ ] **94.5 — the "not yet scored" line has never rendered on any page.**
+       Found while wiring `date`. `DsaScore.astro`'s else-branch is documented
+       (93.1) as a deliberate judgment call: "an unscored component renders an
+       honest 'not yet scored' line, not nothing — absence should read as 'not
+       done yet', not as an omission." Measured: **40 component pages, exactly
+       14 render `DsaScore`, and those 14 are precisely the 14 that are
+       scored.** The component is added to a page at the moment it gets scored,
+       so the branch is unreachable in practice and 26 pages show nothing at
+       all. Nothing user-facing is false — the section is simply absent — but
+       the design intent 93.1 recorded is not realised, and it is a branch that
+       cannot fire, which this project treats as a defect by default.
+       **Accept:** either wire `DsaScore` into all 40 component pages so the
+       26 unscored ones render the honest line as designed (edit by hand, not
+       by regex — these are pages that mix live markup with copy-paste
+       samples — and verify against the BUILT output that exactly 40 pages
+       carry the section and 26 show the not-yet-scored text), or strike the
+       claim from 93.1 and delete the dead branch. Do not leave it claiming
+       behaviour it does not have.
+
+       Superseded premise, kept for the record: **the DSA rubric no longer
+       discriminates.** With Spacing resolved, **12 of 14 scored components
        read 100%**; the distribution is `{94%: 1, 95%: 1, 100%: 12}`, and
        the only two sub-3 dimensions left in the whole file are
        `amount.typography` and `data-table.typography`. Spacing was the
