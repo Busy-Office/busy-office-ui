@@ -769,6 +769,29 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 85 — Owner wishlist: joined ( qty | unit ) becomes Quantity's Basic (2026-08-21)
+
+Two wishlist notes, triaged mid-wake:
+
+**85.1 — "Quantity — Without buttons ( qty | unit ) joined → should be
+basic, rearrange" — shipped.** The joined form is now the page's Basic
+section (and the lead of the Markup sample); the stepper form demoted to
+"With stepper buttons — touch & warehouse" as the opt-in affordance.
+Opener reworded to match: "a real `type="number"` input, optionally
+joined to a unit select and optionally flanked by stepper buttons" —
+the buttons no longer define the component, they extend it. This
+completes the arc of Slices 80/81: buttons optional → joined form
+exists → joined form IS the default story. Verified live: section
+order, opener, and Markup-sample ordering all confirmed against the
+container.
+
+**85.0 — "Data Input - forms" — AWAITING OWNER CLARIFICATION.** Too
+terse to build from; recorded rather than guessed (the 30.0
+precedent). Plausible readings: (a) review/grill the Forms page in the
+Data input group; (b) something about form composition the owner will
+elaborate; (c) a heading for the Quantity note that followed it. If (c),
+nothing is owed.
+
 ## Slice 84 — wake triage-noticing: Slices 71-81 shipped no CHANGELOG entries (2026-08-21)
 
 Loop re-armed after a pause; first wake found every open item

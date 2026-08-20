@@ -108,7 +108,16 @@ const tableColumn = `<table class="bo-data-table">
   </tbody>
 </table>`;
 
-const markup = `<div class="bo-quantity">
+const markup = `<!-- basic: ( qty | unit ), joined — no buttons needed -->
+<div class="bo-quantity">
+  <input class="bo-quantity__input" type="number" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
+  <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+    <option>kg</option> <option>each</option>
+  </select>
+</div>
+
+<!-- with stepper buttons (touch / warehouse) — unit becomes a gapped affix -->
+<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" min="0" max="99" step="1" inputmode="numeric" />
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
@@ -117,43 +126,47 @@ const markup = `<div class="bo-quantity">
 
 <script type="module">
   import { initQuantity } from "@busy-office/ui/js";
-  initQuantity(); // once — wires the step buttons; ArrowUp/Down + typing already work natively
+  initQuantity(); // once — unit-select precision + step buttons; ArrowUp/Down + typing already work natively
 </script>`;
 ---
 <Gallery title="Quantity">
   <p class="demo-note">
     A count field, not a currency one — see <a href={base + '/components/amount'}>Amount</a> for
-    money. A real <code>type="number"</code> input with increment/decrement buttons;
+    money. A real <code>type="number"</code> input, optionally joined to a unit
+    select and optionally flanked by stepper buttons;
     <code>min</code>/<code>max</code>/<code>step</code> are native attributes, so
-    validation, keyboard behavior, and the buttons' clamping all read from the same
-    source of truth.
+    validation, keyboard behavior, and any buttons' clamping all read from the
+    same source of truth.
   </p>
 
   <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em> — and when it is neither a selectable currency nor a steppable count (a rate, a fixed-currency price, a percentage), a plain <code>.bo-input--numeric</code> is the whole answer: no fourth component, just the input modifier.</p>
 
   <section class="demo">
-    <h2>Basic</h2>
+    <h2>Basic — ( qty | unit )</h2>
+    <Demo code={joined} />
+    <p class="bo-u-text-muted">A quantity input joined to its unit select —
+    the exact mirror of the <a href={base + '/components/money'}>Money</a>
+    field's ( currency | amount ) shape, and the natural desktop form.
+    <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd> and typing work
+    natively; <code>initQuantity()</code> makes precision follow the
+    selected unit (kg 2.50 → each, <code>step</code> flips to 1). No
+    stepper buttons needed — they're the opt-in touch affordance, next
+    section.</p>
+  </section>
+
+  <section class="demo">
+    <h2>With stepper buttons — touch &amp; warehouse</h2>
     <Demo code={basic} />
     <p class="bo-u-text-muted"><strong>Requires <code>initQuantity()</code></strong> —
       without it the buttons are inert, but the input itself still works (native number
       keyboard behavior, and it's a real form field either way). The buttons are
-      optional pointer/touch affordances (warehouse gloves, tablets):
-      <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd> on the input steps
-      natively, so they carry <code>tabindex="-1"</code> and cost no tab stops —
-      and a desktop-first form can omit them entirely, next section.</p>
-  </section>
-
-  <section class="demo">
-    <h2>Without buttons — ( qty | unit ), joined</h2>
-    <Demo code={joined} />
-    <p class="bo-u-text-muted">Omit the steppers and the unit-select joins
-    the input into one control — the exact mirror of the
-    <a href={base + '/components/money'}>Money</a> field's
-    ( currency | amount ) shape, and the natural desktop-first form.
-    Precision still follows the selected unit via <code>initQuantity()</code>.
-    With steppers present the <code>+</code> button sits between input and
-    select, so the gap stays; the static text <code>__unit</code> span is
-    deliberately never boxed — it's an annotation, not a control.</p>
+      pointer/touch affordances (warehouse gloves, tablets): they carry
+      <code>tabindex="-1"</code> and cost no tab stops, since
+      <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd> on the input
+      already steps. With buttons present a <code>__unit-select</code> sits
+      after the <code>+</code> with a gap rather than joining; the static
+      text <code>__unit</code> span is deliberately never boxed — it's an
+      annotation, not a control.</p>
   </section>
 
   <section class="demo">
