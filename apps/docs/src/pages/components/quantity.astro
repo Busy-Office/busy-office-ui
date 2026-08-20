@@ -17,6 +17,16 @@ const basic = `<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
 </div>`;
 
+const joined = `<!-- desktop-first: no buttons, unit joined — the mirror of Money's ( currency | amount ) -->
+<div class="bo-quantity">
+  <input class="bo-quantity__input" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
+  <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
+    <option>kg</option>
+    <option>g</option>
+    <option>each</option>
+  </select>
+</div>`;
+
 const unit = `<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="12" min="0" max="500" step="1" inputmode="numeric" aria-label="Quantity" />
@@ -135,6 +145,19 @@ const markup = `<div class="bo-quantity">
       on the input steps natively, which is also why the buttons carry
       <code>tabindex="-1"</code> — one tab stop per field, not three, so a
       ten-row grid costs ten tabs instead of thirty.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Without buttons — ( qty | unit ), joined</h2>
+    <Demo code={joined} />
+    <p class="bo-u-text-muted">Omit the steppers and the unit-select joins
+    the input into one control — the exact mirror of the
+    <a href={base + '/components/money'}>Money</a> field's
+    ( currency | amount ) shape, and the natural desktop-first form.
+    Precision still follows the selected unit via <code>initQuantity()</code>.
+    With steppers present the <code>+</code> button sits between input and
+    select, so the gap stays; the static text <code>__unit</code> span is
+    deliberately never boxed — it's an annotation, not a control.</p>
   </section>
 
   <section class="demo">

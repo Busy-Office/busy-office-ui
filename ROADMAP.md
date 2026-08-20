@@ -769,6 +769,35 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 81 — Owner ask: Quantity basic as ( qty | unit ), joined like Money (2026-08-20)
+
+Follow-on from the Slice 80 grill: with the steppers now optional, the
+owner asked for Quantity's basic form to render as ( qty | unit ) — the
+Money field's joined shape, mirrored. Before this, the joined look
+didn't exist on Quantity at all: the unit-select sat a `space-2` gap
+away from the input, while Money butt-joints its two controls.
+
+**81.1 — the joint, shipped.** Two CSS rules, scoped to the button-less
+case (`:not(:has(.bo-quantity__step))`): the input drops its end radii
+and end border, the select drops its start radii and gap — same joint
+convention as `money.css` (the second element keeps its full border to
+carry the shared edge, so focus rings stay per-element and uncut). With
+steppers present the `+` button sits between input and select, so the
+gap deliberately stays; the static text `__unit` span is deliberately
+never boxed — it's an annotation, not a control, and boxing it would
+invent an input-group addon for no gain. New "Without buttons —
+( qty | unit ), joined" demo right after Basic.
+
+Live-verified, both themes (computed, not just screenshots): input
+6px/0px radii with a 0-width end border, select 0px/6px with zero
+margin — the exact mirror of Money's measurements; precision still
+follows the select (kg → each flipped `step` 0.01 → 1 with the value
+kept losslessly); the buttons-present composition still shows its 8px
+gap. One `stamp-readme` size-drift catch on the way (76 kB min now).
+
+**Exit:** the editable pair now shares one joined-control idiom in both
+directions — ( currency | amount ) and ( qty | unit ).
+
 ## Slice 80 — /design-grill: Quantity's +/− buttons — optional after all (2026-08-20)
 
 Owner questions: why aren't the buttons optional (they feel wrong on

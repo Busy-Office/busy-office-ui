@@ -60,6 +60,28 @@
     margin-inline: 0;
   }
 
+  /* Button-less + unit-select: joined into ONE control — the exact mirror
+     of Money's ( currency | amount ) shape, ( qty | unit ) here (owner
+     ask, 2026-08-20). Same joint convention as money.css: the SECOND
+     element keeps its full border to carry the shared edge, so focus
+     rings stay per-element and uncut. Only without buttons — with
+     steppers present the + button sits between input and select, so the
+     gap stays. The static text __unit span is deliberately NOT joined:
+     boxing plain text would invent an input-group addon for no gain. */
+  .bo-quantity:not(:has(.bo-quantity__step))
+    .bo-quantity__input:has(+ .bo-quantity__unit-select) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    border-inline-end: none;
+  }
+
+  .bo-quantity:not(:has(.bo-quantity__step))
+    .bo-quantity__input + .bo-quantity__unit-select {
+    margin-inline-start: 0;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
   .bo-quantity__unit {
     display: flex;
     align-items: center;
