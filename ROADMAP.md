@@ -61,6 +61,17 @@ composite that locks.
 - **Rethink** when reuse requires copy-paste-modify — extract the
   reusable core instead of shipping the copy.
 
+**Precedence (owner call, 2026-08-21): suitability beats reuse at the
+point of use.** Reusability decides what SHIPS in the framework;
+context-suitability decides what a screen USES. When they conflict — a
+reusable control that is wrong for the context (steppers in a dense
+line grid; the joined money widget crammed into a table cell) — the
+suitable design wins, because an unsuitable design damages the UX no
+matter how reusable it is. The resolution is always to pick or build
+the suitable REUSABLE primitive (the field matrix on
+`/concepts/design-language` says which, per field type × context),
+never a one-off.
+
 ### 4. Design the decision, not the screen (added 2026-08-19, owner input — the Ive filter)
 
 A screen exists to serve **one decision its user must make**, and everything on
@@ -768,6 +779,54 @@ Slice 60, no new instances.
 
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
+
+## Slice 92 — Owner direction: the design system takes the wheel (2026-08-21)
+
+Owner: update the design system with a per-field-type design guide;
+reusability stays a priority but an unsuitable design damages UX — and
+add a scoring system measuring how much each component's design ALIGNS
+with the design system. Clarified mid-build: the score is an alignment
+measure, distinct from the Slice 37 worth rubric.
+
+**92.1 — Objective §3 precedence amendment (owner call).** Reusability
+decides what SHIPS; suitability decides what a screen USES; on
+conflict, suitability wins, and the resolution is always the suitable
+REUSABLE primitive from the matrix — never a one-off.
+
+**92.2 — the field matrix**, on `/concepts/design-language`: date /
+number / money / quantity × standalone form / read-mostly / entry grid
+/ display, every cell a setting of the four primitives, with the
+two-axis generator stated (the screen's job picks the chrome; the
+qualifier's mutability picks joined-vs-split). Pointer added from the
+inline-editing chooser. Verified live.
+
+**92.3 — two scoring instruments, clarified and shipped.** (a) The
+Slice 37 WORTH rubric stays for keep/improve/merge/deprecate, extended
+with a fifth dimension — **Fit**, /15 — the dimension that couldn't see
+steppers being wrong in grids. (b) NEW: the **Design-System Alignment
+score (DSA)** — the owner's ask — seven dimensions = the six
+design-language rules + Fit, 0-3 each with a checkable citation, N/A
+leaves the denominator, reported as %. Instrument described on
+`/concepts/design-language` ("Scoring alignment"); scores live in
+`.roundtable/` and are re-taken when a design changes. Pilot on the
+numeric family: money 95%, quantity 95%, amount 94% — the family is
+on-direction; deductions are three uncommented raw dimension literals
+and two `em` affix sizes.
+
+**Queued from the pilot:**
+- **92.4 — Amount adoption in under-using screens.** Demand citation
+  turned up reading (c): invoice-list, editable-grid's totals, and
+  po-app render amounts as plain text where `.bo-amount` would add
+  grouped/muted-fraction display free — the low count is a defect in
+  the screens, not the component. Accept: those screens adopt Amount
+  for displayed money; visual parity verified live.
+- **92.5 — the raw-literal alignment items**: comment or tokenize
+  money's 9rem cap, quantity's 3rem/12rem floors and raw 1px;
+  consider a token step for amount's 0.875em affixes. Accept: DSA
+  re-score of the family reaches 100% or each remaining literal
+  carries its intrinsic-dimension comment.
+- **92.6 — full-surface DSA scoring in batches**, alongside the worth
+  rubric's reopened 37.2 (now on /15).
 
 ## Slice 91 — Standardize sweep: the conventions Slices 84-90 established, applied site-wide (2026-08-21)
 

@@ -107,6 +107,65 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>The field matrix — which design, per field type and context</h2>
+    <p>Reusability decides what ships; <strong>suitability decides what a
+    screen uses</strong>. When they conflict, the suitable design wins — an
+    unsuitable control damages the UX no matter how reusable it is — and the
+    resolution is always a suitable <em>reusable</em> primitive from this
+    matrix, never a one-off. Contexts follow the
+    <a href={base + '/components/inline-editing'}>editing-design chooser</a>:
+    entry (bordered), read-mostly correction (seamless + row Save/Cancel),
+    and display.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr>
+          <th scope="col">Field type</th>
+          <th scope="col">Standalone form (entry)</th>
+          <th scope="col">Read-mostly record/table</th>
+          <th scope="col">Editable table (entry grid)</th>
+          <th scope="col">Display</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row">Date</th>
+            <td>Native <code>&lt;input type="date"&gt;</code> in a form field — nothing to add</td>
+            <td>Seamless <code>type="date"</code> cell</td>
+            <td>Bordered <code>type="date"</code> cell</td>
+            <td>Text; status (overdue) as a worded badge — <a href={base + '/components/amount'}>the date contract</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Number / rate / %</th>
+            <td><code>.bo-input--numeric</code></td>
+            <td>Seamless numeric</td>
+            <td>Bordered numeric</td>
+            <td><a href={base + '/components/amount'}>Amount</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Money</th>
+            <td>Currency selectable → <a href={base + '/components/money'}>Money</a> ( currency | amount ); fixed → numeric, currency in the label</td>
+            <td>Seamless numeric; the fixed currency shown as adjacent text</td>
+            <td>Currency is its own column (fixed per row) → bordered numeric; currency changeable inline (rare) → the joined Money control in the cell</td>
+            <td>Amount with <code>__currency</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Quantity</th>
+            <td>Joined ( qty | unit ) — <a href={base + '/components/quantity'}>Quantity</a>; touch/warehouse adds the steppers</td>
+            <td>Seamless input; unit as text</td>
+            <td>Unit is its own column → bordered input; unit changeable inline (rare) → the joined control. Steppers never — they belong to touch, not dense grids</td>
+            <td>Amount with <code>__unit</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Two axes generate every cell: the screen's
+    job picks the chrome (bordered / seamless / plain text), and the
+    qualifier's mutability picks joined-versus-split (changeable next to
+    the value → joined control; fixed → label, adjacent text, or its own
+    column). Nothing in the matrix is a new component — every cell is a
+    setting of the four primitives.</p>
+  </section>
+
+  <section class="demo">
     <h2>Subtraction is the method</h2>
     <p>For every element — button, field, colour, screen, feature — the test
     is: <em>if I remove this, does the user's ability to accomplish the task
@@ -132,6 +191,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     of their life there. Keyboard behaviour, focus order, wording, and print
     output get the same treatment as the happy path — good design feels
     inevitable, not impressive.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Scoring alignment — one number per component</h2>
+    <p>Every component carries a <strong>Design-System Alignment score</strong>:
+    each of the six rules above, plus context-fit against the field matrix,
+    scored 0-3 with a checkable citation (a build gate, a grep, a measured
+    check — never an opinion). Rules that don't apply to a component leave
+    the denominator instead of penalizing it, and the result reads as a
+    percentage: how on-direction this component's design is. The score
+    decides where alignment work goes — it is deliberately a different
+    question from whether a component is <em>worth its surface</em>, which
+    a separate keep/improve/deprecate review answers. Scores live with the
+    review records and are re-taken when a component's design changes.</p>
   </section>
 
   <section class="demo">

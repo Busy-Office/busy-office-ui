@@ -16,7 +16,7 @@ the only support for a number is that it seems right, the number does not go in
 confident output that nothing verified; a 55-row table of opinions would be the
 largest instance of it yet.
 
-## Dimensions — 0-3 each, 12 total
+## Dimensions — 0-3 each (15 total since 2026-08-21; batch 1 was scored on the original four, /12)
 
 ### 1. Demand — does a real back-office screen need it?
 
@@ -77,6 +77,25 @@ before scoring whether they are met.
 
 A **0 here is the cheapest to fix and the most urgent** — the 409/htmx page and
 the nine-tabs-one-panel bug were both this, and both shipped looking correct.
+
+### 5. Fit — is it the suitable design for the contexts it is prescribed in? (added 2026-08-21, owner direction)
+
+The dimension the first four could not see: steppers scored fine on
+Contracts while being unsuitable in dense grids; the joined money widget
+was reusable and wrong crammed into a table cell. Scored against the
+field matrix (`/concepts/design-language`) and the editing-design chooser
+(`/components/inline-editing`) — the owner's precedence call applies:
+suitability beats reuse at the point of use.
+
+| | |
+|---|---|
+| **3** | Right design in every context its docs prescribe it for; contexts where it is wrong are named on its page (the way Quantity's steppers now say "touch, not dense grids"). |
+| **2** | Right in its main context; one prescribed context is questionable and unstated. |
+| **1** | Its docs prescribe it somewhere the matrix says a different design belongs. |
+| **0** | Its primary documented use IS the unsuitable one. |
+
+Totals are **/15** from 2026-08-21. Batch-1 totals (recorded /12) stand
+historically per 45.5's Accept; any re-scored row is scored fresh on /15.
 
 ## Cost to remove — 0-3, and it does NOT go in the total
 

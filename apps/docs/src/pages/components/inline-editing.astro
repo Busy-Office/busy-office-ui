@@ -135,7 +135,10 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
         </tbody>
       </table>
     </div>
-    <p class="bo-u-text-muted">Save timing is the second, independent axis:
+    <p class="bo-u-text-muted">Per field type (date, number, money,
+    quantity), the <a href={base + '/concepts/design-language'}>field
+    matrix</a> names the exact control for each of these contexts.
+    Save timing is the second, independent axis:
     batched per row (Save/Cancel, the default here) when a row is a unit of
     work, or per-change (<code>data-row-edit="live"</code>) when each commit
     stands alone.</p>
