@@ -769,6 +769,57 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 76 — /design-grill: Amount vs. Quantity consistency (2026-08-20)
+
+Requested as `/design-grill flow:Amount Quantity` — clarified with the
+user first, since neither name is a journey step; this grills consistency
+between two components, not a flow's handoffs (flow mode as shipped in
+75.2 doesn't fit every two-name request). Full report:
+`.roundtable/design-grill-amount-quantity-consistency-2026-08-20.md`.
+
+**Corrected the pairing before grilling it:** `.bo-amount` is read-only
+display, `.bo-quantity` is an editable input — not structural siblings.
+The real editable pair is Money/Quantity, with Amount as the shared
+read-only display both hand off to. Already documented correctly (all
+three pages carry an identical cross-linking paragraph) — not a finding,
+a clarification.
+
+**Kept, verified rather than assumed:** the decimal-precision plumbing
+(`setInputDecimals`/`decimalsOverride`) is genuinely shared between Money
+and Quantity — the "decimal-input util" merge Objective principle 2
+already cites. Quantity's stepper buttons (Money has none) are a
+domain-justified difference, not neglect — verified live that boundary
+disabling is real (`element.disabled`, not a screenshot): `min=0` truly
+disables `−`, `max=10` truly disables `+`.
+
+**Item 76.1 — Money field's docs are measurably thinner than
+Quantity's.** 5 sections vs. Quantity's 11; three gaps read as genuinely
+missing rather than domain-justified: no "Read-only display — use
+Amount" section (Quantity has this exact section; Money's shared family
+paragraph makes the same claim but never demonstrates it), no "in a
+table column" demo (a common ERP shape for money — line items — that
+Quantity already demos), no large-target/density-variant demo (despite
+`money.css` sizing with density like every other control, same as
+`quantity.css` states explicitly). **Accept:** `money.astro` gains the
+same three sections, matching Quantity's coverage; page-shape and
+`data-hooks` gates stay green; live-verified both themes.
+
+**Item 76.2 — sidebar taxonomy splits the editable pair across two
+groups, contradicting the family's own stated rule.** Quantity (editable)
+sits in "Values" next to read-only Amount/Date/Key-value-facts; Money
+(equally editable) sits in "Data input" next to Forms/Combobox/Tag-input.
+Two genuinely defensible fixes, not a typo: **(a)** move Quantity into
+"Data input" next to Money (groups by editability — matches how a
+consumer actually searches, "let someone type X"), or **(b)** move Money
+into "Values" next to Amount/Quantity (groups by domain family, matching
+the shared cross-link paragraph). Leaning (a) — "Data input" is the
+stronger existing group and the family relationship is already fully
+cross-linked in prose regardless of sidebar placement — but this is an
+owner call, not built in this grill.
+
+**Exit:** 76.1 queued as a normal build item; 76.2 needs an owner
+decision on (a) vs (b) before it can be built.
+
 ## Slice 75 — Owner ask: apply the full Jony Ive design document (2026-08-20)
 
 Triaged from chat: owner shared a fuller written version of the Ive
