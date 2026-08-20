@@ -30,8 +30,8 @@ const fieldMarkup = `<div class="bo-form-field">
         <span class="bo-form-field__hint" id="vendor-hint">Registered vendor name (required — note the automatic asterisk)</span>
       </div>
       <div class="bo-form-field">
-        <label class="bo-form-field__label" for="amount">Amount</label>
-        <input class="bo-input bo-input--numeric" id="amount" inputmode="decimal" value="4,208.00" />
+        <label class="bo-form-field__label" for="amount">Amount (USD)</label>
+        <input class="bo-input bo-input--numeric" id="amount" type="number" step="0.01" inputmode="decimal" value="4208.00" />
       </div>
       <div class="bo-form-field">
         <label class="bo-form-field__label" for="cc">Cost center</label>

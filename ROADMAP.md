@@ -769,6 +769,64 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 77 — /design-grill: the numeric family, incl. "Number" (2026-08-20)
+
+Requested as `/design-grill flow: Amount vs. Quantity vs. Money vs.
+Number` — the Slice 76 consistency treatment extended to the fourth
+member the request names. **"Number" is not a component**: it is
+`.bo-input--numeric` (`form/input.css:83`), and that fact is the thread
+every finding hangs off. Full report:
+`.roundtable/design-grill-numeric-family-2026-08-20.md`. All four
+surfaces measured live (computed styles, both themes), not read from
+source alone. All four findings fixed in the same pass — each was small
+and unambiguous.
+
+**77.1 — Quantity's input had the family's one real rendering defect.**
+`.bo-quantity__input` was the only numeric surface rendering
+proportional figures — the `tabular-nums` declaration sat on
+`.bo-quantity__step` instead: the +/− buttons, which display no digits.
+Confirmed live before fixing (computed `normal` on the input,
+`tabular-nums` on the button — exactly inverted) and after (now
+inverted back to intent; the dead `__step` copy removed per
+subtraction). `text-align: center` examined and KEPT — the one
+deliberate alignment divergence in the family; the value sits between
+its −/+ operators. Comment added in `quantity.css` recording both
+decisions.
+
+**77.2 — `amount.astro`'s editable-money section was stale, contradicting
+its own page.** Written 2026-08-14 (`01a6bad`), two days before
+`.bo-money` shipped (`d8b81d8`), never reconciled: the page's opener said
+"capturing is Money's job" while the section presented a plain input as
+THE answer for editable money, never mentioning `.bo-money`. Reworded to
+state both branches — currency selectable → `.bo-money`; currency fixed
+→ plain `.bo-input--numeric` with the currency in the label — with the
+Money field linked. The demo itself was already the correct fixed-
+currency case and stays.
+
+**77.3 — the family rule named three members; four exist.** The shared
+"rule for this family" paragraph (byte-identical across all three pages,
+verified by md5 before and after) named one display + two entry
+components while the docs themselves use a third entry path in four
+places (`form`, `amount`, `tabs`, `inline-editing`). Extended by one
+sentence naming plain `.bo-input--numeric` as the entry path when the
+value is neither a selectable currency nor a steppable count — still
+byte-identical on all three pages after the edit.
+
+**77.4 — `form.astro`'s Amount field taught a third, divergent recipe.**
+Type-less input, formatted value `4,208.00`, no currency in the label —
+different from the family pages' own recipe. Aligned: `Amount (USD)`,
+`type="number"`, `step="0.01"`, unformatted value.
+
+**Refused: a `.bo-number` component.** Nothing to build —
+`.bo-input--numeric` already is the fourth member; naming it in the docs
+closed the gap for free (principle 2: no second way to do something that
+already works).
+
+**Exit:** all four findings fixed and live-verified (fix 1's computed
+styles re-checked in dark theme with the theme confirmed via `body`'s
+computed background, not assumed from the toggle); core + docs builds
+green; one refusal recorded.
+
 ## Slice 76 — /design-grill: Amount vs. Quantity consistency (2026-08-20)
 
 Requested as `/design-grill flow:Amount Quantity` — clarified with the

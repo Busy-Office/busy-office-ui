@@ -55,8 +55,9 @@ const custom = `<!-- an app-defined currency (points, credits, store scrip) work
 const editable = `<!-- Amount (.bo-amount) is a DISPLAY value — a <span>, not a form control;
      there is no ".bo-amount--input" variant, on purpose (an <input> can't host
      __currency/__fraction as nested markup and stay a single accessible value).
-     For an EDITABLE money field, compose .bo-form-field + .bo-input--numeric
-     directly — the currency belongs in the label, not invented affix markup. -->
+     Editable money has two shapes:
+       currency SELECTABLE -> .bo-money (currency select + amount input as one field)
+       currency FIXED      -> .bo-form-field + .bo-input--numeric, currency in the label -->
 <div class="bo-form-field">
   <label class="bo-form-field__label" for="am-unit-price">Unit price (USD)</label>
   <input class="bo-input bo-input--numeric" type="number" id="am-unit-price" value="12.50" min="0" step="0.01" inputmode="decimal" />
@@ -127,7 +128,7 @@ const markup = `<span class="bo-amount">
     settings.
   </p>
 
-  <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em>.</p>
+  <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em> — and when it is neither a selectable currency nor a steppable count (a rate, a fixed-currency price, a percentage), a plain <code>.bo-input--numeric</code> is the whole answer: no fourth component, just the input modifier.</p>
 
 
   <section class="demo">
@@ -232,14 +233,18 @@ const markup = `<span class="bo-amount">
   </section>
 
   <section class="demo">
-    <h2>Editable money — a plain input, not <code>.bo-amount</code></h2>
+    <h2>Editable money — not <code>.bo-amount</code></h2>
     <Demo code={editable} />
     <p class="bo-u-text-muted"><code>.bo-amount</code> is read-only display; it's
     a <code>&lt;span&gt;</code>, not a form control, and there's deliberately no
     input variant of it (the nested <code>__currency</code>/<code>__fraction</code>
     parts can't live inside a native <code>&lt;input&gt;</code> and still be one
-    accessible value). For data entry, use a plain <code>.bo-input--numeric</code>
-    field — put the currency in the label, the same way <a href={base + '/components/quantity'}>Quantity</a>
+    accessible value). Editable money has two shapes: when the user picks the
+    currency, use the <a href={base + '/components/money'}>Money field</a> —
+    a currency select and amount input working as one control, precision
+    following the currency. When the currency is fixed (this demo's unit
+    price), a plain <code>.bo-input--numeric</code> with the currency in the
+    label is all it takes — the same way <a href={base + '/components/quantity'}>Quantity</a>
     puts the unit in <code>__unit</code> text next to an editable control.</p>
   </section>
 

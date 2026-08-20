@@ -16,7 +16,6 @@
     flex: 0 0 auto;
     inline-size: var(--bo-density-control-height);
     padding-inline: 0;
-    font-variant-numeric: tabular-nums;
   }
 
   .bo-quantity__step:first-child {
@@ -34,7 +33,12 @@
     min-inline-size: 3rem;
     border-radius: 0;
     margin-inline: calc(var(--bo-border-width) * -1);
+    /* Center, not end: the value sits BETWEEN its −/+ operators — the one
+       deliberate alignment divergence in the numeric family (numeric-family
+       grill, 2026-08-20). Tabular figures were on __step (the digit-less
+       buttons) instead of here until that same grill — inverted from intent. */
     text-align: center;
+    font-variant-numeric: tabular-nums;
     /* Buttons are the spinner now. */
     -moz-appearance: textfield;
   }
