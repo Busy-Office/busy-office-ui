@@ -780,6 +780,67 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 94 — Review, improve and score the remaining 37 components (2026-08-21)
+
+Owner: start the loop on the rest of the surface — review, improve,
+score — holding the direction: **simplicity, right presentation to the
+user, make the complex simple**; grill in detail where a score comes
+back low. This supersedes 92.6's one-line "score in batches" with an
+executable plan.
+
+**Unit of work = one sidebar FAMILY per wake**, not N components — the
+numeric-family grills proved that family-level drift (inconsistent
+affordances, one sibling contradicting another) is invisible when
+components are scored alone and obvious when scored together.
+
+**Order by blast radius** (how much a misalignment costs the user),
+worst first, so judgment is freshest where it matters most:
+
+| # | Family | Components | Why this position |
+|--:|---|--:|---|
+| 1 | Tables & lists | 7 | `data-table` is in 16+ screens; the densest surface an ERP user lives in |
+| 2 | Data input | 6 | every entry screen; `form` is the likely first-read page |
+| 3 | Navigation & layout | 7 | shell-level — a misalignment is on every screen at once |
+| 4 | Feedback | 5 | states carry meaning; two-channel failures land here |
+| 5 | Display | 7 | read surfaces; lower interaction risk |
+| 6 | Actions | 3 | small, well-trodden (`button` sets the hierarchy rule) |
+| 7 | Values | 2 | `kv` + the deprecated `date` |
+
+**Per wake:** score every component in the family on the seven DSA
+dimensions, each with a checkable citation; add entries to
+`apps/docs/src/data/dsa-scores.json` (pages then render themselves —
+93.1); record the batch in `.roundtable/scorecard-<family>-<date>.md`
+with the reasoning; fix what is cheap and obviously right in the same
+wake; queue the rest as numbered items.
+
+**The grill trigger — deliberately two clauses, not one:**
+1. **Total < 80%**, or
+2. **any single dimension ≤ 1**, whatever the total.
+
+The second clause is the one that serves the owner's stated direction:
+a component can score 85% while carrying `Fit: 1` — prescribed in a
+context the field matrix says belongs to a different design — and that
+IS the "wrong presentation to the user" defect, hidden by an average.
+A triggered component gets a full `/design-grill`, its findings triaged
+like any other.
+
+**Reading the three principles through the rubric**, so scoring stays
+anchored to the owner's direction rather than becoming box-ticking:
+- *simplicity* → Content (names meaning, not mechanism) and the
+  composition question — could existing primitives already do this?
+- *right presentation* → Fit (matrix-correct context) + Hierarchy
+  (≤1 primary affordance).
+- *make the complex simple* → complexity absorbed by the framework, not
+  pushed into the consumer's mental model or markup.
+
+**Accept (per family):** every component has a JSON entry with seven
+cited scores; its page renders the section live (verified, both
+themes); every trigger-hitting component has a grill report in
+`.roundtable/` and its findings triaged; the batch's own record names
+what was fixed in-wake vs. queued. **Exit (whole slice):** all 37
+scored, no component left at a triggered score without either a fix or
+a queued item carrying its Accept criteria.
+
 ## Slice 93 — Owner ask: show the alignment score on each component's page (2026-08-21)
 
 "Show the score in the document of each component so we know whether we
