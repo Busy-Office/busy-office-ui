@@ -23,6 +23,11 @@
     border-end-start-radius: 0;
     text-align: end;
     font-variant-numeric: tabular-nums;
+    /* min floor: without it, column pressure (a row-edit actions cell
+       appearing, a squeezed table) shrank the input below its own
+       digits and silently clipped "1250.00" to "1250." — money digits
+       must never truncate before the table is forced to widen. */
+    min-inline-size: 6rem;
     max-inline-size: 9rem;
   }
 }

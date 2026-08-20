@@ -55,11 +55,21 @@
 
   /* Per-row dirty badge + Save/Cancel, revealed by initRowEdit() when the
      row has unsaved changes. */
+  /* Stays a REAL table cell (numeric-family follow-up, 2026-08-21):
+     display:flex on a <td> destroys table-cell behavior, turning the
+     base 40px row height into a FIXED height — so whenever a sibling
+     cell wrapped to two lines, this cell stopped short of the row and a
+     bare band of the container's background showed through beneath it.
+     Invisible on a normal row (both transparent), glaring on a dirty/
+     tinted one. End-aligned inline flow + sibling margins reproduce the
+     old flex layout without leaving table-cell layout. */
   .bo-data-table__row-edit-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--bo-space-2);
-    justify-content: flex-end;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .bo-data-table__row-edit-actions > * + * {
+    margin-inline-start: var(--bo-space-2);
   }
 
   .bo-data-table__selection-count {

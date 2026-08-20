@@ -769,6 +769,38 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 89 — Owner screenshot report: two shipped defects in the dirty row-edit row (2026-08-21)
+
+Owner posted a screenshot of the editable-grid "Money & unit cells"
+section in a dirty state showing a clipped amount ("1250.") and a bare
+dark band under Save/Cancel. Both reproduced live, root-caused, and
+fixed in framework CSS — with CHANGELOG entries.
+
+**89.1 — the band: `display: flex` on a `<td>`.**
+`.bo-data-table__row-edit-actions` used flex for its badge/button
+layout, which destroys table-cell behavior: the base
+`height: var(--bo-density-row-height)` became a FIXED height, so when
+the Item cell wrapped to two lines the actions cell stopped short of
+the row and the container's background showed through beneath it —
+invisible on a normal row (both transparent), glaring on the dirty
+tint. Measured before fixing: td 40px inside a 59px row, the band probe
+hitting bare `TR`. Fixed by returning it to a real table cell:
+end-aligned inline flow + `> * + *` sibling margins reproduce the same
+layout. Verified after: `display: table-cell`, td fills the row exactly
+(80/80), paints the tint, both themes.
+
+**89.2 — the clip: `.bo-money__amount` had a max width but no MIN.**
+Under column pressure (the actions cell appearing) the amount input
+shrank below its own digits — measured 64px against 79px of content,
+rendering "1250.00" as "1250." while the DOM value stayed intact. Money
+digits must never truncate: a `min-inline-size: 6rem` floor now forces
+the table to widen instead. Verified after: 97px ≥ 96px content,
+`clipped: false`, full value visible. The reformat logic itself was
+checked and cleared first (USD→JPY→USD round-trips 1250.00 → 1250 →
+1250.00 losslessly) — the defect was purely layout. The white sliver in
+the owner's screenshot did not reproduce and is consistent with
+browser text selection on a focused field; noted, not chased.
+
 ## Slice 88 — Owner wishlist: split the table-column demos into value + qualifier columns (2026-08-21)
 
 Owner: the "In a table column" demos on Money and Quantity "don't make

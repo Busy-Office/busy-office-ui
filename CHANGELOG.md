@@ -8,6 +8,21 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`data-table`): `.bo-data-table__row-edit-actions` was
+  `display: flex` on a `<td>`, which destroys table-cell behavior and
+  turns the base row height into a FIXED height — whenever a sibling
+  cell wrapped to two lines, the actions cell stopped short of the row
+  and a bare band of the container's background showed through beneath
+  it (invisible on a normal row, glaring on a dirty/tinted one). Now a
+  real table cell again: end-aligned inline flow + sibling margins
+  reproduce the same layout. (owner screenshot report, 2026-08-21)
+
+- **Fixed** (`money`): `.bo-money__amount` had a max width but no MIN —
+  under column pressure (a row-edit actions cell appearing) it shrank
+  below its own digits and silently clipped "1250.00" to "1250.".
+  Money digits must never truncate: a 6rem floor now forces the table
+  to widen instead. (same report)
+
 - **Added** (`data-table`): `data-tone="danger|warning|success"` on any
   `<td>` tints that one cell — subtle background plus an inset accent, the
   same two-channel shape row-state uses, per-cell. The server decides the
