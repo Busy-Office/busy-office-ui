@@ -769,6 +769,56 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 78 — /design-grill: the numeric family's DOCS — and a shipped UA-chrome defect (2026-08-20)
+
+Owner-requested angles: demo arrangement (simple → complex), sidebar
+naming ("Money field" vs bare "Quantity"), and "look & feel of display
+and input also different." The third angle surfaced the biggest real
+find of all three family grills. Full report:
+`.roundtable/design-grill-numeric-docs-2026-08-20.md`. All four
+findings fixed in the same pass and live-verified.
+
+**78.1 — `.bo-quantity__input` was shipping on UA-default browser
+chrome.** Nothing in the framework drew its box: `quantity.css` gives it
+flex/alignment only, the reset gives inputs only `font`/`color`. Measured
+live against Money's amount at the same theme and density: `2px inset`
+UA border vs. the token `1px solid`, Chrome's own `rgb(59,59,59)` dark
+background vs. `--bo-color-bg-surface`, `2px` UA padding vs. `12px` —
+height matched only by accident of flex-stretch. Census showed 15 call
+sites across docs + po-app in THREE drifted class compositions,
+including 3 "seamless" quantity cells whose `--bo-input-border:
+transparent` custom property had no consumer, leaving the UA inset
+visible on supposedly-borderless cells. **Fixed by absorption, not a
+markup demand:** `input.css`'s base + `::placeholder`/`:disabled`/
+`[aria-invalid]` selectors now include `.bo-quantity__input` — one CSS
+change repairs all 15 call sites and all three compositions as-is, no
+Breaking markup-contract change. `quantity.css`'s later overrides
+(radius 0, centering, −1px overlap) win by source order — verified
+live in both themes, including the previously-broken base-less seamless
+cells on `/patterns/editable-grid` now rendering the proper transparent
+seamless contract.
+
+**78.2 — sidebar "Money field" → "Money"** (label + H1 + title). The
+"field" suffix carried no consistent meaning — Quantity is equally a
+field without it, and inside a group named "Data input" the suffix is
+redundant with the group. Prose references to "the Money field"
+elsewhere stay as natural descriptive text.
+
+**78.3 — Amount's crossover section moved 9th → 4th.** Each family page
+has a "when you want the sibling" section; Money had it 2nd, Quantity
+3rd, Amount buried it 9th of 12. Now right after Amount's three basic
+money-display demos, matching the convention on the other two pages.
+
+**78.4 — the display-vs-input visual split stated as intentional.** One
+clause added to both crossover captions: a bordered box says "you can
+type here," plain text says "this is a fact" — the two are meant to look
+unrelated. **Refused:** a paired display+input showcase demo per page —
+the clause plus existing demos carry it; that would be addition where a
+sentence suffices.
+
+**Exit:** all four fixed and live-verified (both themes for the CSS
+fix, computed styles not screenshots); core + docs builds green.
+
 ## Slice 77 — /design-grill: the numeric family, incl. "Number" (2026-08-20)
 
 Requested as `/design-grill flow: Amount vs. Quantity vs. Money vs.

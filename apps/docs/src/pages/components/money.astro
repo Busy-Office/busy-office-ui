@@ -105,7 +105,7 @@ const canonical = `<!-- Two real form controls working as one field: the select 
 <!-- Read-only display of the result stays .bo-amount — same
      editable-vs-display split as Quantity vs Amount. -->`;
 ---
-<Gallery title="Money field">
+<Gallery title="Money">
   <p class="demo-note">
     Editable money: a currency select and amount input working as one
     field. Changing currency updates the input's decimal precision live
@@ -135,7 +135,9 @@ const canonical = `<!-- Two real form controls working as one field: the select 
     concern, and <a href={base + '/components/amount'}>Amount</a> already
     handles currency symbols, grouping, minor units, and negative/credit
     formatting — building a second read-only variant here would just be
-    <code>.bo-amount</code> again under a different name.</p>
+    <code>.bo-amount</code> again under a different name. The visual
+    difference is the affordance: a bordered box says "you can type here",
+    plain text says "this is a fact" — the two are meant to look unrelated.</p>
   </section>
 
   <section class="demo">

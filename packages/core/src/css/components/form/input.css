@@ -1,5 +1,15 @@
 @layer bo-components {
-  .bo-input {
+  /* .bo-quantity__input is included here rather than requiring `bo-input`
+     in the markup: the numeric-family docs grill (2026-08-20) found it
+     shipping on UA-default chrome — 2px inset border, the browser's own
+     dark background, 2px padding — because nothing gave it a box, and 15
+     call sites across docs + po-app had drifted into THREE class
+     compositions (bare / +--seamless without the base / the full stack).
+     Absorbing it into this selector fixes every existing consumer's
+     markup as-is; quantity.css's own later rules (radius 0, centering,
+     the -1px overlap) still win by source order. */
+  .bo-input,
+  .bo-quantity__input {
     --bo-input-border: var(--bo-color-border-control);
 
     inline-size: 100%;
@@ -46,17 +56,17 @@
     resize: vertical;
   }
 
-  .bo-input::placeholder {
+  :is(.bo-input, .bo-quantity__input)::placeholder {
     color: var(--bo-color-text-muted);
   }
 
-  .bo-input:disabled {
+  :is(.bo-input, .bo-quantity__input):disabled {
     background: var(--bo-color-bg-muted);
     color: var(--bo-color-text-disabled);
     cursor: not-allowed;
   }
 
-  .bo-input[aria-invalid="true"] {
+  :is(.bo-input, .bo-quantity__input)[aria-invalid="true"] {
     --bo-input-border: var(--bo-state-error-color);
   }
 

@@ -154,6 +154,22 @@ const markup = `<span class="bo-amount">
   </section>
 
   <section class="demo">
+    <h2>Editable money — not <code>.bo-amount</code></h2>
+    <Demo code={editable} />
+    <p class="bo-u-text-muted"><code>.bo-amount</code> is read-only display; it's
+    a <code>&lt;span&gt;</code>, not a form control, and there's deliberately no
+    input variant of it (the nested <code>__currency</code>/<code>__fraction</code>
+    parts can't live inside a native <code>&lt;input&gt;</code> and still be one
+    accessible value). Editable money has two shapes: when the user picks the
+    currency, use the <a href={base + '/components/money'}>Money field</a> —
+    a currency select and amount input working as one control, precision
+    following the currency. When the currency is fixed (this demo's unit
+    price), a plain <code>.bo-input--numeric</code> with the currency in the
+    label is all it takes — the same way <a href={base + '/components/quantity'}>Quantity</a>
+    puts the unit in <code>__unit</code> text next to an editable control.</p>
+  </section>
+
+  <section class="demo">
     <h2>Precision — a setting, not a variant</h2>
     <Demo code={precision} layout="row" />
     <p class="bo-u-text-muted">Whole units, money, or 4-dp unit prices — same component;
@@ -230,22 +246,6 @@ const markup = `<span class="bo-amount">
     its own unit, see <a href={base + '/components/quantity'}>Quantity</a> — same
     <code>__unit</code> convention, plus increment/decrement and native
     validation.</p>
-  </section>
-
-  <section class="demo">
-    <h2>Editable money — not <code>.bo-amount</code></h2>
-    <Demo code={editable} />
-    <p class="bo-u-text-muted"><code>.bo-amount</code> is read-only display; it's
-    a <code>&lt;span&gt;</code>, not a form control, and there's deliberately no
-    input variant of it (the nested <code>__currency</code>/<code>__fraction</code>
-    parts can't live inside a native <code>&lt;input&gt;</code> and still be one
-    accessible value). Editable money has two shapes: when the user picks the
-    currency, use the <a href={base + '/components/money'}>Money field</a> —
-    a currency select and amount input working as one control, precision
-    following the currency. When the currency is fixed (this demo's unit
-    price), a plain <code>.bo-input--numeric</code> with the currency in the
-    label is all it takes — the same way <a href={base + '/components/quantity'}>Quantity</a>
-    puts the unit in <code>__unit</code> text next to an editable control.</p>
   </section>
 
   <section class="demo">
