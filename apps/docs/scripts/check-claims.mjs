@@ -868,21 +868,37 @@ check(
   JSON.stringify({ treeBefore, treeAfter }),
 );
 
-// quantity: the stepper actually steps, and respects its own min.
+/* quantity: the stepper actually steps, and respects its own min.
+
+   Every selector below is scoped to ONE widget via :has([data-quantity-step]),
+   and that is load-bearing rather than tidiness. The steppers are OPTIONAL
+   (80.2), and Slice 85.1 promoted the button-LESS joined ( qty | unit ) form to
+   be the page's Basic demo — so the first `.bo-quantity` on the page no longer
+   has any step buttons. The unscoped version read the FIRST input while
+   clicking the first step button 5,000 bytes further down the page, i.e. it
+   measured widget A while operating widget B, and reported afterUp === start
+   for a stepper that was working correctly. It went red in CI on a true claim.
+
+   Anchoring on "the first quantity that HAS steppers" is what the sentence
+   actually claims, and it survives the demos being reordered again. */
 await visit('/components/quantity/', { width: 1440 });
-const qty = await page.evaluate(() => {
-  const root = document.querySelector('.bo-quantity');
+const QTY = '.bo-quantity:has([data-quantity-step])';
+const qty = await page.evaluate((sel) => {
+  const root = document.querySelector(sel);
+  if (!root) throw new Error('no .bo-quantity with steppers on the page');
   const input = root.querySelector('.bo-quantity__input');
   input.value = String(Number(input.min || 1));
   return { min: input.min || '1', start: input.value };
-});
-await page.click('.bo-quantity [data-quantity-step="1"]');
+}, QTY);
+const readQty = () =>
+  page.evaluate((sel) => document.querySelector(sel).querySelector('.bo-quantity__input').value, QTY);
+await page.click(`${QTY} [data-quantity-step="1"]`);
 await new Promise((r) => setTimeout(r, 100));
-const afterUp = await page.evaluate(() => document.querySelector('.bo-quantity__input').value);
-await page.click('.bo-quantity [data-quantity-step="-1"]');
-await page.click('.bo-quantity [data-quantity-step="-1"]');
+const afterUp = await readQty();
+await page.click(`${QTY} [data-quantity-step="-1"]`);
+await page.click(`${QTY} [data-quantity-step="-1"]`);
 await new Promise((r) => setTimeout(r, 100));
-const afterDown = await page.evaluate(() => document.querySelector('.bo-quantity__input').value);
+const afterDown = await readQty();
 check(
   'quantity: the stepper steps, and will not go below its own min',
   Number(afterUp) === Number(qty.start) + 1 && Number(afterDown) >= Number(qty.min),
