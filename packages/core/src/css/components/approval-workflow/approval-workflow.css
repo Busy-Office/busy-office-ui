@@ -23,12 +23,22 @@
   .bo-timeline__step:not(:last-child)::before {
     content: "";
     position: absolute;
+    /* All three numbers are derived from the marker, not chosen: the line
+       starts 1.5rem down (below a marker of exactly that size), sits at
+       0.75rem minus half its own 2px width so it centres under the marker,
+       and is 2px so it reads as a drawn connector rather than a border —
+       the same weight .bo-stepper uses for the same job. Change the marker
+       size and all three follow it. */
     inset-block: 1.5rem 0;
     inset-inline-start: calc(0.75rem - 1px);
     inline-size: 2px;
     background: var(--bo-color-border-default);
   }
 
+  /* 1.5rem square: the state disc, sized to hold a single glyph (the real
+     markup ✓ ✕ ● that makes state non-colour-alone). Smaller than
+     .bo-stepper's 1.75rem because it holds one glyph rather than two
+     digits. The connector above is positioned from this number. */
   .bo-timeline__marker {
     flex: none;
     display: flex;

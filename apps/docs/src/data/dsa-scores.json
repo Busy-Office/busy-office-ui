@@ -767,6 +767,204 @@
       "improve": [
         "Comment the -0.125em baseline nudge (roadmap 94.6)"
       ]
+    },
+    "alert": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "__dismiss is pushed to the end with margin-inline-start:auto; the alert introduces no competing primary action"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-density-font-size and a weight token; no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "per-variant local custom props (--bo-alert-accent/bg/fg), zero raw colour; the 3px accent is a BORDER so it survives forced-colors, where backgrounds flatten"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "the 3px accent bar and the 24rem toast measure both carry their reason (94.6b)"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "dismissal is markup-driven; the toast region documents its own LIMIT — z-index cannot beat the top layer, so toasts will not float over an open modal <dialog>"
+        },
+        "content": {
+          "score": 3,
+          "cite": "announcement is stated to be the markup’s job (role=\"alert\" vs role=\"status\"), and the top-layer limit is documented rather than glossed"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "inline alerts and toasts; the page names which role each case takes"
+        }
+      }
+    },
+    "skeleton": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a placeholder; introduces no affordance"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "base block is 1em so it matches the line of text it stands in for; no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "gradient built from bg-muted/bg-hover tokens; forced-colors adds a GrayText outline"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "the 2.5rem avatar and 4rem block placeholders both state why they are absolute rather than em (94.6b)"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a static placeholder; it has no interaction surface"
+        },
+        "content": {
+          "score": 3,
+          "cite": "pairs with aria-busy as the programmatic channel, and the forced-colors rule states the failure it prevents — placeholders VANISH and the user sees blank space"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "loading state for a region whose shape is known; distinct from .bo-state’s empty/error"
+        }
+      }
+    },
+    "state": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "__actions carries the single recovery action; nothing competes with it"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "title from --bo-font-size-lg; the 2rem icon now states why it is absolute — a glyph acting as art, not running text (94.6b)"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour, and two-channel by construction: the icon SHAPE differs per state and the text always names it"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "gap/padding from space tokens; the 32ch measure carries its reason (94.6b)"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a layout for an empty/error state; the actions inside it are .bo-btn"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the header states the two-channel contract in the source itself"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the empty and error states every list and detail screen needs; distinct from .bo-skeleton’s loading"
+        }
+      }
+    },
+    "progress": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a measure, not a control; introduces no affordance"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "no font-size at all — it renders no text of its own"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "accent/warning/danger tokens across both engine pseudo-elements; forced-colors hands the element back to the platform with appearance:auto"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "the 10rem x 0.5rem bar proportions state why they are intrinsic (94.6b)"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a native <progress>; value/max semantics and the progressbar role come from the platform, and it is not interactive"
+        },
+        "content": {
+          "score": 3,
+          "cite": "states that colour is ONE channel and the text must say it too (\"93% consumed\"); records the po-app dogfood that produced it"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "continuous progress; the source names .bo-stepper as the discrete-step alternative"
+        }
+      }
+    },
+    "stepper": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "aria-current=\"step\" marks one step; no step is styled as an action"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "marker on --bo-font-size-sm with tabular-nums, label on --bo-density-font-size; no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "raw hex appears ONLY inside @media print, where theme tokens would be wrong on paper; state is two-channel via a real ✓ in the marker markup"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "the 1.75rem marker and 2px connector both carry their reason (94.6b)"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "an <ol> reporting position; the wizard’s controls live elsewhere"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the wrap-not-truncate rule cites its measurement — 558px container, 4 steps, labels clipped by 2-4px (58.3) — and names what clipping costs: which step you are on"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "discrete named steps in a multi-step document; container-queried for narrow shells"
+        }
+      }
+    },
+    "approval-workflow": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a read-only timeline; the current step is marked, not actioned"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "title/meta from weight and size tokens; audit timestamps tabular"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "the one raw hex is inside @media print; state is two-channel by construction — the marker glyph (✓ ✕ ●) is REAL MARKUP, so it survives forced-colors even without a rule"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "marker size and all three connector numbers now state that they are DERIVED from the marker, not chosen (94.6b); the audit grid uses max-content so there is no width token to drift"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "an <ol> of workflow states; approving happens elsewhere"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the audit grid comment records why there is no width token — no ch/rem cross-font-context hazard (unit-doctrine grill)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "status timeline plus audit trail, the two read-only halves of an approval screen"
+        }
+      }
     }
   }
 }

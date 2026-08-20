@@ -28,6 +28,9 @@
     content: "";
     flex: 1;
     min-inline-size: var(--bo-space-4);
+    /* 2px: a connector line, not a border — it has to stay visible as a
+       drawn stroke between markers at every density, where the 1px
+       --bo-border-width reads as an incidental edge. */
     block-size: 2px;
     background: var(--bo-color-border-default);
     margin-inline: var(--bo-space-2);
@@ -37,6 +40,10 @@
     background: var(--bo-color-success);
   }
 
+  /* 1.75rem square: the numbered disc. Sized to fit two tabular digits plus
+     the ring around them — the one dimension a step marker actually has to
+     satisfy — and absolute rather than em so the discs stay a consistent
+     size across a stepper whose labels wrap to different heights. */
   .bo-stepper__marker {
     flex: none;
     display: flex;

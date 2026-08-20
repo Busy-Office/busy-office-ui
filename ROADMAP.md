@@ -963,7 +963,38 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        resolves to compact's `1.875rem` — explicit density correctly beating
        auto-compaction, which is a live confirmation of 94.3's analysis.
 
-3. [ ] **94.6 — batch 3's two family-level findings (Navigation & layout).**
+3. [ ] **94.7 — three of the seven DSA dimensions have never varied, and
+       Spacing is a to-do list. This supersedes 94.4's "no sharpening
+       needed".** Measured across all 28 components scored (batch 4):
+       `hierarchy` `{3: 28}`, `content` `{3: 28}`, `interaction` `{3: 17}`
+       with 11 `na` — **the same value 28 times out of 28, three times over.**
+       By this project's own rule (an identical value across many inputs is an
+       instrument defect until shown otherwise) those three are not measuring;
+       they are ceremony attached to a published number.
+
+       `spacing` is worse than flat, it is *self-clearing*: it reads 2 exactly
+       until a wake writes the why-comment, then 3 forever. All six of batch
+       4 went 2→3 inside the same wake, by the scorer's own edit. A dimension
+       whose value means "has a scoring wake visited this file yet" tells a
+       reader nothing about the design.
+
+       That leaves **`fit`** as the only dimension carrying signal — exactly
+       what 94.4 found when `date` scored `Fit: 0` while passing the 80%
+       clause. 94.4 concluded "the rubric discriminates, no sharpening
+       needed"; on 15 rows that was defensible, on 28 it is not. The rubric
+       discriminates *through one dimension*.
+
+       **Accept:** for each of `hierarchy`, `content`, `interaction`, either
+       (a) write a failure definition sharp enough that a real component in
+       this repo scores below 3 on it — and name that component — or (b)
+       retire the dimension and shrink the denominator. Same test for
+       `spacing`, which additionally must stop being satisfiable by the
+       scorer's own commit. Do this **before** batches 5-7 (Display, Actions,
+       Values: 17 components), so they are not scored twice. Note this is the
+       second time this concern has been raised and the first time it had
+       enough rows to be measured rather than argued.
+
+4. [ ] **94.6 — batch 3's two family-level findings (Navigation & layout).**
        Neither is a per-component defect; both are one habit seen across the
        family, which is why the unit of work is a family.
 

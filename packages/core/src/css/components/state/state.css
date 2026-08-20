@@ -12,6 +12,10 @@
     text-align: center;
   }
 
+  /* 2rem: the icon is the largest thing in an empty state on purpose — it
+     is what the eye lands on before reading. Sized absolutely rather than
+     from a font token because it is a glyph acting as art, not running text,
+     and it should not shrink with density the way the copy beside it does. */
   .bo-state__icon {
     font-size: 2rem;
     line-height: 1;
@@ -28,6 +32,10 @@
     color: var(--bo-color-text-primary);
   }
 
+  /* A measure, not a layout width: 32ch caps the line at roughly the length
+     a reader scans comfortably, and ch ties it to the font actually in use.
+     An empty state's copy is one or two sentences centred under the icon;
+     letting it run the full container width makes it read as a paragraph. */
   .bo-state__description {
     max-inline-size: 32ch;
     color: var(--bo-color-text-secondary);

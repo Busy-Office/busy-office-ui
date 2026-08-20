@@ -11,6 +11,11 @@
     align-items: flex-start;
     gap: var(--bo-space-2);
     padding: var(--bo-space-3) var(--bo-space-4);
+    /* 3px: the status accent bar. Thick enough to read as a deliberate
+       marker at a glance rather than as a hairline border, and the same
+       weight .bo-data-table uses for its row-state accent, so the two read
+       as one language. A border rather than a background stripe because a
+       border survives forced-colors, where backgrounds are flattened. */
     border-inline-start: 3px solid var(--bo-alert-accent);
     border-radius: var(--bo-radius-sm);
     background: var(--bo-alert-bg);
@@ -53,6 +58,10 @@
     display: flex;
     flex-direction: column;
     gap: var(--bo-space-2);
+    /* 24rem: a readable measure for a transient message, and narrow enough
+       that a stack of toasts never covers the screen it is reporting on.
+       Not a layout step — it is the width at which one or two sentences
+       stay scannable in the corner of the eye. */
     max-inline-size: 24rem;
   }
 

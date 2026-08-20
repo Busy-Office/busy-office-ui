@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -66,6 +67,7 @@ const errorState = `<div class="bo-state bo-state--error">
   <ApiTable component="skeleton" notes={[
     'The shimmer is a continuous loop, not a one-shot transition, so it is NOT driven by the --bo-motion-duration-* tokens — it gets an explicit prefers-reduced-motion override instead (same reasoning as .bo-motion-spin in the Motion module).',
   ]} />
+  <DsaScore component="skeleton" />
 
   <section class="demo">
     <h2>Table first-load — skeleton rows</h2>
@@ -123,6 +125,7 @@ const errorState = `<div class="bo-state bo-state--error">
   <ApiTable component="state" notes={[
     'A .bo-state is decoration around a message — the title/description TEXT is the accessible signal; the icon carries aria-hidden="true" so it is never announced as unlabeled content.',
   ]} />
+  <DsaScore component="state" />
 
   <Related links={[
     ["/base/motion", "Motion"],

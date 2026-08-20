@@ -21,12 +21,19 @@
     animation: bo-skeleton-shimmer 1.5s ease-in-out infinite;
   }
 
+  /* 2.5rem square: an avatar-sized placeholder. Absolute rather than em,
+     because it stands in for an IMAGE whose size does not track the
+     surrounding type — unlike the base .bo-skeleton, which is 1em to match
+     the line of text it replaces. */
   .bo-skeleton--circle {
     inline-size: 2.5rem;
     block-size: 2.5rem;
     border-radius: 50%;
   }
 
+  /* 4rem: a paragraph-or-card sized block, tall enough to read as "a chunk
+     of content is coming" rather than as one more missing line. Same
+     reasoning as --circle: it stands in for a box, not for text. */
   .bo-skeleton--block {
     block-size: 4rem;
     border-radius: var(--bo-radius-md);

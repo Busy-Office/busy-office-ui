@@ -7,6 +7,11 @@
      one channel too. Born from the po-app budget-consumption dogfood:
      unstyled native <progress> renders platform-blue chrome that ignores
      the theme in both light and dark. */
+  /* 10rem x 0.5rem: intrinsic bar proportions, not layout steps. The width
+     is a sensible inline default (override it per site — the element is
+     inline-block); the height is deliberately thin so the bar reads as a
+     measure beside its text rather than competing with it. Pairing text is
+     mandatory anyway, per the note above. */
   progress.bo-progress {
     appearance: none;
     inline-size: 10rem;

@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -83,5 +84,6 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
       'For discrete named steps (Submitted → Approved → Paid), use <a href="' + base + '/components/stepper">Stepper</a> instead.',
     ]}
   />
+  <DsaScore component="progress" />
   <Related links={[["/components/stepper", "Stepper"], ["/components/dashboard", "Dashboard"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>
