@@ -135,7 +135,7 @@ and `data-row-state` (both published since 0.1.1) — renaming any of the three 
 a breaking change owed a deprecation cycle, not a sweep. The window in which
 `data-day` could have been renamed for free closed when 0.3.0 was cut.
 
-## Two standing build rules (grill-derived)
+## Three standing build rules (grill-derived)
 
 1. **Never-color-alone has two audiences.** Every state signal ships BOTH a visible
    non-color cue (glyph, text) for sighted colorblind users AND a programmatic
@@ -144,6 +144,28 @@ a breaking change owed a deprecation cycle, not a sweep. The window in which
 2. **Every `@container` query is named.** Bare queries resolve against surprise
    ancestor containers (or the viewport) — the one bug class that recurred across
    reviews. Enforced at build time by `scripts/build-component-css.mjs`.
+3. **`overflow-wrap: anywhere` vs `break-word` is a decision, not a default.**
+   `anywhere` also collapses the element's **min-content width to one
+   character**, so its container can shrink without limit. That is the whole
+   point of it in some places and a bug in others, and the framework uses both
+   values — so the rule is written down rather than guessed (Standardize sweep,
+   2026-08-21):
+
+   - **`anywhere`** when the content can legitimately be ONE unbreakable token
+     that must be shown whole — a filename, an ID, a URL, a filter value — and
+     the container should absorb it. `.bo-file-list__name` is the worked
+     example: at 390px a filename breaks across two lines, which is right,
+     because truncating would hide the extension that says what the file is.
+   - **`break-word`, or nothing at all,** when the content is short words in a
+     container that is free to collapse. `break-word` breaks only what would
+     otherwise overflow and leaves min-content at the longest WORD.
+
+   The cost of getting this backwards was measured: `.bo-badge` copied
+   `.bo-chip`'s `anywhere`, and because a table column will take every inch you
+   let it, **14 of 20 badges** on `/patterns/invoice-list` @390 rendered
+   "Approv/ed". A chip sits in a flex-wrap row with room; a badge sits in a
+   cell. Swept afterwards: of 30 single-word elements carrying `anywhere`,
+   exactly one breaks mid-word, and it is the filename that should.
 
 ## Signature modern-CSS patterns
 

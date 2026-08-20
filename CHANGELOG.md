@@ -26,6 +26,16 @@ pin.
   `/patterns/invoice-list` @390 rendered "Approv/ed", "Pend/ing". A chip sits in
   a flex-wrap row with room; a badge sits in a cell that takes every inch.
 
+- **Added** (tokens): `--bo-color-scrim`, the wash behind a modal `<dialog>` or
+  off-canvas panel. `.bo-dialog::backdrop` and `.bo-offcanvas::backdrop` — the
+  framework's only two `::backdrop` rules — each carried the same
+  `rgb(0 0 0 / 0.4)` literal inline, so the one colour a consumer might most
+  want to tune was the one colour with no token. Deliberately NOT remapped for
+  dark, unlike `--bo-state-*-overlay`: those tint a surface and must invert to
+  stay visible on it, whereas a scrim pushes the whole page back, and a white
+  scrim in dark mode would lift the background toward the panel. Pure refactor
+  — the computed backdrop is `rgba(0, 0, 0, 0.4)` in both themes, unchanged.
+
 - **Fixed** (`data-table`): `.bo-data-table-container` now sets
   `min-inline-size: 0`. As a flex/grid item its `min-width` defaulted to `auto`
   — "never shrink below your own min-content width" — which for a scroll

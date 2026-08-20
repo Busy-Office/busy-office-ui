@@ -51,6 +51,16 @@
     --bo-color-success-text: var(--bo-palette-green-700);
     --bo-color-focus-ring: var(--bo-palette-teal-600);
 
+    /* Modal scrim — the wash behind a <dialog> or an off-canvas panel.
+       Deliberately NOT remapped for dark, unlike the two interaction
+       overlays directly below it: those tint a surface and must invert to
+       stay visible on it, whereas a scrim's job is to push the whole page
+       back. A white scrim in dark mode would lift the background toward the
+       panel instead of away from it. One token, because .bo-dialog and
+       .bo-offcanvas are the framework's only two ::backdrop rules and both
+       had this exact literal inline (Standardize sweep, roadmap 94.6a). */
+    --bo-color-scrim: rgb(0 0 0 / 0.4);
+
     /* Interaction-state tokens. */
     --bo-state-hover-overlay: rgb(0 0 0 / 0.04);
     --bo-state-active-overlay: rgb(0 0 0 / 0.08);
