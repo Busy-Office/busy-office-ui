@@ -1,0 +1,48 @@
+{
+  "$comment": "Design-System Alignment scores (roadmap 92.3). SOURCE OF TRUTH for what renders on component pages — never hand-type a score into a page. Each dimension is 0-3 with a checkable citation; `na` leaves the denominator. Full reasoning lives in .roundtable/scorecard-*.md; this file carries what the docs display. Re-take a score when a component's design changes, and update `scored` to that date.",
+  "rubric": {
+    "dimensions": ["hierarchy", "typography", "colour", "spacing", "interaction", "content", "fit"],
+    "reference": "/concepts/design-language"
+  },
+  "components": {
+    "money": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": { "score": 3, "cite": "no primary-styled control; demos hold ≤1 primary action" },
+        "typography": { "score": 3, "cite": "font-size only via --bo-density-font-size (inherited from .bo-input)" },
+        "colour": { "score": 3, "cite": "zero raw hex in money.css; pairs covered by check:contrast" },
+        "spacing": { "score": 2, "cite": "9rem max-inline-size floor is uncommented; the 6rem min carries its reason (89.2)" },
+        "interaction": { "score": 3, "cite": "native select + input; lossless reformat dispatches real input events so dirty-tracking composes" },
+        "content": { "score": 3, "cite": "captions name meanings; the family-rule paragraph is the exemplar" },
+        "fit": { "score": 3, "cite": "docs name every context per the field matrix, incl. where the joined control does NOT belong (in-cell)" }
+      },
+      "improve": ["Comment or tokenize the 9rem cap (roadmap 92.5)"]
+    },
+    "quantity": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": { "score": 3, "cite": "steppers are --secondary with tabindex=-1; no primary affordance introduced" },
+        "typography": { "score": 3, "cite": "sizes from density tokens; tabular figures on the input (77.1)" },
+        "colour": { "score": 3, "cite": "zero raw hex in quantity.css; inherits gated .bo-input pairs" },
+        "spacing": { "score": 2, "cite": "3rem/12rem floors and a raw 1px in the joint rule are uncommented" },
+        "interaction": { "score": 3, "cite": "native type=number first (arrows/typing work JS-free); boundary sync is progressive enhancement" },
+        "content": { "score": 3, "cite": "captions state meaning, incl. the unsuitable-context callout" },
+        "fit": { "score": 3, "cite": "matrix contexts named; steppers explicitly scoped to touch, not dense grids (80.2)" }
+      },
+      "improve": ["Comment or tokenize the 3rem/12rem floors and the raw 1px (roadmap 92.5)"]
+    },
+    "amount": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": { "score": 3, "cite": "display-only span; introduces no affordance at all" },
+        "typography": { "score": 2, "cite": "two raw 0.875em affix sizes in amount.css — functional, but not a token step" },
+        "colour": { "score": 3, "cite": "zero raw hex; negative/positive is the two-channel signature contract, AA-gated" },
+        "spacing": { "score": 3, "cite": "gap and margins all from spacing tokens" },
+        "interaction": { "score": "na", "cite": "a display span — no interaction surface; the input variant was deliberately refused" },
+        "content": { "score": 3, "cite": "the sign/parentheses carry meaning in text, never colour alone" },
+        "fit": { "score": 3, "cite": "display-only in every matrix context; adopted across the under-using screens (92.4)" }
+      },
+      "improve": ["Consider a token step for the 0.875em affix sizes (roadmap 92.5)"]
+    }
+  }
+}

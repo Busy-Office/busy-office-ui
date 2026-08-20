@@ -780,6 +780,38 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 93 — Owner ask: show the alignment score on each component's page (2026-08-21)
+
+"Show the score in the document of each component so we know whether we
+need to improve it in the future." Built generated, not hand-typed —
+a score written into 40 pages would drift the first time one is
+re-taken, so it follows the same rule as `ApiTable`/`ClassRef`.
+
+**93.1 — the mechanism.** `apps/docs/src/data/dsa-scores.json` is the
+source of truth (per-dimension score + citation + `improve` list);
+`DsaScore.astro` renders it as a "Design-system alignment" section
+after the generated API tables. Wired into the three scored pages.
+Re-scoring is now a JSON edit; 92.6's remaining batches only add JSON
+entries rather than touching pages.
+
+**Two judgment calls, recorded rather than left implicit:**
+- An **unscored component renders an honest "not yet scored" line**,
+  not nothing — absence should read as "not done yet", not as an
+  omission. 3 of 40 are scored today.
+- **`na` dimensions shrink the denominator.** Amount is a display span
+  with no interaction story, so it scores 17/18, not 17/21 — verified
+  live that its Interaction row reads `n/a` and the denominator is 18.
+
+**Consumer-visible by consequence** — the docs site is public, so these
+are now published quality scores. Judged defensible (citations make
+them read as confidence; the known gaps are all small literals), and
+flagged to the owner with the offer to move them behind an
+internal-only page instead — cheap now, expensive after a publish.
+
+Verified live, both themes: money 95% (20/21), quantity 95% (20/21),
+amount 94% (17/18), each with its per-rule evidence table and
+Known-gaps line.
+
 ## Slice 92 — Owner direction: the design system takes the wheel (2026-08-21)
 
 Owner: update the design system with a per-field-type design guide;

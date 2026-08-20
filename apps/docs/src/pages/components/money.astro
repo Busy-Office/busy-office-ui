@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -237,6 +238,7 @@ const canonical = `<!-- Two real form controls working as one field: the select 
       'The JS is optional, not required. Without <code>initMoneyField()</code> the two controls still work — precision just doesn\'t follow the currency automatically. An htmx app that prefers the server owning precision can skip the behavior entirely and re-render the amount input with the new <code>step</code> on currency change (<code>hx-get</code> on the select) — the same outcome, server-side. And a single-currency form needs neither: a plain <code>.bo-input--numeric</code> with the currency in the label (<code>examples/po-app</code> captures every amount this way).',
     ]}
   />
+  <DsaScore component="money" />
   <Related links={[
     ['/components/amount', 'Amount'],
     ['/components/quantity', 'Quantity'],

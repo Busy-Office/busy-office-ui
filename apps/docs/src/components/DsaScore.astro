@@ -1,0 +1,72 @@
+---
+/**
+ * Design-System Alignment score for one component (roadmap 92.3), rendered
+ * FROM src/data/dsa-scores.json so a score can never be hand-typed into a
+ * page and drift from the record. Same generated-not-written rule as
+ * ApiTable/ClassRef.
+ *
+ * An unscored component renders an honest "not yet scored" line rather than
+ * nothing — absence of a score should be legible, not look like an omission.
+ * A dimension scored "na" (a display span has no interaction story) leaves
+ * the denominator instead of counting as a loss.
+ */
+import scores from '../data/dsa-scores.json';
+const { component } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entry = (scores.components as Record<string, any>)[component];
+
+const LABELS: Record<string, string> = {
+  hierarchy: 'Hierarchy', typography: 'Typography', colour: 'Colour',
+  spacing: 'Spacing', interaction: 'Interaction', content: 'Content', fit: 'Fit',
+};
+
+let pct = 0, earned = 0, possible = 0, rows: any[] = [];
+if (entry) {
+  rows = scores.rubric.dimensions.map((d: string) => ({ key: d, ...entry.dimensions[d] }));
+  for (const r of rows) {
+    if (r.score === 'na') continue;
+    earned += r.score;
+    possible += 3;
+  }
+  pct = Math.round((earned / possible) * 100);
+}
+---
+<section class="demo">
+  <h2>Design-system alignment</h2>
+  {entry ? (
+    <>
+      <p>
+        <strong>{pct}%</strong> ({earned}/{possible}) — how closely this
+        component follows the
+        <a href={base + '/concepts/design-language'}> design language</a>.
+        Each rule is scored 0-3 against a checkable citation; rules that
+        don't apply leave the denominator. Scored {entry.scored}.
+      </p>
+      <div class="bo-data-table-container" tabindex="0">
+        <table class="bo-data-table" data-density="compact">
+          <thead><tr>
+            <th scope="col">Rule</th>
+            <th scope="col" class="bo-data-table__col--numeric">Score</th>
+            <th scope="col">Evidence</th>
+          </tr></thead>
+          <tbody>
+            {rows.map((r: any) => (
+              <tr>
+                <th scope="row">{LABELS[r.key]}</th>
+                <td class="bo-data-table__col--numeric">{r.score === 'na' ? 'n/a' : r.score + ' / 3'}</td>
+                <td>{r.cite}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {entry.improve?.length > 0 && (
+        <p class="bo-u-text-muted"><strong>Known gaps:</strong> {entry.improve.join('; ')}.</p>
+      )}
+    </>
+  ) : (
+    <p class="bo-u-text-muted">Not yet scored — alignment scoring is
+    proceeding in batches. The rubric is on
+    <a href={base + '/concepts/design-language'}> the design-language page</a>.</p>
+  )}
+</section>

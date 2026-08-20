@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -270,5 +271,6 @@ const markup = `<span class="bo-amount">
             'Currency and unit are muted affixes; put the currency before or after the value by source order.',
             '<code>__currency</code> accepts a symbol, an ISO 4217 code, or an app-defined currency (points, credits) — no allowlist or validation in CSS.',
             'Decimal precision is per-currency domain data, not a CSS setting — there is no <code>--decimals</code> modifier; your app (or an <code>Intl.NumberFormat</code> call) decides and formats the digits before they reach this component.']} />
+  <DsaScore component="amount" />
   <Related links={[["/components/quantity", "Quantity (editable counts)"], ["/components/money", "Money field (editable money)"], ["/components/data-table", "Data table"], ["/base/utilities", "Utilities (tabular)"], ["/patterns/invoice-list", "Invoice list pattern"]]} />
 </Gallery>
