@@ -9,6 +9,19 @@
     border-radius: var(--bo-radius-md);
     overflow: auto;
     scrollbar-gutter: stable;
+    /* A flex/grid item's min-width defaults to `auto`, which means "never
+       shrink below your own min-content width". For a scroll container that
+       is self-defeating: rather than scrolling its table internally, the box
+       can grow past its parent and push the PAGE sideways.
+
+       Found while diagnosing the /patterns/record-detail @390 overflow and
+       kept on its own merits — it was NOT the cause of that bug (the badge
+       was; see badge.css). Measured before the change: three containers on
+       that page computed `min-inline-size: auto` inside a `display: flex`
+       parent, so they were one long label away from the failure mode above.
+       Latent, not hypothetical. Same one-line fix and same reason as
+       .bo-sidebar-nav__label. */
+    min-inline-size: 0;
     /* NOT the edge-fade that `.bo-tabs__list` uses for the same problem, and
        this is a deliberate difference rather than drift (Standardize sweep,
        2026-08-18). A mask fading the inline edges dims the FROZEN first column

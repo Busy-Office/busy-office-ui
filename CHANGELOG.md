@@ -8,7 +8,32 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+> These land **after** `v0.3.0` was tagged, so they are not in that release.
+> The tag is already pushed; it was not moved to pick them up.
+
+- **Fixed** (`badge`): a long label could push the whole PAGE sideways.
+  `.bo-badge` carried `white-space: nowrap` with no width cap, so a status
+  label that could not break grew the badge past its parent — measured 373px
+  wide against a 390px shell on `/patterns/record-detail`, i.e. 24px of
+  horizontal page overflow at phone width. It now caps at
+  `max-inline-size: 100%` and wraps normally: a multi-word label breaks at its
+  space, a single word never splits. Where a table wants the old behaviour for
+  one column, `.bo-u-text-nowrap` (73.3) still opts into it.
+
+  Deliberately **not** `overflow-wrap: anywhere`, which `.bo-chip` uses for the
+  same shape: `anywhere` also collapses min-content width to one character, and
+  in a narrow table cell that split single words — 14 of 20 badges on
+  `/patterns/invoice-list` @390 rendered "Approv/ed", "Pend/ing". A chip sits in
+  a flex-wrap row with room; a badge sits in a cell that takes every inch.
+
+- **Fixed** (`data-table`): `.bo-data-table-container` now sets
+  `min-inline-size: 0`. As a flex/grid item its `min-width` defaulted to `auto`
+  — "never shrink below your own min-content width" — which for a scroll
+  container is self-defeating: it would grow past its parent and push the page
+  instead of scrolling its table internally. Three containers on
+  `/patterns/record-detail` computed `auto` inside a flex parent. Latent rather
+  than observed (the badge above was the actual overflow), fixed on its own
+  merits.
 
 ## 0.3.0 (2026-08-21)
 

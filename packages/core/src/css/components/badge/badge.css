@@ -34,7 +34,30 @@
     /* Badges are used as links in the docs' own "components used" and
        generated component lists; without this they render underlined. */
     text-decoration: none;
-    white-space: nowrap;
+    /* WRAP rather than spill, and the same answer .bo-chip reached on
+       2026-08-17 for the identical shape — this is the pill next door, and
+       the fix simply had not been propagated. `white-space: nowrap` used to
+       sit here, which meant a long status label ("Purchase Order" in a
+       longer locale) could not break, grew the badge past its parent, and
+       pushed the whole PAGE sideways: measured 373px wide against a 390px
+       shell on /patterns/record-detail @390, i.e. 24px of horizontal page
+       overflow. Truncating instead is not an option — it loses text under
+       the WCAG 1.4.12 user-spacing override, which is why the chip wraps
+       too. A wrapped badge is taller; a page that scrolls sideways at phone
+       width is wrong. Per-column nowrap is still available where a table
+       wants it, via the .bo-u-text-nowrap utility (73.3).
+
+       NOT `overflow-wrap: anywhere`, which is what .bo-chip uses and what
+       the first version of this fix copied. `anywhere` also collapses the
+       element's min-content width to one character, so a narrow table
+       column shrank until single words broke mid-word: measured 14 of 20
+       badges on /patterns/invoice-list @390 rendering "Approv/ed",
+       "Pend/ing". A chip sits in a flex-wrap row with room to breathe; a
+       badge sits in a table cell that will take every inch you let it.
+       Ordinary wrapping keeps min-content at the longest WORD, so a
+       multi-word label breaks at its space and a single word never
+       splits. */
+    max-inline-size: 100%;
   }
 
   /* Derived from the badge's own foreground, so every variant gets a
