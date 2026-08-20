@@ -1,10 +1,12 @@
 /**
  * Multiple frozen columns (roadmap 72.1) — opt-in via [data-sticky-cols],
- * "1" | "2" | "3". Freezing a SINGLE column needs no JS at all (its offset
- * is always 0 — see .bo-data-table--sticky-col in data-table.css); this
- * behavior exists only because 2+ columns need each preceding column's
- * actual rendered width, and table-layout is auto by default so nothing
- * knows that width in advance.
+ * "2" | "3" only. Freezing a SINGLE column needs no JS at all (its offset
+ * is always 0) — use .bo-data-table--sticky-col in data-table.css for that
+ * case; data-sticky-cols="1" is deliberately not a thing (Standardize sweep,
+ * 2026-08-20 — it would just be a second way to do what --sticky-col already
+ * does). This behavior exists only because 2+ columns need each preceding
+ * column's actual rendered width, and table-layout is auto by default so
+ * nothing knows that width in advance.
  *
  * Markup contract:
  *   <table class="bo-data-table" data-sticky-cols="2">

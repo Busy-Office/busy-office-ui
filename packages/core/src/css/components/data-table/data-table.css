@@ -172,15 +172,18 @@
   }
 
   /* Multiple frozen columns (roadmap 72.1), opt-in via [data-sticky-cols].
-     --sticky-col above stays the zero-JS answer for ONE frozen column —
-     its offset is always 0, no measurement needed. Freezing MORE than one
-     needs each column's actual rendered width (table-layout is auto by
-     default, so widths aren't known in advance), which only JS can supply
-     — initStickyCols() measures the header row and writes --bo-sticky-w-1/
-     -w-2 on the <table>. Capped at 3: real ERP tables freeze an identifying
-     column or two, not a wall of them — a genuinely wider need can compose
-     its own inset-inline-start rather than this growing without bound. */
-  .bo-data-table[data-sticky-cols="1"] :is(th, td):nth-child(-n + 1),
+     --sticky-col above stays the ONLY answer for ONE frozen column — its
+     offset is always 0, no measurement needed, so a data-sticky-cols="1"
+     rule here would just be a second way to do the same thing (Standardize
+     sweep, 2026-08-20: found and removed — nothing in the docs or examples
+     ever referenced "1", it was dead, redundant surface from launch).
+     Freezing 2 or 3 needs each column's actual rendered width (table-layout
+     is auto by default, so widths aren't known in advance), which only JS
+     can supply — initStickyCols() measures the header row and writes
+     --bo-sticky-w-1/-w-2 on the <table>. Capped at 3: real ERP tables
+     freeze an identifying column or two, not a wall of them — a genuinely
+     wider need can compose its own inset-inline-start rather than this
+     growing without bound. */
   .bo-data-table[data-sticky-cols="2"] :is(th, td):nth-child(-n + 2),
   .bo-data-table[data-sticky-cols="3"] :is(th, td):nth-child(-n + 3) {
     position: sticky;
@@ -201,7 +204,6 @@
     inset-inline-start: calc(var(--bo-sticky-w-1, 0px) + var(--bo-sticky-w-2, 0px));
   }
 
-  .bo-data-table[data-sticky-cols="1"] thead th:nth-child(-n + 1),
   .bo-data-table[data-sticky-cols="2"] thead th:nth-child(-n + 2),
   .bo-data-table[data-sticky-cols="3"] thead th:nth-child(-n + 3) {
     z-index: calc(var(--bo-z-sticky-header) + 1);

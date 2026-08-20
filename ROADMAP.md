@@ -748,6 +748,48 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 74 — Standardize sweep: sticky-cols' redundant "1" case (2026-08-20)
+
+Dispatched by the counter (5/4 Continue rounds since the last Standardize
+sweep — overdue). Scanned the data-table CSS/JS/docs added across Slices
+71-73 for divergence: inline styles (found none new — the one inline
+`style` this session's demos added matches this file's own pre-existing
+pattern for one-off demo widths, not drift), hardcoded color values
+(none — `git diff` over every CSS change confirmed every color is a
+token), duplicated business logic (none), and the "which N gets which
+attribute value" family of new selectors (`data-sticky-cols`,
+`data-tone`, `data-context-menu`) for overlap with each other or with
+existing mechanisms.
+
+**Found one real instance:** `data-sticky-cols="1"` (Slice 72.1) and the
+pre-existing `.bo-data-table--sticky-col` modifier class do the exact
+same thing for the one-frozen-column case — two ways to reach an
+identical result, the shape principle 2 explicitly refuses. Checked
+before removing: `data-sticky-cols="1"` had zero references anywhere in
+docs, examples, or prose — dead, redundant surface since the moment it
+shipped, not something anyone was relying on.
+
+**Consolidated**: removed the `"1"` case from all three CSS selector
+groups (position/z-index, header z-index — the `inset-inline-start: 0`
+rule stays attribute-value-agnostic since it's harmless without
+`position: sticky` alongside it), updated `initStickyCols()`'s doc
+comment and the docs page's `ApiTable` note to say `data-sticky-cols=
+"2|3"` and point at `--sticky-col` for the single-column case explicitly.
+Full core + docs build green after the change (no gate needed updating —
+this was a pure CSS-selector consolidation, not a new pattern).
+
+**Round check**: re-scanned for the same drift shape elsewhere
+(`data-tone`, `data-context-menu`) — clean, no other instance found.
+Regression-verified live in a `--no-cache` Podman rebuild: the
+`data-sticky-cols="2"` demo still measures correctly post-change
+(`position: sticky` on columns 1-2 via `getComputedStyle`, column 3
+`static`, column 2's `insetInlineStart` still the measured `52px` from
+`initStickyCols()` — checked on `<td>`, not `<th>`, since header cells
+are ALSO `position: sticky` from the unrelated sticky-header-row rule
+and would have given a false pass).
+
+**Exit:** clean re-scan, nothing left to consolidate.
+
 ## Slice 73 — Owner ask: grill a right-click column-header context menu (2026-08-20)
 
 Triaged from chat: "selectable columns, right-click for action (sorting,
