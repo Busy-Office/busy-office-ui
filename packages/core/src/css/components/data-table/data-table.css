@@ -406,8 +406,21 @@
 
   /* Auto-compaction when the table lives in a narrow container.
      Precedence: an EXPLICIT data-density on the table or its container wins —
-     compaction only applies when neither declares one. All density aliases
-     are overridden together so the result is coherent compact, not a mix. */
+     compaction only applies when neither declares one. Every density alias is
+     overridden together, so the result is a coherent density rather than a
+     mix of two.
+
+     It is NOT identical to data-density="compact", and the three numbers
+     below are where it diverges: cell-padding-x is one space step tighter
+     (--bo-space-1 vs compact's --bo-space-2), and the two heights are 1.75rem
+     where compact runs 1.75/1.875rem. The heights are written as literals
+     because they cannot reference the compact block — a container query
+     cannot re-enter a token selector — which also means the control-height
+     literal silently duplicates compact's value and will drift if compact is
+     ever retuned. Whether that divergence is intentional was never decided
+     (these values date to the initial commit); reconciling it is queued as
+     roadmap 94.3, since matching compact would change rendered row heights
+     and needs live verification. */
   @container bo-table (max-width: 30rem) {
     .bo-data-table-container:not([data-density])
       > .bo-data-table:not([data-density]) {

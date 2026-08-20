@@ -61,6 +61,10 @@
     align-items: center;
     gap: var(--bo-space-1);
     padding-inline: var(--bo-space-2);
+    /* Half the smallest space token, deliberately — a pill hugs its own label
+       so a wrapped row of tags reads as tokens, not as buttons. Same number
+       and same reason as .bo-chip in filters.css; only the vertical hug is
+       intrinsic, the inline padding stays tokenised. */
     padding-block: 0.125rem;
     border-radius: var(--bo-radius-full);
     background: var(--bo-color-bg-muted);
@@ -70,6 +74,15 @@
     white-space: nowrap;
   }
 
+  /* 1rem (16px) square: the button sits INSIDE a pill that hugs its label, so
+     a larger box would inflate every tag. Undersized on purpose, and it
+     conforms to WCAG 2.5.8 by the spacing exception rather than by a 24px
+     floor — one remove button per tag, each a tag-width from the next, so no
+     other target's centre falls within 24px. check:target-size measures that
+     clearance on the rendered page; it is not an assumption. (.bo-chip__remove
+     in filters.css takes the other route — same 1rem glyph, padded out to a
+     24px hit area — because chips are anchors that can sit shoulder to
+     shoulder.) */
   .bo-tag-input__remove {
     display: inline-flex;
     align-items: center;
@@ -92,6 +105,10 @@
 
   .bo-tag-input__field {
     flex: 1;
+    /* Floor for the next-value field: it shares a flex-wrap row with the
+       committed tags, so without a floor a full row squeezed it to a few
+       pixels and the field became untypeable. 6rem is enough to see what you
+       are typing; below that it wraps to its own line instead. */
     min-inline-size: 6rem;
     padding: var(--bo-space-1) 0;
     border: 0;

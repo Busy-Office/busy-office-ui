@@ -9,6 +9,10 @@
     display: inline-flex;
     align-items: stretch;
     inline-size: 100%;
+    /* max cap: a count is intrinsically narrow, like Money's amount — it must
+       not stretch across a form column and read as a text field. 12rem (vs
+       Money's 9rem) is the wider of the pair because this control can carry
+       two flanking steppers AND a unit select beside the digits. */
     max-inline-size: 12rem;
   }
 
@@ -30,6 +34,10 @@
 
   .bo-quantity__input {
     flex: 1 1 auto;
+    /* min floor: the same rule Money's amount carries — under column pressure
+       the input must never shrink below its own digits. 3rem (vs Money's 6rem)
+       because counts are short: "9,999" fits, where an amount needs cents and
+       thousands separators. */
     min-inline-size: 3rem;
     border-radius: 0;
     margin-inline: calc(var(--bo-border-width) * -1);

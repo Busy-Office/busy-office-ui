@@ -28,6 +28,10 @@
        digits and silently clipped "1250.00" to "1250." — money digits
        must never truncate before the table is forced to widen. */
     min-inline-size: 6rem;
+    /* max cap: an amount field is intrinsically narrow — it holds digits, not
+       prose — so it must not stretch to fill a wide form column and read as a
+       text field. 9rem is the widest realistic ERP amount ("1,234,567.89")
+       plus its padding; beyond that the number would float alone in whitespace. */
     max-inline-size: 9rem;
   }
 }

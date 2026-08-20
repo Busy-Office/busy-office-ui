@@ -11,6 +11,10 @@
        reorder/remove in your app or HTMX). */
   .bo-ordered-list {
     margin: 0;
+    /* Marker gutter, not a spacing step: it must be wide enough for the
+       widest marker the list will actually render ("12." in tabular figures)
+       so no item's text hangs at a different indent from its siblings. A
+       space token would be sized for layout rhythm, not for the glyph. */
     padding-inline-start: 1.75rem;
   }
 
@@ -18,6 +22,9 @@
     font-family: var(--bo-font-mono);
     font-size: var(--bo-font-size-sm);
     font-variant-numeric: tabular-nums;
+    /* Deliberately below the smallest space token: this is line separation
+       inside one block of text, not gap between components — --bo-space-1
+       spaced the items far enough apart to read as separate rows. */
     padding-block: 0.15rem;
   }
 

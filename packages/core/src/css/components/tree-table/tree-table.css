@@ -24,7 +24,11 @@
   .bo-tree-table [data-tree-level='12'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 13.75em); }
 
   /* Disclosure button: composes the ghost-button look at row scale.
-     Chevron rotation is decoration — aria-expanded is the contract. */
+     Chevron rotation is decoration — aria-expanded is the contract.
+     1.5em square, em-relative so it tracks the density font size: the
+     toggle has to fit inside a compact row's line box without forcing the
+     row taller, and 1.5em is that line box. __spacer below repeats the
+     same number so leaf rows keep the column alignment. */
   .bo-tree-table__toggle {
     inline-size: 1.5em;
     block-size: 1.5em;

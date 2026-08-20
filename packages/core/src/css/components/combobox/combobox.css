@@ -13,6 +13,11 @@
     position: fixed;
     inset: auto;
     margin: 0;
+    /* Popup sizing, both intrinsic to what the list must show rather than to
+       the layout grid. The min keeps a narrow trigger (a short in-cell field)
+       from producing a listbox too tight to read its own option labels; the
+       max caps the popup at roughly ten dense rows so it scrolls in place
+       instead of running past the viewport edge from a low trigger. */
     min-inline-size: 12rem;
     max-block-size: 16rem;
     overflow-y: auto;

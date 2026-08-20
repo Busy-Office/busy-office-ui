@@ -62,6 +62,10 @@
   .bo-tree__label::before {
     content: "▸" / "";
     flex: none;
+    /* One em, so the chevron slot is exactly one character wide at whatever
+       density font-size is in force — the glyph centres in its own advance
+       width and open/closed rows keep identical label alignment. Not a token:
+       the number IS the type size, so any indirection would just rename it. */
     inline-size: 1em;
     text-align: center;
     transition: rotate var(--bo-motion-duration-base) var(--bo-motion-easing-standard);

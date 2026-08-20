@@ -29,8 +29,8 @@
           "cite": "zero raw hex in money.css; pairs covered by check:contrast"
         },
         "spacing": {
-          "score": 2,
-          "cite": "9rem max-inline-size floor is uncommented; the 6rem min carries its reason (89.2)"
+          "score": 3,
+          "cite": "9rem cap and 6rem floor both carry their reason; gap/margins from tokens (94.2)"
         },
         "interaction": {
           "score": 3,
@@ -44,10 +44,7 @@
           "score": 3,
           "cite": "docs name every context per the field matrix, incl. where the joined control does NOT belong (in-cell)"
         }
-      },
-      "improve": [
-        "Comment or tokenize the 9rem cap (roadmap 92.5)"
-      ]
+      }
     },
     "quantity": {
       "scored": "2026-08-21",
@@ -65,8 +62,8 @@
           "cite": "zero raw hex in quantity.css; inherits gated .bo-input pairs"
         },
         "spacing": {
-          "score": 2,
-          "cite": "3rem/12rem floors and a raw 1px in the joint rule are uncommented"
+          "score": 3,
+          "cite": "3rem floor and 12rem cap both carry their reason; the joint uses --bo-border-width, not a raw 1px (94.2)"
         },
         "interaction": {
           "score": 3,
@@ -80,10 +77,7 @@
           "score": 3,
           "cite": "matrix contexts named; steppers explicitly scoped to touch, not dense grids (80.2)"
         }
-      },
-      "improve": [
-        "Comment or tokenize the 3rem/12rem floors and the raw 1px (roadmap 92.5)"
-      ]
+      }
     },
     "amount": {
       "scored": "2026-08-21",
@@ -137,8 +131,8 @@
           "cite": "raw hex appears ONLY inside @media print, where theme tokens would be wrong on paper — checked in context, not a defect; screen pairs are check:contrast-gated"
         },
         "spacing": {
-          "score": 2,
-          "cite": "1.75rem compaction row-heights are uncommented magic numbers; the 1px/2px/3px are intrinsic border/accent widths"
+          "score": 3,
+          "cite": "the 1.75rem compaction heights now state why they are literals and how they diverge from compact (94.2); reconciliation queued as 94.3"
         },
         "interaction": {
           "score": 3,
@@ -154,7 +148,7 @@
         }
       },
       "improve": [
-        "Tokenize or comment the 0.9em __col--code size and the 1.75rem compaction heights (roadmap 94.1)"
+        "Tokenize or comment the 0.9em __col--code size (roadmap 94.1)"
       ]
     },
     "pagination": {
@@ -206,8 +200,8 @@
           "cite": "zero raw hex; reuses gated sidebar pairings"
         },
         "spacing": {
-          "score": 2,
-          "cite": "1.25em indent and 1em chevron are em-relative and intrinsic, but uncommented"
+          "score": 3,
+          "cite": "1.25em indent and 1em chevron slot both carry their em-relative reason (94.2)"
         },
         "interaction": {
           "score": 3,
@@ -239,8 +233,8 @@
           "cite": "zero raw hex; the 1px ButtonText border is a forced-colors requirement, not a themed colour"
         },
         "spacing": {
-          "score": 2,
-          "cite": "1.5em disclosure sizes ×3 are intrinsic but uncommented"
+          "score": 3,
+          "cite": "1.5em disclosure box states why it is one line-box tall, and __spacer cites it (94.2)"
         },
         "interaction": {
           "score": 3,
@@ -272,8 +266,8 @@
           "cite": "zero raw hex"
         },
         "spacing": {
-          "score": 2,
-          "cite": "1.75rem indent and 0.15rem block padding uncommented"
+          "score": 3,
+          "cite": "1.75rem marker gutter and 0.15rem item padding both carry their reason (94.2)"
         },
         "interaction": {
           "score": "na",
@@ -305,8 +299,8 @@
           "cite": "zero raw hex; the error state is border + message + aria-invalid, never colour alone"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 6rem scroll-padding-block-end (action-bar clearance) and the 1rem checkbox box are uncommented"
+          "score": 3,
+          "cite": "the 6rem action-bar clearance and the 1rem native checkbox box both carry their reason (94.2)"
         },
         "interaction": {
           "score": 3,
@@ -338,8 +332,8 @@
           "cite": "zero raw hex"
         },
         "spacing": {
-          "score": 2,
-          "cite": "12rem min / 16rem max listbox sizing is intrinsic but uncommented"
+          "score": 3,
+          "cite": "12rem min / 16rem max listbox sizing states what each bound protects (94.2)"
         },
         "interaction": {
           "score": 3,
@@ -371,8 +365,8 @@
           "cite": "zero raw hex"
         },
         "spacing": {
-          "score": 2,
-          "cite": "chip paddings (0.125/0.25rem) and the 1rem icon box are intrinsic but uncommented"
+          "score": 3,
+          "cite": "0.125rem chip hug commented (94.2); the 1rem remove box already carried its WCAG 2.5.8 hit-area note"
         },
         "interaction": {
           "score": 3,
@@ -404,8 +398,8 @@
           "cite": "zero raw hex; forced-colors handled with a real 1px CanvasText border"
         },
         "spacing": {
-          "score": 2,
-          "cite": "0.125rem chip padding, 1rem remove-button box and 6rem field floor are uncommented"
+          "score": 3,
+          "cite": "chip hug, 1rem remove box and 6rem field floor all carry their reason, incl. the 2.5.8 spacing-exception route (94.2)"
         },
         "interaction": {
           "score": 3,

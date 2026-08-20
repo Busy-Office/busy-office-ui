@@ -15,6 +15,12 @@
     display: inline-flex;
     align-items: center;
     gap: var(--bo-space-1);
+    /* Block padding is half the smallest space token, deliberately: a pill
+       must hug its own label so a row of chips reads as tokens rather than
+       as buttons. --bo-space-1 all round made them tall enough to compete
+       with the controls beside them. Inline padding stays tokenised — only
+       the vertical hug is intrinsic. (Same number, same reason, on
+       .bo-tag-input__tag.) */
     padding: 0.125rem var(--bo-space-2);
     border: var(--bo-border-width) solid var(--bo-color-border-strong);
     border-radius: var(--bo-radius-full);

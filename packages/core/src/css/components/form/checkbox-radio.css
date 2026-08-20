@@ -1,4 +1,11 @@
 @layer bo-components {
+  /* 1rem (16px) square — the platform's own checkbox size, kept rather than
+     restyled so the native control (and its indeterminate state, its
+     forced-colors rendering, its accent-color) stays intact. A control the
+     browser draws is sized in absolute terms, not on the layout grid, so this
+     is not a spacing-token decision. Row-level touch targets come from
+     --bo-density-control-height on the label, not from growing the box;
+     check:target-size measures the result on the rendered page. */
   .bo-checkbox,
   .bo-radio {
     inline-size: 1rem;

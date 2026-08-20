@@ -21,7 +21,14 @@
 
   /* Sticky action bar for long detail forms. The scroll-padding rules keep a
      keyboard-focused field from scrolling UNDER the opaque bar (WCAG 2.4.11
-     Focus Not Obscured). */
+     Focus Not Obscured).
+
+     6rem is a clearance, not a spacing step: it has to exceed the action
+     bar's own rendered height (its padding plus a control), and it is
+     deliberately generous — overshooting parks the focused field a little
+     higher than needed, while undershooting by a pixel hides it and fails
+     the criterion. The bar's height varies with density, so this is one
+     number that covers the tallest case rather than a per-density token. */
   html:has(.bo-form-actions),
   .bo-app-shell__main:has(.bo-form-actions) {
     scroll-padding-block-end: 6rem;

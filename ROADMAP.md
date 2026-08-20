@@ -796,6 +796,66 @@ that the *reasoning* is missing, not the token. Accept: every literal
 flagged by a batch carries its why-comment; affected components
 re-score to 3 on Spacing.
 
+**[x] 94.2 — DONE (Standardize sweep, 2026-08-21).** Fourteen literals
+across ten components now carry their why-comment; all ten re-score to
+3 on Spacing. Two comments make executable claims and both were run,
+not assumed: `check:target-size` names `bo-tag-input__remove 16x16
+(nearest 91px)` and `bo-checkbox 16x16` in its own passing output, so
+the WCAG 2.5.8 spacing-exception route each comment cites is verified
+rather than asserted. The CSS is documentary only — the README
+size-stamp check passing proves the minified `dist` is byte-identical,
+which is stronger evidence than a screenshot that nothing can have
+regressed.
+
+**Three of batch 1-2's citations were wrong, and reconciling them
+before editing is what found 94.3.** The instrument had flagged
+literals that already carried comments (`filters`' 1rem remove box has
+had its WCAG 2.5.8 note since 2026-08-17; `tree`'s 1.25em indent
+states its em-relative reason) and one that does not exist at all —
+`quantity`'s "raw 1px in the joint rule" is *comment text* describing
+a `calc(var(--bo-border-width) * -1)`. That is the documented
+comment-injection trap, hit by a scoring pass rather than a gate. Rate:
+3 of 14 cited literals misread.
+
+1. [ ] **94.3 — `data-table`'s auto-compaction is a fourth density
+       nobody designed.** Found while commenting its `1.75rem` heights.
+       The `@container bo-table (max-width: 30rem)` block claims in its
+       own comment to produce "coherent compact", and does not: it sets
+       `--bo-density-row-height: 1.75rem` where `[data-density="compact"]`
+       uses `1.875rem`, and `--bo-density-cell-padding-x: var(--bo-space-1)`
+       where compact uses `--bo-space-2`. `--bo-density-control-height:
+       1.75rem` *duplicates* compact's value as a literal, so it will
+       drift silently the first time compact is retuned. A container
+       query cannot re-enter a token selector, so the duplication is
+       structural — but the divergence is not: these values date to the
+       initial commit and were never deliberated. The comment has been
+       corrected to state the divergence; the values have not been
+       touched, because matching compact changes rendered row heights.
+       **Accept:** decide whether auto-compaction IS compact (then take
+       the two values to compact's and verify live at 1440/390px in both
+       themes) or is deliberately tighter (then it is a named density
+       with its own row in `density.css`, not three literals hiding in a
+       container query). Either outcome removes the duplicated literal.
+
+2. [ ] **94.4 — the DSA rubric no longer discriminates, and 94.2 is what
+       exposed it.** With Spacing resolved, **12 of 14 scored components
+       read 100%**; the distribution is `{94%: 1, 95%: 1, 100%: 12}`, and
+       the only two sub-3 dimensions left in the whole file are
+       `amount.typography` and `data-table.typography`. Spacing was the
+       one dimension that had ever varied, so removing it flattened the
+       scale. The arithmetic is right — this is not an instrument defect
+       — but a score that reads 100% for almost everything is publishing
+       reassurance, not measurement, and these render on public pages.
+       Note the trigger clauses (total < 80%, any dimension ≤ 1) have
+       **never once fired** across 14 components. **Accept:** before
+       scoring the remaining 23 (batches 3-7), either sharpen the
+       dimensions so a known-weaker component scores visibly lower —
+       pick one deliberately, e.g. the deprecated `date` at its 1/12
+       surface score, and confirm the rubric ranks it below `money` — or
+       record that the surface genuinely is uniformly aligned and change
+       what the section publishes (a checkmark, not a percentage).
+       **Blocks nothing**, but scoring 23 more components to 100% each
+       spends the batches without learning anything.
 
 Owner: start the loop on the rest of the surface — review, improve,
 score — holding the direction: **simplicity, right presentation to the
