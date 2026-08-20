@@ -138,7 +138,7 @@ const rowHtml = (p) => `<tr id="row-${p.id}"${p.bulkError ? ' data-row-state="er
        keyboard user is dumped on <body>. Verified both ways. -->
   <td><input type="checkbox" id="sel-${p.id}" name="id" value="${p.id}" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${p.id}"${p.status !== 'Pending' ? ' disabled' : ''}></td>
   <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
-  <td class="bo-u-text-truncate" data-col="vendor">${p.vendor}</td>
+  <td data-col="vendor"><span class="bo-u-text-truncate" style="display: block; max-inline-size: 14rem">${p.vendor}</span></td>
   <td class="bo-data-table__col--secondary bo-data-table__col--code" data-col="cc">${p.cc}</td>
   <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
   <td data-col="status"><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span>${
@@ -910,7 +910,7 @@ const spendScreen = () => {
       </th></tr>
       ${list.map((p) => `<tr>
         <td class="bo-data-table__col--code"><a href="/pos/${p.id}">${p.id}</a></td>
-        <td class="bo-u-text-truncate">${p.vendor}</td>
+        <td><span class="bo-u-text-truncate" style="display: block; max-inline-size: 14rem">${p.vendor}</span></td>
         <td><span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></td>
         <td class="bo-data-table__col--numeric">${money(p.amount)}</td>
       </tr>`).join('')}

@@ -1018,8 +1018,19 @@ proved the page WAS light; a fresh navigation instead of a JS toggle
 produced a correct screenshot. Not a framework bug — a tooling quirk,
 confirmed by an independent check before being ruled out.
 
-**Exit:** 72.1-72.4 shipped/documented/refused as above; po-app's own
-Vendor-column truncation upgrade is the one open follow-up.
+**Exit:** 72.1-72.4 shipped/documented/refused as above. **72.5 — po-app's
+Vendor-column truncation upgrade, closed 2026-08-20.** Dispatched as this
+wake's Continue item (no P0, no counter due, no queued item with Accept
+criteria — but a real, already-self-tracked follow-up beats manufacturing
+a new Explore search). Both occurrences (`/pos` list, `/spend`) moved the
+`max-inline-size` cap from the bare `<td>` onto an inner `<span>`, matching
+the docs page's own corrected recipe — the `/pos` row keeps `data-col=
+"vendor"` on the `<td>` itself (required for `initTableToolbar()`'s hide
+toggle, which sets `hidden` on the element carrying that attribute, not
+on the header). `check:po-app` 13/13 unchanged; live-verified in a
+`--no-cache` Podman rebuild — `getComputedStyle` confirmed the span's
+`white-space`/`max-inline-size`, and the column-hide checkbox still
+correctly hides the `<td>` (not just the inner span) post-change.
 
 ## Slice 71 — Owner ask: server-controlled conditional cell tone (2026-08-20)
 
