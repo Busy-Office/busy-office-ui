@@ -769,6 +769,21 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 87 — /design-grill: the Combobox page (2026-08-21)
+
+Next Data-input member in the owner's walk. Full report:
+`.roundtable/design-grill-combobox-2026-08-21.md`. Same shape as the
+Forms grill: **87.1** — four hand-written recipe demos converted to
+`Demo`, killing two live write-twice duplications (Basic vs the
+`markup` const; Form integration vs `formMarkup`, whose widget half now
+lives once with only the validation script kept as code). Verified
+post-conversion with a REAL interaction: typing "log" opens and filters
+the list to one option. **87.2** — Markup moved 6/11 → last with the
+page script. **87.3** — the synthetic active-option snapshot kept
+hand-written ON PURPOSE (readonly + forced aria-expanded + static
+positioning — copyable code would teach a broken recipe), with a source
+comment so a future sweep doesn't "fix" it.
+
 ## Slice 86 — /design-grill: the Forms page ("Data Input - forms", clarified by "next") (2026-08-21)
 
 The 85.0 wishlist note resolved to its natural reading: grill the Forms
