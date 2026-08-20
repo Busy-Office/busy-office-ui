@@ -9,9 +9,9 @@
  *
  * Markup contract:
  *   <div class="bo-quantity">
- *     <button class="bo-quantity__step" type="button" data-quantity-step="-1">−</button>
+ *     <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1">−</button>
  *     <input class="bo-quantity__input" type="number" min max step />
- *     <button class="bo-quantity__step" type="button" data-quantity-step="1">+</button>
+ *     <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1">+</button>
  *   </div>
  */
 import { setInputDecimals, decimalsOverride } from '../utils/decimal-input.js';

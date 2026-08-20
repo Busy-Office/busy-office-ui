@@ -12,45 +12,45 @@ const readOnly = `<!-- a count, read-only: Amount with a unit -->
 </span>`;
 
 const basic = `<div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
 </div>`;
 
 const unit = `<div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="12" min="0" max="500" step="1" inputmode="numeric" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <span class="bo-quantity__unit">kg</span>
 </div>`;
 
 const fractional = `<!-- fractional units (weight, volume, time) need a decimal step AND
      inputmode="decimal" — "numeric" implies an integer-only keypad on mobile -->
 <div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <span class="bo-quantity__unit">kg</span>
 </div>`;
 
 const boundary = `<!-- render the correct disabled state server-side when the starting value is already at a boundary -->
 <div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity" disabled>&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity" disabled>&minus;</button>
   <input class="bo-quantity__input" type="number" value="0" min="0" max="10" step="1" inputmode="numeric" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
 </div>
 <div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="10" min="0" max="10" step="1" inputmode="numeric" aria-label="Quantity (at max)" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity" disabled>+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity" disabled>+</button>
 </div>`;
 
 const field = `<div class="bo-form-field">
   <label class="bo-form-field__label" for="qf-1">Quantity</label>
   <div class="bo-quantity">
-    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
     <input class="bo-quantity__input" type="number" id="qf-1" value="150" min="0" max="100" step="1" inputmode="numeric" aria-invalid="true" aria-describedby="qf-1-msg" />
-    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
     <span class="bo-quantity__unit">ea</span>
   </div>
   <p class="bo-form-field__message" id="qf-1-msg" role="alert">Only 100 in stock.</p>
@@ -58,16 +58,16 @@ const field = `<div class="bo-form-field">
 
 const spacious = `<div data-density="spacious">
   <div class="bo-quantity">
-    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
     <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
-    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   </div>
 </div>`;
 
 const unitSelect = `<div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
     <option>kg</option>
     <option>g</option>
@@ -81,17 +81,17 @@ const tableColumn = `<table class="bo-data-table">
   <tbody>
     <tr><td>Standing desk</td><td class="bo-data-table__col--numeric">
       <div class="bo-quantity">
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
         <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
         <span class="bo-quantity__unit">ea</span>
       </div>
     </td></tr>
     <tr><td>Bulk cable (kg)</td><td class="bo-data-table__col--numeric">
       <div class="bo-quantity">
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
         <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity" />
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
         <span class="bo-quantity__unit">kg</span>
       </div>
     </td></tr>
@@ -99,9 +99,9 @@ const tableColumn = `<table class="bo-data-table">
 </table>`;
 
 const markup = `<div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" min="0" max="99" step="1" inputmode="numeric" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="1" aria-label="Increase quantity">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <span class="bo-quantity__unit">ea</span>  <!-- optional -->
 </div>
 
@@ -126,7 +126,15 @@ const markup = `<div class="bo-quantity">
     <Demo code={basic} />
     <p class="bo-u-text-muted"><strong>Requires <code>initQuantity()</code></strong> —
       without it the buttons are inert, but the input itself still works (native number
-      keyboard behavior, and it's a real form field either way).</p>
+      keyboard behavior, and it's a real form field either way).
+      <strong>The buttons themselves are optional</strong>: they're the
+      pointer/touch affordance (warehouse gloves, tablets), and a
+      desktop-first form can omit them entirely — the field keeps its
+      rounded corners, and the unit-select and its precision table still
+      work. Keyboard users never needed them: <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd>
+      on the input steps natively, which is also why the buttons carry
+      <code>tabindex="-1"</code> — one tab stop per field, not three, so a
+      ten-row grid costs ten tabs instead of thirty.</p>
   </section>
 
   <section class="demo">
@@ -260,6 +268,7 @@ const markup = `<div class="bo-quantity">
   <ClassRef component="quantity" />
   <ApiTable component="quantity"
     notes={['A count, not currency — see Amount for money values.',
+            'The +/− buttons are optional pointer/touch affordances with <code>tabindex="-1"</code> — keyboard users step with <kbd>↑</kbd>/<kbd>↓</kbd> on the input natively, so each field costs one tab stop, not three. Omit the buttons entirely for a desktop-first form; the field keeps its rounded corners and the unit-select still derives precision.',
             '<code>min</code>/<code>max</code>/<code>step</code> live on the native <code>&lt;input type="number"&gt;</code>; the step buttons read the same attributes, so there is only one source of truth for the valid range.',
             'Button disabled state at a boundary is kept in sync reactively by <code>initQuantity()</code> — render the correct initial <code>disabled</code> server-side if the starting value is already at min/max.',
             'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.',

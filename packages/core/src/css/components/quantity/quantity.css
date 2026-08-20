@@ -49,6 +49,17 @@
     margin: 0;
   }
 
+  /* The +/− buttons are OPTIONAL (owner question, 2026-08-20): a count
+     field that only needs typing/arrows — desktop forms especially — can
+     omit them, keeping the unit-select and its precision table. The
+     radius-0/−1px-overlap treatment above exists purely to butt-joint the
+     input against its buttons, so without any buttons it must not apply —
+     before this rule, a button-less composition rendered square corners. */
+  .bo-quantity:not(:has(.bo-quantity__step)) .bo-quantity__input {
+    border-radius: var(--bo-radius-md);
+    margin-inline: 0;
+  }
+
   .bo-quantity__unit {
     display: flex;
     align-items: center;

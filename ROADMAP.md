@@ -769,6 +769,49 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 80 — /design-grill: Quantity's +/− buttons — optional after all (2026-08-20)
+
+Owner questions: why aren't the buttons optional (they feel wrong on
+desktop, fine on tablet), and should the Money field get steppers too.
+Full report: `.roundtable/design-grill-quantity-buttons-2026-08-20.md`.
+
+**80.1 — the buttons were always optional in markup; the CSS punished
+omitting them.** They're separate elements, the behavior tolerates their
+absence, and the input steps natively — but `.bo-quantity__input`'s
+unconditional `border-radius: 0` (the butt-joint treatment for sitting
+between buttons) left a button-less composition with square corners,
+verified live by injection. Fixed keyed off reality:
+`.bo-quantity:not(:has(.bo-quantity__step)) .bo-quantity__input`
+restores `--bo-radius-md` and zeroes the −1px overlap margins — the
+absence of the buttons IS the setting, no new modifier (principle 2).
+Verified live post-fix: 6px radii, margin 0, both themes (dark
+confirmed via body's computed canvas token).
+
+**80.2 — the real desktop complaint was tab stops.** Measured live: 3
+tab stops per field (minus → input → plus); a ten-row grid cost 30 tabs
+instead of 10 — while <kbd>↑</kbd>/<kbd>↓</kbd> on the native input
+already steps with zero JS, making the buttons pure keyboard
+redundancy. Fixed: `tabindex="-1"` on all 32 step buttons across the
+quantity page (22), editable-grid (6), field-editor (2), and the
+behavior's markup-contract comment (2). Keyboard equivalence is native,
+buttons stay clickable/touchable. Verified live: exactly 1 tab stop per
+field. Documented in the Basic caption and a new ApiTable note: buttons
+are the pointer/touch affordance; omit them for desktop-first forms;
+the unit-select and precision table still work without them.
+
+**80.3 — steppers for Money: refused.** Amounts are typed, not nudged —
+there is no ERP "one more cent" action the way there is a "one more
+unit" action on a count; a Money stepper would be zero-scenario surface
+and a second way to change a value typing already changes (principle
+2's refuse test). Slice 79 drew the same boundary from the JS side. If
+a tick-stepped price ever genuinely appears, `.bo-quantity` with a
+currency in the label already composes it — the mechanism needs no
+second home.
+
+**Exit:** both fixes shipped and live-verified (injection-tested for
+the CSS, counted for the tab stops, both themes); one refusal recorded;
+core + docs builds green.
+
 ## Slice 79 — /design-grill: Quantity & Money — do they need JS? (2026-08-20)
 
 Owner-requested architecture grill: justify the two behaviors'
