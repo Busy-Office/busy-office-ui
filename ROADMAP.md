@@ -84,8 +84,29 @@ the system may run fifty validations, the user reads *Ready · 428 employees ·
   audience — it is usually two decisions sharing one page, and the fix is a
   split, not a bigger toolbar.
 
+**The screen's decision lives inside a journey** (owner input, 2026-08-20 —
+the full Ive document's §4): a decision is one step of Request → Validation →
+Exception → Resolution → Approval → Execution → Confirmation, and a beautiful
+screen inside a terrible workflow is still a bad product. The unit of design
+is the journey; screens are its steps.
+
+- **Accept** when a screen's exits land the user at the next decision with
+  context intact — the approval screen's "done" IS the confirmation state,
+  not a dead end the user navigates away from blind (precedent: po-app's
+  edit → 302 → record-with-new-values, and the mass-change 422 that
+  re-renders in place instead of losing the user's selection).
+- **Refuse** a screen designed in isolation — one whose entry assumes state
+  no prior step produces, or whose exit drops the user somewhere no next
+  step picks up. If the pattern page cannot say which step precedes and
+  follows it, that's the signal.
+- **Rethink** when a journey needs a screen that exists only to bridge two
+  others (a "now click here to continue" page) — the fix is merging the
+  handoff into an exit, not adding a step.
+
 The full 10-question version of this filter runs on demand as `/design-grill`
-against a named screen; this section is the every-wake distillation.
+against a named screen — or against a whole journey as
+`/design-grill flow:<a> > <b> > <c>`; this section is the every-wake
+distillation.
 
 **How it binds the loops:** Roadmap triage tests every new ask against
 these before queuing (refuse/rethink are valid triage outcomes, recorded
@@ -747,6 +768,61 @@ Slice 60, no new instances.
 
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
+
+## Slice 75 — Owner ask: apply the full Jony Ive design document (2026-08-20)
+
+Triaged from chat: owner shared a fuller written version of the Ive
+principles than what installed as Slice 57/58 and asked how to apply it.
+Checked first, before building anything — most of the document was
+**already installed**: §4's payroll example, the what-is-this/what-
+should-I-look-at/what-should-I-do hierarchy, the `Processing Status: 04`
+refusal, and the full ten-question filter (`/design-grill`, already run
+across all 19 pattern screens) all predate this ask. Mapped the document
+against what exists and found three genuine gaps, all three closed this
+wake — not a new skill, since one already existed and covers most of the
+ground.
+
+**75.1 — the journey principle, folded into `ROADMAP.md` Objective §4.**
+The document's §4 ("design the whole experience, not individual
+screens") wasn't captured: the existing Ive principle judged one screen's
+decision, not a decision's place in Request → Validation → Exception →
+Resolution → Approval → Execution → Confirmation. Added Accept/Refuse/
+Rethink tests for the journey shape directly to §4 rather than creating
+a fifth principle — a screen's decision was already required to exist;
+this adds that its exits must land the user at the next one with context
+intact. Precedent cited: po-app's edit → 302 → record-with-new-values,
+and the mass-change 422 that re-renders in place instead of losing the
+user's selection.
+
+**75.2 — flow mode added to `/design-grill`.** New trigger form,
+`/design-grill flow:<a> > <b> > <c>`, grills a JOURNEY instead of a
+screen — per-handoff measured inputs (context survival, entry honesty,
+exit clarity, failure return path, focus across the seam) and seven flow
+questions (F1-F7) replacing the ten where they don't apply. Verdicts are
+per-seam (keep / fix-handoff / merge-steps / split-journey), same
+evidence discipline as the existing per-element verdicts. Not yet run
+against a real journey — that's a future Objective/Continue dispatch,
+this wake only shipped the capability.
+
+**75.3 — new docs page, `/concepts/design-language`.** The document's §9
+table (hierarchy/typography/colour/spacing/interaction/content) existed
+only as enforced behavior scattered across many files, never as a single
+consumer-facing statement of philosophy — the gap between "internal
+discipline" and the "more than a Tailwind alternative" positioning the
+owner's document closes with. New page states the six rules with a link
+from each to where the framework actually enforces it (contrast gates,
+the accessibility model, `data-row-edit`, concurrency handling), plus the
+subtraction method and the ten-question filter, in the docs' own voice.
+Sidebar entry added first in Core Concepts. Full docs build green
+including the `DOCS_BASE` base-path build (new internal links checked
+against the Pages-deployed path, not just the base-less local one — the
+CLAUDE.md-documented trap). Live-verified in a `--no-cache` Podman
+rebuild, both themes.
+
+**Exit:** all three gaps closed; the full Ive document is now either
+already-enforced (most of it) or captured in `ROADMAP.md`/the skill/the
+docs (the three genuine additions). No new skill created — `/design-grill`
+already existed and only needed the flow-mode extension.
 
 ## Slice 74 — Standardize sweep: sticky-cols' redundant "1" case (2026-08-20)
 

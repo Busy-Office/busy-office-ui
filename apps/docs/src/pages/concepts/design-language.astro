@@ -1,0 +1,160 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="The design language">
+  <p class="demo-note">
+    This framework is a design philosophy for enterprise software first and a
+    stylesheet second. The philosophy fits in one question — not "how can this
+    look better?" but <strong>"what can I remove so the essential thing becomes
+    obvious?"</strong> — and six principles below turn that question into rules
+    a screen either follows or doesn't. Components emerge from the principles,
+    never the other way around.
+  </p>
+
+  <section class="demo">
+    <h2>Design the decision, not the screen</h2>
+    <p>Every screen exists to serve <strong>one decision its user must make</strong>.
+    "The payroll manager needs to know whether payroll is safe to release" is a
+    design brief; "we need a payroll screen" is not. The system may run fifty
+    validations — the user reads <em>Ready · 428 employees · 2 exceptions</em>.
+    Complexity lives under the interface, never in the user's mental model.</p>
+    <p>Every screen must answer, in order: <strong>what is this → what should I
+    look at → what should I do</strong>. And a screen is one step of a journey
+    (request → validation → exception → resolution → approval → execution →
+    confirmation) — a beautiful screen inside a terrible workflow is still a
+    bad product, so each screen's exit lands the user at the next decision with
+    their context intact. The <a href={base + '/patterns/invoice-list'}>pattern
+    pages</a> are built this way: each opens with who uses it and what "done"
+    looks like, before any markup.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The six rules</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr>
+          <th scope="col">Area</th>
+          <th scope="col">Principle</th>
+          <th scope="col">Where the framework enforces it</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row">Hierarchy</th>
+            <td>One primary action per screen; secondary actions subordinate;
+            destructive actions require explicit intent.</td>
+            <td>One plain <a href={base + '/components/button'}><code>bo-btn</code></a>
+            per screen — everything else takes <code>--secondary</code>,
+            <code>--ghost</code>, or <code>--danger-ghost</code>. Measured, not
+            aspirational: 18 of 19 pattern screens hold to ≤1 visually primary
+            action (the wizard's Next/Submit pair is the exception, and even
+            those are never both visible).</td>
+          </tr>
+          <tr>
+            <th scope="row">Typography</th>
+            <td>Large = meaning, medium = context, small = supporting
+            information. Size IS the hierarchy.</td>
+            <td>The <a href={base + '/concepts/tokens'}>type-scale tokens</a> —
+            components consume the scale, never free-pick sizes; density remaps
+            one tier and every component follows.</td>
+          </tr>
+          <tr>
+            <th scope="row">Colour</th>
+            <td>Neutral by default. Colour communicates state — never
+            decoration.</td>
+            <td>Semantic tones only (<code>danger/warning/success</code>), each
+            AA-contrast-gated in both themes at build time, and every colour
+            signal is two-channel: a visible non-colour cue plus a programmatic
+            one, so meaning never rides on hue alone. See
+            <a href={base + '/concepts/accessibility'}>the accessibility
+            model</a> and <a href={base + '/components/data-table'}>conditional
+            cell tone</a> — the tone repeats a meaning already present in text.</td>
+          </tr>
+          <tr>
+            <th scope="row">Spacing</th>
+            <td>Consistent rhythm. Whitespace separates concepts; proximity
+            groups related things.</td>
+            <td>The spacing scale in <a href={base + '/concepts/tokens'}>design
+            tokens</a> plus layout primitives (<code>bo-cluster</code>,
+            <code>bo-stack</code>, <code>bo-grid</code>) that carry the rhythm —
+            pages compose primitives instead of hand-tuning margins.</td>
+          </tr>
+          <tr>
+            <th scope="row">Interaction</th>
+            <td>Direct manipulation; avoid needless dialogs; preserve context;
+            immediate feedback.</td>
+            <td>Inline row editing over modal forms
+            (<a href={base + '/components/inline-editing'}>data-row-edit</a>), errors
+            that re-render in place with the user's work intact
+            (<a href={base + '/concepts/concurrency'}>concurrency &amp;
+            conflicts</a>), and focus restored across swaps so a keyboard user
+            is never dumped on <code>&lt;body&gt;</code>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Content</th>
+            <td>Human language. Explain the consequence, not the mechanism.</td>
+            <td><code>Processing Status: 04</code> is refused; "Ready to
+            release" with detail underneath is the shape. Status strings name
+            meanings, technology stays invisible — the user experiences "I
+            clicked and the page responded," not an HTMX partial update. See
+            <a href={base + '/getting-started/htmx'}>the HTMX guide</a>: markup
+            carries structure, the server carries intelligence.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Subtraction is the method</h2>
+    <p>For every element — button, field, colour, screen, feature — the test
+    is: <em>if I remove this, does the user's ability to accomplish the task
+    materially decrease?</em> If no, it goes. Then ask again: 20 things → 12 →
+    7 → 4 — then ask whether 4 is enough. Simplicity is not minimalism:
+    minimalism is "there aren't many things," simplicity is <strong>"I
+    understand what is happening."</strong> A dense ERP grid can be simple; a
+    sparse screen can be confusing.</p>
+    <p>This test is applied to the framework itself, not just to screens built
+    with it. Additions are refused when they serve exactly one scenario or add
+    a second way to do something that already works — and the refusals are
+    recorded with reasons, the same as the things that shipped. If something
+    needs a long explanation to justify its existence, that is the signal it
+    should not exist.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Details are the design</h2>
+    <p>Simplicity takes more effort, not less. Loading, empty, and error
+    states are designed surfaces, not afterthoughts
+    (<a href={base + '/components/state-patterns'}>state patterns</a>); every
+    pattern page documents them in a states table because screens spend most
+    of their life there. Keyboard behaviour, focus order, wording, and print
+    output get the same treatment as the happy path — good design feels
+    inevitable, not impressive.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The shipping filter</h2>
+    <p>Before a screen ships, it faces ten questions — is the purpose statable
+    in one sentence, is the primary action obvious, can anything be removed,
+    does every element have a purpose, does it explain itself, is complexity
+    hidden, is there decoration, are states understandable, does interaction
+    preserve context, and would it look like this built from zero today. A
+    "no" carries a consequence (remove, reword, simplify, redesign) — not a
+    note. Every pattern in this gallery has been through it, and the deeper
+    principle behind all ten:</p>
+    <p><strong>Design is the process of deciding what deserves to exist.</strong>
+    Don't design screens — design decisions. Don't expose processes — expose
+    outcomes. Don't add functionality — remove friction. Don't make complex
+    systems look simple — make them feel simple.</p>
+  </section>
+
+  <Related links={[
+    ['/concepts/tokens', 'Design tokens'],
+    ['/concepts/accessibility', 'Accessibility model'],
+    ['/concepts/density', 'Density'],
+    ['/patterns/invoice-list', 'Invoice-list pattern'],
+    ['/components/state-patterns', 'State patterns'],
+  ]} />
+</Gallery>
