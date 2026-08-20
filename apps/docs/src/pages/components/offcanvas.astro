@@ -28,6 +28,10 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     (<code>--end</code>). It is a native <code>&lt;dialog&gt;</code>
     variant, so the focus trap, Esc, backdrop and focus-return come from
     the platform.
+    <strong>Not when the panel's content must stay visible beside the
+    record</strong> — sliding over the screen hides the context the user is
+    comparing against; use
+    <a href={base + '/patterns/master-detail'}>master-detail</a> for that.
   </p>
 
   <section class="demo">

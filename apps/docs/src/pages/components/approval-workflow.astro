@@ -34,6 +34,10 @@ const composerMarkup = `<form class="bo-composer">
     glyphs are aria-hidden, state reaches AT via visually-hidden text and
     <code>aria-current</code>. Composed example:
     <a href={base + '/patterns/approval'}>the approval-workflow pattern</a>.
+    <strong>Not for a flow the user is walking right now</strong> — a timeline
+    reports history and status; use
+    <a href={base + '/components/stepper'}>Stepper</a> when the point is which
+    step they are on and what comes next.
   </p>
   <section class="demo">
     <h2>Timeline states</h2>

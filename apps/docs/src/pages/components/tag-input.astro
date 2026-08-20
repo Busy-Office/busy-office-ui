@@ -49,6 +49,10 @@ const canonical = `<!-- The framework owns REMOVAL (it's the framework's own ren
     <a href={base + '/components/combobox'}>Combobox</a>. The framework owns removal
     (it's deleting its own rendered chip); addition is yours: Enter dispatches
     an event with the typed text, you decide whether to accept it.
+    <strong>Not for a small fixed set</strong> — three or four known options
+    read better as checkboxes in a
+    <a href={base + '/components/form'}>form field</a>, and if only ONE value
+    is allowed it is a <a href={base + '/components/combobox'}>Combobox</a>.
   </p>
 
   <section class="demo">

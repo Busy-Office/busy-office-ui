@@ -18,7 +18,7 @@
       "colour": "3 = zero raw colour outside @media print / forced-colors, and any state signal is two-channel. Below 3 = a raw colour on screen, or meaning carried by hue alone.",
       "spacing": "3 = dimensions come from space tokens, or an intrinsic literal carries a comment saying why it is intrinsic. NOTE: this is a DEBT MARKER, not a quality signal — it is satisfiable by the scorer writing the comment, and once written it stays 3 forever. Read it as \"has this file been through a scoring pass\", not as \"is this well spaced\".",
       "interaction": "3 = for a component shipping a behavior, the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS. `na` when the component ships no behavior. Below 3 = a behavior-backed component whose page never draws that line.",
-      "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. Fails today: approval-workflow, file-upload, filters, offcanvas, ordered-list, tag-input — measured across prose and ApiTable notes, hand-verified on filters and ordered-list.",
+      "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. The six that failed when this definition was written (approval-workflow, file-upload, filters, offcanvas, ordered-list, tag-input) were fixed in 94.8; the dimension has demonstrated it can fail, and the citations quote the sentence that clears it.",
       "fit": "3 = the docs place the component in the contexts the field matrix assigns it, including where it does NOT belong. 0 = prescribed in no context at all. Fails today: date (deprecated, zero screens use it)."
     }
   },
@@ -284,17 +284,14 @@
           "cite": "a static list — no interaction surface"
         },
         "content": {
-          "score": 2,
-          "cite": "says order is real semantics and how the markers work, but never when a plain table or .bo-timeline is the better container (94.7)"
+          "score": 3,
+          "cite": "the opener draws the boundary at more than one attribute per item and names the data table as the answer (94.8)"
         },
         "fit": {
           "score": 3,
           "cite": "used where order is real semantics (line items, approval route, release steps)"
         }
-      },
-      "improve": [
-        "Name a context where this is the wrong choice, and the alternative (roadmap 94.8)"
-      ]
+      }
     },
     "form": {
       "scored": "2026-08-21",
@@ -386,17 +383,14 @@
           "cite": "composes initDropdowns + initSavedViews; applied filters are visible chips, not state hidden behind a dialog"
         },
         "content": {
-          "score": 2,
-          "cite": "describes the bar, the chips and the saved-view loop, but never when a filter bar is the wrong shape — e.g. a two-field search where a plain form would do (94.7)"
+          "score": 3,
+          "cite": "the opener says a bar and chips are wrong for one or two fields, pointing at a search input in the table toolbar, and says what earns the chips (94.8)"
         },
         "fit": {
           "score": 3,
           "cite": "filter bar above tables/lists — the context invoice-list actually uses"
         }
-      },
-      "improve": [
-        "Name a context where this is the wrong choice, and the alternative (roadmap 94.8)"
-      ]
+      }
     },
     "tag-input": {
       "scored": "2026-08-21",
@@ -422,17 +416,14 @@
           "cite": "bubbling intent events (bo:tag-add) leave chip DATA with the consumer — framework does visuals"
         },
         "content": {
-          "score": 2,
-          "cite": "distinguishes itself from combobox on the page, but never names a context where tagging is the wrong interaction — e.g. a fixed small set where checkboxes read better (94.7)"
+          "score": 3,
+          "cite": "the opener names two wrong-choice contexts and both alternatives: checkboxes for a small fixed set, Combobox when only one value is allowed (94.8)"
         },
         "fit": {
           "score": 3,
           "cite": "multi-value entry; distinct from combobox's single-select, and the pages cross-name each other"
         }
-      },
-      "improve": [
-        "Name a context where this is the wrong choice, and the alternative (roadmap 94.8)"
-      ]
+      }
     },
     "file-upload": {
       "scored": "2026-08-21",
@@ -458,17 +449,14 @@
           "cite": "a real <input type=file>: platform picker, keyboard access and native drag-drop come free"
         },
         "content": {
-          "score": 2,
-          "cite": "documents the control and its restylable ::file-selector-button, but never when a plain link or a server-side flow is the better answer (94.7)"
+          "score": 3,
+          "cite": "the opener refuses its own use for one required document with nothing to review — a bare <input type=\"file\"> in a form field — and scopes the file list to multi-file (94.8)"
         },
         "fit": {
           "score": 3,
           "cite": "::file-selector-button is the one restylable part and the docs scope themselves to it"
         }
-      },
-      "improve": [
-        "Name a context where this is the wrong choice, and the alternative (roadmap 94.8)"
-      ]
+      }
     },
     "richtext": {
       "scored": "2026-08-21",
@@ -668,8 +656,8 @@
           "cite": "reuses the dialog wiring wholesale (backdrop, Esc, focus-return, Tab loop); translate is physical so RTL gets explicit animation overrides"
         },
         "content": {
-          "score": 2,
-          "cite": "says what it is and that it composes from dialog, but never when a panel should be inline instead of sliding over the screen (94.7)"
+          "score": 3,
+          "cite": "the opener names the case it must not take — content that has to stay visible beside the record — and sends it to master-detail (94.8)"
         },
         "fit": {
           "score": 3,
@@ -677,8 +665,7 @@
         }
       },
       "improve": [
-        "Comment the 18rem panel width (roadmap 94.6)",
-        "Name a context where this is the wrong choice, and the alternative (roadmap 94.8)"
+        "Comment the 18rem panel width (roadmap 94.6)"
       ]
     },
     "tabs": {
@@ -978,17 +965,14 @@
           "cite": "an <ol> of workflow states; approving happens elsewhere"
         },
         "content": {
-          "score": 2,
-          "cite": "states what the timeline IS and how state maps to markup, but never a context where a timeline is the wrong choice — e.g. it does not say to use .bo-stepper when the steps are a wizard the user is walking, not a history (94.7)"
+          "score": 3,
+          "cite": "the opener names the wrong-choice context and the alternative: a timeline reports history, so use Stepper when the point is which step the user is on (94.8)"
         },
         "fit": {
           "score": 3,
           "cite": "status timeline plus audit trail, the two read-only halves of an approval screen"
         }
-      },
-      "improve": [
-        "Name a context where this is the wrong choice, and the alternative (roadmap 94.8)"
-      ]
+      }
     }
   }
 }

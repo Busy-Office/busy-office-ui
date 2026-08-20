@@ -1012,7 +1012,29 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        **Batches 5-7 are unblocked** — they will now be scored against
        definitions that can fail, which was the whole reason for gating them.
 
-4. [ ] **94.8 — write the missing "when this is the wrong choice" guidance**
+4. [x] **94.8 — DONE 2026-08-21.** All six pages gained one sentence in the
+       opener naming a context where the component is the wrong answer and
+       linking a real alternative that exists in this framework: timeline →
+       Stepper, file-upload → a bare input in a form field, filters → the
+       table toolbar, offcanvas → master-detail, ordered-list → the data
+       table, tag-input → checkboxes or Combobox. Verified in the BUILT
+       output — each opener carries both the refusal and a resolving link
+       (the link check passes, so both `/components/table-toolbar` and
+       `/patterns/master-detail` exist). All six re-score to `content: 3`.
+
+       `ordered-list.astro` did not declare `const base`, unlike the other
+       five, so the first build failed with "base is not defined" — a
+       convention assumed rather than checked. Declaration added.
+
+       **Honest note on what this does to the number:** `content` is back to
+       3 on 28 of 28, so its discriminating power is spent until new
+       components arrive. That is not the same failure as `spacing`, though:
+       spacing clears by writing a comment ABOUT existing code, whereas this
+       cleared by writing six pieces of user-facing guidance that did not
+       exist. The definition records that it HAS failed, and names the six,
+       which is what keeps it credible.
+
+   [ ] **94.8 (original text) — write the missing "when this is the wrong choice" guidance**
        for the six components 94.7 named. Each page gains one sentence naming
        a context where it is not the right answer and what to use instead —
        the shape `data-table` (24 contrastive statements) and `combobox` (7)

@@ -20,6 +20,10 @@ const filterMarkup = `<!-- A real <form>, so type="reset" works and role="search
   <p class="demo-note">
     Filter bar + applied-filter chips. Each chip's remove button names its filter in
     the <code>aria-label</code>. Filtering itself is your code (form submit or HTMX).
+    <strong>Not for one or two fields</strong> — a single search input in the
+    <a href={base + '/components/table-toolbar'}>table toolbar</a> reads better
+    than a bar and chips; the chips earn their place once a user can have
+    several filters applied at once and lose track of them.
   </p>
   <section class="demo">
     <form class="bo-filter-bar" role="search" aria-label="Invoice filters">

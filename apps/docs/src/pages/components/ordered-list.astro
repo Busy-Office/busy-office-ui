@@ -5,6 +5,7 @@ import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const defaultList = `<ol class="bo-ordered-list">
   <li>SKU-3391 · Standing desk (×4)</li>
   <li>SKU-1180 · Monitor arm (×8)</li>
@@ -40,7 +41,10 @@ const markup = `<!-- default: mono, for codes/amounts -->
     A native <code>&lt;ol&gt;</code> of items — line items, an approval route, release
     steps, ranked entries. Order is real semantics; the number is the list marker, not
     CSS content, so it survives copy and screen readers. One component, driven by
-    settings.
+    settings. <strong>Not once each item needs more than one attribute</strong>
+    — order alone does not justify a list if you also need quantities, dates or
+    status per row; that is a
+    <a href={base + '/components/data-table'}>data table</a>.
   </p>
 
   <section class="demo">
