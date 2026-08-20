@@ -769,6 +769,54 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 79 — /design-grill: Quantity & Money — do they need JS? (2026-08-20)
+
+Owner-requested architecture grill: justify the two behaviors'
+JS against no-JS, server-side (htmx), and external-package alternatives.
+Full report: `.roundtable/design-grill-quantity-money-js-2026-08-20.md`.
+
+**Verdicts:** Quantity's stepping stays client-side (native input works
+JS-free — typing/arrows/validation; the buttons are the touch/warehouse
+affordance, and a server round-trip per +1 click is indefensible
+latency); boundary-disable sync stays (not expressible in CSS,
+progressive enhancement over native clamping); Money's precision JS
+stays as the default (the `step` attribute is presentation state,
+zero-latency, works on static pages; the ISO table is the already-
+settled Slice 18 named exception — cited, not re-litigated); moving the
+behaviors to an external package is **refused** — they are already
+per-file tree-shakable opt-ins (2.4k/2.4k–5.0k unminified), and po-app
+is the live proof of optionality: it imports NEITHER behavior, capturing
+every amount as a plain fixed-currency `.bo-input--numeric`, exactly
+what the family decision tree prescribes.
+
+**79.1 — the gap the question exposed: Money's page never answered it.**
+Quantity documents its no-JS story ("without it the buttons are inert,
+but the input itself still works"); Money had no equivalent. Added one
+ApiTable note stating all three tiers: JS optional; htmx apps can skip
+`initMoneyField()` and re-render the input with the new `step` on
+currency change (`hx-get` on the select) — same outcome, server-owned;
+single-currency forms need neither. Verified rendering live.
+
+**79.2 — a rendered ApiTable note claimed `.bo-quantity--display`
+exists.** The page's own "Read-only display" section says that modifier
+was removed before it reached a release (grill 2026-08-19) — yet the
+ApiTable's last note still described it as "the read-only form", and a
+dead `display` const carried markup for the nonexistent class. Neither
+gate could catch it: `check-markup` verifies rendered markup (the const
+never rendered) and the notes gate checks that notes render as prose,
+not that their claims are true. Both deleted; verified live that the
+only surviving `--display` mention is the section's legitimate "there
+is no..." explanation (per the removal-verification doctrine: the prose
+explaining a removal is supposed to name it).
+
+**79.3 — one stale "Money field" Related label** on the quantity page,
+the 78.2 rename's follow-through. Now "Money".
+
+**Exit:** architecture verdicts recorded (3 keep, 1 refuse), the
+documentation gap the owner's question exposed is closed, one shipped
+false claim removed; docs build green, all fixes verified against the
+live container.
+
 ## Slice 78 — /design-grill: the numeric family's DOCS — and a shipped UA-chrome defect (2026-08-20)
 
 Owner-requested angles: demo arrangement (simple → complex), sidebar

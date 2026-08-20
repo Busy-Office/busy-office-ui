@@ -231,6 +231,7 @@ const canonical = `<!-- Two real form controls working as one field: the select 
       'Read-only display stays <code>.bo-amount</code> — this component is the editable counterpart, the same split as Quantity (edit) vs Amount (display).',
       'Formatting for display (thousands separators, symbol placement) remains your app’s job — the input holds a plain number; <code>Intl.NumberFormat</code> at render time is the tool.',
       'The reformat is a programmatic value change with no reliable screen-reader announcement channel (WCAG 4.1.3) — when totals or other UI depend on it, announce the consequence in a committed-change <code>aria-live</code> status (the editable-grid pattern shows the recipe); the field itself reads its new value on next focus/arrow.',
+      'The JS is optional, not required. Without <code>initMoneyField()</code> the two controls still work — precision just doesn\'t follow the currency automatically. An htmx app that prefers the server owning precision can skip the behavior entirely and re-render the amount input with the new <code>step</code> on currency change (<code>hx-get</code> on the select) — the same outcome, server-side. And a single-currency form needs neither: a plain <code>.bo-input--numeric</code> with the currency in the label (<code>examples/po-app</code> captures every amount this way).',
     ]}
   />
   <Related links={[

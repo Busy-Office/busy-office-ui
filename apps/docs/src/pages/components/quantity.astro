@@ -64,14 +64,6 @@ const spacious = `<div data-density="spacious">
   </div>
 </div>`;
 
-const display = `<p>Received <span class="bo-quantity bo-quantity--display">
-  <span class="bo-quantity__value">2.50</span>
-  <span class="bo-quantity__unit">kg</span>
-</span> of <span class="bo-quantity bo-quantity--display">
-  <span class="bo-quantity__value">5.00</span>
-  <span class="bo-quantity__unit">kg</span>
-</span> ordered.</p>`;
-
 const unitSelect = `<div class="bo-quantity">
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
@@ -273,7 +265,6 @@ const markup = `<div class="bo-quantity">
             'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.',
             '<code>__unit</code> accepts an ISO/standard unit or an app-defined custom UOM — no allowlist, same convention as Amount\'s <code>__currency</code>.',
             'Decimal precision is expressed via the native <code>step</code> attribute, not a CSS modifier — fractional units need <code>inputmode="decimal"</code>, not the default <code>numeric</code>.',
-            'With a <code>__unit-select</code>, precision follows the built-in unit table (see the reference above) — a deliberate, overridable exception to "your app owns the data", mirroring the Money field\'s currency table; <code>data-decimals</code> always wins.',
-            '<code>--display</code> is the read-only form — a span composition with <code>__value</code> + <code>__unit</code>, no JS; the same display-vs-edit split as Amount vs this component.']} />
-  <Related links={[["/components/amount", "Amount"], ["/components/money", "Money field"], ["/patterns/editable-grid", "Editable grid (composite editor)"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
+            'With a <code>__unit-select</code>, precision follows the built-in unit table (see the reference above) — a deliberate, overridable exception to "your app owns the data", mirroring the Money field\'s currency table; <code>data-decimals</code> always wins.']} />
+  <Related links={[["/components/amount", "Amount"], ["/components/money", "Money"], ["/patterns/editable-grid", "Editable grid (composite editor)"], ["/components/form", "Forms"], ["/concepts/density", "Density"]]} />
 </Gallery>
