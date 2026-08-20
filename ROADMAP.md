@@ -780,6 +780,85 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 95 — Owner wishlist: device-fitness and ERP-coverage scoring (2026-08-21)
+
+Two asks, triaged together because both extend the scoring work and both
+turn out to hinge on the same question: **is the number derived from a fact
+the repo already holds, or is it a new judgment?** 95.1 is the first; 95.2 is
+the second, and that is why they get different shapes.
+
+1. [ ] **95.1 — Device fitness: mobile / tablet / RF scanner, SURFACED not
+       re-scored.** Owner: score components for mobile+tablet and for RF
+       scanner, noting RF needs only the components a scanner function
+       actually uses, not all of them.
+
+       **Do not add two dimensions to the DSA rubric.** 94.4 established the
+       rubric works and that `Fit` is the dimension carrying real signal;
+       diluting seven dimensions into nine — where the two new ones would read
+       3/3 for almost everything — reproduces exactly the flattening 94.4 was
+       raised about. It would also make them *judgments*, when they are
+       already **facts this repo gates**:
+
+       - **RF membership is declared**, not opinion: `RF_COMPONENTS` in
+         `scripts/build-rf-essentials.mjs` lists the 12 components in the
+         profile, and `check:rf-floor` already proves every feature they use
+         is guarded at the Chrome/WebView 108 floor (59.2/59.3). The owner's
+         "only the components required" is therefore *already modelled* — the
+         gap is that a reader of `/components/dialog` cannot see that dialog
+         is NOT in the RF profile.
+       - **Touch fitness is already measured**: `check:target-size` runs all
+         three densities and reports which controls conform via the WCAG 2.5.8
+         spacing exception rather than a 24px floor.
+       - **Narrow-width fitness is already measured**: `check:pseudo` runs 14
+         pages × 2 widths at compact density with text expanded ≥23%.
+
+       **Accept:** a generated per-component line — same rule as `ApiTable` /
+       `DsaScore`, never hand-typed — stating (a) in the RF profile: yes/no,
+       sourced from `RF_COMPONENTS` so it cannot drift, and (b) touch-target
+       status at spacious density, sourced from `check:target-size` output.
+       An honest "not in the RF profile" is the useful answer for most
+       components and must read as a scope statement, not a failing grade.
+       **Refused as part of this:** inventing a mobile/tablet *score*. The
+       framework is density- and container-driven with no device breakpoints;
+       a per-device grade would imply a device-specific design that does not
+       exist and that Objective §2 exists to prevent.
+
+2. [ ] **95.2 — ERP coverage: benchmark JOBS, not component catalogues.**
+       Owner asked directly whether this is possible and whether it makes
+       sense to benchmark. **Possible: yes. As a component-catalogue
+       comparison: no — that one actively fights the Objective.**
+
+       A coverage score against SAP Fiori's or Ant Design's component
+       inventory structurally emits "you are missing X, Y, Z" and becomes a
+       component-adding engine, which is the precise failure Objective §1 and
+       §2 are written to refuse. It would also flatter competitors' taxonomy:
+       this framework deliberately ships one component with many settings
+       where others ship five, so a catalogue diff would report false gaps
+       (`.bo-input--numeric` IS the fourth numeric family member — roadmap 77).
+
+       The version that works measures **whether a user can finish an ERP
+       job** with what ships. That is checkable, it is the question the owner
+       is actually asking ("what is missing to add in future roadmap"), and
+       **the 19 pattern pages are already a partial answer** — each documents
+       a screen, its data contract and its states. Coverage then reads: which
+       ERP jobs have a pattern, which have components but no pattern, and
+       which have neither.
+
+       **Accept:** a job list drawn from a real ERP process inventory
+       (procure-to-pay, order-to-cash, record-to-report, hire-to-retire, plus
+       warehouse/RF execution), each marked *pattern exists* / *composable
+       from documented components but undocumented as a screen* / *genuinely
+       absent*; the report lands in `.roundtable/` and every "genuinely
+       absent" entry is graded against the Objective before it becomes a
+       queued item — refusing is a valid and expected outcome. **Explicitly
+       not Accept:** a percentage. A coverage number invites maximising it,
+       and the honest deliverable here is a ranked list with reasons.
+
+       **Sequencing:** run this AFTER Slice 94 finishes scoring the remaining
+       families. Coverage asks what is missing; that judgment is better made
+       once every component that exists has been looked at, and 94 is four
+       families from done.
+
 ## Slice 94 — Review, improve and score the remaining 37 components (2026-08-21)
 
 **94.2 — the systemic Spacing finding (supersedes the per-component
