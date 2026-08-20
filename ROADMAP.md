@@ -769,6 +769,47 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 82 — Owner ask: redundancy review across Amount/Quantity/Money docs (2026-08-20)
+
+Six slices of rapid additions to these three pages (76-81) made
+accretion the expected failure mode — the same fact layered into a
+caption, a section, a note, and a code comment by different edits. All
+three pages read in full; every repeated fact judged deliberate-parallel
+vs. accidental-accretion. Full report:
+`.roundtable/docs-review-numeric-redundancy-2026-08-20.md`.
+
+**Kept as deliberate parallels:** the family-rule paragraph ×3
+(byte-identical by design), the affordance clause ×2 (same-purpose
+crossover sections on sibling pages), the "no allowlist" affix notes
+(each about its own component's part).
+
+**Cut — four accretions, ~23 lines, zero facts lost:**
+- **82.1** — the currency-decimals table existed TWICE: Money's complete
+  reference (tied to shipped `currencyDecimals`) and a mini-table Amount
+  had grown in its Precision section — with a *different* external
+  authority link (Wikipedia vs. iso.org). Cut Amount's table+link; the
+  "precision is app data" point stays, now linking Money's reference as
+  the single home.
+- **82.2** — "the read-only counterpart is Amount" was told FOUR times on
+  the Money page (opener, the 76.1 section, ApiTable note #3, a trailing
+  comment inside the Markup sample). The section is canonical; the note
+  and sample comment — both predating the section — cut. Opener's
+  one-line lede stays.
+- **82.3** — the optional-buttons story was told three overlapping times
+  on Quantity (Basic caption, joined caption, ApiTable note).
+  Consolidated: joined section canonical; Basic caption shrunk to the JS
+  requirement + a one-line pointer; note tightened to spec facts.
+
+**Checked and cleared, not cut:** "no `--decimals`" on both Amount and
+Quantity (different surfaces — display formatting vs. input `step`);
+precision-follows-select's three one-clause cross-refs on Quantity (each
+load-bearing where it sits); Money's JS-optional note's plain-input
+sentence (unique po-app evidence).
+
+**Exit:** ApiTable notes 154 → 153, all gates green, every cut verified
+absent (and every canonical home verified present) against the live
+container.
+
 ## Slice 81 — Owner ask: Quantity basic as ( qty | unit ), joined like Money (2026-08-20)
 
 Follow-on from the Slice 80 grill: with the steppers now optional, the

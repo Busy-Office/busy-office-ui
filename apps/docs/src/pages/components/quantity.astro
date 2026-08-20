@@ -136,15 +136,11 @@ const markup = `<div class="bo-quantity">
     <Demo code={basic} />
     <p class="bo-u-text-muted"><strong>Requires <code>initQuantity()</code></strong> —
       without it the buttons are inert, but the input itself still works (native number
-      keyboard behavior, and it's a real form field either way).
-      <strong>The buttons themselves are optional</strong>: they're the
-      pointer/touch affordance (warehouse gloves, tablets), and a
-      desktop-first form can omit them entirely — the field keeps its
-      rounded corners, and the unit-select and its precision table still
-      work. Keyboard users never needed them: <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd>
-      on the input steps natively, which is also why the buttons carry
-      <code>tabindex="-1"</code> — one tab stop per field, not three, so a
-      ten-row grid costs ten tabs instead of thirty.</p>
+      keyboard behavior, and it's a real form field either way). The buttons are
+      optional pointer/touch affordances (warehouse gloves, tablets):
+      <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd> on the input steps
+      natively, so they carry <code>tabindex="-1"</code> and cost no tab stops —
+      and a desktop-first form can omit them entirely, next section.</p>
   </section>
 
   <section class="demo">
@@ -291,7 +287,7 @@ const markup = `<div class="bo-quantity">
   <ClassRef component="quantity" />
   <ApiTable component="quantity"
     notes={['A count, not currency — see Amount for money values.',
-            'The +/− buttons are optional pointer/touch affordances with <code>tabindex="-1"</code> — keyboard users step with <kbd>↑</kbd>/<kbd>↓</kbd> on the input natively, so each field costs one tab stop, not three. Omit the buttons entirely for a desktop-first form; the field keeps its rounded corners and the unit-select still derives precision.',
+            'The +/− buttons are optional pointer/touch affordances carrying <code>tabindex="-1"</code> — <kbd>↑</kbd>/<kbd>↓</kbd> on the input steps natively, so each field costs one tab stop, not three. Omitted entirely, the unit-select joins the input into ( qty | unit ).',
             '<code>min</code>/<code>max</code>/<code>step</code> live on the native <code>&lt;input type="number"&gt;</code>; the step buttons read the same attributes, so there is only one source of truth for the valid range.',
             'Button disabled state at a boundary is kept in sync reactively by <code>initQuantity()</code> — render the correct initial <code>disabled</code> server-side if the starting value is already at min/max.',
             'Composes with <code>.bo-form-field</code> for validation — no quantity-specific error styling.',

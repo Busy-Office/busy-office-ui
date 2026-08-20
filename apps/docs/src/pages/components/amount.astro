@@ -177,24 +177,12 @@ const markup = `<span class="bo-amount">
     <p class="bo-u-text-muted">
       <strong>Decimal precision is app/domain data, not a CSS rule</strong> — there's no
       <code>--decimals</code> modifier, because "how many decimals does this currency
-      get" varies by currency, not by design choice. A starting reference (override per
-      field, never hardcode as a single app-wide constant):
+      get" varies by currency, not by design choice. The complete per-currency table
+      (ISO 4217 minor units) lives on the <a href={base + '/components/money'}>Money</a>
+      field's currency decimals reference — most apps already get this from an
+      <code>Intl.NumberFormat</code> call or a currency-master table, which is exactly
+      where it belongs (not this CSS layer).
     </p>
-    <div class="bo-data-table-container" tabindex="0">
-      <table class="bo-data-table" data-density="compact">
-        <thead><tr><th scope="col">Currency</th><th scope="col" class="bo-data-table__col--numeric">Default decimals</th><th scope="col">Example</th></tr></thead>
-        <tbody>
-          <tr><td>USD, SGD, EUR</td><td class="bo-data-table__col--numeric">2</td><td>$4,208.00</td></tr>
-          <tr><td>JPY, KRW</td><td class="bo-data-table__col--numeric">0</td><td>¥56,000</td></tr>
-          <tr><td>BHD, KWD, OMR</td><td class="bo-data-table__col--numeric">3</td><td>BHD 12.500</td></tr>
-          <tr><td>App-defined (points, credits, FX rates)</td><td class="bo-data-table__col--numeric">your call</td><td>2,400 PTS</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="bo-u-text-muted"><a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank" rel="noopener">ISO 4217</a>
-    publishes the standard minor-unit table if you need it beyond this reference — most
-    apps already get this from an <code>Intl.NumberFormat</code> call or a currency-master
-    table, which is exactly where this belongs (not this CSS layer).</p>
   </section>
 
   <section class="demo">
