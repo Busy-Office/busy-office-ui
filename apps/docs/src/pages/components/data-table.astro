@@ -310,6 +310,64 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
   </section>
 
   <section class="demo">
+    <h2>Right-click column menu</h2>
+    <p><code>data-context-menu</code> opens the SAME popover menu component
+    <code>initDropdowns()</code> already renders for the toolbar's Columns
+    picker — right-click a header instead of clicking a button, and the menu
+    opens at the cursor. This behavior (<code>initContextMenu()</code>) owns
+    exactly one thing: positioning. It doesn't own sorting or hiding — those
+    menu items below call the exact mechanisms this page already documents
+    (<code>aria-sort</code> for sort, <code>data-col-toggle</code> for hide),
+    the same as clicking the existing sort button or toolbar checkbox would.
+    A per-column filter item and a runtime "always visible" pin were graded
+    out of scope for the framework — see <code>.roundtable/</code> for the
+    reasoning.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr>
+          <th scope="col" data-context-menu="col-menu-vendor" aria-sort="none">
+            <button class="bo-data-table__sort-btn" type="button">Vendor</button>
+          </th>
+          <th scope="col" class="bo-data-table__col--numeric" data-context-menu="col-menu-amount" aria-sort="none">
+            <button class="bo-data-table__sort-btn" type="button">Amount</button>
+          </th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-col="vendor">Acme Supply Co.</td><td class="bo-data-table__col--numeric" data-col="amount">$4,208.00</td></tr>
+          <tr><td data-col="vendor">Globex Industrial</td><td class="bo-data-table__col--numeric" data-col="amount">$18,940.50</td></tr>
+        </tbody>
+      </table>
+      <div class="bo-dropdown__menu" id="col-menu-vendor" popover>
+        <button class="bo-dropdown__item" type="button">Sort ascending</button>
+        <button class="bo-dropdown__item" type="button">Sort descending</button>
+        <hr class="bo-dropdown__separator" />
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="vendor" checked /> Show column</label>
+      </div>
+      <div class="bo-dropdown__menu" id="col-menu-amount" popover>
+        <button class="bo-dropdown__item" type="button">Sort ascending</button>
+        <button class="bo-dropdown__item" type="button">Sort descending</button>
+        <hr class="bo-dropdown__separator" />
+        <label class="bo-dropdown__item"><input type="checkbox" class="bo-checkbox" data-col-toggle="amount" checked /> Show column</label>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Right-click "Vendor" or "Amount" above. The Sort
+    items are static here, the same way the "Simple" section's sort button at
+    the top of this page is — wiring them to actually re-order rows is
+    consumer code either way, on-page click or context-menu click makes no
+    difference to that contract. "Show column" is real: uncheck it and the
+    column disappears immediately, because it's the exact same
+    <code>data-col-toggle</code> checkbox the toolbar pattern uses, just
+    rendered inside a right-click menu instead of a toolbar dropdown — the
+    menu's own markup has to live INSIDE the same
+    <code>.bo-data-table-container</code> as the table for that to work
+    (<code>data-col-toggle</code>'s hide logic looks up its container via
+    <code>.closest()</code>; a popover placed as a sibling after the
+    container, which is where it would naturally land if authored after the
+    closing <code>&lt;table&gt;</code> tag, silently finds no container and
+    does nothing — caught live on this exact demo before it shipped).</p>
+  </section>
+
+  <section class="demo">
     <h2>Grouped rows + subtotals</h2>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
@@ -489,6 +547,7 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
       'Separately opt-in: <code>data-col-toggle</code>/<code>data-table-export</code> + <code>initTableToolbar()</code> for column visibility (composes with the multi-select dropdown, no new markup) and an export intent (<code>bo:table-export</code> — generating the file is your code). Rows appended later (load-more, swaps) don\'t inherit hidden columns — call <code>initTableToolbar()</code> again after appending, same re-call convention as <code>initDataTables()</code>.',
       '<code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code> tints that cell (CSS-only, no JS). The framework paints the tone; deciding which cells get one — a negative balance, a threshold, any rule — is server-side logic, never the framework\'s. Add <code>data-tone-text</code> alongside it to also tint the text (opt-in, not automatic).',
       'Separately opt-in: <code>data-sticky-cols="1|2|3"</code> + <code>initStickyCols()</code> freezes that many leading columns. One column needs no JS (<code>--sticky-col</code>, offset always 0); two or three need JS because column widths aren\'t known until rendered — the behavior measures the header row and keeps offsets live via <code>ResizeObserver</code>.',
+      'Separately opt-in: <code>data-context-menu="menu-id"</code> + <code>initContextMenu()</code> opens a <code>.bo-dropdown__menu</code> at the cursor on right-click instead of at a button. It only positions the menu — the items inside call whatever this page already documents (an <code>aria-sort</code> control, a <code>data-col-toggle</code> checkbox); this behavior owns no sort or filter logic of its own.',
     ]}
   />
   <section class="demo">
@@ -496,13 +555,14 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <pre><code>{tableMarkup}</code></pre>
   </section>
   <script>
-    import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar, initStickyCols } from '@busy-office/ui/js';
+    import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar, initStickyCols, initContextMenu } from '@busy-office/ui/js';
     initDataTables();
     initDataGrid();
     initRowEdit();
     initDropdowns();
     initTableToolbar();
     initStickyCols();
+    initContextMenu();
   </script>
   <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/patterns/editable-grid", "Editable grid pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

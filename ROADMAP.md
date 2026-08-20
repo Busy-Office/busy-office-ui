@@ -799,9 +799,73 @@ already on the page without double-triggering. Live-verified 1440 + 390,
 light + dark, in the bind-mounted Podman container. `check:contrast` and
 `check:rtl` (menu positioning) unaffected or explicitly re-verified.
 
-**Exit:** grill verdict recorded; 73.1 queued for the next Continue
-dispatch (not built in this triage step — Step 1 records the decision,
-Step 2 decides whether this wake builds it).
+**73.1 shipped 2026-08-20.** New behavior `initContextMenu()` (24th) —
+checked first whether `initDropdowns()` already generalized far enough
+(it doesn't: its `position()` anchors to a `[popovertarget]` invoker's
+rect, and a right-click has no such invoker). New file, ~30 lines: one
+`contextmenu` listener, `preventDefault()`, `showPopover()`, position at
+`e.clientX/Y` clamped to viewport — reuses `.bo-dropdown__menu` CSS
+unchanged (zero new CSS) and `initDropdowns()`'s existing item-click-to-
+close (keyed off DOM structure, works regardless of how the menu opened).
+New "Right-click column menu" demo, wired to real `data-col-toggle` (not
+a mock) plus static Sort items (same "your code" contract the page's own
+sort button already carries).
+
+**A real bug caught live, not trusted from the markup**: the demo's
+first version placed the `.bo-dropdown__menu` divs as siblings AFTER the
+closing `</table>` and `.bo-data-table-container` div — the natural place
+to author them. Right-clicking opened the menu fine, but unchecking "Show
+column" did nothing: `data-col-toggle`'s `applyColToggle()` looks up its
+container via `checkbox.closest('.bo-data-table-container')`, which
+returns null when the checkbox isn't a DESCENDANT of that container —
+confirmed via `getComputedStyle`/DOM inspection, not assumed from a
+clean-looking demo. Fixed by nesting the menu divs inside the container,
+re-verified live: `cellsHidden` flips `[true, true]`, column genuinely
+disappears. Documented the trap in the page's own prose so a real
+consumer doesn't repeat it. A second false-negative hit during
+verification itself — a backgrounded Podman rebuild raced a "container is
+running" poll that checked the OLD container before `podman rm -f` had
+run; re-verified only once the actual rebuild task's completion
+notification landed.
+
+Live-verified 1440px, light + dark, in a `--no-cache` Podman rebuild:
+context menu opens at the cursor (not a fixed corner), native browser
+context menu suppressed, "Show column" genuinely hides/restores the
+column, both themes checked independently (not just toggled via JS —
+learned from Slice 72's stale-screenshot artifact to navigate fresh
+between theme checks). 390px not independently re-verified (same
+browser-resize tool limitation as Slices 70.1/72); low risk, no new
+media query. `check:contrast`/`check:rtl` unaffected (zero new CSS).
+
+**73.2 — hover ring, a bug found by the owner asking a question, not by
+this page's own review.** Chat asked whether a striped or toned row's
+hover state would even be visible. Checked rather than guessed:
+`getComputedStyle` before/after a real hover confirmed `--bo-color-bg-
+hover` and `--bo-color-bg-muted` are the IDENTICAL token in both themes
+(`packages/core/src/css/tokens/color.css:18,108`, deliberately — the
+comment there explains hover needs to be opaque, same as muted) — so a
+striped even row's hover produces a verified ZERO change in fill. A
+`data-tone` cell has the same symptom for a different cause: its own
+`--bo-cell-bg` always wins over the row's, by design (Slice 71.1).
+
+Offered two fixes with different blast radius — a token-level change
+(fixes every surface using both tokens, but 35+ contrast pairs ride on
+`--bo-color-bg-hover`) or a table-scoped one. **Owner chose table-scoped.**
+Shipped: `tr:hover { outline: ... solid var(--bo-color-border-strong);
+outline-offset: -1px; }` — `outline`, not `box-shadow`, specifically so
+it composes with the state/tone accent bars (which already own
+`box-shadow`) instead of overriding them; row-scoped so it draws one
+rectangle around the hovered row rather than per-cell borders. Verified
+live: `outline` goes from `none` to `1px solid` on genuine `:hover`
+(`element.matches(':hover')` checked, not assumed), confirmed visually in
+a screenshot, both themes. No token touched, `check:contrast` unaffected.
+`--bo-color-bg-hover`/`-muted`'s shared-token design stays as documented
+— logged as the underlying cause for a future wake if the owner ever
+wants the systemic fix instead.
+
+**Exit:** 73.1 and 73.2 both shipped and verified; the filter-logic
+refusal and sticky-as-runtime-state rethink from the original grill stand
+unbuilt, as scoped.
 
 ## Slice 72 — Owner wishlist: multi-sticky columns, tone text, width/font (2026-08-20)
 

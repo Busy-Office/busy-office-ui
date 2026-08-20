@@ -128,6 +128,25 @@
     --bo-cell-bg: var(--bo-color-bg-hover);
   }
 
+  /* Hover ring (roadmap 73.2) — a channel independent of --bo-cell-bg, so
+     hover stays visible when the fill alone can't show it: --bo-color-bg-
+     hover and --bo-color-bg-muted are the SAME token (both theme's opaque
+     "one step up from surface" neutral), so a striped even row's hover
+     produces literally zero fill change — confirmed live, not assumed
+     (getComputedStyle matched hovered vs. not). A data-tone cell has the
+     same problem for a different reason: its own --bo-cell-bg always wins
+     over the row's, by design, so the fill never reflects row hover at
+     all. outline, not box-shadow — the state/tone accent bars already own
+     box-shadow, and outline composes independently instead of overriding
+     them. Row-scoped (an outline on <tr> draws one rectangle around the
+     row, not per-cell borders), not a token change — --bo-color-bg-hover
+     is shared across every surface that isn't a data-table row, and this
+     fix stays scoped to the one component where the collision was found. */
+  .bo-data-table tbody tr:hover {
+    outline: var(--bo-border-width) solid var(--bo-color-border-strong);
+    outline-offset: calc(-1 * var(--bo-border-width));
+  }
+
   .bo-data-table tbody tr:has(.bo-data-table__row-select:checked) {
     --bo-cell-bg: var(--bo-color-bg-selected);
   }

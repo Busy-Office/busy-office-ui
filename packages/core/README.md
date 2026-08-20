@@ -40,7 +40,7 @@ initDialogs(); initDataTables(); initTabs(); initDropdowns(); initAlerts();
 ```
 
 Components whose docs page says "JS required" are inert until you call their init.
-All <!-- stat:behaviors -->23<!-- /stat --> behaviors communicate through intent
+All <!-- stat:behaviors -->24<!-- /stat --> behaviors communicate through intent
 events (<!-- stat:events -->`bo:cell-change`, `bo:combobox-select`, `bo:row-cancel`, `bo:row-save`, `bo:scan`, `bo:table-export`, `bo:table-load-more`, `bo:tag-add`, `bo:tag-remove`, `bo:tree-toggle`<!-- /stat -->) — your app owns the data
 layer.
 
