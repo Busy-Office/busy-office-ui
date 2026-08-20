@@ -86,25 +86,34 @@ const unitSelect = `<div class="bo-quantity">
   </select>
 </div>`;
 
-const tableColumn = `<table class="bo-data-table">
-  <thead><tr><th>Item</th><th class="bo-data-table__col--numeric">Qty</th></tr></thead>
+const tableColumn = `<!-- In a line table the unit is its own COLUMN, fixed per row — so each
+     qty cell is just the input (no unit-select, no steppers), with
+     step/inputmode server-rendered per that row's unit. -->
+<table class="bo-data-table">
+  <thead><tr>
+    <th>Item</th>
+    <th class="bo-data-table__col--numeric">Qty</th>
+    <th>Unit</th>
+  </tr></thead>
   <tbody>
-    <tr><td>Standing desk</td><td class="bo-data-table__col--numeric">
-      <div class="bo-quantity">
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-        <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity" />
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
-        <span class="bo-quantity__unit">ea</span>
-      </div>
-    </td></tr>
-    <tr><td>Bulk cable (kg)</td><td class="bo-data-table__col--numeric">
-      <div class="bo-quantity">
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
-        <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity" />
-        <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
-        <span class="bo-quantity__unit">kg</span>
-      </div>
-    </td></tr>
+    <tr>
+      <td>Standing desk</td>
+      <td class="bo-data-table__col--numeric">
+        <div class="bo-quantity">
+          <input class="bo-quantity__input" type="number" value="4" min="0" max="99" step="1" inputmode="numeric" aria-label="Quantity, standing desk" />
+        </div>
+      </td>
+      <td class="bo-data-table__col--code">ea</td>
+    </tr>
+    <tr>
+      <td>Bulk cable</td>
+      <td class="bo-data-table__col--numeric">
+        <div class="bo-quantity">
+          <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity, bulk cable" />
+        </div>
+      </td>
+      <td class="bo-data-table__col--code">kg</td>
+    </tr>
   </tbody>
 </table>`;
 
@@ -272,10 +281,14 @@ const markup = `<!-- basic: ( qty | unit ), joined — no buttons needed -->
     <div class="bo-data-table-container" tabindex="0">
       <Demo code={tableColumn} />
     </div>
-    <p class="bo-u-text-muted">Same component, dropped straight into a
-    <code>__col--numeric</code> cell — no table-specific variant needed. Editable
-    line-item quantities (a whole-count row and a fractional-unit row here) work
-    the same as any other <code>.bo-quantity</code>, increment/decrement included.</p>
+    <p class="bo-u-text-muted">In a line table, split the pair: the unit is
+    its own <strong>column</strong>, fixed per row, and each qty cell is
+    just the input — no unit-select, no steppers. <code>step</code>/
+    <code>inputmode</code> are server-rendered per that row's unit (whole
+    <code>ea</code> vs fractional <code>kg</code> here). The joined
+    ( qty | unit ) control is the <em>form</em> shape — it belongs in a
+    cell only in the rare case the user must change a row's unit inline;
+    steppers belong on touch screens, not dense line grids.</p>
   </section>
 
   <section class="demo">

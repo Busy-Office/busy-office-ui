@@ -769,6 +769,27 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 88 — Owner wishlist: split the table-column demos into value + qualifier columns (2026-08-21)
+
+Owner: the "In a table column" demos on Money and Quantity "don't make
+sense — can we split columns for amount and currency instead". The
+instinct matches the framework's own family rule: in a line table the
+currency/unit is normally FIXED per row, and fixed qualifier → plain
+input, no widget — the joined control crammed into one cell was
+over-applying the FORM recipe to a table.
+
+**88.1 — both demos rewritten as split columns.** Money: Line item |
+Amount (plain `.bo-input--numeric`, `step` server-rendered per that
+row's currency — 0.01 for USD, 1 for JPY) | Currency (a `__col--code`
+column). Quantity: Item | Qty (just the input — no unit-select, no
+steppers; `step`/`inputmode` per the row's unit) | Unit. Captions state
+the boundary explicitly: the joined control is the form shape and
+belongs in a cell only when the user must change a row's currency/unit
+inline; steppers belong on touch screens, not dense line grids.
+Verified live: split markers present, ALL old joined-in-cell markup
+absent from the served pages, light theme visually + dark theme by
+computed tokens (canvas/surface/border-control).
+
 ## Slice 87 — /design-grill: the Combobox page (2026-08-21)
 
 Next Data-input member in the owner's walk. Full report:

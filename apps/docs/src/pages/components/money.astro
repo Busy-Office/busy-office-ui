@@ -23,29 +23,33 @@ const readOnly = `<!-- an amount, read-only: Amount with a currency -->
   <span class="bo-amount__value">1,250.00</span>
 </span>`;
 
-const tableColumn = `<table class="bo-data-table">
-  <thead><tr><th>Line item</th><th class="bo-data-table__col--numeric">Unit price</th></tr></thead>
+const tableColumn = `<!-- In a line table the currency is its own COLUMN, fixed per row —
+     so each amount cell is a plain numeric input (the family rule: fixed
+     currency needs no widget), with step server-rendered per that row's
+     currency. -->
+<table class="bo-data-table">
+  <thead><tr>
+    <th>Line item</th>
+    <th class="bo-data-table__col--numeric">Amount</th>
+    <th>Currency</th>
+  </tr></thead>
   <tbody>
-    <tr><td>Standing desk</td><td class="bo-data-table__col--numeric">
-      <div class="bo-money">
-        <select class="bo-select bo-money__currency" aria-label="Currency">
-          <option>USD</option>
-          <option>EUR</option>
-        </select>
-        <input class="bo-input bo-input--numeric bo-money__amount" type="number"
-            step="0.01" value="1208.00" aria-label="Amount">
-      </div>
-    </td></tr>
-    <tr><td>Import duty (JPY line)</td><td class="bo-data-table__col--numeric">
-      <div class="bo-money">
-        <select class="bo-select bo-money__currency" aria-label="Currency">
-          <option selected>JPY</option>
-          <option>USD</option>
-        </select>
-        <input class="bo-input bo-input--numeric bo-money__amount" type="number"
-            step="1" value="56000" aria-label="Amount">
-      </div>
-    </td></tr>
+    <tr>
+      <td>Standing desk</td>
+      <td class="bo-data-table__col--numeric">
+        <input class="bo-input bo-input--numeric" type="number" step="0.01"
+            value="1208.00" aria-label="Amount, standing desk" />
+      </td>
+      <td class="bo-data-table__col--code">USD</td>
+    </tr>
+    <tr>
+      <td>Import duty</td>
+      <td class="bo-data-table__col--numeric">
+        <input class="bo-input bo-input--numeric" type="number" step="1"
+            value="56000" aria-label="Amount, import duty" />
+      </td>
+      <td class="bo-data-table__col--code">JPY</td>
+    </tr>
   </tbody>
 </table>`;
 
@@ -189,12 +193,14 @@ const canonical = `<!-- Two real form controls working as one field: the select 
     <div class="bo-data-table-container" tabindex="0">
       <Demo code={tableColumn} />
     </div>
-    <p class="bo-u-text-muted">Same component, dropped straight into a
-    <code>__col--numeric</code> cell — no table-specific variant needed.
-    Each row keeps its own currency: the JPY line reformats to 0 decimals
-    independently of the USD row above it, because precision is derived
-    per-field from that row's own <code>&lt;select&gt;</code>, never
-    shared table-wide state.</p>
+    <p class="bo-u-text-muted">In a line table, split the pair: the
+    currency is its own <strong>column</strong>, fixed per row, and each
+    amount cell is a plain <code>.bo-input--numeric</code> — the family
+    rule's fixed-currency case, no widget needed. Precision is the
+    <code>step</code> the server renders per that row's currency (0.01 for
+    the USD line, 1 for JPY). The joined <code>.bo-money</code> control is
+    the <em>form</em> shape — it belongs in a cell only in the rare case
+    the user must change a row's currency inline.</p>
   </section>
 
   <section class="demo">
