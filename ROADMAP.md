@@ -1107,7 +1107,54 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        should require the sentence, so new pages cannot ship without it —
        raise that rather than writing it a third time by hand.
 
-4. [ ] **94.6 — batch 3's two family-level findings (Navigation & layout).**
+4. [x] **94.6 — CLOSED 2026-08-21. Both halves done: (a) the scrim token landed in the earlier Standardize sweep, (b) the spacing habit is now swept framework-wide (below). batch 3's two family-level findings (Navigation & layout).**
+       **(b) done across all remaining families (Standardize, 2026-08-21).**
+       Eleven components were still at `spacing: 2` — batch 3's six, which
+       94.6b queued but never got, plus batch 5's four and batch 6's one.
+       All eleven now carry their reason and re-score to 3; `spacing` reads
+       3 on 39 of 39.
+
+       **Two things worth recording rather than celebrating.** First, one of
+       the eleven was a false entry: `dashboard` had NO uncommented spacing
+       literal — the 32px and 20rem/1rem a scan flags are numbers quoted
+       inside the comments that explain them. Its citation was wrong and is
+       corrected. Second, `spacing` reaching 39/39 is the self-clearing
+       behaviour 94.7 documented, arriving on schedule: the debt is paid, so
+       the dimension now discriminates nothing. Only `typography` (6),
+       `content` (10) and `fit` (1) still vary.
+
+       **The detector that found these was wrong six times first**, always
+       the same way: it searched raw source, so every number quoted inside a
+       comment ("the 1.5rem target floor", "2 x 20rem + 1rem gap = 41rem")
+       came back as an uncommented literal. The working version blanks
+       comments to same-length spaces first, preserving offsets. It is in
+       the scratchpad, not the repo — see 94.11 for why it is not a gate.
+
+
+5. [ ] **94.11 — should "every intrinsic literal carries its reason" be a
+       GATE rather than a rubric dimension?** `spacing` has now discharged
+       to 39/39 and measures nothing until someone adds an uncommented
+       literal — at which point nothing catches it, because the rubric is
+       re-scored by hand on a slice cadence. A build gate would turn the
+       habit into an invariant and let the dimension retire.
+
+       **Not trivially gateable, and the reason is measured.** The corrected
+       detector reports 42 remaining literals framework-wide, and nearly all
+       are legitimate: em `letter-spacing` (treated as intrinsic by
+       precedent), raw `font-size` (a different dimension), and — the hard
+       one — literals covered by ONE comment that explains a family of
+       following rules (`tree-table`'s eleven-level indent ladder, `tabs`'s
+       six mask rules, `data-table`'s six accent bars). A gate that demands
+       a comment per declaration would force six copies of one explanation,
+       which is worse than the habit it polices.
+
+       **Accept:** either express "a comment above this rule GROUP covers its
+       literals" precisely enough that the detector's false-positive rate on
+       today's tree is zero — red-proved by injecting a genuinely
+       unexplained literal and watching it fail — or record that the
+       property is not mechanically checkable and keep it as a rubric
+       dimension, accepting that it only fires when a human re-scores.
+
        Neither is a per-component defect; both are one habit seen across the
        family, which is why the unit of work is a family.
 

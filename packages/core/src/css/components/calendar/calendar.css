@@ -102,6 +102,11 @@
     font-weight: var(--bo-font-weight-medium);
   }
 
+  /* The holiday dot — the NON-COLOUR half of that day's signal, so it has to
+     be legible on its own. All three numbers are em, so the dot tracks the
+     cell's type size instead of shrinking away at compact density: 0.3em is
+     about a third of a digit's width (a mark, not a bullet), and 0.15em lifts
+     it clear of the cell's bottom edge without crowding the date above it. */
   .bo-calendar__day[data-day="holiday"]::after {
     content: "";
     position: absolute;

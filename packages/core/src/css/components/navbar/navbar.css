@@ -4,6 +4,11 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--bo-space-4);
+    /* 3rem floor, not a fixed height: the bar must stay a consistent
+       landmark across every screen even when it holds nothing but the
+       brand, and it must still grow when a control inside it is taller.
+       A MINIMUM is also the WCAG 1.4.12 answer — text that grows must be
+       able to push the bar taller instead of being clipped by it. */
     min-block-size: 3rem;
     padding-block: var(--bo-space-2);
     padding-inline: var(--bo-space-4);

@@ -40,6 +40,10 @@
     display: inline-flex;
   }
 
+  /* 2px, painted in the SURFACE colour rather than a border colour: it is a
+     cut-out, not an outline — it fakes the gap between overlapping discs so
+     each one keeps a clean edge against the one beneath. Thin enough to read
+     as separation, thick enough to survive the overlap below. */
   .bo-avatar-stack .bo-avatar {
     border: 2px solid var(--bo-color-bg-surface);
   }

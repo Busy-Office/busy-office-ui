@@ -42,7 +42,15 @@
      either an overlay background (the same colour assumption, again) or
      restructuring consumer markup into an injected wrapper, for a control that
      duplicates what shift+wheel, swipe and arrow-keys already do. This is one
-     selector, no DOM change, and works on every platform. */
+     selector, no DOM change, and works on every platform.
+
+     The 2.5rem repeated below is the FADE DISTANCE, and it is one number in
+     six places rather than six numbers: every rule fades over the same
+     span, so the start and end edges match and the "both" case is
+     symmetrical. It is sized to about one tab's padding — far enough that
+     the cut-off tab is visibly dimmed rather than merely soft-edged, short
+     enough that the tab still reads. Not a spacing step: it is a distance
+     over which alpha travels, which no space token expresses. */
   .bo-tabs__list[data-overflow="end"] {
     mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
   }
@@ -67,6 +75,10 @@
   .bo-tabs__tab {
     padding: var(--bo-space-2) var(--bo-space-4);
     margin-block-end: calc(var(--bo-border-width) * -1);
+    /* 2px, deliberately heavier than --bo-border-width: this underline is
+       the SELECTED indicator, and at 1px it read as the list's own bottom
+       rule rather than as a marker. Transparent here so every tab reserves
+       the space and selecting one shifts nothing. */
     border-block-end: 2px solid transparent;
     color: var(--bo-color-text-secondary);
     font-size: var(--bo-density-font-size);
@@ -192,6 +204,10 @@
       margin-block-end: calc(var(--bo-border-width) * -1);
       margin-inline-end: 0;
       border-inline-end: none;
+      /* Same 2px selected-indicator as the horizontal base above, restated
+         because the vertical variant moves the marker from the inline edge
+         back to the block edge when its container is too narrow to stay
+         vertical. One weight, two edges — not a second decision. */
       border-block-end: 2px solid transparent;
     }
 

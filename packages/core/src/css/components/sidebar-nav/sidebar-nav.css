@@ -1,4 +1,9 @@
 @layer bo-components {
+  /* 14rem rail: wide enough that a two-word ERP label ("Goods receipt",
+     "Cost centers") sits on one line at comfortable density, narrow enough
+     to leave the content column dominant. A fixed width rather than a
+     fraction, because a nav rail that resizes with the viewport makes every
+     screen's layout different; the collapse below is the responsive answer. */
   .bo-sidebar-nav {
     inline-size: 14rem;
     padding: var(--bo-space-2);
@@ -80,10 +85,18 @@
      from the accessibility tree and, with aria-hidden icons, would leave every
      link with an empty accessible name. */
   @container bo-shell (max-width: 56rem) {
+    /* 3.25rem collapsed: the icon slot (1.3em) plus the rail's own padding
+       on both sides — the narrowest the rail can be while its icons stay
+       centred and touchable. Derived from those two, not chosen. */
     .bo-sidebar-nav {
       inline-size: 3.25rem;
     }
 
+    /* The standard visually-hidden recipe, spelled out rather than pulled
+       from a utility because this rule is inside a container query and has
+       to win locally. The 1px box plus clip-path is the idiom's own shape —
+       a 0x0 element is dropped from the accessibility tree by some engines,
+       which is exactly what must NOT happen here. */
     .bo-sidebar-nav__label,
     .bo-sidebar-nav__heading {
       position: absolute;

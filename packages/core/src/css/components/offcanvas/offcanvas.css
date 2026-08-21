@@ -10,6 +10,11 @@
     inset-block: 0;
     block-size: 100dvh;
     max-block-size: 100dvh;
+    /* 18rem is the drawer width — a little wider than the 14rem rail it
+       usually contains, so a .bo-sidebar-nav inside it is not cramped. The
+       85vw ceiling is what makes it safe on a small phone: the panel must
+       never cover the whole screen, because the strip of page still showing
+       is the affordance that says "tap here to dismiss". */
     inline-size: min(18rem, 85vw);
     max-inline-size: none;
     border: none;

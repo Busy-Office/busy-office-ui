@@ -43,6 +43,10 @@
   .bo-prose blockquote {
     margin-inline: 0;
     padding-inline-start: var(--bo-space-3);
+    /* 3px quote rule — the same weight .bo-alert uses for its status accent,
+       so a marked-off block reads the same way wherever it appears. Heavier
+       than --bo-border-width on purpose: at 1px it reads as a table edge
+       that wandered in, not as a quotation mark. */
     border-inline-start: 3px solid var(--bo-color-border-strong);
     color: var(--bo-color-text-secondary);
   }
@@ -54,6 +58,10 @@
     border-radius: var(--bo-radius-sm);
   }
 
+  /* em, and asymmetric: inline code sits inside a line of prose, so its
+     padding has to scale with the surrounding type and must stay thin
+     vertically or it pushes the line box taller and the paragraph's rhythm
+     breaks. Wider inline so the tint reads as a chip around the token. */
   .bo-prose code { padding: 0.1em 0.35em; }
 
   .bo-prose pre {

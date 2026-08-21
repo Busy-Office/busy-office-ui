@@ -9,10 +9,18 @@
     background: var(--bo-color-bg-surface-raised);
     color: var(--bo-color-text-primary);
     box-shadow: var(--bo-shadow-dialog);
+    /* 32rem is a measure, not a layout step: it is about the width at which
+       a confirmation's prose stays comfortably readable on one or two lines.
+       The min() against the viewport is the phone case — the panel must
+       always leave a margin of page visible around it, never go edge to
+       edge, or it stops reading as a layer above the screen. */
     max-inline-size: min(32rem, calc(100vw - var(--bo-space-8)));
     inline-size: 100%;
   }
 
+  /* 56rem: sized for the content that earns this modifier — an embedded
+     table or a two-column form — rather than for prose, which is why it is
+     an opt-in and not the default. Same viewport guard as the base. */
   .bo-dialog--wide {
     max-inline-size: min(56rem, calc(100vw - var(--bo-space-8)));
   }
@@ -29,6 +37,10 @@
   @keyframes bo-dialog-in {
     from {
       opacity: 0;
+      /* 0.5rem of travel — enough that the panel reads as arriving rather
+         than appearing, small enough that it never looks like it slid in
+         from off-screen (that is .bo-offcanvas's gesture, and the two must
+         not be confused). Paired with a 0.98 scale for the same reason. */
       transform: translateY(0.5rem) scale(0.98);
     }
   }

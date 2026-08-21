@@ -27,6 +27,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    /* One control height minus 4px: the option sits INSIDE the track, so it
+       has to be shorter than the control by the track's padding on both
+       edges (2px each). Subtracting from the density alias rather than
+       hard-coding a height is what keeps the group the same size as the
+       inputs beside it at every density. */
     block-size: calc(var(--bo-density-control-height) - 4px);
     padding-inline: var(--bo-space-3);
     border-radius: var(--bo-radius-sm);

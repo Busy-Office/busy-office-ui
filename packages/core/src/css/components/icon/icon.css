@@ -16,6 +16,10 @@
     display: inline-block;
     inline-size: 1em;
     block-size: 1em;
+    /* -0.125em: a 1em box sits on the text baseline, which leaves the glyph
+       riding high against the letters beside it. Dropping it by an eighth of
+       the type size centres it on the x-height instead. em, so the nudge
+       tracks the font it is aligning to. */
     vertical-align: -0.125em;
     background-color: currentcolor;
     /* contain + center, not 100% 100%: composed slots may widen the box

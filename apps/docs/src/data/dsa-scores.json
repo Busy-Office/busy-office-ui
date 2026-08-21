@@ -543,8 +543,8 @@
           "cite": "zero raw colour — surface/border/text all tokens"
         },
         "spacing": {
-          "score": 2,
-          "cite": "min-block-size: 3rem is an uncommented intrinsic bar height (navbar.css:6) — the 94.2 habit, outside batches 1-2 scope"
+          "score": 3,
+          "cite": "the 3rem bar height states why it is a FLOOR and not a fixed height — a consistent landmark that must still grow for a taller control, which is also the WCAG 1.4.12 answer (94.6b)"
         },
         "interaction": {
           "score": "na",
@@ -579,8 +579,8 @@
           "cite": "zero raw colour; hover/current use state + accent tokens"
         },
         "spacing": {
-          "score": 2,
-          "cite": "14rem rail and the 3.25rem collapsed width are uncommented; the 1.3em icon slot DOES carry its measured reason"
+          "score": 3,
+          "cite": "the 14rem rail and the 3.25rem collapsed width both carry their reason, the collapsed one DERIVED from the icon slot plus padding; the visually-hidden 1px box is named as the idiom it is (94.6b)"
         },
         "interaction": {
           "score": 3,
@@ -648,8 +648,8 @@
           "cite": "::backdrop now consumes --bo-color-scrim, the shared token added in the 94.6a sweep; zero raw colour, and the scrim is deliberately not theme-remapped (a scrim pushes the page back rather than tinting a surface)"
         },
         "spacing": {
-          "score": 2,
-          "cite": "inline-size: min(18rem, 85vw) is an uncommented intrinsic panel width"
+          "score": 3,
+          "cite": "min(18rem, 85vw) explains both halves — wider than the 14rem rail it contains, and capped so a strip of page always shows as the dismiss affordance (94.6b)"
         },
         "interaction": {
           "score": 3,
@@ -684,8 +684,8 @@
           "cite": "the nine #000 are MASK alpha inside linear-gradient(), not theme colour — a mask fades to transparency precisely so no cover colour is assumed; reconciled, not a raw-hex defect"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 2.5rem fade distance and the 2px underline weight are uncommented, though the mask MECHANISM is explained at length"
+          "score": 3,
+          "cite": "the 2px selected underline states why it is heavier than --bo-border-width, and the 2.5rem fade distance is explained ONCE for the family of six rules that share it rather than six times (94.6b)"
         },
         "interaction": {
           "score": 3,
@@ -720,8 +720,8 @@
           "cite": "::backdrop now consumes --bo-color-scrim, the shared token added in the 94.6a sweep; zero raw colour, and the scrim is deliberately not theme-remapped (a scrim pushes the page back rather than tinting a surface)"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 32rem / 56rem--wide caps are uncommented intrinsic dialog widths"
+          "score": 3,
+          "cite": "the 32rem measure, the 56rem--wide opt-in and the 0.5rem entry travel all carry their reason, incl. why the travel must not read like offcanvas sliding in (94.6b)"
         },
         "interaction": {
           "score": 3,
@@ -756,8 +756,8 @@
           "cite": "painted by background-color: currentcolor; the %23000 inside the data URIs is SVG stroke under a MASK and is never painted"
         },
         "spacing": {
-          "score": 2,
-          "cite": "vertical-align: -0.125em is an uncommented intrinsic baseline nudge; the 1em box does carry its reason"
+          "score": 3,
+          "cite": "the -0.125em baseline nudge explains itself — a 1em box rides high on the baseline, so it drops to centre on the x-height (94.6b)"
         },
         "interaction": {
           "score": "na",
@@ -990,8 +990,8 @@
           "cite": "zero raw colour; delta valence is two-channel — a visible glyph plus visually-hidden text, per its own note"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the four 32px sparkline dimensions and the 20rem/1rem pair at the tail are uncommented; the --bo-widget-min default does carry its reason"
+          "score": 3,
+          "cite": "zero uncommented dimension literals — the 32px and 20rem/1rem a scan flags are numbers quoted INSIDE the comments that explain them, and the only real literal left is a font-size, scored under typography"
         },
         "interaction": {
           "score": "na",
@@ -1134,8 +1134,8 @@
           "cite": "zero raw colour; forced-colors adds the disc boundary that separates stacked avatars once backgrounds flatten"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 2px stack ring and the -0.5em overlap are uncommented as VALUES, though the ring’s purpose is stated"
+          "score": 3,
+          "cite": "the 2px stack ring states that it is a cut-out in the surface colour, not an outline; the -0.5em overlap is covered by the stack comment above it (94.6b)"
         },
         "interaction": {
           "score": "na",
@@ -1170,8 +1170,8 @@
           "cite": "zero raw colour"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 3px blockquote rule and the 0.1em/0.35em code padding are uncommented; block margins are all space tokens"
+          "score": 3,
+          "cite": "the 3px quote rule and the em code padding both carry their reason, incl. why the padding must stay thin vertically (94.6b)"
         },
         "interaction": {
           "score": "na",
@@ -1206,8 +1206,8 @@
           "cite": "zero raw colour, and every marked day is required to carry its meaning in text — colour and shape are the visible half only"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 0.15em/0.3em dot geometry is uncommented; the 2.25em cell and the 3px/4px stripe both carry their reason"
+          "score": 3,
+          "cite": "the holiday dot geometry now states that it is the NON-COLOUR half of the signal and why all three numbers are em (94.6b); the 2.25em cell and 3px/4px stripe already carried theirs"
         },
         "interaction": {
           "score": 3,
@@ -1314,8 +1314,8 @@
           "cite": "zero raw colour"
         },
         "spacing": {
-          "score": 2,
-          "cite": "the 4px inset in calc(var(--bo-density-control-height) - 4px) is uncommented — it is the track/option gap and reads as intrinsic, but nothing says so"
+          "score": 3,
+          "cite": "the 4px inset is explained as the track padding on both edges, subtracted from the density alias so the group matches the inputs beside it at every density (94.6b)"
         },
         "interaction": {
           "score": 3,
