@@ -813,7 +813,28 @@ tidier one:**
   `closest('.bo-money')` + `querySelector('.bo-money__amount')`, which is
   already order-independent — verified in `money-field.ts:52-55`, not assumed.
 
-1. [ ] **96.1 — derive the money joint from DOM order.** Replace the
+1. [x] **96.1 — DONE 2026-08-21. derive the money joint from DOM order.**
+       Measured against every Accept criterion rather than eyeballed. In BOTH
+       orders, at **1440px and 390px**: no double border at the seam
+       (`border-inline-end: 0px` on the leader, `1px` on the trailer), gap
+       exactly **0px**, outer corners 6px and inner corners 0px, equal
+       heights, and `domOrderMatchesVisual: true`. `api.json` gains **no
+       modifier** — `variants: []`, still the same three classes.
+       `initMoneyField()` verified working with the select LAST: switching to
+       JPY drove `step` 0.01 → 1 and losslessly reformatted 1250.00 → 1250.
+
+       Focus ring observed, not inferred — but only after three failed
+       attempts, which is worth recording. Programmatic `.focus()` never sets
+       `:focus-visible`, and synthetic clicks did not reach the page (the
+       screenshot space is 1456px against a 1280px viewport). What worked was
+       JS-focus followed by a **real** key event, which flips Chrome into
+       keyboard modality: the focused half then reports
+       `solid 2px @2px` with the sibling at `none`, so the ring is
+       per-element and uncut. **Stated precisely: this was observed on the
+       LEADING element** — the one whose end border is dropped, i.e. the half
+       that could have shown a cut ring. The trailing select keeps its full
+       border and is strictly less at risk, but Tab would not advance focus in
+       this harness, so it was not directly observed. Replace the
        unconditional radius/border rules with position-dependent ones
        (`:first-child` / `:last-child`), so `select` then `input` renders
        `[ USD | 1250.00 ]` and `input` then `select` renders

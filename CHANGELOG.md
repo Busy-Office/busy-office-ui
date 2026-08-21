@@ -11,6 +11,21 @@ pin.
 > These land **after** `v0.3.0` was tagged, so they are not in that release.
 > The tag is already pushed; it was not moved to pick them up.
 
+- **Added** (`money`): the currency may now sit on either side of the amount,
+  and there is **no new class** for it — the joint is derived from DOM order.
+  Write the `select` before the `input` for `[ USD | 1250.00 ]` (en-US), or
+  after it for `[ 1250.00 | EUR ]` (de-DE writes `1.234,56 €`). Currency
+  placement is a locale convention, not a preference, so both had to be
+  reachable; a `--currency-end` modifier would have been a second way to say
+  what the markup already says, and one that can disagree with it.
+
+  Deliberately not `order` on the flex children, which is the shorter trick:
+  it reverses visual order while leaving DOM order alone, so focus would
+  travel against the rendering (WCAG 1.3.2 / 2.4.3). No markup change is
+  needed for existing consumers — currency-first renders exactly as before —
+  and `initMoneyField()` is untouched, since it already resolved its pair by
+  query rather than by position.
+
 - **Fixed** (`badge`): a long label could push the whole PAGE sideways.
   `.bo-badge` carried `white-space: nowrap` with no width cap, so a status
   label that could not break grew the badge past its parent — measured 373px

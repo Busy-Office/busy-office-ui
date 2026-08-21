@@ -18,6 +18,19 @@ const basic = `<div class="bo-money">
       step="0.01" value="1250.00" aria-label="Amount">
 </div>`;
 
+const trailing = `<!-- Currency AFTER the amount: de-DE writes 1.234,56 € where
+     en-US writes $1,234.56. Same two elements, same classes — the order you
+     write them in is the order they render. No modifier to remember. -->
+<div class="bo-money">
+  <input class="bo-input bo-input--numeric bo-money__amount" type="number"
+      step="0.01" value="1250.00" aria-label="Amount">
+  <select class="bo-select bo-money__currency" aria-label="Currency">
+    <option>EUR</option>
+    <option>USD</option>
+    <option>JPY</option>
+  </select>
+</div>`;
+
 const readOnly = `<!-- an amount, read-only: Amount with a currency -->
 <span class="bo-amount">
   <span class="bo-amount__currency">$</span>
@@ -127,6 +140,19 @@ const canonical = `<!-- Two real form controls working as one field: the select 
     don't fit the new precision keep their digits (nothing is ever
     rounded away); switch to BHD and it pads to 3 decimals. Everything
     not in the built-in exception table uses 2.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Currency after the amount</h2>
+    <Demo code={trailing} />
+    <p class="bo-u-text-muted">Currency placement is a locale convention, not
+    a preference: <code>de-DE</code> writes 1.234,56 € where <code>en-US</code>
+    writes $1,234.56. Put the <code>select</code> after the <code>input</code>
+    and it renders that way — the joint follows DOM order, so there is no
+    modifier to remember and no way for a class to disagree with your markup.
+    Tab order follows too, because nothing is visually reordered. The
+    behaviour is unchanged: precision still tracks the currency from either
+    position.</p>
   </section>
 
   <section class="demo">
