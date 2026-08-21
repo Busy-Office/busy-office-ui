@@ -187,7 +187,16 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
       section navigation, because it already styles
       <code>[aria-current="page"]</code>. Kept to one line and allowed to scroll
       sideways; it carries <code>tabindex="0"</code> because a scrollable region
-      must be reachable by keyboard.</li>
+      must be reachable by keyboard. <strong>Reads like tabs, is NOT
+      <code>role="tab"</code></strong> — a real
+      <a href={base + '/components/tabs'}>tabs</a> widget hides every panel but
+      the active one and moves between them with the arrow keys; this bar is
+      plain links, every section stays in the DOM and on screen, and Tab
+      visits each link like any other link. Activating one scrolls (Enter or a
+      click), same as clicking any anchor — Chrome/Firefox/Safari all then
+      resume keyboard Tab from the section just jumped to, not from the top of
+      the document, even though it never becomes <code>document.activeElement</code>
+      itself (verified live, 2026-08-22).</li>
       <li><strong>One sticky wrapper</strong> — the header and the bar stick
       <em>together</em>, in a single sticky element. Two sticky children both at
       <code>inset-block-start: 0</code> pin to the same offset and overlap.</li>
@@ -268,11 +277,35 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
 <style>
   /* The floorplan's only page-level CSS, and all of it is layout.
      One sticky wrapper: two sticky children at inset-block-start: 0 pin to the
-     SAME offset and overlap (measured 77px at 1440, 181px at 390). */
+     SAME offset and overlap (measured 77px at 1440, 181px at 390).
+
+     Two bugs found live while scrolling (roadmap 108, 2026-08-22), both
+     from the SAME cause: .bo-app-shell__main is the scrolling ancestor,
+     and it carries its own --bo-space-6 padding-block-start. A sticky
+     child's `top: 0` pins BELOW that padding (measured: exactly a
+     --bo-space-6 gap between the shell's visible top edge and where this
+     bar actually sticks) — a scrolled-past table cell was fully visible in
+     that gap, sitting behind nothing, because the sticky bar never claims
+     the padding that belongs to its SCROLL CONTAINER. The usual fix for
+     this shape (negative margin + matching padding, so the box extends
+     into the gap and its own background covers it) measured as A NO-OP
+     here — `.op-sticky` is a direct flex item of `.demo`, and Chrome does
+     not fold a flex item's margin into its sticky offset the way block
+     flow does; the gap stayed exactly --bo-space-6 with the trick applied.
+     `inset-block-start: calc(-1 * var(--bo-space-6))` is what actually
+     closes it — measured 0px gap, both the moment stickiness first
+     engages and deep into the scroll, both themes. Second: an embedded
+     table with no height of its own resolves ITS sticky thead against the
+     SAME scrolling ancestor, so at the collision point the table header
+     (--bo-z-sticky-header, 1100) painted over this page-level bar
+     (z-index: 2, an arbitrary number with no relation to the framework's
+     stacking scale) instead of losing to it. --bo-z-sticky-page exists now
+     specifically so page-level chrome always wins that collision — see
+     its definition in tokens/z-index.css. */
   .op-sticky {
     position: sticky;
-    inset-block-start: 0;
-    z-index: 2;
+    inset-block-start: calc(-1 * var(--bo-space-6));
+    z-index: var(--bo-z-sticky-page);
     background: var(--bo-color-bg-canvas);
   }
 

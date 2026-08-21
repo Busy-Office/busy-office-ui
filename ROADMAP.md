@@ -780,6 +780,76 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 108 — P0: object-page sticky bleed-through, z-index scale, tab-vs-anchor clarity (2026-08-22)
+
+Owner report (screenshot of `/patterns/object-page` mid-scroll, dark theme):
+*"bug on object page — scrolling can see content behind... Cascade Layers
+System -- pls define a clear rule so no confusion... navigation thru tab."*
+Reproduced live before touching anything; all three trace back to real,
+measured causes, not the same bug three ways.
+
+1. [x] **108.1 — content visible behind the sticky bar while scrolling.**
+       **Done 2026-08-22.** Root cause, measured: `.bo-app-shell__main`
+       (every docs page's scroll container) carries `padding-block-start:
+       var(--bo-space-6)`; a sticky child's `top: 0` pins BELOW that
+       padding, leaving an uncovered `--bo-space-6` band where a
+       scrolled-past table `<th>` was fully visible. The textbook fix
+       (negative margin + matching padding, so the box extends into the
+       gap) measured as a NO-OP — `.op-sticky` is a direct flex item, and
+       Chrome does not fold a flex item's margin into its sticky offset
+       the way block flow does. `inset-block-start: calc(-1 *
+       var(--bo-space-6))` is what actually closes it — verified 0px gap
+       at every scroll depth tested, both themes, both 1440 and 390.
+       Compounding second cause: the Line items table has no height
+       constraint of its own, so its sticky `<thead>` resolves against the
+       SAME scrolling ancestor as the page header, and at the collision
+       point `--bo-z-sticky-header` (1100) beat the page's own `z-index: 2`
+       — an arbitrary number with no relation to the framework's stacking
+       scale. New token `--bo-z-sticky-page: 1150` (tokens/z-index.css)
+       fixes the collision generally: page-level chrome now always wins
+       over a component nested in it, loses only to `--bo-z-dropdown` and
+       `--bo-z-toast`. object-page.astro was the only pattern page with
+       page-level sticky CSS, so the fix is scoped there; the token is
+       shipped framework-wide for the next one. Verified live both themes,
+       1440 + 390, full core + docs builds green.
+2. [x] **108.2 — "Cascade Layers System" rule, so this stops being
+       confusable.** **Done 2026-08-22.** The report named `@layer` for
+       what was actually a z-index/stacking bug — a real, reasonable
+       conflation: `/concepts/cascade` (titled "The cascade contract")
+       documented `@layer` order in full and said NOTHING about
+       `z-index`, whose only existing statement anywhere was a code
+       comment in tokens/z-index.css. New section on that page, explicit
+       about the two being different mechanisms (`@layer` decides which
+       RULE wins on one element; `z-index` decides what PAINTS OVER what
+       between different elements) — with the z-index scale rendered as a
+       table **generated from the shipped token file** (`import.meta.glob`,
+       same mechanism `base/palettes` already uses — never hand-typed,
+       so it cannot drift the way the "32 pairs" / "70 kB" numbers did),
+       plus the rule for where a new tier belongs. Not added to the DSA
+       scoring rubric: 101.3's stop rule holds — that apparatus is
+       maintenance-only until a component scores well and is plainly bad
+       or vice versa, and a documented rule is what "no confusion" asked
+       for, not a new scored dimension. The already-queued **102.2**
+       (`/design-grill` on object-page) inherits this rule as something to
+       check when it runs; not duplicated here.
+3. [x] **108.3 — "navigation thru tab."** **Done 2026-08-22, verified
+       working, not a functional bug.** Drove real Tab/Enter key
+       sequences: activating an anchor-bar link scrolls correctly and
+       keyboard Tab afterward reliably resumes from the activated
+       section's DOM position (confirmed by checking the actual NEXT stop
+       reached, not just `document.activeElement`, which reports `BODY`
+       here as an expected quirk — Chrome's "sequential focus navigation
+       starting point" for a non-focusable fragment target doesn't update
+       that property, but genuinely does resume Tab order correctly).
+       **What WAS a real gap**: the anchor bar is visually
+       indistinguishable from the framework's real `.bo-tabs` (same
+       segmented-pill look, one "current"), but behaves completely
+       differently — no `role="tab"`, no arrow-key movement, every section
+       stays mounted and visible, Tab visits it like any link. Added that
+       distinction explicitly to the page's own Anatomy section, linking
+       the real tabs component so a reader isn't left assuming ARIA-tab
+       semantics that don't apply here.
+
 ## Slice 107 — Owner ask: button icon-only / text-only / icon+text (2026-08-22)
 
 Owner: *"button with icon only, text only and icon & text."* Measured

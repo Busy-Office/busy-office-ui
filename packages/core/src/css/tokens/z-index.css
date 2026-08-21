@@ -1,6 +1,22 @@
 @layer bo-tokens {
   :root {
-    /* Dropdowns must beat sticky table headers, hence 1200 > 1100. */
+    /* Dropdowns must beat sticky table headers, hence 1200 > 1100.
+       --bo-z-sticky-page is PAGE-level sticky chrome (a pattern's own
+       sticky title/nav bar, e.g. object-page's header + anchor bar) and
+       sits ABOVE --bo-z-sticky-header on purpose: an embedded table with
+       no height constraint of its own resolves ITS sticky thead against
+       the same scrolling ancestor as the page chrome (the shell's main
+       region), so at the scroll position where both are "stuck" they
+       occupy the identical rect. The page header must win that collision
+       — it is the screen's own navigation, one level above any component
+       nested in it — so its opaque background fully covers the table
+       header rather than the two interleaving. Still below --bo-z-dropdown
+       (1200): a dropdown opened from inside the page must float above the
+       page's own chrome, and --bo-z-toast (1600) always wins globally.
+       object-page shipped a bare `z-index: 2` before this token existed,
+       which lost outright the moment a scrolled table inside the page
+       also went sticky (roadmap 108, 2026-08-22). */
+    --bo-z-sticky-page: 1150;
     --bo-z-sticky-col: 1050;
     --bo-z-sticky-header: 1100;
     --bo-z-dropdown: 1200;

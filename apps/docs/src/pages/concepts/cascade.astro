@@ -7,6 +7,22 @@ const layers = `/* declared once, first, in every dist file: */
 
 /* YOUR css — written outside any layer — always wins: */
 .bo-btn { border-radius: 0; }   /* beats the component layer, no !important */`;
+
+// GENERATED from the shipped z-index tokens — names, values, and the
+// stacking rationale are parsed from tokens/z-index.css at build, never
+// hand-typed (this page previously had NO stacking section at all: the
+// framework's only statement of the z-index scale was a code comment,
+// which is how a page-level sticky bar shipped a bare `z-index: 2` with
+// nothing to check it against — roadmap 108, 2026-08-22).
+const zIndexFiles = import.meta.glob('../../../../../packages/core/src/css/tokens/z-index.css', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const zIndexFile = Object.values(zIndexFiles)[0];
+const Z_TOKENS = [...zIndexFile.matchAll(/--(bo-z-[\w-]+):\s*(\d+);/g)]
+  .map(([, name, value]) => ({ name, value: Number(value) }))
+  .sort((a, b) => a.value - b.value);
 ---
 <Gallery title="The cascade contract">
   <p class="demo-note">
@@ -26,6 +42,42 @@ const layers = `/* declared once, first, in every dist file: */
     </ul>
   </section>
   <section class="demo">
+    <h2>Stacking (<code>z-index</code>) — a different mechanism, don't conflate them</h2>
+    <p><code>@layer</code> above decides which RULE wins when two selectors
+    both match the same element — it never affects paint order between
+    DIFFERENT elements. <code>z-index</code> decides what's drawn on top of
+    what — it has no opinion on which rule wrote a property. A page can get
+    the cascade layer completely right and still show one element behind
+    another it should be in front of, because that's the other system
+    entirely — precisely what happened building
+    <a href={base + '/patterns/object-page'}>the object page pattern</a>:
+    its own sticky title bar (page-level chrome) was losing a stacking
+    fight to an ordinary component nested inside it, a table's sticky
+    column header, because the page reached for an arbitrary
+    <code>z-index: 2</code> instead of the framework's actual scale.</p>
+    <table class="bo-data-table" data-density="compact">
+      <thead><tr><th scope="col">Token</th><th scope="col" class="bo-data-table__col--numeric">Value</th></tr></thead>
+      <tbody>
+        {Z_TOKENS.map((t) => (
+          <tr><td class="bo-data-table__col--code">--{t.name}</td><td class="bo-data-table__col--numeric">{t.value}</td></tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="bo-u-text-muted"><strong>The rule</strong>: every
+    <code>position: sticky</code> or <code>position: fixed</code> element
+    that isn't a plain in-flow box reaches for a token from this table —
+    never a bare number. If none fits, that's a sign a new tier belongs
+    here, not that this element gets to invent one. <strong>Where a
+    PATTERN's own page-level sticky chrome collides with a component it
+    contains</strong> (the object-page shape above): the page-level chrome
+    wins, because it is the screen's own navigation, one level above
+    anything nested in it — <code>--bo-z-sticky-page</code> exists for
+    exactly that tier, sitting above every component-internal sticky value
+    it might collide with, below <code>--bo-z-dropdown</code> (a dropdown
+    opened from inside the page must still float above the page's own
+    chrome) and <code>--bo-z-toast</code> (always wins, globally).</p>
+  </section>
+  <section class="demo">
     <h2>What this buys at screen #200</h2>
     <p>Overrides stay one-liners instead of specificity ladders; framework upgrades
     can't silently outrank app CSS (layered can never beat unlayered); and audits are
@@ -36,5 +88,5 @@ const layers = `/* declared once, first, in every dist file: */
     components — wrap it in a lower layer; recipe + live proof in
     <a href={base + '/getting-started/troubleshooting'}>Troubleshooting</a>.</p>
   </section>
-  <Related links={[["/concepts/theming", "Theming"], ["/concepts/tokens", "Design tokens"], ["/getting-started/troubleshooting", "Troubleshooting (reset interop)"]]} />
+  <Related links={[["/concepts/theming", "Theming"], ["/concepts/tokens", "Design tokens"], ["/getting-started/troubleshooting", "Troubleshooting (reset interop)"], ["/patterns/object-page", "Object page (the stacking collision this rule fixed)"]]} />
 </Gallery>
