@@ -990,6 +990,42 @@ then documented — and refusing is an expected outcome.
        fixes queued individually. Where it overlaps 97.2, this grill supplies
        the measurement and 97.2 keeps the cross-surface verdict.
 
+4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
+       The prompt driving every wake names Slice 94 as "the active queued work"
+       and asks for "the seven DSA dimensions". Both are false: **39 of 39
+       components are scored**, and the rubric has **six** dimensions since
+       `hierarchy` was retired. Three independent sources agree
+       (`rubric.dimensions`, the labels rendered into a built page,
+       `check:dsa-scores`' own 39/39).
+
+       The dispatcher has been silently substituting the roadmap's real
+       priorities every wake. The substitutions were right — but nobody was
+       told, which makes this the same two-accounts-disagreeing defect as
+       94.12, the phantom 95.3, and the four live-region statements.
+       **Accept:** the owner updates the standing prompt (or says to keep it
+       and accept the drift, recorded here). A loop cannot fix its own
+       instructions.
+
+5. [ ] **102.5 — make the publish request cheap to say yes to.** Twelve
+       restatements of "publish 0.3.0" have changed nothing, and the reason is
+       now clear: publishing is owner-triggered by design, so the loop has been
+       queueing an item it can never close. Restating it a thirteenth time is
+       not work. **Accept:** one artefact the owner can act on in a minute —
+       what shipped since 0.1.1 in consumer terms (not commit terms), what is
+       breaking, the exact click-path to cut the Release, and a stated
+       yes/no on whether 0.2.0 should be skipped rather than published late.
+       Then the roadmap item becomes "owner-blocked, awaiting release",
+       counted once, not restated.
+
+6. [ ] **102.6 — `check:dsa-scores` reports "312 scored component(s)" when
+       there are 39.** Its noun names components while the count is
+       assertions. Harmless to correctness, but this project has a written
+       rule that a reported number is load-bearing, and an 8x overstatement of
+       coverage is what that rule exists for. Same defect was caught in
+       `check:live-regions` this wake before commit. **Accept:** the printed
+       count matches what it claims to count, in every gate that passes a
+       mismatched noun — swept, not fixed one at a time.
+
 ## Slice 101 — Objective grill: the loop optimised what it could see (2026-08-21)
 
 Fired by the counter at 3/3 (slices 37, 94, 95). Full report:
