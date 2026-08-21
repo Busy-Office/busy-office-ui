@@ -21,6 +21,29 @@
     --bo-density-font-size: var(--bo-font-size-sm);
   }
 
+  /* The AUTO tier — the density a data table falls to on its own when its
+     container is narrower than 30rem and nobody has declared a density
+     (`@container bo-table` in data-table.css). It lived as three literals
+     inside that container query, which made it a fourth density nobody had
+     named and nobody could find from here (roadmap 94.3).
+
+     It is deliberately tighter than `compact`, and the difference was
+     measured rather than assumed. Taking cell-padding-x up to compact's
+     --bo-space-2 at 390px grows a real row on /patterns/detail-form from
+     68px to 87px, because the wider cells force their content to wrap; on
+     simple tables the row goes 28px to 30px. At phone width horizontal room
+     is the scarce resource, so the tighter padding buys the thing there is
+     least of. That is why this is its own tier and not a drifted copy.
+
+     Only the two heights need naming here — every other alias the container
+     query sets is already a shared token. control-height matches compact's
+     value exactly; keeping them adjacent is the point, so a retune of one
+     is visibly a decision about the other. */
+  :root {
+    --bo-density-auto-control-height: 1.75rem; /* 28px, = compact */
+    --bo-density-auto-row-height: 1.75rem; /* 28px, 2px under compact */
+  }
+
   [data-density="spacious"] {
     --bo-density-control-height: 2.75rem; /* 44px */
     --bo-density-row-height: 3rem; /* 48px */

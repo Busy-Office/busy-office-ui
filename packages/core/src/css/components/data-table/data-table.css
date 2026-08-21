@@ -423,24 +423,24 @@
      overridden together, so the result is a coherent density rather than a
      mix of two.
 
-     It is NOT identical to data-density="compact", and the three numbers
-     below are where it diverges: cell-padding-x is one space step tighter
-     (--bo-space-1 vs compact's --bo-space-2), and the two heights are 1.75rem
-     where compact runs 1.75/1.875rem. The heights are written as literals
-     because they cannot reference the compact block — a container query
-     cannot re-enter a token selector — which also means the control-height
-     literal silently duplicates compact's value and will drift if compact is
-     ever retuned. Whether that divergence is intentional was never decided
-     (these values date to the initial commit); reconciling it is queued as
-     roadmap 94.3, since matching compact would change rendered row heights
-     and needs live verification. */
+     It is deliberately TIGHTER than data-density="compact", and as of 94.3
+     that is a decision with a measurement behind it rather than an accident
+     of the initial commit. Raising cell-padding-x to compact's --bo-space-2
+     at 390px grows a real row on /patterns/detail-form from 68px to 87px —
+     the wider cells force their content to wrap — while simple tables go
+     28px to 30px. Horizontal room is the scarce resource at phone width, so
+     the tighter padding buys the thing there is least of.
+
+     The two heights now come from --bo-density-auto-* in tokens/density.css,
+     beside the tiers they relate to, instead of being literals hiding in a
+     container query where no one looking for a density would find them. */
   @container bo-table (max-width: 30rem) {
     .bo-data-table-container:not([data-density])
       > .bo-data-table:not([data-density]) {
       --bo-density-cell-padding-x: var(--bo-space-1);
       --bo-density-cell-padding-y: var(--bo-space-1);
-      --bo-density-row-height: 1.75rem;
-      --bo-density-control-height: 1.75rem;
+      --bo-density-row-height: var(--bo-density-auto-row-height);
+      --bo-density-control-height: var(--bo-density-auto-control-height);
       --bo-density-font-size: var(--bo-font-size-sm);
       --bo-density-field-gap: var(--bo-space-2);
     }

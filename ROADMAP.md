@@ -896,7 +896,37 @@ a `calc(var(--bo-border-width) * -1)`. That is the documented
 comment-injection trap, hit by a scoring pass rather than a gate. Rate:
 3 of 14 cited literals misread.
 
-1. [ ] **94.3 — `data-table`'s auto-compaction is a fourth density
+1. [x] **94.3 — DONE 2026-08-21. Verdict: it IS deliberately tighter, and now it is a NAMED tier with the measurement behind it. `data-table`'s auto-compaction is a fourth density
+       Accept offered two outcomes; the measurement picked the second. Raising
+       `cell-padding-x` to compact's `--bo-space-2` at 390px grows a real row
+       on `/patterns/detail-form` from **68px to 87px** — the wider cells force
+       their content to wrap — while simple tables go 28px to 30px. Horizontal
+       room is the scarce resource at phone width, so the tighter padding buys
+       the thing there is least of. That is a reason, not an accident, and it
+       is now written where the values live. The 2px row-height difference
+       buys nothing measurable, and is recorded as such rather than defended.
+
+       The two heights moved to `--bo-density-auto-*` in `tokens/density.css`,
+       beside the tiers they relate to, so the fourth density is findable from
+       where a reader looks for densities instead of hiding as literals inside
+       a container query. `control-height` still equals compact's value, and
+       the comment says keeping them adjacent is the point: a retune of one is
+       now visibly a decision about the other.
+
+       **Proved a no-op, not assumed.** Measured the same four pages before and
+       after at 390px — 1.75rem / .25rem / 1.75rem, rows 77/28/68/28,
+       identical. Verified live in both themes; at 1280 the container is
+       47.88rem so compaction correctly does not apply, which confirms the
+       tier stays scoped.
+
+       **Considered and not done: a gate asserting `auto` is never looser than
+       `compact`.** It would make "deliberately tighter" executable, which is
+       the house rule for claims. Declined here because equality on
+       `control-height` is deliberate and a naive gate would forbid the
+       intentional retune the comment invites; the honest version needs a
+       "tighter or equal on every alias" comparison across two files, which is
+       a real piece of work rather than a rider on this item. Original text
+       follows.
        nobody designed.** Found while commenting its `1.75rem` heights.
        The `@container bo-table (max-width: 30rem)` block claims in its
        own comment to produce "coherent compact", and does not: it sets
