@@ -823,7 +823,18 @@ four screens? It is *not* automatically drift — `master-detail` is genuinely a
 list-plus-panel and `detail-form` is genuinely entry — but nobody has asked
 the question, and the owner's phrasing is the prompt to ask it.
 
-1. [ ] **99.1 — the gap analysis becomes a decision, screen by screen.**
+1. [x] **99.1 — the gap analysis becomes a decision, screen by screen.**
+       **DONE 2026-08-21.** Verdicts for all nine are in the shared report.
+       Four are already covered (login, dashboard, object page — pending
+       99.2 — and landing page as `app-launch`, with one open question for
+       the owner below). Five become build items: the command bar is 99.3,
+       and inbox / notification / report / output form are 101.4-101.7.
+
+       **One question genuinely for the owner:** "landing page" is read here
+       as `app-launch`, the post-sign-in launchpad. If what is meant is a
+       ROLE HOME — live content, my open items, my KPIs, not a launcher —
+       that is a different screen and becomes a sixth build. Recorded rather
+       than assumed.
        Before building anything: for each of the nine, decide **build /
        already-covered / rename-and-extend**, with the ERP job it serves named
        in one line ("who opens this, how often, what done looks like" — the
@@ -894,6 +905,43 @@ the owner has already answered that with Slices 99 and 100.
        **Accept:** either it lands on the registry, or this item records the
        owner's decision to hold and the reason, so it stops being restated
        every grill as though nobody had decided.
+
+4. [ ] **101.4 — Inbox / worklist.** The one screen an ERP user opens first
+       and the framework does not have. `approval` is ONE approver's queue for
+       ONE document type; an inbox is cross-type and cross-process —
+       approvals, exceptions, assigned tasks, failed jobs — in one list with a
+       "why is this here" per row. **Accept:** the pattern recipe's six parts,
+       plus the two things that make it an inbox rather than a list: the row
+       must say *why it is yours* (assigned / awaiting your approval /
+       exception), and the states table must cover the empty case that is a
+       success ("nothing needs you") distinctly from the filtered-empty case.
+
+5. [ ] **101.5 — Notification.** `alert` and `toast` cover things that happen
+       WHILE you watch; the ERP case is the opposite — a posting run finished
+       twenty minutes ago. **Accept:** a persistent, readable, per-item
+       dismissible surface with an explicit unread contract; states for empty,
+       unread-count, and an item whose underlying record no longer exists.
+       Grill first whether this is a screen, a dropdown off the navbar, or
+       both — and whether it composes from `alert` + `dropdown` + `data-table`
+       rather than needing anything new (Objective §2 says try that first).
+
+6. [ ] **101.6 — Report.** Distinct from `reporting-dashboard`, which
+       MONITORS. A report is RUN — parameters, then read, print or export.
+       **Accept:** the parameter/run boundary in the data contract; states for
+       not-yet-run, running, empty result, and too-many-rows; and a real print
+       story, because the framework has strong `@media print` rules and
+       nothing that exercises them end to end. The 30.4b windowed list is
+       related and stays owner-deferred — do not silently pull it in.
+
+7. [ ] **101.7 — Output form.** The printed artefact an ERP emits: PO,
+       invoice, delivery note. **The shape most UI frameworks ignore and an
+       ERP cannot ship without.** It is a document, not a screen — fixed
+       layout, page breaks, letterhead, totals that survive pagination.
+       `@media print` rules already exist scattered across nine components
+       with nothing composing them into an artefact. **Accept:** grill FIRST
+       whether this belongs in a CSS framework at all (a real answer might be
+       "your server renders PDFs; here is the print stylesheet contract") —
+       refusing is a valid outcome and would itself be worth documenting.
 
 2. [ ] **101.2 — 95.3 was never actually queued.** Last wake's entry says the
        touch half of device fitness was "re-scoped and re-queued as 95.3", and
@@ -1253,7 +1301,41 @@ the second, and that is why they get different shapes.
        a per-device grade would imply a device-specific design that does not
        exist and that Objective §2 exists to prevent.
 
-2. [ ] **95.2 — ERP coverage: benchmark JOBS, not component catalogues.**
+3. [ ] **95.3 — touch fitness: emit it from the gate, or drop the claim.**
+       Queued properly here (roadmap 101.2). 95.1's Accept said touch status
+       should come from `check:target-size`; building it showed that gate
+       measures **instances on a page** — `bo-tag-input__remove 16x16
+       (nearest 91px)` — so a per-component verdict is an inference across
+       contexts, not a fact to surface. A source-scan alternative was tried
+       and abandoned in the same wake: it conflated `em` sizes (which DO
+       scale with density) with fixed ones, matched non-interactive parts,
+       and double-counted `form`'s five stylesheets.
+
+       **Accept:** either make `check:target-size` emit its findings as data
+       and map class → component via `api.json`, stating plainly that the
+       verdict is per instance and aggregated; or record that touch fitness
+       is a SCREEN property rather than a component one and drop the
+       per-component claim. **Do not ship a per-component touch claim derived
+       from a heuristic** — that is the shape 94.11 disproved.
+
+2. [x] **95.2 — ERP coverage: benchmark JOBS, not component catalogues.**
+       **DONE 2026-08-21**, run together with 99.1 as one report:
+       `.roundtable/coverage-erp-jobs-2026-08-21.md` — they are the same
+       question asked twice, 95.2 in general and 99.1 with the owner's own
+       answer as input. No percentage, as Accept required.
+
+       **Finding: the gaps are SHAPES, not domains.** Order-to-cash,
+       hire-to-retire and the rest recompose from screens we already have —
+       a sales order is a list, a detail, an approval and a line grid, and so
+       is a purchase order. Documenting them would re-photograph existing
+       screens with different column headings. Those are marked
+       *composable, do not build* in the report so a future wake does not
+       read the coverage table as a to-do list.
+
+       What no recomposition reaches is five screen shapes — command bar,
+       inbox, notification, report, output form — and **all five were named
+       by the owner**, which is the strongest validation the coverage method
+       could have got.
        Owner asked directly whether this is possible and whether it makes
        sense to benchmark. **Possible: yes. As a component-catalogue
        comparison: no — that one actively fights the Objective.**
