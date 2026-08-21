@@ -780,6 +780,48 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 104 — Owner wishlist: patterns section + tile index à la namethatui.com (2026-08-21)
+
+Owner: *"should patterns be in separate section and arrange the tile like
+https://namethatui.com/ ? pls review and propose."* Reviewed and proposed
+same wake: `.roundtable/proposal-patterns-index-2026-08-21.md`.
+
+**The review's finding: the "separate section" half is already true** (three
+collapsible sidebar groups since 2026-08-16) — **what's missing is the
+section's front door.** There is no `/patterns/` index; the homepage's
+"Patterns" links deep-link to `/patterns/invoice-list` in 3 places. And the
+tile ingredients already exist gate-guaranteed on every pattern page (opener
+who-uses-it line, complexity badge, components-used list), while the
+framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
+
+1. [ ] **104.1 — build the `/patterns/` tile index, generated.** An
+       instance of the app-launch pattern: `bo-widget-grid` tiles grouped
+       under the three existing workflow headings, each tile carrying the
+       pattern's name, its opener's who-uses-it line, complexity badge, and
+       components-used badges — all **extracted at build from the pattern
+       pages**, never hand-written. Homepage's three "Patterns" links point
+       at the index. **Accept:** the index renders one tile per pattern page
+       that exists, with a gate asserting exactly that (red-proved both
+       directions: a pattern page missing from the index, and an index tile
+       whose page doesn't exist); tile copy is extraction, not authorship;
+       zero new CSS classes; sidebar unchanged; verified live both themes,
+       1440 + 390.
+
+2. [ ] **104.2 — preview images on the tiles. OWNER CALL after 104.1.**
+       The proposal's honest fork: text+badges first (zero drift), vs
+       build-time screenshots (feasible via the existing browser-harness
+       chokepoint, but 20 pages × 2 themes per build costs minutes + MBs,
+       and a dense ERP screen at tile size is mostly grey noise). Hand-drawn
+       CSS miniatures are refused outright — hand-written artefacts
+       describing generated surfaces are what the docs doctrine forbids.
+       **Accept:** the owner picks (a) keep text tiles / (b) add generated
+       screenshots, and the choice is recorded here with its reason.
+
+Not queued, deliberately: a separate top-level Patterns nav (20 items don't
+justify the IA surgery; the groups + front door give the separation), a
+components tile index (mechanism generalizes; ask was patterns), and new
+search (⌘K/pagefind already answers "describe the thing").
+
 ## Slice 99 — Owner direction: patterns as an ERP expert would actually build them (2026-08-21)
 
 Owner: *"revamp the pattern to build the realistic pattern by screen (where
