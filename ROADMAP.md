@@ -1039,7 +1039,7 @@ then documented — and refusing is an expected outcome.
        Then the roadmap item becomes "owner-blocked, awaiting release",
        counted once, not restated.
 
-6. [ ] **102.6 — `check:dsa-scores` reports "312 scored component(s)" when
+6. [x] **102.6 — `check:dsa-scores` reports "312 scored component(s)" when
        there are 39.** Its noun names components while the count is
        assertions. Harmless to correctness, but this project has a written
        rule that a reported number is load-bearing, and an 8x overstatement of
@@ -1047,6 +1047,14 @@ then documented — and refusing is an expected outcome.
        `check:live-regions` this wake before commit. **Accept:** the printed
        count matches what it claims to count, in every gate that passes a
        mismatched noun — swept, not fixed one at a time.
+
+       **Done 2026-08-21.** Swept all 22 passing gates by reading what each
+       actually prints. **Two** were wrong, and both were mine from this
+       session: `check:dsa-scores` said "312 scored component(s)" for 39, and
+       `check:wrong-choice` said "79 page(s)" for 60. Both now name
+       assertions and state the real page/component count alongside — the
+       shape `check:live-regions` already used, which is how the defect was
+       recognised. Every other gate's noun matched its count.
 
 ## Slice 101 — Objective grill: the loop optimised what it could see (2026-08-21)
 

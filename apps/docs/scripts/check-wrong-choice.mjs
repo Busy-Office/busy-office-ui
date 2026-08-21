@@ -63,7 +63,10 @@ const patternDir = new URL('../src/pages/patterns/', import.meta.url);
 const files = (await readdir(dir)).filter((f) => f.endsWith('.astro'));
 const patternFiles = (await readdir(patternDir)).filter((f) => f.endsWith('.astro'));
 
-const g = gate('wrong-choice check', 'page(s)');
+/* ASSERTIONS, not pages — this file makes up to two checks per page, so the
+   old 'page(s)' noun printed 79 for 59 pages. Same defect as check-dsa-scores,
+   same wake (Objective grill, 2026-08-21). */
+const g = gate('wrong-choice check', 'assertion(s)');
 assertScanned(files.length, 'component pages', 'No .astro pages found — the gate verified nothing.');
 assertScanned(patternFiles.length, 'pattern pages', 'No pattern .astro pages found — the gate verified nothing.');
 
@@ -97,4 +100,4 @@ for (const file of patternFiles) {
     'add a <strong>Not …</strong> clause naming the wrong context and which screen to use instead');
 }
 
-g.report(`verified (components: ${carried} carry / ${TODO.size} outstanding / ${EXEMPT.size} exempt; patterns: ${patternCarried} carry / ${PATTERN_TODO.size} outstanding)`);
+g.report(`verified across ${files.length + patternFiles.length} pages (components: ${carried} carry / ${TODO.size} outstanding / ${EXEMPT.size} exempt; patterns: ${patternCarried} carry / ${PATTERN_TODO.size} outstanding)`);

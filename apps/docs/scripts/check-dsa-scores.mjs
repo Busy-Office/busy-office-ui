@@ -34,7 +34,13 @@ const scores = JSON.parse(
 const DIMENSIONS = scores.rubric.dimensions;
 const components = Object.entries(scores.components);
 
-const g = gate('dsa-scores check', 'scored component(s)');
+/* The noun names ASSERTIONS, not components: gate() reports results.length,
+   and this file makes ~8 checks per component. It used to say "scored
+   component(s)" and printed 312 of them when there are 39 — an 8x
+   overstatement of its own coverage, found by the Objective grill of
+   2026-08-21. A number a gate reports is load-bearing; that rule applies to
+   the gate's own output first. */
+const g = gate('dsa-scores check', 'assertion(s)');
 assertScanned(
   components.length,
   'scored components in dsa-scores.json',
@@ -140,4 +146,4 @@ for (const [name, entry] of components) {
   g.check(`${name}: at least one dimension actually scored`, scored.length > 0, 'every dimension is "na"');
 }
 
-g.report(`verified (${components.length} scored, ${rendered.size} requested by a page)`);
+g.report(`verified across ${components.length} scored components (${rendered.size} requested by a page)`);
