@@ -780,6 +780,30 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 105 — Standardize sweep findings deferred with reason (2026-08-21)
+
+From the counter-fired sweep (ultracode fan-out: 6 finders + 6 adversarial
+verifiers, 19 of 20 findings confirmed real, 15 fixed in-wake). One finding
+was too large to fix safely in the same wake:
+
+1. [ ] **105.1 — one popover-positioning helper for dropdown / combobox /
+       context-menu.** The anchor-under-invoker math (4px viewport clamp +
+       flip-above-when-no-room) is implemented three times, and the copies
+       have already drifted — the scroll-follow fix was built twice with
+       different mechanisms, and `combobox.position()` never resets
+       `insetInlineStart` the way dropdown's does, so a listbox that once
+       flipped near the inline edge can keep a stale offset. Verified real
+       by an adversarial pass (all three files read, drift confirmed).
+       Deferred, not rushed: it is shipped geometry across three widgets and
+       needs live verification of each (open/flip/scroll/RTL, both themes)
+       plus behavior tests — a full wake of its own, not the tail of a
+       sweep. **Accept:** one exported helper in `utils/`, all three
+       behaviors call it, the two drifted mechanisms reconciled with the
+       chosen one's reason recorded, each widget verified live at 1440+390
+       incl. the flip case and scroll-follow, tests cover the clamp and
+       flip branches, and the combobox stale-offset defect is red-proved
+       fixed (reproduce first, then watch the helper kill it).
+
 ## Slice 104 — Owner wishlist: patterns section + tile index à la namethatui.com (2026-08-21)
 
 Owner: *"should patterns be in separate section and arrange the tile like

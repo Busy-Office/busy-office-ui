@@ -41,7 +41,22 @@ not observe.
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
-- **0.3.0 is PREPARED AND TAGGED, awaiting two owner actions (2026-08-21).**
+- **0.3.0 is PUSHED, awaiting ONE owner action: publish the GitHub Release
+  (updated 2026-08-21, evening sweep).** The owner has already run the push —
+  verified against the remote, not assumed: `git ls-remote` shows
+  `refs/tags/v0.3.0` on origin and origin/main past the tagged commit. The
+  previous version of this entry said "Not pushed, not published" with the
+  push commands listed as owner steps; a wake following it would have handed
+  the owner instructions for a step already done. What remains is exactly
+  one command (npm still serves 0.1.1; `gh release view v0.3.0` says "release
+  not found"):
+
+  ```
+  gh release create v0.3.0 --title "0.3.0" --notes-from-tag
+  ```
+
+  Original entry, kept for its still-true context (tarball contents, Trusted
+  Publishing mechanics, the optional snapshot):
   This entry replaces the ten-grill-old "0.2.0 is tagged" one, which had become
   actively misleading: the tarball built at HEAD was *labelled* 0.2.0 but
   carried 304 commits of post-tag work, so publishing it would have made the
@@ -53,13 +68,6 @@ not observe.
   at 0.3.0 (core build, 110 tests, docs build), tarball packs as
   `busy-office-ui-0.3.0.tgz` (173 files, 220.9 kB), and the workflow's
   tag-vs-package guard simulated green.
-
-  **Not pushed, not published.** The two remaining steps are the owner's:
-
-  ```
-  git push origin main && git push origin v0.3.0
-  gh release create v0.3.0 --title "0.3.0" --notes-from-tag
-  ```
 
   Publishing does NOT need `npm login` — `.github/workflows/publish.yml` uses
   **Trusted Publishing (OIDC)**, no token and no OTP; publishing the GitHub
@@ -73,7 +81,9 @@ not observe.
   version switcher will offer 0.1.1 and latest, not 0.3.0. Cheap to add later;
   say the word.
 - **30.4b** — windowed list (the 50,000-record ask). Scope/Accept criteria are
-  fully written (`ROADMAP.md:4274`); owner explicitly **deferred to the next
+  fully written (the numbered **30.4b** item in ROADMAP.md — item numbers
+  survive file growth; a hand-typed line citation here had drifted ~3000
+  lines, 2026-08-21 sweep); owner explicitly **deferred to the next
   publish cycle** (2026-08-20) rather than building now — not a build-now item
   until that cycle starts, don't re-surface as ready in the meantime.
 - **52.3 — Object Page naming.** Recommendation given (keep the `object-page`
@@ -83,7 +93,8 @@ not observe.
 ## Open questions awaiting the owner
 
 - **30.0** — **this entry was stale, corrected 2026-08-20.** The real open
-  half is the "*check out overview, the sidebar menu*" note (`ROADMAP.md:4116`):
+  half is the "*check out overview, the sidebar menu*" note (in ROADMAP.md's
+  item **30.0** — cited by item, not line, per the sweep fix above):
   either (a) review the docs' own landing page/nav, or (b) a new ERP
   overview/dashboard pattern with a module sidebar — still ambiguous, still
   owner's call. ("Horizontal tabs" was answered 2026-08-18: meant **vertical**

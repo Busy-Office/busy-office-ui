@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const registry = `bo-shell        the app shell     → sidebar collapses to icon rail  (≤ 56rem)
 bo-table        table container   → density compaction + col hiding  (≤ 30rem)
 bo-widget-grid  dashboard grid    → span-2 widgets collapse          (≤ 41rem)
@@ -29,8 +30,13 @@ bo-stepper      the stepper       → labels collapse to SR-only       (≤ 30re
     so the build enforces it mechanically.</p>
     <ul class="bo-stack bo-stack--tight docs-list">
       <li>Thresholds are in <strong>rem</strong> (beyond-conformance support for users who raise the browser default font size).</li>
-      <li>Explicit <code>data-density</code> always beats auto-compaction.</li>
-      <li>Compaction may compact — it may not delete data without an in-page reveal (WCAG 1.4.10).</li>
+      <li>Explicit <code>data-density</code> beats auto-compaction when set
+      on the table or its container itself — see the
+      <a href={base + '/concepts/density'}>density rules</a> for the exact
+      precedence.</li>
+      <li>Compaction may compact — it may not make data unreachable: the
+      <a href={base + '/components/data-table'}>data-table reflow
+      requirement</a> (WCAG 1.4.10) is the canonical rule.</li>
     </ul>
   </section>
   <Related links={[["/concepts/density", "Density"], ["/components/data-table", "Data table"]]} />

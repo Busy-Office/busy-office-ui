@@ -5,7 +5,19 @@ import Demo from '../../components/Demo.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* The size argument below is computed from the shipped artifact — the
+   hand-typed "10.3%" had drifted to a real 6.0% before anyone noticed
+   (2026-08-21 sweep). Same projection, live numbers. */
+const require = createRequire(import.meta.url);
+const iconBytes = readFileSync(require.resolve('@busy-office/ui/css/components/icon.min'), 'utf8').length;
+const totalBytes = readFileSync(require.resolve('@busy-office/ui/css/min'), 'utf8').length;
+const iconShare = ((iconBytes / totalBytes) * 100).toFixed(1);
+const glyphCount = 12;
+const catalogueKb = Math.round((iconBytes / glyphCount) * 200 / 1024);
 
 const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'grid'];
 /* DEPRECATED (roadmap 53.2): zero pattern screens in these docs render these —
@@ -134,9 +146,9 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     the SVG's own colours and paints with yours.</p>
     <p class="bo-u-text-muted">
       <strong>Why there is no 200-icon catalogue here</strong>, since that is the obvious
-      thing to ask for: these twelve are <strong>10.3% of the whole framework</strong> by
+      thing to ask for: these twelve are <strong>{iconShare}% of the whole framework</strong> by
       size, because every glyph is an inlined SVG. Two hundred of them would add roughly
-      <strong>129&nbsp;kB</strong> — about twice everything else we ship — to compete with
+      <strong>{catalogueKb}&nbsp;kB</strong> — more than everything else we ship — to compete with
       icon sets that are better maintained and free. One property is the smaller answer
       and the more general one.
     </p>

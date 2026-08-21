@@ -22,23 +22,27 @@
  */
 import fs from 'node:fs';
 import { join } from 'node:path';
-import { REPO_ROOT, DIST } from './paths.mjs';
-import { demoRegion } from './dist-pages.mjs';
-const api = JSON.parse(fs.readFileSync(join(REPO_ROOT,'packages/core/dist/api.json'),'utf8'));
-const beh = JSON.parse(fs.readFileSync(join(REPO_ROOT,'packages/core/dist/behaviors.json'),'utf8'));
+import { CORE_DIST, DIST } from './paths.mjs';
+import { distPages, demoRegion } from './dist-pages.mjs';
+import { rendersBlock } from './renders-block.mjs';
+const api = JSON.parse(fs.readFileSync(join(CORE_DIST,'api.json'),'utf8'));
+const beh = JSON.parse(fs.readFileSync(join(CORE_DIST,'behaviors.json'),'utf8'));
 const behByBlock = {};
 for (const [n,v] of Object.entries(beh.behaviors)) for (const h of (v.hooks||[])) (behByBlock[h] ??= new Set()).add(n);
-const dirs = fs.readdirSync(join(DIST,'patterns'));
-const demos = dirs.map(d => { try { const h = fs.readFileSync(join(DIST,'patterns',d,'index.html'),'utf8');
-  return demoRegion(h); } catch { return ''; } });
+// Through the chokepoint, not a private readdirSync — this script regrew its
+// own dist walk within days of the 103.1 consolidation (2026-08-21 sweep).
+const demos = (await distPages(DIST))
+  .filter((p) => p.url.startsWith('/patterns/'))
+  .map((p) => demoRegion(p.html));
 const SHELL = new Set(['navbar','sidebar-nav','breadcrumb']);   // demand axis is blind to these
 const rows = [];
 for (const [name,c] of Object.entries(api.components)) {
-  const f = join(REPO_ROOT,'packages/core/dist/css/components',`${name}.min.css`);
+  const f = join(CORE_DIST,'css/components',`${name}.min.css`);
   const bytes = fs.existsSync(f) ? fs.statSync(f).size : 0;
   const blocks = c.blocks?.length ? c.blocks : ['bo-'+name];
-  const screens = demos.filter(p => blocks.some(b =>
-    new RegExp(`class="[^"]*\\b${b}(?![a-z0-9-])|class="[^"]*\\b${b}(__|--)`).test(p))).length;
+  // Shared self-tested detector — the inline regex copy here lacked the
+  // escaping rendersBlock carries (2026-08-21 sweep).
+  const screens = demos.filter(p => blocks.some(b => rendersBlock(p, b))).length;
   const behs = new Set(); for (const b of blocks) if (behByBlock[b]) behByBlock[b].forEach(x=>behs.add(x));
   const surface = c.classes.length + c.variants.length;
   // MEASURABLE axes only

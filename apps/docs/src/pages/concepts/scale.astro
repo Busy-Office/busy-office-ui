@@ -2,7 +2,18 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import pkg from '@busy-office/ui/package.json';
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* Sizes computed from the shipped artifact at build, same as index.astro —
+   the hand-typed "70 kB / 11 kB" beside the computed {pkg.version} had
+   drifted to 75.9/12.5 before anyone noticed (2026-08-21 sweep). */
+const require = createRequire(import.meta.url);
+const minCss = readFileSync(require.resolve('@busy-office/ui/css/min'), 'utf8');
+const minKb = (minCss.length / 1024).toFixed(0);
+const gzipKb = (gzipSync(Buffer.from(minCss)).length / 1024).toFixed(1);
 
 /* Token-mapped AG Grid theme — the recipe DESIGN.md promised ("a token-themed
    AG Grid recipe in the docs, never a grid engine of our own") and that no page
@@ -134,8 +145,8 @@ const agGridRecipe = `/* your-app.css — after both stylesheets */
 
   <section class="demo">
     <h2>The bytes</h2>
-    <p>The whole framework is <strong>{pkg.version}</strong> at roughly 70 kB
-    minified / 11 kB gzipped of CSS, plus optional behaviors — smaller
+    <p>The whole framework is <strong>{pkg.version}</strong> at {minKb} kB
+    minified / {gzipKb} kB gzipped of CSS, plus optional behaviors — smaller
     than most single component libraries' JS runtime, and the CSS is
     cacheable across every screen. Per-component files ship too, so a
     single-screen pilot can import three files and nothing else. There is

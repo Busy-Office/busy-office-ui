@@ -27,12 +27,12 @@
  */
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { DIST } from './paths.mjs';
+import { DIST, CORE_DIST } from './paths.mjs';
 import { distPages, demoRegion } from './dist-pages.mjs';
 import { assertScanned, selfTest } from './gate-report.mjs';
 
 const api = JSON.parse(
-  await readFile(join(DIST, '..', '..', '..', 'packages/core/dist/api.json'), 'utf8'),
+  await readFile(join(CORE_DIST, 'api.json'), 'utf8'),
 );
 
 /** docs-page slug -> every block that component ships. */
@@ -44,14 +44,11 @@ for (const [name, entry] of Object.entries(api.components)) {
   }
 }
 
-/** Does the page render this block, as itself or as one of its parts? */
-export function rendersBlock(markup, block) {
-  const b = block.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return (
-    new RegExp(`class="[^"]*\\b${b}(?![a-z0-9-])`).test(markup) ||
-    new RegExp(`class="[^"]*\\b${b}(__|--)`).test(markup)
-  );
-}
+/** Does the page render this block, as itself or as one of its parts?
+ *  Shared via renders-block.mjs (2026-08-21 sweep) — the self-test below
+ *  exercises the imported function. */
+import { rendersBlock } from './renders-block.mjs';
+export { rendersBlock };
 
 if (process.argv.includes('--self-test')) {
   selfTest([

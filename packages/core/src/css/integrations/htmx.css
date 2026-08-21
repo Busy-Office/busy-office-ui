@@ -18,7 +18,9 @@
 
   .htmx-swapping {
     opacity: 0.5;
-    transition: opacity var(--bo-motion-duration-base) ease-out;
+    /* Same easing token as .htmx-indicator's opacity transition above —
+       the literal ease-out here was accidental drift (2026-08-21 sweep). */
+    transition: opacity var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
   }
 
   /* Flash-on-update: classic ERP grid feedback after a row/cell refresh.

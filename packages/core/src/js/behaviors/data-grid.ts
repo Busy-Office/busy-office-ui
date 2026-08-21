@@ -28,7 +28,12 @@
  */
 const boundGrids = new WeakSet<Element>();
 
-const FOCUSABLE = 'input, button, select, textarea, a[href], [tabindex]';
+// :not(:disabled) matches focus-trap's FOCUSABLE — without it, Enter
+// focused a disabled control and silently went nowhere (2026-08-21
+// sweep). [tabindex] stays unfiltered ON PURPOSE: Enter's programmatic
+// focus of a tabindex="-1" descendant is the two-level grid pattern.
+const FOCUSABLE =
+  'input:not(:disabled), button:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex]';
 
 function cellMatrix(table: HTMLTableElement): HTMLElement[][] {
   return Array.from(table.querySelectorAll('tr')).map((tr) =>

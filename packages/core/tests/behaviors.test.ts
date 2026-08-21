@@ -1459,6 +1459,24 @@ describe('initTableSum robustness (Slice 19 item 4, grill H1/H2 + checkbox)', ()
     expect(document.querySelector('[data-sum-of="qty"]')!.textContent).toBe('7.55'); // not "8"
   });
 
+  it('data-decimals="" means "not supplied" and falls back to the step width, not 0', () => {
+    // 2026-08-21 sweep: an inline second parser treated '' as 0 and forced
+    // integer totals; parseDecimalsAttr now handles both call sites.
+    html`
+      <table>
+        <tbody>
+          <tr><td><input name="qty" type="number" step="0.01" value="2.25" aria-label="Qty" /></td></tr>
+        </tbody>
+        <tfoot><tr><td data-sum-of="qty" data-decimals="">2.25</td></tr></tfoot>
+      </table>
+    `;
+    ui.initTableSum();
+    const qty = document.querySelector<HTMLInputElement>('[aria-label="Qty"]')!;
+    qty.value = '2.30';
+    qty.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(document.querySelector('[data-sum-of="qty"]')!.textContent).toBe('2.30'); // not "2"
+  });
+
   it('a nested table\'s same-named fields are not double-counted into the outer sum', () => {
     html`
       <table>

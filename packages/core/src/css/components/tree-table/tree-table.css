@@ -50,7 +50,10 @@
   .bo-tree-table__toggle::before {
     content: '▸';
     display: inline-block;
-    transition: rotate var(--bo-motion-duration-fast, 0s) ease;
+    /* Same recipe as .bo-tree's disclosure caret — one framework, one
+       caret motion (2026-08-21 sweep folded three unexplained variations:
+       literal ease, a stray 0s fallback, fast-vs-base). */
+    transition: rotate var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
   }
 
   .bo-tree-table__toggle[aria-expanded='true']::before {

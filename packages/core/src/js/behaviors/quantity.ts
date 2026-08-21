@@ -14,7 +14,7 @@
  *     <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1">+</button>
  *   </div>
  */
-import { setInputDecimals, decimalsOverride } from '../utils/decimal-input.js';
+import { setInputDecimals, decimalsOverride, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
 
 let installed = false;
 
@@ -76,7 +76,10 @@ export function initQuantity(): void {
     // Quantize to the step's own decimal places — binary floats make
     // 0.28 + 0.01 print as 0.29000000000000004 otherwise (the docs
     // recommend step="0.01" for weight/volume, so this path is real).
-    const decimals = (input.step.split('.')[1] ?? '').length;
+    // Shared hardened parse: step="any"/missing has no precision info,
+    // so fall back to the value's own places instead of quantizing a
+    // fractional value to an integer (2026-08-21 sweep).
+    const decimals = stepDecimals(input) ?? valueDecimals(input.value);
     const raw = Math.min(max, Math.max(min, current + step * inputStep));
     const next = Number(raw.toFixed(decimals));
 

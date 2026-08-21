@@ -104,7 +104,7 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
   <ClassRef component="alert" />
   <ApiTable component="alert"
     js="Optional: initAlerts() — dismiss buttons remove their alert/toast (delegation covers injected toasts)."
-    notes={['Arrival decides the role, not severity: none if the alert is present at load; <code>role="alert"</code> (errors) or <code>role="status"</code> (everything else) once it is inserted after load.',
+    notes={[`Arrival decides the role, not severity — the <a href="${base}/concepts/accessibility#live-regions">live-region rule</a> is stated once there; short form: none at load, <code>role="alert"</code>/<code>role="status"</code> only when inserted after load.`,
             'The toast region must exist (with <code>aria-live</code>) BEFORE the first toast is injected.',
             'Toasts do not float above an open modal dialog (top layer).']} />
   <DsaScore component="alert" />

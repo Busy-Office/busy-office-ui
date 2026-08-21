@@ -36,6 +36,11 @@ export const DIST = join(DOCS_ROOT, 'dist');
 /** the repository root */
 export const REPO_ROOT = join(DOCS_ROOT, '..', '..');
 
+/** packages/core/dist — the generated core artifacts (api.json,
+ *  behaviors.json, built CSS). Was spelled three different ways across four
+ *  scripts before this export (2026-08-21 sweep). */
+export const CORE_DIST = join(REPO_ROOT, 'packages', 'core', 'dist');
+
 /**
  * Directories that are NOT our source: generated output, vendored code, and
  * frozen snapshots.

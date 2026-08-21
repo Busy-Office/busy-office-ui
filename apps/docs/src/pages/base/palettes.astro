@@ -5,8 +5,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 // GENERATED from the shipped brand CSS — swatches, tokens, and hex are
 // parsed from packages/core/src/css/brand/*.css at build, never
-// hand-painted; the same files check-contrast.mjs gates (32 pairs × 2
-// themes per palette).
+// hand-painted; the same files check-contrast.mjs gates in both themes
+// (the PAIRS array there is the count — a hand-typed "32" here had
+// drifted from its real 35, 2026-08-21 sweep).
 const files = import.meta.glob('../../../../../packages/core/src/css/brand/*.css', {
   query: '?raw',
   import: 'default',

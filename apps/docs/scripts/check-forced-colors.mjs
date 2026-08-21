@@ -29,10 +29,10 @@ import postcss from 'postcss';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
-import { DIST } from './paths.mjs';
+import { DIST, CORE_DIST } from './paths.mjs';
 
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const coreCss = join(docsRoot, '..', '..', 'packages/core/dist/css/index.css');
+const coreCss = join(CORE_DIST, 'css', 'index.css');
 
 /* ---- 1. every forced-colors rule the framework ships ---- */
 const rules = [];

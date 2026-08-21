@@ -77,7 +77,13 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
     <h2>Rules that keep density safe</h2>
     <ul class="bo-stack bo-stack--tight docs-list">
       <li>Density tokens are <strong>rem-only</strong> — they scale with the user's root font, so raised text never clips. The low-vision power user runs large text + compact and gets density at a readable size; that combination is the point.</li>
-      <li>Explicit <code>data-density</code> always beats container-query auto-compaction.</li>
+      <li>Explicit <code>data-density</code> beats container-query
+      auto-compaction <strong>when set on the table or its container
+      element itself</strong> — a distant wrapper's density tokens still
+      inherit, but the compaction query only checks those two elements,
+      so it stays in force. (This sentence is the canonical statement;
+      2026-08-21 sweep — two pages previously said "always beats", which
+      the shipped <code>:not([data-density])</code> selector contradicts.)</li>
       <li><strong>Density moves row height and font size, not control boxes.</strong>
       A checkbox, radio and the tag-input remove button are <code>1rem</code>
       (16px) in <em>every</em> tier, and the data-table sort button is 18px

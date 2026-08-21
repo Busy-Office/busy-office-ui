@@ -25,10 +25,33 @@ export function setInputDecimals(input: HTMLInputElement, decimals: number): voi
   input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
+/** ONE parser for the documented `data-decimals` attribute: '' and
+ *  non-numeric mean "not supplied" (undefined), anything else clamps to a
+ *  non-negative integer. Extracted 2026-08-21 (Standardize sweep) — a
+ *  second inline parse in table-sum treated `data-decimals=""` as 0 and
+ *  forced integer totals, so the one attribute had two edge behaviors. */
+export function parseDecimalsAttr(raw: string | undefined): number | undefined {
+  if (raw === undefined || raw === '' || Number.isNaN(Number(raw))) return undefined;
+  return Math.max(0, Math.trunc(Number(raw)));
+}
+
 /** App override beats any built-in table: data-decimals on the selected
  *  <option>, else on the container. Returns undefined when not supplied. */
 export function decimalsOverride(select: HTMLSelectElement, root: HTMLElement): number | undefined {
-  const raw = select.selectedOptions[0]?.dataset.decimals ?? root.dataset.decimals;
-  if (raw === undefined || raw === '' || Number.isNaN(Number(raw))) return undefined;
-  return Math.max(0, Math.trunc(Number(raw)));
+  return parseDecimalsAttr(select.selectedOptions[0]?.dataset.decimals ?? root.dataset.decimals);
+}
+
+/** Decimals of a numeric step ("0.01" → 2); null when the step carries no
+ *  precision information ("any", missing) — treating those as 0 collapsed
+ *  7.50 to 8 (table-sum grill H1) and quantized a fractional value on
+ *  step="any" increments (2026-08-21 sweep). */
+export function stepDecimals(input: Element): number | null {
+  const step = input instanceof HTMLInputElement ? input.step : '';
+  if (step === '' || step === 'any' || Number.isNaN(Number(step))) return null;
+  return (step.split('.')[1] ?? '').length;
+}
+
+/** Decimal places a value string itself carries ("7.50" → 2). */
+export function valueDecimals(value: string): number {
+  return (value.split('.')[1] ?? '').length;
 }

@@ -47,9 +47,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <td>One plain <a href={base + '/components/button'}><code>bo-btn</code></a>
             per screen — everything else takes <code>--secondary</code>,
             <code>--ghost</code>, or <code>--danger-ghost</code>. Measured, not
-            aspirational: 18 of 19 pattern screens hold to ≤1 visually primary
-            action (the wizard's Next/Submit pair is the exception, and even
-            those are never both visible).</td>
+            aspirational (live DOM at rest, all 21 pattern pages,
+            2026-08-21): every screen shows ≤1 visible primary action —
+            the wizard's Next/Submit pair is never both visible, the grid's
+            per-row Saves stay hidden until a row is dirty, and
+            master-detail's two demos (panel and dialog) carry one each.</td>
           </tr>
           <tr>
             <th scope="row">Typography</th>

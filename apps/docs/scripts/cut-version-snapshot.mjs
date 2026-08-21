@@ -8,14 +8,17 @@
 import { execSync } from 'node:child_process';
 import { rm, cp, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { DIST } from './paths.mjs';
+import { DIST, DOCS_ROOT } from './paths.mjs';
 
 const version = process.argv[2];
 if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
   console.error('usage: node scripts/cut-version-snapshot.mjs <x.y.z>');
   process.exit(1);
 }
-const docsRoot = new URL('..', import.meta.url).pathname;
+// DOCS_ROOT from the chokepoint — the local `new URL(..).pathname` spelling
+// this replaced is the percent-encoded one paths.mjs's header documents as
+// BROKEN on paths containing spaces (2026-08-21 sweep).
+const docsRoot = DOCS_ROOT;
 execSync('npm run build', {
   cwd: docsRoot,
   stdio: 'inherit',

@@ -26,7 +26,7 @@
  * `gate-report.mjs` exists to prevent two copies of (Standardize sweep,
  * 2026-08-20). `assertScanned` replaces this file's own zero-pages guard.
  */
-import { DIST } from './paths.mjs';
+import { DIST, CORE_DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
@@ -51,8 +51,8 @@ const EXCEPTIONS = new Set([
   'data-richtext-cmd',                                  // richtext toolbar demo
 ]);
 
-const api = JSON.parse(await readFile(join(DIST, '..', '..', '..', 'packages/core/dist/api.json'), 'utf8'));
-const beh = JSON.parse(await readFile(join(DIST, '..', '..', '..', 'packages/core/dist/behaviors.json'), 'utf8'));
+const api = JSON.parse(await readFile(join(CORE_DIST, 'api.json'), 'utf8'));
+const beh = JSON.parse(await readFile(join(CORE_DIST, 'behaviors.json'), 'utf8'));
 
 const documented = new Set();
 for (const c of Object.values(api.components)) (c.dataAttrs ?? []).forEach((a) => documented.add(a));
