@@ -780,6 +780,77 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 97 — Owner wishlist: validation check UX/UI (2026-08-21)
+
+Owner asked for a look at the validation experience, with a screenshot of
+`/patterns/editable-grid`: a QTY cell reading 450, red border, and
+*"Exceeds on-hand (200)"* beneath it.
+
+**Two things were measured before writing this entry, and they point in
+opposite directions.**
+
+**Verified GOOD — do not re-litigate.** The two-channel contract holds
+everywhere: **zero** invalid controls across the whole built site lack either
+`aria-describedby` or an adjacent message. The screenshot's own markup carries
+`aria-invalid="true"`, `aria-describedby`, and a real text message — the red
+border is the colour half, the revealed message is the non-colour half, and
+`aria-invalid` is the programmatic one. The field styling changing *only*
+colour (border + label) is therefore not a two-channel defect, because the
+message reveal is the visible non-colour change. Recorded so a grill does not
+"find" it.
+
+**Verified BAD — and the framework already knows the rule it is breaking.**
+`form-field.css` states the contract itself: `role="alert"` *"if it appears
+dynamically"*. Measured across the built site: **8 of 8** `role="alert"`
+elements are present at page load and not hidden — `alerts`, `combobox`,
+`form`, `quantity`, `bulk-actions`, `editable-grid`, `staging`,
+`validation-summary`. Every one is a demo of an error state, so every one is
+an assertive live region that exists before the user has done anything.
+
+1. [ ] **97.1 — `role="alert"` on messages that are present at load.** An
+       assertive live region is for content that ARRIVES. Present at parse
+       time it is unreliable (screen readers commonly do not announce regions
+       that already exist when the page is read) and, where it does fire, it
+       interrupts. The docs are the recipe consumers copy, so this teaches the
+       wrong shape for the most common ERP case of all: a server re-rendering
+       a form with errors after a failed POST.
+
+       The nuance that makes this a decision rather than a find-and-replace:
+       after that POST the error genuinely IS new information, but it arrives
+       as a **page load**, not as a DOM mutation, so a live region is the
+       wrong mechanism — focus management and a summary the user lands on is
+       the right one, which is what `/patterns/validation-summary` already
+       exists for.
+
+       **Accept:** state the rule in one place (server-rendered-at-load vs
+       inserted-after-load, what each uses); every demo that renders a static
+       error drops `role="alert"` or gains a comment saying why it keeps it;
+       the count of unhidden `role="alert"` present at load falls to only
+       those that are genuinely injected; and the claim is executable — a
+       check that fails if a `role="alert"` ships in the built HTML without
+       either `hidden` or a documented exception.
+
+2. [ ] **97.2 — grill validation as ONE experience, not three surfaces.**
+       The owner's ask is broader than the bug above. Validation currently
+       appears in three places with three shapes: `.bo-form-field` (message
+       under a labelled control), the editable grid (message inside a table
+       cell, growing the row), and `/patterns/validation-summary` (a list at
+       the top of the screen). Whether those are one design with three
+       renderings or three designs that merely coexist has never been asked.
+
+       **Questions to answer, each with evidence:** does an in-cell message
+       shift the rows below it while the user types, and by how much
+       (measure it)? When a row fails and the user has scrolled away, what
+       brings them back — and does anything today? Is the summary's link
+       target the field or the row? Do the three agree on wording ("Exceeds
+       on-hand (200)" is a consequence; is that the house voice everywhere)?
+
+       **Accept:** a grill report in `.roundtable/` with a verdict per
+       surface — keep / align / replace — each backed by a measurement or a
+       quoted rule, not taste; every "align" becomes a numbered item with its
+       own Accept. Refusing to unify is a valid outcome if the three contexts
+       genuinely differ, but it has to be argued.
+
 ## Slice 96 — Owner wishlist: currency on the right of the amount (2026-08-21)
 
 Owner: *"Money basic — option for currency on the right."*
