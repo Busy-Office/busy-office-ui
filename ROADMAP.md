@@ -848,6 +848,38 @@ catalogue in ERP vocabulary and job order.
        (picking, putaway, count) are named as front-door candidates, not
        queued.
 
+7. [ ] **109.7 — the RF pattern family: grill the owner's four candidates**
+       (owner follow-up, 2026-08-22: "then should be full range of patterns
+       for RF? metro UI or bento UI landing? list (display and editable)?
+       form? dropdown (instead of dropdown, should popup full screen
+       instead)?"). **Direction: a small RF family mapped to the RF
+       worker's DAY, never a mirror of the app catalogue** — an RF device
+       runs 3-6 tasks, not a suite. Per-candidate starting positions, each
+       to be grilled against the rf-essentials floor (Chrome/WebView 108)
+       and verified in the 360×640 fixture:
+       - **RF landing (metro/bento task menu)** — the strongest candidate:
+         every RF deployment has one; likely composes from
+         `bo-widget-grid` + spacious density with glove-sized tiles.
+       - **RF list (display)** — a pick-list / task queue ("what's next")
+         is real; grill whether it composes from `bo-data-table` at
+         spacious or needs its own single-column task-row shape.
+       - **RF list (editable)** — expect REFUSE: RF editing is
+         one-field-at-a-time scan flow (goods-receipt's own shape), not
+         grid editing with gloves at 360px.
+       - **RF form** — goods-receipt already demonstrates scan-first
+         sequential entry; the question is whether a generic "scan task"
+         shape is worth extracting or goods-receipt IS the documentation.
+       - **Dropdown → full-screen picker** — the instinct (small dropdowns
+         fail with gloves) is right, but the native-first answer must be
+         measured before building anything: on Android WebView a native
+         `<select>` already opens the OS's full-screen picker — the
+         platform may give this for free, making the verdict a doctrine
+         line ("RF uses native select") rather than a component.
+       **Accept:** a grill report per candidate (99.4 front door: compose
+       first, score, refusal expected for at least one), each verdict
+       verified in the fixture at the RF floor, and whatever ships lands
+       on the RF track with the recipe's full shape.
+
 Still owner-blocked inside this catalogue: **role home / overview page**
 (row 3) — open since 99.1: is `app-launch` your "landing page", or do you
 want a role home with live content (my open items, KPIs)? The catalogue
