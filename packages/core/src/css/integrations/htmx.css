@@ -25,10 +25,12 @@
 
   /* Flash-on-update: classic ERP grid feedback after a row/cell refresh.
      Duration is token-driven so prefers-reduced-motion zeroes it like every
-     other animation in the framework. */
+     other animation in the framework. Easing token too, same as every
+     other `animation:` in the framework (dialog/toast/offcanvas entrances)
+     — the literal ease-out was the last one left (2026-08-21 sweep note A). */
   .htmx-settling {
     animation: bo-htmx-settle
-      calc(var(--bo-motion-duration-slow) * 2) ease-out;
+      calc(var(--bo-motion-duration-slow) * 2) var(--bo-motion-easing-standard);
   }
 
   @keyframes bo-htmx-settle {

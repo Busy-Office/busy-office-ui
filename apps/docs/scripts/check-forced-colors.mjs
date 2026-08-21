@@ -23,15 +23,16 @@
 */
 import { readFile, readdir } from 'node:fs/promises';
 import { assertScanned, selfTest } from './gate-report.mjs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import postcss from 'postcss';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST, CORE_DIST } from './paths.mjs';
 
-const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+// docsRoot (the pre-CORE_DIST `join(dirname(fileURLToPath(import.meta.url)), '..')`
+// spelling) went dead here when coreCss moved to CORE_DIST below — it was only
+// ever used to build that one path (2026-08-21 sweep note B).
 const coreCss = join(CORE_DIST, 'css', 'index.css');
 
 /* ---- 1. every forced-colors rule the framework ships ---- */
