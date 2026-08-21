@@ -808,7 +808,13 @@ was too large to fix safely in the same wake:
 
 Owner: *"should patterns be in separate section and arrange the tile like
 https://namethatui.com/ ? pls review and propose."* Reviewed and proposed
-same wake: `.roundtable/proposal-patterns-index-2026-08-21.md`.
+same wake: `.roundtable/proposal-patterns-index-2026-08-21.md`. **Re-reviewed
+from scratch same day at the owner's explicit request** (addendum in the
+same file) — repo facts unchanged, plan confirmed (grouped tiles over
+namethatui's flat platform-filtered grid, since our natural axis is
+workflow stage, which the groups already encode; that grid exists there
+because platform is orthogonal content, which we don't have). One new item
+queued below (104.4).
 
 **The review's finding: the "separate section" half is already true** (three
 collapsible sidebar groups since 2026-08-16) — **what's missing is the
@@ -877,6 +883,20 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        describing generated surfaces are what the docs doctrine forbids.
        **Accept:** the owner picks (a) keep text tiles / (b) add generated
        screenshots, and the choice is recorded here with its reason.
+
+4. [ ] **104.4 — complexity filter chips on the index, gated behind 104.3.**
+       Re-review finding (2026-08-21): namethatui's Newest/Popular/
+       Surprise-me sort has a cheap, real analogue — `bo-segmented`
+       (already shipped; native radios; zero new CSS) could drive an
+       All/Simple/Medium/Advanced filter over the tiles. **Explicitly NOT
+       buildable before 104.3**: filtering by a complexity number that is
+       currently undefined and anti-correlated with real signal (104.3's own
+       finding) would launder that defect straight into the UI. **Accept:**
+       only after 104.3's re-read badges land — a `bo-segmented` filter,
+       live JS (unlike 104.1-104.3, which are static generation), with its
+       own test coverage; refusing to add live filtering at all (static
+       grouping is enough) is a valid outcome if 104.1's usage doesn't show
+       anyone needing it.
 
 Not queued, deliberately: a separate top-level Patterns nav (20 items don't
 justify the IA surgery; the groups + front door give the separation), a

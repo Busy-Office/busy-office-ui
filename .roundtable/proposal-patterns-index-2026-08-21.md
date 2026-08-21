@@ -78,3 +78,50 @@ who-uses-it line + complexity does most of that. Options:
 - The same index for components — the mechanism generalizes, but the ask is
   patterns; components' 40 pages have `llms.txt` + the class index as their
   overview today. Queue only if wanted.
+
+---
+
+## Addendum: re-review from scratch (owner asked, 2026-08-21, same day)
+
+Re-fetched namethatui.com with a sharper prompt (exact grid, one tile's
+content order, category structure, controls, badge content, above-the-fold
+count) and re-measured the repo. Repo facts are unchanged — still 20 pattern
+pages, three sidebar groups, no `/patterns/` index, homepage still deep-links
+to invoice-list in 3 places — so nothing above is stale. Three things the
+sharper fetch adds:
+
+**1. namethatui is a FLAT grid with filter chips, not grouped sections —
+and that's *why* grouping is still the right call for us, not a deviation.**
+Its structure is "All (76) | macOS (32) | Web (44)" — one flat grid, filtered
+by *platform*, because platform is the one thing every tile has and it's
+orthogonal to what the element does. We have no platform axis (everything is
+web). Our natural axis — *workflow stage* — is exactly what the three
+sidebar groups already encode, and a heading that says "these are for
+review & approve" is more informative to a reader than a filter chip they
+have to click first. Confirmed, not changed: grouped tiles over a flat grid.
+
+**2. Preview images are more load-bearing in namethatui's design than the
+first pass credited.** Every characterized tile leads with its image before
+any text — recognition genuinely IS the mechanism there. The cost argument
+in the fork above still holds (dense ERP screens thumbnail into grey noise;
+20 pages × 2 themes per build is real minutes), but it should be read as a
+real gap against the reference, not a minor omission — text-only tiles meet
+the *organization* half of the ask precisely and the *look* half partially.
+Recommendation unchanged (ship text+badges first, measure usage before
+paying for screenshots) but stated with the trade-off's real weight.
+
+**3. New, genuine finding: namethatui's Newest/Popular/Surprise-me sort has
+a real, cheap analogue here — `bo-segmented` (already shipped, the density
+switcher's own control; zero new CSS, native radios, no JS for the control
+itself) could drive an All/Simple/Medium/Advanced filter over the tiles.
+Not proposed for 104.1**: filtering the grid live needs JS + tests beyond
+static generation, and a complexity filter is only as trustworthy as the
+complexity SCALE — which 104.3 found undefined and anti-correlated with
+real signal. Filing as **104.4**, explicitly gated behind 104.3 landing
+first (filtering by a number that doesn't yet mean anything would launder
+the same defect into the UI). Composes from an existing primitive either
+way — no new component, per Objective §2.
+
+**Net effect on the plan: 104.1–104.3 stand as written.** This pass adds one
+new deferred item (104.4) and sharpens the reasoning behind two decisions
+already made rather than reversing either.
