@@ -780,6 +780,40 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 110 — v2 candidates approved and grilled (2026-08-22)
+
+From 109.8's owner answer ("let's include per your recommendation — grill
+the idea. simplicity & maintainability & easy for AI to understand").
+Grill report: `.roundtable/grill-catalogue-v2-candidates-2026-08-22.md`.
+Two of five REFUSED there with re-open conditions (kanban, close cockpit).
+The three builds, in queue order AFTER 101.4-101.7:
+
+1. [ ] **110.1 — role-home (Fiori Overview Page / Dynamics Workspace).**
+       Composes 100%: `bo-widget-grid` of role cards — "my open items"
+       (count + link INTO the inbox), "my KPIs" (`bo-kv` + amount),
+       "recent documents". Zero new CSS expected. **Sequenced after 101.4
+       deliberately**: the open-items card is a filtered view OF the inbox;
+       building the summary before the thing it summarises would invent
+       the inbox contract twice. **Accept:** full pattern recipe incl.
+       wrong-choice clause (vs app-launch: launcher ≠ home; vs dashboard:
+       monitors the BUSINESS, this monitors MY WORK); states incl. the
+       "nothing needs you" success-empty; the owner's three criteria
+       addressed in the report accompanying the build.
+2. [ ] **110.2 — job monitor / batch-run history.** Composes 100%:
+       data-table (name/schedule/last/next run) + badge status
+       (two-channel) + progress for running + record-detail shape for one
+       run's log. **Scope guard in Accept: MONITOR only** — view, retry,
+       cancel; schedule AUTHORING is the ERP's admin module, not this
+       screen (the maintainability criterion, applied). Data contract must
+       cover polling (`hx-trigger="every Ns"`) and the states table:
+       running, failed, stalled, never-ran, retried.
+3. [ ] **110.3 — schedule screen (bo-calendar assembled).** Composes from
+       the shipped calendar + day-detail list + swap contract. LOW
+       priority, honestly ranked: single-source demand (Odoo); if the
+       queue never reaches it, that is the queue working. **Accept:** full
+       recipe; the calendar component page gains a pointer to the
+       assembled screen (the data-table -> list-report precedent).
+
 ## Slice 109 — Owner direction: the real-ERP pattern catalogue + regrouping (2026-08-22)
 
 Owner: *"low quality of patterns content, grouping need to improve. it
@@ -880,7 +914,7 @@ catalogue in ERP vocabulary and job order.
        verified in the fixture at the RF floor, and whatever ships lands
        on the RF track with the recipe's full shape.
 
-8. [ ] **109.8 — catalogue v2 after external research: FIVE decisions for
+8. [x] **109.8 — catalogue v2 after external research: FIVE decisions for
        the owner** (2026-08-22, owner ask: "get new input and research what
        need for ERP. then we review"). Researched three independent
        taxonomies — SAP Fiori floorplans, Dynamics 365 F&O form patterns,
@@ -906,6 +940,16 @@ catalogue in ERP vocabulary and job order.
        (single-source niche), chatter (CRM; timeline covers the ERP need).
        **Accept:** the owner answers the five; approved items get numbered
        entries with the front-door gate; refusals recorded here.
+       **ANSWERED 2026-08-22**: owner approved all five for grilling with
+       three added criteria — simplicity, maintainability, easy for AI to
+       understand. Grilled same wake:
+       `.roundtable/grill-catalogue-v2-candidates-2026-08-22.md`. Verdicts:
+       role-home BUILD (110.1, after inbox), job monitor BUILD (110.2),
+       schedule BUILD low-priority (110.3), kanban REFUSED (single-source;
+       without drag it collapses into list-report grouped by status;
+       re-open condition recorded), close cockpit REFUSED (recomposes into
+       inbox + record-detail + approval + progress; re-open condition on
+       dependency semantics).
 
 Still owner-blocked inside this catalogue: **role home / overview page**
 (row 3) — open since 99.1: is `app-launch` your "landing page", or do you
