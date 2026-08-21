@@ -1025,7 +1025,7 @@ then documented — and refusing is an expected outcome.
        fact to use when 101.4-101.6 land — any of those is its natural first
        real consumer.
 
-0. [x] **102.1 (superseded heading kept for numbering)** The component
+       *Original Accept, retained for the record:* The component
        documents one editor. The owner's framing ("simple to advance")
        asks the question the page does not: what is the LADDER — a
        read-only rendered block, a lightly-formatted note field, a full
