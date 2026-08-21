@@ -780,6 +780,129 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 99 — Owner direction: patterns as an ERP expert would actually build them (2026-08-21)
+
+Owner: *"revamp the pattern to build the realistic pattern by screen (where
+design by 30 years experience of ERP expert)"* — naming login, landing page,
+command bar, object page (detail), inbox, notification, report, output form,
+dashboard. Plus a standing instruction that governs the whole slice: **if a
+missing component is found, add it — but grill the need FIRST and score it
+the same way.**
+
+**The nine mapped against the 19 patterns that exist**, measured before
+planning anything:
+
+| Asked for | Today |
+|---|---|
+| login | **exists** — `/patterns/login` |
+| dashboard | **exists** — `/patterns/reporting-dashboard` |
+| object page (detail) | exists **four times over** — `object-page`, `record-detail`, `detail-form`, `master-detail` |
+| landing page | *partly* — `app-launch` is a launchpad; whether that is the landing page is the owner's call |
+| command bar | **missing as a pattern** |
+| inbox | **missing** (`approval` is a review screen, not a worklist) |
+| notification | **missing** (alerts/toasts are components; the screen-level story is not documented) |
+| report | **missing as distinct from a dashboard** |
+| output form | **missing** — the printed/PDF document an ERP emits |
+
+**Two findings the mapping produced that the ask did not mention, and both
+matter more than the count.**
+
+**(a) The command bar exists — we built it for ourselves and never shipped
+the recipe.** `cmdk` appears in exactly one file, `apps/docs/src/layouts/
+Gallery.astro`, and in **zero** files under `packages/core`. The docs site
+has had a working command palette this whole time, classed as "docs-site
+chrome, never shipped to consumers" in `check-data-hooks`'s exception list.
+An ERP expert would call the command bar one of the highest-leverage screens
+in the product, and we are dogfooding one while documenting none.
+
+**(b) The owner asked for "object page (detail)" — singular — and we have
+four.** `object-page`, `record-detail`, `detail-form` and `master-detail` all
+open by describing someone who owns one record. That is exactly the shape
+Objective §1 and §2 exist to challenge: is this one screen with settings, or
+four screens? It is *not* automatically drift — `master-detail` is genuinely a
+list-plus-panel and `detail-form` is genuinely entry — but nobody has asked
+the question, and the owner's phrasing is the prompt to ask it.
+
+1. [ ] **99.1 — the gap analysis becomes a decision, screen by screen.**
+       Before building anything: for each of the nine, decide **build /
+       already-covered / rename-and-extend**, with the ERP job it serves named
+       in one line ("who opens this, how often, what done looks like" — the
+       pattern recipe's own opener requirement). **Accept:** a table in
+       `.roundtable/` with a verdict per screen and its reason; every "build"
+       becomes its own numbered item carrying the pattern-page recipe's six
+       required parts. No screen gets built before its row exists.
+
+2. [ ] **99.2 — settle the four detail patterns before adding a fifth.**
+       Adding `inbox` and `object page` on top of four overlapping detail
+       screens would make the set harder to navigate, not easier. **Accept:**
+       a verdict — keep four with each one's distinct job stated in its
+       opener so a reader can choose, or merge. Measured, not argued: for each
+       pair, what markup and which components actually differ? Merging is a
+       valid outcome; so is keeping all four **if** each opener names the
+       other three and says when to use them instead (the `content` rule,
+       applied to patterns).
+
+3. [ ] **99.3 — the command bar: document what we already run.** Start from
+       `Gallery.astro`'s implementation rather than a blank page, because a
+       working one has been in daily use. **Accept:** the pattern page names
+       who uses it and when (power users, keyboard-first, jumping across
+       modules); the data contract for its result sources; states incl. empty
+       query, no matches, and slow/async results; and — the part that decides
+       whether this ships as a component — a grilled answer to whether the
+       docs implementation should be **promoted into `packages/core`** or stay
+       docs chrome. Promotion requires the same scoring every component gets.
+
+4. [ ] **99.4 — missing components discovered along the way go through the
+       front door.** The owner's own instruction, recorded as a gate on this
+       slice: grill the need first (Objective §1/§2 — could existing
+       primitives compose it?), then score it on the six DSA dimensions with
+       cited evidence, then document it with the wrong-choice clause
+       `check:wrong-choice` now requires. **Refusing a component is an
+       expected outcome**, not a failure of the slice.
+
+## Slice 100 — Owner wishlist: drag & drop list (2026-08-21)
+
+Owner: *"drag & drop list."*
+
+**Triaged as GRILL-FIRST, not build-first — and the owner's own Slice 99
+instruction says so ("grill the need of it first").** Recorded here with what
+is already true, so the grill starts from facts.
+
+**What exists today.** `.bo-ordered-list__actions` ships a per-row reorder
+group — ↑ ↓ ✕ buttons — and they are deliberately *inert markup*: "wire the
+reorder/remove in your app or HTMX". So the framework already has a reorder
+affordance, and it is **keyboard-accessible by construction** because it is
+buttons. Separately, `file-dropzone.ts` does implement drag-and-drop, but for
+*files* onto an `<input type="file">` — a native, well-supported case with a
+click fallback the platform provides.
+
+**The question the grill has to answer** is not "can we build it" but whether
+dragging earns its place beside a working button path:
+
+- **Drag-and-drop is the classic inaccessible interaction.** Pointer-only by
+  default; no keyboard equivalent unless one is built; screen-reader support
+  needs explicit live-region narration of position ("moved to 3 of 7");
+  touch conflicts with scrolling. Every one of those is a real cost this
+  framework's standing rules would force us to pay in full.
+- **The honest ceiling:** if it ships, dragging can only ever be an
+  *enhancement over* the buttons, never the only path — the same shape as
+  every other behavior here (`initMoneyField()` optional, tree-table readable
+  server-rendered). A drag implementation that replaces the buttons would fail
+  the two-channel rule outright.
+- **Where is the ERP demand?** Reordering line items, approval routes, saved
+  view columns are the plausible cases. Are any of them frequent enough, and
+  painful enough with ↑↓, to justify the mechanism?
+
+1. [ ] **100.1 — grill the need before any code.** **Accept:** a report in
+       `.roundtable/` answering: which ERP task is actually slow with the
+       existing ↑↓ buttons (name the screen and the row count where dragging
+       wins); what the keyboard and screen-reader equivalents would have to be,
+       concretely; whether the touch/scroll conflict is solvable without a
+       drag handle; and the verdict — build / refuse / defer, with the reason.
+       **Refuse is a valid and expected outcome** given a working accessible
+       path already ships. If the verdict is build, it carries its own item
+       with the enhancement-not-replacement constraint written into Accept.
+
 ## Slice 98 — Standardize: the two wrong-choice gates were one rule, written twice (2026-08-21)
 
 Dispatched by the counter at 4/4. The drift was **one wake old and mine**:
