@@ -943,7 +943,15 @@ the owner has already answered that with Slices 99 and 100.
        "your server renders PDFs; here is the print stylesheet contract") —
        refusing is a valid outcome and would itself be worth documenting.
 
-2. [ ] **101.2 — 95.3 was never actually queued.** Last wake's entry says the
+2. [x] **101.2 — DONE 2026-08-21. 95.3 was never actually queued.**
+       95.3 is a real numbered item and has now been dispatched and closed on
+       its merits. The invariant this item asked for was also run: of the
+       `roadmap NN.N` references in this file, only two resolve to no numbered
+       item — `92.5` and `94.1` — and **both survive only inside narrative
+       that exists to describe them as dangling**, which is legitimate per the
+       assert-on-structure rule (the prose explaining a removal is supposed to
+       name the thing removed). Zero live references remain in
+       `dsa-scores.json`. Last wake's entry says the
        touch half of device fitness was "re-scoped and re-queued as 95.3", and
        it was written as **prose inside a closed item** — it appears four times
        in this file and **zero** times as a numbered open item, so the
@@ -1301,7 +1309,32 @@ the second, and that is why they get different shapes.
        a per-device grade would imply a device-specific design that does not
        exist and that Objective §2 exists to prevent.
 
-3. [ ] **95.3 — touch fitness: emit it from the gate, or drop the claim.**
+3. [x] **95.3 — DONE 2026-08-21. Verdict: touch fitness IS a screen property; the per-component claim is dropped, and the docs already said so. touch fitness: emit it from the gate, or drop the
+       **The gate's own output settles it.** In one run, `bo-checkbox 16x16`
+       appears **three times with nearest = 185px, 32px and 33px**, and
+       `bo-data-table__sort-btn` three times at 78px, 812px and 812px. Same
+       component, same size, three different conformance margins — because
+       the margin depends on what else is on that screen. WCAG 2.5.8's
+       spacing exception is itself *defined* in terms of neighbours ("no
+       other target's centre within 24px"), so a per-component claim would
+       not merely be imprecise, it would misrepresent the criterion.
+
+       **And `/concepts/density` already documents it correctly**, including
+       the decisive sentence: *"If you pack controls closer than 24px between
+       centres, you break that, and the framework cannot guarantee it for
+       markup it did not author."* So the per-component surface 95.1 nearly
+       built would have **contradicted a page we already ship** — which is
+       the strongest possible argument for the drop.
+
+       **One real defect found while confirming this.** That same passage
+       quoted "measured: 32-191px to the nearest neighbour" — a hand-typed
+       measurement that had drifted: today's run reaches **812px**. Replaced
+       with a citation of `check:target-size` rather than a corrected number,
+       because the upper bound tells a reader nothing (only the minimum
+       clearance bears on conformance) and any specific figure can only rot
+       again. Verified live in both themes.
+
+ claim.**
        Queued properly here (roadmap 101.2). 95.1's Accept said touch status
        should come from `check:target-size`; building it showed that gate
        measures **instances on a page** — `bo-tag-input__remove 16x16

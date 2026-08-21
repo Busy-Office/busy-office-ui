@@ -82,9 +82,9 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
       A checkbox, radio and the tag-input remove button are <code>1rem</code>
       (16px) in <em>every</em> tier, and the data-table sort button is 18px
       tall. WCAG 2.5.8 is met through its <strong>spacing exception</strong> —
-      a 24px circle centred on each of those reaches no other target
-      (measured: 32-191px to the nearest neighbour, CI-gated in all three
-      tiers) — <em>not</em> through a 24px size floor. If you pack controls
+      a 24px circle centred on each of those reaches no other target, and
+      <code>check:target-size</code> runs that exact spec test in CI across
+      all three tiers — <em>not</em> through a 24px size floor. If you pack controls
       closer than 24px between centres, you break that, and the framework
       cannot guarantee it for markup it did not author.</li>
       <li>Font size and row height move <em>together</em> per tier — never mix a density font token with a hand-set height.</li>
