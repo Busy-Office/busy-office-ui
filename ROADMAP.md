@@ -868,7 +868,47 @@ the question, and the owner's phrasing is the prompt to ask it.
        other three and says when to use them instead (the `content` rule,
        applied to patterns).
 
-3. [ ] **99.3 — the command bar: document what we already run.** Start from
+3. [~] **99.3 — the command bar: document what we already run.**
+       **Promotion question answered 2026-08-21: refuse, on all three counts.**
+       Full report: `.roundtable/grill-command-bar-2026-08-21.md`. No
+       `bo-command-bar`, no promotion of the docs implementation, and no
+       `bo-dialog--palette` modifier. A command bar is `bo-dialog` +
+       `bo-combobox` + `bo-kbd`; all three already ship.
+
+       The deciding measurement is not size, it is **shape**. Live, in one
+       session on one page: the shipped `bo-combobox` holds the full contract
+       (`role=combobox`, `aria-expanded`, `aria-controls`, `aria-autocomplete`,
+       `aria-activedescendant` moved by ArrowDown, `aria-selected` on the
+       option, 15 `role=option`); the docs palette, with 5 real results on
+       screen, has **none of them and no live region** — a screen-reader user
+       types and nothing announces that results appeared. Promoting it would
+       ship a second, worse answer to a question the framework already answers
+       correctly (Objective §1).
+
+       CSS measured: of `.docs-cmdk`'s 10 declarations, **7 already exist in
+       `.bo-dialog`**, 6 more are `--pagefind-ui-*` mappings that cannot
+       generalise, and the 3 that remain are top-anchoring — used by **exactly
+       one** dialog in the tree, so the modifier fails Objective §3 too.
+
+       Remaining work split out below.
+
+3a. [ ] **99.3a — document `/patterns/command-bar` as a composition.**
+       **Accept:** the pattern recipe in full (opener with who/how often/done
+       + the wrong-choice clause; live screen; anatomy; data contract for the
+       result sources; states incl. empty query, no matches, slow/async;
+       components-used badges + complexity). The markup shows the ⌘K binding
+       as consumer code, not a behaviour, and states the rule the grill
+       surfaced: **if the result source cannot load, remove the trigger** — a
+       command bar that opens onto nothing is worse than none.
+
+3b. [ ] **99.3b — docs debt, low priority: rebuild the docs palette on
+       `bo-combobox` + `bo-dialog`, or record why PagefindUI's owned DOM makes
+       it impractical.** Also picks up `--bo-color-scrim` for
+       `.docs-cmdk::backdrop`, which hardcodes `rgb(0 0 0 / 0.45)` while
+       `.bo-dialog::backdrop` already consumes the token added this session.
+       Docs chrome, so it reaches no consumer — recorded, not urgent.
+
+0. [x] **99.3 (original wording, superseded by the split above)** Start from
        `Gallery.astro`'s implementation rather than a blank page, because a
        working one has been in daily use. **Accept:** the pattern page names
        who uses it and when (power users, keyboard-first, jumping across
