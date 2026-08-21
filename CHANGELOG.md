@@ -11,6 +11,20 @@ pin.
 > These land **after** `v0.3.0` was tagged, so they are not in that release.
 > The tag is already pushed; it was not moved to pick them up.
 
+- **Added** (tokens): `--bo-font-size-mono-inline` — the size for monospace
+  text set *inline* in running prose (`.bo-kbd`, `.bo-prose code`,
+  `.bo-data-table__col--code`). A mono face renders optically larger than the
+  sans at the same nominal size, so inline mono needs a fraction of its HOST,
+  which no absolute scale step can express: the same `<code>` sits inside an
+  h2, inside compact table text, and inside body copy.
+
+  **Visible change:** `.bo-kbd` was 0.85em where the other two were 0.9em —
+  one optical correction written as two numbers. It now matches them, which
+  measures as 1px in each dimension at both densities. Mono that is sized as
+  *meta* text is deliberately untouched (`approval-workflow` timestamps and
+  `ordered-list` codes keep their absolute steps, because there the size
+  carries hierarchy rather than correcting a mismatch).
+
 - **Added** (`money`): the currency may now sit on either side of the amount,
   and there is **no new class** for it — the joint is derived from DOM order.
   Write the `select` before the `input` for `[ USD | 1250.00 ]` (en-US), or
