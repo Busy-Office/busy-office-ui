@@ -999,7 +999,33 @@ The standing rule from 99.4 applies to all three: if a grill concludes
 something is missing, the *need* is grilled before any code, then scored,
 then documented — and refusing is an expected outcome.
 
-1. [ ] **102.1 — grill rich text: simple to advanced.** The component
+1. [x] **102.1 — grill rich text: simple to advanced.**
+       Done 2026-08-21. Report:
+       `.roundtable/grill-richtext-ladder-2026-08-21.md`.
+       **Verdict: the ladder already exists, five rungs, no new component** —
+       rung 0 `textarea.bo-input` (one class, already styled), 1 `.bo-prose`,
+       2 `.bo-richtext--readonly`, 3 `.bo-richtext` + native `execCommand`
+       (zero framework JS), 4 a real engine in the same chrome.
+
+       Rung 3 verified live rather than read: Bold on a selection produced
+       `<p><b>hello</b> world</p>` with `aria-pressed` moving false -> true.
+       The browser returned `<b>` and not `<strong>`, which reproduces the
+       page's own engine-variance caveat on the first try.
+
+       **The defect was navigational and the project already knew.** `richtext`
+       sat in `check:wrong-choice`'s TODO and scored `content: 2` with an
+       improve entry naming exactly this. Writing the clause moved all four
+       records at once — opener, ratchet (23 -> 22 outstanding), score
+       (2 -> 3), improve cleared — which is the 94.12 interlock working.
+
+       NOT queued as a fix, deliberately: `.bo-prose` renders on two built
+       pages, both component docs, and zero of 20 pattern screens. It ships
+       for consumers, so docs usage is not its measure and building a screen
+       to exercise it would be building for the metric. Recorded instead as a
+       fact to use when 101.4-101.6 land — any of those is its natural first
+       real consumer.
+
+0. [x] **102.1 (superseded heading kept for numbering)** The component
        documents one editor. The owner's framing ("simple to advance")
        asks the question the page does not: what is the LADDER — a
        read-only rendered block, a lightly-formatted note field, a full

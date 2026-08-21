@@ -440,17 +440,14 @@
           "cite": "CHROME, not an engine (Slice 22 ADR): style a native contenteditable for the light case or mount a real editor inside __content — the consumer keeps the engine"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/richtext is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener names the wrong context and the alternative: an ordinary ERP note field is textarea.bo-input, and a value that is already rich is displayed with .bo-prose rather than a disabled editor (102.1 grill, 2026-08-21)"
         },
         "fit": {
           "score": 3,
           "cite": "'ready, not coupled', the same stance as htmx; the page says when to mount a real editor instead"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "date": {
       "scored": "2026-08-21",

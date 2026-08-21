@@ -78,6 +78,13 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
     a content area, plus <code>.bo-prose</code> for displaying stored
     rich content anywhere. The framework ships the <strong>chrome, not
     an editing engine</strong> — see "Why no engine" below.
+    <strong>Not for an ordinary note field</strong> — most ERP free-text
+    is a plain <code>textarea.bo-input</code> (one class, already styled),
+    and reaching for rich text commits you to sanitizing, storing and
+    printing HTML forever. Step up only when someone genuinely needs bold,
+    lists or links in the stored value; to <em>display</em> a value that is
+    already rich, use <a href={base + '/components/prose'}>prose</a>, not a
+    disabled editor.
   </p>
 
   <section class="demo">

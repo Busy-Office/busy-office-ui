@@ -46,7 +46,7 @@ const TODO = new Set([
   'alerts', 'avatar', 'badge', 'byline', 'calendar',
   'combobox', 'dashboard', 'data-table', 'date', 'icon',
   'inline-editing', 'money', 'navbar', 'pagination', 'progress',
-  'quantity', 'richtext', 'sidebar-nav', 'state-patterns',
+  'quantity', 'sidebar-nav', 'state-patterns',
   'stepper', 'table-toolbar', 'tree-table', 'tree',
 ]);
 
