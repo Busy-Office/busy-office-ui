@@ -29,13 +29,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { basename } from 'node:path';
 import { gate, assertScanned } from './gate-report.mjs';
-
-/** No wrong context exists — each needs a reason, not just a listing. */
-const EXEMPT = new Map([
-  ['button', 'the action primitive every other component defers to; there is no "use X instead of a button"'],
-  ['form', 'the entry-context anchor the field matrix points at — the thing others are the wrong choice VERSUS'],
-  ['prose', 'renders whatever stored rich text a server sends; the choice is upstream of this class'],
-]);
+import { EXEMPT, hasWrongChoiceClause } from './wrong-choice-rule.mjs';
 
 /**
  * Debt, not exemption: these predate the recipe requirement (roadmap 94.10).
@@ -59,9 +53,7 @@ let carried = 0;
 for (const file of files) {
   const slug = basename(file, '.astro');
   const src = await readFile(new URL(file, dir), 'utf8');
-  const opener = /<p class="demo-note"[^>]*>([\s\S]*?)<\/p>/.exec(src)?.[1] ?? '';
-  const has = [...opener.matchAll(/<strong>([\s\S]*?)<\/strong>/g)]
-    .some((m) => /^\s*(Not|Never|Do not|Don'?t)\b/.test(m[1].replace(/<[^>]+>/g, '')));
+  const has = hasWrongChoiceClause(src);
 
   if (has) carried++;
 

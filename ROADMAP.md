@@ -780,6 +780,40 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 98 — Standardize: the two wrong-choice gates were one rule, written twice (2026-08-21)
+
+Dispatched by the counter at 4/4. The drift was **one wake old and mine**:
+94.10 added `check-wrong-choice.mjs` and 94.12 taught `check-dsa-scores.mjs`
+to assert agreement with it — and the second copied the first's detector
+regex byte-for-byte and re-declared its EXEMPT list as a hardcoded `Set`,
+under a comment reading *"Kept in step with check-wrong-choice.mjs's own
+EXEMPT map"*. A promise a human has to keep is drift with a date on it.
+
+**Worse than the usual duplication, and worth naming why.** These two gates
+assert an *equivalence* between each other. If their rules diverged, the
+cross-check would compare two different questions — and still pass. A green
+gate that has stopped measuring what it claims is the exact failure this
+project treats as worse than no gate at all.
+
+Both now import `wrong-choice-rule.mjs`: one `EXEMPT` map, one
+`hasWrongChoiceClause()`. Identical shape to why `gate-report.mjs` exists.
+
+**Behaviour-preserving, and proved so rather than assumed:** both gates
+report the same numbers after the refactor as before (14 carry / 23
+outstanding / 3 exempt; 312 assertions over 39 scored), and **both
+red-proofs were re-run** — a page outside TODO/EXEMPT missing its clause, and
+a `content` score disagreeing with the page — each still naming the failure
+and exiting 1. Refactoring a gate's core logic and then trusting its green is
+how a dead detector gets made.
+
+**Clean pass on the established axes:** raw hex outside an at-rule is only
+`tabs.css`'s nine mask-alpha `#000` (reconciled for the **sixth** time now —
+they are the alpha channel of a `linear-gradient` mask, not theme colour, and
+the file says so); the Demo-conversion census is exactly 19, matching 91.3's
+record; and one shared line across all docs gates, a `console.error` print
+loop in `check-links` and `check-notes`, both legitimately outside
+`gate-report` per Slice 63.1's review. One print line is not worth a module.
+
 ## Slice 97 — Owner wishlist: validation check UX/UI (2026-08-21)
 
 Owner asked for a look at the validation experience, with a screenshot of

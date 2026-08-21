@@ -26,6 +26,7 @@
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { gate, assertScanned } from './gate-report.mjs';
+import { EXEMPT as WRONG_CHOICE_EXEMPT, hasWrongChoiceClause } from './wrong-choice-rule.mjs';
 
 const scores = JSON.parse(
   await readFile(new URL('../src/data/dsa-scores.json', import.meta.url), 'utf8'),
@@ -50,8 +51,6 @@ assertScanned(
    score written and never shown. */
 const pagesDir = new URL('../src/pages/components/', import.meta.url);
 const rendered = new Set();
-/** Kept in step with check-wrong-choice.mjs's own EXEMPT map. */
-const WRONG_CHOICE_EXEMPT = new Set(['button', 'form', 'prose']);
 const pageSlug = new Map();
 const openerHasClause = new Map();
 for (const f of await readdir(pagesDir)) {
@@ -62,9 +61,7 @@ for (const f of await readdir(pagesDir)) {
     rendered.add(m[1]);
     pageSlug.set(m[1], slug);
   }
-  const opener = /<p class="demo-note"[^>]*>([\s\S]*?)<\/p>/.exec(src)?.[1] ?? '';
-  openerHasClause.set(slug, [...opener.matchAll(/<strong>([\s\S]*?)<\/strong>/g)]
-    .some((m) => /^\s*(Not|Never|Do not|Don'?t)\b/.test(m[1].replace(/<[^>]+>/g, ''))));
+  openerHasClause.set(slug, hasWrongChoiceClause(src));
 }
 
 for (const [name, entry] of components) {
