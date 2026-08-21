@@ -130,41 +130,60 @@ const sections = [
       { href: '/components/icon', label: 'Icon' },
     ],
   },
-  // Patterns grouped by ERP workflow mode (2026-08-16, docs-IA pass 2 —
-  // .roundtable/docs-ia-2-2026-08-16.md): capture → review → overview.
+  // Patterns grouped by JOB FAMILY in a real ERP working day (2026-08-22,
+  // Slice 109 catalogue: .roundtable/erp-pattern-catalogue-2026-08-22.md),
+  // replacing the 2026-08-16 interaction-mode grouping — a clerk's day runs
+  // find → work → decide → monitor, and "review & approve" holding the
+  // detail family was the tell. RF is a TRACK, not a group: own browser
+  // floor (rf-essentials, Chrome/WebView 108), own screen size, own usage.
   {
-    label: 'Patterns: capture & edit',
+    label: 'Patterns: enter & find',
     items: [
-      { href: '/patterns/invoice-list', label: 'Invoice list' },
+      { href: '/patterns/login', label: 'Login' },
+      { href: '/patterns/app-launch', label: 'App launch' },
+      { href: '/patterns/command-bar', label: 'Command bar' },
+      { href: '/patterns/list-report', label: 'List report' },
       { href: '/patterns/filter-panel', label: 'Advanced filter panel' },
-      { href: '/patterns/editable-grid', label: 'Editable grid' },
-      { href: '/patterns/field-editor', label: 'Field editor' },
-      { href: '/patterns/goods-receipt', label: 'Goods receipt (RF scanner)' },
-      { href: '/patterns/detail-form', label: 'Multi-column detail form' },
       { href: '/patterns/value-help', label: 'Value help' },
-      { href: '/patterns/validation-summary', label: 'Validation summary' },
     ],
   },
   {
-    label: 'Patterns: review & approve',
+    label: 'Patterns: work one record',
+    items: [
+      { href: '/patterns/object-page', label: 'Object page' },
+      { href: '/patterns/record-detail', label: 'Record detail' },
+      { href: '/patterns/master-detail', label: 'Master-detail' },
+      { href: '/patterns/detail-form', label: 'Multi-column detail form' },
+    ],
+  },
+  {
+    label: 'Patterns: enter & correct data',
+    items: [
+      { href: '/patterns/editable-grid', label: 'Editable grid' },
+      { href: '/patterns/wizard', label: 'Multi-step wizard' },
+      { href: '/patterns/staging', label: 'Staging / batch result' },
+      { href: '/patterns/validation-summary', label: 'Validation summary' },
+      { href: '/patterns/field-editor', label: 'Field editor' },
+    ],
+  },
+  {
+    label: 'Patterns: decide & clear queues',
     items: [
       { href: '/patterns/approval', label: 'Approval workflow' },
       { href: '/patterns/bulk-actions', label: 'Bulk actions' },
-      { href: '/patterns/staging', label: 'Staging / batch result' },
-      { href: '/patterns/record-detail', label: 'Record detail' },
-      { href: '/patterns/object-page', label: 'Object page' },
-      { href: '/patterns/master-detail', label: 'Master-detail' },
-      { href: '/patterns/wizard', label: 'Multi-step wizard' },
     ],
   },
   {
-    label: 'Patterns: overview & shell',
+    label: 'Patterns: monitor & output',
     items: [
       { href: '/patterns/reporting-dashboard', label: 'Reporting dashboard' },
       { href: '/patterns/settings-admin', label: 'Settings & admin' },
-      { href: '/patterns/command-bar', label: 'Command bar' },
-      { href: '/patterns/app-launch', label: 'App launch' },
-      { href: '/patterns/login', label: 'Login' },
+    ],
+  },
+  {
+    label: 'Patterns: RF / rugged devices',
+    items: [
+      { href: '/patterns/goods-receipt', label: 'Goods receipt (RF scanner)' },
     ],
   },
   {

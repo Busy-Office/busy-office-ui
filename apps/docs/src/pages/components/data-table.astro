@@ -159,7 +159,7 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <p>Toolbar + sticky column + footer pagination + filter bar composed
     into a real invoice list — with its anatomy, data contract, states,
     and keyboard walkthrough — is
-    <a href={base + '/patterns/invoice-list'}>the invoice-list pattern</a>.
+    <a href={base + '/patterns/list-report'}>the list-report pattern</a>.
     This page documents the table itself; the pattern documents the
     screen.</p>
   </section>
@@ -267,7 +267,7 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
       <strong>Fifty visible columns is usually a symptom, and this page will say so
       rather than just prove it renders.</strong> Nobody reads fifty columns; they read
       the twelve their job needs. The ERP answer is a <em>column chooser</em> plus
-      <a href={base + '/patterns/invoice-list'}>saved views</a> — let each role pick its
+      <a href={base + '/patterns/list-report'}>saved views</a> — let each role pick its
       columns once and store the choice, so Purchasing sees prices and the warehouse sees
       bins. Ship the wide table as the <em>source</em> of those views, never as the
       default screen. If you genuinely need all fifty at once, that is a report or an
@@ -596,5 +596,5 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     initContextMenu();
   </script>
   <DsaScore component="data-table" />
-  <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/invoice-list", "Invoice-list pattern"], ["/patterns/editable-grid", "Editable grid pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
+  <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/list-report", "Invoice-list pattern"], ["/patterns/editable-grid", "Editable grid pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>

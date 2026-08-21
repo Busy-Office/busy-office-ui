@@ -113,8 +113,8 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
   <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
-      <li><strong>Selection</strong> <span class="bo-u-text-muted">(not in the demo above — see <a href={base + '/patterns/invoice-list'}>invoice-list</a> for the live checkboxes)</span> — row checkboxes carrying <code>name</code>/<code>value</code>, so the selection POSTs natively; <code>initDataTables()</code> keeps the count O(1) at scale.</li>
-      <li><strong>Toolbar action</strong> <span class="bo-u-text-muted">(same — see invoice-list)</span> — bulk buttons appear only when something is selected (<a href={base + '/components/table-toolbar'}>toolbar</a>).</li>
+      <li><strong>Selection</strong> <span class="bo-u-text-muted">(not in the demo above — see <a href={base + '/patterns/list-report'}>the list report</a> for the live checkboxes)</span> — row checkboxes carrying <code>name</code>/<code>value</code>, so the selection POSTs natively; <code>initDataTables()</code> keeps the count O(1) at scale.</li>
+      <li><strong>Toolbar action</strong> <span class="bo-u-text-muted">(same — see the list report)</span> — bulk buttons appear only when something is selected (<a href={base + '/components/table-toolbar'}>toolbar</a>).</li>
       <li><strong>Summary region</strong> — an empty container above the table that the response fills out of band.</li>
       <li><strong>Per-row result</strong> — the error state plus the reason, rendered by the same row template as everything else.</li>
     </ol>
@@ -238,7 +238,7 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
   </section>
 
   <Related links={[
-    ['/patterns/invoice-list', 'Invoice list'],
+    ['/patterns/list-report', 'Invoice list'],
     ['/components/table-toolbar', 'Toolbar & grid navigation'],
     ['/concepts/concurrency', 'Concurrency & conflicts'],
     ['/getting-started/htmx', 'Using with HTMX'],

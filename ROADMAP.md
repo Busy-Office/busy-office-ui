@@ -792,7 +792,7 @@ catalogue's own finding: it is 20 shipped + the 4 already-queued builds
 nothing new needed inventing; what was missing was seeing it as ONE
 catalogue in ERP vocabulary and job order.
 
-1. [ ] **109.1 — regroup the sidebar (and the 104.1 tile index) from 3
+1. [x] **109.1 — regroup the sidebar (and the 104.1 tile index) from 3
        groups to the catalogue's 5 job families**: Enter & find / Work one
        record / Enter & correct data / Decide & clear queues / Monitor,
        report & output. Fixes a real reader problem: "review & approve"
@@ -801,7 +801,7 @@ catalogue in ERP vocabulary and job order.
        groups match the catalogue; no URL changes; 104.1 inherits the
        grouping; check-page-shape/sidebar assertions still green; verified
        live both themes.
-2. [ ] **109.2 — rename `invoice-list` → `list-report` (industry name),
+2. [x] **109.2 — rename `invoice-list` → `list-report` (industry name),
        with redirect.** The page is and always was the generic list screen;
        the invoice is sample data. **Accept:** new slug, old URL redirects
        (the redirect-stub mechanism check-links already understands),
@@ -819,7 +819,7 @@ catalogue in ERP vocabulary and job order.
        into `detail-form`/`editable-grid` + redirect. Decided by evidence
        from 109.3, not taste. Refusing to fold is a valid outcome.
 
-5. [ ] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
+5. [x] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
        (owner follow-up, 2026-08-22: "pattern should not [be] specific,
        like PO or Invoice... should it be in DEMO?" — answered yes,
        catalogue addendum). A pattern is NAMED and FRAMED for its shape;
@@ -831,7 +831,7 @@ catalogue in ERP vocabulary and job order.
        tile index copy state shape names; no page beyond 109.2's rename
        needs touching.
 
-6. [ ] **109.6 — RF becomes a TRACK, not a group member** (owner
+6. [x] **109.6 — RF becomes a TRACK, not a group member** (owner
        follow-up, same message: "app patterns... should be separate from
        RF scanner (old browser, limit screen, usage is different)" —
        agreed on all three axes, which map to things that already exist:

@@ -25,6 +25,9 @@ export default defineConfig({
     '/tokens': `${base}/reference/tokens`,
     '/base/tokens': `${base}/reference/tokens`,
     '/patterns/keyboard-help': `${base}/reference/keyboard`,
+    // 109.2: shape-not-domain rename — the invoice was always sample data
+    // on the generic list screen; the industry name is List Report.
+    '/patterns/invoice-list': `${base}/patterns/list-report`,
     '/components/nav': `${base}/components/sidebar-nav`,
     '/primitives': `${base}/base/primitives`,
   },

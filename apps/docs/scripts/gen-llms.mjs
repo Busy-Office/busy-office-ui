@@ -99,7 +99,7 @@ for (const p of [
   'getting-started/htmx', 'getting-started/troubleshooting',
   'concepts/tokens', 'concepts/density', 'concepts/cascade',
   'concepts/js-behaviors', 'concepts/accessibility', 'concepts/theming',
-  'base/colors', 'reference/classes', 'patterns/invoice-list', 'patterns/approval',
+  'base/colors', 'reference/classes', 'patterns/list-report', 'patterns/approval',
 ]) out += `${site}/${p}/\n`;
 
 /* "Deliberately absent" — generated from DESIGN.md's canonical table (roadmap

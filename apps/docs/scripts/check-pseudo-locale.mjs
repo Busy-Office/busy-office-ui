@@ -32,7 +32,7 @@ const page = await browser.newPage();
 // pages someone thought of; these are the component/pattern families
 // where expansion actually bites, plus the two that already failed.
 const PAGES = [
-  '/components/data-table/', '/components/form/', '/patterns/invoice-list/',
+  '/components/data-table/', '/components/form/', '/patterns/list-report/',
   '/components/dashboard/', '/components/navbar/', '/patterns/approval/',
   '/reference/tokens/', '/components/kv/', '/components/segmented/',
   '/components/filters/', '/components/tabs/', '/components/stepper/',

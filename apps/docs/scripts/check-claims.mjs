@@ -115,7 +115,7 @@ check('"?" opens shortcuts, never while typing', whileTyping === false && otherw
 // never split, chrome disappears, badges print as outlines (NOT as
 // forced colour — that claim was wrong until 2026-08-17), and markers
 // keep the fill that carries their meaning.
-await visit('/patterns/invoice-list/', { media: 'print' });
+await visit('/patterns/list-report/', { media: 'print' });
 await new Promise((r) => setTimeout(r, 200));
 const print = await page.evaluate(() => {
   const g = (sel, prop) => { const el = document.querySelector(sel); return el ? getComputedStyle(el)[prop] : 'NO ELEMENT'; };
@@ -170,7 +170,7 @@ check('print: timeline markers keep their fill', marker.bg !== 'rgba(0, 0, 0, 0)
 
 // "Space on select-all toggles the page's rows and announces the count
 //  via the live region." — invoice-list step 2
-await visit('/patterns/invoice-list/');
+await visit('/patterns/list-report/');
 const selectAll = await page.evaluate(async () => {
   document.querySelector('.bo-data-table__select-all').focus();
   return { focused: document.activeElement.classList.contains('bo-data-table__select-all') };
@@ -221,7 +221,7 @@ check(
    the answer was native implicit submission, so what gets gated now is the
    mechanism itself. Fresh load: the assertions above leave selection and
    focus state behind, and this one depends on both. */
-await visit('/patterns/invoice-list/');
+await visit('/patterns/list-report/');
 const enterActs = await page.evaluate(() => {
   const form = document.getElementById('il-bulk');
   if (!form) return { error: 'no bulk form' };
@@ -924,7 +924,7 @@ check(
    detach from the screen again. */
 
 // The invoice list pages, and print drops the pager with the rest of the chrome.
-await visit('/patterns/invoice-list/', { width: 1440 });
+await visit('/patterns/list-report/', { width: 1440 });
 const pager = await page.evaluate(() => {
   const nav = document.querySelector('.bo-pagination');
   return {
@@ -940,7 +940,7 @@ check(
   JSON.stringify(pager),
 );
 
-await visit('/patterns/invoice-list/', { media: 'print' });
+await visit('/patterns/list-report/', { media: 'print' });
 await new Promise((r) => setTimeout(r, 200));
 const pagerPrint = await page.evaluate(() => {
   const nav = document.querySelector('.bo-pagination');

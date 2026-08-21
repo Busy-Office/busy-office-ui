@@ -31,7 +31,7 @@ const browser = await launchDocsBrowser();
 // Control-dense pages; the sweep is deliberately small because CI cost is tracked.
 const PAGES = [
   '/components/button/', '/components/form/', '/components/data-table/',
-  '/patterns/invoice-list/', '/components/pagination/', '/components/quantity/',
+  '/patterns/list-report/', '/components/pagination/', '/components/quantity/',
   '/patterns/editable-grid/',
 ];
 const DENSITIES = ['compact', 'comfortable', 'spacious'];

@@ -347,8 +347,16 @@ used to stop at "live demo + one caption" (owner docs review,
 6. **Components used** — linked badges + a complexity badge (1-4).
 
 Not gated but expected where they have something to say: keyboard
-walkthrough, print behaviour, scaling notes. `/patterns/invoice-list`
+walkthrough, print behaviour, scaling notes. `/patterns/list-report`
 is the exemplar.
+
+**A pattern is NAMED and FRAMED for its SHAPE; the domain appears only as
+demo data** (owner rule, 2026-08-22, Slice 109). `object-page` demoing
+PO-88213 is the model: generic name, generic anatomy, realistic PO as the
+demo so the screen looks credible. Never name a pattern for its sample
+domain (`invoice-list` was the one violation — renamed `list-report`), and
+never add per-domain demo variants ("the same pattern as an invoice") —
+that is re-photographing, which the coverage doctrine refuses.
 
 Write for a first-time user: plain verbs, one component / many settings, and note the
 two-channel cue wherever colour carries meaning.
