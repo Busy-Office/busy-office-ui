@@ -46,8 +46,11 @@
      bare list and only worked because postcss-nesting happened to emit an
      :is(); the safety now lives in the source, not the pipeline.)
      NOTE (a11y contract): CSS only covers the VISUALS. The message element
-     must carry an id referenced by the control's aria-describedby, and
-     role="alert" if it appears dynamically — see the form docs recipe. */
+     must carry an id referenced by the control's aria-describedby. Add
+     role="alert" ONLY if the message arrives after load (client validation,
+     an htmx swap). A server that re-renders the form with errors delivers
+     them as a page LOAD, so that case wires the message to the field and
+     moves focus to a summary instead — /concepts/accessibility#live-regions. */
   :is(
     .bo-form-field:has([aria-invalid="true"]),
     .bo-form-field:has(input:user-invalid, select:user-invalid, textarea:user-invalid)

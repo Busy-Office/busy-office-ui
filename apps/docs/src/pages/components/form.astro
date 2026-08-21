@@ -20,7 +20,7 @@ const fieldsRow = `<form class="bo-form-row" novalidate>
   <div class="bo-form-field">
     <label class="bo-form-field__label" for="cc">Cost center</label>
     <input class="bo-input bo-input--code" id="cc" required aria-invalid="true" aria-describedby="cc-error" value="CC-XXXX" />
-    <span class="bo-form-field__message" id="cc-error" role="alert">Unknown cost center code</span>
+    <span class="bo-form-field__message" id="cc-error">Unknown cost center code</span>
   </div>
   <div class="bo-form-field">
     <label class="bo-form-field__label" for="status">Status</label>
@@ -115,12 +115,14 @@ const fieldMarkup = `<div class="bo-form-field">
   <label class="bo-form-field__label" for="cc">Cost center</label>
   <input class="bo-input bo-input--code" id="cc" required
          aria-invalid="true" aria-describedby="cc-error" value="CC-XXXX" />
-  <span class="bo-form-field__message" id="cc-error" role="alert">
+  <span class="bo-form-field__message" id="cc-error">
     Unknown cost center code
   </span>
 </div>
-<!-- CSS shows the error visuals; aria-describedby + role="alert" make it
-     announced. Both halves are the contract, not just the :has() trick. -->`;
+<!-- CSS shows the error visuals; aria-invalid + aria-describedby are what
+     reach a screen reader. No role="alert": this markup came back from the
+     server, so it is present at LOAD and a live region announces nothing.
+     Both halves are the contract, not just the :has() trick. -->`;
 ---
 <Gallery title="Forms">
   <p class="demo-note">
@@ -134,8 +136,11 @@ const fieldMarkup = `<div class="bo-form-field">
     <p class="bo-u-text-muted">The error visuals are pure CSS
     (<code>:has()</code> on the field wrapper reads <code>aria-invalid</code>)
     — the ARIA half (<code>aria-invalid</code> +
-    <code>aria-describedby</code> + <code>role="alert"</code>) is what makes
-    the error announced. Both halves are the contract.</p>
+    <code>aria-describedby</code>) is what reaches a screen reader. Both
+    halves are the contract. This error is present at load, so it carries no
+    <code>role="alert"</code>: add one only when the message
+    <a href={base + '/concepts/accessibility#live-regions'}>arrives after
+    load</a>.</p>
   </section>
   <section class="demo">
     <h2>Required & disabled</h2>

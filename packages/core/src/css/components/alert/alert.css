@@ -1,7 +1,14 @@
 @layer bo-components {
-  /* Inline alerts and toasts. Announcement is the markup's job:
-     role="alert" for errors, role="status" (or aria-live="polite") for the
-     rest; the toast region carries aria-live so injected toasts announce. */
+  /* Inline alerts and toasts. Announcement is the markup's job, and ARRIVAL
+     decides it, not severity — this comment used to say "role=alert for
+     errors" full stop, which reads as a severity rule and was copied as one
+     into eight static demos (2026-08-21). An alert already in the HTML at
+     parse time has not changed, so a live region on it announces nothing and
+     interrupts where it does fire.
+       arrives after load? no  -> no role at all; the text carries the meaning
+       arrives after load? yes -> error: role="alert" / else: role="status"
+     The toast region carries aria-live so injected toasts announce. See
+     /concepts/accessibility#live-regions. */
   .bo-alert {
     --bo-alert-accent: var(--bo-color-accent);
     --bo-alert-bg: var(--bo-color-accent-subtle);

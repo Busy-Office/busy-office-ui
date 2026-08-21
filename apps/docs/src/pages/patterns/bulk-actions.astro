@@ -73,6 +73,11 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
 
   <section class="demo">
     <h2>The state after a partial failure</h2>
+    {/* KEEPS role="alert", deliberately. In a real screen this banner is the
+        RESULT of the user's action and arrives by swap — the hx-swap-oob
+        sample above is exactly this banner — so the role is what a consumer should copy. The
+        docs can only render the post-action state statically; that is a
+        limitation of the page, not of the markup. */}
     <div class="bo-alert bo-alert--warning" role="alert">
       <p><strong>2 approved, 2 could not be.</strong> The rows below carry the reason.</p>
     </div>

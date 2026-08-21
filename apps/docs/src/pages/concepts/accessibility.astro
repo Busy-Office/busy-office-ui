@@ -14,6 +14,22 @@ const forcedColors = Object.entries(api.components)
   .filter(([, v]) => v.forcedColors)
   .map(([name]) => ({ name, slug: api.pageSlug?.[name] ?? name }))
   .sort((a, b) => a.name.localeCompare(b.name));
+const liveRegions = `<!-- ARRIVES after load (htmx swap, fetch, client validation):
+     a live region is right. Severity picks WHICH one. -->
+<div class="bo-alert bo-alert--danger" role="alert">Posting failed.</div>
+<div class="bo-alert bo-alert--success" role="status">Saved.</div>
+
+<!-- PRESENT at load (server re-rendered the form after a failed POST):
+     no live region. Wire it to the field, and move focus to a summary. -->
+<div class="bo-form-field">
+  <label class="bo-label" for="cc">Cost center</label>
+  <input class="bo-input" id="cc" aria-invalid="true" aria-describedby="cc-err">
+  <span class="bo-form-field__message" id="cc-err">Unknown cost center code</span>
+</div>
+
+<!-- The one shape that is BOTH: present in the markup, hidden until it
+     applies. Unhiding it is the arrival, so the role is correct. -->
+<div class="bo-alert bo-alert--danger" data-validation-summary-box hidden role="alert">`;
 const twoChannel = `<!-- BOTH channels, every state signal: -->
 <li class="bo-timeline__step" data-state="rejected">
   <span class="bo-timeline__marker" aria-hidden="true">✕</span>   <!-- visible, non-color -->
@@ -37,6 +53,36 @@ const twoChannel = `<!-- BOTH channels, every state signal: -->
     "increase, worse," text; error rows pair a background tint with an inset border
     and expect a badge/message in the row; badges are decoration — the status
     <em>text</em> is the signal.</p>
+  </section>
+  <section class="demo" id="live-regions">
+    <h2>Live regions: arrival decides, severity only refines</h2>
+    <p>A live region announces <em>changes</em>. Content that is already in the
+    HTML when the page is parsed has not changed, so screen readers commonly do
+    not announce it — and where one does, it interrupts whatever the user was
+    reading. <strong>So the first question is never "how bad is this?" — it is
+    "was this here when the page loaded?"</strong></p>
+    <pre><code>{liveRegions}</code></pre>
+    <p>Two questions, asked in this order:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Does it arrive after load?</strong> No → no live region at all.
+      Yes → live region.</li>
+      <li><strong>Only then, how urgent?</strong> An error interrupts:
+      <code>role="alert"</code> (assertive). Anything else waits its turn:
+      <code>role="status"</code> (polite).</li>
+    </ol>
+    <p>This page states the rule because the framework used to carry
+    <strong>two</strong> of them. <code>alert.css</code> and the alerts page said
+    the role was picked by severity; <code>form-field.css</code> and the table
+    below said it was picked by arrival. Both were describing something real —
+    severity is the right answer to question 2 — but it was being used to answer
+    question 1, which is how eight static demos ended up shipping an assertive
+    live region for text that was never going to arrive.</p>
+    <p class="bo-u-text-muted">The ERP case that makes this matter: a server
+    re-renders a form with errors after a failed POST. The error genuinely is new
+    information, but it arrives as a <em>page load</em>, not a DOM mutation — so
+    the mechanism is focus management and a summary the user lands on, which is
+    what <a href={base + '/patterns/validation-summary'}>validation summary</a>
+    is for. Enforced by <code>check:live-regions</code>.</p>
   </section>
   <section class="demo">
     <h2>The framework's job vs yours</h2>

@@ -1095,7 +1095,7 @@ elements are present at page load and not hidden — `alerts`, `combobox`,
 `validation-summary`. Every one is a demo of an error state, so every one is
 an assertive live region that exists before the user has done anything.
 
-1. [ ] **97.1 — `role="alert"` on messages that are present at load.** An
+1. [x] **97.1 — `role="alert"` on messages that are present at load.** An
        assertive live region is for content that ARRIVES. Present at parse
        time it is unreliable (screen readers commonly do not announce regions
        that already exist when the page is read) and, where it does fire, it
@@ -1117,6 +1117,35 @@ an assertive live region that exists before the user has done anything.
        those that are genuinely injected; and the claim is executable — a
        check that fails if a `role="alert"` ships in the built HTML without
        either `hidden` or a documented exception.
+
+       **Done 2026-08-21. The cause was not eight slips — it was two rules.**
+       Four statements of the rule shipped and they disagreed in a specific
+       way: `alert.css` and the alerts page picked the role by **severity**
+       ("role=alert for errors"); `form-field.css` and the accessibility table
+       picked it by **arrival** ("if dynamic"). Severity is the right answer to
+       the *second* question — assertive or polite, once something does arrive
+       — and it was being used to answer the first. So this is recorded as a
+       reconciliation, not "two pages were wrong".
+
+       The rule now lives in one place,
+       `/concepts/accessibility#live-regions`: (1) does it arrive after load?
+       no → no live region at all; yes → (2) error → `role="alert"`, else
+       `role="status"`. All four statements point at it.
+
+       **Measured, built artifact: 10 `role="alert"` → 4; unhidden 8 → 2.**
+       Four field-level messages dropped the role (`aria-invalid` +
+       `aria-describedby` already reach a screen reader); the alerts severity
+       gallery and validation-summary's document-level strip dropped it; two
+       result banners KEEP it with the reason stated at the markup, because in
+       a real screen they arrive by swap and that is what a consumer copies.
+       `check:live-regions` is in the build chain, red-proved three ways
+       (unhidden alert on a non-exception page; a stale EXCEPTIONS entry; and a
+       control confirming a `<pre>` code sample is correctly ignored).
+
+       Swept for the same defect in the polite variant and found **none**: all
+       four unhidden `role="status"` are legitimate — two empty `copy-toast`
+       regions that exist before injection, two `aria-busy` skeletons. No
+       follow-up item, deliberately; there is nothing to queue.
 
 2. [ ] **97.2 — grill validation as ONE experience, not three surfaces.**
        The owner's ask is broader than the bug above. Validation currently

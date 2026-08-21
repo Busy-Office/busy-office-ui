@@ -4,7 +4,8 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
-const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exists,
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exists,
      so injected toasts are announced: -->
 <div class="bo-toast-region" role="status" aria-live="polite"></div>
 
@@ -17,7 +18,10 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
 ---
 <Gallery title="Alerts & toasts">
   <p class="demo-note">
-    Inline alerts use <code>role="alert"</code> (errors) or <code>role="status"</code>.
+    Inline alerts announce only what <em>arrives</em>: add
+    <code>role="alert"</code> (errors) or <code>role="status"</code> when the
+    alert is inserted after load, and <a href={base + '/concepts/accessibility#live-regions'}>no
+    role at all</a> when it is already in the HTML the browser parsed.
     Toasts are alerts injected into a persistent <code>aria-live</code> region — the
     region must exist before the first toast, or nothing is announced.
     <strong>Without the JS:</strong> everything above still works — the role,
@@ -27,16 +31,20 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
   </p>
   <section class="demo">
     <h2>Inline alerts</h2>
-    <div class="bo-alert" role="status">
+    {/* No live-region role on any of these four: this gallery shows what the
+        severities LOOK like, and they are all present at load. The announcing
+        case is demonstrated live by the toast section below, where the alert
+        is genuinely injected. */}
+    <div class="bo-alert">
       <div><span class="bo-alert__title">Heads up.</span> Approvals sync runs at 18:00.</div>
     </div>
-    <div class="bo-alert bo-alert--success" role="status">
+    <div class="bo-alert bo-alert--success">
       <div><span class="bo-alert__title">Saved.</span> All changes stored.</div>
     </div>
-    <div class="bo-alert bo-alert--warning" role="status">
+    <div class="bo-alert bo-alert--warning">
       <div><span class="bo-alert__title">Budget at 92%.</span> CC-4021 nears its limit.</div>
     </div>
-    <div class="bo-alert bo-alert--danger" role="alert">
+    <div class="bo-alert bo-alert--danger">
       <div><span class="bo-alert__title">Posting failed.</span> Period 2026-07 is closed.
         <a href="#">Open period settings</a></div>
       <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
@@ -49,7 +57,7 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
     <h2>Dismissible — the button is the whole API</h2>
     <p>The page said "dismiss buttons work via <code>initAlerts()</code>" and showed
     none. Here is one, live: click the × and this alert is removed from the DOM.</p>
-    <div class="bo-alert bo-alert--warning" role="status">
+    <div class="bo-alert bo-alert--warning">
       <strong class="bo-alert__title">Rate card expires in 3 days</strong>
       Renew it before the next billing run.
       <button class="bo-alert__dismiss" type="button" aria-label="Dismiss">×</button>
@@ -96,7 +104,7 @@ const toastMarkup = `<!-- Region ships in your layout ONCE, before any toast exi
   <ClassRef component="alert" />
   <ApiTable component="alert"
     js="Optional: initAlerts() — dismiss buttons remove their alert/toast (delegation covers injected toasts)."
-    notes={['Inline alerts: <code>role="alert"</code> for errors, <code>role="status"</code> otherwise.',
+    notes={['Arrival decides the role, not severity: none if the alert is present at load; <code>role="alert"</code> (errors) or <code>role="status"</code> (everything else) once it is inserted after load.',
             'The toast region must exist (with <code>aria-live</code>) BEFORE the first toast is injected.',
             'Toasts do not float above an open modal dialog (top layer).']} />
   <DsaScore component="alert" />

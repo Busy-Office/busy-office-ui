@@ -37,6 +37,11 @@ tint on the row:
 
   <section class="demo">
     <h2>The state after validation</h2>
+    {/* KEEPS role="alert", deliberately. In a real screen this banner is the
+        RESULT of POST /import action=validate (see the data contract below),
+        so it arrives after load and the role is what a consumer copies. The
+        docs can only render the post-action state statically; that is a
+        limitation of the page, not of the markup. */}
     <div class="bo-alert bo-alert--warning" role="alert">
       <p><strong>1 ready, 1 to check, 2 cannot import.</strong> Every row
       below says which it is and why.</p>
