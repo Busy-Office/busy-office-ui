@@ -1674,6 +1674,53 @@ check(
   JSON.stringify(mdClose),
 );
 
+/* /patterns/command-bar states two things the browser must actually do, and
+   the second is the reason the page exists in the shape it does.
+
+   1. The composed palette really does carry combobox's keyboard contract —
+      the whole basis for refusing a bo-command-bar component (roadmap 99.3).
+      If ArrowDown ever stops moving aria-activedescendant inside a modal
+      dialog, the refusal stops being justified and this page starts lying.
+   2. The hint strip is NOT overlapped by the result list. It was, when the
+      page was first written: the listbox is a [popover] in the top layer, so
+      it painted over a footer placed below the input. Geometry is the only
+      thing that can catch that — the markup looked perfectly correct. */
+await visit('/patterns/command-bar/');
+const palette = await page.evaluate(async () => {
+  const dlg = document.getElementById('cmd');
+  document.getElementById('cmd-open').click();
+  await new Promise((r) => setTimeout(r, 250));
+  const input = document.getElementById('cmd-input');
+  const listbox = document.getElementById('cmd-list');
+  input.focus();
+  input.value = 'po';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 250));
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+  await new Promise((r) => setTimeout(r, 200));
+  const hint = dlg.querySelector('.cmd-palette__hint');
+  const h = hint.getBoundingClientRect();
+  const l = listbox.getBoundingClientRect();
+  return {
+    open: dlg.open,
+    expanded: input.getAttribute('aria-expanded'),
+    active: input.getAttribute('aria-activedescendant'),
+    selected: !!dlg.querySelector('[role="option"][aria-selected="true"]'),
+    hintOverlapsList: !(h.top >= l.bottom || h.bottom <= l.top),
+    hintAboveInput: h.top < input.getBoundingClientRect().top,
+  };
+});
+check(
+  'command bar: ArrowDown moves aria-activedescendant inside the modal dialog',
+  palette.open && palette.expanded === 'true' && !!palette.active && palette.selected,
+  JSON.stringify(palette),
+);
+check(
+  'command bar: the keyboard hints are above the input and never covered by the popover listbox',
+  palette.hintAboveInput && palette.hintOverlapsList === false,
+  JSON.stringify(palette),
+);
+
 await browser.close();
 server.close();
 

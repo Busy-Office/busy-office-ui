@@ -1,0 +1,239 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const contract = `GET /command?q=pos            -> 200
+{
+  "groups": [
+    { "label": "Records", "items": [
+      { "id": "po-88213", "text": "PO-88213 — Umbrella Logistics", "href": "/po/88213" }
+    ]},
+    { "label": "Actions", "items": [
+      { "id": "act-post", "text": "Post period 2026-07", "href": "/period/post" }
+    ]}
+  ]
+}
+
+# Nothing matched: 200 with an EMPTY groups array, never a 404.
+# "No results" is a state of the screen, not an error of the request.
+
+# The user may not run it: omit the item. Never return an action that
+# 4xx's when chosen — see /concepts/permissions.`;
+
+const binding = `<!-- The shortcut is YOUR four lines, not a behavior: which key
+     the app owns is a page-level decision. -->
+<script type="module">
+  import { initCombobox } from '@busy-office/ui/js';
+  initCombobox();
+
+  const dlg = document.getElementById('cmd');
+  addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      dlg.open ? dlg.close() : dlg.showModal();
+    }
+  });
+  // Backdrop click closes — a native <dialog> does not do this for you.
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+</script>`;
+
+const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Command bar">
+  <!-- Hints ABOVE the input, not below: see "The listbox is a popover" -->
+  <div class="cmd-palette__hint">
+    <span><kbd class="bo-kbd">\u2191</kbd><kbd class="bo-kbd">\u2193</kbd> move</span>
+    <span><kbd class="bo-kbd">Enter</kbd> open</span>
+    <span><kbd class="bo-kbd">Esc</kbd> close</span>
+  </div>
+  <div class="bo-combobox">
+    <input class="bo-input" type="text" role="combobox" id="cmd-input"
+           aria-expanded="false" aria-controls="cmd-list" aria-autocomplete="list"
+           autocomplete="off" placeholder="Search records and actions…">
+    <ul class="bo-combobox__listbox" id="cmd-list" role="listbox" popover>
+      <li class="bo-combobox__option" role="option" id="cmd-1"
+          data-value="PO-88213">PO-88213 — Umbrella Logistics</li>
+      <!-- …one per result… -->
+    </ul>
+  </div>
+</dialog>
+
+<!-- Three declarations are all that separates a palette from a dialog: -->
+<style>
+  .cmd-palette { margin-block-start: 12vh; margin-inline: auto; overflow: hidden; }
+</style>`;
+---
+<Gallery title="Pattern: command bar">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: power users who know what they want — a
+    dispatcher jumping to PO-88213, a controller running "post period" —
+    without walking the menu. <strong>How often</strong>: dozens of times a
+    day, which is why it is keyboard-first and why the shortcut must never be
+    stolen from the browser. <strong>What "done" looks like</strong>: they
+    typed a few characters and the screen they wanted is open, hands never
+    leaving the keyboard.
+    <strong>Not a replacement for navigation</strong> — it rewards people who
+    already know the name of the thing. A first-time or occasional user needs
+    the visible structure of <a href={base + '/patterns/app-launch'}>app
+    launch</a>, and a user narrowing an unknown set needs
+    <a href={base + '/patterns/filter-panel'}>the filter panel</a>; a command
+    bar answers neither.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <p>This palette is <a href={base + '/components/dialog'}>dialog</a> +
+    <a href={base + '/components/combobox'}>combobox</a> +
+    <a href={base + '/components/kbd'}>kbd</a>, composed. The framework ships
+    no command-bar component and does not need one: of the palette CSS this
+    site runs, 7 of 10 declarations already exist in <code>.bo-dialog</code>,
+    and the keyboard contract is <code>combobox</code>'s in full.</p>
+    <button class="bo-btn bo-btn--secondary" type="button" id="cmd-open">
+      Open command bar
+    </button>
+    <p class="bo-u-text-muted">Opened by a button here, deliberately: this site
+    already binds <kbd class="bo-kbd">⌘K</kbd> to its own docs search. That
+    collision is the first thing to check in your own app — a command bar that
+    fights the host for a shortcut loses, silently.</p>
+    <dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Command bar">
+      <div class="cmd-palette__hint">
+        <span><kbd class="bo-kbd">↑</kbd><kbd class="bo-kbd">↓</kbd> move</span>
+        <span><kbd class="bo-kbd">Enter</kbd> open</span>
+        <span><kbd class="bo-kbd">Esc</kbd> close</span>
+      </div>
+      <div class="bo-combobox">
+        <input class="bo-input" type="text" role="combobox" id="cmd-input"
+               aria-expanded="false" aria-controls="cmd-list" aria-autocomplete="list"
+               autocomplete="off" placeholder="Search records and actions…" />
+        <ul class="bo-combobox__listbox" id="cmd-list" role="listbox" popover>
+          <li class="bo-combobox__option" role="option" id="cmd-1" data-value="PO-88213">PO-88213 — Umbrella Logistics</li>
+          <li class="bo-combobox__option" role="option" id="cmd-2" data-value="PO-88214">PO-88214 — Northwind Supply</li>
+          <li class="bo-combobox__option" role="option" id="cmd-3" data-value="INV-4471">INV-4471 — Umbrella Logistics</li>
+          <li class="bo-combobox__option" role="option" id="cmd-4" data-value="CC-4021">CC-4021 — Warehouse cost center</li>
+          <li class="bo-combobox__option" role="option" id="cmd-5" data-value="Post period">Post period 2026-07</li>
+          <li class="bo-combobox__option" role="option" id="cmd-6" data-value="Create purchase order">Create purchase order</li>
+          <li class="bo-combobox__option" role="option" id="cmd-7" data-value="Run reorder report">Run reorder report</li>
+        </ul>
+      </div>
+    </dialog>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Top-anchored dialog</strong> —
+      <a href={base + '/components/dialog'}>dialog</a>, in the top layer so it
+      escapes the app shell's overflow. Three extra declarations anchor it near
+      the top instead of centring it; that is the whole visual difference.</li>
+      <li><strong>Query input + result list</strong> —
+      <a href={base + '/components/combobox'}>combobox</a>, which carries the
+      entire keyboard and ARIA contract: <code>aria-expanded</code>,
+      <code>aria-activedescendant</code> moved by <kbd class="bo-kbd">↑</kbd>/<kbd class="bo-kbd">↓</kbd>,
+      <code>aria-selected</code> on the active option, Esc and click-outside
+      for free.</li>
+      <li><strong>Keyboard hint strip</strong> —
+      <a href={base + '/components/kbd'}>kbd</a>, <strong>above</strong> the
+      input. Render the shortcut per platform:
+      <kbd class="bo-kbd">⌘K</kbd> on Mac, <kbd class="bo-kbd">Ctrl K</kbd>
+      everywhere else, which for a back-office framework is the majority.</li>
+      <li><strong>The shortcut binding</strong> — your code, not a behavior.
+      Which key the app owns is a page-level decision.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <pre><code>{contract}</code></pre>
+    <p class="bo-u-text-muted">Group results by kind — records and actions
+    answer different questions and a flat list makes the user read every row to
+    tell them apart. Two rules do the heavy lifting: <strong>no matches is a
+    200 with an empty list</strong>, never a 404; and <strong>an action the
+    user may not run is omitted, not disabled</strong> — returning one that
+    4xx's when chosen teaches the user to distrust the bar.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The binding, and the failure rule</h2>
+    <pre><code>{binding}</code></pre>
+    <p class="bo-u-text-muted">The non-obvious rule, and the one worth copying:
+    <strong>if the result source cannot load, remove the trigger.</strong> A
+    command bar that opens onto an empty box is worse than no command bar — the
+    user types, nothing happens, and they cannot tell whether the search is
+    broken or the record does not exist. This site does exactly that: if the
+    search index fails to fetch, the button deletes itself.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The listbox is a popover — so nothing sits below it</h2>
+    <p>Combobox renders its listbox as a <code>[popover]</code> in the top
+    layer, which is what stops it being clipped by a scrolling ancestor. The
+    consequence only shows up once results appear: the list is painted over
+    whatever follows the input in the dialog. This page shipped a hint strip
+    below the input and <strong>measured it covered</strong> — footer at
+    y&nbsp;122–175, listbox at 126–284 — hidden at exactly the moment its
+    contents become useful.</p>
+    <p class="bo-u-text-muted">Removing <code>popover</code> is not the fix: it
+    is load-bearing. Measured with the attribute stripped, the list still
+    <em>renders</em>, but <code>aria-expanded</code> stays <code>false</code>,
+    no <code>aria-activedescendant</code> is set and nothing is
+    <code>aria-selected</code> — the whole keyboard contract goes silent while
+    the screen still looks correct. So put keyboard hints, counts, and any
+    footer <strong>above</strong> the input, and keep everything below it
+    empty.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">State</th><th scope="col">What the screen shows</th></tr></thead>
+        <tbody>
+          <tr><td>Empty query (just opened)</td><td>Recent records and the handful of actions this role runs daily — an empty palette wastes the trip. Never a blank box.</td></tr>
+          <tr><td>Typing, results found</td><td>Grouped by kind, most-likely group first. The active option carries <code>aria-selected</code>, so it is announced as the arrow keys move.</td></tr>
+          <tr><td>No matches</td><td>"No records or actions match <em>xyz</em>" <strong>inside</strong> the list region, plus what would help — most misses are a wrong prefix, so say which formats are searchable.</td></tr>
+          <tr><td>Slow source (&gt; ~200ms)</td><td>A busy state on the list region, not a spinner over the input — the user is still typing and must never be blocked. Keep the previous results visible underneath.</td></tr>
+          <tr><td>Source unavailable</td><td>The trigger is removed at load. See the failure rule above.</td></tr>
+          <tr><td>Permission</td><td>Actions the user cannot run are absent from the response, so this state never reaches the screen. That is the point of filtering server-side.</td></tr>
+          <tr><td>Shortcut already taken</td><td>The host owns the key. Detect it at build time, not by racing — and fall back to a visible trigger, which every user can find and no user needs told about.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span> —
+    one input, one list; the composition is the whole trick.</p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dialog'}>Dialog</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/combobox'}>Combobox</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kbd'}>Kbd</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <style>
+    /* The entire visual difference between a dialog and a palette. Kept on the
+       page, not in the framework: exactly one dialog in this tree is
+       top-anchored, and nothing ships for one screen. */
+    .cmd-palette { margin-block-start: 12vh; margin-inline: auto; overflow: visible; }
+    .cmd-palette__hint { display: flex; gap: var(--bo-space-4); font-size: var(--bo-font-size-xs); }
+  </style>
+  <script>
+    import { initCombobox } from '@busy-office/ui/js';
+    initCombobox();
+    const dlg = document.getElementById('cmd') as HTMLDialogElement | null;
+    document.getElementById('cmd-open')?.addEventListener('click', () => {
+      dlg?.showModal();
+      (document.getElementById('cmd-input') as HTMLInputElement | null)?.focus();
+    });
+    // Backdrop click closes — a native <dialog> does not do this for you.
+    dlg?.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  </script>
+
+  <Related links={[["/components/combobox", "Combobox"], ["/components/dialog", "Dialog"], ["/patterns/app-launch", "App launch"], ["/patterns/value-help", "Value help"]]} />
+</Gallery>

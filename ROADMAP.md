@@ -892,7 +892,25 @@ the question, and the owner's phrasing is the prompt to ask it.
 
        Remaining work split out below.
 
-3a. [ ] **99.3a — document `/patterns/command-bar` as a composition.**
+3a. [x] **99.3a — document `/patterns/command-bar` as a composition.**
+       Done 2026-08-21. Full pattern recipe, gated shape, wrong-choice clause
+       (patterns now 5 carrying). Two runtime claims added to `check:claims`
+       and both red-proved.
+
+       **The page found a real composition constraint by being rendered.**
+       `bo-combobox`'s listbox is a `[popover]` in the top layer, so the hint
+       strip placed below the input was painted over the moment results
+       appeared — measured, footer y 122-175 against listbox 126-284, hidden
+       exactly when its contents become useful. The markup looked correct;
+       only geometry showed it. Hints moved above the input, in both the demo
+       and the copyable sample, and the constraint is now a section of the
+       page rather than a silent trap.
+
+       Removing `popover` is NOT the workaround and the page says so with the
+       measurement: stripped, the list still renders while `aria-expanded`
+       stays `false`, no `aria-activedescendant` is set and nothing is
+       `aria-selected` — the contract goes silent while the screen still looks
+       right. That is also why the second claim exists.
        **Accept:** the pattern recipe in full (opener with who/how often/done
        + the wrong-choice clause; live screen; anatomy; data contract for the
        result sources; states incl. empty query, no matches, slow/async;
