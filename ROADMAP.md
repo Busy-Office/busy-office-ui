@@ -780,6 +780,43 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 106 — P0: leaving the docs shell for the landing page silently failed (2026-08-22)
+
+Owner report while dispatching a local Podman deploy: *"issue: navigation
+between landing page and docs."* Reproduced live before touching anything.
+
+**Root cause.** The docs shell boosts every link by default
+(`hx-boost="true"` on `<body>`, `hx-select="#main-content > *"`). The
+landing page (`/`) uses a completely different layout on purpose (its own
+navbar, no sidebar, no `#main-content` — the 30.5 precedent) and was never
+meant to be part of the boosted swap. Clicking the brand link or the
+version-snapshot banner's "Switch to the latest docs" link therefore
+boosted an AJAX request whose response had nothing matching
+`#main-content > *` to select — htmx still updated the URL and
+`<title>` (from the response), but left the CURRENT page's stale content on
+screen. A reader clicking "busy-office-ui" from any docs page saw the URL
+bar say `/` while the docs sidebar and the previous page's content stayed
+exactly as they were — indistinguishable from the click doing nothing.
+
+1. [x] **106.1 — both links to `/` opt out of boost.** **Done 2026-08-22.**
+       `hx-boost="false"` on the navbar brand link and the version-banner
+       link, same precedent already used for `#toc-nav`: a link leaving this
+       shell entirely should do a normal navigation, not rely on the
+       destination adopting a target id it has no reason to carry. Verified
+       live (real click, both plain and DOCS_BASE builds): URL, `<title>`,
+       AND rendered content (`main.landing` present, sidebar gone) all
+       agree after the click.
+2. [x] **106.2 — red-proved gate so this cannot regress silently.** Added a
+       landing-navigation probe to `check-boost.mjs` — the opposite
+       assertion of its existing PROBES (must find `boosted === false`, not
+       `true`) plus a content check. **Red-proved before trusting it**:
+       reverted the fix, watched the new probe fail with the exact message
+       a future regression would print, restored the fix, watched it pass.
+       Opportunistic same-file fix: `check-boost.mjs` carried the same dead
+       `docsRoot`-and-friends import pattern the sweep found and fixed in
+       `check-forced-colors.mjs` yesterday — removed here too (`join`,
+       `dirname`, `fileURLToPath` were never used by any live code path).
+
 ## Slice 105 — Standardize sweep findings deferred with reason (2026-08-21)
 
 From the counter-fired sweep (ultracode fan-out: 6 finders + 6 adversarial

@@ -244,7 +244,15 @@ const current =
             data-cmdk-open aria-label="Search the docs">
           <span class="bo-icon bo-icon--doc" aria-hidden="true"></span>
         </button>
-        <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
+        {/* hx-boost="false": this points at the landing page, which does NOT
+            use this layout — no #main-content, no sidebar, its own navbar.
+            Boosted, htmx's hx-select="#main-content > *" finds nothing in
+            the response to swap, so the URL/title update but the docs shell
+            stays on screen with stale content — reproduced live, 2026-08-22.
+            Same precedent as #toc-nav below: opt OUT of boost for a link
+            that leaves this shell entirely, don't rely on the destination
+            page adopting our target id. */}
+        <a class="bo-navbar__brand" href={base + '/'} hx-boost="false"><Logo />busy-office-ui</a>
         <label class="bo-choice" for="version"><span class="bo-visually-hidden">Docs version</span>
           <select class="bo-select" id="version" aria-label="Docs version">
             <option value={siteRoot + '/'} selected={currentSnapshot === null}>v{pkg.version} · latest</option>
@@ -257,7 +265,7 @@ const current =
         {currentSnapshot && (
           <p class="version-banner" role="note">
             You're reading the <strong>v{currentSnapshot}</strong> snapshot —
-            it does not update. <a href={siteRoot + '/'}>Switch to the latest docs</a>.
+            it does not update. <a href={siteRoot + '/'} hx-boost="false">Switch to the latest docs</a>.
           </p>
         )}
         <label class="bo-choice" for="density">Density

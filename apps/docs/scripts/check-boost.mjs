@@ -16,15 +16,11 @@
 // @heuristic — detects "inline layout styles" by pattern, so it can misread what an attribute is for.
 // OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
 import { assertScanned, selfTest } from './gate-report.mjs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { distPages } from './dist-pages.mjs';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
 import { DESKTOP_WIDTH } from './viewports.mjs';
-
-const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /* ---------- 1. static: no layout-bearing inline styles ---------- */
 // Astro's own tiny runtime styles are fine; LAYOUT rules are not.
@@ -118,6 +114,37 @@ for (const [path, selector, expected] of PROBES) {
     console.log(`FAIL boosted ${path} ${selector}: display=${got} (expected ${expected})`);
   }
 }
+/* ---------- 3. live: leaving the shell (docs -> landing) must be a REAL
+   navigation, not a broken boosted swap ---------- */
+// The landing page (/) uses a completely different layout — its own navbar,
+// no sidebar, no #main-content — so it was never a candidate for the boosted
+// swap every other in-shell link gets. hx-select="#main-content > *" found
+// nothing in the landing page's response to swap, so the URL and <title>
+// updated while the docs shell stayed on screen with STALE content —
+// reproduced live and fixed 2026-08-22 by giving both links to `/` an
+// explicit hx-boost="false". This probe is the opposite assertion of the
+// PROBES loop above: it must find boosted === false.
+await page.goto(`http://localhost:${port}${base}/components/button/`, { waitUntil: 'networkidle0' });
+await page.evaluate(() => { window.__boostMarker = true; });
+await page.click('.bo-navbar__brand');
+await page.waitForFunction(
+  () => location.pathname.replace(/\/$/, '') === '' || location.pathname === '/',
+  { timeout: 10000 },
+).catch(() => {});
+await page.waitForNetworkIdle({ idleTime: 300 }).catch(() => {});
+const landing = await page.evaluate(() => ({
+  boosted: window.__boostMarker === true,
+  landingRendered: !!document.querySelector('main.landing'),
+  sidebarGone: !document.querySelector('[data-navgroup]'),
+}));
+if (landing.boosted) {
+  liveFails++;
+  console.log('FAIL landing-nav: brand link was boosted — hx-boost="false" regressed, the docs shell will show stale content on arrival at "/"');
+} else if (!landing.landingRendered || !landing.sidebarGone) {
+  liveFails++;
+  console.log(`FAIL landing-nav: arrived at "/" but landing content did not render (landingRendered=${landing.landingRendered}, sidebarGone=${landing.sidebarGone})`);
+}
+
 await browser.close();
 server.close();
 
@@ -126,4 +153,4 @@ if (staticFails || liveFails) {
   process.exit(1);
 }
 assertScanned(scanned, 'built pages', 'dist has no pages — run the docs build first');
-console.log(`boost check passed — ${scanned} pages scanned for inline layout styles, ${PROBES.length} boosted probes rendered correctly`);
+console.log(`boost check passed — ${scanned} pages scanned for inline layout styles, ${PROBES.length} boosted probes rendered correctly, 1 landing-navigation probe confirmed unboosted`);
