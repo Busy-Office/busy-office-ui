@@ -1517,7 +1517,39 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        the scratchpad, not the repo — see 94.11 for why it is not a gate.
 
 
-5. [ ] **94.12 — `content` is scored against TWO different standards, and the
+5. [x] **94.12 — DONE 2026-08-21, and 94.10 supplied the tool that made it honest rather than a re-reading exercise. `content` is scored against TWO different standards
+       **Measured the disagreement instead of re-reading 28 pages by
+       judgement** — which is what produced two standards in the first place.
+       `check:wrong-choice` is the executable form of the definition, so the
+       question became simply: does each `content` score agree with the gate's
+       verdict on its page? **22 of 39 did not**, in both directions: 17 rows
+       scored 3 with no clause (the pre-94.7 population), and 5 scored 2 whose
+       pages had gained one, plus the 3 EXEMPT pages.
+
+       **The goalpost move is now on the record rather than hidden.** 94.7
+       defined this as "names a wrong-choice context" in prose; 94.10 made the
+       bolded clause the mandated form, because 34 of 40 pages had nothing and
+       a prose-only rule cannot be enforced. The definition says so in as many
+       words, so nobody has to reconstruct why a row that once passed now does
+       not.
+
+       **And it cannot drift a third time.** `check-dsa-scores` now asserts
+       the equivalence directly: `content: 3` if and only if the page carries
+       the clause or is EXEMPT. Red-proved by recreating 94.12's exact defect —
+       navbar scored 3 with no clause — which the gate names and exits 1 on.
+       The pleasing consequence is that the two records became one action:
+       writing a page's clause raises its score AND shrinks the gate's TODO.
+
+       **The gate caught my own bug while I was writing it.** The re-score
+       script `continue`d on EXEMPT pages before cleaning their `improve`
+       lists, so button/form/prose briefly scored 3 while still claiming a
+       content gap — exactly the shipped contradiction assertion 4 exists to
+       catch, caught this time before it left the machine.
+
+       Distribution: `{73%:1, 93%:10, 94%:11, 100%:17}`. `content` now reads
+       `{2: 22, 3: 17}` — the most discriminating dimension in the rubric, and
+       honestly so: 22 pages genuinely do not tell a reader when to use
+       something else. The remedy is 94.10's ratchet, not a re-score., and the
        file says 3 for both.** Found while feeding results back (37.3). 94.7
        sharpened `content` to "names a context where this is the WRONG choice",
        but **28 of the 39 rows were already scored** against the older implicit

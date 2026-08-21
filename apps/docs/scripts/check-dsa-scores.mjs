@@ -50,10 +50,21 @@ assertScanned(
    score written and never shown. */
 const pagesDir = new URL('../src/pages/components/', import.meta.url);
 const rendered = new Set();
+/** Kept in step with check-wrong-choice.mjs's own EXEMPT map. */
+const WRONG_CHOICE_EXEMPT = new Set(['button', 'form', 'prose']);
+const pageSlug = new Map();
+const openerHasClause = new Map();
 for (const f of await readdir(pagesDir)) {
   if (!f.endsWith('.astro')) continue;
   const src = await readFile(new URL(f, pagesDir), 'utf8');
-  for (const m of src.matchAll(/<DsaScore\s+component="([^"]+)"/g)) rendered.add(m[1]);
+  const slug = f.replace(/\.astro$/, '');
+  for (const m of src.matchAll(/<DsaScore\s+component="([^"]+)"/g)) {
+    rendered.add(m[1]);
+    pageSlug.set(m[1], slug);
+  }
+  const opener = /<p class="demo-note"[^>]*>([\s\S]*?)<\/p>/.exec(src)?.[1] ?? '';
+  openerHasClause.set(slug, [...opener.matchAll(/<strong>([\s\S]*?)<\/strong>/g)]
+    .some((m) => /^\s*(Not|Never|Do not|Don'?t)\b/.test(m[1].replace(/<[^>]+>/g, ''))));
 }
 
 for (const [name, entry] of components) {
@@ -104,6 +115,25 @@ for (const [name, entry] of components) {
     unqueued.length === 0,
     `below 3 with no "<dimension> — …" entry: ${unqueued.join(', ')}`,
   );
+
+  /* 4c. `content` and check:wrong-choice must agree. The score is a claim
+         about the same property the gate enforces, and 94.12 found them
+         holding TWO different standards at once: 22 of 39 rows disagreed
+         with the page, because 94.7 changed the definition without re-reading
+         what had been judged under the old one. Asserting the equivalence
+         here means that can only happen once. Writing a page's clause now
+         raises its score AND shrinks the gate's TODO — one action, and
+         neither record can quietly diverge from the other. */
+  const slug = pageSlug.get(name);
+  if (slug) {
+    const contentIs3 = dims.content?.score === 3;
+    const pageQualifies = WRONG_CHOICE_EXEMPT.has(slug) || openerHasClause.get(slug) === true;
+    g.check(
+      `${name}: content score agrees with check:wrong-choice`,
+      contentIs3 === pageQualifies,
+      `content=${dims.content?.score} but the opener ${pageQualifies ? 'DOES' : 'does NOT'} carry the required clause (/components/${slug})`,
+    );
+  }
 
   /* 5. A scored component renders its score somewhere. */
   g.check(`${name}: some page asks to render its score`, rendered.has(name), 'no page carries <DsaScore component="…" /> for it');

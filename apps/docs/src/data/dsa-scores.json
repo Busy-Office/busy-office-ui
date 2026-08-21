@@ -16,7 +16,7 @@
       "colour": "3 = zero raw colour outside @media print / forced-colors, and any state signal is two-channel. Below 3 = a raw colour on screen, or meaning carried by hue alone.",
       "spacing": "3 = dimensions come from space tokens, or an intrinsic literal carries a comment saying why it is intrinsic. NOTE: this is a DEBT MARKER, not a quality signal — it is satisfiable by the scorer writing the comment, and once written it stays 3 forever. Read it as \"has this file been through a scoring pass\", not as \"is this well spaced\".",
       "interaction": "3 = the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS; a component that ships NO behavior earns 3 by saying so. `na` only when there is no interaction surface at all. Below 3 = a behavior-backed component whose page never draws that line. Applied by READING all 14 behaviour-backed pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7. The three that failed (alert, combobox, tree-table) were fixed in 94.14; the dimension has demonstrated it can fail.",
-      "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. CAVEAT, recorded rather than hidden: this definition was written in 94.7, AFTER 28 of the 39 components had already been scored against an older implicit standard (meaning-not-mechanism, two-channel state). Those 28 rows have NOT been re-read against it — only batches 5-7 (11 components) and the six 94.8 fixed were judged by this wording. A `content: 3` on a pre-94.7 row therefore means \"passed the older standard\", and several plainly would not pass this one (navbar cites \"@media print drops it\", which names no wrong-choice context). Re-scoring them is part of 94.10.",
+      "content": "3 = the opener carries the wrong-choice clause the recipe requires — a <strong> clause beginning \"Not \"/\"Never \"/\"Do not\" naming a context where this component is the WRONG choice, plus the alternative. Below 3 = it does not. GOALPOST MOVED, deliberately and on the record: 94.7 defined this as \"names a wrong-choice context\" in prose, and 94.10 made the clause the mandated form because 34 of 40 pages had nothing and a prose-only rule could not be enforced. check:wrong-choice is the executable version of this definition, so the score and the gate agree by construction; check-dsa-scores asserts they cannot drift apart. EXEMPT pages (button, form, prose) score 3 — no wrong context exists for them.",
       "fit": "3 = the docs place the component in the contexts the field matrix assigns it, including where it does NOT belong. 0 = prescribed in no context at all. Fails today: date (deprecated, zero screens use it).",
       "$retired": "hierarchy — RETIRED 2026-08-21 (roadmap 94.9). It scored 3 on every one of the 25 components it applied to and never once varied, even after 94.7 narrowed it to `na` where a component presents fewer than two affordances. Retiring it loses nothing, which is the point: the property it named — at most one visually primary action — is measured where it actually means something, across whole SCREENS, by the design-grill baseline (roadmap 57.3, re-verified 63.2: 19 of 19 pattern screens, with wizard Next/Submit and master-detail Save-in-dialog recorded as the two legitimate exceptions). A component almost never presents two competing primaries because a component is not a screen. Do not re-add it without a component that fails it."
     }
@@ -42,14 +42,17 @@
           "cite": "native select + input; lossless reformat dispatches real input events so dirty-tracking composes"
         },
         "content": {
-          "score": 3,
-          "cite": "captions name meanings; the family-rule paragraph is the exemplar"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/money is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "docs name every context per the field matrix, incl. where the joined control does NOT belong (in-cell)"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "quantity": {
       "scored": "2026-08-21",
@@ -71,14 +74,17 @@
           "cite": "native type=number first (arrows/typing work JS-free); boundary sync is progressive enhancement"
         },
         "content": {
-          "score": 3,
-          "cite": "captions state meaning, incl. the unsuitable-context callout"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/quantity is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "matrix contexts named; steppers explicitly scoped to touch, not dense grids (80.2)"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "amount": {
       "scored": "2026-08-21",
@@ -129,14 +135,17 @@
           "cite": "selection works via :has() with zero JS; behaviors are opt-in; focus restored across htmx swaps; menus are native popover"
         },
         "content": {
-          "score": 3,
-          "cite": "row states carry badges/messages, never colour alone; captions name meanings"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/data-table is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "matrix table contexts correct incl. the split-column rule (88) and conditional tone; hover ring fixed 73.2"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "pagination": {
       "scored": "2026-08-21",
@@ -158,14 +167,17 @@
           "cite": "native <nav> + buttons/links; current page carries aria-current='page' per its own contract comment"
         },
         "content": {
-          "score": 3,
-          "cite": "page labels are meanings, not indices-as-mechanism"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/pagination is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "the documented answer at the scale where tables stop being scannable (/concepts/scale)"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "tree": {
       "scored": "2026-08-21",
@@ -187,14 +199,17 @@
           "cite": "native <details>/<summary> — open state, Enter/Space, Tab stops from the platform, zero JS/ARIA"
         },
         "content": {
-          "score": 3,
-          "cite": "aria-current active-node convention shared with sidebar-nav"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/tree is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "explicitly navigation, not an APG TreeView; its page states when the heavier pattern would be needed instead"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "tree-table": {
       "scored": "2026-08-21",
@@ -216,14 +231,17 @@
           "cite": "the opener states that indentation (data-tree-level) and open state (aria-expanded + hidden) are markup, so a server-rendered tree reads fine without the JS; initTreeTable() adds only the toggling (94.14)"
         },
         "content": {
-          "score": 3,
-          "cite": "expanded/collapsed state is programmatic + visible"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/tree-table is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "hierarchical rows in a data table; the ADR names the context where the heavier composite would be wrong"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "ordered-list": {
       "scored": "2026-08-21",
@@ -275,7 +293,7 @@
         },
         "content": {
           "score": 3,
-          "cite": "headings name meaning after Slice 86 ('Fields — label, hint, error'); the ARIA half is stated in prose, not only a code comment"
+          "cite": "the entry-context anchor the field matrix points at — the thing others are the wrong choice VERSUS; EXEMPT in check:wrong-choice"
         },
         "fit": {
           "score": 3,
@@ -303,14 +321,17 @@
           "cite": "the opener says this one does not degrade, it stops: Esc and light-dismiss are native to the [popover], but opening/filtering/selection are all initCombobox(), and it names the fallback — ship a <select> (94.14)"
         },
         "content": {
-          "score": 3,
-          "cite": "filtering semantics state exactly what the matcher does AND does not do (not token-based, not accent-folded), plus honest closes-on-scroll caveat"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/combobox is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "single-select by design; the page names the multi-select dropdown as the different job"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "filters": {
       "scored": "2026-08-21",
@@ -419,14 +440,17 @@
           "cite": "CHROME, not an engine (Slice 22 ADR): style a native contenteditable for the light case or mount a real editor inside __content — the consumer keeps the engine"
         },
         "content": {
-          "score": 3,
-          "cite": "documents that execCommand is DEPRECATED and that toolbar behaviour is consumer code — names a real limitation instead of hiding it"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/richtext is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "'ready, not coupled', the same stance as htmx; the page says when to mount a real editor instead"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "date": {
       "scored": "2026-08-21",
@@ -448,8 +472,8 @@
           "cite": "display-only; entry uses a native <input type=\"date\"> directly, so there is no interaction story to score"
         },
         "content": {
-          "score": 3,
-          "cite": "the page leads with the deprecation and shows the replacement before the component itself"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/date is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 0,
@@ -457,7 +481,8 @@
         }
       },
       "improve": [
-        "fit — removed at the next major; until then the page documents the .bo-cluster replacement (roadmap 45.3, CHANGELOG Deprecated)"
+        "fit — removed at the next major; until then the page documents the .bo-cluster replacement (roadmap 45.3, CHANGELOG Deprecated)",
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
       ]
     },
     "navbar": {
@@ -480,14 +505,17 @@
           "cite": "a container: it holds controls but introduces none of its own"
         },
         "content": {
-          "score": 3,
-          "cite": "@media print drops it — chrome does not belong on paper"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/navbar is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "the app top bar; po-app uses it at 3 sites (examples/po-app/server.mjs)"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "sidebar-nav": {
       "scored": "2026-08-21",
@@ -509,14 +537,17 @@
           "cite": "@container bo-shell collapse hides labels VISUALLY (clip-path), not display:none, so every link keeps its accessible name"
         },
         "content": {
-          "score": 3,
-          "cite": "the wrap-not-truncate rule cites the measured 15.7px spill it fixed (owner QA, 2026-08-17)"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/sidebar-nav is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "the shell rail; po-app uses it at 6 sites, and it composes inside .bo-offcanvas for the drawer pattern"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "breadcrumb": {
       "scored": "2026-08-21",
@@ -654,14 +685,17 @@
           "cite": "a decorative span; it introduces no interaction surface"
         },
         "content": {
-          "score": 3,
-          "cite": "names --bo-icon-src as THE mechanism and quantifies the refusal — 12 glyphs are 7,898 bytes (10.3% of the framework); 200 would add ~129 kB (40.1)"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/icon is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "12 ERP glyphs proving a mechanism, not a catalogue; 4 are deprecated with the data-URI replacement documented"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "alert": {
       "scored": "2026-08-21",
@@ -683,14 +717,17 @@
           "cite": "the opener draws the line outright — role, live region and styling are all markup, and initAlerts() adds DISMISSAL ONLY, so the ✕ is the single thing lost without it (94.14)"
         },
         "content": {
-          "score": 3,
-          "cite": "announcement is stated to be the markup’s job (role=\"alert\" vs role=\"status\"), and the top-layer limit is documented rather than glossed"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/alerts is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "inline alerts and toasts; the page names which role each case takes"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "skeleton": {
       "scored": "2026-08-21",
@@ -712,14 +749,17 @@
           "cite": "a static placeholder; it has no interaction surface"
         },
         "content": {
-          "score": 3,
-          "cite": "pairs with aria-busy as the programmatic channel, and the forced-colors rule states the failure it prevents — placeholders VANISH and the user sees blank space"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/state-patterns is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "loading state for a region whose shape is known; distinct from .bo-state’s empty/error"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "state": {
       "scored": "2026-08-21",
@@ -741,14 +781,17 @@
           "cite": "a layout for an empty/error state; the actions inside it are .bo-btn"
         },
         "content": {
-          "score": 3,
-          "cite": "the header states the two-channel contract in the source itself"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/state-patterns is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "the empty and error states every list and detail screen needs; distinct from .bo-skeleton’s loading"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "progress": {
       "scored": "2026-08-21",
@@ -770,14 +813,17 @@
           "cite": "a native <progress>; value/max semantics and the progressbar role come from the platform, and it is not interactive"
         },
         "content": {
-          "score": 3,
-          "cite": "states that colour is ONE channel and the text must say it too (\"93% consumed\"); records the po-app dogfood that produced it"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/progress is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "continuous progress; the source names .bo-stepper as the discrete-step alternative"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "stepper": {
       "scored": "2026-08-21",
@@ -799,14 +845,17 @@
           "cite": "an <ol> reporting position; the wizard’s controls live elsewhere"
         },
         "content": {
-          "score": 3,
-          "cite": "the wrap-not-truncate rule cites its measurement — 558px container, 4 steps, labels clipped by 2-4px (58.3) — and names what clipping costs: which step you are on"
+          "score": 2,
+          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/stepper is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
         },
         "fit": {
           "score": 3,
           "cite": "discrete named steps in a multi-step document; container-queried for narrow shells"
         }
-      }
+      },
+      "improve": [
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
+      ]
     },
     "approval-workflow": {
       "scored": "2026-08-21",
@@ -866,7 +915,7 @@
         }
       },
       "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
       ]
     },
     "byline": {
@@ -898,7 +947,7 @@
         }
       },
       "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
       ]
     },
     "badge": {
@@ -930,7 +979,7 @@
         }
       },
       "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
       ]
     },
     "kbd": {
@@ -953,17 +1002,14 @@
           "cite": "paints the native <kbd>; ships no behavior"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "the opener carries the required wrong-choice clause and links the alternative (94.10)"
         },
         "fit": {
           "score": 3,
           "cite": "shortcut hints in captions, help dialogs and empty states; one chip per physical key"
         }
-      },
-      "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
-      ]
+      }
     },
     "avatar": {
       "scored": "2026-08-21",
@@ -994,7 +1040,7 @@
         }
       },
       "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
       ]
     },
     "prose": {
@@ -1017,17 +1063,14 @@
           "cite": "display-only; the editor chrome is .bo-richtext"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "renders whatever stored rich text a server sends, so the choice is upstream of this class; EXEMPT in check:wrong-choice"
         },
         "fit": {
           "score": 3,
           "cite": "stored rich text wherever it is DISPLAYED — record detail, comments, print; split from richtext so display-only consumers skip the editor"
         }
-      },
-      "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
-      ]
+      }
     },
     "calendar": {
       "scored": "2026-08-21",
@@ -1058,7 +1101,7 @@
         }
       },
       "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
       ]
     },
     "button": {
@@ -1081,17 +1124,14 @@
           "cite": "a native <button>; the loading state is data-loading/aria-busy handled entirely in CSS, so it needs no behavior"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "the action primitive every other component defers to — there is no \"use X instead of a button\", so it is EXEMPT in check:wrong-choice rather than missing the clause"
         },
         "fit": {
           "score": 3,
           "cite": "the action primitive every other component defers to for its affordances"
         }
-      },
-      "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
-      ]
+      }
     },
     "dropdown": {
       "scored": "2026-08-21",
@@ -1113,17 +1153,14 @@
           "cite": "a native [popover] in the top layer — never clipped by a scrolling table container, never in a z-index fight with a sticky header; Esc and light dismiss come from the platform, initDropdowns only positions"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "the opener carries the required wrong-choice clause and links the alternative (94.10)"
         },
         "fit": {
           "score": 3,
           "cite": "row and toolbar menus; the page names the multi-select variant and the context-menu composition"
         }
-      },
-      "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
-      ]
+      }
     },
     "segmented": {
       "scored": "2026-08-21",
@@ -1174,17 +1211,14 @@
           "cite": "a static <dl>; values may contain controls but the component ships none"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "the opener carries the required wrong-choice clause and links the alternative (94.10)"
         },
         "fit": {
           "score": 3,
           "cite": "the record-header staple — labeled facts as a real description list, values as content (badges, <time>, links) rather than strings"
         }
-      },
-      "improve": [
-        "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
-      ]
+      }
     }
   }
 }
