@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-actions">Actions ▾</button>
 <div class="bo-dropdown__menu" id="row-actions" popover>
   <button class="bo-dropdown__item" type="button">Duplicate</button>
@@ -33,6 +34,10 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     z-index fight with sticky headers or frozen columns. Esc and light dismiss are
     native (and Esc closes the innermost layer first inside a dialog).
     <code>initDropdowns()</code> adds invoker anchoring and close-on-select.
+    <strong>Not for two or three options that should all be visible</strong> —
+    hiding a short, mutually exclusive choice behind a click costs a click and
+    hides the alternatives; that is
+    <a href={base + '/components/segmented'}>Segmented control</a>.
   </p>
   <section class="demo">
     <div class="bo-cluster">

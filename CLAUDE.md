@@ -78,6 +78,17 @@ To add or document a component manually:
      <Related links={[["/components/x","X"], …]} />
    </Gallery>
    ```
+   **The opener must say when NOT to use it.** One bolded clause —
+   `<strong>Not for …</strong>` / `Not when …` — naming a context where this
+   component is the wrong choice and linking the alternative. This is a
+   requirement, not a nicety: the DSA rubric's `content` dimension asks for
+   exactly this, and when two families were measured against it **10 of 11
+   pages had nothing** (roadmap 94.10) — a missing step in the recipe, not a
+   run of oversights. `check:wrong-choice` enforces the clause's presence;
+   what it *says* is your judgement. A component with genuinely no wrong
+   context goes in that gate's `EXEMPT` map **with a reason** — forcing a
+   sentence where none is true produces filler, which is worse than silence.
+
    **Demo-first, spec-last** (2026-08-16, docs-IA comparison against Tailwind/
    shadcn/Bootstrap/DaisyUI): `ClassRef` and `ApiTable` sit together at the
    END, right before `Related` — a first-time visitor sees what the thing

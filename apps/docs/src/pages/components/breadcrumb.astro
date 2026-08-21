@@ -22,6 +22,9 @@ const breadcrumbMarkup = `<nav aria-label="Breadcrumb">
     The path trail for deep ERP hierarchies — cost center → PO → line
     item. A landmark <code>&lt;nav&gt;</code> wrapping an ordered list,
     not styled links, so screen-reader users can jump straight to it.
+    <strong>Not for progress through a flow</strong> — a breadcrumb says where
+    this record sits in a hierarchy you can climb, not how far through a task
+    you are. That is <a href={base + '/components/stepper'}>Stepper</a>.
   </p>
 
   <section class="demo">

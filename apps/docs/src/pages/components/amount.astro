@@ -126,7 +126,9 @@ const markup = `<span class="bo-amount">
     <strong>your app formats the number</strong> (locale grouping, decimal precision,
     sign) and supplies the parts as markup — the component styles and aligns them, with
     tabular figures so every row lines up digit-for-digit. One component, driven by
-    settings.
+    settings. <strong>Not for capturing a value</strong> — this is display
+    only; entry is <a href={base + '/components/money'}>Money</a> for currency
+    or <a href={base + '/components/quantity'}>Quantity</a> for a count.
   </p>
 
   <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em> — and when it is neither a selectable currency nor a steppable count (a rate, a fixed-currency price, a percentage), a plain <code>.bo-input--numeric</code> is the whole answer: no fourth component, just the input modifier.</p>

@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
         aria-labelledby="approve-title" data-state="closed">
   <form method="dialog">
@@ -31,6 +32,10 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
     Native <code>&lt;dialog&gt;</code> + <code>initDialogs()</code>: browser handles
     backdrop, ESC, and focus return; the behavior adds trigger wiring, a Tab loop, and
     <code>data-state</code> for the enter animation.
+    <strong>Not for telling the user something</strong> — a modal takes the
+    screen and demands a decision, so it is for a choice that must be made
+    now. Report an outcome with an
+    <a href={base + '/components/alerts'}>alert or toast</a> instead.
   </p>
   <section class="demo">
     <button class="bo-btn" data-dialog-trigger="approve-dialog">Approve PO…</button>

@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const tabsMarkup = `<div class="bo-tabs">
   <div class="bo-tabs__list" role="tablist" aria-label="Purchase order">
     <button class="bo-tabs__tab" role="tab" id="t-details"
@@ -37,6 +38,11 @@ const verticalTabs = ['General','Addresses','Contacts','Payment terms','Bank det
     ARIA tabs pattern: CSS styles <code>aria-selected</code>, panels hide via the
     <code>hidden</code> attribute, <code>initTabs()</code> adds roving tabindex and
     arrow-key navigation with automatic activation.
+    <strong>Not for moving between pages</strong> — tabs swap panels within one
+    screen and keep the URL, so a browser Back that skips the whole screen is
+    the tell. Cross-screen movement belongs to
+    <a href={base + '/components/sidebar-nav'}>the sidebar</a> and
+    <a href={base + '/components/breadcrumb'}>Breadcrumb</a>.
   </p>
   <section class="demo">
     <div class="bo-tabs">

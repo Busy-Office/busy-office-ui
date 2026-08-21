@@ -29,6 +29,10 @@ const canonical = `<!-- Always on the native <kbd> element — the semantics com
     shortcut hints in captions, help dialogs, empty states. Em-sized, so
     it follows the text it sits in; case is preserved
     (<kbd class="bo-kbd">j</kbd> is not <kbd class="bo-kbd">J</kbd>).
+    <strong>Not for an on-screen control's label</strong> — <code>&lt;kbd&gt;</code>
+    means a key the user presses on their keyboard. Referring to a button in
+    the UI is just its name in text, and if you want it to look like the
+    control, that is a <a href={base + '/components/button'}>button</a>.
   </p>
 
   <section class="demo">

@@ -1432,7 +1432,45 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        acceptable is the current state:** six public pages showing 2/3 with no
        queued fix behind them.
 
-5. [ ] **94.10 — the wrong-choice guidance gap is systemic, not a one-off.**
+5. [x] **94.10 — DONE 2026-08-21. Its own escalation condition had been met, so the recipe changed rather than a third hand-written pass. the wrong-choice guidance gap is systemic, not a one-off.**
+       **The real scale, measured first:** of 40 component pages, **6** carried
+       a wrong-choice clause — exactly the six 94.8 wrote by hand. **34 did
+       not.** That is not a run of oversights, and writing 34 sentences by
+       hand would leave the next new page missing it again.
+
+       So the requirement moved into the recipe (`CLAUDE.md`) and is enforced
+       by a new gate, `check:wrong-choice`. The check is **exact, not a
+       judgement about prose**: the opener must carry a `<strong>` clause
+       beginning "Not " / "Never " / "Do not". A convention, mandated — which
+       earns its prescriptiveness twice, because a reader gets the boundary in
+       bold where they are already looking and a gate can see whether it is
+       there. What the clause *says* stays a human judgement.
+
+       **Two lists, and the difference is the point.** `TODO` is debt that
+       only shrinks; `EXEMPT` is a decision, each entry carrying its reason —
+       `button` (the primitive others are the wrong choice *versus*), `form`
+       (the entry-context anchor), `prose` (renders whatever the server
+       sends). Forcing a sentence where none is true produces filler, which is
+       worse than silence.
+
+       **Red-proved both ways**, because a ratchet has two failure modes: a
+       page outside both lists missing the clause (exit 1, names it), and a
+       page that GAINED the clause while still sitting in `TODO` — list rot,
+       which would quietly overstate the debt (exit 1, names it). Restored
+       byte-identical after each.
+
+       **The ratchet moved this wake: 6 → 14 carrying, 31 → 23 outstanding.**
+       Eight written where the wrong context was genuinely clear — dropdown→
+       segmented, segmented→select/combobox, kv→form, kbd→button, amount→
+       money/quantity, tabs→sidebar/breadcrumb, dialog→alert, breadcrumb→
+       stepper. Each verified in the BUILT output to carry both the clause and
+       a resolving link, and live in both themes.
+
+       Three of the eight — `dropdown`, `tabs`, `dialog` — had no `const base`
+       declaration, so the first build failed with "base is not defined". The
+       **same slip as `ordered-list` in 94.8**: assuming a convention holds
+       across pages instead of checking. Twice now, which makes it worth
+       naming rather than quietly fixing.
        94.8 wrote it for the six components 94.7 named, and I recorded there
        that `content`'s discriminating power was "spent until new components
        arrive". **That was wrong, and batch 5 is the correction**: on the

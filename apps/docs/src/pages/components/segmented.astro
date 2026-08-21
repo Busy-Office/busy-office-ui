@@ -51,6 +51,12 @@ const canonical = `<!-- A radiogroup, not styled buttons: keyboard arrow-navigat
     (<a href={base + '/concepts/accessibility'}>two-channel</a>: the filled segment is
     the visible signal, native <code>checked</code>/group semantics are the
     programmatic one) — zero JS.
+    <strong>Not past about five options, or when an option needs explaining</strong>
+    — the whole point is that every choice is visible at once, and a row that
+    wraps or gets truncated has lost it. Use a
+    <a href={base + '/components/form'}>select</a>, or
+    <a href={base + '/components/combobox'}>Combobox</a> when the list is long
+    enough to want filtering.
   </p>
 
   <section class="demo">

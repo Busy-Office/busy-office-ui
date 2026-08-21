@@ -42,6 +42,10 @@ const canonical = `<!-- A native description list: each fact is a <div>-wrapped 
     Terms · Total) as a real description list — not readonly inputs, not
     hand-rolled markup. One grid, responsive by construction; values are
     normal content, so badges and dates compose.
+    <strong>Not when the values are editable</strong> — a description list is a
+    read surface, and styling inputs to look like one hides that they are
+    editable. Use a <a href={base + '/components/form'}>form</a>, or the
+    seamless inline-edit pattern if the screen is read-mostly.
   </p>
 
   <section class="demo">
