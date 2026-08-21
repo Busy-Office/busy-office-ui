@@ -140,7 +140,15 @@ const fieldMarkup = `<div class="bo-form-field">
     halves are the contract. This error is present at load, so it carries no
     <code>role="alert"</code>: add one only when the message
     <a href={base + '/concepts/accessibility#live-regions'}>arrives after
-    load</a>.</p>
+    load</a>. <strong>What the message says</strong>: name the violated
+    constraint and include the datum the user needs to act — &ldquo;Unknown
+    cost center code&rdquo;, or the
+    <a href={base + '/patterns/editable-grid'}>editable grid</a>&rsquo;s
+    &ldquo;Exceeds on-hand (200)&rdquo; — never a bare &ldquo;Invalid
+    value&rdquo;. (Screen-level voices differ by design: the
+    <a href={base + '/patterns/validation-summary'}>validation summary</a>
+    opens with &ldquo;There is a problem&rdquo;, and document-level strips say
+    what is still possible — each stated on its own page.)</p>
   </section>
   <section class="demo">
     <h2>Required & disabled</h2>

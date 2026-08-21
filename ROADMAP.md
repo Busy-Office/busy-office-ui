@@ -1521,7 +1521,16 @@ an assertive live region that exists before the user has done anything.
        for it renders `href="#"` — the behavior builds `'#' + field.id` from
        an input that has `aria-label`/`aria-describedby` but no id).
 
-4. [ ] **97.4 — state the field-message wording rule once.** "Exceeds on-hand
+4. [x] **97.4 — state the field-message wording rule once.** **Done
+       2026-08-21.** Stated in the form page's Fields caption — the element's
+       home, directly beside the mechanism contract and 97.1's live-region
+       pointer: *name the violated constraint and include the datum the user
+       needs to act, never a bare "Invalid value"* — citing both shipped
+       examples ("Unknown cost center code" on the page itself, the grid's
+       "Exceeds on-hand (200)" linked), and noting the screen-level voices
+       (summary heading, document strip) differ by design with each stated on
+       its own page. Rendered exactly once, both links verified, plain +
+       DOCS_BASE builds green. Not a gate, per the item's own terms. "Exceeds on-hand
        (200)" and "Unknown cost center code" agree by example — a terse
        statement of the violated constraint carrying the datum needed to act —
        but no page states the rule, so the next message has nothing to follow.
