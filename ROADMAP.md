@@ -1407,7 +1407,19 @@ letting a gate print a cheerful zero and exit 0.
        via `{ skipRedirects: false }` — its documented job includes redirect
        stub destinations, after two live 404s from base-blind redirects.
 
-2. [ ] **103.2 — a gate over the gates, so this cannot regrow a third time.**
+2. [x] **103.2 — a gate over the gates, so this cannot regrow a third time.**
+       **Done 2026-08-22** (Standardize sweep, counter at 6/4 — and the
+       item had already earned its urgency: component-scores.mjs regrew a
+       private walker within days of 103.1, caught by the 2026-08-21 sweep).
+       `check-dist-walkers.mjs`: flags any docs script whose
+       readdir/opendir/glob argument mentions DIST or a quoted dist path,
+       comments blanked before matching (the 94.6b lesson). Classified
+       @heuristic honestly — ships --self-test with 5 cases including the
+       offender/chokepoint-caller distinction and the dist-only-in-a-comment
+       trap. Red-proved the real way: a temp offending script made the gate
+       exit 1 naming the file; removal returned exit 0. Wired into the build
+       chain right after check-selftests; check:selftests counts it (32
+       gates: 10 heuristic all self-tested, 22 exact).
        Extraction did not hold on its own: nothing stopped a new script from
        writing its own walker, and nothing noticed for three days. The
        chokepoint needs an enforcer, not a convention. **Accept:** a check that
