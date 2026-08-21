@@ -990,6 +990,28 @@ then documented — and refusing is an expected outcome.
        fixes queued individually. Where it overlaps 97.2, this grill supplies
        the measurement and 97.2 keeps the cross-surface verdict.
 
+3a. [ ] **102.7 — check the Data input / Forms family.** Owner ask,
+       2026-08-21. **The interesting part is that the rubric already cleared
+       it**: Slice 94 batch 2 scored these six components 95-100% and
+       triggered no grill. So this is not a re-score — re-running a measure
+       that returned "fine" will return "fine" again. The job is to ask what
+       the six dimensions **do not** measure.
+
+       Candidates, from what the rubric provably cannot see: whether the field
+       matrix matches how an ERP clerk actually fills a form (tab order
+       through a real row, not per-component focus rings); what happens on a
+       server round-trip with values kept and errors wired — the case 97.1
+       just proved the docs had been teaching wrongly; required-vs-optional
+       marking; units, currency and number entry under a non-English locale;
+       and what a genuinely long form does at 390px.
+
+       **Accept:** a report in `.roundtable/` that names, for each weakness,
+       whether the DSA rubric could ever have caught it — because a pattern of
+       "no" is itself a finding about the rubric, and feeds 101.3's stop rule.
+       Verdict per weakness: fix / accept-with-reason / refuse, fixes queued
+       individually. "The family is genuinely sound and here is what the score
+       missed anyway" is a valid outcome.
+
 4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"
        and asks for "the seven DSA dimensions". Both are false: **39 of 39
