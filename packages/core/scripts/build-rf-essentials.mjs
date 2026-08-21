@@ -42,26 +42,15 @@ const outCss = join(pkgRoot, 'dist/css');
 // The RF floor, not the main bundle's floor — the whole point of a
 // SEPARATE build target. and_chr tracks WebView's version directly.
 const RF_TARGET = ['chrome >= 108', 'and_chr >= 108'];
+import { RF_COMPONENTS } from './rf-components.mjs';
+
 const rfAutoprefixer = autoprefixer({ overrideBrowserslist: RF_TARGET });
 
 const base = [postcssImport(), postcssNesting(), postcssCustomMedia(), rfAutoprefixer];
 const pipeline = postcss(base);
 const pipelineMin = postcss([...base, cssnano({ preset: 'default' })]);
 
-const RF_COMPONENTS = [
-  'button/button',
-  'form/checkbox-radio',
-  'form/form-field',
-  'form/form-section',
-  'form/input',
-  'form/select',
-  'quantity/quantity',
-  'badge/badge',
-  'alert/alert',
-  'data-table/data-table',
-  'state/state',
-  'kv/kv',
-];
+
 
 const layers = `@import "${srcCss}/layers.css";\n`;
 const imports = [

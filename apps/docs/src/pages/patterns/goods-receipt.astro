@@ -2,6 +2,9 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import ScanToReceive from '../../components/ScanToReceive.astro';
+// Generated on every build from the array the profile is COMPILED from, so
+// this page and the shipped bundle cannot disagree (roadmap 95.1).
+import rfProfile from '../../data/rf-profile.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pattern: goods receipt (RF scanner)">
@@ -38,6 +41,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     used only on RF scanner / mobile / tablet" is actually demonstrated —
     the profile is what's separated (a build target), not the markup or the
     components.</p>
+    <p><strong>What is in the profile — all {rfProfile.count} of them.</strong>
+    Generated from the same array the bundle is compiled from, so this list
+    and what ships cannot disagree. Everything else in the framework is
+    deliberately absent: a scanner runs a few screens, so the profile carries
+    what those screens need and nothing more. A component missing from this
+    list is a scope statement, not a gap.</p>
+    <ul class="bo-cluster docs-list-bare">
+      {rfProfile.components.map((c) => <li><a href={base + c.href}><code>{c.name}</code></a></li>)}
+    </ul>
     <iframe
       src={base + '/patterns/rf/goods-receipt-rf/'}
       title="Goods receipt, rf-essentials profile, 360×640"

@@ -1115,7 +1115,49 @@ turn out to hinge on the same question: **is the number derived from a fact
 the repo already holds, or is it a new judgment?** 95.1 is the first; 95.2 is
 the second, and that is why they get different shapes.
 
-1. [ ] **95.1 — Device fitness: mobile / tablet / RF scanner, SURFACED not
+1. [x] **95.1 — PARTLY DONE 2026-08-21: the RF half shipped; the touch half is re-scoped and re-queued as 95.3, with the reason. Device fitness: mobile / tablet / RF scanner, SURFACED not
+       **The RF half — done, and the gap was worse than the item said.**
+       `rf-essentials` is named on four docs pages and **the list of what is
+       actually in it appeared on none of them**, so the owner's exact
+       question — *"just need components that required"* — could not be
+       answered from the docs at all. The profile has encoded that answer
+       since 59.2 and nobody could read it.
+
+       The 12-component list now renders on `/patterns/goods-receipt`, where
+       the profile is explained, **generated** from
+       `packages/core/scripts/rf-components.mjs` — extracted from
+       `build-rf-essentials.mjs` so one array both compiles the bundle and
+       renders the page. The line says a missing component is a scope
+       statement, not a gap, which is the owner's own framing.
+
+       **The single-source guarantee is red-proved, not asserted:** adding
+       `tree/tree` to the array moved the bundle to 13 components AND the page
+       data to 13; restoring returned both to 12.
+
+       **95.3 — the touch half, re-scoped and honest.** Accept originally said
+       touch status should come from `check:target-size`. Building it revealed
+       why that is not a simple wiring job: that gate measures **instances on
+       a page**, reporting things like `bo-tag-input__remove 16x16 (nearest
+       91px)`. Turning instance findings into a per-component verdict is an
+       inference across contexts, not a fact to surface. A source-scan
+       alternative was tried and abandoned in the same wake — it conflated
+       `em` sizes (which DO scale with density) with fixed ones, matched
+       non-interactive parts, and double-counted `form`'s five stylesheets.
+       **Accept for 95.3:** either make `check:target-size` emit its findings
+       as data and map class → component via `api.json` (stating that the
+       verdict is per instance, aggregated), or record that touch fitness is
+       a screen property rather than a component one and drop it. Do not ship
+       a per-component touch claim derived from a heuristic.
+
+       Two mistakes worth recording. An `import` placed AFTER a statement in
+       Astro frontmatter fails the build with three different misleading
+       errors ("Unexpected .", "Unterminated string literal", each pointing at
+       an unrelated line) — moving it up with the other imports fixed it. And
+       the list first shipped with `docs-list` instead of the established
+       `docs-list-bare`, so `<ul>` markers painted into the flex row and
+       collided with the text; **caught by looking at the render**, not by any
+       gate, and the correct composition was already in use on five pattern
+       pages.
        re-scored.** Owner: score components for mobile+tablet and for RF
        scanner, noting RF needs only the components a scanner function
        actually uses, not all of them.
