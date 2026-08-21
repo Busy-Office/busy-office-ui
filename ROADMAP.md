@@ -1131,6 +1131,36 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        the scratchpad, not the repo — see 94.11 for why it is not a gate.
 
 
+5. [ ] **94.12 — `content` is scored against TWO different standards, and the
+       file says 3 for both.** Found while feeding results back (37.3). 94.7
+       sharpened `content` to "names a context where this is the WRONG choice",
+       but **28 of the 39 rows were already scored** against the older implicit
+       standard (meaning-not-mechanism, two-channel state) and were never
+       re-read. Only batches 5-7 and the six 94.8 fixed were judged by the new
+       wording. So a pre-94.7 `content: 3` means "passed the older standard" —
+       and several plainly fail the current one: `navbar` cites "@media print
+       drops it", `pagination` "page labels are meanings, not indices",
+       `tree-table` "expanded/collapsed state is programmatic + visible". None
+       of those names a context where the component is the wrong choice.
+
+       This is exactly what **37.2 warned about in advance** — "correcting the
+       rubric after 55 rows are scored means scoring them twice" — and it
+       happened anyway, because 94.7 changed a definition without re-reading
+       what had already been judged by the old one. The caveat is now written
+       into `rubric.definitions.content` so the file stops implying one
+       standard.
+
+       **It also settles 94.10.** With ~20 more likely failures on top of the
+       10 already counted, the shortfall is roughly 30 of 39 — not a set of
+       page-level oversights but a missing step in the recipe. Write the
+       requirement into `CLAUDE.md`'s "How to document a component" and let
+       the pages follow, rather than hand-writing thirty sentences.
+
+       **Accept:** re-read all 28 pre-94.7 rows against the current definition
+       and re-score; every demotion carries a citation saying what the page
+       says instead. Do it in ONE pass, not per-family, so the file is never
+       again half-judged by a retired standard.
+
 5. [ ] **94.11 — should "every intrinsic literal carries its reason" be a
        GATE rather than a rubric dimension?** `spacing` has now discharged
        to 39/39 and measures nothing until someone adds an uncommented

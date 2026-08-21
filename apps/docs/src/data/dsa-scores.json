@@ -18,7 +18,7 @@
       "colour": "3 = zero raw colour outside @media print / forced-colors, and any state signal is two-channel. Below 3 = a raw colour on screen, or meaning carried by hue alone.",
       "spacing": "3 = dimensions come from space tokens, or an intrinsic literal carries a comment saying why it is intrinsic. NOTE: this is a DEBT MARKER, not a quality signal — it is satisfiable by the scorer writing the comment, and once written it stays 3 forever. Read it as \"has this file been through a scoring pass\", not as \"is this well spaced\".",
       "interaction": "3 = for a component shipping a behavior, the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS. `na` when the component ships no behavior. Below 3 = a behavior-backed component whose page never draws that line.",
-      "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. The six that failed when this definition was written (approval-workflow, file-upload, filters, offcanvas, ordered-list, tag-input) were fixed in 94.8; the dimension has demonstrated it can fail, and the citations quote the sentence that clears it.",
+      "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. CAVEAT, recorded rather than hidden: this definition was written in 94.7, AFTER 28 of the 39 components had already been scored against an older implicit standard (meaning-not-mechanism, two-channel state). Those 28 rows have NOT been re-read against it — only batches 5-7 (11 components) and the six 94.8 fixed were judged by this wording. A `content: 3` on a pre-94.7 row therefore means \"passed the older standard\", and several plainly would not pass this one (navbar cites \"@media print drops it\", which names no wrong-choice context). Re-scoring them is part of 94.10.",
       "fit": "3 = the docs place the component in the contexts the field matrix assigns it, including where it does NOT belong. 0 = prescribed in no context at all. Fails today: date (deprecated, zero screens use it)."
     }
   },
@@ -558,10 +558,7 @@
           "score": 3,
           "cite": "the app top bar; po-app uses it at 3 sites (examples/po-app/server.mjs)"
         }
-      },
-      "improve": [
-        "Comment the 3rem bar height (roadmap 94.6)"
-      ]
+      }
     },
     "sidebar-nav": {
       "scored": "2026-08-21",
@@ -594,10 +591,7 @@
           "score": 3,
           "cite": "the shell rail; po-app uses it at 6 sites, and it composes inside .bo-offcanvas for the drawer pattern"
         }
-      },
-      "improve": [
-        "Comment the 14rem/3.25rem rail widths (roadmap 94.6)"
-      ]
+      }
     },
     "breadcrumb": {
       "scored": "2026-08-21",
@@ -663,10 +657,7 @@
           "score": 3,
           "cite": "the drawer-nav pattern — a sidebar-nav inside it at phone width; used in 1 pattern screen"
         }
-      },
-      "improve": [
-        "Comment the 18rem panel width (roadmap 94.6)"
-      ]
+      }
     },
     "tabs": {
       "scored": "2026-08-21",
@@ -699,10 +690,7 @@
           "score": 3,
           "cite": "vertical variant is the ERP settings left-rail shape (36.1); used in 2 pattern screens"
         }
-      },
-      "improve": [
-        "Comment the 2.5rem fade distance (roadmap 94.6)"
-      ]
+      }
     },
     "dialog": {
       "scored": "2026-08-21",
@@ -735,10 +723,7 @@
           "score": 3,
           "cite": "the modal context; po-app uses it at 13 sites, the heaviest real usage in this family"
         }
-      },
-      "improve": [
-        "Comment the 32rem/56rem width caps (roadmap 94.6)"
-      ]
+      }
     },
     "icon": {
       "scored": "2026-08-21",
@@ -771,10 +756,7 @@
           "score": 3,
           "cite": "12 ERP glyphs proving a mechanism, not a catalogue; 4 are deprecated with the data-URI replacement documented"
         }
-      },
-      "improve": [
-        "Comment the -0.125em baseline nudge (roadmap 94.6)"
-      ]
+      }
     },
     "alert": {
       "scored": "2026-08-21",
