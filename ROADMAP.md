@@ -1430,15 +1430,31 @@ dragging earns its place beside a working button path:
   view columns are the plausible cases. Are any of them frequent enough, and
   painful enough with ↑↓, to justify the mechanism?
 
-1. [ ] **100.1 — grill the need before any code.** **Accept:** a report in
-       `.roundtable/` answering: which ERP task is actually slow with the
-       existing ↑↓ buttons (name the screen and the row count where dragging
-       wins); what the keyboard and screen-reader equivalents would have to be,
-       concretely; whether the touch/scroll conflict is solvable without a
-       drag handle; and the verdict — build / refuse / defer, with the reason.
-       **Refuse is a valid and expected outcome** given a working accessible
-       path already ships. If the verdict is build, it carries its own item
-       with the enhancement-not-replacement constraint written into Accept.
+1. [x] **100.1 — grill the need before any code.** **Done 2026-08-21. Verdict:
+       REFUSE.** Report: `.roundtable/grill-drag-drop-2026-08-21.md`. Checked
+       every plausible ERP reorder candidate against what actually ships:
+       line items add/remove only, no reorder at all; approval routes render
+       as `bo-timeline` — a fixed history, not a route being configured;
+       no saved-view/column-order screen exists. **The only reorderable
+       thing in the entire framework is `bo-ordered-list__actions`'s own
+       demo, at 3 items** — there is no screen and no row count where
+       dragging would win, because nothing reorderable at scale exists yet.
+       Keyboard/SR equivalent checked concretely: `aria-grabbed`/
+       `aria-dropeffect` (ARIA's own answer) were deprecated in ARIA 1.1 for
+       being unreliably implemented — zero hits in this codebase or any
+       dependency — so a real build would mean hand-rolling and permanently
+       maintaining a second interaction model (pick-up/move/drop + live
+       announcements) alongside the pointer one, for a cost the two-channel
+       rule already avoids: the existing ↑↓ buttons deliver the same end
+       state today. Touch/scroll conflict is solvable only by adding a
+       dedicated grab handle (`touch-action: none`, scoped) — confirmed
+       zero `touch-action` declarations exist anywhere in the shipped CSS,
+       so this problem has never been solved here even once. Recorded but
+       explicitly NOT queued: if "moving an item far" is ever a measured
+       pain, the cheaper fix is jump controls (move to top/bottom) added to
+       the existing `__actions`, not drag — inventing that fix now, with no
+       screen showing the pain, would repeat the same mistake as building
+       drag itself.
 
 ## Slice 98 — Standardize: the two wrong-choice gates were one rule, written twice (2026-08-21)
 
