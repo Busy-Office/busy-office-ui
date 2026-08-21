@@ -243,6 +243,35 @@ for one run, a detector that could not fail. It now requires the `process.argv`
 branch that actually runs one. Assume this failure mode applies to your check
 too, including the check you are writing to catch it.
 
+## Measure a predicate's base rate before you ship it as a gate
+
+A detector whose predicate is already true of everything cannot fail, and it
+will look exactly like a passing gate while doing so. Check the base rate
+first — if the property holds for 100% of the tree today, the gate is
+ceremony no matter how carefully it is written.
+
+Worked example (roadmap 94.11). The proposal was to gate "every intrinsic
+dimension literal carries its reason", with a rule allowing ONE comment to
+cover a group of sibling rules — `tree-table`'s eleven-level indent ladder
+should not need eleven copies of the same explanation. Expressed as *the
+nearest preceding comment covers the literal*, it was precise, and it scored
+**zero false positives** across all 43 component stylesheets.
+
+It was still worthless, and the red-proof is what showed it: injecting
+`letter-spacing: 7px` — a literal nothing in the file explains — into a rule
+that merely follows an unrelated comment, the detector still reported **0
+unexplained**. Measuring the base rate says why: **155 of 155 literals in the
+framework already have some comment somewhere above them.** The predicate is
+uniformly true, so it distinguishes nothing.
+
+The gap is not fixable by a better regex. **"A comment precedes this literal"
+is checkable; "a comment explains this literal" is semantic.** Where a
+property depends on what prose MEANS, a gate can enforce the *shape* that
+carries it — `check:wrong-choice` requires a `<strong>Not …</strong>` clause
+and says outright that what the clause says is a human call — but it cannot
+judge the content. Choose the shape, or keep the property in a rubric a human
+scores, and say which you did.
+
 ## A bulk edit is verified against the RENDERED artefact
 
 A regex over source is not a refactor. It is a bet that every match means the

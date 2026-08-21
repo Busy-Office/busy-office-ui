@@ -1613,7 +1613,37 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        says instead. Do it in ONE pass, not per-family, so the file is never
        again half-judged by a retired standard.
 
-5. [ ] **94.11 — should "every intrinsic literal carries its reason" be a
+5. [x] **94.11 — DONE 2026-08-21. Answer: NOT mechanically checkable, and the demonstration is the deliverable. should "every intrinsic literal carries its reason" be a
+       Accept required either a rule whose false-positive rate on today's tree
+       is zero, red-proved against a genuinely unexplained literal, or a record
+       that the property cannot be gated. Both halves were built and the second
+       won on evidence.
+
+       The rule was expressible: *the nearest preceding comment covers the
+       literal*, which is exactly the group semantics 94.11 asked for — one
+       comment for `tree-table`'s eleven-level ladder rather than eleven. It
+       scored **zero false positives across all 43 component stylesheets**.
+
+       **And it cannot fail.** Injecting `letter-spacing: 7px` — a literal
+       nothing in the file explains — into a rule that merely follows an
+       unrelated comment, the detector still reported **0 unexplained**. The
+       base rate says why: **155 of 155 literals in the framework already have
+       some comment somewhere above them**, so the predicate is uniformly true
+       and distinguishes nothing.
+
+       No regex closes that gap, because it is not a regex problem: *"a comment
+       precedes this literal"* is checkable, *"a comment explains this
+       literal"* is semantic. So `spacing` stays a rubric dimension, with its
+       definition's existing caveat standing — it is a debt marker that only
+       moves when a human re-scores, and that is now a known limit rather than
+       an unexamined one.
+
+       The general lesson is worth more than the item: **measure a predicate's
+       base rate before shipping it as a gate.** Recorded in `CLAUDE.md`
+       beside the heuristic-gate doctrine, with this as the worked example, and
+       contrasted with `check:wrong-choice` — which works precisely because it
+       gates the SHAPE that carries the meaning and says outright that the
+       meaning itself is a human call.
        GATE rather than a rubric dimension?** `spacing` has now discharged
        to 39/39 and measures nothing until someone adds an uncommented
        literal — at which point nothing catches it, because the rubric is
