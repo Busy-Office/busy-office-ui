@@ -805,7 +805,44 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        directions: a pattern page missing from the index, and an index tile
        whose page doesn't exist); tile copy is extraction, not authorship;
        zero new CSS classes; sidebar unchanged; verified live both themes,
-       1440 + 390.
+       1440 + 390. **Owner add-on (2026-08-21): the simple→complex
+       progression must be legible** — within each workflow group, tiles
+       order by complexity ascending (1 → 4), so each group reads as a
+       ladder whose first tile is its entry point. Derived from the same
+       extracted badge, so the ordering cannot drift from the pages.
+
+3. [ ] **104.3 — define the complexity scale, THEN audit the ladder**
+       (owner add-on, 2026-08-21: "ensure comprehensive patterns (simple to
+       complex)" — and the owner's follow-up grill of the distribution,
+       which found the ground truth missing). Counted this wake: all 20
+       pages carry exactly one badge (the 21st file, `rf/goods-receipt-rf`,
+       is a documented iframe fixture, gate-exempt); hand-typed distribution
+       1×4 / 2×7 / 3×8 / 4×1. **But the grill showed that number is a count
+       of opinions, not a property of screens:** the 1–4 scale is defined
+       nowhere (the page-shape gate only asserts a badge exists), and the
+       badge anti-correlates with every extractable measure — `approval` is
+       a 3 with the surface's MINIMUM component count (2, zero behavior
+       inits) while `login` is a 1 with three; `master-detail` and
+       `field-editor` (both 2) out-build five of the eight 3s on components
+       and inits. Plausibly the badge measures *conceptual* weight (approval
+       is a state machine with permissions), but nothing records that
+       intent, which is the 94.12 two-standards defect in the making.
+       **Accept, in order:** (a) a written definition of each level, each
+       anchored to an observable property and naming a page that sits there
+       and why — the 94.7 recipe; conceptual weight is admissible if the
+       definition says what observable earns it; (b) the 20 badges re-read
+       against the definition, corrections applied on the pages; (c) only
+       then the per-group ladder audit — entry rung and top rung per group,
+       every "missing rung" through the 99.4 front door (grill need first;
+       refusing is valid — "that's the component page's job, link it" fixes
+       index copy, not the pattern set). The provisional per-group reading
+       (capture & edit spans 2–4 with no rung-1; review & approve 1–3;
+       overview & shell 1–2) is recorded as INPUT to (c), not a finding —
+       it may flip under the definition. 101.4–101.7 count toward
+       comprehensiveness and are not re-litigated. 104.1's
+       order-by-complexity add-on inherits (b): the ordering is only as
+       good as the badge it extracts, so if 104.1 ships first it ships with
+       the badges as-are and re-sorts for free when (b) lands.
 
 2. [ ] **104.2 — preview images on the tiles. OWNER CALL after 104.1.**
        The proposal's honest fork: text+badges first (zero drift), vs
