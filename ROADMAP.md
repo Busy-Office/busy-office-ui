@@ -944,6 +944,52 @@ the question, and the owner's phrasing is the prompt to ask it.
        `check:wrong-choice` now requires. **Refusing a component is an
        expected outcome**, not a failure of the slice.
 
+## Slice 102 — owner wishlist: three grills (2026-08-21)
+
+Triaged mid-wake from the owner. All three are **reviews of surface that
+already ships**, not requests for new surface, so the Objective test is
+about depth rather than accept/refuse: none of them can fail §2 by adding
+a caveat list, and each is only worth doing if it produces a verdict a
+reader could act on. Ranked below in the order the owner listed them.
+
+The standing rule from 99.4 applies to all three: if a grill concludes
+something is missing, the *need* is grilled before any code, then scored,
+then documented — and refusing is an expected outcome.
+
+1. [ ] **102.1 — grill rich text: simple to advanced.** The component
+       documents one editor. The owner's framing ("simple to advance")
+       asks the question the page does not: what is the LADDER — a
+       read-only rendered block, a lightly-formatted note field, a full
+       editor with a toolbar — and which rung does an ERP screen actually
+       need where? **Accept:** a report in `.roundtable/` naming each rung,
+       what markup it costs, and which existing screens sit on which rung;
+       a verdict on whether the framework's single `richtext` covers the
+       ladder or hides a gap; and — the part that decides whether anything
+       ships — whether any missing rung composes from existing primitives.
+       A verdict of "one component covers all three rungs, here is the
+       proof" is a valid and preferred outcome.
+
+2. [ ] **102.2 — `/design-grill` on `/patterns/object-page`, comprehensive.**
+       The owner asks for depth here specifically, and 99.2 already settled
+       that object page is the long-record detail screen and must stay. So
+       this grill is not "should it exist" but "is it good": score it on the
+       six DSA dimensions with cited evidence like a component, then grill
+       the screen as a whole — anchor navigation, the sticky action bar,
+       what happens at 390px, print, and the states table. **Accept:** a
+       scored report with a verdict per weakness — fix / accept-with-reason
+       / refuse — and every "fix" queued as a numbered item with its own
+       Accept.
+
+3. [ ] **102.3 — `/design-grill` on `/patterns/editable-grid`.** The screen
+       the owner has now flagged twice (see 97.2, the validation-UX ask that
+       came with a screenshot of this page). Grill it as the hardest data
+       screen the framework ships: in-cell validation and whether the message
+       shifts rows while typing (measure it), keyboard traversal across a
+       row, what a partial save does, and how it degrades without JS.
+       **Accept:** same shape as 102.2 — scored, cited, verdict per weakness,
+       fixes queued individually. Where it overlaps 97.2, this grill supplies
+       the measurement and 97.2 keeps the cross-surface verdict.
+
 ## Slice 101 — Objective grill: the loop optimised what it could see (2026-08-21)
 
 Fired by the counter at 3/3 (slices 37, 94, 95). Full report:
