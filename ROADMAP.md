@@ -1148,7 +1148,17 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        read the component. `breadcrumb` is the proof it is achievable: zero
        raw dimension literals, 100%.
 
-4. [ ] **94.5 — the "not yet scored" line has never rendered on any page.**
+4. [x] **94.5 — CLOSED 2026-08-21, by making the branch REACHABLE rather than by wiring pages. The "not yet scored" line has never rendered on any page.**
+       With all 39 documented components now scored, the wiring fix this item
+       proposed is moot — there is no unscored component left to render the
+       line, so the branch would have been dead forever. Fixed upstream
+       instead: `new-component.mjs` stamps `<DsaScore>` into the scaffold and
+       `check-page-shape.mjs` now REQUIRES it, so the next component ships
+       with the section and shows the honest "not yet scored" line until
+       someone scores it. Red-proved: removed the call from `kbd.astro`,
+       confirmed the string was gone, watched the gate name it and exit 1,
+       restored byte-identical. (The exit code was checked separately —
+       `| tail` had been masking it.) Original text follows.
        Found while wiring `date`. `DsaScore.astro`'s else-branch is documented
        (93.1) as a deliberate judgment call: "an unscored component renders an
        honest 'not yet scored' line, not nothing — absence should read as 'not
@@ -5360,7 +5370,14 @@ every score must cite something checkable or it does not count.
        **Open for the owner before 37.2 runs:** the weights and the outcome set.
        Correcting the rubric after 55 rows are scored means scoring them twice.
 
-2. [ ] **37.2 — Score every component and pattern, in batches, with citations.**
+2. [x] **37.2 — COMPONENT SCORING COMPLETE 2026-08-21 (Slice 94, batches 1-7). Score every component and pattern, in batches, with citations.**
+       **39 of 39 documented components scored**, each with seven cited
+       dimensions rendered on its own page. Distribution
+       `{80%:3, 83%:1, 87%:1, 90%:1, 93%:5, 94%:1, 95%:8, 100%:19}`. The
+       PATTERN half of this item is not done — 19 pattern screens remain
+       unscored, and whether the same seven dimensions even fit a screen
+       rather than a component is an open question, not an assumption.
+       Original text follows.
        Roughly 8-10 per round so each gets real attention. Every row carries its
        four scores, the citation behind each, and one of four outcomes:
        **keep** · **improve** (queue a specific item) · **merge** (into which,

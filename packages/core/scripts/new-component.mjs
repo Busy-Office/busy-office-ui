@@ -134,6 +134,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const example = \`<div class="bo-${name}">TODO</div>\`;
 const canonical = \`<div class="bo-${name}">
@@ -154,6 +155,7 @@ const canonical = \`<div class="bo-${name}">
   </section>
   <ClassRef component="${name}" />
   <ApiTable component="${name}" notes={[]} />
+  <DsaScore component="${name}" />
   <Related links={[["/reference/classes", "Class index"]]} />
 </Gallery>
 `,

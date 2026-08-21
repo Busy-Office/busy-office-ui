@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const variants = `<button class="bo-btn">Primary</button>
@@ -71,5 +72,6 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
             'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.']} />
+  <DsaScore component="button" />
   <Related links={[["/concepts/tokens", "Design tokens"], ["/base/colors", "Color scales"]]} />
 </Gallery>

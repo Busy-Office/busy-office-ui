@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import DsaScore from '../../components/DsaScore.astro';
 const ddMarkup = `<button class="bo-btn bo-btn--secondary" popovertarget="row-actions">Actions ▾</button>
 <div class="bo-dropdown__menu" id="row-actions" popover>
   <button class="bo-dropdown__item" type="button">Duplicate</button>
@@ -103,5 +104,6 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
       'The menu is a native <code>[popover]</code>: never clipped by scroll containers, never z-fought by sticky headers; Esc and light dismiss are native.',
       'Multi-select: add <code>data-multiselect</code> to the menu and use real <code>&lt;input type="checkbox"&gt;</code> items (wrapped in a <code>&lt;label&gt;</code>, not a button). Same <code>initDropdowns()</code> call — no separate init function.',
     ]} />
+  <DsaScore component="dropdown" />
   <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>

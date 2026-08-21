@@ -67,6 +67,15 @@ for (const d of dirs) {
     [new RegExp(`<ClassRef\\s+component="${d.name}"`), `<ClassRef component="${d.name}" />`],
     [/<section\s+class="demo"/, 'at least one hand-authored <section class="demo"> block'],
     [new RegExp(`<ApiTable[\\s\\S]{0,40}?component="${d.name}"`), `<ApiTable component="${d.name}" ... />`],
+    /* Required so DsaScore's "not yet scored" branch is reachable BY
+       CONSTRUCTION. It had never rendered on any page (roadmap 94.5): the
+       component was only ever added to a page at the moment that component
+       got scored, so absence read as "this page forgot", never as "not done
+       yet" — which is the opposite of the judgment 93.1 recorded. With every
+       component now scored the branch would have been dead forever; requiring
+       the section here means the next component ships with it and shows the
+       honest line until someone scores it. */
+    [new RegExp(`<DsaScore\\s+component="${d.name}"`), `<DsaScore component="${d.name}" />`],
     [/<Related[\s\S]{0,10}?links=\{\[\s*\[/, 'a <Related> footer with at least one link'],
   ];
   for (const [re, desc] of checks) {

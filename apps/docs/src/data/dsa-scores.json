@@ -1225,6 +1225,147 @@
       "improve": [
         "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
       ]
+    },
+    "button": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "this is the component that SETS the rule: one plain .bo-btn per screen, everything else takes --secondary/--ghost/--danger-ghost"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-font-size-xs on --sm; no raw font-size anywhere"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour; variants are local custom props over semantic tokens"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "the single literal, --sm’s 1.5rem height, carries its reason in the comment directly above it — it is the WCAG target floor, and the height stays a min-height"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "a native <button>; the loading state is data-loading/aria-busy handled entirely in CSS, so it needs no behavior"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the action primitive every other component defers to for its affordances"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "dropdown": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "menu items are not styled as actions; the trigger carries whatever emphasis its context calls for"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "its one dimension literal carries its reason"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "a native [popover] in the top layer — never clipped by a scrolling table container, never in a z-index fight with a sticky header; Esc and light dismiss come from the platform, initDropdowns only positions"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "row and toolbar menus; the page names the multi-select variant and the context-menu composition"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
+    },
+    "segmented": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": 3,
+          "cite": "a toggle group between peers; no option is styled as primary"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-density-font-size; no raw font-size"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour"
+        },
+        "spacing": {
+          "score": 2,
+          "cite": "the 4px inset in calc(var(--bo-density-control-height) - 4px) is uncommented — it is the track/option gap and reads as intrinsic, but nothing says so"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "a real <input type=\"radio\"> per option sharing one name, so mutual exclusivity, arrow-key navigation and group semantics all come from the platform rather than JS"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the opener names the boundary and the alternative: the button-group answer to a SELECT, for 2-5 options when every one should be visible at once"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "2-5 mutually exclusive views; the page cross-names tabs and filters as the neighbouring shapes"
+        }
+      }
+    },
+    "kv": {
+      "scored": "2026-08-21",
+      "dimensions": {
+        "hierarchy": {
+          "score": "na",
+          "cite": "a description list; introduces no affordance of its own (94.7)"
+        },
+        "typography": {
+          "score": 3,
+          "cite": "--bo-font-size-xs on dt; the 0.04em letter-spacing is intrinsic, same basis as form and combobox"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "grid gaps from space tokens; no uncommented dimension literal"
+        },
+        "interaction": {
+          "score": "na",
+          "cite": "a static <dl>; values may contain controls but the component ships none"
+        },
+        "content": {
+          "score": 2,
+          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "the record-header staple — labeled facts as a real description list, values as content (badges, <time>, links) rather than strings"
+        }
+      },
+      "improve": [
+        "Name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
+      ]
     }
   }
 }
