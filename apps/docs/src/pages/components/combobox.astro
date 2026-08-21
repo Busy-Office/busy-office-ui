@@ -191,6 +191,12 @@ const asyncMarkup = [
     well, without the overhead of asking "which of these N do I want" up front. For
     picking <strong>several</strong> values, use the
     <a href={base + '/components/dropdown'}>multi-select dropdown</a> instead — different job.
+    <strong>Without the JS:</strong> this one does not degrade — it stops. The
+    listbox is a <code>[popover]</code>, so Esc and light-dismiss are native,
+    but opening, filtering and selection are all
+    <code>initCombobox()</code>'s, and without it you have a text input beside
+    a list that never opens. If you cannot run the behavior, ship a
+    <code>&lt;select&gt;</code>.
   </p>
 
   <section class="demo">

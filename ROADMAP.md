@@ -1312,7 +1312,29 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        second time this concern has been raised and the first time it had
        enough rows to be measured rather than argued.
 
-5. [ ] **94.14 — three behaviour-backed pages never say what the JS adds.**
+5. [x] **94.14 — DONE 2026-08-21. three behaviour-backed pages never say what the JS adds.**
+       Each sentence was written from the behavior's own source, not from the
+       page, so it says what the JS actually does:
+
+       - **`alert`** — `initAlerts()` is **dismissal only** (document-level
+         delegation over `.bo-alert__dismiss`). So the role, the live region
+         and the styling are all markup, and the ✕ is the single thing lost.
+         Injecting toasts was always consumer code.
+       - **`combobox`** — this one does not degrade, it *stops*, and the page
+         now says so plainly. Esc and light-dismiss are native to the
+         `[popover]`, but opening, filtering and selection are all
+         `initCombobox()`. It names the fallback too: ship a `<select>`.
+       - **`tree-table`** — indentation is `data-tree-level` and open state is
+         `aria-expanded` + `hidden`, both markup, so a server-rendered tree is
+         fully readable without the JS; `initTreeTable()` adds only the
+         toggling, and the disclosure buttons are what go inert.
+
+       All three re-score to `interaction: 3`, so the dimension now reads 3 on
+       all 21 it applies to. It has demonstrated it can fail (94.9 found these
+       by reading all fourteen), which is what keeps it credible now that it
+       is clean — the same standing that `colour` has.
+
+       Verified against the BUILT output and live in both themes.
        Named by 94.9, which read all 14 rather than grepping them (an earlier
        regex was wrong on 4 of 7). A reader of these three cannot tell what
        they lose by not running the behavior:

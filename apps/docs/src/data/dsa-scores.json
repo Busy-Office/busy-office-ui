@@ -15,7 +15,7 @@
       "typography": "3 = no raw font-size; sizes come from the type scale or a density alias. Below 3 = a raw size off the scale. Fails today: amount (two 0.875em affixes), data-table (0.9em __col--code).",
       "colour": "3 = zero raw colour outside @media print / forced-colors, and any state signal is two-channel. Below 3 = a raw colour on screen, or meaning carried by hue alone.",
       "spacing": "3 = dimensions come from space tokens, or an intrinsic literal carries a comment saying why it is intrinsic. NOTE: this is a DEBT MARKER, not a quality signal — it is satisfiable by the scorer writing the comment, and once written it stays 3 forever. Read it as \"has this file been through a scoring pass\", not as \"is this well spaced\".",
-      "interaction": "3 = the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS; a component that ships NO behavior earns 3 by saying so (the platform does all of it). `na` only when there is no interaction surface at all. Below 3 = a behavior-backed component whose page never draws that line. Applied by READING all 14 behaviour-backed pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7. Fails today: alert, combobox, tree-table.",
+      "interaction": "3 = the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS; a component that ships NO behavior earns 3 by saying so. `na` only when there is no interaction surface at all. Below 3 = a behavior-backed component whose page never draws that line. Applied by READING all 14 behaviour-backed pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7. The three that failed (alert, combobox, tree-table) were fixed in 94.14; the dimension has demonstrated it can fail.",
       "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. CAVEAT, recorded rather than hidden: this definition was written in 94.7, AFTER 28 of the 39 components had already been scored against an older implicit standard (meaning-not-mechanism, two-channel state). Those 28 rows have NOT been re-read against it — only batches 5-7 (11 components) and the six 94.8 fixed were judged by this wording. A `content: 3` on a pre-94.7 row therefore means \"passed the older standard\", and several plainly would not pass this one (navbar cites \"@media print drops it\", which names no wrong-choice context). Re-scoring them is part of 94.10.",
       "fit": "3 = the docs place the component in the contexts the field matrix assigns it, including where it does NOT belong. 0 = prescribed in no context at all. Fails today: date (deprecated, zero screens use it).",
       "$retired": "hierarchy — RETIRED 2026-08-21 (roadmap 94.9). It scored 3 on every one of the 25 components it applied to and never once varied, even after 94.7 narrowed it to `na` where a component presents fewer than two affordances. Retiring it loses nothing, which is the point: the property it named — at most one visually primary action — is measured where it actually means something, across whole SCREENS, by the design-grill baseline (roadmap 57.3, re-verified 63.2: 19 of 19 pattern screens, with wizard Next/Submit and master-detail Save-in-dialog recorded as the two legitimate exceptions). A component almost never presents two competing primaries because a component is not a screen. Do not re-add it without a component that fails it."
@@ -218,8 +218,8 @@
           "cite": "1.5em disclosure box states why it is one line-box tall, and __spacer cites it (94.2)"
         },
         "interaction": {
-          "score": 2,
-          "cite": "server-rendered collapse is documented, but not what initTreeTable() itself adds — a reader cannot tell whether expand/collapse works without it (94.9; fix is 94.14)"
+          "score": 3,
+          "cite": "the opener states that indentation (data-tree-level) and open state (aria-expanded + hidden) are markup, so a server-rendered tree reads fine without the JS; initTreeTable() adds only the toggling (94.14)"
         },
         "content": {
           "score": 3,
@@ -229,10 +229,7 @@
           "score": 3,
           "cite": "hierarchical rows in a data table; the ADR names the context where the heavier composite would be wrong"
         }
-      },
-      "improve": [
-        "interaction — state what the platform provides versus what the behavior adds, so a reader knows what they lose without the JS (roadmap 94.14)"
-      ]
+      }
     },
     "ordered-list": {
       "scored": "2026-08-21",
@@ -308,8 +305,8 @@
           "cite": "12rem min / 16rem max listbox sizing states what each bound protects (94.2)"
         },
         "interaction": {
-          "score": 2,
-          "cite": "nothing states what remains without initCombobox() — a text input beside a list that never opens or filters. The no-JS phrases on the page are about the CONSUMER reading events, not about the behavior being absent (94.9; fix is 94.14)"
+          "score": 3,
+          "cite": "the opener says this one does not degrade, it stops: Esc and light-dismiss are native to the [popover], but opening/filtering/selection are all initCombobox(), and it names the fallback — ship a <select> (94.14)"
         },
         "content": {
           "score": 3,
@@ -319,10 +316,7 @@
           "score": 3,
           "cite": "single-select by design; the page names the multi-select dropdown as the different job"
         }
-      },
-      "improve": [
-        "interaction — state what the platform provides versus what the behavior adds, so a reader knows what they lose without the JS (roadmap 94.14)"
-      ]
+      }
     },
     "filters": {
       "scored": "2026-08-21",
@@ -691,8 +685,8 @@
           "cite": "the 3px accent bar and the 24rem toast measure both carry their reason (94.6b)"
         },
         "interaction": {
-          "score": 2,
-          "cite": "the page never draws the platform/behavior line: inline alerts need no JS at all, toasts cannot work without the injecting script, and a reader is told neither (94.9; fix is 94.14)"
+          "score": 3,
+          "cite": "the opener draws the line outright — role, live region and styling are all markup, and initAlerts() adds DISMISSAL ONLY, so the ✕ is the single thing lost without it (94.14)"
         },
         "content": {
           "score": 3,
@@ -702,10 +696,7 @@
           "score": 3,
           "cite": "inline alerts and toasts; the page names which role each case takes"
         }
-      },
-      "improve": [
-        "interaction — state what the platform provides versus what the behavior adds, so a reader knows what they lose without the JS (roadmap 94.14)"
-      ]
+      }
     },
     "skeleton": {
       "scored": "2026-08-21",

@@ -70,6 +70,12 @@ const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
     readers keep native table browse mode. For hierarchy
     <em>navigation</em> (links, no columns) use
     <a href={base + '/components/tree'}>Tree</a> instead.
+    <strong>Without the JS:</strong> the table renders exactly as the server
+    sent it — indentation comes from <code>data-tree-level</code> and the
+    open/closed state from <code>aria-expanded</code> plus
+    <code>hidden</code>, both markup. <code>initTreeTable()</code> adds only
+    the toggling, so a server-rendered tree is fully readable without it;
+    the disclosure buttons are what go inert.
   </p>
 
   <section class="demo">
