@@ -1074,7 +1074,34 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        Cheap per page, and it is the kind of guidance a first-time user needs
        most — the six are currently silent on it.
 
-5. [ ] **94.9 — finish `interaction`, and decide `hierarchy`'s fate.** Read
+5. [x] **94.9 — DONE 2026-08-21. `interaction` kept and now discriminates; `hierarchy` RETIRED. finish `interaction`, and decide `hierarchy`'s fate.**
+       **`interaction` — read, not grepped, exactly as this item required.**
+       All 14 behaviour-backed pages judged by hand against 94.7's wording.
+       Eleven draw the platform/behavior line, several of them well:
+       `file-upload` ("the platform's own picker, keyboard access and native
+       drag-drop come free; the framework styles it and adds one small opt-in
+       behavior"), `tabs`, `quantity`, `data-table` ("zero JS"), and `money`,
+       whose sentence exists because Slice 79 found this same gap there.
+       **Three fail — `alert`, `combobox`, `tree-table`** — re-scored to 2 and
+       queued as 94.14. The definition also now says what a behavior-LESS
+       component earns: 3 for saying the platform does all of it, not `na`.
+       `na` is reserved for no interaction surface at all.
+
+       **`hierarchy` — retired, and retiring it loses nothing.** It scored 3
+       on every one of the 25 components it applied to and never varied, even
+       after 94.7 narrowed it to `na` where a component has fewer than two
+       affordances. The reason is structural rather than accidental: **a
+       component is not a screen**, and almost no component presents two
+       affordances competing for primacy. The property it named is already
+       measured where it means something — 57.3's design-grill baseline,
+       re-verified in 63.2, covers all 19 pattern SCREENS at ≤1 visually
+       primary action with the two legitimate exceptions named. So the rubric
+       drops from seven dimensions to six, denominators shrink, and the
+       retirement note in `rubric.definitions.$retired` says not to re-add it
+       without a component that fails it.
+
+       Distribution after both changes:
+       `{80%:1, 87%:4, 93%:4, 94%:7, 100%:23}`. Read
        all 13 behaviour-backed pages against 94.7's sharpened `interaction`
        definition and re-score (the regex is not trustworthy here — it was
        wrong on 4 of 7). For `hierarchy`: it is now `na` where it is vacuous
@@ -1113,6 +1140,31 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        Values: 17 components), so they are not scored twice. Note this is the
        second time this concern has been raised and the first time it had
        enough rows to be measured rather than argued.
+
+5. [ ] **94.14 — three behaviour-backed pages never say what the JS adds.**
+       Named by 94.9, which read all 14 rather than grepping them (an earlier
+       regex was wrong on 4 of 7). A reader of these three cannot tell what
+       they lose by not running the behavior:
+
+       - **`alert`** — inline alerts need no JS at all; toasts cannot work
+         without the injecting script. The page draws neither line.
+       - **`combobox`** — nothing states what remains without
+         `initCombobox()`: a text input beside a list that never opens or
+         filters. The page's no-JS phrases are about the CONSUMER reading
+         events, which is a different subject.
+       - **`tree-table`** — server-rendered collapse is documented, but not
+         what `initTreeTable()` itself adds, so whether expand/collapse works
+         without it is unanswered.
+
+       `money` is the model to copy, and it exists because Slice 79 found the
+       same gap there: *"The JS is optional, not required. Without
+       `initMoneyField()` the two controls still work — precision just doesn't
+       follow the currency automatically."* One sentence, and the reader knows
+       exactly what the behavior buys.
+
+       **Accept:** each of the three gains that sentence, naming what the
+       platform does and what the behavior adds; each re-scores to
+       `interaction: 3` with a citation quoting it.
 
 5. [ ] **94.13 — the six raw font-sizes, and whether the type scale is
        missing a step.** Created by 37.3, which found that `typography`'s six

@@ -2,7 +2,6 @@
   "$comment": "Design-System Alignment scores (roadmap 92.3). SOURCE OF TRUTH for what renders on component pages — never hand-type a score into a page. Each dimension is 0-3 with a checkable citation; `na` leaves the denominator. Full reasoning lives in .roundtable/scorecard-*.md; this file carries what the docs display. Re-take a score when a component's design changes, and update `scored` to that date.",
   "rubric": {
     "dimensions": [
-      "hierarchy",
       "typography",
       "colour",
       "spacing",
@@ -13,23 +12,19 @@
     "reference": "/concepts/design-language",
     "definitions": {
       "$comment": "What earns 3 on each dimension, and what a FAILURE looks like (roadmap 94.7). Written because three dimensions had scored 3 on 28 of 28 components — a value that never varies is not a measurement. Each definition names a component in this repo that scores below 3, so the dimension is known to be capable of failing.",
-      "hierarchy": "3 = no two affordances compete for primacy. `na` when the component presents fewer than two affordances — ranking one thing against nothing is vacuous, which is exactly why this read 3 on 28 of 28 before 94.7.",
       "typography": "3 = no raw font-size; sizes come from the type scale or a density alias. Below 3 = a raw size off the scale. Fails today: amount (two 0.875em affixes), data-table (0.9em __col--code).",
       "colour": "3 = zero raw colour outside @media print / forced-colors, and any state signal is two-channel. Below 3 = a raw colour on screen, or meaning carried by hue alone.",
       "spacing": "3 = dimensions come from space tokens, or an intrinsic literal carries a comment saying why it is intrinsic. NOTE: this is a DEBT MARKER, not a quality signal — it is satisfiable by the scorer writing the comment, and once written it stays 3 forever. Read it as \"has this file been through a scoring pass\", not as \"is this well spaced\".",
-      "interaction": "3 = for a component shipping a behavior, the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS. `na` when the component ships no behavior. Below 3 = a behavior-backed component whose page never draws that line.",
+      "interaction": "3 = the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS; a component that ships NO behavior earns 3 by saying so (the platform does all of it). `na` only when there is no interaction surface at all. Below 3 = a behavior-backed component whose page never draws that line. Applied by READING all 14 behaviour-backed pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7. Fails today: alert, combobox, tree-table.",
       "content": "3 = the page names at least one context where this component is the WRONG choice, and what to use instead. Below 3 = the page says only what the component is and how to use it. CAVEAT, recorded rather than hidden: this definition was written in 94.7, AFTER 28 of the 39 components had already been scored against an older implicit standard (meaning-not-mechanism, two-channel state). Those 28 rows have NOT been re-read against it — only batches 5-7 (11 components) and the six 94.8 fixed were judged by this wording. A `content: 3` on a pre-94.7 row therefore means \"passed the older standard\", and several plainly would not pass this one (navbar cites \"@media print drops it\", which names no wrong-choice context). Re-scoring them is part of 94.10.",
-      "fit": "3 = the docs place the component in the contexts the field matrix assigns it, including where it does NOT belong. 0 = prescribed in no context at all. Fails today: date (deprecated, zero screens use it)."
+      "fit": "3 = the docs place the component in the contexts the field matrix assigns it, including where it does NOT belong. 0 = prescribed in no context at all. Fails today: date (deprecated, zero screens use it).",
+      "$retired": "hierarchy — RETIRED 2026-08-21 (roadmap 94.9). It scored 3 on every one of the 25 components it applied to and never once varied, even after 94.7 narrowed it to `na` where a component presents fewer than two affordances. Retiring it loses nothing, which is the point: the property it named — at most one visually primary action — is measured where it actually means something, across whole SCREENS, by the design-grill baseline (roadmap 57.3, re-verified 63.2: 19 of 19 pattern screens, with wizard Next/Submit and master-detail Save-in-dialog recorded as the two legitimate exceptions). A component almost never presents two competing primaries because a component is not a screen. Do not re-add it without a component that fails it."
     }
   },
   "components": {
     "money": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "no primary-styled control; demos hold ≤1 primary action"
-        },
         "typography": {
           "score": 3,
           "cite": "font-size only via --bo-density-font-size (inherited from .bo-input)"
@@ -59,10 +54,6 @@
     "quantity": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "steppers are --secondary with tabindex=-1; no primary affordance introduced"
-        },
         "typography": {
           "score": 3,
           "cite": "sizes from density tokens; tabular figures on the input (77.1)"
@@ -92,10 +83,6 @@
     "amount": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 2,
           "cite": "two raw 0.875em affix sizes in amount.css — functional, but not a token step"
@@ -128,10 +115,6 @@
     "data-table": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn across the page's 14 demos (grepped); bulk actions are --secondary"
-        },
         "typography": {
           "score": 2,
           "cite": "one raw 0.9em on __col--code (data-table.css:244) — not a token step; the 0.03em letter-spacing is intrinsically typographic"
@@ -164,10 +147,6 @@
     "pagination": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn in its demos"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size in pagination.css"
@@ -197,10 +176,6 @@
     "tree": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn; disclosures are not affordance-competing"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -230,10 +205,6 @@
     "tree-table": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn; disclosure buttons are row controls"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -247,8 +218,8 @@
           "cite": "1.5em disclosure box states why it is one line-box tall, and __spacer cites it (94.2)"
         },
         "interaction": {
-          "score": 3,
-          "cite": "plain table + disclosure buttons, deliberately NOT role=treegrid — ADR recorded (adr-tree-table-2026-08-16.md) so native browse mode wins"
+          "score": 2,
+          "cite": "server-rendered collapse is documented, but not what initTreeTable() itself adds — a reader cannot tell whether expand/collapse works without it (94.9; fix is 94.14)"
         },
         "content": {
           "score": 3,
@@ -258,15 +229,14 @@
           "score": 3,
           "cite": "hierarchical rows in a data table; the ADR names the context where the heavier composite would be wrong"
         }
-      }
+      },
+      "improve": [
+        "interaction — state what the platform provides versus what the behavior adds, so a reader knows what they lose without the JS (roadmap 94.14)"
+      ]
     },
     "ordered-list": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -296,10 +266,6 @@
     "form": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "exactly one primary .bo-btn on the page — the action bar's Save; Cancel is --secondary"
-        },
         "typography": {
           "score": 3,
           "cite": "zero raw font-size across its 5 CSS files; the 0.03em letter-spacing is intrinsically typographic"
@@ -329,10 +295,6 @@
     "combobox": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn in its demos"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size; the 0.05em letter-spacing is intrinsic"
@@ -346,8 +308,8 @@
           "cite": "12rem min / 16rem max listbox sizing states what each bound protects (94.2)"
         },
         "interaction": {
-          "score": 3,
-          "cite": "WAI-ARIA APG combobox on a native [popover] — Esc and light-dismiss free; aria-activedescendant synced; ids minted when omitted"
+          "score": 2,
+          "cite": "nothing states what remains without initCombobox() — a text input beside a list that never opens or filters. The no-JS phrases on the page are about the CONSUMER reading events, not about the behavior being absent (94.9; fix is 94.14)"
         },
         "content": {
           "score": 3,
@@ -357,15 +319,14 @@
           "score": 3,
           "cite": "single-select by design; the page names the multi-select dropdown as the different job"
         }
-      }
+      },
+      "improve": [
+        "interaction — state what the platform provides versus what the behavior adds, so a reader knows what they lose without the JS (roadmap 94.14)"
+      ]
     },
     "filters": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn; Apply is --secondary"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -395,10 +356,6 @@
     "tag-input": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -428,10 +385,6 @@
     "file-upload": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "zero primary .bo-btn"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -461,10 +414,6 @@
     "richtext": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "toolbar buttons are .bo-btn--ghost; no primary affordance introduced"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -494,10 +443,6 @@
     "date": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "tabular-nums on __value, --bo-font-size-xs on __relative; zero raw literals"
@@ -530,10 +475,6 @@
     "navbar": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "a layout bar: brand link + flex spacer, introduces no affordance of its own"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size; weight via --bo-font-weight-semibold"
@@ -563,10 +504,6 @@
     "sidebar-nav": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "links only; current page via aria-current=\"page\" plus weight+fill, never colour alone"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-density-font-size on links; the 0.05em letter-spacing is intrinsic (same basis as combobox/form)"
@@ -596,10 +533,6 @@
     "breadcrumb": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "a trail of links; the current crumb is deliberately NOT a link"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-font-size-sm only, no raw font-size"
@@ -629,10 +562,6 @@
     "offcanvas": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "an edge sheet; its header holds a close control and nothing competes with it"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -662,10 +591,6 @@
     "tabs": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "aria-selected is the contract; the chevron/underline is decoration"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size; sizes from density"
@@ -695,10 +620,6 @@
     "dialog": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "__footer is end-aligned and holds at most one primary action"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-font-size-md on the title; no raw font-size"
@@ -728,10 +649,6 @@
     "icon": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "1em square, so glyphs track the surrounding font size and therefore density with no per-tier rule"
@@ -761,10 +678,6 @@
     "alert": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "__dismiss is pushed to the end with margin-inline-start:auto; the alert introduces no competing primary action"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-density-font-size and a weight token; no raw font-size"
@@ -778,8 +691,8 @@
           "cite": "the 3px accent bar and the 24rem toast measure both carry their reason (94.6b)"
         },
         "interaction": {
-          "score": 3,
-          "cite": "dismissal is markup-driven; the toast region documents its own LIMIT — z-index cannot beat the top layer, so toasts will not float over an open modal <dialog>"
+          "score": 2,
+          "cite": "the page never draws the platform/behavior line: inline alerts need no JS at all, toasts cannot work without the injecting script, and a reader is told neither (94.9; fix is 94.14)"
         },
         "content": {
           "score": 3,
@@ -789,15 +702,14 @@
           "score": 3,
           "cite": "inline alerts and toasts; the page names which role each case takes"
         }
-      }
+      },
+      "improve": [
+        "interaction — state what the platform provides versus what the behavior adds, so a reader knows what they lose without the JS (roadmap 94.14)"
+      ]
     },
     "skeleton": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "base block is 1em so it matches the line of text it stands in for; no raw font-size"
@@ -827,10 +739,6 @@
     "state": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "__actions carries the single recovery action; nothing competes with it"
-        },
         "typography": {
           "score": 3,
           "cite": "title from --bo-font-size-lg; the 2rem icon now states why it is absolute — a glyph acting as art, not running text (94.6b)"
@@ -860,10 +768,6 @@
     "progress": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "no font-size at all — it renders no text of its own"
@@ -893,10 +797,6 @@
     "stepper": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "marker on --bo-font-size-sm with tabular-nums, label on --bo-density-font-size; no raw font-size"
@@ -926,10 +826,6 @@
     "approval-workflow": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents fewer than two affordances, so there is nothing to rank (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "title/meta from weight and size tokens; audit timestamps tabular"
@@ -959,10 +855,6 @@
     "dashboard": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "\"one hero per view\" is stated as a rule, and widget actions are --ghost so nothing competes with the stat"
-        },
         "typography": {
           "score": 2,
           "cite": "font-size: 3rem on the stat value is a raw size off the type scale (dashboard.css:140) — same defect class as amount and data-table"
@@ -996,10 +888,6 @@
     "byline": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "presents no affordance — a provenance line (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "sizes from --bo-font-size-sm/xs; no raw font-size"
@@ -1032,10 +920,6 @@
     "badge": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "decoration beside a status word; introduces no affordance (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-font-size-xs and a weight token; the 0.05em letter-spacing is intrinsic, same basis as form/combobox"
@@ -1068,10 +952,6 @@
     "kbd": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "a keycap chip; no affordance (94.7)"
-        },
         "typography": {
           "score": 2,
           "cite": "font-size: 0.85em is a raw size off the scale (kbd.css:17), even though its em-relativity is deliberate and explained"
@@ -1105,10 +985,6 @@
     "avatar": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "decoration with the name as real text nearby; no affordance (94.7)"
-        },
         "typography": {
           "score": 2,
           "cite": "font-size: 0.7em on the initials is a raw size off the scale (avatar.css:19)"
@@ -1142,10 +1018,6 @@
     "prose": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "renders stored rich text; introduces no affordance of its own (94.7)"
-        },
         "typography": {
           "score": 2,
           "cite": "font-size: 0.9em on inline code is a raw size off the scale (prose.css:52); every heading level does come from the scale"
@@ -1179,10 +1051,6 @@
     "calendar": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "a day may be a span, link or button, and only the last two take hover/pointer affordances — the page states that split"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size; the em literals are dot and cell geometry, not type"
@@ -1215,10 +1083,6 @@
     "button": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "this is the component that SETS the rule: one plain .bo-btn per screen, everything else takes --secondary/--ghost/--danger-ghost"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-font-size-xs on --sm; no raw font-size anywhere"
@@ -1251,10 +1115,6 @@
     "dropdown": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "menu items are not styled as actions; the trigger carries whatever emphasis its context calls for"
-        },
         "typography": {
           "score": 3,
           "cite": "no raw font-size"
@@ -1287,10 +1147,6 @@
     "segmented": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": 3,
-          "cite": "a toggle group between peers; no option is styled as primary"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-density-font-size; no raw font-size"
@@ -1320,10 +1176,6 @@
     "kv": {
       "scored": "2026-08-21",
       "dimensions": {
-        "hierarchy": {
-          "score": "na",
-          "cite": "a description list; introduces no affordance of its own (94.7)"
-        },
         "typography": {
           "score": 3,
           "cite": "--bo-font-size-xs on dt; the 0.04em letter-spacing is intrinsic, same basis as form and combobox"
