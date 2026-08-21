@@ -1032,12 +1032,46 @@ the question, and the owner's phrasing is the prompt to ask it.
        surfaced: **if the result source cannot load, remove the trigger** — a
        command bar that opens onto nothing is worse than none.
 
-3b. [ ] **99.3b — docs debt, low priority: rebuild the docs palette on
+3b. [x] **99.3b — docs debt, low priority: rebuild the docs palette on
        `bo-combobox` + `bo-dialog`, or record why PagefindUI's owned DOM makes
-       it impractical.** Also picks up `--bo-color-scrim` for
-       `.docs-cmdk::backdrop`, which hardcodes `rgb(0 0 0 / 0.45)` while
-       `.bo-dialog::backdrop` already consumes the token added this session.
-       Docs chrome, so it reaches no consumer — recorded, not urgent.
+       it impractical.** **Done 2026-08-21 for the `bo-dialog` half; the
+       `bo-combobox` half stays refused, on 99.3's own finding.** PagefindUI
+       owns `#cmdk-search`'s DOM (renders its own input, listbox, result
+       links) and 99.3 already measured that surface has none of
+       `bo-combobox`'s ARIA contract — reaching in to relabel PagefindUI's
+       markup as a combobox would be decorating a widget the framework
+       doesn't control, not composing one. That finding stands; not
+       re-litigated.
+
+       What was buildable: the dialog *chrome* is ours, and the element now
+       carries `bo-dialog bo-dialog--wide` alongside `docs-cmdk`, dropping 7
+       duplicated declarations (padding/border-radius/background/color/
+       box-shadow/border) in favor of the shared component — which also
+       fixed two real drifts, not just DRY: the shadow was the lighter
+       `--bo-shadow-lg` (toast's token) instead of `--bo-shadow-dialog`, and
+       there was **no forced-colors border at all** (verified via CDP
+       `Emulation.setEmulatedMedia`: the palette now gets a real 1px
+       `ButtonText` edge under Windows High Contrast, where before it had
+       none). `--wide` is load-bearing, not decorative — without it
+       `bo-dialog`'s default 32rem `max-inline-size` would have clamped the
+       palette's local 40rem width.
+
+       The scrim fix landed as a deletion: `.docs-cmdk::backdrop`'s hardcoded
+       `rgb(0 0 0 / 0.45)` is gone, and because this file is deliberately
+       unlayered (it demos the override rule to readers), removing the
+       override — not just changing its value — was required for
+       `.bo-dialog::backdrop`'s `--bo-color-scrim` (0.4) to actually take
+       effect; verified computed `background-color` live, not assumed from
+       the source. Local, kept: the top-anchored position (99.3 measured
+       this pattern at exactly one caller, so per Objective §3 it's page CSS
+       not a new modifier), the 40rem search width, and the `--pagefind-ui-*`
+       token mapping (can't generalise into the framework).
+
+       Verified live: light + dark (real search query, 44 results,
+       highlighting correct), Esc closes, 390px (width computes to exactly
+       `min(40rem, 100vw - 2rem)` = 358px, no horizontal overflow), forced-
+       colors border confirmed via CDP emulation, plain + DOCS_BASE builds
+       green.
 
 0. [x] **99.3 (original wording, superseded by the split above)** Start from
        `Gallery.astro`'s implementation rather than a blank page, because a

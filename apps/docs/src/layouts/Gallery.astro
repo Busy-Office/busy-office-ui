@@ -333,7 +333,7 @@ const current =
       </main>
     </div>
     {!currentSnapshot && (
-    <dialog id="cmdk" class="docs-cmdk" aria-label="Search the docs">
+    <dialog id="cmdk" class="bo-dialog bo-dialog--wide docs-cmdk" aria-label="Search the docs">
       <div class="docs-cmdk__panel">
         <div id="cmdk-search"></div>
         <div class="docs-cmdk__hint">
@@ -705,8 +705,17 @@ const current =
   }
 
   /* Cmd/Ctrl+K command palette. Native <dialog> in the top layer, so it escapes
-     the app-shell's overflow. Pagefind's own variables are mapped to our tokens
-     so the palette is theme-aware (light/dark) like the rest of the docs. */
+     the app-shell's overflow. The element also carries .bo-dialog (roadmap
+     99.3b) for the panel chrome — background, radius, shadow, forced-colors
+     border — the framework already ships; only what's genuinely LOCAL stays
+     here: the top-anchored position (99.3 measured this at exactly one
+     caller, so it's page CSS, not a modifier), the search-specific width,
+     and Pagefind's own variables mapped to our tokens so the palette is
+     theme-aware (light/dark) like the rest of the docs. No hand-rolled
+     ::backdrop rule either — .bo-dialog::backdrop already paints
+     --bo-color-scrim, and this file's CSS is unlayered on purpose (see the
+     comment above .demo-note), so it would have masked that token forever
+     had it stayed. */
   .docs-cmdk {
     --pagefind-ui-primary: var(--bo-color-accent);
     --pagefind-ui-text: var(--bo-color-text-primary);
@@ -718,15 +727,8 @@ const current =
     margin-block-start: 12vh;
     margin-inline: auto;
     inline-size: min(40rem, calc(100vw - 2rem));
-    padding: 0;
-    border: 1px solid var(--bo-color-border-default);
-    border-radius: var(--bo-radius-lg);
-    background: var(--bo-color-bg-surface-raised);
-    color: var(--bo-color-text-primary);
-    box-shadow: var(--bo-shadow-lg);
     overflow: hidden;
   }
-  .docs-cmdk::backdrop { background: rgb(0 0 0 / 0.45); }
   .docs-cmdk__panel { display: flex; flex-direction: column; max-block-size: 70vh; }
   #cmdk-search { padding: var(--bo-space-3); overflow: auto; }
   .docs-cmdk__hint {
