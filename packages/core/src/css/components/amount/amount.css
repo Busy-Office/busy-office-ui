@@ -31,7 +31,13 @@
   }
 
   /* Currency symbol ($) or ISO code (USD) — quieter than the number, either side
-     of it (source order decides prefix vs suffix). */
+     of it (source order decides prefix vs suffix).
+
+     Both affixes are 0.875em — a fraction of the VALUE they sit beside, not a
+     step off the type scale. The affix is subordinate to the number and must
+     stay so whether the amount is in a compact table row or a spacious form;
+     an absolute step would be right in one and wrong in the other. Applies to
+     __unit below as well (roadmap 94.13). */
   .bo-amount__currency {
     color: var(--bo-amount-affix-fg);
     font-size: 0.875em;

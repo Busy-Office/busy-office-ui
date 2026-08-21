@@ -16,6 +16,10 @@
     border-radius: 50%;
     background: var(--bo-color-bg-muted);
     color: var(--bo-color-text-secondary);
+    /* 0.7em is GEOMETRY, not typography: two initials have to fit inside a
+       1.8em disc with breathing room, so the text is a fraction of the same
+       host the disc is sized from. Change the disc and this follows it;
+       a scale step would not. */
     font-size: 0.7em;
     font-weight: var(--bo-font-weight-semibold);
     line-height: 1;

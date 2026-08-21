@@ -53,7 +53,7 @@
 
   .bo-prose :is(code, pre) {
     font-family: var(--bo-font-mono);
-    font-size: 0.9em;
+    font-size: var(--bo-font-size-mono-inline);
     background: var(--bo-color-bg-muted);
     border-radius: var(--bo-radius-sm);
   }

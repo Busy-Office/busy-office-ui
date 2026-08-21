@@ -12,7 +12,7 @@
     "reference": "/concepts/design-language",
     "definitions": {
       "$comment": "What earns 3 on each dimension, and what a FAILURE looks like (roadmap 94.7). Written because three dimensions had scored 3 on 28 of 28 components — a value that never varies is not a measurement. Each definition names a component in this repo that scores below 3, so the dimension is known to be capable of failing.",
-      "typography": "3 = no raw font-size; sizes come from the type scale or a density alias. Below 3 = a raw size off the scale. Fails today: amount (two 0.875em affixes), data-table (0.9em __col--code).",
+      "typography": "3 = sizes come from the type scale or a density alias; an em RATIO counts too when the element must track its host rather than the document — inline mono correcting an optical mismatch, an affix subordinate to its value, text fitting inside a box. Those cannot use an absolute step, and each must say so in place, exactly as spacing requires of intrinsic dimensions. Below 3 = a raw size that IS a scale step in disguise, or an unexplained one. Resolved in 94.13: the six raw sizes split into one genuine token (--bo-font-size-mono-inline, 3 callers that had disagreed 0.85 vs 0.9) and three explained intrinsics.",
       "colour": "3 = zero raw colour outside @media print / forced-colors, and any state signal is two-channel. Below 3 = a raw colour on screen, or meaning carried by hue alone.",
       "spacing": "3 = dimensions come from space tokens, or an intrinsic literal carries a comment saying why it is intrinsic. NOTE: this is a DEBT MARKER, not a quality signal — it is satisfiable by the scorer writing the comment, and once written it stays 3 forever. Read it as \"has this file been through a scoring pass\", not as \"is this well spaced\".",
       "interaction": "3 = the page states what the PLATFORM provides versus what the behavior adds, so a reader knows what they lose by not running the JS; a component that ships NO behavior earns 3 by saying so. `na` only when there is no interaction surface at all. Below 3 = a behavior-backed component whose page never draws that line. Applied by READING all 14 behaviour-backed pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7. The three that failed (alert, combobox, tree-table) were fixed in 94.14; the dimension has demonstrated it can fail.",
@@ -84,8 +84,8 @@
       "scored": "2026-08-21",
       "dimensions": {
         "typography": {
-          "score": 2,
-          "cite": "two raw 0.875em affix sizes in amount.css — functional, but not a token step"
+          "score": 3,
+          "cite": "both affixes are 0.875em of the VALUE they sit beside, and the comment says why a scale step would be wrong in one density and right in the other (94.13)"
         },
         "colour": {
           "score": 3,
@@ -107,17 +107,14 @@
           "score": 3,
           "cite": "display-only in every matrix context; adopted across the under-using screens (92.4)"
         }
-      },
-      "improve": [
-        "typography — the two 0.875em affix sizes: decide whether the scale gains a relative tier or declares em ratios intrinsic (roadmap 94.13)"
-      ]
+      }
     },
     "data-table": {
       "scored": "2026-08-21",
       "dimensions": {
         "typography": {
-          "score": 2,
-          "cite": "one raw 0.9em on __col--code (data-table.css:244) — not a token step; the 0.03em letter-spacing is intrinsically typographic"
+          "score": 3,
+          "cite": "__col--code consumes --bo-font-size-mono-inline (94.13); the 0.03em letter-spacing is intrinsic, same basis as form/combobox"
         },
         "colour": {
           "score": 3,
@@ -139,10 +136,7 @@
           "score": 3,
           "cite": "matrix table contexts correct incl. the split-column rule (88) and conditional tone; hover ring fixed 73.2"
         }
-      },
-      "improve": [
-        "typography — the 0.9em __col--code size: same decision (roadmap 94.13)"
-      ]
+      }
     },
     "pagination": {
       "scored": "2026-08-21",
@@ -847,8 +841,8 @@
       "scored": "2026-08-21",
       "dimensions": {
         "typography": {
-          "score": 2,
-          "cite": "font-size: 3rem on the stat value is a raw size off the type scale (dashboard.css:140) — same defect class as amount and data-table"
+          "score": 3,
+          "cite": "3rem is a display size deliberately above the scale top, left a literal because it has exactly one caller; a second is the trigger to promote it (94.13)"
         },
         "colour": {
           "score": 3,
@@ -872,7 +866,6 @@
         }
       },
       "improve": [
-        "typography — the 3rem stat hero, the one case ABOVE the scale rather than below (roadmap 94.13)",
         "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
       ]
     },
@@ -944,8 +937,8 @@
       "scored": "2026-08-21",
       "dimensions": {
         "typography": {
-          "score": 2,
-          "cite": "font-size: 0.85em is a raw size off the scale (kbd.css:17), even though its em-relativity is deliberate and explained"
+          "score": 3,
+          "cite": "inline mono now consumes --bo-font-size-mono-inline, the one ratio in the scale — a fraction of the host, which no absolute step can express (94.13)"
         },
         "colour": {
           "score": 3,
@@ -969,7 +962,6 @@
         }
       },
       "improve": [
-        "typography — the 0.85em keycap size: same decision (roadmap 94.13)",
         "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
       ]
     },
@@ -977,8 +969,8 @@
       "scored": "2026-08-21",
       "dimensions": {
         "typography": {
-          "score": 2,
-          "cite": "font-size: 0.7em on the initials is a raw size off the scale (avatar.css:19)"
+          "score": 3,
+          "cite": "0.7em is geometry, not typography — two initials fitting a 1.8em disc, sized from the same host the disc is; stated in place (94.13)"
         },
         "colour": {
           "score": 3,
@@ -1002,7 +994,6 @@
         }
       },
       "improve": [
-        "typography — the 0.7em initials size: same decision (roadmap 94.13)",
         "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
       ]
     },
@@ -1010,8 +1001,8 @@
       "scored": "2026-08-21",
       "dimensions": {
         "typography": {
-          "score": 2,
-          "cite": "font-size: 0.9em on inline code is a raw size off the scale (prose.css:52); every heading level does come from the scale"
+          "score": 3,
+          "cite": "inline code consumes --bo-font-size-mono-inline; every heading level still comes from the scale (94.13)"
         },
         "colour": {
           "score": 3,
@@ -1035,7 +1026,6 @@
         }
       },
       "improve": [
-        "typography — the 0.9em inline-code size: same decision (roadmap 94.13)",
         "content — name a context where this is the wrong choice, and the alternative (roadmap 94.10)"
       ]
     },

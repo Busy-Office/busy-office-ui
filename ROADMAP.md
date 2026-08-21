@@ -1359,7 +1359,43 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        platform does and what the behavior adds; each re-scores to
        `interaction: 3` with a citation quoting it.
 
-5. [ ] **94.13 — the six raw font-sizes, and whether the type scale is
+5. [x] **94.13 — DONE 2026-08-21. Neither branch alone: the six were THREE different jobs, and separating them is the answer. the six raw font-sizes, and whether the type scale is
+       Accept offered "add a relative tier" or "declare em ratios intrinsic".
+       Reading the six together showed the question was mis-posed — they are
+       not one pattern:
+
+       - **Inline mono, ×3** (`kbd`, `prose code`, `data-table__col--code`) —
+         a monospace face renders optically larger than the sans at the same
+         nominal size, so inline mono is set slightly smaller. This IS one
+         concept, and it was written as **two numbers**: kbd 0.85em against
+         the other two at 0.9em. Now `--bo-font-size-mono-inline`, the one
+         ratio in a scale of absolute steps, and it earns the exception
+         because the same `<code>` sits inside an h2, inside compact table
+         text and inside body copy — no absolute step tracks all three.
+         Unifying moved kbd by **1px in each dimension at both densities**
+         (measured before changing it).
+       - **Subordinate affix** (`amount`, ×2 at 0.875em) and **box geometry**
+         (`avatar` 0.7em, two initials inside a 1.8em disc) — genuinely
+         intrinsic, now explained in place.
+       - **Display size** (`dashboard` 3rem, above the scale's 1.5rem top) —
+         left a literal with the reason, because it has exactly one caller. A
+         second display-sized caller is the recorded trigger to promote it.
+
+       **The count that made this a decision rather than a rename:** the five
+       em values are 0.7 / 0.85 / 0.875 / 0.9 / 0.9. A single "relative tier"
+       would have had to flatten four distinct intents into one number, and
+       four tiers would have been renaming four literals. Only the mono three
+       were actually the same thing.
+
+       Also measured and left alone: **seven** rules use `--bo-font-mono`, with
+       five sizing strategies. Four are correct as they are — `approval-workflow`
+       and `ordered-list` take absolute steps because there the size carries
+       hierarchy, and the utility plus `input` inherit on purpose. The token's
+       comment says so, so a future sweep does not "unify" them.
+
+       `typography` now reads 3 on all 39, and its definition records that an
+       em ratio counts when the element must track its host rather than the
+       document — the same standing `spacing` gives intrinsic dimensions.
        missing a step.** Created by 37.3, which found that `typography`'s six
        failures had **no live follow-up at all**: four of them (`avatar`,
        `dashboard`, `kbd`, `prose`) carried no `improve` entry, and the other

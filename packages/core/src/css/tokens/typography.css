@@ -9,6 +9,27 @@
     --bo-font-size-md: 1rem;
     --bo-font-size-lg: 1.125rem;
     --bo-font-size-xl: 1.5rem;
+
+    /* The one RATIO in a scale of absolute steps, and it earns the exception
+       (roadmap 94.13). Monospace faces render optically larger than the sans
+       at the same nominal size, so inline mono set at its host's size reads
+       too big beside the prose around it — the fix is a fraction OF THE HOST,
+       which no absolute step can express: the same `<code>` sits inside an
+       h2, inside compact table text, and inside body copy, and must track
+       each one.
+
+       Three callers, and they disagreed before this existed: `.bo-kbd` used
+       0.85em while `.bo-prose code` and `.bo-data-table__col--code` used
+       0.9em — one optical correction written as two numbers. Unifying moved
+       kbd by 1px in each dimension at both densities (measured), which is the
+       cost of having it be one decision.
+
+       NOT for mono that is sized as META text rather than inline: the audit
+       timestamps in approval-workflow and the codes in ordered-list take
+       --bo-font-size-xs/sm on purpose, because there the size carries
+       hierarchy rather than correcting an optical mismatch. */
+    --bo-font-size-mono-inline: 0.9em;
+
     --bo-font-weight-normal: 400;
     --bo-font-weight-medium: 500;
     --bo-font-weight-semibold: 600;

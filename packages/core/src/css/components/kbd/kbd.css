@@ -14,7 +14,7 @@
     background: var(--bo-color-bg-muted);
     color: var(--bo-color-text-secondary);
     font-family: var(--bo-font-mono);
-    font-size: 0.85em;
+    font-size: var(--bo-font-size-mono-inline);
     line-height: 1.3;
     text-align: center;
     /* Keys are case-sensitive ("j" is not "J") — never inherit a

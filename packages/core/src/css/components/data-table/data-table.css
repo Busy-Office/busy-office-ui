@@ -254,7 +254,7 @@
 
   .bo-data-table__col--code {
     font-family: var(--bo-font-mono);
-    font-size: 0.9em;
+    font-size: var(--bo-font-size-mono-inline);
   }
 
   /* Sorting: aria-sort on <th> drives the indicator; the button is the target. */

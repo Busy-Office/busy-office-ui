@@ -175,6 +175,12 @@
     font-variant-numeric: normal;
   }
 
+  /* 3rem is a DISPLAY size, deliberately above the scale's top step
+     (--bo-font-size-xl, 1.5rem). The hero stat is the one number a dashboard
+     exists to show, and the scale is built for document hierarchy, not for a
+     single figure meant to be read across a room. Left as a literal rather
+     than added as a step because it has exactly one caller — a second
+     display-sized caller is the trigger to promote it (roadmap 94.13). */
   .bo-stat--hero .bo-stat__value {
     font-size: 3rem;
   }
