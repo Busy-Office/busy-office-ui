@@ -860,6 +860,66 @@ the question, and the owner's phrasing is the prompt to ask it.
        `check:wrong-choice` now requires. **Refusing a component is an
        expected outcome**, not a failure of the slice.
 
+## Slice 101 — Objective grill: the loop optimised what it could see (2026-08-21)
+
+Fired by the counter at 3/3 (slices 37, 94, 95). Full report:
+`.roundtable/objective-grill-2026-08-21-slices-37-94-95.md`.
+
+**Headline, measured: 78% of everything this session added to the shipped
+source is commentary** — 284 comment lines against 78 of code across
+`packages/core/src`. Comments are stripped from the minified bundle, so more
+than three quarters of the work done on the *product* produced zero bytes for
+a consumer. Not zero value — `tabs`'s mask alpha was re-derived **six times**
+before a comment stopped it — but *internal* value, and the Objective's tests
+ask what a consumer can delete or do.
+
+**And largely self-inflicted:** our own `spacing` dimension asks that every
+intrinsic literal carry its reason, so the framework wrote prose to satisfy a
+measure we wrote, and the same rubric then scored itself clean. 94.7 called
+that a self-clearing debt marker; this grill puts the price on it.
+
+**The three principles themselves held.** Simplicity, less-for-more and
+reusability all passed, with six real refusals recorded this session. The
+principles are not the problem — what the loop chose to spend time on is, and
+the owner has already answered that with Slices 99 and 100.
+
+1. [ ] **101.1 — publish 0.3.0, or record why not. Eleventh restatement.**
+       Tagged at 06:00 today and pushed; the registry still serves **0.1.1**.
+       There are now TWO unshipped layers: 0.3.0's 83 entries, plus **five
+       more** stacked on top of the tag (scrim token, Money currency
+       placement, the badge page-overflow P0, the mono token, `data-table`'s
+       `min-inline-size`). Publishing is owner-triggered through Trusted
+       Publishing — `git push` the tag, then publish a GitHub Release — and a
+       wake cannot do it (npm here is unauthenticated by design).
+       **Accept:** either it lands on the registry, or this item records the
+       owner's decision to hold and the reason, so it stops being restated
+       every grill as though nobody had decided.
+
+2. [ ] **101.2 — 95.3 was never actually queued.** Last wake's entry says the
+       touch half of device fitness was "re-scoped and re-queued as 95.3", and
+       it was written as **prose inside a closed item** — it appears four times
+       in this file and **zero** times as a numbered open item, so the
+       dispatcher can never pick it up. Worse than forgetting, because the
+       record claims otherwise: the same two-accounts-disagreeing shape 94.12
+       found in the score file. **Accept:** 95.3 exists as a real `[ ]` item
+       carrying the Accept criteria already written for it, and this file
+       gains no other "re-queued as X" that is not an item. Check by
+       enumerating: every `roadmap NN.N` reference in a citation or comment
+       resolves to a numbered item or a closed one.
+
+3. [ ] **101.3 — give the scoring apparatus a stop rule.** Slice 94 produced a
+       rubric, 39 scored components, three gates, a shared rule module, a
+       retirement note and a 23-page ratchet — and each step generated its own
+       follow-up (94.7 → 94.9/94.10 → 94.12 → 94.14, and 94.11 spawned by
+       94.6). That is a system that grows by being used. It is now complete
+       enough to stop investing in. **Accept:** a written stop rule — what
+       would justify *another* rubric change (a component that scores well and
+       is plainly bad, or vice versa), and what explicitly does not (a
+       dimension reading uniformly, which is now a known and documented
+       property). Until that trigger fires, scoring work is maintenance of the
+       23-page ratchet only, and the queue belongs to Slices 97/99/100, which
+       are what the owner actually asked for.
+
 ## Slice 100 — Owner wishlist: drag & drop list (2026-08-21)
 
 Owner: *"drag & drop list."*
