@@ -27,9 +27,12 @@ const markup = `<table class="bo-data-table" data-row-edit>
       </td>
       <td class="bo-data-table__col--numeric">
         <!-- Cell-level error: .bo-form-field wraps the input + message pair
-             (the SAME contract as a standalone form field — no new CSS) -->
+             (the SAME contract as a standalone form field — no new CSS).
+             The input's own id matters: a validation summary builds each
+             error link from the input's id, so an id-less input can't be
+             linked to. -->
         <div class="bo-form-field" style="margin-block-end: 0">
-          <input class="bo-input bo-input--numeric" type="number"
+          <input class="bo-input bo-input--numeric" type="number" id="line-1-qty"
               value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
               aria-label="Quantity" />
           <span class="bo-form-field__message" id="line-1-qty-err">Exceeds on-hand (200)</span>
@@ -128,7 +131,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
             </td>
             <td class="bo-data-table__col--numeric">
               <div class="bo-form-field" style="margin-block-end: 0">
-                <input class="bo-input bo-input--numeric" type="number"
+                <input class="bo-input bo-input--numeric" type="number" id="line-1-qty"
                     value="450" aria-invalid="true" aria-describedby="line-1-qty-err"
                     aria-label="Quantity" />
                 <span class="bo-form-field__message" id="line-1-qty-err">Exceeds on-hand (200)</span>
@@ -773,6 +776,15 @@ const markup = `<table class="bo-data-table" data-row-edit>
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted">Every request above is <strong>per row</strong>,
+    so a failure comes back on the row the user just acted on — no summary
+    needed. A <strong>document-level submit</strong> (posting or approving the
+    whole PO) is a different job: it can reject several rows at once, including
+    rows scrolled out of view, and nothing on this screen would bring the user
+    back to them. That case gets a
+    <a href={base + '/patterns/validation-summary'}>validation summary</a> at
+    the top of the form — focus lands on the summary and each entry is a link
+    that focuses its field, which scrolls the row into view.</p>
   </section>
 
   <section class="demo">
@@ -810,6 +822,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
     ["/components/money", "Money field"],
     ["/components/quantity", "Quantity"],
     ["/components/form", "Forms"],
+    ["/patterns/validation-summary", "Validation summary"],
     ["/patterns/invoice-list", "Invoice list"],
   ]} />
 </Gallery>

@@ -54,7 +54,7 @@ const TODO = new Set([
 const PATTERN_TODO = new Set([
   'app-launch', 'approval', 'bulk-actions', 'editable-grid', 'field-editor',
   'filter-panel', 'goods-receipt', 'invoice-list', 'login',
-  'reporting-dashboard', 'settings-admin', 'staging', 'validation-summary',
+  'reporting-dashboard', 'settings-admin', 'staging',
   'value-help', 'wizard',
 ]);
 

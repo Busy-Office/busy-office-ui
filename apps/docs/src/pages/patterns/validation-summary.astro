@@ -29,6 +29,13 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
     bo-alert--danger</code>, and every field's error state (red border, red label,
     required asterisk) comes free from the existing <code>:user-invalid</code> styling
     already in <code>.bo-form-field</code>. Try it: submit the empty form below.
+    <strong>Not for per-row saves</strong> — in an
+    <a href={base + '/patterns/editable-grid'}>editable grid</a> each row saves
+    on its own (<code>PATCH</code> per line, 422 → that row re-rendered with
+    cell errors), so a failure comes back on the row the user just acted on and
+    a summary would only restate it. The summary earns its place on a
+    <em>document-level</em> submit — posting the whole form — where several
+    fields can fail at once, including some scrolled out of view.
   </p>
 
   <section class="demo">
@@ -217,6 +224,7 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
     ["/components/alerts", "Alerts & toasts"],
     ["/components/form", "Forms"],
     ["/concepts/js-behaviors", "JS behaviors"],
+    ["/patterns/editable-grid", "Editable grid"],
     ["/patterns/login", "Login pattern"],
   ]} />
 </Gallery>

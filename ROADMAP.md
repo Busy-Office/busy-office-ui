@@ -1405,8 +1405,22 @@ an assertive live region that exists before the user has done anything.
        values; a +40-vs-+22 disagreement that was column-width wrap, not a
        second mechanism).
 
-3. [ ] **97.3 — the per-row vs document-level validation boundary is stated
-       nowhere.** The grid's own contract (`PATCH …/lines/:lineId`, 422 → that
+3. [x] **97.3 — the per-row vs document-level validation boundary is stated
+       nowhere.** **Done 2026-08-21.** The boundary is now stated on both
+       pages: editable-grid's Data contract section says per-row failure needs
+       no summary and names the document-level submit as the summary's job;
+       validation-summary's opener carries it as its wrong-choice clause
+       (**Not for per-row saves**), which moved the PATTERN_TODO ratchet
+       15 → 14 (patterns carrying 5 → 6). Both pages' Related now link each
+       other. The grid's invalid-cell input has `id="line-1-qty"` in the live
+       demo AND the copyable sample, with a comment saying why the id matters
+       (summary links are built from it). Verified in the rendered DOM (id
+       appears exactly once outside `<pre>`, clause + cross-links present,
+       summary behavior unregressed live), both themes via the site's own
+       picker, no horizontal overflow at 390px, and the DOCS_BASE build is
+       green — the first build attempt failed usefully when check:links
+       flagged a literal `href="#id"` inside the new sample comment (the
+       comment was reworded; the gate did its job on rendered text). The grid's own contract (`PATCH …/lines/:lineId`, 422 → that
        row) makes a summary ceremony for per-row saves — correct, keep. But a
        document-level submit that fails multiple rows is exactly
        `/patterns/validation-summary`'s job, and neither page names the
