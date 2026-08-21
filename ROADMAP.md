@@ -880,6 +880,33 @@ catalogue in ERP vocabulary and job order.
        verified in the fixture at the RF floor, and whatever ships lands
        on the RF track with the recipe's full shape.
 
+8. [ ] **109.8 — catalogue v2 after external research: FIVE decisions for
+       the owner** (2026-08-22, owner ask: "get new input and research what
+       need for ERP. then we review"). Researched three independent
+       taxonomies — SAP Fiori floorplans, Dynamics 365 F&O form patterns,
+       Odoo view types — plus an ERP-operations sweep. Full report:
+       `.roundtable/erp-pattern-catalogue-v2-2026-08-22.md`. The current
+       catalogue maps 1:1 onto every core floorplan in all three systems
+       (value-help = Dynamics Lookup, master-detail = Details Master, inbox
+       = Fiori Worklist...). Deltas awaiting the owner's review:
+       (a) **role-home upgraded to build-recommended** — Fiori Overview
+       Page AND Dynamics Workspace both ship it first-class; sequenced
+       after 101.4 since "my open items" wants the inbox to link into;
+       (b) **job monitor / batch-run history** — lean build (the admin's
+       daily screen nothing covers; notification says a run finished,
+       nothing shows the queue);
+       (c) **kanban board** — owner call (Odoo-only evidence, and it
+       reopens the drag question 100.1 refused for lists);
+       (d) **schedule screen** — compose-first grill (bo-calendar already
+       ships as a component);
+       (e) **period-close cockpit** — grill expecting "recomposes".
+       Confirmed refusals with external backing: Analytical List Page
+       (Fiori itself calls it a hybrid of two floorplans we have), Gantt
+       (a library, not a CSS pattern — the virtualiser stance), Map
+       (single-source niche), chatter (CRM; timeline covers the ERP need).
+       **Accept:** the owner answers the five; approved items get numbered
+       entries with the front-door gate; refusals recorded here.
+
 Still owner-blocked inside this catalogue: **role home / overview page**
 (row 3) — open since 99.1: is `app-launch` your "landing page", or do you
 want a role home with live content (my open items, KPIs)? The catalogue
