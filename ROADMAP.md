@@ -780,6 +780,50 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 109 — Owner direction: the real-ERP pattern catalogue + regrouping (2026-08-22)
+
+Owner: *"low quality of patterns content, grouping need to improve. it
+needs to think about the patterns that can use in real ERP. pls list out
+the list that we should have. let me know."* Answered same wake:
+`.roundtable/erp-pattern-catalogue-2026-08-22.md` — a 25-row catalogue in
+ERP language (industry name beside ours), grouped by job family. The
+catalogue's own finding: it is 20 shipped + the 4 already-queued builds
+(101.4-101.7) + 1 standing owner question (role home, open since 99.1) —
+nothing new needed inventing; what was missing was seeing it as ONE
+catalogue in ERP vocabulary and job order.
+
+1. [ ] **109.1 — regroup the sidebar (and the 104.1 tile index) from 3
+       groups to the catalogue's 5 job families**: Enter & find / Work one
+       record / Enter & correct data / Decide & clear queues / Monitor,
+       report & output. Fixes a real reader problem: "review & approve"
+       currently holds the detail family (`record-detail`, `object-page`,
+       `master-detail`), which are not review screens. **Accept:** sidebar
+       groups match the catalogue; no URL changes; 104.1 inherits the
+       grouping; check-page-shape/sidebar assertions still green; verified
+       live both themes.
+2. [ ] **109.2 — rename `invoice-list` → `list-report` (industry name),
+       with redirect.** The page is and always was the generic list screen;
+       the invoice is sample data. **Accept:** new slug, old URL redirects
+       (the redirect-stub mechanism check-links already understands),
+       sidebar + tile + all internal links updated, llms.txt regenerated.
+3. [ ] **109.3 — quality bar, sequenced not sprayed**: run the queued
+       102.2 (object-page) and 102.3 (editable-grid) grills FIRST, extract
+       the per-section bar they produce (states depth, data-contract
+       realism, keyboard walkthrough), then sweep the other 18 pages
+       against it — the 94.10 fix-the-recipe move. 101.4-101.7 get written
+       against that bar from day one. **Accept:** the bar exists as a
+       written checklist in `.roundtable/` after the two grills; the sweep
+       is its own later item with per-page verdicts.
+4. [ ] **109.4 — `field-editor` membership question.** A technique more
+       than a screen; if the 102.x-derived bar finds the page thin, fold
+       into `detail-form`/`editable-grid` + redirect. Decided by evidence
+       from 109.3, not taste. Refusing to fold is a valid outcome.
+
+Still owner-blocked inside this catalogue: **role home / overview page**
+(row 3) — open since 99.1: is `app-launch` your "landing page", or do you
+want a role home with live content (my open items, KPIs)? The catalogue
+reserves the row either way.
+
 ## Slice 108 — P0: object-page sticky bleed-through, z-index scale, tab-vs-anchor clarity (2026-08-22)
 
 Owner report (screenshot of `/patterns/object-page` mid-scroll, dark theme):
