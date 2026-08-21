@@ -135,7 +135,7 @@ and `data-row-state` (both published since 0.1.1) — renaming any of the three 
 a breaking change owed a deprecation cycle, not a sweep. The window in which
 `data-day` could have been renamed for free closed when 0.3.0 was cut.
 
-## Three standing build rules (grill-derived)
+## Four standing build rules (grill-derived)
 
 1. **Never-color-alone has two audiences.** Every state signal ships BOTH a visible
    non-color cue (glyph, text) for sighted colorblind users AND a programmatic
@@ -166,6 +166,27 @@ a breaking change owed a deprecation cycle, not a sweep. The window in which
    "Approv/ed". A chip sits in a flex-wrap row with room; a badge sits in a
    cell. Swept afterwards: of 30 single-word elements carrying `anywhere`,
    exactly one breaks mid-word, and it is the filename that should.
+
+4. **Inside `@media print`, a raw `#000` / `#999` is correct — a token is the
+   bug.** Colour tokens resolve against the active theme, so
+   `var(--bo-color-text)` on paper prints whatever the reader's screen theme
+   said, which in dark mode is near-white ink on white stock. Print output is
+   ink on paper and has exactly one palette, so the nine print declarations in
+   `approval-workflow`, `badge`, `data-table` and `stepper` hardcode black and
+   grey deliberately.
+
+   Written down because a raw-hex sweep flags them every time and three
+   separate sweeps have now re-derived the same answer (Standardize,
+   2026-08-21). The reconciliation lives here rather than as four copies of
+   the same comment: `tabs.css`'s nine mask-alpha `#000` values were
+   re-derived **six** times before a comment stopped it, and the fix for that
+   pattern is one durable statement, not more commentary in the source — the
+   Objective grill measured 78% of this session's shipped-source additions as
+   comment lines, and that is the wrong direction to keep pushing.
+
+   The other nine raw literals in `components/` are `mask-image` alpha stops,
+   where `#000` means "fully opaque" and is not a colour choice at all. Those
+   two cases account for all 18; a nineteenth is a finding.
 
 ## Signature modern-CSS patterns
 
