@@ -851,7 +851,27 @@ tidier one:**
        CHANGELOG entry says this is a Fixed/Added that requires no markup
        change from existing consumers.
 
-2. [ ] **96.2 — decide whether `.bo-quantity` gets the same treatment.** Its
+2. [x] **96.2 — DONE 2026-08-21. Verdict: the mirrors SHOULD diverge, and the reason is measured. decide whether `.bo-quantity` gets the same treatment.**
+       Accept allowed either outcome; the data picked the second. Placement
+       was measured with `Intl` across en-US, de-DE, fr-FR, ja-JP, ar-EG,
+       pt-BR, he-IL and sv-SE: **currency splits 3 leading / 5 trailing**,
+       which is what justified 96.1 — but **the unit trails in 8 of 8**,
+       including both RTL locales (`٥ كغم`, `5 ק״ג` still put the value
+       first). There is no `kg 5` convention to support, so supporting one
+       would be surface with no caller. The reason now lives in
+       `quantity.css` so a future sweep does not re-open it.
+
+       Also recorded there: nothing breaks if a consumer writes the select
+       first anyway. Quantity's joint keys off `+` adjacency, so an unexpected
+       order yields two separate rounded controls rather than a mis-drawn
+       joint — it fails soft, which is why it needs no guard.
+
+       **The measurement's first run was wrong and nearly went into this
+       entry.** The placement detector used `/^\d/`, so Arabic-Indic digits
+       did not count as digits and `ar-EG` came back LEADING for BOTH
+       currency and unit — the opposite of the truth for the unit, and it
+       would have made the two cases look identical. Fixed with `\p{Nd}` and
+       by stripping RTL marks. Its
        button-less `( qty | unit )` joint is the exact same construction
        (Slice 81 built it as a deliberate mirror of Money's), and unit
        placement has the same locale question — `5 kg` vs some locales' `kg

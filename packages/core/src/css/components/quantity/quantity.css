@@ -75,7 +75,21 @@
      rings stay per-element and uncut. Only without buttons — with
      steppers present the + button sits between input and select, so the
      gap stays. The static text __unit span is deliberately NOT joined:
-     boxing plain text would invent an input-group addon for no gain. */
+     boxing plain text would invent an input-group addon for no gain.
+
+     The mirror stops at ORDER, and that is deliberate (roadmap 96.2).
+     Money's joint was made position-derived so the currency can lead or
+     trail, because currency placement genuinely varies by locale. A unit
+     does not. Measured with Intl across en-US, de-DE, fr-FR, ja-JP, ar-EG,
+     pt-BR, he-IL and sv-SE: currency splits 3 leading / 5 trailing, while
+     the unit trails in 8 of 8 — including both RTL locales, where "٥ كغم"
+     and "5 ק״ג" still put the value first. There is no "kg 5" convention to
+     support, so supporting one would be surface with no caller.
+
+     Nothing breaks if someone writes the select first anyway: these rules
+     key off `+` adjacency, so an unexpected order simply produces two
+     separate rounded controls rather than a mis-drawn joint. Fails soft,
+     which is why this needs no guard. */
   .bo-quantity:not(:has(.bo-quantity__step))
     .bo-quantity__input:has(+ .bo-quantity__unit-select) {
     border-start-end-radius: 0;
