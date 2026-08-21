@@ -1084,6 +1084,43 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        second time this concern has been raised and the first time it had
        enough rows to be measured rather than argued.
 
+5. [ ] **94.13 — the six raw font-sizes, and whether the type scale is
+       missing a step.** Created by 37.3, which found that `typography`'s six
+       failures had **no live follow-up at all**: four of them (`avatar`,
+       `dashboard`, `kbd`, `prose`) carried no `improve` entry, and the other
+       two pointed at "roadmap 92.5" and "roadmap 94.1", **neither of which
+       exists as a numbered item**. A reader following either reference found
+       nothing.
+
+       The six, with what each is doing:
+
+       | Component | Literal | What it is |
+       |---|---|---|
+       | `avatar` | `0.7em` | initials inside a 1.8em disc |
+       | `kbd` | `0.85em` | keycap text, deliberately em-relative |
+       | `data-table` | `0.9em` | `__col--code` mono cells |
+       | `prose` | `0.9em` | inline `<code>` |
+       | `amount` | `0.875em` ×2 | currency/unit affixes |
+       | `dashboard` | `3rem` | the stat hero value |
+
+       **The pattern is the finding.** Five of the six are *em* and cluster in
+       a narrow band (0.7-0.9) doing the same job — text that must sit
+       *smaller than its host* without leaving the host's scale, which is what
+       an em ratio buys and a rem token cannot. `--bo-font-size-xs` is an
+       absolute step; none of these want one. The sixth, `dashboard`'s `3rem`,
+       is the opposite case: a display size *above* the scale's top.
+
+       **Accept — decide, do not just tokenise.** Either (a) the scale gains a
+       relative tier (a `--bo-font-size-ratio-*` or similar) that the five em
+       cases consume and a display step for `dashboard`, and all six re-score
+       to 3; or (b) record that "smaller than my host, in em" is a legitimate
+       intrinsic that the type scale deliberately does not express — in which
+       case `typography`'s definition must say so, exactly as `spacing`'s does
+       for intrinsic dimensions, and the six re-score to 3 on that basis
+       rather than staying at 2 forever with no route out. **What is not
+       acceptable is the current state:** six public pages showing 2/3 with no
+       queued fix behind them.
+
 5. [ ] **94.10 — the wrong-choice guidance gap is systemic, not a one-off.**
        94.8 wrote it for the six components 94.7 named, and I recorded there
        that `content`'s discriminating power was "spent until new components
@@ -5467,7 +5504,30 @@ every score must cite something checkable or it does not count.
        breaks a consumer silently, which is the thing this framework claims not
        to do.
 
-3. [ ] **37.3 — Feed the results back.** Every "improve" becomes a queued item
+3. [x] **37.3 — DONE 2026-08-21, and running it found the clause was false. Feed the results back.**
+       Report: `.roundtable/scorecard-feedback-loop-2026-08-21.md`.
+
+       **Six of seventeen below-3 dimensions had no follow-up.** Four
+       (`avatar`, `dashboard`, `kbd`, `prose`) carried no `improve` entry at
+       all for their `typography: 2`, and two pointed at "roadmap 92.5" and
+       "roadmap 94.1" — neither of which has ever been a numbered item. Those
+       six were published on component pages as a 2/3 with nothing behind
+       them.
+
+       Fixed three ways: **94.13** created for the six raw font-sizes with
+       Accept criteria that force a decision rather than a tokenisation; every
+       `improve` entry now **names its dimension** (`"typography — …"`), which
+       makes the score↔follow-up link checkable and tells a reader which rule
+       a gap belongs to; and `check-dsa-scores.mjs` now asserts the
+       **reciprocal** of yesterday's rule — no dimension below 3 without an
+       entry naming it. Red-proved by recreating this exact defect.
+
+       Clause 2 (deprecations): one, `date`, and its migration note is already
+       on the page, in the CHANGELOG and in the CSS header. Nothing owed.
+       Clause 3 (keeps): five recorded in the report so a future sweep does
+       not re-open them — `tabs`' mask alpha (judged four times now), print
+       hex, em letter-spacing, the two feature pages, and `hierarchy: na`.
+       Original text follows. Every "improve" becomes a queued item
        with its own Accept criteria; every "deprecate" gets its migration note;
        every "keep" is recorded so the next sweep doesn't re-litigate it. The
        report lands in `.roundtable/` like the other grills.

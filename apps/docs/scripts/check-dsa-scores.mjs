@@ -89,6 +89,22 @@ for (const [name, entry] of components) {
     `all dimensions are 3 but improve says: ${JSON.stringify(improve)}`,
   );
 
+  /* 4b. The RECIPROCAL of 4, and the one 37.3 was created to catch: a
+         dimension below 3 is a gap, and a gap with no follow-up is a public
+         page reporting a defect that nobody has queued. Four components
+         (avatar, dashboard, kbd, prose) shipped `typography: 2` with no
+         improve entry at all, and two more pointed at "roadmap 92.5" and
+         "roadmap 94.1" — neither of which existed as an item. Entries are
+         prefixed with their dimension so this is checkable rather than a
+         guess at which free-text line addresses which score, and so the
+         rendered "Known gaps" line tells a reader which rule it belongs to. */
+  const unqueued = below.filter((d) => !improve.some((i) => i.startsWith(`${d} —`)));
+  g.check(
+    `${name}: every dimension below 3 has an improve entry naming it`,
+    unqueued.length === 0,
+    `below 3 with no "<dimension> — …" entry: ${unqueued.join(', ')}`,
+  );
+
   /* 5. A scored component renders its score somewhere. */
   g.check(`${name}: some page asks to render its score`, rendered.has(name), 'no page carries <DsaScore component="…" /> for it');
 
