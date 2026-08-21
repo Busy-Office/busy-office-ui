@@ -780,6 +780,65 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 96 — Owner wishlist: currency on the right of the amount (2026-08-21)
+
+Owner: *"Money basic — option for currency on the right."*
+
+**Triaged ACCEPT, and the Objective changes the shape of the answer.** The ask
+is real and not cosmetic: currency placement is a locale convention, not a
+preference. `de-DE` and `fr-FR` write `1.234,56 €` with the symbol trailing,
+`en-US` writes `$1,234.56` leading, and an ERP sold into both cannot pick one.
+This framework already takes locale seriously enough to gate pseudo-locale
+expansion in CI, so a field that can only render one of the two conventions is
+a genuine gap.
+
+**But it should not be an "option", and that is the less-for-more test
+(§2) doing real work.** A modifier — `.bo-money--currency-end` — would be a
+second way to say something the markup already says. The joint is currently
+hard-coded (`__currency` always kills its END border and radius, `__amount`
+always its START), which is the only reason DOM order does not already work.
+Derive the joint from **position** instead and the component simply renders
+whichever order it is given, with no new class, no new API surface, and no
+decision for the consumer to get wrong.
+
+**Two properties that make position-derived the correct answer, not merely the
+tidier one:**
+
+- **Tab order stays correct by construction.** The obvious CSS-only trick —
+  `order` on the flex children — would reverse the visual order while leaving
+  DOM order alone, so focus would jump right-to-left against the rendering.
+  That is a WCAG 1.3.2 / 2.4.3 defect, and it is exactly the kind this
+  framework refuses elsewhere.
+- **No behavior change is needed.** `initMoneyField()` resolves its pair with
+  `closest('.bo-money')` + `querySelector('.bo-money__amount')`, which is
+  already order-independent — verified in `money-field.ts:52-55`, not assumed.
+
+1. [ ] **96.1 — derive the money joint from DOM order.** Replace the
+       unconditional radius/border rules with position-dependent ones
+       (`:first-child` / `:last-child`), so `select` then `input` renders
+       `[ USD | 1250.00 ]` and `input` then `select` renders
+       `[ 1250.00 | USD ]`, both as one joined control.
+
+       **Accept:** both orders render as a single control with one shared
+       edge, verified by measuring the seam in a browser (adjacent borders
+       must not double) in **both themes** and at 390px; focus ring stays
+       per-element and uncut on each half in each order; tab order matches
+       visual order in both; `initMoneyField()` still updates precision with
+       the select in either position; **no new class ships** — confirm the
+       generated `api.json` gains no `--currency-end` modifier. The docs page
+       gains one demo of the trailing form naming the locale reason, and the
+       CHANGELOG entry says this is a Fixed/Added that requires no markup
+       change from existing consumers.
+
+2. [ ] **96.2 — decide whether `.bo-quantity` gets the same treatment.** Its
+       button-less `( qty | unit )` joint is the exact same construction
+       (Slice 81 built it as a deliberate mirror of Money's), and unit
+       placement has the same locale question — `5 kg` vs some locales' `kg
+       5`. **Accept:** either apply the identical position-derived rule and
+       say so, or record why the unit's position is fixed where Money's is
+       not. Do NOT leave the two mirrors diverging silently, which is what
+       Slice 81 built them explicitly to avoid.
+
 ## Slice 95 — Owner wishlist: device-fitness and ERP-coverage scoring (2026-08-21)
 
 Two asks, triaged together because both extend the scoring work and both
