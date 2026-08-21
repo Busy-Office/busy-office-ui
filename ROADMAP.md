@@ -1386,7 +1386,49 @@ an assertive live region that exists before the user has done anything.
        regions that exist before injection, two `aria-busy` skeletons. No
        follow-up item, deliberately; there is nothing to queue.
 
-2. [ ] **97.2 — grill validation as ONE experience, not three surfaces.**
+2. [x] **97.2 — grill validation as ONE experience, not three surfaces.**
+       **Done 2026-08-21. Verdict: it IS one design — the grid reuses
+       `.bo-form-field` verbatim — with two navigational seams, queued as
+       97.3/97.4.** Report: `.roundtable/grill-validation-2026-08-21.md`.
+       Measured live with real keys: an in-cell message costs **+22px per
+       line** and shifts every row below by the same; before the first blur
+       typing an invalid value shifts nothing (`:user-invalid` correctly
+       unmatched while `checkValidity()` is already false); after the first
+       invalid blur it toggles per keystroke, so the row flips ±22px exactly
+       at validity transitions — accepted with reason (reserving the space
+       costs every dense grid row 22px permanently). Summary verified live:
+       submit intercepted, focus lands on the box, links `#field-id`, click
+       focuses the field — field-targeting subsumes row-targeting since focus
+       scrolls the row into view. Wording agrees in structure across all
+       three surfaces; the field rule exists only by example. Two instrument
+       failures caught before quoting (a triple-click concatenating number
+       values; a +40-vs-+22 disagreement that was column-width wrap, not a
+       second mechanism).
+
+3. [ ] **97.3 — the per-row vs document-level validation boundary is stated
+       nowhere.** The grid's own contract (`PATCH …/lines/:lineId`, 422 → that
+       row) makes a summary ceremony for per-row saves — correct, keep. But a
+       document-level submit that fails multiple rows is exactly
+       `/patterns/validation-summary`'s job, and neither page names the
+       boundary or links the other ("validation-summary" appears in
+       editable-grid's rendered body only via the sidebar nav; Related has six
+       links, none the summary). **Accept:** one sentence on each page naming
+       when the other takes over; each page's Related links the other; the
+       grid's copyable invalid-cell input gains an `id` (today a summary link
+       for it renders `href="#"` — the behavior builds `'#' + field.id` from
+       an input that has `aria-label`/`aria-describedby` but no id).
+
+4. [ ] **97.4 — state the field-message wording rule once.** "Exceeds on-hand
+       (200)" and "Unknown cost center code" agree by example — a terse
+       statement of the violated constraint carrying the datum needed to act —
+       but no page states the rule, so the next message has nothing to follow.
+       The summary heading (GOV.UK "There is a problem") and the document
+       strip's "say what is still possible" are each stated on their page;
+       field messages are the odd one out. **Accept:** the rule stated in ONE
+       place (beside the live-region rule 97.1 centralised in
+       /concepts/accessibility, or on the form page), with both shipped
+       examples cited; explicitly NOT a gate — message quality is semantic,
+       the 94.11 shape.
        The owner's ask is broader than the bug above. Validation currently
        appears in three places with three shapes: `.bo-form-field` (message
        under a labelled control), the editable grid (message inside a table
