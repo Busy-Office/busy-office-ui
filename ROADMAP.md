@@ -819,6 +819,35 @@ catalogue in ERP vocabulary and job order.
        into `detail-form`/`editable-grid` + redirect. Decided by evidence
        from 109.3, not taste. Refusing to fold is a valid outcome.
 
+5. [ ] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
+       (owner follow-up, 2026-08-22: "pattern should not [be] specific,
+       like PO or Invoice... should it be in DEMO?" — answered yes,
+       catalogue addendum). A pattern is NAMED and FRAMED for its shape;
+       the domain appears only as realistic demo data (`object-page` +
+       PO-88213 is the exemplar of doing it right). 18 of 20 pages already
+       comply; `invoice-list` is 109.2's rename; no per-domain demo
+       variants ever (re-photographing, 95.2). **Accept:** the rule is one
+       sentence in CLAUDE.md's pattern recipe; the catalogue and the 104.1
+       tile index copy state shape names; no page beyond 109.2's rename
+       needs touching.
+
+6. [ ] **109.6 — RF becomes a TRACK, not a group member** (owner
+       follow-up, same message: "app patterns... should be separate from
+       RF scanner (old browser, limit screen, usage is different)" —
+       agreed on all three axes, which map to things that already exist:
+       the `rf-essentials` profile/floor (Chrome/WebView 108), the 360×640
+       fixture, spacious density). `goods-receipt` moves out of group 3
+       into its own "RF / rugged devices" track in the sidebar and tile
+       index; its name STAYS (on the RF track the domain is the job — the
+       scan flow is the shape). Desktop/tablet/mobile explicitly do NOT
+       fork: responsive-by-construction is the standing bar, and 24
+       screens × 3 device classes would be 72 pages of re-photographs
+       (Objective §3). **Accept:** the track exists in sidebar + tile
+       index with a one-line statement of the app track's
+       device-adaptive-by-construction principle; future RF screens
+       (picking, putaway, count) are named as front-door candidates, not
+       queued.
+
 Still owner-blocked inside this catalogue: **role home / overview page**
 (row 3) — open since 99.1: is `app-launch` your "landing page", or do you
 want a role home with live content (my open items, KPIs)? The catalogue
