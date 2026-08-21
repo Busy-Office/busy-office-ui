@@ -859,6 +859,16 @@ justify the IA surgery; the groups + front door give the separation), a
 components tile index (mechanism generalizes; ask was patterns), and new
 search (⌘K/pagefind already answers "describe the thing").
 
+**Standing gate on this slice (owner, 2026-08-21, restating 99.4): any
+component a 104.x item finds missing goes through the front door — grill the
+need first (Objective §1/§2: could existing primitives compose it?), then
+score it on the six DSA dimensions with cited evidence, then document it with
+the wrong-choice clause. Refusing is an expected outcome. One rule, stated at
+99.4; this line binds it here rather than restating it.** The precedent to
+copy is 99.3's command-bar verdict: the "missing" component turned out to be
+`bo-dialog` + `bo-combobox` + `bo-kbd` composed, and the pattern shipped with
+zero new CSS.
+
 ## Slice 99 — Owner direction: patterns as an ERP expert would actually build them (2026-08-21)
 
 Owner: *"revamp the pattern to build the realistic pattern by screen (where
