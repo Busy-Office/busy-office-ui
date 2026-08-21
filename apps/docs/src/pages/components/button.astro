@@ -17,6 +17,10 @@ const sizes = `<button class="bo-btn">Default</button>
 <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Move up">↑</button>`;
 const states = `<button class="bo-btn" disabled>Disabled</button>
 <button class="bo-btn" data-loading="true">Saving…</button>`;
+const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-circle" aria-hidden="true"></span>Approve</button>
+<button class="bo-btn bo-btn--secondary"><span class="bo-icon bo-icon--truck" aria-hidden="true"></span>Ship</button>
+<button class="bo-btn bo-btn--icon" aria-label="Settings"><span class="bo-icon bo-icon--grid" aria-hidden="true"></span></button>
+<button class="bo-btn">Text only</button>`;
 ---
 <Gallery title="Button">
   <p class="demo-note">
@@ -38,6 +42,21 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
   <section class="demo">
     <h2>States</h2>
     <Demo code={states} />
+  </section>
+  <section class="demo">
+    <h2>Icon only, text only, icon + text</h2>
+    <Demo code={iconText} />
+    <p class="bo-u-text-muted">One primitive, three shapes — no new class for
+    any of them: a plain <code>.bo-icon</code> beside text composes because
+    <code>.bo-btn</code> is already <code>inline-flex</code> with a gap.
+    Every icon here carries <code>aria-hidden="true"</code>, per
+    <a href={base + '/components/icon'}>the icon component's own contract</a>
+    — checked live: whether the icon is hidden or not changes nothing today
+    (the mask has no text content to announce, and the icon-only button's
+    <code>aria-label</code> overrides the whole subtree either way), but
+    hiding it is the documented default and costs nothing to keep, so every
+    demo does it consistently rather than only where it happens to matter
+    right now.</p>
   </section>
   <section class="demo">
     <h2>Per-region density override</h2>
@@ -71,7 +90,8 @@ const states = `<button class="bo-btn" disabled>Disabled</button>
   <ClassRef component="button" />
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
-            'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.']} />
+            'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.',
+            'Icon + text needs no modifier — a <code>.bo-icon</code> beside text composes for free; keep the icon <code>aria-hidden="true"</code>.']} />
   <DsaScore component="button" />
   <Related links={[["/concepts/tokens", "Design tokens"], ["/base/colors", "Color scales"]]} />
 </Gallery>

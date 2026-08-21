@@ -780,6 +780,31 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 107 — Owner ask: button icon-only / text-only / icon+text (2026-08-22)
+
+Owner: *"button with icon only, text only and icon & text."* Measured
+before building anything: icon-only (`--icon`) and text-only were already
+documented on `/components/button`; **icon+text had never been
+demonstrated anywhere in the docs**, despite composing for free —
+`.bo-btn` is already `inline-flex` with a gap, so a plain `.bo-icon`
+beside text just works. Zero new CSS (Objective §2).
+
+1. [x] **107.1 — document the missing third shape.** **Done 2026-08-22.**
+       New demo section on `/components/button` showing all three shapes
+       side by side (Approve/Ship with icon+text, a `--icon`-only settings
+       button, plain text), plus an ApiTable note. **Two claims caught and
+       corrected before shipping, not asserted from memory:** a first draft
+       quoted a specific VoiceOver utterance ("check mark, Approve") this
+       project has no tool to verify (RESUME.md's own standing note) — cut
+       for an accessibility-tree measurement actually taken live instead: an
+       unhidden `.bo-icon` changes NOTHING in Chrome's computed accessible
+       name here (the mask has no text content to announce), and on an
+       `aria-label`led icon-only button neither does the icon's hidden
+       state (the label overrides the whole subtree regardless) — `aria-
+       hidden="true"` is kept everywhere as the icon component's own
+       documented default, not because measurement requires it. Verified
+       live: both themes, 390px, plain + DOCS_BASE builds, all 22 gates.
+
 ## Slice 106 — P0: leaving the docs shell for the landing page silently failed (2026-08-22)
 
 Owner report while dispatching a local Podman deploy: *"issue: navigation
