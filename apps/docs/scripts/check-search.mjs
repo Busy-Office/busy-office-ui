@@ -21,7 +21,6 @@
  * @exact — measures rendered contrast in a real browser. Exempt from --self-test: there is no
  * judgement to get wrong, and ceremony around a lookup is noise.
 */
-import { join } from 'node:path';
 import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
@@ -165,17 +164,13 @@ g.check(
    step ran; searching for code-only strings is not, because Pagefind splits
    camelCase and matches sub-tokens. */
 {
-  const { readdir, readFile } = await import('node:fs/promises');
-  async function* pages(dir) {
-    for (const e of await readdir(dir, { withFileTypes: true })) {
-      const p = join(dir, e.name);
-      if (e.isDirectory()) { if (!['_astro', 'pagefind'].includes(e.name)) yield* pages(p); }
-      else if (e.name.endsWith('.html')) yield p;
-    }
-  }
+  /* distPages: this block carried a fourth half-copy of the exclusion set —
+     `_astro`/`pagefind` but not `/v/` (Standardize, 2026-08-21). */
+  const { distPages } = await import('./dist-pages.mjs');
   let pre = 0, ignored = 0, fixtureTables = 0, keptTables = 0, conflictTables = 0, referenceIgnored = 0;
-  for await (const file of pages(DIST)) {
-    const html = await readFile(file, 'utf8');
+  for (const page of await distPages(DIST)) {
+    const file = page.file;
+    const html = page.html;
     for (const m of html.matchAll(/<pre([^>]*)>/g)) {
       pre += 1;
       if (/data-pagefind-ignore/.test(m[1])) ignored += 1;

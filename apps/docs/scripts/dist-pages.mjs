@@ -27,6 +27,26 @@
  *    exist while they run. It is here so that the intent survives if that
  *    ordering ever changes, not because it matches something today.
  *
+ * **It regrew (Standardize sweep, 2026-08-21).** Three more gates were walking
+ * `dist` themselves — `check-boost`, `check-links`, and `check-live-regions`,
+ * the last written the same day — and the project again had four answers to
+ * the page count: 101, 93, 91, 89. `check-boost` had even hand-copied HALF the
+ * exclusion set (a `/v/` skip, no redirect skip), which is the precise shape
+ * this file exists to prevent.
+ *
+ * All three now call `distPages`. `check-links` passes
+ * `{ skipRedirects: false }` because its documented job includes redirect-stub
+ * DESTINATIONS — the option exists so a legitimate exception stays inside the
+ * chokepoint instead of forking it. Semantic equivalence was checked per gate
+ * before and after: links reported the identical 8902 internal links,
+ * live-regions the identical 2 unhidden / 2 hidden, boost the identical 0
+ * failures and 4 probes; only the page counts converged, 101 -> 93.
+ *
+ * The lesson worth keeping: extracting a chokepoint does not hold on its own.
+ * Nothing stopped a new gate from writing its own walker, and nothing noticed
+ * for a day. If this regrows a third time, the fix is a gate over the gates —
+ * a check that no `scripts/check-*.mjs` calls `readdir` on `dist` directly.
+ *
  * Returns the page URL, its file path, and its HTML — the HTML has to be read
  * to detect a redirect stub anyway, so handing it back saves every caller a
  * second read (forced-colors caches exactly this).

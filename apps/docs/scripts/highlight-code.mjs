@@ -10,10 +10,10 @@
 // and AA falls out of the token pairs the core gate already checks.
 // Drift gate: any color the theme emits that this map doesn't cover fails
 // the build (an unmapped hex would bypass the token/contrast story).
-import { readFile, writeFile, readdir, stat } from 'node:fs/promises';
-import { join } from 'node:path';
+import { writeFile } from 'node:fs/promises';
 import { codeToHtml } from 'shiki';
 import { DIST } from './paths.mjs';
+import { distPages } from './dist-pages.mjs';
 
 
 // github-light hexes → semantic slots (many→few on purpose; the docs need
@@ -52,13 +52,10 @@ function unescapeHtml(s) {
     .replaceAll('&#38;', '&'); // both ampersand forms last — they guard double-escapes (grill H1: &#38; before &amp; double-decoded '&#38;amp;')
 }
 
-async function* htmlFiles(dir) {
-  for (const e of await readdir(dir)) {
-    const p = join(dir, e);
-    if ((await stat(p)).isDirectory()) yield* htmlFiles(p);
-    else if (e === 'index.html') yield p;
-  }
-}
+/* distPages, not a local walker (Standardize, 2026-08-21). This was the sixth
+   script walking dist with its own copy; the chokepoint exists precisely so
+   "which pages count" has one answer. The second pass below re-calls it, which
+   re-reads from disk — that is required, since the first pass rewrites them. */
 
 // Attributed pres included (grill E1: the zero-attribute shape silently
 // skipped six hand-written landing blocks + theming's two). Our own
@@ -77,8 +74,9 @@ let blocks = 0;
 let files = 0;
 const unmapped = new Set();
 
-for await (const file of htmlFiles(DIST)) {
-  const html = await readFile(file, 'utf8');
+for (const page of await distPages(DIST)) {
+  const file = page.file;
+  let html = page.html;
   if (!BLOCK.test(html)) continue;
   BLOCK.lastIndex = 0;
   let changed = false;
@@ -129,8 +127,9 @@ if (unmapped.size) {
 // the whole dist for any surviving un-highlighted <pre><code> and fail
 // loudly, listing where. Zero blocks total is equally a failure.
 const leftovers = [];
-for await (const file of htmlFiles(DIST)) {
-  const html = await readFile(file, 'utf8');
+for (const page of await distPages(DIST)) {
+  const file = page.file;
+  const html = page.html;
   for (const m of html.matchAll(/<pre(?![^>]*\bcode-hl\b)[^>]*><code[\s>]/g)) {
     leftovers.push(`${file.replace(DIST, '')} @${m.index}`);
   }

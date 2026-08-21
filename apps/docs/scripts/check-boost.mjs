@@ -15,10 +15,10 @@
 //
 // @heuristic — detects "inline layout styles" by pattern, so it can misread what an attribute is for.
 // OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
-import { readFile, readdir } from 'node:fs/promises';
 import { assertScanned, selfTest } from './gate-report.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { distPages } from './dist-pages.mjs';
 import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
@@ -27,13 +27,6 @@ import { DESKTOP_WIDTH } from './viewports.mjs';
 const docsRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /* ---------- 1. static: no layout-bearing inline styles ---------- */
-async function* htmlFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* htmlFiles(p);
-    else if (e.name === 'index.html') yield p;
-  }
-}
 // Astro's own tiny runtime styles are fine; LAYOUT rules are not.
 const LAYOUT = /(display\s*:\s*(grid|flex)|grid-template|position\s*:\s*sticky)/;
 
@@ -53,9 +46,9 @@ if (process.argv.includes('--self-test')) {
 }
 let staticFails = 0;
 let scanned = 0;
-for await (const file of htmlFiles(DIST)) {
-  if (file.includes('/v/')) continue; // frozen version snapshots
-  const html = await readFile(file, 'utf8');
+for (const page of await distPages(DIST)) {
+  const file = page.file;
+  const html = page.html;
   scanned++;
   const head = html.slice(0, html.indexOf('</head>'));
   for (const [, css] of head.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {

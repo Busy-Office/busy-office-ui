@@ -7,20 +7,14 @@
  * @exact — resolves each link to a file on disk. Exempt from --self-test: there is no
  *   judgement to get wrong, and ceremony around a lookup is noise.
 */
-import { readFile, readdir, stat } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { assertScanned } from './gate-report.mjs';
 import { join, dirname } from 'node:path';
 import { DIST } from './paths.mjs';
 
-const base = (process.env.DOCS_BASE ?? '').replace(/\/$/, '');
+import { distPages } from './dist-pages.mjs';
 
-async function* htmlFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* htmlFiles(p);
-    else if (e.name.endsWith('.html')) yield p;
-  }
-}
+const base = (process.env.DOCS_BASE ?? '').replace(/\/$/, '');
 
 /** Resolve a URL path to the built file that serves it, or null. */
 async function resolveFile(urlPath) {
@@ -72,8 +66,12 @@ async function idsOf(file) {
 
 let checked = 0;
 const failures = [];
-for await (const file of htmlFiles(DIST)) {
-  const html = await readFile(file, 'utf8');
+/* skipRedirects:false, deliberately: this gate's whole point includes
+   redirect-stub DESTINATIONS — two live 404s came from base-blind redirects
+   (header above). Every other dist-walking gate takes the default. */
+for (const page of await distPages(DIST, { skipRedirects: false })) {
+  const file = page.file;
+  const html = page.html;
   // Relative hrefs resolve against the page URL — the site grill's A-5 found
   // four broken ./ and ../ links the absolute-only check missed.
   const pageDir = '/' + dirname(file.replace(DIST + '/', '')).replace(/^\.$/, '');

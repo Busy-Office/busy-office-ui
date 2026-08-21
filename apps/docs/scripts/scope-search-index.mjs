@@ -24,8 +24,8 @@
  *    is no selector that separates them — indexing a little demo-cell noise is
  *    the deliberate trade for class names staying findable.
  */
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { writeFile } from 'node:fs/promises';
+import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
 
 
@@ -56,16 +56,6 @@ const IGNORE = [
 let files = 0;
 const counts = Object.fromEntries(IGNORE.map(([d]) => [d, 0]));
 
-async function* pages(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) {
-      if (['_astro', 'pagefind'].includes(e.name)) continue;
-      yield* pages(p);
-    } else if (e.name.endsWith('.html')) yield p;
-  }
-}
-
 /* Reference pages ARE their tables. `/reference/tokens`, `/reference/events` and
    `/reference/acr` exist to be searched by token name, event name and criterion,
    and the fixture rule below would swallow all three — it did, and it was found
@@ -78,8 +68,13 @@ async function* pages(dir) {
    that appear on ordinary component pages (ClassRef, ApiTable). */
 const REFERENCE_PAGE = /\/reference\//;
 
-for await (const file of pages(DIST)) {
-  let html = await readFile(file, 'utf8');
+/* distPages, not a local walker: this file used to carry its own, skipping
+   `_astro`/`pagefind` but NOT `/v/` — a third half-copy of the exclusion set
+   (Standardize, 2026-08-21). Frozen version snapshots must not have today's
+   scoping rules written into them. */
+for (const page of await distPages(DIST)) {
+  const file = page.file;
+  let html = page.html;
   const before = html;
   for (const [desc, re] of IGNORE) {
     if (desc === 'fixture tables' && REFERENCE_PAGE.test(file)) continue;

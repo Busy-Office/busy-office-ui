@@ -944,6 +944,49 @@ the question, and the owner's phrasing is the prompt to ask it.
        `check:wrong-choice` now requires. **Refusing a component is an
        expected outcome**, not a failure of the slice.
 
+## Slice 103 — Standardize: the dist-walking chokepoint regrew (2026-08-21)
+
+Dispatched by the counter at 4/4. **`dist-pages.mjs` was extracted on
+2026-08-18 to end exactly one defect — four gates each walking `dist` with
+their own copy of the exclusion set, giving the project two different answers
+to "how many pages does this have?" (82 and 90). Three days later there were
+SIX forks and four answers: 101, 93, 91, 89.**
+
+Migrated all six to the chokepoint: `check-boost`, `check-links`,
+`check-live-regions`, `check-search`, `scope-search-index`, `highlight-code`.
+Three of them carried a hand-copied HALF of the exclusion set — `_astro`/
+`pagefind` or `/v/`, never both, never the redirect stubs — which is the
+precise shape the helper exists to prevent. `check-live-regions` was written
+the same day and had no exclusions at all.
+
+**Semantic equivalence checked per script, before and after**, so the sweep is
+not "it still exits 0": links reported the identical 8902 internal links,
+live-regions the identical 2 unhidden / 2 hidden, boost the identical 0
+failures and 4 probes, search the identical 9 assertions, scope-search-index
+the identical 508 regions across 89 pages, highlight-code 204 blocks — which
+reconciles independently against scope-search-index's 204 code samples. Only
+the page counts moved, 101 -> 93, which was the point.
+
+The real win is inherited rather than written: every one of the six now gets
+`distPages`' fail-loud guard, which throws when `dist` is empty instead of
+letting a gate print a cheerful zero and exit 0.
+
+1. [x] **103.1 — six forks folded back into `dist-pages.mjs`.** Done
+       2026-08-21. `check-links` keeps its exception *inside* the chokepoint
+       via `{ skipRedirects: false }` — its documented job includes redirect
+       stub destinations, after two live 404s from base-blind redirects.
+
+2. [ ] **103.2 — a gate over the gates, so this cannot regrow a third time.**
+       Extraction did not hold on its own: nothing stopped a new script from
+       writing its own walker, and nothing noticed for three days. The
+       chokepoint needs an enforcer, not a convention. **Accept:** a check that
+       fails when any `apps/docs/scripts/*.mjs` other than `dist-pages.mjs`
+       enumerates `dist` itself, red-proved by adding a fork and watching it go
+       red. Classify it honestly — recognising "walks dist" from source is
+       `@heuristic`, so it ships `--self-test` per `check:selftests`. If it
+       cannot be made to fail reliably, say so and keep the convention rather
+       than shipping ceremony (the 94.11 lesson).
+
 ## Slice 102 — owner wishlist: three grills (2026-08-21)
 
 Triaged mid-wake from the owner. All three are **reviews of surface that

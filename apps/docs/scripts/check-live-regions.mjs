@@ -39,10 +39,10 @@
  * exception map below. Nothing is recognised or positionally guessed, so it
  * ships no --self-test.
  */
-import { readFile, readdir } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gate, assertScanned } from './gate-report.mjs';
+import { distPages } from './dist-pages.mjs';
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 
@@ -60,17 +60,7 @@ const EXCEPTIONS = new Map([
    'the counts banner is the response to POST /import action=validate, per the page\'s own data contract'],
 ]);
 
-async function htmlFiles(dir) {
-  const out = [];
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) out.push(...await htmlFiles(p));
-    else if (e.name.endsWith('.html')) out.push(p);
-  }
-  return out;
-}
-
-const files = await htmlFiles(DIST);
+const files = await distPages(DIST);
 const g = gate('live-regions check', 'live-region claim(s)');
 assertScanned(files.length, 'built HTML pages', 'dist held no .html — the gate verified nothing.');
 
@@ -78,13 +68,12 @@ let unhidden = 0;
 let hidden = 0;
 const seenExceptions = new Set();
 
-for (const file of files) {
-  const rel = relative(DIST, file);
+for (const page of files) {
+  const rel = relative(DIST, page.file);
   /* Blank <pre> to same-length spaces rather than deleting: a code sample is
      allowed to teach the dynamic case, and same-length keeps any offset in a
      failure message pointing at the real line. */
-  const html = (await readFile(file, 'utf8'))
-    .replace(/<pre[\s\S]*?<\/pre>/g, (m) => ' '.repeat(m.length));
+  const html = page.html.replace(/<pre[\s\S]*?<\/pre>/g, (m) => ' '.repeat(m.length));
 
   for (const m of html.matchAll(/<[a-zA-Z][^>]*\brole="alert"[^>]*>/g)) {
     if (/\bhidden\b/.test(m[0])) { hidden++; continue; }
