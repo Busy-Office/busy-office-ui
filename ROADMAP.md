@@ -843,7 +843,22 @@ the question, and the owner's phrasing is the prompt to ask it.
        becomes its own numbered item carrying the pattern-page recipe's six
        required parts. No screen gets built before its row exists.
 
-2. [ ] **99.2 — settle the four detail patterns before adding a fifth.**
+2. [x] **99.2 — settle the four detail patterns before adding a fifth.**
+       **Verdict: keep all four, measured.** Component sets barely overlap —
+       `object-page` (amount, badge, button, dashboard, kv, pagination),
+       `record-detail` (approval-workflow, byline, dashboard, kv),
+       `detail-form` (calendar, form), `master-detail` (badge, dashboard,
+       data-table, dialog, kv, offcanvas). Four compositions, four jobs:
+       long read / short read / entry / list-plus-panel. Nothing to merge.
+       The real defect was **one-way** cross-referencing: `object-page`'s
+       opener already named `record-detail`, and no opener named it back.
+       All four now carry a `<strong>Not …</strong>` clause naming a sibling.
+       Generalised: **0 of 19 pattern pages** carried the clause versus 14 of
+       40 component pages — one convention applied to half the surface — so
+       `check:wrong-choice` now scans `pages/patterns/` too, with its own
+       shrinking `PATTERN_TODO` (15 left). Red-proved both ways: a pattern off
+       the list without a clause, and a clause-carrying pattern still listed.
+       2026-08-21.
        Adding `inbox` and `object page` on top of four overlapping detail
        screens would make the set harder to navigate, not easier. **Accept:**
        a verdict — keep four with each one's distinct job stated in its

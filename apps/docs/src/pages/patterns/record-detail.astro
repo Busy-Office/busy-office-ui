@@ -13,6 +13,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     timeline, and an audit trail stacked in a feed — all standard components,
     generic to any ERP. This example is a purchase order; the shape is the
     same for an invoice, a change request, or a leave request.
+    <strong>Not once the record stops fitting in one scan</strong> — when a
+    reader has to hunt for a section, it wants anchor navigation and a
+    sticky action bar, which is
+    <a href={base + '/patterns/object-page'}>object page</a>. Same content,
+    different reading problem.
   </p>
 
   <nav aria-label="Breadcrumb">

@@ -66,6 +66,11 @@ ${deliveryMonth(2026, 8)}
     bar. Nothing new to learn; <code>.bo-form-row</code> already collapses to one
     column on narrow screens by construction (<code>auto-fit</code>, not a fixed
     column count) — resize the window to see it.
+    <strong>Not for reading a record</strong> — a form styles fields for
+    ENTRY, and rendering read-only values as inputs tells the user they can
+    change things they cannot. Read surfaces are
+    <a href={base + '/patterns/record-detail'}>record detail</a> and
+    <a href={base + '/patterns/object-page'}>object page</a>.
   </p>
   <section class="demo">
     {/* An edit screen with no identity line cannot tell you WHICH record you

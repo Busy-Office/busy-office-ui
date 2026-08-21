@@ -23,6 +23,13 @@
  * reason. Forcing a sentence onto those would produce filler, which is worse
  * than silence — the point is guidance, not a box ticked.
  *
+ * Extended to PATTERN pages in the Standardize sweep of 2026-08-21. The
+ * convention had been enforced on components and ignored on screens — one
+ * rule applied to half the surface — and **0 of 19 pattern pages** carried a
+ * clause. It matters more here, not less: picking the wrong SCREEN costs more
+ * than picking the wrong component, and this framework ships four detail
+ * screens a reader has to choose between.
+ *
  * @exact — a structural check for a required element in a known position.
  * Exempt from --self-test: there is no heuristic to get wrong, only presence.
  */
@@ -43,11 +50,22 @@ const TODO = new Set([
   'stepper', 'table-toolbar', 'tree-table', 'tree',
 ]);
 
-const dir = new URL('../src/pages/components/', import.meta.url);
-const files = (await readdir(dir)).filter((f) => f.endsWith('.astro'));
+/** Pattern-page debt, same rule as TODO above: delete a line when it lands. */
+const PATTERN_TODO = new Set([
+  'app-launch', 'approval', 'bulk-actions', 'editable-grid', 'field-editor',
+  'filter-panel', 'goods-receipt', 'invoice-list', 'login',
+  'reporting-dashboard', 'settings-admin', 'staging', 'validation-summary',
+  'value-help', 'wizard',
+]);
 
-const g = gate('wrong-choice check', 'component page(s)');
+const dir = new URL('../src/pages/components/', import.meta.url);
+const patternDir = new URL('../src/pages/patterns/', import.meta.url);
+const files = (await readdir(dir)).filter((f) => f.endsWith('.astro'));
+const patternFiles = (await readdir(patternDir)).filter((f) => f.endsWith('.astro'));
+
+const g = gate('wrong-choice check', 'page(s)');
 assertScanned(files.length, 'component pages', 'No .astro pages found — the gate verified nothing.');
+assertScanned(patternFiles.length, 'pattern pages', 'No pattern .astro pages found — the gate verified nothing.');
 
 let carried = 0;
 for (const file of files) {
@@ -67,4 +85,16 @@ for (const file of files) {
     'add a <strong>Not …</strong> clause naming the wrong context and the alternative, or add the page to EXEMPT with a reason');
 }
 
-g.report(`verified (${carried} carry the clause, ${TODO.size} outstanding, ${EXEMPT.size} exempt)`);
+let patternCarried = 0;
+for (const file of patternFiles) {
+  const slug = basename(file, '.astro');
+  const has = hasWrongChoiceClause(await readFile(new URL(file, patternDir), 'utf8'));
+  if (has) patternCarried++;
+  g.check(`patterns/${slug}: is not listed as TODO once it carries the clause`, !(has && PATTERN_TODO.has(slug)),
+    'it now has the clause — delete it from PATTERN_TODO in this file');
+  if (PATTERN_TODO.has(slug)) continue;
+  g.check(`patterns/${slug}: opener names a screen this is the WRONG choice for`, has,
+    'add a <strong>Not …</strong> clause naming the wrong context and which screen to use instead');
+}
+
+g.report(`verified (components: ${carried} carry / ${TODO.size} outstanding / ${EXEMPT.size} exempt; patterns: ${patternCarried} carry / ${PATTERN_TODO.size} outstanding)`);
