@@ -1880,8 +1880,8 @@ then documented — and refusing is an expected outcome.
        re-running it fails exactly at 390px, confirming the assertion can
        actually catch this defect class rather than passing by construction.
 
-3c. [ ] **102.9 — editable-grid: going dirty can reflow a neighboring
-       column.** From the 102.3 grill
+3c. [x] **102.9 — DONE 2026-08-22.** editable-grid: going dirty can reflow a neighboring
+       column. From the 102.3 grill
        (`.roundtable/grill-editable-grid-2026-08-22.md`): revealing a row's
        Save/Cancel/Unsaved (the row-actions cell, normally `hidden`) widens
        that cell from 32px to 227px; in a table with enough columns that
@@ -1907,6 +1907,45 @@ then documented — and refusing is an expected outcome.
        verified live (1440 + 390, both themes) that the fix doesn't
        reintroduce the wrap somewhere else, and if a runtime claim is added
        to the page it gets a `check-claims.mjs` case per CLAUDE.md.
+
+       **Decision: (b), demo-authoring debt — and (a) was tried first and
+       measured to be the wrong trade, not just assumed to be.** Implementing
+       (a) (`min-inline-size: 12rem` on `.bo-data-table__row-edit-actions`,
+       sized to the measured 189.4px min-content of the always-present
+       badge+Save+Cancel cluster) was built and rebuilt into a live docs
+       image to check its real cost — and it made things **worse**, not just
+       costly: the Advanced table's Cost centers column and the Medium
+       table's Qty column both started wrapping **permanently, in the clean
+       state**, not only while a row was dirty. Reserving width unconditionally
+       doesn't remove the layout pressure, it just makes it constant instead
+       of conditional. Reverted.
+
+       **(b) implemented instead**, scoped to the one demo the grill actually
+       found broken: `editable-grid.astro`'s Advanced table's `Cost centers`
+       header gained `style="min-inline-size: 15rem"` (240px, just above the
+       211px it was compressed to when it wrapped) — a demo-authoring choice,
+       not a framework change; `.bo-data-table__row-edit-actions` is
+       untouched. Verified live, rebuilt fresh into a bind-mounted nginx
+       image: Advanced's row height stays exactly `54px`/`44.5px` (1440/390)
+       clean AND dirty, in both themes — the wrap is gone with no other
+       column affected (Line/Qty/Status/Needed by/Rush all measured
+       unchanged before vs. after).
+
+       **Two pre-existing, unrelated height deltas found during
+       verification, deliberately not fixed here:** Medium's row at 390px
+       grows +36px when dirty, but only because the Qty cell's existing
+       `bo-form-field__message` ("Exceeds on-hand (200)") wraps across more
+       lines as its cell narrows — normal validation-message reflow, not the
+       tag-input-class defect this item is about, and present before this
+       fix too. `inline-editing`'s `Multi-row inline edit` demo grows +11px
+       at 390px (a plain "Widget A" text cell wrapping in its intentionally
+       narrow 28rem-capped illustration table) — same shape, same pre-
+       existing, out of scope. Neither reproduces the "framework contract
+       bug" class 102.9 exists to rule out; noted here rather than silently
+       ignored.
+
+       No runtime claim added — this is a static layout fix to one demo's
+       column width, nothing dynamic worth a `check-claims.mjs` case.
 
 3d. [ ] **102.10 — three Data-input pages are still missing their
        wrong-choice clause, despite reading as "cleared."** Found while
