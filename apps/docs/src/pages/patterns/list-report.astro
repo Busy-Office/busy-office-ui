@@ -20,6 +20,12 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     Composed entirely from shipped components; the
     <a href={base + '/components/data-table'}>data table page</a>
     documents the table itself, this page documents the screen.
+    <strong>Not for a single record's full detail</strong> — once a clerk
+    opens one invoice to review or act on it alone, that screen is a
+    <a href={base + '/patterns/record-detail'}>record detail</a> (or an
+    <a href={base + '/patterns/object-page'}>object page</a> for a richer
+    one); list-report's job stops at finding and bulk-acting on rows, not
+    deep-diving into one.
   </p>
   <section class="demo">
     <form class="bo-cluster" data-density="compact">

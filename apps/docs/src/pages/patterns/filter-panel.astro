@@ -12,6 +12,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     rest a click away. "Done" means the list reloads and <strong>what is currently
     filtering it stays visible</strong> after the panel closes — a filter you cannot see
     is a filter you will forget you set, and then mistrust the numbers.
+    <strong>Not for a list with one obvious narrowing dimension</strong> — a single search
+    box or a two-option status filter is already inline in
+    <a href={base + '/patterns/list-report'}>the list report</a>'s own bar; reach for the
+    grouped, chip-backed panel here only once distinct facets pile up (cost centre, date
+    band, status, and more), not by default for every list.
   </p>
 
   <section class="demo">

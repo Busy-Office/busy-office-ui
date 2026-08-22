@@ -24,6 +24,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     own <code>aria-describedby</code>) announces each successful scan — a
     screen-reader/low-vision RF user gets non-visual confirmation without it
     being read for every sighted user.
+    <strong>Not for a desk-based receiving clerk keying a paper packing slip.</strong>
+    Without a physical scanner there is no barcode to feed the always-focused field, the
+    spacious steppers just waste screen space, and the workflow is really "type these
+    numbers in and check them" — that's
+    <a href={base + '/patterns/detail-form'}>a detail form</a> at normal density, not this
+    pattern.
   </p>
 
   <section class="demo" data-density="spacious">

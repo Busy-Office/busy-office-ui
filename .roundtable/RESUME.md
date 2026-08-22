@@ -11,15 +11,29 @@ uncommitted work, and a decision made but not yet written down.
 
 ---
 
-## In flight: nothing
+## In flight: 109.6, batch 2 of N
 
-Last updated 2026-08-19 after the Slice 56-61 Objective grill. This file had
-gone stale since 2026-08-18 — Slice 48's "open question" below had already
-been resolved and shipped (48.4, then the whole object-page pattern) without
-this file being told. Found by the same grill that found the LIFO dispatch
-bug; both are the same root cause (stale state trusted instead of checked).
-**If this file's "last updated" is more than a few wakes old, verify its
-claims against ROADMAP.md before trusting them.**
+Last updated 2026-08-22 after 109.6 batch 1 landed (commit follows this
+entry). **Batch 1 done and committed** — all 13 `PATTERN_TODO` pages
+bar-scored + wrong-choice-clause'd; `check:wrong-choice` is 30/0, 112.1 is
+unblocked on that front. **Still open, batch 2**: bar-score the ~13
+non-TODO pages against `.roundtable/pattern-quality-bar-2026-08-22.md` —
+`detail-form`, `inbox`, `job-monitor`, `kanban`, `master-detail`,
+`notification`, `output-form`, `record-detail`, `report`, `role-home`,
+`schedule`, `command-bar`, `validation-summary` (confirm RF variants are
+exempt via 109.7 before scoring them). Full batch-1 findings and the
+109.4 field-editor fold verdict: `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md`.
+The systemic gap batch 1 found (12/13 pages lack the human-monitoring-signal
+sentence) is scoring only so far — not yet fixed on any page.
+
+*(Prior note, kept for its still-true warning:)* Last updated 2026-08-19
+after the Slice 56-61 Objective grill. This file had gone stale since
+2026-08-18 — Slice 48's "open question" below had already been resolved and
+shipped (48.4, then the whole object-page pattern) without this file being
+told. Found by the same grill that found the LIFO dispatch bug; both are the
+same root cause (stale state trusted instead of checked). **If this file's
+"last updated" is more than a few wakes old, verify its claims against
+ROADMAP.md before trusting them.**
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 

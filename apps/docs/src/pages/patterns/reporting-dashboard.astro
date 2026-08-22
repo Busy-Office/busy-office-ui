@@ -18,6 +18,11 @@ const rows = [
     widget grid mixing a data table, an audit-style activity feed, and a
     collapsible notes card. Zero new CSS — everything here already has its
     own component page.
+    <strong>Not for an actionable worklist</strong> — this screen is read-only
+    situational awareness: numbers and a feed a manager scans, not a queue
+    anyone works from. A screen whose whole job is triaging items one by one
+    is an <a href={base + '/patterns/inbox'}>inbox</a> or a
+    <a href={base + '/patterns/job-monitor'}>job monitor</a>, not this.
   </p>
 
   <nav aria-label="Breadcrumb">

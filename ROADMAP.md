@@ -541,22 +541,38 @@ catalogue in ERP vocabulary and job order.
        this coverage.** **Accept:** the bar exists as a
        written checklist in `.roundtable/` after the two grills; the sweep
        is its own later item with per-page verdicts.
-4. [ ] **109.4 — `field-editor` membership question.** A technique more
-       than a screen; if the 109.6 sweep finds the page thin against the
-       bar, fold into `detail-form`/`editable-grid` + redirect. Decided by
-       evidence, not taste. Refusing to fold is a valid outcome.
+4. [x] **109.4 — DONE 2026-08-22. VERDICT: FOLD.** Bar-scored, not taste:
+       field-editor fails shape-not-domain (framed by "the SM30 case"),
+       and its own words admit its anatomy is "the data table with
+       `data-row-edit`... nothing here is a field editor component" — the
+       same four elements editable-grid already documents. The one real
+       distinction (single-Save-at-bottom, one-record scope) is a variant
+       paragraph on `detail-form`/`editable-grid`, not a standalone page.
+       **Fold into detail-form/editable-grid + redirect the URL — execution
+       is separate follow-up work, not done here.** Full reasoning:
+       `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md`.
 
-4b. [ ] **109.6 — the 18-page sweep against 109.3's bar.** Split out per
-       109.3's own Accept ("the sweep is its own later item with per-page
-       verdicts"). Scores the other 18 pattern pages (all but object-page
-       and editable-grid, already grilled) against
-       `.roundtable/pattern-quality-bar-2026-08-22.md`; the same pass
-       writes the 13 outstanding wrong-choice clauses listed in the bar's
-       Sweep protocol section. Feeds 109.4 (field-editor fold decision)
-       and 112.1 (`patterns.json` extraction depends on wrong-choice
-       coverage). **Accept:** per-page verdict recorded (pass/fail per bar
-       line, or a stated reason a line doesn't apply), 13 clauses written,
-       `check:wrong-choice`'s `PATTERN_TODO` empties.
+4b. [ ] **109.6 — the pattern sweep against 109.3's bar. IN PROGRESS.**
+       Split out per 109.3's own Accept ("the sweep is its own later item
+       with per-page verdicts"). **Batch 1 done 2026-08-22** (report:
+       `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md`): the 13
+       `PATTERN_TODO` pages, in 4 parallel agents, each bar-scored AND
+       given its wrong-choice clause — `check:wrong-choice` now passes
+       30 carry / 0 outstanding (`PATTERN_TODO` emptied), unblocking
+       112.1. One real defect found and fixed, not just scored: `wizard`
+       claimed panels would "render at once" without JS, which its own
+       `hidden` attribute already contradicts — corrected the prose and
+       added the missing No-JS States row. Systemic gap the batch
+       surfaced: 12 of 13 pages lack the human-monitoring-signal sentence
+       the 109.3 owner-quartet requires — the largest common failure, not
+       yet fixed (scoring only, per the batch's own scope). **Remaining
+       for a later round:** bar-score `detail-form`, `inbox`, `job-monitor`,
+       `kanban`, `master-detail`, `notification`, `output-form`,
+       `record-detail`, `report`, `role-home`, `schedule`, `command-bar`,
+       `validation-summary` (RF variants likely exempt, covered by 109.7 —
+       confirm on continuation). **Accept:** per-page verdict recorded for
+       every pattern page (pass/fail per bar line, or a stated reason a
+       line doesn't apply); wrong-choice clauses done (met, batch 1).
 
 5. [x] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
        (owner follow-up, 2026-08-22: "pattern should not [be] specific,

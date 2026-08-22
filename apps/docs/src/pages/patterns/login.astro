@@ -18,6 +18,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     password managers fill the form), and errors use the same
     <a href={base + '/patterns/validation-summary'}>validation-summary pattern</a> as any
     other form. Try it: submit the empty form.
+    <strong>Not for re-authentication mid-task</strong> — when a workspace
+    needs a step-up credential check without abandoning the screen the user
+    was on (confirming a destructive action, re-entering a password after a
+    session timeout), a full-page navigation throws away that context; use a
+    <a href={base + '/components/dialog'}>dialog</a> carrying the same two
+    fields instead. This page is for the one navigation every session starts
+    with, not an interruption inside one.
   </p>
 
   <section class="demo" style="background: var(--bo-color-bg-canvas); padding: var(--bo-space-8) var(--bo-space-4)">

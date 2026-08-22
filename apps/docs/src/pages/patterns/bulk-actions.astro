@@ -69,6 +69,11 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
     selected record either changed or explained why it didn't. The
     failure mode this pattern exists to prevent is the silent one: an
     action that reports success while quietly skipping rows.
+    <strong>Not for changing one record</strong> — a single row's fields belong on
+    <a href={base + '/patterns/object-page'}>the object page</a> or
+    <a href={base + '/patterns/record-detail'}>record-detail</a>; this pattern's
+    whole cost (out-of-band summary, per-row reasons, the transient-state rule)
+    only pays for itself once more than one record is changing at once.
   </p>
 
   <section class="demo">

@@ -8,7 +8,7 @@
         {
           "href": "/patterns/login",
           "title": "Login",
-          "opener": "Who uses it: every user, before anything else — the first screen and, for anyone who forgets a password, a recurring one. What \"done\" looks like: signed in, or told exactly why not without leaking which part was wrong. The one screen every ERP app has and the one where getting the details wrong locks real users out. Composed entirely from existing components, zero new CSS: .bo-widget (the card primitive) centers the form on the canvas, fields are plain .bo-form-fields with the correct autocomplete tokens (username / current-password — this is what lets password managers fill the form), and errors use the same validation-summary pattern as any other form. Try it: submit the empty form.",
+          "opener": "Who uses it: every user, before anything else — the first screen and, for anyone who forgets a password, a recurring one. What \"done\" looks like: signed in, or told exactly why not without leaking which part was wrong. The one screen every ERP app has and the one where getting the details wrong locks real users out. Composed entirely from existing components, zero new CSS: .bo-widget (the card primitive) centers the form on the canvas, fields are plain .bo-form-fields with the correct autocomplete tokens (username / current-password — this is what lets password managers fill the form), and errors use the same validation-summary pattern as any other form. Try it: submit the empty form. Not for re-authentication mid-task — when a workspace needs a step-up credential check without abandoning the screen the user was on (confirming a destructive action, re-entering a password after a session timeout), a full-page navigation throws away that context; use a dialog carrying the same two fields instead. This page is for the one navigation every session starts with, not an interruption inside one.",
           "openerShort": "Who uses it: every user, before anything else — the first screen and, for anyone who forgets a password, a recurring one.…",
           "complexity": 1,
           "components": [
@@ -29,7 +29,7 @@
         {
           "href": "/patterns/app-launch",
           "title": "App launch",
-          "opener": "Who uses it: anyone opening the suite, every session — the first screen after sign-in. What \"done\" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen — the icon-grid launcher (the \"Bento UI\" / tablet-launcher archetype from the device-coverage table — same .bo-widget-grid container-query mechanism as a dashboard, at a smaller tile size, not a new grid component). Tiles are plain links composed into .bo-widget cards with real CSS icons (themable currentColor glyphs) where a glyph is genuinely right, an initials chip where none is, and inline &lt;svg&gt; where a tenant brings their own; the category row is the ordinary tabs pattern; a \"folder\" tile is just a widget whose body holds a cluster of small tiles. Zero new CSS.",
+          "opener": "Who uses it: anyone opening the suite, every session — the first screen after sign-in. What \"done\" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen — the icon-grid launcher (the \"Bento UI\" / tablet-launcher archetype from the device-coverage table — same .bo-widget-grid container-query mechanism as a dashboard, at a smaller tile size, not a new grid component). Tiles are plain links composed into .bo-widget cards with real CSS icons (themable currentColor glyphs) where a glyph is genuinely right, an initials chip where none is, and inline &lt;svg&gt; where a tenant brings their own; the category row is the ordinary tabs pattern; a \"folder\" tile is just a widget whose body holds a cluster of small tiles. Zero new CSS. Not for returning a user to a specific record they already know — a bookmark, a notification, or a saved link should land directly on the object page or the list report, never route back through the launcher grid to get there.",
           "openerShort": "Who uses it: anyone opening the suite, every session — the first screen after sign-in.…",
           "complexity": 1,
           "components": [
@@ -104,7 +104,7 @@
         {
           "href": "/patterns/list-report",
           "title": "List report",
-          "opener": "Who uses it: AP clerks, all day — the screen they live in. What \"done\" looks like: find the invoices that need action, act on them in bulk, and never lose your place. Composed entirely from shipped components; the data table page documents the table itself, this page documents the screen.",
+          "opener": "Who uses it: AP clerks, all day — the screen they live in. What \"done\" looks like: find the invoices that need action, act on them in bulk, and never lose your place. Composed entirely from shipped components; the data table page documents the table itself, this page documents the screen. Not for a single record's full detail — once a clerk opens one invoice to review or act on it alone, that screen is a record detail (or an object page for a richer one); list-report's job stops at finding and bulk-acting on rows, not deep-diving into one.",
           "openerShort": "Who uses it: AP clerks, all day — the screen they live in.…",
           "complexity": 2,
           "components": [
@@ -133,7 +133,7 @@
         {
           "href": "/patterns/filter-panel",
           "title": "Advanced filter panel",
-          "opener": "The filter set that outgrew the bar. A finance or purchasing user opens the same list a dozen times a day and narrows it a different way each time — cost centre, status, date range, amount band. They do not want twelve controls permanently across the top; they want the two they use constantly visible and the rest a click away. \"Done\" means the list reloads and what is currently filtering it stays visible after the panel closes — a filter you cannot see is a filter you will forget you set, and then mistrust the numbers.",
+          "opener": "The filter set that outgrew the bar. A finance or purchasing user opens the same list a dozen times a day and narrows it a different way each time — cost centre, status, date range, amount band. They do not want twelve controls permanently across the top; they want the two they use constantly visible and the rest a click away. \"Done\" means the list reloads and what is currently filtering it stays visible after the panel closes — a filter you cannot see is a filter you will forget you set, and then mistrust the numbers. Not for a list with one obvious narrowing dimension — a single search box or a two-option status filter is already inline in the list report's own bar; reach for the grouped, chip-backed panel here only once distinct facets pile up (cost centre, date band, status, and more), not by default for every list.",
           "openerShort": "The filter set that outgrew the bar.…",
           "complexity": 2,
           "components": [
@@ -162,7 +162,7 @@
         {
           "href": "/patterns/value-help",
           "title": "Value help",
-          "opener": "Who uses it: anyone typing a code they cannot remember — a buyer picking a material out of forty thousand, a clerk choosing a cost centre; dozens of times a day, inside a form they are part-way through. What \"done\" looks like: the right code is in the field, and the reader is back where they were with nothing else lost. The picker is a detour, not a destination — which is why choosing must put focus back in the field they were filling, not leave it at the top of the document.",
+          "opener": "Who uses it: anyone typing a code they cannot remember — a buyer picking a material out of forty thousand, a clerk choosing a cost centre; dozens of times a day, inside a form they are part-way through. What \"done\" looks like: the right code is in the field, and the reader is back where they were with nothing else lost. The picker is a detour, not a destination — which is why choosing must put focus back in the field they were filling, not leave it at the top of the document. Not when the option set is small — a couple dozen fixed choices belong in a plain native select, not a dialog with search and paging behind it. This pattern is for the case a select cannot handle: a list too large to enumerate in one control.",
           "openerShort": "Who uses it: anyone typing a code they cannot remember — a buyer picking a material out of forty thousand, a clerk choosing a cost…",
           "complexity": 2,
           "components": [
@@ -346,7 +346,7 @@
         {
           "href": "/patterns/wizard",
           "title": "Multi-step wizard",
-          "opener": "Who uses it: whoever is creating something too long for one screen, guided rather than dropped into a form — most often a first-time or occasional flow. What \"done\" looks like: every step completed or explicitly skippable, submitted once, and resumable if abandoned partway. A real multi-step flow — one panel visible at a time, Back/Next move between them — as opposed to detail form's multi-section single screen. Composed from the existing .bo-stepper progress indicator plus a new opt-in behavior, initWizard(), that keeps the stepper and the visible panel in sync and moves focus to each new panel — the panels themselves are plain .bo-form-section fieldsets, nothing new to learn there.",
+          "opener": "Who uses it: whoever is creating something too long for one screen, guided rather than dropped into a form — most often a first-time or occasional flow. What \"done\" looks like: every step completed or explicitly skippable, submitted once, and resumable if abandoned partway. A real multi-step flow — one panel visible at a time, Back/Next move between them — as opposed to detail form's multi-section single screen. Composed from the existing .bo-stepper progress indicator plus a new opt-in behavior, initWizard(), that keeps the stepper and the visible panel in sync and moves focus to each new panel — the panels themselves are plain .bo-form-section fieldsets, nothing new to learn there. Not for a routine single-step task — if there is nothing to walk someone through, a wizard's Back/Next scaffolding is friction with no payoff; use a plain detail form instead. Its Next/Submit pair is the one legitimate two-primary-action layout in this system precisely because it exists to gate a guided multi-step flow, not a single screen.",
           "openerShort": "Who uses it: whoever is creating something too long for one screen, guided rather than dropped into a form — most often a first-time or…",
           "complexity": 3,
           "components": [
@@ -371,7 +371,7 @@
         {
           "href": "/patterns/staging",
           "title": "Staging / batch result",
-          "opener": "Who uses it: whoever maintains data in bulk — an uploaded file, an interface run, a mass posting. How often: month-end and whenever a supplier sends a spreadsheet. What \"done\" looks like: every submitted row either became a record or is still on screen saying why it didn't. This is the landing place that makes the bulk action contract work for data the user has not seen yet.",
+          "opener": "Who uses it: whoever maintains data in bulk — an uploaded file, an interface run, a mass posting. How often: month-end and whenever a supplier sends a spreadsheet. What \"done\" looks like: every submitted row either became a record or is still on screen saying why it didn't. This is the landing place that makes the bulk action contract work for data the user has not seen yet. Not for a handful of records — three or four rows do not need a validate/apply split with per-row verdicts; edit them one at a time in a plain detail form. This pattern earns its complexity only once the count is large enough that a human cannot eyeball every row before committing.",
           "openerShort": "Who uses it: whoever maintains data in bulk — an uploaded file, an interface run, a mass posting.…",
           "complexity": 3,
           "components": [
@@ -392,7 +392,7 @@
         {
           "href": "/patterns/field-editor",
           "title": "Field editor",
-          "opener": "Master-data maintenance — the SM30 case. A back-office user opens one record and corrects a handful of fields: a name typo, a credit limit, a date. They do it a few times a week, not all day, and \"done\" means the whole record committed once, with each field given the input its type deserves — a date picker for a date, a currency field for money, a stepper for a count. One row per field, not one row per record, which is what makes this different from the editable grid.",
+          "opener": "Master-data maintenance — the SM30 case. A back-office user opens one record and corrects a handful of fields: a name typo, a credit limit, a date. They do it a few times a week, not all day, and \"done\" means the whole record committed once, with each field given the input its type deserves — a date picker for a date, a currency field for money, a stepper for a count. One row per field, not one row per record, which is what makes this different from the editable grid. Not for editing many records at once — this page is a data table wearing one record's fields as rows; if you find yourself wanting a second one open, or a Save per row instead of per record, you have outgrown it and want the editable grid (many rows, one save per row) or a plain detail form (one record, but laid out as a form rather than a table) instead.",
           "openerShort": "Master-data maintenance — the SM30 case.…",
           "complexity": 3,
           "components": [
@@ -484,7 +484,7 @@
         {
           "href": "/patterns/approval",
           "title": "Approval workflow",
-          "opener": "Who uses it: an approver named in the chain — a manager, a cost-centre owner, finance. How often: whenever a document reaches their step, which for most approvers is a handful of times a week. What \"done\" looks like: the decision recorded, the next person notified, nothing silently stuck. The composed slice-3 screen: wizard stepper, status timeline, approval queue (the data-table pattern you already know), and the audit trail. State always has two channels: a visible non-color cue (the glyph) and programmatic state (visually-hidden text / aria-current) — one without the other is a defect.",
+          "opener": "Who uses it: an approver named in the chain — a manager, a cost-centre owner, finance. How often: whenever a document reaches their step, which for most approvers is a handful of times a week. What \"done\" looks like: the decision recorded, the next person notified, nothing silently stuck. The composed slice-3 screen: wizard stepper, status timeline, approval queue (the data-table pattern you already know), and the audit trail. State always has two channels: a visible non-color cue (the glyph) and programmatic state (visually-hidden text / aria-current) — one without the other is a defect. Not for a record with no decision to make — a plain edit to a record's own fields, with nobody else's sign-off in the way, is record-detail's job; reach for this pattern only when a chain of people, not just the owner, has to act before the record can move.",
           "openerShort": "Who uses it: an approver named in the chain — a manager, a cost-centre owner, finance.…",
           "complexity": 3,
           "components": [
@@ -501,7 +501,7 @@
         {
           "href": "/patterns/bulk-actions",
           "title": "Bulk actions",
-          "opener": "Who uses it: an AP clerk clearing a queue — select many, act once. What \"done\" looks like: every selected record either changed or explained why it didn't. The failure mode this pattern exists to prevent is the silent one: an action that reports success while quietly skipping rows.",
+          "opener": "Who uses it: an AP clerk clearing a queue — select many, act once. What \"done\" looks like: every selected record either changed or explained why it didn't. The failure mode this pattern exists to prevent is the silent one: an action that reports success while quietly skipping rows. Not for changing one record — a single row's fields belong on the object page or record-detail; this pattern's whole cost (out-of-band summary, per-row reasons, the transient-state rule) only pays for itself once more than one record is changing at once.",
           "openerShort": "Who uses it: an AP clerk clearing a queue — select many, act once.…",
           "complexity": 3,
           "components": [
@@ -564,7 +564,7 @@
         {
           "href": "/patterns/reporting-dashboard",
           "title": "Reporting dashboard",
-          "opener": "Who uses it: a manager checking whether this period's AP activity is on track and where the exceptions are. What \"done\" looks like: three numbers read at a glance, an exception spotted without opening a single invoice. Composed entirely from existing components: breadcrumb, filter bar + saved views, a stat-tile row, and a widget grid mixing a data table, an audit-style activity feed, and a collapsible notes card. Zero new CSS — everything here already has its own component page.",
+          "opener": "Who uses it: a manager checking whether this period's AP activity is on track and where the exceptions are. What \"done\" looks like: three numbers read at a glance, an exception spotted without opening a single invoice. Composed entirely from existing components: breadcrumb, filter bar + saved views, a stat-tile row, and a widget grid mixing a data table, an audit-style activity feed, and a collapsible notes card. Zero new CSS — everything here already has its own component page. Not for an actionable worklist — this screen is read-only situational awareness: numbers and a feed a manager scans, not a queue anyone works from. A screen whose whole job is triaging items one by one is an inbox or a job monitor, not this.",
           "openerShort": "Who uses it: a manager checking whether this period's AP activity is on track and where the exceptions are.…",
           "complexity": 2,
           "components": [
@@ -710,7 +710,7 @@
         {
           "href": "/patterns/settings-admin",
           "title": "Settings & admin",
-          "opener": "Who uses it: a workspace admin, occasionally a first-time setup wizard. How often: rarely per person, but every workspace has one. What \"done\" looks like: a section's values saved, or an unsaved change clearly marked before the admin navigates away. Composed entirely from existing components — .bo-tabs to split General/Users/Notifications, .bo-form-section fieldsets, .bo-checkbox for on/off preferences (there is no separate \"switch\" component — a labeled checkbox already covers the same setting, per the \"one component, many settings\" principle), and the data table for the user list. Nothing new to learn.",
+          "opener": "Who uses it: a workspace admin, occasionally a first-time setup wizard. How often: rarely per person, but every workspace has one. What \"done\" looks like: a section's values saved, or an unsaved change clearly marked before the admin navigates away. Composed entirely from existing components — .bo-tabs to split General/Users/Notifications, .bo-form-section fieldsets, .bo-checkbox for on/off preferences (there is no separate \"switch\" component — a labeled checkbox already covers the same setting, per the \"one component, many settings\" principle), and the data table for the user list. Nothing new to learn. Not for a single end user's own preferences — this screen is workspace-wide configuration an admin changes for everyone (tabs, a member list, org defaults). One person editing their own notification or display preferences needs none of that surface; use a plain detail form scoped to that person instead.",
           "openerShort": "Who uses it: a workspace admin, occasionally a first-time setup wizard. How often: rarely per person, but every workspace has one.…",
           "complexity": 2,
           "components": [
@@ -774,7 +774,7 @@
         {
           "href": "/patterns/goods-receipt",
           "title": "Goods receipt (RF scanner)",
-          "opener": "Who uses it: a warehouse floor worker, one-handed and often gloved, holding a scanner instead of a mouse. What \"done\" looks like: every expected line accounted for — received in full, received partial, or explicitly not received — before the receipt posts. A GR (goods receipt) screen driven by a handheld RF scanner — the scanner types the barcode fast and sends Enter, so the field needs to stay focused and clear itself between scans. Composed from data-scan-input (new opt-in behavior, no new CSS — a plain .bo-input), the existing .bo-quantity at data-density=\"spacious\" for a warehouse-floor large target, and the data table for the receiving log. A visually-hidden aria-live=\"polite\" region (linked via the field's own aria-describedby) announces each successful scan — a screen-reader/low-vision RF user gets non-visual confirmation without it being read for every sighted user.",
+          "opener": "Who uses it: a warehouse floor worker, one-handed and often gloved, holding a scanner instead of a mouse. What \"done\" looks like: every expected line accounted for — received in full, received partial, or explicitly not received — before the receipt posts. A GR (goods receipt) screen driven by a handheld RF scanner — the scanner types the barcode fast and sends Enter, so the field needs to stay focused and clear itself between scans. Composed from data-scan-input (new opt-in behavior, no new CSS — a plain .bo-input), the existing .bo-quantity at data-density=\"spacious\" for a warehouse-floor large target, and the data table for the receiving log. A visually-hidden aria-live=\"polite\" region (linked via the field's own aria-describedby) announces each successful scan — a screen-reader/low-vision RF user gets non-visual confirmation without it being read for every sighted user. Not for a desk-based receiving clerk keying a paper packing slip. Without a physical scanner there is no barcode to feed the always-focused field, the spacious steppers just waste screen space, and the workflow is really \"type these numbers in and check them\" — that's a detail form at normal density, not this pattern.",
           "openerShort": "Who uses it: a warehouse floor worker, one-handed and often gloved, holding a scanner instead of a mouse.…",
           "complexity": 3,
           "components": [

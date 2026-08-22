@@ -43,6 +43,11 @@ const logistics = [
     inline <code>&lt;svg&gt;</code> where a tenant brings their own; the category row is the
     ordinary <a href={base + '/components/tabs'}>tabs</a> pattern; a "folder" tile is just a
     widget whose body holds a cluster of small tiles. Zero new CSS.
+    <strong>Not for returning a user to a specific record they already know</strong> —
+    a bookmark, a notification, or a saved link should land directly on
+    <a href={base + '/patterns/object-page'}>the object page</a> or
+    <a href={base + '/patterns/list-report'}>the list report</a>, never route back
+    through the launcher grid to get there.
   </p>
 
   <section class="demo">

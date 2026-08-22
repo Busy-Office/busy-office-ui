@@ -12,6 +12,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     each field given the input its type deserves — a date picker for a date, a currency field
     for money, a stepper for a count. One row per <em>field</em>, not one row per record, which is what
     makes this different from <a href={base + '/patterns/editable-grid'}>the editable grid</a>.
+    <strong>Not for editing many records at once</strong> — this page is a data table wearing
+    one record's fields as rows; if you find yourself wanting a second one open, or a Save per
+    row instead of per record, you have outgrown it and want
+    <a href={base + '/patterns/editable-grid'}>the editable grid</a> (many rows, one save per
+    row) or a plain <a href={base + '/patterns/detail-form'}>detail form</a> (one record, but
+    laid out as a form rather than a table) instead.
   </p>
 
   <section class="demo">

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 14:11
+Generated at: 2026-08-22 14:18
 
 ## Open items by slice
 
@@ -17,8 +17,6 @@ Generated at: 2026-08-22 14:11
   - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 - **Slice 104** (1 open)
   - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
-- **Slice 109** (1 open)
-  - 109.4 — `field-editor` membership question.
 - **Slice 112** (5 open)
   - 112.1 — `patterns.json`, extracted not authored.
   - 112.2 — pattern catalogue into `llms.txt`.
@@ -39,7 +37,6 @@ dispatch status — counter-triggered rules (652 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
-- 109.4 — `field-editor` membership question.
 - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
 - 99.4 — missing components discovered along the way go through the front door.
 - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.

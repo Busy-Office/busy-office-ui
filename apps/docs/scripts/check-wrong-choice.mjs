@@ -51,12 +51,7 @@ const TODO = new Set([
 ]);
 
 /** Pattern-page debt, same rule as TODO above: delete a line when it lands. */
-const PATTERN_TODO = new Set([
-  'app-launch', 'approval', 'bulk-actions', 'field-editor',
-  'filter-panel', 'goods-receipt', 'list-report', 'login',
-  'reporting-dashboard', 'settings-admin', 'staging',
-  'value-help', 'wizard',
-]);
+const PATTERN_TODO = new Set([]);
 
 const dir = new URL('../src/pages/components/', import.meta.url);
 const patternDir = new URL('../src/pages/patterns/', import.meta.url);

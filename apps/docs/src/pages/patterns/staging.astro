@@ -32,7 +32,12 @@ tint on the row:
     row either became a record or is still on screen saying why it didn't.
     This is the landing place that makes the
     <a href={base + '/patterns/bulk-actions'}>bulk action</a> contract work
-    for data the user has not seen yet.
+    for data the user has not seen yet. <strong>Not for a handful of
+    records</strong> — three or four rows do not need a validate/apply split
+    with per-row verdicts; edit them one at a time in a plain
+    <a href={base + '/patterns/detail-form'}>detail form</a>. This pattern
+    earns its complexity only once the count is large enough that a human
+    cannot eyeball every row before committing.
   </p>
 
   <section class="demo">

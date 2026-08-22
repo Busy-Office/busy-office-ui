@@ -16,6 +16,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     checkbox already covers the same setting, per the "one component, many
     settings" principle), and the data table for the user list. Nothing new
     to learn.
+    <strong>Not for a single end user's own preferences</strong> — this
+    screen is workspace-wide configuration an admin changes for everyone
+    (tabs, a member list, org defaults). One person editing their own
+    notification or display preferences needs none of that surface; use a
+    plain <a href={base + '/patterns/detail-form'}>detail form</a> scoped to
+    that person instead.
   </p>
   <section class="demo">
     <div class="bo-tabs">

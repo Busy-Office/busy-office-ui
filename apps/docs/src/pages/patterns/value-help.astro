@@ -46,6 +46,11 @@ const markup = `<!-- the field, and the control that opens the picker -->
     the reader is back where they were with nothing else lost. The picker is a
     detour, not a destination — which is why choosing must put focus back in the
     field they were filling, not leave it at the top of the document.
+    <strong>Not when the option set is small</strong> — a couple dozen fixed
+    choices belong in a plain <a href={base + '/components/form'}>native
+    select</a>, not a dialog with search and paging behind it. This pattern
+    is for the case a select cannot handle: a list too large to enumerate in
+    one control.
   </p>
 
   <section class="demo">

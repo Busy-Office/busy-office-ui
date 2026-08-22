@@ -17,6 +17,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <code>initWizard()</code>, that keeps the stepper and the visible panel in sync
     and moves focus to each new panel — the panels themselves are plain
     <code>.bo-form-section</code> fieldsets, nothing new to learn there.
+    <strong>Not for a routine single-step task</strong> — if there is nothing
+    to walk someone through, a wizard's Back/Next scaffolding is friction with
+    no payoff; use a plain <a href={base + '/patterns/detail-form'}>detail
+    form</a> instead. Its Next/Submit pair is the one legitimate
+    two-primary-action layout in this system precisely because it exists to
+    gate a guided multi-step flow, not a single screen.
   </p>
   <section class="demo">
     <div data-wizard data-wizard-current="0">
@@ -79,7 +85,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </div>
     <p class="bo-u-text-muted"><strong>Wizards require <code>initWizard()</code></strong> —
-      wired below. Without it every panel would render at once and Back/Next would be inert.</p>
+      wired below. Panels 2+ carry a static <code>hidden</code> attribute, so
+      without it they stay hidden rather than all rendering at once — but
+      Back/Next never fire and Submit never un-hides, so the wizard cannot be
+      completed. See the States table's "No JS" row.</p>
   </section>
   <script>
     import { initWizard } from '@busy-office/ui/js';
@@ -125,6 +134,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Abandoned / resumed</td><td>reopening lands on the furthest completed step with a note of what remains</td></tr>
           <tr><td>Final submit</td><td>disable the whole footer while posting — a double-submitted wizard creates two records</td></tr>
           <tr><td>Cross-step validation</td><td>if step 3 invalidates step 1, say WHICH step and link back to it</td></tr>
+          <tr><td>No JS</td><td>panels 2+ stay hidden (native <code>hidden</code>, not a JS toggle), so the form reads correctly, but Back/Next never fire and Submit never un-hides — the wizard cannot be completed</td></tr>
         </tbody>
       </table>
     </div>

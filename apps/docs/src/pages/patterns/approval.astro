@@ -53,6 +53,11 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
     has two channels: a visible non-color cue (the glyph) <em>and</em>
     programmatic state (visually-hidden text / <code>aria-current</code>) —
     one without the other is a defect.
+    <strong>Not for a record with no decision to make</strong> — a plain edit to a
+    record's own fields, with nobody else's sign-off in the way, is
+    <a href={base + '/patterns/record-detail'}>record-detail</a>'s job; reach for
+    this pattern only when a chain of people, not just the owner, has to act
+    before the record can move.
   </p>
   <section class="demo">
     <h2>Wizard stepper (document creation)</h2>
