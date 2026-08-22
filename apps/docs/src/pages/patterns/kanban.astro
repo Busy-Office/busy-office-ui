@@ -1,0 +1,256 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: kanban board">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever needs to see WHERE a batch of
+    things stands, all at once — a production planner watching orders move
+    through stages, a fulfilment lead watching shipments. <strong>How
+    often</strong>: a screen left open, glanced at through a shift.
+    <strong>What "done" looks like</strong>: every card in the lane that
+    matches its real state, and moving one is a single deliberate act.
+    <strong>Not for finding one specific record</strong> — that is
+    <a href={base + '/patterns/list-report'}>list report</a>, grouped by
+    status if stage is what matters; a board earns its place only when the
+    SHAPE of stages side-by-side is the thing being read, not any one
+    row's fields. <strong>Not drag-and-drop</strong> — moving a card here
+    is a menu action, not a drag gesture; see why below.
+  </p>
+
+  <section class="demo">
+    <h2>Why no drag, in this baseline</h2>
+    <p>A card's stage is changed through <strong>Move to…</strong> in its
+    own action menu, never by dragging. This is the baseline verdict from
+    the pattern's own grill (100.1): drag has no accessible substitute that
+    has ever stabilized — the ARIA properties written for it
+    (<code>aria-grabbed</code>, <code>aria-dropeffect</code>) were
+    deprecated in ARIA 1.1 for being unreliably implemented, so a real drag
+    implementation means hand-rolling a second interaction model (pick up /
+    move / drop + live-region narration) and maintaining it forever
+    alongside this one. The menu already gives every card a keyboard path,
+    a screen-reader-announced result, and a touch target that works with
+    gloves. <a href={base + '/patterns/staging'}>Slice 110.7</a> re-grills
+    whether drag earns its cost specifically for this screen — this page
+    ships the accessible baseline first, and gains drag only if that grill
+    says so.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The board</h2>
+    <div class="bo-cluster" role="group" aria-label="Production orders by stage" style="align-items: flex-start; gap: var(--bo-space-4); overflow-x: auto; padding-block-end: var(--bo-space-2)">
+      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Queued</span>
+          <span class="bo-badge">3</span>
+        </div>
+        <div class="bo-widget__body">
+          <ul class="bo-stack bo-stack--tight docs-list-bare" style="margin: 0">
+            <li class="bo-form-section" style="padding: var(--bo-space-3)">
+              <p style="margin: 0"><strong>WO-4471</strong> · Hydraulic pump assy</p>
+              <p class="bo-byline bo-byline--compact">Line 2 · due 28 Aug</p>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" popovertarget="kb-menu-1">Move ▾</button>
+              <div class="bo-dropdown__menu" id="kb-menu-1" popover>
+                <button class="bo-dropdown__item" type="button">Move to In progress</button>
+                <button class="bo-dropdown__item" type="button">Move to Blocked</button>
+              </div>
+            </li>
+            <li class="bo-form-section" style="padding: var(--bo-space-3)">
+              <p style="margin: 0"><strong>WO-4472</strong> · Seal kit batch</p>
+              <p class="bo-byline bo-byline--compact">Line 1 · due 29 Aug</p>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" popovertarget="kb-menu-2">Move ▾</button>
+              <div class="bo-dropdown__menu" id="kb-menu-2" popover>
+                <button class="bo-dropdown__item" type="button">Move to In progress</button>
+              </div>
+            </li>
+            <li class="bo-form-section" style="padding: var(--bo-space-3)">
+              <p style="margin: 0"><strong>WO-4473</strong> · Filter cartridge run</p>
+              <p class="bo-byline bo-byline--compact">Line 3 · due 30 Aug</p>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" popovertarget="kb-menu-3">Move ▾</button>
+              <div class="bo-dropdown__menu" id="kb-menu-3" popover>
+                <button class="bo-dropdown__item" type="button">Move to In progress</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">In progress</span>
+          <span class="bo-badge">1</span>
+        </div>
+        <div class="bo-widget__body">
+          <ul class="bo-stack bo-stack--tight docs-list-bare" style="margin: 0">
+            <li class="bo-form-section" style="padding: var(--bo-space-3)">
+              <p style="margin: 0"><strong>WO-4468</strong> · Gearbox housing</p>
+              <p class="bo-byline bo-byline--compact">Line 2 · started 08:12</p>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" popovertarget="kb-menu-4">Move ▾</button>
+              <div class="bo-dropdown__menu" id="kb-menu-4" popover>
+                <button class="bo-dropdown__item" type="button">Move to Done</button>
+                <button class="bo-dropdown__item" type="button">Move to Blocked</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Blocked</span>
+          <span class="bo-badge bo-badge--danger">1</span>
+        </div>
+        <div class="bo-widget__body">
+          <ul class="bo-stack bo-stack--tight docs-list-bare" style="margin: 0">
+            <li class="bo-form-section" style="padding: var(--bo-space-3); border-color: var(--bo-color-danger-solid)">
+              <p style="margin: 0"><strong>WO-4460</strong> · Valve manifold</p>
+              <p class="bo-byline bo-byline--compact"><span class="bo-badge bo-badge--danger">Parts short</span> since 09:40</p>
+              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" popovertarget="kb-menu-5">Move ▾</button>
+              <div class="bo-dropdown__menu" id="kb-menu-5" popover>
+                <button class="bo-dropdown__item" type="button">Move to In progress</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Done</span>
+          <span class="bo-badge bo-badge--success">2</span>
+        </div>
+        <div class="bo-widget__body">
+          <ul class="bo-stack bo-stack--tight docs-list-bare" style="margin: 0">
+            <li class="bo-form-section" style="padding: var(--bo-space-3)">
+              <p style="margin: 0"><strong>WO-4455</strong> · Bracket set</p>
+              <p class="bo-byline bo-byline--compact">completed today 07:50</p>
+            </li>
+            <li class="bo-form-section" style="padding: var(--bo-space-3)">
+              <p style="margin: 0"><strong>WO-4451</strong> · Pump seal</p>
+              <p class="bo-byline bo-byline--compact">completed yesterday</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <script type="module">
+      import { initDropdowns } from '@busy-office/ui/js';
+      initDropdowns();
+    </script>
+    <p class="bo-u-text-muted">Every lane's count is a
+    <a href={base + '/components/badge'}>badge</a> in its header — the
+    monitoring signal, readable without opening a single card. A card
+    ageing in one lane (Blocked, "since 09:40") is visible the same way an
+    <a href={base + '/patterns/inbox'}>inbox</a> row's age is: text, not
+    colour alone.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- One lane. Widget + a plain list of cards; each card's move
+     action is a dropdown menu, not a drag handle. -->
+<section class="bo-widget">
+  <div class="bo-widget__header">
+    <span class="bo-widget__title">Queued</span>
+    <span class="bo-badge">3</span>          <!-- the monitoring signal -->
+  </div>
+  <div class="bo-widget__body">
+    <ul class="bo-stack bo-stack--tight docs-list-bare">
+      <li class="bo-form-section">
+        <p><strong>WO-4471</strong> · Hydraulic pump assy</p>
+        <p class="bo-byline bo-byline--compact">Line 2 · due 28 Aug</p>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary"
+                type="button" popovertarget="kb-menu-1">Move ▾</button>
+        <div class="bo-dropdown__menu" id="kb-menu-1" popover>
+          <button class="bo-dropdown__item" type="button">Move to In progress</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<script type="module">
+  import { initDropdowns } from "@busy-office/ui/js";
+  initDropdowns();
+</script>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Lane</strong> — a
+      <a href={base + '/components/dashboard'}>widget</a>, one per stage,
+      laid out in a horizontally-scrolling
+      <a href={base + '/base/primitives'}>cluster</a>. A lane's count badge
+      is the monitoring signal for that stage.</li>
+      <li><strong>Card</strong> — a plain
+      <a href={base + '/components/form'}>form-section</a> box reused as
+      card chrome; identity + the one or two facts that matter for this
+      board (due date, blocked reason).</li>
+      <li><strong>Move action</strong> — a
+      <a href={base + '/components/dropdown'}>dropdown</a> listing only
+      the stages this card can legally move to next — never every stage,
+      which would let a card skip steps a real process cannot skip.</li>
+      <li><strong>Done lane</strong> — cards lose their action; a completed
+      card is a record, not a thing to act on again.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /board</td><td>every lane's cards + counts in one response — an agent reads board state the same way the human sees it, no separate API</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /cards/:id/move</td><td><code>{'{'} to: "in_progress" {'}'}</code> — the card re-rendered in its new lane, both counts updated; 409 if the target stage is not legal from the current one (re-render the card where it is, with the reason)</td></tr>
+          <tr><td class="bo-data-table__col--code">legal transitions</td><td>the SERVER decides which "Move to…" items a card's menu offers — the client never guesses the workflow, it renders what it was sent</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: an agent moves cards through the identical
+    POST a human's menu item calls — no separate automation path. The
+    human's channel is the lane's own shape: card counts, which lane is
+    growing, which card has aged in Blocked. That is the whole reason a
+    board earns its place over a grouped list — the shape is read at a
+    glance, and it must stay true for an agent's moves exactly as much as
+    a human's.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Empty lane</td><td>"No orders queued" text inside the lane — an empty widget body reads as broken, not empty</td></tr>
+          <tr><td>Empty board</td><td>the DIFFERENT empty — every lane shows nothing because nothing exists yet, distinct from a filter excluding everything</td></tr>
+          <tr><td>Move rejected (409)</td><td>the card stays in its lane, states why ("Cannot skip Blocked — resolve the shortage first")</td></tr>
+          <tr><td>Card aged past a threshold</td><td>the byline gains a warning word ("Blocked 6h") — two-channel, same as the job monitor's stalled state</td></tr>
+          <tr><td>Very long lane</td><td>the lane scrolls internally past a height, never grows the whole board vertically past the viewport</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Dashboard &amp; widgets</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dropdown'}>Dropdown</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/byline'}>Byline</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/list-report", "List report"],
+    ["/patterns/inbox", "Inbox"],
+    ["/patterns/job-monitor", "Job monitor"],
+    ["/components/dropdown", "Dropdown"],
+  ]} />
+</Gallery>

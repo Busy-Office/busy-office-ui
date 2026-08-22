@@ -898,7 +898,21 @@ The three builds, in queue order AFTER 101.4-101.7:
        if the owner in practice keeps reading chat summaries instead,
        delete it as ceremony.
 
-6. [ ] **110.6 — kanban board, no-drag baseline (OWNER DEMAND, 2026-08-22).**
+6. [x] **110.6 — kanban board, no-drag baseline (OWNER DEMAND, 2026-08-22).**
+       **Done 2026-08-22.** Lanes = widgets in a horizontally-scrolling
+       cluster (they stack at 390 via cluster wrap); cards = form-section
+       boxes; move = a dropdown listing ONLY the stages the server says are
+       legal from here (the client never guesses the workflow). The page
+       carries a whole section on why no drag in the baseline, citing
+       100.1's evidence, and points at 110.7 as the open re-grill. Lane
+       count badges are the monitoring signal; an aged Blocked card shows
+       its duration in words (the job monitor's stalled discipline). Data
+       contract: agents move cards through the identical POST a human's
+       menu item calls; 409 for illegal transitions re-renders in place
+       with the reason. Zero new CSS, complexity 3, dropdown contract
+       matched exactly this time (popovertarget + initDropdowns — the
+       notification page's lesson applied), menu verified open with a real
+       click, all gates green first build, both themes + 390.
        The owner explicitly chose build, overriding the grouped-list
        objection — recorded as stated consumer demand, the front door's own
        graduation trigger. Baseline is compose-only: lanes = grid columns
