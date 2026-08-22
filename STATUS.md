@@ -30,9 +30,10 @@ Generated at: 2026-08-22 13:58
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (649 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-22 12:14   ok
+dispatch status — counter-triggered rules (650 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-22 12:14   OVERDUE
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -51,7 +52,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 12:12 · Continue · build · 105.1 - one popover-positioning helper for dropdown/combobox/context-menu, unifying the drifted clamp+flip math; context-menu gains real flip-above behavior, combobox gains RTL alignment; scroll-follow policies deliberately kept separate (two distinct owner bug fixes); stale insetInlineStart red-proved fixed; 5 new tests, verified live via CDP · landed · 4b10d18
 - 2026-08-22 12:14 · Standardize · standardize · sweep #4 - checked pattern-groups.mjs single-source-of-truth (gate-verified both directions), popover-position.ts vs sticky-cols.ts/anchor-nav.ts overlap (none, three distinct problems), 104.x demo min-inline-size overrides (matches kanban's pre-existing bare-rem convention), check-dsa-scores/check-wrong-choice redundancy (already share wrong-choice-rule.mjs) - clean pass, nothing to fix · logged · 511e29b
 - 2026-08-22 12:34 · Continue · build · 110.5 - generated STATUS.md, human's ten-second now view, wired into record_iteration.py (reconciled from parallel worktree) · landed · d0edfbe
 - 2026-08-22 13:05 · Roadmap · triage · 112: external governance/conformance proposal grilled (2-round design tree, owner: checker is for AI agents) — metadata substrate queued unconditionally (patterns.json extraction, llms.txt catalogue), Screen Contract gated behind a 32-style pilot with pre-registered >=2-brief bar; 109.3 grows the 13 wrong-choice clauses · triaged · 04fdf23
@@ -61,6 +61,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 13:05 · Meta · refusal · Six-section docs IA reorg — 80% renames of groups measured into place more recently than the proposal was written · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Hand-authored pattern metadata YAML — inverts the generated-from-artifact doctrine; superseded by extraction · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Consumer-facing conformance web tool — downstream of the refused Quality Index · refused · 04fdf23
+- 2026-08-22 13:58 · Continue · build · 110.4 - archived 83 fully-closed slices verbatim to ROADMAP-archive.md with pointer lines (live file 12,406 -> 5,562 lines, 55% cut); mover self-tested via injection, red-proofs structural (zero open items archived, pointers resolve, checkbox conservation, 101.2 enumeration clean); check-floor ALLOW extended and red-proved; 101.1 checkbox closed as superseded · landed · 16ef2bb
 
 ## Sunset test
 
