@@ -28,19 +28,17 @@ const joined = `<!-- desktop-first: no buttons, unit joined — the mirror of Mo
   </select>
 </div>`;
 
-const unit = `<div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+const unit = `<!-- no stepper buttons — this section is about __unit, not touch input -->
+<div class="bo-quantity">
   <input class="bo-quantity__input" type="number" value="12" min="0" max="500" step="1" inputmode="numeric" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <span class="bo-quantity__unit">kg</span>
 </div>`;
 
 const fractional = `<!-- fractional units (weight, volume, time) need a decimal step AND
-     inputmode="decimal" — "numeric" implies an integer-only keypad on mobile -->
+     inputmode="decimal" — "numeric" implies an integer-only keypad on mobile.
+     No stepper buttons — this section is about step/precision, not touch input. -->
 <div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-quantity__input" type="number" value="2.50" min="0" max="500" step="0.25" inputmode="decimal" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <span class="bo-quantity__unit">kg</span>
 </div>`;
 
@@ -56,12 +54,11 @@ const boundary = `<!-- render the correct disabled state server-side when the st
   <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity" disabled>+</button>
 </div>`;
 
-const field = `<div class="bo-form-field">
+const field = `<!-- no stepper buttons — this section is about validation, not touch input -->
+<div class="bo-form-field">
   <label class="bo-form-field__label" for="qf-1">Quantity</label>
   <div class="bo-quantity">
-    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
     <input class="bo-quantity__input" type="number" id="qf-1" value="150" min="0" max="100" step="1" inputmode="numeric" aria-invalid="true" aria-describedby="qf-1-msg" />
-    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
     <span class="bo-quantity__unit">ea</span>
   </div>
   <p class="bo-form-field__message" id="qf-1-msg">Only 100 in stock.</p>
@@ -75,10 +72,11 @@ const spacious = `<div data-density="spacious">
   </div>
 </div>`;
 
-const unitSelect = `<div class="bo-quantity">
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+const unitSelect = `<!-- no stepper buttons — this section is about the unit select driving
+     precision, not touch input; the desktop-first (joined) shape composes
+     with __unit-select exactly like it does with __unit -->
+<div class="bo-quantity">
   <input class="bo-quantity__input" type="number" value="2.50" min="0" step="0.01" inputmode="decimal" aria-label="Quantity" />
-  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <select class="bo-select bo-quantity__unit-select" aria-label="Unit">
     <option>kg</option>
     <option>g</option>
