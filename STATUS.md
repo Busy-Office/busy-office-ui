@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 14:36
+Generated at: 2026-08-22 14:39
 
 ## Open items by slice
 
@@ -35,10 +35,9 @@ Generated at: 2026-08-22 14:36
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (657 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-22 14:08   OVERDUE
+dispatch status — counter-triggered rules (658 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-22 14:39   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -56,7 +55,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 13:05 · Meta · refusal · Hand-authored pattern metadata YAML — inverts the generated-from-artifact doctrine; superseded by extraction · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Consumer-facing conformance web tool — downstream of the refused Quality Index · refused · 04fdf23
 - 2026-08-22 13:58 · Continue · build · 110.4 - archived 83 fully-closed slices verbatim to ROADMAP-archive.md with pointer lines (live file 12,406 -> 5,562 lines, 55% cut); mover self-tested via injection, red-proofs structural (zero open items archived, pointers resolve, checkbox conservation, 101.2 enumeration clean); check-floor ALLOW extended and red-proved; 101.1 checkbox closed as superseded · landed · 16ef2bb
 - 2026-08-22 14:08 · Standardize · standardize · sweep #5 after 4 Continue rounds (110.3/110.5/112-triage/110.4): full suite green post-archive - core build, 13 docs gates (patterns-index 30/30, check-markup 65,770 uses), 116 vitest, stylelint, 88 live claims; generate_status.py verified to import _common helpers not duplicate them; schedule.astro confirmed zero-JS composed; stale ROADMAP.md:NNNN line refs checked - only one, in an immutable historical grill report · logged · f5fe201
@@ -66,6 +64,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 14:35 · Roadmap · triage · 113: owner rich-text sample screenshot triaged against 102.1's rung ladder - 7 execCommand buttons accepted as a richer rung-3 Advanced demo (113.1), rung-4 recipe doc for the refused four (113.2) · triaged · caae589
 - 2026-08-22 14:35 · Meta · refusal · Image upload, table-insertion UI, checklist list-type, color/highlight pickers as new richtext framework surface - infrastructure/distinct-component territory, same grounds as the 101.7 PDF/barcode refusals; re-open only if a real pattern page demonstrates the need · refused · caae589
 - 2026-08-22 14:36 · Continue · build · 112.1 - patterns.json extraction from pattern pages (gen-patterns.mjs: group/opener/complexity/components/States rows/Data-contract rows/wrong-choice clause+link, Anatomy deliberately out of scope per doctrine); self-tested (--self-test, red-proved by breaking the row regex and confirming 2/6 cases went red), reconciled against hand-counts on 9+ pages incl. edge cases (nested <code> tags, no-link wrong-choice clauses); wired into the docs build chain. Landed inside commit 8b60445 (mislabeled - that commit's message only describes 113; caught via git status after the fact, not before - lesson: check git status before a broad git add -A even mid-loop, not just at explicit commit time) · landed · 8b60445
+- 2026-08-22 14:39 · Standardize · standardize · sweep #6 after 4 Continue rounds (109.3/109.6-batches/113-triage/112.1): full suite green, one real finding - COMPLEXITY_RE/BADGE_RE byte-identical across gen-patterns-index.mjs and the new gen-patterns.mjs, plus a third independent opener-regex copy; consolidated into pattern-extract.mjs, verified output-neutral (both generated JSONs byte-identical before/after) · logged · 6dfb33b
 
 ## Sunset test
 
