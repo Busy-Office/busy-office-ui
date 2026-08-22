@@ -28,8 +28,8 @@ Generated at: 2026-08-22 15:42
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (667 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-22 15:09   ok
+dispatch status — counter-triggered rules (668 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-22 15:09   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -47,7 +47,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 14:39 · Standardize · standardize · sweep #6 after 4 Continue rounds (109.3/109.6-batches/113-triage/112.1): full suite green, one real finding - COMPLEXITY_RE/BADGE_RE byte-identical across gen-patterns-index.mjs and the new gen-patterns.mjs, plus a third independent opener-regex copy; consolidated into pattern-extract.mjs, verified output-neutral (both generated JSONs byte-identical before/after) · logged · 6dfb33b
 - 2026-08-22 14:48 · Continue · build · 109.19 - field-editor fold executed (age-order override written down per LOOPS.md, justified by avoiding double-touching detail-form/editable-grid once 109.14/109.16 run); folded as a variant section not full duplication; page deleted, Astro-native redirect added; all internal links updated; caught+fixed a real shipped bug via check:claims (missing <form> wrapper made type=reset inert - diagnosed by reading row-edit.ts's reset handler directly, confirmed it only fires on HTMLFormElement targets); full suite green (88/88 claims, wrong-choice 29/0) · landed · 69a5336
 - 2026-08-22 14:49 · Roadmap · triage · 114: owner htmx-4 wishlist verified via WebFetch (real, beta 6) then triaged against the Objective - refused, its swap-everything-except-204/304 default inverts the discards-non-2xx behavior baked into getting-started/htmx.astro and dozens of pattern Data-contract rows · triaged · dfdeb6c
 - 2026-08-22 14:49 · Meta · refusal · htmx 4 adoption - beta not stable, inverts documented swap-discard behavior across the pattern catalogue, no demonstrated gap; re-open on stable release + a scoped claim-audit first · refused · dfdeb6c
@@ -57,6 +56,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 15:09 · Standardize · standardize · sweep #7 after 4 Continue rounds (109.19 field-editor fold/109.14 No-JS/109.15 monitoring-signal/109.16 4xx rows, ~40 pattern-page edits total): full suite green (core build, docs build 13 gates, 116 vitest, stylelint, check:claims 88/88); full-repo field-editor reference scan clean (only 3 expected hits: historical comment, redirect config, claims-check origin comment); no duplicate boilerplate found across the 26 No-JS rows (each genuinely distinct, uniq-checked); 11 pages legitimately share the identical 'no JS dependency' phrase for the same true fact, not drift · logged · 2531b59
 - 2026-08-22 15:19 · Continue · build · 109.17 - check-claims coverage added for inbox (arrow-key radio nav) and kanban (Move menu open/auto-close); job-monitor confirmed to have nothing live to check (inert buttons, hx-trigger never wired), no case forced. Found+fixed a real shipped bug: kanban's live script used type=module while every other page uses bare <script>, so initDropdowns() silently never ran in production - Move menu positioning/auto-close broken since ship, caught only by adding the live check this item asked for. Diagnosed with a pageerror listener, root-caused by comparing script tags across the whole catalogue, fix verified live (check:claims went from failing to passing on the exact case) · landed · 3bb089f
 - 2026-08-22 15:36 · Continue · build · 109.18 - kanban lane cluster gained tabindex=0 (verified in built output); record-detail's 4 Anatomy items linked to their real components (breadcrumb/kv/dashboard-card/approval-workflow, the last found by grepping which docs page actually uses .bo-timeline/.bo-audit rather than guessing); Opener gained How-often clause; closes Slice 109's build queue (109.19/14/15/16/17/18 all landed) · landed · a45b047
+- 2026-08-22 15:42 · Continue · build · 112.2 - llms.txt gained a generated Patterns section from patterns.json (name/opener/complexity/components/wrong-choice per pattern, kept lean vs full States/Data-contract detail); same anti-drift throw-if-too-small guard as the 32.3 precedent, red-proved by truncating patterns.json and confirming the build actually threw before restoring it; 22.9kB->36.7kB, 53->81 URLs verified · landed · d1cdf06
 
 ## Sunset test
 
