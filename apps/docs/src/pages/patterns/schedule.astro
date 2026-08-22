@@ -1,0 +1,214 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import { monthGrid, DAY_NAMES, DAY_SHORT, weekdayOrder } from '../../lib/month-grid';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* The month grid is GENERATED, never hand-typed — same discipline as
+   /components/calendar and the same reason: a month is 35+ cells whose date
+   must agree with the column it sits under, and getting that wrong is
+   invisible (roadmap 55.1, check:calendar-grid). Schedule adds only which
+   days carry entries and which one is open; the dates themselves come from
+   one function so they cannot drift from the column headings. */
+
+const YEAR = 2026;
+const MONTH = 7; // August (0-indexed)
+const OPEN_DATE = '2026-08-24';
+const TODAY = '2026-08-19';
+const HOLIDAY = '2026-08-03';
+// iso -> count of scheduled entries that day. Only these days become links.
+const ENTRIES = {
+  '2026-08-04': 2,
+  '2026-08-11': 1,
+  '2026-08-19': 3,
+  '2026-08-24': 4,
+  '2026-08-27': 2,
+};
+
+function scheduleMonth(year, monthIdx) {
+  const head = weekdayOrder(1)
+    .map((d) => `<th scope="col"><abbr title="${DAY_NAMES[d]}">${DAY_SHORT[d]}</abbr></th>`).join('');
+  const weeks = monthGrid(year, monthIdx, 1).map((week) => {
+    const cells = week.map(({ iso, day, outside }) => {
+      if (outside) {
+        return `<td><span class="bo-calendar__day bo-calendar__day--outside"><time datetime="${iso}">${day}</time></span></td>`;
+      }
+      const count = ENTRIES[iso];
+      const isOpen = iso === OPEN_DATE;
+      const isHoliday = iso === HOLIDAY;
+      const isToday = iso === TODAY && !isOpen;
+      const dow = new Date(`${iso}T00:00:00Z`).getUTCDay();
+      const weekend = dow === 0 || dow === 6;
+      const dataDay = isOpen ? 'selected' : isHoliday ? 'holiday' : isToday ? 'today' : weekend ? 'closed' : undefined;
+      const mark = dataDay ? ` data-day="${dataDay}"` : '';
+      const srBits = [];
+      if (isOpen) srBits.push('currently open');
+      else if (isHoliday) srBits.push('public holiday, no deliveries');
+      else if (isToday) srBits.push('today');
+      else if (weekend) srBits.push('non-working day');
+      if (count) srBits.push(`${count} scheduled`);
+      const sr = srBits.length ? `<span class="bo-visually-hidden"> — ${srBits.join(', ')}</span>` : '';
+      if (count && !isHoliday) {
+        return `<td><a class="bo-calendar__day" href="#schedule-detail"${mark}><time datetime="${iso}">${day}</time>${sr}</a></td>`;
+      }
+      return `<td><span class="bo-calendar__day"${mark}><time datetime="${iso}">${day}</time>${sr}</span></td>`;
+    });
+    return `      <tr>${cells.join('')}</tr>`;
+  });
+  return `<div class="bo-calendar">
+  <table class="bo-calendar__month">
+    <caption>August 2026 — days with a link carry scheduled work</caption>
+    <thead><tr>${head}</tr></thead>
+    <tbody>
+${weeks.join('\n')}
+    </tbody>
+  </table>
+</div>`;
+}
+
+const monthMarkup = scheduleMonth(YEAR, MONTH);
+---
+<Gallery title="Pattern: schedule">
+  <p class="demo-note">
+    A planner or supervisor scans a month for what is booked — deliveries,
+    maintenance windows, shift cover — several times a day during a busy
+    week, and once a day otherwise. "Done" is picking a day and seeing
+    exactly what is on it without losing the month underneath, the same
+    swap discipline <a href={base + '/patterns/master-detail'}>master-detail</a>
+    uses for a list and a record. <strong>Not for authoring a schedule</strong> —
+    creating, moving or cancelling entries is the admin module's job, not this
+    screen's — and <strong>not for one entry's own detail or history</strong>,
+    which belongs to <a href={base + '/patterns/record-detail'}>record
+    detail</a>, not a month grid. This page only answers "what is on this
+    day".
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="sched-split">
+      <div set:html={monthMarkup} />
+      <aside class="bo-widget" aria-labelledby="schedule-detail-title" id="schedule-detail">
+        <div class="bo-widget__header">
+          <h3 class="bo-widget__title" id="schedule-detail-title">Sunday, 24 August</h3>
+          <span class="bo-badge">4 scheduled</span>
+        </div>
+        <div class="bo-widget__body">
+          <div class="bo-data-table-container" tabindex="0">
+            <table class="bo-data-table" data-density="compact">
+              <caption class="bo-visually-hidden">Entries scheduled for 24 August</caption>
+              <thead><tr><th scope="col">Time</th><th scope="col">Entry</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                <tr><td>08:00</td><td>Inbound delivery — Umbrella Logistics</td><td><span class="bo-badge bo-badge--success">Confirmed</span></td></tr>
+                <tr><td>10:30</td><td>Line 2 preventive maintenance</td><td><span class="bo-badge bo-badge--warning">Tentative</span></td></tr>
+                <tr><td>13:00</td><td>Shift handover — cold store</td><td><span class="bo-badge bo-badge--success">Confirmed</span></td></tr>
+                <tr><td>16:00</td><td>Outbound delivery — Globex Industrial</td><td><span class="bo-badge bo-badge--danger">Conflict</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <p class="bo-u-text-muted">
+      The month stays put while the day-detail list changes — the calendar
+      is never re-rendered on a click, so the reader's place in the month
+      survives. Only days carrying at least one entry are real links;
+      an empty workday is a plain cell, the same "not everything is
+      clickable" discipline the calendar component's own picker uses.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Which day is open is carried the same way master-detail carries
+      row selection</strong> — <code>data-day="selected"</code> on the cell,
+      which is the calendar component's own state, reused rather than
+      invented. There is no second "which day is open" mechanism to keep in
+      sync with it.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Month grid</strong> — <a href={base + '/components/calendar'}>calendar</a>;
+        a day with entries is a real link, a day with none is a plain cell.</li>
+      <li><strong>Which days carry work</strong> — the calendar's own
+        <code>data-day</code> marks (<code>closed</code>, <code>holiday</code>,
+        <code>today</code>) plus whether the cell is a link at all; no new
+        attribute for "has entries", the link/no-link distinction already carries it.</li>
+      <li><strong>Open-day indicator</strong> — <code>data-day="selected"</code>
+        on the chosen cell, the same value the calendar's picker already ships.</li>
+      <li><strong>Day-detail panel</strong> — a <a href={base + '/components/dashboard#card'}>card</a>
+        beside the month, holding a compact <a href={base + '/components/data-table'}>data table</a>
+        of that day's entries with a status <a href={base + '/components/badge'}>badge</a> per row.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /schedule?month=2026-08</td><td>the month grid, with each day's <code>data-day</code> mark and whether it is a link baked in server-side; the detail panel renders empty until a day is chosen</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /schedule/day/:date</td><td><strong>the day-detail fragment only</strong>, swapped into <code>#schedule-detail</code>. Never re-render the month — that is what loses the reader's place in it</td></tr>
+          <tr><td class="bo-data-table__col--code">404 / day now empty</td><td>an entry was cancelled after the month rendered — replace the panel with an empty state naming the day, and stop treating that cell as a link on the next month fetch</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /schedule/day/:date on a closed or holiday date</td><td>never happens from a click (those cells are plain spans, not links); a bookmarked URL still gets a real answer: an empty state saying the works calendar has no entries possible that day</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing selected</td><td>the panel holds a one-line prompt ("Pick a day to see what's on it"), not a blank box</td></tr>
+          <tr><td>Loading the day</td><td><code>aria-busy</code> on the panel only; the month stays interactive so the reader can pick a different day mid-load</td></tr>
+          <tr><td>Empty day</td><td>a day that IS a link (server said it has entries) but returns none by the time it's opened — say so, do not show an empty table with headers and nothing under them</td></tr>
+          <tr><td>Non-working day opened via a bookmark</td><td>the DIFFERENT empty — explain it is a closed/holiday date, not "nothing scheduled yet"</td></tr>
+          <tr><td>Conflict on one entry</td><td>flagged in the row with a badge (see the demo above), not surfaced as a page-level error — the other entries that day are still fine</td></tr>
+          <tr><td>No permission to open a day's detail</td><td>the day stays a plain cell rather than a disabled-looking link — a control a reader can see but never use is worse than one that is simply absent</td></tr>
+          <tr><td>Narrow screen</td><td>panel and grid stack in source order — the same one-column collapse the calendar component already does at its own container breakpoint, nothing new to build here</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/calendar'}>Calendar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard#card'}>Card</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{monthMarkup}</code></pre>
+  </section>
+
+  <Related links={[
+    ["/components/calendar", "Calendar"],
+    ["/patterns/master-detail", "Master-detail (the swap-contract precedent)"],
+    ["/components/data-table", "Data table"],
+    ["/concepts/concurrency", "Concurrency & conflicts"],
+  ]} />
+</Gallery>
+
+<style>
+  /* Same reasoning as /patterns/master-detail's .md-split: a plain bordered
+     auto-fit grid, not .bo-app-shell (100dvh, wrong for an embedded demo) and
+     not .bo-grid (auto-fill keeps empty tracks, which would shrink both panes
+     at wide widths to make room for columns holding nothing). */
+  .sched-split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--bo-space-4);
+    padding: var(--bo-space-4);
+    border: 1px solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+  }
+</style>

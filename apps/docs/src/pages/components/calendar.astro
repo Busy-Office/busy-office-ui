@@ -205,6 +205,16 @@ const three = `<div class="bo-calendar">
   </section>
 
   <section class="demo">
+    <h2>The assembled screen lives in Patterns</h2>
+    <p>Month grid + a day-detail list, swapped in beside it without
+    re-rendering the month — the same swap discipline
+    <a href={base + '/patterns/master-detail'}>master-detail</a> uses for a
+    list and a record — is <a href={base + '/patterns/schedule'}>the schedule
+    pattern</a>. This page documents the calendar itself; the pattern
+    documents the screen.</p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{single}</code></pre>
   </section>
@@ -220,6 +230,7 @@ const three = `<div class="bo-calendar">
     ["/components/date", "Date value"],
     ["/components/form", "Form controls"],
     ["/patterns/filter-panel", "Advanced filter panel"],
+    ["/patterns/schedule", "Schedule pattern"],
     ["/concepts/accessibility", "Accessibility model"],
   ]} />
 </Gallery>

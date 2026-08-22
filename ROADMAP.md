@@ -952,12 +952,45 @@ The three builds, in queue order AFTER 101.4-101.7:
        screen (the maintainability criterion, applied). Data contract must
        cover polling (`hx-trigger="every Ns"`) and the states table:
        running, failed, stalled, never-ran, retried.
-3. [ ] **110.3 — schedule screen (bo-calendar assembled).** Composes from
-       the shipped calendar + day-detail list + swap contract. LOW
-       priority, honestly ranked: single-source demand (Odoo); if the
-       queue never reaches it, that is the queue working. **Accept:** full
-       recipe; the calendar component page gains a pointer to the
-       assembled screen (the data-table -> list-report precedent).
+3. [x] **110.3 — schedule screen (bo-calendar assembled).** **Done
+       2026-08-22.** Composes 100% from what already shipped: the
+       [calendar](/components/calendar) component for the month grid and the
+       exact swap-contract idiom [master-detail](/patterns/master-detail)
+       already established (a list stays put; only the detail region is
+       re-fetched) — applied here to a month instead of a table. A day
+       carrying at least one scheduled entry is a real link; an empty
+       workday is a plain cell, so "does this day have anything on it" is
+       answered by the grid itself before a reader clicks. The open day
+       reuses the calendar's own `data-day="selected"` mark rather than
+       inventing a second "which day is open" mechanism — the same
+       one-state-one-owner discipline `master-detail` uses for
+       `aria-selected`. Zero new CSS, complexity 2. Full pattern recipe:
+       opener (who/how-often/done, with a bold **Not for authoring a
+       schedule** / **not for one entry's own detail** wrong-choice clause
+       pointing at the admin module and record-detail respectively),
+       Anatomy, Data contract (month fetch vs. day-detail fragment vs. the
+       stale-link 404 case), a seven-row States table, and a
+       Components-used list — every claimed component (calendar, card,
+       data table, badge) is actually rendered on the page, verified by
+       `check:components-used`. `/components/calendar` gains an "assembled
+       screen lives in Patterns" pointer section and a Related link, the
+       same shape `/components/data-table` already carries to
+       `/patterns/list-report`. Sidebar entry added under Patterns:
+       monitor & output (pattern-groups.mjs, roadmap 104.1's unified
+       source — this branch predated that unification, reconciled at
+       merge time rather than adding a second sidebar structure). All
+       build gates green (page-shape; wrong-choice; dsa-scores;
+       calendar-grid; data-hooks; components-used; link-check; the
+       patterns-index gate from 104.1). Verified live
+       (`python3 -m http.server` over the built `dist/`, puppeteer
+       screenshots) at 1440px and 390px, light and dark, via localStorage
+       `bo-theme` (the docs shell persists an explicit choice, not
+       `prefers-color-scheme`, so a media-feature emulation silently
+       renders the wrong theme — caught on the first screenshot attempt,
+       worth naming for the next docs-screenshot script). Honestly LOW
+       priority as accepted: single-source demand (Odoo); if this had not
+       reached the top of the queue for several more wakes, that would
+       have been the queue working, not a miss.
 
 4. [ ] **110.4 — archive closed slices out of ROADMAP.md.** From 110.0's
        grill: 11,657 lines, 78 of 92 slices fully closed = 6,961 lines

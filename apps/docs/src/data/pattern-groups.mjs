@@ -63,6 +63,7 @@ export const PATTERN_GROUPS = [
       { href: '/patterns/output-form', label: 'Output form' },
       { href: '/patterns/notification', label: 'Notification' },
       { href: '/patterns/job-monitor', label: 'Job monitor' },
+      { href: '/patterns/schedule', label: 'Schedule' },
       { href: '/patterns/settings-admin', label: 'Settings & admin' },
     ],
   },
