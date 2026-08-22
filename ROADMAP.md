@@ -149,6 +149,96 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 119 — Owner wishlist: the pattern catalog review, grilled (2026-08-22)
+
+Owner asked to "list out first, before deciding" a set of pattern ideas.
+Reviewed against the 29 shipping pattern pages; the owner then asked for
+my own grilled verdicts rather than a menu-pick. **Already shipping, no
+work** (named for the record): login, inbox, notification,
+settings-admin (covers both "setting" and "administration"),
+command-bar (has the command/search dropdown), kanban, app-launch
+(the "bento for apps" ask — bento is a styling variant of it, not a
+pattern), approval (the "workflow" ask), wizard.
+
+1. [ ] **119.1 — Error pages: 404 / 403 / 500 as ONE pattern.** Three
+       variants of one shape — what happened · what you can still do ·
+       where to go — never three pages ("one component, many settings").
+       Real gap: zero coverage today, every ERP ships these, and an
+       unthemed 403 is where enterprise branding visibly falls apart.
+       Expect zero new CSS (state/alert/button compose it). Accept:
+       `/patterns/error-pages` with the full pattern skeleton (opener
+       with wrong-choice clause, anatomy, data contract — what the
+       server returns per status, states incl. "error page inside a
+       fragment swap" vs full navigation, components-used); all docs
+       gates green.
+2. [ ] **119.2 — ERP layout overview, as a CONCEPTS page.** Maps the
+       shells that already ship (app-shell sidebar+navbar · RF
+       full-screen · role-home · split master-detail) to when each
+       fits, linked. Docs-only, zero new CSS — the owner's "different
+       layouts possible for ERP" is a wayfinding gap, not a component
+       gap. Accept: `/concepts/layouts` (or equivalent), each layout
+       shown with a real thumbnail-scale live composition or link, and
+       a decision table naming when each is the wrong choice.
+3. [ ] **119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.** The
+       owner clarified "app screen" as a new app-frame pattern. What is
+       framed decides everything — an iframe'd legacy app, a same-DOM
+       module, a launcher target? Needs a design-tree grill round with
+       the owner before Accept criteria can exist. Deliberately not
+       buildable as written.
+
+**REFUSED, with reasons:**
+- **Standalone Timeline pattern** — `bo-timeline` ships and is
+  demonstrated in approval; a generic activity-feed page would
+  re-photograph the same component in a second context, which the
+  coverage doctrine refuses. Re-open via the 99.4 front door with a
+  real screen approval's page can't answer.
+- **Save panel/dialog page** — already-shipping composition
+  (`bo-form-actions` sticky bar + master-detail's edit dialog), each
+  documented where it lives; a dedicated page would duplicate both.
+- **"column field"** — the owner's message listed it verbatim ("save
+  panel or dialog, column field, kanban board") but the owner does not
+  recognize it on review. Dropped; no action unless re-raised.
+
+## Slice 118 — Owner decision: docs go showcase-first (2026-08-22)
+
+From the owner's docs-presentation wishlist ("Simplicity — show what
+components can do from simple to complex, showcase first; click to see
+code"). Four options were built as CLICKABLE wireframes (artifact:
+"Docs Showcase Wireframes") and judged against the docs' own three
+constraints (one-string Demo doctrine, learning-path gate, print/no-JS
+floor). **Owner picked Option A** — code behind a native fold on every
+Demo.
+
+1. [x] **118.1 — DONE 2026-08-22.** `Demo.astro`'s code half now sits
+       behind `<details class="demo-pair__code">` with a View code
+       summary — one component change, every page inherits it; the
+       one-string doctrine untouched; hand-built `<pre>` samples
+       (first-screen's ladder, Markup sections) deliberately unfolded,
+       since there code IS the point. Print opens all folds
+       (beforeprint + matchMedia('print'), initial-state honored) and
+       restores after; the check-claims case red-proved itself
+       organically — its FIRST run failed on the real missing
+       initial-state path. The `layout="row"` spike still composes
+       (the fold is the right flex panel). Full docs build green,
+       `check:claims` 95/95, learning-path 20/20, screenshots
+       closed/open/dark/390/row. **Accept met.**
+
+**REFUSED, with reasons:**
+- **Option B (showcase strip + folds)** — refused as a default:
+  duplicates every demo's markup twice per page (drift unless
+  generated), and dense ERP components miniaturise into grey noise
+  (the same reason 104.2 refused tile screenshots). Re-open per-page
+  only where 4+ genuinely visual variants exist (button, badge, alert).
+- **Option C (Preview/Code tabs)** — you can never see preview and
+  code together (the actual adoption moment), and it adds 2 tab stops
+  per demo for keyboard users plus a JS dependency native `<details>`
+  doesn't have.
+- **Option D (code in a dialog)** — a modal for reference material;
+  print loses all code; no non-JS fallback without duplicating markup.
+- **Demo re-ordering mechanism** — the "simple → complex ladder" half
+  of the wish is editorial per page, not structural; no mechanism to
+  build.
+
 ## Slice 117 — Owner wishlist: form label position, grilled to Top/Start (2026-08-22)
 
 Owner asked for a label-position option (top/right/left, with different
