@@ -1,0 +1,32 @@
+---
+/**
+ * The RF task queue ("what's next") markup, shared by /patterns/rf/rf-list
+ * (full CSS bundle) and /patterns/rf/rf-list-rf (isolated document,
+ * rf-essentials only) — roadmap 109.7. Composed from `.bo-data-table`, the
+ * SAME component ScanToReceive's own receiving log already ships inside the
+ * RF profile at 360px (goods-receipt-rf, roadmap 59.4) — that page is the
+ * existing proof this shape survives the RF floor and width, not a new
+ * claim. Two narrow columns only: a task queue is scanned top-to-bottom for
+ * "what's next", not cross-referenced column-to-column, so it never needs
+ * the auto-compaction @container rule (data-table.css) to kick in.
+ */
+const tasks = [
+  { label: 'PO-88213 · Dock 4', status: 'Next' },
+  { label: 'PO-88190 · Dock 2', status: 'Queued' },
+  { label: 'SO-51204 · Pick', status: 'Queued' },
+  { label: 'CC-3092 · Count', status: 'Queued' },
+];
+---
+<div class="bo-data-table-container" tabindex="0" data-density="spacious">
+  <table class="bo-data-table">
+    <thead><tr><th scope="col">Task</th><th scope="col">Status</th></tr></thead>
+    <tbody>
+      {tasks.map((t) => (
+        <tr>
+          <td>{t.label}</td>
+          <td><span class={`bo-badge ${t.status === 'Next' ? 'bo-badge--accent' : ''}`}>{t.status}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

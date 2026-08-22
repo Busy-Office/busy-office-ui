@@ -1,0 +1,119 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import RfTaskMenu from '../../components/RfTaskMenu.astro';
+import rfProfile from '../../data/rf-profile.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: RF task menu">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: a warehouse floor worker, first screen
+    after signing into the handheld — every RF shift starts here.
+    <strong>What "done" looks like</strong>: the next task is one tap away,
+    with 3-6 items visible at once, never a menu to search. <strong>Not
+    for</strong> a general app launcher with dozens of destinations — that's
+    <a href={base + '/patterns/app-launch'}>App launch</a>, which this reuses
+    the mechanism from at a different scale: same <code>.bo-widget-grid</code>
+    container-query grid, glove-sized tiles instead of icon tiles, and
+    <code>data-density="spacious"</code> for one-handed, often-gloved use. An
+    RF device runs a handful of tasks per shift, not a suite — this menu
+    stays that short on purpose (roadmap 109.7).
+  </p>
+
+  <section class="demo">
+    <h2>Task menu</h2>
+    <RfTaskMenu />
+  </section>
+
+  <section class="demo">
+    <h2>The RF-floor profile, at RF-scanner size</h2>
+    <p>Everything above is the framework's full CSS bundle, at desktop width.
+    Below is the SAME markup — via the shared component — in an isolated
+    document styled by ONLY the <code>rf-essentials</code> profile (roadmap
+    59.2, Chrome/WebView 108), at 360×640, a common scanner resolution.</p>
+    <p><strong>What is in the profile — all {rfProfile.count} of them.</strong>
+    <code>dashboard/dashboard</code> (the source of <code>.bo-widget-grid</code>/
+    <code>.bo-widget</code>) joined the profile for this pattern (109.7) —
+    its <code>@container</code> queries need Chrome 105+, already inside this
+    profile's 108 floor, so no guard work was needed.</p>
+    <ul class="bo-cluster docs-list-bare">
+      {rfProfile.components.map((c) => <li><a href={base + c.href}><code>{c.name}</code></a></li>)}
+    </ul>
+    <iframe
+      src={base + '/patterns/rf/rf-landing-rf/'}
+      title="RF task menu, rf-essentials profile, 360×640"
+      style="inline-size: 360px; block-size: 640px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)"
+    ></iframe>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<div class="bo-widget-grid" style="--bo-widget-min: 8rem" data-density="spacious">
+  <a href="/receive" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-5)">
+    <span style="font-size: var(--bo-font-size-lg); font-weight: var(--bo-font-weight-semibold)">Receive</span>
+    <span class="bo-badge" aria-label="4 open">4</span>
+  </a>
+  <!-- one .bo-widget per task -->
+</div>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Task grid</strong> — <code>.bo-widget-grid</code> with a
+        raised <code>--bo-widget-min</code> for glove-sized tap targets;
+        auto-fills the 360px screen at 3-4 tiles.</li>
+      <li><strong>Task tile</strong> — <code>.bo-widget</code> as a link;
+        label + an open-count <code>.bo-badge</code>, nothing else — an RF
+        worker already knows the task by name, so no icon set is pulled into
+        the profile for it (grill verdict below).</li>
+      <li><strong>Zero-state tile</strong> <span class="bo-u-text-muted">(Count, above)</span> —
+        a 0 count still renders the tile; it does not disappear, so the menu's
+        shape never shifts mid-shift.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /rf/tasks</td><td>one entry per task type with its open count; 401 → redirect to <a href={base + '/patterns/login'}>login</a>, never a silent empty menu</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /rf/tasks/:type</td><td>the queue for that task (see <a href={base + '/patterns/rf-list'}>RF task queue</a>); 204 for an empty queue, not a 200 with an empty array a client has to interpret</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Loading</td><td>tiles render immediately with a skeleton count; never block the whole grid on one slow endpoint</td></tr>
+          <tr><td>Zero open</td><td>the tile stays, badge reads 0 — see Count above; a vanished tile reads as "not my job today," which is wrong</td></tr>
+          <tr><td>Offline</td><td>last-known counts shown with a stale-data cue; tapping in still opens the cached queue rather than a dead end</td></tr>
+          <tr><td>Permission-scoped</td><td>a task type the worker's role can't run is omitted from the grid, not shown disabled — RF screen real estate at 360px is too scarce for a tile nobody can use</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Dashboard (widget grid)</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/concepts/density'}>Density (spacious)</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/app-launch", "App launch"],
+    ["/patterns/rf-list", "RF task queue"],
+    ["/patterns/goods-receipt", "Goods receipt (RF scanner)"],
+  ]} />
+</Gallery>

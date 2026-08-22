@@ -29,4 +29,13 @@ export const RF_COMPONENTS = [
   'data-table/data-table',
   'state/state',
   'kv/kv',
+  // Added 109.7 (RF landing): .bo-widget-grid/.bo-widget is the RF task
+  // menu's whole layout mechanism — same container-query grid app-launch
+  // already uses at desktop size, here at a glove-sized tile min. Its
+  // @container queries need Chrome 105+ (BCD), already inside this
+  // profile's 108 floor, so no new guard work. Pulling in the stat/collapse
+  // rules this file also carries is accepted as-is (one file, no per-selector
+  // split elsewhere in this profile either) — they're inert if unused, not a
+  // floor risk.
+  'dashboard/dashboard',
 ];

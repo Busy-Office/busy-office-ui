@@ -1,0 +1,30 @@
+---
+/* Isolated document, embedded via <iframe> from /patterns/rf/rf-list
+   (roadmap 109.7, same technique as goods-receipt-rf / 59.4). */
+import RfTaskQueue from '../../../components/RfTaskQueue.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const cssHref = base + '/assets/rf-essentials.min.css';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RF task queue — rf-essentials profile</title>
+    <link rel="stylesheet" href={cssHref} />
+    <style>
+      body {
+        margin: 0;
+        padding: var(--bo-space-3);
+        background: var(--bo-color-bg-canvas);
+        color: var(--bo-color-text-primary);
+      }
+    </style>
+  </head>
+  <body data-density="spacious">
+    <main aria-label="RF task queue, rf-essentials profile demo">
+      <h1 class="bo-visually-hidden">RF task queue</h1>
+      <RfTaskQueue />
+    </main>
+  </body>
+</html>
