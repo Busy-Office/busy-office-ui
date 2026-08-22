@@ -475,6 +475,30 @@ const current =
       initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
                       // delegation, so it keeps working across boosted swaps
                       // with no re-init needed.
+
+      // Demo code folds (roadmap 118): a closed <details> prints EMPTY and
+      // CSS cannot force one open, so print opens every fold and restores
+      // after. Both signals wired on purpose: beforeprint/afterprint cover a
+      // real print, and the matchMedia listener covers emulated print media
+      // (which never fires beforeprint) — that second path is what the
+      // check-claims case actually exercises.
+      const setPrintFolds = (on) => {
+        document.querySelectorAll('details.demo-pair__code').forEach((d) => {
+          if (on) {
+            if (!d.open) { d.dataset.printOpened = ''; d.open = true; }
+          } else if ('printOpened' in d.dataset) {
+            delete d.dataset.printOpened;
+            d.open = false;
+          }
+        });
+      };
+      window.addEventListener('beforeprint', () => setPrintFolds(true));
+      window.addEventListener('afterprint', () => setPrintFolds(false));
+      const printMq = matchMedia('print');
+      printMq.addEventListener('change', (e) => setPrintFolds(e.matches));
+      // A page can LOAD already under print media (emulation sets media
+      // before navigation) — then there is no change event to catch.
+      if (printMq.matches) setPrintFolds(true);
     </script>
     <script is:inline define:vars={{ base }}>
       // hx-boost (2026-08-14): only #main-content swaps on an internal link
@@ -834,7 +858,9 @@ const current =
   .copy-btn:focus-visible { opacity: 1; }
   @media (hover: none) { .copy-btn { opacity: 1; } }
 
-  /* Paired demo: rendered preview on top, its exact code below. */
+  /* Paired demo: rendered preview on top, its code behind a fold below
+     (roadmap 118 "Option A" — showcase first, code on demand). The fold is
+     a native <details>; the pre inside gives up its own border to it. */
   .demo-pair { display: flex; flex-direction: column; gap: 0; }
   .demo-pair__preview {
     border: var(--bo-border-width) solid var(--bo-color-border-default);
@@ -844,7 +870,23 @@ const current =
     background: var(--bo-color-bg-surface);
     padding: var(--bo-space-4);
   }
-  .demo-pair pre { margin-block: 0; border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); border-block-start: none; }
+  .demo-pair__code {
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-block-start: none;
+    border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md);
+    background: var(--bo-color-bg-muted);
+    overflow: hidden;
+  }
+  .demo-pair__code > summary {
+    cursor: pointer;
+    padding: var(--bo-space-2) var(--bo-space-4);
+    font-size: var(--bo-font-size-sm);
+    color: var(--bo-color-text-secondary);
+    user-select: none;
+  }
+  .demo-pair__code > summary:hover { color: var(--bo-color-text-primary); }
+  .demo-pair__code[open] > summary { border-block-end: var(--bo-border-width) solid var(--bo-color-border-default); }
+  .demo-pair pre { margin-block: 0; border: none; border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); }
 
   /* SPIKE (Slice 7 item 4) — opt-in side-by-side once the section.demo
      container is wide enough for both panels to breathe; narrower than
@@ -865,13 +907,16 @@ const current =
       border-start-end-radius: 0;
       border-inline-end: none;
     }
-    .demo-pair--row pre {
+    .demo-pair--row .demo-pair__code {
       flex: 1 1 50%;
       min-inline-size: 0;
       border: var(--bo-border-width) solid var(--bo-color-border-default);
       border-start-start-radius: 0;
       border-end-start-radius: 0;
       border-radius: 0 var(--bo-radius-md) var(--bo-radius-md) 0;
+    }
+    .demo-pair--row pre {
+      border: none;
       background: var(--bo-color-bg-muted);
       padding: var(--bo-space-4);
       overflow-x: auto;

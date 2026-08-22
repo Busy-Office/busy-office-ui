@@ -15,7 +15,15 @@
  */
 const { code, layout } = Astro.props;
 ---
+{/* Code sits behind a native <details> fold (roadmap 118, owner-picked
+    "Option A" from the wireframe review): the preview is the page, the
+    markup is on demand. Native disclosure = keyboard, AT and no-JS for
+    free; print folds are forced open by the shell's print listener and
+    verified by a check-claims case. Still ONE string for both halves. */}
 <div class:list={['demo-pair', layout === 'row' && 'demo-pair--row']}>
   <div class="demo-pair__preview" set:html={code} />
-  <pre><code>{code}</code></pre>
+  <details class="demo-pair__code">
+    <summary>View code</summary>
+    <pre><code>{code}</code></pre>
+  </details>
 </div>

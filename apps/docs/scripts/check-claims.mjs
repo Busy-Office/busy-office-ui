@@ -1914,6 +1914,28 @@ check(
   JSON.stringify(rtlFlip),
 );
 
+// Demo code folds (roadmap 118 "Option A"): closed by default on screen,
+// forced open under print media so printed pages keep their code — a closed
+// <details> prints empty, and the docs' own print story is load-bearing
+// (/patterns/output-form). The shell listens to matchMedia('print'), which
+// is the signal CDP print emulation actually delivers.
+await visit('/components/form/', { width: DESKTOP_WIDTH, height: 1400 });
+const foldsScreen = await page.evaluate(() => {
+  const all = [...document.querySelectorAll('details.demo-pair__code')];
+  return { total: all.length, open: all.filter((d) => d.open).length };
+});
+await visit('/components/form/', { media: 'print', width: DESKTOP_WIDTH, height: 1400 });
+const foldsPrint = await page.evaluate(() => {
+  const all = [...document.querySelectorAll('details.demo-pair__code')];
+  return { total: all.length, open: all.filter((d) => d.open).length };
+});
+check(
+  'demo code folds: closed by default on screen, ALL forced open under print media',
+  foldsScreen.total > 0 && foldsScreen.open === 0 &&
+    foldsPrint.total === foldsScreen.total && foldsPrint.open === foldsPrint.total,
+  JSON.stringify({ foldsScreen, foldsPrint }),
+);
+
 await browser.close();
 server.close();
 
