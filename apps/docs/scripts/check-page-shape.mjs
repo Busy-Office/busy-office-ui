@@ -146,6 +146,11 @@ const RELATED_EXEMPT = new Set([
   'patterns/rf/goods-receipt-rf.astro',
   'patterns/rf/rf-landing-rf.astro',
   'patterns/rf/rf-list-rf.astro',
+  // Same shape, same reason (roadmap 119.1): isolated full-screen preview
+  // opened directly, not embedded — a reader lands on /patterns/schedule
+  // first and follows a real link here, so the parent page is still the
+  // navigation.
+  'patterns/schedule/full.astro',
 ]);
 async function* allPages(dir, rel = '') {
   for (const e of await readdir(dir, { withFileTypes: true })) {

@@ -1,0 +1,45 @@
+---
+/**
+ * The schedule pattern's screen — month grid + day-detail panel — shared by
+ * /patterns/schedule (embedded at docs-page width) and
+ * /patterns/schedule/full (isolated document, real viewport width, roadmap
+ * 119.1's "show it at full screen" ask). One source, so the compact demo
+ * and the full-screen preview cannot drift apart (same rule as
+ * RfTaskMenu.astro, roadmap 109.7).
+ *
+ * The month-generation logic itself lives in lib/schedule-data.ts, not
+ * here — an Astro component's `export const` hoists to true module scope,
+ * evaluated BEFORE the frontmatter code that runs inside the render
+ * closure, so a value computed from frontmatter-local variables can't be
+ * exported directly from a .astro file (found building this: "monthMarkup
+ * is not defined" at import time). A plain module has no such split.
+ */
+import { scheduleMonth, YEAR, MONTH } from '../lib/schedule-data';
+
+const monthMarkup = scheduleMonth(YEAR, MONTH);
+---
+{/* No wrapping element on purpose — the two children are one grid's worth
+    of content, but each consumer (the compact embedded demo vs. the
+    full-screen preview) needs a DIFFERENT grid around them, so the layout
+    class lives with the consumer, not this shared markup. */}
+<div set:html={monthMarkup} />
+<aside class="bo-widget" aria-labelledby="schedule-detail-title" id="schedule-detail">
+  <div class="bo-widget__header">
+    <h3 class="bo-widget__title" id="schedule-detail-title">Sunday, 24 August</h3>
+    <span class="bo-badge">4 scheduled</span>
+  </div>
+  <div class="bo-widget__body">
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <caption class="bo-visually-hidden">Entries scheduled for 24 August</caption>
+        <thead><tr><th scope="col">Time</th><th scope="col">Entry</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><td>08:00</td><td>Inbound delivery — Umbrella Logistics</td><td><span class="bo-badge bo-badge--success">Confirmed</span></td></tr>
+          <tr><td>10:30</td><td>Line 2 preventive maintenance</td><td><span class="bo-badge bo-badge--warning">Tentative</span></td></tr>
+          <tr><td>13:00</td><td>Shift handover — cold store</td><td><span class="bo-badge bo-badge--success">Confirmed</span></td></tr>
+          <tr><td>16:00</td><td>Outbound delivery — Globex Industrial</td><td><span class="bo-badge bo-badge--danger">Conflict</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</aside>

@@ -1936,6 +1936,29 @@ check(
   JSON.stringify({ foldsScreen, foldsPrint }),
 );
 
+// /patterns/schedule's "Open it full screen" link (roadmap 119.1): a real
+// navigation to an isolated document with no docs chrome, showing the SAME
+// generated month (not a second, driftable copy).
+await visit('/patterns/schedule/', { width: DESKTOP_WIDTH, height: 1000 });
+const fullScreenLink = await page.evaluate(() => {
+  const a = [...document.querySelectorAll('a')].find((x) => x.textContent.includes('Open it full screen'));
+  return { href: a?.getAttribute('href'), target: a?.getAttribute('target'), rel: a?.getAttribute('rel') };
+});
+await visit('/patterns/schedule/full/', { width: DESKTOP_WIDTH, height: 1000 });
+const fullScreenPage = await page.evaluate(() => ({
+  hasSidebar: !!document.querySelector('.bo-sidebar-nav'),
+  hasNavbar: !!document.querySelector('.bo-navbar'),
+  dayCells: document.querySelectorAll('.bo-calendar__day').length,
+  hasDetail: !!document.getElementById('schedule-detail'),
+}));
+check(
+  'schedule\'s full-screen link opens a real, chrome-free document with the same generated month',
+  fullScreenLink.href === '/patterns/schedule/full' && fullScreenLink.target === '_blank' &&
+    fullScreenLink.rel === 'noopener' && !fullScreenPage.hasSidebar && !fullScreenPage.hasNavbar &&
+    fullScreenPage.dayCells > 30 && fullScreenPage.hasDetail,
+  JSON.stringify({ fullScreenLink, fullScreenPage }),
+);
+
 await browser.close();
 server.close();
 

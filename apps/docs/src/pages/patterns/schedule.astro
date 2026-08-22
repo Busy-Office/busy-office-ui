@@ -1,72 +1,9 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
-import { monthGrid, DAY_NAMES, DAY_SHORT, weekdayOrder } from '../../lib/month-grid';
+import ScheduleScreen from '../../components/ScheduleScreen.astro';
+import { monthMarkupSample } from '../../lib/schedule-data';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-/* The month grid is GENERATED, never hand-typed — same discipline as
-   /components/calendar and the same reason: a month is 35+ cells whose date
-   must agree with the column it sits under, and getting that wrong is
-   invisible (roadmap 55.1, check:calendar-grid). Schedule adds only which
-   days carry entries and which one is open; the dates themselves come from
-   one function so they cannot drift from the column headings. */
-
-const YEAR = 2026;
-const MONTH = 7; // August (0-indexed)
-const OPEN_DATE = '2026-08-24';
-const TODAY = '2026-08-19';
-const HOLIDAY = '2026-08-03';
-// iso -> count of scheduled entries that day. Only these days become links.
-const ENTRIES = {
-  '2026-08-04': 2,
-  '2026-08-11': 1,
-  '2026-08-19': 3,
-  '2026-08-24': 4,
-  '2026-08-27': 2,
-};
-
-function scheduleMonth(year, monthIdx) {
-  const head = weekdayOrder(1)
-    .map((d) => `<th scope="col"><abbr title="${DAY_NAMES[d]}">${DAY_SHORT[d]}</abbr></th>`).join('');
-  const weeks = monthGrid(year, monthIdx, 1).map((week) => {
-    const cells = week.map(({ iso, day, outside }) => {
-      if (outside) {
-        return `<td><span class="bo-calendar__day bo-calendar__day--outside"><time datetime="${iso}">${day}</time></span></td>`;
-      }
-      const count = ENTRIES[iso];
-      const isOpen = iso === OPEN_DATE;
-      const isHoliday = iso === HOLIDAY;
-      const isToday = iso === TODAY && !isOpen;
-      const dow = new Date(`${iso}T00:00:00Z`).getUTCDay();
-      const weekend = dow === 0 || dow === 6;
-      const dataDay = isOpen ? 'selected' : isHoliday ? 'holiday' : isToday ? 'today' : weekend ? 'closed' : undefined;
-      const mark = dataDay ? ` data-day="${dataDay}"` : '';
-      const srBits = [];
-      if (isOpen) srBits.push('currently open');
-      else if (isHoliday) srBits.push('public holiday, no deliveries');
-      else if (isToday) srBits.push('today');
-      else if (weekend) srBits.push('non-working day');
-      if (count) srBits.push(`${count} scheduled`);
-      const sr = srBits.length ? `<span class="bo-visually-hidden"> — ${srBits.join(', ')}</span>` : '';
-      if (count && !isHoliday) {
-        return `<td><a class="bo-calendar__day" href="#schedule-detail"${mark}><time datetime="${iso}">${day}</time>${sr}</a></td>`;
-      }
-      return `<td><span class="bo-calendar__day"${mark}><time datetime="${iso}">${day}</time>${sr}</span></td>`;
-    });
-    return `      <tr>${cells.join('')}</tr>`;
-  });
-  return `<div class="bo-calendar">
-  <table class="bo-calendar__month">
-    <caption>August 2026 — days with a link carry scheduled work</caption>
-    <thead><tr>${head}</tr></thead>
-    <tbody>
-${weeks.join('\n')}
-    </tbody>
-  </table>
-</div>`;
-}
-
-const monthMarkup = scheduleMonth(YEAR, MONTH);
 ---
 <Gallery title="Pattern: schedule">
   <p class="demo-note">
@@ -85,28 +22,12 @@ const monthMarkup = scheduleMonth(YEAR, MONTH);
 
   <section class="demo">
     <h2>The screen</h2>
+    <p class="bo-u-text-muted">Sized to this page's column below — the
+    real screen is full-width. <a href={base + '/patterns/schedule/full'}
+    target="_blank" rel="noopener">Open it full screen ↗</a> (new tab, no
+    docs chrome — the same markup below, at real scale).</p>
     <div class="sched-split">
-      <div set:html={monthMarkup} />
-      <aside class="bo-widget" aria-labelledby="schedule-detail-title" id="schedule-detail">
-        <div class="bo-widget__header">
-          <h3 class="bo-widget__title" id="schedule-detail-title">Sunday, 24 August</h3>
-          <span class="bo-badge">4 scheduled</span>
-        </div>
-        <div class="bo-widget__body">
-          <div class="bo-data-table-container" tabindex="0">
-            <table class="bo-data-table" data-density="compact">
-              <caption class="bo-visually-hidden">Entries scheduled for 24 August</caption>
-              <thead><tr><th scope="col">Time</th><th scope="col">Entry</th><th scope="col">Status</th></tr></thead>
-              <tbody>
-                <tr><td>08:00</td><td>Inbound delivery — Umbrella Logistics</td><td><span class="bo-badge bo-badge--success">Confirmed</span></td></tr>
-                <tr><td>10:30</td><td>Line 2 preventive maintenance</td><td><span class="bo-badge bo-badge--warning">Tentative</span></td></tr>
-                <tr><td>13:00</td><td>Shift handover — cold store</td><td><span class="bo-badge bo-badge--success">Confirmed</span></td></tr>
-                <tr><td>16:00</td><td>Outbound delivery — Globex Industrial</td><td><span class="bo-badge bo-badge--danger">Conflict</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </aside>
+      <ScheduleScreen />
     </div>
     <p class="bo-u-text-muted">
       The month stays put while the day-detail list changes — the calendar
@@ -193,7 +114,7 @@ const monthMarkup = scheduleMonth(YEAR, MONTH);
 
   <section class="demo">
     <h2>Markup</h2>
-    <pre><code>{monthMarkup}</code></pre>
+    <pre><code>{monthMarkupSample}</code></pre>
   </section>
 
   <Related links={[

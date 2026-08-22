@@ -1,0 +1,62 @@
+---
+/* Isolated document, opened via a real navigation (new tab), not an iframe
+   (roadmap 119.1, owner feedback: the embedded demo on /patterns/schedule
+   reads as a small widget, not the full screen this pattern actually is —
+   because it IS deliberately a small bordered box there, per that page's
+   own comment on .sched-split: ".bo-app-shell (100dvh) is wrong for an
+   embedded demo"). Here it isn't embedded, so the real shell is right.
+   Same technique as /patterns/rf/rf-landing-rf (roadmap 109.7) — deliberately
+   does NOT import the Gallery layout or docs shell, proving the screen reads
+   as a real screen rather than a docs illustration of one. ScheduleScreen
+   is the SAME component the compact demo uses, so the two cannot drift. */
+import ScheduleScreen from '../../../components/ScheduleScreen.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const cssHref = base + '/assets/busy-office-ui.min.css';
+---
+<!doctype html>
+<html lang="en" data-density="comfortable">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Schedule — full screen</title>
+    <link rel="stylesheet" href={cssHref} />
+    <style>
+      body {
+        margin: 0;
+        padding: var(--bo-space-6) var(--bo-space-8);
+        background: var(--bo-color-bg-canvas);
+        color: var(--bo-color-text-primary);
+        font-family: system-ui, sans-serif;
+      }
+      h1 {
+        font-size: var(--bo-font-size-lg);
+        margin-block-end: var(--bo-space-4);
+      }
+      /* max-inline-size, not 2fr (tried first): a 7-column table has a real
+         intrinsic width, and a "big" grid track wider than that just left-
+         aligns the table in a lot of empty space — worse than the compact
+         demo, not better. This is a real screen, so it gets a real screen's
+         max content width, centered, not stretched to fill a track it has
+         no content for. */
+      .full-split {
+        display: grid;
+        grid-template-columns: minmax(20rem, 34rem) minmax(18rem, 1fr);
+        gap: var(--bo-space-6);
+        align-items: start;
+        max-inline-size: 64rem;
+      }
+      @media (max-width: 56rem) {
+        .full-split {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Schedule — August 2026</h1>
+    <div class="full-split">
+      <ScheduleScreen />
+    </div>
+  </body>
+</html>
