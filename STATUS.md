@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 15:50
+Generated at: 2026-08-22 15:53
 
 ## Open items by slice
 
@@ -27,10 +27,9 @@ Generated at: 2026-08-22 15:50
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (669 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-22 15:09   OVERDUE
+dispatch status — counter-triggered rules (670 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-22 15:53   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -47,7 +46,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 14:49 · Roadmap · triage · 114: owner htmx-4 wishlist verified via WebFetch (real, beta 6) then triaged against the Objective - refused, its swap-everything-except-204/304 default inverts the discards-non-2xx behavior baked into getting-started/htmx.astro and dozens of pattern Data-contract rows · triaged · dfdeb6c
 - 2026-08-22 14:49 · Meta · refusal · htmx 4 adoption - beta not stable, inverts documented swap-discard behavior across the pattern catalogue, no demonstrated gap; re-open on stable release + a scoped claim-audit first · refused · dfdeb6c
 - 2026-08-22 14:58 · Continue · build · 109.14 - No-JS States row added to all 26 pages lacking one (precise recount found 26, not the sweep's original 25); 4 parallel agents each required to read real script imports + behavior source before writing a claim; 2 spot-verified independently (master-detail dialog, command-bar no-native-affordance) before trusting; full suite green incl. check:claims 88/88 · landed · cc33407
 - 2026-08-22 15:03 · Continue · build · 109.15 - human-monitoring-signal sentence resolved across all 8 pages: 4 relocated to Anatomy (job-monitor/notification/role-home tied to a real region; output-form handled honestly - its own prose already points monitoring elsewhere, sentence says so rather than force-fitting), 2 authored where a real signal exists (reporting-dashboard's stat delta+staleness, record-detail's audit actor column), 2 declined with a stated reason where genuinely absent (schedule, master-detail) · landed · b7424c5
@@ -57,6 +55,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 15:36 · Continue · build · 109.18 - kanban lane cluster gained tabindex=0 (verified in built output); record-detail's 4 Anatomy items linked to their real components (breadcrumb/kv/dashboard-card/approval-workflow, the last found by grepping which docs page actually uses .bo-timeline/.bo-audit rather than guessing); Opener gained How-often clause; closes Slice 109's build queue (109.19/14/15/16/17/18 all landed) · landed · a45b047
 - 2026-08-22 15:42 · Continue · build · 112.2 - llms.txt gained a generated Patterns section from patterns.json (name/opener/complexity/components/wrong-choice per pattern, kept lean vs full States/Data-contract detail); same anti-drift throw-if-too-small guard as the 32.3 precedent, red-proved by truncating patterns.json and confirming the build actually threw before restoring it; 22.9kB->36.7kB, 53->81 URLs verified · landed · d1cdf06
 - 2026-08-22 15:50 · Continue · build · 113.1 - Advanced rich-text demo built (no pre-existing section existed despite the item assuming one); 7 execCommand button groups, wiring extended for value-taking commands + mutually-exclusive align group; 3 real surprises found testing live (strikethrough->deprecated <strike> tag, formatBlock->correct semantic headings, removeFormat->inline-only scope leaving headings/links intact); 2 promoted to permanent check-claims cases (92/92, up from 90); check-data-hooks caught the new data-richtext-value hook correctly on first build · landed · 92de5e6
+- 2026-08-22 15:53 · Standardize · standardize · sweep #8 after 4 Continue rounds (109.19-checkbox-fix/112.2/113.1): full suite green; one real finding - list-report/approval were hardcoded into llms.txt's Key docs section before 112.2's full generated Patterns section existed, now duplicated with less detail than the generated version; removed the hardcoded pair · logged · b609009
 
 ## Sunset test
 
