@@ -35,8 +35,8 @@ Generated at: 2026-08-22 14:58
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (661 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-22 14:39   ok
+dispatch status — counter-triggered rules (662 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-22 14:39   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -55,7 +55,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 14:11 · Continue · build · 109.3 - pattern quality bar extracted from 102.2/102.3 grills + owner-quartet + 112-grill text, every line grill-cited, two citations spot-checked against source before trusting the delegated extraction; sweep split out as 109.6 (18 pages + 13 wrong-choice clauses) per 109.3's own Accept · landed · 9b86bd6
 - 2026-08-22 14:18 · Continue · build · 109.6 batch 1 - 13 PATTERN_TODO pages bar-scored + wrong-choice-clause'd in 4 parallel agents; check:wrong-choice now 30/0; found+fixed a real false claim on wizard (panels don't render-at-once without JS, contradicted by static hidden attr - verified against markup before fixing, added missing No-JS States row); 109.4 field-editor decided FOLD on bar evidence (thin anatomy, fails shape-not-domain); systemic gap found - 12/13 pages lack human-monitoring-signal sentence, scoring only; remainder (13 non-TODO pages) left open in RESUME.md · landed · bd44050
 - 2026-08-22 14:25 · Continue · build · 109.6/109.13 batch 2 - remaining 13 pattern pages bar-scored (3 parallel agents), closing the 26-page sweep; second false runtime claim found+fixed (schedule.astro's calendar-breakpoint claim, verified against calendar.css before fixing); caught a real item-numbering collision mid-commit (my own 109.6/109.8 duplicated pre-existing items further down Slice 109) via the 101.2 enumeration check and renumbered to 109.13-109.18 before landing; queued 5 systemic findings (No-JS rows 25/26 pages, human-monitoring placement/absence, missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban, mechanical fixes) as their own items · landed · b2117e3
 - 2026-08-22 14:35 · Roadmap · triage · 113: owner rich-text sample screenshot triaged against 102.1's rung ladder - 7 execCommand buttons accepted as a richer rung-3 Advanced demo (113.1), rung-4 recipe doc for the refused four (113.2) · triaged · caae589
@@ -65,6 +64,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 14:48 · Continue · build · 109.19 - field-editor fold executed (age-order override written down per LOOPS.md, justified by avoiding double-touching detail-form/editable-grid once 109.14/109.16 run); folded as a variant section not full duplication; page deleted, Astro-native redirect added; all internal links updated; caught+fixed a real shipped bug via check:claims (missing <form> wrapper made type=reset inert - diagnosed by reading row-edit.ts's reset handler directly, confirmed it only fires on HTMLFormElement targets); full suite green (88/88 claims, wrong-choice 29/0) · landed · 69a5336
 - 2026-08-22 14:49 · Roadmap · triage · 114: owner htmx-4 wishlist verified via WebFetch (real, beta 6) then triaged against the Objective - refused, its swap-everything-except-204/304 default inverts the discards-non-2xx behavior baked into getting-started/htmx.astro and dozens of pattern Data-contract rows · triaged · dfdeb6c
 - 2026-08-22 14:49 · Meta · refusal · htmx 4 adoption - beta not stable, inverts documented swap-discard behavior across the pattern catalogue, no demonstrated gap; re-open on stable release + a scoped claim-audit first · refused · dfdeb6c
+- 2026-08-22 14:58 · Continue · build · 109.14 - No-JS States row added to all 26 pages lacking one (precise recount found 26, not the sweep's original 25); 4 parallel agents each required to read real script imports + behavior source before writing a claim; 2 spot-verified independently (master-detail dialog, command-bar no-native-affordance) before trusting; full suite green incl. check:claims 88/88 · landed · cc33407
 
 ## Sunset test
 
