@@ -67,6 +67,22 @@ const COST_CENTERS = [
 const budgets = { 'CC-1180': 110000, 'CC-2205': 70000, 'CC-4021': 95000 };
 const PAGE_SIZE = 10;
 const audit = [];
+// Notifications: a persistent, unread-tracked activity feed (roadmap
+// Explore, explore/notification-po-app spike). The approve dialog has
+// always had a "Notify additional approvers" field (adlg-notify below);
+// nothing ever rendered anywhere those notified people could actually
+// see anything — only ephemeral toasts existed, gone on next page load.
+// Same shape as `audit` above (push at the same four points audit
+// already hooks), so this reuses established insertion points rather
+// than inventing new ones.
+let notifSeq = 0;
+const notifications = [];
+function notify(title, detail, source, href) {
+  notifications.unshift({
+    id: `N-${++notifSeq}`, unread: true, title, detail, source, href,
+    t: new Date().toISOString(),
+  });
+}
 const money = (n) =>
   '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2 });
 // Display money as .bo-amount (roadmap 92.4) — the framework's display
@@ -114,6 +130,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
     <a class="bo-navbar__brand" href="/">PO demo</a>
     <span class="bo-badge bo-badge--accent">tarball build</span>
     <span class="bo-navbar__spacer"></span>
+    ${notifBellHtml()}
     <div class="bo-segmented" role="group" aria-label="Density" id="density-switch">
       ${DENSITIES.map((d) => `<input class="bo-segmented__input bo-visually-hidden" type="radio"
           name="density" id="density-${d}" value="${d}"${d === density ? ' checked' : ''}>
@@ -132,8 +149,8 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
   <main class="bo-app-shell__main"><div class="bo-stack bo-stack--loose">${main}</div></main>
 </div>
 <script type="module">
-  import { initDialogs, initDataTables, initAlerts } from '/assets/js/index.js';
-  initDialogs(); initDataTables(); initAlerts();
+  import { initDialogs, initDataTables, initAlerts, initDropdowns } from '/assets/js/index.js';
+  initDialogs(); initDataTables(); initAlerts(); initDropdowns();
   document.body.addEventListener('htmx:afterSwap', (e) => { initDataTables(e.target); window.__btt?.(); });
   document.getElementById('density-switch').addEventListener('change', (e) => {
     const d = e.target.value;
@@ -1008,6 +1025,52 @@ const receiveScreen = () => `
   });
 </script>`;
 
+// Notification bell + screen — dogfoods /patterns/notification against real
+// events (explore/notification-po-app, 2026-08-22). Composed from the
+// pattern's own shape: bell dropdown = latest 3 + count badge; screen =
+// full readable history with Mark-read/Dismiss. Real unread contract
+// (two-channel: worded badge + "read" in the byline, never colour alone).
+const notifBadgeHtml = (oob = false) => {
+  const unread = notifications.filter((n) => n.unread).length;
+  const oobAttr = oob ? ' hx-swap-oob="true"' : '';
+  return unread
+    ? `<span class="bo-badge bo-badge--warning" id="notif-count"${oobAttr} hx-get="/notifications/count" hx-trigger="every 60s" hx-swap="outerHTML">${unread} unread</span>`
+    : `<span id="notif-count"${oobAttr} hx-get="/notifications/count" hx-trigger="every 60s" hx-swap="outerHTML"></span>`;
+};
+const notifItemHtml = (n, compact = false) => {
+  if (compact) {
+    return `<a class="bo-dropdown__item" href="/notifications" data-notification-id="${n.id}"${n.unread ? ' data-unread="true"' : ''}>${n.unread ? '<strong>' : ''}${n.title}${n.unread ? '</strong>' : ''} · ${byline(n.t)}</a>`;
+  }
+  return `<article class="bo-alert" id="notif-${n.id}" data-notification-id="${n.id}"${n.unread ? ' data-unread="true"' : ''} aria-label="${n.unread ? 'Unread notification' : 'Notification'}">
+    <div>
+      <p>${n.unread ? '<span class="bo-badge bo-badge--warning">Unread</span> ' : ''}<strong>${n.title}</strong> — ${n.detail}</p>
+      <p class="bo-byline bo-byline--compact">${n.source} · ${byline(n.t)}${n.unread ? '' : ' · read'}</p>
+    </div>
+    <span class="bo-cluster">
+      ${n.href ? `<a class="bo-btn bo-btn--sm bo-btn--secondary" href="${n.href}">Open</a>` : ''}
+      ${n.unread ? `<button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" hx-post="/notifications/${n.id}/read" hx-target="#notif-${n.id}" hx-swap="outerHTML">Mark read</button>` : ''}
+      <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" aria-label="Dismiss: ${n.title}" hx-post="/notifications/${n.id}/dismiss" hx-target="#notif-${n.id}" hx-swap="outerHTML swap:200ms">Dismiss</button>
+    </span>
+  </article>`;
+};
+const byline = (iso) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+const notifBellHtml = () => `<button class="bo-btn bo-btn--secondary" type="button" popovertarget="notif-menu">
+  Notifications ${notifBadgeHtml()}
+</button>
+<div class="bo-dropdown__menu" id="notif-menu" popover>
+  ${notifications.length
+    ? notifications.slice(0, 3).map((n) => notifItemHtml(n, true)).join('\n  ') +
+      '\n  <div class="bo-dropdown__separator"></div>\n  <a class="bo-dropdown__item" href="/notifications">View all notifications</a>'
+    : '<p class="bo-dropdown__item bo-u-text-muted" style="pointer-events: none">No notifications</p>'}
+</div>`;
+const notificationScreen = () => `
+<h1>Notifications</h1>
+<div class="bo-stack" style="max-inline-size: 44rem" id="notif-list">
+  ${notifications.length
+    ? notifications.map((n) => notifItemHtml(n)).join('\n  ')
+    : '<p class="bo-u-text-muted">No notifications.</p>'}
+</div>`;
+
 // Rebuilt against the real role-home pattern shape (explore/role-home-po-app,
 // 2026-08-22) — the original above predates role-home (110.1) and used the
 // same primitives (.bo-widget-grid/.bo-stat) but not its actual anatomy
@@ -1238,6 +1301,34 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Spend by cost center', '/spend', spendScreen(), density));
     }
+    if (path === '/notifications' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Notifications', '/notifications', notificationScreen(), density));
+    }
+    if (path === '/notifications/count' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(notifBadgeHtml());
+    }
+    {
+      const nm = path.match(/^\/notifications\/(N-\d+)(\/read|\/dismiss)$/);
+      if (nm && req.method === 'POST') {
+        const n = notifications.find((x) => x.id === nm[1]);
+        // Idempotent either way, per the pattern's own Data contract: a
+        // second post returns the same state, never an error — includes
+        // an id that's already been dismissed (n undefined here).
+        if (nm[2] === '/read') {
+          if (n) n.unread = false;
+          res.writeHead(200, { 'content-type': 'text/html' });
+          return res.end((n ? notifItemHtml(n) : '') + notifBadgeHtml(true));
+        }
+        if (nm[2] === '/dismiss') {
+          const idx = notifications.findIndex((x) => x.id === nm[1]);
+          if (idx !== -1) notifications.splice(idx, 1);
+          res.writeHead(200, { 'content-type': 'text/html' });
+          return res.end(notifBadgeHtml(true));
+        }
+      }
+    }
     /* MASS CHANGE (roadmap 25.2 / M3): select N rows, set ONE field, in ONE
        validated operation. This is the honest answer to "update 200 records" —
        the request people reach for cell editing to satisfy. It reuses the
@@ -1287,6 +1378,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       });
       for (const [p, reason] of failed) p.bulkError = reason;
       audit.push({ t: new Date().toISOString(), what: `mass change cc=${cc}: ${changed} ok, ${failed.length} failed` });
+      if (changed) notify('Mass change applied', `${changed} moved to ${cc}${failed.length ? `, ${failed.length} could not be` : ''}.`, 'Purchasing', '/spend');
       res.writeHead(200, { 'content-type': 'text/html' });
       const summary = `<div id="bulk-result" hx-swap-oob="innerHTML">${
         failed.length
@@ -1317,6 +1409,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       });
       for (const [p, reason] of failed) p.bulkError = reason;
       audit.push({ t: new Date().toISOString(), what: `bulk approve: ${approved} ok, ${failed.length} failed` });
+      if (approved) notify('Bulk approve completed', `${approved} approved${failed.length ? `, ${failed.length} could not be` : ''}.`, 'Purchasing', '/pos');
       res.writeHead(200, { 'content-type': 'text/html' });
       // The swap returns ALL rows, which would desync the load-more offset
       // and duplicate rows on the next click (grill finding) — remove the
@@ -1362,6 +1455,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
         p.status = 'Rejected';
         p.note = note;
         audit.push({ t: new Date().toISOString(), what: `rejected ${p.id}` });
+        notify(`${p.id} rejected`, note ? `Reason: ${note}` : 'No reason given.', 'Purchasing', `/pos/${p.id}`);
         // ONE endpoint, TWO swap targets: the 422 lands in the dialog body
         // (hx-target), the success has to update the timeline OUTSIDE the
         // dialog. Out-of-band swap solves it — without this the success
@@ -1384,6 +1478,7 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
           .replace(/<(?!\/?(b|strong|i|em|ul|ol|li|p|br)\b)[^>]*>/gi, '')
           .replace(/<(\w+)[^>]*>/g, '<$1>');
         audit.push({ t: new Date().toISOString(), what: `approved ${p.id}` });
+        notify(`${p.id} approved`, `${money(p.amount)} · ${p.vendor}`, 'Purchasing', `/pos/${p.id}`);
         res.writeHead(200, { 'content-type': 'text/html' });
         return res.end(timelineHtml(p));
       }
