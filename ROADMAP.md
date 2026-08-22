@@ -231,7 +231,17 @@ stays evidence-gated.
 109.3 grows the 13 outstanding wrong-choice clauses (settled Q9 — one pass
 per page, not two).
 
-1. [ ] **112.1 — `patterns.json`, extracted not authored.** A
+1. [x] **112.1 — DONE 2026-08-22. `patterns.json` extracted, `gen-patterns.mjs`.**
+       Self-tested (`--self-test`, red-proved by breaking the row regex and
+       confirming the cases meant to catch it went red), reconciled by hand
+       against 9+ pages including edge cases (a nested `<code>` tag inside
+       a Data-contract cell, a wrong-choice clause with no alternative
+       link). Wired into the docs build chain right after
+       `gen-patterns-index.mjs`. No new drift gate added — 112.1's own
+       Accept asked only for the extractor to be red-proved, not for a
+       staleness gate; adding one would be scope creep beyond what was
+       asked. Original item text follows.
+       `patterns.json`, extracted not authored. A
        `gen-patterns.mjs` scrapes the pattern pages (the single source of
        truth stays the pages, per doctrine) into a generated per-pattern
        record: group, opener, complexity, components-used, the States

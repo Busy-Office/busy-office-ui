@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 14:35
+Generated at: 2026-08-22 14:36
 
 ## Open items by slice
 
@@ -23,8 +23,7 @@ Generated at: 2026-08-22 14:35
   - 109.16 — Data-contract 4xx/error row missing.
   - 109.17 — check-claims.mjs has ZERO cases for `inbox`, `job-monitor`, `kanban`.
   - 109.18 — small mechanical fixes, one page each.
-- **Slice 112** (5 open)
-  - 112.1 — `patterns.json`, extracted not authored.
+- **Slice 112** (4 open)
   - 112.2 — pattern catalogue into `llms.txt`.
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
@@ -36,9 +35,10 @@ Generated at: 2026-08-22 14:35
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (656 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-22 14:08   ok
+dispatch status — counter-triggered rules (657 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-22 14:08   OVERDUE
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -56,7 +56,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 13:05 · Meta · refusal · Six-section docs IA reorg — 80% renames of groups measured into place more recently than the proposal was written · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Hand-authored pattern metadata YAML — inverts the generated-from-artifact doctrine; superseded by extraction · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Consumer-facing conformance web tool — downstream of the refused Quality Index · refused · 04fdf23
 - 2026-08-22 13:58 · Continue · build · 110.4 - archived 83 fully-closed slices verbatim to ROADMAP-archive.md with pointer lines (live file 12,406 -> 5,562 lines, 55% cut); mover self-tested via injection, red-proofs structural (zero open items archived, pointers resolve, checkbox conservation, 101.2 enumeration clean); check-floor ALLOW extended and red-proved; 101.1 checkbox closed as superseded · landed · 16ef2bb
@@ -66,6 +65,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 14:25 · Continue · build · 109.6/109.13 batch 2 - remaining 13 pattern pages bar-scored (3 parallel agents), closing the 26-page sweep; second false runtime claim found+fixed (schedule.astro's calendar-breakpoint claim, verified against calendar.css before fixing); caught a real item-numbering collision mid-commit (my own 109.6/109.8 duplicated pre-existing items further down Slice 109) via the 101.2 enumeration check and renumbered to 109.13-109.18 before landing; queued 5 systemic findings (No-JS rows 25/26 pages, human-monitoring placement/absence, missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban, mechanical fixes) as their own items · landed · b2117e3
 - 2026-08-22 14:35 · Roadmap · triage · 113: owner rich-text sample screenshot triaged against 102.1's rung ladder - 7 execCommand buttons accepted as a richer rung-3 Advanced demo (113.1), rung-4 recipe doc for the refused four (113.2) · triaged · caae589
 - 2026-08-22 14:35 · Meta · refusal · Image upload, table-insertion UI, checklist list-type, color/highlight pickers as new richtext framework surface - infrastructure/distinct-component territory, same grounds as the 101.7 PDF/barcode refusals; re-open only if a real pattern page demonstrates the need · refused · caae589
+- 2026-08-22 14:36 · Continue · build · 112.1 - patterns.json extraction from pattern pages (gen-patterns.mjs: group/opener/complexity/components/States rows/Data-contract rows/wrong-choice clause+link, Anatomy deliberately out of scope per doctrine); self-tested (--self-test, red-proved by breaking the row regex and confirming 2/6 cases went red), reconciled against hand-counts on 9+ pages incl. edge cases (nested <code> tags, no-link wrong-choice clauses); wired into the docs build chain. Landed inside commit 8b60445 (mislabeled - that commit's message only describes 113; caught via git status after the fact, not before - lesson: check git status before a broad git add -A even mid-loop, not just at explicit commit time) · landed · 8b60445
 
 ## Sunset test
 
