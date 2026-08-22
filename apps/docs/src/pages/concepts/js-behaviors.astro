@@ -4,6 +4,7 @@ import Related from '../../components/Related.astro';
 import manifest from '@busy-office/ui/behaviors-manifest';
 import eventsManifest from '@busy-office/ui/events';
 import keymapManifest from '@busy-office/ui/keymap';
+import api from '@busy-office/ui/api';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // escape first, THEN backticks→<code> — event docs mention literal tags
 // (`<tr>`, `<input>`) that must never reach set:html raw
@@ -92,6 +93,75 @@ const inits = Object.entries(manifest.behaviors)
     <a href={base + '/reference/events'}>intent-event index</a>; it is
     look-up material, not something to read once.</p>
   </section>
+  <section class="demo">
+    <h2>State attributes <span class="bo-badge">generated</span></h2>
+    <p>Two attributes, deliberately kept separate rather than merged into
+    one lifecycle vocabulary — a component is either OPEN or BUSY, and
+    conflating the two would make "is this dialog open while its save is
+    in flight" unrepresentable in one value.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead><tr><th scope="col">Attribute</th><th scope="col">Values</th><th scope="col">Means</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="bo-data-table__col--code">data-state</td>
+            <td class="bo-data-table__col--code">{api.dataAttrValues['data-state'].join('|')}</td>
+            <td>structural: is this open or closed (dialog, offcanvas,
+            dashboard cards, the motion module's collapse), or where a
+            multi-step control is in its own sequence (stepper,
+            approval-workflow's timeline). Same attribute name, two
+            genuinely different domains — read it per component, never
+            assume the full value set applies everywhere it appears.</td>
+          </tr>
+          <tr>
+            <td class="bo-data-table__col--code">data-loading</td>
+            <td class="bo-data-table__col--code">{api.dataAttrValues['data-loading'].join('|')}</td>
+            <td>busy: an async request is in flight (button, data-table).
+            The opt-in <code>@busy-office/ui/css/htmx</code> module bridges
+            it onto HTMX's own request state — <code>.htmx-request
+            [data-loading]</code> disables pointer events for the
+            duration with no JS wiring on your part.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Where a component's states don't fit either
+    shape, it gets its own attribute rather than overloading these two:
+    <code>data-row-state</code> ({api.dataAttrValues['data-row-state'].join('|')})
+    on data-table rows, <code>data-day</code>
+    ({api.dataAttrValues['data-day'].join('|')}) on the calendar. A shared
+    name across unrelated domains is a worse contract than two honestly
+    different ones.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The Save sequence</h2>
+    <p>The pattern behind every Save/Submit/Approve button in this
+    framework's pattern catalogue, as it actually composes today — no
+    dedicated "loading state" component, because the pieces above already
+    cover it:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Idle</strong> — the button reads "Save".</li>
+      <li><strong>Saving</strong> — your JS (or the HTMX bridge, for free)
+      sets <code>data-loading="true"</code> and <code>aria-busy="true"</code>
+      on the button, and swaps its text to "Saving…". Two channels: the
+      text change is what a sighted user reads; <code>aria-busy</code> is
+      what a screen reader announces. Neither alone is the contract.</li>
+      <li><strong>Saved (or Error)</strong> — clear both attributes and
+      restore the button's resting label, or route to your error state
+      (a field's <code>aria-invalid</code>, a summary, a toast — pattern-
+      specific, not this button's job).</li>
+    </ol>
+    <p class="bo-u-text-muted"><strong>Deliberately no spinner icon or
+    success checkmark on the button itself</strong> — a real, measured
+    decision, not an oversight: an opacity-dimmed solid-fill button drops
+    to roughly 3.24:1 text contrast (axe color-contrast), under the 4.5:1
+    minimum. The button's own visible channel stays the text swap plus
+    <code>cursor: progress</code>; a spinner or checkmark belongs beside
+    or inside the button as your own markup if the pattern wants one —
+    the framework does not force a specific glyph onto every Save action.</p>
+  </section>
+
   <section class="demo">
     <h2>Import paths</h2>
     <pre><code>import {'{ initDialogs }'} from "@busy-office/ui/js";          // barrel

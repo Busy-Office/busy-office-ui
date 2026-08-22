@@ -176,25 +176,27 @@ closing (115.3). Full precedent chain in this slice's commit message.
        scope was deliberately left out of this item). Full suite green:
        13 docs gates, core build, 116 vitest, stylelint, `check:claims`
        92/92. **Accept met.**
-2. [ ] **115.2 — document the state-attribute conventions + the Save
-       sequence.** The honest counterpart to the proposal's §11–13: the
-       framework already has a DELIBERATE split, not a gap — `data-state`
-       is structural open/closed (dialog/offcanvas/widget/motion-collapse,
-       cross-referenced in source as "the same convention");
-       `data-loading="true"` is busy (button, data-table, bridged to htmx
-       in `integrations/htmx.css`); per-domain names where semantics differ
-       (`data-row-state=dirty|error|warning`,
-       `data-day=today|closed|holiday|selected` — calendar.css cites the
-       naming split as deliberate). One documentation section names the
-       split with api.json-generated values, plus the Save→Saving→Saved
-       recipe as it actually composes (consumer text swap + `aria-busy` +
-       `data-loading` + the htmx bridge), including button's MEASURED
-       no-spinner decision (opacity dimming refused at ~3.24:1 contrast)
-       so nobody re-proposes it blind. Location decided at build time
-       (likely `/base/motion` or `/concepts/js-behaviors`). **Accept:** the
-       split is named in one place with generated values; the Save sequence
-       documented with its two-channel story; any browser-behavior claim
-       gets a `check-claims.mjs` case.
+2. [x] **115.2 — DONE 2026-08-22, on `/concepts/js-behaviors`** (not
+       `/base/motion` — `data-state`/`data-loading` are core-wide
+       conventions, not scoped to the opt-in motion module). Two new
+       sections. **"State attributes"**: names the deliberate split with
+       api.json-generated values (`data-state` = `closed|current|done|
+       open|pending|rejected` — one attribute, two genuinely different
+       domains, structural open/closed vs. sequence position; `data-loading`
+       = `true`) plus the per-domain escapes (`data-row-state`, `data-day`),
+       all pulled live from `api.dataAttrValues`, verified in the BUILT
+       page (all four value strings confirmed present, not just the source
+       edit). **"The Save sequence"**: the real Idle→Saving→Saved recipe
+       (text swap + `aria-busy` + `data-loading`), including button's
+       MEASURED no-spinner decision (opacity dimming measured ~3.24:1
+       contrast, under 4.5:1) so nobody re-proposes it blind. One claim
+       caught and fixed before shipping: a first draft asserted the
+       htmx `data-loading` bridge was "the one HTMX-aware CSS rule in the
+       framework" — grepped `integrations/htmx.css` and found five
+       (`.htmx-indicator`, `.htmx-swapping`, `.htmx-settling`, the
+       bridge, the keyframe), corrected before commit. Full suite green
+       (13 docs gates, core build, 116 vitest, stylelint, `check:claims`
+       92/92). **Accept met.**
 3. [ ] **115.3 — extend `check:motion` to transitions.**
        `check-motion.mjs` walks only `animation` declarations — a
        literal-duration `transition` slips through silently, the exact rot
