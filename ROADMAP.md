@@ -777,7 +777,12 @@ catalogue in ERP vocabulary and job order.
        new links resolve; `check:claims` 90/90; core build; vitest;
        stylelint; page-shape). **Accept met — closes Slice 109's build
        queue** (109.19/109.14/109.15/109.16/109.17/109.18 all landed).
-16. [ ] **109.19 — execute the field-editor fold decided by 109.4.**
+16. [x] **109.19 — DONE 2026-08-22 (commit `69a5336`). Checkbox missed at
+       landing time — the implementation and its record_iteration.py
+       entry both landed, but this file's checkbox never flipped, caught
+       later by STATUS.md showing Slice 109 as 1-open when the real
+       count was zero.** Original item text follows.
+       Execute the field-editor fold decided by 109.4.
        **Dispatch-order note (LOOPS.md's oldest-item rule, not
        convenience): this jumps ahead of the older 94.8 and the
        109.14-18 queue, and that override is written down rather than
