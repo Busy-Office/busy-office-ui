@@ -24,9 +24,10 @@ Generated at: 2026-08-22 22:23
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (701 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-22 17:12   ok
+dispatch status — counter-triggered rules (702 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-22 17:12   OVERDUE
   Objective     1 / 3 slice           since 2026-08-22 07:59   ok  [30]
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -42,7 +43,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 20:07 · Continue · build · 116.1: inbox routine approval rows expand in place, reusing approval's dialog/endpoints (round-table decision B) · landed · e34c0d3
 - 2026-08-22 20:23 · Explore · build · 116.2: /inbox dogfooded into po-app, closes role-home's documented gap, real dialog-id collision bug found and fixed by the gate's own first run · landed · ba08035
 - 2026-08-22 20:46 · Roadmap · triage · 117: form label position grilled and triaged (top/start accepted as section modifier) · triaged · e9ffce5
 - 2026-08-22 20:46 · Meta · refusal · label-right for input/dropdown (inverts reading order; no design-system precedent) · refused · e9ffce5
@@ -52,6 +52,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 20:57 · Continue · build · 117.1: form-section --label-start modifier, reusing bo-kv--rows's subgrid alignment; RTL-flip claim red-proved · landed · d397de6
 - 2026-08-22 21:04 · Explore · build · --label-start dogfood into po-app: no natural target, discarded before spiking (form-row incompatibility found by reading) · refused · 59f9084
 - 2026-08-22 21:50 · Continue · build · 30.4b: initWindowedList behavior + /concepts/scale rewrite landed (red-proof dogfood still open) · landed · a1239e0
+- 2026-08-22 22:23 · Continue · build · 30.4b closed: /movements dogfood + permanent red-proof in check-po-app; four real bugs found by the instrument before it ever passed · landed · 82c7a49
 
 ## Sunset test
 
