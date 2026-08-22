@@ -45,6 +45,21 @@
     --bo-alert-bg: var(--bo-color-danger-subtle);
   }
 
+  /* Elevated: a shadow + raised surface instead of the flat accent-bar
+     strip (roadmap 119, owner feedback on notification's list — "go
+     elevated-card"). .bo-toast already carries this exact look, but it
+     ALSO carries bo-toast-in — an entrance animation for content that just
+     arrived, wrong for a static list already in the page at load (the
+     same "arrival decides announcement, not severity" reasoning this
+     file's own top comment states for role=alert). Split out so a
+     scannable list gets the card look without claiming everything on it
+     just happened. */
+  .bo-alert--elevated {
+    box-shadow: var(--bo-shadow-md);
+    background: var(--bo-color-bg-surface-raised);
+    border-radius: var(--bo-radius-md);
+  }
+
   .bo-alert__title {
     font-weight: var(--bo-font-weight-semibold);
   }

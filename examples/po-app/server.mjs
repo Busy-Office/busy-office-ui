@@ -1145,7 +1145,7 @@ const notifItemHtml = (n, compact = false) => {
   if (compact) {
     return `<a class="bo-dropdown__item" href="/notifications" data-notification-id="${n.id}"${n.unread ? ' data-unread="true"' : ''}>${n.unread ? '<strong>' : ''}${n.title}${n.unread ? '</strong>' : ''} · ${byline(n.t)}</a>`;
   }
-  return `<article class="bo-alert" id="notif-${n.id}" data-notification-id="${n.id}"${n.unread ? ' data-unread="true"' : ''} aria-label="${n.unread ? 'Unread notification' : 'Notification'}">
+  return `<article class="bo-alert bo-alert--elevated" id="notif-${n.id}" data-notification-id="${n.id}"${n.unread ? ' data-unread="true"' : ''} aria-label="${n.unread ? 'Unread notification' : 'Notification'}">
     <div>
       <p>${n.unread ? '<span class="bo-badge bo-badge--warning">Unread</span> ' : ''}<strong>${n.title}</strong> — ${n.detail}</p>
       <p class="bo-byline bo-byline--compact">${n.source} · ${byline(n.t)}${n.unread ? '' : ' · read'}</p>

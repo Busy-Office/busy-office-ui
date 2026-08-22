@@ -43,7 +43,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo" id="screen">
     <h2>The screen — readable history with an unread contract</h2>
     <div class="bo-stack" style="max-inline-size: 44rem">
-      <article class="bo-alert" aria-label="Unread notification">
+      <article class="bo-alert bo-alert--elevated" aria-label="Unread notification">
         <div>
           <p><span class="bo-badge bo-badge--warning">Unread</span>
           <strong>Posting run finished</strong> — 412 documents posted, 0 errors.</p>
@@ -54,7 +54,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button">Mark read</button>
         </span>
       </article>
-      <article class="bo-alert" aria-label="Unread notification">
+      <article class="bo-alert bo-alert--elevated" aria-label="Unread notification">
         <div>
           <p><span class="bo-badge bo-badge--warning">Unread</span>
           <strong>Export ready</strong> — Q3 open items (2.4 MB).</p>
@@ -65,7 +65,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button">Mark read</button>
         </span>
       </article>
-      <article class="bo-alert" aria-label="Notification">
+      <article class="bo-alert bo-alert--elevated" aria-label="Notification">
         <div>
           <p><strong>PO-88101 approved</strong> — final step, by M. Okafor.</p>
           <p class="bo-byline bo-byline--compact">Purchasing · today 08:31 · read</p>
@@ -75,7 +75,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" aria-label="Dismiss: PO-88101 approved">Dismiss</button>
         </span>
       </article>
-      <article class="bo-alert" aria-label="Notification">
+      <article class="bo-alert bo-alert--elevated" aria-label="Notification">
         <div>
           <p><strong>Requisition R-4402 deleted upstream</strong> — the record
           this notification pointed to no longer exists.</p>
@@ -97,7 +97,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <h2>Markup</h2>
     <pre><code>{`<!-- One item. Unread = a real badge, not a colour; the byline carries
      source · time, and gains "read" when cleared. -->
-<article class="bo-alert" aria-label="Unread notification">
+<article class="bo-alert bo-alert--elevated" aria-label="Unread notification">
   <div>
     <p><span class="bo-badge bo-badge--warning">Unread</span>
     <strong>Posting run finished</strong> — 412 documents, 0 errors.</p>
@@ -118,9 +118,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       unread-count <a href={base + '/components/badge'}>badge</a> on the
       trigger, latest few items, one "view all" link. Glance surface only.</li>
       <li><strong>The list</strong> — a stack of
-      <a href={base + '/components/alerts'}>alert</a> cards: static
-      severity chrome reused as item chrome, with <em>no live-region
-      role</em> — these are present at load, the exact case the
+      <a href={base + '/components/alerts'}>alert</a> cards,
+      <code>--elevated</code>: a shadow + raised surface instead of the
+      flat accent-bar strip, so a scanned LIST reads as cards rather than
+      a row of warnings. Not <code>.bo-toast</code> — that carries an
+      entrance animation for content that just arrived, wrong for a
+      static list already in the page. Static severity chrome reused as
+      item chrome either way, with <em>no live-region role</em> — these
+      are present at load, the exact case the
       <a href={base + '/concepts/accessibility'}>live-region rule</a>
       excludes.</li>
       <li><strong>Unread contract</strong> — the badge is the visible
