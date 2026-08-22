@@ -149,6 +149,66 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 113 — Owner wishlist: improve the rich text sample (2026-08-22)
+
+Owner attached a screenshot of a third-party editor's description field
+toolbar (heading dropdown, style dropdown, B/I/U/strikethrough, clear
+format, text color, highlight, blockquote, code, paragraph mark, link,
+image, ordered/unordered/checklist lists, align, indent/outdent, a Table
+dropdown) with the ask "Improve rich text sample."
+
+**Triaged against the existing rung ladder** (102.1's grill,
+`.roundtable/grill-richtext-ladder-2026-08-21.md`, which already measured
+five rungs and found the ladder complete — rung 3 is `.bo-richtext` +
+native `execCommand`, zero framework JS; rung 4 is a real engine mounted
+into the same chrome, deliberately undocumented-as-shipped since it needs
+a dependency the framework does not carry). The reference toolbar splits
+cleanly across that boundary:
+
+- **Rung-3-achievable, zero new framework JS or CSS** (native
+  `execCommand`/`queryCommandState`, same dozen-line pattern the current
+  Basic demo already uses for bold/italic/lists): strikethrough
+  (`strikeThrough`), headings (`formatBlock` 'h2'/'h3'), blockquote
+  (`formatBlock` 'blockquote'), align (`justifyLeft/Center/Right`),
+  indent/outdent (`indent`/`outdent`), clear formatting (`removeFormat`),
+  link (`createLink`).
+- **Rung-4/infrastructure, refused as new framework surface** — same
+  reasoning as the PDF/barcode refusals (101.7): image upload needs
+  server-side hosting; table insertion needs real table-building logic;
+  checklist needs custom list-item state `execCommand` doesn't provide;
+  color/highlight pickers need a color-picker UI component of their own.
+  None of these are "a CSS framework's job" per that precedent, and none
+  are demonstrated by a real ERP screen in this repo (the grill's own
+  finding: `.bo-prose`'s rung has never been exercised against a pattern
+  page, `.bo-richtext`'s heavier rungs even less so).
+
+1. [ ] **113.1 — richer rung-3 demo: the seven achievable buttons above,
+       added to the Advanced demo (not Basic — keep Basic minimal per the
+       grill's own "most ERP free-text should never be rich text" framing).**
+       Zero new CSS, zero new framework JS — same `data-richtext-cmd`
+       wiring, same dozen lines. **Accept:** each new button's
+       `execCommand`/`queryCommandState` pairing verified live (the same
+       "tested live rather than read" discipline 102.1 used — it already
+       found the browser returns `<b>` not `<strong>` on Bold, a surprise
+       a hand-typed page would have missed); `aria-pressed` sync confirmed
+       for the toggle commands (bold/italic/strikethrough/align); the
+       heading/blockquote `formatBlock` commands verified to produce valid
+       semantic HTML the sanitizer allowlist section already warns about.
+2. [ ] **113.2 — write the rung-4 recipe extension for the refused four**
+       (image, table, checklist, color/highlight) — documented as "bring
+       your own engine" alongside the existing rung-4 mount recipe, never
+       built. **Accept:** one short section naming each of the four and
+       which real editor feature/library concern it maps to, so a reader
+       reaching for them is routed to rung 4 rather than filing this as a
+       gap in rung 3.
+
+**REFUSED, with reasons:** image upload, table-insertion UI, checklist
+list-type, and color/highlight pickers as new framework surface — each is
+infrastructure or a distinct sub-component the CSS-first doctrine and the
+101.7 PDF/barcode precedent both refuse; re-open only if a real ERP
+pattern page demonstrates the need (the 99.4 front door) rather than a
+reference screenshot alone.
+
 ## Slice 112 — External governance/conformance proposal, grilled to a pilot (2026-08-22)
 
 Owner supplied a rev-3 "Documentation, Governance & Conformance Improvement
