@@ -149,6 +149,49 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 120 — Owner wishlist: dependent dropdowns, checked against an article (2026-08-22)
+
+Owner linked an article ("HTMX Dependent Dropdowns: 5 Strategies I Learned
+the Hard Way") and asked whether it could improve the dropdown. Fetched and
+read in full before triaging (a reader-proxy fetch, since the source blocks
+direct WebFetch). Checked against the shipped surface first: the framework
+already has OOB swaps, debounced live-search (the cost-centre picker's
+`hx-trigger="input changed delay:250ms, search"`), and `hx-include` for bulk
+actions — but nothing demonstrating one `.bo-select` repopulating another.
+Real, if small, gap.
+
+1. [x] **120.1 — DONE 2026-08-22.** "Dependent selects (HTMX)" section on
+       `/components/form`: the article's "Multiple Targets" strategy as the
+       primary demo (`hx-get`/`hx-trigger="change"`/`hx-target` directly on
+       the driving `.bo-select` — zero new framework surface, pure
+       attribute composition already used everywhere else on the page),
+       "Hidden Listeners" and OOB swaps named as the escalation path for
+       independent multi-reactor and multi-target cases, and a small
+       `htmx:afterSwap`/`htmx.ajax()` handler named as the sparing
+       last-resort for real conditional branching. The article's own
+       5th strategy (replace the whole form) is named as the anti-pattern
+       to avoid, with its real cost (focus loss, dropped untouched field
+       values, no screen-reader signal) tied to reasoning this framework
+       already holds — master-detail's panel is deliberately a narrow
+       swap target, never a navigation. Accept: the section demos a real,
+       working attribute contract; zero new CSS/JS; full docs build green;
+       `check:claims` unchanged (95 — no new runtime claim was made,
+       correctly, since the demo's `/cities` endpoint doesn't exist on the
+       static docs site); screenshots light + dark 1440. **Accept met.**
+
+**REFUSED, with reasons:**
+- **A new component/behavior for cascading selects** — every one of the
+  three recommended strategies is pure `hx-*` attribute composition on the
+  EXISTING `.bo-select`; there is nothing here a CSS-first framework should
+  own beyond documentation. Re-open only if a real screen needs something
+  declarative attributes genuinely can't express.
+- **Documenting "Event Chaining" as a first-class pattern** — the source
+  article itself calls for using it "sparingly," and it is the one strategy
+  that adds JS; named as an escape hatch in prose, not given its own demo.
+- **Documenting "Form Replacement"** — the article argues against it
+  outright (focus loss, dropped state, accessibility, mobile); recorded as
+  the named anti-pattern instead of a strategy to adopt.
+
 ## Slice 119 — Owner wishlist: the pattern catalog review, grilled (2026-08-22)
 
 Owner asked to "list out first, before deciding" a set of pattern ideas.

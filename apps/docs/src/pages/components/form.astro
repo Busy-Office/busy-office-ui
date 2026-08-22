@@ -104,6 +104,24 @@ const sections = `<form>
   </div>
 </form>`;
 
+const dependentSelects = `<div class="bo-form-row">
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="dep-country">Country</label>
+    <select class="bo-select" id="dep-country" name="country"
+        hx-get="/cities" hx-trigger="change" hx-target="#dep-city" hx-swap="innerHTML">
+      <option value="">Select a country…</option>
+      <option value="DE">Germany</option>
+      <option value="US">United States</option>
+    </select>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="dep-city">City</label>
+    <select class="bo-select" id="dep-city" name="city" disabled>
+      <option value="">Select a country first</option>
+    </select>
+  </div>
+</div>`;
+
 const labelStart = `<fieldset class="bo-form-section bo-form-section--label-start">
   <legend class="bo-form-section__legend">Invoice header</legend>
   <div class="bo-form-field">
@@ -198,6 +216,34 @@ const fieldMarkup = `<div class="bo-form-field">
     is never hidden underneath it. The full multi-section edit screen, with its
     data contract and dirty-state handling, is
     <a href={base + '/patterns/detail-form'}>the detail-form pattern</a>.</p>
+  </section>
+  <section class="demo">
+    <h2>Dependent selects (HTMX)</h2>
+    <Demo code={dependentSelects} />
+    <p class="bo-u-text-muted">Picking a country repopulates the city
+    select — plain <code>hx-get</code>/<code>hx-trigger="change"</code>/
+    <code>hx-target</code> on the <em>driving</em> <code>.bo-select</code>,
+    same attributes every other swap on this page uses. No framework
+    surface needed: this composes entirely from existing markup.</p>
+    <p class="bo-u-text-muted"><strong>Escalate only when this stops
+    fitting.</strong> A hidden element with
+    <code>hx-trigger="change from:#driving-select"</code> decouples the
+    listener from the select itself when several independent things need
+    to react to one change. <a href={base + '/getting-started/htmx'}>OOB
+    swaps</a> update several dependent selects from one response when a
+    single field drives more than one of them at once. Reach for a small
+    <code>htmx:afterSwap</code>/<code>htmx.ajax()</code> handler only for
+    real conditional branching a declarative trigger can't express, and
+    sparingly — it is the one strategy here that adds JS.</p>
+    <p class="bo-u-text-muted"><strong>Not swapping the whole
+    form.</strong> Re-rendering the entire <code>&lt;form&gt;</code> on
+    every change is the one shape to avoid: focus moves to wherever the
+    swap lands, values in fields the change didn't touch can be dropped
+    by a naive server render, and a screen reader gets no signal about
+    what actually changed. The same reasoning already governs this
+    framework's swap targets elsewhere — <a href={base + '/patterns/master-detail'}>master-detail</a>'s
+    panel is deliberately a narrow swap target, never a navigation, so
+    the list around it never loses its place.</p>
   </section>
   <section class="demo">
     <h2>Label-start sections</h2>
