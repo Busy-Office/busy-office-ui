@@ -149,6 +149,79 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 121 — Owner ask: grill the pattern catalogue for coverage + showcase (2026-08-23)
+
+Owner: "grill & roundtable the patterns - check if coverage of pattern.
+showcase as mush as possible." Two independent agents dispatched — one on
+ERP domain coverage (checked against the existing `.roundtable/erp-
+pattern-catalogue-v2-2026-08-22.md` sweep rather than duplicating it), one
+on discoverability across all 30 shipped pattern pages. Findings below are
+each single-source per claim (not this project's own ≥2-source Objective
+bar) but independently re-checkable — file-referenced facts, not opinions.
+
+**Coverage: recipe compliance is solid.** All 30 pattern pages carry the
+required opener (who/how-often/what-done), a wrong-choice clause, and the
+full Anatomy/Data-contract/States/Components-used skeleton — `check:
+wrong-choice` and `check:page-shape` are visibly doing their job.
+
+**Three real domain gaps, not covered by the prior v2 sweep:**
+1. [ ] **121.1 — Reconciliation / matching screen. BLOCKED ON GRILL.**
+   Two independent lists matched against each other (not one list
+   validated/edited like `staging`, not one list acted on like
+   `bulk-actions`) — a running unmatched balance, aging exceptions.
+   Essential for any finance/AP/treasury module (bank reconciliation,
+   three-way-match exceptions). Needs its own design-tree round before
+   Accept criteria exist.
+2. [ ] **121.2 — Timesheet / time entry. BLOCKED ON GRILL.** Looks like
+   `editable-grid` but isn't: a FIXED calendar-period column axis (not
+   arbitrary fields), row+column totals that must reconcile before a
+   submit-for-period action fires into `approval`. Essential wherever
+   HR/Projects/PSA exists. Needs its own grill.
+3. [ ] **121.3 — Comparison / evaluation matrix. BLOCKED ON GRILL.** N
+   candidates × M criteria, each cell showing a value + delta from
+   best/target, ending in a select/award action (RFQ supplier comparison,
+   budget-variance analysis). Distinct from `master-detail` (one list,
+   one detail) and `editable-grid` (one record's rows). Needs its own
+   grill.
+4. **Cross-entity federated search results** — lower confidence per the
+   reviewing agent itself ("may compose from list-report sections"); NOT
+   queued, named here so it isn't silently lost, re-open only if a real
+   screen needs it.
+
+**Confirmed false gaps — do not re-chase:** document/attachment manager
+(already `file-upload`, wired into `staging`/`inbox`), document-flow/
+linked-document chain (already `record-detail`'s "Record feed" region),
+hierarchy/tree browser (already `tree`/`tree-table`, meant to compose
+in), period-close cockpit / Gantt / map / activity-chatter / Analytical
+List Page (already refused in the v2 catalogue sweep, reasoning re-
+verified here, not re-litigated).
+
+**Showcase: the real gap is cross-linking, not content depth.** 8 of 30
+patterns are total or near-total orphans — reachable only via the
+sidebar/generated index, zero inbound links from any sibling pattern
+page: Error pages, Role home, Command bar, Multi-step wizard, Kanban
+board, Output form, Schedule (near-orphan), Settings & admin
+(near-orphan). Two naming collisions found: Report / Reporting dashboard
+sit as adjacent sidebar labels for genuinely different purposes
+(one-shot parameterized output vs. always-open monitoring); Schedule's
+label ambiguously overlaps `job-monitor`'s own "not for authoring
+schedules" disclaimer. `Output form`'s name itself misfires — reads as
+a data-entry form, is actually the emitted/printed-document pattern.
+
+5. [x] **121.4 — DONE 2026-08-23.** Cross-links added for the 5 weakest
+   orphans the audit named specifically (Multi-step wizard, Output form,
+   Schedule, Command bar, Kanban board) — each now has at least one real
+   inbound link from a genuinely adjacent sibling pattern, not just the
+   sidebar. Accept: each of the 5 has ≥1 inbound `<a href>` from another
+   pattern page's prose or Related footer; docs gates green.
+6. [ ] **121.5 — Remaining orphans + naming collisions.** Error pages,
+   Role home, Settings & admin still need inbound links; Report/
+   Reporting-dashboard and Schedule/Job-monitor naming collisions need
+   either a sidebar label tweak or a more prominent disambiguating note
+   (owner call on which — a rename touches published docs URLs less than
+   the components package, but still a real link-breaking decision, not
+   a silent edit). Queued, not built this wake.
+
 ## Slice 120 — Owner wishlist: dependent dropdowns, checked against an article (2026-08-22)
 
 Owner linked an article ("HTMX Dependent Dropdowns: 5 Strategies I Learned
