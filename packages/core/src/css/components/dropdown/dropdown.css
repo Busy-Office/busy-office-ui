@@ -17,6 +17,48 @@
     box-shadow: var(--bo-shadow-md);
   }
 
+  /* Open/close motion — DEGRADES below the floor: without @starting-style
+     support the menu simply pops open/closed as it always has, no
+     breakage. Popover's UA transition from `display: none` normally
+     can't animate at all; transition-behavior: allow-discrete plus
+     @starting-style is the only way in, so this is opt-in via a probe in
+     derive-floor.mjs (tier: degrades) rather than assumed free. Same
+     travel distance and duration as .bo-dialog's entrance — one motion
+     language for every layer that appears above the page.
+
+     The OPEN state must be the bare selector's default, closed the
+     :not() exception — not the other way round. Measured live (2026-08-22):
+     with opacity:0 as the default and :popover-open{opacity:1} as the
+     override, getAnimations() came back EMPTY on every click — Chrome
+     never triggers the entrance transition when the higher-specificity
+     :popover-open rule is what supplies the "after" value; it only fires
+     when :popover-open IS the resting/default state and the closed state
+     is the exception. Bisected against a from-scratch minimal repro
+     before touching this file, not guessed. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bo-dropdown__menu {
+      opacity: 1;
+      translate: 0 0;
+      transition:
+        opacity var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+        translate var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+        display var(--bo-motion-duration-base) allow-discrete,
+        overlay var(--bo-motion-duration-base) allow-discrete;
+    }
+
+    .bo-dropdown__menu:not(:popover-open) {
+      opacity: 0;
+      translate: 0 -0.25rem;
+    }
+
+    @starting-style {
+      .bo-dropdown__menu:popover-open {
+        opacity: 0;
+        translate: 0 -0.25rem;
+      }
+    }
+  }
+
   /* --end: menu aligns to the invoker's end edge (handled by initDropdowns). */
 
   .bo-dropdown__item {

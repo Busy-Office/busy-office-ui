@@ -36,7 +36,7 @@ order is a documented contract: **tokens → reset → components** — componen
 only their own layer and depend on tokens/reset being imported first. The all-in-one
 `index.css` remains the simplest path and is cheaper once you use most components.
 
-**Browser floor: <!-- stat:floor -->Chrome/Edge 119 · Firefox 128 · Safari 17.4<!-- /stat -->** (declared in
+**Browser floor: <!-- stat:floor -->Chrome/Edge 119 · Firefox 129 · Safari 17.5<!-- /stat -->** (declared in
 browserslist; FF 128 is required by `content` alt-text syntax and comfortably covers
 the `popover` attribute). `:has()`-driven reveals are fail-closed below the floor;
 server-set `aria-invalid` error messages have a non-`:has()` fallback rule.

@@ -76,6 +76,11 @@ const REGISTRY = [
     decision: 'exempt',
     why: 'A spinner toggled between 0 and 1. It carries no text to read.',
   },
+  {
+    match: '.bo-dropdown__menu',
+    decision: 'exempt',
+    why: 'Transient, same shape as htmx-swapping: opacity 0 is the OPEN transition\'s starting point and the CLOSE transition\'s end point, both under 300ms. The genuine resting states are [popover] fully removed from paint (closed) or opacity 1 (open, at the AA background this same file already sets) — nobody reads text mid-fade. This is a transition + @starting-style, not @keyframes, so it needs the explicit entry the file header says keyframes get for free.',
+  },
 ];
 
 const files = ['index.css', 'htmx.css'];

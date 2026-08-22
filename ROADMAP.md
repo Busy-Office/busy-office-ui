@@ -780,6 +780,93 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 111 — Owner wishlist: button group, dropdown animation, design-system reference (2026-08-22)
+
+Owner: *"improve design system... improve button, dropdown, group button
+(sample in attachment)... dropdown animation"* plus an auto-extracted
+"design system" doc (from a live Linear issue page) offered for
+comparison.
+
+**Verdict on the reference, stated first because it decides everything
+else**: it is a computed-style scrape of one app's current CSS, not a
+design system — arbitrary sub-pixel values (`0.05px` spacing, `0.5px`
+borders — a browser rendering artifact, not an intentional unit),
+`radius-button` listed six times at six different values with no scale,
+a single monochrome accent with no stated contrast ratio, and its own
+`10.` section admits `--bg-color` resolves through four indirections to
+one literal. **Extracted anyway, because the underlying UI ideas are
+real and independent of those numbers**: joined/pill button groups,
+icon+text dropdown items with a trailing shortcut, and subtle
+open/close motion on floating menus — all present in the attached
+screenshot, none requiring the source's literal tokens. Built against
+our own contrast-gated, already-scaled tokens instead.
+
+1. [x] **111.1 — `.bo-btn-group`: joins a toolbar, not a choice.**
+       **Done 2026-08-22.** Composes existing `.bo-btn` — no new
+       component. Border-collapse via negative margin (each button keeps
+       its OWN border, so `:focus-visible`/`:disabled`/forced-colors all
+       still resolve per-button; only the shared edge disappears), outer
+       corners rounded via `:first-child`/`:last-child`. Explicitly
+       distinguished from `.bo-segmented` in both the CSS comment and the
+       docs prose: segmented is radios (one active choice), a button
+       group is independent actions that each fire on their own — the
+       screenshot's link/duplicate/"More▾" toolbar is the group shape,
+       not a picker. **One real bug caught and fixed before shipping**:
+       the demo nested the popover menu INSIDE `.bo-btn-group`, which
+       made the menu div — not the trigger button — the true DOM
+       `:last-child`, so the outer corner stayed square. `[popover]`
+       renders in the top layer regardless of DOM position but
+       `:last-child` cares about DOM position; moved the menu to a
+       sibling. Verified live: computed radii 6px/0px/6px across
+       first/middle/last, gap exactly `-1 × border-width`.
+2. [x] **111.2 — dropdown open/close motion.** **Done 2026-08-22, and
+       the fix required real debugging, not just adding CSS.** First
+       attempt (`opacity:0` default, `:popover-open{opacity:1}`
+       override) shipped looking plausible — all 22 build gates passed —
+       but `getAnimations()` on a real click came back **empty**, proving
+       nothing was actually animating despite `@media
+       (prefers-reduced-motion: no-preference)` correctly matching.
+       Traced through three layers before finding it: (a) suspected
+       `dropdown.ts`'s `position()` call forcing a synchronous
+       `offsetWidth` layout read at open — deferred it to
+       `requestAnimationFrame`, no change; (b) bisected with a from-
+       scratch minimal repro outside the framework entirely, confirming
+       `@starting-style` + `[popover]` genuinely works in this Chrome;
+       (c) bisected the exact rule structure and found the real cause —
+       **the OPEN state must be the bare selector's default, closed the
+       `:not(:popover-open)` exception; the reverse (closed as default,
+       open as the higher-specificity override) never triggers the
+       entrance transition at all**, for reasons neither MDN nor the
+       spec state plainly. Swapped the structure; `getAnimations()` now
+       shows two running transitions and a real 0→0.18→0.69→0.97→1 fade
+       sampled over five polls matching the 150ms token exactly.
+       Deliberately kept the `requestAnimationFrame` deferral in
+       `dropdown.ts` too — it was a genuine (if not sufficient alone)
+       fix, costs nothing (the menu is invisible for that one frame
+       regardless), and documents a real hazard for the next person
+       who adds a transition here. Tagged `degrades` in
+       `derive-floor.mjs` (new probe) — floor honestly moved Firefox
+       128→129 / Safari 17.4→17.5 (`@starting-style`'s real requirement,
+       stamped via `stamp-readme.mjs`, not hidden); below that floor the
+       menu still opens and closes, just without the fade. Registered in
+       `check-composited.mjs` as transient (same shape as the existing
+       `htmx-swapping` entry) — opacity 0 is the transition's start/end
+       point, never a resting state anyone reads. Verified live: real
+       fade sampled AND `prefers-reduced-motion: reduce` confirmed
+       instant (opacity 1, no transition) in the same run.
+3. [x] **111.3 — dropdown items with an icon and a trailing shortcut**
+       (the exact shape in the owner's screenshot). **Done 2026-08-22,
+       zero new CSS**: `.bo-dropdown__item` was already `display: flex`,
+       so a leading `.bo-icon` (`aria-hidden`, the same rule as icon+text
+       buttons) and a trailing `.bo-kbd` compose for free —
+       `margin-inline-start: auto` on the last child is plain flexbox,
+       not a framework class. Documented as composition, not shipped as
+       a new part.
+
+Not done, and refused with reason: adopting the reference's literal
+colour/spacing/radius values — they fail this project's own contrast
+gate and token-scale discipline by construction (see verdict above).
+
 ## Slice 110 — v2 candidates approved and grilled (2026-08-22)
 
 From 109.8's owner answer ("let's include per your recommendation — grill

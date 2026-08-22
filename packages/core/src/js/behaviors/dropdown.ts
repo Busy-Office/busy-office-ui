@@ -112,7 +112,16 @@ export function initDropdowns(): void {
       const menu = e.target as HTMLElement;
       if (!menu.classList?.contains('bo-dropdown__menu')) return;
       if ((e as ToggleEvent).newState === 'open') {
-        position(menu);
+        /* rAF, not a synchronous call: position() reads offsetWidth/
+           offsetHeight, forcing a layout the instant the popover opens —
+           which starves the CSS @starting-style entrance transition of
+           the one style-only frame it needs to register (measured live:
+           getAnimations() on the menu came back empty with the call
+           synchronous, 2026-08-22). Deferring one frame costs nothing
+           visible because @starting-style holds the menu at opacity 0
+           for exactly that frame — there is nothing to see in the wrong
+           position yet. */
+        requestAnimationFrame(() => position(menu));
         trackWhileOpen(menu);
       } else {
         stopTracking();

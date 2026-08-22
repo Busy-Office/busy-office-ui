@@ -3,7 +3,7 @@
 CSS-first UI framework for ERP and back-office screens. Semantic components — not
 utility soup — built on modern CSS: `@layer` cascade contract, `:has()`, named
 container queries, native `<dialog>` and `popover`.
-<!-- stat:size -->76 kB minified (12.5 kB gzipped)<!-- /stat --> for the whole
+<!-- stat:size -->77 kB minified (12.8 kB gzipped)<!-- /stat --> for the whole
 framework, zero runtime dependencies, tree-shakable per-component files.
 
 **Docs & live demos:** https://busy-office.github.io/busy-office-ui/
@@ -68,7 +68,7 @@ inline edit) · combobox & multi-select dropdown · tabs · alerts/toasts · nav
 tree · CSS icons (`mask-image`, themable via `currentColor`) · approval timelines ·
 audit trails · wizard stepper · print/report layer.
 
-Browser floor: **<!-- stat:floor -->Chrome/Edge 119 · Firefox 128 · Safari 17.4<!-- /stat -->**.
+Browser floor: **<!-- stat:floor -->Chrome/Edge 119 · Firefox 129 · Safari 17.5<!-- /stat -->**.
 
 ## Links
 

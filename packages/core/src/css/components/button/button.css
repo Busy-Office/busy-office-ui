@@ -117,4 +117,48 @@
       border-color: ButtonText;
     }
   }
+
+  /* Group a row of buttons into one visually joined control — a toolbar
+     ("copy · branch · settings ▾"), not a single-choice picker (that is
+     .bo-segmented, which uses radios because only one option can be
+     active; every button here stays independently clickable). Composes
+     the existing .bo-btn — no new component, no new part class on the
+     buttons themselves.
+
+     Border-collapse via negative margin, not `border: none` on inner
+     buttons: each .bo-btn keeps its own border so :focus-visible,
+     :disabled and forced-colors all still resolve per-button; only the
+     ADJACENT edge disappears (this button's border draws over the
+     previous button's, so exactly one line survives between them). */
+  .bo-btn-group {
+    display: inline-flex;
+  }
+
+  .bo-btn-group > .bo-btn {
+    border-radius: 0;
+    margin-inline-start: calc(-1 * var(--bo-border-width));
+  }
+
+  .bo-btn-group > .bo-btn:first-child {
+    margin-inline-start: 0;
+    border-start-start-radius: var(--bo-radius-md);
+    border-end-start-radius: var(--bo-radius-md);
+  }
+
+  .bo-btn-group > .bo-btn:last-child {
+    border-start-end-radius: var(--bo-radius-md);
+    border-end-end-radius: var(--bo-radius-md);
+  }
+
+  /* Keep the pressed/hovered button's border above its neighbours', or
+     the collapse trick above draws the neighbour's edge over it. A bare
+     z-index is correct here, not a token from the stacking scale
+     (/concepts/cascade#stacking) — that scale is for position:
+     sticky/fixed elements competing GLOBALLY; this is a local nudge
+     among static-position siblings in one group, the same idiom as any
+     input-group border collapse. */
+  .bo-btn-group > .bo-btn:hover,
+  .bo-btn-group > .bo-btn:focus-visible {
+    z-index: 1;
+  }
 }

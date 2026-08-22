@@ -87,11 +87,43 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
     <code>aria-label</code> ("Edit INV-10234", never just "Edit"); for more than
     two actions, collapse into a <a href={base + '/components/dropdown'}>row dropdown</a>.</p>
   </section>
+  <section class="demo">
+    <h2>Button group — a toolbar, not a choice</h2>
+    <div class="bo-btn-group">
+      <button class="bo-btn bo-btn--secondary bo-btn--icon" type="button" aria-label="Copy link"><span class="bo-icon bo-icon--doc" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--secondary bo-btn--icon" type="button" aria-label="Duplicate"><span class="bo-icon bo-icon--invoice" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--secondary" type="button" popovertarget="btngrp-menu">More <span aria-hidden="true">▾</span></button>
+    </div>
+    {/* The popover menu is a SIBLING of .bo-btn-group, not a child: it
+        renders in the top layer regardless of DOM position (that's the
+        whole point of [popover]), but border-radius:last-child cares
+        about DOM position — nesting it inside the group made the menu
+        div the true last child and left the trigger's outer corner
+        square. Caught live, not assumed. */}
+    <div class="bo-dropdown__menu" id="btngrp-menu" popover>
+      <button class="bo-dropdown__item" type="button">Export PDF</button>
+      <button class="bo-dropdown__item" type="button">Configure…</button>
+    </div>
+    <script type="module">
+      import { initDropdowns } from '@busy-office/ui/js';
+      initDropdowns();
+    </script>
+    <p class="bo-u-text-muted"><code>.bo-btn-group</code> visually joins
+    independent buttons into one control — every button stays its own
+    click target. <strong>Not</strong> <code>.bo-segmented</code>: that is
+    radios, for picking exactly one of a small set (My approvals / Team
+    approvals); a button group is a toolbar where every action fires on
+    its own. Each button keeps its own border, focus ring and disabled
+    state — only the shared edge between two buttons collapses to one
+    line, so <code>:focus-visible</code> still outlines a single button,
+    never the whole group.</p>
+  </section>
   <ClassRef component="button" />
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
             'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.',
-            'Icon + text needs no modifier — a <code>.bo-icon</code> beside text composes for free; keep the icon <code>aria-hidden="true"</code>.']} />
+            'Icon + text needs no modifier — a <code>.bo-icon</code> beside text composes for free; keep the icon <code>aria-hidden="true"</code>.',
+            '<code>.bo-btn-group</code> joins a row of buttons into one toolbar — independent actions, not a single-choice picker (that is <code>.bo-segmented</code>).']} />
   <DsaScore component="button" />
   <Related links={[["/concepts/tokens", "Design tokens"], ["/base/colors", "Color scales"]]} />
 </Gallery>

@@ -57,6 +57,7 @@ const FEATURES = [
   { tier: 'degrades', id: 'content alt-text', path: ['css', 'properties', 'content', 'alt_text'], test: (c) => /content:[^;]*\/[^;]*;/.test(c) },
   { tier: 'polish', id: 'text-wrap', path: ['css', 'properties', 'text-wrap'], test: (c) => /text-wrap\s*:/.test(c) },
   { tier: 'degrades', id: 'popover', path: ['html', 'global_attributes', 'popover'], test: (c, js) => /popover/.test(js) || /\[popover/.test(c) },
+  { tier: 'degrades', id: '@starting-style', path: ['css', 'at-rules', 'starting-style'], test: (c) => /@starting-style\b/.test(c) },
   { tier: 'core', id: 'dialog', path: ['html', 'elements', 'dialog'], test: (c, js) => /showModal\(/.test(js) || /\bdialog\b/.test(c) },
 ];
 

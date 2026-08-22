@@ -95,6 +95,27 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     <pre><code>{multiselectMarkup}</code></pre>
   </section>
   <section class="demo">
+    <h2>Items with an icon and a trailing shortcut</h2>
+    <button class="bo-btn bo-btn--secondary" type="button" popovertarget="dd-shortcuts-menu">Actions <span aria-hidden="true">▾</span></button>
+    <div class="bo-dropdown__menu" id="dd-shortcuts-menu" popover>
+      <button class="bo-dropdown__item" type="button">
+        <span class="bo-icon bo-icon--doc" aria-hidden="true"></span> Copy as prompt
+        <kbd class="bo-kbd" style="margin-inline-start: auto">⌘⌥P</kbd>
+      </button>
+      <button class="bo-dropdown__item" type="button">
+        <span class="bo-icon bo-icon--grid" aria-hidden="true"></span> Configure…
+      </button>
+    </div>
+    <p class="bo-u-text-muted">No new class: <code>.bo-dropdown__item</code>
+    is already <code>display: flex</code>, so a leading
+    <a href={base + '/components/icon'}>icon</a> (<code>aria-hidden</code>,
+    same rule as an icon beside any label) and a trailing
+    <a href={base + '/components/kbd'}>keyboard-key</a> compose for free —
+    <code>margin-inline-start: auto</code> on the last child pushes it to
+    the far edge, plain flexbox, no framework CSS needed for the push
+    itself.</p>
+  </section>
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{ddMarkup}</code></pre>
   </section>
@@ -108,6 +129,7 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     notes={[
       'The menu is a native <code>[popover]</code>: never clipped by scroll containers, never z-fought by sticky headers; Esc and light dismiss are native.',
       'Multi-select: add <code>data-multiselect</code> to the menu and use real <code>&lt;input type="checkbox"&gt;</code> items (wrapped in a <code>&lt;label&gt;</code>, not a button). Same <code>initDropdowns()</code> call — no separate init function.',
+      `Open/close motion needs Firefox 129 / Safari 17.5, the <a href="${base}/getting-started/installation#browser-floor">degrades tier</a> of the browser floor — below it the menu still opens and closes, just without the fade.`,
     ]} />
   <DsaScore component="dropdown" />
   <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
