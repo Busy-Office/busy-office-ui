@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 13:58
+Generated at: 2026-08-22 14:08
 
 ## Open items by slice
 
@@ -30,10 +30,9 @@ Generated at: 2026-08-22 13:58
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (650 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-22 12:14   OVERDUE
+dispatch status — counter-triggered rules (651 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-22 14:08   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -52,7 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 12:14 · Standardize · standardize · sweep #4 - checked pattern-groups.mjs single-source-of-truth (gate-verified both directions), popover-position.ts vs sticky-cols.ts/anchor-nav.ts overlap (none, three distinct problems), 104.x demo min-inline-size overrides (matches kanban's pre-existing bare-rem convention), check-dsa-scores/check-wrong-choice redundancy (already share wrong-choice-rule.mjs) - clean pass, nothing to fix · logged · 511e29b
 - 2026-08-22 12:34 · Continue · build · 110.5 - generated STATUS.md, human's ten-second now view, wired into record_iteration.py (reconciled from parallel worktree) · landed · d0edfbe
 - 2026-08-22 13:05 · Roadmap · triage · 112: external governance/conformance proposal grilled (2-round design tree, owner: checker is for AI agents) — metadata substrate queued unconditionally (patterns.json extraction, llms.txt catalogue), Screen Contract gated behind a 32-style pilot with pre-registered >=2-brief bar; 109.3 grows the 13 wrong-choice clauses · triaged · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Consumer Quality Index /100 + application benchmarking — human-org machinery, no second consumer exists (proposal's own §16 rule) · refused · 04fdf23
@@ -62,6 +60,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 13:05 · Meta · refusal · Hand-authored pattern metadata YAML — inverts the generated-from-artifact doctrine; superseded by extraction · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Consumer-facing conformance web tool — downstream of the refused Quality Index · refused · 04fdf23
 - 2026-08-22 13:58 · Continue · build · 110.4 - archived 83 fully-closed slices verbatim to ROADMAP-archive.md with pointer lines (live file 12,406 -> 5,562 lines, 55% cut); mover self-tested via injection, red-proofs structural (zero open items archived, pointers resolve, checkbox conservation, 101.2 enumeration clean); check-floor ALLOW extended and red-proved; 101.1 checkbox closed as superseded · landed · 16ef2bb
+- 2026-08-22 14:08 · Standardize · standardize · sweep #5 after 4 Continue rounds (110.3/110.5/112-triage/110.4): full suite green post-archive - core build, 13 docs gates (patterns-index 30/30, check-markup 65,770 uses), 116 vitest, stylelint, 88 live claims; generate_status.py verified to import _common helpers not duplicate them; schedule.astro confirmed zero-JS composed; stale ROADMAP.md:NNNN line refs checked - only one, in an immutable historical grill report · logged · f5fe201
 
 ## Sunset test
 
