@@ -25,7 +25,7 @@ Generated at: 2026-08-22 20:23
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (692 iterations logged)
+dispatch status — counter-triggered rules (693 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-22 17:12   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
@@ -44,7 +44,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 16:56 · Continue · build · 115.1 - motion-intent vocabulary on /base/motion; all 8 categories named and mapped to where they actually live in the framework, 8 shipped classes tagged in the quick-reference table (verified against built output, zero fallback dashes), wrong-choice clause added and structurally verified; full suite green incl. check:claims 92/92 · landed · a715039
 - 2026-08-22 17:01 · Continue · build · 115.2 - documented the state-attribute conventions (data-state's deliberate two-domain split, data-loading, per-domain escapes) + the real Save sequence incl. button's measured no-spinner contrast decision, on /concepts/js-behaviors; all generated values verified in built output; caught+fixed a false 'the one HTMX-aware rule' claim before shipping (grepped the file, found five); full suite green incl. check:claims 92/92 · landed · 4591ccd
 - 2026-08-22 17:08 · Continue · build · 115.3 - check:motion extended to transition/transition-duration, refactored to share one rule between animation+transition rather than duplicate the walk logic; zero-backlog claim held on a clean full rebuild; red-proved in both directions (injected literal-duration transition with no override -> failed; same rule + matching reduced-motion override -> passed, counter incremented by exactly one); both injections reverted; closes Slice 115 · landed · e7a2d6e
 - 2026-08-22 17:12 · Standardize · standardize · sweep #9 after 4 Continue rounds (115.1/115.2/115.3): full suite green (core build incl. check:motion, docs build 13 gates, 116 vitest, stylelint, check:claims 92/92); one real finding - /base/motion's new Motion-intent section and /concepts/js-behaviors' new State-attributes/Save-sequence sections are thematically linked (motion's State-Transition intent row cites .bo-motion-collapse's data-state, js-behaviors documents that same attribute) but neither page's Related footer linked to the other; added cross-links both directions · logged · 1b841bb
@@ -54,6 +53,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 19:39 · Meta · refusal · full Fiori-style split-pane master-detail inbox (master-detail wrong-choice + review-anatomy foreclose it) · refused · 12b677f
 - 2026-08-22 19:39 · Meta · refusal · universal reading pane across all inbox row types (no shared schema; degrades to title+link or forks into four panels) · refused · 12b677f
 - 2026-08-22 20:07 · Continue · build · 116.1: inbox routine approval rows expand in place, reusing approval's dialog/endpoints (round-table decision B) · landed · e34c0d3
+- 2026-08-22 20:23 · Explore · build · 116.2: /inbox dogfooded into po-app, closes role-home's documented gap, real dialog-id collision bug found and fixed by the gate's own first run · landed · ba08035
 
 ## Sunset test
 
