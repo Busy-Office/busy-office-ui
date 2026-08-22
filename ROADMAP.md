@@ -1901,6 +1901,23 @@ then documented — and refusing is an expected outcome.
        re-score to `content: 3`; verified in the BUILT output, not assumed
        from source.
 
+3e. [ ] **102.11 — write CHANGELOG entries for the 6 commits that landed in
+       `packages/core/src` after the current `## Unreleased` section was
+       written.** Found while writing 102.5's release brief
+       (`.roundtable/release-0.3.0-brief.md`): `01d0952` (role="alert"
+       arrival-vs-severity fix), `b3b3719` (Standardize sweep, 15 real
+       findings incl. a `data-decimals=""` parsing bug), `0c66257` (motion-
+       easing token cleanup), `e163a4d` (Slice 108 P0 — sticky-header content
+       bleed-through), `0365cab` (output-form print/barcode contract),
+       `f1d8969` (Slice 111 button group + dropdown open/close motion). Real,
+       shipped, uncounted work — a consumer reading `CHANGELOG.md` today
+       would not know any of it happened. **Accept:** each of the 6 gains an
+       entry in `## Unreleased` (consumer-facing language, matching the
+       existing entries' voice — "what changed", not "what commit"), tagged
+       `Fixed`/`Added` per this project's existing CHANGELOG convention; no
+       tag is moved and nothing is published — that stays 102.5's stated
+       owner call.
+
 4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"
        and asks for "the seven DSA dimensions". Both are false: **39 of 39
