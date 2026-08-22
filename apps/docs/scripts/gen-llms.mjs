@@ -99,7 +99,11 @@ for (const p of [
   'getting-started/htmx', 'getting-started/troubleshooting',
   'concepts/tokens', 'concepts/density', 'concepts/cascade',
   'concepts/js-behaviors', 'concepts/accessibility', 'concepts/theming',
-  'base/colors', 'reference/classes', 'patterns/list-report', 'patterns/approval',
+  'base/colors', 'reference/classes',
+  // list-report/approval used to be hardcoded here; the full Patterns
+  // section below (112.2) now covers every pattern with more detail
+  // (opener, wrong-choice, components) than a bare URL, so naming two by
+  // hand was redundant with a richer generated source, not a highlight.
 ]) out += `${site}/${p}/\n`;
 
 /* Pattern catalogue — generated from `patterns.json` (roadmap 112.2, the
