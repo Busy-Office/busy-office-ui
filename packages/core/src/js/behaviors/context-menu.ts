@@ -21,14 +21,17 @@
  * ordinary sort control for sorting — this behavior does not own or invent
  * either; it only opens the menu where the user right-clicked.
  */
+import { pointAnchor, positionPopover } from '../utils/popover-position';
+
 let installed = false;
 
+// Shares dropdown/combobox's clamp+flip math (roadmap 105.1) via a
+// zero-size anchor rect at the cursor. Before the shared helper this only
+// clamped (a click near the bottom edge left the menu squashed against the
+// cursor); it now flips fully above the cursor when there's no room below,
+// same as the other two.
 function position(menu: HTMLElement, x: number, y: number): void {
-  const width = menu.offsetWidth;
-  const height = menu.offsetHeight;
-  menu.style.insetInlineStart = 'auto';
-  menu.style.left = `${Math.max(4, Math.min(x, window.innerWidth - width - 4))}px`;
-  menu.style.top = `${Math.max(4, Math.min(y, window.innerHeight - height - 4))}px`;
+  positionPopover(menu, pointAnchor(x, y));
 }
 
 export function initContextMenu(): void {

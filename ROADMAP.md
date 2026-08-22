@@ -1311,8 +1311,9 @@ From the counter-fired sweep (ultracode fan-out: 6 finders + 6 adversarial
 verifiers, 19 of 20 findings confirmed real, 15 fixed in-wake). One finding
 was too large to fix safely in the same wake:
 
-1. [ ] **105.1 — one popover-positioning helper for dropdown / combobox /
-       context-menu.** The anchor-under-invoker math (4px viewport clamp +
+1. [x] **105.1 — DONE 2026-08-22.** One popover-positioning helper for
+       dropdown / combobox / context-menu.
+       The anchor-under-invoker math (4px viewport clamp +
        flip-above-when-no-room) is implemented three times, and the copies
        have already drifted — the scroll-follow fix was built twice with
        different mechanisms, and `combobox.position()` never resets
@@ -1328,6 +1329,52 @@ was too large to fix safely in the same wake:
        incl. the flip case and scroll-follow, tests cover the clamp and
        flip branches, and the combobox stale-offset defect is red-proved
        fixed (reproduce first, then watch the helper kill it).
+
+       **`positionPopover()` + `pointAnchor()` land in
+       `utils/popover-position.ts`** (internal, not re-exported from
+       `index.ts` — a plumbing consolidation, not new public API). All
+       three behaviors now call it: dropdown passes the invoker's rect
+       with its existing `--end`/RTL align option, combobox passes the
+       input's rect (gaining correct RTL trailing-edge alignment as a
+       side effect — it previously always used `r.left` regardless of
+       direction), context-menu passes a zero-width `pointAnchor(x, y)`
+       at the cursor.
+
+       **Static math unified, scroll-follow POLICY deliberately left
+       different — not drift, a real semantic split.** Dropdown's
+       continuous scroll/resize tracking (2026-08-18 owner bug fix: a menu
+       must follow its trigger) and combobox's follow-while-focused-and-
+       onscreen-else-close (2026-08-17 owner bug fix: a field scrolled
+       fully offscreen has nothing to anchor to) are fixes for two
+       genuinely different failure modes tied to each widget's own
+       lifecycle — a dropdown menu has no "focus" concept to hang a close
+       decision on; a combobox listbox does, and closing when its input
+       truly leaves the viewport is correct, not a bug. Forcing them
+       identical would risk reintroducing whichever owner bug the other
+       widget doesn't share. Reconciled by NOT merging: recorded here as
+       the considered decision, not left implicit.
+
+       **Combobox stale-offset defect, red-proved**: reverting the
+       helper's `insetInlineStart = 'auto'` reset and re-running the new
+       vitest suite reproduces it exactly (a stale `999px` inline value
+       survives a reposition); restoring the reset fixes it. New tests
+       (`packages/core/tests/behaviors.test.ts`, "shared popover
+       positioning") cover the clamp branch, the flip branch (dropdown +
+       context-menu), the RTL alignment fix, and this red-proof — 5 new
+       tests, 116/116 passing.
+
+       **Verified live** (fresh nginx bind-mount of `dist`, real CDP
+       clicks via `browser-harness.mjs`, not synthetic events): dropdown
+       opens correctly-positioned at 1440px with `insetInlineStart: auto`
+       confirmed in the computed inline style; combobox listbox tracks its
+       input at both 1440px and 390px; context-menu, in a deliberately
+       short 300px-tall viewport, flips fully above the cursor
+       (`menuBox.y=56` vs. click `y=194`) — the one real behavior CHANGE
+       this unification makes: context-menu previously only clamped
+       (squashing the menu against the cursor near an edge), never
+       flipped, so this is a genuine improvement, not just a refactor.
+       Core build (incl. `check:rtl`), docs build, stylelint, and all 116
+       vitest tests green throughout.
 
 ## Slice 104 — Owner wishlist: patterns section + tile index à la namethatui.com (2026-08-21)
 

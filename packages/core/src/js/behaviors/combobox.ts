@@ -21,6 +21,8 @@
  * and click-outside close without changing the value — native popover
  * behavior, no extra code. Call once.
  */
+import { positionPopover } from '../utils/popover-position';
+
 let installed = false;
 // commit() dispatches a synthetic `input` for generic form-field listeners
 // (see commit()) — the combobox's OWN `input` listener must ignore that one
@@ -82,14 +84,7 @@ function visibleOptions(listbox: HTMLElement): HTMLElement[] {
 
 function position(input: HTMLElement, listbox: HTMLElement): void {
   const r = input.getBoundingClientRect();
-  const width = Math.max(listbox.offsetWidth, r.width);
-  const left = Math.max(4, Math.min(r.left, window.innerWidth - width - 4));
-  let top = r.bottom + 4;
-  if (top + listbox.offsetHeight > window.innerHeight - 4) {
-    top = Math.max(4, r.top - listbox.offsetHeight - 4);
-  }
-  listbox.style.left = `${left}px`;
-  listbox.style.top = `${top}px`;
+  positionPopover(listbox, r);
   listbox.style.minWidth = `${r.width}px`;
 }
 

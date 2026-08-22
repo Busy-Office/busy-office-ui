@@ -28,6 +28,8 @@
  * `<span data-multiselect-count>` for the label text — the behavior never
  * rewrites a trigger's children, only that span or a plain-text trigger.
  */
+import { positionPopover } from '../utils/popover-position';
+
 let installed = false;
 
 function findInvoker(menuId: string): HTMLElement | null {
@@ -57,18 +59,7 @@ function position(menu: HTMLElement): void {
   );
   if (!invoker) return;
   const r = invoker.getBoundingClientRect();
-  const menuWidth = Math.max(menu.offsetWidth, r.width);
-  const rtl = getComputedStyle(menu).direction === 'rtl';
-  const end = menu.classList.contains('bo-dropdown__menu--end');
-  let left = end !== rtl ? r.right - menuWidth : r.left;
-  left = Math.max(4, Math.min(left, window.innerWidth - menuWidth - 4));
-  let top = r.bottom + 4;
-  if (top + menu.offsetHeight > window.innerHeight - 4) {
-    top = Math.max(4, r.top - menu.offsetHeight - 4);
-  }
-  menu.style.insetInlineStart = 'auto';
-  menu.style.left = `${left}px`;
-  menu.style.top = `${top}px`;
+  positionPopover(menu, r, { alignEnd: menu.classList.contains('bo-dropdown__menu--end') });
 }
 
 /* An open menu must FOLLOW its trigger (owner bug report, 2026-08-18).
