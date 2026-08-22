@@ -705,3 +705,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 20:46 · Meta · refusal · per-field position override (speculative) · refused · e9ffce5
 - 2026-08-22 20:46 · Meta · refusal · new CSS for checkbox/radio label side (markup order already solves it) · refused · e9ffce5
 - 2026-08-22 20:57 · Continue · build · 117.1: form-section --label-start modifier, reusing bo-kv--rows's subgrid alignment; RTL-flip claim red-proved · landed · d397de6
+- 2026-08-22 21:04 · Explore · build · --label-start dogfood into po-app: no natural target, discarded before spiking (form-row incompatibility found by reading) · refused · 59f9084
