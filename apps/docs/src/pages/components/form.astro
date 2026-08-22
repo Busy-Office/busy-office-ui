@@ -40,8 +40,8 @@ const reqDisabled = `<form class="bo-form-row" novalidate>
   </div>
   <div class="bo-form-field bo-form-field--required">
     <label class="bo-form-field__label" for="req-class">Approver</label>
-    <input class="bo-input" id="req-class" placeholder="--required class" />
-    <span class="bo-form-field__hint"><code>--required</code> class — for fields whose requiredness is enforced server-side only.</span>
+    <input class="bo-input" id="req-class" aria-required="true" placeholder="--required class" />
+    <span class="bo-form-field__hint"><code>--required</code> class draws the asterisk, but it is CSS only — pair it with <code>aria-required="true"</code> on the control, or a screen reader gets the asterisk with nothing programmatic behind it.</span>
   </div>
   <div class="bo-form-field">
     <label class="bo-form-field__label" for="dis-input">PO number</label>

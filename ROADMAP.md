@@ -1797,27 +1797,49 @@ then documented — and refusing is an expected outcome.
        scores gates green, `check:claims` (86 behaviours) green, stylelint
        green, all 111 vitest behavior tests green.
 
-3a. [ ] **102.7 — check the Data input / Forms family.** Owner ask,
-       2026-08-21. **The interesting part is that the rubric already cleared
-       it**: Slice 94 batch 2 scored these six components 95-100% and
-       triggered no grill. So this is not a re-score — re-running a measure
-       that returned "fine" will return "fine" again. The job is to ask what
-       the six dimensions **do not** measure.
+3a. [x] **102.7 — DONE 2026-08-22.** Data input / Forms family, blind-spot
+       audit (not a re-score). Report:
+       `.roundtable/grill-forms-family-2026-08-22.md`. Measured all five
+       candidates live against the current build: tab order through a real
+       row (Vendor→Amount→Cost center→Status) matches DOM/visual order
+       exactly — keep; the server-round-trip "values kept" claim on
+       `/patterns/validation-summary` lives in an unexecuted `<pre>` code
+       comment describing the CONSUMER's server behaviour, same boundary
+       class as the output-form/report contract docs — accept-with-reason;
+       required-vs-optional marking had a **real defect**: `form.astro`'s
+       `--required` demo (`#req-class`) rendered the visual asterisk with
+       **zero** programmatic signal, contradicting `form-field.css`'s own
+       comment that requiredness must ALSO be on the control
+       (`required`/`aria-required`) — **fixed**, added
+       `aria-required="true"` + a clarified hint, re-verified live
+       post-rebuild, only usage site in the repo; non-English locale
+       entry/display is already a stated, deliberate boundary
+       (`Intl.NumberFormat` at render time, the framework's own words) —
+       accept-with-reason; a genuinely long form (`/patterns/detail-form`,
+       6 fields across 3 sections) has zero horizontal overflow and a flat
+       4px label-to-control gap at 390px, live-measured — keep.
 
-       Candidates, from what the rubric provably cannot see: whether the field
-       matrix matches how an ERP clerk actually fills a form (tab order
-       through a real row, not per-component focus rings); what happens on a
-       server round-trip with values kept and errors wired — the case 97.1
-       just proved the docs had been teaching wrongly; required-vs-optional
-       marking; units, currency and number entry under a non-English locale;
-       and what a genuinely long form does at 390px.
+       **Result for 101.3's stop rule: zero of five caught by the six DSA
+       dimensions, by construction** — every real question here (DOM tab
+       order, an unexecuted cross-file claim, a demo contradicting its own
+       CSS comment, an i18n scope boundary, live layout math) needed the
+       page rendered and driven; none is a property of source text the
+       rubric can read.
 
-       **Accept:** a report in `.roundtable/` that names, for each weakness,
-       whether the DSA rubric could ever have caught it — because a pattern of
-       "no" is itself a finding about the rubric, and feeds 101.3's stop rule.
-       Verdict per weakness: fix / accept-with-reason / refuse, fixes queued
-       individually. "The family is genuinely sound and here is what the score
-       missed anyway" is a valid outcome.
+       **Correction to this item's own premise, found while starting**:
+       "scored these six 95-100%" doesn't hold today — the Data input group
+       grew 6→8 pages since Slice 94, and `combobox`/`money`/`quantity`
+       still carry `content: 2` (94.4%) each, cited as missing the
+       wrong-choice clause and sitting on `check:wrong-choice`'s TODO. Not
+       fixed here (scope creep on this item); queued as **102.10**.
+
+       *Original Accept, retained for the record:* a report in `.roundtable/`
+       that names, for each weakness, whether the DSA rubric could ever have
+       caught it — because a pattern of "no" is itself a finding about the
+       rubric, and feeds 101.3's stop rule. Verdict per weakness: fix /
+       accept-with-reason / refuse, fixes queued individually. "The family
+       is genuinely sound and here is what the score missed anyway" is a
+       valid outcome.
 
 3b. [ ] **102.8 — object-page: fix the 390px anchor-landing gap.** From the
        102.2 grill (`.roundtable/grill-object-page-2026-08-22.md`): at 390px
@@ -1865,6 +1887,19 @@ then documented — and refusing is an expected outcome.
        verified live (1440 + 390, both themes) that the fix doesn't
        reintroduce the wrap somewhere else, and if a runtime claim is added
        to the page it gets a `check-claims.mjs` case per CLAUDE.md.
+
+3d. [ ] **102.10 — three Data-input pages are still missing their
+       wrong-choice clause, despite reading as "cleared."** Found while
+       starting 102.7: `combobox`, `money`, and `quantity` each still score
+       `content: 2` in `dsa-scores.json` (94.4%, not the 95-100% 102.7's own
+       wording assumed), cited as *"no wrong-choice clause in the
+       opener… on check:wrong-choice's TODO."* Same shape as 94.8, just not
+       yet done for these three. **Accept:** each of the three gains one
+       `<strong>Not …</strong>` clause naming a real context where it's the
+       wrong choice and a real alternative in this framework (94.8's six are
+       the template); `check:wrong-choice`'s TODO shrinks by 3; all three
+       re-score to `content: 3`; verified in the BUILT output, not assumed
+       from source.
 
 4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"
