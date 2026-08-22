@@ -684,13 +684,15 @@ catalogue in ERP vocabulary and job order.
        silently fixed — 109.14 through 109.18 below. **Accept met**:
        per-page verdict recorded for every pattern page; wrong-choice done.
 
-11. [ ] **109.14 — No-JS States row, missing on 25 of 26 pages.** The single
-       largest, most uniform gap the sweep found (only `wizard`, fixed
-       in-sweep, has one). **Accept:** every non-exempt pattern page's
-       States table gains a row stating what still works and what can
-       never complete without JS — measured against the page's actual
-       behavior file (per the bulk-edit-verified-against-rendered rule),
-       never assumed from the pattern's category.
+11. [x] **109.14 — DONE 2026-08-22. All 26 pages that lacked a No-JS row
+       now have one** (a precise recount found 26, not the sweep's
+       original 25 — one more page had drifted since). 4 parallel
+       agents, each required to read the page's real script imports and
+       the actual behavior source before writing a claim. Two spot-
+       verified independently before trusting (master-detail's dialog
+       claim, command-bar's no-native-affordance claim — both grepped
+       against source, both correct). Full per-page detail in commit
+       `9e90d3d`'s message. **Accept met.**
 12. [ ] **109.15 — human-monitoring-signal sentence: placement + absence.**
        Two distinct defects the sweep bundled: (a) **stated but
        mis-placed** — `job-monitor`, `notification`, `output-form`,
