@@ -514,7 +514,15 @@ catalogue in ERP vocabulary and job order.
        the invoice is sample data. **Accept:** new slug, old URL redirects
        (the redirect-stub mechanism check-links already understands),
        sidebar + tile + all internal links updated, llms.txt regenerated.
-3. [ ] **109.3 — quality bar, sequenced not sprayed**: run the queued
+3. [x] **109.3 — DONE 2026-08-22. Bar extracted:
+       `.roundtable/pattern-quality-bar-2026-08-22.md`.** Every line cited
+       to its grill finding (102.2/102.3) or the owner-quartet/112-grill
+       roadmap text — no invented requirements. Two citations spot-checked
+       against the source reports before trusting the deliverable (a
+       delegated extraction is an instrument's first output like any
+       other). The sweep is split out as 109.6 below, per this item's own
+       Accept. Original item text follows.
+       Quality bar, sequenced not sprayed: run the queued
        102.2 (object-page) and 102.3 (editable-grid) grills FIRST, extract
        the per-section bar they produce (states depth, data-contract
        realism, keyboard walkthrough), then sweep the other 18 pages
@@ -534,9 +542,21 @@ catalogue in ERP vocabulary and job order.
        written checklist in `.roundtable/` after the two grills; the sweep
        is its own later item with per-page verdicts.
 4. [ ] **109.4 — `field-editor` membership question.** A technique more
-       than a screen; if the 102.x-derived bar finds the page thin, fold
-       into `detail-form`/`editable-grid` + redirect. Decided by evidence
-       from 109.3, not taste. Refusing to fold is a valid outcome.
+       than a screen; if the 109.6 sweep finds the page thin against the
+       bar, fold into `detail-form`/`editable-grid` + redirect. Decided by
+       evidence, not taste. Refusing to fold is a valid outcome.
+
+4b. [ ] **109.6 — the 18-page sweep against 109.3's bar.** Split out per
+       109.3's own Accept ("the sweep is its own later item with per-page
+       verdicts"). Scores the other 18 pattern pages (all but object-page
+       and editable-grid, already grilled) against
+       `.roundtable/pattern-quality-bar-2026-08-22.md`; the same pass
+       writes the 13 outstanding wrong-choice clauses listed in the bar's
+       Sweep protocol section. Feeds 109.4 (field-editor fold decision)
+       and 112.1 (`patterns.json` extraction depends on wrong-choice
+       coverage). **Accept:** per-page verdict recorded (pass/fail per bar
+       line, or a stated reason a line doesn't apply), 13 clauses written,
+       `check:wrong-choice`'s `PATTERN_TODO` empties.
 
 5. [x] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
        (owner follow-up, 2026-08-22: "pattern should not [be] specific,
