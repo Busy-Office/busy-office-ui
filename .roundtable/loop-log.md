@@ -721,3 +721,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 22:41 · Meta · refusal · Form Replacement (article's own anti-pattern, matches existing master-detail doctrine) · refused · 557c9a9
 - 2026-08-22 23:17 · Continue · build · 119.1: error-pages pattern landed; found+fixed .bo-state__actions wrap bug · landed · adf63d2
 - 2026-08-22 23:17 · Continue · build · 119.4: theme cycle + density segmented controls, owner feedback live; found+fixed segmented position collapse and fold focus-ring clipping · landed · adf63d2
+- 2026-08-23 00:10 · Objective · grill · 121: pattern catalogue round-table (2 agents) — 3 real domain gaps queued for grill, 5 orphan patterns cross-linked · triaged · e44dfab
+- 2026-08-23 00:10 · Meta · refusal · cross-entity federated search (lower confidence, not queued) · refused · e44dfab
+- 2026-08-23 00:10 · Meta · refusal · document/attachment manager, document-flow chain, hierarchy/tree browser (already covered, false gaps) · refused · e44dfab
+- 2026-08-23 00:10 · Meta · refusal · period-close cockpit, Gantt, map, activity-chatter, Analytical List Page (v2 sweep's refusals re-verified, not re-litigated) · refused · e44dfab
+- 2026-08-23 00:10 · Continue · build · 119.7: notification cards elevated (owner: go elevated-card) · landed · e44dfab

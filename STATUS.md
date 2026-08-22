@@ -32,9 +32,9 @@ Generated at: 2026-08-23 00:10
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (715 iterations logged)
-  Standardize   8 / 4 Continue rounds since 2026-08-22 17:12   OVERDUE
-  Objective     1 / 3 slice           since 2026-08-22 07:59   ok  [30]
+dispatch status — counter-triggered rules (720 iterations logged)
+  Standardize   9 / 4 Continue rounds since 2026-08-22 17:12   OVERDUE
+  Objective     0 / 3 slices          since 2026-08-23 00:10   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
@@ -54,16 +54,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 22:32 · Meta · refusal · Preview/Code tabs and code dialogs (Options C/D: hide preview during code reading; print/no-JS costs) · refused · e74753d
-- 2026-08-22 22:32 · Meta · refusal · standalone timeline pattern (re-photographs approval's component) · refused · e74753d
-- 2026-08-22 22:32 · Meta · refusal · save panel/dialog page (duplicates two shipping docs) · refused · e74753d
-- 2026-08-22 22:32 · Meta · refusal · column field (owner does not recognize the item) · refused · e74753d
-- 2026-08-22 22:41 · Continue · build · 120.1: dependent-select HTMX docs section, checked against owner's linked article · landed · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · new component/behavior for cascading selects (pure hx-* attribute composition, nothing to own) · refused · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · Event Chaining as first-class pattern (source itself says use sparingly) · refused · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · Form Replacement (article's own anti-pattern, matches existing master-detail doctrine) · refused · 557c9a9
 - 2026-08-22 23:17 · Continue · build · 119.1: error-pages pattern landed; found+fixed .bo-state__actions wrap bug · landed · adf63d2
 - 2026-08-22 23:17 · Continue · build · 119.4: theme cycle + density segmented controls, owner feedback live; found+fixed segmented position collapse and fold focus-ring clipping · landed · adf63d2
+- 2026-08-23 00:10 · Objective · grill · 121: pattern catalogue round-table (2 agents) — 3 real domain gaps queued for grill, 5 orphan patterns cross-linked · triaged · e44dfab
+- 2026-08-23 00:10 · Meta · refusal · cross-entity federated search (lower confidence, not queued) · refused · e44dfab
+- 2026-08-23 00:10 · Meta · refusal · document/attachment manager, document-flow chain, hierarchy/tree browser (already covered, false gaps) · refused · e44dfab
+- 2026-08-23 00:10 · Meta · refusal · period-close cockpit, Gantt, map, activity-chatter, Analytical List Page (v2 sweep's refusals re-verified, not re-litigated) · refused · e44dfab
+- 2026-08-23 00:10 · Continue · build · 119.7: notification cards elevated (owner: go elevated-card) · landed · e44dfab
 
 ## Sunset test
 
