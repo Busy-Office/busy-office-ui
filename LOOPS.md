@@ -406,6 +406,21 @@ progress, and freeze-graduation rounds).
   avoided one check earlier in the same file. Full report:
   `.roundtable/explore-po-edit-2026-08-20.md`.
 
+- ~~role-home dogfooded into po-app's Dashboard~~ — spiked 2026-08-22 in
+  an isolated worktree (removed; finished file copied over). **Graduated,
+  zero framework changes.** `dashScreen()` predated role-home (110.1) —
+  same primitives, never its actual anatomy. Two honest adaptations kept:
+  "Needs you" links to `/pos?status=Pending` (po-app has no `/inbox`
+  route, out of this spike's scope) and "Recent" relabelled "Recently
+  added" (no session/view-history, only real insertion order). Found and
+  fixed two real, pre-existing bugs along the way, reproduced on an
+  unmodified checkout first: `spendScreen()` counted Rejected POs as
+  spend, and its budget figures were stale from before a 25-row backfill
+  — together pinning every cost centre permanently red, demonstrating
+  none of the tone system's three states. Also found an unignored build
+  artifact (`busy-office-ui.tgz`), added to `.gitignore`. Full report:
+  `.roundtable/explore-role-home-po-app-2026-08-22.md`.
+
 ---
 
 ## Operating rules (every loop obeys)
