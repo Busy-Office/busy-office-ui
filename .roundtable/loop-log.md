@@ -715,3 +715,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 22:32 · Meta · refusal · standalone timeline pattern (re-photographs approval's component) · refused · e74753d
 - 2026-08-22 22:32 · Meta · refusal · save panel/dialog page (duplicates two shipping docs) · refused · e74753d
 - 2026-08-22 22:32 · Meta · refusal · column field (owner does not recognize the item) · refused · e74753d
+- 2026-08-22 22:41 · Continue · build · 120.1: dependent-select HTMX docs section, checked against owner's linked article · landed · 557c9a9
+- 2026-08-22 22:41 · Meta · refusal · new component/behavior for cascading selects (pure hx-* attribute composition, nothing to own) · refused · 557c9a9
+- 2026-08-22 22:41 · Meta · refusal · Event Chaining as first-class pattern (source itself says use sparingly) · refused · 557c9a9
+- 2026-08-22 22:41 · Meta · refusal · Form Replacement (article's own anti-pattern, matches existing master-detail doctrine) · refused · 557c9a9
