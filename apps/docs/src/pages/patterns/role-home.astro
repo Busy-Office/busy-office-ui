@@ -1,0 +1,247 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: role home">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: every named role — a buyer, an approver,
+    a warehouse supervisor — each seeing their own version.
+    <strong>How often</strong>: the first screen after sign-in, and the one
+    they come back to between tasks. <strong>What "done" looks like</strong>:
+    the reader knows in one glance whether anything needs them, and leaves
+    for the screen that resolves it.
+    <strong>Not a launcher</strong> — a tile grid of every app someone
+    <em>could</em> open is <a href={base + '/patterns/app-launch'}>app
+    launch</a>; this shows live content about <em>their</em> work. And
+    <strong>not a dashboard</strong>: the
+    <a href={base + '/patterns/reporting-dashboard'}>reporting dashboard</a>
+    monitors the <em>business</em> (is the period on track), a role home
+    monitors <em>my work</em> (is anything waiting on me). Same widgets,
+    different subject — and confusing the two is how a home screen turns
+    into a chart wall nobody acts on.
+  </p>
+
+  <section class="demo">
+    <h2>The screen — one role's morning</h2>
+    <p class="bo-byline bo-byline--compact">Signed in as J. Kim · Buyer, Rotterdam</p>
+    <div class="bo-widget-grid" style="--bo-widget-min: 16rem">
+      <section class="bo-widget bo-widget--span-2">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Needs you</span>
+          <a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/inbox'}>Open inbox</a>
+        </div>
+        <div class="bo-widget__body">
+          <div class="bo-cluster" style="gap: var(--bo-space-6)">
+            <span class="bo-stat">
+              <span class="bo-stat__label">Awaiting your approval</span>
+              <span class="bo-stat__value">3</span>
+              <span class="bo-stat__delta bo-stat__delta--bad"><span aria-hidden="true">▲</span> 1 over 2 days<span class="bo-visually-hidden">, needs attention</span></span>
+            </span>
+            <span class="bo-stat">
+              <span class="bo-stat__label">Exceptions assigned</span>
+              <span class="bo-stat__value">2</span>
+              <span class="bo-stat__delta bo-stat__delta--bad"><span aria-hidden="true">▲</span> oldest 26 days<span class="bo-visually-hidden">, needs attention</span></span>
+            </span>
+            <span class="bo-stat">
+              <span class="bo-stat__label">Tasks</span>
+              <span class="bo-stat__value">1</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="bo-widget">
+        <div class="bo-widget__header"><span class="bo-widget__title">My open orders</span></div>
+        <div class="bo-widget__body">
+          <span class="bo-stat">
+            <span class="bo-stat__label">Value in flight</span>
+            <span class="bo-stat__value">$184,320</span>
+            <span class="bo-stat__delta">across 14 POs</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="bo-widget">
+        <div class="bo-widget__header"><span class="bo-widget__title">Period close</span></div>
+        <div class="bo-widget__body">
+          <p style="margin-block: 0 var(--bo-space-2)">Period 2026-07 · 82% complete</p>
+          <progress class="bo-progress" value="82" max="100" aria-label="Period 2026-07 close progress"></progress>
+          <p class="bo-u-text-muted" style="margin-block-end: 0">2 of your 11 close tasks remain</p>
+        </div>
+      </section>
+
+      <section class="bo-widget">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Recent</span>
+        </div>
+        <div class="bo-widget__body">
+          <ul class="bo-stack bo-stack--tight docs-list-bare" style="margin: 0">
+            <li><a href={base + '/patterns/object-page'}>PO-88213 · Acme Supply Co.</a> <span class="bo-badge bo-badge--warning">Pending approval</span></li>
+            <li><a href={base + '/patterns/object-page'}>PO-88219 · Globex Industrial</a> <span class="bo-badge bo-badge--success">Approved</span></li>
+            <li><a href={base + '/patterns/list-report'}>Open items · CC-4021</a> <span class="bo-badge">report</span></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <p class="bo-u-text-muted">Every number on this screen is <em>about the
+    reader</em> — "awaiting <strong>your</strong> approval", "<strong>your</strong>
+    11 close tasks" — and every one of them is a link out. A role home that
+    cannot be left is a wall; the measure of this screen is how fast people
+    leave it for the screen that does the work.</p>
+  </section>
+
+  <section class="demo">
+    <h2>One pattern, many roles</h2>
+    <p>The same markup serves every role — only the card contents change,
+    which is why this is one pattern and not one screen per job title. An
+    approver's morning above; a warehouse supervisor's below:</p>
+    <div class="bo-widget-grid" style="--bo-widget-min: 16rem">
+      <section class="bo-widget bo-widget--span-2">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">Needs you</span>
+          <a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/inbox'}>Open inbox</a>
+        </div>
+        <div class="bo-widget__body">
+          <div class="bo-cluster" style="gap: var(--bo-space-6)">
+            <span class="bo-stat">
+              <span class="bo-stat__label">Receipts to post</span>
+              <span class="bo-stat__value">7</span>
+            </span>
+            <span class="bo-stat">
+              <span class="bo-stat__label">Short deliveries</span>
+              <span class="bo-stat__value">2</span>
+              <span class="bo-stat__delta bo-stat__delta--bad"><span aria-hidden="true">▲</span> needs decision<span class="bo-visually-hidden">, worse</span></span>
+            </span>
+          </div>
+        </div>
+      </section>
+      <section class="bo-widget">
+        <div class="bo-widget__header"><span class="bo-widget__title">Dock status</span></div>
+        <div class="bo-widget__body">
+          <span class="bo-stat">
+            <span class="bo-stat__label">Trucks waiting</span>
+            <span class="bo-stat__value">3</span>
+            <span class="bo-stat__delta">next slot 11:20</span>
+          </span>
+        </div>
+      </section>
+    </div>
+    <p class="bo-u-text-muted">Identical classes, identical grid, different
+    content. Roles differ in <em>what the server sends</em>, never in the
+    markup — a per-role screen fork is the thing this pattern exists to
+    prevent.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<div class="bo-widget-grid" style="--bo-widget-min: 16rem">
+  <!-- The one card that must exist: what needs the reader, linking
+       into the inbox that holds the rows. -->
+  <section class="bo-widget bo-widget--span-2">
+    <div class="bo-widget__header">
+      <span class="bo-widget__title">Needs you</span>
+      <a class="bo-btn bo-btn--sm bo-btn--secondary" href="/inbox">Open inbox</a>
+    </div>
+    <div class="bo-widget__body">
+      <span class="bo-stat">
+        <span class="bo-stat__label">Awaiting your approval</span>
+        <span class="bo-stat__value">3</span>
+        <span class="bo-stat__delta bo-stat__delta--bad">1 over 2 days</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- Progress card: the close, a run, an onboarding checklist. -->
+  <section class="bo-widget">
+    <div class="bo-widget__header"><span class="bo-widget__title">Period close</span></div>
+    <div class="bo-widget__body">
+      <!-- Native <progress>: value/max semantics and the progressbar
+           role come from the platform. Always pair with visible text. -->
+      <progress class="bo-progress" value="82" max="100"
+                aria-label="Period 2026-07 close progress"></progress>
+    </div>
+  </section>
+</div>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Identity line</strong> — a
+      <a href={base + '/components/byline'}>byline</a> naming who is signed
+      in and in what role. On a screen whose whole content is "yours", the
+      reader must be able to see whose.</li>
+      <li><strong>"Needs you" card</strong> — the one card that must exist,
+      spanning two columns, counting what the
+      <a href={base + '/patterns/inbox'}>inbox</a> holds and linking
+      straight into it. This card is a summary OF the inbox, never a second
+      copy of its logic.</li>
+      <li><strong>Stat cards</strong> —
+      <a href={base + '/components/dashboard'}>stats</a> with a label,
+      value, and a delta that carries its meaning in words plus a glyph
+      (two-channel: "1 over 2 days" is the text, the tone is the echo).</li>
+      <li><strong>Progress card</strong> — a
+      <a href={base + '/components/progress'}>progress bar</a> for anything
+      with a finish line: the period close, a posting run, onboarding.</li>
+      <li><strong>Recent</strong> — links back to what the reader touched;
+      the cheapest useful card in the set.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /home</td><td>the grid shell with each card as its own fragment slot — the page must render before the slowest card resolves</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /home/cards/:name</td><td>one card, loaded independently (<code>hx-trigger="load"</code>); one slow query must never hold the whole screen — the reporting dashboard's contract, same reason</td></tr>
+          <tr><td class="bo-data-table__col--code">counts</td><td>every "needs you" number comes from the SAME query the inbox uses, not a parallel one — two sources for one number is how a home screen starts lying</td></tr>
+          <tr><td class="bo-data-table__col--code">per-role content</td><td>the server decides which cards a role gets; the client never hides cards it received, because a hidden card is still a leaked fact</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: this screen is almost entirely the human's
+    side — it is the oversight surface for work agents are doing
+    underneath. Its one machine-facing rule is the counts contract above:
+    an agent that resolves an inbox row must move this screen's number
+    with it, because a stale "3 awaiting" is worse than no number at all.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing needs you</td><td>the "needs you" card says so as a <strong>success</strong> — "Nothing is waiting on you" — matching the inbox's own empty state; the card stays, it never disappears (a missing card reads as a broken card)</td></tr>
+          <tr><td>Card still loading</td><td>a <a href={base + '/components/state-patterns'}>skeleton</a> inside that card only; the rest of the screen is already usable</td></tr>
+          <tr><td>Card failed</td><td>that card shows the failure and a retry, and the others carry on — one dead query must not blank the home screen</td></tr>
+          <tr><td>New role / first day</td><td>cards render with real zeros and an explanation, never an empty grid: "No orders yet — your first PO will appear here"</td></tr>
+          <tr><td>Permission-limited role</td><td>the server simply does not send those cards; nothing on screen hints at what was withheld</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Dashboard</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/progress'}>Progress</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/byline'}>Byline</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/inbox", "Inbox"],
+    ["/patterns/app-launch", "App launch"],
+    ["/patterns/reporting-dashboard", "Reporting dashboard"],
+    ["/components/dashboard", "Dashboard & widgets"],
+  ]} />
+</Gallery>

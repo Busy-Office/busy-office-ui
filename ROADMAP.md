@@ -808,7 +808,29 @@ The three builds, in queue order AFTER 101.4-101.7:
        distrust). Hence 110.4/110.5 below; 102.4 (wake prompt, owner
        call) re-surfaced as the standing AI-manageability defect.
 
-1. [ ] **110.1 — role-home (Fiori Overview Page / Dynamics Workspace).**
+1. [x] **110.1 — role-home (Fiori Overview Page / Dynamics Workspace).**
+       **Done 2026-08-22.** Composed 100%: `bo-widget-grid` of role cards —
+       "Needs you" (2-col span, counting the SAME source as the inbox,
+       linking into it), stats with two-channel deltas, a native
+       `<progress>` for the close, a Recent list. Zero new CSS. One
+       real error caught by check:markup before shipping: a hand-rolled
+       `.bo-progress__bar` inner div that does not exist — the real
+       contract is the native `<progress>` element (value/max + implicit
+       role from the platform); fixed in both the live demo and the code
+       sample, verified live (`role: implicit`, value/max read correctly).
+       **This also answers the standing 99.1 open question** ("is
+       app-launch the landing page, or is a live role home a separate
+       screen") — it is separate, and this pattern is it; app-launch's own
+       wrong-choice clause and this page's both name each other. "One
+       pattern, many roles" demo proves the §2 shape live: identical
+       markup, a buyer's morning and a warehouse supervisor's, only card
+       CONTENTS differ. Data contract makes "needs you" counts read from
+       the inbox's own source (two counts for one number is how a home
+       screen starts lying) and per-role content a server decision, never
+       client-hidden. States: success-empty distinct from loading/failed
+       PER CARD (one dead query must not blank the whole screen), and a
+       real first-day state. Complexity 2, all gates green, verified live
+       both themes + 390px.
        Composes 100%: `bo-widget-grid` of role cards — "my open items"
        (count + link INTO the inbox), "my KPIs" (`bo-kv` + amount),
        "recent documents". Zero new CSS expected. **Sequenced after 101.4
