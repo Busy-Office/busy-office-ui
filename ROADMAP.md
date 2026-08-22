@@ -175,19 +175,22 @@ tightened it mid-grill to the stronger shape. Settled design:
   already does start/end purely by markup order; a CSS modifier would
   duplicate what markup solves.
 
-1. [ ] **117.1 — build it.** The modifier in `form-section.css` (grid +
-       subgrid + named-container collapse, per the settled design), a
-       demo on the form docs page showing a label-start section with
-       mixed control types (input, select, a tall control) plus the
-       collapse behaviour, the checkbox/radio markup-order note where
-       choice controls are documented, and the "why not right" reasoning
-       stated in prose rather than left implicit. Accept: built CSS
-       contains the modifier and the named `@container`; labels of
-       different lengths align controls to one edge (verified in a
-       screenshot, not assumed); 390px shows the collapsed-to-top state;
-       both themes; api.json picks the class up (generated, not
-       hand-added); all core + docs gates green; RTL flip verified
-       (label lands inline-start in `dir="rtl"`).
+1. [x] **117.1 — DONE 2026-08-22.** `.bo-form-section--label-start` built
+       in `form-section.css`: grid + subgrid reusing `.bo-kv--rows`'s
+       exact alignment technique, named `@container bo-form-section`
+       collapsing to labels-on-top at 30rem (the same threshold tabs/
+       stepper/data-table already use). Demo added to `/components/form`
+       (input, select, textarea, mixed label lengths aligning to one
+       edge) plus the checkbox/radio markup-order note and the "why not
+       right" reasoning stated in prose. Two real runtime claims in that
+       prose (the container-query collapse, the RTL flip) both got
+       `check:claims` cases — the RTL one red-proved by inverting its
+       assertion and confirming FAIL with real measured numbers before
+       reverting. Verified: full core build (README restamped), full
+       docs build (13 gates), `check:claims` 94/94, `check:target-size`,
+       `check:forced-colors` all clean; screenshots 1440/390/dark/RTL,
+       api.json picked up the class generated (not hand-added).
+       **Accept met.**
 
 **REFUSED, with reasons:**
 - **`right` for input/dropdown** (the original ask included it) — no

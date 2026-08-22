@@ -699,3 +699,9 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 19:39 · Meta · refusal · universal reading pane across all inbox row types (no shared schema; degrades to title+link or forks into four panels) · refused · 12b677f
 - 2026-08-22 20:07 · Continue · build · 116.1: inbox routine approval rows expand in place, reusing approval's dialog/endpoints (round-table decision B) · landed · e34c0d3
 - 2026-08-22 20:23 · Explore · build · 116.2: /inbox dogfooded into po-app, closes role-home's documented gap, real dialog-id collision bug found and fixed by the gate's own first run · landed · ba08035
+- 2026-08-22 20:46 · Roadmap · triage · 117: form label position grilled and triaged (top/start accepted as section modifier) · triaged · e9ffce5
+- 2026-08-22 20:46 · Meta · refusal · label-right for input/dropdown (inverts reading order; no design-system precedent) · refused · e9ffce5
+- 2026-08-22 20:46 · Meta · refusal · per-control-type value sets (dissolved once right fell out) · refused · e9ffce5
+- 2026-08-22 20:46 · Meta · refusal · per-field position override (speculative) · refused · e9ffce5
+- 2026-08-22 20:46 · Meta · refusal · new CSS for checkbox/radio label side (markup order already solves it) · refused · e9ffce5
+- 2026-08-22 20:57 · Continue · build · 117.1: form-section --label-start modifier, reusing bo-kv--rows's subgrid alignment; RTL-flip claim red-proved · landed · d397de6
