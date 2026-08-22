@@ -51,7 +51,7 @@ if (process.argv.includes('--self-test')) {
   ]);
 }
 
-const ALLOW = ['scripts/check-floor.mjs', 'scripts/derive-floor.mjs', 'CHANGELOG.md', 'ROADMAP.md'];
+const ALLOW = ['scripts/check-floor.mjs', 'scripts/derive-floor.mjs', 'CHANGELOG.md', 'ROADMAP.md', 'ROADMAP-archive.md'];
 const bad = [];
 let checked = 0;
 for await (const f of files(REPO_ROOT)) {
