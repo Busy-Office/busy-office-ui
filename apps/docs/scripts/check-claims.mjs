@@ -952,6 +952,35 @@ check(
   JSON.stringify(pagerPrint),
 );
 
+/* report (101.6). The page tells the reader to hit Ctrl+P and promises three
+   things happen: the parameter form goes away, the print-only footnote
+   appears, and the run-line (who/when/basis) survives to paper — which is the
+   whole reason a printed figure counts as evidence. All three are print-media
+   only, so nothing on screen can show them being wrong. */
+await visit('/patterns/report/', { media: 'print' });
+await new Promise((r) => setTimeout(r, 200));
+const reportPrint = await page.evaluate(() => {
+  const disp = (sel) => {
+    const el = document.querySelector(sel);
+    return el ? getComputedStyle(el).display : 'MISSING';
+  };
+  const runline = document.querySelector('.bo-print-report .bo-byline');
+  return {
+    form: disp('.bo-form-section'),
+    printOnly: disp('.bo-u-print-only'),
+    report: disp('.bo-print-report'),
+    runline: runline ? getComputedStyle(runline).display : 'MISSING',
+  };
+});
+check(
+  'report: printing drops the parameter form, keeps the run-line, reveals the print-only note',
+  reportPrint.form === 'none' &&
+    reportPrint.printOnly !== 'none' && reportPrint.printOnly !== 'MISSING' &&
+    reportPrint.report !== 'none' &&
+    reportPrint.runline !== 'none' && reportPrint.runline !== 'MISSING',
+  JSON.stringify(reportPrint),
+);
+
 // The detail arrives as a real drawer, and Escape returns focus to its trigger.
 await visit('/patterns/master-detail/', { width: 390 });
 await page.click('[data-dialog-trigger="md-drawer"]');

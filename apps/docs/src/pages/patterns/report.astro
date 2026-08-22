@@ -1,0 +1,190 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: report">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever must answer a specific question
+    with numbers — an accountant at close, a buyer checking open
+    commitments. <strong>How often</strong>: on demand, and on a schedule
+    someone else set. <strong>What "done" looks like</strong>: the result
+    is on screen, printed, or exported, and the parameters that produced it
+    are visible beside it. A report is <em>run</em>: you choose parameters,
+    it executes, you read the result.
+    <strong>Not for monitoring</strong> — a screen you leave open to watch
+    the business is the
+    <a href={base + '/patterns/reporting-dashboard'}>reporting dashboard</a>;
+    this one answers one question, once, with stated inputs. Not a list
+    screen either: <a href={base + '/patterns/list-report'}>list report</a>
+    finds documents to act on, a report produces figures to read.
+  </p>
+
+  <section class="demo">
+    <h2>The screen — parameters, then result</h2>
+    <form class="bo-form-section bo-u-print-hidden" style="max-inline-size: 46rem">
+      <div class="bo-form-row">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="rp-cc">Cost center</label>
+          <input class="bo-input bo-input--code" id="rp-cc" value="CC-4021" required />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="rp-period">Period</label>
+          <select class="bo-select" id="rp-period">
+            <option selected>2026-07</option><option>2026-06</option><option>2026-05</option>
+          </select>
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="rp-basis">Basis</label>
+          <select class="bo-select" id="rp-basis">
+            <option selected>Open items</option><option>All items</option>
+          </select>
+        </div>
+      </div>
+      <div class="bo-form-actions">
+        <button class="bo-btn bo-btn--secondary" type="reset">Reset</button>
+        <button class="bo-btn" type="button">Run report</button>
+      </div>
+    </form>
+
+    <article class="bo-print-report" style="margin-block-start: var(--bo-space-6)">
+      <header class="bo-u-avoid-break">
+        <h3 style="margin: 0">Open items · CC-4021 · period 2026-07</h3>
+        <p class="bo-byline bo-byline--compact">Run by J. Kim · 22 Aug 2026 08:31 · basis: open items</p>
+      </header>
+      <div class="bo-data-table-container" tabindex="0">
+        <table class="bo-data-table" data-density="compact">
+          <caption class="bo-visually-hidden">Open items for cost center CC-4021, period 2026-07</caption>
+          <thead><tr>
+            <th scope="col">Document</th>
+            <th scope="col">Vendor</th>
+            <th scope="col">Due</th>
+            <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="bo-data-table__col--code">INV-10234</td><td>Acme Supply Co.</td><td>15 Aug 2026</td><td class="bo-data-table__col--numeric">$4,208.00</td></tr>
+            <tr><td class="bo-data-table__col--code">INV-10235</td><td>Globex Industrial</td><td>28 Aug 2026</td><td class="bo-data-table__col--numeric">$18,940.50</td></tr>
+            <tr><td class="bo-data-table__col--code">INV-10236</td><td>Initech GmbH</td><td>02 Sep 2026</td><td class="bo-data-table__col--numeric">$730.25</td></tr>
+            <tr><td class="bo-data-table__col--code">INV-10238</td><td>Stark Components</td><td>11 Sep 2026</td><td class="bo-data-table__col--numeric">$56,000.00</td></tr>
+          </tbody>
+          <tfoot><tr>
+            <td colspan="3">Total · 4 documents</td>
+            <td class="bo-data-table__col--numeric">$79,878.75</td>
+          </tr></tfoot>
+        </table>
+      </div>
+      <p class="bo-u-print-only">Printed from busy-office ERP · page totals repeat on every page.</p>
+    </article>
+    <p class="bo-u-text-muted">The parameters stay on screen beside the
+    result and print <em>into</em> the header line — a printed figure whose
+    inputs are unknown is not evidence. Try <kbd class="bo-kbd">Ctrl</kbd>
+    <kbd class="bo-kbd">P</kbd> on this page: the form disappears
+    (<code>.bo-u-print-hidden</code>), the run-line stays, and the
+    print-only footnote appears.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- 1. Parameters: an ordinary form, hidden in print. -->
+<form class="bo-form-section bo-u-print-hidden">
+  <div class="bo-form-row"> …fields… </div>
+  <div class="bo-form-actions">
+    <button class="bo-btn" type="button">Run report</button>
+  </div>
+</form>
+
+<!-- 2. Result: wrapped in .bo-print-report so absolute links print
+     their destination, and the run-line survives to paper. -->
+<article class="bo-print-report">
+  <header class="bo-u-avoid-break">
+    <h3>Open items · CC-4021 · period 2026-07</h3>
+    <p class="bo-byline bo-byline--compact">Run by J. Kim · 22 Aug 2026 08:31</p>
+  </header>
+  <table class="bo-data-table" data-density="compact"> …result… </table>
+  <p class="bo-u-print-only">Printed from busy-office ERP</p>
+</article>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Parameter form</strong> — a plain
+      <a href={base + '/components/form'}>form section</a> carrying
+      <code>.bo-u-print-hidden</code>: the inputs are how you got the
+      figures, not part of them.</li>
+      <li><strong>Run action</strong> — one primary button in
+      <code>.bo-form-actions</code>; running is an explicit act, never a
+      keystroke-triggered refetch (a report is expensive by definition).</li>
+      <li><strong>Run line</strong> — a
+      <a href={base + '/components/byline'}>byline</a> naming who ran it,
+      when, and on what basis. This is the part that makes a printout
+      evidence rather than a screenshot.</li>
+      <li><strong>Result</strong> — a
+      <a href={base + '/components/data-table'}>data table</a> in a
+      <code>.bo-print-report</code> wrapper, with a
+      <code>&lt;tfoot&gt;</code> total.</li>
+      <li><strong>Print extras</strong> —
+      <code>.bo-u-print-only</code> for the paper footnote,
+      <code>.bo-u-avoid-break</code> so the header never splits from its
+      first rows, <code>.bo-u-break-before</code> if the report has
+      sections that must each start a page.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /reports/open-items</td><td>the result fragment INCLUDING its run-line; parameters echoed back so the header cannot disagree with what ran. 422 → the form re-rendered with field errors, result region untouched</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /reports/open-items?cc=…&amp;period=…</td><td>the same result, addressable — a report you cannot link to cannot be cited in an email; an agent re-runs it by URL</td></tr>
+          <tr><td class="bo-data-table__col--code">GET …&amp;format=csv|xlsx</td><td>the export, same parameters, same figures; export is a format of the SAME request, never a second query that might disagree</td></tr>
+          <tr><td class="bo-data-table__col--code">long runs</td><td>202 + a job id → the run appears in the <a href={base + '/patterns/notification'}>notification</a> surface when it finishes; the screen never spins indefinitely</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: an agent runs reports by URL and consumes the
+    export format; the human's channels are the run-line (who/when/basis),
+    the on-screen parameters, and the printed artefact. The rule that keeps
+    both honest: <strong>the parameters that produced a number travel with
+    the number</strong>, on screen, in the export, and on paper.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Not yet run</td><td>the result region says so plainly ("Choose parameters and run") — never an empty table that looks like a zero result</td></tr>
+          <tr><td>Running</td><td>the run button goes <code>aria-busy</code>; long runs return 202 and hand off to notifications rather than holding the screen</td></tr>
+          <tr><td>Empty result</td><td>"No open items for CC-4021 in 2026-07" — the parameters restated, because an empty report is a finding and the reader must see what was asked</td></tr>
+          <tr><td>Too many rows</td><td>state the cap and offer the export ("12,480 rows — showing the first 500; export for all"); never silently truncate</td></tr>
+          <tr><td>Parameter error</td><td>422 re-renders the form with field messages; the PREVIOUS result stays on screen, clearly still labelled with its own run-line</td></tr>
+          <tr><td>Stale result</td><td>parameters edited but not re-run → the result keeps its original run-line; a figure never re-labels itself with inputs that did not produce it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Forms</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/byline'}>Byline</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kbd'}>Keyboard key</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/reporting-dashboard", "Reporting dashboard"],
+    ["/base/print", "Print & reports"],
+    ["/patterns/notification", "Notification"],
+    ["/components/data-table", "Data table"],
+  ]} />
+</Gallery>

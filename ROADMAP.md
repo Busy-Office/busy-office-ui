@@ -1772,7 +1772,24 @@ the owner has already answered that with Slices 99 and 100.
        both — and whether it composes from `alert` + `dropdown` + `data-table`
        rather than needing anything new (Objective §2 says try that first).
 
-6. [ ] **101.6 — Report.** Distinct from `reporting-dashboard`, which
+6. [x] **101.6 — Report.** **Done 2026-08-22.** Parameters -> run ->
+       result, with the run-line (who/when/basis) as the part that makes a
+       printout evidence rather than a screenshot. The Accept's "real print
+       story" is the point of the screen, not a footnote: it is the first
+       page to exercise `.bo-print-report`, `.bo-u-print-only` and
+       `.bo-u-avoid-break` together, and **the claim is executable** —
+       check:claims now drives a print-media render asserting the parameter
+       form disappears, the print-only note appears, and the run-line
+       survives (85 behaviours, up from 84). Red-proved: stripping
+       `.bo-u-print-hidden` from the form turned it red on exactly that
+       assertion. States cover not-yet-run (never an empty table that looks
+       like a zero result), running (202 -> hands off to notifications),
+       empty-with-parameters-restated, too-many-rows (state the cap, offer
+       the export, never silently truncate), and stale-result (a figure
+       never re-labels itself with inputs that did not produce it). Data
+       contract makes export a FORMAT of the same request, and the report
+       addressable by URL so an agent can re-run it. Zero new CSS,
+       complexity 2. Original Accept below:** Distinct from `reporting-dashboard`, which
        MONITORS. A report is RUN — parameters, then read, print or export.
        **Accept:** the parameter/run boundary in the data contract; states for
        not-yet-run, running, empty result, and too-many-rows; and a real print
