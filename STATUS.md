@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 14:24
+Generated at: 2026-08-22 14:25
 
 ## Open items by slice
 
@@ -33,8 +33,8 @@ Generated at: 2026-08-22 14:24
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (653 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-22 14:08   ok
+dispatch status — counter-triggered rules (654 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-22 14:08   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -53,7 +53,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 13:05 · Meta · refusal · Consumer Quality Index /100 + application benchmarking — human-org machinery, no second consumer exists (proposal's own §16 rule) · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Waiver system + SARIF output — CI-exception machinery for human orgs; an AI agent needs PASS/FAIL and readable findings · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · A second Surface Fitness rubric — the six-dimension DSA rubric already gated; Removal Cost axis may be absorbed later · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Six-section docs IA reorg — 80% renames of groups measured into place more recently than the proposal was written · refused · 04fdf23
@@ -63,6 +62,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 14:08 · Standardize · standardize · sweep #5 after 4 Continue rounds (110.3/110.5/112-triage/110.4): full suite green post-archive - core build, 13 docs gates (patterns-index 30/30, check-markup 65,770 uses), 116 vitest, stylelint, 88 live claims; generate_status.py verified to import _common helpers not duplicate them; schedule.astro confirmed zero-JS composed; stale ROADMAP.md:NNNN line refs checked - only one, in an immutable historical grill report · logged · f5fe201
 - 2026-08-22 14:11 · Continue · build · 109.3 - pattern quality bar extracted from 102.2/102.3 grills + owner-quartet + 112-grill text, every line grill-cited, two citations spot-checked against source before trusting the delegated extraction; sweep split out as 109.6 (18 pages + 13 wrong-choice clauses) per 109.3's own Accept · landed · 9b86bd6
 - 2026-08-22 14:18 · Continue · build · 109.6 batch 1 - 13 PATTERN_TODO pages bar-scored + wrong-choice-clause'd in 4 parallel agents; check:wrong-choice now 30/0; found+fixed a real false claim on wizard (panels don't render-at-once without JS, contradicted by static hidden attr - verified against markup before fixing, added missing No-JS States row); 109.4 field-editor decided FOLD on bar evidence (thin anatomy, fails shape-not-domain); systemic gap found - 12/13 pages lack human-monitoring-signal sentence, scoring only; remainder (13 non-TODO pages) left open in RESUME.md · landed · bd44050
+- 2026-08-22 14:25 · Continue · build · 109.6/109.13 batch 2 - remaining 13 pattern pages bar-scored (3 parallel agents), closing the 26-page sweep; second false runtime claim found+fixed (schedule.astro's calendar-breakpoint claim, verified against calendar.css before fixing); caught a real item-numbering collision mid-commit (my own 109.6/109.8 duplicated pre-existing items further down Slice 109) via the 101.2 enumeration check and renumbered to 109.13-109.18 before landing; queued 5 systemic findings (No-JS rows 25/26 pages, human-monitoring placement/absence, missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban, mechanical fixes) as their own items · landed · b2117e3
 
 ## Sunset test
 
