@@ -1409,38 +1409,61 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        `check:patterns-index`), core build, stylelint (no new CSS to lint),
        111 vitest behavior tests — all green.
 
-3. [ ] **104.3 — define the complexity scale, THEN audit the ladder**
-       (owner add-on, 2026-08-21: "ensure comprehensive patterns (simple to
-       complex)" — and the owner's follow-up grill of the distribution,
-       which found the ground truth missing). Counted this wake: all 20
-       pages carry exactly one badge (the 21st file, `rf/goods-receipt-rf`,
-       is a documented iframe fixture, gate-exempt); hand-typed distribution
-       1×4 / 2×7 / 3×8 / 4×1. **But the grill showed that number is a count
-       of opinions, not a property of screens:** the 1–4 scale is defined
-       nowhere (the page-shape gate only asserts a badge exists), and the
-       badge anti-correlates with every extractable measure — `approval` is
-       a 3 with the surface's MINIMUM component count (2, zero behavior
-       inits) while `login` is a 1 with three; `master-detail` and
-       `field-editor` (both 2) out-build five of the eight 3s on components
-       and inits. Plausibly the badge measures *conceptual* weight (approval
-       is a state machine with permissions), but nothing records that
-       intent, which is the 94.12 two-standards defect in the making.
-       **Accept, in order:** (a) a written definition of each level, each
-       anchored to an observable property and naming a page that sits there
-       and why — the 94.7 recipe; conceptual weight is admissible if the
-       definition says what observable earns it; (b) the 20 badges re-read
-       against the definition, corrections applied on the pages; (c) only
-       then the per-group ladder audit — entry rung and top rung per group,
-       every "missing rung" through the 99.4 front door (grill need first;
-       refusing is valid — "that's the component page's job, link it" fixes
-       index copy, not the pattern set). The provisional per-group reading
-       (capture & edit spans 2–4 with no rung-1; review & approve 1–3;
-       overview & shell 1–2) is recorded as INPUT to (c), not a finding —
-       it may flip under the definition. 101.4–101.7 count toward
-       comprehensiveness and are not re-litigated. 104.1's
-       order-by-complexity add-on inherits (b): the ordering is only as
-       good as the badge it extracts, so if 104.1 ships first it ships with
-       the badges as-are and re-sorts for free when (b) lands.
+3. [x] **104.3 — DONE 2026-08-22.** Full report:
+       `.roundtable/complexity-scale-2026-08-22.md`.
+
+       **(a) Definition, anchored on concurrency, not size.** The scale
+       measures how many independently-live loci of state the screen must
+       track at once — level 1 (none, e.g. `record-detail`), level 2
+       (exactly one, e.g. `detail-form`'s single whole-record dirty flag),
+       level 3 (either a cross-visit workflow state gated by another actor,
+       a one-shot batch of N terminal outcomes, or N sub-units *within one
+       record* independently live — `field-editor`'s own States table:
+       *"aria-busy on that row only; every other row stays editable"*), and
+       level 4 (N independently-live units *across records*, continuously,
+       uniquely `editable-grid`). Deliberately does NOT use "has a
+       permission-gated state" as the discriminator — CLAUDE.md's pattern
+       recipe requires that row on every page, so it reads uniformly by
+       construction (the exact failure mode 94.7/101.3 warn about).
+
+       **(b) 27 badges re-read** (grown from the 20 counted 2026-08-21 as
+       Slices 108-111 queued and landed new patterns — comprehensiveness,
+       not re-litigated per this item's own text). **Three corrections**:
+       `value-help` 3→2 and `detail-form` 3→2 (single locus, no
+       concurrency, no cross-visit workflow — the anti-correlation the
+       roadmap flagged for `master-detail`/`field-editor` turned out to
+       cut the other way for these two); `field-editor` 2→3 (its States
+       table proves genuine per-field concurrency, previously
+       under-scored). New distribution `{1:4, 2:14, 3:8, 4:1}`. Incidental
+       fix: both corrected pages carried a stale `"— capture & edit tier"`
+       suffix from the pre-Slice-109 three-tier taxonomy, naming a group
+       neither page is actually in — removed on both; two more pages
+       (`list-report`, `object-page`) carry a similar but not provably
+       stale suffix, noted for a future Standardize prose sweep, not fixed
+       here.
+
+       **(c) Per-group ladder audit**, current six job families
+       (`pattern-groups.mjs`): confirmed the roadmap's own provisional
+       reading (*enter & correct data* spans 2–4, no rung-1) and found two
+       more real gaps the provisional note (written pre-109-regroup)
+       didn't cover — *decide & clear queues* has no rung-1 or rung-4, and
+       *monitor & output* is flat at rung-2 across all six pages. **Every
+       gap resolved to a principled refusal through the 99.4 front door**:
+       rung-1 gaps refused because level 1 (no committed state) inherently
+       contradicts a group whose job is entering data or making a
+       decision; the *decide* group's missing rung-4 refused as
+       `editable-grid`'s job already, cross-linked from `bulk-actions`
+       (reusability, Objective §3); *monitor & output*'s flat rung refused
+       as the group's whole job being inherently single-locus, not a gap.
+       RF (one page) deferred to the already-queued 109.7. **No new items
+       queued** — every finding closed as a refusal, an explicitly valid
+       outcome per this item's own Accept text.
+
+       Verified in the BUILT output: `patterns-index` gate re-passed with
+       the corrected badges (`field-editor` moved up a rung, the other two
+       down), confirming source/config/output agree. Full docs build, core
+       build, stylelint, 111 vitest tests, `check:claims` (88 behaviors) —
+       all green.
 
 2. [ ] **104.2 — preview images on the tiles. OWNER CALL after 104.1.**
        The proposal's honest fork: text+badges first (zero drift), vs

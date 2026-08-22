@@ -164,7 +164,7 @@
           "title": "Value help",
           "opener": "Who uses it: anyone typing a code they cannot remember — a buyer picking a material out of forty thousand, a clerk choosing a cost centre; dozens of times a day, inside a form they are part-way through. What \"done\" looks like: the right code is in the field, and the reader is back where they were with nothing else lost. The picker is a detour, not a destination — which is why choosing must put focus back in the field they were filling, not leave it at the top of the document.",
           "openerShort": "Who uses it: anyone typing a code they cannot remember — a buyer picking a material out of forty thousand, a clerk choosing a cost…",
-          "complexity": 3,
+          "complexity": 2,
           "components": [
             {
               "href": "/components/dialog",
@@ -256,6 +256,31 @@
           ]
         },
         {
+          "href": "/patterns/detail-form",
+          "title": "Multi-column detail form",
+          "opener": "Who uses it: whoever owns the record — a buyer editing a PO, an admin fixing vendor details; occasional, high-stakes edits where losing work is unacceptable. What \"done\" looks like: every change saved (or explicitly discarded) with no silent loss. The edit-screen counterpart to record detail: a full purchase-order edit form, composed entirely from existing components — .bo-form-section fieldsets, the .bo-form-row auto-fit column grid, the line-items data table, and a sticky .bo-form-actions bar. Nothing new to learn; .bo-form-row already collapses to one column on narrow screens by construction (auto-fit, not a fixed column count) — resize the window to see it. Not for reading a record — a form styles fields for ENTRY, and rendering read-only values as inputs tells the user they can change things they cannot. Read surfaces are record detail and object page.",
+          "openerShort": "Who uses it: whoever owns the record — a buyer editing a PO, an admin fixing vendor details; occasional, high-stakes edits where losing…",
+          "complexity": 2,
+          "components": [
+            {
+              "href": "/components/form",
+              "label": "Forms"
+            },
+            {
+              "href": "/patterns/editable-grid",
+              "label": "Editable grid"
+            },
+            {
+              "href": "/patterns/validation-summary",
+              "label": "Validation summary"
+            },
+            {
+              "href": "/components/calendar",
+              "label": "Calendar"
+            }
+          ]
+        },
+        {
           "href": "/patterns/object-page",
           "title": "Object page",
           "opener": "Who uses it: whoever owns one record end to end — a buyer opening a PO, an approver checking it before signing; many times a day, one object at a time. What \"done\" looks like: the reader can see the object's status without scrolling, reach any section in one click, and act on it from anywhere on the page. The long-record counterpart to record detail: same content, but too tall to take in at once, so it gains navigation of its own. Not for a record you can take in at one glance — the anchor rail and sticky action bar are overhead you only earn by being long. That one is record detail.",
@@ -287,31 +312,6 @@
               "label": "Button"
             }
           ]
-        },
-        {
-          "href": "/patterns/detail-form",
-          "title": "Multi-column detail form",
-          "opener": "Who uses it: whoever owns the record — a buyer editing a PO, an admin fixing vendor details; occasional, high-stakes edits where losing work is unacceptable. What \"done\" looks like: every change saved (or explicitly discarded) with no silent loss. The edit-screen counterpart to record detail: a full purchase-order edit form, composed entirely from existing components — .bo-form-section fieldsets, the .bo-form-row auto-fit column grid, the line-items data table, and a sticky .bo-form-actions bar. Nothing new to learn; .bo-form-row already collapses to one column on narrow screens by construction (auto-fit, not a fixed column count) — resize the window to see it. Not for reading a record — a form styles fields for ENTRY, and rendering read-only values as inputs tells the user they can change things they cannot. Read surfaces are record detail and object page.",
-          "openerShort": "Who uses it: whoever owns the record — a buyer editing a PO, an admin fixing vendor details; occasional, high-stakes edits where losing…",
-          "complexity": 3,
-          "components": [
-            {
-              "href": "/components/form",
-              "label": "Forms"
-            },
-            {
-              "href": "/patterns/editable-grid",
-              "label": "Editable grid"
-            },
-            {
-              "href": "/patterns/validation-summary",
-              "label": "Validation summary"
-            },
-            {
-              "href": "/components/calendar",
-              "label": "Calendar"
-            }
-          ]
         }
       ]
     },
@@ -340,39 +340,6 @@
             {
               "href": "/patterns/detail-form",
               "label": "Detail form"
-            }
-          ]
-        },
-        {
-          "href": "/patterns/field-editor",
-          "title": "Field editor",
-          "opener": "Master-data maintenance — the SM30 case. A back-office user opens one record and corrects a handful of fields: a name typo, a credit limit, a date. They do it a few times a week, not all day, and \"done\" means the whole record committed once, with each field given the input its type deserves — a date picker for a date, a currency field for money, a stepper for a count. One row per field, not one row per record, which is what makes this different from the editable grid.",
-          "openerShort": "Master-data maintenance — the SM30 case.…",
-          "complexity": 2,
-          "components": [
-            {
-              "href": "/components/data-table",
-              "label": "Data table"
-            },
-            {
-              "href": "/components/inline-editing",
-              "label": "Inline editing"
-            },
-            {
-              "href": "/components/form",
-              "label": "Form controls"
-            },
-            {
-              "href": "/components/money",
-              "label": "Money"
-            },
-            {
-              "href": "/components/quantity",
-              "label": "Quantity"
-            },
-            {
-              "href": "/components/badge",
-              "label": "Badge"
             }
           ]
         },
@@ -415,6 +382,39 @@
             {
               "href": "/components/alerts",
               "label": "Alerts"
+            },
+            {
+              "href": "/components/badge",
+              "label": "Badge"
+            }
+          ]
+        },
+        {
+          "href": "/patterns/field-editor",
+          "title": "Field editor",
+          "opener": "Master-data maintenance — the SM30 case. A back-office user opens one record and corrects a handful of fields: a name typo, a credit limit, a date. They do it a few times a week, not all day, and \"done\" means the whole record committed once, with each field given the input its type deserves — a date picker for a date, a currency field for money, a stepper for a count. One row per field, not one row per record, which is what makes this different from the editable grid.",
+          "openerShort": "Master-data maintenance — the SM30 case.…",
+          "complexity": 3,
+          "components": [
+            {
+              "href": "/components/data-table",
+              "label": "Data table"
+            },
+            {
+              "href": "/components/inline-editing",
+              "label": "Inline editing"
+            },
+            {
+              "href": "/components/form",
+              "label": "Form controls"
+            },
+            {
+              "href": "/components/money",
+              "label": "Money"
+            },
+            {
+              "href": "/components/quantity",
+              "label": "Quantity"
             },
             {
               "href": "/components/badge",
