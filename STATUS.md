@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 23:17
+Generated at: 2026-08-23 00:10
 
 ## Open items by slice
 
@@ -23,6 +23,11 @@ Generated at: 2026-08-22 23:17
 - **Slice 119** (2 open)
   - 119.2 — ERP layout overview, as a CONCEPTS page.
   - 119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.
+- **Slice 121** (4 open)
+  - 121.1 — Reconciliation / matching screen. BLOCKED ON GRILL.
+  - 121.2 — Timesheet / time entry. BLOCKED ON GRILL.
+  - 121.3 — Comparison / evaluation matrix. BLOCKED ON GRILL.
+  - 121.5 — Remaining orphans + naming collisions.
 
 ## Dispatch counters
 
@@ -37,6 +42,7 @@ dispatch status — counter-triggered rules (715 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 121.5 — Remaining orphans + naming collisions.
 - 119.2 — ERP layout overview, as a CONCEPTS page.
 - 119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
