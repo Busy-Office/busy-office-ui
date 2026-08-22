@@ -2133,18 +2133,20 @@ the owner has already answered that with Slices 99 and 100.
        enumerating: every `roadmap NN.N` reference in a citation or comment
        resolves to a numbered item or a closed one.
 
-3. [ ] **101.3 — give the scoring apparatus a stop rule.** Slice 94 produced a
-       rubric, 39 scored components, three gates, a shared rule module, a
-       retirement note and a 23-page ratchet — and each step generated its own
-       follow-up (94.7 → 94.9/94.10 → 94.12 → 94.14, and 94.11 spawned by
-       94.6). That is a system that grows by being used. It is now complete
-       enough to stop investing in. **Accept:** a written stop rule — what
-       would justify *another* rubric change (a component that scores well and
-       is plainly bad, or vice versa), and what explicitly does not (a
-       dimension reading uniformly, which is now a known and documented
-       property). Until that trigger fires, scoring work is maintenance of the
-       23-page ratchet only, and the queue belongs to Slices 97/99/100, which
-       are what the owner actually asked for.
+3. [x] **101.3 — DONE 2026-08-22. Stop rule lives in
+       `apps/docs/src/data/dsa-scores.json`'s `rubric.stopRule`** (the same
+       file that already carries the rubric's `definitions`, so it's
+       discoverable by whoever next considers touching the rubric, not
+       buried in roadmap history). Fires only when a live grill — not a
+       re-score — finds a component that scores 3 across the board yet has a
+       genuine, user-facing defect the six dimensions structurally can't
+       see; worked example cited is 102.7's forms-family grill, which found
+       `form.astro`'s `--required` demo shipping the asterisk with zero
+       `aria-required`. Does NOT fire on a dimension reading uniformly
+       (documented as expected, not broken) or a grill that confirms the
+       rubric's existing verdict — 102.2 and 102.3's grills both did that,
+       cited as the mirror case. Until the trigger fires, scoring work stays
+       maintenance-only of the existing ratchet.
 
 ## Slice 100 — Owner wishlist: drag & drop list (2026-08-21)
 
