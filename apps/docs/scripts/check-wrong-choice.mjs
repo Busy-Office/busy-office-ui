@@ -61,7 +61,9 @@ const PATTERN_TODO = new Set([
 const dir = new URL('../src/pages/components/', import.meta.url);
 const patternDir = new URL('../src/pages/patterns/', import.meta.url);
 const files = (await readdir(dir)).filter((f) => f.endsWith('.astro'));
-const patternFiles = (await readdir(patternDir)).filter((f) => f.endsWith('.astro'));
+// index.astro (roadmap 104.1) is the section's front door, not a screen a
+// reader picks over another — there is no wrong-choice question to ask of it.
+const patternFiles = (await readdir(patternDir)).filter((f) => f.endsWith('.astro') && f !== 'index.astro');
 
 /* ASSERTIONS, not pages — this file makes up to two checks per page, so the
    old 'page(s)' noun printed 79 for 59 pages. Same defect as check-dsa-scores,

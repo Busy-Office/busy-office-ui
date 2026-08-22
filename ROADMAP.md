@@ -1349,22 +1349,65 @@ tile ingredients already exist gate-guaranteed on every pattern page (opener
 who-uses-it line, complexity badge, components-used list), while the
 framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
 
-1. [ ] **104.1 — build the `/patterns/` tile index, generated.** An
-       instance of the app-launch pattern: `bo-widget-grid` tiles grouped
-       under the three existing workflow headings, each tile carrying the
-       pattern's name, its opener's who-uses-it line, complexity badge, and
-       components-used badges — all **extracted at build from the pattern
-       pages**, never hand-written. Homepage's three "Patterns" links point
-       at the index. **Accept:** the index renders one tile per pattern page
-       that exists, with a gate asserting exactly that (red-proved both
-       directions: a pattern page missing from the index, and an index tile
-       whose page doesn't exist); tile copy is extraction, not authorship;
-       zero new CSS classes; sidebar unchanged; verified live both themes,
-       1440 + 390. **Owner add-on (2026-08-21): the simple→complex
-       progression must be legible** — within each workflow group, tiles
-       order by complexity ascending (1 → 4), so each group reads as a
-       ladder whose first tile is its entry point. Derived from the same
-       extracted badge, so the ordering cannot drift from the pages.
+1. [x] **104.1 — DONE 2026-08-22.** Built `/patterns/index.astro`, `bo-widget`
+       tiles in a `bo-widget-grid`, grouped under the **six current sidebar
+       job-family headings** (the roadmap text's "three workflow headings"
+       was written 2026-08-21, before Slice 109's same-day regroup to six —
+       used the CURRENT groups, not the stale count). Each tile carries the
+       pattern's title, a sentence-truncated cut of its opener's who-uses-it
+       line, its complexity badge, and its Components-used badges, sorted
+       complexity-ascending within each group.
+
+       **Extraction, not authorship, and now shared with the sidebar.**
+       `pattern-groups.mjs` is a new single source of truth for slug→label→
+       group membership; `Gallery.astro`'s sidebar was refactored to import
+       it (`...PATTERN_GROUPS`) instead of carrying its own inline copy, so
+       sidebar and index cannot drift apart. `gen-patterns-index.mjs` (new,
+       modelled on `gen-rf-profile.mjs`) reads each pattern page's own
+       `demo-note` opener / `complexity N of 4` badge / Components-used
+       list — the same three ingredients `check-page-shape.mjs` and
+       `check-components-used.mjs` already gate — into
+       `src/data/patterns-index.json`, which `index.astro` imports like any
+       other generated artifact (api.json, rf-profile.json). Zero new CSS
+       classes; sidebar's own rendering unchanged.
+
+       **The gate, red-proved both directions.** `check-patterns-index.mjs`
+       cross-checks disk files vs. `pattern-groups.mjs` vs. the BUILT
+       `/patterns/` page's actual rendered tiles (via `distPages`/
+       `demoRegion`, the same chokepoint `check-components-used.mjs` uses —
+       not a bespoke walker). Removing a group entry was caught two ways at
+       once (`patterns/login.astro exists but pattern-groups.mjs does not
+       list it` + a stale rendered tile with no source entry); adding a
+       phantom entry with no matching file was caught earlier still —
+       `gen-patterns-index.mjs` itself throws loudly rather than silently
+       generating a dead link.
+
+       **Homepage's front door fixed**, not just re-linked: the nav link and
+       the landing-page "Patterns →" widget both now point at `/patterns/`
+       instead of deep-linking to `list-report` as a stand-in; the widget's
+       body copy — stale since Slice 109's regroup (`"Capture & edit ·
+       Review & approve · Overview & shell — 12 full screens"`, the
+       2026-08-16 grouping and a wrong count) — now reads the live group
+       labels and `patternsIndex.count` (27), so it cannot go stale again.
+       The one other `/patterns/list-report` link (the "invoice pattern"
+       print example) is a specific-pattern citation, not a section link —
+       left as-is, correctly.
+
+       **Two small chokepoint exemptions added**, both with a stated reason:
+       `check-page-shape.mjs`'s `PATTERN_SECTIONS_EXEMPT` and
+       `check-wrong-choice.mjs`'s filter both skip `index.astro` — it is the
+       section's front door, not a screen with its own Anatomy/Data
+       contract/States or a "wrong choice vs. what" question to answer.
+
+       Verified live (fresh nginx bind-mount of `dist`, not the stale
+       `bo-docs-run` container per `.roundtable/RESUME.md`'s standing
+       gotcha): 1440px and 390px, light and dark — 27 tiles render (6
+       `bo-widget-grid`s × per-group counts, confirmed against
+       `class="bo-widget"` count in the built HTML), 390px stacks to one
+       column with no overflow, homepage tile shows the live count. Full
+       docs build (all 28 chained gates incl. the new
+       `check:patterns-index`), core build, stylelint (no new CSS to lint),
+       111 vitest behavior tests — all green.
 
 3. [ ] **104.3 — define the complexity scale, THEN audit the ladder**
        (owner add-on, 2026-08-21: "ensure comprehensive patterns (simple to

@@ -107,8 +107,13 @@ const PATTERN_SECTIONS = [
   [/<h2>\s*States/i, 'an <h2>States</h2> section'],
   [/<h2>\s*Components used/i, 'an <h2>Components used</h2> section'],
 ];
+// index.astro (roadmap 104.1) is the section's front door — a generated
+// tile grid over the pages below, not a pattern doc itself, so the
+// PATTERN_SECTIONS skeleton doesn't apply to it. It still carries its own
+// Related footer, so it isn't exempt from that check below.
+const PATTERN_SECTIONS_EXEMPT = new Set(['index.astro']);
 let patternsChecked = 0;
-for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro'))) {
+for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro') && !PATTERN_SECTIONS_EXEMPT.has(f))) {
   const page = await readFile(join(patternsDir, f), 'utf8');
   patternsChecked++;
   for (const [re, desc] of PATTERN_SECTIONS) {
