@@ -149,6 +149,60 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 117 — Owner wishlist: form label position, grilled to Top/Start (2026-08-22)
+
+Owner asked for a label-position option (top/right/left, with different
+value sets per control type). Grilled through two rounds; the owner
+tightened it mid-grill to the stronger shape. Settled design:
+
+- **Two values, uniform**: `top` (the shipped default, unchanged) and
+  **start** — not "left" (logical, flips under RTL, matching the
+  framework's own conventions) and not "right" (no major design system
+  ships label-right for text inputs; it inverts reading order — value
+  before you know what it labels).
+- **BEM modifier on the SECTION**, `.bo-form-section--label-start`, not
+  per-field and not `data-*`: label position is a static author-time
+  choice (like `bo-btn--secondary`), and section-level lets sibling
+  fields share one label column. **All-or-nothing per section** — a
+  per-field override waits for a real screen that needs one.
+- **Alignment reuses `.bo-kv--rows`'s shipped technique verbatim**:
+  `max-content 1fr` on the section grid, each field a subgrid row, so
+  different label lengths still start every control at one shared edge.
+- **Auto-collapses to top** below 30rem via a named `@container`
+  (house convention: tabs/stepper/data-table all collapse at 30rem) —
+  consumers never manage a breakpoint.
+- **Checkbox/radio: documentation only, zero new CSS** — `.bo-choice`
+  already does start/end purely by markup order; a CSS modifier would
+  duplicate what markup solves.
+
+1. [ ] **117.1 — build it.** The modifier in `form-section.css` (grid +
+       subgrid + named-container collapse, per the settled design), a
+       demo on the form docs page showing a label-start section with
+       mixed control types (input, select, a tall control) plus the
+       collapse behaviour, the checkbox/radio markup-order note where
+       choice controls are documented, and the "why not right" reasoning
+       stated in prose rather than left implicit. Accept: built CSS
+       contains the modifier and the named `@container`; labels of
+       different lengths align controls to one edge (verified in a
+       screenshot, not assumed); 390px shows the collapsed-to-top state;
+       both themes; api.json picks the class up (generated, not
+       hand-added); all core + docs gates green; RTL flip verified
+       (label lands inline-start in `dir="rtl"`).
+
+**REFUSED, with reasons:**
+- **`right` for input/dropdown** (the original ask included it) — no
+  major design system ships it for text fields; it inverts reading
+  order. Owner dropped it mid-grill in favour of top/start only.
+- **Per-control-type value sets** (checkbox {left,right} · input
+  {top,right,left} · textarea {top,left}) — collapsed to one uniform
+  pair; the per-type table dissolved once `right` fell out and
+  checkbox/radio turned out to be markup order, not a label-position
+  case at all.
+- **A per-field position override inside a section** — speculative;
+  no screen needs mixed positions yet. Re-open when one does.
+- **New CSS for checkbox/radio label side** — already fully solved by
+  markup order today; a modifier would duplicate it.
+
 ## Slice 116 — Owner decision: inbox approval rows expand in place (2026-08-22)
 
 Origin: the notification dogfood (Explore round 2) raised the owner's

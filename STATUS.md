@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 20:23
+Generated at: 2026-08-22 20:46
 
 ## Open items by slice
 
@@ -21,6 +21,8 @@ Generated at: 2026-08-22 20:23
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
+- **Slice 117** (1 open)
+  - 117.1 — build it.
 
 ## Dispatch counters
 
@@ -34,6 +36,7 @@ dispatch status — counter-triggered rules (693 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 117.1 — build it.
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
 - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
 - 99.4 — missing components discovered along the way go through the front door.
