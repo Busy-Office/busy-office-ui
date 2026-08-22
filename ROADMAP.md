@@ -520,7 +520,7 @@ catalogue in ERP vocabulary and job order.
        roadmap text — no invented requirements. Two citations spot-checked
        against the source reports before trusting the deliverable (a
        delegated extraction is an instrument's first output like any
-       other). The sweep is split out as 109.6 below, per this item's own
+       other). The sweep is split out as 109.13 below, per this item's own
        Accept. Original item text follows.
        Quality bar, sequenced not sprayed: run the queued
        102.2 (object-page) and 102.3 (editable-grid) grills FIRST, extract
@@ -552,27 +552,64 @@ catalogue in ERP vocabulary and job order.
        is separate follow-up work, not done here.** Full reasoning:
        `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md`.
 
-4b. [ ] **109.6 — the pattern sweep against 109.3's bar. IN PROGRESS.**
-       Split out per 109.3's own Accept ("the sweep is its own later item
-       with per-page verdicts"). **Batch 1 done 2026-08-22** (report:
-       `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md`): the 13
-       `PATTERN_TODO` pages, in 4 parallel agents, each bar-scored AND
-       given its wrong-choice clause — `check:wrong-choice` now passes
-       30 carry / 0 outstanding (`PATTERN_TODO` emptied), unblocking
-       112.1. One real defect found and fixed, not just scored: `wizard`
-       claimed panels would "render at once" without JS, which its own
-       `hidden` attribute already contradicts — corrected the prose and
-       added the missing No-JS States row. Systemic gap the batch
-       surfaced: 12 of 13 pages lack the human-monitoring-signal sentence
-       the 109.3 owner-quartet requires — the largest common failure, not
-       yet fixed (scoring only, per the batch's own scope). **Remaining
-       for a later round:** bar-score `detail-form`, `inbox`, `job-monitor`,
-       `kanban`, `master-detail`, `notification`, `output-form`,
-       `record-detail`, `report`, `role-home`, `schedule`, `command-bar`,
-       `validation-summary` (RF variants likely exempt, covered by 109.7 —
-       confirm on continuation). **Accept:** per-page verdict recorded for
-       every pattern page (pass/fail per bar line, or a stated reason a
-       line doesn't apply); wrong-choice clauses done (met, batch 1).
+4b. [x] **109.13 — DONE 2026-08-22 (renumbered from a same-slice collision
+       with the existing 109.6/109.8 below — caught before it shipped a
+       dangling/ambiguous reference). The pattern sweep against 109.3's bar,
+       26/26 pages scored.** Batch 1 (13 `PATTERN_TODO` pages) + batch 2
+       (13 remaining pages, 3 parallel agents), reports:
+       `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md` and
+       `...-batch2-2026-08-22.md`. `check:wrong-choice` 30/0, unblocking
+       112.1. Two real defects found and independently re-verified against
+       source before fixing (not trusted on a sub-agent's say-so): `wizard`
+       claimed panels render at once without JS (contradicted by its own
+       `hidden` attribute); `schedule` claimed the narrow-screen stack was
+       "the calendar's own container breakpoint" (grep-confirmed
+       `calendar.css` carries no such query). Both corrected. Per this
+       item's own scope, everything else the sweep found is queued, not
+       silently fixed — 109.14 through 109.18 below. **Accept met**:
+       per-page verdict recorded for every pattern page; wrong-choice done.
+
+11. [ ] **109.14 — No-JS States row, missing on 25 of 26 pages.** The single
+       largest, most uniform gap the sweep found (only `wizard`, fixed
+       in-sweep, has one). **Accept:** every non-exempt pattern page's
+       States table gains a row stating what still works and what can
+       never complete without JS — measured against the page's actual
+       behavior file (per the bulk-edit-verified-against-rendered rule),
+       never assumed from the pattern's category.
+12. [ ] **109.15 — human-monitoring-signal sentence: placement + absence.**
+       Two distinct defects the sweep bundled: (a) **stated but
+       mis-placed** — `job-monitor`, `notification`, `output-form`,
+       `role-home` carry the AI-manages/human-monitors sentence under Data
+       contract, not tied to named Anatomy regions as the bar requires;
+       cheap, relocate/duplicate one sentence each. (b) **missing
+       entirely** on monitoring-adjacent screens — `schedule`,
+       `master-detail`, `reporting-dashboard`, `record-detail`; needs real
+       authoring, not just a move. `inbox` and `kanban` already do this
+       right — use them as the model. **Accept:** (a) resolved for all 4,
+       (b) resolved or explicitly declined per page with a stated reason
+       (not every screen has a monitoring signal to name).
+13. [ ] **109.16 — Data-contract 4xx/error row missing.** Confirmed on
+       `master-detail`, `notification`, `output-form`, `record-detail`;
+       batch 1's set not yet individually re-checked for this specific
+       gap. **Accept:** every pattern's Data-contract table states what a
+       failure response returns, or explicitly why the pattern has none
+       (a static export like `output-form` is a legitimate N/A).
+14. [ ] **109.17 — check-claims.mjs has ZERO cases for `inbox`,
+       `job-monitor`, `kanban`.** The most serious of the five findings:
+       these three pages carry runtime-behavior prose (polling, arrow-key
+       nav, move-menu, retry/cancel) unchecked by the executable-claims
+       doctrine CLAUDE.md requires — exactly the gap the wizard/schedule
+       fixes exist to prevent, just not yet wired here. **Accept:** each
+       page's load-bearing runtime claims get a `check-claims.mjs` case,
+       driving real key/mouse events per the doctrine's own warning about
+       synthetic events matching no delegated handler.
+15. [ ] **109.18 — small mechanical fixes, one page each.** `kanban`'s
+       horizontally-scrolling lane cluster lacks `tabindex="0"` on its own
+       scroll container (distinct from the Move-menu popover, which is
+       fine); `record-detail`'s Anatomy list items aren't linked to their
+       components (only page in the catalogue with this gap) and its
+       Opener lacks a "how often" clause. **Accept:** all three fixed,
+       verified live.
 
 5. [x] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
        (owner follow-up, 2026-08-22: "pattern should not [be] specific,

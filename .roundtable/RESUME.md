@@ -11,20 +11,27 @@ uncommitted work, and a decision made but not yet written down.
 
 ---
 
-## In flight: 109.6, batch 2 of N
+## In flight: nothing
 
-Last updated 2026-08-22 after 109.6 batch 1 landed (commit follows this
-entry). **Batch 1 done and committed** — all 13 `PATTERN_TODO` pages
-bar-scored + wrong-choice-clause'd; `check:wrong-choice` is 30/0, 112.1 is
-unblocked on that front. **Still open, batch 2**: bar-score the ~13
-non-TODO pages against `.roundtable/pattern-quality-bar-2026-08-22.md` —
-`detail-form`, `inbox`, `job-monitor`, `kanban`, `master-detail`,
-`notification`, `output-form`, `record-detail`, `report`, `role-home`,
-`schedule`, `command-bar`, `validation-summary` (confirm RF variants are
-exempt via 109.7 before scoring them). Full batch-1 findings and the
-109.4 field-editor fold verdict: `.roundtable/pattern-sweep-109.6-batch1-2026-08-22.md`.
-The systemic gap batch 1 found (12/13 pages lack the human-monitoring-signal
-sentence) is scoring only so far — not yet fixed on any page.
+Last updated 2026-08-22 after 109.6 (renumbered 109.13 mid-wake — see
+below) closed: all 26 non-exempt pattern pages bar-scored across two
+batches, reports in `.roundtable/pattern-sweep-109.6-batch{1,2}-2026-08-22.md`.
+109.4 (field-editor) decided FOLD. Five systemic gaps the sweep found are
+queued as 109.14-109.18 (No-JS rows, human-monitoring-signal placement,
+missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban,
+and a handful of small mechanical fixes) — none fixed yet, scoring only,
+per the sweep's own scope.
+
+**Numbering note for future wakes:** while queuing those five items, the
+sweep's own roadmap number (originally minted "109.6") turned out to
+collide with a pre-existing, unrelated 109.6 ("RF becomes a TRACK") and
+109.8 ("catalogue v2") further down the same slice — caught by re-running
+the 101.2-style enumeration check before committing, not by review. Fixed
+by renumbering to 109.13-109.18 (next free after the existing 109.1-109.8).
+**Lesson for any wake minting a new sub-item number inside an existing
+slice: grep the WHOLE slice for that number first** — checking only the
+nearby text (what happened here) misses collisions further down a long
+slice.
 
 *(Prior note, kept for its still-true warning:)* Last updated 2026-08-19
 after the Slice 56-61 Objective grill. This file had gone stale since

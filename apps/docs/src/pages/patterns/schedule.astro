@@ -168,7 +168,7 @@ const monthMarkup = scheduleMonth(YEAR, MONTH);
           <tr><td>Non-working day opened via a bookmark</td><td>the DIFFERENT empty — explain it is a closed/holiday date, not "nothing scheduled yet"</td></tr>
           <tr><td>Conflict on one entry</td><td>flagged in the row with a badge (see the demo above), not surfaced as a page-level error — the other entries that day are still fine</td></tr>
           <tr><td>No permission to open a day's detail</td><td>the day stays a plain cell rather than a disabled-looking link — a control a reader can see but never use is worse than one that is simply absent</td></tr>
-          <tr><td>Narrow screen</td><td>panel and grid stack in source order — the same one-column collapse the calendar component already does at its own container breakpoint, nothing new to build here</td></tr>
+          <tr><td>Narrow screen</td><td>panel and grid stack in source order — the split's own <code>auto-fit</code> grid (see <code>.sched-split</code> below) collapses to one column below ~36rem; the calendar component itself carries no container breakpoint, nothing new to build here</td></tr>
         </tbody>
       </table>
     </div>
