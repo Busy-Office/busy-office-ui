@@ -780,6 +780,111 @@ Slice 60, no new instances.
 **Exit:** clean re-scan on every established axis; the `gate-report.mjs`
 adoption question is now fully answered rather than partially answered twice.
 
+## Slice 112 — External governance/conformance proposal, grilled to a pilot (2026-08-22)
+
+Owner supplied a rev-3 "Documentation, Governance & Conformance Improvement
+Proposal" (uploaded 2026-08-22) proposing a consumer-facing validator
+(`@busy-office/check`), a Screen Contract YAML, pattern metadata, a Quality
+Index, waivers/SARIF/benchmarking, and a six-section docs IA. Reviewed
+against the repo: **most of its P0 already exists here under other names**
+(Surface Fitness ≈ the DSA rubric; admission gate ≈ the 99.4 front door;
+mandatory doc cores ≈ the two recipes + `check-page-shape`; canonical
+generated metadata ≈ the docs doctrine). The genuinely new bets were the
+Screen Contract + pattern-fit layer. Grilled in a 2-round design-tree
+session (report: `.roundtable/grill-112-pattern-fit-proposal.md`); the
+owner's deciding call: **the checker is for AI agents building with the
+framework** — not human enterprise teams. Final decision made on long-term
+benefit: build the metadata substrate unconditionally; every superstructure
+stays evidence-gated.
+
+**Sequencing (settled Q5): this slice queues BEHIND 110.4 and 109.3.**
+109.3's per-section quality bar is what the pilot judges against, and
+109.3 grows the 13 outstanding wrong-choice clauses (settled Q9 — one pass
+per page, not two).
+
+1. [ ] **112.1 — `patterns.json`, extracted not authored.** A
+       `gen-patterns.mjs` scrapes the pattern pages (the single source of
+       truth stays the pages, per doctrine) into a generated per-pattern
+       record: group, opener, complexity, components-used, the States
+       table rows, the Data-contract table rows, and the wrong-choice
+       clause text + its alternative link (today detected then thrown
+       away by `wrong-choice-rule.mjs`). **Anatomy is deliberately out of
+       scope** — its `<li><strong>Region</strong>` convention fuses
+       component links into prose (approval's entries carry
+       parenthetical asides a naive extractor would swallow); extract it
+       only after a page-side convention tightening earns it. Technique
+       precedent: `check-components-used.mjs`'s section-slice against
+       dist. Red-prove the extractor per the instrument doctrine — first
+       output is wrong until reconciled against a hand count.
+2. [ ] **112.2 — pattern catalogue into `llms.txt`.** Survey finding
+       (2026-08-22): `llms.txt` carries essentially zero pattern data —
+       two hardcoded URLs. Generate a pattern section from 112.1's
+       `patterns.json`. Needs no pilot to justify: llms.txt exists to
+       teach agents the framework and patterns are absent — a plain
+       coverage gap on the existing doctrine (the 32.3 precedent).
+       Anti-drift guard same as 32.3's: a silently-dropped section fails
+       the build.
+3. [ ] **112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.**
+       32-style evidence before any contract surface exists. Protocol,
+       pre-registered here so the verdict cannot be argued afterward:
+       - **Briefs**: the owner writes 5-8 screen briefs from real ERP
+         memory, unseen by the loop before the runs, each with the
+         owner's own pattern pick sealed in a file the pilot agent can
+         never see.
+       - **Agent context**: a fresh subagent gets the brief text plus the
+         IMPROVED `llms.txt` (post-112.2) ONLY — no repo access. One
+         control brief re-run with nothing but the npm README.
+       - **Runs**: one run per brief; any failing brief is re-run twice
+         and the failure counts only if it appears in ≥2 of 3
+         (variance guard).
+       - **Measurement**: the full failure taxonomy, each row arguing
+         for its own defense separately — pattern choice, invented
+         APIs (regression check on 32.1/32.2), missed states,
+         right-pattern-wrong-component (the 42-fields-in-a-Dialog
+         class), contract violations.
+       - **Verdict bar**: confirmed wrong-pattern picks (vs the sealed
+         owner picks) on **≥2 briefs** → the Screen Contract layer earns
+         admission and gets designed (112.4). Below the bar → **refused
+         and recorded**; 112.1/112.2 stand on their own merits either
+         way. Report lands in `.roundtable/`.
+4. [ ] **112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.**
+       Deliberately undesigned until admitted — schema, delivery
+       (extend `bo-check-markup` vs new bin), and finding format are the
+       post-pilot grill round. If 112.3 refuses it, this item closes as
+       refused with the pilot report as the reason.
+5. [ ] **112.5 — "Which Pattern Should I Use?" docs page, after the
+       112.3 verdict.** A task→pattern decision-flow page generated from
+       `patterns.json` (never hand-maintained — it would be the fifth
+       interpretation of the pattern system the proposal itself
+       forbids). Written after the verdict so the page and any contract
+       pattern-selection logic are one authoring pass from one source.
+       Pays regardless of 112.4's fate.
+
+**REFUSED, with reasons (recorded per the grill's Q6 — re-open any of
+these when a second real consumer of `@busy-office/ui` exists):**
+- **Consumer Quality Index /100 + application benchmarking** —
+  organizational-governance machinery for teams that don't exist yet;
+  fails the proposal's own §16 demonstrated-gap rule. The anti-gaming
+  design (§24 medians/percentiles) is good and is preserved here for
+  the re-proposal.
+- **Waiver system (PASS WITH WAIVERS, expiry, SARIF output)** — CI
+  exception machinery for human orgs; an AI agent needs PASS/FAIL and
+  readable findings, nothing more.
+- **A second Surface Fitness rubric (proposal §13, 5-dim /15)** — the
+  six-dimension DSA rubric already exists and is gated; running two
+  violates the proposal's own §2.6. Its one real improvement — the
+  Removal Cost axis + fitness×cost decision matrix (§15) — may be
+  absorbed into the existing rubric as a future Standardize item.
+- **The six-section docs IA reorg (§3)** — ~80% renames groups that
+  were each measured into place more recently than the proposal was
+  written (2026-08-16 comparative IA pass; 104.1's single-source
+  grouping). Extracted instead: 112.5, and possibly an Integration
+  sidebar group as a future small item.
+- **Hand-authored pattern metadata YAML (§30)** — inverts the
+  generated-from-artifact doctrine; superseded by 112.1's extraction.
+- **A consumer-facing conformance web tool (§34)** — downstream of a
+  Quality Index that is itself refused.
+
 ## Slice 111 — Owner wishlist: button group, dropdown animation, design-system reference (2026-08-22)
 
 Owner: *"improve design system... improve button, dropdown, group button
@@ -1121,7 +1226,12 @@ catalogue in ERP vocabulary and job order.
        POSTs to act, what returns) and to name which regions are the
        human-monitoring signals — the AI-manages/human-monitors split made
        explicit. Both halves already live in the recipe's data-contract
-       and states sections; this names them, no new gate.** **Accept:** the bar exists as a
+       and states sections; this names them, no new gate.** **Grown by the
+       Slice 112 grill (2026-08-22, settled Q9): the sweep also writes the
+       13 outstanding wrong-choice clauses (`PATTERN_TODO` in
+       `check-wrong-choice.mjs`) — avoid-when is part of this bar, and one
+       pass per page beats two; 112.1's metadata extraction depends on
+       this coverage.** **Accept:** the bar exists as a
        written checklist in `.roundtable/` after the two grills; the sweep
        is its own later item with per-page verdicts.
 4. [ ] **109.4 — `field-editor` membership question.** A technique more
