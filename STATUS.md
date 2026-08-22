@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 21:35
+Generated at: 2026-08-22 21:50
 
 ## Open items by slice
 
@@ -25,9 +25,9 @@ Generated at: 2026-08-22 21:35
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (700 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-22 17:12   ok
-  Objective     0 / 3 slices          since 2026-08-22 07:59   ok
+dispatch status — counter-triggered rules (701 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-22 17:12   ok
+  Objective     1 / 3 slice           since 2026-08-22 07:59   ok  [30]
 ```
 
 ## Owner-blocked
@@ -44,7 +44,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 19:39 · Meta · refusal · universal reading pane across all inbox row types (no shared schema; degrades to title+link or forks into four panels) · refused · 12b677f
 - 2026-08-22 20:07 · Continue · build · 116.1: inbox routine approval rows expand in place, reusing approval's dialog/endpoints (round-table decision B) · landed · e34c0d3
 - 2026-08-22 20:23 · Explore · build · 116.2: /inbox dogfooded into po-app, closes role-home's documented gap, real dialog-id collision bug found and fixed by the gate's own first run · landed · ba08035
 - 2026-08-22 20:46 · Roadmap · triage · 117: form label position grilled and triaged (top/start accepted as section modifier) · triaged · e9ffce5
@@ -54,6 +53,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 20:46 · Meta · refusal · new CSS for checkbox/radio label side (markup order already solves it) · refused · e9ffce5
 - 2026-08-22 20:57 · Continue · build · 117.1: form-section --label-start modifier, reusing bo-kv--rows's subgrid alignment; RTL-flip claim red-proved · landed · d397de6
 - 2026-08-22 21:04 · Explore · build · --label-start dogfood into po-app: no natural target, discarded before spiking (form-row incompatibility found by reading) · refused · 59f9084
+- 2026-08-22 21:50 · Continue · build · 30.4b: initWindowedList behavior + /concepts/scale rewrite landed (red-proof dogfood still open) · landed · a1239e0
 
 ## Sunset test
 
