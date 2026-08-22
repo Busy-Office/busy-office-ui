@@ -34,8 +34,8 @@ Generated at: 2026-08-22 15:03
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (662 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-22 14:39   ok
+dispatch status — counter-triggered rules (663 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-22 14:39   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -54,7 +54,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 14:18 · Continue · build · 109.6 batch 1 - 13 PATTERN_TODO pages bar-scored + wrong-choice-clause'd in 4 parallel agents; check:wrong-choice now 30/0; found+fixed a real false claim on wizard (panels don't render-at-once without JS, contradicted by static hidden attr - verified against markup before fixing, added missing No-JS States row); 109.4 field-editor decided FOLD on bar evidence (thin anatomy, fails shape-not-domain); systemic gap found - 12/13 pages lack human-monitoring-signal sentence, scoring only; remainder (13 non-TODO pages) left open in RESUME.md · landed · bd44050
 - 2026-08-22 14:25 · Continue · build · 109.6/109.13 batch 2 - remaining 13 pattern pages bar-scored (3 parallel agents), closing the 26-page sweep; second false runtime claim found+fixed (schedule.astro's calendar-breakpoint claim, verified against calendar.css before fixing); caught a real item-numbering collision mid-commit (my own 109.6/109.8 duplicated pre-existing items further down Slice 109) via the 101.2 enumeration check and renumbered to 109.13-109.18 before landing; queued 5 systemic findings (No-JS rows 25/26 pages, human-monitoring placement/absence, missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban, mechanical fixes) as their own items · landed · b2117e3
 - 2026-08-22 14:35 · Roadmap · triage · 113: owner rich-text sample screenshot triaged against 102.1's rung ladder - 7 execCommand buttons accepted as a richer rung-3 Advanced demo (113.1), rung-4 recipe doc for the refused four (113.2) · triaged · caae589
 - 2026-08-22 14:35 · Meta · refusal · Image upload, table-insertion UI, checklist list-type, color/highlight pickers as new richtext framework surface - infrastructure/distinct-component territory, same grounds as the 101.7 PDF/barcode refusals; re-open only if a real pattern page demonstrates the need · refused · caae589
@@ -64,6 +63,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 14:49 · Roadmap · triage · 114: owner htmx-4 wishlist verified via WebFetch (real, beta 6) then triaged against the Objective - refused, its swap-everything-except-204/304 default inverts the discards-non-2xx behavior baked into getting-started/htmx.astro and dozens of pattern Data-contract rows · triaged · dfdeb6c
 - 2026-08-22 14:49 · Meta · refusal · htmx 4 adoption - beta not stable, inverts documented swap-discard behavior across the pattern catalogue, no demonstrated gap; re-open on stable release + a scoped claim-audit first · refused · dfdeb6c
 - 2026-08-22 14:58 · Continue · build · 109.14 - No-JS States row added to all 26 pages lacking one (precise recount found 26, not the sweep's original 25); 4 parallel agents each required to read real script imports + behavior source before writing a claim; 2 spot-verified independently (master-detail dialog, command-bar no-native-affordance) before trusting; full suite green incl. check:claims 88/88 · landed · cc33407
+- 2026-08-22 15:03 · Continue · build · 109.15 - human-monitoring-signal sentence resolved across all 8 pages: 4 relocated to Anatomy (job-monitor/notification/role-home tied to a real region; output-form handled honestly - its own prose already points monitoring elsewhere, sentence says so rather than force-fitting), 2 authored where a real signal exists (reporting-dashboard's stat delta+staleness, record-detail's audit actor column), 2 declined with a stated reason where genuinely absent (schedule, master-detail) · landed · b7424c5
 
 ## Sunset test
 
