@@ -1742,16 +1742,32 @@ then documented — and refusing is an expected outcome.
        A verdict of "one component covers all three rungs, here is the
        proof" is a valid and preferred outcome.
 
-2. [ ] **102.2 — `/design-grill` on `/patterns/object-page`, comprehensive.**
-       The owner asks for depth here specifically, and 99.2 already settled
-       that object page is the long-record detail screen and must stay. So
-       this grill is not "should it exist" but "is it good": score it on the
-       six DSA dimensions with cited evidence like a component, then grill
-       the screen as a whole — anchor navigation, the sticky action bar,
-       what happens at 390px, print, and the states table. **Accept:** a
-       scored report with a verdict per weakness — fix / accept-with-reason
-       / refuse — and every "fix" queued as a numbered item with its own
-       Accept.
+2. [x] **102.2 — DONE 2026-08-22.** `/design-grill` on `/patterns/object-page`,
+       comprehensive. Report: `.roundtable/grill-object-page-2026-08-22.md`.
+       Scored all six DSA dimensions (`fit` not scored — the rubric's
+       definition is field-matrix-specific and doesn't extend to a
+       whole-screen pattern): typography/colour/spacing/interaction/content
+       all cite real evidence and score 3, not forced — the intrinsic `7rem`
+       scroll-margin literal carries its own regression-history comment,
+       which is exactly what the `spacing` definition asks for.
+
+       **Re-verified the whole screen live against the CURRENT build**
+       (the only prior grill, 2026-08-20, predates the 108 sticky P0 fix and
+       109 sidebar regroup) and found one real, small, reproducible defect
+       the existing `check-claims.mjs` probe cannot see: at 390px only,
+       landing on a section via the anchor bar leaves its own
+       `.bo-widget__title` **2.25px under the sticky chrome** — the collapsed
+       sticky wrapper is 18.375px taller at 390 than at 1440 (header title +
+       badge wrap to two lines), but `scroll-margin-block-start` is one fixed
+       value tuned for 1440. Same defect class the page's own comments
+       already document fixing twice (48.3: 110px; 108.1: 26px), a third,
+       much smaller occurrence — invisible in an actual screenshot, unlike
+       the first two. **Not rushed**: both prior fixes needed real live
+       debugging, not a guessed constant, so this is queued as **102.8**
+       rather than patched under time pressure. Print behavior and the
+       states table (6 rows, matches the pattern recipe) re-verified
+       unchanged. All gates green (core build, docs build incl. all chained
+       gates, stylelint, `check:claims`) on the exact build measured.
 
 3. [ ] **102.3 — `/design-grill` on `/patterns/editable-grid`.** The screen
        the owner has now flagged twice (see 97.2, the validation-UX ask that
@@ -1784,6 +1800,25 @@ then documented — and refusing is an expected outcome.
        Verdict per weakness: fix / accept-with-reason / refuse, fixes queued
        individually. "The family is genuinely sound and here is what the score
        missed anyway" is a valid outcome.
+
+3b. [ ] **102.8 — object-page: fix the 390px anchor-landing gap.** From the
+       102.2 grill (`.roundtable/grill-object-page-2026-08-22.md`): at 390px
+       only, jumping to a section leaves its own `.bo-widget__title` 2.25px
+       under the sticky chrome, because the collapsed sticky wrapper is
+       18.375px taller at 390 than at 1440 (the object header's title +
+       badge wrap to two lines) while `scroll-margin-block-start` is one
+       fixed `7rem` value tuned for the 1440 height. Same defect class as
+       48.3 and 108.1, both of which needed real debugging rather than a
+       guessed constant — do the same here rather than hand-tuning a magic
+       number. **Accept:** the gap (`sectionTop - stickyBottom`, or the more
+       precise title-vs-sticky-bottom measure the grill used) is
+       non-negative at 390px for every section, re-verified it did not
+       regress the already-passing 1440 case or the existing
+       `check-claims.mjs` `object-page @${w}: the anchor bar follows the
+       reader` probes; and that probe itself gains an assertion on the
+       landed section's own content clearing the sticky chrome (not just
+       `aria-current` moving), since that coverage hole is what let this
+       occurrence go unnoticed. Verified live, both themes, both widths.
 
 4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"
