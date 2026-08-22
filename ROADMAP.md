@@ -789,7 +789,12 @@ Two of five REFUSED there with re-open conditions (kanban, close cockpit).
 The three builds, in queue order AFTER 101.4-101.7:
 
 0. [x] **110.0 — grill the operating idea itself: simplicity &
-       maintainability & AI-manage & human-monitor.** Done 2026-08-22:
+       maintainability & AI-manage & human-monitor.** Done 2026-08-22 —
+       **scope note**: the owner's ask actually referred to Slice 110's
+       PATTERNS (clarified same day; the per-pattern grill is the addendum
+       in the candidates report, and 109.3's bar gains the AI/human split
+       requirement from it). This operating-model grill stands as a bonus
+       whose findings carry their own measurements:
        `.roundtable/grill-ai-managed-human-monitored-2026-08-22.md`.
        Verdict: adopt the quartet as the NAMED standing rubric (it maps
        1:1 onto machinery already in force — Objective §1, Standardize
@@ -886,7 +891,13 @@ catalogue in ERP vocabulary and job order.
        the per-section bar they produce (states depth, data-contract
        realism, keyboard walkthrough), then sweep the other 18 pages
        against it — the 94.10 fix-the-recipe move. 101.4-101.7 get written
-       against that bar from day one. **Accept:** the bar exists as a
+       against that bar from day one. **Extended by the owner's quartet
+       (2026-08-22, 110 addendum): the bar also requires each pattern to
+       state its data contract in machine-operable terms (what an agent
+       POSTs to act, what returns) and to name which regions are the
+       human-monitoring signals — the AI-manages/human-monitors split made
+       explicit. Both halves already live in the recipe's data-contract
+       and states sections; this names them, no new gate.** **Accept:** the bar exists as a
        written checklist in `.roundtable/` after the two grills; the sweep
        is its own later item with per-page verdicts.
 4. [ ] **109.4 — `field-editor` membership question.** A technique more

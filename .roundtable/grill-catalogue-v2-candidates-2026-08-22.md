@@ -108,6 +108,36 @@ turn out to need a visual the list cannot carry — that is the one part
 recomposition doesn't obviously cover, and it is also the part that would
 need real consumer evidence to design against.
 
+## Addendum: the four criteria applied per pattern (owner clarification, 2026-08-22)
+
+Owner: *"I refer to Slice 110 & patterns that need in this project that
+need to grill the idea"* — the quartet (simplicity, maintainability,
+easy for AI to manage, **presentation to human to monitor**) applied to
+the pattern build queue itself, not the operating model. The fourth
+criterion turns out to be load-bearing for exactly these screens: in an
+ERP where AI agents do the operating, **these patterns ARE the human's
+oversight surfaces.** Grilled per pattern:
+
+| Pattern | AI manages via | Human monitors via | Verdict effect |
+|---|---|---|---|
+| inbox (101.4) | data contract: rows are machine-postable (approve/reject/claim) | THE oversight screen — "what needs ME" is the human's control loop over AI-processed work; the "why is this here" per row is the monitoring signal | **strengthened — the anchor of the whole monitoring story** |
+| notification (101.5) | AI/batch runs emit completions | the human learns what finished while not watching — the unread contract IS the monitoring contract | strengthened |
+| report (101.6) | AI runs with parameters via the run boundary | human reads / prints / exports — the read-side artifact | strengthened |
+| output form (101.7) | AI emits the document | human/auditor-facing compliance artifact | strengthened |
+| role-home (110.1) | links out to machine-operable screens | literally the monitor's home: my open items + my KPIs = the human's dashboard over the AI's work | **strengthened — its wrong-choice clause should SAY this** ("monitors MY WORK, not the business") |
+| job monitor (110.2) | retry/cancel are machine-postable | run history + failure states = watching the automation itself (incl. AI agents' own jobs) | strengthened — the fourth criterion is its entire job |
+| schedule (110.3) | calendar day-detail swaps | date-anchored oversight | unchanged — still low priority |
+| kanban (refused) | — | stage-visualisation IS a monitoring idiom — but grouped list-report carries the same signal without a new layout family | **refusal holds**; the criterion is served cheaper |
+| close cockpit (refused) | — | "period 82% closed" on a role-home card + inbox-scoped tasks | **refusal holds** — the fourth criterion is exactly what recomposition serves |
+
+**One requirement this adds to the quality bar (109.3), not a new gate**:
+each pattern's page states (a) its data contract in machine-operable
+terms — what an agent POSTs to act, what comes back — and (b) which
+regions are the human-monitoring signals (the badge, the live region,
+the progress, the "why is this here" column). Both halves already exist
+in the recipe (data contract, states); the bar makes their AI/human
+split explicit instead of implied.
+
 ## Resulting queue order (build items)
 
 1. 101.4 inbox → 101.5 notification → 101.6 report → 101.7 output form
