@@ -140,6 +140,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
   <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
     <ul>
       <li><a class="bo-sidebar-nav__link" href="/" ${current === '/' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--grid bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Dashboard</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/inbox" ${current === '/inbox' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--check-circle bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Inbox</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--chart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/import" ${current === '/import' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--box bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Import</span></a></li>
@@ -834,20 +835,35 @@ const detailScreen = (p, editErrors = null) => `
     e.target.value = '';
   });
 </script>
-${p.status === 'Pending' ? `
-<div class="bo-cluster" id="approve-cluster">
-  <button class="bo-btn" data-dialog-trigger="approve-dlg">Approve…</button>
+${p.status === 'Pending' ? approveDialogHtml(p) : ''}`;
+
+// Extracted from detailScreen (roadmap 116.2 spike) so /inbox's expand-in-place
+// preview reuses the SAME dialog and endpoints, not a second copy — the exact
+// promise ROADMAP 116.1 makes for the docs pattern, tested here for real.
+//
+// IDs are suffixed per PO (approve-dlg-${p.id}, …) rather than fixed. A first
+// version used fixed IDs on the reasoning "only one routine row renders per
+// page load" — check-po-app's OWN gate disproved that on its first run: an
+// earlier check in that same suite edits PO-88213's amount down to $77.25,
+// which puts it under /inbox's own threshold too, so two routine rows DID
+// share one page — exactly the "instrument's first output is not evidence"
+// case, just against a feature instead of a check.
+function approveDialogHtml(p) {
+  const id = (suffix) => `${suffix}-${p.id}`;
+  return `
+<div class="bo-cluster" id="${id('approve-cluster')}">
+  <button class="bo-btn" data-dialog-trigger="${id('approve-dlg')}">Approve…</button>
 </div>
-<dialog class="bo-dialog" id="approve-dlg" aria-labelledby="adlg-t" data-state="closed">
+<dialog class="bo-dialog" id="${id('approve-dlg')}" aria-labelledby="${id('adlg-t')}" data-state="closed">
   <form method="dialog">
     <header class="bo-dialog__header">
-      <h2 class="bo-dialog__title" id="adlg-t">Approve ${p.id}</h2>
+      <h2 class="bo-dialog__title" id="${id('adlg-t')}">Approve ${p.id}</h2>
       <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
     </header>
-    <div class="bo-dialog__body" id="adlg-body">
+    <div class="bo-dialog__body" id="${id('adlg-body')}">
       <p>Approve ${p.id} for <span class="bo-u-tabular">${money(p.amount)}</span>?</p>
       <div class="bo-form-field">
-        <span class="bo-form-field__label" id="adlg-note-label">Approval note</span>
+        <span class="bo-form-field__label" id="${id('adlg-note-label')}">Approval note</span>
         <div class="bo-richtext">
           <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
             <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
@@ -855,14 +871,14 @@ ${p.status === 'Pending' ? `
             <span class="bo-richtext__divider"></span>
             <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
           </div>
-          <div class="bo-richtext__content bo-prose" contenteditable="true" id="adlg-note"
-               role="textbox" aria-multiline="true" aria-labelledby="adlg-note-label"></div>
+          <div class="bo-richtext__content bo-prose" contenteditable="true" id="${id('adlg-note')}"
+               role="textbox" aria-multiline="true" aria-labelledby="${id('adlg-note-label')}"></div>
         </div>
       </div>
       <div class="bo-form-field">
-        <span class="bo-form-field__label" id="adlg-notify-label">Notify additional approvers</span>
-        <div class="bo-tag-input" id="adlg-notify" role="group" aria-labelledby="adlg-notify-label">
-          <input class="bo-tag-input__field" id="adlg-notify-field" type="text"
+        <span class="bo-form-field__label" id="${id('adlg-notify-label')}">Notify additional approvers</span>
+        <div class="bo-tag-input" id="${id('adlg-notify')}" role="group" aria-labelledby="${id('adlg-notify-label')}">
+          <input class="bo-tag-input__field" id="${id('adlg-notify-field')}" type="text"
               placeholder="Type a name, press Enter">
         </div>
       </div>
@@ -870,11 +886,11 @@ ${p.status === 'Pending' ? `
     <footer class="bo-dialog__footer">
       <button class="bo-btn bo-btn--secondary" value="cancel">Cancel</button>
       <button class="bo-btn bo-btn--danger-ghost" type="button"
-        hx-post="/pos/${p.id}/reject" hx-target="#adlg-body" hx-swap="innerHTML"
-        hx-vals='js:{note: document.getElementById("adlg-note").innerHTML}'>Reject</button>
+        hx-post="/pos/${p.id}/reject" hx-target="#${id('adlg-body')}" hx-swap="innerHTML"
+        hx-vals='js:{note: document.getElementById("${id('adlg-note')}").innerHTML}'>Reject</button>
       <button class="bo-btn" value="confirm"
         hx-post="/pos/${p.id}/approve" hx-target="#timeline-${p.id}" hx-swap="outerHTML"
-        hx-vals='js:{note: document.getElementById("adlg-note").innerHTML}'>Approve</button>
+        hx-vals='js:{note: document.getElementById("${id('adlg-note')}").innerHTML}'>Approve</button>
     </footer>
   </form>
 </dialog>
@@ -892,8 +908,8 @@ ${p.status === 'Pending' ? `
     if (btn.hasAttribute('aria-pressed'))
       btn.setAttribute('aria-pressed', String(document.queryCommandState(btn.dataset.richtextCmd)));
   });
-  const notify = document.getElementById('adlg-notify');
-  const field = document.getElementById('adlg-notify-field');
+  const notify = document.getElementById('${id('adlg-notify')}');
+  const field = document.getElementById('${id('adlg-notify-field')}');
   notify.addEventListener('bo:tag-add', (e) => {
     const tag = document.createElement('span');
     tag.className = 'bo-tag-input__tag';
@@ -906,7 +922,8 @@ ${p.status === 'Pending' ? `
     tag.append(rm);
     notify.insertBefore(tag, field);
   });
-</script>` : ''}`;
+</script>`;
+}
 
 // Dogfood probe (2026-08-15): the canonical grouped-with-subtotals ERP view,
 // built with ONLY documented markup — to find out whether ROADMAP Slice 9
@@ -1071,6 +1088,76 @@ const notificationScreen = () => `
     : '<p class="bo-u-text-muted">No notifications.</p>'}
 </div>`;
 
+// /inbox (roadmap 116.2 spike, dogfooding 116.1 for real). po-app's real
+// data has only ONE row type worth a worklist — Pending PO approvals; no
+// exceptions/tasks/jobs are modeled — so, honestly, there is no cross-type
+// filter to build: a segmented control with one real option is chrome, not
+// a feature, so it is left out rather than faked. The "why it's yours"
+// column still earns its place even with one type.
+//
+// Escalation threshold reuses the ERP round-table review's own guardrail
+// (116's ROADMAP entry): high-value routes to full review. Real data:
+// PO-88210 ($4,208) is the only Pending PO under $10,000 today, so it is
+// the one row that expands in place; PO-88213 ($12,400) and PO-88214
+// ($56,000) both link out — a real escalated/routine split, not staged.
+//
+// Two more honest gaps found dogfooding, not built around: po-app's PO
+// records carry no submitted-date, so there is no real "Waiting" column
+// (the docs demo's is illustrative; a fabricated one here would be a lie
+// the framework's own doctrine refuses) — and no seeded attachment data
+// per PO, so the preview has no attachment line either. Both are gaps in
+// po-app's OWN data model, not in the inbox pattern or in 116.1.
+const INBOX_ESCALATE_OVER = 10000;
+const inboxScreen = () => {
+  const pending = pos.filter((p) => p.status === 'Pending');
+  const rows = pending.map((p) => {
+    const escalated = p.amount > INBOX_ESCALATE_OVER;
+    return `
+    <tr>
+      <td><span class="bo-badge bo-badge--type">PO</span> ${p.id} · ${esc(p.vendor)} · ${moneyHtml(p.amount)}</td>
+      <td>Awaiting <strong>your approval</strong></td>
+      <td>${escalated
+        ? `<a class="bo-btn bo-btn--sm bo-btn--secondary" href="/pos/${p.id}">Review</a>`
+        : `<button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" aria-expanded="true" aria-controls="inb-detail-${p.id}">Preview</button>`}</td>
+    </tr>
+    ${!escalated ? `
+    <tr id="inb-detail-${p.id}">
+      <td colspan="3">
+        <div class="bo-widget">
+          <div class="bo-widget__body">
+            <dl class="bo-kv bo-kv--rows">
+              <div><dt>Vendor</dt><dd>${esc(p.vendor)}</dd></div>
+              <div><dt>Cost centre</dt><dd>${esc(p.cc)}</dd></div>
+              <div><dt>Amount</dt><dd>${moneyHtml(p.amount)}</dd></div>
+            </dl>
+            ${approveDialogHtml(p)}
+          </div>
+        </div>
+      </td>
+    </tr>` : ''}`;
+  }).join('');
+  return `
+<h1>Inbox</h1>
+<p class="bo-byline bo-byline--compact">${pending.length} item${pending.length === 1 ? '' : 's'} need your approval</p>
+${pending.length === 0 ? `
+<div class="bo-widget"><div class="bo-widget__body">
+  <p><strong>Inbox zero</strong> — nothing is waiting on you.</p>
+</div></div>` : `
+<div class="bo-data-table-container" tabindex="0">
+  <table class="bo-data-table">
+    <caption class="bo-visually-hidden">Purchase orders needing your approval</caption>
+    <thead><tr>
+      <th scope="col">Item</th>
+      <th scope="col">Why it's yours</th>
+      <th scope="col"><span class="bo-visually-hidden">Action</span></th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+</div>
+<p class="bo-u-text-muted">Under ${money(INBOX_ESCALATE_OVER)} decides in place, right here; at or above it
+links out to the full record — the framework's inbox pattern's own escalation rule.</p>`}`;
+};
+
 // Rebuilt against the real role-home pattern shape (explore/role-home-po-app,
 // 2026-08-22) — the original above predates role-home (110.1) and used the
 // same primitives (.bo-widget-grid/.bo-stat) but not its actual anatomy
@@ -1080,10 +1167,8 @@ const notificationScreen = () => `
 // so a stat that would need one (the demo page's "+2 since yesterday") is
 // simply not shown, rather than faked. Two real adaptations the honest
 // rebuild forced, kept rather than papered over:
-//  1. "Needs you" links to /pos?status=Pending, not an /inbox route — the
-//     role-home demo's "Open inbox" button assumes a standalone inbox
-//     pattern exists; po-app has no such screen, and building one is out
-//     of this spike's scope. The filtered list is the real equivalent.
+//  1. DONE 2026-08-22 (116.2): "Needs you" now links to the real /inbox
+//     route built above — this gap is closed.
 //  2. "Recent" is relabelled "Recently added" — po-app tracks no per-user
 //     view history (no session), but DOES know insertion order (imports
 //     and /pos/new both unshift). Recently-added is real; recently-viewed
@@ -1103,7 +1188,7 @@ const dashScreen = () => {
   <section class="bo-widget bo-widget--span-2">
     <div class="bo-widget__header">
       <span class="bo-widget__title">Needs you</span>
-      <a class="bo-btn bo-btn--sm bo-btn--secondary" href="/pos?status=Pending">View queue</a>
+      <a class="bo-btn bo-btn--sm bo-btn--secondary" href="/inbox">View queue</a>
     </div>
     <div class="bo-widget__body">
       <span class="bo-stat">
@@ -1304,6 +1389,11 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
     if (path === '/notifications' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Notifications', '/notifications', notificationScreen(), density));
+    }
+
+    if (path === '/inbox' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Inbox', '/inbox', inboxScreen(), density));
     }
     if (path === '/notifications/count' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });

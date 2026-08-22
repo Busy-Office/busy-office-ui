@@ -236,11 +236,73 @@ try {
     JSON.stringify({ status: decidedEdit.status }),
   );
 
+  // roadmap 116.2 spike: /inbox's under-threshold row expands in place with
+  // approval's OWN dialog wired to its OWN endpoint — not a second copy —
+  // while an over-threshold row stays a plain link-out with no preview.
+  //
+  // Fresh records, not the seeded PO-8821x fixtures: an earlier check above
+  // edits PO-88213's amount to $77.25 and another bulk-approves PO-88214,
+  // so by this point in the suite neither is at its seeded value — asserting
+  // against them here would test THIS FILE's own side effects, not the
+  // feature (found on the first run: a false "escalation broken" red that
+  // was actually a stale fixture assumption, not a real bug).
+  const mkPo = (vendor, amount) =>
+    fetch(`${base}/pos/new`, {
+      method: 'POST',
+      redirect: 'manual',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams([['vendor', vendor], ['cc', 'CC-2205'], ['amount', String(amount)]]).toString(),
+    }).then((r) => (r.headers.get('location') || '').replace('/pos/', ''));
+  const routineId = await mkPo('Gate Inbox Routine', 500);
+  const escalatedId = await mkPo('Gate Inbox Escalated', 25000);
+
+  const inboxBody = await fetch(`${base}/inbox`).then(text);
+  check(
+    'inbox expands an under-threshold Pending PO in place, dialog targeting its own endpoint',
+    inboxBody.includes(`id="inb-detail-${routineId}"`) &&
+      inboxBody.includes(`id="approve-dlg-${routineId}"`) &&
+      inboxBody.includes(`hx-post="/pos/${routineId}/approve"`) &&
+      inboxBody.includes(`hx-post="/pos/${routineId}/reject"`),
+    JSON.stringify({ hasDetail: inboxBody.includes(`id="inb-detail-${routineId}"`), routineId }),
+  );
+  check(
+    'inbox links an escalated (over-threshold) Pending PO out instead, no inline preview',
+    inboxBody.includes(`href="/pos/${escalatedId}"`) &&
+      !inboxBody.includes(`id="inb-detail-${escalatedId}"`),
+    JSON.stringify({
+      hasLink: inboxBody.includes(`href="/pos/${escalatedId}"`),
+      hasDetail: inboxBody.includes(`id="inb-detail-${escalatedId}"`),
+      escalatedId,
+    }),
+  );
+
+  // The reused endpoint actually resolves the row, not just renders a dialog
+  // that looks wired — approving through it (the exact params its own
+  // hx-vals sends) is real, previously-untested coverage of POST
+  // /pos/:id/approve, plus the inbox contract's own "row disappears on the
+  // next fetch" promise.
+  const inboxApprove = await post(`/pos/${routineId}/approve`, [['note', 'Gate: approved from inbox preview']]);
+  const inboxAfter = await fetch(`${base}/inbox`).then(text);
+  // Scoped to the row markup itself, not the whole page: approving fires
+  // notify() (roadmap 116's own earlier notification dogfood), so the
+  // navbar bell's recent-activity list — rendered in the shared shell on
+  // every page, including /inbox — now legitimately mentions this PO too.
+  // A bare page-wide substring check would read that cross-feature mention
+  // as "still listed" — a false red, caught by checking curl output by hand
+  // before trusting the assertion.
+  check(
+    'approving from the inbox preview resolves the row and it leaves the list on the next fetch',
+    inboxApprove.status === 200 && !inboxAfter.includes(`id="inb-detail-${routineId}"`),
+    JSON.stringify({ status: inboxApprove.status, stillListed: inboxAfter.includes(`id="inb-detail-${routineId}"`) }),
+  );
+
   /* ---- accessibility over the app's own routes ---- */
   const browser = await launchDocsBrowser();
   const page = await browser.newPage();
   await page.evaluateOnNewDocument(AXE);
-  const ROUTES = ['/', '/pos', '/pos/new', '/import', '/spend', '/receive', '/pos/PO-88210'];
+  // escalatedId is deliberately left Pending (never approved above), so the
+  // axe sweep keeps scanning a real Pending detail page.
+  const ROUTES = ['/', '/pos', '/pos/new', '/import', '/spend', '/receive', `/pos/${escalatedId}`, '/inbox'];
   const violations = [];
   for (const route of ROUTES) {
     for (const width of WIDTHS) {
