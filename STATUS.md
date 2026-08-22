@@ -2,13 +2,12 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 21:50
+Generated at: 2026-08-22 22:23
 
 ## Open items by slice
 
-- **Slice 30** (2 open)
+- **Slice 30** (1 open)
   - 30.0 — AWAITING OWNER CLARIFICATION (2 wishlist notes, 2026-08-18).
-  - 30.4b — Windowed list: server chunks, client releases (W4).
 - **Slice 52** (1 open)
   - 52.3 — The name. OWNER CALL, with the trade-off measured.
 - **Slice 99** (1 open)
@@ -40,7 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 - 52.3 — The name. OWNER CALL, with the trade-off measured.
 - 30.0 — AWAITING OWNER CLARIFICATION (2 wishlist notes, 2026-08-18).
-- 30.4b — Windowed list: server chunks, client releases (W4).
 
 ## Last 10 iterations
 

@@ -3501,7 +3501,27 @@ promised was never written.
        first in the build chain, since a broken import invalidates everything
        downstream. **Cost: ~1 second, 73 imports checked, 0 selectors, 0 CSS.**
 
-5. [ ] **30.4b — Windowed list: server chunks, client releases (W4).**
+5. [x] **30.4b — DONE 2026-08-22.** `initWindowedList()` shipped
+       (behavior + `/concepts/scale` rewrite, commit a1239e0) and
+       dogfooded as po-app's `/movements` (50,000 deterministic rows,
+       commit b5a3081). The Accept's red-proof — scroll deep, scroll
+       back, no scroll jump, no lost selection — is permanent gate
+       coverage in `check-po-app` (18/18) and **caught four real bugs
+       before it ever passed**: per-transition eviction exempted
+       early-exiting chunks forever (now a visible-set sweep); the rem
+       density token read as px left spacers 16x short; IO root:null is
+       clipped by an inner scroll container so re-requests only fired
+       on literal visibility (root = nearest scrolling ancestor now);
+       and the first scrollParent matched the horizontally-scrolling
+       table container (root test now requires vertical clipping).
+       Q4 of the grill amended on the record: spacer height is measured
+       from ONE real row at bind (32.5px real vs the 30px token —
+       border-box extras made token math jump-guaranteed), keeping the
+       decision's intent (zero layout reads during the eviction path).
+       Final numbers: spacer 3250 == 100 x 32.5, anchorShift 0,
+       scrollShift 0, aria-rowcount 50001, mid-chunk aria-rowindex ==
+       offset + 2. **Accept met.** Original item below.
+
        **[OWNER ANSWERED]** Users search and act rather than read 50,000 rows,
        and the ask is that the server serves chunks while the client releases
        memory for what is not visible, via HTMX, with this framework supplying
