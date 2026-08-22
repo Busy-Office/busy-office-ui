@@ -1769,15 +1769,33 @@ then documented — and refusing is an expected outcome.
        unchanged. All gates green (core build, docs build incl. all chained
        gates, stylelint, `check:claims`) on the exact build measured.
 
-3. [ ] **102.3 — `/design-grill` on `/patterns/editable-grid`.** The screen
-       the owner has now flagged twice (see 97.2, the validation-UX ask that
-       came with a screenshot of this page). Grill it as the hardest data
-       screen the framework ships: in-cell validation and whether the message
-       shifts rows while typing (measure it), keyboard traversal across a
-       row, what a partial save does, and how it degrades without JS.
-       **Accept:** same shape as 102.2 — scored, cited, verdict per weakness,
-       fixes queued individually. Where it overlaps 97.2, this grill supplies
-       the measurement and 97.2 keeps the cross-surface verdict.
+3. [x] **102.3 — DONE 2026-08-22.** `/design-grill` on `/patterns/editable-
+       grid`, comprehensive. Report: `.roundtable/grill-editable-grid-
+       2026-08-22.md`. All applicable DSA dimensions score 3; `content` was
+       2 (page sat on `check:wrong-choice`'s `PATTERN_TODO`) — fixed this
+       grill with a wrong-choice clause and removed from `PATTERN_TODO`
+       (ratchet 14 → 13). In-cell validation shift: measured live and found
+       the framework never sets `aria-invalid` client-side (server/app-
+       rendered, by design per the Data contract), so 97.2's already-
+       measured message shift remains the real case; found a DIFFERENT,
+       previously unmeasured shift instead — going dirty widens the row-
+       actions cell, which can compress a neighboring tight column enough to
+       wrap it and grow the whole row (+26px), reproduced only on the
+       Advanced demo's specific column mix, not on Medium/WYSIWYG/Composite.
+       Queued as **102.9** rather than patched blindly. Keyboard traversal
+       (Item→Qty→Price→Save→Cancel→Remove, no `data-grid-nav`) and partial
+       save (per-row independent, verified against `row-edit.ts` source)
+       both confirmed to already match the page's own claims — no gap.
+       No-JS degradation was genuinely undocumented (verified live with JS
+       disabled: fields stay editable, Save never appears since
+       `initRowEdit()` never runs) — added a States-table row stating it.
+       Also fixed, found while checking Related links: 4 pages
+       (`editable-grid`, `record-detail`, `filter-panel`,
+       `reporting-dashboard`) still labelled the Slice-109-renamed
+       `list-report` pattern "Invoice list" — relabelled all four to "List
+       report". Verified live: 1440/390px, wrong-choice/page-shape/dsa-
+       scores gates green, `check:claims` (86 behaviours) green, stylelint
+       green, all 111 vitest behavior tests green.
 
 3a. [ ] **102.7 — check the Data input / Forms family.** Owner ask,
        2026-08-21. **The interesting part is that the rubric already cleared
@@ -1819,6 +1837,34 @@ then documented — and refusing is an expected outcome.
        landed section's own content clearing the sticky chrome (not just
        `aria-current` moving), since that coverage hole is what let this
        occurrence go unnoticed. Verified live, both themes, both widths.
+
+3c. [ ] **102.9 — editable-grid: going dirty can reflow a neighboring
+       column.** From the 102.3 grill
+       (`.roundtable/grill-editable-grid-2026-08-22.md`): revealing a row's
+       Save/Cancel/Unsaved (the row-actions cell, normally `hidden`) widens
+       that cell from 32px to 227px; in a table with enough columns that
+       this eats into a neighboring column's slack, the reallocation can
+       wrap that column's content onto a second line and grow the whole
+       row. Measured live on this page's own Advanced demo: `Cost centers`
+       (tag-input) compresses from 252px to 211px, wraps its "Add..."
+       field, row grows from 54px to 80px (+26px). Confirmed demo-specific,
+       not a `.bo-data-table`/`.bo-data-table__row-edit-actions` contract
+       bug: the Medium, WYSIWYG, and Composite demos on the same page show
+       zero height change on the same interaction -- only the Advanced
+       demo's particular column mix has no slack left. Not patched here
+       deliberately: reserving the actions cell's expanded width
+       unconditionally would cost every clean row, on every table using
+       this behavior, permanent extra width to fix one narrow demo's
+       layout -- the wrong trade without checking what it costs elsewhere
+       first. **Accept:** a decision recorded on which of (a) reserve
+       min-inline-size on `.bo-data-table__row-edit-actions` so revealing
+       never changes the cell's layout footprint, measuring the cost on at
+       least 3 existing tables using `data-row-edit`, or (b) treat this as
+       demo-authoring debt and just widen/adjust the Advanced demo's own
+       columns so it doesn't reproduce -- is correct; whichever is chosen,
+       verified live (1440 + 390, both themes) that the fix doesn't
+       reintroduce the wrap somewhere else, and if a runtime claim is added
+       to the page it gets a `check-claims.mjs` case per CLAUDE.md.
 
 4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"

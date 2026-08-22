@@ -102,8 +102,11 @@ const markup = `<table class="bo-data-table" data-row-edit>
     separate fields inside a row. <strong>Advanced</strong>: every cell
     type, realtime totals, and the save-per-change mode. <strong>The full
     picture</strong>: a composite PO line-items editor putting all of it
-    in one table. Zero new CSS at every
-    step — the grid is the same primitives, composed harder.
+    in one table. <strong>Not for</strong> a table that's read far more
+    often than edited — a plain
+    <a href={base + '/components/data-table'}>data table</a> costs nothing
+    and doesn't ship Save/Cancel machinery nobody triggers. Zero new CSS at
+    every step — the grid is the same primitives, composed harder.
   </p>
 
   <section class="demo">
@@ -799,6 +802,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
           <tr><td>Cell error</td><td><code>aria-invalid</code> + the message inside that cell&rsquo;s form field, with the row tinted</td></tr>
           <tr><td>Conflict</td><td>409 → re-render that row with the server values and say who changed it; never merge silently</td></tr>
           <tr><td>Read-only line</td><td>render the value as text — an invoiced line that looks editable is a support call</td></tr>
+          <tr><td>No JS</td><td>every field is a real, focusable, typable input — but <code>initRowEdit()</code> is what reveals Save/Cancel, so a row can be edited yet never submitted; a genuinely no-JS row needs a native <code>&lt;form&gt;</code> per row with its own submit button instead of this behavior</td></tr>
         </tbody>
       </table>
     </div>
@@ -823,6 +827,6 @@ const markup = `<table class="bo-data-table" data-row-edit>
     ["/components/quantity", "Quantity"],
     ["/components/form", "Forms"],
     ["/patterns/validation-summary", "Validation summary"],
-    ["/patterns/list-report", "Invoice list"],
+    ["/patterns/list-report", "List report"],
   ]} />
 </Gallery>

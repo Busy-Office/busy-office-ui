@@ -52,7 +52,7 @@ const TODO = new Set([
 
 /** Pattern-page debt, same rule as TODO above: delete a line when it lands. */
 const PATTERN_TODO = new Set([
-  'app-launch', 'approval', 'bulk-actions', 'editable-grid', 'field-editor',
+  'app-launch', 'approval', 'bulk-actions', 'field-editor',
   'filter-panel', 'goods-receipt', 'list-report', 'login',
   'reporting-dashboard', 'settings-admin', 'staging',
   'value-help', 'wizard',
