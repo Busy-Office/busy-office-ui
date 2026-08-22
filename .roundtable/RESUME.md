@@ -13,35 +13,36 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-23. `git status` clean, 214 commits ahead of
-origin/main (unpushed, unrelated to the 0.3.0 release question below).
-**This file had gone stale again** — it still read "last updated
-2026-08-22 after 109.6," 214 commits and Slices 110-122 behind reality,
-and its 109.13-109.18 note ("queued, not fixed yet") was flatly wrong:
-all of Slice 109 including 109.13-109.19 shows `[x]` DONE (109.19 landed
-2026-08-22 in commit `69a5336`). A read-only survey this wake (grepping
-every unchecked `[ ]` across the whole 6398-line ROADMAP.md, not
-sampling) found this by cross-checking the claim against the file
-instead of trusting it — exactly the failure mode this file's own
-2026-08-19 warning names. **Lesson repeats: don't trust an "In flight"
-entry's age at face value — re-verify its specific claims against
-ROADMAP.md before acting on them, every time, not just when something
-feels off.**
+Last updated 2026-08-23 00:33. `git status` clean, HEAD `beba4bb`.
+**Backlog is now genuinely dry of buildable-now work.** This wake:
+triaged 122.1 (masking-input wishlist, BLOCKED ON GRILL — real UX
+tradeoffs need the owner's answers, not a self-decided grill),
+dispatched Standardize (overdue: 9/4 Continue rounds) and consolidated
+the RF device-frame iframe style (goods-receipt/rf-list/rf-landing, 3x
+duplicated inline style -> `rf-device-frame.css`), then closed **119.2**
+(the previous survey's one buildable-now item — `/concepts/layouts`),
+fixing a real copy-paste bug (a duplicated "per the ... per the" clause)
+found reviewing it before closing.
 
-**Current reality (2026-08-23 survey), replacing the stale note above:**
-Slices 110-121 all landed and are `[x]` DONE except the items below, which
-are genuinely still open. There is exactly **one buildable-now item** with
-real Accept criteria and no blocker: **119.2 — ERP layout overview,
-concepts page** (docs-only, zero new CSS: map the shells that already
-ship — app-shell sidebar+navbar / RF full-screen / role-home / split
-master-detail — to when each fits). Everything else open is BLOCKED ON
-GRILL or an explicit owner call (121.1/121.2/121.3, 121.5, 119.3, 122.1 —
-the last is this wake's own triage of the "Amount decimal/masking"
-wishlist item, see ROADMAP.md Slice 122). Also open, older and easy to
-lose track of because they don't read as "blocked": 30.0 (owner
-clarification on the overview/sidebar-menu note) and 52.3 (Object Page
-naming, owner taste call) — both under "Open questions" below, unchanged
-since last checked.
+**Every remaining open item is BLOCKED ON GRILL or an explicit owner
+call**: 121.1/121.2/121.3 (new pattern shapes), 121.5 (orphan
+cross-links + naming collisions, owner call), 119.3 (app-frame, owner
+grill), 122.1 (masking input, owner grill), plus the older 30.0
+(overview/sidebar-menu clarification) and 52.3 (Object Page naming) —
+both under "Open questions" below. Per LOOPS.md dispatcher rule 6
+("Backlog empty? -> dispatch Explore"), the next wake's honest move is
+an Explore spike (dogfood-loop fallback per the Ideas backlog note —
+the seed list is exhausted, so pull from `examples/po-app` friction,
+not a manufactured idea) — or surfacing the blocked list to the owner
+so a grill round can actually unblock 121.1-121.3/119.3/122.1, which is
+where most of the real remaining value sits.
+
+**Standing lesson, still true, kept for the next wake that inherits a
+stale note:** don't trust an "In flight" entry's age at face value —
+re-verify its specific claims against ROADMAP.md before acting on them.
+This file went stale from 2026-08-22 (referencing 109.6) all the way to
+2026-08-23 before being caught; the fix each time is a full grep of
+every unchecked `[ ]` in ROADMAP.md, not a sample.
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 
