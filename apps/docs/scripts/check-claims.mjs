@@ -1803,6 +1803,41 @@ check(
   JSON.stringify(palette),
 );
 
+/* /patterns/inbox: "arrow keys move between filters for free" (roadmap
+   109.17 — this page had zero check-claims coverage). Native radio-group
+   behavior, not framework JS, but a documented claim is a documented claim
+   regardless of who implements it. Real key event, not a synthetic one. */
+await visit('/patterns/inbox/', { width: 1440 });
+await page.focus('#inb-all');
+await page.keyboard.press('ArrowRight');
+const inboxArrow = await page.evaluate(() => ({
+  activeId: document.activeElement?.id,
+  appraisedChecked: document.getElementById('inb-appr')?.checked,
+}));
+check(
+  'inbox: ArrowRight on the filter group moves focus AND selection to the next radio',
+  inboxArrow.activeId === 'inb-appr' && inboxArrow.appraisedChecked === true,
+  JSON.stringify(inboxArrow),
+);
+
+/* /patterns/kanban: the Move menu opens via native popovertarget and
+   auto-closes on item selection via initDropdowns()'s delegated click
+   listener (roadmap 109.17 — zero prior coverage). Verified against
+   dropdown.ts directly before writing this: the close-on-select handler
+   matches ANY `.bo-dropdown__item` click inside a `.bo-dropdown__menu[popover]`,
+   independent of whether that item has its own business-logic handler —
+   so this is real even though "Move to…" itself is a no-op in the demo. */
+await visit('/patterns/kanban/', { width: 1440 });
+await page.click('[popovertarget="kb-menu-1"]');
+const kanbanOpen = await page.evaluate(() => document.getElementById('kb-menu-1')?.matches(':popover-open'));
+await page.click('#kb-menu-1 .bo-dropdown__item');
+const kanbanClosed = await page.evaluate(() => !document.getElementById('kb-menu-1')?.matches(':popover-open'));
+check(
+  'kanban: the Move menu opens on trigger click and auto-closes on item selection',
+  kanbanOpen === true && kanbanClosed === true,
+  JSON.stringify({ kanbanOpen, kanbanClosed }),
+);
+
 await browser.close();
 server.close();
 

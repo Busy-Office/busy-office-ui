@@ -733,15 +733,38 @@ catalogue in ERP vocabulary and job order.
        pattern (per-widget/per-card retry, per-section alert), never
        invented from nothing. Full suite green (13 docs gates,
        `check:claims` 88/88). **Accept met.**
-14. [ ] **109.17 — check-claims.mjs has ZERO cases for `inbox`,
-       `job-monitor`, `kanban`.** The most serious of the five findings:
-       these three pages carry runtime-behavior prose (polling, arrow-key
-       nav, move-menu, retry/cancel) unchecked by the executable-claims
-       doctrine CLAUDE.md requires — exactly the gap the wizard/schedule
-       fixes exist to prevent, just not yet wired here. **Accept:** each
-       page's load-bearing runtime claims get a `check-claims.mjs` case,
-       driving real key/mouse events per the doctrine's own warning about
-       synthetic events matching no delegated handler.
+14. [x] **109.17 — DONE 2026-08-22. Found a genuinely shipped, silent bug
+       while adding the cases.** `inbox` (arrow-key radio nav) and
+       `kanban` (Move menu open + auto-close-on-select) both got real
+       `check-claims.mjs` cases — real key/click events, not synthetic.
+       `job-monitor` genuinely has nothing live to check: its Retry/Cancel
+       are inert `type="button"`s with no handler, and the documented
+       `hx-trigger="every 30s"` polling is prose only, never actually
+       applied to the demo markup — confirmed by reading the page, not
+       assumed; no case forced where none applies.
+
+       **The kanban case failed on first run** — the menu opened but
+       never auto-closed. Diagnosed live rather than assumed: a
+       `page.on('pageerror')` listener caught `Failed to resolve module
+       specifier "@busy-office/ui/js"`, meaning `initDropdowns()` had
+       never actually executed on this page. Root cause, found by
+       comparing against every other pattern page: kanban's live wiring
+       script used `<script type="module">` — every other page's real
+       (non-sample) script is a BARE `<script>` tag, which Astro bundles
+       and resolves bare specifiers for; an explicit `type="module"` opts
+       out of that processing and ships the raw unresolvable specifier
+       verbatim. Fixed (`type="module"` → bare `<script>`); the fix
+       verified live, not just by removing the attribute and hoping —
+       `check:claims` went from failing to passing on that exact case.
+       **This means `initDropdowns()` had never run on kanban's live
+       page since it shipped** — the Move menu's positioning and
+       auto-close-on-select were silently broken in production this
+       whole time, caught only because 109.17 asked for a live case.
+       Two false leads chased and ruled out before finding the real
+       cause (a code-sample script-tag duplication theory, and a
+       raw-vs-escaped-entity grep mismatch) — both documented as the
+       kind of instrument-not-evidence check this doctrine asks for.
+       90/90 claims pass. **Accept met, plus a real production fix.**
 15. [ ] **109.18 — small mechanical fixes, one page each.** `kanban`'s
        horizontally-scrolling lane cluster lacks `tabindex="0"` on its own
        scroll container (distinct from the Move-menu popover, which is
