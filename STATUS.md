@@ -28,8 +28,8 @@ Generated at: 2026-08-22 16:56
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (682 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-22 15:53   ok
+dispatch status — counter-triggered rules (683 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-22 15:53   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -47,7 +47,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 16:21 · Meta · refusal · A standalone /inbox route for po-app - out of scope for this spike, the filtered list is the honest current equivalent · refused · 293585a
 - 2026-08-22 16:21 · Meta · refusal · A historical-snapshot mechanism for real deltas - the stat ships without one rather than fake a baseline that doesn't exist · refused · 293585a
 - 2026-08-22 16:40 · Roadmap · triage · 115: owner's 31-section Motion System proposal audited against the repo then triaged - a third already exists more battle-tested (3+1 motion tokens, 8-class opt-in module, check:motion gate, /base/motion); accepted 3 cheap items (intent vocabulary, documenting the deliberate state-attribute split + Save sequence, extending check:motion to transitions while the backlog is zero); the audit found the proposal's unified lifecycle data-state would collide with shipped conventions and that check:motion's transition blind spot is real but currently clean · triaged · 4f9d839
 - 2026-08-22 16:40 · Meta · refusal · Unified data-state=idle|loading|success|error lifecycle vocabulary - collides with the deliberate shipped split (data-state=open/closed, data-loading=busy, per-domain names) and button's measured no-spinner decision · refused · 4f9d839
@@ -57,6 +56,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 16:40 · Meta · refusal · Token expansion to 5 durations/4 easings/distance/scale - less-for-more; the 3+1 set serves all 43 components; re-open per-token on real need · refused · 4f9d839
 - 2026-08-22 16:40 · Meta · refusal · docs/motion gallery IA + repo restructure + literal @layer bo.motion - conflicts with real layer/file conventions; ideas adopted, literal structure refused · refused · 4f9d839
 - 2026-08-22 16:40 · Meta · refusal · Core components importing the opt-in motion module - collapsible-cards duplication precedent stands · refused · 4f9d839
+- 2026-08-22 16:56 · Continue · build · 115.1 - motion-intent vocabulary on /base/motion; all 8 categories named and mapped to where they actually live in the framework, 8 shipped classes tagged in the quick-reference table (verified against built output, zero fallback dashes), wrong-choice clause added and structurally verified; full suite green incl. check:claims 92/92 · landed · a715039
 
 ## Sunset test
 
