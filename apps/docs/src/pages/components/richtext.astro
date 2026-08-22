@@ -215,6 +215,50 @@ const view = new EditorView(host, {
   </section>
 
   <section class="demo">
+    <h2>Four things this framework will never wire — bring your own engine</h2>
+    <p>The reference screenshot behind this page's own wishlist (roadmap
+    113) showed four more toolbar buttons than <code>execCommand</code>
+    can honestly support. Each is refused as new framework surface for
+    the same reason the engine itself is refused (101.7's PDF/barcode
+    precedent) — it is infrastructure or a distinct component, not a CSS
+    framework's job — but a reader reaching for one deserves to be routed
+    to the rung-4 recipe above, not left thinking rung 3 has a gap:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Image upload</strong> — needs a server endpoint to
+      receive the file and a URL to reference it; <code>execCommand
+      ('insertImage', false, url)</code> only inserts an already-hosted
+      URL. Your upload flow (drag-drop, progress, the endpoint) is
+      application code either way; a mounted rung-4 engine's image
+      plugin still calls back into it.</li>
+      <li><strong>Table insertion</strong> — needs real table-building
+      logic (insert/delete row and column, merge, keyboard navigation
+      between cells) that no browser command provides. This is exactly
+      the "half-engine" this page's own reasoning refuses to ship —
+      ProseMirror/TipTap ship a table plugin built for this.</li>
+      <li><strong>Checklist</strong> — reads like a list-style variant
+      but needs custom list-item STATE (checked/unchecked) that
+      <code>insertUnorderedList</code>/<code>insertOrderedList</code>
+      have no concept of. A rung-4 engine's schema can define a
+      checklist node; native <code>execCommand</code> cannot.</li>
+      <li><strong>Color / highlight pickers</strong> — <code>execCommand
+      ('foreColor'/'hiliteColor', false, color)</code> genuinely exists
+      (verified live — it produces a deprecated <code>&lt;font
+      color&gt;</code> tag, one more sanitizer-allowlist variant, same
+      class as Bold's <code>&lt;b&gt;</code> and strikethrough's
+      <code>&lt;strike&gt;</code> above), but the PICKER UI (swatches, a
+      custom-color input, contrast guardrails against this framework's
+      own token set) is a component of its own the framework does not
+      ship — the command working is not the same as the toolbar control
+      existing.</li>
+    </ol>
+    <p class="bo-u-text-muted">None of the four are demonstrated by a
+    real ERP screen in this repo either (102.1's grill finding still
+    holds: even <code>.bo-prose</code>'s rung has never been exercised
+    against a pattern page) — the 99.4 front door applies if one ever
+    is.</p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{canonical}</code></pre>
   </section>

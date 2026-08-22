@@ -249,13 +249,22 @@ cleanly across that boundary:
        needed adding to `check-data-hooks.mjs`'s documented-hooks list
        (the gate caught it correctly on first build). Full suite green
        (13 docs gates, `check:claims` 92/92 up from 90).
-2. [ ] **113.2 — write the rung-4 recipe extension for the refused four**
-       (image, table, checklist, color/highlight) — documented as "bring
-       your own engine" alongside the existing rung-4 mount recipe, never
-       built. **Accept:** one short section naming each of the four and
-       which real editor feature/library concern it maps to, so a reader
-       reaching for them is routed to rung 4 rather than filing this as a
-       gap in rung 3.
+2. [x] **113.2 — DONE 2026-08-22.** New section right after "Why no
+       engine," naming all four refused items and what they need: image
+       upload (a server endpoint + URL — `insertImage` only references
+       an already-hosted image, verified live), table insertion (real
+       cell/row/column logic no command provides), checklist (custom
+       list-item state `insertUnorderedList` has no concept of), color/
+       highlight (the `execCommand` genuinely works — verified live, and
+       produces a deprecated `<font color>` tag, one more sanitizer-
+       allowlist variant alongside Bold's `<b>` and strikethrough's
+       `<strike>` — but the picker UI is a component of its own, not
+       shipped). Two claims stated as fact were verified live before
+       shipping (`insertImage`'s URL-only behavior, `foreColor`'s real
+       support + its `<font>` output), not assumed from how
+       `execCommand` usually works elsewhere. Full suite green (13 docs
+       gates, `check:claims` 92/92, page-shape, wrong-choice). **Closes
+       Slice 113.**
 
 **REFUSED, with reasons:** image upload, table-insertion UI, checklist
 list-type, and color/highlight pickers as new framework surface — each is
