@@ -1841,7 +1841,7 @@ then documented — and refusing is an expected outcome.
        is genuinely sound and here is what the score missed anyway" is a
        valid outcome.
 
-3b. [ ] **102.8 — object-page: fix the 390px anchor-landing gap.** From the
+3b. [x] **102.8 — DONE 2026-08-22.** object-page: fix the 390px anchor-landing gap. From the
        102.2 grill (`.roundtable/grill-object-page-2026-08-22.md`): at 390px
        only, jumping to a section leaves its own `.bo-widget__title` 2.25px
        under the sticky chrome, because the collapsed sticky wrapper is
@@ -1859,6 +1859,26 @@ then documented — and refusing is an expected outcome.
        landed section's own content clearing the sticky chrome (not just
        `aria-current` moving), since that coverage hole is what let this
        occurrence go unnoticed. Verified live, both themes, both widths.
+
+       **Root cause, measured, not guessed:** the collapsed-equivalent header
+       height is genuinely different per width (87px at 1440, 105px at 390 —
+       confirmed by subtracting the collapse target's own rendered height from
+       the sticky wrapper's, which gives the same number whether the header is
+       currently open or already closed), so no single `rem` constant could
+       ever cover both. **Fix:** `anchor-nav.ts` now measures that height live
+       (`syncLandingOffset`, called from the existing `syncAll` on init/scroll/
+       resize) and writes it to `--bo-anchor-landing-offset` on
+       `document.documentElement` — same shape as `sticky-cols.ts`'s
+       `--bo-sticky-w-1`. `object-page.astro`'s `.op-section` now reads
+       `scroll-margin-block-start: calc(var(--bo-anchor-landing-offset, 7rem)
+       + var(--bo-space-2))`, with the `7rem` fallback keeping the no-JS case
+       working and `--bo-space-2` a small rounding buffer. Verified live, all
+       4 sections × both widths × both themes: gap went from `{-2.25 at 390,
+       15.75 at 1440}` (inconsistent, one broken) to a consistent `~20-23px`
+       clearance everywhere, no overshoot. The strengthened `check-claims.mjs`
+       probe (`landingGap >= 0`) was **red-proved**: reverting the fix and
+       re-running it fails exactly at 390px, confirming the assertion can
+       actually catch this defect class rather than passing by construction.
 
 3c. [ ] **102.9 — editable-grid: going dirty can reflow a neighboring
        column.** From the 102.3 grill

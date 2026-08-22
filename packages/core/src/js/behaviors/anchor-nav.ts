@@ -89,9 +89,32 @@ function syncCollapse(nav: HTMLElement): void {
   else if (top < EXPAND_UNDER) target.dataset.state = 'open';
 }
 
+/* Sized for the COLLAPSED header (a jump lands after scrolling, and scrolling
+ * is what collapses it), but the collapsed height is not a constant a
+ * stylesheet can know — 87px at 1440, 105px at 390, because the header's
+ * title + badge wrap to two lines under width pressure even collapsed
+ * (roadmap 102.8, measured live: a static `7rem` guess left a 2.25px gap
+ * at 390 only, invisible in a screenshot). Computed by SUBTRACTING the
+ * collapse target's own rendered height from the wrapper's — this gives the
+ * collapsed-equivalent number in EITHER state (open or closed) without
+ * forcing a visual collapse to measure it, confirmed live: the subtraction
+ * at load (state="open") already equals the value measured after a real
+ * scroll-driven collapse, at both widths. Exposed as a custom property so
+ * CSS reads real geometry instead of guessing it (same shape as
+ * `--bo-sticky-w-1` in sticky-cols.ts).
+ */
+function syncLandingOffset(nav: HTMLElement): void {
+  const wrapper = nav.parentElement;
+  const collapseEl = wrapper?.querySelector<HTMLElement>('[data-anchor-collapse]');
+  if (!wrapper || !collapseEl) return;
+  const collapsedHeight = wrapper.getBoundingClientRect().height - collapseEl.getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--bo-anchor-landing-offset', `${collapsedHeight}px`);
+}
+
 function syncAll(): void {
   for (const nav of document.querySelectorAll<HTMLElement>('[data-anchor-nav]')) {
     syncOne(nav);
+    syncLandingOffset(nav);
   }
 }
 

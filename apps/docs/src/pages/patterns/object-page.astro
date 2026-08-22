@@ -330,15 +330,17 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
      they clicked — caught by the existing "anchor bar follows the reader" claim
      the moment the collapse landed. */
   .op-section {
-    /* Minus --bo-space-6: the sticky chrome sits that much higher since the
-       108.1 padding-gap fix (inset-block-start: -1 * space-6 above), so the
-       jump landing must rise with it — at the old 7rem the landed section
-       sat 26px below the spy line (tolerance 12) and the anchor bar marked
-       the SECTION ABOVE the one just clicked. Caught by check:claims'
-       "anchor bar follows the reader" the moment the 108.1 fix built —
-       the same claim that caught the same class of drift when the header
-       collapse landed (48.3). */
-    scroll-margin-block-start: calc(7rem - var(--bo-space-6));
+    /* `--bo-anchor-landing-offset` is set by anchor-nav.ts to the ACTUAL
+       collapsed-header height, measured live (roadmap 102.8) — the collapsed
+       height is not a constant: 87px at 1440, 105px at 390, because the
+       header's title + badge wrap to two lines under width pressure even
+       collapsed. A fixed `calc(7rem - var(--bo-space-6))` = 88px matched
+       neither and left a 2.25px gap at 390 only (invisible in a screenshot).
+       `+ var(--bo-space-2)` is a small landing buffer against sub-pixel
+       rounding at the boundary, same purpose as anchor-nav.ts's own
+       SPY_TOLERANCE. The `7rem` fallback keeps the no-JS case working
+       (measured: fields stay reachable, just without this precision). */
+    scroll-margin-block-start: calc(var(--bo-anchor-landing-offset, 7rem) + var(--bo-space-2));
   }
 </style>
 

@@ -1507,6 +1507,16 @@ for (const w of WIDTHS) {
     });
     const hdr = document.querySelector('.op-sticky header').getBoundingClientRect();
     const nb = nav.getBoundingClientRect();
+    /* The landed SECTION's own content must clear the sticky chrome, not just
+       aria-current move (roadmap 102.8) — a static scroll-margin guess left a
+       2.25px overlap at 390 only, invisible in a screenshot, that this probe
+       could not see because it only ever checked which link the spy marked
+       current, never where the content actually came to rest. */
+    const sticky = document.querySelector('.op-sticky').getBoundingClientRect();
+    const landedTitle = document
+      .getElementById('delivery')
+      .querySelector('.bo-widget__title')
+      .getBoundingClientRect();
     return {
       start, after, maxSpill: Math.max(...spill),
       /* Measured AFTER scrolling, and it takes three facts, because
@@ -1517,11 +1527,17 @@ for (const w of WIDTHS) {
       headerStillStuck: Math.round(hdr.top) >= -1 && Math.round(hdr.top) < 200,
       barBelowHeader: Math.round(nb.top) >= Math.round(hdr.bottom) - 1,
       scrollableNavIsFocusable: nav.getAttribute('tabindex') === '0',
+      landingGap: Math.round((landedTitle.top - sticky.bottom) * 100) / 100,
     };
   });
   check(
     `object-page @${w}: the anchor bar follows the reader`,
     op.start === '#general' && op.after === '#delivery',
+    JSON.stringify(op),
+  );
+  check(
+    `object-page @${w}: the landed section's own content clears the sticky chrome`,
+    op.landingGap >= 0,
     JSON.stringify(op),
   );
   check(
