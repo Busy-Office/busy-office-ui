@@ -43,7 +43,9 @@ more than once for more than one refusal in the same item.
 """
 import argparse
 import datetime
+import os
 import subprocess
+import sys
 
 from _common import LOG, SEP, connect
 
@@ -119,6 +121,15 @@ def main():
     print(f"recorded: {ts} · {args.loop} · {args.mode} · {args.item} · {args.outcome}")
     for text in args.also_refused:
         print(f"  + refused: {text}")
+
+    # Regenerate STATUS.md (roadmap 110.5) so it can never drift from what was
+    # just recorded. Best-effort: a failure here must not fail the recording
+    # itself, which is the operation that actually matters.
+    try:
+        gen = os.path.join(os.path.dirname(__file__), "generate_status.py")
+        subprocess.run([sys.executable, gen], check=True, capture_output=True)
+    except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
+        print(f"  (warning: STATUS.md regeneration failed: {exc})", file=sys.stderr)
 
 
 if __name__ == "__main__":
