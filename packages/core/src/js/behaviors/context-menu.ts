@@ -21,7 +21,7 @@
  * ordinary sort control for sorting — this behavior does not own or invent
  * either; it only opens the menu where the user right-clicked.
  */
-import { pointAnchor, positionPopover } from '../utils/popover-position';
+import { pointAnchor, positionPopover } from '../utils/popover-position.js';
 
 let installed = false;
 

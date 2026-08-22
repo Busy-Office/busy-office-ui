@@ -21,7 +21,7 @@
  * and click-outside close without changing the value — native popover
  * behavior, no extra code. Call once.
  */
-import { positionPopover } from '../utils/popover-position';
+import { positionPopover } from '../utils/popover-position.js';
 
 let installed = false;
 // commit() dispatches a synthetic `input` for generic form-field listeners

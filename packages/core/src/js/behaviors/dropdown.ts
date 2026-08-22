@@ -28,7 +28,7 @@
  * `<span data-multiselect-count>` for the label text — the behavior never
  * rewrites a trigger's children, only that span or a plain-text trigger.
  */
-import { positionPopover } from '../utils/popover-position';
+import { positionPopover } from '../utils/popover-position.js';
 
 let installed = false;
 
