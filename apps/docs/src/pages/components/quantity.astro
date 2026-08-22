@@ -141,12 +141,16 @@ const markup = `<!-- basic: ( qty | unit ), joined — no buttons needed -->
 ---
 <Gallery title="Quantity">
   <p class="demo-note">
-    A count field, not a currency one — see <a href={base + '/components/amount'}>Amount</a> for
-    money. A real <code>type="number"</code> input, optionally joined to a unit
+    A count field, not a currency one — see <a href={base + '/components/money'}>Money</a> for
+    that. A real <code>type="number"</code> input, optionally joined to a unit
     select and optionally flanked by stepper buttons;
     <code>min</code>/<code>max</code>/<code>step</code> are native attributes, so
     validation, keyboard behavior, and any buttons' clamping all read from the
     same source of truth.
+    <strong>Not for a number that isn't a count</strong> — a percentage, an index,
+    a value with no meaningful unit or step: the joined unit field and stepper
+    buttons imply affordances that number doesn't have, and a plain
+    <code>.bo-input--numeric</code> is the honest answer.
   </p>
 
   <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em> — and when it is neither a selectable currency nor a steppable count (a rate, a fixed-currency price, a percentage), a plain <code>.bo-input--numeric</code> is the whole answer: no fourth component, just the input modifier.</p>

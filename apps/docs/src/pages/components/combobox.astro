@@ -188,7 +188,10 @@ const asyncMarkup = [
   <p class="demo-note">
     A single-select text field that filters a list as you type — for picking one value
     out of a longer list than a plain <a href={base + '/components/form'}>select</a> reads
-    well, without the overhead of asking "which of these N do I want" up front. For
+    well, without the overhead of asking "which of these N do I want" up front.
+    <strong>Not for a short fixed list</strong> — five or fewer known options is exactly
+    what a plain <a href={base + '/components/form'}>select</a> is for: no filtering to
+    write, no JS to ship, and the platform's own picker is faster to operate. For
     picking <strong>several</strong> values, use the
     <a href={base + '/components/dropdown'}>multi-select dropdown</a> instead — different job.
     <strong>Without the JS:</strong> this one does not degrade — it stops. The

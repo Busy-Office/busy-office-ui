@@ -1947,18 +1947,30 @@ then documented — and refusing is an expected outcome.
        No runtime claim added — this is a static layout fix to one demo's
        column width, nothing dynamic worth a `check-claims.mjs` case.
 
-3d. [ ] **102.10 — three Data-input pages are still missing their
-       wrong-choice clause, despite reading as "cleared."** Found while
-       starting 102.7: `combobox`, `money`, and `quantity` each still score
-       `content: 2` in `dsa-scores.json` (94.4%, not the 95-100% 102.7's own
-       wording assumed), cited as *"no wrong-choice clause in the
-       opener… on check:wrong-choice's TODO."* Same shape as 94.8, just not
-       yet done for these three. **Accept:** each of the three gains one
-       `<strong>Not …</strong>` clause naming a real context where it's the
-       wrong choice and a real alternative in this framework (94.8's six are
-       the template); `check:wrong-choice`'s TODO shrinks by 3; all three
-       re-score to `content: 3`; verified in the BUILT output, not assumed
-       from source.
+3d. [x] **102.10 — DONE 2026-08-22.** `combobox`, `money`, and `quantity` each
+       gained one sentence in the opener naming a wrong context and a real
+       alternative: combobox → a short fixed list (five or fewer options),
+       use a plain select; money → a fixed-currency value (a rate, a fee, a
+       percentage), `.bo-input--numeric` is the whole answer; quantity → a
+       number that isn't a count (a percentage, an index), same
+       `.bo-input--numeric` answer. All three added to the FIRST `demo-note`
+       paragraph specifically — `wrong-choice-rule.mjs`'s `opener()` only
+       reads the first `<p class="demo-note">`, and all three pages already
+       carried a *second* demo-note paragraph ("The rule for this family…")
+       that would have silently not counted.
+
+       Verified in the BUILT output, not source: all three clauses render
+       (`grep`'d `dist/`), `check:wrong-choice` (99 assertions, TODO 22→19),
+       `check:dsa-scores` (its own `content`-agrees-with-`check:wrong-choice`
+       cross-check, 94.12's interlock) and `check:links` all pass. Rescored
+       `content: 2→3` for all three directly in `dsa-scores.json` (hand-
+       maintained, not regenerated) and dropped their now-satisfied `improve`
+       entries, matching 94.8's shape.
+
+       Incidental fix, small enough to land inline: `quantity.astro`'s
+       opener linked `/components/amount` for "see … for money", which
+       pointed at the read-only display component instead of the actual
+       entry counterpart; corrected to link `/components/money`.
 
 3e. [ ] **102.11 — write CHANGELOG entries for the 6 commits that landed in
        `packages/core/src` after the current `## Unreleased` section was

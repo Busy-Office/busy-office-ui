@@ -43,17 +43,14 @@
           "cite": "native select + input; lossless reformat dispatches real input events so dirty-tracking composes"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/money is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "the opener says a fixed-currency value (a rate, a fee, a percentage) is wrong for this — .bo-input--numeric is the whole answer, no select needed (102.10)"
         },
         "fit": {
           "score": 3,
           "cite": "docs name every context per the field matrix, incl. where the joined control does NOT belong (in-cell)"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "quantity": {
       "scored": "2026-08-21",
@@ -75,17 +72,14 @@
           "cite": "native type=number first (arrows/typing work JS-free); boundary sync is progressive enhancement"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/quantity is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "the opener says a number that isn't a count (a percentage, an index, no meaningful unit/step) is wrong for this — .bo-input--numeric is the honest answer (102.10)"
         },
         "fit": {
           "score": 3,
           "cite": "matrix contexts named; steppers explicitly scoped to touch, not dense grids (80.2)"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "amount": {
       "scored": "2026-08-21",
@@ -322,17 +316,14 @@
           "cite": "the opener says this one does not degrade, it stops: Esc and light-dismiss are native to the [popover], but opening/filtering/selection are all initCombobox(), and it names the fallback — ship a <select> (94.14)"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/combobox is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "the opener says a short fixed list (five or fewer) is wrong for this — use a plain select instead, no filtering/JS needed (102.10)"
         },
         "fit": {
           "score": 3,
           "cite": "single-select by design; the page names the multi-select dropdown as the different job"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "filters": {
       "scored": "2026-08-21",

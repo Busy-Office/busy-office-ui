@@ -128,6 +128,10 @@ const canonical = `<!-- Two real form controls working as one field: the select 
     (USD 1250.00 → JPY 1250 → BHD 1250.000) from a built-in ISO 4217
     table — overridable when your app supplies its own. The read-only
     counterpart is <a href={base + '/components/amount'}>Amount</a>.
+    <strong>Not for a fixed-currency value</strong> — a rate, a fee percentage, a
+    price your app always quotes in one currency: the select adds a decision the
+    field never needs, and a plain <code>.bo-input--numeric</code> is the whole
+    answer.
   </p>
 
   <p class="demo-note"><strong>The rule for this family:</strong> displaying a value is <a href={base + '/components/amount'}>Amount</a>'s job; capturing one is <a href={base + '/components/money'}>Money</a>'s (currency) or <a href={base + '/components/quantity'}>Quantity</a>'s (count). One display component for every numeric value; two entry components, split by what the value <em>is</em> — and when it is neither a selectable currency nor a steppable count (a rate, a fixed-currency price, a percentage), a plain <code>.bo-input--numeric</code> is the whole answer: no fourth component, just the input modifier.</p>

@@ -44,9 +44,9 @@ import { EXEMPT, hasWrongChoiceClause } from './wrong-choice-rule.mjs';
  */
 const TODO = new Set([
   'alerts', 'avatar', 'badge', 'byline', 'calendar',
-  'combobox', 'dashboard', 'data-table', 'date', 'icon',
-  'inline-editing', 'money', 'navbar', 'pagination', 'progress',
-  'quantity', 'sidebar-nav', 'state-patterns',
+  'dashboard', 'data-table', 'date', 'icon',
+  'inline-editing', 'navbar', 'pagination', 'progress',
+  'sidebar-nav', 'state-patterns',
   'stepper', 'table-toolbar', 'tree-table', 'tree',
 ]);
 
