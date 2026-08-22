@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 19:39
+Generated at: 2026-08-22 20:07
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-08-22 19:39
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 116** (1 open)
-  - 116.1 — Inbox: expand-in-place preview on routine approval rows.
 
 ## Dispatch counters
 

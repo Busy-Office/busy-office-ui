@@ -168,27 +168,33 @@ treat full-page-only as a regression. The claim holds only for
 context-free surfaces (a notification item has title-level context),
 which is exactly why the notification refusal below stands.
 
-1. [ ] **116.1 — Inbox: expand-in-place preview on routine approval
-       rows.** On `/patterns/inbox`: approval rows that are routine
-       (single remaining step, within tolerance, unflagged) gain an
-       expand-in-place preview — header facts (`bo-kv bo-kv--rows`,
-       master-detail's idiom), line summary, attachments **listed**
-       inline but opened in a viewer (a pane never claims diligence on
-       a PDF — the ERP review's guardrail), with Approve/Reject routed
-       to approval's existing endpoints (`POST /po/:id/approve|reject`,
-       reject reason REQUIRED server-side, 409 on already-decided) via
-       approval's decision dialog — shown "not in this static demo"
-       exactly as approval.astro itself does, keeping the No-JS row
-       honest. Flagged / multi-step / high-value rows and all
-       exception/task/job rows: unchanged, link-out only (the second
-       ERP guardrail: escalation goes to the full screen). Amends the
-       contract line "the inbox never resolves anything itself" to name
-       this one exception. Accept: demo shows one routine row expanded
-       AND one escalated row link-out-only; data contract routes
-       decisions to approval's endpoints (no new inbox decision
-       endpoint); States gains expanded/escalated/attachment rows;
-       page-shape + wrong-choice + claims gates green; zero new CSS/JS
-       surface (pure composition).
+1. [x] **116.1 — DONE 2026-08-22.** `/patterns/inbox`'s R-4471 row
+       (one step, one approver, modest value) expands in place: `bo-kv
+       bo-kv--rows` header facts, a line summary, and an attachment
+       **listed** but opened in a viewer, never embedded (a pane can't
+       carry PDF diligence — the ERP review's guardrail). Approve/Reject
+       route to approval's own endpoints (`POST /req/:id/approve|reject`
+       — reason required server-side on reject, 409 on already-decided)
+       via approval's own dialog, "not in this static demo" exactly as
+       approval.astro's own dialog isn't. PO-88213 (step 3 of 4,
+       $18,940.50, 2 days old) stays link-out on purpose, named in prose
+       as the escalation counter-example — the second ERP guardrail.
+       Anatomy item 5 amended ("never resolves anything itself, with one
+       exception below") rather than left contradicted by item 6; Data
+       contract gained the reused-endpoint row; States gained three rows
+       incl. an honest No-JS note (toggle + dialog both need JS, same as
+       approval's own page — a routine row falls back to link-out
+       without it). Key-value facts added to Components used. Full docs
+       build green (`check:page-shape`/`check:wrong-choice`/
+       `check:dsa-scores` pre-build, 10793-link check + `check:markup`
+       post-build) plus `check:claims` 92/92, `check:target-size`,
+       `check:formatting`, `check:forced-colors` run separately, all
+       clean. Verified live in a freshly rebuilt Podman image (curled
+       served HTML for `inb-r4471-detail` before trusting screenshots,
+       per the stale-cache risk) — 1440 + 390, light + dark, plus a
+       scroll-to-row 390 shot confirming no overflow. Zero new CSS/JS
+       surface — pure composition of `bo-widget`/`bo-kv`/`bo-btn`.
+       **Accept met.**
 
 **REFUSED, with reasons:**
 - **Approve/Reject on notification items** (the originating ask) —
