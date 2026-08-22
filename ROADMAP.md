@@ -149,6 +149,92 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 115 — Owner input: the Motion System proposal, triaged (2026-08-22)
+
+Owner uploaded a 31-section "Busy Office Motion System Proposal" (motion as
+a first-class design-system dimension: tokens, primitives, intent
+categories, state machines, creative-latitude config, motion scoring).
+Audited against the repo before triaging: **roughly a third already exists
+in more battle-tested form** — `tokens/motion.css` (3 durations + 1 easing,
+reduced-motion-zeroed), the opt-in `motion/motion.css` module (8
+`.bo-motion-*` classes, explicitly not an Animate.css clone), the
+`check:motion` gate on every core build, and `/base/motion`. The audit also
+found the proposal's §11 state-machine vocabulary would COLLIDE with a
+deliberate shipped convention (see 115.2), and one real gate gap worth
+closing (115.3). Full precedent chain in this slice's commit message.
+
+1. [ ] **115.1 — motion-intent vocabulary on `/base/motion`.** The
+       proposal's §10 eight intent categories (feedback / state transition /
+       entrance-exit / spatial / progress / confirmation / attention /
+       delight) added as guidance prose, each of the 8 shipped
+       `.bo-motion-*` classes tagged with its intent. Zero new CSS. Also
+       adds the wrong-choice clause the page lacks — `/base/` pages are
+       outside `check-wrong-choice.mjs`'s scope, so this is judgment-driven,
+       and extending that gate's scope is deliberately NOT part of this
+       item. **Accept:** the section exists; all 8 classes tagged; the
+       opener carries a `<strong>Not …</strong>` clause naming when motion
+       is the wrong answer.
+2. [ ] **115.2 — document the state-attribute conventions + the Save
+       sequence.** The honest counterpart to the proposal's §11–13: the
+       framework already has a DELIBERATE split, not a gap — `data-state`
+       is structural open/closed (dialog/offcanvas/widget/motion-collapse,
+       cross-referenced in source as "the same convention");
+       `data-loading="true"` is busy (button, data-table, bridged to htmx
+       in `integrations/htmx.css`); per-domain names where semantics differ
+       (`data-row-state=dirty|error|warning`,
+       `data-day=today|closed|holiday|selected` — calendar.css cites the
+       naming split as deliberate). One documentation section names the
+       split with api.json-generated values, plus the Save→Saving→Saved
+       recipe as it actually composes (consumer text swap + `aria-busy` +
+       `data-loading` + the htmx bridge), including button's MEASURED
+       no-spinner decision (opacity dimming refused at ~3.24:1 contrast)
+       so nobody re-proposes it blind. Location decided at build time
+       (likely `/base/motion` or `/concepts/js-behaviors`). **Accept:** the
+       split is named in one place with generated values; the Save sequence
+       documented with its two-channel story; any browser-behavior claim
+       gets a `check-claims.mjs` case.
+3. [ ] **115.3 — extend `check:motion` to transitions.**
+       `check-motion.mjs` walks only `animation` declarations — a
+       literal-duration `transition` slips through silently, the exact rot
+       its own header warns about for animations. Audited 2026-08-22: all
+       15 `transition:` declarations in shipped CSS are token-driven or
+       `none`, so the backlog is ZERO — close the gap before the first
+       exception exists. **Accept:** every `transition` duration must be
+       token-driven or covered by a reduced-motion `transition: none`;
+       red-proved by injecting a literal-duration transition into the BUILT
+       CSS and watching the gate go red; all existing CSS passes unchanged.
+
+**REFUSED, with reasons (re-open conditions stated per item):**
+- **Unified `data-state="idle|loading|success|error"` lifecycle vocabulary
+  (§11)** — collides with the shipped, deliberate convention split and
+  with button's measured no-spinner decision. Re-open only with evidence
+  the existing split fails a real screen.
+- **Motion Quality Review / scoring + advisory motion checker (§22–23)** —
+  the Slice 112 Quality-Index refusal verbatim (no second consumer;
+  composite scores fail the measurement doctrine). Re-open when a second
+  real consumer exists.
+- **`creative_latitude` / `motion_decisions` YAML config (§2.5/§17/§21)** —
+  config surface for consumers that don't exist; re-open alongside the
+  Screen Contract if the 112.3 pilot admits that layer.
+- **Spring / morph / shared-element / stagger / Phase 5 (§6/§9/§14)** —
+  motion's rung 4: no ERP screen in this repo demonstrates the need, and
+  52.1 already refused `animation-timeline` as the off-floor cosmetic class
+  once. Re-open via the 99.4 front door when a real pattern screen needs
+  one.
+- **Token expansion to 5 durations / 4 easings / distance / scale
+  (§5–8)** — the 3+1 set has served all 43 components; less-for-more
+  refuses options serving no shipped need. Re-open per-token when a
+  component actually needs a value that doesn't exist.
+- **`docs/motion/` gallery IA (§19), repo restructure (§28), literal
+  `@layer bo.motion` (§27)** — conflict with actual layer names
+  (`bo-tokens`/`bo-utilities`) and structure; `/base/motion` has not
+  outgrown one page. Ideas adopted, literal structure refused (Slice 111's
+  reference-design-system precedent).
+- **Core components importing the motion module** — standing precedent:
+  collapsible cards DUPLICATED the grid-template-rows technique into
+  dashboard.css rather than making core depend on the opt-in module; the
+  motion module stays opt-in.
+
 ## Slice 114 — Owner wishlist: adopt htmx 4 (2026-08-22)
 
 Owner: *"just use htmx 4"*, `https://four.htmx.org/docs`. Verified via
