@@ -102,6 +102,50 @@ for (const p of [
   'base/colors', 'reference/classes', 'patterns/list-report', 'patterns/approval',
 ]) out += `${site}/${p}/\n`;
 
+/* Pattern catalogue — generated from `patterns.json` (roadmap 112.2, the
+   Slice 112 grill's admitted P0 half). Survey finding that queued this:
+   llms.txt carried essentially zero pattern data before now — two hardcoded
+   URLs under "Key docs" — despite patterns being this framework's primary
+   unit of task-fit (Objective §4: design the decision, not the screen). An
+   assistant choosing components without this section is choosing a WIDGET
+   before it has chosen the SHAPE — exactly the failure mode 112's pilot
+   (112.3, still gated on owner briefs) exists to measure.
+
+   Kept lean: name/group/opener/complexity/components/wrong-choice, not the
+   full States/Data-contract row text patterns.json also carries — that
+   detail belongs to the page itself once a pattern is chosen, and dumping
+   it here would roughly double llms.txt's size for information a
+   pattern-fit decision doesn't need. Same anti-drift discipline as the
+   "Deliberately absent" table below: throws if the catalogue is missing or
+   suspiciously small, because a silently-empty section looks like zero
+   patterns exist, not like generation broke. */
+{
+  const patternsPath = join(docsRoot, 'src/data/patterns.json');
+  const patternsData = JSON.parse(await readFile(patternsPath, 'utf8'));
+  const allPatterns = patternsData.groups.flatMap((g) => g.tiles);
+  if (allPatterns.length < 20) {
+    throw new Error(
+      `gen-llms: patterns.json has only ${allPatterns.length} pattern(s) — expected 20+; ` +
+      'llms.txt would silently ship a near-empty pattern catalogue',
+    );
+  }
+  out += `\n## Patterns (task-fit — choose the SHAPE before the components) — ${site}/patterns/\n\n`;
+  for (const g of patternsData.groups) {
+    out += `### ${g.label}\n`;
+    for (const t of g.tiles) {
+      const opener = t.opener.length > 220 ? `${t.opener.slice(0, 217)}...` : t.opener;
+      out += `- ${t.title} — ${site}${t.href}/ (complexity ${t.complexity}/4)\n`;
+      out += `  ${opener}\n`;
+      if (t.wrongChoice) {
+        out += `  ${t.wrongChoice.clause}`;
+        out += t.wrongChoice.alternative ? ` -> ${site}${t.wrongChoice.alternative}/\n` : '\n';
+      }
+      if (t.components.length) out += `  uses: ${t.components.map((c) => c.href.replace('/components/', '')).join(' ')}\n`;
+    }
+    out += '\n';
+  }
+}
+
 /* "Deliberately absent" — generated from DESIGN.md's canonical table (roadmap
    32.3). An absence is invisible: an assistant asked for a data grid will build
    one unless something tells it the answer was considered and declined. This

@@ -300,14 +300,21 @@ per page, not two).
        precedent: `check-components-used.mjs`'s section-slice against
        dist. Red-prove the extractor per the instrument doctrine — first
        output is wrong until reconciled against a hand count.
-2. [ ] **112.2 — pattern catalogue into `llms.txt`.** Survey finding
-       (2026-08-22): `llms.txt` carries essentially zero pattern data —
-       two hardcoded URLs. Generate a pattern section from 112.1's
-       `patterns.json`. Needs no pilot to justify: llms.txt exists to
-       teach agents the framework and patterns are absent — a plain
-       coverage gap on the existing doctrine (the 32.3 precedent).
-       Anti-drift guard same as 32.3's: a silently-dropped section fails
-       the build.
+2. [x] **112.2 — DONE 2026-08-22.** `llms.txt` gained a `## Patterns`
+       section generated from `patterns.json`: per pattern, name/URL,
+       opener, complexity, components, and the wrong-choice clause +
+       alternative link — the task-fit data an agent needs to pick the
+       right SHAPE before reaching for components (Objective §4). Kept
+       lean deliberately: full States/Data-contract row text stays on
+       the page itself, not duplicated here — including it would have
+       roughly doubled the file for detail a pattern-fit decision
+       doesn't need. Same anti-drift guard as 32.3's precedent (throws
+       if the catalogue is missing or under 20 patterns), red-proved by
+       truncating `patterns.json` to 2 entries and confirming the build
+       actually threw before restoring it. File grew 22.9kB → 36.7kB,
+       53 → 81 URLs verified. Full suite green (13 docs gates incl. the
+       URL-resolution check on all 29 new pattern links; `check:claims`
+       90/90).
 3. [ ] **112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.**
        32-style evidence before any contract surface exists. Protocol,
        pre-registered here so the verdict cannot be argued afterward:

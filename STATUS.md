@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 15:37
+Generated at: 2026-08-22 15:42
 
 ## Open items by slice
 
@@ -17,8 +17,7 @@ Generated at: 2026-08-22 15:37
   - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 - **Slice 104** (1 open)
   - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
-- **Slice 112** (4 open)
-  - 112.2 — pattern catalogue into `llms.txt`.
+- **Slice 112** (3 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
