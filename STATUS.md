@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 22:41
+Generated at: 2026-08-22 23:17
 
 ## Open items by slice
 
@@ -20,8 +20,7 @@ Generated at: 2026-08-22 22:41
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 119** (3 open)
-  - 119.1 — Error pages: 404 / 403 / 500 as ONE pattern.
+- **Slice 119** (2 open)
   - 119.2 — ERP layout overview, as a CONCEPTS page.
   - 119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.
 

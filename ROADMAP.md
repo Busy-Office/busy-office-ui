@@ -203,17 +203,20 @@ command-bar (has the command/search dropdown), kanban, app-launch
 (the "bento for apps" ask — bento is a styling variant of it, not a
 pattern), approval (the "workflow" ask), wizard.
 
-1. [ ] **119.1 — Error pages: 404 / 403 / 500 as ONE pattern.** Three
-       variants of one shape — what happened · what you can still do ·
-       where to go — never three pages ("one component, many settings").
-       Real gap: zero coverage today, every ERP ships these, and an
-       unthemed 403 is where enterprise branding visibly falls apart.
-       Expect zero new CSS (state/alert/button compose it). Accept:
-       `/patterns/error-pages` with the full pattern skeleton (opener
-       with wrong-choice clause, anatomy, data contract — what the
-       server returns per status, states incl. "error page inside a
-       fragment swap" vs full navigation, components-used); all docs
-       gates green.
+1. [x] **119.1 — DONE 2026-08-22.** `/patterns/error-pages`: three
+       status codes, one shape — `.bo-state`/`.bo-state--error`, zero new
+       CSS for the pattern itself. Canvas-centered like login (no
+       persistent chrome assumed); action set is the real difference per
+       code (404/403 navigation-only, never a false-promise Retry; 500
+       gets Retry as primary); data contract splits full navigation from
+       inside-a-fragment-swap; States names the auth-vs-forbidden split
+       explicitly. Found and fixed a real bug building it:
+       `.bo-state__actions` had no `flex-wrap` — every prior consumer put
+       exactly one button in it, so two buttons overflowed 390px instead
+       of wrapping; fixed at the source (`flex-wrap` + centered). Full
+       docs build 13 gates green on the first run, `check:claims` 95,
+       target-size/forced-colors clean, screenshots light/dark 1440+390.
+       **Accept met.**
 2. [ ] **119.2 — ERP layout overview, as a CONCEPTS page.** Maps the
        shells that already ship (app-shell sidebar+navbar · RF
        full-screen · role-home · split master-detail) to when each
@@ -228,6 +231,47 @@ pattern), approval (the "workflow" ask), wizard.
        module, a launcher target? Needs a design-tree grill round with
        the owner before Accept criteria can exist. Deliberately not
        buildable as written.
+4. [x] **119.4 — DONE 2026-08-22.** Docs-shell theme + density controls
+       redesigned live from owner feedback while browsing. Theme: a
+       single cycling icon button (light → dark → system → light),
+       replacing the two-option select — "system" is genuinely new
+       logic, not a restyle: `color.css` has NO `prefers-color-scheme`
+       rule at all (deliberate — tokens only flip on the explicit
+       `[data-theme="dark"]` attribute), so "system" means resolving
+       `matchMedia` in `PrefBootstrap` before paint, plus a live listener
+       so a mid-session OS change takes effect with no click/reload.
+       Density: a real `.bo-segmented` group (not a cycle) — each option
+       directly selectable, since jumping straight to "spacious" is
+       normal; reuses the primitive verbatim (its own CSS comment already
+       names "compact vs comfortable" as the example case). Icons are a
+       row-spacing pictogram (more/tighter lines → fewer/wider), the
+       actual effect density has.
+
+       Two real bugs found and fixed, not worked around: (1)
+       `bo-segmented__input`'s three hidden radios all measured the
+       IDENTICAL coordinate — a `position:absolute` flex child with no
+       inset properties resolves its static position as if it were the
+       container's sole item; `position:relative` on `.bo-segmented`
+       (tried first) does not change this. Fixed by keeping the input in
+       normal flex flow instead (`position: static`, scoped to
+       `.bo-segmented__input`) — latent since the component shipped,
+       dormant because `inbox.astro`'s own segmented filter was never
+       among `target-size`'s probed pages. (2) Owner-reported: a stray
+       teal line under some "View code" folds. Root cause: the reset's
+       global `:focus-visible` ring draws outside the element, but
+       `.demo-pair__code`'s `overflow:hidden` (for rounded corners) clips
+       everything but the bottom sliver. Scoped fix in `Gallery.astro`
+       (docs-shell CSS, not the shared reset) pulls the ring inside for
+       this one case only.
+
+       Verified: full docs build 13 gates, `check:claims` 95,
+       `target-size` (9 exempt control types, up from 8 — correctly
+       exempt via real spacing now, not a collision), `forced-colors`
+       clean. Red-proved "system" directly: forced OS=light with
+       pref=system → resolved light; flipped emulated OS to dark with no
+       click/reload → resolved dark, live. Interactive click-through
+       diagnostics confirmed the cycle, localStorage persistence across a
+       real reload, and correct pre-paint restoration. **Accept met.**
 
 **REFUSED, with reasons:**
 - **Standalone Timeline pattern** — `bo-timeline` ships and is
