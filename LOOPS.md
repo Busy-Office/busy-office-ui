@@ -421,6 +421,18 @@ progress, and freeze-graduation rounds).
   artifact (`busy-office-ui.tgz`), added to `.gitignore`. Full report:
   `.roundtable/explore-role-home-po-app-2026-08-22.md`.
 
+- ~~117.1's `--label-start` modifier, dogfooded into po-app~~ — evaluated
+  2026-08-22, **discarded before spiking**: po-app has exactly one
+  `.bo-form-section` built from `.bo-form-field`s (`/pos/new`), and it
+  already uses `.bo-form-row` — which 117's own ROADMAP entry states is
+  not combinable with `--label-start` (the two answer "how do I lay out
+  several fields" two different ways). Forcing it in would regress a
+  working 3-column form (Vendor/Cost centre/Amount) into a taller,
+  sparser single column for three short, unrelated fields that genuinely
+  read better side by side. No other po-app form is built from
+  `.bo-form-field` at all. Re-open when a genuinely dense, single-column
+  detail form exists in the reference app — not before.
+
 - ~~/inbox dogfooded into po-app~~ — spiked 2026-08-22 in an isolated
   worktree (removed; finished files copied over). **Graduated as ROADMAP
   116.2.** Closed the exact gap the role-home spike above named out of
