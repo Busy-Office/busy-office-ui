@@ -728,3 +728,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 00:10 · Continue · build · 119.7: notification cards elevated (owner: go elevated-card) · landed · e44dfab
 - 2026-08-23 00:20 · Roadmap · plan · 122.1: triaged the masking-input wishlist into ROADMAP (BLOCKED ON GRILL) · triaged · 3894d73
 - 2026-08-23 00:22 · Roadmap · plan · Refreshed stale RESUME.md (109.13-109.18 falsely claimed still-open) · landed · 7f0cfd3
+- 2026-08-23 00:31 · Continue · build · 119.2: ERP layout overview concepts page landed · landed · c9eacab

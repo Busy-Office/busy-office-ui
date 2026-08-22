@@ -1,0 +1,9 @@
+/* Shared RF preview iframe chrome (Standardize 2026-08-23: goods-receipt.astro,
+   rf-list.astro and rf-landing.astro each hand-rolled the identical inline
+   style for their 360x640 device-frame iframe). */
+.rf-device-frame {
+  inline-size: 360px;
+  block-size: 640px;
+  border: 1px solid var(--bo-color-border-default);
+  border-radius: var(--bo-radius-md);
+}
