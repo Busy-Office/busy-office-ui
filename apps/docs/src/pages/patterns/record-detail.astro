@@ -7,7 +7,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <p class="demo-note">
     <strong>Who uses it</strong>: whoever owns this record, checking its
     status or adding to its history — a buyer, an approver, anyone who
-    clicked in from a list row. <strong>What "done" looks like</strong>: the
+    clicked in from a list row. <strong>How often</strong>: every time a
+    list row is opened — this is the default landing for "tell me about
+    this one," many times a day across a team. <strong>What "done" looks
+    like</strong>: the
     current state is read in one glance, without opening anything else. The
     composed detail screen behind any list row: record cards, a status
     timeline, and an audit trail stacked in a feed — all standard components,
@@ -192,10 +195,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
-      <li><strong>Breadcrumb</strong> — where this record sits; the parent link is how users get back to the filtered list.</li>
-      <li><strong>Facts strip</strong> — <code>.bo-kv</code> for the header facts (vendor, cost centre, total): display data, never readonly inputs.</li>
-      <li><strong>Record feed</strong> — one card per related document (order, receipt, invoice) in chronological order.</li>
-      <li><strong>Status timeline + audit trail</strong> — where it is now, and every state change with actor and timestamp.
+      <li><strong>Breadcrumb</strong> — <a href={base + '/components/breadcrumb'}>breadcrumb</a>; where this record sits, and how users get back to the filtered list.</li>
+      <li><strong>Facts strip</strong> — <a href={base + '/components/kv'}>key-value facts</a> (<code>.bo-kv</code>) for the header facts (vendor, cost centre, total): display data, never readonly inputs.</li>
+      <li><strong>Record feed</strong> — one <a href={base + '/components/dashboard#card'}>card</a> per related document (order, receipt, invoice) in chronological order.</li>
+      <li><strong>Status timeline + audit trail</strong> — <a href={base + '/components/approval-workflow'}>timeline and audit trail</a>: where it is now, and every state change with actor and timestamp.
       This is the human-monitoring signal: the actor column is where an
       agent's own changes become visible to the human owning the record.</li>
     </ol>

@@ -765,13 +765,18 @@ catalogue in ERP vocabulary and job order.
        raw-vs-escaped-entity grep mismatch) — both documented as the
        kind of instrument-not-evidence check this doctrine asks for.
        90/90 claims pass. **Accept met, plus a real production fix.**
-15. [ ] **109.18 — small mechanical fixes, one page each.** `kanban`'s
-       horizontally-scrolling lane cluster lacks `tabindex="0"` on its own
-       scroll container (distinct from the Move-menu popover, which is
-       fine); `record-detail`'s Anatomy list items aren't linked to their
-       components (only page in the catalogue with this gap) and its
-       Opener lacks a "how often" clause. **Accept:** all three fixed,
-       verified live.
+15. [x] **109.18 — DONE 2026-08-22.** `kanban`'s lane cluster scroll
+       container gained `tabindex="0"`, confirmed in the built output.
+       `record-detail`'s four Anatomy items linked to their real
+       components — `/components/breadcrumb`, `/components/kv`,
+       `/components/dashboard#card`, and `/components/approval-workflow`
+       (the page that documents both `.bo-timeline` and `.bo-audit`,
+       found by grepping which docs page actually uses those classes
+       rather than guessing); Opener gained a "How often" clause. Full
+       suite green (13 docs gates incl. link check confirming all four
+       new links resolve; `check:claims` 90/90; core build; vitest;
+       stylelint; page-shape). **Accept met — closes Slice 109's build
+       queue** (109.19/109.14/109.15/109.16/109.17/109.18 all landed).
 16. [ ] **109.19 — execute the field-editor fold decided by 109.4.**
        **Dispatch-order note (LOOPS.md's oldest-item rule, not
        convenience): this jumps ahead of the older 94.8 and the
