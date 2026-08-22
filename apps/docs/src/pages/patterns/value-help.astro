@@ -194,6 +194,7 @@ const markup = `<!-- the field, and the control that opens the picker -->
         <tr><td>Too many results</td><td>Page, and say the total. "Showing 1–20 of 4,318" tells the reader to narrow; a bare first page does not.</td></tr>
         <tr><td>Error</td><td>Inside the dialog, results replaced, search preserved.</td></tr>
         <tr><td>Permission</td><td>If the reader may not browse master data, the trigger is absent — not disabled. A disabled button invites a support ticket.</td></tr>
+        <tr><td>No JS</td><td>Like the command bar, the "Find…" trigger has no native <code>popovertarget</code> — <code>initDialogs()</code>'s click listener is the only thing that calls <code>showModal()</code>. With no JS the trigger is inert: the picker dialog never opens, so the field can only be filled by typing a value directly, and the in-dialog filtering script never runs.</td></tr>
       </tbody>
     </table>
   </section>

@@ -230,6 +230,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Move rejected (409)</td><td>the card stays in its lane, states why ("Cannot skip Blocked — resolve the shortage first")</td></tr>
           <tr><td>Card aged past a threshold</td><td>the byline gains a warning word ("Blocked 6h") — two-channel, same as the job monitor's stalled state</td></tr>
           <tr><td>Very long lane</td><td>the lane scrolls internally past a height, never grows the whole board vertically past the viewport</td></tr>
+          <tr><td>No JS</td><td>the Move menu still opens — <code>popovertarget</code> is the native HTML Popover API, so a card's menu button works with no script at all. Without <code>initDropdowns()</code> the menu just isn't anchored to its button (no positioning at our browser floor, so it opens in the popover's default top-layer position rather than under the trigger) and it stays open after a click instead of auto-closing on selection. The "Move to…" items themselves have no click handler in this static demo either way — a real build would need a form/link per item for the move to complete without JS</td></tr>
         </tbody>
       </table>
     </div>

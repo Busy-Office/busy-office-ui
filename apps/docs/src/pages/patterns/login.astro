@@ -156,6 +156,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Account locked</td><td>a distinct message with the unlock path; do NOT reuse the invalid-credentials copy</td></tr>
           <tr><td>Session expired</td><td>arrive with an info alert explaining why, and the original destination preserved</td></tr>
           <tr><td>Submitting</td><td>button disabled + <code>aria-busy</code>; the form is the only thing on screen, so no skeleton</td></tr>
+          <tr><td>No JS</td><td>the live demo form carries <code>novalidate</code>, which turns off the browser's own constraint validation — with no <code>initValidationSummary()</code> to call <code>checkValidity()</code> either, Submit fires with empty required fields unvalidated and the summary box never appears; the canonical form in the Markup section below omits <code>novalidate</code>, so a real deployment of it would fall back to native browser validation bubbles instead of losing validation entirely</td></tr>
         </tbody>
       </table>
     </div>

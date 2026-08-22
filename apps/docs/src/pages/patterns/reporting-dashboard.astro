@@ -174,6 +174,7 @@ const rows = [
           <tr><td>Stale data</td><td>a timestamp ("as of 09:12") on cached aggregates — an unlabelled number is assumed live</td></tr>
           <tr><td>No permission for a metric</td><td>omit the widget; a redacted tile invites a support ticket</td></tr>
           <tr><td>Export running</td><td>a progress affordance and a completion signal; never a frozen button</td></tr>
+          <tr><td>No JS</td><td>widgets render with their initial server-rendered data; row checkboxes still toggle individually as native inputs, but the select-all checkbox and the live "n selected" count need <code>initDataTables()</code> to sync. Saved-view links stay real, navigable <code>&lt;a&gt;</code> hrefs, but their <code>aria-current</code> active marking and re-populating the filter bar's fields from the URL need <code>initSavedViews()</code>. Collapsible cards stay fixed in whichever <code>data-state</code> the server rendered — the trigger buttons do nothing without <code>initCollapsibleCards()</code>, so a card rendered collapsed can never be reopened</td></tr>
         </tbody>
       </table>
     </div>

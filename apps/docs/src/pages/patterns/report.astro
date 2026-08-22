@@ -164,6 +164,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Too many rows</td><td>state the cap and offer the export ("12,480 rows — showing the first 500; export for all"); never silently truncate</td></tr>
           <tr><td>Parameter error</td><td>422 re-renders the form with field messages; the PREVIOUS result stays on screen, clearly still labelled with its own run-line</td></tr>
           <tr><td>Stale result</td><td>parameters edited but not re-run → the result keeps its original run-line; a figure never re-labels itself with inputs that did not produce it</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; it imports no <code>@busy-office/ui/js</code> behavior at all, and every field is a plain, native form control</td></tr>
         </tbody>
       </table>
     </div>

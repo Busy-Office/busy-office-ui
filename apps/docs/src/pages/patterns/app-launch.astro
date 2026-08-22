@@ -200,6 +200,7 @@ const logistics = [
           <tr><td>Empty (new tenant)</td><td>a first-run state naming the one setup action, not an empty grid</td></tr>
           <tr><td>No permission</td><td>omit tiles the user cannot open — a disabled tile teaches nothing</td></tr>
           <tr><td>Error</td><td>inline alert above the grid with retry; keep whatever tiles did load</td></tr>
+          <tr><td>No JS</td><td>the category tabs are plain <code>&lt;button role="tab"&gt;</code> elements with no native switching behavior — without <code>initTabs()</code>'s click handler, the second panel (marked <code>hidden</code> in the markup) never un-hides, so only the Finance tiles are ever reachable; the Logistics apps behind the second tab are effectively invisible</td></tr>
         </tbody>
       </table>
     </div>

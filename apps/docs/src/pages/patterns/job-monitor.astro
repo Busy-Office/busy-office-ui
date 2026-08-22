@@ -162,6 +162,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Succeeded</td><td>success badge + a link to the run's own result; the monitor never shows the result inline</td></tr>
           <tr><td>Never run</td><td>plain muted text, not a badge — a badge implies something happened</td></tr>
           <tr><td>No jobs scheduled</td><td>"No scheduled jobs" — genuinely rare in a live ERP, but the empty state still has to say something, not render a bare header row</td></tr>
+          <tr><td>No JS</td><td>the table itself reads fine as static markup, but Retry/Cancel are bare <code>type="button"</code> elements with no script or form wired to them on this page, so they do nothing — and the row's own polling (<code>hx-trigger="every 30s"</code>, described in Data contract) needs htmx's own script to run at all, so a running/stalled job's status never advances without a manual reload</td></tr>
         </tbody>
       </table>
     </div>

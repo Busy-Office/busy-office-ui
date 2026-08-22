@@ -194,6 +194,7 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
           <tr><td>Source unavailable</td><td>The trigger is removed at load. See the failure rule above.</td></tr>
           <tr><td>Permission</td><td>Actions the user cannot run are absent from the response, so this state never reaches the screen. That is the point of filtering server-side.</td></tr>
           <tr><td>Shortcut already taken</td><td>The host owns the key. Detect it at build time, not by racing — and fall back to a visible trigger, which every user can find and no user needs told about.</td></tr>
+          <tr><td>No JS</td><td>The trigger button has no <code>popovertarget</code> or other native affordance — its <code>&lt;dialog&gt;</code> is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play.</td></tr>
         </tbody>
       </table>
     </div>

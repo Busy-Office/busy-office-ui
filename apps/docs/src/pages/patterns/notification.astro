@@ -167,6 +167,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>All read</td><td>bell badge absent (not "0" — a zero badge reads as noise); items keep their "read" byline</td></tr>
           <tr><td>Dead record</td><td>text kept, link removed, stated plainly ("no longer exists") with dismiss as the only action</td></tr>
           <tr><td>Very long history</td><td>paginate at the screen level (<a href={base + '/components/pagination'}>load-more</a>); the dropdown never grows beyond its few</td></tr>
+          <tr><td>No JS</td><td>the bell opens its menu via native <code>popovertarget</code> (Popover API), so browsing notifications still works; "Mark read" and "Dismiss" are bare <code>type="button"</code> elements with no script or form wired to them on this page, so they do nothing — and the bell's live-count poll (<code>hx-trigger="every 60s"</code>, described in Data contract) needs htmx's own script to run at all</td></tr>
         </tbody>
       </table>
     </div>

@@ -305,6 +305,7 @@ h1 { string-set: doctitle content(); }
           <tr><td>Cancelled</td><td>stated in words at the top; the lines stay readable because a cancelled document still has to be auditable</td></tr>
           <tr><td>Multi-page</td><td>header and totals repeat; parties and terms blocks never split; the print-only continuation line carries the document number so a loose page is identifiable</td></tr>
           <tr><td>No lines</td><td>refuse to emit — a document with no lines is a bug upstream, not an empty state to style</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; it's a rendered, printable document (the <code>initScanInput()</code> mentioned here belongs to the separate goods-receipt screen that later reads its barcode, not to this page)</td></tr>
         </tbody>
       </table>
     </div>

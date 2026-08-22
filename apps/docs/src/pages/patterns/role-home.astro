@@ -221,6 +221,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Card failed</td><td>that card shows the failure and a retry, and the others carry on — one dead query must not blank the home screen</td></tr>
           <tr><td>New role / first day</td><td>cards render with real zeros and an explanation, never an empty grid: "No orders yet — your first PO will appear here"</td></tr>
           <tr><td>Permission-limited role</td><td>the server simply does not send those cards; nothing on screen hints at what was withheld</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; every card is static markup and there is no <code>&lt;script&gt;</code> block to lose</td></tr>
         </tbody>
       </table>
     </div>

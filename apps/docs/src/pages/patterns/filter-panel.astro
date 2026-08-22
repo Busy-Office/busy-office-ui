@@ -131,6 +131,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Saved view</td><td>chips render from the saved query, so a shared link explains itself on arrival</td></tr>
           <tr><td>No permission for a filter</td><td>the group is absent, not disabled — a disabled filter tells the user about data they cannot see</td></tr>
           <tr><td>Narrow screen</td><td>the bar wraps; groups stay behind triggers, which is why this pattern degrades better than twelve inline controls</td></tr>
+          <tr><td>No JS</td><td>the menus are native <code>popover</code> elements opened by <code>popovertarget</code>, so triggers still open and close them and every checkbox inside still submits with the form — but without <code>initDropdowns()</code> the menu is never anchored to its trigger (it falls back to the browser's default popover position) and the trigger label never grows a "(2)" count, so an applied filter is invisible until the menu is reopened</td></tr>
         </tbody>
       </table>
     </div>

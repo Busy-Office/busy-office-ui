@@ -303,6 +303,7 @@ ${deliveryMonth(2026, 8)}
           <tr><td>Field error</td><td><code>aria-invalid</code> + message, focus moved to the first invalid field</td></tr>
           <tr><td>Read-only (viewer role)</td><td>render <a href={base + '/components/kv'}>key-value facts</a> instead of inputs — not disabled inputs</td></tr>
           <tr><td>Conflict (someone else saved)</td><td>409 → banner naming who and when, with reload-or-overwrite; never silently clobber</td></tr>
+          <tr><td>No JS</td><td>the top PO form has no script of its own — its Cancel is <code>type="button"</code> (already inert, with or without JS) and Save is a native <code>submit</code>, so nothing changes without JS. The field-per-row variant's inputs stay natively editable, and its Cancel (<code>type="reset"</code>) and Save (<code>type="submit"</code>) both work via plain HTML with no JS; only <code>initRowEdit()</code>'s live "Unsaved changes" badge and <code>initMoneyField()</code>'s currency-precision reformatting are lost</td></tr>
         </tbody>
       </table>
     </div>

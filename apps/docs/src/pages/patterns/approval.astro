@@ -163,6 +163,7 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
           <tr><td>Submitting</td><td>dialog buttons disabled; the dialog stays open until the swap lands so a failure keeps the typed note</td></tr>
           <tr><td>Not an approver</td><td>the screen is read-only; approval controls are absent, not disabled</td></tr>
           <tr><td>Delegated / out of office</td><td>name the delegate in the timeline — an approval chain that silently reroutes is an audit problem</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; the stepper, status timeline and audit trail are all plain lists with no hidden state to reveal. The decision dialog and Approve/Reject buttons are not part of this static demo (see the note above); in a real build those would be an ordinary <code>&lt;form&gt;</code> POST, which also needs no JS to submit</td></tr>
         </tbody>
       </table>
     </div>

@@ -121,6 +121,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Partial receipt</td><td>the line shows received/ordered; posting a partial is normal and must not warn</td></tr>
           <tr><td>Complete</td><td>a clear terminal state — the next scan starts a NEW receipt rather than silently appending</td></tr>
           <tr><td>Offline / flaky wifi</td><td>queue scans locally and replay; a dropped scan in a warehouse is a stock discrepancy later</td></tr>
+          <tr><td>No JS</td><td>the scan field, quantity input, and table render as plain, focusable, typable native controls, but the core flow cannot complete: <code>initScanInput()</code> is what listens for the terminator key, clears/refocuses the field, and dispatches <code>bo:scan</code> — without it, pressing Enter after a scan does nothing, so no line ever reaches the log. The <code>+</code>/&minus; quantity steppers also need <code>initQuantity()</code>, though the number input itself stays usable via keyboard/typing</td></tr>
         </tbody>
       </table>
     </div>

@@ -205,6 +205,7 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
           <tr><td>No permission</td><td>the bulk buttons are absent, not disabled (<a href={base + '/concepts/permissions'}>permissions</a>)</td></tr>
           <tr><td>Stale selection</td><td>a record decided by someone else since the page loaded fails with "already approved" — that is the partial-failure path doing its job, not an error</td></tr>
           <tr><td>Long-running</td><td>past a few seconds, return a job id and poll; a frozen button is not a progress indicator</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; the rows, checkboxes and bulk buttons in the real screen are plain form controls that POST natively (see the Markup section's <code>hx-post</code> sample — the underlying <code>&lt;form&gt;</code> submits without htmx too). What is lost without JS is the out-of-band summary swap and htmx's per-id focus restoration described in the keyboard walkthrough; a plain form submit reloads the page with the same result instead of swapping in place</td></tr>
         </tbody>
       </table>
     </div>

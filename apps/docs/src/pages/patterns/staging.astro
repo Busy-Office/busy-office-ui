@@ -127,6 +127,7 @@ tint on the row:
           <tr><td>Empty submission</td><td>the "nothing to validate" empty state, not a table with no rows</td></tr>
           <tr><td>After apply</td><td>a success alert with the number APPLIED, and every un-appliable row still listed to fix and re-submit</td></tr>
           <tr><td>Re-validated</td><td>verdicts are recomputed from scratch. Like bulk actions, per-row results are TRANSIENT — a stale "cannot import" on a row the user just fixed is worse than no message</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency. Every row's tint (<code>data-row-state</code>) and verdict badge are server-rendered classification, not JS state; the "Apply" and "Start over" controls shown here are static illustration (<code>type="button"</code>, no script anywhere on the page), since a real staging screen posts the validate/apply actions from the Data contract above regardless of JS</td></tr>
         </tbody>
       </table>
     </div>

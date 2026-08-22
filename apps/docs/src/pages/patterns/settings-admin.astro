@@ -173,6 +173,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Validation error</td><td>field-level messages; focus the first invalid control</td></tr>
           <tr><td>Read-only (non-admin)</td><td>render values as <a href={base + '/components/kv'}>key-value facts</a> and omit the save bar</td></tr>
           <tr><td>Destructive action <span class="bo-u-text-muted">(not in this demo)</span></td><td>confirm dialog naming the exact consequence and requiring the object name typed for irreversible ones</td></tr>
+          <tr><td>No JS</td><td>the tabbed sections need <code>initTabs()</code> to switch panels — without it, whichever panel the server marked visible (not <code>hidden</code>) is the only one reachable, since the inactive tabs' panels carry a static <code>hidden</code> attribute and clicking a tab does nothing</td></tr>
         </tbody>
       </table>
     </div>

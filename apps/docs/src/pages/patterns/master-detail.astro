@@ -232,6 +232,7 @@ const rows = [
           <tr><td>Save conflict</td><td>409 in the panel with both values — see <a href={base + '/concepts/concurrency'}>concurrency</a>; nothing auto-merges</td></tr>
           <tr><td>No permission to edit</td><td>the panel reads; the Edit control is absent, not disabled</td></tr>
           <tr><td>Narrow screen</td><td>the panel becomes a drawer over the list — capped at 85vw, so a sliver of the list stays visible and the user keeps their place; selection survives closing it</td></tr>
+          <tr><td>No JS</td><td>the primary side-panel view (facts, badges) is plain markup and reads fully without JS. The drawer and edit-dialog variants depend on <code>initDialogs()</code>'s click delegation to call the native <code>showModal()</code> — without it, neither <code>&lt;dialog&gt;</code> ever opens, so "Open the detail as a drawer" and "Edit vendor V-1001" do nothing and those two views are unreachable</td></tr>
         </tbody>
       </table>
     </div>

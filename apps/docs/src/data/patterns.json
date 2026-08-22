@@ -45,6 +45,10 @@
             [
               "Submitting",
               "button disabled + aria-busy; the form is the only thing on screen, so no skeleton"
+            ],
+            [
+              "No JS",
+              "the live demo form carries novalidate, which turns off the browser's own constraint validation — with no initValidationSummary() to call checkValidity() either, Submit fires with empty required fields unvalidated and the summary box never appears; the canonical form in the Markup section below omits novalidate, so a real deployment of it would fall back to native browser validation bubbles instead of losing validation entirely"
             ]
           ],
           "dataContract": [
@@ -106,6 +110,10 @@
             [
               "Error",
               "inline alert above the grid with retry; keep whatever tiles did load"
+            ],
+            [
+              "No JS",
+              "the category tabs are plain &lt;button role=\"tab\"&gt; elements with no native switching behavior — without initTabs()'s click handler, the second panel (marked hidden in the markup) never un-hides, so only the Finance tiles are ever reachable; the Logistics apps behind the second tab are effectively invisible"
             ]
           ],
           "dataContract": [
@@ -175,6 +183,10 @@
             [
               "Permission-limited role",
               "the server simply does not send those cards; nothing on screen hints at what was withheld"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; every card is static markup and there is no &lt;script&gt; block to lose"
             ]
           ],
           "dataContract": [
@@ -252,6 +264,10 @@
             [
               "Shortcut already taken",
               "The host owns the key. Detect it at build time, not by racing — and fall back to a visible trigger, which every user can find and no user needs told about."
+            ],
+            [
+              "No JS",
+              "The trigger button has no popovertarget or other native affordance — its &lt;dialog&gt; is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play."
             ]
           ],
           "dataContract": [
@@ -282,6 +298,10 @@
             [
               "Shortcut already taken",
               "The host owns the key. Detect it at build time, not by racing — and fall back to a visible trigger, which every user can find and no user needs told about."
+            ],
+            [
+              "No JS",
+              "The trigger button has no popovertarget or other native affordance — its &lt;dialog&gt; is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play."
             ]
           ],
           "wrongChoice": {
@@ -349,6 +369,10 @@
             [
               "No permission",
               "bulk buttons absent (not disabled) — a control you can never use is noise"
+            ],
+            [
+              "No JS",
+              "row checkboxes and the bulk-action buttons are real inputs inside a native &lt;form&gt;, so picking rows and submitting still works end to end; only initDataTables()'s conveniences are lost — the header checkbox no longer toggles every row (it's just an unwired checkbox), and the \"n selected\" live region never updates, so a screen-reader user gets no running count of the selection"
             ]
           ],
           "dataContract": [
@@ -430,6 +454,10 @@
             [
               "Narrow screen",
               "the bar wraps; groups stay behind triggers, which is why this pattern degrades better than twelve inline controls"
+            ],
+            [
+              "No JS",
+              "the menus are native popover elements opened by popovertarget, so triggers still open and close them and every checkbox inside still submits with the form — but without initDropdowns() the menu is never anchored to its trigger (it falls back to the browser's default popover position) and the trigger label never grows a \"(2)\" count, so an applied filter is invisible until the menu is reopened"
             ]
           ],
           "dataContract": [
@@ -511,6 +539,10 @@
             [
               "Permission",
               "If the reader may not browse master data, the trigger is absent — not disabled. A disabled button invites a support ticket."
+            ],
+            [
+              "No JS",
+              "Like the command bar, the \"Find…\" trigger has no native popovertarget — initDialogs()'s click listener is the only thing that calls showModal(). With no JS the trigger is inert: the picker dialog never opens, so the field can only be filled by typing a value directly, and the in-dialog filtering script never runs."
             ]
           ],
           "dataContract": [
@@ -537,6 +569,10 @@
             [
               "Permission",
               "If the reader may not browse master data, the trigger is absent — not disabled. A disabled button invites a support ticket."
+            ],
+            [
+              "No JS",
+              "Like the command bar, the \"Find…\" trigger has no native popovertarget — initDialogs()'s click listener is the only thing that calls showModal(). With no JS the trigger is inert: the picker dialog never opens, so the field can only be filled by typing a value directly, and the in-dialog filtering script never runs."
             ]
           ],
           "wrongChoice": {
@@ -682,6 +718,10 @@
             [
               "Stale (someone else acted)",
               "poll or push the timeline fragment; a decided record showing \"awaiting approval\" is the failure mode to avoid"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency. Every card, the status timeline, the audit trail and the field-diff table are static markup; the composer's \"Add\" control has no &lt;form&gt; wrapper or script wiring either way, so it is illustrative only, never a working control, regardless of JS"
             ]
           ],
           "dataContract": [
@@ -763,6 +803,10 @@
             [
               "Narrow screen",
               "the panel becomes a drawer over the list — capped at 85vw, so a sliver of the list stays visible and the user keeps their place; selection survives closing it"
+            ],
+            [
+              "No JS",
+              "the primary side-panel view (facts, badges) is plain markup and reads fully without JS. The drawer and edit-dialog variants depend on initDialogs()'s click delegation to call the native showModal() — without it, neither &lt;dialog&gt; ever opens, so \"Open the detail as a drawer\" and \"Edit vendor V-1001\" do nothing and those two views are unreachable"
             ]
           ],
           "dataContract": [
@@ -844,6 +888,10 @@
             [
               "Conflict (someone else saved)",
               "409 → banner naming who and when, with reload-or-overwrite; never silently clobber"
+            ],
+            [
+              "No JS",
+              "the top PO form has no script of its own — its Cancel is type=\"button\" (already inert, with or without JS) and Save is a native submit, so nothing changes without JS. The field-per-row variant's inputs stay natively editable, and its Cancel (type=\"reset\") and Save (type=\"submit\") both work via plain HTML with no JS; only initRowEdit()'s live \"Unsaved changes\" badge and initMoneyField()'s currency-precision reformatting are lost"
             ]
           ],
           "dataContract": [
@@ -1068,6 +1116,10 @@
             [
               "Re-validated",
               "verdicts are recomputed from scratch. Like bulk actions, per-row results are TRANSIENT — a stale \"cannot import\" on a row the user just fixed is worse than no message"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency. Every row's tint (data-row-state) and verdict badge are server-rendered classification, not JS state; the \"Apply\" and \"Start over\" controls shown here are static illustration (type=\"button\", no script anywhere on the page), since a real staging screen posts the validate/apply actions from the Data contract above regardless of JS"
             ]
           ],
           "dataContract": [
@@ -1098,6 +1150,10 @@
             [
               "Re-validated",
               "verdicts are recomputed from scratch. Like bulk actions, per-row results are TRANSIENT — a stale \"cannot import\" on a row the user just fixed is worse than no message"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency. Every row's tint (data-row-state) and verdict badge are server-rendered classification, not JS state; the \"Apply\" and \"Start over\" controls shown here are static illustration (type=\"button\", no script anywhere on the page), since a real staging screen posts the validate/apply actions from the Data contract above regardless of JS"
             ]
           ],
           "wrongChoice": {
@@ -1153,6 +1209,10 @@
             [
               "Cross-field error",
               "attach it to the field the user should change, not to a phantom \"form\" field"
+            ],
+            [
+              "No JS",
+              "the form carries novalidate so JS can own validation — without initValidationSummary() that also disables the browser's own native constraint-validation UI, so submitting the empty form is not stopped client-side at all: it POSTs straight through with empty field values, and only the server's 422 (see Data contract) catches it"
             ]
           ],
           "dataContract": [
@@ -1227,6 +1287,10 @@
             [
               "Overdue",
               "the Waiting cell past a threshold gains the warning tone + the word \"overdue\" — two channels, and the age was already visible before the threshold"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; the filter chips are native radios, the rows are a plain table, and every action is an ordinary link. The polling and claim/409 behaviour in the data contract above are a real server's job, not client script, so nothing here depends on JS running at all"
             ]
           ],
           "dataContract": [
@@ -1288,6 +1352,10 @@
             [
               "Delegated / out of office",
               "name the delegate in the timeline — an approval chain that silently reroutes is an audit problem"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; the stepper, status timeline and audit trail are all plain lists with no hidden state to reveal. The decision dialog and Approve/Reject buttons are not part of this static demo (see the note above); in a real build those would be an ordinary &lt;form&gt; POST, which also needs no JS to submit"
             ]
           ],
           "dataContract": [
@@ -1365,6 +1433,10 @@
             [
               "Long-running",
               "past a few seconds, return a job id and poll; a frozen button is not a progress indicator"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; the rows, checkboxes and bulk buttons in the real screen are plain form controls that POST natively (see the Markup section's hx-post sample — the underlying &lt;form&gt; submits without htmx too). What is lost without JS is the out-of-band summary swap and htmx's per-id focus restoration described in the keyboard walkthrough; a plain form submit reloads the page with the same result instead of swapping in place"
             ]
           ],
           "dataContract": [
@@ -1434,6 +1506,10 @@
             [
               "Very long lane",
               "the lane scrolls internally past a height, never grows the whole board vertically past the viewport"
+            ],
+            [
+              "No JS",
+              "the Move menu still opens — popovertarget is the native HTML Popover API, so a card's menu button works with no script at all. Without initDropdowns() the menu just isn't anchored to its button (no positioning at our browser floor, so it opens in the popover's default top-layer position rather than under the trigger) and it stays open after a click instead of auto-closing on selection. The \"Move to…\" items themselves have no click handler in this static demo either way — a real build would need a form/link per item for the move to complete without JS"
             ]
           ],
           "dataContract": [
@@ -1504,6 +1580,10 @@
             [
               "Export running",
               "a progress affordance and a completion signal; never a frozen button"
+            ],
+            [
+              "No JS",
+              "widgets render with their initial server-rendered data; row checkboxes still toggle individually as native inputs, but the select-all checkbox and the live \"n selected\" count need initDataTables() to sync. Saved-view links stay real, navigable &lt;a&gt; hrefs, but their aria-current active marking and re-populating the filter bar's fields from the URL need initSavedViews(). Collapsible cards stay fixed in whichever data-state the server rendered — the trigger buttons do nothing without initCollapsibleCards(), so a card rendered collapsed can never be reopened"
             ]
           ],
           "dataContract": [
@@ -1577,6 +1657,10 @@
             [
               "Stale result",
               "parameters edited but not re-run → the result keeps its original run-line; a figure never re-labels itself with inputs that did not produce it"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; it imports no @busy-office/ui/js behavior at all, and every field is a plain, native form control"
             ]
           ],
           "dataContract": [
@@ -1646,6 +1730,10 @@
             [
               "No lines",
               "refuse to emit — a document with no lines is a bug upstream, not an empty state to style"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; it's a rendered, printable document (the initScanInput() mentioned here belongs to the separate goods-receipt screen that later reads its barcode, not to this page)"
             ]
           ],
           "dataContract": [
@@ -1719,6 +1807,10 @@
             [
               "Very long history",
               "paginate at the screen level (load-more); the dropdown never grows beyond its few"
+            ],
+            [
+              "No JS",
+              "the bell opens its menu via native popovertarget (Popover API), so browsing notifications still works; \"Mark read\" and \"Dismiss\" are bare type=\"button\" elements with no script or form wired to them on this page, so they do nothing — and the bell's live-count poll (hx-trigger=\"every 60s\", described in Data contract) needs htmx's own script to run at all"
             ]
           ],
           "dataContract": [
@@ -1788,6 +1880,10 @@
             [
               "No jobs scheduled",
               "\"No scheduled jobs\" — genuinely rare in a live ERP, but the empty state still has to say something, not render a bare header row"
+            ],
+            [
+              "No JS",
+              "the table itself reads fine as static markup, but Retry/Cancel are bare type=\"button\" elements with no script or form wired to them on this page, so they do nothing — and the row's own polling (hx-trigger=\"every 30s\", described in Data contract) needs htmx's own script to run at all, so a running/stalled job's status never advances without a manual reload"
             ]
           ],
           "dataContract": [
@@ -1865,6 +1961,10 @@
             [
               "Narrow screen",
               "panel and grid stack in source order — the split's own auto-fit grid (see .sched-split below) collapses to one column below ~36rem; the calendar component itself carries no container breakpoint, nothing new to build here"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; each day is a real &lt;a href=\"#schedule-detail\"&gt; fragment link (native anchor navigation, no script), and the page imports no @busy-office/ui/js behavior"
             ]
           ],
           "dataContract": [
@@ -1926,6 +2026,10 @@
             [
               "Destructive action (not in this demo)",
               "confirm dialog naming the exact consequence and requiring the object name typed for irreversible ones"
+            ],
+            [
+              "No JS",
+              "the tabbed sections need initTabs() to switch panels — without it, whichever panel the server marked visible (not hidden) is the only one reachable, since the inactive tabs' panels carry a static hidden attribute and clicking a tab does nothing"
             ]
           ],
           "dataContract": [
@@ -1988,6 +2092,10 @@
             [
               "Permission-scoped",
               "a task type the worker's role can't run is omitted from the grid, not shown disabled — RF screen real estate at 360px is too scarce for a tile nobody can use"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; each tile is a real &lt;a href&gt; (native navigation to the task queue), and the page imports no @busy-office/ui/js behavior"
             ]
           ],
           "dataContract": [
@@ -2045,6 +2153,10 @@
             [
               "Offline",
               "last-known queue shown with a stale-data cue; claim actions disable rather than silently fail"
+            ],
+            [
+              "No JS",
+              "fully functional — this page has no JS dependency; the demo has no button or script wired to it at all, and it imports no @busy-office/ui/js behavior"
             ]
           ],
           "dataContract": [
@@ -2106,6 +2218,10 @@
             [
               "Offline / flaky wifi",
               "queue scans locally and replay; a dropped scan in a warehouse is a stock discrepancy later"
+            ],
+            [
+              "No JS",
+              "the scan field, quantity input, and table render as plain, focusable, typable native controls, but the core flow cannot complete: initScanInput() is what listens for the terminator key, clears/refocuses the field, and dispatches bo:scan — without it, pressing Enter after a scan does nothing, so no line ever reaches the log. The +/&minus; quantity steppers also need initQuantity(), though the number input itself stays usable via keyboard/typing"
             ]
           ],
           "dataContract": [

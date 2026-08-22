@@ -178,6 +178,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Claimed by a colleague</td><td>409 on claim → the row re-renders naming the claimer; it leaves the list on the next fetch</td></tr>
           <tr><td>Row's document deleted</td><td>the row states it plainly ("PO-88213 no longer exists") with a dismiss — a dead link that 404s is a support call</td></tr>
           <tr><td>Overdue</td><td>the Waiting cell past a threshold gains the warning tone + the word "overdue" — two channels, and the age was already visible before the threshold</td></tr>
+          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; the filter chips are native radios, the rows are a plain table, and every action is an ordinary link. The polling and claim/409 behaviour in the data contract above are a real server's job, not client script, so nothing here depends on JS running at all</td></tr>
         </tbody>
       </table>
     </div>

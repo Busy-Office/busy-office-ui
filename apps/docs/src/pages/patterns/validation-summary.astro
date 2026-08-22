@@ -204,6 +204,7 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
           <tr><td>Server-only error</td><td>e.g. "vendor is blocked" — the summary is the ONLY place it can appear</td></tr>
           <tr><td>Fixed as you go</td><td>remove entries as fields become valid, but keep the summary until resubmit &mdash; the count is the user&rsquo;s progress bar</td></tr>
           <tr><td>Cross-field error</td><td>attach it to the field the user should change, not to a phantom "form" field</td></tr>
+          <tr><td>No JS</td><td>the form carries <code>novalidate</code> so JS can own validation — without <code>initValidationSummary()</code> that also disables the browser's own native constraint-validation UI, so submitting the empty form is not stopped client-side at all: it POSTs straight through with empty field values, and only the server's 422 (see Data contract) catches it</td></tr>
         </tbody>
       </table>
     </div>

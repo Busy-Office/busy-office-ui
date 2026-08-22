@@ -196,6 +196,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
           <tr><td>Row error</td><td><code>data-row-state="error"</code> + a badge naming the reason (two-channel)</td></tr>
           <tr><td>Partial failure after bulk</td><td>re-render the failed rows in the error state and summarise: "8 approved, 2 failed"</td></tr>
           <tr><td>No permission</td><td>bulk buttons absent (not disabled) — a control you can never use is noise</td></tr>
+          <tr><td>No JS</td><td>row checkboxes and the bulk-action buttons are real inputs inside a native <code>&lt;form&gt;</code>, so picking rows and submitting still works end to end; only <code>initDataTables()</code>'s conveniences are lost — the header checkbox no longer toggles every row (it's just an unwired checkbox), and the "n selected" live region never updates, so a screen-reader user gets no running count of the selection</td></tr>
         </tbody>
       </table>
     </div>
