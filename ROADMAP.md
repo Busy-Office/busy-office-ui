@@ -841,7 +841,23 @@ The three builds, in queue order AFTER 101.4-101.7:
        monitors the BUSINESS, this monitors MY WORK); states incl. the
        "nothing needs you" success-empty; the owner's three criteria
        addressed in the report accompanying the build.
-2. [ ] **110.2 — job monitor / batch-run history.** Composes 100%:
+2. [x] **110.2 — job monitor / batch-run history.** **Done 2026-08-22.**
+       Composed 100%: a plain data table, Last-run column carrying every
+       state a schedule can be in — failed/running/succeeded/stalled/never
+       run — as one always-visible column, no drill-in. **Stalled kept
+       deliberately distinct from running**: same warning tone, different
+       word plus a duration, because a job announcing progress and one
+       that has gone quiet for 47 minutes look identical without it. Scope
+       guard from the grill enforced in the opener: not for authoring
+       schedules (the admin module's job) and not for reading one run's
+       own numbers (the report/staging screen's job) — this page only
+       tracks whether runs happened and how they went. `aria-busy="true"`
+       on the running cell is the second channel behind the badge word.
+       This screen IS the fourth criterion (AI-manage/human-monitor) by
+       design — its entire job is watching automation, agents' own
+       scheduled work included, through the same retry/cancel endpoints a
+       human's buttons call. Zero new CSS, complexity 2, all gates green,
+       verified live both themes + 390px. Composes 100%:
        data-table (name/schedule/last/next run) + badge status
        (two-channel) + progress for running + record-detail shape for one
        run's log. **Scope guard in Accept: MONITOR only** — view, retry,

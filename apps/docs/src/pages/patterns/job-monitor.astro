@@ -1,0 +1,186 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: job monitor">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever is accountable when unattended
+    work fails — an integrations admin, an ops lead, the person the
+    <a href={base + '/patterns/inbox'}>inbox</a> assigned an exception to.
+    <strong>How often</strong>: a glance most days, a deep look the moment
+    something is late. <strong>What "done" looks like</strong>: every
+    scheduled job shows its last result and next run, and nothing has
+    failed silently.
+    <strong>Not for authoring schedules</strong> — cron expressions,
+    dependency chains and retry policy are your ERP's admin module; this
+    screen is scoped to <em>monitoring</em> jobs someone already
+    scheduled — view, retry, cancel, nothing that changes what runs next
+    time. And not the place to read one run's own numbers: a finished
+    job links to its own result (a <a href={base + '/patterns/report'}>report</a>
+    or a <a href={base + '/patterns/staging'}>staging</a> screen); this
+    page only tracks whether runs happened and how they went.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Scheduled jobs and their run history</caption>
+        <thead><tr>
+          <th scope="col">Job</th>
+          <th scope="col">Schedule</th>
+          <th scope="col">Last run</th>
+          <th scope="col">Next run</th>
+          <th scope="col"><span class="bo-visually-hidden">Action</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>Nightly GR/IR reconciliation</td>
+            <td class="bo-data-table__col--code">02:00 daily</td>
+            <td><span class="bo-badge bo-badge--danger">Failed</span> today 02:14</td>
+            <td>tonight 02:00</td>
+            <td><button class="bo-btn bo-btn--sm bo-btn--secondary" type="button">Retry</button></td>
+          </tr>
+          <tr>
+            <td>Vendor bank-file import</td>
+            <td class="bo-data-table__col--code">every 15 min</td>
+            <td aria-busy="true"><span class="bo-badge bo-badge--warning">Running</span> started 2 min ago</td>
+            <td>—</td>
+            <td><button class="bo-btn bo-btn--sm bo-btn--secondary" type="button">Cancel</button></td>
+          </tr>
+          <tr>
+            <td>Q3 open-items export</td>
+            <td class="bo-data-table__col--code">on demand</td>
+            <td><span class="bo-badge bo-badge--success">Succeeded</span> today 08:52</td>
+            <td>—</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/report'}>View result</a></td>
+          </tr>
+          <tr>
+            <td>Dunning letter batch</td>
+            <td class="bo-data-table__col--code">08:00 weekdays</td>
+            <td><span class="bo-badge bo-badge--warning">Stalled</span> since 08:00 · 47 min</td>
+            <td>tomorrow 08:00</td>
+            <td><button class="bo-btn bo-btn--sm bo-btn--secondary" type="button">Cancel</button></td>
+          </tr>
+          <tr>
+            <td>Currency rate refresh</td>
+            <td class="bo-data-table__col--code">06:00 daily</td>
+            <td><span class="bo-u-text-muted">Never run</span></td>
+            <td>tomorrow 06:00</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The Last-run column is the whole screen:
+    every state a schedule can be in — <strong>failed</strong>,
+    <strong>running</strong>, <strong>succeeded</strong>,
+    <strong>stalled</strong>, <strong>never run</strong> — is one column,
+    always visible, no drill-in required. Stalled is deliberately distinct
+    from running: a job announcing progress and a job that has gone quiet
+    look identical unless the duration is shown.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<table class="bo-data-table">
+  <thead><tr>
+    <th scope="col">Job</th>
+    <th scope="col">Schedule</th>
+    <th scope="col">Last run</th>
+    <th scope="col">Next run</th>
+    <th scope="col"><span class="bo-visually-hidden">Action</span></th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td>Nightly GR/IR reconciliation</td>
+      <td>02:00 daily</td>
+      <!-- aria-busy on the RUNNING cell — the programmatic channel
+           pairing the "Running" badge's word + tone. -->
+      <td aria-busy="true">
+        <span class="bo-badge bo-badge--warning">Running</span> started 2 min ago
+      </td>
+      <td>—</td>
+      <td><button class="bo-btn bo-btn--sm bo-btn--secondary" type="button">Cancel</button></td>
+    </tr>
+  </tbody>
+</table>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Job list</strong> — a plain
+      <a href={base + '/components/data-table'}>data table</a>, one row
+      per scheduled job. No grouping, no dashboard chrome: this is a
+      worklist, not a visualization.</li>
+      <li><strong>Schedule column</strong> — read-only, stated in the
+      job's own words ("02:00 daily"). Editing it is the admin module's
+      job, named explicitly in the opener.</li>
+      <li><strong>Last-run column</strong> — a
+      <a href={base + '/components/badge'}>badge</a> (word + tone) plus
+      a timestamp/duration; <code>aria-busy="true"</code> on the cell
+      while a job runs, the second channel behind the "Running" word.</li>
+      <li><strong>Action</strong> — Retry after a failure, Cancel while
+      running or stalled, or a link to the run's own result once it
+      succeeded. Never more than one action per row.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /jobs</td><td>the row fragment; each row carries <code>data-job-id</code> and <code>data-status</code> (running/failed/succeeded/stalled/never-run) so an agent reads state without parsing badge text</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /jobs/:id/retry</td><td>the row re-rendered running; 409 if it is already running — re-render with the current state, never queue a second attempt silently</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /jobs/:id/cancel</td><td>the row re-rendered with its last completed state; a job that cannot be cancelled mid-step says so rather than appearing to stop</td></tr>
+          <tr><td class="bo-data-table__col--code">polling</td><td><code>hx-trigger="every 30s"</code> on the table while any row is running or stalled; polling stops once nothing is in flight — an idle screen has no reason to keep asking</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: this screen IS the fourth criterion — its
+    entire job is watching automation, including AI agents' own scheduled
+    work. An agent retries or cancels through the same two endpoints a
+    human's buttons call; the human's channel is the Last-run column, full
+    stop. There is no separate "agent view" — one row, one truth, for
+    both.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Running</td><td>warning badge + <code>aria-busy="true"</code> on the cell, elapsed time, not a spinner alone</td></tr>
+          <tr><td>Failed</td><td>danger badge + when; Retry is the row's action; the failure REASON belongs one click away, not crammed into the cell</td></tr>
+          <tr><td>Stalled</td><td>distinct from running — same warning tone, but the word changes and the duration is shown; a job announcing nothing for an hour is not the same as one announcing progress</td></tr>
+          <tr><td>Succeeded</td><td>success badge + a link to the run's own result; the monitor never shows the result inline</td></tr>
+          <tr><td>Never run</td><td>plain muted text, not a badge — a badge implies something happened</td></tr>
+          <tr><td>No jobs scheduled</td><td>"No scheduled jobs" — genuinely rare in a live ERP, but the empty state still has to say something, not render a bare header row</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/notification", "Notification"],
+    ["/patterns/inbox", "Inbox"],
+    ["/patterns/staging", "Staging / batch result"],
+    ["/patterns/report", "Report"],
+  ]} />
+</Gallery>
