@@ -41,8 +41,17 @@
     color: var(--bo-color-text-secondary);
   }
 
+  /* flex-wrap (roadmap 119.1): every prior consumer of .bo-state__actions
+     put exactly one button in it, so nothing ever exercised two at once —
+     the error-pages pattern does (a primary action plus an escape hatch),
+     and at 390px the pair overflowed the state block's own edge instead of
+     wrapping. justify-content matches .bo-state's own centered layout so a
+     wrapped second button stays centered under the first, not stranded
+     left. */
   .bo-state__actions {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--bo-space-2);
     margin-block-start: var(--bo-space-2);
   }

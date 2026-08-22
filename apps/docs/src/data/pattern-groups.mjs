@@ -19,6 +19,7 @@ export const PATTERN_GROUPS = [
     label: 'Patterns: enter & find',
     items: [
       { href: '/patterns/login', label: 'Login' },
+      { href: '/patterns/error-pages', label: 'Error pages' },
       { href: '/patterns/app-launch', label: 'App launch' },
       { href: '/patterns/role-home', label: 'Role home' },
       { href: '/patterns/command-bar', label: 'Command bar' },
