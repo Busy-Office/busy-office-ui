@@ -23,13 +23,25 @@ function update(container: Element): void {
   const checked = container.querySelectorAll<HTMLInputElement>(
     '.bo-data-table__row-select:checked',
   );
+  // A windowed table (roadmap 30.4b) tracks selection in a Set outside the
+  // DOM — an evicted row's checkbox doesn't exist to be counted below, so
+  // windowed-list.ts writes the true total here before eviction can make
+  // the DOM count wrong. Absent, this is exactly the plain :checked count
+  // it always was; every non-windowed table is unaffected.
+  const override = (container as HTMLElement).dataset.selectedCountOverride;
+  const selectedCount = override !== undefined ? Number(override) : checked.length;
+
   (container as HTMLElement).dataset.anySelected =
-    checked.length > 0 ? 'true' : 'false';
+    selectedCount > 0 ? 'true' : 'false';
 
   const selectAll = container.querySelector<HTMLInputElement>(
     '.bo-data-table__select-all',
   );
   if (selectAll) {
+    // Deliberately LOCAL even with an override present: "select all" means
+    // all rendered rows, never a windowed table's true server-side total —
+    // selecting everything across an unbounded dataset is a distinct,
+    // harder problem this behavior does not attempt.
     selectAll.checked = rows.length > 0 && checked.length === rows.length;
     selectAll.indeterminate =
       checked.length > 0 && checked.length < rows.length;
@@ -42,7 +54,7 @@ function update(container: Element): void {
     if (!count.hasAttribute('aria-live')) {
       count.setAttribute('aria-live', 'polite');
     }
-    count.textContent = checked.length > 0 ? `${checked.length} selected` : '';
+    count.textContent = selectedCount > 0 ? `${selectedCount} selected` : '';
   }
 }
 

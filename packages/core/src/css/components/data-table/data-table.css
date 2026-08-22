@@ -456,6 +456,20 @@
     }
   }
 
+  /* Evicted-chunk placeholder (roadmap 30.4b, windowed-list.ts) — height set
+     inline per chunk (rowCount * --bo-density-row-height, computed, never
+     measured) so scroll position cannot jump when real rows are swapped out.
+     Deliberately no border-accent the way data-row-state gets one: nothing
+     is WRONG with this row, it is simply not loaded yet — an accent would
+     read as a warning that isn't there. */
+  .bo-data-table__spacer {
+    background: var(--bo-color-bg-canvas);
+  }
+
+  .bo-data-table__spacer > td {
+    border: none;
+  }
+
   @media print {
     .bo-data-table-container {
       border: none;

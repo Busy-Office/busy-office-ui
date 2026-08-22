@@ -7,6 +7,7 @@ export { initStickyCols } from './behaviors/sticky-cols.js';
 export { initTableSum } from './behaviors/table-sum.js';
 export { initTreeTable } from './behaviors/tree-table.js';
 export { initLoadMore } from './behaviors/load-more.js';
+export { initWindowedList } from './behaviors/windowed-list.js';
 export { initAnchorNav } from './behaviors/anchor-nav.js';
 export { initCollapsibleCards } from './behaviors/collapsible-card.js';
 export { initSavedViews } from './behaviors/saved-views.js';
