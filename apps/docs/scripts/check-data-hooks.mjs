@@ -46,7 +46,7 @@ const EXCEPTIONS = new Set([
   // demo-local wiring: page scripts driving their own fixtures
   'data-vh-pick', 'data-vh-row', 'data-group',          // value-help picker demo
   'data-line-remove', 'data-line-total',                // editable-grid totals demo
-  'data-any-dirty',                                     // field-editor dirty demo
+  'data-any-dirty',                                     // detail-form's field-per-row variant dirty demo
   'data-maintenance',                                   // master-detail fixture flag
   'data-richtext-cmd',                                  // richtext toolbar demo
 ]);

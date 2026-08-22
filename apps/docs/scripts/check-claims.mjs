@@ -464,13 +464,14 @@ check(
   JSON.stringify(reached),
 );
 
-/* /patterns/field-editor: one Save for the record, and Cancel is a native form
+/* /patterns/detail-form's field-per-row variant (folded from field-editor,
+   roadmap 109.19): one Save for the record, and Cancel is a native form
    reset that must clear the unsaved marks as well as the values (roadmap 34.1).
    The reset half is the part that would rot silently — the values revert
    visibly, but a stale "dirty" band lies about unsaved work and nobody would
    notice from a screenshot. Uses a REAL input event: initRowEdit marks text
    dirty on input, not on change. */
-await visit('/patterns/field-editor/', { width: 1440 });
+await visit('/patterns/detail-form/', { width: 1440 });
 const fe = await page.evaluate(async () => {
   const row = document.querySelector('tr[data-row-id="name"]');
   const input = row.querySelector('input');
@@ -489,7 +490,7 @@ const fe = await page.evaluate(async () => {
   return { before, dirty, after: read() };
 });
 check(
-  'field editor: one Save for the record, and Cancel restores values AND clears the unsaved marks',
+  'detail-form field-per-row variant: one Save for the record, and Cancel restores values AND clears the unsaved marks',
   fe.before.dirty === null && fe.before.perRowSaveButtons === 0 &&
     fe.dirty.dirty === 'dirty' &&
     fe.after.dirty === null && fe.after.value === fe.before.value,

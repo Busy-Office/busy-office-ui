@@ -180,6 +180,74 @@ ${deliveryMonth(2026, 8)}
   </section>
 
   <section class="demo">
+    <h2>Variant: field-per-row layout (master-data maintenance)</h2>
+    <p class="bo-u-text-muted">
+      Some one-record edits read better as a table than a form —
+      <strong>master-data maintenance, the SM30 case</strong>: a back-office
+      user opens one vendor and corrects a handful of fields (a name typo, a
+      credit limit, a date), a few times a week, with each field given the
+      input its type deserves. One row per <em>field</em>, still one record,
+      still this pattern — not <a href={base + '/patterns/editable-grid'}>the
+      editable grid</a>, which is many ROWS, one record per row.
+    </p>
+    <form method="post" action="/vendors/V-1001">
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-row-edit data-density="compact">
+        <caption class="bo-visually-hidden">Vendor master data, one row per field</caption>
+        <thead>
+          <tr><th scope="col" style="inline-size: 14rem">Field</th><th scope="col">Value</th></tr>
+        </thead>
+        <tbody>
+          <tr data-row-id="name">
+            <th scope="row">Vendor name<br /><span class="bo-u-text-muted" style="font-weight: 400">Legal entity as registered</span></th>
+            <td><input class="bo-input bo-input--seamless" id="df-fe-name" aria-label="Vendor name" value="Umbrella Logistics GmbH" /></td>
+          </tr>
+          <tr data-row-id="credit">
+            <th scope="row">Credit limit<br /><span class="bo-u-text-muted" style="font-weight: 400">Per open order</span></th>
+            <td>
+              <div class="bo-money">
+                <select class="bo-select bo-select--seamless bo-money__currency" aria-label="Currency">
+                  <option selected>EUR</option><option>USD</option><option>JPY</option>
+                </select>
+                <input class="bo-input bo-input--numeric bo-input--seamless bo-money__amount" type="number" step="0.01" id="df-fe-credit" aria-label="Credit limit" value="250000.00" />
+              </div>
+            </td>
+          </tr>
+          <tr data-row-id="active">
+            <th scope="row">Active<br /><span class="bo-u-text-muted" style="font-weight: 400">Blocks new orders when off</span></th>
+            <td><input class="bo-checkbox" type="checkbox" id="df-fe-active" aria-label="Active" checked /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bo-data-table__footer">
+      <span class="bo-badge bo-badge--warning" data-any-dirty hidden>Unsaved changes</span>
+      <button class="bo-btn bo-btn--secondary" type="reset">Cancel</button>
+      <button class="bo-btn" type="submit">Save vendor</button>
+    </div>
+    </form>
+    <p class="bo-u-text-muted">
+      <strong>One Save at the bottom, not one per row.</strong> These rows
+      are the FIELDS OF ONE RECORD, not a list of records — a Save per field
+      means six requests for one logical edit, a Cancel that undoes a third
+      of what the user changed, and, measured on the first version of this
+      variant, a button sitting <strong>228px from the field it
+      saves</strong> in an actions column taking 37% of the table. Per-row
+      Save belongs to <a href={base + '/patterns/editable-grid'}>the
+      editable grid</a>, where each row really is a record. Seamless
+      (<code>--seamless</code>) on every field, including money — a screen
+      where some fields read as text and others as boxes tells the user the
+      boxed ones are editable and the rest are not, backwards from the
+      truth. Zero new CSS: <a href={base + '/components/data-table'}>the
+      data table</a> with <code>data-row-edit</code>, ordinary typed
+      inputs — the page's own <a href={base + '/patterns/editable-grid'}>line
+      items</a> table above stays plain (no dirty tracking, by this page's
+      own design); this variant is the one place on the page that wires
+      <code>initRowEdit()</code>.
+    </p>
+  </section>
+
+  <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Sections</strong> — real <code>&lt;fieldset&gt;</code>s
@@ -198,6 +266,9 @@ ${deliveryMonth(2026, 8)}
       <li><strong>Action bar</strong> — sticky <code>.bo-form-actions</code>;
       the framework sets <code>scroll-padding-block-end</code> so focus never lands
       under it.</li>
+      <li><strong>Field-per-row variant</strong> (below) — <a href={base + '/components/inline-editing'}>inline
+      editing</a> on <code>&lt;th scope="row"&gt;</code> labels instead of
+      fieldsets, for the master-data case where the record IS the table.</li>
     </ol>
   </section>
 
@@ -259,13 +330,33 @@ ${deliveryMonth(2026, 8)}
       <li><a class="bo-badge bo-badge--type" href={base + '/patterns/editable-grid'}>Editable grid</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/patterns/validation-summary'}>Validation summary</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/calendar'}>Calendar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/inline-editing'}>Inline editing</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/money'}>Money</a></li>
     </ul>
   </section>
+
+  <script>
+    import { initRowEdit, initMoneyField } from '@busy-office/ui/js';
+    initRowEdit();
+    initMoneyField();
+
+    /* The field-per-row variant's dirty badge — same three-line split as
+       the pattern it was folded from (109.19): the framework marks each
+       ROW dirty, aggregating that into one "unsaved changes" badge is
+       application state. */
+    const feTable = document.querySelector('table[data-row-edit]');
+    const feBadge = document.querySelector('[data-any-dirty]');
+    const feSync = () => { feBadge.hidden = !feTable.querySelector('tr[data-row-state="dirty"]'); };
+    document.addEventListener('input', feSync);
+    document.addEventListener('change', feSync);
+    document.addEventListener('reset', () => setTimeout(feSync, 0));
+  </script>
 
   <Related links={[
     ["/components/form", "Forms"],
     ["/components/calendar", "Calendar"],
     ["/components/data-table", "Data table"],
+    ["/components/inline-editing", "Inline editing"],
     ["/patterns/record-detail", "Record detail (read-only counterpart)"],
     ["/concepts/container-queries", "Container queries"],
   ]} />

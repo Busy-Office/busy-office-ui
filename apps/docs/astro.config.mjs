@@ -28,6 +28,10 @@ export default defineConfig({
     // 109.2: shape-not-domain rename — the invoice was always sample data
     // on the generic list screen; the industry name is List Report.
     '/patterns/invoice-list': `${base}/patterns/list-report`,
+    // 109.19: field-editor folded into detail-form's field-per-row variant
+    // (109.4's verdict — thin anatomy, one distinction expressible as a
+    // paragraph on an existing pattern rather than a standalone page).
+    '/patterns/field-editor': `${base}/patterns/detail-form`,
     '/components/nav': `${base}/components/sidebar-nav`,
     '/primitives': `${base}/base/primitives`,
   },

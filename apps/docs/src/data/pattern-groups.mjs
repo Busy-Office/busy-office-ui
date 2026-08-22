@@ -43,7 +43,6 @@ export const PATTERN_GROUPS = [
       { href: '/patterns/wizard', label: 'Multi-step wizard' },
       { href: '/patterns/staging', label: 'Staging / batch result' },
       { href: '/patterns/validation-summary', label: 'Validation summary' },
-      { href: '/patterns/field-editor', label: 'Field editor' },
     ],
   },
   {

@@ -680,6 +680,32 @@ catalogue in ERP vocabulary and job order.
        components (only page in the catalogue with this gap) and its
        Opener lacks a "how often" clause. **Accept:** all three fixed,
        verified live.
+16. [ ] **109.19 — execute the field-editor fold decided by 109.4.**
+       **Dispatch-order note (LOOPS.md's oldest-item rule, not
+       convenience): this jumps ahead of the older 94.8 and the
+       109.14-18 queue, and that override is written down rather than
+       silent, per LOOPS.md's own warning against convenience reordering
+       (the roadmap-53.2 starvation precedent — an older item sat 9 wakes
+       behind newer, louder ones for exactly this kind of un-stated
+       jump).** The justification: 109.14 (No-JS rows) and 109.16
+       (4xx rows) will both touch `detail-form.astro`/`editable-grid.astro`;
+       running the fold first means those items touch each page once,
+       not twice, and never write content into `field-editor.astro`
+       moments before it is deleted and redirected — real, measured
+       rework avoided, not a preference. Collision-checked 109.19 against
+       the WHOLE of Slice 109 (and the archive) before minting it — the
+       lesson from 109.13's under-scoped check earlier this session.
+       **Accept:** field-editor's one load-bearing distinction
+       (single-Save-at-bottom, one-record scope, per 109.4's verdict) is
+       folded in as a variant paragraph on `detail-form.astro` (the closer
+       fit — same one-record framing) or `editable-grid.astro` if the
+       row-level mechanics turn out to dominate once written; the old
+       `field-editor.astro` page is replaced with a redirect stub (the
+       same mechanism 109.2's `invoice-list` → `list-report` rename
+       used); every internal link/Related-footer badge pointing at
+       `/patterns/field-editor` is updated; `pattern-groups.mjs`,
+       `patterns-index.json`/`patterns.json` regenerate clean; the
+       `check:links`/`check:patterns-index` gates stay green.
 
 5. [x] **109.5 — shape-not-domain, stated as a rule in the pattern recipe**
        (owner follow-up, 2026-08-22: "pattern should not [be] specific,

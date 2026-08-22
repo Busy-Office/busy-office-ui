@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 14:39
+Generated at: 2026-08-22 14:48
 
 ## Open items by slice
 
@@ -17,12 +17,13 @@ Generated at: 2026-08-22 14:39
   - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 - **Slice 104** (1 open)
   - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
-- **Slice 109** (5 open)
+- **Slice 109** (6 open)
   - 109.14 — No-JS States row, missing on 25 of 26 pages.
   - 109.15 — human-monitoring-signal sentence: placement + absence.
   - 109.16 — Data-contract 4xx/error row missing.
   - 109.17 — check-claims.mjs has ZERO cases for `inbox`, `job-monitor`, `kanban`.
   - 109.18 — small mechanical fixes, one page each.
+  - 109.19 — execute the field-editor fold decided by 109.4.
 - **Slice 112** (4 open)
   - 112.2 — pattern catalogue into `llms.txt`.
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
@@ -45,7 +46,7 @@ dispatch status — counter-triggered rules (658 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
-- 109.18 — small mechanical fixes, one page each.
+- 109.19 — execute the field-editor fold decided by 109.4.
 - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
 - 99.4 — missing components discovered along the way go through the front door.
 - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
