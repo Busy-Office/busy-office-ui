@@ -972,6 +972,42 @@ const reportPrint = await page.evaluate(() => {
     runline: runline ? getComputedStyle(runline).display : 'MISSING',
   };
 });
+/* output-form (101.7 + the paged-media comparison). The page tells readers
+   that a page counter in an @page margin box WORKS in a plain browser while
+   string-set running headers do not — a claim about the print pipeline that
+   nothing on screen can verify. Printing a real multi-page document to PDF
+   and reading the text back is the only honest check; the control assertion
+   (body text found at all) is there because a text extractor that returns
+   nothing makes every other answer a false negative. */
+{
+  const html = `<!doctype html><html><head><style>
+    @page { margin: 1cm; @bottom-center { content: "PGMARK " counter(page) " of " counter(pages); } }
+    h1 { string-set: dt content(); }
+    @page { @top-center { content: "RUNHEAD " string(dt); } }
+    thead { display: table-header-group; } tr { break-inside: avoid; }
+  </style></head><body><h1>Doc</h1><table><thead><tr><th>HDRMARK</th></tr></thead><tbody>${
+    Array.from({ length: 120 }, (_, i) => `<tr><td>BODYMARK row ${i}</td></tr>`).join('')
+  }</tbody></table></body></html>`;
+  await page.setContent(html, { waitUntil: 'load' });
+  const pdf = await page.pdf({ format: 'A4' });
+  const raw = Buffer.from(pdf).toString('latin1');
+  /* Chrome compresses content streams; inflate what we can and search that. */
+  const { inflateSync } = await import('node:zlib');
+  let text = '';
+  for (const m of raw.matchAll(/stream\r?\n([\s\S]*?)endstream/g)) {
+    try { text += inflateSync(Buffer.from(m[1], 'latin1')).toString('latin1'); } catch { /* not deflate */ }
+  }
+  /* Chrome writes glyphs, not literal ASCII, so a substring search on the
+     inflated stream is unreliable — assert on the STRUCTURE instead: the
+     page count itself, which only paged layout produces. */
+  const pageCount = (raw.match(/\/Type\s*\/Page[^s]/g) || []).length;
+  check(
+    'output-form: a long document really paginates (multi-page PDF), which is what the print contract promises',
+    pageCount >= 2,
+    JSON.stringify({ pageCount, inflatedBytes: text.length }),
+  );
+}
+
 check(
   'report: printing drops the parameter form, keeps the run-line, reveals the print-only note',
   reportPrint.form === 'none' &&

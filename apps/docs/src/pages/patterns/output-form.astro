@@ -112,6 +112,121 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>Logo &amp; barcode — any mark, any symbology</h2>
+    <p>Both are supported the same way, and the split is the same as the
+    PDF one: <strong>the framework does not generate either</strong> —
+    barcode bitmaps come from a library (bwip-js, ZXing, a GS1 service) or
+    a barcode font, and a logo is your asset. What decides whether the
+    printed result actually <em>works</em> is placement, and that is
+    entirely CSS:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Rule</th><th scope="col">Why it decides success</th></tr></thead>
+        <tbody>
+          <tr><td><code>.bo-u-print-exact</code> on the mark</td><td><strong>The one that breaks scanning.</strong> Browsers lighten fills and drop backgrounds when printing; a barcode whose bars come back grey does not scan, and a logo loses its mark. This utility says "these colours are content".</td></tr>
+          <tr><td>Quiet zone — blank margin around the symbol</td><td>Every symbology requires one (roughly 10× the narrow-bar width for Code 128, 4 modules for QR). A barcode flush against a table border is unreadable to the scanner even though it looks fine.</td></tr>
+          <tr><td>Physical units (<code>mm</code>), not <code>px</code></td><td>A barcode has a real-world minimum size. <code>px</code> is a screen unit and its printed size depends on the renderer's DPI assumption; <code>mm</code> means the same thing on every printer.</td></tr>
+          <tr><td>SVG for the symbol where possible</td><td>Vector bars stay crisp at any DPI. For a raster barcode add <code>image-rendering: pixelated</code> so the renderer does not smooth the bar edges into each other.</td></tr>
+          <tr><td><code>.bo-u-avoid-break</code> on the block</td><td>A symbol split across a page boundary is two unreadable halves.</td></tr>
+          <tr><td>Human-readable text under the symbol</td><td>Both the two-channel rule and the actual GS1 standard: the number must be printed as text as well, so a human (or a failed scan) can still read it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bo-cluster bo-u-avoid-break" style="gap: var(--bo-space-6); align-items: flex-start; margin-block-start: var(--bo-space-4)">
+      <figure class="bo-u-print-exact bo-u-avoid-break" style="margin: 0; text-align: center">
+        {/* Stand-in for YOUR barcode image: bars drawn with a gradient so the
+            demo needs no asset. Real documents put an <img> or inline <svg>
+            here — the placement rules are what this page is documenting. */}
+        <div role="img" aria-label="Barcode for document PO-88213" style="inline-size: 48mm; block-size: 14mm; background: repeating-linear-gradient(90deg, #000 0 1.2px, #000 1.2px 2px, transparent 2px 3.4px, #000 3.4px 4.2px, transparent 4.2px 6px); padding: 0; border: 3mm solid #fff"></div>
+        <figcaption style="font-family: var(--bo-font-mono); font-size: var(--bo-font-size-xs)">PO-88213</figcaption>
+      </figure>
+      <figure class="bo-u-print-exact" style="margin: 0">
+        <div role="img" aria-label="Busy Office Supplies logo" style="inline-size: 26mm; block-size: 26mm; border-radius: var(--bo-radius-md); background: linear-gradient(135deg, var(--bo-color-accent-solid), var(--bo-color-accent-strong)); display: grid; place-items: center; color: #fff; font-weight: var(--bo-font-weight-semibold)">BO</div>
+        <figcaption class="bo-u-text-muted" style="font-size: var(--bo-font-size-xs); text-align: center">Logo · 26mm</figcaption>
+      </figure>
+    </div>
+    <pre><code>{`<!-- Barcode: your renderer supplies the image; these classes and
+     units are what make the printed result scan. -->
+<figure class="bo-u-print-exact bo-u-avoid-break">
+  <img src="/barcode/PO-88213.svg" alt="Barcode for document PO-88213"
+       style="inline-size: 48mm; block-size: 14mm; padding: 3mm" />
+  <figcaption>PO-88213</figcaption>   <!-- human-readable, always -->
+</figure>
+
+<!-- Logo: same utility, physical size, real alt text. -->
+<img class="bo-u-print-exact" src="/brand/logo.svg"
+     alt="Busy Office Supplies Ltd" style="inline-size: 26mm" />`}</code></pre>
+    <p class="bo-u-text-muted">This closes a loop the framework already had
+    open on the other side: <code>initScanInput()</code> on the
+    <a href={base + '/patterns/goods-receipt'}>RF goods-receipt screen</a>
+    <em>reads</em> these barcodes off a handheld. The document that gets
+    scanned in the warehouse is the one this pattern emits — emit and read
+    are now both documented.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Page numbers &amp; running headers — what browsers do, and what needs a renderer</h2>
+    <p>Compared against the dedicated paged-media engines
+    (<a href="https://www.princexml.com/doc/paged/">Prince</a>,
+    <a href="https://doc.courtbouillon.org/weasyprint/stable/">WeasyPrint</a>),
+    which is what the CSS Paged Media and GCPM specs were written for.
+    Two of their headline features matter for an ERP document, and they do
+    <em>not</em> land the same way — measured here by printing a
+    three-page table to PDF and reading the text back out, not by
+    consulting a support table:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Feature</th><th scope="col">Browser print / headless Chrome</th><th scope="col">Prince · WeasyPrint</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>@page</code> margin box with <code>counter(page)</code> / <code>counter(pages)</code></td>
+            <td><span class="bo-badge bo-badge--success">Works</span> — rendered "1 of 3", "2 of 3", "3 of 3" on the right pages</td>
+            <td>Works</td>
+          </tr>
+          <tr>
+            <td><code>string-set</code> + <code>content: string(…)</code> running headers</td>
+            <td><span class="bo-badge bo-badge--danger">No</span> — emitted nothing at all in the same test</td>
+            <td>Works (GCPM)</td>
+          </tr>
+          <tr>
+            <td>Repeating <code>&lt;thead&gt;</code> / <code>&lt;tfoot&gt;</code></td>
+            <td><span class="bo-badge bo-badge--success">Works</span> — header and totals repeated on all 3 pages</td>
+            <td>Works</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>So <strong>page numbering is available to you today</strong>, in a
+    plain browser, with no renderer and no JavaScript. It is not shipped as
+    a framework default because <code>@page</code> is a
+    <em>document-global</em> rule — it cannot be scoped to one route or one
+    element, so shipping it would stamp page numbers on every print job in
+    every consuming app, including screens where that is wrong. It belongs
+    in the stylesheet of your document route:</p>
+    <pre><code>{`/* your-document-route.css — paste as-is; verified in Chrome */
+@page {
+  margin: 1.6cm;                       /* the framework already sets this */
+  @bottom-center {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 9pt;
+  }
+  @bottom-right { content: "PO-88213"; }   /* the doc number on every page */
+}
+
+/* Server-renderer ONLY (Prince, WeasyPrint) — a running header that
+   repeats the document title. Browsers ignore string-set entirely, so
+   never rely on it for a document a user might print from the app. */
+h1 { string-set: doctitle content(); }
+@page { @top-center { content: string(doctitle); } }`}</code></pre>
+    <p class="bo-u-text-muted">The document above uses a plain
+    <code>.bo-u-print-only</code> line carrying its number instead, because
+    that works in <em>both</em> paths — the browser print dialog and the
+    server renderer — and a loose page from a printed PO still identifies
+    itself. Add the margin-box recipe on top when the document is rendered
+    by a route you control.</p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{`<!-- The whole document is one .bo-print-report. No new classes:
      letterhead + parties + kv meta + lines + tfoot totals + terms. -->

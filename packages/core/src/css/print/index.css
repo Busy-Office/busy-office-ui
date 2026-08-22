@@ -79,6 +79,23 @@
     display: none;
   }
 
+  /* Keep this element's colours EXACTLY as authored when printed.
+     Browsers drop backgrounds and lighten fills in print by default (the
+     "Background graphics" checkbox is off in most print dialogs), which is
+     right for screen chrome and wrong for anything whose FILL is the
+     content: a barcode whose bars are lightened does not scan, a logo
+     loses its mark, a status legend loses its key. The framework already
+     applies this internally to timeline/stepper markers and icon masks;
+     this exposes the same escape hatch for consumer content — one
+     property, many uses (barcode, QR, logo, chart, legend swatch).
+     Applies in print only, so screen rendering is untouched. */
+  @media print {
+    .bo-u-print-exact {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
   @media print {
     .bo-u-print-only {
       display: revert;
