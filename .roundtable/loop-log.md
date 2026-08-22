@@ -640,3 +640,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 11:41 · Continue · build · 104.1 - /patterns/ tile index, generated from the pages themselves; pattern-groups.mjs unified as sidebar+index source · landed · 7aec783
 - 2026-08-22 11:51 · Continue · grill · 104.3 - defined the complexity scale on concurrent-live-state (not component count), corrected 3 badges (value-help/detail-form 3->2, field-editor 2->3) with evidence from each page's own States table, fixed a stale pre-109 tier label found on 2 of them, ran the per-group ladder audit and refused every gap through the 99.4 front door - no new items queued · landed · 4d6fbf3
 - 2026-08-22 11:59 · Continue · build · 104.4 - complexity filter chips on the patterns index · refused · 52b5c86
+- 2026-08-22 12:12 · Continue · grill · 110.7 — re-open the drag refusal (100.1): fresh grill at full cost · refused · c28a7a4
