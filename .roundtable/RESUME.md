@@ -13,34 +13,35 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-22 after 109.6 (renumbered 109.13 mid-wake — see
-below) closed: all 26 non-exempt pattern pages bar-scored across two
-batches, reports in `.roundtable/pattern-sweep-109.6-batch{1,2}-2026-08-22.md`.
-109.4 (field-editor) decided FOLD. Five systemic gaps the sweep found are
-queued as 109.14-109.18 (No-JS rows, human-monitoring-signal placement,
-missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban,
-and a handful of small mechanical fixes) — none fixed yet, scoring only,
-per the sweep's own scope.
+Last updated 2026-08-23. `git status` clean, 214 commits ahead of
+origin/main (unpushed, unrelated to the 0.3.0 release question below).
+**This file had gone stale again** — it still read "last updated
+2026-08-22 after 109.6," 214 commits and Slices 110-122 behind reality,
+and its 109.13-109.18 note ("queued, not fixed yet") was flatly wrong:
+all of Slice 109 including 109.13-109.19 shows `[x]` DONE (109.19 landed
+2026-08-22 in commit `69a5336`). A read-only survey this wake (grepping
+every unchecked `[ ]` across the whole 6398-line ROADMAP.md, not
+sampling) found this by cross-checking the claim against the file
+instead of trusting it — exactly the failure mode this file's own
+2026-08-19 warning names. **Lesson repeats: don't trust an "In flight"
+entry's age at face value — re-verify its specific claims against
+ROADMAP.md before acting on them, every time, not just when something
+feels off.**
 
-**Numbering note for future wakes:** while queuing those five items, the
-sweep's own roadmap number (originally minted "109.6") turned out to
-collide with a pre-existing, unrelated 109.6 ("RF becomes a TRACK") and
-109.8 ("catalogue v2") further down the same slice — caught by re-running
-the 101.2-style enumeration check before committing, not by review. Fixed
-by renumbering to 109.13-109.18 (next free after the existing 109.1-109.8).
-**Lesson for any wake minting a new sub-item number inside an existing
-slice: grep the WHOLE slice for that number first** — checking only the
-nearby text (what happened here) misses collisions further down a long
-slice.
-
-*(Prior note, kept for its still-true warning:)* Last updated 2026-08-19
-after the Slice 56-61 Objective grill. This file had gone stale since
-2026-08-18 — Slice 48's "open question" below had already been resolved and
-shipped (48.4, then the whole object-page pattern) without this file being
-told. Found by the same grill that found the LIFO dispatch bug; both are the
-same root cause (stale state trusted instead of checked). **If this file's
-"last updated" is more than a few wakes old, verify its claims against
-ROADMAP.md before trusting them.**
+**Current reality (2026-08-23 survey), replacing the stale note above:**
+Slices 110-121 all landed and are `[x]` DONE except the items below, which
+are genuinely still open. There is exactly **one buildable-now item** with
+real Accept criteria and no blocker: **119.2 — ERP layout overview,
+concepts page** (docs-only, zero new CSS: map the shells that already
+ship — app-shell sidebar+navbar / RF full-screen / role-home / split
+master-detail — to when each fits). Everything else open is BLOCKED ON
+GRILL or an explicit owner call (121.1/121.2/121.3, 121.5, 119.3, 122.1 —
+the last is this wake's own triage of the "Amount decimal/masking"
+wishlist item, see ROADMAP.md Slice 122). Also open, older and easy to
+lose track of because they don't read as "blocked": 30.0 (owner
+clarification on the overview/sidebar-menu note) and 52.3 (Object Page
+naming, owner taste call) — both under "Open questions" below, unchanged
+since last checked.
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 
