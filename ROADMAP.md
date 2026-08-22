@@ -317,14 +317,24 @@ pattern), approval (the "workflow" ask), wizard.
        docs build 13 gates green on the first run, `check:claims` 95,
        target-size/forced-colors clean, screenshots light/dark 1440+390.
        **Accept met.**
-2. [ ] **119.2 — ERP layout overview, as a CONCEPTS page.** Maps the
-       shells that already ship (app-shell sidebar+navbar · RF
-       full-screen · role-home · split master-detail) to when each
+2. [x] **119.2 — DONE 2026-08-23.** ERP layout overview, as a CONCEPTS
+       page. Maps the shells that already ship (app-shell sidebar+navbar ·
+       RF full-screen · role-home · split master-detail) to when each
        fits, linked. Docs-only, zero new CSS — the owner's "different
        layouts possible for ERP" is a wayfinding gap, not a component
-       gap. Accept: `/concepts/layouts` (or equivalent), each layout
-       shown with a real thumbnail-scale live composition or link, and
-       a decision table naming when each is the wrong choice.
+       gap. `/concepts/layouts`: a shell-comparison table, a 3-question
+       decision tree (dedicated device? → RF; first screen after sign-in?
+       → role home; list+detail at once? → split master-detail; else the
+       app shell's main holds the content directly), and a "when each
+       shell is the WRONG choice" table naming the real failure mode per
+       shell (app shell on a single-purpose device; role home used as a
+       general dashboard; RF full-screen with more than one task in the
+       session; split master-detail once the record outgrows a narrow
+       pane, handing off to object-page). Landed uncommitted from an
+       earlier wake (fb7112f); fixed one real copy bug found reviewing it
+       before closing (a duplicated "per the ... per the" clause) and
+       verified the full 13-gate docs build + link check green with the
+       page included. Sidebar entry already present. **Accept met.**
 3. [ ] **119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.** The
        owner clarified "app screen" as a new app-frame pattern. What is
        framed decides everything — an iframe'd legacy app, a same-DOM
