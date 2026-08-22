@@ -647,3 +647,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 12:24 · Meta · refusal · RF list (editable) — grid editing with gloves at 360px, goods-receipt's scan flow already covers correction · refused · c5d21fb
 - 2026-08-22 12:24 · Meta · refusal · RF form generic extraction — goods-receipt already IS the documentation of the shape · refused · c5d21fb
 - 2026-08-22 12:24 · Continue · build · 110.3 - schedule screen (bo-calendar assembled), 100% composed from calendar + master-detail's swap idiom applied to a month; sidebar/pattern-groups placement reconciled at merge (branch predated 104.1's unification) (parallel worktree) · landed · c1d9e10
+- 2026-08-22 12:34 · Continue · build · 110.5 - generated STATUS.md, human's ten-second now view, wired into record_iteration.py (reconciled from parallel worktree) · landed · d0edfbe

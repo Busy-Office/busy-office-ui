@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 12:33
+Generated at: 2026-08-22 12:34
 
 ## Open items by slice
 
@@ -28,8 +28,8 @@ Generated at: 2026-08-22 12:33
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (641 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-22 12:14   ok
+dispatch status — counter-triggered rules (642 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-22 12:14   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -50,7 +50,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 11:07 · Continue · build · 102.8 - object-page 390px anchor-landing gap fixed via live-measured sticky offset (anchor-nav.ts syncLandingOffset), replacing the fixed 7rem guess; strengthened check-claims.mjs probe, red-proved · landed · 5107dff
 - 2026-08-22 11:19 · Continue · build · 102.9 editable-grid dirty-row reflow: tried global min-inline-size reservation first, measured it made two tables wrap permanently even clean (worse than the bug), reverted; fixed as demo-authoring debt instead (Cost centers column floor on the Advanced table) · landed · 55db531
 - 2026-08-22 11:24 · Continue · build · 102.10 - wrong-choice clause for combobox/money/quantity, all three added to the FIRST demo-note paragraph (opener() only reads that one), content re-scored 2->3, TODO shrank by 3 · landed · 39785a9
 - 2026-08-22 11:28 · Continue · build · 102.11 - CHANGELOG entries for 8 undocumented packages/core/src commits (grew past the originally-named 6) · landed · 8e8950f
@@ -60,6 +59,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 11:59 · Continue · build · 104.4 - complexity filter chips on the patterns index · refused · 52b5c86
 - 2026-08-22 12:12 · Continue · build · 105.1 - one popover-positioning helper for dropdown/combobox/context-menu, unifying the drifted clamp+flip math; context-menu gains real flip-above behavior, combobox gains RTL alignment; scroll-follow policies deliberately kept separate (two distinct owner bug fixes); stale insetInlineStart red-proved fixed; 5 new tests, verified live via CDP · landed · 4b10d18
 - 2026-08-22 12:14 · Standardize · standardize · sweep #4 - checked pattern-groups.mjs single-source-of-truth (gate-verified both directions), popover-position.ts vs sticky-cols.ts/anchor-nav.ts overlap (none, three distinct problems), 104.x demo min-inline-size overrides (matches kanban's pre-existing bare-rem convention), check-dsa-scores/check-wrong-choice redundancy (already share wrong-choice-rule.mjs) - clean pass, nothing to fix · logged · 511e29b
+- 2026-08-22 12:34 · Continue · build · 110.5 - generated STATUS.md, human's ten-second now view, wired into record_iteration.py (reconciled from parallel worktree) · landed · d0edfbe
 
 ## Sunset test
 
