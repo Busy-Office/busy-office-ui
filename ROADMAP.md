@@ -1797,7 +1797,26 @@ the owner has already answered that with Slices 99 and 100.
        nothing that exercises them end to end. The 30.4b windowed list is
        related and stays owner-deferred — do not silently pull it in.
 
-7. [ ] **101.7 — Output form.** The printed artefact an ERP emits: PO,
+7. [x] **101.7 — Output form.** **Done 2026-08-22.** The Accept's "grill
+       FIRST whether this belongs in a CSS framework at all" is answered on
+       the page as **half yes**, and the split is the deliverable: producing
+       the PDF is infrastructure (headless Chrome/Gotenberg/wkhtmltopdf) and
+       shipping one would be the virtualiser mistake again; but what every
+       one of those tools CONSUMES — HTML plus a print stylesheet — is
+       exactly this framework's job and already shipped. So the page
+       documents the contract, not a generator, and **zero new CSS was
+       needed, which is itself the evidence the contract was complete.**
+       One suspected gap measured away rather than "fixed": `thead` has an
+       explicit repeat rule but `tfoot` has none — measured in print media,
+       `tfoot` is already `table-footer-group` by browser default, so
+       totals repeat and a framework rule would have been dead code (the
+       exact defect print/index.css's own comment records). Verified in
+       print media: header + totals repeat, letterhead/parties/kv blocks
+       carry break-inside avoid, print-only line appears. States refuse to
+       style a no-lines document (a bug upstream, not an empty state) and
+       forbid watermark-image drafts (a b/w printer loses them; the word
+       DRAFT is the two-channel answer). Complexity 2. Original Accept
+       below:** The printed artefact an ERP emits: PO,
        invoice, delivery note. **The shape most UI frameworks ignore and an
        ERP cannot ship without.** It is a document, not a screen — fixed
        layout, page breaks, letterhead, totals that survive pagination.

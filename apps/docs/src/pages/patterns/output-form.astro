@@ -1,0 +1,214 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: output form">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: nobody, on screen — this is the artefact
+    the ERP <em>emits</em>: a purchase order sent to a vendor, an invoice, a
+    delivery note travelling with goods. <strong>How often</strong>: every
+    time a document is issued, usually unattended.
+    <strong>What "done" looks like</strong>: a page a stranger can read
+    without your system — sender, recipient, document number, lines,
+    totals, terms — that survives pagination and a black-and-white printer.
+    <strong>Not a screen, and not a PDF engine</strong> — if a person needs
+    to work with the record, that is the
+    <a href={base + '/patterns/object-page'}>object page</a>; and rendering
+    the actual PDF is your server's job (see the grill verdict below), not
+    this framework's.
+  </p>
+
+  <section class="demo">
+    <h2>Does this belong in a CSS framework at all? — the grill verdict</h2>
+    <p>The Accept for this pattern asked the question outright, and the
+    honest answer is <strong>half yes</strong>, so it is written down rather
+    than assumed:</p>
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Not ours</strong>: producing the PDF. Headless Chrome,
+      Gotenberg, wkhtmltopdf, a print server — that is infrastructure, it
+      belongs to your stack, and a CSS framework that shipped one would be
+      the <a href={base + '/concepts/scale'}>virtualiser mistake</a> again.</li>
+      <li><strong>Ours</strong>: what every one of those tools consumes —
+      <em>HTML and a print stylesheet</em>. The document's shape, the page
+      contract (<code>@page</code> margins, repeating table headers and
+      totals, break control) and the black-and-white legibility rules are
+      exactly this framework's job, and they already ship in
+      <a href={base + '/base/print'}>the print layer</a>.</li>
+      <li><strong>So this page documents the contract</strong>, not a
+      generator: give your renderer this markup and these classes, and the
+      output is a document. Zero new CSS was needed to build it — which is
+      itself the evidence the contract was already complete.</li>
+    </ul>
+  </section>
+
+  <section class="demo">
+    <h2>The document</h2>
+    <article class="bo-print-report" style="max-inline-size: 46rem; border: 1px solid var(--bo-color-border-default); padding: var(--bo-space-6); border-radius: var(--bo-radius-md)">
+      <header class="bo-u-avoid-break" style="display: flex; justify-content: space-between; gap: var(--bo-space-6)">
+        <div>
+          <p style="margin: 0; font-weight: var(--bo-font-weight-semibold)">Busy Office Supplies Ltd</p>
+          <p class="bo-u-text-muted" style="margin: 0">14 Harbour Road · Rotterdam · NL<br />VAT NL0012 3456 B01</p>
+        </div>
+        <div style="text-align: end">
+          <h3 style="margin: 0">Purchase order</h3>
+          <p class="bo-u-text-muted" style="margin: 0">PO-88213<br />Issued 22 Aug 2026</p>
+        </div>
+      </header>
+
+      <div class="bo-form-row bo-u-avoid-break" style="margin-block: var(--bo-space-5)">
+        <div>
+          <p class="bo-u-text-muted" style="margin: 0">Vendor</p>
+          <p style="margin: 0">Acme Supply Co.<br />221 Industrial Way<br />Manchester · UK</p>
+        </div>
+        <div>
+          <p class="bo-u-text-muted" style="margin: 0">Deliver to</p>
+          <p style="margin: 0">Dock 4, 123 Warehouse Rd<br />Rotterdam · NL</p>
+        </div>
+      </div>
+
+      <dl class="bo-kv bo-u-avoid-break">
+        <div><dt>Payment terms</dt><dd>Net 30</dd></div>
+        <div><dt>Incoterms</dt><dd>DAP Rotterdam</dd></div>
+        <div><dt>Requested delivery</dt><dd>15 Sep 2026</dd></div>
+        <div><dt>Buyer</dt><dd>J. Kim</dd></div>
+      </dl>
+
+      <table class="bo-data-table" data-density="compact" style="margin-block-start: var(--bo-space-5)">
+        <caption class="bo-visually-hidden">Order lines for PO-88213</caption>
+        <thead><tr>
+          <th scope="col">Material</th>
+          <th scope="col">Description</th>
+          <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+          <th scope="col" class="bo-data-table__col--numeric">Unit price</th>
+          <th scope="col" class="bo-data-table__col--numeric">Net value</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">MAT-4471</td><td>Hydraulic pump, 24V</td><td class="bo-data-table__col--numeric">12</td><td class="bo-data-table__col--numeric">770.00</td><td class="bo-data-table__col--numeric">9,240.00</td></tr>
+          <tr><td class="bo-data-table__col--code">MAT-1180</td><td>Seal kit, 60 mm</td><td class="bo-data-table__col--numeric">40</td><td class="bo-data-table__col--numeric">37.01</td><td class="bo-data-table__col--numeric">1,480.50</td></tr>
+          <tr><td class="bo-data-table__col--code">MAT-9002</td><td>Filter cartridge</td><td class="bo-data-table__col--numeric">150</td><td class="bo-data-table__col--numeric">54.80</td><td class="bo-data-table__col--numeric">8,220.00</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="4">Net total</td><td class="bo-data-table__col--numeric">18,940.50</td></tr>
+          <tr><td colspan="4">VAT 21%</td><td class="bo-data-table__col--numeric">3,977.51</td></tr>
+          <tr><td colspan="4"><strong>Total EUR</strong></td><td class="bo-data-table__col--numeric"><strong>22,918.01</strong></td></tr>
+        </tfoot>
+      </table>
+
+      <footer class="bo-u-avoid-break" style="margin-block-start: var(--bo-space-5)">
+        <p class="bo-u-text-muted" style="margin: 0">Terms: goods remain the
+        property of the seller until paid in full. Quote PO-88213 on all
+        correspondence and invoices.</p>
+        <p class="bo-u-print-only">Page totals continue overleaf · PO-88213</p>
+      </footer>
+    </article>
+    <p class="bo-u-text-muted">On paper this is one document, not a
+    screenshot of a screen: the table header repeats on every page and so
+    do the totals (<code>&lt;tfoot&gt;</code> is
+    <code>table-footer-group</code> by browser default — measured, not
+    assumed, which is why the framework adds no rule for it), the address
+    blocks never split (<code>.bo-u-avoid-break</code>), and the print-only
+    line appears only on paper.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- The whole document is one .bo-print-report. No new classes:
+     letterhead + parties + kv meta + lines + tfoot totals + terms. -->
+<article class="bo-print-report">
+  <header class="bo-u-avoid-break"> …sender / doc number / date… </header>
+
+  <div class="bo-form-row bo-u-avoid-break"> …vendor / deliver-to… </div>
+
+  <dl class="bo-kv bo-u-avoid-break"> …terms, incoterms, buyer… </dl>
+
+  <table class="bo-data-table" data-density="compact">
+    <thead>…</thead>            <!-- repeats on every printed page -->
+    <tbody>…lines…</tbody>
+    <tfoot>…net / VAT / total…</tfoot>  <!-- repeats too, by default -->
+  </table>
+
+  <footer class="bo-u-avoid-break">
+    <p>Terms…</p>
+    <p class="bo-u-print-only">Page totals continue overleaf · PO-88213</p>
+  </footer>
+</article>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Letterhead</strong> — who is sending, with the legal
+      identifiers (VAT/company number) a document needs to be valid.</li>
+      <li><strong>Document identity</strong> — type, number, issue date.
+      The number is the thing every later conversation quotes.</li>
+      <li><strong>Parties</strong> — vendor and ship-to as separate blocks,
+      each <code>.bo-u-avoid-break</code>: an address split across a page
+      boundary is a returned delivery.</li>
+      <li><strong>Meta</strong> — <a href={base + '/components/kv'}>key-value
+      facts</a> for terms, incoterms, dates, buyer.</li>
+      <li><strong>Lines + totals</strong> — a
+      <a href={base + '/components/data-table'}>data table</a> with a real
+      <code>&lt;tfoot&gt;</code>; both header and totals repeat per page
+      because the print layer and the browser default already say so.</li>
+      <li><strong>Terms &amp; footer</strong> — the legal tail, plus
+      <code>.bo-u-print-only</code> content that exists on paper only.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /po/:id/document</td><td>this HTML, standalone (no app shell, no nav) — a complete page your renderer or a browser can print directly</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /po/:id/document.pdf</td><td>your server runs the SAME HTML through its renderer; the PDF and the printed page cannot disagree because they are one source</td></tr>
+          <tr><td class="bo-data-table__col--code">issue / re-issue</td><td>a re-issued document states it ("Copy · re-issued 24 Aug 2026") — an unmarked duplicate of a financial document is a control failure</td></tr>
+          <tr><td class="bo-data-table__col--code">draft</td><td>a document that is not yet issued must SAY so on its face (see states) — never render a draft that looks issued</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: agents generate and dispatch these unattended,
+    so the document itself carries every check a human later needs — the
+    number, the issue date, the draft/copy marking, the totals. The
+    monitoring surface for <em>whether</em> they were emitted is the
+    <a href={base + '/patterns/report'}>report</a> and the job monitor; this
+    page's job is that each emitted artefact is self-evidencing.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Draft</td><td>the word DRAFT in the document identity block and in a print-only line — never a colour wash or a watermark image, which a black-and-white printer or a forced-colors reader loses entirely</td></tr>
+          <tr><td>Issued</td><td>issue date present; the document is the record of what was sent</td></tr>
+          <tr><td>Copy / re-issue</td><td>marked in text with the re-issue date beside the original</td></tr>
+          <tr><td>Cancelled</td><td>stated in words at the top; the lines stay readable because a cancelled document still has to be auditable</td></tr>
+          <tr><td>Multi-page</td><td>header and totals repeat; parties and terms blocks never split; the print-only continuation line carries the document number so a loose page is identifiable</td></tr>
+          <tr><td>No lines</td><td>refuse to emit — a document with no lines is a bug upstream, not an empty state to style</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/base/print'}>Print utilities</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/base/print", "Print & reports"],
+    ["/patterns/report", "Report"],
+    ["/patterns/object-page", "Object page"],
+    ["/components/data-table", "Data table"],
+  ]} />
+</Gallery>
