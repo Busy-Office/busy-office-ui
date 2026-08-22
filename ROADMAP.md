@@ -1917,16 +1917,23 @@ then documented — and refusing is an expected outcome.
        and accept the drift, recorded here). A loop cannot fix its own
        instructions.
 
-5. [ ] **102.5 — make the publish request cheap to say yes to.** Twelve
-       restatements of "publish 0.3.0" have changed nothing, and the reason is
-       now clear: publishing is owner-triggered by design, so the loop has been
-       queueing an item it can never close. Restating it a thirteenth time is
-       not work. **Accept:** one artefact the owner can act on in a minute —
-       what shipped since 0.1.1 in consumer terms (not commit terms), what is
-       breaking, the exact click-path to cut the Release, and a stated
-       yes/no on whether 0.2.0 should be skipped rather than published late.
-       Then the roadmap item becomes "owner-blocked, awaiting release",
-       counted once, not restated.
+5. [x] **102.5 — DONE 2026-08-22.** Wrote
+       `.roundtable/release-0.3.0-brief.md`: consumer-terms summary of what's
+       in 0.3.0 (first release past 0.1.1, carries 0.2.0's 65 entries
+       forward), no Breaking entries in either section, the exact release
+       command, and a stated recommendation (skip 0.2.0, but re-cut the tag
+       first — two real fix/feature layers landed on top of it that 101.1's
+       "five more" count had gone stale on: measured live at **155** commits
+       since the tag, of which 6 touch the shipped package and have no
+       CHANGELOG entry yet, on top of the 5 already in `## Unreleased`).
+       101.1 rewritten below to point here instead of restating.
+
+       *Original Accept, retained for the record:* one artefact the owner can
+       act on in a minute — what shipped since 0.1.1 in consumer terms (not
+       commit terms), what is breaking, the exact click-path to cut the
+       Release, and a stated yes/no on whether 0.2.0 should be skipped rather
+       than published late. Then the roadmap item becomes "owner-blocked,
+       awaiting release", counted once, not restated.
 
 6. [x] **102.6 — `check:dsa-scores` reports "312 scored component(s)" when
        there are 39.** Its noun names components while the count is
@@ -1968,14 +1975,22 @@ reusability all passed, with six real refusals recorded this session. The
 principles are not the problem — what the loop chose to spend time on is, and
 the owner has already answered that with Slices 99 and 100.
 
-1. [ ] **101.1 — publish 0.3.0, or record why not. Eleventh restatement.**
-       Tagged at 06:00 today and pushed; the registry still serves **0.1.1**.
-       There are now TWO unshipped layers: 0.3.0's 83 entries, plus **five
-       more** stacked on top of the tag (scrim token, Money currency
-       placement, the badge page-overflow P0, the mono token, `data-table`'s
-       `min-inline-size`). Publishing is owner-triggered through Trusted
-       Publishing — `git push` the tag, then publish a GitHub Release — and a
-       wake cannot do it (npm here is unauthenticated by design).
+1. [ ] **101.1 — SUPERSEDED by 102.5, 2026-08-22.** Publishing is
+       owner-triggered through Trusted Publishing and a wake cannot do it
+       (npm here is unauthenticated by design) — restating "publish or
+       record why not" an eleventh, twelfth time was not producing a
+       decision, so 102.5 replaced the restatement with one artefact:
+       `.roundtable/release-0.3.0-brief.md`. **Status: owner-blocked,
+       awaiting release** — read the brief, not this entry, for current
+       numbers (101.1's own "five more" count had already gone stale by the
+       time 102.5 checked it live). This item stops being restated in future
+       grills; re-open only if the brief itself goes stale.
+
+       *Original wording, kept for the record:* Tagged at 06:00 today and
+       pushed; the registry still serves **0.1.1**. There are now TWO
+       unshipped layers: 0.3.0's 83 entries, plus five more stacked on top
+       of the tag (scrim token, Money currency placement, the badge
+       page-overflow P0, the mono token, `data-table`'s `min-inline-size`).
        **Accept:** either it lands on the registry, or this item records the
        owner's decision to hold and the reason, so it stops being restated
        every grill as though nobody had decided.

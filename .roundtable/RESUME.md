@@ -41,15 +41,19 @@ not observe.
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
-- **0.3.0 is PUSHED, awaiting ONE owner action: publish the GitHub Release
-  (updated 2026-08-21, evening sweep).** The owner has already run the push —
-  verified against the remote, not assumed: `git ls-remote` shows
-  `refs/tags/v0.3.0` on origin and origin/main past the tagged commit. The
-  previous version of this entry said "Not pushed, not published" with the
-  push commands listed as owner steps; a wake following it would have handed
-  the owner instructions for a step already done. What remains is exactly
-  one command (npm still serves 0.1.1; `gh release view v0.3.0` says "release
-  not found"):
+- **0.3.0 is PUSHED, awaiting owner decision — read
+  `.roundtable/release-0.3.0-brief.md` (written 2026-08-22 by 102.5), not
+  this entry, for current numbers.** That brief replaced the standing
+  restatement (ROADMAP.md 101.1, now superseded) after its "five more
+  commits stacked on the tag" count went stale: measured live at 155
+  commits since the tag, 6 of which touch the shipped package with no
+  CHANGELOG entry yet. The brief recommends re-cutting the tag before
+  publishing rather than releasing as-is. Future wakes: don't re-derive this
+  count by hand, re-read the brief (and re-measure `git log v0.3.0..HEAD`
+  if it's been more than a few wakes, per this file's own staleness rule).
+
+  Once the owner decides, the release command itself is unchanged (npm
+  still serves 0.1.1; `gh release view v0.3.0` says "release not found"):
 
   ```
   gh release create v0.3.0 --title "0.3.0" --notes-from-tag
