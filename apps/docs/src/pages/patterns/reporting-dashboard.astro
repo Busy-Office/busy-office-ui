@@ -143,7 +143,10 @@ const rows = [
     <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Period control</strong> — one filter governing every widget; it belongs in the URL so a dashboard is linkable.</li>
       <li><strong>Widget grid</strong> — <code>.bo-grid</code>; each widget is independently swappable.</li>
-      <li><strong>Stat tiles</strong> — one number, its delta, and the comparison basis spelled out.</li>
+      <li><strong>Stat tiles</strong> — one number, its delta, and the comparison basis spelled out.
+      This is the human-monitoring signal: the delta plus the "as of" staleness
+      timestamp (see States) is what tells a reader whether automated work behind
+      the number is current.</li>
       <li><strong>Container queries</strong> — widgets respond to THEIR box, not the viewport, so the same widget works in a half-width column.</li>
     </ol>
   </section>
@@ -160,6 +163,12 @@ const rows = [
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: the aggregates this screen shows are typically
+    produced by scheduled jobs, not the reader; the human's channel is the
+    stat tiles' delta plus the "as of" timestamp on stale data — a number
+    with no visible age is trusted as live, which is exactly the failure
+    this screen must not ship.</p>
   </section>
 
   <section class="demo">

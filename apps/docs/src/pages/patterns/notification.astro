@@ -125,7 +125,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       excludes.</li>
       <li><strong>Unread contract</strong> — the badge is the visible
       channel; the byline's "read" word is the second. Mark-read is
-      per-item; "mark all read" belongs next to the filter, not per row.</li>
+      per-item; "mark all read" belongs next to the filter, not per row.
+      This is the human-monitoring signal — the AI-manages/human-monitors
+      split below names it explicitly.</li>
       <li><strong>Per-item actions</strong> — one link into the thing that
       happened (<a href={base + '/components/button'}>secondary button</a>),
       one ghost dismiss naming its item in <code>aria-label</code>.</li>

@@ -256,7 +256,12 @@ h1 { string-set: doctitle content(); }
       <li><strong>Letterhead</strong> — who is sending, with the legal
       identifiers (VAT/company number) a document needs to be valid.</li>
       <li><strong>Document identity</strong> — type, number, issue date.
-      The number is the thing every later conversation quotes.</li>
+      The number is the thing every later conversation quotes. Not itself
+      a monitoring signal — the human-monitoring surface for WHETHER
+      documents were emitted lives on <a href={base + '/patterns/report'}>report</a>
+      and <a href={base + '/patterns/job-monitor'}>job monitor</a>; this
+      region is what makes an artefact self-evidencing once someone does
+      open it.</li>
       <li><strong>Parties</strong> — vendor and ship-to as separate blocks,
       each <code>.bo-u-avoid-break</code>: an address split across a page
       boundary is a returned delivery.</li>

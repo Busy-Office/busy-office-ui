@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 14:58
+Generated at: 2026-08-22 15:03
 
 ## Open items by slice
 
@@ -17,8 +17,7 @@ Generated at: 2026-08-22 14:58
   - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 - **Slice 104** (1 open)
   - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
-- **Slice 109** (5 open)
-  - 109.15 — human-monitoring-signal sentence: placement + absence.
+- **Slice 109** (4 open)
   - 109.16 — Data-contract 4xx/error row missing.
   - 109.17 — check-claims.mjs has ZERO cases for `inbox`, `job-monitor`, `kanban`.
   - 109.18 — small mechanical fixes, one page each.

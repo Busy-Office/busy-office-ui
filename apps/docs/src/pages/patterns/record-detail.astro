@@ -195,7 +195,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <li><strong>Breadcrumb</strong> — where this record sits; the parent link is how users get back to the filtered list.</li>
       <li><strong>Facts strip</strong> — <code>.bo-kv</code> for the header facts (vendor, cost centre, total): display data, never readonly inputs.</li>
       <li><strong>Record feed</strong> — one card per related document (order, receipt, invoice) in chronological order.</li>
-      <li><strong>Status timeline + audit trail</strong> — where it is now, and every state change with actor and timestamp.</li>
+      <li><strong>Status timeline + audit trail</strong> — where it is now, and every state change with actor and timestamp.
+      This is the human-monitoring signal: the actor column is where an
+      agent's own changes become visible to the human owning the record.</li>
     </ol>
     <p class="bo-u-text-muted">Follows the <a href={base + '/concepts/review-anatomy'}>review-screen anatomy</a>
     contract — this is the short-record shape; see that page for when to reach
@@ -215,6 +217,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: any actor — human or agent — can append to the
+    feed or the audit trail through the same endpoints; the human's
+    channel is the audit trail's actor column, where an automated change
+    is as visible as a person's.</p>
   </section>
 
   <section class="demo">

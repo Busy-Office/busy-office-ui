@@ -693,18 +693,22 @@ catalogue in ERP vocabulary and job order.
        claim, command-bar's no-native-affordance claim — both grepped
        against source, both correct). Full per-page detail in commit
        `9e90d3d`'s message. **Accept met.**
-12. [ ] **109.15 — human-monitoring-signal sentence: placement + absence.**
-       Two distinct defects the sweep bundled: (a) **stated but
-       mis-placed** — `job-monitor`, `notification`, `output-form`,
-       `role-home` carry the AI-manages/human-monitors sentence under Data
-       contract, not tied to named Anatomy regions as the bar requires;
-       cheap, relocate/duplicate one sentence each. (b) **missing
-       entirely** on monitoring-adjacent screens — `schedule`,
-       `master-detail`, `reporting-dashboard`, `record-detail`; needs real
-       authoring, not just a move. `inbox` and `kanban` already do this
-       right — use them as the model. **Accept:** (a) resolved for all 4,
-       (b) resolved or explicitly declined per page with a stated reason
-       (not every screen has a monitoring signal to name).
+12. [x] **109.15 — DONE 2026-08-22.** (a) **Relocated/duplicated**, one
+       Anatomy-tied sentence each: `job-monitor` (Last-run column),
+       `notification` (Unread contract), `role-home` ("Needs you" card);
+       `output-form` handled honestly rather than force-fit — its own
+       prose already says the monitoring happens on `report`/`job-monitor`,
+       so Document identity's new sentence says that instead of claiming
+       a signal this page doesn't have. (b) **Authored where real**:
+       `reporting-dashboard` (Stat tiles' delta + staleness timestamp),
+       `record-detail` (Status timeline's actor column — an agent's
+       changes become visible there). **Declined with a stated reason**
+       where genuinely absent: `schedule` (a planner, not oversight of
+       automation) and `master-detail` (manual browse/edit, nothing
+       automated running behind it) — both got an explicit "No
+       AI-manages/human-monitors split here, stated rather than left
+       silent" paragraph rather than silence. Full suite green (13 docs
+       gates, `check:claims` 88/88). **Accept met.**
 13. [ ] **109.16 — Data-contract 4xx/error row missing.** Confirmed on
        `master-detail`, `notification`, `output-form`, `record-detail`;
        batch 1's set not yet individually re-checked for this specific
