@@ -143,6 +143,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
       <li><a class="bo-sidebar-nav__link" href="/inbox" ${current === '/inbox' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--check-circle bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Inbox</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/pos" ${current === '/pos' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/spend" ${current === '/spend' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--chart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Spend by CC</span></a></li>
+      <li><a class="bo-sidebar-nav__link" href="/movements" ${current === '/movements' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--truck bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Movements</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/import" ${current === '/import' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--box bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Import</span></a></li>
       <li><a class="bo-sidebar-nav__link" href="/receive" ${current === '/receive' ? 'aria-current="page"' : ''}><span class="bo-icon bo-icon--barcode bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Receive</span></a></li>
     </ul>
@@ -930,6 +931,92 @@ function approveDialogHtml(p) {
 // items 8-9 (grouping, subtotal/total) compose from shipped primitives or
 // genuinely fight. One <tbody> per group; the group header is a
 // <th scope="colgroup" colspan>; subtotal/grand-total are plain rows.
+// Goods-movement ledger (roadmap 30.4b dogfood): the honest SCANNING case —
+// an audit trail someone pages through, not a list they filter down. 50,000
+// DETERMINISTIC rows generated from the index (no randomness, no state:
+// re-serving offset N always yields identical bytes, which is also what
+// makes the red-proof's re-request assertions meaningful).
+const MV_TOTAL = 50000;
+const MV_CHUNK = 100;
+const MV_TYPES = ['GR', 'GI', 'TR'];
+const mvRow = (i) => {
+  const type = MV_TYPES[i % 3];
+  const po = `PO-${88210 + (i % 40)}`;
+  const qty = 1 + ((i * 7) % 240);
+  const bin = `A${1 + (i % 9)}-${String(1 + ((i * 13) % 60)).padStart(2, '0')}`;
+  const t = new Date(Date.UTC(2026, 0, 1) + i * 137000).toISOString().slice(0, 16).replace('T', ' ');
+  return `<tr data-row-id="MV-${i + 1}">
+    <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select MV-${i + 1}"></td>
+    <td class="bo-data-table__col--code">MV-${i + 1}</td>
+    <td><span class="bo-badge bo-badge--type">${type}</span></td>
+    <td class="bo-data-table__col--code">${po}</td>
+    <td class="bo-data-table__col--numeric">${qty}</td>
+    <td class="bo-data-table__col--code">${bin}</td>
+    <td>${t}</td>
+  </tr>`;
+};
+const mvChunkHtml = (offset) => {
+  const end = Math.min(offset + MV_CHUNK, MV_TOTAL);
+  let rows = '';
+  for (let i = offset; i < end; i++) rows += mvRow(i);
+  return `<tbody data-chunk-id="mv-${offset}" data-chunk-offset="${offset}">${rows}</tbody>`;
+};
+
+const movementsScreen = () => `
+<h1>Goods movements</h1>
+<p class="bo-byline bo-byline--compact">${MV_TOTAL.toLocaleString('en-US')} movements · windowed — memory stays flat however deep you scroll</p>
+<div class="bo-data-table-container" tabindex="0">
+  <div class="bo-data-table__toolbar">
+    <span class="bo-data-table__selection-count"></span>
+  </div>
+  <table class="bo-data-table" id="mv-table" data-density="compact" data-windowed
+      data-table-total-rows="${MV_TOTAL}">
+    <caption class="bo-visually-hidden">Goods movement ledger, windowed</caption>
+    <thead><tr>
+      <th scope="col"><span class="bo-visually-hidden">Select</span></th>
+      <th scope="col">Movement</th>
+      <th scope="col">Type</th>
+      <th scope="col">PO</th>
+      <th scope="col" class="bo-data-table__col--numeric">Qty</th>
+      <th scope="col">Bin</th>
+      <th scope="col">Posted</th>
+    </tr></thead>
+    ${mvChunkHtml(0)}
+    ${mvChunkHtml(MV_CHUNK)}
+  </table>
+  <div class="bo-data-table__footer">
+    <button class="bo-btn bo-btn--secondary" type="button"
+        data-table-load-more data-load-more-auto data-next-offset="${MV_CHUNK * 2}">Load more</button>
+  </div>
+</div>
+<p class="bo-u-text-muted">Scroll far enough and chunks you passed are released to
+height-matched spacers — scroll back and they re-request. Selection survives the
+round-trip: the checked ids live outside the DOM. Named costs: find-in-page can't
+see an evicted row, and printing gets only what's loaded.</p>
+<script type="module">
+  import { initWindowedList, initDataTables, initLoadMore } from '/assets/js/index.js';
+  initWindowedList(); initDataTables(); initLoadMore();
+  document.addEventListener('bo:table-load-more', (e) => {
+    const d = e.detail;
+    if (d && typeof d.offset === 'number') {
+      // A windowed re-request: swap the evicted spacer back to real rows.
+      const spacer = document.querySelector('#mv-table tbody[data-chunk-offset="' + d.offset + '"]');
+      if (spacer) htmx.ajax('GET', '/movements/chunk?offset=' + d.offset, { target: spacer, swap: 'outerHTML' });
+      return;
+    }
+    // Plain forward load-more: append the next chunk.
+    const btn = e.target;
+    if (btn.disabled) return;
+    const next = Number(btn.dataset.nextOffset);
+    if (next >= ${MV_TOTAL}) { btn.disabled = true; btn.textContent = 'All loaded'; return; }
+    btn.disabled = true;
+    htmx.ajax('GET', '/movements/chunk?offset=' + next, { target: '#mv-table', swap: 'beforeend' }).then(() => {
+      btn.dataset.nextOffset = String(next + ${MV_CHUNK});
+      btn.disabled = false;
+    });
+  });
+</script>`;
+
 const spendScreen = () => {
   const byCc = new Map();
   for (const p of pos) {
@@ -1382,6 +1469,17 @@ ${loose ? tableHtml : `<div class="bo-data-table-container" tabindex="0">
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Receive', '/receive', receiveScreen(), density));
     }
+    if (path === '/movements' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(page('Goods movements', '/movements', movementsScreen(), density));
+    }
+
+    if (path === '/movements/chunk' && req.method === 'GET') {
+      const offset = Math.max(0, Math.min(MV_TOTAL, Number(url.searchParams.get('offset')) || 0));
+      res.writeHead(200, { 'content-type': 'text/html' });
+      return res.end(mvChunkHtml(offset));
+    }
+
     if (path === '/spend' && req.method === 'GET') {
       res.writeHead(200, { 'content-type': 'text/html' });
       return res.end(page('Spend by cost center', '/spend', spendScreen(), density));

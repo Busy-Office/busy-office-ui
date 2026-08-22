@@ -296,13 +296,84 @@ try {
     JSON.stringify({ status: inboxApprove.status, stillListed: inboxAfter.includes(`id="inb-detail-${routineId}"`) }),
   );
 
-  /* ---- accessibility over the app's own routes ---- */
+  /* ---- windowed list (roadmap 30.4b): the Accept's own red-proof ----
+     Scroll deep, scroll back: no scroll jump, no lost selection. During
+     development this instrument caught four real bugs before any of these
+     assertions first passed (early-exited chunks exempt from eviction; the
+     rem density token read as px, spacers 16x short; IntersectionObserver
+     root:null clipped by the app shell's inner scroll container; the
+     horizontal-scroll table container matched as the vertical scroll root)
+     — so it has demonstrated it can fail. */
   const browser = await launchDocsBrowser();
   const page = await browser.newPage();
+  await page.setViewport({ width: 1440, height: 900 });
+  await page.goto(`${base}/movements`, { waitUntil: 'networkidle0', timeout: 20000 });
+  const win = await page.evaluate(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const main = document.querySelector('.bo-app-shell__main');
+    const table = document.getElementById('mv-table');
+    const out = {};
+    out.rowcount = table.getAttribute('aria-rowcount');
+    const realRowHeight = table.querySelector('tr[data-row-id]').getBoundingClientRect().height;
+    const firstBox = table.querySelector('tbody[data-chunk-offset="0"] .bo-data-table__row-select');
+    const rowId = firstBox.closest('[data-row-id]').dataset.rowId;
+    firstBox.click();
+    for (let i = 0; i < 10; i++) { main.scrollTop = main.scrollHeight; await sleep(350); }
+    const c0 = table.querySelector('tbody[data-chunk-offset="0"]');
+    out.chunk0Evicted = c0?.dataset.evicted === 'true';
+    const spacerH = parseFloat(c0?.querySelector('.bo-data-table__spacer')?.style.blockSize ?? '0');
+    out.spacerMatchesReal = Math.abs(spacerH - realRowHeight * 100) <= realRowHeight;
+    out.renderedBounded = table.querySelectorAll('tr[data-row-id]').length <= 400;
+    out.hiddenInputSurvives = !!document.querySelector(
+      `[data-windowed-selection-host] input[value="${rowId}"]`,
+    );
+    // Park the evicted chunk just above the viewport: its re-swap changes
+    // content height ABOVE the visible rows — the case that jumps if the
+    // spacer height is wrong.
+    main.scrollTop = spacerH + 300;
+    await sleep(150);
+    const anchorRow = [...table.querySelectorAll('tr[data-row-id]')].find(
+      (tr) => tr.getBoundingClientRect().top > 100,
+    );
+    const anchorBefore = anchorRow.getBoundingClientRect().top;
+    const scrollBefore = main.scrollTop;
+    await sleep(900);
+    out.chunk0Reloaded =
+      table.querySelector('tbody[data-chunk-offset="0"]')?.dataset.evicted !== 'true';
+    out.anchorShift = anchorRow.isConnected
+      ? Math.abs(anchorRow.getBoundingClientRect().top - anchorBefore)
+      : -1;
+    out.scrollShift = Math.abs(main.scrollTop - scrollBefore);
+    out.checkboxRechecked = !!table.querySelector(
+      `[data-row-id="${rowId}"] .bo-data-table__row-select`,
+    )?.checked;
+    out.countAtEnd = document.querySelector('.bo-data-table__selection-count')?.textContent;
+    const mid = [...table.querySelectorAll('tbody[data-chunk-offset]')].find(
+      (t) => t.dataset.evicted !== 'true' && Number(t.dataset.chunkOffset) > 0,
+    );
+    out.midRowIndexOk =
+      Number(mid?.querySelector('tr')?.getAttribute('aria-rowindex')) ===
+      Number(mid?.dataset.chunkOffset) + 2;
+    return out;
+  });
+  check(
+    'windowed list: deep scroll evicts to height-true spacers and keeps the DOM bounded',
+    win.chunk0Evicted && win.spacerMatchesReal && win.renderedBounded && win.rowcount === '50001',
+    JSON.stringify(win),
+  );
+  check(
+    'windowed list: scrolling back re-loads the chunk with NO scroll jump and NO lost selection',
+    win.chunk0Reloaded && win.anchorShift >= 0 && win.anchorShift <= 2 && win.scrollShift <= 2 &&
+      win.checkboxRechecked && win.hiddenInputSurvives && win.countAtEnd === '1 selected' &&
+      win.midRowIndexOk,
+    JSON.stringify(win),
+  );
+
+  /* ---- accessibility over the app's own routes ---- */
   await page.evaluateOnNewDocument(AXE);
   // escalatedId is deliberately left Pending (never approved above), so the
   // axe sweep keeps scanning a real Pending detail page.
-  const ROUTES = ['/', '/pos', '/pos/new', '/import', '/spend', '/receive', `/pos/${escalatedId}`, '/inbox'];
+  const ROUTES = ['/', '/pos', '/pos/new', '/import', '/spend', '/receive', `/pos/${escalatedId}`, '/inbox', '/movements'];
   const violations = [];
   for (const route of ROUTES) {
     for (const width of WIDTHS) {

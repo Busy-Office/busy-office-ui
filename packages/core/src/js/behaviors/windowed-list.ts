@@ -65,15 +65,63 @@ const observers = new WeakMap<HTMLTableElement, IntersectionObserver>();
 const boundTables = new WeakSet<HTMLTableElement>();
 
 function densityRowHeightPx(table: HTMLTableElement): number {
+  /* The density tokens are declared in REM (density.css: 1.875rem / 2.5rem /
+     3rem) and custom properties come back from getComputedStyle UNRESOLVED —
+     parseFloat alone read "1.875rem" as 1.875 and the first live spacer came
+     out 187.5px for 100 rows, 16x short (30.4b red-proof, first run). Convert
+     by unit; px/unitless pass through. */
   const raw = getComputedStyle(table)
     .getPropertyValue('--bo-density-row-height')
     .trim();
-  const px = parseFloat(raw);
-  return Number.isFinite(px) ? px : 40; // comfortable's own value, if the token can't resolve
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n)) return 40; // comfortable's value, if the token can't resolve
+  if (raw.endsWith('rem'))
+    return n * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16);
+  if (raw.endsWith('em')) return n * (parseFloat(getComputedStyle(table).fontSize) || 16);
+  return n;
 }
 
 function columnCount(table: HTMLTableElement): number {
   return table.tHead?.rows[0]?.cells.length || table.rows[0]?.cells.length || 1;
+}
+
+/* The observer's root must be the nearest scrollable ancestor, not the
+   default viewport: with root:null, rootMargin expands the VIEWPORT rect,
+   but the target is still clipped by any scroll container between it and
+   the root — so a spacer scrolled out of an app shell's main region never
+   reports intersecting at all, margin or no margin, and re-requests only
+   fired once a spacer was literally visible (30.4b red-proof, live in
+   po-app's .bo-app-shell__main). Plain window-scrolled pages: null. */
+function scrollParent(el: Element): Element | null {
+  for (let p = el.parentElement; p; p = p.parentElement) {
+    const s = getComputedStyle(p);
+    // overflow-y alone is not enough: .bo-data-table-container is
+    // `overflow: auto` for HORIZONTAL table scrolling and grows with its
+    // content vertically — picked as root, its rect covers every chunk, so
+    // nothing ever left it and eviction silently stopped (red-proof run 3).
+    // The root is the ancestor that scrolls vertically AND actually clips.
+    if (/(auto|scroll)/.test(s.overflowY) && p.scrollHeight > p.clientHeight + 1) return p;
+  }
+  return null;
+}
+
+/* Spacer row height: measured from ONE real rendered row, cached per table.
+   The grill's original call was "compute from the density token, never
+   measure" — the red-proof amended it: real rows render taller than the
+   token (32.5px vs compact's 30px — border-box extras), so token-derived
+   spacers ran 250px short per 100-row chunk, a guaranteed scroll jump. The
+   decision's INTENT — no layout read during the eviction scroll path —
+   holds: one read at bind (and a cache refresh during the post-swap
+   reconcile, where layout is already hot), never per eviction. The token
+   stays as the fallback when no real row exists yet. */
+const rowHeights = new WeakMap<HTMLTableElement, number>();
+function chunkRowHeightPx(table: HTMLTableElement): number {
+  const cached = rowHeights.get(table);
+  if (cached) return cached;
+  const real = table.querySelector<HTMLElement>('tbody[data-chunk-offset] tr[data-row-id]');
+  const h = real?.getBoundingClientRect().height || densityRowHeightPx(table);
+  if (h) rowHeights.set(table, h);
+  return h;
 }
 
 function selectionSet(table: HTMLTableElement): Set<string> {
@@ -138,7 +186,7 @@ function reindexChunk(tbody: HTMLTableSectionElement, table: HTMLTableElement): 
 
 function makeSpacer(tbody: HTMLTableSectionElement, table: HTMLTableElement): HTMLTableSectionElement {
   const rowCount = tbody.rows.length;
-  const height = rowCount * densityRowHeightPx(table);
+  const height = rowCount * chunkRowHeightPx(table);
   const spacer = document.createElement('tbody');
   spacer.dataset.chunkId = tbody.dataset.chunkId ?? '';
   spacer.dataset.chunkOffset = tbody.dataset.chunkOffset ?? '0';
@@ -178,6 +226,12 @@ function evict(tbody: HTMLTableSectionElement, table: HTMLTableElement, observer
  *   forward "load more" fire, exactly as before this behavior existed.
  */
 function requestReload(spacer: HTMLTableSectionElement, table: HTMLTableElement): void {
+  // One fire per evicted spacer until it is swapped away — a slow consumer
+  // must not accumulate duplicate re-requests while the spacer keeps
+  // crossing the observer margin. data-bo-* = internal bookkeeping, never
+  // consumer-written (the extract-behaviors convention).
+  if (spacer.dataset.boReloading === 'true') return;
+  spacer.dataset.boReloading = 'true';
   const btn = table
     .closest('.bo-data-table-container')
     ?.querySelector<HTMLElement>('[data-table-load-more]');
@@ -198,8 +252,12 @@ function bindTable(table: HTMLTableElement): void {
   if (boundTables.has(table)) return;
   boundTables.add(table);
 
-  const total = table.dataset.tableTotalRows;
-  if (total) table.setAttribute('aria-rowcount', total);
+  // data-table-total-rows counts DATA rows; aria-rowcount counts ALL rows
+  // including the header row, same space aria-rowindex is computed in.
+  const total = Number(table.dataset.tableTotalRows);
+  if (Number.isFinite(total) && total > 0) {
+    table.setAttribute('aria-rowcount', String(total + (table.tHead ? 1 : 0)));
+  }
 
   table
     .querySelectorAll<HTMLTableSectionElement>('tbody[data-chunk-offset]')
@@ -219,17 +277,30 @@ function bindTable(table: HTMLTableElement): void {
     updateSelectedCountOverride(table);
   });
 
-  table.closest('.bo-data-table-container')?.addEventListener('htmx:afterSwap', (e) => {
-    const swapped = (e.target as Element | null)?.closest<HTMLTableSectionElement>(
-      'tbody[data-chunk-offset]',
-    );
-    if (!swapped || swapped.closest('table') !== table) return;
-    swapped.dataset.evicted = 'false';
-    reindexChunk(swapped, table);
-    applySavedSelection(swapped, table);
+  // Deliberately broad rather than target-precise: htmx's afterSwap target
+  // resolution differs between outerHTML swaps (spacer -> real tbody) and
+  // appends (a NEW chunk arriving via the load-more button), and chasing
+  // the exact element per swap style is how a chunk quietly ends up
+  // unobserved. Instead, ANY swap bubbling through the container
+  // reconciles every chunk: reindex + reapply selection on resident ones,
+  // (re)observe all — observe is idempotent per the IntersectionObserver
+  // spec, so double-observing costs nothing.
+  table.closest('.bo-data-table-container')?.addEventListener('htmx:afterSwap', () => {
     const observer = observers.get(table);
-    observer?.unobserve(swapped); // no-op if it wasn't already observed
-    observer?.observe(swapped);
+    // Refresh the cached row height while layout is already hot — a real
+    // row is guaranteed present right after a chunk swap, and this keeps
+    // the cache honest if density changed since bind.
+    const real = table.querySelector<HTMLElement>('tbody[data-chunk-offset] tr[data-row-id]');
+    if (real) rowHeights.set(table, real.getBoundingClientRect().height);
+    table
+      .querySelectorAll<HTMLTableSectionElement>('tbody[data-chunk-offset]')
+      .forEach((tbody) => {
+        if (tbody.dataset.evicted !== 'true') {
+          reindexChunk(tbody, table);
+          applySavedSelection(tbody, table);
+        }
+        observer?.observe(tbody);
+      });
   });
 
   // No-op floor: without IntersectionObserver every chunk simply stays
@@ -237,22 +308,52 @@ function bindTable(table: HTMLTableElement): void {
   if (typeof IntersectionObserver === 'undefined') return;
 
   const resident = Number(table.dataset.windowChunks) || DEFAULT_RESIDENT_CHUNKS;
+  /* Eviction is a SWEEP over all residents, not a per-transition check.
+     The first version evicted only the chunk whose own exit transition was
+     firing, if residents were over budget AT THAT MOMENT — and the 30.4b
+     red-proof caught the hole on its first run: a chunk that exits while
+     the table is still small (chunk 0, always) never transitions again, so
+     it stayed resident forever while later chunks evicted around it. The
+     sweep instead tracks the currently-visible set and, on every callback,
+     evicts the farthest-from-view non-visible residents until the budget
+     holds — no chunk is exempt just because its exit happened early. */
+  const visible = new Set<Element>();
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const tbody = entry.target as HTMLTableSectionElement;
         if (entry.isIntersecting) {
+          visible.add(tbody);
           if (tbody.dataset.evicted === 'true') requestReload(tbody, table);
-          return;
+        } else {
+          visible.delete(tbody);
         }
-        if (tbody.dataset.evicted === 'true') return;
-        const residentCount = Array.from(
-          table.querySelectorAll<HTMLTableSectionElement>('tbody[data-chunk-offset]'),
-        ).filter((c) => c.dataset.evicted !== 'true').length;
-        if (residentCount > resident) evict(tbody, table, observer);
       });
+      const residents = Array.from(
+        table.querySelectorAll<HTMLTableSectionElement>('tbody[data-chunk-offset]'),
+      ).filter((c) => c.dataset.evicted !== 'true');
+      const over = residents.length - resident;
+      if (over <= 0) return;
+      const visibleOffsets = residents
+        .filter((c) => visible.has(c))
+        .map((c) => Number(c.dataset.chunkOffset));
+      const anchor = visibleOffsets.length
+        ? visibleOffsets.reduce((a, b) => a + b, 0) / visibleOffsets.length
+        : Number.POSITIVE_INFINITY; // nothing visible mid-flight: treat the deepest as nearest
+      residents
+        .filter((c) => !visible.has(c))
+        .sort(
+          (a, b) =>
+            Math.abs(Number(b.dataset.chunkOffset) - anchor) -
+            Math.abs(Number(a.dataset.chunkOffset) - anchor),
+        )
+        .slice(0, over)
+        .forEach((c) => {
+          visible.delete(c);
+          evict(c, table, observer);
+        });
     },
-    { root: null, rootMargin: ROOT_MARGIN },
+    { root: scrollParent(table), rootMargin: ROOT_MARGIN },
   );
   observers.set(table, observer);
   table
