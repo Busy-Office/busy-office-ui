@@ -241,19 +241,42 @@ const current =
             it does not update. <a href={siteRoot + '/'} hx-boost="false">Switch to the latest docs</a>.
           </p>
         )}
-        <label class="bo-choice" for="density">Density
-          <select class="bo-select" id="density">
-            <option value="compact">Compact</option>
-            <option value="comfortable" selected>Comfortable</option>
-            <option value="spacious">Spacious</option>
-          </select>
-        </label>
-        <label class="bo-choice" for="theme">Theme
-          <select class="bo-select" id="theme">
-            <option value="light" selected>Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </label>
+        {/* A 3-way segmented group, not a cycle (owner feedback, roadmap
+            119): unlike theme, all three density options are worth jumping
+            to directly. .bo-segmented's own CSS comment names "compact vs
+            comfortable" as its literal example use case — this is that
+            control, not new button-group CSS. Icon-only options still need
+            a real accessible name each, since a label with only an
+            aria-hidden icon has none — a visually-hidden span carries it,
+            same split .bo-btn--icon buttons elsewhere in this file use. */}
+        <div class="bo-segmented" role="group" aria-label="Density" id="density-group">
+          <input class="bo-segmented__input bo-visually-hidden" type="radio" name="density-choice" id="density-compact" value="compact">
+          <label class="bo-segmented__option" for="density-compact">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3h12M2 6.5h12M2 10h12M2 13.5h12"/></g></svg>
+            <span class="bo-visually-hidden">Compact</span>
+          </label>
+          <input class="bo-segmented__input bo-visually-hidden" type="radio" name="density-choice" id="density-comfortable" value="comfortable">
+          <label class="bo-segmented__option" for="density-comfortable">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3h12M2 8h12M2 13h12"/></g></svg>
+            <span class="bo-visually-hidden">Comfortable</span>
+          </label>
+          <input class="bo-segmented__input bo-visually-hidden" type="radio" name="density-choice" id="density-spacious" value="spacious">
+          <label class="bo-segmented__option" for="density-spacious">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 4h12M2 12h12"/></g></svg>
+            <span class="bo-visually-hidden">Spacious</span>
+          </label>
+        </div>
+        {/* One button, three states (owner feedback, roadmap 119): light ->
+            dark -> system -> light. Icon-only, so the accessible name is
+            carried entirely by aria-label — updated on every state change,
+            not just present once, since an icon swap alone announces
+            nothing to a screen reader. Three small hand-authored SVGs, not
+            a request to add sun/moon/monitor to .bo-icon's 12-glyph ERP
+            set (DESIGN.md's own icon-catalogue refusal) — this is docs-
+            shell chrome, the same one-off class the skip-link already is. */}
+        <button class="bo-btn bo-btn--secondary bo-btn--icon" id="theme-cycle" type="button">
+          <span id="theme-cycle-icon" aria-hidden="true"></span>
+        </button>
       </header>
       <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Docs" data-pagefind-ignore>
         {/* ONE search instance site-wide (roadmap 27.1). This used to be a
@@ -579,20 +602,28 @@ const current =
       });
     </script>
     <script>
-      // The documented 3-line density-toggle recipe.
-      const sel = document.getElementById('density') as HTMLSelectElement;
-      sel.value = localStorage.getItem('bo-density') ?? 'comfortable';
-      document.documentElement.dataset.density = sel.value;
-      sel.addEventListener('change', () => {
-        document.documentElement.dataset.density = sel.value;
-        localStorage.setItem('bo-density', sel.value);
+      // Density segmented group (roadmap 119): a real radio group, each
+      // option directly selectable — unlike theme, jumping straight to
+      // "spacious" is a normal thing to want, not a step in a cycle. The
+      // value itself is already correct pre-paint (PrefBootstrap); this
+      // only syncs which radio is checked and wires the change event.
+      const densityGroup = document.getElementById('density-group') as HTMLElement;
+      const densityInput = document.getElementById(
+        `density-${document.documentElement.dataset.density ?? 'comfortable'}`,
+      ) as HTMLInputElement | null;
+      if (densityInput) densityInput.checked = true;
+      densityGroup.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.name !== 'density-choice') return;
+        document.documentElement.dataset.density = target.value;
+        localStorage.setItem('bo-density', target.value);
       });
       // Theme toggle: same shape — one attribute, one storage key. The
       // data-bo-theming guard freezes transitions for the frame of the flip so
       // text doesn't flash on a mismatched (still-animating) background.
       // The INITIAL value is already applied — a blocking inline script in
       // <head> set it before first paint (site bug fix, 2026-08-14) — this
-      // only syncs the <select> to match and wires the change handler.
+      // only syncs the toggle to match and wires the click handler.
       const html = document.documentElement;
       const setTheme = (v: string) => {
         html.setAttribute('data-bo-theming', '');
@@ -604,11 +635,46 @@ const current =
       version?.addEventListener('change', () => {
         window.location.href = version.value;
       });
-      const theme = document.getElementById('theme') as HTMLSelectElement;
-      theme.value = html.dataset.theme ?? 'light';
-      theme.addEventListener('change', () => {
-        setTheme(theme.value);
-        localStorage.setItem('bo-theme', theme.value);
+
+      // Cycling icon button (roadmap 119, owner feedback): light -> dark ->
+      // system -> light. color.css has no prefers-color-scheme rule (see
+      // PrefBootstrap's comment), so "system" resolves matchMedia HERE and
+      // sets data-theme explicitly — never left unset hoping CSS follows
+      // the OS, because in this framework it won't.
+      const THEME_CYCLE = ['light', 'dark', 'system'] as const;
+      const THEME_LABEL: Record<string, string> = { light: 'Light', dark: 'Dark', system: 'System' };
+      const THEME_ICON: Record<string, string> = {
+        light: '<svg viewBox="0 0 16 16" width="16" height="16"><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.4 1.4M11.55 11.55l1.4 1.4M3.05 12.95l1.4-1.4M11.55 4.45l1.4-1.4"/></g></svg>',
+        dark: '<svg viewBox="0 0 16 16" width="16" height="16"><path d="M13.5 9.5A5.8 5.8 0 1 1 6.5 2.5a4.6 4.6 0 0 0 7 7Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+        system: '<svg viewBox="0 0 16 16" width="16" height="16"><rect x="1.5" y="2.5" width="13" height="8.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6 13.5h4M8 11v2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+      };
+      const themeBtn = document.getElementById('theme-cycle') as HTMLButtonElement;
+      const themeIcon = document.getElementById('theme-cycle-icon') as HTMLElement;
+      const syncThemeButton = (pref: string) => {
+        themeIcon.innerHTML = THEME_ICON[pref] ?? THEME_ICON.light;
+        themeBtn.setAttribute('aria-label', `Theme: ${THEME_LABEL[pref] ?? 'Light'} — click for ${THEME_LABEL[THEME_CYCLE[(THEME_CYCLE.indexOf(pref as typeof THEME_CYCLE[number]) + 1) % 3]]}`);
+      };
+      const applyThemePref = (pref: string) => {
+        const resolved = pref === 'system'
+          ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : pref;
+        setTheme(resolved);
+        html.dataset.themePref = pref;
+        syncThemeButton(pref);
+        localStorage.setItem('bo-theme-pref', pref);
+      };
+      // data-theme-pref is already correct pre-paint (PrefBootstrap) — only
+      // the icon/label need syncing on load, not a second setTheme flash.
+      syncThemeButton(html.dataset.themePref ?? 'light');
+      themeBtn.addEventListener('click', () => {
+        const current = html.dataset.themePref ?? 'light';
+        const next = THEME_CYCLE[(THEME_CYCLE.indexOf(current as typeof THEME_CYCLE[number]) + 1) % 3];
+        applyThemePref(next);
+      });
+      // Live-follow the OS while parked on "system" — a preference change
+      // with the tab already open should not need a reload to take effect.
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (html.dataset.themePref === 'system') applyThemePref('system');
       });
     </script>
   </body>
@@ -886,6 +952,16 @@ const current =
   }
   .demo-pair__code > summary:hover { color: var(--bo-color-text-primary); }
   .demo-pair__code[open] > summary { border-block-end: var(--bo-border-width) solid var(--bo-color-border-default); }
+  /* The reset's global :focus-visible ring draws OUTSIDE the element
+     (outline-offset: 2px) — correct everywhere it isn't clipped, but
+     .demo-pair__code is overflow:hidden for its rounded bottom corners, so
+     the ring's top/left/right get cut by the container edge and only the
+     bottom sliver survives, reading as a stray underline instead of a
+     ring (owner-reported inconsistency, roadmap 119). Pulling the ring
+     INSIDE the summary keeps it fully visible without touching the
+     reset's own rule, which every other focusable element still needs
+     drawn outside. */
+  .demo-pair__code > summary:focus-visible { outline-offset: -2px; }
   .demo-pair pre { margin-block: 0; border: none; border-radius: 0 0 var(--bo-radius-md) var(--bo-radius-md); }
 
   /* SPIKE (Slice 7 item 4) — opt-in side-by-side once the section.demo

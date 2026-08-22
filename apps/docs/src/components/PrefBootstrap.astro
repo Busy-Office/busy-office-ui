@@ -15,23 +15,41 @@
  *
  * `density` lets a surface state a deliberate override (the landing was authored
  * compact). Passing it makes that a choice rather than a fallback accident.
+ *
+ * `theme` is a PREFERENCE now (light/dark/system, roadmap 119), not the
+ * applied value — color.css has no prefers-color-scheme rule at all (a
+ * deliberate library choice: tokens only flip on the explicit
+ * [data-theme="dark"] attribute, so an app with no theme-setter JS never
+ * gets a light page wearing dark form chrome under a dark OS). "System"
+ * therefore means resolving matchMedia HERE, before paint, same flash
+ * concern paint-timing everything else in this file — never leaving the
+ * attribute unset and hoping CSS follows the OS on its own, because it
+ * won't. data-theme-pref carries the raw preference for the cycle
+ * button's own icon/label; data-theme carries what color.css actually
+ * reads.
  */
 interface Props {
   /** Default when nothing is stored. Framework default is comfortable. */
   density?: 'compact' | 'comfortable' | 'spacious';
   /** Default when nothing is stored. */
-  theme?: 'light' | 'dark';
+  theme?: 'light' | 'dark' | 'system';
 }
 const { density = 'comfortable', theme = 'light' } = Astro.props;
 ---
 <script is:inline define:vars={{ fallbackDensity: density, fallbackTheme: theme }}>
   try {
-    document.documentElement.dataset.theme = localStorage.getItem('bo-theme') ?? fallbackTheme;
+    const pref = localStorage.getItem('bo-theme-pref') ?? fallbackTheme;
+    const resolved = pref === 'system'
+      ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : pref;
+    document.documentElement.dataset.theme = resolved;
+    document.documentElement.dataset.themePref = pref;
     document.documentElement.dataset.density = localStorage.getItem('bo-density') ?? fallbackDensity;
   } catch (e) {
     /* private mode / storage disabled: fall back to the declared defaults so
        the page still resolves a theme instead of inheriting nothing. */
-    document.documentElement.dataset.theme = fallbackTheme;
+    document.documentElement.dataset.theme = fallbackTheme === 'system' ? 'light' : fallbackTheme;
+    document.documentElement.dataset.themePref = fallbackTheme;
     document.documentElement.dataset.density = fallbackDensity;
   }
 </script>

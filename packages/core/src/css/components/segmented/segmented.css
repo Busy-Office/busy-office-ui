@@ -23,6 +23,23 @@
     border-radius: var(--bo-radius-md);
   }
 
+  /* Overrides .bo-visually-hidden's position:absolute back to the flex
+     item's normal in-flow slot (roadmap 119's target-size gate caught
+     this) — position:relative on .bo-segmented alone does NOT fix it: a
+     position:absolute flex child with no inset properties resolves its
+     STATIC position per spec as if it were the container's sole item,
+     regardless of what establishes the containing block, so all three
+     sibling inputs collapsed to one identical point (measured: same x/y).
+     Kept in flow instead, each input occupies its own tiny real slot next
+     to its label, at its own real coordinates — .bo-visually-hidden's
+     1px/clip-path/overflow still hides it visually either way; only the
+     positioning scheme changes. Latent since this component shipped —
+     dormant until a segmented group landed somewhere this gate's probed
+     pages could see it. */
+  .bo-segmented__input {
+    position: static;
+  }
+
   .bo-segmented__option {
     display: inline-flex;
     align-items: center;
