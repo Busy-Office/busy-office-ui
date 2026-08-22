@@ -708,3 +708,10 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 21:04 · Explore · build · --label-start dogfood into po-app: no natural target, discarded before spiking (form-row incompatibility found by reading) · refused · 59f9084
 - 2026-08-22 21:50 · Continue · build · 30.4b: initWindowedList behavior + /concepts/scale rewrite landed (red-proof dogfood still open) · landed · a1239e0
 - 2026-08-22 22:23 · Continue · build · 30.4b closed: /movements dogfood + permanent red-proof in check-po-app; four real bugs found by the instrument before it ever passed · landed · 82c7a49
+- 2026-08-22 22:32 · Continue · build · 118.1: demo code folds (owner-picked Option A) landed; print folds red-proved organically · landed · e74753d
+- 2026-08-22 22:32 · Roadmap · triage · 119: pattern wishlist triaged with grilled verdicts (error-pages + layout-overview accepted; app-frame grill-blocked) · triaged · e74753d
+- 2026-08-22 22:32 · Meta · refusal · showcase strip as default (Option B: duplication/drift + grey-noise tiles) · refused · e74753d
+- 2026-08-22 22:32 · Meta · refusal · Preview/Code tabs and code dialogs (Options C/D: hide preview during code reading; print/no-JS costs) · refused · e74753d
+- 2026-08-22 22:32 · Meta · refusal · standalone timeline pattern (re-photographs approval's component) · refused · e74753d
+- 2026-08-22 22:32 · Meta · refusal · save panel/dialog page (duplicates two shipping docs) · refused · e74753d
+- 2026-08-22 22:32 · Meta · refusal · column field (owner does not recognize the item) · refused · e74753d
