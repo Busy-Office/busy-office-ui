@@ -1247,7 +1247,7 @@
           "href": "/patterns/inbox",
           "title": "Inbox",
           "group": "Patterns: decide & clear queues",
-          "opener": "Who uses it: every ERP user, first thing — the screen a working day starts on. How often: continuously; it is the tab that stays open. What \"done\" looks like: the list is empty of things that need you — every row either acted on or explicitly handed off. An inbox is cross-type and cross-process: approvals, exceptions, assigned tasks and failed jobs in ONE list, and every row says why it is yours. Not for one document type's approval queue — that scoped, single-process view is the approval workflow's job; and not a feed of things that merely happened — that is the notification screen's contract. The inbox holds only rows that block on a person.",
+          "opener": "Who uses it: every ERP user, first thing — the screen a working day starts on. How often: continuously; it is the tab that stays open. What \"done\" looks like: the list is empty of things that need you — every row either acted on or explicitly handed off. An inbox is cross-type and cross-process: approvals, exceptions, assigned tasks and failed jobs in ONE list, and every row says why it is yours. Not for one document type's approval queue — that scoped, single-process view is the approval workflow's job; and not a feed of things that merely happened — that is notification's contract. The inbox holds only rows that block on a person.",
           "complexity": 2,
           "components": [
             {
