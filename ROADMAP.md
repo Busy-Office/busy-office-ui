@@ -1475,7 +1475,28 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        **Accept:** the owner picks (a) keep text tiles / (b) add generated
        screenshots, and the choice is recorded here with its reason.
 
-4. [ ] **104.4 — complexity filter chips on the index, gated behind 104.3.**
+4. [x] **104.4 — REFUSED 2026-08-22.** Unblocked by 104.3 (badges now
+       anchored to an observable definition), but refused on the merits
+       rather than built by default. `pattern-groups.mjs`'s six job-family
+       groups top out at 7 tiles (enter & find) and run as low as 1 (RF) —
+       every group is already small enough to scan without filtering.
+       The proposal doc itself (`.roundtable/proposal-patterns-index-2026-08-21.md`,
+       point 1 of the addendum) makes the case against this directly:
+       namethatui's filter chips exist *because* its grid is flat with no
+       organizing axis; our workflow-stage groups already ARE that axis,
+       so a complexity filter on top would duplicate work the grouping
+       already does, not add a use-case grouping doesn't cover — the
+       Objective's less-for-more test ("every new option must open more
+       use-cases than the one that asked for it") fails here. 104.1 also
+       shipped this same session, so there is zero usage evidence a filter
+       is missed, and the item's own Accept text names exactly this as
+       sufficient grounds to refuse. Revisit if the pattern count grows
+       past a size where a 6-7-tile group stops being scannable, or if
+       real usage shows readers hunting for a way to narrow the index.
+       No code changed; `bo-segmented`'s composability for this was
+       confirmed but not exercised.
+
+       *Original text, retained for context:*
        Re-review finding (2026-08-21): namethatui's Newest/Popular/
        Surprise-me sort has a cheap, real analogue — `bo-segmented`
        (already shipped; native radios; zero new CSS) could drive an
