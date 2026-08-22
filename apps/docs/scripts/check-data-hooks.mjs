@@ -48,7 +48,7 @@ const EXCEPTIONS = new Set([
   'data-line-remove', 'data-line-total',                // editable-grid totals demo
   'data-any-dirty',                                     // detail-form's field-per-row variant dirty demo
   'data-maintenance',                                   // master-detail fixture flag
-  'data-richtext-cmd',                                  // richtext toolbar demo
+  'data-richtext-cmd', 'data-richtext-value',           // richtext toolbar demo (113.1: value-taking commands)
 ]);
 
 const api = JSON.parse(await readFile(join(CORE_DIST, 'api.json'), 'utf8'));

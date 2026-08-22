@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 15:42
+Generated at: 2026-08-22 15:50
 
 ## Open items by slice
 
@@ -21,8 +21,7 @@ Generated at: 2026-08-22 15:42
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 113** (2 open)
-  - 113.1 — richer rung-3 demo: the seven achievable buttons above, added to the Advanced demo (not Basic — keep Basic minimal per the grill's own "most ERP free-text should never be rich text" framing).
+- **Slice 113** (1 open)
   - 113.2 — write the rung-4 recipe extension for the refused four
 
 ## Dispatch counters

@@ -22,6 +22,36 @@ const basic = `<div class="bo-richtext">
   </div>
 </div>`;
 
+const advanced = `<div class="bo-richtext">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"><s>S</s></button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE">"</button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyLeft" aria-pressed="true">Left</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyCenter" aria-pressed="false">Center</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyRight" aria-pressed="false">Right</button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="outdent">&lt;-</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="indent">-&gt;</button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink">Link</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="removeFormat">Clear</button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList">1. List</button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true"
+       role="textbox" aria-multiline="true" aria-label="Return instructions">
+    <p>Restock only if the seal is unbroken. Otherwise route to Quality —
+    see the exception process linked below.</p>
+  </div>
+</div>`;
+
 const readonly = `<div class="bo-richtext bo-richtext--readonly">
   <div class="bo-richtext__content bo-prose" contenteditable="false" tabindex="0"
        role="textbox" aria-multiline="true" aria-readonly="true" aria-label="Approval note">
@@ -100,6 +130,30 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
   </section>
 
   <section class="demo">
+    <h2>Advanced — the same light case, more commands</h2>
+    <Demo code={advanced} />
+    <p class="bo-u-text-muted">Still zero framework JS: every button here
+    is <code>execCommand</code>/<code>queryCommandState</code>, the exact
+    pattern Basic uses, extended two ways. <strong>Value-taking
+    commands</strong> — H2/H3/quote read the tag from
+    <code>data-richtext-value</code> and call
+    <code>execCommand('formatBlock', false, tag)</code>; Link prompts for
+    a URL and calls <code>createLink</code> with it (Cancel leaves the
+    selection untouched). <strong>A mutually-exclusive group</strong> —
+    the three align buttons sync <code>aria-pressed</code> across all
+    three after every click, not just the one pressed, so at most one
+    ever reads "on" (verified live: <code>justifyCenter</code> correctly
+    clears Left's and Right's pressed state, not just sets its own).
+    <strong>Clear does less than it sounds like</strong> — tested live,
+    not assumed: <code>removeFormat</code> strips inline styling
+    (bold/italic/alignment) but leaves block elements and links alone —
+    a heading stays a heading and a link stays clickable after Clear.
+    Removing those needs <code>formatBlock('P')</code>/<code>unlink</code>
+    explicitly, which this demo does not wire, matching how little
+    "clear formatting" actually promises.</p>
+  </section>
+
+  <section class="demo">
     <h2>Read-only and disabled</h2>
     <Demo code={readonly} />
     <Demo code={disabled} />
@@ -139,9 +193,11 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
     is not going anywhere soon, but it will never be extended), and its
     output HTML varies by engine — bold may come back as
     <code>&lt;b&gt;</code>, <code>&lt;strong&gt;</code>, or a styled
-    span, and list nesting differs — so write your server-side sanitizer
-    allowlist against all the variants, not the one your dev browser
-    produces. When notes outgrow bold/italic/lists (or those caveats
+    span, strikethrough as <code>&lt;strike&gt;</code> (verified live in
+    this browser — the deprecated tag, not <code>&lt;s&gt;</code>), and
+    list nesting differs — so write your server-side sanitizer allowlist
+    against all the variants, not the one your dev browser produces. When
+    notes outgrow bold/italic/lists (or those caveats
     bite), mount a real editor inside the chrome; the shape for
     ProseMirror-style libraries:</p>
     <pre><code>{`import { EditorState } from "prosemirror-state";
@@ -165,16 +221,36 @@ const view = new EditorView(host, {
 
   <script>
     // Docs-page wiring for the live demo — identical to the consumer
-    // snippet in the Markup section.
+    // snippet in the Markup section. Extended for the Advanced demo
+    // (113.1): a value-taking command (formatBlock's tag, createLink's
+    // URL) and the mutually-exclusive justify group, on top of Basic's
+    // plain toggle pattern.
     document.addEventListener('mousedown', (e) => {
       if ((e.target as HTMLElement).closest('[data-richtext-cmd]')) e.preventDefault();
     });
+    const JUSTIFY = ['justifyLeft', 'justifyCenter', 'justifyRight'];
     document.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-cmd]');
       if (!btn) return;
-      document.execCommand(btn.dataset.richtextCmd!);
+      const cmd = btn.dataset.richtextCmd!;
+      let value = btn.dataset.richtextValue ?? '';
+      if (cmd === 'createLink') {
+        const url = prompt('Link URL:');
+        if (!url) return;               // cancelled — leave the selection untouched
+        value = url;
+      }
+      document.execCommand(cmd, false, value);
       if (btn.hasAttribute('aria-pressed'))
-        btn.setAttribute('aria-pressed', String(document.queryCommandState(btn.dataset.richtextCmd!)));
+        btn.setAttribute('aria-pressed', String(document.queryCommandState(cmd)));
+      // The three justify buttons are one mutually-exclusive group — a plain
+      // per-button toggle would let two read "pressed" at once.
+      if (JUSTIFY.includes(cmd)) {
+        const toolbar = btn.closest('.bo-richtext__toolbar');
+        JUSTIFY.forEach((j) => {
+          const b = toolbar?.querySelector<HTMLElement>(`[data-richtext-cmd="${j}"]`);
+          b?.setAttribute('aria-pressed', String(document.queryCommandState(j)));
+        });
+      }
     });
   </script>
 

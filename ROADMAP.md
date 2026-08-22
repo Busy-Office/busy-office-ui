@@ -227,18 +227,28 @@ cleanly across that boundary:
   finding: `.bo-prose`'s rung has never been exercised against a pattern
   page, `.bo-richtext`'s heavier rungs even less so).
 
-1. [ ] **113.1 — richer rung-3 demo: the seven achievable buttons above,
-       added to the Advanced demo (not Basic — keep Basic minimal per the
-       grill's own "most ERP free-text should never be rich text" framing).**
-       Zero new CSS, zero new framework JS — same `data-richtext-cmd`
-       wiring, same dozen lines. **Accept:** each new button's
-       `execCommand`/`queryCommandState` pairing verified live (the same
-       "tested live rather than read" discipline 102.1 used — it already
-       found the browser returns `<b>` not `<strong>` on Bold, a surprise
-       a hand-typed page would have missed); `aria-pressed` sync confirmed
-       for the toggle commands (bold/italic/strikethrough/align); the
-       heading/blockquote `formatBlock` commands verified to produce valid
-       semantic HTML the sanitizer allowlist section already warns about.
+1. [x] **113.1 — DONE 2026-08-22. No pre-existing "Advanced" section
+       existed — the item's own text assumed one; created it.** All seven
+       button groups added (strikethrough, H2/H3, blockquote, 3-way
+       align, indent/outdent, link, clear), zero new CSS, wiring extends
+       the same `data-richtext-cmd` pattern to handle value-taking
+       commands (`data-richtext-value` for `formatBlock`, a `prompt()`
+       for `createLink`) and a mutually-exclusive align group.
+
+       **Tested live, three real surprises found, none assumed:**
+       strikethrough outputs the deprecated `<strike>` tag, not `<s>`
+       (added to the existing Bold-variance sanitizer caveat); `formatBlock`
+       correctly produces real `<h2>`/`<h3>`/`<blockquote>` elements;
+       `removeFormat` clears inline styling only — a heading stays a
+       heading and a link stays clickable after "Clear," which is not
+       what the button name suggests, documented in prose rather than
+       silently assumed. Two of the three promoted to permanent
+       `check-claims.mjs` cases (formatBlock's real heading, the justify
+       group's mutual exclusivity) — `removeFormat`'s scope has no
+       pass/fail shape, so it stays prose-only. `data-richtext-value`
+       needed adding to `check-data-hooks.mjs`'s documented-hooks list
+       (the gate caught it correctly on first build). Full suite green
+       (13 docs gates, `check:claims` 92/92 up from 90).
 2. [ ] **113.2 — write the rung-4 recipe extension for the refused four**
        (image, table, checklist, color/highlight) — documented as "bring
        your own engine" alongside the existing rung-4 mount recipe, never

@@ -1838,6 +1838,44 @@ check(
   JSON.stringify({ kanbanOpen, kanbanClosed }),
 );
 
+/* /components/richtext Advanced demo (roadmap 113.1): formatBlock produces
+   a real semantic heading, and the three justify buttons are a mutually
+   exclusive group — clicking one clears aria-pressed on the other two, not
+   just sets its own. Both surprised on first manual test (removeFormat's
+   scope was the third surprise, documented in prose rather than asserted
+   here — it has no pass/fail shape, only a "what it does" one). */
+await visit('/components/richtext/', { width: 1440, height: 1200 });
+const richtext = await page.evaluate(() => {
+  const advanced = document.querySelectorAll('.demo')[1];
+  const content = advanced.querySelector('.bo-richtext__content');
+  const p = content.querySelector('p');
+  const range = document.createRange();
+  range.selectNodeContents(p);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  return true;
+});
+await page.click('.demo:nth-of-type(2) [data-richtext-cmd="formatBlock"]'); // H2 is the first
+const afterHeading = await page.evaluate(() =>
+  !!document.querySelectorAll('.demo')[1].querySelector('.bo-richtext__content h2'));
+check(
+  'richtext Advanced: formatBlock("H2") produces a real <h2>, not styled text',
+  afterHeading,
+  JSON.stringify({ afterHeading }),
+);
+
+await page.click('.demo:nth-of-type(2) [data-richtext-cmd="justifyCenter"]');
+const justifyState = await page.evaluate(() => {
+  const btns = document.querySelectorAll('.demo:nth-of-type(2) [data-richtext-cmd^="justify"]');
+  return Object.fromEntries([...btns].map((b) => [b.dataset.richtextCmd, b.getAttribute('aria-pressed')]));
+});
+check(
+  'richtext Advanced: clicking Center clears Left/Right aria-pressed, not just sets its own',
+  justifyState.justifyCenter === 'true' && justifyState.justifyLeft === 'false' && justifyState.justifyRight === 'false',
+  JSON.stringify(justifyState),
+);
+
 await browser.close();
 server.close();
 
