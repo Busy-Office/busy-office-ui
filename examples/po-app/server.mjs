@@ -49,6 +49,22 @@ const COST_CENTERS = [
   { code: 'CC-5540', name: 'Customer Support' },
   { code: 'CC-6610', name: 'IT Infrastructure' },
 ];
+// Hoisted from spendScreen (explore/role-home-po-app spike): the dashboard's
+// real Progress card needs the same budget figures spendScreen already had,
+// and a second copy would be the exact duplication this project's own
+// Standardize doctrine refuses.
+//
+// Values corrected in the same spike (real, pre-existing bug, reproduced
+// on an unmodified checkout BEFORE this fix — not introduced by hoisting):
+// the originals (80000/15000/25000, set 2026-08-15 against a 5-row `pos`)
+// were never revisited when the 25-row backfill landed, so /spend showed
+// every cost centre pinned at 134%/448%/330% "review before approving" —
+// every progress bar red, always, which demonstrates none of the tone
+// system's three states. Recomputed from real committed (non-Rejected)
+// spend against the CURRENT `pos`, chosen to land one CC in each tone
+// band (normal/warning/danger) so the demo shows the system actually
+// working, not permanently maxed out.
+const budgets = { 'CC-1180': 110000, 'CC-2205': 70000, 'CC-4021': 95000 };
 const PAGE_SIZE = 10;
 const audit = [];
 const money = (n) =>
@@ -892,8 +908,8 @@ const spendScreen = () => {
   // continuous-progress scenario the parked "Process Bar" item was waiting
   // on. Bare NATIVE <progress> first (platform semantics for free); the
   // question is whether unstyled native rendering is acceptable in a themed
-  // ERP screen or fights.
-  const budgets = { 'CC-1180': 80000, 'CC-2205': 15000, 'CC-4021': 25000 };
+  // ERP screen or fights. (`budgets` moved to module scope — see its
+  // definition near COST_CENTERS.)
   return `
 <h1>Spend by cost center</h1>
 <div class="bo-data-table-container" tabindex="0">
@@ -905,7 +921,12 @@ const spendScreen = () => {
       <th scope="col" class="bo-data-table__col--numeric">Amount</th>
     </tr></thead>
     ${groups.map(([cc, list]) => {
-      const spent = list.reduce((s, p) => s + p.amount, 0);
+      // Real bug found in the role-home dogfood spike (2026-08-22),
+      // reproduced on an unmodified checkout first: a Rejected PO never
+      // actually spent anything, but was counted against budget here
+      // anyway, compounding with the stale budget figures above to pin
+      // every cost centre at "review before approving" permanently.
+      const spent = list.reduce((s, p) => s + (p.status === 'Rejected' ? 0 : p.amount), 0);
       const budget = budgets[cc] ?? 0;
       const pct = budget ? Math.round((spent / budget) * 100) : 0;
       const barTone = pct >= 90 ? ' bo-progress--danger' : pct >= 75 ? ' bo-progress--warning' : '';
@@ -987,34 +1008,76 @@ const receiveScreen = () => `
   });
 </script>`;
 
+// Rebuilt against the real role-home pattern shape (explore/role-home-po-app,
+// 2026-08-22) — the original above predates role-home (110.1) and used the
+// same primitives (.bo-widget-grid/.bo-stat) but not its actual anatomy
+// (Identity line, "Needs you" spanning two columns, Stat/Progress/Recent
+// cards). Every number below is DERIVED from real `pos`/`budgets` data, no
+// synthetic deltas — po-app keeps no historical snapshot to diff against,
+// so a stat that would need one (the demo page's "+2 since yesterday") is
+// simply not shown, rather than faked. Two real adaptations the honest
+// rebuild forced, kept rather than papered over:
+//  1. "Needs you" links to /pos?status=Pending, not an /inbox route — the
+//     role-home demo's "Open inbox" button assumes a standalone inbox
+//     pattern exists; po-app has no such screen, and building one is out
+//     of this spike's scope. The filtered list is the real equivalent.
+//  2. "Recent" is relabelled "Recently added" — po-app tracks no per-user
+//     view history (no session), but DOES know insertion order (imports
+//     and /pos/new both unshift). Recently-added is real; recently-viewed
+//     would have been fabricated.
 const dashScreen = () => {
   const pending = pos.filter((p) => p.status === 'Pending');
-  const total = pending.reduce((s, p) => s + p.amount, 0);
+  const totalPending = pending.reduce((s, p) => s + p.amount, 0);
+  const grandBudget = Object.values(budgets).reduce((s, b) => s + b, 0);
+  const grandSpent = pos.reduce((s, p) =>
+    s + (budgets[p.cc] !== undefined && p.status !== 'Rejected' ? p.amount : 0), 0);
+  const pct = grandBudget ? Math.round((grandSpent / grandBudget) * 100) : 0;
+  const recent = pos.slice(0, 3);
   return `
 <h1>Dashboard</h1>
-<div class="bo-widget-grid" style="--bo-widget-min: 13rem">
-  <div class="bo-widget bo-widget--span-2">
-    <div class="bo-stat bo-stat--hero">
-      <span class="bo-stat__label">Awaiting your approval</span>
-      <span class="bo-stat__value">${pending.length}</span>
-      <span class="bo-stat__delta bo-stat__delta--bad"><span aria-hidden="true">▲</span> +2 <span aria-hidden="true">⚠</span><span class="bo-visually-hidden">increase, worse,</span> since yesterday</span>
+<p class="bo-byline bo-byline--compact">Signed in as A. Reyes · AP Clerk</p>
+<div class="bo-widget-grid" style="--bo-widget-min: 16rem">
+  <section class="bo-widget bo-widget--span-2">
+    <div class="bo-widget__header">
+      <span class="bo-widget__title">Needs you</span>
+      <a class="bo-btn bo-btn--sm bo-btn--secondary" href="/pos?status=Pending">View queue</a>
     </div>
-  </div>
-  <div class="bo-widget"><div class="bo-stat">
-    <span class="bo-stat__label">Pending value</span>
-    <span class="bo-stat__value">${money(total)}</span>
-  </div></div>
-  <div class="bo-widget">
-    <div class="bo-widget__header"><span class="bo-widget__title">Queue</span>
-      <a href="/pos" class="bo-u-text-muted" style="font-size: var(--bo-font-size-xs)">View all</a></div>
-    <div class="bo-widget__body bo-widget__body--flush">
-      <div class="bo-data-table-container" tabindex="0" style="border:none">
-        <table class="bo-data-table">
-          <tbody>${pending.slice(0, 3).map((p) => `<tr><td class="bo-data-table__col--code">${p.id}</td><td class="bo-data-table__col--numeric">${moneyHtml(p.amount)}</td></tr>`).join('')}</tbody>
-        </table>
-      </div>
+    <div class="bo-widget__body">
+      <span class="bo-stat">
+        <span class="bo-stat__label">Awaiting your approval</span>
+        <span class="bo-stat__value">${pending.length}</span>
+      </span>
     </div>
-  </div>
+  </section>
+
+  <section class="bo-widget">
+    <div class="bo-widget__header"><span class="bo-widget__title">My open orders</span></div>
+    <div class="bo-widget__body">
+      <span class="bo-stat">
+        <span class="bo-stat__label">Value in flight</span>
+        <span class="bo-stat__value">${money(totalPending)}</span>
+        <span class="bo-stat__delta">across ${pending.length} PO${pending.length === 1 ? '' : 's'}</span>
+      </span>
+    </div>
+  </section>
+
+  <section class="bo-widget">
+    <div class="bo-widget__header"><span class="bo-widget__title">Budget consumed</span></div>
+    <div class="bo-widget__body">
+      <p style="margin-block: 0 var(--bo-space-2)">${pct}% of ${money(grandBudget)} total</p>
+      <progress class="bo-progress${pct >= 90 ? ' bo-progress--danger' : pct >= 75 ? ' bo-progress--warning' : ''}" value="${Math.min(pct, 100)}" max="100" aria-label="${pct}% of total budget consumed"></progress>
+      <p class="bo-u-text-muted" style="margin-block-end: 0"><a href="/spend">Spend by cost center</a></p>
+    </div>
+  </section>
+
+  <section class="bo-widget">
+    <div class="bo-widget__header"><span class="bo-widget__title">Recently added</span></div>
+    <div class="bo-widget__body">
+      <ul class="bo-stack bo-stack--tight docs-list-bare" style="margin: 0">
+        ${recent.map((p) => `<li><a href="/pos/${p.id}">${p.id} · ${p.vendor}</a> <span class="bo-badge bo-badge--${tone[p.status]}">${p.status}</span></li>`).join('')}
+      </ul>
+    </div>
+  </section>
 </div>`;
 };
 

@@ -1,5 +1,10 @@
 node_modules/
 dist/
+# po-app's local Dockerfile-mirroring workflow (npm pack + npm install) always
+# produces these locally when testing outside the container — found
+# uncommitted and unignored during the role-home dogfood spike, 2026-08-22.
+examples/*/busy-office-ui.tgz
+examples/*/package-lock.json
 .astro/
 graphify-out/
 .DS_Store
