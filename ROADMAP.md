@@ -149,6 +149,51 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 114 — Owner wishlist: adopt htmx 4 (2026-08-22)
+
+Owner: *"just use htmx 4"*, `https://four.htmx.org/docs`. Verified via
+`WebFetch` before triaging rather than trusted or guessed from training
+data — the URL is real, official, and current.
+
+**Confirmed: htmx 4.0 is beta 6, not a stable release**
+(`htmx.org@4.0.0-beta6`), and it carries a breaking change that inverts
+the framework's own load-bearing documentation. `getting-started/htmx.astro:83`
+states outright, and dozens of pattern pages' Data-contract tables repeat
+the same fact for their 422/409 rows: **"htmx swaps 2xx responses and
+discards everything else"** — the "swap it in yourself"
+`htmx-ext-response-targets` workaround exists *because* of that default.
+htmx 4's documented change is the exact inverse: **"htmx 4 swaps all HTTP
+responses. Only 204 and 304 do not swap."** Other stated breaking changes:
+XMLHttpRequest → Fetch API, `hx-ext`/`hx-vars`/`hx-prompt` removed,
+`hx-disable` → `hx-ignore`, a 60s default request timeout (was none),
+implicit → explicit (`:inherited`) attribute inheritance.
+
+**Triaged as a feature/requirement against the Objective, refused for
+now:**
+
+- **Not a drop-in swap.** Adopting htmx 4 wholesale would silently
+  invalidate every documented "htmx discards non-2xx, swap it in
+  yourself" claim across the pattern catalogue — not a version bump, a
+  doctrine-level behavior change touching dozens of already-verified
+  `check-claims.mjs` cases and Data-contract rows.
+- **Beta, not stable** — this project's own quality bar (verify live,
+  executable claims, `check:rf-floor`-style browser-floor discipline)
+  has never shipped against a pre-release dependency; adopting one now
+  would be the first exception, made without a stated reason to accept
+  the risk.
+- **No demonstrated gap** — nothing currently broken or blocked needs
+  htmx 4's specific changes; the ask names a version, not a problem.
+
+**Refused for now. Re-open when: htmx 4 ships stable, AND someone runs a
+scoped audit of every "discards non-2xx" claim this framework documents
+(`getting-started/htmx.astro`, every pattern's 422/409 Data-contract
+rows, the `htmx-ext-response-targets` guidance) against the new
+swap-everything default before any adoption — the same "verify the
+INJECTION, not just the red result" discipline this project already
+applies to gates, applied here to a dependency's documented behavior
+before trusting it.** Nothing touched live; this is a recorded refusal,
+not a build item.
+
 ## Slice 113 — Owner wishlist: improve the rich text sample (2026-08-22)
 
 Owner attached a screenshot of a third-party editor's description field
