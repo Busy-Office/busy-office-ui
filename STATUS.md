@@ -27,8 +27,8 @@ Generated at: 2026-08-22 23:17
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (713 iterations logged)
-  Standardize   6 / 4 Continue rounds since 2026-08-22 17:12   OVERDUE
+dispatch status — counter-triggered rules (715 iterations logged)
+  Standardize   8 / 4 Continue rounds since 2026-08-22 17:12   OVERDUE
   Objective     1 / 3 slice           since 2026-08-22 07:59   ok  [30]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -48,8 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 22:32 · Roadmap · triage · 119: pattern wishlist triaged with grilled verdicts (error-pages + layout-overview accepted; app-frame grill-blocked) · triaged · e74753d
-- 2026-08-22 22:32 · Meta · refusal · showcase strip as default (Option B: duplication/drift + grey-noise tiles) · refused · e74753d
 - 2026-08-22 22:32 · Meta · refusal · Preview/Code tabs and code dialogs (Options C/D: hide preview during code reading; print/no-JS costs) · refused · e74753d
 - 2026-08-22 22:32 · Meta · refusal · standalone timeline pattern (re-photographs approval's component) · refused · e74753d
 - 2026-08-22 22:32 · Meta · refusal · save panel/dialog page (duplicates two shipping docs) · refused · e74753d
@@ -58,6 +56,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 22:41 · Meta · refusal · new component/behavior for cascading selects (pure hx-* attribute composition, nothing to own) · refused · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · Event Chaining as first-class pattern (source itself says use sparingly) · refused · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · Form Replacement (article's own anti-pattern, matches existing master-detail doctrine) · refused · 557c9a9
+- 2026-08-22 23:17 · Continue · build · 119.1: error-pages pattern landed; found+fixed .bo-state__actions wrap bug · landed · adf63d2
+- 2026-08-22 23:17 · Continue · build · 119.4: theme cycle + density segmented controls, owner feedback live; found+fixed segmented position collapse and fold focus-ring clipping · landed · adf63d2
 
 ## Sunset test
 

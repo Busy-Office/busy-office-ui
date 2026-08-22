@@ -719,3 +719,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 22:41 · Meta · refusal · new component/behavior for cascading selects (pure hx-* attribute composition, nothing to own) · refused · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · Event Chaining as first-class pattern (source itself says use sparingly) · refused · 557c9a9
 - 2026-08-22 22:41 · Meta · refusal · Form Replacement (article's own anti-pattern, matches existing master-detail doctrine) · refused · 557c9a9
+- 2026-08-22 23:17 · Continue · build · 119.1: error-pages pattern landed; found+fixed .bo-state__actions wrap bug · landed · adf63d2
+- 2026-08-22 23:17 · Continue · build · 119.4: theme cycle + density segmented controls, owner feedback live; found+fixed segmented position collapse and fold focus-ring clipping · landed · adf63d2
