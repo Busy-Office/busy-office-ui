@@ -1,0 +1,145 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Layouts — the four shells">
+  <p class="demo-note">
+    An ERP suite is not one screen shape wearing different content — it is
+    <strong>four different shells</strong>, each already shipped, each solving
+    a different "where does the reader stand" question. This page is a map,
+    not a new pattern: pick the shell here first, then reach for the pattern
+    that fills it. <strong>Not a component or a fifth option</strong> — every
+    row below is a link to something that already exists; a screen that
+    doesn't fit one of the four is a new shell, not a variant of these.
+  </p>
+
+  <section class="demo">
+    <h2>The four shells</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead>
+          <tr>
+            <th scope="col">Shell</th>
+            <th scope="col">What it answers</th>
+            <th scope="col">Built from</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href={base + '/base/primitives'}>App shell</a></strong></td>
+            <td>"Where in the suite am I?" — persistent navigation, most
+              screens, most of the day.</td>
+            <td><code>.bo-app-shell</code>: header + sidebar + main</td>
+          </tr>
+          <tr>
+            <td><strong><a href={base + '/patterns/role-home'}>Role home</a></strong></td>
+            <td>"What does MY role need today?" — the first screen after
+              sign-in, one per role.</td>
+            <td>App shell's main, filled with widgets scoped to a role</td>
+          </tr>
+          <tr>
+            <td><strong><a href={base + '/patterns/rf-landing'}>RF full-screen</a></strong></td>
+            <td>"One task, no distraction" — a handheld scanner, gloved
+              hands, a single action per screen.</td>
+            <td>No app shell at all — chrome-free, isolated document</td>
+          </tr>
+          <tr>
+            <td><strong><a href={base + '/patterns/master-detail'}>Split master-detail</a></strong></td>
+            <td>"Show me the list AND the one I picked" — browsing many
+              records without losing the list.</td>
+            <td>App shell's main, split into a list pane + detail pane</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">All four are shipped primitives or patterns.
+    This page adds no CSS and no component — it names when each is the
+    right call, the same job
+    <a href={base + '/concepts/review-anatomy'}>review-screen anatomy</a>
+    does one level down, for the three ways to show a single record.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Deciding — three questions, not taste</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Is this a dedicated device with one job</strong> — a
+        warehouse scanner, a kiosk — where the surrounding chrome would
+        just eat screen real estate a gloved thumb can't use anyway?
+        <a href={base + '/patterns/rf-landing'}>RF full-screen</a>, no app
+        shell. Everything else below assumes the app shell is present.</li>
+      <li><strong>Otherwise, is this the FIRST screen after sign-in</strong>,
+        answering "what needs me today" before the reader has chosen a
+        task? <a href={base + '/patterns/role-home'}>Role home</a> — its own
+        page inside the app shell's main, scoped per role rather than one
+        screen for everyone.</li>
+      <li><strong>Otherwise: does the reader need the list AND a record's
+        detail on screen at once</strong>, switching between records without
+        losing their place in the list? Yes →
+        <a href={base + '/patterns/master-detail'}>split master-detail</a>.
+        No — a single list, or a single record filling the page on its own —
+        → the app shell's main holds that content directly (a
+        <a href={base + '/patterns/list-report'}>list report</a> or one of
+        the <a href={base + '/concepts/review-anatomy'}>three record-review
+        shapes</a>), no further layout decision needed.</li>
+    </ol>
+    <p class="bo-u-text-muted">Answering those three is the whole choice.
+    A screen that seems to need two of these at once (a role home that also
+    wants a permanent detail pane, say) is usually two decisions sharing one
+    page — split it, per the
+    per the "design the decision, not the screen" test on
+    <a href={base + '/concepts/design-language'}>the design-language
+    page</a> — rather than merging two shells into a new one.</p>
+  </section>
+
+  <section class="demo">
+    <h2>When each shell is the WRONG choice</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead>
+          <tr>
+            <th scope="col">Shell</th>
+            <th scope="col">Wrong when…</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>App shell</td>
+            <td>the screen is a single dedicated task on a single-purpose
+              device — the persistent chrome becomes pure overhead the
+              reader never uses (that's RF full-screen's case).</td>
+          </tr>
+          <tr>
+            <td>Role home</td>
+            <td>used as a general dashboard/reporting surface — it is
+              scoped to ONE role's daily start, not an analytics page; see
+              <a href={base + '/patterns/reporting-dashboard'}>reporting
+              dashboard</a> for parameterized, cross-role reporting.</td>
+          </tr>
+          <tr>
+            <td>RF full-screen</td>
+            <td>the reader has a full-size screen and more than one task in
+              the same session — dropping the app shell there just removes
+              navigation the reader will immediately want back.</td>
+          </tr>
+          <tr>
+            <td>Split master-detail</td>
+            <td>the record is long enough that a narrow detail pane can't
+              hold it without its own internal scroll-and-search — that's
+              when <a href={base + '/patterns/object-page'}>object page</a>
+              (a full-width page with in-page navigation) replaces the
+              cramped pane, per its own scope note (roadmap 52.2).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <Related links={[
+    ["/base/primitives", "App shell & primitives"],
+    ["/patterns/role-home", "Role home"],
+    ["/patterns/rf-landing", "RF full-screen"],
+    ["/patterns/master-detail", "Split master-detail"],
+    ["/concepts/review-anatomy", "Review-screen anatomy (choosing among the three record-review shapes)"],
+  ]} />
+</Gallery>
