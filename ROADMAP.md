@@ -1725,7 +1725,20 @@ the owner has already answered that with Slices 99 and 100.
        owner's decision to hold and the reason, so it stops being restated
        every grill as though nobody had decided.
 
-4. [ ] **101.4 — Inbox / worklist.** The one screen an ERP user opens first
+4. [x] **101.4 — Inbox / worklist.** **Done 2026-08-22** — built to the
+       110-addendum bar from day one: the "why it's yours" reason is its own
+       column with the reader named in bold; the success-empty ("nothing
+       needs you") is a distinct state from filtered-empty in the states
+       table; the data contract is stated in machine-operable terms
+       (row data attributes, claim endpoint with 409-names-the-claimer)
+       and the human-monitoring signals are named in-page (chip counts,
+       danger badges, the Waiting column — with a deliberately-old 26-day
+       row so age reads as the signal it is). Wrong-choice clause vs
+       approval (single-process queue) and the notification contract.
+       Composed entirely from shipped pieces (data-table, segmented,
+       badge, button) — zero new CSS, complexity 2. All gates green incl.
+       page-shape (21 patterns), wrong-choice (carrying), components-used;
+       verified live both themes + 390px. Original Accept below, kept:** The one screen an ERP user opens first
        and the framework does not have. `approval` is ONE approver's queue for
        ONE document type; an inbox is cross-type and cross-process —
        approvals, exceptions, assigned tasks, failed jobs — in one list with a

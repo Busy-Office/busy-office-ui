@@ -1,0 +1,203 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: inbox">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: every ERP user, first thing — the screen a
+    working day starts on. <strong>How often</strong>: continuously; it is
+    the tab that stays open. <strong>What "done" looks like</strong>: the
+    list is empty of things that need <em>you</em> — every row either acted
+    on or explicitly handed off. An inbox is cross-type and cross-process:
+    approvals, exceptions, assigned tasks and failed jobs in ONE list, and
+    every row says <em>why it is yours</em>.
+    <strong>Not for one document type's approval queue</strong> — that
+    scoped, single-process view is the
+    <a href={base + '/patterns/approval'}>approval workflow</a>'s job; and
+    not a feed of things that merely <em>happened</em> — that is the
+    notification screen's contract. The inbox holds only rows that block on
+    a person.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="bo-cluster" style="margin-block-end: var(--bo-space-3)">
+      <div class="bo-segmented" role="group" aria-label="Inbox filter">
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="inb-f" id="inb-all" checked>
+        <label class="bo-segmented__option" for="inb-all">All (6)</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="inb-f" id="inb-appr">
+        <label class="bo-segmented__option" for="inb-appr">Approvals (3)</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="inb-f" id="inb-exc">
+        <label class="bo-segmented__option" for="inb-exc">Exceptions (2)</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="inb-f" id="inb-task">
+        <label class="bo-segmented__option" for="inb-task">Tasks (1)</label>
+      </div>
+    </div>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Items needing your action</caption>
+        <thead><tr>
+          <th scope="col">Item</th>
+          <th scope="col">Why it's yours</th>
+          <th scope="col">Waiting</th>
+          <th scope="col"><span class="bo-visually-hidden">Action</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="bo-badge bo-badge--type">PO</span> PO-88213 · Acme Supply Co. · $18,940.50</td>
+            <td>Awaiting <strong>your approval</strong> — step 3 of 4</td>
+            <td>2 days</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/approval'}>Review</a></td>
+          </tr>
+          <tr>
+            <td><span class="bo-badge bo-badge--type">INV</span> INV-10236 · Initech GmbH · $730.25</td>
+            <td><span class="bo-badge bo-badge--danger">Exception</span> price variance 12% over tolerance</td>
+            <td>26 days</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/object-page'}>Open</a></td>
+          </tr>
+          <tr>
+            <td><span class="bo-badge bo-badge--type">JOB</span> Nightly GR/IR reconciliation</td>
+            <td><span class="bo-badge bo-badge--danger">Exception</span> failed at 02:14 — <strong>assigned to you</strong></td>
+            <td>6 hours</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/staging'}>Open log</a></td>
+          </tr>
+          <tr>
+            <td><span class="bo-badge bo-badge--type">PO</span> PO-88219 · Globex Industrial · $2,110.00</td>
+            <td>Awaiting <strong>your approval</strong> — step 1 of 2</td>
+            <td>4 hours</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/approval'}>Review</a></td>
+          </tr>
+          <tr>
+            <td><span class="bo-badge bo-badge--type">TASK</span> Confirm vendor bank change · Stark Components</td>
+            <td><strong>Assigned to you</strong> by J. Kim</td>
+            <td>1 day</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/record-detail'}>Open</a></td>
+          </tr>
+          <tr>
+            <td><span class="bo-badge bo-badge--type">REQ</span> Requisition R-4471 · Warehouse consumables</td>
+            <td>Awaiting <strong>your approval</strong> — final step</td>
+            <td>3 days</td>
+            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/approval'}>Review</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Every row answers <em>why is this mine</em>
+    in its own column — awaiting your approval, an exception assigned to
+    you, a task handed to you — because a cross-type list without that
+    column is just a worklist someone else has to explain. The 26-day row
+    is deliberately old: <strong>age is the monitoring signal</strong>, and
+    it must be visible without opening anything.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- One list, many sources. The row's TYPE is a badge; the row's
+     REASON is a column. Filter chips are a segmented control whose
+     counts come from the server. -->
+<div class="bo-segmented" role="group" aria-label="Inbox filter">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio"
+         name="inb-f" id="inb-all" checked>
+  <label class="bo-segmented__option" for="inb-all">All (6)</label>
+  <!-- …one radio+label per row source -->
+</div>
+
+<table class="bo-data-table">
+  <thead><tr>
+    <th scope="col">Item</th>
+    <th scope="col">Why it's yours</th>
+    <th scope="col">Waiting</th>
+    <th scope="col"><span class="bo-visually-hidden">Action</span></th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="bo-badge bo-badge--type">PO</span> PO-88213 …</td>
+      <td>Awaiting <strong>your approval</strong> — step 3 of 4</td>
+      <td>2 days</td>
+      <td><a class="bo-btn bo-btn--sm bo-btn--secondary"
+             href="/approve/PO-88213">Review</a></td>
+    </tr>
+  </tbody>
+</table>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Filter chips</strong> — a
+      <a href={base + '/components/segmented'}>segmented control</a>, one
+      option per row source, counts rendered server-side. Native radios, so
+      arrow keys move between filters for free.</li>
+      <li><strong>The list</strong> — a plain
+      <a href={base + '/components/data-table'}>data table</a>; each row's
+      type is a <a href={base + '/components/badge'}>badge</a>, exceptions
+      carry the danger tone <em>plus</em> the word (two-channel).</li>
+      <li><strong>"Why it's yours" column</strong> — the inbox's defining
+      part: <em>awaiting your approval</em> / <em>assigned to you</em> /
+      <em>exception routed to you</em>. Bold on the phrase that names the
+      reader.</li>
+      <li><strong>Waiting column</strong> — age since the row became yours.
+      This is the human-monitoring signal: an old row is visible shame,
+      unopened.</li>
+      <li><strong>Per-row action</strong> — one
+      <a href={base + '/components/button'}>secondary button</a> linking
+      into the screen that resolves the row (approval, object page, log).
+      The inbox never resolves anything itself.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /inbox?filter=approvals</td><td>the tbody fragment + refreshed chip counts; an agent reads the same rows the human sees — <code>data-item-id</code>, <code>data-reason</code>, <code>data-age-hours</code> per row make it machine-readable without scraping prose</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /inbox/:id/claim</td><td>the row re-rendered as claimed (byline: who); 409 if someone claimed it first — re-render with the claimer's name, never silently drop</td></tr>
+          <tr><td class="bo-data-table__col--code">resolution</td><td>happens on the TARGET screen (approve on the approval screen, fix on the object page); the inbox row disappears on the next fetch — the inbox never posts a decision itself</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: an agent works this screen through the row data
+    attributes and the claim/resolve endpoints; the human monitors through
+    the chip counts, the danger badges, and the Waiting column. Same rows,
+    two channels — neither is decoration.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing needs you</td><td><strong>a success, and it must look like one</strong> — "Inbox zero · nothing is waiting on you" with a positive tone, never the same grey empty-box as a filter mismatch</td></tr>
+          <tr><td>Filtered to empty</td><td>the DIFFERENT empty: "No exceptions right now — 4 items under other filters", with the chips still showing their counts so the reader knows where the work went</td></tr>
+          <tr><td>New rows arrived</td><td>chip counts update on the next poll; rows the reader has scrolled past are never reordered under them mid-read</td></tr>
+          <tr><td>Claimed by a colleague</td><td>409 on claim → the row re-renders naming the claimer; it leaves the list on the next fetch</td></tr>
+          <tr><td>Row's document deleted</td><td>the row states it plainly ("PO-88213 no longer exists") with a dismiss — a dead link that 404s is a support call</td></tr>
+          <tr><td>Overdue</td><td>the Waiting cell past a threshold gains the warning tone + the word "overdue" — two channels, and the age was already visible before the threshold</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/segmented'}>Segmented control</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/approval", "Approval workflow"],
+    ["/patterns/bulk-actions", "Bulk actions"],
+    ["/patterns/list-report", "List report"],
+    ["/components/data-table", "Data table"],
+  ]} />
+</Gallery>
