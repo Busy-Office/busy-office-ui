@@ -2076,16 +2076,6 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        exist. The definition records that it HAS failed, and names the six,
        which is what keeps it credible.
 
-   [ ] **94.8 (original text) — write the missing "when this is the wrong choice" guidance**
-       for the six components 94.7 named. Each page gains one sentence naming
-       a context where it is not the right answer and what to use instead —
-       the shape `data-table` (24 contrastive statements) and `combobox` (7)
-       already have. **Accept:** each of the six re-scores to `content: 3`
-       with a citation quoting the new sentence; the sentence names a real
-       alternative that exists in this framework, not a hypothetical.
-       Cheap per page, and it is the kind of guidance a first-time user needs
-       most — the six are currently silent on it.
-
 5. [x] **94.9 — DONE 2026-08-21. `interaction` kept and now discriminates; `hierarchy` RETIRED. finish `interaction`, and decide `hierarchy`'s fate.**
        **`interaction` — read, not grepped, exactly as this item required.**
        All 14 behaviour-backed pages judged by hand against 94.7's wording.
