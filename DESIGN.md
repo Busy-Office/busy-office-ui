@@ -281,13 +281,27 @@ reasons"; this table is only for things someone would otherwise try to build.
 | A grid engine — virtual scroll, column virtualisation, cell editing | Server-side paging or load-more for lists; the token-themed AG Grid recipe on `/concepts/scale` for the one screen in twenty that is genuinely a spreadsheet | 2026-08-17, "four patterns, no grid" |
 | An icon catalogue — the hundreds-of-glyphs set | The 12 shipped ERP glyphs, then `--bo-icon-src` for anything else: point it at Lucide, Heroicons or your own SVG and `.bo-icon` supplies sizing, `currentColor`, density and forced-colors. Measured: 12 glyphs are 10.3% of the framework, so 200 would add ~129 kB — twice everything else we ship | 2026-08-19, roadmap 40.1 |
 | An illustration / spot-art set | An `<img>` you supply with `alt=""`; for glyphs `--bo-icon-src`, for a person or org `.bo-avatar`, for a tenant app tile the launcher's inline `svg` slot. Empty states are fixed by a clear sentence and the action that resolves them, not by a drawing that must be redrawn per brand and downloaded on a warehouse tablet | 2026-08-19, roadmap 40.2 |
-| A client-side row virtualiser | Filter server-side and paginate; fixed row heights are maintained so a third-party virtualiser drops in cleanly | 2026-08-17 |
+| A client-side row virtualiser for SEARCH workflows | Filter server-side and paginate — fixed row heights are maintained so a third-party virtualiser also drops in cleanly | 2026-08-17, narrowed 2026-08-22 |
 | Tab overflow arrow buttons | The edge fade ships and is conditional on actual overflow; add two buttons calling `scrollBy` if your users expect them | roadmap 30.1b |
 | An app-icon library inside `.bo-icon` | Inline `<svg>` per tenant, or an initials chip — app icons are product content, and every consumer would ship glyphs they never use | roadmap 27.7 |
 | A "field editor" component | `.bo-data-table` + `data-row-edit` + the typed inputs; see `/patterns/field-editor` | roadmap 30.2 |
 | A master-detail component | `.bo-data-table` + a card, dialog or offcanvas; see `/patterns/master-detail` | roadmap 31.2 |
 | `.bo-value-help` and `.bo-staging-table` | Compose combobox + dialog, and the staging pattern | Slice 24 triage |
 | A second toolbar idiom | `.bo-cluster` already does it | roadmap 5a |
+
+**Narrowed, not reversed** (2026-08-22, roadmap 30.4b): the row-virtualiser
+refusal above was never really about search-vs-scan — it was written before
+30.4a drew that line. 30.4a's own decision table already argues the deciding
+question is not row count but what the user is doing: *searching* wants
+filters and page numbers (the refusal above still applies there in full);
+*scanning* wants the next batch, and a windowed list genuinely serves that
+case. `initWindowedList()` ships for the scanning case, reusing the same
+fixed-row-height guarantee this table already cites as the reason a
+virtualiser can drop in cleanly — the guarantee was never scan-specific, so
+the case for withholding a first-party one from scanning workflows stopped
+holding once 30.4a stated the distinction plainly. Filtering stays the
+recommended default even for scanning; windowing is for the real remainder,
+not a replacement for it.
 
 ## HTMX integration
 

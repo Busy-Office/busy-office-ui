@@ -3536,7 +3536,49 @@ promised was never written.
 
        **Cost line: +1 behavior — the largest JS addition this framework would
        have made.** Worth stating plainly, and worth owner confirmation on
-       scope before build.
+       scope before build. **Owner confirmed 2026-08-22** — grilled first
+       (design tree, 8 questions), settled below.
+
+       **DESIGN.md reopened, on the record, not silently** (2026-08-22): the
+       "no client-side row virtualiser" refusal (2026-08-17) predates 30.4a's
+       own search-vs-scan distinction. Narrowed rather than reversed — it
+       still fully applies to search workflows (filter server-side); this
+       item is the scanning case 30.4a's own table argues windowing
+       legitimately serves. See DESIGN.md's "Narrowed, not reversed" note.
+
+       **Settled architecture (grill, 2026-08-22):**
+       - **Does not compose with `data-grid-nav`** (v1). That behavior's
+         `aria-rowindex` is DOM-position-derived, an assumption windowing
+         breaks (a chunk at server rows 5000-5099 would get DOM-order
+         indices 1-100). Documented scope boundary, not silently broken.
+       - **Does compose with row-select/bulk-actions**, via a minimal hook:
+         `data-table.ts`'s `update()` checks a `data-selected-count-override`
+         attribute before its own `:checked` DOM query, so non-windowed
+         tables are byte-for-byte unchanged. Deferring this would defer a
+         real cost, not avoid it — "search and act" means bulk-acting on
+         selected rows, and retrofitting later means either a breaking
+         change or two permanently-diverging selection paths.
+       - **Chunk unit**: one `<tbody data-chunk-id>` per server-fetched
+         chunk — reuses the framework's existing grouped-table precedent,
+         gives eviction a clean single swap target.
+       - **Spacer height**: computed (`rowCount × var(--bo-density-row-height)`),
+         never measured via `getBoundingClientRect` — measuring forces a
+         layout read on the exact operation (eviction) this feature exists
+         to make cheap.
+       - **Event contract**: extends `load-more.ts`'s existing
+         `bo:table-load-more` with an optional chunk-offset detail, rather
+         than a second event type — non-windowing consumers see identical
+         behavior.
+       - **Row count contract**: a `data-table-total-rows` attribute on the
+         container, set once at initial render — matches the framework's
+         attribute-driven contracts everywhere else, no header-reading code.
+       - **No "load everything" escape hatch in v1** — the find-in-page/print
+         costs stay documented limitations pointing at server-side filtering,
+         not something engineered around for a need nobody has stated yet.
+       - **Bidirectional windowing** (evict and re-request in either
+         direction) — the Accept's own "keeps N chunks around the viewport"
+         is viewport-centered, not append-only; `load-more` already covers
+         the simpler forward-only case for consumers that don't need this.
 
 ## Slice 29 — owner bug report (2026-08-18)
 
