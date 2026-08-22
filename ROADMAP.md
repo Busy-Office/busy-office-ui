@@ -196,6 +196,23 @@ which is exactly why the notification refusal below stands.
        surface — pure composition of `bo-widget`/`bo-kv`/`bo-btn`.
        **Accept met.**
 
+2. [x] **116.2 — DONE 2026-08-22, Explore round.** `/inbox` dogfooded into
+       `examples/po-app`, closing a documented gap (role-home's own spike
+       note: "Needs you" linked to `/pos?status=Pending` because po-app "has
+       no /inbox route"). Reuses 116.1's escalation rule against real data
+       (PO-88210 $4,208 expands in place; PO-88213/88214 $12,400/$56,000
+       link out) and po-app's own already-real approve/reject dialog
+       verbatim — extracted into `approveDialogHtml(p)`, called from both
+       `detailScreen` and `inboxScreen`, not a second copy. Two honest gaps
+       named rather than papered over: no submitted-date per PO (no real
+       Waiting column) and no seeded attachment data (no attachment line).
+       Real bug found by the gate on its FIRST run, not by review: fixed-id
+       dialogs collided once a second routine row existed (an unrelated
+       earlier check mutates PO-88213 under threshold) — fixed with
+       per-PO id suffixes. `check:po-app` 16/16 (3 new checks, incl. axe
+       now covering `/inbox`), screenshots 1440/390 light/dark + a real
+       dialog-open shot. **Accept met.**
+
 **REFUSED, with reasons:**
 - **Approve/Reject on notification items** (the originating ask) —
   notification is history ("things that happened"); an item carries

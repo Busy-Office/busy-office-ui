@@ -421,6 +421,17 @@ progress, and freeze-graduation rounds).
   artifact (`busy-office-ui.tgz`), added to `.gitignore`. Full report:
   `.roundtable/explore-role-home-po-app-2026-08-22.md`.
 
+- ~~/inbox dogfooded into po-app~~ — spiked 2026-08-22 in an isolated
+  worktree (removed; finished files copied over). **Graduated as ROADMAP
+  116.2.** Closed the exact gap the role-home spike above named out of
+  scope: "Needs you" now links to a real /inbox, not a filtered /pos list.
+  Reused po-app's own already-real approve dialog verbatim (extracted to
+  `approveDialogHtml(p)`) rather than building a second one. Found a real
+  bug on the gate's OWN first run: fixed dialog IDs collided once a second
+  routine row existed (an unrelated earlier check pushes PO-88213 under
+  the threshold) — fixed with per-PO id suffixes, not by re-running until
+  green.
+
 ---
 
 ## Operating rules (every loop obeys)
