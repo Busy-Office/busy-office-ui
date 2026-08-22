@@ -1012,7 +1012,7 @@ The three builds, in queue order AFTER 101.4-101.7:
        clause names list-report-grouped as the cheaper alternative when
        stage visualisation isn't the point. After 110.2 in queue order.
 
-7. [ ] **110.7 — re-open the drag refusal (100.1): fresh grill at full
+7. [x] **110.7 — re-open the drag refusal (100.1): fresh grill at full
        cost (OWNER ASK, 2026-08-22).** Not a reversal — a fresh grill with
        the complete bill visible: hand-rolled keyboard model (pick up /
        move / drop + live-region narration "moved to 3 of 7"), a dedicated
@@ -1024,6 +1024,24 @@ The three builds, in queue order AFTER 101.4-101.7:
        grill report with build/refuse per surface; if build, its own item
        carrying the full a11y contract. 100.1 stays on record; superseded
        only if this grill says build.
+       **Done 2026-08-22, verdict REFUSE (again).**
+       `.roundtable/grill-kanban-drag-2026-08-22.md` re-ran 100.1's three
+       questions against the real shipped screen (110.6) instead of a
+       hypothetical one. Every underlying fact from 100.1 still holds on
+       re-measurement (`touch-action`: 0 hits in shipped CSS; `draggable`/
+       `dragstart`/sortable libs: 0 hits; ARIA's `aria-grabbed`/
+       `aria-dropeffect` still deprecated with no successor standard), and
+       the kanban board makes the bill *worse*, not better: its move is
+       already a 2-action, zero-scroll menu operation at any board size
+       (the menu lists only legal next stages), while a kanban
+       keyboard-drag equivalent is two-dimensional (pick a lane, then a
+       position) versus the one-dimensional case 100.1 already declined,
+       and the board's horizontal lane-scroll plus per-lane vertical
+       scroll makes the touch/scroll conflict worse, not simpler. Two-
+       channel non-waivable means drag can only ever be pure additive
+       cost here — the menu stays regardless, so nothing already shipped
+       is ever retired to pay for it. Ordered-list "for free" is moot: no
+       mechanism ships to extend. 100.1 stays on record, not superseded.
 
 ## Slice 109 — Owner direction: the real-ERP pattern catalogue + regrouping (2026-08-22)
 
