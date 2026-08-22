@@ -123,7 +123,7 @@
             ],
             [
               "GET /home/counts",
-              "a fragment swapped into the badges once available — tiles must render WITHOUT it"
+              "a fragment swapped into the badges once available — tiles must render WITHOUT it. On failure (5xx/timeout), the badges simply never appear; that is a silent degrade, not an error banner — a tile grid failing loudly over a missing count would be worse than the count just being absent"
             ],
             [
               "GET /recent",
@@ -196,7 +196,7 @@
             ],
             [
               "GET /home/cards/:name",
-              "one card, loaded independently (hx-trigger=\"load\"); one slow query must never hold the whole screen — the reporting dashboard's contract, same reason"
+              "one card, loaded independently (hx-trigger=\"load\"); one slow query must never hold the whole screen — the reporting dashboard's contract, same reason. On 5xx/timeout: that one card shows its own failure + retry (see States); the rest of the grid stays live"
             ],
             [
               "counts",
@@ -387,6 +387,10 @@
             [
               "GET /invoices?page=n",
               "next page rows (append) or a full replace#invoice-rows"
+            ],
+            [
+              "any request, 5xx or timeout",
+              "the Error state above (.bo-alert--danger + retry, last good rows kept); POST /invoices/bulk-approve failing per row is separate — still 200, the failure is the returned row's own data-row-state=\"error\", not a transport-level errorunswapped; alert renders in place"
             ]
           ],
           "wrongChoice": {
@@ -727,7 +731,7 @@
           "dataContract": [
             [
               "GET /po/:id",
-              "the full screen"
+              "the full screen. 404 → the not-found screen, same as any deep link to a record that no longer exists"
             ],
             [
               "POST /po/:id/records",
@@ -735,7 +739,7 @@
             ],
             [
               "GET /po/:id/audit?after=…",
-              "newer audit entries for polling; empty body when nothing changed"
+              "newer audit entries for polling; empty body when nothing changed. 5xx/timeout: the per-section alert in States, not a page-level failure — the facts strip and feed already rendered and must stay readable"
             ]
           ],
           "wrongChoice": {
@@ -1451,6 +1455,10 @@
             [
               "…nothing selected",
               "the button should not have been reachable; if it was, return the list unchanged and say so"
+            ],
+            [
+              "…some rows fail (partial or total)",
+              "still 200, not a 4xx — per-row failure is data (the States table's Partial/All failed rows), never a transport-level error; a genuine 5xx or timeout is the one case that IS a failure response, and gets the plain retry-alert treatment, same as any other request on this screen"
             ]
           ],
           "wrongChoice": {
@@ -1593,7 +1601,7 @@
             ],
             [
               "GET /dashboard/widget/:id?period=",
-              "one widget — so a slow query never blocks the others"
+              "one widget — so a slow query never blocks the others. On 5xx/timeout: that widget shows its own error + retry (see States); the rest of the grid stays usable"
             ],
             [
               "GET /dashboard/export?period=",
@@ -1739,7 +1747,7 @@
           "dataContract": [
             [
               "GET /po/:id/document",
-              "this HTML, standalone (no app shell, no nav) — a complete page your renderer or a browser can print directly"
+              "this HTML, standalone (no app shell, no nav) — a complete page your renderer or a browser can print directly. 404 if the record does not exist; 5xx if rendering itself fails — both as a plain error page, never a broken document that LOOKS complete"
             ],
             [
               "GET /po/:id/document.pdf",
@@ -1816,7 +1824,7 @@
           "dataContract": [
             [
               "GET /notifications",
-              "the list fragment + the unread count for the bell badge; each item carries data-notification-id and data-unread so an agent reads state without scraping prose"
+              "the list fragment + the unread count for the bell badge; each item carries data-notification-id and data-unread so an agent reads state without scraping prose. On 5xx/timeout: the bell keeps its last-known count and the dropdown shows an inline retry — never a blank menu, since \"I don't know\" and \"you have zero\" read as the same thing to a glancing reader"
             ],
             [
               "POST /notifications/:id/read",

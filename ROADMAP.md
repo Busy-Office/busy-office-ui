@@ -709,12 +709,30 @@ catalogue in ERP vocabulary and job order.
        AI-manages/human-monitors split here, stated rather than left
        silent" paragraph rather than silence. Full suite green (13 docs
        gates, `check:claims` 88/88). **Accept met.**
-13. [ ] **109.16 — Data-contract 4xx/error row missing.** Confirmed on
-       `master-detail`, `notification`, `output-form`, `record-detail`;
-       batch 1's set not yet individually re-checked for this specific
-       gap. **Accept:** every pattern's Data-contract table states what a
-       failure response returns, or explicitly why the pattern has none
-       (a static export like `output-form` is a legitimate N/A).
+13. [x] **109.16 — DONE 2026-08-22.** The sweep's original list
+       (`master-detail`, `notification`, `output-form`, `record-detail`)
+       turned out wrong on re-check — a fresh whole-catalogue scan found
+       `master-detail` already had its 404/409 rows, and 6 DIFFERENT
+       pages were the real gap: `app-launch`, `notification`,
+       `output-form`, `record-detail`, `reporting-dashboard`,
+       `role-home`; plus 3 more the original list never named
+       (`bulk-actions`, `list-report`, `staging`). **My own first-pass
+       verification regex was wrong twice in a row** — a loose word match
+       ("error"/"failure") false-positived on prose like "never an
+       error" and "control failure" that don't document a failure
+       response, then a stricter status-code regex false-negatived on
+       `value-help` (already had "a 4xx" as literal text, not digits) and
+       missed `staging`'s fix (case-sensitive "deliberately" vs
+       "Deliberately"). Both caught by manually reading every flagged
+       page's raw Data-contract section before trusting the count —
+       exactly the "an instrument's first output is not evidence"
+       discipline. Fixed: `bulk-actions`/`list-report`/`staging` state
+       their deliberate 200-with-per-row-classification design (no 4xx
+       for a bad row, by design — not a gap); the other 6 got a real
+       404/5xx row grounded in each page's own established failure
+       pattern (per-widget/per-card retry, per-section alert), never
+       invented from nothing. Full suite green (13 docs gates,
+       `check:claims` 88/88). **Accept met.**
 14. [ ] **109.17 — check-claims.mjs has ZERO cases for `inbox`,
        `job-monitor`, `kanban`.** The most serious of the five findings:
        these three pages carry runtime-behavior prose (polling, arrow-key

@@ -211,9 +211,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
         <tbody>
-          <tr><td class="bo-data-table__col--code">GET /po/:id</td><td>the full screen</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /po/:id</td><td>the full screen. 404 → the not-found screen, same as any deep link to a record that no longer exists</td></tr>
           <tr><td class="bo-data-table__col--code">POST /po/:id/records</td><td>one new card fragment appended to the feed</td></tr>
-          <tr><td class="bo-data-table__col--code">GET /po/:id/audit?after=…</td><td>newer audit entries for polling; empty body when nothing changed</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /po/:id/audit?after=…</td><td>newer audit entries for polling; empty body when nothing changed. 5xx/timeout: the per-section alert in States, not a page-level failure — the facts strip and feed already rendered and must stay readable</td></tr>
         </tbody>
       </table>
     </div>

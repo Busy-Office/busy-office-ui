@@ -172,6 +172,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
           <tr><td class="bo-data-table__col--code">GET /invoices?status=&amp;cc=&amp;q=&amp;page=</td><td>the <code>&lt;tbody&gt;</code> rows + an out-of-band footer</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
           <tr><td class="bo-data-table__col--code">POST /invoices/bulk-approve</td><td>the affected rows, re-rendered with new badges</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
           <tr><td class="bo-data-table__col--code">GET /invoices?page=n</td><td>next page rows (append) or a full replace</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
+          <tr><td class="bo-data-table__col--code">any request, 5xx or timeout</td><td>the Error state above (<code>.bo-alert--danger</code> + retry, last good rows kept); <code>POST /invoices/bulk-approve</code> failing per row is separate — still 200, the failure is the returned row's own <code>data-row-state="error"</code>, not a transport-level error</td><td class="bo-data-table__col--code">unswapped; alert renders in place</td></tr>
         </tbody>
       </table>
     </div>

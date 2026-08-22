@@ -112,6 +112,13 @@ tint on the row:
     on the parse exactly, and the cheapest way to guarantee that is one code
     path. The validated rows travel back in the second request, so the server
     never holds per-user staging state between them.</p>
+    <p class="bo-u-text-muted"><strong>Deliberately no 4xx for a bad
+    row.</strong> Both actions always return 200 — a row failing validation
+    is DATA (<code>data-row-state="error"</code> in the classified result),
+    never a transport-level error, which is what lets one response carry a
+    mix of ok/warning/error rows in the same screen. A genuinely malformed
+    request (unparseable file, missing action field) is the one case that
+    IS a 4xx, and gets a plain error banner rather than a partial result.</p>
   </section>
 
   <section class="demo">

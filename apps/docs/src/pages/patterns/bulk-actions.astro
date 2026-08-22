@@ -134,6 +134,7 @@ for (const [r, reason] of failed) r.bulkError = reason;   // rendered per row`;
           <tr><td class="bo-data-table__col--code">POST /invoices/bulk-approve<br />(ids as repeated form fields)</td><td>the affected <code>&lt;tbody&gt;</code> <strong>plus</strong> an out-of-band summary block — one request, both truths</td></tr>
           <tr><td class="bo-data-table__col--code">…all succeeded</td><td>same shape, a success alert; do not special-case the happy path into a different mechanism</td></tr>
           <tr><td class="bo-data-table__col--code">…nothing selected</td><td>the button should not have been reachable; if it was, return the list unchanged and say so</td></tr>
+          <tr><td class="bo-data-table__col--code">…some rows fail (partial or total)</td><td>still <strong>200</strong>, not a 4xx — per-row failure is data (the States table's Partial/All failed rows), never a transport-level error; a genuine 5xx or timeout is the one case that IS a failure response, and gets the plain retry-alert treatment, same as any other request on this screen</td></tr>
         </tbody>
       </table>
     </div>

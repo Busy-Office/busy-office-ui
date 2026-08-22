@@ -158,7 +158,7 @@ const rows = [
         <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
         <tbody>
           <tr><td class="bo-data-table__col--code">GET /dashboard?period=</td><td>the grid shell with each widget as a lazy fragment</td></tr>
-          <tr><td class="bo-data-table__col--code">GET /dashboard/widget/:id?period=</td><td>one widget — so a slow query never blocks the others</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /dashboard/widget/:id?period=</td><td>one widget — so a slow query never blocks the others. On 5xx/timeout: that widget shows its own error + retry (see States); the rest of the grid stays usable</td></tr>
           <tr><td class="bo-data-table__col--code">GET /dashboard/export?period=</td><td>CSV/XLSX; long exports return a job id (see the long-running-jobs note below)</td></tr>
         </tbody>
       </table>

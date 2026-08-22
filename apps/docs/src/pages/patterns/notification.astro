@@ -143,7 +143,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
         <tbody>
-          <tr><td class="bo-data-table__col--code">GET /notifications</td><td>the list fragment + the unread count for the bell badge; each item carries <code>data-notification-id</code> and <code>data-unread</code> so an agent reads state without scraping prose</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /notifications</td><td>the list fragment + the unread count for the bell badge; each item carries <code>data-notification-id</code> and <code>data-unread</code> so an agent reads state without scraping prose. On 5xx/timeout: the bell keeps its last-known count and the dropdown shows an inline retry — never a blank menu, since "I don't know" and "you have zero" read as the same thing to a glancing reader</td></tr>
           <tr><td class="bo-data-table__col--code">POST /notifications/:id/read</td><td>the item re-rendered read + the new count; idempotent — a second post returns the same state, never an error</td></tr>
           <tr><td class="bo-data-table__col--code">POST /notifications/:id/dismiss</td><td>204, item removed on next fetch; dismissing an already-dismissed item is 204 too</td></tr>
           <tr><td class="bo-data-table__col--code">arrival</td><td>new items appear on the next poll (<code>hx-trigger="every 60s"</code> on the bell count is enough); the SCREEN never reorders under a reader mid-scroll</td></tr>

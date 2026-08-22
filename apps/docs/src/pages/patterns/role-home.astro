@@ -197,7 +197,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
         <tbody>
           <tr><td class="bo-data-table__col--code">GET /home</td><td>the grid shell with each card as its own fragment slot — the page must render before the slowest card resolves</td></tr>
-          <tr><td class="bo-data-table__col--code">GET /home/cards/:name</td><td>one card, loaded independently (<code>hx-trigger="load"</code>); one slow query must never hold the whole screen — the reporting dashboard's contract, same reason</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /home/cards/:name</td><td>one card, loaded independently (<code>hx-trigger="load"</code>); one slow query must never hold the whole screen — the reporting dashboard's contract, same reason. On 5xx/timeout: that one card shows its own failure + retry (see States); the rest of the grid stays live</td></tr>
           <tr><td class="bo-data-table__col--code">counts</td><td>every "needs you" number comes from the SAME query the inbox uses, not a parallel one — two sources for one number is how a home screen starts lying</td></tr>
           <tr><td class="bo-data-table__col--code">per-role content</td><td>the server decides which cards a role gets; the client never hides cards it received, because a hidden card is still a leaked fact</td></tr>
         </tbody>

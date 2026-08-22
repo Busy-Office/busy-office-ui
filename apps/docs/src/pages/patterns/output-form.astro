@@ -282,7 +282,7 @@ h1 { string-set: doctitle content(); }
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
         <tbody>
-          <tr><td class="bo-data-table__col--code">GET /po/:id/document</td><td>this HTML, standalone (no app shell, no nav) — a complete page your renderer or a browser can print directly</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /po/:id/document</td><td>this HTML, standalone (no app shell, no nav) — a complete page your renderer or a browser can print directly. 404 if the record does not exist; 5xx if rendering itself fails — both as a plain error page, never a broken document that LOOKS complete</td></tr>
           <tr><td class="bo-data-table__col--code">GET /po/:id/document.pdf</td><td>your server runs the SAME HTML through its renderer; the PDF and the printed page cannot disagree because they are one source</td></tr>
           <tr><td class="bo-data-table__col--code">issue / re-issue</td><td>a re-issued document states it ("Copy · re-issued 24 Aug 2026") — an unmarked duplicate of a financial document is a control failure</td></tr>
           <tr><td class="bo-data-table__col--code">draft</td><td>a document that is not yet issued must SAY so on its face (see states) — never render a draft that looks issued</td></tr>

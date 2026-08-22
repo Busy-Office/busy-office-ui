@@ -182,7 +182,7 @@ const logistics = [
         <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
         <tbody>
           <tr><td class="bo-data-table__col--code">GET /home</td><td>the tile grid; counts may be computed asynchronously</td></tr>
-          <tr><td class="bo-data-table__col--code">GET /home/counts</td><td>a fragment swapped into the badges once available — tiles must render WITHOUT it</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /home/counts</td><td>a fragment swapped into the badges once available — tiles must render WITHOUT it. On failure (5xx/timeout), the badges simply never appear; that is a silent degrade, not an error banner — a tile grid failing loudly over a missing count would be worse than the count just being absent</td></tr>
           <tr><td class="bo-data-table__col--code">GET /recent</td><td>the recent-items list; empty for a new user</td></tr>
         </tbody>
       </table>
