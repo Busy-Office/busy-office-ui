@@ -36,7 +36,7 @@ Generated at: 2026-08-22 14:35
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (654 iterations logged)
+dispatch status — counter-triggered rules (656 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-08-22 14:08   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
@@ -56,8 +56,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 13:05 · Meta · refusal · Waiver system + SARIF output — CI-exception machinery for human orgs; an AI agent needs PASS/FAIL and readable findings · refused · 04fdf23
-- 2026-08-22 13:05 · Meta · refusal · A second Surface Fitness rubric — the six-dimension DSA rubric already gated; Removal Cost axis may be absorbed later · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Six-section docs IA reorg — 80% renames of groups measured into place more recently than the proposal was written · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Hand-authored pattern metadata YAML — inverts the generated-from-artifact doctrine; superseded by extraction · refused · 04fdf23
 - 2026-08-22 13:05 · Meta · refusal · Consumer-facing conformance web tool — downstream of the refused Quality Index · refused · 04fdf23
@@ -66,6 +64,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 14:11 · Continue · build · 109.3 - pattern quality bar extracted from 102.2/102.3 grills + owner-quartet + 112-grill text, every line grill-cited, two citations spot-checked against source before trusting the delegated extraction; sweep split out as 109.6 (18 pages + 13 wrong-choice clauses) per 109.3's own Accept · landed · 9b86bd6
 - 2026-08-22 14:18 · Continue · build · 109.6 batch 1 - 13 PATTERN_TODO pages bar-scored + wrong-choice-clause'd in 4 parallel agents; check:wrong-choice now 30/0; found+fixed a real false claim on wizard (panels don't render-at-once without JS, contradicted by static hidden attr - verified against markup before fixing, added missing No-JS States row); 109.4 field-editor decided FOLD on bar evidence (thin anatomy, fails shape-not-domain); systemic gap found - 12/13 pages lack human-monitoring-signal sentence, scoring only; remainder (13 non-TODO pages) left open in RESUME.md · landed · bd44050
 - 2026-08-22 14:25 · Continue · build · 109.6/109.13 batch 2 - remaining 13 pattern pages bar-scored (3 parallel agents), closing the 26-page sweep; second false runtime claim found+fixed (schedule.astro's calendar-breakpoint claim, verified against calendar.css before fixing); caught a real item-numbering collision mid-commit (my own 109.6/109.8 duplicated pre-existing items further down Slice 109) via the 101.2 enumeration check and renumbered to 109.13-109.18 before landing; queued 5 systemic findings (No-JS rows 25/26 pages, human-monitoring placement/absence, missing 4xx rows, zero check-claims coverage on inbox/job-monitor/kanban, mechanical fixes) as their own items · landed · b2117e3
+- 2026-08-22 14:35 · Roadmap · triage · 113: owner rich-text sample screenshot triaged against 102.1's rung ladder - 7 execCommand buttons accepted as a richer rung-3 Advanced demo (113.1), rung-4 recipe doc for the refused four (113.2) · triaged · caae589
+- 2026-08-22 14:35 · Meta · refusal · Image upload, table-insertion UI, checklist list-type, color/highlight pickers as new richtext framework surface - infrastructure/distinct-component territory, same grounds as the 101.7 PDF/barcode refusals; re-open only if a real pattern page demonstrates the need · refused · caae589
 
 ## Sunset test
 
