@@ -19,6 +19,74 @@
     letter-spacing: 0.03em;
   }
 
+  /* Label-start layout (roadmap 117, owner grill 2026-08-22): labels in a
+     shared start column, controls in the second — the dense two-column shape
+     classic ERP detail screens use. The value pair is top (the default
+     above, unchanged) and START — logical, so it flips under RTL; a literal
+     "left" would not. "Right" was grilled and refused: it puts the value
+     before the reader knows what it labels.
+
+     The alignment technique is .bo-kv--rows's, reused rather than invented
+     twice: max-content column on the section grid, each field a subgrid
+     row, so different label lengths still start every control at one
+     shared edge. Without subgrid support each field falls back to its own
+     max-content column — everything still lays out, labels just don't
+     cross-align between fields (same graceful floor .bo-kv--rows ships).
+
+     Section-level and all-or-nothing on purpose: fields inside share one
+     label column or the section doesn't use this at all. Not combinable
+     with .bo-form-row — the two answer the same space question two ways. */
+  .bo-form-section--label-start {
+    container-type: inline-size;
+    container-name: bo-form-section;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: var(--bo-space-4);
+  }
+
+  .bo-form-section--label-start > .bo-form-section__legend,
+  .bo-form-section--label-start > :not(.bo-form-field) {
+    grid-column: 1 / -1;
+  }
+
+  .bo-form-section--label-start .bo-form-field {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: var(--bo-space-4);
+    row-gap: var(--bo-space-1);
+    align-items: baseline;
+  }
+
+  @supports (grid-template-columns: subgrid) {
+    .bo-form-section--label-start .bo-form-field {
+      grid-template-columns: subgrid;
+    }
+  }
+
+  .bo-form-section--label-start .bo-form-field > .bo-form-field__label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Control, hint and message all stack in the field's second column, so
+     an error never migrates under the label column. */
+  .bo-form-section--label-start .bo-form-field > :not(.bo-form-field__label) {
+    grid-column: 2;
+  }
+
+  /* Below 30rem a side label either cramps the control or truncates
+     itself, so the section collapses back to labels-on-top on its own —
+     the consumer never manages a breakpoint (same 30rem the tabs, stepper
+     and data-table collapses use). Flex context makes the grid-column
+     placements above inert; nothing needs unsetting. */
+  @container bo-form-section (max-width: 30rem) {
+    .bo-form-section--label-start .bo-form-field {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   /* Sticky action bar for long detail forms. The scroll-padding rules keep a
      keyboard-focused field from scrolling UNDER the opaque bar (WCAG 2.4.11
      Focus Not Obscured).

@@ -1876,6 +1876,44 @@ check(
   JSON.stringify(justifyState),
 );
 
+// /components/form "Label-start sections" (roadmap 117): "the section
+// collapses back to labels-on-top on its own" below 30rem, and "start...
+// flips to the visual right under dir=rtl" — both are claims a browser can
+// check, not just a stylesheet rule existing.
+await visit('/components/form/', { width: DESKTOP_WIDTH, height: 1400 });
+const labelStartWide = await page.evaluate(() => {
+  const field = document.querySelector('.bo-form-section--label-start .bo-form-field');
+  return getComputedStyle(field).display;
+});
+await visit('/components/form/', { width: NARROW_WIDTH, height: 1600 });
+const labelStartNarrow = await page.evaluate(() => {
+  const field = document.querySelector('.bo-form-section--label-start .bo-form-field');
+  const cs = getComputedStyle(field);
+  return { display: cs.display, flexDirection: cs.flexDirection };
+});
+check(
+  'label-start section collapses to a stacked (top) layout below 30rem, with no consumer breakpoint',
+  labelStartWide === 'grid' && labelStartNarrow.display === 'flex' && labelStartNarrow.flexDirection === 'column',
+  JSON.stringify({ labelStartWide, labelStartNarrow }),
+);
+
+await visit('/components/form/', { width: DESKTOP_WIDTH, height: 1400 });
+const rtlFlip = await page.evaluate(() => {
+  const field = document.querySelector('.bo-form-section--label-start .bo-form-field');
+  const label = field.querySelector('.bo-form-field__label');
+  const input = field.querySelector('.bo-input');
+  const ltr = { labelLeft: label.getBoundingClientRect().left, inputLeft: input.getBoundingClientRect().left };
+  document.documentElement.setAttribute('dir', 'rtl');
+  const rtl = { labelLeft: label.getBoundingClientRect().left, inputLeft: input.getBoundingClientRect().left };
+  document.documentElement.removeAttribute('dir');
+  return { ltr, rtl };
+});
+check(
+  'label-start is logical (start), not a literal left: the label sits before the input in LTR and after it in RTL',
+  rtlFlip.ltr.labelLeft < rtlFlip.ltr.inputLeft && rtlFlip.rtl.labelLeft > rtlFlip.rtl.inputLeft,
+  JSON.stringify(rtlFlip),
+);
+
 await browser.close();
 server.close();
 

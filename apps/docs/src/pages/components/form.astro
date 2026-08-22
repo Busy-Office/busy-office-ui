@@ -104,11 +104,31 @@ const sections = `<form>
   </div>
 </form>`;
 
+const labelStart = `<fieldset class="bo-form-section bo-form-section--label-start">
+  <legend class="bo-form-section__legend">Invoice header</legend>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="ls-vendor">Vendor</label>
+    <input class="bo-input" id="ls-vendor" value="Acme Supply Co." />
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="ls-terms">Payment terms</label>
+    <select class="bo-select" id="ls-terms">
+      <option>Net 30</option><option>Net 60</option>
+    </select>
+    <span class="bo-form-field__hint">From the vendor master; override per invoice.</span>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="ls-note">Internal note</label>
+    <textarea class="bo-input" id="ls-note" rows="3">Q3 blanket order.</textarea>
+  </div>
+</fieldset>`;
+
 const choices = `<div class="bo-cluster">
   <label class="bo-choice"><input type="checkbox" class="bo-checkbox" checked /> Notify approver</label>
   <label class="bo-choice"><input type="checkbox" class="bo-checkbox" disabled /> Disabled option</label>
   <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" checked /> Normal</label>
   <label class="bo-choice"><input type="radio" name="pri" class="bo-radio" /> Urgent</label>
+  <label class="bo-choice">Urgent first <input type="checkbox" class="bo-checkbox" /></label>
 </div>`;
 
 const fieldMarkup = `<div class="bo-form-field">
@@ -180,8 +200,41 @@ const fieldMarkup = `<div class="bo-form-field">
     <a href={base + '/patterns/detail-form'}>the detail-form pattern</a>.</p>
   </section>
   <section class="demo">
+    <h2>Label-start sections</h2>
+    <Demo code={labelStart} />
+    <p class="bo-u-text-muted">
+      <code>--label-start</code> puts every field's label in a shared column
+      instead of stacking it above — the dense two-column shape classic ERP
+      detail screens use. The values are <strong>top</strong> (the default
+      above, unchanged) and <strong>start</strong>, not left/right: start is
+      logical, so it flips to the visual right under <code>dir="rtl"</code>,
+      and "right" was refused outright — no major design system ships a
+      label to the right of a text field, because it puts the value in front
+      of the reader before they know what it labels. Different label lengths
+      ("Vendor" vs "Payment terms") still start every control at one shared
+      edge — the section is a CSS Grid and each field a <code>subgrid</code>
+      row, the exact technique <a href={base + '/components/kv'}>key-value
+      facts</a> already ships for read-only rows, reused rather than
+      invented twice. <strong>Section-level and all-or-nothing on
+      purpose</strong> — fields inside share one label column or the section
+      doesn't use this at all; there is no per-field override. <strong>Not
+      combinable with <code>.bo-form-row</code></strong> — the two answer
+      the same "how do I lay out several fields" question two different
+      ways. Below 30rem the section collapses back to labels-on-top on its
+      own, the same width every other collapsing container in this
+      framework (tabs, stepper, the data table) uses — resize this page
+      narrow to see it happen with no JS and no breakpoint of your own.</p>
+  </section>
+  <section class="demo">
     <h2>Choices</h2>
     <Demo code={choices} />
+    <p class="bo-u-text-muted">A checkbox/radio's label sits wherever its
+    text sits in the markup — <code>.bo-choice</code> is a plain inline-flex
+    pairing with no positional CSS, so "the label on the left" or "on the
+    right" is just which side of the input the text is written on (the last
+    item above). <strong>This is why choice controls get no
+    <code>--label-start</code> modifier</strong>: the effect the modifier
+    gives text fields, choices already have for free.</p>
   </section>
   <section class="demo">
     <h2>Markup — the canonical field recipe</h2>
