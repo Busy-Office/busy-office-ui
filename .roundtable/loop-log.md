@@ -697,3 +697,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 19:39 · Meta · refusal · Approve/Reject on notification items (context-free surface = the real rubber-stamping case) · refused · 12b677f
 - 2026-08-22 19:39 · Meta · refusal · full Fiori-style split-pane master-detail inbox (master-detail wrong-choice + review-anatomy foreclose it) · refused · 12b677f
 - 2026-08-22 19:39 · Meta · refusal · universal reading pane across all inbox row types (no shared schema; degrades to title+link or forks into four panels) · refused · 12b677f
+- 2026-08-22 20:07 · Continue · build · 116.1: inbox routine approval rows expand in place, reusing approval's dialog/endpoints (round-table decision B) · landed · e34c0d3
