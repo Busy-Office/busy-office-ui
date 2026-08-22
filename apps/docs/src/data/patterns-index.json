@@ -453,6 +453,10 @@
             {
               "href": "/components/button",
               "label": "Button"
+            },
+            {
+              "href": "/components/kv",
+              "label": "Key-value facts"
             }
           ]
         },

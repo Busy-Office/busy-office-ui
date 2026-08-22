@@ -1265,6 +1265,10 @@
             {
               "href": "/components/button",
               "label": "Button"
+            },
+            {
+              "href": "/components/kv",
+              "label": "Key-value facts"
             }
           ],
           "states": [
@@ -1293,8 +1297,20 @@
               "the Waiting cell past a threshold gains the warning tone + the word \"overdue\" — two channels, and the age was already visible before the threshold"
             ],
             [
+              "Approval row, expanded",
+              "header facts, line summary, and an attachment list render inline; the attachment itself never does — it opens in a dedicated viewer, since a preview pane can't carry the diligence a scanned document or PDF needs"
+            ],
+            [
+              "Approval row, escalated",
+              "flagged, mid-chain, or high-value stays a plain link-out row — no preview button at all, so there is nothing that looks decidable but isn't"
+            ],
+            [
+              "Decision submitted from the preview",
+              "same as approval's own: dialog buttons disabled until the swap lands, so a failed note is never lost; success re-renders the row gone (it resolved) or, on 409, re-renders the preview naming who decided first"
+            ],
+            [
               "No JS",
-              "fully functional — this page has no JS dependency; the filter chips are native radios, the rows are a plain table, and every action is an ordinary link. The polling and claim/409 behaviour in the data contract above are a real server's job, not client script, so nothing here depends on JS running at all"
+              "the base list is fully functional with no JS dependency — filter chips are native radios, rows are a plain table, every link-out action is an ordinary link, and the polling/claim/409 behaviour above is the server's job, not client script. Stated honestly, not papered over: the expand-in-place toggle (aria-expanded) and the decision dialog both need JS, the same as approval's own dialog does on its own page — without it, a routine row simply keeps its plain link-out, same as every other row"
             ]
           ],
           "dataContract": [
@@ -1308,7 +1324,11 @@
             ],
             [
               "resolution",
-              "happens on the TARGET screen (approve on the approval screen, fix on the object page); the inbox row disappears on the next fetch — the inbox never posts a decision itself"
+              "happens on the TARGET screen (approve on the approval screen, fix on the object page); the inbox row disappears on the next fetch — the inbox never posts a decision itself, with one exception below"
+            ],
+            [
+              "POST /req/:id/approvePOST /req/:id/reject",
+              "the one exception: a routine, single-remaining-step approval row's expanded preview posts here directly — this is approval's own decision contract, reused verbatim (reject's reason is REQUIRED server-side, 409 if already decided → re-render naming who decided), reached through approval's own dialog. No new inbox-owned decision endpoint exists for any row type"
             ]
           ],
           "wrongChoice": {

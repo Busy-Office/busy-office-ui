@@ -19,6 +19,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <a href={base + '/patterns/notification'}>notification</a>'s contract.
     The inbox holds only rows that block on a person.
   </p>
+  <p class="demo-note">
+    <strong>Routine approvals may decide in place.</strong> A single-step,
+    unflagged approval row can expand to a compact preview — header facts,
+    line summary, attachments — with Approve/Reject right there, running
+    through <a href={base + '/patterns/approval'}>approval</a>'s own dialog
+    and endpoints, never a second copy of them. Anything flagged, mid-chain,
+    high-value, or not an approval keeps the plain link-out: a preview that
+    can't show the real reason — an exception's diff, a job's log — is
+    worse than the row it would replace.
+  </p>
 
   <section class="demo">
     <h2>The screen</h2>
@@ -78,7 +88,30 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <td><span class="bo-badge bo-badge--type">REQ</span> Requisition R-4471 · Warehouse consumables</td>
             <td>Awaiting <strong>your approval</strong> — final step</td>
             <td>3 days</td>
-            <td><a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/approval'}>Review</a></td>
+            <td><button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" aria-expanded="true" aria-controls="inb-r4471-detail">Preview</button></td>
+          </tr>
+          <tr id="inb-r4471-detail">
+            <td colspan="4">
+              <div class="bo-widget">
+                <div class="bo-widget__body">
+                  <dl class="bo-kv bo-kv--rows">
+                    <div><dt>Requested by</dt><dd>T. Alvarez, Warehouse</dd></div>
+                    <div><dt>Cost centre</dt><dd>CC-3405</dd></div>
+                    <div><dt>Amount</dt><dd class="bo-amount">1,240.00 <span class="bo-amount__unit">USD</span></dd></div>
+                  </dl>
+                  <p class="bo-u-text-muted" style="margin-block: var(--bo-space-2) 0">
+                    3 lines — nitrile gloves, air filters, degreaser ·
+                    <a href="#">vendor-quote.pdf</a> (opens in a viewer, not inline —
+                    a pane can't satisfy diligence on a scanned document)
+                  </p>
+                  <div class="bo-cluster" style="margin-block-start: var(--bo-space-3)">
+                    <button class="bo-btn bo-btn--sm" type="button" data-dialog-trigger="inb-r4471-decide">Approve</button>
+                    <button class="bo-btn bo-btn--sm bo-btn--danger" type="button" data-dialog-trigger="inb-r4471-decide">Reject</button>
+                    <a class="bo-btn bo-btn--sm bo-btn--ghost" href={base + '/patterns/approval'}>Open full record</a>
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -88,7 +121,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     you, a task handed to you — because a cross-type list without that
     column is just a worklist someone else has to explain. The 26-day row
     is deliberately old: <strong>age is the monitoring signal</strong>, and
-    it must be visible without opening anything.</p>
+    it must be visible without opening anything. <strong>PO-88213 stays
+    link-out on purpose</strong> — deep in a 4-step chain and $18,940.50, it
+    is exactly the case the ERP-practice review flagged for escalation, not
+    a row we simply didn't get to. <strong>R-4471, above, is the opposite
+    case</strong> — one step, one approver, modest value — shown expanded
+    for illustration; the decision dialog itself is not in this static demo,
+    same as <a href={base + '/patterns/approval'}>approval</a>'s own
+    (<code>data-dialog-trigger</code> needs <code>initDialogs()</code>, and
+    the toggle above needs its own small script to flip
+    <code>aria-expanded</code> — this page has none, so both render
+    permanently open here).</p>
   </section>
 
   <section class="demo">
@@ -143,7 +186,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <li><strong>Per-row action</strong> — one
       <a href={base + '/components/button'}>secondary button</a> linking
       into the screen that resolves the row (approval, object page, log).
-      The inbox never resolves anything itself.</li>
+      The inbox does not resolve rows itself, with one named exception
+      below — everything else is still a link out, never a second decision
+      surface.</li>
+      <li><strong>Expand-in-place preview</strong> — a routine approval row
+      only: a toggle button (<code>aria-expanded</code> /
+      <code>aria-controls</code>) reveals <a href={base + '/components/kv'}>key-value
+      facts</a> plus a line/attachment summary, with Approve/Reject wired to
+      <a href={base + '/patterns/approval'}>approval</a>'s own decision
+      dialog and endpoints — not a new dialog, not a new endpoint. Flagged,
+      mid-chain, high-value, and every non-approval row keep the plain
+      link-out; there is no generic "detail panel" here, because the four
+      row types share no common shape to hang one on.</li>
     </ol>
   </section>
 
@@ -155,7 +209,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <tbody>
           <tr><td class="bo-data-table__col--code">GET /inbox?filter=approvals</td><td>the tbody fragment + refreshed chip counts; an agent reads the same rows the human sees — <code>data-item-id</code>, <code>data-reason</code>, <code>data-age-hours</code> per row make it machine-readable without scraping prose</td></tr>
           <tr><td class="bo-data-table__col--code">POST /inbox/:id/claim</td><td>the row re-rendered as claimed (byline: who); 409 if someone claimed it first — re-render with the claimer's name, never silently drop</td></tr>
-          <tr><td class="bo-data-table__col--code">resolution</td><td>happens on the TARGET screen (approve on the approval screen, fix on the object page); the inbox row disappears on the next fetch — the inbox never posts a decision itself</td></tr>
+          <tr><td class="bo-data-table__col--code">resolution</td><td>happens on the TARGET screen (approve on the approval screen, fix on the object page); the inbox row disappears on the next fetch — the inbox never posts a decision itself, with one exception below</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /req/:id/approve<br>POST /req/:id/reject</td><td><strong>the one exception</strong>: a routine, single-remaining-step approval row's expanded preview posts here directly — this is <a href={base + '/patterns/approval'}>approval</a>'s own decision contract, reused verbatim (reject's reason is REQUIRED server-side, 409 if already decided → re-render naming who decided), reached through approval's own dialog. No new inbox-owned decision endpoint exists for any row type</td></tr>
         </tbody>
       </table>
     </div>
@@ -178,7 +233,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Claimed by a colleague</td><td>409 on claim → the row re-renders naming the claimer; it leaves the list on the next fetch</td></tr>
           <tr><td>Row's document deleted</td><td>the row states it plainly ("PO-88213 no longer exists") with a dismiss — a dead link that 404s is a support call</td></tr>
           <tr><td>Overdue</td><td>the Waiting cell past a threshold gains the warning tone + the word "overdue" — two channels, and the age was already visible before the threshold</td></tr>
-          <tr><td>No JS</td><td>fully functional — this page has no JS dependency; the filter chips are native radios, the rows are a plain table, and every action is an ordinary link. The polling and claim/409 behaviour in the data contract above are a real server's job, not client script, so nothing here depends on JS running at all</td></tr>
+          <tr><td>Approval row, expanded</td><td>header facts, line summary, and an attachment list render inline; the attachment itself never does — it opens in a dedicated viewer, since a preview pane can't carry the diligence a scanned document or PDF needs</td></tr>
+          <tr><td>Approval row, escalated</td><td>flagged, mid-chain, or high-value stays a plain link-out row — no preview button at all, so there is nothing that looks decidable but isn't</td></tr>
+          <tr><td>Decision submitted from the preview</td><td>same as approval's own: dialog buttons disabled until the swap lands, so a failed note is never lost; success re-renders the row gone (it resolved) or, on 409, re-renders the preview naming who decided first</td></tr>
+          <tr><td>No JS</td><td>the base list is fully functional with no JS dependency — filter chips are native radios, rows are a plain table, every link-out action is an ordinary link, and the polling/claim/409 behaviour above is the server's job, not client script. <strong>Stated honestly, not papered over</strong>: the expand-in-place toggle (<code>aria-expanded</code>) and the decision dialog both need JS, the same as approval's own dialog does on its own page — without it, a routine row simply keeps its plain link-out, same as every other row</td></tr>
         </tbody>
       </table>
     </div>
@@ -192,6 +250,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <li><a class="bo-badge bo-badge--type" href={base + '/components/segmented'}>Segmented control</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
     </ul>
   </section>
 
