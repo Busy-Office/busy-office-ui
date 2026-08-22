@@ -1972,22 +1972,31 @@ then documented — and refusing is an expected outcome.
        pointed at the read-only display component instead of the actual
        entry counterpart; corrected to link `/components/money`.
 
-3e. [ ] **102.11 — write CHANGELOG entries for the 6 commits that landed in
-       `packages/core/src` after the current `## Unreleased` section was
-       written.** Found while writing 102.5's release brief
-       (`.roundtable/release-0.3.0-brief.md`): `01d0952` (role="alert"
-       arrival-vs-severity fix), `b3b3719` (Standardize sweep, 15 real
-       findings incl. a `data-decimals=""` parsing bug), `0c66257` (motion-
-       easing token cleanup), `e163a4d` (Slice 108 P0 — sticky-header content
-       bleed-through), `0365cab` (output-form print/barcode contract),
-       `f1d8969` (Slice 111 button group + dropdown open/close motion). Real,
-       shipped, uncounted work — a consumer reading `CHANGELOG.md` today
-       would not know any of it happened. **Accept:** each of the 6 gains an
-       entry in `## Unreleased` (consumer-facing language, matching the
-       existing entries' voice — "what changed", not "what commit"), tagged
-       `Fixed`/`Added` per this project's existing CHANGELOG convention; no
-       tag is moved and nothing is published — that stays 102.5's stated
-       owner call.
+3e. [x] **102.11 — DONE 2026-08-22.** The list grew past the original 6 by
+       the time this ran — 102.8, 102.9 (demo-only, no core change), and
+       94.3/96.2's own follow-ups had landed too — so this covered every
+       undocumented `packages/core/src` commit since the `## Unreleased`
+       cutoff, not just the 6 named at triage time (that was always the
+       item's actual intent: "nothing shipped is undocumented," not "these
+       exact 6 commits"). **8 entries added**: `.bo-btn-group` +
+       dropdown open/close motion (`f1d8969`), `.bo-u-print-exact` utility
+       (`0365cab`), `--bo-z-sticky-page` token (`e163a4d`),
+       `--bo-density-auto-*` tokens — no rendered change, a named-and-
+       findable refactor (`79f7fec`), the `data-grid` disabled-control focus
+       fix + `data-decimals=""` parser unification (`b3b3719`), the
+       `role="alert"` arrival-vs-severity guidance fix (`01d0952`), the
+       `htmx` flash-on-update easing token (`0c66257`), and
+       `initAnchorNav`'s live-measured landing offset (`5107dff`, 102.8).
+       Two commits checked and correctly excluded: `3121f7b` (96.2, a
+       code-comment-only decision record, no shipped change) and 102.9's
+       fix (scoped to the docs demo, not `packages/core`). No tag moved,
+       nothing published — still 102.5's stated owner call. Core build +
+       111 vitest tests green (CHANGELOG.md is markdown-only, no CSS/JS
+       output changed).
+
+       **The 102.x sub-queue (102.2 → 102.11) is now fully closed.** The
+       next dispatch should re-scan ROADMAP.md fresh for the next-oldest
+       open item rather than assume another 102.x exists.
 
 4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"

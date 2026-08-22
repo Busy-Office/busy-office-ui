@@ -74,6 +74,75 @@ pin.
   than observed (the badge above was the actual overflow), fixed on its own
   merits.
 
+- **Added** (`button`, `dropdown`): `.bo-btn-group` joins a toolbar of
+  independent actions — composes `.bo-btn`, no new component. Border-collapse
+  via negative margin, so each button keeps its OWN border
+  (`:focus-visible`/`:disabled`/forced-colors all still resolve per-button);
+  only the shared edge disappears. Distinct from `.bo-segmented` (radios, one
+  active choice) — a button group is buttons that each fire on their own.
+  Dropdown menus now animate open/close (opacity + scale, `@starting-style`,
+  the standard 150ms token), honouring `prefers-reduced-motion: reduce`
+  (instant, no transition). Floor: Firefox 129 / Safari 17.5 for the motion;
+  below that the menu still opens and closes, just without the fade.
+
+- **Added** (utilities): `.bo-u-print-exact` — forces
+  `print-color-adjust: exact` in print media only (screen is untouched).
+  Browsers lighten fills by default when printing, which silently breaks a
+  barcode's contrast enough that it stops scanning. For barcodes, QR codes,
+  logos, charts, and legend swatches in a printed document.
+
+- **Added** (tokens): `--bo-z-sticky-page` (1150) — the z-index a PAGE's own
+  sticky chrome needs to stay above an embedded table's sticky `<thead>`
+  (`--bo-z-sticky-header`, 1100). An object-page-style screen with a table
+  scrolling under the same ancestor as the page header could let the table's
+  header win that fight and bleed through the page chrome.
+
+- **Added** (tokens): `--bo-density-auto-control-height` / `--bo-density-auto-row-height`
+  — the two literals `data-table`'s narrow-container auto-compaction used to
+  hide inline in a `@container` query, now named and findable beside the
+  density tiers they relate to. No rendered change (verified: identical
+  computed heights before and after).
+
+- **Fixed** (`data-grid`): `Enter` on a focused cell could target a
+  `:disabled` control inside it and silently do nothing. The grid's focusable
+  selector now excludes disabled controls, matching the framework's own
+  focus-trap behavior; `[tabindex]` stays unfiltered on purpose (a
+  programmatically-focused `tabindex="-1"` descendant is the two-level-grid
+  pattern).
+
+- **Fixed** (`quantity`, table sums): `data-decimals=""` was two different
+  things depending on which behavior read it — table-sum's own inline parser
+  treated the empty string as `0` and forced integer totals, while every
+  other consumer of the attribute already treated `''` as "not supplied."
+  Both now share one parser; `data-decimals=""` falls through to the
+  step-derived width everywhere. Also: the quantity stepper no longer
+  quantizes a fractional value to an integer when `step="any"` — it falls
+  back to the value's own decimal places instead of treating "no precision
+  info" as zero precision.
+
+- **Fixed** (accessibility guidance): the framework's own comments and docs
+  stated the `role="alert"` rule two different — and contradictory — ways
+  (severity in one place, arrival in another). Arrival is correct: content
+  already in the parsed HTML has not changed, so a live region on it
+  typically announces nothing and can interrupt where it does fire. The rule
+  now lives in one place (`/concepts/accessibility#live-regions`) and every
+  statement points at it; built docs pages that were shipping an unearned
+  `role="alert"` on static content had it removed.
+
+- **Changed** (`htmx` integration): the flash-on-update animation
+  (`.htmx-settling`) now uses the framework's standard easing token instead
+  of a literal `ease-out` — the same curve every other entrance animation in
+  the framework already uses (dialog/toast/offcanvas).
+
+- **Fixed** (`initAnchorNav`): jumping to a section could land its own
+  heading a few pixels under the page's sticky chrome. The collapsed sticky
+  header's height genuinely differs by viewport width (content wraps
+  differently), so no single fixed `scroll-margin-block-start` constant could
+  cover every width. The behavior now measures the real collapsed height live
+  and exposes it as `--bo-anchor-landing-offset` (same shape as
+  `sticky-cols`'s `--bo-sticky-w-1`), with a fixed fallback for the no-JS
+  case.
+
 ## 0.3.0 (2026-08-21)
 
 > **Upgrading from 0.1.1? Read the 0.2.0 section below as well.** 0.2.0 was
