@@ -149,6 +149,33 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 122 — Owner wishlist: Amount decimal control + live masking (2026-08-23)
+
+Owner (2026-08-22 wishlist, item 3): "Amount --> there should be a number
+that allow to control the decimal and masking format as well ..eg. show
+x,xxx,xxx.00". Owner explicitly said "3 - grill it" rather than build
+directly — this is a real UX-tradeoff surface (cursor position while
+typing, paste handling, IME/locale grouping, composing with Money's
+existing `data-decimals`), not a mechanical add. Triage-only this wake:
+tested against the Objective (a live-reformatting numeric input is a
+genuine "one component, many settings" candidate IF the tradeoffs
+resolve cleanly — not yet known, hence the grill) and queued as its own
+design-tree round rather than folded into 121's three pattern-shape
+grills (this is a component-level surface, not a screen).
+
+1. [ ] **122.1 — BLOCKED ON GRILL.** Live decimal/thousands-mask input
+       (typing `1234567` renders `1,234,567` as-you-type, not just on
+       blur). Needs its own grill round before Accept criteria exist —
+       open questions include: does this apply only to
+       `.bo-money`/`initMoneyField()` or also plain
+       `.bo-input--numeric`/Quantity; cursor-position preservation
+       strategy while typing (naive reformat-and-reset-caret breaks
+       mid-edit); locale/grouping-character behavior (`,` vs `.` vs
+       space); paste handling; whether it composes with or replaces
+       Money's existing `data-decimals` mechanism. Grill has not started
+       — needs the owner's answers, not something to self-decide in an
+       autonomous wake.
+
 ## Slice 121 — Owner ask: grill the pattern catalogue for coverage + showcase (2026-08-23)
 
 Owner: "grill & roundtable the patterns - check if coverage of pattern.
