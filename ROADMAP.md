@@ -197,16 +197,23 @@ closing (115.3). Full precedent chain in this slice's commit message.
        bridge, the keyframe), corrected before commit. Full suite green
        (13 docs gates, core build, 116 vitest, stylelint, `check:claims`
        92/92). **Accept met.**
-3. [ ] **115.3 — extend `check:motion` to transitions.**
-       `check-motion.mjs` walks only `animation` declarations — a
-       literal-duration `transition` slips through silently, the exact rot
-       its own header warns about for animations. Audited 2026-08-22: all
-       15 `transition:` declarations in shipped CSS are token-driven or
-       `none`, so the backlog is ZERO — close the gap before the first
-       exception exists. **Accept:** every `transition` duration must be
-       token-driven or covered by a reduced-motion `transition: none`;
-       red-proved by injecting a literal-duration transition into the BUILT
-       CSS and watching the gate go red; all existing CSS passes unchanged.
+3. [x] **115.3 — DONE 2026-08-22.** `check-motion.mjs` extended to
+       `transition`/`transition-duration` alongside `animation`, refactored
+       to run one shared rule against both properties (a `PROPERTIES` list)
+       rather than duplicating the walk logic — the same DRY concern the
+       gate's own domain cares about, applied to the gate itself. Clean
+       full core rebuild passes with the extension embedded in the real
+       build chain: `animation: 15 token-driven, 3 explicit override ·
+       transition: 24 token-driven, 0 explicit override` — the zero-backlog
+       claim held. **Red-proved in BOTH directions**, not just the failing
+       one: injected a literal-duration transition into the BUILT
+       `dist/css/index.css` with no override → gate failed, naming the
+       exact selector and a fix; added a matching
+       `@media (prefers-reduced-motion: reduce) { … transition: none }`
+       to the SAME injected rule → gate passed, override counter
+       incremented by exactly one. Both injections reverted, gate
+       reconfirmed clean. Full suite green (13 docs gates, core build,
+       116 vitest, stylelint, `check:claims` 92/92). **Accept met.**
 
 **REFUSED, with reasons (re-open conditions stated per item):**
 - **Unified `data-state="idle|loading|success|error"` lifecycle vocabulary
