@@ -7,12 +7,12 @@
  * The pages stay the single source of truth (docs doctrine); this is
  * extraction, never authored metadata (refused in the Slice 112 grill,
  * settled Q8 — a second, hand-maintained interpretation of the pattern
- * system is exactly what the doctrine forbids). Reuses the same
- * `opener()`/complexity/components regexes `gen-patterns-index.mjs`
- * already proved, plus `hasWrongChoiceClause`'s underlying detector from
- * `wrong-choice-rule.mjs` (kept in the ONE place both gates already share,
- * per that file's own header — a third divergent copy is the exact defect
- * it exists to prevent).
+ * system is exactly what the doctrine forbids). Opener extraction reuses
+ * `wrong-choice-rule.mjs`'s `opener()`; complexity/components extraction
+ * reuses `pattern-extract.mjs` — the ONE place both this file and
+ * `gen-patterns-index.mjs` share them (Standardize sweep #6 pulled these
+ * out of two byte-identical copies, per that file's own header — a third
+ * divergent copy is the exact defect it exists to prevent).
  *
  * Anatomy is deliberately OUT of scope (112.1) — its
  * `<li><strong>Region</strong>` convention fuses component links into
@@ -25,11 +25,10 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
 import { opener as extractOpener } from './wrong-choice-rule.mjs';
+import { extractComplexity, extractComponents } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
 
-const COMPLEXITY_RE = /complexity (\d) of 4/;
-const BADGE_RE = /class="bo-badge bo-badge--type" href=\{base \+ '([^']+)'\}>([^<]+)</g;
 const WRONG_CHOICE_RE = /<strong>\s*((?:Not|Never|Do not|Don'?t)\b[\s\S]*?)<\/strong>([\s\S]*?)(?:<\/p>|$)/;
 const LINK_RE = /href=\{base \+ '([^']+)'\}/;
 const SECTION_RE = (heading) => new RegExp(`<h2>${heading}<\\/h2>[\\s\\S]*?<tbody>([\\s\\S]*?)<\\/tbody>`);
@@ -101,15 +100,8 @@ for (const { label, items } of PATTERN_GROUPS) {
     const src = await readFile(new URL(`${slug}.astro`, patternsDir), 'utf8');
 
     const opener = stripTags(extractOpener(src));
-    const complexityMatch = COMPLEXITY_RE.exec(src);
-    if (!complexityMatch) {
-      throw new Error(`gen-patterns: ${slug}.astro has no "complexity N of 4" badge — check-page-shape should have caught this`);
-    }
-    const complexity = Number(complexityMatch[1]);
-    const components = [...src.matchAll(BADGE_RE)].map(([, badgeHref, badgeLabel]) => ({
-      href: badgeHref,
-      label: badgeLabel,
-    }));
+    const complexity = extractComplexity(src, slug);
+    const components = extractComponents(src);
 
     const states = extractRows(src, 'States');
     const dataContract = extractRows(src, 'Data contract');

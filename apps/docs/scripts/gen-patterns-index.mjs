@@ -20,12 +20,10 @@
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
+import { opener as extractOpener } from './wrong-choice-rule.mjs';
+import { extractComplexity, extractComponents } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
-
-const OPENER_RE = /<p class="demo-note"[^>]*>([\s\S]*?)<\/p>/;
-const COMPLEXITY_RE = /complexity (\d) of 4/;
-const BADGE_RE = /class="bo-badge bo-badge--type" href=\{base \+ '([^']+)'\}>([^<]+)</g;
 
 const groups = [];
 for (const { label, items } of PATTERN_GROUPS) {
@@ -34,7 +32,7 @@ for (const { label, items } of PATTERN_GROUPS) {
     const slug = href.replace('/patterns/', '');
     const src = await readFile(new URL(`${slug}.astro`, patternsDir), 'utf8');
 
-    const opener = (OPENER_RE.exec(src)?.[1] ?? '')
+    const opener = extractOpener(src)
       .replace(/<[^>]+>/g, '')
       .replace(/\s+/g, ' ')
       .trim();
@@ -44,15 +42,8 @@ for (const { label, items } of PATTERN_GROUPS) {
     const openerShort = opener.length <= 140
       ? opener
       : `${(opener.slice(0, 140).match(/^[\s\S]*[.!?](?=\s|$)/)?.[0] ?? opener.slice(0, 137).replace(/\s+\S*$/, '')).trim()}…`;
-    const complexityMatch = COMPLEXITY_RE.exec(src);
-    if (!complexityMatch) {
-      throw new Error(`gen-patterns-index: ${slug}.astro has no "complexity N of 4" badge — check-page-shape should have caught this`);
-    }
-    const complexity = Number(complexityMatch[1]);
-    const components = [...src.matchAll(BADGE_RE)].map(([, badgeHref, badgeLabel]) => ({
-      href: badgeHref,
-      label: badgeLabel,
-    }));
+    const complexity = extractComplexity(src, slug);
+    const components = extractComponents(src);
 
     tiles.push({ href, title, opener, openerShort, complexity, components });
   }
