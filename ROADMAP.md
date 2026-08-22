@@ -149,6 +149,66 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 116 — Owner decision: inbox approval rows expand in place (2026-08-22)
+
+Origin: the notification dogfood (Explore round 2) raised the owner's
+question "should notification items carry Approve/Reject?". Grilled over
+several rounds, then put to a three-reviewer round table (ERP domain
+expert, UX heterogeneity, engineering reuse — deliberately briefed with
+the proposal only, not the prior conclusions). The owner chose the
+synthesis: **routine approval rows in the inbox expand in place; the
+decision runs through approval's own dialog and endpoints; everything
+else keeps link-out.**
+
+**Correction recorded**: the earlier grill claimed "real systems avoid
+approve-from-a-list" as a rubber-stamping risk. The ERP review showed
+that is wrong for context-showing panes — SAP Fiori My Inbox, Oracle BPM
+Worklist and Coupa all approve inline WITH the document visible, and
+treat full-page-only as a regression. The claim holds only for
+context-free surfaces (a notification item has title-level context),
+which is exactly why the notification refusal below stands.
+
+1. [ ] **116.1 — Inbox: expand-in-place preview on routine approval
+       rows.** On `/patterns/inbox`: approval rows that are routine
+       (single remaining step, within tolerance, unflagged) gain an
+       expand-in-place preview — header facts (`bo-kv bo-kv--rows`,
+       master-detail's idiom), line summary, attachments **listed**
+       inline but opened in a viewer (a pane never claims diligence on
+       a PDF — the ERP review's guardrail), with Approve/Reject routed
+       to approval's existing endpoints (`POST /po/:id/approve|reject`,
+       reject reason REQUIRED server-side, 409 on already-decided) via
+       approval's decision dialog — shown "not in this static demo"
+       exactly as approval.astro itself does, keeping the No-JS row
+       honest. Flagged / multi-step / high-value rows and all
+       exception/task/job rows: unchanged, link-out only (the second
+       ERP guardrail: escalation goes to the full screen). Amends the
+       contract line "the inbox never resolves anything itself" to name
+       this one exception. Accept: demo shows one routine row expanded
+       AND one escalated row link-out-only; data contract routes
+       decisions to approval's endpoints (no new inbox decision
+       endpoint); States gains expanded/escalated/attachment rows;
+       page-shape + wrong-choice + claims gates green; zero new CSS/JS
+       surface (pure composition).
+
+**REFUSED, with reasons:**
+- **Approve/Reject on notification items** (the originating ask) —
+  notification is history ("things that happened"); an item carries
+  title-level context only, and approving with no document visible is
+  the real rubber-stamping case. Not re-openable as-is; the need routes
+  to the inbox, which is what 116.1 does.
+- **Full Fiori-style split-pane (a master-detail inbox)** —
+  master-detail's own wrong-choice clause refuses "one record end to
+  end"; `review-anatomy` explicitly forecloses a fourth review screen;
+  and a persistent pane taxes a rapid-clear list for one row type's
+  benefit.
+- **Universal reading pane across all inbox row types** — the four row
+  types share no schema (a failed job has nothing resembling
+  header/lines/attachments); three already have dedicated screens, so a
+  generic panel either degrades to title+link (no gain over the row) or
+  forks into four bespoke panels (maintained drift). Type-conditional
+  affordances inside one list — Gmail's calendar-invite asymmetry — is
+  the precedent 116.1 follows.
+
 ## Slice 115 — Owner input: the Motion System proposal, triaged (2026-08-22)
 
 Owner uploaded a 31-section "Busy Office Motion System Proposal" (motion as
