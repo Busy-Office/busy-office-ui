@@ -137,8 +137,16 @@ for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro') 
    docs shell, sidebar, and a Related footer all live in the framework's
    MAIN bundle, and pulling any of them in would defeat the page's whole
    purpose. A reader never lands on it directly; the parent page is the
-   navigation. */
-const RELATED_EXEMPT = new Set(['index.astro', '404.astro', 'patterns/rf/goods-receipt-rf.astro']);
+   navigation. rf-landing-rf.astro and rf-list-rf.astro (roadmap 109.7) are
+   the same fixture shape for the two new RF-track patterns — same reason,
+   same exemption. */
+const RELATED_EXEMPT = new Set([
+  'index.astro',
+  '404.astro',
+  'patterns/rf/goods-receipt-rf.astro',
+  'patterns/rf/rf-landing-rf.astro',
+  'patterns/rf/rf-list-rf.astro',
+]);
 async function* allPages(dir, rel = '') {
   for (const e of await readdir(dir, { withFileTypes: true })) {
     if (e.isDirectory()) yield* allPages(join(dir, e.name), `${rel}${e.name}/`);

@@ -1,0 +1,127 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import RfTaskQueue from '../../components/RfTaskQueue.astro';
+import rfProfile from '../../data/rf-profile.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: RF task queue">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: a warehouse floor worker after picking a
+    task from the <a href={base + '/patterns/rf-landing'}>RF task menu</a>
+    — "what's next" for that task type. <strong>What "done" looks like</strong>:
+    the worker reads top-to-bottom, taps the top row, and starts working it —
+    no cross-referencing between columns. <strong>Not for</strong> editing a
+    line's data on this screen — see <a href={base + '/patterns/rf-list#editable-refused'}>Editable, refused</a>
+    below. Composed from <code>.bo-data-table</code> at
+    <code>data-density="spacious"</code>, two narrow columns — the SAME
+    component and profile membership <a href={base + '/patterns/goods-receipt'}>Goods
+    receipt</a>'s own receiving log already proves at 360px (roadmap 59.4);
+    this page is a second, task-queue-shaped use of that same proof, not a
+    new claim about the component.
+  </p>
+
+  <section class="demo">
+    <h2>Task queue</h2>
+    <RfTaskQueue />
+  </section>
+
+  <section class="demo">
+    <h2>The RF-floor profile, at RF-scanner size</h2>
+    <p>Same isolated-document technique as every RF fixture — the
+    <code>rf-essentials</code> profile (Chrome/WebView 108) only, at
+    360×640. No profile change was needed for this page: <code>data-table</code>
+    was already a member.</p>
+    <ul class="bo-cluster docs-list-bare">
+      {rfProfile.components.map((c) => <li><a href={base + c.href}><code>{c.name}</code></a></li>)}
+    </ul>
+    <iframe
+      src={base + '/patterns/rf/rf-list-rf/'}
+      title="RF task queue, rf-essentials profile, 360×640"
+      style="inline-size: 360px; block-size: 640px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)"
+    ></iframe>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<div class="bo-data-table-container" tabindex="0" data-density="spacious">
+  <table class="bo-data-table">
+    <thead><tr><th scope="col">Task</th><th scope="col">Status</th></tr></thead>
+    <tbody>
+      <tr><td>PO-88213 · Dock 4</td><td><span class="bo-badge bo-badge--accent">Next</span></td></tr>
+      <!-- one row per queued task -->
+    </tbody>
+  </table>
+</div>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Queue table</strong> — <code>.bo-data-table</code> at
+        spacious density, two columns: identifying label, status.</li>
+      <li><strong>Next-up row</strong> — the top row carries a distinct
+        <code>.bo-badge--accent</code> status, the row a worker taps first.</li>
+      <li><strong>Row tap target</strong> <span class="bo-u-text-muted">(not in this demo — a real screen wraps each row in a link/button so the whole row is tappable, not just the text)</span>.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /rf/tasks/:type</td><td>the ordered queue, next-up first; 204 for an empty queue</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /rf/tasks/:id/claim</td><td>marks the task in-progress and returns the detail screen route; 409 if another worker already claimed it — re-render the queue, don't just retry</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Loading</td><td>a skeleton row set at the same spacious row height, so the tap targets don't jump once data lands</td></tr>
+          <tr><td>Empty — nothing queued</td><td>"All caught up" text plus a link back to the <a href={base + '/patterns/rf-landing'}>task menu</a>, not a bare blank table</td></tr>
+          <tr><td>Empty — filtered out</td><td>N/A on this screen — the queue has no filter control; filtering happens by picking a different task type from the menu</td></tr>
+          <tr><td>Claim conflict (409)</td><td>the row is removed from this worker's queue with a brief alert; no destructive retry</td></tr>
+          <tr><td>Offline</td><td>last-known queue shown with a stale-data cue; claim actions disable rather than silently fail</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo" id="editable-refused">
+    <h2>Editable, refused</h2>
+    <p>An editable variant of this list — letting a worker change quantity or
+    status inline in the grid — was grilled and <strong>refused</strong>
+    (roadmap 109.7): RF data correction is a one-field-at-a-time <strong>scan
+    flow</strong> (barcode, then quantity, then confirm — see
+    <a href={base + '/patterns/goods-receipt'}>Goods receipt</a>), not grid
+    editing with gloves on a 360px screen. A generic
+    <a href={base + '/patterns/editable-grid'}>editable grid</a> composes for
+    desktop entry; it does not compose for RF, and forcing it to would be
+    the RF track absorbing the app catalogue's shape instead of its own
+    (109.6's founding rule).</p>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/concepts/density'}>Density (spacious)</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/rf-landing", "RF task menu"],
+    ["/patterns/goods-receipt", "Goods receipt (RF scanner)"],
+    ["/patterns/editable-grid", "Editable grid (desktop)"],
+  ]} />
+</Gallery>

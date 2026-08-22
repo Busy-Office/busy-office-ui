@@ -1,0 +1,31 @@
+---
+/**
+ * The RF task menu markup, shared by /patterns/rf/rf-landing (full CSS
+ * bundle) and /patterns/rf/rf-landing-rf (isolated document, rf-essentials
+ * only) — one source, so the two demos cannot drift (same rule as
+ * ScanToReceive.astro, roadmap 59.4 / 109.7).
+ *
+ * Composed entirely from `.bo-widget-grid` + `.bo-widget` (roadmap 109.7 —
+ * the same container-query grid /patterns/app-launch already uses at
+ * desktop tile size, here at a glove-sized min and spacious density) plus
+ * `.bo-badge` for the count chip. No icon glyphs: an RF device's task list
+ * is 3-6 items a worker already knows by name (own shift, own device) —
+ * a label is the whole affordance, and skipping icon.css keeps the
+ * rf-essentials profile from absorbing a 12-glyph set for tiles that don't
+ * need one (grill verdict, .roundtable/rf-pattern-family-grill-2026-08-22.md).
+ */
+const tasks = [
+  { label: 'Receive', count: 4 },
+  { label: 'Put away', count: 12 },
+  { label: 'Pick', count: 7 },
+  { label: 'Count', count: 0 },
+];
+---
+<div class="bo-widget-grid" style="--bo-widget-min: 8rem" data-density="spacious">
+  {tasks.map((t) => (
+    <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-5)">
+      <span style="display: block; font-size: var(--bo-font-size-lg); font-weight: var(--bo-font-weight-semibold); color: var(--bo-color-text-primary)">{t.label}</span>
+      <span class="bo-badge" style="margin-block-start: var(--bo-space-2)" aria-label={`${t.count} open`}>{t.count}</span>
+    </a>
+  ))}
+</div>

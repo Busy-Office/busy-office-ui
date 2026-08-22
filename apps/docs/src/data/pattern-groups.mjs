@@ -69,6 +69,8 @@ export const PATTERN_GROUPS = [
   {
     label: 'Patterns: RF / rugged devices',
     items: [
+      { href: '/patterns/rf-landing', label: 'RF task menu' },
+      { href: '/patterns/rf-list', label: 'RF task queue' },
       { href: '/patterns/goods-receipt', label: 'Goods receipt (RF scanner)' },
     ],
   },

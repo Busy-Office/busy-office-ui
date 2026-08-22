@@ -1117,7 +1117,7 @@ catalogue in ERP vocabulary and job order.
        (picking, putaway, count) are named as front-door candidates, not
        queued.
 
-7. [ ] **109.7 — the RF pattern family: grill the owner's four candidates**
+7. [x] **109.7 — the RF pattern family: grill the owner's four candidates**
        (owner follow-up, 2026-08-22: "then should be full range of patterns
        for RF? metro UI or bento UI landing? list (display and editable)?
        form? dropdown (instead of dropdown, should popup full screen
@@ -1148,6 +1148,51 @@ catalogue in ERP vocabulary and job order.
        first, score, refusal expected for at least one), each verdict
        verified in the fixture at the RF floor, and whatever ships lands
        on the RF track with the recipe's full shape.
+
+       **Done 2026-08-22.** Full report:
+       `.roundtable/rf-pattern-family-grill-2026-08-22.md`. Two BUILDs, two
+       REFUSEs, one doctrine line — the family stayed small on purpose.
+       **RF landing** shipped (`/patterns/rf-landing`): `.bo-widget-grid` +
+       `.bo-widget` at a raised `--bo-widget-min` for glove tiles, spacious
+       density — `dashboard/dashboard` joined the `rf-essentials` profile
+       (13 members now) for it; its one `@container` query needs Chrome
+       105+, already under this profile's 108 floor, so `check:rf-floor`
+       passed with no guard work. Icon glyphs were deliberately left out —
+       ~10% of the whole framework's minified weight for tiles an RF worker
+       already knows by name every shift; label + open-count badge is the
+       whole affordance. **RF list (display)** shipped
+       (`/patterns/rf-list`): `.bo-data-table` at spacious, 2 narrow
+       columns — no profile change, since `goods-receipt-rf`'s own
+       receiving log already proved this exact composition survives 360px
+       (59.4); checked and closed one real risk, `data-table.css`'s
+       auto-compaction `@container` (deliberately tighter than compact
+       density) firing below 480px — it never triggers for a 2-column
+       table, but a future 4+ column RF list needs that check redone.
+       **RF list (editable)** REFUSED, in place on the page
+       (`#editable-refused`) and in the report: RF correction is
+       goods-receipt's one-field scan flow, not grid editing with gloves at
+       360px — absorbing app-catalogue shape into the RF track is exactly
+       what 109.6 drew the track to prevent. **RF form** REFUSED: goods-
+       receipt already IS the documentation of scan-first sequential entry;
+       a generic extraction today would be the same page with the nouns
+       filed off, which 109.5's shape-not-domain rule and the Objective's
+       less-for-more test both refuse — re-open when a second, materially
+       different RF scan-entry screen exists to extract FROM. **Dropdown →
+       full-screen** settled as doctrine, not a component: `.bo-select` is
+       `appearance: none` on a real `<select>`, no JS reimplementation, so
+       the platform already owns what happens on open — Android WebView's
+       native picker is full-screen by default, long-standing OS behavior
+       predating this profile's 108 floor. Stated as NOT re-verified inside
+       an actual Android WebView this session (no device available) rather
+       than claimed as measured. Verification snag worth naming: the first
+       360×640 screenshot pass showed unstyled tiles — traced to this
+       worktree's `node_modules` workaround resolving `@busy-office/ui`
+       through the PARENT checkout's stale build, not this one's; fixed by
+       re-pointing the self-link before trusting any further screenshot
+       (same "confirm the served CSS" discipline CLAUDE.md already states
+       for Podman, different cache). Both new pages verified live at
+       360×640 in light and dark; sidebar entries added under "Patterns: RF
+       / rugged devices"; standing gates green.
 
 8. [x] **109.8 — catalogue v2 after external research: FIVE decisions for
        the owner** (2026-08-22, owner ask: "get new input and research what
