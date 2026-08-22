@@ -1,0 +1,193 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Pattern: notification">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: anyone whose work finishes while they are
+    not watching — a posting run, an export, an approval granted upstream.
+    <strong>How often</strong>: glanced at many times a day, read fully a
+    few. <strong>What "done" looks like</strong>: the unread count is zero
+    because each item was seen and either dismissed or followed. This is
+    the surface for things that <em>happened</em>; it never blocks on you.
+    <strong>Not for work that needs your action</strong> — a row that
+    blocks on a person belongs in the
+    <a href={base + '/patterns/inbox'}>inbox</a>, not here; and not for
+    things happening <em>while you watch</em> — that is an
+    <a href={base + '/components/alerts'}>alert or toast</a>'s moment.
+    The grill that settled the shape (101.5): it is BOTH a navbar glance
+    and a screen — the bell dropdown shows the latest few, the screen
+    holds the readable history — and both compose from shipped pieces.
+  </p>
+
+  <section class="demo">
+    <h2>The navbar glance — a dropdown with an unread badge</h2>
+    <div style="display: inline-block">
+      <button class="bo-btn bo-btn--secondary" type="button" popovertarget="notif-menu">
+        Notifications <span class="bo-badge bo-badge--warning">3 unread</span>
+      </button>
+      <div class="bo-dropdown__menu" id="notif-menu" popover>
+        <a class="bo-dropdown__item" href="#screen"><strong>Posting run finished</strong> · 412 documents · 09:14</a>
+        <a class="bo-dropdown__item" href="#screen"><strong>Export ready</strong> · Q3 open items · 08:52</a>
+        <a class="bo-dropdown__item" href="#screen"><strong>PO-88101 approved</strong> · by M. Okafor · 08:31</a>
+        <div class="bo-dropdown__separator"></div>
+        <a class="bo-dropdown__item" href="#screen">View all notifications</a>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">The count is the badge — word plus tone, two
+    channels. The dropdown holds only the latest few and one link to the
+    screen below; history does not belong in a menu.</p>
+  </section>
+
+  <section class="demo" id="screen">
+    <h2>The screen — readable history with an unread contract</h2>
+    <div class="bo-stack" style="max-inline-size: 44rem">
+      <article class="bo-alert" aria-label="Unread notification">
+        <div>
+          <p><span class="bo-badge bo-badge--warning">Unread</span>
+          <strong>Posting run finished</strong> — 412 documents posted, 0 errors.</p>
+          <p class="bo-byline bo-byline--compact">Batch · today 09:14</p>
+        </div>
+        <span class="bo-cluster">
+          <a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/staging'}>Open result</a>
+          <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button">Mark read</button>
+        </span>
+      </article>
+      <article class="bo-alert" aria-label="Unread notification">
+        <div>
+          <p><span class="bo-badge bo-badge--warning">Unread</span>
+          <strong>Export ready</strong> — Q3 open items (2.4 MB).</p>
+          <p class="bo-byline bo-byline--compact">Reporting · today 08:52</p>
+        </div>
+        <span class="bo-cluster">
+          <a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/list-report'}>Download</a>
+          <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button">Mark read</button>
+        </span>
+      </article>
+      <article class="bo-alert" aria-label="Notification">
+        <div>
+          <p><strong>PO-88101 approved</strong> — final step, by M. Okafor.</p>
+          <p class="bo-byline bo-byline--compact">Purchasing · today 08:31 · read</p>
+        </div>
+        <span class="bo-cluster">
+          <a class="bo-btn bo-btn--sm bo-btn--secondary" href={base + '/patterns/object-page'}>Open PO</a>
+          <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" aria-label="Dismiss: PO-88101 approved">Dismiss</button>
+        </span>
+      </article>
+      <article class="bo-alert" aria-label="Notification">
+        <div>
+          <p><strong>Requisition R-4402 deleted upstream</strong> — the record
+          this notification pointed to no longer exists.</p>
+          <p class="bo-byline bo-byline--compact">Purchasing · yesterday · read</p>
+        </div>
+        <span class="bo-cluster">
+          <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" aria-label="Dismiss: Requisition R-4402 deleted">Dismiss</button>
+        </span>
+      </article>
+    </div>
+    <p class="bo-u-text-muted">The unread contract is two-channel: the
+    badge (word + tone) is the visible cue, and "read" appears in the
+    byline once cleared — never colour alone. The dead-record item keeps
+    its text and loses its link; a notification that 404s is a support
+    call.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{`<!-- One item. Unread = a real badge, not a colour; the byline carries
+     source · time, and gains "read" when cleared. -->
+<article class="bo-alert" aria-label="Unread notification">
+  <div>
+    <p><span class="bo-badge bo-badge--warning">Unread</span>
+    <strong>Posting run finished</strong> — 412 documents, 0 errors.</p>
+    <p class="bo-byline bo-byline--compact">Batch · today 09:14</p>
+  </div>
+  <span class="bo-cluster">
+    <a class="bo-btn bo-btn--sm bo-btn--secondary" href="/staging/412">Open result</a>
+    <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button">Mark read</button>
+  </span>
+</article>`}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>The bell</strong> — a
+      <a href={base + '/components/dropdown'}>dropdown</a> off the navbar:
+      unread-count <a href={base + '/components/badge'}>badge</a> on the
+      trigger, latest few items, one "view all" link. Glance surface only.</li>
+      <li><strong>The list</strong> — a stack of
+      <a href={base + '/components/alerts'}>alert</a> cards: static
+      severity chrome reused as item chrome, with <em>no live-region
+      role</em> — these are present at load, the exact case the
+      <a href={base + '/concepts/accessibility'}>live-region rule</a>
+      excludes.</li>
+      <li><strong>Unread contract</strong> — the badge is the visible
+      channel; the byline's "read" word is the second. Mark-read is
+      per-item; "mark all read" belongs next to the filter, not per row.</li>
+      <li><strong>Per-item actions</strong> — one link into the thing that
+      happened (<a href={base + '/components/button'}>secondary button</a>),
+      one ghost dismiss naming its item in <code>aria-label</code>.</li>
+      <li><strong>The byline</strong> —
+      <a href={base + '/components/byline'}>source · time</a>; the answer
+      to "where did this come from" without opening it.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /notifications</td><td>the list fragment + the unread count for the bell badge; each item carries <code>data-notification-id</code> and <code>data-unread</code> so an agent reads state without scraping prose</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /notifications/:id/read</td><td>the item re-rendered read + the new count; idempotent — a second post returns the same state, never an error</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /notifications/:id/dismiss</td><td>204, item removed on next fetch; dismissing an already-dismissed item is 204 too</td></tr>
+          <tr><td class="bo-data-table__col--code">arrival</td><td>new items appear on the next poll (<code>hx-trigger="every 60s"</code> on the bell count is enough); the SCREEN never reorders under a reader mid-scroll</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The AI-manages / human-monitors
+    split, stated</strong>: agents emit these items and read their state
+    through the data attributes; the human's channels are the bell count,
+    the Unread badges, and the byline trail. A notification an agent
+    marked read on the human's behalf is a contract violation, not a
+    convenience — read-state belongs to the person.</p>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Empty</td><td>"No notifications" — plain, not celebratory; unlike the inbox, an empty history is not an achievement</td></tr>
+          <tr><td>Unread present</td><td>the bell badge carries the count; each unread item carries the worded badge — two channels at both levels</td></tr>
+          <tr><td>All read</td><td>bell badge absent (not "0" — a zero badge reads as noise); items keep their "read" byline</td></tr>
+          <tr><td>Dead record</td><td>text kept, link removed, stated plainly ("no longer exists") with dismiss as the only action</td></tr>
+          <tr><td>Very long history</td><td>paginate at the screen level (<a href={base + '/components/pagination'}>load-more</a>); the dropdown never grows beyond its few</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/alerts'}>Alerts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dropdown'}>Dropdown</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/byline'}>Byline</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/inbox", "Inbox"],
+    ["/components/alerts", "Alerts & toasts"],
+    ["/components/dropdown", "Dropdown"],
+    ["/concepts/accessibility", "Live-region rule"],
+  ]} />
+</Gallery>

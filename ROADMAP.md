@@ -1748,7 +1748,22 @@ the owner has already answered that with Slices 99 and 100.
        exception), and the states table must cover the empty case that is a
        success ("nothing needs you") distinctly from the filtered-empty case.
 
-5. [ ] **101.5 — Notification.** `alert` and `toast` cover things that happen
+5. [x] **101.5 — Notification.** **Done 2026-08-22.** The grill its Accept
+       demanded came first and its answer is on the page: it is BOTH — the
+       navbar glance (dropdown + unread-count badge, latest few, one
+       view-all link) and the screen (readable history), each composing
+       from shipped pieces, zero new CSS. Unread contract two-channel
+       (worded badge + "read" in the byline); dead-record state keeps its
+       text and loses its link; empty is plain, deliberately NOT
+       celebratory (unlike the inbox, an empty history is no achievement).
+       Machine/human split stated: agents emit and read state via data
+       attributes, read-state belongs to the person (an agent marking read
+       on the human's behalf is a contract violation). Two gates caught
+       real errors during the build: check:links flagged three placeholder
+       anchors, and check:data-hooks flagged an invented data-dropdown
+       hook — the real dropdown contract is native popovertarget/popover,
+       which the page now uses and which was verified live with a real
+       click (:popover-open matched, 4 items). Original Accept below:** `alert` and `toast` cover things that happen
        WHILE you watch; the ERP case is the opposite — a posting run finished
        twenty minutes ago. **Accept:** a persistent, readable, per-item
        dismissible surface with an explicit unread contract; states for empty,
