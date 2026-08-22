@@ -32,8 +32,8 @@ Generated at: 2026-08-22 15:19
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (665 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-22 15:09   ok
+dispatch status — counter-triggered rules (666 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-22 15:09   ok
   Objective     0 / 3 slices          since 2026-08-22 07:59   ok
 ```
 
@@ -52,7 +52,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-22 14:35 · Meta · refusal · Image upload, table-insertion UI, checklist list-type, color/highlight pickers as new richtext framework surface - infrastructure/distinct-component territory, same grounds as the 101.7 PDF/barcode refusals; re-open only if a real pattern page demonstrates the need · refused · caae589
 - 2026-08-22 14:36 · Continue · build · 112.1 - patterns.json extraction from pattern pages (gen-patterns.mjs: group/opener/complexity/components/States rows/Data-contract rows/wrong-choice clause+link, Anatomy deliberately out of scope per doctrine); self-tested (--self-test, red-proved by breaking the row regex and confirming 2/6 cases went red), reconciled against hand-counts on 9+ pages incl. edge cases (nested <code> tags, no-link wrong-choice clauses); wired into the docs build chain. Landed inside commit 8b60445 (mislabeled - that commit's message only describes 113; caught via git status after the fact, not before - lesson: check git status before a broad git add -A even mid-loop, not just at explicit commit time) · landed · 8b60445
 - 2026-08-22 14:39 · Standardize · standardize · sweep #6 after 4 Continue rounds (109.3/109.6-batches/113-triage/112.1): full suite green, one real finding - COMPLEXITY_RE/BADGE_RE byte-identical across gen-patterns-index.mjs and the new gen-patterns.mjs, plus a third independent opener-regex copy; consolidated into pattern-extract.mjs, verified output-neutral (both generated JSONs byte-identical before/after) · logged · 6dfb33b
 - 2026-08-22 14:48 · Continue · build · 109.19 - field-editor fold executed (age-order override written down per LOOPS.md, justified by avoiding double-touching detail-form/editable-grid once 109.14/109.16 run); folded as a variant section not full duplication; page deleted, Astro-native redirect added; all internal links updated; caught+fixed a real shipped bug via check:claims (missing <form> wrapper made type=reset inert - diagnosed by reading row-edit.ts's reset handler directly, confirmed it only fires on HTMLFormElement targets); full suite green (88/88 claims, wrong-choice 29/0) · landed · 69a5336
@@ -62,6 +61,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-22 15:03 · Continue · build · 109.15 - human-monitoring-signal sentence resolved across all 8 pages: 4 relocated to Anatomy (job-monitor/notification/role-home tied to a real region; output-form handled honestly - its own prose already points monitoring elsewhere, sentence says so rather than force-fitting), 2 authored where a real signal exists (reporting-dashboard's stat delta+staleness, record-detail's audit actor column), 2 declined with a stated reason where genuinely absent (schedule, master-detail) · landed · b7424c5
 - 2026-08-22 15:08 · Continue · build · 109.16 - Data-contract 4xx/error rows fixed on 9 pages (bulk-actions/list-report/staging got a deliberate-no-4xx design note; app-launch/notification/output-form/record-detail/reporting-dashboard/role-home got a real 404/5xx row grounded in each page's own established failure pattern); the sweep's original 4-page list was wrong (master-detail already had it), caught by manual re-verification against a fresh whole-catalogue scan; my own verification regex itself was wrong twice before landing on an accurate count · landed · e7cf62a
 - 2026-08-22 15:09 · Standardize · standardize · sweep #7 after 4 Continue rounds (109.19 field-editor fold/109.14 No-JS/109.15 monitoring-signal/109.16 4xx rows, ~40 pattern-page edits total): full suite green (core build, docs build 13 gates, 116 vitest, stylelint, check:claims 88/88); full-repo field-editor reference scan clean (only 3 expected hits: historical comment, redirect config, claims-check origin comment); no duplicate boilerplate found across the 26 No-JS rows (each genuinely distinct, uniq-checked); 11 pages legitimately share the identical 'no JS dependency' phrase for the same true fact, not drift · logged · 2531b59
+- 2026-08-22 15:19 · Continue · build · 109.17 - check-claims coverage added for inbox (arrow-key radio nav) and kanban (Move menu open/auto-close); job-monitor confirmed to have nothing live to check (inert buttons, hx-trigger never wired), no case forced. Found+fixed a real shipped bug: kanban's live script used type=module while every other page uses bare <script>, so initDropdowns() silently never ran in production - Move menu positioning/auto-close broken since ship, caught only by adding the live check this item asked for. Diagnosed with a pageerror listener, root-caused by comparing script tags across the whole catalogue, fix verified live (check:claims went from failing to passing on the exact case) · landed · 3bb089f
 
 ## Sunset test
 
