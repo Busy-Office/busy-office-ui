@@ -163,17 +163,19 @@ found the proposal's §11 state-machine vocabulary would COLLIDE with a
 deliberate shipped convention (see 115.2), and one real gate gap worth
 closing (115.3). Full precedent chain in this slice's commit message.
 
-1. [ ] **115.1 — motion-intent vocabulary on `/base/motion`.** The
-       proposal's §10 eight intent categories (feedback / state transition /
-       entrance-exit / spatial / progress / confirmation / attention /
-       delight) added as guidance prose, each of the 8 shipped
-       `.bo-motion-*` classes tagged with its intent. Zero new CSS. Also
-       adds the wrong-choice clause the page lacks — `/base/` pages are
-       outside `check-wrong-choice.mjs`'s scope, so this is judgment-driven,
-       and extending that gate's scope is deliberately NOT part of this
-       item. **Accept:** the section exists; all 8 classes tagged; the
-       opener carries a `<strong>Not …</strong>` clause naming when motion
-       is the wrong answer.
+1. [x] **115.1 — DONE 2026-08-22.** New "Motion intent" section names all 8
+       categories, each mapped to where it lives in the framework (shipped
+       `.bo-motion-*` class, another component's own transitions, or "not
+       shipped — build it in your own app" for Delight, stated honestly
+       rather than force-filled). Quick reference table gained an Intent
+       column; all 8 classes tagged (verified against the BUILT page, not
+       the source — zero `—` fallbacks, confirming the map's keys match the
+       generated class list exactly). Opener gained the wrong-choice
+       clause, verified structurally in built HTML (`/base/` pages are
+       outside `check-wrong-choice.mjs`'s scope — extending that gate's
+       scope was deliberately left out of this item). Full suite green:
+       13 docs gates, core build, 116 vitest, stylelint, `check:claims`
+       92/92. **Accept met.**
 2. [ ] **115.2 — document the state-attribute conventions + the Save
        sequence.** The honest counterpart to the proposal's §11–13: the
        framework already has a DELIBERATE split, not a gap — `data-state`

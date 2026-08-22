@@ -14,6 +14,21 @@ const DESC: Record<string, string> = {
   'bo-motion-pulse-once': 'a single background flash — "this row just changed"',
   'bo-motion-spin': 'continuous rotation for loading indicators',
 };
+// Roadmap 115.1: which of the eight intent categories below each shipped
+// class serves. A vocabulary for the CONVERSATION ("this is an Entrance,
+// not Attention, so fade — not pulse") — not a new mechanism; every class
+// still animates exactly one way, tagged here rather than re-implemented
+// per intent.
+const INTENT: Record<string, string> = {
+  'bo-motion-fade-in': 'Entrance / Exit',
+  'bo-motion-fade-out': 'Entrance / Exit',
+  'bo-motion-scale-in': 'Entrance / Exit',
+  'bo-motion-slide-in-inline-start': 'Entrance / Exit',
+  'bo-motion-slide-in-block-start': 'Entrance / Exit',
+  'bo-motion-collapse': 'State Transition',
+  'bo-motion-pulse-once': 'Attention',
+  'bo-motion-spin': 'Progress',
+};
 const entranceMarkup = `<div class="bo-motion-fade-in">fade-in</div>
 <div class="bo-motion-scale-in">scale-in</div>
 <div class="bo-motion-slide-in-inline-start">slide-in-inline-start</div>
@@ -33,16 +48,45 @@ const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <
     bundle. Every duration comes from the <code>--bo-motion-duration-*</code> tokens,
     already zeroed under <code>prefers-reduced-motion</code>, so every class here is
     reduced-motion-safe with no extra markup.
+    <strong>Not for structural layout — reach for it once a state is already
+    changing.</strong> These classes decorate a transition that's happening
+    anyway (a row appearing, a panel opening); they never decide layout or
+    timing on their own. If nothing is changing yet, motion has nothing to
+    attach to.
   </p>
+  <section class="demo">
+    <h2>Motion intent</h2>
+    <p class="bo-u-text-muted">Eight intents cover what a transition on this
+    page communicates. Naming the intent first — "this is an Entrance, not
+    Attention" — is what keeps a reach for motion deliberate instead of
+    decorative; not every intent has a shipped utility class below, because
+    some are already served by a component's own behavior, not this module.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Intent</th><th scope="col">Communicates</th><th scope="col">Where it lives</th></tr></thead>
+        <tbody>
+          <tr><td>Feedback</td><td>a direct interaction was received (press, hover, focus, selection)</td><td>component-level transitions — button, form fields; not this module</td></tr>
+          <tr><td>State Transition</td><td>a control changed state</td><td><code>.bo-motion-collapse</code>; also tabs/switch/checkbox in their own CSS</td></tr>
+          <tr><td>Entrance / Exit</td><td>an element joined or left the interface</td><td><code>.bo-motion-fade-in</code>, <code>-fade-out</code>, <code>-scale-in</code>, the two <code>-slide-in-*</code> classes</td></tr>
+          <tr><td>Spatial Transition</td><td>where an element exists relative to the rest of the screen</td><td>drawer/offcanvas, dialog — their own directional transitions, not this module</td></tr>
+          <tr><td>Progress</td><td>a process is still running</td><td><code>.bo-motion-spin</code>; also skeleton, native <code>&lt;progress&gt;</code></td></tr>
+          <tr><td>Confirmation</td><td>an action completed</td><td>toast/alert success states — text + icon, no dedicated motion class here</td></tr>
+          <tr><td>Attention</td><td>something changed and is worth noticing, without stealing focus</td><td><code>.bo-motion-pulse-once</code> — the HTMX settle flash, generalized</td></tr>
+          <tr><td>Delight</td><td>personality, when the context calls for it</td><td>not shipped — this framework targets transactional ERP screens first, where delight is rarely the job; build it in your own app when the context genuinely calls for it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
   <section class="demo">
     <h2>Quick reference <span class="bo-badge">generated</span></h2>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
-        <thead><tr><th scope="col">Class</th><th scope="col">Does</th></tr></thead>
+        <thead><tr><th scope="col">Class</th><th scope="col">Intent</th><th scope="col">Does</th></tr></thead>
         <tbody>
           {classes.map((c: string) => (
             <tr>
               <td class="bo-data-table__col--code">.{c}</td>
+              <td>{INTENT[c] ?? '—'}</td>
               <td class="bo-u-text-muted">{DESC[c] ?? '—'}</td>
             </tr>
           ))}

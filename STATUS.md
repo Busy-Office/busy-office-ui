@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-22 16:40
+Generated at: 2026-08-22 16:56
 
 ## Open items by slice
 
@@ -21,8 +21,7 @@ Generated at: 2026-08-22 16:40
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 115** (3 open)
-  - 115.1 — motion-intent vocabulary on `/base/motion`.
+- **Slice 115** (2 open)
   - 115.2 — document the state-attribute conventions + the Save sequence.
   - 115.3 — extend `check:motion` to transitions.
 
