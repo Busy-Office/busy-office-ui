@@ -860,6 +860,32 @@ The three builds, in queue order AFTER 101.4-101.7:
        if the owner in practice keeps reading chat summaries instead,
        delete it as ceremony.
 
+6. [ ] **110.6 — kanban board, no-drag baseline (OWNER DEMAND, 2026-08-22).**
+       The owner explicitly chose build, overriding the grouped-list
+       objection — recorded as stated consumer demand, the front door's own
+       graduation trigger. Baseline is compose-only: lanes = grid columns
+       of `bo-widget` cards, move-card = per-card action menu (two-channel,
+       keyboard-first), zero new CSS expected. The page states plainly that
+       drag is not offered in the baseline and why (pending 110.7).
+       **Accept:** full pattern recipe incl. machine-operable move contract
+       (what an agent POSTs) and the human-monitoring signals (lane counts,
+       aging cards); states incl. empty-lane vs empty-board; wrong-choice
+       clause names list-report-grouped as the cheaper alternative when
+       stage visualisation isn't the point. After 110.2 in queue order.
+
+7. [ ] **110.7 — re-open the drag refusal (100.1): fresh grill at full
+       cost (OWNER ASK, 2026-08-22).** Not a reversal — a fresh grill with
+       the complete bill visible: hand-rolled keyboard model (pick up /
+       move / drop + live-region narration "moved to 3 of 7"), a dedicated
+       touch handle (`touch-action: none`, first in the framework),
+       enhancement-only atop the button path (two-channel is not
+       waivable), permanent dual-model maintenance. Scope: kanban
+       card-between-lanes FIRST (the owner's driving case); ordered-list
+       reorder only if the same mechanism covers it free. **Accept:** a
+       grill report with build/refuse per surface; if build, its own item
+       carrying the full a11y contract. 100.1 stays on record; superseded
+       only if this grill says build.
+
 ## Slice 109 — Owner direction: the real-ERP pattern catalogue + regrouping (2026-08-22)
 
 Owner: *"low quality of patterns content, grouping need to improve. it
