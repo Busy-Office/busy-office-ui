@@ -648,3 +648,10 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-22 12:24 · Meta · refusal · RF form generic extraction — goods-receipt already IS the documentation of the shape · refused · c5d21fb
 - 2026-08-22 12:24 · Continue · build · 110.3 - schedule screen (bo-calendar assembled), 100% composed from calendar + master-detail's swap idiom applied to a month; sidebar/pattern-groups placement reconciled at merge (branch predated 104.1's unification) (parallel worktree) · landed · c1d9e10
 - 2026-08-22 12:34 · Continue · build · 110.5 - generated STATUS.md, human's ten-second now view, wired into record_iteration.py (reconciled from parallel worktree) · landed · d0edfbe
+- 2026-08-22 13:05 · Roadmap · triage · 112: external governance/conformance proposal grilled (2-round design tree, owner: checker is for AI agents) — metadata substrate queued unconditionally (patterns.json extraction, llms.txt catalogue), Screen Contract gated behind a 32-style pilot with pre-registered >=2-brief bar; 109.3 grows the 13 wrong-choice clauses · triaged · 04fdf23
+- 2026-08-22 13:05 · Meta · refusal · Consumer Quality Index /100 + application benchmarking — human-org machinery, no second consumer exists (proposal's own §16 rule) · refused · 04fdf23
+- 2026-08-22 13:05 · Meta · refusal · Waiver system + SARIF output — CI-exception machinery for human orgs; an AI agent needs PASS/FAIL and readable findings · refused · 04fdf23
+- 2026-08-22 13:05 · Meta · refusal · A second Surface Fitness rubric — the six-dimension DSA rubric already gated; Removal Cost axis may be absorbed later · refused · 04fdf23
+- 2026-08-22 13:05 · Meta · refusal · Six-section docs IA reorg — 80% renames of groups measured into place more recently than the proposal was written · refused · 04fdf23
+- 2026-08-22 13:05 · Meta · refusal · Hand-authored pattern metadata YAML — inverts the generated-from-artifact doctrine; superseded by extraction · refused · 04fdf23
+- 2026-08-22 13:05 · Meta · refusal · Consumer-facing conformance web tool — downstream of the refused Quality Index · refused · 04fdf23
