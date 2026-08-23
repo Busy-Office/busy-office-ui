@@ -47,6 +47,7 @@ export const PATTERN_GROUPS = [
       { href: '/patterns/staging', label: 'Staging / batch result' },
       { href: '/patterns/reconciliation', label: 'Reconciliation' },
       { href: '/patterns/timesheet', label: 'Timesheet' },
+      { href: '/patterns/comparison', label: 'Comparison matrix' },
       { href: '/patterns/validation-summary', label: 'Validation summary' },
     ],
   },

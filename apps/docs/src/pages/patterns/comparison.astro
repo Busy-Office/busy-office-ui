@@ -1,0 +1,263 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* Candidates are COLUMNS, criteria are ROWS — uncontested across every
+   reference checked (Ariba's bid comparison sheet, Coupa, GSMArena, Amazon
+   compare). Scored here so the "best per row" marker is DERIVED, never
+   hand-typed: a hand-marked winner is the classic way a comparison table
+   starts lying after an edit. */
+const CANDIDATES = ['Acme Supply Co.', 'Northwind Supply', 'Vertex Industrial'];
+const CRITERIA = [
+  { label: 'Unit price', unit: '$', values: [770.0, 742.5, 803.0], better: 'low', fmt: (v: number) => v.toFixed(2) },
+  { label: 'Lead time', unit: 'days', values: [14, 21, 9], better: 'low', fmt: (v: number) => String(v) },
+  { label: 'On-time delivery', unit: '%', values: [96, 91, 88], better: 'high', fmt: (v: number) => String(v) },
+  { label: 'Quality score', unit: '/100', values: [88, 84, 92], better: 'high', fmt: (v: number) => String(v) },
+];
+const bestIndex = (c: typeof CRITERIA[number]) =>
+  c.values.indexOf(c.better === 'low' ? Math.min(...c.values) : Math.max(...c.values));
+/* Delta from the best, in the criterion's own units — the number a buyer
+   actually argues about ("nine days slower"), not a normalised score. */
+const delta = (c: typeof CRITERIA[number], i: number) => {
+  const b = c.values[bestIndex(c)];
+  const d = c.values[i] - b;
+  if (d === 0) return null;
+  return (c.better === 'low' ? '+' : '−') + c.fmt(Math.abs(d));
+};
+const winsPerCandidate = CANDIDATES.map((_, i) => CRITERIA.filter((c) => bestIndex(c) === i).length);
+
+const markup = `<!-- Candidates as COLUMNS, criteria as ROWS. The best cell per row
+     is DERIVED and marked in two channels: data-tone AND a visually-hidden
+     "best" word, so it survives greyscale, forced colours and a screen reader.
+     One radio column commits to ONE winner. -->
+<form method="post" action="/rfq/4471/award">
+  <table class="bo-data-table">
+    <thead>
+      <tr>
+        <th scope="col">Criterion</th>
+        <th scope="col" class="bo-data-table__col--numeric">Acme Supply Co.</th>
+        …one column per candidate…
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Unit price <span class="bo-u-text-muted">$</span></th>
+        <td class="bo-data-table__col--numeric" data-tone="success">
+          770.00 <span class="bo-visually-hidden">— best on this criterion</span>
+        </td>
+        <td class="bo-data-table__col--numeric">
+          803.00 <span class="bo-u-text-muted">+33.00</span>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row">Criteria won</th>
+        <td class="bo-data-table__col--numeric">2 of 4</td>
+      </tr>
+      <tr>
+        <th scope="row">Award</th>
+        <td><label><input type="radio" name="award" value="acme" class="bo-radio" /> Award</label></td>
+      </tr>
+    </tfoot>
+  </table>
+  <button class="bo-btn" type="submit">Award to selected supplier</button>
+</form>`;
+---
+<Gallery title="Pattern: comparison matrix">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever must choose one of several
+    candidates on stated criteria — a buyer awarding an RFQ, an analyst
+    picking a vendor, a manager comparing budget scenarios.
+    <strong>How often</strong>: once per decision, but the decision is
+    defensible for years afterwards. <strong>What "done" looks like</strong>:
+    one candidate selected, and the criteria that decided it visible beside
+    the choice — the record of <em>why</em> is as much the output as the
+    winner. Candidates are <strong>columns</strong>, criteria are
+    <strong>rows</strong>, and the best value per row is computed and marked
+    rather than left for the reader to spot.
+    <strong>Not for comparing versions of one record</strong> — old-vs-new on
+    a single entity is an audit concern, shown as the change table inside
+    <a href={base + '/patterns/record-detail'}>record detail</a>'s history;
+    and <strong>not for picking one row out of a long list</strong> — that is
+    <a href={base + '/patterns/value-help'}>value help</a>. Reach for this
+    only when a handful of candidates must be weighed on the same named
+    criteria.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="bo-cluster" style="margin-block-end: var(--bo-space-3)">
+      <strong>RFQ-4471 · Hydraulic pumps, 120 units</strong>
+      <span class="bo-badge bo-badge--warning">Awaiting award</span>
+    </div>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <caption class="bo-visually-hidden">Supplier quotes for RFQ-4471, compared on four criteria</caption>
+        <thead>
+          <tr>
+            <th scope="col">Criterion</th>
+            {CANDIDATES.map((c) => <th scope="col" class="bo-data-table__col--numeric">{c}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {CRITERIA.map((c) => (
+            <tr>
+              <th scope="row">{c.label} <span class="bo-u-text-muted">{c.unit}</span></th>
+              {c.values.map((v, i) => (
+                <td class="bo-data-table__col--numeric" data-tone={bestIndex(c) === i ? 'success' : undefined}>
+                  <span class="bo-u-tabular">{c.fmt(v)}</span>
+                  {bestIndex(c) === i
+                    ? <span class="bo-visually-hidden"> — best on this criterion</span>
+                    : <span class="bo-u-text-muted bo-u-tabular" style="margin-inline-start: var(--bo-space-2)">{delta(c, i)}</span>}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Criteria won</th>
+            {winsPerCandidate.map((n) => (
+              <td class="bo-data-table__col--numeric"><span class="bo-u-tabular">{n}</span> of {CRITERIA.length}</td>
+            ))}
+          </tr>
+          <tr>
+            <th scope="row">Award</th>
+            {CANDIDATES.map((c, i) => (
+              <td class="bo-data-table__col--numeric">
+                {/* Nothing pre-checked: the state is "Awaiting award", so the
+                    decision starts UNMADE. A default selection would read as a
+                    recommendation on a screen whose whole argument is that the
+                    win count is not a ranking — and the data contract's 422 for
+                    a missing choice only makes sense if none is preselected. */}
+                <label class="bo-choice" style="justify-content: flex-end">
+                  <input type="radio" name="cmp-award" class="bo-radio" />
+                  <span class="bo-visually-hidden">Award to {c}</span>
+                  <span aria-hidden="true">Award</span>
+                </label>
+              </td>
+            ))}
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="bo-form-actions">
+      <button class="bo-btn" type="button">Award to selected supplier</button>
+    </div>
+    <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-3)">
+      <strong>Two channels on every "best", always.</strong> The winning cell
+      carries <code>data-tone="success"</code> <em>and</em> a visually-hidden
+      "best on this criterion" — colour alone would vanish in greyscale, in
+      forced-colours mode, and for a screen-reader user entirely. Every other
+      cell shows its <strong>delta from the best in that criterion's own
+      units</strong> (<code>+33.00</code>, <code>+12 days</code>), because
+      "nine days slower" is the thing a buyer argues about; a normalised
+      0–100 score hides the trade-off it is supposed to expose.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>No candidate wins every row, and the table does not pretend
+      otherwise.</strong> Vertex is cheapest on nothing but leads on quality
+      and lead time; Northwind wins on price alone. "Criteria won" is a
+      count, deliberately <em>not</em> a ranking — the decision stays the
+      buyer's, and the screen's job is to make the trade-off legible, not to
+      make the choice.
+    </p>
+  </section>
+
+  <section class="demo">
+    <h2>Why one winner, not a split award</h2>
+    <p>Enterprise sourcing tools (Ariba's award scenarios, Coupa's
+    optimisation) can allocate a quantity across several suppliers — 60/40 —
+    and that is real procurement practice. This pattern deliberately ships
+    <strong>select-one</strong> first: a radio column, one submit, one
+    winner. Splitting an award changes the screen's whole contract (per-line
+    allocation, quantity validation against the total, a residual that must
+    reach zero) and would double the pattern's weight for a case most
+    consumers do not have. If your process needs it, the honest composition
+    today is this table for the decision plus
+    <a href={base + '/patterns/editable-grid'}>an editable grid</a> for the
+    allocation — and that is the signal to re-open this, with a real screen
+    to design against.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Subject header</strong> — what is being decided and its
+        state (<a href={base + '/components/badge'}>badge</a>).</li>
+      <li><strong>Criteria rows</strong> — one per stated criterion, with its
+        unit in the row header so cells stay bare numbers.</li>
+      <li><strong>Candidate columns</strong> — one per candidate; keep it to
+        a handful. Past ~6 the table stops being scannable and the real fix
+        is a shortlist step, not a wider table.</li>
+      <li><strong>Best marker + delta</strong> — computed per row, never
+        hand-typed;
+        <a href={base + '/components/data-table'}>data table</a> tone plus
+        visually-hidden text.</li>
+      <li><strong>Criteria won</strong> — a count in the
+        <code>&lt;tfoot&gt;</code>, not a rank.</li>
+      <li><strong>Award row</strong> — one radio per candidate
+        (<a href={base + '/components/form'}>form controls</a>) and a single
+        submit; the radio group makes "exactly one" a property of the
+        markup rather than a rule the server has to police alone.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /rfq/:id/compare</td><td>the full matrix, with best-per-criterion computed SERVER-side — the browser must never be the only place the winner is decided, or a client with JS off sees an unmarked table</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /rfq/:id/award</td><td>one <code>award</code> value; returns the awarded state with the deciding criteria snapshot stored alongside — the record of why, frozen at award time</td></tr>
+          <tr><td class="bo-data-table__col--code">POST … with no selection</td><td>422 naming the missing choice; the radio group makes this hard to reach from the UI but never impossible from a replayed request</td></tr>
+          <tr><td class="bo-data-table__col--code">POST … on an awarded RFQ</td><td>409 — re-render read-only with who awarded, to whom, and when; an award is not re-decidable in place</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Awaiting award</td><td>radios live, submit enabled; every criterion shows its winner and every other cell its delta</td></tr>
+          <tr><td>A candidate missing a value</td><td>an em dash and a visually-hidden "not quoted" — never 0, which would read as the best price and win the row</td></tr>
+          <tr><td>Tie on a criterion</td><td>both cells marked best; the count reflects it. A tie is a real outcome, not something to break arbitrarily</td></tr>
+          <tr><td>One candidate</td><td>the pattern is wrong — there is no comparison; show the quote on <a href={base + '/patterns/record-detail'}>record detail</a> instead</td></tr>
+          <tr><td>Awarded</td><td>read-only, the winning column marked, the deciding snapshot shown; changes go through a new RFQ round, not an edit</td></tr>
+          <tr><td>Narrow screen</td><td>the table scrolls inside its container; the criterion column is the row header, so the reader never loses which row they are on</td></tr>
+          <tr><td>No JS</td><td>fully functional — a plain form with a radio group and a submit; best-marking and deltas are server-rendered, so nothing on this screen depends on the browser</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Form controls</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/value-help", "Value help (picking one row from a long list)"],
+    ["/patterns/record-detail", "Record detail (one candidate on its own)"],
+    ["/patterns/editable-grid", "Editable grid (the allocation half of a split award)"],
+    ["/patterns/approval", "Approval (where an award goes for sign-off)"],
+  ]} />
+</Gallery>

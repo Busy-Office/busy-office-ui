@@ -321,8 +321,28 @@ reconciliation → timesheet → comparison.
        into approval. Accept: `/patterns/timesheet` passes all pattern
        gates; totals recompute on entry (executable claim); submit
        disabled until the target reconciles, with a two-channel reason.
-5. [ ] **123.3c — Comparison matrix pattern, decided: select-one
-       award.** Candidates as columns, criteria as rows; per-criterion
+5. [x] **123.3c — DONE 2026-08-23. Accept met.** `/patterns/comparison`
+       — candidates as COLUMNS, criteria as rows (uncontested across every
+       reference). The best cell per row is DERIVED, never hand-typed, and
+       marked in TWO channels: `data-tone="success"` plus visually-hidden
+       "best on this criterion"; every other cell carries its delta from
+       best **in that criterion's own units** rather than a normalised
+       score that would hide the trade-off. "Criteria won" is a count,
+       explicitly not a ranking. Split-award REFUSED for v1 with the
+       re-open condition stated on the page itself (a real screen needing
+       per-line allocation). Two real fixes while building: the
+       components-used gate caught the award button claimed but never
+       rendered — fixed by adding the control the pattern actually needs,
+       not by trimming the claim; and the demo pre-selected a candidate
+       who had won 1 of 4 criteria, reading as a recommendation on a page
+       arguing the count is not a ranking — the decision now starts
+       unmade, which is also what the data contract's 422 requires.
+       **Verified by measuring the rendered DOM**, not the source: every
+       marked cell is genuinely the min/max of its row and carries the
+       hidden channel; win counts (1/1/2) sum to the four criteria. Gates:
+       markup, page-shape 35 patterns, axe 113 pages x 2 widths zero
+       violations, layout, claims 97, target-size. Screenshots light+dark.
+       *(original decided design follows)* **select-one award.** Candidates as columns, criteria as rows; per-criterion
        best signal computed and shown inline (two-channel, not
        color-only); terminal action selects ONE winner. Split-award
        (Ariba/Coupa allocation) REFUSED for v1 — recorded re-open

@@ -14,7 +14,7 @@ its docs page, or its rubric definition) — never on a timer.
 Seeded 2026-08-23 from `check:wrong-choice`'s TODO set — the 19
 component pages with no wrong-choice clause, which is the executable form
 of the DSA rubric's `content` dimension (the two agree by construction).
-Patterns are not seeded: all 34 already carry the clause and score at the
+Patterns are not seeded: all 35 already carry the clause and score at the
 sweep bar, so they enter only when a sweep or a source change flags one.
 
 Polish drives on `content`, `fit` and `interaction` ONLY.
