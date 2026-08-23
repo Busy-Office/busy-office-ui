@@ -733,3 +733,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 08:46 · Roadmap · plan · Slice 123: seven owner answers triaged; research dispatched for masking/app-frame/pattern-references · triaged · 92287d2
 - 2026-08-23 08:51 · Continue · build · 52.3 + 121.5: object-page retitled; Report/Schedule/Output-form labels renamed long-term; 3 orphans linked · landed · ed25fe1
 - 2026-08-23 09:05 · Continue · build · 123.4: 0.3.0 released to npm (re-cut path); npm-12 pack-shape and base-blind-claim bugs fixed at root · released · 1eb60c8
+- 2026-08-23 09:20 · Continue · bug · output-form 390px table overflow (caught by CI's first layout sweep in 2 days) · landed · 0eec725

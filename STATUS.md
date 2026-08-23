@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 09:05
+Generated at: 2026-08-23 09:20
 
 ## Open items by slice
 
@@ -34,8 +34,8 @@ Generated at: 2026-08-23 09:05
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (727 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-23 00:32   ok
+dispatch status — counter-triggered rules (728 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-23 00:32   ok
   Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
 ```
 
@@ -57,7 +57,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 00:10 · Meta · refusal · document/attachment manager, document-flow chain, hierarchy/tree browser (already covered, false gaps) · refused · e44dfab
 - 2026-08-23 00:10 · Meta · refusal · period-close cockpit, Gantt, map, activity-chatter, Analytical List Page (v2 sweep's refusals re-verified, not re-litigated) · refused · e44dfab
 - 2026-08-23 00:10 · Continue · build · 119.7: notification cards elevated (owner: go elevated-card) · landed · e44dfab
 - 2026-08-23 00:20 · Roadmap · plan · 122.1: triaged the masking-input wishlist into ROADMAP (BLOCKED ON GRILL) · triaged · 3894d73
@@ -67,6 +66,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 08:46 · Roadmap · plan · Slice 123: seven owner answers triaged; research dispatched for masking/app-frame/pattern-references · triaged · 92287d2
 - 2026-08-23 08:51 · Continue · build · 52.3 + 121.5: object-page retitled; Report/Schedule/Output-form labels renamed long-term; 3 orphans linked · landed · ed25fe1
 - 2026-08-23 09:05 · Continue · build · 123.4: 0.3.0 released to npm (re-cut path); npm-12 pack-shape and base-blind-claim bugs fixed at root · released · 1eb60c8
+- 2026-08-23 09:20 · Continue · bug · output-form 390px table overflow (caught by CI's first layout sweep in 2 days) · landed · 0eec725
 
 ## Sunset test
 
