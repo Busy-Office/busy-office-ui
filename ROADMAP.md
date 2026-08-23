@@ -319,7 +319,15 @@ known target, not a judgement call.
 desktop receipt screen and the mirror below is a *different* screen at RF
 size — that contrast is the page's argument.
 
-1. [ ] **131.1 — collapse to ONE live screen per RF page.** The mirror
+1. [x] **131.1 — DONE 2026-08-23. Collapsed to ONE live screen per RF page.**
+       Landed with two things the duplicate had been hiding: the mirror
+       ignored the docs theme entirely (measured — parent dark, iframe
+       light), now fixed for all six via `PrefBootstrap` + a new
+       `lockDensity`; and `check-components-used` went red on 11 TRUE claims
+       because the components render one document down — `demoRegionWithEmbeds`
+       follows the same-origin frame now, and its first version matched `/`
+       (a suffix of every src) and embedded the landing page as evidence.
+       *Original Accept below.* The mirror
        survives (owner's call, and the majority precedent); the inline copy
        goes. *Accept*: (a) `rf-pick`, `rf-putaway`, `rf-count` each render
        their screen component exactly once — asserted against the BUILT
@@ -332,7 +340,15 @@ size — that contrast is the page's argument.
        profile claim moves into its caption; (d) `check:page-shape`,
        `check:claims`, links, `test:axe` and `check:layout` green;
        screenshots at 1440 and 390, light and dark.
-2. [ ] **131.2 — make the frame read as a device.** `.rf-device-frame` is
+2. [x] **131.2 — DONE 2026-08-23. The mirror sits in a handheld.**
+       `RfDevice.astro` is the single call site for all six embeds; chrome
+       (scan window, LED, chin keys) is decorative and appears only via
+       `@container bo-demo (min-width: 26rem)`. Measured: 1440 -> device
+       384x710 with the screen still exactly 360x640; 390 -> chrome hidden,
+       geometry identical to what shipped before. Body colour derives from
+       the TEXT token so it contrasts with the canvas in both themes with no
+       theme fork. Live theme toggle drives the frame for real.
+       *Original Accept below.* `.rf-device-frame` is
        today a 1px border and a radius. It lives in `apps/docs/src/styles/`,
        so this is docs presentation and adds **zero framework surface**.
        *Accept*: (a) a reader sees a handheld at a glance — bezel, inset
@@ -348,8 +364,45 @@ size — that contrast is the page's argument.
        (d) both themes, and it must beat its reference: pure CSS, no image
        asset, theme-aware, and it may not shrink the 360×640 screen it
        frames.
-3. [ ] **131.3 — icons on buttons: grill it, don't assume it.** Two
-       tensions triage found, both recorded so the grill starts from facts.
+3. [x] **131.3 — icons on buttons. DONE 2026-08-23. Verdict: REFUSE, for
+       the RF family specifically.** Three reasons, two of them measured,
+       and one of them a grill that already exists.
+
+       **(a) There is no icon for any of these buttons.** The shipped set is
+       12 masks and every one is domain-shaped. Back / Skip item / Report
+       short / Bin full / Wrong HU / Item not found have none. So the ask is
+       not "use the icons", it is "grow the icon set for one screen family"
+       — which the reusability rule refuses outright: nothing ships for one
+       screen.
+
+       **(b) The one place icons WOULD be glanceable was already grilled and
+       refused**, 2026-08-22, in `.roundtable/rf-pattern-family-grill-2026-08-22.md`.
+       The RF task menu is a 4-tile grid — exactly what icons are for — and
+       `RfTaskMenu.astro` says why it has none: a task list is 3-6 items a
+       worker already knows by name, and adding glyphs would pull the
+       12-glyph `icon.css` into the `rf-essentials` profile, which exists to
+       carry only what RF screens need. That is a build-target cost, not a
+       matter of taste. I proposed this before reading the record; the
+       record was right.
+
+       **(c) The measured cost, which is not what I expected.** Driven on
+       the real mirrors at 360px: `--bar` lays the buttons out equal-width
+       (113px each in a 336px bar), so an icon does **not** widen anything —
+       it wraps labels. `rf-putaway` goes 44px → 52px, every label to two
+       lines; `rf-pick` and `rf-count` already wrap, so nothing changes. So
+       the earlier worry (GAP-7/GAP-13 clipping) was wrong and is withdrawn.
+
+       The refusal rests on (a) and (b), not on cost: at arm's length, a
+       glyph with no established meaning beside "Report short" **adds** a
+       decoding step. The owner's goal — "easy to spot" — is what the label
+       already does. Icon + text stays documented and correct on
+       `/components/button` for full-bundle screens; this is a no for the RF
+       family only.
+
+       *(original triage note kept below — the two tensions it recorded are
+       what the measurement above went and tested)*
+
+       Two tensions triage found, both recorded so the grill starts from facts.
        **One**: the shipped set is 12 masks and is domain-shaped — `doc`,
        `invoice`, `cart`, `check-circle`, `truck`, `box`, `chart`,
        `settings`, `grid`, `barcode`, `building`, `user`. RF's buttons are
