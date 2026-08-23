@@ -241,7 +241,47 @@ half-answered by this project's own grill.
        **Grill first whether this belongs in the docs at all** or whether it
        is an `examples/` app like the ERP suite — the suite exists precisely
        because a walkable multi-screen demo outgrew a docs page.
-3. [ ] **135.3 — should the RF screen be responsive?** *(Noted while
+3. [x] **135.3 — ANSWERED 2026-08-24: yes, already — measured, no CSS
+       needed. But the measurement found a real defect and a real gap.**
+
+       **The measurement**, all six RF screens at 320 / 360 / 480 / 800:
+       **zero** horizontal page overflow at every width, **zero** elements
+       spilling their parent, and a minimum interactive target of **44px** at
+       every width on every screen that has controls. The layouts are
+       ordinary flow — a `bo-kv` header, a field, a button bar — so they
+       already reflow. No breakpoint, no CSS, no `--rf-wide` variant. The
+       documented range is now 320-800.
+
+       **Two instrument faults on the way, both caught before use**: the
+       first spill detector reported `SCRIPT+1244px` on five of six screens
+       (a `<script>` has a zero-size rect, so every parent edge looks like a
+       spill), and a "12px spill" on putaway that turned out to be the
+       hidden confirmation line — zero width, correctly excluded once
+       rendered-only elements were counted.
+
+       **The defect: `rf-list` has NO interactive elements.** The page's own
+       opener promises the worker "taps the top row and starts working it";
+       the rows are plain `<td>` text. A documented gesture the markup never
+       provided — the same shape as the three dead dialog buttons
+       `check-data-hooks` exists because of.
+
+       **The fix was tried, measured, and REVERTED**, which is the part worth
+       keeping: a ghost-button link in the first cell gives the 44px target
+       but its horizontal padding pushes the Status column **44px past the
+       container at 320px** (4px at 360), where plain text overflows by zero.
+       Trading an untappable queue for a clipped status column is not a fix.
+
+       **135.3b — the gap this exposed, queued for a grill**: a `data-table`
+       row that OPENS something has no shipped idiom that survives a narrow
+       two-column table. `inbox` and `job-monitor` put a `bo-btn--sm` in a
+       third column, which is desktop-width thinking. The candidates are a
+       cell-filling link (needs CSS the framework does not have), or dropping
+       the table for the `bo-widget` tile idiom `rf-landing` already uses
+       next door — which would contradict this page's deliberate
+       "composed from `.bo-data-table`" proof-reuse claim (109.7/59.4).
+       That is a design decision, not a mid-wake guess. *Accept*: a recorded
+       accept/refuse/rethink, and whichever way it goes, `rf-list`'s opener
+       and its markup must agree afterwards. *(Noted while
        removing the keypad: with it gone, the pick screen leaves roughly a
        third of the 640px empty below the exception bar — and the docs
        already tell consumers to dock that bar with `position: sticky;

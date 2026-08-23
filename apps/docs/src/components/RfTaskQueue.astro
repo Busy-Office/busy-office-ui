@@ -9,6 +9,19 @@
  * claim. Two narrow columns only: a task queue is scanned top-to-bottom for
  * "what's next", not cross-referenced column-to-column, so it never needs
  * the auto-compaction @container rule (data-table.css) to kick in.
+ *
+ * KNOWN DEFECT, roadmap 135.3: this page's opener promises the worker "taps
+ * the top row and starts working it", and these rows are plain text with
+ * nothing tappable in them. The obvious fix — a ghost-button link in the
+ * first cell — was tried and REVERTED, because it was measured: the button's
+ * horizontal padding pushes the Status column 44px past the container at
+ * 320px and 4px at 360px, where plain text overflows by zero. Trading an
+ * untappable queue for a clipped status column is not a fix.
+ *
+ * The real gap is that a data-table row which OPENS something has no shipped
+ * idiom that survives a narrow two-column table: inbox and job-monitor put a
+ * `bo-btn--sm` in a third column, which is desktop-width thinking. Queued for
+ * a grill rather than guessed at here.
  */
 const tasks = [
   { label: 'PO-88213 · Dock 4', status: 'Next' },

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 00:58
+Generated at: 2026-08-24 01:12
 
 ## Open items by slice
 
@@ -28,16 +28,15 @@ Generated at: 2026-08-24 00:58
   - 134.1 — fix the key, and prove the dark half is dark.
   - 134.2 — re-baseline deliberately, never blind.
   - 134.3 — CI, or delete it.
-- **Slice 135** (3 open)
+- **Slice 135** (2 open)
   - 135.2 — make the RF track navigable, like the suite.
   - 135.3 — should the RF screen be responsive?
-  - 135.4 — drop the numeric keypad from the pick screen.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (810 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-24 00:50   ok
+dispatch status — counter-triggered rules (812 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-24 00:50   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -45,14 +44,12 @@ dispatch status — counter-triggered rules (810 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 135.4 — drop the numeric keypad from the pick screen.
+- 135.3 — should the RF screen be responsive?
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 
 ## Last 10 iterations
 
-- 2026-08-23 23:49 · Meta · refusal · a __count part or badge-in-segment — the count treatment already exists and a badge fills a 24px segment · refused · b932f84
-- 2026-08-23 23:58 · Continue · build · 130.2 GAP-12 — Add a line: home stated (below the table, cluster), two drifted call sites reconciled · landed · a9ba5c7
 - 2026-08-24 00:04 · Continue · build · 130.2 GAP-8 + GAP-10 — merged; recompute/announce contract already existed, discoverability fixed · landed · 70eef95
 - 2026-08-24 00:11 · Continue · build · 130.2 GAP-1 — module rail measured (fails at 11 docs/700px), deferred behind a trigger, limit documented · landed · fa23ff0
 - 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
@@ -61,6 +58,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 00:50 · Standardize · dry · 135.1 — RF naming unified (six labels, one system); slugs kept with the 69-reference reason; goods-receipt duplicate screen removed (131.1 error) · landed · 9167765
 - 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
 - 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
+- 2026-08-24 01:12 · Continue · build · 135.4 — numeric keypad removed from the RF pick screen (markup, wiring, docs, allowlist); inputmode is the answer · landed · 4e39cdf
+- 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
 
 ## Sunset test
 
