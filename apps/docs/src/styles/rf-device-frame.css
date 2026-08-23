@@ -43,6 +43,11 @@
    — dark grey on light, light grey on dark — with no theme fork to maintain
    and no chance of a device that vanishes into a dark canvas. */
 .rf-device {
+  /* One number for every internal gap on the device: the bezel around the
+     screen, the space between scan window and LED, the space between chin
+     keys. It was typed three times before the Standardize sweep of
+     2026-08-24 — the same shape as the 22.5rem/360px duplication this file
+     was created to fix. */
   --rf-device-bezel: 0.75rem;
   --rf-device-body: var(--bo-color-text-secondary);
   inline-size: max-content;
@@ -76,7 +81,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: var(--rf-device-bezel);
     inline-size: 100%;
   }
 
@@ -105,7 +110,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: var(--rf-device-bezel);
     inline-size: 100%;
   }
 
