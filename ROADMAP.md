@@ -653,7 +653,7 @@ reads clean while telling us nothing.
        may carry two timelines (flow and approval) and what distinguishes
        them. Same page-shape and wrong-choice gates as any pattern edit.
 
-3. [ ] **130.2b — the P2P document flow, grilled 2026-08-23 (owner: "as per
+3. [x] **130.2b — DONE 2026-08-23. The P2P document flow, grilled (owner: "as per
        your recommendation").** Question was whether P2P should carry
        PR → PO → GR → Vendor invoice → Payment with sub-functions and
        conversions. Decided on SHAPE COVERAGE, not business completeness:
@@ -3104,7 +3104,7 @@ the question, and the owner's phrasing is the prompt to ask it.
        other three and says when to use them instead (the `content` rule,
        applied to patterns).
 
-3. [~] **99.3 — the command bar: document what we already run.**
+3. [x] **99.3 — DONE. The command bar: document what we already run.**
        **Promotion question answered 2026-08-21: refuse, on all three counts.**
        Full report: `.roundtable/grill-command-bar-2026-08-21.md`. No
        `bo-command-bar`, no promotion of the docs implementation, and no
@@ -3206,8 +3206,10 @@ the question, and the owner's phrasing is the prompt to ask it.
        docs implementation should be **promoted into `packages/core`** or stay
        docs chrome. Promotion requires the same scoring every component gets.
 
-4. [ ] **99.4 — missing components discovered along the way go through the
-       front door.** The owner's own instruction, recorded as a gate on this
+4. **99.4 — STANDING RULE for this slice, not a work item** (un-boxed
+       2026-08-24: a checkbox that can never be ticked kept the dispatcher's
+       "oldest open item" pointed at a policy). Missing components discovered
+       along the way go through the front door. The owner's own instruction, recorded as a gate on this
        slice: grill the need first (Objective §1/§2 — could existing
        primitives compose it?), then score it on the six DSA dimensions with
        cited evidence, then document it with the wrong-choice clause
