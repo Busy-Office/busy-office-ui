@@ -11,9 +11,12 @@
 
    Height stays inline: it is the one value that genuinely differs per demo
    (a frame with an empty main needs less than one holding widgets). */
+/* Composes ON .demo-frame rather than re-declaring its two lines: pages
+   write `class="demo-frame demo-shell-frame"`, and this adds only what a
+   full shell needs on top of the edge. The framework's own doctrine is
+   compose-existing-primitives; a docs stylesheet does not get an
+   exemption from it (Objective grill, 2026-08-23). */
 .demo-shell-frame {
-  border: 1px solid var(--bo-color-border-default);
-  border-radius: var(--bo-radius-md);
   overflow: hidden;
 }
 

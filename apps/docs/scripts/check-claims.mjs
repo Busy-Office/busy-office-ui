@@ -7,6 +7,23 @@
 // it. Prose that asserts runtime behaviour is a hypothesis until it is
 // executed; this file executes the load-bearing ones.
 //
+// EXEMPT, with reasons — a claim this file does NOT cover must be listed
+// here, so "there was no way to test it" stays a decision on the record
+// rather than an unwritten habit anyone can invoke (Objective grill,
+// 2026-08-23, which found the first such claim shipping unlisted):
+//
+//   * file-upload's "on many phones `capture` REPLACES the file picker
+//     rather than adding to it" — a mobile-OS behaviour. Headless
+//     Chromium is a desktop browser that ignores `capture` entirely, so
+//     the only assertion available here (that the IDL attribute
+//     reflects) would test the browser, not this framework. The claim is
+//     load-bearing enough to keep — it is why the page ships TWO inputs
+//     — and the shape it recommends is what a reader copies, so the
+//     honest position is an exemption, not a softened sentence.
+//
+// The bar for joining that list: the behaviour must be unobservable in
+// this harness for a stated reason, not merely awkward to reach.
+//
 // Add a case whenever a page claims something a browser can check.
 // Drive REAL key/mouse events: an early version dispatched a synthetic
 // keydown on `document`, which no delegated handler matches, and

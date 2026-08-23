@@ -157,6 +157,48 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 129 — Objective grill of 126-128, and the gate hole it found (2026-08-23)
+
+Dispatched by rule 3 (three slices closed since the last Objective). Report:
+`.roundtable/grill-objective-126-128-2026-08-23.md`. Every item passed its
+accept test; five findings landed, and one of them is the kind this project
+writes doctrine about.
+
+1. [x] **`check-page-shape.mjs` had never once run against `scan`.** Its
+       `hasRules` filter needed a `.bo-` selector and `scan.css` has none —
+       it is 100% `body[data-scan-result]::after`. 126.2 generalized exactly
+       this definition in three other scripts; this gate kept the old half.
+       A skipped page looks exactly like a passing one, so nothing surfaced
+       it, and `scan.astro` was missing `<DsaScore>` the entire time.
+       Membership now reads `api.json`. 39 → 40 pages checked; the
+       "not yet scored" branch that 94.5 recorded as unreachable by
+       construction now renders on a real page.
+2. [x] **The ORDER assertion from 128.4 was a position heuristic in an
+       `@exact` file** — and CLAUDE.md's taxonomy names "a position" as the
+       heuristic case outright. Extracted as `demoAfterSpec()`, file
+       retagged with the reason (one heuristic check makes the file
+       heuristic; the tag names the weakest link, not the average), and
+       given `--self-test` over four inputs including the composite shape
+       that broke its first draft. Red-proved by replacing the detector
+       with `return false` — the self-test exits 1.
+3. [x] **A claim shipping with neither a case nor a registered exemption.**
+       file-upload's "`capture` REPLACES the picker on many phones" is a
+       mobile-OS behaviour headless Chromium cannot show. The sentence
+       stays — it is why the page ships two inputs — but `check-claims.mjs`
+       now carries an EXEMPT list with the entry and the bar for joining
+       it, so "no way to test it" is a decision on the record.
+4. [x] **The column ladder had no stated ceiling.** Each tier costs a class
+       AND a breakpoint, which is a slope. Three is now stated as the
+       ceiling with its reason, and a fourth is declared a rethink into a
+       numeric priority scale, never `--quaternary`.
+5. [x] **`.demo-shell-frame` re-declared `.demo-frame`** instead of
+       composing on it — one day after that doctrine motivated the split.
+       Fixed on all three sites.
+
+No contradictions were found across the docs pages this window touched,
+including the two most likely candidates (chooser-as-recovery; expand-in-place
+present on desktop and deliberately absent on phones).
+
 ## Slice 128 — Standardize sweep, round 1 (2026-08-23)
 
 Dispatched by rule 2 (4 Continue rounds since the last sweep). A read-only

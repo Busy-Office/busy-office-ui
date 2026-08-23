@@ -477,7 +477,17 @@
      `data-density="compact"` silently disabled reflow on every table that
      set it (found 2026-08-23 when the ladder's own claims case measured
      list-report and nothing hid). Fixed by scoping the ladder to the
-     class alone. */
+     class alone.
+
+     THREE TIERS IS THE CEILING, and it is worth writing down because the
+     next request will be a fourth. Each tier costs a class AND a
+     hand-picked breakpoint — one specific rule per tier, which the
+     Objective refuses past the point where a general mechanism is
+     cheaper. Three matches what a row can actually carry (must-have /
+     useful / context) and what the cited floor uses. If a fourth is ever
+     genuinely needed the answer is NOT `--quaternary`: it is a numeric
+     priority scale that generates its own bands, and that is a rethink,
+     not an increment (Objective grill, 2026-08-23). */
   @container bo-table (max-width: 40rem) {
     .bo-data-table__col--tertiary {
       display: none;

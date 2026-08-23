@@ -8,11 +8,21 @@
  * generator + page-shape gate" pairing (new-component.mjs stamps the shape,
  * this gate guards it).
   *
- * @exact — asserts named sections and components are present. Exempt from --self-test: there is no
- * judgement to get wrong, and ceremony around a lookup is noise.
+ * @heuristic — MOSTLY exact (the presence checks are lookups with no judgement
+ * to get wrong), but the demo-first/spec-last assertion added 2026-08-23 decides
+ * its verdict from POSITIONS in the source, which is precisely what this
+ * project's taxonomy calls heuristic: it can be fooled by a page shape nobody
+ * anticipated, and its own first draft WAS fooled — component-scoped, it
+ * false-positived on state-patterns, a page documenting two components. One
+ * heuristic check makes the file heuristic; the tag names the weakest link, not
+ * the average.
+ *
+ *   Carries --self-test: the order detector is run against pages it must
+ *   classify correctly — compliant, violating, and the composite shape that
+ *   broke the first draft — and exits non-zero if it cannot tell them apart.
 */
 import { readFile, readdir } from 'node:fs/promises';
-import { assertScanned } from './gate-report.mjs';
+import { assertScanned, selfTest } from './gate-report.mjs';
 import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,9 +38,36 @@ const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
 // source; this used to be a hand-maintained copy that drifted out of sync
 // with a THIRD copy in gen-llms.mjs (Slice 6 item 1 caught it the hard way).
 const require = createRequire(import.meta.url);
-const { pageSlug: PAGE_SLUG } = JSON.parse(
-  await readFile(require.resolve('@busy-office/ui/api'), 'utf8'),
-);
+/* The demo-first/spec-last detector, as a pure function so --self-test can
+   run it on inputs whose right answer is known. Stated against the LAST spec
+   block on the page rather than a given component's own: a page may document
+   two components (state-patterns carries both skeleton and state, each with
+   its own pair, the same way alert→alerts aliases a slug), and there the first
+   component's tables correctly sit mid-page ahead of the second's demos. What
+   must never happen is a demo section opening after the FINAL spec table. */
+export function demoAfterSpec(page) {
+  const lastDemo = page.lastIndexOf('<section class="demo"');
+  const lastSpec = Math.max(page.lastIndexOf('<ClassRef'), page.lastIndexOf('<ApiTable'));
+  return lastDemo >= 0 && lastSpec >= 0 && lastDemo > lastSpec;
+}
+
+if (process.argv.includes('--self-test')) {
+  const demo = (n) => `<section class="demo"><h2>${n}</h2></section>`;
+  const spec = (c) => `<ClassRef component="${c}" /><ApiTable component="${c}" />`;
+  selfTest([
+    ['demo-first, spec-last passes',
+      demoAfterSpec(`${demo('Basic')}${demo('Markup')}${spec('badge')}<Related />`), false],
+    ['a demo section after the spec tables is caught',
+      demoAfterSpec(`${demo('Basic')}${spec('badge')}${demo('Markup')}<Related />`), true],
+    ['a composite page — two components, the first spec block mid-page — is NOT caught (the shape that broke the first draft)',
+      demoAfterSpec(`${demo('Skeletons')}${spec('skeleton')}${demo('States')}${spec('state')}<Related />`), false],
+    ['a page with no spec tables at all is not caught (behavior-doc pages have none)',
+      demoAfterSpec(`${demo('Basic')}${demo('Markup')}<Related />`), false],
+  ]);
+}
+
+const api = JSON.parse(await readFile(require.resolve('@busy-office/ui/api'), 'utf8'));
+const { pageSlug: PAGE_SLUG } = api;
 
 const componentsDir = join(coreRoot, 'src/css/components');
 const dirs = (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory());
@@ -47,10 +84,23 @@ for (const d of dirs) {
   const cssBodies = await Promise.all(
     cssFileNames.map((f) => readFile(join(componentsDir, d.name, f), 'utf8')),
   );
-  // A component with no rules yet is a slice stub, not shipped — extract-api.mjs
-  // skips these too (`if (!sets.classes.size) continue`), so the docs can't
-  // exist yet either.
-  const hasRules = cssBodies.some((css) => /\.bo-[a-z0-9]/i.test(css));
+  /* A component with no rules yet is a slice stub, not shipped — so the docs
+     cannot exist yet either. "Shipped" means what extract-api.mjs means by it,
+     and that definition moved: 126.2 generalized it to
+     `if (!sets.classes.size && !sets.dataAttrs.size) continue`, because a
+     surface can be entirely attribute-driven. This gate kept the OLD half of
+     the rule and therefore skipped `scan` — whose CSS is 100%
+     `body[data-scan-result]::after` and contains no `.bo-` selector at all —
+     for its whole life. It went unnoticed because a skipped page looks exactly
+     like a passing one; scan.astro was missing <DsaScore> the entire time
+     (Objective grill, 2026-08-23). Read membership from api.json, which is
+     generated from the shipped artifact and already knows the answer, rather
+     than re-deriving it from a regex here — the same reason PAGE_SLUG is read
+     and not guessed. */
+  const apiEntry = api.components?.[d.name];
+  const hasRules =
+    cssBodies.some((css) => /\.bo-[a-z0-9]/i.test(css)) ||
+    (apiEntry?.dataAttrs?.length ?? 0) > 0;
   if (!hasRules) continue;
   checked++;
 
@@ -94,20 +144,10 @@ for (const d of dirs) {
      kept a "Markup — the canonical recipe" section AFTER ClassRef and
      ApiTable, and the build passed for months (found by a Standardize
      sweep, 2026-08-23). Comparing source positions is exact — the last
-     demo section must open before the spec tables do.
-
-     Stated against the LAST spec block on the page, not this component's
-     own, because a page may document two components (state-patterns
-     carries both skeleton and state, each with its own pair, the same
-     way alert→alerts aliases a slug). There, skeleton's spec tables sit
-     mid-page ahead of state's demos and that is correct; what must never
-     happen is a demo section opening after the final spec table. The
-     first draft of this assertion was component-scoped and flagged
-     state-patterns — a false positive the sweep that wrote it had
-     already predicted. */
-  const lastDemo = page.lastIndexOf('<section class="demo"');
-  const lastSpec = Math.max(page.lastIndexOf('<ClassRef'), page.lastIndexOf('<ApiTable'));
-  if (lastDemo >= 0 && lastSpec >= 0 && lastDemo > lastSpec && !orderReported.has(slug)) {
+     demo section must open before the spec tables do. The detector and
+     the shape that broke its first draft are documented on
+     demoAfterSpec() above, which --self-test exercises. */
+  if (demoAfterSpec(page) && !orderReported.has(slug)) {
     orderReported.add(slug);
     failures.push(
       `${slug}.astro: a <section class="demo"> opens AFTER the last ClassRef/ApiTable — the skeleton is demo-first, spec-last, so the spec tables sit together at the end right before <Related>`,
