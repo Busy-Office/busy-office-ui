@@ -805,3 +805,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 23:33 · Meta · refusal · dropping .bo-btn's global white-space: nowrap — zero buttons change at 1440, four at 390 and all four already fit · refused · 6aa53b4
 - 2026-08-23 23:41 · Continue · build · 130.2 GAP-11 + GAP-14 — both refuse a new state; GAP-11 was a usage bug the gates cannot see · landed · b0a0e51
 - 2026-08-23 23:41 · Meta · refusal · a 5th bo-timeline data-state (partial) and a new data-row-state (excluded) — the marker glyph and row selection already carry both · refused · b0a0e51
+- 2026-08-23 23:49 · Continue · build · 130.2 GAP-3 — segmented option count: gap added, muted-tabular convention documented · landed · b932f84
+- 2026-08-23 23:49 · Meta · refusal · a __count part or badge-in-segment — the count treatment already exists and a badge fills a 24px segment · refused · b932f84

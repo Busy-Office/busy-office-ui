@@ -93,12 +93,19 @@ export const render = () =>
             </tbody>
           </table>
         </div>
-        <!-- GAP-12. "Add a line" is the most-pressed control on any document
-             entry screen and there is no home for it: not part of data-table,
-             not mentioned by editable-grid, not in form-section. Rendered as
-             a loose button under the table, which is where every consumer
-             will independently decide to put it — differently. -->
-        <p><button class="bo-btn bo-btn--secondary" type="button">Add a line</button></p>
+        <!-- GAP-12 RESOLVED 2026-08-23. "Add a line" is the most-pressed
+             control on any document entry screen, and it now has a stated
+             home: BELOW the table in a cluster, never in
+             .bo-data-table__toolbar. The rule is that the toolbar acts on
+             rows that already exist while this creates one that does not,
+             and the new row is appended at the END — a control at the top
+             produces a result the reader cannot see. editable-grid documents
+             it; this screen and that demo had independently invented two
+             different spellings of the same button, which is exactly what
+             the gap predicted. -->
+        <div class="bo-cluster">
+          <button class="bo-btn bo-btn--secondary" type="button">+ Add line</button>
+        </div>
       </fieldset>
 
       <div class="bo-form-actions">

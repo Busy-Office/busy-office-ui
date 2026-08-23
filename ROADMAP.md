@@ -536,6 +536,13 @@ reads clean while telling us nothing.
        table and prove nothing) and claim 108, red-proved against the BUILT
        css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
        the part that risks becoming "colour the cell".
+       **GAP-12 RESOLVED: a stated home, no new surface.** "Add a line"
+       goes BELOW the table in a cluster, never in the table toolbar — the
+       toolbar acts on rows that exist, this creates one that does not, and
+       the new row appends at the end where the control should be. The gap's
+       own prediction had already come true inside the repo: editable-grid
+       used a `<p>` with a hand-typed margin and the label "+ Add line", the
+       requisition screen a bare `<p>` labelled "Add a line". Both agree now.
        **GAP-3 RESOLVED: one line, then a convention.** The count is muted
        tabular text as a second child of the option — the treatment
        `.bo-data-table__selection-count` already ships — not a badge, which

@@ -175,9 +175,25 @@ const markup = `<table class="bo-data-table" data-row-edit>
         </RowEditActions>
       </tr>
     </template>
-    <p style="margin-block-start: var(--bo-space-3)">
+    {/* GAP-12 (roadmap 130.2): where "Add a line" lives, decided once.
+        Below the table, in the page's own stack — NOT in
+        .bo-data-table__toolbar, and not in a <p> carrying a hand-typed
+        margin, which is what this demo used to do and what a copy of it
+        independently reinvented in the ERP example. The stack primitive
+        already owns the spacing. */}
+    <div class="bo-cluster">
       <button class="bo-btn bo-btn--secondary" type="button" id="eg-add">+ Add line</button>
-    </p>
+    </div>
+    <p class="bo-u-text-muted"><strong>Where "Add a line" goes, and why it is
+    not in the toolbar.</strong> A row-adding action sits <em>below</em> the
+    table, in the page's own stack — because the row it creates is appended at
+    the end, and a control at the top produces a result the reader cannot see.
+    <code>.bo-data-table__toolbar</code> is for acting on rows that already
+    exist (bulk actions, filter, the selection count); this creates one that
+    does not. That is the whole rule, and it needs no new part: a
+    <a href={base + '/base/primitives'}>cluster</a> under the table, and the
+    section's own gap does the spacing. On a document entry screen this is the
+    most-pressed control on the page, so it is worth being consistent about.</p>
     <p class="bo-u-text-muted">Try it: the Qty cell above starts invalid (exceeds
     on-hand) — the message is a normal <code>.bo-form-field__message</code>, just
     at cell granularity. Pick an option in the Item combobox: it marks the row

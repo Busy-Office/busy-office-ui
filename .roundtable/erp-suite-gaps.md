@@ -356,7 +356,28 @@ two-channel rule already forces the answer to be more than a colour — the
 existing states pair a tint with a border accent, so an excluded row needs
 its own non-colour cue too.
 
-## GAP-12 — "Add a line" has no home
+## GAP-12 — RESOLVED 2026-08-23 — "Add a line" has no home
+
+**Verdict: it has one now, stated once. No new part, no new CSS.**
+
+**Below the table, in a cluster — never in `.bo-data-table__toolbar`.** The
+rule, and the reason it is decidable rather than a matter of taste: the
+toolbar acts on rows that ALREADY EXIST (bulk actions, filter, the selection
+count), while this creates one that does not — and the new row is appended at
+the END, so a control at the top produces a result the reader cannot see. The
+section's own gap does the spacing; the cluster primitive holds the button.
+
+**The gap's own prediction came true inside this repo.** It said "every
+consumer will independently decide where to put it — differently", and two
+already had: `/patterns/editable-grid` used
+`<p style="margin-block-start: var(--bo-space-3)">` with the label "+ Add
+line", and the requisition screen a bare `<p>` labelled "Add a line". Same
+control, two spellings, one hand-typed margin. Both now agree, and
+editable-grid documents the rule.
+
+*(original entry below)*
+
+## GAP-12 (original) — "Add a line" has no home
 
 **Hit on**: `p2p/requisition` (PR creation).
 **Have**: nothing. It is not part of `data-table`, not mentioned by
