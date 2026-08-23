@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 21:56
+Generated at: 2026-08-23 22:23
 
 ## Open items by slice
 
@@ -17,20 +17,30 @@ Generated at: 2026-08-23 21:56
   - 130.3 — module two, on the settled answers.
   - 130.4 — the remaining four modules.
   - 130.5 — wire the suite into CI
+- **Slice 131** (3 open)
+  - 131.1 — collapse to ONE live screen per RF page.
+  - 131.2 — make the frame read as a device.
+  - 131.3 — icons on buttons: grill it, don't assume it.
+- **Slice 132** (5 open)
+  - 132.1 — date entry has no home, and the deprecated one holds the seat.
+  - 132.2 — "Search Help": check `/patterns/value-help` first.
+  - 132.3 — calendar selection across 1/2/3 months.
+  - 132.4 — file open/save panel.
+  - 132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md` BEFORE anything else.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (785 iterations logged)
-  Standardize   6 / 4 Continue rounds since 2026-08-23 17:58   OVERDUE
+dispatch status — counter-triggered rules (787 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-23 22:21   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 131.1 — collapse to ONE live screen per RF page.
 - 130.2b — the P2P document flow, grilled 2026-08-23 (owner: "as per your recommendation").
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
@@ -38,8 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 18:09 · Continue · build · 127.5 touch attribute recipe on Forms · landed · 1ea0472
-- 2026-08-23 18:15 · Continue · build · 127.6 file-upload camera section; camera candidate closed · landed · c653b33
 - 2026-08-23 18:32 · Objective · grill · Objective grill 126-128: check-page-shape had never run against scan; 4 further corrections · landed · 2bf0e65
 - 2026-08-23 18:58 · Polish · build · scan blind-scored on re-entry: colour/interaction/fit 2→fixed (verdict now carried by frame, not hue) · landed · bfe9798
 - 2026-08-23 20:45 · Continue · build · 130.1 ERP suite P2P pilot — 7 framework gaps found and logged · landed · 28ccfc8
@@ -48,6 +56,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 21:35 · Continue · build · 130.2b P2P flow: PR entry + PR→PO conversion; 6 gaps; form-actions long-label wrap · landed · 04b06e2
 - 2026-08-23 21:35 · Meta · refusal · goods-receipt screens in the ERP example — already covered by the goods-receipt pattern and the three RF screens · refused · 04b06e2
 - 2026-08-23 21:35 · Meta · refusal · payment-run screens in the ERP example — select-and-run is bulk-actions, the unattended run is job-monitor · refused · 04b06e2
+- 2026-08-23 22:21 · Standardize · dry · 131.1 — one RF screen per page; the mirror now follows the docs theme; components-used reads the embed · landed · 5a0b511
+- 2026-08-23 22:23 · Roadmap · plan · 132 — owner wishlist triaged: date entry, search help, calendar months, file panel, list-to-list · triaged · 55c89da
 
 ## Sunset test
 

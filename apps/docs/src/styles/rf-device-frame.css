@@ -12,12 +12,116 @@
 
 /* Shared RF preview iframe chrome (Standardize 2026-08-23: goods-receipt.astro,
    rf-list.astro and rf-landing.astro each hand-rolled the identical inline
-   style for their 360x640 device-frame iframe). */
+   style for their 360x640 device-frame iframe). This is the SCREEN — the
+   handheld around it is below, and is added only where there is room. */
 .rf-device-frame {
   inline-size: var(--demo-rf-inline);
   block-size: 640px;
   border: 1px solid var(--bo-color-border-default);
   border-radius: var(--bo-radius-md);
+}
+
+/* ---------------------------------------------------------------------------
+   The handheld (roadmap 131.2). Owner: "why don't we make RF device like frame
+   so user can also visualise it."
+
+   Two rules govern the whole block:
+
+   1. NARROW STAYS AS IT SHIPPED. Measured before designing anything: at 390px
+      the docs column is 342px and the screen is 360px, so it already overhangs
+      its column and clears the viewport by 6px. There is no room for a bezel,
+      and no reason for one — a reader at 390px is holding the device the frame
+      exists to imagine. So the chrome is OFF by default and switched on by a
+      named container query, the framework's own mechanism.
+   2. NOTHING HERE IS CONTENT. Every part is aria-hidden and empty. If a part
+      ever needs to say something, it stops being decoration and belongs in the
+      caption instead.
+
+   The body colour is derived from the TEXT token, not from a background one.
+   That is deliberate: text is the one colour guaranteed to contrast with the
+   canvas in both themes, so the device reads as an object sitting ON the page
+   — dark grey on light, light grey on dark — with no theme fork to maintain
+   and no chance of a device that vanishes into a dark canvas. */
+.rf-device {
+  --rf-device-bezel: 0.75rem;
+  --rf-device-body: var(--bo-color-text-secondary);
+  inline-size: max-content;
+}
+
+/* The screen was a flex item of section.demo before it gained a wrapper;
+   as an inline-level iframe in a block it picks up a 3px line-box descender
+   under it. Measured (645px tall against 642px of box), not guessed. */
+.rf-device__screen {
+  display: block;
+}
+
+.rf-device__scanner,
+.rf-device__keys {
+  display: none;
+}
+
+@container bo-demo (min-width: 26rem) {
+  .rf-device {
+    display: grid;
+    justify-items: center;
+    gap: var(--rf-device-bezel);
+    padding: var(--rf-device-bezel);
+    background: var(--rf-device-body);
+    border-radius: 1.5rem;
+    box-shadow: var(--bo-shadow-md);
+  }
+
+  /* The scan head: emitter window and status LED. */
+  .rf-device__scanner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    inline-size: 100%;
+  }
+
+  .rf-device__window {
+    inline-size: 5rem;
+    block-size: 0.5rem;
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-palette-red-900);
+  }
+
+  .rf-device__led {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-palette-green-500);
+  }
+
+  /* The screen loses its own border: the bezel is the edge now. */
+  .rf-device__screen {
+    border: 0;
+    border-radius: var(--bo-radius-sm);
+  }
+
+  /* The chin: two hard keys either side of the scan trigger. */
+  .rf-device__keys {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    inline-size: 100%;
+  }
+
+  .rf-device__key {
+    inline-size: 2rem;
+    block-size: 0.625rem;
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-palette-gray-500);
+  }
+
+  .rf-device__trigger {
+    inline-size: 6rem;
+    block-size: 0.875rem;
+    border-radius: var(--bo-radius-full);
+    background: var(--bo-palette-gray-400);
+  }
 }
 
 /* A live screen (not an iframe) shown at handheld width inside a docs page —

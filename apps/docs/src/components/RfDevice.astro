@@ -1,0 +1,64 @@
+---
+/**
+ * A pattern's RF screen, shown inside a handheld the reader can recognise.
+ *
+ * Six pages embedded the same `<iframe class="rf-device-frame">` and the class
+ * carried a 1px border and a radius — accurate about the size, silent about
+ * what holds it. The owner asked for the frame to read as a device (roadmap
+ * 131.2), which matters more now that 131.1 made the mirror the ONLY screen on
+ * those pages: it is no longer "the small copy", it is the screen.
+ *
+ * The chrome is decorative and says so — `aria-hidden`, no text, no focus
+ * stop. The `<iframe title>` stays the only accessible name, and the screen
+ * inside is untouched: this frames the demo, it does not restyle it.
+ *
+ * It appears only when the enclosing `bo-demo` container is wide enough to
+ * hold 360px plus a bezel. Below that the reader is already holding a
+ * handheld, the chrome would buy nothing, and — measured — there are 6px of
+ * slack at 390px before the page scrolls sideways. So the narrow case renders
+ * exactly what shipped before: the screen, its border, nothing else.
+ */
+interface Props {
+  /** Already base-prefixed by the caller, same as the old iframe src. */
+  src: string;
+  /** The iframe's accessible name. */
+  title: string;
+}
+const { src, title } = Astro.props;
+---
+<div class="rf-device">
+  <div class="rf-device__scanner" aria-hidden="true">
+    <span class="rf-device__window"></span>
+    <span class="rf-device__led"></span>
+  </div>
+  <iframe class="rf-device__screen rf-device-frame" src={src} title={title}></iframe>
+  <div class="rf-device__keys" aria-hidden="true">
+    <span class="rf-device__key"></span>
+    <span class="rf-device__trigger"></span>
+    <span class="rf-device__key"></span>
+  </div>
+</div>
+
+<script>
+  /* The mirror is a separate document, so its own PrefBootstrap resolves the
+     theme at load (131.1) — correct on arrival, and correct without this
+     script. What it cannot see is the reader pressing the theme button
+     AFTERWARDS: nothing re-runs in an already-loaded iframe, and the device
+     would sit there in yesterday's theme while the page around it flipped.
+     Same-origin, so the parent can just tell it. */
+  const frames = document.querySelectorAll('.rf-device__screen');
+  if (frames.length) {
+    const push = () => {
+      const theme = document.documentElement.dataset.theme;
+      for (const f of frames) {
+        const doc = (f as HTMLIFrameElement).contentDocument;
+        if (doc && theme) doc.documentElement.dataset.theme = theme;
+      }
+    };
+    new MutationObserver(push).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    for (const f of frames) f.addEventListener('load', push);
+  }
+</script>

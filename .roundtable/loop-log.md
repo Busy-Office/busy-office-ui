@@ -791,3 +791,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 21:35 · Continue · build · 130.2b P2P flow: PR entry + PR→PO conversion; 6 gaps; form-actions long-label wrap · landed · 04b06e2
 - 2026-08-23 21:35 · Meta · refusal · goods-receipt screens in the ERP example — already covered by the goods-receipt pattern and the three RF screens · refused · 04b06e2
 - 2026-08-23 21:35 · Meta · refusal · payment-run screens in the ERP example — select-and-run is bulk-actions, the unattended run is job-monitor · refused · 04b06e2
+- 2026-08-23 22:21 · Standardize · dry · 131.1 — one RF screen per page; the mirror now follows the docs theme; components-used reads the embed · landed · 5a0b511
+- 2026-08-23 22:23 · Roadmap · plan · 132 — owner wishlist triaged: date entry, search help, calendar months, file panel, list-to-list · triaged · 55c89da
