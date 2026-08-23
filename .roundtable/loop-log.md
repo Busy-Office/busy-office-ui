@@ -764,3 +764,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 15:32 · Explore · explore · 125.1: 0.4.0 dogfood found 3 real grouped-number defects, fixed red-first, E2E-proven; wiring graduated · landed · 1f75dab
 - 2026-08-23 15:32 · Objective · grill · 125.2: mobile/web ERP gap audit — 7 evidence-graded candidates for owner pick · logged · 1f75dab
 - 2026-08-23 15:45 · Objective · grill · RF-coverage grill Round 1 settled (scope/boundary/compose-first/size-budget); Round 2 grounded, awaiting references · logged · ee82970
+- 2026-08-23 15:49 · Objective · grill · 126: RF grill closed (Round 2 evidence verdicts); References-are-floors installed as Objective principle · logged · f6c5e76
+- 2026-08-23 15:49 · Meta · refusal · on-screen offline badge on RF screens (infrastructure, refuted by sources) · refused · f6c5e76
+- 2026-08-23 15:49 · Meta · refusal · progress-counter RF element (no two-source support) · refused · f6c5e76
+- 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
