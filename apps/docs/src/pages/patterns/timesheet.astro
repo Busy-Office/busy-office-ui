@@ -82,11 +82,15 @@ const markup = `<!-- The column axis is the PERIOD's days and does not change;
 
   <section class="demo">
     <h2>The screen — one week</h2>
-    <div class="bo-cluster" style="margin-block-end: var(--bo-space-3)">
-      <strong>Week 34 · 17–23 August 2026</strong>
-      <span class="bo-badge bo-badge--warning">Draft</span>
-      <button class="bo-btn bo-btn--secondary" type="button" style="margin-inline-start: auto">Copy last week</button>
-      <button class="bo-btn" type="button">Submit for approval</button>
+    <div class="bo-cluster bo-cluster--split" style="margin-block-end: var(--bo-space-3)">
+      <div class="bo-cluster">
+        <strong>Week 34 · 17–23 August 2026</strong>
+        <span class="bo-badge bo-badge--warning">Draft</span>
+      </div>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--secondary" type="button">Copy last week</button>
+        <button class="bo-btn" type="button">Submit for approval</button>
+      </div>
     </div>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">

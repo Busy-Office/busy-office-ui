@@ -28,6 +28,13 @@ interface Props {
 const { slug } = Astro.props;
 
 const day = (n: number, attrs = '') => `<span class="bo-calendar__day"${attrs}>${n}</span>`;
+/* Same precedent as day(): repeated shells within ONE fragment become a
+   helper, not a docs class — fragments stay strings either way, a class
+   would couple them to tile-preview.css, and check-markup validates only
+   bo-* classes so it could never gate one. */
+const tile = (icon: string, label: string) => `<span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--${icon}" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>${label}</span></span>`;
+const card = (text: string) => `<span class="bo-widget"><span class="bo-widget__body">${text}</span></span>`;
+const stat = (label: string, value: string) => `<span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">${label}</span><span class="bo-stat__value">${value}</span></span></span>`;
 const PREVIEWS: Record<string, { scale: number; html: string }> = {
   'login': { scale: 0.8, html: `
     <div class="bo-widget" style="max-inline-size: 15rem; margin-inline: auto">
@@ -39,12 +46,12 @@ const PREVIEWS: Record<string, { scale: number; html: string }> = {
     </div>` },
   'app-launch': { scale: 0.8, html: `
     <div class="bo-widget-grid" style="--bo-widget-min: 6rem">
-      <span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--cart" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>Purchasing</span></span>
-      <span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--box" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>Warehouse</span></span>
-      <span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--chart" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>Reports</span></span>
+      ${tile('cart', 'Purchasing')}
+      ${tile('box', 'Warehouse')}
+      ${tile('chart', 'Reports')}
     </div>` },
   'wizard': { scale: 0.75, html: `
-    <ol class="bo-stepper" style="list-style: none; padding: 0">
+    <ol class="bo-stepper">
       <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker">✓</span><span class="bo-stepper__label">Header</span></li>
       <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker">✓</span><span class="bo-stepper__label">Lines</span></li>
       <li class="bo-stepper__step"><span class="bo-stepper__marker">3</span><span class="bo-stepper__label">Approvers</span></li>
@@ -60,12 +67,12 @@ const PREVIEWS: Record<string, { scale: number; html: string }> = {
     </div>` },
   'kanban': { scale: 0.7, html: `
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bo-space-2); max-inline-size: 26rem">
-      <div class="bo-stack bo-stack--tight"><span class="bo-badge">Draft · 2</span><span class="bo-widget"><span class="bo-widget__body">PO-88214</span></span><span class="bo-widget"><span class="bo-widget__body">PO-88215</span></span></div>
-      <div class="bo-stack bo-stack--tight"><span class="bo-badge bo-badge--warning">In approval · 1</span><span class="bo-widget"><span class="bo-widget__body">PO-88213</span></span></div>
-      <div class="bo-stack bo-stack--tight"><span class="bo-badge bo-badge--success">Released · 1</span><span class="bo-widget"><span class="bo-widget__body">PO-88209</span></span></div>
+      <div class="bo-stack bo-stack--tight"><span class="bo-badge">Draft · 2</span>${card('PO-88214')}${card('PO-88215')}</div>
+      <div class="bo-stack bo-stack--tight"><span class="bo-badge bo-badge--warning">In approval · 1</span>${card('PO-88213')}</div>
+      <div class="bo-stack bo-stack--tight"><span class="bo-badge bo-badge--success">Released · 1</span>${card('PO-88209')}</div>
     </div>` },
   'approval': { scale: 0.78, html: `
-    <ol class="bo-timeline" style="list-style: none; padding: 0">
+    <ol class="bo-timeline">
       <li class="bo-timeline__step" data-state="done"><span class="bo-timeline__marker">✓</span><div><div class="bo-timeline__title">Submitted</div><div class="bo-timeline__meta">R. Vance</div></div></li>
       <li class="bo-timeline__step" data-state="current"><span class="bo-timeline__marker">●</span><div><div class="bo-timeline__title">Cost-center approval</div><div class="bo-timeline__meta">waiting on M. Okafor</div></div></li>
       <li class="bo-timeline__step" data-state="pending"><span class="bo-timeline__marker">3</span><div><div class="bo-timeline__title">Finance release</div></div></li>
@@ -84,9 +91,9 @@ const PREVIEWS: Record<string, { scale: number; html: string }> = {
     </div>` },
   'reporting-dashboard': { scale: 0.8, html: `
     <div class="bo-widget-grid" style="--bo-widget-min: 8rem">
-      <span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">Open invoices</span><span class="bo-stat__value">1,284</span></span></span>
-      <span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">Overdue</span><span class="bo-stat__value">17</span></span></span>
-      <span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">Avg. approval</span><span class="bo-stat__value">2.4d</span></span></span>
+      ${stat('Open invoices', '1,284')}
+      ${stat('Overdue', '17')}
+      ${stat('Avg. approval', '2.4d')}
     </div>` },
   'comparison': { scale: 0.72, html: `
     <table class="bo-data-table" data-density="compact" style="max-inline-size: 24rem">

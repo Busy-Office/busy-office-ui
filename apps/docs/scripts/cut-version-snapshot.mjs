@@ -1,4 +1,8 @@
 // Release-flow step (Slice 20 item 3): cut a versioned docs snapshot.
+// SNAPSHOTS THE TREE IT RUNS IN — run it at release time. A retroactive
+// snapshot must run from a worktree checked out at that version's tag,
+// or later docs get labelled as the old version (0.3.0 was cut that way
+// on 2026-08-23, 60+ commits after its tag).
 //   node scripts/cut-version-snapshot.mjs <version>
 // Builds the docs with the snapshot's Pages base, strips the pagefind
 // index (search stays a latest-docs feature — 1MB/version saved), and

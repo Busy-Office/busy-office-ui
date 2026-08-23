@@ -65,10 +65,14 @@ const markup = `<!-- One row per BANK line: statement side | the system's propos
 
   <section class="demo">
     <h2>The screen</h2>
-    <div class="bo-cluster" style="margin-block-end: var(--bo-space-3)">
-      <strong>Bank reconciliation — Operating · August</strong>
-      <span class="bo-badge bo-badge--warning">Unmatched difference: <span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,410.50</span></span></span>
-      <button class="bo-btn" type="button" style="margin-inline-start: auto" disabled>Reconcile</button>
+    {/* The documented header shape (record-detail's own comment): --split
+        pushes the trailing action group; no margin-auto one-off. */}
+    <div class="bo-cluster bo-cluster--split" style="margin-block-end: var(--bo-space-3)">
+      <div class="bo-cluster">
+        <strong>Bank reconciliation — Operating · August</strong>
+        <span class="bo-badge bo-badge--warning">Unmatched difference: <span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,410.50</span></span></span>
+      </div>
+      <button class="bo-btn" type="button" disabled>Reconcile</button>
     </div>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
