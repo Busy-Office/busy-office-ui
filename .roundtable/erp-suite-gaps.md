@@ -46,7 +46,43 @@ two-level `sidebar-nav` variant. Refusing is also a real answer — "compose two
 `sidebar-nav`s inside a `bo-cluster`" may be enough, and if so the gap is a
 DOCS gap, not a component one. Decide before building module two.
 
-## GAP-2 — nothing documents "related documents"
+## GAP-2 — DECIDED 2026-08-23 — nothing documents "related documents"
+
+**Verdict: RETHINK → a documented composition. No new component, no new CSS.**
+The shape is **`bo-timeline`, ordered by lifecycle, one step per document TYPE
+with that type's instances as links inside the step**, `data-state` carrying
+done / current / rejected / pending and `aria-current="step"` on the current
+one. Proved in `p2p/purchase-order` and `p2p/vendor-invoice` — two independent
+compositions, which is the Objective's reusability bar — with the example's
+no-CSS rule enforcing the "no new CSS" half rather than my asserting it.
+
+**Why the chain and the related list are ONE surface** (the owner's Q16, tested
+rather than assumed): group the related documents by type in lifecycle order
+and mark the current one, and you have the chain. Rendered as two blocks, the
+same records appear twice on one screen.
+
+**Why not `bo-stepper`**, which is also an ordered chain with a current step:
+it is horizontal and its steps share the row equally, so a step holding three
+invoice links breaks it — and a PO with several receipts is the normal case,
+not the edge. Vertical stacking is the whole reason `bo-timeline` fits.
+
+**Why not the `bo-kv` list it replaces**: a kv row is a fact ABOUT this record;
+these are navigable records with their own state. That was the original
+complaint and it stands.
+
+**Cost, stated**: the screen now carries two `bo-timeline`s (Document flow,
+Approval). They are the same abstraction — an ordered chain with state — so
+this is "one component, many settings" working as intended, but a reader could
+conflate them at a glance. What separates them is the heading and the fact
+that document-flow titles are links. Watch this on module two.
+
+**Still to do**: document it (a section on `/patterns/object-page`), or twelve
+screens will invent twelve versions — which is what this gap said in the first
+place. Queued as ROADMAP 130.2c.
+
+*(original entry below)*
+
+## GAP-2 (original) — nothing documents "related documents"
 
 **Hit on**: `p2p/purchase-order`, `p2p/vendor-invoice`.
 **Wanted**: the block every document screen in every ERP has — what this
@@ -250,6 +286,32 @@ case (107) red-proved by stripping the rule from the built CSS.
 Objective's less-for-more test. The general form would be dropping
 `white-space: nowrap` from `.bo-btn` itself, which changes every button on
 every screen and needs its own grill — recorded, not guessed at.
+
+## GAP-14 — a chain step can be PARTIAL, and `data-state` has no word for it
+
+**Hit on**: `p2p/purchase-order` and `p2p/vendor-invoice` — both, which is what
+makes it a gap rather than one screen's awkwardness. Found by looking at the
+rendered screen, not by a gate: every gate was green with the defect present.
+**What happened**: building GAP-2's document flow, the goods-receipt step is
+*partially* complete — 1 of 2 lines received. `bo-timeline`'s four states are
+`done`, `current`, `pending`, `rejected`. Marking it `done` paints a green tick
+over the words "1 of 2", which is the screen contradicting itself; marking it
+`pending` says nothing has started, which is also false.
+**Compromised to**: `data-state="pending"` with a half-filled marker glyph
+(`◐`), so the glyph carries what the state cannot. It reads correctly and it
+costs nothing, but the *state* is still wrong underneath — a consumer filtering
+on `data-state` sees "not started".
+**Why it is not just this screen**: partial completion is everywhere in ERP —
+partial receipt, partial payment, partial delivery, partial allocation. Any
+chain that models real documents will hit it on its second screen, as this one
+did.
+**Shape of the fix (not decided)**: a fifth `data-state` value, or the honest
+refusal that a chain step is binary and partial belongs in the meta text. The
+two-channel rule already forces any new state to bring a non-colour cue, and
+the marker glyph is that cue — which is a point in favour of it being cheap.
+Grill it before module two, alongside GAP-11's excluded-row state, since both
+ask the same question: *does this component need one more state, or is the
+state list deliberately short?*
 
 ---
 

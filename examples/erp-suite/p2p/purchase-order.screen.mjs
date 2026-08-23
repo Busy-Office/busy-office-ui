@@ -72,18 +72,55 @@ export const render = () =>
       </table>
     </div>
 
-    <h2>Related documents</h2>
-    <!-- GAP-2. A document screen's whole job is to say what this document is
-         connected to: the requisition it came from, the receipts against it,
-         the invoices matched to it. The framework has NO surface for this —
-         no component, no pattern, not a line of guidance. Rendered here as a
-         hand-rolled kv list, which is the wrong shape: these are navigable
-         records with their own status, not facts about this one. -->
-    <dl class="bo-kv bo-kv--rows">
-      <div><dt>Requisition</dt><dd><a href="/p2p/purchase-orders.html">REQ-40118</a> · approved</dd></div>
-      <div><dt>Goods receipts</dt><dd><a href="/p2p/purchase-orders.html">GR-4471</a> · partial, 1 of 2</dd></div>
-      <div><dt>Vendor invoices</dt><dd><a href="/p2p/vendor-invoice.html">INV-55710</a> · <span class="bo-badge bo-badge--danger">price variance</span></dd></div>
-    </dl>
+    <h2>Document flow</h2>
+    <!-- GAP-2 (merged with GAP-9), DECIDED 2026-08-23: bo-timeline, ordered by
+         lifecycle, one step per document TYPE with that type's instances as
+         links inside the step. No new component and no new CSS — which this
+         file proves, because it may not add any.
+
+         Why the chain and the related list are ONE surface: grouping the
+         related documents by type in lifecycle order and marking the current
+         one IS the chain. Rendered separately, the same records appear twice.
+
+         Why not the kv list this replaced: a kv row is a FACT ABOUT this
+         record; these are navigable records with their own state. Why not
+         bo-stepper, which is also an ordered chain with a current step: it is
+         horizontal and its steps each take an equal share of the row, so a
+         step holding three invoice links breaks it — and a PO with several
+         receipts is the normal case, not the edge one. Vertical stacking is
+         the whole reason this fits. -->
+    <ol class="bo-timeline">
+      <li class="bo-timeline__step" data-state="done">
+        <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+        <p class="bo-timeline__title">Requisition — <a href="/p2p/requisitions.html">REQ-40118</a></p>
+        <p class="bo-timeline__meta">Approved 2026-08-19 · M. Osei</p>
+      </li>
+      <li class="bo-timeline__step" data-state="current" aria-current="step">
+        <span class="bo-timeline__marker" aria-hidden="true">●</span>
+        <p class="bo-timeline__title">Purchase order — PO-88213 <span class="bo-badge">you are here</span></p>
+        <p class="bo-timeline__meta">Pending approval · $44,560.00</p>
+      </li>
+      <!-- GAP-14, found by rendering this: the step is PARTIAL and data-state
+           has no word for it. "done" paints a green tick over "1 of 2", which
+           is the screen telling a small lie; "pending" says nothing started.
+           Compromised to pending + a half-filled marker, so the glyph carries
+           what the state cannot — and logged rather than papered over. -->
+      <li class="bo-timeline__step" data-state="pending">
+        <span class="bo-timeline__marker" aria-hidden="true">◐</span>
+        <p class="bo-timeline__title">Goods receipts — <a href="/p2p/purchase-orders.html">GR-4471</a>, <a href="/p2p/purchase-orders.html">GR-4472</a></p>
+        <p class="bo-timeline__meta">Partial — 1 of 2 lines received</p>
+      </li>
+      <li class="bo-timeline__step" data-state="rejected">
+        <span class="bo-timeline__marker" aria-hidden="true">!</span>
+        <p class="bo-timeline__title">Vendor invoice — <a href="/p2p/vendor-invoice.html">INV-55710</a></p>
+        <p class="bo-timeline__meta">Blocked · price variance $1,240.00 over the PO</p>
+      </li>
+      <li class="bo-timeline__step" data-state="pending">
+        <span class="bo-timeline__marker" aria-hidden="true">○</span>
+        <p class="bo-timeline__title">Payment</p>
+        <p class="bo-timeline__meta">Not scheduled — the invoice block must clear first</p>
+      </li>
+    </ol>
 
     <h2>Approval</h2>
     <ol class="bo-timeline">

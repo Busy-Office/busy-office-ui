@@ -87,12 +87,37 @@ export const render = () =>
       </table>
     </div>
 
-    <h2>Related documents</h2>
-    <dl class="bo-kv bo-kv--rows">
-      <div><dt>Purchase order</dt><dd><a href="/p2p/purchase-order.html">PO-88213</a> · pending approval</dd></div>
-      <div><dt>Goods receipt</dt><dd><a href="/p2p/purchase-orders.html">GR-4471</a> · partial, 1 of 2</dd></div>
-      <div><dt>Posts to</dt><dd>Finance · journal entry (created on release)</dd></div>
-    </dl>
+    <h2>Document flow</h2>
+    <!-- GAP-2's decided shape, second independent use — the reusability test
+         the Objective sets (>=2 real compositions). Same chain, different
+         position in it: this screen is the invoice, so the PO is done above
+         and the payment is pending below. Note the LAST step is a document in
+         another module (Finance), which is exactly the cross-module link the
+         suite is for — and it stays a plain step, not a special case. -->
+    <ol class="bo-timeline">
+      <li class="bo-timeline__step" data-state="done">
+        <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+        <p class="bo-timeline__title">Purchase order — <a href="/p2p/purchase-order.html">PO-88213</a></p>
+        <p class="bo-timeline__meta">Pending approval · $44,560.00</p>
+      </li>
+      <!-- GAP-14 again, on the second screen — which is what makes it a gap
+           rather than one screen's awkwardness. -->
+      <li class="bo-timeline__step" data-state="pending">
+        <span class="bo-timeline__marker" aria-hidden="true">◐</span>
+        <p class="bo-timeline__title">Goods receipt — <a href="/p2p/purchase-orders.html">GR-4471</a></p>
+        <p class="bo-timeline__meta">Partial — 1 of 2 lines received</p>
+      </li>
+      <li class="bo-timeline__step" data-state="current" aria-current="step">
+        <span class="bo-timeline__marker" aria-hidden="true">●</span>
+        <p class="bo-timeline__title">Vendor invoice — INV-55710 <span class="bo-badge">you are here</span></p>
+        <p class="bo-timeline__meta">Blocked · price variance $1,240.00 over the PO</p>
+      </li>
+      <li class="bo-timeline__step" data-state="pending">
+        <span class="bo-timeline__marker" aria-hidden="true">○</span>
+        <p class="bo-timeline__title">Journal entry — Finance</p>
+        <p class="bo-timeline__meta">Created on release · not yet posted</p>
+      </li>
+    </ol>
 
     <div class="bo-form-actions">
       <button class="bo-btn" type="button">Release for payment</button>

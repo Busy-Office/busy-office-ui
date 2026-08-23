@@ -509,7 +509,24 @@ reads clean while telling us nothing.
        them — GAP-6 and GAP-7 — were found by a SCREENSHOT after all three
        gates reported the pilot clean, which is the argument for the
        screenshot step in the quality bar, made again.
-2. [~] **130.2 — promote the gaps into decisions.** GAP-5 and GAP-7 landed
+2. [~] **130.2 — promote the gaps into decisions.** **GAP-2 (merged with
+       GAP-9) DECIDED 2026-08-23: RETHINK → a documented composition.** The
+       shape is `bo-timeline` ordered by lifecycle — one step per document
+       TYPE, that type's instances as links inside the step, `data-state`
+       carrying done/current/rejected/pending and `aria-current="step"` on
+       the current one. Proved on `p2p/purchase-order` and
+       `p2p/vendor-invoice` (two independent compositions = the Objective's
+       reusability bar) with **zero new CSS**, which the example's own
+       no-CSS gate enforces rather than my asserting it. `bo-stepper` was
+       the other candidate and loses on a normal case, not an edge one: it
+       is horizontal with equal-share steps, so a step holding three invoice
+       links breaks it. Full reasoning in the gap ledger.
+       **Building it surfaced GAP-14**: a chain step can be PARTIAL (1 of 2
+       received) and `data-state` has no word for it — `done` paints a tick
+       over "1 of 2", `pending` says nothing started. Compromised to a
+       half-filled marker glyph and logged; grill it with GAP-11, since both
+       ask whether the component needs one more state.
+       GAP-5 and GAP-7 landed
        2026-08-23, both accepted without a grill because neither is a
        judgement call: a button that vanishes at 390 and a copyable sample
        that produces a page with no `<h1>` are defects, not design options.
@@ -540,6 +557,16 @@ reads clean while telling us nothing.
        `bo-app-shell__main` collapses a scrollable table container to its
        header row — two correct primitives composing into silent data loss,
        and the broken composition is the one a careful reader tries first).
+2c. [ ] **130.2c — document GAP-2's shape, or twelve screens invent twelve
+       versions.** That is the gap's own words and the reason a decision
+       alone does not close it. *Accept*: a "Document flow" section on
+       `/patterns/object-page` carrying the composition, when to use it, and
+       the two rules the build surfaced — the current step gets
+       `aria-current="step"`, and a step's instances are links inside the
+       step rather than a second list; plus the honest note that a screen
+       may carry two timelines (flow and approval) and what distinguishes
+       them. Same page-shape and wrong-choice gates as any pattern edit.
+
 3. [ ] **130.2b — the P2P document flow, grilled 2026-08-23 (owner: "as per
        your recommendation").** Question was whether P2P should carry
        PR → PO → GR → Vendor invoice → Payment with sub-functions and
