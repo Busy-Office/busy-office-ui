@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 04:38
+Generated at: 2026-08-24 04:48
 
 ## Open items by slice
 
@@ -20,16 +20,12 @@ Generated at: 2026-08-24 04:38
   - 132.3 — calendar selection across 1/2/3 months.
   - 132.4 — file open/save panel.
   - 132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md` BEFORE anything else.
-- **Slice 134** (3 open)
-  - 134.1 — fix the key, and prove the dark half is dark.
-  - 134.2 — re-baseline deliberately, never blind.
-  - 134.3 — CI, or delete it.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (824 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-24 03:53   ok
+dispatch status — counter-triggered rules (825 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-24 03:53   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -42,7 +38,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
 - 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199
 - 2026-08-24 01:45 · Standardize · dry · target-size: my 2.5.8 claim overstated non-conformance; corrected in 5 places, cell-link added to the gate's sweep and red-proved · landed · 86a0bfd
 - 2026-08-24 01:53 · Continue · build · 135.2 part 1 — last two duplicated RF screens removed; check-page-shape now gates the IMPORT, red-proved · landed · d46316b
@@ -52,6 +47,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 03:53 · Standardize · dry · scroll-regions: the allowed-to-overflow list existed in three spellings across two gates; consolidated, pre restored (122 -> 732 regions) · landed · 627ada3
 - 2026-08-24 04:18 · Continue · build · 133.2 — object-page spy verified for all 5 sections at both widths; the old check sampled one and had lost #flow · landed · b7f4464
 - 2026-08-24 04:38 · Continue · bug · 133.3 — GAP-6 fixed: .bo-stack > * flex-shrink 0; reproduced precisely (0 vs 200px), blast radius 0 of 3346 · landed · da7284f
+- 2026-08-24 04:48 · Continue · build · 134.1/134.2 — visual gate: theme key fixed and asserted per shot, baselines re-attributed and regenerated; 134.3 is an owner call with three costed options · landed · a25c780
 
 ## Sunset test
 

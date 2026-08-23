@@ -569,7 +569,41 @@ because three of the five turn out to be partly true already — and one of
 them was **refused with a written grill three days ago**, which the queue
 must not silently re-open.
 
-1. [ ] **132.1 — date entry has no home, and the deprecated one holds the
+1. [x] **132.1 — DONE 2026-08-24. Verdict: REFUSE a component, ACCEPT a
+       section and a sidebar entry.**
+
+       **What native already does, measured**: a `type="date"` with
+       `.bo-input` renders at exactly the same height as a text input at all
+       three densities — 28 / 36 / 44px — so the "matches every other
+       control" claim is checked, not asserted. It also brings the locale's
+       field order, the platform picker, keyboard segment entry and
+       `min`/`max` validation, every one of which an invented widget would
+       re-implement and get wrong in at least one locale.
+
+       **What it cannot do turned out not to be date entry.** Fiscal periods
+       ("P3 2026") are a different field with their own vocabulary — a date
+       picker is the wrong control and a select/combobox over the period list
+       is right. Ranges are two fields with the second's `min` set from the
+       first, one line of consumer code. Neither justifies CSS.
+
+       **So the gap was never surface, it was discoverability** — the same
+       shape as GAP-10. The field matrix on `/concepts/design-language`
+       already said "Native `<input type="date">` in a form field — nothing
+       to add", but `/components/form` contained **zero** date inputs and the
+       only page mentioning date entry was the one marked deprecated.
+       `/components/form#dates` now shows date, datetime-local and time with
+       the ERP-shaped attributes (a fenced posting period, a quarter-hour
+       step), and the Data-input group links straight to it.
+
+       **The deprecated page moved to Reference rather than out of the
+       sidebar.** Removing it turned `check-page-shape` red — "date.astro: no
+       sidebar entry" — and the gate is right: an unlisted component page is
+       unreachable, not retired. Reference is where a superseded surface
+       belongs, which satisfies the owner's "remove it from Values" without
+       orphaning a page consumers of the published package still land on.
+
+       *(original triage below)*
+       **132.1 (original) — date entry has no home, and the deprecated one holds the
        seat.** Facts: `/components/date` is a **display** component —
        deprecated 2026-08-19 (roadmap 45.3), scored 1 of 12 (the framework's
        lowest), used by no screen, kept only because the package is

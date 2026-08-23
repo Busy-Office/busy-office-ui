@@ -830,3 +830,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 03:53 · Standardize · dry · scroll-regions: the allowed-to-overflow list existed in three spellings across two gates; consolidated, pre restored (122 -> 732 regions) · landed · 627ada3
 - 2026-08-24 04:18 · Continue · build · 133.2 — object-page spy verified for all 5 sections at both widths; the old check sampled one and had lost #flow · landed · b7f4464
 - 2026-08-24 04:38 · Continue · bug · 133.3 — GAP-6 fixed: .bo-stack > * flex-shrink 0; reproduced precisely (0 vs 200px), blast radius 0 of 3346 · landed · da7284f
+- 2026-08-24 04:48 · Continue · build · 134.1/134.2 — visual gate: theme key fixed and asserted per shot, baselines re-attributed and regenerated; 134.3 is an owner call with three costed options · landed · a25c780

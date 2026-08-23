@@ -43,6 +43,24 @@ const fieldsRow = `<form class="bo-form-row" novalidate>
   </div>
 </form>`;
 
+const dates = `<form class="bo-form-row" novalidate>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="d-need">Needed by</label>
+    <input class="bo-input" id="d-need" type="date" value="2026-09-15"
+        min="2026-08-24" max="2026-12-31" />
+    <p class="bo-form-field__hint">min/max fence the fiscal window — the browser enforces it</p>
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="d-cut">Cut-off</label>
+    <input class="bo-input" id="d-cut" type="datetime-local" value="2026-09-15T17:00" />
+  </div>
+  <div class="bo-form-field">
+    <label class="bo-form-field__label" for="d-shift">Shift start</label>
+    <input class="bo-input" id="d-shift" type="time" value="06:00" step="900" />
+    <p class="bo-form-field__hint">step="900" — quarter hours only</p>
+  </div>
+</form>`;
+
 const reqDisabled = `<form class="bo-form-row" novalidate>
   <div class="bo-form-field">
     <label class="bo-form-field__label" for="req-native">Vendor</label>
@@ -199,6 +217,35 @@ const fieldMarkup = `<div class="bo-form-field">
     opens with &ldquo;There is a problem&rdquo;, and document-level strips say
     what is still possible — each stated on its own page.)</p>
   </section>
+  <section class="demo" id="dates">
+    <h2>Dates and times</h2>
+    <Demo code={dates} />
+    <p class="bo-u-text-muted"><strong>The framework adds nothing here, and
+    that is the answer rather than an omission.</strong> A native
+    <code>type="date"</code> already brings the locale's field order, the
+    platform's own picker, keyboard segment entry, and validation from
+    <code>min</code>/<code>max</code> — all of which an invented widget would
+    have to re-implement and would get wrong in at least one locale. Put
+    <code>.bo-input</code> on it and it matches every other control on the
+    row: measured against a text input at 28/36/44px for compact, comfortable
+    and spacious — identical at all three.</p>
+    <p class="bo-u-text-muted">The ERP-shaped parts are attributes, not CSS.
+    <code>min</code>/<code>max</code> fence a posting period, so the browser
+    refuses a date outside it. <code>step</code> on a time field quantises to
+    the shift grid. For a <strong>range</strong>, use two fields and set the
+    second's <code>min</code> from the first — one line of your own code.
+    <strong>Not for a fiscal period</strong> ("P3 2026"): that is a different
+    field with its own vocabulary and a date picker is the wrong control for
+    it — use a select or a
+    <a href={base + '/components/combobox'}>combobox</a> over your period
+    list.</p>
+    <p class="bo-u-text-muted">To <em>display</em> a date rather than take
+    one, the contract is on <a href={base + '/components/amount'}>Amount</a> —
+    text plus a worded status badge, never colour alone. The older
+    <a href={base + '/components/date'}>Date display component</a> is
+    deprecated and kept only until the next major.</p>
+  </section>
+
   <section class="demo">
     <h2>Required & disabled</h2>
     <Demo code={reqDisabled} />

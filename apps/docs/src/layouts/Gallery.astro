@@ -77,6 +77,7 @@ const sections = [
       { href: '/components/money', label: 'Money' },
       { href: '/components/quantity', label: 'Quantity' },
       { href: '/components/tag-input', label: 'Tag input' },
+      { href: '/components/form#dates', label: 'Date & time' },
       { href: '/components/file-upload', label: 'File upload' },
       { href: '/components/richtext', label: 'Rich text' },
     ],
@@ -98,7 +99,6 @@ const sections = [
     items: [
       { href: '/components/amount', label: 'Amount' },
       { href: '/components/kv', label: 'Key-value facts' },
-      { href: '/components/date', label: 'Date (deprecated)' },
     ],
   },
   {
@@ -154,6 +154,11 @@ const sections = [
       { href: '/reference/events', label: 'Intent-event index' },
       { href: '/reference/classes', label: 'Class index' },
       { href: '/reference/acr', label: 'Accessibility Conformance Report' },
+      /* Deprecated surfaces live here, not in the live component groups: the
+         owner asked for the Date display component out of "Values" (135/132.1)
+         and check-page-shape rightly refuses to let a component page have no
+         entry at all — an unlisted page is unreachable, not retired. */
+      { href: '/components/date', label: 'Date display (deprecated)' },
     ],
   },
 ];
