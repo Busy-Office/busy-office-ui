@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 15:22
+Generated at: 2026-08-23 15:32
 
 ## Open items by slice
 
@@ -16,9 +16,9 @@ Generated at: 2026-08-23 15:22
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (755 iterations logged)
+dispatch status — counter-triggered rules (757 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-23 14:38   ok
-  Objective     0 / 3 slices          since 2026-08-23 13:38   ok
+  Objective     0 / 3 slices          since 2026-08-23 15:32   ok
 ```
 
 ## Owner-blocked
@@ -30,8 +30,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 12:15 · Continue · bug · 124: RTL flip for the tone bar (gate was blind to inset box-shadow) + when-to-use guidelines + comparison matrix re-marked by weight · landed · 098d026
-- 2026-08-23 12:33 · Polish · tidy · Polish rounds 2-5: avatar/badge/byline/calendar wrong-choice clauses, blind-scored 2->3 · landed · bd8f9f0
 - 2026-08-23 12:45 · Polish · tidy · Polish rounds 6-9: dashboard/data-table/icon/inline-editing wrong-choice clauses, blind-scored · landed · 8287236
 - 2026-08-23 13:00 · Polish · tidy · Polish rounds 10-13: navbar/pagination/progress/sidebar-nav wrong-choice clauses, blind-scored · landed · d9dfa5e
 - 2026-08-23 13:33 · Polish · tidy · Polish rounds 14-18: queue dry — 36/37 pages carry the wrong-choice clause · landed · 2a47d4e
@@ -40,6 +38,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 14:15 · Roadmap · plan · 112.3: protocol owner-confirmed, pilot scaffold created (briefs remain owner-authored) · triaged · e58ea3c
 - 2026-08-23 14:23 · Continue · build · 0.4.0 released (grouped numbers + RTL fix); 0.3.0 docs snapshot cut from the tag, switcher offers three versions · released · 4669b23
 - 2026-08-23 14:38 · Standardize · tidy · Sweep of today's 4 rounds: redundant resets, header idiom converged on --split, preview helpers, snapshot-script doc · landed · efdeb8a
+- 2026-08-23 15:32 · Explore · explore · 125.1: 0.4.0 dogfood found 3 real grouped-number defects, fixed red-first, E2E-proven; wiring graduated · landed · 1f75dab
+- 2026-08-23 15:32 · Objective · grill · 125.2: mobile/web ERP gap audit — 7 evidence-graded candidates for owner pick · logged · 1f75dab
 
 ## Sunset test
 

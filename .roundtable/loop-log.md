@@ -761,3 +761,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 14:15 · Roadmap · plan · 112.3: protocol owner-confirmed, pilot scaffold created (briefs remain owner-authored) · triaged · e58ea3c
 - 2026-08-23 14:23 · Continue · build · 0.4.0 released (grouped numbers + RTL fix); 0.3.0 docs snapshot cut from the tag, switcher offers three versions · released · 4669b23
 - 2026-08-23 14:38 · Standardize · tidy · Sweep of today's 4 rounds: redundant resets, header idiom converged on --split, preview helpers, snapshot-script doc · landed · efdeb8a
+- 2026-08-23 15:32 · Explore · explore · 125.1: 0.4.0 dogfood found 3 real grouped-number defects, fixed red-first, E2E-proven; wiring graduated · landed · 1f75dab
+- 2026-08-23 15:32 · Objective · grill · 125.2: mobile/web ERP gap audit — 7 evidence-graded candidates for owner pick · logged · 1f75dab
