@@ -119,6 +119,14 @@ against a named screen — or against a whole journey as
 `/design-grill flow:<a> > <b> > <c>`; this section is the every-wake
 distillation.
 
+**References are floors, not ceilings** (owner, 2026-08-23, during the
+RF-coverage grill): research citations prove a need RECURS — they never
+define the solution. Parity with SAP/Fiori/Zebra/anyone is not an Accept
+criterion; every design must name what it does BETTER than the reference
+it cites (typically: two-channel state, no-JS floor, reduced-motion and
+forced-colors correctness, honest docs, composition over new surface). A
+proposal that cannot name its improvement is copying, and gets rethought.
+
 **How it binds the loops:** Roadmap triage tests every new ask against
 these before queuing (refuse/rethink are valid triage outcomes, recorded
 with the reason); the design panel grills slices against them; removals
@@ -148,6 +156,48 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 ## Slice 63 — Standardize sweep: finishing last sweep's partial review (2026-08-20)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
+
+## Slice 126 — RF coverage, grilled to a scope (2026-08-23)
+
+Owner asked for the grill BEFORE design ("RF coverage, for components
+needed … ensure the comprehensive design as well"), then installed the
+References-are-floors principle mid-grill. Full tree + evidence:
+`.roundtable/grill-rf-coverage-2026-08-23.md` and
+`.roundtable/` RF research report. Everything below carries the FULL
+component recipe (docs page + wrong-choice clause, DSA score, gates,
+two-channel, RF-floor-guarded CSS) — the owner's "same as other
+components" bar.
+
+1. [ ] **126.1 — rf-essentials size-budget gate.** The profile build
+       fails when min CSS exceeds **40 kB** (now 34.1), gzip-tolerance
+       rule, red-proven. Accept: budget stated in the build output; an
+       injected oversize fails; docs note the budget on the RF track.
+2. [ ] **126.2 — scan-result feedback.** `data-scan-result="ok|error"`
+       timed overlay stamped by `initScanInput()`; two-channel with the
+       existing `data-scan-status` live region; reduced-motion +
+       forced-colors correct (better than DataWedge's colour-only
+       flash). Accept: behavior test + claims case; demoed on
+       goods-receipt; profile delta measured under 126.1's budget.
+3. [ ] **126.3 — `bo-btn-group--bar`.** Equal-width docked action bar
+       (glove targets via spacious), intent-named — no F-key cargo
+       cult. Accept: component docs section + RF pattern adoption;
+       target-size clean at spacious.
+4. [ ] **126.4 — three new RF patterns: pick, putaway, count.** Each
+       with the keypad RECIPE (grid of bo-btns; native inputmode stays
+       the floor), verification-field recipe, Task/Loc/Item KV header,
+       exception bar, full pattern skeleton. Accept: pattern gates,
+       axe/layout, both themes at 360×640.
+5. [ ] **126.5 — comprehensive pass on the existing 3 RF pages.** KV
+       header idiom, verification + camera-fallback recipes in Data
+       contracts, and the unshipped offline PROMISES reworded to the
+       truth. Accept: no state-table row promises unshipped behavior;
+       check:claims still green.
+
+**Refused with evidence** (do not re-chase): on-screen offline badge on
+RF screens (infrastructure per Ivanti; survives only as the mobile
+audit's candidate #1) · progress-counter element (no two-source
+support) · custom keypad COMPONENT (recipe first) · voice, beeps,
+keyboard switching, wedge config (device/app concerns).
 
 ## Slice 125 — Explore/Research fallback: dogfood bugs + mobile-ERP candidates (2026-08-23)
 
