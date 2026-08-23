@@ -590,6 +590,22 @@
               "bulk buttons absent (not disabled) — a control you can never use is noise"
             ],
             [
+              "No saved views yet",
+              "the switcher is absent entirely, not an empty control — a segmented control with one option is a label pretending to be a choice; the Views menu keeps \"Save current filters as a view…\""
+            ],
+            [
+              "View selected, filters then changed",
+              "the chip stays selected but the screen says the view is modified (\"Overdue · edited\") and the Views menu offers Save / Reset — silently drifting off a named view is how someone reports numbers from a filter they never chose"
+            ],
+            [
+              "Shared view link the reader can't see",
+              "their default renders WITH an alert naming the swap; the rows shown must never be mistaken for the rows sent"
+            ],
+            [
+              "Shared view deleted by its owner",
+              "the URL still resolves, to a stated \"this view no longer exists\" + the default — an audit trail that dead-ends on a 404 is a support call"
+            ],
+            [
               "No JS",
               "row checkboxes and the bulk-action buttons are real inputs inside a native &lt;form&gt;, so picking rows and submitting still works end to end; only initDataTables()'s conveniences are lost — the header checkbox no longer toggles every row (it's just an unwired checkbox), and the \"n selected\" live region never updates, so a screen-reader user gets no running count of the selection"
             ]
@@ -606,6 +622,26 @@
             [
               "GET /invoices?page=n",
               "next page rows (append) or a full replace#invoice-rows"
+            ],
+            [
+              "GET /invoices?view=mine",
+              "the server RESOLVES the view name to its filters and renders the list — the view is a saved query living server-side, not a client blob; the response also re-renders the switcher so counts and the selected chip are never stalefull page (a view change is a navigation)"
+            ],
+            [
+              "POST /views &#123;name, query, scope&#125;",
+              "201 + the re-rendered switcher including the new chip. scope is private or shared: a shared view others depend on cannot be silently redefined, so editing one is a new version with the old URL still resolvingthe switcher"
+            ],
+            [
+              "POST /views — 409 name taken",
+              "the form re-renders with the conflict named (\"you already have a view called Mine\") — never auto-suffix to \"Mine (2)\", which is how people end up with four views they cannot tell apartthe save form"
+            ],
+            [
+              "PATCH /views/:id/default",
+              "which view a bare GET /invoices resolves to for THIS user; a default is per-user, and a shared link always beats it — the URL a colleague sent must show what they sawthe switcher"
+            ],
+            [
+              "GET /invoices?view=x — 403 / 404",
+              "fall back to the user's default AND SAY SO (\"that view is not shared with you — showing All open\"); silently swapping the list is how someone acts on the wrong rowsfull page + an alert"
             ],
             [
               "any request, 5xx or timeout",

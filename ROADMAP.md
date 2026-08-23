@@ -247,13 +247,27 @@ its reason.
        `bo-u-text-sm/-lg`) and a wrong `bo-kv__row/__key/__value`
        markup shape — check-markup red on all of them, rewritten
        against the shipped primitives.
-4. [ ] **127.4 — Saved views on list-report.** Grill verdict:
-       composition (dropdown + chips already shipped) + the
-       PERSISTENCE data contract the current one-row mention lacks
-       (Fiori variant management is the floor; ours states the
-       server-side contract instead of shipping a manager). Accept:
-       list-report gains the named-view switcher demo + contract rows;
-       claims case for the switcher's render.
+4. [x] **127.4 — Saved views on list-report. DONE 2026-08-23.**
+       Composition only — a `bo-segmented` of named views inside a GET
+       form + a `bo-dropdown` for save/rename/default/delete. Zero new
+       CSS, and the framework deliberately ships NO view manager:
+       naming, sharing and permissions are the consumer's data model.
+       **The better-than-references clause is testable, so it was
+       tested**: a saved view is a URL. Fiori's variant management is a
+       personal client-side blob behind a dropdown; ours navigates to
+       `?view=overdue`, so a view can be bookmarked, pasted into a
+       ticket, or sent to a colleague who sees the same rows. Claim 103
+       DRIVES that — picks a view, submits, reads `location.search` —
+       and was red-proved by flipping the built form to `method="post"`.
+       Five contract rows (resolve, save with scope, 409 name-taken
+       without auto-suffixing to "Mine (2)", per-user default that a
+       shared link always beats, 403/404 falling back to the default
+       AND SAYING SO); four States rows (no views yet → no switcher at
+       all, since a one-option segmented control is a label pretending
+       to be a choice; view-selected-then-filters-changed; shared link
+       the reader cannot see; view deleted under a live URL).
+       Astro trap re-hit: `{name, query, scope}` in a table cell parsed
+       as a JSX expression — "query is not defined" at build.
 5. [ ] **127.5 — Touch form-entry recipe.** Grill verdict: a Forms
        section, not new surface — the inputmode/autocomplete/
        enterkeyhint recipe per field type (Baymard's cheapest mobile

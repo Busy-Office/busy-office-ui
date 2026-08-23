@@ -28,6 +28,30 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     deep-diving into one.
   </p>
   <section class="demo">
+    {/* A saved view is a URL. The switcher is a GET form of radios, so
+        picking one navigates to ?view=… — shareable, bookmarkable,
+        pasteable into a ticket. hx-boost="false" for the same reason the
+        bulk form opts out: this docs site boosts body-wide and there is
+        no server behind the demo. */}
+    <form class="bo-cluster" method="get" data-density="compact" hx-boost="false"
+        style="margin-block-end: var(--bo-space-2)">
+      <div class="bo-segmented" role="group" aria-label="Saved views">
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="lv-open" value="open" checked>
+        <label class="bo-segmented__option" for="lv-open">All open · 312</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="lv-mine" value="mine">
+        <label class="bo-segmented__option" for="lv-mine">Mine · 18</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="lv-overdue" value="overdue">
+        <label class="bo-segmented__option" for="lv-overdue">Overdue · 7</label>
+      </div>
+      <button class="bo-btn bo-btn--secondary" type="submit">Go</button>
+      <button class="bo-btn bo-btn--secondary" popovertarget="lv-menu">Views ▾</button>
+      <div class="bo-dropdown__menu" id="lv-menu" popover>
+        <button class="bo-dropdown__item" type="button">Save current filters as a view…</button>
+        <button class="bo-dropdown__item" type="button">Rename “Mine”</button>
+        <button class="bo-dropdown__item" type="button">Make this my default</button>
+        <button class="bo-dropdown__item" type="button">Delete “Mine”</button>
+      </div>
+    </form>
     <form class="bo-cluster" data-density="compact">
       <input class="bo-input" type="search" aria-label="Search invoices" placeholder="Search…" style="max-inline-size: 12rem" />
       <select class="bo-select" aria-label="Status filter">
@@ -144,6 +168,12 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
   <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Saved-view switcher</strong> — a
+      <a href={base + '/components/segmented'}>segmented control</a> of named
+      views inside a GET form (so a view is a URL) plus a
+      <a href={base + '/components/dropdown'}>dropdown</a> for save/rename/
+      default/delete. Zero new CSS; the persistence contract is in Data
+      contract below.</li>
       <li><strong>Filter bar</strong> — a plain <code>&lt;form&gt;</code> in a
       <a href={base + '/base/primitives'}>cluster</a> with
       <a href={base + '/components/filters'}>filter</a> controls. Submits on Apply;
@@ -176,6 +206,11 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
           <tr><td class="bo-data-table__col--code">GET /invoices?status=&amp;cc=&amp;q=&amp;page=</td><td>the <code>&lt;tbody&gt;</code> rows + an out-of-band footer</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
           <tr><td class="bo-data-table__col--code">POST /invoices/bulk-approve</td><td>the affected rows, re-rendered with new badges</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
           <tr><td class="bo-data-table__col--code">GET /invoices?page=n</td><td>next page rows (append) or a full replace</td><td class="bo-data-table__col--code">#invoice-rows</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /invoices?view=mine</td><td>the server RESOLVES the view name to its filters and renders the list — the view is a saved query living server-side, not a client blob; the response also re-renders the switcher so counts and the selected chip are never stale</td><td class="bo-data-table__col--code">full page (a view change is a navigation)</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /views &#123;name, query, scope&#125;</td><td>201 + the re-rendered switcher including the new chip. <code>scope</code> is private or shared: a shared view others depend on cannot be silently redefined, so editing one is a new version with the old URL still resolving</td><td class="bo-data-table__col--code">the switcher</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /views — 409 name taken</td><td>the form re-renders with the conflict named ("you already have a view called Mine") — never auto-suffix to "Mine (2)", which is how people end up with four views they cannot tell apart</td><td class="bo-data-table__col--code">the save form</td></tr>
+          <tr><td class="bo-data-table__col--code">PATCH /views/:id/default</td><td>which view a bare <code>GET /invoices</code> resolves to for THIS user; a default is per-user, and a shared link always beats it — the URL a colleague sent must show what they saw</td><td class="bo-data-table__col--code">the switcher</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /invoices?view=x — 403 / 404</td><td>fall back to the user's default AND SAY SO ("that view is not shared with you — showing All open"); silently swapping the list is how someone acts on the wrong rows</td><td class="bo-data-table__col--code">full page + an alert</td></tr>
           <tr><td class="bo-data-table__col--code">any request, 5xx or timeout</td><td>the Error state above (<code>.bo-alert--danger</code> + retry, last good rows kept); <code>POST /invoices/bulk-approve</code> failing per row is separate — still 200, the failure is the returned row's own <code>data-row-state="error"</code>, not a transport-level error</td><td class="bo-data-table__col--code">unswapped; alert renders in place</td></tr>
         </tbody>
       </table>
@@ -184,7 +219,18 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
     responses can target one row. Selection state is CLIENT state — a swap that
     replaces rows clears it, which is the honest behaviour after a bulk action.
     Filters belong in the URL query so a filtered list is linkable and survives
-    reload.</p>
+    reload — and that is exactly what makes a <strong>saved view a URL</strong>
+    here rather than a stored client preference. The switcher is a plain GET
+    form of radios: picking a view navigates to <code>?view=…</code>, so a
+    view can be bookmarked, pasted into a ticket, or sent to a colleague and
+    they see the same rows. That is the one thing the reference
+    implementations' variant managers cannot do — theirs is a personal client
+    blob behind a dropdown — and it costs no component: a
+    <a href={base + '/components/segmented'}>segmented control</a> and a
+    <a href={base + '/components/dropdown'}>dropdown</a>, both already
+    shipped. The framework ships no view MANAGER, on purpose: naming,
+    sharing and permissions are your data model, and the contract rows
+    above are what that model owes the screen.</p>
   </section>
 
   <section class="demo">
@@ -201,6 +247,10 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
           <tr><td>Row error</td><td><code>data-row-state="error"</code> + a badge naming the reason (two-channel)</td></tr>
           <tr><td>Partial failure after bulk</td><td>re-render the failed rows in the error state and summarise: "8 approved, 2 failed"</td></tr>
           <tr><td>No permission</td><td>bulk buttons absent (not disabled) — a control you can never use is noise</td></tr>
+          <tr><td>No saved views yet</td><td>the switcher is absent entirely, not an empty control — a segmented control with one option is a label pretending to be a choice; the Views menu keeps "Save current filters as a view…"</td></tr>
+          <tr><td>View selected, filters then changed</td><td>the chip stays selected but the screen says the view is modified ("Overdue · edited") and the Views menu offers Save / Reset — silently drifting off a named view is how someone reports numbers from a filter they never chose</td></tr>
+          <tr><td>Shared view link the reader can't see</td><td>their default renders WITH an alert naming the swap; the rows shown must never be mistaken for the rows sent</td></tr>
+          <tr><td>Shared view deleted by its owner</td><td>the URL still resolves, to a stated "this view no longer exists" + the default — an audit trail that dead-ends on a 404 is a support call</td></tr>
           <tr><td>No JS</td><td>row checkboxes and the bulk-action buttons are real inputs inside a native <code>&lt;form&gt;</code>, so picking rows and submitting still works end to end; only <code>initDataTables()</code>'s conveniences are lost — the header checkbox no longer toggles every row (it's just an unwired checkbox), and the "n selected" live region never updates, so a screen-reader user gets no running count of the selection</td></tr>
         </tbody>
       </table>

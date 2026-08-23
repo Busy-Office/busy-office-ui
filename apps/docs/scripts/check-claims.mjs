@@ -1996,6 +1996,30 @@ check(
   JSON.stringify(lrLadder),
 );
 
+// Saved views (roadmap 127.4). The page's load-bearing claim is "a saved
+// view is a URL" — the thing the reference variant managers cannot do.
+// So DRIVE it: pick a view, submit, and read location.search. A shape
+// assertion (a segmented control exists) would prove nothing here.
+await visit('/patterns/list-report/', { width: DESKTOP_WIDTH, height: 1800 });
+const beforeSearch = new URL(page.url()).search;
+const formMethod = await page.evaluate(() => document.querySelector('#lv-overdue').closest('form').method);
+await Promise.all([
+  page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+  page.evaluate(() => {
+    const radio = document.querySelector('#lv-overdue');
+    radio.checked = true;
+    const form = radio.closest('form');
+    form.requestSubmit(form.querySelector('button[type="submit"]'));
+  }),
+]);
+const viewUrl = { before: beforeSearch, after: new URL(page.url()).search, method: formMethod };
+check(
+  'a saved view is a URL: picking a view and submitting the switcher navigates to ?view=<name>, so the view can be bookmarked, pasted into a ticket or sent to a colleague',
+  viewUrl.method === 'get' && !viewUrl.before.includes('view=') &&
+    /(^|[?&])view=overdue(&|$)/.test(viewUrl.after),
+  JSON.stringify(viewUrl),
+);
+
 // Inbox's phone section (roadmap 127.3) claims the ladder narrows it —
 // measured at a DESKTOP viewport on purpose: the demo box is 390px while
 // the window is 1440px, so if anything hides it is the CONTAINER query
