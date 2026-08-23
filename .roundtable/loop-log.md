@@ -755,3 +755,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 12:33 · Polish · tidy · Polish rounds 2-5: avatar/badge/byline/calendar wrong-choice clauses, blind-scored 2->3 · landed · bd8f9f0
 - 2026-08-23 12:45 · Polish · tidy · Polish rounds 6-9: dashboard/data-table/icon/inline-editing wrong-choice clauses, blind-scored · landed · 8287236
 - 2026-08-23 13:00 · Polish · tidy · Polish rounds 10-13: navbar/pagination/progress/sidebar-nav wrong-choice clauses, blind-scored · landed · d9dfa5e
+- 2026-08-23 13:33 · Polish · tidy · Polish rounds 14-18: queue dry — 36/37 pages carry the wrong-choice clause · landed · 2a47d4e
