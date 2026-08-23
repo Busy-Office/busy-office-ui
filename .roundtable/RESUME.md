@@ -13,8 +13,30 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-23 21:30. `git status` clean, main pushed, CI green,
+Last updated 2026-08-23 22:35. `git status` clean, CI green,
 **npm serves 0.5.0** (`latest`).
+
+**This wake (Standardize, dispatched by the 6/4 counter) — Slice 131 closed,
+three slices triaged.** Owner sent three wishlist messages mid-wake; each was
+triaged before any code, per the operating rule.
+
+- **131 DONE.** RF pages showed the screen twice (owner). Collapsed to the
+  mirror alone on rf-pick/putaway/count; `RfDevice.astro` now wraps all six
+  embeds in a handheld that appears only above `@container bo-demo
+  (min-width: 26rem)` — at 390px the geometry is byte-identical to before.
+  Icons on RF buttons: **REFUSED** (131.3), no glyph exists for those labels
+  and the task-menu case was already refused on profile-size grounds.
+- **Two defects the duplicate had been hiding**, both fixed: the RF mirrors
+  ignored the docs theme entirely (dark page, light screen), and
+  `check-components-used` could not see components rendered inside the frame.
+- **Queued, not started:** 132 (date entry / search help / calendar months /
+  file panel / list-to-list), 133 (prove table + object-page scrolling —
+  the scroll containers are exempt from every gate today, and GAP-6 moved
+  under it), 134 (`test:visual` is red on 40 of 40 shots, its dark half
+  photographs light pages, and no workflow runs it).
+
+**Next dispatched work:** the dispatcher takes the OLDEST open item — Slice
+130.2's remaining gaps, not the new triage above.
 
 Since the 14:30 entry: Slices 126-130 closed or advanced.
 

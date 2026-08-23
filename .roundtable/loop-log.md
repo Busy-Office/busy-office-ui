@@ -793,3 +793,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 21:35 · Meta · refusal · payment-run screens in the ERP example — select-and-run is bulk-actions, the unattended run is job-monitor · refused · 04b06e2
 - 2026-08-23 22:21 · Standardize · dry · 131.1 — one RF screen per page; the mirror now follows the docs theme; components-used reads the embed · landed · 5a0b511
 - 2026-08-23 22:23 · Roadmap · plan · 132 — owner wishlist triaged: date entry, search help, calendar months, file panel, list-to-list · triaged · 55c89da
+- 2026-08-23 22:29 · Standardize · dry · 131.2 — RfDevice component: one call site for six embeds, chrome only where there is room · landed · 15f9bbc
+- 2026-08-23 22:31 · Roadmap · plan · 133 — owner ask: prove table + object-page scrolling works; the scroll containers are exempt from every gate · triaged · 06ac2e8
+- 2026-08-23 22:32 · Continue · build · 131.3 — icons on RF buttons, decided · refused · 75de725
+- 2026-08-23 22:32 · Meta · refusal · growing the icon set for the RF exception bar: no glyph exists for Back/Skip/Report short, and the task-menu case was already refused on profile-size grounds · refused · 75de725

@@ -157,6 +157,47 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 134 — `test:visual` is red, and nothing runs it (2026-08-23)
+
+Found while verifying 131.1: the wake needed dark-theme screenshots, which
+led to checking how the visual-regression gate takes its own. It takes them
+wrong, and has for days.
+
+**Three separate faults, each enough on its own:**
+
+1. **It sets a key nothing reads.** `visual-regression.mjs` does
+   `localStorage.setItem('bo-theme', t)`. `PrefBootstrap` reads
+   **`bo-theme-pref`** — renamed in roadmap 119. So the "dark" half of every
+   run has been photographing **light** pages under dark filenames. Measured
+   directly: with `bo-theme` set to dark the page resolves `data-theme=light`;
+   with `bo-theme-pref` it resolves dark.
+2. **The baselines are stale.** A full run fails **40 of 40** shots, most on
+   page HEIGHT (e.g. `_components_tree_-dark-1440` 2252px → 2655px) — pages
+   have grown across many slices with nothing re-baselined.
+3. **No workflow runs it.** `grep test:visual .github/workflows/*.yml`
+   returns nothing. This is the project's own rule — *a gate that needs a
+   human to start it is not a gate* — and it is worse than an absent gate,
+   because `npm run test:visual` existing reads as coverage.
+
+Fault 1 is the dangerous one: fix the staleness alone and it goes green
+while measuring dark **nowhere**. A detector that cannot fail, in the exact
+shape the CLAUDE.md doctrine describes.
+
+1. [ ] **134.1 — fix the key, and prove the dark half is dark.** *Accept*:
+       `bo-theme-pref`; then assert in the harness itself that a shot
+       labelled dark was taken with `data-theme="dark"` resolved — the
+       rename could happen again, and a filename is not evidence.
+2. [ ] **134.2 — re-baseline deliberately, never blind.** *Accept*: each of
+       the 40 diffs is inspected and its change attributed to a real, known
+       edit before `--update` runs. The standing rule is explicit: don't
+       blind-`--update` away every failure.
+3. [ ] **134.3 — CI, or delete it.** *Accept*: either it runs in `ci.yml`
+       (with the runner-noise question answered — antialiasing across
+       machines is why a pixel budget exists) or the script and its
+       baselines are removed and `check:layout` + `test:axe` are named as
+       what covers this. **Do not leave a third option**: a gate that runs
+       nowhere is the status quo that produced this slice.
+
 ## Slice 133 — Owner: prove the scrolling actually works (2026-08-23)
 
 Owner input, verbatim: *"UI Component - tables / Patterns like Page Object -
