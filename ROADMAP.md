@@ -509,7 +509,7 @@ reads clean while telling us nothing.
        them — GAP-6 and GAP-7 — were found by a SCREENSHOT after all three
        gates reported the pilot clean, which is the argument for the
        screenshot step in the quality bar, made again.
-2. [~] **130.2 — promote the gaps into decisions.** **GAP-2 (merged with
+2. [x] **130.2 — DONE 2026-08-24. Every gap promoted into a decision.** **GAP-2 (merged with
        GAP-9) DECIDED 2026-08-23: RETHINK → a documented composition.** The
        shape is `bo-timeline` ordered by lifecycle — one step per document
        TYPE, that type's instances as links inside the step, `data-state`
@@ -536,6 +536,16 @@ reads clean while telling us nothing.
        table and prove nothing) and claim 108, red-proved against the BUILT
        css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
        the part that risks becoming "colour the cell".
+       **GAP-4b RESOLVED: already shipped, and the first attempt at it
+       failed measurably.** `data-tone` marks a CELL (with `data-tone-text`
+       and a forced-colors block); the gap had looked at `data-row-state`, a
+       ROW marker, and missed it. Two-channel completed with a
+       visually-hidden word in the cell, per Slice 124's rule that tone is
+       never the only channel. The first composition kept
+       `data-row-state="warning"` on the row and the toned cell's fill came
+       back byte-identical to its neighbours — a cell cue inside a toned row
+       marks nothing. Removing the row state was the fix, not tidying.
+       **With this, every gap in the ledger is decided.**
        **GAP-1 DECIDED: real, measured, and deferred behind a trigger.**
        The single-sidebar compromise fails at 11 documents in one module on a
        700px laptop (17 at 900px) — measured by growing the group and

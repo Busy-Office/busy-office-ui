@@ -13,80 +13,45 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-23 22:35. `git status` clean, CI green,
-**npm serves 0.5.0** (`latest`).
+Last updated 2026-08-24 00:20. `git status` clean, CI green, **npm serves
+0.5.0** (`latest`). Unreleased has grown: two `Fixed` and one `Added`.
 
-**This wake (Standardize, dispatched by the 6/4 counter) — Slice 131 closed,
-three slices triaged.** Owner sent three wishlist messages mid-wake; each was
-triaged before any code, per the operating rule.
+**A ten-wake run closed Slice 131 and ALL of Slice 130.2.**
 
-- **131 DONE.** RF pages showed the screen twice (owner). Collapsed to the
-  mirror alone on rf-pick/putaway/count; `RfDevice.astro` now wraps all six
-  embeds in a handheld that appears only above `@container bo-demo
-  (min-width: 26rem)` — at 390px the geometry is byte-identical to before.
-  Icons on RF buttons: **REFUSED** (131.3), no glyph exists for those labels
-  and the task-menu case was already refused on profile-size grounds.
-- **Two defects the duplicate had been hiding**, both fixed: the RF mirrors
-  ignored the docs theme entirely (dark page, light screen), and
-  `check-components-used` could not see components rendered inside the frame.
-- **Queued, not started:** 132 (date entry / search help / calendar months /
-  file panel / list-to-list), 133 (prove table + object-page scrolling —
-  the scroll containers are exempt from every gate today, and GAP-6 moved
-  under it), 134 (`test:visual` is red on 40 of 40 shots, its dark half
-  photographs light pages, and no workflow runs it).
+- **131 (owner wishlist) DONE.** RF pages showed the screen twice → the
+  mirror alone, wrapped in a handheld (`RfDevice.astro`, one call site for
+  six embeds, chrome only above `@container bo-demo (min-width: 26rem)`).
+  Icons on RF buttons **refused** — no glyph exists for those labels and the
+  task-menu case was already refused on profile-size grounds.
+- **130.2 DONE — every gap in `.roundtable/erp-suite-gaps.md` is decided.**
+  GAP-2 (+9): document flow is a `bo-timeline` composition, documented on
+  `/patterns/object-page`. GAP-4a: grouped column headers were a sticky BUG
+  in shipped CSS (both header rows pinned at 0), fixed with a
+  `--bo-density-row-height` offset + claim 108. GAP-3: a segmented option
+  gained a `gap`; the count is muted tabular text, not a badge. GAP-12: "Add
+  a line" lives below the table in a cluster. GAP-1: measured (fails at 11
+  docs/700px), deferred behind a trigger, limit documented. **Refused as not
+  gaps**: GAP-11 (a usage bug — `bo-data-table__row-select` was omitted),
+  GAP-14 (the marker glyph already carries partial), GAP-10 (the
+  recompute/announce contract is `initTableSum`'s, only discoverability was
+  missing), GAP-4b (`data-tone` marks a cell; the gap had looked at
+  `data-row-state`). GAP-13 answered by a Standardize sweep.
+  **GAP-6 is the exception**: it moved under Slice 133, because it is a
+  scrolling defect and that is what 133 exists to prove.
 
-**Next dispatched work:** the dispatcher takes the OLDEST open item — Slice
-130.2's remaining gaps, not the new triage above.
+**Three owner wishlists triaged this run, none started**: Slice 132 (date
+entry / search help / calendar months / file panel / list-to-list), Slice 133
+(prove table + object-page scrolling — the scroll containers are exempt from
+every gate today), Slice 134 (`test:visual` is red on 40 of 40 shots, its
+dark half photographs light pages, and no workflow runs it).
 
-Since the 14:30 entry: Slices 126-130 closed or advanced.
+**One open owner input:** 112.3 pilot briefs — unchanged; scaffold at
+`.roundtable/pilot-112/`, and the loop must never author brief content.
 
-- **0.5.0 released** (owner said "Cut"). Deliberately a MINOR, not the
-  0.4.1 that had been recommended — Unreleased had grown three `Added`
-  entries by then, and this project bumps minor for features. It carries
-  the three grouped-number defects 0.4.0 had been shipping since that
-  morning, plus the scan flash, `--bar`, and the column ladder. The
-  **0.4.0 docs snapshot was cut FROM ITS TAG** in a worktree (same rule
-  as 0.3.0); the switcher offers 0.5.0 · latest / 0.4.0 / 0.3.0 / 0.1.1.
-- **Slice 129 (Objective grill)** found that `check-page-shape.mjs` had
-  NEVER run against `scan` — its filter needed a `.bo-` selector and
-  `scan.css` has none. A skipped page looks exactly like a passing one.
-  Membership now reads `api.json`; 39 → 40 pages checked.
-- **Polish took `scan`** on a source-change re-entry and scored it
-  colour 2 / interaction 2 / fit 2 — the first colour<3 in the rubric.
-  The scan verdict is now carried by the FRAME (6px solid vs 18px
-  double), not by hue.
-- **Slice 130 — `examples/erp-suite/`, a gap-finding instrument.** Owner
-  wishlist, grilled over two rounds before any build. Static screens,
-  no backend, document-based; cross-module data is API-side and out of
-  scope. P2P pilot: 8 real screens + 5 module stubs. **The rule that
-  makes it work: the example may not add ONE line of its own CSS**
-  (`check-erp-suite.mjs` enforces it), so a gap cannot be papered over.
-  **13 gaps in `.roundtable/erp-suite-gaps.md`**; GAP-5, GAP-7 and
-  GAP-13 already fixed, ten open.
-
-**One open owner input:**
-
-1. **112.3 pilot briefs** — unchanged; scaffold at `.roundtable/pilot-112/`
-   (the loop must never author brief content, and SEALED-PICKS.md stays
-   unopened until all runs are recorded).
-2. ~~**GAP-13's consolidation question**~~ — **ANSWERED 2026-08-23** by the
-   Standardize sweep, no owner call needed: REFUSE the general form. The
-   premise was wrong (two label-wrap rules, not three — `.bo-state__actions`
-   wraps the BAR, not the label), and dropping `.bo-btn`'s global
-   `white-space: nowrap` changes ZERO buttons at 1440 and exactly four at
-   390, every one of which already fits. Full measurement in the gap ledger.
-
-**Progress on 130.2 (the ten open gaps → decisions):** GAP-2 (merged with
-GAP-9) decided AND documented — the document flow is a `bo-timeline`
-composition, on `/patterns/object-page` with claim coverage. GAP-4a decided
-and fixed — grouped column headers were a sticky bug in shipped CSS, not a
-missing feature. GAP-13 answered above. **Open: GAP-1, GAP-3, GAP-4b, GAP-6,
-GAP-8, GAP-10, GAP-11, GAP-12, and the new GAP-14** (a chain step can be
-PARTIAL and `data-state` has no word for it — grill with GAP-11, since both
-ask whether the component needs one more state).
-
-**Next dispatched work, if nothing new arrives:** the rest of 130.2, then
-130.3 builds module two.
+**Next dispatched work:** 130.3 (module two, O2C) is now unblocked — 130.2's
+answers are all in. The oldest queued items ahead of the new triage are
+Slice 132/133/134 by number but 130.3 by age; the dispatcher takes the
+oldest still-open item, which is 130.3.
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 

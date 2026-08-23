@@ -219,9 +219,28 @@ and a reader would see a static table. Claim 108 drives the scroll and
 red-proved by stripping the rule from the BUILT css (`subOffset` 30px -> 0px,
 overlap 0 -> 30).
 
-**GAP-4b still open** — a cell-level "this is the one that disagrees" cue. The
-genuinely new idea, and the one that risks becoming "colour the cell", which
-the two-channel rule forbids. Grill before module two.
+**GAP-4b RESOLVED 2026-08-24 — and it was already shipped.** The gap said
+"`data-row-state` marks a ROW, not a cell". True, and beside the point:
+`data-tone="danger|warning|success"` marks a **cell**, ships `data-tone-text`
+for the value, and carries a forced-colors block. The gap looked at the row
+attribute and missed the cell one.
+
+The two-channel worry was right, though, and Slice 124's guideline had already
+answered it: `data-tone` must never be the ONLY channel, because both its tint
+and its leading bar are colour. So the disagreeing cell also carries a
+visually-hidden word, and the verdict badge still says what KIND of
+disagreement it is. Three signals, only one of them colour, and the eye lands
+on the cell instead of mapping a badge back to a column.
+
+**The composition failed on its first measurement, and that is the finding
+worth keeping.** With `data-row-state="warning"` still on the row, the toned
+cell's computed fill was `rgb(255,251,235)` — **byte-identical to its untoned
+neighbours**, because the row tint IS the warning tint. A cell cue inside a
+toned row marks nothing at all. Removing the row state was not tidying, it was
+the fix. That is Slice 124's rule arriving from a new direction: tone stops
+working the moment it is applied to everything in view.
+
+**No new framework surface. Zero new CSS.**
 
 *(original entry below)*
 

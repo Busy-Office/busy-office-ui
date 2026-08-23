@@ -5,12 +5,33 @@ import { page } from '../_shell.mjs';
    BILLED, line by line, and decides. The `comparison` pattern is about
    choosing between options; `reconciliation` is about two sides of a ledger.
    Neither is three columns of the same line. See GAP-4. */
+/* The 8th field is the verdict; the 9th names WHICH column disagrees, so the
+   tone lands on that cell rather than on the whole row (GAP-4b). */
 const match = [
-  ['10', 'Hex bolt M8 × 40', '2,400', '2,400', '2,400', '0.42', '0.42', 'ok'],
-  ['20', 'Hex nut M8', '2,400', '2,400', '2,400', '0.18', '0.18', 'ok'],
-  ['30', 'Steel plate 3mm', '60', '60', '60', '412.00', '424.00', 'price'],
-  ['40', 'Pallet, heat-treated', '120', '80', '120', '18.00', '18.00', 'qty'],
+  ['10', 'Hex bolt M8 × 40', '2,400', '2,400', '2,400', '0.42', '0.42', 'ok', null],
+  ['20', 'Hex nut M8', '2,400', '2,400', '2,400', '0.18', '0.18', 'ok', null],
+  ['30', 'Steel plate 3mm', '60', '60', '60', '412.00', '424.00', 'price', 'pb'],
+  ['40', 'Pallet, heat-treated', '120', '80', '120', '18.00', '18.00', 'qty', 'qb'],
 ];
+
+/* GAP-4b RESOLVED 2026-08-24: the cue is data-tone on the CELL, which the
+   framework already ships — the gap looked at data-row-state (a ROW marker)
+   and missed it. Slice 124's own guideline says data-tone must not be the
+   only channel, since both its tint and its leading bar are colour; so the
+   disagreeing cell also carries a visually-hidden word. Two channels on the
+   cell itself, plus the verdict badge saying what kind of disagreement it is
+   — and the reader no longer maps a badge back to a column by eye.
+
+   The row-level data-row-state="warning" is GONE, and removing it was not
+   tidying: measured with it in place, the toned cell's computed fill was
+   rgb(255,251,235) — byte-identical to its untoned neighbours, because the
+   row tint IS the warning tint. A cell cue inside a toned row marks nothing.
+   That is Slice 124's guideline arriving from a new direction: tone stops
+   working the moment it is applied to everything in view. */
+const disagrees = (v, col, key) =>
+  v === col ? ' data-tone="warning" data-tone-text' : '';
+const disagreeNote = (v, col) =>
+  v === col ? '<span class="bo-visually-hidden"> — disagrees</span>' : '';
 
 const verdict = {
   ok: ['bo-badge--success', 'Matched'],
@@ -78,14 +99,14 @@ export const render = () =>
         <tbody>
           ${match
             .map(
-              ([no, item, qo, qr, qb, po, pb, v]) => `<tr${v === 'ok' ? '' : ' data-row-state="warning"'}>
+              ([no, item, qo, qr, qb, po, pb, v, col]) => `<tr>
             <td class="bo-u-tabular">${no}</td>
             <td class="bo-u-text-truncate">${item}</td>
             <td class="bo-data-table__col--numeric">${qo}</td>
             <td class="bo-data-table__col--numeric">${qr}</td>
-            <td class="bo-data-table__col--numeric">${qb}</td>
+            <td class="bo-data-table__col--numeric"${disagrees(col, 'qb')}>${qb}${disagreeNote(col, 'qb')}</td>
             <td class="bo-data-table__col--numeric bo-data-table__col--secondary">${po}</td>
-            <td class="bo-data-table__col--numeric bo-data-table__col--secondary">${pb}</td>
+            <td class="bo-data-table__col--numeric bo-data-table__col--secondary"${disagrees(col, 'pb')}>${pb}${disagreeNote(col, 'pb')}</td>
             <td><span class="bo-badge ${verdict[v][0]}">${verdict[v][1]}</span></td>
           </tr>`,
             )

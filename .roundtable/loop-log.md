@@ -809,3 +809,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 23:49 · Meta · refusal · a __count part or badge-in-segment — the count treatment already exists and a badge fills a 24px segment · refused · b932f84
 - 2026-08-23 23:58 · Continue · build · 130.2 GAP-12 — Add a line: home stated (below the table, cluster), two drifted call sites reconciled · landed · a9ba5c7
 - 2026-08-24 00:04 · Continue · build · 130.2 GAP-8 + GAP-10 — merged; recompute/announce contract already existed, discoverability fixed · landed · 70eef95
+- 2026-08-24 00:11 · Continue · build · 130.2 GAP-1 — module rail measured (fails at 11 docs/700px), deferred behind a trigger, limit documented · landed · fa23ff0
+- 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
+- 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 00:04
+Generated at: 2026-08-24 00:18
 
 ## Open items by slice
 
@@ -35,10 +35,9 @@ Generated at: 2026-08-24 00:04
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (803 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-23 23:33   OVERDUE
+dispatch status — counter-triggered rules (806 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-24 00:18   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -52,9 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 23:02 · Continue · build · 130.2c — document flow documented on object-page; empty-marker two-channel defect found and gated · landed · 5b254ba
-- 2026-08-23 23:25 · Continue · build · 130.2 GAP-4a — grouped column headers: two sticky header rows pinned to the same offset; fixed, documented, claim 108 · landed · 1305ab9
-- 2026-08-23 23:33 · Standardize · dry · GAP-13 consolidation — measured; general form refused, knowledge consolidated · landed · 6aa53b4
 - 2026-08-23 23:33 · Meta · refusal · dropping .bo-btn's global white-space: nowrap — zero buttons change at 1440, four at 390 and all four already fit · refused · 6aa53b4
 - 2026-08-23 23:41 · Continue · build · 130.2 GAP-11 + GAP-14 — both refuse a new state; GAP-11 was a usage bug the gates cannot see · landed · b0a0e51
 - 2026-08-23 23:41 · Meta · refusal · a 5th bo-timeline data-state (partial) and a new data-row-state (excluded) — the marker glyph and row selection already carry both · refused · b0a0e51
@@ -62,6 +58,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 23:49 · Meta · refusal · a __count part or badge-in-segment — the count treatment already exists and a badge fills a 24px segment · refused · b932f84
 - 2026-08-23 23:58 · Continue · build · 130.2 GAP-12 — Add a line: home stated (below the table, cluster), two drifted call sites reconciled · landed · a9ba5c7
 - 2026-08-24 00:04 · Continue · build · 130.2 GAP-8 + GAP-10 — merged; recompute/announce contract already existed, discoverability fixed · landed · 70eef95
+- 2026-08-24 00:11 · Continue · build · 130.2 GAP-1 — module rail measured (fails at 11 docs/700px), deferred behind a trigger, limit documented · landed · fa23ff0
+- 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
+- 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58
 
 ## Sunset test
 
