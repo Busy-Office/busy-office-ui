@@ -843,3 +843,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 05:19 · Continue · build · 132.5 — list-to-list refused: multi-select is the shipped answer, no screen needs a dual list, and it does not fit 390px · refused · 409d827
 - 2026-08-24 05:19 · Meta · refusal · a dual-list (pick-list/shuttle) component — a second way to do what data-multiselect already does · refused · 409d827
 - 2026-08-24 05:28 · Continue · build · 130.3 — module two (O2C sales orders) built with zero new CSS; found GAP-15, a defect in GAP-4a's own fix, and fixed it · landed · 39661bd
+- 2026-08-24 05:47 · Continue · build · 130.3 — module two complete (O2C: sales orders + customer invoices ageing); GAP-16 tfoot totals fixed; visual gate caught its first real change plus one unexplained diff · landed · d51f591

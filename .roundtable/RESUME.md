@@ -13,45 +13,46 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-24 00:20. `git status` clean, CI green, **npm serves
-0.5.0** (`latest`). Unreleased has grown: two `Fixed` and one `Added`.
+Last updated 2026-08-24 05:50. `git status` clean, main pushed, **npm serves
+0.5.0** (`latest`). `## Unreleased` has grown to **five Fixed + two Added** —
+enough for a release when the owner wants one.
 
-**A ten-wake run closed Slice 131 and ALL of Slice 130.2.**
+**A twenty-wake run. Slices 131, 132, 133, 135 CLOSED; 130.2 and 130.3 closed;
+134 is one owner call away.**
 
-- **131 (owner wishlist) DONE.** RF pages showed the screen twice → the
-  mirror alone, wrapped in a handheld (`RfDevice.astro`, one call site for
-  six embeds, chrome only above `@container bo-demo (min-width: 26rem)`).
-  Icons on RF buttons **refused** — no glyph exists for those labels and the
-  task-menu case was already refused on profile-size grounds.
-- **130.2 DONE — every gap in `.roundtable/erp-suite-gaps.md` is decided.**
-  GAP-2 (+9): document flow is a `bo-timeline` composition, documented on
-  `/patterns/object-page`. GAP-4a: grouped column headers were a sticky BUG
-  in shipped CSS (both header rows pinned at 0), fixed with a
-  `--bo-density-row-height` offset + claim 108. GAP-3: a segmented option
-  gained a `gap`; the count is muted tabular text, not a badge. GAP-12: "Add
-  a line" lives below the table in a cluster. GAP-1: measured (fails at 11
-  docs/700px), deferred behind a trigger, limit documented. **Refused as not
-  gaps**: GAP-11 (a usage bug — `bo-data-table__row-select` was omitted),
-  GAP-14 (the marker glyph already carries partial), GAP-10 (the
-  recompute/announce contract is `initTableSum`'s, only discoverability was
-  missing), GAP-4b (`data-tone` marks a cell; the gap had looked at
-  `data-row-state`). GAP-13 answered by a Standardize sweep.
-  **GAP-6 is the exception**: it moved under Slice 133, because it is a
-  scrolling defect and that is what 133 exists to prove.
+- **135 (owner, RF track)** — naming unified (labels, not slugs: 69 references
+  made that the wrong trade); the six mirrors are one walkable track; screens
+  measured responsive at 320-800; the keypad removed because the gun has a
+  keyboard. Along the way `.bo-data-table__cell-link` shipped, because the task
+  queue promised a tap it did not provide.
+- **133 (owner, scrolling)** — `check:scroll` is in CI, driving 732 regions;
+  the object-page spy is verified for every section rather than one; GAP-6
+  fixed at the primitive (`.bo-stack > * { flex-shrink: 0 }`).
+- **132 (owner, five wishes)** — one section shipped (date entry on
+  `/components/form#dates`) and four refusals, each with the measurement:
+  Search Help is value-help, the calendar already did it, the file panel is
+  three existing screens, list-to-list is what `data-multiselect` already does.
+- **130.2 / 130.3** — every gap in the ERP-suite ledger decided, then module
+  two built. **The checkpoint says the instrument worked**: pilot 13 gaps,
+  module two 2 — one a regression in the pilot's own fix, one a treatment
+  (totals rows) nobody had needed yet. Modules three to six look mechanical.
 
-**Three owner wishlists triaged this run, none started**: Slice 132 (date
-entry / search help / calendar months / file panel / list-to-list), Slice 133
-(prove table + object-page scrolling — the scroll containers are exempt from
-every gate today), Slice 134 (`test:visual` is red on 40 of 40 shots, its
-dark half photographs light pages, and no workflow runs it).
+**Two things need the owner:**
 
-**One open owner input:** 112.3 pilot briefs — unchanged; scaffold at
-`.roundtable/pilot-112/`, and the loop must never author brief content.
+1. **134.3 — the visual gate.** Three costed options in ROADMAP 134.3
+   (containerise for CI / leave local / delete). It works again and caught
+   three real changes this run.
+2. **112.3 pilot briefs** — unchanged; scaffold at `.roundtable/pilot-112/`,
+   and the loop must never author brief content.
 
-**Next dispatched work:** 130.3 (module two, O2C) is now unblocked — 130.2's
-answers are all in. The oldest queued items ahead of the new triage are
-Slice 132/133/134 by number but 130.3 by age; the dispatcher takes the
-oldest still-open item, which is 130.3.
+**One open finding, deliberately left failing:** `test:visual` reports a diff
+on `/components/richtext` that cannot be attributed — that page has no
+`tfoot`, no `colspan` and zero commits since the baselines were taken. Not
+blind-updated. Also: `--only=<page>` does not filter what it updates, so
+selective re-baselining is not currently possible.
+
+**Next dispatched work:** 130.4 (the remaining four modules, batched if module
+three confirms) is the oldest open item; 134.3 waits on the owner.
 
 ## `npm run docs:build` does NOT run the browser gates (2026-08-24)
 
