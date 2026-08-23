@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 12:33
+Generated at: 2026-08-23 12:45
 
 ## Open items by slice
 
@@ -20,7 +20,7 @@ Generated at: 2026-08-23 12:33
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (747 iterations logged)
+dispatch status — counter-triggered rules (748 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-08-23 11:11   ok
   Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
 ```
@@ -36,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 10:59 · Continue · build · 123.3a: reconciliation pattern shipped; stale 119.3/121.1/122.1 superseded · landed · 575b4ad
 - 2026-08-23 11:11 · Standardize · tidy · 123.3b timesheet + Standardize sweep: bo-stat, demo-shell-frame, decimal-input dedup, aria-hidden steppers · landed · af57cd2
 - 2026-08-23 11:32 · Roadmap · plan · LOOPS v2: Polish + Research loops, halt rule; 2 self-recommendations withdrawn against the record · landed · 3ddeb68
 - 2026-08-23 11:32 · Meta · refusal · folding Optimize into a 7th DSA dimension (101.3 stop rule forbids new dimensions) · refused · 3ddeb68
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 12:00 · Meta · refusal · split/allocated award across multiple winners (select-one for v1, re-open condition documented on the page) · refused · b833474
 - 2026-08-23 12:15 · Continue · bug · 124: RTL flip for the tone bar (gate was blind to inset box-shadow) + when-to-use guidelines + comparison matrix re-marked by weight · landed · 098d026
 - 2026-08-23 12:33 · Polish · tidy · Polish rounds 2-5: avatar/badge/byline/calendar wrong-choice clauses, blind-scored 2->3 · landed · bd8f9f0
+- 2026-08-23 12:45 · Polish · tidy · Polish rounds 6-9: dashboard/data-table/icon/inline-editing wrong-choice clauses, blind-scored · landed · 8287236
 
 ## Sunset test
 
