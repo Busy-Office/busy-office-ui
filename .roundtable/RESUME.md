@@ -13,36 +13,24 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-23 00:33. `git status` clean, HEAD `beba4bb`.
-**Backlog is now genuinely dry of buildable-now work.** This wake:
-triaged 122.1 (masking-input wishlist, BLOCKED ON GRILL — real UX
-tradeoffs need the owner's answers, not a self-decided grill),
-dispatched Standardize (overdue: 9/4 Continue rounds) and consolidated
-the RF device-frame iframe style (goods-receipt/rf-list/rf-landing, 3x
-duplicated inline style -> `rf-device-frame.css`), then closed **119.2**
-(the previous survey's one buildable-now item — `/concepts/layouts`),
-fixing a real copy-paste bug (a duplicated "per the ... per the" clause)
-found reviewing it before closing.
+Last updated 2026-08-23 14:30. `git status` clean, main pushed, CI green,
+**npm serves 0.4.0** (`latest`). A very large owner-driven day: Slices
+119-124 all closed; the loop system itself was redesigned (LOOPS.md now
+has EIGHT loops — Polish and Research added, dispatcher rules 6-8
+including the halt rule; owner-confirmed design, see the 2026-08-23
+commits). Polish ran 18 rounds to a dry queue (36/37 component pages
+carry the wrong-choice clause; `date` skipped as deprecated); Research
+ran 2 rounds (DsaScore false gap closed; tile-preview evidence). The
+docs tile index carries live miniatures for 10 patterns (104.2,
+c-scoped). The 0.3.0 docs snapshot was cut FROM THE TAG in a worktree —
+never snapshot the current tree for a past version — and the switcher
+offers 0.1.1 / 0.3.0 / latest.
 
-**Every remaining open item is BLOCKED ON GRILL or an explicit owner
-call**: 121.1/121.2/121.3 (new pattern shapes), 121.5 (orphan
-cross-links + naming collisions, owner call), 119.3 (app-frame, owner
-grill), 122.1 (masking input, owner grill), plus the older 30.0
-(overview/sidebar-menu clarification) and 52.3 (Object Page naming) —
-both under "Open questions" below. Per LOOPS.md dispatcher rule 6
-("Backlog empty? -> dispatch Explore"), the next wake's honest move is
-an Explore spike (dogfood-loop fallback per the Ideas backlog note —
-the seed list is exhausted, so pull from `examples/po-app` friction,
-not a manufactured idea) — or surfacing the blocked list to the owner
-so a grill round can actually unblock 121.1-121.3/119.3/122.1, which is
-where most of the real remaining value sits.
-
-**Standing lesson, still true, kept for the next wake that inherits a
-stale note:** don't trust an "In flight" entry's age at face value —
-re-verify its specific claims against ROADMAP.md before acting on them.
-This file went stale from 2026-08-22 (referencing 109.6) all the way to
-2026-08-23 before being caught; the fix each time is a full grep of
-every unchecked `[ ]` in ROADMAP.md, not a sample.
+**The ONLY open input anywhere: the owner's 112.3 pilot briefs** —
+scaffold at `.roundtable/pilot-112/` (README explains; the loop must
+never author brief content, and SEALED-PICKS.md stays unopened until all
+runs are recorded). When the owner says "briefs ready", run the
+pre-registered protocol in ROADMAP 112.3.
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 
@@ -64,35 +52,36 @@ not observe.
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
-- **0.3.0 — RELEASED 2026-08-23, npm serves it as `latest`.** Owner chose
-  the re-cut path; done same wake (ROADMAP 123.4 has the full story,
-  including the two real publish-workflow bugs found and fixed: npm 12's
-  `pack --json` shape change, and a base-blind check:claims case).
-  Still-true mechanics for the NEXT release: publishing needs no `npm
-  login` — `.github/workflows/publish.yml` uses Trusted Publishing
-  (OIDC); creating the GitHub Release is the trigger and it re-runs every
-  gate from a clean checkout. npm in a wake's environment is
-  unauthenticated (E401) and always will be. The workflow now pins
-  `npm@11` deliberately — do not "upgrade" it back to `@latest`.
+- **Releases — CURRENT: npm serves 0.4.0 (`latest`), released
+  2026-08-23** (grouped-number input + the RTL tone-bar fix). 0.3.0
+  released earlier the same day. Mechanics for the NEXT release
+  (unchanged, still owner-triggered): fold `## Unreleased`, bump, clean
+  build + tests + pack, tag, push, `gh release create` — Trusted
+  Publishing runs every gate from a clean checkout; the workflow pins
+  `npm@11` deliberately (npm 12 broke `pack --json` mid-release
+  2026-08-23) — do not "upgrade" it to @latest. Docs snapshots: cut from
+  the RELEASE TAG in a worktree if any commits have landed since; the
+  script builds whatever tree it runs in.
 
-  **Optional, still not done:** the docs version snapshot
-  (`node apps/docs/scripts/cut-version-snapshot.mjs 0.3.0`, ~4.3 MB
-  committed). `apps/docs/versions/` holds only `0.1.1`, so the version
-  switcher offers 0.1.1 and latest, not 0.3.0. Cheap to add; owner's
-  call.
-- **30.4b** — windowed list (the 50,000-record ask). Scope/Accept criteria are
+- ~~30.4b~~ — **SHIPPED**: built 2026-08-22 as `initWindowedList`,
+  released to npm in 0.4.0 (2026-08-23). Entry outlived its subject.
+  *(original text below is history only)*
+- **30.4b (historical)** — windowed list (the 50,000-record ask). Scope/Accept criteria are
   fully written (the numbered **30.4b** item in ROADMAP.md — item numbers
   survive file growth; a hand-typed line citation here had drifted ~3000
   lines, 2026-08-21 sweep); owner explicitly **deferred to the next
   publish cycle** (2026-08-20) rather than building now — not a build-now item
   until that cycle starts, don't re-surface as ready in the meantime.
-- **52.3 — Object Page naming.** Recommendation given (keep the `object-page`
-  slug, retitle to name the interaction); genuinely the owner's call on taste,
-  not something the loop can decide for itself.
+- ~~52.3~~ — **CLOSED 2026-08-23**: owner said "do what is good for
+  long term"; slug kept, page retitled to name the interaction.
 
 ## Open questions awaiting the owner
 
-- **30.0** — **this entry was stale, corrected 2026-08-20.** The real open
+- ~~30.0~~ — **CLOSED 2026-08-23**: owner answered (b) — a new ERP
+  overview pattern with a module sidebar — shipped same day as
+  `/patterns/suite-home` (123.2). *(the older correction note below is
+  history only)*
+  **this entry was stale, corrected 2026-08-20.** The real open
   half is the "*check out overview, the sidebar menu*" note (in ROADMAP.md's
   item **30.0** — cited by item, not line, per the sweep fix above):
   either (a) review the docs' own landing page/nav, or (b) a new ERP
