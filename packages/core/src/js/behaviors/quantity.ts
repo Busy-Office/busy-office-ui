@@ -15,6 +15,7 @@
  *   </div>
  */
 import { setInputDecimals, decimalsOverride, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
+import { numericInputValue, isGrouped, setGroupedValue, setGroupedDecimals } from './grouped-number.js';
 
 let installed = false;
 
@@ -48,7 +49,9 @@ export function unitDecimals(unit: string): number | undefined {
 function syncButtons(root: Element): void {
   const input = root.querySelector<HTMLInputElement>('.bo-quantity__input');
   if (!input) return;
-  const value = Number(input.value) || 0;
+  // Grouped-aware read (123.1): a data-grouped input's visible value is
+  // the display string; the machine value lives behind numericInputValue.
+  const value = numericInputValue(input) ?? 0;
   const min = input.min !== '' ? Number(input.min) : -Infinity;
   const max = input.max !== '' ? Number(input.max) : Infinity;
   root.querySelectorAll<HTMLButtonElement>('[data-quantity-step]').forEach((btn) => {
@@ -72,7 +75,7 @@ export function initQuantity(): void {
     const inputStep = Number(input.step) || 1;
     const min = input.min !== '' ? Number(input.min) : -Infinity;
     const max = input.max !== '' ? Number(input.max) : Infinity;
-    const current = Number(input.value) || 0;
+    const current = numericInputValue(input) ?? 0;
     // Quantize to the step's own decimal places — binary floats make
     // 0.28 + 0.01 print as 0.29000000000000004 otherwise (the docs
     // recommend step="0.01" for weight/volume, so this path is real).
@@ -84,7 +87,8 @@ export function initQuantity(): void {
     const next = Number(raw.toFixed(decimals));
 
     if (next !== current) {
-      input.value = String(next);
+      if (isGrouped(input)) setGroupedValue(input, String(next));
+      else input.value = String(next);
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     }
@@ -110,7 +114,8 @@ export function initQuantity(): void {
     if (!root || !input) return;
     const decimals = decimalsOverride(select, root) ?? unitDecimals(select.value);
     if (decimals === undefined) return; // unknown unit: no opinion, leave the field alone
-    setInputDecimals(input, decimals);
+    if (isGrouped(input)) setGroupedDecimals(input, decimals);
+    else setInputDecimals(input, decimals);
     syncButtons(root);
   });
 }

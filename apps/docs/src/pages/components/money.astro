@@ -37,6 +37,20 @@ const readOnly = `<!-- an amount, read-only: Amount with a currency -->
   <span class="bo-amount__value">1,250.00</span>
 </span>`;
 
+const grouped = `<!-- data-grouped: thousands separators, formatted ON BLUR.
+     The name moves to a generated hidden input that always submits the RAW
+     number — the server never parses "1,234,567.50". -->
+<div class="bo-money">
+  <select class="bo-select bo-money__currency" aria-label="Currency">
+    <option>USD</option>
+    <option>JPY</option>
+  </select>
+  <input class="bo-input bo-input--numeric bo-money__amount" type="number"
+      step="0.01" value="1234567.5" name="net-total" data-grouped
+      data-locale="en-US" aria-label="Amount">
+</div>
+<!-- + initGroupedNumber() once, alongside initMoneyField() -->`;
+
 const tableColumn = `<!-- In a line table the currency is its own COLUMN, fixed per row —
      so each amount cell is a plain numeric input (the family rule: fixed
      currency needs no widget), with step server-rendered per that row's
@@ -183,6 +197,23 @@ const canonical = `<!-- Two real form controls working as one field: the select 
   </section>
 
   <section class="demo">
+    <h2>Grouped display — <code>data-grouped</code></h2>
+    <Demo code={grouped} />
+    <p class="bo-u-text-muted">Formats <strong>on blur, never while you
+    type</strong> — the pattern real accounting software ships (live
+    reformatting is where caret jumps and locale bugs live; the evidence
+    is linked from the API notes). Focus shows the raw value for editing;
+    leaving the field renders <code>1,234,567.50</code>. Grouping is
+    <code>Intl</code>-driven via <code>data-locale</code> — under
+    <code>en-IN</code> the same value reads <code>12,34,567.50</code> —
+    and the submitted value is always the raw number via a generated
+    hidden input. Works the same on
+    <a href={base + '/components/quantity'}>Quantity</a> and any plain
+    numeric input. Without JS the field stays a native number input:
+    correct, just ungrouped.</p>
+  </section>
+
+  <section class="demo">
     <h2>Inside a form field</h2>
     <Demo code={inField} />
     <p class="bo-u-text-muted">Composes <code>.bo-form-field</code>
@@ -252,8 +283,9 @@ const canonical = `<!-- Two real form controls working as one field: the select 
   </section>
 
   <script>
-    import { initMoneyField } from '@busy-office/ui/js';
+    import { initMoneyField, initGroupedNumber } from '@busy-office/ui/js';
     initMoneyField();
+    initGroupedNumber();
   </script>
 
   <ClassRef component="money" />

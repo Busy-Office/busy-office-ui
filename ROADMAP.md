@@ -190,7 +190,28 @@ are settled; each item below now carries its decided design and Accept
 criteria, and builds in order: masking → app frame + suite home →
 reconciliation → timesheet → comparison.
 
-1. [ ] **123.1 — Grouped-number formatting, decided: format-on-blur.**
+1. [x] **123.1 — DONE 2026-08-23. Accept met on every criterion:**
+       `initGroupedNumber()` + `data-grouped`/`data-locale` shipped as ONE
+       behavior (grouped-number.ts) serving Money, Quantity and plain
+       numeric inputs; Money's currency-change reformat and Quantity's
+       steppers both route reads/writes through the shared machine-value
+       path. Unit tests prove `1,234,567.50` (en-US) AND `12,34,567.50`
+       (en-IN — Intl-driven, not every-3-digits), the de-DE comma-decimal
+       + lone-dot trap, the never-round lossless rule, garbage→empty
+       submission, and both compositions (8 new tests, 124/124). The
+       submitted value is the raw number via a generated hidden input in
+       all cases. Docs demos on all three pages (money/quantity/form),
+       behaviors.json + js-behaviors page updated by generation,
+       data-hooks gate documents both new attributes (67). The runtime
+       claim has a RED-PROVED check-claims case (data-grouped stripped
+       from the built artifact → exactly that case fails; restored →
+       97/97). Live-verified in the browser (real focus/type/blur:
+       98,765,432.10 rendered, raw in the hidden input; stepper on a
+       grouped value; light+dark, 1440+390 — a real clipping bug at 390
+       found by measuring clientWidth vs scrollWidth and fixed at the
+       demo's container). CHANGELOG Unreleased entry written.
+       *(original decided-design entry follows)*
+       **Decided: format-on-blur.**
        Owner-confirmed per the evidence (`.roundtable/research-numeric-
        masking-2026-08-23.md`: on-blur is what Reckon ships, SAP's own
        guidance warns off live reformatting, GOV.UK abandoned

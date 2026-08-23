@@ -64,6 +64,20 @@ const field = `<!-- no stepper buttons — this section is about validation, not
   <p class="bo-form-field__message" id="qf-1-msg">Only 100 in stock.</p>
 </div>`;
 
+const grouped = `<!-- data-grouped: a large stock count reads as 1,250,000 —
+     grouped ON BLUR; the generated hidden input submits the raw number. -->
+<div class="bo-quantity" style="max-inline-size: 16rem"><!-- the default
+     12rem cap fits "9,999"; a grouped 7-digit count needs more room -->
+  <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-hidden="true">−</button>
+  <input class="bo-input bo-quantity__input" type="number" inputmode="numeric"
+      value="1250000" min="0" step="1" name="stock-count" data-grouped
+      data-locale="en-US" aria-label="Quantity">
+  <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-hidden="true">+</button>
+  <span class="bo-quantity__unit" aria-hidden="true">ea</span>
+  <span class="bo-visually-hidden">each</span>
+</div>
+<!-- + initGroupedNumber() once, alongside initQuantity() -->`;
+
 const spacious = `<div data-density="spacious">
   <div class="bo-quantity">
     <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
@@ -230,6 +244,18 @@ const markup = `<!-- basic: ( qty | unit ), joined — no buttons needed -->
   </section>
 
   <section class="demo">
+    <h2>Grouped display — <code>data-grouped</code></h2>
+    <Demo code={grouped} />
+    <p class="bo-u-text-muted">Warehouse-scale counts group their thousands
+    <strong>on blur</strong> — the steppers keep working on the machine
+    value, and the generated hidden input submits the raw number. The same
+    mechanism as <a href={base + '/components/money'}>Money</a>'s grouped
+    amount (one behavior, three controls); locale comes from
+    <code>data-locale</code>, precision from <code>step</code> or
+    <code>data-decimals</code> as everywhere else.</p>
+  </section>
+
+  <section class="demo">
     <h2>Unit decimals reference — the complete built-in table</h2>
     <p>Every unit the built-in table knows, case-insensitive.
     <strong>Anything not listed leaves the field's precision entirely
@@ -309,8 +335,9 @@ const markup = `<!-- basic: ( qty | unit ), joined — no buttons needed -->
   </section>
 
   <script>
-    import { initQuantity } from '@busy-office/ui/js';
+    import { initQuantity, initGroupedNumber } from '@busy-office/ui/js';
     initQuantity();
+    initGroupedNumber();
   </script>
 
   <ClassRef component="quantity" />

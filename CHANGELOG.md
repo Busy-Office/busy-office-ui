@@ -6,6 +6,27 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
+## Unreleased
+
+- **Added** (`money`, `quantity`, forms): `initGroupedNumber()` +
+  `data-grouped` — thousands-separator display for numeric inputs,
+  formatted **on blur, never while typing** (the pattern real accounting
+  software ships; live reformatting was refused with the evidence — caret
+  jumps, locale decimal bugs, screen-reader announcement churn). One
+  behavior serves Money amounts, Quantity counts and plain numeric
+  inputs. At init the input's `type="number"` becomes
+  `type="text" inputmode="decimal"` and its `name` moves to a generated
+  hidden input that always submits the RAW number — the server never
+  parses a grouped string. Grouping is `Intl.NumberFormat`-driven via
+  `data-locale` (falling back to the document `lang`): `en-IN` correctly
+  renders `12,34,567.50`, which an every-3-digits rule cannot. Typing is
+  parsed locale-aware (a comma decimal under `de-DE` works; a lone dot is
+  always a decimal mark, never grouping — the classic trap). The lossless
+  contract holds: pad/trim only, a value the precision cannot represent
+  keeps its own decimals. Quantity's steppers and Money's currency-change
+  reformat both operate on the machine value of a grouped input. Without
+  JS the field stays a native number input — correct, just ungrouped.
+
 ## 0.3.0 (2026-08-23)
 
 > **Upgrading from 0.1.1? Read the 0.2.0 section below as well.** 0.2.0 was

@@ -7,6 +7,17 @@ import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
+const groupedNumeric = `<!-- data-grouped on a PLAIN numeric input — same
+     mechanism as Money and Quantity: grouped on blur, raw value submitted
+     via a generated hidden input. + initGroupedNumber() once. -->
+<div class="bo-form-field" style="max-inline-size: 16rem">
+  <label class="bo-form-field__label" for="grp-budget">Annual budget</label>
+  <input class="bo-input bo-input--numeric" id="grp-budget" type="number"
+      step="0.01" value="2500000" name="budget" data-grouped
+      data-locale="en-US" aria-describedby="grp-budget-hint" />
+  <span class="bo-form-field__hint" id="grp-budget-hint">Groups on blur — click in, type a number, tab away</span>
+</div>`;
+
 const fieldsRow = `<form class="bo-form-row" novalidate>
   <div class="bo-form-field">
     <label class="bo-form-field__label" for="vendor">Vendor</label>
@@ -206,6 +217,23 @@ const fieldMarkup = `<div class="bo-form-field">
     <a href={base + '/components/data-table'}>data table</a> uses for cell
     editing.</p>
   </section>
+  <section class="demo">
+    <h2>Grouped numeric input — <code>data-grouped</code></h2>
+    <Demo code={groupedNumeric} />
+    <p class="bo-u-text-muted">Thousands separators appear <strong>on
+    blur</strong>, never while typing; the submitted value stays the raw
+    number (a generated hidden input carries it). One behavior serves this
+    plain input, <a href={base + '/components/money'}>Money</a> and
+    <a href={base + '/components/quantity'}>Quantity</a> — locale from
+    <code>data-locale</code>, precision from <code>step</code>/<code>data-decimals</code>.
+    Without JS the field is a native number input: correct, ungrouped.</p>
+  </section>
+
+  <script>
+    import { initGroupedNumber } from '@busy-office/ui/js';
+    initGroupedNumber();
+  </script>
+
   <section class="demo">
     <h2>Sections &amp; the action bar</h2>
     <Demo code={sections} />

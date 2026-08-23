@@ -1959,6 +1959,30 @@ check(
   JSON.stringify({ fullScreenLink, fullScreenPage }),
 );
 
+// "Groups on blur — click in, type a number, tab away" (123.1): the form
+// page's data-grouped input. Drives the real focus → edit → blur path; the
+// submitted value must be the RAW number via the generated hidden input.
+await visit('/components/form/');
+const grouped = await page.evaluate(() => {
+  const input = document.getElementById('grp-budget');
+  input.focus();
+  const whileFocused = input.value;
+  input.value = '1234567.5';
+  input.blur();
+  const hidden = document.querySelector('input[type="hidden"][name="budget"]');
+  return {
+    type: input.type, inputMode: input.inputMode, whileFocused,
+    display: input.value, raw: hidden?.value ?? null,
+  };
+});
+check(
+  "form's data-grouped input: raw while focused, grouped on blur, raw number submitted",
+  grouped.type === 'text' && grouped.inputMode === 'decimal' &&
+    grouped.whileFocused === '2500000.00' && grouped.display === '1,234,567.50' &&
+    grouped.raw === '1234567.50',
+  JSON.stringify(grouped),
+);
+
 await browser.close();
 server.close();
 
