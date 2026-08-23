@@ -8,6 +8,26 @@ pin.
 
 ## Unreleased
 
+- **Added** (`scan`, RF): the scan-result flash — `data-scan-flash` on a
+  `[data-scan-input]` field paints a ~600ms viewport wash on capture
+  (`body[data-scan-result="ok"]`), and the exported
+  `flashScanResult('error', reason)` paints your validation's verdict,
+  announcing the reason through the existing `data-scan-status` live
+  region. Two-channel by construction; reduced-motion gets a static wash,
+  forced-colors a Highlight frame (proven under emulation, not assumed);
+  the overlay is pointer-inert and sits below toasts. Ships in the
+  `rf-essentials` profile, which now carries a build-failing **40 kB
+  size budget** (currently 35.3). Capture is not validity: the framework
+  never decides whether a scanned code is right — it paints the moment.
+
+- **Added** (`button`): `.bo-btn-group--bar` — the RF exception bar. The
+  joined group stretches to a full-width row of EQUAL flex slots (a
+  gloved thumb aims at position, so positions must not shift with label
+  length); long labels WRAP taller in place rather than clipping (a
+  label is content — WCAG 1.4.12 vetoed the ellipsizing first draft).
+  Height comes from `data-density="spacious"`; docking is one consumer
+  line. Intent-named buttons, never F-key numbers.
+
 - **Fixed** (`grouped-number`, three defects found dogfooding 0.4.0 into
   po-app on the day of release — the reference app drove them out within
   hours): (1) focusing a grouped input swapped the display to the raw
