@@ -93,12 +93,21 @@ for (const rule of rules) {
   // — every table page mentions .bo-data-table, but only a handful render a
   // row in the error state.
   const attrs = [...rule.sel.matchAll(/\[([a-z-]+)=["']([^"']+)["']\]/g)].map((m) => `${m[1]}="${m[2]}"`);
+  /* VALUELESS attribute selectors ([data-scan-result] with no =value, the
+     scan flash's base rule, 126.2) produced zero needles and died as
+     "no built page" before the synthesis step could ever run. The attr
+     NAME is needle enough — it appears in the owning page's own API
+     table — and synthesis below sets it with an empty value, which a
+     valueless selector matches. */
+  const bareAttrs = [...rule.sel.matchAll(/\[([a-z-]+)\](?!=)/g)].map((m) => m[1])
+    .filter((name) => !attrs.some((a) => a.startsWith(name + '=')));
+  rule.bareAttrs = bareAttrs;
   // CANDIDATES, not one guess: a class name appears in prose and code
   // samples as often as in live markup, so the first page that merely
   // mentions it frequently has no element matching the selector. The
   // browser pass below settles it by actually querying.
   rule.attrs = attrs;
-  const needles = [...classes, ...attrs];
+  const needles = [...classes, ...attrs, ...bareAttrs];
   rule.candidates = needles.length
     ? [...htmlCache].filter(([, html]) => needles.every((n) => html.includes(n))).map(([path]) => path)
     : [];
@@ -127,27 +136,38 @@ async function measure(forced) {
     const tryPages = rule.page ? [rule.page] : rule.candidates.slice(0, 20);
     for (const path of tryPages) {
       await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
-      const got = await page.evaluate((sel, props, attrs) => {
-        let el = document.querySelector(sel);
+      const got = await page.evaluate((sel, props, attrs, bare0) => {
+        /* A pseudo-element rule (the scan flash's ::after is this gate's
+           first) can never match querySelector — query the BASE element
+           and hand the pseudo to getComputedStyle, per spec. */
+        const pseudo = (sel.match(/::[a-z-]+$/) ?? [null])[0];
+        const baseSel = pseudo ? sel.slice(0, -pseudo.length) : sel;
+        let el = document.querySelector(baseSel);
         // Runtime-only states never appear in static HTML: data-row-state
         // ="dirty" is set by initRowEdit() when a row has unsaved edits, so
         // no built page can contain one. Synthesise it — the rule targets an
         // attribute the APP sets, and setting it is a faithful stand-in.
-        if (!el && attrs.length) {
-          const bare = sel.replace(/\[[a-z-]+=["'][^"']+["']\]/g, '');
+        if (!el && (attrs.length || bare0.length)) {
+          // strip valued AND valueless attr selectors, plus any pseudo —
+          // the host is the element the attrs get synthesized ONTO.
+          const bare = sel
+            .replace(/\[[a-z-]+=["'][^"']+["']\]/g, '')
+            .replace(/\[[a-z-]+\]/g, '')
+            .replace(/::[a-z-]+/g, '');
           const host = document.querySelector(bare.split('>')[0].trim());
           if (host) {
             for (const a of attrs) {
               const [name, value] = a.split('=');
               host.setAttribute(name, value.replace(/"/g, ''));
             }
-            el = document.querySelector(sel);
+            for (const name of bare0) host.setAttribute(name, '');
+            el = document.querySelector(baseSel);
           }
         }
         if (!el) return null;
-        const cs = getComputedStyle(el);
+        const cs = getComputedStyle(el, pseudo ?? undefined);
         return Object.fromEntries(props.map((p) => [p, cs.getPropertyValue(p)]));
-      }, rule.sel, rule.props, rule.attrs ?? []);
+      }, rule.sel, rule.props, rule.attrs ?? [], rule.bareAttrs ?? []);
       if (got) { rule.page = path; seen.set(rule.sel, got); break; }
     }
   }

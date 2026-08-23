@@ -94,7 +94,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <tbody>
           <tr><td>Loading</td><td>tiles render immediately with a skeleton count; never block the whole grid on one slow endpoint</td></tr>
           <tr><td>Zero open</td><td>the tile stays, badge reads 0 — see Count above; a vanished tile reads as "not my job today," which is wrong</td></tr>
-          <tr><td>Offline</td><td>last-known counts shown with a stale-data cue; tapping in still opens the cached queue rather than a dead end</td></tr>
+          <tr><td>Session lost</td><td>the reconnect state: the menu re-renders from the server when the link returns. Cached menus and stale-data cues are an APP/infrastructure layer (the reference products sell session persistence as a server product) — this framework ships the visuals a reconnect needs, and promises nothing it does not ship</td></tr>
           <tr><td>Permission-scoped</td><td>a task type the worker's role can't run is omitted from the grid, not shown disabled — RF screen real estate at 360px is too scarce for a tile nobody can use</td></tr>
           <tr><td>No JS</td><td>fully functional — this page has no JS dependency; each tile is a real <code>&lt;a href&gt;</code> (native navigation to the task queue), and the page imports no <code>@busy-office/ui/js</code> behavior</td></tr>
         </tbody>

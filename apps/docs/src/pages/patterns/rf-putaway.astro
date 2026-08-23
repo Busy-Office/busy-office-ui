@@ -1,0 +1,143 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import PutawayScreen from '../../components/rf/PutawayScreen.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<!-- The verification idiom: the system NAMES the destination and
+     the scan must MATCH it. Matching is three consumer lines — the
+     framework paints capture and verdict, never decides them. -->
+<dl class="bo-kv bo-kv--rows"> …HU / From / To bin (bold — the one fact that matters)… </dl>
+
+<input class="bo-input bo-input--code" data-scan-input data-scan-flash
+    aria-describedby="scan-status" />
+<p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+
+<script type="module">
+  document.addEventListener("bo:scan", (e) => {
+    if (e.detail.value !== expectedBin) flashScanResult("error", "Wrong bin: …");
+    else confirmPutaway();
+  });
+</script>
+
+<div class="bo-btn-group bo-btn-group--bar">
+  <button class="bo-btn bo-btn--secondary">Back</button>
+  <button class="bo-btn bo-btn--secondary">Bin full</button>
+  <button class="bo-btn bo-btn--secondary">Wrong HU</button>
+</div>`;
+---
+<Gallery title="Pattern: RF putaway">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever moves what receiving just
+    accepted into its storage bin — the second half of every inbound
+    delivery. <strong>How often</strong>: per handling unit, all day while
+    trucks unload. <strong>What "done" looks like</strong>: the HU
+    physically in the bin the system chose, proven by scanning that bin's
+    label — the <em>verification</em> idiom: the screen names the
+    destination in bold, and the scan must match it. A wrong bin flashes
+    red before the pallet is set down, which is precisely when a putaway
+    error is still free to fix.
+    <strong>Not the receiving step</strong> —
+    <a href={base + '/patterns/goods-receipt'}>goods receipt</a> captures
+    what ARRIVED against the PO; putaway moves what receipt accepted.
+    Merging them makes dock workers do binning decisions with a truck
+    waiting, which is how both jobs end up done badly.
+  </p>
+
+  <section class="demo" data-density="spacious">
+    <h2>The screen — try it</h2>
+    <div style="max-inline-size: 22.5rem">
+      <PutawayScreen />
+    </div>
+    <p class="bo-u-text-muted">Scan (type + Enter) <code>B-07-12</code> to
+    confirm — anything else flashes the error verdict with the expected
+    bin in the announcement. The compare is <strong>three consumer
+    lines</strong> on <code>bo:scan</code>: verification is validation,
+    and validation is yours; the framework paints capture and verdict.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The RF-floor profile, at RF-scanner size</h2>
+    <p>The same screen — via the shared component — in an isolated document
+    styled by ONLY the <code>rf-essentials</code> profile
+    (Chrome/WebView&nbsp;108), at 360×640:</p>
+    <iframe
+      src={base + '/patterns/rf/rf-putaway-rf/'}
+      title="RF putaway, rf-essentials profile, 360×640"
+      class="rf-device-frame"
+    ></iframe>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Move header</strong> — <a href={base + '/components/kv'}>KV
+        rows</a>: HU, where it came from, and the destination in
+        <strong>bold</strong> — the one fact the whole screen exists to
+        confirm.</li>
+      <li><strong>Verification scan</strong> —
+        <a href={base + '/components/scan'}>scan input + flash</a>; the
+        label says what to scan, the announcement carries the verdict.</li>
+      <li><strong>Confirmation line</strong> — a
+        <a href={base + '/components/badge'}>badge</a> + text, revealed on
+        match; the next HU replaces the screen in a real app.</li>
+      <li><strong>Exception bar</strong> — Back / Bin full / Wrong HU:
+        the two real exceptions this move has, intent-named.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /rf/putaway/next</td><td>the next HU + its system-chosen bin, server-rendered</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /rf/putaway/:hu/confirm</td><td>the scanned bin; the server RE-CHECKS the match (the client compare is UX, never the control) and returns the next HU</td></tr>
+          <tr><td class="bo-data-table__col--code">POST … bin-full</td><td>returns an alternative bin for the same HU — the worker never chooses a bin freehand</td></tr>
+          <tr><td class="bo-data-table__col--code">409 (bin occupied since assignment)</td><td>a new destination with the reason — never a silent reroute; reroutes without reasons are audit holes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Awaiting verification</td><td>destination bold in the header; the field names it again in its label</td></tr>
+          <tr><td>Wrong bin scanned</td><td>error flash + expected bin announced; field clears for retry — the pallet is still on the truck of the forklift, where the fix is free</td></tr>
+          <tr><td>Confirmed</td><td>badge + text, then the next HU; the flash alone is never the record</td></tr>
+          <tr><td>Bin full</td><td>the exception button, not a freehand override — the server picks the alternative</td></tr>
+          <tr><td>Session lost</td><td>reconnect re-renders the HU as the server has it; persistence is infrastructure, not a screen promise</td></tr>
+          <tr><td>No JS</td><td>Enter posts the scan; the server's re-render carries the verdict. Header, field and bar are markup</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/scan'}>Scan feedback</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/goods-receipt", "Goods receipt (what arrives; putaway moves it)"],
+    ["/patterns/rf-pick", "RF picking (the outbound mirror)"],
+    ["/patterns/rf-landing", "RF task menu"],
+    ["/components/scan", "Scan feedback"],
+  ]} />
+</Gallery>

@@ -37,10 +37,17 @@ const api = JSON.parse(
 
 /** docs-page slug -> every block that component ships. */
 const blocksBySlug = new Map();
+const attrsBySlug = new Map();
 for (const [name, entry] of Object.entries(api.components)) {
-  const blocks = entry.blocks?.length ? entry.blocks : [`bo-${name}`];
+  /* An attribute-only component (scan, 126.2) has no blocks — its render
+     evidence is one of its data-* hooks in the demo region, the same
+     generalization extract-api itself made for attr-only surfaces. Only
+     use the bo-<name> guess when the entry has neither. */
+  const blocks = entry.blocks?.length ? entry.blocks
+    : entry.dataAttrs?.length ? [] : [`bo-${name}`];
   for (const key of new Set([api.pageSlug?.[name] ?? name, name])) {
     blocksBySlug.set(key, new Set([...(blocksBySlug.get(key) ?? []), ...blocks]));
+    attrsBySlug.set(key, new Set([...(attrsBySlug.get(key) ?? []), ...(entry.dataAttrs ?? [])]));
   }
 }
 
@@ -74,7 +81,9 @@ for (const page of await distPages(DIST)) {
   for (const slug of new Set([...section[1].matchAll(/\/components\/([a-z-]+)/g)].map((m) => m[1]))) {
     const blocks = blocksBySlug.get(slug);
     if (!blocks) continue; // a page with no api.json entry (concepts-style) — not ours to police
-    if (![...blocks].some((b) => rendersBlock(rendered, b))) {
+    const attrs = attrsBySlug.get(slug) ?? new Set();
+    const rendersAttr = [...attrs].some((a) => new RegExp(`\\s${a}[\\s>=]`).test(rendered));
+    if (![...blocks].some((b) => rendersBlock(rendered, b)) && !rendersAttr) {
       failures.push(
         `${page.url}\n     lists "${slug}" under Components used, but the screen never renders it` +
           `\n     render it, or take it off the list — the list is what the screen IS built from`,

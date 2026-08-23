@@ -141,6 +141,9 @@ for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro') 
    the same fixture shape for the two new RF-track patterns — same reason,
    same exemption. */
 const RELATED_EXEMPT = new Set([
+  'patterns/rf/rf-pick-rf.astro',
+  'patterns/rf/rf-putaway-rf.astro',
+  'patterns/rf/rf-count-rf.astro',
   'index.astro',
   '404.astro',
   'patterns/rf/goods-receipt-rf.astro',

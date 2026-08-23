@@ -48,6 +48,7 @@ const EXCEPTIONS = new Set([
   'data-line-remove', 'data-line-total',                // editable-grid totals demo
   'data-any-dirty',                                     // detail-form's field-per-row variant dirty demo
   'data-maintenance',                                   // master-detail fixture flag
+  'data-pick-keypad', 'data-key',                       // rf-pick's keypad RECIPE (grill R2-Q4): consumer wiring by design — promoting these to API would be the component the grill refused
   'data-richtext-cmd', 'data-richtext-value',           // richtext toolbar demo (113.1: value-taking commands)
 ]);
 

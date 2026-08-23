@@ -78,6 +78,9 @@ export const PATTERN_GROUPS = [
       { href: '/patterns/rf-landing', label: 'RF task menu' },
       { href: '/patterns/rf-list', label: 'RF task queue' },
       { href: '/patterns/goods-receipt', label: 'Goods receipt (RF scanner)' },
+      { href: '/patterns/rf-pick', label: 'RF picking' },
+      { href: '/patterns/rf-putaway', label: 'RF putaway' },
+      { href: '/patterns/rf-count', label: 'RF count' },
     ],
   },
 ];

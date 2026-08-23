@@ -1,0 +1,45 @@
+---
+/**
+ * The putaway pattern's screen — shared by page + rf-profile mirror (the
+ * ScanToReceive rule). The verification idiom lives here: the system
+ * NAMES the destination bin, and the scan must MATCH it — SAP's
+ * verification-profile shape, done as input--code + a three-line compare,
+ * because matching is validation and validation is the consumer's.
+ */
+---
+<dl class="bo-kv bo-kv--rows" style="margin-block-end: var(--bo-space-3)">
+  <div><dt>HU</dt><dd><span class="bo-u-tabular">HU-100234</span></dd></div>
+  <div><dt>From</dt><dd>GR zone · <span class="bo-u-tabular">DOCK-04</span></dd></div>
+  <div><dt>To bin</dt><dd><strong class="bo-u-tabular">B-07-12</strong></dd></div>
+</dl>
+
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="put-scan">Scan destination bin to confirm</label>
+  <input class="bo-input bo-input--code" id="put-scan" data-scan-input data-scan-flash
+      placeholder="Scan B-07-12…" aria-describedby="put-scan-status" />
+  <p id="put-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+</div>
+
+<p class="bo-u-text-muted" id="put-confirm" hidden>
+  <span class="bo-badge bo-badge--success">Confirmed</span> HU-100234 placed in B-07-12.
+</p>
+
+<div class="bo-btn-group bo-btn-group--bar">
+  <button class="bo-btn bo-btn--secondary" type="button">Back</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Bin full</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Wrong HU</button>
+</div>
+
+<script>
+  import { initScanInput, flashScanResult } from '@busy-office/ui/js';
+  initScanInput();
+  // The verification compare — three consumer lines, exactly as documented.
+  document.getElementById('put-scan')?.addEventListener('bo:scan', (e) => {
+    const value = (e as CustomEvent).detail.value.toUpperCase();
+    if (value === 'B-07-12') {
+      document.getElementById('put-confirm')?.removeAttribute('hidden');
+    } else {
+      flashScanResult('error', `Wrong bin: ${value} — this HU goes to B-07-12`);
+    }
+  });
+</script>

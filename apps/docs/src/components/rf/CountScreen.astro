@@ -1,0 +1,50 @@
+---
+/**
+ * The physical-inventory count screen — shared by page + rf-profile
+ * mirror. A count is BLIND by design: the expected quantity is never on
+ * screen, or the counter anchors to it and the count proves nothing.
+ * That single fact shapes the whole screen — it is the one RF pattern
+ * whose KV header deliberately WITHHOLDS a number.
+ */
+---
+<dl class="bo-kv bo-kv--rows" style="margin-block-end: var(--bo-space-3)">
+  <div><dt>Count doc</dt><dd><span class="bo-u-tabular">PI-2026-081</span> · bin 4 of 30</dd></div>
+  <div><dt>Bin</dt><dd><span class="bo-u-tabular">C-02-08</span></dd></div>
+  <div><dt>Item</dt><dd>Seal kit 60&nbsp;mm · <span class="bo-u-tabular">MAT-1180</span></dd></div>
+</dl>
+
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="count-scan">Scan bin to open the count</label>
+  <input class="bo-input bo-input--code" id="count-scan" data-scan-input data-scan-flash
+      placeholder="Scan C-02-08…" aria-describedby="count-scan-status" />
+  <p id="count-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+</div>
+
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="count-qty">Counted quantity</label>
+  <div class="bo-quantity">
+    <input class="bo-quantity__input" id="count-qty" type="number" inputmode="numeric"
+        min="0" step="1" placeholder="—" aria-label="Counted quantity" />
+    <span class="bo-quantity__unit" aria-hidden="true">ea</span>
+    <span class="bo-visually-hidden">each</span>
+  </div>
+  <span class="bo-form-field__hint">Blind count — the system's figure is deliberately not shown.</span>
+</div>
+
+<div class="bo-btn-group bo-btn-group--bar">
+  <button class="bo-btn bo-btn--secondary" type="button">Back</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Item not found</button>
+  <button class="bo-btn" type="button">Submit count</button>
+</div>
+
+<script>
+  import { initScanInput, initQuantity, flashScanResult } from '@busy-office/ui/js';
+  initScanInput();
+  initQuantity();
+  document.getElementById('count-scan')?.addEventListener('bo:scan', (e) => {
+    const value = (e as CustomEvent).detail.value.toUpperCase();
+    if (value !== 'C-02-08') {
+      flashScanResult('error', `Wrong bin: ${value} — this count is for C-02-08`);
+    }
+  });
+</script>

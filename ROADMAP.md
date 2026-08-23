@@ -224,12 +224,51 @@ components" bar.
        (glove targets via spacious), intent-named — no F-key cargo
        cult. Accept: component docs section + RF pattern adoption;
        target-size clean at spacious.
-4. [ ] **126.4 — three new RF patterns: pick, putaway, count.** Each
+4. [x] **126.4 — DONE 2026-08-23. Accept met.** `/patterns/rf-pick`,
+       `/patterns/rf-putaway`, `/patterns/rf-count` — each a shared
+       screen component (page + isolated rf-essentials mirror, the
+       ScanToReceive rule), full pattern skeleton, KV task header, scan
+       flash, the --bar, and the design facts the grill demanded: pick
+       carries the KEYPAD RECIPE (12 plain bo-btns + 3 consumer lines,
+       inputmode stays the floor), putaway carries the VERIFICATION
+       idiom (system names the bin, scan must match, compare is 3
+       consumer lines), count is BLIND by design (the one header that
+       withholds a number; empty ≠ 0, the timesheet rule). Session-lost
+       rows state the reconnect truth, never offline promises. Driven
+       live ON THE PROFILE MIRROR at 360×640: keypad writes, bar slots
+       equal ±1px with "Report short" WRAPPING in place (the 1.4.12 fix
+       visible), wrong-scan flashes error with the reason announced.
+       **Three instrument catches while building:** components-used
+       could not see attr-only `scan` rendered (generalized: a
+       component's data-* hooks count as render evidence — the
+       extract-api generalization, one gate downstream); the keypad's
+       demo hooks are recorded data-hooks EXCEPTIONS citing the grill
+       (promoting them would be the component the grill refused); and
+       CI caught check:forced-colors dying on the flash rule — the gate
+       gained VALUELESS-attr needles and PSEUDO-ELEMENT measurement
+       (its first ::after rule), so the Highlight frame is now PROVEN
+       under emulation (24 rules, 19 structural), not exempted. That CI
+       failure was also mine to own: forced-colors was missing from my
+       pre-push sweep set for 126.2. Gates: links 13,204 incl.
+       DOCS_BASE, claims 98, axe 120 pages x 2 widths zero, layout,
+       target-size. Original text: **three new RF patterns: pick,
+       putaway, count.** Each
        with the keypad RECIPE (grid of bo-btns; native inputmode stays
        the floor), verification-field recipe, Task/Loc/Item KV header,
        exception bar, full pattern skeleton. Accept: pattern gates,
        axe/layout, both themes at 360×640.
-5. [ ] **126.5 — comprehensive pass on the existing 3 RF pages.** KV
+5. [x] **126.5 — DONE 2026-08-23.** The three unshipped offline
+       PROMISES are gone: goods-receipt / rf-landing / rf-list now state
+       the reconnect truth (persistence is infrastructure — the
+       reference products sell it as a server; the screen documents the
+       state it actually ships). Camera-fallback recipe added to
+       goods-receipt's data contract (capture="environment" +
+       BarcodeDetector feeding the same bo:scan flow — a recipe, per the
+       grill: camera pipelines are device capability, not CSS).
+       Goods-receipt had already adopted the bar + flash in 126.2/126.3.
+       claims 98 still green after the rewording — no state row promises
+       unshipped behavior. Original text: **comprehensive pass on the
+       existing 3 RF pages.** KV
        header idiom, verification + camera-fallback recipes in Data
        contracts, and the unshipped offline PROMISES reworded to the
        truth. Accept: no state-table row promises unshipped behavior;

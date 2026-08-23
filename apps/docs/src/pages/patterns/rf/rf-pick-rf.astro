@@ -1,0 +1,31 @@
+---
+/* Isolated rf-essentials proof for /patterns/rf-pick — same rule as
+   goods-receipt-rf: no Gallery, no main bundle; this page must prove the
+   profile (Chrome/WebView 108) is sufficient on its own. */
+import PickScreen from '../../../components/rf/PickScreen.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const cssHref = base + '/assets/rf-essentials.min.css';
+---
+<!doctype html>
+<html lang="en" data-density="spacious">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RF pick — rf-essentials profile</title>
+    <link rel="stylesheet" href={cssHref} />
+    <style>
+      body {
+        margin: 0;
+        padding: var(--bo-space-3);
+        background: var(--bo-color-bg-canvas);
+        color: var(--bo-color-text-primary);
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="RF pick, rf-essentials profile demo">
+      <h1 class="bo-visually-hidden">RF pick</h1>
+      <PickScreen />
+    </main>
+  </body>
+</html>

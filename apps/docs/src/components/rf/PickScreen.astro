@@ -1,0 +1,81 @@
+---
+/**
+ * The pick pattern's screen, shared by /patterns/rf-pick (embedded, spacious)
+ * and /patterns/rf/rf-pick-rf (isolated rf-essentials proof) — one source,
+ * so the demo and the profile proof cannot drift (the ScanToReceive rule).
+ *
+ * Composes ONLY profile members: kv header (Task/From/Item — the
+ * Velocity-modernized header shape), scan input + flash, quantity at
+ * spacious, the --bar exception row, and the keypad RECIPE — a grid of
+ * plain bo-btns wired to the quantity input, proving the grill's
+ * recipe-not-component verdict with working markup.
+ */
+---
+<dl class="bo-kv bo-kv--rows" style="margin-block-end: var(--bo-space-3)">
+  <div><dt>Task</dt><dd><span class="bo-u-tabular">PK-4471</span> · 3 of 12</dd></div>
+  <div><dt>From bin</dt><dd><span class="bo-u-tabular">A-01-04</span></dd></div>
+  <div><dt>Item</dt><dd>Hydraulic pump 24V · <span class="bo-u-tabular">MAT-4471</span></dd></div>
+  <div><dt>Pick</dt><dd><strong class="bo-u-tabular">12</strong> ea</dd></div>
+</dl>
+
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="pick-scan">Scan bin, then item</label>
+  <input class="bo-input bo-input--code" id="pick-scan" data-scan-input data-scan-flash
+      placeholder="Scan A-01-04…" aria-describedby="pick-scan-status" />
+  <p id="pick-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+</div>
+
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="pick-qty">Quantity picked</label>
+  <div class="bo-quantity">
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
+    <input class="bo-quantity__input" id="pick-qty" type="number" inputmode="numeric" value="12" min="0" max="12" step="1" aria-label="Quantity picked" />
+    <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
+    <span class="bo-quantity__unit" aria-hidden="true">ea</span>
+    <span class="bo-visually-hidden">each</span>
+  </div>
+</div>
+
+{/* The keypad RECIPE (grill R2-Q4): a grid of ordinary bo-btns writing into
+    the quantity input. Native inputmode stays the zero-JS floor — this is
+    an ADDITIVE convenience for thick gloves, not a replacement keyboard. */}
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bo-space-2); max-inline-size: 16rem; margin-block-end: var(--bo-space-3)" data-pick-keypad>
+  {[1,2,3,4,5,6,7,8,9].map((n) => (
+    <button class="bo-btn bo-btn--secondary" type="button" data-key={n}>{n}</button>
+  ))}
+  <button class="bo-btn bo-btn--secondary" type="button" data-key="clr">CLR</button>
+  <button class="bo-btn bo-btn--secondary" type="button" data-key="0">0</button>
+  <button class="bo-btn" type="button" data-key="ok">OK</button>
+</div>
+
+<div class="bo-btn-group bo-btn-group--bar">
+  <button class="bo-btn bo-btn--secondary" type="button">Back</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Skip item</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Report short</button>
+</div>
+
+<script>
+  import { initScanInput, initQuantity, flashScanResult } from '@busy-office/ui/js';
+  initScanInput();
+  initQuantity();
+
+  // Demo stand-in for YOUR pick validation: the task says bin A-01-04 and
+  // item MAT-4471; anything else scanned flashes the error verdict.
+  const EXPECTED = ['A-01-04', 'MAT-4471'];
+  document.getElementById('pick-scan')?.addEventListener('bo:scan', (e) => {
+    const value = (e as CustomEvent).detail.value;
+    if (!EXPECTED.includes(value.toUpperCase())) {
+      flashScanResult('error', `Wrong scan: ${value} — expected ${EXPECTED[0]} or ${EXPECTED[1]}`);
+    }
+  });
+
+  // Keypad recipe wiring: three lines of consumer code, as the docs promise.
+  const qty = document.getElementById('pick-qty') as HTMLInputElement | null;
+  document.querySelector('[data-pick-keypad]')?.addEventListener('click', (e) => {
+    const key = (e.target as HTMLElement).closest('[data-key]')?.getAttribute('data-key');
+    if (!key || !qty) return;
+    if (key === 'clr') qty.value = '';
+    else if (key !== 'ok') qty.value = (qty.value + key).replace(/^0+(?=\d)/, '');
+    qty.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+</script>

@@ -128,6 +128,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted"><strong>No scanner? The camera is the
+    fallback, as a recipe.</strong> On a consumer phone, add
+    <code>capture="environment"</code> to a
+    <a href={base + '/components/file-upload'}>file input</a> for photo
+    evidence (damage, labels), and for live barcode reads feed the
+    <code>BarcodeDetector</code> API's result into the same
+    <code>bo:scan</code> flow where supported — the screen's contract does
+    not change, only the way the string arrives. Deliberately a recipe:
+    camera pipelines are a device capability, not framework CSS.</p>
   </section>
 
   <section class="demo">
@@ -141,7 +150,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Over-receipt</td><td>a warning with the tolerance stated; block only past the policy limit</td></tr>
           <tr><td>Partial receipt</td><td>the line shows received/ordered; posting a partial is normal and must not warn</td></tr>
           <tr><td>Complete</td><td>a clear terminal state — the next scan starts a NEW receipt rather than silently appending</td></tr>
-          <tr><td>Offline / flaky wifi</td><td>queue scans locally and replay; a dropped scan in a warehouse is a stock discrepancy later</td></tr>
+          <tr><td>Session lost / flaky wifi</td><td>the RECONNECT state: on regaining the server, re-render as the server has it. Session persistence is INFRASTRUCTURE (the reference products sell it as a server), not a screen promise — an unsent scan is retyped, which is honest and cheaper than a silently dropped one that reads as saved</td></tr>
           <tr><td>No JS</td><td>the scan field, quantity input, and table render as plain, focusable, typable native controls, but the core flow cannot complete: <code>initScanInput()</code> is what listens for the terminator key, clears/refocuses the field, and dispatches <code>bo:scan</code> — without it, pressing Enter after a scan does nothing, so no line ever reaches the log. The <code>+</code>/&minus; quantity steppers also need <code>initQuantity()</code>, though the number input itself stays usable via keyboard/typing</td></tr>
         </tbody>
       </table>

@@ -102,6 +102,10 @@ const JS_HOOKS = {
      own, so the walk cannot see it and a markup validator would call it
      invented (roadmap 32.2). */
   dropdown: { classes: ['bo-dropdown__menu--end'], dataAttrs: [] },
+  /* initScanInput()'s hooks live on the input, not in scan.css — without
+     this the attr-only scan component's API would show its CSS attr
+     (data-scan-result) but not the hooks a consumer actually writes. */
+  scan: { classes: [], dataAttrs: ['data-scan-input', 'data-scan-flash', 'data-scan-status', 'data-scan-terminator'] },
 };
 
 /* Values that are LEGAL but that the CSS never needs a rule for. Level 1 of a

@@ -1,0 +1,148 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import PickScreen from '../../components/rf/PickScreen.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<!-- Header answers before the worker asks: which task, which bin,
+     which item, how many. One scan field does bin AND item (the app knows
+     which it expects next); the flash paints capture, YOUR validation
+     paints the verdict. The keypad is a RECIPE — plain bo-btns writing
+     into the quantity input; inputmode stays the zero-JS floor. -->
+<dl class="bo-kv bo-kv--rows"> …Task / From bin / Item / Pick qty… </dl>
+
+<input class="bo-input bo-input--code" data-scan-input data-scan-flash
+    aria-describedby="scan-status" />
+<p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+
+<div class="bo-quantity"> …picked qty, spacious steppers… </div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bo-space-2)">
+  <button class="bo-btn bo-btn--secondary" data-key="1">1</button> …0–9, CLR, OK…
+</div>
+
+<div class="bo-btn-group bo-btn-group--bar">
+  <button class="bo-btn bo-btn--secondary">Back</button>
+  <button class="bo-btn bo-btn--secondary">Skip item</button>
+  <button class="bo-btn bo-btn--secondary">Report short</button>
+</div>`;
+---
+<Gallery title="Pattern: RF picking">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: a picker with a gun in one hand and the
+    other on the rack — the highest-volume RF activity in any warehouse.
+    <strong>How often</strong>: hundreds of times a shift, one task line at
+    a time. <strong>What "done" looks like</strong>: right bin confirmed by
+    scan, right item confirmed by scan, quantity entered without taking
+    gloves off, and the next line already on screen. The screen answers
+    before the worker asks — task, bin, item, quantity — in the
+    <a href={base + '/components/kv'}>KV header</a> every RF screen here
+    shares. <strong>Not for checking stock without moving it</strong> —
+    counting what a bin holds is
+    <a href={base + '/patterns/rf-count'}>the count pattern</a>, which is
+    blind by design; picking knows exactly what it wants and verifies the
+    worker found it.
+  </p>
+
+  <section class="demo" data-density="spacious">
+    <h2>The screen — try it</h2>
+    <div style="max-inline-size: 22.5rem">
+      <PickScreen />
+    </div>
+    <p class="bo-u-text-muted">Scan (type + Enter) <code>A-01-04</code> or
+    <code>MAT-4471</code> — capture flashes green; anything else flashes
+    red with the reason announced. The keypad is the grill's
+    <strong>recipe, not a component</strong>: twelve ordinary
+    <code>bo-btn</code>s and three consumer lines wiring them to the
+    quantity input — native <code>inputmode</code> remains the zero-JS
+    floor, and the grid is an additive convenience for thick gloves.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The RF-floor profile, at RF-scanner size</h2>
+    <p>The same screen — via the shared component — in an isolated document
+    styled by ONLY the <code>rf-essentials</code> profile
+    (Chrome/WebView&nbsp;108), at 360×640:</p>
+    <iframe
+      src={base + '/patterns/rf/rf-pick-rf/'}
+      title="RF pick, rf-essentials profile, 360×640"
+      class="rf-device-frame"
+    ></iframe>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Task header</strong> — <a href={base + '/components/kv'}>KV
+        rows</a>: task id + position, source bin, item, required quantity.
+        Everything a picker needs to trust the screen, nothing more.</li>
+      <li><strong>Scan field</strong> — one
+        <a href={base + '/components/scan'}>scan input</a> for bin then
+        item; the app knows which it expects next. Capture flashes ok;
+        your validation calls <code>flashScanResult('error', why)</code>.</li>
+      <li><strong>Quantity</strong> —
+        <a href={base + '/components/quantity'}>quantity</a> at spacious
+        density, plus the keypad recipe for gloved entry.</li>
+      <li><strong>Exception bar</strong> —
+        <a href={base + '/components/button'}>--bar</a>: Back / Skip item /
+        Report short. Intent-named, equal glove targets.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /rf/pick/next</td><td>the next task line — this screen, server-rendered; an empty queue returns the task-menu redirect, never a blank pick screen</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /rf/pick/:line/confirm</td><td>bin + item + qty; 422 names WHICH check failed (wrong bin / wrong item / qty over need) so the worker fixes one thing, not everything</td></tr>
+          <tr><td class="bo-data-table__col--code">POST … short (qty &lt; need)</td><td>requires a reason code (<a href={base + '/components/form'}>select</a>) — a silent short is tomorrow's stock discrepancy</td></tr>
+          <tr><td class="bo-data-table__col--code">409 on a re-assigned line</td><td>re-render with who took it and the NEXT line — the worker keeps moving, never argues with a screen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Awaiting bin scan</td><td>the field names what it expects; the header carries the bin as text — the scan is confirmation, not discovery</td></tr>
+          <tr><td>Wrong bin / wrong item</td><td>error flash + the reason in the live region; the field clears and refocuses for the retry</td></tr>
+          <tr><td>Short pick</td><td>Report short opens the reason path; the line completes with its shortfall recorded, never silently adjusted</td></tr>
+          <tr><td>Line re-assigned (409)</td><td>who took it, then the next line — flow beats blame</td></tr>
+          <tr><td>Queue empty</td><td>back to <a href={base + '/patterns/rf-landing'}>the task menu</a>; an empty pick screen teaches nothing</td></tr>
+          <tr><td>Session lost</td><td>the RECONNECT state: on regaining the server, re-render the line as the server has it. Session persistence is infrastructure, not a screen promise</td></tr>
+          <tr><td>No JS</td><td>the form still posts on Enter (the wedge's terminator) and the server re-renders with the verdict — the flash and keypad are enhancements; the KV header, field and bar are markup</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/scan'}>Scan feedback</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/quantity'}>Quantity</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Form controls</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/rf-putaway", "RF putaway (the receiving side's mirror)"],
+    ["/patterns/rf-count", "RF count (blind by design)"],
+    ["/patterns/rf-landing", "RF task menu"],
+    ["/components/scan", "Scan feedback"],
+  ]} />
+</Gallery>

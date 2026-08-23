@@ -1,0 +1,144 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import CountScreen from '../../components/rf/CountScreen.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<!-- BLIND by design: the expected quantity is never on screen, or
+     the counter anchors to it and the count proves nothing. The one RF
+     header that deliberately WITHHOLDS a number. -->
+<dl class="bo-kv bo-kv--rows"> …Count doc / Bin / Item — NO expected qty… </dl>
+
+<input class="bo-input bo-input--code" data-scan-input data-scan-flash
+    aria-describedby="scan-status" />
+<p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+
+<div class="bo-quantity">
+  <input class="bo-quantity__input" type="number" inputmode="numeric"
+      min="0" step="1" placeholder="—" aria-label="Counted quantity" />
+  <span class="bo-quantity__unit" aria-hidden="true">ea</span>
+</div>
+
+<div class="bo-btn-group bo-btn-group--bar">
+  <button class="bo-btn bo-btn--secondary">Back</button>
+  <button class="bo-btn bo-btn--secondary">Item not found</button>
+  <button class="bo-btn">Submit count</button>
+</div>`;
+---
+<Gallery title="Pattern: RF count">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever walks the aisles for a physical
+    inventory or a cycle count. <strong>How often</strong>: cycle counts
+    daily on a rotation; wall-to-wall counts a few times a year, all hands.
+    <strong>What "done" looks like</strong>: the bin scanned open, what is
+    ACTUALLY there entered, submitted — and critically, <strong>the
+    expected quantity was never on screen</strong>. A count is blind by
+    design: show the book figure and the counter anchors to it, and the
+    count stops measuring reality and starts confirming the record. That
+    single fact shapes this screen — it is the one RF header that
+    deliberately withholds a number.
+    <strong>Not for correcting a quantity you already know is wrong</strong>
+    — a known discrepancy is a stock adjustment with a reason, made at a
+    desk on <a href={base + '/patterns/record-detail'}>the record</a>; a
+    count is how you FIND discrepancies, not how you fix them.
+  </p>
+
+  <section class="demo" data-density="spacious">
+    <h2>The screen — try it</h2>
+    <div style="max-inline-size: 22.5rem">
+      <CountScreen />
+    </div>
+    <p class="bo-u-text-muted">Scan (type + Enter) <code>C-02-08</code> to
+    open the count; a wrong bin flashes the verdict. The quantity starts
+    <em>empty</em>, not zero — an untouched field means "not counted yet",
+    and a typed 0 means "I looked, the bin is empty": two different facts
+    the record must keep apart (the same empty-vs-zero rule the timesheet
+    pattern documents).</p>
+  </section>
+
+  <section class="demo">
+    <h2>The RF-floor profile, at RF-scanner size</h2>
+    <p>The same screen — via the shared component — in an isolated document
+    styled by ONLY the <code>rf-essentials</code> profile
+    (Chrome/WebView&nbsp;108), at 360×640:</p>
+    <iframe
+      src={base + '/patterns/rf/rf-count-rf/'}
+      title="RF count, rf-essentials profile, 360×640"
+      class="rf-device-frame"
+    ></iframe>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Count header</strong> — <a href={base + '/components/kv'}>KV
+        rows</a>: document + position, bin, item. No expected quantity,
+        on purpose.</li>
+      <li><strong>Bin scan</strong> —
+        <a href={base + '/components/scan'}>scan input + flash</a>; the
+        count opens only on the right bin.</li>
+      <li><strong>Blind quantity</strong> —
+        <a href={base + '/components/quantity'}>quantity</a>, empty until
+        the counter types; the keypad recipe from
+        <a href={base + '/patterns/rf-pick'}>picking</a> composes here
+        unchanged.</li>
+      <li><strong>Exception bar</strong> — Back / Item not found / Submit
+        count.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /rf/count/next</td><td>the next bin/item to count — WITHOUT the book quantity; blindness is enforced server-side, not by the screen's good manners</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /rf/count/:pos/submit</td><td>the counted figure; a large variance may return a RECOUNT of the same position (the server decides the threshold), announced as such</td></tr>
+          <tr><td class="bo-data-table__col--code">POST … item-not-found</td><td>records a zero-with-reason — distinct from a typed 0, which is a counted empty bin</td></tr>
+          <tr><td class="bo-data-table__col--code">409 (position already counted)</td><td>who counted it and the next position — double-counting is noise in the variance report</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Awaiting bin scan</td><td>the count stays closed until the right bin opens it — counting the wrong bin is worse than not counting</td></tr>
+          <tr><td>Counting</td><td>quantity empty (not zero); Submit disabled until a figure exists — empty and 0 are different facts</td></tr>
+          <tr><td>Recount demanded</td><td>the same position re-opens, SAID to be a recount — a silent recount reads as a glitch and gets pencil-whipped</td></tr>
+          <tr><td>Item not found</td><td>its own exception, not a typed 0 — zero-with-reason and counted-zero diverge in the variance report</td></tr>
+          <tr><td>Session lost</td><td>reconnect re-renders the position as the server has it; an uncommitted count is retyped — honest, and cheaper than a wrong committed one</td></tr>
+          <tr><td>No JS</td><td>scan posts on Enter, the count is a plain form; flash and steppers are enhancements</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/kv'}>Key-value facts</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/scan'}>Scan feedback</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/quantity'}>Quantity</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/rf-pick", "RF picking (knows what it wants; a count must not)"],
+    ["/patterns/rf-putaway", "RF putaway"],
+    ["/patterns/rf-landing", "RF task menu"],
+    ["/components/scan", "Scan feedback"],
+  ]} />
+</Gallery>
