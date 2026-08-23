@@ -37,6 +37,15 @@ import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
+import { createRequire } from 'node:module';
+
+/* Reconciled against the GENERATED keymap rather than a literal: if
+   extract-keymap emits a different number of richtext shortcuts, the
+   dialog's row count must move with it or this fails. A hard-coded 7 would
+   pass while the docs and the source disagreed. */
+const RICHTEXT_KEY_COUNT = createRequire(import.meta.url)(
+  '../../../packages/core/dist/keymap.json',
+).components.find((c) => c.name === 'bo-richtext').keys.length;
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
@@ -2010,37 +2019,178 @@ check(
    exclusive group — clicking one clears aria-pressed on the other two, not
    just sets its own. Both surprised on first manual test (removeFormat's
    scope was the third surprise, documented in prose rather than asserted
-   here — it has no pass/fail shape, only a "what it does" one). */
+   here — it has no pass/fail shape, only a "what it does" one).
+
+   Selected BY CONTENT, not by .demo:nth-of-type(2). Slice 137 inserted three
+   sections above Advanced and the positional selectors silently retargeted a
+   different demo — a claim that still passes while testing the wrong thing is
+   worse than one that fails. The Advanced demo is the one carrying
+   formatBlock; nothing else on the page does. */
 await visit('/components/richtext/', { width: 1440, height: 1200 });
-const richtext = await page.evaluate(() => {
-  const advanced = document.querySelectorAll('.demo')[1];
-  const content = advanced.querySelector('.bo-richtext__content');
-  const p = content.querySelector('p');
+const ADV = '.demo:has([data-richtext-cmd="formatBlock"])';
+const advCount = await page.$$eval(ADV, (n) => n.length);
+check('richtext: the Advanced demo is uniquely identifiable by content', advCount === 1,
+  JSON.stringify({ advCount }));
+
+await page.evaluate((sel) => {
+  const content = document.querySelector(sel).querySelector('.bo-richtext__content');
   const range = document.createRange();
-  range.selectNodeContents(p);
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-  return true;
-});
-await page.click('.demo:nth-of-type(2) [data-richtext-cmd="formatBlock"]'); // H2 is the first
-const afterHeading = await page.evaluate(() =>
-  !!document.querySelectorAll('.demo')[1].querySelector('.bo-richtext__content h2'));
+  range.selectNodeContents(content.querySelector('p'));
+  const s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(range);
+}, ADV);
+await page.click(`${ADV} [data-richtext-cmd="formatBlock"]`); // H2 is the first
+const afterHeading = await page.$eval(ADV, (d) => !!d.querySelector('.bo-richtext__content h2'));
 check(
   'richtext Advanced: formatBlock("H2") produces a real <h2>, not styled text',
   afterHeading,
   JSON.stringify({ afterHeading }),
 );
 
-await page.click('.demo:nth-of-type(2) [data-richtext-cmd="justifyCenter"]');
-const justifyState = await page.evaluate(() => {
-  const btns = document.querySelectorAll('.demo:nth-of-type(2) [data-richtext-cmd^="justify"]');
-  return Object.fromEntries([...btns].map((b) => [b.dataset.richtextCmd, b.getAttribute('aria-pressed')]));
-});
+await page.click(`${ADV} [data-richtext-cmd="justifyCenter"]`);
+const justifyState = await page.$eval(ADV, (d) =>
+  Object.fromEntries([...d.querySelectorAll('[data-richtext-cmd^="justify"]')]
+    .map((b) => [b.dataset.richtextCmd, b.getAttribute('aria-pressed')])));
 check(
   'richtext Advanced: clicking Center clears Left/Right aria-pressed, not just sets its own',
   justifyState.justifyCenter === 'true' && justifyState.justifyLeft === 'false' && justifyState.justifyRight === 'false',
   JSON.stringify(justifyState),
+);
+
+/* Slice 137.2 — the page claims the hot keys are NATIVE and that the toolbar
+   follows the SELECTION rather than the click. Both are browser claims.
+   Driven with real CDP key events: a synthetic keydown matches no native
+   editing command and would report a false failure. Before the fix the
+   button stayed "false" here while the text was genuinely bold. */
+const BASIC = '.demo:has([data-dialog-trigger="rt-keys"])';
+await page.evaluate((sel) => {
+  const content = document.querySelector(sel).querySelector('.bo-richtext__content');
+  const p = content.querySelector('p');
+  const r = document.createRange();
+  r.setStart(p.firstChild, 0);
+  r.setEnd(p.firstChild, 6);
+  const s = getSelection();
+  s.removeAllRanges();
+  s.addRange(r);
+  content.focus();
+}, BASIC);
+const MODKEY = process.platform === 'darwin' ? 'Meta' : 'Control';
+await page.keyboard.down(MODKEY);
+await page.keyboard.press('KeyB');
+await page.keyboard.up(MODKEY);
+await new Promise((r) => setTimeout(r, 100));
+const hotkey = await page.$eval(BASIC, (d) => ({
+  pressed: d.querySelector('[data-richtext-cmd="bold"]').getAttribute('aria-pressed'),
+  bolded: !!d.querySelector('.bo-richtext__content b, .bo-richtext__content strong'),
+  keys: d.querySelector('[data-richtext-cmd="bold"]').getAttribute('aria-keyshortcuts'),
+}));
+check(
+  'richtext: Ctrl/Cmd+B is native AND the toolbar follows it (aria-pressed syncs on selectionchange, not click)',
+  hotkey.pressed === 'true' && hotkey.bolded && !!hotkey.keys,
+  JSON.stringify(hotkey),
+);
+
+/* Slice 136.3 — the placeholder must survive type-then-delete. This is the
+   exact case that kills the naive :empty::before version: the browser leaves
+   a <br> behind, :empty stops matching, and the hint never returns. Asserting
+   the <br> is present is what makes this a real test of the trap and not just
+   of a pristine field. */
+const PH = '.bo-richtext__content[data-placeholder="Why is this being rejected?"]:not(#rt-reason)';
+const phRead = () => page.evaluate((s) => {
+  const el = document.querySelector(s);
+  return { ph: getComputedStyle(el, '::before').content, empty: el.hasAttribute('data-empty'), html: el.innerHTML };
+}, PH);
+const phPristine = await phRead();
+await page.click(PH);
+await page.keyboard.type('x');
+const phTyped = await phRead();
+await page.keyboard.press('Backspace');
+const phDeleted = await phRead();
+check(
+  'richtext: the placeholder returns after type-then-delete, with a <br> in the DOM that :empty could never match',
+  phPristine.ph.includes('rejected') &&
+    phTyped.ph === 'none' &&
+    phDeleted.ph.includes('rejected') &&
+    phDeleted.html.includes('<br>'),
+  JSON.stringify({ phPristine, phTyped, phDeleted }),
+);
+
+/* Slice 136.1 — the FIELD reddens, not only its label and message. The
+   control-vs-neutral comparison is the point: before the fix the invalid
+   border was byte-identical to a valid one. */
+const invalidBorders = await page.evaluate(() => {
+  const bad = document.querySelector('.bo-form-field:has([aria-invalid="true"]) .bo-richtext');
+  const good = document.querySelector('.bo-richtext:not(:has([aria-invalid="true"]))');
+  return {
+    err: getComputedStyle(document.documentElement).getPropertyValue('--bo-state-error-color').trim(),
+    bad: bad && getComputedStyle(bad).borderTopColor,
+    good: good && getComputedStyle(good).borderTopColor,
+  };
+});
+check(
+  'richtext: an invalid field reddens its own border, and differs from a valid one',
+  invalidBorders.bad === 'rgb(220, 38, 38)' && invalidBorders.bad !== invalidBorders.good,
+  JSON.stringify(invalidBorders),
+);
+
+/* Slice 137.3 — collapsing hides the buttons and KEEPS the toggle. The
+   second half is the design claim: the field must still advertise that it
+   is rich. */
+const rtCollapse = await page.evaluate(async () => {
+  const t = document.querySelector('[data-richtext-toggle]');
+  const bar = t.closest('.bo-richtext__toolbar');
+  const others = [...bar.children].filter((c) => c !== t);
+  const vis = (el) => getComputedStyle(el).display !== 'none';
+  const openOthers = others.filter(vis).length;
+  t.click();
+  await new Promise((r) => requestAnimationFrame(r));
+  return {
+    openOthers,
+    rtCollapsedOthers: others.filter(vis).length,
+    toggleStillVisible: vis(t),
+    expanded: t.getAttribute('aria-expanded'),
+    controlsResolves: !!document.getElementById(t.getAttribute('aria-controls')),
+  };
+});
+check(
+  'richtext: collapsing hides every toolbar button but keeps the toggle visible, with aria-expanded/-controls both real',
+  rtCollapse.openOthers > 0 &&
+    rtCollapse.rtCollapsedOthers === 0 &&
+    rtCollapse.toggleStillVisible &&
+    rtCollapse.expanded === 'false' &&
+    rtCollapse.controlsResolves,
+  JSON.stringify(rtCollapse),
+);
+
+/* Slice 137.4 — the keyboard map opens from the toolbar and is GENERATED:
+   its row count must equal what extract-keymap emitted, so a hand-edited
+   dialog or a drifted keymap.json fails here. */
+const keymapRows = await page.evaluate(async () => {
+  document.querySelector('[data-dialog-trigger="rt-keys"]').click();
+  await new Promise((r) => setTimeout(r, 60));
+  const dlg = document.getElementById('rt-keys');
+  const out = { open: dlg.open, rows: dlg.querySelectorAll('.bo-kv > div').length };
+  dlg.close();
+  return out;
+});
+check(
+  `richtext: the keyboard-map dialog opens from the toolbar and lists all ${RICHTEXT_KEY_COUNT} generated shortcuts`,
+  keymapRows.open && keymapRows.rows === RICHTEXT_KEY_COUNT,
+  JSON.stringify(keymapRows),
+);
+
+/* Slice 136.2 — editor chrome never prints. */
+await page.emulateMediaType('print');
+const printBars = await page.evaluate(() => {
+  const bars = [...document.querySelectorAll('.bo-richtext__toolbar')];
+  return { total: bars.length, visible: bars.filter((b) => getComputedStyle(b).display !== 'none').length };
+});
+await page.emulateMediaType('screen');
+check(
+  'richtext: no formatting toolbar prints — editor chrome is a control, not content',
+  printBars.total > 0 && printBars.visible === 0,
+  JSON.stringify(printBars),
 );
 
 // /components/form "Label-start sections" (roadmap 117): "the section

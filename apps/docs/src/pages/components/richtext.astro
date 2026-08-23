@@ -5,45 +5,115 @@ import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
 import Demo from '../../components/Demo.astro';
+import keymapManifest from '@busy-office/ui/keymap';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const basic = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList">1. List</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+            aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
+            aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
+    <span class="bo-richtext__divider"></span>
+    <button class="bo-btn bo-btn--ghost" type="button" data-dialog-trigger="rt-keys"
+            aria-label="Keyboard shortcuts" title="Keyboard shortcuts"><span class="bo-icon bo-icon--keyboard" aria-hidden="true"></span></button>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true"
-       role="textbox" aria-multiline="true" aria-label="Delivery notes">
+       role="textbox" aria-multiline="true" aria-label="Delivery notes"
+       data-placeholder="Add a note — what arrived, and in what condition.">
     <p>Pallet 2 arrived <strong>damp on one corner</strong> — photos attached
     to the receipt. Count verified against the ASN.</p>
   </div>
 </div>`;
 
+const empty = `<div class="bo-richtext">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
+       role="textbox" aria-multiline="true" aria-label="Rejection reason"
+       data-placeholder="Why is this being rejected?"></div>
+</div>`;
+
+const invalid = `<div class="bo-form-field">
+  <label class="bo-form-field__label" for="rt-reason">Rejection reason</label>
+  <div class="bo-richtext">
+    <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+              title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+    </div>
+    <div class="bo-richtext__content bo-prose" contenteditable="true" id="rt-reason" data-empty
+         role="textbox" aria-multiline="true" aria-label="Rejection reason"
+         aria-invalid="true" aria-describedby="rt-reason-err"
+         data-placeholder="Why is this being rejected?"></div>
+  </div>
+  <p class="bo-form-field__message" id="rt-reason-err">A reason is required to reject.</p>
+</div>`;
+
+const collapsible = `<div class="bo-richtext">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting" id="rt-collapse-bar">
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost bo-richtext__toolbar-toggle" type="button"
+            data-richtext-toggle aria-expanded="true" aria-controls="rt-collapse-bar"
+            aria-label="Hide formatting toolbar" title="Hide formatting toolbar">&minus;</button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true"
+       role="textbox" aria-multiline="true" aria-label="Internal note"
+       data-placeholder="Internal note…">
+    <p>Customer called about the short-shipped hose assembly.</p>
+  </div>
+</div>`;
+
 const advanced = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"><s>S</s></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"
+            title="Strikethrough"><s>S</s></button>
     <span class="bo-richtext__divider"></span>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE">"</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE"
+            aria-label="Blockquote" title="Blockquote"><span class="bo-icon bo-icon--quote" aria-hidden="true"></span></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyLeft" aria-pressed="true">Left</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyCenter" aria-pressed="false">Center</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyRight" aria-pressed="false">Right</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyLeft" aria-pressed="true"
+            aria-label="Align left" title="Align left"><span class="bo-icon bo-icon--align-left" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyCenter" aria-pressed="false"
+            aria-label="Align centre" title="Align centre"><span class="bo-icon bo-icon--align-center" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyRight" aria-pressed="false"
+            aria-label="Align right" title="Align right"><span class="bo-icon bo-icon--align-right" aria-hidden="true"></span></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="outdent">&lt;-</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="indent">-&gt;</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="outdent"
+            aria-label="Decrease indent" title="Decrease indent"><span class="bo-icon bo-icon--outdent" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="indent"
+            aria-label="Increase indent" title="Increase indent"><span class="bo-icon bo-icon--indent" aria-hidden="true"></span></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink">Link</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="removeFormat">Clear</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
+            aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="removeFormat"
+            aria-label="Clear formatting" title="Clear formatting"><span class="bo-icon bo-icon--clear-format" aria-hidden="true"></span></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList">1. List</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+            aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true"
        role="textbox" aria-multiline="true" aria-label="Return instructions">
@@ -75,15 +145,21 @@ const disabled = `<div class="bo-richtext bo-richtext--disabled">
 const canonical = `<!-- CHROME, not an engine: the framework styles the container,
      toolbar, and content area. What the toolbar DOES is your code —
      the light case below wires native contenteditable; a real editor
-     library mounts inside __content instead. -->
+     library mounts inside __content instead.
+     This is the RECOMMENDED ERP set: bold, italic, both lists, link.
+     Everything past that is markup your sanitizer, export and print
+     form all have to keep honouring. -->
 <div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
   </div>
-  <div class="bo-richtext__content bo-prose" contenteditable="true"
-       role="textbox" aria-multiline="true" aria-label="Notes"></div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
+       role="textbox" aria-multiline="true" aria-label="Notes"
+       data-placeholder="Add a note…"></div>
 </div>
 <script type="module">
   // The light case, in full — this IS the consumer's entire wiring.
@@ -96,10 +172,61 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
     const btn = e.target.closest('[data-richtext-cmd]');
     if (!btn) return;
     document.execCommand(btn.dataset.richtextCmd);
-    if (btn.hasAttribute('aria-pressed'))   // toggles reflect their state
+  });
+
+  // Toggle state follows the SELECTION, not the click. Ctrl/Cmd+B is
+  // native and fires no click, so a click-only sync leaves the button
+  // reading "off" while the text is bold — wrong for exactly the users
+  // who rely on it. This also covers merely moving the caret into bold
+  // text, which no click covers either.
+  document.addEventListener('selectionchange', () => {
+    const field = document.activeElement?.closest?.('.bo-richtext');
+    if (!field) return;
+    for (const btn of field.querySelectorAll('[data-richtext-cmd][aria-pressed]'))
       btn.setAttribute('aria-pressed', String(document.queryCommandState(btn.dataset.richtextCmd)));
   });
+
+  // Placeholder. CSS cannot detect an empty contenteditable — :empty stops
+  // matching the moment the browser leaves a <br> behind — so emptiness is
+  // reported here, in one line, and styled by [data-empty] in CSS.
+  document.addEventListener('input', (e) => {
+    const el = e.target.closest?.('.bo-richtext__content');
+    if (el) el.toggleAttribute('data-empty', !el.textContent.trim());
+  });
 </script>`;
+
+/* The keyboard map is GENERATED, not written here: extract-keymap.mjs reads
+   the @keymap block in richtext.css and emits dist/keymap.json, so this
+   dialog cannot drift from what the component actually documents. Rendered
+   into the demo string so the preview and its copyable code stay one
+   source, per the Demo contract. */
+const rtKeys = keymapManifest.components.find((c: any) => c.name === 'bo-richtext');
+if (!rtKeys) throw new Error('keymap.json has no bo-richtext entry — did extract-keymap change?');
+const kbdify = (combo: string) =>
+  combo
+    .split('+')
+    .map((k) => `<kbd class="bo-kbd">${k.trim()}</kbd>`)
+    .join(' + ');
+const keymapDialog = `<dialog class="bo-dialog" id="rt-keys" aria-labelledby="rt-keys-title">
+  <form method="dialog">
+    <header class="bo-dialog__header">
+      <h2 class="bo-dialog__title" id="rt-keys-title">Keyboard shortcuts</h2>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">✕</button>
+    </header>
+    <div class="bo-dialog__body">
+      <p class="bo-u-text-muted">These come from the browser, not from this
+      framework — they work whether or not the toolbar is showing.</p>
+      <dl class="bo-kv">
+${rtKeys.keys
+  .map((k: any) => `        <div><dt>${kbdify(k.key)}</dt><dd>${k.does}</dd></div>`)
+  .join('\n')}
+      </dl>
+    </div>
+    <footer class="bo-dialog__footer">
+      <button class="bo-btn" value="confirm">Close</button>
+    </footer>
+  </form>
+</dialog>`;
 ---
 <Gallery title="Rich text">
   <p class="demo-note">
@@ -118,20 +245,112 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
   </p>
 
   <section class="demo">
-    <h2>Basic — the light case (native <code>contenteditable</code>)</h2>
+    <h2>Basic — the recommended ERP set</h2>
     <Demo code={basic} />
-    <p class="bo-u-text-muted">The toolbar buttons are plain ghost
-    buttons carrying <code>data-richtext-cmd</code> — this page wires
-    them to native <code>execCommand</code> in a dozen lines (the Markup
-    section shows the full script, including the <code>mousedown</code>
-    guard that keeps the selection alive and the
-    <code>aria-pressed</code> sync that makes Bold's on/off state visible
-    and announced). Try bold/italic/lists.</p>
+    <p class="bo-u-text-muted"><strong>Five commands: bold, italic, both
+    lists, link.</strong> That set covers every real ERP note — delivery
+    notes, approval comments, return instructions, dunning text — and
+    every one of the five survives a sanitizer allowlist, an export and a
+    print form without argument. Everything past it is markup your
+    downstream boundaries have to keep honouring, which is why the
+    <a href="#advanced">full native surface</a> below is shown as a price
+    list rather than a recommendation. Toolbar buttons are plain ghost
+    buttons carrying <code>data-richtext-cmd</code>; the Markup section
+    has the entire wiring, including the <code>mousedown</code> guard that
+    keeps the selection alive. Try bold/italic/lists — or the keyboard
+    shortcuts, which work without touching the toolbar at all.</p>
   </section>
 
   <section class="demo">
-    <h2>Advanced — the same light case, more commands</h2>
+    <h2 id="shortcuts">Keyboard shortcuts — you already have them</h2>
+    <Demo code={keymapDialog} />
+    <p class="bo-u-text-muted"><strong>Every shortcut here is native
+    <code>contenteditable</code>, shipped by the browser with zero
+    framework JS.</strong> Verified by driving real key events at the
+    Basic demo: Ctrl/Cmd&nbsp;+&nbsp;B on a selection produced
+    <code>&lt;b&gt;…&lt;/b&gt;</code> with nothing of ours listening.
+    <strong>Do not wire your own <code>keydown</code> for these</strong> —
+    you would shadow the browser's and give up its edge cases (IME
+    composition, undo grouping) for nothing.
+    <strong>What DOES need wiring is the toolbar's
+    <code>aria-pressed</code>, and it must follow
+    <code>selectionchange</code> rather than <code>click</code></strong>:
+    a hot key fires no click, so a click-only sync leaves Bold reading
+    "off" while the text is bold — wrong for exactly the users who depend
+    on it. That was a real defect here until 137.2, and the same fix
+    covers merely moving the caret into bold text. The buttons advertise
+    their shortcut through <code>title</code> and
+    <code>aria-keyshortcuts</code>, and the toolbar's keyboard button
+    opens this map. The table is generated from the
+    <code>@keymap</code> block in <code>richtext.css</code>, so it cannot
+    drift from what the component documents.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Rich text keyboard shortcuts</caption>
+        <thead><tr><th scope="col">Key</th><th scope="col">Does</th></tr></thead>
+        <tbody>
+          {rtKeys.keys.map((k: any) => (
+            <tr>
+              <td class="bo-data-table__col--code">{k.key}</td>
+              <td>{k.does}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Hide the toolbar, keep the affordance</h2>
+    <Demo code={collapsible} />
+    <p class="bo-u-text-muted">A dense form with several note fields
+    carries several full toolbars, which is mostly noise. Collapsing
+    fixes that — but <strong>the toggle stays visible</strong>, so the
+    field still says it is rich. That is deliberate and it is the same
+    argument this framework uses to refuse a Notion-style floating
+    toolbar: in a <em>form</em>, chrome that appears only once you select
+    something hides the fact that the field takes formatting at all. A
+    document can afford that; a field a user meets for eight seconds
+    cannot. Two-channel as always —
+    <code>aria-expanded</code> plus <code>aria-controls</code> on the
+    toggle is the programmatic half, the hidden buttons are the visible
+    half. The shortcuts keep working while it is collapsed.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Empty, and invalid</h2>
+    <Demo code={empty} />
+    <Demo code={invalid} />
+    <p class="bo-u-text-muted"><strong>A placeholder needs one line of
+    your JS, and the reason is worth knowing.</strong>
+    <code>contenteditable</code> has no <code>placeholder</code>
+    attribute, and CSS cannot supply one:
+    <code>:empty::before</code> works <em>exactly once</em> — it shows on a
+    pristine field, then the first type-then-delete leaves a
+    <code>&lt;br&gt;</code> behind, <code>:empty</code> stops matching, and
+    the hint never returns. <code>&lt;p&gt;&lt;/p&gt;</code>, which
+    <code>execCommand</code> produces, never matched at all. Emptiness is a
+    property of <em>text content</em> and selectors cannot read text
+    content — so the framework styles
+    <code>[data-empty]::before</code> and you toggle the attribute on
+    <code>input</code>. <strong>Invalid is now on the field itself</strong>:
+    until 136.1 <code>.bo-richtext</code> was the only control in the form
+    family whose border never reddened, so on a form scanned for red boxes
+    it was the box that never turned red. Pair
+    <code>aria-invalid</code> with an
+    <code>aria-describedby</code> message, as shown.</p>
+  </section>
+
+  <section class="demo">
+    <h2 id="advanced">Advanced — everything native gives you, and why you want less</h2>
     <Demo code={advanced} />
+    <p class="bo-u-text-muted"><strong>Read this as a price list, not a
+    recommendation.</strong> Alignment and indentation in a stored ERP
+    note are exactly the cost this page's opener warns about: markup that
+    must now survive the sanitizer, the export and the print form, spent
+    on centring text nobody asked to centre. Ship the
+    <a href="#shortcuts">five-command set</a> unless someone can name the
+    screen that needs more.</p>
     <p class="bo-u-text-muted">Still zero framework JS: every button here
     is <code>execCommand</code>/<code>queryCommandState</code>, the exact
     pattern Basic uses, extended two ways. <strong>Value-taking
@@ -264,15 +483,27 @@ const view = new EditorView(host, {
   </section>
 
   <script>
-    // Docs-page wiring for the live demo — identical to the consumer
-    // snippet in the Markup section. Extended for the Advanced demo
-    // (113.1): a value-taking command (formatBlock's tag, createLink's
-    // URL) and the mutually-exclusive justify group, on top of Basic's
-    // plain toggle pattern.
+    // Docs-page wiring for the live demos — the same shape as the consumer
+    // snippet in the Markup section, plus what the Advanced demo needs
+    // (113.1: value-taking commands and the mutually-exclusive justify
+    // group) and what 137 added (selection-driven state, placeholder,
+    // toolbar collapse).
+    import { initDialogs } from '@busy-office/ui/js';
+    initDialogs(); // the keyboard-map dialog — data-dialog-trigger, no new JS
+
     document.addEventListener('mousedown', (e) => {
       if ((e.target as HTMLElement).closest('[data-richtext-cmd]')) e.preventDefault();
     });
-    const JUSTIFY = ['justifyLeft', 'justifyCenter', 'justifyRight'];
+
+    // Every toggle in a field re-reads its own state. Called from
+    // selectionchange (below) rather than from click, so a NATIVE hot key
+    // and a plain caret move both keep the toolbar honest — a click-only
+    // sync left Bold reading "off" while the text was bold (137.2).
+    const syncField = (field: Element) => {
+      for (const b of field.querySelectorAll<HTMLElement>('[data-richtext-cmd][aria-pressed]'))
+        b.setAttribute('aria-pressed', String(document.queryCommandState(b.dataset.richtextCmd!)));
+    };
+
     document.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-cmd]');
       if (!btn) return;
@@ -284,17 +515,38 @@ const view = new EditorView(host, {
         value = url;
       }
       document.execCommand(cmd, false, value);
-      if (btn.hasAttribute('aria-pressed'))
+      const field = btn.closest('.bo-richtext');
+      // The justify group is mutually exclusive, so the whole field is
+      // re-read rather than just the button pressed — otherwise two read
+      // "pressed" at once.
+      if (field) syncField(field);
+      else if (btn.hasAttribute('aria-pressed'))
         btn.setAttribute('aria-pressed', String(document.queryCommandState(cmd)));
-      // The three justify buttons are one mutually-exclusive group — a plain
-      // per-button toggle would let two read "pressed" at once.
-      if (JUSTIFY.includes(cmd)) {
-        const toolbar = btn.closest('.bo-richtext__toolbar');
-        JUSTIFY.forEach((j) => {
-          const b = toolbar?.querySelector<HTMLElement>(`[data-richtext-cmd="${j}"]`);
-          b?.setAttribute('aria-pressed', String(document.queryCommandState(j)));
-        });
-      }
+    });
+
+    document.addEventListener('selectionchange', () => {
+      const field = (document.activeElement as HTMLElement)?.closest?.('.bo-richtext');
+      if (field) syncField(field);
+    });
+
+    // Placeholder: CSS cannot detect an empty contenteditable (:empty stops
+    // matching once the browser leaves a <br>), so emptiness is reported
+    // here and styled by [data-empty].
+    document.addEventListener('input', (e) => {
+      const el = (e.target as HTMLElement).closest?.('.bo-richtext__content');
+      if (el) el.toggleAttribute('data-empty', !el.textContent?.trim());
+    });
+
+    // Collapse: one line of state, both channels moved together.
+    document.addEventListener('click', (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-toggle]');
+      if (!t) return;
+      const open = t.getAttribute('aria-expanded') !== 'true';
+      t.setAttribute('aria-expanded', String(open));
+      t.innerHTML = open ? '&minus;' : '+';
+      const label = open ? 'Hide formatting toolbar' : 'Show formatting toolbar';
+      t.setAttribute('aria-label', label);
+      t.setAttribute('title', label);
     });
   </script>
 
@@ -306,7 +558,12 @@ const view = new EditorView(host, {
       'The engine is refused, not forgotten: undo, sanitization, and selection belong to a dedicated editor library — mount one inside <code>__content</code> (recipe above) when notes outgrow bold/italic/lists.',
       'Two-channel states: <code>--readonly</code>/<code>--disabled</code> are the visible half; pair them with <code>contenteditable="false"</code> and <code>aria-readonly</code>/<code>aria-disabled</code> — and DISABLED toolbars need <code>disabled</code> on the buttons themselves (<code>pointer-events</code> stops the mouse, not Tab/Enter). Read-only content needs <code>tabindex="0"</code> to stay reachable and scrollable by keyboard.',
       'Give the content area an <code>aria-label</code> always. <code>role="textbox" aria-multiline="true"</code> fits PLAIN notes (bold/italic in a paragraph); drop the role when the content is structured prose (headings, tables) or when you mount an engine — a textbox role flattens structure for screen readers.',
-      'Toggle buttons carry <code>aria-pressed</code> (the wiring syncs it via <code>queryCommandState</code>) — <code>.bo-btn[aria-pressed="true"]</code> ships a gated pressed style, so Bold-is-on is visible and announced.',
+      'Toggle buttons carry <code>aria-pressed</code>, and the wiring must sync it on <code>selectionchange</code>, NOT on <code>click</code>: Ctrl/Cmd+B is native and fires no click, so a click-only sync leaves Bold reading "off" while the text is bold — wrong for exactly the users who rely on it. The same fix covers moving the caret into already-bold text. <code>.bo-btn[aria-pressed="true"]</code> ships a gated pressed style, so Bold-is-on is visible and announced.',
+      'Keyboard shortcuts are NATIVE <code>contenteditable</code> — bold, italic, underline, undo/redo, select-all — and cost you nothing. Do not wire your own <code>keydown</code> for them; you would shadow the browser and give up its IME and undo-grouping behaviour. Advertise them with <code>title</code> plus <code>aria-keyshortcuts</code>, and see the generated keyboard map above; it comes from the <code>@keymap</code> block in <code>richtext.css</code>.',
+      'Placeholder: set <code>data-placeholder</code> and toggle <code>data-empty</code> from your <code>input</code> handler (one line). CSS alone cannot do this — <code>:empty</code> stops matching once the browser leaves a <code>&lt;br&gt;</code> behind, so a pure-CSS placeholder works exactly once.',
+      'Invalid: put <code>aria-invalid="true"</code> on the content element and the field reddens its own border, the same as <code>.bo-input</code> and <code>.bo-select</code>. The border routes through <code>--bo-richtext-border</code>, so it is retintable from outside too.',
+      'The toolbar never prints — editor chrome is a control, not content, so it is hidden in the print layer alongside <code>dialog</code> and <code>[popover]</code>.',
+      'Collapsible toolbar: <code>.bo-richtext__toolbar-toggle</code> with <code>aria-expanded</code> + <code>aria-controls</code> hides every other button and stays visible itself, so the field still advertises that it is rich.',
       'Displaying stored notes is the standalone Prose component — this page is only the EDITOR chrome.',
       'Sanitize stored HTML on the server no matter which editor produced it — rich text is untrusted input, and execCommand output varies by engine (see the caveats above). A tag allowlist alone is NOT enough: stripping <code>&lt;script&gt;</code> tags leaves their text behind ("alert(1)" prints in the note) — remove script/style elements <em>with their content</em>, then filter the rest (dogfood-verified against the reference PO app).',
       'Sizing: the min-height scales with density (<code>--bo-density-row-height</code> × 3) and the field is vertically resizable like a textarea; text inset matches <code>.bo-input</code> so it aligns with the fields around it.',

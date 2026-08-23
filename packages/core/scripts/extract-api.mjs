@@ -43,6 +43,13 @@ async function analyze(files) {
   for (const file of files) {
     const css = await readFile(file, 'utf8');
     const root = postcss.parse(css);
+    // A data attribute the CSS READS is as much a documented contract as one
+    // it selects on: `content: attr(data-placeholder)` is the entire public
+    // surface of the richtext placeholder, and it appears in no selector, so
+    // walkRules alone reported it as undocumented (137.3).
+    root.walkDecls((decl) => {
+      for (const m of decl.value.matchAll(/\battr\(\s*(data-[\w-]+)/g)) out.dataAttrs.add(m[1]);
+    });
     root.walkRules((rule) => {
       for (const m of rule.selector.matchAll(CLASS_RE)) out.classes.add(m[1]);
       for (const m of rule.selector.matchAll(DATA_RE)) {

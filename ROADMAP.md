@@ -157,6 +157,110 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 137 — Owner wishlist: the richtext toolbar (2026-08-24)
+
+Owner input, verbatim: *"The toolbar . - icon, hot key, and hide/unhide
+toolbar."*
+
+Three asks on the toolbar 136 just grilled. **Triage found the second ask is
+already half-built and quietly broken**, which changes what to build.
+
+1. [x] **137.1 — DONE 2026-08-24. Ten glyphs, priced.**
+       136.5 measured this: `.bo-icon` works and `app-frame` uses it eleven
+       times, while richtext — the one surface in the framework that is
+       literally a row of icon-shaped actions — uses it zero times.
+
+       **Not a wholesale swap.** Keep **B** / *I* / ~~S~~ as letterforms:
+       that is the near-universal bold affordance (Word, Docs, and Paper's
+       own floating toolbar all use letterforms), it costs zero bytes, and
+       an icon would be worse. Ship glyphs only for the two classes the
+       grill found genuinely defective — the **broken** (`<-` / `->` for
+       outdent/indent, `"` for blockquote) and the **untranslatable**
+       (`Left`, `Center`, `Right`, `Clear`, `• List`, `1. List`: English
+       words in a framework that ships RTL and a pseudo-locale gate).
+
+       Ten glyphs: list-bullet, list-numbered, link, quote, indent, outdent,
+       align-left, align-center, align-right, clear-format. H2/H3 stay text
+       (a near-universal convention, not English).
+       *Accept*: the size cost is MEASURED and stated in `icon.css`, whose
+       own comment prices the existing 12 at 7,898 bytes / 10.3% of the
+       framework. If ten more glyphs cost more than they are worth, say so
+       and put them in the docs app instead — `--bo-icon-src` is documented
+       as extensible precisely so this choice exists.
+
+2. [x] **137.2 — DONE 2026-08-24. The hot keys already worked; the toolbar
+       now stops lying about them.**
+       Tested before designing anything, driving real CDP key events rather
+       than synthetic dispatch. Selected "Pallet" in the Basic demo and
+       pressed Cmd+B:
+
+       - the browser bolded it natively — `<b>Pallet</b>`, **zero code**;
+       - `document.queryCommandState('bold')` → `true`;
+       - **the Bold button's `aria-pressed` stayed `"false"`.**
+
+       So the ask is not "add hot keys" — contenteditable has had them all
+       along. The defect is that the toolbar's `aria-pressed` sync is wired
+       to `click`, so **a keyboard user toggles bold and the button never
+       updates**: the visible pressed style and the programmatic state are
+       both wrong, together, for exactly the users who rely on them most.
+       That is a two-channel state failure, and it also covers the plain
+       case of moving the caret into bold text.
+
+       Neither is the shortcut discoverable: no `title`, no
+       `aria-keyshortcuts` on any button.
+       *Accept*: sync on `selectionchange` rather than only `click` (fixes
+       keyboard AND caret-move in one), advertise via `aria-keyshortcuts`
+       plus a visible `title`, and document that the hot keys are native —
+       consumers should not wire their own `keydown` and shadow them. The
+       `kbd` component already ships for showing them. Red-prove with the
+       CDP key press asserting `aria-pressed` flips to `"true"`.
+
+3. [x] **137.3 — DONE 2026-08-24.**
+       In tension with 136's own refusal of the floating toolbar, which
+       argued a persistent toolbar *advertises "this field is rich" before
+       the user selects anything* — discoverability a form needs and a
+       document does not. The resolution is that hiding must **collapse to a
+       visible affordance, never vanish**: the toggle stays, so the field
+       still says it is rich while a dense form with several note fields
+       stops carrying several full toolbars.
+       *Accept*: a `__toolbar-toggle` part with `aria-expanded` +
+       `aria-controls` (two-channel), collapsed state in CSS, one line of
+       consumer wiring per this component's existing stance. Refuse
+       auto-hiding on width — unpredictable chrome is worse than dense
+       chrome.
+
+4. [x] **137.4 — DONE 2026-08-24. Owner, mid-build:** *"add Keyboardmap
+       for rich text. also icon on toolbar for keyboard map."*
+
+       **Triage found the mechanism already existed and richtext was the one
+       thing it could not describe.** `extract-keymap.mjs` has been
+       generating `dist/keymap.json` from `@keymap` blocks all along — but
+       it read `src/js/behaviors/*.ts` only, and richtext ships no JS. So the
+       field with the most-used shortcuts in the whole library was invisible
+       to the framework's own keyboard documentation, precisely BECAUSE its
+       shortcuts are native rather than ours.
+
+       Extended the extractor to CSS components: a `@keymap bo-richtext`
+       block in `richtext.css` now emits the same generated data, with the
+       same staleness rule expressed against the artefact that exists there
+       — the name must appear as a real selector in that file.
+       **Red-proved**: renaming it to `bo-richtextual` failed the build with
+       the right message (injection confirmed by grep first), and restoring
+       went green.
+
+       The dialog is `bo-dialog` + `bo-kbd` + `data-dialog-trigger`, so the
+       toolbar's keyboard button opens it with **zero new JS** — the shipped
+       `initDialogs()` already does it. Its rows are rendered from the
+       manifest, and `check:claims` asserts the row count equals
+       `keymap.json`'s, so a hand-edited dialog or a drifted extractor fails.
+
+       **One instrument defect caught by a too-tidy number**: the first run
+       reported *1 key where 7 were written*. The `@key` lookahead required
+       the next tag at column 0, which holds for a JSDoc block after its
+       `* ` prefix is stripped but never for a CSS comment — so the first
+       key swallowed the other six. Fixed before the number was quoted
+       anywhere.
+
 ## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
 
 Owner input, verbatim: *"/components/richtext - grill the design. (ref to
@@ -180,8 +284,7 @@ persistent toolbar stay.
 **Three defects confirmed live** (constructed states in a real browser on
 :8091, not read off the stylesheet), and the first is the sharp one.
 
-1. [ ] **136.1 — `.bo-richtext` is the only form control that never shows it
-       is invalid.** `.bo-form-field:has([aria-invalid="true"])` reddens
+1. [x] **136.1 — DONE 2026-08-24. Fixed at the convention, not the symptom.** `.bo-form-field:has([aria-invalid="true"])` reddens
        `.bo-input` and `.bo-select`; `.bo-richtext` is not in that list and
        has no `[aria-invalid]` rule of its own. Measured with both states
        constructed side by side: input border `rgb(220,38,38)` =
@@ -199,7 +302,7 @@ persistent toolbar stay.
        form-field error block; red-proved by asserting the computed border
        moves to the error token, and that a valid field does NOT.
 
-2. [ ] **136.2 — the editor toolbar prints.** Emulated print media:
+2. [x] **136.2 — DONE 2026-08-24.** Emulated print media:
        `.bo-richtext__toolbar` computes `display: flex` and its buttons
        print, so an ERP record detail with a note prints `B I | • List
        1. List` on the paper. `print/index.css` already has the precedent —
@@ -210,8 +313,8 @@ persistent toolbar stay.
        "self-sufficient part" comment rejects.
        *Accept*: the toolbar stops printing, asserted under print emulation.
 
-3. [ ] **136.3 — an empty field says nothing, and the obvious fix is a
-       trap I tested BEFORE proposing it.** The canonical markup ships an
+3. [x] **136.3 — DONE 2026-08-24. The trap was tested before the fix was
+       proposed, and the fix was red-proved against it.** The canonical markup ships an
        empty content div; contenteditable has no `placeholder` and the
        framework ships no CSS for one, so a consumer following the canonical
        markup renders an empty box with no hint. This is Notion's single best
@@ -235,7 +338,7 @@ persistent toolbar stay.
 defects behind the owner's back: these buttons exist because 113 asked for
 them, from a reference screenshot, and were built correctly.
 
-4. [ ] **136.4 — Advanced teaches the opposite of the opener.** The opener
+4. [x] **136.4 — DONE 2026-08-24.** The opener
        says most ERP free-text should be a `textarea` and that rich text
        *"commits you to sanitizing, storing and printing HTML forever"*; two
        sections later Advanced demonstrates fifteen buttons including
@@ -247,8 +350,7 @@ them, from a reference screenshot, and were built correctly.
        the ERP-recommended set (bold, italic, both lists, link — five) named
        as the one to copy.
 
-5. [ ] **136.5 — the toolbar's labels, and why "add icons" is the wrong
-       remedy wholesale.** `.bo-icon` works (masked SVG data URI painted
+5. [x] **136.5 — DONE 2026-08-24 (delivered as 137.1).** `.bo-icon` works (masked SVG data URI painted
        with `currentColor`, 1em so it tracks density, zero JS) and
        `app-frame` uses it eleven times; **richtext uses it zero times** —
        the one surface in the framework that is literally a row of

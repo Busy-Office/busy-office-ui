@@ -60,9 +60,11 @@
     }
 
     .bo-input,
-    .bo-select {
+    .bo-select,
+    .bo-richtext {
       --bo-input-border: var(--bo-state-error-color);
       --bo-select-border: var(--bo-state-error-color);
+      --bo-richtext-border: var(--bo-state-error-color);
     }
 
     .bo-form-field__label {

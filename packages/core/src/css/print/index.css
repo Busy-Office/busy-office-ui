@@ -48,9 +48,16 @@
       break-inside: avoid;
     }
 
-    /* Top-layer/overlay elements never print. */
+    /* Top-layer/overlay elements never print. Nor does editor chrome: a
+       record detail with a note used to print its formatting toolbar
+       ("B I | list list") onto the paper, because nothing hid it —
+       measured under print emulation, 136.2. A toolbar is the same
+       category as a dialog: a control, not content. Making consumers
+       hand-add .bo-u-print-hidden to every toolbar is the inversion
+       richtext.css's own "self-sufficient part" comment rejects. */
     dialog,
-    [popover] {
+    [popover],
+    .bo-richtext__toolbar {
       display: none !important;
     }
 

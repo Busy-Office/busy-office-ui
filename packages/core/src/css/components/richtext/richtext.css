@@ -1,4 +1,23 @@
 @layer bo-components {
+  /* @keymap bo-richtext
+     Every one of these is NATIVE contenteditable, shipped by the browser
+     with zero framework JS — verified 2026-08-24 by driving real key events
+     at the Basic demo: Cmd+B on a selection produced <b>…</b> and
+     queryCommandState('bold') went true, with nothing of ours listening.
+     Do NOT wire your own keydown for these; you would shadow the browser's
+     and inherit its edge cases (IME composition, undo grouping) for free.
+     What DOES need wiring is the toolbar's aria-pressed, which must follow
+     selectionchange rather than click — otherwise a keyboard user toggles
+     bold and the button keeps reading "off".
+     @key Ctrl/Cmd + B — bold the selection
+     @key Ctrl/Cmd + I — italicise the selection
+     @key Ctrl/Cmd + U — underline the selection
+     @key Ctrl/Cmd + Z — undo, and Shift+Ctrl/Cmd+Z (or Ctrl+Y) to redo
+     @key Ctrl/Cmd + A — select the whole field, not the page
+     @key Tab — move to the NEXT FIELD, not an indent: a rich-text field is
+       still a form field, and trapping Tab would strand keyboard users
+     @key Enter — new paragraph; Shift+Enter for a line break inside one */
+
   /* Rich text — CHROME, not an engine (Slice 22 ADR-in-roadmap): the
      container/toolbar/content styling for a rich-text surface. The
      editing engine (undo, sanitization, selection) is deliberately NOT
@@ -9,13 +28,33 @@
   .bo-richtext {
     display: flex;
     flex-direction: column;
-    border: var(--bo-border-width) solid var(--bo-color-border-control);
+    /* Routed through a custom property so it can be retinted from outside,
+       the same contract .bo-input and .bo-select already offer via
+       --bo-input-border / --bo-select-border. Before 136.1 this was a
+       hard-coded token, which is why an invalid richtext could not be
+       reddened by form-field OR by a consumer. */
+    border: var(--bo-border-width) solid
+      var(--bo-richtext-border, var(--bo-color-border-control));
     border-radius: var(--bo-radius-md);
     background: var(--bo-color-bg-surface);
   }
 
   .bo-richtext:focus-within {
     border-color: var(--bo-color-focus-ring);
+  }
+
+  /* Invalid: the FIELD reddens, not only its label and message. Every
+     sibling control does this and richtext was the one that did not —
+     measured 2026-08-24 with both states constructed side by side:
+     .bo-input went to rgb(220,38,38), .bo-richtext stayed rgb(107,114,128),
+     identical to a field with no error at all. On a form where the user
+     scans for red boxes, this was the box that never turned red.
+     aria-invalid normally lands on __content (the element carrying
+     role="textbox"), so the container reads it with :has(); the second arm
+     covers consumers who mark the wrapper instead. */
+  .bo-richtext:has([aria-invalid='true']),
+  .bo-richtext[aria-invalid='true'] {
+    --bo-richtext-border: var(--bo-state-error-color);
   }
 
   /* Self-sufficient part (5a resolution, 2026-08-16): every __part
@@ -31,6 +70,29 @@
     background: var(--bo-color-bg-muted);
     border-start-start-radius: inherit;
     border-start-end-radius: inherit;
+  }
+
+  /* Collapsible toolbar (137.3). Collapsing must never make the field look
+     plain: the toggle STAYS visible, so the field still advertises that it
+     is rich. That is the same argument 136 used to refuse a floating
+     selection toolbar — in a FORM, chrome that appears only on selection
+     hides the fact that the field takes formatting at all. What collapsing
+     buys is a dense form with several note fields no longer carrying
+     several full toolbars.
+
+     aria-expanded on the toggle is the programmatic half; the hidden
+     buttons are the visible half. One line of consumer wiring flips it,
+     same division as the execCommand wiring. */
+  .bo-richtext__toolbar-toggle {
+    /* Pushed to the end so the collapsed row reads as a control, not as a
+       toolbar that failed to load. */
+    margin-inline-start: auto;
+  }
+
+  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false'])
+    .bo-richtext__toolbar
+    > :not(.bo-richtext__toolbar-toggle) {
+    display: none;
   }
 
   /* Visible group separator inside the toolbar (bold/italic | lists). */
@@ -51,6 +113,27 @@
     font-size: var(--bo-density-font-size);
     overflow-y: auto;
     resize: vertical;
+  }
+
+  /* Placeholder. contenteditable has no placeholder attribute, and CSS
+     alone genuinely cannot supply one — this is not a shortcut not taken.
+     `:empty::before` works EXACTLY ONCE (measured 2026-08-24): it shows on
+     a pristine field, correctly hides once text arrives, and then the
+     first type-then-delete leaves a <br> behind, :empty stops matching,
+     and the placeholder never returns. `<p></p>` — what execCommand and
+     this component's own demos produce — never matched to begin with.
+
+     The reason is worth knowing before reaching for a cleverer selector:
+     emptiness is a property of TEXT CONTENT, and CSS selectors cannot read
+     text content. So the framework ships the styling and the consumer
+     ships one line, the same division as the rest of this component:
+       const sync = (el) =>
+         el.toggleAttribute('data-empty', !el.textContent.trim()); */
+  .bo-richtext__content[data-empty]::before {
+    content: attr(data-placeholder);
+    color: var(--bo-color-text-muted);
+    /* The caret must land in the text, never in the hint. */
+    pointer-events: none;
   }
 
   /* Read-only: content stays selectable/copyable, chrome says "not

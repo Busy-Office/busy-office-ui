@@ -50,6 +50,7 @@ const EXCEPTIONS = new Set([
   'data-maintenance',                                   // master-detail fixture flag
   'data-sync-chip',                                     // app-frame's sync-slot demo cycler target (127.1) — the SLOT is the pattern; the hook is demo wiring
   'data-richtext-cmd', 'data-richtext-value',           // richtext toolbar demo (113.1: value-taking commands)
+  'data-richtext-toggle',                               // richtext toolbar collapse demo (137.3) — the PART is the surface, this is page wiring
   'data-cell-link-demo',                                // handle for the cell-link claims case (135.3b) — the part needs no attribute
   'data-grouped-head',                                  // handle for the grouped-header claims case (130.2 GAP-4a) — the FEATURE needs no attribute, which is the point; this only lets the check find the demo
 ]);
