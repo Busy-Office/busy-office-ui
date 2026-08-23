@@ -1149,7 +1149,15 @@ per page, not two).
        53 → 81 URLs verified. Full suite green (13 docs gates incl. the
        URL-resolution check on all 29 new pattern links; `check:claims`
        90/90).
-3. [ ] **112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.**
+3. [ ] **112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS —
+       protocol owner-confirmed 2026-08-23, scaffold ready.** The owner
+       agreed to the protocol (after stress-testing the loop's format
+       example — the duplicate-check-vs-reconciliation challenge, which
+       also confirmed why briefs must be owner-authored). Scaffold at
+       `.roundtable/pilot-112/` (README + briefs.md + SEALED-PICKS.md);
+       the loop wrote only the scaffold, never brief content. Waiting on:
+       5–8 briefs + sealed picks, then "briefs ready" starts the runs.
+       *(pre-registered protocol follows, unchanged)*
        32-style evidence before any contract surface exists. Protocol,
        pre-registered here so the verdict cannot be argued afterward:
        - **Briefs**: the owner writes 5-8 screen briefs from real ERP
