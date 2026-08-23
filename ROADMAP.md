@@ -228,7 +228,7 @@ half-answered by this project's own grill.
        for this family specifically, with the reason — renaming is a
        Breaking-shaped docs change and "the reference calls it picking" is
        not sufficient on its own.
-2. [~] **135.2 — make the RF track navigable, like the suite.** *(Started
+2. [x] **135.2 — DONE 2026-08-24. The RF track is navigable, like the suite.** *(Started
        2026-08-24 with the thing that had to come first: the LAST two
        duplicated screens.)*
 
@@ -248,16 +248,29 @@ half-answered by this project's own grill.
        and there is no spelling a class-grep can miss. Red-proved by putting
        one back.
 
-       *Still to do — the navigation itself*: the mirrors' links are all
-       `href="#"`. Making them real turns the six into a walkable track (the
-       owner's "switch from app to app"), and the Objective's §4 journey test
-       argues for it: six screens with no way between them do not show a
-       flow. Open question to settle first — those links live inside the
-       `<iframe>` on each pattern page, so clicking one navigates the device
-       in place and the page heading then names a screen the device is no
-       longer showing. Candidate answer: keep it, and retitle the iframe to
-       describe the DEVICE rather than the screen, so the accessible name
-       stays true after navigation. The task
+       **DONE 2026-08-24 — the six mirrors are one walkable track.** Menu
+       tiles open their task, every screen's Back returns to the menu, and a
+       queue row opens the screen for its task type. Zero new CSS: the
+       profile is unchanged at 35.8 kB against its 40 kB budget, because a
+       link needs none. **Walked with real clicks, not asserted hrefs** —
+       menu → each of four tasks → Back → menu, plus a queue row, all nine
+       hops verified.
+
+       The iframe-navigation question resolved as predicted: the frames are
+       retitled to describe the DEVICE ("RF scanner, rf-essentials profile
+       at 360×640 — starts on picking, and its links walk the whole track")
+       rather than one screen, because an accessible name that goes stale on
+       the reader's first interaction is worse than a general one.
+
+       **The base-path build earned its rule again.** Relative links
+       (`../rf-landing-rf/`) work in a browser and pass every local check;
+       `DOCS_BASE=/busy-office-ui` reported **11** "link outside base path"
+       failures, because this repo's convention is absolute `base + '/…'`
+       and the link gate encodes it. Fixed to the convention. The fix then
+       failed differently — `const base` landed at the END of the
+       frontmatter, after the array using it ("Cannot access 'base' before
+       initialization") — which only the base build surfaced, since the
+       plain build had no reason to evaluate those links. The task
        menu already exists (`rf-landing`) and every screen has a Back
        button, but the *mirrors* are isolated documents: nothing links to
        anything, so a reader cannot walk menu → task → next task the way

@@ -1,4 +1,5 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 /* The "Scan to receive" markup + behavior, shared by /patterns/goods-receipt
    (the full page, framework's main CSS bundle) and
    /patterns/goods-receipt-rf (an isolated document, rf-essentials.css only —
@@ -34,7 +35,7 @@
     In a real screen this is sticky at the viewport's block-end; inside a
     docs demo it just sits below the log. */}
 <div class="bo-btn-group bo-btn-group--bar" style="margin-block-start: var(--bo-space-3)">
-  <button class="bo-btn bo-btn--secondary" type="button">Back</button>
+  <a class="bo-btn bo-btn--secondary" href={base + '/patterns/rf/rf-landing-rf/'}>Back</a>
   <button class="bo-btn bo-btn--secondary" type="button">Skip item</button>
   <button class="bo-btn bo-btn--secondary" type="button">Report short</button>
 </div>

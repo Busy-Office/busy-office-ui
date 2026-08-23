@@ -1,4 +1,5 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 /**
  * The RF task menu markup, shared by /patterns/rf/rf-landing (full CSS
  * bundle) and /patterns/rf/rf-landing-rf (isolated document, rf-essentials
@@ -14,16 +15,21 @@
  * rf-essentials profile from absorbing a 12-glyph set for tiles that don't
  * need one (grill verdict, .roundtable/rf-pattern-family-grill-2026-08-22.md).
  */
+/* Real destinations, not `#` (roadmap 135.2). The six RF documents are one
+   TRACK, and a menu whose tiles go nowhere cannot show the journey the
+   Objective's §4 asks for — a screen's exits have to land the reader at the
+   next decision. Relative, so the links survive the DOCS_BASE build without
+   knowing the prefix. */
 const tasks = [
-  { label: 'Receive', count: 4 },
-  { label: 'Put away', count: 12 },
-  { label: 'Pick', count: 7 },
-  { label: 'Count', count: 0 },
+  { label: 'Receive', count: 4, href: base + '/patterns/rf/goods-receipt-rf/' },
+  { label: 'Put away', count: 12, href: base + '/patterns/rf/rf-putaway-rf/' },
+  { label: 'Pick', count: 7, href: base + '/patterns/rf/rf-pick-rf/' },
+  { label: 'Count', count: 0, href: base + '/patterns/rf/rf-count-rf/' },
 ];
 ---
 <div class="bo-widget-grid" style="--bo-widget-min: 8rem" data-density="spacious">
   {tasks.map((t) => (
-    <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-5)">
+    <a href={t.href} class="bo-widget" style="text-align: center; padding-block: var(--bo-space-5)">
       <span style="display: block; font-size: var(--bo-font-size-lg); font-weight: var(--bo-font-weight-semibold); color: var(--bo-color-text-primary)">{t.label}</span>
       <span class="bo-badge" style="margin-block-start: var(--bo-space-2)" aria-label={`${t.count} open`}>{t.count}</span>
     </a>

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 01:45
+Generated at: 2026-08-24 01:53
 
 ## Open items by slice
 
@@ -28,14 +28,12 @@ Generated at: 2026-08-24 01:45
   - 134.1 — fix the key, and prove the dark half is dark.
   - 134.2 — re-baseline deliberately, never blind.
   - 134.3 — CI, or delete it.
-- **Slice 135** (1 open)
-  - 135.2 — make the RF track navigable, like the suite.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (817 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-24 01:45   ok
+dispatch status — counter-triggered rules (818 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-24 01:45   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -43,13 +41,11 @@ dispatch status — counter-triggered rules (817 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 135.2 — make the RF track navigable, like the suite.
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 
 ## Last 10 iterations
 
-- 2026-08-24 00:50 · Standardize · dry · 135.1 — RF naming unified (six labels, one system); slugs kept with the 69-reference reason; goods-receipt duplicate screen removed (131.1 error) · landed · 9167765
 - 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
 - 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
 - 2026-08-24 01:12 · Continue · build · 135.4 — numeric keypad removed from the RF pick screen (markup, wiring, docs, allowlist); inputmode is the answer · landed · 4e39cdf
@@ -59,6 +55,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
 - 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199
 - 2026-08-24 01:45 · Standardize · dry · target-size: my 2.5.8 claim overstated non-conformance; corrected in 5 places, cell-link added to the gate's sweep and red-proved · landed · 86a0bfd
+- 2026-08-24 01:53 · Continue · build · 135.2 part 1 — last two duplicated RF screens removed; check-page-shape now gates the IMPORT, red-proved · landed · d46316b
 
 ## Sunset test
 

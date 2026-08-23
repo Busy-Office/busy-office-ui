@@ -12,6 +12,12 @@
  * stop. The `<iframe title>` stays the only accessible name, and the screen
  * inside is untouched: this frames the demo, it does not restyle it.
  *
+ * That title describes the DEVICE, not one screen (roadmap 135.2). The six RF
+ * documents link to each other now, so following a link inside the frame
+ * navigates the device in place — a title naming a single screen would be
+ * false the moment a reader used it, and an accessible name that goes stale
+ * on the first interaction is worse than a general one.
+ *
  * It appears only when the enclosing `bo-demo` container is wide enough to
  * hold 360px plus a bezel. Below that the reader is already holding a
  * handheld, the chrome would buy nothing, and — measured — there are 6px of
