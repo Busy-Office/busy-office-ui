@@ -13,24 +13,50 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-23 14:30. `git status` clean, main pushed, CI green,
-**npm serves 0.4.0** (`latest`). A very large owner-driven day: Slices
-119-124 all closed; the loop system itself was redesigned (LOOPS.md now
-has EIGHT loops — Polish and Research added, dispatcher rules 6-8
-including the halt rule; owner-confirmed design, see the 2026-08-23
-commits). Polish ran 18 rounds to a dry queue (36/37 component pages
-carry the wrong-choice clause; `date` skipped as deprecated); Research
-ran 2 rounds (DsaScore false gap closed; tile-preview evidence). The
-docs tile index carries live miniatures for 10 patterns (104.2,
-c-scoped). The 0.3.0 docs snapshot was cut FROM THE TAG in a worktree —
-never snapshot the current tree for a past version — and the switcher
-offers 0.1.1 / 0.3.0 / latest.
+Last updated 2026-08-23 21:30. `git status` clean, main pushed, CI green,
+**npm serves 0.5.0** (`latest`).
 
-**The ONLY open input anywhere: the owner's 112.3 pilot briefs** —
-scaffold at `.roundtable/pilot-112/` (README explains; the loop must
-never author brief content, and SEALED-PICKS.md stays unopened until all
-runs are recorded). When the owner says "briefs ready", run the
-pre-registered protocol in ROADMAP 112.3.
+Since the 14:30 entry: Slices 126-130 closed or advanced.
+
+- **0.5.0 released** (owner said "Cut"). Deliberately a MINOR, not the
+  0.4.1 that had been recommended — Unreleased had grown three `Added`
+  entries by then, and this project bumps minor for features. It carries
+  the three grouped-number defects 0.4.0 had been shipping since that
+  morning, plus the scan flash, `--bar`, and the column ladder. The
+  **0.4.0 docs snapshot was cut FROM ITS TAG** in a worktree (same rule
+  as 0.3.0); the switcher offers 0.5.0 · latest / 0.4.0 / 0.3.0 / 0.1.1.
+- **Slice 129 (Objective grill)** found that `check-page-shape.mjs` had
+  NEVER run against `scan` — its filter needed a `.bo-` selector and
+  `scan.css` has none. A skipped page looks exactly like a passing one.
+  Membership now reads `api.json`; 39 → 40 pages checked.
+- **Polish took `scan`** on a source-change re-entry and scored it
+  colour 2 / interaction 2 / fit 2 — the first colour<3 in the rubric.
+  The scan verdict is now carried by the FRAME (6px solid vs 18px
+  double), not by hue.
+- **Slice 130 — `examples/erp-suite/`, a gap-finding instrument.** Owner
+  wishlist, grilled over two rounds before any build. Static screens,
+  no backend, document-based; cross-module data is API-side and out of
+  scope. P2P pilot: 8 real screens + 5 module stubs. **The rule that
+  makes it work: the example may not add ONE line of its own CSS**
+  (`check-erp-suite.mjs` enforces it), so a gap cannot be papered over.
+  **13 gaps in `.roundtable/erp-suite-gaps.md`**; GAP-5, GAP-7 and
+  GAP-13 already fixed, ten open.
+
+**Two open owner inputs:**
+
+1. **112.3 pilot briefs** — unchanged; scaffold at `.roundtable/pilot-112/`
+   (the loop must never author brief content, and SEALED-PICKS.md stays
+   unopened until all runs are recorded).
+2. **GAP-13's consolidation question** — `.bo-btn-group--bar`,
+   `.bo-state__actions` and now `.bo-form-actions > .bo-btn` all make the
+   same "labels wrap rather than clip" call, each citing WCAG 1.4.12.
+   Three specific rules where one general one might do; the general form
+   is dropping `.bo-btn`'s global `white-space: nowrap`, which touches
+   every button on every screen. Recorded, not guessed at.
+
+**Next dispatched work, if nothing new arrives:** ROADMAP 130.2 — grill
+the ten open gaps into accept/refuse/rethink, GAP-2 (merged with the
+document-chain question) first, before 130.3 builds module two.
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 

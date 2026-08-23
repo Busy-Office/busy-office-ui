@@ -278,6 +278,19 @@ reads clean while telling us nothing.
        to" and "where is this in its lifecycle" are one need, and answering
        them separately would produce two overlapping surfaces — exactly what
        the Objective's rethink test targets.
+   **Calibration against ERPNext** (owner asked, 2026-08-23; written up in
+   `.roundtable/assessment-vs-erpnext-2026-08-23.md`): every gap this pilot
+   found is something ERPNext has shipped for years — Connections/Links on
+   every document, "Create → Purchase Order" from a requisition, live derived
+   totals, one list switchable between List/Report/Kanban/Gantt/Calendar.
+   Seven of thirteen gaps are that product's table stakes. The strategic
+   consequence is sharper than the score: **their UI is GENERATED from
+   metadata**, which is why it covers everything and why every document looks
+   alike; ours is hand-shaped, which is why `list-report` and the RF screens
+   beat their equivalents and why we have only 38 shapes. That bet pays off
+   ONLY if the document-flow gaps close, because those are exactly the shapes
+   generation gives away free. Treat 130.2 as the slice that decides whether
+   the bet holds.
 4. [ ] **130.3 — module two, on the settled answers.** O2C (sales order,
        customer invoice), built only after 130.2 lands, so the second module
        measures whether the fixes worked instead of repeating the gaps.
