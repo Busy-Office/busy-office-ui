@@ -104,6 +104,16 @@
 
   .bo-form-actions {
     display: flex;
+    /* WRAP, added 2026-08-23 (roadmap 130.2 / GAP-7). Without it a bar of
+       three buttons at 390px overflowed the START edge — justify-content is
+       flex-end, so the row grows leftward — and the first button was clipped
+       away entirely by the shell's scroll container: 234px of it, measured.
+       Nothing caught this for months, here or in the docs, because content
+       overflowing the start edge never reaches scrollWidth, so every overflow
+       check reported clean; the docs' own bars carry two short buttons and
+       fit. Found by an example app built from shipped CSS only.
+       The gap already applies to both axes, so wrapped rows are spaced. */
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--bo-space-2);
     padding: var(--bo-space-3) 0;

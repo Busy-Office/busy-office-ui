@@ -11,15 +11,30 @@ const SECTIONS = [
 ];
 
 const markup = `<div class="op-sticky">                        <!-- ONE sticky wrapper -->
-  <header class="bo-widget">…object header: title, status, key facts…</header>
+  <header class="bo-widget">
+    <div class="bo-widget__header">
+      <!-- The record's identity IS the page's heading. bo-widget__title is a
+           CLASS, not an element: put it on an <h1> here and on <h2> for each
+           section widget below. Every demo on this site nests inside the docs'
+           own <h1>, so a page copied from one without this line ships with no
+           h1 at all — axe's page-has-heading-one, found by building a real
+           screen from this markup (2026-08-23). -->
+      <h1 class="bo-widget__title">PO-88213 · Acme Supply Co.</h1>
+      <span class="bo-badge bo-badge--warning">Pending approval</span>
+    </div>
+    …key facts…
+  </header>
   <nav class="bo-pagination" data-anchor-nav tabindex="0" aria-label="Sections">
     <a class="bo-pagination__btn" href="#general" aria-current="page">General information</a>
     <a class="bo-pagination__btn" href="#items">Line items</a>
   </nav>
 </div>
 
-<section class="bo-widget" id="general">…</section>
-<section class="bo-widget" id="items">…</section>
+<section class="bo-widget" id="general">
+  <div class="bo-widget__header"><h2 class="bo-widget__title">General information</h2></div>
+  …
+</section>
+<section class="bo-widget" id="items">…same shape, <h2> title…</section>
 
 <div class="bo-form-actions">                     <!-- already sticky + print-hidden -->
   <button class="bo-btn bo-btn--secondary" type="button">Discard</button>

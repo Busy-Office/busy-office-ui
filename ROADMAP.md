@@ -202,7 +202,12 @@ reads clean while telling us nothing.
        them — GAP-6 and GAP-7 — were found by a SCREENSHOT after all three
        gates reported the pilot clean, which is the argument for the
        screenshot step in the quality bar, made again.
-2. [ ] **130.2 — promote the gaps into decisions.** Each of GAP-1..5 gets
+2. [~] **130.2 — promote the gaps into decisions.** GAP-5 and GAP-7 landed
+       2026-08-23, both accepted without a grill because neither is a
+       judgement call: a button that vanishes at 390 and a copyable sample
+       that produces a page with no `<h1>` are defects, not design options.
+       GAP-7 also emptied the example's audit allowlist, which is how a debt
+       marker is meant to end. Five remain. Each of GAP-1..5 gets
        grilled against the Objective and lands as accept / refuse / rethink
        before module two is built. Ordering by confidence-to-cost:
        **GAP-5** (object-page models the record title as a `<span>`, so

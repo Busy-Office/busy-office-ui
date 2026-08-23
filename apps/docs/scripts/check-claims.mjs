@@ -2013,6 +2013,34 @@ check(
   JSON.stringify(lrLadder),
 );
 
+// The action bar WRAPS instead of clipping (roadmap 130.2 / GAP-7). Measure
+// each button against the bar's own client box — NOT the bar's scrollWidth,
+// which is exactly the check that reported this clean while a button was
+// being cut in half: justify-content is flex-end, so the row overflowed the
+// START edge, and content overflowing the start edge never reaches
+// scrollWidth. The framework's standing lesson, and the reason this case
+// exists at all.
+await visit('/components/form/', { width: NARROW_WIDTH, height: 1600 });
+const actionWrap = await page.evaluate(() => {
+  const bar = document.getElementById('wrap-demo');
+  const b = bar.getBoundingClientRect();
+  const buttons = [...bar.querySelectorAll('.bo-btn')];
+  const spills = buttons
+    .map((el) => {
+      const r = el.getBoundingClientRect();
+      return Math.max(b.left - r.left, r.right - b.right);
+    })
+    .filter((n) => n > 1);
+  const rows = new Set(buttons.map((el) => Math.round(el.getBoundingClientRect().top)));
+  return { buttons: buttons.length, spills, rows: rows.size, wrap: getComputedStyle(bar).flexWrap };
+});
+check(
+  'a four-action bar at phone width WRAPS onto more than one row and clips nothing — every button stays inside the bar',
+  actionWrap.wrap === 'wrap' && actionWrap.buttons === 4 &&
+    actionWrap.spills.length === 0 && actionWrap.rows > 1,
+  JSON.stringify(actionWrap),
+);
+
 // Touch attribute recipe (roadmap 127.5). A spec table next to a demo is
 // two copies of one fact, and the docs' whole doctrine is that a
 // documented surface is generated from the shipped thing rather than

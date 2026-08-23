@@ -71,12 +71,12 @@ for (const path of paths) {
          off the left edge (GAP-7). A gate that misses what a screenshot
          catches is not a gate.
 
-         KNOWN, allowlisted with a reason — never silently: the sticky action
-         bar is `display:flex` with no `flex-wrap`, so three buttons do not
-         fit at 390. That is a defect in the shipped component, logged as
-         GAP-7; the example keeps the realistic three-button bar rather than
-         trimming to two and hiding it. Remove this entry when GAP-7 lands. */
-      const KNOWN = ['.bo-form-actions'];
+         The allowlist is EMPTY, and that is the point: it briefly held
+         `.bo-form-actions`, because the sticky bar had no `flex-wrap` and
+         lost its first button at 390. GAP-7 landed the wrap, so the entry
+         came out. An allowlist entry here is a debt marker with a name, not
+         a place to park a defect. */
+      const KNOWN = [];
       const clipped = await page.evaluate((known) => {
         /* Measure the CHILD against the PARENT's client box, not the
            parent's scrollWidth. scrollWidth never accounts for content

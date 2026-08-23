@@ -8,7 +8,15 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+- **Fixed** (`form`): `.bo-form-actions` now wraps. A bar of three or more
+  buttons overflowed the START edge at phone width — `justify-content` is
+  `flex-end`, so the row grows leftward — and the shell's scroll container
+  clipped the first button away entirely (234px of it, measured). No overflow
+  check anywhere caught it, here or in the docs, because content overflowing
+  the start edge never reaches `scrollWidth`; the docs' own bars carry two
+  short buttons and fit. Found by building a real ERP screen out of shipped
+  CSS only. A claims case now measures each button against the bar's own box
+  at 390.
 
 ## 0.5.0 (2026-08-23)
 

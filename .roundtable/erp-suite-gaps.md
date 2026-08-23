@@ -103,8 +103,8 @@ header for `data-table` — mechanical, and useful far beyond this screen;
 it risks becoming "colour the cell", which the two-channel rule forbids
 outright.
 
-## GAP-5 — the object-page header models the record title as a `<span>`, so a
-consumer who copies it ships a page with no `<h1>`
+## GAP-5 — RESOLVED 2026-08-23 — the object-page header modelled the record
+title as a `<span>`, so a consumer who copied it shipped a page with no `<h1>`
 
 **Hit on**: `p2p/purchase-order`, `p2p/vendor-invoice`. Caught by axe
 (`page-has-heading-one`) on the pilot's first audit run — I had copied the
@@ -118,10 +118,15 @@ own `<h1>`, so the docs' axe sweep is green while the copyable markup is not.
 That is the whole argument for building this example.
 **Compromised to**: `<h1 class="bo-widget__title">` on the record title,
 `<h2>` on section headings — which works and is what the pattern should say.
-**Shape of the fix**: a docs fix, and a small one: the object-page and
-record-detail Markup samples should show the heading element, with one line
-saying why. Possibly a claims case asserting the built pattern pages' samples
-carry a heading element. **Highest confidence-to-cost ratio of the five.**
+**FIXED**: object-page's copyable sample now shows `<h1 class="bo-widget__title">`
+for the record identity and `<h2>` for each section widget, with the reason
+inline; dashboard's canonical sample and its API notes say outright that
+`__title` is a CLASS, not an element, and that a `<span>` is only right when
+something else on the page already provides the heading.
+**No gate added, deliberately**: "the sample shows the right heading LEVEL"
+is a semantic property, and a detector for it would have to decide when a
+`<span>` is legitimately correct — which it often is. Per the project's own
+rule, that stays judgement rather than becoming a gate that cannot fail.
 
 ## GAP-6 — `bo-stack` on `bo-app-shell__main` silently clips a scrollable
 table
@@ -141,8 +146,8 @@ That works and is what the docs should say.
 primitives that are each correct compose into silent data loss, and the
 composition that breaks is the one a careful reader would try first.
 
-## GAP-7 — `bo-form-actions` does not wrap: a three-button bar loses a button
-at 390
+## GAP-7 — RESOLVED 2026-08-23 — `bo-form-actions` did not wrap: a
+three-button bar lost a button at 390
 
 **Hit on**: `p2p/vendor-invoice` (Release for payment · Request credit note ·
 Send back to vendor).
@@ -161,8 +166,13 @@ PARENT's client box, it reports the defect immediately.
 **Compromised to**: nothing. The example keeps the realistic three-button
 bar, and `audit.mjs` allowlists `.bo-form-actions` **with the reason and a
 pointer here** rather than trimming the screen to hide it.
-**Shape of the fix**: almost certainly `flex-wrap: wrap` plus a row gap —
-mechanical, and it needs a claims case at 390 so it cannot regress.
+**FIXED**: `flex-wrap: wrap` on `.bo-form-actions` (the existing `gap`
+already spaces both axes). Claim 106 measures each button against the bar's
+own client box at 390 — not its `scrollWidth`, which is the check that
+reported this clean while a button was cut in half — and is red-proved by
+stripping the wrap from the built CSS. A four-action demo on the Forms page
+shows it. The example's audit allowlist is now EMPTY, which is how a debt
+marker is supposed to end.
 
 ---
 

@@ -239,7 +239,25 @@ const fieldMarkup = `<div class="bo-form-field">
     <code>scroll-padding-block-end</code> on the scroll container so keyboard focus
     is never hidden underneath it. The full multi-section edit screen, with its
     data contract and dirty-state handling, is
-    <a href={base + '/patterns/detail-form'}>the detail-form pattern</a>.</p>
+    <a href={base + '/patterns/detail-form'}>the detail-form pattern</a>.
+    The bar <strong>wraps</strong> rather than clipping: a screen with three
+    or four actions keeps all of them at phone width, on as many rows as it
+    takes. Until 2026-08-23 it did not, and the first button was silently
+    cut off at 390 — found by building a real screen out of shipped CSS, not
+    by a gate, because content overflowing the start edge never shows up in
+    an overflow check.</p>
+    <h3>Four actions at phone width</h3>
+    <div class="demo-phone-screen">
+      <div class="bo-form-actions" id="wrap-demo">
+        <button class="bo-btn bo-btn--ghost" type="button">Delete</button>
+        <button class="bo-btn bo-btn--secondary" type="button">Save as draft</button>
+        <button class="bo-btn bo-btn--secondary" type="button">Cancel</button>
+        <button class="bo-btn" type="button">Submit for approval</button>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Four buttons that cannot fit one row at 390px.
+    Every one stays reachable; the primary action stays last, where the eye
+    and the thumb both end up.</p>
   </section>
   <section class="demo">
     <h2>Dependent selects (HTMX)</h2>

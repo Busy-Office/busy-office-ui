@@ -6,7 +6,12 @@ import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
 const collapseMarkup = `<div class="bo-widget">
   <header class="bo-widget__header">
-    <span class="bo-widget__title">Shipping details</span>
+    <!-- __title is a CLASS, not an element. On a real screen give it the
+         heading that fits the page's outline — <h2> for a section widget,
+         <h1> when the widget IS the record's identity (see the object-page
+         pattern). The <span> below is only right when something else on the
+         page already provides the heading. -->
+    <h2 class="bo-widget__title">Shipping details</h2>
     <button class="bo-btn bo-btn--ghost bo-btn--icon" data-collapse-trigger
             aria-expanded="true" aria-controls="ship-body" aria-label="Toggle">
       <span class="bo-widget__toggle-icon">▾</span>
@@ -201,6 +206,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     notes={['Delta valence needs two channels: the visible <code>⚠</code> on bad deltas AND visually-hidden text ("increase, worse,").',
             'Stat values use proportional figures; compact big numbers server-side (12.9K, $4.2M). One hero per view.',
             'Widgets are named containers (<code>bo-widget</code>); the grid is <code>bo-widget-grid</code> — span-2 collapses at the grid&#39;s 2-column threshold.',
+            '<code>bo-widget__title</code> is a CLASS, not an element — put it on the heading level the page&#39;s outline needs (<code>h2</code> for a section widget, <code>h1</code> when the widget carries the record&#39;s identity). Every demo here nests inside this page&#39;s own <code>h1</code>, so copying a <code>span</code> into a real screen is how a page ends up with none.',
             'Collapsible is opt-in: <code>data-collapse-trigger</code> + <code>initCollapsibleCards()</code>. Without the behavior, a <code>.bo-widget__collapse</code> with no <code>data-state</code> just renders open.']} />
   <DsaScore component="dashboard" />
   <Related links={[["/concepts/container-queries", "Container queries"], ["/concepts/tokens", "Design tokens"], ["/patterns/approval", "Approval pattern"]]} />
