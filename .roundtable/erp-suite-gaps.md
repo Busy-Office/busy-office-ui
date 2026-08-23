@@ -288,7 +288,29 @@ two uncovered shapes were built — PR creation and PR→PO conversion. Six more
 gaps, five of them from the conversion screen alone, which is a strong signal
 that document conversion is a genuine hole rather than a missing demo.
 
-## GAP-8 — the transform statement has no surface
+## GAP-8 — DECIDED 2026-08-23 (with GAP-10) — the transform statement
+
+**GAP-8 and GAP-10 are ONE need, and the merge was tested rather than
+assumed**: GAP-8 is a COUNT of documents derived from a grouping rule, GAP-10
+a TOTAL derived from a selection. Both are *a fact about what this operation
+will do, derived from what is currently ticked, that must be restated when it
+changes*. Same shape, same answer.
+
+**Verdict: no new surface. Placement, wording, and a contract that already
+exists.**
+
+- The statement belongs **next to the primary action**, not only at the top of
+  the screen: the reader decides at the button, and the count goes IN the
+  button's label — "Create 2 purchase orders · $44,560.00". The example
+  already did this half correctly.
+- The grouping RULE ("one PO per vendor") is stated in prose beside it,
+  because it is the thing the reader did not choose and cannot infer.
+- Changes are announced through the live-region recipe the framework already
+  documents — see GAP-10 below.
+
+*(original entry below)*
+
+## GAP-8 (original) — the transform statement has no surface
 
 **Hit on**: `p2p/convert-to-po`.
 **Wanted**: "3 requisitions → 2 purchase orders, grouped by vendor" rendered
@@ -308,7 +330,38 @@ connected to", GAP-9 is "what will this document be made from". Rendered as a
 `bo-kv` row of links, the same compromise, which is the evidence that these
 are ONE need. Merged into GAP-2 for the grill, per the owner's Q16 answer.
 
-## GAP-10 — a derived total has no home and no stated owner
+## GAP-10 — MOSTLY NOT A GAP, 2026-08-23 — a derived total has no home and no
+stated owner
+
+**The premise was wrong on both counts, and the source says so.** The claim was
+that "nothing in the docs says who recomputes a derived total as selection
+changes, or how the change is announced". `initTableSum` ships the recompute
+(`data-sum-of`) and its documented contract states the announcement rule
+outright: *announce on COMMITTED change, not per keystroke — `aria-live` on
+the cell itself speaks on every keystroke, since sums recompute on input;
+leave the visible cell plain, add a visually-hidden `aria-live="polite"`
+status near the table, write one summary into it from a `change` listener*.
+There is a working implementation on `/patterns/editable-grid`, and the
+contract reaches `/concepts/js-behaviors`, which is generated from that
+docstring.
+
+**What is genuinely uncovered**, and deliberately: a total over the SELECTION
+rather than over all rows. `data-sum-of` sums every tbody field of that name,
+checked or not — because which rows count is a business rule, and the
+framework's own line is "framework does visuals, you do the data".
+`initTableSum` is the named exception for the universal case; a grouping rule
+is not universal.
+
+**So the real defect was DISCOVERABILITY**, and that is fixed: someone
+building a conversion screen has no reason to read the editable-grid pattern.
+`/components/data-table` — the page that owns selection — now says that a
+number derived from the selection is yours to compute, points at the
+live-region contract, and says why `data-sum-of` deliberately ignores the
+checkboxes.
+
+*(original entry below)*
+
+## GAP-10 (original) — a derived total has no home and no stated owner
 
 **Hit on**: `p2p/convert-to-po` (the button reads "Create 2 purchase orders ·
 $44,560.00" — both numbers derived from which lines are ticked).

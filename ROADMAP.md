@@ -536,6 +536,21 @@ reads clean while telling us nothing.
        table and prove nothing) and claim 108, red-proved against the BUILT
        css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
        the part that risks becoming "colour the cell".
+       **GAP-8 + GAP-10 DECIDED: one need, and mostly already answered.**
+       The merge was tested: a document COUNT from a grouping rule and a
+       TOTAL from a selection are both "a fact about what this operation
+       will do, derived from what is ticked, restated when it changes".
+       GAP-10's premise was wrong — `initTableSum` ships the recompute AND
+       states the announcement contract (committed change, not per
+       keystroke; a visually-hidden `aria-live` beside the table, not on the
+       number), with a working implementation on `/patterns/editable-grid`.
+       The uncovered half — summing only CHECKED rows — is deliberate:
+       which rows count is a business rule, and `initTableSum` is the named
+       exception for the universal case only. The real defect was
+       DISCOVERABILITY; `/components/data-table`, the page that owns
+       selection, now carries the pointer. GAP-8 adds placement: the count
+       goes in the primary action's LABEL, because the reader decides at the
+       button, with the grouping rule in prose beside it.
        **GAP-12 RESOLVED: a stated home, no new surface.** "Add a line"
        goes BELOW the table in a cluster, never in the table toolbar — the
        toolbar acts on rows that exist, this creates one that does not, and

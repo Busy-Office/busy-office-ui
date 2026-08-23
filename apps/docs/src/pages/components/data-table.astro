@@ -119,6 +119,21 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted"><strong>A number derived from the selection —
+    a total, a document count — is yours to compute, and the framework already
+    says how to announce it.</strong> <code>.bo-data-table__selection-count</code>
+    is the built-in case ("3 selected"). For anything else — "Create 2 purchase
+    orders · $44,560.00", "Release 14 invoices" — compute it in your own
+    <code>change</code> listener and write ONE summary into a visually-hidden
+    <code>aria-live="polite"</code> element beside the table. Not
+    <code>aria-live</code> on the number itself: sums recompute on every
+    keystroke, so the cell would speak on each one. That is the same contract
+    <a href={base + '/concepts/js-behaviors'}><code>initTableSum</code></a>
+    documents for column totals, with a working implementation on
+    <a href={base + '/patterns/editable-grid'}>editable grid</a> — and
+    <code>data-sum-of</code> deliberately sums <em>every</em> body row, not
+    just the checked ones, because which rows count is a business rule and
+    those stay yours.</p>
   </section>
   <section class="demo">
     <h2>Narrow container → auto-compaction</h2>
