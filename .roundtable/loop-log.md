@@ -812,3 +812,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 00:11 · Continue · build · 130.2 GAP-1 — module rail measured (fails at 11 docs/700px), deferred behind a trigger, limit documented · landed · fa23ff0
 - 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
 - 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58
+- 2026-08-24 00:21 · Continue · build · 130.2 GAP-4b — cell-level disagreement cue: data-tone already shipped; row tint hid it on the first try · landed · 0ab469a

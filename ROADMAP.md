@@ -167,7 +167,43 @@ is available on visula key board on RF scanner."*
 Checked against what ships before queuing. Three are real; one is already
 half-answered by this project's own grill.
 
-1. [ ] **135.1 — the naming, which is TWO questions wearing one hat.**
+1. [x] **135.1 — DONE 2026-08-24. The naming, which was TWO questions
+       wearing one hat — plus a third thing found on the way.**
+       **(a) Labels unified**, six for six: `RF ` prefix + a noun — RF task
+       menu / RF task queue / RF goods receipt / RF pick / RF putaway / RF
+       count. "Goods receipt (RF scanner)" lost its suffix (the page is
+       RF-only, so the qualifier was doing nothing the prefix does better)
+       and "RF picking" became "RF pick" to match its siblings' noun form.
+       **Slugs deliberately NOT renamed**, and the number is why: 69
+       references across 49 files point at these six slugs, `goods-receipt`
+       alone carrying 25 in 16. That is a bulk edit with real revert risk
+       (this project's own doctrine on bulk edits) bought for cosmetic
+       alignment between a slug and a label a reader never types. Readers
+       navigate by label; the labels are now consistent.
+       **(b) Shape-vs-domain: RETHINK → keep the domain words here, and
+       record where Slice 109's rule actually bites.** That rule exists to
+       stop per-domain DUPLICATION — `invoice-list` became `list-report`
+       because `po-list` and `order-list` would have been the same shape
+       re-photographed. Nothing in the RF family re-photographs anything:
+       there is one picking pattern, not one per industry. And these ARE
+       distinct shapes — guided fetch with a quantity, verify a
+       system-chosen destination, blind entry that withholds the expected
+       number, receive against a document — each stated in its own opener.
+       In this family the domain word IS the industry's name for the shape
+       (SAP, Zebra and Honeywell all say pick/putaway/count), so renaming to
+       invented shape names would cost the warehouse reader discoverability
+       and buy nothing. **The trigger that would make it a violation**: a
+       seventh RF screen that is an existing shape wearing a different
+       operation's name — a "material transfer" that is putaway with new
+       demo data. That gets refused, not added.
+       **(c) A 131.1 error, found by this ask and fixed with it.**
+       `goods-receipt` renders `<ScanToReceive />` inline AND in its mirror
+       — the exact duplication the owner reported for the RF pages — and
+       131.1 spared it on the stated belief that "its top demo is the
+       desktop receipt screen and the RF mirror shows a different screen".
+       That was wrong; the page's own prose said "the SAME markup — via the
+       shared component". Collapsed to the mirror alone, like its three
+       siblings. All four now agree.
        *(a) Mechanical inconsistency, and it is worse than the sidebar
        shows.* There are **three** naming systems across six pages:
        sidebar/title labels (`RF task menu`, `RF task queue`, `Goods receipt

@@ -2,13 +2,12 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import RfDevice from '../../components/RfDevice.astro';
-import ScanToReceive from '../../components/ScanToReceive.astro';
 // Generated on every build from the array the profile is COMPILED from, so
 // this page and the shipped bundle cannot disagree (roadmap 95.1).
 import rfProfile from '../../data/rf-profile.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
-<Gallery title="Pattern: goods receipt (RF scanner)">
+<Gallery title="Pattern: RF goods receipt">
   <p class="demo-note">
     <strong>Who uses it</strong>: a warehouse floor worker, one-handed and
     often gloved, holding a scanner instead of a mouse. <strong>What
@@ -33,21 +32,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     pattern.
   </p>
 
-  <section class="demo" data-density="spacious">
-    <h2>Scan to receive</h2>
-    <ScanToReceive />
-  </section>
-
   <section class="demo">
-    <h2>The RF-floor profile, at RF-scanner size</h2>
-    <p>Everything above is the framework's full CSS bundle, at desktop width.
-    Below is the SAME markup — via the shared component, not a hand-typed
-    copy — in an isolated document styled by ONLY the
-    <code>rf-essentials</code> profile (roadmap 59.2, Chrome/WebView 108),
-    at 360×640, a common scanner resolution. This is where "separated and
-    used only on RF scanner / mobile / tablet" is actually demonstrated —
+    <h2>The screen — try it</h2>
+    <p>Shown the way the scanner gets it: an isolated 360×640 document styled
+    by ONLY the <code>rf-essentials</code> profile (roadmap 59.2,
+    Chrome/WebView&nbsp;108) — not the docs bundle. This is where "separated
+    and used only on RF scanner / mobile / tablet" is actually demonstrated:
     the profile is what's separated (a build target), not the markup or the
-    components.</p>
+    components. One screen, not two — this page rendered the same component a
+    second time at desktop width until roadmap 135.1, which is a size no
+    receiving clerk holds. (131.1 removed that duplicate from the other three
+    RF screens and wrongly spared this one, on the belief that its top demo
+    showed something different. It did not: both rendered
+    <code>&lt;ScanToReceive /&gt;</code>, and this page said so itself.)</p>
     <p><strong>What is in the profile — all {rfProfile.count} of them.</strong>
     Generated from the same array the bundle is compiled from, so this list
     and what ships cannot disagree. Everything else in the framework is

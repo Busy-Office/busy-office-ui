@@ -2714,7 +2714,7 @@
         },
         {
           "href": "/patterns/goods-receipt",
-          "title": "Goods receipt (RF scanner)",
+          "title": "RF goods receipt",
           "group": "Patterns: RF / rugged devices",
           "opener": "Who uses it: a warehouse floor worker, one-handed and often gloved, holding a scanner instead of a mouse. What \"done\" looks like: every expected line accounted for — received in full, received partial, or explicitly not received — before the receipt posts. A GR (goods receipt) screen driven by a handheld RF scanner — the scanner types the barcode fast and sends Enter, so the field needs to stay focused and clear itself between scans. Composed from data-scan-input (new opt-in behavior, no new CSS — a plain .bo-input), the existing .bo-quantity at data-density=\"spacious\" for a warehouse-floor large target, and the data table for the receiving log. A visually-hidden aria-live=\"polite\" region (linked via the field's own aria-describedby) announces each successful scan — a screen-reader/low-vision RF user gets non-visual confirmation without it being read for every sighted user. Not for a desk-based receiving clerk keying a paper packing slip. Without a physical scanner there is no barcode to feed the always-focused field, the spacious steppers just waste screen space, and the workflow is really \"type these numbers in and check them\" — that's a detail form at normal density, not this pattern.",
           "complexity": 3,
@@ -2783,7 +2783,7 @@
         },
         {
           "href": "/patterns/rf-pick",
-          "title": "RF picking",
+          "title": "RF pick",
           "group": "Patterns: RF / rugged devices",
           "opener": "Who uses it: a picker with a gun in one hand and the other on the rack — the highest-volume RF activity in any warehouse. How often: hundreds of times a shift, one task line at a time. What \"done\" looks like: right bin confirmed by scan, right item confirmed by scan, quantity entered without taking gloves off, and the next line already on screen. The screen answers before the worker asks — task, bin, item, quantity — in the KV header every RF screen here shares. Not for checking stock without moving it — counting what a bin holds is the count pattern, which is blind by design; picking knows exactly what it wants and verifies the worker found it.",
           "complexity": 2,
