@@ -763,3 +763,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 14:38 · Standardize · tidy · Sweep of today's 4 rounds: redundant resets, header idiom converged on --split, preview helpers, snapshot-script doc · landed · efdeb8a
 - 2026-08-23 15:32 · Explore · explore · 125.1: 0.4.0 dogfood found 3 real grouped-number defects, fixed red-first, E2E-proven; wiring graduated · landed · 1f75dab
 - 2026-08-23 15:32 · Objective · grill · 125.2: mobile/web ERP gap audit — 7 evidence-graded candidates for owner pick · logged · 1f75dab
+- 2026-08-23 15:45 · Objective · grill · RF-coverage grill Round 1 settled (scope/boundary/compose-first/size-budget); Round 2 grounded, awaiting references · logged · ee82970
