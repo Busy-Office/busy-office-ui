@@ -33,6 +33,7 @@
 @import "./components/ordered-list/ordered-list.css";
 @import "./components/skeleton/skeleton.css";
 @import "./components/state/state.css";
+@import "./components/scan/scan.css";
 @import "./components/quantity/quantity.css";
 @import "./components/date/date.css";
 @import "./components/segmented/segmented.css";

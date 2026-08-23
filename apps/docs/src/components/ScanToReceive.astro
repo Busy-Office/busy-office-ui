@@ -7,7 +7,7 @@
 ---
 <div class="bo-form-field">
   <label class="bo-form-field__label" for="gr-scan">Scan barcode</label>
-  <input class="bo-input bo-input--code" id="gr-scan" data-scan-input autofocus
+  <input class="bo-input bo-input--code" id="gr-scan" data-scan-input data-scan-flash autofocus
       placeholder="Waiting for scan…" aria-describedby="gr-scan-status" />
   <p id="gr-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
 </div>
@@ -31,7 +31,7 @@
 </div>
 
 <script>
-  import { initScanInput, initQuantity } from '@busy-office/ui/js';
+  import { initScanInput, initQuantity, flashScanResult } from '@busy-office/ui/js';
   initScanInput();
   initQuantity();
 
@@ -44,6 +44,13 @@
     if (!log) return;
     if (!placeholderCleared) { log.innerHTML = ''; placeholderCleared = true; }
     const value = (e as CustomEvent).detail.value;
+    // The demo's stand-in for YOUR validation: capture already flashed ok
+    // (data-scan-flash); a code the app rejects flashes error instead —
+    // the framework never decides validity, it only paints the verdict.
+    if (/^REJECT/i.test(value)) {
+      flashScanResult('error', `Not on this PO: ${value}`);
+      return;
+    }
     const qty = qtyInput?.value || '1';
     // textContent, never innerHTML: barcode content is untrusted
     // physical-world input (adversary-printed labels exist).

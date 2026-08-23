@@ -74,8 +74,24 @@ await mkdir(dirname(to), { recursive: true });
 await writeFile(to, pretty.css);
 await writeFile(to.replace(/\.css$/, '.min.css'), min.css);
 
+/* Size budget (roadmap 126.1, RF grill Q4): a profile whose whole point is
+   constrained devices refuses silent growth. 40 kB min — 34.1 today, room
+   for the grill's scan-flash + bar, tight enough that adding a whole
+   component (progress/stepper) forces the membership debate it deserves.
+   Byte-exact on OUR minifier output is safe here (unlike gzip figures,
+   which vary across zlib builds — the stamp-readme lesson); the budget is
+   a ceiling, not an equality, so no tolerance dance is needed. */
+const RF_BUDGET_KB = 40;
+const minKb = min.css.length / 1024;
+if (minKb > RF_BUDGET_KB) {
+  console.error(
+    `rf-essentials OVER BUDGET: ${minKb.toFixed(1)} kB min > ${RF_BUDGET_KB} kB — ` +
+    'trim the addition or argue the budget in ROADMAP 126.1, never both silently.',
+  );
+  process.exit(1);
+}
 console.log(
-  `  ${to.replace(pkgRoot + '/', '')} (${(pretty.css.length / 1024).toFixed(1)} kB / min ${(min.css.length / 1024).toFixed(1)} kB)`,
+  `  ${to.replace(pkgRoot + '/', '')} (${(pretty.css.length / 1024).toFixed(1)} kB / min ${minKb.toFixed(1)} kB, budget ${RF_BUDGET_KB} kB)`,
 );
 console.log(`  components: ${RF_COMPONENTS.length} (${RF_COMPONENTS.join(', ')})`);
 console.log('rf-essentials build complete.');

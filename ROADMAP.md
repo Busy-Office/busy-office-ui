@@ -168,11 +168,39 @@ component recipe (docs page + wrong-choice clause, DSA score, gates,
 two-channel, RF-floor-guarded CSS) — the owner's "same as other
 components" bar.
 
-1. [ ] **126.1 — rf-essentials size-budget gate.** The profile build
+1. [x] **126.1 — DONE 2026-08-23.** Budget gate live in
+       build-rf-essentials (40 kB min ceiling, byte-exact on our own
+       minifier output — deliberately NOT the gzip-tolerance dance, since
+       a ceiling on our bytes has no cross-zlib variance; the gate's
+       comment says so). RED-PROVED at a 30 kB ceiling — and the first
+       red-proof PROBE was itself broken (`$?` read tail's exit, not
+       node's) and got fixed before trusting it. Output prints the budget
+       every build. Original text:
+       **rf-essentials size-budget gate.** The profile build
        fails when min CSS exceeds **40 kB** (now 34.1), gzip-tolerance
        rule, red-proven. Accept: budget stated in the build output; an
        injected oversize fails; docs note the budget on the RF track.
-2. [ ] **126.2 — scan-result feedback.** `data-scan-result="ok|error"`
+2. [x] **126.2 — DONE 2026-08-23. Accept met.** `scan/scan.css` (the
+       grill's one earned surface) + `flashScanResult()` export +
+       opt-in `data-scan-flash`. Two-channel by construction; floor-safe
+       (no color-mix — Chrome 111 > the RF 108 floor); reduced-motion =
+       static wash, forced-colors = Highlight frame; overlay pointer-
+       inert below toasts; composited-gate registered exempt-with-reason
+       (transient, no text). Profile now 14 components at 35.1/40 kB —
+       the new budget gate priced the addition on its first real use.
+       **Two real bugs found by the instruments, not review:** the
+       extractor skipped attribute-only components (generalized: a
+       data-* contract with zero classes is still API — that's how the
+       framework's state idiom works), and the behavior announced
+       "Scanned REJECT…" OVER the consumer's rejection because capture
+       signals ran after dispatch — the claims case caught it; capture
+       now signals first so the consumer's verdict wins. New
+       `/components/scan` page (full skeleton, wrong-choice clause:
+       "not for form validation on an ordinary screen"); goods-receipt
+       demos ok + REJECT paths; claims 98/98; axe 114 pages x 2 widths
+       zero violations; 129/129 tests. DSA: unscored like other
+       attribute/behavior surfaces (the Research round-1 precedent).
+       Original text: **scan-result feedback.** `data-scan-result="ok|error"`
        timed overlay stamped by `initScanInput()`; two-channel with the
        existing `data-scan-status` live region; reduced-motion +
        forced-colors correct (better than DataWedge's colour-only

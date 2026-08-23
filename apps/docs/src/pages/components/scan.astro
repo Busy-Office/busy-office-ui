@@ -1,0 +1,91 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import ClassRef from '../../components/ClassRef.astro';
+import Related from '../../components/Related.astro';
+import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const demo = `<!-- Type a code and press Enter (a hardware scanner does exactly
+     this, faster). data-scan-flash paints the viewport ok-wash on capture;
+     REJECT* codes demo YOUR validation calling flashScanResult('error'). -->
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="scan-demo">Scan barcode</label>
+  <input class="bo-input bo-input--code" id="scan-demo" data-scan-input data-scan-flash
+      placeholder="Try 4006381333931, then REJECT-1" aria-describedby="scan-demo-status" />
+  <p id="scan-demo-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+</div>`;
+
+const canonical = `<input class="bo-input bo-input--code" data-scan-input data-scan-flash
+    autofocus aria-describedby="scan-status" />
+<p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
+<script type="module">
+  import { initScanInput, flashScanResult } from "@busy-office/ui/js";
+  initScanInput(); // capture -> ok flash (data-scan-flash) + live-region announce
+  document.addEventListener("bo:scan", (e) => {
+    // Capture is not validity. YOUR check decides, then paints the verdict:
+    if (!isOnThisPo(e.detail.value)) flashScanResult("error", "Not on this PO");
+  });
+</script>`;
+---
+<Gallery title="Scan feedback">
+  <p class="demo-note">
+    The visible half of a barcode scan, for a user whose eyes are on the
+    <em>rack</em>: a ~600ms viewport wash — green on capture, red when your
+    validation rejects the code — paired, always, with the
+    <code>data-scan-status</code> live region
+    <a href={base + '/patterns/goods-receipt'}>the RF patterns</a> already
+    link, so the cue is two-channel by construction. The device's beep and
+    LED stay the device's job; this component never plays audio.
+    <strong>Not for form validation on an ordinary screen</strong> — a
+    seated user reading a form gets the field's own
+    <a href={base + '/components/form'}>message</a> beside the control it
+    concerns; a full-viewport flash there is noise aimed at nobody. Reach
+    for this only when the user is physically away from the screen between
+    inputs — which is the RF floor's whole context.
+  </p>
+
+  <section class="demo" data-density="spacious">
+    <h2>Try it — capture flashes ok, your validation flashes error</h2>
+    <Demo code={demo} />
+    <p class="bo-u-text-muted">Capture ≠ validity: <code>data-scan-flash</code>
+    makes the behavior paint <em>ok</em> the moment the terminator arrives
+    (the scanner said "I read it"), and <code>flashScanResult('error',
+    reason)</code> is your validation's verdict — the framework cannot know
+    whether a perfectly-scanned code belongs on this PO. Under reduced
+    motion the wash is static for the stamp's lifetime; under forced colors
+    it becomes a Highlight frame, since a repainted background would vanish
+    exactly when contrast matters most.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{canonical}</code></pre>
+  </section>
+
+  <script>
+    import { initScanInput, flashScanResult } from '@busy-office/ui/js';
+    initScanInput();
+    document.addEventListener('bo:scan', (e) => {
+      const value = (e as CustomEvent).detail.value;
+      if (/^REJECT/i.test(value)) flashScanResult('error', `Rejected: ${value}`);
+    });
+  </script>
+
+  <ClassRef component="scan" />
+  <ApiTable
+    component="scan"
+    js="initScanInput() owns the moment: with data-scan-flash on the input, every capture stamps data-scan-result=&quot;ok&quot; on <body> for ~700ms (scan.css paints the wash; a timer clears the stamp, so the reduced-motion static wash cannot linger). flashScanResult(kind, message?) is exported for YOUR validation path — 'error' overrides a live ok, and a message lands in the [data-scan-status] live region."
+    notes={[
+      'Two-channel by contract: the wash is never the only signal — every capture and rejection also reaches the <code>data-scan-status</code> live region. That is the deliberate improvement over device-SDK overlays, which are colour-only.',
+      'The overlay is pointer-inert and sits below toasts: a flash must never eat a tap or cover an error a consumer just raised.',
+      'RF-profile member (its whole audience): counted inside rf-essentials\' 40 kB budget gate.',
+      'No audio, ever — beeps and LEDs belong to the device service; pairing with them is configuration, not CSS.',
+    ]}
+  />
+  <Related links={[
+    ['/patterns/goods-receipt', 'Goods receipt (RF scanner)'],
+    ['/patterns/rf-landing', 'RF task menu'],
+    ['/components/state-patterns', 'Loading, empty & error states'],
+  ]} />
+</Gallery>

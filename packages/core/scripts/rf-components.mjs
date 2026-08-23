@@ -38,4 +38,9 @@ export const RF_COMPONENTS = [
   // split elsewhere in this profile either) — they're inert if unused, not a
   // floor risk.
   'dashboard/dashboard',
+  // Added 126.2 (RF-coverage grill): the scan-result flash IS the RF
+  // surface — a viewport cue for a user watching the rack, paired with the
+  // scan-input live region for two channels. Floor-safe by construction
+  // (no color-mix; see the file's own header).
+  'scan/scan',
 ];

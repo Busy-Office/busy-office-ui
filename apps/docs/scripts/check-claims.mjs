@@ -1983,6 +1983,37 @@ check(
   JSON.stringify(grouped),
 );
 
+// Scan-result flash (126.2): "press Enter: the viewport flashes green …
+// scan a REJECT* code and it flashes red with the reason announced".
+// Real keydown on the real input — a synthetic document-level event
+// matches no delegated handler (this file's own standing lesson).
+await visit('/patterns/goods-receipt/');
+const scanFlash = await page.evaluate(async () => {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const input = document.getElementById('gr-scan');
+  input.focus();
+  input.value = '4006381333931';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  const okStamp = document.body.dataset.scanResult;
+  const okOverlay = getComputedStyle(document.body, '::after').position;
+  await wait(900);
+  const okExpired = document.body.dataset.scanResult === undefined;
+  input.value = 'REJECT-123';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  const errStamp = document.body.dataset.scanResult;
+  const errAnnounced = document.getElementById('gr-scan-status').textContent;
+  await wait(900);
+  return { okStamp, okOverlay, okExpired, errStamp, errAnnounced,
+           finallyClear: document.body.dataset.scanResult === undefined };
+});
+check(
+  'goods-receipt scan flash: ok on capture, expires, error overrides with an announced reason',
+  scanFlash.okStamp === 'ok' && scanFlash.okOverlay === 'fixed' && scanFlash.okExpired &&
+    scanFlash.errStamp === 'error' && /Not on this PO: REJECT-123/.test(scanFlash.errAnnounced) &&
+    scanFlash.finallyClear,
+  JSON.stringify(scanFlash),
+);
+
 await browser.close();
 server.close();
 

@@ -1,0 +1,67 @@
+/* Scan-result flash (roadmap 126.2, RF-coverage grill R2-Q2).
+ *
+ * A warehouse scanner user looks at the RACK, not the screen; the moment a
+ * scan registers they need a cue readable in peripheral vision. The device
+ * beep/LED belong to the device service — this is the VISIBLE half, and it
+ * is deliberately not the only channel: initScanInput() announces every
+ * capture through the [data-scan-status] live region, so the pair is
+ * two-channel by construction. That is the improvement over the reference
+ * (a colour-only overlay with no programmatic channel) — references are
+ * floors, not ceilings.
+ *
+ * Contract: the scan-input behavior stamps `data-scan-result="ok|error"`
+ * on <body> and removes it ~700ms later; this file only paints. The
+ * overlay is pointer-inert and sits above page chrome but below toasts —
+ * a flash must never eat a tap or cover an error a consumer just raised.
+ *
+ * Floor note: no color-mix (Chrome 111 > the RF 108 floor) — a token
+ * background at low opacity does the same job inside the floor. */
+@layer bo-components {
+  body[data-scan-result]::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: calc(var(--bo-z-sticky-page) + 100); /* under --bo-z-toast (1600) */
+    opacity: 0;
+    /* 600ms explicit, not the 300ms token: a peripheral-vision cue for a user
+       looking at the rack, not the screen — and this file carries its own
+       reduced-motion override below. */
+    animation: bo-scan-flash 600ms var(--bo-motion-ease) forwards;
+  }
+
+  body[data-scan-result="ok"]::after {
+    background: var(--bo-color-success);
+  }
+
+  body[data-scan-result="error"]::after {
+    background: var(--bo-color-danger);
+  }
+
+  @keyframes bo-scan-flash {
+    from { opacity: 0.3; }
+    to { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* Keep the cue, drop the motion: a static wash for the stamp's
+       lifetime (the behavior removes the attribute on a timer, so nothing
+       lingers). Zeroing the cue entirely would delete the state signal,
+       which reduced-motion never asks for. */
+    body[data-scan-result]::after {
+      animation: none;
+      opacity: 0.2;
+    }
+  }
+
+  @media (forced-colors: active) {
+    /* Backgrounds are repainted under forced colors; a full-viewport
+       Canvas flash would be invisible. Swap the wash for a thick frame in
+       Highlight — structural, so the cue survives. */
+    body[data-scan-result]::after {
+      background: none;
+      border: 8px solid Highlight;
+      opacity: 1;
+    }
+  }
+}

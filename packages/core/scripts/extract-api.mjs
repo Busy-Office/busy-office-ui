@@ -115,7 +115,11 @@ for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter
     .filter((f) => f.endsWith('.css'))
     .map((f) => join(componentsDir, dir.name, f));
   const sets = await analyze(files);
-  if (!sets.classes.size) continue; // slice stubs
+  /* A component whose whole surface is a data-* contract (scan's
+     body[data-scan-result] flash, 126.2) has zero bo-* classes and is
+     still API — the attribute idiom IS this framework's state channel.
+     Skip only true stubs: no classes AND no data attrs. */
+  if (!sets.classes.size && !sets.dataAttrs.size) continue; // slice stubs
   for (const c of JS_HOOKS[dir.name]?.classes ?? []) sets.classes.add(c);
   for (const d of JS_HOOKS[dir.name]?.dataAttrs ?? []) sets.dataAttrs.add(d);
   api.components[dir.name] = shape(sets);

@@ -19,8 +19,36 @@
  * elsewhere) and initScanInput() announces each scan there, so a
  * screen-reader/low-vision RF user gets non-visual confirmation a scan
  * registered. Without it, behavior is unchanged from before this existed.
+ *
+ * Scan-result flash (126.2, opt-in): add `data-scan-flash` to the input
+ * and every capture stamps `data-scan-result="ok"` on <body> for ~700ms —
+ * scan.css paints the viewport wash a rack-watching user sees in
+ * peripheral vision. Capture is not validity: when YOUR validation
+ * rejects a scan, call `flashScanResult('error', 'why')` — the error wash
+ * plus the same live region, two channels either way. The framework never
+ * decides validity (it cannot); it only paints the moment.
  */
 let installed = false;
+let flashTimer: ReturnType<typeof setTimeout> | undefined;
+
+/**
+ * Paint the scan-result flash and (optionally) announce a message through
+ * the page's [data-scan-status] live region. Exported for the consumer's
+ * validation path — the behavior itself only ever stamps 'ok', because a
+ * terminator proves CAPTURE, never validity.
+ */
+export function flashScanResult(kind: 'ok' | 'error', message?: string): void {
+  document.body.dataset.scanResult = kind;
+  clearTimeout(flashTimer);
+  // Timer, not animationend: reduced-motion swaps the animation for a
+  // static wash (scan.css), and a listener that never fires would leave
+  // the stamp on forever.
+  flashTimer = setTimeout(() => { delete document.body.dataset.scanResult; }, 700);
+  if (message) {
+    const status = document.querySelector('[data-scan-status]');
+    if (status) status.textContent = message;
+  }
+}
 
 function announceScan(input: HTMLInputElement, value: string): void {
   // aria-describedby is a space-separated ID LIST (WAI-ARIA 6.6.1) — a
@@ -53,8 +81,14 @@ export function initScanInput(): void {
      *   to override); the field is cleared and refocused for the next scan
      * @detail value {string} the scanned string, exactly as entered
      */
-    input.dispatchEvent(new CustomEvent('bo:scan', { bubbles: true, detail: { value } }));
+    /* Capture signals FIRST, then dispatch: a consumer's bo:scan handler
+       is where validation lives, and its flashScanResult('error', why)
+       verdict must land LAST so it wins the stamp and the live region.
+       The first ordering announced "Scanned REJECT…" over the consumer's
+       rejection — caught by the claims case, not by review. */
     announceScan(input, value);
+    if (input.hasAttribute('data-scan-flash')) flashScanResult('ok');
+    input.dispatchEvent(new CustomEvent('bo:scan', { bubbles: true, detail: { value } }));
     input.focus();
   });
 

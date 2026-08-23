@@ -42,6 +42,16 @@ const DIST = join(here, '..', 'dist', 'css');
 /** Selector fragment -> decision. Matched as a substring of the rule selector. */
 const REGISTRY = [
   {
+    match: 'data-scan-result',
+    decision: 'exempt',
+    why: 'The scan-result flash (126.2) is a TRANSIENT overlay, not content: '
+      + 'a ~700ms viewport wash a rack-watching RF user catches in peripheral '
+      + 'vision, pointer-inert, carrying no text, removed on a timer. Nothing '
+      + 'is read THROUGH it as a state (the wash peaks at 0.3 and fades), and '
+      + 'the accessible channel is the [data-scan-status] live region the '
+      + 'same behavior updates — WCAG 1.4.3 governs text, of which this has none.',
+  },
+  {
     match: 'data-loading',
     decision: 'aa',
     why: 'A table mid-swap is aria-busy, NOT inactive — the user keeps reading it, so 1.4.3 applies in full. Asserted live in both themes by check:claims.',

@@ -70,15 +70,36 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>Scan feedback — a cue for someone watching the rack</h2>
+    <p>Type anything into the demo above and press Enter: the viewport
+    flashes green for ~600ms. Scan a code starting with
+    <code>REJECT</code> and it flashes red with the reason announced. A
+    scanner user's eyes are on the shelf, not the screen — the flash is
+    readable in peripheral vision, and it is deliberately <strong>not the
+    only channel</strong>: every capture and every rejection also lands in
+    the <code>data-scan-status</code> live region this page already
+    links. Capture is not validity — <code>data-scan-flash</code> makes
+    the behavior paint <em>ok</em> when the terminator arrives, and your
+    validation calls <code>flashScanResult('error', reason)</code> when a
+    captured code is wrong. Under reduced motion the flash is a static
+    wash; under forced colors it becomes a Highlight frame, because a
+    repainted background would vanish exactly when contrast matters
+    most.</p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{`<input class="bo-input bo-input--code" data-scan-input autofocus
     aria-describedby="scan-status" />
 <p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
 
 <script type="module">
-  import { initScanInput } from "@busy-office/ui/js";
+  import { initScanInput, flashScanResult } from "@busy-office/ui/js";
   initScanInput(); // once — clears + refocuses on Enter, fires bo:scan,
-                    // announces "Scanned <value>" in data-scan-status if linked
+                    // announces "Scanned <value>" in data-scan-status if linked;
+                    // with data-scan-flash on the input, capture also paints
+                    // the ok flash. Your validation:
+                    //   flashScanResult('error', 'Not on this PO')
   document.querySelector('[data-scan-input]')
     .addEventListener('bo:scan', (e) => console.log(e.detail.value));
 </script>`}</code></pre>

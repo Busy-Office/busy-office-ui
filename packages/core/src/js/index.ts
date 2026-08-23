@@ -15,7 +15,7 @@ export { initWizard } from './behaviors/wizard.js';
 export { initQuantity, unitDecimals } from './behaviors/quantity.js';
 export { initMoneyField, currencyDecimals } from './behaviors/money-field.js';
 export { initGroupedNumber } from './behaviors/grouped-number.js';
-export { initScanInput } from './behaviors/scan-input.js';
+export { initScanInput, flashScanResult } from './behaviors/scan-input.js';
 export { initFileDropzone } from './behaviors/file-dropzone.js';
 export { initTagInput } from './behaviors/tag-input.js';
 export { initValidationSummary } from './behaviors/validation-summary.js';
