@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 11:11
+Generated at: 2026-08-23 11:32
 
 ## Open items by slice
 
@@ -25,7 +25,7 @@ Generated at: 2026-08-23 11:11
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (739 iterations logged)
+dispatch status — counter-triggered rules (742 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-23 11:11   ok
   Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
 ```
@@ -42,9 +42,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 10:25 · Roadmap · plan · 123.1-123.3c: nine recommendations signed off, Accept criteria written · triaged · a08ec58
-- 2026-08-23 10:25 · Meta · refusal · live as-you-type masking (on-blur decided per ERP evidence) · refused · a08ec58
-- 2026-08-23 10:25 · Meta · refusal · mobile bottom-nav frame tier (icon-rail collapse suffices for now) · refused · a08ec58
 - 2026-08-23 10:25 · Meta · refusal · QBO single-checklist and BC journal-drawer reconciliation layouts · refused · a08ec58
 - 2026-08-23 10:25 · Meta · refusal · Workday day-click-modal timesheet entry · refused · a08ec58
 - 2026-08-23 10:25 · Meta · refusal · split-award comparison action (select-one for v1) · refused · a08ec58
@@ -52,6 +49,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 10:52 · Continue · build · 123.2: app-frame + suite-home patterns shipped; 30.0 closed · landed · 8c17141
 - 2026-08-23 10:59 · Continue · build · 123.3a: reconciliation pattern shipped; stale 119.3/121.1/122.1 superseded · landed · 575b4ad
 - 2026-08-23 11:11 · Standardize · tidy · 123.3b timesheet + Standardize sweep: bo-stat, demo-shell-frame, decimal-input dedup, aria-hidden steppers · landed · af57cd2
+- 2026-08-23 11:32 · Roadmap · plan · LOOPS v2: Polish + Research loops, halt rule; 2 self-recommendations withdrawn against the record · landed · 3ddeb68
+- 2026-08-23 11:32 · Meta · refusal · folding Optimize into a 7th DSA dimension (101.3 stop rule forbids new dimensions) · refused · 3ddeb68
+- 2026-08-23 11:32 · Meta · refusal · auditing typography/colour/spacing as suspect (94.7/94.9 document uniform reading as expected) · refused · 3ddeb68
 
 ## Sunset test
 

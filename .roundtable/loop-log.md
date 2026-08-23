@@ -745,3 +745,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 10:52 · Continue · build · 123.2: app-frame + suite-home patterns shipped; 30.0 closed · landed · 8c17141
 - 2026-08-23 10:59 · Continue · build · 123.3a: reconciliation pattern shipped; stale 119.3/121.1/122.1 superseded · landed · 575b4ad
 - 2026-08-23 11:11 · Standardize · tidy · 123.3b timesheet + Standardize sweep: bo-stat, demo-shell-frame, decimal-input dedup, aria-hidden steppers · landed · af57cd2
+- 2026-08-23 11:32 · Roadmap · plan · LOOPS v2: Polish + Research loops, halt rule; 2 self-recommendations withdrawn against the record · landed · 3ddeb68
+- 2026-08-23 11:32 · Meta · refusal · folding Optimize into a 7th DSA dimension (101.3 stop rule forbids new dimensions) · refused · 3ddeb68
+- 2026-08-23 11:32 · Meta · refusal · auditing typography/colour/spacing as suspect (94.7/94.9 document uniform reading as expected) · refused · 3ddeb68
