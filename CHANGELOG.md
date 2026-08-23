@@ -8,6 +8,10 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.5.0 (2026-08-23)
+
 - **Added** (`data-table`): `.bo-data-table__col--tertiary` completes the
   **column priority ladder** — unmarked columns always show, `--tertiary`
   (nice-to-have context) drops below 40rem of container width,
