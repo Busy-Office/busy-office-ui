@@ -28,6 +28,15 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
     the live region and the styling are all markup. <code>initAlerts()</code>
     adds <em>dismissal only</em>, so the one thing you lose is the ✕ button;
     injecting toasts was always your code.
+    <strong>Not for a field that failed validation</strong> — an error about
+    one input belongs beside that input, as
+    <a href={base + '/components/form'}>the form field's own message</a>,
+    where it is programmatically tied to the control by
+    <code>aria-describedby</code>; an alert floated above the form makes the
+    reader hunt for which field it means. Use an alert for what happened to
+    the <em>request</em> ("Save failed, nothing was changed"), and
+    <a href={base + '/patterns/validation-summary'}>the validation summary</a>
+    when several fields failed at once and the reader needs a route to each.
   </p>
   <section class="demo">
     <h2>Inline alerts</h2>

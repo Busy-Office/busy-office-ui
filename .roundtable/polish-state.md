@@ -24,7 +24,7 @@ quality signal. A dimension that cannot fail must never drive a round.
 
 | surface | dimension | score | rounds | dry | status |
 |---|---|---|---|---|---|
-| component/alerts | content | 2 | 0/3 | 0 | queued |
+| component/alerts | content | **3** | 1/3 | 0 | round 1 landed — blind re-score 2→3, off the gate's TODO |
 | component/avatar | content | 2 | 0/3 | 0 | queued |
 | component/badge | content | 2 | 0/3 | 0 | queued |
 | component/byline | content | 2 | 0/3 | 0 | queued |

@@ -687,7 +687,7 @@
       ]
     },
     "alert": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -706,17 +706,14 @@
           "cite": "the opener draws the line outright — role, live region and styling are all markup, and initAlerts() adds DISMISSAL ONLY, so the ✕ is the single thing lost without it (94.14)"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/alerts is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for a field that failed validation\" — a per-input error belongs beside its control via aria-describedby (form field message), the alert is for what happened to the REQUEST, and validation-summary is named for the many-field case. Blind re-scored 2026-08-23 (Polish round 1) and removed from check:wrong-choice's TODO, so the gate now enforces it."
         },
         "fit": {
           "score": 3,
           "cite": "inline alerts and toasts; the page names which role each case takes"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "skeleton": {
       "scored": "2026-08-21",
