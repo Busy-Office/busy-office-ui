@@ -1,0 +1,234 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* One locked week. The column axis is FIXED (the period's days) — that is
+   what separates a timesheet from an editable grid, where columns are
+   arbitrary fields. Generated so the day headers and the totals cannot
+   drift apart in the demo. */
+const DAYS = [
+  { label: 'Mon', date: '17' }, { label: 'Tue', date: '18' },
+  { label: 'Wed', date: '19' }, { label: 'Thu', date: '20' },
+  { label: 'Fri', date: '21' }, { label: 'Sat', date: '22' },
+  { label: 'Sun', date: '23' },
+];
+/* The demo shows the RECONCILED state: 40.00 against a 40 target, which is
+   why Submit is enabled below. Demo data that misses its own target while
+   the screen offers Submit would contradict this page's own gate — caught
+   by summing the rendered cells rather than trusting the numbers as typed. */
+const ROWS = [
+  { code: 'PRJ-4471', name: 'Hydraulics rollout', hours: [8, 8, 6, 8, 4, 0, 0] },
+  { code: 'PRJ-1180', name: 'Vendor onboarding', hours: [0, 0, 2, 0, 2, 0, 0] },
+  { code: 'INT-0002', name: 'Internal · training', hours: [0, 0, 0, 0, 2, 0, 0] },
+];
+const dayTotal = (i: number) => ROWS.reduce((s, r) => s + r.hours[i], 0);
+const rowTotal = (h: number[]) => h.reduce((s, n) => s + n, 0);
+const grand = ROWS.reduce((s, r) => s + rowTotal(r.hours), 0);
+const TARGET = 40;
+
+const markup = `<!-- The column axis is the PERIOD's days and does not change;
+     rows are what time is booked to. Row totals AND day totals are both
+     shown, and the grand total is checked against the period target before
+     Submit enables. -->
+<table class="bo-data-table">
+  <thead>
+    <tr>
+      <th scope="col">Project / task</th>
+      <th scope="col" class="bo-data-table__col--numeric">Mon 17</th>
+      …one per day…
+      <th scope="col" class="bo-data-table__col--numeric">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">PRJ-4471 · Hydraulics rollout</th>
+      <td class="bo-data-table__col--numeric">
+        <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+               step="0.25" min="0" max="24" value="8" data-sum-col="d0"
+               aria-label="PRJ-4471, Monday 17 August, hours" />
+      </td>
+      …one cell per day…
+      <td class="bo-data-table__col--numeric"><span data-sum-of="row">30.00</span></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row">Day total</th>
+      <td class="bo-data-table__col--numeric"><span data-sum-of="d0">8.00</span></td>
+      …
+      <td class="bo-data-table__col--numeric"><strong>40.00</strong> / 40</td>
+    </tr>
+  </tfoot>
+</table>`;
+---
+<Gallery title="Pattern: timesheet">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: anyone who books time — a consultant, a
+    field engineer, a project team member. <strong>How often</strong>: daily
+    in passing, then once at period end to submit.
+    <strong>What "done" looks like</strong>: every day accounted for, the
+    period total reconciles against its target, and the whole period moves
+    into approval as ONE unit. The column axis is <strong>fixed</strong> —
+    it is the period's days — and both row totals (per project) and day
+    totals are always visible, because the question "did Wednesday add up?"
+    is asked as often as "how much went to this project?".
+    <strong>Not for editing arbitrary fields across rows</strong> — a grid
+    whose columns are a record's own attributes is
+    <a href={base + '/patterns/editable-grid'}>editable grid</a>; the fixed
+    calendar axis and the reconcile-then-submit gate are what make this its
+    own screen.
+  </p>
+
+  <section class="demo">
+    <h2>The screen — one week</h2>
+    <div class="bo-cluster" style="margin-block-end: var(--bo-space-3)">
+      <strong>Week 34 · 17–23 August 2026</strong>
+      <span class="bo-badge bo-badge--warning">Draft</span>
+      <button class="bo-btn bo-btn--secondary" type="button" style="margin-inline-start: auto">Copy last week</button>
+      <button class="bo-btn" type="button">Submit for approval</button>
+    </div>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <caption class="bo-visually-hidden">Hours booked per project per day, week 34</caption>
+        <thead>
+          <tr>
+            <th scope="col">Project / task</th>
+            {DAYS.map((d) => (
+              <th scope="col" class="bo-data-table__col--numeric">{d.label} <span class="bo-u-text-muted">{d.date}</span></th>
+            ))}
+            <th scope="col" class="bo-data-table__col--numeric">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ROWS.map((r) => (
+            <tr>
+              <th scope="row"><span class="bo-data-table__col--code">{r.code}</span> · {r.name}</th>
+              {r.hours.map((h, i) => (
+                <td class="bo-data-table__col--numeric">
+                  <input class="bo-input bo-input--seamless bo-input--numeric" type="number"
+                         step="0.25" min="0" max="24" value={h === 0 ? '' : h.toFixed(2)}
+                         style="inline-size: 4.5rem"
+                         aria-label={`${r.code}, ${DAYS[i].label} ${DAYS[i].date} August, hours`} />
+                </td>
+              ))}
+              <td class="bo-data-table__col--numeric"><span class="bo-u-tabular">{rowTotal(r.hours).toFixed(2)}</span></td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Day total</th>
+            {DAYS.map((_, i) => (
+              <td class="bo-data-table__col--numeric"><span class="bo-u-tabular">{dayTotal(i).toFixed(2)}</span></td>
+            ))}
+            <td class="bo-data-table__col--numeric">
+              <strong class="bo-u-tabular">{grand.toFixed(2)}</strong>
+              <span class="bo-u-text-muted"> / {TARGET}</span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Cells are seamless numeric inputs — the grid
+    reads as a sheet, not as a wall of boxes. Every cell carries a full
+    accessible name ("PRJ-4471, Wednesday 19 August, hours"), because a
+    screen-reader user landing mid-grid has no visual row/column context to
+    fall back on. Empty means <em>no time booked</em> and renders empty, not
+    <code>0.00</code>: a typed zero is a statement ("I worked none on this"),
+    a blank is the absence of one.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Two totals, because two questions</h2>
+    <p>Row totals answer "how much went to this project this week"; day
+    totals answer "does Wednesday add up". Both are always on screen — the
+    references that ship only one force the reader to add up a row or a
+    column in their head, which is exactly where a wrong timesheet comes
+    from. The grand total carries its <strong>target</strong> beside it
+    (<code>40.00 / 40</code>), so the gap that blocks submission is visible
+    before the reader tries.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Period header</strong> — which period, its state
+        (<a href={base + '/components/badge'}>badge</a>: Draft / Submitted /
+        Approved / Returned), and the period actions.</li>
+      <li><strong>Copy last week</strong> — a
+        <a href={base + '/components/button'}>button</a> that seeds the
+        recurring rows; present in every reference, because retyping the
+        same five projects weekly is the pattern's main friction.</li>
+      <li><strong>The grid</strong> — a
+        <a href={base + '/components/data-table'}>data table</a>: fixed day
+        columns, one row per booking target, seamless
+        <a href={base + '/components/form'}>numeric inputs</a> in the
+        cells.</li>
+      <li><strong>Row totals</strong> — the last column, per project.</li>
+      <li><strong>Day totals + grand total vs target</strong> — the
+        <code>&lt;tfoot&gt;</code>; the grand total is what the submit gate
+        reads.</li>
+      <li><strong>Submit</strong> — moves the WHOLE period into
+        <a href={base + '/patterns/approval'}>approval</a>; the approver sees
+        this same grid, read-only.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">PATCH /timesheet/:period/cell</td><td>one cell, saved as typed; returns the affected row total, day total and grand total as one fragment — never the whole grid, which would blow away the caret mid-entry</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /timesheet/:period/copy</td><td>the rows (not the hours) of the previous period; returns the re-rendered grid</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /timesheet/:period/submit</td><td>422 with the failing rule named when validation does not pass (under target, a day over its cap, a closed cost object) — the disabled button is a courtesy, the server is the gate</td></tr>
+          <tr><td class="bo-data-table__col--code">POST … on a submitted period</td><td>409 — re-render read-only with who approved and when; a submitted period is not editable in place</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Draft, incomplete</td><td>Submit disabled; the grand total shows the gap against target (<code>36.00 / 40</code>) so the reason is on screen, not in a tooltip</td></tr>
+          <tr><td>Draft, reconciled</td><td>Submit enabled; the target text flips to a success tone — two channels, since tone alone cannot carry it</td></tr>
+          <tr><td>A day over its cap</td><td>the offending cell gets <code>aria-invalid</code> + a message; the day total is marked, not just the cell — the rule is about the day</td></tr>
+          <tr><td>Submitted</td><td>the whole grid renders read-only with a Submitted badge; editing requires the approver to return it</td></tr>
+          <tr><td>Returned</td><td>editable again, with the approver's reason shown above the grid — a returned period without a reason is an audit problem</td></tr>
+          <tr><td>Approved</td><td>read-only permanently; corrections go through an adjustment, never a silent edit</td></tr>
+          <tr><td>Empty (new period)</td><td>the grid renders with no rows and "Copy last week" as the primary action — an empty timesheet's first job is getting its rows</td></tr>
+          <tr><td>No JS</td><td>fully functional: the cells are real inputs in a real form, and Save recomputes every total server-side. Without JS the totals update on save rather than on each keystroke — the numbers are never browser-computed truth</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Form controls</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/editable-grid", "Editable grid (arbitrary columns, no period axis)"],
+    ["/patterns/approval", "Approval (where a submitted period goes)"],
+    ["/patterns/schedule", "Schedule calendar (when work is planned, not booked)"],
+    ["/components/data-table", "Data table"],
+  ]} />
+</Gallery>

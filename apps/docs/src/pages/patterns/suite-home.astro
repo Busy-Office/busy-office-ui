@@ -17,11 +17,11 @@ const markup = `<!-- Suite home = the app frame with the sidebar at SUITE level:
   </ul>
 </nav>
 <main class="bo-app-shell__main">
-  <div class="bo-widget-grid">
+  <div class="bo-widget-grid" style="--bo-widget-min: 14rem">
     <section class="bo-widget"> …stat: open approvals, all modules… </section>
     <section class="bo-widget bo-widget--span-2"> …needs attention, cross-module… </section>
   </div>
-  <div class="bo-widget-grid" style="--bo-widget-min: 9rem"> …favourite app tiles… </div>
+  <div class="bo-widget-grid" style="--bo-widget-min: 8rem"> …favourite app tiles… </div>
 </main>`;
 ---
 <Gallery title="Pattern: suite home">
@@ -43,7 +43,7 @@ const markup = `<!-- Suite home = the app frame with the sidebar at SUITE level:
 
   <section class="demo">
     <h2>The screen</h2>
-    <div class="bo-app-shell" style="min-block-size: 26rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+    <div class="bo-app-shell demo-shell-frame" style="min-block-size: 26rem">
       <header class="bo-navbar bo-app-shell__header">
         <a class="bo-navbar__brand" href="#">Acme ERP</a>
         <span class="bo-navbar__spacer"></span>
@@ -60,13 +60,15 @@ const markup = `<!-- Suite home = the app frame with the sidebar at SUITE level:
       </nav>
       {/* div, not <main>: nested inside the docs page's own main landmark —
           a real app uses <main>, as the Markup sample shows. */}
-      <div class="bo-app-shell__main" style="padding: var(--bo-space-4)">
+      <div class="bo-app-shell__main">
         <div class="bo-widget-grid" style="--bo-widget-min: 14rem">
           <section class="bo-widget">
             <div class="bo-widget__header"><span class="bo-widget__title">Waiting on you</span></div>
             <div class="bo-widget__body">
-              <p style="margin: 0; font-size: var(--bo-font-size-xl); font-weight: var(--bo-font-weight-semibold)"><span class="bo-u-tabular">7</span></p>
-              <p class="bo-u-text-muted" style="margin: 0">4 approvals · 2 receipts · 1 exception</p>
+              <span class="bo-stat">
+                <span class="bo-stat__value">7</span>
+                <span class="bo-stat__delta">4 approvals · 2 receipts · 1 exception</span>
+              </span>
             </div>
           </section>
           <section class="bo-widget bo-widget--span-2">

@@ -23,8 +23,8 @@
  *            type="number" step="0.01" aria-label="Amount" />
  *   </div>
  */
-import { setInputDecimals, decimalsOverride } from '../utils/decimal-input.js';
-import { isGrouped, setGroupedDecimals } from './grouped-number.js';
+import { decimalsOverride } from '../utils/decimal-input.js';
+import { applyDecimals } from './grouped-number.js';
 
 let installed = false;
 
@@ -55,10 +55,8 @@ export function initMoneyField(): void {
     const root = select.closest<HTMLElement>('.bo-money');
     const amount = root?.querySelector<HTMLInputElement>('.bo-money__amount');
     if (!root || !amount) return;
-    const d = decimalsOverride(select, root) ?? currencyDecimals(select.value);
-    // A data-grouped amount (123.1) reformats through its raw value — the
-    // visible text carries separators setInputDecimals cannot parse.
-    if (isGrouped(amount)) setGroupedDecimals(amount, d);
-    else setInputDecimals(amount, d);
+    // applyDecimals routes a data-grouped amount (123.1) through its raw
+    // value — the visible text carries separators a plain parse cannot read.
+    applyDecimals(amount, decimalsOverride(select, root) ?? currencyDecimals(select.value));
   });
 }

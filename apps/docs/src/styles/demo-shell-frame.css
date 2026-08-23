@@ -1,0 +1,19 @@
+/* Shared framing for a full app-shell shown INSIDE a docs page (Standardize
+   2026-08-23: app-frame.astro and suite-home.astro hand-rolled the identical
+   border/radius/overflow literal, and sidebar-nav.astro a physical-property
+   variant of it). A screen demo needs an edge the page itself does not have,
+   or the demo's own chrome reads as the docs chrome.
+
+   Height stays inline: it is the one value that genuinely differs per demo
+   (a frame with an empty main needs less than one holding widgets). */
+.demo-shell-frame {
+  border: 1px solid var(--bo-color-border-default);
+  border-radius: var(--bo-radius-md);
+  overflow: hidden;
+}
+
+/* The framework's own main padding (space-6) is generous for a scaled-down
+   demo sitting inside an already-padded docs section. */
+.demo-shell-frame > .bo-app-shell__main {
+  padding: var(--bo-space-4);
+}

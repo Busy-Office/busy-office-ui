@@ -300,7 +300,19 @@ reconciliation → timesheet → comparison.
        passes all pattern gates; the running-difference figure is
        two-channel; states cover suggested/confirmed/unmatched/
        exception and the zero-difference gate.
-4. [ ] **123.3b — Timesheet pattern, decided: inline-editable grid**
+4. [x] **123.3b — DONE 2026-08-23.** `/patterns/timesheet` — fixed
+       day-of-week column axis for one locked period, rows = booking
+       target, seamless numeric cells with full per-cell accessible names,
+       BOTH row totals and day totals, grand total carrying its target
+       (`40.00 / 40`), submit moving the whole period as one unit. Empty
+       renders empty, not `0.00` (a typed zero is a statement, a blank is
+       its absence). A real defect was caught by summing the RENDERED
+       cells rather than trusting the demo data: the week totalled 42
+       against a 40 target while the screen offered Submit — the demo
+       contradicting the page's own gate. Fixed to a genuinely reconciled
+       week. Gates: markup, page-shape 34 patterns, axe 112 pages x 2
+       widths zero violations, layout, claims 97, target-size.
+       *(original decided design follows)* **inline-editable grid**
        (CATS/Harvest/Toggl shape; Workday's day-click-modal recorded as
        the refused alternative). Fixed day-of-week columns for one
        locked period; rows = allocation dimension; row totals AND

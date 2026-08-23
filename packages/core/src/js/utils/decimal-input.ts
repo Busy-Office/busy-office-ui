@@ -12,15 +12,29 @@
  * bubbling `input` event so listeners (row-edit dirty tracking) see
  * the programmatic change — the combobox-commit lesson.
  */
+/** The `step` attribute for a given precision: 2 → "0.01", 0 → "1". */
+export function stepAttrFor(decimals: number): string {
+  const d = Math.max(0, Math.trunc(decimals));
+  return d === 0 ? '1' : (10 ** -d).toFixed(d);
+}
+
+/** The lossless pad/trim rule in ONE place: the value at `d` decimals when
+ *  that is numerically identical (1250 → "1250.00", "1250.00" → 1250 at 0),
+ *  else null — meaning "this precision cannot represent the value, leave it
+ *  alone". Never rounds; values beyond MAX_SAFE_INTEGER are left alone too. */
+export function losslessFixed(value: string, decimals: number): string | null {
+  const n = Number(value);
+  if (value === '' || !Number.isFinite(n) || Math.abs(n) > Number.MAX_SAFE_INTEGER) return null;
+  const next = n.toFixed(Math.max(0, Math.trunc(decimals)));
+  return Number(next) === n ? next : null;
+}
+
 export function setInputDecimals(input: HTMLInputElement, decimals: number): void {
   const d = Math.max(0, Math.trunc(decimals));
-  input.step = d === 0 ? '1' : (10 ** -d).toFixed(d);
-  if (input.value === '') return;
-  const n = Number(input.value);
-  if (!Number.isFinite(n) || Math.abs(n) > Number.MAX_SAFE_INTEGER) return;
-  const next = n.toFixed(d);
+  input.step = stepAttrFor(d);
+  const next = losslessFixed(input.value, d);
   // NEVER lossy: apply only when numerically identical (pad/trim).
-  if (Number(next) !== n || next === input.value) return;
+  if (next === null || next === input.value) return;
   input.value = next;
   input.dispatchEvent(new Event('input', { bubbles: true }));
 }

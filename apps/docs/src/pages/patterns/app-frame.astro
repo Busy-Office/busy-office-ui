@@ -69,7 +69,7 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
 
   <section class="demo">
     <h2>The screen</h2>
-    <div class="bo-app-shell" style="min-block-size: 22rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+    <div class="bo-app-shell demo-shell-frame" style="min-block-size: 22rem">
       <header class="bo-navbar bo-app-shell__header">
         <a class="bo-navbar__brand" href="#">Acme ERP</a>
         <button class="bo-btn bo-btn--ghost" type="button" popovertarget="frame-apps" aria-label="Switch module">
@@ -102,7 +102,7 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
       {/* div, not <main>: this demo nests inside the docs page's own main
           landmark — a second/nested main is an axe violation here. A real
           app uses <main>, as the Markup sample shows. */}
-      <div class="bo-app-shell__main" style="padding: var(--bo-space-4)">
+      <div class="bo-app-shell__main">
         <p class="bo-u-text-muted" style="margin: 0">The page — including its own
         breadcrumb and title. Nothing here is the frame's business.</p>
       </div>

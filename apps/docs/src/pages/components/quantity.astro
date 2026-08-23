@@ -68,11 +68,11 @@ const grouped = `<!-- data-grouped: a large stock count reads as 1,250,000 —
      grouped ON BLUR; the generated hidden input submits the raw number. -->
 <div class="bo-quantity" style="max-inline-size: 16rem"><!-- the default
      12rem cap fits "9,999"; a grouped 7-digit count needs more room -->
-  <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-hidden="true">−</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="-1" aria-label="Decrease quantity">&minus;</button>
   <input class="bo-input bo-quantity__input" type="number" inputmode="numeric"
       value="1250000" min="0" step="1" name="stock-count" data-grouped
       data-locale="en-US" aria-label="Quantity">
-  <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-hidden="true">+</button>
+  <button class="bo-btn bo-btn--secondary bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1" aria-label="Increase quantity">+</button>
   <span class="bo-quantity__unit" aria-hidden="true">ea</span>
   <span class="bo-visually-hidden">each</span>
 </div>

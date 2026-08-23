@@ -14,8 +14,8 @@
  *     <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1">+</button>
  *   </div>
  */
-import { setInputDecimals, decimalsOverride, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
-import { numericInputValue, isGrouped, setGroupedValue, setGroupedDecimals } from './grouped-number.js';
+import { decimalsOverride, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
+import { numericInputValue, setGroupedValue, applyDecimals } from './grouped-number.js';
 
 let installed = false;
 
@@ -87,8 +87,9 @@ export function initQuantity(): void {
     const next = Number(raw.toFixed(decimals));
 
     if (next !== current) {
-      if (isGrouped(input)) setGroupedValue(input, String(next));
-      else input.value = String(next);
+      // setGroupedValue falls back to a plain assignment when the input is
+      // not grouped, so no isGrouped branch is needed here.
+      setGroupedValue(input, String(next));
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     }
@@ -114,8 +115,7 @@ export function initQuantity(): void {
     if (!root || !input) return;
     const decimals = decimalsOverride(select, root) ?? unitDecimals(select.value);
     if (decimals === undefined) return; // unknown unit: no opinion, leave the field alone
-    if (isGrouped(input)) setGroupedDecimals(input, decimals);
-    else setInputDecimals(input, decimals);
+    applyDecimals(input, decimals);
     syncButtons(root);
   });
 }

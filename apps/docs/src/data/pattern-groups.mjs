@@ -46,6 +46,7 @@ export const PATTERN_GROUPS = [
       { href: '/patterns/wizard', label: 'Multi-step wizard' },
       { href: '/patterns/staging', label: 'Staging / batch result' },
       { href: '/patterns/reconciliation', label: 'Reconciliation' },
+      { href: '/patterns/timesheet', label: 'Timesheet' },
       { href: '/patterns/validation-summary', label: 'Validation summary' },
     ],
   },

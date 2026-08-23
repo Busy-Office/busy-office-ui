@@ -34,7 +34,9 @@
  * explicit, never the browser default (Indian en-IN groups 12,34,567,
  * which an every-3-digits rule cannot produce).
  */
-import { parseDecimalsAttr, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
+import {
+  parseDecimalsAttr, stepDecimals, valueDecimals, stepAttrFor, losslessFixed, setInputDecimals,
+} from '../utils/decimal-input.js';
 
 let installed = false;
 
@@ -89,19 +91,17 @@ function groupedDisplay(raw: string, loc: string, d: number | null): string {
   if (raw === '') return '';
   const n = Number(raw);
   if (!Number.isFinite(n) || Math.abs(n) > Number.MAX_SAFE_INTEGER) return raw;
-  const target = d !== null && Number(n.toFixed(d)) === n ? d : valueDecimals(raw);
+  // Shared lossless rule: the target precision only when it represents the
+  // value exactly, else the value's own places — never a rounded display.
+  const target = d !== null && losslessFixed(raw, d) !== null ? d : valueDecimals(raw);
   return formatter(loc, target).format(n);
 }
 
 /** Canonical raw form: pad/trim to the decimals when lossless (1250 →
- *  "1250.00" at 2), else the value exactly as given. */
+ *  "1250.00" at 2), else the value exactly as given — the shared rule. */
 function canonicalRaw(raw: string, d: number | null): string {
-  if (raw === '') return '';
-  const n = Number(raw);
-  if (!Number.isFinite(n) || Math.abs(n) > Number.MAX_SAFE_INTEGER) return raw;
-  if (d === null) return raw;
-  const next = n.toFixed(d);
-  return Number(next) === n ? next : raw;
+  if (raw === '' || d === null) return raw;
+  return losslessFixed(raw, d) ?? raw;
 }
 
 /**
@@ -200,14 +200,22 @@ export function setGroupedValue(input: HTMLInputElement, raw: string): void {
  *  `input` event when the machine value changed (pad/trim), so dirty
  *  tracking sees it — the same rule setInputDecimals follows. */
 export function setGroupedDecimals(input: HTMLInputElement, d: number): void {
-  const clamped = Math.max(0, Math.trunc(d));
-  input.step = clamped === 0 ? '1' : (10 ** -clamped).toFixed(clamped);
+  input.step = stepAttrFor(d);
   const s = state.get(input);
   if (!s) return;
   const before = s.hidden ? s.hidden.value : s.raw;
   render(input);
   const after = s.hidden ? s.hidden.value : s.raw;
   if (after !== before) input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+/** Re-derive an input's precision, grouped or not — the ONE call other
+ *  behaviors make so the isGrouped branch is not copied at each site.
+ *  Deliberately NOT re-exported from index.ts: internal composition, not
+ *  public API. */
+export function applyDecimals(input: HTMLInputElement, d: number): void {
+  if (state.has(input)) setGroupedDecimals(input, d);
+  else setInputDecimals(input, d);
 }
 
 export function initGroupedNumber(): void {

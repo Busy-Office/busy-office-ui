@@ -229,10 +229,6 @@ const fieldMarkup = `<div class="bo-form-field">
     Without JS the field is a native number input: correct, ungrouped.</p>
   </section>
 
-  <script>
-    import { initGroupedNumber } from '@busy-office/ui/js';
-    initGroupedNumber();
-  </script>
 
   <section class="demo">
     <h2>Sections &amp; the action bar</h2>
@@ -314,6 +310,12 @@ const fieldMarkup = `<div class="bo-form-field">
     <h2>Markup — the canonical field recipe</h2>
     <pre><code>{fieldMarkup}</code></pre>
   </section>
+
+  <script>
+    import { initGroupedNumber } from '@busy-office/ui/js';
+    initGroupedNumber();
+  </script>
+
   <ClassRef component="form" />
   <ApiTable component="form"
     notes={['Error semantics are YOUR markup: <code>aria-invalid</code> + <code>aria-describedby</code> pointing at the message (with <code>role="alert"</code> if dynamic) — CSS covers visuals only.',
