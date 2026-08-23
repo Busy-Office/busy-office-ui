@@ -447,12 +447,18 @@ shape the CLAUDE.md doctrine describes.
        **Two things learned by USING it, 2026-08-24.** First, it works: it
        caught three real visual changes from this run (the tfoot rule, the
        group-header centring, a prose paragraph) — the first time it has
-       reported anything true since the key was fixed. Second, it reports one
-       diff on `/components/richtext` that I **cannot attribute**: that page
-       has no `tfoot`, no `colspan`, and zero commits since the baselines were
-       taken, and the changed pixels sit in repeating ~37px pairs, one per
-       demo block. Left FAILING rather than blind-updated, because an
-       unexplained diff is the one thing this tool exists to show.
+       reported anything true since the key was fixed. Second, the diff on
+       `/components/richtext` that I called unattributable **was attributable,
+       and my METHOD was the defect.** I checked commits to that PAGE; all
+       9837 of its changed pixels sit at x <= 200, inside the 224px sidebar,
+       because two wakes earlier a sidebar entry moved from Values to
+       Reference (132.1) and shifted every group below it by one row. That is
+       the ~37px pair spacing I had measured and failed to recognise.
+       Attributing a visual diff by per-page git history cannot see a
+       shared-layout change, and a shared-layout change moves EVERY page.
+       Re-baselined once that was established, not before; the lesson and the
+       trick that settled it in seconds — read WHERE the pixels are, not just
+       how many — are in the tool's own header now.
        Also: `--only=<page>` does not do what its name suggests — it skips the
        non-matching pages from the log but still checks all forty and updates
        none, so selective re-baselining is not currently possible.
