@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 09:20
+Generated at: 2026-08-23 09:34
 
 ## Open items by slice
 
@@ -34,9 +34,10 @@ Generated at: 2026-08-23 09:20
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (728 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-23 00:32   ok
+dispatch status — counter-triggered rules (729 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-23 00:32   OVERDUE
   Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -57,7 +58,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 00:10 · Meta · refusal · period-close cockpit, Gantt, map, activity-chatter, Analytical List Page (v2 sweep's refusals re-verified, not re-litigated) · refused · e44dfab
 - 2026-08-23 00:10 · Continue · build · 119.7: notification cards elevated (owner: go elevated-card) · landed · e44dfab
 - 2026-08-23 00:20 · Roadmap · plan · 122.1: triaged the masking-input wishlist into ROADMAP (BLOCKED ON GRILL) · triaged · 3894d73
 - 2026-08-23 00:22 · Roadmap · plan · Refreshed stale RESUME.md (109.13-109.18 falsely claimed still-open) · landed · 7f0cfd3
@@ -67,6 +67,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 08:51 · Continue · build · 52.3 + 121.5: object-page retitled; Report/Schedule/Output-form labels renamed long-term; 3 orphans linked · landed · ed25fe1
 - 2026-08-23 09:05 · Continue · build · 123.4: 0.3.0 released to npm (re-cut path); npm-12 pack-shape and base-blind-claim bugs fixed at root · released · 1eb60c8
 - 2026-08-23 09:20 · Continue · bug · output-form 390px table overflow (caught by CI's first layout sweep in 2 days) · landed · 0eec725
+- 2026-08-23 09:34 · Continue · bug · axe: schedule/full landmarks+heading-order, command-bar placeholder-only name · landed · c862d39
 
 ## Sunset test
 
