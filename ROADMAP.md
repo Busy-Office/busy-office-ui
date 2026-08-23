@@ -149,6 +149,63 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 123 — Owner answers, seven decisions in one message (2026-08-23)
+
+The owner answered every open item in one pass. Recorded here so no wake
+re-asks; each answer routes to its own item below or amends an existing one.
+
+1. **122.1 (masking)** — scope answer: applies to Money AND plain
+   numeric/Quantity ("yes"). Owner asked for best practice from other ERP
+   software before the grill round — research dispatched 2026-08-23;
+   grill proceeds once the evidence report is in (see 123.1).
+2. **119.3 (app-frame)** — NOT an iframe. The ask is: what is the MODERN
+   design for an application frame/shell? Research dispatched (Fiori
+   shell, Dynamics app frame, Lightning, Carbon UI shell, etc.); a
+   proposal goes back to the owner (see 123.2).
+3. **121.1/121.2/121.3** — owner: "find reference to propose me."
+   Research dispatched (Xero/BC reconciliation, CATS/Workday timesheets,
+   Ariba/Coupa comparison); per-pattern proposals with named references
+   go back to the owner (see 123.3).
+4. **121.5 (orphans + naming)** — owner: "which solution is good for
+   long term?" Long-term call made and BUILT this wake: sidebar labels
+   renamed to carry the distinction (labels are cheap and fixable;
+   slugs/URLs unchanged so links and search hold — the same trade-off
+   already decided for 52.3), plus inbound cross-links for the three
+   remaining orphans. See 121.5's own entry for the Accept evidence.
+5. **30.0** — answered: a NEW ERP overview/dashboard pattern with a
+   module sidebar (not a review of the docs' own nav). Folded into the
+   app-frame proposal (123.2) — same research covers both; they ship as
+   one coherent frame + overview story, not two competing screens.
+6. **52.3 (Object Page naming)** — owner: "do what is good for long
+   term" = the standing recommendation. BUILT this wake: slug kept,
+   human title/opener renamed to name the interaction. See 52.3.
+7. **0.3.0** — owner chose: re-cut the tag. BUILT this wake: Layer-2
+   CHANGELOG entries written, `## Unreleased` folded into `## 0.3.0`,
+   tag moved to the new HEAD, release created (Trusted Publishing runs
+   the gates from a clean checkout). See 123.4.
+
+1. [ ] **123.1 — Masking grill, evidence-first.** Once the ERP
+       best-practice research lands: run the 122.1 grill with the owner,
+       evidence in hand (as-you-type vs on-blur per real products, caret
+       strategy, locale source, paste, submitted-value contract). Scope
+       per owner: Money + numeric/Quantity, one shared mechanism.
+2. [ ] **123.2 — App-frame + ERP overview proposal.** Once the shell
+       research lands: propose the modern app-frame anatomy (what the
+       framework should own vs the consumer) AND the 30.0 overview-with-
+       module-sidebar pattern as one story. Owner picks before build.
+3. [ ] **123.3 — Three pattern proposals with references.** Once the
+       screen-reference research lands: per-pattern proposal (anatomy,
+       contract, the one disagreement each set of references has) for
+       reconciliation / timesheet / comparison-matrix. Owner picks
+       which (if any) get built, and in what order.
+4. [ ] **123.4 — 0.3.0 re-cut + release.** Write CHANGELOG entries for
+       the package-touching commits since the `## Unreleased` section
+       was last updated; fold Unreleased into `## 0.3.0`; move tag
+       v0.3.0 to the new HEAD; push; `gh release create v0.3.0` —
+       publish then runs via Trusted Publishing. Accept: npm serves
+       0.3.0; CHANGELOG's 0.3.0 section covers every package-touching
+       commit since v0.1.1; publish workflow green.
+
 ## Slice 122 — Owner wishlist: Amount decimal control + live masking (2026-08-23)
 
 Owner (2026-08-22 wishlist, item 3): "Amount --> there should be a number
