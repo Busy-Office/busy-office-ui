@@ -53,6 +53,22 @@ answers are all in. The oldest queued items ahead of the new triage are
 Slice 132/133/134 by number but 130.3 by age; the dispatcher takes the
 oldest still-open item, which is 130.3.
 
+## `npm run docs:build` does NOT run the browser gates (2026-08-24)
+
+A green local docs build is **not** a green CI. The build script runs the
+static checks (page-shape, links, markup, data-hooks, components-used …). It
+does **not** run `check:claims`, `check:layout` or `test:axe` — CI runs those
+as separate steps.
+
+This cost a red main on 2026-08-24. Collapsing `/patterns/goods-receipt` to
+its mirror moved `#gr-scan` into the iframe; the docs build passed, so did
+`check:layout` and `test:axe`, and `check:claims` — which I did not run —
+went red on CI with *"No element found for selector: #gr-scan"*. Two claims
+had been silently driving the duplicate inline copy.
+
+**Any change to what a page RENDERS runs `check:claims` before the push.**
+It is the gate that knows what the page promised.
+
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 
 The long-running `bo-docs-run` container serves a **baked image with no bind

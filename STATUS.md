@@ -2,18 +2,15 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 00:21
+Generated at: 2026-08-24 00:50
 
 ## Open items by slice
 
-- **Slice 99** (1 open)
-  - 99.4 — missing components discovered along the way go through the front door.
 - **Slice 112** (3 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 130** (4 open)
-  - 130.2b — the P2P document flow, grilled 2026-08-23 (owner: "as per your recommendation").
+- **Slice 130** (3 open)
   - 130.3 — module two, on the settled answers.
   - 130.4 — the remaining four modules.
   - 130.5 — wire the suite into CI
@@ -31,12 +28,16 @@ Generated at: 2026-08-24 00:21
   - 134.1 — fix the key, and prove the dark half is dark.
   - 134.2 — re-baseline deliberately, never blind.
   - 134.3 — CI, or delete it.
+- **Slice 135** (3 open)
+  - 135.2 — make the RF track navigable, like the suite.
+  - 135.3 — should the RF screen be responsive?
+  - 135.4 — drop the numeric keypad from the pick screen.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (807 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-24 00:18   ok
+dispatch status — counter-triggered rules (809 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-24 00:50   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -44,15 +45,12 @@ dispatch status — counter-triggered rules (807 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 130.2b — the P2P document flow, grilled 2026-08-23 (owner: "as per your recommendation").
+- 135.4 — drop the numeric keypad from the pick screen.
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
-- 99.4 — missing components discovered along the way go through the front door.
 
 ## Last 10 iterations
 
-- 2026-08-23 23:41 · Continue · build · 130.2 GAP-11 + GAP-14 — both refuse a new state; GAP-11 was a usage bug the gates cannot see · landed · b0a0e51
-- 2026-08-23 23:41 · Meta · refusal · a 5th bo-timeline data-state (partial) and a new data-row-state (excluded) — the marker glyph and row selection already carry both · refused · b0a0e51
 - 2026-08-23 23:49 · Continue · build · 130.2 GAP-3 — segmented option count: gap added, muted-tabular convention documented · landed · b932f84
 - 2026-08-23 23:49 · Meta · refusal · a __count part or badge-in-segment — the count treatment already exists and a badge fills a 24px segment · refused · b932f84
 - 2026-08-23 23:58 · Continue · build · 130.2 GAP-12 — Add a line: home stated (below the table, cluster), two drifted call sites reconciled · landed · a9ba5c7
@@ -61,6 +59,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
 - 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58
 - 2026-08-24 00:21 · Continue · build · 130.2 GAP-4b — cell-level disagreement cue: data-tone already shipped; row tint hid it on the first try · landed · 0ab469a
+- 2026-08-24 00:50 · Standardize · dry · 135.1 — RF naming unified (six labels, one system); slugs kept with the 69-reference reason; goods-receipt duplicate screen removed (131.1 error) · landed · 9167765
+- 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
 
 ## Sunset test
 

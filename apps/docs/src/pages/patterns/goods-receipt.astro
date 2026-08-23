@@ -65,8 +65,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Scan feedback — a cue for someone watching the rack</h2>
-    <p>Type anything into the demo above and press Enter: the viewport
-    flashes green for ~600ms. Scan a code starting with
+    <p>Type anything into the screen above and press Enter: the
+    <strong>device's</strong> viewport flashes green for ~600ms — the flash is
+    <code>position: fixed</code>, so it covers whatever viewport the screen is
+    running in, which here is the handheld rather than this page. Scan a code starting with
     <code>REJECT</code> and it flashes red with the reason announced. A
     scanner user's eyes are on the shelf, not the screen — the flash is
     readable in peripheral vision, and it is deliberately <strong>not the

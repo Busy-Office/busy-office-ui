@@ -67,6 +67,27 @@ async function visit(path, { media = 'screen', features = [], width = DESKTOP_WI
   await page.goto(url(path), { waitUntil: 'networkidle0' });
 }
 
+/**
+ * The frame holding an RF screen's mirror.
+ *
+ * Roadmap 131.1/135.1 collapsed the RF pattern pages to ONE screen, and that
+ * screen is an isolated `rf-essentials` document embedded in the page — so a
+ * claim about scanning, flashing or focus has to drive the frame, not the
+ * outer page. Both goods-receipt claims below found this the expensive way:
+ * they went red on CI with "No element found for selector: #gr-scan" after
+ * the duplicate inline copy they had been silently relying on was removed.
+ *
+ * Fails loudly rather than returning the page: a claim that silently fell
+ * back to the outer document would pass while testing nothing, which is the
+ * failure mode this whole file exists to avoid.
+ */
+async function mirror(match) {
+  const f = page.frames().find((fr) => fr.url().includes(match));
+  if (!f) throw new Error(`mirror frame not found for "${match}" on ${page.url()}`);
+  await f.waitForSelector('main', { timeout: 5000 });
+  return f;
+}
+
 
 // "Cancel restores the row's values and re-fires input events, so
 //  derived totals revert with it." — editable-grid / concurrency
@@ -1216,11 +1237,12 @@ check(
    CLEARS, it KEEPS focus for the next scan, and the polite live region gets the
    code so a non-visual user hears the confirmation. */
 await visit('/patterns/goods-receipt/');
-await page.click('#gr-scan');
+const grFrame = await mirror('goods-receipt-rf');
+await grFrame.click('#gr-scan');
 await page.keyboard.type('5901234123457', { delay: 5 });
 await page.keyboard.press('Enter');
 await new Promise((r) => setTimeout(r, 200));
-const scan = await page.evaluate(() => ({
+const scan = await grFrame.evaluate(() => ({
   value: document.getElementById('gr-scan').value,
   stillFocused: document.activeElement === document.getElementById('gr-scan'),
   announced: document.querySelector('[data-scan-status]')?.textContent.trim() ?? '',
@@ -2274,7 +2296,11 @@ check(
 // Real keydown on the real input — a synthetic document-level event
 // matches no delegated handler (this file's own standing lesson).
 await visit('/patterns/goods-receipt/');
-const scanFlash = await page.evaluate(async () => {
+/* The flash paints on the SCREEN's viewport, which is now the device's —
+   `position: fixed` resolves against the mirror document, not the docs page.
+   That is the correct behaviour for a screen shown inside a handheld, and
+   the page's caption says so. */
+const scanFlash = await (await mirror('goods-receipt-rf')).evaluate(async () => {
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const input = document.getElementById('gr-scan');
   input.focus();

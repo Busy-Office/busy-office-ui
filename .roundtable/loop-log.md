@@ -813,3 +813,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
 - 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58
 - 2026-08-24 00:21 · Continue · build · 130.2 GAP-4b — cell-level disagreement cue: data-tone already shipped; row tint hid it on the first try · landed · 0ab469a
+- 2026-08-24 00:50 · Standardize · dry · 135.1 — RF naming unified (six labels, one system); slugs kept with the 69-reference reason; goods-receipt duplicate screen removed (131.1 error) · landed · 9167765
+- 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
