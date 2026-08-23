@@ -2,7 +2,6 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import RfDevice from '../../components/RfDevice.astro';
-import RfTaskMenu from '../../components/RfTaskMenu.astro';
 import rfProfile from '../../data/rf-profile.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
@@ -22,16 +21,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </p>
 
   <section class="demo">
-    <h2>Task menu</h2>
-    <RfTaskMenu />
-  </section>
-
-  <section class="demo">
-    <h2>The RF-floor profile, at RF-scanner size</h2>
-    <p>Everything above is the framework's full CSS bundle, at desktop width.
-    Below is the SAME markup — via the shared component — in an isolated
-    document styled by ONLY the <code>rf-essentials</code> profile (roadmap
-    59.2, Chrome/WebView 108), at 360×640, a common scanner resolution.</p>
+    <h2>The screen — try it</h2>
+    <p>Shown the way the scanner gets it: an isolated 360×640 document styled
+    by ONLY the <code>rf-essentials</code> profile (roadmap 59.2,
+    Chrome/WebView&nbsp;108) — not the docs bundle. One screen, not two: this
+    page rendered the same component a second time at desktop width until
+    roadmap 135.2.</p>
     <p><strong>What is in the profile — all {rfProfile.count} of them.</strong>
     <code>dashboard/dashboard</code> (the source of <code>.bo-widget-grid</code>/
     <code>.bo-widget</code>) joined the profile for this pattern (109.7) —

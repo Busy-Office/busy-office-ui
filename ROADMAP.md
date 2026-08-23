@@ -228,7 +228,36 @@ half-answered by this project's own grill.
        for this family specifically, with the reason — renaming is a
        Breaking-shaped docs change and "the reference calls it picking" is
        not sufficient on its own.
-2. [ ] **135.2 — make the RF track navigable, like the suite.** The task
+2. [~] **135.2 — make the RF track navigable, like the suite.** *(Started
+       2026-08-24 with the thing that had to come first: the LAST two
+       duplicated screens.)*
+
+       **The duplication the owner reported covered all SIX RF pages, and I
+       cleared it in three passes instead of one.** 131.1 fixed three,
+       135.1c fixed `goods-receipt` after the owner's naming ask exposed it,
+       and this wake found the final two — `rf-landing` and `rf-list` each
+       rendered their screen inline AND in the mirror.
+       **The detector is why**: 131.1 found instances by grepping for the
+       `.demo-rf-screen` wrapper class, which is a PROXY for "renders a
+       screen", not the thing itself. Three of the six pages wrapped their
+       copy in nothing, so the grep reported 3 where the answer was 6 — and I
+       wrote "rf-landing and rf-list render it once" into a commit message on
+       that evidence.
+       **Now gated exactly**: `check-page-shape` fails if any pattern page
+       IMPORTS an RF screen component, because the import is what renders it
+       and there is no spelling a class-grep can miss. Red-proved by putting
+       one back.
+
+       *Still to do — the navigation itself*: the mirrors' links are all
+       `href="#"`. Making them real turns the six into a walkable track (the
+       owner's "switch from app to app"), and the Objective's §4 journey test
+       argues for it: six screens with no way between them do not show a
+       flow. Open question to settle first — those links live inside the
+       `<iframe>` on each pattern page, so clicking one navigates the device
+       in place and the page heading then names a screen the device is no
+       longer showing. Candidate answer: keep it, and retitle the iframe to
+       describe the DEVICE rather than the screen, so the accessible name
+       stays true after navigation. The task
        menu already exists (`rf-landing`) and every screen has a Back
        button, but the *mirrors* are isolated documents: nothing links to
        anything, so a reader cannot walk menu → task → next task the way

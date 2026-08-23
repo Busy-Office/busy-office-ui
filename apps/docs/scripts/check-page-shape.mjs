@@ -196,6 +196,39 @@ for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro') 
   }
 }
 
+/* ---------- an RF screen renders ONCE, in its mirror (roadmap 135.2) ------
+   The owner reported the same defect twice: an RF pattern page showing its
+   screen inline AND again in the device mirror below it — "it is kind of
+   redundant that you show HTML form and also show iframe".
+
+   It took three passes to actually clear, and the reason is worth the gate.
+   131.1 found the instances by grepping for the `.demo-rf-screen` wrapper
+   class, which is a PROXY for "this page renders a screen", not the thing
+   itself: goods-receipt wrapped its copy in nothing, and rf-landing/rf-list
+   wrapped theirs in nothing either, so a class-name search reported 3 when
+   the answer was 6.
+
+   This asks the exact question instead — does a pattern page IMPORT a screen
+   component? — because the import is what renders it, and there is no
+   spelling of it a grep for a class can miss. The mirrors under
+   `patterns/rf/` are where those components belong; nothing else may pull
+   one in. */
+const RF_SCREENS = ['RfTaskMenu', 'RfTaskQueue', 'ScanToReceive', 'PickScreen', 'PutawayScreen', 'CountScreen'];
+let rfChecked = 0;
+for (const f of (await readdir(patternsDir)).filter((f) => f.endsWith('.astro'))) {
+  const src = await readFile(join(patternsDir, f), 'utf8');
+  rfChecked++;
+  for (const screen of RF_SCREENS) {
+    if (new RegExp(`^import\\s+${screen}\\s+from`, 'm').test(src)) {
+      failures.push(
+        `patterns/${f}: imports ${screen} — an RF screen renders ONCE, in its ` +
+          `mirror under patterns/rf/. A second copy on the pattern page is the ` +
+          `duplication roadmap 131.1/135.1c/135.2 removed three times.`,
+      );
+    }
+  }
+}
+
 /* ---------- EVERY docs page ends with Related (Slice 23 item 8) ----------
    The owner review measured Related on ~75% of pages and asked for 100%:
    it is the only outward path from a page, and the pages missing it were
@@ -249,4 +282,4 @@ if (failures.length) {
   process.exit(1);
 }
 assertScanned(checked, 'component pages', 'the page source directory is empty or moved');
-console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s) verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer`);
+console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s), ${rfChecked} checked for a duplicated RF screen verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer`);

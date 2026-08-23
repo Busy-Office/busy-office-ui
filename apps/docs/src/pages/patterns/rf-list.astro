@@ -2,7 +2,6 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import RfDevice from '../../components/RfDevice.astro';
-import RfTaskQueue from '../../components/RfTaskQueue.astro';
 import rfProfile from '../../data/rf-profile.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
@@ -26,16 +25,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </p>
 
   <section class="demo">
-    <h2>Task queue</h2>
-    <RfTaskQueue />
-  </section>
-
-  <section class="demo">
-    <h2>The RF-floor profile, at RF-scanner size</h2>
-    <p>Same isolated-document technique as every RF fixture — the
-    <code>rf-essentials</code> profile (Chrome/WebView 108) only, at
-    360×640. No profile change was needed for this page: <code>data-table</code>
-    was already a member.</p>
+    <h2>The screen — try it</h2>
+    <p>Shown the way the scanner gets it: the <code>rf-essentials</code>
+    profile (Chrome/WebView&nbsp;108) only, at 360×640, in an isolated
+    document. No profile change was needed for this page:
+    <code>data-table</code> was already a member. One screen, not two — this
+    page rendered the same component a second time at desktop width until
+    roadmap 135.2.</p>
     <ul class="bo-cluster docs-list-bare">
       {rfProfile.components.map((c) => <li><a href={base + c.href}><code>{c.name}</code></a></li>)}
     </ul>

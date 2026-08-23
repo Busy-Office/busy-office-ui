@@ -822,3 +822,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92
 - 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
 - 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199
+- 2026-08-24 01:45 · Standardize · dry · target-size: my 2.5.8 claim overstated non-conformance; corrected in 5 places, cell-link added to the gate's sweep and red-proved · landed · 86a0bfd
