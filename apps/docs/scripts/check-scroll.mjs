@@ -1,7 +1,7 @@
 /**
- * Gate: a container that overflows must actually SCROLL.
+ * Gate: content past a container's edge must be REACHABLE.
  *
- * @exact — drives real scrolling in a real browser and compares geometry.
+ * @exact — reads computed overflow and measured geometry in a real browser.
  * Exempt from --self-test: there is no recognition step to fool, and the
  * red-proof is in the roadmap (inject `overflow: visible` and it fails).
  *
@@ -33,7 +33,8 @@
  *      layout accounting (scrollbar gutter, integer rounding, platform
  *      scrollbar metrics), not lost content — and the probe simply
  *      re-measured the platform. macOS overlay scrollbars hid it completely:
- *      122 containers here, 204 there.
+ *      122 containers here, 208 there — and the verdict is now the same either way,
+ *      which is the property that was missing.
  *   2. WIDER THAN ITS BOX  -> reachable by keyboard (`tabindex`), because a
  *      scrollable region that only a mouse can reach fails WCAG 2.1.1.
  *   3. TALLER THAN ITS BOX -> the USER must be able to reach the rest, i.e.
@@ -59,21 +60,21 @@ import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
 import { gate, assertScanned } from './gate-report.mjs';
+import { SCROLL_REGION_SELECTOR } from './scroll-regions.mjs';
 
 const WIDTHS = [1440, 390];
-const SEL = '.bo-data-table-container, .scale-scroll';
+const SEL = SCROLL_REGION_SELECTOR;
 
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 const g = gate('scroll check', 'scrollable container(s)');
-let containers = 0;
 let pagesScanned = 0;
 
 for (const width of WIDTHS) {
   await page.setViewport({ width, height: 900 });
   for (const p of await distPages(DIST)) {
-    if (!p.html.includes('bo-data-table-container') && !p.html.includes('scale-scroll')) continue;
+    if (!p.html.includes('bo-data-table-container') && !p.html.includes('scale-scroll') && !p.html.includes('<pre')) continue;
     await page.goto(`http://localhost:${port}${base}${p.url}`, { waitUntil: 'networkidle0' });
     if (width === WIDTHS[0]) pagesScanned += 1;
     const found = await page.evaluate((sel) => {
@@ -98,7 +99,6 @@ for (const width of WIDTHS) {
 
     const REACHABLE = (v) => v === 'auto' || v === 'scroll';
     for (const c of found) {
-      containers += 1;
       const at = `${p.url} @${width} [${c.cls}]`;
       if (c.byX > 1) {
         g.check(
@@ -125,4 +125,4 @@ for (const width of WIDTHS) {
 await browser.close();
 server.close();
 assertScanned(pagesScanned, 'page(s) carrying a scroll container', 'is dist built?');
-g.report(`driven across ${pagesScanned} page(s) x ${WIDTHS.length} widths`);
+g.report(`checked across ${pagesScanned} page(s) x ${WIDTHS.length} widths`);

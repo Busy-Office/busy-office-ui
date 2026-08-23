@@ -16,6 +16,7 @@
 // @exact — measures geometry in a real browser. Exempt from --self-test: there is no
 // judgement to get wrong, and ceremony around a lookup is noise.
 import { serveDist } from './serve-dist.mjs';
+import { SCROLL_REGION_SELECTOR } from './scroll-regions.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
@@ -26,7 +27,11 @@ const { server, port, base } = await serveDist(DIST);
 const paths = (await distPages(DIST)).map((p) => p.url);
 const browser = await launchDocsBrowser();
 
-const OVERFLOW_EXEMPT = '.bo-data-table-container, .scale-scroll, pre';
+/* These are SUPPOSED to overflow, so this gate ignores them; check-scroll
+   (roadmap 133) takes the other half and asks whether what spills past their
+   edge is reachable. ONE list, in scroll-regions.mjs — it had drifted into
+   three spellings, two of them inside this file. */
+const OVERFLOW_EXEMPT = SCROLL_REGION_SELECTOR;
 const findings = [];
 
 async function overflowProbe(page) {
@@ -89,7 +94,7 @@ async function spacingProbe(page) {
     return introduced.length ? introduced.slice(0, 3) : null;
   }, exemptSelector());
 }
-function exemptSelector() { return '.bo-data-table-container,.scale-scroll,pre'; }
+function exemptSelector() { return SCROLL_REGION_SELECTOR; }
 
 /* ONE navigation, three viewports — not three navigations.
    This was the single most expensive step in CI (79s, more than the axe sweep),

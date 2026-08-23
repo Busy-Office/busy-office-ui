@@ -826,3 +826,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 01:53 · Continue · build · 135.2 part 1 — last two duplicated RF screens removed; check-page-shape now gates the IMPORT, red-proved · landed · d46316b
 - 2026-08-24 02:03 · Continue · build · 135.2 — six RF mirrors wired into one walkable track (menu/back/queue), zero CSS, walked with real clicks · landed · b669359
 - 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
+- 2026-08-24 03:27 · Continue · bug · 133.1 fix — scroll probe measured platform scrollbar accounting; both axes now use computed overflow, red-proved · landed · aaea776
