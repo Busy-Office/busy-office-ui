@@ -37,7 +37,12 @@ const PAGES = [
 const DENSITIES = ['compact', 'comfortable', 'spacious'];
 
 const probe = (page) => page.evaluate(() => {
-  const SEL = 'button, input[type=checkbox], input[type=radio], input[type=range], select, a.bo-btn, [role=button]';
+  /* `a.bo-btn`, not every `<a>`: a link inside prose is exempt from 2.5.8 and
+     sweeping them would bury the real controls in noise.
+     `.bo-data-table__cell-link` joins the list (roadmap 135.3b) because it is
+     the one anchor the framework makes a TARGET rather than a phrase — it
+     exists to be tapped, and it should stay measured. */
+  const SEL = 'button, input[type=checkbox], input[type=radio], input[type=range], select, a.bo-btn, a.bo-data-table__cell-link, [role=button]';
   const targets = [];
   for (const el of document.querySelectorAll('#main-content ' + SEL)) {
     if (el.closest('pre, code')) continue;          // code samples are not live UI

@@ -502,9 +502,11 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <p class="bo-u-text-muted">Why it exists, measured rather than assumed: a
     plain <code>&lt;a&gt;</code> in a cell is inline, so its hit area is its
     <em>line box</em> — <strong>18px</strong> tall at spacious density for a
-    label that fits on one line, under
-    <a href={base + '/concepts/accessibility'}>WCAG 2.5.8</a>'s 24px floor and
-    nowhere near a gloved thumb. It is easy to miss because a label that
+    label that fits on one line. That still <em>conforms</em> to
+    <a href={base + '/concepts/accessibility'}>WCAG 2.5.8</a> — rows this far
+    apart pass via the spacing exception, the same way this framework's 18px
+    sort button does — which is exactly why conformance is the wrong bar here.
+    The RF track's bar is a gloved thumb, and 18px is not that. It is easy to miss because a label that
     <em>wraps</em> measures 42px and looks fine. The part takes the cell's own
     vertical padding instead of sitting inside it, which lifts the same link to
     <strong>48px</strong> without moving anything on screen. Styling the link as

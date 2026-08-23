@@ -820,3 +820,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
 - 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
 - 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92
+- 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
+- 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199

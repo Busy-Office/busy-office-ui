@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 01:24
+Generated at: 2026-08-24 01:37
 
 ## Open items by slice
 
@@ -34,9 +34,10 @@ Generated at: 2026-08-24 01:24
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (814 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-24 00:50   ok
+dispatch status — counter-triggered rules (816 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-24 00:50   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -49,8 +50,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
-- 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58
 - 2026-08-24 00:21 · Continue · build · 130.2 GAP-4b — cell-level disagreement cue: data-tone already shipped; row tint hid it on the first try · landed · 0ab469a
 - 2026-08-24 00:50 · Standardize · dry · 135.1 — RF naming unified (six labels, one system); slugs kept with the 69-reference reason; goods-receipt duplicate screen removed (131.1 error) · landed · 9167765
 - 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
@@ -59,6 +58,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
 - 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
 - 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92
+- 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
+- 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199
 
 ## Sunset test
 

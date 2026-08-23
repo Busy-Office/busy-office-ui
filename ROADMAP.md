@@ -288,7 +288,9 @@ half-answered by this project's own grill.
        list, built where adding CSS is forbidden, already opens a document
        with a plain `<a>` in the identifying cell. So the idiom exists; the
        question was only whether it is a big enough target. It is not —
-       **18px**, because an inline link's hit area is its line box. I nearly
+       **18px**, because an inline link's hit area is its line box — which
+       CONFORMS to WCAG 2.5.8 via the spacing exception, so no gate would have
+       caught it; the bar it misses is this track's own glove target. I nearly
        shipped the opposite conclusion: the first link I measured was 42px,
        and only enumerating every row showed that those were the two whose
        labels WRAP. `display: block` alone gets 24px, exactly WCAG 2.5.8's

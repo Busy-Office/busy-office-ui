@@ -13,7 +13,8 @@ pin.
   of text. Every ERP list has such a row and the framework had no answer that
   survives a touch screen: a plain `<a>` in a cell is inline, so its hit area
   is its LINE BOX — **18px** at spacious density for a label that fits one
-  line, under WCAG 2.5.8's 24px floor. That is easy to miss, because a label
+  line. That *conforms* to WCAG 2.5.8 via the spacing exception, so no gate
+  flags it; the bar it misses is a gloved thumb's. That is easy to miss, because a label
   that *wraps* measures 42px and looks fine. The part takes the cell's own
   vertical padding rather than sitting inside it, lifting the same link to
   **48px** with nothing moving on screen. Styling the link as a button also

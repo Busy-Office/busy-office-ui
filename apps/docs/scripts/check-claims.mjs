@@ -542,9 +542,11 @@ check(
    first measured happened to WRAP, giving a 42px line box.
 
    Assert the shipped state and the counterfactual in one pass: with the part,
-   every link clears 44px; strip the class and the single-line rows collapse
-   under WCAG 2.5.8's 24px floor. Checking only the first half would pass on a
-   table whose labels all wrap. */
+   every link clears 44px; strip the class and the single-line rows fall back
+   to an 18px line box. That 18px CONFORMS to WCAG 2.5.8 via the spacing
+   exception — check-target-size reports exactly that for the 18px sort button
+   — so this is an ergonomics claim, not a conformance one. Checking only the
+   first half would pass on a table whose labels all wrap. */
 await visit('/components/data-table/', { width: 1440 });
 const cellLink = await page.evaluate(() => {
   const box = document.querySelector('[data-cell-link-demo]');
