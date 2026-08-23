@@ -157,6 +157,86 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 135 — Owner wishlist: the RF track, four asks (2026-08-24)
+
+Owner input, verbatim: *"standardize the RF pattern naming / should it be
+similart to app suite ? where can navigate to app list to switch from app to
+app. / screen also need to be responsive? / doesn't require number pad. as it
+is available on visula key board on RF scanner."*
+
+Checked against what ships before queuing. Three are real; one is already
+half-answered by this project's own grill.
+
+1. [ ] **135.1 — the naming, which is TWO questions wearing one hat.**
+       *(a) Mechanical inconsistency, and it is worse than the sidebar
+       shows.* There are **three** naming systems across six pages:
+       sidebar/title labels (`RF task menu`, `RF task queue`, `Goods receipt
+       (RF scanner)`, `RF picking`, `RF putaway`, `RF count`), slugs
+       (`rf-landing`, `rf-list`, `goods-receipt`, `rf-pick`, `rf-putaway`,
+       `rf-count`), and the mirror pages (`rf-landing-rf` …). Five labels
+       take an `RF ` prefix and one takes a `(RF scanner)` suffix; three
+       slugs disagree with their own label (`rf-pick` ↔ "RF picking",
+       `rf-landing` ↔ "task menu", `rf-list` ↔ "task queue").
+       *(b) A real question underneath, and it is the owner's own rule
+       pointing at the owner's own screens.* CLAUDE.md, from Slice 109:
+       *"A pattern is NAMED and FRAMED for its SHAPE; the domain appears
+       only as demo data… never name a pattern for its sample domain."*
+       `RF picking` / `RF putaway` / `RF count` / `goods receipt` are
+       warehouse OPERATIONS. The counter-argument is that they are genuinely
+       different shapes — guided fetch, verify-a-destination, blind entry,
+       receive-against-a-document — and that a warehouse reader searches for
+       "picking", not for "blind entry".
+       *Accept*: (a) one naming system, applied to labels, slugs and mirrors
+       together, with redirects if a slug moves (`check:links` is the gate);
+       (b) a recorded **accept / refuse / rethink** on shape-vs-domain names
+       for this family specifically, with the reason — renaming is a
+       Breaking-shaped docs change and "the reference calls it picking" is
+       not sufficient on its own.
+2. [ ] **135.2 — make the RF track navigable, like the suite.** The task
+       menu already exists (`rf-landing`) and every screen has a Back
+       button, but the *mirrors* are isolated documents: nothing links to
+       anything, so a reader cannot walk menu → task → next task the way
+       `examples/erp-suite` walks module → document. *Accept*: from the RF
+       task menu mirror, reach every RF screen and get back, with real
+       links, no JS beyond what already ships; the profile stays inside its
+       40 kB budget (`build-rf-essentials`' own gate prices it); and the
+       isolation the mirrors exist for is preserved — they must still load
+       ONLY `rf-essentials`, which is the whole point of those documents.
+       **Grill first whether this belongs in the docs at all** or whether it
+       is an `examples/` app like the ERP suite — the suite exists precisely
+       because a walkable multi-screen demo outgrew a docs page.
+3. [ ] **135.3 — should the RF screen be responsive?** Today everything is
+       360×640 because that is the resolution the `rf-essentials` profile
+       targets, and the docs frame says so. Real fleets are mixed: 320-wide
+       older guns, 480×800 mid-range, 6-inch tablets on forklifts.
+       *Accept*: measure the shipped RF screens at 320 / 360 / 480 / 800
+       before deciding anything — if they already reflow (they are ordinary
+       flow layouts with a `bo-kv` and a button bar, so they may), the
+       answer is a documented range and a screenshot, not CSS. If something
+       breaks, fix that specific thing. **Do not add a breakpoint on a
+       hypothesis**; the device frame's own 360px claim must stay honest
+       whatever the answer is.
+4. [ ] **135.4 — drop the numeric keypad from the pick screen.** Owner:
+       *"doesn't require number pad, as it is available on [the] visual
+       keyboard on [the] RF scanner."* **This confirms the RF grill's own
+       preliminary verdict**, which is why it is queued as a removal rather
+       than a debate: `.roundtable/grill-rf-coverage-2026-08-23.md` lists
+       "numeric keypad for gloved hands" as *"open — likely refuse:
+       `inputmode` summons the device keypad; a custom keypad is device-app
+       territory"*, and R2-Q4 shipped a *recipe* as the compromise, saying
+       "promote to a component only on a real consumer's
+       copy-paste-modify". The owner is the domain authority on what an RF
+       gun provides, and the answer is: the platform already provides it.
+       *Accept*: the keypad markup, its wiring, its caption, its Anatomy
+       bullet and its line in the copyable Markup sample all go together —
+       a demo that keeps the prose after losing the widget is worse than
+       either; `data-pick-keypad` and `data-key` leave
+       `check-data-hooks`' exception list (a stale allowlist entry is a
+       promise nobody is keeping); `inputmode="numeric"` stays and the page
+       says plainly that the device keyboard is the answer. Removals face
+       the same Objective tests as additions: this one passes §1 outright —
+       the consumer deletes markup and a wiring block.
+
 ## Slice 134 — `test:visual` is red, and nothing runs it (2026-08-23)
 
 Found while verifying 131.1: the wake needed dark-theme screenshots, which
