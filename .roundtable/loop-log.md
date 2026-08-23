@@ -840,3 +840,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 05:08 · Meta · refusal · a 2-month demo (repeats the 3-month point) and a scripted drag-select range picker · refused · 16ed66d
 - 2026-08-24 05:13 · Continue · build · 132.4 — file open/save panel refused as a pattern; mapped to file-upload / value-help / form-in-dialog and documented · refused · 4c5c199
 - 2026-08-24 05:13 · Meta · refusal · a file-panel pattern — the OS owns the local picker, value-help is the store picker, and a browser has no save panel · refused · 4c5c199
+- 2026-08-24 05:19 · Continue · build · 132.5 — list-to-list refused: multi-select is the shipped answer, no screen needs a dual list, and it does not fit 390px · refused · 409d827
+- 2026-08-24 05:19 · Meta · refusal · a dual-list (pick-list/shuttle) component — a second way to do what data-multiselect already does · refused · 409d827

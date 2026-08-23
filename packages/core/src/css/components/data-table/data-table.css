@@ -163,6 +163,20 @@
      splitting, not more CSS. A group label that WRAPS to two lines exceeds
      the token and will sit a few pixels off — keep group labels short, which
      the uppercase header styling already encourages. */
+  /* A GROUP header owns its span, so it centres over it. Without this the
+     label inherits whatever alignment its columns use — and for the numeric
+     groups that grouped headers exist for, that is `end`, which parks the
+     word over the LAST column of the group. Measured on a real screen: the
+     "Quantity" label sat 229px off the centre of the three columns it heads,
+     reading as a label for "Confirmed" alone (roadmap 130.3, module two).
+
+     `thead` only: a `th[colspan]` in the BODY is a row-group heading
+     ("CC-4021 — Warehouse"), which is a label for the rows beneath it and
+     belongs at the start, where it already is. */
+  .bo-data-table thead th[colspan] {
+    text-align: center;
+  }
+
   .bo-data-table thead tr:nth-child(2) th {
     inset-block-start: var(--bo-density-row-height);
   }

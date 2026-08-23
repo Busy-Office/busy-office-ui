@@ -596,6 +596,32 @@ timeline it means *the step in progress*. One value, two meanings, on two
 timelines that can sit on the same screen. `/patterns/object-page` now states
 which meaning applies in a flow, and that a flow has exactly one `current`.
 
+## GAP-15 — FIXED 2026-08-24 — a grouped column header landed over its last
+column, not its span
+
+**Hit on**: `o2c/sales-order` (module two), and present in the docs demo that
+shipped with GAP-4a — so it was introduced by the fix for GAP-4a and found by
+the next module, which is exactly what module two is for.
+**What happened**: a `th[colspan]` heading three numeric columns inherits
+their alignment (`end`), so the word "Quantity" sat over "Confirmed" alone.
+Measured: **229px off the centre** of the span it heads.
+**Fixed**: `.bo-data-table thead th[colspan] { text-align: center }` — a group
+header owns its span. `thead` only, because a `th[colspan]` in the BODY is a
+row-group heading ("CC-4021 — Warehouse"), which labels the rows beneath it
+and belongs at the start. Re-measured after: 0px off centre.
+
+---
+
+## Module two's count (roadmap 130.3, in progress)
+
+The pilot found **13** gaps. Module two's sales-order pair found **one**, and
+it was a defect in the pilot's own fix rather than missing surface. Everything
+130.2 settled was spent rather than re-decided: the grouped header, the
+cell-level tone on the disagreeing cell, "+ Add line" below the table, the
+document flow as a timeline, the cell-link on list rows, and muted tabular
+counts in the segmented views. Zero new CSS was needed to build the screens;
+the one line added was to correct GAP-15.
+
 ---
 
 ## Not gaps (checked, and the framework was right)

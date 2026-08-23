@@ -18,7 +18,7 @@
 /** The six modules, in the order they appear on the rail. */
 export const MODULES = [
   { id: 'home', label: 'Home', icon: 'grid', href: '/index.html' },
-  { id: 'o2c', label: 'Order to cash', icon: 'cart', href: '/o2c/index.html' },
+  { id: 'o2c', label: 'Order to cash', icon: 'cart', href: '/o2c/sales-orders.html' },
   { id: 'p2p', label: 'Procure to pay', icon: 'truck', href: '/p2p/purchase-orders.html' },
   { id: 'crm', label: 'CRM', icon: 'user', href: '/crm/index.html' },
   { id: 'fin', label: 'Finance', icon: 'invoice', href: '/fin/index.html' },
@@ -31,6 +31,9 @@ export const SECTIONS = {
   /* One level, and the functions ARE the documents (owner, 2026-08-23):
      anything in P2P that is not a document is a report or a job, and both
      already have homes. Ordered as the work flows. */
+  o2c: [
+    { label: 'Sales orders', href: '/o2c/sales-orders.html' },
+  ],
   p2p: [
     { label: 'Requisitions', href: '/p2p/requisitions.html' },
     { label: 'Purchase orders', href: '/p2p/purchase-orders.html' },

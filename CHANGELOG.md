@@ -8,6 +8,12 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`data-table`): a grouped column header now centres over its span.
+  A `th[colspan]` heading numeric columns inherited their `end` alignment, so
+  the group's label sat over its LAST column — measured at 229px off centre,
+  reading as a label for that one column rather than the group. `thead` only:
+  a `th[colspan]` in the body is a row-group heading and belongs at the start.
+
 - **Fixed** (`stack`): `.bo-stack > *` no longer shrinks. A stack distributes
   rhythm, not space, and without this the loss was silent: a flex item that is
   itself a scroll container has an automatic minimum size of ZERO, so putting
