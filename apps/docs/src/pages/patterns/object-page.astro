@@ -7,6 +7,7 @@ const SECTIONS = [
   ['general', 'General information'],
   ['items', 'Line items'],
   ['delivery', 'Delivery'],
+  ['flow', 'Document flow'],
   ['approvals', 'Approvals'],
 ];
 
@@ -155,22 +156,56 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
         </div>
       </section>
 
+      {/* Document flow (roadmap 130.2c). The chain and the "related documents"
+          list are ONE surface: group the related records by document type in
+          lifecycle order, mark the current one, and the chain IS the list.
+          Same component as Approvals below on purpose — an ordered chain with
+          state is one abstraction, and the heading plus the links are what
+          tell them apart. */}
+      <section class="bo-widget op-section" id="flow">
+        <div class="bo-widget__header"><span class="bo-widget__title">Document flow</span></div>
+        <div class="bo-widget__body">
+          <ol class="bo-timeline" role="list">
+            <li class="bo-timeline__step" data-state="done">
+              <span class="bo-timeline__marker" aria-hidden="true">✓</span>
+              <div class="bo-timeline__title">Requisition — <a href="#flow">REQ-40118</a></div>
+              <div class="bo-timeline__meta">Approved 4 Aug 2026 · M. Osei</div>
+            </li>
+            <li class="bo-timeline__step" data-state="current" aria-current="step">
+              <span class="bo-timeline__marker" aria-hidden="true">●</span>
+              <div class="bo-timeline__title">Purchase order — PO-88213 <span class="bo-badge">you are here</span></div>
+              <div class="bo-timeline__meta">Pending approval · <span class="bo-u-tabular">$18,940.50</span></div>
+            </li>
+            <li class="bo-timeline__step" data-state="pending">
+              <span class="bo-timeline__marker" aria-hidden="true">○</span>
+              <div class="bo-timeline__title">Goods receipt</div>
+              <div class="bo-timeline__meta">Nothing received yet</div>
+            </li>
+            <li class="bo-timeline__step" data-state="pending">
+              <span class="bo-timeline__marker" aria-hidden="true">○</span>
+              <div class="bo-timeline__title">Vendor invoice</div>
+              <div class="bo-timeline__meta">Not yet received</div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
       <section class="bo-widget op-section" id="approvals">
         <div class="bo-widget__header"><span class="bo-widget__title">Approvals</span></div>
         <div class="bo-widget__body">
           <ol class="bo-timeline" role="list">
             <li class="bo-timeline__step" data-state="done">
-              <span class="bo-timeline__marker" aria-hidden="true"></span>
+              <span class="bo-timeline__marker" aria-hidden="true">✓</span>
               <div class="bo-timeline__title">Submitted by J. Kim</div>
               <div class="bo-timeline__meta">10 Aug 2026 · 09:14</div>
             </li>
             <li class="bo-timeline__step" data-state="done">
-              <span class="bo-timeline__marker" aria-hidden="true"></span>
+              <span class="bo-timeline__marker" aria-hidden="true">✓</span>
               <div class="bo-timeline__title">Budget check passed</div>
               <div class="bo-timeline__meta">10 Aug 2026 · 09:15 · automatic</div>
             </li>
             <li class="bo-timeline__step" data-state="current">
-              <span class="bo-timeline__marker" aria-hidden="true"></span>
+              <span class="bo-timeline__marker" aria-hidden="true">●</span>
               <div class="bo-timeline__title">Awaiting cost-centre owner</div>
               <div class="bo-timeline__meta">assigned to M. Okafor</div>
             </li>
@@ -219,6 +254,11 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
       <code>inset-block-start: 0</code> pin to the same offset and overlap.</li>
       <li><strong>Sections</strong> — one widget per facet, each with the
       <code>id</code> the anchor bar targets.</li>
+      <li><strong>Document flow</strong> — a
+      <a href={base + '/components/approval-workflow'}>timeline</a> carrying
+      the chain this record sits in, one step per document type. It answers
+      "what is this connected to" and "where is it in its lifecycle" with one
+      surface; the section below says why those are one question.</li>
       <li><strong>Action bar</strong> —
       <code>.bo-form-actions</code>, which is already sticky, already hidden in
       print, and already sets <code>scroll-padding-block-end</code> so focus
@@ -227,6 +267,57 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
     <p class="bo-u-text-muted">Follows the <a href={base + '/concepts/review-anatomy'}>review-screen anatomy</a>
     contract — this is the long-record shape; see that page for when a shorter
     <a href={base + '/patterns/record-detail'}>record detail</a> is enough.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Document flow — what this record is connected to</h2>
+    <p>Every ERP document sits in a chain: a purchase order came from a
+    requisition, gets receipts against it, is matched to invoices, and is paid.
+    A reader on this screen needs to know two things, and they are
+    <strong>one question, not two</strong> — <em>what is this connected to</em>
+    and <em>where is it in its lifecycle</em>. Group the related records by
+    document type, put the types in lifecycle order, mark the current one, and
+    the chain <em>is</em> the list. Render them as two blocks and the same
+    records appear twice on one screen.</p>
+
+    <p>The shape is a <a href={base + '/components/approval-workflow'}>timeline</a>,
+    with three rules the build of a real six-module suite settled:</p>
+
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong>One step per document TYPE, not per document.</strong> A PO
+      with two receipts has one "Goods receipts" step holding both links — not
+      two steps. Otherwise the chain's length changes with the data and stops
+      reading as a lifecycle.</li>
+      <li><strong>The instances are links inside the step</strong>, in its
+      title. A step with no document yet carries no link and says so in its
+      meta ("Nothing received yet") — an empty step is information, so it stays
+      in the chain rather than disappearing.</li>
+      <li><strong>The current record gets <code>aria-current="step"</code></strong>
+      and says "you are here" in words. Two channels: the marker state is the
+      visual one, <code>aria-current</code> the programmatic one, and neither is
+      colour alone.</li>
+    </ul>
+
+    <p class="bo-u-text-muted"><strong>Not a table, and not a
+    <a href={base + '/components/kv'}>kv</a> list.</strong> A kv row is a fact
+    <em>about</em> this record; these are navigable records with their own
+    state, which is why the first attempt at this — a kv list with the status
+    stuffed into the value — could not carry a status, a date and a link in a
+    scannable column. A <a href={base + '/components/data-table'}>data table</a>
+    holds all three but implies sorting and selection that are not there, and
+    it cannot show order or position. <strong>Not
+    <a href={base + '/components/stepper'}>stepper</a></strong> either, though
+    it is also an ordered chain with a current step: it lays its steps out
+    horizontally with an equal share of the row each, so a step holding three
+    invoice links breaks it — and a document with several receipts is the
+    normal case, not the edge.</p>
+
+    <p class="bo-u-text-muted">This screen deliberately shows the cost as well
+    as the shape: <strong>Document flow and Approvals are the same component</strong>,
+    one above the other. That is "one component, many settings" working — an
+    ordered chain with state is one abstraction — but a reader can conflate them
+    at a glance, so give them distinct headings and keep the flow's titles as
+    links. If a screen needs both, they are never adjacent by accident.</p>
   </section>
 
   <section class="demo">
@@ -280,6 +371,14 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
       <li><a class="bo-badge bo-badge--type" href={base + '/components/amount'}>Amount</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/pagination'}>Pagination</a></li>
       <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      {/* Both were rendered by this screen and missing from the list before
+          130.2c. `check-components-used` catches a page claiming what it does
+          not render; the reverse — rendering what it does not claim — has no
+          gate, deliberately (a screen touches a dozen primitives and listing
+          every one is noise). These two are not noise: the line-items table
+          and the two timelines are the screen. */}
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/approval-workflow'}>Timeline</a></li>
     </ul>
   </section>
 

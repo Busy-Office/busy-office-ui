@@ -557,7 +557,14 @@ reads clean while telling us nothing.
        `bo-app-shell__main` collapses a scrollable table container to its
        header row — two correct primitives composing into silent data loss,
        and the broken composition is the one a careful reader tries first).
-2c. [ ] **130.2c — document GAP-2's shape, or twelve screens invent twelve
+2c. [x] **130.2c — DONE 2026-08-23. GAP-2's shape is documented**, in the
+       live object-page screen and as guidance beside it. Writing it found a
+       defect on that same page: three EMPTY `bo-timeline__marker`s, i.e.
+       state carried by colour alone, against the component's own stated
+       contract. Fixed, and `check-markup` now enforces the contract for
+       every consumer of the published package — red-proved on those three,
+       adjacency self-tested. *Original Accept below.*
+       **130.2c (original) — document GAP-2's shape, or twelve screens invent twelve
        versions.** That is the gap's own words and the reason a decision
        alone does not close it. *Accept*: a "Document flow" section on
        `/patterns/object-page` carrying the composition, when to use it, and

@@ -76,9 +76,20 @@ this is "one component, many settings" working as intended, but a reader could
 conflate them at a glance. What separates them is the heading and the fact
 that document-flow titles are links. Watch this on module two.
 
-**Still to do**: document it (a section on `/patterns/object-page`), or twelve
-screens will invent twelve versions — which is what this gap said in the first
-place. Queued as ROADMAP 130.2c.
+**DOCUMENTED 2026-08-23 (130.2c)**: `/patterns/object-page` carries a
+"Document flow" section — in the live screen AND as guidance — with the three
+rules the build settled (one step per document TYPE not per document;
+instances are links inside the step; the current record gets
+`aria-current="step"` and says "you are here"), plus the refusals (kv, table,
+stepper) and the stated cost of two timelines on one screen.
+
+**Writing that page found a defect in it**: the Approvals demo's three
+`bo-timeline__marker`s were EMPTY, so their state was carried by colour alone
+— against the component's own first comment, which says the glyph "is MARKUP
+inside .bo-timeline__marker, so state is never color-alone". Fixed, and
+`check-markup` now enforces it for every consumer of the published package
+(red-proved on those three, with the adjacency case self-tested — two empty
+markers in a row must report two, the trap that bit the bare-text rule).
 
 *(original entry below)*
 

@@ -401,6 +401,14 @@
             {
               "href": "/components/button",
               "label": "Button"
+            },
+            {
+              "href": "/components/data-table",
+              "label": "Data table"
+            },
+            {
+              "href": "/components/approval-workflow",
+              "label": "Timeline"
             }
           ]
         }

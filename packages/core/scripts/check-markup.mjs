@@ -96,11 +96,20 @@ if (process.argv.includes('--self-test')) {
     '<button role="tab" aria-controls="p"></button></div>';
   const distinct = '<div role="tablist"><button role="tab" aria-controls="p1"></button>' +
     '<button role="tab" aria-controls="p2"></button></div>';
+  /* Same adjacency trap as the bare-text rule, which is why it is tested the
+     same way: two empty markers back to back must report TWO. */
+  const emptyMarkers = (html) =>
+    [...html.matchAll(/<span class="bo-timeline__marker"[^>]*>([\s\S]*?)<\/span>/g)]
+      .filter((m) => !m[1].trim()).length;
+  const marker = (inner) => `<span class="bo-timeline__marker" aria-hidden="true">${inner}</span>`;
   const results = [
     ['two ADJACENT bare-text rows are both reported', bareText(adjacent), 2],
     ['a clean table reports none', bareText(clean), 0],
     ['two tabs sharing a panel are reported', sharedPanels(shared), 1],
     ['two tabs with their own panels are not', sharedPanels(distinct), 0],
+    ['two ADJACENT empty markers are both reported', emptyMarkers(marker('') + marker('')), 2],
+    ['a marker carrying its glyph is not reported', emptyMarkers(marker('✓')), 0],
+    ['whitespace is not a glyph', emptyMarkers(marker('  \n  ')), 1],
   ];
   let ok = true;
   for (const [what, got, want] of results) {
@@ -206,6 +215,25 @@ for (const root of roots) {
         where,
         what: `bare text "${text.slice(0, 40)}" directly inside <${m[1]}>`,
         hint: 'the parser hoists this out of the table and renders it above — wrap it in a cell or delete it',
+      });
+    }
+
+    /* 3. an EMPTY timeline marker — state carried by colour alone.
+       approval-workflow.css states the contract in its own first comment: the
+       glyph "is MARKUP inside .bo-timeline__marker, so state is never
+       color-alone". An empty marker silently breaks it — the element renders,
+       the tint is right, and the only difference between done, pending and
+       rejected is hue. Found on this repo's own object-page pattern (roadmap
+       130.2c), three markers, on the page a reader copies from.
+
+       Checkable exactly, not heuristically: the marker either has text between
+       its tags or it does not. */
+    for (const m of html.matchAll(/<span class="bo-timeline__marker"[^>]*>([\s\S]*?)<\/span>/g)) {
+      if (m[1].trim()) continue;
+      findings.push({
+        where,
+        what: 'an empty .bo-timeline__marker — the step\'s state is carried by colour alone',
+        hint: 'put the glyph in the marker (done ✓, current ●, pending ○, rejected ✕) — approval-workflow.css requires it',
       });
     }
 
