@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 13:33
+Generated at: 2026-08-23 13:38
 
 ## Open items by slice
 
@@ -11,7 +11,7 @@ Generated at: 2026-08-23 13:33
 - **Slice 102** (1 open)
   - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 - **Slice 104** (1 open)
-  - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
+  - 104.2 — preview images on the tiles. OWNER CALL, now with evidence
 - **Slice 112** (3 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
@@ -20,9 +20,9 @@ Generated at: 2026-08-23 13:33
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (750 iterations logged)
+dispatch status — counter-triggered rules (751 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-08-23 11:11   ok
-  Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
+  Objective     0 / 3 slices          since 2026-08-23 13:38   ok
 ```
 
 ## Owner-blocked
@@ -30,13 +30,12 @@ dispatch status — counter-triggered rules (750 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
-- 104.2 — preview images on the tiles. OWNER CALL after 104.1.
+- 104.2 — preview images on the tiles. OWNER CALL, now with evidence
 - 99.4 — missing components discovered along the way go through the front door.
 - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
 
 ## Last 10 iterations
 
-- 2026-08-23 11:32 · Meta · refusal · folding Optimize into a 7th DSA dimension (101.3 stop rule forbids new dimensions) · refused · 3ddeb68
 - 2026-08-23 11:32 · Meta · refusal · auditing typography/colour/spacing as suspect (94.7/94.9 document uniform reading as expected) · refused · 3ddeb68
 - 2026-08-23 11:37 · Polish · tidy · Polish round 1: alerts wrong-choice clause, blind re-score 2->3 · landed · 258fcbf
 - 2026-08-23 12:00 · Continue · build · 123.3c: comparison matrix pattern shipped — closes Slice 123 · landed · b833474
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 12:45 · Polish · tidy · Polish rounds 6-9: dashboard/data-table/icon/inline-editing wrong-choice clauses, blind-scored · landed · 8287236
 - 2026-08-23 13:00 · Polish · tidy · Polish rounds 10-13: navbar/pagination/progress/sidebar-nav wrong-choice clauses, blind-scored · landed · d9dfa5e
 - 2026-08-23 13:33 · Polish · tidy · Polish rounds 14-18: queue dry — 36/37 pages carry the wrong-choice clause · landed · 2a47d4e
+- 2026-08-23 13:38 · Objective · grill · Research rounds 1-2: DsaScore false gap closed with evidence; tile-preview evidence brief for 104.2 · logged · 637eb0b
 
 ## Sunset test
 
