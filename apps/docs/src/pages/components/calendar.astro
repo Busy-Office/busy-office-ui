@@ -185,6 +185,21 @@ const three = `<div class="bo-calendar">
       the decision — a delivery date around a plant shutdown, a period-end close. That is
       a narrow case, and it is the whole case.
     </p>
+    <p class="bo-u-text-muted"><strong>A RANGE — "from this day to that one"
+    — across two or three months.</strong> For an ordinary from/to, the answer
+    is not this grid: it is two
+    <a href={base + '/components/form#dates'}>native date fields</a> with the
+    second's <code>min</code> set from the first, which costs two tab stops
+    against one per selectable day. Reach for the grid only when the marks
+    matter here too — picking a shutdown window around the holidays you can
+    see. Then it is the same mechanism twice and still no JavaScript: the
+    first submit puts the start date in the URL, the server re-renders with
+    that day selected and everything before it <code>disabled</code>, and the
+    second submit closes the range. The rule about which spans are legal stays
+    where the works calendar lives. <strong>What is refused is the scripted
+    drag-select</strong>: it needs pointer tracking, a hover-preview state and
+    a keyboard equivalent to invent, and it would replace a server round trip
+    that an ERP is making anyway.</p>
   </section>
 
   <section class="demo">

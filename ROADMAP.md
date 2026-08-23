@@ -653,7 +653,31 @@ must not silently re-open.
        value-help, or ONE new item per genuinely missing capability. **Not**
        a second picker pattern — the Objective's rethink test forbids two
        surfaces growing toward each other.
-3. [ ] **132.3 — calendar selection across 1/2/3 months.** Half of this is
+3. [x] **132.3 — DONE 2026-08-24. My triage was WRONG about the premise,
+       and the correction is most of the finding.** I wrote "nothing on the
+       docs page demonstrates it". `/components/calendar` already carries
+       **"Three months — repetition, not a setting"** with a live demo and
+       the wrap explanation ("the same markup serves a wide planning screen
+       and a phone"), **"Picking a date from it — no JavaScript"** with real
+       submit buttons and server-decided disabled days, and **"Why the
+       framework does not ship a date-picker widget"** with the native-vs-grid
+       division of labour. Three of the four things the item asked for were
+       already there; I had not read the page before writing the item. A
+       2-month demo would be repetition of the point the 3-month demo already
+       makes ("repetition, not a setting"), so it is refused as filler.
+
+       **The one genuine gap was a RANGE** — from/to across months — and it is
+       now answered in place: for an ordinary from/to the answer is two native
+       date fields with the second's `min` from the first (two tab stops
+       against one per selectable day); the grid earns it only when the marks
+       matter, and then it is the same no-JS mechanism twice — first submit
+       sets the start, the server re-renders with earlier days disabled,
+       second submit closes it. **Refused: the scripted drag-select**, which
+       needs pointer tracking, a hover-preview state and an invented keyboard
+       equivalent, to replace a round trip an ERP is making anyway.
+
+       *(original triage below)*
+       **132.3 (original) — calendar selection across 1/2/3 months.** Half of this is
        already true and undocumented: `.bo-calendar`'s own source says "one
        month or three is repetition, not a setting: put several
        `.bo-calendar__month` in one `.bo-calendar` and they wrap. There is no

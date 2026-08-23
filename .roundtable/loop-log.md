@@ -834,3 +834,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 04:56 · Continue · build · 132.1 — date entry documented on /components/form#dates; component refused (native measured identical at 3 densities); deprecated page moved to Reference · landed · 3909b80
 - 2026-08-24 04:56 · Meta · refusal · a date-input component or CSS — native brings locale order, picker, keyboard entry and min/max validation, and matches .bo-input's height exactly · refused · 3909b80
 - 2026-08-24 05:00 · Standardize · dry · native-date rule: 4 pages mentioned it, none linked to the canonical section; three pointers added · landed · a5db304
+- 2026-08-24 05:03 · Continue · build · 132.2 — Search Help = value-help; vocabulary line added, F4's three capabilities compared (2 already covered, 1 correctly absent) · landed · 01e637f
+- 2026-08-24 05:03 · Meta · refusal · a second picker pattern for search help — the Objective's rethink test: two surfaces growing toward each other · refused · 01e637f

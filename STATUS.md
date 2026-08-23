@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 05:00
+Generated at: 2026-08-24 05:03
 
 ## Open items by slice
 
@@ -14,8 +14,7 @@ Generated at: 2026-08-24 05:00
   - 130.3 — module two, on the settled answers.
   - 130.4 — the remaining four modules.
   - 130.5 — wire the suite into CI
-- **Slice 132** (4 open)
-  - 132.2 — "Search Help": check `/patterns/value-help` first.
+- **Slice 132** (3 open)
   - 132.3 — calendar selection across 1/2/3 months.
   - 132.4 — file open/save panel.
   - 132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md` BEFORE anything else.
@@ -23,8 +22,8 @@ Generated at: 2026-08-24 05:00
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (828 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-24 05:00   ok
+dispatch status — counter-triggered rules (830 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-24 05:00   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -37,8 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 02:03 · Continue · build · 135.2 — six RF mirrors wired into one walkable track (menu/back/queue), zero CSS, walked with real clicks · landed · b669359
-- 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
 - 2026-08-24 03:27 · Continue · bug · 133.1 fix — scroll probe measured platform scrollbar accounting; both axes now use computed overflow, red-proved · landed · aaea776
 - 2026-08-24 03:53 · Standardize · dry · scroll-regions: the allowed-to-overflow list existed in three spellings across two gates; consolidated, pre restored (122 -> 732 regions) · landed · 627ada3
 - 2026-08-24 04:18 · Continue · build · 133.2 — object-page spy verified for all 5 sections at both widths; the old check sampled one and had lost #flow · landed · b7f4464
@@ -47,6 +44,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 04:56 · Continue · build · 132.1 — date entry documented on /components/form#dates; component refused (native measured identical at 3 densities); deprecated page moved to Reference · landed · 3909b80
 - 2026-08-24 04:56 · Meta · refusal · a date-input component or CSS — native brings locale order, picker, keyboard entry and min/max validation, and matches .bo-input's height exactly · refused · 3909b80
 - 2026-08-24 05:00 · Standardize · dry · native-date rule: 4 pages mentioned it, none linked to the canonical section; three pointers added · landed · a5db304
+- 2026-08-24 05:03 · Continue · build · 132.2 — Search Help = value-help; vocabulary line added, F4's three capabilities compared (2 already covered, 1 correctly absent) · landed · 01e637f
+- 2026-08-24 05:03 · Meta · refusal · a second picker pattern for search help — the Objective's rethink test: two surfaces growing toward each other · refused · 01e637f
 
 ## Sunset test
 
