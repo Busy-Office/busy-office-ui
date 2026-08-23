@@ -1,0 +1,227 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
+     Top bar = suite-level only (true on every screen); sidebar = the current
+     module's nav; everything else — breadcrumbs, titles, content — belongs
+     to the page. The switcher and user menu are native [popover] menus:
+     Escape, click-away and focus return are platform behavior, not ours. -->
+<div class="bo-app-shell">
+  <header class="bo-navbar bo-app-shell__header">
+    <a class="bo-navbar__brand" href="/">Acme ERP</a>
+
+    <!-- Module switcher: the waffle. Reuses the launcher's tile mechanism
+         at menu size — the menu is app-launch in miniature. -->
+    <button class="bo-btn bo-btn--ghost" type="button" popovertarget="frame-apps"
+            aria-label="Switch module">
+      <span class="bo-icon bo-icon--grid" aria-hidden="true"></span>
+    </button>
+    <div class="bo-dropdown__menu" id="frame-apps" popover>
+      <a class="bo-dropdown__item" href="/purchasing"><span class="bo-icon bo-icon--cart" aria-hidden="true"></span> Purchasing</a>
+      <a class="bo-dropdown__item" href="/warehouse"><span class="bo-icon bo-icon--box" aria-hidden="true"></span> Warehouse</a>
+      <a class="bo-dropdown__item" href="/reports"><span class="bo-icon bo-icon--chart" aria-hidden="true"></span> Reports</a>
+      <a class="bo-dropdown__item" href="/home">All applications…</a>
+    </div>
+
+    <span class="bo-navbar__spacer"></span>
+
+    <input class="bo-input" type="search" aria-label="Search everything"
+           placeholder="Search…" style="max-inline-size: 14rem" />
+
+    <a class="bo-btn bo-btn--ghost" href="/notifications">
+      Alerts <span class="bo-badge bo-badge--warning">3</span>
+    </a>
+
+    <button class="bo-btn bo-btn--ghost" type="button" popovertarget="frame-user">
+      <span class="bo-avatar" aria-hidden="true">JK</span> J. Kim
+    </button>
+    <div class="bo-dropdown__menu" id="frame-user" popover>
+      <a class="bo-dropdown__item" href="/profile">Profile</a>
+      <a class="bo-dropdown__item" href="/signout">Sign out</a>
+    </div>
+  </header>
+
+  <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Purchasing">
+    …the CURRENT module's nav (swaps whole when the module changes)…
+  </nav>
+
+  <main class="bo-app-shell__main"> …the page, including its own breadcrumb… </main>
+</div>`;
+---
+<Gallery title="Pattern: app frame">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: everyone, on every screen — the persistent
+    chrome the whole suite lives inside. <strong>How often</strong>: it never
+    leaves the screen. <strong>What "done" looks like</strong>: any module is
+    one click away, and search, notifications and the user menu are in the
+    same place on every screen of every module. The anatomy is the modern
+    consensus across enterprise suites (Fiori's shell bar, Dynamics'
+    area-plus-sitemap, Lightning, Carbon's UI shell): a <strong>suite-level
+    top bar</strong>, a <strong>module-level sidebar</strong>, and a main
+    region that belongs entirely to the page.
+    <strong>Not for a single-task dedicated device</strong> — a handheld
+    scanner runs <a href={base + '/patterns/rf-landing'}>RF full-screen</a>
+    with no frame at all; and <strong>not an iframe</strong> — the frame is
+    the layout every page renders inside, not a container that embeds pages.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="bo-app-shell" style="min-block-size: 22rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+      <header class="bo-navbar bo-app-shell__header">
+        <a class="bo-navbar__brand" href="#">Acme ERP</a>
+        <button class="bo-btn bo-btn--ghost" type="button" popovertarget="frame-apps" aria-label="Switch module">
+          <span class="bo-icon bo-icon--grid" aria-hidden="true"></span>
+        </button>
+        <div class="bo-dropdown__menu" id="frame-apps" popover>
+          <a class="bo-dropdown__item" href="#"><span class="bo-icon bo-icon--cart" aria-hidden="true"></span> Purchasing</a>
+          <a class="bo-dropdown__item" href="#"><span class="bo-icon bo-icon--box" aria-hidden="true"></span> Warehouse</a>
+          <a class="bo-dropdown__item" href="#"><span class="bo-icon bo-icon--chart" aria-hidden="true"></span> Reports</a>
+          <a class="bo-dropdown__item" href="#">All applications…</a>
+        </div>
+        <span class="bo-navbar__spacer"></span>
+        <input class="bo-input" type="search" aria-label="Search everything" placeholder="Search…" style="max-inline-size: 14rem" />
+        <a class="bo-btn bo-btn--ghost" href="#">Alerts <span class="bo-badge bo-badge--warning">3</span></a>
+        <button class="bo-btn bo-btn--ghost" type="button" popovertarget="frame-user">
+          <span class="bo-avatar" aria-hidden="true">JK</span> J. Kim
+        </button>
+        <div class="bo-dropdown__menu" id="frame-user" popover>
+          <a class="bo-dropdown__item" href="#">Profile</a>
+          <a class="bo-dropdown__item" href="#">Sign out</a>
+        </div>
+      </header>
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Purchasing">
+        <ul role="list">
+          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--check-circle bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Approvals</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--building bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Vendors</span></a></li>
+        </ul>
+      </nav>
+      {/* div, not <main>: this demo nests inside the docs page's own main
+          landmark — a second/nested main is an axe violation here. A real
+          app uses <main>, as the Markup sample shows. */}
+      <div class="bo-app-shell__main" style="padding: var(--bo-space-4)">
+        <p class="bo-u-text-muted" style="margin: 0">The page — including its own
+        breadcrumb and title. Nothing here is the frame's business.</p>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">The waffle button and the user menu are native
+    <code>[popover]</code> menus — open them: Escape closes, click-away closes,
+    focus returns to the trigger, none of it our code. The switcher menu is
+    <a href={base + '/patterns/app-launch'}>app launch</a> in miniature; its
+    last entry goes to the full launcher.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Frame-owned vs page-owned — the boundary that keeps a suite coherent</h2>
+    <p>Every design system studied draws the same line (GOV.UK made it a
+    published rule: suite-wide tools and service-level tools must not blur).
+    What is true on <em>every</em> screen lives in the frame; everything else
+    belongs to the page:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Element</th><th scope="col">Owner</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+          <tr><td>Brand, module switcher, global search, notifications, user menu</td><td><strong>Frame (top bar)</strong></td><td>true everywhere; Atlassian's redesign stripped the top bar to exactly this set</td></tr>
+          <tr><td>Module navigation</td><td><strong>Frame (sidebar)</strong></td><td>contextual to the module; swaps <em>whole</em> on module change — never mixed into the top bar</td></tr>
+          <tr><td>Breadcrumb, page title, page actions, content</td><td><strong>Page</strong></td><td>the frame must not need to know what any page is about</td></tr>
+          <tr><td>Which modules exist, their order, role visibility</td><td><strong>Server</strong></td><td>authorization data, rendered into the frame — never framework opinion</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Shell</strong> — <a href={base + '/base/primitives'}>.bo-app-shell</a>:
+        header + sidebar + main; the sidebar collapses to an icon rail under
+        900px of shell width, labels kept in the accessibility tree.</li>
+      <li><strong>Top bar</strong> — <a href={base + '/components/nav'}>navbar</a>:
+        brand, then the suite-level controls.</li>
+      <li><strong>Module switcher</strong> — a ghost
+        <a href={base + '/components/button'}>button</a> opening a
+        <a href={base + '/components/dropdown'}>dropdown</a> of module links;
+        the full grid lives on <a href={base + '/patterns/app-launch'}>app
+        launch</a>, which the menu's last entry opens.</li>
+      <li><strong>Global search</strong> — a search
+        <a href={base + '/components/form'}>input</a>; wire it to the
+        <a href={base + '/patterns/command-bar'}>command bar</a> for
+        type-to-jump.</li>
+      <li><strong>Notifications</strong> — a link with a
+        <a href={base + '/components/badge'}>badge</a> count into the
+        <a href={base + '/patterns/notification'}>notification center</a>.</li>
+      <li><strong>User menu</strong> — <a href={base + '/components/avatar'}>avatar</a>
+        + dropdown.</li>
+      <li><strong>Module sidebar</strong> —
+        <a href={base + '/components/nav'}>sidebar nav</a> with
+        <code>aria-current="page"</code> on the active entry; its
+        <code>aria-label</code> names the module.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET (any page)</td><td>the frame renders server-side around every page — modules and sidebar entries already filtered by the user's role; a module the user cannot open is absent, not disabled</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /notifications/count</td><td>a fragment swapped into the badge once available; the bar renders WITHOUT it. On failure the badge simply never appears — a silent degrade, same contract as the launcher's tile counts</td></tr>
+          <tr><td class="bo-data-table__col--code">4xx on a module link</td><td>a full navigation to <a href={base + '/patterns/error-pages'}>an error page</a> — the frame stays; only main is the casualty</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Current module</td><td>the sidebar's active entry carries <code>aria-current="page"</code> + the visible marker — two channels</td></tr>
+          <tr><td>Narrow (&lt;900px shell width)</td><td>the sidebar collapses to its icon rail; labels stay in the accessibility tree. A bottom-nav tier is deliberately NOT shipped — re-opens on a real consumer need</td></tr>
+          <tr><td>No permission for a module</td><td>absent from switcher and sidebar both — a disabled module teaches nothing and leaks structure</td></tr>
+          <tr><td>Count unavailable</td><td>no badge, no error — the bar never fails loudly over a number</td></tr>
+          <tr><td>Print</td><td>the whole frame disappears (<code>.bo-navbar</code> and the sidebar are print-hidden); paper gets the page, not the chrome</td></tr>
+          <tr><td>No JS</td><td>the switcher and user menus are native <code>popover</code> — they open, close on Escape/click-away and return focus with zero JS; only menu anchoring (initDropdowns) is an enhancement. Search submits as a form; every module link is a real link</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/base/primitives'}>App shell</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/nav'}>Navbar & sidebar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dropdown'}>Dropdown</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/avatar'}>Avatar</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/form'}>Form controls</a></li>
+    </ul>
+  </section>
+
+  <script>
+    import { initDropdowns } from '@busy-office/ui/js';
+    initDropdowns();
+  </script>
+
+  <Related links={[
+    ["/patterns/suite-home", "Suite home (the overview screen inside this frame)"],
+    ["/patterns/app-launch", "App launch (the switcher's full-grid form)"],
+    ["/patterns/command-bar", "Command bar (what global search should open into)"],
+    ["/patterns/notification", "Notification center"],
+    ["/concepts/layouts", "Layouts — the four shells"],
+  ]} />
+</Gallery>

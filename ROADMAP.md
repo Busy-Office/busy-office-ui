@@ -237,7 +237,27 @@ reconciliation → timesheet → comparison.
        value is the raw number in all cases; behavior tests cover blur
        format / refocus raw / paste / locale; docs pages updated with
        generated API rows; all gates green.
-2. [ ] **123.2 — App frame documented + Suite home pattern, decided.**
+2. [x] **123.2 — DONE 2026-08-23. Accept met:** `/patterns/app-frame`
+       (header anatomy with named regions — brand · waffle module switcher
+       · global search · notifications · user menu — plus the
+       frame-owned/page-owned/server-owned ownership table) and
+       `/patterns/suite-home` (module-level sidebar + cross-module
+       overview, the Dynamics-areas/Fiori-My-Home shape) both shipped as
+       full pattern pages, both in pattern-groups, both passing every
+       gate (page-shape 32 patterns, wrong-choice 32/32 carry, markup,
+       links 11,644, axe 110 pages × 2 widths zero violations, layout,
+       claims 97, target-size, forced-colors). The module switcher IS a
+       working composition — ghost button + native [popover] dropdown +
+       existing icons; zero new framework CSS/JS; the waffle menu was
+       opened live (popover-open verified true, anchored via
+       initDropdowns). Each page's wrong-choice clause points at its
+       sibling (suite-home ↔ role-home; app-frame → RF full-screen and
+       explicitly "not an iframe"). Two real fixes found building it:
+       a nonexistent `bo-sidebar-nav__list` class caught by
+       check-markup, and the live demos' nested `<main>` landmark caught
+       by preemptively running the axe sweep locally (the CI-only-gate
+       lesson from this morning, applied). Screenshots light+dark.
+       *(original decided-design entry follows)*
        Owner-confirmed: top-bar waffle/grid module switcher reusing
        app-launch's tile mechanism (M365/Salesforce/Fiori consensus;
        sidebar stays purely module-nav), and 30.0 ships as a NEW
@@ -3806,15 +3826,14 @@ promised was never written.
        and 390 in both themes; `check:claims` 27 -> 28, red-proved with the
        injection confirmed in the built artefact.
 
-0. [ ] **30.0 — AWAITING OWNER CLARIFICATION (2 wishlist notes, 2026-08-18).**
-       Recorded here so they are not lost in chat. Both have two readings that
-       lead to materially different work, so neither is buildable as written.
-       - *"check out overview. the sidebar menu."* — either (a) review the docs'
-         OWN landing page and nav, or (b) a new ERP pattern page: an
-         overview/dashboard screen with a module sidebar. (b) is a slice of
-         work; (a) is a review.
+0. [x] **30.0 — CLOSED 2026-08-23, both halves answered.**
+       - *"check out overview. the sidebar menu."* — **ANSWERED 2026-08-23:
+         reading (b)**, a new ERP overview pattern with a module sidebar.
+         Shipped the same day as `/patterns/suite-home` (123.2), alongside
+         the app-frame pattern that hosts it. Open five days; closed by the
+         owner's seven-answer message.
        - *"horizontal tabs"* — **ANSWERED 2026-08-18: vertical tabs** (reading
-         (a)). Queued as 36.1; this half of 30.0 is closed.
+         (a)). Queued as 36.1; this half of 30.0 was closed then.
 
 2. [x] **30.2 — Field editor pattern** (2026-08-18) —
        `/patterns/field-editor`, one row per FIELD with the input each type

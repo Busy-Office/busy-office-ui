@@ -1,0 +1,174 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import AppTile from '../../components/AppTile.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<!-- Suite home = the app frame with the sidebar at SUITE level:
+     entries are MODULES (the Dynamics areas / Fiori "My Home" shape), and
+     main is a cross-module overview. Everything is shipped primitives —
+     stat widgets, an elevated-alert list, the launcher's tile grid. -->
+<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Modules">
+  <ul role="list">
+    <li><a class="bo-sidebar-nav__link" href="/home" aria-current="page">…Home…</a></li>
+    <li><a class="bo-sidebar-nav__link" href="/finance">…Finance…</a></li>
+    <li><a class="bo-sidebar-nav__link" href="/purchasing">…Purchasing…</a></li>
+    <li><a class="bo-sidebar-nav__link" href="/warehouse">…Warehouse…</a></li>
+  </ul>
+</nav>
+<main class="bo-app-shell__main">
+  <div class="bo-widget-grid">
+    <section class="bo-widget"> …stat: open approvals, all modules… </section>
+    <section class="bo-widget bo-widget--span-2"> …needs attention, cross-module… </section>
+  </div>
+  <div class="bo-widget-grid" style="--bo-widget-min: 9rem"> …favourite app tiles… </div>
+</main>`;
+---
+<Gallery title="Pattern: suite home">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: anyone whose work spans modules — a
+    controller touching Finance and Purchasing, an ops lead across Warehouse
+    and Reports; the screen behind the brand link and the switcher's "home".
+    <strong>How often</strong>: between tasks, and first thing after sign-in
+    when no single role owns the day. <strong>What "done" looks like</strong>:
+    cross-module status in one glance, and any module one click away — the
+    sidebar at this level lists <em>modules</em>, not one module's screens
+    (the Fiori "My Home" / Dynamics areas shape).
+    <strong>Not for one role's daily queue</strong> — a buyer who lives in
+    Purchasing all day wants <a href={base + '/patterns/role-home'}>role
+    home</a>, which shows <em>their</em> work, not the suite; and
+    <strong>not just a launcher</strong> — a pure tile grid with no live
+    status is <a href={base + '/patterns/app-launch'}>app launch</a>.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="bo-app-shell" style="min-block-size: 26rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+      <header class="bo-navbar bo-app-shell__header">
+        <a class="bo-navbar__brand" href="#">Acme ERP</a>
+        <span class="bo-navbar__spacer"></span>
+        <span class="bo-avatar" aria-hidden="true">JK</span>
+      </header>
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Modules">
+        <ul role="list">
+          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-icon bo-icon--grid bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Home</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--doc bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Finance</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--cart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchasing</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--box bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Warehouse</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-icon bo-icon--chart bo-sidebar-nav__icon" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Reports</span></a></li>
+        </ul>
+      </nav>
+      {/* div, not <main>: nested inside the docs page's own main landmark —
+          a real app uses <main>, as the Markup sample shows. */}
+      <div class="bo-app-shell__main" style="padding: var(--bo-space-4)">
+        <div class="bo-widget-grid" style="--bo-widget-min: 14rem">
+          <section class="bo-widget">
+            <div class="bo-widget__header"><span class="bo-widget__title">Waiting on you</span></div>
+            <div class="bo-widget__body">
+              <p style="margin: 0; font-size: var(--bo-font-size-xl); font-weight: var(--bo-font-weight-semibold)"><span class="bo-u-tabular">7</span></p>
+              <p class="bo-u-text-muted" style="margin: 0">4 approvals · 2 receipts · 1 exception</p>
+            </div>
+          </section>
+          <section class="bo-widget bo-widget--span-2">
+            <div class="bo-widget__header"><span class="bo-widget__title">Across your modules</span></div>
+            <div class="bo-widget__body">
+              <ul class="bo-stack bo-stack--tight docs-list-bare" role="list">
+                <li><span class="bo-badge bo-badge--warning">Purchasing</span> PO-88213 waiting on cost-center approval · 2 days</li>
+                <li><span class="bo-badge bo-badge--danger">Finance</span> Payment run FX-441 blocked — budget hold</li>
+                <li><span class="bo-badge">Warehouse</span> Stock count WH-2 finishes today</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+        <p class="bo-u-text-muted" style="margin-block: var(--bo-space-3) var(--bo-space-2)">Your apps</p>
+        <div class="bo-widget-grid" style="--bo-widget-min: 8rem">
+          <AppTile icon="invoice" label="Invoices" />
+          <AppTile icon="check-circle" label="Approvals" />
+          <AppTile icon="chart" label="Spend" />
+        </div>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">The frame is
+    <a href={base + '/patterns/app-frame'}>the app frame</a>; what makes this
+    screen the SUITE's home is the sidebar level — modules, with Home itself
+    the current entry — and a main region aggregating status <em>across</em>
+    them. Entering a module swaps the whole sidebar to that module's nav.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Module sidebar</strong> —
+        <a href={base + '/components/nav'}>sidebar nav</a>, one entry per
+        module the user may open, Home current; <code>aria-label="Modules"</code>
+        says which level this sidebar is.</li>
+      <li><strong>Cross-module "needs you" stat</strong> — a
+        <a href={base + '/components/dashboard'}>widget</a> with one number
+        and its breakdown; links into the
+        <a href={base + '/patterns/inbox'}>inbox</a>.</li>
+      <li><strong>Across-your-modules list</strong> — module
+        <a href={base + '/components/badge'}>badges</a> + one line each; every
+        row links to the screen that resolves it (the journey rule: an exit
+        lands at the next decision).</li>
+      <li><strong>Favourite apps</strong> — the launcher's own tile
+        mechanism (<a href={base + '/patterns/app-launch'}>app launch</a>)
+        at a smaller size; personal, server-persisted.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GET /home</td><td>sidebar + tiles render immediately (role-filtered server-side); the two status widgets may arrive as follow-up fragments</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /home/status</td><td>the cross-module widgets, aggregated server-side — the page never fans out N module requests from the browser. On failure: the widgets show their error state inline; sidebar and tiles are unaffected</td></tr>
+          <tr><td class="bo-data-table__col--code">4xx</td><td>expired session → full navigation to <a href={base + '/patterns/login'}>login</a>; a module gone from the user's role → its entry is simply absent on the next render</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing needs you</td><td>the stat reads 0 with "all clear" text — a zero is a fact, not an empty state</td></tr>
+          <tr><td>Status unavailable</td><td>the two widgets show an inline error with retry; sidebar and tiles keep working — partial failure never takes the frame</td></tr>
+          <tr><td>Single-module user</td><td>this screen is WRONG for them — route straight to their <a href={base + '/patterns/role-home'}>role home</a> or the module; a one-module suite home is a corridor with one door</td></tr>
+          <tr><td>New user, no favourites</td><td>the tile row seeds from role defaults, never renders empty beside a working suite</td></tr>
+          <tr><td>Narrow</td><td>the shell's icon rail, same as every screen in the frame</td></tr>
+          <tr><td>No JS</td><td>fully functional — every element here is links and server-rendered content; there is nothing to enhance</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 2 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/base/primitives'}>App shell</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/nav'}>Sidebar nav</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/dashboard'}>Widgets</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/avatar'}>Avatar</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/app-frame", "App frame (the chrome this screen sits inside)"],
+    ["/patterns/role-home", "Role home (one role's day, not the suite)"],
+    ["/patterns/app-launch", "App launch (tiles without live status)"],
+    ["/patterns/inbox", "Inbox (where the needs-you number resolves)"],
+    ["/concepts/layouts", "Layouts — the four shells"],
+  ]} />
+</Gallery>
