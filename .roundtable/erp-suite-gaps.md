@@ -130,7 +130,33 @@ same "one component, many settings" call the badge/count question got
 elsewhere. Cheap either way; the risk is twelve screens each inventing a
 different separator.
 
-## GAP-4 — three-way match has no home: no grouped column header, no
+## GAP-4 — (a) RESOLVED 2026-08-23, (b) still open — three-way match has no
+home: no grouped column header, no "this is the cell that disagrees" cue
+
+**GAP-4a RESOLVED.** A grouped (two-row) column header needed no new class,
+modifier or component — plain `<th scope="colgroup" colspan>` over
+`scope="col"`, which axe accepts as-is. What it needed was a fix to something
+already shipped: `.bo-data-table thead th` sets `position: sticky;
+inset-block-start: 0`, correct for ONE header row and silently wrong for two —
+both rows pin to the same offset. Measured after scrolling: the "Quantity"
+cell and the "Ordered" cell beneath it occupied the IDENTICAL box (341-371),
+so the group label was not merely overlapped, it was invisible. Header rows 2
+and 3 now offset by `--bo-density-row-height`, the same token that sets the
+row height, so it is exact at every density rather than a guessed number.
+Capped at three rows (the `data-sticky-cols` precedent). Documented on
+`/components/data-table` with a demo whose container actually scrolls — a
+header sticks to its own scrollport, so on an uncapped docs page nothing pins
+and a reader would see a static table. Claim 108 drives the scroll and
+red-proved by stripping the rule from the BUILT css (`subOffset` 30px -> 0px,
+overlap 0 -> 30).
+
+**GAP-4b still open** — a cell-level "this is the one that disagrees" cue. The
+genuinely new idea, and the one that risks becoming "colour the cell", which
+the two-channel rule forbids. Grill before module two.
+
+*(original entry below)*
+
+## GAP-4 (original) — three-way match has no home: no grouped column header, no
 "this is the cell that disagrees" cue
 
 **Hit on**: `p2p/vendor-invoice`, the three-way match table.

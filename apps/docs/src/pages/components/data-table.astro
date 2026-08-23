@@ -465,6 +465,59 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     problem — regroup server-side instead).</p>
   </section>
   <section class="demo">
+    <h2>Grouped column headers</h2>
+    <div class="bo-data-table-container dt-scroll-demo" tabindex="0" data-grouped-head>
+      <table class="bo-data-table" data-density="compact">
+        <caption class="bo-visually-hidden">Three-way match: quantity and unit price, ordered against received against billed</caption>
+        <thead>
+          <tr>
+            <th scope="col" rowspan="2">Item</th>
+            <th scope="colgroup" colspan="3" class="bo-data-table__col--numeric">Quantity</th>
+            <th scope="colgroup" colspan="2" class="bo-data-table__col--numeric">Unit price</th>
+          </tr>
+          <tr>
+            <th scope="col" class="bo-data-table__col--numeric">Ordered</th>
+            <th scope="col" class="bo-data-table__col--numeric">Received</th>
+            <th scope="col" class="bo-data-table__col--numeric">Billed</th>
+            <th scope="col" class="bo-data-table__col--numeric">Ordered</th>
+            <th scope="col" class="bo-data-table__col--numeric">Billed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Hex bolt M8 × 40</td><td class="bo-data-table__col--numeric">2,400</td><td class="bo-data-table__col--numeric">2,400</td><td class="bo-data-table__col--numeric">2,400</td><td class="bo-data-table__col--numeric">0.42</td><td class="bo-data-table__col--numeric">0.42</td></tr>
+          <tr><td>Hex nut M8</td><td class="bo-data-table__col--numeric">2,400</td><td class="bo-data-table__col--numeric">2,400</td><td class="bo-data-table__col--numeric">2,400</td><td class="bo-data-table__col--numeric">0.18</td><td class="bo-data-table__col--numeric">0.18</td></tr>
+          <tr data-row-state="warning"><td>Steel plate 3mm</td><td class="bo-data-table__col--numeric">60</td><td class="bo-data-table__col--numeric">60</td><td class="bo-data-table__col--numeric">60</td><td class="bo-data-table__col--numeric">412.00</td><td class="bo-data-table__col--numeric">424.00</td></tr>
+          <tr data-row-state="warning"><td>Pallet, heat-treated</td><td class="bo-data-table__col--numeric">120</td><td class="bo-data-table__col--numeric">80</td><td class="bo-data-table__col--numeric">120</td><td class="bo-data-table__col--numeric">18.00</td><td class="bo-data-table__col--numeric">18.00</td></tr>
+          <tr><td>Washer M8, zinc</td><td class="bo-data-table__col--numeric">4,800</td><td class="bo-data-table__col--numeric">4,800</td><td class="bo-data-table__col--numeric">4,800</td><td class="bo-data-table__col--numeric">0.04</td><td class="bo-data-table__col--numeric">0.04</td></tr>
+          <tr><td>Threadlocker, 50ml</td><td class="bo-data-table__col--numeric">24</td><td class="bo-data-table__col--numeric">24</td><td class="bo-data-table__col--numeric">24</td><td class="bo-data-table__col--numeric">9.60</td><td class="bo-data-table__col--numeric">9.60</td></tr>
+          <tr><td>Anchor bolt M12</td><td class="bo-data-table__col--numeric">600</td><td class="bo-data-table__col--numeric">600</td><td class="bo-data-table__col--numeric">600</td><td class="bo-data-table__col--numeric">1.85</td><td class="bo-data-table__col--numeric">1.85</td></tr>
+          <tr><td>Gasket sheet, 2mm</td><td class="bo-data-table__col--numeric">15</td><td class="bo-data-table__col--numeric">15</td><td class="bo-data-table__col--numeric">15</td><td class="bo-data-table__col--numeric">62.00</td><td class="bo-data-table__col--numeric">62.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Three readings of one line — ordered, received,
+    billed — belong under one heading, or the reader has to parse "Qty ordered
+    / Qty received / Qty billed" five times per row. Plain table semantics do
+    all of it: <code>&lt;th scope="colgroup" colspan&gt;</code> on the group,
+    <code>scope="col"</code> on each column beneath it, and
+    <code>rowspan="2"</code> for a column that has no group. <strong>No class,
+    no modifier</strong> — a second header row simply works.
+    <strong>Not for making one wide table narrower</strong>: grouping headers
+    does not reduce how much a reader must hold in their head, so if the
+    columns are unrelated, split the table or use
+    <a href={base + '/components/tabs'}>tabs</a> instead.</p>
+    <p class="bo-u-text-muted">What the framework does for you is the part that
+    silently breaks: every header cell is <code>position: sticky</code>, so
+    without help <strong>both rows pin to the same offset and the second lands
+    on top of the first</strong> — measured on a real screen, the group label
+    was not merely overlapped but completely invisible. Each row now offsets by
+    <code>--bo-density-row-height</code>, which is the same token that sets the
+    row height, so it stays exact at every density. Up to three header rows;
+    beyond that the table wants splitting, not more CSS. Keep group labels
+    short — a label that wraps to two lines exceeds the token and sits a few
+    pixels off.</p>
+  </section>
+  <section class="demo">
     <h2>Conditional cell tone</h2>
     <p><code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code>
     tints that one cell — subtle background plus an inset accent, same shape
@@ -694,3 +747,17 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
   <DsaScore component="data-table" />
   <Related links={[["/concepts/density", "Density"], ["/concepts/container-queries", "Container queries"], ["/components/pagination", "Pagination"], ["/patterns/list-report", "Invoice-list pattern"], ["/patterns/editable-grid", "Editable grid pattern"], ["/concepts/accessibility", "Accessibility model"]]} />
 </Gallery>
+
+<style>
+  /* Docs-only, and load-bearing for what the grouped-header demo SHOWS: a
+     header sticks to its own scrollport, and .bo-data-table-container has no
+     height of its own, so on an ordinary docs page nothing ever pins and the
+     reader sees a static table. Capping the height makes the container scroll
+     vertically, which is the only way the group row's behaviour is visible —
+     and it is the shape a dense ERP table actually has. Not framework CSS: a
+     table's height belongs to the screen that hosts it. */
+  .dt-scroll-demo {
+    max-block-size: 11rem;
+    overflow-y: auto;
+  }
+</style>

@@ -514,6 +514,74 @@ check(
   JSON.stringify(fe),
 );
 
+/* /components/data-table's grouped column header (roadmap 130.2, GAP-4a):
+   "a second header row simply works". That is a runtime promise about
+   `position: sticky`, and it was FALSE until this wake — every `thead th`
+   pinned at 0, so on a real three-way-match screen the "Quantity" cell and
+   the "Ordered" cell beneath it occupied the identical box and the group
+   label was invisible, not merely overlapped.
+
+   Driven, not inspected. "Stuck" is defined by MOVEMENT, not by position: a
+   pinned header travels less than the scroll delta while a body row travels
+   the whole of it. The first version of this check asked whether the group
+   row sat at the scrollport's top edge, which is a different question — it
+   depends on which ancestor scrolls and on what sticky chrome sits above,
+   and it reported `groupPinned: false` while the fix was demonstrably
+   working. Testing the pinning as a RELATIVE displacement needs no
+   assumption about either.
+
+   Checking "disjoint" alone would not do: on an unscrolled page the two
+   rows are naturally stacked, so that half passes while nothing is tested. */
+await visit('/components/data-table/', { width: 1440 });
+const groupedHead = await page.evaluate(async () => {
+  const box = document.querySelector('[data-grouped-head]');
+  const groupCell = () => [...box.querySelectorAll('thead tr')[0].querySelectorAll('th')]
+    .find((t) => t.textContent.trim() === 'Quantity');
+  const subCell = () => box.querySelectorAll('thead tr')[1].querySelector('th');
+  const bodyCell = () => box.querySelector('tbody tr:last-child td');
+
+  box.scrollIntoView({ block: 'start' });
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const before = { g: groupCell().getBoundingClientRect().top, b: bodyCell().getBoundingClientRect().top };
+
+  /* The header sticks to ITS OWN scrollport, which is the container — it has
+     `overflow` of its own, so scrolling the page moves the whole table,
+     header included, and pins nothing. That is why the demo caps its height:
+     without a container that scrolls there is no sticky behaviour to see or
+     to test. Walk outward anyway, starting at the container itself, so this
+     keeps working if the demo's shape changes. */
+  const scroller = (() => {
+    for (let el = box; el; el = el.parentElement) {
+      const cs = getComputedStyle(el);
+      if (/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight) return el;
+    }
+    return document.scrollingElement;
+  })();
+  const DELTA = 60;
+  scroller.scrollTop += DELTA;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  const g = groupCell().getBoundingClientRect();
+  const s = subCell().getBoundingClientRect();
+  const after = { g: g.top, b: bodyCell().getBoundingClientRect().top };
+  return {
+    overlap: Math.round(Math.min(g.bottom, s.bottom) - Math.max(g.top, s.top)),
+    subBelowGroup: Math.round(s.top) >= Math.round(g.bottom) - 1,
+    bodyMoved: Math.round(before.b - after.b),
+    groupMoved: Math.round(before.g - after.g),
+    subOffset: getComputedStyle(subCell()).insetBlockStart,
+    scroller: scroller.className || scroller.tagName,
+  };
+});
+check(
+  'data-table: a grouped header keeps its group row visible above the sub row while scrolling',
+  groupedHead.overlap <= 0 &&
+    groupedHead.subBelowGroup &&
+    groupedHead.bodyMoved >= 40 &&
+    groupedHead.groupMoved < groupedHead.bodyMoved,
+  JSON.stringify(groupedHead),
+);
+
 /* /components/data-table claims of the 50-column table: "the Item column stays
    put, the header stays put, and both stay opaque over the cells passing
    underneath" (roadmap 30.3). Opacity matters as much as position — a

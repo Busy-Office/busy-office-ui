@@ -521,6 +521,21 @@ reads clean while telling us nothing.
        the other candidate and loses on a normal case, not an edge one: it
        is horizontal with equal-share steps, so a step holding three invoice
        links breaks it. Full reasoning in the gap ledger.
+       **GAP-4a DECIDED + FIXED 2026-08-23: ACCEPT, as a bug fix rather than
+       a feature.** A grouped two-row column header needs no new class,
+       modifier or component — plain `<th scope="colgroup" colspan>` over
+       `scope="col"`, which axe accepts unchanged. What it needed was a fix
+       to shipped CSS: every `thead th` pins at `inset-block-start: 0`, so
+       two header rows land on each other. Measured, not inferred — the
+       group cell and the sub cell beneath it occupied the identical box
+       after scrolling, so "Quantity" was invisible, not merely overlapped.
+       Rows 2 and 3 now offset by `--bo-density-row-height`, the token that
+       already sets the row height, so it is exact at every density.
+       Documented with a demo whose container actually scrolls (a header
+       sticks to its own scrollport, so an uncapped demo would show a static
+       table and prove nothing) and claim 108, red-proved against the BUILT
+       css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
+       the part that risks becoming "colour the cell".
        **Building it surfaced GAP-14**: a chain step can be PARTIAL (1 of 2
        received) and `data-state` has no word for it — `done` paints a tick
        over "1 of 2", `pending` says nothing started. Compromised to a

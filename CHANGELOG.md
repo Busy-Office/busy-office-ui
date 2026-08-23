@@ -8,6 +8,19 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`data-table`): a **grouped (multi-row) column header** now sticks
+  correctly. Every `thead th` was `position: sticky; inset-block-start: 0` —
+  right for one header row, silently wrong for two: both rows pinned to the
+  same offset, so the second landed on top of the first. Measured on a real
+  three-way-match screen, the group cell and the sub cell beneath it occupied
+  the identical box, which means the group label ("Quantity", "Unit price")
+  was not merely overlapped but invisible for as long as the reader scrolled.
+  Header rows 2 and 3 now offset by `--bo-density-row-height`, the same token
+  that sets the row height, so the offset is exact at every density instead of
+  a guessed number. Capped at three rows, the same call `data-sticky-cols`
+  makes. **No new class or modifier** — a second header row simply works.
+  Documented with a demo and a claims case that drives the scroll.
+
 - **Fixed** (`form`): `.bo-form-actions` now wraps. A bar of three or more
   buttons overflowed the START edge at phone width — `justify-content` is
   `flex-end`, so the row grows leftward — and the shell's scroll container

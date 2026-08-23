@@ -51,6 +51,7 @@ const EXCEPTIONS = new Set([
   'data-pick-keypad', 'data-key',
   'data-sync-chip',                                     // app-frame's sync-slot demo cycler target (127.1) — the SLOT is the pattern; the hook is demo wiring                       // rf-pick's keypad RECIPE (grill R2-Q4): consumer wiring by design — promoting these to API would be the component the grill refused
   'data-richtext-cmd', 'data-richtext-value',           // richtext toolbar demo (113.1: value-taking commands)
+  'data-grouped-head',                                  // handle for the grouped-header claims case (130.2 GAP-4a) — the FEATURE needs no attribute, which is the point; this only lets the check find the demo
 ]);
 
 const api = JSON.parse(await readFile(join(CORE_DIST, 'api.json'), 'utf8'));

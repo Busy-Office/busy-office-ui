@@ -143,6 +143,34 @@
     white-space: nowrap;
   }
 
+  /* GROUPED (multi-row) headers — ordered/received/billed under one
+     "Quantity", year over quarter over month. Every `thead th` above sticks
+     at 0, which is correct for one header row and silently wrong for two:
+     both rows pin to the same offset and the second lands ON the first.
+     Measured on a real three-way-match screen (roadmap 130.2, GAP-4a): after
+     scrolling, the "Quantity" cell and the "Ordered" cell beneath it occupied
+     the IDENTICAL box, 341-371 — the group label was not merely overlapped,
+     it was completely invisible.
+
+     The offset is exact rather than guessed because the row height is already
+     a density token: every `th`/`td` above sets `height:
+     var(--bo-density-row-height)`, so row two starts one of those down and
+     row three two. No new class, no modifier, nothing for a consumer to
+     learn — a second header row simply works, at every density.
+
+     Capped at three rows, the same call `data-sticky-cols` makes and for the
+     same reason: a fourth level of column grouping is a sign the table wants
+     splitting, not more CSS. A group label that WRAPS to two lines exceeds
+     the token and will sit a few pixels off — keep group labels short, which
+     the uppercase header styling already encourages. */
+  .bo-data-table thead tr:nth-child(2) th {
+    inset-block-start: var(--bo-density-row-height);
+  }
+
+  .bo-data-table thead tr:nth-child(3) th {
+    inset-block-start: calc(2 * var(--bo-density-row-height));
+  }
+
   .bo-data-table--striped tbody tr:nth-child(even) {
     --bo-cell-bg: var(--bo-color-bg-muted);
   }

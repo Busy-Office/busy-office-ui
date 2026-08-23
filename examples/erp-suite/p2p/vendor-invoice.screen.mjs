@@ -47,25 +47,32 @@ export const render = () =>
     </header>
 
     <h2>Three-way match</h2>
-    <!-- GAP-4. Ordered / received / billed is THREE readings of one line, and
-         the reader's job is to spot where they disagree. Rendered as a wide
-         flat table, because the framework has no surface for a grouped
-         (two-row) column header, and nothing that marks WHICH cell in a row
-         is the one that disagrees. The verdict badge at the end is a summary
-         the reader must map back to a column by eye — exactly the manual
-         step this screen exists to remove. -->
+    <!-- GAP-4a FIXED 2026-08-23, and this screen is what found it. Ordered /
+         received / billed is THREE readings of one line, so they belong under
+         one heading — plain table semantics, no class and no modifier. What
+         was broken underneath: every thead th sticks at 0, so with two header
+         rows the second pinned ON TOP of the first and "Quantity" vanished
+         entirely while scrolling. Each header row now offsets by
+         --bo-density-row-height.
+         GAP-4b is still open: nothing marks WHICH cell in a row disagrees, so
+         the verdict badge at the end is still a summary the reader maps back
+         to a column by eye. -->
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <table class="bo-data-table">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item</th>
-            <th scope="col" class="bo-data-table__col--numeric">Qty ordered</th>
-            <th scope="col" class="bo-data-table__col--numeric">Qty received</th>
-            <th scope="col" class="bo-data-table__col--numeric">Qty billed</th>
-            <th scope="col" class="bo-data-table__col--numeric bo-data-table__col--secondary">Price ordered</th>
-            <th scope="col" class="bo-data-table__col--numeric bo-data-table__col--secondary">Price billed</th>
-            <th scope="col">Verdict</th>
+            <th scope="col" rowspan="2">#</th>
+            <th scope="col" rowspan="2">Item</th>
+            <th scope="colgroup" colspan="3" class="bo-data-table__col--numeric">Quantity</th>
+            <th scope="colgroup" colspan="2" class="bo-data-table__col--numeric bo-data-table__col--secondary">Unit price</th>
+            <th scope="col" rowspan="2">Verdict</th>
+          </tr>
+          <tr>
+            <th scope="col" class="bo-data-table__col--numeric">Ordered</th>
+            <th scope="col" class="bo-data-table__col--numeric">Received</th>
+            <th scope="col" class="bo-data-table__col--numeric">Billed</th>
+            <th scope="col" class="bo-data-table__col--numeric bo-data-table__col--secondary">Ordered</th>
+            <th scope="col" class="bo-data-table__col--numeric bo-data-table__col--secondary">Billed</th>
           </tr>
         </thead>
         <tbody>
