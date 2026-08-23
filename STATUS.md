@@ -2,21 +2,21 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 14:09
+Generated at: 2026-08-23 14:15
 
 ## Open items by slice
 
 - **Slice 99** (1 open)
   - 99.4 — missing components discovered along the way go through the front door.
 - **Slice 112** (3 open)
-  - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
+  - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (752 iterations logged)
+dispatch status — counter-triggered rules (753 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-08-23 11:11   ok
   Objective     0 / 3 slices          since 2026-08-23 13:38   ok
 ```
@@ -25,12 +25,11 @@ dispatch status — counter-triggered rules (752 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
+- 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 - 99.4 — missing components discovered along the way go through the front door.
 
 ## Last 10 iterations
 
-- 2026-08-23 11:37 · Polish · tidy · Polish round 1: alerts wrong-choice clause, blind re-score 2->3 · landed · 258fcbf
 - 2026-08-23 12:00 · Continue · build · 123.3c: comparison matrix pattern shipped — closes Slice 123 · landed · b833474
 - 2026-08-23 12:00 · Meta · refusal · split/allocated award across multiple winners (select-one for v1, re-open condition documented on the page) · refused · b833474
 - 2026-08-23 12:15 · Continue · bug · 124: RTL flip for the tone bar (gate was blind to inset box-shadow) + when-to-use guidelines + comparison matrix re-marked by weight · landed · 098d026
@@ -40,6 +39,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 13:33 · Polish · tidy · Polish rounds 14-18: queue dry — 36/37 pages carry the wrong-choice clause · landed · 2a47d4e
 - 2026-08-23 13:38 · Objective · grill · Research rounds 1-2: DsaScore false gap closed with evidence; tile-preview evidence brief for 104.2 · logged · 637eb0b
 - 2026-08-23 14:09 · Continue · build · 102.4 wake prompt adopted; 104.2 c-scoped tile miniatures built (10 previews, inert, gate 1.4.12 principled exclusion red-proved) · landed · f17089c
+- 2026-08-23 14:15 · Roadmap · plan · 112.3: protocol owner-confirmed, pilot scaffold created (briefs remain owner-authored) · triaged · e58ea3c
 
 ## Sunset test
 
