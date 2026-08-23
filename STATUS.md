@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 22:32
+Generated at: 2026-08-23 22:33
 
 ## Open items by slice
 
@@ -27,11 +27,15 @@ Generated at: 2026-08-23 22:32
   - 133.1 — a scroll sweep, red-proved.
   - 133.2 — object-page, scrolled for real.
   - 133.3 — whatever 133.1/133.2 find is a P0, not a note.
+- **Slice 134** (3 open)
+  - 134.1 — fix the key, and prove the dark half is dark.
+  - 134.2 — re-baseline deliberately, never blind.
+  - 134.3 — CI, or delete it.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (791 iterations logged)
+dispatch status — counter-triggered rules (792 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-23 22:29   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
@@ -47,7 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 21:04 · Continue · build · 130.2 first two gaps closed: form-actions wrap (GAP-7), heading-level samples (GAP-5) · landed · e034a6e
 - 2026-08-23 21:35 · Continue · build · 130.2b P2P flow: PR entry + PR→PO conversion; 6 gaps; form-actions long-label wrap · landed · 04b06e2
 - 2026-08-23 21:35 · Meta · refusal · goods-receipt screens in the ERP example — already covered by the goods-receipt pattern and the three RF screens · refused · 04b06e2
 - 2026-08-23 21:35 · Meta · refusal · payment-run screens in the ERP example — select-and-run is bulk-actions, the unattended run is job-monitor · refused · 04b06e2
@@ -57,6 +60,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 22:31 · Roadmap · plan · 133 — owner ask: prove table + object-page scrolling works; the scroll containers are exempt from every gate · triaged · 06ac2e8
 - 2026-08-23 22:32 · Continue · build · 131.3 — icons on RF buttons, decided · refused · 75de725
 - 2026-08-23 22:32 · Meta · refusal · growing the icon set for the RF exception bar: no glyph exists for Back/Skip/Report short, and the task-menu case was already refused on profile-size grounds · refused · 75de725
+- 2026-08-23 22:33 · Roadmap · plan · 134 — test:visual: wrong theme key, stale baselines, runs in no workflow · triaged · 71a8f17
 
 ## Sunset test
 

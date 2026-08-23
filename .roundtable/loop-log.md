@@ -797,3 +797,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 22:31 · Roadmap · plan · 133 — owner ask: prove table + object-page scrolling works; the scroll containers are exempt from every gate · triaged · 06ac2e8
 - 2026-08-23 22:32 · Continue · build · 131.3 — icons on RF buttons, decided · refused · 75de725
 - 2026-08-23 22:32 · Meta · refusal · growing the icon set for the RF exception bar: no glyph exists for Back/Skip/Report short, and the task-menu case was already refused on profile-size grounds · refused · 75de725
+- 2026-08-23 22:33 · Roadmap · plan · 134 — test:visual: wrong theme key, stale baselines, runs in no workflow · triaged · 71a8f17
