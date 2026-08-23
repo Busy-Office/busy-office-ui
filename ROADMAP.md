@@ -157,6 +157,80 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 131 — Owner wishlist: the RF pages show the screen twice (2026-08-23)
+
+Owner input, verbatim: *"for Pattern: RF --> it is kind of redundant that you
+show HTML form and also show iframe. shall we show only iframe (which is
+closer to real device) --- why don't we make RF device like frame so user can
+also visualise it. (anyway, why don't we use icon on button as well? easy to
+spot"*
+
+Triage checked the claim against the pages before queuing it, and it is
+exact — and it is **drift, not a preference between two designs**.
+`rf-pick`, `rf-putaway` and `rf-count` each render the SAME shared screen
+component **twice**: once inline as "The screen — try it"
+(`.demo-rf-screen`, full bundle, `data-density="spacious"`), then again in
+the `rf-essentials` iframe at 360×640. Their two siblings in the same
+family, `rf-landing` and `rf-list`, render it **once**, in the iframe alone.
+Five pages, one family, two shapes — and the majority already does what the
+owner is asking for. That makes 131.1 a Standardize consolidation with a
+known target, not a judgement call.
+
+`goods-receipt` is **not** in scope and must keep both: its top demo is the
+desktop receipt screen and the mirror below is a *different* screen at RF
+size — that contrast is the page's argument.
+
+1. [ ] **131.1 — collapse to ONE live screen per RF page.** The mirror
+       survives (owner's call, and the majority precedent); the inline copy
+       goes. *Accept*: (a) `rf-pick`, `rf-putaway`, `rf-count` each render
+       their screen component exactly once — asserted against the BUILT
+       html, not the source diff, per the bulk-edit doctrine; (b) nothing
+       the removed caption said is lost — those captions carry the scan
+       codes to type and the empty-vs-zero rule, so they merge into the
+       surviving section and the built page still contains them; (c) the
+       surviving section is renamed — once it is the page's only screen it
+       is not "the RF-floor profile" section, it is *the screen*, and the
+       profile claim moves into its caption; (d) `check:page-shape`,
+       `check:claims`, links, `test:axe` and `check:layout` green;
+       screenshots at 1440 and 390, light and dark.
+2. [ ] **131.2 — make the frame read as a device.** `.rf-device-frame` is
+       today a 1px border and a radius. It lives in `apps/docs/src/styles/`,
+       so this is docs presentation and adds **zero framework surface**.
+       *Accept*: (a) a reader sees a handheld at a glance — bezel, inset
+       screen, a scan-window/trigger cue — all of it decorative, carrying no
+       text and no focus stop, with the `<iframe title>` still the only
+       accessible name; (b) **no sideways scroll at 390px** — bezel padding
+       cannot simply be added around a fixed 360px box, so the frame must
+       shrink as a unit; `check:layout` and `test:axe` are the gates and
+       both are CI-only sweeps, so they get run locally before the push
+       (2026-08-23 rule: a gate that only runs in CI is not known to work);
+       (c) one definition, still shared by all six embedding pages — this
+       class exists *because* three pages hand-rolled the same inline style;
+       (d) both themes, and it must beat its reference: pure CSS, no image
+       asset, theme-aware, and it may not shrink the 360×640 screen it
+       frames.
+3. [ ] **131.3 — icons on buttons: grill it, don't assume it.** Two
+       tensions triage found, both recorded so the grill starts from facts.
+       **One**: the shipped set is 12 masks and is domain-shaped — `doc`,
+       `invoice`, `cart`, `check-circle`, `truck`, `box`, `chart`,
+       `settings`, `grid`, `barcode`, `building`, `user`. RF's buttons are
+       Back / Skip item / Report short / a 0-9 keypad, and **not one of them
+       has an icon in that set**. So "use icons" is not a docs edit; it is a
+       request to grow a framework surface, which is precisely what the
+       Objective's *less for more* test exists to judge. **Two**: the RF
+       exception bar at 360px has already lost a button off the left edge
+       (130.2 GAP-7) and still spilled with one long label (GAP-13) — an
+       icon makes every button in that bar wider. *Accept*: a recorded
+       **accept / refuse / rethink** with its reason; if accepted, icons
+       come only from the shipped set or from additions that survive ≥2
+       independent uses, always `aria-hidden`, always **beside text** (never
+       icon-only on a gloved screen at arm's length), and the bar still fits
+       360px with no clip.
+
+**Not in this slice**, so it does not get re-proposed: per-screen device art,
+a second frame variant, or a photographic device image. One frame, one
+definition, all six pages.
+
 ## Slice 130 — ERP suite examples: the gap-finding instrument (2026-08-23)
 
 Owner wishlist: enterprise-grade example app UIs across Order-to-cash,
