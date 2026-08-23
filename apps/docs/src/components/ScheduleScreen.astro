@@ -17,6 +17,13 @@
 import { scheduleMonth, YEAR, MONTH } from '../lib/schedule-data';
 
 const monthMarkup = scheduleMonth(YEAR, MONTH);
+/* The detail panel's heading level depends on the consumer's document
+   outline: on /patterns/schedule the screen sits under an <h2> section, so
+   h3 is correct; the isolated /patterns/schedule/full has only its own h1
+   above this, where h3 would skip a level (axe heading-order, caught by
+   CI's audit 2026-08-23). */
+const { detailHeadingLevel = 3 } = Astro.props;
+const DetailHeading = `h${detailHeadingLevel}`;
 ---
 {/* No wrapping element on purpose — the two children are one grid's worth
     of content, but each consumer (the compact embedded demo vs. the
@@ -25,7 +32,7 @@ const monthMarkup = scheduleMonth(YEAR, MONTH);
 <div set:html={monthMarkup} />
 <aside class="bo-widget" aria-labelledby="schedule-detail-title" id="schedule-detail">
   <div class="bo-widget__header">
-    <h3 class="bo-widget__title" id="schedule-detail-title">Sunday, 24 August</h3>
+    <DetailHeading class="bo-widget__title" id="schedule-detail-title">Sunday, 24 August</DetailHeading>
     <span class="bo-badge">4 scheduled</span>
   </div>
   <div class="bo-widget__body">

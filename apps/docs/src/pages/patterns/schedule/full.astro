@@ -54,9 +54,11 @@ const cssHref = base + '/assets/busy-office-ui.min.css';
     </style>
   </head>
   <body>
-    <h1>Schedule — August 2026</h1>
-    <div class="full-split">
-      <ScheduleScreen />
-    </div>
+    <main aria-label="Schedule, full-screen preview">
+      <h1>Schedule — August 2026</h1>
+      <div class="full-split">
+        <ScheduleScreen detailHeadingLevel={2} />
+      </div>
+    </main>
   </body>
 </html>
