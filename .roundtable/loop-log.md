@@ -743,3 +743,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 10:25 · Meta · refusal · split-award comparison action (select-one for v1) · refused · a08ec58
 - 2026-08-23 10:40 · Continue · build · 123.1: initGroupedNumber shipped — one grouped-display behavior for Money/Quantity/numeric · landed · 341ea7f
 - 2026-08-23 10:52 · Continue · build · 123.2: app-frame + suite-home patterns shipped; 30.0 closed · landed · 8c17141
+- 2026-08-23 10:59 · Continue · build · 123.3a: reconciliation pattern shipped; stale 119.3/121.1/122.1 superseded · landed · 575b4ad
