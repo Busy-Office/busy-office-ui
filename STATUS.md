@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 18:58
+Generated at: 2026-08-23 20:44
 
 ## Open items by slice
 
@@ -12,6 +12,11 @@ Generated at: 2026-08-23 18:58
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
+- **Slice 130** (4 open)
+  - 130.2 — promote the gaps into decisions.
+  - 130.3 — module two, on the settled answers.
+  - 130.4 — the remaining four modules.
+  - 130.5 — wire the suite into CI
 
 ## Dispatch counters
 
@@ -25,6 +30,7 @@ dispatch status — counter-triggered rules (779 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 - 99.4 — missing components discovered along the way go through the front door.
 

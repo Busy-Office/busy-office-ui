@@ -157,6 +157,99 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 130 — ERP suite examples: the gap-finding instrument (2026-08-23)
+
+Owner wishlist: enterprise-grade example app UIs across Order-to-cash,
+Procure-to-pay, CRM, Finance, Inventory and Production — "while creating
+examples app UI, pls also capture the components required or improvements
+needed to include in the roadmap (also design navigation as it will be
+complex app)". Grilled in two rounds before any build. Owner's answers
+narrowed it decisively:
+
+- **Q2 one suite, six modules** — confirmed.
+- **Q3 "just sample screen to navigate thru app UI… don't do anything
+  complicated"** — so: STATIC screens, real links, no server, no data layer,
+  no interactivity beyond navigation.
+- **Q4 "document based"** — the unit of depth is a document type, not a flow.
+- **Q5 cross-module data is API-side and OUT OF SCOPE** — "decide purely for
+  UX/UI framework". So modules link to each other; nothing pretends to have
+  a backend.
+
+Adopted from my recommendations on "Next": module rail + section list (Q8a),
+the proposed document set (Q9), list + document screens per type (Q10),
+links-only cross-module references (Q11), the no-new-CSS rule (Q12), and
+P2P first as a pilot (Q13).
+
+**The mechanism, which is the actual product here.** The example may not add
+a single line of its own CSS — `check-erp-suite.mjs` fails on a `.css` file,
+a `<style>` block, or an inline style that is not a documented framework
+custom property. A screen that needs something the framework has not got
+compromises VISIBLY and the need lands in `.roundtable/erp-suite-gaps.md`.
+Without that rule every gap becomes a local style block and the instrument
+reads clean while telling us nothing.
+
+1. [x] **130.1 — P2P pilot. DONE 2026-08-23.** `examples/erp-suite/`: five
+       hand-authored screens (suite home, PO list, PO document, vendor-invoice
+       list, vendor-invoice document with three-way match) + five honest
+       module stubs so every rail entry lands somewhere. Chrome is rendered
+       once in `_shell.mjs`; screen BODIES are hand-written, deliberately —
+       a generated grid of identical screens would hide exactly what this
+       exists to expose. Three gates, all green: `check-markup` (every class
+       exists — it caught an invented `bo-amount--danger` and named the real
+       `--negative`), `check-erp-suite` (no CSS, every internal link
+       resolves), `audit` (axe at 1440 and 390, no sideways scroll).
+       **Seven gaps found, logged with the screen that hit each.** Two of
+       them — GAP-6 and GAP-7 — were found by a SCREENSHOT after all three
+       gates reported the pilot clean, which is the argument for the
+       screenshot step in the quality bar, made again.
+2. [ ] **130.2 — promote the gaps into decisions.** Each of GAP-1..5 gets
+       grilled against the Objective and lands as accept / refuse / rethink
+       before module two is built. Ordering by confidence-to-cost:
+       **GAP-5** (object-page models the record title as a `<span>`, so
+       copying the pattern ships a page with no `<h1>` — caught by axe on the
+       pilot's first run; a docs fix, possibly with a claims case),
+       **GAP-2** (nothing documents "related documents" — the connective
+       tissue of a document suite, needed on every document screen in every
+       module; likely a documented composition, not a component),
+       **GAP-4a** (grouped two-row column header for `data-table` — mechanical
+       and useful well beyond three-way match), **GAP-3** (a count inside a
+       segmented option — probably a convention, not CSS), **GAP-1** (the
+       module rail — may be a docs answer: two `sidebar-nav`s in a cluster),
+       **GAP-4b** (a cell-level "this is the one that disagrees" cue — the
+       only genuinely new idea, and it risks becoming "colour the cell",
+       which the two-channel rule forbids; grill hardest here).
+       Two more, both found by screenshot after the gates were green, and
+       both defects in SHIPPED code rather than missing surface:
+       **GAP-7** (`bo-form-actions` has no `flex-wrap`, so a three-button bar
+       loses its first button — 234px of it — off the left edge at 390;
+       invisible to every overflow check because content overflowing the
+       START edge never reaches `scrollWidth`. Mechanical fix, needs a claims
+       case at 390) and **GAP-6** (`bo-stack` composed onto
+       `bo-app-shell__main` collapses a scrollable table container to its
+       header row — two correct primitives composing into silent data loss,
+       and the broken composition is the one a careful reader tries first).
+3. [ ] **130.3 — module two, on the settled answers.** O2C (sales order,
+       customer invoice), built only after 130.2 lands, so the second module
+       measures whether the fixes worked instead of repeating the gaps.
+       **This is the checkpoint for the whole idea**: if module two finds
+       another five gaps, the framework has a systemic hole worth a slice of
+       its own; if it finds none, modules three to six are mechanical and can
+       be batched.
+4. [ ] **130.4 — the remaining four modules.** CRM (account, opportunity),
+       Finance (journal entry, payment), Inventory (stock movement, item
+       master), Production (production order, BOM). Batched only if 130.3
+       says they are mechanical. Each still logs its gaps.
+5. [ ] **130.5 — wire the suite into CI** once it stops changing shape:
+       `build` + the three gates, in the same job as the docs checks. Left
+       until last on purpose — a gate that guards a moving target reports
+       noise. Until then it runs on demand and the loop runs it by hand.
+
+**Refused up front**, so it does not get re-proposed: per-domain patterns or
+components. The owner's own Slice 109 rule — a pattern is named and framed
+for its SHAPE, the domain appears only as demo data — means this slice
+produces example screens and roadmap items, never an `invoice-approval`
+component.
+
 ## Slice 129 — Objective grill of 126-128, and the gate hole it found (2026-08-23)
 
 Dispatched by rule 3 (three slices closed since the last Objective). Report:
