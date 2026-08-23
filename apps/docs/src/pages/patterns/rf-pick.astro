@@ -7,8 +7,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const markup = `<!-- Header answers before the worker asks: which task, which bin,
      which item, how many. One scan field does bin AND item (the app knows
      which it expects next); the flash paints capture, YOUR validation
-     paints the verdict. The keypad is a RECIPE — plain bo-btns writing
-     into the quantity input; inputmode stays the zero-JS floor. -->
+     paints the verdict. No on-screen keypad: inputmode summons the gun's
+     own keyboard, and the screen keeps the room. -->
 <dl class="bo-kv bo-kv--rows"> …Task / From bin / Item / Pick qty… </dl>
 
 <input class="bo-input bo-input--code" data-scan-input data-scan-flash
@@ -16,10 +16,6 @@ const markup = `<!-- Header answers before the worker asks: which task, which bi
 <p id="scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
 
 <div class="bo-quantity"> …picked qty, spacious steppers… </div>
-
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bo-space-2)">
-  <button class="bo-btn bo-btn--secondary" data-key="1">1</button> …0–9, CLR, OK…
-</div>
 
 <div class="bo-btn-group bo-btn-group--bar">
   <button class="bo-btn bo-btn--secondary">Back</button>
@@ -55,11 +51,12 @@ const markup = `<!-- Header answers before the worker asks: which task, which bi
     <RfDevice src={base + '/patterns/rf/rf-pick-rf/'} title="RF pick, rf-essentials profile, 360×640" />
     <p class="bo-u-text-muted">Scan (type + Enter) <code>A-01-04</code> or
     <code>MAT-4471</code> — capture flashes green; anything else flashes
-    red with the reason announced. The keypad is the grill's
-    <strong>recipe, not a component</strong>: twelve ordinary
-    <code>bo-btn</code>s and three consumer lines wiring them to the
-    quantity input — native <code>inputmode</code> remains the zero-JS
-    floor, and the grid is an additive convenience for thick gloves.</p>
+    red with the reason announced. <strong>There is no on-screen
+    keypad</strong>, and that is the point (roadmap 135.4, owner): an RF gun
+    ships a keyboard, so a grid of number buttons duplicates the platform and
+    spends the screen's scarcest resource on it.
+    <code>inputmode="numeric"</code> on the quantity input summons the
+    device's own keypad and stays the zero-JS floor.</p>
   </section>
 
   <section class="demo">
@@ -79,7 +76,9 @@ const markup = `<!-- Header answers before the worker asks: which task, which bi
         your validation calls <code>flashScanResult('error', why)</code>.</li>
       <li><strong>Quantity</strong> —
         <a href={base + '/components/quantity'}>quantity</a> at spacious
-        density, plus the keypad recipe for gloved entry.</li>
+        density — big enough for a gloved thumb, with
+        <code>inputmode="numeric"</code> bringing up the device's keyboard
+        for anything the steppers are too slow for.</li>
       <li><strong>Exception bar</strong> —
         <a href={base + '/components/button'}>--bar</a>: Back / Skip item /
         Report short. Intent-named, equal glove targets.</li>
@@ -113,7 +112,7 @@ const markup = `<!-- Header answers before the worker asks: which task, which bi
           <tr><td>Line re-assigned (409)</td><td>who took it, then the next line — flow beats blame</td></tr>
           <tr><td>Queue empty</td><td>back to <a href={base + '/patterns/rf-landing'}>the task menu</a>; an empty pick screen teaches nothing</td></tr>
           <tr><td>Session lost</td><td>the RECONNECT state: on regaining the server, re-render the line as the server has it. Session persistence is infrastructure, not a screen promise</td></tr>
-          <tr><td>No JS</td><td>the form still posts on Enter (the wedge's terminator) and the server re-renders with the verdict — the flash and keypad are enhancements; the KV header, field and bar are markup</td></tr>
+          <tr><td>No JS</td><td>the form still posts on Enter (the wedge's terminator) and the server re-renders with the verdict — the flash is an enhancement; the KV header, field, quantity and bar are markup</td></tr>
         </tbody>
       </table>
     </div>

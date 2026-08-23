@@ -241,7 +241,12 @@ half-answered by this project's own grill.
        **Grill first whether this belongs in the docs at all** or whether it
        is an `examples/` app like the ERP suite — the suite exists precisely
        because a walkable multi-screen demo outgrew a docs page.
-3. [ ] **135.3 — should the RF screen be responsive?** Today everything is
+3. [ ] **135.3 — should the RF screen be responsive?** *(Noted while
+       removing the keypad: with it gone, the pick screen leaves roughly a
+       third of the 640px empty below the exception bar — and the docs
+       already tell consumers to dock that bar with `position: sticky;
+       inset-block-end: 0`, which the demo does not do. Measure that as part
+       of this item; it may be the more useful half of "responsive".)* Today everything is
        360×640 because that is the resolution the `rf-essentials` profile
        targets, and the docs frame says so. Real fleets are mixed: 320-wide
        older guns, 480×800 mid-range, 6-inch tablets on forklifts.
@@ -252,7 +257,7 @@ half-answered by this project's own grill.
        breaks, fix that specific thing. **Do not add a breakpoint on a
        hypothesis**; the device frame's own 360px claim must stay honest
        whatever the answer is.
-4. [ ] **135.4 — drop the numeric keypad from the pick screen.** Owner:
+4. [x] **135.4 — DONE 2026-08-24. Dropped the numeric keypad.** Owner:
        *"doesn't require number pad, as it is available on [the] visual
        keyboard on [the] RF scanner."* **This confirms the RF grill's own
        preliminary verdict**, which is why it is queued as a removal rather

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 00:50
+Generated at: 2026-08-24 00:58
 
 ## Open items by slice
 
@@ -36,8 +36,8 @@ Generated at: 2026-08-24 00:50
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (809 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-24 00:50   ok
+dispatch status — counter-triggered rules (810 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-24 00:50   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -51,7 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 23:49 · Continue · build · 130.2 GAP-3 — segmented option count: gap added, muted-tabular convention documented · landed · b932f84
 - 2026-08-23 23:49 · Meta · refusal · a __count part or badge-in-segment — the count treatment already exists and a badge fills a 24px segment · refused · b932f84
 - 2026-08-23 23:58 · Continue · build · 130.2 GAP-12 — Add a line: home stated (below the table, cluster), two drifted call sites reconciled · landed · a9ba5c7
 - 2026-08-24 00:04 · Continue · build · 130.2 GAP-8 + GAP-10 — merged; recompute/announce contract already existed, discoverability fixed · landed · 70eef95
@@ -61,6 +60,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 00:21 · Continue · build · 130.2 GAP-4b — cell-level disagreement cue: data-tone already shipped; row tint hid it on the first try · landed · 0ab469a
 - 2026-08-24 00:50 · Standardize · dry · 135.1 — RF naming unified (six labels, one system); slugs kept with the 69-reference reason; goods-receipt duplicate screen removed (131.1 error) · landed · 9167765
 - 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
+- 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
 
 ## Sunset test
 

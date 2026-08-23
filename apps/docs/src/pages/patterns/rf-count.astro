@@ -76,9 +76,10 @@ const markup = `<!-- BLIND by design: the expected quantity is never on screen, 
         count opens only on the right bin.</li>
       <li><strong>Blind quantity</strong> —
         <a href={base + '/components/quantity'}>quantity</a>, empty until
-        the counter types; the keypad recipe from
-        <a href={base + '/patterns/rf-pick'}>picking</a> composes here
-        unchanged.</li>
+        the counter types. <code>inputmode="numeric"</code> brings up the
+        gun's own keyboard — the same call
+        <a href={base + '/patterns/rf-pick'}>RF pick</a> makes, and for the
+        same reason: the device already has one.</li>
       <li><strong>Exception bar</strong> — Back / Item not found / Submit
         count.</li>
     </ol>

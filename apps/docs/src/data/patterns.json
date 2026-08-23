@@ -2836,7 +2836,7 @@
             ],
             [
               "No JS",
-              "the form still posts on Enter (the wedge's terminator) and the server re-renders with the verdict — the flash and keypad are enhancements; the KV header, field and bar are markup"
+              "the form still posts on Enter (the wedge's terminator) and the server re-renders with the verdict — the flash is an enhancement; the KV header, field, quantity and bar are markup"
             ]
           ],
           "dataContract": [

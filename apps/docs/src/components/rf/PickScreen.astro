@@ -6,9 +6,15 @@
  *
  * Composes ONLY profile members: kv header (Task/From/Item — the
  * Velocity-modernized header shape), scan input + flash, quantity at
- * spacious, the --bar exception row, and the keypad RECIPE — a grid of
- * plain bo-btns wired to the quantity input, proving the grill's
- * recipe-not-component verdict with working markup.
+ * spacious, and the --bar exception row.
+ *
+ * NO on-screen keypad (roadmap 135.4, owner): an RF gun already provides a
+ * keyboard, so a custom grid of number buttons duplicates the platform and
+ * eats the screen's scarcest resource. `inputmode="numeric"` on the quantity
+ * input summons the device's own keypad and remains the zero-JS floor. This
+ * confirms the RF grill's own preliminary verdict — "likely refuse:
+ * inputmode summons the device keypad; a custom keypad is device-app
+ * territory" — which had shipped a recipe as the compromise.
  */
 ---
 <dl class="bo-kv bo-kv--rows" style="margin-block-end: var(--bo-space-3)">
@@ -36,18 +42,6 @@
   </div>
 </div>
 
-{/* The keypad RECIPE (grill R2-Q4): a grid of ordinary bo-btns writing into
-    the quantity input. Native inputmode stays the zero-JS floor — this is
-    an ADDITIVE convenience for thick gloves, not a replacement keyboard. */}
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bo-space-2); max-inline-size: 16rem; margin-block-end: var(--bo-space-3)" data-pick-keypad>
-  {[1,2,3,4,5,6,7,8,9].map((n) => (
-    <button class="bo-btn bo-btn--secondary" type="button" data-key={n}>{n}</button>
-  ))}
-  <button class="bo-btn bo-btn--secondary" type="button" data-key="clr">CLR</button>
-  <button class="bo-btn bo-btn--secondary" type="button" data-key="0">0</button>
-  <button class="bo-btn" type="button" data-key="ok">OK</button>
-</div>
-
 <div class="bo-btn-group bo-btn-group--bar">
   <button class="bo-btn bo-btn--secondary" type="button">Back</button>
   <button class="bo-btn bo-btn--secondary" type="button">Skip item</button>
@@ -67,15 +61,5 @@
     if (!EXPECTED.includes(value.toUpperCase())) {
       flashScanResult('error', `Wrong scan: ${value} — expected ${EXPECTED[0]} or ${EXPECTED[1]}`);
     }
-  });
-
-  // Keypad recipe wiring: three lines of consumer code, as the docs promise.
-  const qty = document.getElementById('pick-qty') as HTMLInputElement | null;
-  document.querySelector('[data-pick-keypad]')?.addEventListener('click', (e) => {
-    const key = (e.target as HTMLElement).closest('[data-key]')?.getAttribute('data-key');
-    if (!key || !qty) return;
-    if (key === 'clr') qty.value = '';
-    else if (key !== 'ok') qty.value = (qty.value + key).replace(/^0+(?=\d)/, '');
-    qty.dispatchEvent(new Event('input', { bubbles: true }));
   });
 </script>
