@@ -21,8 +21,19 @@
  *
  * Three properties, per container, at both widths:
  *
- *   1. WIDER THAN ITS BOX  -> setting `scrollLeft` moves it and reads back.
- *      A container that overflows but cannot scroll has simply lost content.
+ *   1. WIDER THAN ITS BOX  -> the USER can reach the rest, i.e. computed
+ *      `overflow-x` is auto or scroll.
+ *
+ *      Version one DROVE `scrollLeft` instead and asserted it moved. That is
+ *      the wrong instrument, and CI's Linux proved it: eight containers
+ *      reported 6-11px past their box while the browser refused to scroll at
+ *      all, on pages that are demonstrably fine. The browser's own max-scroll
+ *      is the authority on whether content is reachable, so a positive
+ *      scrollWidth-minus-clientWidth that the browser will not scroll is
+ *      layout accounting (scrollbar gutter, integer rounding, platform
+ *      scrollbar metrics), not lost content — and the probe simply
+ *      re-measured the platform. macOS overlay scrollbars hid it completely:
+ *      122 containers here, 204 there.
  *   2. WIDER THAN ITS BOX  -> reachable by keyboard (`tabindex`), because a
  *      scrollable region that only a mouse can reach fails WCAG 2.1.1.
  *   3. TALLER THAN ITS BOX -> the USER must be able to reach the rest, i.e.
@@ -50,9 +61,6 @@ import { DIST } from './paths.mjs';
 import { gate, assertScanned } from './gate-report.mjs';
 
 const WIDTHS = [1440, 390];
-/* Two integer-rounded metrics can disagree by a couple of pixels with no real
-   content between them. Above this, an unscrollable overflow is a defect. */
-const ROUNDING_PX = 4;
 const SEL = '.bo-data-table-container, .scale-scroll';
 
 const { server, port, base } = await serveDist(DIST);
@@ -60,7 +68,6 @@ const browser = await launchDocsBrowser();
 const page = await browser.newPage();
 const g = gate('scroll check', 'scrollable container(s)');
 let containers = 0;
-const subPixel = [];
 let pagesScanned = 0;
 
 for (const width of WIDTHS) {
@@ -73,21 +80,14 @@ for (const width of WIDTHS) {
       const out = [];
       for (const box of document.querySelectorAll(sel)) {
         const byX = box.scrollWidth - box.clientWidth;
-        const overflowsX = byX > 1;
-        const overflowsY = box.scrollHeight - box.clientHeight > 1;
-        if (!overflowsX && !overflowsY) continue;
-        // Drive it, do not infer it from computed style: `overflow: auto` on
-        // an element an ancestor has collapsed still reports "auto".
-        let movedX = 0;
-        if (overflowsX) {
-          box.scrollLeft = 40;
-          movedX = box.scrollLeft;
-          box.scrollLeft = 0;
-        }
-        const overflowY = getComputedStyle(box).overflowY;
+        const byY = box.scrollHeight - box.clientHeight;
+        if (byX <= 1 && byY <= 1) continue;
+        const cs = getComputedStyle(box);
         out.push({
           cls: (box.className || '').toString().slice(0, 48),
-          overflowsX, overflowsY, movedX, overflowY, byX,
+          byX, byY,
+          overflowX: cs.overflowX,
+          overflowY: cs.overflowY,
           focusable: box.hasAttribute('tabindex'),
           clientH: Math.round(box.clientHeight),
           scrollH: Math.round(box.scrollHeight),
@@ -96,35 +96,26 @@ for (const width of WIDTHS) {
       return out;
     }, SEL);
 
+    const REACHABLE = (v) => v === 'auto' || v === 'scroll';
     for (const c of found) {
       containers += 1;
       const at = `${p.url} @${width} [${c.cls}]`;
-      if (c.overflowsX) {
-        /* SUB-PIXEL NOISE IS NOT A DEFECT, and this gate learned it the
-           expensive way: it passed on macOS and failed 10 containers on CI's
-           Linux, because `scrollWidth` and `clientWidth` are each ROUNDED to
-           integers and the two platforms lay scrollbars out differently
-           (overlay vs classic, which also changes clientWidth). A 2px
-           "overflow" between two rounded metrics can be under a pixel of real
-           content, and the browser then correctly refuses to scroll at all.
-           Below the threshold it is REPORTED rather than dropped silently, so
-           a real small clip cannot hide behind this exemption. */
-        if (c.byX > ROUNDING_PX) {
-          g.check(`${at} scrolls sideways (${c.byX}px of content past the box)`, c.movedX > 0,
-            'the container is wider than its box and setting scrollLeft did nothing — ' +
-            'that content is unreachable, not merely off-screen');
-          g.check(`${at} is keyboard-reachable`, c.focusable,
-            'a scrollable region needs tabindex="0" or a keyboard user cannot reach the rest (WCAG 2.1.1)');
-        } else if (c.movedX === 0) {
-          subPixel.push(`${at} ${c.byX}px`);
-        }
+      if (c.byX > 1) {
+        g.check(
+          `${at} lets a user reach content past the inline edge (${c.byX}px)`,
+          REACHABLE(c.overflowX),
+          `computed overflow-x is "${c.overflowX}" — the content past the edge is clipped ` +
+            'with no scrollbar, wheel or keyboard route to it',
+        );
+        g.check(`${at} is keyboard-reachable`, c.focusable,
+          'a scrollable region needs tabindex="0" or a keyboard user cannot reach the rest (WCAG 2.1.1)');
       }
-      if (c.overflowsY) {
+      if (c.byY > 1) {
         g.check(
           `${at} lets a user reach content below the fold (${c.clientH}px box, ${c.scrollH}px content)`,
-          c.overflowY === 'auto' || c.overflowY === 'scroll',
-          `the container is taller than its box and computed overflow-y is "${c.overflowY}" — ` +
-            'the rows below the fold are clipped with no scrollbar, wheel or keyboard route to them',
+          REACHABLE(c.overflowY),
+          `computed overflow-y is "${c.overflowY}" — the rows below the fold are clipped ` +
+            'with no scrollbar, wheel or keyboard route to them',
         );
       }
     }
@@ -134,9 +125,4 @@ for (const width of WIDTHS) {
 await browser.close();
 server.close();
 assertScanned(pagesScanned, 'page(s) carrying a scroll container', 'is dist built?');
-g.report(
-  `driven across ${pagesScanned} page(s) x ${WIDTHS.length} widths` +
-    (subPixel.length
-      ? `; ${subPixel.length} container(s) reported <=${ROUNDING_PX}px of unscrollable overflow, which is rounding between two integer metrics, not lost content: ${subPixel.slice(0, 6).join(', ')}`
-      : ''),
-);
+g.report(`driven across ${pagesScanned} page(s) x ${WIDTHS.length} widths`);
