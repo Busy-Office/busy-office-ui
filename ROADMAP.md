@@ -536,6 +536,17 @@ reads clean while telling us nothing.
        table and prove nothing) and claim 108, red-proved against the BUILT
        css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
        the part that risks becoming "colour the cell".
+       **GAP-1 DECIDED: real, measured, and deferred behind a trigger.**
+       The single-sidebar compromise fails at 11 documents in one module on a
+       700px laptop (17 at 900px) — measured by growing the group and
+       scrolling to its end. The pilot has three and O2C will have two, so
+       nothing exercises it. Building a second rail means changing
+       `.bo-app-shell`'s grid — the most-composed layout here — for zero
+       shipped screens; the sticky-group alternative was measured too and
+       spends 34% of the sidebar's height at seven modules, about half at
+       twelve. `/components/sidebar-nav` now documents the limit and the
+       answer at that size (move the long list into the PAGE, or split the
+       module). Revisit trigger: a real screen with >10 entries in one group.
        **GAP-8 + GAP-10 DECIDED: one need, and mostly already answered.**
        The merge was tested: a document COUNT from a grouping rule and a
        TOTAL from a selection are both "a fact about what this operation

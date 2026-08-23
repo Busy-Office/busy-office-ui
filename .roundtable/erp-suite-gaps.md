@@ -26,7 +26,46 @@ bar's screenshot step earning its place, again.
 
 ---
 
-## GAP-1 — no module rail: the shell has one sidebar, a suite needs two levels
+## GAP-1 — DECIDED 2026-08-24 — no module rail: the shell has one sidebar, a
+suite needs two levels
+
+**Verdict: RETHINK → the gap is real and MEASURED, and the rail is deferred
+behind a stated trigger rather than guessed at.**
+
+**The defect, measured** on the pilot's own shell (7 module entries, sidebar
+224px wide), by growing the document group and scrolling to its end:
+
+| viewport | documents in the module | modules still reachable |
+|---|---|---|
+| 900px | 3, 7, 11 | yes |
+| 900px | 17, 23 | **no** |
+| 700px | 3, 7 | yes |
+| 700px | 11, 17, 23 | **no** |
+
+So the compromise fails at **11 documents in one module on a 700px laptop**.
+The P2P pilot has three, and O2C (130.3) will have two — neither exercises it.
+
+**Why not build the rail now.** A second, narrower slot means changing
+`.bo-app-shell`'s grid, which is the most-composed layout in the framework,
+on a case no shipped screen has. The reusability rule is explicit — nothing
+ships for one screen, and here it would ship for *zero*. The cheap
+alternative was considered and rejected on its own measurement: making the
+modules group `position: sticky` keeps them reachable but spends 224px of a
+652px sidebar permanently — 34% at seven modules, about half at twelve. That
+trades the defect for a smaller rail, which is why real suites use an ICON
+rail (collapsing horizontally, ~48px) rather than a sticky group.
+
+**What shipped instead**: the limit is documented where a consumer meets it.
+`/components/sidebar-nav` now states the measured numbers, and says what to do
+at that size — move the long list into the PAGE (a tab strip or an anchor bar
+belongs to the screen, not the chrome) or split the module.
+
+**The trigger to revisit**: a real screen with more than ten entries in a
+single sidebar group. Not a hypothetical, and not a date.
+
+*(original entry below)*
+
+## GAP-1 (original) — no module rail: the shell has one sidebar, a suite needs two levels
 
 **Hit on**: every screen (`_shell.mjs`).
 **Wanted**: the shape every multi-module ERP uses — a narrow always-visible

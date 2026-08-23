@@ -66,6 +66,22 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
         media queries.</p>
       </div>
     </div>
+    <p class="bo-u-text-muted"><strong>How many entries fit before the top
+    group scrolls away.</strong> The rail is one scrolling column, so a long
+    second group pushes the first out of view — and the first group is usually
+    the one you need from anywhere (the modules). Measured on a real suite
+    shell with 7 module entries: at a 900px-tall viewport the modules stay
+    visible up to <strong>11</strong> entries in the second group and are gone
+    by 17; on a 700px laptop the limit is <strong>11</strong>. If a group needs
+    more than that, the answer is not a taller rail — move the long list into
+    the page (a <a href={base + '/components/tabs'}>tab strip</a> or an
+    <a href={base + '/patterns/object-page'}>anchor bar</a> belongs to the
+    screen, not the chrome), or split the module. A second, narrower icon rail
+    is what large suites use, and this framework deliberately does not ship one
+    yet: no screen here has hit the limit, and adding a column to
+    <code>.bo-app-shell</code> — the most-composed layout in the framework — on
+    a hypothetical is how a grid grows a slot nobody fills (roadmap 130.2,
+    GAP-1).</p>
   </section>
   </section>
 
