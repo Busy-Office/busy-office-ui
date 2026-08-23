@@ -536,6 +536,21 @@ reads clean while telling us nothing.
        table and prove nothing) and claim 108, red-proved against the BUILT
        css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
        the part that risks becoming "colour the cell".
+       **GAP-11 DECIDED: NOT A GAP — my bug.** An excluded conversion line
+       looked identical to an included one because the screen wrote
+       `class="bo-checkbox"` and omitted `bo-data-table__row-select`, which
+       is what the framework's own selection rule keys on. Measured after
+       fixing: included rows tinted, excluded transparent, distinct in both
+       themes, checkbox carrying the non-colour channel. Worth keeping for
+       what it says about the gates — `check-markup` verifies a class EXISTS,
+       so using a real class and omitting the one that works passes clean.
+       **GAP-14 DECIDED: REFUSE the fifth state.** The marker is consumer
+       markup, so `◐` carries partial-ness on the non-colour channel already;
+       `pending` renders "not complete", which a partial step genuinely is.
+       The grill's real find was a DOCS problem: `current` means "the record
+       you are on" in a document flow and "the step in progress" in an
+       approval timeline — two meanings, two timelines, one screen. Stated
+       on `/patterns/object-page` now.
        **Building it surfaced GAP-14**: a chain step can be PARTIAL (1 of 2
        received) and `data-state` has no word for it — `done` paints a tick
        over "1 of 2", `pending` says nothing started. Compromised to a

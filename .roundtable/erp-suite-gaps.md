@@ -289,7 +289,31 @@ announced to a screen reader. The framework already has this problem solved
 next door — `data-table`'s selection count is a live region — but nothing
 generalises it to "a number derived from a selection".
 
-## GAP-11 — no row state for "deliberately excluded"
+## GAP-11 — NOT A GAP, 2026-08-23 — my bug, not the framework's
+
+**Verdict: REFUSE a new `data-row-state` value.** The complaint was that an
+excluded line renders identically to an included one. It did — because the
+conversion screen wrote `class="bo-checkbox"` and left off
+`bo-data-table__row-select`, the class the framework's own rule keys on:
+`tbody tr:has(.bo-data-table__row-select:checked)` fills the row with
+`--bo-color-bg-selected`. The docs' canonical markup carries both classes; I
+copied one.
+
+Measured after fixing it, in both themes: included rows
+`rgb(240,253,250)` / `rgb(11,59,55)`, the excluded row transparent —
+**distinct, with the checkbox as the non-colour channel**. Nothing to add.
+
+**What this says about the gates**, and it is the useful part: `check-markup`
+verifies every `bo-*` class EXISTS, so a row that uses a real class and omits
+the one that does the work passes clean. That failure mode is invisible to it
+by construction, and it is the second time this pilot has produced one (the
+first was `bo-amount--danger`, which check-markup DID catch because the name
+was invented). Copying a canonical sample partially is the risk; the gate
+covers wrong names, not missing ones.
+
+*(original entry below)*
+
+## GAP-11 (original) — no row state for "deliberately excluded"
 
 **Hit on**: `p2p/convert-to-po`, the unticked line.
 **Have**: `data-row-state` ships `dirty`, `error`, `warning` — every one a
@@ -363,13 +387,23 @@ on `data-state` sees "not started".
 partial receipt, partial payment, partial delivery, partial allocation. Any
 chain that models real documents will hit it on its second screen, as this one
 did.
-**Shape of the fix (not decided)**: a fifth `data-state` value, or the honest
-refusal that a chain step is binary and partial belongs in the meta text. The
-two-channel rule already forces any new state to bring a non-colour cue, and
-the marker glyph is that cue — which is a point in favour of it being cheap.
-Grill it before module two, alongside GAP-11's excluded-row state, since both
-ask the same question: *does this component need one more state, or is the
-state list deliberately short?*
+**DECIDED 2026-08-23: REFUSE the fifth state.** Grilled with GAP-11, since
+both asked whether the component needs one more state. Both answers are no,
+for different reasons.
+
+The marker is the CONSUMER's markup, so `◐` already carries partial-ness on
+the channel that matters — the non-colour one. A `partial` state would add a
+value to learn and a colour pairing to gate, and would buy only two things:
+an un-greyed title and a distinct marker tint. The greying is not actually a
+lie: `pending` renders a step as *not complete*, and a partial step is not
+complete. The only thing it misstates is "nothing has started", and the glyph
+and the meta line both say otherwise, explicitly.
+
+**What the grill DID surface, and it is a docs fix rather than CSS**: in a
+document flow `current` means *the record you are looking at*; in an approval
+timeline it means *the step in progress*. One value, two meanings, on two
+timelines that can sit on the same screen. `/patterns/object-page` now states
+which meaning applies in a flow, and that a flow has exactly one `current`.
 
 ---
 

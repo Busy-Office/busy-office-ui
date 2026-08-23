@@ -58,7 +58,7 @@ const group = (g, i) => `
         <table class="bo-data-table">
           <thead>
             <tr>
-              <th scope="col"><input type="checkbox" class="bo-checkbox" aria-label="Include all lines from ${g.vendor}" checked></th>
+              <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Include all lines from ${g.vendor}" checked></th>
               <th scope="col" class="bo-data-table__col--tertiary">Source</th>
               <th scope="col">#</th>
               <th scope="col">Item</th>
@@ -71,14 +71,18 @@ const group = (g, i) => `
           <tbody>
             ${g.lines
               .map(
-                /* GAP-11. An excluded line renders IDENTICALLY to an
-                   included one — the only difference is the checkbox.
-                   data-row-state ships dirty / error / warning, all of them
-                   PROBLEM states; "deliberately left out" is not a problem
-                   and has no cue. On a 40-line conversion the reader cannot
-                   see at a glance what they are dropping. */
+                /* GAP-11 was MY BUG, not the framework's (2026-08-23).
+                   The complaint was that an excluded line renders identically
+                   to an included one. It did — because this table wrote
+                   `class="bo-checkbox"` and left off
+                   `bo-data-table__row-select`, which is the class the
+                   framework's own selection rule keys on
+                   (`tr:has(.bo-data-table__row-select:checked)` tints the row
+                   with --bo-color-bg-selected). check-markup could not catch
+                   it: every class used was real, one that does the work was
+                   simply absent. */
                 ([src, no, item, desc, qty, price, total, include]) => `<tr>
-              <td><input type="checkbox" class="bo-checkbox" aria-label="Include ${item} from ${src}"${
+              <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Include ${item} from ${src}"${
                 include ? ' checked' : ''
               }></td>
               <td class="bo-data-table__col--tertiary bo-data-table__col--code">${src}</td>

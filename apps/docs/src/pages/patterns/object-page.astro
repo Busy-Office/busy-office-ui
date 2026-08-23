@@ -296,6 +296,14 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
       and says "you are here" in words. Two channels: the marker state is the
       visual one, <code>aria-current</code> the programmatic one, and neither is
       colour alone.</li>
+      <li><strong>A half-done step is <code>pending</code> with a half-filled
+      marker</strong> — <code>◐</code> — and the detail in its meta line
+      ("Partial — 1 of 2 lines received"). There is no <code>partial</code>
+      state and there should not be: the marker is your markup, so the glyph
+      already carries the distinction without colour, which is the channel that
+      matters. Note the one place this differs from an approval timeline:
+      here <code>current</code> means <em>the record you are looking at</em>,
+      not <em>the step in progress</em>. One flow, one <code>current</code>.</li>
     </ul>
 
     <p class="bo-u-text-muted"><strong>Not a table, and not a
