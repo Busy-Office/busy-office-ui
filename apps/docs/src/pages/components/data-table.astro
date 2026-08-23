@@ -661,6 +661,10 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     class would be a second way to do something native HTML already does —
     this framework ships "semantic components, not utility soup" on purpose.</p>
   </section>
+  <section class="demo">
+    <h2>Markup — the canonical table recipe</h2>
+    <pre><code>{tableMarkup}</code></pre>
+  </section>
   <ClassRef component="data-table" />
   <ApiTable
     component="data-table"
@@ -677,12 +681,7 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
       'Separately opt-in: <code>data-sticky-cols="2|3"</code> + <code>initStickyCols()</code> freezes that many leading columns — for ONE, use <code>--sticky-col</code> instead (offset always 0, no JS; <code>data-sticky-cols="1"</code> is deliberately not supported, it would just be a second way to do the same thing). Two or three need JS because column widths aren\'t known until rendered — the behavior measures the header row and keeps offsets live via <code>ResizeObserver</code>.',
       'Separately opt-in: <code>data-context-menu="menu-id"</code> + <code>initContextMenu()</code> opens a <code>.bo-dropdown__menu</code> at the cursor on right-click instead of at a button. It only positions the menu — the items inside call whatever this page already documents (an <code>aria-sort</code> control, a <code>data-col-toggle</code> checkbox); this behavior owns no sort or filter logic of its own.',
     ]}
-  />
-  <section class="demo">
-    <h2>Markup — the canonical table recipe</h2>
-    <pre><code>{tableMarkup}</code></pre>
-  </section>
-  <script>
+  />  <script>
     import { initDataTables, initDataGrid, initRowEdit, initDropdowns, initTableToolbar, initStickyCols, initContextMenu } from '@busy-office/ui/js';
     initDataTables();
     initDataGrid();

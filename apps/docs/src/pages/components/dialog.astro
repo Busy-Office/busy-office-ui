@@ -116,6 +116,10 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
     work, only the accidental backdrop click is disarmed. Pair the destructive
     action with <code>.bo-btn--danger</code> and lead with the safe choice.</p>
   </section>
+  <section class="demo">
+    <h2>Markup — the canonical dialog recipe</h2>
+    <pre><code>{dialogMarkup}</code></pre>
+  </section>
   <ClassRef component="dialog" />
   <ApiTable
     component="dialog"
@@ -125,12 +129,7 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
       'The Tab focus loop and <code>data-state</code> animation sync are supplied by the behavior.',
       'Toasts cannot float above an open modal (top layer) — render confirmations inside the dialog.',
     ]}
-  />
-  <section class="demo">
-    <h2>Markup — the canonical dialog recipe</h2>
-    <pre><code>{dialogMarkup}</code></pre>
-  </section>
-  <script>
+  />  <script>
     import { initDialogs } from '@busy-office/ui/js';
     initDialogs();
   </script>

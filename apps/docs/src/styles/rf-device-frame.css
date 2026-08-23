@@ -1,9 +1,33 @@
+/* The two handheld widths the docs simulate, defined ONCE. Both numbers are
+   load-bearing elsewhere, which is why they get names rather than being
+   retyped: 360px is the RF scanner the rf-essentials profile targets (and
+   the size the mirrored pages are screenshotted at), 390px is the narrow
+   viewport check:layout and test:axe sweep every page at. Standardize
+   2026-08-23 — 22.5rem was hand-typed on three RF pattern pages beside an
+   iframe whose class already encoded the same 360px. */
+:root {
+  --demo-rf-inline: 360px;
+  --demo-phone-inline: 390px;
+}
+
 /* Shared RF preview iframe chrome (Standardize 2026-08-23: goods-receipt.astro,
    rf-list.astro and rf-landing.astro each hand-rolled the identical inline
    style for their 360x640 device-frame iframe). */
 .rf-device-frame {
-  inline-size: 360px;
+  inline-size: var(--demo-rf-inline);
   block-size: 640px;
   border: 1px solid var(--bo-color-border-default);
   border-radius: var(--bo-radius-md);
+}
+
+/* A live screen (not an iframe) shown at handheld width inside a docs page:
+   the "try it" wrapper above each RF mirror, and the phone sections on
+   approval/inbox. No frame — these sit in the page's own flow, and the
+   mirrors below them are what carry the device chrome. */
+.demo-rf-screen {
+  max-inline-size: var(--demo-rf-inline);
+}
+
+.demo-phone-screen {
+  max-inline-size: var(--demo-phone-inline);
 }

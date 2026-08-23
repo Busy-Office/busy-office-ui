@@ -24,7 +24,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
-import { WIDTHS } from './viewports.mjs';
+import { WIDTHS, DESKTOP_WIDTH } from './viewports.mjs';
 import { REPO_ROOT } from './paths.mjs';
 
 const repoRoot = REPO_ROOT;
@@ -306,7 +306,7 @@ try {
      — so it has demonstrated it can fail. */
   const browser = await launchDocsBrowser();
   const page = await browser.newPage();
-  await page.setViewport({ width: 1440, height: 900 });
+  await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
   await page.goto(`${base}/movements`, { waitUntil: 'networkidle0', timeout: 20000 });
   const win = await page.evaluate(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

@@ -100,11 +100,11 @@ const recipe = `/* app.css — the ONE statement that matters comes first: it fi
     <h3>Proof, live</h3>
     <div class="bo-cluster" style="align-items: stretch; --bo-cluster-gap: var(--bo-space-4)">
       <figure style="margin: 0">
-        <iframe srcdoc={iframeRaw} title="Unlayered reset — button stripped" style="border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); inline-size: 16rem; block-size: 5rem; background: white"></iframe>
+        <iframe srcdoc={iframeRaw} title="Unlayered reset — button stripped" class="demo-frame" style="inline-size: 16rem; block-size: 5rem; background: white"></iframe>
         <figcaption class="bo-u-text-muted" style="font-size: var(--bo-font-size-xs)">Reset unlayered: the button is stripped bare.</figcaption>
       </figure>
       <figure style="margin: 0">
-        <iframe srcdoc={iframeRecipe} title="Reset wrapped in a layer — button intact" style="border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); inline-size: 16rem; block-size: 5rem; background: white"></iframe>
+        <iframe srcdoc={iframeRecipe} title="Reset wrapped in a layer — button intact" class="demo-frame" style="inline-size: 16rem; block-size: 5rem; background: white"></iframe>
         <figcaption class="bo-u-text-muted" style="font-size: var(--bo-font-size-xs)">Same reset wrapped in <code>app-reset</code>: framework wins.</figcaption>
       </figure>
     </div>

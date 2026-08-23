@@ -19,6 +19,7 @@ import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
+import { DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 
 
 const { server, port, base } = await serveDist(DIST);
@@ -104,37 +105,44 @@ const settle = (ms = 80) => new Promise((r) => setTimeout(r, ms));
 
 async function sweep(path, page) {
   const url = `http://localhost:${port}${base}${path}`;
-  // 390 wide: both stresses share this load
-  await page.setViewport({ width: 390, height: 1000 });
+  // narrow: both stresses share this load
+  await page.setViewport({ width: NARROW_WIDTH, height: 1000 });
   await page.goto(url, { waitUntil: 'networkidle0' });
   await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
   const o390 = await overflowProbe(page);
-  if (o390) findings.push({ kind: 'overflow', path, cfg: '390', ...o390 });
+  if (o390) findings.push({ kind: 'overflow', path, cfg: String(NARROW_WIDTH), ...o390 });
   const s390 = await spacingProbe(page);
-  if (s390) findings.push({ kind: 'spacing', path, cfg: '390', clipped: s390 });
+  if (s390) findings.push({ kind: 'spacing', path, cfg: String(NARROW_WIDTH), clipped: s390 });
 
   // desktop: spacing again (different wrap points). No reload — the density
   // attribute set above survives, since only a navigation would clear it.
-  await page.setViewport({ width: 1440, height: 1000 });
+  await page.setViewport({ width: DESKTOP_WIDTH, height: 1000 });
   await settle();
   const s1440 = await spacingProbe(page);
-  if (s1440) findings.push({ kind: 'spacing', path, cfg: '1440', clipped: s1440 });
+  if (s1440) findings.push({ kind: 'spacing', path, cfg: String(DESKTOP_WIDTH), clipped: s1440 });
   // Rides this already-loaded page: a component that paints its own control
   // surface must not also wear the browser's link underline. Found by
   // dogfooding (2026-08-17) — the landing page's own CTAs and every
   // "components used" badge were anchors, and .bo-btn/.bo-badge never reset
   // text-decoration while six other anchor-bearing components did.
   const underlined = await underlineProbe(page);
-  if (underlined.length) findings.push({ kind: 'underline', path, cfg: '1440', els: underlined });
+  if (underlined.length) findings.push({ kind: 'underline', path, cfg: String(DESKTOP_WIDTH), els: underlined });
 
   // browser zoom: overflow only. Zoom is cleared explicitly afterwards because
   // the page object is reused for the next path from the pool — previously the
   // next navigation reset it, and nothing else does.
-  await page.setViewport({ width: 1432, height: 1000 });
+  // 1432, not the desktop width itself: at 150% zoom Chrome reports a
+  // slightly narrower layout viewport, and the pre-shrunk number keeps the
+  // zoomed case comparable to the unzoomed one. Derived from DESKTOP_WIDTH
+  // so a change to the pair carries here instead of silently drifting
+  // 8px apart (Standardize 2026-08-23 — this file was the last gate still
+  // holding its own copies of the sweep widths).
+  const ZOOM_WIDTH = DESKTOP_WIDTH - 8;
+  await page.setViewport({ width: ZOOM_WIDTH, height: 1000 });
   await page.evaluate(() => { document.documentElement.style.zoom = '1.5'; });
   await settle(120);
   const oZoom = await overflowProbe(page);
-  if (oZoom) findings.push({ kind: 'overflow', path, cfg: '1432@150%', ...oZoom });
+  if (oZoom) findings.push({ kind: 'overflow', path, cfg: `${ZOOM_WIDTH}@150%`, ...oZoom });
   await page.evaluate(() => { document.documentElement.style.zoom = ''; });
 }
 
@@ -185,4 +193,4 @@ if (findings.length) {
   console.error(`layout check FAILED — ${findings.length} finding(s) across ${paths.length} pages`);
   process.exit(1);
 }
-console.log(`layout check passed — ${paths.length} pages: no overflow at 390 or 150% zoom, no content lost under WCAG 1.4.12 spacing, no control-styled anchor wearing a link underline`);
+console.log(`layout check passed — ${paths.length} pages: no overflow at ${NARROW_WIDTH} or 150% zoom, no content lost under WCAG 1.4.12 spacing, no control-styled anchor wearing a link underline`);

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 17:49
+Generated at: 2026-08-23 17:57
 
 ## Open items by slice
 
@@ -19,8 +19,8 @@ Generated at: 2026-08-23 17:49
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (770 iterations logged)
-  Standardize   6 / 4 Continue rounds since 2026-08-23 14:38   OVERDUE
+dispatch status — counter-triggered rules (771 iterations logged)
+  Standardize   7 / 4 Continue rounds since 2026-08-23 14:38   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 15:49   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -34,7 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 15:49 · Meta · refusal · progress-counter RF element (no two-source support) · refused · f6c5e76
 - 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
 - 2026-08-23 16:09 · Continue · build · 126.1 budget gate (red-proven) + 126.2 scan flash (2 instrument-caught bugs: attr-only API, capture-vs-verdict ordering) · landed · 36b637a
 - 2026-08-23 16:20 · Continue · build · 126.3 btn-group--bar: equal glove slots, intent-named; 1.4.12 veto of ellipsis honored (labels wrap) · landed · ee8ed6a
@@ -44,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 16:57 · Continue · build · 127.1: sync-state slot (zero new CSS) + /concepts/offline contract page, claims-driven · landed · 9df614f
 - 2026-08-23 17:22 · Continue · build · 127.2 column priority ladder (--tertiary) + density-coupling fix · landed · 236a39a
 - 2026-08-23 17:34 · Continue · build · 127.3 approve-from-phone sections (approval + inbox) · landed · 3ef5e22
+- 2026-08-23 17:49 · Continue · build · 127.4 saved views on list-report (view = URL) · landed · f022fce
 
 ## Sunset test
 

@@ -36,7 +36,7 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
 
   <section class="demo">
     <h2>Grouped sections in an embedded shell</h2>
-    <div class="bo-app-shell" style="min-height: 18rem; max-inline-size: 700px; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); overflow: hidden">
+    <div class="bo-app-shell demo-shell-frame" style="min-block-size: 18rem; max-inline-size: 700px">
       <header class="bo-navbar bo-app-shell__header">
         <span class="bo-navbar__brand">Embedded app</span>
         <span class="bo-navbar__spacer"></span>
@@ -76,7 +76,7 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
         shell narrow enough to fit this page the labels are visually hidden and
         there is nothing to show. Outside a shell the query never matches, so
         this renders the expanded rail at any viewport, including 390. */}
-    <nav class="bo-sidebar-nav" aria-label="Long labels" style="inline-size: 14rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md)">
+    <nav class="bo-sidebar-nav demo-frame" aria-label="Long labels" style="inline-size: 14rem">
       <div class="bo-sidebar-nav__section">
         <div class="bo-sidebar-nav__heading">Reference</div>
         <ul>

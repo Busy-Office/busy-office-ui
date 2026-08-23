@@ -157,6 +157,59 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 128 — Standardize sweep, round 1 (2026-08-23)
+
+Dispatched by rule 2 (4 Continue rounds since the last sweep). A read-only
+fan-out scanned inline styles, duplicated script constants, repeated CSS and
+page-skeleton drift, then reported with file:line evidence. Landed:
+
+1. [x] **The frame idiom, finished.** `demo-shell-frame.css` was added THIS
+       MORNING and its own commit message named `sidebar-nav.astro` as an
+       unconverted case; the sweep found it plus 7 more inline copies of
+       `border + radius`. Split into two classes because they are two ideas:
+       `.demo-shell-frame` (edge + clipping + calmer `__main` padding, for a
+       real app shell) and `.demo-frame` (just the edge, for a navbar, two
+       sidebar navs, a button bar, a print report and two srcdoc iframes,
+       none of which may inherit the clipping). 8 sites converted; the 5
+       remaining matches are inside page `<style>` blocks, which is a
+       different and legitimate thing.
+2. [x] **Handheld widths single-sourced.** `22.5rem` was hand-typed on three
+       RF pages *beside an iframe whose class already encoded the same
+       360px*. Now `--demo-rf-inline` / `--demo-phone-inline` with the reason
+       written down (360 = the RF profile's target and the mirrors'
+       screenshot size; 390 = the width `check:layout` and `test:axe` sweep
+       every page at) + `.demo-rf-screen` / `.demo-phone-screen`. 6 sites.
+3. [x] **`viewports.mjs` finally adopted everywhere it applies.** The module
+       exists precisely to stop the pair drifting, and `check-layout.mjs` —
+       the gate that sweeps at both widths — never imported it; `check-po-app`
+       had one residual literal in an otherwise-converted file. The zoom
+       width is now `DESKTOP_WIDTH - 8` with its 8px explained rather than a
+       bare `1432`.
+4. [x] **page-shape now checks ORDER, not just presence.** Its own header has
+       said "demo-first, spec-last" since it was written, but the checks are
+       independent `.test()` calls, so `dialog.astro` and `data-table.astro`
+       both kept a Markup section AFTER their spec tables and built green for
+       months. Pages fixed; assertion added against the LAST spec block on
+       the page — the first draft was component-scoped and false-positived on
+       `state-patterns`, a composite documenting two components, exactly as
+       the sweep predicted it would. Red-proved by injecting a demo section
+       after `badge.astro`'s tables.
+
+Refused this round, with reasons: consolidating `margin-block-start:
+var(--bo-space-3)` (11 sites) — a single throwaway declaration with no shared
+meaning; a class for it names nothing. `max-inline-size: 28rem` (9 sites) —
+applied to four structurally unrelated elements for the generic reason "not
+full-bleed"; consolidating would invent an arbitrary size token. The four
+repeated CSS declaration pairs in `packages/core` — the utilities file says
+outright it is "a curated set of escape hatches, not a utility system", so
+the honest fix would widen public API, which rule 3 of this loop forbids.
+`margin: 0` looked like the sweep's biggest number (28) and is not one thing:
+22 of the 28 are two files resetting their own local typography.
+
+Next round's input: `DAY_NAMES` is duplicated between `check-calendar-grid.mjs`
+and `month-grid.ts`, and cannot be imported across the .ts/.mjs line without
+moving it to a plain module — real, but a restructure rather than a rename.
+
 ## Slice 127 — the mobile-ERP candidates, grilled to builds (2026-08-23)
 
 The owner's sequencing: "look ok but before design, please grill the

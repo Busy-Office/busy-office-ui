@@ -37,6 +37,9 @@ const dirs = (await readdir(componentsDir, { withFileTypes: true })).filter((d) 
 const gallery = await readFile(galleryPath, 'utf8');
 
 const failures = [];
+/* A composite page is visited once per component it documents; the order
+   failure is a property of the PAGE, so report it once. */
+const orderReported = new Set();
 let checked = 0;
 
 for (const d of dirs) {
@@ -80,6 +83,35 @@ for (const d of dirs) {
   ];
   for (const [re, desc] of checks) {
     if (!re.test(page)) failures.push(`${slug}.astro: missing ${desc}`);
+  }
+
+  /* ORDER, not just presence. The header above has said "demo-first,
+     spec-last" since this gate was written, and the recipe in CLAUDE.md
+     calls it the single highest-leverage structural fix found in the
+     2026-08-16 docs-IA comparison — but the checks above are independent
+     .test() calls, so a page could satisfy every one of them with its
+     spec tables on top. Two did: dialog.astro and data-table.astro each
+     kept a "Markup — the canonical recipe" section AFTER ClassRef and
+     ApiTable, and the build passed for months (found by a Standardize
+     sweep, 2026-08-23). Comparing source positions is exact — the last
+     demo section must open before the spec tables do.
+
+     Stated against the LAST spec block on the page, not this component's
+     own, because a page may document two components (state-patterns
+     carries both skeleton and state, each with its own pair, the same
+     way alert→alerts aliases a slug). There, skeleton's spec tables sit
+     mid-page ahead of state's demos and that is correct; what must never
+     happen is a demo section opening after the final spec table. The
+     first draft of this assertion was component-scoped and flagged
+     state-patterns — a false positive the sweep that wrote it had
+     already predicted. */
+  const lastDemo = page.lastIndexOf('<section class="demo"');
+  const lastSpec = Math.max(page.lastIndexOf('<ClassRef'), page.lastIndexOf('<ApiTable'));
+  if (lastDemo >= 0 && lastSpec >= 0 && lastDemo > lastSpec && !orderReported.has(slug)) {
+    orderReported.add(slug);
+    failures.push(
+      `${slug}.astro: a <section class="demo"> opens AFTER the last ClassRef/ApiTable — the skeleton is demo-first, spec-last, so the spec tables sit together at the end right before <Related>`,
+    );
   }
 
   if (!gallery.includes(`href: '/components/${slug}'`)) {

@@ -1,4 +1,9 @@
-/* Shared framing for a full app-shell shown INSIDE a docs page (Standardize
+/* Two framing classes, one idea: a demo shown INSIDE a docs page needs an
+   edge the page itself does not have, or the demo's own chrome reads as the
+   docs chrome. `.demo-frame` is that edge; `.demo-shell-frame` is the edge
+   PLUS what a full app-shell needs (clipping, and a calmer main padding).
+
+   Shared framing for a full app-shell shown INSIDE a docs page (Standardize
    2026-08-23: app-frame.astro and suite-home.astro hand-rolled the identical
    border/radius/overflow literal, and sidebar-nav.astro a physical-property
    variant of it). A screen demo needs an edge the page itself does not have,
@@ -16,4 +21,16 @@
    demo sitting inside an already-padded docs section. */
 .demo-shell-frame > .bo-app-shell__main {
   padding: var(--bo-space-4);
+}
+
+/* The generic edge — border + radius and nothing else. Split out of
+   .demo-shell-frame in the Standardize round of 2026-08-23: the same two
+   declarations were hand-typed inline on eight more demos (a navbar, two
+   sidebar navs, a button bar, a print report and two srcdoc iframes) that
+   are NOT app shells, so they must not inherit its clipping or its
+   __main padding rule. Sizes stay inline — the width of a demo is a
+   property of that demo, not of framing. */
+.demo-frame {
+  border: 1px solid var(--bo-color-border-default);
+  border-radius: var(--bo-radius-md);
 }
