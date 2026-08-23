@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 18:14
+Generated at: 2026-08-23 18:15
 
 ## Open items by slice
 
@@ -16,8 +16,8 @@ Generated at: 2026-08-23 18:14
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (776 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-23 17:58   ok
+dispatch status — counter-triggered rules (777 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-23 17:58   ok
   Objective     0 / 3 slices          since 2026-08-23 15:49   ok
 ```
 
@@ -30,7 +30,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 16:52 · Meta · refusal · swipe row actions stay parked (Hypothesis, needs a consumer) · refused · d32bd68
 - 2026-08-23 16:57 · Continue · build · 127.1: sync-state slot (zero new CSS) + /concepts/offline contract page, claims-driven · landed · 9df614f
 - 2026-08-23 17:22 · Continue · build · 127.2 column priority ladder (--tertiary) + density-coupling fix · landed · 236a39a
 - 2026-08-23 17:34 · Continue · build · 127.3 approve-from-phone sections (approval + inbox) · landed · 3ef5e22
@@ -40,6 +39,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 17:58 · Meta · refusal · max-inline-size:28rem consolidation (9 sites) — would invent an arbitrary size token · refused · 7ce9aa3
 - 2026-08-23 17:58 · Meta · refusal · consolidating 4 repeated CSS pairs in packages/core — the honest fix widens public API · refused · 7ce9aa3
 - 2026-08-23 18:09 · Continue · build · 127.5 touch attribute recipe on Forms · landed · 1ea0472
+- 2026-08-23 18:15 · Continue · build · 127.6 file-upload camera section; camera candidate closed · landed · c653b33
 
 ## Sunset test
 
