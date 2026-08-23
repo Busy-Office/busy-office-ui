@@ -1,0 +1,25 @@
+/* Live miniatures on the /patterns/ tile index (roadmap 104.2, option
+   c-scoped). The stage renders REAL shipped-CSS compositions at reduced
+   scale; the wrapper crops them to a fixed band so every tile stays the
+   same height whether or not it carries a preview's full content.
+
+   The stage is `inert` + aria-hidden in the markup — this file only makes
+   doubly sure nothing inside can capture a pointer. Scale is per-preview
+   (--tp-scale) because a month grid needs more shrink than a login card;
+   the stage widens by the inverse so the scaled result still fills the
+   tile's inline size. */
+.tile-preview {
+  block-size: 7.5rem;
+  overflow: hidden;
+  border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+  background: var(--bo-color-bg-canvas);
+  padding: var(--bo-space-3);
+}
+
+.tile-preview__stage {
+  --tp-scale: 0.75;
+  transform: scale(var(--tp-scale));
+  transform-origin: top left;
+  inline-size: calc(100% / var(--tp-scale));
+  pointer-events: none;
+}

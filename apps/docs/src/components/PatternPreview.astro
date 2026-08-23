@@ -1,0 +1,106 @@
+---
+/**
+ * Live tile miniatures for the /patterns/ index (roadmap 104.2, owner
+ * decision 2026-08-23: option c-scoped). Each preview is a SMALL, REAL
+ * composition of the shipped CSS — the same classes the pattern page
+ * itself demonstrates — rendered inert inside the tile. Zero drift by
+ * construction: no images to go stale, and check-markup verifies every
+ * class against the built CSS like any other docs markup.
+ *
+ * SCOPED deliberately (the research's own caveat, and namethatui's own
+ * practice): only patterns whose screens read at tile size get one — a
+ * dense list-report shrunk to 16rem is grey noise, and a preview that
+ * cannot be read is worse than text. Patterns not in this map render
+ * text-only tiles, unchanged.
+ *
+ * Rules for a fragment, so previews can never regress the gates:
+ *  - real shipped classes and documented data-* values ONLY
+ *    (check-markup enforces this against dist);
+ *  - NO ids, NO popovers, NO aria-controls/expanded — nothing that can
+ *    collide or claim interactivity; the whole stage is `inert` +
+ *    aria-hidden, so it is invisible to AT and untabbable (the tile's
+ *    own text carries all information);
+ *  - decorative text only; never a value the tile's copy contradicts.
+ */
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+
+const day = (n: number, attrs = '') => `<span class="bo-calendar__day"${attrs}>${n}</span>`;
+const PREVIEWS: Record<string, { scale: number; html: string }> = {
+  'login': { scale: 0.8, html: `
+    <div class="bo-widget" style="max-inline-size: 15rem; margin-inline: auto">
+      <div class="bo-widget__body">
+        <div class="bo-form-field"><span class="bo-form-field__label">Email</span><span class="bo-input">j.kim@acme.example</span></div>
+        <div class="bo-form-field"><span class="bo-form-field__label">Password</span><span class="bo-input">••••••••</span></div>
+        <span class="bo-btn" style="inline-size: 100%">Sign in</span>
+      </div>
+    </div>` },
+  'app-launch': { scale: 0.8, html: `
+    <div class="bo-widget-grid" style="--bo-widget-min: 6rem">
+      <span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--cart" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>Purchasing</span></span>
+      <span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--box" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>Warehouse</span></span>
+      <span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--chart" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>Reports</span></span>
+    </div>` },
+  'wizard': { scale: 0.75, html: `
+    <ol class="bo-stepper" style="list-style: none; padding: 0">
+      <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker">✓</span><span class="bo-stepper__label">Header</span></li>
+      <li class="bo-stepper__step" data-state="done"><span class="bo-stepper__marker">✓</span><span class="bo-stepper__label">Lines</span></li>
+      <li class="bo-stepper__step"><span class="bo-stepper__marker">3</span><span class="bo-stepper__label">Approvers</span></li>
+      <li class="bo-stepper__step"><span class="bo-stepper__marker">4</span><span class="bo-stepper__label">Review</span></li>
+    </ol>
+    <div class="bo-form-field" style="margin-block-start: var(--bo-space-3); max-inline-size: 18rem"><span class="bo-form-field__label">Cost center</span><span class="bo-input">CC-4021</span></div>` },
+  'schedule': { scale: 0.72, html: `
+    <div class="bo-calendar" style="max-inline-size: 22rem">
+      <div class="bo-calendar__month">
+        ${day(10)}${day(11)}${day(12, ' data-day="holiday"')}${day(13)}${day(14)}${day(15)}${day(16)}
+        ${day(17)}${day(18, ' data-day="today"')}${day(19)}${day(20, ' data-day="selected"')}${day(21)}${day(22, ' data-day="closed"')}${day(23)}
+      </div>
+    </div>` },
+  'kanban': { scale: 0.7, html: `
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bo-space-2); max-inline-size: 26rem">
+      <div class="bo-stack bo-stack--tight"><span class="bo-badge">Draft · 2</span><span class="bo-widget"><span class="bo-widget__body">PO-88214</span></span><span class="bo-widget"><span class="bo-widget__body">PO-88215</span></span></div>
+      <div class="bo-stack bo-stack--tight"><span class="bo-badge bo-badge--warning">In approval · 1</span><span class="bo-widget"><span class="bo-widget__body">PO-88213</span></span></div>
+      <div class="bo-stack bo-stack--tight"><span class="bo-badge bo-badge--success">Released · 1</span><span class="bo-widget"><span class="bo-widget__body">PO-88209</span></span></div>
+    </div>` },
+  'approval': { scale: 0.78, html: `
+    <ol class="bo-timeline" style="list-style: none; padding: 0">
+      <li class="bo-timeline__step" data-state="done"><span class="bo-timeline__marker">✓</span><div><div class="bo-timeline__title">Submitted</div><div class="bo-timeline__meta">R. Vance</div></div></li>
+      <li class="bo-timeline__step" data-state="current"><span class="bo-timeline__marker">●</span><div><div class="bo-timeline__title">Cost-center approval</div><div class="bo-timeline__meta">waiting on M. Okafor</div></div></li>
+      <li class="bo-timeline__step" data-state="pending"><span class="bo-timeline__marker">3</span><div><div class="bo-timeline__title">Finance release</div></div></li>
+    </ol>` },
+  'notification': { scale: 0.78, html: `
+    <div class="bo-stack bo-stack--tight" style="max-inline-size: 20rem">
+      <div class="bo-alert bo-alert--elevated bo-alert--warning"><div><span class="bo-alert__title">Approval overdue</span> PO-88213 · 2 days</div></div>
+      <div class="bo-alert bo-alert--elevated"><div><span class="bo-alert__title">Import finished</span> 240 rows staged</div></div>
+    </div>` },
+  'error-pages': { scale: 0.75, html: `
+    <div class="bo-state bo-state--error" style="max-inline-size: 18rem; margin-inline: auto">
+      <span class="bo-state__icon">✕</span>
+      <span class="bo-state__title">404 — not found</span>
+      <span class="bo-state__description">The record may have been deleted.</span>
+      <span class="bo-state__actions"><span class="bo-btn bo-btn--secondary">Back to list</span></span>
+    </div>` },
+  'reporting-dashboard': { scale: 0.8, html: `
+    <div class="bo-widget-grid" style="--bo-widget-min: 8rem">
+      <span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">Open invoices</span><span class="bo-stat__value">1,284</span></span></span>
+      <span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">Overdue</span><span class="bo-stat__value">17</span></span></span>
+      <span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">Avg. approval</span><span class="bo-stat__value">2.4d</span></span></span>
+    </div>` },
+  'comparison': { scale: 0.72, html: `
+    <table class="bo-data-table" data-density="compact" style="max-inline-size: 24rem">
+      <thead><tr><th>Criterion</th><th class="bo-data-table__col--numeric">Acme</th><th class="bo-data-table__col--numeric">Vertex</th></tr></thead>
+      <tbody>
+        <tr><th>Unit price $</th><td class="bo-data-table__col--numeric"><strong>770.00</strong></td><td class="bo-data-table__col--numeric">803.00</td></tr>
+        <tr><th>Lead time</th><td class="bo-data-table__col--numeric">14</td><td class="bo-data-table__col--numeric"><strong>9</strong></td></tr>
+      </tbody>
+    </table>` },
+};
+const preview = PREVIEWS[slug];
+---
+{preview && (
+  <div class="tile-preview" inert aria-hidden="true">
+    <div class="tile-preview__stage" style={`--tp-scale: ${preview.scale}`} set:html={preview.html} />
+  </div>
+)}

@@ -54,6 +54,14 @@ async function spacingProbe(page) {
       const map = new Map();
       for (const el of main.querySelectorAll('*')) {
         if (el.closest('.bo-visually-hidden, .skip-link, .scale-skip')) continue;
+        /* 1.4.12 protects CONTENT — text a reader needs. A subtree that is
+           inert AND aria-hidden is decoration by declaration: AT cannot
+           reach it and it cannot be operated, so cropping it under spacing
+           overrides loses nothing (the pattern tiles' live miniatures are
+           the case in point — their tile's own text carries everything).
+           Both attributes are required: aria-hidden alone still leaves
+           sighted-keyboard content, inert alone still announces. */
+        if (el.closest('[inert][aria-hidden="true"]')) continue;
         const cs = getComputedStyle(el);
         const hidesY = cs.overflowY === 'hidden' || cs.overflow === 'hidden';
         const hidesX = cs.overflowX === 'hidden' || cs.overflow === 'hidden';

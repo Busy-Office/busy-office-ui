@@ -1950,8 +1950,26 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        build, stylelint, 111 vitest tests, `check:claims` (88 behaviors) —
        all green.
 
-2. [ ] **104.2 — preview images on the tiles. OWNER CALL, now with
-       evidence** (Research round 2, 2026-08-23:
+2. [x] **104.2 — DONE 2026-08-23. Owner picked (c-scoped): live
+       miniatures where they read, text where they don't.** Built:
+       `PatternPreview.astro` — 10 patterns (login, app-launch, wizard,
+       schedule, kanban, approval, notification, error-pages,
+       reporting-dashboard, comparison) get a small REAL composition of
+       the shipped CSS, rendered `inert` + aria-hidden inside the tile
+       (verified live: 10 previews, all inert, zero tabbables inside);
+       the 25 dense patterns stay text-only on purpose and the index's
+       opener says why. Zero images, zero drift surface: check-markup
+       validates every preview class against the built CSS like any
+       other markup. Fragment rules written into the component (no ids,
+       no popovers, documented data-* values only). The layout sweep
+       caught a REAL 1.4.12 interaction on the first build — spacing
+       overrides grow the previews past their crop — resolved in the
+       GATE on principle, not per-tile: 1.4.12 protects content, and an
+       inert+aria-hidden subtree is decoration by declaration, so the
+       sweep now skips such subtrees; red-proved both ways (visible
+       clipped content still fails; only the decorated case passes).
+       Screenshots light+dark. Evidence trail: *(entry as decided
+       follows)* **OWNER CALL, now with evidence** (Research round 2, 2026-08-23:
        `.roundtable/research-pattern-tile-previews-2026-08-23.md`). The
        original fork was text-vs-screenshots; the research adds the shape
        the item had not considered and the owner's own reference actually
@@ -2529,7 +2547,18 @@ then documented — and refusing is an expected outcome.
        next dispatch should re-scan ROADMAP.md fresh for the next-oldest
        open item rather than assume another 102.x exists.
 
-4. [ ] **102.4 — reconcile the standing wake prompt with reality. OWNER CALL.**
+4. [x] **102.4 — DONE 2026-08-23. Owner adopted a drift-proof wake
+       prompt** (conditional on no conflict with the dispatcher —
+       verified: the prompt defers to LOOPS.md's rule order rather than
+       restating it, and its halt sentence restates rule 8, so it cannot
+       disagree with the file by construction). The adopted text names
+       only stable things — the two files, the handover file, the live
+       verification floor incl. the CI-only sweeps, the recorder — and
+       none of the things that drifted before (slice numbers, dimension
+       counts, dispatch order). Recorded verbatim in the loop-wake-trigger
+       memory note; the old prompt's Slice-94/seven-dimensions text is
+       retired. *(original entry follows)*
+       **reconcile the standing wake prompt with reality. OWNER CALL.**
        The prompt driving every wake names Slice 94 as "the active queued work"
        and asks for "the seven DSA dimensions". Both are false: **39 of 39
        components are scored**, and the rubric has **six** dimensions since

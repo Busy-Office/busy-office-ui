@@ -2,6 +2,7 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import patternsIndex from '../../data/patterns-index.json';
+import PatternPreview from '../../components/PatternPreview.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Patterns">
@@ -10,10 +11,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     the <a href={base + '/components/data-table'}>component docs</a> instead.
     This is every full ERP screen this framework documents, grouped the way a
     working day actually runs: find something, work one record, correct
-    data, clear a queue, monitor what ran. Every tile below is generated
+    data, clear a queue, monitor what ran. Every tile's text is generated
     from its pattern page's own opener, complexity badge and Components-used
-    list — nothing here is hand-written, so it cannot drift from the page it
-    describes. Within each group, tiles order simplest first.
+    list, so it cannot drift from the page it describes. Tiles whose screens
+    read at this size also carry a <strong>live miniature</strong> — a small,
+    inert composition of the same shipped CSS, not an image — while dense
+    screens stay text-only on purpose: a list-report shrunk to a tile is
+    grey noise. Within each group, tiles order simplest first.
   </p>
 
   {patternsIndex.groups.map((group) => (
@@ -22,6 +26,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="bo-widget-grid" style="--bo-widget-min: 16rem">
         {group.tiles.map((tile) => (
           <a href={base + tile.href} class="bo-widget">
+            <PatternPreview slug={tile.href.replace('/patterns/', '')} />
             <div class="bo-widget__header">
               <span class="bo-widget__title">{tile.title}</span>
               <span class="bo-badge">complexity {tile.complexity} of 4</span>
