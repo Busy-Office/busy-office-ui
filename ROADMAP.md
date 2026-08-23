@@ -196,15 +196,33 @@ its reason.
        section + concept page; a claims case drives a state change and
        asserts both channels; no state is colour-only; nothing promises
        an engine.
-2. [ ] **127.2 — Table column priority.** Grill verdict: CSS-first,
-       a per-column `--priority-low/-medium` class pair hidden under
-       the EXISTING named `bo-table` container query (Fiori pop-in and
-       PatternFly stacking are the floors; ours needs no JS and no new
-       query). Column-chooser (table-toolbar) is the documented
-       recovery. Accept: data-table docs section + list-report
-       adoption; a claims case proves a low-priority column hides at
-       narrow container width and returns via the chooser; budget
-       unaffected (main bundle).
+2. [x] **127.2 — Table column priority. DONE 2026-08-23.** Shipped as
+       `__col--tertiary` completing a THREE-tier ladder with the
+       already-shipping `__col--secondary` (unmarked → tertiary drops
+       below 40rem → secondary below 30rem), one class per cell under
+       the EXISTING named `bo-table` query: no JS, no new mechanism.
+       Two verdict corrections found while building, both recorded
+       because they contradict the queued text:
+       (a) **The column chooser is NOT the recovery.** It hides via
+       `[hidden]`, which cannot un-hide what a container query hid —
+       the compose is one-way, deliberately (choice operates within
+       what the space allows). The canonical reflow rule — the row's
+       detail view — is the recovery, and the docs now say so.
+       (b) **A real defect the claims case surfaced**: `--secondary`
+       hiding lived inside the `:not([data-density])` auto block, so
+       every table setting `data-density` explicitly — including the
+       framework's OWN list-report screen — got no reflow at phone
+       width while the docs claimed the column "hides itself".
+       Density and priority are independent settings now; CHANGELOG
+       carries it as Fixed. The instrument earned its keep: the number
+       it reported (nothing hidden at 21.25rem) was not the bug it was
+       written to catch.
+       Red-proved twice against the BUILT css — neutralising the
+       tertiary rule reddens both cases, and demoting tertiary to the
+       same 30rem threshold reddens the ORDER case alone (the
+       minified spelling keeps the space after `max-width:`, which the
+       first attempt missed). 101 claims green, layout 121, axe 121x2
+       zero, forced-colors 24/19.
 3. [ ] **127.3 — Approve-from-phone.** Grill verdict: SECTIONS, not
        patterns (the audit's own call) — approval and inbox each gain
        an "on a phone" section + phone-width States rows: what

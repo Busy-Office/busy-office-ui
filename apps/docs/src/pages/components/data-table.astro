@@ -152,6 +152,52 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     columns <code>--secondary</code>. This sentence is the canonical statement of
     the rule; other pages point here (2026-08-21 sweep — it had been restated
     four ways).</p>
+    <h3>The full priority ladder — <code>--tertiary</code> drops first</h3>
+    {/* resize:horizontal makes "resize this box's edge" literally true —
+        720px starts ABOVE the 40rem tier so the reader watches the drop */}
+    <div style="max-inline-size: 720px; min-inline-size: 16rem; resize: horizontal; overflow: hidden; padding-block-end: 2px">
+      <div class="bo-data-table-container" tabindex="0">
+        <table class="bo-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Invoice #</th>
+              <th scope="col">Vendor</th>
+              <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
+              <th scope="col" class="bo-data-table__col--tertiary">Created by</th>
+              <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.slice(0, 3).map((r) => (
+              <tr>
+                <td class="bo-data-table__col--code">{r.no}</td>
+                <td>{r.vendor}</td>
+                <td class="bo-data-table__col--secondary">{r.cc}</td>
+                <td class="bo-data-table__col--tertiary">J. Kim</td>
+                <td class="bo-data-table__col--numeric">{r.amount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Three tiers by what a narrowing container
+    drops: unmarked columns are the ones the row cannot be understood
+    without; <code>--tertiary</code> (nice-to-have context) drops first,
+    below 40rem of container width; <code>--secondary</code> follows below
+    30rem. Resize this box's edge to watch "Created by" go before "Cost
+    center". Same floors as the references (Fiori marks columns by
+    importance, PatternFly stacks) with no JS and no new mechanism — one
+    class on the cells, the existing named container query does the rest.
+    Recovery is the reflow rule above — every tier equally: data a tier
+    drops must stay reachable through the row's detail view. The
+    <a href={base + '/components/table-toolbar'}>column chooser</a> does
+    NOT restore a priority-hidden column, on purpose: it hides via
+    <code>[hidden]</code>, which composes one-way with the container query
+    — the user's choice operates within what the space allows, and a
+    chooser that could force a column into a container with no room for it
+    would just recreate the sideways scroll the ladder exists to
+    prevent.</p>
   </section>
   <section class="demo">
     <h2>Editing, toolbars and grid navigation</h2>

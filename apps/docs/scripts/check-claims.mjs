@@ -1936,6 +1936,66 @@ check(
   JSON.stringify({ foldsScreen, foldsPrint }),
 );
 
+// Column priority ladder (roadmap 127.2): --tertiary drops below 40rem of
+// CONTAINER width, --secondary below 30rem, unmarked columns never — the
+// tier ORDER is the claim, not just "something hides". Driven by setting
+// the demo wrapper's width and re-reading computed display, so the named
+// container query is exercised for real, at three widths bracketing both
+// thresholds.
+await visit('/components/data-table/', { width: DESKTOP_WIDTH, height: 2400 });
+const ladder = await page.evaluate(async () => {
+  const raf = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const tertiaryTh = document.querySelector('th.bo-data-table__col--tertiary');
+  const wrap = tertiaryTh.closest('.bo-data-table-container').parentElement;
+  const read = () => {
+    const row = tertiaryTh.closest('tr');
+    const vis = (sel) => getComputedStyle(row.querySelector(sel)).display !== 'none';
+    return {
+      tertiary: vis('.bo-data-table__col--tertiary'),
+      secondary: vis('.bo-data-table__col--secondary'),
+      unmarked: vis('th:not([class])'),
+    };
+  };
+  const out = {};
+  for (const [name, width] of [['wide', '45rem'], ['mid', '35rem'], ['narrow', '25rem']]) {
+    wrap.style.maxInlineSize = width;
+    wrap.style.minInlineSize = '0';
+    await raf();
+    out[name] = read();
+  }
+  return out;
+});
+check(
+  'column priority ladder drops in tier order as the CONTAINER narrows: all visible at 45rem; tertiary-only hidden at 35rem; tertiary+secondary hidden (unmarked still visible) at 25rem',
+  ladder.wide.tertiary && ladder.wide.secondary && ladder.wide.unmarked &&
+    !ladder.mid.tertiary && ladder.mid.secondary && ladder.mid.unmarked &&
+    !ladder.narrow.tertiary && !ladder.narrow.secondary && ladder.narrow.unmarked,
+  JSON.stringify(ladder),
+);
+
+// The ladder ADOPTED: list-report's results table at a phone-narrow
+// viewport keeps the columns an AP clerk cannot read the row without
+// (Invoice #, Vendor, Amount, Status) and drops Cost center + Due.
+await visit('/patterns/list-report/', { width: NARROW_WIDTH, height: 1600 });
+const lrLadder = await page.evaluate(() => {
+  const table = document.querySelector('.bo-data-table--sticky-col');
+  const th = (sel) => table.querySelector(`thead ${sel}`);
+  const vis = (el) => el && getComputedStyle(el).display !== 'none';
+  return {
+    containerRem: table.closest('.bo-data-table-container').clientWidth / 16,
+    tertiaryHidden: !vis(th('.bo-data-table__col--tertiary')),
+    secondaryHidden: !vis(th('.bo-data-table__col--secondary')),
+    invoiceVisible: vis(th('[aria-sort]')),
+    amountVisible: vis(th('.bo-data-table__col--numeric')),
+  };
+});
+check(
+  'list-report at phone width: priority ladder drops Cost center (tertiary) and Due (secondary); Invoice # and Amount stay',
+  lrLadder.containerRem < 30 && lrLadder.tertiaryHidden && lrLadder.secondaryHidden &&
+    lrLadder.invoiceVisible && lrLadder.amountVisible,
+  JSON.stringify(lrLadder),
+);
+
 // /patterns/schedule's "Open it full screen" link (roadmap 119.1): a real
 // navigation to an isolated document with no docs chrome, showing the SAME
 // generated month (not a second, driftable copy).

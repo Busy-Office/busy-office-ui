@@ -8,6 +8,24 @@ pin.
 
 ## Unreleased
 
+- **Added** (`data-table`): `.bo-data-table__col--tertiary` completes the
+  **column priority ladder** — unmarked columns always show, `--tertiary`
+  (nice-to-have context) drops below 40rem of container width,
+  `--secondary` below 30rem. One class on the cells; the existing named
+  `bo-table` container query does the work, so no JS and no new
+  mechanism. Data a tier drops must stay reachable through the row's
+  detail view (the canonical reflow rule); the column chooser composes
+  one-way and deliberately does not restore a priority-hidden column.
+
+- **Fixed** (`data-table`): column priority no longer depends on density.
+  `--secondary` hiding was scoped inside the auto-compaction block, so any
+  table that set `data-density` explicitly — `compact` is the common ERP
+  choice, and the framework's own list-report screen does it — silently
+  got NO reflow at phone width while the docs said the column "hides
+  itself". Density (how tight the rows are) and priority (what still fits)
+  are independent settings now. Found by the ladder's own live claims case
+  measuring the shipped list-report page.
+
 - **Added** (`scan`, RF): the scan-result flash — `data-scan-flash` on a
   `[data-scan-input]` field paints a ~600ms viewport wash on capture
   (`body[data-scan-result="ok"]`), and the exported

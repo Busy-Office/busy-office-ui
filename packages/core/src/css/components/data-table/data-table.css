@@ -458,6 +458,32 @@
      The two heights now come from --bo-density-auto-* in tokens/density.css,
      beside the tiers they relate to, instead of being literals hiding in a
      container query where no one looking for a density would find them. */
+  /* Column priority ladder (roadmap 127.2; Fiori's importance pop-in and
+     PatternFly's stacking are the floors — ours needs no JS and no new
+     query mechanism). Three tiers by what a NARROWING container drops:
+       (unmarked)      the columns the row cannot be understood without
+       __col--secondary  drops below 30rem (shipped since the first
+                         auto-compaction — this ladder EXTENDS it)
+       __col--tertiary   drops first, below 40rem: nice-to-have context
+     Recovery is the ROW's detail view, per the canonical reflow rule on
+     the data-table docs page — NOT the column chooser: the chooser hides
+     via [hidden], which cannot un-hide what the container query hid, and
+     that one-way compose is deliberate (choice operates within what space
+     allows).
+     Priority is INDEPENDENT of density, unlike the padding compaction
+     above: density says how tight the rows are, priority says what still
+     fits — a consumer who picked `compact` has, if anything, MORE reason
+     to keep the ladder. It used to be welded to the auto block, so
+     `data-density="compact"` silently disabled reflow on every table that
+     set it (found 2026-08-23 when the ladder's own claims case measured
+     list-report and nothing hid). Fixed by scoping the ladder to the
+     class alone. */
+  @container bo-table (max-width: 40rem) {
+    .bo-data-table__col--tertiary {
+      display: none;
+    }
+  }
+
   @container bo-table (max-width: 30rem) {
     .bo-data-table-container:not([data-density])
       > .bo-data-table:not([data-density]) {
@@ -473,9 +499,8 @@
       padding-block: var(--bo-space-1);
     }
 
-    .bo-data-table-container:not([data-density])
-      .bo-data-table:not([data-density])
-      .bo-data-table__col--secondary {
+    /* Ladder tier 2 — same independence from density as --tertiary. */
+    .bo-data-table__col--secondary {
       display: none;
     }
   }

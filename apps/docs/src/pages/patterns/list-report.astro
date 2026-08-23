@@ -59,8 +59,8 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
             <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
             <th scope="col" aria-sort="ascending"><button class="bo-data-table__sort-btn" type="button">Invoice #</button></th>
             <th scope="col">Vendor</th>
-            <th scope="col" class="bo-data-table__col--secondary">Cost center</th>
-            <th scope="col">Due</th>
+            <th scope="col" class="bo-data-table__col--tertiary">Cost center</th>
+            <th scope="col" class="bo-data-table__col--secondary">Due</th>
             <th scope="col" class="bo-data-table__col--numeric">Amount</th>
             <th scope="col">Status</th>
           </tr>
@@ -71,8 +71,8 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
               <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label={`Select ${r.no}`} /></td>
               <td class="bo-data-table__col--code">{r.no}</td>
               <td class="bo-u-text-truncate">{r.vendor}</td>
-              <td class="bo-data-table__col--secondary bo-data-table__col--code">{r.cc}</td>
-              <td class="bo-u-tabular">{r.due}</td>
+              <td class="bo-data-table__col--tertiary bo-data-table__col--code">{r.cc}</td>
+              <td class="bo-data-table__col--secondary bo-u-tabular">{r.due}</td>
               <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">{r.amount.slice(1, -3)}<span class="bo-amount__fraction">{r.amount.slice(-3)}</span></span></span></td>
               <td><span class={`bo-badge bo-badge--${r.tone}`}>{r.status}</span></td>
             </tr>
@@ -154,7 +154,11 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
       <li><strong>Table</strong> (<code>.bo-data-table--sticky-col</code>) — sticky
       header, frozen select column, <code>aria-sort</code> on the sorted header,
       <a href={base + '/components/badge'}>status badges</a> carrying text, not just
-      color.</li>
+      color. Columns declare their priority: Cost center is
+      <code>--tertiary</code> (drops first as the container narrows), Due is
+      <code>--secondary</code> — the
+      <a href={base + '/components/data-table'}>ladder</a> keeps a narrow
+      screen on the columns the row cannot be understood without.</li>
       <li><strong>Footer</strong> — rows-per-page +
       <a href={base + '/components/pagination'}>pagination</a>, or a load-more
       button; pick one and keep it (see Scaling).</li>
