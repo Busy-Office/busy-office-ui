@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 10:59
+Generated at: 2026-08-23 11:11
 
 ## Open items by slice
 
@@ -19,17 +19,15 @@ Generated at: 2026-08-23 10:59
 - **Slice 121** (2 open)
   - 121.2 — SUPERSEDED → queued as 123.3b
   - 121.3 — SUPERSEDED → queued as 123.3c
-- **Slice 123** (2 open)
-  - 123.3b — Timesheet pattern, decided: inline-editable grid
+- **Slice 123** (1 open)
   - 123.3c — Comparison matrix pattern, decided: select-one award.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (738 iterations logged)
-  Standardize   7 / 4 Continue rounds since 2026-08-23 00:32   OVERDUE
+dispatch status — counter-triggered rules (739 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-23 11:11   ok
   Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -44,7 +42,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 09:34 · Continue · bug · axe: schedule/full landmarks+heading-order, command-bar placeholder-only name · landed · c862d39
 - 2026-08-23 10:25 · Roadmap · plan · 123.1-123.3c: nine recommendations signed off, Accept criteria written · triaged · a08ec58
 - 2026-08-23 10:25 · Meta · refusal · live as-you-type masking (on-blur decided per ERP evidence) · refused · a08ec58
 - 2026-08-23 10:25 · Meta · refusal · mobile bottom-nav frame tier (icon-rail collapse suffices for now) · refused · a08ec58
@@ -54,6 +51,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 10:40 · Continue · build · 123.1: initGroupedNumber shipped — one grouped-display behavior for Money/Quantity/numeric · landed · 341ea7f
 - 2026-08-23 10:52 · Continue · build · 123.2: app-frame + suite-home patterns shipped; 30.0 closed · landed · 8c17141
 - 2026-08-23 10:59 · Continue · build · 123.3a: reconciliation pattern shipped; stale 119.3/121.1/122.1 superseded · landed · 575b4ad
+- 2026-08-23 11:11 · Standardize · tidy · 123.3b timesheet + Standardize sweep: bo-stat, demo-shell-frame, decimal-input dedup, aria-hidden steppers · landed · af57cd2
 
 ## Sunset test
 
