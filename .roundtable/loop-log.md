@@ -845,3 +845,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 05:28 · Continue · build · 130.3 — module two (O2C sales orders) built with zero new CSS; found GAP-15, a defect in GAP-4a's own fix, and fixed it · landed · 39661bd
 - 2026-08-24 05:47 · Continue · build · 130.3 — module two complete (O2C: sales orders + customer invoices ageing); GAP-16 tfoot totals fixed; visual gate caught its first real change plus one unexplained diff · landed · d51f591
 - 2026-08-24 06:00 · Roadmap · plan · handover — RESUME current after the twenty-wake run; 134.3 and 112.3 await the owner · logged · 735020b
+- 2026-08-24 06:37 · Continue · owner-decision · 134.3 — delete the visual-regression gate (owner call, option c); LOOPS.md step 4 rewired to check:layout+check:scroll+test:axe · landed · 3174784

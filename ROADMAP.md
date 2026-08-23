@@ -157,6 +157,147 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
+
+Owner input, verbatim: *"/components/richtext - grill the design. (ref to
+dropbox text editor or notation -- suggestion for change. what is needed for
+ERP)"* — read as Dropbox Paper and Notion.
+
+A third axis on this component, and genuinely not a re-run: 102.1 asked
+*which rung*, 113 asked *which commands*, neither asked whether the editor's
+**shape** is right. Grill:
+`.roundtable/grill-richtext-design-2026-08-24.md`.
+
+**The headline suggestion is REFUSED, with the reason stated rather than
+dodged.** Paper and Notion edit a *document*; `.bo-richtext` is a *field in a
+form*. A field has neighbours, a save boundary, a validity state and a lock
+state; a document has none of those, which is why Notion can drop the chrome
+and this cannot. The value also LEAVES the app — printed onto delivery
+documents, exported, re-parsed by software we do not control — which argues
+for a smaller command set, not a richer one. So the box, the border and the
+persistent toolbar stay.
+
+**Three defects confirmed live** (constructed states in a real browser on
+:8091, not read off the stylesheet), and the first is the sharp one.
+
+1. [ ] **136.1 — `.bo-richtext` is the only form control that never shows it
+       is invalid.** `.bo-form-field:has([aria-invalid="true"])` reddens
+       `.bo-input` and `.bo-select`; `.bo-richtext` is not in that list and
+       has no `[aria-invalid]` rule of its own. Measured with both states
+       constructed side by side: input border `rgb(220,38,38)` =
+       `--bo-state-error-color`; richtext border `rgb(107,114,128)`,
+       **identical to a richtext with no error at all**. The label reddens
+       and the message shows, so it is not silent — but on a form where the
+       user scans for red boxes, this is the box that never turns red.
+
+       Second-order cause worth fixing at the same time: input and select
+       route their border through `--bo-input-border` / `--bo-select-border`
+       and are therefore retintable; `.bo-richtext` hard-codes
+       `var(--bo-color-border-control)`, so **a consumer cannot fix this from
+       outside either**. Fixing the convention fixes the state.
+       *Accept*: richtext joins the `--bo-*-border` convention and the
+       form-field error block; red-proved by asserting the computed border
+       moves to the error token, and that a valid field does NOT.
+
+2. [ ] **136.2 — the editor toolbar prints.** Emulated print media:
+       `.bo-richtext__toolbar` computes `display: flex` and its buttons
+       print, so an ERP record detail with a note prints `B I | • List
+       1. List` on the paper. `print/index.css` already has the precedent —
+       `dialog` and `[popover]` are `display: none !important` because
+       top-layer chrome never prints; a toolbar is the same category, a
+       control rather than content. Requiring consumers to hand-add
+       `.bo-u-print-hidden` is the exact inversion `richtext.css`'s own
+       "self-sufficient part" comment rejects.
+       *Accept*: the toolbar stops printing, asserted under print emulation.
+
+3. [ ] **136.3 — an empty field says nothing, and the obvious fix is a
+       trap I tested BEFORE proposing it.** The canonical markup ships an
+       empty content div; contenteditable has no `placeholder` and the
+       framework ships no CSS for one, so a consumer following the canonical
+       markup renders an empty box with no hint. This is Notion's single best
+       affordance and a real floor we are under.
+
+       `:empty::before` **works exactly once.** Pristine → placeholder shows;
+       type "x" → correctly hides; type-then-delete → DOM holds `<br>`,
+       `:empty` stops matching, **placeholder never returns**; and `<p></p>`
+       (what execCommand and this page's own demos produce) never matched to
+       begin with. Not fixable in CSS, and the reason belongs in the docs
+       because consumers will hit it: **emptiness is a property of text
+       content, and CSS selectors cannot read text content.**
+       *Accept*: framework ships
+       `.bo-richtext__content[data-empty]::before` (with `pointer-events:
+       none` so the caret lands in the text); docs ship the one-line
+       `textContent.trim()` toggle, same shape as the execCommand wiring
+       already documented. Red-prove the type-then-delete case specifically —
+       it is the one that killed the naive version.
+
+**Two framing items — the page has started arguing with itself.** Not
+defects behind the owner's back: these buttons exist because 113 asked for
+them, from a reference screenshot, and were built correctly.
+
+4. [ ] **136.4 — Advanced teaches the opposite of the opener.** The opener
+       says most ERP free-text should be a `textarea` and that rich text
+       *"commits you to sanitizing, storing and printing HTML forever"*; two
+       sections later Advanced demonstrates fifteen buttons including
+       alignment and indent/outdent on a field labelled "Return
+       instructions" — exactly the cost the opener warns about, spent on
+       centring text nobody asked to centre. Cheap fix is the framing:
+       Advanced should read as *"everything native gives you, and why you
+       want less"*, not as the recommended step up. *Accept*: reframed, with
+       the ERP-recommended set (bold, italic, both lists, link — five) named
+       as the one to copy.
+
+5. [ ] **136.5 — the toolbar's labels, and why "add icons" is the wrong
+       remedy wholesale.** `.bo-icon` works (masked SVG data URI painted
+       with `currentColor`, 1em so it tracks density, zero JS) and
+       `app-frame` uses it eleven times; **richtext uses it zero times** —
+       the one surface in the framework that is literally a row of
+       icon-shaped actions is the holdout. But the twelve shipped glyphs are
+       all domain nouns (barcode, box, truck, invoice…) with **no formatting
+       glyph**, so this costs ~4 new one-line mask rules, and a wholesale
+       swap would be wrong anyway. Keep **B** / *I* / ~~S~~ as letterforms
+       (the near-universal affordance — Word, Docs and Paper's own floating
+       toolbar all use letterforms here; an icon would be worse). Replace the
+       genuinely broken (`<-` / `->` for outdent/indent, `"` for blockquote)
+       and the untranslatable (`Left`, `Center`, `Right`, `Clear`, `• List`,
+       `1. List` — English words in a framework that ships RTL and a
+       pseudo-locale gate).
+
+**Two ERP-specific proposals — unbuilt, and the 99.4 front door applies
+before either becomes surface.** These are where the component could BEAT the
+references rather than catch up: neither Notion nor Paper has either, because
+neither stores into someone else's schema.
+
+6. [ ] **136.6 — a document reference, not a URL link.** The highest-value
+       rich feature in an ERP note is *"see PO-88213"* becoming a real link
+       to that record. Notion has @-mentions for people and pages; ERP's
+       equivalent is a document reference, and it is the one rich-text
+       feature a clerk would use daily. `createLink` prompting for a URL —
+       what the page wires today — is the generic-web answer to an
+       ERP-specific need. `combobox` already ships as the value-help
+       surface this would compose with and has never been wired to a note
+       field. **Asserted as the right shape, not demonstrated** — no code
+       exists.
+
+7. [ ] **136.7 — a length budget measured in STORED HTML.** ERP long-text
+       columns have limits and rich text spends them on markup the user
+       cannot see: a 200-word note with heavy formatting can blow a
+       1000-character column while looking short. **The framework ships no
+       character counter at all** (confirmed — nothing in `form/*.css`), so
+       this is a hole in the form family generally, not only here. The
+       ERP-correct version counts stored HTML rather than visible text, and
+       that distinction is the whole point.
+
+**Refused outright**, each a document affordance imported into a form:
+slash menu (amortises over hours; a clerk spends seconds), block handles
+(a note is not an outline), floating selection toolbar (a persistent toolbar
+advertises "this field is rich" *before* selection — discoverability a form
+needs and a document does not). **Markdown list rules** (`- `, `1. `) are the
+one Notion affordance worth taking and are rung-3 achievable in a few lines of
+consumer JS — noted as a recipe, and it is what would let the toolbar SHRINK
+rather than grow, since a keyboard-bound clerk never reaches for a button.
+Inline `**bold**` genuinely needs an engine.
+
 ## Slice 135 — Owner wishlist: the RF track, four asks (2026-08-24)
 
 Owner input, verbatim: *"standardize the RF pattern naming / should it be

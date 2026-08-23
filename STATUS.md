@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 06:00
+Generated at: 2026-08-24 06:37
 
 ## Open items by slice
 
@@ -33,7 +33,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 05:03 · Meta · refusal · a second picker pattern for search help — the Objective's rethink test: two surfaces growing toward each other · refused · 01e637f
 - 2026-08-24 05:08 · Continue · build · 132.3 — calendar: triage premise was wrong (3 of 4 asks already shipped); range guidance added, drag-select refused · landed · 16ed66d
 - 2026-08-24 05:08 · Meta · refusal · a 2-month demo (repeats the 3-month point) and a scripted drag-select range picker · refused · 16ed66d
 - 2026-08-24 05:13 · Continue · build · 132.4 — file open/save panel refused as a pattern; mapped to file-upload / value-help / form-in-dialog and documented · refused · 4c5c199
@@ -43,6 +42,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 05:28 · Continue · build · 130.3 — module two (O2C sales orders) built with zero new CSS; found GAP-15, a defect in GAP-4a's own fix, and fixed it · landed · 39661bd
 - 2026-08-24 05:47 · Continue · build · 130.3 — module two complete (O2C: sales orders + customer invoices ageing); GAP-16 tfoot totals fixed; visual gate caught its first real change plus one unexplained diff · landed · d51f591
 - 2026-08-24 06:00 · Roadmap · plan · handover — RESUME current after the twenty-wake run; 134.3 and 112.3 await the owner · logged · 735020b
+- 2026-08-24 06:37 · Continue · owner-decision · 134.3 — delete the visual-regression gate (owner call, option c); LOOPS.md step 4 rewired to check:layout+check:scroll+test:axe · landed · 3174784
 
 ## Sunset test
 
