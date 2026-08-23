@@ -838,3 +838,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 05:03 · Meta · refusal · a second picker pattern for search help — the Objective's rethink test: two surfaces growing toward each other · refused · 01e637f
 - 2026-08-24 05:08 · Continue · build · 132.3 — calendar: triage premise was wrong (3 of 4 asks already shipped); range guidance added, drag-select refused · landed · 16ed66d
 - 2026-08-24 05:08 · Meta · refusal · a 2-month demo (repeats the 3-month point) and a scripted drag-select range picker · refused · 16ed66d
+- 2026-08-24 05:13 · Continue · build · 132.4 — file open/save panel refused as a pattern; mapped to file-upload / value-help / form-in-dialog and documented · refused · 4c5c199
+- 2026-08-24 05:13 · Meta · refusal · a file-panel pattern — the OS owns the local picker, value-help is the store picker, and a browser has no save panel · refused · 4c5c199

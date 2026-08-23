@@ -718,7 +718,35 @@ must not silently re-open.
        form) or nothing at all; if it ships it is named for its SHAPE per the
        Slice 109 rule, and its opener must say what it is NOT — value-help
        picks a *code*, this picks a *document*.
-5. [ ] **132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md`
+5. [x] **132.5 — DONE 2026-08-24. REFUSED, and the prior grill's own test is
+       what decided it.** Slice 100 refused drag-and-drop for ORDER; this
+       asked about MEMBERSHIP, which is a different shape, so it got its own
+       run rather than being closed as a duplicate. It fails anyway, on
+       three counts.
+
+       **Membership selection already has a shipped answer**: the multi-select
+       dropdown — `data-multiselect` on the menu, real checkboxes inside. It
+       is what the column chooser uses (`initTableToolbar`) and what the
+       filter panel uses. A dual list would be a second way to do a job that
+       already works, which the Objective refuses outright.
+
+       **No shipped screen needs one** — the 100.1 test, re-run and still
+       negative. `settings-admin` is tabs plus form sections plus checkboxes;
+       the closest membership case in the framework is the column chooser,
+       and it is a dropdown.
+
+       **And it does not fit.** Two lists plus the arrow column is three
+       columns inside the 342px a docs page has at 390px — about 114px each,
+       when a single task label measured **128px** at spacious density
+       earlier in this slice. A checkbox menu is one column and works at any
+       width.
+
+       Slice 100's reasons still stand on top of that: ARIA's own drag answer
+       (`aria-grabbed`/`aria-dropeffect`) was deprecated in ARIA 1.1, so a
+       keyboard equivalent must be invented and maintained forever. Recorded
+       on `/components/dropdown`, beside the answer it would have duplicated.
+       *(original triage below)*
+       **132.5 (original) — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md`
        BEFORE anything else.** Slice 100 asked for "drag & drop list" and the
        grill **REFUSED** it, with reasons that still stand: ARIA's own answer
        (`aria-grabbed`/`aria-dropeffect`) was deprecated in ARIA 1.1 as

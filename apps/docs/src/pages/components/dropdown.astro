@@ -92,6 +92,16 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     updates the trigger's label ("Cost center" → "Cost center (2)") from
     <code>data-multiselect-label</code>. Tab + Space, no extra keyboard wiring
     needed. Every other menu on the page still closes on select.</p>
+    <p class="bo-u-text-muted"><strong>This is the framework's answer to
+    "choose which of these apply" — including the case a desktop ERP solves
+    with two side-by-side lists</strong> (available on the left, selected on
+    the right, arrows between). There is no dual-list component and there will
+    not be one while this exists: it would be a second way to do the same job,
+    it invents an interaction model that has to be taught, and it does not fit
+    — three columns inside the 342px a docs page has at 390px leaves about
+    114px each, when a single task label measured 128px at spacious density.
+    A checkbox menu is one column, works at any width, and gets its keyboard
+    and screen-reader behaviour from the platform (roadmap 132.5).</p>
     <pre><code>{multiselectMarkup}</code></pre>
   </section>
   <section class="demo">
