@@ -157,6 +157,97 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 132 — Owner wishlist: date entry, three pickers, list-to-list (2026-08-23)
+
+Owner input, verbatim: *"Date Input field should be under Data Input? and can
+remove deprecate one from values / Search Help / Calendar selection (1 month,
+2 months, 3 months display) / File open/save panel pattern / List to List drag
+& drop"*
+
+Five asks. Triage checked each against what already ships before queuing it,
+because three of the five turn out to be partly true already — and one of
+them was **refused with a written grill three days ago**, which the queue
+must not silently re-open.
+
+1. [ ] **132.1 — date entry has no home, and the deprecated one holds the
+       seat.** Facts: `/components/date` is a **display** component —
+       deprecated 2026-08-19 (roadmap 45.3), scored 1 of 12 (the framework's
+       lowest), used by no screen, kept only because the package is
+       published so removal is a next-major change. It sits in **Values**,
+       labelled "Date (deprecated)". Meanwhile there is **no date-entry page
+       anywhere**: the framework's actual position — *editing uses a native
+       `<input type="date">`* — exists only as a sentence inside that
+       deprecated file's comment. Money, Quantity, Tag input, File upload and
+       Rich text all have Data-input pages; date entry has a comment.
+       *Accept*: (a) a recorded **accept / refuse / rethink** on whether date
+       entry is a page, a section of `/components/form`, or nothing — "add a
+       component" is not the default answer, and the grill must say what
+       native `<input type="date">` cannot do (fiscal periods, ranges,
+       keyboard entry of `today+30`, locale order) before ANY new CSS is
+       proposed; (b) whatever ships, the Data-input group carries date entry
+       and the Values group no longer lists the deprecated one; (c)
+       `/components/date` keeps a reachable URL — it is the deprecation
+       notice a consumer of the published package lands on — so `check:links`
+       and the page-shape gate stay green either way.
+2. [ ] **132.2 — "Search Help": check `/patterns/value-help` first.** That
+       pattern already documents exactly this interaction — "anyone typing a
+       code they cannot remember… a list too large to enumerate in one
+       control", with focus returning to the field. SAP's F4 help adds things
+       it may not cover: a multi-criteria search tab, a personal value list,
+       and a configurable hit-list. *Accept*: a written comparison naming
+       which of those three the pattern already does; then either a
+       vocabulary line so a reader searching "search help" lands on
+       value-help, or ONE new item per genuinely missing capability. **Not**
+       a second picker pattern — the Objective's rethink test forbids two
+       surfaces growing toward each other.
+3. [ ] **132.3 — calendar selection across 1/2/3 months.** Half of this is
+       already true and undocumented: `.bo-calendar`'s own source says "one
+       month or three is repetition, not a setting: put several
+       `.bo-calendar__month` in one `.bo-calendar` and they wrap. There is no
+       `--months` variant to learn." Nothing on the docs page demonstrates
+       it. The other half does not exist at all: the component's stated job
+       is to say **which days are special** — display, not capture. A range
+       *selection* is a different contract. *Accept*: (a) the multi-month
+       claim gets a demo on `/components/calendar` at 1, 2 and 3 months, and
+       a `check:claims` case if the caption asserts the wrap behaviour;
+       (b) range selection is grilled separately and must beat the no-JS
+       floor it would replace — two native `<input type="date">`s — on
+       something other than looks.
+4. [ ] **132.4 — file open/save panel.** `/components/file-upload` +
+       `file-dropzone.ts` cover *upload*. Nothing covers *browse a document
+       store and pick one*, or *save-as with a name and a destination* —
+       both real ERP screens (attachments, output destination, report
+       export). *Accept*: grill whether this is a **pattern** composed
+       entirely of shipped primitives (dialog + data-table + breadcrumb +
+       form) or nothing at all; if it ships it is named for its SHAPE per the
+       Slice 109 rule, and its opener must say what it is NOT — value-help
+       picks a *code*, this picks a *document*.
+5. [ ] **132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md`
+       BEFORE anything else.** Slice 100 asked for "drag & drop list" and the
+       grill **REFUSED** it, with reasons that still stand: ARIA's own answer
+       (`aria-grabbed`/`aria-dropeffect`) was deprecated in ARIA 1.1 as
+       unreliably implemented, so a build means permanently maintaining a
+       second interaction model; and **nothing reorderable at scale exists in
+       the framework** — the only reorderable thing is `ordered-list`'s own
+       three-item demo.
+       **This ask is a different shape, which is why it is queued rather than
+       closed as a duplicate**: Slice 100 was about ORDER within one list;
+       list-to-list is about MEMBERSHIP across two (the dual-list / shuttle /
+       pick-list — column chooser, role assignment, field selection).
+       Membership has an accessible path that order does not: Add/Remove
+       buttons moving the selection, which is the shipped pattern in every
+       reference. *Accept*: (a) name the shipped screen that needs membership
+       selection at a size where two lists beat a multi-select — if none
+       exists, **REFUSE and record it**, exactly as 100.1 did, because "no
+       screen shows the pain" was the reason then and is still checkable now;
+       (b) if one exists, buttons are the path and dragging can only ever be
+       an enhancement over them — a drag-only implementation fails the
+       two-channel rule outright.
+
+**Queue position.** None of these jumps the queue: the dispatcher takes the
+OLDEST open item, and Slice 130's gaps are older. Recorded so a later wake
+does not mistake "newest" for "next".
+
 ## Slice 131 — Owner wishlist: the RF pages show the screen twice (2026-08-23)
 
 Owner input, verbatim: *"for Pattern: RF --> it is kind of redundant that you
