@@ -198,13 +198,24 @@ re-asks; each answer routes to its own item below or amends an existing one.
        contract, the one disagreement each set of references has) for
        reconciliation / timesheet / comparison-matrix. Owner picks
        which (if any) get built, and in what order.
-4. [ ] **123.4 — 0.3.0 re-cut + release.** Write CHANGELOG entries for
-       the package-touching commits since the `## Unreleased` section
-       was last updated; fold Unreleased into `## 0.3.0`; move tag
-       v0.3.0 to the new HEAD; push; `gh release create v0.3.0` —
-       publish then runs via Trusted Publishing. Accept: npm serves
-       0.3.0; CHANGELOG's 0.3.0 section covers every package-touching
-       commit since v0.1.1; publish workflow green.
+4. [x] **123.4 — DONE 2026-08-23. npm now serves 0.3.0 (`latest`).**
+       Six missing entries written (initWindowedList, `--label-start`,
+       `--elevated`, state-actions wrap fix, segmented input-position
+       fix, shared popover positioning); `## Unreleased` folded into
+       `## 0.3.0` re-dated 2026-08-23 with a re-cut note; tag moved;
+       release created. **The first publish attempt failed on two real
+       bugs, both fixed at the root, not retried around:** (1) the
+       workflow's `npm install -g npm@latest` picked up npm 12.0, which
+       changed `pack --dry-run --json` from `[{...}]` to
+       `{"<name>": {...}}` and killed `check:package` with a bare
+       TypeError — script now accepts both shapes and fails loudly on
+       the next change, workflow pins npm@11; (2) `check:claims`'
+       schedule full-screen case compared its href base-blind — green
+       locally, red under CI's `DOCS_BASE` build (the exact LOOPS.md
+       trap) — now compares `base + path`, verified against a local
+       DOCS_BASE build (96/96). Tag re-cut onto the fix, release
+       re-created, publish workflow green in 1m16s, registry confirmed
+       serving 0.3.0. Accept met.
 
 ## Slice 122 — Owner wishlist: Amount decimal control + live masking (2026-08-23)
 

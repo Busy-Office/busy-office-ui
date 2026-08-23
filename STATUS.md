@@ -2,14 +2,12 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 00:34
+Generated at: 2026-08-23 09:05
 
 ## Open items by slice
 
 - **Slice 30** (1 open)
   - 30.0 — AWAITING OWNER CLARIFICATION (2 wishlist notes, 2026-08-18).
-- **Slice 52** (1 open)
-  - 52.3 — The name. OWNER CALL, with the trade-off measured.
 - **Slice 99** (1 open)
   - 99.4 — missing components discovered along the way go through the front door.
 - **Slice 102** (1 open)
@@ -22,41 +20,43 @@ Generated at: 2026-08-23 00:34
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
 - **Slice 119** (1 open)
   - 119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.
-- **Slice 121** (4 open)
+- **Slice 121** (3 open)
   - 121.1 — Reconciliation / matching screen. BLOCKED ON GRILL.
   - 121.2 — Timesheet / time entry. BLOCKED ON GRILL.
   - 121.3 — Comparison / evaluation matrix. BLOCKED ON GRILL.
-  - 121.5 — Remaining orphans + naming collisions.
 - **Slice 122** (1 open)
   - 122.1 — BLOCKED ON GRILL.
+- **Slice 123** (3 open)
+  - 123.1 — Masking grill, evidence-first.
+  - 123.2 — App-frame + ERP overview proposal.
+  - 123.3 — Three pattern proposals with references.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (724 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-23 00:32   ok
-  Objective     0 / 3 slices          since 2026-08-23 00:10   ok
+dispatch status — counter-triggered rules (727 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-23 00:32   ok
+  Objective     1 / 3 slice           since 2026-08-23 00:10   ok  [52]
 ```
 
 ## Owner-blocked
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 123.1 — Masking grill, evidence-first.
+- 123.2 — App-frame + ERP overview proposal.
+- 123.3 — Three pattern proposals with references.
 - 122.1 — BLOCKED ON GRILL.
-- 121.5 — Remaining orphans + naming collisions.
+- 121.3 — Comparison / evaluation matrix. BLOCKED ON GRILL.
 - 119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
 - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
 - 99.4 — missing components discovered along the way go through the front door.
 - 102.4 — reconcile the standing wake prompt with reality. OWNER CALL.
-- 52.3 — The name. OWNER CALL, with the trade-off measured.
 - 30.0 — AWAITING OWNER CLARIFICATION (2 wishlist notes, 2026-08-18).
 
 ## Last 10 iterations
 
-- 2026-08-22 23:17 · Continue · build · 119.4: theme cycle + density segmented controls, owner feedback live; found+fixed segmented position collapse and fold focus-ring clipping · landed · adf63d2
-- 2026-08-23 00:10 · Objective · grill · 121: pattern catalogue round-table (2 agents) — 3 real domain gaps queued for grill, 5 orphan patterns cross-linked · triaged · e44dfab
-- 2026-08-23 00:10 · Meta · refusal · cross-entity federated search (lower confidence, not queued) · refused · e44dfab
 - 2026-08-23 00:10 · Meta · refusal · document/attachment manager, document-flow chain, hierarchy/tree browser (already covered, false gaps) · refused · e44dfab
 - 2026-08-23 00:10 · Meta · refusal · period-close cockpit, Gantt, map, activity-chatter, Analytical List Page (v2 sweep's refusals re-verified, not re-litigated) · refused · e44dfab
 - 2026-08-23 00:10 · Continue · build · 119.7: notification cards elevated (owner: go elevated-card) · landed · e44dfab
@@ -64,6 +64,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 00:22 · Roadmap · plan · Refreshed stale RESUME.md (109.13-109.18 falsely claimed still-open) · landed · 7f0cfd3
 - 2026-08-23 00:31 · Continue · build · 119.2: ERP layout overview concepts page landed · landed · c9eacab
 - 2026-08-23 00:32 · Standardize · tidy · RF device-frame iframe style consolidated (3 pages -> rf-device-frame.css); alert/segmented/error-pages drift checked and ruled out · landed · beba4bb
+- 2026-08-23 08:46 · Roadmap · plan · Slice 123: seven owner answers triaged; research dispatched for masking/app-frame/pattern-references · triaged · 92287d2
+- 2026-08-23 08:51 · Continue · build · 52.3 + 121.5: object-page retitled; Report/Schedule/Output-form labels renamed long-term; 3 orphans linked · landed · ed25fe1
+- 2026-08-23 09:05 · Continue · build · 123.4: 0.3.0 released to npm (re-cut path); npm-12 pack-shape and base-blind-claim bugs fixed at root · released · 1eb60c8
 
 ## Sunset test
 

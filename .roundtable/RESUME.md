@@ -64,49 +64,22 @@ not observe.
 
 ## Owner-blocked (re-stated each grill, not re-queued)
 
-- **0.3.0 is PUSHED, awaiting owner decision — read
-  `.roundtable/release-0.3.0-brief.md` (written 2026-08-22 by 102.5), not
-  this entry, for current numbers.** That brief replaced the standing
-  restatement (ROADMAP.md 101.1, now superseded) after its "five more
-  commits stacked on the tag" count went stale: measured live at 155
-  commits since the tag, 6 of which touch the shipped package with no
-  CHANGELOG entry yet. The brief recommends re-cutting the tag before
-  publishing rather than releasing as-is. Future wakes: don't re-derive this
-  count by hand, re-read the brief (and re-measure `git log v0.3.0..HEAD`
-  if it's been more than a few wakes, per this file's own staleness rule).
+- **0.3.0 — RELEASED 2026-08-23, npm serves it as `latest`.** Owner chose
+  the re-cut path; done same wake (ROADMAP 123.4 has the full story,
+  including the two real publish-workflow bugs found and fixed: npm 12's
+  `pack --json` shape change, and a base-blind check:claims case).
+  Still-true mechanics for the NEXT release: publishing needs no `npm
+  login` — `.github/workflows/publish.yml` uses Trusted Publishing
+  (OIDC); creating the GitHub Release is the trigger and it re-runs every
+  gate from a clean checkout. npm in a wake's environment is
+  unauthenticated (E401) and always will be. The workflow now pins
+  `npm@11` deliberately — do not "upgrade" it back to `@latest`.
 
-  Once the owner decides, the release command itself is unchanged (npm
-  still serves 0.1.1; `gh release view v0.3.0` says "release not found"):
-
-  ```
-  gh release create v0.3.0 --title "0.3.0" --notes-from-tag
-  ```
-
-  Original entry, kept for its still-true context (tarball contents, Trusted
-  Publishing mechanics, the optional snapshot):
-  This entry replaces the ten-grill-old "0.2.0 is tagged" one, which had become
-  actively misleading: the tarball built at HEAD was *labelled* 0.2.0 but
-  carried 304 commits of post-tag work, so publishing it would have made the
-  version number permanently wrong. Owner chose 0.3.0.
-
-  Done in-wake: version bumped, CHANGELOG cut as `0.3.0 (2026-08-21)` with the
-  0.1.1-upgrade note, `DESIGN.md`'s `data-day` rationale corrected before the
-  release could falsify it, tag `v0.3.0` created at `24c6e7d`, every gate green
-  at 0.3.0 (core build, 110 tests, docs build), tarball packs as
-  `busy-office-ui-0.3.0.tgz` (173 files, 220.9 kB), and the workflow's
-  tag-vs-package guard simulated green.
-
-  Publishing does NOT need `npm login` — `.github/workflows/publish.yml` uses
-  **Trusted Publishing (OIDC)**, no token and no OTP; publishing the GitHub
-  Release is the trigger, and it re-runs every gate from a clean checkout
-  before `npm publish`. npm in a wake's environment is unauthenticated (E401)
-  and always will be, so this handoff shape is permanent, not a one-off.
-
-  **Optional, and deliberately not done:** the docs version snapshot
-  (`node apps/docs/scripts/cut-version-snapshot.mjs 0.3.0`, ~4.3 MB committed).
-  0.2.0 skipped it too — `apps/docs/versions/` holds only `0.1.1` — so the
-  version switcher will offer 0.1.1 and latest, not 0.3.0. Cheap to add later;
-  say the word.
+  **Optional, still not done:** the docs version snapshot
+  (`node apps/docs/scripts/cut-version-snapshot.mjs 0.3.0`, ~4.3 MB
+  committed). `apps/docs/versions/` holds only `0.1.1`, so the version
+  switcher offers 0.1.1 and latest, not 0.3.0. Cheap to add; owner's
+  call.
 - **30.4b** — windowed list (the 50,000-record ask). Scope/Accept criteria are
   fully written (the numbered **30.4b** item in ROADMAP.md — item numbers
   survive file growth; a hand-typed line citation here had drifted ~3000
