@@ -19,6 +19,7 @@ const pgMarkup = `<div class="bo-data-table__footer">
     <span class="bo-pagination__info">1–25 of 312</span>
   </nav>
 </div>`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Pagination">
   <p class="demo-note">
@@ -26,6 +27,13 @@ const pgMarkup = `<div class="bo-data-table__footer">
     page carries <code>aria-current="page"</code>. Pairs with
     <code>.bo-data-table__footer</code> under a table. Navigation is your code's job
     (links or HTMX) — the framework styles state.
+    <strong>Not for stepping through a process</strong> — numbered page
+    links say "the same kind of thing continues, in arbitrary order, and
+    you may jump anywhere". A sequence where each step must be completed
+    before the next is a <a href={base + '/components/stepper'}>stepper</a>
+    (or the <a href={base + '/patterns/wizard'}>wizard</a> pattern), where
+    order is the point and skipping ahead is refused. The tell is whether
+    landing on page 7 first would be wrong.
   </p>
   <section class="demo">
     <div class="bo-data-table-container" tabindex="0">

@@ -17,6 +17,16 @@ const navbarMarkup = `<header class="bo-navbar bo-app-shell__header">
     The application header: brand, environment marker, and the actions
     that belong to the whole app rather than the current screen. This
     page's own header is the live demo.
+    <strong>Not for the current page's own title or actions</strong> — the
+    navbar is suite-level chrome, identical on every screen; the moment it
+    carries "Purchase order PO-88213" or a Save button it stops being a
+    fixed landmark and starts changing under the reader. Page identity
+    belongs in the content area with the
+    <a href={base + '/components/breadcrumb'}>breadcrumb</a> and heading,
+    and a screen's actions in its own
+    <a href={base + '/components/form'}>form actions</a> bar. The boundary
+    is drawn in full on the
+    <a href={base + '/patterns/app-frame'}>app frame</a> pattern.
   </p>
 
   <section class="demo">

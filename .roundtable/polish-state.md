@@ -34,10 +34,10 @@ quality signal. A dimension that cannot fail must never drive a round.
 | component/date | content | 2 | — | — | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed |
 | component/inline-editing | content | **3** | 1/3 | 0 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) |
-| component/navbar | content | 2 | 0/3 | 0 | queued |
-| component/pagination | content | 2 | 0/3 | 0 | queued |
-| component/progress | content | 2 | 0/3 | 0 | queued |
-| component/sidebar-nav | content | 2 | 0/3 | 0 | queued |
+| component/navbar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not the page's own title or actions" |
+| component/pagination | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for stepping through a process" |
+| component/progress | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for work of unknown duration" |
+| component/sidebar-nav | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for navigating within one screen" |
 | component/state-patterns | content | 2 | 0/3 | 0 | queued |
 | component/stepper | content | 2 | 0/3 | 0 | queued |
 | component/table-toolbar | content | 2 | 0/3 | 0 | queued |

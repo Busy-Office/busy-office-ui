@@ -31,6 +31,14 @@ const markup = `<!-- A real <progress> element — value/max semantics and the p
     JS, zero ARIA). Distinct from <a href={base + '/components/stepper'}>Stepper</a>, which is
     for discrete named steps. Always pair it with visible text ("71% consumed") —
     the fill is one channel.
+    <strong>Not for work of unknown duration</strong> — a bar that has no
+    honest <code>value</code> either sits frozen or invents motion, and
+    both tell the reader something false about how far along they are. When
+    the server cannot say how much is left, use a
+    <a href={base + '/components/state-patterns'}>loading state</a> and say
+    what is happening in words; save the bar for the case where a real
+    fraction exists. A determinate-looking bar on indeterminate work is the
+    single most common misuse of this element.
   </p>
 
   <section class="demo">

@@ -140,7 +140,7 @@
       }
     },
     "pagination": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -159,17 +159,14 @@
           "cite": "native <nav> + buttons/links; current page carries aria-current='page' per its own contract comment"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/pagination is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for stepping through a process\" — numbered links mean arbitrary order and jump-anywhere; an ordered sequence is a stepper or the wizard pattern, with the tell stated (would landing on page 7 first be wrong). Blind re-scored 2026-08-23 (Polish round 10), judged genuine; the scorer noted the load-more section sits on the allowed side of the boundary rather than against it."
         },
         "fit": {
           "score": 3,
           "cite": "the documented answer at the scale where tables stop being scannable (/concepts/scale)"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "tree": {
       "scored": "2026-08-21",
@@ -472,7 +469,7 @@
       ]
     },
     "navbar": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -491,20 +488,17 @@
           "cite": "a container: it holds controls but introduces none of its own"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/navbar is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for the current page's own title or actions\" — suite-level chrome that starts carrying a record title or a Save button stops being a fixed landmark; points at breadcrumb + heading in the content area, a form-actions bar, and app-frame for the full boundary. Blind re-scored 2026-08-23 (Polish round 10), which independently confirmed the demo, the ApiTable note and the docs' own header all hold the same line."
         },
         "fit": {
           "score": 3,
           "cite": "the app top bar; po-app uses it at 3 sites (examples/po-app/server.mjs)"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "sidebar-nav": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -523,17 +517,14 @@
           "cite": "@container bo-shell collapse hides labels VISUALLY (clip-path), not display:none, so every link keeps its accessible name"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/sidebar-nav is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for navigating within one screen\" — every rail entry is a destination, so a record's own sections should scroll, and aria-current=\"page\" there would claim a page change that never happened; points at object-page's anchor bar and tabs. Blind re-scored 2026-08-23 (Polish round 10); both demos verified to use aria-current on genuine destinations, matching the clause."
         },
         "fit": {
           "score": 3,
           "cite": "the shell rail; po-app uses it at 6 sites, and it composes inside .bo-offcanvas for the drawer pattern"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "breadcrumb": {
       "scored": "2026-08-21",
@@ -774,7 +765,7 @@
       ]
     },
     "progress": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -793,17 +784,14 @@
           "cite": "a native <progress>; value/max semantics and the progressbar role come from the platform, and it is not interactive"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/progress is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for work of unknown duration\" — a bar with no honest value either freezes or invents motion, and both misstate progress; points at a loading state plus words. Blind re-scored 2026-08-23 (Polish round 10). The scorer flagged a near-miss and resolved it: the ApiTable's advice to freeze a stalled bar at 93% is consistent, because 93% completed IS a real fraction and that note scopes itself to flows that started determinate."
         },
         "fit": {
           "score": 3,
           "cite": "continuous progress; the source names .bo-stepper as the discrete-step alternative"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "stepper": {
       "scored": "2026-08-21",

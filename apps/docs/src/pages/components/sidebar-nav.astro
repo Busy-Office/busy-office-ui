@@ -23,6 +23,15 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
     the <em>shell</em> is narrow, not when the viewport is. This page's own
     sidebar is the live demo; the embedded shell below proves the
     container-query behaviour independently.
+    <strong>Not for navigating within one screen</strong> — this rail moves
+    the reader between destinations, and every entry is somewhere else. A
+    long record's own sections are not destinations: jumping to "Delivery"
+    should scroll, not navigate, and marking it
+    <code>aria-current="page"</code> would claim a page change that never
+    happened. That is <a href={base + '/patterns/object-page'}>object
+    page</a>'s anchor bar, or plain
+    <a href={base + '/components/tabs'}>tabs</a> when the sections are
+    mutually exclusive.
   </p>
 
   <section class="demo">
