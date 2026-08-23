@@ -161,4 +161,35 @@
   .bo-btn-group > .bo-btn:focus-visible {
     z-index: 1;
   }
+
+  /* --bar (roadmap 126.3, RF-coverage grill R2-Q3): the RF exception bar.
+     SAP's RF screens pin a persistent F5/F6/F7 pushbutton row; Velocity
+     docks BACK/CLOSE. The improvement over both (references are floors):
+     buttons are INTENT-NAMED, never F-key numbers, and each stays a real
+     .bo-btn — focus ring, disabled state and forced-colors all still
+     resolve per button, which a telnet-conversion's painted keys never had.
+     The joined group becomes a full-width bar of EQUAL-width targets
+     (flex: 1 — a gloved thumb aims at position, so positions must not
+     shift when labels differ). Height comes from the density system:
+     data-density="spacious" IS the glove tier — no --large here either.
+     Docking is the consumer's one line (position: sticky; inset-block-end:
+     0) because WHERE it docks belongs to the screen, not the component. */
+  .bo-btn-group--bar {
+    display: flex;
+    inline-size: 100%;
+  }
+
+  .bo-btn-group--bar > .bo-btn {
+    flex: 1;
+    min-inline-size: 0;
+    /* Labels WRAP rather than clip. The first draft ellipsized them, and
+       the layout sweep failed it under WCAG 1.4.12 text-spacing overrides
+       — a button label is content, and clipping content is exactly what
+       1.4.12 forbids. Equal inline slots are what a gloved thumb needs
+       (positions must not shift); the bar growing TALLER when a label
+       wraps costs nothing and keeps every word readable. Same call as
+       .bo-state__actions' wrap fix (119.1). */
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
 }

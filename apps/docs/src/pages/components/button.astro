@@ -118,6 +118,31 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
     line, so <code>:focus-visible</code> still outlines a single button,
     never the whole group.</p>
   </section>
+
+  <section class="demo">
+    <h2>Action bar — <code>--bar</code>, the RF exception row</h2>
+    <div data-density="spacious" style="max-inline-size: 22.5rem; border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-md); padding: var(--bo-space-3)">
+      <p class="bo-u-text-muted" style="margin-block-start: 0">…the scan screen above it…</p>
+      <div class="bo-btn-group bo-btn-group--bar">
+        <button class="bo-btn bo-btn--secondary" type="button">Back</button>
+        <button class="bo-btn bo-btn--secondary" type="button">Skip item</button>
+        <button class="bo-btn bo-btn--secondary" type="button">Report short</button>
+      </div>
+    </div>
+    <p class="bo-u-text-muted"><code>--bar</code> stretches the group to a
+    full-width row of <strong>equal</strong> targets — a gloved thumb aims
+    at a position, so positions must not shift when labels differ (a long
+    label WRAPS taller inside its slot instead of breaking the grid — the
+    first draft ellipsized, and the layout sweep failed it under WCAG
+    1.4.12: a label is content, and content never clips).
+    Height is the density system's job: <code>data-density="spacious"</code>
+    is the glove tier, as everywhere. The buttons are
+    <strong>intent-named</strong> — Back, Skip item, Report short — never
+    the F5/F6 numbers green-screen conversions carry forward: a number the
+    user must translate is a label that failed. Dock it with one consumer
+    line (<code>position: sticky; inset-block-end: 0</code>) — where it
+    docks belongs to the screen, not the component.</p>
+  </section>
   <ClassRef component="button" />
   <ApiTable component="button"
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',

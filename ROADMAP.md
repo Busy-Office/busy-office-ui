@@ -206,7 +206,21 @@ components" bar.
        forced-colors correct (better than DataWedge's colour-only
        flash). Accept: behavior test + claims case; demoed on
        goods-receipt; profile delta measured under 126.1's budget.
-3. [ ] **126.3 — `bo-btn-group--bar`.** Equal-width docked action bar
+3. [x] **126.3 — DONE 2026-08-23. Accept met.** `--bar` on the existing
+       btn-group (a SETTING, per the grill's compose-first rule): full
+       width, equal flex slots so gloved-thumb positions never shift,
+       intent-named buttons (no F-key cargo cult), height from
+       data-density="spacious", docking left to the consumer's one sticky
+       line. **The layout sweep vetoed the first draft's design**: nowrap
+       + ellipsis clipped labels under WCAG 1.4.12 text-spacing overrides
+       — a label is content, and content never clips — so labels now WRAP
+       taller in equal slots (the .bo-state__actions precedent), and the
+       docs prose records the correction rather than hiding it. Adopted
+       on the button page + goods-receipt's live demo AND its isolated
+       rf-profile mirror (which is what caught the stale-profile rebuild
+       gap: the iframe loads rf-essentials.min.css, not the main
+       bundle). Profile at 35.3/40 kB. target-size, axe 114x2, layout,
+       claims 98 all green. Original text: **`bo-btn-group--bar`.** Equal-width docked action bar
        (glove targets via spacious), intent-named — no F-key cargo
        cult. Accept: component docs section + RF pattern adoption;
        target-size clean at spacious.

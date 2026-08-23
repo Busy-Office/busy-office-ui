@@ -30,6 +30,15 @@
   </table>
 </div>
 
+{/* The RF exception bar (126.3): equal glove-width targets, intent-named.
+    In a real screen this is sticky at the viewport's block-end; inside a
+    docs demo it just sits below the log. */}
+<div class="bo-btn-group bo-btn-group--bar" style="margin-block-start: var(--bo-space-3)">
+  <button class="bo-btn bo-btn--secondary" type="button">Back</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Skip item</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Report short</button>
+</div>
+
 <script>
   import { initScanInput, initQuantity, flashScanResult } from '@busy-office/ui/js';
   initScanInput();
