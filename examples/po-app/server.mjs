@@ -1089,7 +1089,7 @@ const receiveScreen = () => `
 <h1>Receive against PO</h1>
 <div class="bo-form-field" style="max-inline-size: 22rem">
   <label class="bo-form-field__label" for="rcv-scan">Scan PO barcode</label>
-  <input class="bo-input bo-input--code" id="rcv-scan" data-scan-input autofocus
+  <input class="bo-input bo-input--code" id="rcv-scan" data-scan-input data-scan-flash autofocus
     placeholder="Waiting for scan…" aria-describedby="rcv-scan-status">
   <p id="rcv-scan-status" data-scan-status aria-live="polite" class="bo-visually-hidden"></p>
 </div>

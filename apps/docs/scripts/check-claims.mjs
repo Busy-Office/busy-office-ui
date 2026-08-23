@@ -2178,6 +2178,57 @@ check(
   JSON.stringify(scanFlash),
 );
 
+// The verdict must be readable WITHOUT colour (fixed 2026-08-23 after a
+// blind DSA score found accepted and rejected differing only by hue, and
+// painting the identical frame under forced colours — no verdict at all
+// for the user that mode exists to serve). Compare the two states'
+// computed geometry, never their colour, and do it again under
+// forced-colors emulation where the hues are replaced by the UA.
+const verdictShape = await page.evaluate(async () => {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const read = () => {
+    const cs = getComputedStyle(document.body, '::after');
+    return { width: cs.borderTopWidth, style: cs.borderTopStyle };
+  };
+  document.body.dataset.scanResult = 'ok';
+  await wait(20);
+  const ok = read();
+  document.body.dataset.scanResult = 'error';
+  await wait(20);
+  const err = read();
+  delete document.body.dataset.scanResult;
+  return { ok, err };
+});
+/* Puppeteer's own emulateMediaFeatures() rejects forced-colors; the
+   framework's forced-colors gate goes through CDP for the same reason. */
+const fcSession = await page.createCDPSession();
+await fcSession.send('Emulation.setEmulatedMedia', {
+  features: [{ name: 'forced-colors', value: 'active' }],
+});
+const verdictShapeFc = await page.evaluate(async () => {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const read = () => {
+    const cs = getComputedStyle(document.body, '::after');
+    return { width: cs.borderTopWidth, style: cs.borderTopStyle };
+  };
+  document.body.dataset.scanResult = 'ok';
+  await wait(20);
+  const ok = read();
+  document.body.dataset.scanResult = 'error';
+  await wait(20);
+  const err = read();
+  delete document.body.dataset.scanResult;
+  return { ok, err };
+});
+await fcSession.send('Emulation.setEmulatedMedia', { features: [] });
+await fcSession.detach();
+const differs = (v) => v.ok.width !== v.err.width || v.ok.style !== v.err.style;
+check(
+  'scan verdict is told apart WITHOUT colour — accepted and rejected differ in frame geometry, in normal rendering AND under forced colours',
+  differs(verdictShape) && differs(verdictShapeFc),
+  JSON.stringify({ verdictShape, verdictShapeFc }),
+);
+
 // Sync-state slot (127.1): "Click it in this demo to cycle the four
 // states" — both channels must move together, and the glyphs must differ
 // by SHAPE across states (never colour-only).

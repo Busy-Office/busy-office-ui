@@ -73,7 +73,29 @@ const canonical = `<input class="bo-input bo-input--code" data-scan-input data-s
     });
   </script>
 
-  <ClassRef component="scan" />
+    <section class="demo">
+    <h2>What the platform gives you, and what the behavior adds</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Without <code>initScanInput()</code></th><th scope="col">What the behavior adds</th></tr></thead>
+        <tbody>
+          <tr><td>A keyboard-wedge scanner types the code and sends Enter, so a plain input inside a form <strong>posts the scan</strong>. The screen still works</td><td>the <code>bo:scan</code> event, so a screen can react without a round trip</td></tr>
+          <tr><td>Nothing announces the capture — the field just changes</td><td>the <code>[data-scan-status]</code> live region announcement</td></tr>
+          <tr><td>No flash: the CSS keys off <code>data-scan-result</code>, which only the behavior stamps</td><td>the flash, and <code>flashScanResult()</code> for your verdict</td></tr>
+          <tr><td>A trailing terminator character can land in the value</td><td><code>data-scan-terminator</code> stripping</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Unlike <a href={base + '/components/dialog'}>dialog</a>
+    or <a href={base + '/components/combobox'}>combobox</a>, there is no native
+    element underneath this one — a scanner is a keyboard, and the platform has
+    no idea a scan happened. <strong>That makes the boundary more important
+    here, not less</strong>: the no-JS path is a real form post and a server
+    re-render, which every RF pattern page documents as its No-JS row. Build
+    that path first and treat the flash as the enhancement it is.</p>
+  </section>
+
+<ClassRef component="scan" />
   <ApiTable
     component="scan"
     js="initScanInput() owns the moment: with data-scan-flash on the input, every capture stamps data-scan-result=&quot;ok&quot; on <body> for ~700ms (scan.css paints the wash; a timer clears the stamp, so the reduced-motion static wash cannot linger). flashScanResult(kind, message?) is exported for YOUR validation path — 'error' overrides a live ok, and a message lands in the [data-scan-status] live region."

@@ -50,6 +50,34 @@ quality signal. A dimension that cannot fail must never drive a round.
 | component/tree | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, pair-coherent with tree-table |
 | component/tree-table | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, pair-coherent with tree |
 
+## Re-entry: scan (2026-08-23) — the queue's first source-change entry
+
+`scan` shipped in 126.2 and had never been scored (it was also invisible to
+`check-page-shape` until Slice 129 fixed that). Blind-scored on entry:
+**colour 2, interaction 2, fit 2** — three below 3, the first colour<3 in the
+rubric. Round 1 fixed all three:
+
+- **colour**: accepted vs rejected differed by HUE ALONE in the visible
+  channel (`--bo-color-success` vs `--bo-color-danger`, identical geometry),
+  and under forced-colors both painted the SAME `8px solid Highlight` frame —
+  so the user that mode exists for got no verdict at all. The file's own
+  header had claimed "two-channel by construction"; the second channel was
+  the live region, which serves a screen-reader user and does nothing for a
+  sighted colour-blind one. Now the FRAME carries the verdict (accepted 6px
+  solid, rejected 18px double) and forced-colors only recolours it. Claim 105
+  compares the two states' geometry and never their colour, in normal
+  rendering AND under CDP forced-colors emulation; red-proved by collapsing
+  the two borders in the built CSS.
+- **interaction**: the page never drew the platform-vs-behavior line every
+  other behavior-backed page draws. It has no native element underneath —
+  a scanner is a keyboard — which makes the line more important, not less.
+  Added as a table plus the no-JS path.
+- **fit**: po-app's own receive screen used `data-scan-input` without
+  `data-scan-flash`, i.e. the framework's only real consumer had
+  half-adopted the surface it ships. One attribute.
+
+Re-score pending: next Polish pass blind-re-scores scan (2 → ?) on all three.
+
 ## Not in the queue, with reasons
 
 - **component/date — `fit: 0`, the single lowest score in the rubric.**

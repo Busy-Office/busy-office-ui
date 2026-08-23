@@ -9,6 +9,18 @@
  * (a colour-only overlay with no programmatic channel) — references are
  * floors, not ceilings.
  *
+ * ACCEPTED vs REJECTED is carried by the FRAME, not the hue (fixed
+ * 2026-08-23 — a blind DSA score caught the first version distinguishing
+ * the two verdicts by green-vs-red alone, with the live region as the only
+ * other channel. That satisfies "two-channel" for a screen-reader user and
+ * fails it for the sighted colour-blind one this component exists to serve,
+ * and under forced-colors BOTH verdicts painted the identical frame, so
+ * that user got no verdict at all.) A thin edge means accepted; a thick
+ * doubled edge means rejected — widths, because peripheral vision reads
+ * mass long before it reads detail, and a border survives the repaint that
+ * deletes a background. The state rules own the geometry so the
+ * forced-colors block only has to recolour it.
+ *
  * Contract: the scan-input behavior stamps `data-scan-result="ok|error"`
  * on <body> and removes it ~700ms later; this file only paints. The
  * overlay is pointer-inert and sits above page chrome but below toasts —
@@ -32,10 +44,15 @@
 
   body[data-scan-result="ok"]::after {
     background: var(--bo-color-success);
+    /* A quiet edge: accepted is the common case and must not startle. */
+    border: 6px solid var(--bo-color-success);
   }
 
   body[data-scan-result="error"]::after {
     background: var(--bo-color-danger);
+    /* Three times the mass and a doubled rule — legible in peripheral
+       vision and to a viewer who cannot separate the two hues. */
+    border: 18px double var(--bo-color-danger);
   }
 
   @keyframes bo-scan-flash {
@@ -56,11 +73,13 @@
 
   @media (forced-colors: active) {
     /* Backgrounds are repainted under forced colors; a full-viewport
-       Canvas flash would be invisible. Swap the wash for a thick frame in
-       Highlight — structural, so the cue survives. */
+       Canvas flash would be invisible. Drop the wash and keep the frame the
+       state rules already drew — recolouring only, so accepted (6px solid)
+       and rejected (18px double) stay TOLD APART here, which the first
+       version's single shared `border: 8px solid Highlight` did not. */
     body[data-scan-result]::after {
       background: none;
-      border: 8px solid Highlight;
+      border-color: Highlight;
       opacity: 1;
     }
   }
