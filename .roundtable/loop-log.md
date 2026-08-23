@@ -735,3 +735,10 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 09:05 · Continue · build · 123.4: 0.3.0 released to npm (re-cut path); npm-12 pack-shape and base-blind-claim bugs fixed at root · released · 1eb60c8
 - 2026-08-23 09:20 · Continue · bug · output-form 390px table overflow (caught by CI's first layout sweep in 2 days) · landed · 0eec725
 - 2026-08-23 09:34 · Continue · bug · axe: schedule/full landmarks+heading-order, command-bar placeholder-only name · landed · c862d39
+- 2026-08-23 10:25 · Roadmap · plan · 123.1-123.3c: nine recommendations signed off, Accept criteria written · triaged · a08ec58
+- 2026-08-23 10:25 · Meta · refusal · live as-you-type masking (on-blur decided per ERP evidence) · refused · a08ec58
+- 2026-08-23 10:25 · Meta · refusal · mobile bottom-nav frame tier (icon-rail collapse suffices for now) · refused · a08ec58
+- 2026-08-23 10:25 · Meta · refusal · QBO single-checklist and BC journal-drawer reconciliation layouts · refused · a08ec58
+- 2026-08-23 10:25 · Meta · refusal · Workday day-click-modal timesheet entry · refused · a08ec58
+- 2026-08-23 10:25 · Meta · refusal · split-award comparison action (select-one for v1) · refused · a08ec58
+- 2026-08-23 10:40 · Continue · build · 123.1: initGroupedNumber shipped — one grouped-display behavior for Money/Quantity/numeric · landed · 341ea7f
