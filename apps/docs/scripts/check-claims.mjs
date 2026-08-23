@@ -2041,6 +2041,32 @@ check(
   JSON.stringify(actionWrap),
 );
 
+/* And a SINGLE button whose label is longer than the bar wraps its label
+   instead of spilling — flex-wrap cannot save that one, because there is no
+   line it would fit on. Found by the ERP example immediately after the
+   flex-wrap fix landed: a "Create 2 purchase orders · $44,560.00" button
+   still hung 15px past the edge at 390. */
+const longLabel = await page.evaluate(() => {
+  const bar = document.getElementById('wrap-demo');
+  const btn = bar.querySelector('.bo-btn');
+  const original = btn.textContent;
+  btn.textContent = 'Create 2 purchase orders and notify both vendors immediately';
+  const b = bar.getBoundingClientRect();
+  const r = btn.getBoundingClientRect();
+  const out = {
+    spill: Math.round(Math.max(b.left - r.left, r.right - b.right)),
+    lines: Math.round(r.height / parseFloat(getComputedStyle(btn).lineHeight)),
+    whiteSpace: getComputedStyle(btn).whiteSpace,
+  };
+  btn.textContent = original;
+  return out;
+});
+check(
+  'a single action whose label is longer than the bar wraps onto more lines rather than spilling past the edge',
+  longLabel.whiteSpace === 'normal' && longLabel.spill <= 1 && longLabel.lines > 1,
+  JSON.stringify(longLabel),
+);
+
 // Touch attribute recipe (roadmap 127.5). A spec table next to a demo is
 // two copies of one fact, and the docs' whole doctrine is that a
 // documented surface is generated from the shipped thing rather than

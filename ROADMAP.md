@@ -233,18 +233,63 @@ reads clean while telling us nothing.
        `bo-app-shell__main` collapses a scrollable table container to its
        header row — two correct primitives composing into silent data loss,
        and the broken composition is the one a careful reader tries first).
-3. [ ] **130.3 — module two, on the settled answers.** O2C (sales order,
+3. [ ] **130.2b — the P2P document flow, grilled 2026-08-23 (owner: "as per
+       your recommendation").** Question was whether P2P should carry
+       PR → PO → GR → Vendor invoice → Payment with sub-functions and
+       conversions. Decided on SHAPE COVERAGE, not business completeness:
+       a step earns a screen only if it stresses the framework in a way
+       nothing shipped already does.
+       **Refused as already covered**, with reasons: **Goods receipt** —
+       `goods-receipt` plus the three RF screens cover receiving end to end;
+       **Payment** — select-and-run is `bulk-actions`, the unattended run is
+       `job-monitor`. Building either repeats work and adds ~10 screens for
+       no new information.
+       **Accepted**: **PR creation** (tests `detail-form` at real scale) and
+       **PR → PO conversion**, which nothing covers — grepped all 38 pattern
+       pages and conversion/derivation appears nowhere. Its shape is genuinely
+       new: select N sources → group them by a rule (one PO per vendor) →
+       PREVIEW what will be created → convert some lines but not others →
+       land on the result with its sources linked. Must include partial
+       line-level conversion and many-to-one grouping — a 1:1 Convert button
+       teaches nothing.
+       If it survives, it becomes a pattern candidate named
+       `document-conversion` — framed by SHAPE, with PR→PO as demo data only
+       (Slice 109 rule).
+       **Nav stays one level** (Q17): in P2P the functions ARE the documents;
+       anything else is a report or a job, and both have homes. Deciding a
+       third level while GAP-1 (no module rail) is open would design the
+       navigation backwards.
+       **BUILT 2026-08-23**: `p2p/requisitions` (source list whose action
+       names its OUTPUT, not its effect on the rows), `p2p/requisition` (PR
+       entry — form sections + a line grid + the 127.5 touch attributes),
+       and `p2p/convert-to-po` (two result groups from three sources, with a
+       line excluded). **Six more gaps**, five from the conversion screen
+       alone — GAP-8 (the transform statement "3 → 2, grouped by vendor" has
+       no surface, and it is the sentence that decides how many documents get
+       created), GAP-9 (sources→result, which is GAP-2 seen from the other
+       end, merged), GAP-10 (a derived total has no home and, more
+       importantly, no stated owner for recomputing and announcing it),
+       GAP-11 (no row state for "deliberately excluded" — the shipped states
+       are all PROBLEM states), GAP-12 ("Add a line" has no home anywhere),
+       GAP-13 (a single over-long button still spilled after GAP-7's
+       flex-wrap — fixed for `.bo-form-actions`, claim 107, but it is now the
+       THIRD instance of one rule and consolidation needs its own grill).
+       **GAP-2 absorbs the chain question** (Q16): "what is this connected
+       to" and "where is this in its lifecycle" are one need, and answering
+       them separately would produce two overlapping surfaces — exactly what
+       the Objective's rethink test targets.
+4. [ ] **130.3 — module two, on the settled answers.** O2C (sales order,
        customer invoice), built only after 130.2 lands, so the second module
        measures whether the fixes worked instead of repeating the gaps.
        **This is the checkpoint for the whole idea**: if module two finds
        another five gaps, the framework has a systemic hole worth a slice of
        its own; if it finds none, modules three to six are mechanical and can
        be batched.
-4. [ ] **130.4 — the remaining four modules.** CRM (account, opportunity),
+5. [ ] **130.4 — the remaining four modules.** CRM (account, opportunity),
        Finance (journal entry, payment), Inventory (stock movement, item
        master), Production (production order, BOM). Batched only if 130.3
        says they are mechanical. Each still logs its gaps.
-5. [ ] **130.5 — wire the suite into CI** once it stops changing shape:
+6. [ ] **130.5 — wire the suite into CI** once it stops changing shape:
        `build` + the three gates, in the same job as the docs checks. Left
        until last on purpose — a gate that guards a moving target reports
        noise. Until then it runs on demand and the loop runs it by hand.

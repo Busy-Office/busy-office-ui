@@ -123,6 +123,26 @@
     border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
   }
 
+  /* A button in this bar WRAPS its label rather than clipping it — the
+     third time this framework has made the same call, after
+     .bo-btn-group--bar (RF) and .bo-state__actions (119.1), and for the
+     same reason each time: a button label is content, and WCAG 1.4.12
+     forbids clipping content. flex-wrap alone does not cover it, because a
+     SINGLE button whose label is longer than the bar cannot be moved to a
+     line where it fits — "Create 2 purchase orders · $44,560.00" at 390px
+     still spilled 15px past the edge (roadmap 130.2b, found by the example
+     app's audit immediately after the wrap landed).
+     Three instances of one rule is a consolidation question, logged as
+     GAP-13 rather than answered here: changing .bo-btn's global
+     `white-space: nowrap` affects every button on every screen and deserves
+     its own grill. */
+  .bo-form-actions > .bo-btn {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
   @media print {
     .bo-form-actions {
       display: none;

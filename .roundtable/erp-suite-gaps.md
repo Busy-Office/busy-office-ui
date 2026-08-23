@@ -11,9 +11,9 @@ the framework has not got, the screen compromises visibly and the need lands
 here. Without that rule, every gap becomes a local `<style>` block and the
 instrument reads clean while telling us nothing.
 
-**Status of the pilot**: Procure-to-pay, 2 document types, 5 real screens
-(suite home, PO list, PO document, invoice list, invoice document) + 5 honest
-module stubs. Gates: `check-markup` (every class exists), `check-erp-suite`
+**Status of the pilot**: Procure-to-pay, 3 document types, 8 real screens
+(suite home, requisition list, requisition entry form, conversion preview, PO
+list, PO document, invoice list, invoice document) + 5 honest module stubs. Gates: `check-markup` (every class exists), `check-erp-suite`
 (no CSS, every link resolves), `audit` (axe at 1440 and 390, no sideways
 scroll, and — added mid-pilot — no element spilling content past its
 parent's edge). All green, with ONE allowlisted failure carrying its reason:
@@ -173,6 +173,83 @@ reported this clean while a button was cut in half — and is red-proved by
 stripping the wrap from the built CSS. A four-action demo on the Forms page
 shows it. The example's audit allowlist is now EMPTY, which is how a debt
 marker is supposed to end.
+
+---
+
+# Round 2 — the P2P document flow (2026-08-23)
+
+Owner asked whether P2P should carry PR → PO → GR → invoice → payment.
+Decided on shape coverage: **GR and Payment were REFUSED as already covered**
+(`goods-receipt` + the RF screens; `bulk-actions` + `job-monitor`), and the
+two uncovered shapes were built — PR creation and PR→PO conversion. Six more
+gaps, five of them from the conversion screen alone, which is a strong signal
+that document conversion is a genuine hole rather than a missing demo.
+
+## GAP-8 — the transform statement has no surface
+
+**Hit on**: `p2p/convert-to-po`.
+**Wanted**: "3 requisitions → 2 purchase orders, grouped by vendor" rendered
+as a *fact about the operation*, prominent and unmissable. It is the sentence
+that tells the reader how many documents they are about to create.
+**Have**: nothing. It sits in a `bo-alert` as prose.
+**Why it matters**: creating the wrong number of purchase orders is not
+undoable — you cancel documents a vendor may already have seen. The count is
+DERIVED from a grouping rule the reader did not choose, so it must be stated,
+not inferred.
+
+## GAP-9 — "these sources became this result", again
+
+**Hit on**: `p2p/convert-to-po`, each result group.
+Same shape as GAP-2 seen from the other end: GAP-2 is "what is this document
+connected to", GAP-9 is "what will this document be made from". Rendered as a
+`bo-kv` row of links, the same compromise, which is the evidence that these
+are ONE need. Merged into GAP-2 for the grill, per the owner's Q16 answer.
+
+## GAP-10 — a derived total has no home and no stated owner
+
+**Hit on**: `p2p/convert-to-po` (the button reads "Create 2 purchase orders ·
+$44,560.00" — both numbers derived from which lines are ticked).
+**Have**: nothing. Both are hand-typed here because the example ships no JS.
+**The real gap is the CONTRACT, not the CSS**: nothing in the docs says who
+recomputes a derived total as selection changes, or how the change is
+announced to a screen reader. The framework already has this problem solved
+next door — `data-table`'s selection count is a live region — but nothing
+generalises it to "a number derived from a selection".
+
+## GAP-11 — no row state for "deliberately excluded"
+
+**Hit on**: `p2p/convert-to-po`, the unticked line.
+**Have**: `data-row-state` ships `dirty`, `error`, `warning` — every one a
+PROBLEM state. A line the reader chose to leave out is not a problem, and it
+renders identically to an included line apart from its checkbox. Visible in
+the screenshot: on a four-line conversion you can just about track it; on a
+forty-line one you cannot see what you are dropping.
+**Shape of the fix**: likely one more `data-row-state` value, and the
+two-channel rule already forces the answer to be more than a colour — the
+existing states pair a tint with a border accent, so an excluded row needs
+its own non-colour cue too.
+
+## GAP-12 — "Add a line" has no home
+
+**Hit on**: `p2p/requisition` (PR creation).
+**Have**: nothing. It is not part of `data-table`, not mentioned by
+`editable-grid`, not in `form-section`. Rendered as a loose button under the
+table — which is where every consumer will independently decide to put it,
+differently. The most-pressed control on any document entry screen.
+
+## GAP-13 — RESOLVED as a targeted fix, OPEN as a consolidation question
+
+**Hit on**: `p2p/convert-to-po` at 390 — a single button labelled "Create 2
+purchase orders · $44,560.00" spilled 15px past the bar even after GAP-7's
+`flex-wrap` landed, because there is no line a too-long button fits on.
+**Fixed**: `.bo-form-actions > .bo-btn` now wraps its label, with a claims
+case (107) red-proved by stripping the rule from the built CSS.
+**Still open**: that is the THIRD instance of one rule — `.bo-btn-group--bar`
+(RF) and `.bo-state__actions` (119.1) made the same call, each citing WCAG
+1.4.12. Three specific rules where one general one might do is exactly the
+Objective's less-for-more test. The general form would be dropping
+`white-space: nowrap` from `.bo-btn` itself, which changes every button on
+every screen and needs its own grill — recorded, not guessed at.
 
 ---
 

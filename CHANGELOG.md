@@ -18,6 +18,14 @@ pin.
   CSS only. A claims case now measures each button against the bar's own box
   at 390.
 
+- **Fixed** (`form`): a button in `.bo-form-actions` whose label is longer
+  than the bar now wraps instead of spilling past its edge — `flex-wrap`
+  cannot help a single item with no line to fall to. Third instance of one
+  rule after `.bo-btn-group--bar` and `.bo-state__actions`, each citing WCAG
+  1.4.12: a button label is content, and clipping content is what 1.4.12
+  forbids. Whether these three consolidate into dropping `.bo-btn`'s global
+  `white-space: nowrap` is a separate, unanswered question.
+
 ## 0.5.0 (2026-08-23)
 
 - **Added** (`data-table`): `.bo-data-table__col--tertiary` completes the

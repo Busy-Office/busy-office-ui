@@ -28,7 +28,11 @@ export const MODULES = [
 
 /** The documents each module owns — the second nav level. */
 export const SECTIONS = {
+  /* One level, and the functions ARE the documents (owner, 2026-08-23):
+     anything in P2P that is not a document is a report or a job, and both
+     already have homes. Ordered as the work flows. */
   p2p: [
+    { label: 'Requisitions', href: '/p2p/requisitions.html' },
     { label: 'Purchase orders', href: '/p2p/purchase-orders.html' },
     { label: 'Vendor invoices', href: '/p2p/vendor-invoices.html' },
   ],
