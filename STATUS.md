@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 23:25
+Generated at: 2026-08-23 23:33
 
 ## Open items by slice
 
@@ -35,10 +35,9 @@ Generated at: 2026-08-23 23:25
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (795 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-23 22:29   OVERDUE
+dispatch status — counter-triggered rules (797 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-23 23:33   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -52,8 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 22:21 · Standardize · dry · 131.1 — one RF screen per page; the mirror now follows the docs theme; components-used reads the embed · landed · 5a0b511
-- 2026-08-23 22:23 · Roadmap · plan · 132 — owner wishlist triaged: date entry, search help, calendar months, file panel, list-to-list · triaged · 55c89da
 - 2026-08-23 22:29 · Standardize · dry · 131.2 — RfDevice component: one call site for six embeds, chrome only where there is room · landed · 15f9bbc
 - 2026-08-23 22:31 · Roadmap · plan · 133 — owner ask: prove table + object-page scrolling works; the scroll containers are exempt from every gate · triaged · 06ac2e8
 - 2026-08-23 22:32 · Continue · build · 131.3 — icons on RF buttons, decided · refused · 75de725
@@ -62,6 +59,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 22:51 · Continue · build · 130.2 GAP-2 — document flow decided as a bo-timeline composition, proved on two screens, GAP-14 found · landed · 0001553
 - 2026-08-23 23:02 · Continue · build · 130.2c — document flow documented on object-page; empty-marker two-channel defect found and gated · landed · 5b254ba
 - 2026-08-23 23:25 · Continue · build · 130.2 GAP-4a — grouped column headers: two sticky header rows pinned to the same offset; fixed, documented, claim 108 · landed · 1305ab9
+- 2026-08-23 23:33 · Standardize · dry · GAP-13 consolidation — measured; general form refused, knowledge consolidated · landed · 6aa53b4
+- 2026-08-23 23:33 · Meta · refusal · dropping .bo-btn's global white-space: nowrap — zero buttons change at 1440, four at 390 and all four already fit · refused · 6aa53b4
 
 ## Sunset test
 

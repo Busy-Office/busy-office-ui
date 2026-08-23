@@ -801,3 +801,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 22:51 · Continue · build · 130.2 GAP-2 — document flow decided as a bo-timeline composition, proved on two screens, GAP-14 found · landed · 0001553
 - 2026-08-23 23:02 · Continue · build · 130.2c — document flow documented on object-page; empty-marker two-channel defect found and gated · landed · 5b254ba
 - 2026-08-23 23:25 · Continue · build · 130.2 GAP-4a — grouped column headers: two sticky header rows pinned to the same offset; fixed, documented, claim 108 · landed · 1305ab9
+- 2026-08-23 23:33 · Standardize · dry · GAP-13 consolidation — measured; general form refused, knowledge consolidated · landed · 6aa53b4
+- 2026-08-23 23:33 · Meta · refusal · dropping .bo-btn's global white-space: nowrap — zero buttons change at 1440, four at 390 and all four already fit · refused · 6aa53b4

@@ -64,21 +64,29 @@ Since the 14:30 entry: Slices 126-130 closed or advanced.
   **13 gaps in `.roundtable/erp-suite-gaps.md`**; GAP-5, GAP-7 and
   GAP-13 already fixed, ten open.
 
-**Two open owner inputs:**
+**One open owner input:**
 
 1. **112.3 pilot briefs** — unchanged; scaffold at `.roundtable/pilot-112/`
    (the loop must never author brief content, and SEALED-PICKS.md stays
    unopened until all runs are recorded).
-2. **GAP-13's consolidation question** — `.bo-btn-group--bar`,
-   `.bo-state__actions` and now `.bo-form-actions > .bo-btn` all make the
-   same "labels wrap rather than clip" call, each citing WCAG 1.4.12.
-   Three specific rules where one general one might do; the general form
-   is dropping `.bo-btn`'s global `white-space: nowrap`, which touches
-   every button on every screen. Recorded, not guessed at.
+2. ~~**GAP-13's consolidation question**~~ — **ANSWERED 2026-08-23** by the
+   Standardize sweep, no owner call needed: REFUSE the general form. The
+   premise was wrong (two label-wrap rules, not three — `.bo-state__actions`
+   wraps the BAR, not the label), and dropping `.bo-btn`'s global
+   `white-space: nowrap` changes ZERO buttons at 1440 and exactly four at
+   390, every one of which already fits. Full measurement in the gap ledger.
 
-**Next dispatched work, if nothing new arrives:** ROADMAP 130.2 — grill
-the ten open gaps into accept/refuse/rethink, GAP-2 (merged with the
-document-chain question) first, before 130.3 builds module two.
+**Progress on 130.2 (the ten open gaps → decisions):** GAP-2 (merged with
+GAP-9) decided AND documented — the document flow is a `bo-timeline`
+composition, on `/patterns/object-page` with claim coverage. GAP-4a decided
+and fixed — grouped column headers were a sticky bug in shipped CSS, not a
+missing feature. GAP-13 answered above. **Open: GAP-1, GAP-3, GAP-4b, GAP-6,
+GAP-8, GAP-10, GAP-11, GAP-12, and the new GAP-14** (a chain step can be
+PARTIAL and `data-state` has no word for it — grill with GAP-11, since both
+ask whether the component needs one more state).
+
+**Next dispatched work, if nothing new arrives:** the rest of 130.2, then
+130.3 builds module two.
 
 ## Live-verification gotcha — `bo-docs-run` on :8081 is STALE (2026-08-21)
 
