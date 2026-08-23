@@ -29,11 +29,11 @@ quality signal. A dimension that cannot fail must never drive a round.
 | component/badge | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for anything actionable" |
 | component/byline | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
 | component/calendar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for a plain date field" |
-| component/dashboard | content | 2 | 0/3 | 0 | queued |
-| component/data-table | content | 2 | 0/3 | 0 | queued |
+| component/dashboard | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not a wrapper round every section" |
+| component/data-table | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for laying out a page" |
 | component/date | content | 2 | — | — | **SKIPPED** — deprecated, see note below |
-| component/icon | content | 2 | 0/3 | 0 | queued |
-| component/inline-editing | content | 2 | 0/3 | 0 | queued |
+| component/icon | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed |
+| component/inline-editing | content | **3** | 1/3 | 0 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) |
 | component/navbar | content | 2 | 0/3 | 0 | queued |
 | component/pagination | content | 2 | 0/3 | 0 | queued |
 | component/progress | content | 2 | 0/3 | 0 | queued |
@@ -52,3 +52,14 @@ quality signal. A dimension that cannot fail must never drive a round.
   instead. The honest fix is removal at the next breaking change, not
   polish. Worst-first ordering would have picked it first — recording why
   it is skipped so no future wake re-picks it.
+
+- **component/inline-editing and component/table-toolbar are NOT scored.**
+  Both are on `check:wrong-choice`'s queue but neither page renders
+  `<DsaScore>`, so the DSA rubric covers 39 of the 41 component pages and
+  the polish loop's own instrument is blind to these two. Recorded as an
+  observation, deliberately not acted on: extending the rubric's coverage
+  is scoring apparatus, and roadmap 101.3's stop rule keeps that out of
+  scope until a live grill finds a defect the six dimensions cannot see.
+  A Research round is the right place to decide whether the gap is real
+  (these may be sub-surfaces of data-table rather than components in their
+  own right) or worth closing.

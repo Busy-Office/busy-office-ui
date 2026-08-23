@@ -70,6 +70,16 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <strong>Advanced</strong> (<code>data-grid-nav</code> + <code>initDataGrid()</code>,
     further down this page) only when a screen genuinely needs full two-axis
     keyboard navigation — most tables don't.
+    <strong>Not for laying out a page</strong> — a table means "these rows
+    are the same kind of thing, and these columns are the same fact about
+    each". Using one to place a form's labels beside its controls, or to
+    put two panels side by side, tells a screen reader there is tabular
+    data to navigate when there is none. Those want
+    <a href={base + '/components/form'}>form sections</a> and the
+    <a href={base + '/base/primitives'}>layout primitives</a>. A single
+    record's own facts are not a table either — that is
+    <a href={base + '/components/kv'}>key-value facts</a>, which is one
+    thing described, not many things compared.
   </p>
   <section class="demo">
     <h2>Simple — select, sort, filter</h2>

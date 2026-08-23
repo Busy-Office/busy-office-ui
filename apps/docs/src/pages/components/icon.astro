@@ -54,6 +54,16 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     small: twelve ERP glyphs prove the mechanism; adding your own is one line of
     CSS — or paste inline SVG with <code>fill="currentColor"</code>, which is an
     equally first-class answer.
+    <strong>Not as the only label for a meaning the reader has to
+    learn</strong> — an icon-only control works when the glyph is already a
+    convention (close, search, settings) and space is genuinely tight, and
+    then it still needs an <code>aria-label</code>, since these glyphs are
+    <code>aria-hidden</code> decoration. It fails the moment the meaning is
+    domain-specific: nobody recognises a mark for "post goods issue", so
+    that button needs its words. And where no glyph in any set reads as the
+    thing — "accounts payable" has none — use letters: an initials
+    <a href={base + '/components/badge'}>badge</a> is honest where an
+    approximate icon is confidently wrong.
   </p>
 
   <section class="demo">
@@ -129,7 +139,11 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     <p class="bo-u-text-muted">Composes with the existing
     <code>.bo-sidebar-nav__icon</code> slot and <code>.bo-btn--icon</code> —
     decorative icons carry <code>aria-hidden</code>; an icon-only button labels
-    <em>itself</em> with <code>aria-label</code>, never the icon.</p>
+    <em>itself</em> with <code>aria-label</code>, never the icon.
+    Both buttons here pass the opener's test deliberately: a cog for
+    settings and a bar chart for reports are conventions a reader already
+    holds. The same treatment on a domain action — "post goods issue" —
+    would not be, and that button gets its words.</p>
   </section>
 
   <section class="demo">

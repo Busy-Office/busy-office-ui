@@ -35,6 +35,7 @@ const statMarkup = `<div class="bo-widget">
      carry direction — a colorblind reader can't tell good ▲ from bad ▲) and
      the visually-hidden text for screen readers. Glyphs are aria-hidden so
      AT hears "+12%, increase, worse, vs July" without triangle noise. -->`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Dashboard">
   <p class="demo-note">
@@ -45,6 +46,16 @@ const statMarkup = `<div class="bo-widget">
     <strong>Looking for a "Card"?</strong> <code>.bo-widget</code> is it —
     header/body/band composition, independent of dashboards; see
     "<a href="#card">Widget parts</a>" below.
+    <strong>Not as a wrapper around every section of a page</strong> — a
+    widget is a box that says "this content is a separate thing from the
+    box beside it". Wrapping each section of one continuous form or record
+    in its own bordered card draws lines where the reader needs
+    continuity, and the page turns into a stack of containers with no
+    hierarchy. A long record's own sections want
+    <a href={base + '/components/form'}>form sections</a> or
+    <a href={base + '/patterns/object-page'}>object page</a>'s anchored
+    headings; reach for widgets when the pieces are genuinely independent
+    and could be reordered.
   </p>
   <section class="demo">
     <div class="bo-widget-grid" style="--bo-widget-min: 13rem">

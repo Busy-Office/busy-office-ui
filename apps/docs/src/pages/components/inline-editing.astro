@@ -37,6 +37,14 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
     app persists with. The component-level how-to — the assembled
     screen, with its data contract and states, is the
     <a href={base + '/patterns/editable-grid'}>editable grid pattern</a>.
+    <strong>Not for creating a record</strong> — in-place editing assumes
+    the row already exists and that each change is a small correction to
+    it. A new record usually has required fields, validation that spans
+    several of them, and a decision the user can abandon; that belongs in
+    a <a href={base + '/patterns/detail-form'}>detail form</a> or a
+    <a href={base + '/patterns/wizard'}>wizard</a>, where Cancel means
+    nothing was created. An empty row waiting to be filled in a grid gives
+    the user no way to say "actually, never mind".
   </p>
 
   <section class="demo">

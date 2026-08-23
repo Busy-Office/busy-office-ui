@@ -111,7 +111,7 @@
       }
     },
     "data-table": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -130,17 +130,14 @@
           "cite": "selection works via :has() with zero JS; behaviors are opt-in; focus restored across htmx swaps; menus are native popover"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/data-table is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for laying out a page\" — a table asserts same-kind rows and same-fact columns, so using one for form layout or side-by-side panels lies to a screen reader; points at form sections + layout primitives, and at kv for ONE record's facts. Blind re-scored 2026-08-23 (Polish round 6), judged genuine."
         },
         "fit": {
           "score": 3,
           "cite": "matrix table contexts correct incl. the split-column rule (88) and conditional tone; hover ring fixed 73.2"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "pagination": {
       "scored": "2026-08-21",
@@ -655,7 +652,7 @@
       }
     },
     "icon": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -674,17 +671,14 @@
           "cite": "a decorative span; it introduces no interaction surface"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/icon is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not as the only label for a meaning the reader has to learn\" — icon-only works for conventions (close/search/settings) with an aria-label, fails for domain actions nobody has a mark for; initials badge where no glyph reads as the thing. Blind re-scored 2026-08-23 (Polish round 6): the scorer caught the first draft's absolute \"Never\" contradicting this page's OWN icon-only button demo, so the clause was narrowed to conventional-vs-learned meaning and the demo caption now states why its two buttons pass that test."
         },
         "fit": {
           "score": 3,
           "cite": "12 ERP glyphs proving a mechanism, not a catalogue; 4 are deprecated with the data-URI replacement documented"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "alert": {
       "scored": "2026-08-23",
@@ -873,7 +867,7 @@
       }
     },
     "dashboard": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -892,17 +886,14 @@
           "cite": "ships no behavior — auto-compaction is a named container query, not JS"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not as a wrapper around every section of a page\" — a widget says the content inside is separate from the box beside it, so card-wrapping one continuous record draws lines where the reader needs continuity; points at form sections and object-page's anchored headings. Blind re-scored 2026-08-23 (Polish round 6), judged genuine and doing real work precisely because this page declares the widget to BE the Card two sentences earlier."
         },
         "fit": {
           "score": 3,
           "cite": "named containers whose width drives the density of what they hold; the overview surface the sidebar assigns it"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "byline": {
       "scored": "2026-08-23",

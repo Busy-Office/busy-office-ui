@@ -43,8 +43,8 @@ import { EXEMPT, hasWrongChoiceClause } from './wrong-choice-rule.mjs';
  * Delete a line when its page gains the clause — the list only shrinks.
  */
 const TODO = new Set([
-  'dashboard', 'data-table', 'date', 'icon',
-  'inline-editing', 'navbar', 'pagination', 'progress',
+  'date',
+  'navbar', 'pagination', 'progress',
   'sidebar-nav', 'state-patterns',
   'stepper', 'table-toolbar', 'tree-table', 'tree',
 ]);
