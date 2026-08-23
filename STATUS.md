@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 15:49
+Generated at: 2026-08-23 16:09
 
 ## Open items by slice
 
@@ -12,9 +12,7 @@ Generated at: 2026-08-23 15:49
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 126** (5 open)
-  - 126.1 — rf-essentials size-budget gate.
-  - 126.2 — scan-result feedback.
+- **Slice 126** (3 open)
   - 126.3 — `bo-btn-group--bar`.
   - 126.4 — three new RF patterns: pick, putaway, count.
   - 126.5 — comprehensive pass on the existing 3 RF pages.
@@ -22,8 +20,8 @@ Generated at: 2026-08-23 15:49
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (762 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-23 14:38   ok
+dispatch status — counter-triggered rules (763 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-23 14:38   ok
   Objective     0 / 3 slices          since 2026-08-23 15:49   ok
 ```
 
@@ -36,7 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 14:15 · Roadmap · plan · 112.3: protocol owner-confirmed, pilot scaffold created (briefs remain owner-authored) · triaged · e58ea3c
 - 2026-08-23 14:23 · Continue · build · 0.4.0 released (grouped numbers + RTL fix); 0.3.0 docs snapshot cut from the tag, switcher offers three versions · released · 4669b23
 - 2026-08-23 14:38 · Standardize · tidy · Sweep of today's 4 rounds: redundant resets, header idiom converged on --split, preview helpers, snapshot-script doc · landed · efdeb8a
 - 2026-08-23 15:32 · Explore · explore · 125.1: 0.4.0 dogfood found 3 real grouped-number defects, fixed red-first, E2E-proven; wiring graduated · landed · 1f75dab
@@ -46,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 15:49 · Meta · refusal · on-screen offline badge on RF screens (infrastructure, refuted by sources) · refused · f6c5e76
 - 2026-08-23 15:49 · Meta · refusal · progress-counter RF element (no two-source support) · refused · f6c5e76
 - 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
+- 2026-08-23 16:09 · Continue · build · 126.1 budget gate (red-proven) + 126.2 scan flash (2 instrument-caught bugs: attr-only API, capture-vs-verdict ordering) · landed · 36b637a
 
 ## Sunset test
 
