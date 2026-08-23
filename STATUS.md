@@ -16,9 +16,6 @@ Generated at: 2026-08-23 12:00
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 121** (2 open)
-  - 121.2 — SUPERSEDED → queued as 123.3b
-  - 121.3 — SUPERSEDED → queued as 123.3c
 
 ## Dispatch counters
 
@@ -32,7 +29,6 @@ dispatch status — counter-triggered rules (745 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 121.3 — SUPERSEDED → queued as 123.3c
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS.
 - 104.2 — preview images on the tiles. OWNER CALL after 104.1.
 - 99.4 — missing components discovered along the way go through the front door.

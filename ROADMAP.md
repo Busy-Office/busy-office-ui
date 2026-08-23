@@ -422,14 +422,14 @@ wrong-choice` and `check:page-shape` are visibly doing their job.
    Essential for any finance/AP/treasury module (bank reconciliation,
    three-way-match exceptions). Needs its own design-tree round before
    Accept criteria exist.
-2. [ ] **121.2 — SUPERSEDED → queued as 123.3b** (design decided;
-   see Slice 123). Looks like
+2. [x] **121.2 — SUPERSEDED → built as 123.3b** (`/patterns/timesheet`,
+   2026-08-23). Looks like
    `editable-grid` but isn't: a FIXED calendar-period column axis (not
    arbitrary fields), row+column totals that must reconcile before a
    submit-for-period action fires into `approval`. Essential wherever
    HR/Projects/PSA exists. Needs its own grill.
-3. [ ] **121.3 — SUPERSEDED → queued as 123.3c** (design decided;
-   see Slice 123). N
+3. [x] **121.3 — SUPERSEDED → built as 123.3c** (`/patterns/comparison`,
+   2026-08-23). N
    candidates × M criteria, each cell showing a value + delta from
    best/target, ending in a select/award action (RFQ supplier comparison,
    budget-variance analysis). Distinct from `master-detail` (one list,
