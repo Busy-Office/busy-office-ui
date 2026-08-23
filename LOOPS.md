@@ -14,15 +14,17 @@ demand: `/loop <type> …`.
 
 ---
 
-## The six loops
+## The eight loops
 
 | Loop | Job (one line) | Cadence | Primary skills / agents |
 |------|----------------|---------|-------------------------|
 | **Roadmap** | Dispatcher: triage new input, decide what runs next | **every wake, first** — 20 min | `Plan`, `domain-modeling` |
 | **Continue** | Build the next backlog item — multi-round until its Accept criteria are met | dispatched most wakes | `frontend-design`, `diagnosing-bugs`, `Explore`, `verifier` |
 | **Standardize** | DRY + tidy: one pattern, no one-offs — multi-round until a clean pass | dispatched every 4th Continue round, or on drift | `Explore`, `stylelint` gate, `verifier`, `Workflow` fan-out |
-| **Optimize** | Smaller, faster, lower-specificity | dispatched on demand / at size regressions | build metrics, `Explore` |
-| **Explore** | Find & spike a *new* idea (try/error) | dispatched when backlog empties, or on demand | `frontend-design`, `Plan`, worktree isolation |
+| **Polish** | Raise ONE scored surface per round — components 3 rounds, patterns 10 | dispatched when the backlog is clear (owner, 2026-08-23) | blind re-scorer agent, existing rubrics |
+| **Research** | Answer what we don't know from trusted sources; queue, never build | dispatched when Polish is exhausted | web research agents, `grilling` |
+| **Optimize** | Smaller, faster, lower-specificity | on demand / size-budget breach | build metrics, `Explore` |
+| **Explore** | Find & spike a *new* idea (try/error) | on demand (seed list exhausted 2026-08-14) | `frontend-design`, `Plan`, worktree isolation |
 | **Objective** | Grill the product *vision* | dispatched at milestones / on demand | `round-table` (rt-*), project panel |
 
 ---
@@ -156,9 +158,35 @@ match to its full playbook below:
    and were not (282 -> 261 -> 257). A metric that moves on its own between
    identical commits needs more than one point before it can spend a wake
    (2026-08-18).
-6. **Backlog empty** (no unchecked item in the current slice)? → dispatch
-   **Explore** for one idea, then run Roadmap's own triage again on the
-   result (graduate into the plan, or log the discard).
+6. **Any scored surface below its round budget and not marked dry?** →
+   dispatch **Polish** (owner decision, 2026-08-23; full playbook below).
+   Components get 3 rounds, patterns 10 — as CEILINGS, not quotas. The
+   ledger is `.roundtable/polish-state.md`.
+
+7. **Every surface dry or budget-spent?** → dispatch **Research**: answer
+   an open question from trusted sources, grill it, queue it in
+   `ROADMAP.md` with Accept criteria. **It never builds** — findings wait
+   for the owner.
+
+8. **Nothing above matched** → **say why, ONCE, and stop the loop.**
+
+   This rule exists because of measured behaviour, not theory: on
+   2026-08-15 the dispatcher logged **28 idle wakes inside one 12-hour
+   window** (03:04→15:49), fifteen of them consecutive at 20-minute
+   intervals, each re-deriving "backlog still empty". Eleven items were
+   open the whole time — every one owner- or environment-blocked. The
+   streak ended only when the owner arrived to publish 0.1.0; the loop had
+   no way to restart itself and no way to *conclude*.
+
+   So: a wake that reaches this rule reports the blocking set (what is
+   open, who each item waits on) and **stops**, rather than idling. A
+   dispatcher that can halt and hand back a reason beats one that idles
+   politely forever. Do NOT re-dispatch Explore here — its seed list has
+   been exhausted since 2026-08-14 and re-running it is how the idle
+   spiral started.
+
+   *(Explore remains available on demand, and as the graduation path for a
+   spike the owner asks for.)*
 
 Record the dispatch decision itself as part of the iteration log — the outcome
 line already names which loop ran; that's the audit trail for *why*.
@@ -277,8 +305,101 @@ surfaced more:
 **Exit:** a clean pass finds nothing to consolidate. Hands back to the
 dispatcher.
 
+### 3b. Polish (raise a scored surface) — multi-round, budgeted
+**Trigger:** dispatcher rule 6 — the backlog is clear of queued build items.
+Added on the owner's decision, 2026-08-23, to close the idle-wake failure
+mode rule 8 documents. **Input:** the worst-scoring surface with rounds
+remaining, per `.roundtable/polish-state.md`.
+
+**One round = try → verify → adjust, and it must be falsifiable:**
+
+1. **Pick** the surface with the LOWEST score and rounds remaining. Ties
+   break by fewest rounds used. **One round per surface per pass** — never
+   the same surface twice running while another sits at the same score.
+2. **Try**: fix exactly ONE scored weakness. Not a general tidy — a named
+   dimension on a named surface, so the re-score has something to measure.
+3. **Verify**: rebuild, all docs gates, plus the browser sweeps CI runs
+   that the local build does NOT (`test:axe`, `check:layout`) — the
+   2026-08-23 lesson that a CI-only gate is not known to work.
+4. **Blind re-score** — *the load-bearing step*. A SECOND agent re-scores
+   the surface against the rubric, told the surface and the dimension but
+   **never what changed or what the old score was**. The agent that made
+   the change may not score it: it would be marking its own homework, and
+   this file's own doctrine already says an instrument's first output is
+   not evidence. Without this the dry-round exit can never fire and the
+   3/10 budgets become a guarantee of self-approved work.
+5. **Did the score move?**
+   - **Yes** → commit, `round++`, reset that surface's dry counter.
+   - **No** → `dry++`. **Two dry rounds in a row mark the surface DRY and
+     forfeit its remaining budget.** This is what reconciles the budgets
+     with this file's standing "don't manufacture busywork" rule: a
+     surface that cannot produce a measurable gain twice running is
+     finished, whatever its budget says.
+
+**What "scored" means — existing instruments only, no new ones:**
+- **Components** → the DSA rubric in `apps/docs/src/data/dsa-scores.json`.
+  Polish drives on **`content`, `fit` and `interaction` only**.
+  - `typography`/`colour`/`spacing` read 3 on all 39 components, and that
+    is **documented as expected, not broken** (94.7/94.9; `hierarchy` was
+    retired for exactly this). `spacing`'s own definition says outright it
+    is "a DEBT MARKER, not a quality signal — satisfiable by the scorer
+    writing the comment". A dimension that cannot fail must never drive a
+    round.
+  - The real queue is executable: `check:wrong-choice`'s `TODO` set — 19
+    component pages with no wrong-choice clause, and the gate already
+    ratchets (a page that gains the clause MUST leave TODO or the gate
+    fails). `content` and that gate agree by construction.
+- **Patterns** → the pattern-sweep bar in `.roundtable/pattern-sweep-*`.
+
+**The rubric's own stop rule (roadmap 101.3) binds this loop.** Polish is
+"maintenance of the existing ratchet only — fixing entries the rubric
+already flags". It may NOT add dimensions, definitions or gates. That rule
+fires only when a live grill finds a surface scoring 3 across the board
+with a genuine user-facing defect the six dimensions structurally cannot
+see. **A dead trigger on another loop is not that trigger** (see Optimize).
+
+**Exit:** every surface dry or budget-spent → hands to Research (rule 7).
+**Re-entry:** a surface's budget resets when its SOURCE changes — its CSS,
+its docs page, or its rubric definition. Never on a timer: work re-enters
+the queue because the thing actually changed.
+
+### 3c. Research (find out what we don't know) — queue, never build
+**Trigger:** dispatcher rule 7 — Polish exhausted. **Input:** an open
+question in `ROADMAP.md`, or a scored weakness with no known fix.
+
+1. **Check the ledger** (`.roundtable/research-*.md`) — do not re-research
+   a question answered recently. Re-open only if the answer has gone stale.
+2. **Fan out to TRUSTED sources, 2+ INDEPENDENT per claim, URL-cited**:
+   W3C/WAI-ARIA APG, WHATWG, MDN, Baymard, Nielsen Norman, GOV.UK Design
+   System, the major design systems (Carbon, Fluent, Material, Fiori,
+   Atlassian), and the ERP products themselves. Blogs, vendor marketing and
+   AI answers are LEADS TO VERIFY, never sources to cite.
+3. **Grill** the finding with the `grilling` skill's design-tree rounds.
+4. **Evidence gate** (same bar as Objective): ≥2 independent sources →
+   `Evidence`; otherwise `Hypothesis`. Every claim carries its
+   counter-evidence.
+5. **Write** `.roundtable/research-<topic>-<date>.md` and queue the finding
+   in `ROADMAP.md` **with Accept criteria**.
+6. **STOP.** Research changes *direction*, and direction is the owner's in
+   every slice so far. It may land docs-only corrections; anything touching
+   the shipped package waits for sign-off.
+
+**Exit:** one question answered and queued, or the ledger says everything
+current is answered — then rule 8 (report and stop).
+
 ### 4. Optimize
-**Trigger:** dispatched on demand, or when a tracked metric regresses.
+**Trigger:** on demand, or when a tracked metric regresses on two
+consecutive runs, **or when a size budget is breached outright** — the
+absolute-threshold trigger added 2026-08-23 because the trend-only one was
+effectively dead: `Optimize` fired **3 times in 740 recorded iterations
+(0.4%)**, all inside one 48-hour window, because "regressed twice running"
+almost never becomes true on a growing library.
+
+Deliberately NOT folded into Polish as a seventh "cost" dimension, though
+that was the first proposal: the DSA rubric's stop rule (roadmap 101.3)
+forbids new dimensions unless a live grill finds a defect the existing six
+structurally cannot see, and a dead trigger on this loop is not that
+finding. Fixing the trigger is the smaller, more honest change.
 1. Measure first: gzip/min bundle size, selector count, specificity hot-spots,
    unused CSS, docs page weight.
 2. Pick the biggest win; trim (merge selectors, drop dead rules, lighten the demo).
