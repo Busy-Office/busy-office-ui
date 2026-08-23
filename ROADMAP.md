@@ -1950,15 +1950,25 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        build, stylelint, 111 vitest tests, `check:claims` (88 behaviors) —
        all green.
 
-2. [ ] **104.2 — preview images on the tiles. OWNER CALL after 104.1.**
-       The proposal's honest fork: text+badges first (zero drift), vs
-       build-time screenshots (feasible via the existing browser-harness
-       chokepoint, but 20 pages × 2 themes per build costs minutes + MBs,
-       and a dense ERP screen at tile size is mostly grey noise). Hand-drawn
-       CSS miniatures are refused outright — hand-written artefacts
-       describing generated surfaces are what the docs doctrine forbids.
-       **Accept:** the owner picks (a) keep text tiles / (b) add generated
-       screenshots, and the choice is recorded here with its reason.
+2. [ ] **104.2 — preview images on the tiles. OWNER CALL, now with
+       evidence** (Research round 2, 2026-08-23:
+       `.roundtable/research-pattern-tile-previews-2026-08-23.md`). The
+       original fork was text-vs-screenshots; the research adds the shape
+       the item had not considered and the owner's own reference actually
+       uses: **namethatui's tiles are LIVE INLINE MINIATURES** — real
+       rendered pattern markup at small scale — not images. Survey:
+       Tailwind Plus / shadcn / Mobbin ship screenshots; Carbon and
+       Fiori's indexes are text-only; the split is by genre, and this
+       tile index is in the visual genre. Hand-drawn stays refused (the
+       one shape that is hand-written, unchanged). The options are now:
+       (a) keep text tiles; (b) build-time screenshots via the proven
+       shadcn capture-script shape (generated, but needs a staleness
+       gate); (c) live miniatures — zero drift by construction, existing
+       gates apply, costs index paint + needs inert scaled previews; or
+       (c-scoped) miniatures only for the ~10 patterns that read at tile
+       size, text for the rest — namethatui itself only previews what
+       compresses legibly. **Accept:** the owner picks and the choice is
+       recorded here with its reason.
 
 4. [x] **104.4 — REFUSED 2026-08-22.** Unblocked by 104.3 (badges now
        anchored to an observable definition), but refused on the merits

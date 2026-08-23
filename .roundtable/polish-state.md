@@ -59,13 +59,13 @@ quality signal. A dimension that cannot fail must never drive a round.
   polish. Worst-first ordering would have picked it first — recording why
   it is skipped so no future wake re-picks it.
 
-- **component/inline-editing and component/table-toolbar are NOT scored.**
-  Both are on `check:wrong-choice`'s queue but neither page renders
-  `<DsaScore>`, so the DSA rubric covers 39 of the 41 component pages and
-  the polish loop's own instrument is blind to these two. Recorded as an
-  observation, deliberately not acted on: extending the rubric's coverage
-  is scoring apparatus, and roadmap 101.3's stop rule keeps that out of
-  scope until a live grill finds a defect the six dimensions cannot see.
-  A Research round is the right place to decide whether the gap is real
-  (these may be sub-surfaces of data-table rather than components in their
-  own right) or worth closing.
+- **component/inline-editing and component/table-toolbar NOT scored —
+  RESOLVED 2026-08-23 (Research round 1): FALSE GAP.** Two independent
+  proofs, both from the repo: (1) neither has a directory under
+  `packages/core/src/css/components/` — there is no CSS component to
+  score; (2) every `bo-*` class on both pages belongs to `data-table`,
+  and what they document is BEHAVIORS on that surface (`initRowEdit`;
+  `initTableToolbar`/`initDataGrid`). They are behavior-documentation
+  pages, which the CSS-design rubric correctly does not score — the same
+  reason `/concepts/js-behaviors` is unscored. No rubric change needed,
+  which also keeps roadmap 101.3's stop rule intact. Do not re-raise.
