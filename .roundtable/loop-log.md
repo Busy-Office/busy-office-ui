@@ -751,3 +751,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 11:37 · Polish · tidy · Polish round 1: alerts wrong-choice clause, blind re-score 2->3 · landed · 258fcbf
 - 2026-08-23 12:00 · Continue · build · 123.3c: comparison matrix pattern shipped — closes Slice 123 · landed · b833474
 - 2026-08-23 12:00 · Meta · refusal · split/allocated award across multiple winners (select-one for v1, re-open condition documented on the page) · refused · b833474
+- 2026-08-23 12:15 · Continue · bug · 124: RTL flip for the tone bar (gate was blind to inset box-shadow) + when-to-use guidelines + comparison matrix re-marked by weight · landed · 098d026

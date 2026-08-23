@@ -8,6 +8,18 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`data-table`, RTL): the row-state stripe and the `data-tone`
+  cell bar never flipped for right-to-left documents. `box-shadow`'s
+  x-offset is physical and has no logical form, so `inset 3px 0 0` rendered
+  byte-identically under `dir="rtl"` and left the marker on the row's
+  TRAILING edge — while the same marker's own `forced-colors` fallback used
+  logical `border-inline-start` and did flip, so the two channels disagreed
+  about which edge means "start". Now flips (`inset -3px 0 0` under RTL) and
+  is registered as the framework's sixth documented flip site. `check:rtl`
+  gained an inset-`box-shadow` detector so this class of bug cannot recur:
+  it was previously invisible to that gate, because a `box-shadow` is not a
+  physical box *property*.
+
 - **Added** (`money`, `quantity`, forms): `initGroupedNumber()` +
   `data-grouped` — thousands-separator display for numeric inputs,
   formatted **on blur, never while typing** (the pattern real accounting
