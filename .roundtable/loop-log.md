@@ -787,3 +787,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 18:58 · Polish · build · scan blind-scored on re-entry: colour/interaction/fit 2→fixed (verdict now carried by frame, not hue) · landed · bfe9798
 - 2026-08-23 20:45 · Continue · build · 130.1 ERP suite P2P pilot — 7 framework gaps found and logged · landed · 28ccfc8
 - 2026-08-23 20:53 · Continue · release · 0.5.0 released to npm (grouped-number fixes + scan flash + --bar + column ladder) with the 0.4.0 docs snapshot · released · de0cbc1
+- 2026-08-23 21:04 · Continue · build · 130.2 first two gaps closed: form-actions wrap (GAP-7), heading-level samples (GAP-5) · landed · e034a6e

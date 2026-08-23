@@ -20,8 +20,8 @@ Generated at: 2026-08-23 21:04
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (781 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-23 17:58   OVERDUE
+dispatch status — counter-triggered rules (782 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-08-23 17:58   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -36,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 17:58 · Standardize · tidy · Standardize round 1: frame idiom, handheld widths, viewports adoption, page-shape ORDER assertion · landed · 7ce9aa3
 - 2026-08-23 17:58 · Meta · refusal · a class for margin-block-start:space-3 (11 sites) — names nothing · refused · 7ce9aa3
 - 2026-08-23 17:58 · Meta · refusal · max-inline-size:28rem consolidation (9 sites) — would invent an arbitrary size token · refused · 7ce9aa3
 - 2026-08-23 17:58 · Meta · refusal · consolidating 4 repeated CSS pairs in packages/core — the honest fix widens public API · refused · 7ce9aa3
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 18:58 · Polish · build · scan blind-scored on re-entry: colour/interaction/fit 2→fixed (verdict now carried by frame, not hue) · landed · bfe9798
 - 2026-08-23 20:45 · Continue · build · 130.1 ERP suite P2P pilot — 7 framework gaps found and logged · landed · 28ccfc8
 - 2026-08-23 20:53 · Continue · release · 0.5.0 released to npm (grouped-number fixes + scan flash + --bar + column ladder) with the 0.4.0 docs snapshot · released · de0cbc1
+- 2026-08-23 21:04 · Continue · build · 130.2 first two gaps closed: form-actions wrap (GAP-7), heading-level samples (GAP-5) · landed · e034a6e
 
 ## Sunset test
 
