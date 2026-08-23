@@ -6,6 +6,26 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
+## Unreleased
+
+- **Fixed** (`grouped-number`, three defects found dogfooding 0.4.0 into
+  po-app on the day of release — the reference app drove them out within
+  hours): (1) focusing a grouped input swapped the display to the raw
+  value AFTER the pointer gesture had built a selection, so
+  select-and-retype APPENDED instead of replacing, and the concatenation
+  then parsed to an empty hidden value (a 422 on a form that looked
+  fine). Focus now selects the raw value — also the amount-field
+  convention spreadsheets and AutoNumeric follow. (2) A form reset (a
+  row-edit Cancel is a `type="reset"` button) restored the visible input
+  to its raw ungrouped attribute default and wiped the JS-created hidden
+  input to empty; grouped inputs now re-sync from `defaultValue` after
+  the reset applies, restoring both the grouped display and the raw
+  submission value. (3) The first version of that resync dispatched an
+  `input` event, which re-marked row-edit's just-cleared dirty row —
+  reset resync is now SILENT, matching the native reset it follows
+  (a native reset never fires `input`); covered by a composition test
+  running both behaviors together.
+
 ## 0.4.0 (2026-08-23)
 
 - **Fixed** (`data-table`, RTL): the row-state stripe and the `data-tone`

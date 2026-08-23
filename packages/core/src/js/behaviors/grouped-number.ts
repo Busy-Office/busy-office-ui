@@ -233,6 +233,46 @@ export function initGroupedNumber(): void {
     upgrade(input);
     const s = state.get(input)!;
     input.value = s.raw; // raw for editing — the caret works on what it sees
+    /* Select it. The swap above destroys any selection the pointer gesture
+       was building (triple-click landed on text that no longer exists), so
+       without this, select-and-retype APPENDS instead of replacing — found
+       by the 0.4.0 dogfood driving po-app's real edit form, where the
+       stray concatenation then parsed to an empty hidden value and a 422.
+       Select-all-on-focus is also the amount-field convention AutoNumeric
+       and spreadsheets follow: an amount is usually replaced, not edited
+       mid-string. */
+    input.select();
+  });
+
+  /* Form reset (a row-edit Cancel is a type=reset button): the browser
+     restores the VISIBLE input to its value ATTRIBUTE — the raw, ungrouped
+     server-rendered default — and wipes the JS-created hidden input to ''
+     (it has no value attribute to restore). Left alone, that is a blurred
+     field showing an ungrouped number over an EMPTY submission value, with
+     row-edit's dirty state still set — three desyncs from one gesture
+     (0.4.0 dogfood). The reset event fires BEFORE defaults are applied, so
+     re-sync happens in a microtask after; the input event lets dirty
+     tracking clear the same way every other programmatic reformat does. */
+  document.addEventListener('reset', (e) => {
+    const form = e.target as HTMLFormElement | null;
+    if (!form?.querySelectorAll) return;
+    const grouped = [...form.querySelectorAll<HTMLInputElement>('input[data-grouped]')]
+      .filter((i) => state.has(i));
+    if (!grouped.length) return;
+    setTimeout(() => {
+      for (const input of grouped) {
+        const s = state.get(input)!;
+        s.raw = input.defaultValue;
+        render(input);
+        /* SILENT on purpose — no input dispatch. A native reset never fires
+           input, and row-edit clears its dirty rows from its own reset
+           listener; dispatching here re-marked the row dirty right after
+           row-edit had cleared it (two setTimeout(0) handlers, ours last —
+           found E2E in the po-app dogfood, reproduced as the composition
+           test below). Reset means "back to default", which is the one
+           programmatic change dirty-tracking must NOT hear as an edit. */
+      }
+    }, 0);
   });
 
   document.addEventListener('focusout', (e) => {

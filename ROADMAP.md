@@ -149,6 +149,37 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 125 — Explore/Research fallback: dogfood bugs + mobile-ERP candidates (2026-08-23)
+
+Dispatched at the owner's ask ("Research/Explore fallback — UX/UI
+Web/Mobile App for ERP: what is missing, what requires improvement").
+Two tracks, both landed as reports:
+
+1. [x] **125.1 — DONE. Explore: 0.4.0 dogfooded into po-app; THREE real
+       framework defects found and fixed the same day** (report:
+       `.roundtable/explore-grouped-dogfood-2026-08-23.md`). One daily
+       gesture — select the amount, retype, Cancel — broke three ways:
+       focus destroyed the selection so retype appended; the garbage
+       parsed to an empty hidden value (silent 422); Cancel's native
+       reset desynced display/hidden/dirty. Fixed red-first (3 failing
+       tests, then green; the fix's own first version re-dirtied
+       row-edit's cleared row and is pinned by a composition test —
+       reset resync is SILENT, as native reset is). 127/127; E2E proven
+       on the real npm-installed package (Cancel → grouped display,
+       restored raw, clean row). po-app wiring graduated into main.
+       **npm still serves 0.4.0 with these defects — 0.4.1 patch release
+       recommended, owner-triggered as always.**
+2. [x] **125.2 — DONE. Research: mobile/web ERP gap audit** (report:
+       `.roundtable/research-erp-mobile-web-gaps-2026-08-23.md`). Seven
+       ranked, evidence-graded candidates; six false gaps named and
+       killed; the bottom-nav refusal respected with its re-open trigger
+       sharpened (first phone-first consumer). **Owner picks which
+       candidates become build items:**
+       (1) offline/sync-state signalling · (2) table column priority ·
+       (3) approve-from-phone passes · (4) camera capture/barcode recipe ·
+       (5) saved views on list-report · (6) touch form-entry recipe ·
+       (7) swipe actions (low, Hypothesis).
+
 ## Slice 124 — Owner: the left bar on a toned cell (2026-08-23)
 
 Owner wishlist: "cell or row highlights with color. Why there is a bolder

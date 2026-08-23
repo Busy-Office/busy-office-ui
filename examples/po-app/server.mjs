@@ -151,8 +151,9 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
   <main class="bo-app-shell__main"><div class="bo-stack bo-stack--loose">${main}</div></main>
 </div>
 <script type="module">
-  import { initDialogs, initDataTables, initAlerts, initDropdowns } from '/assets/js/index.js';
-  initDialogs(); initDataTables(); initAlerts(); initDropdowns();
+  import { initDialogs, initDataTables, initAlerts, initDropdowns, initGroupedNumber } from '/assets/js/index.js';
+  initDialogs();
+  initGroupedNumber(); // grouped amounts (0.4.0), dogfooded 2026-08-23 initDataTables(); initAlerts(); initDropdowns();
   document.body.addEventListener('htmx:afterSwap', (e) => { initDataTables(e.target); window.__btt?.(); });
   document.getElementById('density-switch').addEventListener('change', (e) => {
     const d = e.target.value;
@@ -560,6 +561,7 @@ const newPoScreen = (values = {}, errors = {}) => `
       <div class="bo-form-field">
         <label class="bo-form-field__label" for="new-amount">Amount</label>
         <input class="bo-input bo-input--numeric" id="new-amount" name="amount" type="number" min="0.01" step="0.01" required
+          data-grouped data-locale="en-US"
           value="${esc(values.amount || '')}"
           ${errors.amount ? `aria-invalid="true" aria-describedby="new-amount-err"` : ''}>
         ${errors.amount ? `<p class="bo-form-field__message" id="new-amount-err" role="alert">${errors.amount}</p>` : ''}
@@ -746,6 +748,7 @@ const editableOrderFields = (p, errors = {}) => `
           <th scope="row">Amount</th>
           <td>
             <input class="bo-input bo-input--numeric bo-input--seamless" id="edit-amount" name="amount" type="number"
+              data-grouped data-locale="en-US"
               min="0.01" step="0.01" value="${p.amount}" aria-label="Amount"
               ${errors.amount ? `aria-invalid="true" aria-describedby="edit-amount-err"` : ''}>
             ${errors.amount ? `<p class="bo-form-field__message" id="edit-amount-err" role="alert">${errors.amount}</p>` : ''}
