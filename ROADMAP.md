@@ -405,20 +405,44 @@ Fault 1 is the dangerous one: fix the staleness alone and it goes green
 while measuring dark **nowhere**. A detector that cannot fail, in the exact
 shape the CLAUDE.md doctrine describes.
 
-1. [ ] **134.1 — fix the key, and prove the dark half is dark.** *Accept*:
+1. [x] **134.1 — DONE 2026-08-24. Key fixed, and every shot proves its
+       own theme.** *Accept*:
        `bo-theme-pref`; then assert in the harness itself that a shot
        labelled dark was taken with `data-theme="dark"` resolved — the
        rename could happen again, and a filename is not evidence.
-2. [ ] **134.2 — re-baseline deliberately, never blind.** *Accept*: each of
+2. [x] **134.2 — DONE 2026-08-24. Re-baselined with the growth
+       attributed**: all ten pages had real commits since the baselines
+       (2-16 each, 49 total), the largest being data-table at 6567 ->
+       12290px — two demos I added that same day. Not blind-updated. *Accept*: each of
        the 40 diffs is inspected and its change attributed to a real, known
        edit before `--update` runs. The standing rule is explicit: don't
        blind-`--update` away every failure.
-3. [ ] **134.3 — CI, or delete it.** *Accept*: either it runs in `ci.yml`
-       (with the runner-noise question answered — antialiasing across
-       machines is why a pixel budget exists) or the script and its
-       baselines are removed and `check:layout` + `test:axe` are named as
-       what covers this. **Do not leave a third option**: a gate that runs
-       nowhere is the status quo that produced this slice.
+3. [~] **134.3 — CI, or delete it — the criterion I wrote was wrong, and
+       here is what replaced it.** I set "do not leave a third option"
+       before knowing the constraint that decides this: **the baselines are
+       machine-specific**. Font rasterisation differs between macOS and CI's
+       Linux, so baselines committed from a laptop fail every CI run for
+       reasons unrelated to the change under review. "Just run it in CI" is
+       not an available option; the real one is *generate baselines inside
+       the same container CI uses*, which is genuine machinery and a
+       cost/benefit call about CI minutes.
+
+       Deleting is not obviously right either: the tool's unique job is
+       catching UNINTENDED visual change (a token edit that shifts
+       everything), which no other gate here does — and it has done it
+       before (fourteen unexplained diffs in one commit).
+
+       **So this is an owner call, and it is presented rather than
+       guessed.** What shipped meanwhile makes the tool honest instead of
+       misleading: the theme key fixed, every shot asserting its own
+       resolved `data-theme`, baselines re-attributed and regenerated, and
+       the file saying plainly at the top that it is a LOCAL tool and why.
+       A tool that admits what it is beats a gate that reads as coverage.
+
+       *Options for the owner*: (a) containerise the screenshots so
+       baselines are portable and wire it into `ci.yml`; (b) leave it local
+       and documented as now; (c) delete it and name `check:layout` +
+       `test:axe` as the cover.
 
 ## Slice 133 — Owner: prove the scrolling actually works (2026-08-23)
 

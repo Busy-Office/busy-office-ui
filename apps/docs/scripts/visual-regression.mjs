@@ -1,4 +1,31 @@
 /**
+ * Pixel-diff regression over a small set of pages. LOCAL TOOL, NOT A CI GATE —
+ * and that distinction is the whole reason this file needed roadmap 134.
+ *
+ * Its baselines are MACHINE-SPECIFIC: font rasterisation differs between
+ * macOS and CI's Linux, so baselines committed from a laptop would fail every
+ * CI run for reasons that have nothing to do with the change under review.
+ * Making it a real gate therefore means generating baselines inside the same
+ * container CI uses — real machinery, and an owner call about CI minutes, not
+ * something to slip in. Until that call, this runs by hand and says so.
+ *
+ * What went wrong while nobody ran it (roadmap 134):
+ *
+ *   - It set `localStorage['bo-theme']`. PrefBootstrap reads `bo-theme-pref`,
+ *     renamed back in roadmap 119. Every "dark" shot was a LIGHT page under a
+ *     dark filename — a gate half-measuring nothing, invisible because no
+ *     workflow ran it. Each shot now ASSERTS its resolved `data-theme`, since
+ *     a filename is not evidence.
+ *   - Its baselines went four days stale, so a run failed 40 of 40 and told
+ *     you nothing. Re-baselined 2026-08-24 with the growth attributed: all
+ *     ten pages had real commits since (2-16 each, 49 total), the largest
+ *     being data-table at 6567 -> 12290px, which is two demos added that day.
+ *
+ * Re-baseline deliberately (`npm run test:visual:update -w docs`) only after
+ * attributing every diff to a known edit. Blind-updating turns this into a
+ * screenshot archive.
+ */
+/**
  * Visual-regression harness — screenshot-diffs a page matrix (key pages ×
  * light/dark × 1440/390px) against committed baselines, so the "looks
  * right" pass becomes mechanical like the other gates.
@@ -91,7 +118,15 @@ await mkdir(diffDir, { recursive: true });
 let failures = 0;
 let written = 0;
 for (const theme of THEMES) {
-  await page.evaluateOnNewDocument((t) => localStorage.setItem('bo-theme', t), theme);
+  /* `bo-theme-pref`, not `bo-theme` (roadmap 134.1). PrefBootstrap reads the
+     -pref key; the old spelling was renamed in roadmap 119 and this harness
+     was not, so for weeks every "dark" shot was of a LIGHT page under a dark
+     filename. Nothing noticed, because the gate ran in no workflow.
+
+     The rename alone is not the fix — the same silent drift could happen
+     again — so each shot now ASSERTS the theme it claims. A filename is not
+     evidence. */
+  await page.evaluateOnNewDocument((t) => localStorage.setItem('bo-theme-pref', t), theme);
   for (const width of WIDTHS) {
     await page.setViewport({ width, height: 1000 });
     for (const path of PAGES) {
@@ -102,6 +137,15 @@ for (const theme of THEMES) {
         // fail loudly (learned the hard way: a stale dist baselined 404s).
         failures++;
         console.log(`FAIL ${name}: HTTP ${resp?.status()} for ${path}`);
+        continue;
+      }
+      const resolved = await page.evaluate(() => document.documentElement.dataset.theme);
+      if (resolved !== theme) {
+        failures++;
+        console.log(
+          `FAIL ${name}: page resolved data-theme="${resolved}", not "${theme}" — ` +
+            'the shot would be filed under a theme it does not show',
+        );
         continue;
       }
       // Full-page shot; disable animations/caret for stability.
