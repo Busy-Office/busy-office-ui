@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 17:57
+Generated at: 2026-08-23 17:58
 
 ## Open items by slice
 
@@ -19,10 +19,9 @@ Generated at: 2026-08-23 17:57
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (771 iterations logged)
-  Standardize   7 / 4 Continue rounds since 2026-08-23 14:38   OVERDUE
+dispatch status — counter-triggered rules (775 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-23 17:58   ok
   Objective     0 / 3 slices          since 2026-08-23 15:49   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -34,16 +33,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
-- 2026-08-23 16:09 · Continue · build · 126.1 budget gate (red-proven) + 126.2 scan flash (2 instrument-caught bugs: attr-only API, capture-vs-verdict ordering) · landed · 36b637a
-- 2026-08-23 16:20 · Continue · build · 126.3 btn-group--bar: equal glove slots, intent-named; 1.4.12 veto of ellipsis honored (labels wrap) · landed · ee8ed6a
-- 2026-08-23 16:42 · Continue · build · 126.4+126.5: pick/putaway/count shipped (profile-mirror-verified); offline promises reworded to reconnect truth; forced-colors gate gained pseudo+valueless-attr proof · landed · 7e44c4e
 - 2026-08-23 16:52 · Roadmap · plan · Slice 127: six mobile-candidate builds queued with grill verdicts · triaged · d32bd68
 - 2026-08-23 16:52 · Meta · refusal · swipe row actions stay parked (Hypothesis, needs a consumer) · refused · d32bd68
 - 2026-08-23 16:57 · Continue · build · 127.1: sync-state slot (zero new CSS) + /concepts/offline contract page, claims-driven · landed · 9df614f
 - 2026-08-23 17:22 · Continue · build · 127.2 column priority ladder (--tertiary) + density-coupling fix · landed · 236a39a
 - 2026-08-23 17:34 · Continue · build · 127.3 approve-from-phone sections (approval + inbox) · landed · 3ef5e22
 - 2026-08-23 17:49 · Continue · build · 127.4 saved views on list-report (view = URL) · landed · f022fce
+- 2026-08-23 17:58 · Standardize · tidy · Standardize round 1: frame idiom, handheld widths, viewports adoption, page-shape ORDER assertion · landed · 7ce9aa3
+- 2026-08-23 17:58 · Meta · refusal · a class for margin-block-start:space-3 (11 sites) — names nothing · refused · 7ce9aa3
+- 2026-08-23 17:58 · Meta · refusal · max-inline-size:28rem consolidation (9 sites) — would invent an arbitrary size token · refused · 7ce9aa3
+- 2026-08-23 17:58 · Meta · refusal · consolidating 4 repeated CSS pairs in packages/core — the honest fix widens public API · refused · 7ce9aa3
 
 ## Sunset test
 

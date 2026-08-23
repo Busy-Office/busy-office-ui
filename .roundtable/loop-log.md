@@ -777,3 +777,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 17:22 · Continue · build · 127.2 column priority ladder (--tertiary) + density-coupling fix · landed · 236a39a
 - 2026-08-23 17:34 · Continue · build · 127.3 approve-from-phone sections (approval + inbox) · landed · 3ef5e22
 - 2026-08-23 17:49 · Continue · build · 127.4 saved views on list-report (view = URL) · landed · f022fce
+- 2026-08-23 17:58 · Standardize · tidy · Standardize round 1: frame idiom, handheld widths, viewports adoption, page-shape ORDER assertion · landed · 7ce9aa3
+- 2026-08-23 17:58 · Meta · refusal · a class for margin-block-start:space-3 (11 sites) — names nothing · refused · 7ce9aa3
+- 2026-08-23 17:58 · Meta · refusal · max-inline-size:28rem consolidation (9 sites) — would invent an arbitrary size token · refused · 7ce9aa3
+- 2026-08-23 17:58 · Meta · refusal · consolidating 4 repeated CSS pairs in packages/core — the honest fix widens public API · refused · 7ce9aa3
