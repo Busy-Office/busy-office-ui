@@ -690,7 +690,26 @@ must not silently re-open.
        (b) range selection is grilled separately and must beat the no-JS
        floor it would replace — two native `<input type="date">`s — on
        something other than looks.
-4. [ ] **132.4 — file open/save panel.** `/components/file-upload` +
+4. [x] **132.4 — DONE 2026-08-24. Verdict: REFUSE a pattern — the desktop
+       idiom is three web screens the framework already has.** Read the
+       surface first this time, and the ask decomposes cleanly:
+       **Open, from the machine** → `/components/file-upload`. The picker is
+       the operating system's. It cannot be restyled and must not be
+       re-implemented, because a page has no access to the file system to
+       draw one — that is the reason, not a preference.
+       **Open, from the system** (a stored contract, a drawing on a material)
+       → `/patterns/value-help`, with documents as the rows and the "folder"
+       as one more filter. Same screen, different data — which is exactly the
+       Slice 109 rule about naming for SHAPE rather than domain.
+       **Save** → a browser has no save panel to offer. Either the server
+       emits the artefact and the browser downloads it (the emit side is
+       `/patterns/output-form`), or the document is stored in your system and
+       "save as" is a name field plus a destination select in a dialog —
+       a form, not a panel.
+       The mapping is documented on `/components/file-upload`, which is where
+       a reader looking for a "file panel" actually lands.
+       *(original triage below)*
+       **132.4 (original) — file open/save panel.** `/components/file-upload` +
        `file-dropzone.ts` cover *upload*. Nothing covers *browse a document
        store and pick one*, or *save-as with a name and a destination* —
        both real ERP screens (attachments, output destination, report

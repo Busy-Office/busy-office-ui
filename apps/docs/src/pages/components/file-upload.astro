@@ -81,6 +81,24 @@ const canonical = `<!-- The input is the real control — the label makes the wh
     file list and its remove controls exist for multi-file attachment.
   </p>
 
+  <p class="demo-note"><strong>Looking for a "file open / save panel"?</strong>
+  That is a desktop idiom, and on the web it is three different screens the
+  framework already has (roadmap 132.4).
+  <strong>Open, from the machine</strong>: this component. The picker is the
+  operating system's, which is why it cannot be restyled and must not be
+  re-implemented — a page has no access to the file system to draw one.
+  <strong>Open, from the system</strong> — a contract already stored, a
+  drawing on a material: that is
+  <a href={base + '/patterns/value-help'}>value help</a>, with documents as
+  the rows and the "folder" as one more filter. Same screen, different data.
+  <strong>Save</strong>: a browser has no save panel to offer. Either the
+  server emits the artefact and the browser downloads it — the emit side is
+  <a href={base + '/patterns/output-form'}>output form</a> — or the document
+  is stored in your system, and then "save as" is a name field and a
+  destination <a href={base + '/components/form'}>select</a> in a
+  <a href={base + '/components/dialog'}>dialog</a>, which is a form, not a
+  panel.</p>
+
   <section class="demo">
     <h2>Basic</h2>
     <Demo code={basic} />
