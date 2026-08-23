@@ -1,0 +1,1 @@
+import{c as a}from"./copy-toast.BZ6AD1ei.js";document.addEventListener("click",e=>{const t=e.target.closest(".scale-sw");if(!t)return;const s=e.shiftKey?t.dataset.hex:t.dataset.var;a(s,"clipboard unavailable here — the tooltip shows the hex")});

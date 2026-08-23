@@ -1,0 +1,1 @@
+import{i as e}from"./dialog.CxuwDFnT.js";e();const n=document.getElementById("shortcuts-dlg");document.addEventListener("keydown",t=>{t.key!=="?"||t.target.closest("input, textarea, select, [contenteditable]")||n.showModal()});

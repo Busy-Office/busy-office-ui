@@ -1,0 +1,1 @@
+let n=!1;function s(){n||(n=!0,document.addEventListener("click",i=>{const t=i.target?.closest("[data-collapse-trigger]");if(!t)return;const e=t.getAttribute("aria-controls"),a=e?document.getElementById(e):null;if(!a)return;const r=t.getAttribute("aria-expanded")!=="false";t.setAttribute("aria-expanded",String(!r)),a.dataset.state=r?"closed":"open"}))}export{s as i};

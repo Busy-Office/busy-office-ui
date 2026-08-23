@@ -1,0 +1,1 @@
+import{c as a}from"./copy-toast.BZ6AD1ei.js";document.addEventListener("click",e=>{const t=e.target.closest(".pal-copy");t&&a(t.dataset.copy,"clipboard unavailable here — copy the line from the card")});

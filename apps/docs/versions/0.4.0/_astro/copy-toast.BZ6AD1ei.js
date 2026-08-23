@@ -1,0 +1,1 @@
+let r;function o(e){const t=document.querySelector(".copy-toast");t&&(clearTimeout(r),t.textContent="",requestAnimationFrame(()=>{t.textContent=e}),r=setTimeout(()=>{t.textContent=""},2500))}function n(e,t){if(!navigator.clipboard){o(t);return}navigator.clipboard.writeText(e).then(()=>o(`copied ${e}`),()=>o("copy failed — your browser blocked clipboard access"))}export{n as c};

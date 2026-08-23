@@ -1,0 +1,413 @@
+# busy-office-ui v0.4.0
+
+> CSS-first UI framework for ERP and back-office applications. Semantic components,
+> density as a dimension (data-density="compact|comfortable|spacious" on <html> or any
+> wrapper), dark mode via [data-theme="dark"], all framework CSS in @layer (unlayered
+> consumer CSS always wins). Browser floor: Chrome/Edge 119 · Firefox 129 · Safari 17.5.
+
+## Install
+
+npm i @busy-office/ui
+import "@busy-office/ui/css";                      # all-in-one
+# a la carte, ORDER MATTERS: tokens -> reset -> components
+import "@busy-office/ui/css/tokens"; import "@busy-office/ui/css/reset";
+import "@busy-office/ui/css/components/data-table";
+
+## JS behaviors (call each ONCE — document delegation survives all DOM swaps)
+
+import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts,
+         refreshDataTable, trapFocus } from "@busy-office/ui/js";
+- initDialogs(): REQUIRED for <dialog class="bo-dialog"> + [data-dialog-trigger].
+- initDataTables(): select-all, live "n selected" count, O(1) toolbar reveal;
+  re-derives on htmx:afterSwap; refreshDataTable(container) for other swaps.
+- initTabs(): REQUIRED for tabs (roving tabindex, RTL-aware arrows).
+- initDropdowns(): anchors [popover] menus to their invoker; close-on-select.
+- initAlerts(): .bo-alert__dismiss removes its alert/toast.
+
+## Behavior hooks (generated — the DOM each init reads)
+- initDialogs(): Dialog behavior via event delegation — no per-element binding, no DOM flags [hooks: data-dialog-trigger data-dismissible data-state]
+- initDataTables(): Optional table behavior (~1 kB): wires select-all, keeps an O(1) data-any-selected attribute on the container (so CSS needn't re-scan every row via :has() on large grids), and maintains a live "n… [hooks: bo-data-table-container bo-data-table__row-select bo-data-table__select-all bo-data-table__selection-count data-any-selected data-selected-count-override]
+- refreshDataTable(): Optional table behavior (~1 kB): wires select-all, keeps an O(1) data-any-selected attribute on the container (so CSS needn't re-scan every row via :has() on large grids), and maintains a live "n… [hooks: bo-data-table-container bo-data-table__row-select bo-data-table__select-all bo-data-table__selection-count data-any-selected data-selected-count-override]
+- initDataGrid(): Opt-in ARIA grid pattern for .bo-data-table (WAI-ARIA APG "Grid", the interactive-widgets variant) [hooks: bo-data-table bo-data-table-container bo-data-table__row-select data-grid-nav]
+- refreshDataGrid(): Opt-in ARIA grid pattern for .bo-data-table (WAI-ARIA APG "Grid", the interactive-widgets variant) [hooks: bo-data-table bo-data-table-container bo-data-table__row-select data-grid-nav]
+- initRowEdit(): Multi-row inline edit: tracks which rows have unsaved changes, shows a per-row Save/Cancel affordance, and dispatches a `bo:row-save` event for your code to persist (fetch, hx-patch, form submit —… [hooks: bo-badge bo-badge--warning bo-btn bo-btn--sm bo-data-table bo-data-table__row-edit-actions bo-input bo-input--seamless data-row-edit data-row-edit-cancel data-row-edit-dirty data-row-edit-save data-row-id data-row-state]
+- initTableToolbar(): Optional data-table toolbar actions: column visibility + export [hooks: bo-btn bo-btn--secondary bo-checkbox bo-data-table bo-data-table-container bo-data-table__toolbar bo-dropdown__menu data-col data-col-toggle data-multiselect data-multiselect-label data-table-export data-table-export-format]
+- initStickyCols(): Multiple frozen columns (roadmap 72.1) — opt-in via [data-sticky-cols], "2" | "3" only [hooks: bo-data-table bo-data-table--sticky-col bo-sticky-w-1 bo-sticky-w-2 data-sticky-cols data-table]
+- initTableSum(): Declarative realtime column totals — the auto-sum half of Slice 18's subtotal contract (a deliberate, named exception to "you do the data"; the other half is listening to `bo:cell-change` yourself for… [hooks: bo-data-table__col--numeric data-decimals data-sum-of]
+- initTreeTable(): Expand/collapse for hierarchical table rows — document-level delegation, call initTreeTable() once [hooks: bo-data-table bo-tree-table bo-tree-table__toggle data-sum-of data-tree-level data-tree-table]
+- initLoadMore(): Load-more pagination ("pull up to see more") — the infinite-scroll alternative to page-number `.bo-pagination` [hooks: bo-btn bo-btn--secondary bo-data-table bo-data-table-container bo-data-table__footer bo-pagination data-load-more-auto data-table-load-more]
+- initWindowedList(): Windowed list: server-chunked rows with client-side memory release (roadmap 30.4b) — for SCANNING a large list, not searching one [hooks: bo-app-shell__main bo-btn bo-btn--secondary bo-data-table bo-data-table-container bo-data-table__footer bo-data-table__row-select bo-data-table__spacer bo-density-row-height data-chunk-id data-chunk-offset data-chunk-size data-evicted data-grid-nav data-load-more-auto data-row-id data-selected-count-override data-table data-table-load-more data-table-total-rows data-window-chunks data-windowed data-windowed-selection-host]
+- initAnchorNav(): Anchor navigation for long detail screens (the "object page" floorplan) [hooks: bo-anchor-landing-offset bo-app-shell__main bo-motion-duration-slow bo-pagination bo-sidebar-nav bo-sticky-w-1 data-anchor-collapse data-anchor-nav data-state]
+- initCollapsibleCards(): Collapsible card sections (.bo-widget) [hooks: bo-widget__collapse data-collapse-trigger data-state]
+- initSavedViews(): Saved-view / filter-bar persistence [hooks: bo-filter-bar data-saved-views]
+- initWizard(): Multi-step wizard flow — one panel visible at a time, with a bo-stepper kept in sync [hooks: bo-stepper bo-stepper__step data-state data-wizard data-wizard-back data-wizard-current data-wizard-next data-wizard-panel data-wizard-submit]
+- initQuantity(): Increment/decrement buttons for .bo-quantity — document-level delegation, call initQuantity() once [hooks: bo-money__currency bo-quantity bo-quantity__input bo-quantity__step bo-quantity__unit-select data-decimals data-quantity-step]
+- unitDecimals(): Increment/decrement buttons for .bo-quantity — document-level delegation, call initQuantity() once [hooks: bo-money__currency bo-quantity bo-quantity__input bo-quantity__step bo-quantity__unit-select data-decimals data-quantity-step]
+- initMoneyField(): Currency-aware money field — a currency <select> linked to an amount input: changing currency updates the input's `step` (decimal precision) and reformats the current value to that precision [hooks: bo-input bo-input--numeric bo-money bo-money__amount bo-money__currency bo-select data-decimals]
+- currencyDecimals(): Currency-aware money field — a currency <select> linked to an amount input: changing currency updates the input's `step` (decimal precision) and reformats the current value to that precision [hooks: bo-input bo-input--numeric bo-money bo-money__amount bo-money__currency bo-select data-decimals]
+- initGroupedNumber(): Grouped display for numeric inputs — thousands separators via `Intl.NumberFormat`, formatted ON BLUR, never while typing (123.1: what Reckon ships, what SAP's own guidance steers to after live… [hooks: bo-input bo-input--numeric data-decimals data-grouped data-locale]
+- initScanInput(): RF/handheld barcode-scanner input [hooks: bo-input bo-input--code bo-visually-hidden data-scan-input data-scan-status data-scan-terminator]
+- initFileDropzone(): Drag-and-drop convenience for a `.bo-file-dropzone` [hooks: bo-file-dropzone bo-file-input bo-visually-hidden data-dragover data-file-dropzone]
+- initTagInput(): Multi-value tag/chip entry (Fiori Token/MultiInput; Ant/Carbon Tag) — multi-tag cost centers on a record, multiple approval-routing recipients [hooks: bo-alert bo-tag-input bo-tag-input__field bo-tag-input__remove bo-tag-input__tag data-grid]
+- initValidationSummary(): Inline validation summary [hooks: bo-alert bo-alert--danger data-validation-summary data-validation-summary-box]
+- initTabs(): ARIA tabs behavior via document-level delegation — call initTabs() once [hooks: bo-tabs--vertical bo-tabs__list bo-tabs__tab data-overflow]
+- initDropdowns(): Popover-based dropdown menus [hooks: bo-btn bo-btn--secondary bo-checkbox bo-dropdown__item bo-dropdown__menu bo-dropdown__menu--end data-multiselect data-multiselect-count data-multiselect-label]
+- initContextMenu(): Right-click (contextmenu) trigger for the SAME popover menu component initDropdowns() already opens on click (roadmap 73.1) [hooks: bo-checkbox bo-dropdown__item bo-dropdown__menu data-col-toggle data-context-menu]
+- initCombobox(): Editable combobox with list autocomplete — WAI-ARIA APG combobox pattern (single-select, list autocomplete, manual selection) [hooks: bo-combobox bo-combobox__group bo-combobox__listbox bo-combobox__option bo-combobox__option-label bo-input bo-visually-hidden data-name data-open-on-focus data-value]
+- initAlerts(): Dismiss behavior for alerts and toasts: any .bo-alert__dismiss button removes its enclosing .bo-alert [hooks: bo-alert bo-alert__dismiss]
+- trapFocus(): Loop Tab / Shift+Tab within a container
+
+## Rules your markup must follow
+
+- State is two-channel: visible non-color cue (glyph, aria-hidden) AND programmatic
+  (visually-hidden text like "Completed: ", aria-current, ARIA attributes).
+- Forms: aria-invalid + aria-describedby -> message id (+ role="alert" if dynamic).
+- Dialogs: aria-labelledby -> title id. Icon-only buttons: aria-label.
+- Row-select checkboxes need name/value to POST. Styled lists get role="list".
+- Sorting: YOUR code re-orders rows and sets aria-sort on <th>; CSS draws indicator.
+- Never user-scalable=no. Never override html font-size (rem-based framework).
+- Columns hidden by container compaction (__col--secondary) must stay reachable.
+- A scrollable region must be keyboard-reachable: .bo-data-table-container needs
+  tabindex="0" (and an aria-label when the table has no caption). axe reports
+  scrollable-region-focusable otherwise, and no markup linter can infer it.
+
+## Components (classes generated from shipped CSS)
+
+### alert — https://busy-office.github.io/busy-office-ui/components/alerts/
+classes: bo-alert bo-alert--danger bo-alert--elevated bo-alert--success bo-alert--warning bo-alert__dismiss bo-alert__title bo-toast bo-toast-region
+
+### amount — https://busy-office.github.io/busy-office-ui/components/amount/
+classes: bo-amount bo-amount--block bo-amount--muted bo-amount--negative bo-amount--positive bo-amount--strong bo-amount__currency bo-amount__fraction bo-amount__unit bo-amount__value
+
+### approval-workflow — https://busy-office.github.io/busy-office-ui/components/approval-workflow/
+classes: bo-audit bo-audit__actor bo-audit__detail bo-audit__entry bo-audit__time bo-composer bo-composer__actions bo-composer__body bo-timeline bo-timeline__marker bo-timeline__meta bo-timeline__step bo-timeline__title
+data attrs: data-state="closed|current|done|open|pending|rejected"
+
+### avatar — https://busy-office.github.io/busy-office-ui/components/avatar/
+classes: bo-avatar bo-avatar-stack
+
+### badge — https://busy-office.github.io/busy-office-ui/components/badge/
+classes: bo-badge bo-badge--accent bo-badge--danger bo-badge--success bo-badge--type bo-badge--warning
+
+### breadcrumb — https://busy-office.github.io/busy-office-ui/components/breadcrumb/
+classes: bo-breadcrumb
+aria styled: aria-current
+
+### button — https://busy-office.github.io/busy-office-ui/components/button/
+classes: bo-btn bo-btn--danger bo-btn--danger-ghost bo-btn--ghost bo-btn--icon bo-btn--secondary bo-btn--sm bo-btn-group
+data attrs: data-loading="true"
+aria styled: aria-busy aria-disabled aria-pressed
+
+### byline — https://busy-office.github.io/busy-office-ui/components/byline/
+classes: bo-byline bo-byline--compact bo-byline__avatar
+
+### calendar — https://busy-office.github.io/busy-office-ui/components/calendar/
+classes: bo-calendar bo-calendar__day bo-calendar__day--outside bo-calendar__month
+data attrs: data-day="closed|holiday|selected|today"
+
+### combobox — https://busy-office.github.io/busy-office-ui/components/combobox/
+classes: bo-combobox bo-combobox__group bo-combobox__listbox bo-combobox__option bo-combobox__option-code bo-combobox__option-label bo-combobox__option-meta
+aria styled: aria-selected
+
+### dashboard — https://busy-office.github.io/busy-office-ui/components/dashboard/
+classes: bo-badge bo-badge--type bo-stat bo-stat--hero bo-stat__delta bo-stat__delta--bad bo-stat__delta--good bo-stat__label bo-stat__value bo-widget bo-widget--span-2 bo-widget-grid bo-widget__band bo-widget__band--msg bo-widget__body bo-widget__body--flush bo-widget__collapse bo-widget__header bo-widget__title bo-widget__toggle-icon
+data attrs: data-collapse-trigger data-state="closed|current|done|open|pending|rejected"
+aria styled: aria-expanded
+
+### data-table — https://busy-office.github.io/busy-office-ui/components/data-table/
+classes: bo-data-table bo-data-table--sticky-col bo-data-table--striped bo-data-table-container bo-data-table__bulk-actions bo-data-table__col--center bo-data-table__col--code bo-data-table__col--left bo-data-table__col--numeric bo-data-table__col--right bo-data-table__col--secondary bo-data-table__footer bo-data-table__row-edit-actions bo-data-table__row-select bo-data-table__select-all bo-data-table__selection-count bo-data-table__sort-btn bo-data-table__spacer bo-data-table__toolbar
+data attrs: data-any-selected="true" data-density="comfortable|compact|spacious" data-grid-nav data-loading="true" data-row-state="dirty|error|warning" data-sticky-cols="2|3" data-tone="danger|success|warning" data-tone-text
+aria styled: aria-busy aria-sort
+
+### date — https://busy-office.github.io/busy-office-ui/components/date/
+classes: bo-date bo-date--overdue bo-date__relative bo-date__value
+
+### dialog — https://busy-office.github.io/busy-office-ui/components/dialog/
+classes: bo-dialog bo-dialog--wide bo-dialog__body bo-dialog__footer bo-dialog__header bo-dialog__title
+data attrs: data-dialog-trigger data-dismissible data-state="closed|current|done|open|pending|rejected"
+
+### dropdown — https://busy-office.github.io/busy-office-ui/components/dropdown/
+classes: bo-dropdown__item bo-dropdown__item--danger bo-dropdown__menu bo-dropdown__menu--end bo-dropdown__separator
+
+### file-upload — https://busy-office.github.io/busy-office-ui/components/file-upload/
+classes: bo-file-dropzone bo-file-dropzone__hint bo-file-input bo-file-list bo-file-list__item bo-file-list__name bo-file-list__size
+data attrs: data-dragover="true"
+
+### filters — https://busy-office.github.io/busy-office-ui/components/filters/
+classes: bo-chip bo-chip--active bo-chip__remove bo-filter-bar
+data attrs: data-saved-views
+
+### form — https://busy-office.github.io/busy-office-ui/components/form/
+classes: bo-app-shell__main bo-checkbox bo-choice bo-cluster bo-data-table__footer bo-data-table__toolbar bo-filter-bar bo-form-actions bo-form-field bo-form-field--required bo-form-field__hint bo-form-field__label bo-form-field__message bo-form-row bo-form-section bo-form-section--label-start bo-form-section__legend bo-input bo-input--code bo-input--numeric bo-input--seamless bo-quantity__input bo-radio bo-select bo-select--seamless
+data attrs: data-theme="dark|light"
+aria styled: aria-invalid aria-required
+
+### icon — https://busy-office.github.io/busy-office-ui/components/icon/
+classes: bo-icon bo-icon--barcode bo-icon--box bo-icon--building bo-icon--cart bo-icon--chart bo-icon--check-circle bo-icon--doc bo-icon--grid bo-icon--invoice bo-icon--settings bo-icon--truck bo-icon--user
+
+### kbd — https://busy-office.github.io/busy-office-ui/components/kbd/
+classes: bo-kbd
+
+### kv — https://busy-office.github.io/busy-office-ui/components/kv/
+classes: bo-kv bo-kv--rows
+
+### money — https://busy-office.github.io/busy-office-ui/components/money/
+classes: bo-money bo-money__amount bo-money__currency
+
+### navbar — https://busy-office.github.io/busy-office-ui/components/navbar/
+classes: bo-navbar bo-navbar__brand bo-navbar__spacer
+
+### offcanvas — https://busy-office.github.io/busy-office-ui/components/offcanvas/
+classes: bo-offcanvas bo-offcanvas--end bo-offcanvas__header bo-sidebar-nav
+data attrs: data-state="closed|current|done|open|pending|rejected"
+
+### ordered-list — https://busy-office.github.io/busy-office-ui/components/ordered-list/
+classes: bo-ordered-list bo-ordered-list--plain bo-ordered-list__actions
+
+### pagination — https://busy-office.github.io/busy-office-ui/components/pagination/
+classes: bo-pagination bo-pagination__btn bo-pagination__info
+aria styled: aria-current
+
+### progress — https://busy-office.github.io/busy-office-ui/components/progress/
+classes: bo-progress bo-progress--danger bo-progress--warning
+
+### prose — https://busy-office.github.io/busy-office-ui/components/prose/
+classes: bo-prose
+
+### quantity — https://busy-office.github.io/busy-office-ui/components/quantity/
+classes: bo-quantity bo-quantity__input bo-quantity__step bo-quantity__unit bo-quantity__unit-select
+
+### richtext — https://busy-office.github.io/busy-office-ui/components/richtext/
+classes: bo-btn bo-richtext bo-richtext--disabled bo-richtext--readonly bo-richtext__content bo-richtext__divider bo-richtext__toolbar
+
+### segmented — https://busy-office.github.io/busy-office-ui/components/segmented/
+classes: bo-segmented bo-segmented__input bo-segmented__option
+
+### sidebar-nav — https://busy-office.github.io/busy-office-ui/components/sidebar-nav/
+classes: bo-sidebar-nav bo-sidebar-nav__heading bo-sidebar-nav__icon bo-sidebar-nav__label bo-sidebar-nav__link bo-sidebar-nav__section
+aria styled: aria-current
+
+### skeleton — https://busy-office.github.io/busy-office-ui/components/state-patterns/
+classes: bo-skeleton bo-skeleton--block bo-skeleton--circle
+
+### state — https://busy-office.github.io/busy-office-ui/components/state-patterns/
+classes: bo-state bo-state--error bo-state__actions bo-state__description bo-state__icon bo-state__title
+
+### stepper — https://busy-office.github.io/busy-office-ui/components/stepper/
+classes: bo-stepper bo-stepper__label bo-stepper__marker bo-stepper__step
+data attrs: data-state="closed|current|done|open|pending|rejected"
+aria styled: aria-current
+
+### tabs — https://busy-office.github.io/busy-office-ui/components/tabs/
+classes: bo-tabs--vertical bo-tabs__list bo-tabs__panel bo-tabs__tab
+data attrs: data-overflow="both|end|start"
+aria styled: aria-selected
+
+### tag-input — https://busy-office.github.io/busy-office-ui/components/tag-input/
+classes: bo-tag-input bo-tag-input--seamless bo-tag-input__field bo-tag-input__remove bo-tag-input__tag
+
+### tree — https://busy-office.github.io/busy-office-ui/components/tree/
+classes: bo-tree bo-tree__branch bo-tree__label bo-tree__link
+aria styled: aria-current
+
+### tree-table — https://busy-office.github.io/busy-office-ui/components/tree-table/
+classes: bo-tree-table bo-tree-table__spacer bo-tree-table__toggle
+data attrs: data-tree-level="1|10|11|12|2|3|4|5|6|7|8|9"
+aria styled: aria-expanded
+
+## Primitives — https://busy-office.github.io/busy-office-ui/base/primitives/
+cluster: bo-cluster bo-cluster--end bo-cluster--split
+grid: bo-grid
+sidebar-layout: bo-app-shell bo-app-shell__header bo-app-shell__main bo-app-shell__sidebar
+stack: bo-stack bo-stack--loose bo-stack--tight
+visually-hidden: bo-visually-hidden
+
+## Utilities
+bo-print-report bo-u-avoid-break bo-u-break-before bo-u-hidden bo-u-mono bo-u-print-exact bo-u-print-hidden bo-u-print-only bo-u-tabular bo-u-text-muted bo-u-text-nowrap bo-u-text-right bo-u-text-truncate
+
+## Semantic tokens (re-brand = remap these in UNLAYERED :root; re-set in your [data-theme="dark"] block — unlayered beats the framework's dark remaps)
+--bo-border-width --bo-color-accent --bo-color-accent-solid --bo-color-accent-strong --bo-color-accent-subtle --bo-color-accent-text --bo-color-bg-canvas --bo-color-bg-hover --bo-color-bg-muted --bo-color-bg-selected --bo-color-bg-surface --bo-color-bg-surface-raised --bo-color-border-control --bo-color-border-default --bo-color-border-strong --bo-color-danger --bo-color-danger-solid --bo-color-danger-strong --bo-color-danger-subtle --bo-color-danger-text --bo-color-focus-ring --bo-color-scrim --bo-color-success --bo-color-success-strong --bo-color-success-subtle --bo-color-success-text --bo-color-text-disabled --bo-color-text-inverse --bo-color-text-muted --bo-color-text-primary --bo-color-text-secondary --bo-color-warning --bo-color-warning-strong --bo-color-warning-subtle --bo-color-warning-text --bo-density-auto-control-height --bo-density-auto-row-height --bo-density-cell-padding-x --bo-density-cell-padding-y --bo-density-control-height --bo-density-field-gap --bo-density-font-size --bo-density-row-height --bo-focus-ring-offset --bo-focus-ring-width --bo-font-mono --bo-font-sans --bo-font-size-base --bo-font-size-lg --bo-font-size-md --bo-font-size-mono-inline --bo-font-size-sm --bo-font-size-xl --bo-font-size-xs --bo-font-weight-medium --bo-font-weight-normal --bo-font-weight-semibold --bo-line-height-normal --bo-line-height-tight --bo-motion-duration-base --bo-motion-duration-fast --bo-motion-duration-slow --bo-motion-easing-standard --bo-radius-full --bo-radius-lg --bo-radius-md --bo-radius-sm --bo-shadow-dialog --bo-shadow-lg --bo-shadow-md --bo-shadow-sm --bo-space-0 --bo-space-1 --bo-space-10 --bo-space-12 --bo-space-2 --bo-space-3 --bo-space-4 --bo-space-5 --bo-space-6 --bo-space-8 --bo-state-active-overlay --bo-state-disabled-opacity --bo-state-error-bg --bo-state-error-color --bo-state-hover-overlay --bo-z-dropdown --bo-z-sticky-col --bo-z-sticky-header --bo-z-sticky-page --bo-z-toast
+
+## Key docs
+https://busy-office.github.io/busy-office-ui/getting-started/installation/
+https://busy-office.github.io/busy-office-ui/getting-started/first-screen/
+https://busy-office.github.io/busy-office-ui/getting-started/htmx/
+https://busy-office.github.io/busy-office-ui/getting-started/troubleshooting/
+https://busy-office.github.io/busy-office-ui/concepts/tokens/
+https://busy-office.github.io/busy-office-ui/concepts/density/
+https://busy-office.github.io/busy-office-ui/concepts/cascade/
+https://busy-office.github.io/busy-office-ui/concepts/js-behaviors/
+https://busy-office.github.io/busy-office-ui/concepts/accessibility/
+https://busy-office.github.io/busy-office-ui/concepts/theming/
+https://busy-office.github.io/busy-office-ui/base/colors/
+https://busy-office.github.io/busy-office-ui/reference/classes/
+
+## Patterns (task-fit — choose the SHAPE before the components) — https://busy-office.github.io/busy-office-ui/patterns/
+
+### Patterns: enter & find
+- Login — https://busy-office.github.io/busy-office-ui/patterns/login/ (complexity 1/4)
+  Who uses it: every user, before anything else — the first screen and, for anyone who forgets a password, a recurring one. What "done" looks like: signed in, or told exactly why not without leaking which part was wrong...
+  Not for re-authentication mid-task -> https://busy-office.github.io/busy-office-ui/components/dialog/
+  uses: form button alerts
+- Error pages — https://busy-office.github.io/busy-office-ui/patterns/error-pages/ (complexity 1/4)
+  Who uses it: every user, eventually — a stale bookmark, a link shared before a record moved, a permission that changed since yesterday, a request that failed server-side. How often: rare per user, universal per app — ...
+  Not for a section failing to load inside a page you're still on -> https://busy-office.github.io/busy-office-ui/components/state-patterns/
+  uses: state-patterns button
+- App frame — https://busy-office.github.io/busy-office-ui/patterns/app-frame/ (complexity 2/4)
+  Who uses it: everyone, on every screen — the persistent chrome the whole suite lives inside. How often: it never leaves the screen. What "done" looks like: any module is one click away, and search, notifications and t...
+  Not for a single-task dedicated device -> https://busy-office.github.io/busy-office-ui/patterns/rf-landing/
+  uses: /base/primitives nav dropdown button badge avatar form
+- Suite home — https://busy-office.github.io/busy-office-ui/patterns/suite-home/ (complexity 2/4)
+  Who uses it: anyone whose work spans modules — a controller touching Finance and Purchasing, an ops lead across Warehouse and Reports; the screen behind the brand link and the switcher's "home". How often: between tas...
+  Not for one role's daily queue -> https://busy-office.github.io/busy-office-ui/patterns/role-home/
+  uses: /base/primitives nav dashboard badge avatar
+- App launch — https://busy-office.github.io/busy-office-ui/patterns/app-launch/ (complexity 1/4)
+  Who uses it: anyone opening the suite, every session — the first screen after sign-in. What "done" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen ...
+  Not for returning a user to a specific record they already know -> https://busy-office.github.io/busy-office-ui/patterns/object-page/
+  uses: /base/primitives dashboard badge
+- Role home — https://busy-office.github.io/busy-office-ui/patterns/role-home/ (complexity 2/4)
+  Who uses it: every named role — a buyer, an approver, a warehouse supervisor — each seeing their own version. How often: the first screen after sign-in, and the one they come back to between tasks. What "done" looks l...
+  Not a launcher -> https://busy-office.github.io/busy-office-ui/patterns/app-launch/
+  uses: dashboard progress badge byline button
+- Command bar — https://busy-office.github.io/busy-office-ui/patterns/command-bar/ (complexity 1/4)
+  Who uses it: power users who know what they want — a dispatcher jumping to PO-88213, a controller running "post period" — without walking the menu. How often: dozens of times a day, which is why it is keyboard-first a...
+  Not a replacement for navigation -> https://busy-office.github.io/busy-office-ui/patterns/app-launch/
+  uses: dialog combobox kbd button
+- List report — https://busy-office.github.io/busy-office-ui/patterns/list-report/ (complexity 2/4)
+  Who uses it: AP clerks, all day — the screen they live in. What "done" looks like: find the invoices that need action, act on them in bulk, and never lose your place. Composed entirely from shipped components; the dat...
+  Not for a single record's full detail -> https://busy-office.github.io/busy-office-ui/patterns/record-detail/
+  uses: data-table pagination filters badge form
+- Advanced filter panel — https://busy-office.github.io/busy-office-ui/patterns/filter-panel/ (complexity 2/4)
+  The filter set that outgrew the bar. A finance or purchasing user opens the same list a dozen times a day and narrows it a different way each time — cost centre, status, date range, amount band. They do not want twelv...
+  Not for a list with one obvious narrowing dimension -> https://busy-office.github.io/busy-office-ui/patterns/list-report/
+  uses: filters dropdown filters data-table form
+- Value help — https://busy-office.github.io/busy-office-ui/patterns/value-help/ (complexity 2/4)
+  Who uses it: anyone typing a code they cannot remember — a buyer picking a material out of forty thousand, a clerk choosing a cost centre; dozens of times a day, inside a form they are part-way through. What "done" lo...
+  Not when the option set is small -> https://busy-office.github.io/busy-office-ui/components/form/
+  uses: dialog filters data-table pagination state-patterns form
+
+### Patterns: work one record
+- Object page — https://busy-office.github.io/busy-office-ui/patterns/object-page/ (complexity 3/4)
+  A long record, navigated in sections instead of scrolled as one feed. Who uses it: whoever owns one record end to end — a buyer opening a PO, an approver checking it before signing; many times a day, one object at a t...
+  Not for a record you can take in at one glance -> https://busy-office.github.io/busy-office-ui/patterns/record-detail/
+  uses: dashboard kv badge amount pagination button
+- Record detail — https://busy-office.github.io/busy-office-ui/patterns/record-detail/ (complexity 1/4)
+  Who uses it: whoever owns this record, checking its status or adding to its history — a buyer, an approver, anyone who clicked in from a list row. How often: every time a list row is opened — this is the default landi...
+  Not once the record stops fitting in one scan -> https://busy-office.github.io/busy-office-ui/patterns/object-page/
+  uses: kv dashboard approval-workflow byline
+- Master-detail — https://busy-office.github.io/busy-office-ui/patterns/master-detail/ (complexity 2/4)
+  M2 of the four data-maintenance patterns (and the most common one in practice): a list of records, and clicking a row opens that record's fields in a panel beside the list or a dialog over it. A back-office user uses ...
+  Not when one record deserves the whole screen -> https://busy-office.github.io/busy-office-ui/patterns/object-page/
+  uses: data-table dashboard#card dialog offcanvas kv badge
+- Multi-column detail form — https://busy-office.github.io/busy-office-ui/patterns/detail-form/ (complexity 2/4)
+  Who uses it: whoever owns the record — a buyer editing a PO, an admin fixing vendor details; occasional, high-stakes edits where losing work is unacceptable. What "done" looks like: every change saved (or explicitly d...
+  Not for reading a record -> https://busy-office.github.io/busy-office-ui/patterns/record-detail/
+  uses: form /patterns/editable-grid /patterns/validation-summary calendar inline-editing money
+
+### Patterns: enter & correct data
+- Editable grid — https://busy-office.github.io/busy-office-ui/patterns/editable-grid/ (complexity 4/4)
+  Who uses it: whoever enters or corrects line items — a buyer building a PO, a warehouse clerk keying a pick list. What "done" looks like: every row either saved or still marked unsaved, never silently dropped. Line-it...
+  Not for -> https://busy-office.github.io/busy-office-ui/components/data-table/
+  uses: data-table money quantity combobox tag-input
+- Multi-step wizard — https://busy-office.github.io/busy-office-ui/patterns/wizard/ (complexity 3/4)
+  Who uses it: whoever is creating something too long for one screen, guided rather than dropped into a form — most often a first-time or occasional flow. What "done" looks like: every step completed or explicitly skipp...
+  Not for a routine single-step task -> https://busy-office.github.io/busy-office-ui/patterns/detail-form/
+  uses: stepper form button /patterns/validation-summary
+- Staging / batch result — https://busy-office.github.io/busy-office-ui/patterns/staging/ (complexity 3/4)
+  Who uses it: whoever maintains data in bulk — an uploaded file, an interface run, a mass posting. How often: month-end and whenever a supplier sends a spreadsheet. What "done" looks like: every submitted row either be...
+  Not for a handful of records -> https://busy-office.github.io/busy-office-ui/patterns/detail-form/
+  uses: data-table alerts badge
+- Reconciliation — https://busy-office.github.io/busy-office-ui/patterns/reconciliation/ (complexity 3/4)
+  Who uses it: whoever must prove two independent records agree — an accountant clearing the bank statement against the ledger, AP matching payments to invoices, treasury clearing suspense. How often: daily to monthly, ...
+  Not for validating one imported list -> https://busy-office.github.io/busy-office-ui/patterns/staging/
+  uses: data-table badge amount button
+- Timesheet — https://busy-office.github.io/busy-office-ui/patterns/timesheet/ (complexity 3/4)
+  Who uses it: anyone who books time — a consultant, a field engineer, a project team member. How often: daily in passing, then once at period end to submit. What "done" looks like: every day accounted for, the period t...
+  Not for editing arbitrary fields across rows -> https://busy-office.github.io/busy-office-ui/patterns/editable-grid/
+  uses: data-table form badge button
+- Comparison matrix — https://busy-office.github.io/busy-office-ui/patterns/comparison/ (complexity 2/4)
+  Who uses it: whoever must choose one of several candidates on stated criteria — a buyer awarding an RFQ, an analyst picking a vendor, a manager comparing budget scenarios. How often: once per decision, but the decisio...
+  Not for comparing versions of one record -> https://busy-office.github.io/busy-office-ui/patterns/record-detail/
+  uses: data-table form badge button
+- Validation summary — https://busy-office.github.io/busy-office-ui/patterns/validation-summary/ (complexity 2/4)
+  Who uses it: anyone filling a form with more than a couple of required fields — worth it the moment a reader could miss which field failed. What "done" looks like: every problem named in one place AND on its field, wi...
+  Not for per-row saves -> https://busy-office.github.io/busy-office-ui/patterns/editable-grid/
+  uses: alerts form /concepts/js-behaviors /patterns/detail-form
+
+### Patterns: decide & clear queues
+- Inbox — https://busy-office.github.io/busy-office-ui/patterns/inbox/ (complexity 2/4)
+  Who uses it: every ERP user, first thing — the screen a working day starts on. How often: continuously; it is the tab that stays open. What "done" looks like: the list is empty of things that need you — every row eith...
+  Not for one document type's approval queue -> https://busy-office.github.io/busy-office-ui/patterns/approval/
+  uses: data-table segmented badge button kv
+- Approval workflow — https://busy-office.github.io/busy-office-ui/patterns/approval/ (complexity 3/4)
+  Who uses it: an approver named in the chain — a manager, a cost-centre owner, finance. How often: whenever a document reaches their step, which for most approvers is a handful of times a week. What "done" looks like: ...
+  Not for a record with no decision to make -> https://busy-office.github.io/busy-office-ui/patterns/record-detail/
+  uses: approval-workflow badge
+- Bulk actions — https://busy-office.github.io/busy-office-ui/patterns/bulk-actions/ (complexity 3/4)
+  Who uses it: an AP clerk clearing a queue — select many, act once. What "done" looks like: every selected record either changed or explained why it didn't. The failure mode this pattern exists to prevent is the silent...
+  Not for changing one record -> https://busy-office.github.io/busy-office-ui/patterns/object-page/
+  uses: data-table table-toolbar alerts badge /concepts/permissions
+- Kanban board — https://busy-office.github.io/busy-office-ui/patterns/kanban/ (complexity 3/4)
+  Who uses it: whoever needs to see WHERE a batch of things stands, all at once — a production planner watching orders move through stages, a fulfilment lead watching shipments. How often: a screen left open, glanced at...
+  Not for finding one specific record -> https://busy-office.github.io/busy-office-ui/patterns/list-report/
+  uses: dashboard dropdown badge form byline
+
+### Patterns: monitor & output
+- Reporting dashboard — https://busy-office.github.io/busy-office-ui/patterns/reporting-dashboard/ (complexity 2/4)
+  Who uses it: a manager checking whether this period's AP activity is on track and where the exceptions are. What "done" looks like: three numbers read at a glance, an exception spotted without opening a single invoice...
+  Not for an actionable worklist -> https://busy-office.github.io/busy-office-ui/patterns/inbox/
+  uses: dashboard /base/primitives /concepts/container-queries
+- Parameterized report — https://busy-office.github.io/busy-office-ui/patterns/report/ (complexity 2/4)
+  Who uses it: whoever must answer a specific question with numbers — an accountant at close, a buyer checking open commitments. How often: on demand, and on a schedule someone else set. What "done" looks like: the resu...
+  Not for monitoring -> https://busy-office.github.io/busy-office-ui/patterns/reporting-dashboard/
+  uses: form data-table byline button kbd
+- Issued document — https://busy-office.github.io/busy-office-ui/patterns/output-form/ (complexity 2/4)
+  Who uses it: nobody, on screen — this is the artefact the ERP emits: a purchase order sent to a vendor, an invoice, a delivery note travelling with goods. How often: every time a document is issued, usually unattended...
+  Not a screen, and not a PDF engine -> https://busy-office.github.io/busy-office-ui/patterns/object-page/
+  uses: data-table kv /base/print
+- Notification — https://busy-office.github.io/busy-office-ui/patterns/notification/ (complexity 2/4)
+  Who uses it: anyone whose work finishes while they are not watching — a posting run, an export, an approval granted upstream. How often: glanced at many times a day, read fully a few. What "done" looks like: the unrea...
+  Not for work that needs your action -> https://busy-office.github.io/busy-office-ui/patterns/inbox/
+  uses: alerts dropdown badge byline button
+- Job monitor — https://busy-office.github.io/busy-office-ui/patterns/job-monitor/ (complexity 2/4)
+  Who uses it: whoever is accountable when unattended work fails — an integrations admin, an ops lead, the person the inbox assigned an exception to. How often: a glance most days, a deep look the moment something is la...
+  Not for authoring schedules -> https://busy-office.github.io/busy-office-ui/patterns/report/
+  uses: data-table badge button
+- Schedule calendar — https://busy-office.github.io/busy-office-ui/patterns/schedule/ (complexity 2/4)
+  A planner or supervisor scans a month for what is booked — deliveries, maintenance windows, shift cover — several times a day during a busy week, and once a day otherwise. "Done" is picking a day and seeing exactly wh...
+  Not for authoring a schedule -> https://busy-office.github.io/busy-office-ui/patterns/record-detail/
+  uses: calendar dashboard#card data-table badge
+- Settings & admin — https://busy-office.github.io/busy-office-ui/patterns/settings-admin/ (complexity 2/4)
+  Who uses it: a workspace admin, occasionally a first-time setup wizard. How often: rarely per person, but every workspace has one. What "done" looks like: a section's values saved, or an unsaved change clearly marked ...
+  Not for a single end user's own preferences -> https://busy-office.github.io/busy-office-ui/patterns/detail-form/
+  uses: form tabs
+
+### Patterns: RF / rugged devices
+- RF task menu — https://busy-office.github.io/busy-office-ui/patterns/rf-landing/ (complexity 1/4)
+  Who uses it: a warehouse floor worker, first screen after signing into the handheld — every RF shift starts here. What "done" looks like: the next task is one tap away, with 3-6 items visible at once, never a menu to ...
+  Not for -> https://busy-office.github.io/busy-office-ui/patterns/app-launch/
+  uses: dashboard badge /concepts/density
+- RF task queue — https://busy-office.github.io/busy-office-ui/patterns/rf-list/ (complexity 1/4)
+  Who uses it: a warehouse floor worker after picking a task from the RF task menu — "what's next" for that task type. What "done" looks like: the worker reads top-to-bottom, taps the top row, and starts working it — no...
+  Not for -> https://busy-office.github.io/busy-office-ui/patterns/rf-list#editable-refused/
+  uses: data-table badge /concepts/density
+- Goods receipt (RF scanner) — https://busy-office.github.io/busy-office-ui/patterns/goods-receipt/ (complexity 3/4)
+  Who uses it: a warehouse floor worker, one-handed and often gloved, holding a scanner instead of a mouse. What "done" looks like: every expected line accounted for — received in full, received partial, or explicitly n...
+  Not for a desk-based receiving clerk keying a paper packing slip. -> https://busy-office.github.io/busy-office-ui/patterns/detail-form/
+  uses: quantity data-table /concepts/density
+
+
+## Deliberately absent — do not build these, use the alternative
+
+- A grid engine — virtual scroll, column virtualisation, cell editing -> Server-side paging or load-more for lists; the token-themed AG Grid recipe on /concepts/scale for the one screen in twenty that is genuinely a spreadsheet
+- An icon catalogue — the hundreds-of-glyphs set -> The 12 shipped ERP glyphs, then --bo-icon-src for anything else: point it at Lucide, Heroicons or your own SVG and .bo-icon supplies sizing, currentColor, density and forced-colors. Measured: 12 glyphs are 10.3% of the framework, so 200 would add ~129 kB — twice everything else we ship
+- An illustration / spot-art set -> An <img> you supply with alt=""; for glyphs --bo-icon-src, for a person or org .bo-avatar, for a tenant app tile the launcher's inline svg slot. Empty states are fixed by a clear sentence and the action that resolves them, not by a drawing that must be redrawn per brand and downloaded on a warehouse tablet
+- A client-side row virtualiser for SEARCH workflows -> Filter server-side and paginate — fixed row heights are maintained so a third-party virtualiser also drops in cleanly
+- Tab overflow arrow buttons -> The edge fade ships and is conditional on actual overflow; add two buttons calling scrollBy if your users expect them
+- An app-icon library inside .bo-icon -> Inline <svg> per tenant, or an initials chip — app icons are product content, and every consumer would ship glyphs they never use
+- A "field editor" component -> .bo-data-table + data-row-edit + the typed inputs; see /patterns/field-editor
+- A master-detail component -> .bo-data-table + a card, dialog or offcanvas; see /patterns/master-detail
+- .bo-value-help and .bo-staging-table -> Compose combobox + dialog, and the staging pattern
+- A second toolbar idiom -> .bo-cluster already does it
+
+These were considered and declined on purpose; see DESIGN.md and ROADMAP.md for the reasoning.
