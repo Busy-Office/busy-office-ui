@@ -6,6 +6,23 @@
     gap: var(--bo-stack-gap, var(--bo-space-4));
   }
 
+  /* A stack distributes RHYTHM, not space — so its children keep their own
+     size and a stack that does not fit OVERFLOWS rather than squeezing.
+     Visible overflow beats silent loss, and without this the loss really is
+     silent: a scroll container's automatic minimum size resolves to ZERO
+     (CSS Flexbox), so putting `bo-stack` on a height-constrained element —
+     `bo-app-shell__main`, which is exactly the composition a reader reaches
+     for when sections run together — collapses a table container to nothing.
+     Measured on the ERP suite: clientHeight 0 against scrollHeight 200, a
+     header and no rows, reported by no gate (roadmap 133.3, GAP-6).
+
+     Costs nothing that exists: applied across every `.bo-stack` child on the
+     docs site, 3346 of them at two widths, ZERO heights changed. It only
+     bites where a stack was being squeezed, which is the bug. */
+  .bo-stack > * {
+    flex-shrink: 0;
+  }
+
   .bo-stack--tight {
     --bo-stack-gap: var(--bo-space-2);
   }

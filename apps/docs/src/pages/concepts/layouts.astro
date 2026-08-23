@@ -92,6 +92,28 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>Spacing the shell's main — the one composition that bites</h2>
+    <p>When a screen's sections run together, the framework's own answer is the
+    <a href={base + '/base/primitives'}>stack</a> primitive — so putting
+    <code>bo-stack</code> on <code>.bo-app-shell__main</code> is the first
+    thing a careful reader tries. <strong>Put it on an inner element
+    instead.</strong></p>
+    <p><code>__main</code> is a height-constrained scroller. Making it a flex
+    column makes its children flex items, and a flex item that is itself a
+    scroll container has an automatic minimum size of <strong>zero</strong> —
+    so a table container directly inside it collapses to nothing: measured at
+    <code>clientHeight 0</code> against <code>scrollHeight 200</code>, a header
+    row and no data, on a screen that still looked plausible. Two correct
+    primitives composing into silent data loss, and the composition that breaks
+    is the one a careful reader tries first (roadmap 133.3).</p>
+    <p class="bo-u-text-muted">The framework now defends the general case:
+    <code>.bo-stack &gt; *</code> is <code>flex-shrink: 0</code>, because a
+    stack distributes <em>rhythm</em>, not space — a stack that does not fit
+    should overflow its scroller, visibly, rather than squeeze its children
+    away. That costs nothing existing (applied across 3346 stack children on
+    this site, zero heights changed). The advice above still stands, because
+    it is about which element owns the spacing, not only about the collapse.</p>
+
     <h2>When each shell is the WRONG choice</h2>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">

@@ -514,7 +514,22 @@ a hole exactly where the owner is pointing:
        visible, and nothing sticky overlaps anything else sticky. Drive real
        scroll events — a synthetic `scroll` on `document` matches no
        delegated handler and reports a false pass.
-3. [ ] **133.3 — whatever 133.1/133.2 find is a P0, not a note.** GAP-6 is
+3. [x] **133.3 — DONE 2026-08-24. GAP-6 fixed at the primitive.**
+       Reproducing it took three attempts, and the two failures are the
+       useful part: `bo-stack` on `__main` changes nothing on a docs demo
+       (that shell is not height-constrained) and nothing on the suite's own
+       screen (the container sits inside an inner stack div). The collapse
+       needs a scroll container that is a **direct** flex item of a
+       height-constrained flex column — built that way, `clientHeight 0`
+       against `scrollHeight 200`.
+       Fixed with `.bo-stack > * { flex-shrink: 0 }`: a stack distributes
+       rhythm, not space, so one that does not fit overflows visibly instead
+       of squeezing children away. Blast radius measured BEFORE shipping —
+       3346 stack children at two widths, zero heights changed — and
+       re-verified against the reproduction: 200/200.
+       133.1 and 133.2 found no other defect: every container that overflows
+       is reachable, and the object-page spy is correct for all five
+       sections. **Slice 133 closes.** GAP-6 is
        already one of them and is fixed under this item rather than 130.2, so
        the fix and the check that proves it land together.
 

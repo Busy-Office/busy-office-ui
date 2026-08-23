@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 03:53
+Generated at: 2026-08-24 04:18
 
 ## Open items by slice
 
@@ -20,8 +20,7 @@ Generated at: 2026-08-24 03:53
   - 132.3 — calendar selection across 1/2/3 months.
   - 132.4 — file open/save panel.
   - 132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md` BEFORE anything else.
-- **Slice 133** (2 open)
-  - 133.2 — object-page, scrolled for real.
+- **Slice 133** (1 open)
   - 133.3 — whatever 133.1/133.2 find is a P0, not a note.
 - **Slice 134** (3 open)
   - 134.1 — fix the key, and prove the dark half is dark.
@@ -31,8 +30,8 @@ Generated at: 2026-08-24 03:53
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (822 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-24 03:53   ok
+dispatch status — counter-triggered rules (823 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-24 03:53   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -45,7 +44,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
 - 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92
 - 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
 - 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199
@@ -55,6 +53,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
 - 2026-08-24 03:27 · Continue · bug · 133.1 fix — scroll probe measured platform scrollbar accounting; both axes now use computed overflow, red-proved · landed · aaea776
 - 2026-08-24 03:53 · Standardize · dry · scroll-regions: the allowed-to-overflow list existed in three spellings across two gates; consolidated, pre restored (122 -> 732 regions) · landed · 627ada3
+- 2026-08-24 04:18 · Continue · build · 133.2 — object-page spy verified for all 5 sections at both widths; the old check sampled one and had lost #flow · landed · b7f4464
 
 ## Sunset test
 

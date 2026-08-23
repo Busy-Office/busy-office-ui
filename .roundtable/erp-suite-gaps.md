@@ -289,7 +289,36 @@ is a semantic property, and a detector for it would have to decide when a
 `<span>` is legitimately correct — which it often is. Per the project's own
 rule, that stays judgement rather than becoming a gate that cannot fail.
 
-## GAP-6 — `bo-stack` on `bo-app-shell__main` silently clips a scrollable
+## GAP-6 — FIXED 2026-08-24 — `bo-stack` on `bo-app-shell__main` silently
+clips a scrollable table
+
+**Reproduced precisely before fixing, and the first two attempts did NOT
+reproduce it** — which is why the precondition is now written down rather than
+described loosely. Adding `bo-stack` to `__main` on a docs demo changes
+nothing (that shell is not height-constrained), and adding it on the suite's
+own PO screen changes nothing either (the container sits inside an inner
+`bo-stack` div, which is the compromise this gap recorded). The collapse needs
+**a scroll container that is a DIRECT flex item of a height-constrained flex
+column**: constructed that way, `clientHeight 0` against `scrollHeight 200`.
+
+**Fixed at the primitive**: `.bo-stack > * { flex-shrink: 0 }`. A stack
+distributes RHYTHM, not space, so a stack that does not fit should overflow
+its scroller visibly rather than squeeze its children away — and the squeeze
+is silent precisely because a flex item that is itself a scroll container has
+an automatic minimum size of zero. Re-run against the reproduction: 200/200,
+nothing hidden.
+
+**Blast radius measured before shipping, not after**: applied to every
+`.bo-stack` child on the docs site — 3346 of them at two widths — **zero**
+heights changed. It only bites where a stack was being squeezed, which is the
+bug.
+
+`/concepts/layouts` documents the composition anyway, because the advice is
+about which element owns the spacing, not only about the collapse.
+
+*(original entry below)*
+
+## GAP-6 (original) — `bo-stack` on `bo-app-shell__main` silently clips a scrollable
 table
 
 **Hit on**: every document screen, and found by a SCREENSHOT after three

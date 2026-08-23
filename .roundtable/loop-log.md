@@ -828,3 +828,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
 - 2026-08-24 03:27 · Continue · bug · 133.1 fix — scroll probe measured platform scrollbar accounting; both axes now use computed overflow, red-proved · landed · aaea776
 - 2026-08-24 03:53 · Standardize · dry · scroll-regions: the allowed-to-overflow list existed in three spellings across two gates; consolidated, pre restored (122 -> 732 regions) · landed · 627ada3
+- 2026-08-24 04:18 · Continue · build · 133.2 — object-page spy verified for all 5 sections at both widths; the old check sampled one and had lost #flow · landed · b7f4464

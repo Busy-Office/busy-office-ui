@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`stack`): `.bo-stack > *` no longer shrinks. A stack distributes
+  rhythm, not space, and without this the loss was silent: a flex item that is
+  itself a scroll container has an automatic minimum size of ZERO, so putting
+  `bo-stack` on a height-constrained element — `.bo-app-shell__main`, the
+  composition a reader reaches for when sections run together — collapsed a
+  table container to `clientHeight 0` against `scrollHeight 200`. A header row
+  and no data, reported by no gate. A stack that does not fit now overflows its
+  scroller visibly instead. Costs nothing existing: measured across 3346 stack
+  children at two widths, zero heights changed.
+
 - **Added** (`data-table`): `.bo-data-table__cell-link` — the link in the cell
   that names a row's record becomes a **full-cell target** instead of a strip
   of text. Every ERP list has such a row and the framework had no answer that
