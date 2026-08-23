@@ -774,3 +774,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 16:52 · Roadmap · plan · Slice 127: six mobile-candidate builds queued with grill verdicts · triaged · d32bd68
 - 2026-08-23 16:52 · Meta · refusal · swipe row actions stay parked (Hypothesis, needs a consumer) · refused · d32bd68
 - 2026-08-23 16:57 · Continue · build · 127.1: sync-state slot (zero new CSS) + /concepts/offline contract page, claims-driven · landed · 9df614f
+- 2026-08-23 17:22 · Continue · build · 127.2 column priority ladder (--tertiary) + density-coupling fix · landed · 236a39a

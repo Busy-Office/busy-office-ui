@@ -21,8 +21,8 @@ Generated at: 2026-08-23 17:22
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (768 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-23 14:38   OVERDUE
+dispatch status — counter-triggered rules (769 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-08-23 14:38   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 15:49   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -36,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 15:49 · Objective · grill · 126: RF grill closed (Round 2 evidence verdicts); References-are-floors installed as Objective principle · logged · f6c5e76
 - 2026-08-23 15:49 · Meta · refusal · on-screen offline badge on RF screens (infrastructure, refuted by sources) · refused · f6c5e76
 - 2026-08-23 15:49 · Meta · refusal · progress-counter RF element (no two-source support) · refused · f6c5e76
 - 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 16:52 · Roadmap · plan · Slice 127: six mobile-candidate builds queued with grill verdicts · triaged · d32bd68
 - 2026-08-23 16:52 · Meta · refusal · swipe row actions stay parked (Hypothesis, needs a consumer) · refused · d32bd68
 - 2026-08-23 16:57 · Continue · build · 127.1: sync-state slot (zero new CSS) + /concepts/offline contract page, claims-driven · landed · 9df614f
+- 2026-08-23 17:22 · Continue · build · 127.2 column priority ladder (--tertiary) + density-coupling fix · landed · 236a39a
 
 ## Sunset test
 
