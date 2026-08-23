@@ -13,6 +13,7 @@ const tones = `<span class="bo-badge">Neutral</span>
 const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</span>
 <span class="bo-badge bo-badge--type">Invoice</span>
 <span class="bo-badge bo-badge--type">Change Request</span>`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Badge">
   <p class="demo-note">
@@ -21,6 +22,13 @@ const typeChip = `<span class="bo-badge bo-badge--type">Purchase Order #4021</sp
     <code>--bo-color-*-text</code> tokens, which remap in dark mode to stay AA.
     A badge is decoration for sighted users — the status text itself is the
     accessible signal, so never encode status as color alone.
+    <strong>Not for anything the reader can act on</strong> — a badge is a
+    label, and a label that responds to a click is a control wearing the
+    wrong clothes. A filter value the reader can remove is a
+    <a href={base + '/components/filters'}>chip</a>; anything that fires an
+    action is a <a href={base + '/components/button'}>button</a>. The test
+    is whether removing it would change what the screen does: if yes, it was
+    never a badge.
   </p>
   <section class="demo">
     <h2>Tones</h2>

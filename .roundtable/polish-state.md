@@ -25,13 +25,13 @@ quality signal. A dimension that cannot fail must never drive a round.
 | surface | dimension | score | rounds | dry | status |
 |---|---|---|---|---|---|
 | component/alerts | content | **3** | 1/3 | 0 | round 1 landed — blind re-score 2→3, off the gate's TODO |
-| component/avatar | content | 2 | 0/3 | 0 | queued |
-| component/badge | content | 2 | 0/3 | 0 | queued |
-| component/byline | content | 2 | 0/3 | 0 | queued |
-| component/calendar | content | 2 | 0/3 | 0 | queued |
+| component/avatar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not the only way to name someone" |
+| component/badge | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for anything actionable" |
+| component/byline | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
+| component/calendar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for a plain date field" |
 | component/dashboard | content | 2 | 0/3 | 0 | queued |
 | component/data-table | content | 2 | 0/3 | 0 | queued |
-| component/date | content | 2 | 0/3 | 0 | queued |
+| component/date | content | 2 | — | — | **SKIPPED** — deprecated, see note below |
 | component/icon | content | 2 | 0/3 | 0 | queued |
 | component/inline-editing | content | 2 | 0/3 | 0 | queued |
 | component/navbar | content | 2 | 0/3 | 0 | queued |

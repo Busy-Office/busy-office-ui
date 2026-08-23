@@ -110,9 +110,14 @@ const three = `<div class="bo-calendar">
     plant shutdown, period-end, the dates a shipment cannot land on. Use it to
     <em>show</em> a calendar, and — with each day as a real submit button — to
     <strong>pick from one</strong> when which days are special is part of the choice.
-    For a plain date with no such context, use the native
-    <code>&lt;input type="date"&gt;</code>: it is localized, one tab stop, and native on
-    a phone.
+    <strong>Not for a plain date field</strong> — when the reader just needs
+    to state a date and no day is special, the native
+    <code>&lt;input type="date"&gt;</code> wins on every axis that matters:
+    localized for free, one tab stop instead of a grid of them, and the
+    platform's own picker on a phone. Reach for this grid only when
+    <em>which</em> days are special is part of the decision — a shutdown, a
+    blackout window, period-end — because that is the one thing the native
+    control cannot show.
   </p>
 
   <section class="demo">

@@ -12,6 +12,15 @@ const markup = `<span class="bo-byline"><strong>R. Vance</strong> · Requester �
     An author · role · timestamp provenance line — for a record header, a comment, a
     feed item, an audit note. The name is emphasis ink; the rest is secondary. One
     class, plain markup, domain-neutral.
+    <strong>Not inside the cells of a sortable grid</strong> — a stack of
+    comments or feed entries each carrying their own byline is exactly
+    right, because each one is a separate thing the reader reads. A
+    <em>table</em> is not: packing actor and timestamp into one cell buries
+    the value that differs inside two that repeat, and neither can be
+    sorted or filtered on. Give them their own
+    <a href={base + '/components/data-table'}>data table</a> columns — the
+    line is whether the reader scans DOWN a column, not how many items
+    there are.
   </p>
 
   <section class="demo">

@@ -905,7 +905,7 @@
       ]
     },
     "byline": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -924,20 +924,17 @@
           "cite": "plain markup, no behavior"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not inside the cells of a sortable grid\" — a stack of comments each with a byline is right, but packing actor+timestamp into a table cell buries the differing value in two repeating ones and neither sorts; points at data-table columns. Blind re-scored 2026-08-23 (Polish round 2); the scorer caught the first draft drawing the line at \"many rows\", which contradicted the same opener's own recommendation for feed items — boundary redrawn at scanning DOWN a column."
         },
         "fit": {
           "score": 3,
           "cite": "record headers, comments, feed items, audit notes; composes .bo-avatar rather than owning a disc"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "badge": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -956,17 +953,14 @@
           "cite": "a static span"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for anything the reader can act on\" — a badge is a label; a removable filter value is a chip and anything that fires is a button, with the test stated (would removing it change what the screen does). Blind re-scored 2026-08-23 (Polish round 2), judged genuine: clickable/dismissible badges are a common misuse of a status pill."
         },
         "fit": {
           "score": 3,
           "cite": "approval states and document statuses; the --type rectangle is scoped to record-type labels"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "kbd": {
       "scored": "2026-08-21",
@@ -998,7 +992,7 @@
       }
     },
     "avatar": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -1017,17 +1011,14 @@
           "cite": "decoration; aria-hidden by contract"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not as the only way to name someone\" — an initials disc with no adjacent name asks every reader to decode it and gives a screen-reader user nothing, since the avatar is aria-hidden by contract; points at byline, or dropping the disc in a dense table. Blind re-scored 2026-08-23 (Polish round 2), judged genuine: avatar-only assignee columns are a mainstream real pattern."
         },
         "fit": {
           "score": 3,
           "cite": "assignee columns, approval chains, bylines; em-sized so it inherits scale instead of shipping size modifiers"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "prose": {
       "scored": "2026-08-21",
@@ -1059,7 +1050,7 @@
       }
     },
     "calendar": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -1078,17 +1069,14 @@
           "cite": "days can be real submit buttons, so selection posts without JS; data-day is app state written per render, like data-row-state"
         },
         "content": {
-          "score": 2,
-          "cite": "the page says what it is and how to use it, but never a context where it is the WRONG choice or what to use instead (94.7 definition; fix is 94.10)"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for a plain date field\" — the native input type=date is localized, one tab stop, and gets the platform picker on a phone; the grid earns its place only when WHICH days are special is part of the decision. Blind re-scored 2026-08-23 (Polish round 2), judged the strongest of its batch."
         },
         "fit": {
           "score": 3,
           "cite": "a month grid that says which days are special — holidays, shutdowns, period-end, blocked delivery dates"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "button": {
       "scored": "2026-08-21",
