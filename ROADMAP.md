@@ -157,6 +157,65 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 127 — the mobile-ERP candidates, grilled to builds (2026-08-23)
+
+The owner's sequencing: "look ok but before design, please grill the
+idea — RF coverage" → the RF grill shipped as Slice 126; the candidates
+now proceed under the same bar (grill verdict first, comprehensive
+design, References-are-floors). Evidence base:
+`.roundtable/research-erp-mobile-web-gaps-2026-08-23.md`. Candidate 7
+(swipe) stays parked (Hypothesis, needs a consumer). Grill verdicts are
+condensed here because each candidate already carries 2+ sources and an
+Accept sketch; where a verdict needed a design call, it is stated with
+its reason.
+
+1. [ ] **127.1 — Offline / sync-state signalling.** Grill verdict:
+       ZERO new CSS — compose badge + icon + visually-hidden +
+       aria-live (the RF grill's Q2 boundary binds: visuals and
+       contracts, never the queue engine). Build: a named sync-status
+       slot documented on the app-frame pattern (the D365 ever-present
+       header evidence), four two-channel states
+       (online/syncing/queued/error — glyph SHAPE + text, announced on
+       change), and a `/concepts/offline` page stating the whole
+       contract the RF pages now honestly defer to. Accept: app-frame
+       section + concept page; a claims case drives a state change and
+       asserts both channels; no state is colour-only; nothing promises
+       an engine.
+2. [ ] **127.2 — Table column priority.** Grill verdict: CSS-first,
+       a per-column `--priority-low/-medium` class pair hidden under
+       the EXISTING named `bo-table` container query (Fiori pop-in and
+       PatternFly stacking are the floors; ours needs no JS and no new
+       query). Column-chooser (table-toolbar) is the documented
+       recovery. Accept: data-table docs section + list-report
+       adoption; a claims case proves a low-priority column hides at
+       narrow container width and returns via the chooser; budget
+       unaffected (main bundle).
+3. [ ] **127.3 — Approve-from-phone.** Grill verdict: SECTIONS, not
+       patterns (the audit's own call) — approval and inbox each gain
+       an "on a phone" section + phone-width States rows: what
+       collapses, decision buttons within thumb reach (the --bar
+       composes here), and the 390px screenshot discipline. Accept:
+       both pages' sections land; axe/layout at 390 stay green.
+4. [ ] **127.4 — Saved views on list-report.** Grill verdict:
+       composition (dropdown + chips already shipped) + the
+       PERSISTENCE data contract the current one-row mention lacks
+       (Fiori variant management is the floor; ours states the
+       server-side contract instead of shipping a manager). Accept:
+       list-report gains the named-view switcher demo + contract rows;
+       claims case for the switcher's render.
+5. [ ] **127.5 — Touch form-entry recipe.** Grill verdict: a Forms
+       section, not new surface — the inputmode/autocomplete/
+       enterkeyhint recipe per field type (Baymard's cheapest mobile
+       win), stated as a table generated-adjacent to the field matrix.
+       Accept: forms page section; the recipe table names each field
+       type's exact attributes; no attribute invented (data-hooks
+       clean).
+6. [ ] **127.6 — camera candidate closed.** 126.5 already landed the
+       recipe on goods-receipt; this item just verifies file-upload
+       cross-references it (capture="environment") and closes the
+       audit's candidate 4 with a pointer. Accept: file-upload page
+       carries the capture recipe line; candidate marked closed.
+
 ## Slice 126 — RF coverage, grilled to a scope (2026-08-23)
 
 Owner asked for the grill BEFORE design ("RF coverage, for components
