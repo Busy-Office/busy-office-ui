@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 02:03
+Generated at: 2026-08-24 02:33
 
 ## Open items by slice
 
@@ -20,8 +20,7 @@ Generated at: 2026-08-24 02:03
   - 132.3 — calendar selection across 1/2/3 months.
   - 132.4 — file open/save panel.
   - 132.5 — list-to-list drag & drop. Read `.roundtable/grill-drag-drop-2026-08-21.md` BEFORE anything else.
-- **Slice 133** (3 open)
-  - 133.1 — a scroll sweep, red-proved.
+- **Slice 133** (2 open)
   - 133.2 — object-page, scrolled for real.
   - 133.3 — whatever 133.1/133.2 find is a P0, not a note.
 - **Slice 134** (3 open)
@@ -32,8 +31,8 @@ Generated at: 2026-08-24 02:03
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (819 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-24 01:45   ok
+dispatch status — counter-triggered rules (820 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-24 01:45   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -46,7 +45,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
 - 2026-08-24 01:12 · Continue · build · 135.4 — numeric keypad removed from the RF pick screen (markup, wiring, docs, allowlist); inputmode is the answer · landed · 4e39cdf
 - 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
 - 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
@@ -56,6 +54,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 01:45 · Standardize · dry · target-size: my 2.5.8 claim overstated non-conformance; corrected in 5 places, cell-link added to the gate's sweep and red-proved · landed · 86a0bfd
 - 2026-08-24 01:53 · Continue · build · 135.2 part 1 — last two duplicated RF screens removed; check-page-shape now gates the IMPORT, red-proved · landed · d46316b
 - 2026-08-24 02:03 · Continue · build · 135.2 — six RF mirrors wired into one walkable track (menu/back/queue), zero CSS, walked with real clicks · landed · b669359
+- 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
 
 ## Sunset test
 
