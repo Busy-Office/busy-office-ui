@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 06:37
+Generated at: 2026-08-24 06:44
 
 ## Open items by slice
 
@@ -14,11 +14,19 @@ Generated at: 2026-08-24 06:37
   - 130.3 — module two, on the settled answers.
   - 130.4 — the remaining four modules.
   - 130.5 — wire the suite into CI
+- **Slice 136** (7 open)
+  - 136.1 — `.bo-richtext` is the only form control that never shows it is invalid.
+  - 136.2 — the editor toolbar prints.
+  - 136.3 — an empty field says nothing, and the obvious fix is a trap I tested BEFORE proposing it.
+  - 136.4 — Advanced teaches the opposite of the opener.
+  - 136.5 — the toolbar's labels, and why "add icons" is the wrong remedy wholesale.
+  - 136.6 — a document reference, not a URL link.
+  - 136.7 — a length budget measured in STORED HTML.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (839 iterations logged)
+dispatch status — counter-triggered rules (840 iterations logged)
   Standardize   6 / 4 Continue rounds since 2026-08-24 05:00   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -28,12 +36,12 @@ dispatch status — counter-triggered rules (839 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 136.3 — an empty field says nothing, and the obvious fix is a trap I tested BEFORE proposing it.
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 
 ## Last 10 iterations
 
-- 2026-08-24 05:08 · Continue · build · 132.3 — calendar: triage premise was wrong (3 of 4 asks already shipped); range guidance added, drag-select refused · landed · 16ed66d
 - 2026-08-24 05:08 · Meta · refusal · a 2-month demo (repeats the 3-month point) and a scripted drag-select range picker · refused · 16ed66d
 - 2026-08-24 05:13 · Continue · build · 132.4 — file open/save panel refused as a pattern; mapped to file-upload / value-help / form-in-dialog and documented · refused · 4c5c199
 - 2026-08-24 05:13 · Meta · refusal · a file-panel pattern — the OS owns the local picker, value-help is the store picker, and a browser has no save panel · refused · 4c5c199
@@ -43,6 +51,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 05:47 · Continue · build · 130.3 — module two complete (O2C: sales orders + customer invoices ageing); GAP-16 tfoot totals fixed; visual gate caught its first real change plus one unexplained diff · landed · d51f591
 - 2026-08-24 06:00 · Roadmap · plan · handover — RESUME current after the twenty-wake run; 134.3 and 112.3 await the owner · logged · 735020b
 - 2026-08-24 06:37 · Continue · owner-decision · 134.3 — delete the visual-regression gate (owner call, option c); LOOPS.md step 4 rewired to check:layout+check:scroll+test:axe · landed · 3174784
+- 2026-08-24 06:44 · Explore · grill · 136 — grill the rich-text design against Paper/Notion; 3 defects confirmed live, chromeless-editor refused, 2 ERP proposals raised · logged · a4925e0
 
 ## Sunset test
 
