@@ -1,7 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
-import PickScreen from '../../components/rf/PickScreen.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const markup = `<!-- Header answers before the worker asks: which task, which bin,
@@ -44,11 +43,19 @@ const markup = `<!-- Header answers before the worker asks: which task, which bi
     worker found it.
   </p>
 
-  <section class="demo" data-density="spacious">
+  <section class="demo">
     <h2>The screen — try it</h2>
-    <div class="demo-rf-screen">
-      <PickScreen />
-    </div>
+    <p>Shown the way the scanner gets it: an isolated 360×640 document
+    styled by ONLY the <code>rf-essentials</code> profile
+    (Chrome/WebView&nbsp;108) — not the docs bundle. One screen, not two:
+    this page used to render the same component a second time at desktop
+    width, which showed the reader a size no picker ever holds
+    (roadmap 131.1).</p>
+    <iframe
+      src={base + '/patterns/rf/rf-pick-rf/'}
+      title="RF pick, rf-essentials profile, 360×640"
+      class="rf-device-frame"
+    ></iframe>
     <p class="bo-u-text-muted">Scan (type + Enter) <code>A-01-04</code> or
     <code>MAT-4471</code> — capture flashes green; anything else flashes
     red with the reason announced. The keypad is the grill's
@@ -56,18 +63,6 @@ const markup = `<!-- Header answers before the worker asks: which task, which bi
     <code>bo-btn</code>s and three consumer lines wiring them to the
     quantity input — native <code>inputmode</code> remains the zero-JS
     floor, and the grid is an additive convenience for thick gloves.</p>
-  </section>
-
-  <section class="demo">
-    <h2>The RF-floor profile, at RF-scanner size</h2>
-    <p>The same screen — via the shared component — in an isolated document
-    styled by ONLY the <code>rf-essentials</code> profile
-    (Chrome/WebView&nbsp;108), at 360×640:</p>
-    <iframe
-      src={base + '/patterns/rf/rf-pick-rf/'}
-      title="RF pick, rf-essentials profile, 360×640"
-      class="rf-device-frame"
-    ></iframe>
   </section>
 
   <section class="demo">

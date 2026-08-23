@@ -20,10 +20,15 @@
   border-radius: var(--bo-radius-md);
 }
 
-/* A live screen (not an iframe) shown at handheld width inside a docs page:
-   the "try it" wrapper above each RF mirror, and the phone sections on
-   approval/inbox. No frame — these sit in the page's own flow, and the
-   mirrors below them are what carry the device chrome. */
+/* A live screen (not an iframe) shown at handheld width inside a docs page —
+   today only the button page's glove-target demo. No frame: it sits in the
+   page's own flow.
+
+   It used to also wrap a second copy of each RF screen, rendered above that
+   page's mirror. Roadmap 131.1 removed those three copies (owner: "it is
+   kind of redundant that you show HTML form and also show iframe"): the
+   mirror is the same component at the size the worker actually holds, so
+   the desktop-width copy was showing a size no scanner has. */
 .demo-rf-screen {
   max-inline-size: var(--demo-rf-inline);
 }

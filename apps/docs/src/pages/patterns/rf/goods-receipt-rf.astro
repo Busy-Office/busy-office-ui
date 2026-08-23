@@ -8,14 +8,16 @@
    troubleshooting page's interop iframes — an isolated document is the
    only way to actually test what a page loading ONLY that file gets. */
 import ScanToReceive from '../../../components/ScanToReceive.astro';
+import PrefBootstrap from '../../../components/PrefBootstrap.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cssHref = base + '/assets/rf-essentials.min.css';
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-density="spacious">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <PrefBootstrap density="spacious" lockDensity />
     <title>Goods receipt — rf-essentials profile</title>
     <link rel="stylesheet" href={cssHref} />
     <style>
@@ -31,7 +33,7 @@ const cssHref = base + '/assets/rf-essentials.min.css';
       }
     </style>
   </head>
-  <body data-density="spacious">
+  <body>
     {/* aria-label is load-bearing, not decoration: axe-audit.mjs scans into
         same-origin iframes, so this <main> and the parent
         /patterns/goods-receipt page's own #main-content land in ONE

@@ -5,6 +5,13 @@
  *   built markup, which can be fooled by a name that is a prefix of another or
  *   by markup that lives only in a code sample. Carries --self-test.
  *
+ * READS THE EMBED, TOO (roadmap 131.1). The RF screens render inside a
+ * same-origin `<iframe>`, so a gate reading only the outer page sees an empty
+ * screen. When the inline duplicates of those screens were removed, this went
+ * red on 11 claims that were all TRUE — which is the useful kind of red: the
+ * evidence had moved one document down, not disappeared. `demoRegionWithEmbeds`
+ * follows it, the same call `axe-audit` already makes for these frames.
+ *
  * WHY. `/patterns/*` end with a "Components used" list and a complexity badge,
  * which reads as *this screen is built from these*. **Eleven of sixteen pages
  * listed components they never rendered** — `invoice-list` claimed `pagination`
@@ -28,7 +35,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { DIST, CORE_DIST } from './paths.mjs';
-import { distPages, demoRegion } from './dist-pages.mjs';
+import { distPages, demoRegionWithEmbeds } from './dist-pages.mjs';
 import { assertScanned, selfTest } from './gate-report.mjs';
 
 const api = JSON.parse(
@@ -57,6 +64,14 @@ for (const [name, entry] of Object.entries(api.components)) {
 import { rendersBlock } from './renders-block.mjs';
 export { rendersBlock };
 
+/* `/` is deliberately in this fixture: it is a suffix of every src, and the
+   first version of demoRegionWithEmbeds matched it instead of the mirror —
+   embedding the landing page as the RF screen's evidence. */
+const EMBED_FIXTURE = new Map([
+  ['/', '<html><body><main><div class="bo-widget"></div></main></body></html>'],
+  ['/patterns/rf/x-rf/', '<html><body><main><dl class="bo-kv"></dl></main></body></html>'],
+]);
+
 if (process.argv.includes('--self-test')) {
   selfTest([
     ['an exact block counts', rendersBlock('<i class="bo-badge">', 'bo-badge'), true],
@@ -64,19 +79,49 @@ if (process.argv.includes('--self-test')) {
     ['a MODIFIER counts', rendersBlock('<i class="bo-badge bo-badge--type">', 'bo-badge'), true],
     ['a longer name does NOT count', rendersBlock('<div class="bo-data-table-container">', 'bo-data-table'), false],
     ['absent is absent', rendersBlock('<div class="bo-kv">', 'bo-progress'), false],
+    /* The embed half (131.1): a screen shown in a same-origin iframe is
+       rendered by the page. The base-path case is the one that would fail
+       on CI only, so it is the one asserted. */
+    [
+      'an EMBEDDED screen counts, base path and all',
+      demoRegionWithEmbeds(
+        '<section class="demo"><iframe src="/busy-office-ui/patterns/rf/x-rf/"></iframe></section>',
+        EMBED_FIXTURE,
+      ).includes('bo-kv'),
+      true,
+    ],
+    [
+      'a page it does not embed contributes nothing',
+      demoRegionWithEmbeds('<section class="demo"><p>no frame here</p></section>', EMBED_FIXTURE)
+        .includes('bo-kv'),
+      false,
+    ],
+    [
+      'the embed is the frame\'s page, not the "/" that also suffix-matches',
+      demoRegionWithEmbeds(
+        '<section class="demo"><iframe src="/busy-office-ui/patterns/rf/x-rf/"></iframe></section>',
+        EMBED_FIXTURE,
+      ).includes('bo-widget'),
+      false,
+    ],
   ]);
 }
 
 const failures = [];
 let listsChecked = 0;
 
-for (const page of await distPages(DIST)) {
+const pages = await distPages(DIST);
+/* Every built page by url, so a pattern's screen can be read where it
+   actually renders — see demoRegionWithEmbeds. */
+const htmlByUrl = new Map(pages.map((p) => [p.url, p.html]));
+
+for (const page of pages) {
   if (!page.url.startsWith('/patterns/')) continue;
   const section = page.html.match(/<h2[^>]*>Components used<\/h2>([\s\S]*?)<\/section>/);
   if (!section) continue;
   listsChecked += 1;
 
-  const rendered = demoRegion(page.html);
+  const rendered = demoRegionWithEmbeds(page.html, htmlByUrl);
 
   for (const slug of new Set([...section[1].matchAll(/\/components\/([a-z-]+)/g)].map((m) => m[1]))) {
     const blocks = blocksBySlug.get(slug);

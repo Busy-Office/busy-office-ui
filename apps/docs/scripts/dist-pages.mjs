@@ -126,3 +126,51 @@ export function demoRegion(html) {
   if (start < 0) return '';
   return html.slice(start).replace(/<pre[\s\S]*?<\/pre>/g, ' ');
 }
+
+/**
+ * The demo region PLUS the demo of every same-origin page it EMBEDS.
+ *
+ * The RF pattern pages show their screen inside an `<iframe>` — an isolated
+ * document proving the `rf-essentials` profile is sufficient on its own. A
+ * gate that reads only the outer page therefore sees a screen with no
+ * components in it. That was tolerable while each of those pages ALSO
+ * rendered an inline copy; roadmap 131.1 removed the copies (owner: the two
+ * were redundant), and `check-components-used` immediately went red on 11
+ * true claims — the components are rendered, one document down.
+ *
+ * Following the embed is the same call `axe-audit` already makes: a
+ * same-origin iframe's content is part of what the page shows. This can only
+ * ADD rendered evidence, never remove it, so it cannot turn a red claim
+ * green by accident — a component neither document renders still fails.
+ *
+ * Two details that are load-bearing:
+ *
+ * - **Match the src by LONGEST suffix.** CI builds with
+ *   `DOCS_BASE=/busy-office-ui`, so the iframe's src carries a prefix that
+ *   `distPages` urls do not. A `===` here would silently find nothing and
+ *   quietly restore the blindness this exists to fix — on CI only, which is
+ *   the worst place to learn it. But a *first* suffix match is worse than
+ *   either: `/` is the home page's url and is a suffix of every src, so the
+ *   first version of this pulled the entire landing page in as the RF
+ *   screen's evidence. It reported the right verdict for three components and
+ *   the wrong one for four, and what exposed it was the byte count — 13,900
+ *   characters embedded from a 4,537-byte page.
+ * - **An embedded page has no `<section class="demo">`** — it is the demo. So
+ *   take its `<body>` and strip `<pre>`, rather than calling `demoRegion` and
+ *   getting an empty string.
+ *
+ * @param {string} html                 the outer page
+ * @param {Map<string,string>} byUrl    every built page's url -> html
+ */
+export function demoRegionWithEmbeds(html, byUrl) {
+  const own = demoRegion(html);
+  const urls = [...byUrl.keys()].sort((a, b) => b.length - a.length);
+  const embedded = [...own.matchAll(/<iframe[^>]*\ssrc="([^"]+)"/g)]
+    .map(([, src]) => urls.find((u) => src.endsWith(u)))
+    .filter(Boolean)
+    .map((u) => {
+      const body = byUrl.get(u).indexOf('<body');
+      return body < 0 ? '' : byUrl.get(u).slice(body).replace(/<pre[\s\S]*?<\/pre>/g, ' ');
+    });
+  return [own, ...embedded].join('\n');
+}

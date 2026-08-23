@@ -1,7 +1,6 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
-import CountScreen from '../../components/rf/CountScreen.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const markup = `<!-- BLIND by design: the expected quantity is never on screen, or
@@ -43,29 +42,25 @@ const markup = `<!-- BLIND by design: the expected quantity is never on screen, 
     count is how you FIND discrepancies, not how you fix them.
   </p>
 
-  <section class="demo" data-density="spacious">
+  <section class="demo">
     <h2>The screen — try it</h2>
-    <div class="demo-rf-screen">
-      <CountScreen />
-    </div>
+    <p>Shown the way the scanner gets it: an isolated 360×640 document
+    styled by ONLY the <code>rf-essentials</code> profile
+    (Chrome/WebView&nbsp;108) — not the docs bundle. One screen, not two:
+    this page used to render the same component a second time at desktop
+    width, which showed the reader a size no counter ever holds
+    (roadmap 131.1).</p>
+    <iframe
+      src={base + '/patterns/rf/rf-count-rf/'}
+      title="RF count, rf-essentials profile, 360×640"
+      class="rf-device-frame"
+    ></iframe>
     <p class="bo-u-text-muted">Scan (type + Enter) <code>C-02-08</code> to
     open the count; a wrong bin flashes the verdict. The quantity starts
     <em>empty</em>, not zero — an untouched field means "not counted yet",
     and a typed 0 means "I looked, the bin is empty": two different facts
     the record must keep apart (the same empty-vs-zero rule the timesheet
     pattern documents).</p>
-  </section>
-
-  <section class="demo">
-    <h2>The RF-floor profile, at RF-scanner size</h2>
-    <p>The same screen — via the shared component — in an isolated document
-    styled by ONLY the <code>rf-essentials</code> profile
-    (Chrome/WebView&nbsp;108), at 360×640:</p>
-    <iframe
-      src={base + '/patterns/rf/rf-count-rf/'}
-      title="RF count, rf-essentials profile, 360×640"
-      class="rf-device-frame"
-    ></iframe>
   </section>
 
   <section class="demo">

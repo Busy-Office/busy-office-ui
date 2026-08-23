@@ -33,10 +33,24 @@ interface Props {
   density?: 'compact' | 'comfortable' | 'spacious';
   /** Default when nothing is stored. */
   theme?: 'light' | 'dark' | 'system';
+  /**
+   * `true` → density is a FIXED property of this surface, not a stored
+   * preference: write `density` and never read `bo-density`. Theme still
+   * follows the reader.
+   *
+   * Added for the RF mirror pages (roadmap 131.1): they are embedded in a
+   * docs page to show what a 360x640 scanner renders, and "spacious" is
+   * part of what they are demonstrating — a reader who set the docs to
+   * compact must not silently re-density the warehouse screen. They still
+   * need the THEME half, which is why they cannot simply skip this
+   * component: measured 2026-08-23, the mirrors ignored the docs theme
+   * entirely and showed a light screen inside a dark page.
+   */
+  lockDensity?: boolean;
 }
-const { density = 'comfortable', theme = 'light' } = Astro.props;
+const { density = 'comfortable', theme = 'light', lockDensity = false } = Astro.props;
 ---
-<script is:inline define:vars={{ fallbackDensity: density, fallbackTheme: theme }}>
+<script is:inline define:vars={{ fallbackDensity: density, fallbackTheme: theme, densityLocked: lockDensity }}>
   try {
     const pref = localStorage.getItem('bo-theme-pref') ?? fallbackTheme;
     const resolved = pref === 'system'
@@ -44,7 +58,9 @@ const { density = 'comfortable', theme = 'light' } = Astro.props;
       : pref;
     document.documentElement.dataset.theme = resolved;
     document.documentElement.dataset.themePref = pref;
-    document.documentElement.dataset.density = localStorage.getItem('bo-density') ?? fallbackDensity;
+    document.documentElement.dataset.density = densityLocked
+      ? fallbackDensity
+      : (localStorage.getItem('bo-density') ?? fallbackDensity);
   } catch (e) {
     /* private mode / storage disabled: fall back to the declared defaults so
        the page still resolves a theme instead of inheriting nothing. */
