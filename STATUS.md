@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 01:53
+Generated at: 2026-08-24 02:03
 
 ## Open items by slice
 
@@ -32,8 +32,8 @@ Generated at: 2026-08-24 01:53
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (818 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-24 01:45   ok
+dispatch status — counter-triggered rules (819 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-24 01:45   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -46,7 +46,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 00:50 · Meta · refusal · renaming the six RF slugs — 69 references across 49 files for cosmetic alignment; and renaming pick/putaway/count to invented shape names · refused · 9167765
 - 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
 - 2026-08-24 01:12 · Continue · build · 135.4 — numeric keypad removed from the RF pick screen (markup, wiring, docs, allowlist); inputmode is the answer · landed · 4e39cdf
 - 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
@@ -56,6 +55,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 01:37 · Meta · refusal · a bo-btn--ghost cell link (pushes the next column 44px past a 320px container) and display:block alone (24px, exactly the WCAG floor) · refused · 7f55199
 - 2026-08-24 01:45 · Standardize · dry · target-size: my 2.5.8 claim overstated non-conformance; corrected in 5 places, cell-link added to the gate's sweep and red-proved · landed · 86a0bfd
 - 2026-08-24 01:53 · Continue · build · 135.2 part 1 — last two duplicated RF screens removed; check-page-shape now gates the IMPORT, red-proved · landed · d46316b
+- 2026-08-24 02:03 · Continue · build · 135.2 — six RF mirrors wired into one walkable track (menu/back/queue), zero CSS, walked with real clicks · landed · b669359
 
 ## Sunset test
 

@@ -12,6 +12,7 @@
     "check:claims": "node scripts/check-claims.mjs",
     "check:pseudo": "node scripts/check-pseudo-locale.mjs",
     "check:layout": "node scripts/check-layout.mjs",
+    "check:scroll": "node scripts/check-scroll.mjs",
     "check:forced-colors": "node scripts/check-forced-colors.mjs",
     "check:target-size": "node scripts/check-target-size.mjs",
     "check:formatting": "node scripts/check-formatting.mjs",

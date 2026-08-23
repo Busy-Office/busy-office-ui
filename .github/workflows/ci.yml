@@ -45,6 +45,12 @@ jobs:
       # spacing override. Merged from two serial sweeps that cost 345s.
       - name: Layout sweep (overflow + WCAG 1.4.12 text spacing)
         run: npm run check:layout -w docs
+      # check:layout EXEMPTS the scroll containers from its overflow rule —
+      # correctly, they are meant to overflow — and until 2026-08-24 nothing
+      # then asked whether they SCROLL. The framework's entire answer to a wide
+      # table was asserted nowhere (owner ask, roadmap 133).
+      - name: Scroll sweep (containers that overflow must actually scroll)
+        run: npm run check:scroll -w docs
       # Was run by hand and had drifted red unnoticed: two docs pages had
       # authoring bugs (a demo <main> nested inside the page's own main, a
       # demo section that had lost its <h2>). An accessibility framework

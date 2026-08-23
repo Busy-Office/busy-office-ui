@@ -443,7 +443,34 @@ a hole exactly where the owner is pointing:
   strip scrolling rather than wrapping, a sticky column staying opaque).
   Three pages, hand-picked. Not a sweep.
 
-1. [ ] **133.1 — a scroll sweep, red-proved.** Every built page carrying a
+1. [x] **133.1 — DONE 2026-08-24. `check:scroll`, red-proved twice, wired
+       into CI beside its siblings.** 122 scrollable containers driven across
+       108 pages at 1440 and 390. Three properties: a container wider than its
+       box must actually move when `scrollLeft` is set; it must carry
+       `tabindex` (a scrollable region only a mouse can reach fails WCAG
+       2.1.1); and one taller than its box must let a USER reach the rest.
+
+       **Two red-proofs, and the first two attempts at the first one were
+       worthless** — I appended `overflow-x: visible` to the wrong stylesheet
+       twice, and the gate "passed". Checking the DOM (`computed overflow-x`)
+       rather than the file is what caught it, which is the standing trap
+       list working exactly as written. With the injection confirmed in the
+       DOM, the gate fails 59 of 122.
+
+       **The vertical check had a real hole and the red-proof found it.**
+       Version one drove `scrollTop` — but an element with `overflow: hidden`
+       is still PROGRAMMATICALLY scrollable, so scrollTop moved happily while
+       a person saw a 30px box over 298px of content with no scrollbar, no
+       wheel and no keyboard route. It passed the injection. Now it asks for
+       computed `overflow-y` of auto or scroll, and fails that injection.
+
+       **Stated, not implied — this does NOT cover GAP-6's exact shape.**
+       There the container kept `overflow: auto` and was merely COLLAPSED by a
+       flex ancestor to 32px: technically user-scrollable, in practice a
+       header and a sliver. Catching that needs a "too short to be useful"
+       threshold, which is a judgement rather than a measurement, so it is not
+       smuggled into an `@exact` gate. GAP-6 stays a documented composition
+       rule until someone can state the threshold and defend it. Every built page carrying a
        scroll container gets driven, not inspected. *Accept*: for each
        `.bo-data-table-container` that overflows — (a) setting `scrollLeft`
        moves it and reads back non-zero (a container that overflows but
