@@ -8,6 +8,20 @@ pin.
 
 ## Unreleased
 
+- **Added** (`data-table`): `.bo-data-table__cell-link` — the link in the cell
+  that names a row's record becomes a **full-cell target** instead of a strip
+  of text. Every ERP list has such a row and the framework had no answer that
+  survives a touch screen: a plain `<a>` in a cell is inline, so its hit area
+  is its LINE BOX — **18px** at spacious density for a label that fits one
+  line, under WCAG 2.5.8's 24px floor. That is easy to miss, because a label
+  that *wraps* measures 42px and looks fine. The part takes the cell's own
+  vertical padding rather than sitting inside it, lifting the same link to
+  **48px** with nothing moving on screen. Styling the link as a button also
+  works and costs more than it looks: the padding pushes the next column 44px
+  past a 320px container. Documented with a demo and a claims case that
+  asserts both halves — with the part every link clears 44px, without it the
+  single-line rows fall under 24px.
+
 - **Added** (`segmented`): `.bo-segmented__option` now has a `gap`, so a
   second child — a saved view's count, an icon — sits beside the label instead
   of against it. An option with a single text run has one flex item, so this

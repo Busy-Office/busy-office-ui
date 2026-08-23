@@ -285,6 +285,39 @@
     font-size: var(--bo-font-size-mono-inline);
   }
 
+  /* A cell whose LINK is the row's action — opening the record the row names.
+     Every ERP list has one; the framework had no answer that survives a touch
+     screen, and the omission was measured rather than assumed (roadmap
+     135.3b). A plain `<a>` in a cell is inline, so its hit area is its LINE
+     BOX: on the RF task queue at spacious density that is 18px tall for a
+     label that fits one line — under WCAG 2.5.8's 24px floor, let alone a
+     gloved thumb. It looked adequate at first because the two rows I measured
+     happened to WRAP, giving a 42px line box; the two that did not wrap gave
+     18.
+
+     `display: block` is the whole fix: the link takes the cell's content box
+     instead of its text, measured at 135x48 in the same table where the
+     inline version gave 121x18, with zero container overflow at 320px. The
+     obvious alternative — styling it as a `bo-btn` — was tried first and
+     reverted: a button's horizontal padding pushes the next column 44px past
+     the container at that width.
+
+     Not `width: 100%` or a stretched pseudo-element: the block box already
+     fills the cell, and a stretched overlay would swallow any other
+     interactive thing in the row. */
+  .bo-data-table__cell-link {
+    display: block;
+    /* Absorb the cell's own vertical padding rather than sitting inside it:
+       `display: block` alone is still CONTENT height, so a single-line label
+       measured 24px — WCAG 2.5.8's floor exactly, and nowhere near a gloved
+       thumb. The negative margin cancels the padding the cell already spends,
+       so nothing moves visually and the link's box grows into it. Measured
+       after: 48px against 24px, at spacious density, with the cell's
+       appearance unchanged. */
+    padding-block: var(--bo-density-cell-padding-y);
+    margin-block: calc(-1 * var(--bo-density-cell-padding-y));
+  }
+
   /* Sorting: aria-sort on <th> drives the indicator; the button is the target. */
   .bo-data-table__sort-btn {
     display: inline-flex;

@@ -10,18 +10,18 @@
  * "what's next", not cross-referenced column-to-column, so it never needs
  * the auto-compaction @container rule (data-table.css) to kick in.
  *
- * KNOWN DEFECT, roadmap 135.3: this page's opener promises the worker "taps
- * the top row and starts working it", and these rows are plain text with
- * nothing tappable in them. The obvious fix — a ghost-button link in the
- * first cell — was tried and REVERTED, because it was measured: the button's
- * horizontal padding pushes the Status column 44px past the container at
- * 320px and 4px at 360px, where plain text overflows by zero. Trading an
- * untappable queue for a clipped status column is not a fix.
+ * The task cell is a LINK (roadmap 135.3/135.3b). This page's opener promises
+ * the worker taps a task and starts working it, and until 2026-08-24 the rows
+ * were plain text with nothing tappable — a documented gesture the markup
+ * never provided.
  *
- * The real gap is that a data-table row which OPENS something has no shipped
- * idiom that survives a narrow two-column table: inbox and job-monitor put a
- * `bo-btn--sm` in a third column, which is desktop-width thinking. Queued for
- * a grill rather than guessed at here.
+ * `bo-data-table__cell-link`, not a button and not a bare <a>. Both
+ * alternatives were tried and measured. A `bo-btn--ghost` pushes the Status
+ * column 44px past the container at 320px. A bare inline <a> is only as tall
+ * as its LINE BOX — 18px here for a label that fits one line, under WCAG
+ * 2.5.8's 24px floor — which is easy to miss, because a label that WRAPS
+ * measures 42px and looks fine. The part makes the link fill the cell:
+ * 135x48px, zero overflow.
  */
 const tasks = [
   { label: 'PO-88213 · Dock 4', status: 'Next' },
@@ -36,7 +36,7 @@ const tasks = [
     <tbody>
       {tasks.map((t) => (
         <tr>
-          <td>{t.label}</td>
+          <td><a class="bo-data-table__cell-link" href="#">{t.label}</a></td>
           <td><span class={`bo-badge ${t.status === 'Next' ? 'bo-badge--accent' : ''}`}>{t.status}</span></td>
         </tr>
       ))}

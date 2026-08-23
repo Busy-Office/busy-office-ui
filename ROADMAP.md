@@ -281,7 +281,24 @@ half-answered by this project's own grill.
        "composed from `.bo-data-table`" proof-reuse claim (109.7/59.4).
        That is a design decision, not a mid-wake guess. *Accept*: a recorded
        accept/refuse/rethink, and whichever way it goes, `rf-list`'s opener
-       and its markup must agree afterwards. *(Noted while
+       and its markup must agree afterwards.
+
+       **DONE 2026-08-24: ACCEPT a part — `.bo-data-table__cell-link`.** The
+       grill started from evidence rather than options: the erp-suite's PO
+       list, built where adding CSS is forbidden, already opens a document
+       with a plain `<a>` in the identifying cell. So the idiom exists; the
+       question was only whether it is a big enough target. It is not —
+       **18px**, because an inline link's hit area is its line box. I nearly
+       shipped the opposite conclusion: the first link I measured was 42px,
+       and only enumerating every row showed that those were the two whose
+       labels WRAP. `display: block` alone gets 24px, exactly WCAG 2.5.8's
+       floor and no more, because a block box is still content height. The
+       part absorbs the cell's vertical padding with a matching negative
+       margin — 48px, nothing moves on screen, zero container overflow at
+       320px. `rf-list` uses it and its opener now matches its markup.
+       Refused on the way, each with a measurement: a `bo-btn--ghost` link
+       (pushes the next column 44px past a 320px container) and leaving the
+       queue as text (the page promised a tap that did not exist). *(Noted while
        removing the keypad: with it gone, the pick screen leaves roughly a
        third of the 640px empty below the exception bar — and the docs
        already tell consumers to dock that bar with `position: sticky;

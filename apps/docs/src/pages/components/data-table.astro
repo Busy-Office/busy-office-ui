@@ -480,6 +480,40 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     problem — regroup server-side instead).</p>
   </section>
   <section class="demo">
+    <h2>Opening the record a row names</h2>
+    <div class="bo-data-table-container" tabindex="0" data-density="spacious" data-cell-link-demo>
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Open task queue</caption>
+        <thead><tr><th scope="col">Task</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><td><a class="bo-data-table__cell-link" href="#">PO-88213 · Dock 4</a></td><td><span class="bo-badge bo-badge--accent">Next</span></td></tr>
+          <tr><td><a class="bo-data-table__cell-link" href="#">SO-51204 · Pick</a></td><td><span class="bo-badge">Queued</span></td></tr>
+          <tr><td><a class="bo-data-table__cell-link" href="#">CC-3092 · Count</a></td><td><span class="bo-badge">Queued</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Every ERP list has a row that opens something.
+    Put <code>.bo-data-table__cell-link</code> on the link in the identifying
+    cell and it becomes a <strong>full-cell target</strong> instead of a strip
+    of text. <strong>Not for a row with several actions</strong> — one cell
+    link per row, or the reader cannot tell which part opens what; put multiple
+    actions in their own cell as buttons, the way
+    <a href={base + '/patterns/inbox'}>inbox</a> does.</p>
+    <p class="bo-u-text-muted">Why it exists, measured rather than assumed: a
+    plain <code>&lt;a&gt;</code> in a cell is inline, so its hit area is its
+    <em>line box</em> — <strong>18px</strong> tall at spacious density for a
+    label that fits on one line, under
+    <a href={base + '/concepts/accessibility'}>WCAG 2.5.8</a>'s 24px floor and
+    nowhere near a gloved thumb. It is easy to miss because a label that
+    <em>wraps</em> measures 42px and looks fine. The part takes the cell's own
+    vertical padding instead of sitting inside it, which lifts the same link to
+    <strong>48px</strong> without moving anything on screen. Styling the link as
+    a <a href={base + '/components/button'}>button</a> also works and costs more
+    than it looks: the padding pushes the next column 44px past a 320px
+    container.</p>
+  </section>
+
+  <section class="demo">
     <h2>Grouped column headers</h2>
     <div class="bo-data-table-container dt-scroll-demo" tabindex="0" data-grouped-head>
       <table class="bo-data-table" data-density="compact">

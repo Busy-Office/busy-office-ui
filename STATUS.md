@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 01:12
+Generated at: 2026-08-24 01:24
 
 ## Open items by slice
 
@@ -28,15 +28,14 @@ Generated at: 2026-08-24 01:12
   - 134.1 — fix the key, and prove the dark half is dark.
   - 134.2 — re-baseline deliberately, never blind.
   - 134.3 — CI, or delete it.
-- **Slice 135** (2 open)
+- **Slice 135** (1 open)
   - 135.2 — make the RF track navigable, like the suite.
-  - 135.3 — should the RF screen be responsive?
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (812 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-24 00:50   ok
+dispatch status — counter-triggered rules (814 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-24 00:50   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -44,14 +43,12 @@ dispatch status — counter-triggered rules (812 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 135.3 — should the RF screen be responsive?
+- 135.2 — make the RF track navigable, like the suite.
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 
 ## Last 10 iterations
 
-- 2026-08-24 00:04 · Continue · build · 130.2 GAP-8 + GAP-10 — merged; recompute/announce contract already existed, discoverability fixed · landed · 70eef95
-- 2026-08-24 00:11 · Continue · build · 130.2 GAP-1 — module rail measured (fails at 11 docs/700px), deferred behind a trigger, limit documented · landed · fa23ff0
 - 2026-08-24 00:11 · Meta · refusal · adding a second sidebar slot to .bo-app-shell, and the sticky-module-group alternative — both measured, neither earns its cost at any shipped screen size · refused · fa23ff0
 - 2026-08-24 00:18 · Standardize · dry · rf-device internal spacing — 0.75rem typed three times, consolidated to the bezel token · landed · cc49c58
 - 2026-08-24 00:21 · Continue · build · 130.2 GAP-4b — cell-level disagreement cue: data-tone already shipped; row tint hid it on the first try · landed · 0ab469a
@@ -60,6 +57,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
 - 2026-08-24 01:12 · Continue · build · 135.4 — numeric keypad removed from the RF pick screen (markup, wiring, docs, allowlist); inputmode is the answer · landed · 4e39cdf
 - 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
+- 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
+- 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92
 
 ## Sunset test
 

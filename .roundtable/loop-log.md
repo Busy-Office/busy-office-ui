@@ -818,3 +818,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 00:58 · Continue · bug · P0 — goods-receipt claims drove the removed inline copy; rewired to the mirror, RESUME notes that docs:build skips the browser gates · landed · 1dddb46
 - 2026-08-24 01:12 · Continue · build · 135.4 — numeric keypad removed from the RF pick screen (markup, wiring, docs, allowlist); inputmode is the answer · landed · 4e39cdf
 - 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
+- 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
+- 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92

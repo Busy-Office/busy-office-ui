@@ -535,6 +535,41 @@ check(
   JSON.stringify(fe),
 );
 
+/* /components/data-table's cell link (roadmap 135.3b): "a full-cell target
+   instead of a strip of text", and the page quotes 18px vs 48px. That is a
+   geometry claim about a touch target, and it is exactly the kind that looks
+   fine while being false — the bug it fixes was invisible because the two rows
+   first measured happened to WRAP, giving a 42px line box.
+
+   Assert the shipped state and the counterfactual in one pass: with the part,
+   every link clears 44px; strip the class and the single-line rows collapse
+   under WCAG 2.5.8's 24px floor. Checking only the first half would pass on a
+   table whose labels all wrap. */
+await visit('/components/data-table/', { width: 1440 });
+const cellLink = await page.evaluate(() => {
+  const box = document.querySelector('[data-cell-link-demo]');
+  const links = [...box.querySelectorAll('.bo-data-table__cell-link')];
+  const heights = () => links.map((a) => Math.round(a.getBoundingClientRect().height));
+  const withPart = heights();
+  links.forEach((a) => a.classList.remove('bo-data-table__cell-link'));
+  const without = heights();
+  links.forEach((a) => a.classList.add('bo-data-table__cell-link'));
+  return {
+    count: links.length,
+    withPart,
+    without,
+    minWith: Math.min(...withPart),
+    minWithout: Math.min(...without),
+    overflow: Math.round(box.scrollWidth - box.clientWidth),
+  };
+});
+check(
+  'data-table: a cell link is a full-cell target, not a line of text',
+  cellLink.count >= 3 && cellLink.minWith >= 44 && cellLink.minWithout < 24 &&
+    cellLink.overflow === 0,
+  JSON.stringify(cellLink),
+);
+
 /* /components/data-table's grouped column header (roadmap 130.2, GAP-4a):
    "a second header row simply works". That is a runtime promise about
    `position: sticky`, and it was FALSE until this wake — every `thead th`
