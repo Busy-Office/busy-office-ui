@@ -148,7 +148,8 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
     notes={['Loading state: flip <code>data-loading="true"</code> (or rely on <code>aria-busy</code>) — CSS handles the rest.',
             'Icon-only buttons (<code>--icon</code>) require an <code>aria-label</code>.',
             'Icon + text needs no modifier — a <code>.bo-icon</code> beside text composes for free; keep the icon <code>aria-hidden="true"</code>.',
-            '<code>.bo-btn-group</code> joins a row of buttons into one toolbar — independent actions, not a single-choice picker (that is <code>.bo-segmented</code>).']} />
+            '<code>.bo-btn-group</code> joins a row of buttons into one toolbar — independent actions, not a single-choice picker (that is <code>.bo-segmented</code>).',
+            'Labels do NOT wrap by default, and that is deliberate: a button is a target, and a target whose height depends on its label makes rows jump. A label wraps only where the button is forced into a slot it cannot escape — <code>.bo-btn-group--bar</code> (equal shares) and <code>.bo-form-actions</code> (a sticky bar with no line to fall onto). Everywhere else the container decides the layout, so give a long label a container that fits it.']} />
   <DsaScore component="button" />
   <Related links={[["/concepts/tokens", "Design tokens"], ["/base/colors", "Color scales"]]} />
 </Gallery>

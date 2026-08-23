@@ -317,12 +317,33 @@ purchase orders · $44,560.00" spilled 15px past the bar even after GAP-7's
 `flex-wrap` landed, because there is no line a too-long button fits on.
 **Fixed**: `.bo-form-actions > .bo-btn` now wraps its label, with a claims
 case (107) red-proved by stripping the rule from the built CSS.
-**Still open**: that is the THIRD instance of one rule — `.bo-btn-group--bar`
-(RF) and `.bo-state__actions` (119.1) made the same call, each citing WCAG
-1.4.12. Three specific rules where one general one might do is exactly the
-Objective's less-for-more test. The general form would be dropping
-`white-space: nowrap` from `.bo-btn` itself, which changes every button on
-every screen and needs its own grill — recorded, not guessed at.
+**Consolidation question ANSWERED 2026-08-23 (Standardize): REFUSE the
+general form.** Two corrections came out of measuring it rather than
+reasoning about it.
+
+**The premise was wrong.** This is the SECOND instance, not the third:
+`.bo-state__actions` is `flex-wrap` on the CONTAINER — the bar wrapping onto
+another line — while `.bo-btn-group--bar > .bo-btn` and
+`.bo-form-actions > .bo-btn` wrap the LABEL inside the button. Different
+declarations solving different problems; only two of them are the same rule.
+
+**The general form fixes nothing.** Removing `.bo-btn`'s global
+`white-space: nowrap` and re-measuring every docs page: at 1440px **zero**
+buttons change. At 390px exactly **four** do — "Open log", "View result",
+"Open result", "Create / find…" — and all four ALREADY FIT: each sits inside
+its parent with 4px to spare, zero parent overflow, full text visible. So the
+change would turn four correct one-line buttons into two-line buttons inside
+table cells, moving row heights, and buy no accessibility at all.
+
+**What was consolidated is the KNOWLEDGE, not the CSS.** The rule of thumb —
+nowrap by default because a button is a target and a target whose height
+depends on its label makes rows jump; a label wraps only where the button is
+forced into a slot it cannot escape — is now stated once in
+`form-section.css`, referenced from `button.css`, and given to consumers on
+`/components/button`. Merging the two selectors into one cross-component rule
+was considered and refused: `api.json` is extracted per directory, so a rule
+in `button.css` naming `.bo-form-actions` would misattribute that class to
+the button component and corrupt generated docs.
 
 ## GAP-14 — a chain step can be PARTIAL, and `data-state` has no word for it
 

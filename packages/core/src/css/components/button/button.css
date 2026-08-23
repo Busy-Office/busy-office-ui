@@ -187,8 +187,17 @@
        — a button label is content, and clipping content is exactly what
        1.4.12 forbids. Equal inline slots are what a gloved thumb needs
        (positions must not shift); the bar growing TALLER when a label
-       wraps costs nothing and keeps every word readable. Same call as
-       .bo-state__actions' wrap fix (119.1). */
+       wraps costs nothing and keeps every word readable.
+
+       One of exactly TWO places a label wraps; the other is
+       `.bo-form-actions > .bo-btn`, whose comment carries the shared rule
+       and the measurement behind it. (It is not the same call as
+       `.bo-state__actions`, despite an earlier note here saying so: that
+       one is `flex-wrap` on the container — the BAR wrapping, not the
+       label.) The short version: nowrap is right by default, because a
+       button is a target and a target whose height depends on its label
+       makes rows jump; a label wraps only where the button is forced into
+       a slot it cannot escape. */
     white-space: normal;
     overflow-wrap: break-word;
   }

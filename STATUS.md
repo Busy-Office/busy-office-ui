@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 23:02
+Generated at: 2026-08-23 23:25
 
 ## Open items by slice
 
@@ -35,9 +35,10 @@ Generated at: 2026-08-23 23:02
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (794 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-23 22:29   ok
+dispatch status — counter-triggered rules (795 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-23 22:29   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -51,7 +52,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 21:35 · Meta · refusal · payment-run screens in the ERP example — select-and-run is bulk-actions, the unattended run is job-monitor · refused · 04b06e2
 - 2026-08-23 22:21 · Standardize · dry · 131.1 — one RF screen per page; the mirror now follows the docs theme; components-used reads the embed · landed · 5a0b511
 - 2026-08-23 22:23 · Roadmap · plan · 132 — owner wishlist triaged: date entry, search help, calendar months, file panel, list-to-list · triaged · 55c89da
 - 2026-08-23 22:29 · Standardize · dry · 131.2 — RfDevice component: one call site for six embeds, chrome only where there is room · landed · 15f9bbc
@@ -61,6 +61,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 22:33 · Roadmap · plan · 134 — test:visual: wrong theme key, stale baselines, runs in no workflow · triaged · 71a8f17
 - 2026-08-23 22:51 · Continue · build · 130.2 GAP-2 — document flow decided as a bo-timeline composition, proved on two screens, GAP-14 found · landed · 0001553
 - 2026-08-23 23:02 · Continue · build · 130.2c — document flow documented on object-page; empty-marker two-channel defect found and gated · landed · 5b254ba
+- 2026-08-23 23:25 · Continue · build · 130.2 GAP-4a — grouped column headers: two sticky header rows pinned to the same offset; fixed, documented, claim 108 · landed · 1305ab9
 
 ## Sunset test
 

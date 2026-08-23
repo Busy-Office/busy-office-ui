@@ -132,10 +132,29 @@
      line where it fits — "Create 2 purchase orders · $44,560.00" at 390px
      still spilled 15px past the edge (roadmap 130.2b, found by the example
      app's audit immediately after the wrap landed).
-     Three instances of one rule is a consolidation question, logged as
-     GAP-13 rather than answered here: changing .bo-btn's global
-     `white-space: nowrap` affects every button on every screen and deserves
-     its own grill. */
+
+     GAP-13's consolidation question is ANSWERED (Standardize, 2026-08-23):
+     keep it here, do NOT drop .bo-btn's global `white-space: nowrap`.
+
+     Two corrections came out of measuring it. First, this is the SECOND
+     instance, not the third: .bo-state__actions wraps the BAR
+     (`flex-wrap` on the container, so buttons flow to another line), while
+     this and .bo-btn-group--bar wrap the LABEL. Different declarations,
+     different problems; the note that said otherwise was wrong.
+
+     Second, the general form fixes nothing. Removing the global nowrap and
+     re-measuring every docs page: at 1440 **zero** buttons change; at 390
+     exactly **four** do, and all four ALREADY FIT — each sits inside its
+     parent with 4px to spare, no parent overflow, full text visible. So the
+     change would turn four correct one-line buttons into two-line buttons
+     inside table cells, moving row heights, for no accessibility gain.
+
+     The rule of thumb, stated once and referenced from
+     .bo-btn-group--bar: nowrap is right by DEFAULT, because a button is a
+     target and a target whose height depends on its label makes rows jump.
+     A label wraps only where the button is forced into a slot it cannot
+     escape — an equal-share bar, or a sticky action bar with no line to
+     fall onto. Elsewhere the container decides the layout. */
   .bo-form-actions > .bo-btn {
     min-inline-size: 0;
     max-inline-size: 100%;
