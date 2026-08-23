@@ -308,8 +308,8 @@
         {
           "href": "/patterns/object-page",
           "title": "Object page",
-          "opener": "Who uses it: whoever owns one record end to end — a buyer opening a PO, an approver checking it before signing; many times a day, one object at a time. What \"done\" looks like: the reader can see the object's status without scrolling, reach any section in one click, and act on it from anywhere on the page. The long-record counterpart to record detail: same content, but too tall to take in at once, so it gains navigation of its own. Not for a record you can take in at one glance — the anchor rail and sticky action bar are overhead you only earn by being long. That one is record detail.",
-          "openerShort": "Who uses it: whoever owns one record end to end — a buyer opening a PO, an approver checking it before signing; many times a day, one…",
+          "opener": "A long record, navigated in sections instead of scrolled as one feed. Who uses it: whoever owns one record end to end — a buyer opening a PO, an approver checking it before signing; many times a day, one object at a time. What \"done\" looks like: the reader can see the object's status without scrolling, reach any section in one click, and act on it from anywhere on the page. The long-record counterpart to record detail: same content, but too tall to take in at once, so it gains navigation of its own. Not for a record you can take in at one glance — the anchor rail and sticky action bar are overhead you only earn by being long. That one is record detail.",
+          "openerShort": "A long record, navigated in sections instead of scrolled as one feed.…",
           "complexity": 3,
           "components": [
             {
@@ -580,7 +580,7 @@
         },
         {
           "href": "/patterns/report",
-          "title": "Report",
+          "title": "Parameterized report",
           "opener": "Who uses it: whoever must answer a specific question with numbers — an accountant at close, a buyer checking open commitments. How often: on demand, and on a schedule someone else set. What \"done\" looks like: the result is on screen, printed, or exported, and the parameters that produced it are visible beside it. A report is run: you choose parameters, it executes, you read the result. Not for monitoring — a screen you leave open to watch the business is the reporting dashboard; this one answers one question, once, with stated inputs. Not a list screen either: list report finds documents to act on, a report produces figures to read.",
           "openerShort": "Who uses it: whoever must answer a specific question with numbers — an accountant at close, a buyer checking open commitments.…",
           "complexity": 2,
@@ -609,7 +609,7 @@
         },
         {
           "href": "/patterns/output-form",
-          "title": "Output form",
+          "title": "Issued document",
           "opener": "Who uses it: nobody, on screen — this is the artefact the ERP emits: a purchase order sent to a vendor, an invoice, a delivery note travelling with goods. How often: every time a document is issued, usually unattended. What \"done\" looks like: a page a stranger can read without your system — sender, recipient, document number, lines, totals, terms — that survives pagination and a black-and-white printer. Not a screen, and not a PDF engine — if a person needs to work with the record, that is the object page; and rendering the actual PDF is your server's job (see the grill verdict below), not this framework's.",
           "openerShort": "Who uses it: nobody, on screen — this is the artefact the ERP emits: a purchase order sent to a vendor, an invoice, a delivery note…",
           "complexity": 2,
@@ -680,7 +680,7 @@
         },
         {
           "href": "/patterns/schedule",
-          "title": "Schedule",
+          "title": "Schedule calendar",
           "opener": "A planner or supervisor scans a month for what is booked — deliveries, maintenance windows, shift cover — several times a day during a busy week, and once a day otherwise. \"Done\" is picking a day and seeing exactly what is on it without losing the month underneath, the same swap discipline master-detail uses for a list and a record. Not for authoring a schedule — creating, moving or cancelling entries is the admin module's job, not this screen's — and not for one entry's own detail or history, which belongs to record detail, not a month grid. This page only answers \"what is on this day\".",
           "openerShort": "A planner or supervisor scans a month for what is booked — deliveries, maintenance windows, shift cover — several times a day during a…",
           "complexity": 2,

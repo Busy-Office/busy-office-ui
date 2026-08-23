@@ -298,13 +298,26 @@ a data-entry form, is actually the emitted/printed-document pattern.
    inbound link from a genuinely adjacent sibling pattern, not just the
    sidebar. Accept: each of the 5 has ≥1 inbound `<a href>` from another
    pattern page's prose or Related footer; docs gates green.
-6. [ ] **121.5 — Remaining orphans + naming collisions.** Error pages,
-   Role home, Settings & admin still need inbound links; Report/
-   Reporting-dashboard and Schedule/Job-monitor naming collisions need
-   either a sidebar label tweak or a more prominent disambiguating note
-   (owner call on which — a rename touches published docs URLs less than
-   the components package, but still a real link-breaking decision, not
-   a silent edit). Queued, not built this wake.
+6. [x] **121.5 — DONE 2026-08-23.** Owner answered "which solution is
+   good for long term?" — the long-term call is labels renamed, slugs
+   kept (labels are cheap to change and carry the distinction; URLs stay
+   stable so links and search hold — the same trade-off 52.3 decided).
+   Built: `Report` → **Parameterized report** ("a report is *run*: you
+   choose parameters" — its own opener's words), `Schedule` →
+   **Schedule calendar** (a calendar of planned work vs job-monitor's
+   watching-it-run), `Output form` → **Issued document** (kills the
+   data-entry-form misread; the page's own words: "the artefact the ERP
+   *emits* ... every time a document is *issued*"). Renamed everywhere
+   the label appears: pattern-groups.mjs (sidebar + tile index), each
+   page's `<Gallery title>`, and every cross-reference label text
+   (object-page, record-detail, job-monitor, output-form). Orphan
+   inbound links added: login → error-pages (same canvas-centered
+   shape), app-launch → role-home (both post-sign-in starts),
+   detail-form → settings-admin (where config forms live). Verified in
+   BUILT HTML (each new label ×3 in the tile index; each orphan target
+   present in its linker's built page), full 13-gate docs build green,
+   tile index screenshotted live. Slugs, URLs unchanged — zero broken
+   links by construction (link gate re-verified 11216).
 
 ## Slice 120 — Owner wishlist: dependent dropdowns, checked against an article (2026-08-22)
 
@@ -3517,7 +3530,15 @@ answered by it: `.roundtable/grill-object-page-design-2026-08-19.md`.
        flips and jiggles around that exact point — and red-proving it by removing
        the dead band produces `["closed","open"]`.
 
-3. [ ] **52.3 — The name. OWNER CALL, with the trade-off measured.**
+3. [x] **52.3 — DONE 2026-08-23 (owner: "do what is good for long
+       term" = the standing recommendation).** Slug kept; title renamed
+       to "Object page — a long record, in sections" and the opener now
+       leads with the interaction ("A long record, navigated in sections
+       instead of scrolled as one feed") before the who/when. Sidebar
+       label stays the short, searchable "Object page". Verified in
+       built HTML (title + h1), full docs build green. Original
+       trade-off table kept below for the record.
+       *(original entry follows)*
        This project's bar is "write for a first-time user: plain verbs".
        "Object page" is SAP vocabulary — precise for a Fiori user, opaque
        otherwise — and it names the thing shown rather than what makes the

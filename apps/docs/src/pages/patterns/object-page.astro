@@ -26,13 +26,15 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
   <button class="bo-btn" type="submit">Submit for approval</button>
 </div>`;
 ---
-<Gallery title="Pattern: object page">
+<Gallery title="Pattern: object page — a long record, in sections">
   <p class="demo-note">
-    <strong>Who uses it</strong>: whoever owns one record end to end — a buyer
-    opening a PO, an approver checking it before signing; many times a day, one
-    object at a time. <strong>What "done" looks like</strong>: the reader can
-    see the object's status without scrolling, reach any section in one click,
-    and act on it from anywhere on the page. The long-record counterpart to
+    <strong>A long record, navigated in sections instead of scrolled as one
+    feed.</strong> <strong>Who uses it</strong>: whoever owns one record end
+    to end — a buyer opening a PO, an approver checking it before signing;
+    many times a day, one object at a time. <strong>What "done" looks
+    like</strong>: the reader can see the object's status without scrolling,
+    reach any section in one click, and act on it from anywhere on the page.
+    The long-record counterpart to
     <a href={base + '/patterns/record-detail'}>record detail</a>: same content,
     but too tall to take in at once, so it gains navigation of its own.
     <strong>Not for a record you can take in at one glance</strong> — the
@@ -269,7 +271,7 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
   <Related links={[
     ["/patterns/record-detail", "Record detail (short records)"],
     ["/patterns/detail-form", "Detail form (editing)"],
-    ["/patterns/output-form", "Output form (printing or emailing this record)"],
+    ["/patterns/output-form", "Issued document (printing or emailing this record)"],
     ["/components/pagination", "Pagination"],
     ["/concepts/js-behaviors", "JS behaviors"],
   ]} />
