@@ -276,8 +276,21 @@ reconciliation → timesheet → comparison.
        new component unless a real gap is measured); suite-home and
        role-home each carry a wrong-choice clause pointing at the
        other.
-3. [ ] **123.3a — Reconciliation pattern, decided: Xero-style
-       two-column with suggested matches.** Owner-confirmed layout (the
+3. [x] **123.3a — DONE 2026-08-23. Accept met:**
+       `/patterns/reconciliation` — one row per statement line with the
+       system's proposal beside it, confirming removes BOTH sides at once,
+       and a running unmatched difference in the header gates Reconcile
+       (disabled until exactly zero; the gate is server-enforced via 422,
+       the button only reflects it). Two-channel throughout: the
+       difference is text in a badge, amounts carry `data-tone` AND sign,
+       "no suggestion" is a visible badge rather than an empty cell.
+       States cover suggested / no-suggestion / confirmed / concurrent-409
+       / all-matched / deferred-exceptions / no-JS. Zero new CSS — data
+       table + badge + amount + button. All gates green (page-shape 33
+       patterns, markup, links, axe 111 pages x 2 widths zero violations,
+       layout, claims 97).
+       *(original decided design follows)* **Xero-style two-column with
+       suggested matches.** Owner-confirmed layout (the
        canonical shape; QBO checklist and BC journal-drawer recorded as
        refused alternatives with reasons in the research doc). Contract
        from the shared reference behavior: confirming a match removes
@@ -338,7 +351,9 @@ resolve cleanly — not yet known, hence the grill) and queued as its own
 design-tree round rather than folded into 121's three pattern-shape
 grills (this is a component-level surface, not a screen).
 
-1. [ ] **122.1 — BLOCKED ON GRILL.** Live decimal/thousands-mask input
+1. [x] **122.1 — SUPERSEDED 2026-08-23 → built as 123.1**
+       (`initGroupedNumber`, format-on-blur; live masking refused with
+       evidence). Original text: Live decimal/thousands-mask input
        (typing `1234567` renders `1,234,567` as-you-type, not just on
        blur). Needs its own grill round before Accept criteria exist —
        open questions include: does this apply only to
@@ -367,19 +382,22 @@ full Anatomy/Data-contract/States/Components-used skeleton — `check:
 wrong-choice` and `check:page-shape` are visibly doing their job.
 
 **Three real domain gaps, not covered by the prior v2 sweep:**
-1. [ ] **121.1 — Reconciliation / matching screen. BLOCKED ON GRILL.**
+1. [x] **121.1 — SUPERSEDED 2026-08-23 → built as 123.3a** (grill
+   settled by the owner's sign-off; see Slice 123).
    Two independent lists matched against each other (not one list
    validated/edited like `staging`, not one list acted on like
    `bulk-actions`) — a running unmatched balance, aging exceptions.
    Essential for any finance/AP/treasury module (bank reconciliation,
    three-way-match exceptions). Needs its own design-tree round before
    Accept criteria exist.
-2. [ ] **121.2 — Timesheet / time entry. BLOCKED ON GRILL.** Looks like
+2. [ ] **121.2 — SUPERSEDED → queued as 123.3b** (design decided;
+   see Slice 123). Looks like
    `editable-grid` but isn't: a FIXED calendar-period column axis (not
    arbitrary fields), row+column totals that must reconcile before a
    submit-for-period action fires into `approval`. Essential wherever
    HR/Projects/PSA exists. Needs its own grill.
-3. [ ] **121.3 — Comparison / evaluation matrix. BLOCKED ON GRILL.** N
+3. [ ] **121.3 — SUPERSEDED → queued as 123.3c** (design decided;
+   see Slice 123). N
    candidates × M criteria, each cell showing a value + delta from
    best/target, ending in a select/award action (RFQ supplier comparison,
    budget-variance analysis). Distinct from `master-detail` (one list,
@@ -523,7 +541,9 @@ pattern), approval (the "workflow" ask), wizard.
        before closing (a duplicated "per the ... per the" clause) and
        verified the full 13-gate docs build + link check green with the
        page included. Sidebar entry already present. **Accept met.**
-3. [ ] **119.3 — App-frame pattern. BLOCKED ON OWNER GRILL.** The
+3. [x] **119.3 — SUPERSEDED 2026-08-23 → built as 123.2**
+       (`/patterns/app-frame`; the owner clarified it is NOT an iframe and
+       signed off the researched anatomy). Original text: The
        owner clarified "app screen" as a new app-frame pattern. What is
        framed decides everything — an iframe'd legacy app, a same-DOM
        module, a launcher target? Needs a design-tree grill round with

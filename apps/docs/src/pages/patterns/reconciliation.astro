@@ -1,0 +1,210 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const markup = `<!-- One row per BANK line: statement side | the system's proposed
+     match | the decision. Confirming removes BOTH sides from the working set
+     at once; the running difference in the header gates Reconcile at zero.
+     The shape every reference shares (Xero, QBO, Business Central, SAP). -->
+<header class="bo-cluster">
+  <h1>Bank reconciliation — Operating · August</h1>
+  <span class="bo-badge bo-badge--warning">Unmatched difference:
+    <span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,410.50</span></span>
+  </span>
+  <button class="bo-btn" type="submit" disabled>Reconcile</button>
+</header>
+
+<div class="bo-data-table-container" tabindex="0">
+  <table class="bo-data-table">
+    <thead><tr>
+      <th scope="col">Statement line</th>
+      <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+      <th scope="col">Suggested match</th>
+      <th scope="col">Decision</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td>08-19 · ACME SUPPLY CO</td>
+        <td class="bo-data-table__col--numeric">-9,240.00</td>
+        <td>PO-88213 payment · Acme Supply</td>
+        <td>
+          <button class="bo-btn bo-btn--secondary" type="button">Match</button>
+          <button class="bo-btn bo-btn--ghost" type="button">Other…</button>
+        </td>
+      </tr>
+      <tr>
+        <td>08-20 · UNKNOWN REMITTER</td>
+        <td class="bo-data-table__col--numeric">1,480.50</td>
+        <td><span class="bo-badge">no suggestion</span></td>
+        <td><button class="bo-btn bo-btn--ghost" type="button">Create / find…</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>`;
+---
+<Gallery title="Pattern: reconciliation">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: whoever must prove two independent records
+    agree — an accountant clearing the bank statement against the ledger, AP
+    matching payments to invoices, treasury clearing suspense.
+    <strong>How often</strong>: daily to monthly, in sittings that end only
+    at zero. <strong>What "done" looks like</strong>: every line matched or
+    explicitly excepted, the running difference reads
+    <strong>exactly zero</strong>, and Reconcile — disabled until then —
+    commits the period. Two independent lists matched <em>against each
+    other</em>, with the system proposing and a human confirming (the shape
+    Xero, QuickBooks, Business Central and SAP's three-way match all share).
+    <strong>Not for validating one imported list</strong> — rows checked and
+    corrected against rules, with no counter-list, is
+    <a href={base + '/patterns/staging'}>staging</a>; and not for acting on
+    many rows of one list — that is
+    <a href={base + '/patterns/bulk-actions'}>bulk actions</a>. Reach for
+    this only when TWO sources must agree line by line.
+  </p>
+
+  <section class="demo">
+    <h2>The screen</h2>
+    <div class="bo-cluster" style="align-items: center; margin-block-end: var(--bo-space-3)">
+      <strong>Bank reconciliation — Operating · August</strong>
+      <span class="bo-badge bo-badge--warning">Unmatched difference: <span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">4,410.50</span></span></span>
+      <span class="bo-navbar__spacer"></span>
+      <button class="bo-btn" type="button" disabled>Reconcile</button>
+    </div>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Statement lines awaiting reconciliation</caption>
+        <thead><tr>
+          <th scope="col">Statement line</th>
+          <th scope="col" class="bo-data-table__col--numeric">Amount</th>
+          <th scope="col">Suggested match</th>
+          <th scope="col">Decision</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="bo-u-tabular">08-19</span> · ACME SUPPLY CO</td>
+            <td class="bo-data-table__col--numeric" data-tone="danger">-9,240.00</td>
+            <td>PO-88213 payment · Acme Supply Co. · <span class="bo-u-tabular">-9,240.00</span></td>
+            <td>
+              <button class="bo-btn bo-btn--secondary" type="button">Match</button>
+              <button class="bo-btn bo-btn--ghost" type="button">Other…</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="bo-u-tabular">08-20</span> · NORTHWIND REFUND</td>
+            <td class="bo-data-table__col--numeric" data-tone="success">2,930.00</td>
+            <td>CR-1180 credit note · Northwind Supply · <span class="bo-u-tabular">2,930.00</span></td>
+            <td>
+              <button class="bo-btn bo-btn--secondary" type="button">Match</button>
+              <button class="bo-btn bo-btn--ghost" type="button">Other…</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="bo-u-tabular">08-21</span> · UNKNOWN REMITTER 4471</td>
+            <td class="bo-data-table__col--numeric" data-tone="success">1,480.50</td>
+            <td><span class="bo-badge">no suggestion</span></td>
+            <td><button class="bo-btn bo-btn--ghost" type="button">Create / find…</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">One row per <em>statement</em> line; the
+    system's proposal sits beside it, and confirming a match removes
+    <strong>both sides</strong> from the working set at once — the matched
+    pair leaves this list and the difference shrinks by its amount. A line
+    with no suggestion goes down the explicit exception path (create a
+    transaction, search the ledger, or transfer) — it can be deferred, but
+    never silently skipped: the zero gate at the top makes a forgotten line
+    impossible to sign off.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Why Reconcile is disabled until zero</h2>
+    <p>The running difference is the pattern's whole contract: it is the sum
+    of everything not yet matched, and the finish action is gated on it
+    reaching <strong>exactly zero</strong> (a tolerance, where policy allows
+    one, is a <em>server</em> rule — the UI still shows the residual it
+    wrote off). Every reference behaves this way, because a reconciliation
+    signed off at non-zero is not a reconciliation. Two channels as always:
+    the amount is text beside its badge, and the disabled button carries the
+    reason in the markup, not only in its state.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Markup</h2>
+    <pre><code>{markup}</code></pre>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Period header</strong> — account + period, the running
+        difference (<a href={base + '/components/amount'}>Amount</a> in a
+        <a href={base + '/components/badge'}>badge</a>), and the gated
+        Reconcile <a href={base + '/components/button'}>button</a>.</li>
+      <li><strong>The working list</strong> — a
+        <a href={base + '/components/data-table'}>data table</a>, one row per
+        statement line, tone on the amount column
+        (<code>data-tone</code>).</li>
+      <li><strong>Suggested match</strong> — the system's proposal in its own
+        column; "no suggestion" is a
+        <a href={base + '/components/badge'}>badge</a>, never an empty
+        cell.</li>
+      <li><strong>Decision cluster</strong> — Match confirms the pair;
+        "Other…" opens a <a href={base + '/patterns/value-help'}>value-help
+        picker</a> over the ledger; "Create / find…" is the exception path
+        for lines the ledger doesn't know yet.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Request</th><th scope="col">Returns / on failure</th></tr></thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">POST /recon/:id/match</td><td>confirms one pair ATOMICALLY (both sides or neither); returns the removed row + the updated difference fragment for the header</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /recon/:id/match (already matched)</td><td>409 — someone else cleared one side; re-render the row as it now is with a banner naming who, never silently double-match</td></tr>
+          <tr><td class="bo-data-table__col--code">GET /recon/:id/candidates?line=…</td><td>the "Other…" picker's list — server-side search over open ledger items, same contract as value help</td></tr>
+          <tr><td class="bo-data-table__col--code">POST /recon/:id/close</td><td>422 unless the difference is zero (or within the server's stated tolerance, returned with the residual it wrote off) — the gate is enforced server-side, the disabled button is only its reflection</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
+        <tbody>
+          <tr><td>Suggested</td><td>proposal shown beside the line; Match is one click. Suggestions are ranked server-side — the UI never pretends to certainty the matcher doesn't have</td></tr>
+          <tr><td>No suggestion</td><td>a visible "no suggestion" badge + the exception path — an empty cell reads as "not loaded", which this is not</td></tr>
+          <tr><td>Confirmed</td><td>the pair leaves the working set; the difference updates in the same swap. An undo lives in the matched view, not here</td></tr>
+          <tr><td>Concurrent match (409)</td><td>the row re-renders as it now is, with who-and-when; the difference re-syncs</td></tr>
+          <tr><td>All matched, zero difference</td><td>Reconcile enables; the badge flips to success. This is the only state where the period can close</td></tr>
+          <tr><td>Deferred exceptions remain</td><td>difference non-zero → Reconcile stays disabled; the header names how many lines remain, so "why can't I finish" is always answered on screen</td></tr>
+          <tr><td>No JS</td><td>every decision is a form POST returning the full page; the difference and gate are server-computed truth either way — HTMX only narrows the swap</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/badge'}>Badge</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/amount'}>Amount</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/button'}>Button</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ["/patterns/staging", "Staging (one list validated, no counter-list)"],
+    ["/patterns/bulk-actions", "Bulk actions (many rows of one list)"],
+    ["/patterns/value-help", "Value help (the Other… picker)"],
+    ["/patterns/inbox", "Inbox (where deferred exceptions land)"],
+  ]} />
+</Gallery>

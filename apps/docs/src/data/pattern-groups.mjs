@@ -45,6 +45,7 @@ export const PATTERN_GROUPS = [
       { href: '/patterns/editable-grid', label: 'Editable grid' },
       { href: '/patterns/wizard', label: 'Multi-step wizard' },
       { href: '/patterns/staging', label: 'Staging / batch result' },
+      { href: '/patterns/reconciliation', label: 'Reconciliation' },
       { href: '/patterns/validation-summary', label: 'Validation summary' },
     ],
   },
