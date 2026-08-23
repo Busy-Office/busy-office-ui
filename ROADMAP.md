@@ -482,7 +482,30 @@ a hole exactly where the owner is pointing:
        on a container and confirm the sweep goes red, then check the
        injection landed in the DOM — not merely in the file — per the
        standing trap list.
-2. [ ] **133.2 — object-page, scrolled for real.** The pattern has a sticky
+2. [x] **133.2 — DONE 2026-08-24. Object-page, scrolled for real — and the
+       finding was COVERAGE, not a defect.** The spy is correct: driven at
+       1440 and 390, scrolling to each of the five sections marks that
+       section, with every landing gap positive (20.5-22.8px clear of the
+       sticky chrome). No bug to fix.
+
+       What was wrong is what the check LOOKED at. It scrolled to `#delivery`
+       alone and concluded "the anchor bar follows the reader" — one sample
+       out of five, which cannot see a spy that is right in the middle and
+       wrong at either end. Worse, it never saw `#flow` at all: I added that
+       section in 130.2c and did not extend the check, so coverage silently
+       shrank from a third of the page to a fifth.
+
+       Now every section, both widths. **Red-proved in a way that also proves
+       the old version was insufficient**: injecting a 400px
+       `scroll-margin-block-start` on `#flow` makes the spy mark `items`
+       instead, the check names it exactly
+       (`{"id":"flow","marked":"items"}`) — and `#delivery` still marks
+       correctly in that same run, so the single-sample version would have
+       passed the injection.
+
+       Also hardened while red-proving: the probe threw a TypeError inside
+       the page when `[data-anchor-nav]` was missing, producing a stack trace
+       where a regression report belongs. It returns a diagnostic now. The pattern has a sticky
        anchor bar and a scroll-spy, and Slice 108 already fixed a sticky
        bleed-through P0 there, so this is a surface with a history. *Accept*:
        scroll to each section and assert the spy marks the section whose

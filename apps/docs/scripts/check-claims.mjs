@@ -1636,10 +1636,30 @@ for (const w of WIDTHS) {
   await visit('/patterns/object-page/', { width: w });
   const op = await page.evaluate(async () => {
     const nav = document.querySelector('[data-anchor-nav]');
+    /* Report, never throw: a probe that dies inside the page produces a stack
+       trace where a regression report should be. Found while red-proving this
+       very check — a stale injection removed the attribute and the gate
+       crashed instead of naming what was missing. */
+    if (!nav) return { fatal: 'no [data-anchor-nav] on the page' };
     const cur = () => nav.querySelector('[aria-current="page"]')?.getAttribute('href');
     const start = cur();
-    document.getElementById('delivery').scrollIntoView();
-    await new Promise((r) => setTimeout(r, 400));
+    /* EVERY section, not a sample (roadmap 133.2). This probe used to scroll
+       to #delivery alone and conclude the spy followed the reader. One sample
+       cannot see a spy that is right for the middle of the page and wrong at
+       either end — and it did not see #flow at all, a fifth section added in
+       130.2c months of commits after this check was written. A check that
+       samples silently stops covering whatever is added next. */
+    const sections = [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href').slice(1));
+    const spy = [];
+    const gaps = [];
+    for (const id of sections) {
+      document.getElementById(id).scrollIntoView();
+      await new Promise((r) => setTimeout(r, 400));
+      const stuckBox = document.querySelector('.op-sticky').getBoundingClientRect();
+      const t = document.getElementById(id).querySelector('.bo-widget__title').getBoundingClientRect();
+      spy.push({ id, marked: (cur() || '').slice(1) });
+      gaps.push(Math.round((t.top - stuckBox.bottom) * 100) / 100);
+    }
     const after = cur();
     /* The anchor bar's labels must not spill their own control. Height cannot
        show this: .bo-pagination__btn is a FIXED --bo-density-control-height, so
@@ -1664,6 +1684,9 @@ for (const w of WIDTHS) {
       .getBoundingClientRect();
     return {
       start, after, maxSpill: Math.max(...spill),
+      spy, gaps,
+      spyWrong: spy.filter((x) => x.marked !== x.id),
+      worstGap: Math.min(...gaps),
       /* Measured AFTER scrolling, and it takes three facts, because
          `nav.top >= hdr.bottom` alone is true in document flow and so could
          never fail on the bug it was written for — a static wrapper passed it.
@@ -1676,23 +1699,23 @@ for (const w of WIDTHS) {
     };
   });
   check(
-    `object-page @${w}: the anchor bar follows the reader`,
-    op.start === '#general' && op.after === '#delivery',
-    JSON.stringify(op),
+    `object-page @${w}: the anchor bar follows the reader into EVERY section (${op.spy?.length ?? 0})`,
+    !op.fatal && op.start === '#general' && op.spy.length >= 5 && op.spyWrong.length === 0,
+    JSON.stringify({ start: op.start, spyWrong: op.spyWrong, spy: op.spy }),
   );
   check(
-    `object-page @${w}: the landed section's own content clears the sticky chrome`,
-    op.landingGap >= 0,
-    JSON.stringify(op),
+    `object-page @${w}: every section's own content clears the sticky chrome`,
+    !op.fatal && op.worstGap >= 0,
+    JSON.stringify({ worstGap: op.worstGap, gaps: op.gaps }),
   );
   check(
     `object-page @${w}: header and anchor bar stay stuck AND stacked`,
-    op.headerStillStuck && op.barBelowHeader,
+    !op.fatal && op.headerStillStuck && op.barBelowHeader,
     JSON.stringify(op),
   );
   check(
     `object-page @${w}: anchor labels stay inside their fixed-height control`,
-    op.maxSpill === 0 && op.scrollableNavIsFocusable,
+    !op.fatal && op.maxSpill === 0 && op.scrollableNavIsFocusable,
     JSON.stringify(op),
   );
 }

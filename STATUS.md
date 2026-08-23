@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 03:27
+Generated at: 2026-08-24 03:53
 
 ## Open items by slice
 
@@ -31,10 +31,9 @@ Generated at: 2026-08-24 03:27
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (821 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-24 01:45   OVERDUE
+dispatch status — counter-triggered rules (822 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-24 03:53   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -46,7 +45,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 01:12 · Meta · refusal · the on-screen keypad recipe itself — the device ships a keyboard, confirming the RF grill's own preliminary refuse · refused · 4e39cdf
 - 2026-08-24 01:24 · Continue · build · 135.3 — RF screens measured at 320/360/480/800: already responsive, no CSS; found rf-list has zero interactive elements · landed · 6227b92
 - 2026-08-24 01:24 · Meta · refusal · a ghost-button link in the queue's first cell — measured, it pushes the Status column 44px past the container at 320px · refused · 6227b92
 - 2026-08-24 01:37 · Continue · build · 135.3b — .bo-data-table__cell-link: a row that opens a record is a full-cell target (18px -> 48px); rf-list fixed · landed · 7f55199
@@ -56,6 +54,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 02:03 · Continue · build · 135.2 — six RF mirrors wired into one walkable track (menu/back/queue), zero CSS, walked with real clicks · landed · b669359
 - 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
 - 2026-08-24 03:27 · Continue · bug · 133.1 fix — scroll probe measured platform scrollbar accounting; both axes now use computed overflow, red-proved · landed · aaea776
+- 2026-08-24 03:53 · Standardize · dry · scroll-regions: the allowed-to-overflow list existed in three spellings across two gates; consolidated, pre restored (122 -> 732 regions) · landed · 627ada3
 
 ## Sunset test
 
