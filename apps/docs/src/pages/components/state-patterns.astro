@@ -46,6 +46,13 @@ const errorState = `<div class="bo-state bo-state--error">
     (<code>.bo-state--error</code>) — one component, two settings, not two
     separate components. The icon <em>shape</em> differs, not just its color,
     and the title always says which state it is.
+    <strong>Not for a failure inside an otherwise-working screen</strong> —
+    a full-view error state replaces everything, so using it when one
+    fragment failed throws away all the content that DID load. A widget
+    that could not refresh or a save that was rejected wants an inline
+    <a href={base + '/components/alerts'}>alert</a> beside the thing it is
+    about, with the rest of the screen left standing; these states are for
+    when there is genuinely nothing else to show.
   </p>
 
   <section class="demo">

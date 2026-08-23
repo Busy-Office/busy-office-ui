@@ -17,6 +17,12 @@ of the DSA rubric's `content` dimension (the two agree by construction).
 Patterns are not seeded: all 35 already carry the clause and score at the
 sweep bar, so they enter only when a sweep or a source change flags one.
 
+**QUEUE DRY as of 2026-08-23, 14 rounds in:** every seeded surface landed
+its clause in one round and passed blind re-score; none needed a second
+round, so no surface ever reached the 3-round ceiling or the dry-round
+exit. The gate's TODO holds only the deliberately-skipped `date`. Per
+dispatcher rule 7, the next clear-queue wake dispatches **Research**.
+
 Polish drives on `content`, `fit` and `interaction` ONLY.
 `typography`/`colour`/`spacing` read 3 on all 39 components — documented as
 expected (94.7/94.9), and `spacing` is explicitly a debt marker, not a
@@ -38,11 +44,11 @@ quality signal. A dimension that cannot fail must never drive a round.
 | component/pagination | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for stepping through a process" |
 | component/progress | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for work of unknown duration" |
 | component/sidebar-nav | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for navigating within one screen" |
-| component/state-patterns | content | 2 | 0/3 | 0 | queued |
-| component/stepper | content | 2 | 0/3 | 0 | queued |
-| component/table-toolbar | content | 2 | 0/3 | 0 | queued |
-| component/tree | content | 2 | 0/3 | 0 | queued |
-| component/tree-table | content | 2 | 0/3 | 0 | queued |
+| component/state-patterns | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3 (clears skeleton AND state) |
+| component/stepper | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for independent sections" |
+| component/table-toolbar | content | **3** | 1/3 | 0 | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
+| component/tree | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, pair-coherent with tree-table |
+| component/tree-table | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, pair-coherent with tree |
 
 ## Not in the queue, with reasons
 

@@ -67,9 +67,14 @@ const canonical = `<!-- A PLAIN table + disclosure buttons — deliberately NOT
     Hierarchical rows in a data table — a BOM explosion, account rollups,
     org-unit budgets: expand and collapse branches while every row keeps
     real table columns. A plain table with disclosure buttons, so screen
-    readers keep native table browse mode. For hierarchy
-    <em>navigation</em> (links, no columns) use
-    <a href={base + '/components/tree'}>Tree</a> instead.
+    readers keep native table browse mode.
+    <strong>Not for hierarchy navigation</strong> — when the reader is
+    going somewhere (a cost-center to open, a category to drill into) and
+    the rows carry no data columns, this is the heavier tool: use
+    <a href={base + '/components/tree'}>Tree</a>, whose links and
+    disclosures are native elements with zero JS. Reach for the tree
+    table only when every row genuinely needs table columns beside its
+    branch.
     <strong>Without the JS:</strong> the table renders exactly as the server
     sent it — indentation comes from <code>data-tree-level</code> and the
     open/closed state from <code>aria-expanded</code> plus

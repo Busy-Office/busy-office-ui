@@ -18,6 +18,7 @@ const stepperMarkup = `<ol class="bo-stepper" role="list">
     <span class="bo-stepper__label"><span class="bo-visually-hidden">Not started: </span>Review</span>
   </li>
 </ol>`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Gallery title="Stepper">
   <p class="demo-note">
@@ -25,6 +26,13 @@ const stepperMarkup = `<ol class="bo-stepper" role="list">
     marker glyph (aria-hidden) AND visually-hidden state text / <code>aria-current</code>.
     The stepper is its own named container — labels collapse to screen-reader-only when
     it narrows; markers stay.
+    <strong>Not for switching between independent sections</strong> — a
+    stepper asserts order: earlier steps are complete, later ones are not
+    yet reachable, and the numbers promise a sequence. Sections a reader
+    may visit in any order are
+    <a href={base + '/components/tabs'}>tabs</a>; if the "steps" can be
+    done in any order, the numbers are a lie and readers will still
+    assume they cannot skip ahead.
   </p>
   <section class="demo">
     <ol class="bo-stepper" role="list" style="max-inline-size: 40rem">

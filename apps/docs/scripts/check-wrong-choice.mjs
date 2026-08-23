@@ -44,8 +44,6 @@ import { EXEMPT, hasWrongChoiceClause } from './wrong-choice-rule.mjs';
  */
 const TODO = new Set([
   'date',
-  'state-patterns',
-  'stepper', 'table-toolbar', 'tree-table', 'tree',
 ]);
 
 /** Pattern-page debt, same rule as TODO above: delete a line when it lands. */

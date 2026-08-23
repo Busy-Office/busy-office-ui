@@ -169,7 +169,7 @@
       }
     },
     "tree": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -188,20 +188,17 @@
           "cite": "native <details>/<summary> — open state, Enter/Space, Tab stops from the platform, zero JS/ARIA"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/tree is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for rows that carry data columns\" — amounts/statuses beside nodes need a real table (tree-table) or screen readers lose the column relationships; this component is for going somewhere. Blind re-scored 2026-08-23 (Polish round 14); pair-coherence with tree-table verified — one boundary drawn from both sides, the selection-tree case explicitly assigned to the unshipped APG TreeView, nothing claimed twice or left unclaimed."
         },
         "fit": {
           "score": 3,
           "cite": "explicitly navigation, not an APG TreeView; its page states when the heavier pattern would be needed instead"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "tree-table": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -220,17 +217,14 @@
           "cite": "the opener states that indentation (data-tree-level) and open state (aria-expanded + hidden) are markup, so a server-rendered tree reads fine without the JS; initTreeTable() adds only the toggling (94.14)"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/tree-table is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for hierarchy navigation\" — links with no data columns want tree's native zero-JS elements; earn this heavier tool only when every row needs columns beside its branch. Blind re-scored 2026-08-23 (Polish round 14); pair-coherence with tree verified."
         },
         "fit": {
           "score": 3,
           "cite": "hierarchical rows in a data table; the ADR names the context where the heavier composite would be wrong"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "ordered-list": {
       "scored": "2026-08-21",
@@ -701,7 +695,7 @@
       }
     },
     "skeleton": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -720,20 +714,17 @@
           "cite": "a static placeholder; it has no interaction surface"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/state-patterns is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "page opener (state-patterns) carries the wrong-choice clause: \"Not for a failure inside an otherwise-working screen\" — a full-view state replaces everything, so one failed fragment wants an inline alert with the rest of the screen left standing. Blind re-scored 2026-08-23 (Polish round 14); the table first-load caption's data-loading pointer verified to reinforce, not contradict."
         },
         "fit": {
           "score": 3,
           "cite": "loading state for a region whose shape is known; distinct from .bo-state’s empty/error"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "state": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -752,17 +743,14 @@
           "cite": "a layout for an empty/error state; the actions inside it are .bo-btn"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/state-patterns is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "page opener (state-patterns) carries the wrong-choice clause: \"Not for a failure inside an otherwise-working screen\" — same clause as skeleton's, one page, two scored components. Blind re-scored 2026-08-23 (Polish round 14)."
         },
         "fit": {
           "score": 3,
           "cite": "the empty and error states every list and detail screen needs; distinct from .bo-skeleton’s loading"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "progress": {
       "scored": "2026-08-23",
@@ -794,7 +782,7 @@
       }
     },
     "stepper": {
-      "scored": "2026-08-21",
+      "scored": "2026-08-23",
       "dimensions": {
         "typography": {
           "score": 3,
@@ -813,17 +801,14 @@
           "cite": "an <ol> reporting position; the wizard’s controls live elsewhere"
         },
         "content": {
-          "score": 2,
-          "cite": "no wrong-choice clause in the opener. This row was scored before 94.7 defined the dimension and 94.10 made the clause the requirement; /components/stepper is on check:wrong-choice's TODO, and writing the clause raises this score and shrinks that list in one action"
+          "score": 3,
+          "cite": "opener carries the wrong-choice clause: \"Not for switching between independent sections\" — a stepper asserts order and its numbers promise a sequence; free-order sections are tabs. Blind re-scored 2026-08-23 (Polish round 14); consistent with the ApiTable note that steps are inert li elements, so section-switching is doubly wrong."
         },
         "fit": {
           "score": 3,
           "cite": "discrete named steps in a multi-step document; container-queried for narrow shells"
         }
-      },
-      "improve": [
-        "content — write the wrong-choice clause the recipe requires (roadmap 94.10 ratchet)"
-      ]
+      }
     },
     "approval-workflow": {
       "scored": "2026-08-21",

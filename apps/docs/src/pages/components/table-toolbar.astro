@@ -27,8 +27,16 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
     The two opt-in behaviors that sit on top of a
     <a href={base + '/components/data-table'}>data table</a>: a toolbar
     with column visibility and export, and the keyboard grid navigation
-    model. Both are deliberate opt-ins — a read-mostly ERP list is
-    better without either.
+    model. Both are deliberate opt-ins.
+    <strong>Do not add either to a read-mostly list</strong> — a reference
+    table someone scans a few times a day gains nothing from column
+    toggles (its columns were chosen server-side for a reason), and
+    keyboard grid navigation actively costs: per-cell Tab stops turn a
+    table a screen-reader user could browse natively into a widget they
+    must operate. The plain
+    <a href={base + '/components/data-table'}>data table</a> already ships
+    selection, sort and filter free; earn these two with a real need —
+    many optional columns, or genuinely cell-level work.
   </p>
 
   <section class="demo">

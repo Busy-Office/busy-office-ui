@@ -45,7 +45,12 @@ const markup = `<nav aria-label="Cost centers">
     state, Enter/Space toggling, and keyboard focus come from the platform —
     zero JS, zero ARIA wiring. This is <em>navigation</em> (links + disclosures),
     not a WAI-ARIA TreeView — see the note below for when you'd need that instead.
-   Rows with real table <em>columns</em> that expand/collapse belong in the <a href={base + '/components/tree-table'}>Tree table</a> instead.</p>
+   <strong>Not for rows that carry data columns</strong> — the moment each
+   node needs amounts, statuses or dates beside it, a list of links is the
+   wrong shape and screen readers lose the column relationships: that is
+   the <a href={base + '/components/tree-table'}>Tree table</a>, a real
+   table whose rows expand. This component is for going somewhere, not for
+   reading values.</p>
 
   <section class="demo">
     <h2>Basic — try it (keyboard: Tab, then Enter/Space)</h2>
