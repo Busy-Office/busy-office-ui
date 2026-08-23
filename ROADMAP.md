@@ -157,6 +157,54 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 133 — Owner: prove the scrolling actually works (2026-08-23)
+
+Owner input, verbatim: *"UI Component - tables / Patterns like Page Object -
+pls also test scrolling on UI ... to ensure that it is working properly."*
+
+A verification ask, and triage says the instinct is already right — there is
+a hole exactly where the owner is pointing:
+
+- **`check:layout` EXEMPTS the scroll containers.** Its overflow rule skips
+  `.bo-data-table-container, .scale-scroll, pre` — correctly, because those
+  are *supposed* to overflow. But nothing then checks that they actually
+  **scroll**. The framework's whole answer to a wide table is "it scrolls in
+  its container", and that answer is asserted nowhere.
+- **A shipped composition already breaks it**, found by screenshot in
+  130.2b and still open as **GAP-6**: `bo-stack` on `bo-app-shell__main`
+  collapses a scrollable table container to its header row — two correct
+  primitives composing into silent data loss, and it is the composition a
+  careful reader tries first.
+- What *does* exist is per-page and narrow: `check:claims` drives real
+  scrolling for three specific claims (a dropdown staying anchored, the tab
+  strip scrolling rather than wrapping, a sticky column staying opaque).
+  Three pages, hand-picked. Not a sweep.
+
+1. [ ] **133.1 — a scroll sweep, red-proved.** Every built page carrying a
+       scroll container gets driven, not inspected. *Accept*: for each
+       `.bo-data-table-container` that overflows — (a) setting `scrollLeft`
+       moves it and reads back non-zero (a container that overflows but
+       cannot scroll is the GAP-6 failure); (b) it is keyboard-reachable
+       (`tabindex="0"`, the axe scrollable-region rule); (c) the PAGE does
+       not scroll sideways instead — the container absorbs it. Run at 1440
+       **and** 390, both themes not required (this is geometry, not colour).
+       **Red-proof is mandatory and specific**: inject `overflow: visible`
+       on a container and confirm the sweep goes red, then check the
+       injection landed in the DOM — not merely in the file — per the
+       standing trap list.
+2. [ ] **133.2 — object-page, scrolled for real.** The pattern has a sticky
+       anchor bar and a scroll-spy, and Slice 108 already fixed a sticky
+       bleed-through P0 there, so this is a surface with a history. *Accept*:
+       scroll to each section and assert the spy marks the section whose
+       content is at the top (the 48-spike's own lesson: spy by measuring
+       against the bar's bottom edge, so the check must too), the bar stays
+       visible, and nothing sticky overlaps anything else sticky. Drive real
+       scroll events — a synthetic `scroll` on `document` matches no
+       delegated handler and reports a false pass.
+3. [ ] **133.3 — whatever 133.1/133.2 find is a P0, not a note.** GAP-6 is
+       already one of them and is fixed under this item rather than 130.2, so
+       the fix and the check that proves it land together.
+
 ## Slice 132 — Owner wishlist: date entry, three pickers, list-to-list (2026-08-23)
 
 Owner input, verbatim: *"Date Input field should be under Data Input? and can
