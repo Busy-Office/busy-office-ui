@@ -6,10 +6,55 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
-## Unreleased
+## 0.3.0 (2026-08-23)
 
-> These land **after** `v0.3.0` was tagged, so they are not in that release.
-> The tag is already pushed; it was not moved to pick them up.
+> **Upgrading from 0.1.1? Read the 0.2.0 section below as well.** 0.2.0 was
+> tagged and CHANGELOG'd on 2026-08-18 but never reached the registry — the
+> published versions are `0.1.0` and `0.1.1` only. 0.3.0 is therefore the first
+> release carrying 0.2.0's 65 entries, and they land on you together with this
+> section. Nothing is skipped; the version number is.
+>
+> The `v0.3.0` tag was originally cut 2026-08-21 and re-cut 2026-08-23 before
+> first publish to pick up everything below — it never reached the registry in
+> between, so no published artifact changed meaning.
+
+- **Added** (`data-table`): `initWindowedList()` — server-chunked windowing
+  for very long tables (the 50,000-row ledger case). The server sends
+  `<tbody data-chunk-id data-chunk-offset>` fragments; the behavior evicts
+  far-off-screen chunks to spacer rows (bounded DOM), re-requests them on
+  scroll-back via `bo:table-load-more`, preserves scroll position across
+  swaps, and reapplies row selection through the existing hidden-input
+  contract. `aria-rowcount`/`aria-rowindex` reflect server totals, not DOM
+  position. Composes with `initDataTables()` and `initLoadMore()`; without
+  JS the table is simply the ordinary paginated list.
+
+- **Added** (`form-section`): `--label-start` modifier — labels sit at the
+  inline start of each row instead of above the control, for dense
+  single-column detail forms. Not combinable with `.bo-form-row` (the two
+  answer "how do I lay out several fields" two different ways — the docs
+  say which to reach for when).
+
+- **Added** (`alert`): `--elevated` modifier — shadow + raised surface +
+  radius for alerts presented as cards in a static list (a notification
+  center). Split from `.bo-toast` deliberately: toast's entrance animation
+  announces content that just arrived, which is wrong for a list already
+  on the page at load.
+
+- **Fixed** (`state`): `.bo-state__actions` now wraps and centers its
+  buttons. Every prior consumer had exactly one action, so a two-button
+  error page overflowed a 390px viewport instead of wrapping — latent
+  since the component shipped.
+
+- **Fixed** (`segmented`): the visually-hidden radio inputs all collapsed
+  to the identical 1×1 coordinate — a `position: absolute` flex child with
+  no inset properties resolves its static position as if it were the
+  container's sole item, so hit-targets and target-size measurement were
+  wrong for every option but one. The input now stays in normal flex flow
+  (`position: static`), giving each its real slot beside its label.
+
+- **Changed** (`dropdown`, `combobox`, `context-menu`): the three menus now
+  share one popover-positioning helper instead of three hand-rolled copies
+  — same flip/clamp behavior everywhere, no API change.
 
 - **Added** (tokens): `--bo-font-size-mono-inline` — the size for monospace
   text set *inline* in running prose (`.bo-kbd`, `.bo-prose code`,
@@ -142,14 +187,6 @@ pin.
   and exposes it as `--bo-anchor-landing-offset` (same shape as
   `sticky-cols`'s `--bo-sticky-w-1`), with a fixed fallback for the no-JS
   case.
-
-## 0.3.0 (2026-08-21)
-
-> **Upgrading from 0.1.1? Read the 0.2.0 section below as well.** 0.2.0 was
-> tagged and CHANGELOG'd on 2026-08-18 but never reached the registry — the
-> published versions are `0.1.0` and `0.1.1` only. 0.3.0 is therefore the first
-> release carrying 0.2.0's 65 entries, and they land on you together with the 18
-> below. Nothing is skipped; the version number is.
 
 - **Fixed** (`data-table`): `.bo-data-table__row-edit-actions` was
   `display: flex` on a `<td>`, which destroys table-cell behavior and
