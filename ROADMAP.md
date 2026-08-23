@@ -417,51 +417,35 @@ shape the CLAUDE.md doctrine describes.
        the 40 diffs is inspected and its change attributed to a real, known
        edit before `--update` runs. The standing rule is explicit: don't
        blind-`--update` away every failure.
-3. [~] **134.3 — CI, or delete it — the criterion I wrote was wrong, and
-       here is what replaced it.** I set "do not leave a third option"
-       before knowing the constraint that decides this: **the baselines are
-       machine-specific**. Font rasterisation differs between macOS and CI's
-       Linux, so baselines committed from a laptop fail every CI run for
-       reasons unrelated to the change under review. "Just run it in CI" is
-       not an available option; the real one is *generate baselines inside
-       the same container CI uses*, which is genuine machinery and a
-       cost/benefit call about CI minutes.
+3. [x] **134.3 — DELETED, owner call 2026-08-24.** Verbatim: *"134.3 -
+       delete it. just download/write new when needed."* Option (c). Gone:
+       `visual-regression.mjs`, the 40 baselines (33 MB), `visual-diffs/`,
+       and the `test:visual` / `test:visual:update` scripts.
 
-       Deleting is not obviously right either: the tool's unique job is
-       catching UNINTENDED visual change (a token edit that shifts
-       everything), which no other gate here does — and it has done it
-       before (fourteen unexplained diffs in one commit).
+       **What covers this now**, and said plainly because it is less:
+       `check:layout`, `check:scroll` and `test:axe` sweep every page at
+       1440px and 390px, but they assert PROPERTIES — nothing overflows,
+       every scroll region is reachable and focusable, no axe violation.
+       They do not compare pixels, so a change that is merely *different*
+       rather than broken passes. That is the coverage the owner traded
+       away, deliberately: the tool could not run in CI at all (baselines
+       are machine-specific — macOS and Linux rasterise fonts differently),
+       so it was 33 MB of committed images gating nothing, catchable only
+       by whoever remembered to run it locally. LOOPS.md step 4 now names
+       the three gates plus a one-page spot-check for shared-selector fixes,
+       and says to write a throwaway pixel check if a specific change ever
+       needs one.
 
-       **So this is an owner call, and it is presented rather than
-       guessed.** What shipped meanwhile makes the tool honest instead of
-       misleading: the theme key fixed, every shot asserting its own
-       resolved `data-theme`, baselines re-attributed and regenerated, and
-       the file saying plainly at the top that it is a LOCAL tool and why.
-       A tool that admits what it is beats a gate that reads as coverage.
-
-       *Options for the owner*: (a) containerise the screenshots so
-       baselines are portable and wire it into `ci.yml`; (b) leave it local
-       and documented as now; (c) delete it and name `check:layout` +
-       `test:axe` as the cover.
-
-       **Two things learned by USING it, 2026-08-24.** First, it works: it
-       caught three real visual changes from this run (the tfoot rule, the
-       group-header centring, a prose paragraph) — the first time it has
-       reported anything true since the key was fixed. Second, the diff on
-       `/components/richtext` that I called unattributable **was attributable,
-       and my METHOD was the defect.** I checked commits to that PAGE; all
-       9837 of its changed pixels sit at x <= 200, inside the 224px sidebar,
-       because two wakes earlier a sidebar entry moved from Values to
-       Reference (132.1) and shifted every group below it by one row. That is
-       the ~37px pair spacing I had measured and failed to recognise.
-       Attributing a visual diff by per-page git history cannot see a
-       shared-layout change, and a shared-layout change moves EVERY page.
-       Re-baselined once that was established, not before; the lesson and the
-       trick that settled it in seconds — read WHERE the pixels are, not just
-       how many — are in the tool's own header now.
-       Also: `--only=<page>` does not do what its name suggests — it skips the
-       non-matching pages from the log but still checks all forty and updates
-       none, so selective re-baselining is not currently possible.
+       **The one lesson worth keeping, rehoused here because its only home
+       was that file's header.** A visual diff I called unattributable was
+       attributable, and my METHOD was the defect: I checked commits to the
+       PAGE, but all 9837 changed pixels sat at x <= 200 — inside the 224px
+       sidebar — because a sidebar entry had moved between groups two wakes
+       earlier (132.1) and shifted every group below it by one row.
+       **Attributing a visual change by per-page history cannot see a
+       shared-layout change, and a shared-layout change moves every page.**
+       Read WHERE the pixels are before asking what touched the page; it
+       settled in seconds what page-history could not settle at all.
 
 ## Slice 133 — Owner: prove the scrolling actually works (2026-08-23)
 

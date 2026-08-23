@@ -19,7 +19,8 @@
  *  - **No `headless: 'new'`.** Nine copies used the `'new'` spelling, one used
  *    `true`. Since puppeteer 22 these select the same renderer and `'new'` is
  *    the deprecated alias — so the majority spelling was the wrong one, and the
- *    visual-regression outlier was already correct. Worth stating because
+ *    visual-regression outlier (since deleted) was already correct. Worth
+ *    stating because
  *    "9 agree, 1 differs" reads like the 1 is the bug.
  */
 import puppeteer from 'puppeteer-core';

@@ -252,15 +252,21 @@ Run **try → verify → adjust** as many rounds as it takes to satisfy the item
    needs the same treatment, not an exact-string gate.
    A fix scoped to a SHARED selector (anything matching more than the one
    page that surfaced the bug — `.docs-content pre.has-copy`, a reset
-   rule, a token) needs `test:visual` run as part of this step, not just a
-   live spot-check of the reported page: the fix can legitimately change
-   rendering on other pages the report never mentioned (learned
-   2026-08-16 — a code-block overflow fix correctly changed 6 of the 8
-   visual-regression baseline pages, most only visible at 390px, which a
-   single-viewport click-through sweep hadn't surfaced). Confirm any
-   resulting diff is the fix's real, intended effect — not a regression —
-   before regenerating baselines, e.g. via pixel-diff inspection or a live
-   spot-check of one instance; don't blind `--update` away every failure.
+   rule, a token) can legitimately change rendering on pages the report
+   never mentioned, so the reported page passing is NOT the check
+   (learned 2026-08-16 — a code-block overflow fix correctly changed 6 of
+   8 sampled pages, most only visible at 390px, which a single-viewport
+   click-through hadn't surfaced). Run the whole-tree browser gates —
+   `check:layout`, `check:scroll`, `test:axe` — which sweep every page at
+   1440px and 390px, then spot-check ONE page the report never named.
+   Those gates assert *properties* (nothing overflows, every scroll
+   region is reachable, no axe violation), not pixels: a change that is
+   merely different rather than broken will pass, so name the pages you
+   expect to move and look at one. Pixel comparison was deliberately
+   dropped (134.3, owner call 2026-08-24): 33 MB of baselines that could
+   not run in CI, in exchange for catching only what those three gates
+   miss. If a specific change needs a pixel check, write a throwaway one
+   for it and delete it after.
 5. **Round check** — does it satisfy *Accept* AND pass the standing gates
    (contrast, named `@container`, links, behaviors, stylelint, tests)? If
    not, adjust and go back to step 3. If a round reveals the item was

@@ -1,8 +1,9 @@
 /**
  * The contexts this project verifies in. One answer, imported.
  *
- * `[1440, 390]` was hand-copied into five gates — axe-audit, visual-regression,
- * check-po-app, check-pseudo-locale and one sweep inside check-claims — and the
+ * `[1440, 390]` was hand-copied into five gates — axe-audit, visual-regression
+ * (deleted 2026-08-24), check-po-app, check-pseudo-locale and one sweep inside
+ * check-claims — and the
  * REASON for the pair was written down in exactly one of them (Standardize
  * sweep, 2026-08-19). That is the same shape as `paths.mjs` and
  * `SOURCE_SKIP_DIRS` before it: one decision, stored N times, failing silently.

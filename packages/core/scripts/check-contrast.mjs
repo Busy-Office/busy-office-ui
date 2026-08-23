@@ -17,7 +17,7 @@ const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 // The raw palette steps live in the generated scales.css since Slice 22;
 // color.css holds the semantic tier that aliases them — the scan needs
 // BOTH to resolve var chains (reading only color.css silently dropped
-// every pair whose token aliases a scale step; caught by test:visual).
+// every pair whose token aliases a scale step).
 const css =
   (await readFile(join(pkgRoot, 'src/css/tokens/scales.css'), 'utf8')) +
   (await readFile(join(pkgRoot, 'src/css/tokens/color.css'), 'utf8'));

@@ -37,22 +37,19 @@ enough for a release when the owner wants one.
   module two 2 — one a regression in the pilot's own fix, one a treatment
   (totals rows) nobody had needed yet. Modules three to six look mechanical.
 
-**Two things need the owner:**
+**Owner decisions, 2026-08-24:**
 
-1. **134.3 — the visual gate.** Three costed options in ROADMAP 134.3
-   (containerise for CI / leave local / delete). It works again and caught
-   three real changes this run.
-2. **112.3 pilot briefs** — unchanged; scaffold at `.roundtable/pilot-112/`,
-   and the loop must never author brief content.
-
-**One open finding, deliberately left failing:** `test:visual` reports a diff
-on `/components/richtext` that cannot be attributed — that page has no
-`tfoot`, no `colspan` and zero commits since the baselines were taken. Not
-blind-updated. Also: `--only=<page>` does not filter what it updates, so
-selective re-baselining is not currently possible.
+1. **134.3 — the visual gate is DELETED** (option c, verbatim: *"just
+   download/write new when needed"*). Tool, 40 baselines, `visual-diffs/`
+   and both npm scripts are gone. `check:layout` + `check:scroll` +
+   `test:axe` are the cover — property gates, not pixel gates, so a change
+   that is merely different now passes silently. LOOPS.md step 4 says so.
+2. **112.3 pilot briefs — acknowledged, still owner-blocked.** Scaffold is
+   at `.roundtable/pilot-112/`; the loop must never author brief content,
+   so this stays parked until briefs exist.
 
 **Next dispatched work:** 130.4 (the remaining four modules, batched if module
-three confirms) is the oldest open item; 134.3 waits on the owner.
+three confirms) is the oldest open item.
 
 ## `npm run docs:build` does NOT run the browser gates (2026-08-24)
 
