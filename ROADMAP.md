@@ -184,20 +184,86 @@ re-asks; each answer routes to its own item below or amends an existing one.
    tag moved to the new HEAD, release created (Trusted Publishing runs
    the gates from a clean checkout). See 123.4.
 
-1. [ ] **123.1 — Masking grill, evidence-first.** Once the ERP
-       best-practice research lands: run the 122.1 grill with the owner,
-       evidence in hand (as-you-type vs on-blur per real products, caret
-       strategy, locale source, paste, submitted-value contract). Scope
-       per owner: Money + numeric/Quantity, one shared mechanism.
-2. [ ] **123.2 — App-frame + ERP overview proposal.** Once the shell
-       research lands: propose the modern app-frame anatomy (what the
-       framework should own vs the consumer) AND the 30.0 overview-with-
-       module-sidebar pattern as one story. Owner picks before build.
-3. [ ] **123.3 — Three pattern proposals with references.** Once the
-       screen-reference research lands: per-pattern proposal (anatomy,
-       contract, the one disagreement each set of references has) for
-       reconciliation / timesheet / comparison-matrix. Owner picks
-       which (if any) get built, and in what order.
+**Owner sign-off 2026-08-23: "Go with your recommendation" — all nine
+research-backed recommendations confirmed in one message.** The grills
+are settled; each item below now carries its decided design and Accept
+criteria, and builds in order: masking → app frame + suite home →
+reconciliation → timesheet → comparison.
+
+1. [ ] **123.1 — Grouped-number formatting, decided: format-on-blur.**
+       Owner-confirmed per the evidence (`.roundtable/research-numeric-
+       masking-2026-08-23.md`: on-blur is what Reckon ships, SAP's own
+       guidance warns off live reformatting, GOV.UK abandoned
+       type=number; live masking survives mainly as fintech
+       calculator-style fill). ONE shared mechanism for Money, Quantity
+       and plain numeric inputs; live-as-you-type REFUSED (re-open only
+       with a real screen that demands it, and then as the
+       calculator/fill-from-right shape, never mid-string reformatting).
+       Decided design: opt-in `data-grouped` on the existing controls;
+       at init the behavior swaps `type="number"` →
+       `type="text" inputmode="decimal"` (no-JS keeps the native number
+       field — correct, just ungrouped); display formats via
+       `Intl.NumberFormat` with explicit locale from `data-locale`
+       (fallback: document `lang`); `data-decimals` stays the single
+       precision source; a hidden input carries the raw unformatted
+       value for submission (the universal shape across every reference);
+       paste re-parses from scratch; focus shows the raw editable value,
+       blur shows the grouped display. Accept: one behavior/util (not
+       three), demoed on Money + Quantity + a plain numeric input;
+       `1234567.5` with 2 decimals renders `1,234,567.50` on blur and
+       `12,34,567.50` under an Indian-grouping locale (proving
+       Intl-driven grouping, not an every-3-digits rule); the submitted
+       value is the raw number in all cases; behavior tests cover blur
+       format / refocus raw / paste / locale; docs pages updated with
+       generated API rows; all gates green.
+2. [ ] **123.2 — App frame documented + Suite home pattern, decided.**
+       Owner-confirmed: top-bar waffle/grid module switcher reusing
+       app-launch's tile mechanism (M365/Salesforce/Fiori consensus;
+       sidebar stays purely module-nav), and 30.0 ships as a NEW
+       "Suite home" pattern beside role-home (cross-linked, not
+       merged). Mobile bottom-nav tier REFUSED for now (icon-rail
+       collapse already ships; re-open on a real consumer need).
+       Build: (a) app-frame page documenting the header anatomy —
+       named slots for brand / module switcher / global search /
+       notifications / user menu — plus a frame-vs-page ownership
+       table (what the framework owns vs the consumer, per
+       `.roundtable/research-app-frame-2026-08-23.md`); (b)
+       `/patterns/suite-home`: module sidebar + cross-module overview
+       (the Dynamics Areas+Subareas / Fiori My Home shape). Accept:
+       both pages pass the full page-shape/pattern gates; the module
+       switcher is a working composition of existing primitives (no
+       new component unless a real gap is measured); suite-home and
+       role-home each carry a wrong-choice clause pointing at the
+       other.
+3. [ ] **123.3a — Reconciliation pattern, decided: Xero-style
+       two-column with suggested matches.** Owner-confirmed layout (the
+       canonical shape; QBO checklist and BC journal-drawer recorded as
+       refused alternatives with reasons in the research doc). Contract
+       from the shared reference behavior: confirming a match removes
+       both sides from the working set; unmatched items get an explicit
+       exception path; the finish action is gated on the running
+       difference reaching zero. Accept: `/patterns/reconciliation`
+       passes all pattern gates; the running-difference figure is
+       two-channel; states cover suggested/confirmed/unmatched/
+       exception and the zero-difference gate.
+4. [ ] **123.3b — Timesheet pattern, decided: inline-editable grid**
+       (CATS/Harvest/Toggl shape; Workday's day-click-modal recorded as
+       the refused alternative). Fixed day-of-week columns for one
+       locked period; rows = allocation dimension; row totals AND
+       column totals plus a period target the grand total reconciles
+       against; validation gates submit; the period submits as ONE unit
+       into approval. Accept: `/patterns/timesheet` passes all pattern
+       gates; totals recompute on entry (executable claim); submit
+       disabled until the target reconciles, with a two-channel reason.
+5. [ ] **123.3c — Comparison matrix pattern, decided: select-one
+       award.** Candidates as columns, criteria as rows; per-criterion
+       best signal computed and shown inline (two-channel, not
+       color-only); terminal action selects ONE winner. Split-award
+       (Ariba/Coupa allocation) REFUSED for v1 — recorded re-open
+       condition: a real procurement screen needing percentage
+       allocation across winners. Accept: `/patterns/comparison`
+       passes all pattern gates; the best-per-row signal is
+       demonstrated in both themes.
 4. [x] **123.4 — DONE 2026-08-23. npm now serves 0.3.0 (`latest`).**
        Six missing entries written (initWindowedList, `--label-start`,
        `--elevated`, state-actions wrap fix, segmented input-position
