@@ -749,3 +749,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 11:32 · Meta · refusal · folding Optimize into a 7th DSA dimension (101.3 stop rule forbids new dimensions) · refused · 3ddeb68
 - 2026-08-23 11:32 · Meta · refusal · auditing typography/colour/spacing as suspect (94.7/94.9 document uniform reading as expected) · refused · 3ddeb68
 - 2026-08-23 11:37 · Polish · tidy · Polish round 1: alerts wrong-choice clause, blind re-score 2->3 · landed · 258fcbf
+- 2026-08-23 12:00 · Continue · build · 123.3c: comparison matrix pattern shipped — closes Slice 123 · landed · b833474
+- 2026-08-23 12:00 · Meta · refusal · split/allocated award across multiple winners (select-one for v1, re-open condition documented on the page) · refused · b833474
