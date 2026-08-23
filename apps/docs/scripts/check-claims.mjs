@@ -1953,7 +1953,7 @@ const fullScreenPage = await page.evaluate(() => ({
 }));
 check(
   'schedule\'s full-screen link opens a real, chrome-free document with the same generated month',
-  fullScreenLink.href === '/patterns/schedule/full' && fullScreenLink.target === '_blank' &&
+  fullScreenLink.href === base + '/patterns/schedule/full' && fullScreenLink.target === '_blank' &&
     fullScreenLink.rel === 'noopener' && !fullScreenPage.hasSidebar && !fullScreenPage.hasNavbar &&
     fullScreenPage.dayCells > 30 && fullScreenPage.hasDetail,
   JSON.stringify({ fullScreenLink, fullScreenPage }),

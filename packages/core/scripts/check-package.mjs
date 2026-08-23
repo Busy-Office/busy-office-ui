@@ -33,10 +33,19 @@ import { fileURLToPath } from 'node:url';
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(await readFile(join(pkgRoot, 'package.json'), 'utf8'));
 
-const packed = new Set(
-  JSON.parse(execFileSync('npm', ['pack', '--dry-run', '--json'], { cwd: pkgRoot, encoding: 'utf8' }))[0]
-    .files.map((f) => f.path),
+/* npm <= 11 emits `[{...report}]`; npm 12 changed it to `{"<name>": {...report}}`
+   (broke the publish workflow's npm@latest install, 2026-08-23). Accept both,
+   and fail with the raw shape rather than a bare TypeError on the next change. */
+const packParsed = JSON.parse(
+  execFileSync('npm', ['pack', '--dry-run', '--json'], { cwd: pkgRoot, encoding: 'utf8' }),
 );
+const packReport = Array.isArray(packParsed) ? packParsed[0] : packParsed[pkg.name];
+if (!Array.isArray(packReport?.files)) {
+  console.error('check:package cannot read `npm pack --dry-run --json` output — shape changed again?');
+  console.error(JSON.stringify(packParsed).slice(0, 400));
+  process.exit(1);
+}
+const packed = new Set(packReport.files.map((f) => f.path));
 
 const failures = [];
 const bins = Object.entries(pkg.bin ?? {});

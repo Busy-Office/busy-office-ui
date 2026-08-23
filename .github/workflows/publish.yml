@@ -25,7 +25,10 @@ jobs:
           node-version: 22
           cache: npm
       # Trusted Publishing needs npm >= 11.5.1; the runner's bundled npm may lag.
-      - run: npm install -g npm@latest
+      # Pinned to the 11 major, NOT @latest: npm 12.0 changed `pack --json`'s
+      # output shape and broke check:package mid-release (2026-08-23) — an
+      # unpinned @latest in a release workflow is a moving dependency.
+      - run: npm install -g npm@11
 
       - name: Tag must match package.json version
         run: |
