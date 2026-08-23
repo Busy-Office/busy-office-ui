@@ -132,7 +132,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     fallback, as a recipe.</strong> On a consumer phone, add
     <code>capture="environment"</code> to a
     <a href={base + '/components/file-upload'}>file input</a> for photo
-    evidence (damage, labels), and for live barcode reads feed the
+    evidence (damage, labels) — file upload's own camera section spells
+    out the two-input shape, because a lone <code>capture</code> input
+    takes the gallery away, and for live barcode reads feed the
     <code>BarcodeDetector</code> API's result into the same
     <code>bo:scan</code> flow where supported — the screen's contract does
     not change, only the way the string arrives. Deliberately a recipe:

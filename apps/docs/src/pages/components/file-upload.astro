@@ -11,6 +11,18 @@ const basic = `<input class="bo-file-input" type="file" aria-label="Attach a fil
 
 const multiple = `<input class="bo-file-input" type="file" multiple accept=".pdf,.jpg,.png" aria-label="Attach receipts">`;
 
+const camera = `<!-- Phone evidence: the camera as ONE way in, not the only one.
+     Two inputs, because capture on a single input removes the choice. -->
+<div class="bo-cluster">
+  <label class="bo-btn bo-btn--secondary" for="fu-cam">Take a photo</label>
+  <input class="bo-file-input bo-visually-hidden" id="fu-cam" type="file"
+      accept="image/*" capture="environment">
+
+  <label class="bo-btn bo-btn--secondary" for="fu-pick">Choose a file</label>
+  <input class="bo-file-input bo-visually-hidden" id="fu-pick" type="file"
+      accept="image/*,.pdf">
+</div>`;
+
 const dropzone = `<label class="bo-file-dropzone" data-file-dropzone>
   <input class="bo-file-input bo-visually-hidden" type="file" multiple aria-label="Attach vendor documents">
   <span>Drop files here, or click to browse</span>
@@ -83,6 +95,25 @@ const canonical = `<!-- The input is the real control — the label makes the wh
     <p class="bo-u-text-muted"><code>multiple</code> and <code>accept</code>
     are native attributes — no framework API for them, because there's
     nothing to add.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Camera evidence on a phone — <code>capture</code></h2>
+    <Demo code={camera} />
+    <p class="bo-u-text-muted"><code>capture="environment"</code> asks a
+    phone for the rear camera (<code>user</code> asks for the selfie one);
+    desktop browsers ignore it entirely, which is why it is safe to ship
+    on a screen both kinds of user reach. <strong>The trap is what it
+    takes away</strong>: on many phones <code>capture</code> replaces the
+    file picker rather than adding to it, so a single input with
+    <code>capture</code> means a warehouse worker with the photo already
+    in their gallery cannot attach it. Ship the two entry points above —
+    take one, or choose one — and the choice survives. This is a recipe,
+    not framework surface: <code>capture</code> and <code>accept</code>
+    are native attributes and there is nothing to add. The screen that
+    uses it is <a href={base + '/patterns/goods-receipt'}>goods
+    receipt</a>, where a photo of a damaged pallet is the evidence, and
+    where live barcode reads feed the same <code>bo:scan</code> flow.</p>
   </section>
 
   <section class="demo">

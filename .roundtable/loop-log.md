@@ -781,3 +781,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 17:58 · Meta · refusal · a class for margin-block-start:space-3 (11 sites) — names nothing · refused · 7ce9aa3
 - 2026-08-23 17:58 · Meta · refusal · max-inline-size:28rem consolidation (9 sites) — would invent an arbitrary size token · refused · 7ce9aa3
 - 2026-08-23 17:58 · Meta · refusal · consolidating 4 repeated CSS pairs in packages/core — the honest fix widens public API · refused · 7ce9aa3
+- 2026-08-23 18:09 · Continue · build · 127.5 touch attribute recipe on Forms · landed · 1ea0472

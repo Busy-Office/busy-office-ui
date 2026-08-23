@@ -344,11 +344,21 @@ its reason.
        live field to match. **Red-proved in both directions** — drifting
        the field from the table and the table from the field each go
        red.
-6. [ ] **127.6 — camera candidate closed.** 126.5 already landed the
-       recipe on goods-receipt; this item just verifies file-upload
-       cross-references it (capture="environment") and closes the
-       audit's candidate 4 with a pointer. Accept: file-upload page
-       carries the capture recipe line; candidate marked closed.
+6. [x] **127.6 — camera candidate closed. DONE 2026-08-23.** The
+       verify found the cross-reference was ONE-WAY: goods-receipt
+       named `capture="environment"` and linked to file-upload, and
+       file-upload said nothing about the camera at all, so a reader
+       arriving from the component side found no recipe. Closed by
+       giving file-upload its own camera section — and by stating the
+       part the reference material usually omits: on many phones
+       `capture` REPLACES the picker rather than adding to it, so a
+       lone capture input takes the gallery away from a worker who
+       already photographed the pallet. The shipped shape is two entry
+       points (take one / choose one), which keeps the choice. Recipe,
+       not surface: `capture` and `accept` are native and there is
+       nothing to add. No claims case — the only runtime assertion
+       available (that an IDL attribute reflects) would be testing the
+       browser, not this framework.
 
 ## Slice 126 — RF coverage, grilled to a scope (2026-08-23)
 
