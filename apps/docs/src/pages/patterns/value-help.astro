@@ -53,6 +53,20 @@ const markup = `<!-- the field, and the control that opens the picker -->
     one control.
   </p>
 
+  <p class="demo-note"><strong>Also called</strong>: <em>search help</em> or
+  <em>F4 help</em> in SAP, a <em>value list</em>, a <em>lookup</em>, a
+  <em>picker</em>. Same screen; this page is it (roadmap 132.2).
+  Measured against what an F4 help characteristically offers:
+  <strong>multi-criteria search</strong> is here already — the
+  <a href={base + '/components/filters'}>filter bar</a> above the results
+  takes as many criteria as the field needs, and the demo runs two;
+  <strong>a configurable hit list</strong> needs nothing new either, because
+  <code>initTableToolbar()</code> already ships column visibility and the
+  results are an ordinary <a href={base + '/components/data-table'}>data
+  table</a>; <strong>a personal value list</strong> — the reader's recent or
+  favourite picks — is a group of rows above the results, and the list itself
+  is your data, not the framework's. None of the three is a second pattern.</p>
+
   <section class="demo">
     <h2>The screen</h2>
 

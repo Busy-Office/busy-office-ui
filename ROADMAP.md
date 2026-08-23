@@ -623,7 +623,26 @@ must not silently re-open.
        `/components/date` keeps a reachable URL — it is the deprecation
        notice a consumer of the published package lands on — so `check:links`
        and the page-shape gate stay green either way.
-2. [ ] **132.2 — "Search Help": check `/patterns/value-help` first.** That
+2. [x] **132.2 — DONE 2026-08-24. Verdict: NOT a second pattern — one
+       vocabulary line and a comparison.** Measured against what an F4 help
+       characteristically offers:
+       **multi-criteria search — already there**: the filter bar above the
+       results takes as many criteria as the field needs, and the shipped
+       demo runs two (a search box and a group select).
+       **Configurable hit list — already there, elsewhere**:
+       `initTableToolbar()` ships column visibility and the results are an
+       ordinary `data-table`, so the capability composes without anything
+       new.
+       **Personal value list (recent/favourite picks) — genuinely absent,
+       and correctly so**: it is a group of rows above the results, and the
+       list itself is the consumer's data. "Framework does visuals, you do
+       the data" answers it; inventing surface would embed an app decision.
+       The page now names the other words for itself — search help, F4 help,
+       value list, lookup, picker — so a reader searching any of them lands
+       here. Confirmed present in the built page, which is what the site
+       search indexes.
+       *(original triage below)*
+       **132.2 (original) — "Search Help": check `/patterns/value-help` first.** That
        pattern already documents exactly this interaction — "anyone typing a
        code they cannot remember… a list too large to enumerate in one
        control", with focus returning to the field. SAP's F4 help adds things

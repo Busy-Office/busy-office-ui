@@ -833,3 +833,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 04:48 · Continue · build · 134.1/134.2 — visual gate: theme key fixed and asserted per shot, baselines re-attributed and regenerated; 134.3 is an owner call with three costed options · landed · a25c780
 - 2026-08-24 04:56 · Continue · build · 132.1 — date entry documented on /components/form#dates; component refused (native measured identical at 3 densities); deprecated page moved to Reference · landed · 3909b80
 - 2026-08-24 04:56 · Meta · refusal · a date-input component or CSS — native brings locale order, picker, keyboard entry and min/max validation, and matches .bo-input's height exactly · refused · 3909b80
+- 2026-08-24 05:00 · Standardize · dry · native-date rule: 4 pages mentioned it, none linked to the canonical section; three pointers added · landed · a5db304

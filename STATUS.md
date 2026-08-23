@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 04:56
+Generated at: 2026-08-24 05:00
 
 ## Open items by slice
 
@@ -23,10 +23,9 @@ Generated at: 2026-08-24 04:56
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (827 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-24 03:53   OVERDUE
+dispatch status — counter-triggered rules (828 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-24 05:00   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -38,7 +37,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 01:53 · Continue · build · 135.2 part 1 — last two duplicated RF screens removed; check-page-shape now gates the IMPORT, red-proved · landed · d46316b
 - 2026-08-24 02:03 · Continue · build · 135.2 — six RF mirrors wired into one walkable track (menu/back/queue), zero CSS, walked with real clicks · landed · b669359
 - 2026-08-24 02:33 · Continue · build · 133.1 — check:scroll gate: 122 containers driven at 1440/390, red-proved twice, wired into CI · landed · ba0bbd0
 - 2026-08-24 03:27 · Continue · bug · 133.1 fix — scroll probe measured platform scrollbar accounting; both axes now use computed overflow, red-proved · landed · aaea776
@@ -48,6 +46,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 04:48 · Continue · build · 134.1/134.2 — visual gate: theme key fixed and asserted per shot, baselines re-attributed and regenerated; 134.3 is an owner call with three costed options · landed · a25c780
 - 2026-08-24 04:56 · Continue · build · 132.1 — date entry documented on /components/form#dates; component refused (native measured identical at 3 densities); deprecated page moved to Reference · landed · 3909b80
 - 2026-08-24 04:56 · Meta · refusal · a date-input component or CSS — native brings locale order, picker, keyboard entry and min/max validation, and matches .bo-input's height exactly · refused · 3909b80
+- 2026-08-24 05:00 · Standardize · dry · native-date rule: 4 pages mentioned it, none linked to the canonical section; three pointers added · landed · a5db304
 
 ## Sunset test
 
