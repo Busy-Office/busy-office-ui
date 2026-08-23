@@ -332,6 +332,21 @@
     margin-block: calc(-1 * var(--bo-density-cell-padding-y));
   }
 
+  /* A TOTALS row is a summary, not another record — so it separates itself
+     from the rows it sums. Until roadmap 130.3 a `<tfoot>` cell was
+     byte-identical to a body cell: same background, same weight, no border,
+     measured. On a receivables ageing screen that put "Total outstanding"
+     in the same visual register as a customer, which is a misread waiting to
+     happen.
+
+     Two channels, neither of them colour on its own: a rule above the row,
+     and the weight of the figures. All six `<tfoot>` uses in the docs are
+     totals or sums and every one of them wants this. */
+  .bo-data-table tfoot :is(th, td) {
+    border-block-start: 2px solid var(--bo-color-border-strong);
+    font-weight: var(--bo-font-weight-semibold);
+  }
+
   /* Sorting: aria-sort on <th> drives the indicator; the button is the target. */
   .bo-data-table__sort-btn {
     display: inline-flex;

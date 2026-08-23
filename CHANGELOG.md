@@ -8,6 +8,13 @@ pin.
 
 ## Unreleased
 
+- **Fixed** (`data-table`): a `<tfoot>` totals row now separates itself from
+  the rows it sums — a 2px rule above and semibold figures. It was
+  byte-identical to a body cell (same background, same weight, no border,
+  measured), so on a receivables ageing screen "Total outstanding" sat in the
+  same visual register as a customer. Two channels, neither colour alone. All
+  six `<tfoot>` uses in the docs are totals or sums and every one wants it.
+
 - **Fixed** (`data-table`): a grouped column header now centres over its span.
   A `th[colspan]` heading numeric columns inherited their `end` alignment, so
   the group's label sat over its LAST column — measured at 229px off centre,

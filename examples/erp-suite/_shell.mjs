@@ -33,6 +33,7 @@ export const SECTIONS = {
      already have homes. Ordered as the work flows. */
   o2c: [
     { label: 'Sales orders', href: '/o2c/sales-orders.html' },
+    { label: 'Customer invoices', href: '/o2c/customer-invoices.html' },
   ],
   p2p: [
     { label: 'Requisitions', href: '/p2p/requisitions.html' },

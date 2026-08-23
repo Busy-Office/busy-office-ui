@@ -444,6 +444,19 @@ shape the CLAUDE.md doctrine describes.
        and documented as now; (c) delete it and name `check:layout` +
        `test:axe` as the cover.
 
+       **Two things learned by USING it, 2026-08-24.** First, it works: it
+       caught three real visual changes from this run (the tfoot rule, the
+       group-header centring, a prose paragraph) — the first time it has
+       reported anything true since the key was fixed. Second, it reports one
+       diff on `/components/richtext` that I **cannot attribute**: that page
+       has no `tfoot`, no `colspan`, and zero commits since the baselines were
+       taken, and the changed pixels sit in repeating ~37px pairs, one per
+       demo block. Left FAILING rather than blind-updated, because an
+       unexplained diff is the one thing this tool exists to show.
+       Also: `--only=<page>` does not do what its name suggests — it skips the
+       non-matching pages from the log but still checks all forty and updates
+       none, so selective re-baselining is not currently possible.
+
 ## Slice 133 — Owner: prove the scrolling actually works (2026-08-23)
 
 Owner input, verbatim: *"UI Component - tables / Patterns like Page Object -

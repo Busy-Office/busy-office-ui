@@ -610,12 +610,29 @@ header owns its span. `thead` only, because a `th[colspan]` in the BODY is a
 row-group heading ("CC-4021 — Warehouse"), which labels the rows beneath it
 and belongs at the start. Re-measured after: 0px off centre.
 
+## GAP-16 — FIXED 2026-08-24 — a totals row looked like another record
+
+**Hit on**: `o2c/customer-invoices` (module two), a receivables ageing screen.
+**What happened**: a `<tfoot>` cell was **byte-identical** to a body cell —
+same background, same font weight, no border, measured — so "Total
+outstanding · 136,310.00" sat in the same visual register as a customer's row.
+On a screen whose whole job is "who do I chase", that is a misread waiting to
+happen.
+**Fixed**: `.bo-data-table tfoot :is(th, td)` gains a 2px rule above and
+semibold figures. Two channels, neither colour alone. All six `<tfoot>` uses
+in the docs are totals or sums and every one of them wants this — measured
+before shipping, not after.
+**Found by screenshot**, again, after all three gates were green.
+
 ---
 
 ## Module two's count (roadmap 130.3, in progress)
 
-The pilot found **13** gaps. Module two's sales-order pair found **one**, and
-it was a defect in the pilot's own fix rather than missing surface. Everything
+The pilot found **13** gaps. Module two, both document types built, found
+**two**: GAP-15, a defect in the pilot's own fix (a group header landing over
+its last column), and GAP-16, a totals row indistinguishable from a data row.
+Neither is missing surface for a NEW kind of screen — one is a regression and
+one is a treatment nobody had needed until a screen with totals existed. Everything
 130.2 settled was spent rather than re-decided: the grouped header, the
 cell-level tone on the disagreeing cell, "+ Add line" below the table, the
 document flow as a timeline, the cell-link on list rows, and muted tabular

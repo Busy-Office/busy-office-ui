@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 05:19
+Generated at: 2026-08-24 05:28
 
 ## Open items by slice
 
@@ -18,8 +18,8 @@ Generated at: 2026-08-24 05:19
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (836 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-24 05:00   OVERDUE
+dispatch status — counter-triggered rules (837 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-08-24 05:00   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -33,7 +33,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 04:56 · Meta · refusal · a date-input component or CSS — native brings locale order, picker, keyboard entry and min/max validation, and matches .bo-input's height exactly · refused · 3909b80
 - 2026-08-24 05:00 · Standardize · dry · native-date rule: 4 pages mentioned it, none linked to the canonical section; three pointers added · landed · a5db304
 - 2026-08-24 05:03 · Continue · build · 132.2 — Search Help = value-help; vocabulary line added, F4's three capabilities compared (2 already covered, 1 correctly absent) · landed · 01e637f
 - 2026-08-24 05:03 · Meta · refusal · a second picker pattern for search help — the Objective's rethink test: two surfaces growing toward each other · refused · 01e637f
@@ -43,6 +42,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 05:13 · Meta · refusal · a file-panel pattern — the OS owns the local picker, value-help is the store picker, and a browser has no save panel · refused · 4c5c199
 - 2026-08-24 05:19 · Continue · build · 132.5 — list-to-list refused: multi-select is the shipped answer, no screen needs a dual list, and it does not fit 390px · refused · 409d827
 - 2026-08-24 05:19 · Meta · refusal · a dual-list (pick-list/shuttle) component — a second way to do what data-multiselect already does · refused · 409d827
+- 2026-08-24 05:28 · Continue · build · 130.3 — module two (O2C sales orders) built with zero new CSS; found GAP-15, a defect in GAP-4a's own fix, and fixed it · landed · 39661bd
 
 ## Sunset test
 
