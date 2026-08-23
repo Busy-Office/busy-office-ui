@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 16:20
+Generated at: 2026-08-23 16:42
 
 ## Open items by slice
 
@@ -12,15 +12,12 @@ Generated at: 2026-08-23 16:20
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 126** (2 open)
-  - 126.4 — three new RF patterns: pick, putaway, count.
-  - 126.5 — comprehensive pass on the existing 3 RF pages.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (764 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-23 14:38   ok
+dispatch status — counter-triggered rules (765 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-23 14:38   ok
   Objective     0 / 3 slices          since 2026-08-23 15:49   ok
 ```
 
@@ -33,7 +30,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 14:38 · Standardize · tidy · Sweep of today's 4 rounds: redundant resets, header idiom converged on --split, preview helpers, snapshot-script doc · landed · efdeb8a
 - 2026-08-23 15:32 · Explore · explore · 125.1: 0.4.0 dogfood found 3 real grouped-number defects, fixed red-first, E2E-proven; wiring graduated · landed · 1f75dab
 - 2026-08-23 15:32 · Objective · grill · 125.2: mobile/web ERP gap audit — 7 evidence-graded candidates for owner pick · logged · 1f75dab
 - 2026-08-23 15:45 · Objective · grill · RF-coverage grill Round 1 settled (scope/boundary/compose-first/size-budget); Round 2 grounded, awaiting references · logged · ee82970
@@ -43,6 +39,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
 - 2026-08-23 16:09 · Continue · build · 126.1 budget gate (red-proven) + 126.2 scan flash (2 instrument-caught bugs: attr-only API, capture-vs-verdict ordering) · landed · 36b637a
 - 2026-08-23 16:20 · Continue · build · 126.3 btn-group--bar: equal glove slots, intent-named; 1.4.12 veto of ellipsis honored (labels wrap) · landed · ee8ed6a
+- 2026-08-23 16:42 · Continue · build · 126.4+126.5: pick/putaway/count shipped (profile-mirror-verified); offline promises reworded to reconnect truth; forced-colors gate gained pseudo+valueless-attr proof · landed · 7e44c4e
 
 ## Sunset test
 

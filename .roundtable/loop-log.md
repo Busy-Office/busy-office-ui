@@ -770,3 +770,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 15:49 · Meta · refusal · custom keypad component (recipe first; promote only on real consumer copy-paste-modify) · refused · f6c5e76
 - 2026-08-23 16:09 · Continue · build · 126.1 budget gate (red-proven) + 126.2 scan flash (2 instrument-caught bugs: attr-only API, capture-vs-verdict ordering) · landed · 36b637a
 - 2026-08-23 16:20 · Continue · build · 126.3 btn-group--bar: equal glove slots, intent-named; 1.4.12 veto of ellipsis honored (labels wrap) · landed · ee8ed6a
+- 2026-08-23 16:42 · Continue · build · 126.4+126.5: pick/putaway/count shipped (profile-mirror-verified); offline promises reworded to reconnect truth; forced-colors gate gained pseudo+valueless-attr proof · landed · 7e44c4e
