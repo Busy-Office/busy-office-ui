@@ -1996,6 +1996,33 @@ check(
   JSON.stringify(lrLadder),
 );
 
+// Inbox's phone section (roadmap 127.3) claims the ladder narrows it —
+// measured at a DESKTOP viewport on purpose: the demo box is 390px while
+// the window is 1440px, so if anything hides it is the CONTAINER query
+// doing it, not a media query. That distinction is the page's actual
+// assertion and the reason the section needs no phone-only stylesheet.
+await visit('/patterns/inbox/', { width: DESKTOP_WIDTH, height: 2200 });
+const inboxPhone = await page.evaluate(() => {
+  const th = document.querySelector('th.bo-data-table__col--tertiary');
+  const table = th.closest('table');
+  const vis = (el) => getComputedStyle(el).display !== 'none';
+  return {
+    viewport: window.innerWidth,
+    containerRem: th.closest('.bo-data-table-container').clientWidth / 16,
+    sourceVisible: vis(th),
+    waitingVisible: vis(table.querySelector('th.bo-data-table__col--secondary')),
+    itemVisible: vis(table.querySelector('thead th:not([class])')),
+    itemLinks: table.querySelectorAll('tbody a').length,
+  };
+});
+check(
+  'inbox phone section: at a 1440px VIEWPORT the 390px container still drops Source and Waiting — a container query, not a media query — leaving the item and its link',
+  inboxPhone.viewport === DESKTOP_WIDTH && inboxPhone.containerRem < 30 &&
+    !inboxPhone.sourceVisible && !inboxPhone.waitingVisible &&
+    inboxPhone.itemVisible && inboxPhone.itemLinks === 3,
+  JSON.stringify(inboxPhone),
+);
+
 // /patterns/schedule's "Open it full screen" link (roadmap 119.1): a real
 // navigation to an isolated document with no docs chrome, showing the SAME
 // generated month (not a second, driftable copy).

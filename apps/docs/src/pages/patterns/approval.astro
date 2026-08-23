@@ -119,6 +119,42 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
     nothing new to learn.</p>
   </section>
   <section class="demo">
+    <h2>On a phone — the decision, not the document</h2>
+    <div style="max-inline-size: 390px">
+      <div class="bo-widget">
+        <div class="bo-widget__header">
+          <span class="bo-widget__title">PO-88213 · Northwind Supply</span>
+          <span class="bo-badge bo-badge--warning">Pending</span>
+        </div>
+        <div class="bo-stack bo-stack--tight">
+          <dl class="bo-kv bo-kv--rows">
+            <div><dt>Amount</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">48,200<span class="bo-amount__fraction">.00</span></span></span></dd></div>
+            <div><dt>Requested by</dt><dd>M. Osei</dd></div>
+            <div><dt>Waiting since</dt><dd><span class="bo-u-tabular">3 days</span></dd></div>
+            <div><dt>Budget after</dt><dd><span class="bo-u-tabular">$11,800</span> left</dd></div>
+          </dl>
+          <p><a href={base + '/patterns/object-page'}>Open the full request →</a></p>
+        </div>
+      </div>
+      <div class="bo-btn-group bo-btn-group--bar" style="margin-block-start: var(--bo-space-3)">
+        <button class="bo-btn bo-btn--secondary" type="button">Reject</button>
+        <button class="bo-btn" type="button">Approve</button>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">An approver on a phone is deciding, not
+    reading. Ship the <strong>three facts the decision turns on</strong> —
+    what, how much, and what it leaves — plus a link to everything else,
+    and put the decision within thumb reach: the same
+    <a href={base + '/components/button'}><code>--bar</code></a> the RF
+    screens use, docked by the consumer's own sticky line. What does NOT
+    survive the trip: the audit trail (link it), the bulk queue (deciding
+    twenty things by thumb is how rubber-stamping happens), and the
+    rejection note as a typed essay — offer reasons as buttons and let
+    the essay be optional. <strong>Not a second pattern</strong>: it is
+    this pattern at 390px, so the routes, the contract and the 409 story
+    below are unchanged.</p>
+  </section>
+  <section class="demo">
     <h2>Markup — timeline</h2>
     <pre><code>{timelineMarkup}</code></pre>
   </section>
@@ -163,6 +199,8 @@ const timelineMarkup = `<!-- State has TWO channels, always: the visible glyph (
           <tr><td>Submitting</td><td>dialog buttons disabled; the dialog stays open until the swap lands so a failure keeps the typed note</td></tr>
           <tr><td>Not an approver</td><td>the screen is read-only; approval controls are absent, not disabled</td></tr>
           <tr><td>Delegated / out of office</td><td>name the delegate in the timeline — an approval chain that silently reroutes is an audit problem</td></tr>
+          <tr><td>On a phone</td><td>the decision card + a docked <code>--bar</code>; the audit trail and line items become links, not collapsed sections — a collapsed audit trail on a phone is read by nobody and still costs the scroll</td></tr>
+          <tr><td>Decided on a phone, stale in a tab</td><td>the same 409 as anywhere: the desktop tab that still shows buttons must lose, and say who won — a phone decision is not a lesser one</td></tr>
           <tr><td>No JS</td><td>fully functional — this page has no JS dependency; the stepper, status timeline and audit trail are all plain lists with no hidden state to reveal. The decision dialog and Approve/Reject buttons are not part of this static demo (see the note above); in a real build those would be an ordinary <code>&lt;form&gt;</code> POST, which also needs no JS to submit</td></tr>
         </tbody>
       </table>

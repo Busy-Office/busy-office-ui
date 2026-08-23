@@ -223,12 +223,30 @@ its reason.
        minified spelling keeps the space after `max-width:`, which the
        first attempt missed). 101 claims green, layout 121, axe 121x2
        zero, forced-colors 24/19.
-3. [ ] **127.3 — Approve-from-phone.** Grill verdict: SECTIONS, not
-       patterns (the audit's own call) — approval and inbox each gain
-       an "on a phone" section + phone-width States rows: what
-       collapses, decision buttons within thumb reach (the --bar
-       composes here), and the 390px screenshot discipline. Accept:
-       both pages' sections land; axe/layout at 390 stay green.
+3. [x] **127.3 — Approve-from-phone. DONE 2026-08-23.** Sections, as
+       the verdict said — no new pattern, no new CSS.
+       **approval**: a 390px decision card (bo-widget + kv + the
+       `--bar`) carrying only the facts the decision turns on, with the
+       record itself a link; prose names what does NOT survive the trip
+       (audit trail → link, bulk queue → absent because deciding twenty
+       things by thumb is how rubber-stamping happens, typed rejection
+       essay → reasons as buttons). Two States rows: on a phone, and
+       decided-on-phone-stale-in-a-tab (the same 409 — a phone decision
+       is not a lesser one).
+       **inbox**: the same table narrowed by 127.2's ladder — Source
+       (tertiary) then Waiting (secondary) drop, item + link survive.
+       Expand-in-place is deliberately NOT offered at 390px, so no row
+       looks decidable in place when it isn't; it links out to
+       approval's card. One States row.
+       Claim (102 total): the inbox section measured at a **1440px
+       viewport** — the 390px box still drops both tiers, proving a
+       CONTAINER query rather than a media query, which is why neither
+       section needs a phone-only stylesheet. Red-proved by widening
+       the box in the built HTML.
+       Caught in build: three invented classes (`bo-card`,
+       `bo-u-text-sm/-lg`) and a wrong `bo-kv__row/__key/__value`
+       markup shape — check-markup red on all of them, rewritten
+       against the shipped primitives.
 4. [ ] **127.4 — Saved views on list-report.** Grill verdict:
        composition (dropdown + chips already shipped) + the
        PERSISTENCE data contract the current one-row mention lacks

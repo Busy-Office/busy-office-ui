@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 17:22
+Generated at: 2026-08-23 17:34
 
 ## Open items by slice
 
@@ -12,8 +12,7 @@ Generated at: 2026-08-23 17:22
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
   - 112.5 — "Which Pattern Should I Use?" docs page, after the 112.3 verdict.
-- **Slice 127** (4 open)
-  - 127.3 — Approve-from-phone.
+- **Slice 127** (3 open)
   - 127.4 — Saved views on list-report.
   - 127.5 — Touch form-entry recipe.
   - 127.6 — camera candidate closed.

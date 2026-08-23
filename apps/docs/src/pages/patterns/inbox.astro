@@ -135,6 +135,51 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>On a phone — one column, one action per row</h2>
+    <div style="max-inline-size: 390px">
+      <div class="bo-data-table-container" tabindex="0">
+        <table class="bo-data-table" data-density="compact">
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col" class="bo-data-table__col--secondary">Waiting</th>
+              <th scope="col" class="bo-data-table__col--tertiary">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="bo-badge bo-badge--warning">Approval</span> <a href={base + '/patterns/approval'}>PO-88213 · $48,200</a></td>
+              <td class="bo-data-table__col--secondary bo-u-tabular">3d</td>
+              <td class="bo-data-table__col--tertiary">Purchasing</td>
+            </tr>
+            <tr>
+              <td><span class="bo-badge bo-badge--danger">Exception</span> <a href={base + '/patterns/goods-receipt'}>GR-4471 short-shipped</a></td>
+              <td class="bo-data-table__col--secondary bo-u-tabular">1d</td>
+              <td class="bo-data-table__col--tertiary">Warehouse</td>
+            </tr>
+            <tr>
+              <td><span class="bo-badge bo-badge--type">Task</span> <a href={base + '/patterns/timesheet'}>Submit week 34</a></td>
+              <td class="bo-data-table__col--secondary bo-u-tabular">6h</td>
+              <td class="bo-data-table__col--tertiary">HR</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="bo-u-text-muted">Same table, same rows — the
+    <a href={base + '/components/data-table'}>column priority ladder</a>
+    does the narrowing: Source (<code>--tertiary</code>) goes first, then
+    Waiting (<code>--secondary</code>), and what survives is the one thing
+    a phone reader needs — <strong>what it is and what it is about</strong>,
+    as a link. Expand-in-place does not come along: a preview inside a
+    390px row is a worse version of the screen it previews, so a phone row
+    links out to <a href={base + '/patterns/approval'}>the decision
+    screen</a>, which has its own phone section. Bulk claim is deliberately
+    absent for the same reason approval drops its bulk queue.
+    <strong>Not a mobile pattern</strong> — one inbox, read narrow.</p>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{`<!-- One list, many sources. The row's TYPE is a badge; the row's
      REASON is a column. Filter chips are a segmented control whose
@@ -236,6 +281,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td>Approval row, expanded</td><td>header facts, line summary, and an attachment list render inline; the attachment itself never does — it opens in a dedicated viewer, since a preview pane can't carry the diligence a scanned document or PDF needs</td></tr>
           <tr><td>Approval row, escalated</td><td>flagged, mid-chain, or high-value stays a plain link-out row — no preview button at all, so there is nothing that looks decidable but isn't</td></tr>
           <tr><td>Decision submitted from the preview</td><td>same as approval's own: dialog buttons disabled until the swap lands, so a failed note is never lost; success re-renders the row gone (it resolved) or, on 409, re-renders the preview naming who decided first</td></tr>
+          <tr><td>On a phone</td><td>the priority ladder leaves item + link; expand-in-place is not offered at all, so no row looks decidable in place when it isn't — the row links out to approval's phone decision card</td></tr>
           <tr><td>No JS</td><td>the base list is fully functional with no JS dependency — filter chips are native radios, rows are a plain table, every link-out action is an ordinary link, and the polling/claim/409 behaviour above is the server's job, not client script. <strong>Stated honestly, not papered over</strong>: the expand-in-place toggle (<code>aria-expanded</code>) and the decision dialog both need JS, the same as approval's own dialog does on its own page — without it, a routine row simply keeps its plain link-out, same as every other row</td></tr>
         </tbody>
       </table>

@@ -1763,6 +1763,10 @@
               "same as approval's own: dialog buttons disabled until the swap lands, so a failed note is never lost; success re-renders the row gone (it resolved) or, on 409, re-renders the preview naming who decided first"
             ],
             [
+              "On a phone",
+              "the priority ladder leaves item + link; expand-in-place is not offered at all, so no row looks decidable in place when it isn't — the row links out to approval's phone decision card"
+            ],
+            [
               "No JS",
               "the base list is fully functional with no JS dependency — filter chips are native radios, rows are a plain table, every link-out action is an ordinary link, and the polling/claim/409 behaviour above is the server's job, not client script. Stated honestly, not papered over: the expand-in-place toggle (aria-expanded) and the decision dialog both need JS, the same as approval's own dialog does on its own page — without it, a routine row simply keeps its plain link-out, same as every other row"
             ]
@@ -1830,6 +1834,14 @@
             [
               "Delegated / out of office",
               "name the delegate in the timeline — an approval chain that silently reroutes is an audit problem"
+            ],
+            [
+              "On a phone",
+              "the decision card + a docked --bar; the audit trail and line items become links, not collapsed sections — a collapsed audit trail on a phone is read by nobody and still costs the scroll"
+            ],
+            [
+              "Decided on a phone, stale in a tab",
+              "the same 409 as anywhere: the desktop tab that still shows buttons must lose, and say who won — a phone decision is not a lesser one"
             ],
             [
               "No JS",
