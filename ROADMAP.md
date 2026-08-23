@@ -149,6 +149,57 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 124 — Owner: the left bar on a toned cell (2026-08-23)
+
+Owner wishlist: "cell or row highlights with color. Why there is a bolder
+line on the left? — it might not suitable for all the case. Pls review the
+guidelines when to have this left bolder line."
+
+Investigated rather than answered from opinion. The bar is
+`box-shadow: inset 3px 0 0` on `tr[data-row-state]`'s first cell and on
+`td[data-tone]`. The question surfaced **one real defect and one real
+documentation gap.**
+
+1. [x] **124.1 — DONE. P0-shaped RTL defect: the bar never flipped.**
+       `box-shadow`'s x-offset is physical and has no logical form, so the
+       marker rendered `inset 3px 0 0` **byte-identically under `dir="rtl"`**
+       — measured live, not assumed — leaving it on the row's TRAILING edge,
+       while its OWN forced-colors fallback used logical
+       `border-inline-start` and did flip. Two channels for one marker,
+       disagreeing about which edge means "start". `check:rtl` could not see
+       it: a `box-shadow` is not a physical box *property*, so nothing
+       matched. Fixed with a `[dir="rtl"]` flip (now `-3px`, re-probed:
+       +3px LTR / −3px RTL), registered as the framework's **sixth**
+       documented flip site, and the gate extended to catch inset
+       `box-shadow` x-offsets — red-proved: the new detector fired on the
+       real construct before the site was registered. All three places the
+       count lives (check-rtl, /concepts/i18n, DESIGN.md) updated together,
+       which the gate itself enforces.
+2. [x] **124.2 — DONE. The guidelines the owner asked for.** New section on
+       `/components/data-table`: the bar is **not decoration** — under
+       forced-colors the browser discards backgrounds, so a tone carried by
+       tint alone vanishes for exactly the readers who need it most; the bar
+       survives because the forced-colors rule swaps it to a real border.
+       It follows the **leading** edge, not the left. Right for: row state
+       (one bar per row, a margin marker), and a FEW exceptional cells.
+       Reach for something else when: most rows have a toned cell (the bars
+       become texture, and tone is carrying ranking rather than exception —
+       sort, or use a badge); the toned cell is a right-aligned number (the
+       bar sits at the far edge from the digits — pair with
+       `data-tone-text`); or it is being used as the only channel (both tint
+       and bar are colour).
+3. [x] **124.3 — DONE. Applied the new guideline to my own page.** The
+       comparison matrix (123.3c, shipped hours earlier) was exactly the
+       wrong use: every row has a winner, so `data-tone` was carrying
+       ranking, not exception. Now marks the winner by **weight** —
+       `<strong>` on the value plus the visually-hidden phrase — two
+       channels, **neither of them colour**, both landing on the number
+       itself, and the mark the references actually use (GSMArena bolds the
+       winning spec). Verified in the rendered DOM: exactly one bold cell
+       per row, always the true min/max, always with the hidden channel,
+       and zero `data-tone` left on the page. Also fixed a stale figure in
+       the caption that cited a delta the table no longer showed.
+
 ## Slice 123 — Owner answers, seven decisions in one message (2026-08-23)
 
 The owner answered every open item in one pass. Recorded here so no wake

@@ -226,12 +226,14 @@ selection count for bulk actions).
 - `@media print` rules: hide nav/toolbars, full-width black-on-white tables.
 - All animations are token-duration-driven and zeroed under `prefers-reduced-motion`
   (including the HTMX settle flash) — `check:motion` refuses any animation with a
-  literal duration and no override. Logical properties throughout, with **five**
+  literal duration and no override. Logical properties throughout, with **six (6)**
   physical exceptions that each ship an explicit `[dir="rtl"]` flip, because CSS
   offers no logical form for what they use: the select chevron and tree/tree-table
   disclosure glyphs (`background-position` and `content` have no logical keywords),
-  the off-canvas slide direction, and the `slide-in-inline-start` animation
-  (`transform` is physical). `check:rtl` gates that count — a sixth unflipped case
+  the off-canvas slide direction, the `slide-in-inline-start` animation
+  (`transform` is physical), and the data table's row-state stripe /
+  `data-tone` cell bar (an inset `box-shadow`'s x-offset is physical).
+  `check:rtl` gates that count — a seventh unflipped case
   fails the build. (This bullet said "the one physical exception" until 2026-08-17,
   when executing the claim found the other four.)
 

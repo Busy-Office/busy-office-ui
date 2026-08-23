@@ -46,6 +46,23 @@ const NEEDS_FLIP = [
   { name: 'translateX', re: /translateX\(\s*(-?[.\d]+[a-z%]*)\s*\)/g, nonZero: (m) => parseFloat(m) !== 0 },
   { name: 'translate', re: /(?:^|[;{\s])translate\s*:\s*(-?[.\d]+[a-z%]*)/g, nonZero: (m) => parseFloat(m) !== 0 },
   { name: 'background-position', re: /background-position\s*:\s*([^;}]+)/g, nonZero: (m) => /\b(?:left|right)\b/.test(m) },
+  /* `box-shadow`'s x-offset is PHYSICAL and has no logical form, so an inset
+     accent bar stays on the same visual edge under RTL. Added 2026-08-23
+     after exactly that shipped unnoticed: data-table's row-state stripe and
+     data-tone cell bar rendered `inset 3px 0 0` identically in both
+     directions — measured, byte-identical — while their OWN forced-colors
+     fallback used logical `border-inline-start` and did flip, so the two
+     channels disagreed about which edge means "start". This gate could not
+     see it: box-shadow is not a "physical box property", so nothing matched.
+     A zero x-offset (a plain drop shadow, `0 1px 2px`) is direction-safe and
+     not a flip site. */
+  { name: 'box-shadow inset x-offset',
+    re: /box-shadow\s*:\s*([^;}]+)/g,
+    nonZero: (m) => {
+      if (!/\binset\b/.test(m)) return false;
+      const x = m.replace(/\binset\b/, ' ').trim().match(/(-?[.\d]+)(?:px|rem|em|%)/);
+      return !!x && parseFloat(x[1]) !== 0;
+    } },
   /* Glyphs that POINT along the inline axis. Logical properties move boxes,
      never the character inside them, so a chevron in `content` keeps aiming
      the same way in RTL — the tree's disclosure arrow is exactly this.
@@ -67,12 +84,13 @@ const ALLOWED = new Map([
   ['css/components/tree.css', 'tree disclosure chevron'],
   ['css/components/tree-table.css', 'tree-table disclosure chevron'],
   ['css/components/offcanvas.css', 'off-canvas drawer slide direction'],
+  ['css/components/data-table.css', 'row-state stripe + data-tone cell bar (box-shadow inset x-offset is physical)'],
   // Bundles that re-export the above; same rules, same flips.
   ['css/index.css', 'full bundle — contains the component flips above'],
   ['css/components/nav.css', 'nav bundle — contains offcanvas'],
   ['css/rf-essentials.css', 'RF-floor bundle (roadmap 59.2) — re-exports the select chevron flip from form.css'],
 ]);
-const DOCUMENTED_PLACES = 5;
+const DOCUMENTED_PLACES = 6;
 
 /* Quote-agnostic: components write [dir="rtl"] and [dir='rtl'] alike, and a
    naive substring check silently reported a file with a real flip as missing

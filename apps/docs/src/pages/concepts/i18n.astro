@@ -60,9 +60,9 @@ new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(new Date())`;
     <p>The stylesheet uses logical properties throughout —
     <code>inline-size</code>, <code>padding-inline</code>,
     <code>inset-inline-start</code>, <code>text-align: start</code> — so
-    a right-to-left document mirrors without a mirrored stylesheet. Five
+    a right-to-left document mirrors without a mirrored stylesheet. Six
     places need an explicit flip, because CSS gives no logical form for what
-    they use — and all five have one: the
+    they use — and all six have one: the
     <a href={base + '/components/form'}>select</a> chevron (a background
     image has no logical position), the
     <a href={base + '/components/tree'}>tree</a> and
@@ -72,12 +72,23 @@ new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(new Date())`;
     <a href={base + '/components/offcanvas'}>drawer</a> slide direction, and
     the <a href={base + '/base/motion'}><code>slide-in-inline-start</code></a>
     animation (<code>transform</code> is physical; there is no logical
-    translate). The count is gated: a sixth unflipped case fails the build
-    rather than shipping a stylesheet that mirrors most of the way. Both
+    translate), and the
+    <a href={base + '/components/data-table'}>data table</a>'s row-state
+    stripe and <code>data-tone</code> cell bar (an inset
+    <code>box-shadow</code>'s x-offset is physical). The count is gated: a
+    seventh unflipped case fails the build rather than shipping a stylesheet
+    that mirrors most of the way. Both
     halves of this section were prose until 2026-08-17, and executing them
     found two real defects — the animation slid in from the wrong edge
     despite its logical name, and tree-table was missing the flip its
-    sibling tree already had.</p>
+    sibling tree already had. The sixth was found the same way in 2026-08-23,
+    from an owner question about the bar itself: the stripe rendered
+    <code>inset 3px 0 0</code> byte-identically in both directions — so it
+    sat on the row's TRAILING edge in RTL — while its own forced-colors
+    fallback used logical <code>border-inline-start</code> and did flip. Two
+    channels for the same marker, disagreeing about which edge means start.
+    The gate could not see it, because a <code>box-shadow</code> is not a
+    physical box <em>property</em>; it now checks inset x-offsets too.</p>
     <p class="bo-u-text-muted"><strong>Your CSS must follow.</strong> A
     single <code>margin-left</code> in app code re-breaks RTL. Numbers
     stay left-to-right inside RTL text — that is correct, not a bug.</p>

@@ -417,6 +417,30 @@
     }
   }
 
+
+  /* RTL: `box-shadow`'s inset offset is PHYSICAL — there is no logical form,
+     so a 3px x-offset stays on the visual LEFT under `dir="rtl"`, i.e. the
+     row's TRAILING edge. That silently contradicts this same marker's own
+     forced-colors fallback below, which uses logical `border-inline-start`
+     and does flip. Measured, not assumed (2026-08-23, owner report): the
+     computed shadow was byte-identical — `3px 0px 0px 0px inset` — in both
+     directions. A documented flip site, like motion.css's transform and
+     offcanvas's slide direction. */
+  [dir="rtl"] .bo-data-table tr[data-row-state="error"] > :first-child,
+  [dir="rtl"] .bo-data-table td[data-tone="danger"] {
+    box-shadow: inset -3px 0 0 var(--bo-color-danger);
+  }
+
+  [dir="rtl"] .bo-data-table tr[data-row-state="dirty"] > :first-child,
+  [dir="rtl"] .bo-data-table tr[data-row-state="warning"] > :first-child,
+  [dir="rtl"] .bo-data-table td[data-tone="warning"] {
+    box-shadow: inset -3px 0 0 var(--bo-color-warning);
+  }
+
+  [dir="rtl"] .bo-data-table td[data-tone="success"] {
+    box-shadow: inset -3px 0 0 var(--bo-color-success);
+  }
+
   /* Auto-compaction when the table lives in a narrow container.
      Precedence: an EXPLICIT data-density on the table or its container wins —
      compaction only applies when neither declares one. Every density alias is

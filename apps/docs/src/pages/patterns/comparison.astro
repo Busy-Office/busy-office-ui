@@ -27,10 +27,11 @@ const delta = (c: typeof CRITERIA[number], i: number) => {
 };
 const winsPerCandidate = CANDIDATES.map((_, i) => CRITERIA.filter((c) => bestIndex(c) === i).length);
 
-const markup = `<!-- Candidates as COLUMNS, criteria as ROWS. The best cell per row
-     is DERIVED and marked in two channels: data-tone AND a visually-hidden
-     "best" word, so it survives greyscale, forced colours and a screen reader.
-     One radio column commits to ONE winner. -->
+const markup = `<!-- Candidates as COLUMNS, criteria as ROWS. The best value per
+     row is DERIVED and marked in two channels, NEITHER of them colour: bold
+     weight on the number itself, plus a visually-hidden "best" phrase. Not
+     data-tone — every row has a winner here, so a tinted cell would carry
+     ranking rather than exception. One radio column commits to ONE winner. -->
 <form method="post" action="/rfq/4471/award">
   <table class="bo-data-table">
     <thead>
@@ -43,11 +44,11 @@ const markup = `<!-- Candidates as COLUMNS, criteria as ROWS. The best cell per 
     <tbody>
       <tr>
         <th scope="row">Unit price <span class="bo-u-text-muted">$</span></th>
-        <td class="bo-data-table__col--numeric" data-tone="success">
-          770.00 <span class="bo-visually-hidden">— best on this criterion</span>
+        <td class="bo-data-table__col--numeric">
+          <strong>742.50</strong><span class="bo-visually-hidden"> — best on this criterion</span>
         </td>
         <td class="bo-data-table__col--numeric">
-          803.00 <span class="bo-u-text-muted">+33.00</span>
+          803.00 <span class="bo-u-text-muted">+60.50</span>
         </td>
       </tr>
     </tbody>
@@ -105,12 +106,17 @@ const markup = `<!-- Candidates as COLUMNS, criteria as ROWS. The best cell per 
           {CRITERIA.map((c) => (
             <tr>
               <th scope="row">{c.label} <span class="bo-u-text-muted">{c.unit}</span></th>
+              {/* The winner is marked by WEIGHT, not by data-tone. Every row here
+                  has exactly one best, so a toned cell would be carrying RANKING,
+                  not exception — and a bar on every row reads as texture rather
+                  than "look here" (the data-table page's own guidance). Weight
+                  lands on the number itself, survives greyscale and
+                  forced-colors, and needs no colour at all. */}
               {c.values.map((v, i) => (
-                <td class="bo-data-table__col--numeric" data-tone={bestIndex(c) === i ? 'success' : undefined}>
-                  <span class="bo-u-tabular">{c.fmt(v)}</span>
+                <td class="bo-data-table__col--numeric">
                   {bestIndex(c) === i
-                    ? <span class="bo-visually-hidden"> — best on this criterion</span>
-                    : <span class="bo-u-text-muted bo-u-tabular" style="margin-inline-start: var(--bo-space-2)">{delta(c, i)}</span>}
+                    ? <><strong class="bo-u-tabular">{c.fmt(v)}</strong><span class="bo-visually-hidden"> — best on this criterion</span></>
+                    : <><span class="bo-u-tabular">{c.fmt(v)}</span><span class="bo-u-text-muted bo-u-tabular" style="margin-inline-start: var(--bo-space-2)">{delta(c, i)}</span></>}
                 </td>
               ))}
             </tr>
@@ -147,12 +153,19 @@ const markup = `<!-- Candidates as COLUMNS, criteria as ROWS. The best cell per 
       <button class="bo-btn" type="button">Award to selected supplier</button>
     </div>
     <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-3)">
-      <strong>Two channels on every "best", always.</strong> The winning cell
-      carries <code>data-tone="success"</code> <em>and</em> a visually-hidden
-      "best on this criterion" — colour alone would vanish in greyscale, in
-      forced-colours mode, and for a screen-reader user entirely. Every other
+      <strong>Two channels on every "best", and neither is colour.</strong>
+      The winning value is set in <strong>bold</strong> — the mark lands on
+      the number itself and survives greyscale and forced-colours — plus a
+      visually-hidden "best on this criterion" for a screen reader.
+      Deliberately NOT <code>data-tone</code>: every row here has exactly one
+      winner, so a toned cell would be carrying <em>ranking</em> rather than
+      <em>exception</em>, and a stripe on every row reads as texture instead
+      of "look here" (see the
+      <a href={base + '/components/data-table'}>data table</a>'s own guidance
+      on when that bar is the right mark). It is also the mark the references
+      use — GSMArena bolds the winning spec. Every other
       cell shows its <strong>delta from the best in that criterion's own
-      units</strong> (<code>+33.00</code>, <code>+12 days</code>), because
+      units</strong> (<code>+60.50</code>, <code>+12 days</code>), because
       "nine days slower" is the thing a buyer argues about; a normalised
       0–100 score hides the trade-off it is supposed to expose.
     </p>
