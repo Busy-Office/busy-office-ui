@@ -1996,6 +1996,42 @@ check(
   JSON.stringify(lrLadder),
 );
 
+// Touch attribute recipe (roadmap 127.5). A spec table next to a demo is
+// two copies of one fact, and the docs' whole doctrine is that a
+// documented surface is generated from the shipped thing rather than
+// retyped beside it. This recipe cannot be generated — the attributes
+// express MEANING a stylesheet does not carry — so the next best thing
+// is asserted: parse each table row's #id and its <code> attribute
+// pairs, then require the live field to carry exactly those values. The
+// table drifting from the demo is the failure this catches, in either
+// direction.
+await visit('/components/form/', { width: DESKTOP_WIDTH, height: 2600 });
+const recipe = await page.evaluate(() => {
+  const rows = [...document.querySelectorAll('table tbody tr')].filter((tr) =>
+    /^#tr-/.test(tr.querySelector('td code')?.textContent ?? ''));
+  return rows.map((tr) => {
+    const id = tr.querySelector('td code').textContent.slice(1);
+    const pairs = [...tr.querySelectorAll('td:nth-child(2) code')]
+      .map((c) => c.textContent.match(/^([a-z]+)="([^"]*)"$/))
+      .filter(Boolean)
+      .map((m) => [m[1], m[2]]);
+    const el = document.getElementById(id);
+    return {
+      id,
+      found: !!el,
+      pairs: pairs.length,
+      mismatched: !el ? ['no such field'] : pairs
+        .filter(([name, value]) => el.getAttribute(name) !== value)
+        .map(([name, value]) => `${name}: table says ${value}, field has ${el.getAttribute(name)}`),
+    };
+  });
+});
+check(
+  'touch attribute recipe: every field in the table carries, live, exactly the attributes the table claims for it',
+  recipe.length === 6 && recipe.every((r) => r.found && r.pairs >= 1 && r.mismatched.length === 0),
+  JSON.stringify(recipe),
+);
+
 // Saved views (roadmap 127.4). The page's load-bearing claim is "a saved
 // view is a URL" — the thing the reference variant managers cannot do.
 // So DRIVE it: pick a view, submit, and read location.search. A shape

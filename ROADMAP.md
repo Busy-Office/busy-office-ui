@@ -321,13 +321,29 @@ its reason.
        the reader cannot see; view deleted under a live URL).
        Astro trap re-hit: `{name, query, scope}` in a table cell parsed
        as a JSX expression — "query is not defined" at build.
-5. [ ] **127.5 — Touch form-entry recipe.** Grill verdict: a Forms
-       section, not new surface — the inputmode/autocomplete/
-       enterkeyhint recipe per field type (Baymard's cheapest mobile
-       win), stated as a table generated-adjacent to the field matrix.
-       Accept: forms page section; the recipe table names each field
-       type's exact attributes; no attribute invented (data-hooks
-       clean).
+5. [x] **127.5 — Touch form-entry recipe. DONE 2026-08-23.** A Forms
+       section, not surface: six live fields at phone width + a table
+       giving each one its exact `type`/`inputmode`/`autocomplete`/
+       `enterkeyhint`. Nothing invented — every attribute is standard
+       HTML, so data-hooks stays clean.
+       Better than the floor (Baymard's mobile-keyboard finding) in two
+       named places: the **code-field trio**
+       (`autocapitalize="characters"` + `autocorrect="off"` +
+       `spellcheck="false"`), which generic mobile-form advice skips
+       because consumer forms have no part numbers — a phone otherwise
+       lower-cases `abc-10924`, autocorrects it, and underlines it red;
+       and an `enterkeyhint` **rule** rather than a list: it describes
+       what the key DOES in your flow, so only the last field before a
+       submit earns `done`, a textarea keeps `enter` (its Enter is a
+       newline), and a scan field's is cosmetic because the scanner
+       sends Enter itself.
+       Claim 104 is the interesting part: a spec table beside a demo is
+       two copies of one fact, and this recipe cannot be GENERATED (the
+       attributes carry meaning no stylesheet holds), so the claim
+       parses each row's `#id` and its `<code>` pairs and requires the
+       live field to match. **Red-proved in both directions** — drifting
+       the field from the table and the table from the field each go
+       red.
 6. [ ] **127.6 — camera candidate closed.** 126.5 already landed the
        recipe on goods-receipt; this item just verifies file-upload
        cross-references it (capture="environment") and closes the

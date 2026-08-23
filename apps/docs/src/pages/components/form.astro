@@ -307,6 +307,102 @@ const fieldMarkup = `<div class="bo-form-field">
     gives text fields, choices already have for free.</p>
   </section>
   <section class="demo">
+    <h2>Typing on a phone — the attribute recipe per field</h2>
+    <p>Nothing here is a component: these are plain HTML attributes that
+    decide which keyboard a phone shows and what its bottom-right key
+    says. They cost nothing, and getting them wrong is the most-felt
+    mobile defect in a data-entry screen — a numeric keypad for a part
+    code, or a "Go" key that submits the form three fields early.</p>
+    <div class="demo-phone-screen">
+      <form class="bo-form-section">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="tr-item">Item code</label>
+          <input class="bo-input bo-input--code" id="tr-item" name="item"
+              autocapitalize="characters" autocorrect="off" spellcheck="false"
+              enterkeyhint="next" placeholder="ABC-10924" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="tr-qty">Quantity</label>
+          <input class="bo-input bo-input--numeric" id="tr-qty" name="qty" type="number"
+              inputmode="numeric" step="1" min="0" enterkeyhint="next" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="tr-amount">Unit price</label>
+          <input class="bo-input bo-input--numeric" id="tr-amount" name="price" type="number"
+              inputmode="decimal" step="0.01" enterkeyhint="next" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="tr-search">Find a vendor</label>
+          <input class="bo-input" id="tr-search" name="q" type="search"
+              enterkeyhint="search" placeholder="Search vendors…" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="tr-email">Contact email</label>
+          <input class="bo-input" id="tr-email" name="email" type="email"
+              inputmode="email" autocomplete="email" enterkeyhint="next" />
+        </div>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="tr-note">Note</label>
+          <textarea class="bo-input" id="tr-note" name="note" rows="2" enterkeyhint="enter"></textarea>
+        </div>
+        <div class="bo-form-actions">
+          <button class="bo-btn" type="button">Save line</button>
+        </div>
+      </form>
+    </div>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Field</th><th scope="col">Attributes</th><th scope="col">Why this one</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>#tr-item</code> Item / part / bin code</td>
+            <td><code>autocapitalize="characters"</code> <code>autocorrect="off"</code> <code>spellcheck="false"</code> <code>enterkeyhint="next"</code></td>
+            <td>the trio generic mobile-form advice skips, because consumer forms have no part numbers: a phone otherwise lower-cases <code>abc-10924</code>, autocorrects it to a word, and underlines it red. No <code>inputmode</code> — codes are alphanumeric, and forcing the numeric pad hides the letters</td>
+          </tr>
+          <tr>
+            <td><code>#tr-qty</code> Whole quantity</td>
+            <td><code>type="number"</code> <code>inputmode="numeric"</code> <code>step="1"</code> <code>enterkeyhint="next"</code></td>
+            <td><code>numeric</code>, not <code>decimal</code>: a keypad with a decimal point on a field that rejects decimals invites the error</td>
+          </tr>
+          <tr>
+            <td><code>#tr-amount</code> Money / measured quantity</td>
+            <td><code>type="number"</code> <code>inputmode="decimal"</code> <code>step="0.01"</code> <code>enterkeyhint="next"</code></td>
+            <td>the decimal pad carries the separator the locale actually uses. With <code>data-grouped</code> the behavior swaps <code>type</code> to <code>text</code> on upgrade and keeps <code>inputmode="decimal"</code> — grouping and a numeric type cannot coexist</td>
+          </tr>
+          <tr>
+            <td><code>#tr-search</code> Search / filter</td>
+            <td><code>type="search"</code> <code>enterkeyhint="search"</code></td>
+            <td>the key says Search, and iOS adds the clear affordance</td>
+          </tr>
+          <tr>
+            <td><code>#tr-email</code> Contact email</td>
+            <td><code>type="email"</code> <code>inputmode="email"</code> <code>autocomplete="email"</code> <code>enterkeyhint="next"</code></td>
+            <td><code>autocomplete</code> is the one that saves real typing; the token list is the spec's, never a made-up name — a wrong token silently disables autofill</td>
+          </tr>
+          <tr>
+            <td><code>#tr-note</code> Free-text note</td>
+            <td><code>enterkeyhint="enter"</code></td>
+            <td>a textarea's Enter must stay a newline; <code>done</code> or <code>send</code> here teaches people that Enter submits, which it does not</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted"><strong>The rule for
+    <code>enterkeyhint</code></strong>: it describes what the key DOES in
+    your flow, not where the field sits. Every field above says
+    <code>next</code> because each is followed by another; only the last
+    field before a submit earns <code>done</code>, and only a field that
+    posts on Enter earns <code>go</code> or <code>send</code>. A scan
+    field is the interesting case — the scanner sends Enter itself, so
+    <code>enterkeyhint</code> is cosmetic there and the
+    <a href={base + '/components/scan'}>scan input</a> owns that
+    behaviour instead. None of this needs JS, a component, or a
+    breakpoint, which is why it lives here as a recipe rather than as
+    surface: <strong>the framework cannot know your field's meaning</strong>,
+    and these attributes are exactly the place where meaning has to be
+    stated by hand.</p>
+  </section>
+  <section class="demo">
     <h2>Markup — the canonical field recipe</h2>
     <pre><code>{fieldMarkup}</code></pre>
   </section>
