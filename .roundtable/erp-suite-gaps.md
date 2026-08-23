@@ -114,7 +114,37 @@ section (badge + link + meta in a `bo-stack`), NOT a new component — but the
 composition has to be decided once and documented, or twelve screens will
 invent twelve versions of it. Worth grilling against the Objective.
 
-## GAP-3 — a segmented option cannot carry a count
+## GAP-3 — RESOLVED 2026-08-23 — a segmented option cannot carry a count
+
+**Verdict: one line of CSS, then a documented convention. No part, no
+modifier, no component.**
+
+The count is **muted tabular text as a second child of the option** —
+`<span class="bo-u-text-muted bo-u-tabular">128</span>` — which is the
+treatment the framework already ships for a count under another name:
+`.bo-data-table__selection-count` is xs + text-secondary + tabular-nums. A
+count is not a status, so it is not a badge.
+
+**Not a badge, and that is measured**: at compact density a `bo-badge` renders
+**24px tall inside a 24px segment**, filling the option edge to edge. The
+muted span renders 20px in the same 24px slot. Where there IS room and the
+number really is a status — a task tile, a nav row — the badge stays right.
+
+**The one real framework gap was a missing `gap`.** `.bo-segmented__option` is
+`inline-flex` with no gap, so any second child sat against the label. Adding
+`gap: var(--bo-space-2)` changed the width of **zero** existing options across
+every page of the docs site — an option with one text run has one flex item,
+so there is nothing to space — measured before shipping, not reasoned about.
+
+**Instrument note, in the spirit of the standing rule**: the first probe for
+this reported "113 pages have a segmented control", which is nearly every page
+— because the docs shell's own density switcher is one. That is the
+chrome-counted-as-content trap, third time in this repo. The measurement that
+counted was taken on the example's real triage views instead.
+
+*(original entry below)*
+
+## GAP-3 (original) — a segmented option cannot carry a count
 
 **Hit on**: `p2p/vendor-invoices` (the triage views: All open · 128, Blocked ·
 9, Mine · 14).

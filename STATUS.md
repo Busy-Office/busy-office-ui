@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-23 23:33
+Generated at: 2026-08-23 23:41
 
 ## Open items by slice
 
@@ -35,8 +35,8 @@ Generated at: 2026-08-23 23:33
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (797 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-23 23:33   ok
+dispatch status — counter-triggered rules (799 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-23 23:33   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -51,8 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-23 22:29 · Standardize · dry · 131.2 — RfDevice component: one call site for six embeds, chrome only where there is room · landed · 15f9bbc
-- 2026-08-23 22:31 · Roadmap · plan · 133 — owner ask: prove table + object-page scrolling works; the scroll containers are exempt from every gate · triaged · 06ac2e8
 - 2026-08-23 22:32 · Continue · build · 131.3 — icons on RF buttons, decided · refused · 75de725
 - 2026-08-23 22:32 · Meta · refusal · growing the icon set for the RF exception bar: no glyph exists for Back/Skip/Report short, and the task-menu case was already refused on profile-size grounds · refused · 75de725
 - 2026-08-23 22:33 · Roadmap · plan · 134 — test:visual: wrong theme key, stale baselines, runs in no workflow · triaged · 71a8f17
@@ -61,6 +59,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-23 23:25 · Continue · build · 130.2 GAP-4a — grouped column headers: two sticky header rows pinned to the same offset; fixed, documented, claim 108 · landed · 1305ab9
 - 2026-08-23 23:33 · Standardize · dry · GAP-13 consolidation — measured; general form refused, knowledge consolidated · landed · 6aa53b4
 - 2026-08-23 23:33 · Meta · refusal · dropping .bo-btn's global white-space: nowrap — zero buttons change at 1440, four at 390 and all four already fit · refused · 6aa53b4
+- 2026-08-23 23:41 · Continue · build · 130.2 GAP-11 + GAP-14 — both refuse a new state; GAP-11 was a usage bug the gates cannot see · landed · b0a0e51
+- 2026-08-23 23:41 · Meta · refusal · a 5th bo-timeline data-state (partial) and a new data-row-state (excluded) — the marker glyph and row selection already carry both · refused · b0a0e51
 
 ## Sunset test
 

@@ -44,6 +44,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    /* So a second child — a count, an icon — sits beside the label instead of
+       against it. An option with a single text run has ONE flex item, so this
+       cannot affect existing usage, and that is measured rather than reasoned:
+       adding it changed the width of zero options across every page of the
+       docs site (roadmap 130.2, GAP-3). Saved views want their size beside
+       their name — "Blocked · 9" is what makes a clerk click; "Blocked" alone
+       is a filter nobody knows the size of. */
+    gap: var(--bo-space-2);
     /* One control height minus 4px: the option sits INSIDE the track, so it
        has to be shorter than the control by the track's padding on both
        edges (2px each). Subtracting from the density alias rather than

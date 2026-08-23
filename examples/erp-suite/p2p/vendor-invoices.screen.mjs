@@ -25,18 +25,21 @@ export const render = () =>
 
     <!-- GAP-3. This list is a triage queue: the reader wants "show me only
          what is blocked". That is a saved view / segmented filter over the
-         SAME list, which list-report now documents (127.4) — but the counts
-         beside each view are the load-bearing part and nothing in the
-         framework renders a count inside a segmented option. Written as
-         plain text inside the label, which is what a consumer will copy. -->
+         SAME list, which list-report now documents (127.4). GAP-3 RESOLVED
+         2026-08-23: the count is muted tabular text as a second child of the
+         option — no part, no modifier. The one thing the framework was
+         missing was a gap on .bo-segmented__option, so the count sat
+         against the label; adding it changed the width of zero existing
+         options anywhere on the docs site. Not a badge: a badge is a status
+         chip, and at compact density it is 24px tall inside a 24px segment. -->
     <form class="bo-cluster" method="get" data-density="compact">
       <div class="bo-segmented" role="group" aria-label="Saved views">
         <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="v-all" value="all" checked>
-        <label class="bo-segmented__option" for="v-all">All open · 128</label>
+        <label class="bo-segmented__option" for="v-all">All open <span class="bo-u-text-muted bo-u-tabular">128</span></label>
         <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="v-block" value="blocked">
-        <label class="bo-segmented__option" for="v-block">Blocked · 9</label>
+        <label class="bo-segmented__option" for="v-block">Blocked <span class="bo-u-text-muted bo-u-tabular">9</span></label>
         <input class="bo-segmented__input bo-visually-hidden" type="radio" name="view" id="v-mine" value="mine">
-        <label class="bo-segmented__option" for="v-mine">Mine · 14</label>
+        <label class="bo-segmented__option" for="v-mine">Mine <span class="bo-u-text-muted bo-u-tabular">14</span></label>
       </div>
       <button class="bo-btn bo-btn--secondary" type="submit">Go</button>
     </form>

@@ -23,6 +23,15 @@ const three = `<div class="bo-segmented" role="group" aria-label="Report range">
   <label class="bo-segmented__option" for="seg-quarter">Quarter</label>
 </div>`;
 
+const counts = `<div class="bo-segmented" role="group" aria-label="Saved views">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-view" id="seg-all" checked>
+  <label class="bo-segmented__option" for="seg-all">All open <span class="bo-u-text-muted bo-u-tabular">128</span></label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-view" id="seg-blocked">
+  <label class="bo-segmented__option" for="seg-blocked">Blocked <span class="bo-u-text-muted bo-u-tabular">9</span></label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-view" id="seg-mine2">
+  <label class="bo-segmented__option" for="seg-mine2">Mine <span class="bo-u-tabular bo-u-text-muted">14</span></label>
+</div>`;
+
 const disabled = `<div class="bo-segmented" role="group" aria-label="Export format">
   <input class="bo-segmented__input bo-visually-hidden" type="radio" name="seg-export" id="seg-csv" checked>
   <label class="bo-segmented__option" for="seg-csv">CSV</label>
@@ -69,6 +78,22 @@ const canonical = `<!-- A radiogroup, not styled buttons: keyboard arrow-navigat
   <section class="demo">
     <h2>Three options</h2>
     <Demo code={three} />
+  </section>
+
+  <section class="demo">
+    <h2>Saved views, with their size</h2>
+    <Demo code={counts} />
+    <p class="bo-u-text-muted">The count is usually the load-bearing half:
+    "Blocked&nbsp;9" is what makes a clerk click, while "Blocked" alone is a
+    filter nobody knows the size of. It needs no part and no modifier — an
+    option is a flex container with a gap, so a second child sits beside the
+    label. <strong>Use muted tabular text, not a
+    <a href={base + '/components/badge'}>badge</a></strong>: a badge is a
+    status chip and a count is not a status, and at compact density a badge is
+    24px tall inside a 24px segment — measured — so it fills the option edge to
+    edge. Where there IS room and the number really is a status (a task tile, a
+    nav row), the badge is right. Tabular figures keep the numbers from
+    shifting the option's width as they change.</p>
   </section>
 
   <section class="demo">

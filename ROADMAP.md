@@ -536,6 +536,12 @@ reads clean while telling us nothing.
        table and prove nothing) and claim 108, red-proved against the BUILT
        css. **GAP-4b stays open** — the cell-level "this one disagrees" cue,
        the part that risks becoming "colour the cell".
+       **GAP-3 RESOLVED: one line, then a convention.** The count is muted
+       tabular text as a second child of the option — the treatment
+       `.bo-data-table__selection-count` already ships — not a badge, which
+       at compact density is 24px tall inside a 24px segment. The only real
+       framework gap was a missing `gap` on `.bo-segmented__option`; adding
+       it changed zero existing options site-wide, measured.
        **GAP-11 DECIDED: NOT A GAP — my bug.** An excluded conversion line
        looked identical to an included one because the screen wrote
        `class="bo-checkbox"` and omitted `bo-data-table__row-select`, which

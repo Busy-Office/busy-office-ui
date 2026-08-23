@@ -8,6 +8,16 @@ pin.
 
 ## Unreleased
 
+- **Added** (`segmented`): `.bo-segmented__option` now has a `gap`, so a
+  second child — a saved view's count, an icon — sits beside the label instead
+  of against it. An option with a single text run has one flex item, so this
+  cannot affect existing usage: measured before shipping, it changed the width
+  of zero options across every page of the docs site. The count itself needs
+  no new surface — muted tabular text, the same treatment
+  `.bo-data-table__selection-count` already ships. Not a badge: a badge is a
+  status chip, and at compact density it renders 24px tall inside a 24px
+  segment.
+
 - **Fixed** (`data-table`): a **grouped (multi-row) column header** now sticks
   correctly. Every `thead th` was `position: sticky; inset-block-start: 0` —
   right for one header row, silently wrong for two: both rows pinned to the
