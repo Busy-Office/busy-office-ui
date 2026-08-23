@@ -24,6 +24,16 @@
  * Re-baseline deliberately (`npm run test:visual:update -w docs`) only after
  * attributing every diff to a known edit. Blind-updating turns this into a
  * screenshot archive.
+ *
+ * ATTRIBUTE BY LAYOUT TOO, NOT ONLY BY PAGE. On 2026-08-24 a diff on
+ * /components/richtext looked unattributable: that page had no relevant
+ * markup and zero commits since the baselines. Every one of its 9837 changed
+ * pixels turned out to sit at x <= 200 — inside the sidebar — because a
+ * sidebar ENTRY had moved between groups two wakes earlier, shifting every
+ * group below it by one row. The page's own git history could never show
+ * that. When a diff looks unexplained, check the shell (Gallery.astro) and
+ * the global stylesheets before calling it a mystery; and read WHERE the
+ * pixels are, because "all of them in the left 200px" answers it instantly.
  */
 /**
  * Visual-regression harness — screenshot-diffs a page matrix (key pages ×

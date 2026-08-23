@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 05:47
+Generated at: 2026-08-24 06:00
 
 ## Open items by slice
 
@@ -18,7 +18,7 @@ Generated at: 2026-08-24 05:47
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (838 iterations logged)
+dispatch status — counter-triggered rules (839 iterations logged)
   Standardize   6 / 4 Continue rounds since 2026-08-24 05:00   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -33,7 +33,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 05:03 · Continue · build · 132.2 — Search Help = value-help; vocabulary line added, F4's three capabilities compared (2 already covered, 1 correctly absent) · landed · 01e637f
 - 2026-08-24 05:03 · Meta · refusal · a second picker pattern for search help — the Objective's rethink test: two surfaces growing toward each other · refused · 01e637f
 - 2026-08-24 05:08 · Continue · build · 132.3 — calendar: triage premise was wrong (3 of 4 asks already shipped); range guidance added, drag-select refused · landed · 16ed66d
 - 2026-08-24 05:08 · Meta · refusal · a 2-month demo (repeats the 3-month point) and a scripted drag-select range picker · refused · 16ed66d
@@ -43,6 +42,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 05:19 · Meta · refusal · a dual-list (pick-list/shuttle) component — a second way to do what data-multiselect already does · refused · 409d827
 - 2026-08-24 05:28 · Continue · build · 130.3 — module two (O2C sales orders) built with zero new CSS; found GAP-15, a defect in GAP-4a's own fix, and fixed it · landed · 39661bd
 - 2026-08-24 05:47 · Continue · build · 130.3 — module two complete (O2C: sales orders + customer invoices ageing); GAP-16 tfoot totals fixed; visual gate caught its first real change plus one unexplained diff · landed · d51f591
+- 2026-08-24 06:00 · Roadmap · plan · handover — RESUME current after the twenty-wake run; 134.3 and 112.3 await the owner · logged · 735020b
 
 ## Sunset test
 
