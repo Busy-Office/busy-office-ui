@@ -788,3 +788,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-23 20:45 · Continue · build · 130.1 ERP suite P2P pilot — 7 framework gaps found and logged · landed · 28ccfc8
 - 2026-08-23 20:53 · Continue · release · 0.5.0 released to npm (grouped-number fixes + scan flash + --bar + column ladder) with the 0.4.0 docs snapshot · released · de0cbc1
 - 2026-08-23 21:04 · Continue · build · 130.2 first two gaps closed: form-actions wrap (GAP-7), heading-level samples (GAP-5) · landed · e034a6e
+- 2026-08-23 21:35 · Continue · build · 130.2b P2P flow: PR entry + PR→PO conversion; 6 gaps; form-actions long-label wrap · landed · 04b06e2
+- 2026-08-23 21:35 · Meta · refusal · goods-receipt screens in the ERP example — already covered by the goods-receipt pattern and the three RF screens · refused · 04b06e2
+- 2026-08-23 21:35 · Meta · refusal · payment-run screens in the ERP example — select-and-run is bulk-actions, the unattended run is job-monitor · refused · 04b06e2
