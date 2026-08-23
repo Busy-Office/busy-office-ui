@@ -2014,6 +2014,33 @@ check(
   JSON.stringify(scanFlash),
 );
 
+// Sync-state slot (127.1): "Click it in this demo to cycle the four
+// states" — both channels must move together, and the glyphs must differ
+// by SHAPE across states (never colour-only).
+await visit('/patterns/app-frame/');
+const sync = await page.evaluate(() => {
+  const btn = document.getElementById('frame-sync');
+  const read = () => ({
+    chip: document.querySelector('[data-sync-chip]').textContent.trim(),
+    live: document.getElementById('frame-sync-live').textContent,
+  });
+  const s0 = read();
+  const seen = [s0];
+  for (let i = 0; i < 3; i++) { btn.click(); seen.push(read()); }
+  btn.click(); // wraps back to online
+  const wrapped = read();
+  const glyphs = seen.map((s) => s.chip[0]);
+  return { seen, wrapped, glyphShapes: new Set(glyphs).size };
+});
+check(
+  "app-frame sync slot: four states, both channels move together, glyphs differ by shape",
+  sync.glyphShapes === 4 &&
+    sync.seen.every((s) => s.live.startsWith('Connection:')) &&
+    /queued/.test(sync.seen[2].chip) && /3 actions queued/.test(sync.seen[2].live) &&
+    /error/i.test(sync.seen[3].chip) && sync.wrapped.chip === sync.seen[0].chip,
+  JSON.stringify(sync),
+);
+
 await browser.close();
 server.close();
 

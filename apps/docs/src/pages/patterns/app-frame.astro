@@ -30,6 +30,13 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
     <input class="bo-input" type="search" aria-label="Search everything"
            placeholder="Search…" style="max-inline-size: 14rem" />
 
+    <!-- Sync-state slot: badge + glyph SHAPE + text (two channels), the
+         live region announces changes. States: ● Online / ↻ Syncing /
+         ⏸ 3 queued / ✕ Sync error. YOUR app sets them; the frame is only
+         the one place they always appear. -->
+    <span class="bo-badge bo-badge--success"><span aria-hidden="true">●</span> Online</span>
+    <span aria-live="polite" class="bo-visually-hidden">Connection: online</span>
+
     <a class="bo-btn bo-btn--ghost" href="/notifications">
       Alerts <span class="bo-badge bo-badge--warning">3</span>
     </a>
@@ -83,6 +90,14 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
         </div>
         <span class="bo-navbar__spacer"></span>
         <input class="bo-input" type="search" aria-label="Search everything" placeholder="Search…" style="max-inline-size: 14rem" />
+        {/* Sync-state slot (127.1): ZERO new CSS — badge + glyph SHAPE +
+            text, with changes announced. The queue engine is the app's;
+            this is the ever-present place its truth is shown (the D365
+            evidence). Click it in this demo to cycle the four states. */}
+        <button class="bo-btn bo-btn--ghost" type="button" id="frame-sync" aria-describedby="frame-sync-live">
+          <span class="bo-badge bo-badge--success" data-sync-chip><span aria-hidden="true">●</span> Online</span>
+        </button>
+        <span id="frame-sync-live" aria-live="polite" class="bo-visually-hidden">Connection: online</span>
         <a class="bo-btn bo-btn--ghost" href="#">Alerts <span class="bo-badge bo-badge--warning">3</span></a>
         <button class="bo-btn bo-btn--ghost" type="button" popovertarget="frame-user">
           <span class="bo-avatar" aria-hidden="true">JK</span> J. Kim
@@ -155,6 +170,11 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
         <a href={base + '/components/form'}>input</a>; wire it to the
         <a href={base + '/patterns/command-bar'}>command bar</a> for
         type-to-jump.</li>
+      <li><strong>Sync state</strong> — a
+        <a href={base + '/components/badge'}>badge</a> whose glyph SHAPE and
+        text both change per state, with an <code>aria-live</code>
+        announcement — the full contract is
+        <a href={base + '/concepts/offline'}>the offline concept page</a>.</li>
       <li><strong>Notifications</strong> — a link with a
         <a href={base + '/components/badge'}>badge</a> count into the
         <a href={base + '/patterns/notification'}>notification center</a>.</li>
@@ -215,6 +235,25 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
   <script>
     import { initDropdowns } from '@busy-office/ui/js';
     initDropdowns();
+    // Demo-only state cycler for the sync slot — a real app drives this
+    // from its queue. Both channels move together, always.
+    const STATES = [
+      ['bo-badge--success', '●', 'Online', 'Connection: online'],
+      ['bo-badge--accent', '↻', 'Syncing', 'Connection: syncing changes'],
+      ['bo-badge--warning', '⏸', '3 queued', 'Connection: offline, 3 actions queued'],
+      ['bo-badge--danger', '✕', 'Sync error', 'Connection: sync failed, retry needed'],
+    ];
+    let si = 0;
+    document.getElementById('frame-sync')?.addEventListener('click', () => {
+      si = (si + 1) % STATES.length;
+      const [tone, glyph, label, announce] = STATES[si];
+      const chip = document.querySelector('[data-sync-chip]')!;
+      chip.className = `bo-badge ${tone}`;
+      chip.innerHTML = '';
+      const g = document.createElement('span'); g.setAttribute('aria-hidden', 'true'); g.textContent = glyph;
+      chip.append(g, ` ${label}`);
+      document.getElementById('frame-sync-live')!.textContent = announce;
+    });
   </script>
 
   <Related links={[

@@ -169,7 +169,22 @@ condensed here because each candidate already carries 2+ sources and an
 Accept sketch; where a verdict needed a design call, it is stated with
 its reason.
 
-1. [ ] **127.1 — Offline / sync-state signalling.** Grill verdict:
+1. [x] **127.1 — DONE 2026-08-23. Accept met, zero new CSS as the
+       verdict demanded.** The app frame gains the sync-state slot —
+       badge composition whose four states differ by glyph SHAPE
+       (● ↻ ⏸ ✕) and text, changes announced through one polite live
+       region; the queued state carries its COUNT ("3 queued" is a fact,
+       "offline" is a mood). `/concepts/offline` states the whole
+       contract: what the framework ships (the visible half) and what it
+       deliberately does not (queue/storage/replay are app architecture;
+       the references sell persistence as a server), plus the five rules
+       a queue engine owes the chip — including idempotent replay via
+       the existing 409 discipline, and error-is-sticky. Claims case
+       drives the demo cycle live: four glyph shapes verified distinct,
+       both channels moving together, wrap-around correct (99 claims).
+       The demo cycler's hook recorded as a cited data-hooks exception.
+       axe 121 pages x 2 widths zero; layout clean. Original text:
+       **Offline / sync-state signalling.** Grill verdict:
        ZERO new CSS — compose badge + icon + visually-hidden +
        aria-live (the RF grill's Q2 boundary binds: visuals and
        contracts, never the queue engine). Build: a named sync-status

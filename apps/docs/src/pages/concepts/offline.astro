@@ -1,0 +1,87 @@
+---
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Gallery title="Offline & queued actions">
+  <p class="demo-note">
+    What this framework ships for flaky-network ERP reality — and, stated
+    just as plainly, what it deliberately does not. The split is the same
+    one every page here follows: <strong>the framework does visuals and
+    contracts; the queue engine, storage and replay are your app's</strong>
+    (the reference products sell session persistence as a <em>server</em>;
+    a CSS framework pretending to ship it would be selling air).
+    <strong>Not a promise of offline-first</strong> — if your deployment
+    needs true offline capture, that is an application architecture
+    (service worker, local store, idempotent replay) this page gives you
+    the <em>visible half</em> of, nothing more.
+  </p>
+
+  <section class="demo">
+    <h2>The four states a user must be able to tell apart</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">State</th><th scope="col">Chip</th><th scope="col">Announced</th><th scope="col">Meaning for the user</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Online</td>
+            <td><span class="bo-badge bo-badge--success"><span aria-hidden="true">●</span> Online</span></td>
+            <td>"Connection: online"</td>
+            <td>acting saves now</td>
+          </tr>
+          <tr>
+            <td>Syncing</td>
+            <td><span class="bo-badge bo-badge--accent"><span aria-hidden="true">↻</span> Syncing</span></td>
+            <td>"Connection: syncing changes"</td>
+            <td>recent work is in flight; leaving now may lose the tail</td>
+          </tr>
+          <tr>
+            <td>Queued</td>
+            <td><span class="bo-badge bo-badge--warning"><span aria-hidden="true">⏸</span> 3 queued</span></td>
+            <td>"Connection: offline, 3 actions queued"</td>
+            <td>work is captured, not saved — the COUNT is the honesty: "offline" alone hides how much is at risk</td>
+          </tr>
+          <tr>
+            <td>Error</td>
+            <td><span class="bo-badge bo-badge--danger"><span aria-hidden="true">✕</span> Sync error</span></td>
+            <td>"Connection: sync failed, retry needed"</td>
+            <td>replay hit something a retry alone will not fix — this state must never decay back to a quiet glyph</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Every state is <strong>two-channel by
+    shape</strong>: the glyph differs in FORM (● ↻ ⏸ ✕), never only in
+    colour, and the text says the state in words. Changes are announced
+    through one <code>aria-live="polite"</code> region beside the chip —
+    polite, because a connection blip mid-sentence is context, not an
+    emergency. Zero new CSS: this is
+    <a href={base + '/components/badge'}>badge</a> composition, and the
+    slot's fixed home is the
+    <a href={base + '/patterns/app-frame'}>app frame's</a> top bar — a
+    status that moves between screens is a status users stop finding.</p>
+  </section>
+
+  <section class="demo">
+    <h2>The contract your queue engine owes the chip</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr><th scope="col">Rule</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+          <tr><td>Both channels move in one place, together</td><td>a chip that says Online while the live region still says queued is worse than either alone</td></tr>
+          <tr><td>The queued state carries the count</td><td>"3 queued" is a fact the user can weigh before walking out of wifi range; "offline" is a mood</td></tr>
+          <tr><td>Queued actions must be idempotent on replay</td><td>a reconnect that re-posts a claim or a scan twice turns signalling into data corruption; design the server so replay is safe (the same 409 discipline every pattern here documents)</td></tr>
+          <tr><td>Error is sticky until acted on</td><td>auto-clearing a failed sync teaches users the red state means nothing</td></tr>
+          <tr><td>Screens stay honest about what is local</td><td>a row that exists only in the queue renders with a queued cue (a <a href={base + '/components/badge'}>badge</a>), not disguised as saved — the RF pages' session-lost rows follow the same rule</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <Related links={[
+    ["/patterns/app-frame", "App frame (the slot's fixed home)"],
+    ["/patterns/goods-receipt", "Goods receipt (session-lost, honestly)"],
+    ["/concepts/concurrency", "Concurrency & conflicts (the 409 discipline replay relies on)"],
+    ["/components/badge", "Badge"],
+  ]} />
+</Gallery>
