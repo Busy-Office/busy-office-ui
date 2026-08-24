@@ -858,6 +858,35 @@ is the outcome the whole exercise was for.
 
 ---
 
+## GAP-19 — FIXED 2026-08-24 — bulk actions could not wrap, and the CI gate
+found it on its first run
+
+**This is GAP-7's twin.** That one was "`bo-form-actions` did not wrap: a
+three-button bar lost a button at 390". This one is the same defect in the
+other actions container: `.bo-data-table__toolbar` wraps, but
+`.bo-data-table__bulk-actions` is a flex **item** whose own buttons could not
+wrap or shrink, so "Approve" + "Create purchase orders" spilled **33px** past
+the toolbar edge on `p2p/requisitions` at 390px.
+
+`min-inline-size: 0` is the load-bearing half of the fix: a flex item's
+automatic minimum size is its content, so `flex-wrap` alone still refuses to
+narrow the group below its widest button.
+
+**Found by the gate wired in an hour earlier (130.5), on its first CI run.**
+That is the strongest argument for that item that could exist.
+
+**And it exposed a second defect — in the instrument, not the framework.**
+`npm run suite` passed locally and failed in CI. The reason was not font
+metrics (though those differ — 33px locally, 19px on CI): `build.mjs` never
+cleaned `dist`, so the local run audited **25 pages** — three of them stale
+"not part of the pilot" stubs for modules since built — while CI, starting
+from a clean checkout, audited the **22** the source actually produces. A gate
+that inspects leftovers can pass while the thing it guards is broken.
+`build.mjs` now removes `dist` before writing, and both environments agree at
+22.
+
+---
+
 ## Not gaps (checked, and the framework was right)
 
 - **List screens**: `list-report` covered the PO list end to end — filters,

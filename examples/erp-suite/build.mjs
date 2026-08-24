@@ -8,13 +8,22 @@
  * lives and variety is what finds gaps: a generated grid of identical screens
  * would hide precisely what this example exists to expose.
  */
-import { mkdir, writeFile, readdir } from 'node:fs/promises';
+import { mkdir, writeFile, readdir, rm } from 'node:fs/promises';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MODULES, page } from './_shell.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, 'dist');
+
+/* Clean first. Without this, dist keeps pages from previous shapes — the
+   generated "not part of the pilot" stubs for modules since built, and any
+   screen renamed along the way — and the gates then audit files no source
+   produces. It masked a real failure on 2026-08-24: `npm run suite` passed
+   locally over 25 stale pages while CI, starting clean at 22, failed on a
+   toolbar that overflowed at 390px. A gate that inspects leftovers is a gate
+   that can pass while the thing it guards is broken. */
+await rm(OUT, { recursive: true, force: true });
 
 const BUILT_MODULES = ['home', 'o2c', 'p2p', 'crm', 'prod'];
 

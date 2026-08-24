@@ -54,9 +54,21 @@
         the container, so un-checking the LAST selected row re-scans every row
         checkbox — fine at hundreds of rows, measurable at thousands; use
         initDataTables() for big grids. */
+  /* GAP-19 (erp-suite, found by the CI gate on its first run, 2026-08-24).
+     This is GAP-7's twin: `bo-form-actions` lost a button at 390px for the
+     want of a wrap, and so did this. The toolbar around it wraps, but
+     bulk-actions is a flex ITEM — its own buttons could not wrap or shrink,
+     so a two-button group ("Approve" + "Create purchase orders") spilled
+     33px past the toolbar's edge on a 390px screen.
+
+     min-inline-size: 0 is the load-bearing half. A flex item's automatic
+     minimum size is its CONTENT, so wrap alone still refuses to let the
+     group narrow below its widest button. */
   .bo-data-table__bulk-actions {
     display: none;
     align-items: center;
+    flex-wrap: wrap;
+    min-inline-size: 0;
     gap: var(--bo-space-2);
   }
 
