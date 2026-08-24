@@ -870,10 +870,13 @@ function approveDialogHtml(p) {
         <span class="bo-form-field__label" id="${id('adlg-note-label')}">Approval note</span>
         <div class="bo-richtext">
           <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-            <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
-            <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
-            <span class="bo-richtext__divider"></span>
-            <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+            <div class="bo-richtext__group" role="group" aria-label="Text style">
+              <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"><strong>B</strong></button>
+              <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"><em>I</em></button>
+            </div>
+            <div class="bo-richtext__group" role="group" aria-label="Lists">
+              <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList">• List</button>
+            </div>
           </div>
           <div class="bo-richtext__content bo-prose" contenteditable="true" id="${id('adlg-note')}"
                role="textbox" aria-multiline="true" aria-labelledby="${id('adlg-note-label')}"></div>

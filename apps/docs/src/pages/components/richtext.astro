@@ -185,11 +185,14 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
      form all have to keep honouring. -->
 <div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
-            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
-            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    <div class="bo-richtext__group" role="group" aria-label="Text style">
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
+              title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Lists">
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
+              aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    </div>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
        role="textbox" aria-multiline="true" aria-label="Notes"

@@ -6,7 +6,17 @@ names, and `data-*`/ARIA contracts are the public API. **Per-component dist file
 placement is explicitly NOT API until v1.0** — import granular files at your own
 pin.
 
+
 ## Unreleased
+
+### Deprecated
+
+- `.bo-richtext__divider` — use `.bo-richtext__group` instead. The divider was
+  a decorative `<span>`: it drew a separator the eye could read while the
+  toolbar remained a single `role="group"`, so a screen-reader user heard one
+  undifferentiated run of buttons. `__group` is a real named group that draws
+  the same separator from the boundary between groups, and it wraps as a unit.
+  The class still ships and still works; removal is a next-major change.
 
 - **Fixed** (`data-table`): a `<tfoot>` totals row now separates itself from
   the rows it sums — a 2px rule above and semibold figures. It was

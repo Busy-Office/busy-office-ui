@@ -229,7 +229,17 @@
     border-inline-start: var(--bo-border-width) solid var(--bo-color-border-strong);
   }
 
-  /* Visible group separator inside the toolbar (bold/italic | lists). */
+  /* DEPRECATED (2026-08-24, Standardize round). Superseded by
+     `.bo-richtext__group`, which draws the same separator from the boundary
+     between groups AND carries the grouping for assistive tech — this element
+     was a single-channel cue, visible only. Two ways to do one thing is the
+     one-off this round exists to remove, so the last two usages (the docs'
+     canonical Markup sample and the reference app's approval-note toolbar)
+     were migrated.
+
+     Kept, not deleted: `@busy-office/ui` is published, so removal is a
+     next-major change — the same call `.bo-icon--settings` and the other
+     53.2 deprecations got. See CHANGELOG. */
   .bo-richtext__divider {
     align-self: stretch;
     margin-block: var(--bo-space-1);
