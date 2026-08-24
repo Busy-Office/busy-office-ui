@@ -439,7 +439,42 @@ const current =
             processTerm: (term) => (term.trim().length < MIN_QUERY_LENGTH ? '' : term),
           });
           keepBoosted(document.getElementById('cmdk-search'));
+          // Swap Pagefind's "Clear" text label for the same ✕ glyph this
+          // framework's other dismiss controls use (see .bo-alert__dismiss
+          // on /components/alerts) — bo-icon has no close glyph in its
+          // 24-icon set, so ✕ is this framework's established icon for
+          // "dismiss", not a one-off invention. Done via the same
+          // MutationObserver as the message rewrite below (not a one-shot
+          // setTimeout like the aria-label fix above): Svelte re-renders
+          // this button on every keystroke and would silently put "Clear"
+          // back — confirmed empirically wrapping it in a new element for
+          // repositioning got reverted by Svelte's own DOM diffing on the
+          // very next render, which is why the CSS below repositions it
+          // in place (relative to <form>) instead of restructuring the DOM.
+          const relabelClear = () => {
+            const btn = dlg.querySelector('#cmdk-search .pagefind-ui__search-clear');
+            if (btn && btn.textContent !== '✕') {
+              btn.textContent = '✕';
+              btn.setAttribute('aria-label', 'Clear search');
+            }
+          };
+          relabelClear();
           const input = () => dlg.querySelector('.pagefind-ui__search-input');
+          // Pagefind's Clear button is `position: absolute` sized by its
+          // own calc(58px * scale) height — taller than this input's actual
+          // rendered height (measured live: input 41px vs Clear's fixed
+          // 46px), because a busy-office-ui base reset shrinks the input
+          // below what Pagefind's own calc() assumed. Rather than guess a
+          // matching fixed height, measure the real input and expose it as
+          // a custom property the CSS below sizes Clear to exactly — robust
+          // to whatever the input's actual height turns out to be.
+          const syncClearSize = () => {
+            const i = input();
+            const search = document.getElementById('cmdk-search');
+            if (i && search) search.style.setProperty('--cmdk-input-h', `${i.getBoundingClientRect().height}px`);
+          };
+          syncClearSize();
+          window.addEventListener('resize', syncClearSize);
           // processTerm suppresses the search below MIN_QUERY_LENGTH, but
           // Pagefind then renders its own "No results for s" message —
           // which reads as a real negative result rather than "keep
@@ -447,20 +482,80 @@ const current =
           // floor; a MutationObserver (not a debounce) because Pagefind
           // re-renders the message node itself on every keystroke.
           const cmdkSearch = document.getElementById('cmdk-search');
+          // A 3+ char query with no genuine match still surfaced noise: "asd"
+          // returned "83 results for asd", top-ranked by pages where the
+          // only highlighted match was "as" — Pagefind treats the last typed
+          // word as a live, incomplete prefix and backs off to whatever
+          // shorter prefix it CAN match (down to a single character) rather
+          // than requiring a minimum prefix length. Measured directly
+          // against this build's index: "sdfdfdfsd" top-matched on a bare
+          // "s", "qwerty" on a bare "q", "jkl" on "JK" — while genuine
+          // queries ("table", "invoice") highlight the whole typed word.
+          // Pagefind's own relevance SCORE doesn't separate these cases —
+          // measured "qwerty"/"jkl"/"wat" all outscoring real short words
+          // like "css"/"lorem", because the score is term-rarity weighted,
+          // not match-quality weighted. What DOES separate them is how much
+          // of each query word its own highlighted match actually covers,
+          // so filter on that directly rather than on score.
+          const strippedLower = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+          const commonPrefixLength = (a, b) => {
+            let n = 0;
+            while (n < a.length && n < b.length && a[n] === b[n]) n++;
+            return n;
+          };
+          const isWeakMatch = (li, queryWords) => {
+            const marks = [...li.querySelectorAll('mark')].map((m) => strippedLower(m.textContent));
+            if (!marks.length) return true;
+            return queryWords.some((w) => {
+              const required = Math.max(3, Math.ceil(w.length * 0.6));
+              const best = Math.max(0, ...marks.map((m) => commonPrefixLength(m, w)));
+              return best < required;
+            });
+          };
+          const NO_STRONG_MATCH = (q) => `No strong matches for "${q}"`;
+          const filterWeakMatches = () => {
+            const i = input();
+            const raw = i?.value.trim() ?? '';
+            // Words under 3 chars (connectors like "of", "in") aren't held
+            // to this bar — only long enough to have a meaningful prefix.
+            const words = raw.toLowerCase().split(/\s+/).filter((w) => w.length >= 3);
+            const results = [...cmdkSearch.querySelectorAll('.pagefind-ui__result')];
+            if (!words.length || !results.length) return;
+            let shown = 0;
+            for (const li of results) {
+              const weak = isWeakMatch(li, words);
+              if (weak) { if (li.style.display !== 'none') li.style.display = 'none'; }
+              else { if (li.style.display === 'none') li.style.display = ''; shown += 1; }
+            }
+            const msg = cmdkSearch.querySelector('.pagefind-ui__message');
+            if (!msg) return;
+            if (shown === 0) {
+              if (msg.textContent !== NO_STRONG_MATCH(raw)) msg.textContent = NO_STRONG_MATCH(raw);
+            } else if (shown < results.length) {
+              const want = `${shown} result${shown === 1 ? '' : 's'} for ${raw}`;
+              if (msg.textContent !== want) msg.textContent = want;
+            }
+          };
           new MutationObserver(() => {
+            relabelClear();
             const i = input();
             const msg = cmdkSearch.querySelector('.pagefind-ui__message');
             if (!i || !msg) return;
             const short = i.value.trim().length > 0 && i.value.trim().length < MIN_QUERY_LENGTH;
-            if (short && msg.textContent !== 'Keep typing to search…') {
-              msg.textContent = 'Keep typing to search…';
+            if (short) {
+              if (msg.textContent !== 'Keep typing to search…') msg.textContent = 'Keep typing to search…';
+              return;
             }
+            filterWeakMatches();
           }).observe(cmdkSearch, { childList: true, subtree: true });
           const links = () => [...dlg.querySelectorAll('.pagefind-ui__result-link')];
           const open = () => {
             if (dlg.open) return;
             dlg.showModal();
             const i = input(); if (i) { i.focus(); i.select?.(); }
+            // <dialog> isn't laid out while closed, so a getBoundingClientRect
+            // taken at mount time (script load, dialog still closed) reads 0.
+            syncClearSize();
           };
           document.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dlg.open ? dlg.close() : open(); }
@@ -854,7 +949,59 @@ const current =
     overflow: hidden;
   }
   .docs-cmdk__panel { display: flex; flex-direction: column; max-block-size: 70vh; }
-  #cmdk-search { padding: var(--bo-space-3); overflow: auto; }
+  /* Scroll only the RESULT LIST, not the input: Pagefind's own markup nests
+     the input, the Clear button AND the whole results drawer inside one
+     <form class="pagefind-ui__form"> (checked against the built dist), so a
+     naive `position: sticky` on that form sticks the entire form — input and
+     results together — which does nothing. Chain flex/min-block-size:0 down
+     through Pagefind's own wrapper elements instead: #cmdk-search fills the
+     remaining space in the (max 70vh) panel, and only the drawer — which
+     holds the message, result list and "Load more" button, not the input —
+     scrolls inside it. */
+  #cmdk-search {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    padding: var(--bo-space-3);
+  }
+  #cmdk-search .pagefind-ui,
+  #cmdk-search .pagefind-ui__form {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    flex: 1 1 auto;
+  }
+  /* Default flex-shrink is 1 on any flex item — without this, the input
+     shrank ~10px shorter once the (taller) drawer content made the column
+     overflow, since it was shrinking right along with the drawer instead of
+     staying fixed while only the drawer scrolled. Measured live: input
+     height dropped from 51px (empty query, drawer hidden) to 41px (query
+     typed, drawer visible) before this rule. */
+  #cmdk-search .pagefind-ui__search-input,
+  #cmdk-search .pagefind-ui__search-clear {
+    flex-shrink: 0;
+  }
+  #cmdk-search .pagefind-ui__drawer {
+    min-block-size: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+  /* Clear is `position: absolute` relative to <form>, which coincides with
+     the input's own top-left (input is the form's first child) but is NOT
+     the input's height — the form also wraps the whole results drawer.
+     --cmdk-input-h (set by syncClearSize() above, from the input's real
+     measured height) sizes Clear to exactly the input's box instead of
+     Pagefind's own calc(58px * scale), which came out taller than this
+     site's actual (reset-shrunk) input and stuck out below it. */
+  #cmdk-search .pagefind-ui__search-clear {
+    inset-block-start: 0;
+    inset-block-end: auto;
+    block-size: var(--cmdk-input-h, 100%);
+    display: inline-flex;
+    align-items: center;
+  }
   /* Pagefind's own stylesheet scopes list-style:none to its Svelte class
      hashes (e.g. .pagefind-ui__result.svelte-4xnkmf.svelte-4xnkmf). Its
      result-list assets ship under static, unhashed filenames
@@ -868,7 +1015,12 @@ const current =
     list-style: none;
     padding-inline-start: 0;
   }
-  #cmdk-search .pagefind-ui__result { padding-block: var(--bo-space-2); }
+  #cmdk-search .pagefind-ui__result {
+    padding-block: var(--bo-space-2);
+    /* Compact rows read as a group via spacing alone; a rule line every
+       ~16px of content reads as noisier than no rule at all. */
+    border: none;
+  }
   .docs-cmdk__hint {
     display: flex; gap: var(--bo-space-4);
     padding: var(--bo-space-2) var(--bo-space-3);
