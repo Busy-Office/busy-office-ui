@@ -1,0 +1,181 @@
+---
+/* Named for the SHAPE, not the component (Slice 109): the owner asked for "a
+   pattern for Skeleton", and Skeleton is a component — `bo-skeleton` already
+   has its page on /components/state-patterns. What has no page is the SCREEN
+   decision around it: whether to show a placeholder at all, what shape it
+   takes, and what happens at the moment real content arrives. That is first
+   load, and it is a pattern. */
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import Demo from '../../components/Demo.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const matched = `<!-- Placeholders MATCH the shape of what replaces them: three
+     columns, the same widths, the same row height. -->
+<table class="bo-data-table">
+  <thead>
+    <tr><th scope="col">Order</th><th scope="col">Customer</th>
+        <th scope="col" class="bo-data-table__col--numeric">Value</th></tr>
+  </thead>
+  <tbody aria-busy="true">
+    <tr>
+      <td><span class="bo-skeleton" style="inline-size: 5rem"></span></td>
+      <td><span class="bo-skeleton" style="inline-size: 9rem"></span></td>
+      <td class="bo-data-table__col--numeric"><span class="bo-skeleton" style="inline-size: 4rem"></span></td>
+    </tr>
+    <tr>
+      <td><span class="bo-skeleton" style="inline-size: 5rem"></span></td>
+      <td><span class="bo-skeleton" style="inline-size: 7rem"></span></td>
+      <td class="bo-data-table__col--numeric"><span class="bo-skeleton" style="inline-size: 4rem"></span></td>
+    </tr>
+  </tbody>
+</table>`;
+
+const spinner = `<!-- A REFETCH keeps the rows the user was reading and dims them.
+     aria-busy is the programmatic half; the dimming is the visible half. -->
+<div class="bo-data-table-container" data-loading="true" tabindex="0">
+  <table class="bo-data-table" aria-busy="true">
+    <tbody><tr><td>SO-51204</td><td>Halden Marine AS</td></tr></tbody>
+  </table>
+</div>`;
+---
+<Gallery title="First load">
+  <p class="demo-note">
+    <strong>Who uses it</strong>: everyone, on every screen, before they can do
+    anything else. <strong>How often</strong>: several times an hour — it is
+    the most-seen state in an ERP and the least-designed.
+    <strong>What "done" looks like</strong>: the reader knew what was coming,
+    and nothing jumped when it arrived.
+    <strong>Not for a REFETCH of data already on screen</strong> — replacing
+    rows the user is reading with placeholders throws away their place and
+    reads as data loss; dim the existing rows with
+    <code>aria-busy</code> instead, as
+    <a href={base + '/patterns/list-report'}>list report</a> does. And not for
+    waits under about a quarter of a second, where a placeholder flashing in
+    and out is worse than nothing at all.
+  </p>
+
+  <section class="demo">
+    <h2>Skeleton, spinner, or nothing</h2>
+    <p class="bo-u-text-muted">Three answers, and the wait decides which:</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Which loading treatment to use</caption>
+        <thead>
+          <tr><th scope="col">Wait</th><th scope="col">Show</th><th scope="col">Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Under ~250ms</td><td><strong>Nothing</strong></td><td>A placeholder that appears and vanishes reads as a flicker. The screen simply arrives.</td></tr>
+          <tr><td>~250ms to ~10s</td><td><strong>Skeleton</strong></td><td>The layout is known, so show it. The reader starts reading structure before content exists.</td></tr>
+          <tr><td>Over ~10s, or unknown</td><td><strong>Progress, with words</strong></td><td>A skeleton implies "nearly there". Past ten seconds that is a lie — say what is happening and, if you can, how far along.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">A spinner is the fallback when the shape is
+    genuinely unknown — a report whose columns depend on the answer. If you
+    know the shape, a skeleton beats a spinner, because a spinner says only
+    "wait" while a skeleton also says "this is what you will get".</p>
+  </section>
+
+  <section class="demo">
+    <h2>Shape-matching is the whole technique</h2>
+    <Demo code={matched} />
+    <p class="bo-u-text-muted"><strong>Placeholders take the shape of what
+    replaces them</strong> — same columns, same widths, same row height. That
+    is not decoration: it is what stops the page moving when content lands. A
+    generic grey block followed by a three-column table is two layouts, and the
+    reader pays for the difference with a jump exactly when they have started
+    reading. Vary the widths between rows so it reads as data rather than a
+    pattern, and keep the count close to what usually arrives.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Refetch is a different state</h2>
+    <Demo code={spinner} />
+    <p class="bo-u-text-muted">The rows already on screen are still true until
+    the new ones arrive, so keep them and dim them. Swapping them for
+    placeholders takes away what the reader was in the middle of, which is why
+    the opener refuses it. <code>aria-busy</code> carries the programmatic
+    half; a table mid-swap is <strong>not</strong> "inactive", so the dimming
+    still has to meet contrast — this framework asserts that in
+    <code>check:composited</code> rather than assuming it.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Anatomy</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>The frame that does not move</strong> — the page chrome,
+      headings and table header render immediately from what the client already
+      knows. Only the unknown parts get placeholders.</li>
+      <li><strong>Placeholders</strong> —
+      <a href={base + '/components/state-patterns'}><code>.bo-skeleton</code></a>,
+      sized to the content they stand in for, inside the region marked
+      <code>aria-busy="true"</code>.</li>
+      <li><strong>The busy region</strong> — one element carries
+      <code>aria-busy</code>, so assistive tech is told once that a region is
+      updating rather than once per placeholder.</li>
+      <li><strong>The swap</strong> — placeholders are replaced by real nodes
+      in one update. Replacing them one at a time makes the layout settle in
+      steps, which is the jump this pattern exists to avoid.</li>
+      <li><strong>The failure exit</strong> — if the request fails, the
+      placeholders must go. A skeleton that never resolves is the worst state
+      on this page: it promises content that is not coming.</li>
+    </ol>
+  </section>
+
+  <section class="demo">
+    <h2>Data contract</h2>
+    <p class="bo-u-text-muted">The server owes the client two things and the
+    client owes the reader one.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">First-load request and response contract</caption>
+        <thead>
+          <tr><th scope="col">Moment</th><th scope="col">What crosses the boundary</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Request sent</td><td>The client renders the frame and the placeholders <em>immediately</em> — it does not wait to be told to.</td></tr>
+          <tr><td><code>200</code></td><td>The full region's markup, swapped into the busy region in one replacement. The response should include enough to remove <code>aria-busy</code> in the same swap.</td></tr>
+          <tr><td><code>4xx</code> / <code>5xx</code></td><td>An error region that REPLACES the placeholders — see <a href={base + '/components/state-patterns'}>error state</a>. HTMX discards non-2xx by default, so this needs explicit handling or the skeleton stays forever.</td></tr>
+          <tr><td>Timeout</td><td>The client's problem, not the server's: decide a ceiling and fail to the error state at it. "Still loading" after a minute is a bug that looks like patience.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>States</h2>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">First-load states</caption>
+        <thead><tr><th scope="col">State</th><th scope="col">Treatment</th></tr></thead>
+        <tbody>
+          <tr><td>Loading (first paint)</td><td>Skeleton rows in shape, region <code>aria-busy="true"</code></td></tr>
+          <tr><td>Loading (refetch)</td><td>Keep the rows, dim them, <code>aria-busy</code> — never placeholders</td></tr>
+          <tr><td>Loaded, with data</td><td>One swap, <code>aria-busy</code> removed in the same update</td></tr>
+          <tr><td>Loaded, empty</td><td>The <a href={base + '/components/state-patterns'}>empty state</a> — and the DIFFERENT one if filters caused it</td></tr>
+          <tr><td>Failed</td><td>Error state replacing the placeholders, with a retry. The placeholders must not survive this.</td></tr>
+          <tr><td>Reduced motion</td><td>The placeholder stays, the shimmer stops — the block still reserves the space, so nothing is lost but the movement</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Components used</h2>
+    <p class="bo-u-text-muted"><span class="bo-badge">complexity 1 of 4</span> —
+    one component and a placement rule; the judgement is all in the shape.</p>
+    <ul class="bo-cluster docs-list-bare">
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/state-patterns'}>Skeleton</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/state-patterns'}>State</a></li>
+      <li><a class="bo-badge bo-badge--type" href={base + '/components/data-table'}>Data table</a></li>
+    </ul>
+  </section>
+
+  <Related links={[
+    ['/components/state-patterns', 'Skeleton, empty & error states'],
+    ['/patterns/list-report', 'List report'],
+    ['/base/motion', 'Motion'],
+    ['/getting-started/htmx', 'Using with HTMX'],
+  ]} />
+</Gallery>

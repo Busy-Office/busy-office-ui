@@ -419,7 +419,7 @@ found the idea already shipped **and broken**, which reorders the work.
        14/16/20 dark, **10 distinct frames of 10** in both themes, and reduced
        motion still stops it with the block visible.
 
-2. [~] **142.2 — motion researched, retimed and showcased 2026-08-25; the Skeleton PATTERN page is the remaining half.**
+2. [x] **142.2 — DONE 2026-08-25. Motion researched, retimed and showcased; the pattern shipped as `/patterns/first-load`.**
        Owner: *"pls check /components/state-patterns — the sample of Skeleton
        object. pls also showcase for motion. and also add pattern for
        Skeleton."* The component demo exists on `/components/state-patterns`;
@@ -463,6 +463,26 @@ found the idea already shipped **and broken**, which reorders the work.
        place. The section also states the reduced-motion answer to WCAG's
        Pause-Stop-Hide concern: the user's OS preference is the control, and
        the block keeps its space.
+
+       **The pattern is named for the SHAPE, not the component.** The owner
+       asked for "a pattern for Skeleton", and Skeleton is a component —
+       `bo-skeleton` already has its page. What had no page is the SCREEN
+       decision around it, so it shipped as **First load**, per Slice 109's
+       rule that a pattern is named and framed for its shape. It answers the
+       three things the component page cannot: **skeleton vs spinner vs
+       nothing** (a wait table — under ~250ms show nothing, ~250ms–10s a
+       skeleton, past 10s words and progress, because a skeleton past ten
+       seconds implies "nearly there" and that is a lie);
+       **shape-matching**, which is the whole technique and the reason the
+       page does not jump when content lands; and **refetch as a different
+       state** — keep the rows the reader is mid-way through and dim them,
+       because replacing them with placeholders throws away their place and
+       reads as data loss. That last one is the page's wrong-choice clause.
+
+       The failure exit is called out in Anatomy because it is the worst state
+       here: **a skeleton that never resolves promises content that is not
+       coming**, and HTMX discards non-2xx by default, so it is a real way to
+       ship one.
 
        **Owner, immediately after: "causing the cut scene — it doesn't give
        the smooth transition after loop complete."** Correct, and it was

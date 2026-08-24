@@ -877,3 +877,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-25 06:17 · Continue · bug · skeleton loop cut at restart — band was visible at both endpoints; 150%/-50% over 1.8s is seamless, proved after 3 false instrument readings · landed · c7d460d
 - 2026-08-25 06:23 · Continue · bug · 143.1 — dead Reprice-line button on /base/motion (Attention effects carry no class at rest); 143.2 triaged · landed · 1112baf
 - 2026-08-25 06:57 · Continue · build · 143.2 DemoFrame + demo routes (sidebar-nav both states, offcanvas in-frame); 143.3 collapsed icon centring · landed · 6b00ee2
+- 2026-08-25 07:04 · Continue · build · 143.4 — drawer exit motion via allow-discrete behind @supports; chosen because the JS route could fail to close · landed · 7acd8aa
+- 2026-08-25 07:13 · Standardize · tidy · 0fr/1fr triplication settled as correct — utility vs component-part selector ownership, plus the opt-in module · refused · f4d4d11
