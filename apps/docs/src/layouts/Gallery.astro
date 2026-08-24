@@ -855,6 +855,20 @@ const current =
   }
   .docs-cmdk__panel { display: flex; flex-direction: column; max-block-size: 70vh; }
   #cmdk-search { padding: var(--bo-space-3); overflow: auto; }
+  /* Pagefind's own stylesheet scopes list-style:none to its Svelte class
+     hashes (e.g. .pagefind-ui__result.svelte-4xnkmf.svelte-4xnkmf). Its
+     result-list assets ship under static, unhashed filenames
+     (pagefind-ui.js / pagefind-ui.css) with no cache-busting — a stale
+     cached copy of one alongside a fresh copy of the other reintroduces
+     numbered <ol> markers and oversized row padding. These rules are
+     unscoped to any Pagefind hash, so they hold regardless of which
+     version is loaded. */
+  #cmdk-search .pagefind-ui__results,
+  #cmdk-search .pagefind-ui__result {
+    list-style: none;
+    padding-inline-start: 0;
+  }
+  #cmdk-search .pagefind-ui__result { padding-block: var(--bo-space-2); }
   .docs-cmdk__hint {
     display: flex; gap: var(--bo-space-4);
     padding: var(--bo-space-2) var(--bo-space-3);
