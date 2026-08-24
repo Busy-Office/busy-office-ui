@@ -28,7 +28,8 @@
   ],
   "files": [
     "dist",
-    "scripts/check-markup.mjs"
+    "scripts/check-markup.mjs",
+    "NOTICE"
   ],
   "exports": {
     "./package.json": "./package.json",

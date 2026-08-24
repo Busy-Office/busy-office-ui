@@ -382,6 +382,27 @@ already half-built and quietly broken**, which changes what to build.
        names what is behind the button. State rides on `aria-expanded`, on
        the bar's presence, and on the toggle's own pressed styling.
 
+10. [x] **137.10 — DONE 2026-08-24. Owner picked the icons directly:**
+       *"removing format - lucide remove-formatting icon / formatting -
+       lucide square-pen icon."*
+
+       Both fetched from source rather than reproduced from memory, and both
+       rendered at the true 1em button size before shipping: `T×` reads far
+       better than the A-with-slash it replaces, and `square-pen` is legible
+       at 16px. Both are already drawn to this file's own convention —
+       24×24, stroke 2, round caps — so they sit in the set without looking
+       imported, and `--format` returning to STROKE removes the filled-glyph
+       exception 137.9 had to make.
+
+       **Licence handled rather than assumed.** Lucide is ISC, which requires
+       its notice in all copies. The package declares MIT and had no LICENSE
+       or NOTICE file at all, and `files` publishes only `dist` — so the
+       notice is in two places that actually ship: the stylesheet the art
+       lives in, and a new `packages/core/NOTICE` added to `files`.
+       `icon.css`'s header also claimed every glyph was "original geometric
+       line art", which stopped being true the moment these landed; it now
+       says which two are not.
+
 ## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
 
 Owner input, verbatim: *"/components/richtext - grill the design. (ref to
