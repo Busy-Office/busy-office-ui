@@ -575,6 +575,28 @@ progress, and freeze-graduation rounds).
 
 ## Operating rules (every loop obeys)
 
+- **Every wake leaves the thing it touched BETTER than the item required**
+  (owner, 2026-08-24: *"just take note that build better. where loop will
+  also look for the improvement"*). Ticking an Accept criterion is the floor,
+  not the wake's output. Before committing, the loop asks the improvement
+  question about what it just touched — and it is a *question*, not a licence
+  to widen scope:
+
+  - Did this reveal something the item did not name? Log it, and fix it only
+    when it is smaller than the explaining.
+  - Is the fix in the right layer? Six list screens missing a create action
+    was one line missing from a pattern page (Slice 139) — the improvement
+    was upstream of every screen that had the symptom.
+  - Does the gate that should have caught this exist, and can it fail?
+    A fix without one invites the same defect back.
+  - Is a NUMBER worth recording? The instrument grill (2026-08-24) only
+    produced its finding because seventeen gaps had been logged with what
+    triggered them.
+
+  **This does not license scope creep**, which the Objective already refuses.
+  An improvement that is bigger than the item becomes a roadmap entry, not an
+  extra commit. The rule is: never end a wake having *noticed* nothing.
+
 - **New input always goes through Roadmap triage first** (2026-08-14 redesign) —
   even mid-cycle. A bug report or a new ask doesn't get worked directly by
   whatever loop happens to be running; it's classified and entered into
