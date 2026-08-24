@@ -52,6 +52,22 @@ const REGISTRY = [
       + 'same behavior updates — WCAG 1.4.3 governs text, of which this has none.',
   },
   {
+    match: 'bo-offcanvas::backdrop',
+    decision: 'exempt',
+    why: 'The drawer scrim\'s opacity is the two ENDS of a transition (143.4), '
+      + 'not a resting state: 0 while the drawer is closed — when there is no '
+      + 'backdrop on screen at all — and 1 while it is open, which is the '
+      + 'shipped scrim the rest of this file already governs. Keyframes are '
+      + 'skipped here for exactly this reason; allow-discrete expresses the '
+      + 'same thing as a transition, so it needs saying rather than assuming. '
+      + 'Nothing is read THROUGH it at 0, because at 0 the dialog is closed.',
+  },
+  {
+    match: 'bo-offcanvas[open]::backdrop',
+    decision: 'exempt',
+    why: 'The open end of the same transition — opacity 1, the scrim as shipped.',
+  },
+  {
     match: 'data-loading',
     decision: 'aa',
     why: 'A table mid-swap is aria-busy, NOT inactive — the user keeps reading it, so 1.4.3 applies in full. Asserted live in both themes by check:claims.',

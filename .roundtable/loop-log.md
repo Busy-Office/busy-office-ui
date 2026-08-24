@@ -876,3 +876,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-25 06:07 · Continue · build · 142.2a — skeleton sweep retimed (travel 4x too far, not duration), linear, left-to-right; motion showcase with speed controls · landed · d70bd16
 - 2026-08-25 06:17 · Continue · bug · skeleton loop cut at restart — band was visible at both endpoints; 150%/-50% over 1.8s is seamless, proved after 3 false instrument readings · landed · c7d460d
 - 2026-08-25 06:23 · Continue · bug · 143.1 — dead Reprice-line button on /base/motion (Attention effects carry no class at rest); 143.2 triaged · landed · 1112baf
+- 2026-08-25 06:57 · Continue · build · 143.2 DemoFrame + demo routes (sidebar-nav both states, offcanvas in-frame); 143.3 collapsed icon centring · landed · 6b00ee2

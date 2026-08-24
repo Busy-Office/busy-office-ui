@@ -64,6 +64,95 @@
     animation-name: bo-offcanvas-in;
   }
 
+  /* EXIT motion (143.4, owner: "collapse drawer motion when close").
+     The drawer animated in and vanished out, because `initDialogs` sets
+     data-state on the `close` EVENT — which fires after the dialog has
+     already left the top layer, so there is nothing on screen left to
+     animate.
+
+     Two ways to fix that, and the choice is an ERP one rather than a taste
+     one. The alternative was to delay the real `close()` in JS until an exit
+     animation ended; that reaches every browser, but it makes dismissal
+     depend on an `animationend` that can fail to arrive — an interrupted
+     animation, a detached node, a zeroed duration — and **a drawer that
+     fails to close is a trap, which is strictly worse than one that closes
+     without flourish.** In a back-office app a modal that will not dismiss
+     blocks the work.
+
+     So: the platform's own mechanism, and no JS at all. Where
+     `transition-behavior: allow-discrete` is unavailable the drawer closes
+     exactly as it does today — instantly, losing nothing, because motion is
+     never this framework's only channel. The @supports guard is temporary by
+     construction: when the floor passes Chrome 117 it can be deleted with no
+     change in behaviour.
+
+     Reduced motion needs no rule here either — the durations are the shared
+     tokens, which tokens/motion.css already zeroes, and a zero-duration
+     discrete transition is an instant close. */
+  @supports (transition-behavior: allow-discrete) {
+    .bo-offcanvas {
+      /* The closed position. Physical, like the keyframes above, so RTL gets
+         the same explicit treatment — but as ONE value rather than a second
+         set of keyframes to keep in step. */
+      --bo-offcanvas-offset: -100%;
+
+      translate: var(--bo-offcanvas-offset) 0;
+      transition:
+        translate var(--bo-motion-duration-slow) var(--bo-motion-easing-standard),
+        overlay var(--bo-motion-duration-slow) allow-discrete,
+        display var(--bo-motion-duration-slow) allow-discrete;
+    }
+
+    .bo-offcanvas--end,
+    [dir="rtl"] .bo-offcanvas {
+      --bo-offcanvas-offset: 100%;
+    }
+
+    [dir="rtl"] .bo-offcanvas--end {
+      --bo-offcanvas-offset: -100%;
+    }
+
+    .bo-offcanvas[open] {
+      translate: 0 0;
+    }
+
+    @starting-style {
+      .bo-offcanvas[open] {
+        translate: var(--bo-offcanvas-offset) 0;
+      }
+    }
+
+    /* The entrance keyframes would now run alongside the transition and the
+       two would fight over the same property. The transition covers both
+       directions, so the animation stands down where it is supported. */
+    .bo-offcanvas[data-state="open"],
+    .bo-offcanvas--end[data-state="open"],
+    [dir="rtl"] .bo-offcanvas[data-state="open"],
+    [dir="rtl"] .bo-offcanvas--end[data-state="open"] {
+      animation: none;
+    }
+
+    /* The scrim leaves with the panel; a backdrop that cuts out first is the
+       tell that made the old close read as a jump. */
+    .bo-offcanvas::backdrop {
+      opacity: 0;
+      transition:
+        opacity var(--bo-motion-duration-slow) var(--bo-motion-easing-standard),
+        overlay var(--bo-motion-duration-slow) allow-discrete,
+        display var(--bo-motion-duration-slow) allow-discrete;
+    }
+
+    .bo-offcanvas[open]::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      .bo-offcanvas[open]::backdrop {
+        opacity: 0;
+      }
+    }
+  }
+
   .bo-offcanvas__header {
     display: flex;
     align-items: center;

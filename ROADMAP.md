@@ -324,7 +324,7 @@ problem with the same answer**, which is worth doing once rather than twice.
        than widening the rail to hide the arithmetic. After: **−0.5px**, the
        remainder being the icon's own fractional width.
 
-4. [ ] **143.4 — the drawer has no CLOSE motion** (owner: *"Drawers
+4. [x] **143.4 — DONE 2026-08-25. The drawer animates out, in CSS, behind an `@supports` guard.** (owner: *"Drawers
        (off-canvas) — collapse drawer motion when close"*). Confirmed by
        reading both halves: `offcanvas.css` animates `[data-state="open"]`
        with `bo-offcanvas-in`, and `initDialogs` sets `data-state="closed"`
@@ -340,8 +340,49 @@ problem with the same answer**, which is worth doing once rather than twice.
        this framework's **Chrome 108 floor**, so it must sit behind
        `@supports` and the entrance animation has to be reworked as a
        transition so the two do not fight.
-       *Accept*: the drawer animates out as it animates in, at both floors,
-       with whichever route is chosen written down as the reason.
+       **Decided on ERP grounds, which the owner asked for: reusability and
+       long-term maintenance.** The CSS route wins on three counts, and the
+       first is the one that settles it.
+
+       **It cannot fail closed.** The JS route makes dismissal depend on an
+       `animationend` that can fail to arrive — an interrupted animation, a
+       detached node, a zeroed duration. **A drawer that fails to close is a
+       trap, and that is strictly worse than one that closes without
+       flourish**: in a back-office app a modal that will not dismiss blocks
+       the work. Where `allow-discrete` is unavailable the drawer closes
+       exactly as it does today, losing nothing, because motion is never this
+       framework's only channel.
+
+       **Reduced motion costs nothing.** The durations are the shared tokens
+       and `tokens/motion.css` already zeroes them, so a reduced-motion user
+       gets an instant close with no special case — verified: `0s, 0s, 0s`
+       and gone on the next frame. The JS route would have needed its own
+       branch, which is a second place for the two to disagree.
+
+       **The guard is self-removing.** `@supports (transition-behavior:
+       allow-discrete)` deletes cleanly when the floor passes Chrome 117, with
+       no behaviour change on the day it goes. A JS/CSS timing coupling never
+       gets simpler — every future exit animation would have to keep step with
+       the behaviour.
+
+       And it is **additive, not Breaking**: no shipped behaviour changes, so
+       the freeze audit's CHANGELOG-Breaking rule does not bite.
+
+       Implementation notes worth keeping: the entrance keyframes stand down
+       inside the guard (`animation: none`) or the transition and the
+       animation fight over `translate`; RTL is one custom property
+       (`--bo-offcanvas-offset`) rather than a second set of keyframes to keep
+       in step; and the scrim fades WITH the panel, because a backdrop that
+       cuts out first is the tell that made the old close read as a jump.
+
+       The `::backdrop` opacity ends had to be registered with
+       `check:composited` — they are the two ends of a transition rather than
+       a resting state, and at 0 the dialog is closed, so nothing is read
+       through it.
+
+       Verified: still painted immediately after `close()`, `translate`
+       changing across the exit, **and gone afterwards** — the trap case is
+       the one that had to be proven, not the motion.
 
 ## Slice 142 — Owner wishlist: skeleton motion, state standardisation, command-bar states (2026-08-25)
 
