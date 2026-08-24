@@ -14,8 +14,19 @@
      @key Ctrl/Cmd + U — underline the selection
      @key Ctrl/Cmd + Z — undo, and Shift+Ctrl/Cmd+Z (or Ctrl+Y) to redo
      @key Ctrl/Cmd + A — select the whole field, not the page
-     @key Tab — move to the NEXT FIELD, not an indent: a rich-text field is
-       still a form field, and trapping Tab would strand keyboard users
+     @key Tab (in a list) — indent, nesting the item under the one above;
+       Shift+Tab outdents it again. This one is NOT native — it is the
+       optional recipe on the docs page, scoped to list items on purpose
+     @key Tab (anywhere else) — moves to the next control, as in any form
+       field. Indent outside a list produces a styled blockquote rather
+       than an indent, so capturing Tab there would store a semantic lie
+     @key Escape, then Tab — leaves the field even from inside a list. The
+       release is what keeps list-Tab from being a WCAG 2.1.2 keyboard
+       trap: without it, a field whose content is entirely a list has no
+       Tab exit at all
+     @key Alt + Shift + T — show or hide the formatting toolbar. Also a
+       recipe key rather than a native one, and chosen to dodge the browser
+       shortcuts Ctrl/Cmd+Shift+T and Alt+F10 already own
      @key Enter — new paragraph; Shift+Enter for a line break inside one */
 
   /* Rich text — CHROME, not an engine (Slice 22 ADR-in-roadmap): the
@@ -28,6 +39,8 @@
   .bo-richtext {
     display: flex;
     flex-direction: column;
+    /* containing block for the floating toolbar toggle */
+    position: relative;
     /* Routed through a custom property so it can be retinted from outside,
        the same contract .bo-input and .bo-select already offer via
        --bo-input-border / --bo-select-border. Before 136.1 this was a
@@ -72,27 +85,82 @@
     border-start-end-radius: inherit;
   }
 
-  /* Collapsible toolbar (137.3). Collapsing must never make the field look
-     plain: the toggle STAYS visible, so the field still advertises that it
-     is rich. That is the same argument 136 used to refuse a floating
-     selection toolbar — in a FORM, chrome that appears only on selection
-     hides the fact that the field takes formatting at all. What collapsing
-     buys is a dense form with several note fields no longer carrying
-     several full toolbars.
+  /* Collapsible toolbar (137.3, reworked after owner review 2026-08-24).
 
-     aria-expanded on the toggle is the programmatic half; the hidden
-     buttons are the visible half. One line of consumer wiring flips it,
-     same division as the execCommand wiring. */
-  .bo-richtext__toolbar-toggle {
-    /* Pushed to the end so the collapsed row reads as a control, not as a
-       toolbar that failed to load. */
-    margin-inline-start: auto;
+     Collapsing must never make the field look plain: the toggle STAYS
+     visible, so the field still advertises that it is rich. That is the
+     same argument 136 used to refuse a floating SELECTION toolbar — in a
+     form, chrome that appears only once you select something hides the fact
+     that the field takes formatting at all. What collapsing buys is a dense
+     form with several note fields no longer carrying several full toolbars.
+
+     The first version did not actually buy that: it hid the toolbar's
+     BUTTONS and left the bar — same height, same fill, same border — so the
+     screen barely changed. Now the bar goes entirely and the toggle floats
+     over the field's top corner.
+
+     The toggle is a SIBLING of the toolbar, not a child, for two reasons: it
+     has to outlive the element it hides, and a control nested inside the
+     region its own aria-controls names is its own edge case.
+
+     aria-expanded is the programmatic half, the vanished bar is the visible
+     half. One line of consumer wiring flips it, same division as the
+     execCommand wiring. */
+  /* The icon stays the SAME in both states on purpose. A control whose
+     glyph changes meaning ("+" then "−") asks the reader to decode a
+     direction; a formatting glyph just says what is behind the button,
+     which is what Slack and Gmail both do for this exact toggle. State is
+     carried by aria-expanded, by the toolbar being there or not, and by the
+     pressed styling below. */
+  .bo-richtext__toolbar-toggle[aria-expanded='true'] {
+    background: var(--bo-color-bg-muted);
+    color: var(--bo-color-text-primary);
   }
 
-  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false'])
-    .bo-richtext__toolbar
-    > :not(.bo-richtext__toolbar-toggle) {
+  .bo-richtext__toolbar-toggle {
+    position: absolute;
+    inset-block-start: var(--bo-space-1);
+    inset-inline-end: var(--bo-space-1);
+    z-index: 1;
+  }
+
+  /* Expanded, the toolbar reserves exactly the toggle's square plus its
+     offset so wrapping buttons never slide underneath it. .bo-btn--icon is
+     square at --bo-btn-height, which resolves from
+     --bo-density-control-height — so this tracks density instead of
+     guessing a pixel. */
+  .bo-richtext:has(.bo-richtext__toolbar-toggle) .bo-richtext__toolbar {
+    padding-inline-end: calc(var(--bo-density-control-height) + var(--bo-space-2));
+  }
+
+  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false']) .bo-richtext__toolbar {
     display: none;
+  }
+
+  /* Grouped buttons (137.7). The divider below is VISUAL ONLY — a
+     decorative span between categories, inside a toolbar that is a single
+     role="group". So a sighted user saw six categories and a screen-reader
+     user heard fifteen undifferentiated buttons: exactly the two-channel
+     failure this framework refuses everywhere else.
+
+     __group carries both channels. It is a real role="group" with its own
+     aria-label, and the separator is drawn from the BOUNDARY between groups
+     rather than from an extra element, so there is one concept instead of
+     two. It also fixes a wrapping bug you can see at 1440px: with bare
+     buttons the toolbar wrapped mid-category and orphaned the two list
+     buttons on their own row. A group wraps as a unit.
+
+     __divider still ships and still works — removing it would be a breaking
+     change to a published class — but __group is the one to reach for. */
+  .bo-richtext__group {
+    display: flex;
+    align-items: center;
+    gap: var(--bo-space-1);
+  }
+
+  .bo-richtext__group + .bo-richtext__group {
+    padding-inline-start: var(--bo-space-1);
+    border-inline-start: var(--bo-border-width) solid var(--bo-color-border-strong);
   }
 
   /* Visible group separator inside the toolbar (bold/italic | lists). */

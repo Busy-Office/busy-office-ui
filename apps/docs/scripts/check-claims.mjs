@@ -2134,33 +2134,87 @@ check(
   JSON.stringify(invalidBorders),
 );
 
-/* Slice 137.3 — collapsing hides the buttons and KEEPS the toggle. The
-   second half is the design claim: the field must still advertise that it
-   is rich. */
+/* Slice 137.3 — collapsing removes the toolbar BAR, not just its buttons,
+   and keeps a floating toggle. The first version hid the buttons and left
+   the bar at full height, which saved nothing on screen; asserting the
+   bar's own rendered height is what would have caught that, so that is what
+   is asserted. Alt+Shift+T is checked too — the toggle must be reachable
+   without the mouse, which is the whole point of a control that hides the
+   other controls. */
 const rtCollapse = await page.evaluate(async () => {
   const t = document.querySelector('[data-richtext-toggle]');
-  const bar = t.closest('.bo-richtext__toolbar');
-  const others = [...bar.children].filter((c) => c !== t);
+  const field = t.closest('.bo-richtext');
+  const bar = field.querySelector('.bo-richtext__toolbar');
+  const h = (el) => el.getBoundingClientRect().height;
   const vis = (el) => getComputedStyle(el).display !== 'none';
-  const openOthers = others.filter(vis).length;
+  const openBarHeight = h(bar);
   t.click();
   await new Promise((r) => requestAnimationFrame(r));
   return {
-    openOthers,
-    rtCollapsedOthers: others.filter(vis).length,
+    openBarHeight,
+    collapsedBarHeight: h(bar),
+    barHidden: !vis(bar),
     toggleStillVisible: vis(t),
+    toggleOutsideBar: !bar.contains(t),
     expanded: t.getAttribute('aria-expanded'),
     controlsResolves: !!document.getElementById(t.getAttribute('aria-controls')),
   };
 });
 check(
-  'richtext: collapsing hides every toolbar button but keeps the toggle visible, with aria-expanded/-controls both real',
-  rtCollapse.openOthers > 0 &&
-    rtCollapse.rtCollapsedOthers === 0 &&
+  'richtext: collapsing removes the toolbar bar entirely (not just its buttons) and leaves a floating toggle',
+  rtCollapse.openBarHeight > 0 &&
+    rtCollapse.collapsedBarHeight === 0 &&
+    rtCollapse.barHidden &&
     rtCollapse.toggleStillVisible &&
+    rtCollapse.toggleOutsideBar &&
     rtCollapse.expanded === 'false' &&
     rtCollapse.controlsResolves,
   JSON.stringify(rtCollapse),
+);
+
+// re-open with the keyboard only, from inside the field
+await page.evaluate(() => {
+  document.querySelector('[data-richtext-toggle]')
+    .closest('.bo-richtext').querySelector('.bo-richtext__content').focus();
+});
+await page.keyboard.down('Alt');
+await page.keyboard.down('Shift');
+await page.keyboard.press('KeyT');
+await page.keyboard.up('Shift');
+await page.keyboard.up('Alt');
+const rtHotToggle = await page.evaluate(() => {
+  const t = document.querySelector('[data-richtext-toggle]');
+  return {
+    expanded: t.getAttribute('aria-expanded'),
+    barVisible: getComputedStyle(t.closest('.bo-richtext').querySelector('.bo-richtext__toolbar')).display !== 'none',
+    keys: t.getAttribute('aria-keyshortcuts'),
+  };
+});
+check(
+  'richtext: Alt+Shift+T re-opens the toolbar from inside the field, and the shortcut is advertised',
+  rtHotToggle.expanded === 'true' && rtHotToggle.barVisible && rtHotToggle.keys === 'Alt+Shift+T',
+  JSON.stringify(rtHotToggle),
+);
+
+/* Slice 137.7 — the toolbar's visual categories must exist for AT too. The
+   dividers were decorative spans inside one big role="group", so the eye
+   saw six categories and a screen reader heard one list. Each group must be
+   a real role="group" WITH a name — an unnamed group announces nothing. */
+const rtGroups = await page.evaluate((sel) => {
+  const bar = document.querySelector(sel).querySelector('.bo-richtext__toolbar');
+  const groups = [...bar.querySelectorAll('.bo-richtext__group')];
+  return {
+    count: groups.length,
+    allAreGroups: groups.every((g) => g.getAttribute('role') === 'group'),
+    allNamed: groups.every((g) => (g.getAttribute('aria-label') || '').trim().length > 0),
+    names: groups.map((g) => g.getAttribute('aria-label')),
+    buttonsOutsideAnyGroup: [...bar.querySelectorAll('.bo-btn')].filter((b) => !b.closest('.bo-richtext__group')).length,
+  };
+}, ADV);
+check(
+  'richtext: every Advanced toolbar button sits in a NAMED role="group", so the visual categories exist programmatically',
+  rtGroups.count >= 5 && rtGroups.allAreGroups && rtGroups.allNamed && rtGroups.buttonsOutsideAnyGroup === 0,
+  JSON.stringify(rtGroups),
 );
 
 /* Slice 137.4 — the keyboard map opens from the toolbar and is GENERATED:
@@ -2178,6 +2232,113 @@ check(
   `richtext: the keyboard-map dialog opens from the toolbar and lists all ${RICHTEXT_KEY_COUNT} generated shortcuts`,
   keymapRows.open && keymapRows.rows === RICHTEXT_KEY_COUNT,
   JSON.stringify(keymapRows),
+);
+
+/* Slice 137.5/137.6 — keyboard-first lists. The markdown rule is the one
+   most likely to regress SILENTLY: the trailing space contenteditable
+   inserts is U+00A0, not U+0020, so a rule written against an ASCII space
+   fires never and looks like nothing is wired. Asserting the character
+   codes pins the trap itself, not just the happy path.
+
+   Tab is asserted three ways because the interesting cases are the two
+   where it must NOT indent: outside a list (indent would store a styled
+   blockquote) and after Escape (otherwise a list-only field is a WCAG
+   2.1.2 keyboard trap with no exit). */
+const LIST_FIELD =
+  '.bo-richtext__content[data-placeholder^="Type"]';
+const listHtml = () => page.$eval(LIST_FIELD, (e) => e.innerHTML);
+const clearList = async () => {
+  await page.$eval(LIST_FIELD, (e) => { e.innerHTML = ''; });
+  await page.click(LIST_FIELD);
+};
+
+/* The platform fact the rule is written against, pinned directly: a
+   trailing space in a contenteditable is U+00A0. It cannot be read off the
+   demo field, because by then the rule has already consumed the marker —
+   so this types into a scratch element where no rule is listening. If a
+   future engine emits U+0020 here, the recipe's regex needs widening and
+   this is what says so. */
+const trailingSpaceCode = await page.evaluate(async () => {
+  const el = document.createElement('div');
+  el.setAttribute('contenteditable', 'true');
+  document.body.append(el);
+  el.focus();
+  document.execCommand('insertText', false, '- ');
+  const codes = [...el.textContent].map((c) => c.charCodeAt(0));
+  el.remove();
+  return codes;
+});
+check(
+  'richtext: a trailing space in contenteditable is U+00A0, which is why the markdown rule cannot match an ASCII space',
+  trailingSpaceCode[trailingSpaceCode.length - 1] === 160,
+  JSON.stringify({ trailingSpaceCode }),
+);
+
+await clearList();
+await page.keyboard.type('- milk');
+const mdDash = await listHtml();
+
+await clearList();
+await page.keyboard.type('1. first');
+const mdOrdered = await listHtml();
+
+await clearList();
+await page.keyboard.type('qty - 5');
+const mdMidLine = await listHtml();
+
+check(
+  'richtext: "- " and "1. " at line start become real <ul>/<ol>, and a mid-line marker is left alone',
+  mdDash.includes('<ul>') && mdDash.includes('milk') &&
+    mdOrdered.includes('<ol>') && mdOrdered.includes('first') &&
+    !mdMidLine.includes('<ul>') && mdMidLine.includes('qty'),
+  JSON.stringify({ mdDash, mdOrdered, mdMidLine }),
+);
+
+/* The start number is the one place execCommand gives no control at all,
+   so the recipe sets <ol start> afterwards. Asserted as stored HTML AND as
+   the number the browser actually renders — an attribute that a CSS counter
+   overrides would still pass the first half. */
+await clearList();
+await page.keyboard.type('5. five');
+const startFive = await page.evaluate((sel) => {
+  const li = document.querySelector(sel).querySelector('li');
+  return { html: document.querySelector(sel).innerHTML, start: li?.closest('ol')?.getAttribute('start') };
+}, LIST_FIELD);
+await clearList();
+await page.keyboard.type('1. one');
+const startOne = await listHtml();
+check(
+  'richtext: "5. " starts the list at 5 via <ol start>, and "1. " leaves the attribute off',
+  startFive.start === '5' && startFive.html.includes('<ol start="5">') && !startOne.includes('start='),
+  JSON.stringify({ startFive, startOne }),
+);
+
+await clearList();
+await page.keyboard.type('- one');
+await page.keyboard.press('Enter');
+await page.keyboard.type('two');
+await page.keyboard.press('Tab');
+const tabNested = await listHtml();
+await page.keyboard.down('Shift');
+await page.keyboard.press('Tab');
+await page.keyboard.up('Shift');
+const tabOutdented = await listHtml();
+const stillInField = await page.evaluate(() =>
+  !!document.activeElement?.classList?.contains('bo-richtext__content'));
+check(
+  'richtext: Tab nests a list item and Shift+Tab lifts it back, without leaving the field',
+  /<ul>[\s\S]*<ul>/.test(tabNested) && !/<ul>[\s\S]*<ul>/.test(tabOutdented) && stillInField,
+  JSON.stringify({ tabNested, tabOutdented, stillInField }),
+);
+
+await page.keyboard.press('Escape');
+await page.keyboard.press('Tab');
+const escaped = await page.evaluate(() =>
+  !document.activeElement?.classList?.contains('bo-richtext__content'));
+check(
+  'richtext: Escape releases the field so Tab can leave a list — no WCAG 2.1.2 keyboard trap',
+  escaped,
+  JSON.stringify({ escaped }),
 );
 
 /* Slice 136.2 — editor chrome never prints. */

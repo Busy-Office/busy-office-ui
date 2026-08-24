@@ -261,6 +261,127 @@ already half-built and quietly broken**, which changes what to build.
        key swallowed the other six. Fixed before the number was quoted
        anywhere.
 
+5. [x] **137.5 — DONE 2026-08-24. Owner:** *"how about *, - or 1. would it
+       start the bullet point or numbered list?"* — and *"can we control
+       which is start number?"*
+
+       **No, none of it is native**: `contenteditable` has no input rules, so
+       typing `- ` leaves you the literal characters. Wired as a recipe: the
+       marker is matched at block start, deleted, and the real command run in
+       its place. `- ` and `* ` give `<ul>`, any number gives `<ol>`, and a
+       mid-line marker (`qty - 5`) is correctly left alone.
+
+       **The start number is the one thing execCommand gives NO control
+       over** — `insertOrderedList` always starts at 1 and takes no argument
+       — so the plain-HTML `start` attribute is set afterwards: `5. ` yields
+       `<ol start="5">`, `12) ` yields 12, and `1. ` is left bare because
+       `start="1"` is the default and writing it would be noise in the
+       stored value. Verified as RENDERED, not just as an attribute: the
+       markers read 5, 6, 7. Nothing in the framework styles `ol` with CSS
+       counters, which is the usual reason `start` silently does nothing in
+       a design system — checked before relying on it.
+
+       **The bug worth remembering: the trailing space is not a space.**
+       The first implementation was correct and fired never. contenteditable
+       converts a trailing space to U+00A0 so it will not collapse, so a
+       regex written against `[ ]` matches nothing — char codes `[45, 160]`.
+       It looked exactly like "the script did not load"; what settled it was
+       proving the script HAD loaded (a later-registered handler still
+       worked) and then reading the actual bytes. `check:claims` now pins
+       the platform fact in a scratch element, because that is what would
+       change under us.
+
+6. [x] **137.6 — DONE 2026-08-24. Owner:** *"Tab — what is solution for
+       that? if we want tab?"*
+
+       Tab today moves focus out and inserts nothing. The solution shipped
+       is **context-sensitive**: inside a list item Tab indents and
+       Shift+Tab outdents; anywhere else it moves to the next control, as in
+       any form field.
+
+       **Scoped to lists on purpose, and the reason is in the output.**
+       `execCommand('indent')` in a plain paragraph emits
+       `<blockquote style="margin: 0 0 0 40px; border: none; padding: 0px">`
+       — a semantic lie AND an inline style any sanitizer strips, so
+       capturing Tab there would store something that vanishes on save.
+
+       **Escape releases the field**, and that is load-bearing rather than a
+       nicety: a field whose entire content is a list would otherwise have
+       no Tab exit at all, which is a WCAG 2.1.2 keyboard trap. Asserted:
+       Tab from inside a list keeps focus in the field, Escape-then-Tab
+       leaves it.
+
+       Documented caveat that cannot be fixed from here: Chrome nests as
+       `<ul><li>a</li><ul>…</ul></ul>`, putting the inner list as a SIBLING
+       of the `<li>` rather than inside it — invalid HTML that parsers
+       normalise differently. A reason to mount an engine if nested lists
+       matter to the stored value; not a reason to drop Tab.
+
+7. [x] **137.7 — DONE 2026-08-24. Owner:** *"toolbar, some button can be
+       group buttons? if they are the same categories?"*
+
+       **Yes, and the existing dividers were a single-channel cue** — a
+       decorative `<span>` inside a toolbar that was one big `role="group"`.
+       A sighted user read six categories; a screen-reader user heard
+       fifteen undifferentiated buttons. Exactly the failure this framework
+       refuses everywhere else, sitting in its own toolbar.
+
+       `.bo-richtext__group` carries both channels: a real `role="group"`
+       with its own `aria-label`, with the separator drawn from the boundary
+       between groups rather than an extra element — one concept instead of
+       two. `__divider` still ships (removal is breaking on a published
+       class) but `__group` is the one to reach for.
+
+       It also fixed a visible wrapping bug the owner's screenshot showed:
+       bare buttons wrapped mid-category and orphaned the two list buttons
+       on a row of their own. A group wraps as a unit, and Advanced now fits
+       one row at 1440px.
+
+8. [x] **137.8 — DONE 2026-08-24. Owner, on seeing the first version:**
+       *"hide should also hide the toolbar? — better to have floating button
+       on top-right for unhide."*
+
+       **The owner was right and the first version was half a feature.** It
+       hid the toolbar's BUTTONS and left the bar — same height, same fill,
+       same border — so collapsing changed almost nothing on screen, which
+       was the entire point of it. Now the bar goes entirely and the toggle
+       floats over the field's top corner.
+
+       The toggle became a SIBLING of the toolbar rather than a child: it
+       has to outlive the element it hides, and it makes `aria-controls`
+       honest (a control nested inside the region it names is its own edge
+       case). Toolbar reserves exactly the toggle's square via
+       `--bo-density-control-height` so wrapping buttons never slide under
+       it — density-tracked, not a guessed pixel.
+
+       Added **Alt+Shift+T**, chosen to dodge Ctrl/Cmd+Shift+T (reopen closed
+       tab) and Alt+F10 (focus-the-toolbar in other editors). The claim
+       asserts the collapsed bar's rendered height is 0 — asserting "the
+       buttons are hidden" is what let the first version pass while looking
+       unchanged.
+
+9. [x] **137.9 — DONE 2026-08-24. Owner:** *"floating + could be confusing.
+       any better icon?"* then *"how about Aa"* / *"or A with pen"*.
+
+       Right again — `+` in an ERP reads as "add a row", not "show
+       formatting". Answered by RENDERING five candidates at the true 1em
+       button size instead of arguing about them, which changed the answer:
+       **a stroked "Aa" collapses** — the lowercase bowl closes and the
+       letter reads as a hook — while the same glyph FILLED holds perfectly.
+       That is why every editor shipping this icon draws it solid, and why
+       the owner's reference image was solid.
+
+       So `.bo-icon--format` is the one filled glyph in the set, and the
+       exception is recorded with its evidence: stroke stays the house
+       convention for pictograms, but a LETTERFORM is a different problem
+       and gets the answer that survives the size. "A with pen" was legible
+       large and became a blob at 16px.
+
+       The icon does **not** change between states. A glyph that flips
+       `+`/`−` asks the reader to decode a direction; a formatting glyph
+       names what is behind the button. State rides on `aria-expanded`, on
+       the bar's presence, and on the toggle's own pressed styling.
+
 ## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
 
 Owner input, verbatim: *"/components/richtext - grill the design. (ref to

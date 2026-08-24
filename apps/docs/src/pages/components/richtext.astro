@@ -10,20 +10,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const basic = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
-            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
-            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
-            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
-            aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
-            aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-dialog-trigger="rt-keys"
-            aria-label="Keyboard shortcuts" title="Keyboard shortcuts"><span class="bo-icon bo-icon--keyboard" aria-hidden="true"></span></button>
+    <div class="bo-richtext__group" role="group" aria-label="Text style">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+              title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+              title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Lists">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+              aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+              aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Insert">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
+              aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Help">
+      <button class="bo-btn bo-btn--ghost" type="button" data-dialog-trigger="rt-keys"
+              aria-label="Keyboard shortcuts" title="Keyboard shortcuts"><span class="bo-icon bo-icon--keyboard" aria-hidden="true"></span></button>
+    </div>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true"
        role="textbox" aria-multiline="true" aria-label="Delivery notes"
@@ -68,10 +74,12 @@ const collapsible = `<div class="bo-richtext">
             title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
             aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost bo-richtext__toolbar-toggle" type="button"
-            data-richtext-toggle aria-expanded="true" aria-controls="rt-collapse-bar"
-            aria-label="Hide formatting toolbar" title="Hide formatting toolbar">&minus;</button>
   </div>
+  <button class="bo-btn bo-btn--ghost bo-btn--icon bo-richtext__toolbar-toggle" type="button"
+          data-richtext-toggle aria-expanded="true" aria-controls="rt-collapse-bar"
+          aria-label="Hide formatting toolbar (Alt + Shift + T)"
+          title="Hide formatting toolbar (Alt + Shift + T)"
+          aria-keyshortcuts="Alt+Shift+T"><span class="bo-icon bo-icon--format" aria-hidden="true"></span></button>
   <div class="bo-richtext__content bo-prose" contenteditable="true"
        role="textbox" aria-multiline="true" aria-label="Internal note"
        data-placeholder="Internal note…">
@@ -79,41 +87,60 @@ const collapsible = `<div class="bo-richtext">
   </div>
 </div>`;
 
-const advanced = `<div class="bo-richtext">
+const lists = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
-            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
-            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"
-            title="Strikethrough"><s>S</s></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE"
-            aria-label="Blockquote" title="Blockquote"><span class="bo-icon bo-icon--quote" aria-hidden="true"></span></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyLeft" aria-pressed="true"
-            aria-label="Align left" title="Align left"><span class="bo-icon bo-icon--align-left" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyCenter" aria-pressed="false"
-            aria-label="Align centre" title="Align centre"><span class="bo-icon bo-icon--align-center" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyRight" aria-pressed="false"
-            aria-label="Align right" title="Align right"><span class="bo-icon bo-icon--align-right" aria-hidden="true"></span></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="outdent"
-            aria-label="Decrease indent" title="Decrease indent"><span class="bo-icon bo-icon--outdent" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="indent"
-            aria-label="Increase indent" title="Increase indent"><span class="bo-icon bo-icon--indent" aria-hidden="true"></span></button>
-    <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
-            aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="removeFormat"
-            aria-label="Clear formatting" title="Clear formatting"><span class="bo-icon bo-icon--clear-format" aria-hidden="true"></span></button>
-    <span class="bo-richtext__divider"></span>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
             aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
             aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
+  </div>
+  <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
+       role="textbox" aria-multiline="true" aria-label="Return instructions"
+       data-placeholder="Type &quot;- &quot;, &quot;1. &quot; or &quot;5. &quot; to start a list, then Tab to nest…"></div>
+</div>`;
+
+const advanced = `<div class="bo-richtext">
+  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
+    <div class="bo-richtext__group" role="group" aria-label="Text style">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+            title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+            title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"
+            title="Strikethrough"><s>S</s></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="removeFormat"
+            aria-label="Clear formatting" title="Clear formatting"><span class="bo-icon bo-icon--clear-format" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Block format">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE"
+            aria-label="Blockquote" title="Blockquote"><span class="bo-icon bo-icon--quote" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Alignment">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyLeft" aria-pressed="true"
+            aria-label="Align left" title="Align left"><span class="bo-icon bo-icon--align-left" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyCenter" aria-pressed="false"
+            aria-label="Align centre" title="Align centre"><span class="bo-icon bo-icon--align-center" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyRight" aria-pressed="false"
+            aria-label="Align right" title="Align right"><span class="bo-icon bo-icon--align-right" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Indent">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="outdent"
+            aria-label="Decrease indent" title="Decrease indent"><span class="bo-icon bo-icon--outdent" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="indent"
+            aria-label="Increase indent" title="Increase indent"><span class="bo-icon bo-icon--indent" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Lists">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+            aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
+    </div>
+    <div class="bo-richtext__group" role="group" aria-label="Insert">
+      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
+            aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
+    </div>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true"
        role="textbox" aria-multiline="true" aria-label="Return instructions">
@@ -301,20 +328,92 @@ ${rtKeys.keys
   </section>
 
   <section class="demo">
+    <h2>Keyboard-first lists — <code>-</code>, <code>*</code>, <code>1.</code> and Tab</h2>
+    <Demo code={lists} />
+    <p class="bo-u-text-muted"><strong>Type <code>-&nbsp;</code>,
+    <code>*&nbsp;</code> or <code>1.&nbsp;</code> at the start of a line and
+    it becomes a real list; Tab nests the item, Shift&nbsp;+&nbsp;Tab lifts
+    it back out.</strong> This is the affordance that lets a clerk build a
+    list without ever reaching the toolbar — and it is the reason the
+    recommended toolbar can stay at five buttons. <strong>None of it is
+    native</strong>: <code>contenteditable</code> has no input rules, so
+    typing <code>-&nbsp;</code> otherwise leaves you the literal characters.
+    The wiring is in the Markup section, about fifteen lines.</p>
+    <p class="bo-u-text-muted"><strong>The number you type is the number the
+    list starts at.</strong> <code>5.&nbsp;</code> begins at 5,
+    <code>12)&nbsp;</code> at 12; <code>1.&nbsp;</code> is left plain
+    because <code>start="1"</code> is the default and writing it would be
+    noise in the stored value. <code>execCommand</code> gives you no say in
+    this — <code>insertOrderedList</code> always starts at 1 and takes no
+    argument — so the recipe sets the plain-HTML
+    <a href="https://developer.mozilla.org/docs/Web/HTML/Element/ol#start"><code>start</code></a>
+    attribute afterwards. To renumber partway down a list, that is
+    <code>&lt;li value="9"&gt;</code> on the item itself. Both are real HTML
+    that prints and exports; nothing here styles <code>ol</code> with CSS
+    counters, which is the usual reason <code>start</code> silently does
+    nothing in a design system.</p>
+    <p class="bo-u-text-muted"><strong>Three things this page got wrong
+    before testing them, kept here because you will hit all three.</strong>
+    <strong>(1) The trailing space is not a space.</strong>
+    <code>contenteditable</code> converts it to U+00A0 so it will not
+    collapse, so a regex written against an ASCII space matches nothing and
+    the rule silently never fires — the character codes here are
+    <code>[45,&nbsp;160]</code>. <strong>(2) Tab is scoped to list items on
+    purpose.</strong> <code>execCommand('indent')</code> in a plain
+    paragraph emits
+    <code>&lt;blockquote style="margin:0 0 0 40px"&gt;</code> — a semantic
+    lie <em>and</em> an inline style your sanitizer will strip, so the
+    indent would vanish on save. Outside a list, Tab moves to the next
+    control like any form field. <strong>(3) Escape releases the
+    field.</strong> A field whose whole content is a list would otherwise
+    have no Tab exit at all, which is a WCAG 2.1.2 keyboard trap; press
+    Escape, then Tab, and focus leaves. That is in the keyboard map.</p>
+    <p class="bo-u-text-muted"><strong>One caveat you cannot fix from
+    here:</strong> Chrome's <code>indent</code> nests as
+    <code>&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;ul&gt;…&lt;/ul&gt;&lt;/ul&gt;</code>,
+    putting the inner list as a sibling of the <code>&lt;li&gt;</code>
+    rather than inside it — which is invalid HTML that parsers normalise
+    differently. If nested lists genuinely matter to your stored value,
+    that is a reason to mount a real engine rather than a reason to stop
+    using Tab.</p>
+  </section>
+
+  <section class="demo">
     <h2>Hide the toolbar, keep the affordance</h2>
     <Demo code={collapsible} />
     <p class="bo-u-text-muted">A dense form with several note fields
     carries several full toolbars, which is mostly noise. Collapsing
-    fixes that — but <strong>the toggle stays visible</strong>, so the
-    field still says it is rich. That is deliberate and it is the same
-    argument this framework uses to refuse a Notion-style floating
-    toolbar: in a <em>form</em>, chrome that appears only once you select
-    something hides the fact that the field takes formatting at all. A
-    document can afford that; a field a user meets for eight seconds
-    cannot. Two-channel as always —
-    <code>aria-expanded</code> plus <code>aria-controls</code> on the
-    toggle is the programmatic half, the hidden buttons are the visible
-    half. The shortcuts keep working while it is collapsed.</p>
+    removes <strong>the whole bar</strong> — the first version of this hid
+    only the buttons and left the strip at full height, which saved
+    nothing on screen — and leaves a single control floating over the
+    field's top corner. <strong>The toggle always stays</strong>, so the
+    field still says it is rich. That is the same argument this framework
+    uses to refuse a Notion-style floating <em>selection</em> toolbar: in a
+    form, chrome that appears only once you select something hides the fact
+    that the field takes formatting at all. A document can afford that; a
+    field a user meets for eight seconds cannot.</p>
+    <p class="bo-u-text-muted"><strong>The icon does not change between
+    states</strong>, and that is deliberate. A glyph that flips
+    <code>+</code>&nbsp;/&nbsp;<code>&minus;</code> asks the reader to
+    decode a direction, and <code>+</code> in an ERP reads as "add a row"
+    rather than "show formatting". A formatting glyph just names what is
+    behind the button — the same choice Slack and Gmail make for this exact
+    control. State rides on <code>aria-expanded</code>, on the bar being
+    there or not, and on the button's own pressed styling.
+    <strong>Alt&nbsp;+&nbsp;Shift&nbsp;+&nbsp;T</strong> toggles it from
+    inside the field (chosen to dodge Ctrl/Cmd&nbsp;+&nbsp;Shift&nbsp;+&nbsp;T
+    and Alt&nbsp;+&nbsp;F10, which the browser and other editors already
+    own), and it is in the keyboard map. Every shortcut keeps working while
+    the toolbar is hidden — which is rather the point.</p>
+    <p class="bo-u-text-muted"><strong>Group buttons that belong
+    together.</strong> <code>.bo-richtext__group</code> is a real
+    <code>role="group"</code> with its own <code>aria-label</code>, so the
+    categories a sighted user reads from the separator lines exist for a
+    screen-reader user too — the decorative
+    <code>__divider</code> span never did that, which made it a
+    single-channel cue in a framework that refuses those. Groups also wrap
+    as units: before this, the Advanced toolbar wrapped mid-category and
+    orphaned the two list buttons on a row of their own.</p>
   </section>
 
   <section class="demo">
@@ -537,16 +636,96 @@ const view = new EditorView(host, {
       if (el) el.toggleAttribute('data-empty', !el.textContent?.trim());
     });
 
-    // Collapse: one line of state, both channels moved together.
-    document.addEventListener('click', (e) => {
-      const t = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-toggle]');
-      if (!t) return;
+    /* Keyboard-first lists (137.5/137.6) — the two asks that let a clerk
+       build a list without ever reaching for the toolbar.
+
+       MARKDOWN TRIGGERS. contenteditable has NO input rules: typing "- "
+       natively produces the literal text "- " and nothing else. So the
+       marker is matched at the start of a block, deleted, and the real
+       command run in its place.
+
+       TAB. Scoped to list items ON PURPOSE. execCommand('indent') outside a
+       list emits <blockquote style="margin:0 0 0 40px"> — a semantic lie
+       AND an inline style any sanitizer strips, so the indent would vanish
+       on save. Inside a list it nests, which is what people mean by Tab.
+
+       ESCAPE RELEASES THE FIELD. Without it, a field whose whole content is
+       a list has no Tab exit — a WCAG 2.1.2 keyboard trap. Esc arms the next
+       Tab to move focus instead of indenting. */
+    // The trailing space is U+00A0, not U+0020: contenteditable converts a
+    // trailing space to a non-breaking one to keep it from collapsing. An
+    // ASCII-space regex matches nothing here and the rule silently never
+    // fires — measured (char codes [45, 160]), not guessed.
+    const MARKER = /^([*-]|(\d{1,3})[.)])[  ]$/;
+    document.addEventListener('input', (e) => {
+      const field = (e.target as HTMLElement).closest?.('.bo-richtext__content');
+      if (!field) return;
+      const sel = getSelection();
+      const node = sel?.anchorNode;
+      if (!node || node.nodeType !== 3) return;
+      const typed = node.textContent!.slice(0, sel!.anchorOffset);
+      const m = MARKER.exec(typed);
+      if (!m) return;
+      const host = node.parentElement;
+      if (!host || host.closest('li')) return;      // already in a list
+      node.textContent = node.textContent!.slice(sel!.anchorOffset);
+      const r = document.createRange();
+      r.setStart(node, 0);
+      r.collapse(true);
+      sel!.removeAllRanges();
+      sel!.addRange(r);
+      const ordered = !!m[2];
+      document.execCommand(ordered ? 'insertOrderedList' : 'insertUnorderedList');
+      /* execCommand always starts an <ol> at 1 and takes no argument for it.
+         The start number is plain HTML (<ol start>), so it is set afterwards:
+         typing "5. " gives a list that starts at 5. Nothing in the framework
+         styles ol with CSS counters, which is what would otherwise override
+         the attribute silently. */
+      if (ordered && m[2] !== '1') {
+        const at = getSelection()?.anchorNode;
+        const ol = (at?.nodeType === 1 ? (at as Element) : at?.parentElement)?.closest('ol');
+        if (ol) ol.setAttribute('start', m[2]);
+      }
+    });
+
+    let tabReleased = false;
+    document.addEventListener('keydown', (e) => {
+      const field = (e.target as HTMLElement).closest?.('.bo-richtext__content');
+      if (!field) return;
+      if (e.key === 'Escape') { tabReleased = true; return; }
+      if (e.key !== 'Tab') { tabReleased = false; return; }
+      if (tabReleased) { tabReleased = false; return; }   // let focus leave
+      const node = getSelection()?.anchorNode;
+      const el = node?.nodeType === 1 ? (node as Element) : node?.parentElement;
+      if (!el?.closest('li')) return;                     // not a list: focus moves
+      e.preventDefault();
+      document.execCommand(e.shiftKey ? 'outdent' : 'indent');
+    });
+
+    // Collapse: one line of state, both channels moved together. Reachable
+    // by click, by Tab-and-Enter (it is a real button), and by Alt+Shift+T
+    // from inside the field — chosen to dodge Ctrl/Cmd+Shift+T (reopen
+    // closed tab) and Alt+F10, which editors already use for "focus the
+    // toolbar".
+    const toggleToolbar = (t: HTMLElement) => {
       const open = t.getAttribute('aria-expanded') !== 'true';
       t.setAttribute('aria-expanded', String(open));
-      t.innerHTML = open ? '&minus;' : '+';
-      const label = open ? 'Hide formatting toolbar' : 'Show formatting toolbar';
+      const label = `${open ? 'Hide' : 'Show'} formatting toolbar (Alt + Shift + T)`;
       t.setAttribute('aria-label', label);
       t.setAttribute('title', label);
+    };
+    document.addEventListener('click', (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-toggle]');
+      if (t) toggleToolbar(t);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!(e.altKey && e.shiftKey && e.key.toLowerCase() === 't')) return;
+      const field = (e.target as HTMLElement).closest?.('.bo-richtext');
+      const t = field?.querySelector<HTMLElement>('[data-richtext-toggle]');
+      if (!t) return;
+      e.preventDefault();
+      toggleToolbar(t);
+      t.focus();            // move focus to the control that changed state
     });
   </script>
 
