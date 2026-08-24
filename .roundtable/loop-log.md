@@ -855,3 +855,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 11:19 · Continue · owner-wishlist · 137.17-137.18 — /base/motion was demonstrating nothing (opt-in module never imported); fixed, showcases added, liveness claims · landed · dbcdbc8
 - 2026-08-24 18:49 · Standardize · drift · 130.3 stale checkbox — module two was built and verdicted a day earlier · landed · 29a09c0
 - 2026-08-24 18:59 · Continue · build · 130.4 module three (CRM, 4 screens) + GAP-17 stepper marker overlap at 5 steps + check:rtl comment false-positive · landed · e544ecc
+- 2026-08-24 19:26 · Continue · owner-wishlist · 138.1 — focus ring inset for joined money/quantity segments; 3 instrument defects caught · landed · 622a5cc

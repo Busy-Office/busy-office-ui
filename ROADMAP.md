@@ -190,20 +190,34 @@ see dropdown)"*
        so a version that measures nothing cannot pass quietly. Red-proved:
        restoring the 2px offset reaches the built CSS and fails the claim.
 
-2. [ ] **138.2 — currency and unit as a SEARCHABLE list, by choice.** A
+2. [x] **138.2 — DONE 2026-08-24. Composed, not invented — and the
+       type-one-character behaviour turned out to already be the default.** A
        `<select>` is right for 5 currencies and wrong for 180, and unit-of-
        measure lists in a real ERP run to hundreds. The owner asks for the
        choice, plus a type-ahead that only opens after one character so the
        control does not blast a 200-item list on focus.
 
-       **Compose, do not invent**: `bo-combobox` already ships and is exactly
-       this control — the framework's value-help surface, with the keyboard
-       contract already in `keymap.json`. The work is to make `.bo-money`
-       and `.bo-quantity` accept a combobox in the slot where they currently
-       accept a select, which is a joining/geometry question rather than a
-       new component. Whether the "1 character before opening" threshold
-       belongs in `initCombobox` or in the consumer's data source is the one
-       real design decision.
+       `bo-combobox` already ships and already IS this control. So the work
+       was joining geometry, not a component: `.bo-money` and `.bo-quantity`
+       now take a combobox in the slot where they take a select. The joint
+       has to reach the input INSIDE the combobox — the wrapper is a
+       positioning box with no border or background, so rounding its corners
+       would style something invisible and leave the visible control
+       unjoined. 138.1's inset focus ring was extended to the nested input
+       for the same reason: it is a segment of the joined field even though
+       it is not a direct child. Verified joined at a 0px gap on one row,
+       with a ring identical to the plain input's.
+
+       **The "at least 1 char" requirement needed no code at all.**
+       `data-open-on-focus` is opt-IN, so a combobox written without it is
+       already shut until the first character — the attribute exists for the
+       short lists where showing everything immediately is the point. Said
+       plainly on the page, because a reader would otherwise look for a
+       setting that does not exist.
+
+       Not done: the same demo on `/components/quantity`. The CSS covers it
+       and the unit slot behaves identically; only the documented example is
+       missing.
 
 ## Slice 137 — Owner wishlist: the richtext toolbar (2026-08-24)
 

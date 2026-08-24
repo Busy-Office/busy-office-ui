@@ -57,6 +57,45 @@
     outline-offset: calc(-1 * var(--bo-focus-ring-width, 2px));
   }
 
+  /* A joined field takes a COMBOBOX wherever it takes a select — the same
+     slot, but searchable. A `<select>` is right for five currencies and
+     wrong for a hundred and eighty, and unit-of-measure lists in a real ERP
+     run to hundreds (owner wishlist, 138.2).
+
+     The joint has to reach the input INSIDE the combobox: `.bo-combobox` is
+     a positioning wrapper with no border or background of its own, so
+     rounding its corners would style a box nobody can see and leave the
+     visible control unjoined. The listbox is a fixed-position popover placed
+     by initCombobox(), so it is unaffected by any of this.
+
+     Typing is already the trigger: `data-open-on-focus` is opt-IN, so a
+     combobox left without it stays shut until the first character — which is
+     the behaviour a long list needs. */
+  .bo-money > .bo-combobox {
+    display: flex;
+  }
+
+  .bo-money > .bo-combobox > .bo-input {
+    inline-size: 100%;
+  }
+
+  .bo-money > .bo-combobox:first-child > .bo-input {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    border-inline-end: none;
+  }
+
+  .bo-money > .bo-combobox:last-child > .bo-input {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  /* 138.1's inset ring reaches the nested input too — it is a segment of the
+     joined field even though it is not a direct child. */
+  .bo-money > .bo-combobox > .bo-input:focus-visible {
+    outline-offset: calc(-1 * var(--bo-focus-ring-width, 2px));
+  }
+
   .bo-money__amount {
     text-align: end;
     font-variant-numeric: tabular-nums;

@@ -717,6 +717,19 @@ cover record creation.
 optionally refresh/overflow) that renders regardless of row count, then apply
 it to `purchase-orders.screen.mjs` and any other suite list screen missing it.
 
+**Corroborated 2026-08-24** by three more external screenshots (a document
+detail screen, a report/dashboard screen, a journal-entry form) — all three
+put the same header-action row (refresh, overflow, a primary action) above
+the content, on screen SHAPES beyond just the list. Everything else in those
+three screenshots checked out as already covered or already beaten: `tree
+-table`'s docs already hand bulk expand/collapse to app code over the
+existing per-row event (so "Set Level"/"Collapse All" needed nothing new);
+`filters` already renders one removable chip per active value, which is more
+legible than a collapsed "5 values selected" label; a right-rail
+Assign/Attachments/Tags/Share panel is Frappe collaboration chrome, out of
+this framework's scope same as the row-level heart/comment icons rejected
+above.
+
 ---
 
 ## Not gaps (checked, and the framework was right)

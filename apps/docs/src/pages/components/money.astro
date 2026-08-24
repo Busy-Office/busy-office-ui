@@ -134,6 +134,26 @@ const canonical = `<!-- Two real form controls working as one field: the select 
   import { initMoneyField } from "@busy-office/ui/js";
   initMoneyField();
 </script>`;
+const searchable = `<!-- A searchable currency, for the list that is 180 long.
+     Same slot as the select; the combobox is the framework's value-help
+     control, so nothing new is introduced. No data-open-on-focus, so the
+     list stays shut until the first character is typed. -->
+<div class="bo-money">
+  <input class="bo-input bo-money__amount" type="text" inputmode="decimal"
+         value="1250.00" aria-label="Amount">
+  <div class="bo-combobox bo-money__currency" data-name="currency">
+    <input class="bo-input" type="text" role="combobox" aria-expanded="false"
+           aria-controls="cur-list" aria-autocomplete="list" aria-label="Currency"
+           placeholder="Type to search…" value="EUR">
+    <ul class="bo-combobox__listbox" id="cur-list" role="listbox" popover>
+      <li class="bo-combobox__option" role="option" id="cur-eur" data-value="EUR">EUR — Euro</li>
+      <li class="bo-combobox__option" role="option" id="cur-usd" data-value="USD">USD — US dollar</li>
+      <li class="bo-combobox__option" role="option" id="cur-gbp" data-value="GBP">GBP — Pound sterling</li>
+      <li class="bo-combobox__option" role="option" id="cur-nok" data-value="NOK">NOK — Norwegian krone</li>
+      <li class="bo-combobox__option" role="option" id="cur-jpy" data-value="JPY">JPY — Japanese yen</li>
+    </ul>
+  </div>
+</div>`;
 ---
 <Gallery title="Money">
   <p class="demo-note">
@@ -171,6 +191,25 @@ const canonical = `<!-- Two real form controls working as one field: the select 
     Tab order follows too, because nothing is visually reordered. The
     behaviour is unchanged: precision still tracks the currency from either
     position.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Long currency lists — use a combobox in the same slot</h2>
+    <Demo code={searchable} />
+    <p class="bo-u-text-muted">A <code>select</code> is right for five
+    currencies and wrong for a hundred and eighty; unit-of-measure lists in a
+    real ERP run to hundreds.
+    <strong>Put a <a href={base + '/components/combobox'}>combobox</a> where
+    the select goes</strong> — the joint reaches the input inside it, so the
+    field still reads as one control. Nothing new is introduced: the combobox
+    is already this framework's value-help surface, with its keyboard
+    contract in the <a href={base + '/concepts/js-behaviors'}>generated
+    keymap</a>.
+    <strong>The list stays shut until you type.</strong> That is the default,
+    not a setting: <code>data-open-on-focus</code> is opt-IN, so a combobox
+    without it opens on the first character rather than dropping two hundred
+    options the moment the field is focused. Add the attribute for the short
+    lists where seeing every option immediately is the point.</p>
   </section>
 
   <section class="demo">
