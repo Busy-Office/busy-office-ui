@@ -851,3 +851,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 09:10 · Continue · owner-wishlist · 137.5-137.9 — markdown list triggers + ol start, context-sensitive Tab with Esc release, __group, collapse rework with floating Aa toggle · landed · 27f6d8c
 - 2026-08-24 09:19 · Continue · owner-wishlist · 137.10 — adopt lucide remove-formatting + square-pen, ISC notice added to NOTICE and icon.css · landed · 9798061
 - 2026-08-24 09:40 · Continue · owner-wishlist · 137.11-137.13 — alignment as bo-segmented radio group, collapse motion via bo-motion-collapse, bo-btn--icon on toolbar buttons · landed · a5ea0ee
+- 2026-08-24 10:13 · Continue · owner-wishlist · 137.14-137.16 — collapse motion actually runs (was a class with no stylesheet), radius chain restored, all toolbar buttons squared · landed · 3997705
