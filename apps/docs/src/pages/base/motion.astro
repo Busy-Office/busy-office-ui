@@ -197,7 +197,7 @@ const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
       </div>
 
       <div>
-        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-motion-play="sc-row">Reprice line</button>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-motion-play="sc-row" data-motion-class="bo-motion-pulse-once">Reprice line</button>
         <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-2)">
           <table class="bo-data-table">
             <caption class="bo-visually-hidden">A line the server just repriced</caption>
@@ -276,7 +276,13 @@ const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
     const target = document.getElementById(btn.dataset.motionPlay!);
     if (!target) return;
     const el = (target.querySelector('[class*="bo-motion-"]') as HTMLElement) ?? target;
+    /* Attention effects are ADDED when something changes, so their element
+       carries no bo-motion-* class at rest — which made this handler bail and
+       left the "Reprice line" button dead. data-motion-class names the class
+       to apply for that case; entrance effects, which sit in the markup, keep
+       replaying the classes they already have. */
     const cls = [...el.classList].filter((c) => c.startsWith('bo-motion-'));
+    if (!cls.length && btn.dataset.motionClass) cls.push(btn.dataset.motionClass);
     if (!cls.length) return;
     el.classList.remove(...cls);
     void el.offsetWidth;
@@ -305,6 +311,15 @@ const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
      does not perform it. Removing the node is the consumer's job, and doing
      it here is what makes this a demo of the real pattern rather than of a
      flicker. Restored after a beat so the sample can be replayed. */
+  /* pulse-once is a one-shot: leave the class on and the animation cannot be
+     replayed, because re-adding a class the element already has does nothing. */
+  document.addEventListener('animationend', (e) => {
+    const el = e.target as HTMLElement;
+    if (el.classList?.contains('bo-motion-pulse-once') && el.closest('#sc-row')) {
+      el.classList.remove('bo-motion-pulse-once');
+    }
+  });
+
   const scRemove = document.getElementById('sc-remove');
   scRemove?.addEventListener('animationend', (e) => {
     const row = e.target as HTMLElement;
