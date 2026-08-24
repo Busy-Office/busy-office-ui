@@ -237,6 +237,48 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 141 — Owner: standardize the command bar (2026-08-25)
+
+Owner input, verbatim: *"Please standardize the Pattern: command bar"*, with a
+screenshot of the palette.
+
+**Triage found the two command bars differ for a GOOD reason, and share a bad
+one.** The framework documents a command bar at `/patterns/command-bar`; the
+docs site runs its own palette (`docs-cmdk`) in `Gallery.astro`. Compared
+directly:
+
+- **Hint placement differs, correctly.** The pattern puts hints ABOVE the
+  input because its `bo-combobox` listbox is a `[popover]` in the top layer
+  and paints over anything below — the page documents this under *"The listbox
+  is a popover"*, having shipped the bug once already. The docs palette uses
+  Pagefind, whose results render inline, so hints below are fine there.
+  **Forcing them identical would reintroduce a fixed bug.** Left different,
+  and the reason is now written down in both places.
+
+- **The docs palette re-implemented `.bo-kbd`.** Five local declarations
+  approximating the shipped component — and approximating it wrongly: no
+  doubled bottom border (the thing that makes a keycap read as a keycap) and
+  no `text-transform: none` guard (so "j" could render as "J" under an
+  inherited uppercase). A docs site re-implementing its own framework's
+  component is exactly the one-off a Standardize round exists to remove.
+
+1. [x] **141.1 — DONE 2026-08-25. The docs palette uses the shipped
+       component.** `class="bo-kbd"` on its keycaps, the local `kbd` rule
+       deleted, and only the spacing between adjacent caps kept local because
+       that is the hint strip's layout rather than the component's. Labels and
+       glyphs aligned to the documented pattern's wording (move / open /
+       close, `Enter` / `Esc`). Verified against a reference cap on the same
+       page: both now compute a 2px bottom border, `text-transform: none` and
+       the same mono face.
+
+2. [x] **141.2 — DONE 2026-08-25. The search input's focus ring was not the
+       framework's.** Found while screenshotting 141.1: Pagefind styles its
+       own focus as a **1px `rgb(0, 95, 204)`** outline — neither this
+       framework's focus colour (`#0d9488`) nor its 2px width — on **the most
+       used control on the site**. Aligned to the same tokens every other
+       focusable thing here uses; measured after: `rgb(13, 148, 136)` at 2px.
+       `check:search` (10 rendered assertions) still green.
+
 ## Slice 139 — Gap ledger promotion: the list screen with no way to create (2026-08-24)
 
 Promoting **GAP-17** out of `.roundtable/erp-suite-gaps.md`. The ledger's own

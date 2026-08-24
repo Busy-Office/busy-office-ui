@@ -359,9 +359,9 @@ const current =
       <div class="docs-cmdk__panel">
         <div id="cmdk-search"></div>
         <div class="docs-cmdk__hint">
-          <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
-          <span><kbd>↵</kbd> open</span>
-          <span><kbd>esc</kbd> close</span>
+          <span><kbd class="bo-kbd">↑</kbd><kbd class="bo-kbd">↓</kbd> move</span>
+          <span><kbd class="bo-kbd">Enter</kbd> open</span>
+          <span><kbd class="bo-kbd">Esc</kbd> close</span>
         </div>
       </div>
     </dialog>
@@ -1027,11 +1027,25 @@ const current =
     border-block-start: 1px solid var(--bo-color-border-default);
     font-size: var(--bo-font-size-xs); color: var(--bo-color-text-muted);
   }
-  .docs-cmdk__hint kbd {
-    font-family: var(--bo-font-mono); font-size: 0.9em;
-    padding: 0.05rem 0.3rem; margin-inline-end: 0.15rem;
-    border: 1px solid var(--bo-color-border-default); border-radius: var(--bo-radius-sm);
-    background: var(--bo-color-bg-muted);
+  /* Pagefind styles its own input focus — measured as a 1px rgb(0,95,204)
+     outline, which is neither this framework's focus colour (#0d9488) nor
+     its 2px width, on the most-used control on the site. Aligned to the same
+     tokens every other focusable thing here uses, rather than left as a
+     third-party default that happens to look like a focus ring. */
+  #cmdk-search .pagefind-ui__search-input:focus-visible {
+    outline: var(--bo-focus-ring-width, 2px) solid var(--bo-color-focus-ring);
+    outline-offset: var(--bo-focus-ring-offset, 2px);
+  }
+
+  /* The keycaps are .bo-kbd, the shipped component — this used to be five
+     local declarations approximating it, and approximating it wrongly: it
+     missed the doubled bottom border that is the whole reason a keycap reads
+     as a keycap, and the text-transform guard that keeps "j" from becoming
+     "J". A docs site re-implementing its own framework's component is the
+     one-off this round removes. Only the spacing between adjacent caps is
+     local, because that is this hint strip's layout, not the component's. */
+  .docs-cmdk__hint .bo-kbd + .bo-kbd {
+    margin-inline-start: 0.15rem;
   }
   /* Search trigger (roadmap 27.1). Replaces a second Pagefind instance and the
      ::after badge that collided with Pagefind's own Clear button the moment
