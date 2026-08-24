@@ -1988,18 +1988,47 @@ reads clean while telling us nothing.
        Finance (journal entry, payment), Inventory (stock movement, item
        master), Production (production order, BOM). Batched only if 130.3
        says they are mechanical. Each still logs its gaps.
-       **CRM done 2026-08-24** — four screens, one framework gap (GAP-18,
-       `bo-stepper` marker overlap at five steps).
+       **CLOSED 2026-08-24 after Production, with Inventory and Finance
+       deliberately NOT built** (owner's call, on the evidence). CRM: four
+       screens, one gap (GAP-18, `bo-stepper` marker overlap at five steps).
+       Production: four screens, **zero** — against a prediction of 2-4, the
+       highest of the three.
+
+       Running yield: pilot 13 → module two 2 → module three 1 → module four
+       **0**. Production was the module predicted to find the most, and
+       Inventory's one distinctive shape (the cross-tab) was proven covered by
+       Production's own capacity screen before Inventory existed. Finance was
+       predicted 0 to begin with. Building them would have been running an
+       experiment whose answer was already in.
+
+       **That is the instrument succeeding, not failing** — it reports that
+       the framework now covers the shapes an ERP needs, which is what the
+       whole exercise was for. Six modules were never the goal; finding the
+       gaps was.
        **Note for Production (140.2)**: a reference screenshot showed a
        "Material Requirement Planning" panel where checkboxes configure a
        derived action. Check it against **GAP-8**'s settled answer — restate
        the action's effect in the primary button label — and log a gap only
        if that genuinely fails to carry it. Noted rather than sliced,
        because this is the module that will hit it for real.
-6. [ ] **130.5 — wire the suite into CI** once it stops changing shape:
-       `build` + the three gates, in the same job as the docs checks. Left
-       until last on purpose — a gate that guards a moving target reports
-       noise. Until then it runs on demand and the loop runs it by hand.
+6. [x] **130.5 — DONE 2026-08-24. The suite runs in CI.** Its precondition
+       — "once it stops changing shape" — was met the moment module four found
+       zero gaps and the remaining modules were dropped.
+
+       One entry point, `npm run suite`, chaining build → structure → audit,
+       so **CI and the loop cannot drift apart**: the same command produces
+       the same three results in both. Added beside `check:po-app`, its exact
+       analogue. The audit starts its own server, so the step needs nothing
+       set up around it — the standing rule that a gate needing a human to
+       start something is not a gate.
+
+       **Red-proved rather than assumed.** Injecting a `<style>` block into a
+       suite screen — precisely what the instrument exists to forbid — turned
+       it red with the right message (`prod/capacity.html: contains a <style>
+       block`), and the chain stopped before the audit. The exit code was
+       checked **without a pipe**: 1 on the broken tree, 0 on the restored
+       one. `| tail` had masked a failing build's status here before, so the
+       first reading of `exit=0` was `tail`'s, not npm's.
 
 **Refused up front**, so it does not get re-proposed: per-domain patterns or
 components. The owner's own Slice 109 rule — a pattern is named and framed

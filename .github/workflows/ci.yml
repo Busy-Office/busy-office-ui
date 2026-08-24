@@ -75,6 +75,17 @@ jobs:
       # app on a free port; ~12s, no container needed.
       - name: Reference app smoke + axe
         run: npm run check:po-app -w docs
+      # The ERP suite is the framework's gap-finding instrument: 25 screens
+      # built ONLY from shipped CSS, with `check-erp-suite` enforcing that it
+      # has none of its own. Wired in last on purpose (130.5) — a gate
+      # guarding a moving target reports noise, and the suite only stopped
+      # changing shape once module four found zero gaps. Three checks in one
+      # script so CI and the loop run the identical thing: build, structure
+      # (zero local CSS + every internal link resolves), then axe and
+      # horizontal-overflow at both widths. The audit starts its own server,
+      # so this needs nothing set up around it.
+      - name: ERP suite — build, structure, axe
+        run: npm run suite
       # The token contrast gate is static analysis over OUR pairs; it passed on
       # the page where vendored Pagefind CSS rendered at 1.46:1. This measures
       # rendered third-party UI, which is the only way to see it.
