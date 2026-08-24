@@ -323,8 +323,11 @@ them, so the first question is whether either has earned a slice at all.
        this session (the Connections panel, sidebar collaboration chrome, the
        bare tile-grid home, multi-select "N selected" labels).
 
-3. [ ] **140.3 — turn 130.4 into an experiment: predict each module's yield
-       before building it.** The grill's largest finding
+3. [x] **140.3 — DONE 2026-08-24. 130.4 is now an experiment: each module's
+       yield is predicted before it is built.** Predictions and a results
+       column live in `.roundtable/erp-suite-gaps.md`, which is where the
+       comparison happens — the roadmap states the plan, the ledger keeps the
+       score. The grill's largest finding
        (`.roundtable/grill-erp-suite-instrument-2026-08-24.md`): **130.4 is
        scheduled by DOMAIN, but every gap this instrument has found came from
        a SHAPE or from STRESS.** Categorised, all seventeen: 9 from a new

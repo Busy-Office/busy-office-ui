@@ -752,6 +752,49 @@ above.
 
 ---
 
+## Predictions for the remaining modules (recorded 2026-08-24, BEFORE building)
+
+The instrument grill found that all seventeen gaps came from a new **shape**
+(9) or from **stress** on an existing one (4), or were my own bugs and doc
+defects (4) — and **none** from a new domain. If that is right, the remaining
+modules are worth exactly the shapes they force, and their yields are
+predictable. Written down here, before any of them is built, so that being
+wrong is informative rather than deniable.
+
+| Module | Shapes it forces | Predicted gaps | Actual |
+|---|---|---|---|
+| **Production** | multi-level BOM hierarchy with rolled-up quantities; capacity/utilisation over time; the MRP derived-action panel | **2-4 (highest)** | _to fill_ |
+| **Inventory** | stock by item × warehouse (cross-tab) | **0-1** | _to fill_ |
+| **Finance** | journal entry that must balance to zero before posting; payment list + detail | **0** | _to fill_ |
+
+**Three named predictions**, each falsifiable:
+
+1. **Intensity over a long date grid is a real gap.** Capacity/utilisation
+   across a quarter has no home: `schedule` is a month grid for discrete
+   bookings, `timesheet` is numeric entry for one period, and the colour ramp
+   in `scales.json` ships **no `bo-scale` utilities**, so markup cannot apply
+   it. Two-channel makes it harder still — colour-only intensity is already
+   refused here. *Falsified if a capacity screen can be built from existing
+   surface without new CSS.*
+
+2. **The MRP panel is NOT a gap.** GAP-8's settled answer — restate the
+   action's effect in the primary button label — carries "Get Raw Materials
+   For Production" without new surface. *Falsified if the checkboxes-configure
+   -a-derived-action shape needs something GAP-8 does not give.*
+
+3. **The cross-tab is NOT a gap.** `comparison` documents a candidates ×
+   criteria grid, and `data-table` ships `--sticky-col` / `data-sticky-cols`
+   beside its sticky header, so the hard part — holding the row header still
+   while both axes scroll — is solved. *Falsified if a data cross-tab (many ×
+   many, scanned for a number) needs what a decision grid (few × few, pick
+   one) does not.*
+
+**A module that finds zero is a success.** It is the evidence for stopping at
+shape coverage instead of grinding through six domains, which is the only
+outcome that would let this roadmap DELETE work rather than add it.
+
+---
+
 ## Not gaps (checked, and the framework was right)
 
 - **List screens**: `list-report` covered the PO list end to end — filters,
