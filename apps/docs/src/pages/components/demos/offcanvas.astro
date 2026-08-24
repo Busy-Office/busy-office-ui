@@ -1,0 +1,55 @@
+---
+/* Standalone page for /components/offcanvas's embedded demo (143.2).
+   The drawer is a real <dialog>, so demonstrating it inline meant covering
+   the docs page around it — owner: "why don't we use iframe for the demo
+   instead of add drawer on the mainpage". In its own document it takes over
+   nothing but itself, and its top layer is the frame's. */
+import '@busy-office/ui/css';
+import PrefBootstrap from '../../../components/PrefBootstrap.astro';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <PrefBootstrap />
+    <title>Offcanvas — drawer demo</title>
+    <style>
+      html, body { margin: 0; block-size: 100%; }
+      body {
+        background: var(--bo-color-bg-canvas); color: var(--bo-color-text-primary);
+        padding: var(--bo-space-4);
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Offcanvas drawer demo">
+      <h1 class="bo-visually-hidden">Offcanvas drawer demo</h1>
+      <button class="bo-btn bo-btn--secondary" type="button"
+              data-dialog-trigger="drawer-demo" aria-label="Open navigation">&#9776; Menu</button>
+      <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-3)">
+        The drawer opens over THIS document, not over the page documenting it.</p>
+    </main>
+
+    <dialog class="bo-offcanvas" id="drawer-demo" data-state="closed" aria-labelledby="drawer-demo-title">
+      <div class="bo-offcanvas__header">
+        <span id="drawer-demo-title" class="bo-navbar__brand">Modules</span>
+        <form method="dialog">
+          <button class="bo-btn bo-btn--ghost bo-btn--icon" value="cancel" aria-label="Close">&#10005;</button>
+        </form>
+      </div>
+      <nav class="bo-sidebar-nav" aria-label="Modules">
+        <div class="bo-sidebar-nav__section">
+          <a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-sidebar-nav__label">Order to cash</span></a>
+          <a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__label">Procure to pay</span></a>
+          <a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__label">Inventory</span></a>
+        </div>
+      </nav>
+    </dialog>
+
+    <script>
+      import { initDialogs } from '@busy-office/ui/js';
+      initDialogs();
+    </script>
+  </body>
+</html>

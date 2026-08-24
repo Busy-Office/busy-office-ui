@@ -257,7 +257,7 @@ problem with the same answer**, which is worth doing once rather than twice.
        and the one-shot is removed at `animationend` — otherwise re-adding a
        class the element already has does nothing and it can never replay.
 
-2. [ ] **143.2 — a demo cannot show what only its CONTEXT produces.** Owner
+2. [x] **143.2 — DONE 2026-08-25. A demo cannot show what only its CONTEXT produces.** Owner
        asked to standardise `/components/sidebar-nav` (with an
        expand/collapse option) and `/components/offcanvas` (*"why don't we use
        iframe for the demo instead of add drawer on the mainpage"*).
@@ -275,12 +275,73 @@ problem with the same answer**, which is worth doing once rather than twice.
        `RfDevice.astro` does exactly this for six RF pages (Slice 131), and
        that component exists *because* the same iframe was pasted six times.
 
-       *Accept*: one shared embed component rather than a second copy of
-       RfDevice's iframe; standalone demo routes for the embedded screens; the
-       sidebar-nav page shows BOTH rail states and the offcanvas drawer opens
-       inside its frame instead of over the page. `PatternPreview` was checked
-       first and does not embed — it takes props, so it is not the
-       generalisation to extend.
+       Shipped as `DemoFrame.astro` — the iframe plus the theme handshake —
+       with **`RfDevice` refactored onto it** rather than a second copy made,
+       and three standalone routes under `components/demos/`. Verified:
+       the wide frame's shell is **958px with a 224px rail and visible
+       labels**, the narrow frame's **638px with a 52px rail and hidden
+       labels**, identical at 1600 and 1100 viewports; and opening the drawer
+       leaves **zero dialogs open on the docs page** while the frame's own is
+       open.
+
+       **Four things went wrong on the way, each caught by measuring the
+       rendered result rather than the build, which was happy throughout.**
+
+       - `DemoFrame` shipped a default size, and Astro's `[data-astro-cid-*]`
+         scoping out-specified `.rf-device-frame` — so every RF handheld
+         silently rendered at 352px instead of 640px. `:where()` did not save
+         it. The fix was realising a demo frame's size is **always** the
+         demo's, so the shared component states none.
+       - The page's own `<style>` did not reach the frames at all: Astro
+         scopes a page's CSS to elements the PAGE renders, and the iframe
+         belongs to `DemoFrame`. Every frame fell back to the HTML default
+         **300×150** — measured as a 300px shell in both panes. `:global()`
+         fixes it, and it is why `RfDevice` never hit this: its sizing lives
+         in a global stylesheet.
+       - `transform: scale()` shrinks what you see, never what the element
+         occupies, so the fixed 60rem frame pushed **594px of overflow** at
+         390. The wrapper clips it and the grid child needs
+         `min-inline-size: 0`.
+       - axe walks INTO iframes and treats the result as one tree, so two
+         frames of one document contributed two identical landmark sets and
+         tripped `landmark-unique`. Split into `-wide` and `-narrow` routes
+         over a shared component, whose only difference is the landmark name.
+
+       `PatternPreview` was checked first and does not embed — it takes props,
+       so it was not the generalisation to extend.
+
+3. [x] **143.3 — DONE 2026-08-25. The collapsed rail's icon was 3.1px off
+       centre** (owner QA — *"Icon button is not in the middle"*), and it is
+       the frames from 143.2 that made it visible at all: before them the
+       collapsed state could not be rendered on the page.
+
+       The rail's own comment derives its 3.25rem from "the icon slot plus the
+       rail's own padding" — but the **link** adds 12px of its own each side,
+       which that sum never counted. Measured at 52px: 8 + 12 + 18.2 + 12 + 8
+       = **58.2px of content in a 52px rail**, so the icon overflowed to one
+       side. Collapsed links now fill the rail and centre their icon with the
+       inline padding zeroed, which keeps the derived 3.25rem honest rather
+       than widening the rail to hide the arithmetic. After: **−0.5px**, the
+       remainder being the icon's own fractional width.
+
+4. [ ] **143.4 — the drawer has no CLOSE motion** (owner: *"Drawers
+       (off-canvas) — collapse drawer motion when close"*). Confirmed by
+       reading both halves: `offcanvas.css` animates `[data-state="open"]`
+       with `bo-offcanvas-in`, and `initDialogs` sets `data-state="closed"`
+       on the **`close` event** — which fires after the dialog has already
+       left the top layer, so nothing is left on screen to animate.
+
+       **Two routes, and the choice is a real one rather than a detail.**
+       Either the shipped behaviour delays the actual `close()` until an exit
+       animation ends — timing change to a stable behaviour, so a CHANGELOG
+       Breaking entry under the freeze audit — or the CSS moves to
+       `transition-behavior: allow-discrete` with `@starting-style`, which
+       animates a `<dialog>` out with no JS but needs **Chrome 117** against
+       this framework's **Chrome 108 floor**, so it must sit behind
+       `@supports` and the entrance animation has to be reworked as a
+       transition so the two do not fight.
+       *Accept*: the drawer animates out as it animates in, at both floors,
+       with whichever route is chosen written down as the reason.
 
 ## Slice 142 — Owner wishlist: skeleton motion, state standardisation, command-bar states (2026-08-25)
 

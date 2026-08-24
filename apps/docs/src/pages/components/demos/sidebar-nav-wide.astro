@@ -1,0 +1,27 @@
+---
+/* Standalone shell for /components/sidebar-nav (143.2), wide variant.
+   No Gallery: the rail collapses under `@container bo-shell (max-width:
+   56rem)`, so it needs a real .bo-app-shell sized by the frame around it.
+   Two routes rather than one embedded twice, because axe walks into iframes
+   and two identically-named landmark sets trip landmark-unique. */
+import '@busy-office/ui/css';
+import PrefBootstrap from '../../../components/PrefBootstrap.astro';
+import SidebarNavShellDemo from '../../../components/SidebarNavShellDemo.astro';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <PrefBootstrap />
+    <title>Sidebar nav — wide shell demo</title>
+    <style>
+      html, body { margin: 0; block-size: 100%; }
+      body { background: var(--bo-color-bg-canvas); color: var(--bo-color-text-primary); }
+      .demo-main { padding: var(--bo-space-4); overflow: auto; }
+    </style>
+  </head>
+  <body>
+    <SidebarNavShellDemo label="wide shell" />
+  </body>
+</html>

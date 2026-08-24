@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+import DemoFrame from '../../components/DemoFrame.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
         data-dialog-trigger="drawer-nav" aria-label="Open navigation">☰ Menu</button>
@@ -33,6 +34,18 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     comparing against; use
     <a href={base + '/patterns/master-detail'}>master-detail</a> for that.
   </p>
+
+  <section class="demo">
+    <h2>Open the drawer — in its own document</h2>
+    <DemoFrame src={base + '/components/demos/offcanvas/'} title="Offcanvas drawer demo — opens inside this frame" class="oc-frame" />
+    <p class="bo-u-text-muted"><strong>An iframe, so the drawer takes over
+    nothing but itself.</strong> <code>.bo-offcanvas</code> is a real
+    <code>&lt;dialog&gt;</code>: opened inline it renders in the page's top
+    layer and covers the documentation around it, which makes the one control
+    you want to study the thing hiding everything else. In its own document the
+    drawer still gets a real top layer, a real backdrop and real Esc handling —
+    the platform behaviour is the point — but scoped to the frame.</p>
+  </section>
 
   <section class="demo">
     <h2>Start-side drawer — navigation on a narrow shell</h2>
@@ -115,3 +128,18 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
     ['/components/filters', 'Filters'],
   ]} />
 </Gallery>
+<style>
+  /* :global() is load-bearing. Astro scopes a page's <style> to elements the
+     PAGE renders, and this iframe is rendered by DemoFrame — a different
+     component with a different scope id — so an unscoped selector matched
+     nothing and every frame silently fell back to the HTML default 300x150.
+     Measured, not spotted: both rails reported a 300px shell. (RfDevice
+     avoids this only because its sizing lives in a global stylesheet.) */
+  :global(.oc-frame) {
+    inline-size: 100%;
+    block-size: 20rem;
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+  }
+</style>
+

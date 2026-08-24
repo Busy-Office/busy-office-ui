@@ -1,0 +1,39 @@
+---
+/**
+ * The shell demo embedded by /components/sidebar-nav, as a component so the
+ * two frames can differ in the ONE thing they must: their landmark names.
+ *
+ * axe walks into iframes and treats the result as one tree, so two frames of
+ * the same document contribute two identically-named landmarks and trip
+ * landmark-unique. The frames have to be separate routes with distinct names —
+ * this holds the markup so that is the only difference between them.
+ */
+interface Props {
+  /** Distinguishes this frame's landmarks from the other frame's. */
+  label: string;
+}
+const { label } = Astro.props;
+const links = [
+  ['grid', 'Home'], ['cart', 'Order to cash'], ['truck', 'Procure to pay'],
+  ['user', 'CRM'], ['invoice', 'Finance'], ['box', 'Inventory'],
+];
+---
+<div class="bo-app-shell">
+  <div class="bo-app-shell__sidebar">
+    <nav class="bo-sidebar-nav" aria-label={`Modules, ${label}`}>
+      <div class="bo-sidebar-nav__section">
+        {links.map(([icon, text], i) => (
+          <a class="bo-sidebar-nav__link" href="#" aria-current={i === 1 ? 'page' : undefined}>
+            <span class={`bo-icon bo-icon--${icon} bo-sidebar-nav__icon`} aria-hidden="true"></span>
+            <span class="bo-sidebar-nav__label">{text}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+  </div>
+  <main class="bo-app-shell__main demo-main" aria-label={`Sidebar nav demo, ${label}`}>
+    <h1 class="bo-visually-hidden">Sidebar nav — {label} shell</h1>
+    <p class="bo-u-text-muted">The rail beside this pane answers to the width of
+    its <em>shell</em>, not the viewport.</p>
+  </main>
+</div>

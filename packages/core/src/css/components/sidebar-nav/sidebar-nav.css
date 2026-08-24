@@ -92,6 +92,23 @@
       inline-size: 3.25rem;
     }
 
+    /* The link must fill the collapsed rail and centre its own icon. Without
+       this it keeps the expanded state's inline padding, and that padding was
+       never in the 3.25rem sum above — which counts the icon slot and the
+       RAIL's padding, but not the LINK's. Measured at 52px: 8 (rail) + 12
+       (link) + 18.2 (icon) + 12 + 8 = 58.2px of content in a 52px rail, so
+       the icon overflowed to one side and sat 3.1px right of centre
+       (owner QA, 2026-08-25 — visible the moment the collapsed state could be
+       demonstrated at all, which is what 143.2's frames bought).
+
+       Zeroing the inline padding rather than widening the rail keeps that
+       derived 3.25rem honest: it is the icon plus the rail's padding, and now
+       nothing else is competing for the space. */
+    .bo-sidebar-nav__link {
+      justify-content: center;
+      padding-inline: 0;
+    }
+
     /* The standard visually-hidden recipe, spelled out rather than pulled
        from a utility because this rule is inside a container query and has
        to win locally. The 1px box plus clip-path is the idiom's own shape —

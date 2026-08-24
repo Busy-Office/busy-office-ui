@@ -1,0 +1,79 @@
+---
+/**
+ * A demo that needs its own DOCUMENT, embedded in the page that documents it.
+ *
+ * Some components cannot be demonstrated inline, and the two reasons are
+ * opposite (owner ask, roadmap 143.2):
+ *
+ *  - **The demo needs a context the page cannot give it.**
+ *    `.bo-sidebar-nav` collapses to icons under a `@container bo-shell` query,
+ *    so inside a docs demo it renders the expanded rail at every viewport —
+ *    `/components/sidebar-nav` said so in its own comment. The state the
+ *    component is most interesting for was undemonstrable.
+ *  - **The demo takes the page over.** `.bo-offcanvas` is a real `<dialog>`,
+ *    so showing the drawer meant covering the docs around it.
+ *
+ * An iframe answers both: its own document, its own container context, its own
+ * top layer. `RfDevice` has embedded exactly this since Slice 131 and now
+ * builds on this component rather than repeating it — that component keeps the
+ * handheld chrome, this one owns the frame and the theme handshake.
+ *
+ * THE THEME HANDSHAKE is the part worth centralising. The embedded page has
+ * its own `PrefBootstrap`, so it resolves the theme correctly on load and
+ * needs nothing from us. What it cannot see is the reader pressing the theme
+ * button afterwards: nothing re-runs in an already-loaded iframe, and the demo
+ * would sit in yesterday's theme while the page around it flipped. Same
+ * origin, so the parent just tells it.
+ */
+interface Props {
+  /** Already base-prefixed by the caller. */
+  src: string;
+  /** The iframe's accessible name — the only one it has. */
+  title: string;
+  /** Extra classes for the caller's own framing (RfDevice's screen, a width). */
+  class?: string;
+  /** Frame height. Demos are screens, so this is theirs to state. */
+  height?: string;
+}
+const { src, title, class: extra = '', height } = Astro.props;
+---
+
+<iframe
+  class:list={['demo-frame', extra]}
+  src={src}
+  title={title}
+  style={height ? `block-size: ${height}` : undefined}
+></iframe>
+
+<script>
+  /* Every embedded demo follows the reader's theme, including a change made
+     after the frame has loaded. Keyed off .demo-frame so one observer serves
+     every embed on the page rather than one per component. */
+  const frames = document.querySelectorAll<HTMLIFrameElement>('.demo-frame');
+  if (frames.length) {
+    const push = () => {
+      const theme = document.documentElement.dataset.theme;
+      for (const f of frames) {
+        const doc = f.contentDocument;
+        if (doc && theme) doc.documentElement.dataset.theme = theme;
+      }
+    };
+    new MutationObserver(push).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    for (const f of frames) f.addEventListener('load', push);
+  }
+</script>
+
+{/* NO styles here, deliberately. A first version set a default size, and
+    Astro scopes component CSS with a [data-astro-cid-*] attribute — which
+    ties `.rf-device-frame`'s specificity and then wins on source order, so
+    every RF handheld silently rendered at 352px instead of its own 640px.
+    Wrapping the defaults in :where() did not save it either.
+
+    The deeper point is that the fix was never specificity: a demo frame's
+    SIZE is always specific to the demo it holds — a 360x640 handheld, a
+    700px shell, a drawer — so there is no sensible default to inherit. This
+    component owns the iframe and the theme handshake, which is the part that
+    is genuinely shared; callers pass their own class and size. */}

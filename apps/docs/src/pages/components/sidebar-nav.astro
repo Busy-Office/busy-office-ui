@@ -4,6 +4,7 @@ import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+import DemoFrame from '../../components/DemoFrame.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-label="Main">
   <div class="bo-sidebar-nav__section">
@@ -33,6 +34,31 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
     <a href={base + '/components/tabs'}>tabs</a> when the sections are
     mutually exclusive.
   </p>
+
+  <section class="demo">
+    <h2>Both rail states, in real shells</h2>
+    <div class="sbn-frames">
+      <div>
+        <div class="sbn-scaler">
+          <DemoFrame src={base + '/components/demos/sidebar-nav-wide/'} title="Sidebar nav in a wide app shell — labels visible" class="sbn-frame sbn-frame--wide" />
+        </div>
+        <p class="bo-u-text-muted">Shell wider than 56rem — labels visible.</p>
+      </div>
+      <div>
+        <DemoFrame src={base + '/components/demos/sidebar-nav-narrow/'} title="Sidebar nav in a narrow app shell — collapsed to icons" class="sbn-frame sbn-frame--narrow" />
+        <p class="bo-u-text-muted">Shell at 56rem or narrower — collapsed to icons.</p>
+      </div>
+    </div>
+    <p class="bo-u-text-muted"><strong>These are iframes, and they have to be.</strong>
+    The rail collapses under <code>@container bo-shell (max-width: 56rem)</code>,
+    so it answers to the width of its <em>shell</em>, not the viewport. A demo
+    inline on this page has no such container, so it rendered the expanded rail
+    at every width — including 390 — and the state the component is most
+    interesting for could not be shown at all. A frame gives the demo its own
+    document and its own container, so the two panes above differ by nothing but
+    how wide their shell is. Drag the browser narrow and they stay as they are;
+    that is the point.</p>
+  </section>
 
   <section class="demo">
     <h2>Grouped sections in an embedded shell</h2>
@@ -140,3 +166,58 @@ const sidebarMarkup = `<nav class="bo-sidebar-nav bo-app-shell__sidebar" aria-la
     ['/components/navbar', 'Navbar'],
   ]} />
 </Gallery>
+<style>
+  /* :global() is load-bearing. Astro scopes a page's <style> to elements the
+     PAGE renders, and this iframe is rendered by DemoFrame — a different
+     component with a different scope id — so an unscoped selector matched
+     nothing and every frame silently fell back to the HTML default 300x150.
+     Measured, not spotted: both rails reported a 300px shell. (RfDevice
+     avoids this only because its sizing lives in a global stylesheet.) */
+  .sbn-frames { display: grid; gap: var(--bo-space-5); }
+  :global(.sbn-frame) {
+    inline-size: 100%;
+    block-size: 20rem;
+    border: var(--bo-border-width) solid var(--bo-color-border-default);
+    border-radius: var(--bo-radius-md);
+  }
+  /* 40rem keeps this shell under the 56rem breakpoint at ANY reader viewport,
+     so the collapsed rail is guaranteed rather than incidental. */
+  :global(.sbn-frame--narrow) { max-inline-size: 40rem; }
+
+  /* The wide frame is a FIXED 60rem and is scaled down to fit. Sizing it at
+     100% instead looked right and was not: the docs content column is 1088px
+     at a 1600px viewport but well under the 56rem (896px) breakpoint on a
+     smaller screen, so the "wide" pane quietly collapsed too and both demos
+     showed the same state — measured, both rails 52px. A demo of a
+     breakpoint has to hold its side of the breakpoint on every screen. */
+  /* transform: scale() shrinks what you SEE, never what the element occupies
+     in layout — so the 60rem frame still claimed 60rem and pushed the page
+     sideways (measured: 594px of overflow at 390). The wrapper clips it, and
+     min-inline-size: 0 stops the grid column sizing itself to the unscaled
+     child, which is a grid item's default (auto) behaviour. */
+  .sbn-frames > * { min-inline-size: 0; }
+  .sbn-scaler { overflow: hidden; max-inline-size: 100%; }
+  :global(.sbn-frame--wide) {
+    inline-size: 60rem;
+    transform-origin: top left;
+  }
+</style>
+
+<script>
+  /* Scale the fixed 60rem frame to whatever width the column actually has,
+     and shrink the wrapper to the scaled height so it leaves no gap. */
+  const scaler = document.querySelector<HTMLElement>('.sbn-scaler');
+  const wide = document.querySelector<HTMLIFrameElement>('.sbn-frame--wide');
+  if (scaler && wide) {
+    const fit = () => {
+      const avail = scaler.getBoundingClientRect().width;
+      const natural = wide.offsetWidth || 1;
+      const scale = Math.min(1, avail / natural);
+      wide.style.transform = `scale(${scale})`;
+      scaler.style.blockSize = `${wide.offsetHeight * scale}px`;
+    };
+    fit();
+    window.addEventListener('resize', fit);
+  }
+</script>
+

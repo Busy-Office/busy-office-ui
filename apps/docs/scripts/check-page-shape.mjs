@@ -259,6 +259,17 @@ const RELATED_EXEMPT = new Set([
   // first and follows a real link here, so the parent page is still the
   // navigation.
   'patterns/schedule/full.astro',
+  /* components/demos/* (roadmap 143.2) — the RF-mirror shape applied to two
+     components that cannot be demonstrated inline. sidebar-nav collapses
+     under `@container bo-shell`, so it needs a real .bo-app-shell sized by
+     the frame; offcanvas is a <dialog>, so demonstrating it inline covered
+     the docs page. Both are embedded via <iframe> from their component page,
+     which is the navigation — a reader never lands here directly, and adding
+     docs chrome would give the shell demo a SECOND shell and change the very
+     container width the demo exists to show. */
+  'components/demos/sidebar-nav-wide.astro',
+  'components/demos/sidebar-nav-narrow.astro',
+  'components/demos/offcanvas.astro',
 ]);
 async function* allPages(dir, rel = '') {
   for (const e of await readdir(dir, { withFileTypes: true })) {
