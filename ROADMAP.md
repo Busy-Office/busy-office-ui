@@ -317,6 +317,30 @@ found the idea already shipped **and broken**, which reorders the work.
        Pause-Stop-Hide concern: the user's OS preference is the control, and
        the block keeps its space.
 
+       **Owner, immediately after: "causing the cut scene — it doesn't give
+       the smooth transition after loop complete."** Correct, and it was
+       caused by the previous fix. `100% → 0%` put the band at the box's LEFT
+       edge at the start and its RIGHT edge at the end, so restarting snapped
+       it back across the whole box — visible, every 1.5s.
+
+       A seamless loop needs the band fully OFF-SCREEN at both ends. With a
+       2x-wide gradient the band centre sits at `W(1 − P/100)`, so it clears
+       the box at `150%` (centre −0.5W) and again at `−50%` (centre +1.5W).
+       Retimed to **`150% → −50%` over 1.8s** — 2W of travel, ~1.1
+       box-widths per second: half the original speed, seamless, and still
+       inside the 1.5–2s band guidance calls comfortable.
+
+       **Proved rather than eyeballed**, and it took four attempts at the
+       instrument. Pausing the animation and then setting `animation-delay`
+       does not re-seek, so the first check compared one frozen frame with
+       itself and reported "seamless" — a detector that could not fail.
+       Seeking via `getAnimations()[0].currentTime` with a forced repaint
+       works, but sampling an element **scrolled out of the viewport**
+       returned a static frame and said the band was invisible mid-cycle,
+       which the arithmetic said was impossible. With the element in view:
+       **12 of 12 distinct live frames, start-frame identical to end-frame
+       (no cut), and the band visibly present mid-cycle.**
+
 3. [x] **142.3 — DONE 2026-08-25. Standardized, and the component docs were already right — the errors were around them.** Owner:
        *"Please standardize the Pattern: error pages, Loading, empty & error
        states (esp. Empty — no results match your filters)."* Measured first:

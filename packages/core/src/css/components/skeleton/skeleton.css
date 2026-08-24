@@ -27,7 +27,7 @@
     /* linear, not ease-in-out: a travelling highlight that accelerates
        through the middle is what reads as "fast" even at a correct duration.
        A steady sweep reads as "working". */
-    animation: bo-skeleton-shimmer 1.5s linear infinite;
+    animation: bo-skeleton-shimmer 1.8s linear infinite;
   }
 
   /* 2.5rem square: an avatar-sized placeholder. Absolute rather than em,
@@ -48,23 +48,34 @@
     border-radius: var(--bo-radius-md);
   }
 
-  /* ONE sweep per cycle, left to right. Measured before changing it
-     (2026-08-25, owner: "the motion is too fast"): the old 200% -> -200%
-     range moved the 2x-wide gradient image FOUR element-widths per cycle, so
-     the highlight crossed roughly TWICE per 1.5s — about 1.3 sweeps a second.
-     The duration was never the problem; the travel was 4x too far.
+  /* One sweep per cycle, left to right, and SEAMLESS at the loop boundary.
+     Two owner reports shaped these numbers, and the arithmetic is worth
+     keeping because both fixes are invisible in the CSS alone.
 
      Percentage background-position aligns the P% point of the image with the
-     P% point of the box, so with background-size: 200% the band (the image's
-     midpoint) sits at the box's LEFT edge at 100% and its RIGHT edge at 0%.
-     100% -> 0% is therefore exactly one left-to-right pass.
+     P% point of the box, so with background-size: 200% the band — the
+     image's midpoint, about one box wide — sits at:
+         P=150%  centre -0.50W   fully off-screen left
+         P=100%  centre  0.00W   at the left edge      (visible)
+         P=  0%  centre +1.00W   at the right edge     (visible)
+         P= -50%  centre +1.50W   fully off-screen right
 
-     1.5s is kept deliberately: published guidance puts the comfortable band
-     at 1.5-2s, with under 1s reading as glitchy and over 2s as broken — and
-     that guidance assumes one sweep per cycle, which is only now true. */
+     "Too fast" (report 1): the original 200% -> -200% moved the image FOUR
+     box-widths per cycle, so the highlight crossed roughly twice per 1.5s.
+     The duration always matched published guidance; the TRAVEL was 4x too
+     far.
+
+     "Cut scene" (report 2): the first fix, 100% -> 0%, made the travel right
+     but left the band VISIBLE at both endpoints — so restarting the loop
+     snapped it from the right edge back to the left. A seamless loop needs
+     the band fully off-screen at both ends, which is 150% -> -50%.
+
+     That is 2W of travel. At 1.8s it crosses at ~1.1 box-widths per second —
+     half the original, and inside the 1.5-2s band that guidance calls
+     comfortable (under 1s reads as glitchy, over 2s as broken). */
   @keyframes bo-skeleton-shimmer {
-    from { background-position: 100% 0; }
-    to { background-position: 0% 0; }
+    from { background-position: 150% 0; }
+    to { background-position: -50% 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
