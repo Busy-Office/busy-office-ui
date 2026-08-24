@@ -550,13 +550,43 @@ found the idea already shipped **and broken**, which reorders the work.
        against the rendered artefact, not the diff. It is worth doing as its
        own round rather than as a tail on this one.
 
-4. [ ] **142.4 — command bar: document its states.** Owner: *"also value when
+4. [x] **142.4 — DONE 2026-08-25. The command bar demonstrates its states rather than describing them.** Owner: *"also value when
        enter, clear function, when key in command, when search, when clear."*
        The pattern documents markup and keyboard contract but not what the
        control DOES across its lifecycle: what the input holds after Enter,
        how a query is cleared, and how "searching" differs from "typing a
-       command". *Accept*: a States table plus a demo that visibly moves
-       through them, per the pattern recipe.
+       command".
+
+       Four answers, each wired into the live palette so the page shows them:
+
+       - **Command vs search is not a mode.** Same input, same list; actions
+         and records are separate GROUPS in the listbox. A palette that made
+         the user pick "search mode" first would ask them to know the answer
+         before typing it, which is the one thing a palette exists to avoid.
+       - **Enter — and what the box holds afterwards.** `initCombobox` commits
+         the active option and leaves that text SELECTED, so the next
+         keystroke replaces it. A palette's commit navigates, so the demo
+         **clears and closes**: a palette reopened onto last week's query is
+         one you have to clear before you can use.
+       - **Clear** is a visible ✕, shown only when there is something to
+         clear, that empties the query and returns focus to the input — it
+         does **not** close, which is the difference between "I mistyped" and
+         "I'm done".
+       - **Escape takes two presses**, and that is correct rather than a bug:
+         the listbox is a `popover`, so the first Escape is the platform
+         light-dismissing it and the second closes the dialog. Documented
+         instead of fought.
+
+       **The first attempt at the ✕ silently did nothing, and this page had
+       already written down why.** Placed after the input in source order it
+       rendered below — precisely where the top-layer listbox paints — so
+       every click landed on the listbox. That is this page's own *"the
+       listbox is a popover, so nothing sits below it"* section, which it
+       shipped after hitting the same thing with its hint strip. Verified by
+       driving the palette rather than by reading it: ✕ hidden on an empty
+       box, shown once typed, clearing to empty with the palette still open
+       and focus back in the input, and Enter reporting the commit, resetting
+       the value and closing.
 
 ## Slice 141 — Owner: standardize the command bar (2026-08-25)
 

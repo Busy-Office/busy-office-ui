@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-25 07:13
+Generated at: 2026-08-25 07:18
 
 ## Open items by slice
 
@@ -16,8 +16,8 @@ Generated at: 2026-08-25 07:13
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (864 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-25 07:13   ok
+dispatch status — counter-triggered rules (865 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-25 07:13   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -31,7 +31,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 23:15 · Standardize · tidy · richtext __divider deprecated for __group; last two usages migrated (canonical sample + reference app) · landed · d3bb443
 - 2026-08-25 05:42 · Standardize · tidy · 141 — docs palette uses shipped bo-kbd instead of a local re-implementation; Pagefind focus ring aligned to framework tokens · landed · cdd7c07
 - 2026-08-25 05:49 · Continue · bug · 142.1 — skeleton shimmer swept between two byte-identical tokens and was never visible; new highlight token, 10/10 distinct frames · landed · ef64c74
 - 2026-08-25 05:56 · Standardize · tidy · 142.3 — filtered-empty gains copyable code; phantom .bo-state--empty removed from prose and regenerated data · landed · 56f742c
@@ -41,6 +40,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-25 06:57 · Continue · build · 143.2 DemoFrame + demo routes (sidebar-nav both states, offcanvas in-frame); 143.3 collapsed icon centring · landed · 6b00ee2
 - 2026-08-25 07:04 · Continue · build · 143.4 — drawer exit motion via allow-discrete behind @supports; chosen because the JS route could fail to close · landed · 7acd8aa
 - 2026-08-25 07:13 · Standardize · tidy · 0fr/1fr triplication settled as correct — utility vs component-part selector ownership, plus the opt-in module · refused · f4d4d11
+- 2026-08-25 07:18 · Continue · build · 142.2b — /patterns/first-load shipped: skeleton vs spinner vs nothing, shape-matching, refetch as a distinct state · landed · bdc2680
 
 ## Sunset test
 

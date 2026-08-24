@@ -115,8 +115,11 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
           <li class="bo-combobox__option" role="option" id="cmd-6" data-value="Create purchase order">Create purchase order</li>
           <li class="bo-combobox__option" role="option" id="cmd-7" data-value="Run reorder report">Run reorder report</li>
         </ul>
+        <button class="bo-btn bo-btn--ghost bo-btn--icon cmd-palette__clear" type="button"
+                id="cmd-clear" aria-label="Clear query" hidden>&#10005;</button>
       </div>
     </dialog>
+    <p class="bo-u-text-muted" id="cmd-result" role="status" aria-live="polite"></p>
   </section>
 
   <section class="demo">
@@ -203,6 +206,63 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
   </section>
 
   <section class="demo">
+    <h2>Typing, committing, clearing</h2>
+    <p class="bo-u-text-muted">Open the palette above and try each: type
+    <code>PO</code> to search records, type <code>post</code> to reach an
+    action, press <kbd class="bo-kbd">Enter</kbd> to commit, and use the
+    <kbd class="bo-kbd">✕</kbd> to clear without leaving.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">What the palette does at each step</caption>
+        <thead>
+          <tr><th scope="col">Moment</th><th scope="col">What the palette does</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Keying in a <strong>command</strong></td>
+            <td>Same input, same list. A palette that made the user choose
+            "search mode" or "command mode" first would be asking them to know
+            the answer before they typed it — the whole point is one box.
+            Actions and records are separate GROUPS in the listbox, not
+            separate modes.</td>
+          </tr>
+          <tr>
+            <td>Keying in a <strong>search</strong></td>
+            <td>Filtering starts on the first character;
+            <code>initCombobox()</code> owns it. Nothing is committed until
+            Enter, so arrowing through results changes the active option, not
+            the value.</td>
+          </tr>
+          <tr>
+            <td><strong>Enter</strong> — the value afterwards</td>
+            <td>The combobox commits the active option and leaves that text in
+            the input <em>selected</em>, so the next keystroke replaces it
+            rather than appending. In a palette the commit usually navigates,
+            so decide what the box holds when the user comes back: this demo
+            <strong>clears and closes</strong>, because a palette reopened onto
+            last week's query is a palette you have to clear before you can
+            use.</td>
+          </tr>
+          <tr>
+            <td><strong>Clear</strong></td>
+            <td>A visible <kbd class="bo-kbd">✕</kbd>, shown only when there is
+            something to clear. It empties the query and returns focus to the
+            input — it does <strong>not</strong> close the palette, which is
+            the difference between "I mistyped" and "I'm done".</td>
+          </tr>
+          <tr>
+            <td><strong>Escape</strong>, and why it takes two</td>
+            <td>The listbox is a <code>popover</code>, so the first Escape is
+            the platform light-dismissing it; the second closes the dialog.
+            That layering is free and correct — but it surprises people, so say
+            it in the hint rather than fighting it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>
@@ -225,6 +285,19 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
        top-anchored, and nothing ships for one screen. */
     .cmd-palette { margin-block-start: 12vh; margin-inline: auto; overflow: visible; }
     .cmd-palette__hint { display: flex; gap: var(--bo-space-4); font-size: var(--bo-font-size-xs); }
+
+    /* Clear sits INSIDE the input's box, not after it — this page's own
+       "the listbox is a popover" rule, which I broke on the first attempt.
+       Placed after the input in source order it rendered below, which is
+       precisely where the top-layer listbox paints, so every click landed on
+       the listbox instead and the button silently did nothing. */
+    .cmd-palette .bo-combobox { position: relative; }
+    .cmd-palette__clear {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-end: 0;
+      z-index: 1;
+    }
   </style>
   <script>
     import { initCombobox } from '@busy-office/ui/js';
@@ -236,6 +309,36 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
     });
     // Backdrop click closes — a native <dialog> does not do this for you.
     dlg?.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+    /* The three states the States table above promises, wired so the page
+       demonstrates them rather than describing them (142.4). */
+    const input = document.getElementById('cmd-input') as HTMLInputElement | null;
+    const clear = document.getElementById('cmd-clear') as HTMLButtonElement | null;
+    const result = document.getElementById('cmd-result');
+
+    // Clear is shown only when there is something to clear — a permanently
+    // visible ✕ on an empty box is a control that does nothing.
+    const syncClear = () => { if (clear && input) clear.hidden = input.value === ''; };
+    input?.addEventListener('input', syncClear);
+
+    clear?.addEventListener('click', () => {
+      if (!input) return;
+      input.value = '';
+      syncClear();
+      input.focus();          // clearing is not leaving: focus stays in the box
+    });
+
+    /* Commit. initCombobox dispatches this on Enter and on click, and leaves
+       the committed text selected. A palette's commit NAVIGATES, so here it
+       reports what it would open and resets — a palette reopened onto last
+       week's query is one you have to clear before you can use. */
+    document.addEventListener('bo:combobox-select', (e) => {
+      const value = (e as CustomEvent).detail?.value ?? input?.value ?? '';
+      if (result) result.textContent = `Would open: ${value}`;
+      if (input) input.value = '';
+      syncClear();
+      dlg?.close();
+    });
   </script>
 
   <Related links={[["/components/combobox", "Combobox"], ["/components/dialog", "Dialog"], ["/patterns/app-launch", "App launch"], ["/patterns/value-help", "Value help"]]} />

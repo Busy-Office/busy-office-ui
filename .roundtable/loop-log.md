@@ -879,3 +879,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-25 06:57 · Continue · build · 143.2 DemoFrame + demo routes (sidebar-nav both states, offcanvas in-frame); 143.3 collapsed icon centring · landed · 6b00ee2
 - 2026-08-25 07:04 · Continue · build · 143.4 — drawer exit motion via allow-discrete behind @supports; chosen because the JS route could fail to close · landed · 7acd8aa
 - 2026-08-25 07:13 · Standardize · tidy · 0fr/1fr triplication settled as correct — utility vs component-part selector ownership, plus the opt-in module · refused · f4d4d11
+- 2026-08-25 07:18 · Continue · build · 142.2b — /patterns/first-load shipped: skeleton vs spinner vs nothing, shape-matching, refetch as a distinct state · landed · bdc2680
