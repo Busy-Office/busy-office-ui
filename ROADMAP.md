@@ -2025,7 +2025,7 @@ reads clean while telling us nothing.
 
        Ticked 2026-08-24 as drift: the work and its verdict landed a day
        earlier, the checkbox did not move with them.
-5. [ ] **130.4 — the remaining four modules.** CRM (account, opportunity),
+5. [x] **130.4 — CLOSED 2026-08-24 after Production.** CRM (account, opportunity),
        Finance (journal entry, payment), Inventory (stock movement, item
        master), Production (production order, BOM). Batched only if 130.3
        says they are mechanical. Each still logs its gaps.
