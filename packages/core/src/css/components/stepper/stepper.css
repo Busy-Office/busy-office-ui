@@ -99,9 +99,41 @@
     }
   }
 
+  /* GAP-17 (erp-suite module three, 2026-08-24). A FIVE-step stepper at
+     390px pushed each marker 10px past its own step. Arithmetic, not a
+     rounding artefact: a non-first step needs connector 16 + its 16px
+     margins + the 8px gap + a 28px marker = 68px minimum, and
+     `min-inline-size: 0` above lets the step collapse to 58px — so the
+     marker, which is `flex: none`, spills. Four steps fit (72.5px each) and
+     five do not, which is why nothing caught it until a module with five
+     stages existed.
+
+     Two changes, because either alone still has a ceiling. Below 30rem the
+     labels are already hidden, so the connector's generous spacing is
+     buying nothing — tightening it drops the per-step minimum to 52px and
+     fits six. `min-inline-size: auto` then stops the step collapsing under
+     its own marker at all, and wrap (on .bo-stepper, which a container
+     query cannot style from inside its own container) catches the rest —
+     the chain breaks onto a second row rather than overlapping. A
+     stepper that wraps still says which step you are on; one whose markers
+     overlap does not. */
+  .bo-stepper {
+    flex-wrap: wrap;
+    row-gap: var(--bo-space-2);
+  }
+
   /* Narrow STEPPER (its own named container): labels collapse to
      screen-reader-only, markers remain. */
   @container bo-stepper (max-width: 30rem) {
+    .bo-stepper__step {
+      min-inline-size: auto;
+    }
+
+    .bo-stepper__step:not(:first-child)::before {
+      min-inline-size: var(--bo-space-2);
+      margin-inline: var(--bo-space-1);
+    }
+
     .bo-stepper__label {
       position: absolute;
       width: 1px;

@@ -20,7 +20,7 @@ export const MODULES = [
   { id: 'home', label: 'Home', icon: 'grid', href: '/index.html' },
   { id: 'o2c', label: 'Order to cash', icon: 'cart', href: '/o2c/sales-orders.html' },
   { id: 'p2p', label: 'Procure to pay', icon: 'truck', href: '/p2p/purchase-orders.html' },
-  { id: 'crm', label: 'CRM', icon: 'user', href: '/crm/index.html' },
+  { id: 'crm', label: 'CRM', icon: 'user', href: '/crm/accounts.html' },
   { id: 'fin', label: 'Finance', icon: 'invoice', href: '/fin/index.html' },
   { id: 'inv', label: 'Inventory', icon: 'box', href: '/inv/index.html' },
   { id: 'prod', label: 'Production', icon: 'settings', href: '/prod/index.html' },
@@ -39,6 +39,14 @@ export const SECTIONS = {
     { label: 'Requisitions', href: '/p2p/requisitions.html' },
     { label: 'Purchase orders', href: '/p2p/purchase-orders.html' },
     { label: 'Vendor invoices', href: '/p2p/vendor-invoices.html' },
+  ],
+  /* CRM breaks the "the functions ARE the documents" rule above, and it is
+     the rule that bends rather than the module: an account is master data,
+     not a document. It still belongs at this level because it is what a
+     salesperson navigates BY. */
+  crm: [
+    { label: 'Accounts', href: '/crm/accounts.html' },
+    { label: 'Opportunities', href: '/crm/opportunities.html' },
   ],
 };
 

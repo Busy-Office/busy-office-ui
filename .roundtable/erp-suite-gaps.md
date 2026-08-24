@@ -641,6 +641,49 @@ the one line added was to correct GAP-15.
 
 ---
 
+## Module three — CRM (2026-08-24)
+
+The first module that is NOT a document. An account is master data: no
+posting date, no approval, no document flow, never "done". That was the point
+of building CRM third — 130.3's checkpoint said the rest were mechanical, and
+a claim like that is only worth testing against a shape the suite has never
+built.
+
+**One framework gap, one gap of my own.**
+
+- **GAP-17 (framework, FIXED).** `bo-stepper` overlaps its own markers at
+  five steps. The opportunity screen is the first thing in the suite with a
+  five-stage chain, and at 390px each marker sat **10px past its own step's
+  right edge** — measured, then explained by arithmetic rather than guessed: a
+  non-first step needs connector 16 + its 16px margins + the 8px gap + a 28px
+  marker = **68px minimum**, and `min-inline-size: 0` lets the step collapse
+  to 58px, so a `flex: none` marker spills. **Four steps fit at 72.5px each;
+  five do not**, which is why three modules of four-step flows never surfaced
+  it.
+  Fixed at the component: below 30rem the labels are already hidden, so the
+  connector's spacing buys nothing and tightening it drops the per-step
+  minimum to 52px (six steps fit); `min-inline-size: auto` stops the step
+  collapsing under its own marker; and `flex-wrap` on the stepper catches
+  anything beyond that. A stepper that wraps still says which step you are
+  on — one whose markers overlap does not.
+
+- **Mine, not the framework's.** An empty `<th>` on the contacts table.
+  `audit.mjs` caught it (`empty-table-header`) before it was committed, which
+  is the gate doing its job.
+
+**What the master-data shape did NOT need.** No new component. The account
+record is `bo-widget` header + `bo-kv` + two `bo-data-table`s, and the
+interesting judgement was what to leave OUT: **open items are not a document
+flow**. They are unrelated transactions that happen to share a customer, so a
+timeline would imply an order that does not exist. The opportunity screen does
+use a stepper, but for a FORECAST — a deal can move back a stage, which no
+document flow in this suite can do.
+
+Running count: pilot 13, module two 2, module three 1. The trend 130.3
+predicted is holding.
+
+---
+
 ## Not gaps (checked, and the framework was right)
 
 - **List screens**: `list-report` covered the PO list end to end — filters,

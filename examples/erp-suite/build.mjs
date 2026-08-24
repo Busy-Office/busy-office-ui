@@ -16,10 +16,10 @@ import { MODULES, page } from './_shell.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, 'dist');
 
-const BUILT_MODULES = ['home', 'o2c', 'p2p'];
+const BUILT_MODULES = ['home', 'o2c', 'p2p', 'crm'];
 
 const screens = [];
-for (const dir of ['.', 'o2c', 'p2p']) {
+for (const dir of ['.', 'o2c', 'p2p', 'crm']) {
   const abs = join(here, dir);
   for (const f of await readdir(abs)) {
     if (!f.endsWith('.screen.mjs')) continue;

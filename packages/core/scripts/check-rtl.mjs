@@ -102,7 +102,16 @@ const flipSites = new Set();
 
 for await (const file of distCssFiles()) {
   const rel = relative(join(distCssRoot, '..', '..'), file).replace(/^dist\//, '');
-  const css = await readFile(file, 'utf8');
+  const raw = await readFile(file, 'utf8');
+  /* Comments are prose, not CSS. Scanning them cost a wake on 2026-08-24: a
+     stepper comment containing the words "catches whatever is left:" was
+     reported as `physical property "left:"`, which is the same shape as the
+     self-tripping assertions CLAUDE.md warns about — a detector fooled by
+     the sentence written to explain the code. Stripped for the property
+     scan only; the flip-site census below still reads the raw file, because
+     its count is asserted against DESIGN.md and changing what it sees is a
+     separate decision from fixing a false positive. */
+  const css = raw.replace(/\/\*[\s\S]*?\*\//g, '');
 
   for (const re of PHYSICAL) {
     const m = css.match(re);
@@ -110,7 +119,7 @@ for await (const file of distCssFiles()) {
   }
 
   for (const { name, re, nonZero } of NEEDS_FLIP) {
-    for (const m of css.matchAll(re)) {
+    for (const m of raw.matchAll(re)) {
       if (!nonZero(m[1])) continue;
       if (!ALLOWED.has(rel)) {
         failures.push(`${rel}: direction-sensitive ${name}(${m[1].trim()}) at an unlisted site — add a [dir="rtl"] flip and list it in check-rtl.mjs + /concepts/i18n`);
