@@ -3,10 +3,38 @@ name: CI
 on:
   push:
     branches: [main]
+    # Narrative-only commits skip CI entirely. This repo records every loop
+    # iteration, and 8 of the last 30 commits touched ONLY these paths — at
+    # ~12 minutes a run that was ~96 CI-minutes per 30 commits spent proving
+    # that a log entry does not break a stylesheet.
+    #
+    # The list is deliberately short. DESIGN.md, ROADMAP.md, LOOPS.md,
+    # README.md and CHANGELOG.md are all READ BY GATE SCRIPTS (4, 2, 1, 1 and
+    # 1 of them respectively — check:rtl reads DESIGN.md, stamp-readme reads
+    # the READMEs), so a markdown edit can genuinely turn CI red and none of
+    # those may be ignored. Only .roundtable/** and STATUS.md are read by
+    # nothing.
+    paths-ignore:
+      - '.roundtable/**'
+      - 'STATUS.md'
   pull_request:
+    paths-ignore:
+      - '.roundtable/**'
+      - 'STATUS.md'
+
+# Pushing twice in a minute used to run the whole suite twice. The older run
+# is superseded the moment the newer one starts, so cancel it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  # ---------------------------------------------------------------------------
+  # Everything that does not need a browser. Cheap, so it fails fast and tells
+  # you within a minute if the CSS itself is wrong.
+  # ---------------------------------------------------------------------------
+  core:
+    name: Core build, lint, unit tests, container
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,75 +50,6 @@ jobs:
         run: npm run lint:css -w @busy-office/ui
       - name: Behavior tests (against compiled dist)
         run: npx vitest run --root packages/core
-      - name: Build docs gallery at the Pages base path (incl. dist link check)
-        run: npm run build -w docs
-        env:
-          DOCS_BASE: /busy-office-ui
-      # AFTER the docs build — it sweeps the built dist. (Ordering bug on
-      # first landing: placed before the build, so dist did not exist.)
-      # Documented behaviour must be true — prose that asserts runtime
-      # behaviour is a hypothesis until something runs it (2026-08-17).
-      - name: Documented-claims check
-        run: npm run check:claims -w docs
-      # Pure Intl, milliseconds: the SG/TH strings printed on /concepts/i18n
-      # and the ISO-vs-CLDR precision divergence it names are facts about the
-      # platform, so an ICU upgrade can make the page wrong on its own.
-      - name: Formatting claims (Intl / ISO-vs-CLDR)
-        run: npm run check:formatting -w docs
-      # The i18n page claims long translations wrap rather than clip —
-      # run that claim at compact density in a +35% pseudo-locale.
-      - name: Pseudo-locale expansion check
-        run: npm run check:pseudo -w docs
-      # One concurrent sweep: narrow/zoom overflow AND the WCAG 1.4.12
-      # spacing override. Merged from two serial sweeps that cost 345s.
-      - name: Layout sweep (overflow + WCAG 1.4.12 text spacing)
-        run: npm run check:layout -w docs
-      # check:layout EXEMPTS the scroll containers from its overflow rule —
-      # correctly, they are meant to overflow — and until 2026-08-24 nothing
-      # then asked whether they SCROLL. The framework's entire answer to a wide
-      # table was asserted nowhere (owner ask, roadmap 133).
-      - name: Scroll sweep (containers that overflow must actually scroll)
-        run: npm run check:scroll -w docs
-      # Was run by hand and had drifted red unnoticed: two docs pages had
-      # authoring bugs (a demo <main> nested inside the page's own main, a
-      # demo section that had lost its <h2>). An accessibility framework
-      # cannot ship docs with landmark and heading-order violations, so the
-      # sweep is a gate now rather than a habit (2026-08-17).
-      - name: Axe accessibility audit (81 pages x 2 widths)
-        run: npm run test:axe -w docs
-      # Windows High Contrast support is a documented promise and the
-      # component list on /concepts/accessibility is generated from the CSS.
-      # This catches the half generation cannot: a forced-colors rule whose
-      # selector no longer matches anything (left behind by a rename or a
-      # component split).
-      - name: Forced-colors rules still live
-        run: npm run check:forced-colors -w docs
-      # SC 2.5.8 with the REAL spec test (24px circle, spacing exception),
-      # because the framework's conformance rides on spacing rather than on
-      # a size floor — the docs claimed a 24px floor and were wrong.
-      - name: Target size (WCAG 2.5.8)
-        run: npm run check:target-size -w docs
-      # The reference app is what adopters copy and what four docs pages cite as
-      # the working implementation, and nothing tested it until 26.1. Boots the
-      # app on a free port; ~12s, no container needed.
-      - name: Reference app smoke + axe
-        run: npm run check:po-app -w docs
-      # The ERP suite is the framework's gap-finding instrument: 25 screens
-      # built ONLY from shipped CSS, with `check-erp-suite` enforcing that it
-      # has none of its own. Wired in last on purpose (130.5) — a gate
-      # guarding a moving target reports noise, and the suite only stopped
-      # changing shape once module four found zero gaps. Three checks in one
-      # script so CI and the loop run the identical thing: build, structure
-      # (zero local CSS + every internal link resolves), then axe and
-      # horizontal-overflow at both widths. The audit starts its own server,
-      # so this needs nothing set up around it.
-      - name: ERP suite — build, structure, axe
-        run: npm run suite
-      # The token contrast gate is static analysis over OUR pairs; it passed on
-      # the page where vendored Pagefind CSS rendered at 1.46:1. This measures
-      # rendered third-party UI, which is the only way to see it.
-      - name: Search — rendered contrast + index scope
-        run: npm run check:search -w docs
       # The container is the tool every change is VERIFIED in — the quality bar
       # says screenshot it at two widths in both themes before committing — and
       # nothing verified the container itself. It rotted twice: chromium missing
@@ -101,3 +60,81 @@ jobs:
       # Builds the image only; publishing it is a separate question.
       - name: Docs container builds
         run: docker build -f apps/docs/Containerfile -t bo-docs .
+
+  # ---------------------------------------------------------------------------
+  # The browser gates, sharded. They were 11 serial steps totalling ~12 minutes
+  # while each one spends most of its time walking the same 121 built pages.
+  # Sharding does not make any single gate faster; it makes the WALL CLOCK the
+  # slowest shard instead of the sum. Shards are balanced against measured
+  # step times, and every shard pays the same ~50s to build core + docs first.
+  #
+  # fail-fast is off on purpose: one shard going red must not hide what the
+  # others would have found, which is the whole reason these are separate
+  # gates rather than one script.
+  # ---------------------------------------------------------------------------
+  docs-gates:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Documented behaviour must be true — prose that asserts runtime
+          # behaviour is a hypothesis until something runs it (2026-08-17).
+          # Pure Intl, milliseconds: the SG/TH strings printed on /concepts/i18n
+          # and the ISO-vs-CLDR precision divergence it names are facts about
+          # the platform, so an ICU upgrade can make the page wrong on its own.
+          - name: Claims + formatting
+            run: npm run check:claims -w docs && npm run check:formatting -w docs
+          # check:layout EXEMPTS the scroll containers from its overflow rule —
+          # correctly, they are meant to overflow — and until 2026-08-24 nothing
+          # then asked whether they SCROLL. The framework's entire answer to a
+          # wide table was asserted nowhere (owner ask, roadmap 133).
+          - name: Scroll sweep
+            run: npm run check:scroll -w docs
+          # One concurrent sweep: narrow/zoom overflow AND the WCAG 1.4.12
+          # spacing override. Merged from two serial sweeps that cost 345s.
+          # Forced colors catches the half generation cannot: a rule whose
+          # selector no longer matches anything after a rename or a split.
+          - name: Layout + forced-colors
+            run: npm run check:layout -w docs && npm run check:forced-colors -w docs
+          # Was run by hand and had drifted red unnoticed: two docs pages had
+          # authoring bugs (a demo <main> nested inside the page's own main, a
+          # demo section that had lost its <h2>). An accessibility framework
+          # cannot ship docs with landmark and heading-order violations.
+          # SC 2.5.8 uses the REAL spec test (24px circle, spacing exception),
+          # because conformance here rides on spacing rather than a size floor.
+          # The token contrast gate is static analysis over OUR pairs; it passed
+          # on the page where vendored Pagefind CSS rendered at 1.46:1 — this
+          # measures rendered third-party UI, the only way to see it.
+          - name: Axe + target size + search
+            run: npm run test:axe -w docs && npm run check:target-size -w docs && npm run check:search -w docs
+          # The i18n page claims long translations wrap rather than clip — run
+          # that claim at compact density in a +35% pseudo-locale.
+          # The reference app is what adopters copy and what four docs pages
+          # cite as the working implementation, and nothing tested it until 26.1.
+          # The ERP suite is the framework's gap-finding instrument: 25 screens
+          # built ONLY from shipped CSS, with check-erp-suite enforcing that it
+          # has none of its own. One script so CI and the loop run the identical
+          # thing; its audit starts its own server, so it needs nothing set up.
+          - name: Pseudo-locale + reference app + ERP suite
+            run: npm run check:pseudo -w docs && npm run check:po-app -w docs && npm run suite
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build core (CSS dist + TS)
+        run: npm run build -w @busy-office/ui
+      # Every browser gate reads the BUILT dist, and it must be built at the
+      # Pages base path: CI serves from /busy-office-ui, and a harness that
+      # assumes base-less URLs 404s its assets — which fails open, passing a
+      # sweep over CSS-less pages (2026-08-16, three red runs in a row).
+      - name: Build docs gallery at the Pages base path (incl. dist link check)
+        run: npm run build -w docs
+        env:
+          DOCS_BASE: /busy-office-ui
+      - name: ${{ matrix.name }}
+        run: ${{ matrix.run }}
