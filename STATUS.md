@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 19:26
+Generated at: 2026-08-24 19:52
 
 ## Open items by slice
 
@@ -16,13 +16,16 @@ Generated at: 2026-08-24 19:26
 - **Slice 136** (2 open)
   - 136.6 — a document reference, not a URL link.
   - 136.7 — a length budget measured in STORED HTML.
-- **Slice 138** (1 open)
-  - 138.2 — currency and unit as a SEARCHABLE list, by choice.
+- **Slice 139** (2 open)
+  - 139.1 — `list-report.astro` documents a header-actions row that renders regardless of row count.
+  - 139.2 — the six suite list screens get the row.
+- **Slice 140** (1 open)
+  - 140.3 — turn 130.4 into an experiment: predict each module's yield before building it.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (842 iterations logged)
+dispatch status — counter-triggered rules (845 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-24 18:49   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
@@ -31,22 +34,21 @@ dispatch status — counter-triggered rules (842 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
-- 138.2 — currency and unit as a SEARCHABLE list, by choice.
 - 130.5 — wire the suite into CI
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 
 ## Last 10 iterations
 
-- 2026-08-24 06:44 · Explore · grill · 136 — grill the rich-text design against Paper/Notion; 3 defects confirmed live, chromeless-editor refused, 2 ERP proposals raised · logged · a4925e0
-- 2026-08-24 07:30 · Continue · owner-wishlist · 137 — richtext toolbar: 10 icons, hot-key aria-pressed fix (selectionchange), collapse, generated keyboard map via extract-keymap CSS scan; plus 136.1-136.5 · landed · 43ea922
-- 2026-08-24 09:10 · Continue · owner-wishlist · 137.5-137.9 — markdown list triggers + ol start, context-sensitive Tab with Esc release, __group, collapse rework with floating Aa toggle · landed · 27f6d8c
-- 2026-08-24 09:19 · Continue · owner-wishlist · 137.10 — adopt lucide remove-formatting + square-pen, ISC notice added to NOTICE and icon.css · landed · 9798061
 - 2026-08-24 09:40 · Continue · owner-wishlist · 137.11-137.13 — alignment as bo-segmented radio group, collapse motion via bo-motion-collapse, bo-btn--icon on toolbar buttons · landed · a5ea0ee
 - 2026-08-24 10:13 · Continue · owner-wishlist · 137.14-137.16 — collapse motion actually runs (was a class with no stylesheet), radius chain restored, all toolbar buttons squared · landed · 3997705
 - 2026-08-24 11:19 · Continue · owner-wishlist · 137.17-137.18 — /base/motion was demonstrating nothing (opt-in module never imported); fixed, showcases added, liveness claims · landed · dbcdbc8
 - 2026-08-24 18:49 · Standardize · drift · 130.3 stale checkbox — module two was built and verdicted a day earlier · landed · 29a09c0
 - 2026-08-24 18:59 · Continue · build · 130.4 module three (CRM, 4 screens) + GAP-17 stepper marker overlap at 5 steps + check:rtl comment false-positive · landed · e544ecc
 - 2026-08-24 19:26 · Continue · owner-wishlist · 138.1 — focus ring inset for joined money/quantity segments; 3 instrument defects caught · landed · 622a5cc
+- 2026-08-24 19:33 · Continue · owner-wishlist · 138.2 — money/quantity accept a combobox in the select slot; type-to-open was already the default · landed · 06820c4
+- 2026-08-24 19:41 · Roadmap · triage · GAP-17 promoted to Slice 139; watch items decided (heatmap refused, MRP folded into 130.4); GAP number collision fixed · logged · 2b6b9d1
+- 2026-08-24 19:41 · Meta · refusal · a contribution-heatmap slice — no Projects module exists and the reference showed uniform gray cells · refused · 2b6b9d1
+- 2026-08-24 19:52 · Explore · grill · ERP suite as instrument — gaps track shape/stress not domain; 139 strengthened, 140.1 reopened as intensity-over-time, 130.4 reframed as a prediction experiment · logged · 16048e3
 
 ## Sunset test
 

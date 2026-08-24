@@ -856,3 +856,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 18:49 · Standardize · drift · 130.3 stale checkbox — module two was built and verdicted a day earlier · landed · 29a09c0
 - 2026-08-24 18:59 · Continue · build · 130.4 module three (CRM, 4 screens) + GAP-17 stepper marker overlap at 5 steps + check:rtl comment false-positive · landed · e544ecc
 - 2026-08-24 19:26 · Continue · owner-wishlist · 138.1 — focus ring inset for joined money/quantity segments; 3 instrument defects caught · landed · 622a5cc
+- 2026-08-24 19:33 · Continue · owner-wishlist · 138.2 — money/quantity accept a combobox in the select slot; type-to-open was already the default · landed · 06820c4
+- 2026-08-24 19:41 · Roadmap · triage · GAP-17 promoted to Slice 139; watch items decided (heatmap refused, MRP folded into 130.4); GAP number collision fixed · logged · 2b6b9d1
+- 2026-08-24 19:41 · Meta · refusal · a contribution-heatmap slice — no Projects module exists and the reference showed uniform gray cells · refused · 2b6b9d1
+- 2026-08-24 19:52 · Explore · grill · ERP suite as instrument — gaps track shape/stress not domain; 139 strengthened, 140.1 reopened as intensity-over-time, 130.4 reframed as a prediction experiment · logged · 16048e3
