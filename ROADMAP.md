@@ -285,7 +285,7 @@ found the idea already shipped **and broken**, which reorders the work.
        nothing, and the shape-matching rule is demonstrated rather than
        asserted.
 
-3. [ ] **142.3 — standardize empty / loading / error states.** Owner:
+3. [x] **142.3 — DONE 2026-08-25. Standardized, and the component docs were already right — the errors were around them.** Owner:
        *"Please standardize the Pattern: error pages, Loading, empty & error
        states (esp. Empty — no results match your filters)."* Measured first:
 
@@ -299,9 +299,33 @@ found the idea already shipped **and broken**, which reorders the work.
          two references is in text **I wrote** for Slice 139, quoting the
          states table as evidence without checking the class was real.
 
-       *Accept*: one documented answer for empty / filtered-empty / loading /
-       error, the phantom class reference removed or made real, and the
-       pattern pages that claim these states actually render them.
+       **What was actually wrong, having looked:** `/components/state-patterns`
+       already documents both empties and explains the distinction well. Two
+       things around it did not.
+
+       - **The filtered-empty section was the only state section a reader
+         could see but not copy.** Its siblings (`Empty`, `--error`) use
+         `<Demo>`, which renders a preview and its copyable code from one
+         string; this one was raw inline markup. Fixed — all three now match,
+         and the exact state the owner named is the one that gained the code.
+       - **`.bo-state--empty` did not exist** and was referenced twice in
+         `list-report.astro` as though it did, once in text I wrote for Slice
+         139. Both replaced with links to the documented answer, and the
+         states table now says outright that there is **no `--empty`
+         modifier**: a first-run empty says "nothing exists yet" and offers
+         *create*; a filtered empty says "nothing matches" and offers *clear*.
+         The wording is the whole difference.
+
+       The phantom name had also propagated into the generated
+       `patterns.json`; rebuilding cleared it from the source, which is the
+       generated-artifact rule doing its job.
+
+       **Not done, and named rather than silently skipped**: only 4 of 39
+       pattern pages link to `/components/state-patterns` from their States
+       tables. Pointing the other 35 at the single documented answer is a
+       35-file sweep, and this repo's own rule is that a bulk edit is verified
+       against the rendered artefact, not the diff. It is worth doing as its
+       own round rather than as a tail on this one.
 
 4. [ ] **142.4 — command bar: document its states.** Owner: *"also value when
        enter, clear function, when key in command, when search, when clear."*

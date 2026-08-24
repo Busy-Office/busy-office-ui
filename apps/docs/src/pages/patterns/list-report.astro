@@ -30,7 +30,7 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
   <section class="demo">
     {/* GAP-17 / Slice 139: a header-actions row that stands whether the
         table is empty or full — the pattern used to name a primary action
-        only inside .bo-state--empty (States, below), so six of seven suite
+        only inside the empty state (States, below), so six of seven suite
         list screens shipped with no way to create a record at all. bo-btn +
         bo-cluster--split, zero new CSS.
         The title is a real <h1> on a real screen — this demo uses a <span>
@@ -265,8 +265,8 @@ const rows = Array.from({ length: 14 }, (_, i) => ({
         <tbody>
           <tr><td>Loading (first paint)</td><td><a href={base + '/components/state-patterns'}>Skeleton rows</a> — never an empty table that fills in</td></tr>
           <tr><td>Loading (refetch)</td><td><code>data-loading="true"</code> + <code>aria-busy</code> on the table: dims and blocks interaction mid-swap</td></tr>
-          <tr><td>Empty (no data yet)</td><td>the header action stays — it is not only the empty state's action anymore — and <code>.bo-state--empty</code> repeats it in-place so the reader does not have to look up</td></tr>
-          <tr><td>Empty (filters exclude everything)</td><td>a DIFFERENT message — offer "Clear filters", not "Create"</td></tr>
+          <tr><td>Empty (no data yet)</td><td>the header action stays — it is not only the empty state's action anymore — and a <a href={base + '/components/state-patterns'}><code>.bo-state</code></a> repeats it in-place so the reader does not have to look up</td></tr>
+          <tr><td>Empty (filters exclude everything)</td><td>the same <a href={base + '/components/state-patterns'}><code>.bo-state</code></a> with DIFFERENT words — name the filters that caused it and offer "Clear filters", not "Create". There is no <code>--empty</code>/<code>--filtered</code> modifier; the wording is the whole difference</td></tr>
           <tr><td>Error</td><td><code>.bo-alert--danger</code> above the table with a retry; keep the last good rows visible</td></tr>
           <tr><td>Row error</td><td><code>data-row-state="error"</code> + a badge naming the reason (two-channel)</td></tr>
           <tr><td>Partial failure after bulk</td><td>re-render the failed rows in the error state and summarise: "8 approved, 2 failed"</td></tr>

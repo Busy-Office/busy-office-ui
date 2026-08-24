@@ -30,6 +30,20 @@ const emptyState = `<div class="bo-state">
   </div>
 </div>`;
 
+/* The SAME component as emptyState above — no `--empty` modifier exists, and
+   none is needed. What separates first-run empty from filtered-empty is the
+   CONTENT: which filters caused it, and the one-click way out. Kept as its own
+   copyable string because it was the only state section on this page a reader
+   could see but not copy. */
+const filteredEmptyState = `<div class="bo-state">
+  <span class="bo-state__icon" aria-hidden="true">🔍</span>
+  <p class="bo-state__title">No POs match these filters</p>
+  <p class="bo-state__description">Status "Rejected" + CC-4021 has no results in this period.</p>
+  <div class="bo-state__actions">
+    <button class="bo-btn bo-btn--secondary" type="button">Clear filters</button>
+  </div>
+</div>`;
+
 const errorState = `<div class="bo-state bo-state--error">
   <span class="bo-state__icon" aria-hidden="true">⚠</span>
   <p class="bo-state__title">Couldn't load purchase orders</p>
@@ -113,16 +127,14 @@ const errorState = `<div class="bo-state bo-state--error">
   </section>
   <section class="demo">
     <h2>Empty — "no results match your filters"</h2>
-    <div class="bo-state" style="max-inline-size: 28rem">
-      <span class="bo-state__icon" aria-hidden="true">🔍</span>
-      <p class="bo-state__title">No POs match these filters</p>
-      <p class="bo-state__description">Status "Rejected" + CC-4021 has no results in this period.</p>
-      <div class="bo-state__actions">
-        <button class="bo-btn bo-btn--secondary" type="button">Clear filters</button>
-      </div>
-    </div>
+    <Demo code={filteredEmptyState} />
     <p class="bo-u-text-muted">Distinct from first-run empty: name the filters that
-    caused it and offer the one-click way out — otherwise users assume data loss.</p>
+    caused it and offer the one-click way out — otherwise users assume data loss.
+    <strong>It is the same component with different words</strong> — there is no
+    <code>--empty</code> modifier and none is needed. A first-run empty says
+    "nothing exists yet" and offers <em>create</em>; a filtered empty says
+    "nothing matches" and offers <em>clear</em>. Getting that wrong is what
+    makes users think their data is gone.</p>
   </section>
   <section class="demo">
     <h2><code>--error</code></h2>

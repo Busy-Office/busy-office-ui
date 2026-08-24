@@ -571,11 +571,11 @@
             ],
             [
               "Empty (no data yet)",
-              "the header action stays — it is not only the empty state's action anymore — and .bo-state--empty repeats it in-place so the reader does not have to look up"
+              "the header action stays — it is not only the empty state's action anymore — and a .bo-state repeats it in-place so the reader does not have to look up"
             ],
             [
               "Empty (filters exclude everything)",
-              "a DIFFERENT message — offer \"Clear filters\", not \"Create\""
+              "the same .bo-state with DIFFERENT words — name the filters that caused it and offer \"Clear filters\", not \"Create\". There is no --empty/--filtered modifier; the wording is the whole difference"
             ],
             [
               "Error",
