@@ -763,7 +763,7 @@ wrong is informative rather than deniable.
 
 | Module | Shapes it forces | Predicted gaps | Actual |
 |---|---|---|---|
-| **Production** | multi-level BOM hierarchy with rolled-up quantities; capacity/utilisation over time; the MRP derived-action panel | **2-4 (highest)** | _to fill_ |
+| **Production** | multi-level BOM hierarchy with rolled-up quantities; capacity/utilisation over time; the MRP derived-action panel | **2-4 (highest)** | **0 — prediction wrong** |
 | **Inventory** | stock by item × warehouse (cross-tab) | **0-1** | _to fill_ |
 | **Finance** | journal entry that must balance to zero before posting; payment list + detail | **0** | _to fill_ |
 
@@ -792,6 +792,69 @@ wrong is informative rather than deniable.
 **A module that finds zero is a success.** It is the evidence for stopping at
 shape coverage instead of grinding through six domains, which is the only
 outcome that would let this roadmap DELETE work rather than add it.
+
+---
+
+## Module four — Production (2026-08-24): the predictions scored
+
+Four screens — production orders, production order (with the MRP panel), BOM,
+capacity. **Zero framework gaps. Predicted 2-4. The prediction was wrong**, and
+the way it was wrong is the useful part.
+
+**Prediction 1 — "intensity over a long date grid IS a gap" — FALSIFIED.**
+The claim was that a capacity screen could not be built from shipped surface
+without new CSS. It could. `--sticky-col` pins the work-centre names while the
+weeks scroll, `data-tone` carries three buckets, `bo-u-tabular` aligns the
+figures, and the audit passes at both widths with zero local CSS.
+
+What survives is much narrower than what was claimed: there is **no continuous
+ramp** — `scales.json` has eleven steps and ships no `bo-scale` utility — so
+the screen is three buckets, not a heatmap. **And that is arguably better, not
+worse.** The two-channel rule forces the number into every cell regardless;
+once "126%" is written there, a continuous shade is decoration that would also
+need a legend and still could not be read precisely. The reference screenshot
+that started this — uniform gray GitHub squares — has no number in any cell
+and cannot answer "by how much".
+
+This is the *references are floors* rule paying out in an unexpected
+direction: the framework's constraint produced the better screen. Logged as
+**not a gap**, and the watch item from 140.1 is closed rather than left open.
+
+**Prediction 2 — "the MRP panel is NOT a gap" — CONFIRMED.** The
+checkboxes-configure-a-derived-action shape is a plain `fieldset` of
+`bo-choice` rows, and GAP-8's answer carried it exactly: the button says
+**"Create 2 purchase requisitions"** rather than naming a feature, so no
+separate "this will do X" statement was needed — which is the surface GAP-8
+refused. Nothing new.
+
+**Prediction 3 — "the cross-tab is NOT a gap" — CONFIRMED EARLY.** The
+capacity screen *is* a cross-tab (work centre × week), so this was answered
+before Inventory was built. `--sticky-col` holds the row header while the
+columns scroll, which was the hard part.
+
+**BOM needed nothing either.** `tree-table` carried a three-level hierarchy
+with `data-tree-level` and its toggle/spacer parts. Rolled-up quantities are
+two numeric columns — per-parent and total-required — which `data-table`
+already does.
+
+**One gap of my own, caught before it shipped**: I guessed a class name
+`bo-checkbox-row`. It does not exist; the real one is `bo-choice`. Found by
+checking `api.json` rather than by the gate, but the gate would have caught
+it — the same shape as the `--danger` guess in the pilot.
+
+### What this does to the plan
+
+The Sequence's own clause said it: *"If Production finds zero, the thesis is
+wrong in an interesting way — the remaining modules would be re-argued rather
+than ground through."* Production was the **highest**-predicted module and it
+found nothing. Inventory was predicted 0-1 and its distinctive shape has
+already been proven covered; Finance was predicted 0.
+
+So the honest reading is that **the instrument has stopped paying for itself
+on new modules**. Running count: pilot 13, module two 2, module three 1,
+module four **0**. That is not a reason to distrust the suite — it is the
+suite reporting that the framework now covers the shapes an ERP needs, which
+is the outcome the whole exercise was for.
 
 ---
 

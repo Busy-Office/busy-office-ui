@@ -23,7 +23,7 @@ export const MODULES = [
   { id: 'crm', label: 'CRM', icon: 'user', href: '/crm/accounts.html' },
   { id: 'fin', label: 'Finance', icon: 'invoice', href: '/fin/index.html' },
   { id: 'inv', label: 'Inventory', icon: 'box', href: '/inv/index.html' },
-  { id: 'prod', label: 'Production', icon: 'settings', href: '/prod/index.html' },
+  { id: 'prod', label: 'Production', icon: 'settings', href: '/prod/production-orders.html' },
 ];
 
 /** The documents each module owns — the second nav level. */
@@ -47,6 +47,11 @@ export const SECTIONS = {
   crm: [
     { label: 'Accounts', href: '/crm/accounts.html' },
     { label: 'Opportunities', href: '/crm/opportunities.html' },
+  ],
+  prod: [
+    { label: 'Production orders', href: '/prod/production-orders.html' },
+    { label: 'Bills of material', href: '/prod/bom.html' },
+    { label: 'Capacity', href: '/prod/capacity.html' },
   ],
 };
 
