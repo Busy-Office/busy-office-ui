@@ -133,7 +133,12 @@
     padding-inline-end: calc(var(--bo-density-control-height) + var(--bo-space-2));
   }
 
-  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false']) .bo-richtext__toolbar {
+  /* Child combinator, and it is doing real work: an UNWRAPPED toolbar hides
+     instantly, but a toolbar wrapped in .bo-motion-collapse is no longer a
+     direct child, so this rule stops applying and the wrapper animates it
+     instead. Opting into motion is therefore one wrapper and no override —
+     no !important, no competing rule, nothing to undo. */
+  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false']) > .bo-richtext__toolbar {
     display: none;
   }
 

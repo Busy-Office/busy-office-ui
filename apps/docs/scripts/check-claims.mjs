@@ -2048,13 +2048,27 @@ check(
   JSON.stringify({ afterHeading }),
 );
 
-await page.click(`${ADV} [data-richtext-cmd="justifyCenter"]`);
-const justifyState = await page.$eval(ADV, (d) =>
-  Object.fromEntries([...d.querySelectorAll('[data-richtext-cmd^="justify"]')]
-    .map((b) => [b.dataset.richtextCmd, b.getAttribute('aria-pressed')])));
+/* Alignment is a RADIO GROUP now, not three aria-pressed toggles — it is one
+   choice of three, and saying so lets the platform own mutual exclusivity
+   (and arrow-key navigation) instead of JS clearing two siblings by hand.
+   Asserting exactly-one-checked is the property that used to need code. */
+await page.click(`${ADV} label[for="rt-a-center"]`);
+const justifyState = await page.$eval(ADV, (d) => {
+  const radios = [...d.querySelectorAll('input[type="radio"][data-richtext-cmd]')];
+  return {
+    total: radios.length,
+    checked: radios.filter((r) => r.checked).map((r) => r.dataset.richtextCmd),
+    sharedName: new Set(radios.map((r) => r.name)).size,
+    anyAriaPressed: radios.some((r) => r.hasAttribute('aria-pressed')),
+  };
+});
 check(
-  'richtext Advanced: clicking Center clears Left/Right aria-pressed, not just sets its own',
-  justifyState.justifyCenter === 'true' && justifyState.justifyLeft === 'false' && justifyState.justifyRight === 'false',
+  'richtext Advanced: alignment is one radio group — exactly one checked, one shared name, no aria-pressed',
+  justifyState.total === 3 &&
+    justifyState.checked.length === 1 &&
+    justifyState.checked[0] === 'justifyCenter' &&
+    justifyState.sharedName === 1 &&
+    !justifyState.anyAriaPressed,
   JSON.stringify(justifyState),
 );
 
@@ -2144,27 +2158,32 @@ check(
 const rtCollapse = await page.evaluate(async () => {
   const t = document.querySelector('[data-richtext-toggle]');
   const field = t.closest('.bo-richtext');
+  /* Measure the box that CARRIES the constraint — the aria-controls target.
+     The toolbar itself is the wrong probe once motion is on: it gets clipped
+     inside a zero-height wrapper and keeps its own non-zero rect, so a check
+     on the toolbar would read "still 60px tall" while the bar is visibly
+     gone. This resolves correctly whether or not the toolbar is wrapped. */
+  const region = document.getElementById(t.getAttribute('aria-controls'));
   const bar = field.querySelector('.bo-richtext__toolbar');
   const h = (el) => el.getBoundingClientRect().height;
   const vis = (el) => getComputedStyle(el).display !== 'none';
-  const openBarHeight = h(bar);
+  const openBarHeight = h(region);
   t.click();
-  await new Promise((r) => requestAnimationFrame(r));
+  // motion is token-driven; wait past the slow duration rather than a frame
+  await new Promise((r) => setTimeout(r, 500));
   return {
     openBarHeight,
-    collapsedBarHeight: h(bar),
-    barHidden: !vis(bar),
+    collapsedBarHeight: h(region),
     toggleStillVisible: vis(t),
     toggleOutsideBar: !bar.contains(t),
     expanded: t.getAttribute('aria-expanded'),
-    controlsResolves: !!document.getElementById(t.getAttribute('aria-controls')),
+    controlsResolves: !!region,
   };
 });
 check(
   'richtext: collapsing removes the toolbar bar entirely (not just its buttons) and leaves a floating toggle',
   rtCollapse.openBarHeight > 0 &&
     rtCollapse.collapsedBarHeight === 0 &&
-    rtCollapse.barHidden &&
     rtCollapse.toggleStillVisible &&
     rtCollapse.toggleOutsideBar &&
     rtCollapse.expanded === 'false' &&

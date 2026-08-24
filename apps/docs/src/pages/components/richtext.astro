@@ -17,17 +17,17 @@ const basic = `<div class="bo-richtext">
               title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Lists">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
               aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertOrderedList"
               aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Insert">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="createLink"
               aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Help">
-      <button class="bo-btn bo-btn--ghost" type="button" data-dialog-trigger="rt-keys"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-dialog-trigger="rt-keys"
               aria-label="Keyboard shortcuts" title="Keyboard shortcuts"><span class="bo-icon bo-icon--keyboard" aria-hidden="true"></span></button>
     </div>
   </div>
@@ -67,13 +67,15 @@ const invalid = `<div class="bo-form-field">
 </div>`;
 
 const collapsible = `<div class="bo-richtext">
-  <div class="bo-richtext__toolbar" role="group" aria-label="Formatting" id="rt-collapse-bar">
+  <div class="bo-motion-collapse" data-state="open" id="rt-collapse-bar">
+    <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
             title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
             title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
-            aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
+              aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
+    </div>
   </div>
   <button class="bo-btn bo-btn--ghost bo-btn--icon bo-richtext__toolbar-toggle" type="button"
           data-richtext-toggle aria-expanded="true" aria-controls="rt-collapse-bar"
@@ -89,9 +91,9 @@ const collapsible = `<div class="bo-richtext">
 
 const lists = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
             aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertOrderedList"
             aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
@@ -108,37 +110,42 @@ const advanced = `<div class="bo-richtext">
             title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
       <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"
             title="Strikethrough"><s>S</s></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="removeFormat"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="removeFormat"
             aria-label="Clear formatting" title="Clear formatting"><span class="bo-icon bo-icon--clear-format" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Block format">
       <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
       <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE"
             aria-label="Blockquote" title="Blockquote"><span class="bo-icon bo-icon--quote" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Alignment">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyLeft" aria-pressed="true"
-            aria-label="Align left" title="Align left"><span class="bo-icon bo-icon--align-left" aria-hidden="true"></span></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyCenter" aria-pressed="false"
-            aria-label="Align centre" title="Align centre"><span class="bo-icon bo-icon--align-center" aria-hidden="true"></span></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="justifyRight" aria-pressed="false"
-            aria-label="Align right" title="Align right"><span class="bo-icon bo-icon--align-right" aria-hidden="true"></span></button>
+      <div class="bo-segmented">
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="rt-align" id="rt-a-left"
+                 data-richtext-cmd="justifyLeft" checked>
+        <label class="bo-segmented__option" for="rt-a-left" title="Align left"><span class="bo-icon bo-icon--align-left" aria-hidden="true"></span><span class="bo-visually-hidden">Align left</span></label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="rt-align" id="rt-a-center"
+                 data-richtext-cmd="justifyCenter">
+        <label class="bo-segmented__option" for="rt-a-center" title="Align centre"><span class="bo-icon bo-icon--align-center" aria-hidden="true"></span><span class="bo-visually-hidden">Align centre</span></label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="rt-align" id="rt-a-right"
+                 data-richtext-cmd="justifyRight">
+        <label class="bo-segmented__option" for="rt-a-right" title="Align right"><span class="bo-icon bo-icon--align-right" aria-hidden="true"></span><span class="bo-visually-hidden">Align right</span></label>
+      </div>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Indent">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="outdent"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="outdent"
             aria-label="Decrease indent" title="Decrease indent"><span class="bo-icon bo-icon--outdent" aria-hidden="true"></span></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="indent"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="indent"
             aria-label="Increase indent" title="Increase indent"><span class="bo-icon bo-icon--indent" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Lists">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
             aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertOrderedList"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertOrderedList"
             aria-label="Numbered list" title="Numbered list"><span class="bo-icon bo-icon--list-numbered" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Insert">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="createLink"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="createLink"
             aria-label="Link" title="Link"><span class="bo-icon bo-icon--link" aria-hidden="true"></span></button>
     </div>
   </div>
@@ -181,7 +188,7 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
     <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
             title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
     <span class="bo-richtext__divider"></span>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="insertUnorderedList"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
             aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
@@ -405,6 +412,38 @@ ${rtKeys.keys
     and Alt&nbsp;+&nbsp;F10, which the browser and other editors already
     own), and it is in the keyboard map. Every shortcut keeps working while
     the toolbar is hidden — which is rather the point.</p>
+    <p class="bo-u-text-muted"><strong>There are two kinds of grouping, and
+    the difference is whether the choice is exclusive.</strong> Buttons that
+    are merely the same <em>category</em> — bold/italic/strike, or the two
+    list buttons — stay separate toggles inside a
+    <code>.bo-richtext__group</code>: each is independently on or off, and a
+    block can be neither bulleted nor numbered. Buttons that are
+    <em>one choice of several</em> — alignment — are a
+    <a href={base + '/components/segmented'}>segmented control</a> instead,
+    which is a real radio group. That is not cosmetic: three
+    <code>aria-pressed</code> toggles announce "three independent buttons"
+    when the truth is "one of three", and the exclusivity then has to be
+    maintained by hand in JS. As radios the platform owns it — group
+    membership, arrow-key navigation and "1 of 3" all come free, and nothing
+    clears the other two.</p>
+    <p class="bo-u-text-muted"><strong>Motion is opt-in and costs one
+    wrapper.</strong> Wrap the toolbar in
+    <code>.bo-motion-collapse</code> and move its
+    <code>data-state</code> with <code>aria-expanded</code>; the bar then
+    rolls up instead of vanishing. It animates real auto height via the
+    <code>grid-template-rows: 0fr/1fr</code> technique, so there is no
+    measured pixel value and no magic maximum, and it uses the duration
+    tokens — which are set to <code>0ms</code> under
+    <code>prefers-reduced-motion</code>, so honouring that takes no extra
+    code. An unwrapped toolbar keeps hiding instantly; the CSS targets a
+    direct child, so opting in requires no override.</p>
+    <p class="bo-u-text-muted"><strong>Icon-only buttons take
+    <code>.bo-btn--icon</code>.</strong> Without it an icon button is padded
+    like a text button — measured here at 47px wide around a 13px glyph
+    before this was fixed, against a 4px gap. The gap was never the problem;
+    the button was. With the modifier they are square and track density
+    (28px at compact, 44px at spacious), and stay above the 24px target
+    floor.</p>
     <p class="bo-u-text-muted"><strong>Group buttons that belong
     together.</strong> <code>.bo-richtext__group</code> is a real
     <code>role="group"</code> with its own <code>aria-label</code>, so the
@@ -590,8 +629,25 @@ const view = new EditorView(host, {
     import { initDialogs } from '@busy-office/ui/js';
     initDialogs(); // the keyboard-map dialog — data-dialog-trigger, no new JS
 
+    // The mousedown guard is load-bearing: without it the press blurs the
+    // field and collapses the selection before the command runs. It has to
+    // cover the segmented control's LABELS too — a label is a sibling of its
+    // radio, not an ancestor, so closest('[data-richtext-cmd]') misses it
+    // and the selection dies on the way to the command.
     document.addEventListener('mousedown', (e) => {
-      if ((e.target as HTMLElement).closest('[data-richtext-cmd]')) e.preventDefault();
+      const el = e.target as HTMLElement;
+      if (el.closest('[data-richtext-cmd]') ||
+          el.closest('.bo-richtext .bo-segmented__option')) e.preventDefault();
+    });
+
+    // Mutually-exclusive groups are radios, so the command runs on change.
+    // The platform owns "exactly one of these", which is why nothing here
+    // clears the other two.
+    document.addEventListener('change', (e) => {
+      const r = e.target as HTMLInputElement;
+      if (r.type !== 'radio' || !r.dataset.richtextCmd) return;
+      if (!r.closest('.bo-richtext')) return;
+      document.execCommand(r.dataset.richtextCmd, false, '');
     });
 
     // Every toggle in a field re-reads its own state. Called from
@@ -601,6 +657,11 @@ const view = new EditorView(host, {
     const syncField = (field: Element) => {
       for (const b of field.querySelectorAll<HTMLElement>('[data-richtext-cmd][aria-pressed]'))
         b.setAttribute('aria-pressed', String(document.queryCommandState(b.dataset.richtextCmd!)));
+      // Radio groups reflect the caret as well — move into centred text and
+      // the centre option checks itself. No aria-pressed here on purpose:
+      // "one of three" is what a radio already means.
+      for (const r of field.querySelectorAll<HTMLInputElement>('input[type="radio"][data-richtext-cmd]'))
+        r.checked = document.queryCommandState(r.dataset.richtextCmd!);
     };
 
     document.addEventListener('click', (e) => {
@@ -713,6 +774,12 @@ const view = new EditorView(host, {
       const label = `${open ? 'Hide' : 'Show'} formatting toolbar (Alt + Shift + T)`;
       t.setAttribute('aria-label', label);
       t.setAttribute('title', label);
+      // If the toolbar is wrapped for motion, the wrapper's data-state is
+      // what animates it — same convention dialog and offcanvas already use.
+      document.getElementById(t.getAttribute('aria-controls') || '')
+        ?.classList.contains('bo-motion-collapse') &&
+        document.getElementById(t.getAttribute('aria-controls')!)!
+          .setAttribute('data-state', open ? 'open' : 'closed');
     };
     document.addEventListener('click', (e) => {
       const t = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-toggle]');

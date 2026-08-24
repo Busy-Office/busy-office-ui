@@ -403,6 +403,74 @@ already half-built and quietly broken**, which changes what to build.
        line art", which stopped being true the moment these landed; it now
        says which two are not.
 
+11. [x] **137.11 — DONE 2026-08-24. The owner asked the grouping question
+       TWICE, and the second time was the useful one.** 137.7 answered the
+       narrow reading — semantic grouping, named `role="group"`, separator,
+       wrap-as-a-unit. The reading it missed: buttons of one category
+       rendered as a single JOINED control.
+
+       The distinction that matters turned out not to be visual at all —
+       **it is whether the choice is exclusive**:
+
+       - same *category*, independently on/off (bold/italic/strike; the two
+         list buttons, since a block can be neither) → separate toggles in a
+         `__group`;
+       - *one choice of several* (alignment) → `bo-segmented`, a real radio
+         group.
+
+       Alignment as three `aria-pressed` toggles was a genuine semantics
+       bug: it announces "three independent buttons" when the truth is "one
+       of three", and the exclusivity then has to be maintained by hand —
+       which is exactly what 113.1's JS was doing, syncing all three after
+       every click. As radios the platform owns group membership, arrow-key
+       navigation and "1 of 3", and nothing clears the siblings.
+
+       Composed `bo-segmented` rather than adding a joined-group modifier —
+       the primitive already existed and already solved it.
+       **One trap:** the load-bearing `mousedown` guard matched
+       `[data-richtext-cmd]`, and a segmented LABEL is a sibling of its
+       radio rather than an ancestor, so the guard missed it and the
+       selection would die before the command ran. The guard now covers the
+       labels too. The claim asserts exactly-one-checked, one shared name,
+       and no `aria-pressed` survivor.
+
+12. [x] **137.12 — DONE 2026-08-24. Owner:** *"toolbar hide/unhide: do you
+       have motion to add? pls suggest."*
+
+       **Nothing new was invented — the framework already had the answer
+       twice over.** `.bo-motion-collapse` implements the
+       `grid-template-rows: 0fr/1fr` technique, so real auto height animates
+       with no measured pixel and no magic maximum; and `tokens/motion.css`
+       zeroes the duration tokens under `prefers-reduced-motion`, so any
+       component using them honours it for free rather than repeating a
+       media query.
+
+       Opting in costs one wrapper and no override: the instant-hide rule
+       was narrowed to a DIRECT child, so a toolbar wrapped for motion
+       simply stops matching it. No `!important`, nothing to undo.
+
+       **The claim had to move with it.** It measured the toolbar's own box,
+       which is the wrong probe once motion is on — the toolbar keeps its
+       non-zero rect while being clipped inside a zero-height wrapper, so
+       the check would have read "still 60px tall" while the bar was
+       visibly gone. It now measures the `aria-controls` target, which is
+       the box carrying the constraint in either design.
+
+13. [x] **137.13 — DONE 2026-08-24. Owner:** *"too much space between the
+       button? or button too wide on compact."*
+
+       **The second guess was right, and measuring settled it in one pass:**
+       the gap was 4px; each icon button was **47px wide around a 13px
+       glyph**, with 16px of padding a side. Cause: `.bo-btn--icon` was on
+       the collapse toggle but on none of the fifteen toolbar buttons, so
+       icon-only controls were being padded like text buttons.
+
+       Now square and density-tracked — 28px at compact, 44px at spacious,
+       a 40% width cut at compact — and still above the 24px target floor,
+       re-verified through `check:target-size` across 3 densities. Text
+       buttons (B/I/S, H2/H3) keep their padding; they have something to
+       pad.
+
 ## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
 
 Owner input, verbatim: *"/components/richtext - grill the design. (ref to
