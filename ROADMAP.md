@@ -237,6 +237,80 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 142 — Owner wishlist: skeleton motion, state standardisation, command-bar states (2026-08-25)
+
+Owner input, three items. The third asked for a grill of an idea; the grill
+found the idea already shipped **and broken**, which reorders the work.
+
+1. [x] **142.1 — DONE 2026-08-25. GRILLED: the shimmer already existed, and
+       had never been visible.** The ask was *"Common motion for skeleton page
+       like Shimmer or Wave: a light gradient moves from left to right across
+       the gray placeholder blocks — pls grill the idea."*
+
+       `.bo-skeleton` already implements exactly that: a `linear-gradient`
+       sweeping `background-position` over 1.5s, with a
+       `prefers-reduced-motion` override. So the grill's question was not
+       "should we build it" but "does it work".
+
+       **It did not.** The gradient ran `bg-muted → bg-hover → bg-muted`, and
+       those two tokens are **byte-identical in both themes** — light both
+       resolve to `gray-100`, dark both to `#262a33`. Measured: delta
+       **0,0,0** per channel, contrast **1.0**. It was a gradient from a
+       colour to itself. The animation ran, `background-position` moved, and
+       nothing on screen changed.
+
+       **Reading the CSS could not find this** — it looks correct, and the
+       component's own comment calls the shimmer "the visual channel" of a
+       two-channel state. What found it was sampling rendered frames: **2
+       distinct of 10**. So the component's two-channel promise was broken —
+       only `aria-busy` was actually communicating.
+
+       Fixed with a dedicated `--bo-color-skeleton-highlight`, because the two
+       themes move in opposite directions from `bg-muted` (light brightens to
+       white, dark lightens to slate) and no existing token means "the band
+       that travels across a skeleton". After: delta 12/11/9 light and
+       14/16/20 dark, **10 distinct frames of 10** in both themes, and reduced
+       motion still stops it with the block visible.
+
+2. [ ] **142.2 — showcase the skeleton motion, and add a Skeleton pattern.**
+       Owner: *"pls check /components/state-patterns — the sample of Skeleton
+       object. pls also showcase for motion. and also add pattern for
+       Skeleton."* The component demo exists on `/components/state-patterns`;
+       what is missing is a demo that shows the motion **as motion** (a replay
+       control, like `/base/motion` has, since a loop that is always running
+       is easy to look past) and a **pattern** page for the loading screen —
+       skeletons placed to match the shape of the content that will replace
+       them, which is a screen-level decision the component page cannot make.
+       *Accept*: the pattern says when to use a skeleton over a spinner over
+       nothing, and the shape-matching rule is demonstrated rather than
+       asserted.
+
+3. [ ] **142.3 — standardize empty / loading / error states.** Owner:
+       *"Please standardize the Pattern: error pages, Loading, empty & error
+       states (esp. Empty — no results match your filters)."* Measured first:
+
+       - `bo-state` is used on **3 of 39** pattern pages.
+       - The filtered-empty case the owner names — *no results match your
+         filters* — appears on **2 of 39**, though CLAUDE.md's own pattern
+         recipe requires it as a state distinct from no-data-yet empty.
+       - **`.bo-state--empty` does not exist.** It is referenced twice in
+         `list-report.astro` prose as though it were a real class; the
+         component ships `bo-state` and `bo-state--error` only. One of those
+         two references is in text **I wrote** for Slice 139, quoting the
+         states table as evidence without checking the class was real.
+
+       *Accept*: one documented answer for empty / filtered-empty / loading /
+       error, the phantom class reference removed or made real, and the
+       pattern pages that claim these states actually render them.
+
+4. [ ] **142.4 — command bar: document its states.** Owner: *"also value when
+       enter, clear function, when key in command, when search, when clear."*
+       The pattern documents markup and keyboard contract but not what the
+       control DOES across its lifecycle: what the input holds after Enter,
+       how a query is cleared, and how "searching" differs from "typing a
+       command". *Accept*: a States table plus a demo that visibly moves
+       through them, per the pattern recipe.
+
 ## Slice 141 — Owner: standardize the command bar (2026-08-25)
 
 Owner input, verbatim: *"Please standardize the Pattern: command bar"*, with a

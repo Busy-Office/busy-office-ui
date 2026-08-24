@@ -11,10 +11,16 @@
     inline-size: 100%;
     block-size: 1em;
     border-radius: var(--bo-radius-sm);
+    /* The highlight must DIFFER from the base. It swept bg-muted -> bg-hover
+       -> bg-muted, and those two tokens are byte-identical in both themes, so
+       this was a gradient from a colour to itself: the animation ran, the
+       background-position moved, and nothing on screen changed. Caught by
+       sampling rendered frames (2 distinct of 10) rather than by reading the
+       CSS, which looks correct. */
     background: linear-gradient(
       90deg,
       var(--bo-color-bg-muted) 25%,
-      var(--bo-color-bg-hover) 50%,
+      var(--bo-color-skeleton-highlight) 50%,
       var(--bo-color-bg-muted) 75%
     );
     background-size: 200% 100%;

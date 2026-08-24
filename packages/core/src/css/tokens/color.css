@@ -16,6 +16,14 @@
     /* Opaque hover surface — used where translucent overlays can't work
        (e.g. sticky table cells that must stay opaque over scrolled content). */
     --bo-color-bg-hover: var(--bo-palette-gray-100);
+    /* The band that travels across a loading skeleton. It needs its own token
+       because the two themes move in opposite directions from bg-muted: light
+       brightens toward white, dark lightens toward slate. .bo-skeleton used to
+       sweep from bg-muted to bg-HOVER, and those two are the SAME VALUE in
+       both themes (measured 2026-08-25: delta 0,0,0 per channel, contrast
+       1.0) — so the shimmer animated a gradient between a colour and itself
+       and was never visible at all. */
+    --bo-color-skeleton-highlight: #ffffff;
     --bo-color-border-default: var(--bo-palette-gray-200);
     --bo-color-border-strong: var(--bo-palette-gray-300);
     /* Control boundaries (inputs/selects) need >= 3:1 against the surface
@@ -116,6 +124,9 @@
     --bo-color-text-muted: var(--bo-palette-gray-400);
     --bo-color-text-disabled: var(--bo-palette-gray-600);
     --bo-color-bg-hover: #262a33;
+    /* Lighter than bg-muted (#262a33) by roughly the same perceptual step the
+       light theme takes toward white — see the token's note above. */
+    --bo-color-skeleton-highlight: #343a47;
     --bo-color-accent: var(--bo-palette-teal-400);
     --bo-color-accent-subtle: #0b3b37;
     --bo-color-danger: var(--bo-palette-red-400);
