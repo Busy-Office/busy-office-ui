@@ -651,7 +651,16 @@ built.
 
 **One framework gap, one gap of my own.**
 
-- **GAP-17 (framework, FIXED).** `bo-stepper` overlaps its own markers at
+- **GAP-18 (framework, FIXED).** *Logged as GAP-17 on 2026-08-24 and
+  renumbered the same day: a second, unrelated GAP-17 — the list-screen
+  create action — was written into the ledger independently, and my
+  `git add -A` swept it into commit 622a5cc under an unrelated message. Two
+  gaps briefly shared a number. The create-action entry keeps 17 because it
+  is the one carrying a `## GAP-N` heading and the one external notes refer
+  to; this one moves. The build-loop's own rule — add named files, never
+  `-A` — is what would have prevented it.*
+
+  `bo-stepper` overlaps its own markers at
   five steps. The opportunity screen is the first thing in the suite with a
   five-stage chain, and at 390px each marker sat **10px past its own step's
   right edge** — measured, then explained by arithmetic rather than guessed: a
@@ -716,6 +725,17 @@ cover record creation.
 **Fix**: add a header-actions row to the pattern (primary "+ New" button,
 optionally refresh/overflow) that renders regardless of row count, then apply
 it to `purchase-orders.screen.mjs` and any other suite list screen missing it.
+
+**PROMOTED 2026-08-24 → ROADMAP Slice 139.** The number that decided it:
+**6 of 7 suite list screens have no create action** — only `purchase-orders`,
+where the gap was found. The other six span three modules and were each built
+by following the pattern page, so this is one missing line copied six times
+rather than six oversights. Objective test passes on all three arms; GAP-2's
+resolution (which updated `object-page.astro`) is the precedent for fixing a
+documentation gap in the documentation. The generalisation to detail/report/
+form shapes was **refused for now**: those screens carry `bo-form-actions` at
+the foot, so they have a placement, not an absence — and the only evidence for
+moving it is external, which this ledger's own rule does not act on.
 
 **Corroborated 2026-08-24** by three more external screenshots (a document
 detail screen, a report/dashboard screen, a journal-entry form) — all three

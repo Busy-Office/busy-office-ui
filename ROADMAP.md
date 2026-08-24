@@ -157,6 +157,117 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 139 — Gap ledger promotion: the list screen with no way to create (2026-08-24)
+
+Promoting **GAP-17** out of `.roundtable/erp-suite-gaps.md`. The ledger's own
+header sets the rule this slice follows: the file is the raw log, the roadmap
+is the decision.
+
+**The measurement that decides it.** `list-report.astro` names a primary
+action in exactly one place — line 244 of its states table,
+`.bo-state--empty` "with the primary action (Create invoice)". Every real
+screen has rows, so that state never renders. Counted across the suite:
+
+> **6 of 7 list screens have no way to create a record.** Only
+> `p2p/purchase-orders` has one, added when the gap was found. The other six —
+> `requisitions`, `vendor-invoices`, `sales-orders`, `customer-invoices`,
+> `accounts`, `opportunities` — span three modules and were each built by
+> following the pattern page.
+
+That is the argument in one number. This is not six oversights; it is one
+missing line in the pattern, copied six times. It also **corrected an earlier
+audit**: the ledger's own "Not gaps" section had checked `list-report` against
+filters, toolbar, bulk actions and pagination and concluded it covered the
+list screen end to end. None of those create anything, and the doc gap is what
+made the omission invisible to a careful check.
+
+**Objective test — ACCEPT on all three.**
+- *Simplicity*: accept when it lets a consumer delete a decision. "Where does
+  New go on a list?" gets answered once instead of per screen.
+- *Less-for-more*: one header-actions row carries create, refresh and overflow.
+- *Reusability*: it is `bo-btn` + `bo-cluster`, **zero new CSS** — proven by
+  the example's no-local-CSS gate rather than asserted, and already shipped on
+  one screen.
+
+**Precedent is exact.** GAP-2 resolved as "RETHINK → a documented composition,
+no new component, no new CSS", and its resolution updated
+`object-page.astro`, which carries a Document flow section to this day. A
+documentation/composition gap is fixed in the documentation.
+
+1. [ ] **139.1 — `list-report.astro` documents a header-actions row that
+       renders regardless of row count.** Anatomy gains the region; the
+       states table stops implying the primary action is an empty-state
+       affordance; a demo shows it above a populated table. Per the pattern
+       recipe the row is named in **Components used** and the states table
+       says what it does when the list is empty (the action stays; the empty
+       state stops being the only place it exists).
+       *Accept*: a reader building a list screen from this page ships a
+       create action without being told separately.
+
+2. [ ] **139.2 — the six suite list screens get the row.** Not cosmetic
+       follow-through: they are the reusability evidence. GAP-2's bar was
+       "two independent compositions"; this has six, across three modules.
+       *Accept*: `check-erp-suite` still reports zero local CSS, and the
+       audit stays green at both widths.
+
+**Deliberately NOT in this slice — and the restraint is the point.** Three
+further screenshots (a document detail, a report/dashboard, a journal-entry
+form) show the same header-action row on shapes beyond the list, which reads
+like an argument for documenting it once at page level rather than inside
+`list-report`. **Refused for now, on internal evidence.** The suite's detail
+screens are not missing an action surface — they carry `bo-form-actions` at
+the foot, which is a placement decision rather than an absence. So the only
+shape with a measured hole is the list. Moving detail actions into a header
+row is a design question that four external screenshots hint at and nothing
+built here has hit, and this project's rule (GAP-1's rejected sticky-rail
+speculation) is that gaps get logged when hit while building, not inferred
+from a reference.
+
+**Ledger hygiene done with this promotion.** Two different gaps briefly shared
+the number 17 — the create action, and a `bo-stepper` marker overlap I logged
+the same day. The stepper one is now **GAP-18**. Cause worth recording: I
+committed with `git add -A`, which swept an independently-written ledger entry
+into commit `622a5cc` under an unrelated message. The build-loop's own
+instruction — add named files, never `-A` — is what would have prevented it.
+
+## Slice 140 — The two watch items: one refused, one already scheduled (2026-08-24)
+
+Both came from reference screenshots rather than from a screen that needed
+them, so the first question is whether either has earned a slice at all.
+
+1. [x] **140.1 — REFUSED: a contribution-heatmap slice for a Projects
+       screen.** Nothing about this is measured. **There is no Projects
+       module** — the rail is `home, o2c, p2p, crm, fin, inv, prod` — so a
+       slice would mean inventing a module to host one widget, which is
+       building for the metric in the plainest form. The screenshot showed
+       **uniform gray cells**, so even the thing that would make it a
+       framework question (whether intensity is encoded by colour alone —
+       a two-channel violation) could not be read from it. And `calendar` is
+       correctly not the answer: it is a scheduling month-grid, not an
+       intensity plot.
+
+       Refused under the standing rule that rejected GAP-1's sticky-rail
+       speculation: **gaps are logged when hit while building, not guessed
+       at from a reference.** If Projects is ever built for a reason of its
+       own, the heatmap question answers itself then — with a real screen and
+       a real intensity scale to evaluate.
+
+2. [x] **140.2 — NO SLICE NEEDED: the MRP panel is already scheduled.**
+       130.4's fourth module is **Production (production order, BOM)** —
+       the same domain as the Manufacturing production-plan screen the panel
+       came from. So this does not need a slice; it needs a note on the item
+       that already exists, and it gets one: when Production is built, check
+       the "Get Raw Materials For Production" / "Download Required Materials"
+       checkbox-configures-a-derived-action shape against **GAP-8's** settled
+       answer — restate the action's effect in the primary button label — and
+       log a gap only if that genuinely fails to carry it.
+
+       This is the better outcome than a speculative slice: the module is
+       coming anyway, so the shape gets tested against a real screen, which
+       is exactly how several reference comparisons resolved as *not* gaps
+       this session (the Connections panel, sidebar collaboration chrome, the
+       bare tile-grid home, multi-select "N selected" labels).
+
 ## Slice 138 — Owner wishlist: joined fields (2026-08-24)
 
 Owner input, verbatim: *"Highlight on focus field is overlap?"* and *"Money
@@ -1782,6 +1893,14 @@ reads clean while telling us nothing.
        Finance (journal entry, payment), Inventory (stock movement, item
        master), Production (production order, BOM). Batched only if 130.3
        says they are mechanical. Each still logs its gaps.
+       **CRM done 2026-08-24** — four screens, one framework gap (GAP-18,
+       `bo-stepper` marker overlap at five steps).
+       **Note for Production (140.2)**: a reference screenshot showed a
+       "Material Requirement Planning" panel where checkboxes configure a
+       derived action. Check it against **GAP-8**'s settled answer — restate
+       the action's effect in the primary button label — and log a gap only
+       if that genuinely fails to carry it. Noted rather than sliced,
+       because this is the module that will hit it for real.
 6. [ ] **130.5 — wire the suite into CI** once it stops changing shape:
        `build` + the three gates, in the same job as the docs checks. Left
        until last on purpose — a gate that guards a moving target reports
