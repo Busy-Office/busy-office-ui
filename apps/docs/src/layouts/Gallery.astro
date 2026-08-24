@@ -386,6 +386,11 @@ const current =
       })();
     </script>
     <script is:inline define:vars={{ base }}>
+      // Below this many characters, Pagefind's term-frequency ranking has no
+      // real signal — almost every page has SOME word starting with any one
+      // letter, so shorter queries return noise ordered by chance, not
+      // relevance. See the processTerm call below.
+      const MIN_QUERY_LENGTH = 2;
       // Pagefind exists only in the built site; degrade silently in dev.
       const css = document.createElement('link');
       css.rel = 'stylesheet';
@@ -418,9 +423,39 @@ const current =
         // Cmd/Ctrl+K command palette — a second Pagefind instance in a dialog.
         const dlg = document.getElementById('cmdk');
         if (dlg) {
-          new PagefindUI({ element: '#cmdk-search', showSubResults: true, showImages: false });
+          new PagefindUI({
+            element: '#cmdk-search',
+            showSubResults: true,
+            showImages: false,
+            // Below MIN_QUERY_LENGTH chars, term-frequency ranking has no
+            // real signal to work with — nearly every page contains SOME
+            // word starting with any single letter, so a 1-char query like
+            // "s" returned 113 results ordered by noise, not relevance
+            // ("So", "select", "shells" outranking the actual page titles
+            // that matter). Returning '' from processTerm is Pagefind's
+            // documented way to suppress the search entirely below a
+            // length floor; the MutationObserver below rewrites the
+            // resulting zero-results message into a "keep typing…" prompt.
+            processTerm: (term) => (term.trim().length < MIN_QUERY_LENGTH ? '' : term),
+          });
           keepBoosted(document.getElementById('cmdk-search'));
           const input = () => dlg.querySelector('.pagefind-ui__search-input');
+          // processTerm suppresses the search below MIN_QUERY_LENGTH, but
+          // Pagefind then renders its own "No results for s" message —
+          // which reads as a real negative result rather than "keep
+          // typing". Rewrite it whenever the input is still under the
+          // floor; a MutationObserver (not a debounce) because Pagefind
+          // re-renders the message node itself on every keystroke.
+          const cmdkSearch = document.getElementById('cmdk-search');
+          new MutationObserver(() => {
+            const i = input();
+            const msg = cmdkSearch.querySelector('.pagefind-ui__message');
+            if (!i || !msg) return;
+            const short = i.value.trim().length > 0 && i.value.trim().length < MIN_QUERY_LENGTH;
+            if (short && msg.textContent !== 'Keep typing to search…') {
+              msg.textContent = 'Keep typing to search…';
+            }
+          }).observe(cmdkSearch, { childList: true, subtree: true });
           const links = () => [...dlg.querySelectorAll('.pagefind-ui__result-link')];
           const open = () => {
             if (dlg.open) return;
