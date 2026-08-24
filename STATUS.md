@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 09:19
+Generated at: 2026-08-24 09:40
 
 ## Open items by slice
 
@@ -36,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 05:19 · Continue · build · 132.5 — list-to-list refused: multi-select is the shipped answer, no screen needs a dual list, and it does not fit 390px · refused · 409d827
 - 2026-08-24 05:19 · Meta · refusal · a dual-list (pick-list/shuttle) component — a second way to do what data-multiselect already does · refused · 409d827
 - 2026-08-24 05:28 · Continue · build · 130.3 — module two (O2C sales orders) built with zero new CSS; found GAP-15, a defect in GAP-4a's own fix, and fixed it · landed · 39661bd
 - 2026-08-24 05:47 · Continue · build · 130.3 — module two complete (O2C: sales orders + customer invoices ageing); GAP-16 tfoot totals fixed; visual gate caught its first real change plus one unexplained diff · landed · d51f591
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 07:30 · Continue · owner-wishlist · 137 — richtext toolbar: 10 icons, hot-key aria-pressed fix (selectionchange), collapse, generated keyboard map via extract-keymap CSS scan; plus 136.1-136.5 · landed · 43ea922
 - 2026-08-24 09:10 · Continue · owner-wishlist · 137.5-137.9 — markdown list triggers + ol start, context-sensitive Tab with Esc release, __group, collapse rework with floating Aa toggle · landed · 27f6d8c
 - 2026-08-24 09:19 · Continue · owner-wishlist · 137.10 — adopt lucide remove-formatting + square-pen, ISC notice added to NOTICE and icon.css · landed · 9798061
+- 2026-08-24 09:40 · Continue · owner-wishlist · 137.11-137.13 — alignment as bo-segmented radio group, collapse motion via bo-motion-collapse, bo-btn--icon on toolbar buttons · landed · a5ea0ee
 
 ## Sunset test
 
