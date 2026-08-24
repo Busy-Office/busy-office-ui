@@ -2529,6 +2529,59 @@ check(
   JSON.stringify(motionCollapse),
 );
 
+/* Joined fields (owner QA, 2026-08-24): .bo-money and .bo-quantity butt their
+   segments edge to edge, so a focus ring drawn OUTSIDE one of them lands on
+   its neighbour. Measured before the fix on "Currency after the amount": a
+   0px visual gap between input and currency select against a ring extending
+   4px — it covered the select's leading edge by exactly 4px.
+
+   Asserted as geometry rather than as "outline-offset is negative", because
+   the property is the fix and the overlap is the defect: a future change to
+   ring width or group spacing could restore the overlap while leaving the
+   offset untouched. */
+for (const [label, path, sel] of [
+  ['money', '/components/money/', '.bo-money'],
+  ['quantity', '/components/quantity/', '.bo-quantity'],
+]) {
+  await visit(path, { width: DESKTOP_WIDTH, height: 1400 });
+  const rings = await page.evaluate((groupSel) => {
+    const worst = [];
+    let skipped = 0;
+    for (const g of document.querySelectorAll(groupSel)) {
+      const kids = [...g.children].filter((c) => c.matches('input, select, button'));
+      for (let i = 0; i < kids.length - 1; i++) {
+        const a = kids[i];
+        const n = kids[i + 1];
+        a.focus();
+        /* :focus-visible is a heuristic, and programmatic .focus() does NOT
+           satisfy it for a BUTTON — the element then wears the UA's own ring
+           (3px, offset 0) and the measurement describes Chrome's default
+           rather than this framework's. Skip those instead of reporting
+           them, and count the skips so a version of this check that measures
+           nothing at all cannot pass quietly. */
+        if (!a.matches(':focus-visible')) { skipped++; a.blur(); continue; }
+        const cs = getComputedStyle(a);
+        /* Snapshot while FOCUSED. getComputedStyle returns a LIVE object, so
+           reading outlineOffset after blur() reports the unfocused value —
+           which is how the first version of this check reported a 3-4px
+           overlap against a fix that measures 0 by hand. */
+        const ring = (parseFloat(cs.outlineOffset) || 0) + (parseFloat(cs.outlineWidth) || 0);
+        const ar = a.getBoundingClientRect();
+        const nr = n.getBoundingClientRect();
+        a.blur();
+        if (Math.abs(ar.top - nr.top) > 6) continue;   // not side by side
+        worst.push(+(ring - (nr.left - ar.right)).toFixed(1));
+      }
+    }
+    return { pairs: worst.length, skipped, maxOverlap: worst.length ? Math.max(...worst) : 0 };
+  }, sel);
+  check(
+    `${label}: a focused segment's ring stays off its neighbour — joined controls share an edge`,
+    rings.pairs > 0 && rings.maxOverlap <= 1,   // 1px tolerance: the shared border rounds
+    JSON.stringify(rings),
+  );
+}
+
 // /components/form "Label-start sections" (roadmap 117): "the section
 // collapses back to labels-on-top on its own" below 30rem, and "start...
 // flips to the visual right under dir=rtl" — both are claims a browser can

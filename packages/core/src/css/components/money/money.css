@@ -42,6 +42,21 @@
     border-end-start-radius: 0;
   }
 
+  /* Joined controls share an edge, so a ring drawn OUTSIDE one of them lands
+     on its neighbour. Measured on "Currency after the amount" (owner QA,
+     2026-08-24): the input and the currency select sit flush — a 0px visual
+     gap — while the global ring extends 4px (2px offset + 2px width), so it
+     covered the select's leading edge by exactly 4px.
+
+     Inset the ring for the segments of a joined field. The comment above
+     already promised focus rings stay "per-element and uncut"; drawing them
+     inward is what keeps that true once the elements touch. Still a 2px
+     solid ring in the focus colour, so WCAG 2.4.11 is unaffected — it moves
+     inside the control's own edge rather than across its neighbour's. */
+  .bo-money > :focus-visible {
+    outline-offset: calc(-1 * var(--bo-focus-ring-width, 2px));
+  }
+
   .bo-money__amount {
     text-align: end;
     font-variant-numeric: tabular-nums;

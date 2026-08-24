@@ -157,6 +157,54 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 138 — Owner wishlist: joined fields (2026-08-24)
+
+Owner input, verbatim: *"Highlight on focus field is overlap?"* and *"Money
+and Quantity - Currency & Unit could be a long list. can we have option
+whether want dropdown or searchable dropdown? (need to key at least 1 char to
+see dropdown)"*
+
+1. [x] **138.1 — DONE 2026-08-24. The focus ring landed on the neighbour, and
+       it did so because the field is JOINED.** Measured on "Currency after
+       the amount": the amount input and the currency select sit flush — a
+       **0px visual gap** — while the global ring extends 4px (2px offset +
+       2px width), so it covered the select's leading edge by exactly 4px.
+       `.bo-quantity` has the same shape and the same bug.
+
+       `money.css` already promised this in a comment — *"focus rings stay
+       per-element and uncut"* — and the promise was right; what it had not
+       accounted for is that once two controls touch, a ring drawn OUTSIDE
+       one of them is drawn ON the other. Inset the ring for the segments of
+       a joined field. Still 2px solid in the focus colour, so WCAG 2.4.11 is
+       untouched; it moves inside the control's own edge instead of across
+       its neighbour's.
+
+       **Three instrument defects on the way, all mine, none shipped.** The
+       first probe compared each input against the wrong element and reported
+       223px "overlaps". The claim then read `outlineOffset` from a LIVE
+       `getComputedStyle` object *after* calling `blur()`, so it reported the
+       unfocused value and failed a fix that measures 0 by hand. And
+       `:focus-visible` does not match a BUTTON focused programmatically, so
+       the check was measuring Chrome's own 3px UA ring on the stepper
+       buttons and calling it ours — it now skips those and counts the skips,
+       so a version that measures nothing cannot pass quietly. Red-proved:
+       restoring the 2px offset reaches the built CSS and fails the claim.
+
+2. [ ] **138.2 — currency and unit as a SEARCHABLE list, by choice.** A
+       `<select>` is right for 5 currencies and wrong for 180, and unit-of-
+       measure lists in a real ERP run to hundreds. The owner asks for the
+       choice, plus a type-ahead that only opens after one character so the
+       control does not blast a 200-item list on focus.
+
+       **Compose, do not invent**: `bo-combobox` already ships and is exactly
+       this control — the framework's value-help surface, with the keyboard
+       contract already in `keymap.json`. The work is to make `.bo-money`
+       and `.bo-quantity` accept a combobox in the slot where they currently
+       accept a select, which is a joining/geometry question rather than a
+       new component. Whether the "1 character before opening" threshold
+       belongs in `initCombobox` or in the consumer's data source is the one
+       real design decision.
+
 ## Slice 137 — Owner wishlist: the richtext toolbar (2026-08-24)
 
 Owner input, verbatim: *"The toolbar . - icon, hot key, and hide/unhide

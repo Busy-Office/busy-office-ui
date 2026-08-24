@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 18:49
+Generated at: 2026-08-24 18:59
 
 ## Open items by slice
 
@@ -20,8 +20,8 @@ Generated at: 2026-08-24 18:49
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (841 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-24 18:49   ok
+dispatch status — counter-triggered rules (842 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-24 18:49   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -34,7 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 06:00 · Roadmap · plan · handover — RESUME current after the twenty-wake run; 134.3 and 112.3 await the owner · logged · 735020b
 - 2026-08-24 06:37 · Continue · owner-decision · 134.3 — delete the visual-regression gate (owner call, option c); LOOPS.md step 4 rewired to check:layout+check:scroll+test:axe · landed · 3174784
 - 2026-08-24 06:44 · Explore · grill · 136 — grill the rich-text design against Paper/Notion; 3 defects confirmed live, chromeless-editor refused, 2 ERP proposals raised · logged · a4925e0
 - 2026-08-24 07:30 · Continue · owner-wishlist · 137 — richtext toolbar: 10 icons, hot-key aria-pressed fix (selectionchange), collapse, generated keyboard map via extract-keymap CSS scan; plus 136.1-136.5 · landed · 43ea922
@@ -44,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 10:13 · Continue · owner-wishlist · 137.14-137.16 — collapse motion actually runs (was a class with no stylesheet), radius chain restored, all toolbar buttons squared · landed · 3997705
 - 2026-08-24 11:19 · Continue · owner-wishlist · 137.17-137.18 — /base/motion was demonstrating nothing (opt-in module never imported); fixed, showcases added, liveness claims · landed · dbcdbc8
 - 2026-08-24 18:49 · Standardize · drift · 130.3 stale checkbox — module two was built and verdicted a day earlier · landed · 29a09c0
+- 2026-08-24 18:59 · Continue · build · 130.4 module three (CRM, 4 screens) + GAP-17 stepper marker overlap at 5 steps + check:rtl comment false-positive · landed · e544ecc
 
 ## Sunset test
 

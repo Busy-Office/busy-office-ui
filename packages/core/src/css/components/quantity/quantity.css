@@ -22,6 +22,12 @@
     padding-inline: 0;
   }
 
+  /* Same joined-edge problem as .bo-money (2026-08-24): stepper buttons sit
+     flush against the input, so an outward ring lands on the neighbour. */
+  .bo-quantity > :focus-visible {
+    outline-offset: calc(-1 * var(--bo-focus-ring-width, 2px));
+  }
+
   .bo-quantity__step:first-child {
     border-start-end-radius: 0;
     border-end-end-radius: 0;

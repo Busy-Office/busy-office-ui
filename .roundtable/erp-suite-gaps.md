@@ -684,10 +684,46 @@ predicted is holding.
 
 ---
 
+## GAP-17 — 2026-08-24 — a list screen has no standing way to CREATE a
+record; `list-report` only offers the action inside the empty state
+
+**Screen**: `p2p/purchase-orders.screen.mjs`, corrected by two independent
+external ERP screenshots (a Frappe purchase-order list, a Frappe stock
+ledger) — both put a primary "create" action, a refresh, and an overflow
+menu in a header row above the table. Neither reference was copied (the
+project rule is references are a floor, not a target — both also do things
+worse: color-only progress bars, an ID column truncated to unreadability,
+row-level social icons out of scope for this framework); the pattern they
+agree on independently is what's worth checking against.
+
+**Screenshotted at `localhost:65072/p2p/purchase-orders.html`**: breadcrumb,
+`<h1>Purchase orders</h1>`, then straight into the filter form and table.
+There is no control anywhere on the page that creates a new purchase order.
+
+**Why this is a real gap and not a screen mistake**: `apps/docs/src/pages/
+patterns/list-report.astro`'s own states table (line 244) names the pattern —
+`.bo-state--empty` "with the primary action (Create invoice)" — but only for
+the EMPTY state. Every screen in this suite has rows, so that state never
+renders, and the pattern page never shows a primary action that stands
+whether the table is empty or full. The primitives needed already exist
+(`bo-btn--icon`, `dropdown`) — this is a documentation/composition gap, not a
+missing component.
+
+**Corrects the "Not gaps" verdict below**, which had checked `list-report`
+against filters/toolbar/bulk-actions/pagination and missed that none of those
+cover record creation.
+
+**Fix**: add a header-actions row to the pattern (primary "+ New" button,
+optionally refresh/overflow) that renders regardless of row count, then apply
+it to `purchase-orders.screen.mjs` and any other suite list screen missing it.
+
+---
+
 ## Not gaps (checked, and the framework was right)
 
 - **List screens**: `list-report` covered the PO list end to end — filters,
-  toolbar, bulk actions, the priority ladder, pagination. Nothing missing.
+  toolbar, bulk actions, the priority ladder, pagination. **Correction,
+  GAP-17**: it does not cover record creation outside the empty state.
 - **Approval trail**: `bo-timeline` carried the PO's approval chain with its
   markers, states and meta, unchanged.
 - **Money**: `bo-amount` with `--negative` carried the variance. My first
