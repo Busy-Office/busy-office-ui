@@ -849,3 +849,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 06:44 · Explore · grill · 136 — grill the rich-text design against Paper/Notion; 3 defects confirmed live, chromeless-editor refused, 2 ERP proposals raised · logged · a4925e0
 - 2026-08-24 07:30 · Continue · owner-wishlist · 137 — richtext toolbar: 10 icons, hot-key aria-pressed fix (selectionchange), collapse, generated keyboard map via extract-keymap CSS scan; plus 136.1-136.5 · landed · 43ea922
 - 2026-08-24 09:10 · Continue · owner-wishlist · 137.5-137.9 — markdown list triggers + ol start, context-sensitive Tab with Esc release, __group, collapse rework with floating Aa toggle · landed · 27f6d8c
+- 2026-08-24 09:19 · Continue · owner-wishlist · 137.10 — adopt lucide remove-formatting + square-pen, ISC notice added to NOTICE and icon.css · landed · 9798061
