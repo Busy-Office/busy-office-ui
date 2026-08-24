@@ -195,9 +195,13 @@ no new component, no new CSS", and its resolution updated
 documentation/composition gap is fixed in the documentation.
 
 1. [ ] **139.1 — `list-report.astro` documents a header-actions row that
-       renders regardless of row count.** Anatomy gains the region; the
-       states table stops implying the primary action is an empty-state
-       affordance; a demo shows it above a populated table. Per the pattern
+       renders regardless of row count.** **The Anatomy is the fix, not the
+       states table** (grilled 2026-08-24): Anatomy is an ordered enumeration
+       of five regions — saved-view switcher, filter bar, toolbar, table,
+       footer — so a builder working region by region produces exactly the six
+       screens that exist. The states table is where the omission is visible;
+       the Anatomy is where it is *caused*. Both change; only one is the
+       cause. A demo shows the row above a populated table. Per the pattern
        recipe the row is named in **Components used** and the states table
        says what it does when the list is empty (the action stays; the empty
        state stops being the only place it exists).
@@ -248,9 +252,21 @@ them, so the first question is whether either has earned a slice at all.
 
        Refused under the standing rule that rejected GAP-1's sticky-rail
        speculation: **gaps are logged when hit while building, not guessed
-       at from a reference.** If Projects is ever built for a reason of its
-       own, the heatmap question answers itself then — with a real screen and
-       a real intensity scale to evaluate.
+       at from a reference.**
+
+       **Grilled 2026-08-24, and the refusal was narrower than I wrote it.**
+       Refusing the Projects slice is right; treating the underlying question
+       as disposed of was not. Reframed as an ERP need it survives: *does the
+       framework have any way to show INTENSITY over a long date grid* —
+       machine utilisation across a quarter, stock-movement density, absence
+       patterns across a year? Measured: `schedule` is a month grid for
+       discrete bookings, `timesheet` is numeric entry for one period, and the
+       colour ramp exists in `scales.json` but ships **no `bo-scale`
+       utilities**, so markup cannot apply it. The two-channel rule makes it
+       harder still — intensity by colour alone is already refused here, so
+       any answer needs a second channel. That is an unsolved design problem,
+       and it now rides on **Production capacity** (140.3), a module already
+       scheduled rather than one invented to host a widget.
 
 2. [x] **140.2 — NO SLICE NEEDED: the MRP panel is already scheduled.**
        130.4's fourth module is **Production (production order, BOM)** —
@@ -267,6 +283,43 @@ them, so the first question is whether either has earned a slice at all.
        is exactly how several reference comparisons resolved as *not* gaps
        this session (the Connections panel, sidebar collaboration chrome, the
        bare tile-grid home, multi-select "N selected" labels).
+
+3. [ ] **140.3 — turn 130.4 into an experiment: predict each module's yield
+       before building it.** The grill's largest finding
+       (`.roundtable/grill-erp-suite-instrument-2026-08-24.md`): **130.4 is
+       scheduled by DOMAIN, but every gap this instrument has found came from
+       a SHAPE or from STRESS.** Categorised, all seventeen: 9 from a new
+       shape, 4 from stress on an existing one, 4 my own bugs or doc defects —
+       and **zero** from a new domain. Module two's two gaps were a regression
+       plus a new shape; module three's one was a five-step chain.
+
+       So the remaining modules are worth exactly the shapes they force.
+       Predictions, recorded **before** building so being wrong is
+       informative:
+
+       | Module | New shape it forces | Predicted |
+       |---|---|---|
+       | Production | BOM as a multi-level hierarchy with rolled-up quantities; capacity over time; the MRP panel | **highest** |
+       | Inventory | stock by item x warehouse (cross-tab) | **low-medium** |
+       | Finance | journal entry that must balance; payment list + detail | **low, shapes already covered** |
+
+       Two named predictions to check rather than assume:
+       - **MRP panel (from 140.2)**: GAP-8's answer — restate the action's
+         effect in the primary button label — carries it, and no new surface
+         is needed. Plausible, untested.
+       - **Cross-tab**: NOT a gap. `comparison` already documents a
+         candidates-by-criteria grid, and `data-table` ships
+         `--sticky-col` / `data-sticky-cols` beside its sticky header, so the
+         hard part — holding the row header still while both axes scroll — is
+         solved. *This prediction started the grill rated "high" on the
+         assumption that no pattern covered a cross-tab; checking instead of
+         assuming reversed it. Absence of a docs page is not absence of a
+         capability — the same reflex that produced GAP-1's speculation.*
+
+       *Accept*: each module is built with its prediction on record, and the
+       result is compared against it. **A module that finds zero is a
+       success**, not a wasted build — it is the evidence for stopping at
+       shape coverage instead of grinding through domains.
 
 ## Slice 138 — Owner wishlist: joined fields (2026-08-24)
 
