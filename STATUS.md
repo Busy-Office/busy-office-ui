@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 07:30
+Generated at: 2026-08-24 09:10
 
 ## Open items by slice
 
@@ -36,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 05:13 · Continue · build · 132.4 — file open/save panel refused as a pattern; mapped to file-upload / value-help / form-in-dialog and documented · refused · 4c5c199
 - 2026-08-24 05:13 · Meta · refusal · a file-panel pattern — the OS owns the local picker, value-help is the store picker, and a browser has no save panel · refused · 4c5c199
 - 2026-08-24 05:19 · Continue · build · 132.5 — list-to-list refused: multi-select is the shipped answer, no screen needs a dual list, and it does not fit 390px · refused · 409d827
 - 2026-08-24 05:19 · Meta · refusal · a dual-list (pick-list/shuttle) component — a second way to do what data-multiselect already does · refused · 409d827
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 06:37 · Continue · owner-decision · 134.3 — delete the visual-regression gate (owner call, option c); LOOPS.md step 4 rewired to check:layout+check:scroll+test:axe · landed · 3174784
 - 2026-08-24 06:44 · Explore · grill · 136 — grill the rich-text design against Paper/Notion; 3 defects confirmed live, chromeless-editor refused, 2 ERP proposals raised · logged · a4925e0
 - 2026-08-24 07:30 · Continue · owner-wishlist · 137 — richtext toolbar: 10 icons, hot-key aria-pressed fix (selectionchange), collapse, generated keyboard map via extract-keymap CSS scan; plus 136.1-136.5 · landed · 43ea922
+- 2026-08-24 09:10 · Continue · owner-wishlist · 137.5-137.9 — markdown list triggers + ol start, context-sensitive Tab with Esc release, __group, collapse rework with floating Aa toggle · landed · 27f6d8c
 
 ## Sunset test
 
