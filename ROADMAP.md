@@ -3528,6 +3528,17 @@ per page, not two).
        `.roundtable/pilot-112/` (README + briefs.md + SEALED-PICKS.md);
        the loop wrote only the scaffold, never brief content. Waiting on:
        5–8 briefs + sealed picks, then "briefs ready" starts the runs.
+
+       **Realigned 2026-08-24 — still blocked, but with new evidence the pilot
+       should account for.** The ERP suite has since built 25 screens from
+       these patterns, and GAP-17 found `list-report`'s Anatomy omitted a whole
+       region (the create action) — an omission that propagated into **6 of 7
+       list screens**. That is real pattern-fit failure data from a different
+       direction than the pilot measures: the pilot asks whether an agent
+       PICKS the right pattern from the docs; this says a correctly picked
+       pattern's own anatomy can be incomplete. It argues for the Screen
+       Contract layer's premise without satisfying the pilot's verdict bar,
+       which is deliberately about sealed owner picks.
        *(pre-registered protocol follows, unchanged)*
        32-style evidence before any contract surface exists. Protocol,
        pre-registered here so the verdict cannot be argued afterward:
@@ -3556,13 +3567,25 @@ per page, not two).
        (extend `bo-check-markup` vs new bin), and finding format are the
        post-pilot grill round. If 112.3 refuses it, this item closes as
        refused with the pilot report as the reason.
-5. [ ] **112.5 — "Which Pattern Should I Use?" docs page, after the
-       112.3 verdict.** A task→pattern decision-flow page generated from
-       `patterns.json` (never hand-maintained — it would be the fifth
-       interpretation of the pattern system the proposal itself
-       forbids). Written after the verdict so the page and any contract
-       pattern-selection logic are one authoring pass from one source.
-       Pays regardless of 112.4's fate.
+5. [ ] **112.5 — "Which Pattern Should I Use?" docs page. UNBLOCKED
+       2026-08-24 — the coupling to 112.3 cost more than it saved.** A
+       task→pattern decision-flow page generated from `patterns.json` (never
+       hand-maintained — it would be the fifth interpretation of the pattern
+       system the proposal itself forbids).
+
+       It was sequenced after the 112.3 verdict so the page and any contract
+       pattern-selection logic would be one authoring pass from one source — a
+       real saving, but a small one, and this item's own last line already said
+       it **pays regardless of 112.4's fate**.
+
+       **Realignment:** 112.3 has been blocked on owner-authored briefs since
+       2026-08-23 and the loop cannot unblock it by design. Holding a page that
+       pays on its own behind a gate only the owner can open trades a certain
+       benefit for a possible second authoring pass. Decoupled: build it now,
+       and accept that a later contract layer might touch it again.
+
+       It is now **the only dispatchable build item in the backlog** — every
+       other open item waits on the owner or on an unmet condition.
 
 **REFUSED, with reasons (recorded per the grill's Q6 — re-open any of
 these when a second real consumer of `@busy-office/ui` exists):**
@@ -6649,15 +6672,21 @@ structurally an owner call, not something a loop can derive.
        stale *site* was fixed, the stale *package* was not. Publishing is
        owner-triggered by policy; the work itself is done.
 
-2. [ ] **OWNER CALL — direction. STILL OPEN, but its precondition is now met
-       (2026-08-21):** the release is cut as 0.3.0 and awaits only the owner's
-       push + GitHub Release. Once it lands, the recommended default below
-       becomes actionable rather than hypothetical — there is finally a
-       published package recent enough for adopter feedback to be about the
-       current framework. The choice itself remains structurally an owner call.
+2. [ ] **OWNER CALL — direction. REALIGNED 2026-08-24: the release blocker is
+       GONE; this waits on a decision only.** It said the release "is cut as
+       0.3.0 and awaits only the owner's push". **0.5.0 is published on npm** —
+       checked, not assumed. The precondition was not merely met, it has been
+       overtaken twice, and the recommended default below still says "ship
+       0.2.0 first", which shipped long ago.
 
-       Recommended default: **ship 0.2.0 first,
-       then choose from real adopter feedback rather than from this room** —
+       Nothing structural blocks this any more. What remains is the choice,
+       which was always an owner call: pick (a), (b), (c) or (d) below, or say
+       "keep waiting for adopter feedback" and mean it as a decision rather
+       than as a precondition.
+
+       Recommended default (kept for its reasoning, though its ship-first
+       clause is spent): **choose from real adopter feedback rather than from
+       this room** —
        the cost being that feedback takes time, against the alternative risk of
        building the next twelve components for nobody. Candidates if the owner
        prefers to choose now: (a) adoption/DX — starter template, copy-paste
@@ -8153,7 +8182,12 @@ the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
 12. [ ] **AT runtime evidence** — NEEDS-RUNTIME (owner hardware): combobox
        activedescendant, data-grid implicit roles, selection live-region on
        VoiceOver + NVDA; results recorded in `.roundtable/` and cited by the
-       ACR.
+       ACR. **Realigned 2026-08-24: unchanged, and genuinely unblockable by
+       the loop** — it needs a human listening to a screen reader, which no
+       gate here can simulate. `test:axe` (121 pages x 2 widths) and
+       `check:forced-colors` cover what automation can; the residue is
+       announcement behaviour, which only ears verify. Stays open rather than
+       quietly closed, because the ACR cites it.
 
 ## Slice 16 — docs IA, compared against 5 CSS frameworks (user wishlist)
 
@@ -9093,7 +9127,13 @@ Highest-leverage bets (2026-08-14 review — ranked):
       dist (the "96% changed" failures on the next run exposed it) —
       the script now refuses any non-200 response, and baselines were
       regenerated from a verified-fresh build.
-- [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build caching).
+- [ ] **Turbo** — adopt if the workspace grows past ~2 packages (build
+      caching). **Condition NOT met, measured 2026-08-24**: `workspaces` is
+      `packages/*` + `apps/*`, resolving to exactly **two** —
+      `@busy-office/ui` and `docs`. `examples/po-app` and `examples/erp-suite`
+      have their own builds but are not workspaces, so they add no
+      cross-package graph for Turbo to cache. Re-check when a third real
+      workspace appears.
 - [x] **Data-grid virtualization hooks — investigated with measurements,
       closed as WON'T BUILD (2026-08-15; evidence extended same day after
       the decisions grill challenged the single-machine data — 4× CPU
