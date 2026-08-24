@@ -150,7 +150,7 @@ are ranked by the shapes they force, not by module order.
 | 3 | **130.4b Inventory** | Stock by item × warehouse. Predicted **not** a gap (`comparison` documents a candidates × criteria grid; `data-table` ships `--sticky-col`). Building it either confirms that or proves the prediction wrong. |
 | 4 | **130.4c Finance** | Journal entry that must balance, payment list + detail. Predicted **~0 gaps** — all shapes covered. This is the thesis test: a module that finds nothing is a **success**, and the evidence for stopping at shape coverage. |
 | 5 | **130.5** — wire the suite into CI | Its own condition is "once it stops changing shape". That is true only after 2-4 land. Ordered last among suite work on purpose: a gate guarding a moving target reports noise. |
-| 6 | **136.6 / 136.7** — richtext for ERP | Deliberately last, and the reason is the instrument. Both are currently *asserted as the right shape, not demonstrated* — my own words. The suite's note fields are what would demonstrate them, so building the modules first turns these from proposals into evidenced items **or refutes them**. |
+| 6 | ~~**136.6 / 136.7**~~ — **both REFUSED 2026-08-24** | The instrument did what this row predicted, and refuted them. 25 ERP screens express document relationships as a document-flow timeline (5) or a related list (2), and use rich text on **zero**. A reference belongs in a structured surface GAP-2 already resolved, not in prose. 136.7's general question — a character counter for the form family — is re-homed as open, not queued. |
 
 **Gated, not sequenced** — these are not "later", they are waiting on someone:
 
@@ -961,7 +961,8 @@ before either becomes surface.** These are where the component could BEAT the
 references rather than catch up: neither Notion nor Paper has either, because
 neither stores into someone else's schema.
 
-6. [ ] **136.6 — a document reference, not a URL link.** The highest-value
+6. [x] **136.6 — REFUSED 2026-08-24, on the instrument's evidence.** The
+       original claim, mine: the highest-value
        rich feature in an ERP note is *"see PO-88213"* becoming a real link
        to that record. Notion has @-mentions for people and pages; ERP's
        equivalent is a document reference, and it is the one rich-text
@@ -972,7 +973,33 @@ neither stores into someone else's schema.
        field. **Asserted as the right shape, not demonstrated** — no code
        exists.
 
-7. [ ] **136.7 — a length budget measured in STORED HTML.** ERP long-text
+       **The suite demonstrated the opposite, which is exactly why this item
+       was sequenced after it.** Counted across the 25 ERP screens: document
+       relationships are expressed as a **document-flow timeline on 5
+       screens** and a **related-list table on 2**. Rich text appears on
+       **zero** of them, and on **1 of 39** pattern screens.
+
+       So an ERP does not put a document reference inside prose. It puts it in
+       a structured surface — which GAP-2 already resolved, with `bo-timeline`
+       ordered by lifecycle, and which the object-page pattern documents. That
+       is not an accident of taste: a structured reference is queryable,
+       prints in the document flow, and survives an export. A link buried in a
+       paragraph is none of those, which is why the *web* answer is the wrong
+       one here.
+
+       **Objective**: refuse — it embeds a workflow decision (that references
+       live in prose) that the domain contradicts, and it would need engine
+       surface this framework explicitly refuses, to duplicate something two
+       shipped patterns already do better.
+
+       **Honest limit**: zero richtext usage partly reflects that the suite
+       builds lists and document details rather than edit forms, so this is
+       evidence about where references belong, not proof that no note field
+       will ever exist. **What would reopen it**: a real screen whose note
+       genuinely needs an inline reference *and* cannot use a related list.
+
+7. [x] **136.7 — REFUSED as a richtext item 2026-08-24; the general
+       question is left open and re-homed.** ERP long-text
        columns have limits and rich text spends them on markup the user
        cannot see: a 200-word note with heavy formatting can blow a
        1000-character column while looking short. **The framework ships no
@@ -980,6 +1007,20 @@ neither stores into someone else's schema.
        this is a hole in the form family generally, not only here. The
        ERP-correct version counts stored HTML rather than visible text, and
        that distinction is the whole point.
+
+       **Refused as a richtext item for the same reason as 136.6**: the
+       premise is that stored markup silently blows a DB column, and across
+       25 ERP screens **no screen stores rich text at all**. A budget for a
+       field nobody uses is surface built for an argument rather than a
+       screen.
+
+       **The general question is NOT answered and is deliberately not closed
+       here.** "This field has a limit and you are near it" is an ordinary
+       need for any `textarea` against a sized column, and the framework
+       still ships **no character counter of any kind** (confirmed — nothing
+       in `form/*.css`). That belongs to the **form family**, not to richtext,
+       and it should be raised by a screen that hits it rather than inherited
+       from this slice. Re-homed as an open question, not a queued item.
 
 **Refused outright**, each a document affordance imported into a form:
 slash menu (amortises over hours; a clerk spends seconds), block handles
