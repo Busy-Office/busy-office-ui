@@ -863,3 +863,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 20:01 · Continue · build · 139.1/139.2 landed — header-actions row on list-report + six suite screens (found in tree, verified here) · landed · 46a688e
 - 2026-08-24 20:46 · Continue · build · 140.3 — three falsifiable predictions recorded in the ledger before building the remaining modules · landed · 21482a4
 - 2026-08-24 20:51 · Continue · build · 130.4 Production — 4 screens, ZERO gaps; prediction of 2-4 falsified; 140.1 intensity watch item closed as not-a-gap · landed · f2ce085
+- 2026-08-24 21:22 · Continue · build · 130.5 — erp-suite wired into CI via one npm run suite entry point; red-proved on a <style> injection; 130.4 closed without Inventory/Finance · landed · 45baaa1
+- 2026-08-24 21:24 · Continue · triage · 136.6/136.7 refused on suite evidence — ERP expresses document references as structured surface, not prose links · refused · 02d183e
