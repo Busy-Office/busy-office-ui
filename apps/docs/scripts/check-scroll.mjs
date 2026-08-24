@@ -71,12 +71,32 @@ const page = await browser.newPage();
 const g = gate('scroll check', 'scrollable container(s)');
 let pagesScanned = 0;
 
-for (const width of WIDTHS) {
-  await page.setViewport({ width, height: 900 });
-  for (const p of await distPages(DIST)) {
-    if (!p.html.includes('bo-data-table-container') && !p.html.includes('scale-scroll') && !p.html.includes('<pre')) continue;
-    await page.goto(`http://localhost:${port}${base}${p.url}`, { waitUntil: 'networkidle0' });
-    if (width === WIDTHS[0]) pagesScanned += 1;
+/* Page-outer, width-inner — and the order is the whole cost of this gate.
+   Width-outer navigated every page ONCE PER WIDTH: 230 full networkidle0
+   loads for 115 pages, which made this the slowest step in CI at 216s, more
+   than three times check:layout's 65s for a comparable sweep. Loading once
+   and resizing is what check-layout already does for its three widths, and
+   it is sound here for the same reason: overflow is CSS-driven, so a resize
+   reflows it exactly as a fresh load would. The page list is read once too,
+   rather than re-read from disk per width. */
+const scrollPages = (await distPages(DIST)).filter(
+  (p) =>
+    p.html.includes('bo-data-table-container') ||
+    p.html.includes('scale-scroll') ||
+    p.html.includes('<pre'),
+);
+
+for (const p of scrollPages) {
+  /* Load width is pinned, not inherited. Without this the page loads at
+     whatever width the PREVIOUS page's inner loop ended on, which made the
+     container count drift (746 -> 758) purely from iteration order — a
+     number that moves for a reason unrelated to the thing being measured is
+     a defect in the instrument, not a finding. */
+  await page.setViewport({ width: WIDTHS[0], height: 900 });
+  await page.goto(`http://localhost:${port}${base}${p.url}`, { waitUntil: 'networkidle0' });
+  pagesScanned += 1;
+  for (const width of WIDTHS) {
+    await page.setViewport({ width, height: 900 });
     const found = await page.evaluate((sel) => {
       const out = [];
       for (const box of document.querySelectorAll(sel)) {
