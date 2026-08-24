@@ -133,6 +133,50 @@ with the reason); the design panel grills slices against them; removals
 face the same tests as additions — deleting a surface consumers compose
 against is a Breaking-entry decision, not a tidy-up.
 
+## CI strategy — measured, and why branches are not the lever (2026-08-24)
+
+Owner asked whether a dev/main split should manage different CI. **It should
+not, and the timing data says why: CI was slow for a structural reason, not a
+branching one.**
+
+Measured before changing anything: ~12.4 min of serial steps, lopsided —
+scroll 216s (29% of the run), claims 104s, axe 68s, layout 65s, container 59s.
+Eleven browser gates each launched a browser and walked the same 121 built
+pages.
+
+Fixed structurally, **without touching branches**: sharding the browser gates
+into five parallel jobs took wall clock to **184s**. Plus `paths-ignore` for
+narrative-only commits (8 of the last 30 touched only `.roundtable/**` and
+`STATUS.md`) and `cancel-in-progress` for superseded pushes. Roughly **4x**,
+with no change to what any gate asserts.
+
+**Why NOT tier gates by branch.** This file's own doctrine already answers it:
+*a gate that only runs in CI is not known to work.* The corollary is worse — a
+gate that only runs on `main` finds problems **after** the merge, which is the
+expensive moment to find them. Cheap-on-dev / full-on-main also trains you to
+trust a green that means less than it says. Same gates everywhere; make them
+fast instead. At 3 minutes there is nothing left to tier.
+
+**Branches ARE worth it — for a different problem.** Twice on 2026-08-24 the
+owner and the loop edited the same working tree simultaneously: once an
+independently-written ledger entry was swept into an unrelated commit by
+`git add -A` (which is how two gaps briefly shared the number 17), and once a
+whole slice (139) was found already implemented and uncommitted. Branches plus
+separate worktrees remove that contention entirely, and `fix/docs-search-bar`
+showed the shape working. So: **branch for isolation and review, not for CI
+tiering.**
+
+**Standing rules that follow:**
+- Same gate set on every branch and on `main`.
+- `main` protected, requiring CI green.
+- Anything that reads a file must not be in `paths-ignore` — `DESIGN.md`,
+  `ROADMAP.md`, `LOOPS.md`, `README.md` and `CHANGELOG.md` are each read by
+  gate scripts, so none of them may be ignored. Only `.roundtable/**` and
+  `STATUS.md` are read by nothing.
+- Re-measure before optimising again. The single biggest win here was a loop
+  written the wrong way round, and no amount of workflow tuning would have
+  found it.
+
 ## Sequence — what runs next, and why in this order (owner, 2026-08-24)
 
 Eighteen items are open; **nine are dispatchable** and nine are gated on the
