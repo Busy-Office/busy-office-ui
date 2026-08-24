@@ -860,3 +860,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 19:41 · Roadmap · triage · GAP-17 promoted to Slice 139; watch items decided (heatmap refused, MRP folded into 130.4); GAP number collision fixed · logged · 2b6b9d1
 - 2026-08-24 19:41 · Meta · refusal · a contribution-heatmap slice — no Projects module exists and the reference showed uniform gray cells · refused · 2b6b9d1
 - 2026-08-24 19:52 · Explore · grill · ERP suite as instrument — gaps track shape/stress not domain; 139 strengthened, 140.1 reopened as intensity-over-time, 130.4 reframed as a prediction experiment · logged · 16048e3
+- 2026-08-24 20:01 · Continue · build · 139.1/139.2 landed — header-actions row on list-report + six suite screens (found in tree, verified here) · landed · 46a688e
