@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-24 22:01
+Generated at: 2026-08-24 22:20
 
 ## Open items by slice
 
@@ -14,8 +14,8 @@ Generated at: 2026-08-24 22:01
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (852 iterations logged)
-  Standardize   8 / 4 Continue rounds since 2026-08-24 18:49   OVERDUE
+dispatch status — counter-triggered rules (853 iterations logged)
+  Standardize   9 / 4 Continue rounds since 2026-08-24 18:49   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -28,7 +28,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-24 19:41 · Roadmap · triage · GAP-17 promoted to Slice 139; watch items decided (heatmap refused, MRP folded into 130.4); GAP number collision fixed · logged · 2b6b9d1
 - 2026-08-24 19:41 · Meta · refusal · a contribution-heatmap slice — no Projects module exists and the reference showed uniform gray cells · refused · 2b6b9d1
 - 2026-08-24 19:52 · Explore · grill · ERP suite as instrument — gaps track shape/stress not domain; 139 strengthened, 140.1 reopened as intensity-over-time, 130.4 reframed as a prediction experiment · logged · 16048e3
 - 2026-08-24 20:01 · Continue · build · 139.1/139.2 landed — header-actions row on list-report + six suite screens (found in tree, verified here) · landed · 46a688e
@@ -38,6 +37,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-24 21:24 · Continue · triage · 136.6/136.7 refused on suite evidence — ERP expresses document references as structured surface, not prose links · refused · 02d183e
 - 2026-08-24 21:43 · Continue · bug · GAP-19 — bulk-actions could not wrap at 390 (GAP-7's twin); caught by the new CI gate on its first run; build.mjs now cleans dist · landed · 6e9441c
 - 2026-08-24 22:01 · Continue · bug · docs search bar: gate Pagefind results below 2 chars (was 113 noise-ranked results for 's'), pin cmdk result list-style/row-spacing against a stale-cache mismatch · landed · 8ff3971deab0e6b56bb6783289e667bf4f1eb1ac
+- 2026-08-24 22:20 · Continue · bug · docs search bar: filter weak/gibberish matches by prefix-overlap with query (score alone doesn't separate noise from signal), sticky cmdk input via flex chain, Clear button sized to real input height + swapped to close glyph · landed · 3a90a7a61ea0480a767f3d7537695a06ebf68b6a
 
 ## Sunset test
 
