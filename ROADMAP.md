@@ -237,6 +237,51 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 143 — Owner wishlist: motion bug, sidebar-nav, offcanvas (2026-08-25)
+
+Owner input, three items. Triage found the second and third are **the same
+problem with the same answer**, which is worth doing once rather than twice.
+
+1. [x] **143.1 — DONE 2026-08-25. The "Reprice line" showcase button was
+       dead.** Owner: *"standardise /base/motion & fix the bug"*. Found by
+       clicking every control on the page rather than reading it: the row
+       reported `animation-name: none` before and after the click, and its
+       played flag never set. Every other control worked.
+
+       Mine, from 137.18. **Attention** effects are ADDED when something
+       changes, so their element correctly carries no `bo-motion-*` class at
+       rest — and the generic replay handler bails when it finds none, because
+       its job for **Entrance** effects is to re-trigger classes already in the
+       markup. `sc-row` was the only Attention showcase, so it was the only one
+       that fell through. `data-motion-class` names the class for that case,
+       and the one-shot is removed at `animationend` — otherwise re-adding a
+       class the element already has does nothing and it can never replay.
+
+2. [ ] **143.2 — a demo cannot show what only its CONTEXT produces.** Owner
+       asked to standardise `/components/sidebar-nav` (with an
+       expand/collapse option) and `/components/offcanvas` (*"why don't we use
+       iframe for the demo instead of add drawer on the mainpage"*).
+
+       **Same root cause.** `sidebar-nav`'s icon-only collapse is a
+       `@container bo-shell` query, and the page already admits the
+       consequence in its own comment: inside a demo it *"renders the expanded
+       rail at any viewport, including 390"*. The demo structurally **cannot**
+       show the state the component is most interesting for. `offcanvas` has
+       the mirror problem: its drawer is a real `<dialog>`, so the demo takes
+       over the whole docs page to show itself.
+
+       **Same answer, already precedented here.** An iframe gives a demo its
+       own document, its own container context, and its own top layer.
+       `RfDevice.astro` does exactly this for six RF pages (Slice 131), and
+       that component exists *because* the same iframe was pasted six times.
+
+       *Accept*: one shared embed component rather than a second copy of
+       RfDevice's iframe; standalone demo routes for the embedded screens; the
+       sidebar-nav page shows BOTH rail states and the offcanvas drawer opens
+       inside its frame instead of over the page. `PatternPreview` was checked
+       first and does not embed — it takes props, so it is not the
+       generalisation to extend.
+
 ## Slice 142 — Owner wishlist: skeleton motion, state standardisation, command-bar states (2026-08-25)
 
 Owner input, three items. The third asked for a grill of an idea; the grill
