@@ -40,6 +40,30 @@ const collapseMarkup = `<button class="bo-btn bo-btn--secondary" id="collapse-to
 const pulseMarkup = `<button class="bo-btn bo-btn--secondary" id="pulse-trigger">Simulate update</button>
 <div class="bo-motion-pulse-once" id="pulse-demo">Row total: $12,400.00</div>`;
 const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <span aria-live="polite">Loading…</span>`;
+/* Showcases (137.18). Every demo above animates an abstract box, which shows
+   WHAT each class does but not WHEN to reach for it — and the page's own
+   framing is that you pick by intent. These are the same eight classes in the
+   place an ERP actually uses them. `fade-out` appears here because it is the
+   one documented class that had no demo at all. */
+const toastMarkup = `<!-- Entrance: a toast arrives from the top edge -->
+<div class="bo-alert bo-alert--success bo-motion-slide-in-block-start" role="status">
+  <p class="bo-alert__title">Purchase order PO-88213 approved</p>
+</div>`;
+const menuMarkup = `<!-- Entrance: a menu grows from its trigger, 0.96 -> 1 -->
+<div class="bo-motion-scale-in">
+  <div class="bo-card">Duplicate · Export · Cancel line</div>
+</div>`;
+const rowMarkup = `<!-- Attention: a row the server just repriced -->
+<tr class="bo-motion-pulse-once">
+  <td>MRN-2255</td><td class="bo-data-table__col--numeric">1,284.00</td>
+</tr>`;
+const savingMarkup = `<!-- Progress: the spinner lives INSIDE the button that is busy -->
+<button class="bo-btn" type="button" aria-busy="true">
+  <span class="bo-motion-spin bo-icon bo-icon--settings" aria-hidden="true"></span>
+  Saving…
+</button>`;
+const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
+<tr class="bo-motion-fade-out">…</tr>`;
 ---
 <Gallery title="Motion">
   <p class="demo-note">
@@ -139,6 +163,79 @@ const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <
     <span aria-live="polite">Loading…</span>
     <pre><code>{spinMarkup}</code></pre>
   </section>
+  <section class="demo">
+    <h2>In context — the same classes on real screens</h2>
+    <p class="bo-u-text-muted">The demos above animate a plain box, which
+    shows what each class does but not when to reach for it. These are the
+    same classes doing the job they exist for. <strong>Pick by intent</strong>
+    — Entrance for something arriving, Attention for something that changed
+    under the user, Progress for something still running.</p>
+
+    <div class="bo-stack">
+      <div>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-motion-play="sc-toast">Show toast</button>
+        <div id="sc-toast" style="margin-block-start: var(--bo-space-2)">
+          <div class="bo-alert bo-alert--success bo-motion-slide-in-block-start" role="status">
+            <p class="bo-alert__title">Purchase order PO-88213 approved</p>
+          </div>
+        </div>
+        <p class="bo-u-text-muted"><strong>Entrance · toast</strong> —
+        <code>slide-in-block-start</code>. It arrives from the edge it is
+        anchored to, so the motion says where it came from.</p>
+      </div>
+
+      <div>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-motion-play="sc-menu">Open menu</button>
+        <div id="sc-menu" style="margin-block-start: var(--bo-space-2)">
+          <div class="bo-motion-scale-in bo-alert" role="group" aria-label="Row actions">
+            <p>Duplicate · Export · Cancel line</p>
+          </div>
+        </div>
+        <p class="bo-u-text-muted"><strong>Entrance · menu</strong> —
+        <code>scale-in</code>. A subtle 0.96 → 1 reads as "this grew out of
+        the thing you clicked", which a plain fade does not.</p>
+      </div>
+
+      <div>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-motion-play="sc-row">Reprice line</button>
+        <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-2)">
+          <table class="bo-data-table">
+            <caption class="bo-visually-hidden">A line the server just repriced</caption>
+            <thead><tr><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Unit price</th></tr></thead>
+            <tbody>
+              <tr><td class="bo-data-table__col--code">MRN-2210</td><td class="bo-data-table__col--numeric">640.00</td></tr>
+              <tr id="sc-row"><td class="bo-data-table__col--code">MRN-2255</td><td class="bo-data-table__col--numeric">1,284.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="bo-u-text-muted"><strong>Attention · a value changed under
+        you</strong> — <code>pulse-once</code> on the row the server
+        repriced. This is the one intent that exists because the user did
+        <em>not</em> cause the change, so nothing else on screen points at
+        it.</p>
+      </div>
+
+      <div>
+        <button class="bo-btn" type="button" id="sc-save" data-motion-play="sc-save-icon">Save</button>
+        <p class="bo-u-text-muted" style="margin-block-start: var(--bo-space-2)"><strong>Progress · saving</strong> —
+        <code>spin</code> inside the button that is busy, paired with
+        <code>aria-busy</code>. Keeping it in the button is what ties the
+        wait to the thing being waited on.</p>
+      </div>
+
+      <div>
+        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-motion-play="sc-remove">Remove line</button>
+        <div id="sc-remove" style="margin-block-start: var(--bo-space-2)">
+          <div class="bo-alert bo-motion-fade-out">Line 30 — Anode kit</div>
+        </div>
+        <p class="bo-u-text-muted"><strong>Exit · removal</strong> —
+        <code>fade-out</code>, the one class on this page that had no demo
+        until now. It buys the half-second a user needs to see WHICH row
+        left; remove the node when the animation ends, not before.</p>
+      </div>
+    </div>
+  </section>
+
   <Related links={[
     ["/concepts/accessibility", "Accessibility model"],
     ["/concepts/js-behaviors", "JS behaviors (state attributes, the Save sequence)"],
@@ -166,6 +263,60 @@ const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <
     const open = collapseDemo?.dataset.state === 'open';
     if (collapseDemo) collapseDemo.dataset.state = open ? 'closed' : 'open';
     collapseToggle.setAttribute('aria-expanded', String(!open));
+  });
+
+  /* Showcase replay (137.18). One delegated handler for every sample: strip
+     the bo-motion-* classes, force a reflow, put them back — the same
+     restart trick the entrance replay uses. Without a replay these are
+     invisible, because an entrance animation plays once on mount, long
+     before anyone has scrolled to it. */
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-motion-play]');
+    if (!btn) return;
+    const target = document.getElementById(btn.dataset.motionPlay!);
+    if (!target) return;
+    const el = (target.querySelector('[class*="bo-motion-"]') as HTMLElement) ?? target;
+    const cls = [...el.classList].filter((c) => c.startsWith('bo-motion-'));
+    if (!cls.length) return;
+    el.classList.remove(...cls);
+    void el.offsetWidth;
+    el.dataset.userPlayed = '1';   // see the fade-out handler below
+    el.classList.add(...cls);
+  });
+
+  /* The Save showcase swaps the button into its busy state for real, rather
+     than animating a decoration next to it — aria-busy is the half a screen
+     reader gets, so it moves with the spinner. */
+  const save = document.getElementById('sc-save');
+  save?.addEventListener('click', () => {
+    if (save.getAttribute('aria-busy') === 'true') return;
+    const label = save.textContent;
+    save.setAttribute('aria-busy', 'true');
+    save.innerHTML =
+      '<span class="bo-motion-spin bo-icon bo-icon--settings" aria-hidden="true"></span> Saving…';
+    setTimeout(() => {
+      save.removeAttribute('aria-busy');
+      save.textContent = label;
+    }, 1600);
+  });
+
+  /* fade-out has no `forwards` fill on purpose, so the element springs back
+     to opacity 1 when the animation ends — the class animates the exit, it
+     does not perform it. Removing the node is the consumer's job, and doing
+     it here is what makes this a demo of the real pattern rather than of a
+     flicker. Restored after a beat so the sample can be replayed. */
+  const scRemove = document.getElementById('sc-remove');
+  scRemove?.addEventListener('animationend', (e) => {
+    const row = e.target as HTMLElement;
+    if (!row.classList.contains('bo-motion-fade-out')) return;
+    // Only a USER-triggered play removes the row. The class also runs once on
+    // mount like every other entrance demo here, and hiding on that made the
+    // sample show an empty gap to anyone who had just arrived — the demo
+    // looked broken at exactly the moment it was first seen.
+    if (row.dataset.userPlayed !== '1') return;
+    delete row.dataset.userPlayed;
+    row.style.visibility = 'hidden';
+    setTimeout(() => { row.style.visibility = ''; }, 1200);
   });
 
   const pulseTrigger = document.getElementById('pulse-trigger');

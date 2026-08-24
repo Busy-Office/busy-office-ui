@@ -249,6 +249,32 @@
     resize: vertical;
   }
 
+  /* The content's corners follow the field's curve. Latent everywhere and
+     VISIBLE in read-only (owner QA, 2026-08-24): that is the one state
+     where __content carries its own background, so its square corners sat
+     inside the field's 6px rounded ones and notched all four. Measured
+     0px on every content box against a 6px field.
+
+     Rounded per position rather than blanket `overflow: hidden` on the
+     field — the content's :focus-visible outline is drawn OUTSIDE its
+     border box with an offset, and a clipping ancestor would eat it. A
+     corner fix must not cost a focus ring.
+
+     Bottom: __content is always the last child. Top: only when it is also
+     the first, i.e. there is no toolbar above it — plus the read-only case
+     explicitly, where a consumer may still have a toolbar in the markup
+     that the modifier hides (display:none does not affect :first-child). */
+  .bo-richtext__content {
+    border-end-start-radius: inherit;
+    border-end-end-radius: inherit;
+  }
+
+  .bo-richtext__content:first-child,
+  .bo-richtext--readonly .bo-richtext__content {
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+  }
+
   /* Placeholder. contenteditable has no placeholder attribute, and CSS
      alone genuinely cannot supply one — this is not a shortcut not taken.
      `:empty::before` works EXACTLY ONCE (measured 2026-08-24): it shows on

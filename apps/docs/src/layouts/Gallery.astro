@@ -1,5 +1,12 @@
 ---
 import '@busy-office/ui/css';
+/* The OPT-IN motion module. It is deliberately absent from index.css, which
+   meant /base/motion documented eight effects and demonstrated none of them:
+   the classes were in the markup and their rules were in a stylesheet this
+   site never loaded (found 2026-08-24 — every demo computed animation-name
+   `none`, and .bo-motion-collapse computed `display: block`). A docs site
+   that documents an opt-in module has to opt in. */
+import '@busy-office/ui/css/motion';
 import '../styles/code-hl.css';
 import '../styles/copy-toast.css';
 import '../styles/doc-swatch.css';

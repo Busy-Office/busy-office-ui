@@ -2457,6 +2457,78 @@ check(
   JSON.stringify(printBars),
 );
 
+/* /base/motion (137.17) — the page documents eight opt-in effects, and for
+   its whole life it demonstrated NONE of them: motion.css is deliberately
+   never imported by index.css, and the docs site had not opted in. Every
+   class sat in the markup computing animation-name `none`, and
+   .bo-motion-collapse computed `display: block`.
+
+   Nothing caught it because nothing asserted the rules were REACHING the
+   page. A "does the class appear in the markup" check would have passed
+   throughout. So this asserts the computed result — the only place the
+   difference between a loaded and an unloaded stylesheet shows up. */
+await visit('/base/motion/', { width: DESKTOP_WIDTH, height: 1600 });
+const motionLive = await page.evaluate(() => {
+  const read = (sel) => {
+    const el = document.querySelector(sel);
+    if (!el) return { missing: true };
+    const c = getComputedStyle(el);
+    return { anim: c.animationName, display: c.display, transition: c.transitionProperty };
+  };
+  return {
+    fadeIn: read('.bo-motion-fade-in'),
+    scaleIn: read('.bo-motion-scale-in'),
+    collapse: read('.bo-motion-collapse'),
+    spin: read('.bo-motion-spin'),
+    fadeOut: read('.bo-motion-fade-out'),
+  };
+});
+check(
+  'motion: the opt-in module actually reaches /base/motion — every documented effect computes a real animation, not `none`',
+  motionLive.fadeIn.anim === 'bo-motion-fade-in' &&
+    motionLive.scaleIn.anim === 'bo-motion-scale-in' &&
+    motionLive.spin.anim === 'bo-motion-spin' &&
+    motionLive.fadeOut.anim === 'bo-motion-fade-out' &&
+    motionLive.collapse.display === 'grid' &&
+    motionLive.collapse.transition.includes('grid-template-rows'),
+  JSON.stringify(motionLive),
+);
+
+/* And the collapse demo must really interpolate, not jump — the same
+   end-state blindness that hid the richtext bug (137.14). */
+const motionCollapse = await page.evaluate(async () => {
+  const t = document.getElementById('collapse-toggle');
+  const d = document.getElementById('collapse-demo');
+  t.click();
+  await new Promise((r) => setTimeout(r, 600));
+  const open = d.getBoundingClientRect().height;
+  const frames = [];
+  const t0 = performance.now();
+  t.click();
+  await new Promise((res) => {
+    const tick = () => {
+      frames.push(+d.getBoundingClientRect().height.toFixed(1));
+      if (performance.now() - t0 < 600) requestAnimationFrame(tick);
+      else res();
+    };
+    requestAnimationFrame(tick);
+  });
+  return {
+    open: +open.toFixed(1),
+    closed: frames.at(-1),
+    intermediate: frames.filter((h) => h > 1 && h < open - 1).length,
+    reduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
+  };
+});
+check(
+  'motion: the collapse demo interpolates its height rather than jumping (and snaps only under reduced motion)',
+  motionCollapse.open > 0 &&
+    (motionCollapse.reduced
+      ? motionCollapse.intermediate === 0
+      : motionCollapse.intermediate > 0),
+  JSON.stringify(motionCollapse),
+);
+
 // /components/form "Label-start sections" (roadmap 117): "the section
 // collapses back to labels-on-top on its own" below 30rem, and "start...
 // flips to the visual right under dir=rtl" — both are claims a browser can

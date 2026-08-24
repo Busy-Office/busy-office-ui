@@ -534,6 +534,56 @@ already half-built and quietly broken**, which changes what to build.
        `scrollWidth` vs `clientWidth` is what notices; the claim also pins
        one distinct width, squareness, and the 24px floor.
 
+17. [x] **137.17 — DONE 2026-08-24. Owner:** *"review motion whether it is
+       working as expect? /base/motion."*
+
+       **It was not. Every demo on the page was dead, and had been since the
+       page shipped.** `motion.css` is deliberately opt-in — its own header
+       says *"Never imported by index.css"* — and `Gallery.astro` imported
+       `@busy-office/ui/css` and nothing else. So eight documented effects
+       sat in the markup with their rules in a stylesheet the site never
+       loaded: `animation-name` computed `none` on every one, and
+       `.bo-motion-collapse` computed `display: block` rather than `grid`.
+
+       The page itself is well built — it already had replay buttons and
+       real triggers. Nothing was wrong with it except that it was never
+       wired to its own stylesheet.
+
+       **Same root cause that had just bitten 137.14**, which is what makes
+       it worth stating as a rule: *a class in the markup proves nothing.*
+       The only place the difference between a loaded and an unloaded
+       stylesheet appears is the COMPUTED value, so that is what the new
+       claim reads — plus a second claim that the collapse demo actually
+       interpolates rather than jumping, since an end-state check passes
+       either way.
+
+       Fixed by importing the opt-in module in the docs layout: a docs site
+       that documents an opt-in module has to opt in.
+
+18. [x] **137.18 — DONE 2026-08-24. Owner:** *"also provide enough sample as
+       showcases."*
+
+       Added **In context**: the same classes on real screens rather than on
+       an abstract box — a toast arriving (`slide-in-block-start`), a menu
+       growing from its trigger (`scale-in`), a repriced table row
+       (`pulse-once`), a Save button that really enters its busy state with
+       `aria-busy` (`spin`), and a line being removed (`fade-out`).
+
+       **`fade-out` had no demo at all** — the one documented class the page
+       never showed. Demoing it properly meant showing the part that is easy
+       to get wrong: the class has no `forwards` fill, so it animates the
+       exit and then springs back. The node removal is the consumer's job,
+       and the sample now does it on `animationend`.
+
+       **Two bugs in my own showcase, both caught rather than shipped.** The
+       first by the new claim: I put `bo-motion-fade-out` in the code SAMPLE
+       and never on the rendered element, so the button did nothing and the
+       claim reported the class missing. The second by looking at the
+       screenshot: hiding the row on `animationend` also fired for the
+       mount-time animation, so the sample rendered as an empty gap to
+       anyone who had just arrived — it looked broken at exactly the moment
+       it was first seen. Only a user-triggered play removes the row now.
+
 ## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
 
 Owner input, verbatim: *"/components/richtext - grill the design. (ref to
