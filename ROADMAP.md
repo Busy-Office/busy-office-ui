@@ -1702,13 +1702,20 @@ reads clean while telling us nothing.
        to" and "where is this in its lifecycle" are one need, and answering
        them separately would produce two overlapping surfaces — exactly what
        the Objective's rethink test targets.
-4. [ ] **130.3 — module two, on the settled answers.** O2C (sales order,
-       customer invoice), built only after 130.2 lands, so the second module
-       measures whether the fixes worked instead of repeating the gaps.
-       **This is the checkpoint for the whole idea**: if module two finds
-       another five gaps, the framework has a systemic hole worth a slice of
-       its own; if it finds none, modules three to six are mechanical and can
-       be batched.
+4. [x] **130.3 — DONE 2026-08-23. Module two built, and the checkpoint
+       answered: BATCH THE REST.** O2C — sales-orders, sales-order (grouped
+       availability header, per-cell tone), customer-invoices (AR ageing with
+       a `<tfoot>` totals row), customer-invoice (chasing history plus
+       document flow).
+
+       **The instrument worked.** Pilot: 13 gaps. Module two: **2** — one a
+       regression in the pilot's own fix, one a treatment nobody had needed
+       yet (totals rows). Two is not five, so by this item's own test modules
+       three to six are mechanical and can be batched, which is what 130.4
+       now does.
+
+       Ticked 2026-08-24 as drift: the work and its verdict landed a day
+       earlier, the checkbox did not move with them.
 5. [ ] **130.4 — the remaining four modules.** CRM (account, opportunity),
        Finance (journal entry, payment), Inventory (stock movement, item
        master), Production (production order, BOM). Batched only if 130.3
