@@ -143,6 +143,31 @@ for (const q of ['invoice', 'table', 'approve']) {
   );
 }
 
+/* Short-query guard: a 1-char query ("s") used to return "113 results for s"
+   ranked by term-frequency noise — nearly every page has SOME word starting
+   with any single letter, so there is no real relevance signal below
+   MIN_QUERY_LENGTH (Gallery.astro). Asserted on the RENDERED message and
+   result count, not on the presence of a processTerm string in source —
+   Gallery.astro's script is inline JS, easy to edit without touching a
+   detectable marker, so the only trustworthy signal is what the dialog
+   actually shows. Red-proved by temporarily reverting the processTerm/
+   MutationObserver change and re-running this file: this check went from
+   pass to fail on "0 result(s), message: 113 results for s".  */
+await page.goto(`http://localhost:${port}${base}/components/button/`, { waitUntil: 'networkidle0' });
+await page.click('.docs-searchbtn');
+await new Promise((r) => setTimeout(r, 300));
+await page.type('#cmdk .pagefind-ui__search-input', 's');
+await new Promise((r) => setTimeout(r, 500));
+const shortQuery = await page.evaluate(() => ({
+  message: document.querySelector('#cmdk-search .pagefind-ui__message')?.textContent.trim() ?? '',
+  results: document.querySelectorAll('#cmdk-search .pagefind-ui__result').length,
+}));
+g.check(
+  '1-char query ("s") is suppressed instead of returning noise-ranked results',
+  shortQuery.results === 0 && !/^\d+ results? for/.test(shortQuery.message),
+  `${shortQuery.results} result(s), message: "${shortQuery.message}"`,
+);
+
 /* Relevance guard: ignoring code samples must not take the GENERATED reference
    tables with it. An earlier version of scope-search-index.mjs ignored every
    <table>, which dropped `bo-data-table` from 9 hits to 3 and put Pagination
