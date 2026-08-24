@@ -28,7 +28,13 @@ export const render = () =>
       { label: 'Customer invoices' },
     ],
     body: `
-    <h1>Customer invoices</h1>
+    <div class="bo-cluster bo-cluster--split">
+      <h1>Customer invoices</h1>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh customer invoices">⟳</button>
+        <button class="bo-btn" type="button">+ New customer invoice</button>
+      </div>
+    </div>
     <p class="bo-u-text-muted">Receivables by age. The decision this screen
     serves is who to chase first, so the buckets are the columns and the
     oldest money is the one that stands out.</p>

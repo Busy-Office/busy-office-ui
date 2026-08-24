@@ -21,7 +21,13 @@ export const render = () =>
       { label: 'Opportunities' },
     ],
     body: `
-    <h1>Opportunities</h1>
+    <div class="bo-cluster bo-cluster--split">
+      <h1>Opportunities</h1>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh opportunities">⟳</button>
+        <button class="bo-btn" type="button">+ New opportunity</button>
+      </div>
+    </div>
     <p class="bo-u-text-muted">The pipeline, by stage. Weighted value is
     value × probability — the only figure worth adding up, which is why it
     carries the total.</p>

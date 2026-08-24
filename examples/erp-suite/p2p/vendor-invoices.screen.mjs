@@ -21,7 +21,13 @@ export const render = () =>
       { label: 'Vendor invoices' },
     ],
     body: `
-    <h1>Vendor invoices</h1>
+    <div class="bo-cluster bo-cluster--split">
+      <h1>Vendor invoices</h1>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh vendor invoices">⟳</button>
+        <button class="bo-btn" type="button">+ New vendor invoice</button>
+      </div>
+    </div>
 
     <!-- GAP-3. This list is a triage queue: the reader wants "show me only
          what is blocked". That is a saved view / segmented filter over the

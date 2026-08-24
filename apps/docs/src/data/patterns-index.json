@@ -196,6 +196,10 @@
               "label": "Data table"
             },
             {
+              "href": "/components/button",
+              "label": "Button"
+            },
+            {
               "href": "/components/pagination",
               "label": "Pagination"
             },

@@ -28,7 +28,13 @@ export const render = () =>
       { label: 'Sales orders' },
     ],
     body: `
-    <h1>Sales orders</h1>
+    <div class="bo-cluster bo-cluster--split">
+      <h1>Sales orders</h1>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh sales orders">⟳</button>
+        <button class="bo-btn" type="button">+ New sales order</button>
+      </div>
+    </div>
 
     <form class="bo-cluster" method="get" data-density="compact">
       <div class="bo-segmented" role="group" aria-label="Saved views">

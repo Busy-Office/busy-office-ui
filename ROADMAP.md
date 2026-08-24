@@ -194,25 +194,28 @@ no new component, no new CSS", and its resolution updated
 `object-page.astro`, which carries a Document flow section to this day. A
 documentation/composition gap is fixed in the documentation.
 
-1. [ ] **139.1 — `list-report.astro` documents a header-actions row that
-       renders regardless of row count.** **The Anatomy is the fix, not the
-       states table** (grilled 2026-08-24): Anatomy is an ordered enumeration
-       of five regions — saved-view switcher, filter bar, toolbar, table,
-       footer — so a builder working region by region produces exactly the six
-       screens that exist. The states table is where the omission is visible;
-       the Anatomy is where it is *caused*. Both change; only one is the
-       cause. A demo shows the row above a populated table. Per the pattern
-       recipe the row is named in **Components used** and the states table
-       says what it does when the list is empty (the action stays; the empty
-       state stops being the only place it exists).
-       *Accept*: a reader building a list screen from this page ships a
-       create action without being told separately.
+1. [x] **139.1 — DONE 2026-08-24. `list-report.astro` documents a
+       header-actions row that renders regardless of row count.** Added as
+       item 1 of the Anatomy (not just the states table, per the grill), a
+       live demo (`bo-cluster bo-cluster--split` + `bo-btn`/`bo-btn--icon`
+       above the saved-view switcher), the States table's Empty row reworded
+       to say the action stays rather than only appearing there, and `Button`
+       added to Components used. The demo's title is a `<span>`, not a real
+       `<h1>` — GAP-5's own trap (every demo nests inside the docs page's own
+       `<h1>`); verified exactly one `<h1>` in the built page. `check-markup`,
+       `components-used`, `page-shape`, and the docs link check all pass on
+       the full rebuild.
 
-2. [ ] **139.2 — the six suite list screens get the row.** Not cosmetic
-       follow-through: they are the reusability evidence. GAP-2's bar was
-       "two independent compositions"; this has six, across three modules.
-       *Accept*: `check-erp-suite` still reports zero local CSS, and the
-       audit stays green at both widths.
+2. [x] **139.2 — DONE 2026-08-24. The six suite list screens get the row.**
+       `requisitions`, `vendor-invoices`, `sales-orders`, `customer-invoices`,
+       `accounts`, `opportunities` — each screen's own sensible primary action
+       ("+ New requisition", "+ New account", etc.), not one label copied six
+       times; `requisitions` keeps its existing "Create purchase orders" bulk
+       action distinct from the new "+ New requisition" (create vs. act-on-
+       selection are different operations, per that screen's own comment).
+       `check-erp-suite` (zero local CSS, links resolve), `check-markup`, and
+       `audit` (axe + no sideways scroll, both widths) all pass clean on the
+       rebuild; two screens spot-verified live in-browser, not just gate-green.
 
 **Deliberately NOT in this slice — and the restraint is the point.** Three
 further screenshots (a document detail, a report/dashboard, a journal-entry

@@ -23,7 +23,13 @@ export const render = () =>
       { label: 'Requisitions' },
     ],
     body: `
-    <h1>Requisitions</h1>
+    <div class="bo-cluster bo-cluster--split">
+      <h1>Requisitions</h1>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh requisitions">⟳</button>
+        <button class="bo-btn" type="button">+ New requisition</button>
+      </div>
+    </div>
 
     <form class="bo-cluster" data-density="compact">
       <input class="bo-input" type="search" aria-label="Search requisitions" placeholder="Search…" style="max-inline-size: 12rem">

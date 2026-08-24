@@ -23,7 +23,13 @@ export const render = () =>
     moduleId: 'crm',
     trail: [{ label: 'Home', href: '/index.html' }, { label: 'CRM', href: '/crm/accounts.html' }, { label: 'Accounts' }],
     body: `
-    <h1>Accounts</h1>
+    <div class="bo-cluster bo-cluster--split">
+      <h1>Accounts</h1>
+      <div class="bo-cluster">
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh accounts">⟳</button>
+        <button class="bo-btn" type="button">+ New account</button>
+      </div>
+    </div>
     <p class="bo-u-text-muted">Customer master data. The decision this screen
     serves is who to call, so the columns are the ones that change what you
     would say — exposure and credit standing, not address detail.</p>

@@ -540,6 +540,10 @@
               "label": "Data table"
             },
             {
+              "href": "/components/button",
+              "label": "Button"
+            },
+            {
               "href": "/components/pagination",
               "label": "Pagination"
             },
@@ -567,7 +571,7 @@
             ],
             [
               "Empty (no data yet)",
-              ".bo-state--empty with the primary action (Create invoice)"
+              "the header action stays — it is not only the empty state's action anymore — and .bo-state--empty repeats it in-place so the reader does not have to look up"
             ],
             [
               "Empty (filters exclude everything)",
