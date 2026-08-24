@@ -573,6 +573,34 @@ progress, and freeze-graduation rounds).
 
 ---
 
+## Settled: the 0fr/1fr collapse appears three times, and that is correct
+
+Raised twice as duplication (2026-08-24, 2026-08-25) and refused here so it
+stops being re-raised. `display: grid` + `grid-template-rows: 0fr/1fr` +
+`overflow: hidden` appears in `motion/motion.css`, `dashboard.css` and
+`richtext.css`. It is the same four declarations, and it is **not** removable
+duplication, for two reasons that compound:
+
+- **Selector ownership.** `.bo-motion-collapse` is a UTILITY: it works because
+  the consumer puts it on their own markup. `.bo-widget__collapse` and
+  `.bo-richtext__toolbar-collapse` are component PARTS, styled by the
+  component. A component cannot delegate to a class the consumer would have to
+  add to markup the component itself defines.
+- **The module is opt-in.** `motion.css` is deliberately never imported by
+  `index.css`. A component that leaned on it would ship a feature that works
+  only for consumers who happened to import an optional stylesheet — which is
+  exactly the failure `/base/motion` shipped for its whole life before 137.17.
+
+So the shared thing here is the TECHNIQUE, and plain CSS has no way to share a
+technique without also sharing a selector. What IS shared is already shared:
+the duration and easing come from the motion tokens, so a change to the feel
+lands everywhere at once. Only the four structural declarations repeat, and
+each carries a comment pointing at the others.
+
+**What would change this:** a fourth copy, or a divergence between the three
+(one gains a fix the others miss). Either is the signal to reopen — not the
+count on its own.
+
 ## Operating rules (every loop obeys)
 
 - **Every wake leaves the thing it touched BETTER than the item required**
