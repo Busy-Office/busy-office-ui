@@ -122,6 +122,42 @@ const errorState = `<div class="bo-state bo-state--error">
 </tbody>`}</code></pre>
   </section>
   <section class="demo">
+    <h2>The motion, and why it is timed this way</h2>
+    <div class="bo-stack" id="sk-motion">
+      <span class="bo-skeleton" style="inline-size: 60%"></span>
+      <span class="bo-skeleton" style="inline-size: 85%"></span>
+      <span class="bo-skeleton" style="inline-size: 45%"></span>
+    </div>
+    <div class="bo-cluster" style="margin-block-start: var(--bo-space-3)">
+      <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-sk-speed="1">Normal (1.5s)</button>
+      <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-sk-speed="4">Slow it 4&times;</button>
+      <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-sk-speed="0">Pause</button>
+    </div>
+    <p class="bo-u-text-muted"><strong>One sweep, left to right, every 1.5
+    seconds.</strong> Published guidance puts the comfortable band at
+    <strong>1.5–2s</strong>: under a second reads as glitchy and anxious, over
+    two as broken. Slow it 4&times; above to see the band's path clearly — the
+    controls are here because a loop that never stops is easy to look straight
+    past, which is exactly how this animation shipped broken.</p>
+    <p class="bo-u-text-muted"><strong>It used to run four times too far.</strong>
+    The gradient is twice the width of its box, and the old keyframes moved it
+    from 200% to &minus;200% — four box-widths per cycle, so the highlight
+    crossed roughly twice every 1.5s. The duration matched the guidance while
+    the <em>travel</em> did not, which is what made it feel fast. Percentage
+    <code>background-position</code> aligns the P% point of the image with the
+    P% point of the box, so at <code>200%</code> the band starts a full box
+    off-screen; <code>100% &rarr; 0%</code> is exactly one pass.
+    <strong>Easing matters too</strong>: <code>ease-in-out</code> accelerates
+    the band through the middle, which reads as hurried even at the right
+    duration. A travelling highlight wants <code>linear</code>.</p>
+    <p class="bo-u-text-muted"><strong>Reduced motion stops it and keeps the
+    block.</strong> The placeholder still occupies its space and still pairs
+    with <code>aria-busy</code>, so nothing is lost — only the movement. That
+    also answers the WCAG <em>Pause, Stop, Hide</em> concern for animation
+    that outlasts five seconds: the user's own OS preference is the control.</p>
+  </section>
+
+  <section class="demo">
     <h2>Empty</h2>
     <Demo code={emptyState} />
   </section>
@@ -152,3 +188,18 @@ const errorState = `<div class="bo-state bo-state--error">
     ["/concepts/accessibility", "Accessibility model"],
   ]} />
 </Gallery>
+<script>
+  // Showcase control (142.2). Scales the animation duration rather than
+  // swapping keyframes, so what you slow down is exactly what ships.
+  const box = document.getElementById('sk-motion');
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-sk-speed]');
+    if (!btn || !box) return;
+    const factor = Number(btn.dataset.skSpeed);
+    for (const el of box.querySelectorAll<HTMLElement>('.bo-skeleton')) {
+      el.style.animationPlayState = factor === 0 ? 'paused' : 'running';
+      if (factor > 0) el.style.animationDuration = `${1.5 * factor}s`;
+    }
+  });
+</script>
+

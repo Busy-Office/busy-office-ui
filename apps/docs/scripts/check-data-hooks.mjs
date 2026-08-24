@@ -52,6 +52,7 @@ const EXCEPTIONS = new Set([
   'data-richtext-cmd', 'data-richtext-value',           // richtext toolbar demo (113.1: value-taking commands)
   'data-richtext-toggle',                               // richtext toolbar collapse demo (137.3) — the PART is the surface, this is page wiring
   'data-motion-play',                                   // /base/motion showcase replay (137.18) — page wiring; the CLASSES are the surface
+  'data-sk-speed',                                      // state-patterns skeleton speed control (142.2) — page wiring; the ANIMATION is the surface
   'data-cell-link-demo',                                // handle for the cell-link claims case (135.3b) — the part needs no attribute
   'data-grouped-head',                                  // handle for the grouped-header claims case (130.2 GAP-4a) — the FEATURE needs no attribute, which is the point; this only lets the check find the demo
 ]);

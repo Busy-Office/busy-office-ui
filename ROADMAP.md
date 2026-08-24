@@ -272,7 +272,7 @@ found the idea already shipped **and broken**, which reorders the work.
        14/16/20 dark, **10 distinct frames of 10** in both themes, and reduced
        motion still stops it with the block visible.
 
-2. [ ] **142.2 — showcase the skeleton motion, and add a Skeleton pattern.**
+2. [~] **142.2 — motion researched, retimed and showcased 2026-08-25; the Skeleton PATTERN page is the remaining half.**
        Owner: *"pls check /components/state-patterns — the sample of Skeleton
        object. pls also showcase for motion. and also add pattern for
        Skeleton."* The component demo exists on `/components/state-patterns`;
@@ -284,6 +284,38 @@ found the idea already shipped **and broken**, which reorders the work.
        *Accept*: the pattern says when to use a skeleton over a spinner over
        nothing, and the shape-matching rule is demonstrated rather than
        asserted.
+
+       **Owner, mid-round: "the motion of skeleton is too fast. Should we make
+       it slower? Pls research what make better for UX."** Researched, then
+       measured — and the research said our DURATION was already right, which
+       moved the diagnosis somewhere better.
+
+       Published guidance puts the comfortable shimmer cycle at **1.5–2s**:
+       under a second reads as glitchy and anxious, over two as broken. Ours
+       was 1.5s, dead centre. So the "too fast" perception had to come from
+       elsewhere, and measuring found it: the gradient image is 2x the box
+       width, and the keyframes ran **200% → −200%** — a 400% range over a
+       negative positioning area, moving the image **four box-widths per
+       cycle**. The highlight therefore crossed roughly **twice every 1.5s**,
+       about 1.3 sweeps a second. **The duration matched the guidance; the
+       travel was 4x too far.**
+
+       Fixed to `100% → 0%` — exactly one pass, and left-to-right, which is
+       both the convention and what the owner described (the old direction was
+       right-to-left). Easing moved from `ease-in-out` to `linear`: a
+       travelling highlight that accelerates through the middle reads as
+       hurried even at a correct duration. Duration stayed 1.5s, now that the
+       figure means what the guidance assumes. Measured after: travel **0.96
+       box-widths** (was ~4), still 9–10 distinct rendered frames of 10 in
+       both themes.
+
+       Showcased on `/components/state-patterns` with Normal / Slow-4x /
+       Pause controls — verified to really change the animation (1.5s → 6s →
+       paused → 1.5s) — because a loop that never stops is easy to look past,
+       which is exactly how this animation shipped invisible in the first
+       place. The section also states the reduced-motion answer to WCAG's
+       Pause-Stop-Hide concern: the user's OS preference is the control, and
+       the block keeps its space.
 
 3. [x] **142.3 — DONE 2026-08-25. Standardized, and the component docs were already right — the errors were around them.** Owner:
        *"Please standardize the Pattern: error pages, Loading, empty & error
