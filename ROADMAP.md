@@ -133,6 +133,42 @@ with the reason); the design panel grills slices against them; removals
 face the same tests as additions — deleting a surface consumers compose
 against is a Breaking-entry decision, not a tidy-up.
 
+## Sequence — what runs next, and why in this order (owner, 2026-08-24)
+
+Eighteen items are open; **nine are dispatchable** and nine are gated on the
+owner or on a condition. The order below is the plan of record. It is derived
+from one finding rather than from item age: the instrument grill
+(`.roundtable/grill-erp-suite-instrument-2026-08-24.md`) showed that **every
+gap the ERP suite has found came from a new SHAPE or from STRESS, and none
+from a new domain** — 9, 4, and 0 of the seventeen. So the remaining modules
+are ranked by the shapes they force, not by module order.
+
+| # | Item | Why here |
+|---|------|----------|
+| 1 | **140.3** — predictions on record | Must precede the modules. A yield predicted *after* building is worthless; the whole value is that it can be wrong. Cheap — recording, not building. |
+| 2 | **130.4a Production** | Highest predicted yield: BOM as a multi-level hierarchy, capacity over time, the MRP panel. Also where **140.1's reopened question** — intensity over a long date grid — gets tested on a real screen instead of a screenshot. |
+| 3 | **130.4b Inventory** | Stock by item × warehouse. Predicted **not** a gap (`comparison` documents a candidates × criteria grid; `data-table` ships `--sticky-col`). Building it either confirms that or proves the prediction wrong. |
+| 4 | **130.4c Finance** | Journal entry that must balance, payment list + detail. Predicted **~0 gaps** — all shapes covered. This is the thesis test: a module that finds nothing is a **success**, and the evidence for stopping at shape coverage. |
+| 5 | **130.5** — wire the suite into CI | Its own condition is "once it stops changing shape". That is true only after 2-4 land. Ordered last among suite work on purpose: a gate guarding a moving target reports noise. |
+| 6 | **136.6 / 136.7** — richtext for ERP | Deliberately last, and the reason is the instrument. Both are currently *asserted as the right shape, not demonstrated* — my own words. The suite's note fields are what would demonstrate them, so building the modules first turns these from proposals into evidenced items **or refutes them**. |
+
+**Gated, not sequenced** — these are not "later", they are waiting on someone:
+
+- **112.3** pilot briefs → owner (the loop must never author brief content);
+  **112.4** blocked on 112.3's verdict; **112.5** after both.
+- **OWNER CALL — direction**: precondition met (0.3.0 cut), awaiting the
+  owner's push + GitHub Release.
+- **AT runtime evidence**: needs owner hardware — a screen reader this loop
+  cannot drive.
+- **Turbo**: conditional, and its condition (workspace past ~2 packages) is
+  not met.
+
+**What would change this order.** If Production finds three or more gaps, the
+shape thesis is holding and Inventory/Finance stay as written. If Production
+finds **zero**, the thesis is wrong in an interesting way — the remaining
+modules would be re-argued rather than ground through, because the instrument
+would have stopped paying for itself.
+
 ## Slice 27 — triaged from the owner QA review (2026-08-17)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
