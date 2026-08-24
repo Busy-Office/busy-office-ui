@@ -865,3 +865,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 20:51 · Continue · build · 130.4 Production — 4 screens, ZERO gaps; prediction of 2-4 falsified; 140.1 intensity watch item closed as not-a-gap · landed · f2ce085
 - 2026-08-24 21:22 · Continue · build · 130.5 — erp-suite wired into CI via one npm run suite entry point; red-proved on a <style> injection; 130.4 closed without Inventory/Finance · landed · 45baaa1
 - 2026-08-24 21:24 · Continue · triage · 136.6/136.7 refused on suite evidence — ERP expresses document references as structured surface, not prose links · refused · 02d183e
+- 2026-08-24 21:43 · Continue · bug · GAP-19 — bulk-actions could not wrap at 390 (GAP-7's twin); caught by the new CI gate on its first run; build.mjs now cleans dist · landed · 6e9441c
+- 2026-08-24 22:01 · Continue · bug · docs search bar: gate Pagefind results below 2 chars (was 113 noise-ranked results for 's'), pin cmdk result list-style/row-spacing against a stale-cache mismatch · landed · 8ff3971deab0e6b56bb6783289e667bf4f1eb1ac
