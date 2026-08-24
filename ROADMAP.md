@@ -434,8 +434,9 @@ already half-built and quietly broken**, which changes what to build.
        labels too. The claim asserts exactly-one-checked, one shared name,
        and no `aria-pressed` survivor.
 
-12. [x] **137.12 — DONE 2026-08-24. Owner:** *"toolbar hide/unhide: do you
-       have motion to add? pls suggest."*
+12. [x] **137.12 — DONE 2026-08-24, but only on the SECOND attempt — the
+       first shipped a class that animated nothing. Owner:** *"toolbar
+       hide/unhide: do you have motion to add? pls suggest."*
 
        **Nothing new was invented — the framework already had the answer
        twice over.** `.bo-motion-collapse` implements the
@@ -470,6 +471,68 @@ already half-built and quietly broken**, which changes what to build.
        re-verified through `check:target-size` across 3 densities. Text
        buttons (B/I/S, H2/H3) keep their padding; they have something to
        pad.
+
+14. [x] **137.14 — DONE 2026-08-24. The motion did not work, and the owner
+       is the one who noticed: *"appear and disappear? or something move? I
+       don't see the different."***
+
+       **He was right, and my gate had said green.** The markup carried
+       `.bo-motion-collapse`; the rules live in `motion/motion.css`, which is
+       deliberately opt-in — *"Never imported by index.css"* — and the docs
+       site never loads it. So the class was present and styled by nothing:
+       computed `display` was `block` rather than `grid`, and
+       `transition-duration` `0s`.
+
+       **Why the claim missed it is the lesson.** It asserted the END STATE —
+       the region reaches height 0 — which is equally true whether the bar
+       eases shut or vanishes in a single frame. A property that holds in
+       both the working and broken case cannot separate them. The claim now
+       samples height across the transition and requires intermediate
+       frames, with the reduced-motion branch asserting the opposite, since
+       snapping is correct when the duration tokens are zeroed.
+
+       Fixed by owning the motion in `richtext.css` rather than depending on
+       an optional stylesheet — the same call `dashboard.css` already made,
+       and now the **third** copy of the `0fr/1fr` technique in this repo.
+       That duplication is a real signal that the collapse primitive belongs
+       in core rather than in the opt-in module, but moving it is an
+       architecture decision for the owner, not something to slip into a
+       wishlist item. Driven straight off `aria-expanded`, so the
+       parallel `data-state` and the JS that kept it in step are both gone.
+
+       **Second defect, found by measuring rather than looking:** the track
+       reaching `0fr` still left a 9px strip, because padding and the bottom
+       border sit outside the content box. They now collapse on the same
+       clock; closed height is a true 0.
+
+15. [x] **137.15 — DONE 2026-08-24. Owner, on a zoomed corner: *"at the
+       corner of the rich text, something missing?"*** — and something was.
+
+       `__toolbar` rounds its top corners with `border-start-*-radius:
+       inherit`, which resolves against its PARENT. Introducing the motion
+       wrapper silently re-pointed that inherit at an element with no radius,
+       so the toolbar's corners went square inside the field's 6px rounded
+       ones. Measured: wrapped toolbar `0px`, unwrapped control `6px`.
+
+       The wrapper now continues the chain. **A wrapper added for motion must
+       not change the geometry** — worth stating because `inherit` makes
+       every new ancestor a silent participant, and nothing in the build
+       would have caught it.
+
+16. [x] **137.16 — DONE 2026-08-24. Owner:** *"bold and italicise .. its
+       button still wide?"* Right again, and 137.13 had only done half the
+       job: it squared the ICON buttons and left every letterform one alone.
+
+       Measured at compact: **B was 42.9px of box around 8.9px of text**, I
+       was 37.6 around 3.6, H2/H3 ~52 around ~18 — beside icon buttons at 28.
+       All of them fit a 28px square, so all of them got it. Toolbar width
+       892 → **652px**, a 27% cut, one row at compact, nothing clipped.
+
+       New claim guards the risk that creates: squaring a button puts TEXT in
+       a box sized for a 1em glyph, which fits in this face at this density
+       and would clip silently under a wider font or a translated label.
+       `scrollWidth` vs `clientWidth` is what notices; the claim also pins
+       one distinct width, squareness, and the 24px floor.
 
 ## Slice 136 — Owner: grill the rich-text DESIGN (2026-08-24)
 

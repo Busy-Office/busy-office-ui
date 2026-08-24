@@ -134,12 +134,73 @@
   }
 
   /* Child combinator, and it is doing real work: an UNWRAPPED toolbar hides
-     instantly, but a toolbar wrapped in .bo-motion-collapse is no longer a
-     direct child, so this rule stops applying and the wrapper animates it
-     instead. Opting into motion is therefore one wrapper and no override —
-     no !important, no competing rule, nothing to undo. */
+     instantly, but a toolbar inside __toolbar-collapse is no longer a direct
+     child, so this rule stops applying and the wrapper animates it instead.
+     Opting into motion is one wrapper and no override — no !important, no
+     competing rule, nothing to undo. */
   .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false']) > .bo-richtext__toolbar {
     display: none;
+  }
+
+  /* Optional motion for the collapse. The same grid-template-rows 0fr/1fr
+     technique as .bo-motion-collapse, and the THIRD copy of it in this
+     repo (dashboard.css holds the second, with the same note) — because
+     motion.css is deliberately opt-in and "never imported by index.css", so
+     a component cannot rely on the utility being loaded. A first version of
+     this shipped the utility class in the markup and animated nothing at
+     all: the class was there, its rules were in a stylesheet the page never
+     loaded. Measured, not assumed — display computed to `block`, not
+     `grid`, and transition-duration to 0s.
+
+     Driven straight off aria-expanded rather than a parallel data-state, so
+     there is one source of truth and no JS keeping two attributes in step.
+
+     duration-base, not -slow: this is form chrome getting out of the way,
+     and 300ms on a toolbar reads as lag. Reduced motion needs no rule here
+     — tokens/motion.css already zeroes the duration tokens. */
+  .bo-richtext__toolbar-collapse {
+    display: grid;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+    /* Continues the radius chain. __toolbar rounds its top corners with
+       `inherit`, which resolves against its PARENT — so introducing this
+       wrapper silently resolved it to 0 and left square toolbar corners
+       poking into the field's 6px rounded ones (measured: wrapped toolbar
+       0px, unwrapped 6px). A wrapper added for motion must not change the
+       geometry; `overflow: hidden` above then clips the bar to the curve. */
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+    transition: grid-template-rows var(--bo-motion-duration-base)
+      var(--bo-motion-easing-standard);
+  }
+
+  /* The child must be able to shrink past its content, or the track cannot
+     animate down. */
+  .bo-richtext__toolbar-collapse > * {
+    min-block-size: 0;
+    overflow: hidden;
+  }
+
+  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false'])
+    .bo-richtext__toolbar-collapse {
+    grid-template-rows: 0fr;
+  }
+
+  /* The track reaching 0fr is not the whole job: padding and the bottom
+     border live OUTSIDE the content box, so a zero track still left a 9px
+     strip behind — measured, and visible as a thin bar that never went
+     away. They have to collapse on the same clock. */
+  .bo-richtext__toolbar-collapse .bo-richtext__toolbar {
+    transition:
+      padding-block var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+      border-block-end-width var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+
+  .bo-richtext:has(.bo-richtext__toolbar-toggle[aria-expanded='false'])
+    .bo-richtext__toolbar-collapse
+    .bo-richtext__toolbar {
+    padding-block: 0;
+    border-block-end-width: 0;
   }
 
   /* Grouped buttons (137.7). The divider below is VISUAL ONLY — a

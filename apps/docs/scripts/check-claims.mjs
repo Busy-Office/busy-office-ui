@@ -2215,6 +2215,90 @@ check(
   JSON.stringify(rtHotToggle),
 );
 
+/* Slice 137.13 — toolbar buttons are square and their content still fits.
+   The second half matters because squaring them put TEXT (B, I, S, H2, H3)
+   into a box sized for a 1em glyph: it fits in this font at this density,
+   and a wider face or a translated label would clip silently. scrollWidth
+   vs clientWidth is the check that notices. */
+const rtBtnBox = await page.evaluate((sel) => {
+  const f = document.querySelector(sel);
+  f.setAttribute('data-density', 'compact');
+  const btns = [...f.querySelectorAll('.bo-richtext__toolbar .bo-btn')];
+  const widths = btns.map((b) => Math.round(b.getBoundingClientRect().width));
+  const heights = btns.map((b) => Math.round(b.getBoundingClientRect().height));
+  const out = {
+    count: btns.length,
+    distinctWidths: [...new Set(widths)],
+    square: widths.every((w, i) => Math.abs(w - heights[i]) <= 1),
+    clipped: btns.filter((b) => b.scrollWidth > b.clientWidth + 1)
+      .map((b) => b.textContent.trim() || b.getAttribute('aria-label')),
+    meetsTargetFloor: widths.every((w) => w >= 24) && heights.every((h) => h >= 24),
+  };
+  f.removeAttribute('data-density');
+  return out;
+}, ADV);
+check(
+  'richtext: every toolbar button is one square size at compact, clips nothing, and stays above the 24px target floor',
+  rtBtnBox.count > 10 &&
+    rtBtnBox.distinctWidths.length === 1 &&
+    rtBtnBox.square &&
+    rtBtnBox.clipped.length === 0 &&
+    rtBtnBox.meetsTargetFloor,
+  JSON.stringify(rtBtnBox),
+);
+
+/* Slice 137.12 — the collapse must ANIMATE, and this is the assertion the
+   first version did not have. A check on the end state ("height reaches 0")
+   passes identically whether the bar eases shut or vanishes in one frame,
+   which is exactly how a version that animated nothing at all shipped: the
+   markup carried .bo-motion-collapse while its rules sat in motion.css, a
+   stylesheet deliberately never imported by index.css and never loaded by
+   this page. So sample the height across the transition and require
+   intermediate frames.
+
+   Under prefers-reduced-motion the duration tokens are 0ms and snapping is
+   the CORRECT behaviour, so that branch asserts the opposite. */
+const rtMotion = await page.evaluate(async () => {
+  const t = document.querySelector('[data-richtext-toggle]');
+  const region = document.getElementById(t.getAttribute('aria-controls'));
+  if (!region.classList.contains('bo-richtext__toolbar-collapse')) return { wired: false };
+  /* Self-contained: earlier checks leave the toolbar in whatever state they
+     finished in, and sampling a transition that is still settling reads as
+     "no motion". Force it open, let it settle, then measure. */
+  if (t.getAttribute('aria-expanded') !== 'true') t.click();
+  await new Promise((r) => setTimeout(r, 400));
+  const frames = [];
+  const t0 = performance.now();
+  t.click();
+  await new Promise((res) => {
+    const tick = () => {
+      frames.push(+region.getBoundingClientRect().height.toFixed(1));
+      if (performance.now() - t0 < 350) requestAnimationFrame(tick);
+      else res();
+    };
+    requestAnimationFrame(tick);
+  });
+  t.click(); // leave it open for later checks
+  const open = frames[0];
+  return {
+    wired: true,
+    reduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
+    open,
+    closed: frames.at(-1),
+    intermediate: frames.filter((h) => h > 1 && h < open - 1).length,
+    transitionProperty: getComputedStyle(region).transitionProperty,
+  };
+});
+check(
+  'richtext: the toolbar collapse ANIMATES (intermediate heights), reaches a true 0, and snaps only under reduced motion',
+  rtMotion.wired &&
+    rtMotion.open > 0 &&
+    rtMotion.closed === 0 &&
+    rtMotion.transitionProperty.includes('grid-template-rows') &&
+    (rtMotion.reduced ? rtMotion.intermediate === 0 : rtMotion.intermediate > 0),
+  JSON.stringify(rtMotion),
+);
+
 /* Slice 137.7 — the toolbar's visual categories must exist for AT too. The
    dividers were decorative spans inside one big role="group", so the eye
    saw six categories and a screen reader heard one list. Each group must be

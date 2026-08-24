@@ -11,9 +11,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const basic = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
     <div class="bo-richtext__group" role="group" aria-label="Text style">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
               title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="italic" aria-pressed="false"
               title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Lists">
@@ -41,9 +41,9 @@ const basic = `<div class="bo-richtext">
 
 const empty = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
             title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="italic" aria-pressed="false"
             title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="true" data-empty
@@ -55,7 +55,7 @@ const invalid = `<div class="bo-form-field">
   <label class="bo-form-field__label" for="rt-reason">Rejection reason</label>
   <div class="bo-richtext">
     <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
               title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
     </div>
     <div class="bo-richtext__content bo-prose" contenteditable="true" id="rt-reason" data-empty
@@ -67,11 +67,11 @@ const invalid = `<div class="bo-form-field">
 </div>`;
 
 const collapsible = `<div class="bo-richtext">
-  <div class="bo-motion-collapse" data-state="open" id="rt-collapse-bar">
+  <div class="bo-richtext__toolbar-collapse" id="rt-collapse-bar">
     <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
             title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="italic" aria-pressed="false"
             title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
     <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
               aria-label="Bulleted list" title="Bulleted list"><span class="bo-icon bo-icon--list-bullet" aria-hidden="true"></span></button>
@@ -104,18 +104,18 @@ const lists = `<div class="bo-richtext">
 const advanced = `<div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
     <div class="bo-richtext__group" role="group" aria-label="Text style">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
             title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="italic" aria-pressed="false"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="italic" aria-pressed="false"
             title="Italic (Ctrl/Cmd + I)" aria-keyshortcuts="Control+I Meta+I"><em>I</em></button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="strikeThrough" aria-pressed="false"
             title="Strikethrough"><s>S</s></button>
       <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="removeFormat"
             aria-label="Clear formatting" title="Clear formatting"><span class="bo-icon bo-icon--clear-format" aria-hidden="true"></span></button>
     </div>
     <div class="bo-richtext__group" role="group" aria-label="Block format">
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
-      <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H2">H2</button>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="formatBlock" data-richtext-value="H3">H3</button>
       <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="formatBlock" data-richtext-value="BLOCKQUOTE"
             aria-label="Blockquote" title="Blockquote"><span class="bo-icon bo-icon--quote" aria-hidden="true"></span></button>
     </div>
@@ -166,8 +166,8 @@ const readonly = `<div class="bo-richtext bo-richtext--readonly">
 
 const disabled = `<div class="bo-richtext bo-richtext--disabled">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" disabled><strong>B</strong></button>
-    <button class="bo-btn bo-btn--ghost" type="button" disabled><em>I</em></button>
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" disabled><strong>B</strong></button>
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" disabled><em>I</em></button>
   </div>
   <div class="bo-richtext__content bo-prose" contenteditable="false"
        role="textbox" aria-multiline="true" aria-disabled="true" aria-label="Notes (locked)">
@@ -185,7 +185,7 @@ const canonical = `<!-- CHROME, not an engine: the framework styles the containe
      form all have to keep honouring. -->
 <div class="bo-richtext">
   <div class="bo-richtext__toolbar" role="group" aria-label="Formatting">
-    <button class="bo-btn bo-btn--ghost" type="button" data-richtext-cmd="bold" aria-pressed="false"
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="bold" aria-pressed="false"
             title="Bold (Ctrl/Cmd + B)" aria-keyshortcuts="Control+B Meta+B"><strong>B</strong></button>
     <span class="bo-richtext__divider"></span>
     <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" data-richtext-cmd="insertUnorderedList"
@@ -427,16 +427,21 @@ ${rtKeys.keys
     membership, arrow-key navigation and "1 of 3" all come free, and nothing
     clears the other two.</p>
     <p class="bo-u-text-muted"><strong>Motion is opt-in and costs one
-    wrapper.</strong> Wrap the toolbar in
-    <code>.bo-motion-collapse</code> and move its
-    <code>data-state</code> with <code>aria-expanded</code>; the bar then
-    rolls up instead of vanishing. It animates real auto height via the
+    wrapper — no JS and no second attribute.</strong> Put the toolbar inside
+    <code>.bo-richtext__toolbar-collapse</code> and it rolls up instead of
+    vanishing, driven straight off the toggle's own
+    <code>aria-expanded</code>. It animates real auto height via the
     <code>grid-template-rows: 0fr/1fr</code> technique, so there is no
-    measured pixel value and no magic maximum, and it uses the duration
-    tokens — which are set to <code>0ms</code> under
-    <code>prefers-reduced-motion</code>, so honouring that takes no extra
-    code. An unwrapped toolbar keeps hiding instantly; the CSS targets a
-    direct child, so opting in requires no override.</p>
+    measured pixel and no magic maximum, and the duration comes from the
+    tokens — which are <code>0ms</code> under
+    <code>prefers-reduced-motion</code>, so honouring that needs no extra
+    code. An unwrapped toolbar keeps hiding instantly: the instant rule
+    targets a <em>direct</em> child, so opting in overrides nothing.
+    <strong>Why not the <code>.bo-motion-collapse</code> utility?</strong>
+    Because <code>motion.css</code> is deliberately opt-in and never
+    imported by <code>index.css</code> — the first attempt here shipped that
+    class and animated nothing at all, since its rules were in a stylesheet
+    the page never loaded.</p>
     <p class="bo-u-text-muted"><strong>Icon-only buttons take
     <code>.bo-btn--icon</code>.</strong> Without it an icon button is padded
     like a text button — measured here at 47px wide around a 13px glyph
@@ -774,12 +779,6 @@ const view = new EditorView(host, {
       const label = `${open ? 'Hide' : 'Show'} formatting toolbar (Alt + Shift + T)`;
       t.setAttribute('aria-label', label);
       t.setAttribute('title', label);
-      // If the toolbar is wrapped for motion, the wrapper's data-state is
-      // what animates it — same convention dialog and offcanvas already use.
-      document.getElementById(t.getAttribute('aria-controls') || '')
-        ?.classList.contains('bo-motion-collapse') &&
-        document.getElementById(t.getAttribute('aria-controls')!)!
-          .setAttribute('data-state', open ? 'open' : 'closed');
     };
     document.addEventListener('click', (e) => {
       const t = (e.target as HTMLElement).closest<HTMLElement>('[data-richtext-toggle]');
