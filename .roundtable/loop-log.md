@@ -852,3 +852,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-24 09:19 · Continue · owner-wishlist · 137.10 — adopt lucide remove-formatting + square-pen, ISC notice added to NOTICE and icon.css · landed · 9798061
 - 2026-08-24 09:40 · Continue · owner-wishlist · 137.11-137.13 — alignment as bo-segmented radio group, collapse motion via bo-motion-collapse, bo-btn--icon on toolbar buttons · landed · a5ea0ee
 - 2026-08-24 10:13 · Continue · owner-wishlist · 137.14-137.16 — collapse motion actually runs (was a class with no stylesheet), radius chain restored, all toolbar buttons squared · landed · 3997705
+- 2026-08-24 11:19 · Continue · owner-wishlist · 137.17-137.18 — /base/motion was demonstrating nothing (opt-in module never imported); fixed, showcases added, liveness claims · landed · dbcdbc8
