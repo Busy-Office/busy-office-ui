@@ -3960,7 +3960,7 @@ per page, not two).
        (extend `bo-check-markup` vs new bin), and finding format are the
        post-pilot grill round. If 112.3 refuses it, this item closes as
        refused with the pilot report as the reason.
-5. [ ] **112.5 — "Which Pattern Should I Use?" docs page. UNBLOCKED
+5. [x] **112.5 — DONE 2026-08-25, generated from `patterns.json` as required. UNBLOCKED
        2026-08-24 — the coupling to 112.3 cost more than it saved.** A
        task→pattern decision-flow page generated from `patterns.json` (never
        hand-maintained — it would be the fifth interpretation of the pattern
@@ -3979,6 +3979,29 @@ per page, not two).
 
        It is now **the only dispatchable build item in the backlog** — every
        other open item waits on the owner or on an unmet condition.
+
+       **Shipped at `/concepts/which-pattern`**, under concepts rather than
+       patterns: it documents no screen, so the pattern-shape gate rightly
+       does not apply to it.
+
+       Every cell is read from `patterns.json` — the same file that builds the
+       tile index and the sidebar — so adding a pattern adds a row with no
+       edit here, and rewording an opener rewords its row. Three things are
+       extracted, because they are the three a reader chooses by: the job
+       family, who the screen is for, and **the pattern's own statement of
+       when it is the wrong choice**. That last is the most useful column and
+       the most reliable source, because `check:wrong-choice` requires every
+       page to carry the clause.
+
+       Verified against the numbers measured BEFORE building, which is the
+       independent check: **39 rows across 6 groups, 39 pattern links, and 17
+       alternative links** — the clauses that name another pattern outright
+       get a real link to it. Five rows show a dash, and the page says so in
+       its own words rather than hiding it: a blank means the clause is
+       phrased in a way the extraction did not match, never that the page is
+       silent on it. Where a clause describes an alternative instead of naming
+       it, the prose stands — inventing a link the author did not write would
+       be the page guessing.
 
 **REFUSED, with reasons (recorded per the grill's Q6 — re-open any of
 these when a second real consumer of `@busy-office/ui` exists):**

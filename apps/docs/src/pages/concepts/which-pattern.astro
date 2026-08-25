@@ -1,0 +1,136 @@
+---
+/* GENERATED from patterns.json — the roadmap item (112.5) made this a
+   condition, and the reason is worth restating: a hand-maintained decision
+   flow would be a FIFTH interpretation of the pattern system, free to drift
+   from the sidebar, the tile index, the pages themselves and pattern-groups.
+   Everything below is read from the same file `/patterns/` is built from.
+   Nothing here is typed twice.
+
+   The three things extracted are the three a reader actually chooses by:
+   the job family (the group), who the screen is for, and — most usefully —
+   the pattern's own statement of when it is the WRONG choice. That last one
+   is enforced to exist by `check:wrong-choice`, so it is a reliable source
+   rather than a lucky one. */
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import patterns from '../../data/patterns.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const tiles = patterns.groups.flatMap((g: any) => g.tiles);
+const byTitle = new Map<string, any>(tiles.map((t: any) => [t.title.toLowerCase(), t]));
+
+const WHO = /Who uses it:\s*(.+?)(?=\s+(?:How often|What "done")|$)/s;
+const NOT = /\b(?:Not for|Not when)\b\s*(.+?)(?=\s*(?:\.\s+[A-Z]|$))/s;
+
+/** Split a wrong-choice clause so any pattern it names becomes a real link. */
+function linkAlternatives(clause: string, selfTitle: string) {
+  const hit = [...byTitle.entries()].find(
+    ([lt]) => lt !== selfTitle.toLowerCase() && clause.toLowerCase().includes(lt),
+  );
+  if (!hit) return { before: clause, target: null as any, after: '' };
+  const [lt, target] = hit;
+  const i = clause.toLowerCase().indexOf(lt);
+  return { before: clause.slice(0, i), target, after: clause.slice(i + lt.length) };
+}
+
+const groups = patterns.groups.map((g: any) => ({
+  label: g.label.replace(/^Patterns:\s*/, ''),
+  rows: g.tiles.map((t: any) => {
+    const who = WHO.exec(t.opener)?.[1]?.trim() ?? '';
+    const notRaw = NOT.exec(t.opener)?.[1]?.trim() ?? '';
+    return { ...t, who, not: notRaw ? linkAlternatives(notRaw, t.title) : null };
+  }),
+}));
+
+const withNot = groups.flatMap((g: any) => g.rows).filter((r: any) => r.not).length;
+const withWho = groups.flatMap((g: any) => g.rows).filter((r: any) => r.who).length;
+---
+<Gallery title="Which pattern should I use?">
+  <p class="demo-note">
+    Pick by the JOB, not by the widget. A screen's pattern follows from what
+    the person is trying to finish — find something, work one record, enter
+    data, clear a queue, watch something run — and every pattern below says in
+    its own words when it is the <em>wrong</em> choice, which is usually the
+    faster way to decide. <strong>Not a component index</strong>: if you know
+    the screen and need the parts, the pattern page lists them, and
+    <a href={base + '/components/button'}>the component pages</a> document each
+    one. This page only answers "which screen am I building?".
+  </p>
+
+  <section class="demo">
+    <h2>Start from the job</h2>
+    <p class="bo-u-text-muted">Six families, in the order a working day runs
+    through them. Every row is read from the same file that builds
+    <a href={base + '/patterns/'}>the pattern index</a> and the sidebar, so
+    this page cannot disagree with them about what exists.</p>
+
+    {groups.map((g: any) => (
+      <>
+        <h3>{g.label}</h3>
+        <div class="bo-data-table-container" tabindex="0" data-density="compact">
+          <table class="bo-data-table">
+            <caption class="bo-visually-hidden">{g.label} — patterns, who they serve, and when not to use them</caption>
+            <thead>
+              <tr>
+                <th scope="col">Pattern</th>
+                <th scope="col">Reach for it when</th>
+                <th scope="col">Not when</th>
+              </tr>
+            </thead>
+            <tbody>
+              {g.rows.map((r: any) => (
+                <tr>
+                  <td><a class="bo-data-table__cell-link" href={base + r.href}>{r.title}</a></td>
+                  <td>{r.who || <span class="bo-u-text-muted">—</span>}</td>
+                  <td>
+                    {r.not ? (
+                      <>
+                        {r.not.before}
+                        {r.not.target && (
+                          <a href={base + r.not.target.href}>{r.not.target.title}</a>
+                        )}
+                        {r.not.after}
+                      </>
+                    ) : (
+                      <span class="bo-u-text-muted">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    ))}
+  </section>
+
+  <section class="demo">
+    <h2>How this page is built, and what it does not cover</h2>
+    <p class="bo-u-text-muted">Every cell above is extracted from
+    <code>patterns.json</code>, which is generated from the pattern pages
+    themselves. Adding a pattern adds a row here with no edit to this file;
+    rewording a page's opener rewords its row. That is the point — a
+    hand-written decision flow would be a fifth place the pattern system is
+    described, free to drift from the other four.</p>
+    <p class="bo-u-text-muted"><strong>Stated so you can see the gaps rather
+    than trust the table.</strong> Of {tiles.length} patterns,
+    <strong>{withWho}</strong> state who they are for and
+    <strong>{withNot}</strong> state when not to use them; the rest show
+    <span class="bo-u-text-muted">—</span> and their page is the answer. The
+    "not when" column is the pattern's own wrong-choice clause, which
+    <code>check:wrong-choice</code> requires every page to carry — so a blank
+    means the clause is phrased in a way this extraction did not match, never
+    that the page is silent on it.</p>
+    <p class="bo-u-text-muted">And a pattern named in a wrong-choice clause is
+    linked automatically where the clause names one outright. Where it
+    describes the alternative instead of naming it, the prose stands — the
+    page it points at is one sentence away, and inventing a link the author did
+    not write would be this page guessing.</p>
+  </section>
+
+  <Related links={[
+    ['/patterns/', 'All patterns'],
+    ['/concepts/design-language', 'Design language'],
+    ['/getting-started/first-screen', 'Build your first screen'],
+  ]} />
+</Gallery>
