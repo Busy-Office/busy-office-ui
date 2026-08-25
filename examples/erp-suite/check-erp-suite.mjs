@@ -17,6 +17,7 @@
  * --self-test: there is no judgement to get wrong.
  */
 import { readdir, readFile } from 'node:fs/promises';
+import { suitePages } from './pages.mjs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -46,7 +47,10 @@ for (const f of sourceFiles) {
   if (f.endsWith('.css')) failures.push(`${f}: the example ships its own CSS — that is a gap being papered over, not a screen`);
 }
 
-const built = (await walk(DIST)).filter((f) => f.endsWith('.html'));
+/* The shared enumerator, not this file's general file walker: that one exists
+   for the stray-CSS sweep over SOURCE and returns every file. Two walks of the
+   dist tree written independently is what pages.mjs consolidates. */
+const built = (await suitePages(DIST)).map((p) => p.file);
 if (built.length === 0) failures.push('no screens built — run build.mjs first');
 
 const screens = new Set(built.map((f) => '/' + f.slice(DIST.length + 1)));

@@ -30,6 +30,11 @@
  */
 import { serveSuite } from './serve.mjs';
 import { launchDocsBrowser } from '../../apps/docs/scripts/browser-harness.mjs';
+import { suitePages } from './pages.mjs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const DIST = join(dirname(fileURLToPath(import.meta.url)), 'dist');
 
 /** What each kind of screen is FOR, and therefore what it owes. */
 const KIND = {
@@ -150,7 +155,23 @@ function fit(rows) {
   return { slope, intercept, sd };
 }
 
-const paths = Object.keys(KIND).map((k) => (k === 'index' ? '/index.html' : `/${k}.html`));
+/* EVERY BUILT SCREEN HAS A KIND, asserted rather than assumed. The map is
+   hand-written on purpose (see the header — inferring kind from features is
+   circular), and a hand-written map is exactly the thing that silently falls
+   behind: add a screen, and it is simply never scored, with no error and a
+   total that still looks plausible. Now checked against the shared
+   enumerator, which is also why that enumerator exists — an ad-hoc walk
+   written the same day reported 21 screens where there were 22. */
+const built = (await suitePages(DIST)).map((p) => p.url.replace(/^\//, '').replace(/\.html$/, ''));
+const unscored = built.filter((b) => !(b in KIND));
+const stale = Object.keys(KIND).filter((k) => !built.includes(k));
+if (unscored.length || stale.length) {
+  if (unscored.length) console.error(`score: ${unscored.length} built screen(s) have no kind: ${unscored.join(', ')}`);
+  if (stale.length) console.error(`score: ${stale.length} kind(s) name a screen that is not built: ${stale.join(', ')}`);
+  console.error('  A screen with no kind is silently unscored. Add it to KIND, or remove the stale entry.');
+  process.exit(1);
+}
+
 const { server, port } = await serveSuite();
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();

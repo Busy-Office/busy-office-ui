@@ -14,6 +14,7 @@ import { readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveSuite } from './serve.mjs';
+import { suitePages } from './pages.mjs';
 import { launchDocsBrowser } from '../../apps/docs/scripts/browser-harness.mjs';
 import { WIDTHS, NARROW_WIDTH } from '../../apps/docs/scripts/viewports.mjs';
 
@@ -21,16 +22,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const DIST = join(here, 'dist');
 const AXE = readFileSync(new URL('../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 
-async function walk(dir, prefix = '') {
-  const out = [];
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    if (e.isDirectory()) out.push(...(await walk(join(dir, e.name), `${prefix}/${e.name}`)));
-    else if (e.name.endsWith('.html')) out.push(`${prefix}/${e.name}`);
-  }
-  return out;
-}
-
-const paths = await walk(DIST);
+const paths = (await suitePages(DIST)).map((p) => p.url);
 const { server, port } = await serveSuite();
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
