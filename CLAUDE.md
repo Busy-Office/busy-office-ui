@@ -71,7 +71,16 @@ python3 scripts/loops/record_metric.py --name <metric> --value <n> --unit <u>   
 ```
 
 This keeps `.roundtable/loop-log.md` (human) and `.roundtable/loops.db` (queryable)
-in sync. Query the mirror to steer prioritization.
+in sync, and regenerates `STATUS.md` and `.roundtable/INDEX.md`. Query the mirror
+to steer prioritization.
+
+**Before grilling something, check `.roundtable/INDEX.md`** — 131 findings live
+there and browsing them previously required knowing a filename in advance. The
+index is generated, lists every finding with its date and whether anything cites
+it, and prints the count of **repeated subjects**: the same question grilled
+twice is the signature of a directory that has outgrown retrieval, so it is
+measured on every run rather than asserted. It read 3 when written, all
+deliberate follow-ups.
 
 ## Quality bar (every change meets it)
 

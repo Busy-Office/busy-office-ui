@@ -125,11 +125,18 @@ def main():
     # Regenerate STATUS.md (roadmap 110.5) so it can never drift from what was
     # just recorded. Best-effort: a failure here must not fail the recording
     # itself, which is the operation that actually matters.
-    try:
-        gen = os.path.join(os.path.dirname(__file__), "generate_status.py")
-        subprocess.run([sys.executable, gen], check=True, capture_output=True)
-    except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
-        print(f"  (warning: STATUS.md regeneration failed: {exc})", file=sys.stderr)
+    for name, label in (
+        ("generate_status.py", "STATUS.md"),
+        # The .roundtable index is derived the same way and regenerated here for
+        # the same reason: a findings list that is refreshed by hand is a
+        # findings list that is wrong.
+        ("generate_roundtable_index.py", ".roundtable/INDEX.md"),
+    ):
+        try:
+            gen = os.path.join(os.path.dirname(__file__), name)
+            subprocess.run([sys.executable, gen], check=True, capture_output=True)
+        except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
+            print(f"  (warning: {label} regeneration failed: {exc})", file=sys.stderr)
 
 
 if __name__ == "__main__":
