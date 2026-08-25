@@ -66,6 +66,7 @@ export const render = () =>
         <legend class="bo-form-section__legend">Lines</legend>
         <div class="bo-data-table-container" tabindex="0" data-density="compact">
           <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Requisition lines with quantity, estimated price and value</caption>
             <thead>
               <tr>
                 <th scope="col">#</th>

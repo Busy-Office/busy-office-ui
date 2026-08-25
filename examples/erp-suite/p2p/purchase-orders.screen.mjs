@@ -62,6 +62,7 @@ export const render = () =>
         <span class="bo-u-text-muted">312 orders</span>
       </div>
       <table class="bo-data-table bo-data-table--sticky-col">
+        <caption class="bo-visually-hidden">Purchase orders with vendor, cost centre, value and status</caption>
         <thead>
           <tr>
             <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>

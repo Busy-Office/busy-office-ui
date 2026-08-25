@@ -43,6 +43,7 @@ export const render = () =>
     <h2>Lines</h2>
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Purchase order lines with quantity, price and net value</caption>
         <thead>
           <tr>
             <th scope="col">#</th>

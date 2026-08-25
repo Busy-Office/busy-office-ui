@@ -80,6 +80,7 @@ export const render = () =>
          to a column by eye. -->
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Vendor invoice lines matched against the purchase order</caption>
         <thead>
           <tr>
             <th scope="col" rowspan="2">#</th>

@@ -56,6 +56,11 @@ const group = (g, i) => `
       </div>
       <div class="bo-data-table-container" tabindex="0" data-density="compact">
         <table class="bo-data-table">
+        <!-- Every data table carries an accessible name, and a DISTINCT one:
+             this template renders once per vendor, so one shared caption would
+             give both groups a name a screen-reader user cannot tell apart
+             (roadmap 145.1). axe flags neither. -->
+        <caption class="bo-visually-hidden">Lines for purchase order ${i + 1} of 2, to ${g.vendor}</caption>
           <thead>
             <tr>
               <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Include all lines from ${g.vendor}" checked></th>

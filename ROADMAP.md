@@ -259,6 +259,30 @@ the codebase rather than from the owner's inbox.
 screen's whole source. Rule 6, the round budgets, the blind re-score and the
 source-digest re-entry all apply unchanged. One mechanism, more surfaces.
 
+0. [x] **145.0 — DONE 2026-08-26. Feasibility test BEFORE building the ledger:
+       does the rubric separate screens at all?** Added because the component
+       rubric is the cautionary case — 19 surfaces, every one scored **3 in a
+       single round**, the queue went dry, and three of its dimensions had to
+       be retired for reading 3 everywhere. Building a screen ledger without
+       testing for that reproduces the failure one level up.
+
+       Three screens of deliberately different kinds were scored by hand
+       against draft dimensions: `fin/journal-entry` (a document with a
+       constraint), `p2p/purchase-orders` (a list report), `fin/ar-aging` (a
+       cross-tab). **They separate**, and one dimension separated them on the
+       first pass by finding a real defect rather than a score: two screens
+       named their data table and one did not.
+
+       Followed up across all 28 screens: **8 tables had no accessible name,
+       and all 8 were in P2P** — the pilot module, built before the convention
+       existed. Five later modules all got it right. axe never flagged it,
+       because naming a table is best practice rather than a WCAG failure, so
+       no gate saw a module-wide gap. Fixed, and now gated in the suite audit.
+
+       *Verdict: 145.1-145.3 are worth building.* The dimensions discriminate,
+       and the cheap objective ones point at real defects rather than
+       decorating a number.
+
 1. [ ] **145.1 — settle the rubric against measured base rates, THEN write it.**
        Not the other way round: this file already retired
        `typography`/`colour`/`spacing` for reading 3 on all 39 components, and

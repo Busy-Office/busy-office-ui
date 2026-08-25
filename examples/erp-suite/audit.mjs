@@ -58,6 +58,39 @@ for (const path of paths) {
     );
     for (const v of violations) failures.push(`${path}@${width}: ${v.id} (${v.impact}, ${v.nodes} node(s))`);
 
+    /* EVERY DATA TABLE IS NAMED, and named DISTINCTLY on its own page.
+       axe does not flag a missing <caption> — naming a table is best practice
+       rather than a WCAG failure — so eight unnamed tables shipped across the
+       whole P2P module, which was built before the convention existed, and
+       five later modules all got it right. Nothing noticed until a
+       screen-scoring pass compared modules (roadmap 145.1). Two tables sharing
+       one name is the same defect wearing a disguise: convert-to-po renders
+       its template once per vendor, so a single caption gave both groups an
+       identical accessible name a screen-reader user cannot tell apart. */
+    if (width === WIDTHS[0]) {
+      for (const t of await page.evaluate(() =>
+        [...document.querySelectorAll('table')].map((t, i) => ({
+          i,
+          name:
+            t.querySelector('caption')?.textContent.trim() ||
+            t.getAttribute('aria-label') ||
+            (t.getAttribute('aria-labelledby')
+              ? document.getElementById(t.getAttribute('aria-labelledby'))?.textContent.trim()
+              : '') ||
+            '',
+        })),
+      )) {
+        if (!t.name) failures.push(`${path}: table ${t.i + 1} has no accessible name (caption or aria-label)`);
+      }
+      const names = await page.evaluate(() =>
+        [...document.querySelectorAll('table')].map(
+          (t) => t.querySelector('caption')?.textContent.trim() || t.getAttribute('aria-label') || '',
+        ),
+      );
+      const dupes = names.filter((n, i) => n && names.indexOf(n) !== i);
+      for (const d of new Set(dupes)) failures.push(`${path}: two tables share the name "${d}"`);
+    }
+
     if (width === NARROW_WIDTH) {
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

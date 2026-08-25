@@ -52,6 +52,7 @@ export const render = () =>
         <span class="bo-u-text-muted">42 requisitions</span>
       </div>
       <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Requisitions with vendor, requester, value and status</caption>
         <thead>
           <tr>
             <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>

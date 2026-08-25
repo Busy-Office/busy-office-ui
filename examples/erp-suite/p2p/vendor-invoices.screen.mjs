@@ -52,6 +52,7 @@ export const render = () =>
 
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Vendor invoices with the order they match, amount and status</caption>
         <thead>
           <tr>
             <th scope="col">Invoice #</th>
