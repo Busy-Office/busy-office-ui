@@ -302,6 +302,18 @@ surfaced more:
 1. Scan for divergence: inline styles that should be tokens/classes, duplicated
    token values or logic (e.g. the same lookup table hand-copied into multiple
    scripts), component pages that break the one-page skeleton, repeated CSS.
+   **Run `npm run scan:dead-style -w docs`** — inline declarations that change
+   no computed value at all. It is not a CI gate on purpose (the walk costs ~2
+   min, and folding it into `check:layout` would mean mutating a trusted gate's
+   page to catch cosmetic drift), so THIS step is what keeps it from rotting:
+   the dispatcher reaches Standardize every 4th Continue round, which is the
+   mechanism, not a human remembering. First sweep: 29 dead, 25 of them
+   `style="margin: 0"` restating the reset's own `* { margin: 0 }` on the pages
+   readers copy from.
+   **Before consolidating inline styles, re-read DESIGN.md line 15** — a
+   missing spacing utility is NOT the finding, because this framework refuses a
+   utility system by design. The finding is either a dead declaration or a
+   component that should own the value.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

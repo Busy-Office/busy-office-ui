@@ -31,7 +31,8 @@
     "check:dsa-scores": "node scripts/check-dsa-scores.mjs",
     "check:wrong-choice": "node scripts/check-wrong-choice.mjs",
     "check:live-regions": "node scripts/check-live-regions.mjs",
-    "check:patterns-index": "node scripts/check-patterns-index.mjs"
+    "check:patterns-index": "node scripts/check-patterns-index.mjs",
+    "scan:dead-style": "node scripts/scan-dead-style.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",
