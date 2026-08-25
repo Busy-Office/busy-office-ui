@@ -39,7 +39,15 @@
        fixed shell off-screen (owner review 2026-08-16: 4025px document
        in a 740px viewport). */
     position: relative;
-    padding: var(--bo-space-6);
+    /* PUBLISHED so a sticky child can reach this container's true bottom edge.
+       `inset-block-end: 0` on a sticky element resolves to the PADDING edge,
+       so .bo-form-actions parked 24px short of the bottom and the record kept
+       scrolling through the strip underneath it — a bar that is supposed to BE
+       the bottom of the screen with live content sliding out below it (owner
+       report, 2026-08-26). A child that must span the padding needs to know
+       how much there is; outside a shell the fallback is 0 and nothing moves. */
+    --bo-app-shell-pad: var(--bo-space-6);
+    padding: var(--bo-app-shell-pad);
     background: var(--bo-color-bg-canvas);
     min-width: 0;
     overflow: auto;

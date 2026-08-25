@@ -118,7 +118,16 @@
     gap: var(--bo-space-2);
     padding: var(--bo-space-3) 0;
     position: sticky;
-    inset-block-end: 0;
+    /* Reach the scroll container's real edge, not its padding edge. Without
+       these three the bar floats --bo-app-shell-pad short of the bottom and
+       the document scrolls visibly through the gap beneath it. The negative
+       inset pulls it down over the padding, the negative margin stops that
+       creating extra scroll length, and the matching padding keeps the buttons
+       where they were. Outside a shell the variable is unset, the calcs all
+       resolve to 0, and this is exactly the old behaviour. */
+    inset-block-end: calc(-1 * var(--bo-app-shell-pad, 0px));
+    margin-block-end: calc(-1 * var(--bo-app-shell-pad, 0px));
+    padding-block-end: calc(var(--bo-space-3) + var(--bo-app-shell-pad, 0px));
     background: var(--bo-color-bg-canvas);
     border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
 
@@ -161,6 +170,10 @@
   .bo-widget .bo-form-actions {
     position: static;
     background: none;
+    /* A bar inside a card does not stick, so it must not carry the
+       edge-reaching offsets either — they would pull it out of its card. */
+    margin-block-end: 0;
+    padding-block-end: var(--bo-space-3);
   }
 
   /* A button in this bar WRAPS its label rather than clipping it — the
