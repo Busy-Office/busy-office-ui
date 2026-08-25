@@ -2,20 +2,19 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-25 07:56
+Generated at: 2026-08-25 08:04
 
 ## Open items by slice
 
-- **Slice 112** (3 open)
+- **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-  - 112.5 — "Which Pattern Should I Use?" docs page. UNBLOCKED 2026-08-24 — the coupling to 112.3 cost more than it saved.
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (866 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-25 07:13   ok
+dispatch status — counter-triggered rules (867 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-25 07:13   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -24,11 +23,10 @@ dispatch status — counter-triggered rules (866 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
-- 112.5 — "Which Pattern Should I Use?" docs page. UNBLOCKED 2026-08-24 — the coupling to 112.3 cost more than it saved.
+- 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
 
 ## Last 10 iterations
 
-- 2026-08-25 05:49 · Continue · bug · 142.1 — skeleton shimmer swept between two byte-identical tokens and was never visible; new highlight token, 10/10 distinct frames · landed · ef64c74
 - 2026-08-25 05:56 · Standardize · tidy · 142.3 — filtered-empty gains copyable code; phantom .bo-state--empty removed from prose and regenerated data · landed · 56f742c
 - 2026-08-25 06:07 · Continue · build · 142.2a — skeleton sweep retimed (travel 4x too far, not duration), linear, left-to-right; motion showcase with speed controls · landed · d70bd16
 - 2026-08-25 06:17 · Continue · bug · skeleton loop cut at restart — band was visible at both endpoints; 150%/-50% over 1.8s is seamless, proved after 3 false instrument readings · landed · c7d460d
@@ -38,6 +36,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-25 07:13 · Standardize · tidy · 0fr/1fr triplication settled as correct — utility vs component-part selector ownership, plus the opt-in module · refused · f4d4d11
 - 2026-08-25 07:18 · Continue · build · 142.2b — /patterns/first-load shipped: skeleton vs spinner vs nothing, shape-matching, refetch as a distinct state · landed · bdc2680
 - 2026-08-25 07:56 · Continue · build · 142.4 — command bar states wired and demonstrated (clear, commit-and-reset, command-vs-search, double Escape) · landed · 975fe45
+- 2026-08-25 08:04 · Continue · build · 112.5 — /concepts/which-pattern generated from patterns.json: 39 rows, 17 alternative links · landed · 1755423
 
 ## Sunset test
 

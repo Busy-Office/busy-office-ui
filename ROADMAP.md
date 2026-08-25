@@ -237,6 +237,51 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
+## Slice 144 — Owner wishlist: login's sticky actions, a comment/chat component (2026-08-25)
+
+1. [x] **144.1 — DONE 2026-08-25. A form-actions bar inside a CARD no longer
+       sticks.** Owner: *"check /patterns/login — scrolling down, sign in
+       section stick to footer. It is not right."* Reproduced immediately:
+       `.bo-form-actions` is `position: sticky; inset-block-end: 0`
+       unconditionally, so the login card's "Sign in" rode the bottom of the
+       viewport while the page scrolled behind it.
+
+       **Sticky is right for what it was written for and wrong here.** Its own
+       comment says "sticky action bar for long detail forms" — it exists so a
+       long form's actions stay reachable while that form is the thing being
+       scrolled. A `.bo-widget` is bounded content, and its actions belong to
+       **it**; stuck to the viewport they detach from the card they act on and
+       read as a page footer that has lost its page.
+
+       The deeper problem is the name: the class is named for the form, not
+       for the form's LENGTH, so a consumer building a short card reaches for
+       it and inherits an assumption they never made. Scoping by container
+       answers that without a modifier they would have to know to add.
+
+       **Measured before shipping, and the blast radius is one page.** Of the
+       13 pages carrying this bar, exactly **one** has it inside a card — the
+       login screen. The other twelve are full-screen forms and keep sticking.
+       Verified after: login `static` with no scroll-padding reserved,
+       `detail-form` still `sticky` with its 6rem clearance intact — that
+       clearance is a WCAG 2.4.11 measure, so it had to survive.
+
+       A first count said "3 occurrences, on object-page" and was wrong: it
+       looked for any preceding `bo-widget` in the document rather than actual
+       ancestry. `closest()` in a browser is what settled it.
+
+2. [ ] **144.2 — a comment / chat component.** Owner: *"add components — for
+       comment/chat."* Not yet designed, and it needs the Objective test
+       before any CSS: an ERP comment thread is a real and recurring need
+       (approval notes, chasing history, handover), but the suite already
+       expresses two neighbouring shapes — `bo-timeline` carries an ordered
+       chain of events with state, and `bo-audit` carries an immutable trail.
+       The question to answer first is what a comment thread has that neither
+       does: an author identity, a relative time, threading, and an unsent
+       draft. `bo-avatar` and `bo-byline` already ship for the first two.
+       *Accept*: either a component that earns its place against those three,
+       or a documented composition of what exists — and the refusal recorded
+       with the measurement if that is the answer.
+
 ## Slice 143 — Owner wishlist: motion bug, sidebar-nav, offcanvas (2026-08-25)
 
 Owner input, three items. Triage found the second and third are **the same

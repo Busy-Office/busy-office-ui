@@ -97,8 +97,8 @@
      higher than needed, while undershooting by a pixel hides it and fails
      the criterion. The bar's height varies with density, so this is one
      number that covers the tallest case rather than a per-density token. */
-  html:has(.bo-form-actions),
-  .bo-app-shell__main:has(.bo-form-actions) {
+  html:has(.bo-form-actions:not(.bo-widget *)),
+  .bo-app-shell__main:has(.bo-form-actions:not(.bo-widget *)) {
     scroll-padding-block-end: 6rem;
   }
 
@@ -121,6 +121,29 @@
     inset-block-end: 0;
     background: var(--bo-color-bg-canvas);
     border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+  }
+
+  /* A bar INSIDE A CARD does not stick (owner QA, 2026-08-25: the login
+     screen's "Sign in" rode the bottom of the viewport while the page
+     scrolled behind it). Sticky exists so a long form's actions stay
+     reachable while that form is the thing being scrolled. A .bo-widget is
+     bounded content, and its actions belong to IT — stuck to the viewport
+     they detach from the card they act on, which reads as a page footer that
+     has lost its page.
+
+     The class is named for the form, not for the form's length, so a
+     consumer building a short card reaches for it and inherits an assumption
+     they never made. Scoping by container answers that without a modifier
+     they would have to know to add.
+
+     Measured before shipping: of 13 pages carrying this bar, exactly ONE has
+     it inside a card — the login screen. The other twelve are full-screen
+     forms and keep sticking. The scroll-padding above is scoped the same way,
+     so a page whose only bar is in a card no longer reserves 6rem of
+     clearance for a bar that does not stick. */
+  .bo-widget .bo-form-actions {
+    position: static;
+    background: none;
   }
 
   /* A button in this bar WRAPS its label rather than clipping it — the
