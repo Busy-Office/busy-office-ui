@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 06:19
+Generated at: 2026-08-26 06:59
 
 ## Open items by slice
 
@@ -18,8 +18,8 @@ Generated at: 2026-08-26 06:19
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (894 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-25 23:31   OVERDUE
+dispatch status — counter-triggered rules (895 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-08-25 23:31   OVERDUE
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -35,7 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-25 22:07 · Meta · refusal · a genealogy/graph component — one component for one screen until a where-used BOM explosion gives it a second use · refused · 7ae2b5a
 - 2026-08-25 23:00 · Standardize · tidy · ROADMAP.md 9,824 -> 1,094 lines (44 slices archived); check:slice-refs and check:ci-ignores ship; nearly clobbered the existing archive via APFS case-insensitivity · landed · 063211c
 - 2026-08-25 23:31 · Standardize · tidy · .roundtable/INDEX.md — 131 findings indexed; splitting, pruning and a DB mirror all measured and refused · landed · 36477d7
 - 2026-08-25 23:31 · Meta · refusal · splitting .roundtable live-vs-settled — 78 of 86 citations come from ROADMAP-archive.md, so moving files breaks footnotes to fix an unevidenced problem · refused · 36477d7
@@ -45,6 +44,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-26 06:10 · Continue · build · 145.1 — rubric settled: functionality + performance kept, ux DROPPED (1 distinct value); its 4 binary checks moved into the suite audit · landed · 90ea5f5
 - 2026-08-26 06:10 · Meta · refusal · ux as a scoring dimension — binary properties belong in a gate, not a rubric · refused · 90ea5f5
 - 2026-08-26 06:19 · Continue · build · 145.2 — performance scored as a fit residual (own ≈ 70 + 1.25×facts); absolute budget and nodes-per-fact both measured wrong first · landed · b187779
+- 2026-08-26 06:41 · Continue · bug · 146.2 — object-page sticky bar: 24px gap below it fixed, and z-index:auto let a table header paint through it; check:sticky-layers gates the class · landed · cad382a
 
 ## Sunset test
 
