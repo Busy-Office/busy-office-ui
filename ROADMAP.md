@@ -404,10 +404,29 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        whose set is always short does not owe a filter, and saying so is a
        result, not a dodge.
 
-4. [ ] **145.3 — seed `.roundtable/suite-score.md` and stamp every screen.**
+4. [x] **145.3 — DONE 2026-08-26. Ledger seeded, 28 screens, and the digest was reading the wrong thing.**
        Same ledger shape as `polish-state.md`, so `--check`/`--apply`/`--stamp`
        work on it. *Accept*: `polish_requeue.py --check` reports screens whose
        `.screen.mjs` moved, and a Polish round can pick one.
+
+       Seeded from `score.mjs --json` with a stated 0-3 anchor per dimension,
+       and the distribution is the point: **1 screen at 1, 16 at 2, 11 at 3**.
+       The component rubric it is modelled on scored 19 surfaces at 3 in a
+       single pass and went dry; this one separates, which is what 145.0 and
+       145.1 were spent making sure of.
+
+       `polish_requeue.py` grew `--ledger polish|suite`. One mechanism, two
+       ledgers — the shape, the `src` digest, `--check/--apply/--stamp` are all
+       unchanged, which is the whole reason 145 was built on the Polish
+       machinery instead of beside it.
+
+       **The Accept test failed first, and found a real defect in the shared
+       tool.** Touching a `.screen.mjs` produced no re-entry, because `digest()`
+       used `git ls-files -s` — the STAGED blob. An edit that had not been
+       `git add`ed was invisible, so a wake mid-round would be told nothing had
+       moved. Now hashes the working tree. This was latent in the polish ledger
+       too since 2026-08-25 and nothing had caught it, because every test until
+       now happened to compare committed states.
 
 4. [x] **145.4 — DONE 2026-08-25. Finance and Inventory built, 8 screens, 2 gaps.** Not SKIPPED.
        Correction to the note below: they are not half-built screens, they are

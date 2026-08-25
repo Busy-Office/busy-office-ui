@@ -42,7 +42,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-LEDGER = ROOT / ".roundtable" / "polish-state.md"
+LEDGERS = {
+    "polish": ROOT / ".roundtable" / "polish-state.md",   # components and patterns
+    "suite": ROOT / ".roundtable" / "suite-score.md",     # ERP-suite screens (145.3)
+}
+LEDGER = LEDGERS["polish"]  # rebound from --ledger in main()
 API = ROOT / "packages" / "core" / "dist" / "api.json"
 
 DOCS_PAGES = ROOT / "apps" / "docs" / "src" / "pages"
@@ -100,11 +104,19 @@ def digest(surface: str, tree: str | None = None) -> str:
         ]
         blobs = sorted(ln.split()[2] for ln in lines if ln.strip())
     else:
-        lines = [
+        # WORKING TREE, not the index. `git ls-files -s` reports the STAGED
+        # blob, so an edit that has not been `git add`ed is invisible — a wake
+        # that changed a screen and had not yet committed would be told nothing
+        # moved. Found by the Accept test for 145.3: touching a .screen.mjs
+        # produced no re-entry at all. hash-object hashes what is on disk.
+        listed = [
             ln for p in paths
-            for ln in git("ls-files", "-s", "--", p).splitlines()
+            for ln in git("ls-files", "--", p).splitlines()
+            if ln.strip()
         ]
-        blobs = sorted(ln.split()[1] for ln in lines if ln.strip())
+        blobs = sorted(
+            git("hash-object", "--", f).strip() for f in listed
+        )
     if not blobs:
         return "-"
     return subprocess.run(
@@ -158,8 +170,14 @@ def main() -> int:
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--stamp", metavar="SURFACE")
     ap.add_argument("--backfill", metavar="SHA")
+    ap.add_argument(
+        "--ledger", choices=sorted(LEDGERS), default="polish",
+        help="which ledger to operate on; both share the shape and the src digest",
+    )
     args = ap.parse_args()
 
+    global LEDGER
+    LEDGER = LEDGERS[args.ledger]
     text = LEDGER.read_text()
 
     if args.backfill:
@@ -218,11 +236,11 @@ def main() -> int:
             print(f"  (not re-queued: {s} — {why})")
 
     if not changed:
-        print(f"polish re-entry: {len(recorded)} surface(s) checked, none re-enters the queue")
+        print(f"{args.ledger} re-entry: {len(recorded)} surface(s) checked, none re-enters the queue")
         report_excluded()
         return 0
 
-    print(f"polish re-entry: {len(changed)} surface(s) whose SOURCE moved since their last round")
+    print(f"{args.ledger} re-entry: {len(changed)} surface(s) whose SOURCE moved since their last round")
     for s, was, now in changed:
         print(f"  {s:34s} {was} -> {now}")
         for p in source_paths(s):

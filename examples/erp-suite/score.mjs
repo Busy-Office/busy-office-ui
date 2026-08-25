@@ -218,6 +218,33 @@ server.close();
 
 const F = fit(results);
 for (const r of results) r.excess = r.own - (F.intercept + F.slope * r.facts);
+
+/* --json for the ledger seeder. The 0-3 anchors are stated here rather than in
+   the seeder so the rubric and its scale live together:
+     functionality — the fraction of what its KIND owes that is present.
+     performance   — distance from the suite's own markup line, in sd. A screen
+                     within one sd is ordinary; beyond two is the outlier the
+                     Accept test demonstrated is detectable. */
+if (process.argv.includes('--json')) {
+  const band = (r) => {
+    const ratio = r.fn / r.fnOf;
+    return ratio === 1 ? 3 : ratio >= 0.75 ? 2 : ratio >= 0.5 ? 1 : 0;
+  };
+  const perf = (r) => {
+    const d = Math.abs(r.excess) / F.sd;
+    return d <= 1 ? 3 : d <= 2 ? 2 : 1;
+  };
+  console.log(JSON.stringify({
+    fit: { intercept: +F.intercept.toFixed(1), slope: +F.slope.toFixed(2), sd: +F.sd.toFixed(1) },
+    screens: results.map((r) => ({
+      key: r.key, kind: r.kind,
+      functionality: band(r), owes: `${r.fn}/${r.fnOf}`, missing: r.fnMiss,
+      performance: perf(r), excess: Math.round(r.excess),
+    })),
+  }, null, 1));
+  process.exit(0);
+}
+
 const pad = (s, n) => String(s).padEnd(n);
 console.log(`markup cost: own ≈ ${F.intercept.toFixed(1)} + ${F.slope.toFixed(2)} × facts  (residual sd ${F.sd.toFixed(1)} nodes)`);
 console.log(`  ${F.slope.toFixed(2)} DOM nodes per displayed fact — the framework's own report card.\n`);
