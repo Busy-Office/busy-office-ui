@@ -899,3 +899,72 @@ that inspects leftovers can pass while the thing it guards is broken.
   one, which is the gate working as designed.
 - **Density**: `data-density="compact"` on the containers did what an ERP
   screen needs without a single override.
+
+## GAP-20 — FIXED 2026-08-25 — a tree-table row header lost its indentation
+
+**Found by**: building `/inv/lot-trace`, module six (Inventory).
+
+`.bo-tree-table [data-tree-level='N'] > td:first-child` indented on `td`
+only. The first column of a hierarchy IS the row's label, so
+`<th scope="row">` is the correct markup for it — and choosing it made a
+twelve-level tree render dead flat, while every gate stayed green: axe is
+happy (a `th` row header is *better* markup), the layout sweep sees no
+overflow, and nothing asserts that an indent indents.
+
+**The accessible option was the one that broke.** That is the part worth
+keeping: not that a selector was too narrow, but that the failure mode
+rewarded the worse markup and was invisible to the whole gate suite.
+
+Fixed by widening all eleven rules to `:is(td, th):first-child`. Every
+existing use writes `<td>` and is unaffected. Verified by measurement: a
+level-2 `th` and the same cell swapped to a `td` both compute
+`padding-inline-start: 26.625px` against a root's `8px`.
+
+> **My first injection check for this was dead.** It injected
+> `padding-inline-start: revert-layer` from an unlayered `<style>` to
+> "remove" the fix and confirm the indent collapsed — and reported
+> identical padding before and after, because `revert-layer` in an
+> unlayered context does not undo a rule inside `@layer bo-components`. It
+> looked like a passing red-proof. The property was proved instead by
+> swapping the `th` to a `td` in the DOM and showing both now match.
+
+## GAP-21 — 2026-08-25 — no way to say "this row is the same entity as that row"
+
+**Found by**: the same screen, and NOT fixed — recorded for a decision.
+
+A lot family is a DAG, not a tree. LOT-A9F4 was blended from two supplier
+lots and consumed by three batches, one of which was reworked from
+another's returns. `data-tree-level` encodes depth, which assumes exactly
+one path to each node, so a blended lot has to be duplicated — it appears
+four times on the screen, and summing those rows would double-count by
+1,540 L.
+
+The screen states this in an alert and marks repeated rows with a badge,
+because a reader should not have to notice it during a recall. That is a
+workaround in prose, not a solution.
+
+**The narrow finding is not "add a graph component"** — it is that the
+framework has no way to mark two rows as the same entity. The same
+shortfall appears in a where-used BOM explosion, which is a second use and
+therefore the thing that would make this earn surface. One screen does not.
+
+**Refused for now**: a genealogy/graph component. It would be one component
+for one screen, which the Objective refuses without a second use, and the
+honest cost of the flattening is one alert plus a badge.
+
+## Module six (Inventory) and module five (Finance): 2 gaps, 1 fixed
+
+Running count: pilot 13, module two 2, module three 1, module four **0**,
+modules five and six **2** (GAP-20 fixed, GAP-21 recorded).
+
+Both came from the two screens picked *because* they were unlike anything
+the suite had built — a DAG rendered as a tree, and a worksheet where the
+same table is input and output. The three screens closest to what already
+existed (trial balance, AR aging, stock on hand) found **nothing**, and a
+prediction made in triage to justify dropping these very modules —
+"`--sticky-col` plus `data-tone` already cover a cross-tab" — was built
+twice and **held both times**.
+
+That is the pattern across six modules now: gaps come from *shape novelty*,
+not from module count. More screens of a shape already covered find zero,
+which is what module four demonstrated and what these five confirm.

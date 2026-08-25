@@ -411,7 +411,7 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        work on it. *Accept*: `polish_requeue.py --check` reports screens whose
        `.screen.mjs` moved, and a Polish round can pick one.
 
-4. [ ] **145.4 — DECIDED 2026-08-25, owner: FINISH THEM.** Not SKIPPED.
+4. [x] **145.4 — DONE 2026-08-25. Finance and Inventory built, 8 screens, 2 gaps.** Not SKIPPED.
        Correction to the note below: they are not half-built screens, they are
        `build.mjs`-generated "not part of the pilot" empty states, so every
        module on the nav rail lands somewhere. Finishing them means building
@@ -425,6 +425,23 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        in the set. *Accept*: 8 screens, zero CSS of their own, gaps recorded in
        the ledger either way — including "found nothing", which is the result
        Production produced and is worth as much.
+
+       **Result: 28 screens, zero CSS of their own, zero axe violations.**
+       GAP-20 (fixed): `.bo-tree-table`'s indent matched `td:first-child`
+       only, so choosing `<th scope="row">` — the correct markup for a
+       hierarchy's row label — rendered a twelve-level tree flat while every
+       gate stayed green. The accessible option was the one that broke, and
+       nothing in the suite asserts that an indent indents. GAP-21 (recorded,
+       refused): a lot family is a DAG, so a blended lot is duplicated four
+       times and the framework cannot say two rows are the same entity; a
+       graph component would be one component for one screen until a
+       where-used BOM explosion gives it a second.
+
+       **Two predictions died to measurement**, which is the instrument
+       working: a totals row was asserted to have no treatment and has had one
+       since 130.3, and `data-tree-level` was read as 0-based when its own
+       contract says 1..12. The three screens closest to existing shapes found
+       nothing at all — gaps come from shape novelty, not module count.
 
 **Note (not a work item) — how 145.4 was found.** Found
        while enumerating: 21 screens are 7 p2p, 4 o2c, 4 crm, 4 prod, 1 fin,

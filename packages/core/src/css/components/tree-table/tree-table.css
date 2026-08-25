@@ -10,18 +10,26 @@
 
   /* Indent by level — explicit rules, not attr()-driven calc (FF128
      floor). Twelve levels: real engineering BOMs routinely run 8-12
-     deep (machine → sub-assembly → weldment → part → raw). */
-  .bo-tree-table [data-tree-level='2'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 1.25em); }
-  .bo-tree-table [data-tree-level='3'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 2.5em); }
-  .bo-tree-table [data-tree-level='4'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 3.75em); }
-  .bo-tree-table [data-tree-level='5'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 5em); }
-  .bo-tree-table [data-tree-level='6'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 6.25em); }
-  .bo-tree-table [data-tree-level='7'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 7.5em); }
-  .bo-tree-table [data-tree-level='8'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 8.75em); }
-  .bo-tree-table [data-tree-level='9'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 10em); }
-  .bo-tree-table [data-tree-level='10'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 11.25em); }
-  .bo-tree-table [data-tree-level='11'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 12.5em); }
-  .bo-tree-table [data-tree-level='12'] > td:first-child { padding-inline-start: calc(var(--bo-space-3) + 13.75em); }
+     deep (machine → sub-assembly → weldment → part → raw).
+
+     `:is(td, th)` rather than `td`, found 2026-08-25 by building a lot-trace
+     screen in the ERP suite. The first column of a hierarchy IS the row's
+     label, so `<th scope="row">` is the correct markup for it — and with a
+     `td`-only selector that choice silently lost its indentation, turning a
+     twelve-level tree into a flat list while every gate stayed green. The
+     accessible option must not be the one that breaks. Every existing use
+     writes `<td>` and is unaffected. */
+  .bo-tree-table [data-tree-level='2'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 1.25em); }
+  .bo-tree-table [data-tree-level='3'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 2.5em); }
+  .bo-tree-table [data-tree-level='4'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 3.75em); }
+  .bo-tree-table [data-tree-level='5'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 5em); }
+  .bo-tree-table [data-tree-level='6'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 6.25em); }
+  .bo-tree-table [data-tree-level='7'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 7.5em); }
+  .bo-tree-table [data-tree-level='8'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 8.75em); }
+  .bo-tree-table [data-tree-level='9'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 10em); }
+  .bo-tree-table [data-tree-level='10'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 11.25em); }
+  .bo-tree-table [data-tree-level='11'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 12.5em); }
+  .bo-tree-table [data-tree-level='12'] > :is(td, th):first-child { padding-inline-start: calc(var(--bo-space-3) + 13.75em); }
 
   /* Disclosure button: composes the ghost-button look at row scale.
      Chevron rotation is decoration — aria-expanded is the contract.

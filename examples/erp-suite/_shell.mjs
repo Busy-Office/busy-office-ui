@@ -22,7 +22,7 @@ export const MODULES = [
   { id: 'p2p', label: 'Procure to pay', icon: 'truck', href: '/p2p/purchase-orders.html' },
   { id: 'crm', label: 'CRM', icon: 'user', href: '/crm/accounts.html' },
   { id: 'fin', label: 'Finance', icon: 'invoice', href: '/fin/journal-entry.html' },
-  { id: 'inv', label: 'Inventory', icon: 'box', href: '/inv/index.html' },
+  { id: 'inv', label: 'Inventory', icon: 'box', href: '/inv/stock-on-hand.html' },
   { id: 'prod', label: 'Production', icon: 'settings', href: '/prod/production-orders.html' },
 ];
 
@@ -58,6 +58,15 @@ export const SECTIONS = {
     { label: 'Trial balance', href: '/fin/trial-balance.html' },
     { label: 'AR aging', href: '/fin/ar-aging.html' },
     { label: 'Period close', href: '/fin/period-close.html' },
+  ],
+  /* Inventory is the clearest case of the CRM exception: a stock level is
+     master data and a count is a job, but they are what a storesperson
+     navigates by. Only stock-movement is a document. */
+  inv: [
+    { label: 'Stock on hand', href: '/inv/stock-on-hand.html' },
+    { label: 'Stock movements', href: '/inv/stock-movement.html' },
+    { label: 'Cycle counts', href: '/inv/cycle-count.html' },
+    { label: 'Lot trace', href: '/inv/lot-trace.html' },
   ],
   prod: [
     { label: 'Production orders', href: '/prod/production-orders.html' },
