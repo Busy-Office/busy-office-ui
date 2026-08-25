@@ -357,6 +357,69 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
        comment component twice and both answers were inside a file named for
        approvals — the cost of not splitting it is no longer hypothetical.
 
+## Slice 145 — Score the ERP-suite screens so the loop can benchmark them (2026-08-25)
+
+Owner wishlist: *"continue improvement the examples of App Suite, Role Page,
+O2C, P2P, etc. — each screen should be given the scoring in term of
+functionality, UX/UI, performance so can use to benchmark for next improvement
+— this can be considered in unattended autonomous loops."*
+
+**Why it is the right fuel.** Dispatcher rule 4 is owner-blocked and rule 6 had
+run dry, which is exactly the state that makes an unattended loop stop finding
+work. 21 suite screens scored on three dimensions is a queue that refills from
+the codebase rather than from the owner's inbox.
+
+**Reuses the Polish machinery rather than inventing a second one.**
+`polish_requeue.py` now resolves `screen/<module>/<name>` to its
+`.screen.mjs` — the suite carries no CSS of its own by gate, so one file IS the
+screen's whole source. Rule 6, the round budgets, the blind re-score and the
+source-digest re-entry all apply unchanged. One mechanism, more surfaces.
+
+1. [ ] **145.1 — settle the rubric against measured base rates, THEN write it.**
+       Not the other way round: this file already retired
+       `typography`/`colour`/`spacing` for reading 3 on all 39 components, and
+       LOOPS.md states outright that a dimension which cannot fail must never
+       drive a round. A first sweep of all 21 screens measured which candidate
+       signals actually separate them:
+
+       | signal | range | distinct | verdict |
+       | --- | --- | --- | --- |
+       | DOM nodes | 58–234 | 18 | discriminates |
+       | distinct `bo-` classes | 29–65 | 12 | discriminates |
+       | HTML bytes | 3.5k–14.6k | — | discriminates |
+       | headings / actions / fields | 1–5 / 1–6 / 0–17 | 4–6 | discriminates |
+       | tree depth | 8–12 | 4 | weak — do not drive on it |
+       | landmarks | 4–5 | **2** | **cannot fail — excluded** |
+
+       **The finding that shapes the rubric:** almost everything cheap to
+       measure describes what a screen *is*, not how good it is. A list screen
+       has zero form fields and that is not a deficiency. So the numbers are
+       **evidence a scorer cites, never the score**, and a screen is scored
+       against what its KIND owes — the pattern page's own States table is the
+       checklist — never against a screen of a different kind.
+       *Accept*: three dimensions each shown to produce at least three distinct
+       values across the 21 screens, or the dimension is dropped and said so.
+
+2. [ ] **145.2 — performance is the one dimension that can be exact.** DOM
+       nodes and bytes are already measured and discriminate. Needs a per-KIND
+       budget rather than one global number, and a red-proof (inflate a screen,
+       watch the score fall). *Accept*: a screen that gains 80 nodes for no new
+       information scores lower, demonstrated.
+
+3. [ ] **145.3 — seed `.roundtable/suite-score.md` and stamp every screen.**
+       Same ledger shape as `polish-state.md`, so `--check`/`--apply`/`--stamp`
+       work on it. *Accept*: `polish_requeue.py --check` reports screens whose
+       `.screen.mjs` moved, and a Polish round can pick one.
+
+4. [ ] **145.4 — the `fin` and `inv` modules are one-screen stubs.** Found
+       while enumerating: 21 screens are 7 p2p, 4 o2c, 4 crm, 4 prod, 1 fin,
+       1 inv. Finance and Inventory were dropped on the owner's instruction
+       after Production found 0 gaps, so these are stubs by decision, not
+       neglect — but a scored ledger will rank them last forever and generate
+       wakes for screens nobody intends to finish. Either mark them SKIPPED
+       with the reason, the way `component/date` is, or finish them.
+       **OWNER CALL.**
+
 ## Slice 143 — Owner wishlist: motion bug, sidebar-nav, offcanvas (2026-08-25)
 
 Owner input, three items. Triage found the second and third are **the same

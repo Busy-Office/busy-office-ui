@@ -66,9 +66,20 @@ def slug_to_css_dirs() -> dict[str, list[str]]:
     return out
 
 
+SUITE = ROOT / "examples" / "erp-suite"
+
+
 def source_paths(surface: str) -> list[str]:
-    """Repo-relative paths that DEFINE a surface: its docs page + its CSS."""
+    """Repo-relative paths that DEFINE a surface.
+
+    An ERP-suite screen is `screen/<module>/<name>` and its whole definition is
+    one `.screen.mjs` file — the suite carries no CSS of its own by gate, so
+    there is nothing else to hash. Components and patterns are their docs page
+    plus, for a component, the CSS directories that page documents.
+    """
     kind, slug = surface.split("/", 1)
+    if kind == "screen":
+        return [str((SUITE / f"{slug}.screen.mjs").relative_to(ROOT))]
     folder = "components" if kind == "component" else "patterns"
     paths = [str((DOCS_PAGES / folder / f"{slug}.astro").relative_to(ROOT))]
     if kind == "component":
@@ -102,7 +113,7 @@ def digest(surface: str, tree: str | None = None) -> str:
     ).stdout.strip()[:8]
 
 
-ROW = re.compile(r"^\|\s*(component|pattern)/([a-z0-9-]+)\s*\|(.*)\|\s*$")
+ROW = re.compile(r"^\|\s*(component|pattern|screen)/([a-z0-9-]+(?:/[a-z0-9-]+)?)\s*\|(.*)\|\s*$")
 
 
 def rows(text: str):
