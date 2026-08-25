@@ -25,10 +25,10 @@ const OUT = join(here, 'dist');
    that can pass while the thing it guards is broken. */
 await rm(OUT, { recursive: true, force: true });
 
-const BUILT_MODULES = ['home', 'o2c', 'p2p', 'crm', 'prod'];
+const BUILT_MODULES = ['home', 'o2c', 'p2p', 'crm', 'fin', 'prod'];
 
 const screens = [];
-for (const dir of ['.', 'o2c', 'p2p', 'crm', 'prod']) {
+for (const dir of ['.', 'o2c', 'p2p', 'crm', 'fin', 'prod']) {
   const abs = join(here, dir);
   for (const f of await readdir(abs)) {
     if (!f.endsWith('.screen.mjs')) continue;

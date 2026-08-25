@@ -21,7 +21,7 @@ export const MODULES = [
   { id: 'o2c', label: 'Order to cash', icon: 'cart', href: '/o2c/sales-orders.html' },
   { id: 'p2p', label: 'Procure to pay', icon: 'truck', href: '/p2p/purchase-orders.html' },
   { id: 'crm', label: 'CRM', icon: 'user', href: '/crm/accounts.html' },
-  { id: 'fin', label: 'Finance', icon: 'invoice', href: '/fin/index.html' },
+  { id: 'fin', label: 'Finance', icon: 'invoice', href: '/fin/journal-entry.html' },
   { id: 'inv', label: 'Inventory', icon: 'box', href: '/inv/index.html' },
   { id: 'prod', label: 'Production', icon: 'settings', href: '/prod/production-orders.html' },
 ];
@@ -47,6 +47,17 @@ export const SECTIONS = {
   crm: [
     { label: 'Accounts', href: '/crm/accounts.html' },
     { label: 'Opportunities', href: '/crm/opportunities.html' },
+  ],
+  /* Finance breaks the "the functions ARE the documents" rule the way CRM
+     does, and more sharply: a journal entry is a document, but a trial balance
+     and an aging are REPORTS and period close is a job. They sit at this level
+     because it is what a finance clerk navigates by — the alternative was a
+     module whose only entry was the one screen nobody opens daily. */
+  fin: [
+    { label: 'Journal entries', href: '/fin/journal-entry.html' },
+    { label: 'Trial balance', href: '/fin/trial-balance.html' },
+    { label: 'AR aging', href: '/fin/ar-aging.html' },
+    { label: 'Period close', href: '/fin/period-close.html' },
   ],
   prod: [
     { label: 'Production orders', href: '/prod/production-orders.html' },
