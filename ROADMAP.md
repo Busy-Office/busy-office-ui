@@ -426,14 +426,14 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        the ledger either way — including "found nothing", which is the result
        Production produced and is worth as much.
 
-5. [ ] **145.5 — the original stub note, kept for the record.** Found
+**Note (not a work item) — how 145.4 was found.** Found
        while enumerating: 21 screens are 7 p2p, 4 o2c, 4 crm, 4 prod, 1 fin,
        1 inv. Finance and Inventory were dropped on the owner's instruction
        after Production found 0 gaps, so these are stubs by decision, not
        neglect — but a scored ledger will rank them last forever and generate
        wakes for screens nobody intends to finish. Either mark them SKIPPED
        with the reason, the way `component/date` is, or finish them.
-       **OWNER CALL.**
+       *Answered 2026-08-25: finish them — see 145.4 above.*
 
 ## Slice 143 — Owner wishlist: motion bug, sidebar-nav, offcanvas (2026-08-25)
 

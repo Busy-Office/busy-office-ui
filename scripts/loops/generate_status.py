@@ -38,10 +38,21 @@ ROADMAP = os.path.join(ROOT, "ROADMAP.md")
 STATUS = os.path.join(ROOT, "STATUS.md")
 
 # Matches the roadmap's open-item convention: "N. [ ] **NN.N[a-z] — Title.**"
+# The numeric id is OPTIONAL. It was mandatory until 2026-08-25, and that
+# silently hid two of nine open items — including the one titled "OWNER CALL —
+# direction", a stated release blocker, from the very section that exists to
+# surface owner decisions. The old code even wrote the wrong assumption down:
+# "bare 'N.' list markers without a NN.N id aren't roadmap items". They are;
+# some items are named rather than numbered.
 ITEM = re.compile(
-    r"^\d+\.\s*\[ \]\s*\*\*(\d+)(\.\d+[a-z]?)?\s*(?:—|-)\s*([^*]+?)\*\*",
+    r"^\d+\.\s*\[ \]\s*\*\*(?:(\d+)(\.\d+[a-z]?)?\s*(?:—|-)\s*)?([^*]+?)\*\*",
     re.M,
 )
+
+# Every open checkbox, however its title is written. Used ONLY to reconcile
+# against what ITEM parsed: a mirror that under-reports what is open is worse
+# than no mirror, because the number gets quoted while steering priorities.
+ANY_OPEN = re.compile(r"^\d+\.\s*\[ \]", re.M)
 
 
 def open_items():
@@ -57,18 +68,39 @@ def open_items():
     for i, m in enumerate(matches):
         major = m.group(1)
         minor = m.group(2) or ""
-        item_id = f"{major}{minor}"
-        if not minor:
-            continue  # bare "N." list markers without a NN.N id aren't roadmap items
         title = " ".join(m.group(3).split())
+        # An un-numbered item is filed under "—" rather than dropped. It sorts
+        # last so the numbered backlog still reads in slice order.
+        if major is None:
+            major, minor = "—", ""
+        item_id = f"{major}{minor}" if major != "—" else ""
         body_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
         # stop the body at the next '##' heading too, whichever comes first
         next_heading = text.find("\n## ", m.start())
         if next_heading != -1:
             body_end = min(body_end, next_heading)
         body = text[m.start():body_end]
-        owner_blocked = bool(re.search(r"owner", body, re.I))
+        # An item is blocked when it SAYS so. Matching the bare word "owner"
+        # was wrong in both directions and wrong in a way that costs work:
+        # 145.4 reads "DECIDED 2026-08-25, owner: FINISH THEM" — an item the
+        # owner had just AUTHORISED — and it was filed under "needs an owner
+        # decision", telling the loop to leave it alone. The markers below are
+        # the ones the roadmap actually uses; an item that is blocked must
+        # carry one, which is a convention a human can follow and a regex can
+        # check, rather than a guess about prose.
+        owner_blocked = bool(
+            re.search(r"BLOCKED ON|OWNER CALL|NEEDS-RUNTIME|BLOCKED\b", body)
+        )
         items.append((major, item_id, title, owner_blocked))
+
+    raw = len(ANY_OPEN.findall(text))
+    if raw != len(items):
+        raise SystemExit(
+            f"generate_status: ROADMAP.md has {raw} open checkbox(es) but only "
+            f"{len(items)} parsed. STATUS.md would under-report what is open, "
+            "which is exactly the failure this check exists to stop. Fix ITEM "
+            "or the roadmap's formatting before regenerating."
+        )
     return items
 
 
@@ -76,7 +108,7 @@ def by_slice(items):
     groups = {}
     for major, item_id, title, _ in items:
         groups.setdefault(major, []).append((item_id, title))
-    return dict(sorted(groups.items(), key=lambda kv: int(kv[0])))
+    return dict(sorted(groups.items(), key=lambda kv: (kv[0] == "—", int(kv[0]) if kv[0] != "—" else 0)))
 
 
 def dispatch_counters():
@@ -127,7 +159,7 @@ def render(now_str):
         for major, its in slices.items():
             out.append(f"- **Slice {major}** ({len(its)} open)")
             for iid, title in its:
-                out.append(f"  - {iid} — {title}")
+                out.append(f"  - {iid} — {title}" if iid else f"  - {title}")
     else:
         out.append("(no open items found)")
     out.append("")
@@ -148,7 +180,7 @@ def render(now_str):
     out.append("")
     if owner_blocked:
         for iid, title in owner_blocked:
-            out.append(f"- {iid} — {title}")
+            out.append(f"- {iid} — {title}" if iid else f"- {title}")
     else:
         out.append("(none)")
     out.append("")
