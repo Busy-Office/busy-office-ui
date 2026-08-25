@@ -121,6 +121,23 @@
     inset-block-end: 0;
     background: var(--bo-color-bg-canvas);
     border-block-start: var(--bo-border-width) solid var(--bo-color-border-default);
+
+    /* ELEVATION, added 2026-08-25 on an owner report of "footer gap" on the
+       object page. The bar was canvas-coloured (#f9fafb) with no shadow while
+       floating over a SURFACE-coloured card (#ffffff), so it did not read as a
+       bar floating above the record — it read as a hole punched through the
+       card, showing the page behind. Measured, not guessed: 44px of the
+       document-flow timeline sat behind it mid-scroll with box-shadow: none.
+
+       The shadow is the fix rather than a background change because the bar is
+       correct on a full-screen form, where canvas IS the page — only the
+       "is this above or through?" signal was missing, and that is elevation.
+       Changing the background would have repainted twelve working screens to
+       fix one wrong reading.
+
+       Two channels on purpose: forced-colors drops shadows entirely, and the
+       border-block-start above is geometry, so the bar keeps an edge there. */
+    box-shadow: var(--bo-shadow-up);
   }
 
   /* A bar INSIDE A CARD does not stick (owner QA, 2026-08-25: the login

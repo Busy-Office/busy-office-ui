@@ -9,7 +9,27 @@ pin.
 
 ## Unreleased
 
+### Fixed
+
+- **`.bo-form-actions` read as a hole punched through a card** (owner report,
+  "object page — there is footer gap?"). The sticky bar is canvas-coloured
+  (`#f9fafb`) with no shadow, and on an object page it floats over a
+  surface-coloured card (`#ffffff`) — so instead of a bar above the record it
+  looked like a gap showing the page behind. Measured: 44px of the
+  document-flow timeline sat behind it mid-scroll with `box-shadow: none`. It
+  now carries the new `--bo-shadow-up`. The fix is elevation rather than a
+  background change because the bar is correct on a full-screen form, where
+  canvas IS the page; repainting twelve working screens to fix one wrong
+  reading would have been the wrong trade. `border-block-start` remains the
+  geometry channel, so the bar keeps an edge under forced-colors, which drops
+  shadows.
+
 ### Added
+
+- `--bo-shadow-up` — an upward elevation shadow, mirroring `--bo-shadow-md`.
+  Every other shadow token points down, which assumes the elevated thing sits
+  on top of what follows it; a bar stuck to the bottom of the viewport is the
+  opposite case, and its downward shadow falls on nothing.
 
 - `data-visibility="external"` on `.bo-composer` / `.bo-audit__entry`, and
   `data-state="resolved"` on a `--discussion` entry — the two things a thread
