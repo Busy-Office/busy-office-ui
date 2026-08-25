@@ -24,6 +24,18 @@
  * dead (`margin: 0`, already guaranteed by the reset) and exits non-zero if it
  * cannot tell them apart.
  *
+ * BOTH MEDIA, BECAUSE PRINT HAS ITS OWN CASCADE. A declaration dead on screen
+ * can be load-bearing in print: inline `margin: 0` is redundant against the
+ * reset's `* { margin: 0 }`, but would matter if a print rule set a margin.
+ * `/patterns/output-form` is a print pattern this sweep edited, and the owner
+ * asked exactly this. A first attempt guarded it STATICALLY — fail if any print
+ * rule sets a box property — and that was too blunt: it fired on
+ * `.bo-app-shell { block-size: auto }`, a legitimate print layout reset with no
+ * bearing on any inline style. Selector analysis was the wrong tool. The probe
+ * now simply runs in both media and calls a declaration dead only if removing
+ * it changes nothing in EACH. `emulateMediaType` needs no reload, so this costs
+ * one extra evaluate per page rather than a second walk.
+ *
  * SETTLED PAGES ONLY. The first version used `domcontentloaded` and reported
  * 1414, then 1420, then 1416 live on identical input — JS-set inline styles
  * caught mid-flight. `networkidle0` makes it deterministic (1426, twice). A
@@ -86,6 +98,20 @@ const proof = await page.evaluate((fn) => {
     dead: res.find((r) => r.decl === 'margin: 0')?.dead,
   };
 }, PROBE.toString());
+/* The print branch reports 0, which is the shape of a branch that never runs.
+   Prove the emulation actually takes effect before believing that zero. */
+await page.emulateMediaType('print');
+const printReally = await page.evaluate(() => matchMedia('print').matches);
+await page.emulateMediaType('screen');
+const screenReally = await page.evaluate(() => matchMedia('screen').matches);
+if (!printReally || !screenReally) {
+  console.error('dead-style scan: media emulation is not taking effect');
+  console.error(`  (print→matches=${printReally}, screen→matches=${screenReally}).`);
+  console.error('  The print pass would silently duplicate the screen pass. Not reporting.');
+  await browser.close(); server.close();
+  process.exit(1);
+}
+
 if (proof.live !== false || proof.dead !== true) {
   console.error('dead-style scan: SELF-TEST FAILED — the probe cannot tell a live');
   console.error(`  declaration from a dead one (live→dead=${proof.live}, dead→dead=${proof.dead}).`);
@@ -99,10 +125,22 @@ const byDecl = new Map();
 const byPage = new Map();
 let dead = 0;
 let live = 0;
+let printOnlyLive = 0;
 for (const p of await distPages(DIST)) {
   await page.goto(`http://localhost:${port}${base}${p.url}`, { waitUntil: 'networkidle0', timeout: 20000 });
-  for (const r of await run()) {
+  await page.emulateMediaType('screen');
+  const onScreen = await run();
+  await page.emulateMediaType('print');
+  const onPaper = await run();
+  await page.emulateMediaType('screen');
+  for (let i = 0; i < onScreen.length; i += 1) {
+    const r = onScreen[i];
+    const inPrint = onPaper[i];
     if (!r.dead) { live += 1; continue; }
+    // Dead on screen, live on paper: the declaration is doing its job where it
+    // matters. Counted separately so the number is visible rather than folded
+    // into "live" as if nothing interesting happened.
+    if (inPrint && !inPrint.dead) { live += 1; printOnlyLive += 1; continue; }
     dead += 1;
     byDecl.set(r.decl, (byDecl.get(r.decl) ?? 0) + 1);
     byPage.set(p.url, (byPage.get(p.url) ?? 0) + 1);
@@ -110,6 +148,7 @@ for (const p of await distPages(DIST)) {
 }
 
 console.log(`dead-style scan — ${dead} dead, ${live} live inline declaration(s) across ${byPage.size} page(s)`);
+console.log(`  (screen + print measured; ${printOnlyLive} declaration(s) are dead on screen but LIVE in print)`);
 if (dead) {
   console.log('\n  by declaration:');
   for (const [d, n] of [...byDecl].sort((a, b) => b[1] - a[1])) console.log(`    ${String(n).padStart(3)}x  ${d}`);
