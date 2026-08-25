@@ -48,6 +48,18 @@ export const render = () =>
       <button class="bo-btn bo-btn--secondary" type="submit">Go</button>
     </form>
 
+    <form class="bo-cluster" data-density="compact">
+      <input class="bo-input" type="search" aria-label="Search sales orders" placeholder="Search…" style="max-inline-size: 12rem">
+      <select class="bo-select" aria-label="Status filter">
+        <option>All statuses</option><option>Open</option><option>Partially shipped</option><option>Shipped</option><option>Invoiced</option>
+      </select>
+      <select class="bo-select" aria-label="Customer filter">
+        <option>All customers</option><option>Halden Marine AS</option><option>Norvik Shipping</option>
+      </select>
+      <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+      <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
+    </form>
+
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">

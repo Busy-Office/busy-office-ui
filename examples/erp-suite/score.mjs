@@ -40,7 +40,7 @@ const DIST = join(dirname(fileURLToPath(import.meta.url)), 'dist');
 const KIND = {
   'index': 'home',
   'p2p/requisitions': 'list', 'p2p/purchase-orders': 'list', 'p2p/vendor-invoices': 'list',
-  'o2c/sales-orders': 'list', 'o2c/customer-invoices': 'list',
+  'o2c/sales-orders': 'list',
   'crm/accounts': 'list', 'crm/opportunities': 'list',
   'prod/production-orders': 'list',
   'p2p/requisition': 'document', 'p2p/purchase-order': 'document',
@@ -51,6 +51,14 @@ const KIND = {
   'p2p/convert-to-po': 'worksheet', 'inv/cycle-count': 'worksheet',
   'fin/trial-balance': 'report', 'fin/ar-aging': 'report', 'prod/capacity': 'report',
   'inv/stock-on-hand': 'report',
+  /* Reclassified 2026-08-26, the THIRD kind-map correction and the one that
+     names the cause: `o2c/customer-invoices` is "Receivables by age", a cross-tab
+     with Current / 1-30 / 31-60 / 61-90 / 90+ — the same shape as fin/ar-aging.
+     It was filed as a list because its NAME sounds like one. All three
+     corrections share that: period-close, bom and this. Kind comes from what a
+     screen DOES, and the map is hand-written precisely so that judgement is
+     visible in a diff rather than inferred from a URL. */
+  'o2c/customer-invoices': 'report',
   /* Corrected 2026-08-26 after the first run scored these 1/4 and 2/4. That was
      the MAP being wrong, not the screens: a BOM and a lot trace are structures,
      and a structure has no meaningful total, so owing a <tfoot> was nonsense.
@@ -111,6 +119,24 @@ const OWES = {
       ['orientation', () => !!document.querySelector('h1')],
       ['no dead ends', () => [...document.querySelectorAll('a[href]')].every((a) => a.getAttribute('href') !== '#')],
     ],
+  },
+};
+
+/**
+ * Owed things that are CORRECTLY ABSENT here, with the reason.
+ *
+ * Without this the only way to clear a gap is to add the thing, which turns a
+ * rubric into a checklist that rewards adding surface. 145.4b's Accept clause
+ * allows "correctly absent" as a result on purpose, and requiring a written
+ * reason in a diff is what stops that becoming a way to wave findings away.
+ */
+const EXEMPT = {
+  'inv/stock-on-hand': {
+    'a total or a summary row':
+      'The quantity columns mix UNITS — ea, m and kg in one column, because the ' +
+      'rows are different items. A column total would add hydraulic pumps to ' +
+      'metres of hose and print a number that means nothing. The per-row total ' +
+      'is the one that is defined, and it is there.',
   },
 };
 
@@ -209,7 +235,9 @@ for (const key of Object.keys(KIND)) {
 
   results.push({
     key, kind,
-    fn: fn.filter(([, ok]) => ok).length, fnOf: fn.length, fnMiss: fn.filter(([, ok]) => !ok).map(([n]) => n),
+    fn: fn.filter(([n, ok]) => ok || EXEMPT[key]?.[n]).length,
+    fnOf: fn.length,
+    fnMiss: fn.filter(([n, ok]) => !ok && !EXEMPT[key]?.[n]).map(([n]) => n),
     own: perf.own, facts: perf.facts,
   });
 }
@@ -261,9 +289,25 @@ const distinct = (f) => new Set(results.map(f)).size;
 const dFn = distinct((r) => `${r.fn}/${r.fnOf}`);
 const dPerf = distinct((r) => r.excess.toFixed(0));
 
-console.log('\nACCEPT TEST — a dimension needs 3+ distinct values or it is dropped:');
-for (const [name, n] of [['functionality', dFn], ['performance', dPerf]]) {
-  console.log(`  ${pad(name, 15)} ${n} distinct  ${n >= 3 ? 'KEEP' : '*** DROP — cannot discriminate ***'}`);
+const totalMissing = results.reduce((a, r) => a + r.fnMiss.length, 0);
+
+/* A UNIFORM DIMENSION IS NOT AUTOMATICALLY A DEAD ONE, and conflating the two
+   would be actively dangerous now that a wake reads this unattended.
+   `ux` was dropped for reading 5/5 on every screen — but it read that way from
+   the FIRST run, before any work, so it never discriminated at all.
+   `functionality` reached the same uniformity by the opposite route: it scored
+   3 distinct values, produced ten findings, and every one was acted on or
+   recorded as correctly absent. An empty backlog is the dimension SUCCEEDING.
+   Telling a future wake to delete it would throw away the instrument the
+   moment it finished its job. So the verdict distinguishes the two, and the
+   drop test is a question to re-ask when the RUBRIC changes, not every run. */
+console.log('\nACCEPT TEST — 3+ distinct values, or the dimension is dropped:');
+for (const [name, n, backlog] of [['functionality', dFn, totalMissing], ['performance', dPerf, null]]) {
+  const verdict =
+    n >= 3 ? 'KEEP'
+    : backlog === 0 ? 'KEEP — uniform because the backlog is EMPTY, not because it cannot see'
+    : '*** DROP — cannot discriminate ***';
+  console.log(`  ${pad(name, 15)} ${n} distinct  ${verdict}`);
 }
 
 const outliers = results.filter((r) => Math.abs(r.excess) > 2 * F.sd);

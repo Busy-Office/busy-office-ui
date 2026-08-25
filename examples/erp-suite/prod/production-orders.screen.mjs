@@ -25,6 +25,18 @@ export const render = () =>
       </div>
     </div>
 
+    <form class="bo-cluster" data-density="compact">
+      <input class="bo-input" type="search" aria-label="Search production orders" placeholder="Search…" style="max-inline-size: 12rem">
+      <select class="bo-select" aria-label="Status filter">
+        <option>All statuses</option><option>Released</option><option>In progress</option><option>Confirmed</option><option>Closed</option>
+      </select>
+      <select class="bo-select" aria-label="Work centre filter">
+        <option>All work centres</option><option>Assembly line 1</option><option>Machining cell</option>
+      </select>
+      <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+      <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
+    </form>
+
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">

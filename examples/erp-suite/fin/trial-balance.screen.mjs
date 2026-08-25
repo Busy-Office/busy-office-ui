@@ -49,7 +49,7 @@ export const render = () =>
     ],
     body: `
     <div class="bo-cluster bo-cluster--split">
-      <h1>Trial balance</h1>
+      <h1>Trial balance <span class="bo-badge bo-badge--success">In balance</span></h1>
       <div class="bo-cluster">
         <button class="bo-btn bo-btn--secondary" type="button">Export</button>
         <button class="bo-btn bo-btn--secondary" type="button">Print</button>

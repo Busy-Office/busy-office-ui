@@ -46,6 +46,23 @@ export const render = () =>
       <button class="bo-btn bo-btn--secondary" type="submit">Go</button>
     </form>
 
+    <!-- A list owes a way to narrow the set (roadmap 145.4b). Six lists
+         shipped without one while the two in P2P had it, which is not
+         "the pilot module is better" but "whatever a module was iterated
+         on, it has" — the argument for scoring every screen. Same shipped
+         markup as p2p/purchase-orders: a bo-cluster form, no new CSS. -->
+    <form class="bo-cluster" data-density="compact">
+      <input class="bo-input" type="search" aria-label="Search accounts" placeholder="Search…" style="max-inline-size: 12rem">
+      <select class="bo-select" aria-label="Tier filter">
+        <option>All tiers</option><option>Strategic</option><option>Key</option><option>Standard</option>
+      </select>
+      <select class="bo-select" aria-label="Location filter">
+        <option>All locations</option><option>Norway</option><option>Netherlands</option><option>Singapore</option>
+      </select>
+      <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+      <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
+    </form>
+
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">

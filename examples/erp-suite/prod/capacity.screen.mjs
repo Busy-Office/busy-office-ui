@@ -42,6 +42,7 @@ export const render = () =>
       <h1>Capacity — Q4</h1>
       <div class="bo-cluster">
         <button class="bo-btn" type="button">+ New production order</button>
+        <button class="bo-btn bo-btn--secondary" type="button">Export</button>
         <button class="bo-btn bo-btn--secondary bo-btn--icon" type="button" aria-label="Refresh"><span class="bo-icon bo-icon--settings" aria-hidden="true"></span></button>
       </div>
     </div>
@@ -74,6 +75,22 @@ export const render = () =>
             )
             .join('\n          ')}
         </tbody>
+        <!-- The row a planner reads first: mean load across all work centres,
+             which says whether the QUARTER is over-committed rather than one
+             cell (roadmap 145.4b). -->
+        <tfoot>
+          <tr>
+            <th scope="row">All work centres</th>
+            <td class="bo-data-table__col--numeric bo-u-tabular">65%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular">69%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular">77%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular" data-tone="warning" data-tone-text>88%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular" data-tone="warning" data-tone-text>87%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular">80%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular">73%</td>
+            <td class="bo-data-table__col--numeric bo-u-tabular">62%</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 

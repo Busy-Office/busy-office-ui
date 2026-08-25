@@ -50,6 +50,18 @@ export const render = () =>
       <button class="bo-btn bo-btn--secondary" type="submit">Go</button>
     </form>
 
+    <form class="bo-cluster" data-density="compact">
+      <input class="bo-input" type="search" aria-label="Search vendor invoices" placeholder="Search…" style="max-inline-size: 12rem">
+      <select class="bo-select" aria-label="Match status filter">
+        <option>All match states</option><option>Matched</option><option>Price variance</option><option>Qty variance</option>
+      </select>
+      <select class="bo-select" aria-label="Vendor filter">
+        <option>All vendors</option><option>Acme Supply Co.</option><option>Northwind Supply</option>
+      </select>
+      <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+      <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
+    </form>
+
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <table class="bo-data-table">
         <caption class="bo-visually-hidden">Vendor invoices with the order they match, amount and status</caption>

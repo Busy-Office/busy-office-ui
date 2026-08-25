@@ -32,6 +32,18 @@ export const render = () =>
     value × probability — the only figure worth adding up, which is why it
     carries the total.</p>
 
+    <form class="bo-cluster" data-density="compact">
+      <input class="bo-input" type="search" aria-label="Search opportunities" placeholder="Search…" style="max-inline-size: 12rem">
+      <select class="bo-select" aria-label="Stage filter">
+        <option>All stages</option><option>Qualify</option><option>Propose</option><option>Negotiate</option><option>Closed won</option>
+      </select>
+      <select class="bo-select" aria-label="Owner filter">
+        <option>All owners</option><option>J. Kim</option><option>M. Osei</option><option>A. Bello</option>
+      </select>
+      <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+      <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
+    </form>
+
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
       <div class="bo-data-table__toolbar">
         <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">

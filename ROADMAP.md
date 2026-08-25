@@ -384,7 +384,7 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        with them. The absolute number (`nodes per fact`) is printed for that
        reason and belongs in `record_metric.py`, where a trend is visible.
 
-3. [ ] **145.4b — act on the backlog the rubric produced.** Not a new idea:
+3. [x] **145.4b — DONE 2026-08-26. Backlog 10 → 0, and one of the ten was a kind error, not a gap.** Not a new idea:
        these are the gaps `score.mjs` reported on 2026-08-26, written down so
        an unattended wake picks them up instead of re-deriving them.
 
@@ -403,6 +403,32 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        **or** the item closes as "correctly absent" with the reason — a list
        whose set is always short does not owe a filter, and saying so is a
        result, not a dodge.
+
+       **Five lists got a filter, not six.** `o2c/customer-invoices` is
+       "Receivables by age" — a cross-tab with Current / 1–30 / 31–60 / 61–90 /
+       90+, the same shape as `fin/ar-aging`. It was filed as a list because
+       its NAME sounds like one. That is the **third** kind-map correction after
+       `period-close` and `bom`, and the three share a cause worth stating: kind
+       was assigned from what a screen is CALLED rather than what it DOES.
+
+       **One gap was correctly absent, and is now recorded as such.**
+       `inv/stock-on-hand` owes no column total: the quantity columns mix units
+       — ea, m and kg in one column, because the rows are different items — so
+       a total would add hydraulic pumps to metres of hose. `score.mjs` grew an
+       `EXEMPT` map that requires a written reason, because without one the
+       only way to clear a gap is to add surface, which turns a rubric into a
+       checklist that rewards adding things.
+
+       **The empty backlog then broke the Accept test, which is the finding
+       that matters for autonomy.** With every gap closed, `functionality`
+       reads ONE distinct value and the drop rule said *"cannot
+       discriminate"* — the same verdict `ux` earned. But `ux` read uniform
+       from its first run, before any work; `functionality` scored 3 distinct,
+       produced ten findings, and reached uniformity by having them all fixed.
+       An unattended wake acting on that verdict would have deleted a working
+       instrument at the exact moment it succeeded. The verdict now
+       distinguishes the two, and the drop test is a question to re-ask when
+       the RUBRIC changes, not on every run.
 
 4. [x] **145.3 — DONE 2026-08-26. Ledger seeded, 28 screens, and the digest was reading the wrong thing.**
        Same ledger shape as `polish-state.md`, so `--check`/`--apply`/`--stamp`
