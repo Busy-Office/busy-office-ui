@@ -2,14 +2,15 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 06:59
+Generated at: 2026-08-26 07:00
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 145** (1 open)
+- **Slice 145** (2 open)
+  - 145.4b — act on the backlog the rubric produced.
   - 145.3 — seed `.roundtable/suite-score.md` and stamp every screen.
 - **Slice —** (2 open)
   - OWNER CALL — direction. REALIGNED 2026-08-24: the release blocker is GONE; this waits on a decision only.

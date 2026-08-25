@@ -384,7 +384,27 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        with them. The absolute number (`nodes per fact`) is printed for that
        reason and belongs in `record_metric.py`, where a trend is visible.
 
-3. [ ] **145.3 — seed `.roundtable/suite-score.md` and stamp every screen.**
+3. [ ] **145.4b — act on the backlog the rubric produced.** Not a new idea:
+       these are the gaps `score.mjs` reported on 2026-08-26, written down so
+       an unattended wake picks them up instead of re-deriving them.
+
+       - **6 lists have no way to narrow the set** — `crm/accounts`,
+         `crm/opportunities`, `o2c/sales-orders`, `o2c/customer-invoices`,
+         `p2p/vendor-invoices`, `prod/production-orders`. The two that DO have
+         one are both in P2P. Read next to the caption finding, where P2P was
+         the module that was *behind*, the pattern is not "the pilot is better"
+         but **whatever a module was iterated on, it has**.
+       - **2 reports have no summary row** — `prod/capacity`, `inv/lot-trace`
+         (a structure: check whether a total is owed at all before adding one,
+         since the kind map already got exactly this wrong once).
+       - 1 report offers no way to take it away, 1 lacks emphasis.
+
+       *Accept*: `node examples/erp-suite/score.mjs` reports a smaller backlog,
+       **or** the item closes as "correctly absent" with the reason — a list
+       whose set is always short does not owe a filter, and saying so is a
+       result, not a dodge.
+
+4. [ ] **145.3 — seed `.roundtable/suite-score.md` and stamp every screen.**
        Same ledger shape as `polish-state.md`, so `--check`/`--apply`/`--stamp`
        work on it. *Accept*: `polish_requeue.py --check` reports screens whose
        `.screen.mjs` moved, and a Polish round can pick one.
