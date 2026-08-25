@@ -87,6 +87,9 @@ const PAIRS = [
   // .bo-progress fill on its track — non-text UI component (WCAG 1.4.11, 3:1)
   ['--bo-color-accent', '--bo-color-bg-muted', 3],
   ['--bo-color-warning-strong', '--bo-color-bg-muted', 3],
+  // The external-visibility edge on a composer/entry: a non-text UI indicator
+  // (SC 1.4.11) sitting on the surface a thread is drawn on, not on muted.
+  ['--bo-color-warning-strong', '--bo-color-bg-surface', 3],
   ['--bo-color-danger', '--bo-color-bg-muted', 3],
   // Slice 20 code-highlighting palette sits on bg-muted — every slot is
   // TEXT, so every pair gates at 4.5 (the pre-existing 3:1 entries for

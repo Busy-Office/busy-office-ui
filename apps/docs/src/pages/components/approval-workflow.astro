@@ -36,6 +36,41 @@ const discussionMarkup = `<!-- Same list, different kind of entry. --discussion 
   </li>
 </ol>`;
 
+const collabMarkup = `<!-- Internal is the default: no attribute, no edge. -->
+<ol class="bo-audit bo-audit--discussion" role="list">
+  <li class="bo-audit__entry" data-state="resolved">
+    <time class="bo-audit__time" datetime="2026-08-21T08:05">08-21 08:05</time>
+    <div class="bo-audit__detail">
+      <span class="bo-byline"><strong>M. Osei</strong> \u00b7 Requester</span>
+      <span class="bo-badge">Resolved</span>
+      <div class="bo-prose"><p>Split raised as PO-88240 for the balance.</p></div>
+    </div>
+  </li>
+  <li class="bo-audit__entry" data-visibility="external">
+    <time class="bo-audit__time" datetime="2026-08-21T09:30">08-21 09:30</time>
+    <div class="bo-audit__detail">
+      <span class="bo-byline"><strong>M. Osei</strong> \u00b7 Requester</span>
+      <span class="bo-badge bo-badge--warning">External \u00b7 sent to vendor</span>
+      <div class="bo-prose"><p>Please confirm the revised delivery date for the
+      40-unit first drop.</p></div>
+    </div>
+  </li>
+</ol>
+
+<!-- The COMPOSER carries it too, which is the point: you can see where the
+     words go while you are writing them, not after. -->
+<form class="bo-composer" data-visibility="external">
+  <span class="bo-avatar bo-byline__avatar" aria-hidden="true">MO</span>
+  <div class="bo-composer__body">
+    <span class="bo-badge bo-badge--warning">External \u00b7 goes to the vendor</span>
+    <label class="bo-visually-hidden" for="c-ext">Message to vendor</label>
+    <textarea class="bo-input" id="c-ext" rows="2"></textarea>
+    <div class="bo-composer__actions">
+      <button class="bo-btn bo-btn--sm" type="button">Send to vendor</button>
+    </div>
+  </div>
+</form>`;
+
 const composerMarkup = `<form class="bo-composer">
   <span class="bo-avatar bo-byline__avatar" aria-hidden="true">RV</span>
   <div class="bo-composer__body">
@@ -161,6 +196,49 @@ const composerMarkup = `<form class="bo-composer">
     handover threads. It is a <strong>flat</strong> thread on purpose — no
     nesting, no replies-to-replies, no left/right bubbles. Those are messaging-app
     shapes; an ERP discussion hangs off a record and reads in one order.</p>
+  </section>
+  <section class="demo">
+    <h2>Collaborating — who can see this, and what is settled</h2>
+    <p class="bo-u-text-muted">
+      A thread people <em>act on</em> needs two things a thread people only read
+      does not. <code>data-visibility="external"</code> marks a comment that
+      leaves the building, and <code>data-state="resolved"</code> marks a
+      question that is settled.
+    </p>
+    <Demo code={collabMarkup} />
+    <p class="bo-u-text-muted">
+      <strong>Internal is the default</strong> — no attribute, no edge. Getting
+      the hook wrong then means a message that should have gone out stayed in,
+      which someone chases; the reverse is unrecoverable, which is why the
+      dangerous direction is the one you have to type.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>The edge is geometry, and the badge is the other channel.</strong>
+      The stripe survives forced-colors and a monochrome print, but a stripe
+      alone tells a screen-reader user nothing — so name the audience in a
+      badge, as above. That is your text to write: "External \u00b7 sent to
+      vendor" is useful, "External" on its own is not.
+    </p>
+    <p class="bo-u-text-muted">
+      <strong>Why the composer carries it as well.</strong> Every ERP we
+      measured against puts this on a small tab pair <em>above</em> an otherwise
+      identical box — so the surface you are looking at while you type is the
+      one thing that never says where the words are going, and a mis-click is a
+      broadcast. Marking the composer means the answer is in front of you at the
+      moment it matters. <strong>Not a permission check</strong>: this is a
+      signal, and the server still decides who may post what.
+    </p>
+    <p class="bo-u-text-muted">
+      Resolved returns the comment to the audit trail's own treatment, because
+      that is what it now is — history. Only a <code>--discussion</code>
+      resolves; an audit entry is immutable by definition.
+      <strong>A visible "Resolved" marker is required, not optional</strong> —
+      measured under <code>forced-colors: active</code>, the UA repaints both
+      inks to the same black, so the ink difference is the whole signal in
+      normal use and <em>no</em> signal there. The external edge is geometry
+      and survives; this state has no non-colour channel of its own, so the
+      marker is it.
+    </p>
   </section>
   <section class="demo">
     <h2><code>.bo-composer</code> — writing a new entry</h2>

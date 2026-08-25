@@ -150,6 +150,52 @@
     color: var(--bo-color-text-primary);
   }
 
+  /* WHO CAN SEE THIS. Collaboration on an ERP document has exactly one
+     consequential mistake — an internal remark leaving the building. "We can
+     go to 12% margin, push them" is a normal thing to write to a colleague and
+     a catastrophe to send to the vendor.
+
+     Odoo, SAP and Salesforce all solve it with a small tab pair ABOVE an
+     otherwise identical box. That is the floor, not the ceiling: the surface
+     you are looking at while you type is the one thing that never tells you
+     where the words are going, so a mis-click is a broadcast. Here the surface
+     itself carries it, at compose time and permanently afterwards.
+
+     Internal is the DEFAULT — no attribute, no edge. The failure mode of
+     forgetting the hook is then "a message that should have gone out stayed
+     in", which someone chases; the reverse is unrecoverable.
+
+     The edge is geometry, not colour: it survives forced-colors and a
+     monochrome print. The WORDS are the author's job and the docs require
+     them — a badge naming the audience, so the accessible name says
+     "External · visible to vendor" and not just an orange stripe. */
+  .bo-composer[data-visibility='external'],
+  .bo-audit__entry[data-visibility='external'] {
+    border-inline-start: calc(var(--bo-border-width) * 3) solid
+      var(--bo-color-warning-strong);
+    padding-inline-start: var(--bo-space-3);
+  }
+
+  /* RESOLVED returns a comment to being history, which is what the audit
+     trail's own treatment already means — so it reverts the one thing
+     --discussion changed rather than inventing a third appearance. The ink
+     stays at secondary, which the contrast gate already covers on surface and
+     canvas.
+
+     THE AUTHOR'S MARKER IS REQUIRED HERE, not a nicety, and measurement is
+     why: under `forced-colors: active` the UA repaints both inks to the same
+     black, so the ONLY difference between a resolved comment and a live one
+     disappears. Unlike the external edge — which is geometry and survives —
+     this state has no non-colour channel of its own. A visible "Resolved"
+     marker inside __detail is the second channel; without it this modifier is
+     colour-only, which this framework does not ship.
+
+     Only a discussion resolves. An audit entry is immutable by definition, and
+     scoping this says so. */
+  .bo-audit--discussion .bo-audit__entry[data-state='resolved'] .bo-audit__detail {
+    color: var(--bo-color-text-secondary);
+  }
+
   /* Composer: how a new .bo-audit entry gets written, not just read. Pairs
      with .bo-byline__avatar (byline.css) for the "who" — composed, not
      duplicated. The textarea is plain .bo-input (form/input.css already

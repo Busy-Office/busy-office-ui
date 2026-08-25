@@ -96,11 +96,21 @@ export const render = () =>
           the line stoppage costs more than the second delivery.</p></div>
         </div>
       </li>
-      <li class="bo-audit__entry">
+      <li class="bo-audit__entry" data-state="resolved">
         <span class="bo-audit__time"><time datetime="2026-08-21T08:05">21 Aug 08:05</time></span>
         <div class="bo-audit__detail">
           <span class="bo-byline"><strong>M. Osei</strong> · Requester</span>
+          <span class="bo-badge">Resolved</span>
           <div class="bo-prose"><p>Split raised as PO-88240 for the balance.</p></div>
+        </div>
+      </li>
+      <li class="bo-audit__entry" data-visibility="external">
+        <span class="bo-audit__time"><time datetime="2026-08-21T09:30">21 Aug 09:30</time></span>
+        <div class="bo-audit__detail">
+          <span class="bo-byline"><strong>M. Osei</strong> · Requester</span>
+          <span class="bo-badge bo-badge--warning">External · sent to vendor</span>
+          <div class="bo-prose"><p>Please confirm the revised delivery date for the
+          40-unit first drop, and invoice the two drops separately.</p></div>
         </div>
       </li>
     </ol>

@@ -310,6 +310,53 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
        class names and per-component dist paths, so it is a **breaking change
        and an OWNER CALL**.
 
+3. [x] **144.3 — DONE 2026-08-25. Collaboration: who can see this, and what is
+       settled.** Owner, clarifying 144.2: *"I refer to comment section for
+       user to comment on document or approval workflow (so they can
+       collaborate)."* A different ask — 144.2 shipped a thread you can READ;
+       collaboration is people ACTING on each other's comments. The survey said
+       the framework had none of it: mentions, resolve, visibility and
+       anchoring all returned **NONE** across 265 classes (reconciled against
+       known-present classes first, so the five zeroes are real absences and
+       not a dead detector).
+
+       Four candidates, each attacked before being accepted. **Accepted:**
+       `data-visibility="external"` — collaboration on an ERP document has one
+       catastrophic mistake, an internal remark leaving the building, and the
+       references (Odoo/SAP/Salesforce) all put it on a small tab pair ABOVE an
+       otherwise identical box, so the surface you look at while typing never
+       says where the words go. Here the composer itself is visibly a different
+       object, and the posted entry keeps the mark. Internal is the default:
+       forgetting the hook means a message stayed in, which someone chases; the
+       reverse is unrecoverable. **Accepted cheaply:** `data-state="resolved"`
+       — the objection "the document's own state machine resolves things" holds
+       for one approver and fails for a rejection carrying three objections;
+       one document state, N discussion states. **Deferred:** mentions (an
+       inline person token sits awkwardly against the framework's own
+       references-don't-live-in-prose rule, small payoff, no screen demanding
+       it) and anchoring (a two-way comment↔row link with highlight and
+       scroll-into-view is pattern scale, not a modifier).
+
+       Injection-checked: edges 3px, **0px the moment the attribute is
+       removed in the same run**. A new contrast pairing declared per the
+       recipe (36 pairs × 2 themes). `data-visibility` self-registers from the
+       selector — data-hooks went 71 → 72 documented with nothing
+       hand-maintained.
+
+       **The measurement corrected the design.** A `forced-colors: active`
+       probe added to CONFIRM a claim already on the page instead changed what
+       the page may claim: the edge survives (geometry), but resolved and live
+       ink both repaint to the same black, so resolved has *no* signal there.
+       The "Resolved" marker is now documented as **required**, not optional —
+       without it the modifier is colour-only, which this framework does not
+       ship. Grill: `.roundtable/grill-collaboration-comments-2026-08-25.md`.
+
+       **Sharpens the open OWNER CALL from 144.2:** a surface for collaborating
+       on *any* document now lives in `approval-workflow.css`, which already
+       houses three shape-general components. The owner has now asked for a
+       comment component twice and both answers were inside a file named for
+       approvals — the cost of not splitting it is no longer hypothetical.
+
 ## Slice 143 — Owner wishlist: motion bug, sidebar-nav, offcanvas (2026-08-25)
 
 Owner input, three items. Triage found the second and third are **the same

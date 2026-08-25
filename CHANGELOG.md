@@ -11,6 +11,20 @@ pin.
 
 ### Added
 
+- `data-visibility="external"` on `.bo-composer` / `.bo-audit__entry`, and
+  `data-state="resolved"` on a `--discussion` entry — the two things a thread
+  people ACT on needs that a thread people only read does not. External marks a
+  comment that leaves the building, with the edge on the **composer** as well
+  as the posted entry: every ERP measured against puts this on a tab pair above
+  an otherwise identical box, so the surface you look at while typing never
+  says where the words go. Internal is the default, because forgetting the hook
+  should fail toward "stayed in", not "broadcast". The edge is geometry and
+  survives forced-colors; the audience badge is the author's to write.
+  **A visible "Resolved" marker is required** — measured under
+  `forced-colors: active`, both inks repaint to the same black, so the marker
+  is that state's only non-colour channel. Grill:
+  `.roundtable/grill-collaboration-comments-2026-08-25.md`.
+
 - `.bo-audit--discussion` — turns the audit trail into a comment thread. The
   owner asked for a comment/chat component; the measurement said the framework
   already ships four fifths of one (`.bo-audit` is the list, `.bo-byline` the
