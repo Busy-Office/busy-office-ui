@@ -132,8 +132,55 @@ def last_iterations(n=10):
     return list(reversed(rows))
 
 
+def sync_mirror(items, now_str):
+    """Rebuild the roadmap_items mirror from what was just parsed.
+
+    Wholesale, not incremental: the markdown is the record, so the mirror is
+    whatever the record currently says and a stale row is a bug rather than
+    history. Rebuildable by construction — delete loops.db and the next run
+    restores this table exactly (storage doctrine, CLAUDE.md).
+
+    Exists so "the oldest still-open item" — dispatcher rule 4 — is an ORDER BY
+    rather than a scan of a file that had reached 9,824 lines.
+    """
+    conn = connect()
+    try:
+        conn.execute("DELETE FROM roadmap_items")
+        conn.executemany(
+            "INSERT INTO roadmap_items (item_id, slice, title, blocked, synced) "
+            "VALUES (?, ?, ?, ?, ?)",
+            [
+                (iid or title, None if major == "\u2014" else major, title, 1 if blocked else 0, now_str)
+                for major, iid, title, blocked in items
+            ],
+        )
+        conn.commit()
+        n = conn.execute("SELECT COUNT(*) FROM roadmap_items").fetchone()[0]
+    finally:
+        conn.close()
+    # Reconcile against the SOURCE, not against the argument.
+    #
+    # The first version of this compared `n` to `len(items)` — the list it had
+    # just been handed. That is self-consistent by construction: hand it a
+    # short list and it happily agrees with itself. Red-proving it by dropping
+    # an item produced a PASS, which is the whole "detector that cannot fail"
+    # failure mode, committed one hour after writing "a mirror must reconcile
+    # against its source" into CLAUDE.md.
+    #
+    # The source is the markdown. Count its raw checkboxes and compare.
+    raw = len(ANY_OPEN.findall(open(ROADMAP, encoding="utf-8").read()))
+    if n != raw:
+        raise SystemExit(
+            f"generate_status: ROADMAP.md has {raw} open checkbox(es) but the "
+            f"mirror holds {n}. A mirror that under-reports gets quoted while "
+            "steering priorities — refusing to leave it in that state."
+        )
+    return n
+
+
 def render(now_str):
     items = open_items()
+    sync_mirror(items, now_str)
     slices = by_slice(items)
     owner_blocked = [(iid, title) for _, iid, title, blocked in items if blocked]
     iterations = last_iterations(10)

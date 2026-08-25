@@ -16,12 +16,43 @@ for the plan, `LOOPS.md` for autonomous-work orchestration.
   what the database rule forbids — the archive is still markdown, still
   reviewed, still diffed. `check:slice-refs` keeps the 148 citations pointing
   into it resolvable.
-- **Structured + time-series → a SQLite *mirror*.** `loops.db` (loop telemetry) and
-  graphify's `graph.db` are **derived, rebuildable, and git-ignored**. Use them to
-  query — trends, counts, "give me a number" — never as the primary record.
+- **Anything you SORT, FILTER or COUNT → a SQLite *mirror*.** `loops.db` (loop
+  telemetry, and the roadmap backlog) and graphify's `graph.db` are **derived,
+  rebuildable, and git-ignored**. Never the primary record.
+
+  Widened from "structured + time-series" on 2026-08-25, because that wording
+  was read as "telemetry only" and left the backlog unqueryable: dispatcher
+  rule 4 wants *the oldest still-open item*, which is an `ORDER BY`, and it was
+  answered by scanning a 9,824-line file every wake. A backlog is structured
+  and is not a time series; it still deserves a mirror.
 - **Rule of thumb:** if a human should read or review it, it's a markdown file; if
   you want to *query* it, add a mirror row. Every mirror must be rebuildable from
   the files (`scripts/loops/rebuild_from_log.py`, graphify's `json_to_sqlite`).
+- **A mirror must RECONCILE against its source and fail loudly when it cannot.**
+  This is the rule the doctrine was missing, and it cost something real:
+  `STATUS.md` silently listed **7 of 9** open items for weeks — its parser
+  required a numeric id, so "OWNER CALL — direction", a stated release blocker,
+  was invisible in the section that exists to surface owner decisions. A mirror
+  that under-reports is worse than no mirror, because its number gets quoted
+  while steering priorities. Every generator now counts the raw thing in the
+  source (`N. [ ]` checkboxes) and refuses to write if fewer were parsed.
+
+  The general form: **a derived artefact may not decide, on its own, what it
+  failed to see.** Assert the count, not just the content.
+
+  **And reconcile against the SOURCE, not against the argument** — the same
+  day this rule was written, the first mirror built under it compared its row
+  count to *the list it had just been handed*. That is self-consistent by
+  construction: hand it a short list and it agrees with itself. Red-proving it
+  by dropping an item produced a **pass**. A reconciliation that cannot see
+  past its own caller is a detector that cannot fail, and the tell is that
+  nothing in the check re-reads the file. Count the raw thing in the markdown.
+- **Why the record itself stays markdown**, restated because it gets asked: the
+  roadmap is prose that is argued with — accept/refuse tests, measurements,
+  realignments — and `git diff` on that IS the review. A `.db` is a binary blob:
+  no diff, no merge, no PR review, and two wakes editing it conflict
+  irreconcilably. **148 slice numbers are cited from shipped CSS comments**, and
+  `roadmap 130.3` has to resolve to something a person opens with no tooling.
 
 ## Autonomous loops
 
@@ -291,6 +322,16 @@ Three failures in one session (2026-08-18), each caught late or by luck:
 - `./serve-dist.mjs` became `./serve-DIST.mjs` in eight import specifiers.
   **Every gate passed locally** because APFS is case-insensitive; Linux CI
   failed with `ERR_MODULE_NOT_FOUND`.
+- **CREATING a file is the same trap, and it destroys instead of breaking**
+  (2026-08-25). Writing `ROADMAP-ARCHIVE.md` while `ROADMAP-archive.md` was
+  already tracked is ONE file on APFS: 7,307 lines of archived history were
+  silently overwritten, and nothing errored. `git status` showing it as
+  **modified rather than added** was the only tell. So before creating a file,
+  check `git ls-files` for a case-insensitive match — a "new" file that shows
+  up as modified is not new, it is a file you just replaced. The same write
+  also poisoned a measurement taken minutes later: a base-rate count read 58
+  where the truth was 2, because it was counting against content that no
+  longer existed.
 - The same rename rewrote *prose*, including a user-facing gate message that
   started reporting "internal links verified against DIST".
 - A third put an Astro **component call inside a copy-paste code sample**, and
