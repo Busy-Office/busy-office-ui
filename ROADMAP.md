@@ -345,11 +345,44 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        **whatever a module was iterated on, it has** — which is an argument for
        scoring every screen rather than trusting that a convention spread.
 
-2. [ ] **145.2 — performance is the one dimension that can be exact.** DOM
-       nodes and bytes are already measured and discriminate. Needs a per-KIND
-       budget rather than one global number, and a red-proof (inflate a screen,
-       watch the score fall). *Accept*: a screen that gains 80 nodes for no new
-       information scores lower, demonstrated.
+2. [x] **145.2 — DONE 2026-08-26. Performance is a FIT RESIDUAL, not a budget.**
+       The item asked for a per-kind node budget. That was the wrong
+       instrument, and two measurements said so before any score was recorded:
+
+       1. **Absolute budget per kind** — cannot tell a RICH screen from a
+          BLOATED one. `p2p/purchase-order` read 235/220 "OVER" while being
+          simply the densest document in the suite.
+       2. **Nodes per fact** — wrong in the opposite direction. Chrome is
+          near-fixed per screen, so the ratio is hyperbolic in `facts` and
+          punishes THIN screens: `crm/opportunity` ranked worst in the suite at
+          7.83 on twelve facts and is entirely ordinary.
+       3. **Least-squares fit of own-nodes against facts, scored on the
+          residual** — right, because it separates the two costs the others
+          conflated: a fixed overhead every screen pays, and a marginal cost per
+          fact. Excess above the line is markup that bought nothing, which is
+          what the Accept criterion actually describes.
+
+       **Measured: `own ≈ 70 + 1.25 × facts`, residual sd 18** over 27 screens.
+       That slope is the framework's own report card — each displayed fact
+       costs **1.25 DOM nodes**, so there is almost no wrapper-per-datum, which
+       is the CSS-first charter showing up as a number rather than a claim.
+
+       *Accept — demonstrated*: 80 empty `<span>`s appended to `/fin/ar-aging`
+       with facts unchanged moved its excess from **−3 to +77**. 21 distinct
+       values across the suite, so the dimension discriminates.
+
+       **The one outlier was my instrument, not a screen.** `p2p/purchase-order`
+       sat at +56 (2.7sd) until the fact counter was corrected: a thread entry
+       carries an author, a marker and a body, and counting the whole entry as
+       ONE fact under-counted the only screen with a discussion thread. Fixed,
+       purchase-order fell to +36, and the suite now has **zero outliers** —
+       the honest reading being that nothing is bloated today, not that the
+       detector is asleep, since the Accept test proves it fires.
+
+       **Stated limit:** the fit is recomputed each run, so it measures
+       *relative* bloat — if every screen doubled its chrome the line would move
+       with them. The absolute number (`nodes per fact`) is printed for that
+       reason and belongs in `record_metric.py`, where a trend is visible.
 
 3. [ ] **145.3 — seed `.roundtable/suite-score.md` and stamp every screen.**
        Same ledger shape as `polish-state.md`, so `--check`/`--apply`/`--stamp`

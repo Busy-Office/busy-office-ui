@@ -905,3 +905,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-25 23:31 · Meta · refusal · splitting .roundtable live-vs-settled — 78 of 86 citations come from ROADMAP-archive.md, so moving files breaks footnotes to fix an unevidenced problem · refused · 36477d7
 - 2026-08-25 23:31 · Meta · refusal · pruning uncited findings — every file was last modified this month; deleting three-week-old work to save 1.8 MB is not a trade · refused · 36477d7
 - 2026-08-25 23:43 · Continue · bug · check-ci-ignores and check-slice-refs crashed the docs container build (ENOENT on files the image does not copy); both now stand down loudly · landed · f2ae348
+- 2026-08-26 06:01 · Continue · build · 145.0 feasibility: rubric separates screens; found and fixed 8 unnamed tables (all in P2P), now gated · landed · 03d1e15
+- 2026-08-26 06:10 · Continue · build · 145.1 — rubric settled: functionality + performance kept, ux DROPPED (1 distinct value); its 4 binary checks moved into the suite audit · landed · 90ea5f5
+- 2026-08-26 06:10 · Meta · refusal · ux as a scoring dimension — binary properties belong in a gate, not a rubric · refused · 90ea5f5
