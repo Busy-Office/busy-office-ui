@@ -125,6 +125,23 @@
        creating extra scroll length, and the matching padding keeps the buttons
        where they were. Outside a shell the variable is unset, the calcs all
        resolve to 0, and this is exactly the old behaviour. */
+    /* JOIN THE LAYER SCALE. This shipped `z-index: auto` and therefore lost to
+       anything carrying a number: a sticky table header (1100) painted straight
+       through the buttons, slicing "Submit for approval" in half (owner report,
+       2026-08-26). The same bug is already recorded one component over —
+       object-page shipped a bare `z-index: 2` and lost the moment a nested
+       table went sticky (roadmap 108) — which is what makes this a CLASS, not
+       an incident: a sticky surface without a declared layer is a collision
+       waiting for the next sticky thing.
+
+       `--bo-z-sticky-page` because this bar IS page chrome, the same rank as
+       the screen's own header and anchor bar. It beats sticky table headers
+       (1100) and sticky columns (1050), and stays under dropdowns (1200) so a
+       menu opened from a button in this bar still floats above it. The header
+       and this bar never contend — one is top, one is bottom.
+       `check:sticky-layers` now fails the build on any sticky rule that does
+       not declare a layer, so the next one cannot ship silently. */
+    z-index: var(--bo-z-sticky-page);
     inset-block-end: calc(-1 * var(--bo-app-shell-pad, 0px));
     margin-block-end: calc(-1 * var(--bo-app-shell-pad, 0px));
     padding-block-end: calc(var(--bo-space-3) + var(--bo-app-shell-pad, 0px));

@@ -1152,6 +1152,45 @@ re-raised as a new finding.
        was written — and a wake that reads one older than a few days re-checks
        before trusting it.
 
+2. [x] **146.2 — DONE 2026-08-26. The object page's sticky bar: a gap below it,
+       then a table header painting through it.** Two owner reports, one
+       underlying shape — *sticky chrome that had not been told where it sits*.
+
+       **The gap.** Measured 24px, and `.bo-app-shell__main`'s bottom padding
+       is 24px, which is the whole bug: `inset-block-end: 0` resolves to the
+       PADDING edge, so the bar parked one padding short of the container. What
+       sat in that strip was live record content scrolling under the bar and
+       reappearing below it. The shell now publishes `--bo-app-shell-pad` and
+       the bar spans it; outside a shell every calc resolves to 0 and nothing
+       moves.
+
+       **The overlay.** `.bo-form-actions` shipped `z-index: auto`, so a sticky
+       table header (1100) painted straight through it and cut "Submit for
+       approval" in half. It never joined the `--bo-z-*` scale — which exists
+       precisely because `object-page` lost the same fight with a bare
+       `z-index: 2` in roadmap 108. **Twice is a class**, and that is the
+       answer to the owner's real question, "how do consumers use this without
+       hitting the bug": they should never pick a number. `check:sticky-layers`
+       now fails the build on any block-axis sticky rule that does not declare
+       a layer from the scale. Red-proved both ways — removing the layer, and
+       inventing one outside the scale.
+
+       Inline-axis sticky is exempt **by measurement, not assumption**: the
+       data-table toolbar, footer and sticky columns hold still horizontally
+       and never contend with page chrome. Requiring a layer of them would be
+       ceremony, and the base rate was checked before the rule was written
+       (6 sticky rules: 2 block-axis, 4 inline).
+
+       The detector's first run counted a sentence — `button.css` documents
+       docking in prose — the same comment-blindness `check:rtl` already had.
+
+       **Not fixed, and stated rather than left implicit:** the shadow is
+       always on, including when the bar is at rest. A CSS-only "stuck"
+       detection needs scroll-driven animation, and three attempts to build an
+       oracle for it disagreed with each other, so nothing was shipped that
+       could not be verified. Either a small behaviour with an
+       IntersectionObserver sentinel, or leave it. **OWNER CALL.**
+
 ## Slice 26 — from the Objective grill (2026-08-17)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.

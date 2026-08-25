@@ -908,3 +908,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 06:01 · Continue · build · 145.0 feasibility: rubric separates screens; found and fixed 8 unnamed tables (all in P2P), now gated · landed · 03d1e15
 - 2026-08-26 06:10 · Continue · build · 145.1 — rubric settled: functionality + performance kept, ux DROPPED (1 distinct value); its 4 binary checks moved into the suite audit · landed · 90ea5f5
 - 2026-08-26 06:10 · Meta · refusal · ux as a scoring dimension — binary properties belong in a gate, not a rubric · refused · 90ea5f5
+- 2026-08-26 06:19 · Continue · build · 145.2 — performance scored as a fit residual (own ≈ 70 + 1.25×facts); absolute budget and nodes-per-fact both measured wrong first · landed · b187779

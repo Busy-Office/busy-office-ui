@@ -64,7 +64,7 @@
     "check:rtl": "node scripts/check-rtl.mjs",
     "check:motion": "node scripts/check-motion.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run check:composited && npm run check:rtl && npm run check:motion && npm run build:acr && npm run build:floor && npm run build:rf-essentials && npm run check:rf-floor && node scripts/stamp-readme.mjs --check && npm run check:package",
+    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run check:composited && npm run check:rtl && npm run check:motion && npm run check:sticky-layers && npm run build:acr && npm run build:floor && npm run build:rf-essentials && npm run check:rf-floor && node scripts/stamp-readme.mjs --check && npm run check:package",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
@@ -78,7 +78,8 @@
     "build:floor": "node scripts/derive-floor.mjs",
     "check:composited": "node scripts/check-composited.mjs",
     "build:rf-essentials": "node scripts/build-rf-essentials.mjs",
-    "check:rf-floor": "node scripts/check-rf-floor.mjs"
+    "check:rf-floor": "node scripts/check-rf-floor.mjs",
+    "check:sticky-layers": "node scripts/check-sticky-layers.mjs"
   },
   "browserslist": [
     "chrome >= 119",
