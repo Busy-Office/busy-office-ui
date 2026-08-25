@@ -42,11 +42,29 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
  *  and `94.6a` is a sub-item renumbered when its slice was rewritten. */
 const KNOWN_DANGLING = new Set(['5', '94.6a']);
 
-const corpus = (
-  await readFile(join(ROOT, 'ROADMAP.md'), 'utf8')
-) + (await readFile(join(ROOT, 'ROADMAP-archive.md'), 'utf8'));
+/* Same standing-down rule as check-ci-ignores: the docs image copies apps/ and
+   packages/, so the roadmap and its archive are legitimately absent. Say the
+   citations were NOT verified rather than passing silently. */
+const live = await readFile(join(ROOT, 'ROADMAP.md'), 'utf8').catch(() => null);
+const archived = await readFile(join(ROOT, 'ROADMAP-archive.md'), 'utf8').catch(() => null);
+if (live === null || archived === null) {
+  console.log(
+    'slice-refs check SKIPPED — ROADMAP.md / ROADMAP-archive.md are not in this\n' +
+      '  build context, so the 148 slice citations were NOT verified here.',
+  );
+  process.exit(0);
+}
+const corpus = live + archived;
 
-const files = execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' })
+let listing = '';
+try {
+  listing = execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' });
+} catch {
+  console.log('slice-refs check SKIPPED — no git in this build context, so the');
+  console.log('  citations could not be enumerated and were NOT verified here.');
+  process.exit(0);
+}
+const files = listing
   .split('\n')
   .filter((f) => /\.(css|mjs|js|astro|md|py)$/.test(f) && !f.startsWith('ROADMAP'));
 

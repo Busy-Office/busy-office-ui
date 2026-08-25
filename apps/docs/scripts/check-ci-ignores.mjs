@@ -58,7 +58,23 @@ function readsFile(source, name) {
   return patterns.some((re) => re.test(code));
 }
 
-const yml = await readFile(join(ROOT, '.github', 'workflows', 'ci.yml'), 'utf8');
+/* The docs image copies apps/ and packages/ only, so `.github/` is legitimately
+   absent there. Say so and stand down — a gate that cannot run must never
+   report a clean pass it did not earn, and must never crash the build that
+   contains it (CLAUDE.md, after check:rtl broke the po-app image the same
+   way). Found by building the container BEFORE pushing, which is the whole
+   reason "verify a new gate in the narrowest context that must run it"
+   is written down. */
+const YML = join(ROOT, '.github', 'workflows', 'ci.yml');
+const yml = await readFile(YML, 'utf8').catch(() => null);
+if (yml === null) {
+  console.log(
+    'ci-ignores check SKIPPED — .github/workflows/ci.yml is not in this build\n' +
+      '  context, so CI\'s paths-ignore list was NOT verified here. It is verified\n' +
+      '  in the full checkout, which is the context that owns that file.',
+  );
+  process.exit(0);
+}
 const ignored = [...yml.matchAll(/^\s*-\s*'([^']+)'\s*$/gm)]
   .map((m) => m[1])
   .filter((p) => !p.includes('*')) // directory globs have no single file to read
