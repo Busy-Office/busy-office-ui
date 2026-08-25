@@ -283,7 +283,7 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        and the cheap objective ones point at real defects rather than
        decorating a number.
 
-1. [ ] **145.1 — settle the rubric against measured base rates, THEN write it.**
+1. [x] **145.1 — DONE 2026-08-26. Two dimensions, not three: `ux` failed its own Accept test.**
        Not the other way round: this file already retired
        `typography`/`colour`/`spacing` for reading 3 on all 39 components, and
        LOOPS.md states outright that a dimension which cannot fail must never
@@ -307,6 +307,43 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        checklist — never against a screen of a different kind.
        *Accept*: three dimensions each shown to produce at least three distinct
        values across the 21 screens, or the dimension is dropped and said so.
+
+       **Result, measured across all 28 screens** (`examples/erp-suite/score.mjs`):
+
+       | dimension | distinct values | verdict |
+       | --- | --- | --- |
+       | functionality | 3 | KEEP |
+       | performance | 6 | KEEP |
+       | **ux** | **1** | **DROPPED** |
+
+       `ux` read **5/5 on every screen**. The Accept test caught exactly what it
+       was written for, one level up from the components case it was modelled
+       on. But the reason is worth more than the verdict: those five checks are
+       **binary** — a caption is present or it is not; headings skip a level or
+       they do not — and a binary property that never varies belongs in a GATE,
+       enforced once, not in a rubric re-confirming it 28 times. **A rubric is
+       for what can be better or worse.** Not a dead detector either: the
+       caption half was red-proved and fires. Redundant, not blind — a
+       distinction worth keeping, because the two have different fixes.
+
+       So the four un-gated ones moved into `audit.mjs` and are now asserted on
+       every suite run (red-proved: demoting an `<h1>` to `<h3>` reports
+       *"headings descend without skipping a level — FAILS"*).
+
+       **The kind map was wrong on its first run**, as the base rate predicts:
+       `period-close` scored 1/4 and `bom` 2/4, and both were misclassification
+       rather than defect — a BOM has no meaningful total, so owing a `<tfoot>`
+       was nonsense, and close tasks are not filtered, created ad hoc or
+       drilled into. Added `structure` and `job` kinds. The six lists missing a
+       filter bar were **left exactly where they were**, because correcting a
+       kind is legitimate and tuning until scores look good is not.
+
+       **The backlog the score exists to produce**, and it repeats the caption
+       finding INVERTED: 6 lists have no way to narrow the set — and the two
+       that do are both in P2P, the pilot module. P2P was *behind* on captions
+       and *ahead* on filters. The pattern is not "the pilot is better", it is
+       **whatever a module was iterated on, it has** — which is an argument for
+       scoring every screen rather than trusting that a convention spread.
 
 2. [ ] **145.2 — performance is the one dimension that can be exact.** DOM
        nodes and bytes are already measured and discriminate. Needs a per-KIND

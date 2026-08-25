@@ -91,6 +91,35 @@ for (const path of paths) {
       for (const d of new Set(dupes)) failures.push(`${path}: two tables share the name "${d}"`);
     }
 
+    /* PROPERTIES, NOT SCORES (roadmap 145.1). These four started as a `ux`
+       dimension of the screen rubric and read 5/5 on all 28 screens — one
+       distinct value, which fails the Accept test. The reason is worth more
+       than the result: each is BINARY. A caption is present or it is not;
+       headings skip a level or they do not. A rubric is for things that can be
+       better or worse, and a binary property that never varies belongs in a
+       gate, where it is enforced once instead of re-confirmed 28 times.
+       Not a dead detector — the caption half was red-proved and fires. */
+    if (width === WIDTHS[0]) {
+      for (const [claim, ok] of await page.evaluate(() => {
+        const hs = [...document.querySelectorAll('h1,h2,h3,h4')].map((h) => +h.tagName[1]);
+        const num = [...document.querySelectorAll('.bo-data-table__col--numeric')];
+        return [
+          ['headings descend without skipping a level',
+            hs.length > 0 && hs[0] === 1 && hs.every((h, i) => i === 0 || h - hs[i - 1] <= 1)],
+          ['every toned cell carries a non-colour cue',
+            [...document.querySelectorAll('[data-tone]')].every(
+              (e) => e.textContent.trim().length > 0 || e.hasAttribute('data-tone-text'))],
+          ['numeric columns use tabular figures',
+            num.length === 0 || num.some((c) => c.classList.contains('bo-u-tabular')
+              || getComputedStyle(c).fontVariantNumeric.includes('tabular'))],
+          ['at most two primary actions compete',
+            document.querySelectorAll('.bo-btn:not(.bo-btn--secondary):not(.bo-btn--ghost):not(.bo-btn--icon)').length <= 2],
+        ];
+      })) {
+        if (!ok) failures.push(`${path}: ${claim} — FAILS`);
+      }
+    }
+
     if (width === NARROW_WIDTH) {
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
