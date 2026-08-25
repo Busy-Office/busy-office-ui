@@ -134,6 +134,16 @@ match to its full playbook below:
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.
 
+   **Read `ROADMAP.md` only, and it is short again.** A closed slice leaves a
+   one-line pointer here and its text moves to `ROADMAP-archive.md`. Item 110.4
+   did this for 83 slices on 2026-08-22; the live file grew back from 5,562 to
+   **9,824 lines in three days**, so a second pass on 2026-08-25 moved 44 more
+   and brought it to **1,094**. Treat it as a recurring sweep, not a one-off —
+   if this rule is walking thousands of lines again, that is the signal.
+   The archive is for looking a reason UP (`check:slice-refs` keeps its 148
+   citations resolvable); a dispatch decision never comes from it, because
+   nothing in it is open.
+
    **Oldest, not "current in-progress slice," as of 2026-08-19.** The old
    wording never defined "current," and in practice it meant "whichever
    slice a triage step just created" — because triage inserts near the top

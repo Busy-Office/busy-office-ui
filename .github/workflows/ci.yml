@@ -8,12 +8,29 @@ on:
     # ~12 minutes a run that was ~96 CI-minutes per 30 commits spent proving
     # that a log entry does not break a stylesheet.
     #
-    # The list is deliberately short. DESIGN.md, ROADMAP.md, LOOPS.md,
-    # README.md and CHANGELOG.md are all READ BY GATE SCRIPTS (4, 2, 1, 1 and
-    # 1 of them respectively — check:rtl reads DESIGN.md, stamp-readme reads
-    # the READMEs), so a markdown edit can genuinely turn CI red and none of
-    # those may be ignored. Only .roundtable/** and STATUS.md are read by
-    # nothing.
+    # The list is deliberately short. DESIGN.md, LOOPS.md, README.md and
+    # CHANGELOG.md are READ BY GATE SCRIPTS (check:rtl reads DESIGN.md,
+    # stamp-readme reads the READMEs), so a markdown edit can genuinely turn
+    # CI red and none of those may be ignored.
+    #
+    # ROADMAP.md IS READ BY A GATE, and the route to that sentence is worth
+    # keeping. The old comment here claimed two gate scripts read it and used
+    # that to justify not ignoring it. Measured on 2026-08-25: zero did — four
+    # mentioned it in a comment, and the only opener was
+    # scripts/loops/generate_status.py, which never runs in CI. So it was added
+    # to this list, worth ~10 skipped runs per 60 commits.
+    #
+    # Within the same session the roadmap was split into ROADMAP.md plus
+    # ROADMAP-ARCHIVE.md, and check:slice-refs was written to stop the 116
+    # citations pointing into the archive from rotting — a gate that READS
+    # ROADMAP.md. check:ci-ignores failed immediately, which is precisely its
+    # job: an ignored path had silently stopped being safe to ignore. The
+    # saving is forfeited because a roadmap-only commit can now genuinely turn
+    # CI red by deleting a cited slice.
+    #
+    # Only .roundtable/** and STATUS.md are read by nothing, and
+    # check:ci-ignores asserts that rather than trusting this comment — which
+    # is the lesson, since this comment was wrong for months.
     paths-ignore:
       - '.roundtable/**'
       - 'STATUS.md'

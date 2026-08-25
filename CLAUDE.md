@@ -6,9 +6,16 @@ for the plan, `LOOPS.md` for autonomous-work orchestration.
 
 ## Storage doctrine — markdown is source of truth, SQLite is a derived mirror
 
-- **Narrative + contract → markdown, in git.** `ROADMAP.md`, `LOOPS.md`,
-  `DESIGN.md`, `.roundtable/*.md`, and the loop log are the source of truth. They
-  are reviewed and diffed; never move them into a database.
+- **Narrative + contract → markdown, in git.** `ROADMAP.md`, `ROADMAP-archive.md`,
+  `LOOPS.md`, `DESIGN.md`, `.roundtable/*.md`, and the loop log are the source of
+  truth. They are reviewed and diffed; never move them into a database.
+  `ROADMAP.md` holds what is OPEN; `ROADMAP-archive.md` holds closed slices
+  verbatim, with a one-line pointer left behind. This is a **recurring sweep**:
+  110.4 moved 83 slices, the live file grew back to 9,824 lines in three days,
+  and a second pass moved 44 more (→ 1,094). Splitting a markdown file is not
+  what the database rule forbids — the archive is still markdown, still
+  reviewed, still diffed. `check:slice-refs` keeps the 148 citations pointing
+  into it resolvable.
 - **Structured + time-series → a SQLite *mirror*.** `loops.db` (loop telemetry) and
   graphify's `graph.db` are **derived, rebuildable, and git-ignored**. Use them to
   query — trends, counts, "give me a number" — never as the primary record.
