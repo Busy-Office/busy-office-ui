@@ -411,7 +411,22 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        work on it. *Accept*: `polish_requeue.py --check` reports screens whose
        `.screen.mjs` moved, and a Polish round can pick one.
 
-4. [ ] **145.4 — the `fin` and `inv` modules are one-screen stubs.** Found
+4. [ ] **145.4 — DECIDED 2026-08-25, owner: FINISH THEM.** Not SKIPPED.
+       Correction to the note below: they are not half-built screens, they are
+       `build.mjs`-generated "not part of the pilot" empty states, so every
+       module on the nav rail lands somewhere. Finishing them means building
+       Finance and Inventory for real and adding them to `BUILT_MODULES`.
+       Chosen for gap-finding value, since Production found 0 gaps: Finance
+       stresses a live balancing CONSTRAINT (a journal entry that must balance
+       before it can post), a totals/footer row, and an aging cross-tab — which
+       tests the standing prediction that `--sticky-col` already covers
+       cross-tabs. Inventory stresses an item×location matrix, dense count
+       entry with variance, and lot genealogy, which is the likeliest real gap
+       in the set. *Accept*: 8 screens, zero CSS of their own, gaps recorded in
+       the ledger either way — including "found nothing", which is the result
+       Production produced and is worth as much.
+
+5. [ ] **145.5 — the original stub note, kept for the record.** Found
        while enumerating: 21 screens are 7 p2p, 4 o2c, 4 crm, 4 prod, 1 fin,
        1 inv. Finance and Inventory were dropped on the owner's instruction
        after Production found 0 gaps, so these are stubs by decision, not
