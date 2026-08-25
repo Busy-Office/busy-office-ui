@@ -882,3 +882,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-25 07:18 · Continue · build · 142.2b — /patterns/first-load shipped: skeleton vs spinner vs nothing, shape-matching, refetch as a distinct state · landed · bdc2680
 - 2026-08-25 07:56 · Continue · build · 142.4 — command bar states wired and demonstrated (clear, commit-and-reset, command-vs-search, double Escape) · landed · 975fe45
 - 2026-08-25 08:04 · Continue · build · 112.5 — /concepts/which-pattern generated from patterns.json: 39 rows, 17 alternative links · landed · 1755423
+- 2026-08-25 08:10 · Continue · bug · 144.1 — form-actions inside a card no longer sticks to the viewport; blast radius measured as exactly one page · landed · 5b0c784

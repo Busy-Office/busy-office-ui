@@ -9,6 +9,21 @@ pin.
 
 ## Unreleased
 
+### Added
+
+- `.bo-audit--discussion` — turns the audit trail into a comment thread. The
+  owner asked for a comment/chat component; the measurement said the framework
+  already ships four fifths of one (`.bo-audit` is the list, `.bo-byline` the
+  author line — its own docs already named "a comment" as a use — `.bo-avatar`
+  the face, `.bo-composer` the write surface, placeholder "Add a comment…").
+  The one part that did NOT compose was type size: `.bo-audit__detail` is `xs`
+  secondary ink, correct for "changed status to Approved" and wrong for a
+  message, so a composed thread rendered its body at **12px under a 13px
+  byline** — metadata outranking the content. The modifier returns the detail
+  to body size and primary ink (measured 12→14px, secondary→primary, reverting
+  when the class is removed). A separate `bo-comment` component was refused:
+  see `.roundtable/grill-comment-thread-2026-08-25.md`.
+
 ### Deprecated
 
 - `.bo-richtext__divider` — use `.bo-richtext__group` instead. The divider was

@@ -72,6 +72,51 @@ export const render = () =>
       </table>
     </div>
 
+    <h2>Internal notes</h2>
+    <!-- 144.2: a comment thread, composed — NOT a new component. bo-audit is
+         the list, --discussion says its entries are content rather than small
+         print, bo-byline is the author line (its own docs name "a comment"),
+         bo-prose is the body, bo-composer is the write surface. The one thing
+         that did not compose was the body's type size, which is why the
+         modifier exists. -->
+    <ol class="bo-audit bo-audit--discussion">
+      <li class="bo-audit__entry">
+        <span class="bo-audit__time"><time datetime="2026-08-20T09:12">20 Aug 09:12</time></span>
+        <div class="bo-audit__detail">
+          <span class="bo-byline"><strong>M. Osei</strong> · Requester</span>
+          <div class="bo-prose"><p>Vendor confirmed the coupling is on a 3-week
+          lead time. Asked whether we split the line and take 40 now.</p></div>
+        </div>
+      </li>
+      <li class="bo-audit__entry">
+        <span class="bo-audit__time"><time datetime="2026-08-20T11:40">20 Aug 11:40</time></span>
+        <div class="bo-audit__detail">
+          <span class="bo-byline"><strong>J. Kim</strong> · Cost-centre manager</span>
+          <div class="bo-prose"><p>Split it. Budget is committed either way and
+          the line stoppage costs more than the second delivery.</p></div>
+        </div>
+      </li>
+      <li class="bo-audit__entry">
+        <span class="bo-audit__time"><time datetime="2026-08-21T08:05">21 Aug 08:05</time></span>
+        <div class="bo-audit__detail">
+          <span class="bo-byline"><strong>M. Osei</strong> · Requester</span>
+          <div class="bo-prose"><p>Split raised as PO-88240 for the balance.</p></div>
+        </div>
+      </li>
+    </ol>
+
+    <form class="bo-composer">
+      <span class="bo-avatar bo-byline__avatar" aria-hidden="true">MO</span>
+      <div class="bo-composer__body">
+        <label class="bo-visually-hidden" for="po-note">Add a note</label>
+        <textarea class="bo-input" id="po-note" rows="3"
+                  placeholder="Visible to anyone who can see this order."></textarea>
+        <div class="bo-composer__actions">
+          <button class="bo-btn" type="button">Post note</button>
+        </div>
+      </div>
+    </form>
+
     <h2>Document flow</h2>
     <!-- GAP-2 (merged with GAP-9), DECIDED 2026-08-23: bo-timeline, ordered by
          lifecycle, one step per document TYPE with that type's instances as

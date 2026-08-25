@@ -3,6 +3,7 @@ import Gallery from '../../layouts/Gallery.astro';
 import ClassRef from '../../components/ClassRef.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
+import Demo from '../../components/Demo.astro';
 import DsaScore from '../../components/DsaScore.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const auditMarkup = `<ol class="bo-audit" role="list">
@@ -14,6 +15,27 @@ const auditMarkup = `<ol class="bo-audit" role="list">
 </ol>
 <!-- Grid-aligned: the time column self-sizes; details land in the content
      column automatically — no width tuning when formats change. -->`;
+const discussionMarkup = `<!-- Same list, different kind of entry. --discussion says the
+     detail IS the content, so it keeps body size and primary ink. -->
+<ol class="bo-audit bo-audit--discussion" role="list">
+  <li class="bo-audit__entry">
+    <time class="bo-audit__time" datetime="2026-08-20T09:12">08-20 09:12</time>
+    <div class="bo-audit__detail">
+      <span class="bo-byline"><strong>M. Osei</strong> \u00b7 Requester</span>
+      <div class="bo-prose"><p>Vendor confirmed a 3-week lead time on the coupling.
+      Asked whether we split the line and take 40 now.</p></div>
+    </div>
+  </li>
+  <li class="bo-audit__entry">
+    <time class="bo-audit__time" datetime="2026-08-20T11:40">08-20 11:40</time>
+    <div class="bo-audit__detail">
+      <span class="bo-byline"><strong>J. Kim</strong> \u00b7 Cost-centre manager</span>
+      <div class="bo-prose"><p>Split it \u2014 budget is committed either way and the
+      line stoppage costs more than a second delivery.</p></div>
+    </div>
+  </li>
+</ol>`;
+
 const composerMarkup = `<form class="bo-composer">
   <span class="bo-avatar bo-byline__avatar" aria-hidden="true">RV</span>
   <div class="bo-composer__body">
@@ -120,6 +142,25 @@ const composerMarkup = `<form class="bo-composer">
     step flips <code>data-state="rejected"</code> → back to
     <code>current</code> on resubmit — the audit trail keeps the full history while
     the timeline shows only the present.</p>
+  </section>
+  <section class="demo">
+    <h2><code>--discussion</code> — a comment thread</h2>
+    <p class="bo-u-text-muted">
+      A discussion is the same list carrying a different kind of entry, so it is
+      a <em>setting</em>, not a second component. An audit trail's
+      <code>__detail</code> is small print <em>about</em> a record; a comment is
+      the content itself. Composing a thread without this modifier rendered the
+      message at 12px underneath a 13px byline — the metadata outranking the
+      thing it introduces — so <code>--discussion</code> returns the detail to
+      body size and primary ink. Everything else is already shared: the time
+      column, <a href={base + '/components/byline'}>Byline</a> for the author,
+      <code>.bo-composer</code> below to write one.
+    </p>
+    <Demo code={discussionMarkup} />
+    <p class="bo-u-text-muted">Use it for approval notes, chasing history and
+    handover threads. It is a <strong>flat</strong> thread on purpose — no
+    nesting, no replies-to-replies, no left/right bubbles. Those are messaging-app
+    shapes; an ERP discussion hangs off a record and reads in one order.</p>
   </section>
   <section class="demo">
     <h2><code>.bo-composer</code> — writing a new entry</h2>

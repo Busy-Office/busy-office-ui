@@ -132,6 +132,24 @@
     font-size: var(--bo-font-size-xs);
   }
 
+  /* A DISCUSSION is the same list carrying a different kind of entry, so it is
+     a setting rather than a component (roadmap 144.2). An audit trail's detail
+     is small print about a record — "changed status to Approved" — and xs
+     secondary ink is right for it. A comment is the content itself, and
+     composing one from the trail rendered the message at 12px under a 13px
+     byline: the metadata outranking the thing it introduces, measured on a
+     real screen, not inferred. This modifier says which of the two the list
+     is; everything else — the time column, .bo-byline for the author,
+     .bo-composer to write one — is already shared. */
+  .bo-audit--discussion {
+    font-size: inherit;
+  }
+
+  .bo-audit--discussion .bo-audit__detail {
+    font-size: inherit;
+    color: var(--bo-color-text-primary);
+  }
+
   /* Composer: how a new .bo-audit entry gets written, not just read. Pairs
      with .bo-byline__avatar (byline.css) for the "who" — composed, not
      duplicated. The textarea is plain .bo-input (form/input.css already

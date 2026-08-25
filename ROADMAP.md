@@ -269,18 +269,46 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
        looked for any preceding `bo-widget` in the document rather than actual
        ancestry. `closest()` in a browser is what settled it.
 
-2. [ ] **144.2 — a comment / chat component.** Owner: *"add components — for
-       comment/chat."* Not yet designed, and it needs the Objective test
-       before any CSS: an ERP comment thread is a real and recurring need
-       (approval notes, chasing history, handover), but the suite already
-       expresses two neighbouring shapes — `bo-timeline` carries an ordered
-       chain of events with state, and `bo-audit` carries an immutable trail.
-       The question to answer first is what a comment thread has that neither
-       does: an author identity, a relative time, threading, and an unsent
-       draft. `bo-avatar` and `bo-byline` already ship for the first two.
-       *Accept*: either a component that earns its place against those three,
-       or a documented composition of what exists — and the refusal recorded
-       with the measurement if that is the answer.
+2. [x] **144.2 — DONE 2026-08-25. A comment thread earns a MODIFIER, not a
+       component.** Owner: *"add components — for comment/chat."* The survey
+       the Accept test demanded found the framework already ships four fifths
+       of one, and one part of it was written for this exact job: `.bo-audit`
+       is the list, `.bo-byline` the author line (**its own first comment
+       already names "a comment" as a use**), `.bo-avatar` the face, and
+       `.bo-composer` the unsent draft — whose own comment says "how a new
+       `.bo-audit` entry gets written", whose docs demo placeholder is
+       literally `Add a comment…`, and whose print rule calls it "an empty
+       comment-input form".
+
+       Rather than argue the composition, one was **built into
+       `p2p/purchase-order` and refereed by the suite's zero-CSS gate**: 22
+       screens, zero local CSS, zero axe violations. It composed. But a
+       passing gate is not a rendered screen, and measuring the render found
+       the one thing that did not compose — **the message body rendered at
+       12px underneath its own 13px byline**, smaller than a table cell,
+       because `.bo-audit__detail` is `xs` secondary ink. That is correct for
+       "changed status to Approved" and wrong for a message: the metadata
+       outranked the content. Fixed with two rules, `.bo-audit--discussion`,
+       injection-checked (12→14px and secondary→primary, reverting when the
+       class is removed; the plain trail still measures 12px, so nothing
+       regressed).
+
+       Refused: a `bo-comment` component (re-expresses four shipped things to
+       add one type-size decision), threading (an ERP discussion hangs off a
+       record and reads in one order), and chat bubbles (a messaging-app
+       shape — colleagues act in *roles*, which `name · role` already carries).
+       Grill: `.roundtable/grill-comment-thread-2026-08-25.md`.
+
+       **Two findings raised, not fixed — the second causes the first:**
+       *(a)* the owner asked for something that already existed, because
+       `.bo-composer` lives only on `/components/approval-workflow` and nothing
+       in its name says "comment"; *(b)* `approval-workflow.css` is a **domain
+       name housing three shape-general components** — `bo-timeline`,
+       `bo-audit` and `bo-composer` are none of them about approval. Slice 109
+       settled that patterns are named for shape and not domain; this file is
+       the component-side counter-example. Splitting it changes documented
+       class names and per-component dist paths, so it is a **breaking change
+       and an OWNER CALL**.
 
 ## Slice 143 — Owner wishlist: motion bug, sidebar-nav, offcanvas (2026-08-25)
 
