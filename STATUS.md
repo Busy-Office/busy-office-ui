@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-25 23:31
+Generated at: 2026-08-26 05:51
 
 ## Open items by slice
 
@@ -20,8 +20,8 @@ Generated at: 2026-08-25 23:31
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (889 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-25 23:31   ok
+dispatch status — counter-triggered rules (890 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-25 23:31   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
 
@@ -36,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-25 10:17 · Roadmap · plan · Slice 145 queued — ERP-suite screen scoring (functionality/UX/performance); base rates measured first, landmarks excluded as unable to fail · logged · 1dd68ce
 - 2026-08-25 19:03 · Continue · bug · object-page 'footer gap' — sticky .bo-form-actions was canvas-coloured with no shadow over a surface card; new --bo-shadow-up makes it read as elevated · landed · 75e8615
 - 2026-08-25 20:53 · Continue · bug · money currency slot: a combobox rendered 180px vs the selects' 75px; sized via --bo-money-currency-size, plus the missing invalid-currency demo · landed · 9837cb9
 - 2026-08-25 21:31 · Standardize · tidy · STATUS.md under-reported open items (7 of 9) because the parser required numeric ids; reconciliation guard added and red-proved · landed · c7e2965
@@ -46,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-25 23:31 · Standardize · tidy · .roundtable/INDEX.md — 131 findings indexed; splitting, pruning and a DB mirror all measured and refused · landed · 36477d7
 - 2026-08-25 23:31 · Meta · refusal · splitting .roundtable live-vs-settled — 78 of 86 citations come from ROADMAP-archive.md, so moving files breaks footnotes to fix an unevidenced problem · refused · 36477d7
 - 2026-08-25 23:31 · Meta · refusal · pruning uncited findings — every file was last modified this month; deleting three-week-old work to save 1.8 MB is not a trade · refused · 36477d7
+- 2026-08-25 23:43 · Continue · bug · check-ci-ignores and check-slice-refs crashed the docs container build (ENOENT on files the image does not copy); both now stand down loudly · landed · f2ae348
 
 ## Sunset test
 

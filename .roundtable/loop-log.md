@@ -904,3 +904,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-25 23:31 · Standardize · tidy · .roundtable/INDEX.md — 131 findings indexed; splitting, pruning and a DB mirror all measured and refused · landed · 36477d7
 - 2026-08-25 23:31 · Meta · refusal · splitting .roundtable live-vs-settled — 78 of 86 citations come from ROADMAP-archive.md, so moving files breaks footnotes to fix an unevidenced problem · refused · 36477d7
 - 2026-08-25 23:31 · Meta · refusal · pruning uncited findings — every file was last modified this month; deleting three-week-old work to save 1.8 MB is not a trade · refused · 36477d7
+- 2026-08-25 23:43 · Continue · bug · check-ci-ignores and check-slice-refs crashed the docs container build (ENOENT on files the image does not copy); both now stand down loudly · landed · f2ae348

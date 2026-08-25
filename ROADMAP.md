@@ -1025,27 +1025,38 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
-## OPEN — Pages deploy blocked, owner-side (2026-08-18)
+## Slice 146 — the published site went stale for a week (2026-08-26)
 
-**The published site is four commits stale** (live: `35c38eb`/27.6,
-last-modified 17:25 GMT). `actions/deploy-pages@v4` has returned **HTTP 503 on
-four consecutive commits** — `162553b`, `c02f663`, `effe7a9`, `47f7ea0` — always
-at "Creating Pages deployment". CI itself is green on every one of them; only
-the deploy step fails, so nothing is wrong with the build.
+1. [x] **146.1 — DONE 2026-08-26. The Pages failure was NOT owner-side, and
+       the entry that said so sent every wake looking in the wrong place.**
+       This section previously read *"Pages deploy blocked, owner-side"*, blamed
+       `actions/deploy-pages@v4` returning **HTTP 503 at "Creating Pages
+       deployment"**, and concluded: *"there is no code change that fixes it."*
 
-What I checked, because the action's own error asks: **githubstatus.com reports
-Pages, Actions and API Requests all operational**, so this is not a
-broadly-reported outage, which is what I assumed for the first two failures.
-The repo's Pages config is correct and unchanged (`build_type: "workflow"`,
-public, HTTPS enforced), and the same workflow deployed successfully at 17:25.
-`GET /repos/.../pages` reports `"status": null`. Re-running via `gh run rerun`
-is itself refused with 503, so it cannot be retried from here.
+       That was true on 2026-08-18 and stopped being true afterwards, and
+       nothing re-checked it. Read on 2026-08-26: the last five Pages runs all
+       failed **in the core build**, not the deploy step, on
+       `README.md: claims drifted from dist — run: node scripts/stamp-readme.mjs`.
+       A one-command fix, wearing a label that said no fix existed.
 
-Accept: a deploy run completes and the live site serves the collapsible-nav
-+ launcher-marks + print-rule build. **Owner action** — this needs repo
-settings/GitHub support access; there is no code change that fixes it. Retry
-`gh run rerun <id> --failed` on the newest "Deploy docs to Pages" run once
-Pages accepts deployments again.
+       **Three things kept it invisible for a week**, and each is worth more
+       than the bug:
+       - *It was not a checkbox.* `STATUS.md` lists `N. [ ]` items, so a
+         `## OPEN —` section is invisible to the file whose job is "what is
+         open". The named-item fix (2026-08-25) widened the parser to titles;
+         it did not reach prose sections. **Now a numbered item**, which is why
+         this slice exists at all.
+       - *A stale diagnosis outranks no diagnosis.* "Owner-side, no code change
+         fixes it" is a closed question. Nobody re-opens a closed question, so
+         the entry protected the bug.
+       - *16 commits were unpushed.* Half of "the site is a week stale" was
+         simply that nothing had been pushed since 144.1.
+
+       *Accept*: a Pages run completes green and the live site serves current
+       docs. **The rule this leaves behind**: an OPEN entry that blames an
+       external party carries the date it was last VERIFIED, not the date it
+       was written — and a wake that reads one older than a few days re-checks
+       before trusting it.
 
 ## Slice 26 — from the Objective grill (2026-08-17)
 

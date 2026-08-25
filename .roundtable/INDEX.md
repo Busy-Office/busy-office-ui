@@ -155,4 +155,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 131 files, 87 cited from outside, 44 uncited snapshots, 3 repeated subject(s).
+— 131 files, 88 cited from outside, 44 uncited snapshots, 3 repeated subject(s).
