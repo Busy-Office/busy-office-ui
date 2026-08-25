@@ -28,27 +28,27 @@ Polish drives on `content`, `fit` and `interaction` ONLY.
 expected (94.7/94.9), and `spacing` is explicitly a debt marker, not a
 quality signal. A dimension that cannot fail must never drive a round.
 
-| surface | dimension | score | rounds | dry | status |
-|---|---|---|---|---|---|
-| component/alerts | content | **3** | 1/3 | 0 | round 1 landed — blind re-score 2→3, off the gate's TODO |
-| component/avatar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not the only way to name someone" |
-| component/badge | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for anything actionable" |
-| component/byline | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
-| component/calendar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for a plain date field" |
-| component/dashboard | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not a wrapper round every section" |
-| component/data-table | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for laying out a page" |
-| component/date | content | 2 | — | — | **SKIPPED** — deprecated, see note below |
-| component/icon | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed |
-| component/inline-editing | content | **3** | 1/3 | 0 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) |
-| component/navbar | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not the page's own title or actions" |
-| component/pagination | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for stepping through a process" |
-| component/progress | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for work of unknown duration" |
-| component/sidebar-nav | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for navigating within one screen" |
-| component/state-patterns | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3 (clears skeleton AND state) |
-| component/stepper | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, "not for independent sections" |
-| component/table-toolbar | content | **3** | 1/3 | 0 | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
-| component/tree | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, pair-coherent with tree-table |
-| component/tree-table | content | **3** | 1/3 | 0 | round 1 landed — blind 2→3, pair-coherent with tree |
+| surface | dimension | score | rounds | dry | src | status |
+|---|---|---|---|---|---|---|
+| component/alerts | content | **3** | 1/3 | 0 | 20c2fe2c | round 1 landed — blind re-score 2→3, off the gate's TODO |
+| component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
+| component/badge | content | **3** | 1/3 | 0 | 40c937f6 | round 1 landed — blind 2→3, "not for anything actionable" |
+| component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
+| component/calendar | content | **3** | 1/3 | 0 | e1dec38b | round 1 landed — blind 2→3, "not for a plain date field" · **RE-QUEUED — source changed**|
+| component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
+| component/data-table | content | **3** | 1/3 | 0 | 42b426c7 | round 1 landed — blind 2→3, "not for laying out a page" · **RE-QUEUED — source changed**|
+| component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
+| component/icon | content | **3** | 1/3 | 0 | 75de0dee | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed · **RE-QUEUED — source changed**|
+| component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) |
+| component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" |
+| component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" |
+| component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" |
+| component/sidebar-nav | content | **3** | 1/3 | 0 | 465e2954 | round 1 landed — blind 2→3, "not for navigating within one screen" · **RE-QUEUED — source changed**|
+| component/state-patterns | content | **3** | 1/3 | 0 | 7e137d03 | round 1 landed — blind 2→3 (clears skeleton AND state) · **RE-QUEUED — source changed**|
+| component/stepper | content | **3** | 1/3 | 0 | 4b8a288e | round 1 landed — blind 2→3, "not for independent sections" · **RE-QUEUED — source changed**|
+| component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
+| component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table |
+| component/tree-table | content | **3** | 1/3 | 0 | f0b3ed9e | round 1 landed — blind 2→3, pair-coherent with tree |
 
 ## Re-entry: scan (2026-08-23) — the queue's first source-change entry
 

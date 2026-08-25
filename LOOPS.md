@@ -163,6 +163,18 @@ match to its full playbook below:
    Components get 3 rounds, patterns 10 — as CEILINGS, not quotas. The
    ledger is `.roundtable/polish-state.md`.
 
+   **Run `python3 scripts/loops/polish_requeue.py --apply` BEFORE evaluating
+   this rule.** The ledger has always said a surface re-enters "only when its
+   SOURCE changes — never on a timer", and until 2026-08-25 nothing executed
+   that sentence: it was a rule a human had to notice. It was not noticed.
+   `component/sidebar-nav` sat at 1/3 rounds while its docs page changed twice
+   in one day and the ledger still read QUEUE DRY — so this rule would have
+   reported dry, the loop would have fallen through to Research, and an
+   unattended run would have stopped finding work while seven surfaces were
+   genuinely eligible. The script compares git blob SHAs, so it is exact rather
+   than heuristic, and it honours SKIPPED and dry rows rather than dragging a
+   deprecated component back into the queue.
+
 7. **Every surface dry or budget-spent?** → dispatch **Research**: answer
    an open question from trusted sources, grill it, queue it in
    `ROADMAP.md` with Accept criteria. **It never builds** — findings wait
@@ -331,6 +343,8 @@ remaining, per `.roundtable/polish-state.md`.
 
 **One round = try → verify → adjust, and it must be falsifiable:**
 
+0. **Re-queue first**: `python3 scripts/loops/polish_requeue.py --apply`.
+   Nothing else in the loop notices that a surface's source moved.
 1. **Pick** the surface with the LOWEST score and rounds remaining. Ties
    break by fewest rounds used. **One round per surface per pass** — never
    the same surface twice running while another sits at the same score.
@@ -349,7 +363,12 @@ remaining, per `.roundtable/polish-state.md`.
 5. **Did the score move?**
    - **Yes** → commit, `round++`, reset that surface's dry counter.
    - **No** → `dry++`. **Two dry rounds in a row mark the surface DRY and
-     forfeit its remaining budget.** This is what reconciles the budgets
+     forfeit its remaining budget.**
+
+   Either way, close the round with
+   `python3 scripts/loops/polish_requeue.py --stamp <surface>` — that records
+   the source state the score was earned against. Skip it and the surface
+   re-queues itself forever on the change the round just made. This is what reconciles the budgets
      with this file's standing "don't manufacture busywork" rule: a
      surface that cannot produce a measurable gain twice running is
      finished, whatever its budget says.
