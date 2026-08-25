@@ -13,6 +13,28 @@
     inline-size: auto;
   }
 
+  /* A COMBOBOX in the currency slot must not balloon (owner report,
+     2026-08-25: "why is currency field too long?"). `inline-size: auto` is
+     right for a <select>, which shrink-wraps to its widest option — every
+     select on the money page measured 74-78px. A combobox is a <div> wrapping
+     an <input>, and neither shrink-wraps: the input keeps its ~20-character
+     default and the slot rendered 180px, 2.4x the selects and WIDER THAN THE
+     AMOUNT FIELD it belongs to.
+
+     The slot holds an ISO 4217 code — three letters, always — so the size is a
+     property of the slot rather than of the control that happens to sit in it.
+     Exposed as a custom property because unit-of-measure reuses this same slot
+     and its codes are longer ("EACH", "CTN"), so widening it is a setting, not
+     a fork.
+
+     A rem literal rather than `ch`: this slot sits next to a tabular-figure
+     amount, and `ch` measures the "0" of whichever font the slot inherits,
+     which is the cross-font-context hazard the unit doctrine already names. */
+  .bo-combobox.bo-money__currency,
+  .bo-combobox.bo-money__currency > .bo-input {
+    inline-size: var(--bo-money-currency-size, 5.5rem);
+  }
+
   /* The joint is derived from DOM ORDER, not from a modifier (owner wishlist,
      roadmap 96.1). Currency leads in en-US ("$1,234.56") and trails in de-DE
      ("1.234,56 €"), so an ERP sold into both needs each — but writing the

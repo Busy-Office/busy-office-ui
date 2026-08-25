@@ -31,6 +31,23 @@ const trailing = `<!-- Currency AFTER the amount: de-DE writes 1.234,56 € wher
   </select>
 </div>`;
 
+const rejected = `<!-- The mechanism already ships: aria-invalid is the
+     programmatic channel, .bo-form-field__message the visible one. What counts
+     as a valid code is the server's call, not CSS's. -->
+<div class="bo-form-field">
+  <label class="bo-form-field__label" for="cur-bad">Order value</label>
+  <div class="bo-money">
+    <input class="bo-input bo-money__amount" type="text" inputmode="decimal"
+           value="1250.00" aria-label="Amount">
+    <div class="bo-combobox bo-money__currency" data-name="currency">
+      <input class="bo-input" id="cur-bad" type="text" role="combobox"
+             aria-expanded="false" aria-autocomplete="list" aria-label="Currency"
+             aria-invalid="true" aria-describedby="cur-bad-msg" value="EURO">
+    </div>
+  </div>
+  <p class="bo-form-field__message" id="cur-bad-msg">EURO is not a currency code. Did you mean EUR?</p>
+</div>`;
+
 const readOnly = `<!-- an amount, read-only: Amount with a currency -->
 <span class="bo-amount">
   <span class="bo-amount__currency">$</span>
@@ -144,7 +161,7 @@ const searchable = `<!-- A searchable currency, for the list that is 180 long.
   <div class="bo-combobox bo-money__currency" data-name="currency">
     <input class="bo-input" type="text" role="combobox" aria-expanded="false"
            aria-controls="cur-list" aria-autocomplete="list" aria-label="Currency"
-           placeholder="Type to search…" value="EUR">
+           value="EUR">
     <ul class="bo-combobox__listbox" id="cur-list" role="listbox" popover>
       <li class="bo-combobox__option" role="option" id="cur-eur" data-value="EUR">EUR — Euro</li>
       <li class="bo-combobox__option" role="option" id="cur-usd" data-value="USD">USD — US dollar</li>
@@ -210,6 +227,26 @@ const searchable = `<!-- A searchable currency, for the list that is 180 long.
     without it opens on the first character rather than dropping two hundred
     options the moment the field is focused. Add the attribute for the short
     lists where seeing every option immediately is the point.</p>
+  </section>
+
+  <section class="demo">
+    <h2>A currency that is not on the list</h2>
+    <Demo code={rejected} />
+    <p class="bo-u-text-muted">A combobox lets people TYPE, so people type
+    <code>EURO</code>, <code>US$</code> and yesterday's currency code. Nothing
+    new is needed to say no: <code>aria-invalid="true"</code> on the input is
+    the programmatic channel, <code>.bo-form-field</code> reacts to it with
+    <code>:has()</code>, and <code>.bo-form-field__message</code> is the
+    visible one — the same two channels every other field in this framework
+    uses. <strong>Whether a code is valid is your server's call</strong>, not a
+    CSS one: ISO 4217 has 180 entries, it changes, and half of ERP money
+    fields are additionally restricted to the currencies a company is
+    configured for.</p>
+    <p class="bo-u-text-muted"><strong>Say what is wrong, not that something
+    is.</strong> "Not a currency" leaves the reader to guess whether they
+    mistyped or the currency is genuinely unavailable here — and those have
+    different fixes. Naming the nearest match turns a rejection into a
+    correction.</p>
   </section>
 
   <section class="demo">

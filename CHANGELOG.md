@@ -11,6 +11,18 @@ pin.
 
 ### Fixed
 
+- **A combobox in Money's currency slot ballooned to 180px** (owner report,
+  "why is currency field too long?"). `inline-size: auto` is right for a
+  `<select>`, which shrink-wraps to its widest option — every select on the
+  page measured 74–78px. A combobox is a `<div>` wrapping an `<input>` and
+  neither shrink-wraps, so the slot rendered **2.4× the selects and wider than
+  the amount field it belongs to**. The slot holds an ISO 4217 code — three
+  letters, always — so its size is now a property of the slot rather than of
+  whichever control sits in it, exposed as `--bo-money-currency-size` because
+  unit-of-measure reuses the same slot with longer codes. Measured after:
+  88px. The demo's `placeholder="Type to search…"` went with it, since it
+  cannot fit a three-letter field and `aria-label` already names the control.
+
 - **`.bo-form-actions` read as a hole punched through a card** (owner report,
   "object page — there is footer gap?"). The sticky bar is canvas-coloured
   (`#f9fafb`) with no shadow, and on an object page it floats over a
