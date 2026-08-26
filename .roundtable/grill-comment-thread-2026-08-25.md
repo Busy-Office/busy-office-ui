@@ -92,7 +92,7 @@ time 12 — content on top, which is the whole point.
   messaging-app shape. The people in an ERP thread are colleagues acting in
   *roles*, which is what `.bo-byline`'s `name · role` already carries; splitting
   them into two sides says the wrong thing about the conversation.
-- Consistent with the earlier refusal of Frappe's row-level heart/comment icons
+- Consistent with the earlier refusal of an external ERP's row-level heart/comment icons
   and its Assign/Attachments/Tags/Share rail as collaboration chrome
   (`erp-suite-gaps.md:749`). This grill refuses the *social* shape and accepts
   the *record-note* one, which is the distinction that was implicit there.

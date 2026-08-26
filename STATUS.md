@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 00:08
+Generated at: 2026-08-27 00:12
 
 ## Open items by slice
 
@@ -44,7 +44,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-26 23:07 · Meta · refusal · moving repo gates out of the docs build — 0.43s of 11.70s, no correctness gap, and relocation is the exact shape that broke the container twice today · refused · a5ffae3
 - 2026-08-26 23:25 · Continue · bug · P0: Objective counter blind since slice numbers passed 99 — reported 0/3 for five days while ~17 slices closed; regex widened and a zero now fails loudly · landed · 55a5184
 - 2026-08-26 23:34 · Standardize · tidy · one screenFragment() extractor replaces two byte-identical copies written hours apart today; output verified identical by checksum · landed · 3addeb9
-- 2026-08-26 23:56 · Explore · research · CMC + Frappe/ERPNext researched to Slice 149 — the recommended build was withdrawn: bo-progress already covers value-vs-threshold and is used on 1 of 27 screens, so the gap is adoption, not coverage · logged · b09e2e3
+- 2026-08-26 23:56 · Explore · research · Two external references researched to Slice 149 — the recommended build was withdrawn: bo-progress already covers value-vs-threshold and is used on 1 of 27 screens, so the gap is adoption, not coverage · logged · b09e2e3
 - 2026-08-26 23:56 · Meta · refusal · sparklines, column chooser, number abbreviation, gantt/tours, group-by-with-counts, and running the suggested 1-commit fork · refused · b09e2e3
 
 ## Sunset test

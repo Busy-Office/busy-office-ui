@@ -14,7 +14,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 127 snapshots, newest first
+## Findings — 128 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -27,6 +27,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
 | 2026-08-26 | [Busy Office UI Framework Review & AI Benchmark Proposal](external-review-2026-08-26.md) | ✓ |
 | 2026-08-26 | [Grill: the external framework review — 2026-08-26](grill-external-review-2026-08-26.md) | ✓ |
+| 2026-08-26 | [Research: dense numeric UI, and an open-source ERP desk — 2026-08-26](research-dense-numeric-ui-2026-08-26.md) | ✓ |
 | 2026-08-25 | [Grill: a comment section for collaborating on a document — 2026-08-25 (roadmap 144.3)](grill-collaboration-comments-2026-08-25.md) | ✓ |
 | 2026-08-25 | [Grill: does a comment/chat thread earn a component? — 2026-08-25 (roadmap 144.2)](grill-comment-thread-2026-08-25.md) | ✓ |
 | 2026-08-24 | [Grill — the ERP suite as an instrument, and whether Slices 139/140 serve it](grill-erp-suite-instrument-2026-08-24.md) | ✓ |
@@ -159,4 +160,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 134 files, 91 cited from outside, 44 uncited snapshots, 4 repeated subject(s).
+— 135 files, 92 cited from outside, 44 uncited snapshots, 4 repeated subject(s).

@@ -697,7 +697,7 @@ predicted is holding.
 record; `list-report` only offers the action inside the empty state
 
 **Screen**: `p2p/purchase-orders.screen.mjs`, corrected by two independent
-external ERP screenshots (a Frappe purchase-order list, a Frappe stock
+external ERP screenshots (a purchase-order list, a stock
 ledger) — both put a primary "create" action, a refresh, and an overflow
 menu in a header row above the table. Neither reference was copied (the
 project rule is references are a floor, not a target — both also do things
@@ -746,7 +746,7 @@ three screenshots checked out as already covered or already beaten: `tree
 existing per-row event (so "Set Level"/"Collapse All" needed nothing new);
 `filters` already renders one removable chip per active value, which is more
 legible than a collapsed "5 values selected" label; a right-rail
-Assign/Attachments/Tags/Share panel is Frappe collaboration chrome, out of
+Assign/Attachments/Tags/Share panel is external collaboration chrome, out of
 this framework's scope same as the row-level heart/comment icons rejected
 above.
 

@@ -10,7 +10,7 @@ import { page } from '../_shell.mjs';
    header-actions row (existing bo-btn/bo-cluster primitives, no new CSS).
    Also adds a "Received" column: existing bo-progress paired with its own
    percent text, never colour/fill-length alone — the two-channel rule two
-   external references (a Frappe PO list, a stock ledger) both violated with
+   external ERP references (a PO list, a stock ledger) both violated with
    bare, textless progress fills. null = not a meaningful reading (rejected /
    not yet approved), rendered as an em dash rather than a misleading 0%. */
 const rows = [

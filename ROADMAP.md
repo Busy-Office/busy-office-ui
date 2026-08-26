@@ -1186,14 +1186,21 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
-## Slice 149 — Research: CoinMarketCap and Frappe/ERPNext (owner wishlist, 2026-08-26)
+## Slice 149 — Research: dense numeric UI, and an open-source ERP desk (owner wishlist, 2026-08-26)
 
-Owner wishlist: research `coinmarketcap.com` (+ the Bitcoin detail page) and the
-ERPNext demo — *"what is good to bring into this project"*. Two `/deep-research`
-runs, plus primary reading of both sources (notes:
-`.roundtable/research-cmc-erpnext-2026-08-26.md`): both CMC pages fetched directly, and
-Frappe's desk stylesheets read from source (`frappe/public/scss/desk`, 42
-modules) after the ERPNext demo would not log in and `demo.erpnext.com` 404'd.
+Owner wishlist: study two external references — a high-traffic public
+market-data site (listing + a detail page) and an open-source ERP's desk UI —
+for *"what is good to bring into this project"*. Two `/deep-research` runs, plus
+primary reading of both (notes:
+`.roundtable/research-dense-numeric-ui-2026-08-26.md`): both market-data pages
+fetched directly, and the ERP desk's 42 stylesheet modules read from source
+after its hosted demo would not log in and a second host 404'd.
+
+**No external product is named in this repo's documents** (owner instruction,
+2026-08-27). That costs a little reproducibility and is the owner's call. It
+also changes nothing about the findings: the one that matters is normative and
+cites the standard, and every refusal below turns on ERP suitability rather than
+on who did it first.
 
 **The headline is a correction to this slice's own first answer.** The initial
 recommendation was to BUILD a value-against-threshold display, on the evidence
@@ -1234,9 +1241,10 @@ because it means the instrument has a blind spot, not just a backlog.
        surface.
 
 2. [ ] **149.2 — the positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.**
-       CMC's strongest numeric idea is the 24h low/high band with the current
-       price positioned inside it, and all-time-high shown as a distance from
-       now. This is **not** what `bo-progress` does: progress runs 0→max, where
+       The market-data reference's strongest numeric idea is a session low/high
+       band with the current value positioned inside it, and an all-time high
+       shown as a distance from now. This is **not** what `bo-progress` does:
+       progress runs 0→max, where
        zero is meaningful; a range positions a value BETWEEN two bounds where
        zero is not on the scale at all.
 
@@ -1246,10 +1254,10 @@ because it means the instrument has a blind spot, not just a backlog.
        genealogy graph. Build it when a second, different screen needs it.
 
 3. [ ] **149.3 — record the two-channel finding as positioning; keep it OUT of the docs.**
-       CoinMarketCap signals gain and loss with **colour alone**, on the most
-       important number on the page — a WCAG 1.4.1 failure on one of the
-       most-visited financial sites in the world. Frappe's indicator dots do the
-       same. This framework has forbidden that from the start.
+       The market-data reference signals gain and loss with **colour alone**, on
+       the most important number on the page — a WCAG 1.4.1 failure on a site
+       with enormous traffic. The ERP desk's status dots do the same. This
+       framework has forbidden that from the start.
 
        *Accept*: recorded in `.roundtable/` as evidence for the owner's
        "references are floors" rule. **Refused for the docs**, and the reason
@@ -1259,7 +1267,7 @@ because it means the instrument has a blind spot, not just a backlog.
 
 4. [ ] **149.4 — P0: four patterns document auto-updating content with no way to pause it.**
        Found by the `/deep-research` run, and it is the one thing in that report
-       this project could not have reached by reading CMC's markup — the finding
+       this project could not have reached by reading the reference's markup — the finding
        is **normative, not observed**. WCAG 2.2 SC 2.2.2 (Level A) has two
        bullets with deliberately different thresholds: moving/blinking/scrolling
        triggers only after five seconds, but **auto-updating information
@@ -1304,12 +1312,12 @@ because it means the instrument has a blind spot, not just a backlog.
 **What the deep-research run changed about the rest of this slice** (105 agents,
 adversarial verification, `/private/tmp/…/tasks/w1xngxeu6.output`):
 
-- **The pagination finding was already covered** — CMC's transferable rule is
+- **The pagination finding was already covered** — the transferable rule is
   "bounded page, real URL per page, always state which slice of what total".
   `.bo-pagination__info` ships and its canonical markup reads `1–25 of 312`.
   Fourth "already covered" of this research, and consistent with the rest.
-- **The column CAP does not overturn the chooser refusal.** CMC bounds user
-  column choice at `8/12` metrics with five vendor presets. The cap is only
+- **The column CAP does not overturn the chooser refusal.** The reference bounds
+  user column choice at 8-of-12 metrics with vendor presets. The cap is only
   meaningful if there is a chooser, and the chooser is refused above for a
   reason that still holds. Recorded because the *idea* is good and the verdict
   is unchanged, not because it is new evidence.
@@ -1318,38 +1326,38 @@ adversarial verification, `/private/tmp/…/tasks/w1xngxeu6.output`):
   primary sources — those regions are client-hydrated and the only sources
   describing them were third-party clone tutorials. A direct page fetch is one
   observation; it did not survive adversarial checking. Since 149.2 was already
-  refused-pending-a-second-use, nothing changes operationally — but the CMC
+  refused-pending-a-second-use, nothing changes operationally — but the external
   citation should not be leaned on.
 - **Sparklines, sticky rank/name columns and tick-flash colouring also failed
   verification.** The refusals below were reached independently and now rest on
-  firmer ground: there was less there than the site's reputation suggests.
+  firmer ground: there was less there than the reference's reputation suggests.
 
 **Refused, with reasons.** *Sparklines / row trend* — direct precedent, the
 `prod/capacity` heatmap was refused for the same reason (no `bo-scale` utility
 ships, and this is data-viz). *Column chooser* — the framework's
 `__col--secondary`/`--tertiary` is the better ERP answer: the designer ranks
 importance once, instead of every user configuring a personal view. *Number
-abbreviation* (`$1.56T`) — CMC can abbreviate because market cap needs no
-precision; an ERP amount is auditable, and abbreviating an invoice total is a
-defect dressed as a feature. *Gantt, onboarding tours* (Frappe) — app concerns,
-not CSS-framework ones. *Group-by with counts* — the last surviving Frappe
+abbreviation* (`1.56T`) — the reference can abbreviate because market cap needs
+no precision; an ERP amount is auditable, and abbreviating an invoice total is a
+defect dressed as a feature. *Gantt, onboarding tours* — app concerns, not
+CSS-framework ones. *Group-by with counts* — the last surviving desk-UI
 candidate, and it closes: `/patterns/filter-panel` already has a section headed
 *"Why the count on the trigger matters"*.
 
-**The suggested repo, `rbale0831/frappe-erpnext-demo`, was not run** — a bare
-fork, 1 commit, 1 star, no demo tooling of its own. Standing up MariaDB +
-Frappe + Redis + workers to obtain evidence available more precisely from the
-source stylesheets is 20-60 minutes spent to learn less.
+**The demo repo the owner suggested was not run** — a bare fork, 1 commit, no
+demo tooling of its own. Standing up a database, app server, queue and workers
+to obtain evidence available more precisely from the source stylesheets is
+20-60 minutes spent to learn less.
 
 **A probe that was wrong first, recorded because it is the third instance
-today**: the initial Frappe mechanism sweep searched component class NAMES and
+today**: the initial desk-UI mechanism sweep searched component class NAMES and
 reported `workflow`, `comment`, `kanban`, `indicator` as missing. All four
 exist under different names (`approval-workflow`, `bo-composer`,
 `patterns/kanban`, `bo-badge` + `data-tone`). A naming-derived probe over a
 framework that names things well is a detector that cannot pass.
 
-*The ERPNext `/deep-research` run was still in its verification phase when this
-was written; anything it adds gets triaged into this slice.*
+*The second `/deep-research` run (the ERP desk) was still in its verification
+phase when this was written; anything it adds gets triaged into this slice.*
 
 ## Slice 148 — Triaged from an external framework review (2026-08-26)
 
