@@ -1186,6 +1186,76 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 151 — Owner wishlist: learn from a mainstream list product (2026-08-27)
+
+Owner supplied a screenshot of a widely-used enterprise list/tracker product
+(change-request tracker: module, category, priority, status, assignee, due date)
+and asked what to learn from it. Read as primary evidence — an actual screen in
+use, which is stronger than either research run.
+
+**Three of its mechanisms are already covered here, two of them better.** Its
+filter chips read `Module: FI ×`; ours read `Status: Pending` with
+`aria-label="Remove filter Status: Pending"`, so a screen reader hears what the
+code *means* — the reference's bare two-letter chip does not carry that. Column
+headers already have `data-context-menu` (sort). The command-bar shape —
+primary action first, then verbs, then an overflow `…` — is
+`/patterns/command-bar`. Status pills are word + tone in both.
+
+1. [ ] **151.1 — named views as a first-class strip on a list screen.**
+       The reference puts saved views on the shelf above the table —
+       *All items · Created by me · FI · MM · » · + Add view* — and marks the
+       active one with an **asterisk when it has unsaved changes**. Nothing here
+       documents this: `grep` finds no saved-view concept on any of the 39
+       pattern pages, and it is the single biggest thing in the screenshot the
+       framework has no answer for.
+
+       It passes all three principles. *Simplicity*: a consumer stops inventing
+       a view switcher. *Less for more*: one strip serves every list screen.
+       *Reusability*: every list screen, unchanged.
+
+       *Accept*: documented as a **pattern**, composed from shipped primitives
+       (the strip is a `bo-segmented`/tab shape; the overflow is the existing
+       `»` treatment) with **zero new CSS**, and the framework owns only the
+       visuals — persistence, naming and permissions stay with the consumer
+       ("framework does visuals, you do the data"). The dirty-state marker must
+       be **two-channel**: an asterisk is a glyph, so it needs accompanying
+       accessible text ("unsaved changes"), not a bare `*`.
+
+2. [ ] **151.2 — a column can explain itself.**
+       The reference puts an ⓘ beside `Request Date` and `Due Date` carrying a
+       per-column description. ERP headers are full of terms a newcomer cannot
+       resolve — `CR/INC/PR`, `GR/IR`, `FSV`, `Dep date` all appear in this one
+       screenshot — and the framework has no way to say what a column means.
+
+       *Accept*: the explanation is reachable by **keyboard and touch**, not
+       hover alone. That is the hard part and therefore the framework's job —
+       a title-attribute tooltip is exactly the lazy answer to refuse, since it
+       is invisible to touch and unreliable to assistive tech. Compose the
+       existing popover rather than inventing a tooltip component.
+
+3. [ ] **151.3 — ordinal values: RETHINK, do not add a priority modifier.**
+       The reference renders priority as **↓ Low** / **Normal** — an arrow
+       glyph encoding *rank direction* on top of word and tone. `bo-badge` has
+       five tones and **no ordinal channel**.
+
+       A `--priority` modifier is refused on sight: principle 2 refuses a
+       modifier serving exactly one scenario. The real question is whether
+       *ordinality* is general here — priority, severity, risk, ABC class and
+       ageing buckets are all ranked, not merely categorical, and tone alone
+       says "bad" rather than "how much".
+
+       *Accept*: a decision recorded either way. If it ships, it is one general
+       mechanism (e.g. `data-rank` on the existing badge), never a per-domain
+       modifier. **Refusing is a valid outcome** — the suite has 23 of 27
+       screens showing badges and has never once asked for rank.
+
+**Refused: a filter control in the column header.** The reference offers filter
+funnels per column. This framework already has two filtering surfaces — the
+filter bar and `/patterns/filter-panel` — and principle 2 refuses "any second
+way to do something that already works". A third entry point would be a third
+place for a user to look and a third state to keep in sync. If a header entry
+point is ever wanted, it must *open the existing filter surface*, not become one.
+
 ## Slice 150 — Objective grill of Slices 112, 130-148 (2026-08-27)
 
 Dispatched by rule 3, **overdue at 17/3**. Full report:
