@@ -943,3 +943,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-27 00:30 · Meta · refusal · gating zero reach — bo-tree's zero is suitability-beats-reuse working correctly, so a red build would be wrong a third of the time · refused · 1802b6b
 - 2026-08-27 00:32 · Roadmap · plan · 151: triaged an owner screenshot of a mainstream list product — named views, self-explaining columns, ordinal badges queued; three mechanisms already covered, two better · logged · bd211a2
 - 2026-08-27 00:32 · Meta · refusal · a filter control in the column header — a third filtering surface where two already exist · refused · bd211a2
+- 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
+- 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6

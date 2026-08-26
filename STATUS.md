@@ -25,9 +25,9 @@ Generated at: 2026-08-27 00:43
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (928 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-26 23:34   ok
-  Objective     0 / 3 slices          since 2026-08-27 00:30   ok
+dispatch status — counter-triggered rules (930 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-26 23:34   ok
+  Objective     1 / 3 slice           since 2026-08-27 00:30   ok  [149]
 ```
 
 ## Owner-blocked
@@ -40,8 +40,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 23:25 · Continue · bug · P0: Objective counter blind since slice numbers passed 99 — reported 0/3 for five days while ~17 slices closed; regex widened and a zero now fails loudly · landed · 55a5184
-- 2026-08-26 23:34 · Standardize · tidy · one screenFragment() extractor replaces two byte-identical copies written hours apart today; output verified identical by checksum · landed · 3addeb9
 - 2026-08-26 23:56 · Explore · research · Two external references researched to Slice 149 — the recommended build was withdrawn: bo-progress already covers value-vs-threshold and is used on 1 of 27 screens, so the gap is adoption, not coverage · logged · b09e2e3
 - 2026-08-26 23:56 · Meta · refusal · sparklines, column chooser, number abbreviation, gantt/tours, group-by-with-counts, and running the suggested 1-commit fork · refused · b09e2e3
 - 2026-08-27 00:21 · Continue · bug · 149.4 P0: job-monitor and notification documented auto-updating content with no pause control (WCAG 2.2.2, no five-second grace for numbers); job-monitor ships a bo-segmented Off/30s/5m, notification documents a settings preference; gated by check:autoupdate-control · landed · fcec793
@@ -50,6 +48,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 00:30 · Meta · refusal · gating zero reach — bo-tree's zero is suitability-beats-reuse working correctly, so a red build would be wrong a third of the time · refused · 1802b6b
 - 2026-08-27 00:32 · Roadmap · plan · 151: triaged an owner screenshot of a mainstream list product — named views, self-explaining columns, ordinal badges queued; three mechanisms already covered, two better · logged · bd211a2
 - 2026-08-27 00:32 · Meta · refusal · a filter control in the column header — a third filtering surface where two already exist · refused · bd211a2
+- 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
+- 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6
 
 ## Sunset test
 
