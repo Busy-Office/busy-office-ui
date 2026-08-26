@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 00:43
+Generated at: 2026-08-27 00:45
 
 ## Open items by slice
 
@@ -19,6 +19,8 @@ Generated at: 2026-08-27 00:43
   - 151.1 — named views as a first-class strip on a list screen.
   - 151.2 — a column can explain itself.
   - 151.3 — ordinal values: RETHINK, do not add a priority modifier.
+- **Slice 152** (1 open)
+  - 152.1 — a wireframe + copyable template per shell, on the page that already owns shells.
 - **Slice —** (1 open)
   - AT runtime evidence
 

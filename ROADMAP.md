@@ -1186,6 +1186,54 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 152 — Owner wishlist: show every layout as a skeleton template (2026-08-27)
+
+Owner: *"add section for all possible layout (using skeleton template) so it is
+easier for AI or human to reference to."*
+
+**The hole is real and specific.** `concepts/layouts` already maps the four
+shells — App shell, Role home, RF full-screen, Split master-detail — with
+decision questions and wrong-choice guidance. It contains **zero skeletons**. It
+tells a reader which shell to pick and never shows what one looks like, so the
+structure has to be inferred from prose or by opening a live screen.
+
+1. [ ] **152.1 — a wireframe + copyable template per shell, on the page that already owns shells.**
+       Each of the four gets a `bo-skeleton` wireframe **and** its structural
+       markup, rendered from ONE string through the existing `Demo` component —
+       the recipe's own rule, never write the preview and the code twice.
+
+       *Accept*: **zero new CSS** (wireframes are built from `bo-skeleton`,
+       `bo-stack`, `bo-cluster`, `bo-grid`, which all ship); `check-markup`
+       passes, which it will only do if every class in the wireframe is real —
+       that is what stops a decorative drawing drifting from the framework; and
+       the page does **not** grow a fifth taxonomy.
+
+       **It must REDUCE duplication, not add to it.** The four shells are
+       currently hand-written **twice** on that page — once in a "what it
+       answers" table and once in a "wrong when…" table — with no data source
+       behind either. Deriving all three surfaces (both tables + the new
+       wireframes) from one array at the top of the page is the design; a third
+       hand-written list would be exactly the drift this project keeps paying
+       for. Net effect should be *less* hand-maintained prose than before.
+
+       **Bounded deliberately.** "All possible layouts" is unbounded; the four
+       shells are not. This documents the shells that exist — it does not invent
+       new ones, and a screen that fits none of the four is a new shell
+       proposal, which the page already says.
+
+**Why this is worth doing, stated as the Objective would.** *Simplicity*: a
+reader picks a shell by seeing it rather than parsing three paragraphs.
+*Less for more*: one array feeds three surfaces that are hand-maintained today.
+*Reusability*: the copyable template is the thing an agent or a person actually
+starts from — the same reason the screen kit serves raw markup rather than
+describing it.
+
+**Watch item, recorded because it is the likeliest failure**: a wireframe is a
+picture of a layout, and pictures drift. `check-markup` catches invented
+classes but cannot catch a wireframe that stops resembling the shell it names.
+If that drift appears, the answer is to generate the wireframe from the shell's
+real markup, not to hand-correct the picture.
+
 ## Slice 151 — Owner wishlist: learn from a mainstream list product (2026-08-27)
 
 Owner supplied a screenshot of a widely-used enterprise list/tracker product
