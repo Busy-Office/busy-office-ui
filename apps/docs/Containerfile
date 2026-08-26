@@ -12,6 +12,16 @@ COPY apps/docs ./apps/docs
 # image from 33.1 until 2026-08-18 — the second time a docs-build dependency rotted
 # here unnoticed, which is why CI now builds this file.
 COPY DESIGN.md ./
+# The ERP suite is a BUILD INPUT too, since 147.1: gen-suite-index.mjs reads its
+# screens to generate the kit index, and copy-suite.mjs builds and copies its 28
+# pages into dist/suite. Leaving it out broke this image on 2026-08-26 with
+# ERR_MODULE_NOT_FOUND — the THIRD time a docs-build dependency rotted here, and
+# the second in one session: two gates added that morning had already broken it
+# by reading ci.yml and ROADMAP.md, which are legitimately absent and now stand
+# down. This one is different and must NOT stand down: the suite is not optional
+# context, it is a quarter of what the docs now serve, and an image that quietly
+# omitted the screen kit would look fine and be wrong.
+COPY examples/erp-suite ./examples/erp-suite
 RUN npm ci --ignore-scripts
 # The docs build ends in check-boost, which drives a real browser. Without
 # Chrome the image build fails — which it silently did from the moment that
