@@ -258,9 +258,24 @@ if (process.argv.includes('--json')) {
     const ratio = r.fn / r.fnOf;
     return ratio === 1 ? 3 : ratio >= 0.75 ? 2 : ratio >= 0.5 ? 1 : 0;
   };
+  /* ONE-DIRECTIONAL, corrected 2026-08-26 during the first Polish round on
+     this ledger. The band was `Math.abs(excess)`, which scored the LEANEST
+     screen in the suite exactly like the most bloated one: fin/trial-balance
+     sits 35 nodes BELOW the line and was marked down for it.
+
+     The dimension's stated job (145.2) is "a screen that gains 80 nodes for no
+     new information scores lower". That is one-directional by construction.
+     Penalising thrift would have had a Polish round "improve" the leanest
+     screen by adding markup, which is the rubric paying for the opposite of
+     what it measures.
+
+     Below the line is not a defect; it is a limit of the model. The fit is
+     linear and table-heavy screens are more node-efficient per fact than a
+     straight line predicts, so a 92-fact trial balance lands under it by
+     arithmetic, not by neglect. */
   const perf = (r) => {
-    const d = Math.abs(r.excess) / F.sd;
-    return d <= 1 ? 3 : d <= 2 ? 2 : 1;
+    const over = Math.max(0, r.excess) / F.sd;
+    return over <= 1 ? 3 : over <= 2 ? 2 : 1;
   };
   console.log(JSON.stringify({
     fit: { intercept: +F.intercept.toFixed(1), slope: +F.slope.toFixed(2), sd: +F.sd.toFixed(1) },

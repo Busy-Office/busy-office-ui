@@ -254,8 +254,12 @@ def main() -> int:
         for i, s, cells in rows(text):
             if s in names:
                 parts = lines[i].rstrip().rstrip("|").split("|")
-                if "re-queued" not in parts[-1]:
-                    parts[-1] = parts[-1].rstrip() + " · **RE-QUEUED — source changed**"
+                if "re-queued" not in parts[-1].lower():
+                    # Keep the row's spacing shape: the seeder writes "… |" with a
+                    # space before the pipe, and appending without it produced rows
+                    # a later regex silently skipped — eight of twenty-eight, caught
+                    # only by counting what was updated.
+                    parts[-1] = parts[-1].rstrip() + " · **RE-QUEUED — source changed** "
                 lines[i] = "|".join(parts) + "|"
         LEDGER.write_text("\n".join(lines) + "\n")
         print(f"\nledger updated — {len(names)} surface(s) marked for re-score")
