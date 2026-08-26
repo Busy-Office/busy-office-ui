@@ -1186,6 +1186,65 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 150 — Objective grill of Slices 112, 130-148 (2026-08-27)
+
+Dispatched by rule 3, **overdue at 17/3**. Full report:
+`.roundtable/grill-objective-130-148-2026-08-27.md`.
+
+**The finding: the ERP suite is blind in one direction.** All **21 gaps** it has
+produced are *"this screen cannot be built from shipped CSS"* — which is what its
+zero-CSS gate detects. A screen that **hand-rolls something the framework already
+ships passes that gate perfectly**, because hand-rolling uses existing classes.
+The instrument cannot see it by construction.
+
+Two independent components with the same signature, which clears the evidence
+gate (one alone would be a Hypothesis):
+
+| component | reach across 27 suite screens | what the screens do instead |
+|---|---|---|
+| `bo-progress` | **1 of 27** | four hand-roll a threshold (tone buckets, a boolean, two `bo-kv` rows, a badge) |
+| `bo-date` | **0 of 27**, while **21 render a date** | plain strings — `'01 Oct'` |
+
+**This fails Objective principle 3 measurably** — *"nothing ships for one screen;
+a piece earns its place by surviving ≥2 real, independent compositions."* Three
+components have never been composed into any screen or pattern: `bo-date`,
+`bo-tree`, `bo-file-dropzone`/`__input`/`__list`. The bar exists to stop things
+shipping for one screen; these shipped for **zero** and no gate asserts reach.
+
+1. [ ] **150.1 — report component reach on every build; do NOT gate it.**
+       Count each component's independent compositions across suite + patterns
+       and print the low end.
+       *Accept*: a reported number with the three meanings distinguished, and
+       **no red build**. Zero reach is not by itself a defect — see below — so a
+       hard gate would be wrong roughly a third of the time, and a gate that is
+       wrong teaches evasion.
+
+**The three zeros have three DIFFERENT causes, which a single number hides:**
+
+- **`bo-date` — reached-for failure.** 21 screens show a date and none uses it.
+  The framework's problem: a discoverability defect, same shape as `bo-progress`.
+- **`bo-tree` — correctly refused at the point of use.** Its own opener says
+  *"Not for rows that carry data columns"* and points at `tree-table`, which
+  **is** used. Every hierarchy in the suite carries data columns, so `tree-table`
+  rightly wins every time. This is **suitability-beats-reuse working as written**
+  — a gate on zero reach would have flagged a component that is behaving
+  correctly.
+- **`bo-file-upload` — a gap in the INSTRUMENT.** No suite screen has an
+  attachment flow at all, though attachments are a real ERP job. That says
+  nothing about the component.
+
+**Refused**: building anything for the three zeros (`bo-date` needs the *screens*
+changed, not the component); a "usage" rubric dimension (the `ux`-dimension
+mistake corrected in 145 and the entropy-report mistake refused in 148 — a
+property that is true or false belongs in a measurement, not a score).
+
+**Grading**: principle 1 (simplicity) holding — 147/148 let a consumer delete an
+assembly step. Principle 2 (less for more) holding — 149.4 answered one
+requirement two different ways with **zero new CSS** rather than shipping a
+`--live` modifier; watch `tree`/`tree-table` as an adjacent-surfaces *Rethink*
+trigger if a third hierarchy surface appears. Principle 3 (reusability)
+**failing**, as measured above.
+
 ## Slice 149 — Research: dense numeric UI, and an open-source ERP desk (owner wishlist, 2026-08-26)
 
 Owner wishlist: study two external references — a high-traffic public
