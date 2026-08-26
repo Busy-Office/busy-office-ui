@@ -2439,7 +2439,7 @@
             ],
             [
               "arrival",
-              "new items appear on the next poll (hx-trigger=\"every 60s\" on the bell count is enough); the SCREEN never reorders under a reader mid-scroll"
+              "new items appear on the next poll (hx-trigger=\"every 60s\" on the bell count is enough); the SCREEN never reorders under a reader mid-scroll. The poll must be user-stoppable — WCAG 2.2 SC 2.2.2 applies to auto-updating values from the first tick, with no five-second grace. The bell is app-shell chrome on every screen, so the control belongs in settings as a notification-refresh preference (off included), not as a widget bolted next to the bell — the same reasoning that lets an OS reduced-motion preference satisfy the criterion for animation. A per-screen version of this control is shown on job monitor, where the updating region is the screen"
             ]
           ],
           "wrongChoice": {
@@ -2512,7 +2512,7 @@
             ],
             [
               "polling",
-              "hx-trigger=\"every 30s\" on the table while any row is running or stalled; polling stops once nothing is in flight — an idle screen has no reason to keep asking"
+              "hx-trigger=\"every 30s\" on the table while any row is running or stalled; polling stops once nothing is in flight — an idle screen has no reason to keep asking. The interval is the user's to set: the Refresh control writes the chosen value into hx-trigger, and Off removes it. WCAG 2.2 SC 2.2.2 requires this from the first tick — the five-second grace applies to moving content, not to auto-updating values"
             ]
           ],
           "wrongChoice": {
