@@ -941,3 +941,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-27 00:21 · Meta · refusal · applying one mechanical fix to both pages — a widget beside the app-shell bell would be worse design than a settings preference · refused · fcec793
 - 2026-08-27 00:30 · Objective · grill · Objective grill 112/130-148: the suite is blind to components it CAN express but nobody reaches for — bo-progress 1/27, bo-date 0/27 while 21 screens render dates; three components at zero reach fail principle 3 · logged · 1802b6b
 - 2026-08-27 00:30 · Meta · refusal · gating zero reach — bo-tree's zero is suitability-beats-reuse working correctly, so a red build would be wrong a third of the time · refused · 1802b6b
+- 2026-08-27 00:32 · Roadmap · plan · 151: triaged an owner screenshot of a mainstream list product — named views, self-explaining columns, ordinal badges queued; three mechanisms already covered, two better · logged · bd211a2
+- 2026-08-27 00:32 · Meta · refusal · a filter control in the column header — a third filtering surface where two already exist · refused · bd211a2
