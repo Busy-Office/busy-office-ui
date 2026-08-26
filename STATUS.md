@@ -25,9 +25,9 @@ Generated at: 2026-08-27 00:49
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (930 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-26 23:34   ok
-  Objective     1 / 3 slice           since 2026-08-27 00:30   ok  [149]
+dispatch status — counter-triggered rules (931 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-26 23:34   ok
+  Objective     2 / 3 slices          since 2026-08-27 00:30   ok  [149, 152]
 ```
 
 ## Owner-blocked
@@ -40,7 +40,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 23:56 · Explore · research · Two external references researched to Slice 149 — the recommended build was withdrawn: bo-progress already covers value-vs-threshold and is used on 1 of 27 screens, so the gap is adoption, not coverage · logged · b09e2e3
 - 2026-08-26 23:56 · Meta · refusal · sparklines, column chooser, number abbreviation, gantt/tours, group-by-with-counts, and running the suggested 1-commit fork · refused · b09e2e3
 - 2026-08-27 00:21 · Continue · bug · 149.4 P0: job-monitor and notification documented auto-updating content with no pause control (WCAG 2.2.2, no five-second grace for numbers); job-monitor ships a bo-segmented Off/30s/5m, notification documents a settings preference; gated by check:autoupdate-control · landed · fcec793
 - 2026-08-27 00:21 · Meta · refusal · applying one mechanical fix to both pages — a widget beside the app-shell bell would be worse design than a settings preference · refused · fcec793
@@ -50,6 +49,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 00:32 · Meta · refusal · a filter control in the column header — a third filtering surface where two already exist · refused · bd211a2
 - 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
 - 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6
+- 2026-08-27 00:49 · Continue · build · 152.1: a copyable structural template per shell on concepts/layouts, driven by one SHELLS array that also replaced two hand-written tables; surfaced that split master-detail has no shipped primitive · landed · d873603
 
 ## Sunset test
 

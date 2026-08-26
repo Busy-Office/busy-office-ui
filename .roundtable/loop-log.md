@@ -945,3 +945,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-27 00:32 · Meta · refusal · a filter control in the column header — a third filtering surface where two already exist · refused · bd211a2
 - 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
 - 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6
+- 2026-08-27 00:49 · Continue · build · 152.1: a copyable structural template per shell on concepts/layouts, driven by one SHELLS array that also replaced two hand-written tables; surfaced that split master-detail has no shipped primitive · landed · d873603
