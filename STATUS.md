@@ -2,23 +2,26 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 21:35
+Generated at: 2026-08-26 22:02
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
+- **Slice 148** (3 open)
+  - 148.1 — split the 129 behavior tests out of one file
+  - 148.2 — `npm create busy-office`
+  - 148.3 — the build chain is doing repo-wide validation
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (910 iterations logged)
-  Standardize   5 / 4 Continue rounds since 2026-08-26 07:11   OVERDUE
+dispatch status — counter-triggered rules (912 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-26 21:42   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -31,8 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 08:47 · Meta · refusal · a per-content-type weighting for the markup fit — overfitting to one screen's evidence · refused · 41cc9da
-- 2026-08-26 09:25 · Polish · tidy · screens round 2: added a bulk-action obligation for lists (6 of 7 had it), fixed vendor-invoices; recalibrated facts to count controls; purchase-order's excess recorded as explained, not a defect · landed · 516ff6d
 - 2026-08-26 09:25 · Meta · refusal · exempting purchase-order's markup excess — a fourth adjustment in one round is tuning until nothing is flagged · refused · 516ff6d
 - 2026-08-26 13:50 · Polish · tidy · screens round 3: crm/account dry — performance concluded a regression tripwire, not a work generator, after four investigations found content not waste · landed · 3e6709f
 - 2026-08-26 13:50 · Meta · refusal · a fourth Polish round driven by performance — four investigations found zero waste; the dimension measures content mix · refused · 3e6709f
@@ -41,6 +42,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-26 21:22 · Meta · refusal · Demo for whole screens — +181 KB on one page, or 28 docs pages that must carry a page skeleton a screen does not have · refused · c22a93e
 - 2026-08-26 21:22 · Meta · refusal · a copy button on the suite screens — the zero-CSS claim is the instrument's whole value · refused · c22a93e
 - 2026-08-26 21:35 · Continue · build · 147.3 — check:quickstart executes the documented adoption path: empty dir → local pack → imports resolve → a kit screen renders (computed style, not markup) → bo-check-markup · landed · c8ccb08
+- 2026-08-26 21:42 · Standardize · tidy · five scripts had regrown the REPO_ROOT duplication paths.mjs was extracted to end; routed through it and added check:paths as a gate over the gates · landed · dc421ec
+- 2026-08-26 21:55 · Continue · bug · P0: docs container had no examples/erp-suite, so 147.1's kit generator broke the image; third time a docs-build dependency rotted there · landed · 23f931d
 
 ## Sunset test
 

@@ -925,3 +925,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 21:22 · Meta · refusal · Demo for whole screens — +181 KB on one page, or 28 docs pages that must carry a page skeleton a screen does not have · refused · c22a93e
 - 2026-08-26 21:22 · Meta · refusal · a copy button on the suite screens — the zero-CSS claim is the instrument's whole value · refused · c22a93e
 - 2026-08-26 21:35 · Continue · build · 147.3 — check:quickstart executes the documented adoption path: empty dir → local pack → imports resolve → a kit screen renders (computed style, not markup) → bo-check-markup · landed · c8ccb08
+- 2026-08-26 21:42 · Standardize · tidy · five scripts had regrown the REPO_ROOT duplication paths.mjs was extracted to end; routed through it and added check:paths as a gate over the gates · landed · dc421ec
+- 2026-08-26 21:55 · Continue · bug · P0: docs container had no examples/erp-suite, so 147.1's kit generator broke the image; third time a docs-build dependency rotted there · landed · 23f931d

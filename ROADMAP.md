@@ -1186,6 +1186,55 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 148 — Triaged from an external framework review (2026-08-26)
+
+Owner supplied a full review (`.roundtable/external-review-2026-08-26.md`,
+~8.7/10, recommendation **not to restart**). Triage:
+`.roundtable/grill-external-review-2026-08-26.md`.
+
+**It found a live P0 before this project did**, which is the headline: §8 named
+a CI container failure with the file, the import and the fix. Real, mine, fixed
+in `23f931d`. A review that reproduces its own claims earns the rest of its
+findings a hearing.
+
+**It changes no priorities, and saying so beats manufacturing agreement.** Its
+P1 is 112.3, top of the owner-blocked list since 2026-08-23; its P2 is a
+runnable starter, which 147.3 half-built today. The value is independent
+confirmation of the existing direction plus a caught regression — not a new one.
+
+1. [ ] **148.1 — split the 129 behavior tests out of one file** (review §21).
+       One `tests/*.test.ts` per behavior. Cheap, no counter-argument, and it
+       cuts the context a coding agent must load to change one behavior.
+       *Accept*: same test count passing, one file per behavior, and the
+       behaviors-vs-`.d.ts` gate still green.
+
+2. [ ] **148.2 — `npm create busy-office`** (review §22, its P2). 147.3 proves
+       the documented path with a CHECK; a human still assembles the page by
+       hand. A scaffold that produces a running screen closes the gap between
+       "the path works" and "I have an app". *Accept*: `npm create` in an empty
+       directory yields a dev server showing a real screen, and the scaffold is
+       exercised by `check:quickstart` rather than described.
+
+3. [ ] **148.3 — the build chain is doing repo-wide validation** (review §7 and
+       §20 together, and the one place the review shifts weight). The docs
+       `build` script is ~30 steps and implicitly owns validation that is not
+       about docs. Three of six loop rounds on 2026-08-26 fixed INSTRUMENTS
+       rather than the framework — the review's "the project may optimise the
+       framework-development process more than the framework-user experience",
+       with the loop log as evidence.
+       *Accept*: a measured answer, not a refactor for its own sake — count what
+       the docs build runs that is not about docs, and either move it or state
+       why one chain is right. **Refusing to reorganise is a valid outcome**;
+       the risk being named is real, and so is the cost of churn.
+
+**Refused, recorded in the grill**: §8's manifest fix (the coupling is 28 copied
+HTML pages, not the manifest — which already exists); §14's entropy report
+(most targets are already GATES, and scoring an enforced binary property is the
+`ux`-dimension mistake corrected this morning); §16 (one package — already
+true); §11 `bo-check-screen` as a next step (it needs a contract to check, and
+whether that contract is justified is what 112.3 measures — building it first is
+the intuition-over-evidence move §6 itself warns against).
+
 ## Slice 147 — Adoption: the framework has no front door (owner decision, 2026-08-26)
 
 Owner picked **(a) adoption/DX** from the direction call. The argument for it
