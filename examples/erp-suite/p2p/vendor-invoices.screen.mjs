@@ -63,10 +63,23 @@ export const render = () =>
     </form>
 
     <div class="bo-data-table-container" tabindex="0" data-density="compact">
+      <!-- Bulk actions, added 2026-08-26: six of the suite's seven lists had
+           them and this one did not (roadmap 145, Polish round). Posting matched
+           invoices is a batch job — a clerk clears the matched ones together and
+           opens only the exceptions. -->
+      <div class="bo-data-table__toolbar">
+        <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+          <button class="bo-btn bo-btn--secondary" type="button">Post</button>
+          <button class="bo-btn bo-btn--secondary" type="button">Hold</button>
+        </div>
+        <span class="bo-data-table__selection-count"></span>
+        <span class="bo-u-text-muted">148 invoices</span>
+      </div>
       <table class="bo-data-table">
         <caption class="bo-visually-hidden">Vendor invoices with the order they match, amount and status</caption>
         <thead>
           <tr>
+            <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all invoices"></th>
             <th scope="col">Invoice #</th>
             <th scope="col">Vendor</th>
             <th scope="col" class="bo-data-table__col--secondary">Against</th>
@@ -78,6 +91,7 @@ export const render = () =>
           ${rows
             .map(
               ([no, vendor, po, amount, status, tone]) => `<tr${tone === 'danger' ? ' data-row-state="error"' : ''}>
+            <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select ${no}"></td>
             <td class="bo-data-table__col--code"><a href="/p2p/vendor-invoice.html">${no}</a></td>
             <td class="bo-u-text-truncate">${vendor}</td>
             <td class="bo-data-table__col--secondary bo-data-table__col--code">${

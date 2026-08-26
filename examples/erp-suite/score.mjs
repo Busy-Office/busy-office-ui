@@ -82,6 +82,14 @@ const OWES = {
       ['a create action', () => [...document.querySelectorAll('.bo-btn')].some((b) => /^[+]|\bnew\b|\bcreate\b|\braise\b/i.test(b.textContent.trim()))],
       ['status per row', () => !!document.querySelector('tbody .bo-badge, tbody [data-tone]')],
       ['a row-level way in', () => !!document.querySelector('tbody a[href]')],
+      /* Added 2026-08-26 from a Polish comparison, not invented: SIX of the
+         seven lists carry bulk actions and one does not. An ERP list exists to
+         be worked in batches — approve ten POs, post five invoices — so acting
+         on one row at a time is the exception, not the shape. The evidence for
+         the rule is the suite's own consistency, which is the only kind of
+         rubric addition that is not just an opinion with a checkbox. */
+      ['a way to act on several at once',
+        () => !!document.querySelector('.bo-data-table__bulk-actions, .bo-data-table__select-all')],
     ],
     document: [
       ['the record identity in the heading', () => /[A-Z]{2,}-?\d{3,}|\b\d{4}-\d{4}\b/.test(document.querySelector('h1')?.textContent || '')],
@@ -229,7 +237,14 @@ for (const key of Object.keys(KIND)) {
       document.querySelectorAll('.bo-kv dd').length +
       document.querySelectorAll('.bo-timeline__step, .bo-audit__entry').length +
       document.querySelectorAll('.bo-byline, .bo-prose p, .bo-timeline__meta').length +
-      document.querySelectorAll('.bo-btn').length;
+      document.querySelectorAll('.bo-btn').length +
+      // A CONTROL is delivered surface too, not chrome. Excluding checkboxes,
+      // inputs and selects made the dimension penalise completeness: three
+      // Polish rounds running, the screens it flagged were the ones doing MORE
+      // — pagination, bulk actions, a discussion thread — never ones wasting
+      // markup. A fact is what the screen hands the user, and a filter select
+      // is handed to them as surely as a total.
+      document.querySelectorAll('.bo-checkbox, .bo-input, .bo-select, .bo-radio').length;
     return { own: document.querySelectorAll('*').length - shell, facts };
   });
 
