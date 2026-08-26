@@ -28,6 +28,32 @@ recomputes the two numbers from the built screens; the `rounds`, `dry` and
 **Budgets:** screens get **3 rounds** as a CEILING, not a quota. Two consecutive
 rounds that fail to move a score mark a screen `dry` and forfeit the rest.
 
+
+**PERFORMANCE IS A TRIPWIRE, NOT A WORK GENERATOR — concluded 2026-08-26 after
+four investigations.** Every screen it flagged was doing MORE, never wasting:
+
+| screen | excess | what it turned out to be |
+| --- | --- | --- |
+| `p2p/purchase-order` | +35 | a discussion thread, a second timeline, a composer |
+| `p2p/purchase-orders` | +21 | the only list with a footer and pagination, for 312 records |
+| `p2p/vendor-invoices` | — | went UP when legitimate bulk actions were added |
+| `crm/account` | +21 | `bo-kv`'s per-pair wrapper and `bo-amount`'s four-node structure |
+
+The last one settles it: the cost is two shipped components doing their job —
+`bo-kv` needs a wrapper per pair to grid `dt`/`dd`, `bo-amount` spends nodes so
+currency, value and fraction align and mute independently. Four rounds, zero
+instances of markup that bought nothing.
+
+So the dimension's spread measures **content mix, not waste**, and it should
+stop selecting Polish rounds. It keeps its value as a REGRESSION guard — the
+Accept test showed it moves an excess from −3 to +77 when 80 empty nodes are
+injected — which is what a tripwire is for. Re-open it as a work driver only if
+a screen goes over with no content to explain it.
+
+**Consequence for the loop:** with the functionality backlog at zero and
+performance dry, screen Polish has no queue. The dispatcher should fall through
+rather than manufacture rounds.
+
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|
 | screen/prod/capacity | functionality | **3** | 0/3 | 0 | ddc3152e | owes 4/4; markup -9 vs the line |
@@ -39,7 +65,7 @@ rounds that fail to move a score mark a screen `dry` and forfeit the rest.
 | screen/o2c/customer-invoices | functionality | **3** | 0/3 | 0 | 63084c2b | owes 4/4; markup 0 vs the line |
 | screen/o2c/sales-orders | functionality | **3** | 0/3 | 0 | 2631ee9c | owes 5/5; markup +15 vs the line |
 | screen/p2p/vendor-invoices | performance | 2 | 0/3 | 0 | d88b63d9 | owes 5/5; markup +18 vs the line |
-| screen/crm/account | performance | 2 | 0/3 | 0 | e2d25639 | owes 4/4; markup +21 vs the line |
+| screen/crm/account | performance | 2 | 1/3 | 1 | e2d25639 | round 1 — **dry, no waste.** +21 is `bo-kv`'s per-pair wrapper and `bo-amount`'s four-node structure: two shipped components doing their job, not padding. See the note above — this is the fourth such finding. |
 | screen/fin/journal-entry | functionality | **3** | 0/3 | 0 | 201a7c47 | owes 4/4; markup -17 vs the line |
 | screen/fin/period-close | functionality | **3** | 0/3 | 0 | eed43768 | owes 4/4; markup -17 vs the line |
 | screen/inv/lot-trace | functionality | **3** | 0/3 | 0 | 7583ed94 | owes 4/4; markup -20 vs the line |
