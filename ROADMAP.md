@@ -1265,7 +1265,7 @@ because it means the instrument has a blind spot, not just a backlog.
        is both unkind and perishable — they may fix it tomorrow — and "we beat
        X" is not something a person reading the badge page needs.
 
-4. [ ] **149.4 — P0: four patterns document auto-updating content with no way to pause it.**
+4. [x] **149.4 — DONE 2026-08-27. P0: patterns documented auto-updating content with no way to pause it.**
        Found by the `/deep-research` run, and it is the one thing in that report
        this project could not have reached by reading the reference's markup — the finding
        is **normative, not observed**. WCAG 2.2 SC 2.2.2 (Level A) has two
@@ -1275,18 +1275,29 @@ because it means the instrument has a blind spot, not just a backlog.
        needing a control is a stock ticker, so the "essential" carve-out does
        not cover an ordinary live cell.
 
-       Measured across the pattern pages — every one that documents polling,
-       and whether it offers any control:
+       Measured across the pattern pages:
 
-       | pattern | documents auto-update | offers pause/stop/frequency |
+       | pattern | documents an auto-update TRIGGER | offers pause/stop/frequency |
        |---|---|---|
        | `job-monitor` | `hx-trigger="every 30s"` | **no** |
-       | `inbox` | polling | **no** |
-       | `notification` | polling | **no** |
-       | `record-detail` | polling | **no** |
+       | `notification` | `hx-trigger="every 60s"` | **no** |
+       | `record-detail` | no trigger — an endpoint *for* polling | n/a |
+       | `inbox` | no trigger — polling named in passing | n/a |
+       | `bulk-actions` | no trigger — polling named in passing | n/a |
 
-       **Four of four, and the framework already knows the criterion**, which is
-       what makes this sharp rather than an oversight. `components/state-patterns`
+       **THE FIRST COUNT HERE SAID "FOUR OF FOUR" AND WAS WRONG**, corrected
+       before any code was written. The detector grepped
+       `polling|every Ns|auto-refresh` and counted every *mention*, so a page
+       saying "the polling behaviour above is the server's job" scored as a page
+       that auto-updates. Two pages document a real trigger; three name polling
+       without specifying one. The doctrine's question — *is this signal present
+       in things I am not counting?* — has an inverse that bit here: **am I
+       counting things that are not the signal?** The finding survives the
+       correction (two pages, zero controls) but it is half the size first
+       claimed, and the fix is correspondingly narrower.
+
+       **The framework already knows the criterion**, which is what makes this
+       sharp rather than an oversight. `components/state-patterns`
        cites *Pause, Stop, Hide* by name and answers it correctly for skeleton
        animation — *"the user's own OS preference is the control"*, with the
        five-second threshold quoted. It applied the criterion to the bullet that
@@ -1297,7 +1308,7 @@ because it means the instrument has a blind spot, not just a backlog.
        DOM-inspectable property. This is a gap in what the gates can see, not a
        gate that broke.
 
-       *Accept*: each of the four documents a control, built from
+       *Accept*: each page that documents a trigger documents a control, built from
        **`bo-segmented`** (`__input`/`__option` already ship) as a frequency
        choice rather than a bare pause — SC 2.2.2 accepts "control the frequency
        of the update", and for an ERP monitor *off / 30s / 5m* is a more useful
@@ -1308,6 +1319,40 @@ because it means the instrument has a blind spot, not just a backlog.
        *Not* a licence to add a live-number component. The framework does not
        ship polling and should not start; what it owes is the documented
        contract for patterns that do.
+
+       **Done, and the two pages got DIFFERENT answers**, which is the part
+       worth keeping. `job-monitor`'s updating region *is* the screen, so it
+       ships the control: a `bo-segmented` radiogroup — *Off / 30s / 5m* — above
+       the table, written into `hx-trigger`, with *Off* removing it. Zero new
+       CSS, as the Accept required. `notification` polls a bell count that is
+       app-shell chrome on every screen; bolting a widget next to the bell would
+       be worse design, so it documents the control as a **settings preference**
+       instead, by the same logic that lets an OS reduced-motion preference
+       satisfy the criterion for animation. Applying one fix to both would have
+       been the mechanical answer, not the right one.
+
+       Gated by `check:autoupdate-control` (`@exact`): a pattern documenting
+       `hx-trigger="every …"` must cite SC 2.2.2 or ship a control. It fires on
+       the TRIGGER, not on the word "polling" — the three pages that name
+       polling in passing are deliberately not caught. Red-proved by stripping
+       all three control signals from `job-monitor` and confirming by grep that
+       the strip landed while the trigger remained. It also **refuses to pass on
+       an empty set**: if no page matches the trigger it exits non-zero rather
+       than reporting a serene pass, because that zero would be indistinguishable
+       from a broken pattern.
+
+       Verified live at 1440 and 390, light and dark, on computed style rather
+       than a screenshot. **Two instrument defects were caught in that check, in
+       the order the doctrine predicts.** First, `querySelector('.bo-segmented')`
+       measured the docs shell's own density switcher — *Compact / Comfortable /
+       Spacious* — which is the "shell chrome is a real `bo-*` element" trap
+       recorded in CLAUDE.md, hit again; scoped to the control's own
+       `aria-labelledby`. Second, `emulateMediaFeatures` did **not** flip the
+       theme, because this site honours an explicit `data-theme` from
+       `localStorage`, so the first "dark" pass was light and would have been
+       reported as two themes verified. Now the attribute is set and the body's
+       computed background is asserted to differ (`rgb(249,250,251)` vs
+       `rgb(15,17,21)`) — the theme is proven flipped, not assumed.
 
 **What the deep-research run changed about the rest of this slice** (105 agents,
 adversarial verification, `/private/tmp/…/tasks/w1xngxeu6.output`):

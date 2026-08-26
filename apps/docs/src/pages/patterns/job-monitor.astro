@@ -24,6 +24,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>The screen</h2>
+    <div class="bo-cluster">
+      <span id="jm-refresh-label">Refresh</span>
+      <div class="bo-segmented" role="group" aria-labelledby="jm-refresh-label">
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="jm-refresh" id="jm-refresh-off">
+        <label class="bo-segmented__option" for="jm-refresh-off">Off</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="jm-refresh" id="jm-refresh-30s" checked>
+        <label class="bo-segmented__option" for="jm-refresh-30s">30s</label>
+        <input class="bo-segmented__input bo-visually-hidden" type="radio" name="jm-refresh" id="jm-refresh-5m">
+        <label class="bo-segmented__option" for="jm-refresh-5m">5m</label>
+      </div>
+    </div>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
         <caption class="bo-visually-hidden">Scheduled jobs and their run history</caption>
@@ -84,7 +95,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="demo">
     <h2>Markup</h2>
-    <pre><code>{`<table class="bo-data-table">
+    <pre><code>{`<!-- A screen that updates itself owes the reader a way to stop it.
+     WCAG 2.2 SC 2.2.2 applies to auto-updating values from the FIRST
+     tick — the five-second grace is for moving content, not numbers.
+     A radiogroup, so arrow-key navigation and "n of m" come free; the
+     chosen value is written into the table's hx-trigger, Off removes it. -->
+<div class="bo-cluster">
+  <span id="jm-refresh-label">Refresh</span>
+  <div class="bo-segmented" role="group" aria-labelledby="jm-refresh-label">
+    <input class="bo-segmented__input bo-visually-hidden" type="radio" name="jm-refresh" id="jm-off">
+    <label class="bo-segmented__option" for="jm-off">Off</label>
+    <input class="bo-segmented__input bo-visually-hidden" type="radio" name="jm-refresh" id="jm-30s" checked>
+    <label class="bo-segmented__option" for="jm-30s">30s</label>
+    <input class="bo-segmented__input bo-visually-hidden" type="radio" name="jm-refresh" id="jm-5m">
+    <label class="bo-segmented__option" for="jm-5m">5m</label>
+  </div>
+</div>
+
+<table class="bo-data-table">
   <thead><tr>
     <th scope="col">Job</th>
     <th scope="col">Schedule</th>
@@ -111,6 +139,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo">
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Refresh control</strong> — a
+      <a href={base + '/components/segmented'}>segmented control</a> above the
+      table (<em>Off / 30s / 5m</em>). Not decoration: a screen that updates
+      itself owes the reader a way to stop it, and a radiogroup gives the
+      keyboard and screen-reader behaviour for free. Off is a real option —
+      someone reading a failure reason should not have the row move under them.</li>
       <li><strong>Job list</strong> — a plain
       <a href={base + '/components/data-table'}>data table</a>, one row
       per scheduled job. No grouping, no dashboard chrome: this is a
@@ -139,7 +173,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td class="bo-data-table__col--code">GET /jobs</td><td>the row fragment; each row carries <code>data-job-id</code> and <code>data-status</code> (running/failed/succeeded/stalled/never-run) so an agent reads state without parsing badge text</td></tr>
           <tr><td class="bo-data-table__col--code">POST /jobs/:id/retry</td><td>the row re-rendered running; 409 if it is already running — re-render with the current state, never queue a second attempt silently</td></tr>
           <tr><td class="bo-data-table__col--code">POST /jobs/:id/cancel</td><td>the row re-rendered with its last completed state; a job that cannot be cancelled mid-step says so rather than appearing to stop</td></tr>
-          <tr><td class="bo-data-table__col--code">polling</td><td><code>hx-trigger="every 30s"</code> on the table while any row is running or stalled; polling stops once nothing is in flight — an idle screen has no reason to keep asking</td></tr>
+          <tr><td class="bo-data-table__col--code">polling</td><td><code>hx-trigger="every 30s"</code> on the table while any row is running or stalled; polling stops once nothing is in flight — an idle screen has no reason to keep asking. <strong>The interval is the user's to set</strong>: the Refresh control writes the chosen value into <code>hx-trigger</code>, and <em>Off</em> removes it. WCAG 2.2 <a href="https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html">SC 2.2.2</a> requires this from the <em>first</em> tick — the five-second grace applies to moving content, not to auto-updating values</td></tr>
         </tbody>
       </table>
     </div>
