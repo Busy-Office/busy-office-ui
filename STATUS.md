@@ -2,17 +2,18 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 23:56
+Generated at: 2026-08-27 00:08
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 149** (3 open)
+- **Slice 149** (4 open)
   - 149.1 — `bo-progress` is on 1 of 27 screens; four that want it hand-rolled their own.
   - 149.2 — the positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.
   - 149.3 — record the two-channel finding as positioning; keep it OUT of the docs.
+  - 149.4 — P0: four patterns document auto-updating content with no way to pause it.
 - **Slice —** (1 open)
   - AT runtime evidence
 

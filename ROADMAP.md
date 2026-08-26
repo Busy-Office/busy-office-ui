@@ -1257,6 +1257,73 @@ because it means the instrument has a blind spot, not just a backlog.
        is both unkind and perishable — they may fix it tomorrow — and "we beat
        X" is not something a person reading the badge page needs.
 
+4. [ ] **149.4 — P0: four patterns document auto-updating content with no way to pause it.**
+       Found by the `/deep-research` run, and it is the one thing in that report
+       this project could not have reached by reading CMC's markup — the finding
+       is **normative, not observed**. WCAG 2.2 SC 2.2.2 (Level A) has two
+       bullets with deliberately different thresholds: moving/blinking/scrolling
+       triggers only after five seconds, but **auto-updating information
+       triggers from the first tick**. W3C's own worked example of content
+       needing a control is a stock ticker, so the "essential" carve-out does
+       not cover an ordinary live cell.
+
+       Measured across the pattern pages — every one that documents polling,
+       and whether it offers any control:
+
+       | pattern | documents auto-update | offers pause/stop/frequency |
+       |---|---|---|
+       | `job-monitor` | `hx-trigger="every 30s"` | **no** |
+       | `inbox` | polling | **no** |
+       | `notification` | polling | **no** |
+       | `record-detail` | polling | **no** |
+
+       **Four of four, and the framework already knows the criterion**, which is
+       what makes this sharp rather than an oversight. `components/state-patterns`
+       cites *Pause, Stop, Hide* by name and answers it correctly for skeleton
+       animation — *"the user's own OS preference is the control"*, with the
+       five-second threshold quoted. It applied the criterion to the bullet that
+       HAS a grace period and not to the bullet that does not.
+
+       **`axe` cannot catch this**, which is why the sweep has been green
+       throughout: "is there a control for this updating region" is not a
+       DOM-inspectable property. This is a gap in what the gates can see, not a
+       gate that broke.
+
+       *Accept*: each of the four documents a control, built from
+       **`bo-segmented`** (`__input`/`__option` already ship) as a frequency
+       choice rather than a bare pause — SC 2.2.2 accepts "control the frequency
+       of the update", and for an ERP monitor *off / 30s / 5m* is a more useful
+       control than a stop button. **Zero new CSS**; if it needs any, the design
+       is wrong. Plus a gate: a pattern page documenting `hx-trigger="every`
+       must also document its control, red-proved by removing one.
+
+       *Not* a licence to add a live-number component. The framework does not
+       ship polling and should not start; what it owes is the documented
+       contract for patterns that do.
+
+**What the deep-research run changed about the rest of this slice** (105 agents,
+adversarial verification, `/private/tmp/…/tasks/w1xngxeu6.output`):
+
+- **The pagination finding was already covered** — CMC's transferable rule is
+  "bounded page, real URL per page, always state which slice of what total".
+  `.bo-pagination__info` ships and its canonical markup reads `1–25 of 312`.
+  Fourth "already covered" of this research, and consistent with the rest.
+- **The column CAP does not overturn the chooser refusal.** CMC bounds user
+  column choice at `8/12` metrics with five vendor presets. The cap is only
+  meaningful if there is a chooser, and the chooser is refused above for a
+  reason that still holds. Recorded because the *idea* is good and the verdict
+  is unchanged, not because it is new evidence.
+- **149.2's provenance is weaker than 149.2 says.** The verification pass could
+  **not** confirm the detail page's ranges, stat tiles, tabs or converters from
+  primary sources — those regions are client-hydrated and the only sources
+  describing them were third-party clone tutorials. A direct page fetch is one
+  observation; it did not survive adversarial checking. Since 149.2 was already
+  refused-pending-a-second-use, nothing changes operationally — but the CMC
+  citation should not be leaned on.
+- **Sparklines, sticky rank/name columns and tick-flash colouring also failed
+  verification.** The refusals below were reached independently and now rest on
+  firmer ground: there was less there than the site's reputation suggests.
+
 **Refused, with reasons.** *Sparklines / row trend* — direct precedent, the
 `prod/capacity` heatmap was refused for the same reason (no `bo-scale` utility
 ships, and this is data-viz). *Column chooser* — the framework's
