@@ -934,3 +934,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 23:07 · Continue · build · 148.3 — measured the docs build's repo validation at 3.7% with no correctness gap; refused the reorg, grouped the 7 gates under check:repo for legibility at zero cost · landed · a5ffae3
 - 2026-08-26 23:07 · Meta · refusal · moving repo gates out of the docs build — 0.43s of 11.70s, no correctness gap, and relocation is the exact shape that broke the container twice today · refused · a5ffae3
 - 2026-08-26 23:25 · Continue · bug · P0: Objective counter blind since slice numbers passed 99 — reported 0/3 for five days while ~17 slices closed; regex widened and a zero now fails loudly · landed · 55a5184
+- 2026-08-26 23:34 · Standardize · tidy · one screenFragment() extractor replaces two byte-identical copies written hours apart today; output verified identical by checksum · landed · 3addeb9

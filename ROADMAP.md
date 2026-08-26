@@ -1186,6 +1186,104 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 149 — Research: CoinMarketCap and Frappe/ERPNext (owner wishlist, 2026-08-26)
+
+Owner wishlist: research `coinmarketcap.com` (+ the Bitcoin detail page) and the
+ERPNext demo — *"what is good to bring into this project"*. Two `/deep-research`
+runs, plus primary reading of both sources (notes:
+`.roundtable/research-cmc-erpnext-2026-08-26.md`): both CMC pages fetched directly, and
+Frappe's desk stylesheets read from source (`frappe/public/scss/desk`, 42
+modules) after the ERPNext demo would not log in and `demo.erpnext.com` 404'd.
+
+**The headline is a correction to this slice's own first answer.** The initial
+recommendation was to BUILD a value-against-threshold display, on the evidence
+that four suite screens each invent one. Checking whether it already existed —
+before writing the item, which is the only useful time — found **`bo-progress`**:
+native `<progress>`, so value/max semantics and the progressbar role come from
+the platform, with `--warning`/`--danger` variants whose own comment reads
+*"threshold states (approaching / over budget)"*. It ships, it is documented,
+and it is used on **1 of 27** suite screens.
+
+So the finding is not a missing component. It is a **component nobody reaches
+for** — which is a different problem with a much cheaper fix, and one the suite
+was not built to detect. Every one of the 21 gaps the instrument has found so
+far was *"the framework cannot express this"*. This is the first of the opposite
+kind: *"it can, and the screen did it by hand anyway."* Worth stating plainly,
+because it means the instrument has a blind spot, not just a backlog.
+
+1. [ ] **149.1 — `bo-progress` is on 1 of 27 screens; four that want it hand-rolled their own.**
+
+       | screen | the pair | how it is expressed today |
+       |---|---|---|
+       | `prod/capacity` | load vs available | ad-hoc `bucket()` → three tone buckets |
+       | `inv/stock-on-hand` | on-hand vs reorder point | ad-hoc `short = t < rop` boolean |
+       | `crm/account` | open exposure vs credit limit | two unrelated `bo-kv` rows |
+       | `crm/accounts` | the same, as a status | a `Credit hold` badge |
+
+       *Accept*: each of the four either uses `bo-progress` **or** records a
+       one-line reason it should not, the suite's zero-CSS gate stays green, and
+       usage is re-measured afterwards. **Refusing per screen is a valid
+       outcome** — a bar is not always the right reading of a threshold, and
+       `crm/accounts` is a list where a badge may well beat 40 tiny bars.
+       Converting all four because a count says so would be the re-photographing
+       mistake the coverage doctrine already refuses.
+
+       *The real question underneath*: why did four screens miss it? If the
+       answer is discoverability, that is a docs finding, and it belongs with
+       the external review's §7 worry about internal machinery outpacing user
+       surface.
+
+2. [ ] **149.2 — the positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.**
+       CMC's strongest numeric idea is the 24h low/high band with the current
+       price positioned inside it, and all-time-high shown as a distance from
+       now. This is **not** what `bo-progress` does: progress runs 0→max, where
+       zero is meaningful; a range positions a value BETWEEN two bounds where
+       zero is not on the scale at all.
+
+       *Accept*: recorded as a candidate **with its condition stated, and no
+       component built**. There is one plausible ERP use (a stock min/max band)
+       and one use is not evidence — the same bar that refused the lot-trace
+       genealogy graph. Build it when a second, different screen needs it.
+
+3. [ ] **149.3 — record the two-channel finding as positioning; keep it OUT of the docs.**
+       CoinMarketCap signals gain and loss with **colour alone**, on the most
+       important number on the page — a WCAG 1.4.1 failure on one of the
+       most-visited financial sites in the world. Frappe's indicator dots do the
+       same. This framework has forbidden that from the start.
+
+       *Accept*: recorded in `.roundtable/` as evidence for the owner's
+       "references are floors" rule. **Refused for the docs**, and the reason
+       matters: naming a third party's accessibility failure on a component page
+       is both unkind and perishable — they may fix it tomorrow — and "we beat
+       X" is not something a person reading the badge page needs.
+
+**Refused, with reasons.** *Sparklines / row trend* — direct precedent, the
+`prod/capacity` heatmap was refused for the same reason (no `bo-scale` utility
+ships, and this is data-viz). *Column chooser* — the framework's
+`__col--secondary`/`--tertiary` is the better ERP answer: the designer ranks
+importance once, instead of every user configuring a personal view. *Number
+abbreviation* (`$1.56T`) — CMC can abbreviate because market cap needs no
+precision; an ERP amount is auditable, and abbreviating an invoice total is a
+defect dressed as a feature. *Gantt, onboarding tours* (Frappe) — app concerns,
+not CSS-framework ones. *Group-by with counts* — the last surviving Frappe
+candidate, and it closes: `/patterns/filter-panel` already has a section headed
+*"Why the count on the trigger matters"*.
+
+**The suggested repo, `rbale0831/frappe-erpnext-demo`, was not run** — a bare
+fork, 1 commit, 1 star, no demo tooling of its own. Standing up MariaDB +
+Frappe + Redis + workers to obtain evidence available more precisely from the
+source stylesheets is 20-60 minutes spent to learn less.
+
+**A probe that was wrong first, recorded because it is the third instance
+today**: the initial Frappe mechanism sweep searched component class NAMES and
+reported `workflow`, `comment`, `kanban`, `indicator` as missing. All four
+exist under different names (`approval-workflow`, `bo-composer`,
+`patterns/kanban`, `bo-badge` + `data-tone`). A naming-derived probe over a
+framework that names things well is a detector that cannot pass.
+
+*The ERPNext `/deep-research` run was still in its verification phase when this
+was written; anything it adds gets triaged into this slice.*
+
 ## Slice 148 — Triaged from an external framework review (2026-08-26)
 
 Owner supplied a full review (`.roundtable/external-review-2026-08-26.md`,
