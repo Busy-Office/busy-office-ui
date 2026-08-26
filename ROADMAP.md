@@ -1197,7 +1197,7 @@ decision questions and wrong-choice guidance. It contains **zero skeletons**. It
 tells a reader which shell to pick and never shows what one looks like, so the
 structure has to be inferred from prose or by opening a live screen.
 
-1. [ ] **152.1 — a wireframe + copyable template per shell, on the page that already owns shells.**
+1. [x] **152.1 — DONE 2026-08-27. A copyable template per shell, and the page now hand-maintains LESS than before.**
        Each of the four gets a `bo-skeleton` wireframe **and** its structural
        markup, rendered from ONE string through the existing `Demo` component —
        the recipe's own rule, never write the preview and the code twice.
@@ -1220,6 +1220,31 @@ structure has to be inferred from prose or by opening a live screen.
        shells are not. This documents the shells that exist — it does not invent
        new ones, and a screen that fits none of the four is a new shell
        proposal, which the page already says.
+
+       **Shipped as STRUCTURE, not a rendering — and that was a finding, not a
+       shortcut.** A live `.bo-app-shell` cannot be previewed on this page: it
+       *is* the page's own shell, and nesting one would fight the real one for
+       the viewport. `base/primitives` had already reached that conclusion and
+       shows the shell as code with placeholders; this follows that precedent
+       for all four rather than inventing a drawing that would drift. It is also
+       the form an agent can act on — something to copy, not a picture to
+       interpret, which is what the owner's ask was for.
+
+       **The duplication went DOWN.** One `SHELLS` array now feeds the
+       "what it answers" table, the "wrong when" table and the four templates;
+       the first two were hand-written twice with no source behind either. Adding
+       a third hand-written list was the obvious way to do this and the wrong one.
+
+       **`check-markup` is what stops the templates drifting** — 88,550 `bo-*`
+       uses validated, and the build fails on an invented class or `data-*`
+       value. The one non-framework class is *named as such in the markup*:
+       `your-split`, because **no split primitive ships**. That was discovered
+       while writing the template — `/patterns/master-detail` draws its split
+       with a page-local `md-split` class that exists nowhere in the framework.
+       A shell listed as one of the four has no primitive behind it, and the
+       page now says so instead of implying otherwise.
+
+       Verified live at 1440 and 390, both themes, no sideways scroll.
 
 **Why this is worth doing, stated as the Objective would.** *Simplicity*: a
 reader picks a shell by seeing it rather than parsing three paragraphs.

@@ -2,6 +2,96 @@
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* ONE array, three surfaces (roadmap 152.1). The four shells used to be
+   hand-written twice on this page — once for "what it answers", once for
+   "wrong when" — with no source behind either, and the owner's ask for a
+   template per shell would have made it three. Two hand-maintained lists that
+   must agree is the drift this repo keeps paying for, so the lists are derived
+   and the templates join them rather than becoming a fourth.
+
+   The templates are STRUCTURE, not a rendering. A live .bo-app-shell cannot be
+   previewed inside this page — it is the page's own shell, and nesting it
+   would fight the real one for the viewport. base/primitives reached the same
+   conclusion and shows the shell as code with placeholders; this follows that
+   precedent for all four. It is also the form an agent can actually use:
+   something to copy, not a picture to interpret. */
+const SHELLS = [
+  {
+    name: 'App shell',
+    href: '/base/primitives',
+    answers: '"Where in the suite am I?" — persistent navigation, most screens, most of the day.',
+    builtFromCode: '.bo-app-shell',
+    builtFrom: ': header + sidebar + main',
+    wrongWhen:
+      'the screen is a single dedicated task on a single-purpose device — the persistent chrome becomes pure overhead the reader never uses (that’s RF full-screen’s case).',
+    template: `<div class="bo-app-shell">                      <!-- container: bo-shell -->
+  <header class="bo-navbar bo-app-shell__header">…</header>
+  <nav class="bo-sidebar-nav bo-app-shell__sidebar">…</nav>
+  <main class="bo-app-shell__main">
+    <nav aria-label="Breadcrumb">…</nav>
+    <h1>…</h1>
+    …the pattern that fills the shell goes here…
+  </main>
+</div>`,
+  },
+  {
+    name: 'Role home',
+    href: '/patterns/role-home',
+    answers: '"What does MY role need today?" — the first screen after sign-in, one per role.',
+    builtFrom: "App shell's main, filled with widgets scoped to a role",
+    wrongWhen:
+      'used as a general dashboard/reporting surface — it is scoped to ONE role’s daily start, not an analytics page.',
+    template: `<main class="bo-app-shell__main">
+  <h1>…the role, not the app…</h1>
+  <!-- Widgets reflow on their own; do not hand-place them into columns. -->
+  <div class="bo-widget-grid">
+    <section class="bo-widget">
+      <div class="bo-widget__header"><h2 class="bo-widget__title">…</h2></div>
+      <div class="bo-widget__body">…a worklist, a count, one chart…</div>
+    </section>
+    …more widgets…
+  </div>
+</main>`,
+  },
+  {
+    name: 'RF full-screen',
+    href: '/patterns/rf-landing',
+    answers: '"One task, no distraction" — a handheld scanner, gloved hands, a single action per screen.',
+    builtFrom: 'No app shell at all — chrome-free, isolated document',
+    wrongWhen:
+      'the reader has a full-size screen and more than one task in the same session — dropping the app shell there just removes navigation the reader will immediately want back.',
+    template: `<!-- No .bo-app-shell: the chrome is the thing being removed.
+     data-density="spacious" IS the gloved-hand variant — there is no
+     --large modifier and there should not be one. -->
+<main data-density="spacious">
+  <h1>…the one task…</h1>
+  <form class="bo-stack">
+    <div class="bo-form-field">…scan input…</div>
+    <button class="bo-btn" type="submit">…the single action…</button>
+  </form>
+</main>`,
+  },
+  {
+    name: 'Split master-detail',
+    href: '/patterns/master-detail',
+    answers: '"Show me the list AND the one I picked" — browsing many records without losing the list.',
+    builtFrom: "App shell's main, split into a list pane + detail pane",
+    wrongWhen:
+      'the record is long enough that a narrow detail pane can’t hold it without its own internal scroll-and-search — that is when object page replaces the cramped pane.',
+    /* Stated plainly because it is true and easy to miss: this shell has NO
+       shipped primitive. /patterns/master-detail draws the split with a
+       page-local class, so the two panes are your grid, not the framework's. */
+    template: `<main class="bo-app-shell__main">
+  <!-- No framework split primitive ships. The two panes are YOUR grid —
+       one declaration, and it is the only CSS this shell needs. -->
+  <div class="your-split">          <!-- e.g. grid-template-columns: 22rem 1fr -->
+    <section aria-label="List">…a data table, one row per record…</section>
+    <section aria-label="Detail">…the record you picked…</section>
+  </div>
+</main>`,
+  },
+];
 ---
 <Gallery title="Layouts — the four shells">
   <p class="demo-note">
@@ -26,30 +116,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><strong><a href={base + '/base/primitives'}>App shell</a></strong></td>
-            <td>"Where in the suite am I?" — persistent navigation, most
-              screens, most of the day.</td>
-            <td><code>.bo-app-shell</code>: header + sidebar + main</td>
-          </tr>
-          <tr>
-            <td><strong><a href={base + '/patterns/role-home'}>Role home</a></strong></td>
-            <td>"What does MY role need today?" — the first screen after
-              sign-in, one per role.</td>
-            <td>App shell's main, filled with widgets scoped to a role</td>
-          </tr>
-          <tr>
-            <td><strong><a href={base + '/patterns/rf-landing'}>RF full-screen</a></strong></td>
-            <td>"One task, no distraction" — a handheld scanner, gloved
-              hands, a single action per screen.</td>
-            <td>No app shell at all — chrome-free, isolated document</td>
-          </tr>
-          <tr>
-            <td><strong><a href={base + '/patterns/master-detail'}>Split master-detail</a></strong></td>
-            <td>"Show me the list AND the one I picked" — browsing many
-              records without losing the list.</td>
-            <td>App shell's main, split into a list pane + detail pane</td>
-          </tr>
+          {SHELLS.map((s) => (
+            <tr>
+              <td><strong><a href={base + s.href}>{s.name}</a></strong></td>
+              <td>{s.answers}</td>
+              <td>{s.builtFromCode && <code>{s.builtFromCode}</code>}{s.builtFrom}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
@@ -124,36 +197,41 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>App shell</td>
-            <td>the screen is a single dedicated task on a single-purpose
-              device — the persistent chrome becomes pure overhead the
-              reader never uses (that's RF full-screen's case).</td>
-          </tr>
-          <tr>
-            <td>Role home</td>
-            <td>used as a general dashboard/reporting surface — it is
-              scoped to ONE role's daily start, not an analytics page; see
-              <a href={base + '/patterns/reporting-dashboard'}>reporting
-              dashboard</a> for parameterized, cross-role reporting.</td>
-          </tr>
-          <tr>
-            <td>RF full-screen</td>
-            <td>the reader has a full-size screen and more than one task in
-              the same session — dropping the app shell there just removes
-              navigation the reader will immediately want back.</td>
-          </tr>
-          <tr>
-            <td>Split master-detail</td>
-            <td>the record is long enough that a narrow detail pane can't
-              hold it without its own internal scroll-and-search — that's
-              when <a href={base + '/patterns/object-page'}>object page</a>
-              (a full-width page with in-page navigation) replaces the
-              cramped pane, per its own scope note (roadmap 52.2).</td>
-          </tr>
+          {SHELLS.map((s) => (
+            <tr>
+              <td>{s.name}</td>
+              <td>{s.wrongWhen}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
+    <p class="bo-u-text-muted">Two of those have a named destination worth
+    following: a cross-role analytics surface is
+    <a href={base + '/patterns/reporting-dashboard'}>reporting dashboard</a>,
+    and a record too long for a narrow pane is
+    <a href={base + '/patterns/object-page'}>object page</a> — a full-width
+    page with in-page navigation, per its own scope note (roadmap 52.2).</p>
+  </section>
+
+  <section class="demo">
+    <h2>The template for each shell</h2>
+    <p class="bo-u-text-muted">Structure only — copy one and fill it in. These
+    are <strong>outlines, not renderings</strong>: a live
+    <code>.bo-app-shell</code> cannot be shown inside this page, because it is
+    this page's own shell and would fight the real one for the viewport. What
+    is below is the part you actually reuse.</p>
+    {SHELLS.map((s) => (
+      <div>
+        <h3><a href={base + s.href}>{s.name}</a></h3>
+        <pre><code>{s.template}</code></pre>
+      </div>
+    ))}
+    <p class="bo-u-text-muted">Every class above ships — the build fails on an
+    invented <code>bo-*</code> class or <code>data-*</code> value, so these
+    templates cannot quietly drift from the framework. The one exception is
+    named as one: <code>your-split</code> is deliberately yours, because
+    <strong>no split primitive ships</strong>.</p>
   </section>
 
   <Related links={[
