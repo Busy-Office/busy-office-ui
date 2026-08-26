@@ -131,6 +131,22 @@ match to its full playbook below:
    a pattern rather than restate one slice, and the last useful grill covered
    two. The number is a judgement and is written down so it can be argued with.
 
+   **THE COUNTER WAS BLIND FOR FIVE DAYS, and this is the third recurrence.**
+   `dispatch_status.py` parsed slice numbers with `^(\d{2})\.` — exactly two
+   digits. The day slice numbers passed 99 (2026-08-21) it read "14" out of
+   "145.3", wanted a dot, found "5", and matched nothing. Objective then
+   reported **0 slices while 70 Continue rounds and ~17 slices went past it**,
+   flagged "ok" the whole time. Found 2026-08-26, not by the rule failing but by
+   a human noticing the number looked wrong.
+
+   Two fixes, and the second is the important one. The regex now takes any slice
+   number. And a **zero is now treated as a defect**: if Continue rounds have
+   happened since the last Objective and not one of them names a slice, that is
+   a parse failure and the script exits rather than printing "ok". This file has
+   now recorded the same shape of bug three times about Objective specifically,
+   which is enough to stop trusting careful wording and make the silence
+   impossible instead.
+
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.
 

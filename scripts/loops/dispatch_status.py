@@ -32,7 +32,17 @@ ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · (\w+) · (\w+) · (.*)$
 # and "17 screens" as slice numbers, which is how the first version of this
 # script reported 16 slices instead of 10 — the same class of instrument error
 # the Slices 31-40 grill had just finished cataloguing.
-SLICE = re.compile(r"^(\d{2})\.\d+[a-z]?\b")
+# ANY slice number, not two digits. `^(\d{2})\.` silently stopped matching the
+# day slice numbers passed 99 (2026-08-21): it read "14" out of "145.3", wanted
+# a dot, found "5", and returned no match. Objective then counted 0 slices for
+# FIVE DAYS while 70 Continue rounds and ~17 slices went past it — a rule that
+# could not fire, reporting "ok".
+#
+# LOOPS.md already records this failure shape twice, the second time about
+# Objective specifically ("it starved for ten slices before this was noticed").
+# This is the third. The regex is the bug; the silence is the lesson, which is
+# what assert_parsed below exists for.
+SLICE = re.compile(r"^([1-9]\d{0,2})\.\d+[a-z]?\b")
 
 # name -> (threshold, what one unit is, how the rule counts)
 RULES = {
@@ -73,8 +83,19 @@ def report(all_rows, loop, threshold, unit):
             if r["loop"] == "Continue"
             for m in [SLICE.match(r["item"])]
             if m
-        })
+        }, key=int)
         count = len(slices)
+        # A ZERO HERE IS A DEFECT UNTIL PROVEN OTHERWISE. Continue rounds
+        # happened but no slice parsed out of any of them means the parser is
+        # blind, not that no work landed — exactly how this rule spent five
+        # days reporting "ok" while eighteen slices closed.
+        build_rows = [r for r in after if r["loop"] == "Continue"]
+        if build_rows and not slices:
+            raise SystemExit(
+                f"dispatch_status: {len(build_rows)} Continue round(s) since the last "
+                f"{loop} round and NOT ONE names a slice. That is a parse failure, not "
+                f"a quiet backlog — check SLICE against what record_iteration.py writes."
+            )
         detail = f"  [{', '.join(slices)}]" if slices else ""
     overdue = count >= threshold
     flag = "OVERDUE" if overdue else "ok"
