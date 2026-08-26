@@ -82,9 +82,21 @@ function visibleOptions(listbox: HTMLElement): HTMLElement[] {
   return options(listbox).filter((o) => !o.hidden && o.getAttribute('aria-disabled') !== 'true');
 }
 
+/* Where the browser can anchor the popup itself, it does it better and this
+   stands down (combobox.css). JS cannot beat compositor scrolling: positioning
+   from a scroll handler left the list exactly one scroll-delta behind its field
+   every frame — 4px gap at rest, 94px mid-scroll — which is the drift an owner
+   reported on 2026-08-26. Writing inline top/left here would also override
+   `position-area` and undo the fix, so this is a hard either/or, not a belt
+   and braces. The width hint still applies: it is sizing, not position. */
+const CSS_ANCHORED =
+  typeof CSS !== 'undefined' &&
+  CSS.supports?.('anchor-name', '--a') &&
+  CSS.supports?.('anchor-scope', '--a');
+
 function position(input: HTMLElement, listbox: HTMLElement): void {
   const r = input.getBoundingClientRect();
-  positionPopover(listbox, r);
+  if (!CSS_ANCHORED) positionPopover(listbox, r);
   listbox.style.minWidth = `${r.width}px`;
 }
 

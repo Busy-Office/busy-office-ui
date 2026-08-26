@@ -30,6 +30,46 @@
     list-style: none;
   }
 
+  /* THE BROWSER ANCHORS IT, not JavaScript, wherever it can (owner report,
+     2026-08-26: "dropdown is moving when scroll up/down").
+
+     Measured cause: the listbox is a `position: fixed` popover in the top
+     layer, and the behaviour re-positioned it from a `scroll` handler. JS
+     cannot beat compositor scrolling, so every frame the list sat exactly one
+     scroll-delta behind its field and snapped back after the handler ran —
+     4px gap at rest, 34/64/94px mid-scroll. That IS the judder.
+
+     CSS anchor positioning has the browser hold them together at layout time,
+     so there is no frame to be late by. Measured across settled frames with
+     the JS suppressed: gap 4, dx 0, unchanged at every scroll position — and
+     more accurate than the JS, which placed the list 265px off the field's
+     inline edge at open.
+
+     `anchor-scope` confines the name to one combobox, so several on a page do
+     not resolve to each other's field. Both are above this project's
+     `chrome >= 119` floor, hence @supports: browsers without it keep the JS
+     path, which still works and merely lags. */
+  @supports (anchor-name: --a) and (anchor-scope: --a) {
+    .bo-combobox {
+      anchor-scope: --bo-combobox;
+    }
+
+    .bo-combobox > .bo-input {
+      anchor-name: --bo-combobox;
+    }
+
+    .bo-combobox__listbox {
+      position-anchor: --bo-combobox;
+      position-area: block-end span-inline-end;
+      /* No room below: flip above rather than run off the viewport. */
+      position-try-fallbacks: flip-block;
+      margin-block-start: var(--bo-space-1);
+      /* The JS path writes inline top/left, which would win over
+         position-area. It stands down when this is supported (combobox.ts). */
+    }
+  }
+
+
   .bo-combobox__option {
     padding: var(--bo-space-2) var(--bo-space-3);
     border-radius: var(--bo-radius-sm);

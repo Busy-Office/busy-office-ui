@@ -3,12 +3,32 @@
   .bo-filter-bar {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    /* BASELINE OF THE CONTROLS, not the centre of the boxes (owner report,
+       2026-08-26: the Apply button sat 5px above the combobox next to it).
+
+       Two things conspired. `.bo-form-field` carries a stacking
+       `margin-block-end` for vertical forms, and flex centring uses the MARGIN
+       box — so a labelled field's centre axis sat 8px below its visual centre
+       and the button followed it. Zeroing the margin alone makes it worse, not
+       better: centring a 61px labelled field against a 36px button puts the
+       button clear above the input.
+
+       A filter bar is a row of CONTROLS whose labels happen to sit above them,
+       so the thing that must line up is the control's bottom edge. `end` does
+       that for a labelled field, an unlabelled one, and a bare button alike. */
+    align-items: flex-end;
     gap: var(--bo-space-2);
     padding: var(--bo-space-2) var(--bo-space-3);
     border: var(--bo-border-width) solid var(--bo-color-border-default);
     border-radius: var(--bo-radius-md);
     background: var(--bo-color-bg-surface);
+  }
+
+  /* The stacking margin is for a vertical form; in a bar it is what pushed the
+     alignment off. Cleared here rather than removed from .bo-form-field, which
+     needs it everywhere else. */
+  .bo-filter-bar .bo-form-field {
+    margin-block-end: 0;
   }
 
   .bo-chip {
