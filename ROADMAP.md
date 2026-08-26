@@ -1354,6 +1354,70 @@ because it means the instrument has a blind spot, not just a backlog.
        computed background is asserted to differ (`rgb(249,250,251)` vs
        `rgb(15,17,21)`) — the theme is proven flipped, not assumed.
 
+5. [ ] **149.5 — the status badge as a click-through filter: recorded, NOT queued.**
+       From the second `/deep-research` run (104 agents). The ERP-desk reference
+       declares a list row's status as a three-part tuple — *label, colour name,
+       filter query* — so the pill renders its word and its tone (two-channel by
+       construction, which this framework already requires) **and doubles as a
+       one-click filter into the list**. Workflow state and draft/submitted reuse
+       the same primitive rather than each inventing one.
+
+       The click-through half is genuinely absent here: nothing in the docs
+       documents narrowing a list by clicking a value.
+
+       *Accept*: **recorded with its condition, no component built.** 23 of 27
+       suite screens already show a status badge in a list, so the opportunity is
+       everywhere — and in 21 recorded gaps the instrument has **never once asked
+       for it**. That is the evidence that matters. A reference doing something
+       is not a reason; *references are floors* cuts both ways, and the suite is
+       what decides. Build it when a screen actually fights for it.
+
+       If it is ever built, two things travel with it: the pill needs a real
+       affordance (a clickable badge that looks identical to a decorative one is
+       an accessibility problem, not a feature), and the filter it applies must
+       appear in the existing `filters` chip rail so it is visible and
+       removable — otherwise a list silently filters itself.
+
+**What the second run found, and why most of it closes** (104 agents,
+adversarial verification):
+
+- **Count-annotated filter facets** — already covered. `/patterns/filter-panel`
+  has a section headed *"Why the count on the trigger matters"*. Fifth
+  "already covered" across the two runs.
+- **Column widths from a data-type lookup table** (text 200px, numeric 100px,
+  boolean 60px) — **refused**. That table exists because the reference's grid is
+  virtualized and absolutely positioned, so it *must* know widths in advance. A
+  CSS-first table lets content size itself; `__col--numeric` already carries the
+  real need, which is alignment (`text-align: end`), not a pixel budget. Copying
+  the workaround for someone else's architecture is the clearest form of
+  photographing a reference.
+- **A document dashboard as a framework-level region**, five named areas driven
+  by per-doctype metadata — **out of scope**. The visual shape is
+  `/patterns/object-page`; the metadata-driven assembly is app architecture, and
+  a CSS framework that starts owning where content comes from has stopped being
+  a CSS framework.
+- **Navigation, keyboard shortcuts, saved filters, bulk actions and the activity
+  timeline produced NO verified findings** — the run says so plainly, and one
+  print-format claim was refuted 0-3. Recorded because an absence of evidence is
+  worth writing down: nothing here should be cited later as "the reference does
+  X" for those areas.
+
+**Where the references are floors, with specifics** (evidence for 149.3, and the
+CSS-first thesis's best independent support so far):
+
+- The ERP desk's dense grid emits row elements carrying **no `role` or `aria-*`
+  attributes at all**, buying scroll performance with virtualization tied to a
+  fixed row height. This framework's equivalent is a real `<table>` with real
+  semantics — and the axe sweep, `check-live-regions` and `check-data-hooks`
+  gate it on every build.
+- Its form stats row computes grid classes **in JavaScript** against a hardcoded
+  twelve-column system, with no CSS rules behind them and no resize handling.
+  This is the CSS-first argument stated by a counter-example: layout that a
+  container query does for free, done in script, and wrong on resize.
+- Its own maintainers filed the dense line-item table as a **readability bug**
+  and shipped only a narrow fix. The screen ERP users spend the most time in is
+  an open complaint in the reference implementation.
+
 **What the deep-research run changed about the rest of this slice** (105 agents,
 adversarial verification, `/private/tmp/…/tasks/w1xngxeu6.output`):
 
