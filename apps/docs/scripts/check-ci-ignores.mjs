@@ -29,8 +29,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gate, assertScanned } from './gate-report.mjs';
+import { REPO_ROOT as ROOT } from './paths.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
 /** Directories whose scripts can run inside a CI job. */
 const SCRIPT_DIRS = [

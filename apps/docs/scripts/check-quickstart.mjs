@@ -29,8 +29,8 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { REPO_ROOT as ROOT } from './paths.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const FRAGMENT = join(ROOT, 'apps', 'docs', 'dist', 'suite', 'markup', 'p2p', 'purchase-orders.txt');
 
 const fail = (msg, detail = '') => {

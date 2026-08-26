@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/check-imports.mjs && node scripts/check-floor.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-selftests.mjs && node scripts/check-dist-walkers.mjs && node scripts/copy-framework-css.mjs && node scripts/gen-rf-profile.mjs && node scripts/gen-patterns-index.mjs && node scripts/gen-patterns.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-page-shape.mjs && node scripts/check-wrong-choice.mjs && node scripts/check-dsa-scores.mjs && node scripts/check-versions.mjs && node scripts/gen-suite-index.mjs && astro build && node scripts/copy-suite.mjs && node scripts/highlight-code.mjs && node scripts/scope-search-index.mjs && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs && node scripts/stamp-build-id.mjs && node scripts/check-boost.mjs && node scripts/check-notes.mjs && node scripts/check-live-regions.mjs && node scripts/check-learning-path.mjs && node scripts/check-components-used.mjs && node scripts/check-calendar-grid.mjs && node scripts/check-data-hooks.mjs && node scripts/check-patterns-index.mjs && node ../../packages/core/scripts/check-markup.mjs dist",
+    "build": "node scripts/check-imports.mjs && node scripts/check-floor.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-selftests.mjs && node scripts/check-dist-walkers.mjs && node scripts/check-paths.mjs && node scripts/copy-framework-css.mjs && node scripts/gen-rf-profile.mjs && node scripts/gen-patterns-index.mjs && node scripts/gen-patterns.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-page-shape.mjs && node scripts/check-wrong-choice.mjs && node scripts/check-dsa-scores.mjs && node scripts/check-versions.mjs && node scripts/gen-suite-index.mjs && astro build && node scripts/copy-suite.mjs && node scripts/highlight-code.mjs && node scripts/scope-search-index.mjs && pagefind --site dist && node scripts/gen-llms.mjs && node scripts/check-links.mjs && node scripts/stamp-build-id.mjs && node scripts/check-boost.mjs && node scripts/check-notes.mjs && node scripts/check-live-regions.mjs && node scripts/check-learning-path.mjs && node scripts/check-components-used.mjs && node scripts/check-calendar-grid.mjs && node scripts/check-data-hooks.mjs && node scripts/check-patterns-index.mjs && node ../../packages/core/scripts/check-markup.mjs dist",
     "preview": "astro preview",
     "test:axe": "node scripts/axe-audit.mjs",
     "check:claims": "node scripts/check-claims.mjs",
@@ -36,7 +36,8 @@
     "check:ci-ignores": "node scripts/check-ci-ignores.mjs",
     "check:slice-refs": "node scripts/check-slice-refs.mjs",
     "copy:suite": "node scripts/copy-suite.mjs",
-    "check:quickstart": "node scripts/check-quickstart.mjs"
+    "check:quickstart": "node scripts/check-quickstart.mjs",
+    "check:paths": "node scripts/check-paths.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

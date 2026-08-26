@@ -17,8 +17,8 @@
 import { readdir, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { REPO_ROOT as ROOT } from './paths.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const SUITE = join(ROOT, 'examples', 'erp-suite');
 const OUT = join(ROOT, 'apps', 'docs', 'src', 'data', 'suite.json');
 

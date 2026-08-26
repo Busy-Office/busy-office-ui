@@ -33,8 +33,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { gate, assertScanned } from './gate-report.mjs';
+import { REPO_ROOT as ROOT } from './paths.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
 /** Citations that did not resolve when the roadmap was split (2026-08-25). */
 /** Citations that resolved nowhere when the 2026-08-25 sweep ran. Both

@@ -32,8 +32,8 @@ import { suitePages } from '../../../examples/erp-suite/pages.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { REPO_ROOT as ROOT } from './paths.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const SUITE = join(ROOT, 'examples', 'erp-suite');
 const DEST = join(ROOT, 'apps', 'docs', 'dist', 'suite');
 
