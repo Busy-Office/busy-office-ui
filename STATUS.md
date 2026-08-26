@@ -2,19 +2,13 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 00:49
+Generated at: 2026-08-27 01:06
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 149** (3 open)
-  - 149.2 — the positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.
-  - 149.3 — record the two-channel finding as positioning; keep it OUT of the docs.
-  - 149.5 — the status badge as a click-through filter: recorded, NOT queued.
-- **Slice 150** (1 open)
-  - 150.1 — report component reach on every build; do NOT gate it.
 - **Slice 151** (3 open)
   - 151.1 — named views as a first-class strip on a list screen.
   - 151.2 — a column can explain itself.

@@ -1354,13 +1354,42 @@ components have never been composed into any screen or pattern: `bo-date`,
 `bo-tree`, `bo-file-dropzone`/`__input`/`__list`. The bar exists to stop things
 shipping for one screen; these shipped for **zero** and no gate asserts reach.
 
-1. [ ] **150.1 — report component reach on every build; do NOT gate it.**
+1. [x] **150.1 — DONE 2026-08-27. Reach is reported on every build, per BLOCK, and deliberately never fails.**
        Count each component's independent compositions across suite + patterns
        and print the low end.
        *Accept*: a reported number with the three meanings distinguished, and
        **no red build**. Zero reach is not by itself a defect — see below — so a
        hard gate would be wrong roughly a third of the time, and a gate that is
        wrong teaches evasion.
+
+       `report-reach.mjs` prints on every docs build: **61 block classes across
+       75 independent compositions** — 7 never composed
+       (`bo-avatar-stack`, `bo-date`, `bo-file-dropzone`, `bo-file-input`,
+       `bo-file-list`, `bo-toast-region`, `bo-tree`) and 10 used once. It always
+       exits 0, and it prints the caveat next to the number so the figure cannot
+       be quoted without it.
+
+       **Counted per BLOCK, not per component**, because both component-level
+       attempts in the grill were wrong in opposite directions: `api.json`'s
+       `blocks` is not an ownership map (`richtext` claims `bo-btn` and scored
+       58), and restricting to unique blocks made `button` read 4 — which is
+       `bo-btn-group`'s reach. A block is a real class; its reach is unambiguous.
+
+       **Component docs pages are excluded on purpose** — a component appearing
+       on its own reference page is not a composition, and counting it would
+       make every block look used, which is the 100%-is-a-defect shape this repo
+       has hit before. It also guards the tidy numbers explicitly: all-zero
+       means the matcher broke, all-used means the corpus is wrong, and it says
+       so rather than printing a serene summary.
+
+       Reconciled against independently known values before being trusted:
+       `bo-data-table` 64, `bo-badge` 63, `bo-btn` 58. *The first reconciliation
+       command was itself broken* — it reported zero for `bo-data-table`, which
+       is obviously in nearly every screen — so the instrument checking the
+       instrument needed checking too. The corpus count (47 pattern files vs
+       `check:patterns-index`'s 39) is written into the script, because it
+       legitimately disagrees and an unexplained number invites someone to
+       "fix" it: 39 pattern pages + 7 standalone RF screens + `schedule/full`.
 
 **The three zeros have three DIFFERENT causes, which a single number hides:**
 
@@ -1475,7 +1504,7 @@ because it means the instrument has a blind spot, not just a backlog.
        already solves the floor case legibly with tone plus text, which is
        evidence that the floor case may need *nothing at all*.
 
-2. [ ] **149.2 — the positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.**
+2. [x] **149.2 — RECORDED 2026-08-27. The positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.**
        The market-data reference's strongest numeric idea is a session low/high
        band with the current value positioned inside it, and an all-time high
        shown as a distance from now. This is **not** what `bo-progress` does:
@@ -1488,7 +1517,7 @@ because it means the instrument has a blind spot, not just a backlog.
        and one use is not evidence — the same bar that refused the lot-trace
        genealogy graph. Build it when a second, different screen needs it.
 
-3. [ ] **149.3 — record the two-channel finding as positioning; keep it OUT of the docs.**
+3. [x] **149.3 — RECORDED 2026-08-27. The two-channel finding as positioning, kept OUT of the docs.**
        The market-data reference signals gain and loss with **colour alone**, on
        the most important number on the page — a WCAG 1.4.1 failure on a site
        with enormous traffic. The ERP desk's status dots do the same. This
@@ -1589,7 +1618,7 @@ because it means the instrument has a blind spot, not just a backlog.
        computed background is asserted to differ (`rgb(249,250,251)` vs
        `rgb(15,17,21)`) — the theme is proven flipped, not assumed.
 
-5. [ ] **149.5 — the status badge as a click-through filter: recorded, NOT queued.**
+5. [x] **149.5 — RECORDED 2026-08-27. The status badge as a click-through filter: recorded, NOT queued.**
        From the second `/deep-research` run (104 agents). The ERP-desk reference
        declares a list row's status as a three-part tuple — *label, colour name,
        filter query* — so the pill renders its word and its tone (two-channel by
