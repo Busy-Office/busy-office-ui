@@ -19,9 +19,9 @@ Generated at: 2026-08-27 00:21
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (922 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-26 23:34   ok
-  Objective    17 / 3 slices          since 2026-08-23 18:32   OVERDUE  [112, 130, 131, 132, 133, 134, 135, 136, 139, 140, 142, 143, 144, 145, 146, 147, 148]
+dispatch status — counter-triggered rules (924 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-26 23:34   ok
+  Objective    18 / 3 slices          since 2026-08-23 18:32   OVERDUE  [112, 130, 131, 132, 133, 134, 135, 136, 139, 140, 142, 143, 144, 145, 146, 147, 148, 149]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
@@ -35,8 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 22:03 · Roadmap · triage · Slice 148 from the external review: 3 accepted (split tests, npm create, build-chain scope), 4 refused with reasons · triaged · 3c5bada
-- 2026-08-26 22:06 · Continue · build · 148.1 — behavior tests split into 25 files (129 passing); first attempt lost 4 tests to a stray top-level helper and exposed two blocks sharing state through module order · landed · 10ad5d2
 - 2026-08-26 22:48 · Continue · build · 148.2 — @busy-office/create-ui scaffolds a zero-dependency project with a real suite screen; check:quickstart runs the scaffold and its own server rather than describing them · landed · 5f7a218
 - 2026-08-26 22:48 · Meta · refusal · prompts/options in the scaffolder v1 — every question is one the person cannot answer before seeing a screen · refused · 5f7a218
 - 2026-08-26 23:07 · Continue · build · 148.3 — measured the docs build's repo validation at 3.7% with no correctness gap; refused the reorg, grouped the 7 gates under check:repo for legibility at zero cost · landed · a5ffae3
@@ -45,6 +43,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-26 23:34 · Standardize · tidy · one screenFragment() extractor replaces two byte-identical copies written hours apart today; output verified identical by checksum · landed · 3addeb9
 - 2026-08-26 23:56 · Explore · research · Two external references researched to Slice 149 — the recommended build was withdrawn: bo-progress already covers value-vs-threshold and is used on 1 of 27 screens, so the gap is adoption, not coverage · logged · b09e2e3
 - 2026-08-26 23:56 · Meta · refusal · sparklines, column chooser, number abbreviation, gantt/tours, group-by-with-counts, and running the suggested 1-commit fork · refused · b09e2e3
+- 2026-08-27 00:21 · Continue · bug · 149.4 P0: job-monitor and notification documented auto-updating content with no pause control (WCAG 2.2.2, no five-second grace for numbers); job-monitor ships a bo-segmented Off/30s/5m, notification documents a settings preference; gated by check:autoupdate-control · landed · fcec793
+- 2026-08-27 00:21 · Meta · refusal · applying one mechanical fix to both pages — a widget beside the app-shell bell would be worse design than a settings preference · refused · fcec793
 
 ## Sunset test
 
