@@ -22,7 +22,13 @@
  * wrong produces a kit whose links are all dead, which is worse than no kit,
  * so `check:links` covers the result rather than trust covering it.
  */
-import { cp, rm, mkdir, readdir } from 'node:fs/promises';
+import { cp, rm, mkdir, readFile, writeFile } from 'node:fs/promises';
+/* The suite's own enumerator, not a private walker. `check:dist-walkers`
+   forbids the latter and its history is the argument: forked walkers regrew
+   twice, ending at six copies with four different page counts. distPages()
+   is the chokepoint for the DOCS tree and yields only index.html; suitePages()
+   is the one for this tree and yields every screen. */
+import { suitePages } from '../../../examples/erp-suite/pages.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -55,15 +61,53 @@ await cp(join(SUITE, 'dist'), DEST, { recursive: true });
    page. */
 await cp(join(ROOT, 'packages', 'core', 'dist', 'css'), join(DEST, 'bo'), { recursive: true });
 
-const count = (await readdir(DEST, { recursive: true })).filter((f) => f.endsWith('.html')).length;
+/* A COPYABLE FRAGMENT PER SCREEN (roadmap 147.2), and the reasoning for this
+   shape rather than the obvious ones:
+
+   `Demo` — preview plus copyable code from one string — already covers
+   FRAGMENTS on 39 pattern pages, and it is the right tool there. Reusing it
+   for whole screens costs either +181 KB on a single page, or 28 new docs
+   pages that `check:page-shape` would require to carry an opener, a ClassRef
+   and an ApiTable — none of which a screen has. A copy button on the screens
+   themselves was refused outright: the suite's entire claim is that it is
+   built from shipped CSS with nothing added, and baking a docs affordance
+   into it would make that untrue.
+
+   What is actually missing is smaller than "copy-paste" suggests. A reader can
+   already open a screen and view source; the friction is isolating <main> out
+   of a full document. So serve exactly that, as text, and add no UI at all. */
+/* Cut from the UNPREFIXED build. The deployed copy has every link rewritten to
+   `/suite/...`, and a reader pasting that into their own app would inherit this
+   site's deployment path — a trap dressed as an example. Caught by reading the
+   first fragment rather than trusting the extraction. */
+execFileSync(process.execPath, [join(SUITE, 'build.mjs')], { cwd: SUITE, stdio: 'pipe' });
+
+const frags = [];
+for (const { url, file } of await suitePages(join(SUITE, 'dist'))) {
+  const f = url.replace(/^\//, '');
+  const html = await readFile(file, 'utf8');
+  const main = html.match(/<main[^>]*>([\s\S]*?)<\/main>/)?.[1];
+  if (!main) continue;
+  const out = join(DEST, 'markup', f.replace(/\.html$/, '.txt'));
+  await mkdir(dirname(out), { recursive: true });
+  /* De-indent so what a reader copies is not wearing the shell's whitespace. */
+  const lines = main.replace(/^\n+|\s+$/g, '').split('\n');
+  const pad = Math.min(...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)[0].length));
+  await writeFile(out, lines.map((l) => l.slice(pad)).join('\n') + '\n');
+  frags.push(f);
+}
+
+const count = (await suitePages(DEST)).length;
 if (count === 0) {
   console.error('copy-suite: nothing copied — the suite did not build?');
   process.exit(1);
 }
 
-/* Leave the developer's own dist unprefixed. `npm run suite` serves it at the
-   root, and a stray base would 404 every link on the next local run — the kind
-   of state that is invisible until someone opens it. */
-execFileSync(process.execPath, [join(SUITE, 'build.mjs')], { cwd: SUITE, stdio: 'pipe' });
+/* The developer's own dist is left unprefixed by the rebuild above, which
+   matters: `npm run suite` serves it at the root, and a stray base would 404
+   every link on the next local run — invisible until someone opens it. */
 
-console.log(`copy-suite: ${count} screen(s) copied to dist/suite (base ${suiteBase || '/suite'})`);
+console.log(
+  `copy-suite: ${count} screen(s) copied to dist/suite (base ${suiteBase || '/suite'}), ` +
+    `${frags.length} markup fragment(s)`,
+);

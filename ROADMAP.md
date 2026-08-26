@@ -1237,7 +1237,7 @@ most complete artefact this project owns has no way in.
        `KIND` moved to `kinds.mjs`, shared by the scorer and the kit index —
        one definition that has already corrected itself three times.
 
-2. [ ] **147.2 — decide what "copy-paste" means here, before building it.**
+2. [x] **147.2 — DECIDED 2026-08-26. Not `Demo`, not a copy button: a plain-text fragment per screen.**
        The suite renders from `.screen.mjs` templates, so its HTML is a build
        output, not something a reader can lift. The docs' pattern pages already
        ship `Demo` (preview + copyable code from one string) for FRAGMENTS.
@@ -1246,6 +1246,37 @@ most complete artefact this project owns has no way in.
        something a reader may prefer to clone. *Accept*: one answer, argued
        against the alternative, and a working example of it. Refusing to add a
        second mechanism is a valid outcome if `Demo` already covers it.
+
+       **Priced before arguing**, which is what settled it. The 28 `<main>`
+       bodies total 181 KB, median 6.7 KB; a docs pattern page is 97 KB today.
+
+       - **`Demo` on one kit page** — +181 KB on a single page. Refused.
+       - **`Demo` on 28 new docs pages** — 6.7 KB each is fine, but each would
+         be a docs page that `check:page-shape` requires to carry an opener, a
+         `ClassRef` and an `ApiTable`. A screen has none of those and gains
+         nothing by pretending. Refused.
+       - **A copy button on the screens themselves** — refused outright. The
+         suite's entire claim is that it is built from shipped CSS with nothing
+         added; baking a docs affordance into it would make that untrue, and
+         the zero-CSS gate exists to keep that claim honest.
+
+       **What shipped is smaller than "copy-paste" implies.** `Demo` already
+       covers FRAGMENTS on 39 pattern pages and remains the right tool there.
+       What the suite adds is a COMPLETE composed screen, and the only real
+       friction is isolating `<main>` from a full document — so `copy-suite`
+       emits exactly that as plain text, linked as *copy* beside each screen.
+       No new UI, no new component, no second mechanism inside the docs.
+
+       **The first version leaked a deployment path.** Fragments were cut from
+       the DEPLOYED copy, so every link read `/suite/index.html` — this site's
+       URL structure pasted into a reader's app, a trap dressed as an example.
+       Now cut from the unprefixed build. Verified: 28 screens and 28 fragments
+       all resolve, no `/suite/` in the markup, no `<html>` wrapper.
+
+       And `check:dist-walkers` caught the first draft enumerating `dist`
+       privately — the gate whose own history is six forked walkers with four
+       different page counts. Routed through `suitePages()`, the enumerator the
+       Standardize round consolidated for this exact tree.
 
 3. [ ] **147.3 — a starter that runs.** `npm i` then what? There is no
        template, no scaffold, and the package's only bin is

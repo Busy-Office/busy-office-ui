@@ -7,6 +7,7 @@
         {
           "key": "index",
           "href": "/suite/index.html",
+          "markup": "/suite/markup/index.txt",
           "title": "Home",
           "kind": "home",
           "blurb": "a landing page — where a working day starts"
@@ -20,6 +21,7 @@
         {
           "key": "o2c/customer-invoice",
           "href": "/suite/o2c/customer-invoice.html",
+          "markup": "/suite/markup/o2c/customer-invoice.txt",
           "title": "INV-70318",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -27,6 +29,7 @@
         {
           "key": "o2c/customer-invoices",
           "href": "/suite/o2c/customer-invoices.html",
+          "markup": "/suite/markup/o2c/customer-invoices.txt",
           "title": "Customer invoices",
           "kind": "report",
           "blurb": "read-only analysis"
@@ -34,6 +37,7 @@
         {
           "key": "o2c/sales-order",
           "href": "/suite/o2c/sales-order.html",
+          "markup": "/suite/markup/o2c/sales-order.txt",
           "title": "SO-51204",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -41,6 +45,7 @@
         {
           "key": "o2c/sales-orders",
           "href": "/suite/o2c/sales-orders.html",
+          "markup": "/suite/markup/o2c/sales-orders.txt",
           "title": "Sales orders",
           "kind": "list",
           "blurb": "find and act on many records at once"
@@ -54,6 +59,7 @@
         {
           "key": "p2p/convert-to-po",
           "href": "/suite/p2p/convert-to-po.html",
+          "markup": "/suite/markup/p2p/convert-to-po.txt",
           "title": "Create purchase orders",
           "kind": "worksheet",
           "blurb": "dense entry, computed as you type"
@@ -61,6 +67,7 @@
         {
           "key": "p2p/purchase-order",
           "href": "/suite/p2p/purchase-order.html",
+          "markup": "/suite/markup/p2p/purchase-order.txt",
           "title": "PO-88213",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -68,6 +75,7 @@
         {
           "key": "p2p/purchase-orders",
           "href": "/suite/p2p/purchase-orders.html",
+          "markup": "/suite/markup/p2p/purchase-orders.txt",
           "title": "Purchase orders",
           "kind": "list",
           "blurb": "find and act on many records at once"
@@ -75,6 +83,7 @@
         {
           "key": "p2p/requisition",
           "href": "/suite/p2p/requisition.html",
+          "markup": "/suite/markup/p2p/requisition.txt",
           "title": "REQ-40118",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -82,6 +91,7 @@
         {
           "key": "p2p/requisitions",
           "href": "/suite/p2p/requisitions.html",
+          "markup": "/suite/markup/p2p/requisitions.txt",
           "title": "Requisitions",
           "kind": "list",
           "blurb": "find and act on many records at once"
@@ -89,6 +99,7 @@
         {
           "key": "p2p/vendor-invoice",
           "href": "/suite/p2p/vendor-invoice.html",
+          "markup": "/suite/markup/p2p/vendor-invoice.txt",
           "title": "INV-55710",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -96,6 +107,7 @@
         {
           "key": "p2p/vendor-invoices",
           "href": "/suite/p2p/vendor-invoices.html",
+          "markup": "/suite/markup/p2p/vendor-invoices.txt",
           "title": "Vendor invoices",
           "kind": "list",
           "blurb": "find and act on many records at once"
@@ -109,6 +121,7 @@
         {
           "key": "crm/account",
           "href": "/suite/crm/account.html",
+          "markup": "/suite/markup/crm/account.txt",
           "title": "Halden Marine AS",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -116,6 +129,7 @@
         {
           "key": "crm/accounts",
           "href": "/suite/crm/accounts.html",
+          "markup": "/suite/markup/crm/accounts.txt",
           "title": "Accounts",
           "kind": "list",
           "blurb": "find and act on many records at once"
@@ -123,6 +137,7 @@
         {
           "key": "crm/opportunities",
           "href": "/suite/crm/opportunities.html",
+          "markup": "/suite/markup/crm/opportunities.txt",
           "title": "Opportunities",
           "kind": "list",
           "blurb": "find and act on many records at once"
@@ -130,6 +145,7 @@
         {
           "key": "crm/opportunity",
           "href": "/suite/crm/opportunity.html",
+          "markup": "/suite/markup/crm/opportunity.txt",
           "title": "OPP-2201",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -143,6 +159,7 @@
         {
           "key": "fin/ar-aging",
           "href": "/suite/fin/ar-aging.html",
+          "markup": "/suite/markup/fin/ar-aging.txt",
           "title": "AR aging",
           "kind": "report",
           "blurb": "read-only analysis"
@@ -150,6 +167,7 @@
         {
           "key": "fin/journal-entry",
           "href": "/suite/fin/journal-entry.html",
+          "markup": "/suite/markup/fin/journal-entry.txt",
           "title": "Journal entry",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -157,6 +175,7 @@
         {
           "key": "fin/period-close",
           "href": "/suite/fin/period-close.html",
+          "markup": "/suite/markup/fin/period-close.txt",
           "title": "Period close",
           "kind": "job",
           "blurb": "a process with steps and owners"
@@ -164,6 +183,7 @@
         {
           "key": "fin/trial-balance",
           "href": "/suite/fin/trial-balance.html",
+          "markup": "/suite/markup/fin/trial-balance.txt",
           "title": "Trial balance",
           "kind": "report",
           "blurb": "read-only analysis"
@@ -177,6 +197,7 @@
         {
           "key": "inv/cycle-count",
           "href": "/suite/inv/cycle-count.html",
+          "markup": "/suite/markup/inv/cycle-count.txt",
           "title": "Cycle count",
           "kind": "worksheet",
           "blurb": "dense entry, computed as you type"
@@ -184,6 +205,7 @@
         {
           "key": "inv/lot-trace",
           "href": "/suite/inv/lot-trace.html",
+          "markup": "/suite/markup/inv/lot-trace.txt",
           "title": "Lot trace",
           "kind": "structure",
           "blurb": "a hierarchy, explored"
@@ -191,6 +213,7 @@
         {
           "key": "inv/stock-movement",
           "href": "/suite/inv/stock-movement.html",
+          "markup": "/suite/markup/inv/stock-movement.txt",
           "title": "Stock movement",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -198,6 +221,7 @@
         {
           "key": "inv/stock-on-hand",
           "href": "/suite/inv/stock-on-hand.html",
+          "markup": "/suite/markup/inv/stock-on-hand.txt",
           "title": "Stock on hand",
           "kind": "report",
           "blurb": "read-only analysis"
@@ -211,6 +235,7 @@
         {
           "key": "prod/bom",
           "href": "/suite/prod/bom.html",
+          "markup": "/suite/markup/prod/bom.txt",
           "title": "BOM — PMP-4400",
           "kind": "structure",
           "blurb": "a hierarchy, explored"
@@ -218,6 +243,7 @@
         {
           "key": "prod/capacity",
           "href": "/suite/prod/capacity.html",
+          "markup": "/suite/markup/prod/capacity.txt",
           "title": "Capacity",
           "kind": "report",
           "blurb": "read-only analysis"
@@ -225,6 +251,7 @@
         {
           "key": "prod/production-order",
           "href": "/suite/prod/production-order.html",
+          "markup": "/suite/markup/prod/production-order.txt",
           "title": "PRO-3310",
           "kind": "document",
           "blurb": "one record, read and worked"
@@ -232,6 +259,7 @@
         {
           "key": "prod/production-orders",
           "href": "/suite/prod/production-orders.html",
+          "markup": "/suite/markup/prod/production-orders.txt",
           "title": "Production orders",
           "kind": "list",
           "blurb": "find and act on many records at once"

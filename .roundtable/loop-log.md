@@ -920,3 +920,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 09:25 · Meta · refusal · exempting purchase-order's markup excess — a fourth adjustment in one round is tuning until nothing is flagged · refused · 516ff6d
 - 2026-08-26 13:50 · Polish · tidy · screens round 3: crm/account dry — performance concluded a regression tripwire, not a work generator, after four investigations found content not waste · landed · 3e6709f
 - 2026-08-26 13:50 · Meta · refusal · a fourth Polish round driven by performance — four investigations found zero waste; the dimension measures content mix · refused · 3e6709f
+- 2026-08-26 21:15 · Continue · build · 147.1 — screen kit at /getting-started/screen-kit, suite deployed under /suite/; found 28 screens would have shipped CSS-less and a data-row-state value the framework never defined · landed · 20d5609
