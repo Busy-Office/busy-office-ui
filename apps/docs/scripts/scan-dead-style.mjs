@@ -147,7 +147,16 @@ for (const p of await distPages(DIST)) {
   }
 }
 
-console.log(`dead-style scan — ${dead} dead, ${live} live inline declaration(s) across ${byPage.size} page(s)`);
+/* `byPage` only ever records pages that have a DEAD declaration, so the page
+   count belongs to `dead` and not to `live`. Worded as one clause per number
+   because the old phrasing — "0 dead, 1428 live inline declaration(s) across 0
+   page(s)" — attached "across 0 pages" to the live total and read as
+   impossible, which is exactly the misreadable number this repo keeps warning
+   about (Standardize sweep, 2026-08-27). */
+console.log(
+  `dead-style scan — ${dead} dead declaration(s) on ${byPage.size} page(s); ` +
+    `${live} live inline declaration(s) in total`,
+);
 console.log(`  (screen + print measured; ${printOnlyLive} declaration(s) are dead on screen but LIVE in print)`);
 if (dead) {
   console.log('\n  by declaration:');

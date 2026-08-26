@@ -33,10 +33,11 @@
  * `bo-btn-group`'s reach, not button's. A block is a real class and its reach
  * is unambiguous, so that is what gets counted.
  */
-import { readdir, readFile, stat } from 'node:fs/promises';
-import { join, extname } from 'node:path';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { assertScanned } from './gate-report.mjs';
-import { REPO_ROOT, CORE_DIST } from './paths.mjs';
+import { CORE_DIST } from './paths.mjs';
+import { collectSource } from './source-files.mjs';
 
 const api = JSON.parse(await readFile(join(CORE_DIST, 'api.json'), 'utf8'));
 
@@ -60,34 +61,20 @@ for (const [name, meta] of Object.entries(api.components ?? {})) {
    "fix" it. The RF screens are chrome-free demos and are real compositions, so
    they count. */
 const CORPORA = [
-  ['suite screen', join(REPO_ROOT, 'examples', 'erp-suite'), (f) => f.endsWith('.screen.mjs')],
-  ['pattern page', join(REPO_ROOT, 'apps', 'docs', 'src', 'pages', 'patterns'), (f) => f.endsWith('.astro')],
+  ['suite screen', 'examples/erp-suite', (f) => f.endsWith('.screen.mjs')],
+  ['pattern page', 'apps/docs/src/pages/patterns', (f) => f.endsWith('.astro')],
 ];
 
-const walk = async (dir, keep, out = []) => {
-  let entries;
-  try {
-    entries = await readdir(dir, { withFileTypes: true });
-  } catch {
-    return out;
-  }
-  for (const e of entries) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) {
-      if (e.name === 'dist' || e.name === 'node_modules') continue;
-      await walk(p, keep, out);
-    } else if (keep(e.name)) out.push(p);
-  }
-  return out;
-};
-
+/* Source enumeration lives in source-files.mjs — see its header for why this
+   script no longer rolls its own (Standardize sweep, 2026-08-27). */
 const files = [];
-for (const [label, dir, keep] of CORPORA) {
-  for (const f of await walk(dir, keep)) files.push([label, f]);
+for (const [label, root, keep] of CORPORA) {
+  const { files: found } = await collectSource([{ path: root, label }], { keep });
+  files.push(...found);
 }
 assertScanned(files.length, 'screens or pattern pages', 'wrong directory, or the suite is not checked out?');
 
-const texts = await Promise.all(files.map(([, f]) => readFile(f, 'utf8')));
+const texts = await Promise.all(files.map((f) => readFile(f.abs, 'utf8')));
 
 const reach = new Map();
 for (const b of owners.keys()) {
@@ -111,8 +98,8 @@ const suspicious =
 
 console.log(
   `reach report — ${rows.length} block class(es) across ${files.length} independent composition(s) ` +
-    `(${files.filter(([l]) => l === 'suite screen').length} suite screens, ` +
-    `${files.filter(([l]) => l === 'pattern page').length} pattern pages)`,
+    `(${files.filter((f) => f.label === 'suite screen').length} suite screens, ` +
+    `${files.filter((f) => f.label === 'pattern page').length} pattern pages)`,
 );
 if (suspicious) console.log(`  !! ${suspicious}`);
 

@@ -30,10 +30,9 @@
  * and where a finding is normative, cite the standard instead — that is the
  * durable citation anyway.
  */
-import { readdir, readFile, stat } from 'node:fs/promises';
-import { join, extname } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { gate, assertScanned } from './gate-report.mjs';
-import { REPO_ROOT } from './paths.mjs';
+import { collectSource, byExt } from './source-files.mjs';
 
 /* Names that have occurred in this repo, plus near neighbours. Lowercase;
    matched case-insensitively on a word boundary so "frappe" catches "Frappe's"
@@ -54,36 +53,11 @@ const ROOTS = [
   'packages/core/src', 'examples',
 ];
 
-const TEXT = new Set(['.md', '.astro', '.css', '.ts', '.tsx', '.mjs', '.js', '.json', '.html']);
-const SKIP_DIR = new Set(['node_modules', 'dist', '.git', '.astro']);
+const KEEP = byExt('.md', '.astro', '.css', '.ts', '.tsx', '.mjs', '.js', '.json', '.html');
 
-const files = [];
-const missing = [];
-
-const walk = async (abs, rel) => {
-  for (const e of await readdir(abs, { withFileTypes: true })) {
-    if (e.name.startsWith('.') && e.name !== '.roundtable') continue;
-    if (e.isDirectory()) {
-      if (SKIP_DIR.has(e.name)) continue;
-      await walk(join(abs, e.name), join(rel, e.name));
-    } else if (TEXT.has(extname(e.name))) {
-      files.push([join(abs, e.name), join(rel, e.name)]);
-    }
-  }
-};
-
-for (const r of ROOTS) {
-  const abs = join(REPO_ROOT, r);
-  let s;
-  try {
-    s = await stat(abs);
-  } catch {
-    missing.push(r);
-    continue;
-  }
-  if (s.isDirectory()) await walk(abs, r);
-  else if (TEXT.has(extname(r))) files.push([abs, r]);
-}
+/* Source enumeration lives in source-files.mjs — see its header for why this
+   script no longer rolls its own (Standardize sweep, 2026-08-27). */
+const { files, missing } = await collectSource(ROOTS, { keep: KEEP });
 
 /* This file necessarily contains the denylist it enforces. */
 const SELF = 'apps/docs/scripts/check-vendor-names.mjs';
@@ -91,7 +65,7 @@ const g = gate('vendor-names check', 'file(s)');
 let scanned = 0;
 let hits = 0;
 
-for (const [abs, rel] of files) {
+for (const { abs, rel } of files) {
   if (rel === SELF) continue;
   const text = (await readFile(abs, 'utf8')).toLowerCase();
   scanned += 1;
