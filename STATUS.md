@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 22:02
+Generated at: 2026-08-26 22:03
 
 ## Open items by slice
 
@@ -19,7 +19,7 @@ Generated at: 2026-08-26 22:02
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (912 iterations logged)
+dispatch status — counter-triggered rules (913 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-26 21:42   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
 ```
@@ -34,7 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 09:25 · Meta · refusal · exempting purchase-order's markup excess — a fourth adjustment in one round is tuning until nothing is flagged · refused · 516ff6d
 - 2026-08-26 13:50 · Polish · tidy · screens round 3: crm/account dry — performance concluded a regression tripwire, not a work generator, after four investigations found content not waste · landed · 3e6709f
 - 2026-08-26 13:50 · Meta · refusal · a fourth Polish round driven by performance — four investigations found zero waste; the dimension measures content mix · refused · 3e6709f
 - 2026-08-26 21:15 · Continue · build · 147.1 — screen kit at /getting-started/screen-kit, suite deployed under /suite/; found 28 screens would have shipped CSS-less and a data-row-state value the framework never defined · landed · 20d5609
@@ -44,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-26 21:35 · Continue · build · 147.3 — check:quickstart executes the documented adoption path: empty dir → local pack → imports resolve → a kit screen renders (computed style, not markup) → bo-check-markup · landed · c8ccb08
 - 2026-08-26 21:42 · Standardize · tidy · five scripts had regrown the REPO_ROOT duplication paths.mjs was extracted to end; routed through it and added check:paths as a gate over the gates · landed · dc421ec
 - 2026-08-26 21:55 · Continue · bug · P0: docs container had no examples/erp-suite, so 147.1's kit generator broke the image; third time a docs-build dependency rotted there · landed · 23f931d
+- 2026-08-26 22:03 · Roadmap · triage · Slice 148 from the external review: 3 accepted (split tests, npm create, build-chain scope), 4 refused with reasons · triaged · 3c5bada
 
 ## Sunset test
 

@@ -1202,11 +1202,33 @@ P1 is 112.3, top of the owner-blocked list since 2026-08-23; its P2 is a
 runnable starter, which 147.3 half-built today. The value is independent
 confirmation of the existing direction plus a caught regression — not a new one.
 
-1. [ ] **148.1 — split the 129 behavior tests out of one file** (review §21).
+1. [x] **148.1 — DONE 2026-08-26. 25 files, 129 tests, and the first attempt silently lost four.** (review §21).
        One `tests/*.test.ts` per behavior. Cheap, no counter-argument, and it
        cuts the context a coding agent must load to change one behavior.
        *Accept*: same test count passing, one file per behavior, and the
        behaviors-vs-`.d.ts` gate still green.
+
+       2,350 lines → 25 files (`helpers.ts` carries `html`, `stubShowModal`
+       and `pick`). Core build green, so the behaviors-vs-`.d.ts` gate holds.
+
+       **The Accept criterion caught a silent loss, which is the whole reason
+       it was written as a COUNT.** The first split produced 125 tests, not
+       129, and one file truncated mid-block. Cause: a stray top-level
+       `function pick()` sitting BETWEEN two `describe`s. The brace tracker
+       treated its body as belonging to the previous block, mis-assigned every
+       line after it, and `table-sum.test.ts` ended with "Unexpected end of
+       file". Four tests vanished with it.
+
+       A second symptom was more interesting than the bug: splitting
+       `initGroupedNumber`'s two blocks into separate FILES made one fail —
+       `expected '42' to be '42.00'`. They were sharing state through module
+       order, which one file had hidden. Merging them by behavior fixed it, and
+       the lesson is that "one file per behavior" is not the same as "one file
+       per describe": the behavior is the unit that is actually independent.
+
+       Redone by lifting the helper out FIRST so the remainder is header plus
+       blocks only, with an assertion that every `it(` survives the carve —
+       a bulk edit verified against a count, not against the diff.
 
 2. [ ] **148.2 — `npm create busy-office`** (review §22, its P2). 147.3 proves
        the documented path with a CHECK; a human still assembles the page by
