@@ -1186,6 +1186,64 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 153 — Objective grill of Slices 149, 150, 152 (2026-08-27)
+
+Rule 3 at 3/3, second Objective round of the day. The first produced the reach
+finding that Slice 150 acted on; this one grills that action. Full report:
+`.roundtable/grill-objective-149-152-2026-08-27.md`.
+
+**The headline: a gate on zero reach would have been wrong 6 times out of 7.**
+150.1 refused to gate it on the argument that zero reach has three meanings and
+a gate "would be wrong roughly a third of the time". Diagnosing the two blocks
+nobody had examined makes that argument far stronger, and adds a category:
+
+| block | verdict |
+|---|---|
+| `bo-tree` | correctly refused at the point of use |
+| `bo-avatar-stack` | correctly refused, and strongly — see below |
+| `bo-toast-region` | **cannot appear: a NEW fourth meaning** — a runtime container an app injects into; a static screen has nothing to inject |
+| `bo-date` | reached-for failure — **the one real defect** |
+| `bo-file-dropzone`/`__input`/`__list` | instrument gap: no suite screen has an attachment flow |
+
+**`bo-avatar-stack` is the sharpest of these.** Its CSS comment says it was
+promoted by the *"approval-chain 'who's next'"* scenario — and the suite HAS
+that scenario. `p2p/purchase-order` renders the chain as a `bo-timeline` with
+named steps, `data-state` done/current/pending, timestamps and "waiting 2 days".
+Overlapping discs would lose every one of those. The component is fine; the
+screen made the better call. Suitability-beats-reuse, twice over.
+
+1. [ ] **153.1 — teach `report-reach` the fourth meaning.**
+       A runtime container cannot appear in a composition corpus, so listing
+       `bo-toast-region` beside `bo-date` invites the reader to treat them as the
+       same finding.
+       *Accept*: the report separates "cannot appear" from "never composed", with
+       the membership stated in the script rather than inferred; still never
+       fails the build.
+
+2. [ ] **153.2 — `bo-date` is the one real miss.**
+       21 of 27 suite screens render a date as a plain string like `'01 Oct'`.
+       *Accept*: the **screens** change, not the component — and per 149.1's
+       precedent, refusing per screen with a reason is a valid outcome.
+
+**Also recorded: an instrument raised a 37.7% alarm that died to one question.**
+A first query said 356 of 944 `loops.db` rows carry an outcome outside the
+enforced vocabulary. But 139 are `shipped`, a vocabulary CLAUDE.md already
+documents as rejected; the newest offender is 2026-08-19, so nothing has leaked
+since enforcement; the log carries the same values, so the mirror is faithful;
+nothing queries `outcome` to decide anything; and the one risk worth testing —
+a silent undercount of refusals — is **1 row in 167**. Second time today an
+instrument's first output misled, after the reconciliation command that reported
+zero uses of `bo-data-table`.
+
+**Refused**: gating zero reach (re-refused, 6-of-7 wrong); backfilling the
+pre-2026-08-19 outcomes — rewriting reviewed history to satisfy a rule that did
+not exist when it was written, to fix 1 row in 167, inverts the doctrine.
+
+**Measured**: in the reliable window (584 rows), **166 refused against 334
+landed** — a third of substantive outcomes are refusals. The Objective says
+refusing is valid; this is evidence the loop behaves that way rather than only
+saying so.
+
 ## Slice 152 — Owner wishlist: show every layout as a skeleton template (2026-08-27)
 
 Owner: *"add section for all possible layout (using skeleton template) so it is
