@@ -1280,7 +1280,7 @@ confirmation of the existing direction plus a caught regression — not a new on
 
        **Publishing stays owner-triggered**, like every release.
 
-3. [ ] **148.3 — the build chain is doing repo-wide validation** (review §7 and
+3. [x] **148.3 — MEASURED 2026-08-26, REORGANISATION REFUSED. 3.7%, and no correctness gap.** (review §7 and
        §20 together, and the one place the review shifts weight). The docs
        `build` script is ~30 steps and implicitly owns validation that is not
        about docs. Three of six loop rounds on 2026-08-26 fixed INSTRUMENTS
@@ -1291,6 +1291,36 @@ confirmation of the existing direction plus a caught regression — not a new on
        the docs build runs that is not about docs, and either move it or state
        why one chain is right. **Refusing to reorganise is a valid outcome**;
        the risk being named is real, and so is the cost of churn.
+
+       **Measured.** Seven of 34 steps are meaningful with no docs site at all
+       — `check-imports`, `check-loop-vocab`, `check-selftests`,
+       `check-dist-walkers`, `check-paths`, `check-ci-ignores`,
+       `check-slice-refs`. Together they cost **0.43s of an 11.70s build: 3.7%**.
+
+       **And no correctness gap**, which was the more important half. The worry
+       is that repo validation hides behind a docs build and stops running.
+       It does not: the docs build always runs in CI, and nothing these seven
+       read is in `paths-ignore`. A change touching only `scripts/` still gets
+       them.
+
+       So the reorganisation is **refused**. Moving them buys 0.43s and costs a
+       new npm script, new CI wiring, and the risk this repo has hit repeatedly
+       — a gate that moves somewhere it is not known to run. The docs container
+       broke twice today for exactly that shape.
+
+       **What the review is right about is the LEGIBILITY**, and that was free.
+       34 flat `&&` steps hid what owned what. The seven now live behind
+       `check:repo`, so the build reads
+       `npm run check:repo && …` and a person debugging a failure can see
+       instantly whether it was a docs problem or a repo problem. Measured
+       cost: **11.68s vs 11.70s** — noise. Step count unchanged at 34.
+
+       *An automated classifier was tried first and abandoned*: keying off what
+       each script reads put `check-slice-refs` (reads ROADMAP) in "docs" and
+       `copy-suite` (generates the kit) in "meta". Substrings cannot separate
+       these. Classified by an explicit criterion instead — **would this gate
+       still be meaningful if the docs did not exist?** — and the criterion is
+       written down so the next person can disagree with it.
 
 **Refused, recorded in the grill**: §8's manifest fix (the coupling is 28 copied
 HTML pages, not the manifest — which already exists); §14's entropy report
