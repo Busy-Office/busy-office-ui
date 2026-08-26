@@ -1272,7 +1272,7 @@ gate (one alone would be a Hypothesis):
 
 | component | reach across 27 suite screens | what the screens do instead |
 |---|---|---|
-| `bo-progress` | **1 of 27** | four hand-roll a threshold (tone buckets, a boolean, two `bo-kv` rows, a badge) |
+| `bo-progress` | **1 of 27** | four hand-roll a threshold — but **only one was progress-shaped** (149.1, corrected 2026-08-27); the other three were right to do something else |
 | `bo-date` | **0 of 27**, while **21 render a date** | plain strings — `'01 Oct'` |
 
 **This fails Objective principle 3 measurably** — *"nothing ships for one screen;
@@ -1347,7 +1347,7 @@ far was *"the framework cannot express this"*. This is the first of the opposite
 kind: *"it can, and the screen did it by hand anyway."* Worth stating plainly,
 because it means the instrument has a blind spot, not just a backlog.
 
-1. [ ] **149.1 — `bo-progress` is on 1 of 27 screens; four that want it hand-rolled their own.**
+1. [x] **149.1 — DONE 2026-08-27. One screen adopted it, three refused — and the refusals found a distinction worth more than the adoption.**
 
        | screen | the pair | how it is expressed today |
        |---|---|---|
@@ -1368,6 +1368,39 @@ because it means the instrument has a blind spot, not just a backlog.
        answer is discoverability, that is a docs finding, and it belongs with
        the external review's §7 worry about internal machinery outpacing user
        surface.
+
+       **Outcome: 1 adopted, 3 refused.**
+
+       - **`crm/account` — ADOPTED.** Open exposure $24,520 against a $150,000
+         credit limit is consumption toward a **ceiling**, which is exactly what
+         `<progress>` models. Paired with "16% of limit used" in text, because
+         the fill alone is one channel. Two `bo-kv` rows that never related to
+         each other now relate.
+       - **`inv/stock-on-hand` — REFUSED, and this is the finding.** A reorder
+         point is a **floor you must stay above**, not a ceiling you consume
+         toward. `bo-progress` means value/max; on-hand 120 against a reorder
+         point of 50 is not "240% used" — it is "safely above the line". Drawing
+         it as a progress bar would be **semantically wrong**, not merely ugly.
+       - **`prod/capacity` — REFUSED.** It is a matrix, work centre × week. A
+         bar in every cell would be dozens of bars, and the existing treatment
+         is already two-channel and better: tabular numerals, `data-tone` +
+         `data-tone-text`, and a visually-hidden "— over capacity".
+       - **`crm/accounts` — REFUSED.** A list. A `Credit hold` badge beats forty
+         tiny bars, exactly as the Accept anticipated.
+
+       **This CORRECTS the premise of the item, and of Slice 150's evidence.**
+       The claim was "four screens hand-roll what `bo-progress` already does".
+       Four screens do express a value against a bound ad-hoc — that part is
+       true — but only **one** of them is progress-shaped. The other three were
+       right to do something else. So the *reached-for failure* for
+       `bo-progress` is one screen, not four.
+
+       **Ceiling vs floor is a real distinction the framework had not named**,
+       and it sharpens 149.2: a floor-threshold ("stay above") and a positional
+       range ("sit between") are both genuinely outside `<progress>`, which only
+       models consumption. Recorded here rather than built — `inv/stock-on-hand`
+       already solves the floor case legibly with tone plus text, which is
+       evidence that the floor case may need *nothing at all*.
 
 2. [ ] **149.2 — the positional range (`low ——•—— high`) is genuinely uncovered, and is deliberately NOT queued.**
        The market-data reference's strongest numeric idea is a session low/high

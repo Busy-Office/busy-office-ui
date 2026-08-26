@@ -44,7 +44,13 @@ export const render = () =>
           <div><dt>Owner</dt><dd>P. Sandberg</dd></div>
           <div><dt>Terms</dt><dd>Net 30 · DAP Bergen</dd></div>
           <div><dt>Credit limit</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">150,000<span class="bo-amount__fraction">.00</span></span></span></dd></div>
-          <div><dt>Open exposure</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">24,520<span class="bo-amount__fraction">.00</span></span></span></dd></div>
+          <div><dt>Open exposure</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">24,520<span class="bo-amount__fraction">.00</span></span></span>
+            <!-- Consumption toward a CEILING, which is what <progress> models:
+                 value/max semantics and the progressbar role come from the
+                 platform. Paired with the percentage in text — the fill alone
+                 is one channel (roadmap 149.1). -->
+            <progress class="bo-progress" value="24520" max="150000"></progress>
+            <span class="bo-u-text-muted"> 16% used</span></dd></div>
           <div><dt>Customer since</dt><dd><span class="bo-u-tabular">2019-03-11</span></dd></div>
         </dl>
       </div>
