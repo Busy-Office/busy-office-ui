@@ -22,10 +22,9 @@ Generated at: 2026-08-27 05:39
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (935 iterations logged)
+dispatch status — counter-triggered rules (937 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-27 01:40   ok
-  Objective     3 / 3 slices          since 2026-08-27 00:30   OVERDUE  [149, 150, 152]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-27 05:39   ok
 ```
 
 ## Owner-blocked
@@ -38,8 +37,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 00:30 · Meta · refusal · gating zero reach — bo-tree's zero is suitability-beats-reuse working correctly, so a red build would be wrong a third of the time · refused · 1802b6b
-- 2026-08-27 00:32 · Roadmap · plan · 151: triaged an owner screenshot of a mainstream list product — named views, self-explaining columns, ordinal badges queued; three mechanisms already covered, two better · logged · bd211a2
 - 2026-08-27 00:32 · Meta · refusal · a filter control in the column header — a third filtering surface where two already exist · refused · bd211a2
 - 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
 - 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6
@@ -48,6 +45,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 01:07 · Meta · refusal · gating zero reach, and counting per component — api.json blocks is not an ownership map · refused · 1e0a56e
 - 2026-08-27 01:40 · Standardize · tidy · one source-files.mjs replaces two hand-rolled source walks written the same day with different skip lists; output proven identical (byte-diff + file-set diff). Also fixed scan-dead-style's misreadable count · landed · e556566
 - 2026-08-27 01:40 · Meta · refusal · extracting the regex-escape one-liner from three scripts — all byte-identical, no divergence risk, ceremony not consolidation · refused · e556566
+- 2026-08-27 05:39 · Objective · grill · Objective grill 149/150/152: of 7 zero-reach blocks only bo-date is a real defect — a gate would have been wrong 6 of 7; found a fourth meaning (runtime containers cannot appear); a 37.7% mirror alarm died to one question · logged · 81cf45e
+- 2026-08-27 05:39 · Meta · refusal · gating zero reach (re-refused, 6-of-7 wrong) and backfilling pre-2026-08-19 outcome vocabulary · refused · 81cf45e
 
 ## Sunset test
 

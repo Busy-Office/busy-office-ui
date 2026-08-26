@@ -950,3 +950,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-27 01:07 · Meta · refusal · gating zero reach, and counting per component — api.json blocks is not an ownership map · refused · 1e0a56e
 - 2026-08-27 01:40 · Standardize · tidy · one source-files.mjs replaces two hand-rolled source walks written the same day with different skip lists; output proven identical (byte-diff + file-set diff). Also fixed scan-dead-style's misreadable count · landed · e556566
 - 2026-08-27 01:40 · Meta · refusal · extracting the regex-escape one-liner from three scripts — all byte-identical, no divergence risk, ceremony not consolidation · refused · e556566
+- 2026-08-27 05:39 · Objective · grill · Objective grill 149/150/152: of 7 zero-reach blocks only bo-date is a real defect — a gate would have been wrong 6 of 7; found a fourth meaning (runtime containers cannot appear); a 37.7% mirror alarm died to one question · logged · 81cf45e
+- 2026-08-27 05:39 · Meta · refusal · gating zero reach (re-refused, 6-of-7 wrong) and backfilling pre-2026-08-19 outcome vocabulary · refused · 81cf45e
