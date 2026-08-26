@@ -16,6 +16,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { screenFragment } from '../../examples/erp-suite/fragment.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SUITE = join(HERE, '..', '..', 'examples', 'erp-suite');
@@ -27,12 +28,10 @@ const SCREEN = 'p2p/purchase-orders';
 
 execFileSync(process.execPath, [join(SUITE, 'build.mjs')], { cwd: SUITE, stdio: 'pipe' });
 const html = await readFile(join(SUITE, 'dist', `${SCREEN}.html`), 'utf8');
-const main = html.match(/<main[^>]*>([\s\S]*?)<\/main>/)?.[1];
-if (!main) {
+const fragment = screenFragment(html);
+if (!fragment) {
   console.error(`create-ui build: no <main> in ${SCREEN} — did the suite layout change?`);
   process.exit(1);
 }
-const lines = main.replace(/^\n+|\s+$/g, '').split('\n');
-const pad = Math.min(...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)[0].length));
-await writeFile(join(HERE, 'template', 'screen.html'), lines.map((l) => l.slice(pad)).join('\n') + '\n');
+await writeFile(join(HERE, 'template', 'screen.html'), fragment);
 console.log(`create-ui: template screen snapshotted from ${SCREEN}`);

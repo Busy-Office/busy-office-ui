@@ -931,3 +931,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 22:06 · Continue · build · 148.1 — behavior tests split into 25 files (129 passing); first attempt lost 4 tests to a stray top-level helper and exposed two blocks sharing state through module order · landed · 10ad5d2
 - 2026-08-26 22:48 · Continue · build · 148.2 — @busy-office/create-ui scaffolds a zero-dependency project with a real suite screen; check:quickstart runs the scaffold and its own server rather than describing them · landed · 5f7a218
 - 2026-08-26 22:48 · Meta · refusal · prompts/options in the scaffolder v1 — every question is one the person cannot answer before seeing a screen · refused · 5f7a218
+- 2026-08-26 23:07 · Continue · build · 148.3 — measured the docs build's repo validation at 3.7% with no correctness gap; refused the reorg, grouped the 7 gates under check:repo for legibility at zero cost · landed · a5ffae3
+- 2026-08-26 23:07 · Meta · refusal · moving repo gates out of the docs build — 0.43s of 11.70s, no correctness gap, and relocation is the exact shape that broke the container twice today · refused · a5ffae3
+- 2026-08-26 23:25 · Continue · bug · P0: Objective counter blind since slice numbers passed 99 — reported 0/3 for five days while ~17 slices closed; regex widened and a zero now fails loudly · landed · 55a5184

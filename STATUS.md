@@ -2,24 +2,23 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 22:48
+Generated at: 2026-08-26 23:25
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 148** (1 open)
-  - 148.3 — the build chain is doing repo-wide validation
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (916 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-26 21:42   ok
-  Objective     0 / 3 slices          since 2026-08-23 18:32   ok
+dispatch status — counter-triggered rules (919 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-08-26 21:42   OVERDUE
+  Objective    17 / 3 slices          since 2026-08-23 18:32   OVERDUE  [112, 130, 131, 132, 133, 134, 135, 136, 139, 140, 142, 143, 144, 145, 146, 147, 148]
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -32,9 +31,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 21:22 · Continue · build · 147.2 — copy-paste decided: plain-text <main> fragment per screen; Demo-per-screen and a copy button both refused with the numbers · landed · c22a93e
-- 2026-08-26 21:22 · Meta · refusal · Demo for whole screens — +181 KB on one page, or 28 docs pages that must carry a page skeleton a screen does not have · refused · c22a93e
-- 2026-08-26 21:22 · Meta · refusal · a copy button on the suite screens — the zero-CSS claim is the instrument's whole value · refused · c22a93e
 - 2026-08-26 21:35 · Continue · build · 147.3 — check:quickstart executes the documented adoption path: empty dir → local pack → imports resolve → a kit screen renders (computed style, not markup) → bo-check-markup · landed · c8ccb08
 - 2026-08-26 21:42 · Standardize · tidy · five scripts had regrown the REPO_ROOT duplication paths.mjs was extracted to end; routed through it and added check:paths as a gate over the gates · landed · dc421ec
 - 2026-08-26 21:55 · Continue · bug · P0: docs container had no examples/erp-suite, so 147.1's kit generator broke the image; third time a docs-build dependency rotted there · landed · 23f931d
@@ -42,6 +38,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-26 22:06 · Continue · build · 148.1 — behavior tests split into 25 files (129 passing); first attempt lost 4 tests to a stray top-level helper and exposed two blocks sharing state through module order · landed · 10ad5d2
 - 2026-08-26 22:48 · Continue · build · 148.2 — @busy-office/create-ui scaffolds a zero-dependency project with a real suite screen; check:quickstart runs the scaffold and its own server rather than describing them · landed · 5f7a218
 - 2026-08-26 22:48 · Meta · refusal · prompts/options in the scaffolder v1 — every question is one the person cannot answer before seeing a screen · refused · 5f7a218
+- 2026-08-26 23:07 · Continue · build · 148.3 — measured the docs build's repo validation at 3.7% with no correctness gap; refused the reorg, grouped the 7 gates under check:repo for legibility at zero cost · landed · a5ffae3
+- 2026-08-26 23:07 · Meta · refusal · moving repo gates out of the docs build — 0.43s of 11.70s, no correctness gap, and relocation is the exact shape that broke the container twice today · refused · a5ffae3
+- 2026-08-26 23:25 · Continue · bug · P0: Objective counter blind since slice numbers passed 99 — reported 0/3 for five days while ~17 slices closed; regex widened and a zero now fails loudly · landed · 55a5184
 
 ## Sunset test
 

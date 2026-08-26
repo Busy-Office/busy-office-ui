@@ -29,6 +29,7 @@ import { cp, rm, mkdir, readFile, writeFile } from 'node:fs/promises';
    is the chokepoint for the DOCS tree and yields only index.html; suitePages()
    is the one for this tree and yields every screen. */
 import { suitePages } from '../../../examples/erp-suite/pages.mjs';
+import { screenFragment } from '../../../examples/erp-suite/fragment.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -86,14 +87,11 @@ const frags = [];
 for (const { url, file } of await suitePages(join(SUITE, 'dist'))) {
   const f = url.replace(/^\//, '');
   const html = await readFile(file, 'utf8');
-  const main = html.match(/<main[^>]*>([\s\S]*?)<\/main>/)?.[1];
-  if (!main) continue;
+  const fragment = screenFragment(html);
+  if (!fragment) continue;
   const out = join(DEST, 'markup', f.replace(/\.html$/, '.txt'));
   await mkdir(dirname(out), { recursive: true });
-  /* De-indent so what a reader copies is not wearing the shell's whitespace. */
-  const lines = main.replace(/^\n+|\s+$/g, '').split('\n');
-  const pad = Math.min(...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)[0].length));
-  await writeFile(out, lines.map((l) => l.slice(pad)).join('\n') + '\n');
+  await writeFile(out, fragment);
   frags.push(f);
 }
 
