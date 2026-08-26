@@ -2,27 +2,26 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-26 07:00
+Generated at: 2026-08-26 21:04
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 145** (2 open)
-  - 145.4b — act on the backlog the rubric produced.
-  - 145.3 — seed `.roundtable/suite-score.md` and stamp every screen.
-- **Slice —** (2 open)
-  - OWNER CALL — direction. REALIGNED 2026-08-24: the release blocker is GONE; this waits on a decision only.
+- **Slice 147** (3 open)
+  - 147.1 — give the suite a front door.
+  - 147.2 — decide what "copy-paste" means here, before building it.
+  - 147.3 — a starter that runs.
+- **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (895 iterations logged)
-  Standardize   5 / 4 Continue rounds since 2026-08-25 23:31   OVERDUE
+dispatch status — counter-triggered rules (905 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-26 07:11   ok
   Objective     0 / 3 slices          since 2026-08-23 18:32   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -31,21 +30,20 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- OWNER CALL — direction. REALIGNED 2026-08-24: the release blocker is GONE; this waits on a decision only.
 - AT runtime evidence
 
 ## Last 10 iterations
 
-- 2026-08-25 23:00 · Standardize · tidy · ROADMAP.md 9,824 -> 1,094 lines (44 slices archived); check:slice-refs and check:ci-ignores ship; nearly clobbered the existing archive via APFS case-insensitivity · landed · 063211c
-- 2026-08-25 23:31 · Standardize · tidy · .roundtable/INDEX.md — 131 findings indexed; splitting, pruning and a DB mirror all measured and refused · landed · 36477d7
-- 2026-08-25 23:31 · Meta · refusal · splitting .roundtable live-vs-settled — 78 of 86 citations come from ROADMAP-archive.md, so moving files breaks footnotes to fix an unevidenced problem · refused · 36477d7
-- 2026-08-25 23:31 · Meta · refusal · pruning uncited findings — every file was last modified this month; deleting three-week-old work to save 1.8 MB is not a trade · refused · 36477d7
-- 2026-08-25 23:43 · Continue · bug · check-ci-ignores and check-slice-refs crashed the docs container build (ENOENT on files the image does not copy); both now stand down loudly · landed · f2ae348
-- 2026-08-26 06:01 · Continue · build · 145.0 feasibility: rubric separates screens; found and fixed 8 unnamed tables (all in P2P), now gated · landed · 03d1e15
-- 2026-08-26 06:10 · Continue · build · 145.1 — rubric settled: functionality + performance kept, ux DROPPED (1 distinct value); its 4 binary checks moved into the suite audit · landed · 90ea5f5
-- 2026-08-26 06:10 · Meta · refusal · ux as a scoring dimension — binary properties belong in a gate, not a rubric · refused · 90ea5f5
-- 2026-08-26 06:19 · Continue · build · 145.2 — performance scored as a fit residual (own ≈ 70 + 1.25×facts); absolute budget and nodes-per-fact both measured wrong first · landed · b187779
-- 2026-08-26 06:41 · Continue · bug · 146.2 — object-page sticky bar: 24px gap below it fixed, and z-index:auto let a table header paint through it; check:sticky-layers gates the class · landed · cad382a
+- 2026-08-26 07:11 · Standardize · tidy · three walks of the suite dist tree consolidated into pages.mjs; score.mjs now asserts every built screen has a kind · landed · 864f405
+- 2026-08-26 07:11 · Meta · refusal · consolidating audit/score browser setup — four lines used differently, coupling two gates buys less than it risks · refused · 864f405
+- 2026-08-26 07:19 · Continue · build · 145.3 — suite-score.md seeded (28 screens: 1/16/11 across scores 1-3); polish_requeue gained --ledger; digest fixed to hash the working tree not the index · landed · 79acbf8
+- 2026-08-26 07:53 · Continue · build · 145.4b — rubric backlog 10→0: five lists filtered, one kind error corrected, one gap recorded correctly-absent; the empty backlog exposed a drop-verdict that would delete a working dimension · landed · ee826a4
+- 2026-08-26 08:47 · Polish · tidy · screens round 1: performance band was Math.abs(excess) and penalised the leanest screen; now one-directional. purchase-order investigated → dry, its +33 is a discussion thread the linear fit under-prices · landed · 41cc9da
+- 2026-08-26 08:47 · Meta · refusal · a per-content-type weighting for the markup fit — overfitting to one screen's evidence · refused · 41cc9da
+- 2026-08-26 09:25 · Polish · tidy · screens round 2: added a bulk-action obligation for lists (6 of 7 had it), fixed vendor-invoices; recalibrated facts to count controls; purchase-order's excess recorded as explained, not a defect · landed · 516ff6d
+- 2026-08-26 09:25 · Meta · refusal · exempting purchase-order's markup excess — a fourth adjustment in one round is tuning until nothing is flagged · refused · 516ff6d
+- 2026-08-26 13:50 · Polish · tidy · screens round 3: crm/account dry — performance concluded a regression tripwire, not a work generator, after four investigations found content not waste · landed · 3e6709f
+- 2026-08-26 13:50 · Meta · refusal · a fourth Polish round driven by performance — four investigations found zero waste; the dimension measures content mix · refused · 3e6709f
 
 ## Sunset test
 

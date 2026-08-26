@@ -82,7 +82,12 @@ export const render = () =>
               const done = got !== '';
               const v = done ? got - sys : null;
               const tone = v ? 'danger' : '';
-              return `<tr${done ? '' : ' data-row-state="pending"'}>
+              /* No data-row-state for an uncounted line: the framework defines
+                 dirty / error / warning and "pending" is none of them, so the
+                 attribute matched no CSS and did nothing. The empty input and
+                 the em-dash variance already say the line is not done
+                 (roadmap 147.1 — found when the suite entered check-markup). */
+              return `<tr>
             <th scope="row" class="bo-data-table__col--code">${item}</th>
             <td>${desc}</td>
             <td class="bo-data-table__col--code">${unit}</td>

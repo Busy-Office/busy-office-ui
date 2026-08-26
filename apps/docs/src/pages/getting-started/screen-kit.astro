@@ -1,0 +1,105 @@
+---
+/* GENERATED from suite.json (roadmap 147.1). A hand-written list of 28 screens
+   would be a second description of the suite, free to drift from it — the same
+   reason /patterns/ is built from patterns.json and /concepts/which-pattern
+   refuses to be a fifth interpretation of the pattern system.
+
+   This page exists because the suite was INVISIBLE. It has been built and
+   gated on every commit since Slice 130 — 28 screens, six modules, zero CSS of
+   its own, axe-clean at two widths — and nothing in the docs linked to it. A
+   person evaluating this framework could read 39 pattern pages and never see a
+   finished screen. */
+import Gallery from '../../layouts/Gallery.astro';
+import Related from '../../components/Related.astro';
+import suite from '../../data/suite.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const kinds = [...new Set(suite.modules.flatMap((m: any) => m.screens.map((s: any) => s.kind)))];
+---
+<Gallery title="Screen kit">
+  <p class="demo-note">
+    <strong>{suite.total} complete ERP screens</strong>, across {suite.modules.length}
+    modules, built from this framework and <em>nothing else</em> — no CSS of
+    their own, not one line. Open one, read its markup, take what you need.
+    They are the answer to "yes, but what does a real screen look like?".
+    <strong>Not a component gallery</strong> — if you want one control and its
+    settings, <a href={base + '/components/button'}>the component pages</a> are
+    that. This is whole screens, with realistic data, in the shape an ERP
+    actually uses them.
+  </p>
+
+  <section class="demo">
+    <h2>Why these exist, and what that buys you</h2>
+    <p class="bo-u-text-muted">The suite is not a showcase — it is this
+    project's <strong>gap-finding instrument</strong>. Every screen is built
+    only from shipped CSS, and a build gate fails if any of them adds a single
+    declaration of its own. When a screen cannot be built, that is a hole in the
+    framework and it gets recorded and usually fixed. Twenty-one gaps have been
+    found this way.</p>
+    <p class="bo-u-text-muted">Which is the useful part for you: <strong>these
+    screens are proof the framework covers them.</strong> They are rebuilt and
+    re-audited on every commit — axe at 1440 and 390, no sideways scroll, every
+    data table named, every internal link resolving. If a screen here looks
+    right, the CSS behind it is the CSS you install.</p>
+  </section>
+
+  {suite.modules.map((m: any) => (
+    <section class="demo">
+      <h2>{m.label}</h2>
+      <div class="bo-data-table-container" tabindex="0" data-density="compact">
+        <table class="bo-data-table">
+          <caption class="bo-visually-hidden">{m.label} screens, what each one is for</caption>
+          <thead>
+            <tr>
+              <th scope="col">Screen</th>
+              <th scope="col">Kind</th>
+              <th scope="col">What it is for</th>
+            </tr>
+          </thead>
+          <tbody>
+            {m.screens.map((s: any) => (
+              <tr>
+                <th scope="row">
+                  <a class="bo-data-table__cell-link" href={base + s.href}>{s.title}</a>
+                </th>
+                <td><span class="bo-badge bo-badge--type">{s.kind}</span></td>
+                <td>{s.blurb}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+
+  <section class="demo">
+    <h2>How to take one</h2>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Open the screen</strong> and use it. Sort, filter, select rows,
+      open a drawer — it is a real page, not a picture of one.</li>
+      <li><strong>View source.</strong> The markup is plain HTML with
+      <code>bo-</code> classes; there is no build step between what you read and
+      what you see.</li>
+      <li><strong>Install the CSS</strong> —
+      <a href={base + '/getting-started/installation'}>installation</a> is one
+      import — and paste. The classes resolve because they are the same ones
+      this site ships.</li>
+      <li><strong>Check your markup</strong> with
+      <code>npx bo-check-markup dist</code>, the same gate the suite passes: it
+      fails on a class or a <code>data-*</code> value the framework does not
+      define. A typo becomes a build error rather than a silently dead rule.</li>
+    </ol>
+    <p class="bo-u-text-muted">Screens are kinds — {kinds.join(', ')} — and the
+    kind is what a screen owes. A list owes a way to narrow the set and a way to
+    act on several at once; a report owes a total and a way to take it away.
+    That is enforced, not aspirational:
+    <a href={base + '/concepts/which-pattern'}>which pattern should I use?</a>
+    walks the same decision from the other end.</p>
+  </section>
+
+  <Related links={[
+    ['/getting-started/installation', 'Installation'],
+    ['/getting-started/first-screen', 'Build your first screen'],
+    ['/patterns/', 'All patterns'],
+    ['/concepts/which-pattern', 'Which pattern should I use?'],
+  ]} />
+</Gallery>

@@ -63,9 +63,26 @@ for (const m of MODULES.filter((x) => !BUILT_MODULES.includes(x.id))) {
   });
 }
 
+/* SUITE_BASE lets the suite be served from a sub-path — it exists so 28 built
+   screens can sit under the docs site instead of only on a developer's disk
+   (roadmap 147.1). The screens write absolute links (`/p2p/purchase-orders.html`,
+   `/bo/index.css`) because that is what an app does; rewriting them once here
+   beats threading a prefix through 28 files, and it cannot miss one.
+
+   Safe as a bulk rewrite precisely because it was checked first: the suite has
+   ZERO <pre>/<code> blocks, so there is no copy-paste sample whose text would
+   be corrupted — the trap this repo has recorded twice. Anchors (`href="#"`)
+   and absolute URLs do not start with a single `/` and are untouched. */
+const BASE = (process.env.SUITE_BASE ?? '').replace(/\/$/, '');
+const rebase = (html) =>
+  BASE ? html.replace(/\s(href|src)="\/(?!\/)/g, ` $1="${BASE}/`) : html;
+
 for (const s of screens) {
   const target = join(OUT, s.path);
   await mkdir(dirname(target), { recursive: true });
-  await writeFile(target, s.html);
+  await writeFile(target, rebase(s.html));
 }
-console.log(`erp-suite: ${screens.length} screen(s) rendered to ${relative(process.cwd(), OUT)}`);
+console.log(
+  `erp-suite: ${screens.length} screen(s) rendered to ${relative(process.cwd(), OUT)}` +
+    (BASE ? ` (base ${BASE})` : ''),
+);

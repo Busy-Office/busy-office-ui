@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+/**
+ * Generate `src/data/suite.json` — the index the screen-kit page renders from.
+ *
+ * GENERATED, because a hand-written list of 28 screens across six modules is a
+ * second description of the suite, free to drift from it. This project has the
+ * scar: `/patterns/` is built from `patterns.json` for exactly this reason, and
+ * `/concepts/which-pattern` says outright that a hand-maintained flow "would be
+ * a FIFTH interpretation of the pattern system".
+ *
+ * Derived from the SOURCE rather than the built HTML, so it does not depend on
+ * build order — the page is rendered by Astro, and the suite is copied into
+ * `dist/` only afterwards. Module labels and section order come from
+ * `_shell.mjs`, which is what the suite's own navigation uses, so the kit lists
+ * screens in the order a person would meet them in the app.
+ */
+import { readdir, writeFile, mkdir } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
+const SUITE = join(ROOT, 'examples', 'erp-suite');
+const OUT = join(ROOT, 'apps', 'docs', 'src', 'data', 'suite.json');
+
+const { MODULES } = await import(pathToFileURL(join(SUITE, '_shell.mjs')).href);
+
+/** What each screen is FOR — the same map the scorer uses, kept in one place. */
+const { KIND } = await import(pathToFileURL(join(SUITE, 'kinds.mjs')).href);
+
+const KIND_BLURB = {
+  home: 'a landing page — where a working day starts',
+  list: 'find and act on many records at once',
+  document: 'one record, read and worked',
+  worksheet: 'dense entry, computed as you type',
+  report: 'read-only analysis',
+  structure: 'a hierarchy, explored',
+  job: 'a process with steps and owners',
+};
+
+const modules = [];
+for (const m of MODULES) {
+  const dir = m.id === 'home' ? SUITE : join(SUITE, m.id);
+  let files = [];
+  try {
+    files = (await readdir(dir)).filter((f) => f.endsWith('.screen.mjs'));
+  } catch {
+    continue;
+  }
+  const screens = [];
+  for (const f of files.sort()) {
+    const name = f.replace('.screen.mjs', '');
+    const key = m.id === 'home' ? name : `${m.id}/${name}`;
+    const mod = await import(pathToFileURL(join(dir, f)).href);
+    const html = mod.render();
+    const title = html.match(/<title>([^<·]+)/)?.[1].trim() ?? name;
+    screens.push({
+      key,
+      href: `/suite/${key}.html`,
+      title,
+      kind: KIND[key] ?? 'screen',
+      blurb: KIND_BLURB[KIND[key]] ?? '',
+    });
+  }
+  if (screens.length) modules.push({ id: m.id, label: m.label, screens });
+}
+
+const total = modules.reduce((n, m) => n + m.screens.length, 0);
+if (total === 0) {
+  console.error('gen-suite-index: found no screens — did examples/erp-suite move?');
+  process.exit(1);
+}
+
+await mkdir(dirname(OUT), { recursive: true });
+await writeFile(OUT, JSON.stringify({ modules, total }, null, 2) + '\n');
+console.log(`suite index: ${total} screen(s) across ${modules.length} module(s)`);

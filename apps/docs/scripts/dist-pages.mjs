@@ -54,7 +54,13 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-const SKIP_DIRS = ['_astro', 'pagefind', 'v'];
+/* `suite` is the ERP suite copied in by copy-suite.mjs (roadmap 147.1). It is
+   an APP, not documentation: it has no docs page skeleton, no wrong-choice
+   clause and no ClassRef, so page-shape and the docs sweeps would fail it for
+   not being something it never claimed to be. It carries its own gates —
+   `npm run suite` runs axe at two widths, a 390px overflow check, table naming
+   and the zero-CSS rule — so it is verified, just not here. */
+const SKIP_DIRS = ['_astro', 'pagefind', 'v', 'suite'];
 
 async function* walk(dir, rel = '') {
   for (const e of await readdir(dir, { withFileTypes: true })) {

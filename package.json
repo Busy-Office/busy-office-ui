@@ -10,7 +10,7 @@
     "docs:dev": "npm run dev -w docs",
     "docs:build": "npm run build -w docs",
     "suite:build": "node examples/erp-suite/build.mjs",
-    "suite:check": "node examples/erp-suite/check-erp-suite.mjs",
+    "suite:check": "node examples/erp-suite/check-erp-suite.mjs && node packages/core/scripts/check-markup.mjs examples/erp-suite/dist",
     "suite:audit": "node examples/erp-suite/audit.mjs",
     "suite": "npm run suite:build && npm run suite:check && npm run suite:audit"
   }

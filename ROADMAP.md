@@ -1151,7 +1151,9 @@ structurally an owner call, not something a loop can derive.
        stale *site* was fixed, the stale *package* was not. Publishing is
        owner-triggered by policy; the work itself is done.
 
-2. [ ] **OWNER CALL — direction. REALIGNED 2026-08-24: the release blocker is
+2. [x] **OWNER CALL — DECIDED 2026-08-26: (a) adoption/DX.** See Slice 147. Original text kept below.
+
+2b. [x] **OWNER CALL — direction. REALIGNED 2026-08-24: the release blocker is
        GONE; this waits on a decision only.** It said the release "is cut as
        0.3.0 and awaits only the owner's push". **0.5.0 is published on npm** —
        checked, not assumed. The precondition was not merely met, it has been
@@ -1183,6 +1185,79 @@ worse — zero CSS growth is the charter working, and a ratio that reads "added 
 CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
+
+## Slice 147 — Adoption: the framework has no front door (owner decision, 2026-08-26)
+
+Owner picked **(a) adoption/DX** from the direction call. The argument for it
+was that it is the only option producing the input the others need: (d) define
+1.0 would be defining it from this room, (b) is building the next twelve
+components for nobody, and (c) autosave is better answered *with* a user.
+
+**The premise, measured before any work.** Onboarding runs install → import →
+ONE list screen (`getting-started/first-screen`, four steps) → stops. And
+**nothing in the docs links to `examples/erp-suite` at all**: 28 screens across
+six modules, built from shipped CSS with zero of their own, axe-clean at two
+widths and 390px-safe, are invisible to anyone who does not read the repo. The
+most complete artefact this project owns has no way in.
+
+1. [x] **147.1 — DONE 2026-08-26. The suite has a URL, a page, and CSS it would have shipped without.** It is already built
+       (`examples/erp-suite/dist`, 28 pages, gated on every commit). What it
+       lacks is a URL and a page that says what it is. *Accept*: a docs page
+       lists the screens by the job they do, each links to a working screen,
+       and the suite deploys alongside the docs rather than living only on a
+       developer's disk. **Verify the link target actually serves** — a kit
+       whose links 404 is worse than no kit.
+
+       Shipped: `/getting-started/screen-kit`, **generated from the suite**
+       (`gen-suite-index.mjs` → `suite.json`) so a hand-written list of 28
+       screens cannot drift from the thing it describes — the same rule
+       `/patterns/` and `/concepts/which-pattern` already follow. The suite
+       builds at the docs' base path via a new `SUITE_BASE` and is copied to
+       `dist/suite/` **in the docs build**, not only in the Pages workflow,
+       because a step that only runs in CI is not known to work.
+
+       **The Accept clause earned its place twice.** Checking that links SERVE
+       rather than that files were copied found `/suite/bo/index.css` returning
+       404: `serve.mjs` mounts `/bo/` VIRTUALLY from `packages/core/dist/css`
+       for local runs, so the built `dist/` has no stylesheet at all. Copying
+       only `dist/` would have deployed 28 perfectly-gated screens **with no CSS
+       whatsoever**, and every one would have looked broken to the first person
+       who opened the kit. Verified after: 28 links, 49 in-screen assets, zero
+       dead.
+
+       **And it found a real bug in the suite by moving it under a gate that
+       had never run on it.** `check-markup` flagged
+       `data-row-state="pending"` on `inv/cycle-count` — not a value the
+       framework defines, so it matched no CSS and did nothing. The suite's own
+       header claimed class checking was "delegated to the framework's own
+       check-markup, run by the caller", and **no caller ran it**: `npm run
+       suite` was build → check → audit. A documented delegation to nobody, now
+       wired, and it validates 4,233 class uses across the 28 screens.
+
+       `KIND` moved to `kinds.mjs`, shared by the scorer and the kit index —
+       one definition that has already corrected itself three times.
+
+2. [ ] **147.2 — decide what "copy-paste" means here, before building it.**
+       The suite renders from `.screen.mjs` templates, so its HTML is a build
+       output, not something a reader can lift. The docs' pattern pages already
+       ship `Demo` (preview + copyable code from one string) for FRAGMENTS.
+       The open question is whether a whole screen wants the same treatment or
+       a different one — 28 screens × full markup is a lot of page weight for
+       something a reader may prefer to clone. *Accept*: one answer, argued
+       against the alternative, and a working example of it. Refusing to add a
+       second mechanism is a valid outcome if `Demo` already covers it.
+
+3. [ ] **147.3 — a starter that runs.** `npm i` then what? There is no
+       template, no scaffold, and the package's only bin is
+       `bo-check-markup`. *Accept*: a person with an empty directory reaches a
+       rendered ERP screen by following written steps, and the steps are
+       executed by a check rather than believed — the same bar
+       `check:claims` holds prose to.
+
+**Sequenced deliberately**: 147.1 makes what exists reachable, 147.2 decides
+before building, 147.3 is the largest and benefits from both. None of it adds
+CSS; this slice is entirely about the distance between "published on npm" and
+"someone built a screen with it".
 
 ## Slice 146 — the published site went stale for a week (2026-08-26)
 

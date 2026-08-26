@@ -910,3 +910,13 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 06:10 · Meta · refusal · ux as a scoring dimension — binary properties belong in a gate, not a rubric · refused · 90ea5f5
 - 2026-08-26 06:19 · Continue · build · 145.2 — performance scored as a fit residual (own ≈ 70 + 1.25×facts); absolute budget and nodes-per-fact both measured wrong first · landed · b187779
 - 2026-08-26 06:41 · Continue · bug · 146.2 — object-page sticky bar: 24px gap below it fixed, and z-index:auto let a table header paint through it; check:sticky-layers gates the class · landed · cad382a
+- 2026-08-26 07:11 · Standardize · tidy · three walks of the suite dist tree consolidated into pages.mjs; score.mjs now asserts every built screen has a kind · landed · 864f405
+- 2026-08-26 07:11 · Meta · refusal · consolidating audit/score browser setup — four lines used differently, coupling two gates buys less than it risks · refused · 864f405
+- 2026-08-26 07:19 · Continue · build · 145.3 — suite-score.md seeded (28 screens: 1/16/11 across scores 1-3); polish_requeue gained --ledger; digest fixed to hash the working tree not the index · landed · 79acbf8
+- 2026-08-26 07:53 · Continue · build · 145.4b — rubric backlog 10→0: five lists filtered, one kind error corrected, one gap recorded correctly-absent; the empty backlog exposed a drop-verdict that would delete a working dimension · landed · ee826a4
+- 2026-08-26 08:47 · Polish · tidy · screens round 1: performance band was Math.abs(excess) and penalised the leanest screen; now one-directional. purchase-order investigated → dry, its +33 is a discussion thread the linear fit under-prices · landed · 41cc9da
+- 2026-08-26 08:47 · Meta · refusal · a per-content-type weighting for the markup fit — overfitting to one screen's evidence · refused · 41cc9da
+- 2026-08-26 09:25 · Polish · tidy · screens round 2: added a bulk-action obligation for lists (6 of 7 had it), fixed vendor-invoices; recalibrated facts to count controls; purchase-order's excess recorded as explained, not a defect · landed · 516ff6d
+- 2026-08-26 09:25 · Meta · refusal · exempting purchase-order's markup excess — a fourth adjustment in one round is tuning until nothing is flagged · refused · 516ff6d
+- 2026-08-26 13:50 · Polish · tidy · screens round 3: crm/account dry — performance concluded a regression tripwire, not a work generator, after four investigations found content not waste · landed · 3e6709f
+- 2026-08-26 13:50 · Meta · refusal · a fourth Polish round driven by performance — four investigations found zero waste; the dimension measures content mix · refused · 3e6709f

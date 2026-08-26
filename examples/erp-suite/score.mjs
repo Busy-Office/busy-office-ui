@@ -36,39 +36,9 @@ import { fileURLToPath } from 'node:url';
 
 const DIST = join(dirname(fileURLToPath(import.meta.url)), 'dist');
 
-/** What each kind of screen is FOR, and therefore what it owes. */
-const KIND = {
-  'index': 'home',
-  'p2p/requisitions': 'list', 'p2p/purchase-orders': 'list', 'p2p/vendor-invoices': 'list',
-  'o2c/sales-orders': 'list',
-  'crm/accounts': 'list', 'crm/opportunities': 'list',
-  'prod/production-orders': 'list',
-  'p2p/requisition': 'document', 'p2p/purchase-order': 'document',
-  'p2p/vendor-invoice': 'document', 'o2c/sales-order': 'document',
-  'o2c/customer-invoice': 'document', 'crm/account': 'document',
-  'crm/opportunity': 'document', 'prod/production-order': 'document',
-  'fin/journal-entry': 'document', 'inv/stock-movement': 'document',
-  'p2p/convert-to-po': 'worksheet', 'inv/cycle-count': 'worksheet',
-  'fin/trial-balance': 'report', 'fin/ar-aging': 'report', 'prod/capacity': 'report',
-  'inv/stock-on-hand': 'report',
-  /* Reclassified 2026-08-26, the THIRD kind-map correction and the one that
-     names the cause: `o2c/customer-invoices` is "Receivables by age", a cross-tab
-     with Current / 1-30 / 31-60 / 61-90 / 90+ — the same shape as fin/ar-aging.
-     It was filed as a list because its NAME sounds like one. All three
-     corrections share that: period-close, bom and this. Kind comes from what a
-     screen DOES, and the map is hand-written precisely so that judgement is
-     visible in a diff rather than inferred from a URL. */
-  'o2c/customer-invoices': 'report',
-  /* Corrected 2026-08-26 after the first run scored these 1/4 and 2/4. That was
-     the MAP being wrong, not the screens: a BOM and a lot trace are structures,
-     and a structure has no meaningful total, so owing a <tfoot> was nonsense.
-     Period close is a job — you do not filter close tasks, create them ad hoc,
-     or drill into a task record. Reclassified because the PURPOSE differs, not
-     to erase a low score; the six lists still missing a filter bar were left
-     exactly where they are. */
-  'prod/bom': 'structure', 'inv/lot-trace': 'structure',
-  'fin/period-close': 'job',
-};
+/* One definition, shared with the docs' screen-kit index (roadmap 147.1). */
+import { KIND } from './kinds.mjs';
+
 
 /**
  * What a kind owes, per dimension. Each entry is a name and a predicate that
@@ -340,7 +310,11 @@ for (const [name, n, backlog] of [['functionality', dFn, totalMissing], ['perfor
   console.log(`  ${pad(name, 15)} ${n} distinct  ${verdict}`);
 }
 
-const outliers = results.filter((r) => Math.abs(r.excess) > 2 * F.sd);
+/* OVER the line only, matching the score band. `Math.abs` here flagged
+   fin/trial-balance — the leanest screen in the suite — as an outlier while the
+   score correctly did not, which is the same penalise-thrift bug one line over.
+   Below the line is a limit of a straight-line fit, not a defect. */
+const outliers = results.filter((r) => r.excess > 2 * F.sd);
 console.log(`\nmarkup outliers beyond 2sd: ${outliers.length}${outliers.length ? ' — ' + outliers.map((o) => o.key).join(', ') : ' (none)'}`);
 
 console.log('\nWhat is missing, by frequency — this is the backlog the score is FOR:');
