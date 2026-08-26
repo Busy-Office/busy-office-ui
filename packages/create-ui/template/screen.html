@@ -1,0 +1,122 @@
+<div class="bo-stack">
+  <nav aria-label="Breadcrumb"><ol class="bo-breadcrumb"><li><a href="/index.html">Home</a></li><li><a href="/p2p/purchase-orders.html">Procure to pay</a></li><li><span aria-current="page">Purchase orders</span></li></ol></nav>
+  
+<div class="bo-cluster bo-cluster--split">
+  <h1>Purchase orders</h1>
+  <div class="bo-cluster">
+    <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh purchase orders">⟳</button>
+    <button class="bo-btn" type="button">+ New purchase order</button>
+  </div>
+</div>
+
+<form class="bo-cluster" data-density="compact">
+  <input class="bo-input" type="search" aria-label="Search purchase orders" placeholder="Search…" style="max-inline-size: 12rem">
+  <select class="bo-select" aria-label="Status filter">
+    <option>All statuses</option><option>Pending approval</option><option>Approved</option><option>Closed</option>
+  </select>
+  <select class="bo-select" aria-label="Vendor filter">
+    <option>All vendors</option><option>Northwind Supply</option><option>Ferrus Metals</option>
+  </select>
+  <button class="bo-btn bo-btn--secondary" type="button">Apply</button>
+  <button class="bo-btn bo-btn--ghost" type="reset">Clear</button>
+</form>
+
+<div class="bo-data-table-container" tabindex="0" data-density="compact">
+  <div class="bo-data-table__toolbar">
+    <div class="bo-data-table__bulk-actions" role="group" aria-label="Bulk actions">
+      <button class="bo-btn bo-btn--secondary" type="button">Approve</button>
+      <button class="bo-btn bo-btn--danger" type="button">Reject</button>
+    </div>
+    <span class="bo-data-table__selection-count"></span>
+    <span class="bo-u-text-muted">312 orders</span>
+  </div>
+  <table class="bo-data-table bo-data-table--sticky-col">
+    <caption class="bo-visually-hidden">Purchase orders with vendor, cost centre, value and status</caption>
+    <thead>
+      <tr>
+        <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all"></th>
+        <th scope="col" aria-sort="descending"><button class="bo-data-table__sort-btn" type="button">Order #</button></th>
+        <th scope="col">Vendor</th>
+        <th scope="col" class="bo-data-table__col--tertiary">Cost center</th>
+        <th scope="col" class="bo-data-table__col--secondary">Needed by</th>
+        <th scope="col" class="bo-data-table__col--numeric">Value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Received</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select PO-88213"></td>
+        <td class="bo-data-table__col--code"><a href="/p2p/purchase-order.html">PO-88213</a></td>
+        <td class="bo-u-text-truncate">Northwind Supply</td>
+        <td class="bo-data-table__col--tertiary bo-data-table__col--code">CC-4021</td>
+        <td class="bo-data-table__col--secondary bo-u-tabular">2026-08-28</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">48,200<span class="bo-amount__fraction">.00</span></span></span></td>
+        <td><span class="bo-badge bo-badge--warning">Pending approval</span></td>
+        <td><span class="bo-u-text-muted">—</span></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select PO-88198"></td>
+        <td class="bo-data-table__col--code"><a href="/p2p/purchase-order.html">PO-88198</a></td>
+        <td class="bo-u-text-truncate">Ferrus Metals</td>
+        <td class="bo-data-table__col--tertiary bo-data-table__col--code">CC-4021</td>
+        <td class="bo-data-table__col--secondary bo-u-tabular">2026-08-25</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">12,940<span class="bo-amount__fraction">.00</span></span></span></td>
+        <td><span class="bo-badge bo-badge--success">Approved</span></td>
+        <td><progress class="bo-progress" value="0" max="100"></progress> 0% received</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select PO-88164"></td>
+        <td class="bo-data-table__col--code"><a href="/p2p/purchase-order.html">PO-88164</a></td>
+        <td class="bo-u-text-truncate">Kite Logistics</td>
+        <td class="bo-data-table__col--tertiary bo-data-table__col--code">CC-1180</td>
+        <td class="bo-data-table__col--secondary bo-u-tabular">2026-08-24</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">3,180<span class="bo-amount__fraction">.50</span></span></span></td>
+        <td><span class="bo-badge bo-badge--success">Approved</span></td>
+        <td><progress class="bo-progress" value="0" max="100"></progress> 0% received</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select PO-88140"></td>
+        <td class="bo-data-table__col--code"><a href="/p2p/purchase-order.html">PO-88140</a></td>
+        <td class="bo-u-text-truncate">Northwind Supply</td>
+        <td class="bo-data-table__col--tertiary bo-data-table__col--code">CC-2205</td>
+        <td class="bo-data-table__col--secondary bo-u-tabular">2026-08-21</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">27,015<span class="bo-amount__fraction">.00</span></span></span></td>
+        <td><span class="bo-badge">Partially received</span></td>
+        <td><progress class="bo-progress" value="55" max="100"></progress> 55% received</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select PO-88121"></td>
+        <td class="bo-data-table__col--code"><a href="/p2p/purchase-order.html">PO-88121</a></td>
+        <td class="bo-u-text-truncate">Aalto Plastics</td>
+        <td class="bo-data-table__col--tertiary bo-data-table__col--code">CC-1180</td>
+        <td class="bo-data-table__col--secondary bo-u-tabular">2026-08-19</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">9,600<span class="bo-amount__fraction">.00</span></span></span></td>
+        <td><span class="bo-badge">Closed</span></td>
+        <td><progress class="bo-progress" value="100" max="100"></progress> 100% received</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="Select PO-88097"></td>
+        <td class="bo-data-table__col--code"><a href="/p2p/purchase-order.html">PO-88097</a></td>
+        <td class="bo-u-text-truncate">Ferrus Metals</td>
+        <td class="bo-data-table__col--tertiary bo-data-table__col--code">CC-4021</td>
+        <td class="bo-data-table__col--secondary bo-u-tabular">2026-08-18</td>
+        <td class="bo-data-table__col--numeric"><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">61,750<span class="bo-amount__fraction">.00</span></span></span></td>
+        <td><span class="bo-badge bo-badge--danger">Rejected</span></td>
+        <td><span class="bo-u-text-muted">—</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="bo-data-table__footer">
+    <nav class="bo-pagination" aria-label="Purchase order pages">
+      <button class="bo-pagination__btn" type="button" disabled aria-label="Previous page">‹</button>
+      <a class="bo-pagination__btn" aria-current="page" href="#">1</a>
+      <a class="bo-pagination__btn" href="#">2</a>
+      <a class="bo-pagination__btn" href="#">3</a>
+      <a class="bo-pagination__btn" href="#" aria-label="Next page">›</a>
+      <span class="bo-pagination__info">1–6 of 312</span>
+    </nav>
+  </div>
+</div>
+
+</div>

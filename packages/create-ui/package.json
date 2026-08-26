@@ -1,0 +1,13 @@
+{
+  "name": "@busy-office/create-ui",
+  "version": "0.1.0",
+  "description": "Scaffold a Busy Office ERP screen — npm create @busy-office/ui",
+  "type": "module",
+  "license": "MIT",
+  "bin": { "create-ui": "./index.mjs" },
+  "files": ["index.mjs", "template", "NOTICE"],
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

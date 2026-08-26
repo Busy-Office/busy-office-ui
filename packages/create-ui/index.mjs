@@ -1,0 +1,174 @@
+#!/usr/bin/env node
+/**
+ * npm create @busy-office/ui [dir]
+ *
+ * Scaffolds one runnable ERP screen. Deliberately small: `check:quickstart`
+ * already proves that install → import → paste produces a rendered screen
+ * (roadmap 147.3), so what was missing is not proof, it is the assembling. A
+ * newcomer should not have to build the page by hand to see one work.
+ *
+ * NO PROMPTS AND NO OPTIONS in v1, which is a decision rather than an
+ * omission. The review that asked for this also warned against building a
+ * large DSL, and every question here is a question the person cannot yet answer
+ * — they have not seen a screen. One command, one screen, and the screen kit is
+ * one link away when they want a different one.
+ *
+ * The generated project has ZERO dependencies beyond the framework itself: the
+ * dev server is twenty lines of `node:http` written into the project, not a
+ * package. That matches what is being taught — this framework ships CSS and
+ * optional behaviors, not a toolchain — and it means `npm run dev` works on a
+ * plane.
+ */
+import { mkdir, writeFile, readFile, readdir, access } from 'node:fs/promises';
+import { join, dirname, basename, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const TEMPLATE = join(HERE, 'template');
+
+const target = resolve(process.argv[2] ?? 'my-erp');
+const name = basename(target);
+
+/* Refuse to scaffold into a directory that already has files. Overwriting
+   someone's work to save them a flag is never the right trade. */
+try {
+  const existing = (await readdir(target)).filter((f) => !f.startsWith('.'));
+  if (existing.length) {
+    console.error(`create-ui: ${target} is not empty (${existing.length} entries).`);
+    console.error('  Pick an empty directory, or a name that does not exist yet.');
+    process.exit(1);
+  }
+} catch {
+  /* does not exist — good */
+}
+
+const version = JSON.parse(await readFile(join(HERE, 'package.json'), 'utf8')).version;
+const screen = await readFile(join(TEMPLATE, 'screen.html'), 'utf8');
+
+const files = {
+  'package.json': JSON.stringify(
+    {
+      name,
+      private: true,
+      type: 'module',
+      scripts: {
+        dev: 'node server.mjs',
+        check: 'bo-check-markup .',
+      },
+      dependencies: { '@busy-office/ui': '^0.5.0' },
+    },
+    null,
+    2,
+  ) + '\n',
+
+  'index.html': `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${name}</title>
+<!-- One stylesheet is the whole install. Swap for
+     node_modules/@busy-office/ui/dist/css/index.min.css in production. -->
+<link rel="stylesheet" href="/node_modules/@busy-office/ui/dist/css/index.css">
+</head>
+<body>
+<div class="bo-app-shell">
+  <main class="bo-app-shell__main">
+${screen.replace(/^/gm, '    ').trimEnd()}
+  </main>
+</div>
+
+<!-- Interactive behaviors are opt-in: sorting, selection and bulk actions on
+     the table above come from this one call. Delete it and the page still
+     renders — that is the point of a CSS-first framework. -->
+<script type="module">
+  import { initDataTables } from '/node_modules/@busy-office/ui/dist/js/index.js';
+  initDataTables();
+</script>
+</body>
+</html>
+`,
+
+  'server.mjs': `/* Twenty lines instead of a dependency. This project has none beyond
+   the framework, so \`npm run dev\` works offline and there is no toolchain
+   to learn before you see a screen. */
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { extname, join } from 'node:path';
+
+const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json' };
+const port = Number(process.env.PORT ?? 5173);
+
+createServer(async (req, res) => {
+  const url = decodeURIComponent(req.url.split('?')[0]);
+  const path = url === '/' ? '/index.html' : url;
+  try {
+    const body = await readFile(join(process.cwd(), path));
+    res.writeHead(200, { 'content-type': TYPES[extname(path)] ?? 'application/octet-stream' });
+    res.end(body);
+  } catch {
+    res.writeHead(404, { 'content-type': 'text/plain' }).end('Not found');
+  }
+}).listen(port, () => console.log(\`\\n  \${'\\u2192'} http://localhost:\${port}\\n\`));
+`,
+
+  'README.md': `# ${name}
+
+A Busy Office ERP screen, scaffolded with \`npm create @busy-office/ui\`.
+
+\`\`\`bash
+npm install
+npm run dev     # http://localhost:5173
+\`\`\`
+
+## What you are looking at
+
+A **work list** — the commonest ERP screen. Someone opens it every morning,
+narrows the set, acts on several rows at once, and drills into the exceptions.
+It is copied verbatim from the framework's ERP suite, which is rebuilt and
+re-audited on every commit, so it is a screen that is known to work rather than
+one written for a tutorial.
+
+## Change it
+
+Everything on the page is plain HTML with \`bo-\` classes — there is no build
+step between what you read and what you see. Edit \`index.html\`.
+
+\`\`\`bash
+npm run check   # fails on a class or data-* value the framework does not define
+\`\`\`
+
+That check is the same one the framework runs on itself. A typo becomes an
+error rather than a silently dead rule.
+
+## Next
+
+- **More screens** — 28 of them, each with copyable markup:
+  <https://busy-office.github.io/busy-office-ui/getting-started/screen-kit>
+- **Which screen do I need?**
+  <https://busy-office.github.io/busy-office-ui/concepts/which-pattern>
+- **Components and their settings**
+  <https://busy-office.github.io/busy-office-ui/components/button>
+
+_Scaffolded by @busy-office/create-ui ${version}._
+`,
+
+  '.gitignore': 'node_modules\n',
+};
+
+await mkdir(target, { recursive: true });
+for (const [f, body] of Object.entries(files)) {
+  await mkdir(dirname(join(target, f)), { recursive: true });
+  await writeFile(join(target, f), body);
+}
+
+console.log(`
+  Scaffolded ${name}
+
+    cd ${basename(target)}
+    npm install
+    npm run dev
+
+  One work-list screen, ready to edit. More at the screen kit:
+  https://busy-office.github.io/busy-office-ui/getting-started/screen-kit
+`);

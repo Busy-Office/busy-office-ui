@@ -26,7 +26,7 @@ import { mkdtemp, writeFile, readFile, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { REPO_ROOT as ROOT } from './paths.mjs';
@@ -156,9 +156,62 @@ ${fragment}
          String(err.stdout ?? err).split('\n').slice(0, 3).join(' '));
   }
 
+  /* ---- arm 2: the SCAFFOLD, run rather than described (roadmap 148.2) ----
+     Arm 1 proves the documented path works if you assemble the page yourself.
+     This proves `npm create @busy-office/ui` hands someone a running screen
+     without assembling anything — which is the difference between "the path
+     works" and "I have an app". It spawns the project's OWN server.mjs, not a
+     test harness, because that file ships and would otherwise never run. */
+  const scaffold = join(dir, 'scaffolded');
+  execFileSync(process.execPath, [join(ROOT, 'packages', 'create-ui', 'index.mjs'), scaffold], { stdio: 'pipe' });
+  execFileSync('npm', ['i', '--no-save', join(dir, packed)], { cwd: scaffold, stdio: 'pipe' });
+
+  const dev = spawn(process.execPath, ['server.mjs'], {
+    cwd: scaffold,
+    env: { ...process.env, PORT: '5199' },
+    stdio: 'ignore',
+  });
+  let scaffoldSeen;
+  try {
+    for (let i = 0; i < 40; i += 1) {
+      try {
+        if ((await fetch('http://localhost:5199/')).ok) break;
+      } catch {
+        await new Promise((r) => setTimeout(r, 100));
+      }
+    }
+    const p2 = await browser.newPage();
+    await p2.setViewport({ width: 1440, height: 900 });
+    const threw = [];
+    p2.on('pageerror', (e) => threw.push(String(e)));
+    await p2.goto('http://localhost:5199/', { waitUntil: 'networkidle0', timeout: 20000 });
+    scaffoldSeen = await p2.evaluate(() => ({
+      token: getComputedStyle(document.documentElement).getPropertyValue('--bo-color-accent').trim(),
+      rows: document.querySelectorAll('tbody tr').length,
+      sortable: document.querySelectorAll('.bo-data-table__sort-btn').length,
+      behaviorRan: !!document.querySelector('[data-bo-table],[aria-sort]'),
+    }));
+    if (threw.length) fail('the scaffolded page threw', threw[0]);
+  } finally {
+    dev.kill();
+  }
+  if (!scaffoldSeen.token) fail('the scaffolded project renders unstyled', JSON.stringify(scaffoldSeen));
+  if (!scaffoldSeen.rows) fail('the scaffolded screen has no rows', JSON.stringify(scaffoldSeen));
+
+  try {
+    execFileSync('npx', ['bo-check-markup', '.'], { cwd: scaffold, stdio: 'pipe' });
+  } catch (err) {
+    fail("the scaffold's own `npm run check` fails on what it generated",
+         String(err.stdout ?? err).split('\n').slice(0, 3).join(' '));
+  }
+
   console.log(
     `quickstart check passed — empty dir → npm i → ${resolved.length} documented import(s) resolve → ` +
       `a kit screen renders (${seen.rows} rows, ${seen.boClasses} styled elements) → bo-check-markup clean`,
+  );
+  console.log(
+    `  scaffold — npm create @busy-office/ui → its own server.mjs serves a styled screen ` +
+      `(${scaffoldSeen.rows} rows, ${scaffoldSeen.sortable} sortable column(s)) → bo-check-markup clean`,
   );
 } finally {
   if (browser) await browser.close();

@@ -1230,7 +1230,7 @@ confirmation of the existing direction plus a caught regression — not a new on
        blocks only, with an assertion that every `it(` survives the carve —
        a bulk edit verified against a count, not against the diff.
 
-2. [ ] **148.2 — `npm create @busy-office/ui`** (review §22, its P2).
+2. [x] **148.2 — DONE 2026-08-26. `npm create @busy-office/ui` — one command, one running screen.** (review §22, its P2).
        **Name corrected on the owner's challenge, 2026-08-26** — the review
        said `npm create busy-office` and it was copied here unexamined.
        `npm create <x>` resolves to `create-<x>`, and every real scaffolder
@@ -1252,6 +1252,33 @@ confirmation of the existing direction plus a caught regression — not a new on
        "the path works" and "I have an app". *Accept*: `npm create` in an empty
        directory yields a dev server showing a real screen, and the scaffold is
        exercised by `check:quickstart` rather than described.
+
+       `@busy-office/create-ui`, 5.3 kB packed. Generates five files and a
+       project with **zero dependencies beyond the framework** — the dev server
+       is twenty lines of `node:http` written into the project, not a package,
+       so `npm run dev` works offline and there is no toolchain to learn before
+       seeing a screen. That is also what the framework itself claims to be.
+
+       **The screen is copied, not authored.** It is snapshotted at build time
+       from the ERP suite's `p2p/purchase-orders` — a work list, the commonest
+       ERP screen and the one an agent reaches for a dashboard instead of
+       (review §28). Hand-writing a starter screen would make the one page a
+       newcomer sees the one page nobody gates.
+
+       **No prompts, and that is a decision.** The review that asked for this
+       also warned against building a DSL, and every question a wizard could
+       ask is one the person cannot answer yet — they have not seen a screen.
+       One command, one screen, the kit one link away.
+
+       **Exercised, not described**, as the Accept required: `check:quickstart`
+       grew a second arm that scaffolds, installs the local pack, spawns the
+       project's OWN `server.mjs` — that file ships and would otherwise never
+       run — loads it in a browser and asserts computed style. Red-proved twice:
+       breaking the stylesheet path reports *"the scaffolded project renders
+       unstyled"*, and scaffolding into a non-empty directory refuses rather
+       than overwriting someone's work.
+
+       **Publishing stays owner-triggered**, like every release.
 
 3. [ ] **148.3 — the build chain is doing repo-wide validation** (review §7 and
        §20 together, and the one place the review shifts weight). The docs
