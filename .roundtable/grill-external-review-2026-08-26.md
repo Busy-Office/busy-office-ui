@@ -16,7 +16,7 @@ Rated ~8.7/10 overall with the recommendation **not to restart**. The framing �
 | --- | --- | --- |
 | 8 / P0 | CI container build broken | Verified, fixed, and the Containerfile now records the third instance of this class |
 | 21 | 129 behavior tests in one file | Cheap, obviously right, no counter-argument |
-| 22 / P2 | `npm create busy-office` | 147.3 proves the path with a CHECK; a human still assembles the page by hand. Real gap. |
+| 22 / P2 | a scaffolder | 147.3 proves the path with a CHECK; a human still assembles the page by hand. Real gap. **Its NAME is wrong though** — see below. |
 | 6 / P1 | Measure before building Screen Contracts | Already the plan — 112.3 gates 112.4 — and the review is right that it is the pivot |
 | 13 | Structural metrics are tripwires, not truth | Reached independently this morning: four Polish rounds found content, never waste, and performance was reclassified a regression tripwire |
 | 7 | Process machinery may outgrow user value | Fair. Three of six loop rounds today fixed instruments rather than the framework. |
@@ -51,6 +51,24 @@ a NEXT step. Building it before 112.3 reports is the intuition-over-evidence
 move the review itself warns against in §6. It needs a contract to check
 against, and whether that contract is justified is exactly what the pilot
 measures.
+
+## A name the review got wrong, and I copied
+
+§22 proposes `npm create busy-office`. That names the SCOPE, not the product.
+`npm create <x>` resolves to `create-<x>`, and every real scaffolder names the
+product — `npm create vite` (package `vite`), `astro`, `svelte`. The product
+here is `@busy-office/ui`, so `npm create busy-office` is `npm create meta` for
+React.
+
+Worth recording because I put it in the roadmap unexamined and the owner caught
+it. A review being right about a P0 does not make its incidental details right,
+and copying a name is exactly the kind of low-stakes detail that slips through
+a triage aimed at the big claims.
+
+Settled on the scoped form, `npm create @busy-office/ui`: it mirrors the install
+command character for character, and the scope is already owned so it cannot be
+squatted — unscoped `create-busy-office-ui` is free for anyone today. All three
+names checked as unregistered, so this is merit, not availability.
 
 ## Corrections to the review
 

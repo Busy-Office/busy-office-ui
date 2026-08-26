@@ -928,3 +928,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 21:42 · Standardize · tidy · five scripts had regrown the REPO_ROOT duplication paths.mjs was extracted to end; routed through it and added check:paths as a gate over the gates · landed · dc421ec
 - 2026-08-26 21:55 · Continue · bug · P0: docs container had no examples/erp-suite, so 147.1's kit generator broke the image; third time a docs-build dependency rotted there · landed · 23f931d
 - 2026-08-26 22:03 · Roadmap · triage · Slice 148 from the external review: 3 accepted (split tests, npm create, build-chain scope), 4 refused with reasons · triaged · 3c5bada
+- 2026-08-26 22:06 · Continue · build · 148.1 — behavior tests split into 25 files (129 passing); first attempt lost 4 tests to a stray top-level helper and exposed two blocks sharing state through module order · landed · 10ad5d2

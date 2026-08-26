@@ -1230,7 +1230,23 @@ confirmation of the existing direction plus a caught regression — not a new on
        blocks only, with an assertion that every `it(` survives the carve —
        a bulk edit verified against a count, not against the diff.
 
-2. [ ] **148.2 — `npm create busy-office`** (review §22, its P2). 147.3 proves
+2. [ ] **148.2 — `npm create @busy-office/ui`** (review §22, its P2).
+       **Name corrected on the owner's challenge, 2026-08-26** — the review
+       said `npm create busy-office` and it was copied here unexamined.
+       `npm create <x>` resolves to `create-<x>`, and every real scaffolder
+       names the PRODUCT: `npm create vite` (package `vite`), `astro`,
+       `svelte`. Here the product is `@busy-office/ui`; `busy-office` alone is
+       the SCOPE, so scaffolding by it is `npm create meta` for React.
+
+       Owner proposed `busy-office-ui`, which is right. Going one further to
+       the scoped form for two reasons: it mirrors the install command
+       character for character (`npm i @busy-office/ui` /
+       `npm create @busy-office/ui`), which is the "one vocabulary" argument
+       the review makes in §16; and the scope is already owned, so it cannot be
+       squatted, where unscoped `create-busy-office-ui` is free for anyone
+       today. Precedent: `npm create @eslint/config`. Checked: all three names
+       are unregistered, so this is a free choice made on merit rather than
+       availability. 147.3 proves
        the documented path with a CHECK; a human still assembles the page by
        hand. A scaffold that produces a running screen closes the gap between
        "the path works" and "I have an app". *Accept*: `npm create` in an empty
