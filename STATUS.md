@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 01:06
+Generated at: 2026-08-27 01:07
 
 ## Open items by slice
 
@@ -19,9 +19,10 @@ Generated at: 2026-08-27 01:06
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (931 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-26 23:34   ok
-  Objective     2 / 3 slices          since 2026-08-27 00:30   ok  [149, 152]
+dispatch status — counter-triggered rules (933 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-26 23:34   OVERDUE
+  Objective     3 / 3 slices          since 2026-08-27 00:30   OVERDUE  [149, 150, 152]
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -34,8 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-26 23:56 · Meta · refusal · sparklines, column chooser, number abbreviation, gantt/tours, group-by-with-counts, and running the suggested 1-commit fork · refused · b09e2e3
-- 2026-08-27 00:21 · Continue · bug · 149.4 P0: job-monitor and notification documented auto-updating content with no pause control (WCAG 2.2.2, no five-second grace for numbers); job-monitor ships a bo-segmented Off/30s/5m, notification documents a settings preference; gated by check:autoupdate-control · landed · fcec793
 - 2026-08-27 00:21 · Meta · refusal · applying one mechanical fix to both pages — a widget beside the app-shell bell would be worse design than a settings preference · refused · fcec793
 - 2026-08-27 00:30 · Objective · grill · Objective grill 112/130-148: the suite is blind to components it CAN express but nobody reaches for — bo-progress 1/27, bo-date 0/27 while 21 screens render dates; three components at zero reach fail principle 3 · logged · 1802b6b
 - 2026-08-27 00:30 · Meta · refusal · gating zero reach — bo-tree's zero is suitability-beats-reuse working correctly, so a red build would be wrong a third of the time · refused · 1802b6b
@@ -44,6 +43,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
 - 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6
 - 2026-08-27 00:49 · Continue · build · 152.1: a copyable structural template per shell on concepts/layouts, driven by one SHELLS array that also replaced two hand-written tables; surfaced that split master-detail has no shipped primitive · landed · d873603
+- 2026-08-27 01:07 · Continue · build · 150.1: report-reach.mjs prints block reach on every build (61 blocks, 75 compositions, 7 never composed) and never fails — zero reach has three meanings and a gate would be wrong about one · landed · 1e0a56e
+- 2026-08-27 01:07 · Meta · refusal · gating zero reach, and counting per component — api.json blocks is not an ownership map · refused · 1e0a56e
 
 ## Sunset test
 
