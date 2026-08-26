@@ -921,3 +921,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-26 13:50 · Polish · tidy · screens round 3: crm/account dry — performance concluded a regression tripwire, not a work generator, after four investigations found content not waste · landed · 3e6709f
 - 2026-08-26 13:50 · Meta · refusal · a fourth Polish round driven by performance — four investigations found zero waste; the dimension measures content mix · refused · 3e6709f
 - 2026-08-26 21:15 · Continue · build · 147.1 — screen kit at /getting-started/screen-kit, suite deployed under /suite/; found 28 screens would have shipped CSS-less and a data-row-state value the framework never defined · landed · 20d5609
+- 2026-08-26 21:22 · Continue · build · 147.2 — copy-paste decided: plain-text <main> fragment per screen; Demo-per-screen and a copy button both refused with the numbers · landed · c22a93e
+- 2026-08-26 21:22 · Meta · refusal · Demo for whole screens — +181 KB on one page, or 28 docs pages that must carry a page skeleton a screen does not have · refused · c22a93e
+- 2026-08-26 21:22 · Meta · refusal · a copy button on the suite screens — the zero-CSS claim is the instrument's whole value · refused · c22a93e

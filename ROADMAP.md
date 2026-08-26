@@ -1278,12 +1278,34 @@ most complete artefact this project owns has no way in.
        different page counts. Routed through `suitePages()`, the enumerator the
        Standardize round consolidated for this exact tree.
 
-3. [ ] **147.3 — a starter that runs.** `npm i` then what? There is no
+3. [x] **147.3 — DONE 2026-08-26. The adoption path is executed on every build, not documented and hoped for.** `npm i` then what? There is no
        template, no scaffold, and the package's only bin is
        `bo-check-markup`. *Accept*: a person with an empty directory reaches a
        rendered ERP screen by following written steps, and the steps are
        executed by a check rather than believed — the same bar
        `check:claims` holds prose to.
+
+       **No new prose was needed.** `getting-started/installation` already
+       documented the path; what was missing is that nothing ran it.
+       `check:quickstart` now does, end to end: an empty temp directory,
+       `npm init`, `npm i` of the **local pack** (the registry tells you 0.5.0
+       worked; this tells you whether the thing about to be published does),
+       every documented import resolved from that fresh install, a **real
+       screen-kit fragment** pasted into the documented skeleton, and a browser
+       assertion that it rendered — closing with the documented final step,
+       `npx bo-check-markup`.
+
+       **It measures computed style, not markup, and the red-proof is why.**
+       Sabotaging the stylesheet to empty left the page with **6 rows and 108
+       `bo-` elements** — a structure check would have passed a completely
+       unstyled page. So it asserts `--bo-color-accent` resolves,
+       `.bo-data-table` computes `border-collapse: collapse`, and `.bo-btn`
+       computes `cursor: pointer`. Red-proved twice: an empty stylesheet, and a
+       documented import that does not resolve.
+
+       Using a kit fragment rather than a hand-written snippet makes this prove
+       **147.1's promise too** — "paste it and the classes resolve" is now a
+       build failure if untrue, rather than a claim on a page.
 
 **Sequenced deliberately**: 147.1 makes what exists reachable, 147.2 decides
 before building, 147.3 is the largest and benefits from both. None of it adds

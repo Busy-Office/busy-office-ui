@@ -35,7 +35,8 @@
     "scan:dead-style": "node scripts/scan-dead-style.mjs",
     "check:ci-ignores": "node scripts/check-ci-ignores.mjs",
     "check:slice-refs": "node scripts/check-slice-refs.mjs",
-    "copy:suite": "node scripts/copy-suite.mjs"
+    "copy:suite": "node scripts/copy-suite.mjs",
+    "check:quickstart": "node scripts/check-quickstart.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

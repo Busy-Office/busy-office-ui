@@ -58,6 +58,16 @@ const skeleton = `<!doctype html>
 </html>`;
 ---
 <Gallery title="Installation">
+  <p class="demo-note">
+    <strong>These steps are executed, not just written.</strong> On every CI run
+    <code>check:quickstart</code> creates an empty directory, installs the
+    package that is about to be published, resolves each import named below,
+    pastes a real screen from the
+    <a href={base + '/getting-started/screen-kit'}>screen kit</a>, and asserts in
+    a browser that the CSS actually applied — a page with no stylesheet still has
+    every row and every class, so it measures computed style rather than markup.
+    If anything here stops working, that build fails.
+  </p>
   <p class="demo-note">Install the package and import one stylesheet — that's it. No
   build step: the output is plain CSS and standard ES modules. Two ideas show up
   immediately below and are worth a minute each: <a href={base + '/concepts/tokens'}>design

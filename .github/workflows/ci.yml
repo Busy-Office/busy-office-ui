@@ -130,12 +130,17 @@ jobs:
           # that claim at compact density in a +35% pseudo-locale.
           # The reference app is what adopters copy and what four docs pages
           # cite as the working implementation, and nothing tested it until 26.1.
-          # The ERP suite is the framework's gap-finding instrument: 25 screens
+          # The ERP suite is the framework's gap-finding instrument: 28 screens
           # built ONLY from shipped CSS, with check-erp-suite enforcing that it
           # has none of its own. One script so CI and the loop run the identical
           # thing; its audit starts its own server, so it needs nothing set up.
+          # check:quickstart is the adoption path executed rather than
+          # documented: an empty directory, npm i of the LOCAL pack, the
+          # documented imports, a real kit screen pasted in, and an assertion
+          # that it RENDERS. An unstyled page still has every row and every
+          # class, so it checks computed style, not structure (roadmap 147.3).
           - name: Pseudo-locale + reference app + ERP suite
-            run: npm run check:pseudo -w docs && npm run check:po-app -w docs && npm run suite
+            run: npm run check:pseudo -w docs && npm run check:po-app -w docs && npm run suite && npm run check:quickstart -w docs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
