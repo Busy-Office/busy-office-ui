@@ -222,6 +222,19 @@ the number is used, not after it looks wrong:
 - **Derive names from the generated source, never from a convention.** Page
   slugs are not class names: `alerts` → `bo-alert`, `button` → `bo-btn`,
   `dashboard` → `bo-widget`. `api.json` knows; a guess does not.
+- **A context-window regex is secretly a POSITION filter, and it fails
+  silently.** `grep -oE ".{50}(saved view).{80}"` reads as "show the match with
+  context"; it means *"match only when 50 characters precede it on the same
+  line"*. `aria-label="Saved views"` sits near a line start, so it returned
+  **zero** while plain `grep -c` found it instantly (2026-08-27). This is worse
+  than a dead detector — a dead one looks unremarkable, whereas this reported a
+  confident ABSENCE. It put a wrong claim into ROADMAP ("the single biggest
+  thing in the screenshot the framework has no answer for") for a mechanism
+  `/patterns/list-report` already shipped, and shipped *more completely* than
+  the proposal. **Grep with a plain fixed string first; add context only after
+  you know the count.** And when one claim from a session dies this way,
+  **re-verify its siblings** — they came from the same instrument, on the same
+  day, in the same frame of mind.
 
 Applies to ad-hoc measurement, not to a gate that has already been red-proved —
 that one has earned its output by construction.

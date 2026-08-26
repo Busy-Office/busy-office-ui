@@ -1332,25 +1332,45 @@ headers already have `data-context-menu` (sort). The command-bar shape —
 primary action first, then verbs, then an overflow `…` — is
 `/patterns/command-bar`. Status pills are word + tone in both.
 
-1. [ ] **151.1 — named views as a first-class strip on a list screen.**
-       The reference puts saved views on the shelf above the table —
-       *All items · Created by me · FI · MM · » · + Add view* — and marks the
-       active one with an **asterisk when it has unsaved changes**. Nothing here
-       documents this: `grep` finds no saved-view concept on any of the 39
-       pattern pages, and it is the single biggest thing in the screenshot the
-       framework has no answer for.
+1. [x] **151.1 — REFUSED 2026-08-27, ALREADY COVERED. The claim was wrong, and a broken detector made it.**
+       This item said saved views were *"the single biggest thing in the
+       screenshot the framework has no answer for"*, citing a grep that found no
+       saved-view concept on any of the 39 pattern pages.
 
-       It passes all three principles. *Simplicity*: a consumer stops inventing
-       a view switcher. *Less for more*: one strip serves every list screen.
-       *Reusability*: every list screen, unchanged.
+       **`/patterns/list-report` has had the entire mechanism all along**, and it
+       is better than the reference on three counts:
 
-       *Accept*: documented as a **pattern**, composed from shipped primitives
-       (the strip is a `bo-segmented`/tab shape; the overflow is the existing
-       `»` treatment) with **zero new CSS**, and the framework owns only the
-       visuals — persistence, naming and permissions stay with the consumer
-       ("framework does visuals, you do the data"). The dirty-state marker must
-       be **two-channel**: an asterisk is a glyph, so it needs accompanying
-       accessible text ("unsaved changes"), not a bare `*`.
+       - Views are a `bo-segmented` radiogroup **carrying counts** — *All open ·
+         312 · Mine · 18 · Overdue · 7*.
+       - **A saved view is a URL** (`?view=…`), so it is shareable, bookmarkable
+         and pasteable into a ticket. The switcher is a GET form of radios.
+       - A "Views ▾" menu already offers *Save current filters as a view…*,
+         Rename, Make default and Delete — the "+ Add view" the screenshot shows.
+
+       Its States table goes further than anything proposed here: server-side
+       resolution (*"a saved query living server-side, not a client blob"*),
+       name-conflict handling (*"never auto-suffix to 'Mine (2)', which is how
+       people end up with four views they cannot tell apart"*), permission
+       fallback, and an empty state arguing that a one-option switcher is *"a
+       label pretending to be a choice"*.
+
+       **Even the dirty-state marker is there, and is better than the asterisk**:
+       *"View selected, filters then changed — the chip stays selected but the
+       screen says the view is modified ('Overdue · edited')"*. A **word**, not a
+       glyph, so it is two-channel by default where a bare `*` is not.
+
+       **The detector that produced the false negative is the finding.** The
+       grep was `.{50}(saved view|add view|…).{80}` — a context-window regex,
+       which silently requires **50 characters before the match on the same
+       line**. `aria-label="Saved views"` sits near the start of its line, so it
+       matched zero; plain `grep -c "Saved views"` finds it immediately. A
+       regex written to show context became a filter on position.
+
+       This cost more than a wasted grep: it put a confident, wrong claim into
+       the roadmap, and the proposed build would have re-implemented a mechanism
+       that already ships. **151.2 was re-verified with plain greps before being
+       trusted** — it stands. 151.3 came from `api.json` rather than a regex and
+       is unaffected.
 
 2. [ ] **151.2 — a column can explain itself.**
        The reference puts an ⓘ beside `Request Date` and `Due Date` carrying a
