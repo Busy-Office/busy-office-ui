@@ -2,15 +2,14 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 00:19
+Generated at: 2026-08-28 00:22
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 153** (2 open)
-  - 153.1 — teach `report-reach` the fourth meaning.
+- **Slice 153** (1 open)
   - 153.2 — `bo-date` is the one real miss.
 - **Slice 157** (1 open)
   - 157.3 — write the guideline: when does a row show a marker at all?
@@ -20,9 +19,9 @@ Generated at: 2026-08-28 00:19
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (953 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-28 00:09   ok
-  Objective     1 / 3 slice           since 2026-08-28 00:13   ok  [151]
+dispatch status — counter-triggered rules (954 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-28 00:09   ok
+  Objective     2 / 3 slices          since 2026-08-28 00:13   ok  [151, 153]
 ```
 
 ## Owner-blocked
@@ -35,7 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 15:57 · Continue · bug · 154.1 verifier pass: the collapsed-card reveal was claimed on the page but proven only in jsdom — now demoed and checked live (transition settled, non-zero height on the box carrying the constraint), red-proved in isolation; the tabpanel path is an explicit EXEMPT with a reason; the tabpanel fallback no longer leaves two tabs aria-selected · landed · 0ae6141
 - 2026-08-27 21:43 · Roadmap · plan · 155.1/155.2 triaged from the owner's create-ui question: the scaffold's ^0.5.0 pin is unchecked and check:quickstart bypasses it with --no-save, and create-ui/NOTICE is a byte-identical hand copy of core's · triaged · 758ca1a
 - 2026-08-27 21:57 · Roadmap · plan · 156.1/156.2 triaged: owner wants a device layout guide; the framework is container-query responsive so Desktop/Tablet/Mobile are one shell at different widths — deliverable is a measured shell x device support matrix, RF the one genuine exception · triaged · c53bfaf
 - 2026-08-27 22:24 · Continue · build · 156.1/156.2: a measured shell x device support matrix on /concepts/layouts with device entry points; found that crossing the 896px band gives main 171px MORE room, and that split master-detail's fixed 22rem list pane leaves a 36px detail pane at 390px · landed · ca5a34b
@@ -45,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 00:13 · Objective · grill · Objective grill 151/154/156/157: Accept criteria were embedding predictions and 2 of ~12 were falsified (Breaking-that-wasn't, a flip-site count that did not move); six instrument errors in one session, three of them name-derivation against a rule that already exists — assertions caught all six, recall caught none · logged · b2c556a
 - 2026-08-28 00:13 · Meta · refusal · a gate that every var(--bo-*) resolves — base rate is 65 refs, 0 genuinely unresolved, and the measuring instrument was 6-for-6 false · refused · b2c556a
 - 2026-08-28 00:19 · Continue · build · 151.3: ordinal values REFUSED — 168 suite badges, zero ranked; the rank word IS the ordinal channel and the two-channel rule makes it mandatory anyway, so a glyph would encode the same fact twice. Reopen test written on the badge page · refused · 6088cbb
+- 2026-08-28 00:22 · Continue · build · 153.1: report-reach separates 'cannot appear' (bo-toast-region, a runtime container) from 'never composed' (7->6); the hand-kept exemption reconciles against measurement both ways so it cannot rot, red-proved on both paths · landed · c2c7d59
 
 ## Sunset test
 
