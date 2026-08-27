@@ -52,6 +52,19 @@ pin.
 
 ### Changed
 
+- **The leading edge now means exactly one thing: the ROW.** `td[data-tone]`
+  cells keep their tint but lose the `inset 3px` bar they used to share with
+  `tr[data-row-state]`. One visual was doing two jobs — an edge on an amount
+  cell was indistinguishable from the marker meaning "this row is in a state",
+  and a dirty row holding a danger cell rendered two 3px edges that meant
+  different things. The attribute is unchanged, so no markup moves.
+  Consequences worth knowing: a toned cell's non-colour channel is now the
+  adjacent text/`aria-label` the doctrine already required — and under
+  `forced-colors`, where the UA drops the tint, that text is the ONLY channel,
+  so it is no longer optional in practice. The `data-tone` half of the RTL
+  flip site and its forced-colors fallback went with the bar; DESIGN.md's
+  flip-site count stays at six because the row stripe is still a flip site.
+
 - **A dirty row no longer says it four times.** `initRowEdit()`'s documented
   row-action markup drops the visible `Unsaved` badge and makes Save/Cancel
   icon-only. The row already carried the state on two visual channels — an

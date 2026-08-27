@@ -231,8 +231,14 @@ selection count for bulk actions).
   offers no logical form for what they use: the select chevron and tree/tree-table
   disclosure glyphs (`background-position` and `content` have no logical keywords),
   the off-canvas slide direction, the `slide-in-inline-start` animation
-  (`transform` is physical), and the data table's row-state stripe /
-  `data-tone` cell bar (an inset `box-shadow`'s x-offset is physical).
+  (`transform` is physical), and the data table's row-state stripe (an inset
+  `box-shadow`'s x-offset is physical). The stripe used to have a twin — the
+  same bar on a `data-tone` CELL — removed 2026-08-27 (roadmap 157.2) because
+  one visual meaning two things is worse than no marker: an edge on an amount
+  cell was indistinguishable from the row-state marker beside it. The count
+  did not move, since the row stripe is still a flip site; only what it
+  covers did. **The gate asserts the NUMBER, not this sentence**, so this
+  description is maintained by hand and is the part that can rot.
   `check:rtl` gates that count — a seventh unflipped case
   fails the build. (This bullet said "the one physical exception" until 2026-08-17,
   when executing the claim found the other four.)

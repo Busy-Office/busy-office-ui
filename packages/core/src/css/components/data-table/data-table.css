@@ -475,20 +475,30 @@
      the condition (Objective principle 3: framework does visuals, the
      consumer does data). Not a substitute for a programmatic channel: pair
      the toned value with adjacent text/an aria-label carrying the same
-     meaning, the same as row-state's own badge-or-message requirement. */
+     meaning, the same as row-state's own badge-or-message requirement.
+
+     NO LEADING EDGE AT CELL LEVEL (owner call, 2026-08-27, roadmap 157.2).
+     A cell tone used to carry the same `inset 3px` accent the ROW state uses,
+     and that is one visual doing two jobs: an edge on an amount cell is
+     indistinguishable from the marker meaning "this ROW is in a state", and a
+     dirty row holding a danger cell showed two 3px edges that meant different
+     things. The tint was never the problem; the edge was.
+
+     So the leading edge now means exactly one thing: THE ROW. A cell's tone is
+     its tint plus its own value, and the adjacent-text requirement stated
+     above is what keeps that from being colour-only — it is also the only
+     channel left under forced-colors, where the UA drops the tint. That
+     requirement is enforced by writing, not by CSS. */
   .bo-data-table td[data-tone="danger"] {
     --bo-cell-bg: var(--bo-state-error-bg);
-    box-shadow: inset 3px 0 0 var(--bo-color-danger);
   }
 
   .bo-data-table td[data-tone="warning"] {
     --bo-cell-bg: var(--bo-color-warning-subtle);
-    box-shadow: inset 3px 0 0 var(--bo-color-warning);
   }
 
   .bo-data-table td[data-tone="success"] {
     --bo-cell-bg: var(--bo-color-success-subtle);
-    box-shadow: inset 3px 0 0 var(--bo-color-success);
   }
 
   /* Text color is opt-in (roadmap 72.2), not the data-tone default: the
@@ -510,14 +520,6 @@
     color: var(--bo-color-success-text);
   }
 
-  @media (forced-colors: active) {
-    .bo-data-table td[data-tone="danger"],
-    .bo-data-table td[data-tone="warning"],
-    .bo-data-table td[data-tone="success"] {
-      box-shadow: none;
-      border-inline-start: 3px solid CanvasText;
-    }
-  }
 
 
   /* RTL: `box-shadow`'s inset offset is PHYSICAL — there is no logical form,
@@ -528,14 +530,12 @@
      computed shadow was byte-identical — `3px 0px 0px 0px inset` — in both
      directions. A documented flip site, like motion.css's transform and
      offcanvas's slide direction. */
-  [dir="rtl"] .bo-data-table tr[data-row-state="error"] > :first-child,
-  [dir="rtl"] .bo-data-table td[data-tone="danger"] {
+  [dir="rtl"] .bo-data-table tr[data-row-state="error"] > :first-child {
     box-shadow: inset -3px 0 0 var(--bo-color-danger);
   }
 
   [dir="rtl"] .bo-data-table tr[data-row-state="dirty"] > :first-child,
-  [dir="rtl"] .bo-data-table tr[data-row-state="warning"] > :first-child,
-  [dir="rtl"] .bo-data-table td[data-tone="warning"] {
+  [dir="rtl"] .bo-data-table tr[data-row-state="warning"] > :first-child {
     box-shadow: inset -3px 0 0 var(--bo-color-warning);
   }
 

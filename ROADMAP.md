@@ -1260,7 +1260,17 @@ regression.
        **Breaking** entry — the documented row-edit markup contract changes
        shape, which the freeze-audit correction says is Breaking.
 
-2. [ ] **157.2 — the leading edge is a ROW marker; drop it at cell level.**
+2. [x] **157.2 — the leading edge is a ROW marker; drop it at cell level.**
+       **Shipped.** Verified live: all three tones render `box-shadow: none`
+       with their tint intact, and the row stripe is untouched
+       (`rgb(220,38,38) 3px inset` on an error row).
+       `check:forced-colors` went 24 -> 21 live rules, exactly the three
+       removed, and still passes. **The RTL count did NOT move** — the
+       prediction in this item's Accept criteria was wrong: the row stripe is
+       still a flip site, so six stays six. What moved is what the sixth site
+       COVERS, and DESIGN.md's prose named the cell bar explicitly. The gate
+       asserts only the number, so that sentence could have rotted silently;
+       it now says so in the sentence itself.
        **Owner, 2026-08-27, on two screenshots:** *"for left border line, we
        don't need at the cell level but level row is ok. might not need all the
        case."*
