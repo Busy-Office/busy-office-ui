@@ -13,97 +13,93 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-27 18:00, HEAD `44c995b`. Working tree clean. 157.3
-landed and is committed.
+Last updated 2026-08-27 19:00. Working tree clean apart from the generated
+`STATUS.md` / `loop-log.md` the recorder rewrites. The Standardize sweep landed
+in three commits and reached its exit condition (a clean pass).
+
+## THE NEXT WAKE DISPATCHES OBJECTIVE — read this before Step 2
+
+```
+Standardize   0 / 4 Continue rounds   ok        (fired and cleared this wake)
+Objective     3 / 3 slices            OVERDUE   [151, 153, 157]
+```
+
+Rule 2 fired this wake and is now reset. **Rule 3 is still overdue and is now
+the first match** — it sits above the queued-build-item rule precisely so a
+build item cannot keep skipping it, which is the failure this file has recorded
+three times about Objective specifically. Do not fall through to rule 4.
+
+After Objective clears, the oldest open item by age is **158.1**.
 
 ## ⚠ THIS WAS A CLOUD WAKE — NOTHING WAS VISUALLY VERIFIED
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
-dark. Say so rather than implying otherwise: **`/components/data-table` gained a
-new `#markers` section that no human or screenshot has looked at.** The
-automated sweeps that *did* run cover the properties (`check:layout` — no
-overflow at 390 or 150% zoom; `test:axe` — 127 pages x 2 widths, zero
-violations; `check:scroll`, `check:forced-colors`, `check:target-size`), and
-they assert properties, not pixels: a section that renders *ugly* rather than
-*broken* would pass all of them.
+dark. **This wake carries no visual risk, and that is measured rather than
+asserted:** two of three commits are script-only, and the third's CSS half is
+comments only, proved both directions —
 
-**The one thing worth a human eye next time there is a container:** the new
-marker table on `/components/data-table` at 390px, both themes. It is a
-three-column table inside `.bo-data-table-container` with prose in every cell,
-which is the shape most likely to look cramped without technically overflowing.
+- the comments DID reach the shipped un-minified CSS (3 in `dist/css/index.css`,
+  1 in `dist/css/components/stepper.css`), so the edit is real, not a no-op;
+- all **14 minified stylesheets are byte-for-byte identical** across a build
+  from the stashed tree and a build from this one, so nothing a browser renders
+  changed.
 
-The CSS half of the wake does not carry this risk and was measured properly: it
-is a rule REMOVAL, and its effect was read as a **computed style in a real
-browser** (headless Chromium at `/opt/pw-browsers/chromium-1194/chrome-linux/
-chrome`, `CHROME_PATH` set), before and after, in both text directions.
+**Chromium is available in cloud wakes** — set
+`CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, and run
+`npm ci` first (the container starts with no `node_modules`). Every browser
+gate ran from it this wake: check:claims (139 behaviours), check:layout (127
+pages), check:scroll (906 containers x 2 widths), test:axe (127 pages x 2
+widths), check:quickstart, scan:dead-style.
 
-**Chromium is available in cloud wakes** and every browser gate runs from it —
-set `CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`. `npm ci`
-is needed first; the container starts with no `node_modules`.
+**Still unlooked-at by a human, carried forward from the previous wake:** the
+`#markers` table on `/components/data-table` at 390px, both themes. Untouched
+this wake.
 
-## THE DISPATCHER IS OVERDUE ON BOTH COUNTERS — read this before Step 2
+## What landed this wake (Standardize, dispatcher rule 2)
 
-```
-Standardize   4 / 4 Continue rounds   OVERDUE
-Objective     3 / 3 slices            OVERDUE  [151, 153, 157]
-```
+Four rounds, ending on a clean pass. The theme is **chokepoint regrowth** — a
+shared module extracted by an earlier sweep, then bypassed again.
 
-Both crossed on this wake's own iteration. Rules 2 and 3 sit **above** the
-queued-build-item rule precisely so this cannot be skipped for another build
-item — that ordering exists because these two counters starved for ten slices
-before anyone noticed. The next wake dispatches **Standardize** (rule 2 is
-first), and the wake after that should reach Objective unless another Continue
-round intervenes.
+1. **29 viewport literals** back to `viewports.mjs`, across four scripts
+   (check-scroll's `const WIDTHS = [1440, 390]` shadowing the export name;
+   check-claims x25; check-quickstart x2; scan-dead-style x1). New
+   `check:viewport-forks` (`@heuristic`, `--self-test`, in `check:repo`) holds
+   the line, reading the widths FROM viewports.mjs rather than storing a copy.
+2. **check-versions.mjs** reported `${snapshots.length} snapshot(s) verified`
+   with no zero-guard, reading the count from a file — `"snapshots": []` was a
+   silent pass in the one gate whose job is catching a release slip.
+3. **The visually-hidden triple** settled in LOOPS.md next to the 0fr/1fr
+   precedent, and all three copies cross-referenced.
+4. **`source-files.mjs`'s SKIP_DIRS** was a second copy of `SOURCE_SKIP_DIRS`,
+   disagreeing by three entries.
 
-## What landed this wake (157.3)
+Four things worth carrying forward:
 
-The guideline the owner asked for — *"pls also write the clear guideline. when
-to show it"* — is `#markers` on `/components/data-table`: a table of what each
-marker MEANS, then one row shows at most one leading edge, a cell tone is never
-an edge, and a merely-negative value gets no marker.
-
-**Writing it found that 157.2 was not finished.** `[dir="rtl"]
-td[data-tone="success"]` survived the cell-edge removal — it was a *standalone*
-rule while danger and warning were grouped into the row selectors the edit
-rewrote, so it was not where the edit was looking. An RTL reader got a green 3px
-edge on a success cell that an LTR reader never saw, in one tone of three, for
-one day inside the Unreleased window. **Never published** — 0.5.0 predates
-157.2.
-
-Three things from it worth carrying forward:
-
-- **A per-file allowlist cannot see a stale rule inside an allowed file.**
-  `check:rtl` passed on the injected bug — confirmed by injecting it, not
-  assumed. The rule is stated per MARKER, so it is now asserted per marker in
-  `check:claims` (computed shadow, all three tones + a row state, both
-  directions). Red-proved on both halves.
-- **The injection was confirmed in the DOM, not by grep.** Grepping the built
-  CSS for the selector found *nothing* while the claim's own reading showed
-  `x: -3` — the minified-spelling trap CLAUDE.md already records, hit again.
-- **Prose gets checked like a number.** A drafted sentence said a row both dirty
-  and rejected shows "rejected — the blocking state wins". `row-edit.ts:122`
-  says the opposite: `setDirty` writes `dirty` over `error` while the user
-  types, and restores `error` on going clean if a cell is still `aria-invalid`
-  (58.4). The page states the shipped behaviour instead.
-
-**A cost was recorded rather than hidden.** 158.1 named `/components/data-table`
-the site's longest page (4,429 words) hours before this wake made it longer:
-**+337 reader-facing words**, +57 on `/components/inline-editing`. ~200 of them
-are the guideline table. The stale "bar on the leading edge" section was
-*replaced*, not appended to (−347 words), because 157.2 had falsified most of
-it. **This is live input for 158.1's verdict on that page** — the honest reading
-is that it is longer *and* less wrong. Do not let 158.1 quote 4,429 as current.
-
-**A derived number was caught wearing a measurement's clothes.** The first
-metric recorded this wake was `4429 + 337 = 4766`, arithmetic on a baseline
-produced by an instrument this wake never ran. It was removed and replaced with
-the delta actually measured. Same doctrine as the instruments rule, applied to
-a number that had already been written down.
+- **Importing a constant is not using it.** check-claims imported `WIDTHS`,
+  `DESKTOP_WIDTH` and `NARROW_WIDTH` and then hardcoded 25 viewports anyway. No
+  convention, and no import-list check, can see that — which is why it landed
+  as a gate.
+- **A gate must not store its own copy of the thing it polices.**
+  `check:viewport-forks` reads the widths from `viewports.mjs`; a private copy
+  would be the very fork it hunts and would go stale the day the pair changes.
+  Red-proved on both branches (re-inject the real fork → red; rename the export
+  → red on the parse, not a sweep for a needle it never found).
+- **Checking before claiming killed three findings.** check-layout and
+  axe-audit look unguarded but get their pages from `distPages()`, which throws
+  on zero; check-search's hand-rolled luminance already carries its refusal (it
+  runs inside `page.evaluate` and cannot import a Node module); po-app's walker
+  has nothing to over-count. The first read of each was wrong.
+- **A gate was measured and REFUSED**, with the reasoning stored in
+  `source-files.mjs` so it is not re-proposed: a skip-list-fork detector has a
+  base rate of one true signal against two exceptions. Ceremony, not a gate
+  (roadmap 94.11).
 
 ## Still open, and why
 
-- **158.1 / 158.2** — the prose-length verdicts. 158.1 is next in line by age
-  after Standardize and Objective clear.
+- **158.1 / 158.2** — the prose-length verdicts. Next by age once Objective
+  clears. **158.1 must not quote 4,429 words as current** for
+  `/components/data-table`; the previous wake added +337 reader-facing words to
+  it and that baseline was never re-measured.
 - **112.3** — the pattern-fit pilot. BLOCKED ON OWNER: needs 5–8 owner-written
   screen briefs with sealed picks; scaffold ready at `.roundtable/pilot-112/`.
 - **112.4** — Screen Contract layer, gated on 112.3's verdict.
