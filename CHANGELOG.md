@@ -50,7 +50,29 @@ pin.
   geometry channel, so the bar keeps an edge under forced-colors, which drops
   shadows.
 
+### Changed
+
+- **A dirty row no longer says it four times.** `initRowEdit()`'s documented
+  row-action markup drops the visible `Unsaved` badge and makes Save/Cancel
+  icon-only. The row already carried the state on two visual channels — an
+  amber tint and a 3px inset leading edge, the latter surviving
+  `forced-colors` as a real border — and the buttons appearing at all said it
+  again. **Not a breaking change**: `data-row-state` is a data attribute and
+  invisible to assistive tech, so the badge was the only thing announcing
+  "unsaved"; that meaning moved onto the Save button's accessible name
+  (`Save <row> — unsaved changes`), which exists only while the row is dirty.
+  The behavior still drives an optional `[data-row-edit-dirty]` badge if a
+  consumer renders one, so existing markup keeps working unchanged.
+
 ### Added
+
+- `.bo-icon--save` and `.bo-icon--close` — the pair the icon-only row actions
+  need. `check-circle` was the obvious reuse and is deliberately refused for
+  save: a tick on an ERP line reads as *approve*, a separate and consequential
+  action this framework ships a whole approval-workflow for, and two controls
+  one keystroke apart must not be able to trade meanings. Both hand-drawn on
+  the same 24-grid and stroke weight as their neighbours, so no third-party
+  attribution applies.
 
 - `reveal(el)` — open every container that is hiding an element, so it can
   actually be focused and seen. Handles a closed `<details>`, an inactive

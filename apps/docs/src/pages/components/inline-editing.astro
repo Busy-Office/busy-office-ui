@@ -12,11 +12,8 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
         <input class="bo-input bo-input--seamless bo-input--numeric" value="12" aria-label="Quantity for Widget A" />
       </td>
       <td class="bo-data-table__row-edit-actions">
-        <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save
-                aria-label="Save — Widget A" hidden>Save</button>
-        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel
-                aria-label="Cancel — Widget A" hidden>Cancel</button>
+        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save Widget A — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to Widget A" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
       </td>
     </tr>
   </tbody>
@@ -145,11 +142,72 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
     </div>
     <p class="bo-u-text-muted">Per field type (date, number, money,
     quantity), the <a href={base + '/concepts/design-language'}>field
-    matrix</a> names the exact control for each of these contexts.
-    Save timing is the second, independent axis:
-    batched per row (Save/Cancel, the default here) when a row is a unit of
-    work, or per-change (<code>data-row-edit="live"</code>) when each commit
-    stands alone.</p>
+    matrix</a> names the exact control for each of these contexts.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Save timing — the second, independent axis</h2>
+    <p>Editing design says what a cell <em>looks</em> like; save timing says
+    when the edit <em>commits</em>. They are chosen separately, and the second
+    one is where screens drift apart. <strong>Not a taste question</strong> —
+    the rule is what a row IS.</p>
+
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr>
+          <th scope="col">If a row is…</th>
+          <th scope="col">Use</th>
+          <th scope="col">Because</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>one record</strong> — a PO line, an item, a timesheet entry</td>
+            <td><strong>Batch per row</strong> — <code>data-row-edit</code>, the default. Save/Cancel appear on the dirty row.</td>
+            <td>Each row commits alone, so a 422 comes back on the row the user just
+            touched and a conflict on one row is not a screen-wide rollback.</td>
+          </tr>
+          <tr>
+            <td><strong>one field of one record</strong> — a settings list, a vendor master</td>
+            <td><strong>Form-level save</strong> — one Save for the record. Keep <code>data-row-edit</code> for dirty marking only.</td>
+            <td>Six fields means six requests for one logical edit, and a Cancel that
+            undoes a third of what the user changed. Measured on an early version of
+            <a href={base + '/patterns/detail-form'}>detail-form</a>: a Save button
+            <strong>228px from the field it saved</strong>.</td>
+          </tr>
+          <tr>
+            <td><strong>independent, with nothing to cancel as a set</strong></td>
+            <td><strong>Live</strong> — <code>data-row-edit="live"</code>. No buttons at all.</td>
+            <td>Every committed change saves itself. The honest cost: it commits per
+            <em>field</em>, so a half-typed line reaches your validation mid-row, and
+            you owe per-field success/failure feedback.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="bo-u-text-muted"><strong>The mistake this table exists to prevent</strong>
+    is using per-row save on a list of one record's fields — it looks like a grid and
+    is a form. If you cannot name what one row is a record <em>of</em>, you want
+    form-level save.</p>
+
+    <h3>How a dirty row says so</h3>
+    <p>The framework paints the state; you must not add a fourth statement of it.
+    A dirty row carries <strong>two visual channels</strong> — an amber tint and a
+    3px inset leading edge — and both are deliberate: under
+    <code>forced-colors</code> the tint disappears and the edge becomes a real
+    border, so the state survives high-contrast mode.</p>
+    <p><strong>Colour is never the whole signal.</strong>
+    <code>data-row-state</code> is a data attribute and is invisible to assistive
+    technology, so the programmatic channel is the <strong>Save button's accessible
+    name</strong> — it exists only while the row is dirty, so its presence and its
+    name both carry the meaning. Name it per row
+    (<code>Save Bearing kit — unsaved changes</code>), never just "Save": a table of
+    identical "Save" buttons gives a screen-reader user nothing to tell them apart,
+    and axe cannot catch it because the buttons <em>are</em> named.</p>
+    <p class="bo-u-text-muted">A visible "Unsaved" badge is <strong>not</strong> the
+    shape to copy — the row already says it twice, and the buttons appearing at all
+    say it a third time. The <code>[data-row-edit-dirty]</code> hook still works if
+    your screen genuinely needs a visible word.</p>
   </section>
 
   <section class="demo">

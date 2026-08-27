@@ -43,11 +43,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
             step="0.01" value="3.40" aria-label="Unit price" />
       </td>
       <td class="bo-data-table__row-edit-actions">
-        <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-        <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save
-                aria-label="Save — line 1 (Steel bracket)" hidden>Save</button>
-        <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel
-                aria-label="Cancel — line 1 (Steel bracket)" hidden>Cancel</button>
+        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save line 1 (Steel bracket) — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to line 1 (Steel bracket)" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
         <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
       </td>
     </tr>
@@ -421,9 +418,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Bearing kit" hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Bearing kit" hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save Bearing kit — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to Bearing kit" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
           <tr data-row-id="ADV-2">
@@ -445,9 +441,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Seal ring set" hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Seal ring set" hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save Seal ring set — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to Seal ring set" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
         </tbody>
@@ -524,9 +519,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Impeller housing" hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Impeller housing" hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save Impeller housing — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to Impeller housing" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
           <tr data-row-id="WYS-2">
@@ -546,9 +540,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — Gasket sheet" hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — Gasket sheet" hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save Gasket sheet — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to Gasket sheet" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
         </tbody>
@@ -674,9 +667,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — line 1 (Steel bracket)" hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — line 1 (Steel bracket)" hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save line 1 (Steel bracket) — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to line 1 (Steel bracket)" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
           <tr data-row-id="PO-L2">
@@ -715,9 +707,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-              <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save aria-label="Save — line 2 (Hydraulic pump)" hidden>Save</button>
-              <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel aria-label="Cancel — line 2 (Hydraulic pump)" hidden>Cancel</button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save line 2 (Hydraulic pump) — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to line 2 (Hydraulic pump)" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
         </tbody>

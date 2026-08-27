@@ -10,17 +10,28 @@
  *       <tr data-row-id="INV-1">
  *         <td><input class="bo-input bo-input--seamless" ... /></td>
  *         <td class="bo-data-table__row-edit-actions">
- *           <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
- *           <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save hidden>Save</button>
- *           <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel hidden>Cancel</button>
+ *           <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button"
+ *                   data-row-edit-save aria-label="Save <row> — unsaved changes" hidden>
+ *             <span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+ *           <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button"
+ *                   data-row-edit-cancel aria-label="Discard changes to <row>" hidden>
+ *             <span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
  *         </td>
  *       </tr>
  *     </tbody>
  *   </table>
  *
  * Sets `data-row-state="dirty"` on the <tr> (same visual channel the
- * error row state uses) and reveals the row's dirty badge + save/cancel
- * buttons. Cancel resets every input/textarea to its `defaultValue`,
+ * error row state uses) and reveals the row's save/cancel buttons.
+ *
+ * **Where "unsaved" is announced** (roadmap 157.1, owner call). The row's
+ * own tint + inset left edge carry the state visually, and survive
+ * forced-colors. `data-row-state` is a data attribute and is invisible to
+ * assistive tech, so the PROGRAMMATIC channel is the Save button's
+ * accessible name — it exists only while the row is dirty, so its presence
+ * and its name both carry the meaning. A visible `Unsaved` badge used to do
+ * this and was removed as a fourth statement of the same fact; the optional
+ * `[data-row-edit-dirty]` hook below still works if a consumer wants one. Cancel resets every input/textarea to its `defaultValue`,
  * every checkbox/radio to `defaultChecked`, and every select to its
  * default selection (re-firing change so dependent behaviors like
  * money/unit precision re-derive), then dispatches `bo:row-cancel` so
@@ -124,6 +135,10 @@ function setDirty(row: HTMLElement, dirty: boolean): void {
   } else {
     row.removeAttribute('data-row-state');
   }
+  /* Optional, and no longer used by this project's own markup (157.1): the
+     row's tint is the visual channel and the Save button's accessible name is
+     the programmatic one. Kept because consumers may still render a badge, and
+     a behavior that silently stopped driving one would be a breaking surprise. */
   const badge = row.querySelector<HTMLElement>('[data-row-edit-dirty]');
   const save = row.querySelector<HTMLElement>('[data-row-edit-save]');
   const cancel = row.querySelector<HTMLElement>('[data-row-edit-cancel]');

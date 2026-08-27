@@ -1186,6 +1186,115 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 157 — Owner: the dirty row says it twice (2026-08-27)
+
+**Owner, on a screenshot of a dirty requisition line:** *"save on item level
+doesn't make sense, need to be discrete"* → then, after the grill:
+*"I still don't see a need. If need to keep for possible usecase, just icon only
+without 'unsaved' — might be just show the background color for dirty row.
+`[save icon] [x] icon`."*
+
+**The grill's verdict, and why the mechanism survives.** Per-row commit is
+load-bearing and the repo already argued it: `concepts/concurrency.astro:71` —
+*"the editable grid saves per row precisely so one conflict is not a
+screen-wide rollback."* A 422 lands on the row the user just touched, which is
+also why `validation-summary` documents itself as **not** for per-row saves.
+Slice 34 already measured this once and found this grid uses per-row save
+**correctly**; `field-editor` was the misapplication and was rebuilt to one
+form-level Save. And the alternative is not free: `data-row-edit="live"` ships
+today but commits **per field**, and has already produced two save-integrity
+bugs here (Cancel behaving as Save; a save-before-reformat persisting stale
+precision) — both traced to committing with no explicit commit step.
+
+**The owner's real finding stands, though, and it is a duplicated signal.** The
+dirty row ALREADY carries the state on two visual channels — an amber tint
+(`--bo-cell-bg: warning-subtle`) and a 3px inset left edge — and forced-colors
+is handled, the `box-shadow` swapping to `border-inline-start: 3px solid
+CanvasText`. The `Unsaved` badge repeats visually what the row already says,
+and then Save and Cancel repeat it a third time by appearing at all.
+
+**The catch that shapes the fix, from the framework's own comment**
+(`data-table.css:476`): a tint is *"not a substitute for a programmatic
+channel: pair the toned value with adjacent text/an aria-label carrying the
+same meaning, the same as row-state's own badge-or-message requirement."*
+`data-row-state` is a data attribute and is invisible to assistive tech, so the
+badge is currently the ONLY thing that announces "unsaved". Deleting it without
+re-homing that meaning would trade a visual duplicate for an accessibility
+regression.
+
+1. [x] **157.1 — icon-only row actions; the dirty state rides the row.**
+       **Shipped**, and verified live in both themes: the row goes dirty with
+       its amber inset edge, **no "Unsaved" text anywhere in the row**, and
+       Save/Cancel are 24x24 icons whose centres sit 36px apart — clearing the
+       24px spacing exception rather than relying on it narrowly.
+       `check:target-size` and `check:forced-colors` both pass.
+       **Not breaking after all.** The Accept criterion above predicted a
+       Breaking CHANGELOG entry; the evidence says otherwise. `row-edit.ts`
+       guards the badge with `if (badge)`, so consumer markup that still
+       renders one keeps working — only this project's own recommended shape
+       changed. Recorded as Changed, with the compatibility stated.
+       Also landed the guide the owner asked for alongside it: a save-timing
+       section on `/components/inline-editing` naming which model fits a row
+       that is a record, a row that is one record's field, and a row that
+       commits alone — plus what channel carries "dirty" and why colour is
+       never the whole signal.
+       Drop the `Unsaved` badge. Save and Cancel become icon-only, and the
+       announced state moves onto the Save button's accessible name
+       (`Save <row> — unsaved changes`), which is present only while the row is
+       dirty. One element instead of two, and the state travels on the control
+       you would act on.
+       **No behavior change is needed** — `row-edit.ts` already guards the badge
+       with `if (badge)`, so markup without one degrades cleanly. `row-edit.ts`'s
+       documented markup contract and `RowEditActions.astro` both move.
+       Needs a new `.bo-icon--save` glyph: verified, **none exists** — and
+       `check-circle` is refused for this, because a tick on an ERP line reads
+       as *approve*, which is a separate real action in this domain.
+       *Accept*: (a) no visible `Unsaved` text anywhere in row-edit actions;
+       (b) a screen reader still hears the state — asserted in `check-claims`
+       on the accessible name, not on the markup; (c) `check:target-size`
+       passes with two adjacent 24x24 controls (gap is `--bo-space-2` = 8px, so
+       centres are 32px apart and clear the 24px spacing exception — confirmed
+       by the gate, not by this arithmetic); (d) `check:forced-colors` still
+       passes, since the tint is the channel that disappears there and the
+       inset edge is the one that must not; (e) the CHANGELOG carries a
+       **Breaking** entry — the documented row-edit markup contract changes
+       shape, which the freeze-audit correction says is Breaking.
+
+2. [ ] **157.2 — the leading edge is a ROW marker; drop it at cell level.**
+       **Owner, 2026-08-27, on two screenshots:** *"for left border line, we
+       don't need at the cell level but level row is ok. might not need all the
+       case."*
+       The defect is one visual doing two jobs. `td[data-tone="danger"|
+       "warning"|"success"]` each carry the same `inset 3px` accent that
+       `tr[data-row-state]` uses, so a red edge on an AMOUNT cell is
+       indistinguishable from the marker meaning *this ROW is in a state* — and
+       a dirty row holding a danger cell shows two 3px edges, three pixels
+       apart in meaning. The tint is not the problem; the edge is.
+       *Accept*: (a) `box-shadow` removed from all three `td[data-tone]` rules,
+       tint retained; (b) the forced-colors block and the two RTL flip entries
+       that exist ONLY to serve that cell shadow go with it — `check:rtl` counts
+       flip sites and DESIGN.md's count moves in the same commit; (c)
+       `check:forced-colors` still passes, and the loss is stated honestly: with
+       no edge and no tint under HCM, a toned cell's ONLY channel is the
+       adjacent text the doctrine already requires; (d) the row edge is
+       untouched.
+
+3. [ ] **157.3 — write the guideline: when does a row show a marker at all?**
+       **Owner:** *"might not need all the case. pls also write the clear
+       guideline. when to show it."* Queued separately from 157.2 on the owner's
+       instruction to land these one at a time — 157.2 is a CSS removal, this is
+       the writing that makes the removal legible, and bundling them would hide
+       a judgement call inside a diff.
+       The question the guideline must answer plainly: a row can be dirty, in
+       error, in warning; a cell can be toned; both used to shout. State which
+       marker is correct for which case, that **one row shows at most one
+       leading edge**, and that a cell tone is never an edge.
+       *Accept*: lands on `/components/data-table` next to the row-state table;
+       says what each marker MEANS, not just how to write it; names the case
+       where NO marker is right (a value that is merely negative is not an
+       error — `bo-amount` already colours it); and is reachable from
+       `/components/inline-editing`'s save-timing section, which 157.1 added.
+
 ## Slice 156 — Owner: a device guide for the shells, with a support matrix (2026-08-27)
 
 **Owner ask:** *"add side menu for skeleton template, where provide guideline

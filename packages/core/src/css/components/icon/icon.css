@@ -64,6 +64,25 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='m8 12 3 3 5-6'/></svg>");
   }
 
+  /* A disk outline, deliberately NOT a tick. `check-circle` was the obvious
+     reuse and is refused here: on an ERP line a tick reads as *approve*, which
+     is a separate, consequential action in this domain — the framework ships a
+     whole approval-workflow for it. Two controls one keystroke apart must not
+     be able to trade meanings. Hand-drawn on the same 24-grid and stroke
+     weight as its neighbours, so no third-party attribution applies. */
+  .bo-icon--save {
+    --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4h11l5 5v11H4z'/><path d='M8 4v5h7'/><path d='M8 20v-6h8v6'/></svg>");
+  }
+
+  /* Discard, paired with --save above. Drawn rather than reusing the literal
+     "✕" the remove-line button carries: a text glyph inherits font metrics and
+     sits at a different optical weight beside an SVG icon of the same nominal
+     size, which is exactly the mismatch that makes two adjacent row controls
+     look like they belong to different systems. */
+  .bo-icon--close {
+    --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 6l12 12M18 6L6 18'/></svg>");
+  }
+
   .bo-icon--truck {
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 6h12v10H2z'/><path d='M14 10h4l3 3v3h-7'/><circle cx='7' cy='18.5' r='1.5'/><circle cx='17' cy='18.5' r='1.5'/></svg>");
   }

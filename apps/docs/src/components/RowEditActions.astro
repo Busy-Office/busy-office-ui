@@ -1,6 +1,6 @@
 ---
 /**
- * The per-row Save / Cancel / dirty-badge cell that `initRowEdit()` drives.
+ * The per-row Save / Cancel cell that `initRowEdit()` drives.
  *
  * Extracted because it appeared **19 times across 3 pages** — and the copies had
  * drifted on the thing that matters most (Standardize sweep, 2026-08-18):
@@ -21,6 +21,25 @@
  *
  * The slot takes any extra row action (the editable grid's "Remove line"),
  * so the variants collapse into one definition without losing either.
+ *
+ * ── No `Unsaved` badge, and the state moved (roadmap 157.1, owner call) ──
+ *
+ * A dirty row said it three times: an amber tint, a 3px inset left edge, a
+ * badge reading "Unsaved" — and then Save/Cancel appearing at all said it a
+ * fourth. The row's own two visual channels are enough, and they already
+ * survive forced-colors (the tint drops, the inset edge becomes a real
+ * border).
+ *
+ * What the badge WAS carrying, and where it went: `data-row-state` is a data
+ * attribute, invisible to assistive tech, so the badge was the only thing
+ * announcing the state. `data-table.css` says this outright — a tone is "not
+ * a substitute for a programmatic channel". So the meaning now rides the Save
+ * button's accessible name, which exists only while the row is dirty. One
+ * element instead of two, and the state travels on the control you act on.
+ *
+ * Icon-only, per the same owner call. The glyph is `--save` (a disk), NOT
+ * `check-circle`: a tick on an ERP line reads as *approve*, a separate and
+ * consequential action here.
  */
 interface Props {
   /** The row's human name — "Bearing kit", "Credit limit". Used for the
@@ -30,10 +49,13 @@ interface Props {
 const { row } = Astro.props;
 ---
 <td class="bo-data-table__row-edit-actions">
-  <span class="bo-badge bo-badge--warning" data-row-edit-dirty hidden>Unsaved</span>
-  <button class="bo-btn bo-btn--sm" type="button" data-row-edit-save
-          aria-label={`Save — ${row}`} hidden>Save</button>
-  <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" data-row-edit-cancel
-          aria-label={`Cancel — ${row}`} hidden>Cancel</button>
+  <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save
+          aria-label={`Save ${row} — unsaved changes`} hidden>
+    <span class="bo-icon bo-icon--save" aria-hidden="true"></span>
+  </button>
+  <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel
+          aria-label={`Discard changes to ${row}`} hidden>
+    <span class="bo-icon bo-icon--close" aria-hidden="true"></span>
+  </button>
   <slot />
 </td>
