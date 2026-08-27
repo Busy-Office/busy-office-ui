@@ -30,6 +30,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { REPO_ROOT as ROOT } from './paths.mjs';
+import { DESKTOP_WIDTH } from './viewports.mjs';
 
 const FRAGMENT = join(ROOT, 'apps', 'docs', 'dist', 'suite', 'markup', 'p2p', 'purchase-orders.txt');
 
@@ -119,7 +120,7 @@ ${fragment}
 
   browser = await launchDocsBrowser();
   const page = await browser.newPage();
-  await page.setViewport({ width: 1440, height: 900 });
+  await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
   await page.goto(`http://localhost:${port}/`, { waitUntil: 'networkidle0', timeout: 20000 });
@@ -181,7 +182,7 @@ ${fragment}
       }
     }
     const p2 = await browser.newPage();
-    await p2.setViewport({ width: 1440, height: 900 });
+    await p2.setViewport({ width: DESKTOP_WIDTH, height: 900 });
     const threw = [];
     p2.on('pageerror', (e) => threw.push(String(e)));
     await p2.goto('http://localhost:5199/', { waitUntil: 'networkidle0', timeout: 20000 });

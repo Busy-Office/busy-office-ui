@@ -54,6 +54,7 @@ import { serveDist } from './serve-dist.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
+import { DESKTOP_WIDTH } from './viewports.mjs';
 
 /** Runs in the page. Returns one row per element carrying a style attribute. */
 const PROBE = () => {
@@ -81,7 +82,7 @@ const PROBE = () => {
 const { server, port, base } = await serveDist(DIST);
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
-await page.setViewport({ width: 1440, height: 900 });
+await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
 const run = () => page.evaluate((fn) => eval('(' + fn + ')')(), PROBE.toString());
 
 /* ---- self-red-proof ---- */

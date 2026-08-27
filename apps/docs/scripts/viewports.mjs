@@ -14,6 +14,19 @@
  * gate still reports a pass. CLAUDE.md's quality bar says "screenshot at 1440px
  * AND 390px" as a single rule; it should therefore be a single constant.
  *
+ * IT REGREW, AND NOTHING COMPARED THEM — the sentence above predicted its own
+ * failure and was right (Standardize sweep, 2026-08-27). Eight days after the
+ * extraction, four scripts spelled a width as a number again, across 29 code
+ * sites: `check-scroll` had `const WIDTHS = [1440, 390]` shadowing this
+ * module's own export name; `check-quickstart` (x2) and `scan-dead-style`
+ * each set a literal desktop viewport; and `check-claims` had 25 — in a file
+ * that ALREADY imports WIDTHS, DESKTOP_WIDTH and NARROW_WIDTH. That last one
+ * is the lesson: importing the constant is not using it, so "does it import
+ * viewports.mjs?" cannot verify this convention.
+ *
+ * `check:viewport-forks` now asserts it, reading the widths FROM HERE rather
+ * than storing its own copy, and red-proved against the real fork it removed.
+ *
  * WHY THESE TWO, since a constant with no rationale is how the reason got lost:
  *
  *   1440 — the desktop case. Wide enough that the shell, the sidebar rail and a

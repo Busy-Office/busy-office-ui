@@ -61,8 +61,8 @@ import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
 import { gate, assertScanned } from './gate-report.mjs';
 import { SCROLL_REGION_SELECTOR } from './scroll-regions.mjs';
+import { WIDTHS } from './viewports.mjs';
 
-const WIDTHS = [1440, 390];
 const SEL = SCROLL_REGION_SELECTOR;
 
 const { server, port, base } = await serveDist(DIST);

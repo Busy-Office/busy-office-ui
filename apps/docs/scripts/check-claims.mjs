@@ -410,7 +410,7 @@ check(
    rendered box, so it is executable here rather than trusted. Checked at 1440:
    at narrow widths the docs shell collapses the rail to icon-only and there is
    no label to wrap, which the page itself now says. */
-await visit('/components/sidebar-nav/', { width: 1440 });
+await visit('/components/sidebar-nav/', { width: DESKTOP_WIDTH });
 const rail = await page.evaluate(() => {
   const nav = document.querySelector('nav[aria-label="Long labels"]');
   if (!nav) return { missing: true };
@@ -441,7 +441,7 @@ check(
    trigger moved away underneath it. Real events, and MORE THAN ONE movement:
    with the bug present a single scroll happened to land within 6px of correct,
    which would have read as a pass. */
-await visit('/components/filters/', { width: 1440 });
+await visit('/components/filters/', { width: DESKTOP_WIDTH });
 await page.click('[popovertarget="view-menu"]');
 await new Promise((r) => setTimeout(r, 200));
 const anchored = [];
@@ -466,7 +466,7 @@ check(
    off-screen tab into view. Both are runtime behaviour (roadmap 30.1). The
    second is the one that matters: it is what makes the missing macOS scrollbar
    an inconvenience rather than a keyboard trap. */
-await visit('/components/tabs/', { width: 1440 });
+await visit('/components/tabs/', { width: DESKTOP_WIDTH });
 const strip = 'div[aria-label="Module areas"]';
 const overflows = await page.evaluate((s) => {
   const l = document.querySelector(s);
@@ -532,7 +532,7 @@ check(
    visibly, but a stale "dirty" band lies about unsaved work and nobody would
    notice from a screenshot. Uses a REAL input event: initRowEdit marks text
    dirty on input, not on change. */
-await visit('/patterns/detail-form/', { width: 1440 });
+await visit('/patterns/detail-form/', { width: DESKTOP_WIDTH });
 const fe = await page.evaluate(async () => {
   const row = document.querySelector('tr[data-row-id="name"]');
   const input = row.querySelector('input');
@@ -570,7 +570,7 @@ check(
    exception — check-target-size reports exactly that for the 18px sort button
    — so this is an ergonomics claim, not a conformance one. Checking only the
    first half would pass on a table whose labels all wrap. */
-await visit('/components/data-table/', { width: 1440 });
+await visit('/components/data-table/', { width: DESKTOP_WIDTH });
 const cellLink = await page.evaluate(() => {
   const box = document.querySelector('[data-cell-link-demo]');
   const links = [...box.querySelectorAll('.bo-data-table__cell-link')];
@@ -613,7 +613,7 @@ check(
 
    Checking "disjoint" alone would not do: on an unscrolled page the two
    rows are naturally stacked, so that half passes while nothing is tested. */
-await visit('/components/data-table/', { width: 1440 });
+await visit('/components/data-table/', { width: DESKTOP_WIDTH });
 const groupedHead = await page.evaluate(async () => {
   const box = document.querySelector('[data-grouped-head]');
   const groupCell = () => [...box.querySelectorAll('thead tr')[0].querySelectorAll('th')]
@@ -668,7 +668,7 @@ check(
    underneath" (roadmap 30.3). Opacity matters as much as position — a
    transparent frozen cell shows the scrolling content through itself, which
    looks like a rendering bug and makes both unreadable. */
-await visit('/components/data-table/', { width: 1440 });
+await visit('/components/data-table/', { width: DESKTOP_WIDTH });
 const wide = await page.evaluate(() => {
   const table = document.querySelector('table.bo-data-table--sticky-col');
   const box = table.parentElement;
@@ -704,7 +704,7 @@ check(
    `panel.hidden = !selected` and the last tab in DOM order wins. The static
    check in bo-check-markup catches the STRUCTURE; this catches the BEHAVIOUR,
    and the two fail independently. */
-await visit('/components/tabs/', { width: 1440 });
+await visit('/components/tabs/', { width: DESKTOP_WIDTH });
 const tabbing = [];
 for (const n of [1, 3, 9]) {
   await page.click(`div[aria-label="Module areas"] [role=tab]:nth-child(${n})`);
@@ -751,7 +751,7 @@ const orientationOf = (label) =>
     return { orientation: list.getAttribute('aria-orientation'), flexDirection: getComputedStyle(list).flexDirection };
   }, label);
 
-await visit('/components/tabs/', { width: 1440 });
+await visit('/components/tabs/', { width: DESKTOP_WIDTH });
 
 const vRail = { ...(await orientationOf('Vendor settings')), start: await selectedIn('Vendor settings') };
 vRail.afterDown = await pressIn('Vendor settings', 'ArrowDown');
@@ -806,7 +806,7 @@ check(
 /* The narrow collapse — the part a class-based orientation check gets wrong.
    Below 30rem of the tab set's OWN width the rail becomes a strip, so the
    keyboard axis has to follow the rendered layout, not the modifier class. */
-await visit('/components/tabs/', { width: 390 });
+await visit('/components/tabs/', { width: NARROW_WIDTH });
 const narrow = { ...(await orientationOf('Vendor settings')), start: await selectedIn('Vendor settings') };
 narrow.afterRight = await pressIn('Vendor settings', 'ArrowRight');
 check(
@@ -825,7 +825,7 @@ check(
    behaviors are not initialised on this page, the hero is a dead mock-up making
    a live promise — which is exactly the first impression the rebuild exists to
    fix, only worse. */
-await visit('/getting-started/first-screen/', { width: 1440 });
+await visit('/getting-started/first-screen/', { width: DESKTOP_WIDTH });
 const hero = await page.evaluate(async () => {
   const preview = document.querySelector('.demo-pair__preview');
   const firstPre = document.querySelector('pre');
@@ -854,7 +854,7 @@ check(
    replaces it. If it does not actually work for a consumer-authored glyph, the
    refusal is not a trade — it is just twelve icons and a shrug. Asserted here
    rather than described, and against a glyph this repo does not ship. */
-await visit('/components/icon/', { width: 1440 });
+await visit('/components/icon/', { width: DESKTOP_WIDTH });
 const iconSrc = await page.evaluate(() => {
   const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'><path d='M12 5v14M5 12h14'/></svg>";
   const el = document.createElement('span');
@@ -892,7 +892,7 @@ check(
    not move focus, so the first version of this check asked whether focus
    returned to a trigger that had never held it, and reported a failure against
    behaviour that works. */
-await visit('/patterns/filter-panel/', { width: 1440 });
+await visit('/patterns/filter-panel/', { width: DESKTOP_WIDTH });
 const TRIGGER = '[popovertarget="fp-cc"]';
 await page.click(TRIGGER);
 await new Promise((r) => setTimeout(r, 150));
@@ -929,7 +929,7 @@ check(
    with scripting doing nothing, and a day the server marked unavailable must be
    unclickable rather than merely styled. A calendar that only LOOKS pickable is
    the failure this claim exists to prevent. */
-await visit('/components/calendar/', { width: 1440 });
+await visit('/components/calendar/', { width: DESKTOP_WIDTH });
 const pickable = await page.evaluate(() => {
   const form = document.querySelector('form.bo-calendar');
   const days = [...form.querySelectorAll('button.bo-calendar__day')];
@@ -972,9 +972,9 @@ check(
    against a 4.5:1 requirement, while body text passed at 4.61:1, which is why
    nobody noticed by looking. Measured here, in both themes, on the real thing. */
 for (const theme of ['light', 'dark']) {
-  await visit('/components/data-table/', { width: 1440 });
+  await visit('/components/data-table/', { width: DESKTOP_WIDTH });
   await page.evaluate((t) => localStorage.setItem('bo-theme', t), theme);
-  await visit('/components/data-table/', { width: 1440 });
+  await visit('/components/data-table/', { width: DESKTOP_WIDTH });
   const dim = await page.evaluate(() => {
     const t = document.querySelector('table[data-loading="true"]');
     const bg = getComputedStyle(document.body).backgroundColor.match(/\d+/g).map(Number);
@@ -1009,7 +1009,7 @@ for (const theme of ['light', 'dark']) {
    silent. */
 
 // tree-table: the toggle collapses its subtree and says so.
-await visit('/components/tree-table/', { width: 1440 });
+await visit('/components/tree-table/', { width: DESKTOP_WIDTH });
 const treeBefore = await page.evaluate(() => {
   const t = document.querySelector('table.bo-tree-table');
   const btn = t.querySelector('.bo-tree-table__toggle');
@@ -1048,7 +1048,7 @@ check(
 
    Anchoring on "the first quantity that HAS steppers" is what the sentence
    actually claims, and it survives the demos being reordered again. */
-await visit('/components/quantity/', { width: 1440 });
+await visit('/components/quantity/', { width: DESKTOP_WIDTH });
 const QTY = '.bo-quantity:has([data-quantity-step])';
 const qty = await page.evaluate((sel) => {
   const root = document.querySelector(sel);
@@ -1073,7 +1073,7 @@ check(
 );
 
 // alert: dismiss removes the alert it belongs to, and only that one.
-await visit('/components/alerts/', { width: 1440 });
+await visit('/components/alerts/', { width: DESKTOP_WIDTH });
 const alertBefore = await page.evaluate(() => document.querySelectorAll('.bo-alert').length);
 await page.click('.bo-alert__dismiss');
 await new Promise((r) => setTimeout(r, 150));
@@ -1091,7 +1091,7 @@ check(
    detach from the screen again. */
 
 // The invoice list pages, and print drops the pager with the rest of the chrome.
-await visit('/patterns/list-report/', { width: 1440 });
+await visit('/patterns/list-report/', { width: DESKTOP_WIDTH });
 const pager = await page.evaluate(() => {
   const nav = document.querySelector('.bo-pagination');
   return {
@@ -1185,7 +1185,7 @@ check(
 );
 
 // The detail arrives as a real drawer, and Escape returns focus to its trigger.
-await visit('/patterns/master-detail/', { width: 390 });
+await visit('/patterns/master-detail/', { width: NARROW_WIDTH });
 await page.click('[data-dialog-trigger="md-drawer"]');
 await new Promise((r) => setTimeout(r, 200));
 const drawerOpen = await page.evaluate(() => {
@@ -1533,7 +1533,7 @@ check(
   };
   const wide = await at(bandPx + 1);
   const atBand = await at(bandPx);
-  const narrow = await at(390);
+  const narrow = await at(NARROW_WIDTH);
   await p.close();
 
   check(
@@ -2201,7 +2201,7 @@ check(
    109.17 — this page had zero check-claims coverage). Native radio-group
    behavior, not framework JS, but a documented claim is a documented claim
    regardless of who implements it. Real key event, not a synthetic one. */
-await visit('/patterns/inbox/', { width: 1440 });
+await visit('/patterns/inbox/', { width: DESKTOP_WIDTH });
 await page.focus('#inb-all');
 await page.keyboard.press('ArrowRight');
 const inboxArrow = await page.evaluate(() => ({
@@ -2221,7 +2221,7 @@ check(
    matches ANY `.bo-dropdown__item` click inside a `.bo-dropdown__menu[popover]`,
    independent of whether that item has its own business-logic handler —
    so this is real even though "Move to…" itself is a no-op in the demo. */
-await visit('/patterns/kanban/', { width: 1440 });
+await visit('/patterns/kanban/', { width: DESKTOP_WIDTH });
 await page.click('[popovertarget="kb-menu-1"]');
 const kanbanOpen = await page.evaluate(() => document.getElementById('kb-menu-1')?.matches(':popover-open'));
 await page.click('#kb-menu-1 .bo-dropdown__item');
@@ -2244,7 +2244,7 @@ check(
    different demo — a claim that still passes while testing the wrong thing is
    worse than one that fails. The Advanced demo is the one carrying
    formatBlock; nothing else on the page does. */
-await visit('/components/richtext/', { width: 1440, height: 1200 });
+await visit('/components/richtext/', { width: DESKTOP_WIDTH, height: 1200 });
 const ADV = '.demo:has([data-richtext-cmd="formatBlock"])';
 const advCount = await page.$$eval(ADV, (n) => n.length);
 check('richtext: the Advanced demo is uniquely identifiable by content', advCount === 1,
