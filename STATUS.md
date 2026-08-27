@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 18:47
+Generated at: 2026-08-27 18:55
 
 ## Open items by slice
 
@@ -18,8 +18,8 @@ Generated at: 2026-08-27 18:47
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (959 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-27 18:47   ok
+dispatch status — counter-triggered rules (960 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-27 18:55   ok
   Objective     3 / 3 slices          since 2026-08-28 00:13   OVERDUE  [151, 153, 157]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -35,6 +35,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 ## Last 10 iterations
 
 - 2026-08-27 18:47 · Standardize · tidy · viewport-width forks: 29 literals in 4 gate scripts back to viewports.mjs + check:viewport-forks to hold the line · landed · 728d8aa
+- 2026-08-27 18:55 · Standardize · tidy · gate-report bypass: check-versions zero-guard (8 of 9 non-users were fine); visually-hidden triple settled + cross-referenced · landed · 0768f09
 
 ## Sunset test
 
