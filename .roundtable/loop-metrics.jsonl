@@ -95,3 +95,4 @@
 {"ts": "2026-08-19 21:47", "name": "gates", "value": 27.0, "unit": "count"}
 {"ts": "2026-08-19 23:09", "name": "framework_classes", "value": 189.0, "unit": "count"}
 {"ts": "2026-08-26 06:19", "name": "suite-nodes-per-fact", "value": 1.25, "unit": "ratio"}
+{"ts": "2026-08-27 17:58", "name": "docs-words-added-data-table", "value": 337.0, "unit": "words"}
