@@ -60,17 +60,24 @@ describe('reveal', () => {
     ).toBe('true');
   });
 
-  it('defers to the installed behavior rather than writing state itself', () => {
-    ui.initCollapsibleCards();
+  it('fallback does not leave two tabs both selected', () => {
+    // Two required fields in two panels of an uninitialised tablist, revealed
+    // one after the other. Without the sibling sweep this ends with both tabs
+    // reading aria-selected="true".
     html`
-      <button data-collapse-trigger aria-expanded="false" aria-controls="c">Notes</button>
-      <div class="bo-widget__collapse" id="c" data-state="closed"><input id="f" /></div>
+      <div role="tablist">
+        <button role="tab" id="t1" aria-controls="p1" aria-selected="true">One</button>
+        <button role="tab" id="t2" aria-controls="p2" aria-selected="false">Two</button>
+      </div>
+      <div role="tabpanel" id="p1" hidden><input id="f1" /></div>
+      <div role="tabpanel" id="p2" hidden><input id="f2" /></div>
     `;
-    ui.reveal(document.getElementById('f')!);
-    expect(document.getElementById('c')!.dataset.state).toBe('open');
-    expect(
-      document.querySelector('[data-collapse-trigger]')!.getAttribute('aria-expanded'),
-    ).toBe('true');
+    ui.reveal(document.getElementById('f1')!);
+    ui.reveal(document.getElementById('f2')!);
+    const selected = [...document.querySelectorAll('[role="tab"]')].filter(
+      (t) => t.getAttribute('aria-selected') === 'true',
+    );
+    expect(selected.map((t) => t.id)).toEqual(['t2']);
   });
 
   it('does nothing to an element that is already visible', () => {
@@ -89,5 +96,22 @@ describe('reveal', () => {
     ui.reveal(document.getElementById('f')!);
     expect((document.getElementById('outer') as HTMLDetailsElement).open).toBe(true);
     expect(document.getElementById('inner')!.dataset.state).toBe('open');
+  });
+
+  /* LAST on purpose: initCollapsibleCards() flips a module-level `installed`
+     singleton that persists for the rest of this file's run, so any test added
+     after it would silently exercise the real behavior instead of the
+     not-installed fallback it meant to test. */
+  it('defers to the installed behavior rather than writing state itself', () => {
+    ui.initCollapsibleCards();
+    html`
+      <button data-collapse-trigger aria-expanded="false" aria-controls="c">Notes</button>
+      <div class="bo-widget__collapse" id="c" data-state="closed"><input id="f" /></div>
+    `;
+    ui.reveal(document.getElementById('f')!);
+    expect(document.getElementById('c')!.dataset.state).toBe('open');
+    expect(
+      document.querySelector('[data-collapse-trigger]')!.getAttribute('aria-expanded'),
+    ).toBe('true');
   });
 });

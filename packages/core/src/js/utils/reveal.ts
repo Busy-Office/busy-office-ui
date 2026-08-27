@@ -105,13 +105,27 @@ export function reveal(el: Element): void {
       const panel = node;
       if (!pressOwner('[role="tab"]', panel.id, () => !panel.hidden)) {
         // No tab points here, or its behavior is not installed. Show the panel
-        // and mark its own tab selected. Sibling panels are deliberately left
-        // alone: re-implementing `activate()` here would be a second copy of
-        // the tabs contract, and a page that never called initTabs() has tabs
-        // that do not work at all — which `reveal` cannot and should not
-        // repair. The user still lands on the field they must fix.
+        // and select its tab — deselecting the tab's siblings, because
+        // revealing two panels in turn would otherwise leave a tablist with
+        // two tabs both reading aria-selected="true". That state is worse than
+        // the bug being fixed: visible to a sighted user, incoherent to a
+        // screen reader.
+        //
+        // Only `aria-selected` is corrected, not the roving tabindex or the
+        // sibling panels' visibility — that is `activate()`'s job in tabs.ts,
+        // and copying it here would be a second, drifting definition of the
+        // tabs contract. A page that never called `initTabs()` has tabs that
+        // do not work at all, which `reveal` cannot repair and should not try
+        // to; what it guarantees is that the user reaches the field.
         panel.hidden = false;
-        ownerFor('[role="tab"]', panel.id)?.setAttribute('aria-selected', 'true');
+        const tab = ownerFor('[role="tab"]', panel.id);
+        if (tab) {
+          for (const sibling of tab.closest('[role="tablist"]')?.querySelectorAll<HTMLElement>(
+            '[role="tab"]',
+          ) ?? []) {
+            sibling.setAttribute('aria-selected', String(sibling === tab));
+          }
+        }
       }
       continue;
     }

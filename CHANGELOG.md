@@ -56,9 +56,10 @@ pin.
   actually be focused and seen. Handles a closed `<details>`, an inactive
   `[role=tabpanel][hidden]` and a collapsed `.bo-widget__collapse`, and reveals
   by pressing each container's own control so the behavior that owns that state
-  keeps its ARIA correct. `initValidationSummary()` is the first caller;
-  exported because any in-page link that lands on a field the user cannot
-  currently see needs the same thing. Deliberately does not touch containers
+  keeps its ARIA correct. `initValidationSummary()` is currently the only
+  caller — exported on the same footing as `trapFocus`, because the problem it
+  solves belongs to any in-page link that lands on a field the user cannot see,
+  not to the summary specifically. Deliberately does not touch containers
   the framework did not define — stripping `hidden` off app markup whose
   meaning it cannot know is a worse failure than not revealing.
 

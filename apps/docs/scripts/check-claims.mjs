@@ -21,6 +21,17 @@
 //     — and the shape it recommends is what a reader copies, so the
 //     honest position is an exemption, not a softened sentence.
 //
+//   * `reveal()`'s THIRD container — an inactive `[role=tabpanel][hidden]`.
+//     The other two it handles are demonstrated and checked live on
+//     /patterns/validation-summary (a closed `<details>` and a collapsed
+//     `.bo-widget__collapse`). No docs page composes a FORM across tabs, and
+//     restructuring that pattern's demo into a tabbed form to reach the third
+//     path would change what the page teaches in order to satisfy this gate —
+//     the tail wagging the dog. Covered instead by `reveal.test.ts`, which
+//     asserts both the pressed-tab path and the not-installed fallback.
+//     Re-home this as a live case the moment a pattern page grows a tabbed
+//     form; roadmap 154 records that question as deliberately open.
+//
 // The bar for joining that list: the behaviour must be unobservable in
 // this harness for a stated reason, not merely awkward to reach.
 //
@@ -1381,6 +1392,52 @@ check(
     vsReveal.openAfter &&
     vsReveal.focused === 'vs-dock',
   JSON.stringify(vsReveal),
+);
+
+/* The collapsed-card container, which fails DIFFERENTLY and worse than the
+   other two: it clips instead of un-rendering, so `.focus()` succeeds into a
+   0px `overflow: hidden` box and focus moves somewhere the user cannot see.
+   `<details>` above cannot catch a regression here — a fix that handled only
+   un-rendered containers would leave this live.
+
+   Measure the box that CARRIES the constraint. The input keeps its own height
+   whether or not it is clipped; the collapse container is what animates from
+   0, so this settles the `grid-template-rows` transition first and then
+   asserts the container is really open. A bounded poll, so a container that is
+   genuinely stuck at zero still reports zero rather than hanging. */
+const vsCollapse = await page.evaluate(async () => {
+  const box = document.querySelector('[data-validation-summary-box]');
+  const collapse = document.getElementById('vs-notes-body');
+  const trigger = document.querySelector('[data-collapse-trigger][aria-controls="vs-notes-body"]');
+  const entry = [...box.querySelectorAll('a')].find((a) => a.getAttribute('href') === '#vs-note');
+  const out = {
+    blocksSubmit: document.getElementById('vs-note').willValidate,
+    closedBefore: collapse.dataset.state === 'closed',
+    listed: !!entry,
+  };
+  if (!entry) return out;
+  entry.click();
+  for (let i = 0; i < 40 && collapse.getBoundingClientRect().height === 0; i++) {
+    await new Promise((r) => setTimeout(r, 25));
+  }
+  return {
+    ...out,
+    state: collapse.dataset.state,
+    expanded: trigger.getAttribute('aria-expanded'),
+    height: Math.round(collapse.getBoundingClientRect().height),
+    focused: document.activeElement?.id ?? null,
+  };
+});
+check(
+  'validation-summary: an entry inside a collapsed card opens it — focus does not land in a clipped 0px box',
+  vsCollapse.blocksSubmit &&
+    vsCollapse.closedBefore &&
+    vsCollapse.listed &&
+    vsCollapse.state === 'open' &&
+    vsCollapse.expanded === 'true' &&
+    vsCollapse.height > 0 &&
+    vsCollapse.focused === 'vs-note',
+  JSON.stringify(vsCollapse),
 );
 
 /* And the reason `novalidate` is on that form, which the page now states
