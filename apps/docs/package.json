@@ -34,6 +34,7 @@
     "check:live-regions": "node scripts/check-live-regions.mjs",
     "check:patterns-index": "node scripts/check-patterns-index.mjs",
     "scan:dead-style": "node scripts/scan-dead-style.mjs",
+    "report:prose": "node scripts/report-prose.mjs",
     "check:ci-ignores": "node scripts/check-ci-ignores.mjs",
     "check:slice-refs": "node scripts/check-slice-refs.mjs",
     "copy:suite": "node scripts/copy-suite.mjs",

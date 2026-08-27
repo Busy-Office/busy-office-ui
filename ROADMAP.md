@@ -1343,29 +1343,62 @@ DOCS, where it has never really been applied. Principle 1 already carries the
 exact test: *"Rethink when a docs explanation keeps growing to cover a surface —
 the fix is simplifying the thing, never the prose."*
 
-**Measured baseline, reader-facing prose in the built pages** (code samples,
-nav and tab strips excluded; taken 2026-08-28):
+**Measured baseline — SUPERSEDED 2026-08-28, and the correction is the point.**
+The original figures below were taken by an ad-hoc instrument that was never
+written down, so nobody could re-run them. By the time 158.1 came up, 157.3 had
+added +337 words to the page it leads with. Re-measuring is now a command:
 
 ```
-107 pages · median 775 words · mean 916 · total 98,062
+npm run docs:build && npm run report:prose -w docs      # scripts/report-prose.mjs
 ```
 
-Seven pages exceed **2x the median**:
+```
+118 documentation pages of 127 built · median 739 · mean 884 · total 104,367
+```
+
+**Twelve** pages exceed 2x the median (1,478), not seven:
 
 | words | x median | page |
 |---|---|---|
-| 4,429 | 5.7 | `/components/data-table` (22 demo sections) |
-| 3,616 | 4.7 | `/components/richtext` |
-| 2,425 | 3.1 | `/concepts/which-pattern` |
-| 2,087 | 2.7 | `/components/form` |
-| 1,930 | 2.5 | `/patterns/editable-grid` |
-| 1,897 | 2.4 | `/patterns/list-report` |
-| 1,723 | 2.2 | `/components/calendar` |
+| 5,022 | 6.8 | `/components/data-table` |
+| 3,805 | 5.1 | `/components/richtext` |
+| 2,324 | 3.1 | `/concepts/which-pattern` |
+| 2,213 | 3.0 | `/components/form` |
+| 1,955 | 2.6 | `/patterns/editable-grid` |
+| 1,941 | 2.6 | `/patterns/list-report` |
+| 1,691 | 2.3 | `/components/calendar` |
+| 1,561 | 2.1 | `/components/money` |
+| 1,507 | 2.0 | `/components/combobox` |
+| 1,490 | 2.0 | `/components/tabs` |
+| 1,488 | 2.0 | `/concepts/layouts` |
+| 1,485 | 2.0 | `/patterns/output-form` |
 
-*(An eighth entry, `/patterns/invoice-list` at an identical 1,897, was my
+**Why the page count moved, reconciled exactly rather than waved at.** 107 was
+41 components + 41 patterns + 16 concepts + 8 getting-started + the root; adding
+`/base/` (6) and `/reference/` (5) — ordinary reader-facing documentation the
+old instrument left out — is exactly 118. The RF screens (6) and the iframe
+demo fragments (3) stay excluded with the reason stated in the script: they are
+rendered artefacts, not pages a reader reads, and leaving them in drags the
+median down and so inflates the outlier set. Beyond the page set the two
+instruments are **not comparable at all**, since the old one's extraction rules
+are unknown; the top seven rank identically, which is corroboration and not
+equivalence.
+
+**The new instrument's own first output was wrong twice**, per this repo's base
+rate. Its chrome-exclusion alarm looked for a suspiciously repeated count and
+was a detector that could not fail: swapping `<main>` for `<body>` put the whole
+shell into every page (median 739 → 1034) and it stayed silent, because a
+constant added to every page leaves them all still different. It now compares
+`<body>` against `<main>` on the longest page — substitute one for the other and
+the difference is exactly zero, which is what makes it falsifiable. Red-proved
+both ways.
+
+*Superseded original (2026-08-28, instrument unrecorded): 107 pages, median 775,
+mean 916, total 98,062; seven outliers led by `/components/data-table` at 4,429.
+An eighth entry, `/patterns/invoice-list` at an identical 1,897, was that
 instrument following a redirect stub and counting `list-report` twice —
-identical values across different inputs are a defect until proven otherwise,
-and this one was.)*
+`report-prose` goes through `distPages`, which has skipped redirect stubs since
+2026-08-18.*
 
 **Own up to the trend first.** `apps/docs/src/pages` took **+482 / -90 lines in
 24 hours**, nearly all of it mine, and `/concepts/layouts` alone took +283 —
@@ -1377,10 +1410,14 @@ historical problem; the loop is actively creating it.
        surface in an ERP, so 4,429 words may be honest coverage — or it may be
        explanation compensating for a component with too many settings, which
        is principle 1's rethink case and means changing the component.
-       *Accept*: for each of the seven, a recorded verdict — **honest coverage**
-       (leave it), **explanation covering complexity** (a roadmap item against
-       the component, not the page), or **removable** (cut, with what went).
-       A verdict per page, not a global trim.
+       *Accept*: for **each page `report:prose` lists over 2x the median on the
+       run that opens the round** — not a count fixed in advance, which was
+       seven and is now twelve — a recorded verdict: **honest coverage** (leave
+       it), **explanation covering complexity** (a roadmap item against the
+       component, not the page), or **removable** (cut, with what went). A
+       verdict per page, not a global trim. Re-run the report first: the premise
+       is a measurement, and 159's rule says re-checking it is part of the
+       criterion, not a courtesy.
 
 2. [ ] **158.2 — the loop's own prose discipline.**
        The 24-hour delta is the actionable half. Something should make the loop
