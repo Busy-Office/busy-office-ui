@@ -2,15 +2,13 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 20:52
+Generated at: 2026-08-27 21:51
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 158** (1 open)
-  - 158.2 — the loop's own prose discipline.
 - **Slice 159** (1 open)
   - 159.1 — `report-reach` prints the verdict where one exists.
 - **Slice 160** (1 open)
@@ -21,9 +19,10 @@ Generated at: 2026-08-27 20:52
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (971 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-27 18:57   ok
+dispatch status — counter-triggered rules (973 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-27 18:57   OVERDUE
   Objective     2 / 3 slices          since 2026-08-27 19:43   ok  [158, 159]
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -37,9 +36,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 20:50 · Continue · build · 158.1 — twelve prose-outlier verdicts; report:prose gains generated/hidden/family splits · landed · 851e9e3
-- 2026-08-27 20:52 · Roadmap · plan · Slice 160 — named-product measurement triaged to owner call, not scrubbed · triaged · 6a71491
-- 2026-08-27 20:52 · Meta · refusal · scrubbing 45 design-system citations unilaterally — direction is the owner's · refused · 6a71491
+- 2026-08-27 21:51 · Continue · build · 158.2 — the decision: a cadence, not a budget. Nine daily builds show that on the 89 pages present throughout, prose rose 51,051->77,080 words (+51%) and the minimum 8-day delta is exactly 0 — 71 grew, 18 flat, 0 shrank — while pages do shrink day to day, so the comparator can report negative. report:prose joins scan:dead-style in Standardize step 1; no new gate. Three instruments were wrong first: shallow clone, astro not clearing dist, and git checkout not deleting · landed · 9b33141
+- 2026-08-27 21:51 · Meta · refusal · a word-count budget or gate, now on evidence — it would have fired on 71 of 89 pages and pushed out the refusal sections 158.1 read as the framework arguing for less · refused · 9b33141
 
 ## Sunset test
 
