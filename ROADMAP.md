@@ -1186,6 +1186,53 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 155 — Two drift risks in `create-ui`, found by explaining it (2026-08-27)
+
+**Input**: the owner asked what `@busy-office/ui` and `@busy-office/create-ui`
+are to each other. Answering it meant reading the scaffolder, and reading it
+surfaced two things nothing keeps honest. Neither is broken **today** — both
+are latent drift, so neither is P0, and both queue behind the older items.
+
+Worth noting how they were found: not by a sweep looking for problems, but by
+having to explain a thing precisely. That is the third time this has produced a
+real finding, and it is cheaper than any detector.
+
+1. [ ] **155.1 — the scaffold's framework pin is unchecked, and the gate that
+       looks like it covers it steps around it.**
+       `create-ui/index.mjs:58` writes `dependencies: { '@busy-office/ui':
+       '^0.5.0' }` as a hardcoded string, while the real version lives in
+       `packages/core/package.json`. It is correct right now (both read 0.5.0)
+       and nothing keeps it correct — no gate reads it.
+       **The confusing part, and the reason this is worth an item rather than a
+       one-line fix**: `check:quickstart` DOES run the scaffolder for real
+       (arm 2, roadmap 148.2) and boots the generated project. But it installs
+       with `npm i --no-save <locally packed tarball>`, which resolves nothing
+       from the registry — so the generated `dependencies` entry is never
+       exercised. The gate proves the scaffold works while being structurally
+       incapable of noticing the pin is stale. That is this repo's most-recorded
+       defect class wearing a passing gate as a disguise.
+       *Accept*: the pin is derived from `packages/core/package.json` rather
+       than written by hand, OR a check asserts the two agree and fails when
+       they do not. Red-prove it by bumping core's version and confirming the
+       check goes red — asserting on the generated `package.json`, not on the
+       source string that writes it.
+
+2. [ ] **155.2 — `packages/create-ui/NOTICE` is a byte-identical hand copy of
+       `packages/core/NOTICE`.**
+       Verified with `diff`: identical. `create-ui/build.mjs` snapshots the
+       template screen and never touches NOTICE, so nothing regenerates or
+       reconciles it — the second copy goes stale the moment core's third-party
+       notices change, and a stale attribution file is the kind of small wrong
+       that is embarrassing rather than merely untidy.
+       Shipping *a* notice from the scaffolder is defensible (the generated
+       project pulls the CSS those notices describe), so the finding is the
+       **hand copy**, not the file's existence. Deleting it is a valid outcome
+       only if the scaffolded project genuinely does not redistribute the
+       artwork — decide that deliberately, do not assume it.
+       *Accept*: one source of truth — generated/copied at build time, or the
+       file removed with the reason recorded. A check that the shipped copies
+       agree, if two copies survive.
+
 ## Slice 154 — Triaged from a reference form-layout engine (2026-08-27)
 
 **Input**: an 897-line form-layout engine from an open-source ERP desk

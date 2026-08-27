@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 15:57
+Generated at: 2026-08-27 21:43
 
 ## Open items by slice
 
@@ -14,6 +14,9 @@ Generated at: 2026-08-27 15:57
 - **Slice 153** (2 open)
   - 153.1 — teach `report-reach` the fourth meaning.
   - 153.2 — `bo-date` is the one real miss.
+- **Slice 155** (2 open)
+  - 155.1 — the scaffold's framework pin is unchecked, and the gate that looks like it covers it steps around it.
+  - 155.2 — `packages/create-ui/NOTICE` is a byte-identical hand copy of `packages/core/NOTICE`.
 - **Slice —** (1 open)
   - AT runtime evidence
 
