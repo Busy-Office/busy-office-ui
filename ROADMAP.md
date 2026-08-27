@@ -1186,6 +1186,59 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 163 — noticed while shipping 159.1: the bucket nobody adjudicated is the one below the bar (2026-08-28)
+
+Not part of 159.1 and deliberately not folded into it — this is bigger than the
+item, so it is an entry rather than an extra commit (LOOPS.md's improvement
+rule).
+
+**Measured, from the report 159.1 just changed** (`node
+apps/docs/scripts/report-reach.mjs`, 2026-08-28, after `npm run build -w
+@busy-office/ui`):
+
+```
+61 block classes · 75 independent compositions
+  zero reach:      7  — 7 of 7 adjudicated (5 verdicts + 1 cannot-appear + 1 deprecated)
+  exactly one:    10  — 0 of 10 adjudicated
+```
+
+**The asymmetry is the finding.** The Objective's principle 3 sets the bar at
+"≥2 real, independent compositions". A block at **zero** has now been examined
+seven times over, across two grills and two slices. A block at **exactly one**
+sits one composition short of the written bar and **not one of the ten has ever
+been looked at**. Attention went to the number that looked alarming rather than
+to the number the principle actually names.
+
+The ten: `bo-calendar`, `bo-composer`, `bo-offcanvas`, `bo-ordered-list`,
+`bo-prose`, `bo-radio`, `bo-richtext`, `bo-skeleton`, `bo-tag-input`,
+`bo-toast`.
+
+**This is NOT a claim that any of them is a defect.** Slice 153.2 is exactly
+what happens when a bare count from this report is read as one — a settled zero
+was re-read as "the one real defect" and nearly spread a retired class across 21
+screens. Several of these are obviously fine on sight (`bo-radio` is a form
+control; `bo-toast` pairs with the runtime container already exempted). The
+finding is that **nobody has written that down**, so the report cannot tell an
+examined one from an unexamined one — which is the same defect 159.1 just fixed
+one bucket up.
+
+1. [ ] **163.1 — adjudicate the ten blocks at exactly one composition.**
+       Each gets a verdict, or an explicit "not examined", by the same rule
+       159.1 installed: the verdict is a dated claim, it stays in the count, and
+       it reconciles both ways.
+       *Accept*: (a) every block the report prints at exactly one composition
+       carries a verdict or reads as unexamined, checked by running the report;
+       (b) each verdict is measured, with the command next to the claim — an
+       assertion about which screens do or do not compose a block is re-runnable
+       or it does not go in; (c) **"all ten are correct as they stand" is a
+       satisfying outcome**, recorded as ten verdicts, and so is "n of them are
+       real principle-3 misses" — the criterion is that each is decided, not
+       that any of them moves; (d) the report still never fails the build.
+
+       **Do not re-derive the counts above** — the command is in this item and
+       takes seconds. If it now disagrees with 61/75/7/10, that disagreement is
+       the first thing to report, not something to quietly write over.
+
 ## Slice 162 — Two wakes took the same item, and nothing could have stopped them (2026-08-28)
 
 **What happened.** The hourly cloud routine was promoted from this session
@@ -1519,7 +1572,52 @@ loop's prose growth open as an item): when an item's premise is itself a
 measurement from an earlier wake, re-checking it is part of the criterion, and
 the command goes next to the claim.
 
-1. [ ] **159.1 — `report-reach` prints the verdict where one exists.**
+1. [x] **159.1 — DONE 2026-08-28. `report-reach` prints the verdict where one
+       exists.**
+       An `ADJUDICATED` map now carries the five verdicts, and every block the
+       report names prints one line saying either the verdict or
+       `NO VERDICT RECORDED: nobody has examined this zero yet.` — never a bare
+       comma list, which is what read as an open question. The three
+       file-upload blocks share ONE verdict and print on one line, grouped by
+       the verdict text itself: repeating the identical paragraph three times
+       made one finding look like three.
+
+       **Not a third exemption bucket, as the item required.** Adjudicated
+       blocks stay inside the `never composed` count. The header states why:
+       `CANNOT_APPEAR` and `DEPRECATED` are stable facts, a verdict is a dated
+       claim about the suite, so it stays in the count where the next reader
+       re-tests it.
+
+       **Each verdict was re-checked against measurement before being copied**
+       from `.roundtable/grill-objective-149-152-2026-08-27.md`, and the
+       commands are next to the claims in the script:
+
+       - `bo-file-*` — `find examples/erp-suite -name "*.screen.mjs" -exec
+         grep -ilE "attach|upload" {} \; | wc -l` → **0**, over **28** screen
+         files. The grill said "all 27"; there are 27 module screens **plus the
+         suite index**, which the script's own corpus comment already states.
+         Zero either way, so the verdict stands — but the count in the entry is
+         the measured one.
+       - `bo-tree` — opener reads "Not for rows that carry data columns";
+         `bo-tree-table` reaches **2** compositions to `bo-tree`'s **0**.
+       - `bo-avatar-stack` — the promotion comment is real
+         (`avatar/avatar.css:40`, found only case-insensitively — it is
+         capitalised, and the first grep for the grill's lowercase quotation
+         returned nothing); `bo-timeline` reaches **11**.
+
+       **Accept (c) — reconciliation both ways — is red-proved, injection
+       confirmed each time.** Giving a COMPOSED block a verdict prints
+       `!! bo-timeline carries a verdict explaining its ZERO reach but IS
+       composed 11x`; renaming an entry prints `!! … is not a shipped block`;
+       removing `bo-tree`'s entry prints the `NO VERDICT RECORDED` line for a
+       block that is genuinely in the zero list. **Accept (d)**: exit 0, no
+       `process.exit` added, and it ran inside `docs:build` green.
+
+       **Cloud wake — nothing visual.** This is one Node script that prints to
+       stdout; it renders nothing and ships in no page. No screenshot was taken
+       and none is owed.
+
+       *Original finding:*
        Seven blocks have ever read zero reach, and **all seven are now
        adjudicated as not-a-defect** — 150.1 refused to gate this on the
        argument that a gate would be wrong "roughly a third of the time"; the

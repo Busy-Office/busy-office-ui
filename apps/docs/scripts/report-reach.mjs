@@ -86,6 +86,76 @@ const CANNOT_APPEAR = new Map([
   ],
 ]);
 
+/**
+ * Blocks that read zero AND have been examined, with the verdict that examining
+ * them produced. Roadmap 159.1.
+ *
+ * NOT a third exemption bucket, and the distinction is the whole point. An
+ * entry here is still counted and still printed under "never composed" — it is
+ * an *adjudicated* zero, not an excused one. `CANNOT_APPEAR` says the corpus
+ * structurally cannot contain the block; `DEPRECATED` says the zero is the
+ * intended end state. Both are stable facts. A verdict here is a dated claim
+ * about the suite as it stands, and it can go stale in a way those two cannot —
+ * so it stays visible, in the count, where the next reader will re-test it.
+ *
+ * Why it exists: a bare block name in that list reads as an open question. Five
+ * of them were printed bare while all five were in fact adjudicated (the
+ * verdicts sat in `.roundtable/grill-objective-149-152-2026-08-27.md` and, for
+ * two of them, in a CSS header comment nobody reading this report would open).
+ * That is the exact state that produced roadmap 153.2, where an already-settled
+ * zero was re-read as "the one real defect" and nearly spread a retired class
+ * across 21 screens.
+ *
+ * Each `why` is copied from that grill, not re-derived — and each was re-checked
+ * against measurement before being copied here (roadmap 159.1 Accept (b)). The
+ * commands are next to the claims, per CLAUDE.md, so the next wake re-runs them
+ * instead of re-deriving them.
+ */
+const ADJUDICATED = new Map([
+  [
+    'bo-tree',
+    {
+      verdict: 'correctly refused at the point of use',
+      why:
+        'its own opener says "Not for rows that carry data columns" and points at tree-table, ' +
+        'which IS composed. Re-measured 2026-08-28: `bo-tree-table` reaches 2 compositions, ' +
+        '`bo-tree` 0 — suitability beating reuse, as the Objective asks.',
+    },
+  ],
+  [
+    'bo-avatar-stack',
+    {
+      verdict: 'correctly refused, and strongly',
+      why:
+        'the suite HAS the scenario that promoted the primitive — avatar.css:40 reads ' +
+        '`Approval-chain "who\'s next" stack — the scenario that promoted the primitive` — and ' +
+        'p2p/purchase-order renders that chain as a `bo-timeline` with named steps, data-state ' +
+        'done/current/pending and timestamps, all of which overlapping discs would lose. ' +
+        'Re-measured 2026-08-28: `bo-timeline` reaches 11 compositions.',
+    },
+  ],
+  ['bo-file-dropzone', { verdict: 'instrument gap', why: fileUploadWhy() }],
+  ['bo-file-input', { verdict: 'instrument gap', why: fileUploadWhy() }],
+  ['bo-file-list', { verdict: 'instrument gap', why: fileUploadWhy() }],
+]);
+
+/**
+ * The file-upload family shares ONE verdict, so it is written once.
+ *
+ * The claim is about the CORPUS, not the component: no suite screen has an
+ * attachment flow at all, so this zero says nothing about file-upload. Roadmap
+ * 159.1's criterion is that this agrees with what the command reports — not
+ * that the number stays zero. When a screen grows an attachment flow, this
+ * entry becomes stale and the reconciliation below says so.
+ */
+function fileUploadWhy() {
+  return (
+    'no suite screen has an attachment flow at all, so this says nothing about the component. ' +
+    'Command: `find examples/erp-suite -name "*.screen.mjs" -exec grep -ilE "attach|upload" {} \\; | wc -l` ' +
+    '— 0 of 28 screen files on 2026-08-28 (27 module screens + the suite index).'
+  );
+}
+
 const api = JSON.parse(await readFile(join(CORE_DIST, 'api.json'), 'utf8'));
 
 /** Every shipped block class, and which component(s) declare it. */
@@ -146,6 +216,14 @@ const one = rows.filter(([, n]) => n === 1);
 const staleExempt = [...CANNOT_APPEAR.keys(), ...DEPRECATED.keys()].filter((b) => (reach.get(b) ?? 0) > 0);
 const unknownExempt = [...CANNOT_APPEAR.keys(), ...DEPRECATED.keys()].filter((b) => !reach.has(b));
 
+/* The same reconciliation, both ways, for the verdicts — 153.1's rule applies
+   to them too and they need it MORE, because a verdict is a dated claim about
+   the suite rather than a stable fact about the block. A block whose verdict
+   says "nobody composed this, and here is why that is right" is refuted the
+   moment somebody composes it. */
+const staleVerdict = [...ADJUDICATED.keys()].filter((b) => (reach.get(b) ?? 0) > 0);
+const unknownVerdict = [...ADJUDICATED.keys()].filter((b) => !reach.has(b));
+
 /* A tidy number is a defect until proven otherwise (CLAUDE.md). All-zero means
    the matcher broke; all-used means the corpus is wrong. Say so loudly in the
    report rather than printing a serene summary. */
@@ -161,7 +239,32 @@ console.log(
 );
 if (suspicious) console.log(`  !! ${suspicious}`);
 
-console.log(`  never composed (${zero.length}): ${zero.map(([b]) => b).join(', ') || 'none'}`);
+/* One line per block, never a bare comma list: a name on its own reads as an
+   open question, and five of these were settled while reading as open. The
+   reader must be able to tell EXAMINED from UNEXAMINED without opening the
+   source, so a block with no verdict says so in as many words.
+
+   Blocks sharing one verdict print on one line. The file-upload family is three
+   blocks and ONE finding — repeating the identical paragraph three times makes
+   the report look like three problems, which is the opposite of what this is
+   for. Grouping is keyed on the verdict text itself, so it cannot drift from
+   what the map says. */
+console.log(`  never composed (${zero.length}):${zero.length ? '' : ' none'}`);
+const printed = new Set();
+for (const [b] of zero) {
+  if (printed.has(b)) continue;
+  const adj = ADJUDICATED.get(b);
+  if (!adj) {
+    console.log(`    ${b} — NO VERDICT RECORDED: nobody has examined this zero yet.`);
+    printed.add(b);
+    continue;
+  }
+  const sharing = zero
+    .map(([n]) => n)
+    .filter((n) => ADJUDICATED.get(n)?.verdict === adj.verdict && ADJUDICATED.get(n)?.why === adj.why);
+  for (const n of sharing) printed.add(n);
+  console.log(`    ${sharing.join(', ')} — ADJUDICATED: ${adj.verdict} — ${adj.why}`);
+}
 if (exempt.length) {
   console.log(`  cannot appear (${exempt.length}) — not a finding, and not counted above:`);
   for (const [b] of exempt) console.log(`    ${b} — ${CANNOT_APPEAR.get(b)}`);
@@ -176,7 +279,26 @@ for (const b of staleExempt) {
 for (const b of unknownExempt) {
   console.log(`  !! ${b} is listed as "cannot appear" but is not a shipped block — renamed or removed?`);
 }
-console.log(`  used once (${one.length}): ${one.map(([b]) => b).join(', ') || 'none'}`);
+for (const b of staleVerdict) {
+  console.log(
+    `  !! ${b} carries a verdict explaining its ZERO reach but IS composed ${reach.get(b)}x — ` +
+      'the verdict is refuted, re-examine it and rewrite or remove the entry',
+  );
+}
+for (const b of unknownVerdict) {
+  console.log(`  !! ${b} carries a verdict here but is not a shipped block — renamed or removed?`);
+}
+/* Which of these carry a verdict is COMPUTED, not asserted. The only verdicts
+   that exist are about zero reach, so this is expected to read "none" — and the
+   day it does not, the staleVerdict line above has already fired. Printing a
+   hardcoded "none adjudicated" would be a sentence that cannot go wrong, which
+   this repo counts as a defect. Roadmap 163.1 is the item to fill this in. */
+console.log(
+  `  used once (${one.length}) — adjudicated: ` +
+    `${one.filter(([b]) => ADJUDICATED.has(b)).map(([b]) => b).join(', ') || 'none'}; ` +
+    `carrying no verdict: ` +
+    `${one.filter(([b]) => !ADJUDICATED.has(b)).map(([b]) => b).join(', ') || 'none'}`,
+);
 console.log(
   '  zero reach is NOT automatically a defect — it can mean the component is ' +
     'correctly refused at the point of use, or that the suite has no screen of ' +
