@@ -13,18 +13,22 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-27 08:35, HEAD `d29bb32`. Working tree clean, every gate
-green (129 behavior tests, 130 live claims, full docs build). npm serves
-**0.5.0**.
+Last updated 2026-08-27 15:45, HEAD `6e25b0e`. Working tree clean apart from
+`layout.js` (see below). Every gate green: 136 behavior tests, 132 live claims,
+full docs build, plus the CI-only sweeps `test:axe` (127 pages x 2 widths) and
+`check:layout`. npm serves **0.5.0**.
 
-**⚠ 26 commits are unpushed.** Everything from Slice 149 through 153 is local
-only. CI and Pages have therefore not seen any of it — push before trusting a
-green badge, and run the CI-only sweeps (`test:axe`, `check:layout`) as the wake
-prompt requires.
+**⚠ 29 commits are unpushed.** Everything from Slice 149 through 154 is local
+only. CI and Pages have not seen any of it.
 
-**The backlog is NOT halt-blocked** — this file said the opposite until now, and
-a wake that believed it would have stopped with real work queued. Three
-dispatchable items:
+**`layout.js` at the repo root is TRIAGED INPUT, not abandoned work.** It is an
+897-line form-layout engine from an open-source ERP desk framework, dropped
+there for review. Slice 154 triaged it; it is deliberately never committed
+(third-party source), and per the standing owner instruction the product is not
+named anywhere in this repo. **Do not re-triage it** — and do not treat the
+dirty tree it causes as an interrupted slice. Deleting it is safe.
+
+**The backlog is NOT halt-blocked.** Three dispatchable items, oldest first:
 
 - **151.3** — ordinal values (priority/severity/risk read as ranked, and
   `bo-badge` has tone but no ordinal channel). Recorded as a **RETHINK**:
@@ -39,6 +43,17 @@ dispatchable items:
   a date as a plain string like `'01 Oct'`. **The screens change, not the
   component**, and per 149.1's precedent refusing per screen with a reason is a
   valid outcome.
+
+**One docs container, and it is the bind-mounted one.** Two were running: a
+stale image on `:8081` (baked 2026-08-26 21:55, no mounts, served 200s and
+therefore looked fine) and the current bind-mounted one on `:8091`. A wake
+following `LOOPS.md`'s documented port would have screenshotted 18-hour-old
+content and believed it — it briefly misled this wake. Both were removed and
+replaced by a single `bo-docs-run` on **:8081**, bind-mounted to
+`apps/docs/dist` exactly as `LOOPS.md` specifies, so the doc and reality now
+agree. Recreate with the command in LOOPS.md if it is gone. **Confirm a served
+page carries your change before trusting a screenshot** — `vs-dock` on
+`/patterns/validation-summary/` is this wake's marker.
 
 **Still owner-blocked, unchanged** — do not try to work around these:
 
@@ -85,6 +100,36 @@ regrowth, not every conceivable name, so the judgement is still yours.
 - **Standardize** — one `source-files.mjs` replaced two hand-rolled source walks
   written the same day with different skip lists; proven behaviour-neutral by
   diffing output and file sets.
+
+## Slice 154 (2026-08-27) — triaged from a reference form-layout engine
+
+Both items shipped in one wake. The finding is worth keeping in mind beyond
+the fix: **the framework could hide the very thing it had just told the user to
+fix.** A `required` control inside an inactive tab panel, a closed `<details>`
+or a collapsed widget still blocks submit, so `initValidationSummary()` listed
+it — and the link it handed over silently did nothing.
+
+- **A third container turned up mid-build and fails WORSE than the two the item
+  named.** `.bo-widget__collapse[data-state="closed"]` clips instead of
+  un-rendering, so `.focus()` *succeeds* into a 0px `overflow: hidden` box.
+  Focus moves somewhere invisible with no way to find it. A fix scoped to the
+  two named containers would have looked complete.
+- **`reveal(el)` verifies its own press.** It reveals by clicking each
+  container's own control so the owning behavior keeps `aria-selected` /
+  `aria-expanded` correct — then checks the container actually opened. That
+  check exists because the first version reported success while doing nothing:
+  the tabs delegation matches `.bo-tabs__tab[role=tab]`, and the repro's tabs
+  had `role` but not the class.
+- **Five mechanisms from the reference were refused with reasons** (Tab-key
+  takeover, alt+hover fieldnames, colour-named message block, auto-hiding empty
+  sections, scroll-direction tab strip). One question is left OPEN rather than
+  half-decided: the reference's whole shape is a **tabbed detail form**, and no
+  pattern page shows one — `detail-form` has no tabs, `object-page` answers long
+  records with anchor-nav instead. That is a design call for `/design-grill`,
+  not a build item.
+- **Checked, not assumed, that the fix is in the right layer**: all nine
+  `.focus()` sites in `behaviors/` were audited and only `validation-summary`
+  can target a container the user cannot see.
 
 ## Two traps recorded today, both worth not repeating
 
