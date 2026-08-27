@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 21:51
+Generated at: 2026-08-27 22:55
 
 ## Open items by slice
 
@@ -13,16 +13,17 @@ Generated at: 2026-08-27 21:51
   - 159.1 — `report-reach` prints the verdict where one exists.
 - **Slice 160** (1 open)
   - 160.1 — OWNER CALL: does the no-named-product rule reach design references?
+- **Slice 161** (1 open)
+  - 161.4 — the Objective counter cannot see a slice that closes under any loop but Continue, and this wake is an instance.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (973 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-27 18:57   OVERDUE
+dispatch status — counter-triggered rules (977 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-27 22:53   ok
   Objective     2 / 3 slices          since 2026-08-27 19:43   ok  [158, 159]
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -36,8 +37,10 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 21:51 · Continue · build · 158.2 — the decision: a cadence, not a budget. Nine daily builds show that on the 89 pages present throughout, prose rose 51,051->77,080 words (+51%) and the minimum 8-day delta is exactly 0 — 71 grew, 18 flat, 0 shrank — while pages do shrink day to day, so the comparator can report negative. report:prose joins scan:dead-style in Standardize step 1; no new gate. Three instruments were wrong first: shallow clone, astro not clearing dist, and git checkout not deleting · landed · 9b33141
-- 2026-08-27 21:51 · Meta · refusal · a word-count budget or gate, now on evidence — it would have fired on 71 of 89 pages and pushed out the refusal sections 158.1 read as the framework arguing for less · refused · 9b33141
+- 2026-08-27 22:53 · Standardize · sweep · 161.1 — Standardize step 1: scan:dead-style clean (0/1428), three family-median prose verdicts recorded; 2 of 3 are against the instrument · landed · 835d839
+- 2026-08-27 22:53 · Standardize · sweep · 161.2 — pattern named for its sample domain in 4 reader-facing places (3 Related labels + 1 DSA cite), fixed and verified against dist · landed · 835d839
+- 2026-08-27 22:53 · Meta · refusal · a gate requiring a Related label to match the linked page's title — 90 of 428 links (21.0%) legitimately disagree because the label carries the link's reason · refused · 835d839
+- 2026-08-27 22:53 · Standardize · sweep · 161.3 — LOOPS.md's settled repeat count was 3, is 8; report:css-repeats added as the command, red-proved both ways · landed · 835d839
 
 ## Sunset test
 

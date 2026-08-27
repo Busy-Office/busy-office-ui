@@ -1341,6 +1341,53 @@ what ran, and it is not the same as having looked.
        each (bare control vs combobox wrapper), and the reopen condition is a
        third component, not a fifth copy.
 
+4. [ ] **161.4 — the Objective counter cannot see a slice that closes under any
+       loop but Continue, and this wake is an instance.**
+       Noticed by running `dispatch_status.py` after recording this slice: it
+       still reads `Objective 2 / 3 [158, 159]`, with 161 closed and its three
+       items ticked. Not chased into a fix, because changing what the counter
+       counts changes when Objective preempts the build queue — and this file
+       records that getting that threshold wrong in EITHER direction has cost
+       real time (starved for ten slices one way; "would fire almost every wake
+       and starve the build" the other). That is a judgement, not a bug fix.
+
+       **Measured, with the command, so the next wake re-runs it:**
+
+       ```
+       # rows naming a slice number, by loop, over the whole log
+       python3 - <<'PY'
+       import re; from collections import Counter
+       S=re.compile(r"^([1-9]\d{0,2})\.\d+[a-z]?\b")
+       R=re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · (\w+) · (\w+) · (.*)$")
+       t=Counter(); n=Counter()
+       for l in open('.roundtable/loop-log.md'):
+           m=R.match(l)
+           if not m: continue
+           t[m.group(2)]+=1
+           if S.match(m.group(4).rsplit(' · ',2)[0]): n[m.group(2)]+=1
+       for k in sorted(t,key=lambda x:-t[x]): print(f"{k:14}{n[k]:5} / {t[k]}")
+       PY
+         # Continue 241/457 · Meta 0/170 · Roadmap 10/128 · Standardize 31/110
+         # · Explore 6/56 · Objective 2/44 · Polish 0/9 · Optimize 0/3
+       ```
+
+       `dispatch_status.py` filters to `r["loop"] == "Continue"` with a stated
+       reason — *"a Roadmap triage row plans a slice, it does not close one"* —
+       which is right about Roadmap and was never asked about Standardize.
+       **31 Standardize rows have named a slice** and none has ever counted. So
+       the exclusion is not a rare edge; it is 28% of that loop's rows, and it
+       is the same silent-starvation shape this file has recorded three times
+       about Objective specifically.
+
+       *Accept*: a recorded decision about **which loops close a slice**, with
+       the count each contributes, and `dispatch_status.py` agreeing with the
+       decision — including the case where the decision is *keep Continue-only*,
+       which is satisfying and wants only the reason written into the script's
+       comment where the next reader will find it. If the filter widens, re-run
+       the counter against the historical log first and say what the Objective
+       cadence WOULD have been, rather than predicting it: this file's own rule
+       is that a criterion names the property, not the value.
+
 ## Slice 160 — triaged while reading 158.1's outlier pages: named products the denylist does not deny (2026-08-28)
 
 **Not new input** — nothing was filed and nobody asked. Found by reading

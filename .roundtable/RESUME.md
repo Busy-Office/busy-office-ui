@@ -13,16 +13,15 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-27 21:55 UTC. Working tree clean; two commits landed and
-were pushed as one batch.
+Last updated 2026-08-28 (cloud wake). Working tree clean; four commits landed
+and were pushed as one batch.
 
-## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THREE GIT/BUILD TRAPS, ALL MEASURED
+## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS, ALL MEASURED
 
 ### 1. `git checkout main` — the container starts DETACHED
 
-**The container starts on a DETACHED HEAD at the pushed tip, while the local
-`main` ref is STALE.** Confirmed again this wake: `HEAD` was `5231ba7` (the
-pushed tip) while `refs/heads/main` sat at `17b3ba6`, five commits behind.
+**Confirmed again this wake**: `HEAD` was `9d80050` (the pushed tip) on a
+detached head, with no local `main` branch at all.
 
 ```
 git fetch origin main && git checkout -B main origin/main
@@ -31,38 +30,39 @@ git fetch origin main && git checkout -B main origin/main
 `git ls-remote --heads origin` is the authority on what is actually pushed; the
 local `origin/main` ref is not, until a fetch. Also note `git checkout <file>`
 discards an UNCOMMITTED fix; save a copy or commit before injecting a red-proof.
+This wake injected two red-proofs into `badge.css` and used `cp` to a backup
+outside the tree, then `git status --short packages/core/src` to confirm the
+revert — do that, not `git checkout`.
+
+### 1b. THE BASH WORKING DIRECTORY PERSISTS BETWEEN TOOL CALLS
+
+New this wake, and it produced a `cp: cannot stat` on a file that plainly
+exists. A `cd apps/docs` in one command leaves the NEXT command there. It cost
+nothing here only because the failing command was the *first* half of a
+red-proof injection; had it been the revert half, `badge.css` would have been
+left modified. **Anchor every command with an absolute `cd`, or none at all.**
 
 ### 2. THE CLONE IS SHALLOW — any history measurement is silently 50x wrong
 
-**New this wake, and it nearly put a false claim into ROADMAP.md.** The cloud
-checkout is a shallow clone with a graft boundary, so the oldest commit it holds
-has **no parents** and appears to ADD every file in the repo.
-
 ```
 git rev-parse --is-shallow-repository     # -> true, on a fresh container
-git fetch --unshallow origin              # 31 seconds, 50 commits -> 1,443
+git fetch --unshallow origin              # ~31 seconds
 ```
 
-Before the unshallow, a 24-hour `git log --numstat` over `apps/docs/src/pages`
-reported **+23,926/-39**; the truth is **+482/-90**. Nothing errors. The tell
-was a root commit dated one day ago whose subject was an ordinary refactor.
-**Unshallow before measuring anything from history**, including churn, blame,
-"in the last N days", or a file's age. (Checked and NOT a problem:
-`polish_requeue.py` uses `git ls-tree`/`hash-object` on the working tree, never
-a historical commit, so rule 6 is shallow-safe.)
+The oldest commit the shallow clone holds has no parents and appears to ADD
+every file in the repo. Before the unshallow, a 24-hour `git log --numstat` over
+`apps/docs/src/pages` reported **+23,926/-39**; the truth is **+482/-90**.
+Nothing errors. **Unshallow before measuring anything from history** — churn,
+blame, "in the last N days", a file's age. (This wake measured nothing from
+history and so did NOT unshallow; the clone is still shallow.)
 
-### 3. `astro build` does not clear `dist`, and `git checkout <sha> -- <dir>`
-does not DELETE
+### 3. `astro build` does not clear `dist`
 
-Both bit while building the nine-day series for 158.2, and both fail silently:
-
-- An older source tree built over a newer `dist` left 36 stale pages behind and
-  reported 127 pages for 91 sources. The tell was the *identical* page count
-  across eight different days. `rm -rf apps/docs/dist` first.
-- `git checkout <sha> -- apps/docs/src` only adds and updates; files the old
-  tree lacks stay on disk. Correct form is `rm -rf <dir> && git checkout <sha>
-  -- <dir>`, and afterwards `git reset -- <paths>` for files the old tree had
-  and HEAD does not, or they linger staged as added-then-deleted.
+An older source tree built over a newer `dist` leaves stale pages behind; the
+tell is an *identical* page count across different inputs. `rm -rf
+apps/docs/dist` first — this wake did, before every build.
+Also: `git checkout <sha> -- <dir>` only adds and updates, so use
+`rm -rf <dir> && git checkout <sha> -- <dir>`, then `git reset -- <paths>`.
 
 ## Cloud-wake toolchain — what works, in order
 
@@ -71,92 +71,89 @@ npm ci                                                    # no node_modules at s
 export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 ```
 
-**`CHROME_PATH` does not persist between shell invocations** — each `Bash` call
-is a fresh shell, and `npm run docs:build` fails partway (after Astro renders,
-in a browser gate) without it. Export it in the SAME command as the build.
-Everything ran green from there this wake: `build -w @busy-office/ui`,
-`test -w @busy-office/ui` (137), `docs:build`, `check:claims` (139),
-`check:repo`, `check:layout` (127 pages), `test:axe` (127 x 2).
+**`CHROME_PATH` does not persist between shell invocations** — export it in the
+SAME command as the build. Everything ran green this wake: `build -w
+@busy-office/ui`, `test -w @busy-office/ui` (137), `docs:build`, `check:claims`
+(139), `check:repo`, `check:layout` (127 pages), `test:axe` (127 x 2), plus a
+`DOCS_BASE=/busy-office-ui` build and a plain rebuild after it.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
-dark. **Nothing in this wake's diff is visual** — it is `ROADMAP.md` and
-`LOOPS.md` only, no CSS, no docs page, no script — so the risk from THIS wake is
-structurally zero.
+dark.
+
+**From THIS wake** — four docs edits, all link/cite TEXT inside components that
+already existed (three `Related` labels, one `dsa-scores.json` cite). No CSS, no
+layout, no colour. `check:layout` and `test:axe` swept all 127 pages at both
+widths. The labels grew by one word each, which is why `report:prose`'s corpus
+total moved 104,408 → 104,411 — reconciled, not assumed. **Still not the same as
+having looked**; a first local wake could glance at `/components/data-table`'s
+Related row, though the risk is close to zero.
 
 **Still unlooked-at by a human, carried forward:**
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
-  `<span class="bo-badge">generated</span>` inside an existing `<h2>` last wake.
-  `DsaScore` renders on 38 pages, so if the badge wraps badly it wraps in 38
-  places. First local wake: glance at one component page's "Design-system
+  `<span class="bo-badge">generated</span>` inside an existing `<h2>` two wakes
+  ago. `DsaScore` renders on 38 pages, so if the badge wraps badly it wraps in
+  38 places. First local wake: glance at one component page's "Design-system
   alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes —
-  now four wakes back.
+  now five wakes back.
 
-## Counters after this wake — Standardize is OVERDUE, measured not predicted
+## Counters after this wake — READ THEM, and note 161.4
 
 ```
 python3 scripts/loops/dispatch_status.py
-  Standardize   4 / 4 Continue rounds since 2026-08-27 18:57   OVERDUE
+  Standardize   0 / 4 Continue rounds since 2026-08-27 22:53   ok
   Objective     2 / 3 slices          since 2026-08-27 19:43   ok  [158, 159]
 ```
 
-**Rule 2 fires on the next wake: dispatch Standardize.** Last wake's handover
-predicted this and was wrong — it read 3/4 and reasoned that the *next* round
-would make it 4. The rule is evaluated against the count that exists at dispatch
-time, so 3 meant rule 2 did not fire and rule 4 dispatched Continue. It is 4
-now, and `dispatch_status.py` says `OVERDUE` rather than `ok`, which is the only
-form of this claim worth trusting. Run the command; do not carry the forecast.
+Standardize ran this wake and reset to 0/4. **Objective still reads 2/3 even
+though Slice 161 closed** — that is item **161.4**, opened this wake: the
+counter filters to `Continue` rows only, and this slice landed under
+`Standardize`. Measured, not assumed: **31 of 110 Standardize rows in the whole
+log name a slice number, and none has ever counted.** Not fixed here, because
+widening the filter changes when Objective preempts the build queue and this
+file records that being wrong in either direction has cost real time.
 
-Standardize's step 1 now wants **two** sweeps, neither of them a CI gate:
-`npm run scan:dead-style -w docs`, and — new, from 158.2 —
-`npm run report:prose -w docs`, recording a verdict for any page over 2x its
-FAMILY median that has none. **Three are waiting on day one**, which is the
-base-rate check that says the mechanism is not ceremony: `/base/motion/`,
-`/concepts/js-behaviors/`, `/concepts/design-language/`. 158.1 verdicted the
-twelve over the CORPUS median; these three the family split adds and nobody has
-read.
-
-After Standardize, rule 4's oldest still-open item is **159.1**.
+So: rule 3 does not fire on the current reading. **Rule 4's oldest still-open
+item is 159.1** — unchanged from last wake, since this wake was rule 2.
 
 ## What landed this wake
 
-**Continue (rule 4), 158.2 — the loop's own prose discipline, decided.**
-Dispatch went to rule 4 because rules 2 and 3 measured 3/4 and 2/3.
+**Standardize (rule 2), Slice 161** — first run of the two-sweep step 1 that
+158.2 installed, and the sweep that was NOT on the list is the one that found
+something.
 
-- **The premise reproduces exactly** (+482/-90 over `apps/docs/src/pages`,
-  +283/-51 on `concepts/layouts`, in the 24h window ending at the commit that
-  wrote it) — and the command is now recorded next to it, which it lacked.
-- **Lines were the wrong unit, and the hypothesis was wrong.** The expectation
-  was that layouts' +283 lines were markup and in-file data, since
-  `report:prose` drops `<pre>` whole. Measured: that page went **808 → 1,488
-  reader-facing words**, and the +589/-130 line delta across six pages produced
-  **+2,020 words**. Lines under-report here.
-- **Nine daily builds, same instrument each time.** On the **89 pages present
-  throughout**, prose went **51,051 → 77,080 words (+51%)** and the **minimum
-  8-day delta across all 89 is exactly 0** — 71 grew, 18 flat, 0 shrank, at
-  every threshold tried. Pages *do* shrink day to day (12 in one window, worst
-  −52 on `/components/prose/`), so the comparator can report negative; the net
-  never is. Reconciled independently against `report:prose`'s own totals
-  (104,606 over 127 dist pages here vs 104,408 over 118 there — exactly the 9
-  excluded artefact pages).
-- **Decision: refuse the budget again, adopt a cadence.** A budget would have
-  fired on 71 of 89 pages. `report:prose` joins `scan:dead-style` in
-  Standardize's step 1 — existing instrument, existing hook, no new gate, no new
-  file, no new ledger. Per CLAUDE.md 94.11 this is deliberately the rubric a
-  human scores rather than a gate, and it says so.
-- **Three instruments were wrong before any of that was true** — the three traps
-  at the top of this file. That is the base rate holding at 3-for-3 in one wake.
-
-**Noticed, not chased.** `dispatch_status.py` reports 973 iterations where
-`rebuild_from_log` reports more — its `ROW` regex requires `\w+` for both loop
-and mode, so six legacy rows do not match. Does not affect either counter's
-verdict. Left alone deliberately, third wake running.
+- **161.1** — `scan:dead-style` clean (0 dead of 1,428 live). Three prose
+  verdicts recorded for the pages the FAMILY median flags:
+  `/concepts/js-behaviors/` (74% generated → the instrument),
+  `/base/motion/` (0.97x the CORPUS median → the instrument, and `/base/`'s n=6
+  median is what is wrong), `/concepts/design-language/` (honest coverage, the
+  one to watch — 0 generated, 1.5x density, and it is the page other pages are
+  measured against). Per-page detail reconciled against `report:prose` on three
+  totals AND reproduced 158.1's corpus median of 103 w/h2 exactly.
+- **161.2** — `invoice-list`, the one pattern name the owner rule refused, was
+  still the visible label in **four** reader-facing places (3 `Related` labels
+  + the `filters.fit` DSA cite). Fixed; verified against `dist`, not the diff.
+  **The gate was refused on a measured base rate**: 90 of 428 Related links
+  (21.0%) legitimately disagree with their target's title, because the label
+  carries the link's REASON. Nothing but reading would have caught this.
+- **161.3** — LOOPS.md's "Settled" section asserted **three** repeated CSS rule
+  bodies and, in the same breath, that the count was cheap to re-measure "in one
+  command" — while recording no command. It is **eight**. `npm run
+  report:css-repeats -w @busy-office/ui` is that command now, reconciled against
+  an independent regex pass and red-proved both ways. Its own first run was
+  wrong (postcss keeps `!important` off `decl.value`), which is the base rate
+  holding. **No verdict changed** — all eight repeats are correct; LOOPS.md now
+  carries the table and states the verdict as a RULE, which is what let five
+  siblings sit unrecorded.
+- **161.4 (OPEN)** — the counter finding above.
 
 ## Still open, and why
 
+- **161.4** — which loops close a slice, for the Objective counter. Command and
+  counts are in the item; do not re-derive them.
 - **159.1** — `report-reach` prints the verdict where one exists. The verdicts
   already exist in `.roundtable/grill-objective-149-152-2026-08-27.md`; do not
   re-derive them, and do not make them a third exemption bucket.
@@ -169,6 +166,11 @@ verdict. Left alone deliberately, third wake running.
 **One decision waiting, not a roadmap item.** `@busy-office/create-ui` is built,
 gated and committed but **NOT published**, so `npm create @busy-office/ui` works
 only from this repo. Publishing is owner-triggered, as every release is.
+
+**Noticed, not chased, third wake running.** `dispatch_status.py` reports fewer
+iterations than `rebuild_from_log` — its `ROW` regex requires `\w+` for both
+loop and mode, so six legacy rows do not match. Does not affect either
+counter's verdict.
 
 ## Standing owner instruction (2026-08-27)
 
