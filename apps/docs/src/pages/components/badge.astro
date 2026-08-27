@@ -55,6 +55,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <p class="bo-u-text-muted">A status column of badges next to numeric cells —
     where badges actually live in an ERP. The tone word IS the text, so the meaning
     never depends on the hue alone.</p>
+    <p class="bo-u-text-muted"><strong>Ranked values — priority, severity, risk,
+    ABC class — need no extra channel.</strong> Tone says <em>bad</em>, not
+    <em>how much</em>, so the obvious-looking move is an ordinal modifier
+    (<code>--priority</code>, <code>data-rank</code>). It is refused, and the
+    reason is on this page already: the word is the text. "High" and "Low" are
+    themselves the ordinal channel — readable, sortable, translatable, and
+    announced — and the two-channel rule means that word has to be there whatever
+    else you add. A rank glyph would encode the same fact a second time.
+    <strong>What would change this:</strong> a screen where the user must compare
+    rank across many rows <em>at a glance</em> and reading the words is too slow.
+    Measured across the 27-screen ERP suite, that screen does not exist — 168
+    badges, none of them ranked (roadmap 151.3).</p>
   </section>
   <ClassRef component="badge" />
   <ApiTable component="badge"

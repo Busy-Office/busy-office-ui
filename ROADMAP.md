@@ -1848,7 +1848,7 @@ primary action first, then verbs, then an overflow `…` — is
        built CSS is **not** minified (`p {` with a space), which is the
        documented trap inverted. Searching for the VALUE (`34ch`) settled it.
 
-3. [ ] **151.3 — ordinal values: RETHINK, do not add a priority modifier.**
+3. [x] **151.3 — ordinal values: REFUSED, with the evidence and the reopen test.**
        The reference renders priority as **↓ Low** / **Normal** — an arrow
        glyph encoding *rank direction* on top of word and tone. `bo-badge` has
        five tones and **no ordinal channel**.
@@ -1863,6 +1863,32 @@ primary action first, then verbs, then an overflow `…` — is
        mechanism (e.g. `data-rank` on the existing badge), never a per-domain
        modifier. **Refusing is a valid outcome** — the suite has 23 of 27
        screens showing badges and has never once asked for rank.
+
+       **DECIDED 2026-08-28: refused**, and the measurement is far stronger than
+       the note above. **168 badge instances across the 27 suite screens, and
+       not one carries a ranked value.** The entire rank vocabulary in the
+       framework is two occurrences: one `urgent` in the suite, and one
+       `Urgent` in `/components/form` which is a **radio input label** — a
+       choice being made, not a rank being displayed. So an ordinal channel
+       would serve zero current scenarios, which principle 2 refuses more
+       firmly than the "exactly one scenario" case it names, and principle 3's
+       "≥2 real independent compositions" fails outright at zero.
+
+       **The argument that settles it was already on the badge page**: *"the
+       tone word IS the text, so the meaning never depends on the hue alone."*
+       For a ranked value the word — "High", "Low" — **is** the ordinal
+       channel: readable, sortable, translatable, announced. The two-channel
+       rule means it must be present regardless, so a rank glyph would encode
+       the same fact a second time. That is the whole refusal, and it does not
+       depend on the suite's sample at all.
+
+       **Steelmanned before refusing**: ordinality IS real in ERP (priority,
+       severity, ABC class, ageing buckets) and tone genuinely cannot express
+       it. The reference renders `↓ Low`. The counter is that the arrow adds a
+       gradient, not information, unless the user must compare ranks ACROSS
+       MANY ROWS at a glance — and that is now written on the badge page as the
+       explicit reopen test, so the next person to want `--priority` finds the
+       answer instead of re-deriving it.
 
 **Refused: a filter control in the column header.** The reference offers filter
 funnels per column. This framework already has two filtering surfaces — the
