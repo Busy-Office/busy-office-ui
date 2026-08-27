@@ -993,3 +993,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-27 22:53 · Meta · refusal · a gate requiring a Related label to match the linked page's title — 90 of 428 links (21.0%) legitimately disagree because the label carries the link's reason · refused · 835d839
 - 2026-08-27 22:53 · Standardize · sweep · 161.3 — LOOPS.md's settled repeat count was 3, is 8; report:css-repeats added as the command, red-proved both ways · landed · 835d839
 - 2026-08-28 07:14 · Roadmap · plan · 162.1 triaged: the cloud routine and the local session both dispatched 157.3 within an hour — LOOPS.md mentions concurrency zero times because it was written when loops were session-scoped, and rule 4 is deterministic so two dispatchers always pick the same item · triaged · a38bcd6
+- 2026-08-27 23:44 · Continue · build · 159.1 — report-reach prints the verdict where one exists; five adjudicated zeros were printing bare · landed · cc6b69b
+- 2026-08-27 23:44 · Roadmap · plan · Slice 163 — 7 of 7 zero-reach blocks adjudicated, 0 of 10 at exactly one composition; one is the count principle 3 names · logged · cc6b69b
