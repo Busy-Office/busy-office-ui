@@ -21,6 +21,13 @@
  *   - `bo-file-dropzone` reflects a gap in the INSTRUMENT: no suite screen has
  *     an attachment flow at all.
  *
+ * A FOURTH meaning was found by the next grill (2026-08-27, roadmap 153.1) and
+ * is handled separately below: a block that **cannot appear** in a static
+ * corpus at all, because it is a runtime container an app injects into. Listing
+ * one of those beside `bo-date` invited the reader to treat "nobody reached for
+ * this" and "this could not possibly be here" as the same finding, when only
+ * the first is ever actionable.
+ *
  * A gate would go red on all three, and be wrong about the second. A detector
  * that is wrong a third of the time teaches people to work around it, which is
  * worse than no detector. So this prints a number a human reads.
@@ -38,6 +45,24 @@ import { join } from 'node:path';
 import { assertScanned } from './gate-report.mjs';
 import { CORE_DIST } from './paths.mjs';
 import { collectSource } from './source-files.mjs';
+
+/**
+ * Blocks that CANNOT appear in this corpus, with the reason each is exempt.
+ *
+ * Stated here rather than inferred, deliberately: every heuristic this project
+ * has written to recognise a category of class has eventually been fooled, and
+ * "is this a runtime container" is exactly the kind of judgement a regex would
+ * get wrong quietly. A short hand-kept list is auditable; a clever matcher is
+ * not. Membership is checked against reality below — a listed block that turns
+ * out to BE composed is reported as a stale entry rather than silently
+ * excused.
+ */
+const CANNOT_APPEAR = new Map([
+  [
+    'bo-toast-region',
+    'an empty runtime container — the docs markup is `<div class="bo-toast-region" role="status" aria-live="polite"></div>` followed by "Server/HTMX/JS injects:". A static screen has nothing to inject.',
+  ],
+]);
 
 const api = JSON.parse(await readFile(join(CORE_DIST, 'api.json'), 'utf8'));
 
@@ -85,8 +110,18 @@ for (const b of owners.keys()) {
 assertScanned(reach.size, 'block classes in api.json', 'is packages/core built?');
 
 const rows = [...reach.entries()].sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]));
-const zero = rows.filter(([, n]) => n === 0);
+const rawZero = rows.filter(([, n]) => n === 0);
+const exempt = rawZero.filter(([b]) => CANNOT_APPEAR.has(b));
+const zero = rawZero.filter(([b]) => !CANNOT_APPEAR.has(b));
 const one = rows.filter(([, n]) => n === 1);
+
+/* Reconcile the hand-kept list against what was actually measured, both ways.
+   A listed block that IS composed means the exemption is stale; a listed block
+   that does not exist at all means it was renamed. Neither fails the build —
+   this is a report — but neither is allowed to pass silently either, which is
+   the failure mode of every exemption list that has ever rotted. */
+const staleExempt = [...CANNOT_APPEAR.keys()].filter((b) => (reach.get(b) ?? 0) > 0);
+const unknownExempt = [...CANNOT_APPEAR.keys()].filter((b) => !reach.has(b));
 
 /* A tidy number is a defect until proven otherwise (CLAUDE.md). All-zero means
    the matcher broke; all-used means the corpus is wrong. Say so loudly in the
@@ -104,6 +139,16 @@ console.log(
 if (suspicious) console.log(`  !! ${suspicious}`);
 
 console.log(`  never composed (${zero.length}): ${zero.map(([b]) => b).join(', ') || 'none'}`);
+if (exempt.length) {
+  console.log(`  cannot appear (${exempt.length}) — not a finding, and not counted above:`);
+  for (const [b] of exempt) console.log(`    ${b} — ${CANNOT_APPEAR.get(b)}`);
+}
+for (const b of staleExempt) {
+  console.log(`  !! ${b} is listed as "cannot appear" but IS composed ${reach.get(b)}x — the exemption is stale, remove it`);
+}
+for (const b of unknownExempt) {
+  console.log(`  !! ${b} is listed as "cannot appear" but is not a shipped block — renamed or removed?`);
+}
 console.log(`  used once (${one.length}): ${one.map(([b]) => b).join(', ') || 'none'}`);
 console.log(
   '  zero reach is NOT automatically a defect — it can mean the component is ' +

@@ -1642,13 +1642,30 @@ named steps, `data-state` done/current/pending, timestamps and "waiting 2 days".
 Overlapping discs would lose every one of those. The component is fine; the
 screen made the better call. Suitability-beats-reuse, twice over.
 
-1. [ ] **153.1 — teach `report-reach` the fourth meaning.**
+1. [x] **153.1 — teach `report-reach` the fourth meaning.**
        A runtime container cannot appear in a composition corpus, so listing
        `bo-toast-region` beside `bo-date` invites the reader to treat them as the
        same finding.
        *Accept*: the report separates "cannot appear" from "never composed", with
        the membership stated in the script rather than inferred; still never
        fails the build.
+
+       **Shipped.** "never composed" drops 7 -> 6 and `bo-toast-region` moves to
+       its own "cannot appear" line carrying its reason. Membership is a
+       hand-kept `CANNOT_APPEAR` map, not a matcher — every heuristic this
+       project has written to recognise a category of class has eventually been
+       fooled, and "is this a runtime container" is exactly the judgement a
+       regex would get wrong quietly.
+       **The exemption reconciles against reality, both ways**, which the item
+       did not ask for and is the part that stops the list rotting: a listed
+       block that IS composed reports as a stale entry, and one that is not a
+       shipped block at all reports as renamed/removed. Red-proved on both
+       paths (`bo-btn` → "IS composed 58x"; a fabricated name → "not a shipped
+       block"), and exit stays 0 in every case — it reports, it never fails.
+       Membership was evidenced rather than assumed: the docs markup is an
+       empty `<div class="bo-toast-region" role="status" aria-live="polite">`
+       followed by "Server/HTMX/JS injects:". Checked all 61 blocks for other
+       runtime containers; `bo-toast-region` is the only one.
 
 2. [ ] **153.2 — `bo-date` is the one real miss.**
        21 of 27 suite screens render a date as a plain string like `'01 Oct'`.
