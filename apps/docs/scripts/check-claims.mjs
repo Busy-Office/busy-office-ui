@@ -1345,6 +1345,75 @@ check(
   JSON.stringify(vsFocus),
 );
 
+/* The half that shipped broken (roadmap 154.1): a required field inside a
+   container the framework hides still blocks submit, so the summary lists it —
+   and before this, the entry it handed over silently did nothing, because
+   `.focus()` is a no-op on a subtree the browser does not render. The page now
+   demos a required field inside a closed <details>, so the claim is checkable
+   against the real page rather than against injected markup.
+
+   Asserted on the DOM after a REAL click, never on the source: the failing
+   version listed the entry correctly and looked completely fine. */
+const vsReveal = await page.evaluate(async () => {
+  const details = document.querySelector('form[data-validation-summary] details');
+  const box = document.querySelector('[data-validation-summary-box]');
+  const entry = [...box.querySelectorAll('a')].find((a) => a.getAttribute('href') === '#vs-dock');
+  return {
+    // The precondition the whole claim rests on — if a collapsed required
+    // field did NOT block submit there would be nothing to reveal.
+    blocksSubmit: document.getElementById('vs-dock').willValidate,
+    closedBefore: !details.open,
+    listed: !!entry,
+    ...(entry
+      ? await (async () => {
+          entry.click();
+          await new Promise((r) => setTimeout(r, 150));
+          return { openAfter: details.open, focused: document.activeElement?.id ?? null };
+        })()
+      : {}),
+  };
+});
+check(
+  'validation-summary: an entry inside a closed <details> opens it, then focuses the field',
+  vsReveal.blocksSubmit &&
+    vsReveal.closedBefore &&
+    vsReveal.listed &&
+    vsReveal.openAfter &&
+    vsReveal.focused === 'vs-dock',
+  JSON.stringify(vsReveal),
+);
+
+/* And the reason `novalidate` is on that form, which the page now states
+   outright. Without it the browser's interactive validation blocks the submit
+   event, so the behavior never runs — the summary stays hidden and lists
+   nothing. Checked on a CLONE of the real form with the attribute removed, so
+   this tests the shipped behavior rather than a hand-written stand-in. */
+const vsNoValidate = await page.evaluate(async () => {
+  const original = document.querySelector('form[data-validation-summary]');
+  const clone = original.cloneNode(true);
+  clone.removeAttribute('novalidate');
+  // Ids must stay unique or the clone's fields shadow the originals.
+  clone.querySelectorAll('[id]').forEach((el) => (el.id = `clone-${el.id}`));
+  clone.querySelectorAll('label[for]').forEach((l) => (l.htmlFor = `clone-${l.htmlFor}`));
+  const box = clone.querySelector('[data-validation-summary-box]');
+  // The clone inherits the list the EARLIER case populated, so reset it —
+  // otherwise "4 entries" is the previous test's output, not this one's, and
+  // the assertion measures nothing.
+  box.querySelector('ul').innerHTML = '';
+  box.hidden = true;
+  document.body.appendChild(clone);
+  clone.querySelector('button[type="submit"]').click();
+  await new Promise((r) => setTimeout(r, 150));
+  const out = { summaryShown: !box.hidden, entries: box.querySelectorAll('a').length };
+  clone.remove();
+  return out;
+});
+check(
+  'validation-summary: without novalidate the behavior never runs — which is why the docs require it',
+  vsNoValidate.summaryShown === false && vsNoValidate.entries === 0,
+  JSON.stringify(vsNoValidate),
+);
+
 /* collapsible-card — the docs state the two-channel contract outright: the
    trigger's aria-expanded AND the panel's data-state. Drift to one channel is
    invisible, because the chevron and the height animation both keep working. */

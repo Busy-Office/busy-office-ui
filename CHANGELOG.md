@@ -11,6 +11,20 @@ pin.
 
 ### Fixed
 
+- **The validation summary handed you a link that did nothing.** A `required`
+  control inside a container the framework hides — an inactive
+  `[role=tabpanel][hidden]`, a closed `<details>`, a collapsed
+  `.bo-widget__collapse` — is still constraint-validated, so it blocks submit
+  and `initValidationSummary()` correctly lists it. Following that entry then
+  did nothing at all: `.focus()` is a no-op on a subtree the browser does not
+  render. Measured against the shipped `dist/` — `document.activeElement` stayed
+  unchanged and the container stayed shut. The collapsed-card case failed
+  differently and worse: focus succeeded into a 0px `overflow: hidden`
+  container, so focus moved somewhere the user could not see. The summary now
+  opens whatever is hiding the field first, by pressing that container's own
+  control, so `aria-selected` / `aria-expanded` stay correct rather than
+  drifting out of step with what is on screen.
+
 - **A combobox in Money's currency slot ballooned to 180px** (owner report,
   "why is currency field too long?"). `inline-size: auto` is right for a
   `<select>`, which shrink-wraps to its widest option — every select on the
@@ -37,6 +51,16 @@ pin.
   shadows.
 
 ### Added
+
+- `reveal(el)` — open every container that is hiding an element, so it can
+  actually be focused and seen. Handles a closed `<details>`, an inactive
+  `[role=tabpanel][hidden]` and a collapsed `.bo-widget__collapse`, and reveals
+  by pressing each container's own control so the behavior that owns that state
+  keeps its ARIA correct. `initValidationSummary()` is the first caller;
+  exported because any in-page link that lands on a field the user cannot
+  currently see needs the same thing. Deliberately does not touch containers
+  the framework did not define — stripping `hidden` off app markup whose
+  meaning it cannot know is a worse failure than not revealing.
 
 - `--bo-shadow-up` — an upward elevation shadow, mirroring `--bo-shadow-md`.
   Every other shadow token points down, which assumes the elevated thing sits

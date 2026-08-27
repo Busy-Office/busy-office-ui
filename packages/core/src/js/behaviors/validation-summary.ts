@@ -14,6 +14,8 @@
  *     ...fields with a <label for="id">
  *   </form>
  */
+import { reveal } from '../utils/reveal.js';
+
 let installed = false;
 
 function fieldLabel(field: HTMLElement): string {
@@ -49,6 +51,11 @@ export function initValidationSummary(): void {
       a.textContent = fieldLabel(field);
       a.addEventListener('click', (ev) => {
         ev.preventDefault();
+        // Open whatever is hiding it first. A required field inside an
+        // inactive tab, a closed <details> or a collapsed widget still blocks
+        // submit, so the summary must list it — and without this the link it
+        // hands over silently does nothing. See utils/reveal.ts.
+        reveal(field);
         field.focus();
       });
       li.appendChild(a);

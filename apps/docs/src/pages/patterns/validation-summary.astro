@@ -63,11 +63,27 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
         </div>
       </fieldset>
 
+      <details class="bo-form-section">
+        <summary>Delivery instructions</summary>
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="vs-dock">Dock code</label>
+          <input class="bo-input" id="vs-dock" required />
+        </div>
+      </details>
+
       <div class="bo-form-actions">
         <button class="bo-btn" type="submit">Submit</button>
       </div>
     </form>
   </section>
+
+  {/* Outside the demo section deliberately: `.bo-form-actions` is sticky with
+      its own background, so a caption placed after the form inside the same
+      section is painted over by the bar (seen at 1440px and 390px). */}
+  <p class="bo-u-text-muted">The last field sits inside a closed
+  <code>&lt;details&gt;</code> on purpose: it still blocks submit, so the summary
+  lists it, and following that entry opens the section before focusing the
+  field. Collapsing a required field does not excuse it.</p>
 
   <script>
     import { initValidationSummary } from '@busy-office/ui/js';
@@ -76,7 +92,7 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
 
   <section class="demo">
     <h2>Markup</h2>
-    <pre><code>{`<form data-validation-summary>
+    <pre><code>{`<form data-validation-summary novalidate>
   <div class="bo-alert bo-alert--danger" data-validation-summary-box hidden role="alert">
     <p>There is a problem</p>
     <ul></ul>  <!-- populated on an invalid submit -->
@@ -92,8 +108,21 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
   import { initValidationSummary } from "@busy-office/ui/js";
   initValidationSummary(); // once — wires the [data-validation-summary] form
 </script>`}</code></pre>
+    <p class="bo-u-text-muted"><strong><code>novalidate</code> is required, not optional.</strong>
+    Without it the browser's own interactive validation stops an invalid submit
+    <em>before</em> the <code>submit</code> event fires, so this behavior never
+    runs at all — measured: the summary stays hidden and lists nothing. If the
+    invalid field also sits inside a hidden container the browser cannot focus
+    it either, so the form refuses to submit with no visible reason and only a
+    console error.</p>
     <p class="bo-u-text-muted">Field labels come from each field's own <code>&lt;label
     for&gt;</code> text — no extra markup needed to name a field in the summary list.</p>
+    <p class="bo-u-text-muted"><strong>A field hidden inside a tab, a
+    <code>&lt;details&gt;</code> or a collapsed card still blocks submit</strong>, so
+    the summary lists it — and following its link opens whatever is hiding it before
+    moving focus, activating the tab so <code>aria-selected</code> stays correct.
+    That reveal is exported as <code>reveal(el)</code> for any other in-page link
+    that has to land on a field the user cannot currently see.</p>
     <p class="bo-u-text-muted"><strong>If your app boosts forms with <code>htmx</code>'s
     <code>hx-boost</code></strong> (as this docs site does — found live while building
     this demo): add <code>hx-boost="false"</code> to any

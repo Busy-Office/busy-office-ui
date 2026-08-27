@@ -25,3 +25,4 @@ export { initContextMenu } from './behaviors/context-menu.js';
 export { initCombobox } from './behaviors/combobox.js';
 export { initAlerts } from './behaviors/alert.js';
 export { trapFocus } from './utils/focus-trap.js';
+export { reveal } from './utils/reveal.js';

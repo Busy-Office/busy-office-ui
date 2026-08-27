@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 08:30
+Generated at: 2026-08-27 15:04
 
 ## Open items by slice
 
@@ -14,13 +14,16 @@ Generated at: 2026-08-27 08:30
 - **Slice 153** (2 open)
   - 153.1 — teach `report-reach` the fourth meaning.
   - 153.2 — `bo-date` is the one real miss.
+- **Slice 154** (2 open)
+  - 154.1 — P0: reveal a focus target's containers before focusing it.
+  - 154.2 — P0: the canonical markup a reader copies is inert.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (940 iterations logged)
+dispatch status — counter-triggered rules (942 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-08-27 01:40   ok
   Objective     1 / 3 slice           since 2026-08-27 05:39   ok  [151]
 ```
@@ -35,8 +38,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 00:49 · Continue · build · 152.1: a copyable structural template per shell on concepts/layouts, driven by one SHELLS array that also replaced two hand-written tables; surfaced that split master-detail has no shipped primitive · landed · d873603
-- 2026-08-27 01:07 · Continue · build · 150.1: report-reach.mjs prints block reach on every build (61 blocks, 75 compositions, 7 never composed) and never fails — zero reach has three meanings and a gate would be wrong about one · landed · 1e0a56e
 - 2026-08-27 01:07 · Meta · refusal · gating zero reach, and counting per component — api.json blocks is not an ownership map · refused · 1e0a56e
 - 2026-08-27 01:40 · Standardize · tidy · one source-files.mjs replaces two hand-rolled source walks written the same day with different skip lists; output proven identical (byte-diff + file-set diff). Also fixed scan-dead-style's misreadable count · landed · e556566
 - 2026-08-27 01:40 · Meta · refusal · extracting the regex-escape one-liner from three scripts — all byte-identical, no divergence risk, ceremony not consolidation · refused · e556566
@@ -45,6 +46,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 06:31 · Continue · triaged · 151.1 refused as already-covered: list-report ships the full saved-views mechanism (counts, view-as-URL, save/rename/default/delete, 'Overdue · edited' dirty marker). A context-window regex requiring 50 preceding chars produced the false negative · refused · b1898ef
 - 2026-08-27 08:30 · Continue · build · 151.2: a column can explain itself (real button + popover, keyboard/touch, gated by 2 claims cases); uncovered and fixed a top-layer panel inheriting its DOM parent's uppercase/nowrap typography · landed · 8532466
 - 2026-08-27 08:30 · Meta · refusal · forcing the framework's 34ch prose measure over the docs' own unlayered 46rem — the cascade contract says a consumer override wins · refused · 8532466
+- 2026-08-27 15:04 · Roadmap · plan · triaged a reference form-layout engine: 154.1/154.2 queued as P0 (validation-summary hands a dead link into a hidden tab panel or closed details; canonical markup omits novalidate so the behavior never runs), five mechanisms refused with reasons · triaged · fca43f7
+- 2026-08-27 15:04 · Meta · refusal · Tab-key takeover, alt+hover fieldnames, colour-named message block, auto-hiding empty sections, scroll-direction tab strip · refused · fca43f7
 
 ## Sunset test
 

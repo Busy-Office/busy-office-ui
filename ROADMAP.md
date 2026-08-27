@@ -1239,7 +1239,26 @@ broken. It is still a defect in published code (0.5.0 on npm) that consumers
 compose themselves, and it is silent — no throw, no console warning on the
 `novalidate` path.
 
-1. [ ] **154.1 — P0: reveal a focus target's containers before focusing it.**
+1. [x] **154.1 — P0: reveal a focus target's containers before focusing it.**
+       **Shipped** as `reveal(el)` in `utils/`, exported. The repro inverts:
+       all three containers open, focus lands on the field, `aria-selected`
+       and `aria-expanded` follow. Red-proved — removing the `reveal(field)`
+       call and rebuilding turns `check:claims` red on exactly that case, with
+       the built dist confirmed to no longer contain it.
+       **A THIRD container turned up while building, and it fails worse.**
+       The item named two. `.bo-widget__collapse[data-state="closed"]` clips
+       instead of un-rendering, so `.focus()` SUCCEEDS and moves focus into a
+       0px `overflow: hidden` box — invisible, with no way for the user to find
+       where focus went. A reveal that handled only the two named containers
+       would have looked complete and left the worst case live.
+       **Two of this repo's own traps recurred, both caught by assertions
+       rather than by review**: the repro's first two runs measured nothing
+       (both dist modules declare a top-level `let installed`, so one
+       concatenated script tag silently failed to install), and the first fix
+       reported success while doing nothing (the tabs delegation matches
+       `.bo-tabs__tab[role=tab]`, so pressing a tab without the class never
+       activated anything). `reveal` now VERIFIES the press and falls back,
+       which is the general form of that lesson.
        One general mechanism, not a fix inside `validation-summary`: given an
        element, open every ancestor that hides it — a closed `<details>`, an
        inactive `[role=tabpanel][hidden]` (activating its tab, so `aria-selected`
@@ -1254,7 +1273,19 @@ compose themselves, and it is silent — no throw, no console warning on the
        reveal step is removed — red-proved by asserting the DOM, not the source;
        (d) no new component CSS, and no widening of any public class surface.
 
-2. [ ] **154.2 — P0: the canonical markup a reader copies is inert.**
+2. [x] **154.2 — P0: the canonical markup a reader copies is inert.**
+       **Shipped.** The copy block now carries `novalidate`, the page says
+       outright that it is required and why, and a `check:claims` case proves
+       the claim by cloning the real form, removing the attribute, and
+       submitting: the summary stays hidden and lists nothing.
+       **The check's own first run was wrong** in the way this repo keeps
+       recording — it asserted `entries === 0` on a clone that had inherited
+       the previous case's populated list, so "4 entries" was the earlier
+       test's output, not this one's.
+       Corrected while building: the loop's own case B first asserted a fix
+       that should not exist. The browser is RIGHT to block an invalid submit
+       before `submit` fires; 154.2's fix is documentation, so the assertion
+       now pins the documented reality instead of demanding code change it.
        `/patterns/validation-summary`'s live demo carries `novalidate`; the
        copy-paste `Markup` block at that page's end does not. Verified: with the
        behavior correctly installed and no `novalidate`, `summaryShown` is
