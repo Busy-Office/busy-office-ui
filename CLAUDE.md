@@ -273,6 +273,30 @@ writing rule with nothing mechanical behind it — the same grill refused a gate
 for its sibling finding on base rate, and inventing one here would be the same
 ceremony.
 
+**And when the item's PREMISE is itself a measurement from an earlier wake,
+re-checking it is part of the criterion, not a courtesy** (added by the next
+grill, 2026-08-28, rather than given its own section — 158.2 has the loop's
+prose growth open, and a second section restating a neighbouring idea is what
+that item is about). Two rounds in one window were spent refuting a premise the
+plan had asserted as fact: 151.1's *"`grep` finds no saved-view concept on any
+of the 39 pattern pages"* (the mechanism ships in full on
+`/patterns/list-report`) and 153.2's *"21 of 27 suite screens render a date as a
+plain string like `'01 Oct'`"* (they render `<td class="bo-u-tabular">01 Oct</td>`,
+the prescribed replacement, and `bo-date` is deprecated). Neither recorded the
+command that produced it, so neither could be re-run — only re-derived.
+
+149.1 is the control, same window, same shape of error: its count was right and
+its interpretation wrong for three of four screens, and it cost nothing because
+its criterion read *"each of the four either uses `bo-progress` **or** records a
+one-line reason it should not"*. So:
+
+- **Write the command next to the claim.** A count or an absence about this
+  repo is re-runnable in seconds; without the command the next wake re-derives
+  it, and re-deriving is where the second, different mistake comes from.
+- **Write the criterion so finding the premise FALSE is a satisfying outcome**,
+  not an off-plan one. "The screens change, not the component" assumes the
+  premise; "each either changes or records why not" does not.
+
 ## A number you report is load-bearing — red-prove it like a gate
 
 Thirteen detectors across three slices could not fail (Slices 39/42/43 grill).

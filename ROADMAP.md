@@ -1186,6 +1186,121 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 159 — Objective grill of Slices 151, 153, 157 (2026-08-28)
+
+Rule 3 at 3/3. Full report:
+`.roundtable/grill-objective-151-153-157-2026-08-28.md`.
+
+**The window was half refusals** — 151.3 and 153.2 out of four Continue rounds,
+against a base rate of 174 refused to 346 landed (33.5%) since 2026-08-19. The
+two split cleanly: 151.3 was refused **on principle** with its premise intact,
+153.2 because **its premise was false**. Neither failing premise (151.1's too,
+just before this window) recorded the command that produced it, so the next
+wake could not re-run the claim and had to re-derive it. 149.1 is the control
+in the same window: same shape of error — its count was right, its
+interpretation wrong for 3 of 4 screens — and it cost nothing, because its
+Accept criteria said *"each of the four either uses `bo-progress` **or**
+records a one-line reason it should not"*. The difference is one sentence in
+the criteria, not care.
+
+**Recorded as a writing rule** (appended to CLAUDE.md's existing
+Accept-criterion section rather than given its own, because 158.2 has the
+loop's prose growth open as an item): when an item's premise is itself a
+measurement from an earlier wake, re-checking it is part of the criterion, and
+the command goes next to the claim.
+
+1. [ ] **159.1 — `report-reach` prints the verdict where one exists.**
+       Seven blocks have ever read zero reach, and **all seven are now
+       adjudicated as not-a-defect** — 150.1 refused to gate this on the
+       argument that a gate would be wrong "roughly a third of the time"; the
+       measured figure is 7 of 7. But of the five still printed bare under
+       "never composed", **zero carry their verdict in the output**: `bo-tree`
+       and `bo-file-dropzone` have theirs in a header comment the reader of the
+       report never sees, and `bo-avatar-stack` — the sharpest verdict of the
+       seven, that the suite HAS the approval-chain scenario and renders it as a
+       `bo-timeline` that overlapping discs would lose — is not in the script at
+       all. A bare name reads as an open question, which is the state that
+       produced 153.2.
+
+       **Not a third exemption bucket.** These blocks are *adjudicated*, not
+       exempt: a weaker, dated claim that can go stale in a way "is deprecated"
+       cannot. Burying them in an exemption map would make the report print a
+       serene zero, which this repo already treats as a defect.
+
+       *Accept*: (a) every block the report names carries either a verdict or
+       nothing-known, so a reader can tell examined from unexamined without
+       opening the source; (b) the verdicts already written in
+       `.roundtable/grill-objective-149-152-2026-08-27.md` are the source, not
+       re-derived, and each is checked against measurement before being copied —
+       `bo-file-dropzone`'s "no suite screen has an attachment flow" was
+       re-verified this grill (`grep -rilE "attach|upload"` over all 27
+       `*.screen.mjs` returns zero) and the criterion is that it agrees with
+       what that command reports, not that it stays zero; (c) 153.1's both-ways
+       reconciliation covers the new entries too — an adjudicated block that IS
+       composed reports as stale; (d) the report still never fails the build.
+
+2. [ ] **159.2 — P0: the mirror's RECOVERY path is what corrupts it.**
+       `_common.py` sets `SEP = " · "` and `parse_log_line` assigns the fields
+       **positionally from the left**. 151.1's log line legitimately quotes
+       list-report's dirty marker — `'Overdue · edited'` — so it has seven
+       fields, and the rebuilt row holds a fragment of the item's prose in its
+       `outcome` column. One line in 971, measured.
+
+       **The write path is fine; the recovery path is the bug.**
+       `record_iteration.py` builds the log line and the DB row from the same
+       in-memory values, so the live insert was correct. The row only breaks
+       when `rebuild_from_log.py` — *"the recovery/verify path … running it can
+       never drift from the files"* — reads the markdown back. The storage
+       doctrine says a mirror must be rebuildable from the files; here
+       rebuilding is what breaks it.
+
+       **Nothing was watching.** `check:loop-vocab` compares the vocabulary
+       *documented* in CLAUDE.md and LOOPS.md against the Python constant. It
+       never reads a row, so an outcome outside the vocabulary entirely sits in
+       the mirror unnoticed — the failure the doctrine's own "a mirror must
+       RECONCILE against its source and fail loudly" exists to prevent.
+
+       Blast radius, checked rather than implied: `dispatch_status.py` reads
+       `loop-log.md` directly, so the dispatcher counters are unaffected. What
+       moves is anything counting by `outcome` — the refusal figure above is
+       really 175/346.
+
+       *Accept*: (a) the fixed-arity trailing fields are parsed from the RIGHT
+       and the item is whatever is left in the middle, so an embedded separator
+       cannot shift a column; (b) red-proved on the real line — rebuild before
+       the fix reproduces the mangled `outcome`, after it the row's outcome is
+       `refused` and the item retains `'Overdue · edited'` intact; (c) the
+       rebuild reconciles against the vocabulary `record_iteration.py` enforces
+       and **refuses to write** when a post-enforcement row falls outside it,
+       naming the line — pre-2026-08-19 history keeps its `shipped`/`committed`
+       vocabulary, which 153 already refused to rewrite; (d) the rebuilt row
+       count still equals the number of log lines parsed, asserted not assumed.
+
+**Refused: a gate for 157.3's "not where the edit was looking" shape.** 157.3
+asserted no gate could have caught the RTL cell edge that survived 157.2. This
+grill tried to build one, twice, and both instruments are recorded dead so they
+are not rebuilt:
+
+- **The split family** — a property declared by members of one attribute-value
+  family living in both a comma group and a standalone rule. Red-proved: it
+  does fire on the family at `3a995d1^`. But it fires on the *pre-condition*,
+  before the bug exists — base rate **3 of 15 families today, 0 defects**, all
+  three legitimate splits by value (an `error` row is danger-coloured, `dirty`
+  and `warning` are warning-coloured; three density tiers hold three numbers).
+- **The asymmetry** — a property declared for a proper subset of a family's
+  values, which is what the bug looked like after 157.2. It reports **zero on
+  the commit that carried the live bug**: 157.2 removed the danger and warning
+  rules entirely, so the family had one surviving member, and a family of one
+  cannot be asymmetric. On the healthy tree it flags 35 properties, 27 of them
+  `[data-theme=*]` tokens the dark theme legitimately overrides. Noisy and
+  blind at once.
+
+157.3's answer was right, and now measured rather than asserted: the defect is
+*the absence of an absence*, which source structure cannot express. The
+`check:claims` case reading the computed shadow per marker in both directions is
+the correct granularity. Fourth consecutive gate proposal refused on base rate
+(94.11, the skip-list fork, the `var(--bo-*)` resolution gate, this).
+
 ## Slice 158 — Owner wishlist: simplicity is the key; clean up the content (2026-08-28)
 
 **Owner:** *"i believe in simplicity is the key for the success. Less option for
