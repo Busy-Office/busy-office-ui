@@ -2897,6 +2897,51 @@ check(
   JSON.stringify(ladder),
 );
 
+/* The marker guideline (roadmap 157.3): "the leading edge means the ROW, and a
+   cell tone is never an edge". 157.2 removed the cell edge and MISSED its RTL
+   twin — `[dir="rtl"] td[data-tone="success"]` was a standalone rule while
+   danger and warning were grouped into the row selectors being rewritten, so
+   the shipped stylesheet gave an RTL reader a green 3px edge on a success cell
+   that an LTR reader never saw, in one tone out of three.
+
+   `check:rtl` could not see it: that gate's allowlist is keyed by FILE, and
+   data-table.css legitimately still carries the row stripes, so a stale rule
+   inside it is indistinguishable from the rules that belong there. The rule is
+   stated per MARKER, so it is asserted per marker — computed shadow on every
+   tone and on a row state, in BOTH directions, since the whole defect lived in
+   one direction only. */
+await visit('/components/data-table/', { width: DESKTOP_WIDTH, height: 2400 });
+const markers = await page.evaluate(() => {
+  const inset = (el) => {
+    const s = getComputedStyle(el).boxShadow;
+    if (!/inset/.test(s)) return 0;
+    const x = s.replace(/^rgba?\([^)]*\)/, '').trim().match(/(-?[\d.]+)px/);
+    return x ? parseFloat(x[1]) : 0;
+  };
+  const read = () => ({
+    tones: ['danger', 'warning', 'success'].map((t) => {
+      const cell = document.querySelector(`td[data-tone="${t}"]`);
+      return { tone: t, found: !!cell, x: cell ? inset(cell) : null };
+    }),
+    row: (() => {
+      const first = document.querySelector('tr[data-row-state="error"] > :first-child');
+      return { found: !!first, x: first ? inset(first) : null };
+    })(),
+  });
+  const ltr = read();
+  document.documentElement.setAttribute('dir', 'rtl');
+  const rtl = read();
+  document.documentElement.removeAttribute('dir');
+  return { ltr, rtl };
+});
+const noCellEdge = (side) => side.tones.every((t) => t.found && t.x === 0);
+check(
+  'markers: a data-tone CELL carries no leading edge in EITHER direction, while the row-state row does — and the row edge flips with dir',
+  noCellEdge(markers.ltr) && noCellEdge(markers.rtl) &&
+    markers.ltr.row.found && markers.ltr.row.x > 0 && markers.rtl.row.x < 0,
+  JSON.stringify(markers),
+);
+
 // The ladder ADOPTED: list-report's results table at a phone-narrow
 // viewport keeps the columns an AP clerk cannot read the row without
 // (Invoice #, Vendor, Amount, Status) and drops Cost center + Due.

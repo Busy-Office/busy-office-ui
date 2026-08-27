@@ -30,3 +30,10 @@ apps/docs/public/assets/
 # existing locally is the point, only committing it is the defect.
 apps/docs/scripts/_*.mjs
 packages/core/scripts/_*.mjs
+
+# CPython bytecode cache. `scripts/loops/*.py` import a shared `_common` module,
+# so every recorder run leaves __pycache__/ behind and it showed up as untracked
+# noise in the wake's own `git status` — the same shape as the unignored
+# busy-office-ui.tgz found 2026-08-22. Derived, per-interpreter, rebuildable.
+__pycache__/
+*.pyc

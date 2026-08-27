@@ -64,6 +64,14 @@ pin.
   so it is no longer optional in practice. The `data-tone` half of the RTL
   flip site and its forced-colors fallback went with the bar; DESIGN.md's
   flip-site count stays at six because the row stripe is still a flip site.
+  That last sentence was **not true when it was written** and is now asserted
+  rather than claimed: the RTL rule for `td[data-tone="success"]` was a
+  standalone rule while danger and warning were grouped into the row selectors
+  being rewritten, so it survived the edit and gave an RTL reader a green 3px
+  edge on a success cell for one day inside this Unreleased window (never
+  published). `check:rtl` keys its allowlist by FILE and could not see it;
+  a `check:claims` case now asserts the computed shadow per marker, in both
+  directions, and was red-proved against both halves.
 
 - **A dirty row no longer says it four times.** `initRowEdit()`'s documented
   row-action markup drops the visible `Unsaved` badge and makes Save/Cancel

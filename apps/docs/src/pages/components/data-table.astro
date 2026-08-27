@@ -262,7 +262,9 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <p class="bo-u-text-muted"><code>data-row-state="error"</code> — the tint plus a
     start border, and the badge/message in the row carries the reason (two-channel:
     never the color alone). This is the visual channel the dirty row state
-    above reuses in amber.</p>
+    above reuses in amber. <a href="#markers">Which marker, and when</a> —
+    the guideline for choosing between the row states, a cell tone, and no
+    marker at all.</p>
   </section>
   <section class="demo">
     <h2>Performance at scale — measured, not guessed</h2>
@@ -622,8 +624,9 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
   <section class="demo">
     <h2>Conditional cell tone</h2>
     <p><code>data-tone="danger|warning|success"</code> on a <code>&lt;td&gt;</code>
-    tints that one cell — subtle background plus an inset accent, same shape
-    as row state above, scoped to a single cell instead of a whole row. The
+    tints that one cell — a subtle background, and <strong>no leading
+    edge</strong>: the edge belongs to the row, and only to the row (see
+    <a href="#markers">the guideline below</a>). The
     framework never decides <em>why</em> a cell is toned: a negative balance,
     a budget threshold, any business rule — that condition is computed
     server-side and rendered as this one attribute. Pair the tone with text
@@ -666,45 +669,97 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     reads correctly.</p>
   </section>
 
-  <section class="demo">
-    <h2>The bar on the leading edge — what it is for, and when to stop</h2>
-    <p><strong>The bar is not decoration, and that is the whole reason it is
-    there.</strong> Under <code>forced-colors</code> (Windows High Contrast)
-    the browser throws away background colours — so a tone carried by tint
-    alone would vanish for exactly the readers who most need it. The bar
-    survives, because the forced-colors rule swaps it to a real
-    <code>border-inline-start</code>. Remove the bar and the tone becomes a
-    single fragile channel.</p>
-    <p>It follows the <strong>leading edge</strong>, not the left: under
-    <code>dir="rtl"</code> it flips to the right, one of the framework's six
-    documented flip sites (see <a href={base + '/concepts/i18n'}>i18n</a>).</p>
-    <p><strong>When it is the right mark:</strong></p>
-    <ul class="bo-stack bo-stack--tight docs-list">
-      <li><strong>Row state</strong> — one bar on the row's leading edge,
-        running down the margin like a change marker in a diff. This is what
-        the idiom was built for and where it reads best.</li>
-      <li><strong>A few exceptional cells</strong> — two or three cells in a
-        table that break a rule. The bar draws the eye to something rare.</li>
-    </ul>
-    <p><strong>When to reach for something else:</strong></p>
-    <ul class="bo-stack bo-stack--tight docs-list">
-      <li><strong>When most rows have a toned cell</strong>, the bars stop
-        being exceptions and become texture — the eye reads a ragged column
-        of stripes instead of "look here". If a majority of rows qualify,
-        tone is carrying <em>ranking</em>, not <em>exception</em>: sort by
-        the value, or put the meaning in a
-        <a href={base + '/components/badge'}>badge</a> the reader can
-        actually read.</li>
-      <li><strong>When the toned cell is a right-aligned number</strong>, the
-        bar sits on the far side of the cell from the digits it qualifies.
-        That is a real weakness of the shape and worth knowing before you
-        reach for it; pair it with <code>data-tone-text</code> so the meaning
-        also lands on the number itself.</li>
-      <li><strong>Never as the only channel.</strong> Both the tint and the
-        bar are colour. The programmatic meaning belongs in text — a sign, a
-        badge, a visually-hidden phrase — exactly as the demo above does with
-        its minus sign.</li>
-    </ul>
+  <section class="demo" id="markers">
+    <h2>Which marker, and when — the guideline</h2>
+    <p>A row can be dirty, in error or in warning; a cell can be toned. They
+    are not interchangeable and they do not stack. Choose by <strong>what is
+    true of the data</strong>, not by how much attention you want.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table" data-density="compact">
+        <thead><tr>
+          <th scope="col">Marker</th>
+          <th scope="col">What it means</th>
+          <th scope="col">Reach for it when</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><code>tr[data-row-state="error"]</code><br />tint + leading edge</td>
+            <td><strong>This row is blocked.</strong> Something has to change
+            before it can be saved, posted or approved.</td>
+            <td>The server rejected it, a validation failed, a duplicate was
+            found — always with the reason written in the row.</td>
+          </tr>
+          <tr>
+            <td><code>tr[data-row-state="warning"]</code><br />tint + leading edge</td>
+            <td><strong>This row will go through, and you should look
+            first.</strong> Nothing is blocked.</td>
+            <td>A tolerance breach, a short receipt, a price that moved since
+            the order was placed.</td>
+          </tr>
+          <tr>
+            <td><code>tr[data-row-state="dirty"]</code><br />tint + leading edge</td>
+            <td><strong>This row has unsaved edits.</strong> A state of the
+            editor, not of the record.</td>
+            <td>Set by <code>initRowEdit()</code>, not by hand — see
+            <a href={base + '/components/inline-editing'}>inline editing</a>.</td>
+          </tr>
+          <tr>
+            <td><code>td[data-tone]</code><br />tint only, no edge</td>
+            <td><strong>This value crossed a line</strong> your rules drew.
+            The row itself is fine.</td>
+            <td>Over budget, below reorder point, outside tolerance. It marks
+            the cell, and never implies anything about the row.</td>
+          </tr>
+          <tr>
+            <td><strong>No marker</strong></td>
+            <td>Nothing is wrong.</td>
+            <td>The default, and the one most often got wrong — see below.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>One row shows at most one leading edge</h3>
+    <p>The edge means <strong>the ROW is in a state</strong>, and nothing else.
+    A cell tone is never an edge — it was until 2026-08-27, and the two were
+    indistinguishable: a red edge on an amount cell read exactly like the
+    marker for a failed row beside it. A dirty row holding an over-budget cell
+    shows <em>one</em> edge, the row's, plus a tint on that cell. Wanting a
+    second edge means the row is being asked to say two things, and one of them
+    belongs in a <a href={base + '/components/badge'}>badge</a> or a message.</p>
+    <p>The states are mutually exclusive by construction — one attribute, one
+    value — so a row that is both rejected and being edited has to pick. It
+    shows <strong>dirty</strong> while the user types, because that is the
+    state they are creating; when the row goes clean,
+    <code>initRowEdit()</code> puts <code>error</code> back if a cell is still
+    <code>aria-invalid</code>. Cancel restores the values the row arrived with,
+    which for a rejected row are still the rejected ones, so the error survives
+    a Cancel rather than being tidied away by it.</p>
+    <h3>When no marker is right</h3>
+    <p>A value that is merely <strong>negative, small or zero is not an
+    error</strong>. A credit note, a negative variance, a zero balance are
+    ordinary data, and <a href={base + '/components/amount'}>Amount</a>'s
+    <code>--negative</code> modifier colours the figure without claiming
+    anything about the row. Mark those and every screen opens half-red, which
+    spends the one signal you have on rows nobody needs to look at. Ask what
+    the reader must <em>do</em>: if the answer is nothing, use no marker.</p>
+    <p>Tone fails the same way when <strong>most rows qualify</strong> — the
+    tint is then describing a <em>ranking</em>, not an exception. Sort by the
+    value, or put the meaning in a badge the reader can actually read.</p>
+    <h3>Why the edge exists at all</h3>
+    <p>It is not decoration. Under <code>forced-colors</code> (Windows High
+    Contrast) the browser throws away background colours, so a state carried by
+    tint alone would vanish for exactly the readers who most need it — the edge
+    survives, because the forced-colors rule swaps it for a real
+    <code>border-inline-start</code>. It follows the <strong>leading</strong>
+    edge: under <code>dir="rtl"</code> it flips to the right, one of the
+    framework's six flip sites (see
+    <a href={base + '/concepts/i18n'}>i18n</a>).</p>
+    <p>A toned cell has no such fallback, which is why
+    <strong>colour is never its only channel</strong>. The meaning belongs in
+    adjacent text — a sign, a word, a badge, a visually-hidden phrase, as the
+    demo above does with its minus sign — because under high contrast that text
+    is all that is left. On a right-aligned number,
+    <code>data-tone-text</code> puts the tone on the digits themselves.</p>
   </section>
   <section class="demo">
     <h2>Column alignment</h2>

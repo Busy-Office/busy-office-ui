@@ -1355,7 +1355,37 @@ regression.
        adjacent text the doctrine already requires; (d) the row edge is
        untouched.
 
-3. [ ] **157.3 — write the guideline: when does a row show a marker at all?**
+3. [x] **157.3 — write the guideline: when does a row show a marker at all?**
+       **Shipped, and it found that 157.2 was not finished.** Writing the
+       sentence "a cell tone is never an edge" meant checking it, and it was
+       false in the shipped stylesheet: `[dir="rtl"] td[data-tone="success"]`
+       survived 157.2 because it was a *standalone* rule while danger and
+       warning were grouped into the row selectors the edit rewrote — so it
+       was not where the edit was looking. Measured in a browser against
+       `dist`, not read off the source: `rgb(34,197,94) -3px 0px 0px 0px inset`
+       on an RTL success cell, `none` on every other tone and on every LTR
+       cell. One direction, one tone out of three, one day inside the
+       Unreleased window (never published). Removed.
+       **No gate could have caught it, and that is the finding.** `check:rtl`
+       keys its allowlist by FILE, and `data-table.css` legitimately still
+       carries the row stripes, so a stale rule inside it is indistinguishable
+       from the rules that belong there — the gate passed on the injected bug,
+       confirmed by injection rather than assumed. The rule is stated per
+       MARKER, so it is now asserted per marker: a `check:claims` case reads
+       the computed shadow on all three tones and on a row state, in **both**
+       directions. Red-proved on both halves (re-inject the RTL rule → red;
+       zero the row stripe → red), and the injection was confirmed **in the
+       DOM**, not by grep — a grep for the selector in the built CSS found
+       nothing while the claim's own reading showed `x: -3`, which is the
+       minified-spelling trap CLAUDE.md already records.
+       **Cost, recorded rather than hidden:** the page 158.1 named as the
+       site's longest got **+337 reader-facing words** (4,429 baseline, so
+       ~+7.6%); `/components/inline-editing` got +57 for the cross-link.
+       ~200 of those words are the guideline table itself. The stale
+       "bar on the leading edge" section was *replaced*, not appended to —
+       347 words removed — because 157.2 had falsified most of it. This is
+       live input for 158.1's verdict on `/components/data-table`: the honest
+       reading is that the page is longer *and* less wrong than before.
        **Owner:** *"might not need all the case. pls also write the clear
        guideline. when to show it."* Queued separately from 157.2 on the owner's
        instruction to land these one at a time — 157.2 is a CSS removal, this is
@@ -1370,6 +1400,17 @@ regression.
        where NO marker is right (a value that is merely negative is not an
        error — `bo-amount` already colours it); and is reachable from
        `/components/inline-editing`'s save-timing section, which 157.1 added.
+       *All four met*: `#markers` on `/components/data-table`, linked from the
+       row-state demo caption above it and from inline-editing's save-timing
+       section (both verified present in the BUILT html, with the `id` target,
+       under the plain and the `DOCS_BASE` builds).
+       **One drafted sentence was falsified by the source before it shipped**,
+       which is the reason to check prose the same way as a number: the draft
+       said a row that is both dirty and rejected shows *rejected*, "the
+       blocking state wins". `row-edit.ts:122` says otherwise — `setDirty`
+       writes `dirty` over `error` while the user types, and restores `error`
+       on going clean if a cell is still `aria-invalid` (58.4's deliberate
+       decision). The page now states the shipped behaviour.
 
 ## Slice 156 — Owner: a device guide for the shells, with a support matrix (2026-08-27)
 

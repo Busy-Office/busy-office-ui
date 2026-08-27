@@ -208,6 +208,12 @@ const rowEditMarkup = `<table class="bo-data-table" data-row-edit>
     shape to copy — the row already says it twice, and the buttons appearing at all
     say it a third time. The <code>[data-row-edit-dirty]</code> hook still works if
     your screen genuinely needs a visible word.</p>
+    <p><strong>Dirty is one of four marks a row can carry</strong>, and they do
+    not stack: which one is right for error, warning, a toned cell or nothing
+    at all — plus why a row shows at most one leading edge — is set out in
+    <a href={base + '/components/data-table#markers'}>the data table's marker
+    guideline</a>. Worth reading before you set
+    <code>data-row-state</code> anywhere by hand.</p>
   </section>
 
   <section class="demo">

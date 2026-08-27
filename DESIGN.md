@@ -238,7 +238,11 @@ selection count for bulk actions).
   cell was indistinguishable from the row-state marker beside it. The count
   did not move, since the row stripe is still a flip site; only what it
   covers did. **The gate asserts the NUMBER, not this sentence**, so this
-  description is maintained by hand and is the part that can rot.
+  description is maintained by hand and is the part that can rot — and it did,
+  for a day: the RTL rule for a `data-tone="success"` cell survived 157.2 and
+  was removed by 157.3, which is exactly the drift a per-file count cannot see.
+  A `check:claims` case now asserts the computed shadow per marker in both
+  directions, so the sentence has an executable half.
   `check:rtl` gates that count — a seventh unflipped case
   fails the build. (This bullet said "the one physical exception" until 2026-08-17,
   when executing the claim found the other four.)

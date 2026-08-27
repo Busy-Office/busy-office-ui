@@ -84,7 +84,13 @@ const ALLOWED = new Map([
   ['css/components/tree.css', 'tree disclosure chevron'],
   ['css/components/tree-table.css', 'tree-table disclosure chevron'],
   ['css/components/offcanvas.css', 'off-canvas drawer slide direction'],
-  ['css/components/data-table.css', 'row-state stripe + data-tone cell bar (box-shadow inset x-offset is physical)'],
+  /* Row state ONLY since 157.2 — the data-tone cell bar that used to share
+     this entry is gone. This map is keyed by FILE, so it cannot tell one
+     surviving rule inside an allowed file from the rules that belong there;
+     157.3 found an RTL cell-bar leftover here that this gate passed. The
+     per-marker assertion lives in docs `check:claims` (computed shadow, both
+     directions), because that is the granularity the rule is stated at. */
+  ['css/components/data-table.css', 'row-state stripe (box-shadow inset x-offset is physical)'],
   // Bundles that re-export the above; same rules, same flips.
   ['css/index.css', 'full bundle — contains the component flips above'],
   ['css/components/nav.css', 'nav bundle — contains offcanvas'],

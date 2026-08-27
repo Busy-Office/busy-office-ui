@@ -467,9 +467,11 @@
     }
   }
 
-  /* Per-CELL conditional tone (roadmap 71.1) — same shape as row state above
-     (subtle background + inset accent, no text-color change), scoped to one
-     cell instead of a whole row. The SERVER decides which cells get which
+  /* Per-CELL conditional tone (roadmap 71.1) — a subtle background on one
+     cell, and no text-color change unless [data-tone-text] asks for it. It is
+     deliberately NOT the same shape as row state above: the row keeps the
+     leading edge, the cell gets tint only (see 157.2's note below). The
+     SERVER decides which cells get which
      tone and why — a negative amount, a threshold breach, any business rule
      — the framework only paints data-tone once it's set; it never invents
      the condition (Objective principle 3: framework does visuals, the
@@ -502,7 +504,7 @@
   }
 
   /* Text color is opt-in (roadmap 72.2), not the data-tone default: the
-     background + accent above already carries the tone, and forcing text
+     background above already carries the tone, and forcing text
      color on every toned cell would fight a value that's ALSO bold, or
      already colored by something else in the cell. Add [data-tone-text]
      to tint the text too. Tokens are the exact -text/-subtle pairs already
@@ -529,7 +531,19 @@
      and does flip. Measured, not assumed (2026-08-23, owner report): the
      computed shadow was byte-identical — `3px 0px 0px 0px inset` — in both
      directions. A documented flip site, like motion.css's transform and
-     offcanvas's slide direction. */
+     offcanvas's slide direction.
+
+     ROW SITES ONLY. 157.2 removed the cell-level edge, but its RTL twin for
+     `td[data-tone="success"]` survived the edit — it was a standalone rule
+     while danger and warning were grouped into the row selectors that were
+     rewritten, so it was not where the edit was looking (roadmap 157.3).
+     For one day the shipped stylesheet gave an RTL reader a 3px green edge on
+     a success cell that an LTR reader did not get, in one tone out of three:
+     measured `rgb(34,197,94) -3px 0px 0px 0px inset` against dist, computed in
+     a browser, not read off the source. `check:rtl` counts flip sites per FILE
+     and this file still has the row stripes, so no gate could see it; the
+     claim on /components/data-table asserts the computed shadow per marker
+     instead, which is the granularity the rule is actually stated at. */
   [dir="rtl"] .bo-data-table tr[data-row-state="error"] > :first-child {
     box-shadow: inset -3px 0 0 var(--bo-color-danger);
   }
@@ -537,10 +551,6 @@
   [dir="rtl"] .bo-data-table tr[data-row-state="dirty"] > :first-child,
   [dir="rtl"] .bo-data-table tr[data-row-state="warning"] > :first-child {
     box-shadow: inset -3px 0 0 var(--bo-color-warning);
-  }
-
-  [dir="rtl"] .bo-data-table td[data-tone="success"] {
-    box-shadow: inset -3px 0 0 var(--bo-color-success);
   }
 
   /* Auto-compaction when the table lives in a narrow container.
