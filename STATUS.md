@@ -20,8 +20,8 @@ Generated at: 2026-08-27 08:30
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (938 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-27 01:40   ok
+dispatch status — counter-triggered rules (940 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-27 01:40   ok
   Objective     1 / 3 slice           since 2026-08-27 05:39   ok  [151]
 ```
 
@@ -35,8 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 00:43 · Continue · build · 149.1: bo-progress adopted on crm/account (exposure vs credit limit); refused on three others — reorder point is a FLOOR not a ceiling, capacity is a matrix, accounts is a list · landed · c750ed6
-- 2026-08-27 00:43 · Meta · refusal · bo-progress on inv/stock-on-hand, prod/capacity and crm/accounts — three distinct reasons, all recorded · refused · c750ed6
 - 2026-08-27 00:49 · Continue · build · 152.1: a copyable structural template per shell on concepts/layouts, driven by one SHELLS array that also replaced two hand-written tables; surfaced that split master-detail has no shipped primitive · landed · d873603
 - 2026-08-27 01:07 · Continue · build · 150.1: report-reach.mjs prints block reach on every build (61 blocks, 75 compositions, 7 never composed) and never fails — zero reach has three meanings and a gate would be wrong about one · landed · 1e0a56e
 - 2026-08-27 01:07 · Meta · refusal · gating zero reach, and counting per component — api.json blocks is not an ownership map · refused · 1e0a56e
@@ -45,6 +43,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 05:39 · Objective · grill · Objective grill 149/150/152: of 7 zero-reach blocks only bo-date is a real defect — a gate would have been wrong 6 of 7; found a fourth meaning (runtime containers cannot appear); a 37.7% mirror alarm died to one question · logged · 81cf45e
 - 2026-08-27 05:39 · Meta · refusal · gating zero reach (re-refused, 6-of-7 wrong) and backfilling pre-2026-08-19 outcome vocabulary · refused · 81cf45e
 - 2026-08-27 06:31 · Continue · triaged · 151.1 refused as already-covered: list-report ships the full saved-views mechanism (counts, view-as-URL, save/rename/default/delete, 'Overdue · edited' dirty marker). A context-window regex requiring 50 preceding chars produced the false negative · refused · b1898ef
+- 2026-08-27 08:30 · Continue · build · 151.2: a column can explain itself (real button + popover, keyboard/touch, gated by 2 claims cases); uncovered and fixed a top-layer panel inheriting its DOM parent's uppercase/nowrap typography · landed · 8532466
+- 2026-08-27 08:30 · Meta · refusal · forcing the framework's 34ch prose measure over the docs' own unlayered 46rem — the cascade contract says a consumer override wins · refused · 8532466
 
 ## Sunset test
 
