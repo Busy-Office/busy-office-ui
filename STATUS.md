@@ -23,7 +23,7 @@ Generated at: 2026-08-28 07:14
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (977 iterations logged)
+dispatch status — counter-triggered rules (978 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-27 22:53   ok
   Objective     2 / 3 slices          since 2026-08-27 19:43   ok  [158, 159]
 ```
@@ -39,7 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 23:44 · Continue · build · 157.2: dropped the inset leading edge from td[data-tone] so the edge means only the ROW; cells keep their tint. RTL count did not move as predicted — six stays six, but DESIGN.md's prose named the removed bar · landed · 3a995d1
 - 2026-08-28 00:09 · Standardize · tidy · 155.1/155.2 consolidated: create-ui's three derived artefacts (template screen, framework pin, NOTICE) get one --check freshness gate wired into CI; found that CI never ran create-ui's build at all, so the generated template screen had no verification · landed · e321aa2
 - 2026-08-28 00:13 · Objective · grill · Objective grill 151/154/156/157: Accept criteria were embedding predictions and 2 of ~12 were falsified (Breaking-that-wasn't, a flip-site count that did not move); six instrument errors in one session, three of them name-derivation against a rule that already exists — assertions caught all six, recall caught none · logged · b2c556a
 - 2026-08-28 00:13 · Meta · refusal · a gate that every var(--bo-*) resolves — base rate is 65 refs, 0 genuinely unresolved, and the measuring instrument was 6-for-6 false · refused · b2c556a
@@ -49,6 +48,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 00:37 · Meta · refusal · a word-count budget or gate — prose here carries decisions and a budget cannot tell a recorded decision from padding · refused · 4b64f67
 - 2026-08-28 00:42 · Continue · build · 153.2 REFUSED: bo-date is deprecated (3 independent confirmations) and the suite already uses the prescribed .bo-u-tabular replacement 349x — the grill matched the string '01 Oct' without its markup. report-reach gains a 'deprecated' category so zero reach on a retired block cannot be read as a defect again · refused · 67638f7
 - 2026-08-28 07:11 · Continue · build · 157.3: one 'which mark, and when to use none' guideline on data-table, written as a rewrite that removed prose describing the cell bar 157.2 had deleted; net -27 words on the largest page by absorbing the two-channel rule that was stated four times · landed · c2f1525
+- 2026-08-28 07:14 · Roadmap · plan · 162.1 triaged: the cloud routine and the local session both dispatched 157.3 within an hour — LOOPS.md mentions concurrency zero times because it was written when loops were session-scoped, and rule 4 is deterministic so two dispatchers always pick the same item · triaged · a38bcd6
 
 ## Sunset test
 
