@@ -18,8 +18,16 @@ Last updated 2026-08-27 15:45, HEAD `6e25b0e`. Working tree clean apart from
 full docs build, plus the CI-only sweeps `test:axe` (127 pages x 2 widths) and
 `check:layout`. npm serves **0.5.0**.
 
-**⚠ 29 commits are unpushed.** Everything from Slice 149 through 154 is local
-only. CI and Pages have not seen any of it.
+**Pushed, and green.** The 32-commit backlog from Slice 149 through 154 went out
+in one push (`8437e3a`). CI passed in 3m26s and the Pages deploy succeeded — the
+first time either has seen any of it.
+
+**⚠ Two workflow runs from 2026-08-26 have been stuck `queued` for 16+ hours**
+(CI `32985176430`, Deploy `32985737608`), plus one `startup_failure`. They are
+superseded by this push and will never run, but they mean **nothing between
+2026-08-26 15:16 and today was ever CI-validated** — a wider gap than the
+previous handover implied. They are noise in `gh run list`; cancelling them is
+an owner call, not a loop one.
 
 **`layout.js` at the repo root is TRIAGED INPUT, not abandoned work.** It is an
 897-line form-layout engine from an open-source ERP desk framework, dropped
