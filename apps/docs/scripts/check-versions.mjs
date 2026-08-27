@@ -8,6 +8,7 @@
 import { readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
 import { DOCS_ROOT } from './paths.mjs';
+import { assertScanned } from './gate-report.mjs';
 
 /* Was `new URL('..', import.meta.url).pathname` — percent-ENCODED, so every
    readFile under it fails with ENOENT on a checkout whose path contains a
@@ -15,6 +16,17 @@ import { DOCS_ROOT } from './paths.mjs';
    left behind by that sweep (Standardize, 2026-08-19). */
 const docsRoot = DOCS_ROOT;
 const { snapshots } = JSON.parse(await readFile(join(docsRoot, 'versions.json'), 'utf8'));
+
+/* And left behind AGAIN, by the gate-report sweep this time (Standardize,
+   2026-08-27). The count below is read from a FILE, so `"snapshots": []` —
+   a release that resets versions.json, or an edit that drops the array —
+   printed "0 snapshot(s) verified" and exited 0. That is the fail-open bug
+   assertScanned exists for, in the one gate whose whole job is catching a
+   release slip. Six sibling gates were checked for the same shape: four
+   count a literal array (visible in review, cannot silently empty) and two
+   walk dist through distPages(), which throws on zero already. */
+assertScanned(snapshots.length, 'version snapshots in versions.json', 'an empty snapshots list disarms this gate silently');
+
 const missing = [];
 for (const v of snapshots) {
   try {

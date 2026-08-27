@@ -134,6 +134,16 @@
       margin-inline: var(--bo-space-1);
     }
 
+    /* The standard visually-hidden recipe, spelled out rather than pulled
+       from `.bo-visually-hidden`, for the same reason `.bo-sidebar-nav__label`
+       spells it out: the hiding is CONDITIONAL on this container query, and
+       the label is a component PART — a consumer cannot add a static utility
+       class to markup whose hidden-ness the component decides. The 1px box
+       plus clip-path is the idiom's own shape; a 0x0 element is dropped from
+       the accessibility tree by some engines, which must NOT happen here.
+       Third copy of the same nine declarations, by design — the others are
+       `primitives/visually-hidden.css` and `sidebar-nav.css`. A FOURTH copy,
+       or a divergence between the three, is the signal to reopen. */
     .bo-stepper__label {
       position: absolute;
       width: 1px;

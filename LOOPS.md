@@ -658,6 +658,41 @@ each carries a comment pointing at the others.
 (one gains a fix the others miss). Either is the signal to reopen — not the
 count on its own.
 
+## Settled: the visually-hidden recipe also appears three times, same reason
+
+Found by a Standardize sweep (2026-08-27) that keyed every rule in
+`packages/core/src/css` by its sorted declaration list: of 237 rules with 3+
+declarations, exactly **three blocks repeat**, and this is the only one worth a
+verdict. The nine declarations of the visually-hidden idiom sit in
+`primitives/visually-hidden.css` (the canonical `.bo-visually-hidden`),
+`sidebar-nav.css` and `stepper.css`.
+
+It is the **same shape as the 0fr/1fr case above**, and refused for the same
+two reasons: `.bo-visually-hidden` is a UTILITY the consumer puts on their own
+markup, while `.bo-sidebar-nav__label` and `.bo-stepper__label` are component
+PARTS whose hidden-ness is decided by a **container query**, not by the
+consumer. There is no markup a consumer could put the class on. Plain CSS
+cannot share a rule body without also sharing a selector.
+
+**What the sweep actually fixed** was the divergence that WAS there — in the
+explanation, not the declarations. `sidebar-nav.css` carried five lines saying
+why it is spelled out; `stepper.css`, the identical case, carried nothing, so
+its copy read as unexplained duplication a future tidy would "fix" into
+something that cannot work. All three now carry the reason and point at the
+other two.
+
+**No gate.** "A comment explains this literal" is semantic, and roadmap 94.11
+paid for that lesson: the shape is checkable, the meaning is not. The count is
+cheap to re-measure — key rules by their sorted declaration list — so the next
+sweep can recheck it in one command instead of trusting this paragraph.
+
+**What would change this:** a fourth copy, or a divergence between the three.
+The other two repeats the sweep found are not findings: `list-style/margin/
+padding: 0` on three list roots is three components each resetting their own
+list, and `.bo-widget__header` / `.bo-offcanvas__header` agreeing on six
+declarations is two components' headers converging by taste, not one decision
+stored twice — merging either would mean one component styling another's part.
+
 ## Operating rules (every loop obeys)
 
 - **Every wake leaves the thing it touched BETTER than the item required**

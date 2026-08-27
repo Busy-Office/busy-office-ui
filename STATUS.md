@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 17:58
+Generated at: 2026-08-27 18:47
 
 ## Open items by slice
 
@@ -18,8 +18,8 @@ Generated at: 2026-08-27 17:58
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (958 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-28 00:09   OVERDUE
+dispatch status — counter-triggered rules (959 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-27 18:47   ok
   Objective     3 / 3 slices          since 2026-08-28 00:13   OVERDUE  [151, 153, 157]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -34,7 +34,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 17:58 · Continue · build · 157.3: the marker guideline on /components/data-table (#markers) — and the RTL cell edge 157.2 missed: [dir=rtl] td[data-tone=success] survived as a standalone rule, measured -3px inset in a browser against dist, one tone of three, never published. check:rtl keys its allowlist by FILE and passed on the injected bug; a per-marker check:claims case now asserts computed shadow in both directions, red-proved on both halves · landed · c073c36
+- 2026-08-27 18:47 · Standardize · tidy · viewport-width forks: 29 literals in 4 gate scripts back to viewports.mjs + check:viewport-forks to hold the line · landed · 728d8aa
 
 ## Sunset test
 

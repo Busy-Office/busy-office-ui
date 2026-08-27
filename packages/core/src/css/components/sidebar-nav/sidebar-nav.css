@@ -113,7 +113,11 @@
        from a utility because this rule is inside a container query and has
        to win locally. The 1px box plus clip-path is the idiom's own shape —
        a 0x0 element is dropped from the accessibility tree by some engines,
-       which is exactly what must NOT happen here. */
+       which is exactly what must NOT happen here.
+       Two other copies exist by design: `primitives/visually-hidden.css` (the
+       utility a consumer applies to their own markup) and `stepper.css` (the
+       same conditional-part case as here). A FOURTH copy, or a divergence
+       between the three, is the signal to reopen. */
     .bo-sidebar-nav__label,
     .bo-sidebar-nav__heading {
       position: absolute;

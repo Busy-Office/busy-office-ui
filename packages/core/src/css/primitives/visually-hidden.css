@@ -1,4 +1,11 @@
 @layer bo-primitives {
+  /* The canonical copy. Two components spell these same nine declarations out
+     instead of delegating here, and that is correct, not drift: in
+     `sidebar-nav.css` and `stepper.css` the hiding is CONDITIONAL on a
+     container query and the element is a component PART, so there is no markup
+     a consumer could put this class on. Plain CSS cannot share a rule body
+     without also sharing a selector. A FOURTH copy, or a divergence between
+     the three, is the signal to reopen (Standardize sweep, 2026-08-27). */
   .bo-visually-hidden {
     position: absolute;
     width: 1px;
