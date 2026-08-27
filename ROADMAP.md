@@ -1417,7 +1417,7 @@ Worth noting how they were found: not by a sweep looking for problems, but by
 having to explain a thing precisely. That is the third time this has produced a
 real finding, and it is cheaper than any detector.
 
-1. [ ] **155.1 — the scaffold's framework pin is unchecked, and the gate that
+1. [x] **155.1 — the scaffold's framework pin is unchecked, and the gate that
        looks like it covers it steps around it.**
        `create-ui/index.mjs:58` writes `dependencies: { '@busy-office/ui':
        '^0.5.0' }` as a hardcoded string, while the real version lives in
@@ -1437,7 +1437,7 @@ real finding, and it is cheaper than any detector.
        check goes red — asserting on the generated `package.json`, not on the
        source string that writes it.
 
-2. [ ] **155.2 — `packages/create-ui/NOTICE` is a byte-identical hand copy of
+2. [x] **155.2 — `packages/create-ui/NOTICE` is a byte-identical hand copy of
        `packages/core/NOTICE`.**
        Verified with `diff`: identical. `create-ui/build.mjs` snapshots the
        template screen and never touches NOTICE, so nothing regenerates or
@@ -1452,6 +1452,24 @@ real finding, and it is cheaper than any detector.
        *Accept*: one source of truth — generated/copied at build time, or the
        file removed with the reason recorded. A check that the shipped copies
        agree, if two copies survive.
+
+**Both landed together in one Standardize round, because they are one finding.**
+Triaging them separately was the mistake: `create-ui` has **three** derived
+artefacts — the template screen, the framework pin, the NOTICE — and the real
+defect was that none had a freshness gate. The scan found the third and worst
+one: **CI never ran `build -w @busy-office/create-ui` at all**, so
+`template/screen.html` is generated from the ERP suite, committed, and nothing
+re-derived or verified it. A suite screen could change and the scaffold would
+ship a stale screen silently.
+
+So `build.mjs` now owns all three and takes `--check` — the same shape
+`generate-scales.mjs` and `stamp-readme.mjs` already use — and CI runs it
+beside `check:quickstart`, with a comment saying why both are needed:
+quickstart proves the scaffolder produces a running app but installs a local
+tarball with `--no-save`, so it never resolves the pin the scaffold writes.
+Red-proved on two independent drift paths: bumping core's version and
+corrupting the NOTICE each fail with the artefact named and the fix stated;
+restoring passes.
 
 ## Slice 154 — Triaged from a reference form-layout engine (2026-08-27)
 

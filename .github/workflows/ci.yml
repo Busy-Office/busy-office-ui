@@ -139,8 +139,13 @@ jobs:
           # documented imports, a real kit screen pasted in, and an assertion
           # that it RENDERS. An unstyled page still has every row and every
           # class, so it checks computed style, not structure (roadmap 147.3).
-          - name: Pseudo-locale + reference app + ERP suite
-            run: npm run check:pseudo -w docs && npm run check:po-app -w docs && npm run suite && npm run check:quickstart -w docs
+          # create-ui's freshness check runs HERE, beside check:quickstart, on
+          # purpose: quickstart proves the scaffolder produces a running app,
+          # but installs a local tarball with --no-save, so it never resolves
+          # the pin the scaffold writes. The two are complementary, and neither
+          # alone would have caught a stale one (roadmap 155).
+          - name: Pseudo-locale + reference app + ERP suite + scaffold freshness
+            run: npm run check:pseudo -w docs && npm run check:po-app -w docs && npm run suite && npm run check:quickstart -w docs && npm run check -w @busy-office/create-ui
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
