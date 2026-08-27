@@ -1186,6 +1186,79 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 156 — Owner: a device guide for the shells, with a support matrix (2026-08-27)
+
+**Owner ask:** *"add side menu for skeleton template, where provide guideline
+for all possible layout for this UI framework — Desktop / Mobile / Tablet / RF
+Scanner"*, refined after review to: *"might not be suitable for all device, so
+pls indicate whether layout can support Desktop/Tablet/Mobile/RF."*
+
+**Owner decisions, taken 2026-08-27 and binding on this slice:**
+- **Device entry points, responsive truth.** The side menu names the four
+  device classes, because that is how the question gets asked. The CONTENT
+  says what is true underneath.
+- **Extend `/concepts/layouts`**, do not fork a second page. Slice 152's
+  `SHELLS` array already drives that page; the matrix extends it rather than
+  duplicating the shell list.
+
+**The finding that shaped it, verified before proposing anything.** This
+framework is **container-query** responsive, not device-targeted:
+`.bo-app-shell` declares `container-name: bo-shell`, and the only shell band in
+the entire stylesheet is `@container bo-shell (max-width: 56rem)`, which
+collapses `.bo-sidebar-nav` to a 3.25rem icon rail. It keys on the CONTAINER,
+not the viewport, so an embedded shell responds correctly too.
+
+So Desktop / Tablet / Mobile are **not three layouts** — they are one shell
+answering to width. Shipping four parallel device-layout families would teach
+consumers to write device-specific markup, which is precisely what the
+container queries exist to avoid, and principle 2 refuses a second way to do
+something that already works. The owner's refinement is what makes the ask
+land correctly: the deliverable is a **support matrix**, not four layouts.
+
+**RF Scanner is the one genuine exception** and must not be flattened into the
+others: it has its own stylesheet (`rf-essentials.css`, 14 components, its own
+floor gate), its own pattern family, and the App shell's own `wrongWhen` text
+already names it — "a single dedicated task on a single-purpose device" where
+persistent chrome is pure overhead.
+
+1. [ ] **156.1 — a shell x device support matrix, measured not asserted.**
+       Four shells (App shell, Role home, RF full-screen, Split master-detail)
+       x four device classes, each cell one of *supported* / *supported, with
+       what changes* / *not intended, use X instead*.
+       **Every cell is either measured in a browser or traceable to a decision
+       already recorded on the page.** The editorial cells come from each
+       shell's existing `wrongWhen`; the behavioural ones get measured. No cell
+       may be filled by reasoning about what the CSS probably does — this
+       repo's most expensive mistakes are all confident claims about
+       unmeasured behaviour.
+       **Measure the container, not the viewport**, and not the docs chrome:
+       every built docs page wraps its demo in the docs' OWN `.bo-app-shell`,
+       so grepping a built page for shell classes measures the wrapper. That
+       exact confusion has been recorded twice already.
+       *Accept*: (a) the matrix is generated from the `SHELLS` array, not
+       hand-written into markup, so a new shell cannot appear without a row;
+       (b) each behavioural claim has a `check-claims` case driving a real
+       browser at the width in question, red-proved; (c) no new component CSS
+       and no new public class — this is documentation of shipped behaviour;
+       (d) the page still passes page-shape, axe at both widths, and
+       `check:layout`.
+
+2. [ ] **156.2 — the side menu, with device entry points.**
+       An in-page menu on `/concepts/layouts` whose entries are Desktop,
+       Tablet, Mobile and RF Scanner, each landing on a section that states
+       which shells work there, what changes at that width, and which
+       container query drives it.
+       *Accept*: entries resolve to real sections; the menu is built from the
+       same data as the matrix so the two cannot disagree; keyboard reachable
+       and announced; works at 390px, where a side menu is itself a layout
+       problem — if it cannot be made to work there it becomes a top menu, and
+       that decision is recorded rather than quietly dropped.
+
+**Explicitly NOT in this slice**: any per-device CSS, any device-specific
+shell, any new breakpoint. If the matrix turns up a cell that genuinely is not
+supported and should be, that is a finding for triage — not a licence to add a
+layout inside a documentation slice.
+
 ## Slice 155 — Two drift risks in `create-ui`, found by explaining it (2026-08-27)
 
 **Input**: the owner asked what `@busy-office/ui` and `@busy-office/create-ui`
