@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 19:46
+Generated at: 2026-08-27 19:54
 
 ## Open items by slice
 
@@ -20,8 +20,8 @@ Generated at: 2026-08-27 19:46
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (966 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-27 18:57   ok
+dispatch status — counter-triggered rules (968 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-27 18:57   ok
   Objective     1 / 3 slice           since 2026-08-27 19:43   ok  [159]
 ```
 
@@ -35,8 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 00:42 · Continue · build · 153.2 REFUSED: bo-date is deprecated (3 independent confirmations) and the suite already uses the prescribed .bo-u-tabular replacement 349x — the grill matched the string '01 Oct' without its markup. report-reach gains a 'deprecated' category so zero reach on a retired block cannot be read as a defect again · refused · 67638f7
-- 2026-08-27 17:58 · Continue · build · 157.3: the marker guideline on /components/data-table (#markers) — and the RTL cell edge 157.2 missed: [dir=rtl] td[data-tone=success] survived as a standalone rule, measured -3px inset in a browser against dist, one tone of three, never published. check:rtl keys its allowlist by FILE and passed on the injected bug; a per-marker check:claims case now asserts computed shadow in both directions, red-proved on both halves · landed · c073c36
 - 2026-08-27 18:47 · Standardize · tidy · viewport-width forks: 29 literals in 4 gate scripts back to viewports.mjs + check:viewport-forks to hold the line · landed · 728d8aa
 - 2026-08-27 18:55 · Standardize · tidy · gate-report bypass: check-versions zero-guard (8 of 9 non-users were fine); visually-hidden triple settled + cross-referenced · landed · 0768f09
 - 2026-08-27 18:57 · Standardize · tidy · skip-list fork: source-files.mjs re-exports paths.mjs SOURCE_SKIP_DIRS; clean pass across all chokepoints · landed · dd482f3
@@ -45,6 +43,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 19:43 · Meta · refusal · a gate for the split/asymmetric selector-family shape — 3 of 15 families today with 0 defects, and the sharper predicate reports zero on the commit that carried the live bug · refused · 098205a
 - 2026-08-27 19:43 · Meta · refusal · a third exemption bucket in report-reach — the five remaining blocks are adjudicated, not exempt, and burying them would make the report print a serene zero · refused · 098205a
 - 2026-08-27 19:46 · Continue · bug · 159.2 P0: rebuild_from_log corrupted the one log line whose item contains the log's own separator — outcome held the item's prose, commit_sha held 'refused'. Fields now read from the ends; the rebuild reconciles bullet-count and post-enforcement vocabulary and refuses to write BEFORE the drop, so the previous mirror survives; parse_log_line self-tests on every run. All three red-proved with the injection confirmed · landed · 72029ee
+- 2026-08-27 19:54 · Continue · build · 158 premise re-measured under 159's own rule: report:prose makes the baseline a command, and it was wrong — 118 documentation pages not 107 (/base/ and /reference/ were missing), median 739, and TWELVE pages over 2x the median not seven, so 158.1's Accept now names the property instead of a count fixed in advance. The new instrument's chrome alarm was itself a detector that could not fail; replaced with a body-vs-main comparison, red-proved both ways · landed · 7d46218
+- 2026-08-27 19:54 · Meta · refusal · a word-count gate — 158 refused it up front and the reasoning holds: prose here carries decisions and a budget is satisfiable by moving words into a code comment · refused · 7d46218
 
 ## Sunset test
 

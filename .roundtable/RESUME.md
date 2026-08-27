@@ -13,93 +13,131 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-27 19:00. Working tree clean apart from the generated
-`STATUS.md` / `loop-log.md` the recorder rewrites. The Standardize sweep landed
-in three commits and reached its exit condition (a clean pass).
+Last updated 2026-08-27 19:55 UTC (2026-08-28 03:55 +08). Working tree clean;
+four commits landed and were pushed as one batch.
 
-## THE NEXT WAKE DISPATCHES OBJECTIVE — read this before Step 2
+## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — `git checkout main` IS A TRAP HERE
+
+**The container starts on a DETACHED HEAD at the pushed tip, while the local
+`main` ref is STALE.** This wake found it the expensive way:
 
 ```
-Standardize   0 / 4 Continue rounds   ok        (fired and cleared this wake)
-Objective     3 / 3 slices            OVERDUE   [151, 153, 157]
+HEAD (detached)      3d534c0   <- the previous wake's work, already on GitHub
+refs/heads/main      17b3ba6   <- 7 commits behind
+refs/remotes/origin/main 17b3ba6   <- also stale until you fetch
 ```
 
-Rule 2 fired this wake and is now reset. **Rule 3 is still overdue and is now
-the first match** — it sits above the queued-build-item rule precisely so a
-build item cannot keep skipping it, which is the failure this file has recorded
-three times about Objective specifically. Do not fall through to rule 4.
+`git checkout main` therefore moves the wake **backwards onto older history**,
+silently. It looked like data loss — `loop-log.md` lost five lines, and
+`git ls-remote` disagreed with `origin/main` — before the cause was clear.
 
-After Objective clears, the oldest open item by age is **158.1**.
+**Do this instead, before committing anything:**
+
+```
+git fetch origin main && git checkout -B main origin/main
+```
+
+`git ls-remote --heads origin` is the authority on what is actually pushed; the
+local `origin/main` ref is not, until a fetch. Recovery, if you have already
+committed onto the stale branch: `git branch backup-wrong-base`, reset onto the
+fetched tip, re-apply by patch, and **check every patch applies cleanly** — a
+`git stash pop` across the two bases auto-merged `ROADMAP.md` and the result had
+to be redone by hand.
+
+Also note `git checkout <file>` discards an UNCOMMITTED fix. One red-proof
+injection was reverted that way and the fix went with it; save a copy first, or
+commit before injecting.
 
 ## ⚠ THIS WAS A CLOUD WAKE — NOTHING WAS VISUALLY VERIFIED
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
-dark. **This wake carries no visual risk, and that is measured rather than
-asserted:** two of three commits are script-only, and the third's CSS half is
-comments only, proved both directions —
-
-- the comments DID reach the shipped un-minified CSS (3 in `dist/css/index.css`,
-  1 in `dist/css/components/stepper.css`), so the edit is real, not a no-op;
-- all **14 minified stylesheets are byte-for-byte identical** across a build
-  from the stashed tree and a build from this one, so nothing a browser renders
-  changed.
+dark. **This wake carries no visual risk, and that is structural rather than
+asserted: not one line of CSS, component markup or docs page was touched.** The
+four commits are two Python loop scripts, one new Node report script, one npm
+script entry, and markdown.
 
 **Chromium is available in cloud wakes** — set
 `CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, and run
-`npm ci` first (the container starts with no `node_modules`). Every browser
-gate ran from it this wake: check:claims (139 behaviours), check:layout (127
-pages), check:scroll (906 containers x 2 widths), test:axe (127 pages x 2
-widths), check:quickstart, scan:dead-style.
+`npm ci` first (the container starts with no `node_modules`). Everything ran
+green from it this wake: `build -w @busy-office/ui`, `test -w @busy-office/ui`
+(137 tests), `docs:build`, `check:repo`, `check:claims` (139 behaviours),
+`check:layout` (127 pages), `test:axe` (127 pages x 2 widths).
 
-**Still unlooked-at by a human, carried forward from the previous wake:** the
+**Still unlooked-at by a human, carried forward from two wakes back:** the
 `#markers` table on `/components/data-table` at 390px, both themes. Untouched
-this wake.
+again this wake.
 
-## What landed this wake (Standardize, dispatcher rule 2)
+## Counters after this wake
 
-Four rounds, ending on a clean pass. The theme is **chokepoint regrowth** — a
-shared module extracted by an earlier sweep, then bypassed again.
+```
+Standardize   2 / 4 Continue rounds   ok
+Objective     1 / 3 slices            ok   [159]
+```
 
-1. **29 viewport literals** back to `viewports.mjs`, across four scripts
-   (check-scroll's `const WIDTHS = [1440, 390]` shadowing the export name;
-   check-claims x25; check-quickstart x2; scan-dead-style x1). New
-   `check:viewport-forks` (`@heuristic`, `--self-test`, in `check:repo`) holds
-   the line, reading the widths FROM viewports.mjs rather than storing a copy.
-2. **check-versions.mjs** reported `${snapshots.length} snapshot(s) verified`
-   with no zero-guard, reading the count from a file — `"snapshots": []` was a
-   silent pass in the one gate whose job is catching a release slip.
-3. **The visually-hidden triple** settled in LOOPS.md next to the 0fr/1fr
-   precedent, and all three copies cross-referenced.
-4. **`source-files.mjs`'s SKIP_DIRS** was a second copy of `SOURCE_SKIP_DIRS`,
-   disagreeing by three entries.
+Rule 3 fired this wake and is now reset. **The next wake falls through to rule 4
+— the oldest still-open item, which is `158.1`.** Its premise has just been
+re-measured and its Accept criteria rewritten, so it is ready to build: run
+`npm run docs:build && npm run report:prose -w docs` first and work the list
+that run prints, not the twelve rows now in the roadmap.
+
+## What landed this wake
+
+**Objective (rule 3, at 3/3), grilling 151/153/157.** Report:
+`.roundtable/grill-objective-151-153-157-2026-08-28.md`. Half the window was
+refusals, and the two split cleanly — 151.3 refused *on principle* with its
+premise intact, 153.2 because *its premise was false*.
+
+1. **An Accept criterion must make re-checking a measured premise part of
+   done.** Both premise-false refusals cited a measurement with no command
+   recorded, so neither could be re-run. 149.1 is the control: same shape of
+   error, cost nothing, because its criterion said *"each of the four either
+   uses `bo-progress` **or** records a one-line reason it should not"*. Written
+   as an amendment to CLAUDE.md's existing Accept-criterion section, not a new
+   one — 158.2 has the loop's prose growth open as an item.
+2. **A gate for 157.3's shape: refused, with two dead instruments recorded.**
+   The split-family detector fires on the pre-condition, before the bug exists
+   (3 of 15 families, 0 defects). The asymmetry detector reports **zero on the
+   commit that carried the live bug**, because 157.2 left the family with one
+   member and a family of one cannot be asymmetric. Do not rebuild either.
+3. **159.2, P0, fixed same wake.** `rebuild_from_log` — the *recovery* path —
+   was what corrupted the mirror: `parse_log_line` read all six fields from the
+   left, so 151.1's line quoting `'Overdue · edited'` rebuilt with the item's
+   own prose in its `outcome` column. The write path was always correct. Fields
+   now read from the ends; the rebuild reconciles bullet-count and
+   post-enforcement vocabulary and refuses **before** the DROP so the previous
+   mirror survives; `parse_log_line` self-tests on every run. All three
+   red-proved with the injection confirmed.
+4. **`report:prose`** — 158's baseline made re-runnable, and it was wrong: 118
+   documentation pages not 107 (`/base/` and `/reference/` were missing from the
+   old instrument), and **twelve** pages over 2x the median, not seven.
 
 Four things worth carrying forward:
 
-- **Importing a constant is not using it.** check-claims imported `WIDTHS`,
-  `DESKTOP_WIDTH` and `NARROW_WIDTH` and then hardcoded 25 viewports anyway. No
-  convention, and no import-list check, can see that — which is why it landed
-  as a gate.
-- **A gate must not store its own copy of the thing it polices.**
-  `check:viewport-forks` reads the widths from `viewports.mjs`; a private copy
-  would be the very fork it hunts and would go stale the day the pair changes.
-  Red-proved on both branches (re-inject the real fork → red; rename the export
-  → red on the parse, not a sweep for a needle it never found).
-- **Checking before claiming killed three findings.** check-layout and
-  axe-audit look unguarded but get their pages from `distPages()`, which throws
-  on zero; check-search's hand-rolled luminance already carries its refusal (it
-  runs inside `page.evaluate` and cannot import a Node module); po-app's walker
-  has nothing to over-count. The first read of each was wrong.
-- **A gate was measured and REFUSED**, with the reasoning stored in
-  `source-files.mjs` so it is not re-proposed: a skip-list-fork detector has a
-  base rate of one true signal against two exceptions. Ceremony, not a gate
-  (roadmap 94.11).
+- **159.1 is queued and cheap.** Seven blocks have ever read zero reach and all
+  seven are adjudicated not-a-defect, but the report prints five of them bare.
+  The verdicts already exist in
+  `.roundtable/grill-objective-149-152-2026-08-27.md`; do not re-derive them,
+  and do not make them a third exemption bucket.
+- **An instrument's first output is not evidence, again — twice in one wake.**
+  `report-prose`'s own chrome alarm could not fail (swapping `<main>` for
+  `<body>` moved the median 739 → 1034 and it stayed silent), and the asymmetry
+  detector reported zero on the very commit it was built for. Both caught by
+  red-proving, neither by review.
+- **Noticed, not chased:** `dispatch_status.py` reports 968 iterations where
+  `rebuild_from_log` reports 974 — its `ROW` regex requires `\w+` for both loop
+  and mode, so six legacy rows do not match. Pre-existing, does not affect
+  either counter's verdict (both sum `loop == "Continue"` rows that do match),
+  and left alone deliberately rather than turned into busywork. If a wake ever
+  needs an exact iteration count from that script, this is why it disagrees.
+- **`__pycache__/` was already ignored** by the previous wake — a change this
+  wake proposed and then found upstream, which is what being on stale history
+  looks like from the inside.
 
 ## Still open, and why
 
-- **158.1 / 158.2** — the prose-length verdicts. Next by age once Objective
-  clears. **158.1 must not quote 4,429 words as current** for
-  `/components/data-table`; the previous wake added +337 reader-facing words to
-  it and that baseline was never re-measured.
+- **158.1 / 158.2** — the prose-length verdicts. Next by age. 158.1's premise is
+  now current and its criterion names the property rather than a count.
+- **159.1** — `report-reach` prints the verdict where one exists.
 - **112.3** — the pattern-fit pilot. BLOCKED ON OWNER: needs 5–8 owner-written
   screen briefs with sealed picks; scaffold ready at `.roundtable/pilot-112/`.
 - **112.4** — Screen Contract layer, gated on 112.3's verdict.
