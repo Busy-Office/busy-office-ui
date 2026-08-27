@@ -352,6 +352,14 @@ surfaced more:
    missing spacing utility is NOT the finding, because this framework refuses a
    utility system by design. The finding is either a dead declaration or a
    component that should own the value.
+   **Also run `npm run report:css-repeats -w @busy-office/ui`** — rule bodies in
+   the shipped CSS that appear more than once, keyed by their sorted declaration
+   list. The standing verdicts are in "Settled: the visually-hidden recipe"
+   below, with the table of all eight; **the finding is the DELTA**, a new group
+   or an existing one that grew, never the count. Same reason as the other two
+   sweeps: deliberately not a gate (every current repeat is correct, so a gate
+   would fail the build on eight right answers), which makes this step the only
+   thing keeping it from rotting.
    **Also run `npm run report:prose -w docs`** and record a verdict for any page
    over 2x its FAMILY median that has none yet — 158.1 verdicted the twelve over
    the CORPUS median; `/base/motion/`, `/concepts/js-behaviors/` and
@@ -678,11 +686,9 @@ count on its own.
 ## Settled: the visually-hidden recipe also appears three times, same reason
 
 Found by a Standardize sweep (2026-08-27) that keyed every rule in
-`packages/core/src/css` by its sorted declaration list: of 237 rules with 3+
-declarations, exactly **three blocks repeat**, and this is the only one worth a
-verdict. The nine declarations of the visually-hidden idiom sit in
-`primitives/visually-hidden.css` (the canonical `.bo-visually-hidden`),
-`sidebar-nav.css` and `stepper.css`.
+`packages/core/src/css` by its sorted declaration list. The nine declarations of
+the visually-hidden idiom sit in `primitives/visually-hidden.css` (the canonical
+`.bo-visually-hidden`), `sidebar-nav.css` and `stepper.css`.
 
 It is the **same shape as the 0fr/1fr case above**, and refused for the same
 two reasons: `.bo-visually-hidden` is a UTILITY the consumer puts on their own
@@ -699,16 +705,61 @@ something that cannot work. All three now carry the reason and point at the
 other two.
 
 **No gate.** "A comment explains this literal" is semantic, and roadmap 94.11
-paid for that lesson: the shape is checkable, the meaning is not. The count is
-cheap to re-measure — key rules by their sorted declaration list — so the next
-sweep can recheck it in one command instead of trusting this paragraph.
+paid for that lesson: the shape is checkable, the meaning is not. Every repeat
+below is CORRECT, so a gate would fail the build on eight rules that are all
+right.
 
-**What would change this:** a fourth copy, or a divergence between the three.
-The other two repeats the sweep found are not findings: `list-style/margin/
-padding: 0` on three list roots is three components each resetting their own
-list, and `.bo-widget__header` / `.bo-offcanvas__header` agreeing on six
-declarations is two components' headers converging by taste, not one decision
-stored twice — merging either would mean one component styling another's part.
+### The count is a command now, and the command disagreed with the paragraph
+
+Standardize, 2026-08-28. This section used to assert *"of 237 rules with 3+
+declarations, exactly **three** blocks repeat"*, and then, in the same breath,
+that the count was "cheap to re-measure … in one command instead of trusting
+this paragraph" — while recording no command. The next sweep re-derived it and
+got **eight**, on the identical 237 rules. Roadmap 159's finding exactly: a
+measurement without its command gets re-derived, and then two answers exist with
+nothing to adjudicate them.
+
+```
+npm run report:css-repeats -w @busy-office/ui
+  # 74 source files · 237 rules with 3+ declarations · 225 distinct bodies
+  # · 8 bodies appearing more than once      (2026-08-28)
+```
+
+`report-css-repeats.mjs` is that command. It reconciles with an independent
+regex pass on all three totals, and it is red-proved both ways: a novel
+duplicated body takes it 8 → 9, and so does making `badge.css`'s print rule
+carry `stepper.css`'s `!important`s — which is how its own first-run bug was
+caught, since postcss keeps `!important` off `decl.value` and the two rules
+merged into a repeat that is not one.
+
+**The five it had not recorded change no verdict.** Every one is the same
+ownership argument, which is why the rule below is now stated as a rule rather
+than as a list of blessed blocks:
+
+| repeated body | where | why it stays |
+|---|---|---|
+| `list-style/margin/padding: 0` | `.bo-timeline`, `.bo-sidebar-nav ul`, `.bo-tree`+`ul` | three components each resetting their own list |
+| the 9-line visually-hidden idiom | `.bo-visually-hidden`, `.bo-sidebar-nav__label`+`__heading`, `.bo-stepper__label` | the section above |
+| header row, 6 declarations | `.bo-widget__header`, `.bo-offcanvas__header` | two headers converging by taste, not one decision stored twice |
+| `display:flex / align-items:center / gap:space-1` | `.bo-breadcrumb li`, `.bo-richtext__group` | the cluster idiom on markup the component owns; a consumer cannot class an `<li>` the component generates the rhythm for |
+| `flex:1 / min-inline-size:0 / overflow-wrap:anywhere` | `.bo-combobox__option-label`, `.bo-file-list__name` | "a text cell that must shrink and wrap"; both are parts |
+| disabled look | `:is(.bo-input, .bo-quantity__input):disabled`, `.bo-richtext--disabled` | sharing would mean `input.css` styling richtext's root |
+| `aria-current="page"` link | `.bo-sidebar-nav__link`, `.bo-tree__link` | two nav components, each styling its own link part |
+| joined-control radius reset | **x4** — twice each in `money.css`, `quantity.css` | see below |
+
+The last one is the only one worth watching. Four copies is the trigger this
+file names for the 0fr/1fr case, and it is met — but it is **two components, not
+four**: money and quantity each spell the idiom twice, because the joined child
+is either a bare control (`.bo-money > :first-child`; quantity's
+`__input:has(+ .bo-quantity__unit-select)`) or a combobox WRAPPER whose real
+border is one level down (`> .bo-combobox:first-child > .bo-input`). Same
+decision, two child shapes, per component. Reopen if a THIRD component joins the
+pair — that is when a shared joined-control part would have somewhere to live
+that isn't one component styling another's insides.
+
+**What would change any of this:** a body appearing in a component that is not
+already in the table, or an existing group growing. Run the command; the delta
+is the finding, never the count on its own.
 
 ## Operating rules (every loop obeys)
 

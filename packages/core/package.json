@@ -79,7 +79,8 @@
     "check:composited": "node scripts/check-composited.mjs",
     "build:rf-essentials": "node scripts/build-rf-essentials.mjs",
     "check:rf-floor": "node scripts/check-rf-floor.mjs",
-    "check:sticky-layers": "node scripts/check-sticky-layers.mjs"
+    "check:sticky-layers": "node scripts/check-sticky-layers.mjs",
+    "report:css-repeats": "node scripts/report-css-repeats.mjs"
   },
   "browserslist": [
     "chrome >= 119",
