@@ -16,10 +16,47 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    conclusion and shows the shell as code with placeholders; this follows that
    precedent for all four. It is also the form an agent can actually use:
    something to copy, not a picture to interpret. */
+/* The ONE band the stylesheet declares for the shell, in both units, so the
+   prose below never restates it from memory. `.bo-app-shell` sets
+   `container-name: bo-shell`; `sidebar-nav.css` is the only rule that queries
+   it. If a second band is ever added, this page is wrong until it moves. */
+const SHELL_BAND_REM = 56;
+const SHELL_BAND_PX = SHELL_BAND_REM * 16;
+
+/* Device classes, defined by what the CONTAINER is doing rather than by any
+   device-sniffing — the whole point of the matrix below. The px ranges are
+   descriptive ("a tablet usually lands here"), never something the CSS tests. */
+const DEVICES = [
+  { key: 'desktop', label: 'Desktop', range: `shell wider than ${SHELL_BAND_PX}px` },
+  { key: 'tablet', label: 'Tablet', range: `roughly 768–${SHELL_BAND_PX}px` },
+  { key: 'mobile', label: 'Mobile', range: 'roughly 320–767px' },
+  { key: 'rf', label: 'RF scanner', range: 'handheld, one task, gloved hands' },
+];
+
+/* Every `note` below was MEASURED in a headless browser against the shipped
+   stylesheet, not reasoned about (roadmap 156.1); the `no` verdicts that are
+   editorial rather than dimensional trace to the shell's own `wrongWhen`
+   text, which is on this page already. `check-claims` re-drives the numeric
+   ones on every build. */
 const SHELLS = [
   {
     name: 'App shell',
     href: '/base/primitives',
+    devices: {
+      desktop: { ok: 'yes', note: 'Rail 224px, labels visible.' },
+      tablet: {
+        ok: 'yes',
+        note: `At ${SHELL_BAND_PX}px and below the rail collapses to a 52px icon strip.`,
+      },
+      mobile: {
+        ok: 'yes',
+        note: 'Same 52px rail — there is no separate mobile drawer. Labels are visually hidden, not removed, so they still have accessible names.',
+      },
+      rf: {
+        ok: 'no',
+        note: 'Chrome the reader never uses. Use RF full-screen.',
+      },
+    },
     answers: '"Where in the suite am I?" — persistent navigation, most screens, most of the day.',
     builtFromCode: '.bo-app-shell',
     builtFrom: ': header + sidebar + main',
@@ -38,6 +75,12 @@ const SHELLS = [
   {
     name: 'Role home',
     href: '/patterns/role-home',
+    devices: {
+      desktop: { ok: 'yes', note: 'Widget grid resolves to 3 columns at 1440px.' },
+      tablet: { ok: 'yes', note: '2 columns. Never hand-place widgets to force this.' },
+      mobile: { ok: 'yes', note: '1 column at 390px. The grid reflows on its own.' },
+      rf: { ok: 'no', note: 'A day-start dashboard, not one task. Use RF full-screen.' },
+    },
     answers: '"What does MY role need today?" — the first screen after sign-in, one per role.',
     builtFrom: "App shell's main, filled with widgets scoped to a role",
     wrongWhen:
@@ -57,6 +100,15 @@ const SHELLS = [
   {
     name: 'RF full-screen',
     href: '/patterns/rf-landing',
+    devices: {
+      desktop: {
+        ok: 'no',
+        note: 'Removes navigation a multi-task reader immediately wants back.',
+      },
+      tablet: { ok: 'depends', note: 'Only if the tablet IS the dedicated device.' },
+      mobile: { ok: 'depends', note: 'Same test: one job, or not this shell.' },
+      rf: { ok: 'yes', note: 'Its case. data-density="spacious" gives 44px controls.' },
+    },
     answers: '"One task, no distraction" — a handheld scanner, gloved hands, a single action per screen.',
     builtFrom: 'No app shell at all — chrome-free, isolated document',
     wrongWhen:
@@ -75,6 +127,15 @@ const SHELLS = [
   {
     name: 'Split master-detail',
     href: '/patterns/master-detail',
+    devices: {
+      desktop: { ok: 'yes', note: 'Detail pane 816px at 1440px.' },
+      tablet: { ok: 'depends', note: 'Tightens to a 382px detail pane at 834px — workable, watch the content.' },
+      mobile: {
+        ok: 'no',
+        note: 'Breaks: the list pane is a fixed 22rem that never shrinks, so at 390px the detail pane is 36px. Swap the split for the offcanvas drawer that pattern already ships.',
+      },
+      rf: { ok: 'no', note: 'Two panes on a handheld. Use RF full-screen.' },
+    },
     answers: '"Show me the list AND the one I picked" — browsing many records without losing the list.',
     builtFrom: "App shell's main, split into a list pane + detail pane",
     wrongWhen:
@@ -131,6 +192,99 @@ const SHELLS = [
     right call, the same job
     <a href={base + '/concepts/review-anatomy'}>review-screen anatomy</a>
     does one level down, for the three ways to show a single record.</p>
+  </section>
+
+  <section class="demo" id="devices">
+    <h2>Which shell works on which device</h2>
+    <p class="bo-u-text-muted">Jump to a device:
+      {DEVICES.map((d, i) => (
+        <>{i > 0 && ' · '}<a href={`#device-${d.key}`}>{d.label}</a></>
+      ))}
+    </p>
+    <p><strong>Desktop, tablet and mobile are not three layouts.</strong> They are
+    the same shells answering to width. <code>.bo-app-shell</code> declares
+    <code>container-name: bo-shell</code>, and the whole stylesheet contains exactly
+    one shell band — <code>@container bo-shell (max-width: {SHELL_BAND_REM}rem)</code>.
+    It keys on the <em>container</em>, not the viewport, so a shell embedded in a
+    panel responds to the panel. <strong>Do not branch your markup per device</strong>;
+    there is nothing to branch on.</p>
+
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-u-text-muted">Measured in a browser against the shipped
+        stylesheet, not estimated. ✓ supported · ~ depends · ✕ use something else.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Shell</th>
+            {DEVICES.map((d) => <th scope="col">{d.label}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {SHELLS.map((s) => (
+            <tr>
+              <th scope="row"><a href={base + s.href}>{s.name}</a></th>
+              {DEVICES.map((d) => {
+                const c = s.devices[d.key];
+                const mark = c.ok === 'yes' ? '✓' : c.ok === 'no' ? '✕' : '~';
+                const word = c.ok === 'yes' ? 'Supported' : c.ok === 'no' ? 'Use something else' : 'Depends';
+                return (
+                  <td>
+                    {/* Two channels: the glyph is never the only signal — the
+                        word carries the verdict for anyone who cannot resolve
+                        a symbol, and it is what a screen reader announces. */}
+                    <strong><span aria-hidden="true">{mark}</span> {word}</strong>
+                    <span class="bo-u-text-muted"> — {c.note}</span>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* The table above is the scan view — every shell against every device, and
+        it is what a reader compares in. These sections answer the other
+        question, the one a reader arrives with: "I am building for a tablet,
+        what can I use?" So they list only what you CAN reach for, and collapse
+        everything ruled out into one redirect line. Restating all four verdicts
+        here would just be the table again in a taller shape — and the table is
+        already the thing that scrolls on a phone. */}
+    {DEVICES.map((d) => {
+      const usable = SHELLS.filter((s) => s.devices[d.key].ok !== 'no');
+      const ruledOut = SHELLS.filter((s) => s.devices[d.key].ok === 'no');
+      return (
+        <div id={`device-${d.key}`}>
+          <h3>{d.label} <span class="bo-u-text-muted">— {d.range}</span></h3>
+          <ul class="bo-stack bo-stack--tight docs-list">
+            {usable.map((s) => (
+              <li>
+                <a href={base + s.href}>{s.name}</a>
+                {s.devices[d.key].ok === 'depends' && <strong> only if</strong>}{' '}
+                {s.devices[d.key].note}
+              </li>
+            ))}
+          </ul>
+          {ruledOut.length > 0 && (
+            <p class="bo-u-text-muted">
+              <strong>Not here:</strong>{' '}
+              {ruledOut.map((s, i) => (
+                <>{i > 0 && ', '}{s.name}</>
+              ))}
+              {' — '}
+              {ruledOut.length === 1 ? 'see the table for what to use instead.' : 'the table says what to use instead.'}
+            </p>
+          )}
+        </div>
+      );
+    })}
+
+    <p class="bo-u-text-muted"><strong>Crossing the band can give content MORE
+    room, not less</strong> — the one result here that surprises. At {SHELL_BAND_PX}px
+    the rail drops from 224px to 52px, so <code>main</code> gains 171px in the same
+    breath the window got narrower: measured, a role home goes from 1 widget column
+    at 897px to 2 columns at {SHELL_BAND_PX}px. If you are testing a layout, test
+    <em>both sides</em> of the band, not just the narrow end.</p>
   </section>
 
   <section class="demo">

@@ -49,6 +49,9 @@ import { DIST } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
+import { readFile } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /* Reconciled against the GENERATED keymap rather than a literal: if
    extract-keymap emits a different number of richtext shortcuts, the
@@ -1470,6 +1473,95 @@ check(
   vsNoValidate.summaryShown === false && vsNoValidate.entries === 0,
   JSON.stringify(vsNoValidate),
 );
+
+/* /concepts/layouts' device matrix (roadmap 156.1). Every dimensional cell in
+   that table is a runtime claim about the SHIPPED stylesheet, and the page
+   states them as measured facts — so they are re-measured here on every build
+   rather than trusted to stay true.
+
+   Measured on a constructed shell, not on this docs page: the docs site is
+   itself wrapped in a `.bo-app-shell`, so reading the rail off a rendered docs
+   page measures the DOCS chrome. That exact confusion is recorded twice in
+   CLAUDE.md, and it would make these numbers agree with the table for the
+   wrong reason.
+
+   The container band is read from the stylesheet rather than hardcoded here,
+   so a change to the CSS moves the assertion instead of silently disagreeing
+   with it. */
+{
+  /* The UNMINIFIED shipped stylesheet. The copy in dist/assets is minified,
+     and searching a minified build for a source spelling is a trap this repo
+     has already paid for once (`print-color-adjust: exact` is emitted without
+     the space). Read the artifact whose spelling is the source's. */
+  const shellCss = await readFile(
+    join(dirname(fileURLToPath(import.meta.url)), '../../../packages/core/dist/css/index.css'),
+    'utf8',
+  ).catch(() => null);
+  const band = shellCss?.match(/@container bo-shell \(max-width:\s*([\d.]+)rem\)/);
+  check(
+    'layouts: the stylesheet still declares exactly ONE shell band, as the page says',
+    !!band && (shellCss.match(/@container bo-shell/g) ?? []).length === 1,
+    `bands found: ${(shellCss?.match(/@container bo-shell[^)]*\)/g) ?? []).join(' | ') || 'none'}`,
+  );
+
+  const bandPx = band ? Number(band[1]) * 16 : 896;
+  const p = await browser.newPage();
+  const markup = `<!doctype html><meta charset=utf-8><style>${shellCss}</style>
+    <div class="bo-app-shell" id="shell">
+      <header class="bo-navbar bo-app-shell__header">H</header>
+      <nav class="bo-sidebar-nav bo-app-shell__sidebar" id="rail">
+        <a class="bo-sidebar-nav__link" href="#a"><span class="bo-sidebar-nav__icon">▪</span><span class="bo-sidebar-nav__label" id="lbl">Purchase orders</span></a>
+      </nav>
+      <main class="bo-app-shell__main" id="main">
+        <div id="split" style="display:grid;grid-template-columns:22rem 1fr;">
+          <section id="list">l</section><section id="detail">d</section>
+        </div>
+      </main>
+    </div>`;
+  const at = async (w) => {
+    await p.setViewport({ width: w, height: 900 });
+    await p.setContent(markup);
+    return p.evaluate(() => {
+      const wd = (id) => Math.round(document.getElementById(id).getBoundingClientRect().width);
+      return {
+        rail: wd('rail'),
+        main: wd('main'),
+        detail: wd('detail'),
+        labelPos: getComputedStyle(document.getElementById('lbl')).position,
+      };
+    });
+  };
+  const wide = await at(bandPx + 1);
+  const atBand = await at(bandPx);
+  const narrow = await at(390);
+  await p.close();
+
+  check(
+    'layouts: above the band the rail is expanded; at it and below it collapses to a 52px icon strip',
+    wide.rail > 200 && atBand.rail === 52 && narrow.rail === 52,
+    JSON.stringify({ wide: wide.rail, atBand: atBand.rail, narrow: narrow.rail }),
+  );
+  check(
+    'layouts: the collapsed rail hides its label visually without removing it',
+    wide.labelPos === 'static' && atBand.labelPos === 'absolute',
+    JSON.stringify({ wide: wide.labelPos, atBand: atBand.labelPos }),
+  );
+  /* The counter-intuitive line on the page: crossing the band makes `main`
+     WIDER, because the rail gives back more than the window lost. */
+  check(
+    'layouts: crossing the band gives main MORE room, not less — as the page claims',
+    atBand.main > wide.main,
+    JSON.stringify({ justAbove: wide.main, atBand: atBand.main }),
+  );
+  /* And the matrix's one hard "not this shell": the split's list pane is a
+     fixed 22rem, so the detail pane is unusable at phone width. If this ever
+     becomes false the table is wrong and should say "supported". */
+  check(
+    'layouts: the master-detail split really does collapse its detail pane at 390px',
+    narrow.detail < 60,
+    JSON.stringify({ detailAt390: narrow.detail }),
+  );
+}
 
 /* collapsible-card — the docs state the two-channel contract outright: the
    trigger's aria-expanded AND the panel's data-state. Drift to one channel is

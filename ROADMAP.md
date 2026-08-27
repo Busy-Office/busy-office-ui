@@ -1221,7 +1221,22 @@ floor gate), its own pattern family, and the App shell's own `wrongWhen` text
 already names it — "a single dedicated task on a single-purpose device" where
 persistent chrome is pure overhead.
 
-1. [ ] **156.1 — a shell x device support matrix, measured not asserted.**
+1. [x] **156.1 — a shell x device support matrix, measured not asserted.**
+       **Shipped.** Generated from `SHELLS`, so a new shell cannot appear
+       without a row. Five `check-claims` cases re-drive the dimensional
+       claims on every build; red-proved by replacing the rail's collapsed
+       `inline-size` and confirming two cases fail on exactly that.
+       **The measurement found something the ask did not anticipate**, and it
+       is now the sharpest line on the page: **crossing the band gives content
+       MORE room.** At 896px the rail drops 224px -> 52px, so `main` gains
+       171px in the same breath the window narrowed — measured, a role home
+       goes from 1 widget column at 897px to 2 at 896px. Test both sides of a
+       band, not just the narrow end.
+       **And one hard "not supported" that the owner's refinement is exactly
+       why we looked for**: split master-detail's list pane is a fixed 22rem
+       that never shrinks, so at 390px the detail pane measures **36px**. The
+       framework already ships the answer — the offcanvas drawer on
+       `/patterns/master-detail` — so the cell says which to use instead.
        Four shells (App shell, Role home, RF full-screen, Split master-detail)
        x four device classes, each cell one of *supported* / *supported, with
        what changes* / *not intended, use X instead*.
@@ -1243,7 +1258,20 @@ persistent chrome is pure overhead.
        (d) the page still passes page-shape, axe at both widths, and
        `check:layout`.
 
-2. [ ] **156.2 — the side menu, with device entry points.**
+2. [x] **156.2 — the side menu, with device entry points.**
+       **Shipped**, and it reuses what the docs already have rather than
+       inventing a rail: the section registers in the page's own "on this
+       page" nav, and an inline "Jump to a device" row lands on four sections
+       built from the same `DEVICES` array as the matrix, so the two cannot
+       disagree. Verified live: all four anchors resolve at 1440 and 390, in
+       both themes, with no page-level overflow.
+       **The 390px answer turned out to matter more than expected.** The
+       matrix is a 5-column table, which is genuinely cramped on a phone even
+       scrolling inside its own container — so the per-device sections carry
+       the mobile read, and they were rewritten to answer a DIFFERENT question
+       rather than restate the table: they list only what you can reach for
+       there, mark "only if" for the conditional ones, and collapse everything
+       ruled out into one redirect line.
        An in-page menu on `/concepts/layouts` whose entries are Desktop,
        Tablet, Mobile and RF Scanner, each landing on a section that states
        which shells work there, what changes at that width, and which

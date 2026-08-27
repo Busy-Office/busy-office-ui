@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 21:43
+Generated at: 2026-08-27 22:24
 
 ## Open items by slice
 
@@ -23,7 +23,7 @@ Generated at: 2026-08-27 21:43
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (945 iterations logged)
+dispatch status — counter-triggered rules (946 iterations logged)
   Standardize   4 / 4 Continue rounds since 2026-08-27 01:40   OVERDUE
   Objective     2 / 3 slices          since 2026-08-27 05:39   ok  [151, 154]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -39,7 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 05:39 · Objective · grill · Objective grill 149/150/152: of 7 zero-reach blocks only bo-date is a real defect — a gate would have been wrong 6 of 7; found a fourth meaning (runtime containers cannot appear); a 37.7% mirror alarm died to one question · logged · 81cf45e
 - 2026-08-27 05:39 · Meta · refusal · gating zero reach (re-refused, 6-of-7 wrong) and backfilling pre-2026-08-19 outcome vocabulary · refused · 81cf45e
 - 2026-08-27 06:31 · Continue · triaged · 151.1 refused as already-covered: list-report ships the full saved-views mechanism (counts, view-as-URL, save/rename/default/delete, 'Overdue · edited' dirty marker). A context-window regex requiring 50 preceding chars produced the false negative · refused · b1898ef
 - 2026-08-27 08:30 · Continue · build · 151.2: a column can explain itself (real button + popover, keyboard/touch, gated by 2 claims cases); uncovered and fixed a top-layer panel inheriting its DOM parent's uppercase/nowrap typography · landed · 8532466
@@ -49,6 +48,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 15:44 · Continue · bug · 154.1/154.2: validation-summary handed a dead link into a hidden container — reveal(el) opens a closed <details>, an inactive tab panel or a collapsed widget by pressing its own control and verifying the press; a THIRD container found mid-build fails worse (focus succeeds into a 0px overflow:hidden box); canonical markup now carries the novalidate without which the behavior never runs · landed · 6e25b0e
 - 2026-08-27 15:57 · Continue · bug · 154.1 verifier pass: the collapsed-card reveal was claimed on the page but proven only in jsdom — now demoed and checked live (transition settled, non-zero height on the box carrying the constraint), red-proved in isolation; the tabpanel path is an explicit EXEMPT with a reason; the tabpanel fallback no longer leaves two tabs aria-selected · landed · 0ae6141
 - 2026-08-27 21:43 · Roadmap · plan · 155.1/155.2 triaged from the owner's create-ui question: the scaffold's ^0.5.0 pin is unchecked and check:quickstart bypasses it with --no-save, and create-ui/NOTICE is a byte-identical hand copy of core's · triaged · 758ca1a
+- 2026-08-27 21:57 · Roadmap · plan · 156.1/156.2 triaged: owner wants a device layout guide; the framework is container-query responsive so Desktop/Tablet/Mobile are one shell at different widths — deliverable is a measured shell x device support matrix, RF the one genuine exception · triaged · c53bfaf
 
 ## Sunset test
 
