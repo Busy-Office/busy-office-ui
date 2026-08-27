@@ -1186,6 +1186,51 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 162 — Two wakes took the same item, and nothing could have stopped them (2026-08-28)
+
+**What happened.** The hourly cloud routine was promoted from this session
+(owner call, 2026-08-28). It fired, worked the queue correctly, and landed
+21 commits including **157.3**. Roughly an hour later the local session — still
+open, still dispatching — reached rule 4, took the oldest open item, and got
+**157.3 as well**. Both wrote a marker guideline into the same section of
+`/components/data-table`. The local copy was discarded on `git push` rejection.
+
+**Nothing was lost and nothing was corrupted**, because the push was rejected
+rather than merged: the local work went to a branch, `main` was reset to
+`origin`, and the branch was deleted after confirming the cloud's version was
+strictly better — it also fixed an RTL cell edge that 157.2 had missed, which
+the local version never found.
+
+**The cost was one wake's work, and the cause is structural.** `LOOPS.md`
+mentions concurrency **zero times** — the word does not appear. Every rule in
+it assumes one wake at a time, which was true while loops were session-scoped
+("these run while this session is open"). Promoting to `/schedule` made two
+dispatchers real without any rule changing, and rule 4 is deterministic: given
+the same `ROADMAP.md`, two dispatchers will always choose the *same* item.
+**Determinism is the feature that makes the collision certain.**
+
+1. [ ] **162.1 — decide how two dispatchers share one queue.**
+       Options, none obviously right: claim an item by committing a marker
+       before working it (a lock in git, which two wakes can still race);
+       partition by loop type (cloud takes Continue, local takes grills);
+       have the local session stop dispatching once a routine exists and act
+       only on owner input; or accept collisions and rely on push rejection,
+       which is what actually saved this one.
+       **Accept**: a decision recorded in `LOOPS.md` either way, naming what it
+       costs. "Accept collisions" is a valid outcome and may be right — the
+       failure mode was cheap, self-detecting, and resolved without data loss.
+       What is NOT acceptable is leaving the file silent, because a reader
+       cannot tell that concurrency was considered.
+
+**Also worth recording, because it argues for the routine.** The cloud wake
+found a real defect the local session shipped: 157.2 removed the cell-level
+leading edge but its **RTL twin for `td[data-tone="success"]` survived**, a
+standalone rule while danger and warning were grouped into the selectors the
+edit rewrote. The local verification checked one tone's block and concluded
+"0 box-shadow on cell tones" — the wrong box. One direction, one tone of three,
+caught within a day and inside the Unreleased window. An independent wake
+re-deriving the same claim is what caught it.
+
 ## Slice 161 — Standardize sweep: the cadence's first run, and a settled count that was wrong (2026-08-28)
 
 Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
