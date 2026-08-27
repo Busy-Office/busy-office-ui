@@ -1186,6 +1186,69 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 160 — triaged while reading 158.1's outlier pages: named products the denylist does not deny (2026-08-28)
+
+**Not new input** — nothing was filed and nobody asked. Found by reading
+`/components/richtext` for 158.1 and noticing two consumer products named as UX
+precedent in a paragraph, then measuring rather than assuming.
+
+The standing owner instruction (2026-08-27) is *"no external product is named in
+any document in this repo — describe the mechanism instead, or cite the standard
+when a finding is normative"*. `check:vendor-names` enforces it and passes; it
+is a **denylist** and says so in its own header, so it catches regrowth of the
+seven names that have actually occurred, not every conceivable one. It is
+working as designed. What it cannot see is the question below.
+
+**Measured, with the command, so the next wake re-runs instead of re-deriving:**
+
+```
+grep -rnoE "\b(Notion|Slack|Gmail|Excel|Salesforce|Odoo|SAP|Fiori|Carbon|Material|Atlassian|Bootstrap|Tailwind|DaisyUI)\b" \
+  apps/docs/src packages/core/src
+```
+
+Two populations, and they are not the same question:
+
+- **Consumer apps cited as UX precedent — 8 mentions in 4 files.** Notion (1),
+  Slack (2), Gmail (2), Excel (3). One of the eight is a **shipped source
+  comment**, not docs: `richtext.css:112` ("which is what Slack and Gmail both
+  do for this exact toggle") — it ships in the package. The rest are
+  `richtext.astro:401,410`, `staging.astro:150,151` and `data-table.astro:347`.
+- **Design systems and ERP suites cited as design references — 45 mentions.**
+  Tailwind (11), Fiori (10), SAP (9), Material (6), Carbon (4), Atlassian (1),
+  Bootstrap (1), DaisyUI (1), Odoo (1), Salesforce (1). The last three are one
+  sentence: `approval-workflow.css:158`, another shipped comment, citing how
+  three ERP suites solve internal-vs-external remarks. These are load-bearing
+  in a different
+  way: LOOPS.md's own Research playbook *names them as the trusted sources to
+  cite*, `/patterns/object-page` exists because of a Fiori floorplan spike, and
+  the docs-IA ordering rule was decided by comparing four of them. Scrubbing
+  these would delete the provenance of decisions this repo made deliberately.
+
+*One instrument note, because it nearly went into this entry as a fact:* a
+case-insensitive first pass reported **"Stripe: 19"**. Every one was `stripe` as
+in a zebra row stripe. Word-boundary and case-sensitive matching is what makes
+the counts above real; the tidy-looking 19 was the tell.
+
+**This is a direction question, and direction has been the owner's in every
+slice so far**, so nothing was scrubbed. The two populations plausibly want
+opposite answers and a wake picking one unilaterally would either gut the
+design-reference provenance or leave the instruction half-applied.
+
+1. [ ] **160.1 — OWNER CALL: does the no-named-product rule reach design
+       references?** The consumer-app half looks like the same shape as the
+       names already scrubbed and is small to fix (8 mentions, 4 files, one of
+       them a shipped CSS comment). The design-system half is cited *as
+       evidence* and the Research playbook tells wakes to cite exactly those.
+       *Accept*: a recorded decision for **each population separately** —
+       scrub-and-extend-the-denylist, or keep-with-a-stated-reason. Where the
+       answer is scrub, the fix is the one `check-vendor-names.mjs` already
+       states: describe the mechanism and keep the verdict, never delete the
+       sentence. Where it is keep, the reason goes in that gate's header so the
+       next wake reading the denylist does not re-raise this.
+       **Finding either population already compliant is a satisfying outcome** —
+       re-run the command above before acting; these counts are from
+       2026-08-28 and the tree moves.
+
 ## Slice 159 — Objective grill of Slices 151, 153, 157 (2026-08-28)
 
 Rule 3 at 3/3. Full report:
