@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 00:22
+Generated at: 2026-08-28 00:37
 
 ## Open items by slice
 
@@ -13,6 +13,9 @@ Generated at: 2026-08-28 00:22
   - 153.2 — `bo-date` is the one real miss.
 - **Slice 157** (1 open)
   - 157.3 — write the guideline: when does a row show a marker at all?
+- **Slice 158** (2 open)
+  - 158.1 — decide, per outlier, whether the PROSE or the THING is wrong.
+  - 158.2 — the loop's own prose discipline.
 - **Slice —** (1 open)
   - AT runtime evidence
 

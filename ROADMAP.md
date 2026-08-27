@@ -1186,6 +1186,72 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 158 — Owner wishlist: simplicity is the key; clean up the content (2026-08-28)
+
+**Owner:** *"i believe in simplicity is the key for the success. Less option for
+more opportunity — (optimize, clean up the content)"*
+
+This restates the Objective's **principle 2** almost verbatim, so it is not new
+direction — it is the owner saying the principle is not being honoured in the
+DOCS, where it has never really been applied. Principle 1 already carries the
+exact test: *"Rethink when a docs explanation keeps growing to cover a surface —
+the fix is simplifying the thing, never the prose."*
+
+**Measured baseline, reader-facing prose in the built pages** (code samples,
+nav and tab strips excluded; taken 2026-08-28):
+
+```
+107 pages · median 775 words · mean 916 · total 98,062
+```
+
+Seven pages exceed **2x the median**:
+
+| words | x median | page |
+|---|---|---|
+| 4,429 | 5.7 | `/components/data-table` (22 demo sections) |
+| 3,616 | 4.7 | `/components/richtext` |
+| 2,425 | 3.1 | `/concepts/which-pattern` |
+| 2,087 | 2.7 | `/components/form` |
+| 1,930 | 2.5 | `/patterns/editable-grid` |
+| 1,897 | 2.4 | `/patterns/list-report` |
+| 1,723 | 2.2 | `/components/calendar` |
+
+*(An eighth entry, `/patterns/invoice-list` at an identical 1,897, was my
+instrument following a redirect stub and counting `list-report` twice —
+identical values across different inputs are a defect until proven otherwise,
+and this one was.)*
+
+**Own up to the trend first.** `apps/docs/src/pages` took **+482 / -90 lines in
+24 hours**, nearly all of it mine, and `/concepts/layouts` alone took +283 —
+pushing it to 1,550, exactly the 2x line. The owner is not describing a
+historical problem; the loop is actively creating it.
+
+1. [ ] **158.1 — decide, per outlier, whether the PROSE or the THING is wrong.**
+       The two leaders are the test. A data table genuinely is the most complex
+       surface in an ERP, so 4,429 words may be honest coverage — or it may be
+       explanation compensating for a component with too many settings, which
+       is principle 1's rethink case and means changing the component.
+       *Accept*: for each of the seven, a recorded verdict — **honest coverage**
+       (leave it), **explanation covering complexity** (a roadmap item against
+       the component, not the page), or **removable** (cut, with what went).
+       A verdict per page, not a global trim.
+
+2. [ ] **158.2 — the loop's own prose discipline.**
+       The 24-hour delta is the actionable half. Something should make the loop
+       feel the cost of adding 283 lines to one page.
+       *Accept*: a decision either way, recorded. **Refusing is a valid
+       outcome** and may well be right.
+
+**Refused up front: a word-count budget or gate.** It is the obvious mechanism
+and it is wrong here, for a reason this repo has already paid to learn. Prose in
+this project **carries decisions** — every `wrongWhen`, every measured number,
+every "we refused X because Y" exists so the next person does not re-derive it,
+and CLAUDE.md is explicit that removing that reasoning is how the same mistakes
+come back. A word budget cannot tell a recorded decision from padding, so it
+would push the loop to delete exactly the sentences that earn their place, and
+it would be satisfiable by moving words into a code comment where no gate looks.
+The judgement is per page and it is human; measure it, do not gate it.
+
 ## Slice 157 — Owner: the dirty row says it twice (2026-08-27)
 
 **Owner, on a screenshot of a dirty requisition line:** *"save on item level
