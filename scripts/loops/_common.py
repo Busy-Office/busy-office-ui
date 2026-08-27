@@ -30,6 +30,20 @@ def parse_log_line(line):
 
     Tolerant of the older 4-field form (ts · loop · item · outcome) so history
     written before the mode/commit columns existed still rebuilds cleanly.
+
+    THE ITEM IS THE ONLY FIELD THAT MAY CONTAIN THE SEPARATOR, so the fixed
+    fields around it are taken from the ENDS and the item is whatever is left in
+    the middle (roadmap 159.2). Reading `outcome` and `commit` positionally from
+    the LEFT is what broke: 151.1's line legitimately quotes list-report's dirty
+    marker — `'Overdue · edited'` — so it carries seven fields, and the rebuilt
+    row held a fragment of the item's own prose in its `outcome` column while
+    `commit_sha` held the word "refused". One line in 971, and silent.
+
+    Worth stating because the direction of the bug is the lesson:
+    `record_iteration.py` builds the log line and the DB row from the same
+    in-memory values, so the WRITE path was always correct. Only the RECOVERY
+    path — the script whose whole purpose is that it can never drift from the
+    files — could produce the damage.
     """
     line = line.strip()
     if not line.startswith("- "):
@@ -39,8 +53,9 @@ def parse_log_line(line):
         return None
     ts, loop = parts[0], parts[1]
     rest = parts[2:]
-    if len(rest) >= 4:                       # mode · item · outcome · commit(+)
-        mode, item, outcome, commit = rest[0], rest[1], rest[2], rest[3]
+    if len(rest) >= 4:                       # mode · item(+) · outcome · commit
+        mode, outcome, commit = rest[0], rest[-2], rest[-1]
+        item = SEP.join(rest[1:-2])
     elif len(rest) == 3:                      # mode · item · outcome
         mode, item, outcome, commit = rest[0], rest[1], rest[2], None
     elif len(rest) == 2:                      # legacy: item · outcome

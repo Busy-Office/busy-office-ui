@@ -1239,7 +1239,38 @@ the command goes next to the claim.
        reconciliation covers the new entries too — an adjudicated block that IS
        composed reports as stale; (d) the report still never fails the build.
 
-2. [ ] **159.2 — P0: the mirror's RECOVERY path is what corrupts it.**
+2. [x] **159.2 — DONE 2026-08-28. P0: the mirror's RECOVERY path is what corrupts it.**
+       **Fixed.** `parse_log_line` now takes `mode` from the left and
+       `outcome`/`commit` from the RIGHT, joining whatever is between them back
+       into the item — the item is the only field that may contain the
+       separator. Red repro first, on the real line: before, `outcome` held
+       *"edited' dirty marker). A context-window regex…"*, `commit_sha` held
+       `"refused"`, and the item was truncated at `'Overdue`; after, all three
+       are right and the item keeps `'Overdue · edited'` intact. The change
+       touches only lines with more than the canonical arity — **1 of 974**,
+       measured — so 973 rows parse byte-identically to before.
+
+       `rebuild_from_log.py` now reconciles before it writes, and all three
+       assertions were red-proved with the injection confirmed each time:
+       (1) every `- ` bullet in the log must produce a row — injecting a
+       parser that skips one line reports *"974 bullet line(s) … but only 973
+       parsed"*; (2) every row after the enforcement boundary must carry an
+       outcome `record_iteration.py` would accept — appending a `shipped` row
+       dated 2026-08-28 names the line and refuses; (3) `parse_log_line`'s
+       self-test runs on EVERY rebuild rather than behind a flag, and
+       re-injecting the original left-positional parser fails it.
+
+       **Validation moved AHEAD of the DROP** — not asked for, and the part
+       worth keeping: refusing mid-insert would have left an *empty* mirror,
+       which is a quieter kind of wrong than the row it exists to catch.
+       Verified by injection: after the refusal the previous mirror still holds
+       974 rows.
+
+       The measured effect on the number this grill quotes: refusals since
+       2026-08-19 read 174 before and 175 after, the recovered row being
+       151.1's own refusal.
+
+       *Original finding:*
        `_common.py` sets `SEP = " · "` and `parse_log_line` assigns the fields
        **positionally from the left**. 151.1's log line legitimately quotes
        list-report's dirty marker — `'Overdue · edited'` — so it has seven
