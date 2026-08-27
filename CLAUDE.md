@@ -239,6 +239,40 @@ the number is used, not after it looks wrong:
 Applies to ad-hoc measurement, not to a gate that has already been red-proved —
 that one has earned its output by construction.
 
+## An Accept criterion names the PROPERTY to verify, never the value it will have
+
+A criterion is the checkable definition of done that a later wake — with less
+context than you have now — reads and executes. When it embeds a *forecast*,
+satisfying it literally produces a wrong artefact.
+
+Twice in one window (Objective grill, 2026-08-28), a criterion predicted what a
+gate would say and was wrong both times:
+
+- 154.1 required "the CHANGELOG carries a **Breaking** entry". It was not
+  breaking — `row-edit.ts` guards the badge with `if (badge)`, so consumer
+  markup kept working. Following the criterion would have shipped a Breaking
+  entry for a compatible change.
+- 157.2 required that "DESIGN.md's flip-site **count moves** in the same
+  commit". It did not move — six stayed six, because the row stripe is still a
+  flip site; only what that site *covers* changed. Following the criterion
+  would have edited a correct number into a wrong one.
+
+Both were caught by believing the measurement over the criterion, which is the
+right order — but that is a judgement the next wake may not make.
+
+So write the property, not the prediction:
+
+- ✗ "DESIGN.md's flip-site count moves" → ✓ "DESIGN.md's count agrees with
+  what `check:rtl` reports"
+- ✗ "the CHANGELOG carries a Breaking entry" → ✓ "the CHANGELOG entry matches
+  the actual compatibility, with the reasoning"
+
+The second form is satisfiable by measuring. The first is satisfiable only by
+having been right in advance, which is not what a criterion is for. This is a
+writing rule with nothing mechanical behind it — the same grill refused a gate
+for its sibling finding on base rate, and inventing one here would be the same
+ceremony.
+
 ## A number you report is load-bearing — red-prove it like a gate
 
 Thirteen detectors across three slices could not fail (Slices 39/42/43 grill).
