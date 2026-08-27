@@ -1373,6 +1373,14 @@ npm run docs:build && npm run report:prose -w docs      # scripts/report-prose.m
 | 1,488 | 2.0 | `/concepts/layouts` |
 | 1,485 | 2.0 | `/patterns/output-form` |
 
+*Eight of the twelve figures above rose by exactly 1 when 158.1 landed, because
+the `generated` badge added to `DsaScore` and to the which-pattern index is
+itself a word inside `<main>`. The four that did not — editable-grid,
+list-report, layouts, output-form — are the four with no `DsaScore` block, which
+is the check that the badge went where it was meant to. The set and the order
+did not move. 158.1's verdicts quote the run that opened its round, which is the
+one WITH the badge, so the two tables differ by that word and nothing else.*
+
 **Why the page count moved, reconciled exactly rather than waved at.** 107 was
 41 components + 41 patterns + 16 concepts + 8 getting-started + the root; adding
 `/base/` (6) and `/reference/` (5) — ordinary reader-facing documentation the
@@ -1405,19 +1413,135 @@ instrument following a redirect stub and counting `list-report` twice —
 pushing it to 1,550, exactly the 2x line. The owner is not describing a
 historical problem; the loop is actively creating it.
 
-1. [ ] **158.1 — decide, per outlier, whether the PROSE or the THING is wrong.**
-       The two leaders are the test. A data table genuinely is the most complex
-       surface in an ERP, so 4,429 words may be honest coverage — or it may be
-       explanation compensating for a component with too many settings, which
-       is principle 1's rethink case and means changing the component.
-       *Accept*: for **each page `report:prose` lists over 2x the median on the
-       run that opens the round** — not a count fixed in advance, which was
-       seven and is now twelve — a recorded verdict: **honest coverage** (leave
-       it), **explanation covering complexity** (a roadmap item against the
-       component, not the page), or **removable** (cut, with what went). A
-       verdict per page, not a global trim. Re-run the report first: the premise
-       is a measurement, and 159's rule says re-checking it is part of the
-       criterion, not a courtesy.
+1. [x] **158.1 — DONE 2026-08-28. Twelve verdicts, and three of them are
+       against the INSTRUMENT rather than the page.**
+       *Accept was*: for each page `report:prose` lists over 2x the median on
+       the run that opens the round, a recorded verdict — **honest coverage**,
+       **explanation covering complexity** (a roadmap item against the
+       component), or **removable** (cut, with what went). Re-run the report
+       first, per 159's rule.
+
+       The opening run is the one below (12 pages over 1,478). Every verdict
+       rests on a measured input, and each command is recorded so the next wake
+       re-runs rather than re-derives:
+
+       ```
+       npm run docs:build && npm run report:prose -w docs   # totals, the three-way
+                                       # split, and the per-family medians below
+       ```
+
+       **The three inputs that decided most of it.**
+
+       - **A fifth to a third of every component outlier is GENERATED**, not
+         authored — ApiTable + ClassRef + DsaScore + the which-pattern index.
+         `report:prose` now prints `authored + generated` per outlier, so this
+         is re-runnable. `DsaScore` was missing the `generated` badge its own
+         header comment claims it follows, on all 38 scored pages; it gained
+         one in this commit, which is what makes the split exact rather than a
+         heading-text guess.
+       - **The corpus median mixes families with different MANDATED shapes.**
+         Family medians run 346 (`/base/`) to 1,023 (`/reference/`) — a 3x
+         spread — because the pattern recipe requires an anatomy list, a data
+         contract and a states table before an author writes a word, and
+         `/getting-started/` has no recipe at all. Now printed per family.
+         Taking 2x within each family also yields twelve pages, which is a
+         coincidence: three swap in (`/base/motion/`, `/concepts/js-behaviors/`,
+         `/concepts/design-language/`) and three swap out (`combobox`, `tabs`,
+         `output-form`). The sets are printed, not the counts, for that reason.
+       - **Nothing is removable because it is said elsewhere.** Swept every
+         documentation page for sentences of ≥12 words appearing on more than
+         one page, excluding badge-marked generated sections: **11 of 2,558**,
+         and all eleven are either recipe boilerplate or a family rule stated
+         deliberately on all three of amount/money/quantity. Zero removals is a
+         suspicious result, so this is the detector that would have found one;
+         it ran, and it found none.
+
+       **The verdicts.** Words are from the opening run; `w/h2` is words per
+       reader-visible chunk against a corpus median of 103; `surface` is
+       classes + `data-*` hooks from `api.json`, against a median of 5 across
+       40 components.
+
+       1. `/components/data-table/` 5,023 (6.8x; 4,047 authored, 22 h2, 228
+          w/h2) — **honest coverage.** It has the largest API surface in the
+          framework (29, rank 1) and the longest page, which is the consistent
+          direction. Its densest block is the 641-word marker guideline, which
+          records why the leading edge exists, why a row shows at most one, and
+          when *no* marker is right — decision prose of exactly the kind this
+          slice refuses to gate. 157 *reduced* the marker set rather than
+          growing it. No removable setting was identified; the page's own
+          "the assembled screen lives in Patterns" and "editing lives in
+          inline-editing" lines are what keep it from absorbing more.
+       2. `/components/richtext/` 3,806 (5.2x; 2,946 authored, 16 h2, 238
+          w/h2) — **honest coverage, and the one page where length is NOT
+          explained by API size.** Surface 12 (rank 6) against a rank-2 page.
+          **1,313 of its 2,946 authored words sit in four sections whose job
+          is to say what it will not do**: why no engine and how to mount a
+          real one inside the chrome (152, and it is where the two
+          `execCommand` caveats a server-side sanitizer allowlist has to be
+          written against are recorded), the four things the framework will
+          never wire (322), "everything native gives you, and why you want
+          less" (248), and "keyboard shortcuts — you already have them" (591).
+          The length IS the
+          product decision. Cutting it would leave a rich-text component with
+          no stated limit, which is the failure mode a half-engine invites.
+       3. `/concepts/which-pattern/` 2,325 (3.1x) — **not authored prose at
+          all**: 2,015 of 2,325 words are generated from `patterns.json`, 87%.
+          Its heading now carries the `generated` badge.
+       4. `/components/form/` 2,214 (3.0x; 1,727 authored, 16 h2, 138 w/h2) —
+          **honest coverage.** Surface 29 (rank 2, tied largest). Breadth of
+          settings at near-median density per chunk.
+       5. `/patterns/editable-grid/` 1,955 (2.6x; 13 h2, 150 w/h2) — **honest
+          coverage.** One demo section per cell type, plus the recipe's
+          mandated anatomy/contract/states. 2.3x within its own family.
+       6. `/patterns/list-report/` 1,941 (2.6x; 9 h2, 216 w/h2) — **honest
+          coverage.** 807 of its words are the two mandated sections (data
+          contract 462, states 345), and LOOPS.md names this page the recipe's
+          exemplar. Density is high because the mandated sections are dense.
+       7. `/components/calendar/` 1,692 (2.3x; 1,263 authored, 11 h2) —
+          **honest coverage.** Surface 5, exactly the median, so this is a
+          long page for a small component — and three of its eleven chunks are
+          refusals: where the week starts is your data not a setting, why no
+          date-picker widget ships, and picking a date with no JavaScript.
+          That is less-for-more being *argued*, which is the opposite of a
+          component that grew.
+       8. `/components/money/` 1,562 (2.1x; 1,124 authored, 16 h2, **98
+          w/h2**) — **honest coverage.** Below the corpus median density with
+          twice the median number of chunks: long by breadth, not by
+          explanation.
+       9. `/components/combobox/` 1,508 (2.0x; **992 authored**, 516
+          generated = 34%, 16 h2, 94 w/h2) — **the instrument, not the page.**
+          Its authored prose is 1.3x the median. It is in this list because a
+          third of it is the page recipe's fixed cost.
+       10. `/components/tabs/` 1,491 (2.0x; **530 words hidden at load**,
+           36%) — **the instrument, not the page.** The page's demos build 24
+           tab panels, each carrying a caption, and **21 of them are `hidden`
+           at load** — a reader sees one per demo. Visible authored prose is
+           roughly 580 words, well under the corpus median. The report now
+           prints the hidden figure.
+       11. `/concepts/layouts/` 1,488 (2.0x; 1,488 authored, **0 generated**,
+           7 h2 = the median chunk count, 213 w/h2 = 2.1x the median density)
+           — **honest coverage, and the one page to watch.** It is the only
+           outlier with no generated fraction and above-median density, and it
+           is where the owner's own +283-lines-in-24-hours delta landed. What
+           landed, read: a `SHELLS × DEVICES` support matrix driven from
+           in-file data, whose own source comment already refuses to restate
+           the table in prose, plus the shell-spacing trap that composes two
+           correct primitives into a zero-height scroller. Both carry
+           measurements. Nothing to cut today; if it grows again without a
+           matching data or defect change, that is the signal.
+       12. `/patterns/output-form/` 1,485 (2.0x; 10 h2, 149 w/h2) — **honest
+           coverage**, and not an outlier within its own family (2x = 1,670).
+           Its two largest sections cover print behaviour no other page does.
+
+       **Tally: 9 honest coverage, 3 instrument, 0 removable, 0 component
+       rethink.** The zero on the last two is the part to be suspicious of, so
+       it is the part with a detector behind it: the cross-page duplication
+       sweep above found 11 repeated sentences in 2,558 and none of them cuttable,
+       and the "explanation covering complexity" reading was tested against
+       `api.json` surface rank rather than impression — it holds for
+       data-table and form (rank 1 and 2 → pages 1 and 4) and fails for
+       richtext and calendar, where the extra words are refusals, which is the
+       framework arguing for less rather than documenting more.
 
 2. [ ] **158.2 — the loop's own prose discipline.**
        The 24-hour delta is the actionable half. Something should make the loop

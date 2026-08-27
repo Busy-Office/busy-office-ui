@@ -10,7 +10,13 @@
    the job family (the group), who the screen is for, and — most usefully —
    the pattern's own statement of when it is the WRONG choice. That last one
    is enforced to exist by `check:wrong-choice`, so it is a reliable source
-   rather than a lucky one. */
+   rather than a lucky one.
+
+   The heading below carries the same `generated` badge ApiTable/ClassRef/
+   DsaScore use, added 2026-08-28: this is the longest single block in the docs
+   (2,014 of the page's 2,324 words) and not one of those words is typed here,
+   so a reader — and `report:prose`, which counts the badge — should be able to
+   tell that without reading this comment (roadmap 158.1). */
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import patterns from '../../data/patterns.json';
@@ -58,7 +64,7 @@ const withWho = groups.flatMap((g: any) => g.rows).filter((r: any) => r.who).len
   </p>
 
   <section class="demo">
-    <h2>Start from the job</h2>
+    <h2>Start from the job <span class="bo-badge">generated</span></h2>
     <p class="bo-u-text-muted">Six families, in the order a working day runs
     through them. Every row is read from the same file that builds
     <a href={base + '/patterns/'}>the pattern index</a> and the sidebar, so

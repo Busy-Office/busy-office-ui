@@ -69,13 +69,50 @@ const DROP = ['pre', 'script', 'style', 'svg', 'template'];
      /patterns/rf/       — chrome-free RF screens, demos of a device profile */
 const NOT_PROSE = ['/components/demos/', '/patterns/rf/'];
 
-/** Reader-facing word count for one built page's HTML. */
-export function proseWords(html) {
+const words = (el) => (el.textContent.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) ?? []).length;
+
+/**
+ * Reader-facing word count for one built page, split three ways. The split was
+ * added by 158.1's round (2026-08-28), because working through twelve outliers
+ * by hand produced two facts a bare total cannot show, and 159's rule says the
+ * command belongs next to the claim rather than being re-derived:
+ *
+ *   - `generated` — words inside a section whose own <h2> carries the page's
+ *     `generated` badge (ApiTable, ClassRef, DsaScore, and the which-pattern
+ *     index). This is a FIXED COST of the page recipe, not the author's prose:
+ *     it runs 19-34% of every component page in the outlier set, and for
+ *     `/components/combobox/` it is a third of the page. Judging an author by a
+ *     number a quarter of which is machine-written is the wrong instrument.
+ *     Exact, not recognised — the badge is emitted by those components; nothing
+ *     here guesses from heading text. It was worth a fix rather than a
+ *     heuristic: `DsaScore` was missing the badge on all 38 scored pages and
+ *     gained it in the same commit.
+ *   - `hidden` — words inside an element carrying `hidden` at load, which a
+ *     reader does not read unless they click. It is 3 on nearly every page (the
+ *     "On this page" TOC aside before JS fills it) and **530 of 1,490 on
+ *     `/components/tabs/`**, whose demo repeats a caption inside each of 21
+ *     tab panels. Subtract it and that page is no longer an outlier at all —
+ *     the length was in the measurement, not the page.
+ *
+ * The two are measured independently and could in principle overlap; only
+ * `generated` is subtracted to form the printed `authored` figure.
+ */
+export function proseParts(html) {
   const doc = new JSDOM(html).window.document;
   const main = doc.querySelector('main');
   if (!main) return null; // caller decides — a page with no <main> is a finding, not a zero
   for (const el of main.querySelectorAll(DROP.join(','))) el.remove();
-  return (main.textContent.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) ?? []).length;
+  const gen = [...main.querySelectorAll('section')].filter((s) => {
+    if (s.parentElement.closest('section')) return false; // nested: counted by its ancestor
+    const h = s.querySelector('h2');
+    return !!h && [...h.querySelectorAll('.bo-badge')].some((b) => /generated/i.test(b.textContent));
+  });
+  const hid = [...main.querySelectorAll('[hidden]')].filter((e) => !e.parentElement.closest('[hidden]'));
+  return {
+    words: words(main),
+    generated: gen.reduce((n, s) => n + words(s), 0),
+    hidden: hid.reduce((n, e) => n + words(e), 0),
+  };
 }
 
 const built = await distPages(DIST);
@@ -86,9 +123,9 @@ assertScanned(pages.length, 'documentation pages after the NOT_PROSE filter', 'd
 const rows = [];
 const noMain = [];
 for (const p of pages) {
-  const words = proseWords(p.html);
-  if (words === null) noMain.push(p.url);
-  else rows.push({ url: p.url, words });
+  const parts = proseParts(p.html);
+  if (parts === null) noMain.push(p.url);
+  else rows.push({ url: p.url, family: p.url.match(/^\/([^/]+)\//)?.[1] ?? '(root)', ...parts });
 }
 assertScanned(rows.length, 'pages with a <main>', 'did the page shell change?');
 
@@ -134,9 +171,41 @@ if (noMain.length) console.log(`  !! ${noMain.length} page(s) have no <main> and
 
 const OVER = median * 2;
 const outliers = rows.filter((r) => r.words > OVER);
-console.log(`  over 2x the median (${OVER}) — ${outliers.length} page(s):`);
+console.log(`  over 2x the median (${OVER}) — ${outliers.length} page(s):  [words = authored + generated; hidden-at-load shown when over 10]`);
 for (const r of outliers) {
-  console.log(`    ${String(r.words).padStart(6)}  ${(r.words / median).toFixed(1)}x  ${r.url}`);
+  const hid = r.hidden > 10 ? `  ${r.hidden} hidden` : '';
+  console.log(
+    `    ${String(r.words).padStart(6)}  ${(r.words / median).toFixed(1)}x  ` +
+      `${String(r.words - r.generated).padStart(5)} authored + ${String(r.generated).padStart(4)} generated` +
+      `${hid.padEnd(12)}  ${r.url}`,
+  );
+}
+
+/* PER-FAMILY MEDIANS, and this is the second thing 158.1's round could not say
+   from one number. The families do not have the same MANDATED shape: the
+   pattern recipe requires an anatomy list, a data contract and a states table
+   before an author writes a word, while a `/getting-started/` page has no
+   recipe at all. Their medians run from 346 to 1,023 — a 3x spread — so a
+   single corpus threshold flags `/reference/` pages for being reference pages
+   and can never flag a `/base/` page however bloated it gets.
+
+   Measured on the run that introduced this: taking 2x WITHIN each family also
+   yields twelve pages, which is a coincidence and is why the sets are printed
+   rather than the counts — three pages swap in and three swap out. */
+const byFamily = new Map();
+for (const r of rows) byFamily.set(r.family, [...(byFamily.get(r.family) ?? []), r]);
+const medianOf = (xs) => {
+  const s = [...xs].sort((a, b) => a - b);
+  return s.length % 2 ? s[(s.length - 1) / 2] : Math.round((s[s.length / 2 - 1] + s[s.length / 2]) / 2);
+};
+console.log('  by family — a family median, and what 2x it flags:');
+for (const [fam, rs] of [...byFamily].sort()) {
+  const m = medianOf(rs.map((r) => r.words));
+  const over = rs.filter((r) => r.words > m * 2);
+  console.log(
+    `    ${fam.padEnd(16)} n=${String(rs.length).padStart(3)}  median ${String(m).padStart(5)}  ` +
+      `over 2x: ${over.length ? over.map((r) => r.url).join(' ') : '—'}`,
+  );
 }
 console.log(
   '  a long page is not automatically a defect — 158 asks, per page, whether the ' +
