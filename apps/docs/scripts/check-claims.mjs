@@ -3003,6 +3003,59 @@ check(
   JSON.stringify(sync),
 );
 
+/* /components/data-table claims a column description is reachable by KEYBOARD
+   and TOUCH — not hover — and that the panel is never clipped by the table's
+   own scroll container (roadmap 151.2). All three are runtime facts, so they
+   are driven rather than described.
+
+   The clipping half is the one worth testing: the container is
+   `overflow`-scrolled, so a naively-positioned panel would be cut off. The
+   panel escaping it is the whole reason this composes [popover] instead of an
+   absolutely-positioned div. Measured as "the panel's box is not contained by
+   the scroller's box", which is what a clipped panel would fail. */
+await visit('/components/data-table');
+const colDesc = await page.evaluate(async () => {
+  const btn = document.querySelector('[popovertarget="col-desc-grir"]');
+  const panel = document.getElementById('col-desc-grir');
+  if (!btn || !panel) return { found: false };
+  // KEYBOARD: focus it and press Enter — no mouse anywhere in this path.
+  btn.focus();
+  const focused = document.activeElement === btn;
+  btn.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  btn.click(); // what Enter does on a native button
+  await new Promise((r) => requestAnimationFrame(r));
+  const open = panel.matches(':popover-open');
+  const pr = panel.getBoundingClientRect();
+  const scroller = btn.closest('.bo-data-table-container');
+  const sr = scroller.getBoundingClientRect();
+  const clipped = pr.right > sr.right + 1 || pr.bottom > sr.bottom + 1;
+  return {
+    found: true,
+    focused,
+    open,
+    isButton: btn.tagName === 'BUTTON',
+    named: !!btn.getAttribute('aria-label'),
+    // a title tooltip is the answer this page explicitly refuses
+    noTitleTooltip: !btn.hasAttribute('title'),
+    escapesScroller: clipped,
+    text: panel.textContent.trim().slice(0, 40),
+  };
+});
+check(
+  'data-table column description: real button, keyboard-openable, named, and not a title tooltip',
+  colDesc.found && colDesc.focused && colDesc.open && colDesc.isButton &&
+    colDesc.named && colDesc.noTitleTooltip && colDesc.text.length > 10,
+  JSON.stringify(colDesc),
+);
+/* NOT asserted here, deliberately: "the panel escapes the table's scroll
+   container". The first version of this check required the panel's box to
+   extend past the scroller's, which is not the same property — a small panel
+   that fits inside is not clipped either, so the assertion could not
+   discriminate and simply failed on a working feature. Exercising the real
+   condition needs a demo where the panel WOULD be clipped (a wide table with
+   the explained column at the far edge), which is /components/dropdown's job
+   and is documented there. This page links to it rather than re-claiming it. */
+
 await browser.close();
 server.close();
 

@@ -9,12 +9,33 @@
     inset: auto;
     margin: 0;
     min-inline-size: 12rem;
+    /* A top-layer panel is visually detached from its DOM parent, so it must
+       not wear that parent's display typography. Found by putting a column
+       description inside a <th> (roadmap 151.2): the panel inherited the
+       header's uppercase, 0.03em tracking and white-space:nowrap, so the
+       sentence rendered ALL CAPS on one unwrappable line. Wherever a menu is
+       nested in styled text this was already wrong; a data-table header is
+       simply the first place it showed. .bo-data-table__sort-btn's deliberate
+       `text-transform: inherit` is unaffected — it is a sibling, not a
+       descendant of this panel. */
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: normal;
     padding: var(--bo-space-1);
     border: var(--bo-border-width) solid var(--bo-color-border-default);
     border-radius: var(--bo-radius-md);
     background: var(--bo-color-bg-surface-raised);
     color: var(--bo-color-text-primary);
     box-shadow: var(--bo-shadow-md);
+  }
+
+  /* Prose in a panel needs a measure; a menu of items does not. Scoped to <p>
+     rather than the panel so no existing menu's width can move — menus hold
+     __item buttons, and a paragraph inside one is by definition explanatory
+     text (a column description, a "what does this mean"). 34ch is a readable
+     line, not a layout step. */
+  .bo-dropdown__menu p {
+    max-inline-size: 34ch;
   }
 
   /* Open/close motion — DEGRADES below the floor: without @starting-style

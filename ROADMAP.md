@@ -1372,7 +1372,7 @@ primary action first, then verbs, then an overflow `…` — is
        trusted** — it stands. 151.3 came from `api.json` rather than a regex and
        is unaffected.
 
-2. [ ] **151.2 — a column can explain itself.**
+2. [x] **151.2 — DONE 2026-08-27. A column can explain itself, and it uncovered a real framework bug.**
        The reference puts an ⓘ beside `Request Date` and `Due Date` carrying a
        per-column description. ERP headers are full of terms a newcomer cannot
        resolve — `CR/INC/PR`, `GR/IR`, `FSV`, `Dep date` all appear in this one
@@ -1383,6 +1383,40 @@ primary action first, then verbs, then an overflow `…` — is
        a title-attribute tooltip is exactly the lazy answer to refuse, since it
        is invisible to touch and unreliable to assistive tech. Compose the
        existing popover rather than inventing a tooltip component.
+
+       Shipped on `/components/data-table` with **zero new components**: a real
+       `<button>` plus the `bo-dropdown__menu` popover, so Esc and light dismiss
+       come from the platform. Only columns that need a description get the
+       marker — a marker on all twelve headers is clutter. Gated by two new
+       `check:claims` cases (real button, keyboard-openable, named, **and no
+       `title` attribute**), red-proved by swapping in a `title`-tooltip span
+       and watching it go red.
+
+       **It uncovered a genuine framework bug, which is the suite model working
+       on the docs for once.** A popover nested in a `<th>` inherited the
+       header's `text-transform: uppercase`, `letter-spacing: 0.03em` and
+       `white-space: nowrap`, so the sentence rendered ALL CAPS on one
+       unwrappable line. **A top-layer panel is visually detached from its DOM
+       parent and must not wear that parent's display typography** — fixed on
+       `.bo-dropdown__menu` itself, since this was already wrong anywhere a menu
+       sat inside styled text; a data-table header is just where it first showed.
+       `.bo-data-table__sort-btn`'s deliberate `text-transform: inherit` is a
+       sibling, not a descendant, and is unaffected.
+
+       *A second attempted fix taught the cascade contract instead.* Adding
+       `.bo-dropdown__menu p { max-inline-size: 34ch }` had no effect on the
+       docs page: the computed value came out **736px**, because the docs' own
+       **unlayered** `.docs-content :is(p, …)` rule sets `46rem` and unlayered
+       styles beat any `@layer`. That is the framework's cascade contract
+       working exactly as designed — the docs site is a consumer, and a consumer
+       override winning is the point. The rule stays because it is right for
+       consumers who do not override; it is not forced, because forcing it would
+       break the contract to win a cosmetic argument.
+
+       *Two greps failed on minified-vs-source spelling in one sitting*, in
+       opposite directions: `bo-dropdown__menu p{` found nothing because the
+       built CSS is **not** minified (`p {` with a space), which is the
+       documented trap inverted. Searching for the VALUE (`34ch`) settled it.
 
 3. [ ] **151.3 — ordinal values: RETHINK, do not add a priority modifier.**
        The reference renders priority as **↓ Low** / **Normal** — an arrow

@@ -442,6 +442,57 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
   </section>
 
   <section class="demo">
+    <h2>A column that explains itself</h2>
+    <p>ERP headers are full of terms a newcomer cannot resolve — <code>GR/IR</code>,
+    <code>FSV</code>, <code>CR/INC/PR</code>, "Dep date". Give such a column a
+    description and it stops being folklore. <strong>Only columns that need
+    one get the button</strong>: a marker on all twelve headers is clutter, and
+    most columns say what they are.</p>
+    <p><strong>A <code>title</code> tooltip is the wrong answer</strong>, which
+    is why this composes the popover instead. <code>title</code> is invisible on
+    touch, unreachable by keyboard, and inconsistently surfaced by screen
+    readers — the explanation would exist only for a mouse user who happened to
+    hover. The button is a real <code>&lt;button&gt;</code> and the panel is the
+    same native <code>[popover]</code>
+    <a href={base + '/components/dropdown'}>dropdown</a> uses, so Esc and light
+    dismiss are free. It also inherits the top-layer behaviour
+    <a href={base + '/components/dropdown'}>dropdown</a> documents and proves —
+    a panel that is never clipped by a scrolling table container — which is the
+    part that is genuinely hard to get right, and the reason to compose that
+    component rather than position a <code>div</code> by hand.</p>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <caption class="bo-visually-hidden">Goods receipts, with an explained column</caption>
+        <thead>
+          <tr>
+            <th scope="col">Document</th>
+            <th scope="col">
+              GR/IR
+              <button class="bo-btn bo-btn--ghost bo-btn--icon bo-btn--sm"
+                      type="button" popovertarget="col-desc-grir"
+                      aria-label="What does GR/IR mean?">ⓘ</button>
+              <div class="bo-dropdown__menu" id="col-desc-grir" popover>
+                <p>Goods-receipt / invoice-receipt clearing: the balance between
+                what arrived and what was invoiced. A non-zero value means a
+                delivery and its invoice disagree.</p>
+              </div>
+            </th>
+            <th scope="col" class="bo-data-table__col--numeric">Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="bo-data-table__col--code">GR-88104</td><td>Open</td><td class="bo-data-table__col--numeric bo-u-tabular">1,240.00</td></tr>
+          <tr><td class="bo-data-table__col--code">GR-88102</td><td>Cleared</td><td class="bo-data-table__col--numeric bo-u-tabular">0.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">The description lives in the header cell, so it
+    travels with the column — nothing to keep in sync elsewhere. Keep it to a
+    sentence or two: a paragraph in a popover is a document that has escaped,
+    and it belongs on a concept page you link to instead.</p>
+  </section>
+
+  <section class="demo">
     <h2>Grouped rows + subtotals</h2>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table">
