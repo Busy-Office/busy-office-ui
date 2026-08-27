@@ -12,8 +12,10 @@
  * composed at all. The obvious response — fail the build on zero reach — is
  * wrong, and the grill says why: **zero reach has at least three meanings.**
  *
- *   - `bo-date` was a REACHED-FOR FAILURE: 21 of 27 suite screens render a
- *     date and none used it. The framework's problem.
+ *   - `bo-date` was read as a REACHED-FOR FAILURE — and that reading was
+ *     WRONG, which is why the DEPRECATED bucket below exists. It has been
+ *     deprecated since 2026-08-19; the suite renders dates with the prescribed
+ *     replacement (`.bo-u-tabular`, 349 uses). See roadmap 153.2.
  *   - `bo-tree` is CORRECTLY UNUSED. Its own docs say "not for rows that carry
  *     data columns" and point at tree-table, which IS used; every hierarchy in
  *     the suite carries data columns, so tree-table rightly wins every time.
@@ -57,6 +59,26 @@ import { collectSource } from './source-files.mjs';
  * out to BE composed is reported as a stale entry rather than silently
  * excused.
  */
+/**
+ * Blocks that are DEPRECATED, and therefore SHOULD read zero.
+ *
+ * Added after 153.2, where the absence of this category produced a wrong
+ * finding rather than a confusing one. The 2026-08-27 grill read `bo-date`'s
+ * zero reach as "the one real defect" and filed an item to adopt it across 21
+ * screens — but `bo-date` has been deprecated since 2026-08-19 (roadmap 45.3),
+ * and its own docs tell you to compose `.bo-cluster` + `.bo-u-tabular`
+ * instead. Adopting it would have spread a class the framework is retiring.
+ *
+ * Zero reach on a deprecated block is the deprecation WORKING. Listing it
+ * beside a real miss invites exactly the inversion that happened.
+ */
+const DEPRECATED = new Map([
+  [
+    'bo-date',
+    'deprecated 2026-08-19 (roadmap 45.3) — compose `.bo-cluster` + `.bo-u-tabular` instead. Zero reach is the deprecation working; the suite uses the replacement 349x.',
+  ],
+]);
+
 const CANNOT_APPEAR = new Map([
   [
     'bo-toast-region',
@@ -112,7 +134,8 @@ assertScanned(reach.size, 'block classes in api.json', 'is packages/core built?'
 const rows = [...reach.entries()].sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]));
 const rawZero = rows.filter(([, n]) => n === 0);
 const exempt = rawZero.filter(([b]) => CANNOT_APPEAR.has(b));
-const zero = rawZero.filter(([b]) => !CANNOT_APPEAR.has(b));
+const retired = rawZero.filter(([b]) => DEPRECATED.has(b));
+const zero = rawZero.filter(([b]) => !CANNOT_APPEAR.has(b) && !DEPRECATED.has(b));
 const one = rows.filter(([, n]) => n === 1);
 
 /* Reconcile the hand-kept list against what was actually measured, both ways.
@@ -120,8 +143,8 @@ const one = rows.filter(([, n]) => n === 1);
    that does not exist at all means it was renamed. Neither fails the build —
    this is a report — but neither is allowed to pass silently either, which is
    the failure mode of every exemption list that has ever rotted. */
-const staleExempt = [...CANNOT_APPEAR.keys()].filter((b) => (reach.get(b) ?? 0) > 0);
-const unknownExempt = [...CANNOT_APPEAR.keys()].filter((b) => !reach.has(b));
+const staleExempt = [...CANNOT_APPEAR.keys(), ...DEPRECATED.keys()].filter((b) => (reach.get(b) ?? 0) > 0);
+const unknownExempt = [...CANNOT_APPEAR.keys(), ...DEPRECATED.keys()].filter((b) => !reach.has(b));
 
 /* A tidy number is a defect until proven otherwise (CLAUDE.md). All-zero means
    the matcher broke; all-used means the corpus is wrong. Say so loudly in the
@@ -143,8 +166,12 @@ if (exempt.length) {
   console.log(`  cannot appear (${exempt.length}) — not a finding, and not counted above:`);
   for (const [b] of exempt) console.log(`    ${b} — ${CANNOT_APPEAR.get(b)}`);
 }
+if (retired.length) {
+  console.log(`  deprecated (${retired.length}) — SHOULD read zero, and does:`);
+  for (const [b] of retired) console.log(`    ${b} — ${DEPRECATED.get(b)}`);
+}
 for (const b of staleExempt) {
-  console.log(`  !! ${b} is listed as "cannot appear" but IS composed ${reach.get(b)}x — the exemption is stale, remove it`);
+  console.log(`  !! ${b} is exempted here but IS composed ${reach.get(b)}x — the exemption is stale, remove it`);
 }
 for (const b of unknownExempt) {
   console.log(`  !! ${b} is listed as "cannot appear" but is not a shipped block — renamed or removed?`);

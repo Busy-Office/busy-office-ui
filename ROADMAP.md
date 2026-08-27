@@ -1733,10 +1733,36 @@ screen made the better call. Suitability-beats-reuse, twice over.
        followed by "Server/HTMX/JS injects:". Checked all 61 blocks for other
        runtime containers; `bo-toast-region` is the only one.
 
-2. [ ] **153.2 — `bo-date` is the one real miss.**
-       21 of 27 suite screens render a date as a plain string like `'01 Oct'`.
-       *Accept*: the **screens** change, not the component — and per 149.1's
-       precedent, refusing per screen with a reason is a valid outcome.
+2. [x] **153.2 — REFUSED: the premise was inverted. `bo-date` is DEPRECATED.**
+       The item said 21 of 27 suite screens render a date as a plain string and
+       that "the screens change, not the component". Both halves are wrong, and
+       building it would have made the framework worse.
+
+       **`bo-date` has been deprecated since 2026-08-19 (roadmap 45.3)**,
+       confirmed in three independent places: the CSS comment, `CHANGELOG:646`,
+       and `/components/date`, which says outright *"Deprecated … this is a
+       deprecation, not a deletion."* Its own notice prescribes composing
+       `.bo-cluster` + `.bo-u-tabular` instead. Adopting it into 21 screens
+       would have spread a class the framework is retiring.
+
+       **And the screens were already right.** The suite uses the prescribed
+       replacement **349 times**, and the dates the grill flagged are rendered
+       `<td class="bo-u-tabular">01 Oct</td>` — the grill matched the STRING
+       `'01 Oct'` without looking at its markup, so it read correctly-composed
+       dates as plain ones.
+
+       So zero reach on `bo-date` was never a defect; it is the deprecation
+       working exactly as designed. This is the second grill finding in two days
+       to die to one question, and both times the question was *is this signal
+       present in things I am not counting?*
+
+       **Fixed so it cannot recur**: `report-reach` gains a fifth category,
+       **deprecated — SHOULD read zero, and does**, alongside 153.1's "cannot
+       appear". "Never composed" drops 7 → 5 and now lists only genuine
+       candidates. Same discipline as 153.1: an explicit map with its reason,
+       reconciled against measurement so a block that is deprecated but still
+       composed reports as stale. Red-proved (`bo-badge` → "IS composed 64x");
+       exit stays 0.
 
 **Also recorded: an instrument raised a 37.7% alarm that died to one question.**
 A first query said 356 of 944 `loops.db` rows carry an outcome outside the
