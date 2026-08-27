@@ -1,0 +1,30 @@
+# graphify corpus exclusions.
+#
+# NOTE: graphify prefers this file over .gitignore and does NOT merge the two —
+# whatever .gitignore says is invisible once this file exists. So the rules
+# below are .gitignore's, copied, plus the graph-specific ones at the bottom.
+# If you add a rule to .gitignore that should also apply here, add it here too.
+
+node_modules/
+dist/
+examples/*/busy-office-ui.tgz
+examples/*/package-lock.json
+.astro/
+graphify-out/
+.DS_Store
+.roundtable/loops.db
+.claude/scheduled_tasks.lock
+apps/docs/public/assets/
+.serena/
+apps/docs/scripts/_*.mjs
+packages/core/scripts/_*.mjs
+
+# ---- graph-specific, beyond .gitignore -------------------------------------
+
+# Frozen built snapshots of the docs site (0.1.1, 0.3.0, 0.4.0) — 485 tracked
+# files, 25 MB, 308 of them .html. Tracked on purpose so old versions stay
+# browsable, but they are BUILD OUTPUT, and three near-duplicate copies of the
+# same site would dominate the graph with duplicated nodes while teaching it
+# nothing the current source does not already say. Source is graphed; its
+# renderings are not.
+apps/docs/versions/

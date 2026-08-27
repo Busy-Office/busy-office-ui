@@ -1186,6 +1186,120 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 154 — Triaged from a reference form-layout engine (2026-08-27)
+
+**Input**: an 897-line form-layout engine from an open-source ERP desk
+framework, dropped at the repo root as `layout.js`. Per the standing owner
+instruction the product is not named anywhere here — what follows describes
+mechanisms. Per `references-are-floors`, nothing below is adopted because the
+reference does it; each mechanism is tested against the Objective and most are
+refused. The file is **deliberately not committed** (third-party source, and
+nothing in this repo should carry another project's code).
+
+The reference builds one screen shape end to end: a metadata-driven detail form
+split across **tabs**, each tab holding **collapsible sections**, with fields
+shown/hidden/required by declarative `depends_on` expressions. That is the
+dominant ERP form shape, and reading it against this framework surfaced one
+real defect with two halves.
+
+### The finding: this framework can hide the thing it just told you to fix
+
+The reference does one small thing in `set_focus()` — before focusing a field it
+calls `field.tab.set_active()` — and one more in its section refresh: a
+collapsible section refuses to collapse while it holds a missing mandatory
+field. Both encode the same rule: **never leave the user's next required action
+inside a container they cannot see.**
+
+`initValidationSummary()` does not, and the composition it fails on is one this
+framework invites: `bo-tabs` + `bo-form-section` + the summary are all shipped,
+all documented as composable. Verified in headless Chrome against the **shipped
+`dist/` behavior**, with the injection asserted (both dist modules declare a
+top-level `let installed`, so a single concatenated script tag silently fails to
+install — the first two runs of this repro measured nothing, and the assertion
+is what caught it) and with a passing control (a visible field focuses fine, so
+the detector can observe success as well as failure):
+
+| markup | result |
+|---|---|
+| `required` inside `.bo-tabs__panel[hidden]` | `willValidate: true` — it blocks submit |
+| `required` inside a closed `<details>` | `willValidate: true` — it blocks submit |
+| summary link → hidden panel field | **`document.activeElement` is `(none)`; panel stays hidden** |
+| summary link → closed-`<details>` field | **`document.activeElement` is `(none)`; details stays closed** |
+| control: summary link → visible field | focuses correctly |
+
+So the summary correctly *names* the field the user must fix and hands them a
+link that does nothing. Two-channel signalling is intact; the repair path is
+not. This is the framework failing principle 1's own list — focus is named there
+as a hard problem the framework absorbs — and principle 3's accept test, since
+the behavior does not survive a context it was not designed for.
+
+**The counter-argument, recorded so this can be argued with:** no shipped docs
+page composes tabs with a required field, so nothing on the site is currently
+broken. It is still a defect in published code (0.5.0 on npm) that consumers
+compose themselves, and it is silent — no throw, no console warning on the
+`novalidate` path.
+
+1. [ ] **154.1 — P0: reveal a focus target's containers before focusing it.**
+       One general mechanism, not a fix inside `validation-summary`: given an
+       element, open every ancestor that hides it — a closed `<details>`, an
+       inactive `[role=tabpanel][hidden]` (activating its tab, so `aria-selected`
+       and roving tabindex stay correct) — then focus. `validation-summary` is
+       the first caller; any in-page fragment link is the second, which is what
+       makes it general rather than a one-off.
+       *Accept*: (a) the repro above inverts — after a summary-link click the
+       hidden-panel field and the closed-`<details>` field are each
+       `document.activeElement`, the panel is no longer `[hidden]`, and its tab
+       reads `aria-selected="true"`; (b) the visible-field control still passes;
+       (c) a case in `check-claims.mjs` drives real events and goes red when the
+       reveal step is removed — red-proved by asserting the DOM, not the source;
+       (d) no new component CSS, and no widening of any public class surface.
+
+2. [ ] **154.2 — P0: the canonical markup a reader copies is inert.**
+       `/patterns/validation-summary`'s live demo carries `novalidate`; the
+       copy-paste `Markup` block at that page's end does not. Verified: with the
+       behavior correctly installed and no `novalidate`, `summaryShown` is
+       `false` and the summary lists nothing — the browser's interactive
+       validation blocks the `submit` event from ever firing, so the behavior
+       never runs. All the user gets is a console error
+       (`An invalid form control with name='terms' is not focusable`) and a form
+       that refuses to submit with no visible reason. The page's own States
+       table already says the form carries `novalidate`; the block a reader
+       actually copies is the one that omits it.
+       *Accept*: the canonical block matches the demo it documents, and a check
+       asserts the built page's copyable markup carries `novalidate` — so the
+       two cannot drift apart again silently.
+
+### Refused, with reasons
+
+- **Tab-key rewritten to walk "next eligible field"** (skip hidden/read-only,
+  auto-open a child grid, land on the primary button at the end). Refused on
+  principle 1: it replaces the one contract every user already brings with them
+  with a bespoke one, and correct use requires knowing rules that live nowhere
+  on screen. The framework's job is to make the native order *correct* — which
+  is 154.1 — not to take the key over.
+- **Alt+hover reveals field names.** Developer tooling, not product UI, and it
+  presumes a metadata model this framework deliberately does not have.
+- **A form message block taking a colour name** (`show_message(html, "red")`).
+  Already shipped as `bo-alert`, and better: a colour-named API is the exact
+  anti-pattern the tone system refuses, since colour alone is one channel.
+- **Auto-hiding a section whose fields are all hidden.** `:has()` makes it a
+  one-liner, which is why it is tempting, but it serves exactly one scenario
+  (server-driven conditional fields) — principle 2 refuses that on sight — and
+  it makes a component silently restructure markup the consumer owns. The
+  consumer hides the section when it hides the fields.
+- **A tab strip that hides on scroll-down and reappears on scroll-up.**
+  Direction-driven chrome motion, and `object-page`'s anchor-nav already
+  answers "where am I in a long record" without moving anything.
+
+### Not refused, not queued — one open question
+
+The reference's whole shape is a **tabbed detail form**, and no pattern page
+shows one: `detail-form` has no tabs, and `object-page` answers long records
+with anchor-nav instead. Whether that is a genuine gap or a deliberate better
+answer is a design call, not a build item, and it is the kind of question
+`/design-grill` exists for. Recorded here rather than queued so it is not
+half-decided by whoever picks it up.
+
 ## Slice 153 — Objective grill of Slices 149, 150, 152 (2026-08-27)
 
 Rule 3 at 3/3, second Objective round of the day. The first produced the reach
