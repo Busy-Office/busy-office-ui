@@ -2,15 +2,13 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 00:13
+Generated at: 2026-08-28 00:19
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 151** (1 open)
-  - 151.3 — ordinal values: RETHINK, do not add a priority modifier.
 - **Slice 153** (2 open)
   - 153.1 — teach `report-reach` the fourth meaning.
   - 153.2 — `bo-date` is the one real miss.
@@ -22,9 +20,9 @@ Generated at: 2026-08-28 00:13
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (952 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-28 00:09   ok
-  Objective     0 / 3 slices          since 2026-08-28 00:13   ok
+dispatch status — counter-triggered rules (953 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-28 00:09   ok
+  Objective     1 / 3 slice           since 2026-08-28 00:13   ok  [151]
 ```
 
 ## Owner-blocked
@@ -37,7 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 15:44 · Continue · bug · 154.1/154.2: validation-summary handed a dead link into a hidden container — reveal(el) opens a closed <details>, an inactive tab panel or a collapsed widget by pressing its own control and verifying the press; a THIRD container found mid-build fails worse (focus succeeds into a 0px overflow:hidden box); canonical markup now carries the novalidate without which the behavior never runs · landed · 6e25b0e
 - 2026-08-27 15:57 · Continue · bug · 154.1 verifier pass: the collapsed-card reveal was claimed on the page but proven only in jsdom — now demoed and checked live (transition settled, non-zero height on the box carrying the constraint), red-proved in isolation; the tabpanel path is an explicit EXEMPT with a reason; the tabpanel fallback no longer leaves two tabs aria-selected · landed · 0ae6141
 - 2026-08-27 21:43 · Roadmap · plan · 155.1/155.2 triaged from the owner's create-ui question: the scaffold's ^0.5.0 pin is unchecked and check:quickstart bypasses it with --no-save, and create-ui/NOTICE is a byte-identical hand copy of core's · triaged · 758ca1a
 - 2026-08-27 21:57 · Roadmap · plan · 156.1/156.2 triaged: owner wants a device layout guide; the framework is container-query responsive so Desktop/Tablet/Mobile are one shell at different widths — deliverable is a measured shell x device support matrix, RF the one genuine exception · triaged · c53bfaf
@@ -47,6 +44,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 00:09 · Standardize · tidy · 155.1/155.2 consolidated: create-ui's three derived artefacts (template screen, framework pin, NOTICE) get one --check freshness gate wired into CI; found that CI never ran create-ui's build at all, so the generated template screen had no verification · landed · e321aa2
 - 2026-08-28 00:13 · Objective · grill · Objective grill 151/154/156/157: Accept criteria were embedding predictions and 2 of ~12 were falsified (Breaking-that-wasn't, a flip-site count that did not move); six instrument errors in one session, three of them name-derivation against a rule that already exists — assertions caught all six, recall caught none · logged · b2c556a
 - 2026-08-28 00:13 · Meta · refusal · a gate that every var(--bo-*) resolves — base rate is 65 refs, 0 genuinely unresolved, and the measuring instrument was 6-for-6 false · refused · b2c556a
+- 2026-08-28 00:19 · Continue · build · 151.3: ordinal values REFUSED — 168 suite badges, zero ranked; the rank word IS the ordinal channel and the two-channel rule makes it mandatory anyway, so a glyph would encode the same fact twice. Reopen test written on the badge page · refused · 6088cbb
 
 ## Sunset test
 
