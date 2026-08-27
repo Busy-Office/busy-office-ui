@@ -1186,6 +1186,161 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 161 — Standardize sweep: the cadence's first run, and a settled count that was wrong (2026-08-28)
+
+Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
+Rule 1 found no open P0 and GitHub intake is empty (0 open issues), so nothing
+preempted it. First run of the two-sweep step 1 that 158.2 installed — and the
+sweep that was NOT on the list is the one that found something.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots.** Nothing in this
+slice is visual — three `Related` link LABELS, one JSON cite string, one new
+report script, `LOOPS.md` and this file. The four docs edits change link text
+inside an existing `<Related>` component, so no layout or colour is touched;
+`check:layout` and `test:axe` swept all 127 pages at 1440px and 390px. That is
+what ran, and it is not the same as having looked.
+
+1. [x] **161.1 — `scan:dead-style` clean; three prose verdicts, and two of the
+       three are against the INSTRUMENT.**
+       *Accept was* (from 158.2's cadence): a recorded verdict for any page over
+       **2x its FAMILY median** that has none — `/base/motion/`,
+       `/concepts/js-behaviors/`, `/concepts/design-language/`, the three the
+       family split adds that 158.1's corpus-median pass never saw.
+
+       ```
+       npm run scan:dead-style -w docs   # 0 dead of 1428 live inline declarations
+       npm run report:prose -w docs      # medians, family split, the three-way split
+       ```
+
+       Per-page detail was taken with an ad-hoc pass that **reconciles against
+       `report:prose` on three independent totals** (118 pages, median 739,
+       total 104,408) **and reproduces 158.1's stated corpus median of 103
+       words per `h2` exactly** — that last one is the check on the new counter,
+       since a words-per-chunk figure is the one number here 158.1 did not
+       already publish.
+
+       1. `/concepts/js-behaviors/` 1,429 (2.57x family) — **the instrument, not
+          the page, and the sharpest case in the corpus so far.** 1,054 of
+          1,429 words (**74%**) are inside the three `<h2>`s carrying the
+          `generated` badge — The inits, Keyboard support, State attributes.
+          Authored prose is **375 words**: 0.51x the corpus median and 0.67x its
+          own family's. It is an outlier only by being a page whose job is to
+          render three generated tables.
+       2. `/base/motion/` 718 (2.08x family) — **the instrument, and the family
+          median is what is wrong.** The page is **0.97x the CORPUS median** and
+          its density is 90 w/h2 against a corpus median of 103: below average
+          on both. `/base/` has n=6 with a 6.5x internal spread
+          (110·127·283·408·630·718) because two of the six —`/base/utilities/`
+          at 110 words and `/base/print/` at 127 — are pointer pages. A median
+          of 346 taken over that is not a baseline, and 2x it lands below the
+          corpus median, so **the `/base/` family can flag a page for being
+          average-length**. Recorded rather than fixed: n=6 is too small to
+          re-cut, and the fix is to read the corpus column too, which the report
+          already prints.
+       3. `/concepts/design-language/` 1,230 (2.21x family, 1.66x corpus) —
+          **honest coverage, and the one of the three to watch.** It is the only
+          one with **0 generated words** and above-median density (154 w/h2,
+          1.5x). It is also the page that states the Objective's six rules, the
+          field matrix, and the ten-question shipping filter — the prose other
+          pages are measured *against*. Its two densest sections are the six-rule
+          table, where every row cites where the framework ENFORCES the rule
+          (a build gate, a measured DOM count, a token set), and the field
+          matrix, whose own closing line says every cell is a setting of four
+          primitives and nothing in it is a new component. Cutting either
+          removes a citation, not a word. Same watch condition as
+          `/concepts/layouts/`: if it grows again with no matching rule or gate
+          change, that is the signal.
+
+       **Tally across the two runs: 158.1's 9 honest / 3 instrument / 0
+       removable, plus 1 honest / 2 instrument here.** The instrument column is
+       now 5 of 15, which is the argument for the cadence rather than a budget:
+       a third of what a word count flags is the word count's own fault.
+
+2. [x] **161.2 — a pattern still named for its sample domain, in four
+       reader-facing places; and the gate for it refused, measured.**
+       Noticed while reading `/concepts/design-language/` for 161.1 — its
+       `Related` list linked `/patterns/list-report` with the label
+       **"Invoice-list pattern"**.
+
+       LOOPS.md's owner rule (2026-08-22, Slice 109) is *"a pattern is NAMED and
+       FRAMED for its SHAPE; never name a pattern for its sample domain —
+       `invoice-list` was the one violation, renamed `list-report`"*. The
+       **route** was renamed and a redirect stub left behind, correctly. The
+       **visible labels were not**:
+
+       ```
+       grep -rlo "invoice-list" apps/docs/dist --include=*.html
+         # 5 built pages: the redirect stub (correct) + 4 real occurrences
+       ```
+
+       Fixed: `Related` labels on `/components/data-table/`, `/base/print/` and
+       `/concepts/design-language/` now read "List report pattern" — the
+       spelling `/components/amount/` already used — and `dsa-scores.json`'s
+       `filters.fit` cite ("the context invoice-list actually uses", rendered
+       verbatim into the DSA table on `/components/filters/`) now names
+       list-report. Verified against the BUILT output, not the diff: the only
+       remaining `invoice-list` in `dist` is the redirect stub itself.
+
+       **The gate is refused, on base rate, and the measurement is the point.**
+       The obvious gate — *a `Related` label must agree with the linked page's
+       own title* — was measured before being written: **90 of 428 resolved
+       Related links (21.0%) legitimately disagree**, because the label carries
+       the REASON for the link ("Kanban board (status as columns, not a
+       bulk-select list)", "Editable grid (htmx in anger)"). That is good
+       writing, and a gate would delete it. The narrower form fails too: 6 of
+       the 10 redirect-stub slugs are ordinary English (`tokens`, `htmx`,
+       `theming`, `primitives`, `nav`, `printing`), so "an old slug appears in
+       prose" is unusable. This is roadmap 94.11's shape exactly — the shape is
+       checkable, the meaning is not — so the rule stays a human call in
+       LOOPS.md, and the honest statement is that nothing would have caught it
+       but reading.
+
+3. [x] **161.3 — a "Settled" count in LOOPS.md was wrong, and it had no
+       command; it has one now.**
+       LOOPS.md asserted *"of 237 rules with 3+ declarations, exactly **three**
+       blocks repeat"* — and, two paragraphs later, that the count was "cheap to
+       re-measure … in one command instead of trusting this paragraph", while
+       recording no command. Re-measured this sweep: **eight**, on the identical
+       237 rules. Roadmap 159's finding, landing on the file that records it.
+
+       ```
+       npm run report:css-repeats -w @busy-office/ui
+         # 74 source files · 237 rules with 3+ declarations · 225 distinct
+         # bodies · 8 bodies appearing more than once
+       ```
+
+       `packages/core/scripts/report-css-repeats.mjs` is the command — a REPORT,
+       never a gate, for the reason the section itself gives: all eight repeats
+       are correct, so a gate would fail the build on eight right answers. Same
+       precedent as `report-prose.mjs`, written for the same reason.
+
+       **Its own first run was wrong, which is the base rate holding.** postcss
+       keeps `!important` off `decl.value`, so `.bo-badge`'s print rule and
+       `.bo-stepper__marker`'s print rule — same three declarations, two of the
+       stepper's marked `!important` — merged into a repeat that is not one, and
+       it reported 9. Caught by reconciling against an independent regex pass
+       that happened to keep the flag. With the flag in the key, the two
+       instruments agree on all three totals.
+
+       **Red-proved both ways, and the injection was confirmed in the file
+       before the number was believed**: two rules with an invented shared body
+       take it 8 → 9 with both selectors named in the output; and making
+       `badge.css`'s print rule carry the stepper's `!important`s ALSO takes it
+       8 → 9, which is what proves the flag is discriminating rather than
+       decorative. It also refuses to report if `distinct === rules`, the shape
+       a key contaminated with the selector would produce.
+
+       **No verdict changed.** All five newly-surfaced repeats are the same
+       ownership argument already settled twice: plain CSS cannot share a rule
+       body without sharing a selector, and a UTILITY and a component PART
+       cannot share one. LOOPS.md now carries the table of all eight, and the
+       verdict is stated as a RULE rather than as three blessed blocks — which
+       is what let five siblings sit unrecorded. The one to watch is the
+       joined-control radius reset at **x4**, meeting this file's own
+       "fourth copy" trigger; it is two components spelling one idiom twice
+       each (bare control vs combobox wrapper), and the reopen condition is a
+       third component, not a fifth copy.
+
 ## Slice 160 — triaged while reading 158.1's outlier pages: named products the denylist does not deny (2026-08-28)
 
 **Not new input** — nothing was filed and nobody asked. Found by reading
