@@ -352,6 +352,23 @@ surfaced more:
    missing spacing utility is NOT the finding, because this framework refuses a
    utility system by design. The finding is either a dead declaration or a
    component that should own the value.
+   **Also run `npm run report:prose -w docs`** and record a verdict for any page
+   over 2x its FAMILY median that has none yet — 158.1 verdicted the twelve over
+   the CORPUS median; `/base/motion/`, `/concepts/js-behaviors/` and
+   `/concepts/design-language/` are the three the family split adds and nobody
+   has read. Same reason as `scan:dead-style`: it is deliberately not a gate, so
+   this step is the only thing that keeps it from rotting.
+   **Why a cadence and not a budget** (158.2's decision, and it is measured, not
+   asserted): across nine daily builds 2026-08-20→28, on the **89 pages present
+   throughout**, prose went **51,051 → 77,080 words (+51%)** and **not one page
+   ended shorter than it started** — 71 grew, 18 flat, 0 shrank, and it holds at
+   every threshold (65 grew by more than 50 words, minimum delta exactly 0).
+   Pages *do* shrink between individual days — 12 did in one window — so the
+   comparator can report negative; the net simply never is. A per-page
+   justification test cannot produce a shrink, because it is applied while the
+   words are being written, when the answer is always yes. Reading the outliers
+   on a cadence is the only step that ever asks the other question. ROADMAP
+   158.2 carries the commands.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

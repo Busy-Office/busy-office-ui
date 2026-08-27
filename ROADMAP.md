@@ -1606,11 +1606,122 @@ historical problem; the loop is actively creating it.
        richtext and calendar, where the extra words are refusals, which is the
        framework arguing for less rather than documenting more.
 
-2. [ ] **158.2 — the loop's own prose discipline.**
-       The 24-hour delta is the actionable half. Something should make the loop
-       feel the cost of adding 283 lines to one page.
-       *Accept*: a decision either way, recorded. **Refusing is a valid
-       outcome** and may well be right.
+2. [x] **158.2 — DONE 2026-08-28. The decision: a CADENCE, not a budget — and
+       the number that decided it is that in eight days no page ever got
+       shorter.**
+       *Accept was*: a decision either way, recorded; refusing valid.
+
+       **The premise re-checked first, per 159's rule, and it reproduces
+       exactly.** It was recorded without a command, so here is the command:
+
+       ```
+       # the 24h window ending at the commit that wrote the claim (4b64f67,
+       # 2026-08-27T16:37:22Z). ALL of apps/docs/src/pages, then one file:
+       git log --no-merges --numstat --format='' \
+           --since="2026-08-26T16:37:22+0000" --until="2026-08-27T16:37:22+0000" \
+           -- apps/docs/src/pages | awk '{a+=$1;d+=$2} END{printf "+%d/-%d\n",a,d}'
+       #   -> +482/-90            (the claim: +482/-90)
+       #   same, restricted to concepts/layouts.astro -> +283/-51  (the claim: +283)
+       ```
+
+       **But lines were the wrong unit, and measuring the right one reversed the
+       conclusion I expected.** The hypothesis on opening this was that +283
+       lines to `/concepts/layouts` was mostly markup and in-file data — the
+       support matrix, plus four copyable shell templates, and `report:prose`
+       drops `<pre>` whole. Measured instead of assumed: over `0e43838..HEAD`
+       that page's **reader-facing words went 808 → 1,488, +680**, and the whole
+       `+589/-130` line delta across six pages produced **+2,020 reader-facing
+       words**. Lines under-report here rather than over-report. The hypothesis
+       was wrong and the owner's instinct was right.
+
+       **The measurement that actually decides the item — nine daily builds.**
+       One dist per day, the same current instrument every time, so only the
+       content varies:
+
+       ```
+       for sha in a77a934 6ffdfd3 73561ef 07df19f 12f95a6 975fe45 ee826a4 3014ca0 HEAD; do
+         rm -rf apps/docs/src && git checkout $sha -- apps/docs/src   # see the trap below
+         rm -rf apps/docs/dist && npx astro build --root apps/docs
+         # then per-page words via report-prose.mjs's exported proseParts()
+       done
+       ```
+
+       | 00:00 UTC | pages | words | Δ | fixed-89 words | Δ |
+       |---|---|---|---|---|---|
+       | 08-20 | 89 | 51,051 | — | 51,051 | — |
+       | 08-21 | 90 | 59,444 | +8,393 | 58,234 | +7,183 |
+       | 08-22 | 92 | 64,115 | +4,671 | 60,915 | +2,681 |
+       | 08-23 | 107 | 80,073 | +15,958 | 65,707 | +4,792 |
+       | 08-24 | 121 | 95,450 | +15,377 | 73,118 | +7,411 |
+       | 08-25 | 125 | 98,491 | +3,041 | 74,939 | +1,821 |
+       | 08-26 | 126 | 101,513 | +3,022 | 75,637 | +698 |
+       | 08-27 | 127 | 102,680 | +1,167 | 75,714 | +77 |
+       | 08-28 | 127 | 104,606 | +1,926 | 77,080 | +1,366 |
+
+       The corpus doubled, but **most of that is new pages** (89 → 127), which
+       is a framework documenting more components and is not the finding. The
+       finding is the fixed column: on the **89 pages present on all nine
+       days**, prose rose **+51%**, and
+
+       > **71 grew, 18 stayed flat, 0 ended shorter. The minimum 8-day delta
+       > across all 89 pages is exactly 0**, and that holds at every threshold
+       > tried (>0, >1, >5, >20, >50 words). Median page: **+212**.
+
+       **Why that is not a dead comparator.** Pages *do* shrink day to day — 12
+       did in the 08-21→22 window, worst `-52` on `/components/prose/`, and
+       `/patterns/editable-grid/` is `-24` in the last window — so the
+       comparison can and does report negative. The net is what never is:
+       **positive in all eight windows.** Reconciled independently: this walk
+       reports 104,606 words over 127 dist pages and `npm run report:prose -w
+       docs` reports 104,408 over 118 after its `NOT_PROSE` filter — a 9-page,
+       198-word difference that is exactly the excluded artefact pages.
+
+       **The decision.**
+
+       - **Refused, now with evidence rather than only reasoning: a word budget
+         or gate.** 158 refused it up front on the argument that prose here
+         carries decisions. The measurement makes it concrete — a budget would
+         have fired on 71 of 89 pages, and the sentences it would push out are
+         `/components/richtext/`'s four refusal sections and
+         `/components/calendar/`'s three, which 158.1 already read and found to
+         be the framework arguing for *less*.
+       - **Adopted: `report:prose` joins `scan:dead-style` in Standardize's step
+         1** (LOOPS.md). Every 4th Continue round, run it and record a verdict
+         for any page over 2x its FAMILY median that has none. Existing
+         instrument, existing dispatcher hook, existing precedent for a sweep
+         that is deliberately not a gate — no new gate, no new file, no new
+         ledger. The immediate queue is non-empty, which is the base-rate check
+         this repo requires before shipping a mechanism: `/base/motion/`,
+         `/concepts/js-behaviors/`, `/concepts/design-language/`.
+       - **Why a cadence is the shape that fits.** A per-page justification test
+         cannot ever produce a shrink: it is applied while the words are being
+         written, when the answer is always yes. That is precisely how 158.1
+         could return *9 honest coverage, 0 removable* on the levels while the
+         direction was monotone. Nothing in the loop asks "should this come
+         out?" on a page nobody is currently editing, and a cadence is the
+         cheapest thing that does. Per CLAUDE.md 94.11 this is the **rubric a
+         human scores**, chosen deliberately over a gate, and said so.
+
+       **Three instruments were wrong before any of the above was true**, which
+       is this repo's base rate holding at 3-for-3 in one wake:
+
+       1. **The cloud container clones SHALLOW.** `git log --since=…24h…` over
+          `apps/docs/src/pages` reported **+23,926/-39** — 50x the truth —
+          because the graft boundary re-adds every file as new. The tell was a
+          root commit dated one day ago with no parents. `git rev-parse
+          --is-shallow-repository` is the check; `git fetch --unshallow origin`
+          took 31 seconds. **Any git-history measurement taken in a cloud wake
+          before that fetch is wrong and looks fine.**
+       2. **`astro build` does not clear `dist`.** An older source tree built
+          over a newer dist reported 127 pages for 91 sources — a hybrid corpus.
+          The tell was the *identical* page count across eight different days.
+          `rm -rf apps/docs/dist` first.
+       3. **`git checkout <sha> -- <dir>` does not DELETE files absent from that
+          tree.** It only adds and updates. So every historical build silently
+          kept the 36 newer pages on top of the old ones. `rm -rf <dir> && git
+          checkout <sha> -- <dir>` is the correct form, and the tree needs
+          `git reset -- <paths>` afterwards for files the old tree had and HEAD
+          does not, or they linger staged as added-then-deleted.
 
 **Refused up front: a word-count budget or gate.** It is the obvious mechanism
 and it is wrong here, for a reason this repo has already paid to learn. Prose in
