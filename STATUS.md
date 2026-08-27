@@ -23,9 +23,9 @@ Generated at: 2026-08-27 22:24
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (946 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-27 01:40   OVERDUE
-  Objective     2 / 3 slices          since 2026-08-27 05:39   ok  [151, 154]
+dispatch status — counter-triggered rules (947 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-08-27 01:40   OVERDUE
+  Objective     3 / 3 slices          since 2026-08-27 05:39   OVERDUE  [151, 154, 156]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
@@ -39,7 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 05:39 · Meta · refusal · gating zero reach (re-refused, 6-of-7 wrong) and backfilling pre-2026-08-19 outcome vocabulary · refused · 81cf45e
 - 2026-08-27 06:31 · Continue · triaged · 151.1 refused as already-covered: list-report ships the full saved-views mechanism (counts, view-as-URL, save/rename/default/delete, 'Overdue · edited' dirty marker). A context-window regex requiring 50 preceding chars produced the false negative · refused · b1898ef
 - 2026-08-27 08:30 · Continue · build · 151.2: a column can explain itself (real button + popover, keyboard/touch, gated by 2 claims cases); uncovered and fixed a top-layer panel inheriting its DOM parent's uppercase/nowrap typography · landed · 8532466
 - 2026-08-27 08:30 · Meta · refusal · forcing the framework's 34ch prose measure over the docs' own unlayered 46rem — the cascade contract says a consumer override wins · refused · 8532466
@@ -49,6 +48,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 15:57 · Continue · bug · 154.1 verifier pass: the collapsed-card reveal was claimed on the page but proven only in jsdom — now demoed and checked live (transition settled, non-zero height on the box carrying the constraint), red-proved in isolation; the tabpanel path is an explicit EXEMPT with a reason; the tabpanel fallback no longer leaves two tabs aria-selected · landed · 0ae6141
 - 2026-08-27 21:43 · Roadmap · plan · 155.1/155.2 triaged from the owner's create-ui question: the scaffold's ^0.5.0 pin is unchecked and check:quickstart bypasses it with --no-save, and create-ui/NOTICE is a byte-identical hand copy of core's · triaged · 758ca1a
 - 2026-08-27 21:57 · Roadmap · plan · 156.1/156.2 triaged: owner wants a device layout guide; the framework is container-query responsive so Desktop/Tablet/Mobile are one shell at different widths — deliverable is a measured shell x device support matrix, RF the one genuine exception · triaged · c53bfaf
+- 2026-08-27 22:24 · Continue · build · 156.1/156.2: a measured shell x device support matrix on /concepts/layouts with device entry points; found that crossing the 896px band gives main 171px MORE room, and that split master-detail's fixed 22rem list pane leaves a 36px detail pane at 390px · landed · ca5a34b
 
 ## Sunset test
 
