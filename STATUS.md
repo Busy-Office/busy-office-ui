@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-27 23:44
+Generated at: 2026-08-28 00:09
 
 ## Open items by slice
 
@@ -14,9 +14,6 @@ Generated at: 2026-08-27 23:44
 - **Slice 153** (2 open)
   - 153.1 — teach `report-reach` the fourth meaning.
   - 153.2 — `bo-date` is the one real miss.
-- **Slice 155** (2 open)
-  - 155.1 — the scaffold's framework pin is unchecked, and the gate that looks like it covers it steps around it.
-  - 155.2 — `packages/create-ui/NOTICE` is a byte-identical hand copy of `packages/core/NOTICE`.
 - **Slice 157** (1 open)
   - 157.3 — write the guideline: when does a row show a marker at all?
 - **Slice —** (1 open)
@@ -25,8 +22,8 @@ Generated at: 2026-08-27 23:44
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (949 iterations logged)
-  Standardize   7 / 4 Continue rounds since 2026-08-27 01:40   OVERDUE
+dispatch status — counter-triggered rules (950 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-28 00:09   ok
   Objective     4 / 3 slices          since 2026-08-27 05:39   OVERDUE  [151, 154, 156, 157]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -41,7 +38,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-27 08:30 · Meta · refusal · forcing the framework's 34ch prose measure over the docs' own unlayered 46rem — the cascade contract says a consumer override wins · refused · 8532466
 - 2026-08-27 15:04 · Roadmap · plan · triaged a reference form-layout engine: 154.1/154.2 queued as P0 (validation-summary hands a dead link into a hidden tab panel or closed details; canonical markup omits novalidate so the behavior never runs), five mechanisms refused with reasons · triaged · fca43f7
 - 2026-08-27 15:04 · Meta · refusal · Tab-key takeover, alt+hover fieldnames, colour-named message block, auto-hiding empty sections, scroll-direction tab strip · refused · fca43f7
 - 2026-08-27 15:44 · Continue · bug · 154.1/154.2: validation-summary handed a dead link into a hidden container — reveal(el) opens a closed <details>, an inactive tab panel or a collapsed widget by pressing its own control and verifying the press; a THIRD container found mid-build fails worse (focus succeeds into a 0px overflow:hidden box); canonical markup now carries the novalidate without which the behavior never runs · landed · 6e25b0e
@@ -51,6 +47,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-27 22:24 · Continue · build · 156.1/156.2: a measured shell x device support matrix on /concepts/layouts with device entry points; found that crossing the 896px band gives main 171px MORE room, and that split master-detail's fixed 22rem list pane leaves a 36px detail pane at 390px · landed · ca5a34b
 - 2026-08-27 23:33 · Continue · build · 157.1: icon-only row actions, Unsaved badge removed, dirty state moved onto the Save button's accessible name; new save/close glyphs; save-timing guide on inline-editing · landed · 9d1ecbe
 - 2026-08-27 23:44 · Continue · build · 157.2: dropped the inset leading edge from td[data-tone] so the edge means only the ROW; cells keep their tint. RTL count did not move as predicted — six stays six, but DESIGN.md's prose named the removed bar · landed · 3a995d1
+- 2026-08-28 00:09 · Standardize · tidy · 155.1/155.2 consolidated: create-ui's three derived artefacts (template screen, framework pin, NOTICE) get one --check freshness gate wired into CI; found that CI never ran create-ui's build at all, so the generated template screen had no verification · landed · e321aa2
 
 ## Sunset test
 
