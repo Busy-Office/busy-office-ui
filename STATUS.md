@@ -2,15 +2,13 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 13:58 UTC
+Generated at: 2026-08-28 14:03 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 171** (1 open)
-  - 171.3 — layout: decide whether it is scorable at all before scoring it.
 - **Slice 173** (2 open)
   - 173.1 — the windowed-list demo puts 2000px of blank between the header and its only content.
   - 173.2 — editable-grid "Medium": the numeric columns need alignment.
@@ -22,7 +20,7 @@ Generated at: 2026-08-28 13:58 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1058 iterations logged)
+dispatch status — counter-triggered rules (1059 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-28 21:48   ok
   Objective     0 / 3 slices          since 2026-08-28 13:57   ok
 ```
@@ -38,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 21:36 · Meta · refusal · a gate detecting mis-tagged @exact gates — base rate 2 of 38, and its predicate would be a heuristic about heuristics · refused · 0131ebc
 - 2026-08-28 21:42 · Continue · build · 170.3: the zero-slice guard warns instead of hard-exiting Step 0b, and reports p=0.242^N so a reader can weigh its own inference; fatality stays with 164.1's provable bullets-vs-rows check. Red-proved both directions plus a sanity case · landed · 08fe17c
 - 2026-08-28 21:48 · Standardize · tidy · both standing lanes clean — dead-style 0, css-repeats delta 0 against the settled table (verified mechanically); examined the 6 BCD feature paths shared by derive-floor and check-rf-floor and refused it, divergence there throws loudly and the paths agree · landed · 1b9f888
 - 2026-08-28 21:48 · Meta · refusal · extracting the shared BCD feature paths — both scripts throw on a moved key, the six agree today, and only one column overlaps · refused · 1b9f888
@@ -48,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 13:57 · Meta · refusal · a mechanism asserting which scripts check:repo runs — that asserts a preference not a fact, and check:ci-ignores already derives the CI-run set (94.11 ceremony) · refused · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · reversing 169.4's advisory call from a grill 44 minutes after it was made, without the owner — the decision is left recorded, the false documents corrected · refused · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · resolving the Step 0c collision hole by making the loser record its log row earlier — that manufactures a conflict on purpose to preserve a guarantee · refused · 869e32d4
+- 2026-08-28 22:03 · Roadmap · grill · 171.3 — layout scorability: refused; six predicates measured across 28 screens, three fail the accept test, two rank kind, and offScale ranks hairlines · refused · d5d97b2
 
 ## Sunset test
 

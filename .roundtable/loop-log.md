@@ -1064,3 +1064,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-28 13:57 · Meta · refusal · a mechanism asserting which scripts check:repo runs — that asserts a preference not a fact, and check:ci-ignores already derives the CI-run set (94.11 ceremony) · refused · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · reversing 169.4's advisory call from a grill 44 minutes after it was made, without the owner — the decision is left recorded, the false documents corrected · refused · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · resolving the Step 0c collision hole by making the loser record its log row earlier — that manufactures a conflict on purpose to preserve a guarantee · refused · 869e32d4
+- 2026-08-28 22:03 · Roadmap · grill · 171.3 — layout scorability: refused; six predicates measured across 28 screens, three fail the accept test, two rank kind, and offScale ranks hairlines · refused · d5d97b2
