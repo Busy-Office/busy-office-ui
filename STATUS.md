@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 11:43 UTC
+Generated at: 2026-08-28 12:08 UTC
 
 ## Open items by slice
 
@@ -24,10 +24,9 @@ Generated at: 2026-08-28 11:43 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1040 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-28 07:45   OVERDUE
+dispatch status — counter-triggered rules (1042 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-28 20:08   ok
   Objective     1 / 3 slice           since 2026-08-28 11:42   ok  [172]
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -40,8 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 09:40 · Continue · build · 168.1 — RESUME.md gains a standing ## Direction block: four answers a wake fills from named sources, two backed by recorded commands. Implemented not refused, because the item's refusal argument ('the owner sees it in conversation') assumes a conversation and this is the scheduled cloud routine. Premise re-checked and half wrong: fb15cdc IS 164.3 advancing it, so the figure is 12 of 13 work rows did not advance it, a rate not a state; registry asked directly and create-ui is still E404 · landed · f2506dfb
-- 2026-08-28 09:40 · Meta · refusal · generating the block into STATUS.md — 'is the direction blocked' is not derivable from the log without classifying rows by subject, the sixth regex LOOPS.md rule 3 refuses by name and the one 170.3 is open about · refused · f2506dfb
 - 2026-08-28 09:40 · Meta · refusal · a threshold on the 12-of-13 rate — that is the ratio 168.1's own Accept refuses, and it cannot tell maintenance that unblocks product from maintenance that displaces it · refused · f2506dfb
 - 2026-08-28 18:41 · Roadmap · plan · 171.1-171.3 triaged from the owner's scoring wishlist: performance and the recommendation surface already exist for screens, usability died by its own accept test at 5/5 on all 28, layout is unscored — and 4 of 6 DSA dimensions have exactly one value across 39 components, so the instrument driving Polish cannot rank · triaged · 1f7a2ee
 - 2026-08-28 18:41 · Meta · refusal · a new usability score — it died once on measurement and re-proposing it without answering the 5/5 result re-raises a settled refusal · refused · 1f7a2ee
@@ -50,6 +47,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 11:42 · Meta · refusal · a mechanism over the @exact/@heuristic taxonomy — the predicate is true of 1 of 39 gates, which is 94.11's ceremony test · refused · a2849e00
 - 2026-08-28 11:42 · Meta · refusal · acting on the self-arm finding — the accelerating trend that would have justified it does not survive controlling for arming-set size · refused · a2849e00
 - 2026-08-28 11:43 · Continue · build · 172.1 — check-resume-charter retagged @heuristic and its fail-open fence hole closed: hasUnterminatedFence is now its own loud g.check and the --self-test the tag owes ships with six cases, red-proved both ways with the injections confirmed off disk; check-selftests now matches the tag at its declaration position, reconciled against the unchanged tree (43/12/31) which is what caught the fix's own first draft reporting eight gates untagged · landed · a2849e00
+- 2026-08-28 20:08 · Standardize · tidy · nine gates printed a bare failure count while 26 and the shared gate() helper name the noun; converged them on the house form, each noun taken from that gate's own pass line. Red-proved on the failure branch, since passing gates cannot exercise it · landed · ad0b77a
+- 2026-08-28 20:08 · Meta · refusal · a reportFailures() helper — it would need the noun passed in anyway, saving four lines and nothing else, while gate() already serves the assertion-shaped gates · refused · ad0b77a
 
 ## Sunset test
 
