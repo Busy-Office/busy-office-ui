@@ -23,103 +23,86 @@ made but not yet written down.**
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 4 → Continue,
-build mode on 177.1, the fourth archive sweep**). Working tree clean at hand-off;
-the wake's commits were pushed as one push.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 2 → Standardize,
+Slice 178**). Working tree clean at hand-off; the wake's commits were pushed as
+one push.
 
 No collision. `git branch --show-current` answered EMPTY at Step 0 (detached
 container, ENVIRONMENT.md trap 1), fixed with `git checkout -B main origin/main`
-**before the first commit**; the mandated pre-commit `git fetch origin main`
-found `origin/main` unmoved at `b17aa797`, confirmed against
-`git ls-remote --heads origin`, which is the authority.
+**before the first commit**; `origin/main` arrived as a forced update
+(`17b3ba6...4be166b`). The mandated pre-commit `git fetch origin main` found it
+unmoved at `4be166be`, confirmed against `git ls-remote --heads origin`, which is
+the authority.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
 goes stale between wakes. Trust the `N. [ ]` checkboxes, not this section.
 
-## Rule 4 fired this wake — on an item the wake itself triaged
-
-The previous handover predicted "a wake reaching rule 6 again is the likely
-path". It was wrong, and the reason is worth carrying: **rule 4's own text names
-the signal that fired it.** The rule says *"if this rule is walking thousands of
-lines again, that is the signal"* — and executing rule 4 meant reading a
-**3,750-line** `ROADMAP.md`. Slice 165 is the precedent for treating that as
-triageable ("not new input", noticed while executing the dispatcher).
-
-So Step 1 triaged Slice **177**, committed it on its own as Step 1.3 requires,
-and Step 2 then dispatched rule 4 onto `177.1` — the only dispatchable open item.
-
-**The five older open items were each re-read at their *Accept*, not their
-framing**, and all five are still owner-blocked:
-
-| item | its Accept needs | dispatchable in a loop? |
-|---|---|---|
-| `15.12` | a human listening to NVDA/VoiceOver | no — owner hardware |
-| `112.3` | 5–8 owner-authored briefs + sealed picks | no |
-| `112.4` | 112.3's verdict | no |
-| `173.2` | owner picks (a) row-level error row or (b) float-on-focus | no |
-| `175.4` | a recorded decision on the collision scheme | no — OWNER CALL |
-| `176.3` | a recorded owner decision; says *do not decide it in a loop* | no |
-
-**"Oldest still-open" was read as "oldest DISPATCHABLE still-open", and that is
-stated rather than smuggled.** Taken literally, rule 4 would point at `15.12`
-forever, since it is the oldest open item and can never be closed by a loop. The
-previous two handovers reached the same reading and reported "rule 4 found
-nothing"; this wake makes the reading explicit so the next one can disagree with
-it in writing.
-
-## What landed this wake (2026-08-28, cloud, rule 4 → 177.1)
+## Rule 2 fired this wake, and rule 3 is still armed
 
 Dispatcher, in the order `LOOPS.md` states them: rule 1 clear (no open P0 —
 `grep -niE '\bp0\b' ROADMAP.md` returns only closed slice headings and prose;
-GitHub intake **0 open issues**, asked via the API, not assumed); rule 2
-`Standardize 3/4 ok`; rule 3 `Objective 2/3 ok [173, 176]`; **rule 4 fired.**
+GitHub intake **0 open issues**, asked via the API, not assumed); **rule 2 fired**
+at `Standardize 4 / 4 OVERDUE`.
 
-Rule 5 was evaluated and the reason it does not fire is *not* "no regression":
-`.roundtable/loop-metrics.jsonl` holds 99 readings across 29 metric names, and
-**no metric has two consecutive recent readings at all** — the newest reading of
-any metric is `css-repeat-bodies` on 2026-08-27, and `bundle-gz-kb` has not moved
-since 2026-08-17. There is nothing for a two-run trend to be computed over.
+**Rule 3 was armed at the same time and was NOT consumed** — it sits below rule 2,
+so `Objective 3/3 [173, 176, 177]` was never evaluated for dispatch. After this
+wake's recording it reads **`4 / 3 OVERDUE [173, 176, 177, 178]`**, because Slice
+178 closes on a Standardize row and 161.4 counts those.
 
-- **Nine closed slices moved to `ROADMAP-archive.md`** — 172, 174, 171, 170, 169,
-  168, 167, 165, 164 — each replaced by the established one-line pointer.
-  `ROADMAP.md` 3,872 → **1,956** at move time; the archive 19,285 → **21,237**.
-- **Conservation reconciles exactly on both sides**: live lost 1,916 = 1,943 body
-  lines moved − 27 pointer stubs (9 × 3); archive gained 1,952 = 1,943 body + 9
-  headings. Not "approximately" — exactly.
-- **Refusal guards ran before the move**, not after: OPEN re-derived from the
-  `N. [ ]` checkboxes and asserted disjoint from the target set, plus a
-  per-target assertion that the section is not already a pointer.
-- **The trend is the finding, not the sweep.** Sweeps located by the line-count
-  **drop** across all 722 ROADMAP-touching commits, because a subject-line grep
-  for `archive sweep` finds only 2 of the 3 real ones (2026-08-25's is titled
-  *"tidy: sweep 44 closed slices…"*) — a confident absence, CLAUDE.md's
-  position-filter shape. Regrowth per ROADMAP-touching commit **+30.4 → +51.0 →
-  +67.9** while cycle length halves **140 → 66 → 33 commits**. Both agree.
-- **The detector's 4th hit is a false positive and is labelled one** — a 319-line
-  net reduction inside a grill commit clears a `>300` threshold. 3 of 4 real.
-- **An archive defect was found by the verification and deliberately NOT fixed.**
-  Slices 17, 23 and 24 each appear **twice** in `ROADMAP-archive.md`, the second
-  copy being a 3-line pointer stub that points at the file it is already in. No
-  history lost. Pre-existing: the archive held 144 slice numbers with those same
-  three duplicated *before* this wake, 153 after (+9 = exactly this sweep).
-  Left alone on the archive's own authority — its header reads *"Nothing here is
-  edited"* — so changing that is a direction call, recorded with its measurement.
+Rules 4-8 were not reached. The six open items are unchanged and all six are
+owner-blocked — `112.3`, `112.4`, `173.2`, `175.4`, `176.3`, and `15.12` (AT
+runtime evidence, owner hardware). Nothing this wake changed that set.
 
-**Re-run, do not quote** — every figure here is a snapshot; the commands are all
-in ROADMAP 177.
+## What landed this wake (2026-08-28, cloud, rule 2 → Slice 178)
+
+**The finding is one shape appearing twice: 169.3's split created a durable loop
+file, and the two instruments that classify loop files were not told.**
+
+- **178.1 — `report_loop_prose.py` never measured `.roundtable/ENVIRONMENT.md`,**
+  while the comment directly above its own `FILES` list states the rule that
+  required the row (167.2 added the `LOOPS-archive.md` row for exactly this).
+  At `f52f2597`, `RESUME.md` went **3,150 → 1,683 words (−1,467)** and
+  `ENVIRONMENT.md` appeared at **1,666** — the **largest single down step in
+  RESUME.md's 65-step series**, scored as a shrink when it was a relocation.
+  Red-proved with the injection asserted first (`count == 1` before replacing):
+  a probe with only the new row's path broken exits **1** with `RECONCILIATION
+  FAILED … listed here but not on disk`.
+- **178.2 — the same file was filed by `generate_roundtable_index.py` as a
+  dateless row under "Findings — snapshots"**, the one thing its own header says
+  it is not. 141 findings / 7 ledgers → **140 / 8**.
+- **178.3 — the prose cadence's verdict for `/concepts/scale/`**, the only one of
+  today's 14 flagged pages carrying none (158.1's twelve + 161.1's three cover
+  the other 13). The verdict: length honest (1,168 words, **all authored**, 167
+  per `h2` against a corpus median of 103) — **and the page contradicts itself.**
+  Two decision tables, both touched by ONE commit (`a1239e02`), send a reader
+  scanning ~10,000 rows to windowing and to load-more respectively. The page's
+  own caption states which is right; the older row was stale and now matches.
+  Word-neutral: corpus total 104,737 and page total 1,168 unchanged after the fix.
+- **178.4 — three sweeps at zero delta**: `css-repeats` 74/237/225/8 matching
+  LOOPS.md's table on every group size; `dead-style` 0 of 1,428; `report_loop_prose`
+  showing `LOOPS.md` at 32 up / **1** down, so 167.1's finding condition is unmet.
+
+**⚠ A needle read a confident ZERO in this wake and was wrong.**
+`grep -Fc -- "/concepts/scale/"` (trailing slash) reads **0** across both roadmap
+files; without the slash it reads **4**. The finding survived only because
+CLAUDE.md's "a plain zero is a defect in the instrument until proven otherwise"
+was applied before the zero was believed. **Re-run, do not quote** — every figure
+here is a snapshot and the commands are all in ROADMAP 178.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**Nothing in this wake's commits renders.** `git diff --stat` names `ROADMAP.md`,
-`ROADMAP-archive.md`, `.roundtable/RESUME.md` and the recording commit's
-generated files — **no file under `packages/core/src` or `apps/docs/src`**. That
-is a stronger statement than a screenshot would be. `check:layout` (127 pages)
-and `test:axe` (127 × 2 widths) swept everything anyway and were green. **No
-visual debt was added; nothing visual was looked at.**
+**One docs page changed and it was NOT visually verified.**
+`apps/docs/src/pages/concepts/scale.astro` — the change is the text of one
+existing `<td>`: no element, class or style added, so nothing about the page's
+layout or colour moved. `check:layout` (127 pages), `test:axe` (127 × 2 widths)
+and `check:claims` (141 behaviours) all passed, and the
+`DOCS_BASE=/busy-office-ui` build resolved the row's new link. **That is what
+ran; it is not the same as having looked at the page.** A local wake glancing at
+`/concepts/scale`'s first decision table would close this out in seconds.
 
-**The carried-forward visual items have now waited FOUR wakes.** Neither is
+**The carried-forward visual items have now waited FIVE wakes.** Neither is
 dispatchable here; both need a local wake with a browser:
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
@@ -130,19 +113,19 @@ dispatchable here; both need a local wake with a browser:
 
   **⚠ Do NOT "correct" that 39 to 40 from `check:dsa-scores`.** The gate reports
   *"40 requested by a page"*, which counts component ENTRIES, not pages:
-  `state-patterns.astro` renders `<DsaScore` twice (`skeleton` at :91 and
-  `state` at :183). 39 pages request 40 entries. A `grep -rlE "<DsaScore|DsaScore "`
-  also reads 40, and that second alternative is the same trap one level down — it
-  matches a *comment* in `concepts/which-pattern.astro:16`, an assertion tripping
-  on prose about itself. Count `<DsaScore` files, or count built pages carrying
-  "Design-system alignment": both read **39**.
+  `state-patterns.astro` renders `<DsaScore` twice. 39 pages request 40 entries.
+  A `grep -rlE "<DsaScore|DsaScore "` also reads 40, and that second alternative
+  matches a *comment* in `concepts/which-pattern.astro:16` — an assertion
+  tripping on prose about itself. Count `<DsaScore` files, or count built pages
+  carrying "Design-system alignment": both read **39**.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 
 **Traps exercised for real this wake:** 1 (detached HEAD — `git branch
---show-current` EMPTY, caught before the first commit), 1b, 1c, 2 (unshallowed:
-`--is-shallow-repository` read `true`, now 1,547 commits — and this wake's whole
-finding is a history measurement, so the unshallow was load-bearing, not
-routine), 3. Not exercised: 4, 5, 6, 7.
+--show-current` EMPTY, caught before the first commit), 1b, 1c (**bit for real**:
+`scan:dead-style` produced no output line with `CHROME_PATH` unexported, and only
+re-running it in the same command as the export gave the number), 2 (unshallowed:
+`--is-shallow-repository` read `true`, now 1,550 commits — load-bearing, since
+this wake's whole finding is a history measurement), 3. Not exercised: 4, 5, 6, 7.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -151,23 +134,20 @@ from the sources named — never by copying the answers above you.**
 
 - **Direction:** (a) adoption/DX — finish it by publishing
   `@busy-office/create-ui`. Source: the `DECISION (owner, 2026-08-28)` block in
-  Slice 164.3. **⚠ THAT BLOCK MOVED THIS WAKE.** Slice 164 was one of the nine
-  swept, so it now lives in **`ROADMAP-archive.md`**, not `ROADMAP.md` — the
-  previous handover's "read it there" pointed at the live file and would now
-  find nothing. Read it in the archive; this line is a pointer, and a pointer
-  that disagrees with its source loses to the source.
+  Slice 164.3, which lives in **`ROADMAP-archive.md`**, not `ROADMAP.md` — 164
+  was swept by 177.1. Read it there; this line is a pointer, and a pointer that
+  disagrees with its source loses to the source.
 - **Remaining step, and who it waits on:** `npm publish -w
   @busy-office/create-ui` — **owner-only**, by CLAUDE.md's standing policy
   ("Publishing remains owner-triggered"). Asked the registry this wake, which is
   the authority: **still E404**.
 - **Did this wake advance it?** **No.** The remaining step is owner-only, and no
-  cloud wake can run it. This wake ran rule 4 → Continue on 177.1.
+  cloud wake can run it. This wake ran rule 2 → Standardize on Slice 178.
 - **Work rows since the direction was decided that did not advance it:** derive
-  it, do not increment — a copied number is 169.1's exact failure mode. Run the
-  command below unshallowed, print the matched rows and read them. This wake:
-  **35** non-Meta work rows since `fb15cdc`, of which the needle matches **2**;
-  reading them, only **164.3** advances the direction and **168.1** merely
-  narrates it. So **34 of 35** did not.
+  it, do not increment — a copied number is 169.1's exact failure mode. This
+  wake: **37** non-Meta work rows since `fb15cdc`, of which the needle matches
+  **2**; reading them, only **164.3** advances the direction and **168.1** merely
+  narrates it. So **36 of 37** did not.
 
   **⚠ The `grep create-ui` needle over-counts.** Read the matched rows; do not
   `-c` them:
@@ -211,32 +191,26 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 the parser's five blindings and nothing else ever has.
 
 **Prediction written down first, then checked, which is the point of the
-exercise.** Before recording: `Standardize 3/4 ok, Objective 2/3 ok [173, 176]`,
-parser 1,070 against a raw `grep -c "^- "` of 1,070. A `Continue` row **should**
-move rule 2 to `4/4` and arm Standardize; rule 3 counts slices *closed* by
-Continue or Standardize (161.4), and Slice 177 closes with this wake, so it
-should reach **3/3** and arm Objective too.
+exercise.** Before recording: `Standardize 4/4 OVERDUE`, `Objective 3/3 OVERDUE
+[173, 176, 177]`, parser 1,074 against a raw `grep -c "^- "` of 1,074. One
+Standardize row plus one `--also-refused` row should read **1,076**; rule 2
+should RESET to `0/4`; and rule 3 should gain Slice 178, since 161.4 counts a
+slice closed by Standardize.
 
-After recording: **`Standardize 4/4 OVERDUE`, `Objective 3/3 OVERDUE
-[173, 176, 177]`**, parser **1,074** against a raw `grep -c "^- "` of **1,074**.
-The row count rose by exactly **4** — two iteration rows plus two
-`--also-refused` rows. **Prediction confirmed on all four numbers**, including
-both counters crossing in the same wake, which is the first time that has
-happened in this handover's records.
+After recording: **`Standardize 0/4 ok`, `Objective 4/3 OVERDUE
+[173, 176, 177, 178]`**, parser **1,076** against a raw `grep -c "^- "` of
+**1,076**. **Prediction confirmed on all four numbers.**
 
 ## What the next wake should expect
 
-**Rules 2 and 3 are both expected to be armed.** Rule 2 sits above rule 3, so a
-Standardize sweep is the likely dispatch, with Objective next. Neither needs a
-browser, so both are cloud-dispatchable — the first wake in four where that is
-true.
+**Rule 3 → Objective is the likely dispatch** — it is the only armed counter, it
+is one over its threshold, and rule 2 is spent. It needs no browser, so it is
+cloud-dispatchable. Its material is Slices 173, 176, 177 and 178.
 
-**Rule 4 has nothing to give either of them**: all six open items are the
-owner-blocked set in the table above, unchanged by this wake.
+**Rule 4 still has nothing to give**: all six open items are the owner-blocked
+set above, unchanged by this wake.
 
-**Do not re-raise Slice 177's observations as new findings.** Two were recorded
-deliberately without opening items — the archive's three duplicate pointer stubs
-(refused on the archive's own "nothing here is edited" charter) and the fact that
-61% of the swept lines were Objective-grill slices that each also have a full
-report in `.roundtable/` (a direction call about how the loop records its own
-work). Both are measured and written down; neither is a loop's to decide.
+**Do not re-raise Slice 178's refusal as a new finding.** A gate for "two tables
+on one page disagree about the same decision" was refused, measured against
+94.11's shape-vs-meaning line and recorded with the iteration. The cadence is the
+mechanism that caught it, which is what 158.2 says the cadence is for.
