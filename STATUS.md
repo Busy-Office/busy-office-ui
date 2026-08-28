@@ -2,15 +2,14 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 13:48 UTC
+Generated at: 2026-08-28 13:54 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 171** (3 open)
-  - 171.1 — decide whether the component rubric gets the screen score's ACCEPT TEST.
+- **Slice 171** (2 open)
   - 171.2 — a recommendation surface for components, or a recorded refusal.
   - 171.3 — layout: decide whether it is scorable at all before scoring it.
 - **Slice 173** (2 open)
@@ -22,7 +21,7 @@ Generated at: 2026-08-28 13:48 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1052 iterations logged)
+dispatch status — counter-triggered rules (1053 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-28 21:48   ok
   Objective     1 / 3 slice           since 2026-08-28 21:36   ok  [170]
 ```
@@ -37,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 20:25 · Continue · build · 169.4: check:repo no longer reads a CI-ignored path — the RESUME charter check moved onto record_iteration's path; check:ci-ignores now covers globs and derives which scripts CI runs, and its red-proof failed twice before the workspace-context bug was found · landed · 87e0c7f
 - 2026-08-28 12:56 · Continue · build · 170.2 — narrative-row gate refused on base rate: flags 1258 of 1289 lines examined · refused · 99bf809d
 - 2026-08-28 12:56 · Meta · refusal · the LOOPS.md cadence bullet for re-reading narrative sections; and the section-shape gate, 45 of 45 sections would flag · refused · 99bf809d
 - 2026-08-28 20:58 · Continue · bug · 172.1/172.2 from an owner screenshot of /patterns/command-bar: the copyable CSS shipped overflow:hidden which measures the results listbox at zero height, and the hint strip had zero padding on an 8px-rounded dialog. Both red-proofs failed first time — one tripped on its own explanation, one injected into the wrong of two copies · landed · a060a5a
@@ -47,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 21:42 · Continue · build · 170.3: the zero-slice guard warns instead of hard-exiting Step 0b, and reports p=0.242^N so a reader can weigh its own inference; fatality stays with 164.1's provable bullets-vs-rows check. Red-proved both directions plus a sanity case · landed · 08fe17c
 - 2026-08-28 21:48 · Standardize · tidy · both standing lanes clean — dead-style 0, css-repeats delta 0 against the settled table (verified mechanically); examined the 6 BCD feature paths shared by derive-floor and check-rf-floor and refused it, divergence there throws loudly and the paths agree · landed · 1b9f888
 - 2026-08-28 21:48 · Meta · refusal · extracting the shared BCD feature paths — both scripts throw on a moved key, the six agree today, and only one column overlaps · refused · 1b9f888
+- 2026-08-28 21:54 · Roadmap · grill · 171.1 — DSA rubric: refused the screen score's accept test; no dimension passes it (not 4 of 6), and LOOPS.md's ranking claim corrected to an evidence record · refused · 0c8a05f
 
 ## Sunset test
 
