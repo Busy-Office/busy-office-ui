@@ -14,7 +14,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 137 snapshots, newest first
+## Findings — 138 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -32,6 +32,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | 2026-08-28 | [Objective grill — Slices 161, 162, 166 — 2026-08-28](grill-objective-161-162-166-2026-08-28.md) | ✓ |
 | 2026-08-28 | [Objective grill — Slices 163, 164, 165 (2026-08-28)](grill-objective-163-165-2026-08-28.md) | ✓ |
 | 2026-08-28 | [Objective grill — Slices 164, 167, 169 (2026-08-28)](grill-objective-164-167-169-2026-08-28.md) | ✓ |
+| 2026-08-28 | [Objective grill — Slices 168, 169, 170 (2026-08-28)](grill-objective-168-169-170-2026-08-28.md) | ✓ |
 | 2026-08-27 | [Objective grill — Slices 112, 130-148 (2026-08-27)](grill-objective-130-148-2026-08-27.md) | ✓ |
 | 2026-08-27 | [Objective grill — Slices 149, 150, 152 (2026-08-27)](grill-objective-149-152-2026-08-27.md) | ✓ |
 | 2026-08-26 | [Busy Office UI Framework Review & AI Benchmark Proposal](external-review-2026-08-26.md) | ✓ |
@@ -169,4 +170,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 144 files, 100 cited from outside, 45 uncited snapshots, 4 repeated subject(s).
+— 145 files, 101 cited from outside, 45 uncited snapshots, 4 repeated subject(s).
