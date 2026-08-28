@@ -144,9 +144,11 @@ Four findings, three Evidence:
   verdict on exactly **one**. Nearly nothing — the defect is the silence.
 - **B — two clocks write one log** (164.2, OPEN). `record_iteration.py` writes
   naive `datetime.now()`; the owner's machine is UTC+08, this container is UTC.
-  2 adjacent inversions in 990 pairs, both on a cloud/local handover. **Latent
-  — all three `ts` consumers were read and none decides on it.** Belongs with
-  162.1.
+  Every inversion sits on a cloud/local handover and the count grows by one per
+  handover — the command is in 164.2; do not quote a fixed number (this wake's
+  first draft did, and it was wrong in both numerator and denominator).
+  **Latent — all three `ts` consumers were read and none decides on it.**
+  Belongs with 162.1.
 - **C — positive control.** 159's "write the command next to the claim" rule
   paid off one wake later: 160's re-run found its *framing* wrong (two
   populations were four, three kept).

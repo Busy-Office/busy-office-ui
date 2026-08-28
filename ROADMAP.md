@@ -1249,9 +1249,23 @@ catches.
        no offset. The owner's machine is UTC+08; the cloud container is UTC.
        Since the routine was promoted to `/schedule` (162), both write the same
        file, and two rows can disagree with real chronology by eight hours.
-       Measured: **2 adjacent inversions in 990 pairs**, both exactly on a
-       cloud/local handover. Line order is correct; the timestamps are what
-       lie.
+       Line order is correct; the timestamps are what lie.
+
+       **Measured, with the command, because the count grows by one per
+       handover and a fixed number here would be stale within a wake** — the
+       first version of this entry said "2 in 990 pairs" and was wrong in both
+       halves, caught by re-running before pushing:
+
+       ```
+       python3 - <<'PY'
+       import re
+       R=re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) · ")
+       t=[R.match(l).group(1) for l in open('.roundtable/loop-log.md') if R.match(l)]
+       print(len(t),"rows ·",sum(1 for a,b in zip(t,t[1:]) if b<a),"inversions")
+       PY
+       # 996 rows · 3 inversions   (2026-08-28; one of the three added by the
+       #                            wake that filed this item)
+       ```
 
        **Latent, and that was checked, not assumed** — all three consumers read:
        `dispatch_status.py` orders by file index, `generate_status.py` by
