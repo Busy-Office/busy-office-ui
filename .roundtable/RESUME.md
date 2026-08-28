@@ -13,15 +13,23 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **Standardize**).
-Working tree clean; two commits landed and were pushed as one batch.
+Last updated 2026-08-28 03:44 UTC (cloud wake, scheduled routine —
+**Continue → 162.1**). Working tree clean; three commits landed and were pushed
+as one batch.
+
+**All three cloud traps below were re-confirmed this wake**: `HEAD` was detached
+at `2756a4c` with no local `main`; `git rev-parse --is-shallow-repository` read
+`true` (the unshallow brought the history to 1,464 commits and every history
+number in this wake depends on it); `node_modules` was absent so `npm ci` ran
+first; `CHROME_PATH` had to be exported in the same command as each build.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS, ALL MEASURED
 
 ### 1. `git checkout main` — the container starts DETACHED
 
-**Confirmed again this wake**: `HEAD` was `e6bf553` (the pushed tip) on a
-detached head, with no local `main` branch at all.
+**Confirmed on every cloud wake so far**, most recently 2026-08-28 03:30 UTC:
+`HEAD` was `2756a4c` (the pushed tip) on a detached head, with no local `main`
+branch at all. The wake before that saw the same thing at `e6bf553`.
 
 ```
 git fetch origin main && git checkout -B main origin/main
@@ -61,9 +69,10 @@ git fetch --unshallow origin              # ~27 seconds this wake
 
 The oldest commit the shallow clone holds has no parents and appears to ADD
 every file in the repo. **Unshallow before measuring anything from history.**
-This wake DID unshallow — three of its four findings are history measurements
-(703 revisions of the loop log replayed; per-day commit classification; the
-provenance of a number in this very file).
+The last two cloud wakes both did, and both needed it: 2026-08-28 03:30's entire
+162.1 decision rests on history (commit author TZ offsets, the cloud era's 36
+commits, the loop-log touch rate over all 1,464), and the wake before it
+replayed 703 revisions of the loop log.
 
 ### 3. `astro build` does not clear `dist`
 
@@ -99,47 +108,54 @@ Everything ran green this wake: `build -w @busy-office/ui`, `test -w
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
 dark.
 
-**From THIS wake — nothing visual exists to look at, and this is the THIRD
-consecutive wake for which that is true.** The code changes are two build-time
-Node generators and `dispatch_status.py`; none renders, ships in a page, or is
-imported by a component. `gen-rf-profile.mjs`'s output is **byte-identical**
-before and after — so no page's markup changed at all, which is a stronger
-statement than a screenshot would have been and is the one being made here.
-Everything else is markdown. `check:layout` and `test:axe` swept all 127 pages
-at both widths anyway and were unchanged. **No visual debt was added; nothing
-visual was looked at.**
+**From THIS wake — nothing visual exists to look at, and this is the FOURTH
+consecutive wake for which that is true.** Every change this wake is markdown:
+`LOOPS.md`, `ROADMAP.md`, `STATUS.md`, `.roundtable/loop-log.md`. Not one line
+of CSS, Astro, or JS was touched — `git diff --stat` over the wake's three
+commits lists only `.md` files. So no page's markup changed at all, which is a
+stronger statement than a screenshot would have been and is the one being made
+here. `check:layout` (127 pages) and `test:axe` (127 x 2, zero violations) swept
+anyway and were unchanged. **No visual debt was added; nothing visual was looked
+at.**
 
-**Three consecutive non-visual wakes is itself worth noticing.** It is not
+**Four consecutive non-visual wakes is itself worth noticing.** It is not
 evidence of avoidance — rule 4's oldest open items genuinely are loop machinery
 (164.3 says so outright) — but the two carried-forward visual items below have
-now waited five and eight wakes respectively.
+now waited six and nine wakes respectively.
 
 **Still unlooked-at by a human, carried forward:**
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
-  `<span class="bo-badge">generated</span>` inside an existing `<h2>` **five**
+  `<span class="bo-badge">generated</span>` inside an existing `<h2>` **six**
   wakes ago. `DsaScore` renders on 38 pages, so if the badge wraps badly it
   wraps in 38 places. First local wake: glance at one component page's
   "Design-system alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes —
-  now **eight** wakes back.
+  now **nine** wakes back.
 
 ## Counters after this wake
 
 ```
 python3 scripts/loops/dispatch_status.py
-  # Standardize 0 / 4 Continue rounds   ok       <- reset by this wake's sweep
-  # Objective   2 / 3 slices  [161, 166]  ok     <- 166 visible only after 166.5
+  # Standardize 1 / 4 Continue round        ok
+  # Objective   3 / 3 slices [161,162,166]  OVERDUE   <- 162 added by this wake
 ```
 
-**NEXT WAKE: rule 4.** Both counters are below threshold, so no counter rule
-preempts. Rule 4's oldest still-open dispatchable item is **162.1**, then
-163.1, 164.2, 165. 112.3/112.4 and the AT-runtime item are older but blocked on
-the owner or on hardware.
+**NEXT WAKE: rule 3 — Objective.** It went OVERDUE the moment this wake's
+Continue row named Slice 162, exactly as the previous handover predicted. Rule 3
+sits above rule 4, so **do not start a build**: the grill covers Slices 161, 162
+and 166.
 
-**Objective is one slice from firing.** The next Continue or Standardize round
-that names a new slice takes it to 3/3, and rule 3 sits above rule 4 — so the
-wake after next is likely Objective, not a build.
+**The counter was read immediately after `record_iteration.py`, per 166.5's
+lesson, and it agreed** with what had just been written — 162 appeared, and the
+later `Roadmap · hygiene` row correctly did *not* move it (161.4's filter:
+Roadmap rows plan a slice, they do not close one). That is the first time that
+comparison has come back clean rather than exposing a blind parser; do it anyway
+next wake.
+
+**Rule 4's queue, for the wake after the grill**: oldest still-open dispatchable
+item is **163.1**, then 164.2, then 165.1. 112.3/112.4 and the AT-runtime item
+are older but blocked on the owner or on hardware; 164.3 is an OWNER CALL.
 
 **Do NOT re-verdict the prose outliers.** The previous handover named
 `/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/` as
@@ -168,7 +184,53 @@ Objective was reset by the 2026-08-28 grill and still reads 0/3.
 then 163.1, 164.2, and the newly filed 165. 112.3/112.4 and the AT-runtime item
 are older but blocked on the owner or on hardware.
 
-## What landed this wake (2026-08-28, cloud, Standardize → Slice 166)
+## What landed this wake (2026-08-28, cloud, Continue → 162.1)
+
+**162.1 CLOSED — the decision is "ACCEPT collisions", and it is in `LOOPS.md`
+Step 0c with its cost. Do not re-derive it; the commands are in the item.**
+
+- **The premise was re-checked first and held.** Plain fixed strings (CLAUDE.md's
+  rule after the context-regex incident), not a context regex: `concurrency`,
+  `concurrent`, `parallel`, `simultane`, `collision`, `race`, `two wakes`,
+  `two dispatchers` → 0 hits each in `LOOPS.md`; the 12 `lock` hits are all
+  `block`/`blocked`/`blocks`/`blocking`/`unblock`/`lockfile`.
+- **The two dispatchers turned out to be exactly separable with nothing built**:
+  the git author TZ offset (`+0000` cloud, `+0800` owner) — 32 / 1432 of 1,464
+  commits — and 994 of the log's 1,001 rows already end in their commit's sha.
+  **That is a finding FOR 164.2, not a closing of it**: 164.2 asks whether the
+  row should carry the clock itself; the answer is that the record already
+  exists one indirection away. Whoever takes 164.2 should start there.
+- **They genuinely overlap, and it is not historical**: in the routine's first
+  nine hours there were 36 commits, 5 same-clock runs and **4 alternations**,
+  with handover gaps of 18.5 / 29.2 / 32.8 / 30.5 minutes.
+- **The refusal with an exact price**: a git claim marker must be *pushed* to be
+  visible, and `pages.yml` triggers on every push to `main` with **no
+  `paths-ignore`** (`ci.yml` has one; Pages does not). A second deploy per wake,
+  to buy detection that a `git fetch` before the first commit buys free.
+- **Corrected in passing**: the operating-rules bullet still read "Session-scoped
+  — these run while this session is open", which is the sentence that had gone
+  false and the reason the file was silent on concurrency at all.
+
+**165 got a checkbox, and the reason is worth carrying.** `STATUS.md` listed
+four open slices and not 165 — not an under-parse, but because Slice 165 carried
+**no `N. [ ]` checkbox at all**. Its own archive command pinned
+`OPEN={15,112,161,162,163,164,165}` under a comment saying "re-derive from the
+`N. [ ]` checkboxes"; re-deriving as instructed drops 165 and classifies **this
+very item's 47 lines as a closed slice to be archived**. Both fixed: 165.1
+exists, and the command derives `OPEN`. Re-measured after the fix — `OPEN
+[15, 112, 163, 164, 165]`, **20 closed slices / 3,019 lines**, `ROADMAP.md`
+**4,212** lines. One wake ago the same command read 17 / 2,488 against 3,882.
+
+**An instrument was wrong on its first output again — the base rate holds.** The
+first "how many commits touch `loop-log.md`" pass parsed `git log --name-only`
+by treating any 40-character line as a sha. **31 pathnames in this repo are
+exactly 40 characters** (`apps/docs/src/pages/patterns/index.astro` among them),
+so it read **1,579** commits against `git rev-list --count HEAD`'s **1,464**,
+and 44% instead of 48%. Caught only because two counts of the same thing
+disagreed. **Parse `git log --name-only` with `--format=%x00%H` and NUL-split
+records**; it reconciles with `rev-list` exactly.
+
+## What landed in an earlier wake (2026-08-28, cloud, Standardize → Slice 166)
 
 **Slice 166 CLOSED — the sweep came back clean, and both findings were things
 the sweep tripped over rather than looked for.**
@@ -232,53 +294,32 @@ file was at 1,094 on 2026-08-25. Rule 4 walks all of it every wake. The command
 is in the item. **Do it by hand** — the last case-collision on this exact pair
 of files destroyed 7,307 lines silently.
 
-## What landed in an earlier wake
+## What landed three wakes back — trimmed to a pointer
 
-**Objective (rule 3, fired at 3/3), grill of Slices 158/159/160 — logged.**
-Report: `.roundtable/grill-objective-158-161-2026-08-28.md`. Roadmap entry:
-Slice 164.
-
-Four findings, three Evidence:
-
-- **A — the instrument that DECIDES did not reconcile.** `dispatch_status.py`
-  read 982 of the log's 991 rows and printed a confident number; the nine it
-  missed are all `Continue` rows (`owner-decision`, `owner-wishlist` — `(\w+)`
-  does not match a hyphen), which is exactly what both counters count.
-  **Fixed and red-proved (164.1).** Cost, measured by replaying both parsers
-  over all 703 revisions of the log: row count differs on 79, the OVERDUE/ok
-  verdict on exactly **one**. Nearly nothing — the defect is the silence.
-- **B — two clocks write one log** (164.2, OPEN). `record_iteration.py` writes
-  naive `datetime.now()`; the owner's machine is UTC+08, this container is UTC.
-  Every inversion sits on a cloud/local handover and the count grows by one per
-  handover — the command is in 164.2; do not quote a fixed number (this wake's
-  first draft did, and it was wrong in both numerator and denominator).
-  **Latent — all three `ts` consumers were read and none decides on it.**
-  Belongs with 162.1.
-- **C — positive control.** 159's "write the command next to the claim" rule
-  paid off one wake later: 160's re-run found its *framing* wrong (two
-  populations were four, three kept).
-- **D — every open item is about the loop, not the product** (164.3, OWNER
-  CALL). Six open; three blocked; all three dispatchable ones are the loop's
-  own machinery. Nothing open would change anything a consumer installs.
-
-**Corrected in passing: this file's own number.** The note below used to say
-"six legacy rows do not match". It was **nine** at the commit that wrote it and
-has been nine since 2026-08-24 — a bare count with no command, carried forward
-four wakes. It is now fixed rather than counted.
+The Objective grill of Slices 158/159/160 (rule 3 at 3/3) is written up in
+full at `.roundtable/grill-objective-158-161-2026-08-28.md` and as ROADMAP
+Slice 164. Its four findings live there; the two that are still OPEN are 164.2
+and 164.3, listed below. Trimmed from this file rather than carried a fourth
+time — a handover that only grows stops being read.
 
 ## Still open, and why
 
 - **164.3** — OWNER CALL: the 2026-08-26 direction (adoption/DX) was discharged
   by Slice 147 and nothing succeeded it. Not a wake's decision.
-- **164.2** — whether the log records which clock wrote a row. Pairs with 162.1.
+- **164.2** — whether the log records which clock wrote a row. **Start from
+  162.1's finding**: the git author TZ offset already separates the two
+  dispatchers exactly, and 994 of 1,001 rows carry their commit's sha, so the
+  record exists one indirection away. The open question is whether that
+  indirection is acceptable, not whether the information is lost.
 - **163.1** — adjudicate the ten blocks at exactly one composition. The counts
   and the command are in the item; do not re-derive them.
-- **162.1** — how two dispatchers share one queue. "Accept collisions" is a
-  valid outcome; what is not acceptable is leaving `LOOPS.md` silent.
-- **165** — the archive sweep. Re-run with 166 added to the OPEN set: still
-  **17 closed slices, 2,488 lines**, and `ROADMAP.md` is now **4,131 lines**
-  (3,882 when 165 was filed one wake ago — this slice added 249). By hand; the
-  last case-collision on this file pair destroyed 7,307 lines silently.
+- **165.1** — the archive sweep, **by hand**. Re-measured this wake with `OPEN`
+  derived rather than pinned: **20 closed slices, 3,019 lines**, against a
+  **4,212**-line `ROADMAP.md`. The command is in the item and re-runs in
+  seconds — run it, do not quote these. The last case-collision on this exact
+  file pair destroyed 7,307 lines silently, so check `git ls-files` for a
+  case-insensitive match before writing, and confirm `git status` shows
+  `ROADMAP-archive.md` as **modified**, never as added.
 - **112.3** — the pattern-fit pilot. BLOCKED ON OWNER: needs 5–8 owner-written
   screen briefs with sealed picks; scaffold ready at `.roundtable/pilot-112/`.
 - **112.4** — Screen Contract layer, gated on 112.3's verdict.
