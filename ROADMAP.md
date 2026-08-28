@@ -1494,9 +1494,45 @@ nothing visual was looked at.**
        not. **A fix that quietly stops the detector from firing is the worse
        bug**, which is why the second half of that proof exists.
 
-       Two instrument defects in one gate, in one wake — the same 3-of-3 rate
-       Slice 168's grill measured, and material for the grill rule 3 now has
-       queued.
+       **And a THIRD, which turned CI red — the one this repo has already
+       written down.** The first push took the docs container build red at
+       `Containerfile:33`: `check:repo` now ends in `check-resume-charter.mjs`,
+       and that context copies only `package.json`, `packages/`, `apps/docs`,
+       `DESIGN.md` and `examples/erp-suite` — **`.roundtable/` is not there**, so
+       `readFile` threw ENOENT and the whole docs build failed.
+
+       This is CLAUDE.md's *"A gate that only runs in CI is not known to work"*
+       section, reproduced almost word for word: it names `check:rtl`'s DESIGN.md
+       assertion breaking the po-app image "because that context copies only
+       `packages/` and the file simply is not there". The gate had been verified
+       in the cloud container's **full checkout — the most permissive context the
+       build has** — which that section says is one data point, not portability.
+
+       Fixed to the contract the section states and that four sibling gates
+       already follow (`check:rtl` for DESIGN.md, `check:loop-vocab` for
+       `record_iteration.py`, `check:slice-refs`, `check:ci-ignores`): **say so
+       loudly, never skip quietly.** Absent input now prints "the handover
+       charter was NOT verified (expected inside container builds; CI has the
+       full checkout and does verify it)" and exits 0.
+
+       Verified in the narrowest context that must run it, which is the step that
+       was skipped: a scratch tree containing exactly the Containerfile's `COPY`
+       set, where it now warns and exits 0 alongside its two siblings. And
+       re-proved that the skip path did not disable the gate — with
+       `.roundtable/` present, dropping the pointer is still red.
+
+       ```
+       # reproduce the container context without building an image
+       mkdir -p ctx/apps && cp package.json package-lock.json tsconfig.base.json DESIGN.md ctx/
+       cp -r apps/docs ctx/apps/ && cp -r packages ctx/packages
+       (cd ctx/apps/docs && node scripts/check-resume-charter.mjs)   # warns, exit 0
+       ```
+
+       **Three instrument defects in one gate, in one wake** — the same 3-of-3
+       rate Slice 168's grill measured across three slices, here compressed into
+       a single file. Two were caught by the gate's own output; the third needed
+       CI, because it is the one defect that is invisible everywhere the author
+       can see. Material for the grill rule 3 now has queued.
 
        **Not verified: nothing visual.** This was a cloud wake — no Podman, no
        `localhost:8081`, no screenshots. No CSS, Astro page or rendered surface

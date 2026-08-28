@@ -97,10 +97,30 @@ export const headingsIn = (src) => {
   return out;
 };
 
-const [resume, environment] = await Promise.all([
-  readFile(RESUME, 'utf8'),
-  readFile(ENVIRONMENT, 'utf8').catch(() => null),
-]);
+/* `.roundtable/` is loop machinery, not part of the published docs image, so the
+   docs Containerfile copies only package.json, packages/, apps/docs, DESIGN.md
+   and examples/erp-suite. This gate therefore CANNOT run there — and a gate that
+   cannot run must SAY SO rather than pass, which is the contract `check:rtl`
+   follows for DESIGN.md and `check:loop-vocab` for record_iteration.py.
+
+   Learned the documented way, on the first push (2026-08-28, CI run 572): the
+   gate was verified in the cloud container's FULL checkout, which is the most
+   permissive context the build has, and turned the docs container build red at
+   `Containerfile:33` — the exact shape CLAUDE.md records for `check:rtl` and the
+   po-app image. Verify a new gate in the NARROWEST context that must run it. */
+let resume;
+try {
+  resume = await readFile(RESUME, 'utf8');
+} catch (err) {
+  if (err.code !== 'ENOENT') throw err;
+  console.log(
+    'resume charter: .roundtable/RESUME.md is not in this build context, so the ' +
+      'handover charter was NOT verified (expected inside container builds; CI has ' +
+      'the full checkout and does verify it).',
+  );
+  process.exit(0);
+}
+const environment = await readFile(ENVIRONMENT, 'utf8').catch(() => null);
 
 const g = gate('resume charter', 'charter rules');
 

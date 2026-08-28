@@ -199,11 +199,15 @@ not skip it for 170.2. Check `.roundtable/INDEX.md` first — no prior grill
 should cover these three, but that is the instruction, not an assumption.
 
 **A grill has material here.** Four candidates, offered as leads, not verdicts:
-`check:resume-charter` shipped with TWO instrument defects in one wake — the
-wrong-headings arrival check (caught pre-push) and a `headingsIn` that read bash
+`check:resume-charter` shipped with THREE instrument defects in one wake — the
+wrong-headings arrival check (caught pre-push), a `headingsIn` that read bash
 comments inside code fences as headings (caught post-push by its own output,
 which made the `@exact` tag wrong since recognition is exactly what that tag
-denies);
+denies), and an ENOENT that **turned CI red** because `.roundtable/` is not in
+the docs container's `COPY` set — CLAUDE.md's "a gate that only runs in CI is
+not known to work" section, reproduced almost word for word one wake after being
+read. Two were caught by the gate's own output; the third needed CI, because it
+is the one defect invisible everywhere the author can see;
 this wake's `grep -c create-ui` needle acquiring a fault one wake after being
 written (168 wrote it, 169's wake tripped it); `check:resume-charter`'s own
 first version asserting the wrong headings against the destination, which is the
