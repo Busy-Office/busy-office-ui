@@ -88,7 +88,7 @@ a no-op recorded in one line.
 |---|---|---|---|---|---|---|
 | component/alerts | content | **3** | 1/3 | 0 | 20c2fe2c | round 1 landed — blind re-score 2→3, off the gate's TODO |
 | component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
-| component/badge | content | **3** | 1/3 | 0 | 40c937f6 | round 1 landed — blind 2→3, "not for anything actionable" · **RE-QUEUED — source changed** |
+| component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
 | component/calendar | content | **3** | 1/3 | 0 | e1dec38b | round 1 landed — blind 2→3, "not for a plain date field" · **RE-QUEUED — source changed**|
 | component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
@@ -170,6 +170,44 @@ took it had read this section first, so it is not the independent second
 opinion §3b's step 4 requires, and it is not counted as one. The blind
 re-score of scan's three fixed dimensions is still owed; it now has a baseline
 to be blind against, which it did not have before.
+
+## Round 2 on badge (2026-08-28, cloud wake) — NO-OP, and what the arms measured
+
+Dispatcher rule 6, ten surfaces re-queued, all `content: 3` at `1/3` — an
+unbroken tie that §3b's "lowest score, then fewest rounds" cannot break. Picked
+`badge` on the one discriminator that exists: it carries **the rubric's only
+line-number citation**, the most staleness-prone kind there is, and its source
+had moved. §3b's reconciliation, four arms:
+
+1. **Wrong-choice clause present** on all 10 re-queued pages. Redundant —
+   `check:wrong-choice` ratchets it (`1 outstanding`, the skipped `date`).
+2. **`dsa-scores.json` entry rendered by its page** — gated per name by
+   assertion 7 since 176.1 (`40 requested by a page, all scored`).
+3. **Line-number citations into shipped CSS: 1 of 40 components.** Only
+   `badge · spacing -> badge.css:42`. Still holds — line 42 reads
+   `measured 373px wide against a 390px`, bare numbers inside a comment,
+   which is exactly what the cite claims. A gate for a 1-of-40 predicate
+   would be ceremony (94.11).
+4. **`content` cites quoting a page clause verbatim: 18 of 40, and 18 of 18
+   still present.** This arm is **not gated** — `check:wrong-choice` requires
+   only that *a* clause exists, so a reword would leave the rubric quoting
+   wording the page no longer carries. Recorded, **not gated**: roadmap 101.3's
+   stop rule forbids Polish adding gates, and 18/18 is a base rate a later
+   wake should re-measure before deciding it is worth one.
+
+Two instrument defects were caught before either became a finding, both
+textbook: a single-line `<strong>Not …</strong>` grep reported `icon` as having
+no clause (it wraps across lines — a position filter, CLAUDE.md's own trap),
+and a slug-guess reported 3 mismatches that were `alert`→`alerts` and
+`skeleton`/`state`→`state-patterns`. The second run reads the map off the
+generated `api.json` (`api.pageSlug`) rather than guessing.
+
+```
+node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components;
+const re=/([a-z0-9-]+\.(?:css|astro|ts|mjs|json)):(\d+)/g; let n=0;
+for(const c of Object.values(d)) for(const v of Object.values(c.dimensions||{}))
+  { re.lastIndex=0; while(re.exec(String(v.cite||''))) n++; } console.log(n)"
+```
 
 ## Not in the queue, with reasons
 
