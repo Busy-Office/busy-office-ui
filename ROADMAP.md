@@ -936,6 +936,60 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 168 — Objective grill of Slices 163, 164, 165 (2026-08-28)
+
+Rule 3 at 3/3. Full report:
+`.roundtable/grill-objective-163-165-2026-08-28.md`. Index checked first — no
+prior grill covers these three, so not a repeated subject.
+
+**Every slice in the window contained an instrument defect, and the
+instrument's own item is what found it — 3 of 3.** 163's used-once
+reconciliation was computed and never printed (caught by red-proving both
+directions and getting *silence*); 164.1's parser missed 9 rows, every one a
+`Continue` row, printing 982 against a raw 991; 165's counting command bills
+non-slice `## ` sections to the preceding slice, so Slice 29 read 78 lines
+while being a correct 3-line pointer. **None was caught by a gate** — each was
+caught by the wake using the instrument. Counter-evidence is substantial: all
+three were caught before a wrong claim reached anything, and 164.1 measured its
+own blast radius at **one wrong verdict in 703 revisions**. No gate proposed;
+two of the three already print their own reconciliation and the third is a
+throwaway snippet.
+
+**"Re-run the command first" paid off twice in one window.** 163.1 agreed
+exactly (61/75/7/10) and said so; 165.1 disagreed (21/3,125/4,461 against a
+pinned 20/3,019/4,212), and chasing the extra slice is what exposed the third
+defect above. Recorded because grills mostly record failures: **a number written
+next to its command is a number the next wake can falsify.** Its own
+falsification test — whether items written a month from now still carry their
+commands.
+
+1. [ ] **168.1 — let the dispatcher SAY when the chosen direction is blocked.**
+       The owner decided (2026-08-28) to finish direction (a) by publishing
+       `create-ui`. The loop has advanced it **zero times since**, and that is
+       not idleness: the entire remaining step is `npm publish`, owner-triggered
+       by standing policy. So rule 4 did what rule 4 does — took the oldest open
+       item — and the window's work was a report script and an archive sweep.
+
+       **`LOOPS.md` cannot notice.** It mentions "direction" seven times and
+       every one is *direction as an input to triage*; no rule tracks whether
+       the chosen direction is being advanced, and none can distinguish "the
+       direction is blocked and what remains is maintenance" from "healthy
+       work". Rule 8 halts only when NOTHING matches, which is never true while
+       maintenance exists — and maintenance always exists.
+
+       Same shape this file has recorded three times about counters: a signal
+       starving under a rule that is always true. One level up, the starving
+       signal is the **direction** and the always-true rule is rule 4.
+
+       *Accept*: the smallest thing that makes it sayable — a line in
+       `RESUME.md`'s handover naming the current direction and whether the wake
+       could advance it. **Not a new dispatcher rule, not a gate, and not a
+       ratio**: the product-vs-machinery ratio was retired one grill ago with
+       "not to be re-raised as a new finding", and that retirement is correct —
+       a ratio cannot tell maintenance that UNBLOCKS product from maintenance
+       that displaces it. **Refusing this outright is a valid outcome**, and the
+       argument for refusing is that the owner already sees it in conversation.
+
 ## Slice 167 — Objective grill of Slices 161, 162, 166 (2026-08-28)
 
 Dispatcher rule 3 at 3/3 `[161, 162, 166]`; rule 1 found no open P0 and GitHub

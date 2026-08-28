@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 13:11
+Generated at: 2026-08-28 13:15
 
 ## Open items by slice
 
@@ -14,6 +14,8 @@ Generated at: 2026-08-28 13:11
 - **Slice 167** (2 open)
   - 167.1 — the loop's own prose is the fastest-growing and the only unmeasured prose in the repo. Decide whether the 158.2 cadence covers it.
   - 167.2 — `LOOPS.md` rule 3 is 82% archaeology, and the file has no archive.
+- **Slice 168** (1 open)
+  - 168.1 — let the dispatcher SAY when the chosen direction is blocked.
 - **Slice —** (1 open)
   - AT runtime evidence
 
