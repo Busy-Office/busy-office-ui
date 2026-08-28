@@ -15,7 +15,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 140 snapshots, newest first
+## Findings — 141 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -35,6 +35,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | 2026-08-28 | [Objective grill — Slices 168, 169, 170 (2026-08-28)](grill-objective-168-169-170-2026-08-28.md) | ✓ |
 | 2026-08-28 | [Objective grill — Slices 169, 170, 172 (2026-08-28)](grill-objective-169-170-172-2026-08-28.md) | ✓ |
 | 2026-08-28 | [Objective grill — Slices 169, 170, 172 (2026-08-28)](grill-objective-169-172-2026-08-28.md) | · |
+| 2026-08-28 | [Objective grill — Slices 173, 176, 177, 178 (2026-08-28)](grill-objective-173-176-177-178-2026-08-28.md) | ✓ |
 | 2026-08-28 | [Is `layout` scorable? — base rate measured first (roadmap 171.3, 2026-08-28)](layout-scorability-2026-08-28.md) | ✓ |
 | 2026-08-27 | [Objective grill — Slices 112, 130-148 (2026-08-27)](grill-objective-130-148-2026-08-27.md) | ✓ |
 | 2026-08-27 | [Objective grill — Slices 149, 150, 152 (2026-08-27)](grill-objective-149-152-2026-08-27.md) | ✓ |
@@ -173,4 +174,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 148 files, 103 cited from outside, 46 uncited snapshots, 4 repeated subject(s).
+— 149 files, 104 cited from outside, 46 uncited snapshots, 4 repeated subject(s).

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 19:49 UTC
+Generated at: 2026-08-28 21:44 UTC
 
 ## Open items by slice
 
@@ -21,10 +21,9 @@ Generated at: 2026-08-28 19:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1076 iterations logged)
+dispatch status — counter-triggered rules (1078 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-28 19:49   ok
-  Objective     4 / 3 slices          since 2026-08-28 13:57   OVERDUE  [173, 176, 177, 178]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-28 21:44   ok
 ```
 
 ## Owner-blocked
@@ -39,8 +38,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 16:41 · Meta · refusal · a Polish/ledger line in dispatch_status.py — rule 6 is not counter-triggered, it has no threshold to be overdue against, and the value it would print is constant (19 of 19, unchanged across 11 of 11 revisions), so the line would read identically every wake forever · refused · eb7fd36c
-- 2026-08-28 17:40 · Polish · tidy · rule 6 → badge round 2: reconciliation clean on all four arms, NO-OP recorded as §3b requires. Ten surfaces re-queued all content:3 at 1/3, so the tie-break has no discriminator; picked badge for carrying the rubric's only line-number citation with a moved source. Measured: clause on 10/10 (gate ratchets it, redundant); score entry rendered per page (gated by assertion 7 since 176.1); line-number cites 1 of 40 components, badge.css:42 still reads 'measured 373px wide against a 390px' inside a comment as cited; content cites quoting a clause verbatim 18 of 40, 18 of 18 still present and UN-GATED. Two instrument defects caught before either became a finding: a single-line <strong>Not …</strong> grep called icon clauseless (clause wraps lines — a position filter), and a slug-guess reported 3 mismatches that were alert→alerts and skeleton/state→state-patterns, fixed by reading api.pageSlug off the generated api.json. Rules 1-5 all clear; rule 4 found nothing because all six open items are owner-blocked, re-read by Accept not framing · logged · 926f7c63
 - 2026-08-28 17:40 · Meta · refusal · a gate on the verbatim-clause citation arm — 101.3 forbids Polish adding gates, and 18 of 18 is a base rate to re-measure before anyone decides it earns one (94.11) · refused · 926f7c63
 - 2026-08-28 17:40 · Meta · refusal · manufacturing a fix on badge — §3b says a reconciliation finding nothing is a one-line no-op, and all four arms came back clean · refused · 926f7c63
 - 2026-08-28 18:41 · Roadmap · plan · 177 triaged — the archive sweep is due a fourth time; rule 4's own signal fired while executing rule 4 (3,750 lines). Regrowth per ROADMAP-touching commit +30.4 -> +51.0 -> +67.9 while cycle length halves 140 -> 66 -> 33; sweeps located by the line-count drop because a subject-line grep finds only 2 of 3 · triaged · 2ae54a4a
@@ -49,6 +46,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 18:41 · Meta · refusal · opening an item for the 61% of swept lines that are Objective-grill slices duplicating their own .roundtable/ reports — a direction call about how the loop records its work; recorded with its measurement instead · refused · 2ae54a4a
 - 2026-08-28 19:49 · Standardize · sweep · 178 — 169.3's split outran two instruments that classify loop files (report_loop_prose.py never measured ENVIRONMENT.md; generate_roundtable_index.py filed it as a dated snapshot), and the prose cadence's verdict for /concepts/scale found the page giving two different answers for scanning at ~10,000 rows. css-repeats delta 0, dead-style 0 · landed · e5edf61f
 - 2026-08-28 19:49 · Meta · refusal · a gate for 'two tables on one page disagree about the same decision' — semantic, not shape; 94.11's line, and the cadence is the mechanism that caught it · refused · e5edf61f
+- 2026-08-28 21:44 · Objective · grill · 179 — grill of 173/176/177/178: report_loop_prose reconciled in only one direction (the arm that has never failed; 9 of 15 commits red on the reverse, red-proved with the old script shown passing the same injection), and Slice 177's 'both readings agree' is a ratio and its denominator — regrowth per cycle 4,262->3,367->2,364 and peak 9,824->4,461->3,872 both FALL, so on rule 4's own cost the sweep is converging. css-repeats/wrong-choice/slice-refs re-derived, all held · landed · 74d8c2b8
+- 2026-08-28 21:44 · Meta · refusal · a gate for check:selftests' blind spot over scripts/loops/*.py — 2 of 9 carry a tag, both honest, zero defects behind the gap, so a gate would be ceremony (94.11) · refused · 74d8c2b8
 
 ## Sunset test
 
