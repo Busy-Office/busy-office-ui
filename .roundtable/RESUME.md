@@ -18,19 +18,38 @@ moving it is that item's job, not a passing tidy.
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 2 → Standardize,
-Slice 169**). Working tree clean at hand-off; the wake's commits were pushed as
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 3 → Objective,
+Slice 170**). Working tree clean at hand-off; the wake's commits were pushed as
 one batch.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
-goes stale between wakes, and it did again: the handover this one replaces named
-**167.2** as the oldest dispatchable open item, and `ROADMAP.md` showed it
-already closed (`3006da0`). Trust the `N. [ ]` checkboxes, not this section.
+goes stale between wakes. The handover this one replaces was correct: it named
+**168.1** then **169.3**, and both are still open. Trust the `N. [ ]`
+checkboxes, not this section.
+
+**Direction, stated as a fact of this wake and not as an implementation of
+168.1** — that item asks for a *standing* element of the handover and is still
+open, to be decided by the wake that dispatches it. The chosen direction is (a),
+publish `create-ui`; its remaining step is `npm publish`, owner-only, so this
+wake could not advance it. Measured: **61 commits since the last change to a
+declaration in `packages/core/src`**, which is `c073c360` — the cloud routine's
+own first commit.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS
 
-**Re-confirmed this wake: 1, 1c, 2, 3.** Trap 4 was not exercised (no formatter
-was run). Said plainly rather than carried forward as "all confirmed".
+**Exercised for real this wake (2026-08-28, Slice 170): 1c, 2, 3.** Said one by
+one rather than carried forward as "all confirmed":
+
+- **1** — half-exercised. `origin/main` came back a **forced update**
+  (`17b3ba6...fe2de12`), so the ref genuinely was not merely behind — but
+  `HEAD` already matched it (`rev-list --left-right --count` = `0 0`), so no
+  checkout was needed and the detached-HEAD half was never tested.
+- **1b, 4, 7** — not exercised: no `cd` was issued, no formatter was run, and
+  every word count came from `report_loop_prose.py` (Python `str.split()`),
+  never from a bare `wc -w`.
+- **6** — avoided by construction, not tested: background tasks were waited on
+  by the completion notification and by `Monitor` with an until-loop. An empty
+  output file was never read as "done".
 
 ### 1. `git checkout main` — the container starts DETACHED
 
@@ -158,12 +177,11 @@ export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 rm -rf apps/docs/dist
 ```
 
-Green again this wake (2026-08-28, Slice 169): `build -w @busy-office/ui`,
-`test -w @busy-office/ui` (137), `docs:build`, `check:claims` (139),
-`check:repo`, `check:layout` (127 pages), `test:axe` (127 × 2). Traps 1, 1b,
-1c, 2, 3 and **6** were all exercised for real — 6 bit again, on the
-`scan:dead-style` background task, and the empty output file was correctly read
-as *still running* rather than done.
+Green again this wake (2026-08-28, Slice 170): `build -w @busy-office/ui`,
+`test -w @busy-office/ui` (137 tests, 26 files), `docs:build`, `check:repo`
+(9 gates — 288 imports, 42 self-test classifications, 185 slice citations, 530
+files against the vendor denylist), `check:claims` (139 behaviours),
+`check:layout` (127 pages), `test:axe` (127 × 2, zero violations).
 
 `sqlite3` is NOT installed in this container. Query the mirror with Python's
 `sqlite3` module — `python3 -c "import sqlite3; ..."`.
@@ -173,11 +191,11 @@ as *still running* rather than done.
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
 **Nothing visual exists to look at from this wake.** `git diff --stat` lists
-`ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md` and one `console.log` format
-in `apps/docs/scripts/report-prose.mjs`. No file under `packages/core/src` or
-`apps/docs/src` was touched, which is a stronger statement than a screenshot.
-`check:layout` (127 pages) and `test:axe` (127 × 2) swept anyway and were green.
-**No visual debt was added; nothing visual was looked at.**
+`ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md` and one new grill file. **No
+executable file was touched at all** — no script, no CSS, no Astro page — which
+is a stronger statement than a screenshot. `check:layout` and `test:axe` swept
+every page at both widths anyway and were green. **No visual debt was added;
+nothing visual was looked at.**
 
 **The two carried-forward visual items have waited another wake** — both need a
 local wake with a browser, and neither is dispatchable here:
@@ -189,31 +207,38 @@ local wake with a browser, and neither is dispatchable here:
   alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 
-## What landed this wake (2026-08-28, cloud, rule 2 → Standardize 169)
+## What landed this wake (2026-08-28, cloud, rule 3 → Objective 170)
 
 Dispatcher: rule 1 clear (no open P0, GitHub intake **0 open issues**), rule 2
-read `Standardize 4 / 4 OVERDUE` and won. Third run of 158.2's cadence.
-**Three of the four sweeps were zero-delta; the finding came from the fourth.**
+read `Standardize 0 / 4`, rule 3 read `Objective 3 / 3 OVERDUE [164, 167, 169]`
+and won. Full report:
+`.roundtable/grill-objective-164-167-169-2026-08-28.md`.
 
-- **169.1 closed.** `LOOPS.md` still told every wake that `/base/motion/`,
-  `/concepts/js-behaviors/` and `/concepts/design-language/` were unread.
-  **161.1 verdicted all three**, and **166.1 already found this** — and put the
-  correction in THIS file, which is rewritten every wake, so it was discarded
-  while the durable playbook stayed wrong. This wake re-derived all three a
-  third time before finding 161.1's entry. The instruction now names the
-  **property** (any flagged page with no verdict in `ROADMAP.md` or the
-  archive), not a snapshot of names.
-- **169.2 closed.** `report-prose.mjs`'s family list printed a bare URL while
-  its corpus list printed `authored + generated`. The family half is the one
-  LOOPS.md sends a wake to read, so the split was missing exactly where it was
-  needed — 2 of the 12 family-flagged pages are majority machine-written
-  (`js-behaviors` 375a+1054g, `which-pattern` 310a+2015g). No threshold moved;
-  the flagged set is identical before and after.
-- **169.3 OPEN — the generalized form, and the next wake can execute it.**
-  63% of this file is durable content. Destination is a direction call, so it
-  was filed rather than decided. Full measurement and command in ROADMAP 169.3.
+- **170.1 closed — `ROADMAP.md`'s plan of record went stale 37 minutes after it
+  was written, and 193 commits passed over it.** `## Sequence — what runs next`
+  opens *"Eighteen items are open; nine are dispatchable"* (it is **5 and 2**)
+  and sequences five rows that are all closed or were deliberately dropped; its
+  gated list still says "0.3.0 cut" while the package is **0.5.0**. Nobody
+  noticed because rule 4 reads *checkboxes* and never the prose above them. The
+  section now carries a supersession note with its commands, and the owner's
+  text is left verbatim. `## STATE (2026-08-18)` got the same one-line
+  annotation; `## CI strategy` was checked and is sound.
+- **170.2 OPEN — the generalized form**: nothing re-reads `ROADMAP.md`'s
+  narrative sections. Accept is written so that **refusing it on a measured base
+  rate satisfies it** — there is exactly one plan-of-record table in the repo.
+- **Finding B, settled not filed**: 161.4's *"`Objective` is excluded — circular"*
+  is wrong. A grill files items in its **own** slice number and `Continue` builds
+  them, so a grill arms the next grill: **7 of 26** dispatches depended on that,
+  and this wake is the extreme case (2 of 3 armed slices are grills; 1 of 3
+  without them, which would have dispatched **168.1** instead). Corrected in
+  `LOOPS.md` rule 3. No mechanism — a heading classifier would be the sixth
+  regex, and this grill's own first attempt got it wrong.
+- **Finding C, settled not filed**: **61 commits, zero shipped declarations
+  changed.** Third consecutive grill to conclude the direction is owner-blocked;
+  the filed answer, 168.1, already exists.
 
-**Re-run, do not quote** — every figure above has its command in ROADMAP 169.
+**Re-run, do not quote** — every figure above has its command in ROADMAP 170 or
+the grill file.
 
 ## Counters after this wake
 
@@ -221,10 +246,15 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
 the parser's five blindings and nothing else ever has.
 
-**NEXT WAKE: re-derive it, but expect rule 3 (Objective).** Standardize
-discharged its counter this wake, and Objective stood at 2/3 before it. Rule 4's
-oldest dispatchable open items are **168.1** then **169.3**; 112.3/112.4 and the
-AT-runtime item are older but blocked on the owner or on hardware.
+Read immediately after `record_iteration.py` this wake: **Standardize 0/4 ok,
+Objective 3/3 OVERDUE → 0/3 ok**, parser at 1,029 rows against a raw
+`grep -c "^- "` of 1,029 — the agreement that check exists for.
+
+**NEXT WAKE: re-derive it, but expect rule 4 → 168.1.** Both counters were
+discharged or low at hand-off. Rule 4's oldest dispatchable open items are
+**168.1**, then **169.3**,
+then **170.2**; 112.3/112.4 and the AT-runtime item are older but blocked on the
+owner or on hardware. 168.1 needs no browser and is dispatchable in a cloud wake.
 
 ## Traps worth carrying forward (not slice history)
 

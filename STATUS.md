@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 07:45 UTC
+Generated at: 2026-08-28 08:46 UTC
 
 ## Open items by slice
 
@@ -13,16 +13,17 @@ Generated at: 2026-08-28 07:45 UTC
   - 168.1 — let the dispatcher SAY when the chosen direction is blocked.
 - **Slice 169** (1 open)
   - 169.3 — the generalized form of 169.1: `RESUME.md` is carrying durable content, and its charter says it cannot.
+- **Slice 170** (1 open)
+  - 170.2 — the generalized form of 170.1: nothing re-reads the narrative sections of `ROADMAP.md`, and refusing this is a satisfying outcome.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1026 iterations logged)
+dispatch status — counter-triggered rules (1029 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-28 07:45   ok
-  Objective     3 / 3 slices          since 2026-08-28 13:15   OVERDUE  [164, 167, 169]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-28 08:46   ok
 ```
 
 ## Owner-blocked
@@ -35,9 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 05:42 · Meta · refusal · backfilling offsets into the 1014 existing rows — exact via blame and still refused: record_iteration.py's standing rule is that historical rows record what was believed when written · refused · 75aba882
-- 2026-08-28 05:42 · Meta · refusal · a gate for the naive stamp — the only checkable property (the stamp carries an offset) is the option this item refused, so the gate would enforce the rejected answer · refused · 75aba882
-- 2026-08-28 06:47 · Continue · build · 167.1 — verdict the loop's own prose growth: 2 instrument, 3 honest; the cadence extends, 158.2's median instrument refused · landed · e3844c49
 - 2026-08-28 06:47 · Meta · refusal · the median-outlier test over the five loop-machinery files: n=5 has no usable median, 161.1 already recorded n=6 failing, and the spread is 102x · refused · e3844c49
 - 2026-08-28 06:50 · Continue · build · 167.3 — STATUS.md's history half had no reconciliation: a git-ignored loops.db means a fresh cloud container renders 'Last 10 iterations' from 2 rows against the log's 1,020, deleting nine committed rows silently; generator now counts the raw log rows, announces, rebuilds and re-checks · landed · cef80575
 - 2026-08-28 06:50 · Meta · refusal · a CI gate for it — these scripts are not in CI at all, which is rebuild_from_log.py's own stated reason for putting its assertions in the writing path · refused · cef80575
@@ -45,6 +43,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 07:44 · Standardize · sweep · 169.1 — LOOPS.md's prose-sweep step named three pages as unread that 161.1 had verdicted; 166.1 corrected only RESUME.md, which is rewritten every wake. Instruction now names the property. · landed · 87bf0f54
 - 2026-08-28 07:45 · Standardize · sweep · 169.2 — report-prose.mjs's family list printed a bare URL while its corpus list printed authored+generated; the family half is the one the playbook sends a wake to read. Split now printed in both. · landed · 87bf0f54
 - 2026-08-28 07:45 · Standardize · sweep · 169.3 — 63% of RESUME.md is durable content its own header forbids; filed with Accept criteria rather than decided, because the destination is a direction call · triaged · 87bf0f54
+- 2026-08-28 08:46 · Objective · grill · Objective grill 164/167/169: ROADMAP.md's plan of record went stale 37 minutes after it was written and 193 commits passed over it, invisible because rule 4 reads checkboxes and never the prose above them; and rule 3's Objective exclusion is one hop short — a grill files items in its own slice number and Continue builds them, so 7 of 26 dispatches were armed by grill follow-up, this one at 2 of 3 · logged · 00d9e099
+- 2026-08-28 08:46 · Meta · refusal · a slice-heading classifier inside dispatch_status.py — it would be the sixth regex, and this grill's own first attempt got it wrong · refused · 00d9e099
+- 2026-08-28 08:46 · Meta · refusal · rewriting the owner's Sequence table rather than annotating it — 130.4's closure was an owner call, so recording the supersession is bookkeeping and choosing a new sequence is not · refused · 00d9e099
 
 ## Sunset test
 
