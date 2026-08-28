@@ -1407,18 +1407,42 @@ def sections(p):
         elif cur is not None: d[cur]+=1
     return d
 live=sections('ROADMAP.md'); arch=sections('ROADMAP-archive.md')
-OPEN={15,112,161,162,163,164,165}      # re-derive from the `N. [ ]` checkboxes
+OPEN=set(); cur=None                   # DERIVED, never hardcoded — a pinned list
+for l in open('ROADMAP.md'):           # goes stale the moment a slice closes
+    m=H.match(l)
+    if m: cur=int(m.group(1))
+    elif cur is not None and re.match(r'^\s*\d+\. \[ \]', l): OPEN.add(cur)
+print("OPEN:",sorted(OPEN))
 big={s:n for s,n in live.items() if s not in OPEN and n>6}
 print(len(big),"closed slices carrying",sum(big.values()),"lines here;",
       sum(1 for s in big if s in arch),"already in the archive")
 PY
-  # 17 closed slices · 2,488 lines · 1 already archived   (2026-08-28)
+  # OPEN: [15, 112, 163, 164, 165]
+  # 20 closed slices · 3,019 lines · 1 already archived   (2026-08-28, after 162.1)
 ```
 
-**2,488 of 3,882 lines — 64% of the file — is closed slices that have not been
-moved.** The live file was brought to 1,094 lines on 2026-08-25 and has grown
-2,788 lines in three days, which is a steeper regrowth than the one that
-triggered the second pass. The doctrine in CLAUDE.md already settles the
+**The count moved and the direction is the finding, not the number.** One wake
+ago this read 17 slices / 2,488 lines against a 3,882-line file; it is now
+**20 / 3,019 against 4,212** (`wc -l`, not predicted — the first draft of this
+sentence guessed 4,262 and was wrong by 50), because two more slices closed and
+this wake added
+162.1's write-up. Re-run it rather than quoting either figure — the list of
+closed slices is derived, so the command stays right while any pinned number
+rots.
+
+**The pinned `OPEN` set was itself the bug this item nearly shipped.** Its own
+comment said "re-derive from the `N. [ ]` checkboxes", and re-deriving is what
+exposed that **Slice 165 had no checkbox at all** — so a re-derivation dropped
+165 from `OPEN` and classified **this very item's 47 lines as a closed slice to
+be archived**, while `STATUS.md`, whose whole job is surfacing open items, never
+listed it. Fixed by giving 165 the checkbox below and by deriving `OPEN` above.
+This is the same shape CLAUDE.md's storage doctrine already records for
+`STATUS.md`'s parser: a derived artefact deciding, on its own, what it failed to
+see.
+
+The live file was brought to 1,094 lines on 2026-08-25, which is the regrowth
+that makes this a recurring sweep rather than a one-off. The doctrine in
+CLAUDE.md already settles the
 question of whether this is allowed: the archive is still markdown, still
 reviewed, still diffed, and `check:slice-refs` keeps the citations resolvable
 (it currently checks 178 of 180, with a 2-row known-dangling baseline).
@@ -1428,12 +1452,19 @@ applies with force here: the last case-collision on this exact pair of files
 silently destroyed 7,307 lines of archived history, and the tell was only that
 `git status` showed the file as *modified* rather than *added*.
 
-*Accept*: every closed slice's text lives in `ROADMAP-archive.md` with a
-one-line pointer left in `ROADMAP.md`; `check:slice-refs` passes with its
-citation count reconciled against the source rather than against the mover; the
-line counts before and after are both recorded; and `git status` shows
-`ROADMAP-archive.md` as modified, with its line count having GROWN by
-approximately what `ROADMAP.md` lost — the property, not a predicted number.
+1. [ ] **165.1 — move the closed slices to `ROADMAP-archive.md`, by hand.**
+       *Accept*: every closed slice's text lives in `ROADMAP-archive.md` with a
+       one-line pointer left in `ROADMAP.md`; `check:slice-refs` passes with its
+       citation count reconciled against the source rather than against the
+       mover; the line counts before and after are both recorded; and
+       `git status` shows `ROADMAP-archive.md` as **modified**, with its line
+       count having GROWN by approximately what `ROADMAP.md` lost — the
+       property, not a predicted number.
+
+       **Re-run the command above first.** Its numbers are re-measured every
+       time it runs and the pinned ones in this file are not; a disagreement
+       with `20 / 3,019` is the first thing to report, not something to write
+       over.
 
 ## Slice 164 — Objective grill of Slices 158, 159, 160 (2026-08-28)
 
