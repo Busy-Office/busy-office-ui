@@ -944,6 +944,27 @@ that isn't one component styling another's insides.
 already in the table, or an existing group growing. Run the command; the delta
 is the finding, never the count on its own.
 
+### Also settled: the BCD feature paths shared by two floor scripts
+
+Raised by the Standardize sweep of 2026-08-28 and refused, recorded here so the
+next sweep does not re-raise it. `derive-floor.mjs` (16 features, each with a
+`tier` and a whole-stylesheet `test`) and `check-rf-floor.mjs` (6 features, each
+with a `kind` and a `pattern`) **share the `path` column for 6 feature ids** —
+the browser-compat-data key, which is the fragile part: both scripts' own error
+text asks *"has the key moved?"*.
+
+It is refused on the same ground as the regex-escape extraction:
+**divergence here is LOUD.** Measured — both scripts throw immediately with the
+offending path named when a key is missing, and the six shared paths agree
+today. The tables are also not the same table; only one column overlaps, and
+each script's other columns exist for different jobs.
+
+**Reopen if** a third consumer of these paths appears, or if the six ever
+actually disagree — that is when the shared thing has somewhere to live that is
+not one script importing another's internals. Compare them by extracting the
+`id:`/`path:` pairs from both files and diffing the shared ids; the sweep that
+raised this did exactly that and got "none disagree".
+
 ## Operating rules (every loop obeys)
 
 - **Every wake leaves the thing it touched BETTER than the item required**
