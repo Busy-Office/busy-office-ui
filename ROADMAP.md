@@ -1186,6 +1186,135 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 164 — Objective grill of Slices 158, 159, 160 (2026-08-28)
+
+Rule 3 at 3/3. Full report:
+`.roundtable/grill-objective-158-161-2026-08-28.md`. Cloud wake — no container,
+no screenshots; the only code change is a Python script that prints to stdout.
+
+**The window itself was healthy.** 19 rows, 9 landed, 7 refused (all decided
+*inside* items that landed, via `--also-refused`), 2 triaged, 1 logged. Zero
+Continue rounds were refused, against a previous window where half were — and
+the base rate has not moved: 182 refused / (355 landed + 182 refused) = **33.9%**
+since 2026-08-19, against 33.5% measured one window ago. The refusals moved
+channel, not frequency.
+
+**The rule 159 wrote paid off one wake later** (grill §C, Evidence). Slice 160's
+triage wrote its command next to its claim; the build round re-ran it and found
+the *framing* wrong — "two populations" of named products were four, three of
+which were kept, and one of the two new ones (interop hazard: the product name
+IS the reader's search term) would have been scrubbed by a wake that trusted the
+triage. 158's premise was re-measured the same way in the same window and was
+also wrong (107 pages → 118, seven outliers → twelve). Both errors were
+structural, not numeric — the kind a re-derivation reproduces and only a re-run
+catches.
+
+1. [x] **164.1 — DONE 2026-08-28. The instrument that DECIDES did not reconcile; the one that only mirrors did.**
+       `rebuild_from_log.py` counts the raw `- ` bullets and refuses to write
+       when it under-parses. `dispatch_status.py` — whose output *chooses the
+       loop this wake runs* — had no such check, and its `(\w+)` mode field
+       missed **nine rows, every one a `Continue` row**, which is exactly what
+       both counters count (`owner-decision`, `owner-wishlist`, all
+       2026-08-24). It printed "982 iterations logged" against
+       `grep -c "^- " .roundtable/loop-log.md` = **991**.
+
+       **Cost, measured rather than asserted**, by replaying both parsers over
+       all **703 revisions** of the log: the row count differs on **79**, and
+       the OVERDUE/ok verdict on exactly **one** (dc7ea4d, 2026-08-24 20:02 —
+       Standardize read 3/4 "ok" when it was 4/4). One in 703 is nearly
+       nothing, and the entry says so; the defect is the confident number
+       printed while blind, not the damage it did.
+
+       *Accept*: (a) the counter reads every row the log contains, checked by
+       the raw bullet count, not by the parser being checked; (b) an
+       under-parse **raises** instead of printing — the docstring's "exit
+       status is always 0" was already false and is corrected; (c) red-proved
+       with the injection confirmed, including the old regex tripping the new
+       reconciliation. All four cases pass; details in the grill.
+
+       **Refused: a writer-side guard in `record_iteration.py`.** Base rate is
+       9 rows in 991 (0.9%) from one convention, the mode field is deliberately
+       free text, and the reader now fails loudly — a second detector for the
+       same defect is the ceremony this repo keeps refusing.
+
+       **Also corrected: a carried-forward number.** `RESUME.md` called this
+       "six legacy rows" for four wakes. It was **nine** at the commit that
+       wrote it (`de0c814`, re-checked against that commit's own copy of the
+       log) and has been nine since 2026-08-24 — a bare count with no command,
+       written the day after 159 made "write the command next to the claim" a
+       rule.
+
+2. [ ] **164.2 — decide whether the loop log records WHICH CLOCK wrote a row.**
+       `record_iteration.py` writes `datetime.now()` — naive local wall-clock,
+       no offset. The owner's machine is UTC+08; the cloud container is UTC.
+       Since the routine was promoted to `/schedule` (162), both write the same
+       file, and two rows can disagree with real chronology by eight hours.
+       Measured: **2 adjacent inversions in 990 pairs**, both exactly on a
+       cloud/local handover. Line order is correct; the timestamps are what
+       lie.
+
+       **Latent, and that was checked, not assumed** — all three consumers read:
+       `dispatch_status.py` orders by file index, `generate_status.py` by
+       `ORDER BY id`, and the one real `ts` comparison
+       (`rebuild_from_log.py`'s `VOCAB_ENFORCED_FROM`) is a cutoff nine days in
+       the past. Nothing decides wrongly today.
+
+       Options, none obviously right: write UTC always (one line, but existing
+       rows silently change meaning); write an ISO offset (honest, but changes
+       the line format four parsers and 991 rows depend on); or accept it and
+       say so in `LOOPS.md`. *Accept*: a decision recorded either way, naming
+       what it costs, and — if the format changes — a migration that leaves the
+       991 existing rows parseable, with the parsers reconciled against the raw
+       bullet count as 164.1 now does. **"Accept it" is a valid outcome**;
+       leaving the file silent is not. Belongs with **162.1**, which is the
+       same subject (what two dispatchers sharing one queue costs); this is the
+       second cost, and unlike the first it is silent and lands in the record
+       itself.
+
+3. [ ] **164.3 — OWNER CALL: the direction chosen on 2026-08-26 is spent, and the
+       queue behind it is empty of product work.** Not a wake's decision, filed
+       here so it is visible rather than re-derived.
+
+       **Measured, exactly, from the generated mirror** (`STATUS.md`,
+       2026-08-28 08:18 — six open items):
+
+       | item | about | dispatchable |
+       |---|---|---|
+       | 112.3 pattern-fit pilot | conformance layer | no — owner briefs |
+       | 112.4 Screen Contract | gated on 112.3 | no |
+       | AT runtime evidence | a screen reader | no — hardware |
+       | 161.4 the Objective counter | `dispatch_status.py` | yes |
+       | 162.1 two dispatchers, one queue | `LOOPS.md` | yes |
+       | 163.1 the ten one-composition blocks | `report-reach.mjs` | yes |
+
+       **All three dispatchable items are about the loop's own machinery.** Not
+       one open item would change a component, a pattern page, a token, or
+       anything a consumer of `@busy-office/ui` installs. Rule 4's next
+       dispatch is therefore inward by construction, whatever any wake intends.
+
+       This is the state the Slice-112 grill predicted in this file — *"from
+       here the dispatcher can only reach Standardize, Objective and Explore —
+       all of which generate work about the project … the Objective charter is
+       a filter, not a direction"*. The owner answered on 2026-08-26 with **(a)
+       adoption/DX**; it became Slice 147 (the screen kit, a real front door)
+       and shipped. **Nothing succeeded it.** One slice discharged the
+       direction and the queue behind it was already maintenance.
+
+       *Accept*: an owner decision — re-pick from (b) depth on data
+       maintenance, (c) autosave, (d) define 1.0, extend (a) with the next
+       adoption step, or "keep waiting for adopter feedback" **meant as a
+       decision, not as a precondition**. Finishing 161.4/162.1/163.1 first is
+       fine and is what the loop will do meanwhile; the finding is only that
+       finishing them leaves the queue empty of product work and **no rule in
+       `LOOPS.md` will notice**.
+
+       **No metric, dashboard or gate is proposed**, deliberately: the
+       verification-to-product ratio was raised and RETIRED above with "not to
+       be re-raised as a new finding", and that retirement is correct. The
+       corroborating commit-share measurement (product share of work commits:
+       six days at 77-95%, then 83 → 68 → 60 → 52%) is in the grill report with
+       its confounds, as corroboration only.
+
 ## Slice 163 — noticed while shipping 159.1: the bucket nobody adjudicated is the one below the bar (2026-08-28)
 
 Not part of 159.1 and deliberately not folded into it — this is bigger than the
