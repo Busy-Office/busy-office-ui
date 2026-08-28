@@ -32,12 +32,17 @@ open. `ROADMAP.md` was right; this file was not.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS, ALL MEASURED
 
-**All four were re-confirmed again this wake.**
+**Two of the four were re-confirmed this wake (1 and 2); 3 and 4 were not
+exercised** — `dist` was removed pre-emptively rather than after observing a
+stale build, and no formatter was run. Said plainly rather than carried forward
+as "all four confirmed", which the previous handover claimed.
 
 ### 1. `git checkout main` — the container starts DETACHED
 
-Confirmed on every cloud wake so far. This wake: `HEAD` at `c4390c7` detached,
-with a stale local `main`.
+Confirmed on every cloud wake so far. This wake: `HEAD` detached at `a911143`
+— which happened to equal the new `origin/main`, while the local `main` branch
+ref was five commits stale at `17b3ba6`. So the detachment is not always visible
+as wrong history; check the BRANCH, not just what HEAD points at.
 
 ```
 git fetch origin main && git checkout -B main origin/main
