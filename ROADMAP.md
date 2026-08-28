@@ -1265,18 +1265,63 @@ by. The screen score, built later and with an explicit ACCEPT TEST that drops
 any dimension below 3 distinct values, does discriminate. **The newer instrument
 already contains the fix the older one lacks.**
 
-1. [ ] **171.1 — decide whether the component rubric gets the screen score's
-       ACCEPT TEST.** `score.mjs` drops a dimension that cannot produce 3
-       distinct values; the DSA rubric has no such test and four dimensions
-       that would fail it.
-       *Accept*: a recorded decision. Applying the test would retire
-       typography/colour/spacing/interaction as SCORES (they may remain as
-       gated properties, which is what they actually are). **This is squarely
-       against 101.3's stop rule** — "Polish may NOT add dimensions,
-       definitions or gates" — so the honest reading is that this REMOVES
-       rather than adds, and that argument has to be made explicitly rather
-       than assumed. Refusing, and recording why the uniform dimensions earn
-       their place, is a satisfying outcome.
+> **Corrected by 171.1 (2026-08-28), left standing above so the route is
+> visible.** Two claims here are wrong. It is not four of six — it is **six of
+> six**, once "cannot rank" is read as *fewer than 3 distinct values* rather
+> than *exactly 1*; `content` and `fit` are 3-on-38-and-something-else-on-one,
+> which sorts no better than unanimity. And the conclusion does not follow:
+> the newer instrument's accept test is not "the fix the older one lacks",
+> because the two instruments are not the same kind of thing. A screen score
+> RANKS surfaces against each other; the DSA rubric RECORDS that gated
+> properties hold, per component, with a citation. Porting the test would have
+> deleted the record to fix a ranking the rubric was never the right source
+> for. **The rank/record distinction is the thing to carry forward** — the
+> pull toward "one instrument, applied uniformly" was strong enough to reach
+> a written roadmap item before anyone asked what each was for.
+
+1. [x] **171.1 — decide whether the component rubric gets the screen score's
+       ACCEPT TEST.** DECIDED 2026-08-28: **refused**, and the rule the rubric
+       was serving was corrected instead.
+
+       **First, the disagreement, because this item's own convention is to
+       report it rather than write over it.** The item says "four dimensions
+       that would fail it". Re-measured with the command now pinned in
+       `LOOPS.md` §3b: **none of the six passes.** `typography`/`colour`/
+       `spacing` have 1 distinct value; `interaction`, `content` and `fit`
+       have 2 (`content` is 3 on 38 components and 2 on one; `fit` is 3 on 38
+       and 0 on one). So applying a 3-distinct-value test retires the ENTIRE
+       rubric, not four of six — including the three dimensions this repo had
+       named as Polish's actual drivers.
+
+       That makes the decision easier rather than harder, and it flips which
+       side 101.3's stop rule protects. The honest argument, made explicitly
+       as the item required:
+
+       - **Applying the test would REMOVE, not add** — technically permitted
+         by 101.3, which forbids Polish from *adding* dimensions. But it would
+         delete 39 components × 6 cited judgements to fix a defect that is not
+         in the rubric.
+       - **The uniform dimensions earn their place, and 94.7/94.9 already said
+         so**: they read 3 everywhere because gates enforce them. Uniformity
+         here is the gates HOLDING, not a broken instrument. `spacing`'s own
+         definition concedes it is "a DEBT MARKER, not a quality signal".
+         **A rubric recording that six properties hold, each with a citation,
+         is evidence — and evidence is allowed to be unanimous.**
+       - **The defect was in the RULE that asked it to rank.** `LOOPS.md` said
+         "Polish drives on `content`, `fit` and `interaction` only" — a
+         ranking those three cannot support at 2/2/2 distinct values.
+
+       So: the rubric stays, unchanged and un-tested; `LOOPS.md` §3b now says
+       plainly that it is a per-component evidence record and **not** a
+       ranking, and that the component queue is `check:wrong-choice`'s
+       executable `TODO` set — which is what Polish has actually been driving
+       on all along.
+
+       **Surfaced by the same measurement, and it is the more useful finding:
+       that queue is down to 1 outstanding** (it read 19 when §3b was
+       written). Polish's component lane is nearly dry — which is a real input
+       to what gets built next, and was invisible while the rubric was
+       presumed to be the queue.
 
 2. [ ] **171.2 — a recommendation surface for components, or a recorded refusal.**
        Screens get one; components do not, and Polish fixes silently instead.

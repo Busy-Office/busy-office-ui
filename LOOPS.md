@@ -608,18 +608,39 @@ remaining, per `.roundtable/polish-state.md`.
      finished, whatever its budget says.
 
 **What "scored" means — existing instruments only, no new ones:**
-- **Components** → the DSA rubric in `apps/docs/src/data/dsa-scores.json`.
-  Polish drives on **`content`, `fit` and `interaction` only**.
-  - `typography`/`colour`/`spacing` read 3 on all 39 components, and that
-    is **documented as expected, not broken** (94.7/94.9; `hierarchy` was
-    retired for exactly this). `spacing`'s own definition says outright it
-    is "a DEBT MARKER, not a quality signal — satisfiable by the scorer
-    writing the comment". A dimension that cannot fail must never drive a
-    round.
-  - The real queue is executable: `check:wrong-choice`'s `TODO` set — 19
-    component pages with no wrong-choice clause, and the gate already
-    ratchets (a page that gains the clause MUST leave TODO or the gate
-    fails). `content` and that gate agree by construction.
+- **Components** → the queue is `check:wrong-choice`'s `TODO` set, and **only**
+  that. The DSA rubric is a per-component EVIDENCE RECORD, not a ranking.
+  - **No DSA dimension can rank, measured 2026-08-28 (roadmap 171.1)** — not
+    the three this file used to name as Polish's drivers:
+
+    ```
+    node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components;
+    const a={}; for (const c of Object.values(d))
+      for (const [k,v] of Object.entries(c.dimensions||{})) (a[k]=a[k]||{})[v.score]=(a[k][v.score]||0)+1;
+    console.log(a)"
+    # typography 1 · colour 1 · spacing 1 · interaction 2 · content 2 · fit 2
+    #   distinct values, out of 39 components
+    ```
+
+    This file used to say "Polish drives on `content`, `fit` and `interaction`
+    only". Those have **2, 2 and 2** distinct values — `content` is 3 on 38
+    components and 2 on one; `fit` is 3 on 38 and 0 on one. Picking "the
+    lowest-scoring surface" from that is picking one page and then guessing.
+    The sentence promised a ranking the data cannot support.
+  - **The rubric still earns its place, and is deliberately NOT retired.**
+    `typography`/`colour`/`spacing` read 3 everywhere because gates already
+    enforce them (94.7/94.9; `hierarchy` was retired for exactly this), and
+    `spacing`'s own definition says it is "a DEBT MARKER, not a quality signal".
+    Uniformity is the gates HOLDING. Applying the ERP-suite score's accept test
+    — 3+ distinct values or the dimension is dropped — would retire **all six**,
+    deleting 39 components' worth of cited judgement to fix a ranking nobody
+    should have been asking it for. Refused: the mismatch was the rule, not the
+    rubric.
+  - The queue is executable and it RATCHETS: a page that gains a wrong-choice
+    clause MUST leave `TODO` or the gate fails. **Down to 1 outstanding**
+    (`npm run check:wrong-choice -w docs`, 2026-08-28 — it read 19 when this
+    section was written), so this lane is nearly dry; re-run it rather than
+    trusting either number.
 - **Patterns** → the pattern-sweep bar in `.roundtable/pattern-sweep-*`.
 
 **The rubric's own stop rule (roadmap 101.3) binds this loop.** Polish is
