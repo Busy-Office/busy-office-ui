@@ -161,8 +161,9 @@ match to its full playbook below:
    times the counter reaches 3 over the whole log from **23 to 23**.
 
    **And the bigger half was not the loop filter at all — it was a FOURTH
-   instance of the regex going quietly blind.** The log uses two conventions,
-   `164.1 …` and `Slice 84: …`, and the counter could only ever see the first:
+   instance of the regex going quietly blind.** The log uses THREE conventions
+   — `164.1 …`, `Slice 84: …`, and a bare top-level `166 — …` / `119: …` — and
+   at this point the counter could see only the first:
 
    ```
    # 996 rows: 302 bare · 141 prose · 553 naming no slice
@@ -180,6 +181,37 @@ match to its full playbook below:
    the direction this rule worries about. `slice_of` now ships `--self-test`,
    red-proved both ways (disable the prose branch → 3 cases fail; restore the
    two-digit regex → 3 different cases fail).
+
+   **A FIFTH instance, found the next wake (roadmap 166.5).** The third
+   convention above — a bare top-level number, `166 — …` or `119: …` — was
+   still invisible, and what exposed it was the Standardize wake's own row:
+   `dispatch_status.py` read `Objective 1 / 3 [161]` immediately after
+   recording an iteration that named Slice 166. **The number disagreed with
+   what had just been written**, which is the only thing that ever catches
+   this. 21 rows and 6 distinct slices were being missed; rows naming a slice
+   went 444 → 465, distinct slices 144 → 150, and the live counter moved to
+   `2 / 3 [161, 166]`.
+
+   **The widening's first draft invented slices**, which is the part to carry
+   forward. A loose `^(\d+)\s*[—–:-]` reads **`4-tick sweep: …`** and
+   **`4-seat adversarial grill …`** as slice 4 — 18 such rows exist, all of
+   them Standardize and Objective rows, so it would have made this counter
+   fire EARLY. A parser change that reports more is not self-evidently a fix.
+   The shipped rule lets a colon sit flush and requires a dash to be
+   surrounded by whitespace; `--self-test` now carries a case for each
+   convention and for both traps, and fails when the fix is reverted (2 cases)
+   and when the separator is loosened (2 different cases).
+
+   **The count above is deliberately not restated for the fix.** The replay
+   harness written to produce one read 61 crossings where this section
+   publishes 23 for the unchanged parser, so the harness is wrong and no new
+   cadence figure is quoted. The live reading is what is checked instead.
+
+   So: five recurrences, all the same shape. **The lesson is no longer "widen
+   the regex" — it is that this counter is only ever caught by a number
+   disagreeing with something a human just wrote down.** Read its output right
+   after recording an iteration, every wake; that comparison has now found two
+   of the five.
 
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.

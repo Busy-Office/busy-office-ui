@@ -83,6 +83,32 @@ BULLET = "- "
 # heading are slices 7-21, which predate that heading convention — not noise.
 SLICE_BARE = re.compile(r"^([1-9]\d{0,2})\.\d+[a-z]?\b")
 SLICE_PROSE = re.compile(r"^Slice ([1-9]\d{0,2})(?:\.\d+[a-z]?)?\b", re.IGNORECASE)
+# A THIRD convention, and the FIFTH time this parser has been found blind
+# (roadmap 166.5, 2026-08-28). A row may name a slice with no sub-item and no
+# "Slice" prefix — `166 — Standardize sweep`, `119: pattern wishlist triaged`.
+# SLICE_BARE requires `.N` and SLICE_PROSE requires the word, so both miss it.
+# Found the same way the fourth was: by a Standardize row this script then
+# refused to see, on the very wake that wrote it.
+#
+# The separator is what makes this safe, and the first draft got it wrong. A
+# loose `\s*[—–:-]` also matches `4-tick sweep: …` and `4-seat adversarial
+# grill …`, which are counts, not slice 4 — 18 such rows are in the log and a
+# widening that swallowed them would invent slices. So: a colon may sit flush
+# against the number, but a dash must be surrounded by whitespace.
+#
+# Measured over all 1,000 rows, reconciled three ways: the loose probe matches
+# 39 rows the old parser missed, this one matches 21, and the 18 it rejects are
+# every `N-tick`/`N-seat` row and nothing else (21 + 18 = 39, and each of the 18
+# was read). Rows naming a slice 444 -> 465, distinct slices 144 -> 150, rows
+# LOST by the widening: 0.
+#
+# NO CADENCE FIGURE IS QUOTED HERE, deliberately. A replay harness written for
+# it read 61 crossings where this file's own header publishes 23 for the
+# unchanged parser, so the harness — not the header — is wrong, and an
+# unreconciled number does not go in a comment. What IS checked is the live
+# effect: before this change `dispatch_status.py` read `Objective 1 / 3 [161]`
+# with a Standardize row for 166 already in the log; after, `2 / 3 [161, 166]`.
+SLICE_TOP = re.compile(r"^([1-9]\d{0,2})(?::|\s+[—–-])\s")
 
 # WHICH LOOPS CLOSE A SLICE (roadmap 161.4, decided 2026-08-28 by replaying the
 # whole log, not by argument). Counts are per-loop rows that name a slice, and
@@ -140,8 +166,8 @@ RULES = {
 
 
 def slice_of(item):
-    """The slice number a log item names, or None. Both conventions."""
-    m = SLICE_BARE.match(item) or SLICE_PROSE.match(item)
+    """The slice number a log item names, or None. All three conventions."""
+    m = SLICE_BARE.match(item) or SLICE_PROSE.match(item) or SLICE_TOP.match(item)
     return m.group(1) if m else None
 
 
@@ -227,6 +253,13 @@ SELF_TEST = [
     ("10.3% of pages carry the clause", "10"),              # KNOWN false positive, below
     ("scored Tables & lists (5 components)", None),
     ("released 0.3.0 to npm", None),                        # leading 0 refused
+    # The third convention (166.5) — bare top-level number, no sub-item.
+    ("166 — Standardize sweep: three rot-guards clean", "166"),  # was invisible
+    ("119: pattern wishlist triaged with grilled verdicts", "119"),  # flush colon
+    # ...and the trap that the first draft of that widening fell into. These are
+    # counts of ticks and seats, not slice 4. Eighteen such rows are in the log.
+    ("4-tick sweep: paths.mjs is one definition of DIST", None),
+    ("4-seat adversarial grill of Slice 18 at slice close", None),
 ]
 # `10.3%` is a real miss and is left alone deliberately. The tighter rule —
 # require `.[1-9]`, since item indexes are 1-based — was measured over the whole

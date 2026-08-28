@@ -1323,6 +1323,66 @@ visual debt was added; nothing visual was looked at.**
        0 of 20 — the shape 94.11 warns produces a detector that never fires. It is
        written down so the next sweep re-runs it instead of re-deriving it.
 
+5. [x] **166.5 — the dispatcher's slice parser was blind a FIFTH time, and this
+       wake's own Standardize row is what it could not see.**
+
+       Not searched for. After recording 166, `dispatch_status.py` still read
+       `Objective 1 / 3 [161]` — a Standardize row naming Slice 166 was in the
+       log, `CLOSES_A_SLICE` includes Standardize since 161.4, and the counter
+       showed 1. The number disagreed with what had just been written, which is
+       the only reason this was noticed.
+
+       **A third convention.** A row may name a slice with no sub-item and no
+       `Slice` prefix — `166 — …`, `119: …`. `SLICE_BARE` requires `.N`;
+       `SLICE_PROSE` requires the word. LOOPS.md rule 3 says "the log uses two
+       conventions" and it has used three since at least Slice 53.
+
+       **Its first draft invented slices, and that is the finding worth keeping.**
+       A loose `^(\d+)\s*[—–:-]` looked obviously right and matched **`4-tick
+       sweep: …`** and **`4-seat adversarial grill …`** as *slice 4*. Eighteen
+       such rows are in the log. A widening that reports MORE is not
+       self-evidently a fix — this one would have fabricated a slice number onto
+       eighteen Standardize rows, i.e. made the counter fire early rather than
+       late. The shipped rule lets a colon sit flush but requires a dash to be
+       surrounded by whitespace.
+
+       **Measured over all 1,000 rows and reconciled three ways** (the command
+       is the script's own `--self-test`; the population figures below are from
+       an ad-hoc pass kept in this entry so the next wake re-runs rather than
+       re-derives):
+
+       ```
+       python3 scripts/loops/dispatch_status.py --self-test   # 14 cases
+       python3 scripts/loops/dispatch_status.py               # the live effect
+       ```
+
+       - loose probe 39 rows · corrected 21 · rejected 18, and **21 + 18 = 39**
+         with every one of the 18 read individually — all `N-tick`/`N-seat`,
+         none a slice reference.
+       - rows naming a slice **444 → 465**; distinct slices **144 → 150**; rows
+         **LOST by the widening: 0**.
+       - live: `Objective 1 / 3 [161]` → **`2 / 3 [161, 166]`**.
+
+       **No cadence figure is quoted, deliberately.** A replay harness written
+       to answer "how many times does this change when the counter crosses 3
+       over the whole log" read **61** where this script's own header publishes
+       **23** for the *unchanged* parser. The harness cannot reproduce a
+       published, red-proved number, so the harness is what is wrong, and an
+       unreconciled number does not go into a comment or a roadmap entry. That
+       was the second instrument in this wake to be wrong on its first output
+       (166.4 was the first), which is the base rate CLAUDE.md states, hit twice
+       in one sitting.
+
+       *Accept*: `slice_of` returns the slice for all three conventions and
+       `None` for the `N-tick` shape; `--self-test` carries a case for each and
+       **fails when the fix is reverted AND when the separator is loosened**;
+       the live counter's reading agrees with what the log says was recorded.
+
+       **Red-proved both ways, injections confirmed to have landed:** removing
+       `SLICE_TOP` from `slice_of` fails 2 cases (`166`, `119`); restoring the
+       loose separator fails 2 *different* cases (`4-tick`, `4-seat`). 14 cases
+       pass as shipped.
+
 **Sweep verdict: clean.** `scan:dead-style` 0, `report:css-repeats` no delta,
 `report:prose` no unverdicted page, one duplicated table found and removed, and
 the re-scan for more of the same shape red-proved before its zero was believed.

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 01:41
+Generated at: 2026-08-28 02:39
 
 ## Open items by slice
 
@@ -22,10 +22,9 @@ Generated at: 2026-08-28 01:41
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (999 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-27 22:53   OVERDUE
+dispatch status — counter-triggered rules (1000 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-28 02:39   ok
   Objective     1 / 3 slice           since 2026-08-28 00:49   ok  [161]
-  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -39,9 +38,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 01:41 · Continue · build · 161.4 decided which loops close a slice: Continue+Standardize, with Roadmap/Explore/Objective measured before being refused (adding the last two moves the log's crossing count 23 to 23). The premise was the smaller half — the same run found a FOURTH blind regex, the prose 'Slice NN' convention the counter never saw: 141 of 996 rows, 45 extra slices, union 144 of ROADMAP.md's 146. Cadence replayed not predicted: crossings 18 to 22 on the format fix alone, 23 with Standardize; of 45 real Objective rounds those already past 3 goes 6 to 15. slice_of ships --self-test, red-proved both ways · landed · 537f561
-- 2026-08-28 01:41 · Roadmap · plan · 165 triaged: the archive sweep is due again — 2,488 of ROADMAP.md's 3,882 lines (64%) are 17 closed slices never moved, against 1,094 lines on 2026-08-25. Dispatcher rule 4 walks all of it every wake and names this exact signal itself. Filed with its command and an Accept that asserts the property, not a predicted line count; flagged do-by-hand because the last case-collision on this pair of files destroyed 7,307 lines silently · triaged · 537f561
-- 2026-08-28 01:41 · Meta · refusal · doing the sweep in this wake — a 2,488-line bulk move of the file the dispatcher reads, landed under a commit whose item was a counter fix, is exactly the scope creep the operating rules refuse · refused · 537f561
+- 2026-08-28 02:39 · Standardize · sweep · 166 — Standardize sweep: three rot-guards clean; a fourth copy of api.pageSlug in gen-rf-profile.mjs removed, two false comments corrected, re-scan red-proved · landed · fde0e23
 
 ## Sunset test
 
