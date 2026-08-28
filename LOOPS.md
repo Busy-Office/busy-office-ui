@@ -248,6 +248,20 @@ match to its full playbook below:
    Standardize exclusion survived unexamined: adding both changes the number of
    times the counter reaches 3 over the whole log from **23 to 23**.
 
+   **The `Objective` exclusion does NOT close the circle, and saying it does is
+   wrong** (measured 2026-08-28, roadmap 170 finding B). A grill files its items
+   **in its own slice number**, and those items are built by `Continue` rows —
+   which count. So a grill arms the next grill, one hop removed: **7 of 26**
+   rule-3 dispatches would not have crossed without a grill-derived slice, and
+   on 2026-08-28 two of the three armed slices were themselves grills (164,
+   167), leaving 1 of 3 without them. **Recorded, not fixed** — rule 3 sits
+   above rule 4 exactly so it cannot starve, and classifying slices by heading
+   inside the dispatcher would be the sixth regex this rule's own history
+   refuses (170's first attempt missed the older "from the Objective grill,
+   Slices 45-50" convention and reported 4 of 26). The command is in
+   `.roundtable/grill-objective-164-167-169-2026-08-28.md` §B; re-run it, the
+   figures are snapshots.
+
    The five recurrence narratives — what each parser did, the replay figures,
    the counts that were snapshots — are in **`LOOPS-archive.md`**. They are
    history a wake needs when it TOUCHES the parser, not when it reads the
