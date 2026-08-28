@@ -231,6 +231,85 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 180 — P0: a loop-name tally is read as a slice citation, and `main` has been red since (2026-08-28)
+
+**Dispatcher rule 1, and the P0 was found by the wake rather than reported.**
+Step 0's environment setup ran `npm run docs:build` on a clean checkout of
+`origin/main` at `f7c2070` and it exited 1:
+
+```
+FAIL roadmap 2 resolves
+     Cited from .roundtable/grill-objective-173-176-177-178-2026-08-28.md but
+     found in neither ROADMAP.md nor ROADMAP-archive.md.
+slice-refs check FAILED — 1 of 362 slice citation(s) do not hold
+```
+
+**This is not only a local failure — it is the pushed default branch.** Asked
+the API rather than assumed: run `33213989733` (CI) and `33213989703` (Deploy
+docs to Pages), both `failure`, both on `f7c20708`, created `21:46:17Z`. All
+**5** failing CI jobs die in the same place — `docs build` → `check:repo` — and
+the two runs before it (`52a50b58`, `4be166be`) are `success`, so the break is
+this push, not a drift. **The docs site has not deployed since.**
+
+`git log -S'Roadmap 2 · Polish' -- .roundtable/` names one commit: `74d8c2b`,
+Slice 179's own grill report, pushed with `f7c2070` at 21:46:08Z.
+
+**What the gate matched.** Line 17 of that report is a tally of loop rows:
+
+```
+— Meta 12 · Continue 4 · Roadmap 2 · Polish 2 · Standardize 1; refused 13,
+```
+
+`Roadmap` there is a **loop name followed by its count**. The gate extracts
+citations with `/\broadmap\s+(\d{1,3}(?:\.\d+[a-z]?)?)/gi`, which cannot tell
+that from the citation form `roadmap 179.2`, so it demanded a `## Slice 2` that
+has never existed. Nothing in the shipped package is affected — no `.css`, no
+`.ts`, no `dist/` artefact — but every gate downstream of `check:repo` in
+`docs:build` stops running, which is why five jobs and the deploy all fail on
+one line of prose in a report.
+
+**Case cannot be the discriminator, measured before it was tried.** Over the
+461 matches the current pattern finds across the tracked tree: `roadmap` 434,
+`ROADMAP` 15, `Roadmap` 12 — and **11 of those 12 Title-case matches are
+genuine sentence-initial citations** (`Roadmap 171.1`, `Roadmap 159's finding`,
+`Roadmap 131.1/135.1`, …). Only the tally is not one.
+
+**The tag was wrong too.** The gate declares itself `@exact`, on the grounds of
+"equality and set membership over strings matched at a fixed lexical position".
+The heading arm is exactly that. The other arm is a bare word regex over free
+prose, which is *recognition* — and it has now been fooled. `check:selftests`
+therefore never asked this gate for a `--self-test`.
+
+1. [ ] **180.1 — the extractor must not read a loop-name tally as a citation,
+       and must prove it can still fail.**
+
+       *Accept* — properties, not predicted values:
+       - `npm run docs:build` exits 0 on the tree at HEAD, and the CI run on
+         the pushed commit reports `success` (read from the API, not inferred
+         from the local run).
+       - `check:slice-refs`' own reported citation count agrees with an
+         independent re-count of the same corpus taken outside the gate.
+       - The skip predicate's base rate is measured on the unedited tree
+         **before** it ships, and recorded here with the command. A predicate
+         true of everything, or of nothing, is refused (94.11).
+       - Red-proved in **both** directions, each injection confirmed to have
+         landed before its result is believed: an unresolvable citation makes
+         the gate red and names it; a second, differently-worded loop tally
+         leaves it green; and the **old** extractor goes red on that same tally
+         injection, which is what makes the red-proof discriminating rather
+         than a detector agreeing with itself (179.1's shape).
+       - The gate's `@heuristic`/`@exact` tag agrees with what the code
+         actually does, and `check:selftests` agrees with the tag — including
+         the `process.argv` branch that runs a real self-test, which is the
+         thing that meta-gate checks rather than the tag text.
+       - The self-test itself is red-proved by stubbing the classifier.
+
+       **The grill report's tally line is left exactly as written.** Rewording
+       it would restore green in one edit and fix nothing: the next tally
+       breaks the branch again. Left in the tree it is a live fixture — the
+       gate's correctness is exercised by real content on every run, not only
+       by its own self-test.
+
 ## Slice 179 — Objective grill of Slices 173, 176, 177, 178 (2026-08-28)
 
 Dispatcher rule 3 at **4 / 3 OVERDUE `[173, 176, 177, 178]`**; rule 1 found no
