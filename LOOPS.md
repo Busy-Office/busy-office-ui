@@ -37,10 +37,26 @@ router now, and it acts on what it finds instead of just reading it.
 
 ### Step 0 — Read the handover
 
-`.roundtable/RESUME.md`, then `git status`. The wake prompt says *don't assume
-prior-turn state*, which only works if state a wake needs is written down rather
-than remembered. `RESUME.md` carries the two things `ROADMAP.md` and the loop log
-cannot: **work left uncommitted**, and decisions taken but not yet recorded.
+`.roundtable/RESUME.md` **and `.roundtable/ENVIRONMENT.md`**, then `git status`.
+The wake prompt says *don't assume prior-turn state*, which only works if state a
+wake needs is written down rather than remembered. `RESUME.md` carries the two
+things `ROADMAP.md` and the loop log cannot: **work left uncommitted**, and
+decisions taken but not yet recorded.
+
+`ENVIRONMENT.md` carries what none of the three can: **the git/build traps and
+the toolchain that works** — the detached HEAD, the shallow clone, the
+`CHROME_PATH` export, the background task whose empty output file is not a
+completion signal. It was split out of `RESUME.md` by 169.3 (2026-08-28) because
+the handover is rewritten wholesale every wake — mean 111 lines added+removed
+over the last 20 commits — and durable content there had grown to **214 of 372
+lines (57%)**, growing 3.2x faster than the per-wake half the file exists for.
+
+**Naming it HERE is what makes the split safe, and it is the reason the refusal
+argument lost.** 167.2's "a pointer is read less than a paragraph" is true of a
+cross-reference into an archive nobody is told to open; it is not true of a file
+Step 0 instructs the wake to read. `check:resume-charter` holds both ends —
+`RESUME.md` must keep its pointer, and the moved sections must not grow back
+there.
 
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and

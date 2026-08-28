@@ -40,7 +40,8 @@
     "copy:suite": "node scripts/copy-suite.mjs",
     "check:quickstart": "node scripts/check-quickstart.mjs",
     "check:paths": "node scripts/check-paths.mjs",
-    "check:repo": "node scripts/check-imports.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-selftests.mjs && node scripts/check-dist-walkers.mjs && node scripts/check-viewport-forks.mjs && node scripts/check-paths.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-vendor-names.mjs"
+    "check:resume-charter": "node scripts/check-resume-charter.mjs",
+    "check:repo": "node scripts/check-imports.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-selftests.mjs && node scripts/check-dist-walkers.mjs && node scripts/check-viewport-forks.mjs && node scripts/check-paths.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-vendor-names.mjs && node scripts/check-resume-charter.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

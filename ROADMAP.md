@@ -1326,7 +1326,15 @@ nothing visual was looked at.**
        **Not a gate, deliberately** — 158 refuses a word-count gate up front and
        that reasoning is untouched here. This changes a `console.log` format.
 
-3. [ ] **169.3 — the generalized form of 169.1: `RESUME.md` is carrying durable
+3. [x] **169.3 — DONE 2026-08-28 (cloud wake). Implemented, not refused.** The
+       traps, the toolchain, the carried-forward measurement discipline and the
+       standing owner instruction now live in **`.roundtable/ENVIRONMENT.md`**;
+       `RESUME.md` keeps a pointer and only what its own header allows;
+       `LOOPS.md` Step 0 names both files; `check:resume-charter` holds both
+       ends. The full decision, with the premise re-check that changed the
+       argument, is at the end of this item.
+
+       **the generalized form of 169.1: `RESUME.md` is carrying durable
        content, and its charter says it cannot.** Noticed in this round's
        re-scan, not searched for — 169.1 is one instance and this is the shape.
 
@@ -1375,13 +1383,106 @@ nothing visual was looked at.**
        because `RESUME.md` is the file Step 0 opens, and a pointer is read less
        than a paragraph (this file's own words, 167.2).
 
-       **Deliberately not decided by this wake.** The destination is a direction
+       **Deliberately not decided by that wake.** The destination is a direction
        call, not a mechanical move: 167.2 split `LOOPS.md` one wake ago
        specifically to stop it growing, so appending 140 lines of environment
        traps to it cuts against a decision made one wake earlier, and a new root
        document is a new durable artefact. Per this project's operating rule, an
        improvement bigger than the item becomes a roadmap entry rather than an
        extra commit.
+
+       ### DECIDED 2026-08-28 — move it. What the premise re-check changed.
+
+       **Half the item's own supporting evidence turned out to argue the other
+       way, and that is the finding.** 169.3 rested on *"content that has
+       survived sixteen manual re-copies is durable by demonstration"*. A
+       continuity probe over all 53 revisions of the file — asking not whether
+       each trap is present today but whether it was ever **dropped and later
+       restored** — strengthens the durability half and destroys the risk half:
+
+       ```
+       # for each probe, walk the revisions chronologically and count the
+       # present -> absent transitions after its first appearance
+       python3 - <<'PY'
+       import subprocess
+       rows=[l.split() for l in subprocess.run(['git','log','--format=%H %cs','--',
+             '.roundtable/RESUME.md'],capture_output=True,text=True).stdout.split('\n') if l.strip()][::-1]
+       texts=[subprocess.run(['git','show',f'{s}:.roundtable/RESUME.md'],
+              capture_output=True,text=True).stdout for s,_ in rows]
+       for name,needle in {'shallow':'THE CLONE IS SHALLOW','CHROME_PATH':'CHROME_PATH',
+           'detached':'the container starts DETACHED','astro dist':'astro build` does not clear',
+           'prettier':"IS NOT THIS REPO'S FORMATTER",'cwd':'WORKING DIRECTORY PERSISTS',
+           'toolchain':'Cloud-wake toolchain','bg-task':'NOT A COMPLETION SIGNAL',
+           'wc':'UNDERCOUNTS THIS REPO'}.items():
+           seq=[needle in t for t in texts]; f=seq.index(True); tail=seq[f:]
+           gaps=sum(1 for i in range(1,len(tail)) if tail[i-1] and not tail[i])
+           print(f'{name:12} {sum(seq):3d}/{len(seq)}  dropped-then-restored {gaps}')
+       PY
+       # 9 probes, 53 revisions, DROPPED-THEN-RESTORED = 0 for every one
+       ```
+
+       So **the re-copy has never lost anything.** Loss was never the cost, and
+       an item arguing "move it before it gets lost" would have been arguing
+       from a risk that 53 revisions say does not occur. The real cost is the
+       one 169.1 actually paid, and it is about **visibility, not survival**: a
+       correction to a trap lands inside a 111-line wholesale rewrite, where
+       nothing distinguishes it from the wake's own churn.
+
+       **The two numbers that decided it**, both re-runnable:
+
+       ```
+       # durable vs per-wake lines, and their growth, across the 27 revisions
+       # since durable content first appeared  (full script: see the wake's
+       # transcript; it splits on '## ' and bills each section to one half)
+       #   durable    9 -> 214 lines   up 15  down 3  flat  9
+       #   per-wake  93 -> 158 lines   up 15  down 8  flat  4
+       #   whole    102 -> 372 lines   up 20  down 7  flat  0
+
+       # mean churn per commit on the handover, last 20 commits
+       git log --format=%H -20 -- .roundtable/RESUME.md | while read s; do
+         git show $s --numstat --format= -- .roundtable/RESUME.md; done |
+         awk -F'\t' '{a+=$1;r+=$2;n++} END{print a+r" lines over "n" commits, mean "int((a+r)/n)}'
+       #   2219 lines over 20 commits, mean 111
+       ```
+
+       **214 of 372 lines (57%) were durable** — 169.3 read 63% of 261, and the
+       fraction fell only because 168.1 added *per-wake* answers, not because
+       anything left. Over those 27 revisions the half this file is not for grew
+       **3.2x faster** than the half it is for.
+
+       **The refusal argument was weighed and does not transfer.** "A pointer is
+       read less than a paragraph" is 167.2's line about splitting *narrative*
+       into an archive nobody is instructed to open. `LOOPS.md` **Step 0 now
+       names both files**, which makes reading `ENVIRONMENT.md` a step the
+       dispatcher executes rather than a cross-reference it may skip. That is the
+       whole difference, and it is why the destination is `.roundtable/` — a
+       sibling of `loop-log.md`, `INDEX.md` and `RESUME.md`, not the "new root
+       document" the item worried about, and not `LOOPS.md`, which 167.2 split
+       one wake earlier precisely to stop it growing.
+
+       **`check:resume-charter` is the ratchet**, and its base rate is the
+       reason it is not ceremony: the predicate was **FALSE on the real tree**
+       before the move, so the gate was watched failing on the actual defect
+       rather than on an injection — 6 of 6 rules red on `HEAD`'s
+       `RESUME.md`. Confirmed both ways afterwards, injections verified to have
+       taken effect before believing either result: dropping the pointer → red
+       on assertion 1; blanking a trap in the destination → red on the arrival
+       check. `@exact` — both halves are string membership over two files, so no
+       `--self-test` is owed.
+
+       **The gate's own first version had the bug this repo keeps paying for**,
+       caught before it shipped: it asserted the four *old headings* were
+       present in the destination, but `ENVIRONMENT.md` deliberately re-titles
+       several sections and `READ FIRST IF THIS IS A CLOUD WAKE` exists nowhere
+       in it. Three of four matched by luck; the check meant to prove arrival
+       would have proved the opposite and been "fixed" by loosening it. It now
+       probes for the content a reader came for (`THE CLONE IS SHALLOW`,
+       `NOT A COMPLETION SIGNAL`, …), not for a heading.
+
+       **Not verified: nothing visual.** This was a cloud wake — no Podman, no
+       `localhost:8081`, no screenshots. No CSS, Astro page or rendered surface
+       was touched, which is a stronger statement than a screenshot;
+       `check:layout` and `test:axe` swept all 127 pages at both widths anyway.
 
 ## Slice 168 — Objective grill of Slices 163, 164, 165 (2026-08-28)
 
