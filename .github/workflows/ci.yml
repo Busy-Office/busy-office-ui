@@ -28,9 +28,29 @@ on:
     # saving is forfeited because a roadmap-only commit can now genuinely turn
     # CI red by deleting a cited slice.
     #
-    # Only .roundtable/** and STATUS.md are read by nothing, and
-    # check:ci-ignores asserts that rather than trusting this comment — which
-    # is the lesson, since this comment was wrong for months.
+    # STATUS.md is read by nothing, and check:ci-ignores asserts that rather
+    # than trusting this comment — which is the lesson, since this comment was
+    # wrong for months.
+    #
+    # .roundtable/** IS NOW READ BY A CI SCRIPT, and this comment used to claim
+    # otherwise (2026-08-28, roadmap 169.4). check-resume-charter.mjs opens
+    # .roundtable/RESUME.md and .roundtable/ENVIRONMENT.md, and it runs inside
+    # check:repo. check:ci-ignores did NOT catch it: line ~80 filters out any
+    # entry containing '*', because a directory glob has no single file to
+    # open — so of the two entries here it verifies STATUS.md and skips this
+    # one. Measured, not reasoned: the gate's pass line reads "verified against
+    # 124 script(s): STATUS.md", and feeding check-resume-charter.mjs to its own
+    # readsFile() returns true for both names.
+    #
+    # The consequence, stated rather than glossed: a commit touching ONLY
+    # .roundtable/** can break check:repo and will not be built, so the failure
+    # surfaces on the next commit that is. The attribution harm is smaller than
+    # the general case this comment warns about — the gate names the file and
+    # the reason in its failure text — but the invariant is genuinely violated.
+    # Whether to un-ignore .roundtable/** (~27% more full runs, the saving this
+    # list exists for) or move the charter check out of check:repo is a
+    # cost/benefit call for the owner, filed as roadmap 169.4 rather than
+    # decided by the wake that caused it.
     paths-ignore:
       - '.roundtable/**'
       - 'STATUS.md'

@@ -223,8 +223,20 @@ first version asserting the wrong headings against the destination, which is the
 same shape 168's grill already found 3-of-3 times; and whether moving durable
 content out of a rewritten file is a pattern with other instances, or one.
 
-**After the grill, rule 4's oldest dispatchable items are 170.2, then 170.3**,
-then the newly triaged 171.1-171.3 — **8 open items**, re-derived from
-`ROADMAP.md` after the rebase, not carried forward. 112.3/112.4 and the
+**After the grill, rule 4's oldest dispatchable item is 169.4** (filed by this
+wake, see below), then **170.2**, **170.3**, then the newly triaged
+171.1-171.3 — **9 open items**, re-derived from `ROADMAP.md`, not carried
+forward.
+
+**169.4 is a defect this wake CAUSED, and it is the one thing here worth an
+owner's eye.** `check-resume-charter.mjs` runs inside `check:repo` and reads
+`.roundtable/RESUME.md`, but `.roundtable/**` is in CI's `paths-ignore` — so a
+commit touching only that path can break `check:repo` without being built.
+`check:ci-ignores` did not catch it because it filters glob entries by
+construction; its pass line reads "verified against 124 script(s): **STATUS.md**"
+— one of the two entries. `ci.yml`'s comment claimed `.roundtable/**` was read by
+nothing and has been corrected. The item is a cost/benefit call (un-ignore the
+path, move the check to the loop's tooling, or cover globs and accept red), so
+it is filed rather than decided by the wake that caused it. 112.3/112.4 and the
 AT-runtime item are older but blocked on the owner or on hardware. 170.2 and
 170.3 need no browser and are dispatchable in a cloud wake.

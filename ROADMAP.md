@@ -1539,6 +1539,62 @@ nothing visual was looked at.**
        was touched, which is a stronger statement than a screenshot;
        `check:layout` and `test:axe` swept all 127 pages at both widths anyway.
 
+4. [ ] **169.4 — `check:repo` now reads a path CI ignores, and the gate that
+       exists to catch that cannot see it.** Caused by 169.3 and found in the
+       same wake, by noticing that its own last push created no CI run.
+
+       Two facts, both measured rather than reasoned:
+
+       ```
+       npm run check:ci-ignores -w docs | tail -1
+       # -> "verified against 124 script(s): STATUS.md"
+       #    ONE of the two paths-ignore entries. check-ci-ignores.mjs line ~80
+       #    filters entries containing '*' ("directory globs have no single
+       #    file to read"), so '.roundtable/**' is skipped by construction.
+
+       # and the new gate does read them, by check-ci-ignores' OWN readsFile():
+       #   RESUME.md      -> READ
+       #   ENVIRONMENT.md -> READ
+       ```
+
+       So `check-resume-charter.mjs` runs inside `check:repo` and opens
+       `.roundtable/RESUME.md`, while `.roundtable/**` sits in `paths-ignore`.
+       **A commit touching only `.roundtable/**` can break `check:repo` and will
+       not be built**, surfacing on the next commit that is — the exact silent
+       condition `check-ci-ignores.mjs`'s header describes, landing in the one
+       slot that gate does not cover.
+
+       **Severity, honestly bounded:** smaller than the general case, because
+       the failure text names the file and the reason ("RESUME.md points at
+       ENVIRONMENT.md — the pointer is gone"), so a reader is not misled about
+       which change caused it. The ratchet is delayed, not dead. But the
+       invariant `paths-ignore` rests on is genuinely violated, and `ci.yml`'s
+       comment asserted the opposite until this item corrected it.
+
+       *Accept*: `check:ci-ignores` and `ci.yml` agree with what the scripts
+       actually read — **either** the glob is covered (which requires resolving
+       one of the options below, since covering it while the read exists is red
+       by construction), **or** a recorded reason the glob is legitimately out
+       of scope. Whichever is chosen, `ci.yml`'s comment states what is true of
+       `.roundtable/**` at that point, and the claim is checked by a command
+       rather than by the comment.
+
+       **Not decided by the wake that caused it** — it is a cost/benefit call:
+
+       - **Un-ignore `.roundtable/**`.** Correct and simple; costs the saving
+         this list exists for. Re-measure before choosing — the comment's
+         "8 of the last 30 commits" is a snapshot from a different era, and the
+         loop's commit mix has changed.
+       - **Move the charter check out of `check:repo`** into the loop's own
+         tooling, which already runs mechanically every iteration
+         (`record_iteration.py`). Arguably the right LAYER — the charter is a
+         property of loop bookkeeping, which CI deliberately does not build —
+         but LOOPS.md's "a gate that needs a human to start something is not a
+         gate" deserves an answer first: the loop is not a human, yet it is also
+         not CI.
+       - **Cover globs in `check:ci-ignores` and accept the red** until one of
+         the two above lands. Honest, and unshippable as-is.
+
 ## Slice 168 — Objective grill of Slices 163, 164, 165 (2026-08-28)
 
 Rule 3 at 3/3. Full report:
