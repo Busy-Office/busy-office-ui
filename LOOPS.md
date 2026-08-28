@@ -66,8 +66,10 @@ a CI gate reading it was the contradiction — and re-homed it in
 `(RESUME.md charter check FAILED — see below)` on stderr and must not fail the
 recording. So it runs every wake, and nothing rejects a commit that breaks the
 charter. That is a real trade, not an oversight, and it is written here because
-two documents claimed the opposite for the 41 minutes between the gate being
-hardened (172.1) and demoted (169.4), and neither wake named the other.
+two documents claimed the opposite from the moment it became true: the gate was
+hardened at **11:42:09Z** (`18791d5`, 172.1) and demoted at **12:26:17Z**
+(`33fb89e`, 169.4) — **44 minutes, two consecutive wakes, neither naming the
+other.**
 
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
@@ -118,7 +120,31 @@ queue and nothing claims an item.
 (Slice 162). Nothing was corrupted, because `git push` rejected the loser rather
 than merging it.
 
-**Why that is safe by construction and not by luck.** Every wake ends with
+**⚠ THE "SAFE BY CONSTRUCTION" ARGUMENT BELOW IS FALSE, AND THE SECOND
+COLLISION IS WHAT SHOWED IT** (Objective grill of 169/170/172, 2026-08-28;
+roadmap 175.4, which leaves the *decision* open). On 2026-08-28 the cloud
+routine and a local session both took the same rule-3 dispatch, and **the
+loser's rebase resolved with no conflict at all**. Stated exactly, because the
+reopen condition below is worded more narrowly than what happened: it anticipated
+an overlap on `loop-log.md`'s append point ALONE, and this collision overlapped
+on `ROADMAP.md` and `LOOPS.md` and merged clean anyway, with `loop-log.md` not in
+the loser's diff at all. The same failure through a wider door. Both guaranteed
+collision points failed:
+
+- **`loop-log.md` was not in the loser's diff.** `record_iteration.py` runs
+  *after* the commit, once per wake, so for nearly all of a wake the append
+  point is untouched. The guarantee holds only for a wake that has already
+  recorded when the other pushes, which is the minority of the wake.
+- **`ROADMAP.md` was in both diffs and merged cleanly.** Two wakes ticking boxes
+  in *different* slices produce disjoint hunks — 170.3 against a heading
+  renumber and a new slice ~400 lines away.
+
+What actually caught it was the `git fetch origin main` before the first commit,
+mandated below. That is the working half, and it is a process rule with nothing
+mechanical behind it: a wake that skips it gets no second signal. Read the rest
+of this paragraph as the argument that was made, not as one that holds.
+
+**Why that was believed safe by construction and not by luck.** Every wake ends with
 `record_iteration.py`, which appends to `.roundtable/loop-log.md`, and every
 dispatched item ticks a box in `ROADMAP.md`. Two concurrent wakes therefore
 collide in those two files even when their code changes are disjoint: the

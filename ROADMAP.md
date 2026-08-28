@@ -981,10 +981,22 @@ Continue 4 / Standardize 1 / Roadmap ×1. Reconciled before quoting: 1,047 raw
 bullets, 1,047 parsed by `dispatch_status.rows()`, 1,047 by the independent
 outcome parser — whose first draft was wrong on 356 rows anyway (report §D).
 
-**A local wake was mid-flight while this one ran** — `5f21113` landed at 13:32Z,
-five minutes before Step 0, with no iteration row yet. `LOOPS.md` Step 0c accepts
-collisions; nothing here touches Slice 173, and `origin/main` was re-fetched
-before the first commit.
+**THIS GRILL COLLIDED WITH A SECOND ONE, AND BOTH ARE KEPT.** `LOOPS.md` Step 0c
+exercised for real, second recorded time. A local wake was live throughout —
+`5f21113` landed at 13:32Z, five minutes before Step 0, with no iteration row —
+and by the pre-commit re-fetch Step 0c mandates, `origin/main` had moved four
+commits including **its own Objective grill of the same 169/170/172 window**
+(`0131ebc5`, recorded 13:36Z). Nothing here duplicates it: its findings are the
+green-red-proof rule, the self-declared `@exact` exemption, and what went right;
+none of the three below appears in it, checked by reading it rather than by
+title. Rebased rather than discarded, and **every figure re-verified on the
+rebased tree** — the other wake changed `dispatch_status.py` and
+`check-ci-ignores.mjs` between the measurement and the commit. The §A red-proof
+still reproduces 3 → 4; `sorted({` is still line 247. What moved: the log is
+1,052 rows, refusal 208 of 590 (35.25%), and `dispatch_status.py` now reads
+`Objective 1 / 3 [170]` because the other grill discharged the counter mid-wake.
+The window figures above are the state this grill examined, tip named, not
+silently refreshed.
 
 1. [x] **175.1 — DONE 2026-08-28. `## Slice 172` headed two different slices,
        and it is the first such collision in 710 revisions of `ROADMAP.md`.**
@@ -1126,6 +1138,55 @@ before the first commit.
        refuses. **What would reopen it:** a charter violation that actually lands
        and survives a wake, which is now visible because `LOOPS.md` says where
        the check reports.
+
+4. [ ] **175.4 — OWNER CALL. Step 0c's own reopen condition fired, so "accept
+       collisions" is due a re-decision.** The finding is recorded and the false
+       half is already corrected in `LOOPS.md`; what is open is the decision,
+       which has been the owner's in every slice so far.
+
+       Step 0c accepts collisions on this argument: *"the loser's rebase
+       conflicts, so it cannot land silently on top of work it never read"* —
+       and names its own trigger: *"a collision that LANDS rather than being
+       rejected — two wakes whose only overlap was the append point of
+       `loop-log.md` and whose rebase resolved cleanly."*
+
+       **On this wake's collision the rebase resolved with no conflict at all**,
+       and both guaranteed collision points failed for different reasons.
+       **Stated exactly: the trigger's wording is narrower than what happened.**
+       It anticipated a collision whose *only* overlap was `loop-log.md`'s append
+       point; this one overlapped on `ROADMAP.md` and `LOOPS.md` and still merged
+       clean, while `loop-log.md` was not in the loser's diff at all. Not the
+       literal condition — the same failure through a wider door, and the safety
+       claim the condition protects is the one that broke.
+
+       ```
+       git diff --name-only 5f211132 7cc6e73b   # other wake: 9 files
+       git diff --name-only 7cc6e73b 6c2ce5e0   # this wake:  4 files
+       comm -12 …                               # overlap: LOOPS.md, ROADMAP.md
+       ```
+
+       - `loop-log.md` was **not in the loser's diff**. `record_iteration.py`
+         runs after the commit, once per wake, so for nearly all of a wake the
+         append point is untouched. The guarantee holds only for a wake that has
+         already recorded when the other pushes.
+       - `ROADMAP.md` was in both and **merged cleanly**: two wakes ticking
+         boxes in different slices produce disjoint hunks — 170.3 against a
+         heading renumber and a new slice ~400 lines away.
+
+       What caught it was the `git fetch origin main` before the first commit,
+       which the same section mandates and which is the working half. Severity
+       is bounded and stated: nothing was lost, the two grills share no finding,
+       and the cost was one re-verification pass — Step 0c's own argument for
+       redundant coverage paid for itself.
+
+       *Accept*: a recorded decision that either (a) keeps "accept collisions"
+       with the safety argument restated to match what is actually true — naming
+       the pre-commit fetch as the only mechanism — or (b) picks a different
+       scheme, with its cost measured rather than asserted. Either way `LOOPS.md`
+       Step 0c stops carrying an argument its own trigger has falsified. **Do not
+       resolve this by making the loser record earlier**: that would create a
+       conflict on purpose to preserve a guarantee, and it trades a clean rebase
+       for a hand-resolved one every time two wakes overlap.
 
 ## Slice 173 — Owner: two demos that do not demonstrate (2026-08-28)
 
