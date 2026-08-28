@@ -266,7 +266,19 @@ def main():
     )
     args = ap.parse_args()
 
-    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    # UTC, and it says so (roadmap 164.2). This was a naive `now()`, and it is
+    # the one such site in the loop scripts that is NOT latent: two dispatchers
+    # write this file — the owner's machine at +0800, the cloud container at
+    # +0000 — so a cloud regeneration stamped an hour EIGHT HOURS EARLIER than
+    # the local one before it (13:15 -> 05:31, observed). A freshness stamp on a
+    # derived mirror that runs backwards tells a reader the mirror is stale when
+    # it was just rebuilt. Nothing parses this line: `--check` strips it.
+    #
+    # The log ROWS deliberately keep their naive local stamp — that decision,
+    # its cost and the two refusals are in LOOPS.md Step 0c.
+    now_str = datetime.datetime.now(datetime.timezone.utc).strftime(
+        "%Y-%m-%d %H:%M UTC"
+    )
     content = render(now_str)
 
     if args.check:

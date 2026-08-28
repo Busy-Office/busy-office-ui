@@ -1318,7 +1318,7 @@ catches.
        written the day after 159 made "write the command next to the claim" a
        rule.
 
-2. [ ] **164.2 — decide whether the loop log records WHICH CLOCK wrote a row.**
+2. [x] **164.2 — DECIDED 2026-08-28: the row keeps its naive local stamp; the clock is recovered by `git blame`, not by the sha.**
        `record_iteration.py` writes `datetime.now()` — naive local wall-clock,
        no offset. The owner's machine is UTC+08; the cloud container is UTC.
        Since the routine was promoted to `/schedule` (162), both write the same
@@ -1358,6 +1358,116 @@ catches.
        same subject (what two dispatchers sharing one queue costs); this is the
        second cost, and unlike the first it is silent and lands in the record
        itself.
+
+       **DECISION (2026-08-28, cloud wake): accept the naive local stamp. The
+       decision is recorded in `LOOPS.md` Step 0c, next to 162.1.** Four
+       measurements decided it, each with its command; all are snapshots at
+       1014 rows — re-run, do not quote. Full script for the last two:
+       `.roundtable/probe-164.2-clocks.py` is NOT kept; the code is inline
+       below because it runs in seconds.
+
+       **(1) The premise re-checked, and it holds.** 3 inversions, unchanged
+       across the 18 rows added since the item was filed at 996.
+
+       ```
+       python3 - <<'PY'
+       import re
+       R=re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ")
+       t=[R.match(l).group(1) for l in open('.roundtable/loop-log.md') if R.match(l)]
+       print(len(t),"rows ·",sum(1 for a,b in zip(t,t[1:]) if b<a),"inversions")
+       PY
+       # 1014 rows · 3 inversions        (2026-08-28)
+       ```
+
+       **(2) The ordering an offset would add is already present, and already
+       correct.** Resolve each naive stamp through the author-tz of the commit
+       that INTRODUCED that line (`git blame --line-porcelain`), and the file's
+       own line order is chronological at **1014 of 1014** — zero true-UTC
+       inversions, worst violation 0 minutes. So "line order is correct; the
+       timestamps are what lie" is now measured rather than asserted, and the
+       thing the offset buys is display disambiguation for a single row read in
+       isolation, not order.
+
+       ```
+       python3 - <<'PY'
+       import re,subprocess,datetime
+       out=subprocess.check_output(['git','blame','--line-porcelain','--',
+                                    '.roundtable/loop-log.md'],text=True)
+       rows=[];cur={}
+       for l in out.split('\n'):
+           if re.match(r'^[0-9a-f]{40} ',l): cur={}
+           elif l.startswith('author-tz '): cur['tz']=l.split()[1]
+           elif l.startswith('\t'):
+               if l[1:].startswith('- '): cur['text']=l[1:]; rows.append(cur)
+               cur={}
+       R=re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ")
+       inst=[]
+       for r in rows:
+           tz=r['tz']; s=1 if tz[0]=='+' else -1
+           off=s*datetime.timedelta(hours=int(tz[1:3]),minutes=int(tz[3:5]))
+           n=datetime.datetime.strptime(R.match(r['text']).group(1),"%Y-%m-%d %H:%M")
+           inst.append((n-off,n))
+       print(len(inst),"rows ·",sum(1 for a,b in zip(inst,inst[1:]) if b[0]<a[0]),
+             "true-UTC inversions ·",
+             sum(1 for a,b in zip(inst,inst[1:]) if b[1]<a[1]),"naive")
+       PY
+       # 1014 rows · 0 true-UTC inversions · 3 naive        (2026-08-28)
+       ```
+
+       That zero is red-proved, because a plain zero is a defect until shown
+       otherwise: appending one deliberately backwards row
+       (`- 2026-08-20 01:00 · … · deadbee`) takes it to **1015 rows · 1
+       true-UTC inversion · 4 naive**, and the injection is confirmed to have
+       landed — blame resolves the uncommitted line at the container's own
+       `+0000` and it is the last row the detector sees.
+
+       **(3) 162.1's "already recorded exactly, one indirection away" is wrong
+       at the margin, and wrong in the place that matters.** The same script,
+       comparing the row's own sha against blame: they **agree on 1004 rows and
+       disagree on none**, but the sha is *unrecoverable* on **10 of 1014** —
+       the five 2026-08-13 rows carrying a literal `-`, and **five whose sha no
+       longer exists in this history** (`c1d9e10`, `f014635`, `bce2cef2`,
+       `ea4c72b`; line 998's row cites `f014635` while blame gives `e6bf5538`,
+       the surviving commit for the same work). They were rebased away — which
+       is what the LOSING dispatcher does after a collision, i.e. the exact
+       scenario the attribution is for. `LOOPS.md` had counted rows that *carry*
+       a sha (1009), never rows whose sha *resolves* (1004). Blame is exact at
+       1014/1014 and survives a rebase, because rebase preserves the author date
+       and its offset. Corrected in place; the section now names blame.
+
+       **(4) The `%z` option is not free, measured by injection rather than by
+       reading the parsers.** Appending one row spelled
+       `- 2026-08-28 14:00 +0000 · Continue · build · … · landed · deadbee` to
+       the log and running all four consumers: `_common.parse_log_line`,
+       `rebuild_from_log.py` and `generate_status.py` accept it, and
+       **`dispatch_status.py` — the one whose output chooses this wake's loop —
+       exits 1**, because its `ROW` regex requires ` · ` immediately after
+       `HH:MM`. 164.1's reconciliation caught it loudly, which is the guard
+       working, and is also the cost: the format change is a coordinated parser
+       edit plus a permanently mixed column, bought for an ordering measurement
+       (2) says the file already has. **Refused.** Backfilling the 1014 existing
+       rows is exact via blame and also **refused**: `record_iteration.py`'s own
+       standing rule is that historical rows record what was believed when
+       written.
+
+       **Fixed in passing, because it was smaller than explaining it**
+       (`LOOPS.md`'s every-wake improvement rule): `generate_status.py` wrote
+       `STATUS.md`'s `Generated at:` from the same naive `now()`, and this is
+       the one such site that is **not** latent. Regenerating on this cloud wake
+       moved it **backwards, 13:15 → 05:31** — a derived mirror reporting itself
+       eight hours staler than the rebuild that had just written it, which is
+       the freshness signal a reader actually uses. It now stamps `… UTC`
+       explicitly. Nothing parses the line: `--check` strips it before
+       comparing, and `check:repo` stayed green.
+
+       **No gate.** The defect is a human misreading one row's hour; the only
+       checkable property — "the stamp carries an offset" — is the thing this
+       item just refused, so a gate would enforce the rejected option. Stated
+       rather than wrapped in ceremony, per 94.11.
+
+       **Cloud wake: nothing visual was looked at.** The diff is markdown plus
+       two Python comment blocks and one `strftime` in a script that writes a
+       markdown file; no page markup changed.
 
 3. [x] **164.3 — OWNER CALL, DECIDED 2026-08-28: (a) is NOT spent. Finish it.** Not a wake's decision, filed
        here so it is visible rather than re-derived.

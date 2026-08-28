@@ -2,15 +2,13 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 13:15
+Generated at: 2026-08-28 05:40 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 164** (1 open)
-  - 164.2 — decide whether the loop log records WHICH CLOCK wrote a row.
 - **Slice 167** (2 open)
   - 167.1 — the loop's own prose is the fastest-growing and the only unmeasured prose in the repo. Decide whether the 158.2 cadence covers it.
   - 167.2 — `LOOPS.md` rule 3 is 82% archaeology, and the file has no archive.
@@ -33,7 +31,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
 - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- 164.2 — decide whether the loop log records WHICH CLOCK wrote a row.
 - AT runtime evidence
 
 ## Last 10 iterations

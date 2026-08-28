@@ -77,6 +77,14 @@ def main():
                          "Repeatable.")
     args = ap.parse_args()
 
+    # Naive local wall-clock, DELIBERATELY (roadmap 164.2, decided 2026-08-28).
+    # Two dispatchers write this log from two clocks (+0800 and +0000), so a row
+    # is ambiguous by eight hours on its face and 3 of 1013 adjacent pairs read
+    # backwards. Adding `%z` was refused: `dispatch_status.py`'s ROW regex
+    # rejects such a row outright, and the file's own line order is already
+    # chronological at 1014 of 1014 once each stamp is read through the blame
+    # offset of the commit that wrote it. Which clock wrote a row is recovered
+    # by `git blame`, exactly. Full reasoning: LOOPS.md Step 0c.
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     if args.outcome == "shipped":
         raise SystemExit(

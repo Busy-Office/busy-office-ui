@@ -104,30 +104,37 @@ adds no deploy. It is a process rule with nothing mechanical behind it, and that
 is stated rather than dressed up: a pre-commit hook would need the network on
 every commit and would block a wake that has legitimately already reconciled.
 
-**Which dispatcher wrote a row is already recorded exactly**, and nothing had to
-be added for it. The git author timezone offset separates them — the cloud
-container is `+0000`, the owner's machine `+0800` — and **1,000 of the log's
-1,005 rows end in the sha of their own commit**. The five that do not are all
-from 2026-08-13, the log's first day, and carry a literal `-`.
+**Which dispatcher wrote a row is recoverable exactly — by `git blame`, not by
+the sha the row carries.** This section used to name the sha and call it exact;
+164.2 measured the two and it is not. Blame resolves **1014 of 1014** rows (974
+`+0800`, 40 `+0000`); the sha resolves **1004**, agreeing on all of them and
+disagreeing on none, but missing ten — five 2026-08-13 rows carrying a literal
+`-`, and **five whose sha no longer exists**, rebased away. That is what the
+LOSING dispatcher does after a collision, so the weaker mechanism is weakest
+exactly where the record is for. Blame survives a rebase; the author offset does
+not change.
 
 ```
-git log --format='%ad' --date=format:'%z' | sort | uniq -c   # 32 +0000 · 1432 +0800
-grep -cE '^- .* · [0-9a-f]{7,40}$' .roundtable/loop-log.md   # 1000, of 1005 `^- ` rows
-git show -s --format=%ai <sha-from-a-log-row>                # which clock wrote it
+git blame --line-porcelain -- .roundtable/loop-log.md | grep -c '^author-tz +0000'
+grep -cE '^- .* · [0-9a-f]{7,40}$' .roundtable/loop-log.md   # rows carrying a sha
 ```
 
-**Note the `{7,40}`, and do not shorten it to `{7}`.** The first draft of this
-section did, published *994 of 1,001*, and was wrong: git's abbreviation length
-grew with the repo, so 994 rows carry a 7-char sha, **4 carry 8 and 2 carry the
-full 40**, and a regex anchored at exactly seven silently drops the newest rows —
-the ones this wake had just written. It was caught only because the command was
-written down next to the number and then run, which is the whole reason roadmap
-159 made that a rule. The figures are a snapshot from 2026-08-28: the
-denominator moved 1001 → 1005 *inside this one wake*. Re-run, do not quote.
+**Keep the `{7,40}`; never `{7}`** — git's abbreviation grows with the repo (7, 8
+and 40 all occur), and an anchored seven silently drops the newest rows, which is
+how an earlier count here published wrong. Figures are snapshots; re-run them.
 
-That is a *finding for 164.2*, not a closing of it: 164.2 asks whether the row
-should carry the clock itself, and the answer above is that the record already
-exists one indirection away.
+**Decision (164.2, 2026-08-28): the log row keeps its naive local timestamp.**
+Cost, named: a row is ambiguous by eight hours on its face and **3 of 1013
+adjacent pairs read backwards**. It costs no ordering — read each stamp through
+its blame offset and the file's own line order is chronological at **1014 of
+1014**, so an offset would add an ordering the file already has, and no consumer
+parses the stamp as a time. Refused: appending `%z`, which
+`dispatch_status.py`'s `ROW` rejects outright (verified by injection, not by
+reading); and backfilling the 1014 existing rows, which `record_iteration.py`'s
+standing rule forbids. Fixed instead, being smaller than explaining: `STATUS.md`'s
+`Generated at:` stamp, the one naive `now()` that is not latent — it ran
+**backwards** 13:15 → 05:31 on this wake, and now says UTC. Every command and
+figure is in ROADMAP 164.2.
 
 **Three options refused, each for a measured reason:**
 
