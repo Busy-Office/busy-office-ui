@@ -195,6 +195,38 @@ never be non-zero — three consecutive measurements reported "not clipped"
 while the label was spilling 15.7px past the rail. Only its right edge
 against the RAIL's client edge showed it (2026-08-18).
 
+## A green red-proof is a defect in the INJECTION until proven otherwise
+
+The rule above it — *verify the injection, not just the red result* — is
+written, worked through five examples, and was violated **five times in two
+slices** by an agent that had read it (Objective grill, 2026-08-28). Every one
+failed the same way: the detector was fine, the injection never landed, and the
+gate correctly reported "nothing is broken" about a change that had not been
+made.
+
+- Three in a row on one gate: a directory prefix whose leading `.` is a regex
+  wildcard; flattened workspace script maps, so the root's `build` overrode the
+  docs one; a bare `npm run X` resolved against the root instead of the
+  workspace it sits in.
+- One where **two copies of the rule existed** and the injection hit the demo
+  rather than the copyable block.
+- One where the assertion tripped on **its own explanation** — the sample's
+  comment named the value the assertion was searching for.
+
+So state it as an observation rather than an intention, which is the form this
+file's other rules take and the form that actually gets acted on:
+
+**A red-proof that comes back green is a defect in the injection until proven
+otherwise** — the same grammar as *a 0%, a 100%, or an identical value across
+many inputs is a defect until proven otherwise*.
+
+Confirm the injection changed the thing the gate reads: grep the BUILT output,
+assert the DOM, count the matches before replacing (two copies is common), and
+prefer an assertion that fails loudly over a replace that silently matches
+nothing. When the red-proof is of a self-test, the same applies one level up —
+the first attempt at one here removed comment-stripping, which could not
+possibly affect the case it targeted.
+
 ## An instrument's first output is not evidence
 
 Six new or reworked measuring instruments landed in one window and **none was

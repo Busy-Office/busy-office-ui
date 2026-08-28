@@ -3,8 +3,20 @@
  * Gate: every path in CI's `paths-ignore` is genuinely read by nothing that
  * runs in CI.
  *
- * @exact — it opens each script and looks for a real read of the file. No
- * judgement about what a script "probably" does.
+ * @heuristic — Carries --self-test. RE-TAGGED 2026-08-28 (Objective grill of
+ * 169/170/172). It was `@exact` on the grounds that it "opens each script and
+ * looks for a real read", but that IS a recognition step: `readsFile` and
+ * `opensPath` decide, from call shapes, whether a mention is a read — and the
+ * file's own header already records that a naive version "would fail on every
+ * one of those four comments". 169.4 then made it more recognition-heavy by
+ * adding directory-prefix matching for globs, whose first version flagged a
+ * path inside a `<code>` tag in generated HTML.
+ *
+ * The tag matters because `check:selftests` EXEMPTS `@exact` gates from having
+ * to prove they can fail. A gate is exempted by its own self-declaration and
+ * nothing checks the declaration — which is how a sibling gate shipped tagged
+ * `@exact` while running a heading-vs-fence state machine, found one grill
+ * earlier. Self-declaration is not evidence.
  *
  * WHY. `paths-ignore` means a commit touching only those paths is NEVER
  * BUILT. That is safe exactly as long as no gate depends on them, and that
@@ -28,7 +40,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { gate, assertScanned } from './gate-report.mjs';
+import { gate, assertScanned, selfTest } from './gate-report.mjs';
 import { REPO_ROOT as ROOT } from './paths.mjs';
 
 
@@ -173,6 +185,23 @@ for (const m of ciText.matchAll(/scripts\/([\w-]+\.mjs)/g)) {
 }
 assertScanned(ciRun.size, 'script(s) CI runs, derived from ci.yml', 'ci.yml moved, or npm run indirection changed shape?');
 
+if (process.argv.includes('--self-test')) {
+  /* The cases that killed real versions of this detector, kept as the proof it
+     can still tell them apart. Every NOT-flagged case below is a false positive
+     that actually occurred. */
+  selfTest([
+    ['a readFile of the name is a read', readsFile("await readFile(join(D,'ROADMAP.md'))", 'ROADMAP.md'), true],
+    ['a join toward the name is a read', readsFile("const p = join(ROOT, 'STATUS.md');", 'STATUS.md'), true],
+    ['a name in a // comment is NOT a read', readsFile('// ROADMAP.md is read by nothing\nconst x = 1;', 'ROADMAP.md'), false],
+    ['a name in a /* */ comment is NOT a read', readsFile('/* see ROADMAP.md */\nconst x = 1;', 'ROADMAP.md'), false],
+    ['a glob prefix opened by readFile is a read', opensPath("readFile(join(R,'.roundtable/RESUME.md'))", '.roundtable'), true],
+    ['a glob prefix inside a <code> tag is NOT a read', opensPath('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
+    ['a glob prefix in a comment is NOT a read', opensPath('// writes to .roundtable/loop-log.md\nconst x = 1;', '.roundtable'), false],
+  ]);
+}
+
+const SELF = join(ROOT, 'apps', 'docs', 'scripts', 'check-ci-ignores.mjs');
+
 let scanned = 0;
 
 for (const dir of SCRIPT_DIRS) {
@@ -194,6 +223,13 @@ for (const dir of SCRIPT_DIRS) {
       // two: after the charter check moved off `check:repo` onto the loop's own
       // path, the gate kept flagging it for a read that CI no longer performs.
       if (!ciRun.has(join(dir, e))) continue;
+      /* This file necessarily contains reads of the paths it enforces — its
+         --self-test fixtures are literal `readFile('.roundtable/…')` strings,
+         and its own detector correctly matches them. Same self-reference
+         `check-vendor-names` records for the denylist it enforces. Excluded by
+         PATH, so a real read added elsewhere in this file is still caught by
+         the fixtures being the only thing here. */
+      if (join(dir, e) === SELF) continue;
       const isGlob = path.includes('*');
       // For a glob, any read of a file under that directory is a violation —
       // there is no single name to look for, so the directory prefix is the
