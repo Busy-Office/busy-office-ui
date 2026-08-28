@@ -957,6 +957,95 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 171 — Owner wishlist: score layout / usability / performance, then recommend (2026-08-28)
+
+**Owner:** *"Score the layout, usability, performance — after getting the score,
+recommend for the improvement."*
+
+**Measured before proposing anything, because most of this already exists and
+one part of it was already tried and REFUSED with evidence.**
+
+Two scoring instruments ship today, and only one of them discriminates:
+
+```
+node examples/erp-suite/score.mjs                      # 28 suite screens
+node -e "…dimensions of apps/docs/src/data/dsa-scores.json"   # 39 components
+```
+
+| instrument | dimension | distinct values |
+|---|---|---|
+| suite screens | **performance** | **23** — genuinely discriminating |
+| suite screens | functionality | 2 — "uniform because the backlog is EMPTY, not because it cannot see" |
+| components (DSA) | typography | **1** (3 on all 39) |
+| components (DSA) | colour | **1** (3 on all 39) |
+| components (DSA) | spacing | **1** (3 on all 39) |
+| components (DSA) | interaction | 1 among scored (3 on 21, n/a on 18) |
+| components (DSA) | content | 2 (one page at 2, 38 at 3) |
+| components (DSA) | fit | 2 (one page at 0, 38 at 3) |
+
+**So the wishlist maps onto three different situations, not one ask:**
+
+- **performance — ALREADY BUILT and working.** Scored per screen as distance
+  from the suite's own markup line (`own ≈ 68.7 + 1.26 × facts`, residual sd
+  17.9), deliberately not an absolute budget because a budget cannot tell a
+  RICH screen from a BLOATED one (145.2). Currently **one outlier beyond 2sd:
+  `p2p/purchase-order`.**
+- **"recommend the improvement" — ALREADY BUILT for screens.** `score.mjs`
+  ends with *"What is missing, by frequency — this is the backlog the score is
+  FOR"*. It does not exist for components, and the Polish loop **fixes** rather
+  than recommends (LOOPS.md §3b step 2: *"fix exactly ONE scored weakness"*) —
+  so nothing produces a recommendation LIST a human reads for components.
+- **usability — TRIED AND DROPPED, by its own Accept test.** `ux` read **5/5
+  on all 28 screens**, one distinct value; its five checks were binary (a
+  caption is present or it is not), so they moved into `audit.mjs` where a
+  binary property belongs, enforced once instead of re-confirmed 28 times
+  (145.1). Re-adding it must first answer *why it will not read 5/5 again*.
+- **layout — genuinely unscored.** The nearest dimension, DSA `spacing`, is
+  documented as *"a DEBT MARKER, not a quality signal — satisfiable by the
+  scorer writing the comment"* and reads 3 on all 39.
+
+**The finding underneath the wishlist, and it is bigger than the wishlist.**
+The instrument that drives the Polish loop — the DSA rubric — has **four of six
+dimensions with exactly one value across 39 components**. A dimension that
+cannot vary cannot rank, so "score, then improve the worst" has nothing to sort
+by. The screen score, built later and with an explicit ACCEPT TEST that drops
+any dimension below 3 distinct values, does discriminate. **The newer instrument
+already contains the fix the older one lacks.**
+
+1. [ ] **171.1 — decide whether the component rubric gets the screen score's
+       ACCEPT TEST.** `score.mjs` drops a dimension that cannot produce 3
+       distinct values; the DSA rubric has no such test and four dimensions
+       that would fail it.
+       *Accept*: a recorded decision. Applying the test would retire
+       typography/colour/spacing/interaction as SCORES (they may remain as
+       gated properties, which is what they actually are). **This is squarely
+       against 101.3's stop rule** — "Polish may NOT add dimensions,
+       definitions or gates" — so the honest reading is that this REMOVES
+       rather than adds, and that argument has to be made explicitly rather
+       than assumed. Refusing, and recording why the uniform dimensions earn
+       their place, is a satisfying outcome.
+
+2. [ ] **171.2 — a recommendation surface for components, or a recorded refusal.**
+       Screens get one; components do not, and Polish fixes silently instead.
+       *Accept*: either the component equivalent of *"what is missing, by
+       frequency"* — reusing `check:wrong-choice`'s TODO set and the DSA
+       dimensions that actually vary, never inventing a new score — or a
+       recorded refusal on the ground that Polish already acts on the same
+       information and a list nobody reads is ceremony.
+
+3. [ ] **171.3 — layout: decide whether it is scorable at all before scoring it.**
+       Measure the base rate FIRST, per CLAUDE.md: if a candidate layout
+       predicate is already true of every screen, it is ceremony no matter how
+       carefully written — which is exactly how `ux` died.
+       *Accept*: a base-rate measurement recorded before any dimension is
+       proposed, and **"layout is not scorable, here is the evidence"** is a
+       satisfying outcome. `p2p/purchase-order`, the one live performance
+       outlier, is the obvious first specimen.
+
+**Not proposed: a new score for usability.** It has died once on measurement,
+and re-proposing it without answering the 5/5 result would be re-raising a
+settled refusal — which this file's own doctrine refuses.
+
 ## Slice 170 — Objective grill of Slices 164, 167, 169 (2026-08-28)
 
 Dispatcher rule 3 at 3/3 `[164, 167, 169]`; rule 1 found no open P0 and GitHub

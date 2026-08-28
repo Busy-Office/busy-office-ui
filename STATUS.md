@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 09:40 UTC
+Generated at: 2026-08-28 10:40 UTC
 
 ## Open items by slice
 
@@ -14,6 +14,10 @@ Generated at: 2026-08-28 09:40 UTC
 - **Slice 170** (2 open)
   - 170.2 — the generalized form of 170.1: nothing re-reads the narrative sections of `ROADMAP.md`, and refusing this is a satisfying outcome.
   - 170.3 — `dispatch_status.py`'s zero-slice guard hard-exits on a legitimate row, and this wake tripped it live.
+- **Slice 171** (3 open)
+  - 171.1 — decide whether the component rubric gets the screen score's ACCEPT TEST.
+  - 171.2 — a recommendation surface for components, or a recorded refusal.
+  - 171.3 — layout: decide whether it is scorable at all before scoring it.
 - **Slice —** (1 open)
   - AT runtime evidence
 
