@@ -17,14 +17,40 @@ wrong lever entirely (it would block the very work the loop exists to do).
 
     python3 scripts/loops/dispatch_status.py
 
-Exit status is always 0; the output is the product.
+The output is the product. Exit status is 0 on a clean read and NON-ZERO on a
+parse failure — a counter that cannot see its own input must say so rather than
+print a number, which is the whole reason this file exists.
 """
 import re
 import sys
 
 from _common import LOG
 
-ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · (\w+) · (\w+) · (.*)$")
+ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) · (.*)$")
+# `[\w-]`, not `\w`, and the hyphen is not hypothetical: NINE rows carry a
+# hyphenated mode (`owner-decision`, `owner-wishlist`, all 2026-08-24) and every
+# one of them is a **Continue** row — which is precisely what both counters
+# below count. The parser read 982 of 991 bullets and said "ok".
+#
+# Measured before fixing, by replaying both parsers over all 703 revisions of
+# loop-log.md: the row count differs on 79 of them, and the OVERDUE/ok verdict
+# differs on exactly ONE (dc7ea4d, 2026-08-24: Standardize read 3/4 "ok" when it
+# was 4/4). So the cost was one wake's flag, not a starved loop — the number is
+# small and is written down rather than dramatised.
+#
+# The lesson is the SILENCE, not the count, which is why the reconciliation
+# below matters more than this character class. A carried-forward note in
+# RESUME.md called this "six legacy rows" for four wakes; it was nine at the
+# commit that wrote it and has been nine ever since. A bare count with no
+# command, which is the failure roadmap 159 wrote a rule against the day before.
+
+# The raw thing to count in the source, per CLAUDE.md's mirror doctrine: every
+# iteration is one "- " bullet. `rebuild_from_log.py` already reconciles against
+# this and refuses to write when it under-parses; this script decided on the
+# same file with no such check. Counting the raw thing is what makes the
+# assertion independent of the regex above — a reconciliation that re-uses the
+# parser it is checking cannot fail.
+BULLET = "- "
 # The slice a row worked on: the log's convention is that an item OPENS with its
 # item number — "40.3 REFUSED the date picker…".
 #
@@ -53,11 +79,21 @@ RULES = {
 
 def rows():
     out = []
+    bullets = 0
     with open(LOG, encoding="utf-8") as fh:
         for line in fh:
+            if line.startswith(BULLET):
+                bullets += 1
             m = ROW.match(line.rstrip("\n"))
             if m:
                 out.append({"at": m.group(1), "loop": m.group(2), "item": m.group(4)})
+    if bullets != len(out):
+        raise SystemExit(
+            f"dispatch_status: {bullets} iteration bullet(s) in {LOG} but only {len(out)} "
+            f"parsed into rows. Every counter below reads Continue rows, so an unparsed row "
+            f"makes a counter under-report and a loop starve — silently, which is the failure "
+            f"this script exists to make impossible. Fix ROW; do not print a number."
+        )
     return out
 
 
