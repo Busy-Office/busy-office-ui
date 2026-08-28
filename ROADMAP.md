@@ -1323,13 +1323,46 @@ already contains the fix the older one lacks.**
        to what gets built next, and was invisible while the rubric was
        presumed to be the queue.
 
-2. [ ] **171.2 — a recommendation surface for components, or a recorded refusal.**
-       Screens get one; components do not, and Polish fixes silently instead.
-       *Accept*: either the component equivalent of *"what is missing, by
-       frequency"* — reusing `check:wrong-choice`'s TODO set and the DSA
-       dimensions that actually vary, never inventing a new score — or a
-       recorded refusal on the ground that Polish already acts on the same
-       information and a list nobody reads is ceremony.
+2. [x] **171.2 — a recommendation surface for components, or a recorded refusal.**
+       DECIDED 2026-08-28: **refused**, on both of its own permitted inputs
+       having been measured to nothing.
+
+       This item named exactly two inputs for the surface, and 171.1 plus a
+       direct read of the gate emptied both:
+
+       - **`check:wrong-choice`'s TODO set is one page** — `date`. A
+         "what is missing, by frequency" list over a one-element set is a
+         list with one row and no frequency.
+       - **"the DSA dimensions that actually vary" is the empty set** (171.1:
+         all six have ≤2 distinct values across 39 components). The item
+         assumed some vary; none do. There is no second column to rank on,
+         and the item forbids inventing a score to supply one — correctly.
+
+       **The structural reason, which outlives today's counts.** The gate
+       already IS the surface, and it double-ratchets — verified by reading
+       `check-wrong-choice.mjs`, not inferred:
+
+       1. a page without the clause, not in `TODO`/`EXEMPT`, fails outright;
+       2. a page that GAINS the clause while still listed in `TODO` **also**
+          fails, so the outstanding count cannot rot into an overstatement.
+
+       So component debt cannot silently accumulate and cannot silently
+       misreport itself, in CI, on every push. A separate recommendation
+       surface would be a **non-executable second copy of that list** — which
+       is the precise failure mode the storage doctrine names: a derived
+       artefact whose number gets quoted while the executable one is right
+       there. Refused.
+
+       *Honest caveat, stated rather than glossed*: debt can still enter
+       legitimately by adding a new page to `TODO` or `EXEMPT` in its own
+       commit. That is a visible diff in a gate file rather than a silent
+       accrual, which is the property that matters — but it is a review
+       dependency, not an automated one.
+
+       *What the item was actually reaching for* was answered in 171.1 and is
+       worth more than the surface would have been: **the lane is nearly
+       dry.** That is a dispatch input, and it is now recorded where dispatch
+       reads it.
 
 3. [ ] **171.3 — layout: decide whether it is scorable at all before scoring it.**
        Measure the base rate FIRST, per CLAUDE.md: if a candidate layout
