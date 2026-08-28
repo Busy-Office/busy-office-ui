@@ -40,10 +40,8 @@ own first commit.
 **Exercised for real this wake (2026-08-28, Slice 170): 1c, 2, 3.** Said one by
 one rather than carried forward as "all confirmed":
 
-- **1** — half-exercised. `origin/main` came back a **forced update**
-  (`17b3ba6...fe2de12`), so the ref genuinely was not merely behind — but
-  `HEAD` already matched it (`rev-list --left-right --count` = `0 0`), so no
-  checkout was needed and the detached-HEAD half was never tested.
+- **1** — exercised in full, and **it bit at `git push`, not at Step 0.** See
+  the corrected trap 1 below; this wake's first push was rejected.
 - **1b, 4, 7** — not exercised: no `cd` was issued, no formatter was run, and
   every word count came from `report_loop_prose.py` (Python `str.split()`),
   never from a bare `wc -w`.
@@ -54,7 +52,7 @@ one rather than carried forward as "all confirmed":
 ### 1. `git checkout main` — the container starts DETACHED
 
 Confirmed again. This wake `origin/main` came back as a **forced update**
-(`17b3ba6...787319c`) — a rebase — so the local ref was not merely behind.
+(`17b3ba6...fe2de12`) — a rebase — so the local ref was not merely behind.
 
 ```
 git fetch origin main && git checkout -B main origin/main
@@ -62,6 +60,34 @@ git fetch origin main && git checkout -B main origin/main
 
 `git ls-remote --heads origin` is the authority on what is pushed; the local
 `origin/main` ref is not, until a fetch.
+
+**THE TRAP DOES NOT BITE AT STEP 0. IT BITES AT `git push`, and the usual Step 0
+check gives false comfort** (2026-08-28, Slice 170 — the first push of that wake
+was rejected after three commits were already made).
+
+On a detached HEAD the local `main` ref still exists and is **stale** — here it
+sat at the pre-rebase `17b3ba67` while work was committed onto a detached
+`6dfb8709`. `git push -u origin main` pushes *that ref*, not `HEAD`, so it
+reports the confusing `a pushed branch tip is behind its remote counterpart`
+even though your work is strictly ahead.
+
+The check that missed it is the one that looks most reassuring:
+
+```
+git rev-list --left-right --count origin/main...HEAD    # 0  3   ← compares HEAD
+git branch --show-current                               # EMPTY ← the actual answer
+git rev-parse --short main HEAD                         # 17b3ba67 vs 6dfb8709
+```
+
+`--left-right ... HEAD` compares the wrong ref. **Run `git branch
+--show-current` before the first commit; an empty answer means fix it now.**
+The recovery once commits already exist is safe and is a fast-forward — verify
+first, never force:
+
+```
+git merge-base --is-ancestor origin/main HEAD && git checkout -B main HEAD
+git push -u origin main
+```
 
 ### 1b. THE BASH WORKING DIRECTORY PERSISTS BETWEEN TOOL CALLS
 
