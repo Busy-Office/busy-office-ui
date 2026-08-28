@@ -141,8 +141,18 @@ collision points failed:
 
 What actually caught it was the `git fetch origin main` before the first commit,
 mandated below. That is the working half, and it is a process rule with nothing
-mechanical behind it: a wake that skips it gets no second signal. Read the rest
-of this paragraph as the argument that was made, not as one that holds.
+mechanical behind it: a wake that skips it gets no second signal.
+
+**The window is the tail of a wake, not the wake — and the same wake proved it
+both ways.** After the other dispatcher pushed a second time, the loser rebased
+again, this time *after* `record_iteration.py` had appended its rows: that rebase
+**conflicted**, on `loop-log.md` and `STATUS.md`, exactly as promised. One
+variable differs between the two — whether the log row existed yet. So read the
+paragraph below as an argument that holds only once a wake has recorded, which
+is the last thing it does. Resolving such a conflict: **keep BOTH row sets**,
+then regenerate the mirrors (`rebuild_from_log.py`, `generate_status.py`,
+`generate_roundtable_index.py`) rather than hand-merging them, and check the
+parser against a raw `grep -c "^- "` before committing.
 
 **Why that was believed safe by construction and not by luck.** Every wake ends with
 `record_iteration.py`, which appends to `.roundtable/loop-log.md`, and every

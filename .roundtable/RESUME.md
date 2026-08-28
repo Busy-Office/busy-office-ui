@@ -178,14 +178,24 @@ Objective 0/3 ok**, parser at **1,056 against a raw 1,056**.
 Re-read `dispatch_status.py` at Step 0b rather than trusting this line.
 
 **When rule 4 is next reached, re-derive its oldest dispatchable item from
-`ROADMAP.md`'s `N. [ ]` checkboxes** — 9 open, and 170.3 closed while this wake
-ran, so the dispatchable list is 171.1, 171.2, 171.3, then 173.1/173.2. **175.4
-is owner-blocked, not dispatchable.** Do not carry this forward.
+`ROADMAP.md`'s `N. [ ]` checkboxes** — **7 open** at hand-off. The local wake
+closed 170.3, 171.1 and 171.2 while this one ran, so the dispatchable list is
+**171.3**, then 173.1/173.2. **175.4 is owner-blocked, not dispatchable.** Do not
+carry this forward — it moved three times inside this single wake.
 112.3/112.4 and the `AT runtime evidence` item are older but blocked on the owner
 or on hardware. **173.1/173.2 came from the local wake that was live during this
 one** — 173.2 is explicitly *owner to pick* between two candidates, and 173.1
 changes a demo's rendering, so it wants a browser and is a poor cloud pick.
 
-**171.1-171.3 need no browser and are dispatchable in a cloud wake**: they are
-scoring/rubric decisions, and 171.3 asks whether layout is scorable at all before
-scoring it.
+**171.3 needs no browser and is dispatchable in a cloud wake**: it asks whether
+layout is scorable at all before scoring it. 173.1 changes a demo's rendering, so
+it wants a browser and is a poor cloud pick even though its Accept names a
+measurement; 173.2 is explicitly *owner to pick* between two candidates.
+
+**This wake rebased TWICE, and the two rebases behaved differently — which is
+175.4's evidence, not an anecdote.** The first (before `record_iteration.py`)
+resolved clean, overlapping `ROADMAP.md` and `LOOPS.md`. The second (after it)
+conflicted on `.roundtable/loop-log.md` and `STATUS.md`, exactly as Step 0c
+predicts. Resolved by keeping BOTH row sets, per that section's own instruction,
+then `rebuild_from_log.py` + `generate_status.py` + `generate_roundtable_index.py`
+regenerated the mirrors; parser and raw both read **1,058**.

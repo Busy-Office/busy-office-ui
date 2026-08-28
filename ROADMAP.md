@@ -1174,7 +1174,25 @@ silently refreshed.
          heading renumber and a new slice ~400 lines away.
 
        What caught it was the `git fetch origin main` before the first commit,
-       which the same section mandates and which is the working half. Severity
+       which the same section mandates and which is the working half.
+
+       **The other arm of the experiment ran by accident, in the same wake.** The
+       other dispatcher pushed again, and this wake rebased a second time —
+       *after* `record_iteration.py` had appended its rows. That rebase
+       **conflicted**, on `loop-log.md` and `STATUS.md`, exactly as Step 0c
+       promises. One variable differs:
+
+       | rebase | log row appended yet? | result |
+       |---|---|---|
+       | first | no | **clean** |
+       | second | yes | **conflict** |
+
+       So the guarantee is real and its WINDOW is the tail of a wake, not the
+       wake. Resolved as Step 0c instructs — both row sets kept, never one
+       dropped — then the mirrors regenerated rather than hand-merged; parser and
+       raw agree at 1,058.
+
+       Severity
        is bounded and stated: nothing was lost, the two grills share no finding,
        and the cost was one re-verification pass — Step 0c's own argument for
        redundant coverage paid for itself.
