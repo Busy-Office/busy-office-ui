@@ -58,6 +58,17 @@ Step 0 instructs the wake to read. `check:resume-charter` holds both ends —
 `RESUME.md` must keep its pointer, and the moved sections must not grow back
 there.
 
+**It reports both ends; it no longer FAILS a build on either** (measured by the
+Objective grill of 169/170/172, roadmap 175.3). 169.4 removed it from
+`check:repo` — correctly, because `.roundtable/**` is in CI's `paths-ignore` and
+a CI gate reading it was the contradiction — and re-homed it in
+`record_iteration.py`, where it is deliberately advisory: it prints
+`(RESUME.md charter check FAILED — see below)` on stderr and must not fail the
+recording. So it runs every wake, and nothing rejects a commit that breaks the
+charter. That is a real trade, not an oversight, and it is written here because
+two documents claimed the opposite for the 41 minutes between the gate being
+hardened (172.1) and demoted (169.4), and neither wake named the other.
+
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
 empty `RESUME.md` when it lands.
