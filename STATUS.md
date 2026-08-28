@@ -2,15 +2,14 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 13:54 UTC
+Generated at: 2026-08-28 13:55 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 171** (2 open)
-  - 171.2 — a recommendation surface for components, or a recorded refusal.
+- **Slice 171** (1 open)
   - 171.3 — layout: decide whether it is scorable at all before scoring it.
 - **Slice 173** (2 open)
   - 173.1 — the windowed-list demo puts 2000px of blank between the header and its only content.
@@ -21,7 +20,7 @@ Generated at: 2026-08-28 13:54 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1053 iterations logged)
+dispatch status — counter-triggered rules (1054 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-28 21:48   ok
   Objective     1 / 3 slice           since 2026-08-28 21:36   ok  [170]
 ```
@@ -36,7 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 12:56 · Continue · build · 170.2 — narrative-row gate refused on base rate: flags 1258 of 1289 lines examined · refused · 99bf809d
 - 2026-08-28 12:56 · Meta · refusal · the LOOPS.md cadence bullet for re-reading narrative sections; and the section-shape gate, 45 of 45 sections would flag · refused · 99bf809d
 - 2026-08-28 20:58 · Continue · bug · 172.1/172.2 from an owner screenshot of /patterns/command-bar: the copyable CSS shipped overflow:hidden which measures the results listbox at zero height, and the hint strip had zero padding on an 8px-rounded dialog. Both red-proofs failed first time — one tripped on its own explanation, one injected into the wrong of two copies · landed · a060a5a
 - 2026-08-28 21:02 · Roadmap · plan · 173.1/173.2 triaged from owner reports: the windowed-list demo hides its only 4 rows 2000px below the header between two spacers, and editable-grid's numeric inputs are ~247px wide for 3-digit values so header/value/error sit far apart · triaged · 8ac7583
@@ -46,6 +44,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 21:48 · Standardize · tidy · both standing lanes clean — dead-style 0, css-repeats delta 0 against the settled table (verified mechanically); examined the 6 BCD feature paths shared by derive-floor and check-rf-floor and refused it, divergence there throws loudly and the paths agree · landed · 1b9f888
 - 2026-08-28 21:48 · Meta · refusal · extracting the shared BCD feature paths — both scripts throw on a moved key, the six agree today, and only one column overlaps · refused · 1b9f888
 - 2026-08-28 21:54 · Roadmap · grill · 171.1 — DSA rubric: refused the screen score's accept test; no dimension passes it (not 4 of 6), and LOOPS.md's ranking claim corrected to an evidence record · refused · 0c8a05f
+- 2026-08-28 21:55 · Roadmap · grill · 171.2 — component recommendation surface: refused; both named inputs measured empty (TODO=1 page, zero varying DSA dimensions) and check:wrong-choice already double-ratchets · refused · 0cd397e
 
 ## Sunset test
 
