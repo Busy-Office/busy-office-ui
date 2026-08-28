@@ -44,6 +44,12 @@ LIVING = {
     "polish-state.md": "the Polish round ledger (LOOPS.md §3b)",
     "erp-suite-gaps.md": "the gap ledger the ERP suite exists to fill",
     "RESUME.md": "where a cold start picks up",
+    # Split out of RESUME.md by 169.3 and missed here, so it landed in the
+    # Findings table as a dateless "snapshot" — the one thing its own header
+    # says it is not ("This file is durable. Edit it when a trap changes; do not
+    # re-copy it"). LOOPS.md Step 0 instructs every wake to read it, which is
+    # this section's definition, and it inflated the snapshot count by one.
+    "ENVIRONMENT.md": "the git/build traps and the toolchain that works",
     "PANEL.md": "the standing review panel",
     "surface-baseline.md": "the scored-surface baseline",
     "surface-review-rubric.md": "how a surface is scored",

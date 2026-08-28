@@ -62,6 +62,22 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 # (path, when it is read)
 FILES = [
     (".roundtable/RESUME.md", "Step 0 — the handover"),
+    # Added with 169.3's split, for the identical reason the LOOPS-archive.md row
+    # below was added one slice earlier — and it was MISSED at the time, which is
+    # how a rule stated in a comment gets broken by the next commit that should
+    # have obeyed it. 169.3 moved 1,467 words out of RESUME.md into this file
+    # (3,150 -> 1,683 at f52f2597); that is the LARGEST single down step in
+    # RESUME.md's 65-step series, and it is a relocation, not a shrink. The
+    # destination went unmeasured entirely, while Step 0 instructs every wake to
+    # read it and its own header says it is DURABLE ("edit it when a trap
+    # changes") — so 158.2's ratchet premise applies to it, unlike the handover
+    # it was cut from.
+    #
+    # What belongs in this list: AUTHORED prose the dispatcher is instructed to
+    # read. Not the generated mirrors a wake also opens — STATUS.md,
+    # .roundtable/INDEX.md and the loop log are written by scripts/loops/*.py,
+    # so a word count over them measures a generator, not anyone's writing.
+    (".roundtable/ENVIRONMENT.md", "Step 0 — the traps (split from RESUME.md, 169.3)"),
     ("LOOPS.md", "Steps 0b-2 — the rules themselves"),
     # Added with 167.2's split. WITHOUT this row the move would read as LOOPS.md
     # losing 717 words, which is a shrink that never happened — the prose was

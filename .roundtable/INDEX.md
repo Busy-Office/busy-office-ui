@@ -6,6 +6,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 
 ## Living ledgers — written to repeatedly, read by the loop
 
+- [`ENVIRONMENT.md`](ENVIRONMENT.md) — the git/build traps and the toolchain that works
 - [`PANEL.md`](PANEL.md) — the standing review panel
 - [`RESUME.md`](RESUME.md) — where a cold start picks up
 - [`erp-suite-gaps.md`](erp-suite-gaps.md) — the gap ledger the ERP suite exists to fill
@@ -14,13 +15,12 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 141 snapshots, newest first
+## Findings — 140 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
 | Date | Finding | Cited |
 |---|---|---|
-| — | [Environment — the traps, and the toolchain that works](ENVIRONMENT.md) | ✓ |
 | — | [Grill report — Slice 112: the governance/conformance proposal (2026-08-22)](grill-112-pattern-fit-proposal.md) | ✓ |
 | — | [Grill — Slice 22 item 1, the color/scales/tokens docs (presentation pass)](grill-slice22-color-docs.md) | ✓ |
 | — | [Grill — Slice 22 sign-off (items 2+3, shipped ungrilled)](grill-slice22-signoff.md) | · |
