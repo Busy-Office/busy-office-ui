@@ -100,7 +100,8 @@ const NAMES = [
    quietly passes because its input is missing is the failure `check:rtl`
    records. */
 const ROOTS = [
-  'ROADMAP.md', 'ROADMAP-archive.md', 'DESIGN.md', 'LOOPS.md', 'CLAUDE.md',
+  'ROADMAP.md', 'ROADMAP-archive.md', 'DESIGN.md', 'LOOPS.md', 'LOOPS-archive.md',
+  'CLAUDE.md',
   'README.md', 'STATUS.md', '.roundtable', 'apps/docs/src', 'apps/docs/scripts',
   'packages/core/src', 'examples',
 ];

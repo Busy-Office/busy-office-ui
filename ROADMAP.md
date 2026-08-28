@@ -1209,8 +1209,7 @@ net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
        Or `RESUME.md`/`ROADMAP.md` going 0-down over a window, which would move
        them out of `instrument` and into the cadence for real.
 
-2. [ ] **167.2 — `LOOPS.md` rule 3 is 82% archaeology, and the file has no
-       archive.**
+2. [x] **167.2 — DONE 2026-08-28. Rule 3: 1,171 → 525 words; `LOOPS-archive.md` created.**
 
        The dispatcher reads rule 3 every wake to decide one thing — *is the
        counter at 3?* Measured:
@@ -1253,6 +1252,39 @@ net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
        from where it used to be; and the before/after word split is reported by
        re-running the command above rather than predicted here. A recorded
        decision to move **nothing**, with the reason, also satisfies this.
+
+       **Command re-run first: it disagreed, and the disagreement sharpens the
+       item.** Pinned `1,026 / 181 rule / 845 history / 9,706 file`; measured
+       **1,171 / 181 / 990 / 9,983**. The rule half is *unchanged at 181* while
+       the history grew 145 words in one wake — so it is **85% archaeology**,
+       not 82%, and the ratio worsens on its own every recurrence.
+
+       **Moved: 8 paragraphs, 717 words**, into a new `LOOPS-archive.md` —
+       the five incident narratives, the replay figures and the snapshot
+       counts. Rule 3 is now **525 words**, LOOPS.md 9,983 → 9,337.
+
+       **What deliberately did NOT move**, because the item's own
+       counter-evidence is right that a pointer is read less than a paragraph:
+       the rule, why it sits above rule 4, why three and not one, which loops
+       close a slice, and — most importantly — the **standing lesson** ("this
+       counter is only ever caught by a number disagreeing with something a
+       human just wrote down") together with the sentence recording that the
+       lesson was tested and held. All seven checked present after the move.
+
+       **Two gates had to learn about the new file, and the second is the
+       point.** `check:vendor-names` gains it as a root, because a gate blind
+       to the archive guards the wrong half of the repo — the same argument
+       160.1 used to refuse scoping ROOTS away from history. And
+       `report_loop_prose.py`, 167.1's own instrument, gains it because
+       otherwise this move would have read as **LOOPS.md losing 717 words** —
+       a shrink that never happened. An instrument that can be improved by
+       moving text outside its own scope measures filing, not size.
+
+       **Its reconciliation caught exactly that**, unprompted: the first run
+       after the split printed *"RECONCILIATION FAILED — LOOPS-archive.md: not
+       tracked at HEAD — a zero here would look like a real count"* and refused
+       to report numbers. 167.3's reconciliation work, paying off one item
+       later.
 
 3. [x] **167.3 — DONE 2026-08-28, found in passing. `STATUS.md`'s history half
        had no reconciliation, and a cloud wake silently deleted nine committed

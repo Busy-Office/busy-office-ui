@@ -63,6 +63,11 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 FILES = [
     (".roundtable/RESUME.md", "Step 0 — the handover"),
     ("LOOPS.md", "Steps 0b-2 — the rules themselves"),
+    # Added with 167.2's split. WITHOUT this row the move would read as LOOPS.md
+    # losing 717 words, which is a shrink that never happened — the prose was
+    # relocated, not deleted. An instrument that can be improved by moving text
+    # out of its own scope measures filing, not size.
+    ("LOOPS-archive.md", "Incident narratives split out of LOOPS.md (167.2)"),
     ("ROADMAP.md", "rule 4 — the queue"),
     ("ROADMAP-archive.md", "(archive) — looked up, never dispatched from"),
     ("CLAUDE.md", "every wake — the doctrine"),
