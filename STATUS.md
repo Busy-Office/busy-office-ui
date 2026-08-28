@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 06:49 UTC
+Generated at: 2026-08-28 06:50 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,8 @@ Generated at: 2026-08-28 06:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1020 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-28 13:11   ok
+dispatch status — counter-triggered rules (1022 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-28 13:11   ok
   Objective     2 / 3 slices          since 2026-08-28 13:15   ok  [164, 167]
 ```
 
@@ -34,8 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 13:00 · Continue · build · 163.1: ten used-once verdicts — 8 correct at one (from each component's gated wrong-choice clause), bo-composer a real screen-level miss (approval shows the thread but offers no way to contribute), bo-ordered-list unexamined; the reconciliation shipped dead and was caught by red-proving · landed · 2c46191
-- 2026-08-28 13:11 · Standardize · tidy · 165.1 archive sweep: 20 closed slices moved, ROADMAP.md 4,461 -> 1,474 and archive 16,218 -> 19,285, conservation reconciled to the 80 lines of pointer stubs; found the counting command attributes non-slice H2 sections to the preceding slice (4 sections, 279 lines) · landed · 187ab92
 - 2026-08-28 13:15 · Objective · grill · Objective grill 163/164/165: 3 of 3 slices contained an instrument defect found by the instrument's own item, never by a gate (damage rate one wrong verdict in 703 revisions); and the chosen direction (a) cannot be advanced by the loop at all since its remaining step is owner-only, which no LOOPS.md rule can notice · logged · 409e5bb
 - 2026-08-28 13:15 · Meta · refusal · a gate for the instrument defects, and a product-vs-machinery ratio — retired one grill ago and a ratio cannot tell maintenance that unblocks product from maintenance that displaces it · refused · 409e5bb
 - 2026-08-28 05:42 · Continue · build · 164.2 decided: the log row keeps its naive local stamp — an offset would add an ordering the file already has (file order is chronological at 1014/1014 through blame offsets, red-proved), and dispatch_status.py's ROW rejects an offset row outright; 162.1's 'recorded exactly via the sha' corrected — 5 rows cite a sha rebased out of existence, blame is exact at 1014/1014 · logged · 75aba882
@@ -44,6 +42,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 05:42 · Meta · refusal · a gate for the naive stamp — the only checkable property (the stamp carries an offset) is the option this item refused, so the gate would enforce the rejected answer · refused · 75aba882
 - 2026-08-28 06:47 · Continue · build · 167.1 — verdict the loop's own prose growth: 2 instrument, 3 honest; the cadence extends, 158.2's median instrument refused · landed · e3844c49
 - 2026-08-28 06:47 · Meta · refusal · the median-outlier test over the five loop-machinery files: n=5 has no usable median, 161.1 already recorded n=6 failing, and the spread is 102x · refused · e3844c49
+- 2026-08-28 06:50 · Continue · build · 167.3 — STATUS.md's history half had no reconciliation: a git-ignored loops.db means a fresh cloud container renders 'Last 10 iterations' from 2 rows against the log's 1,020, deleting nine committed rows silently; generator now counts the raw log rows, announces, rebuilds and re-checks · landed · cef80575
+- 2026-08-28 06:50 · Meta · refusal · a CI gate for it — these scripts are not in CI at all, which is rebuild_from_log.py's own stated reason for putting its assertions in the writing path · refused · cef80575
 
 ## Sunset test
 
