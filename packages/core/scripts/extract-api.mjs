@@ -159,10 +159,17 @@ api.motion = shape(motionSets);
 // Global class index: class -> owning page slug. Docs page slugs differ from
 // CSS dir names when a component shares a page (site-grill S-2; skeleton +
 // state share one page). Published on api.pageSlug — the SINGLE source of
-// this alias; gen-llms.mjs and check-page-shape.mjs both read it from
-// dist/api.json rather than keeping their own copies (that drifted once
-// already — Slice 6 item 1 added an alias here and missed gen-llms.mjs's
-// copy until its build broke).
+// this alias; gen-llms.mjs, check-page-shape.mjs and gen-rf-profile.mjs all
+// read it from dist/api.json rather than keeping their own copies (that
+// drifted once already — Slice 6 item 1 added an alias here and missed
+// gen-llms.mjs's copy until its build broke).
+//
+// gen-rf-profile.mjs is the third reader as of 2026-08-28 and was the second
+// drift: it kept a seven-entry copy keyed on FILE stems while this one is
+// keyed on DIRS, so the sentence above named two readers while three sites
+// existed. Nothing was user-visible — all 14 of its hrefs resolved — but the
+// same alias lived in two places again, which is exactly what this comment
+// says it does not. When adding an alias here, no other file needs editing.
 const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
 /* GLOBAL legal values for every data-* attribute, unioned across all shipped
    CSS including tokens/ (roadmap 32.1). The per-component maps answer "what

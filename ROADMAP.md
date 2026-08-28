@@ -1186,6 +1186,147 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 166 — Standardize sweep: a fourth copy of the alias whose home says there is one (2026-08-28)
+
+Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
+Rule 1 found no open P0 and GitHub intake is empty (0 open issues), so nothing
+preempted it. Second run of the cadence 158.2 installed.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders: two build-time Node generators
+and three comments. `gen-rf-profile.mjs`'s output is byte-identical before and
+after, so no page's markup changes at all — which is a stronger statement than a
+screenshot would have been, and it is the one made here. `check:layout` and
+`test:axe` swept all 127 pages at both widths anyway and were unchanged. **No
+visual debt was added; nothing visual was looked at.**
+
+1. [x] **166.1 — the three rot-guard sweeps: two clean, and the finding came
+       from the fourth thing the playbook names.**
+
+       ```
+       npm run scan:dead-style -w docs        # 0 dead of 1,428 live inline decls
+       npm run report:css-repeats -w @busy-office/ui
+         # 74 files · 237 rules · 225 distinct · 8 repeated — LOOPS.md's table exactly
+       npm run report:prose -w docs           # 118 pages · median 739 · total 104,419
+       ```
+
+       **`report:css-repeats` — zero delta.** All three totals and all eight
+       groups match LOOPS.md's table byte for byte. Per that table's own rule,
+       the finding is the delta and there is none; the joined-control x4 group
+       is still two components, not four, so its reopen trigger (a THIRD
+       component) is unmet.
+
+       **`report:prose` — zero unverdicted pages, and RESUME.md was wrong to
+       say otherwise.** The handover named `/base/motion/`,
+       `/concepts/js-behaviors/` and `/concepts/design-language/` as "the three
+       nobody has verdicted"; **161.1 verdicted all three**, in the run that
+       wrote that note. Every page the report flags today — 12 over the corpus
+       median, 12 over a family median — carries a verdict from 158.1 or 161.1.
+       The corpus total moved 104,408 → 104,419 (+11 words) and no page crossed
+       a threshold it had not already crossed. Corrected in the handover rather
+       than counted again.
+
+2. [x] **166.2 — `gen-rf-profile.mjs` kept a fourth copy of `api.pageSlug`, and
+       the canonical site's comment named two readers.**
+
+       `extract-api.mjs` publishes the CSS-dir→page-slug alias on
+       `api.pageSlug` and its comment calls it *"the SINGLE source of this
+       alias"*, naming `gen-llms.mjs` and `check-page-shape.mjs` as the readers
+       that hold no copy — because it drifted once already (Slice 6 item 1).
+       There was a third site holding a copy:
+
+       ```
+       grep -rn "state-patterns'" apps/docs/scripts/*.mjs packages/core/scripts/*.mjs
+       ```
+
+       `gen-rf-profile.mjs` carried a seven-entry hand map, and it had drifted
+       **in both directions** — five `→ form` entries the canonical map does not
+       carry, and no `skeleton` entry that it does. It never collided, because
+       the two maps are keyed on different things: the canonical one on CSS
+       **dirs**, this one on **file stems** (`RF_COMPONENTS` holds `<dir>/<file>`
+       and the generator read `split('/')[1]`).
+
+       **No user-visible defect, stated as measured and not as reassurance:**
+       all 14 of the profile's hrefs resolve to a built page today. The cost was
+       a second home for an alias whose whole documented point is having one.
+
+       *Accept was*: the alias exists in exactly one place; the generator's
+       output is unchanged; and whatever asserts the property is named and shown
+       to fail.
+
+       **What landed.** The href is now derived from the DIR through
+       `api.pageSlug` (the name still comes from the file stem — five entries
+       share the `form` dir but name five distinct files the profile ships, and
+       collapsing them would change the rendered list). The hand map is gone.
+
+       - **Output byte-identical**, diffed against the pre-change
+         `rf-profile.json`. This is the property the refactor had to hold, and
+         it is checked rather than argued.
+       - **The new import is load-bearing, red-proved**: deleting `alert` from
+         `api.pageSlug` moves the generated href to `/components/alert`;
+         restoring it returns the file to byte-identical. Without this the
+         import could have been decorative and the derivation a coincidence.
+       - **No new gate, and that is measured, not assumed.** The three pattern
+         pages consuming this render every href as a real `<a>`, so
+         `check-links.mjs` already covers a slug with no page. Red-proved by
+         injecting `/components/no-such-page` into the built
+         `patterns/rf-landing/index.html`, confirming the string was present in
+         the BUILT file, and running the gate: it names the link and exits **1**.
+         Restored; the gate then verified 14,456 links.
+
+3. [x] **166.3 — two comments were false and are now corrected.**
+       Both were found by the refactor, not searched for.
+
+       - `rf-components.mjs` said *"the docs derive the display name from the
+         dir"*. They derive it from the file stem, and have since the generator
+         was written — the line described `split('/')[0]` while the code read
+         `[1]`. Now states both halves and why they differ.
+       - `extract-api.mjs`'s "SINGLE source" comment named two readers while
+         three sites existed. Now names three, and records this as the second
+         drift so the next one is not written off as first-time.
+
+       No gate proposed for either. "A comment matches the code it describes" is
+       semantic, and roadmap 94.11 already paid for that lesson; the shape here
+       is not checkable, and inventing one would be the ceremony that section
+       refuses.
+
+4. [x] **166.4 — the re-scan that closes the sweep, and its first version could
+       not have found the bug it was written to re-check for.**
+
+       Standardize's exit is *a clean pass finds nothing to consolidate*, so the
+       round has to re-scan for the same drift elsewhere. Two passes:
+
+       ```
+       grep -rn "state-patterns'" apps/docs/scripts/*.mjs packages/core/scripts/*.mjs
+         # 1 site — extract-api.mjs:173. The alias is single-sourced again.
+       ```
+
+       Then, for the same SHAPE anywhere else — a string→string map of 3+
+       entries whose keys overlap another file's. **The first version compared
+       key sets for EQUALITY and reported 0.** It would have reported 0 on
+       yesterday's tree too: the drifted map had seven keys against the
+       canonical three, so equality never fires and the instrument was
+       congratulating the tree for a bug that was present. The zero looked like
+       an answer and was an artefact — CLAUDE.md's base-rate rule, hit on the
+       first output of a new instrument exactly as that section says to expect.
+
+       Rewritten to test **overlap** (2+ shared keys) and red-proved against the
+       known-bad input rather than a synthetic one: run over
+       `extract-api.mjs` plus `git show HEAD:apps/docs/scripts/gen-rf-profile.mjs`,
+       it reports **1 overlap on `alert` and `state`** and names both files. Over
+       the live tree — 86 script files, 20 qualifying maps — it reports **0**.
+       That zero has now been shown to be capable of being non-zero, which is the
+       only reason it is quoted here.
+
+       Ad-hoc, deliberately not a gate: 20 maps is a small enough population that
+       a gate would be ceremony, and the predicate's base rate on the live tree is
+       0 of 20 — the shape 94.11 warns produces a detector that never fires. It is
+       written down so the next sweep re-runs it instead of re-deriving it.
+
+**Sweep verdict: clean.** `scan:dead-style` 0, `report:css-repeats` no delta,
+`report:prose` no unverdicted page, one duplicated table found and removed, and
+the re-scan for more of the same shape red-proved before its zero was believed.
+
 ## Slice 165 — the archive sweep is due again, and rule 4 is the thing paying for it (2026-08-28)
 
 **Not new input** — nothing was filed and nobody asked. Noticed while closing

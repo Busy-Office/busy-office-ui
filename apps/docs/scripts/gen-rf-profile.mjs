@@ -8,18 +8,46 @@
  * matters: the page renders exactly what ships, or the build regenerates it.
  *
  * Same rule as api.json/contrast.json — never hand-edit the output.
+ *
+ * The two halves of an entry come from the two halves of its path, and they
+ * are NOT the same thing (Standardize sweep, 2026-08-28):
+ *
+ *   - the NAME is the file stem — `form/input` is displayed as `input`,
+ *     because what the profile ships is that CSS file, and five of the
+ *     fourteen entries would otherwise collapse into one `form`;
+ *   - the HREF is the DIR, resolved through `api.pageSlug`, because a page
+ *     is per-directory: all five form files document on `/components/form`.
+ *
+ * That second half used to be a hand-copied seven-entry table keyed on file
+ * stems, which is a fourth copy of an alias `extract-api.mjs` publishes as
+ * "the SINGLE source" and names only two readers of. It had already drifted
+ * away from the canonical map in both directions (it carried five `→ form`
+ * entries the canonical one does not need, and lacked `skeleton`), and its
+ * own doc-comment said it keyed on CSS dirs while the code keyed on file
+ * stems. Deriving costs one import and cannot drift: adding an alias to
+ * `extract-api.mjs` now reaches this generator too. Output is unchanged —
+ * all 14 hrefs are byte-identical to the hand-mapped ones.
+ *
+ * No new gate: the three pattern pages that consume this render every href
+ * as a real `<a>`, so `check-links.mjs` already fails the build on a slug
+ * with no page. Red-proved by injecting `/components/no-such-page` into a
+ * built page — check-links reports it and exits 1.
  */
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { RF_COMPONENTS } from '../../../packages/core/scripts/rf-components.mjs';
 
-/** Page slugs differ from CSS dirs for a few (alerts, state-patterns, form). */
-const PAGE = {
-  'checkbox-radio': 'form', 'form-field': 'form', 'form-section': 'form',
-  input: 'form', select: 'form', state: 'state-patterns', alert: 'alerts',
-};
+const require = createRequire(import.meta.url);
+const { pageSlug: PAGE_SLUG } = JSON.parse(
+  await readFile(require.resolve('@busy-office/ui/api'), 'utf8'),
+);
 
-const components = [...new Set(RF_COMPONENTS.map((p) => p.split('/')[1]))]
-  .map((name) => ({ name, href: `/components/${PAGE[name] ?? name}` }));
+const components = [...new Map(
+  RF_COMPONENTS.map((p) => {
+    const [dir, file] = p.split('/');
+    return [file, { name: file, href: `/components/${PAGE_SLUG[dir] ?? dir}` }];
+  }),
+).values()];
 
 await writeFile(
   new URL('../src/data/rf-profile.json', import.meta.url),

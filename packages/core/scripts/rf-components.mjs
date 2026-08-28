@@ -14,7 +14,12 @@
  * exactly these. Adding a component to the profile updates both, or neither.
  *
  * Paths are `<dir>/<file>` under `src/css/components/`, which is what the
- * build's `@import` needs; the docs derive the display name from the dir.
+ * build's `@import` needs. The docs derive the display name from the FILE
+ * stem and the docs-page link from the DIR — corrected here 2026-08-28, when
+ * this line still said the name came from the dir and `gen-rf-profile.mjs`
+ * had been keying on `split('/')[1]` the whole time. The two halves are
+ * genuinely different: five entries share the `form` dir and one page, but
+ * name five distinct files that the profile ships.
  */
 export const RF_COMPONENTS = [
   'button/button',
