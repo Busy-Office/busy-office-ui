@@ -52,8 +52,27 @@ for (const dir of DIRS) {
     if (name === 'check-selftests.mjs') continue;
     checked += 1;
     const src = await readFile(join(REPO_ROOT, dir, name), 'utf8');
-    const isHeuristic = src.includes('@heuristic');
-    const isExact = src.includes('@exact');
+    /* A DECLARATION, not a mention — the same distinction the `--self-test`
+       comment below draws, which this line did not draw until 2026-08-28. A
+       plain `src.includes('@exact')` cannot tell the tag from prose ABOUT the
+       tag, so a gate whose header explains why it was retagged — naming the tag
+       it no longer carries — was reported as claiming both. That is CLAUDE.md's
+       "assert on structure, never on raw text": the comment written to explain
+       a removal legitimately names the thing removed. So match the tag at its
+       declaration position, in BOTH comment styles in use here (` * @exact` in
+       a JSDoc block, `// @exact` as a line comment).
+
+       Fail-closed either way — it over-reported, never under — so no earlier
+       verdict was wrong.
+
+       Reconciled against the UNCHANGED tree, not only the edited one, and that
+       is what caught this regex's own first draft: allowing the JSDoc form
+       alone reported eight gates as untagged. Corrected, it reproduces the
+       known pre-change reading exactly (43 gates: 12 heuristic, 31 exact) and
+       shows only the one deliberate move after it (43: 13 / 30). */
+    const declares = (tag) => new RegExp(String.raw`^\s*(?:\*|//)?\s*${tag}\b`, 'm').test(src);
+    const isHeuristic = declares('@heuristic');
+    const isExact = declares('@exact');
 
     if (isHeuristic === isExact) {
       untagged.push(

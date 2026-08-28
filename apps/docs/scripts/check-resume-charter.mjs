@@ -21,9 +21,30 @@
  *      heading (`^## …`) and not any mention means a wake can still write prose
  *      about the traps — it just cannot re-host them.
  *
- * @exact — both halves are string membership over two files. There is no
- *   recognition step to fool, so no `--self-test` is owed (CLAUDE.md: wrapping
- *   ceremony around an equality check is the thing that rule exempts).
+ * @heuristic — and it was tagged `@exact` for one day, wrongly. Assertion 1 is
+ *   string membership. Assertion 2 is membership over *the output of a parser*:
+ *   `headingsIn` has to recognise which `#` lines are headings and which sit
+ *   inside a fence. That is a recognition step, which is the definition
+ *   `check:selftests` gives `@heuristic`, so a `--self-test` is owed and is
+ *   below. The original tag's own justification — "both halves are string
+ *   membership over two files" — was true of the first half only.
+ *
+ *   Found by the Objective grill of Slices 168-170 (2026-08-28), by running the
+ *   parser rather than reading it. The base rate decided the fix: **1 of 39
+ *   `@exact` gates does markdown-structure recognition** — this one — so the
+ *   answer is the correct tag on one file, not a new mechanism over the taxonomy
+ *   (roadmap 94.11's precedent). `check:selftests` already enforces the rest.
+ *
+ * The defect the mis-tag was hiding is that assertion 2 FAILS OPEN. The fence
+ * skipper is a state machine, so an unterminated fence anywhere above a heading
+ * turns the whole remainder of the file into invisible content and the gate
+ * still reports every rule holding. Demonstrated, not reasoned: pasting
+ * `## Cloud-wake toolchain …` back into the real `RESUME.md` goes red as it
+ * should, and the identical paste preceded by one stray ``` line goes GREEN.
+ * `RESUME.md` is rewritten wholesale every wake and is full of shell recipes,
+ * which is exactly the document most likely to carry an odd fence. So the
+ * unterminated fence is now its own loud failure, per CLAUDE.md: a gate that
+ * cannot run must say so rather than pass.
  *
  * Red-proved 2026-08-28, and the useful way round: this gate was RED on the
  * real tree before the move — RESUME.md carried every heading and no pointer —
@@ -31,6 +52,13 @@
  * Confirmed both ways afterwards: deleting the pointer line goes red on
  * assertion 1, pasting `## Cloud-wake toolchain — what works, in order` back
  * goes red on assertion 2.
+ *
+ * The fence assertion was red-proved the same way (2026-08-28): the stray-fence
+ * paste that had been GREEN was appended to the real `RESUME.md`, the injection
+ * was confirmed by reading the file back, and the gate went red on it. The
+ * `--self-test` was red-proved by stubbing `hasUnterminatedFence` to `false` —
+ * one case flips to FAIL and the run exits 1, so it is not a self-test that
+ * cannot fail.
  */
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -80,15 +108,20 @@ const MUST_HAVE_ARRIVED = [
  * of shell recipes whose comments start with `#`, so a naive filter reads
  * `# fb15cdc is the commit carrying the owner's decision` as a heading. Caught
  * by running the same expression by hand over the finished `RESUME.md` and
- * getting three "headings" that are bash comments. Left in, this is a
- * recognition step — which would make the `@exact` tag above a lie, and
- * `check:selftests` classifies gates by that tag.
+ * getting three "headings" that are bash comments.
+ *
+ * Skipping fences did not remove the recognition step, it moved it — which is
+ * why the tag above now reads `@heuristic`. The state machine below decides
+ * what a heading is, and `hasUnterminatedFence` exists because it decides
+ * wrongly, and silently, on a file whose fences are unbalanced.
  */
+const FENCE = /^\s*(```|~~~)/;
+
 export const headingsIn = (src) => {
   const out = [];
   let fenced = false;
   for (const line of src.split('\n')) {
-    if (/^\s*(```|~~~)/.test(line)) {
+    if (FENCE.test(line)) {
       fenced = !fenced;
       continue;
     }
@@ -96,6 +129,40 @@ export const headingsIn = (src) => {
   }
   return out;
 };
+
+/**
+ * The fail-open condition, kept separate so it can be asserted rather than
+ * hoped for: if the fence state is still open at the end of the file, every
+ * heading after that point was invisible to `headingsIn` and assertion 2
+ * silently checked nothing.
+ */
+export const hasUnterminatedFence = (src) =>
+  src.split('\n').filter((line) => FENCE.test(line)).length % 2 === 1;
+
+/* Run the detector against inputs it must tell apart. This is what the
+   `@heuristic` tag owes, and it is red-proved in both directions: case 2 is the
+   original bash-comment bug (a `#` line inside a fence is not a heading), and
+   case 4 is the fail-open bug this self-test was written for — it FAILED before
+   `hasUnterminatedFence` existed. */
+if (process.argv.includes('--self-test')) {
+  const H = '## Cloud-wake toolchain — what works, in order';
+  const cases = [
+    ['a plain heading is found', headingsIn(`intro\n${H}\nbody`).length === 1],
+    ['a `#` line inside a fence is not a heading', headingsIn('```\n# not a heading\n```').length === 0],
+    ['a heading inside a fence is not a heading', headingsIn(`\`\`\`\n${H}\n\`\`\``).length === 0],
+    ['an unterminated fence is caught, not skipped', hasUnterminatedFence(`\`\`\`\n${H}\n`)],
+    ['a balanced document is not flagged', !hasUnterminatedFence('```\nx\n```\ntext')],
+    ['a document with no fence at all is not flagged', !hasUnterminatedFence(`${H}\nbody`)],
+  ];
+  const bad = cases.filter(([, ok]) => !ok);
+  for (const [what, ok] of cases) console.log(`  ${ok ? 'ok  ' : 'FAIL'}  ${what}`);
+  if (bad.length) {
+    console.error(`resume charter self-test FAILED — ${bad.length} case(s) misclassified.`);
+    process.exit(1);
+  }
+  console.log(`resume charter self-test passed — ${cases.length} cases classified correctly`);
+  process.exit(0);
+}
 
 /* `.roundtable/` is loop machinery, not part of the published docs image, so the
    docs Containerfile copies only package.json, packages/, apps/docs, DESIGN.md
@@ -142,6 +209,17 @@ g.check(
   resume.includes('ENVIRONMENT.md'),
   'The pointer is gone. Step 0 opens RESUME.md, so nothing reaches the traps.\n' +
     '     Restore the blockquote under the title (roadmap 169.3).',
+);
+
+/* Before assertion 2 can mean anything, the parser it rests on must have seen
+   the whole file. An odd fence count leaves the state machine open, so every
+   heading below it is invisible and the loop below passes by not looking. */
+g.check(
+  'every fenced block in RESUME.md is closed',
+  !hasUnterminatedFence(resume),
+  'An unterminated ``` fence leaves the rest of the file invisible to the\n' +
+    '     heading scan, so the charter rules below would pass without checking.\n' +
+    '     Close the fence; do not relax this to get green.',
 );
 
 const resumeHeadings = headingsIn(resume);
