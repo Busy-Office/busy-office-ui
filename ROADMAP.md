@@ -231,6 +231,124 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 179 — Objective grill of Slices 173, 176, 177, 178 (2026-08-28)
+
+Dispatcher rule 3 at **4 / 3 OVERDUE `[173, 176, 177, 178]`**; rule 1 found no
+open P0 and GitHub intake is empty (**0 open issues**, asked via the API, not
+assumed), rule 2 read `Standardize 0 / 4 ok`. Full report:
+`.roundtable/grill-objective-173-176-177-178-2026-08-28.md`. `.roundtable/INDEX.md`
+checked first — 148 files, 4 repeated subjects, and no existing report names any
+of these four slices.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — one Python script under
+`scripts/loops/`, plus prose in `LOOPS.md`, `ROADMAP.md` and `.roundtable/`.
+`git diff --stat` names no `.css`, no `.astro` and no file under
+`packages/core/src`, so there is no visual surface to have looked at.
+
+1. [x] **179.1 — DONE. `report_loop_prose.py` reconciles in one direction, and
+       it is the direction that has never failed.** The script asks, of every
+       path in `FILES`, *is it on disk?* — a listed file that vanishes, which has
+       happened zero times. The failure that has happened **twice** is the
+       reverse: a durable loop file is created, `LOOPS.md` starts telling every
+       wake to read it, and `FILES` is not updated. 167.2 caught it by hand;
+       169.3 did not, and 178.1 found it a day later — after 1,467 words were
+       scored as a shrink in `RESUME.md` and 1,666 went unmeasured at the
+       destination. 178.1's red-proof (`ENVIRONMENTT.md`) exercises the arm that
+       has never fired.
+
+       *Accept* — properties, not predicted values:
+       - The script fails when a `.md` file the dispatcher region names is
+         measured by neither `FILES` nor an `EXEMPT` entry **carrying a reason**.
+       - The predicate's base rate is measured over history **before** the
+         assertion ships, and it distinguishes rather than being true of
+         everything (94.11).
+       - Both arms are red-proved with the injection asserted to have landed
+         first, and the pre-179.1 script is shown **passing** on the same
+         injection — otherwise the new arm has not been shown to add anything.
+       - A region anchor that cannot be located is **reported as fatal**, never
+         returned as an empty set.
+       - If the new assertion rests on recognition, the tag says so and a
+         `--self-test` exists that has been watched failing.
+
+       **Met.** Base rate replayed over the 15 commits where both files parse:
+       **9 of 15 red (60%)** — one defect episode, nine commits wide, opening at
+       `f52f2597` (169.3) and closing at `e409a0fe` (178.1). Not nine independent
+       instances, and said so. Red-proof, `count == 1` asserted before replacing,
+       probe copy in the same directory (never `git stash`):
+
+       ```
+       pre-179.1 script, ENVIRONMENT.md row deleted  -> exit 0, silent
+       post-179.1 script, same deletion              -> exit 1
+           .roundtable/ENVIRONMENT.md: named in LOOPS.md's dispatcher region,
+                                       measured by nothing here
+       ```
+
+       Retagged **`@heuristic`** (it now reads prose) with a 7-case
+       `--self-test`, every case paired with its near-twin: a dated report
+       filename is skipped and the same name without a date is not; a bare
+       `ENVIRONMENT.md` resolves to the `.roundtable/` path; a path below rule 5
+       is out of the region. Red-proved one level up — stubbing
+       `dispatcher_md_paths` to return an empty set exits 1.
+
+       **Recorded, not filed:** `check:selftests` reads only `check-*.mjs` under
+       `apps/docs/scripts` and `packages/core/scripts`, so **no
+       `scripts/loops/*.py` tag is enforced by anything**. 2 of 9 carry a tag and
+       both are honest (`dispatch_status.py --self-test` classifies 14 cases). A
+       gate over zero defects would be ceremony; this line exists so a third bad
+       tag is not re-discovered as new.
+
+2. [x] **179.2 — DONE. Slice 177's "both readings agree" is a ratio and its
+       denominator, and the quantity that says what a wake pays moves the other
+       way.** 177 (and `LOOPS.md` rule 4) concluded *"the sweep is not converging
+       on a steady state"* from cycle length halving while per-commit rate rose.
+       **Rate × length = regrowth identically**, so those two cannot disagree by
+       construction; the rate rises *because* length falls faster than the total.
+
+       *Accept*: the trend is re-derived with the fourth sweep included, and both
+       documents state whichever way the measurement comes out — finding 177
+       right is a satisfying outcome.
+
+       **Met, and 177 is half right.** Re-derived over all **725**
+       ROADMAP-touching commits, by the line drop rather than by subject line.
+       177.1 closed the cycle 177 could only measure mid-flight:
+
+       | cycle | trough | peak | regrowth | commits | per commit |
+       |---|---|---|---|---|---|
+       | after 110.4 (08-22)    | 5,562 | 9,824 | **4,262** | 141 | +30.2 |
+       | after tidy-44 (08-25)  | 1,094 | 4,461 | **3,367** |  67 | +50.3 |
+       | after 165's 20 (08-28) | 1,508 | 3,872 | **2,364** |  35 | +67.5 |
+
+       The unreported third column **falls**, as does the peak a wake walks
+       (**9,824 → 4,461 → 3,872**). Rule 4's cost is the peak, so on that number
+       the sweep **is** converging, 2.5x across three cycles. Cycle length is
+       partly endogenous besides — a cycle ends when a wake notices, and the
+       trigger fell with it.
+
+       **What stands:** the per-commit rise is real (each commit writes 30 → 68
+       lines), 177's generator measurement (61% of swept lines are grill slices
+       that also have a `.roundtable/` report) is untouched, its figures
+       reproduce within the boundary convention, and its one forward prediction
+       **held** — the fourth sweep came 35 commits after the third. This corrects
+       an interpretation, not a measurement. `LOOPS.md` rule 4 carries the
+       three-column table; ROADMAP 177 carries a correction block in place, so
+       the original reading stays readable.
+
+3. [x] **179.3 — the window's re-derived claims, one line each, per the
+       playbook's "a clean round is worth one line, not a re-derivation".**
+
+       - `report:css-repeats` — **74 files · 237 rules · 225 distinct · 8
+         repeated**, groups x4/x3/x3/five-x2, matching `LOOPS.md`'s table on every
+         figure. 178.4 reproduces exactly.
+       - `check:wrong-choice` — **37 carry / 1 outstanding / 3 exempt**;
+         patterns 39/0. 176.2's premise reproduces.
+       - `check:slice-refs`' sufficiency argument re-measured at HEAD: **153
+         pointer stubs in `ROADMAP.md`, 153 distinct slice numbers in the
+         archive, set-equal both ways**; 160 live headings, 160 distinct. Holds.
+       - Refusal rate **36.50%** (223 of 611 decided), continuing the creep
+         33.5 → … → 35.25 → 36.50. Two independent parsers agree to the decimal;
+         356 legacy rows excluded, the same 356 the previous grill measured.
+
 ## Slice 178 — Standardize sweep: the split that outran its own instrument, and a page that disagrees with itself (2026-08-28)
 
 Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`. Rule 1
@@ -1207,6 +1325,17 @@ Cycle length in commits is **halving** (140 → 66 → 33) while the per-commit 
 is **rising** (+30 → +51 → +68). Both readings agree, which is what makes this
 worth a line: the sweep is not converging on a steady state, and CLAUDE.md's
 "recurring sweep" wording describes it accurately but understates the trend.
+
+> **CORRECTED by 179.2 (Objective grill, 2026-08-28) — the last sentence above
+> is wrong, and "both readings agree" is not corroboration.** Rate × length =
+> regrowth, so the two quantities are one measurement decomposed and cannot
+> disagree by construction. The third term, unreported here, moves the other
+> way: regrowth per cycle **4,262 → 3,367 → 2,364** and the peak a wake actually
+> walks **9,824 → 4,461 → 3,872**, both falling monotonically across the three
+> now-closed cycles. On rule 4's own cost — lines walked before a sweep — the
+> sweep **is** converging. The prediction in the same paragraph held: the fourth
+> sweep (177.1) came 35 commits after the third. Table and commands in
+> `LOOPS.md` rule 4.
 
 **What is generating it, measured, and deliberately NOT acted on.** Of the 1,943
 lines this sweep moves, **1,192 (61%) are the five Objective-grill slices**

@@ -371,14 +371,40 @@ match to its full playbook below:
    are re-measured — ROADMAP 177 carries the scope command and the trend, and
    `check:slice-refs` reports its own citation count on every run.
 
-   **It is a recurring sweep whose rate is RISING, which is the part worth
-   carrying here.** Measured across all 722 commits that have touched
-   `ROADMAP.md`, by the line-count drop rather than by grepping subject lines
-   (that grep finds only 2 of the 3 sweeps it should): regrowth per
-   ROADMAP-touching commit went **+30.4 → +51.0 → +67.9** while the gap between
-   sweeps halved, **140 → 66 → 33 commits**. Expect the next sweep sooner than
-   the last one, and re-run the command rather than trusting these three
-   figures — they are snapshots too, and saying so is the point.
+   **It is a recurring sweep. Each commit writes MORE, and each cycle regrows
+   LESS — both are true, and the second is the one that says what a wake pays.**
+   Measured across all 725 commits that have touched `ROADMAP.md`, by the
+   line-count drop rather than by grepping subject lines (that grep finds only 2
+   of the 3 sweeps it should). Four sweeps have now happened, so three cycles
+   are closed:
+
+   | cycle | trough | peak | regrowth | commits | per commit |
+   |---|---|---|---|---|---|
+   | after 110.4 (08-22)   | 5,562 | 9,824 | 4,262 | 141 | +30.2 |
+   | after tidy-44 (08-25) | 1,094 | 4,461 | 3,367 |  67 | +50.3 |
+   | after 165's 20 (08-28)| 1,508 | 3,872 | 2,364 |  35 | +67.5 |
+
+   **The two figures this paragraph used to quote are a ratio and its
+   denominator, not two agreeing readings** (roadmap 179.2). Rate × length =
+   regrowth exactly, so "per-commit rate rising" and "cycle length halving"
+   cannot disagree by construction — the rate rises *because* the length falls
+   faster than the total does. The quantity neither of them showed is the third
+   column, and it moves the other way: **regrowth per cycle 4,262 → 3,367 →
+   2,364, and the peak a wake actually walks 9,824 → 4,461 → 3,872**, both
+   falling monotonically. Rule 4's cost is the peak, so on the number that
+   matters here the sweep IS converging.
+
+   Cycle length is also partly endogenous — a cycle ends when a wake *notices*,
+   and the trigger has fallen with it (swept at 9,824, then 4,461, then 3,872),
+   so "the gap is halving" measures how soon wakes look as much as how fast the
+   file grows. The old paragraph's one prediction held: the fourth sweep came
+   **35 commits** after the third, against 67 and 141.
+
+   Re-run rather than trusting the table — these are snapshots, and saying so is
+   the point. Earlier figures read 140/66/33 and +30.4/+51.0/+67.9; the small
+   differences are the cycle-boundary convention plus cycle 3 having been
+   measured mid-flight, at 33 commits and 3,750 lines, before its own sweep
+   closed it.
 
    The archive is for looking a reason UP (`check:slice-refs` keeps its
    citations resolvable — it reports the count itself, so read it there); a
