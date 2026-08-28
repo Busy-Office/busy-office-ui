@@ -1623,14 +1623,43 @@ already contains the fix the older one lacks.**
        dry.** That is a dispatch input, and it is now recorded where dispatch
        reads it.
 
-3. [ ] **171.3 — layout: decide whether it is scorable at all before scoring it.**
-       Measure the base rate FIRST, per CLAUDE.md: if a candidate layout
-       predicate is already true of every screen, it is ceremony no matter how
-       carefully written — which is exactly how `ux` died.
-       *Accept*: a base-rate measurement recorded before any dimension is
-       proposed, and **"layout is not scorable, here is the evidence"** is a
-       satisfying outcome. `p2p/purchase-order`, the one live performance
-       outlier, is the obvious first specimen.
+3. [x] **171.3 — layout: decide whether it is scorable at all before scoring it.**
+       DECIDED 2026-08-28: **layout is not scorable, and here is the evidence.**
+       Six candidate predicates measured in a real browser at 1440×900 across
+       all 28 suite screens BEFORE any dimension was proposed. Full table and
+       method: `.roundtable/layout-scorability-2026-08-28.md`.
+
+       | candidate | distinct | why it does not survive |
+       |---|---|---|
+       | `depth` | 1 | uniform — **and it measures the fixture**. The lists carry 6 rows; the same layout with 600 rows scores differently. |
+       | `widthUse` | 1 | 0.84 on all 28 — the shell's fixed sidebar. Uniform because the shell works. |
+       | `aboveFold` | 2 | binary, 27 true. A binary property belongs in a gate, not a rubric re-confirming it 28 times — **the exact reason `ux` was retired**. |
+       | `regions` | 7 | varies, but ranks *what the screen is* (145.0). A document owes more regions than a home screen. |
+       | `maxDepth` | 4 | same confound — a document with tabs legitimately nests deeper. |
+       | `offScale` | 5 | the only candidate that could have been quality. It is not. |
+
+       **`offScale` is the interesting failure.** It passes the accept test,
+       and is still worthless: all nine genuinely off-scale values in the suite
+       are either hairlines (`-1px` on 25/28, `1px` on 27/28, `2px` on 24/28 —
+       border-collapse offsets and focus-ring insets) or em/percentage-derived
+       computed values (`6.5px`, `26.625px`, `41.25px`) that resolve off-scale
+       *by design*. **No screen uses a hand-picked off-scale spacing literal.**
+       So the count ranks how many bordered tables a screen has. Telling
+       "off-scale because sloppy" from "off-scale because it is a border" needs
+       intent — CLAUDE.md's existing wall, one literal over.
+
+       **Three instrument defects in four rounds, each producing a plausible
+       number** — the base rate confirming itself again: `regions` counted the
+       `.bo-stack` wrapper (1 on 27 of 28); token membership compared rem
+       against px so nothing matched (`nonToken` identical to `spacings` on all
+       28); and `gap` computes to a **two-value string**, so `"12px 16px"`
+       matched no single-value token and rounds 2–3 reported `4/8/12/16px` as
+       off-scale — values that are literally `--bo-space-1/2/3/4`. That last
+       one was caught by the claim not being credible, not by review.
+
+       **Not proposed**: no layout dimension, no gate. The properties that
+       matter here are binary and already gated (`check:layout`,
+       `check:scroll`, `check:target-size`, `check:forced-colors`).
 
 **Not proposed: a new score for usability.** It has died once on measurement,
 and re-proposing it without answering the 5/5 result would be re-raising a
