@@ -23,57 +23,54 @@ made but not yet written down.**
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 6 → Polish,
-`component/scan`**). Working tree clean at hand-off; the wake's commits were
-pushed. No collision this wake: the mandated pre-commit `git fetch origin main`
-found `origin/main` unmoved at `da9145a9`, and `git branch --show-current`
-answered `main` rather than empty (ENVIRONMENT.md trap 1, checked BEFORE the
-first commit, which is the only time it helps).
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 4 → Continue,
+build mode, on 176.2**). Working tree clean at hand-off; the wake's commits were
+pushed. No collision: `git branch --show-current` answered EMPTY at Step 0 —
+the container started detached, ENVIRONMENT.md trap 1, fixed with
+`git checkout -B main origin/main` **before the first commit**, which is the only
+time it helps — and the mandated pre-commit `git fetch origin main` found
+`origin/main` unmoved at `4ab5a3d0`.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
 goes stale between wakes. Trust the `N. [ ]` checkboxes, not this section.
 
-## ⚠ RULE 6 FIRED, AND IT IS THE FIRST WAKE THAT ACTUALLY REACHED IT
+## ⚠ RULE 4 FIRED — and the previous handover predicted it would not
 
-The previous handover predicted *"the next wake may well reach rule 8 and halt."*
-It did not, and the prediction was wrong for a reason worth carrying: **rules 5,
-6 and 7 sit between rule 4 and the halt**, and rule 6 had a queue nobody had
-looked at. Rule 4 genuinely found nothing dispatchable — all five open
-checkboxes are owner- or hardware-blocked, re-verified by reading each — but
-`polish_requeue.py --apply`, which rule 6 *mandates* running first, marked ten
-surfaces re-queued, and the ledger named a scan re-score as pending.
+The last handover said *"the next wake will likely reach rule 6 again"* and told
+this wake to expect no dispatchable item. It was wrong, for a reason worth
+carrying: **176.2 was dispatchable all along, and its own handover note said so**
+("the one open item a loop could plausibly argue itself into deciding"). An item
+whose Accept has an arm a loop can satisfy by MEASURING is a rule-4 item, whatever
+the item's prose says about direction. Read the Accept, not the framing.
 
-**So: do not conclude "halt" from rule 4 being empty.** Run rule 5's metric
-check and rule 6's re-queue before deciding, as this wake did.
+## What landed this wake (2026-08-28, cloud, rule 4 → Continue on 176.2)
 
-## What landed this wake (2026-08-28, cloud, rule 6 → Polish on `component/scan`)
+Dispatcher: rule 1 clear (no open P0 — `grep -i p0 ROADMAP.md` finds only closed
+slice headings; GitHub intake **0 open issues**, asked via the API, not assumed),
+rule 2 `Standardize 2/4 ok`, rule 3 `Objective 1/3 ok [173]`, rule 4 → **176.2**.
+Five of the six open checkboxes were re-read and are owner- or hardware-blocked.
 
-Dispatcher: rule 1 clear (no open P0; GitHub intake **0 open issues**, asked via
-the API, not assumed), rule 2 `Standardize 2/4 ok`, rule 3 `Objective 1/3 ok
-[173]`, rule 4 no dispatchable item, rule 5 no metric with two consecutive
-readings and no budget breach (`rf-essentials` 36.4 kB against 40 kB).
-
-- **176.1 — `/components/scan` published "Not yet scored" for five days after
-  it was scored.** The 2026-08-23 Polish re-entry round scored scan, found
-  colour/interaction/fit all at 2, and fixed all three — but wrote the result
-  into `polish-state.md` prose only. `dsa-scores.json` never got the entry, so
-  `DsaScore.astro` rendered its missing-entry fallback to every reader.
-- **The gate printed the discrepancy and passed on it.** `check:dsa-scores`
-  reported *"39 scored components (40 requested by a page)"* the whole time.
-  Assertion 7 now asserts it per name, **red-proved twice** — once by the real
-  defect (`FAIL scan: …`) before the entry existed, once by deleting an
-  unrelated entry (`FAIL kv: …`) to prove the check is not scan-shaped, with the
-  injection confirmed absent from the parsed JSON before the red was believed.
-- **The ledger contradicted itself and `LOOPS.md`.** It said `QUEUE DRY` while
-  its own table listed 10 `RE-QUEUED` rows, and still carried *"Polish drives on
-  content, fit and interaction ONLY"* — refuted by 171.1 five days ago in
-  `LOOPS.md` and never corrected here. Both fixed, with the re-measurement.
-- **176.2 raised OPEN and deliberately not resolved.** `polish_requeue.py`
-  re-queues on source change; §3b admits only `check:wrong-choice`'s TODO. All
-  10 re-queued rows score `content: 3` and are off the TODO, so rule 6
-  dispatches Polish onto surfaces with no scored weakness. Both sides are
-  deliberate decisions three days apart and neither names the other; resolving
-  it changes what the dispatcher does on every clear-backlog wake.
+- **176.2 closed BENIGN under Accept arm (c), and its PREMISE was half wrong.**
+  It was raised as *"rule 6 dispatches on the loser"*. Rule 6 dispatches on
+  neither side: its predicate is *"below its round budget and not marked dry"*,
+  `polish_requeue.py --apply` writes only the ledger's `status` column, and
+  §3b's TODO narrows which surface a round **picks**, not whether rule 6 fires.
+- **The base rate is the finding.** Parsed **all 11 revisions** of
+  `.roundtable/polish-state.md`, not just the current one: `budget_spent = 0`
+  and `marked_dry = 0` in **11 of 11**. Structural, not an instrument bug — the
+  dry exit needs two consecutive non-moving rounds and every seeded surface
+  landed its fix in one.
+- **Firing-rate consequence, measured against the log: zero**, by construction.
+  10 Polish rows of 1067 (0.94%) over five wake-dates; under arm (a) **2 of 10**
+  would not have fired, both `scan`, one of them 176.1.
+- **176.3 raised OPEN as an OWNER CALL.** §3b's Exit has never been satisfiable
+  for the same reason, so rule 7 has never been dispatched (**0** `Research`
+  rows in 1067, though six `research-*.md` reports exist under other loop names)
+  and rule 8 sits below it. Three options weighed, none taken — each changes
+  what the dispatcher does.
+- **Refused:** a Polish line in `dispatch_status.py`. Rule 6 is not
+  counter-triggered, so it has no threshold to be overdue against, and the value
+  would be constant — the line would read identically every wake forever.
 
 **Re-run, do not quote** — every figure here is a snapshot and the ROADMAP entry
 carries its commands.
@@ -82,36 +79,28 @@ carries its commands.
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**The commit's only rendered change is `/components/scan`'s "Design-system
-alignment" section**, which stops rendering the one-line fallback and starts
-rendering the six-row table — from the same `DsaScore.astro`, with no markup and
-no CSS change. `git diff --stat` names no file under `packages/core/src` and no
-`.css` anywhere. `check:layout` and `test:axe` swept 127 pages at both widths and
-were green; the unit suite is 146/146; the rendered artefact was checked, not
-just the diff (`"Not yet scored"` now appears in **zero** built pages).
+**Nothing in this wake's commits renders.** `git diff --stat` names three
+markdown files — `ROADMAP.md`, `LOOPS.md`, `.roundtable/polish-state.md` — plus
+the log/STATUS/RESUME recording commit, and no file under `packages/core/src` or
+`apps/docs/src`. That is a stronger statement than a screenshot.
+`check:layout` and `test:axe` swept 127 pages at both widths anyway and were
+green. **No visual debt was added; nothing visual was looked at.**
 
-**That section's appearance at 390px was NOT looked at.** It is the same
-component and the same table markup as the 39 pages already carrying it — which
-is an argument, not a verification, and is why it is named here.
-
-**The carried-forward visual items have waited another wake** — both need a
-local wake with a browser, and neither is dispatchable here:
+**The carried-forward visual items have now waited two wakes.** Both need a local
+wake with a browser and neither is dispatchable here:
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
   `<span class="bo-badge">generated</span>` inside an existing `<h2>`.
-  `DsaScore` now renders on **39** pages (scan joined them this wake), so if the
-  badge wraps badly it wraps in 39 places. First local wake: glance at one
-  component page's "Design-system alignment" heading at 390px — and make it
-  `/components/scan`, which is the page this wake changed.
+  `DsaScore` renders on **39** pages, so if the badge wraps badly it wraps in 39
+  places. First local wake: glance at one component page's "Design-system
+  alignment" heading at 390px — make it `/components/scan`.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 
-**Traps exercised for real this wake:** 1 (branch checked before the first
-commit; `origin/main` arrived as a forced update `17b3ba6...da9145a`), 1b, 1c, 2
-(unshallowed before the direction ratio), 5 (`polish_requeue.py` **crashed** on a
-fresh container with `FileNotFoundError: packages/core/dist/api.json` — rule 6's
-own mandated first command needs `npm run build -w @busy-office/ui` to have run;
-build first), 6 (a background gate's empty output file read as "still running",
-correctly). Not exercised: 3, 4, 7.
+**Traps exercised for real this wake:** 1 (detached HEAD — `git branch
+--show-current` was EMPTY, caught before the first commit), 1c, 2 (unshallowed
+before parsing 11 revisions of the ledger and before the direction ratio), 5
+(`polish_requeue.py --check` needs `npm run build -w @busy-office/ui` to have run
+first — built before touching it). Not exercised: 1b, 3, 4, 6, 7.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -127,13 +116,13 @@ from the sources named — never by copying the answers above you.**
   ("Publishing remains owner-triggered"). Asked the registry this wake, which is
   the authority: **still E404**.
 - **Did this wake advance it?** **No.** The remaining step is owner-only, and no
-  cloud wake can run it. This wake ran rule 6 → Polish on `component/scan`.
+  cloud wake can run it. This wake ran rule 4 → Continue on 176.2.
 - **Work rows since the direction was decided that did not advance it:**
-  **31 of 32** as of this wake (was 30 of 31). Derived this wake, unshallowed
-  first; re-derive rather than increment — a copied number is 169.1's exact
-  failure mode. The needle matched **2** rows and only **164.3** advances the
-  direction; **168.1** merely narrates it, which is why the count below is a
-  read, not a `-c`.
+  **32 of 33** as of this wake (was 31 of 32). Derived this wake by running the
+  command below, unshallowed first — it read `33` non-`Meta` rows; re-derive
+  rather than increment — a copied number is 169.1's exact failure mode. The
+  needle matched **2** rows and only **164.3** advances the direction; **168.1**
+  merely narrates it, which is why the count is a read, not a `-c`.
 
   **⚠ The `grep -c create-ui` needle over-counts.** Only ONE of its matches
   advances the direction (164.3, which fixed three publish blockers); the other
@@ -176,37 +165,35 @@ the new decision. Rewrite them; do not reinterpret them.
 
 Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
-the parser's five blindings and nothing else ever has.
+the parser's five blindings and nothing else ever has. Done this wake, and the
+numbers agreed with what had just been recorded.
 
-Read at Step 0b against tip `da9145a`: **Standardize 2/4 ok, Objective 1/3 ok
-[173]**, parser 1,062 against a raw `grep -c "^- "` of 1,062.
+Read after recording: **Standardize 3/4 ok, Objective 2/3 ok [173, 176]**,
+parser 1,067 against a raw `grep -c "^- "` of 1,067. Both moved, correctly — a
+`Continue` row advances rule 2, and Slice 176 closing advances rule 3 (161.4:
+Continue and Standardize close slices).
 
-**Note for the next wake: a Polish row does NOT move rule 2 or rule 3.** Rule
-2 counts Continue rounds; rule 3 counts slices closed by Continue **and**
-Standardize only (161.4). So expect the counters to read the same as they did
-this wake, and do not read that as the recorder failing — re-read
-`dispatch_status.py` at Step 0b rather than trusting this line.
+**So rule 2 is one Continue round from firing and rule 3 is one slice from
+firing.** Expect the next wake to reach Standardize or Objective before rule 4 —
+evaluate them in order rather than assuming, and note that rule 2 preempts a
+queued build item deliberately.
 
 **When rule 4 is next reached, re-derive its oldest dispatchable item from
-`ROADMAP.md`'s `N. [ ]` checkboxes.** At hand-off the open set is **6** —
-the five that were open before, every one owner-blocked or needing hardware,
-plus this wake's own 176.2:
+`ROADMAP.md`'s `N. [ ]` checkboxes.** At hand-off the open set is **6** — 176.2
+closed, 176.3 opened:
 
 - `112.3` / `112.4` — blocked on owner briefs, and on 112.3's verdict.
 - `173.2` — explicitly *owner to pick* between two candidates (a row-level error
   row, or a message that floats on focus).
 - `175.4` — OWNER CALL, Step 0c's reopen condition.
-- `176.2` — the requeue-vs-queue contradiction. **Direction, so owner-facing**,
-  but note it is the one open item a loop could plausibly argue itself into
-  deciding; if a wake does take it, the Accept explicitly allows "the
-  contradiction is benign" as a closing outcome, and requires the consequence
-  for rule-6 firing rate to be **measured against the log, not predicted**.
+- `176.3` — OWNER CALL, this wake's. §3b's Exit is unsatisfiable, so rules 7 and
+  8 are unreachable. **Do not decide it in a loop** — all three options change
+  what the dispatcher does on a clear-backlog wake. Its Accept requires the
+  consequence measured against the ledger and the log, and "leave it" closes it.
 - `AT runtime evidence` (Slice 15) — NEEDS-RUNTIME, owner hardware.
 
-**So the next wake will likely reach rule 6 again** — `polish_requeue.py
---apply` will still report the same ten re-queued surfaces, because 176.2 is
-open and nothing has changed the mechanism. **That is exactly the state 176.2
-describes, and it is not a new finding.** A Polish round on any of those ten has
-no scored weakness to fix (all `content: 3`, all off the wrong-choice TODO), so
-do not manufacture one: say so in one line, and either take 176.2's decision to
-the owner or fall through to rule 7 (Research). Do not re-dispatch Explore.
+**If a wake does reach rule 6:** `polish_requeue.py --apply` will still report
+the same ten re-queued surfaces. `LOOPS.md` §3b now says what such a round is
+for — reconcile the surface's published artefact against the ledger's record of
+it, and **record a no-op in one line if that finds nothing**. Do not manufacture
+a fix, and do not re-raise 176.2; it is closed and the reasoning is in ROADMAP.
