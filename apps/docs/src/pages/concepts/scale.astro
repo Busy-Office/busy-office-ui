@@ -20,14 +20,27 @@ const gzipKb = (gzipSync(Buffer.from(minCss)).length / 1024).toFixed(1);
    chunks, offsets 0/50/100 of a 50,000-row total; the middle one is what a
    reader is looking at, so it's the one shown fully loaded — the other two
    illustrate the evicted-spacer shape rather than padding the page with
-   150 real rows. */
+   150 real rows.
+
+   SPACER HEIGHTS ARE ILLUSTRATIVE (roadmap 173.1). At their true size —
+   50 rows x ~40px — each spacer is 2,000px, so the table ran 4,200px and
+   the four loaded rows sat 2,000px below the header: a reader saw two
+   screens of blank and never reached the thing being demonstrated. They
+   are shown at 120px, and the copied markup says so on the line above
+   each one, because `Demo` renders the preview and the copyable code from
+   ONE string — a shortened height that did not admit it would be a 154.2
+   (a sample that silently misleads the person pasting it). The real
+   formula stays in the comment and in the caption below the demo. */
 const windowedMarkup = `<table class="bo-data-table" data-windowed data-window-chunks="3"
        data-table-total-rows="50000">
   <thead><tr><th scope="col">Row</th><th scope="col">Reference</th></tr></thead>
-  <!-- Scrolled past and evicted: a spacer, height = rowCount *
-       --bo-density-row-height, computed at eviction time — never measured. -->
+  <!-- Scrolled past and evicted: ONE spacer stands in for this chunk's 50
+       rows. Height = rowCount x a row height measured once when the table
+       binds and cached, so eviction itself never forces a layout read.
+       Shown at 120px so the whole shape fits one screen; running, this
+       spacer is about 2,000px. -->
   <tbody data-chunk-id="c0" data-chunk-offset="0" data-evicted="true">
-    <tr class="bo-data-table__spacer" style="block-size: 2000px"><td colspan="2"></td></tr>
+    <tr class="bo-data-table__spacer" style="block-size: 120px"><td colspan="2"></td></tr>
   </tbody>
   <!-- The chunk currently in view: real rows, real data-row-id. -->
   <tbody data-chunk-id="c1" data-chunk-offset="50">
@@ -37,9 +50,10 @@ const windowedMarkup = `<table class="bo-data-table" data-windowed data-window-c
     <tr data-row-id="R-54"><td>54</td><td>REF-000054</td></tr>
   </tbody>
   <!-- Not yet scrolled to: evicted the same way, symmetrically — this is
-       bidirectional windowing, not append-only infinite scroll. -->
+       bidirectional windowing, not append-only infinite scroll. Same
+       illustrative 120px; same real ~2,000px. -->
   <tbody data-chunk-id="c2" data-chunk-offset="100" data-evicted="true">
-    <tr class="bo-data-table__spacer" style="block-size: 2000px"><td colspan="2"></td></tr>
+    <tr class="bo-data-table__spacer" style="block-size: 120px"><td colspan="2"></td></tr>
   </tbody>
 </table>`;
 
@@ -138,10 +152,16 @@ const agGridRecipe = `/* your-app.css — after both stylesheets */
     holds; this doesn't reopen it, it names the one case it never covered.</p>
     <Demo code={windowedMarkup} />
     <p class="bo-u-text-muted">A chunk that scrolls far enough away
-    evicts to a <strong>computed-height spacer</strong> — never measured
-    via <code>getBoundingClientRect</code>, so eviction never forces a
-    layout read on the exact operation this behavior exists to make
-    cheap — and re-requests (the same <code>bo:table-load-more</code>
+    evicts to a <strong>computed-height spacer</strong>: its height is
+    <em>rows &times; row height</em>, and that row height is measured from
+    one real row <strong>once, when the table binds</strong>, then cached —
+    so eviction never forces a layout read on the exact operation this
+    behavior exists to make cheap. (Deriving it from
+    <code>--bo-density-row-height</code> instead was tried and reverted:
+    real rows render taller than the token, so token-derived spacers ran
+    ~250px short per 100-row chunk and the list jumped as you scrolled. The
+    token remains the fallback when no real row has rendered yet.) A spacer
+    re-requests its rows (the same <code>bo:table-load-more</code>
     event <a href={base + '/components/pagination'}>load-more</a> already
     fires, now carrying an optional chunk-offset detail) when scrolled
     back toward. Selection survives eviction too: a checked row's

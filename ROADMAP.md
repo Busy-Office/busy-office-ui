@@ -1212,8 +1212,27 @@ silently refreshed.
 *"/patterns/editable-grid — Medium — combobox lookup cells, validation,
 add/remove lines — requires alignment"* (with a screenshot).
 
-1. [ ] **173.1 — the windowed-list demo puts 2000px of blank between the header
-       and its only content.** Measured live, all three chunks:
+1. [x] **173.1 — the windowed-list demo puts 2000px of blank between the header
+       and its only content.** LANDED 2026-08-28. Premise re-measured first and
+       it reproduced exactly (`c0 2000/0 · c1 160/4 · c2 2000/0`, table 4200px).
+       Spacers are now **120px and say so in the copied markup**; the table is
+       **440px** and all three chunks sit in one view at 1440×900 **and**
+       390×844, light and dark. Red-proved: injecting `2000px` back into the
+       built page (4 occurrences — 2 preview, 2 copyable, confirmed by count
+       before believing it) turns `allChunksInView` false at both widths.
+
+       **A second defect was found in the same block, and it is the worse
+       one.** The copied comment said the spacer height was
+       `rowCount * --bo-density-row-height, computed at eviction time — never
+       measured`, and the caption said `never measured via
+       getBoundingClientRect`. Both document a design that was **tried and
+       reverted**: `chunkRowHeightPx()` measures one real row once at bind and
+       caches it, precisely because token-derived spacers ran ~250px short per
+       100-row chunk and the list jumped while scrolling. The token is only the
+       fallback. Page now states the real mechanism and why the token version
+       was abandoned.
+
+       *Original measurement, kept:*
 
        ```
        c0  evicted spacer   2000px   0 data rows
@@ -1300,6 +1319,27 @@ add/remove lines — requires alignment"* (with a screenshot).
        Either changes the pattern's documented States contract ("the message
        inside that cell's form field"), so it is a design decision, not a tidy.
 
+3. [ ] **173.3 — `initWindowedList` is a shipped behavior with ZERO tests.**
+       Found while fixing 173.1, queued rather than folded into it.
+       ```
+       grep -rl "initWindowedList\|data-windowed\|data-chunk-id" packages/core/tests/
+       # (no matches — 2026-08-28)
+       ```
+       It is exported from `index.ts` and carries an entry in
+       `behaviors.json`, so it is public surface. **Its spacer-height
+       mechanism has already shipped wrong once** — token-derived heights ran
+       ~250px short per 100-row chunk, a scroll jump found by red-proof rather
+       than by a test — and nothing executable holds it today. That is also
+       why 173.1 found the docs describing the reverted design: no test, no
+       pressure to keep the prose true.
+       *Accept*: the spacer height a real eviction produces equals
+       `rowCount × the measured row height` (**not** the density token), plus
+       the two claims the page now makes — measured once at bind and cached,
+       and selection surviving eviction via the out-of-DOM Set. If jsdom
+       cannot give real row heights, say so and put the height case in a
+       browser gate instead of writing a test that asserts the fallback and
+       calls it covered — that would re-create the exact bug.
+
 **Recorded because it nearly became a false P0.** The first measurement of
 173.1 used `querySelector('#windowed-list tbody')` — **singular** — and this
 demo has THREE `<tbody>` elements. It returned the first, the evicted spacer,
@@ -1307,6 +1347,15 @@ and reported *"zero data rows at every scroll position"*: a demo rendering
 nothing at all. That was written up as a serious defect before
 `querySelectorAll` showed four real rows sitting 2000px down. The real finding
 is worse for the reader and much less dramatic than the false one.
+
+**And the fix's own first measurement was wrong the other way** (2026-08-28).
+After the spacers shrank, the check still reported
+`firstRowInFirstViewport: false` — because it tested `rect.top < innerHeight`
+without scrolling to the section, so it was measuring *where the section sits
+on the page*, not whether the shape fits a viewport. The table had already
+gone 4200px → 440px. Same lesson as the sidebar label that could never
+overflow its own box: **measure the box that carries the constraint** — here,
+the table against the viewport, after `scrollIntoView`.
 
 ## Slice 172 — Objective grill of Slices 168, 169, 170 (2026-08-28)
 
