@@ -51,8 +51,9 @@ ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) ·
 # assertion independent of the regex above — a reconciliation that re-uses the
 # parser it is checking cannot fail.
 BULLET = "- "
-# The slice a row worked on. THE LOG USES TWO CONVENTIONS, and for most of its
-# life this script could see only one of them.
+# The slice a row worked on. THE LOG USES FOUR CONVENTIONS; this script parses
+# three of them, and the fourth is refused deliberately (see MID_TEXT below).
+# For most of its life it could see only the first.
 #
 #   bare   "164.1 the dispatcher's counter reconciles…"
 #   prose  "Slice 84: wrote the eight missing CHANGELOG entries…"
@@ -109,6 +110,43 @@ SLICE_PROSE = re.compile(r"^Slice ([1-9]\d{0,2})(?:\.\d+[a-z]?)?\b", re.IGNORECA
 # effect: before this change `dispatch_status.py` read `Objective 1 / 3 [161]`
 # with a Standardize row for 166 already in the log; after, `2 / 3 [161, 166]`.
 SLICE_TOP = re.compile(r"^([1-9]\d{0,2})(?::|\s+[—–-])\s")
+
+# A FOURTH convention exists and is REFUSED, on measurement (Objective grill of
+# 161/162/166, 2026-08-28). Thirty Continue/Standardize rows name their slice
+# MID-TEXT, after an em-dash, which all three start-anchored patterns above
+# miss:
+#
+#   "Skeleton + state (empty/error) components — Slice 6 item 1 · shipped 0242384"
+#   "Demo-section ordering audit (Slice 6 item 10) — sample-before-code convention"
+#
+# Eight distinct slices (3, 6, 7, 8, 14, 18, 22, 96) are invisible, and that is
+# the right outcome. The convention is DEAD: 29 of the 30 rows are 2026-08-14 to
+# 2026-08-16, the newest is 2026-08-21, and adding a `\bSlice (\d+)\b` fallback
+# moves the whole-log crossing count 24 -> 25 — one crossing in the log's entire
+# history, none in the last week. Against that, a non-anchored pattern re-opens
+# exactly what 166.5's first draft did: a widening that reports MORE is not
+# self-evidently a fix.
+#
+# This block exists so the SIXTH discovery of a missed convention is not
+# reported as a new bug. LOOPS.md rule 3 concluded after the fifth recurrence
+# that "the lesson is no longer widen the regex"; this is that sentence's first
+# test, and it holds.
+#
+# Re-run before reopening — and note the plain grep UNDERCOUNTS, because two of
+# the thirty use a parenthetical (`(Slice 6 item 10)`) rather than an em-dash:
+#
+#   grep -c ' — Slice [0-9]' .roundtable/loop-log.md            # 28, not 30
+#   python3 -c "import re,sys; sys.path.insert(0,'scripts/loops'); \
+#     from dispatch_status import slice_of, ROW, CLOSES_A_SLICE; \
+#     rs=[m.groups() for m in map(lambda l: ROW.match(l.rstrip()), \
+#         open('.roundtable/loop-log.md')) if m]; \
+#     print(sum(1 for _,lp,_,it in rs if lp in CLOSES_A_SLICE \
+#         and not slice_of(it) and re.search(r'\bSlice \d+', it)))"   # 30
+#
+# The population is Continue/Standardize rows only, because those are the only
+# loops this counter reads; across ALL loops the same probe finds 79.
+#
+# Reopen only if rows in the CURRENT convention era start using it again.
 
 # WHICH LOOPS CLOSE A SLICE (roadmap 161.4, decided 2026-08-28 by replaying the
 # whole log, not by argument). Counts are per-loop rows that name a slice, and

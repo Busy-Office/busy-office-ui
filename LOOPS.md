@@ -299,16 +299,30 @@ match to its full playbook below:
    convention and for both traps, and fails when the fix is reverted (2 cases)
    and when the separator is loosened (2 different cases).
 
-   **The count above is deliberately not restated for the fix.** The replay
-   harness written to produce one read 61 crossings where this section
-   publishes 23 for the unchanged parser, so the harness is wrong and no new
-   cadence figure is quoted. The live reading is what is checked instead.
+   **The 61-vs-23 is settled, and the figures above are a SNAPSHOT.** 166.5
+   refused to quote its replay harness's 61 against this section's 23, on the
+   grounds that 23 was "published, red-proved" — which `--self-test` is not: it
+   proves `slice_of`'s classification, not the crossing replay, and no command
+   was ever recorded for 18/22/23. A third, independent replay (Objective
+   grill, 2026-08-28) reproduces all five published figures exactly at the 996
+   rows they were taken on — 18 · 22 · 23 · 23, and 6 → 15 — so **the harness
+   was wrong and 166.5's verdict holds**. It also shows the cost of the missing
+   command: ten rows later the `+ Standardize` figure is **24**. Re-run, do not
+   quote; the command is in
+   `.roundtable/grill-objective-161-162-166-2026-08-28.md`.
 
    So: five recurrences, all the same shape. **The lesson is no longer "widen
    the regex" — it is that this counter is only ever caught by a number
    disagreeing with something a human just wrote down.** Read its output right
    after recording an iteration, every wake; that comparison has now found two
    of the five.
+
+   **That sentence was tested and held.** A FOURTH log convention exists — 30
+   Continue/Standardize rows name their slice mid-text, after an em-dash, and
+   all three patterns miss it. It is refused, measured: the convention died on
+   2026-08-21, and parsing it moves the whole-log crossing count by **one, ever**.
+   The counts, the commands and the reopen condition are in `dispatch_status.py`
+   beside `SLICE_TOP`, so a sixth discovery is not re-reported as a new bug.
 
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.

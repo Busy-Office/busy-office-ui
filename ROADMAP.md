@@ -1186,6 +1186,159 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 167 — Objective grill of Slices 161, 162, 166 (2026-08-28)
+
+Dispatcher rule 3 at 3/3 `[161, 162, 166]`; rule 1 found no open P0 and GitHub
+intake is empty, rule 2 read `Standardize 2 / 4`. Full report:
+`.roundtable/grill-objective-161-162-166-2026-08-28.md`.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing here renders — the grill file, this entry,
+`.roundtable/RESUME.md`, one comment block in `dispatch_status.py` and two
+corrected paragraphs in `LOOPS.md`. No CSS, Astro or JS that ships to a page was
+touched, so no page's markup changes at all. `check:layout` and `test:axe` swept
+all pages at both widths anyway and were unchanged. **No visual debt was added;
+nothing visual was looked at.**
+
+Window shape: 12 rows · landed 6 · refused 5 (all Meta) · triaged 1. Refusal
+base rate since 2026-08-19 is **34.2%** (188 of 550), against 33.9% and 33.5%
+in the two previous windows — unmoved.
+
+**Three findings were settled inside the grill and are not items:**
+
+- **A — the 61-vs-23 is adjudicated.** 166.5 refused to quote its harness's 61
+  against the header's 23 on the grounds that 23 was "published, red-proved".
+  It was not: `--self-test` proves `slice_of`'s classification, not the crossing
+  replay, and no command was ever recorded for 18/22/23. A third independent
+  replay reproduces **all five** published figures exactly at the 996 rows they
+  were taken on (18 · 22 · 23 · 23, and 6 → 15), so the harness was wrong and
+  166.5's verdict holds. The cost of the missing command is visible: ten rows
+  later the `+ Standardize` figure is **24**. `LOOPS.md` rule 3 now says so and
+  points at the command. **No new doctrine, deliberately** — this is roadmap
+  159's existing rule ("write the command next to the claim"), not a new one,
+  and the gap was compliance. Inventing a second rule for it is the ceremony
+  94.11 refuses.
+- **B — a SIXTH convention exists and is refused, measured.** 30
+  Continue/Standardize rows name their slice mid-text (`… — Slice 6 item 1 ·
+  shipped …`); 8 distinct slices are invisible to all three start-anchored
+  patterns. 29 of the 30 are from 2026-08-14→16 and the newest is 2026-08-21;
+  parsing them moves the whole-log crossing count **24 → 25**, one crossing
+  ever. This is the first test of `LOOPS.md`'s own post-fifth-recurrence
+  conclusion — *"the lesson is no longer widen the regex"* — and it holds. The
+  counts, both commands (the plain grep undercounts at 28; two rows use a
+  parenthetical) and the reopen condition are beside `SLICE_TOP`.
+- **D — "it does not move the crossing count" is insufficient as a criterion.**
+  161.4 refused Explore+Objective partly because they move it 23 → 23.
+  Measured: `SLICE_TOP`, the fix 166.5 shipped and which was right to ship,
+  **also** moves it 23 → 23. A cadence test applied to a correctness change
+  gives the right answer once by luck. 161.4's refusal still stands on its
+  stated definitional reason; the number was corroboration, and reads to the
+  next wake as the argument.
+
+**The finding that is filed, and the tension it sits in.** This grill's headline
+is that the loop's own prose is growing unchecked — and a grill is prose about
+the loop. That is stated rather than dodged: the two items below are the only
+ones filed, both findings A/B/D were closed in place rather than queued, and the
+net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
+
+1. [ ] **167.1 — the loop's own prose is the fastest-growing and the only
+       unmeasured prose in the repo. Decide whether the 158.2 cadence covers
+       it.**
+
+       158.2 installed a cadence over `apps/docs` prose on the measurement that
+       it grew **+51%** in nine days with **zero pages shrinking**, and argued —
+       correctly — that a per-page justification test cannot produce a shrink
+       because it is applied while the words are being written. That cadence
+       covers the product's prose. **It does not cover the files the loop runs
+       on**, and over the identical window those grew faster:
+
+       ```
+       # words at each day's last commit, 2026-08-20 -> 2026-08-28
+       python3 - <<'PY'
+       import subprocess
+       F=['LOOPS.md','CLAUDE.md','ROADMAP.md','ROADMAP-archive.md',
+          '.roundtable/RESUME.md','DESIGN.md']
+       for d in ['2026-08-20','2026-08-28']:
+           s=subprocess.run(['git','rev-list','-1',f'--before={d}T23:59:59','HEAD'],
+                            capture_output=True,text=True).stdout.strip()
+           for f in F:
+               r=subprocess.run(['git','show',f'{s}:{f}'],capture_output=True,text=True)
+               print(d,f,len(r.stdout.split()) if not r.returncode else 0)
+       PY
+         # RESUME.md          837 ->   2,980   +256.0%   read every wake, Step 0
+         # LOOPS.md         4,380 ->   9,706   +121.6%   read every wake, Steps 0b-2
+         # ROADMAP + archive 86,368 -> 179,597  +107.9%   read every wake, rule 4
+         # CLAUDE.md        2,966 ->   4,759    +60.5%
+         # docs pages (158.2) 51,051 -> 77,080   +51%     read by users
+         # DESIGN.md        3,119 ->   3,609    +15.7%   the product's architecture
+       ```
+
+       The prose describing the **loop** grew two to five times faster than the
+       prose describing the **product**, and is read far more often.
+       `RESUME.md`'s own text contains *"a handover that only grows stops being
+       read"*, written the day it tripled.
+
+       **Counter-evidence, and it is why this is a decision and not a fix.**
+       Growth is not the defect — being unmeasured is. 158.1/161.1 found the
+       *instrument* at fault in 5 of 15 flagged pages, so a word count over
+       these files would likely flag `LOOPS.md` for containing decisions.
+       `ROADMAP.md`'s growth is already managed (165.1). And `DESIGN.md` is not
+       a like-for-like comparator: it is deliberately terse and delegates to
+       generated docs.
+
+       *Accept*: a recorded verdict for each of the five loop-machinery files
+       naming whether its growth is honest, instrument, or removable — the same
+       three-way split 158.1 used — **or** a recorded reason the cadence should
+       not extend here. Either outcome satisfies this; finding the premise
+       uninteresting is a satisfying result. Whatever is decided carries the
+       command that produced its numbers, and the numbers are re-run rather than
+       quoted from this entry.
+
+2. [ ] **167.2 — `LOOPS.md` rule 3 is 82% archaeology, and the file has no
+       archive.**
+
+       The dispatcher reads rule 3 every wake to decide one thing — *is the
+       counter at 3?* Measured:
+
+       ```
+       python3 - <<'PY'
+       t=open('LOOPS.md',encoding='utf-8').read()
+       r3=t[t.index('3. **THREE OR MORE slices'):t.index('4. **Build item queued')]
+       k=r3.index('**THE COUNTER WAS BLIND FOR FIVE DAYS')
+       print(len(r3.split()),'words total;',len(r3[:k].split()),'rule /',
+             len(r3[k:].split()),'recurrence history;',len(t.split()),'file')
+       PY
+         # rule 3: 1,026 words — 181 the rule itself, 845 the five recurrences
+         # LOOPS.md: 9,706 words, so one counter's history is ~9% of the file
+       ```
+
+       One 6-line function (`slice_of`: three regexes and a three-line body) now
+       carries **4,248 words** across four files — 845 in `LOOPS.md` rule 3,
+       1,709 in `dispatch_status.py`'s comments (148 of 304 lines), 1,244 in
+       ROADMAP 161.4 + 166.5, 450 in `RESUME.md`. `DESIGN.md`, the whole shipped
+       architecture, is 3,609.
+
+       `ROADMAP.md` has `ROADMAP-archive.md` for exactly this, blessed by
+       CLAUDE.md's storage doctrine (*"the archive is still markdown, still
+       reviewed, still diffed"*). `LOOPS.md` has no archive. The recurrence
+       narratives are the clearest candidate: they are history a wake needs
+       **when it touches the parser** — where `dispatch_status.py`'s own header
+       already keeps most of it — not when it reads the counter.
+
+       **Counter-evidence.** Each write-up was individually correct, and the
+       fifth recurrence was found *because* the fourth had been written down;
+       this prose has paid for itself. The risk of moving it is real and is the
+       reason this is an item and not a tidy: the whole point of rule 3's
+       history is that a wake reading the rule is warned, and a pointer is read
+       less than a paragraph.
+
+       *Accept*: rule 3's **decision content** — threshold, why three not one,
+       the ordering above rule 4, which loops close a slice — is intact and
+       still readable without following a link; every moved paragraph resolves
+       from where it used to be; and the before/after word split is reported by
+       re-running the command above rather than predicted here. A recorded
+       decision to move **nothing**, with the reason, also satisfies this.
+
 ## Slice 166 — Standardize sweep: a fourth copy of the alias whose home says there is one (2026-08-28)
 
 Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
