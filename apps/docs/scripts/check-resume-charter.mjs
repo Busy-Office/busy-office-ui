@@ -73,12 +73,29 @@ const MUST_HAVE_ARRIVED = [
   ['the standing owner instruction', 'No external product is named'],
 ];
 
-/** Headings only — `^## …` — so prose may still reference a trap by name. */
-const headingsIn = (src) =>
-  src
-    .split('\n')
-    .filter((l) => /^#{1,6} /.test(l))
-    .map((l) => l.replace(/^#{1,6} /, '').trim());
+/**
+ * Headings only — `^## …` — so prose may still reference a trap by name.
+ *
+ * Fenced code blocks are skipped, and that is not a nicety: both files are full
+ * of shell recipes whose comments start with `#`, so a naive filter reads
+ * `# fb15cdc is the commit carrying the owner's decision` as a heading. Caught
+ * by running the same expression by hand over the finished `RESUME.md` and
+ * getting three "headings" that are bash comments. Left in, this is a
+ * recognition step — which would make the `@exact` tag above a lie, and
+ * `check:selftests` classifies gates by that tag.
+ */
+export const headingsIn = (src) => {
+  const out = [];
+  let fenced = false;
+  for (const line of src.split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      fenced = !fenced;
+      continue;
+    }
+    if (!fenced && /^#{1,6} /.test(line)) out.push(line.replace(/^#{1,6} /, '').trim());
+  }
+  return out;
+};
 
 const [resume, environment] = await Promise.all([
   readFile(RESUME, 'utf8'),

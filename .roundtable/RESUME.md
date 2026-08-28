@@ -198,7 +198,12 @@ after recording. Rule 3 sits above rule 4, so it preempts the build queue; do
 not skip it for 170.2. Check `.roundtable/INDEX.md` first — no prior grill
 should cover these three, but that is the instruction, not an assumption.
 
-**A grill has material here.** Three candidates, offered as leads, not verdicts:
+**A grill has material here.** Four candidates, offered as leads, not verdicts:
+`check:resume-charter` shipped with TWO instrument defects in one wake — the
+wrong-headings arrival check (caught pre-push) and a `headingsIn` that read bash
+comments inside code fences as headings (caught post-push by its own output,
+which made the `@exact` tag wrong since recognition is exactly what that tag
+denies);
 this wake's `grep -c create-ui` needle acquiring a fault one wake after being
 written (168 wrote it, 169's wake tripped it); `check:resume-charter`'s own
 first version asserting the wrong headings against the destination, which is the

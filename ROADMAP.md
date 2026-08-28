@@ -1479,6 +1479,25 @@ nothing visual was looked at.**
        probes for the content a reader came for (`THE CLONE IS SHALLOW`,
        `NOT A COMPLETION SIGNAL`, …), not for a heading.
 
+       **And a SECOND defect in the same gate, found by its own output minutes
+       after the push.** `headingsIn` filtered `^#{1,6} ` line by line with no
+       notion of fenced code blocks — and both files are full of shell recipes
+       whose comments start with `#`, so running the same expression by hand
+       over the finished `RESUME.md` returned three "headings" that are bash
+       comments (`# fb15cdc is the commit carrying the owner's decision`). It
+       fails closed, so no verdict was wrong; what was wrong is the **`@exact`
+       tag**, because recognising a heading amid code fences is exactly the
+       recognition step that tag claims is absent — and `check:selftests`
+       classifies gates by that tag, so the mislabel propagates. Now fence-aware,
+       and re-proved in both directions rather than only re-run: a real heading
+       appended outside a fence goes red; the identical text inside a fence does
+       not. **A fix that quietly stops the detector from firing is the worse
+       bug**, which is why the second half of that proof exists.
+
+       Two instrument defects in one gate, in one wake — the same 3-of-3 rate
+       Slice 168's grill measured, and material for the grill rule 3 now has
+       queued.
+
        **Not verified: nothing visual.** This was a cloud wake — no Podman, no
        `localhost:8081`, no screenshots. No CSS, Astro page or rendered surface
        was touched, which is a stronger statement than a screenshot;
