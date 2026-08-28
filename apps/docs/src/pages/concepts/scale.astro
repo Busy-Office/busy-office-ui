@@ -119,7 +119,7 @@ const agGridRecipe = `/* your-app.css — after both stylesheets */
           <tr><td>Up to ~1,000 rows</td><td>Render them. Native scrolling, find-in-page and print all keep working.</td></tr>
           <tr><td>~1,000–5,000 rows</td><td>Still fine on modern hardware; add <a href={base + '/components/pagination'}>pagination or load-more</a> before it becomes a habit.</td></tr>
           <tr><td>Beyond ~5,000, searching</td><td>Paginate server-side. The framework ships <strong>no virtualiser for search</strong> — see below.</td></tr>
-          <tr><td>Beyond ~5,000, scanning</td><td>A <a href="#windowed-list">windowed list</a> — the framework's one first-party exception, and it exists for exactly this case.</td></tr>
+          <tr><td>Beyond ~5,000, scanning</td><td><a href={base + '/components/pagination'}>Load-more</a> while the feed is bounded; a <a href="#windowed-list">windowed list</a> only once memory must stay flat.</td></tr>
           <tr><td>200 columns</td><td>Horizontal scroll plus a frozen first column (<code>--sticky-col</code>); offer a column chooser rather than shrinking type past legibility.</td></tr>
           <tr><td>Bulk select at scale</td><td><code>initDataTables()</code> keeps the selection count O(1) rather than re-counting the DOM; the style flush after checking 20,000 boxes is the cost, and it is the browser's, not ours.</td></tr>
           <tr><td>Slow aggregates on a dashboard</td><td>Load each widget as its own fragment so one slow query never blocks the screen — the <a href={base + '/patterns/reporting-dashboard'}>dashboard pattern</a>'s data contract.</td></tr>
