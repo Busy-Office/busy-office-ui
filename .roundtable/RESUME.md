@@ -173,9 +173,24 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 the parser's five blindings and nothing else ever has.
 
 Read at Step 0b, before any commit: **Standardize 2/4 ok, Objective 2/3 ok
-[168, 170]**, parser at 1,033. Read again immediately after `record_iteration.py`
-and reconcile against a raw `grep -c "^- "` of the log.
+[168, 170]**, parser at 1,033. Read again immediately after
+`record_iteration.py`: **Standardize 3/4 ok, Objective 3/3 OVERDUE
+[168, 169, 170]**, parser at **1,034 against a raw `grep -c "^- "` of 1,034** —
+the agreement that check exists for.
 
-**NEXT WAKE: re-derive it, but expect rule 4 → 170.2**, then **170.3**;
+**NEXT WAKE: rule 3 fires — dispatch Objective, a grill of Slices 168, 169 and
+170.** It crossed on this wake's own row, which is why Step 0b is read again
+after recording. Rule 3 sits above rule 4, so it preempts the build queue; do
+not skip it for 170.2. Check `.roundtable/INDEX.md` first — no prior grill
+should cover these three, but that is the instruction, not an assumption.
+
+**A grill has material here.** Three candidates, offered as leads, not verdicts:
+this wake's `grep -c create-ui` needle acquiring a fault one wake after being
+written (168 wrote it, 169's wake tripped it); `check:resume-charter`'s own
+first version asserting the wrong headings against the destination, which is the
+same shape 168's grill already found 3-of-3 times; and whether moving durable
+content out of a rewritten file is a pattern with other instances, or one.
+
+**After the grill, rule 4's oldest dispatchable items are 170.2, then 170.3.**
 112.3/112.4 and the AT-runtime item are older but blocked on the owner or on
 hardware. Both need no browser and are dispatchable in a cloud wake.

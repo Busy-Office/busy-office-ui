@@ -14,12 +14,13 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 136 snapshots, newest first
+## Findings — 137 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
 | Date | Finding | Cited |
 |---|---|---|
+| — | [Environment — the traps, and the toolchain that works](ENVIRONMENT.md) | ✓ |
 | — | [Grill report — Slice 112: the governance/conformance proposal (2026-08-22)](grill-112-pattern-fit-proposal.md) | ✓ |
 | — | [Grill — Slice 22 item 1, the color/scales/tokens docs (presentation pass)](grill-slice22-color-docs.md) | ✓ |
 | — | [Grill — Slice 22 sign-off (items 2+3, shipped ungrilled)](grill-slice22-signoff.md) | · |
@@ -168,4 +169,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 143 files, 99 cited from outside, 45 uncited snapshots, 4 repeated subject(s).
+— 144 files, 100 cited from outside, 45 uncited snapshots, 4 repeated subject(s).
