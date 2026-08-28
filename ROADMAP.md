@@ -1321,10 +1321,33 @@ next to its command is a number the next wake can falsify.** Its own
 falsification test — whether items written a month from now still carry their
 commands.
 
-1. [ ] **168.1 — let the dispatcher SAY when the chosen direction is blocked.**
+1. [x] **168.1 — DONE 2026-08-28. Implemented, not refused, and the argument
+       for refusing died on a fact of the wake that closed it: a scheduled cloud
+       routine has no conversation.** `RESUME.md` now carries a standing
+       `## Direction` block — four answers a wake fills from named sources, two
+       of them backed by a recorded command. Four lines of answer, ~40 of
+       template and reasoning; no dispatcher rule, no gate, no ratio.
+
+       **The premise was re-checked before being built on**, per CLAUDE.md, and
+       it holds — but only one of its two halves was still true as written:
+
+       ```
+       npm view @busy-office/create-ui version   # E404 — still unpublished
+       npm view @busy-office/ui version          # 0.5.0
+       ```
+
+       The registry is the authority here, and it was asked rather than the
+       roadmap's own text re-read. **The "zero times since" half is now wrong and
+       was wrong when written**: `fb15cdc`, the commit carrying the owner's
+       decision, *is* 164.3 fixing three publish blockers. Measured over the 13
+       work rows recorded since it, exactly **1 names `create-ui` and it is that
+       row**, so the true figure is **12 of 13 did not advance it** — which is
+       the finding, and stronger than "zero", because it is a rate that can be
+       re-derived next wake instead of a state that cannot. The command is in the
+       block itself.
+
        The owner decided (2026-08-28) to finish direction (a) by publishing
-       `create-ui`. The loop has advanced it **zero times since**, and that is
-       not idleness: the entire remaining step is `npm publish`, owner-triggered
+       `create-ui`. The remaining step is `npm publish`, owner-triggered
        by standing policy. So rule 4 did what rule 4 does — took the oldest open
        item — and the window's work was a report script and an archive sweep.
 
@@ -1339,7 +1362,7 @@ commands.
        starving under a rule that is always true. One level up, the starving
        signal is the **direction** and the always-true rule is rule 4.
 
-       *Accept*: the smallest thing that makes it sayable — a line in
+       *Accept was*: the smallest thing that makes it sayable — a line in
        `RESUME.md`'s handover naming the current direction and whether the wake
        could advance it. **Not a new dispatcher rule, not a gate, and not a
        ratio**: the product-vs-machinery ratio was retired one grill ago with
@@ -1347,6 +1370,41 @@ commands.
        a ratio cannot tell maintenance that UNBLOCKS product from maintenance
        that displaces it. **Refusing this outright is a valid outcome**, and the
        argument for refusing is that the owner already sees it in conversation.
+
+       **Why that refusal argument was rejected, and it is a fact of this wake
+       rather than a preference.** "The owner already sees it in conversation"
+       assumes a conversation. This wake is the hourly cloud routine: nobody was
+       reading, and its only channel to the owner is one push notification whose
+       content it composes from the handover. `LOOPS.md`'s own Step 0c records
+       that promoting the loop to `/schedule` "made a second dispatcher real
+       without a rule changing" — the same promotion is what removed the
+       conversation this item's refusal depended on. That is the third time this
+       file has recorded a rule outliving the conditions it was written under.
+
+       **Two smaller variants were considered and refused, each for a stated
+       reason, not for taste:**
+
+       - **Generate the block into `STATUS.md`** (which `record_iteration.py`
+         already rewrites every wake, so it could never be copied stale). It
+         cannot be generated: "is the direction blocked" is not derivable from
+         the log without classifying rows by what they were *about* — the sixth
+         regex `LOOPS.md` rule 3 refuses by name, and 170.3 is open on that
+         script hard-exiting over exactly this kind of inference. The count that
+         IS derivable is in the block, with its command.
+       - **A threshold on that count** ("warn at N wakes without advance").
+         That is the ratio 168.1 refuses in its own Accept, and it inherits the
+         flaw named there: it cannot tell maintenance that unblocks product from
+         maintenance that displaces it. The block states the number and leaves
+         the judgement where the item put it.
+
+       **The tension with 169.3 is real and is not resolved here.** 169.3 (open)
+       finds that 63% of `RESUME.md` is durable content its own header forbids,
+       and this item adds ~40 more lines of it. Named rather than smuggled: the
+       *answers* are per-wake and belong in a handover; the *template and the two
+       commands* are durable and travel with the traps if 169.3 decides to move
+       them. That decision stays 169.3's — this item was dispatched by rule 4 as
+       the oldest open, and doing 169.3's direction call inside it is the scope
+       creep the Objective refuses.
 
 ## Slice 167 — Objective grill of Slices 161, 162, 166 (2026-08-28)
 

@@ -46,6 +46,13 @@ A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
 empty `RESUME.md` when it lands.
 
+`RESUME.md`'s `## Direction` block is answered at hand-off, not read and left
+(168.1). It is the only place the loop can say the owner's chosen direction is
+blocked: rule 4 always has an oldest open item and rule 8 halts only when
+nothing matches, so a direction nobody can advance stays invisible under
+maintenance that looks healthy. **Not a rule here** — deliberately; the item
+refused a dispatcher rule, a gate and a ratio alike.
+
 ### Step 0b — Read the counters
 
 ```

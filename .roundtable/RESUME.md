@@ -18,36 +18,82 @@ moving it is that item's job, not a passing tidy.
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 3 → Objective,
-Slice 170**). Working tree clean at hand-off; the wake's commits were pushed as
-one batch.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 4 → Continue,
+168.1**). Working tree clean at hand-off; the wake's commits were pushed as one
+batch.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
 goes stale between wakes. The handover this one replaces was correct: it named
-**168.1** then **169.3**, and both are still open. Trust the `N. [ ]`
-checkboxes, not this section.
+**168.1** then **169.3**; 168.1 closed this wake, 169.3 is still open. Trust the
+`N. [ ]` checkboxes, not this section.
 
-**Direction, stated as a fact of this wake and not as an implementation of
-168.1** — that item asks for a *standing* element of the handover and is still
-open, to be decided by the wake that dispatches it. The chosen direction is (a),
-publish `create-ui`; its remaining step is `npm publish`, owner-only, so this
-wake could not advance it. Measured: **61 commits since the last change to a
-declaration in `packages/core/src`**, which is `c073c360` — the cloud routine's
-own first commit.
+## Direction — the owner's pick, and whether THIS wake advanced it
+
+**Standing section, added by 168.1 (2026-08-28). Answer all four every wake,
+from the sources named — never by copying the answers above you.** Rule 4 always
+has an oldest open item, so the loop never stalls and never halts; a *direction*
+that nobody can advance is therefore invisible underneath maintenance that looks
+healthy. This block is the only place the loop says so out loud. Four answers,
+not a rule, not a gate and not a ratio — the three things 168.1 refused.
+
+- **Direction:** (a) adoption/DX — finish it by publishing
+  `@busy-office/create-ui`. Source: the `DECISION (owner, 2026-08-28)` block in
+  `ROADMAP.md`'s Slice 164.3. **Read it there**; this line is a pointer, and a
+  pointer that disagrees with its source loses to the source.
+- **Remaining step, and who it waits on:** `npm publish -w
+  @busy-office/create-ui` — **owner-only**, by CLAUDE.md's standing policy
+  ("Publishing remains owner-triggered"). Do not trust the previous wake's
+  answer here; ask the registry, which is the authority and this file is not.
+- **Did this wake advance it?** **No.** The remaining step is owner-only, and no
+  cloud wake can run it. This wake ran rule 4 → Continue on 168.1 itself.
+- **Work rows since the direction was decided that did not advance it:**
+  **12 of 13** on 2026-08-28 — the commands below printed `13` and `1`, and that
+  `1` is 164.3, the deciding row itself. Re-derive rather than increment; a
+  copied number is 169.1's exact failure mode.
+
+```
+npm view @busy-office/create-ui version     # E404 → unpublished → still blocked
+npm view @busy-office/ui version            # 0.5.0 on 2026-08-28
+
+# fb15cdc is the commit carrying the owner's decision. UNSHALLOW FIRST (trap 2)
+# or these resolve nothing and the rate is silently missing, not wrong.
+git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' | grep -vc ' · Meta · '
+git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' | grep -v ' · Meta · ' | grep -c create-ui
+```
+
+**When that number climbs and the registry still 404s, say so to the owner** —
+that is the whole finding, and on a scheduled routine the push notification is
+the only channel it has. No threshold is attached and no gate is proposed:
+168.1's Accept names a line in the handover, and a threshold here would be the
+ratio that item refused by name.
+
+**`create-ui` is the only name in these commands that will age.** When the owner
+picks a direction that is not "publish the front door", the two `npm view` lines
+and the `grep -c` needle change with it — and `fb15cdc` becomes whichever commit
+carries the new decision. Rewrite them; do not reinterpret them.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS
 
-**Exercised for real this wake (2026-08-28, Slice 170): 1c, 2, 3.** Said one by
+**Exercised for real this wake (2026-08-28, 168.1): 1, 1c, 2, 3.** Said one by
 one rather than carried forward as "all confirmed":
 
-- **1** — exercised in full, and **it bit at `git push`, not at Step 0.** See
-  the corrected trap 1 below; this wake's first push was rejected.
-- **1b, 4, 7** — not exercised: no `cd` was issued, no formatter was run, and
-  every word count came from `report_loop_prose.py` (Python `str.split()`),
-  never from a bare `wc -w`.
-- **6** — avoided by construction, not tested: background tasks were waited on
-  by the completion notification and by `Monitor` with an until-loop. An empty
-  output file was never read as "done".
+- **1** — exercised, and **this container had NO local `main` at all**, which is
+  a harder failure than the stale-ref case the trap documents and shows up one
+  command earlier: `git rev-parse --short main HEAD` exited **128**, `fatal:
+  Needed a single revision`. `git branch --show-current` was empty, as the trap
+  says it would be. Fixed with `git checkout -B main origin/main` **before the
+  first commit**, so trap 1 did not bite at push this time — the corrected
+  advice worked as written. Also confirmed again: `origin/main` arrived as a
+  **forced update** (`17b3ba6...12e97c6`), and the tip the previous handover
+  named (`fe2de12`) no longer exists — Step 0c's rebase mechanic, visible.
+- **1c** — needed by `docs:build`, `check:layout` and `test:axe`, exported in
+  the same command each time.
+- **2** — shallow again on a fresh container; `git fetch --unshallow` brought it
+  to **1,495 commits**. Needed, because this wake's finding is a rate measured
+  across `git diff fb15cdc..HEAD`.
+- **3** — `rm -rf apps/docs/dist` before `docs:build`, as always.
+- **1b, 4, 6, 7** — not exercised: no `cd` was issued, no formatter was run, no
+  background task was launched, and no word count was taken at all.
 
 ### 1. `git checkout main` — the container starts DETACHED
 
@@ -203,11 +249,13 @@ export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 rm -rf apps/docs/dist
 ```
 
-Green again this wake (2026-08-28, Slice 170): `build -w @busy-office/ui`,
+Green again this wake (2026-08-28, 168.1): `build -w @busy-office/ui`,
 `test -w @busy-office/ui` (137 tests, 26 files), `docs:build`, `check:repo`
 (9 gates — 288 imports, 42 self-test classifications, 185 slice citations, 530
 files against the vendor denylist), `check:claims` (139 behaviours),
-`check:layout` (127 pages), `test:axe` (127 × 2, zero violations).
+`check:layout` (127 pages), `test:axe` (127 × 2, zero violations). Figures
+unmoved from the previous wake, which is expected: no input to any of them
+changed.
 
 `sqlite3` is NOT installed in this container. Query the mirror with Python's
 `sqlite3` module — `python3 -c "import sqlite3; ..."`.
@@ -217,11 +265,12 @@ files against the vendor denylist), `check:claims` (139 behaviours),
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
 **Nothing visual exists to look at from this wake.** `git diff --stat` lists
-`ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md` and one new grill file. **No
-executable file was touched at all** — no script, no CSS, no Astro page — which
-is a stronger statement than a screenshot. `check:layout` and `test:axe` swept
-every page at both widths anyway and were green. **No visual debt was added;
-nothing visual was looked at.**
+exactly three files: `ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md`. **No
+executable file was touched at all** — no script, no CSS, no Astro page, nothing
+under `apps/docs/src` or `packages/core/src` — which is a stronger statement than
+a screenshot. `check:layout` (127 pages) and `test:axe` (127 × 2) swept every
+page at both widths anyway and were green. **No visual debt was added; nothing
+visual was looked at.**
 
 **The two carried-forward visual items have waited another wake** — both need a
 local wake with a browser, and neither is dispatchable here:
@@ -233,38 +282,40 @@ local wake with a browser, and neither is dispatchable here:
   alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 
-## What landed this wake (2026-08-28, cloud, rule 3 → Objective 170)
+## What landed this wake (2026-08-28, cloud, rule 4 → Continue 168.1)
 
-Dispatcher: rule 1 clear (no open P0, GitHub intake **0 open issues**), rule 2
-read `Standardize 0 / 4`, rule 3 read `Objective 3 / 3 OVERDUE [164, 167, 169]`
-and won. Full report:
-`.roundtable/grill-objective-164-167-169-2026-08-28.md`.
+Dispatcher: rule 1 clear (no open P0; GitHub intake **0 open issues**, asked via
+the API, not assumed), rule 2 read `Standardize 1 / 4 ok`, rule 3 read
+`Objective 1 / 3 ok [170]` — neither fired. Rule 4 took the oldest still-open
+item: 112.3/112.4 are owner-blocked and the AT-runtime item needs hardware, so
+**168.1**, exactly as the previous handover predicted.
 
-- **170.1 closed — `ROADMAP.md`'s plan of record went stale 37 minutes after it
-  was written, and 193 commits passed over it.** `## Sequence — what runs next`
-  opens *"Eighteen items are open; nine are dispatchable"* (it is **5 and 2**)
-  and sequences five rows that are all closed or were deliberately dropped; its
-  gated list still says "0.3.0 cut" while the package is **0.5.0**. Nobody
-  noticed because rule 4 reads *checkboxes* and never the prose above them. The
-  section now carries a supersession note with its commands, and the owner's
-  text is left verbatim. `## STATE (2026-08-18)` got the same one-line
-  annotation; `## CI strategy` was checked and is sound.
-- **170.2 OPEN — the generalized form**: nothing re-reads `ROADMAP.md`'s
-  narrative sections. Accept is written so that **refusing it on a measured base
-  rate satisfies it** — there is exactly one plan-of-record table in the repo.
-- **Finding B, settled not filed**: 161.4's *"`Objective` is excluded — circular"*
-  is wrong. A grill files items in its **own** slice number and `Continue` builds
-  them, so a grill arms the next grill: **7 of 26** dispatches depended on that,
-  and this wake is the extreme case (2 of 3 armed slices are grills; 1 of 3
-  without them, which would have dispatched **168.1** instead). Corrected in
-  `LOOPS.md` rule 3. No mechanism — a heading classifier would be the sixth
-  regex, and this grill's own first attempt got it wrong.
-- **Finding C, settled not filed**: **61 commits, zero shipped declarations
-  changed.** Third consecutive grill to conclude the direction is owner-blocked;
-  the filed answer, 168.1, already exists.
+- **168.1 closed — implemented, not refused.** `RESUME.md` now carries a
+  standing `## Direction` block: four answers a wake fills from named sources,
+  two of them backed by a recorded command. No dispatcher rule, no gate, no
+  ratio — the three things the item refused by name.
+- **The item's own refusal argument died on a fact of this wake.** "Refusing is
+  valid … the owner already sees it in conversation" assumes a conversation.
+  This wake is the hourly cloud routine; nobody was reading, and its only
+  channel to the owner is one push notification composed from this handover.
+- **The premise was re-checked and half of it was wrong.** *"The loop has
+  advanced it zero times since"* — `fb15cdc`, the commit carrying the owner's
+  decision, **is** 164.3 fixing three publish blockers. The honest figure is a
+  rate, not a state: **13 work rows since it, 1 names `create-ui`, and that one
+  is 164.3 itself → 12 of 13 did not advance it.** A rate re-derives next wake;
+  "zero" cannot. Both commands are in the block.
+- **Asked the registry rather than re-reading the roadmap**: `npm view
+  @busy-office/create-ui version` → **E404**, `@busy-office/ui` → **0.5.0**. The
+  direction is still blocked, verified against the authority.
+- **One sentence added to `LOOPS.md` Step 0** so the block is answered at
+  hand-off rather than read and left. Not a rule; the item forbade one.
+- **169.3's tension is named, not smuggled.** This adds ~40 durable lines to a
+  file 169.3 (open) finds is 63% durable already. The answers are per-wake and
+  belong here; the template and the two commands travel with the traps if 169.3
+  decides to move them. That call stays 169.3's.
 
-**Re-run, do not quote** — every figure above has its command in ROADMAP 170 or
-the grill file.
+**Re-run, do not quote** — every figure above has its command in ROADMAP 168.1
+or in the `## Direction` block.
 
 ## Counters after this wake
 
@@ -272,15 +323,18 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
 the parser's five blindings and nothing else ever has.
 
-Read immediately after `record_iteration.py` this wake: **Standardize 0/4 ok,
-Objective 3/3 OVERDUE → 0/3 ok**, parser at 1,029 rows against a raw
-`grep -c "^- "` of 1,029 — the agreement that check exists for.
+Read at Step 0b this wake, before any commit: **Standardize 1/4 ok, Objective
+1/3 ok [170]**, parser at 1,030 iterations. Re-read after
+`record_iteration.py` and reconcile against a raw `grep -c "^- "` — that
+agreement is what the check exists for.
 
-**NEXT WAKE: re-derive it, but expect rule 4 → 168.1.** Both counters were
-discharged or low at hand-off. Rule 4's oldest dispatchable open items are
-**168.1**, then **169.3**,
-then **170.2**; 112.3/112.4 and the AT-runtime item are older but blocked on the
-owner or on hardware. 168.1 needs no browser and is dispatchable in a cloud wake.
+**NEXT WAKE: re-derive it, but expect rule 4 → 169.3.** Rule 4's oldest
+dispatchable open items are now **169.3**, then **170.2**, then **170.3**;
+112.3/112.4 and the AT-runtime item are older but blocked on the owner or on
+hardware. All three need no browser and are dispatchable in a cloud wake.
+**169.3 is a direction call**, not a mechanical move — it decides where the trap
+block above lives, and 168.1 has just made that block bigger, which is an
+argument for it, not against.
 
 ## Traps worth carrying forward (not slice history)
 
