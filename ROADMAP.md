@@ -1258,9 +1258,10 @@ Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
        property is not "every narrative section rots": n=2 above the slice list,
        one stale, one not.
 
-2. [ ] **170.2 — the generalized form of 170.1: nothing re-reads the narrative
-       sections of `ROADMAP.md`, and refusing this is a satisfying outcome.**
-       Noticed while grilling 170.1, not searched for.
+2. [x] **170.2 — REFUSED 2026-08-28, on the measured base rate. The predicate
+       flags 1,258 of the 1,289 lines it examines (97.6%), and 4 of 4 rows in
+       the one section it exists for.** Noticed while grilling 170.1, not
+       searched for.
 
        The checkbox list is verified constantly — `STATUS.md` reconciles against
        it, `check:slice-refs` keeps its citations resolvable, rule 4 walks it
@@ -1287,6 +1288,118 @@ Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
        the record and 158.2's cadence rests on a signature (never shrinks) that
        nobody has shown holds for a narrative section of `ROADMAP.md`, a file
        measured at **-85.9%** over the same window.
+
+       **VERDICT (b): refused. The predicate is uniformly true, so it
+       distinguishes nothing** — 94.11's shape exactly, and this is the second
+       time that rule has decided an item rather than being quoted by one.
+
+       The predicate, stated so it can be re-run: *a line naming an item id
+       whose checkbox is `[x]`*. Its exact half is real — the id map is built
+       from `N. [x] **<id>**` across `ROADMAP.md` + `ROADMAP-archive.md`, so
+       "is this id closed" is **equality, not recognition**. Measured over all
+       162 tracked `.md` files, against an id universe of **398 ids, 391 of
+       them closed (98.2%)**:
+
+       | scope | examined | flagged | rate |
+       |---|---|---|---|
+       | S1 — any narrative line (outside a checkbox item body) | 1,289 | 1,258 | **97.6%** |
+       | S2 — narrative lines in `ROADMAP.md` only | 43 | 41 | 95.3% |
+       | S3 — markdown table rows, repo-wide | 129 | 124 | 96.1% |
+       | S4 — rows of the one `## Sequence` table | 4 | 4 | **100%** |
+
+       ```
+       python3 - <<'PY'
+       import re, subprocess, collections
+       ITEM = re.compile(r'^\s*\d+\. \[([ x])\] \*\*(\d{1,3}\.\d{1,2}[a-z]?)\b')
+       ANY  = re.compile(r'^\s*\d+\. \[[ x]\] ');  HEAD = re.compile(r'^#{1,6} ')
+       TOK  = re.compile(r'\b(\d{1,3}\.\d{1,2}[a-z]?)\b')
+       state = {m.group(2): m.group(1) == 'x' for f in ('ROADMAP.md', 'ROADMAP-archive.md')
+                for m in map(ITEM.match, open(f, encoding='utf-8')) if m}
+       S = collections.defaultdict(lambda: [0, 0])
+       for f in subprocess.run(['git','ls-files','*.md'],capture_output=True,text=True).stdout.split():
+           inside = seq = False
+           for l in open(f, encoding='utf-8'):
+               if ANY.match(l): inside = True
+               elif HEAD.match(l): inside, seq = False, f=='ROADMAP.md' and l.startswith('## Sequence')
+               ids = [m.group(1) for m in TOK.finditer(l)          # '%' excludes 24.5% etc
+                      if m.group(1) in state and l[m.end():m.end()+1] != '%']
+               if not ids: continue
+               hit = any(state[i] for i in ids)
+               for k in (['S1 narrative line'] if not inside else []) + \
+                        (['S2 ROADMAP.md narrative'] if not inside and f=='ROADMAP.md' else []) + \
+                        (['S3 table row'] if l.lstrip().startswith('|') else []) + \
+                        (['S4 `## Sequence` row'] if seq and l.lstrip().startswith('|') else []):
+                   S[k][0] += 1; S[k][1] += hit
+       print(f'{len(state)} ids · {sum(state.values())} closed ({100*sum(state.values())/len(state):.1f}%)')
+       for k in sorted(S): print(f'  {k:26} examined {S[k][0]:5d}  flagged {S[k][1]:5d}  {100*S[k][1]/S[k][0]:5.1f}%')
+       PY
+       ```
+
+       **Reconciled against something independent before quoting, per the
+       standing rule.** S1's 97.6% is not a number the detector invented: the id
+       universe is **98.2% closed**, so "names a closed item" simply *is* the
+       prior, and the two agree to 0.6pp by two different routes. The open-item
+       side reconciles too — the map holds **7** open ids
+       (`112.3 112.4 170.2 170.3 171.1 171.2 171.3`) against
+       `grep -cE '^[0-9]+\. \[ \] ' ROADMAP.md` = **8**, the difference being
+       `AT runtime evidence`, the one open item with no id. Both were read
+       before this entry ticked its own box; re-running now returns 392 closed
+       and 6 open, and the rates move by tenths.
+
+       **The detector is alive — this is a base rate, not a dead instrument.**
+       It returns clean on **31 of the 1,289** narrative lines, every one of
+       them naming only currently-open ids (`RESUME.md:172-173`,
+       `grill-external-review-2026-08-26.md:50`, …). So it *can* fail; it just
+       cannot tell anything apart at 97.6%.
+
+       **Three findings that kill the narrower forms, in the order they close
+       off the retreat:**
+
+       - **S4 is 4 of 4 flagged today — on a section 170.1 already FIXED.**
+         `## Sequence` carries its supersession block and the owner's rows are
+         deliberately left verbatim, which was 170.1's *Accept*. The rows still
+         point at closed items, correctly. A gate on S4 would be permanently red
+         on a resolved case, and the only thing separating "stale plan" from
+         "plan correctly marked superseded" is the annotation prose —
+         **semantic**, which 94.11 says a gate cannot judge.
+       - **On its one real instance the predicate is blind to the two worst
+         rows.** The table has six rows; S4 examines four. Rows 3 and 4 name
+         `130.4b Inventory` and `130.4c Finance` — the two 170.1 found were
+         *deliberately dropped*, the most-wrong rows in the table — and
+         `130.4a/b/c` **are not in the id map at all**: they never got their own
+         checkboxes (`130.4` did). The predicate sees the rows that aged
+         gracefully and misses the ones that did not.
+       - **It flagged row 2 for the wrong reason.** Row 2's subject is
+         `130.4a Production`, invisible per above; the row matched on `140.1`,
+         cited in its *rationale* prose. The predicate cannot tell a row's
+         subject from an id quoted in its justification, so even where it fires
+         it is not firing on what the reader would call the plan.
+
+       **The shape gate is refused on its own number, not by analogy.**
+       `check:wrong-choice`'s trick — gate the *shape* that carries the meaning
+       (require a supersession marker on any section holding closed-item rows) —
+       was measured rather than waved off: **45 distinct (file, section) pairs
+       hold a table row naming an item id, and 45 of 45 (100%) hold at least one
+       row naming a closed item.** Most are grill reports, where naming closed
+       work retrospectively is the whole point. That gate would need an `EXEMPT`
+       map covering essentially all 45 entries, which is the ceremony 94.11
+       names, arrived at from the other direction.
+
+       **What would reopen this:** not a second stale section — 170.1 already
+       measured n=2 above the slice list, one stale and one sound, so a third
+       instance changes no rate. Reopen when the **id universe stops being ~98%
+       closed** (a long-lived open backlog would make "points at a closed item"
+       informative again), or when a mechanical marker for "this section is a
+       forward-looking plan" exists in the files, so the predicate has something
+       to narrow onto that is not prose. Re-run the command; the rates are
+       snapshots.
+
+       **Refused alongside it, and named so it is not re-proposed as new:** a
+       `LOOPS.md` cadence bullet — "re-read the narrative sections every N
+       wakes". The *Accept* forbade it without measuring first, and the
+       measurement above is what it asked for: with n=2 narrative sections and
+       one of them already annotated, the cadence would re-derive a known answer
+       on a schedule. 167.1 has `LOOPS.md`'s growth on the record.
 
 3. [ ] **170.3 — `dispatch_status.py`'s zero-slice guard hard-exits on a
        legitimate row, and this wake tripped it live.** Found by triggering it,
