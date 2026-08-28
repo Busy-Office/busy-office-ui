@@ -280,8 +280,72 @@ The heading arm is exactly that. The other arm is a bare word regex over free
 prose, which is *recognition* — and it has now been fooled. `check:selftests`
 therefore never asked this gate for a `--self-test`.
 
-1. [ ] **180.1 — the extractor must not read a loop-name tally as a citation,
-       and must prove it can still fail.**
+1. [x] **180.1 — DONE. The extractor no longer reads a loop-name tally as a
+       citation, and the gate is retagged `@heuristic` because that arm always
+       was.**
+
+       **The skip predicate, and its base rate measured on the UNEDITED tree
+       before it shipped:** a match is not a citation when it has a ` · `-joined
+       neighbour of the form `Word Number` on either side. True of **1 of 461**
+       matches — the one false positive. Not 0, not 100%, so it distinguishes
+       something (94.11).
+
+       ```
+       # the predicate, over `git ls-files` filtered to .css/.mjs/.js/.astro/.md/.py
+       # minus ROADMAP*: TALLY_AFTER = /^\s*·\s+[A-Za-z][A-Za-z-]*\s+\d/
+       #                 TALLY_BEFORE = /[A-Za-z][A-Za-z-]*\s+\d+\s*·\s*$/
+       ```
+
+       **Case was tried first and refused, measured:** 461 matches split
+       `roadmap` 434 · `ROADMAP` 15 · `Roadmap` 12, and **11 of the 12**
+       Title-case ones are genuine sentence-initial citations. A case rule would
+       have broken eleven real citations to fix one tally.
+
+       **Reconciled against an independent recount, outside the gate** — the
+       Accept's second criterion. The gate reports `364 slice citation(s)
+       checked (204 cited, 2 known-dangling)` and `162 slice number(s)`; a
+       separate Python pass over the same corpus reads **204 distinct refs, 162
+       headings, 364 checks, 0 unresolved**. Agreement on all four.
+
+       **Red-proved in both directions, each injection confirmed to have landed
+       before the result was believed:**
+
+       | injection | new gate | old gate |
+       |---|---|---|
+       | `roadmap 999.9` appended to a scanned file | **red**, names 999.9 | red |
+       | a *differently worded* tally, `Objective 3 · Roadmap 7 · Explore 1` | **green**, exit 0 | **red**, `FAIL roadmap 7`, exit 1 |
+
+       The second row is what makes this discriminating rather than a detector
+       agreeing with itself (179.1's shape): the old extractor, run from a probe
+       copy in the same directory — never `git stash`, per `ENVIRONMENT.md` —
+       fails on the identical bytes the new one passes. And the raw pattern was
+       printed against the injected file first (`raw regex sees: [… "Roadmap
+       7"]`), so the green is the skip working, not the match being missed.
+
+       **The self-test is red-proved too.** Stubbing the classifier to never
+       skip (`if (false && …)`, injection confirmed present by grep) turns **4
+       of its 10 cases** WRONG and exits 1; restored, exit 0.
+       `check:selftests` reads 43 gates as `15 heuristic (all self-tested) / 28
+       exact`, and the tag counts computed off the `HEAD` blobs versus the
+       working tree move **14/29 → 15/28** — exactly one gate, this one.
+
+       **Two things fixed while here, both this repo's own rule about stale
+       snapshots (177):** the header claimed "**148** slice numbers are cited"
+       twice while the run line read 362, and the standing-down message a
+       reduced build context prints said "the 148 slice citations were NOT
+       verified here". All three now name the property; the gate prints the
+       count itself.
+
+       **NOT fixed, recorded with the measurement that argues against fixing
+       it:** the failing arm is the first check in `check:repo`, which is the
+       first step of `docs:build`, so one sentence of prose in `.roundtable/` —
+       a directory CI's `paths-ignore` excludes from *triggering* runs — stops
+       all five CI jobs and the Pages deploy. The obvious reaction, "stop
+       scanning `.roundtable/`", is refused on the numbers: **42** distinct refs
+       are cited from there and **16 are cited from nowhere else**, so scoping
+       the gate away from it would re-open the silent rot the gate exists to
+       catch, for sixteen refs. Left as an observation in the gate's header,
+       not as a queued item.
 
        *Accept* — properties, not predicted values:
        - `npm run docs:build` exits 0 on the tree at HEAD, and the CI run on

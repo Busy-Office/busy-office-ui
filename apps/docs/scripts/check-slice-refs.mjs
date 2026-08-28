@@ -3,22 +3,56 @@
  * Gate: a slice number cited from the code still resolves in the plan, and
  * resolves to exactly ONE slice.
  *
- * @exact — equality and set membership over strings matched at a fixed lexical
- *   position (`^## Slice N`, and the citation form in the source). Nothing is
- *   inferred about what a section says.
+ * @heuristic — RETAGGED 2026-08-28 (roadmap 180.1), after this gate turned the
+ *   default branch red for 47 minutes on a line of prose. One arm is exact:
+ *   resolving a ref against `^## Slice N` is set membership and nothing is
+ *   inferred about what a section says. The OTHER arm — deciding which strings
+ *   in the tree are citations at all — is a bare word regex over free prose,
+ *   which is recognition, and recognition can be fooled. It was: the loop-name
+ *   tally `Meta 12 · Continue 4 · Roadmap 2 · Polish 2 · Standardize 1` in a
+ *   grill report was read as a citation to a `## Slice 2` that has never
+ *   existed. Carries --self-test.
+ *
+ * WHAT MADE THAT COSTLY, and why it is written here rather than in a slice: the
+ * failing arm is the FIRST thing in `check:repo`, which is the first thing in
+ * `docs:build`. So one unluckily-worded sentence in `.roundtable/` — a
+ * directory CI's `paths-ignore` deliberately excludes from *triggering* a run —
+ * stopped all five CI jobs and the Pages deploy. A gate over prose has the
+ * blast radius of a gate over code.
+ *
+ * THE DISCRIMINATOR IS THE TALLY SHAPE, NOT THE CASE. Measured on the unedited
+ * tree before it shipped: 461 matches, `roadmap` 434 · `ROADMAP` 15 ·
+ * `Roadmap` 12 — and 11 of those 12 Title-case matches are genuine
+ * sentence-initial citations (`Roadmap 171.1`, `Roadmap 159's finding`), so
+ * case discriminates nothing. What the tally has and a citation does not is a
+ * ` · `-joined NEIGHBOUR of the form `Word Number`. Base rate of that
+ * predicate on the unedited tree: true of **1 of 461** matches, which is the
+ * one false positive. Neither 0 nor 100%, so it is not ceremony (94.11).
  *
  * WHY. `ROADMAP.md` is swept periodically: item 110.4 moved 83 closed slices
  * to `ROADMAP-archive.md` on 2026-08-22, the live file grew back from 5,562 to
  * 9,824 lines in three days, and a second pass on 2026-08-25 moved 44 more
  * (9,824 -> 1,094). Each sweep leaves a pointer line and moves the section
  * byte-identical. That only stays safe while both halves are searchable
- * together: **148 slice numbers are cited** from shipped CSS comments, docs
- * pages and scripts, because a rule usually carries the slice that produced
- * it, which is how "why is this selector shaped like that" stays answerable.
- * Trim the archive and those become dead references, silently.
+ * together: slice numbers are cited from shipped CSS comments, docs pages and
+ * scripts, because a rule usually carries the slice that produced it, which is
+ * how "why is this selector shaped like that" stays answerable. Trim the
+ * archive and those become dead references, silently.
+ *
+ * **How many, is printed by this gate on every run and is deliberately not
+ * written here.** The two numbers that used to be — "148 cited", twice — were
+ * both stale by 2026-08-28, when the run line read 362; `LOOPS.md` rule 4
+ * recorded the same rot in its own copy. A snapshot in a header goes stale
+ * silently and is read as current; the property does not (roadmap 177).
+ *
+ * WHERE they are cited from matters for one decision, so it is measured rather
+ * than assumed: 42 of the distinct refs are cited from `.roundtable/`, and
+ * **16 are cited from nowhere else**. That is the answer to the obvious
+ * reaction to the outage above — "stop scanning the notes directory". It would
+ * drop those 16 and re-open exactly the silent rot this gate exists to catch.
  *
  * A REGRESSION GATE, NOT A PURITY GATE. Two citations do not resolve today and
- * both predate the sweeps, so demanding all 148 would be red on its first run.
+ * both predate the sweeps, so demanding every one would be red on its first run.
  * The baseline is frozen; the gate fires only when the set GROWS. Removing an
  * entry is always welcome, adding one needs a reason in the diff.
  *
@@ -62,8 +96,54 @@ import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { gate, assertScanned } from './gate-report.mjs';
+import { gate, assertScanned, selfTest } from './gate-report.mjs';
 import { REPO_ROOT as ROOT } from './paths.mjs';
+
+/** The citation form, and the one thing that is NOT one.
+ *
+ *  Shared by the gate and its --self-test deliberately: a self-test with its
+ *  own copy of the extractor is worthless, because breaking the real one
+ *  leaves the copy green (check-loop-vocab.mjs paid for that lesson first).
+ *
+ *  `\s+` spans a line break on purpose — 12 of the 461 citations in the tree
+ *  wrap (`roadmap\n   94.5`), and dropping them would shrink the gate's reach
+ *  silently, which is the failure this file exists to prevent.
+ */
+const CITE = /\broadmap\s+(\d{1,3}(?:\.\d+[a-z]?)?)/gi;
+const TALLY_AFTER = /^\s*·\s+[A-Za-z][A-Za-z-]*\s+\d/;
+const TALLY_BEFORE = /[A-Za-z][A-Za-z-]*\s+\d+\s*·\s*$/;
+
+export function citationsIn(text) {
+  const out = [];
+  CITE.lastIndex = 0;
+  for (const m of text.matchAll(CITE)) {
+    const before = text.slice(Math.max(0, m.index - 40), m.index);
+    const after = text.slice(m.index + m[0].length, m.index + m[0].length + 40);
+    /* A loop-name tally, not a citation: `… Continue 4 · Roadmap 2 · Polish 2`.
+       Requires a REAL neighbour of the form `Word Number` joined by ` · ` —
+       not merely a middot somewhere nearby, which would skip prose that
+       happens to sit in a separated list. */
+    if (TALLY_AFTER.test(after) || TALLY_BEFORE.test(before)) continue;
+    out.push(m[1]);
+  }
+  return out;
+}
+
+if (process.argv.includes('--self-test')) {
+  const tally = '21 rows — Meta 12 · Continue 4 · Roadmap 2 · Polish 2 · Standardize 1; refused 13';
+  selfTest([
+    ['reads a lowercase citation', citationsIn('see roadmap 179.2 for the commands'), ['179.2']],
+    ['reads a bare slice citation', citationsIn('(roadmap 108) shipped this'), ['108']],
+    ['reads a sentence-initial one', citationsIn('Roadmap 171.1 measured those three'), ['171.1']],
+    ['reads one wrapped over a line', citationsIn('per roadmap\n   94.5, the rule'), ['94.5']],
+    ['reads a lettered sub-item', citationsIn('roadmap 94.6a is renumbered'), ['94.6a']],
+    ['SKIPS a loop-name tally', citationsIn(tally), []],
+    ['skips it at the END of a tally', citationsIn('Meta 12 · Continue 4 · Roadmap 2'), []],
+    ['skips it at the START of a tally', citationsIn('Roadmap 2 · Polish 2 · Meta 3'), []],
+    ['still reads a citation on a tally line', citationsIn(`${tally}. See roadmap 177.1.`), ['177.1']],
+    ['finds nothing in text with no citation', citationsIn('the roadmap says so'), []],
+  ]);
+}
 
 
 /** Citations that did not resolve when the roadmap was split (2026-08-25). */
@@ -80,7 +160,7 @@ const archived = await readFile(join(ROOT, 'ROADMAP-archive.md'), 'utf8').catch(
 if (live === null || archived === null) {
   console.log(
     'slice-refs check SKIPPED — ROADMAP.md / ROADMAP-archive.md are not in this\n' +
-      '  build context, so the 148 slice citations were NOT verified here.',
+      '  build context, so the slice citations were NOT verified here.',
   );
   process.exit(0);
 }
@@ -101,9 +181,9 @@ const files = listing
 const cites = new Map();
 for (const f of files) {
   const t = await readFile(join(ROOT, f), 'utf8').catch(() => '');
-  for (const m of t.matchAll(/\broadmap\s+(\d{1,3}(?:\.\d+[a-z]?)?)/gi)) {
-    if (!cites.has(m[1])) cites.set(m[1], new Set());
-    cites.get(m[1]).add(f);
+  for (const ref of citationsIn(t)) {
+    if (!cites.has(ref)) cites.set(ref, new Set());
+    cites.get(ref).add(f);
   }
 }
 assertScanned(cites.size, 'slice citation(s)', 'wrong build context, or the citation style changed?');
