@@ -288,7 +288,7 @@ for await (const [rel, file] of allPages(join(docsRoot, 'src/pages'))) {
 }
 
 if (failures.length) {
-  console.error(`page-shape check FAILED (${failures.length}):`);
+  console.error(`page-shape check FAILED — ${failures.length} page(s) drift from the CLAUDE.md skeleton:`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }

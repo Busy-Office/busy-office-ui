@@ -94,7 +94,7 @@ await browser.close();
 server.close();
 
 if (violations.length) {
-  console.error(`target-size check FAILED (${violations.length}) — SC 2.5.8:`);
+  console.error(`target-size check FAILED — ${violations.length} control(s) violate SC 2.5.8:`);
   for (const v of violations.slice(0, 15)) {
     console.error(`  ${v.density} ${v.path}: ${v.w}x${v.h} "${v.cls}" — nearest target only ${v.nearest}px away (needs 24)`);
   }

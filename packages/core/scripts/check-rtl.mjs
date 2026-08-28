@@ -179,7 +179,7 @@ if (designMd === null) {
 }
 
 if (failures.length) {
-  console.error(`rtl check FAILED (${failures.length}):`);
+  console.error(`rtl check FAILED — ${failures.length} physical property use(s) have no [dir="rtl"] flip:`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }

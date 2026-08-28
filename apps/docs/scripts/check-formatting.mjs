@@ -74,7 +74,7 @@ if (gone.length) {
 }
 
 if (failures.length) {
-  console.error(`formatting check FAILED (${failures.length}):`);
+  console.error(`formatting check FAILED — ${failures.length} documented Intl output(s) do not reproduce:`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }

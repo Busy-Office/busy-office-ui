@@ -95,7 +95,7 @@ for await (const file of distCssFiles()) {
 }
 
 if (failures.length) {
-  console.error(`motion check FAILED (${failures.length}):`);
+  console.error(`motion check FAILED — ${failures.length} animation(s) or transition(s) ignore prefers-reduced-motion:`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }

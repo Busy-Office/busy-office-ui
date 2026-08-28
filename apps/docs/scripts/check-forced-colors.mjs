@@ -195,7 +195,7 @@ for (const rule of rules) {
 }
 
 if (dead.length) {
-  console.error(`forced-colors check FAILED (${dead.length}):`);
+  console.error(`forced-colors check FAILED — ${dead.length} rule(s) are dead under emulation:`);
   for (const d of dead) console.error('  ' + d);
   process.exit(1);
 }

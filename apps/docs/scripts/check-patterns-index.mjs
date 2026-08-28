@@ -77,7 +77,7 @@ if (!indexPage) {
 }
 
 if (failures.length) {
-  console.error(`patterns-index check FAILED (${failures.length}):`);
+  console.error(`patterns-index check FAILED — ${failures.length} pattern(s) disagree across disk, pattern-groups.mjs and the tile index:`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }

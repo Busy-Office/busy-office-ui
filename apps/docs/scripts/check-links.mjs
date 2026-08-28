@@ -122,7 +122,7 @@ for (const page of await distPages(DIST, { skipRedirects: false })) {
 }
 
 if (failures.length) {
-  console.error(`link check FAILED (${failures.length}):`);
+  console.error(`link check FAILED — ${failures.length} internal link(s) do not resolve against dist:`);
   for (const f of [...new Set(failures)]) console.error('  ' + f);
   process.exit(1);
 }

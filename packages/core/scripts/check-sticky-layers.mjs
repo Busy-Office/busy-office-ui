@@ -99,7 +99,7 @@ for await (const file of cssFiles(CSS)) {
 }
 
 if (failures.length) {
-  console.error(`sticky-layers check FAILED (${failures.length}):`);
+  console.error(`sticky-layers check FAILED — ${failures.length} sticky rule(s) declare no layer:`);
   for (const f of failures) console.error(`  ${f}`);
   process.exit(1);
 }
