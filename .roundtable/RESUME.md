@@ -50,6 +50,15 @@ not a rule, not a gate and not a ratio — the three things 168.1 refused.
   **12 of 13** on 2026-08-28 — the commands below printed `13` and `1`, and that
   `1` is 164.3, the deciding row itself. Re-derive rather than increment; a
   copied number is 169.1's exact failure mode.
+- **Is that ratio a PROBLEM? No — the owner was shown it and decided otherwise
+  (2026-08-28).** Asked directly whether to pause the hourly routine until the
+  publish, given a measured 16 machinery : 6 consumer-facing files over twelve
+  hours and a direction the loop structurally cannot advance, the owner chose
+  **keep it running hourly**. So a wake finding this block's answers unchanged
+  is looking at an **accepted state, not a fault**: do not re-triage it, do not
+  raise it as a new finding, and do not slow or pause the routine on your own
+  judgement. What WOULD be new information: the registry answering something
+  other than E404, or the owner picking a different direction.
 
 ```
 npm view @busy-office/create-ui version     # E404 → unpublished → still blocked
