@@ -51,13 +51,18 @@ ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) ·
 # assertion independent of the regex above — a reconciliation that re-uses the
 # parser it is checking cannot fail.
 BULLET = "- "
-# The slice a row worked on: the log's convention is that an item OPENS with its
-# item number — "40.3 REFUSED the date picker…".
+# The slice a row worked on. THE LOG USES TWO CONVENTIONS, and for most of its
+# life this script could see only one of them.
 #
-# Anchored to the start on purpose. A free-text scan for `NN.N` reads "10.3%"
-# and "17 screens" as slice numbers, which is how the first version of this
-# script reported 16 slices instead of 10 — the same class of instrument error
-# the Slices 31-40 grill had just finished cataloguing.
+#   bare   "164.1 the dispatcher's counter reconciles…"
+#   prose  "Slice 84: wrote the eight missing CHANGELOG entries…"
+#
+# Anchored to the start on purpose, and kept as TWO patterns rather than one
+# loosened pattern, because the looseness is exactly what goes wrong: a free-text
+# scan for `NN.N` reads "10.3%" and "17 screens" as slice numbers, which is how
+# the first version of this script reported 16 slices instead of 10. So the bare
+# form REQUIRES the `.N` sub-item, and the prose form REQUIRES the literal word.
+#
 # ANY slice number, not two digits. `^(\d{2})\.` silently stopped matching the
 # day slice numbers passed 99 (2026-08-21): it read "14" out of "145.3", wanted
 # a dot, found "5", and returned no match. Objective then counted 0 slices for
@@ -66,15 +71,78 @@ BULLET = "- "
 #
 # LOOPS.md already records this failure shape twice, the second time about
 # Objective specifically ("it starved for ten slices before this was noticed").
-# This is the third. The regex is the bug; the silence is the lesson, which is
-# what assert_parsed below exists for.
-SLICE = re.compile(r"^([1-9]\d{0,2})\.\d+[a-z]?\b")
+# The two-digit bug was the third. THE MISSING PROSE FORM IS THE FOURTH, and it
+# was the biggest of them — measured over all 996 rows on 2026-08-28:
+#
+#   996 rows: 302 bare, 141 prose, 553 naming no slice
+#   distinct slices seen — bare 99 · prose 60 · union 144, of the 146 in ROADMAP.md
+#
+# Reconciled against an independent source rather than against itself: the 45
+# slices the prose form adds are all real, and the union lands 2 short of the
+# roadmap's own heading count. The 50 parsed numbers with no `## Slice N`
+# heading are slices 7-21, which predate that heading convention — not noise.
+SLICE_BARE = re.compile(r"^([1-9]\d{0,2})\.\d+[a-z]?\b")
+SLICE_PROSE = re.compile(r"^Slice ([1-9]\d{0,2})(?:\.\d+[a-z]?)?\b", re.IGNORECASE)
+
+# WHICH LOOPS CLOSE A SLICE (roadmap 161.4, decided 2026-08-28 by replaying the
+# whole log, not by argument). Counts are per-loop rows that name a slice, and
+# the parenthetical is how many slices that loop is the ONLY witness for:
+#
+#   Continue     · 252 rows — builds items. Uncontested.
+#   Standardize  ·  31 rows (12 slices) — ADDED. Slices 47, 49, 50, 55, 60, 63,
+#                            65, 69, 103, 111, 155 and 161 have a Standardize
+#                            row and no Continue row at all; Slice 49's own
+#                            heading is "Standardize sweep". Those are closed
+#                            slices the counter could never see. The old comment
+#                            was right about Roadmap and was never asked about
+#                            this: 28% of Standardize's slice-naming rows.
+#   Roadmap      ·  11 rows (4 slices) — EXCLUDED, reason unchanged: a triage row
+#                            plans a slice, it does not close one. Slice 162 is
+#                            the live illustration — Roadmap-only, and open.
+#   Explore      ·   6 rows (5 slices) — EXCLUDED. A spike graduates INTO the
+#                            plan; the build that follows is a Continue row.
+#   Objective    ·   2 rows (1 slice)  — EXCLUDED, and it is also circular: an
+#                            Objective row resets this very counter.
+#   Meta/Polish/Optimize · 0 rows ever named a slice. Nothing to decide.
+#
+# (The separators above are not decoration. check:slice-refs reads the word
+# "roadmap" followed by whitespace and a number as a citation, so an aligned
+# column that put a row count straight after a loop named Roadmap turned the
+# gate red on a slice that does not exist. The gate was right — the string was
+# genuinely ambiguous — and the first attempt to explain that here failed the
+# same way, by quoting the offending text verbatim. Hence the separator.)
+#
+# Explore and Objective were measured before being refused, because "obviously
+# not" is how the Standardize exclusion survived unexamined. Adding both to the
+# set below changes the number of times the counter reaches 3 over the whole log
+# from 23 to 23 — they buy nothing, so they stay out.
+#
+# THE CADENCE THIS BUYS, replayed rather than predicted (the Accept criterion's
+# own requirement). Times the count crossed 3 over all 996 rows:
+#
+#   Continue + bare only (before)   18
+#   Continue, both forms            22      <- the format fix is most of it
+#   + Standardize, both forms       23      <- decided
+#   + Explore + Objective           23
+#
+# And of the 45 Objective rounds that actually ran, the number where the counter
+# was ALREADY past 3 goes 6 -> 15: the corrected counter shows the rule was
+# firing LATE more often than anyone knew. It is not trigger-happy either — 23
+# crossings against 45 real Objective rounds means it still signals about half as
+# often as the loop actually ran, which is the direction LOOPS.md worries about.
+CLOSES_A_SLICE = ("Continue", "Standardize")
 
 # name -> (threshold, what one unit is, how the rule counts)
 RULES = {
     "Standardize": (4, "Continue round"),
     "Objective": (3, "slice"),
 }
+
+
+def slice_of(item):
+    """The slice number a log item names, or None. Both conventions."""
+    m = SLICE_BARE.match(item) or SLICE_PROSE.match(item)
+    return m.group(1) if m else None
 
 
 def rows():
@@ -111,21 +179,20 @@ def report(all_rows, loop, threshold, unit):
     else:
         # Distinct slices touched since the last grill — what "a slice closed"
         # means in practice, and countable from what the log already writes.
-        # Continue rows only: that is where build work lands. A Roadmap triage
-        # row plans a slice, it does not close one.
+        # Which loops count is decided and measured at CLOSES_A_SLICE above.
         slices = sorted({
-            m.group(1)
+            s
             for r in after
-            if r["loop"] == "Continue"
-            for m in [SLICE.match(r["item"])]
-            if m
+            if r["loop"] in CLOSES_A_SLICE
+            for s in [slice_of(r["item"])]
+            if s
         }, key=int)
         count = len(slices)
-        # A ZERO HERE IS A DEFECT UNTIL PROVEN OTHERWISE. Continue rounds
-        # happened but no slice parsed out of any of them means the parser is
-        # blind, not that no work landed — exactly how this rule spent five
-        # days reporting "ok" while eighteen slices closed.
-        build_rows = [r for r in after if r["loop"] == "Continue"]
+        # A ZERO HERE IS A DEFECT UNTIL PROVEN OTHERWISE. Build rounds happened
+        # but no slice parsed out of any of them means the parser is blind, not
+        # that no work landed — exactly how this rule spent five days reporting
+        # "ok" while eighteen slices closed.
+        build_rows = [r for r in after if r["loop"] in CLOSES_A_SLICE]
         if build_rows and not slices:
             raise SystemExit(
                 f"dispatch_status: {len(build_rows)} Continue round(s) since the last "
@@ -142,7 +209,51 @@ def report(all_rows, loop, threshold, unit):
     return overdue
 
 
+# @heuristic — `slice_of` RECOGNISES a slice reference in free prose, and that
+# recognition has now been wrong twice in this file's life (two digits only; the
+# prose form invisible). apps/docs' check:selftests does not reach scripts/loops,
+# so the rule is honoured here by hand rather than skipped because no gate asks.
+# Each case below is one the detector has actually got wrong, or one it must keep
+# refusing — a self-test made only of things it already passes cannot fail.
+SELF_TEST = [
+    # (item text, expected slice or None)
+    ("164.1 the dispatcher's counter reconciles", "164"),   # bare
+    ("Slice 84: wrote the eight missing entries", "84"),    # prose — was invisible
+    ("Slice 92.4: adopted Amount in invoice-list", "92"),   # prose with sub-item
+    ("145.3 something past the two-digit bug", "145"),      # the 2026-08-21 regression
+    ("7.2 an early single-digit slice", "7"),
+    ("Slice 7 scoping review (device coverage)", "7"),      # prose, no sub-item
+    ("17 screens render a date as a plain string", None),   # not a slice number
+    ("10.3% of pages carry the clause", "10"),              # KNOWN false positive, below
+    ("scored Tables & lists (5 components)", None),
+    ("released 0.3.0 to npm", None),                        # leading 0 refused
+]
+# `10.3%` is a real miss and is left alone deliberately. The tighter rule —
+# require `.[1-9]`, since item indexes are 1-based — was measured over the whole
+# log and changes four rows: it drops the two "1.0 checklist" false positives AND
+# two REAL references, `110.0` and `145.0`. Trading two right answers for two
+# wrong ones is not a fix. Both surviving false positives are on Explore and
+# Roadmap rows, which CLOSES_A_SLICE excludes, so neither reaches the counter.
+
+
+def self_test():
+    bad = [
+        f"    {item!r} -> {got!r}, expected {want!r}"
+        for item, want in SELF_TEST
+        for got in [slice_of(item)]
+        if got != want
+    ]
+    if bad:
+        print("dispatch_status --self-test FAILED:", file=sys.stderr)
+        print("\n".join(bad), file=sys.stderr)
+        return 1
+    print(f"dispatch_status --self-test: {len(SELF_TEST)} cases classified correctly")
+    return 0
+
+
 def main():
+    if "--self-test" in sys.argv:
+        return self_test()
     all_rows = rows()
     if len(all_rows) < 2:
         print("dispatch status: loop-log.md has too few rows to say anything", file=sys.stderr)

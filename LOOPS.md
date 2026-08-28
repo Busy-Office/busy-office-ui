@@ -147,6 +147,40 @@ match to its full playbook below:
    which is enough to stop trusting careful wording and make the silence
    impossible instead.
 
+   **Which loops close a slice — decided 2026-08-28 (roadmap 161.4).**
+   `Continue` **and `Standardize`**. Excluded: `Roadmap` (a triage row plans a
+   slice, it does not close one — Slice 162 is the live illustration, Roadmap-only
+   and open), `Explore` (a spike graduates INTO the plan; the build that follows
+   is a Continue row), `Objective` (circular — an Objective row resets this
+   counter), and `Meta`/`Polish`/`Optimize`, which have never named a slice at
+   all. Standardize was added because 12 slices — 47, 49, 50, 55, 60, 63, 65, 69,
+   103, 111, 155, 161 — have a Standardize row and **no Continue row**; Slice 49's
+   own heading is "Standardize sweep". Explore and Objective were measured before
+   being refused rather than waved off, since being obviously-not is how the
+   Standardize exclusion survived unexamined: adding both changes the number of
+   times the counter reaches 3 over the whole log from **23 to 23**.
+
+   **And the bigger half was not the loop filter at all — it was a FOURTH
+   instance of the regex going quietly blind.** The log uses two conventions,
+   `164.1 …` and `Slice 84: …`, and the counter could only ever see the first:
+
+   ```
+   # 996 rows: 302 bare · 141 prose · 553 naming no slice
+   # distinct slices seen — bare 99 · prose 60 · union 144, of 146 in ROADMAP.md
+   python3 scripts/loops/dispatch_status.py --self-test
+   ```
+
+   Replayed over the whole log, the count crosses 3 **18** times as the rule
+   stood, **22** with the prose form alone, **23** with Standardize as well — so
+   the format bug was four times the size of the question the item asked. Of the
+   45 Objective rounds that actually ran, the number where the counter was
+   already past 3 goes **6 → 15**: the rule was firing late more often than
+   anyone knew. It is not trigger-happy either — 23 crossings against 45 real
+   Objective rounds still signals about half as often as the loop ran, which is
+   the direction this rule worries about. `slice_of` now ships `--self-test`,
+   red-proved both ways (disable the prose branch → 3 cases fail; restore the
+   two-digit regex → 3 different cases fail).
+
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.
 

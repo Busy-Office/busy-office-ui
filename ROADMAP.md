@@ -1582,8 +1582,36 @@ what ran, and it is not the same as having looked.
        each (bare control vs combobox wrapper), and the reopen condition is a
        third component, not a fifth copy.
 
-4. [ ] **161.4 — the Objective counter cannot see a slice that closes under any
+4. [x] **161.4 — the Objective counter cannot see a slice that closes under any
        loop but Continue, and this wake is an instance.**
+       **DONE 2026-08-28 (cloud wake).** Decision, the counts and the replayed
+       cadence are in `LOOPS.md` rule 3 and in `dispatch_status.py`'s own
+       comment, where the next reader will find them. Summary: the filter widens
+       to **Continue + Standardize**; Roadmap, Explore and Objective stay out,
+       the last two measured before being refused (adding both moves the log's
+       crossing count 23 → 23).
+
+       **The premise was right and was the smaller half.** Re-running the command
+       below confirmed 31 Standardize rows name a slice and none counted — but
+       the same run exposed a FOURTH instance of this counter's regex going
+       quietly blind. The log uses two conventions, `164.1 …` and `Slice 84: …`,
+       and the parser could only ever see the first: 302 bare rows against **141
+       prose rows**, 99 distinct slices against a union of **144 of the 146** in
+       this file. Replayed over the whole log, the count crosses 3 **18** times
+       as the rule stood, **22** on the format fix alone, **23** with Standardize
+       — so the format bug was four times the size of the question this item
+       asked. `slice_of` now ships `--self-test`, red-proved both ways.
+
+       **The counter reads the same today (0/3) and that is not a null result.**
+       Only two rows follow the last Objective round and neither names a slice.
+       The fix changes what the counter can see, not what it sees this instant.
+
+       **NOTE — the command below carried a stale regex for one wake.** It was
+       written with `(\w+)` for the loop field on 2026-08-27; 164.1 widened that
+       to `[\w-]+` the next day because nine rows carry a hyphenated mode, and
+       this copy was not updated with it. Fixed in place. That is roadmap 159's
+       rule biting its own author: a command written next to a claim still rots
+       when the thing it duplicates moves.
        Noticed by running `dispatch_status.py` after recording this slice: it
        still reads `Objective 2 / 3 [158, 159]`, with 161 closed and its three
        items ticked. Not chased into a fix, because changing what the counter
@@ -1599,7 +1627,7 @@ what ran, and it is not the same as having looked.
        python3 - <<'PY'
        import re; from collections import Counter
        S=re.compile(r"^([1-9]\d{0,2})\.\d+[a-z]?\b")
-       R=re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · (\w+) · (\w+) · (.*)$")
+       R=re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) · (.*)$")
        t=Counter(); n=Counter()
        for l in open('.roundtable/loop-log.md'):
            m=R.match(l)
@@ -1610,6 +1638,12 @@ what ran, and it is not the same as having looked.
        PY
          # Continue 241/457 · Meta 0/170 · Roadmap 10/128 · Standardize 31/110
          # · Explore 6/56 · Objective 2/44 · Polish 0/9 · Optimize 0/3
+         # re-run 2026-08-28 at 996 rows: Continue 252/469 · Meta 0/174
+         # · Roadmap 11/130 · Standardize 31/110 · Explore 6/56 · Objective 2/45
+         # · Polish 0/9 · Optimize 0/3 — the premise holds, unchanged where it
+         # matters. NOTE this command only sees the BARE `NN.N` convention, which
+         # is the blind spot the item's closing note is about; the counter itself
+         # now reads both.
        ```
 
        `dispatch_status.py` filters to `r["loop"] == "Continue"` with a stated
