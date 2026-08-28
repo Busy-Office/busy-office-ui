@@ -111,9 +111,13 @@ function scrollParent(el: Element): Element | null {
    token (32.5px vs compact's 30px — border-box extras), so token-derived
    spacers ran 250px short per 100-row chunk, a guaranteed scroll jump. The
    decision's INTENT — no layout read during the eviction scroll path —
-   holds: one read at bind (and a cache refresh during the post-swap
-   reconcile, where layout is already hot), never per eviction. The token
-   stays as the fallback when no real row exists yet. */
+   holds ONE READ SHORT OF LITERALLY: the measurement is lazy, so the FIRST
+   eviction of a table does read, and every eviction after it uses the
+   cache (plus a refresh during the post-swap reconcile, where layout is
+   already hot). This comment used to say "one read at bind", which nothing
+   in bindTable does; measured 0 reads at bind and 1 at the first eviction
+   (roadmap 173.3, pinned by tests/windowed-list.test.ts). The token stays
+   as the fallback when no real row exists yet. */
 const rowHeights = new WeakMap<HTMLTableElement, number>();
 function chunkRowHeightPx(table: HTMLTableElement): number {
   const cached = rowHeights.get(table);

@@ -1319,7 +1319,7 @@ add/remove lines — requires alignment"* (with a screenshot).
        Either changes the pattern's documented States contract ("the message
        inside that cell's form field"), so it is a design decision, not a tidy.
 
-3. [ ] **173.3 — `initWindowedList` is a shipped behavior with ZERO tests.**
+3. [x] **173.3 — `initWindowedList` is a shipped behavior with ZERO tests.**
        Found while fixing 173.1, queued rather than folded into it.
        ```
        grep -rl "initWindowedList\|data-windowed\|data-chunk-id" packages/core/tests/
@@ -1339,6 +1339,56 @@ add/remove lines — requires alignment"* (with a screenshot).
        cannot give real row heights, say so and put the height case in a
        browser gate instead of writing a test that asserts the fallback and
        calls it covered — that would re-create the exact bug.
+
+       **DONE 2026-08-28 (cloud wake). 9 tests in
+       `packages/core/tests/windowed-list.test.ts`, and the Accept's premise
+       about the prose turned out to be FALSE — which is the finding.**
+
+       *jsdom cannot give real row heights*, as the Accept anticipated: every
+       `getBoundingClientRect` is 0×0, so a test written against real geometry
+       would have measured the 40px token fallback and called the measured path
+       covered. Instead rows carry a stubbed **32.5px**, deliberately unequal to
+       the token, so every height assertion discriminates: the headline case
+       asserts `2 × 32.5 = 65` **and** `!== 2 × 40`. The one property a stub
+       cannot establish — that real rows genuinely render taller than the token
+       — was already held in a real browser and is **not** newly written here:
+       `check-po-app.mjs`'s `spacerMatchesReal` compares a 100-row spacer to a
+       measured row on `/movements`, with a ±1-row tolerance that a 250px
+       token-derived shortfall breaks.
+
+       **The premise "measured once at bind and cached" is wrong, measured.**
+       Counting rect reads on `tr[data-row-id]`:
+
+       ```
+       atBind: 0 · afterFirstEviction: 1
+       ```
+
+       Nothing in `bindTable` reads geometry; `chunkRowHeightPx` is called from
+       `makeSpacer`, i.e. lazily at the FIRST eviction — which is on the scroll
+       path the mechanism exists to keep cheap. The intent (one read per table,
+       never per eviction) holds; the wording never did. **Two documents said
+       it**: `windowed-list.ts`'s own header comment ("one read at bind") and
+       the caption 173.1 had just landed on `/concepts/scale` ("once, when the
+       table binds"). Both corrected in this commit, and the count is now
+       pinned by a test rather than by prose.
+
+       **Red-proved, five injections, each verified in the BUILT
+       `dist/js/behaviors/windowed-list.js` by grep before believing the
+       result** (CLAUDE.md: a green red-proof is a defect in the injection
+       until proven otherwise):
+
+       | injected regression | tests red |
+       |---|---|
+       | token-derived height (the reverted design) | 3 |
+       | `rowHeights` cache removed | 1 |
+       | `data-chunk-size` dropped from the spacer | 1 |
+       | `data-bo-reloading` re-request guard removed | 1 |
+       | `applySavedSelection` call removed from the swap reconcile | 1 |
+
+       Also covered: `aria-rowcount`/`aria-rowindex` from the offset, the
+       documented no-op floor where `IntersectionObserver` is absent, and the
+       token fallback asserted **as** the fallback (a chunk with no
+       `data-row-id` row at all), never as the measured path.
 
 **Recorded because it nearly became a false P0.** The first measurement of
 173.1 used `querySelector('#windowed-list tbody')` — **singular** — and this

@@ -35,10 +35,10 @@ const windowedMarkup = `<table class="bo-data-table" data-windowed data-window-c
        data-table-total-rows="50000">
   <thead><tr><th scope="col">Row</th><th scope="col">Reference</th></tr></thead>
   <!-- Scrolled past and evicted: ONE spacer stands in for this chunk's 50
-       rows. Height = rowCount x a row height measured once when the table
-       binds and cached, so eviction itself never forces a layout read.
-       Shown at 120px so the whole shape fits one screen; running, this
-       spacer is about 2,000px. -->
+       rows. Height = rowCount x a row height measured from one real row at
+       the FIRST eviction and cached, so no eviction after that forces a
+       layout read. Shown at 120px so the whole shape fits one screen;
+       running, this spacer is about 2,000px. -->
   <tbody data-chunk-id="c0" data-chunk-offset="0" data-evicted="true">
     <tr class="bo-data-table__spacer" style="block-size: 120px"><td colspan="2"></td></tr>
   </tbody>
@@ -154,9 +154,9 @@ const agGridRecipe = `/* your-app.css — after both stylesheets */
     <p class="bo-u-text-muted">A chunk that scrolls far enough away
     evicts to a <strong>computed-height spacer</strong>: its height is
     <em>rows &times; row height</em>, and that row height is measured from
-    one real row <strong>once, when the table binds</strong>, then cached —
-    so eviction never forces a layout read on the exact operation this
-    behavior exists to make cheap. (Deriving it from
+    one real row <strong>once, at the first eviction</strong>, then cached —
+    so no eviction after that forces a layout read on the exact operation
+    this behavior exists to make cheap. (Deriving it from
     <code>--bo-density-row-height</code> instead was tried and reverted:
     real rows render taller than the token, so token-derived spacers ran
     ~250px short per 100-row chunk and the list jumped as you scrolled. The
