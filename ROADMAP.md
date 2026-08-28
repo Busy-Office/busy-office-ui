@@ -1654,18 +1654,70 @@ dispatchers real without any rule changing, and rule 4 is deterministic: given
 the same `ROADMAP.md`, two dispatchers will always choose the *same* item.
 **Determinism is the feature that makes the collision certain.**
 
-1. [ ] **162.1 — decide how two dispatchers share one queue.**
-       Options, none obviously right: claim an item by committing a marker
-       before working it (a lock in git, which two wakes can still race);
-       partition by loop type (cloud takes Continue, local takes grills);
-       have the local session stop dispatching once a routine exists and act
-       only on owner input; or accept collisions and rely on push rejection,
-       which is what actually saved this one.
-       **Accept**: a decision recorded in `LOOPS.md` either way, naming what it
-       costs. "Accept collisions" is a valid outcome and may be right — the
-       failure mode was cheap, self-detecting, and resolved without data loss.
-       What is NOT acceptable is leaving the file silent, because a reader
-       cannot tell that concurrency was considered.
+1. [x] **162.1 — DONE 2026-08-28. Decided: ACCEPT collisions, with one fetch
+       that makes the loser find out early.** The decision, its cost and the
+       three refusals are in `LOOPS.md` **Step 0c** — do not re-derive them.
+
+       **The premise was re-checked first and holds.** Plain fixed strings, not
+       a context regex: `concurrency`, `concurrent`, `parallel`, `simultane`,
+       `collision`, `race`, `two wakes`, `two dispatchers` → **0 hits each** in
+       `LOOPS.md`; the 12 hits for `lock` are `block`/`blocked`/`blocks`/
+       `blocking`/`unblock`/`lockfile`.
+
+       ```
+       for w in concurrency concurrent parallel simultane collision race lock; do \
+         printf '%-14s %s\n' "$w" "$(grep -ci -- "$w" LOOPS.md)"; done
+       ```
+
+       **The two dispatchers are exactly separable, and nothing had to be built
+       to do it** — the git author timezone offset is the discriminator (cloud
+       container `+0000`, owner's machine `+0800`), and 994 of the log's 1,001
+       rows end in the sha of their own commit:
+
+       ```
+       git log --format='%ad' --date=format:'%z' | sort | uniq -c
+         # 32 +0000 · 1432 +0800   of 1,464 commits            (2026-08-28)
+       git log --since 2026-08-27T17:57:55Z --format='%h|%ai|%s'
+         # the cloud era: 36 commits · 5 same-clock runs · 4 alternations
+         # handover gaps 18.5 / 29.2 / 32.8 / 30.5 minutes — they overlap
+       ```
+
+       So the collision is not hypothetical or past: both dispatchers were
+       active inside the same half-hour **four times** in the routine's first
+       nine hours.
+
+       **Why "accept" is safe by construction**: every wake ends with
+       `record_iteration.py` (appends `.roundtable/loop-log.md`) and ticks a box
+       in `ROADMAP.md`, so two concurrent wakes conflict on rebase even when
+       their code changes are disjoint. **5 of 5 same-clock commit runs in the
+       cloud era touched both files.** n=5 and the 100% is expected by
+       construction, not surprising — at commit level only 705 of 1,464 (48%)
+       touch the log, because a wake commits several times and records once.
+
+       **The refusal that has an exact price**: a claim marker must be *pushed*
+       to be visible, and `pages.yml` triggers on every push to `main` with **no
+       `paths-ignore`** (`ci.yml` has one; the Pages workflow does not). That is
+       a second deploy per wake, reopening the CDN skew window the "one push per
+       wake" rule exists to close — to buy detection at minute 2 instead of at
+       the push, which a `git fetch` before the first commit buys for free.
+
+       *Accept*, as written, all met: (a) a decision is recorded in `LOOPS.md`
+       naming what it costs — Step 0c, "up to one wake's work, discarded";
+       (b) "accept collisions" was the blessed valid outcome and is the one
+       taken; (c) the file is no longer silent — Step 0c plus a corrected
+       operating-rules bullet, since **"Session-scoped — these run while this
+       session is open" was the sentence that had gone false** and it was still
+       sitting in the file.
+
+       **An instrument was wrong on its first output, as the base rate says.**
+       The first pass at "how many commits touch `loop-log.md`" parsed
+       `git log --name-only` by treating any 40-character line as a sha. **31
+       distinct pathnames in this repo are exactly 40 characters** —
+       `apps/docs/src/pages/patterns/index.astro` among them — so it counted
+       **1,579** commits where `git rev-list --count HEAD` says **1,464**, and
+       reported 44% instead of 48%. Caught only because two counts of the same
+       thing disagreed; re-run with `--format=%x00%H` and NUL-split records,
+       which reconciles with `rev-list` exactly.
 
 **Also worth recording, because it argues for the routine.** The cloud wake
 found a real defect the local session shipped: 157.2 removed the cell-level

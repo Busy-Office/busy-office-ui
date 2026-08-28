@@ -63,6 +63,92 @@ Not a gate, deliberately. A stale counter is information for whoever is
 dispatching; failing a build over it would block the very work the loop exists
 to do.
 
+### Step 0c — Two dispatchers share this queue, and collisions are ACCEPTED
+
+Decided 2026-08-28 (roadmap 162.1). Until then this file said nothing about
+concurrency at all — re-checked before deciding, with plain fixed strings:
+`concurrency`, `concurrent`, `parallel`, `simultane`, `collision`, `race`,
+`two wakes` and `two dispatchers` all returned **0**, and the 12 hits for
+`lock` were `block`/`blocked`/`blocks`/`blocking`/`unblock`/`lockfile`. That
+silence was correct when loops were session-scoped; promoting the routine to
+`/schedule` made a second dispatcher real without a rule changing, and rule 4
+is deterministic, so two dispatchers reading one `ROADMAP.md` always pick the
+same item.
+
+**The decision: accept collisions.** Two dispatchers may take the same item; the
+one that pushes second loses its work and re-dispatches. Nothing partitions the
+queue and nothing claims an item.
+
+**What it costs, named:** up to one wake's work, discarded. It has happened once
+— the cloud routine and the local session both built 157.3 within an hour
+(Slice 162). Nothing was corrupted, because `git push` rejected the loser rather
+than merging it.
+
+**Why that is safe by construction and not by luck.** Every wake ends with
+`record_iteration.py`, which appends to `.roundtable/loop-log.md`, and every
+dispatched item ticks a box in `ROADMAP.md`. Two concurrent wakes therefore
+collide in those two files even when their code changes are disjoint: the
+loser's rebase conflicts, so it cannot land silently on top of work it never
+read. Measured over the whole cloud era — every commit since the routine's first
+one, `c073c36`, 2026-08-27 17:57:55Z — **5 of 5 same-clock commit runs touched
+both files**. n is five, and the 100% is expected by construction rather than
+surprising: at COMMIT level only **705 of 1,464 (48%)** touch the log, because a
+wake commits several times and records once. The claim is about wakes.
+
+**The one thing that changes, and it costs no push:** `git fetch origin main` at
+Step 0 **and again immediately before the wake's first commit**. If
+`origin/main` has moved since the wake started, the other dispatcher has landed
+something — re-read `ROADMAP.md` before continuing, because the item may now be
+closed. That moves detection from after the push to before the first commit and
+adds no deploy. It is a process rule with nothing mechanical behind it, and that
+is stated rather than dressed up: a pre-commit hook would need the network on
+every commit and would block a wake that has legitimately already reconciled.
+
+**Which dispatcher wrote a row is already recorded exactly**, and nothing had to
+be added for it. The git author timezone offset separates them — the cloud
+container is `+0000`, the owner's machine `+0800` — and **994 of the log's 1,001
+rows end in the 7-char sha of their own commit**:
+
+```
+git log --format='%ad' --date=format:'%z' | sort | uniq -c   # 32 +0000 · 1432 +0800
+git show -s --format=%ai <sha-from-a-log-row>                # which clock wrote it
+```
+
+That is a *finding for 164.2*, not a closing of it: 164.2 asks whether the row
+should carry the clock itself, and the answer above is that the record already
+exists one indirection away.
+
+**Three options refused, each for a measured reason:**
+
+- **A claim marker committed before working (a lock in git).** To be visible it
+  must be *pushed*, and `pages.yml` triggers on every push to `main` with **no
+  `paths-ignore`** — so it doubles the Pages deploys per wake and reopens the CDN
+  skew window that the "one push per wake" operating rule exists to close
+  (owner-reported unstyled first paint, 2026-08-16). It still races: two wakes
+  that both read before either pushed both claim, and the loser learns at push
+  rejection — the same moment it learns today. And a wake that dies mid-flight
+  (`RESUME.md` carries one killed by an unset `CHROME_PATH`) leaves a claim that
+  nothing releases, with nobody watching. Trading a self-healing failure for a
+  silent one is the wrong direction.
+- **Partition by loop type** (cloud takes Continue, local takes grills). It
+  partitions the *loops* but not the *counters*: rules 2 and 3 count Continue
+  rounds and closed slices out of one shared log, so whichever dispatcher is
+  allowed to run Continue would drive a Standardize counter only the other one
+  may discharge. Step 0b already records that three rules starved exactly that
+  way and each was found by hand; a scheme that makes starvation a design
+  property is worse than the collision it prevents.
+- **The local session stops dispatching once a routine exists.** Slice 162's own
+  postscript is the counter-evidence: the cloud wake found a real defect the
+  local session had shipped — 157.2's surviving RTL twin for
+  `td[data-tone="success"]` — precisely by re-deriving the same claim
+  independently. Redundant coverage is the mechanism that caught it. Rule 1 also
+  has to run wherever owner input lands, which is the local session.
+
+**What would reopen this:** a collision that LANDS rather than being rejected —
+two wakes whose only overlap was the append point of `loop-log.md` and whose
+rebase resolved cleanly. Resolve such a conflict by keeping BOTH rows; never by
+dropping one.
+
 ### Step 1 — Triage new input
 
 New input = a user-reported issue, a new requirement, direction, or constraint
@@ -888,8 +974,13 @@ is the finding, never the count on its own.
 - **Record every iteration** via `scripts/loops/record_iteration.py` (writes the
   markdown log + the `loops.db` mirror). Files are source of truth; the DB is
   rebuildable telemetry.
-- **Session-scoped** — these run while this session is open; closing it stops them.
-  For durable cloud cadence, promote to `/schedule`.
+- **No longer session-scoped, and that is what made concurrency real** — this
+  bullet used to read "these run while this session is open; closing it stops
+  them. For durable cloud cadence, promote to `/schedule`." The promotion
+  happened (owner call, 2026-08-28), so an hourly cloud routine now dispatches
+  whether or not a local session is open, and both read one `ROADMAP.md`.
+  **Collisions are accepted — see Step 0c for the decision, its cost, and the
+  one fetch that makes the loser find out early.**
 - **Recognize steady state; don't manufacture busywork** (2026-08-15) — once
   the Ideas seed list AND the Long-term backlog's directly-actionable items
   are genuinely exhausted (checked, not assumed — re-read `ROADMAP.md` fresh
