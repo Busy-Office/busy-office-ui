@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 02:39
+Generated at: 2026-08-28 02:42
 
 ## Open items by slice
 
@@ -22,9 +22,9 @@ Generated at: 2026-08-28 02:39
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1000 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-28 02:39   ok
-  Objective     1 / 3 slice           since 2026-08-28 00:49   ok  [161]
+dispatch status — counter-triggered rules (1001 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-28 02:42   ok
+  Objective     2 / 3 slices          since 2026-08-28 00:49   ok  [161, 166]
 ```
 
 ## Owner-blocked
@@ -39,6 +39,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 ## Last 10 iterations
 
 - 2026-08-28 02:39 · Standardize · sweep · 166 — Standardize sweep: three rot-guards clean; a fourth copy of api.pageSlug in gen-rf-profile.mjs removed, two false comments corrected, re-scan red-proved · landed · fde0e23
+- 2026-08-28 02:42 · Standardize · sweep · 166.5 — the slice parser was blind a fifth time; its own Standardize row exposed it. Third convention added, first draft would have invented 18 slices · landed · 69cadcb
 
 ## Sunset test
 

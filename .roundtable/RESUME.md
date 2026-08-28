@@ -13,8 +13,8 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine). Working tree clean;
-two commits landed and were pushed as one batch.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **Standardize**).
+Working tree clean; two commits landed and were pushed as one batch.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS, ALL MEASURED
 
@@ -99,40 +99,54 @@ Everything ran green this wake: `build -w @busy-office/ui`, `test -w
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
 dark.
 
-**From THIS wake — nothing visual exists to look at, and this is the second
-consecutive wake for which that is true.** The only code change is again
-`scripts/loops/dispatch_status.py`, a Python script that prints to a terminal:
-it renders nothing, ships in no page, is imported by no component and is not
-part of the docs build. Everything else is markdown. `check:layout` and
-`test:axe` swept all 127 pages at both widths anyway and were unchanged. **No
-visual debt was added.**
+**From THIS wake — nothing visual exists to look at, and this is the THIRD
+consecutive wake for which that is true.** The code changes are two build-time
+Node generators and `dispatch_status.py`; none renders, ships in a page, or is
+imported by a component. `gen-rf-profile.mjs`'s output is **byte-identical**
+before and after — so no page's markup changed at all, which is a stronger
+statement than a screenshot would have been and is the one being made here.
+Everything else is markdown. `check:layout` and `test:axe` swept all 127 pages
+at both widths anyway and were unchanged. **No visual debt was added; nothing
+visual was looked at.**
+
+**Three consecutive non-visual wakes is itself worth noticing.** It is not
+evidence of avoidance — rule 4's oldest open items genuinely are loop machinery
+(164.3 says so outright) — but the two carried-forward visual items below have
+now waited five and eight wakes respectively.
 
 **Still unlooked-at by a human, carried forward:**
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
-  `<span class="bo-badge">generated</span>` inside an existing `<h2>` four
+  `<span class="bo-badge">generated</span>` inside an existing `<h2>` **five**
   wakes ago. `DsaScore` renders on 38 pages, so if the badge wraps badly it
   wraps in 38 places. First local wake: glance at one component page's
   "Design-system alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes —
-  now seven wakes back.
+  now **eight** wakes back.
 
 ## Counters after this wake
 
 ```
 python3 scripts/loops/dispatch_status.py
-  # Standardize 4 / 4 Continue rounds   OVERDUE
-  # Objective   1 / 3 slices      [161]      <- the widened parser, working
+  # Standardize 0 / 4 Continue rounds   ok       <- reset by this wake's sweep
+  # Objective   2 / 3 slices  [161, 166]  ok     <- 166 visible only after 166.5
 ```
 
-**NEXT WAKE: rule 2 fires before rule 4.** Standardize crossed its threshold on
-this wake's own Continue row, so the next dispatch is **Standardize**, not
-162.1. Its playbook's three rot-guard sweeps are the point of the dispatch and
-none is a CI gate: `npm run scan:dead-style -w docs`, `npm run
-report:css-repeats -w @busy-office/ui` (the delta against LOOPS.md's table of
-eight is the finding, never the count), and `npm run report:prose -w docs` —
-where `/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/`
-are the three family-median outliers nobody has verdicted yet.
+**NEXT WAKE: rule 4.** Both counters are below threshold, so no counter rule
+preempts. Rule 4's oldest still-open dispatchable item is **162.1**, then
+163.1, 164.2, 165. 112.3/112.4 and the AT-runtime item are older but blocked on
+the owner or on hardware.
+
+**Objective is one slice from firing.** The next Continue or Standardize round
+that names a new slice takes it to 3/3, and rule 3 sits above rule 4 — so the
+wake after next is likely Objective, not a build.
+
+**Do NOT re-verdict the prose outliers.** The previous handover named
+`/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/` as
+"the three nobody has verdicted"; **161.1 had already verdicted all three**, in
+the very run that wrote the note. Every page `report:prose` flags today carries
+a verdict from 158.1 or 161.1. Corrected here rather than carried forward
+again.
 
 **The `[161]` is NOT evidence the 161.4 fix does anything, and the first draft
 of this note said it was.** Run in place against the identical log, the old
@@ -154,7 +168,46 @@ Objective was reset by the 2026-08-28 grill and still reads 0/3.
 then 163.1, 164.2, and the newly filed 165. 112.3/112.4 and the AT-runtime item
 are older but blocked on the owner or on hardware.
 
-## What landed this wake (2026-08-28, cloud, Continue → 161.4)
+## What landed this wake (2026-08-28, cloud, Standardize → Slice 166)
+
+**Slice 166 CLOSED — the sweep came back clean, and both findings were things
+the sweep tripped over rather than looked for.**
+
+- **166.1** three rot-guards clean: `scan:dead-style` 0 dead of 1,428;
+  `report:css-repeats` 8 repeats, matching LOOPS.md's table on all three totals
+  — **no delta, so no finding**; `report:prose` no unverdicted page (see the
+  correction under Counters).
+- **166.2** `gen-rf-profile.mjs` held a **fourth copy** of the alias
+  `extract-api.mjs` publishes as "the SINGLE source" while naming two readers.
+  Drifted both ways, never collided (the maps key on dirs vs file stems), all
+  14 hrefs resolved — no user-visible defect. Now derived. **Output
+  byte-identical**, which is why `rf-profile.json` is absent from the diff.
+- **166.3** two comments were false and are corrected.
+- **166.4/166.5** below.
+
+**Two instruments were wrong on their first output, in one wake.** That is
+CLAUDE.md's stated base rate, and it is worth reading as confirmation rather
+than as bad luck:
+
+- 166.4's re-scan compared key sets for **equality** and reported 0 — it would
+  have reported 0 on yesterday's tree too, since the drifted map had seven keys
+  against three. Rewritten to test overlap and red-proved against
+  `git show HEAD:` of the pre-change file.
+- 166.5's replay harness read **61** crossings where `dispatch_status.py`'s own
+  header publishes **23** for the unchanged parser. Unreconciled, so **no
+  cadence figure was quoted anywhere** — not in the script, not in ROADMAP, not
+  in LOOPS.md. If a later wake wants that number, the harness needs fixing
+  first; do not quote the 61.
+
+**166.5 is the one to carry forward.** The slice parser went blind a **fifth**
+time, on a third log convention (`166 — …`, `119: …`). What exposed it was
+running `dispatch_status.py` immediately after `record_iteration.py` and seeing
+the counter disagree with the row just written. **That comparison has now found
+two of the five recurrences — do it every wake.** The first draft of the fix
+would have read `4-tick sweep: …` as slice 4 across 18 rows, making the counter
+fire early; a parser change that reports MORE is not self-evidently a fix.
+
+## What landed in an earlier wake (2026-08-28, cloud, Continue → 161.4)
 
 **161.4 CLOSED.** Which loops close a slice: **Continue + Standardize**.
 Roadmap/Explore/Objective excluded, the last two measured before being refused
@@ -222,7 +275,10 @@ four wakes. It is now fixed rather than counted.
   and the command are in the item; do not re-derive them.
 - **162.1** — how two dispatchers share one queue. "Accept collisions" is a
   valid outcome; what is not acceptable is leaving `LOOPS.md` silent.
-- **165** — the archive sweep. 17 closed slices, 2,488 lines, by hand.
+- **165** — the archive sweep. Re-run with 166 added to the OPEN set: still
+  **17 closed slices, 2,488 lines**, and `ROADMAP.md` is now **4,131 lines**
+  (3,882 when 165 was filed one wake ago — this slice added 249). By hand; the
+  last case-collision on this file pair destroyed 7,307 lines silently.
 - **112.3** — the pattern-fit pilot. BLOCKED ON OWNER: needs 5–8 owner-written
   screen briefs with sealed picks; scaffold ready at `.roundtable/pilot-112/`.
 - **112.4** — Screen Contract layer, gated on 112.3's verdict.
