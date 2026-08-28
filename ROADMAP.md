@@ -996,12 +996,60 @@ add/remove lines — requires alignment"* (with a screenshot).
        **qty input is ~247px wide for a 3-digit value**, so the number, its
        header and its error message sit far apart across an empty gutter, and
        "Exceeds on-hand (200)" hangs under the middle of a wide box.
-       *Accept*: **ask the owner which reading is meant before building** — the
-       measurement rules out a simple header-vs-cell misalignment, so the fix
-       depends on whether "alignment" means the input should be sized to its
-       content, the error should align to the input's edge, or something the
-       screenshot shows that this measurement missed. Recording the
-       measurement now so the question is asked once, with evidence.
+       **ANSWERED by the owner, and measured exactly.** The complaint is that
+       *showing the error misaligns the fields*:
+
+       ```
+       without error   row 53px   inputs at 407 / 407 / 407
+       with error      row 75px   inputs at 418 / 407 / 418   <- 11px shift
+       ```
+
+       The erroring field stays put and its SIBLINGS drop 11px: the qty cell
+       grew (input + `.bo-form-field__message` stacked) so every other cell
+       re-centres in a taller row. `.bo-form-field__message` is `display:
+       block` revealed by `:has([aria-invalid="true"])` — correct in a form,
+       where a field owns a column of vertical space; wrong in a grid row whose
+       height is a density token (`2.5rem`) and whose numeric column alignment
+       is the thing `--numeric` + tabular-nums exists to protect.
+
+       **The principle the fix must satisfy: the message may not contribute to
+       the row's height.**
+
+       **Owner proposed a floating box below the field. Grilled 2026-08-28 —
+       right mechanism, wrong lifetime.** It does fix the cause (out of flow =
+       no height change), and three failure modes were measured rather than
+       argued:
+
+       - **A plain absolutely-positioned box is clipped.**
+         `.bo-data-table-container` is `overflow: auto` with `container-type:
+         inline-size`, which both establishes a containing block and clips —
+         so a box on the last visible row is cut off. Escaping needs a real
+         top-layer `popover`.
+       - **Which collides with what is already there.** This same demo has
+         **5 popovers** (the combobox lookup cells), so an error popover shares
+         an anchor with a listbox — the failure `/patterns/command-bar`
+         documents a section about.
+       - **It occludes the next row, permanently.** The message adds **22px**
+         (75-53) against a **40px** comfortable row: ~55% of the line beneath.
+         Native validation bubbles get away with this because they are
+         TRANSIENT; this pattern's contract is *"422 → that row re-rendered
+         with cell errors"*, which is persistent and can hit several rows at
+         once.
+
+       **Two candidates remain, both keeping the row at 53px** — owner to pick:
+       - **(a) Row-level error row** — a `<tr>` beneath the data row. Shows
+         every reason at once without interaction, scales to several errors per
+         line, no occlusion. Costs a row.
+       - **(b) Message floats on FOCUS only.** Splits fact from reason: the row
+         tint **plus its 3px inset leading edge** (both already shipping, and
+         157.2 settled that the edge means "this row is in a state") carry the
+         fact on two channels; `aria-describedby` already carries the reason to
+         a screen reader; the visible message appears in the field you have
+         clicked into to fix. Cost, stated: a sighted user scanning sees WHICH
+         cell is wrong but must focus it to read WHY.
+
+       Either changes the pattern's documented States contract ("the message
+       inside that cell's form field"), so it is a design decision, not a tidy.
 
 **Recorded because it nearly became a false P0.** The first measurement of
 173.1 used `querySelector('#windowed-list tbody')` — **singular** — and this
