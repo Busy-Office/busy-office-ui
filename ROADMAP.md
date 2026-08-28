@@ -957,6 +957,60 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 173 — Owner: two demos that do not demonstrate (2026-08-28)
+
+**Owner:** *"/concepts/scale — Windowed list — the scanning exception"* and
+*"/patterns/editable-grid — Medium — combobox lookup cells, validation,
+add/remove lines — requires alignment"* (with a screenshot).
+
+1. [ ] **173.1 — the windowed-list demo puts 2000px of blank between the header
+       and its only content.** Measured live, all three chunks:
+
+       ```
+       c0  evicted spacer   2000px   0 data rows
+       c1  loaded chunk      160px   4 data rows   <- the entire point
+       c2  evicted spacer   2000px   0 data rows
+       table 4200px · first data row sits 2000px below the header
+       ```
+
+       The markup is structurally right — it faithfully shows evicted spacers
+       either side of a loaded chunk, which is the bidirectional-windowing
+       shape the prose describes. It is the DEMO that fails: a reader lands on
+       the section, sees a header, then two screens of nothing, and the four
+       rows the page's own comment calls *"what a reader is looking at"* are
+       off-screen. A demo of a performance mechanism that cannot be seen
+       teaches nothing, on the page whose thesis is "measured, not guessed".
+       *Accept*: the spacer/rows/spacer shape is visible **in one view** —
+       either a bounded scroll container on the demo, or illustrative spacer
+       heights with the real formula kept in the prose. `Demo` renders preview
+       and copyable code from ONE string, so whatever is chosen is also what a
+       reader pastes: if the heights become illustrative, the markup must say
+       so where it is copied, or this trades a readability bug for a 154.2.
+       Verified by measuring the first data row's offset from the header, not
+       by looking.
+
+2. [ ] **173.2 — editable-grid "Medium": the numeric columns need alignment.**
+       Measured: headers and cells agree at the box level (`Qty` and
+       `Unit price` are both `text-align: end`, inputs inset by the 16px cell
+       padding — 807/791 and 1087/1071). What the screenshot shows is that the
+       **qty input is ~247px wide for a 3-digit value**, so the number, its
+       header and its error message sit far apart across an empty gutter, and
+       "Exceeds on-hand (200)" hangs under the middle of a wide box.
+       *Accept*: **ask the owner which reading is meant before building** — the
+       measurement rules out a simple header-vs-cell misalignment, so the fix
+       depends on whether "alignment" means the input should be sized to its
+       content, the error should align to the input's edge, or something the
+       screenshot shows that this measurement missed. Recording the
+       measurement now so the question is asked once, with evidence.
+
+**Recorded because it nearly became a false P0.** The first measurement of
+173.1 used `querySelector('#windowed-list tbody')` — **singular** — and this
+demo has THREE `<tbody>` elements. It returned the first, the evicted spacer,
+and reported *"zero data rows at every scroll position"*: a demo rendering
+nothing at all. That was written up as a serious defect before
+`querySelectorAll` showed four real rows sitting 2000px down. The real finding
+is worse for the reader and much less dramatic than the false one.
+
 ## Slice 172 — Objective grill of Slices 168, 169, 170 (2026-08-28)
 
 Dispatcher rule 3 at 3/3 `[168, 169, 170]`; rule 1 found no open P0 and GitHub

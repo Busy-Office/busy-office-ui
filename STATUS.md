@@ -15,6 +15,9 @@ Generated at: 2026-08-28 13:02 UTC
   - 171.1 — decide whether the component rubric gets the screen score's ACCEPT TEST.
   - 171.2 — a recommendation surface for components, or a recorded refusal.
   - 171.3 — layout: decide whether it is scorable at all before scoring it.
+- **Slice 173** (2 open)
+  - 173.1 — the windowed-list demo puts 2000px of blank between the header and its only content.
+  - 173.2 — editable-grid "Medium": the numeric columns need alignment.
 - **Slice —** (1 open)
   - AT runtime evidence
 
