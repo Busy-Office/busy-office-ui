@@ -106,13 +106,24 @@ every commit and would block a wake that has legitimately already reconciled.
 
 **Which dispatcher wrote a row is already recorded exactly**, and nothing had to
 be added for it. The git author timezone offset separates them — the cloud
-container is `+0000`, the owner's machine `+0800` — and **994 of the log's 1,001
-rows end in the 7-char sha of their own commit**:
+container is `+0000`, the owner's machine `+0800` — and **1,000 of the log's
+1,005 rows end in the sha of their own commit**. The five that do not are all
+from 2026-08-13, the log's first day, and carry a literal `-`.
 
 ```
 git log --format='%ad' --date=format:'%z' | sort | uniq -c   # 32 +0000 · 1432 +0800
+grep -cE '^- .* · [0-9a-f]{7,40}$' .roundtable/loop-log.md   # 1000, of 1005 `^- ` rows
 git show -s --format=%ai <sha-from-a-log-row>                # which clock wrote it
 ```
+
+**Note the `{7,40}`, and do not shorten it to `{7}`.** The first draft of this
+section did, published *994 of 1,001*, and was wrong: git's abbreviation length
+grew with the repo, so 994 rows carry a 7-char sha, **4 carry 8 and 2 carry the
+full 40**, and a regex anchored at exactly seven silently drops the newest rows —
+the ones this wake had just written. It was caught only because the command was
+written down next to the number and then run, which is the whole reason roadmap
+159 made that a rule. The figures are a snapshot from 2026-08-28: the
+denominator moved 1001 → 1005 *inside this one wake*. Re-run, do not quote.
 
 That is a *finding for 164.2*, not a closing of it: 164.2 asks whether the row
 should carry the clock itself, and the answer above is that the record already

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 03:41
+Generated at: 2026-08-28 03:46
 
 ## Open items by slice
 
@@ -22,8 +22,8 @@ Generated at: 2026-08-28 03:41
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1005 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-28 02:42   ok
+dispatch status — counter-triggered rules (1006 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-28 02:42   ok
   Objective     3 / 3 slices          since 2026-08-28 00:49   OVERDUE  [161, 162, 166]
   -> a counter is at or past its threshold; the dispatcher should pick it
 ```
@@ -43,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 03:39 · Meta · refusal · a git claim marker as a lock — it must be pushed to be visible and pages.yml deploys on every push · refused · 15ab347b
 - 2026-08-28 03:39 · Meta · refusal · partitioning the queue by loop type — it would make counter starvation a design property · refused · 15ab347b
 - 2026-08-28 03:41 · Roadmap · hygiene · Slice 165 carried no `N. [ ]` checkbox, so STATUS.md omitted it and 165's own archive command — which pins OPEN under a comment telling you to re-derive it — classified 165's own 47 lines as a closed slice to be archived. Gave it 165.1 with the Accept criteria that were loose prose, and made the command derive OPEN. Re-measured: OPEN [15,112,163,164,165], 20 closed slices / 3,019 lines, ROADMAP.md 4,212 lines · landed · b3604c18
+- 2026-08-28 03:46 · Continue · fix · 162.1's sha count was wrong on publication and the command caught it one commit later: grep -cE '^- .* · [0-9a-f]{7}$' requires exactly seven hex, but git's abbreviation grew with the repo — 994 rows carry 7 chars, 4 carry 8, 2 carry 40 — so it silently dropped the four rows this wake had just written. Corrected to 1,000 of 1,005 in LOOPS.md, ROADMAP.md and RESUME.md, pattern widened to [0-9a-f]{7,40} with a note not to shorten it. Positive control for roadmap 159's write-the-command-next-to-the-claim rule · landed · bce2cef2
 
 ## Sunset test
 

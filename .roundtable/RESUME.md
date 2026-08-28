@@ -196,7 +196,12 @@ Step 0c with its cost. Do not re-derive it; the commands are in the item.**
   `block`/`blocked`/`blocks`/`blocking`/`unblock`/`lockfile`.
 - **The two dispatchers turned out to be exactly separable with nothing built**:
   the git author TZ offset (`+0000` cloud, `+0800` owner) — 32 / 1432 of 1,464
-  commits — and 994 of the log's 1,001 rows already end in their commit's sha.
+  commits — and **1,000 of the log's 1,005 rows** already end in their commit's
+  sha (the 5 that do not are all from the log's first day). **Match the sha with
+  `[0-9a-f]{7,40}`, never `{7}`**: git's abbreviation grew with the repo, so 994
+  rows carry 7 chars, 4 carry 8 and 2 carry 40, and a `{7}`-anchored regex
+  silently drops the newest rows — it published a wrong *994 of 1,001* here
+  before being caught.
   **That is a finding FOR 164.2, not a closing of it**: 164.2 asks whether the
   row should carry the clock itself; the answer is that the record already
   exists one indirection away. Whoever takes 164.2 should start there.
@@ -308,7 +313,8 @@ time — a handover that only grows stops being read.
   by Slice 147 and nothing succeeded it. Not a wake's decision.
 - **164.2** — whether the log records which clock wrote a row. **Start from
   162.1's finding**: the git author TZ offset already separates the two
-  dispatchers exactly, and 994 of 1,001 rows carry their commit's sha, so the
+  dispatchers exactly, and 1,000 of 1,005 rows carry their commit's sha (match
+  with `[0-9a-f]{7,40}`, never `{7}`), so the
   record exists one indirection away. The open question is whether that
   indirection is acceptable, not whether the information is lost.
 - **163.1** — adjudicate the ten blocks at exactly one composition. The counts

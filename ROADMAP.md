@@ -1702,12 +1702,15 @@ the same `ROADMAP.md`, two dispatchers will always choose the *same* item.
 
        **The two dispatchers are exactly separable, and nothing had to be built
        to do it** — the git author timezone offset is the discriminator (cloud
-       container `+0000`, owner's machine `+0800`), and 994 of the log's 1,001
-       rows end in the sha of their own commit:
+       container `+0000`, owner's machine `+0800`), and 1,000 of the log's 1,005
+       rows end in the sha of their own commit (the 5 that do not are all from
+       the log's first day, 2026-08-13, and carry a literal `-`):
 
        ```
        git log --format='%ad' --date=format:'%z' | sort | uniq -c
-         # 32 +0000 · 1432 +0800   of 1,464 commits            (2026-08-28)
+         # 32 +0000 · 1432 +0800   of 1,464 commits            (2026-08-28 03:35Z)
+       grep -cE '^- .* · [0-9a-f]{7,40}$' .roundtable/loop-log.md
+         # 1000, of 1005 `^- ` rows — a snapshot; the log grows every wake
        git log --since 2026-08-27T17:57:55Z --format='%h|%ai|%s'
          # the cloud era: 36 commits · 5 same-clock runs · 4 alternations
          # handover gaps 18.5 / 29.2 / 32.8 / 30.5 minutes — they overlap
@@ -1740,8 +1743,20 @@ the same `ROADMAP.md`, two dispatchers will always choose the *same* item.
        session is open" was the sentence that had gone false** and it was still
        sitting in the file.
 
-       **An instrument was wrong on its first output, as the base rate says.**
-       The first pass at "how many commits touch `loop-log.md`" parsed
+       **TWO instruments were wrong on their first output, as the base rate
+       says — and the second is a positive control for roadmap 159's rule.**
+       The sha count above was first published as *994 of 1,001* by a regex
+       anchored at `[0-9a-f]{7}$`. Git's abbreviation length grew with the repo,
+       so **994 rows carry a 7-char sha, 4 carry 8, and 2 carry the full 40** —
+       the regex silently dropped the four rows this very wake had just written,
+       and would go on dropping every future row. It was caught only because 159's
+       rule forced the command to be written next to the number, and writing it
+       meant running it. A count of the tails is the reconciliation:
+       `grep -oE ' · [0-9a-f]{7,40}$' … | awk '{print length($0)}' | sort -n | uniq -c`
+       → `994 x 7 · 4 x 8 · 2 x 40`, and 1005 - 1000 = the 5 pre-convention rows.
+
+       The other one: the first pass at "how many commits touch `loop-log.md`"
+       parsed
        `git log --name-only` by treating any 40-character line as a sha. **31
        distinct pathnames in this repo are exactly 40 characters** —
        `apps/docs/src/pages/patterns/index.astro` among them — so it counted
