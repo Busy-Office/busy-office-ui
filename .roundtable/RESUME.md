@@ -171,7 +171,8 @@ Objective 3/3 OVERDUE [169, 170, 172]**, parser at 1,047 against a raw
 four commits, and before this wake's own row: **Standardize 0/4 ok, Objective
 1/3 ok [170]** — the other grill discharged rule 3 at 13:36Z. Parser 1,052
 against a raw 1,052.
-Read again immediately after `record_iteration.py`: FILL THIS IN FROM THE RUN.
+Read again immediately after `record_iteration.py`: **Standardize 0/4 ok,
+Objective 0/3 ok**, parser at **1,056 against a raw 1,056**.
 
 **NEXT WAKE: rule 3 was discharged twice over**, so expect rule 4 → Continue.
 Re-read `dispatch_status.py` at Step 0b rather than trusting this line.
