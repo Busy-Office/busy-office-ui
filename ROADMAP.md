@@ -231,6 +231,170 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 178 — Standardize sweep: the split that outran its own instrument, and a page that disagrees with itself (2026-08-28)
+
+Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`. Rule 1
+found no open P0 (`grep -niE '\bp0\b' ROADMAP.md` returns only closed slice headings
+and prose) and GitHub intake is empty (**0 open issues**, asked via the API, not
+assumed), so nothing preempted it. Rule 3 was armed in the same wake
+(`Objective 3 / 3 OVERDUE [173, 176, 177]`) and sits BELOW rule 2, so it stays
+armed for the next wake rather than being consumed here.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px and 390px
+in light and dark.** One docs page changed — `/concepts/scale` — and the change is
+the TEXT of one existing `<td>`: no element added, no class, no style. `check:layout`
+(127 pages) and `test:axe` (127 x 2 widths) swept everything green, `check:claims`
+verified 141 documented behaviours live, and the `DOCS_BASE=/busy-office-ui` build
+resolved the row's new link to `/busy-office-ui/components/pagination`. **That is
+what ran. It is not the same as having looked at the page, and it is not claimed to be.**
+
+1. [x] **178.1 — `report_loop_prose.py` never measured the file 169.3 created,
+       and the comment directly above its own file list states the rule that
+       required it.**
+       *Accept was*: the report's file list agrees with the set of AUTHORED prose
+       files `LOOPS.md` Step 0 through rule 4 instructs a wake to read — verified
+       by naming the property that separates them, not by listing names.
+
+       167.2's split added a `LOOPS-archive.md` row with this reasoning attached:
+       *"WITHOUT this row the move would read as LOOPS.md losing 717 words, which
+       is a shrink that never happened … An instrument that can be improved by
+       moving text out of its own scope measures filing, not size."* **169.3 did
+       the identical thing one slice later and no row was added.**
+
+       ```
+       git log --diff-filter=A --format="%H %ad %s" -- .roundtable/ENVIRONMENT.md
+       #   f52f2597  2026-08-28  169.3 — move the durable traps out of the handover
+       ```
+
+       Measured, not inferred: at `f52f2597` `RESUME.md` went **3,150 -> 1,683
+       words (-1,467)** and `ENVIRONMENT.md` appeared at **1,666**. That -1,467 is
+       the **largest single down step in RESUME.md's 65-step series** since
+       2026-08-20 (20 downs in that window) — a relocation the report scored as a
+       shrink, with the destination unmeasured entirely.
+
+       The destination is the half that matters: Step 0 instructs **every wake** to
+       read it, and its own header says it is DURABLE (*"Edit it when a trap
+       changes; do not re-copy it"*), so 158.2's ratchet premise applies to it —
+       unlike the handover it was cut from, which the report already discounts as
+       shrink-by-design. It sat at 1,666 words, `0 up / 0 down`, invisible.
+
+       **Red-proved, and the injection was asserted before it was believed.** A
+       probe copy in the same directory (never `git stash` — ENVIRONMENT.md's own
+       trap) had only the new row's path broken to `ENVIRONMENTT.md`, with the
+       replace asserting `count == 1` first; the probe exits **1** with
+       `RECONCILIATION FAILED … .roundtable/ENVIRONMENTT.md: listed here but not
+       on disk`. So the new row is genuinely reconciled against disk, not a silent
+       zero. Probe deleted.
+
+       The comment added with the row also names **what does not belong**: the
+       generated mirrors a wake opens (`STATUS.md`, `.roundtable/INDEX.md`, the
+       loop log) are written by `scripts/loops/*.py`, so a word count over them
+       measures a generator, not anyone's writing.
+
+2. [x] **178.2 — the same split misfiled `ENVIRONMENT.md` as a dated finding,
+       which is the one thing its own header says it is not.**
+       *Accept was*: `.roundtable/INDEX.md` classifies every `.roundtable` file by
+       what it is, and the classification agrees with the file's own charter.
+
+       `generate_roundtable_index.py`'s `LIVING` map had 7 entries and no
+       `ENVIRONMENT.md`, so the file fell through into **Findings — snapshots** as
+       a dateless row, inflating that count by one. It is written to repeatedly and
+       read by the loop every wake, which is that section's literal definition.
+
+       ```
+       python3 scripts/loops/generate_roundtable_index.py
+       #  before: 141 findings, 7 ledgers      after: 140 findings, 8 ledgers, 46 uncited
+       awk '/^## /{s=$0} /ENVIRONMENT\.md/{print s" || "$0}' .roundtable/INDEX.md
+       #  exactly one hit, under "## Living ledgers"
+       ```
+
+       Verified on the regenerated artefact rather than on the diff: one link, in
+       one section, and the findings count moved by exactly one.
+
+3. [x] **178.3 — the prose cadence's verdict for `/concepts/scale/`, the one
+       flagged page carrying none — and the verdict is that the page contradicts
+       itself, which is not a length problem.**
+       *Accept was* (158.2's cadence): every page `report:prose` flags — over 2x
+       the corpus median or over 2x its family median — carries a recorded verdict,
+       or gains one here.
+
+       ```
+       npm run report:prose -w docs
+       #  118 pages · median 748 · total 104,737 words
+       #  9 over 2x the corpus median (1,496); 12 over a family median; union = 14
+       ```
+
+       **13 of the 14 carry a verdict** — 158.1's twelve plus 161.1's three, 15
+       pages in all. `/concepts/scale/` is the one that does not, and it is newly
+       flagged: source words **530 (2026-08-17) -> 1,806 (HEAD)**, with **+220 on
+       `3c9964f2`, 2026-08-28** — after 166.1 last checked this property and
+       recorded zero unverdicted pages. 166.1 was right when written.
+
+       **The needle lied first, exactly as CLAUDE.md predicts.**
+       `grep -Fc -- "/concepts/scale/" ROADMAP.md ROADMAP-archive.md` reads **0**
+       — a confident absence — while `grep -Fc -- "/concepts/scale"` reads **4**.
+       One trailing slash. A plain zero was treated as a defect in the instrument
+       until re-tested, which is the only reason the four mentions were read at all
+       (none of them is a prose verdict; the finding survived).
+
+       **The verdict: honest coverage, and the page is dense rather than padded** —
+       1,168 words, **1,168 authored + 0 generated**, across 7 `<h2>`s = 167 words
+       per section against 158.1's corpus median of 103. Nothing here is
+       boilerplate and nothing is said elsewhere.
+
+       **But reading it for the verdict found a real defect the length never was.**
+       The page carries two decision tables, and they give **different answers to
+       the same question**. Both edits came from ONE commit:
+
+       ```
+       git show a1239e02 -- apps/docs/src/pages/concepts/scale.astro
+       #  + old table:  "Beyond ~5,000, scanning"  -> a windowed list
+       #  + new table:  "~2,000–50,000, scanning forward through a bounded feed" -> load-more
+       #  + new table:  "50,000+, unbounded"                                     -> a windowed list
+       ```
+
+       So at ~10,000 rows the older table (`cd44a14b`, 2026-08-17) sends a reader
+       to windowing while the newer one (`04e44344`, 2026-08-18, refined by
+       `a1239e02`) sends them to load-more. **The page itself states which is
+       right**, in the caption under the newer table: *"Windowing earns its place
+       only once scanning itself needs memory to stay flat, not merely once row
+       counts get large"* — and warns that reaching for windowing early is *"the
+       most common way to make a screen slower and less accessible at once."* The
+       old row is the stale one; 30.4b added the finer bounded/unbounded axis to
+       one table and left the other saying what it had said before.
+
+       Fixed as one row's text, so the two tables now agree:
+
+       > Beyond ~5,000, scanning → *Load-more while the feed is bounded; a windowed
+       > list only once memory must stay flat.*
+
+       **Word-neutral, measured on the rebuilt artefact**: `report:prose` reads the
+       same corpus total (104,737) and the same page total (1,168) after the fix.
+       Verified in the BUILT html, not the diff — the new row renders, the old
+       clause `"the framework's one first-party exception"` returns **0**, and the
+       `#windowed-list` anchor it points at still exists.
+
+       **No gate, and the reason is the standing one.** *"Two tables on one page
+       disagree about the same decision"* is semantic; 94.11 already paid for the
+       lesson that a gate can enforce the SHAPE that carries a property but not its
+       meaning. The mechanism that caught this is the cadence itself — a human
+       reading an outlier — which is what 158.2 says it is for.
+
+4. [x] **178.4 — the other three sweeps: zero delta, recorded in one line each,
+       per the playbook's "a clean round is worth one line, not a re-derivation".**
+
+       - `npm run report:css-repeats -w @busy-office/ui` — **74 files · 237 rules ·
+         225 distinct bodies · 8 repeated**, matching `LOOPS.md`'s table on every
+         total and every group size (x4, x3, x3, five x2). Delta zero. The
+         joined-control x4 is still **two components**, so its reopen trigger (a
+         THIRD component) is unmet.
+       - `npm run scan:dead-style -w docs` — **0 dead of 1,428 live** inline
+         declarations, screen and print.
+       - `python3 scripts/loops/report_loop_prose.py` — `LOOPS.md` now reads
+         **32 up / 1 down**, so 167.1's stated finding condition (*"`LOOPS.md`
+         still at 0 down after 167.2"*) is **not** met. No file changed accumulate
+         class.
+
 ## Slice 27 — triaged from the owner QA review (2026-08-17)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
