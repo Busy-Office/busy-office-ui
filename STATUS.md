@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 14:51 UTC
+Generated at: 2026-08-28 15:43 UTC
 
 ## Open items by slice
 
@@ -13,13 +13,15 @@ Generated at: 2026-08-28 14:51 UTC
   - 173.2 — editable-grid "Medium": the numeric columns need alignment.
 - **Slice 175** (1 open)
   - 175.4 — OWNER CALL. Step 0c's own reopen condition fired, so "accept collisions" is due a re-decision.
+- **Slice 176** (1 open)
+  - 176.2 — `polish_requeue.py` and `LOOPS.md` §3b's queue definition contradict each other, and rule 6 dispatches on the loser.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1062 iterations logged)
+dispatch status — counter-triggered rules (1065 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-08-28 21:48   ok
   Objective     1 / 3 slice           since 2026-08-28 13:57   ok  [173]
 ```
@@ -35,9 +37,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 21:54 · Roadmap · grill · 171.1 — DSA rubric: refused the screen score's accept test; no dimension passes it (not 4 of 6), and LOOPS.md's ranking claim corrected to an evidence record · refused · 0c8a05f
-- 2026-08-28 21:55 · Roadmap · grill · 171.2 — component recommendation surface: refused; both named inputs measured empty (TODO=1 page, zero varying DSA dimensions) and check:wrong-choice already double-ratchets · refused · 0cd397e
-- 2026-08-28 13:57 · Objective · grill · Objective grill 169/170/172: '## Slice 172' headed TWO slices — first collision in 710 revisions — so 172.1 named two items, check:slice-refs asks only whether a citation resolves and not whether it resolves uniquely, the self-arm script silently reclassified an owner bug report as grill-derived (1 of 3 reported, 2 of 4 honest), and dispatch_status.py's sorted({}) subtracted exactly one slice from rule 3, red-proved 3 -> 4; check-resume-charter's pointer assertion was resume.includes('ENVIRONMENT.md') so it could never see the blockquote go and had over-claimed its red-proof since its first commit (every revision carries 3-5 mentions and one blockquote); that same gate left check:repo at 169.4 and is advisory now, 44 minutes after 172.1 hardened it, while two documents said it fails the build · logged · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · a mechanism asserting which scripts check:repo runs — that asserts a preference not a fact, and check:ci-ignores already derives the CI-run set (94.11 ceremony) · refused · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · reversing 169.4's advisory call from a grill 44 minutes after it was made, without the owner — the decision is left recorded, the false documents corrected · refused · 869e32d4
 - 2026-08-28 13:57 · Meta · refusal · resolving the Step 0c collision hole by making the loser record its log row earlier — that manufactures a conflict on purpose to preserve a guarantee · refused · 869e32d4
@@ -45,6 +44,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 22:29 · Continue · build · 173.1 — windowed-list demo: spacers 2000px -> illustrative 120px stated in the copied markup, whole shape in one view at both widths and themes, red-proved; also corrected two claims documenting the reverted token-derived spacer design · landed · 3c9964f
 - 2026-08-28 14:51 · Continue · build · 173.3 — initWindowedList's first tests: 9 cases, 5 red-proved injections into the built dist; jsdom cannot give real row heights so rows carry a 32.5px stub unequal to the 40px token, and the browser half was already in check-po-app's spacerMatchesReal; the Accept's premise was false — 0 rect reads at bind, 1 at the first eviction — so two documents claiming "measured once at bind" were corrected · landed · 8d51e8b
 - 2026-08-28 14:51 · Meta · refusal · widening 173.3 into the demo's missing data-chunk-size, and re-fixing 173.1 after losing the collision — the landed fix was the better one · refused · 8d51e8b
+- 2026-08-28 15:43 · Polish · build · 176.1 — /components/scan published "Not yet scored" for five days after the 2026-08-23 Polish round scored it: the result went into polish-state.md prose only, dsa-scores.json never got the entry, and check:dsa-scores PRINTED the 39-vs-40 discrepancy in its own report line and passed. Assertion 7 asserts it per name, red-proved twice (the real defect, then an unrelated entry to prove it is not scan-shaped, injection confirmed before the red was believed); scan's six citations re-verified against the shipped artifact, recorded as a CITED re-score not the blind one the ledger asked for; ledger's self-contradictory QUEUE DRY header and 171.1-refuted driver sentence both corrected · landed · 7e7b71ea
+- 2026-08-28 15:43 · Meta · refusal · resolving 176.2 (polish_requeue.py re-queues on source change while LOOPS.md §3b admits only check:wrong-choice's TODO) inside the wake that found it — both sides are deliberate measured decisions three days apart, and either resolution changes what the dispatcher does on every clear-backlog wake · refused · 7e7b71ea
+- 2026-08-28 15:43 · Meta · refusal · manufacturing a Polish round on any of the ten re-queued surfaces — all score content 3 and are off the wrong-choice TODO, so there is no scored weakness to fix and 171.1 already measured that no DSA dimension can rank them · refused · 7e7b71ea
 
 ## Sunset test
 
