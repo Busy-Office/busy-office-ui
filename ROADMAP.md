@@ -1082,6 +1082,59 @@ Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
        nobody has shown holds for a narrative section of `ROADMAP.md`, a file
        measured at **-85.9%** over the same window.
 
+3. [ ] **170.3 — `dispatch_status.py`'s zero-slice guard hard-exits on a
+       legitimate row, and this wake tripped it live.** Found by triggering it,
+       not by reading the code.
+
+       The guard raises when *"N Continue round(s) since the last Objective
+       round and NOT ONE names a slice"*, on the stated inference that this
+       means the parser is blind. It fired after this wake recorded a
+       `Continue · fix` row for the trap-1 correction — a row that genuinely
+       belongs to no slice. **Its inference is unsound on a small window, and
+       the base rate says so:**
+
+       ```
+       python3 - <<'PY'
+       import sys,re; sys.path.insert(0,'scripts/loops'); import dispatch_status as ds
+       R=re.compile(r"^- (\S+ \S+) · ([\w-]+) · ([\w-]+) · (.*?) · (\w+) · \S+$")
+       rows=[m.groups() for m in (R.match(l.rstrip()) for l in
+             open('.roundtable/loop-log.md')) if m]
+       cs=[r for r in rows if r[1] in ds.CLOSES_A_SLICE]
+       no=[r for r in cs if not ds.slice_of(r[3])]
+       print(len(cs),"rows ·",len(no),"name no slice")
+       PY
+       # 477 rows · 117 name no slice   (24.5%, 2026-08-28)
+       ```
+
+       At 24.5% a window of ONE has roughly a one-in-four chance of tripping the
+       guard with nothing wrong, two rows ~6%, three ~1.5%. And the failure mode
+       is the expensive one: **a hard exit of the script the dispatcher reads at
+       Step 0b**, so the next wake gets no counters at all rather than a warning
+       it can weigh. Compare the reconciliation 164.1 installed one slice
+       earlier, which raises on a *provable* disagreement (parsed rows vs raw
+       bullets) rather than on an inference.
+
+       **What this wake did, said plainly so it does not read as the guard being
+       appeased**: the row was amended in place — seconds old, uncommitted — to
+       read `170 — trap 1 corrected …`, which is accurate (the correction is
+       Slice 170's work) and restored Step 0b immediately rather than leaving
+       the next wake with a dead first step. The finding is filed regardless.
+
+       *Accept*: a recorded verdict that either (a) makes the guard's severity
+       match the strength of its inference — with the threshold chosen from the
+       measured base rate and red-proved in **both** directions, that it still
+       fires on a genuinely blind parser and no longer fires on a legitimate
+       slice-less window — or (b) records the measured reason to leave it fatal,
+       naming what a wake should do when it fires. **Do not resolve this by
+       requiring writers to name a slice**: 24.5% of the log already does not,
+       164.1 refused a writer-side guard on a neighbouring field for base-rate
+       reasons, and the mode/item text is deliberately free.
+
+       **Noted, not a finding**: `dispatch_status.py` now reads
+       `Objective 1 / 3 [170]` — this grill's own follow-up row is already the
+       first slice arming the next grill, which is finding B happening inside
+       the wake that measured it.
+
 ## Slice 169 — Standardize sweep: the correction landed in the file that is rewritten every wake (2026-08-28)
 
 Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
