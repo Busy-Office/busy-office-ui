@@ -30,7 +30,8 @@ import re
 import subprocess
 import sys
 
-from _common import ROOT, LOG, connect
+import rebuild_from_log
+from _common import ROOT, LOG, connect, parse_log_line
 
 import os
 
@@ -120,9 +121,57 @@ def dispatch_counters():
     return out.stdout.strip() or "(dispatch_status.py produced no output)"
 
 
+def log_row_count():
+    """How many iteration rows the LOG holds — the raw thing, counted in the source."""
+    with open(LOG, encoding="utf-8") as f:
+        return sum(1 for line in f if parse_log_line(line))
+
+
 def last_iterations(n=10):
-    """Last n rows from loops.db (the mirror), most recent last."""
+    """Last n rows from loops.db (the mirror), most recent last.
+
+    RECONCILED AGAINST THE LOG BEFORE IT IS READ. The open-items half of this
+    generator has carried that assertion since 2026-08-25; this half did not,
+    and the gap cost real content the first time a wake ran where the mirror
+    was not already warm.
+
+    `loops.db` is git-ignored — correctly, it is derived — so a FRESH CLONE HAS
+    NO MIRROR AT ALL. On a cloud wake the container clones, `record_iteration.py`
+    creates the db and inserts its own one row, and this function then rendered
+    "Last 10 iterations" from a table holding 1, while `loop-log.md` held 1,020.
+    STATUS.md is committed, so that would have deleted nine rows of history from
+    a tracked file and reported nothing (measured 2026-08-28, roadmap 167.1).
+
+    Exactly CLAUDE.md's rule — *a derived artefact may not decide, on its own,
+    what it failed to see* — and the same shape as the STATUS.md defect that
+    wrote the rule: a mirror that under-reports, whose number then gets quoted.
+
+    Self-healing rather than fatal, because the mirror is rebuildable BY
+    DEFINITION and a hard exit here would fire after the log row was already
+    appended, leaving the two records further apart than it found them. The
+    rebuild is announced, never silent, and a disagreement that SURVIVES a
+    rebuild is a parser bug and does exit.
+    """
+    want = log_row_count()
     conn = connect()
+    have = conn.execute("SELECT count(*) FROM iterations").fetchone()[0]
+    if have != want:
+        print(
+            f"generate_status: loops.db holds {have} iteration(s), "
+            f"loop-log.md holds {want} — rebuilding the mirror from the log."
+        )
+        conn.close()
+        rebuild_from_log.main()
+        conn = connect()
+        have = conn.execute("SELECT count(*) FROM iterations").fetchone()[0]
+        if have != want:
+            conn.close()
+            raise SystemExit(
+                f"generate_status: loops.db still holds {have} of {want} log "
+                "row(s) after a rebuild. That is a parser bug, not a cold "
+                "mirror — STATUS.md would under-report history. Fix "
+                "parse_log_line before regenerating."
+            )
     rows = conn.execute(
         "SELECT ts, loop, mode, item, outcome, commit_sha FROM iterations "
         "ORDER BY id DESC LIMIT ?",

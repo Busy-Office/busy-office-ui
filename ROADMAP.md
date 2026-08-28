@@ -1254,6 +1254,62 @@ net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
        re-running the command above rather than predicted here. A recorded
        decision to move **nothing**, with the reason, also satisfies this.
 
+3. [x] **167.3 — DONE 2026-08-28, found in passing. `STATUS.md`'s history half
+       had no reconciliation, and a cloud wake silently deleted nine committed
+       rows with it.**
+
+       Not filed then fixed — found while committing 167.1, and fixed because
+       the fix is smaller than the explaining. `record_iteration.py` regenerates
+       `STATUS.md`, and the diff it produced replaced **ten** iteration rows with
+       **one**:
+
+       ```
+       python3 -c "import sqlite3; print(sqlite3.connect('.roundtable/loops.db').execute('select count(*) from iterations').fetchone()[0])"
+       grep -cE '^- 2026' .roundtable/loop-log.md
+         # mirror 2 · log 1,020        (before the fix, on a fresh container)
+       ```
+
+       **`loops.db` is git-ignored — correctly, it is derived — so a FRESH CLONE
+       HAS NO MIRROR AT ALL.** The container clones, `record_iteration.py`
+       creates the db and inserts its own row, and `last_iterations(10)` then
+       renders "Last 10 iterations" from a table holding one. `STATUS.md` is
+       **tracked**, so that commit would have deleted nine rows of history from a
+       reviewed file and reported nothing. It is not a regression from this
+       wake's change; it is latent in every cloud wake and was survived so far
+       only by mirrors that happened to be warm.
+
+       **The rule was already written and only half-applied.** CLAUDE.md's
+       storage doctrine — *"a derived artefact may not decide, on its own, what
+       it failed to see … Assert the count, not just the content"* — was written
+       FOR this generator, after `STATUS.md` listed 7 of 9 open items for weeks.
+       The open-items half has carried `ANY_OPEN` since 2026-08-25. The
+       iterations half, in the same function's file, had nothing. Same failure,
+       same file, same doctrine, one half guarded.
+
+       **Self-healing, not fatal, and the reason is measured:** a hard exit here
+       fires *after* `record_iteration.py` has appended to the log, leaving the
+       two records further apart than it found them. The mirror is rebuildable by
+       definition, so the generator now counts the raw rows in `loop-log.md`,
+       announces any disagreement, rebuilds from the log, and re-checks — and a
+       disagreement that **survives** the rebuild is a parser bug and does exit 1.
+
+       **Four branches, each red-proved end to end**, injections confirmed
+       independently of the message:
+       - warm mirror → silent, 10 rows;
+       - `rm .roundtable/loops.db` — the exact cloud condition → announces
+         `0 … 1,020`, rebuilds, 10 rows;
+       - `DELETE FROM iterations WHERE id > 3` → announces `3 … 1,020`,
+         rebuilds, 10 rows. The near-miss a mere `exists()` check would miss;
+       - a shortfall that survives a rebuild (probe copy in the same directory,
+         `log_row_count` + 1 — not `git stash`) → exit **1**, naming
+         `parse_log_line`.
+
+       **No gate.** These scripts are not in CI at all, which
+       `rebuild_from_log.py`'s own header already records as the reason its
+       assertions live in the path that writes. The same argument applies here:
+       the check belongs in the writer, and adding a CI gate for a script CI
+       never runs is the ceremony 94.11 refuses.
+
 ## Slice 166 — Standardize sweep: a fourth copy of the alias whose home says there is one (2026-08-28)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.

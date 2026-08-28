@@ -1024,3 +1024,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-28 05:42 · Meta · refusal · appending %z to new log rows — measured by injection: dispatch_status.py hard-exits on it, for an ordering the file already has, plus a permanently mixed column · refused · 75aba882
 - 2026-08-28 05:42 · Meta · refusal · backfilling offsets into the 1014 existing rows — exact via blame and still refused: record_iteration.py's standing rule is that historical rows record what was believed when written · refused · 75aba882
 - 2026-08-28 05:42 · Meta · refusal · a gate for the naive stamp — the only checkable property (the stamp carries an offset) is the option this item refused, so the gate would enforce the rejected answer · refused · 75aba882
+- 2026-08-28 06:47 · Continue · build · 167.1 — verdict the loop's own prose growth: 2 instrument, 3 honest; the cadence extends, 158.2's median instrument refused · landed · e3844c49
+- 2026-08-28 06:47 · Meta · refusal · the median-outlier test over the five loop-machinery files: n=5 has no usable median, 161.1 already recorded n=6 failing, and the spread is 102x · refused · e3844c49

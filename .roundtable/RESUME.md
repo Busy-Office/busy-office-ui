@@ -85,7 +85,18 @@ rather than a stale number.
 No prettier config and no prettier dependency exists here. The style enforcers
 are `stylelint` and the gates in `check:repo`.
 
-### 5. NEW — A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
+### 5. NEW — `loops.db` IS GIT-IGNORED, SO A FRESH CONTAINER HAS NO MIRROR
+
+**Fixed this wake (167.3), so this is now a note rather than a trap** — but know
+the shape, because other derived mirrors have it too. `record_iteration.py`
+regenerates the tracked `STATUS.md` from `loops.db`, and on a fresh clone that db
+holds only the row this wake just inserted. `STATUS.md`'s "Last 10 iterations"
+was rendered from **2 rows against the log's 1,020**, which would have committed
+nine rows of history away, silently. `generate_status.py` now counts the raw rows
+in `loop-log.md`, announces the disagreement and rebuilds. If you touch another
+mirror here, assert its count against the file first.
+
+### 6. NEW — A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
 No locale is set in this container, and GNU `wc` in the C locale swallows an em
 dash, which this repo's prose is full of:
@@ -171,6 +182,13 @@ them**, with `python3 scripts/loops/report_loop_prose.py`. In one line each:
 - **Shipped:** `scripts/loops/report_loop_prose.py`, three guards red-proved end
   to end, plus one bullet in `LOOPS.md`'s Standardize step 1 — **+73 words,
   measured by the script itself**, to the file this item is about.
+
+**167.3 closed, found in passing while committing 167.1.** `STATUS.md`'s history
+half had no reconciliation and this wake's own commit would have deleted nine
+committed iteration rows — see trap 5 above and ROADMAP 167.3. CLAUDE.md's
+storage doctrine was written for this generator and only its open-items half
+applied it; the iterations half in the same file had nothing. Four branches
+red-proved.
 
 ## Traps worth carrying forward (not slice history)
 
