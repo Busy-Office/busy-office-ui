@@ -109,7 +109,7 @@
   /* The icon stays the SAME in both states on purpose. A control whose
      glyph changes meaning ("+" then "−") asks the reader to decode a
      direction; a formatting glyph just says what is behind the button,
-     which is what Slack and Gmail both do for this exact toggle. State is
+     which is the settled convention in mainstream rich-text composers. State is
      carried by aria-expanded, by the toolbar being there or not, and by the
      pressed styling below. */
   .bo-richtext__toolbar-toggle[aria-expanded='true'] {

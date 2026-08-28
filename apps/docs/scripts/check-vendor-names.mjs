@@ -29,6 +29,35 @@
  * keep the verdict: *"a high-traffic market-data site"* carries the finding,
  * and where a finding is normative, cite the standard instead — that is the
  * durable citation anyway.
+ *
+ * ── WHAT THE RULE DOES *NOT* REACH (owner call, roadmap 160.1) ──────────────
+ *
+ * Measuring the tree turned up four populations of named product, not one, and
+ * three of them are deliberately kept. Written here so the next wake reading
+ * this denylist does not re-raise them as an oversight:
+ *
+ *  1. A product named as **UX PRECEDENT** — "the same choice <app> makes".
+ *     This is what the rule is for, and the eight that existed were rewritten
+ *     to describe the mechanism instead. Any new one is a violation.
+ *  2. A **DESIGN SYSTEM cited as evidence** for a design decision. KEPT:
+ *     LOOPS.md's Research playbook names those systems as trusted sources and
+ *     tells wakes to cite exactly them, so scrubbing here would contradict the
+ *     process that produced the citation. The owner's rule already permits
+ *     citing a standard when a finding is normative; this is that case.
+ *  3. A framework named as an **INTEROP HAZARD** — /getting-started/
+ *     troubleshooting and /concepts/cascade. KEPT, and this is the one the
+ *     triage missed: the product name IS the reader's search term. Someone
+ *     whose buttons went unstyled searches the name of what they just
+ *     installed, not "an unlayered reset" — they do not yet know their reset
+ *     is unlayered. Describing the mechanism here makes the page unfindable
+ *     for the exact failure it exists to rescue.
+ *  4. An **ATTRIBUTION** of third-party material — tokens/scales.css credits
+ *     the MIT palette its ranges seed from. KEPT on principle: an attribution
+ *     is not a mention, and removing one is a licensing question rather than a
+ *     style one.
+ *
+ * If a fifth population appears, decide it the same way — by what the name is
+ * DOING in the sentence, not by whether it is a product.
  */
 import { readFile } from 'node:fs/promises';
 import { gate, assertScanned } from './gate-report.mjs';
@@ -42,6 +71,29 @@ const NAMES = [
   'erpnext', 'frappe',
   'bitcoin', 'ethereum',
 ];
+
+/* REFUSED — the four names scrubbed by 160.1 are NOT added here, and trying it
+   is what proved why. Both halves were measured, not reasoned about:
+
+   `slack` and `excel` are ordinary English on a case-insensitive word-boundary
+   match. `slack` already appears twice in correct technical prose ("1px of
+   slack" in tabs.ts, "slack at 390px" in RfDevice.astro), so listing it fails
+   the build against text that is entirely right.
+
+   `gmail` and `notion` are not English, so they looked safe — and adding them
+   turned the build RED on four files: ROADMAP.md, ROADMAP-archive.md, a grill
+   snapshot, and loop-log.md. Every one is the repo's own decision RECORD, which
+   cannot record "these names were scrubbed and here is why" without naming
+   them. That is CLAUDE.md's removal trap in gate form: an assertion trippable
+   by its own explanation.
+
+   Scoping ROOTS away from the history was considered and refused too — those
+   files are exactly where a regrown mention would be argued for, so a gate
+   blind to them guards the wrong half of the repo.
+
+   So the scrub stands and the guard does not exist. What protects it is this
+   header plus the four-population note above; a reviewer, not a regex. Saying
+   so beats shipping a gate that fires on its own audit trail. */
 
 /* Where prose and shipped source live. Absent dirs are REPORTED, not skipped —
    the docs container copies only packages/ + apps/docs, and a gate that

@@ -1534,8 +1534,7 @@ slice so far**, so nothing was scrubbed. The two populations plausibly want
 opposite answers and a wake picking one unilaterally would either gut the
 design-reference provenance or leave the instruction half-applied.
 
-1. [ ] **160.1 — OWNER CALL: does the no-named-product rule reach design
-       references?** The consumer-app half looks like the same shape as the
+1. [x] **160.1 — OWNER CALL, DECIDED 2026-08-28: scrub population 1 only.** The consumer-app half looks like the same shape as the
        names already scrubbed and is small to fix (8 mentions, 4 files, one of
        them a shipped CSS comment). The design-system half is cited *as
        evidence* and the Research playbook tells wakes to cite exactly those.
@@ -1548,6 +1547,47 @@ design-reference provenance or leave the instruction half-applied.
        **Finding either population already compliant is a satisfying outcome** —
        re-run the command above before acting; these counts are from
        2026-08-28 and the tree moves.
+
+       **Grilled, and the two-population framing was wrong: there are FOUR**,
+       three of which are kept. Re-running the command turned up a third and
+       fourth kind this triage never saw:
+
+       - **1 · UX precedent** (8 mentions, 4 files) — **SCRUBBED.** Each
+         rewritten to the mechanism with the verdict intact, never deleted:
+         "the settled convention in mainstream composers", "the user's
+         spreadsheet — which beats any web grid at being a spreadsheet".
+         One was a shipped CSS comment.
+       - **2 · Design systems as evidence** — **KEPT.** LOOPS.md's Research
+         playbook names those systems as trusted sources and tells wakes to
+         cite exactly them; scrubbing would contradict the process that
+         produced the citation.
+       - **3 · INTEROP HAZARD** — **KEPT**, and this is the one the triage
+         missed. 11 mentions, mostly `/getting-started/troubleshooting` and
+         `/concepts/cascade`. The product name **is the reader's search term**:
+         someone whose buttons went unstyled searches what they just
+         installed, not "an unlayered reset" — they do not yet know their
+         reset is unlayered. Describing the mechanism makes the page
+         unfindable for the exact failure it exists to rescue.
+       - **4 · ATTRIBUTION** — **KEPT on principle.** `tokens/scales.css`
+         credits the MIT palette its 20 ranges seed from. An attribution is
+         not a mention. Grilling it found a real gap alongside: that credit
+         lived **only** in a generated CSS comment and was **absent from
+         `packages/core/NOTICE`**, which carries the Lucide glyph credit. Now
+         filed there, and the create-ui freshness gate (155) propagated the
+         copy automatically.
+
+       **Refused, after trying it and watching it fail: extending the
+       denylist.** `slack` and `excel` are ordinary English on a
+       case-insensitive word-boundary match — `slack` already appears twice in
+       correct prose ("1px of slack"). `gmail` and `notion` looked safe, and
+       adding them turned the build **red on four files**: `ROADMAP.md`, the
+       archive, a grill snapshot and `loop-log.md` — every one the repo's own
+       decision RECORD, which cannot say "these were scrubbed and here is why"
+       without naming them. CLAUDE.md's removal trap in gate form: an
+       assertion trippable by its own explanation. Scoping ROOTS away from the
+       history was refused too — that is exactly where a regrowth would be
+       argued for. So the scrub stands, the guard does not exist, and the
+       gate's header now says so with the four populations spelled out.
 
 ## Slice 159 — Objective grill of Slices 151, 153, 157 (2026-08-28)
 
