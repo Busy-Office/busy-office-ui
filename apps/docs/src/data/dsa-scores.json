@@ -1157,6 +1157,36 @@
           "cite": "the record-header staple — labeled facts as a real description list, values as content (badges, <time>, links) rather than strings"
         }
       }
+    },
+    "scan": {
+      "scored": "2026-08-28",
+      "$comment": "The entry that was MISSING for five days. scan was scored on Polish re-entry 2026-08-23 (loop-log bfe9798) and its three sub-3 dimensions fixed in that same round, but the result was written into .roundtable/polish-state.md prose only — so this file, the source of truth the page renders from, still had no scan and /components/scan published \"Not yet scored\". Recorded 2026-08-28 with every citation re-verified against the shipped CSS, the page source and the gates named below. Stated exactly: this is a CITED re-score, not the blind one polish-state.md asked for — the ledger's \"2 -> ?\" is still open, and this is the baseline it was missing.",
+      "dimensions": {
+        "typography": {
+          "score": 3,
+          "cite": "sets no type at all — zero font-size declarations in scan.css; the component is a frame and a wash over whatever the page already renders"
+        },
+        "colour": {
+          "score": 3,
+          "cite": "zero raw colour (success/danger tokens; Highlight only inside @media forced-colors), and two-channel WITHOUT hue: the verdict is carried by frame geometry — accepted 6px solid, rejected 18px double — plus the [data-scan-status] live region. check:claims compares the two states' computed border width/style and never their colour, in normal rendering AND under CDP forced-colors emulation"
+        },
+        "spacing": {
+          "score": 3,
+          "cite": "every literal states its reason in place: the 6px and 18px frames (peripheral vision reads mass before detail), the 600ms explicit over the 300ms token, and the z-index calc naming the toast layer it sits below"
+        },
+        "interaction": {
+          "score": 3,
+          "cite": "the page draws the platform-vs-behavior line as a four-row table plus the no-JS path — and says why the line matters MORE here: there is no native element underneath, a scanner is just a keyboard"
+        },
+        "content": {
+          "score": 3,
+          "cite": "the opener carries the required wrong-choice clause — \"Not for form validation on an ordinary screen\" — and links the alternative (the field's own message), naming the boundary as physical distance from the screen"
+        },
+        "fit": {
+          "score": 3,
+          "cite": "prescribed where the field matrix puts it and nowhere else: linked from /patterns/goods-receipt and /patterns/rf-landing, adopted by po-app's own receive screen (data-scan-input + data-scan-flash), and counted inside rf-essentials' 40 kB RF budget gate"
+        }
+      }
     }
   }
 }

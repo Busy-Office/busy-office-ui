@@ -54,7 +54,20 @@ assertScanned(
    already enforces the other direction — every component with a CSS dir must
    carry `<DsaScore component="…" />` — so what is left for this gate is the
    orphan case: a scored ENTRY that no page ever asks for, which would be a
-   score written and never shown. */
+   score written and never shown.
+
+   THE MIRROR OF THAT CASE WENT UNASSERTED FOR FIVE DAYS, and this gate
+   PRINTED it the whole time: its report line read "39 scored components (40
+   requested by a page)" and passed. The missing one was `scan` — blind-scored
+   on 2026-08-23 (Polish re-entry round, loop-log `bfe9798`), its three sub-3
+   dimensions fixed in that same round, and the result written into
+   `.roundtable/polish-state.md` prose and nowhere else. `dsa-scores.json` —
+   which its own $comment calls the SOURCE OF TRUTH for what renders — never
+   received the entry, so `/components/scan` published "Not yet scored" to
+   every reader while three internal records said it had been.
+
+   A gate that computes a discrepancy and reports it as prose has decided, on
+   its own, what it failed to see. Assertion 7 asserts the count. */
 const pagesDir = new URL('../src/pages/components/', import.meta.url);
 const rendered = new Set();
 const pageSlug = new Map();
@@ -146,4 +159,34 @@ for (const [name, entry] of components) {
   g.check(`${name}: at least one dimension actually scored`, scored.length > 0, 'every dimension is "na"');
 }
 
-g.report(`verified across ${components.length} scored components (${rendered.size} requested by a page)`);
+/* 7. THE MIRROR OF 5, and the one that shipped a public falsehood: a page
+      asks for a score that does not exist. `DsaScore.astro` renders "Not yet
+      scored — alignment scoring is proceeding in batches" for a missing
+      entry, which is deliberate and right when nobody has scored the
+      component, and a lie once somebody has and never wrote it down.
+
+      Per-name rather than a bare `rendered.size === components.length`: two
+      compensating errors (one orphan entry plus one unscored page) would
+      satisfy a count comparison while both defects shipped. Membership names
+      the offender, which is also what the failure message has to say to be
+      actionable.
+
+      No exemption list, deliberately. `check-page-shape` already requires
+      every CSS-backed component to carry <DsaScore>, so a page reaching this
+      assertion has already been judged score-worthy by another gate; a second
+      list here would let one gate's requirement be waived in the other. If a
+      component genuinely should not be scored, it loses its <DsaScore> call
+      and answers to check-page-shape instead. */
+const unscored = [...rendered].filter((name) => !scores.components[name]);
+for (const name of [...rendered].sort()) {
+  g.check(
+    `${name}: the page that renders its score has one to render`,
+    Boolean(scores.components[name]),
+    `/components/${pageSlug.get(name)} carries <DsaScore component="${name}" /> but dsa-scores.json has no "${name}" entry, so the page publishes "Not yet scored"`,
+  );
+}
+
+g.report(
+  `verified across ${components.length} scored components (${rendered.size} requested by a page` +
+    `${unscored.length ? `, ${unscored.length} of them UNSCORED: ${unscored.join(', ')}` : ', all scored'})`,
+);

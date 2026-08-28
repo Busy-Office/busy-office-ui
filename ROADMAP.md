@@ -957,6 +957,119 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 176 — Polish round 2 on `component/scan`: the score that was taken and never written down (2026-08-28)
+
+Dispatcher: rule 1 clear (no open P0; GitHub intake **0 open issues**, asked via
+the API, not assumed), rule 2 `Standardize 2 / 4 ok`, rule 3 `Objective 1 / 3 ok
+[173]`. **Rule 4 found no dispatchable item**: all five `N. [ ]` checkboxes are
+owner- or hardware-blocked (112.3 owner briefs, 112.4 on 112.3's verdict, 173.2
+*owner to pick* between two candidates, 175.4 OWNER CALL, Slice 15's AT runtime
+evidence NEEDS-RUNTIME). Rule 5 found no metric with two consecutive readings
+and no budget breach (`rf-essentials` 36.4 kB against its 40 kB gate). **Rule 6
+fired** — `polish_requeue.py --apply` marked ten surfaces re-queued, and the
+ledger's own re-entry section named a scan re-score as pending.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** One rendered change ships in this slice — `/components/scan`'s
+"Design-system alignment" section stops saying *"Not yet scored"* and starts
+rendering the six-row table every other component page already renders, from the
+same `DsaScore.astro` component with no markup or CSS change. `git diff --stat`
+names no file under `packages/core/src` and no `.css` anywhere. **That section's
+appearance at 390px was NOT looked at**; it is the same component and the same
+table markup as the 39 pages that already carry it, which is an argument, not a
+verification.
+
+1. [x] **176.1 — DONE. `/components/scan` published "Not yet scored" for five
+       days after it was scored.** Polish re-entry scored `scan` on 2026-08-23
+       (`bfe9798`), found `colour`/`interaction`/`fit` all at 2, and fixed all
+       three in that same round. The result was written into
+       `.roundtable/polish-state.md` prose **and nowhere else** —
+       `dsa-scores.json`, which its own `$comment` calls the SOURCE OF TRUTH for
+       what renders, never received a `scan` entry, and `DsaScore.astro`
+       correctly renders *"Not yet scored — alignment scoring is proceeding in
+       batches"* for a missing one.
+
+       ```
+       node -e "console.log('scan' in require('./apps/docs/src/data/dsa-scores.json').components)"
+       # false  (before this slice)
+       npm run check:dsa-scores -w docs
+       # "39 scored components (40 requested by a page)"   <- printed, unasserted
+       ```
+
+       **The gate computed the discrepancy and reported it as prose.** Its
+       assertion 5 checks that every scored entry is rendered by some page; the
+       mirror — every page-requested component has an entry — was never written,
+       and its own header explains why it was thought unnecessary
+       (`check-page-shape` enforces that CSS-backed components carry
+       `<DsaScore>`, which is a different claim). This is CLAUDE.md's rule
+       exactly: *a derived artefact may not decide, on its own, what it failed to
+       see. Assert the count, not just the content.*
+
+       *Accept*: (a) `check:dsa-scores` names, per component, any page that
+       renders a score with no entry behind it, and its report line states
+       whether the two counts agree rather than printing both and leaving the
+       reader to subtract; (b) the assertion has been watched failing, with the
+       injection confirmed to have landed before the red result was believed;
+       (c) `scan` carries an entry whose six citations were each re-verified
+       against the shipped artifact this wake, and the entry states what kind of
+       score it is rather than implying it is the blind one the ledger asked
+       for; (d) the full cloud gate set is green.
+
+       **Met.** (a) assertion 7, per name, 40 checks; the report line now ends
+       `all scored` or names the offenders. (b) red-proved **twice** — first by
+       the real defect, before the entry existed
+       (`FAIL scan: … dsa-scores.json has no "scan" entry`), then by deleting an
+       *unrelated* entry and confirming the gate names that one instead
+       (`FAIL kv: …`), with `'kv' in components` asserted `false` before the run
+       and `true` after restore, and `git diff --stat` confirming the restore
+       was byte-exact. The second proof matters because the first could have
+       been satisfied by a check hard-coded to `scan`. (c) recorded — no
+       `font-size` and no raw colour in `scan.css`; the 6px-solid vs 18px-double
+       verdict geometry asserted by `check:claims` in normal rendering *and*
+       under CDP forced-colors emulation; the platform-vs-behavior table on the
+       page; `data-scan-flash` adopted at `examples/po-app/server.mjs:1095`. The
+       entry's `$comment` says outright that this is a **cited re-score, not a
+       blind one**, so it is not counted as §3b's independent second opinion —
+       the blind re-score is still owed and now has a baseline. (d) below.
+
+2. [ ] **176.2 — `polish_requeue.py` and `LOOPS.md` §3b's queue definition
+       contradict each other, and rule 6 dispatches on the loser.** Found while
+       executing rule 6, recorded rather than resolved: both sides are
+       deliberate, measured decisions three days apart, and neither names the
+       other.
+
+       - **2026-08-25** added `polish_requeue.py` precisely so a surface whose
+         source moved re-enters the queue — the ledger had said so since it was
+         written and nothing executed it, so `component/sidebar-nav` sat at 1/3
+         rounds while its page changed twice in a day.
+       - **2026-08-28 (171.1)** narrowed the component queue to
+         `check:wrong-choice`'s TODO set **and only that**, because no DSA
+         dimension can rank.
+
+       Together they misfire. `--apply` re-queued **10** surfaces this wake;
+       every one scores `content: 3` and is off the TODO, so the Polish round
+       they trigger has no scored weakness to fix. Re-measured this wake over
+       40 components: `typography`/`colour`/`spacing` have **1** distinct value
+       each, `interaction` **2** (3 or `na`), `content` **2** and `fit` **2** —
+       and in both of the latter the single non-3 is `date`, which the ledger
+       SKIPS as deprecated. The commands are in `.roundtable/polish-state.md`.
+
+       Resolving it either way changes what the dispatcher does on a
+       clear-backlog wake — honouring the TODO makes rule 6 effectively
+       unreachable and hands every such wake to Research (rule 7), which is what
+       the ledger's own header used to promise; keeping the re-queue needs an
+       instrument that can rank a re-entered surface, and 171.1 measured that
+       none of the six exists. Both are direction, and direction has been the
+       owner's in every slice so far.
+
+       *Accept*: a recorded decision that either (a) makes `polish_requeue.py`'s
+       output agree with §3b's queue definition, or (b) restores a rankable
+       instrument for a re-entered surface, or (c) keeps both and states in
+       `LOOPS.md` what a Polish round on a `content: 3` surface is supposed to
+       do — **in each case naming the consequence for how often rule 6 fires,
+       measured against the log rather than predicted.** Finding that the
+       contradiction is benign is a satisfying outcome and closes this item.
+
 ## Slice 175 — Objective grill of Slices 169, 170, 172 (2026-08-28)
 
 Dispatcher rule 3 at 3/3 `[169, 170, 172]`; rule 1 found no open P0 and GitHub
