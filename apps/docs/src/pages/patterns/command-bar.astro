@@ -60,7 +60,20 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
 
 <!-- Three declarations are all that separates a palette from a dialog: -->
 <style>
-  .cmd-palette { margin-block-start: 12vh; margin-inline: auto; overflow: hidden; }
+  /* overflow MUST stay visible. With overflow:hidden the results listbox does
+     not render at all — measured, not guessed. The listbox is a [popover] and
+     this dialog is its containing block, so clipping the dialog clips the
+     results away and the palette silently becomes a search box that finds
+     nothing. See "The listbox is a popover" on this page. */
+  .cmd-palette { margin-block-start: 12vh; margin-inline: auto; overflow: visible; }
+  /* Padding, or the hint row sits flush in the corner of an 8px-rounded box
+     and reads as a separate floating bar rather than part of the palette. */
+  .cmd-palette__hint {
+    display: flex; gap: var(--bo-space-4);
+    font-size: var(--bo-font-size-xs);
+    padding: var(--bo-space-2) var(--bo-space-3);
+    border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+  }
 </style>`;
 ---
 <Gallery title="Pattern: command bar">
@@ -284,7 +297,17 @@ const markup = `<dialog id="cmd" class="bo-dialog cmd-palette" aria-label="Comma
        page, not in the framework: exactly one dialog in this tree is
        top-anchored, and nothing ships for one screen. */
     .cmd-palette { margin-block-start: 12vh; margin-inline: auto; overflow: visible; }
-    .cmd-palette__hint { display: flex; gap: var(--bo-space-4); font-size: var(--bo-font-size-xs); }
+    /* Padded, and separated from the input. Without this the hint row sits
+       flush against the corner of an 8px-rounded dialog with zero inset, so
+       the palette reads as two stacked full-bleed strips instead of one
+       object (owner screenshot, 2026-08-28). Measured before: hint width ==
+       dialog width == 512px, padding 0. */
+    .cmd-palette__hint {
+      display: flex; gap: var(--bo-space-4);
+      font-size: var(--bo-font-size-xs);
+      padding: var(--bo-space-2) var(--bo-space-3);
+      border-block-end: var(--bo-border-width) solid var(--bo-color-border-default);
+    }
 
     /* Clear sits INSIDE the input's box, not after it — this page's own
        "the listbox is a popover" rule, which I broke on the first attempt.

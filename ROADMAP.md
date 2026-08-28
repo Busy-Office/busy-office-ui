@@ -1067,6 +1067,47 @@ parsed — the *first* parser reconciled at 824 and was rewritten (finding C).
        recognition step, which is the property worth sweeping for and is not
        "does the file contain a regex".
 
+## Slice 172 — Owner: /patterns/command-bar (2026-08-28)
+
+**Owner feedback**, a screenshot of the open palette. Investigated live rather
+than read off the crop, and it turned up two defects — the visible one and a
+worse one behind it.
+
+1. [x] **172.1 — DONE. The copyable CSS shipped `overflow: hidden`, which
+       silently removes the results list.** The page devotes a whole section to
+       *"The listbox is a popover — so nothing sits below it"*, and the block a
+       reader pastes carried the one value that breaks it. **Measured, both
+       ways:** with `overflow: visible` the listbox renders below the dialog;
+       with `hidden` it measures **zero height and does not render at all** —
+       the dialog is the popover's containing block. So a reader copying the
+       sample got a command bar that finds nothing.
+       Same shape as 154.2, on a different page. Both style blocks now agree,
+       and the value carries its reason inline.
+
+2. [x] **172.2 — DONE. The hint strip had zero padding and read as a separate
+       floating bar** — which is what the owner's screenshot shows. Measured
+       before: `hint width == dialog width == 512px`, `padding: 0`, on a dialog
+       with `border-radius: 8px`, so the row sat flush in the corner and the
+       palette read as two stacked full-bleed strips. Now padded with a
+       separator from the input; verified at 1440 light and 390 dark.
+
+**Two executable claims added**, since the fix put a runtime assertion into code
+a reader pastes: one drives the live palette and asserts `hidden` really does
+clip the results away, one asserts the copyable rule carries `visible`.
+
+**Both red-proofs failed on their first attempt, in different ways, and the
+lesson is the same each time — confirm the injection, not the file.**
+- The static claim tripped on **its own explanation**: the sample's comment
+  says *"With overflow:hidden the results listbox does not render"*, so a
+  raw-text assertion matched the prose. It now strips comments and asserts the
+  DECLARATION. CLAUDE.md's removal rule, hit live.
+- The red-proof itself stayed green because **two copies of the rule exist**
+  (copyable and live demo) and the first injection hit the wrong one. An
+  assertion on the match count caught it. And when the right one was injected,
+  `grep` on the built page still read **0** — the sample is syntax-highlighted,
+  so the literal never appears in the raw HTML while the DOM sees it fine. The
+  claim failing is what proved the injection landed.
+
 ## Slice 171 — Owner wishlist: score layout / usability / performance, then recommend (2026-08-28)
 
 **Owner:** *"Score the layout, usability, performance — after getting the score,

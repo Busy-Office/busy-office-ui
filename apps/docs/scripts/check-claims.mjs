@@ -1563,6 +1563,59 @@ check(
   );
 }
 
+/* command-bar: the palette's own CSS comment now asserts that `overflow`
+   must stay visible or the results listbox does not render. That is a runtime
+   claim inside code a reader PASTES, so it is executed here rather than
+   trusted — and it was true when written: with overflow:hidden the listbox
+   measured zero height, because the dialog is the popover's containing block
+   (owner report, 2026-08-28).
+
+   Both halves are checked: the live demo behaves, and the COPYABLE block says
+   the value that makes it behave. 154.2 is the precedent — a canonical sample
+   that differed from its demo in a way that silently broke the feature. */
+await visit('/patterns/command-bar/');
+const cmdBar = await page.evaluate(async () => {
+  const dlg = document.querySelector('dialog.cmd-palette');
+  const type = async (overflow) => {
+    if (dlg.open) dlg.close();
+    dlg.style.overflow = overflow;
+    dlg.showModal();
+    const input = dlg.querySelector('input');
+    input.value = 'PO';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 250));
+    const box = dlg.querySelector('[role="listbox"]')?.getBoundingClientRect();
+    const out = !!box && box.height > 0;
+    dlg.close();
+    dlg.style.overflow = '';
+    return out;
+  };
+  const shipped = getComputedStyle(dlg).overflow;
+  return { shipped, rendersAsShipped: await type(''), clippedByHidden: !(await type('hidden')) };
+});
+check(
+  'command-bar: the palette ships overflow:visible, and hidden really does clip the results away',
+  cmdBar.shipped === 'visible' && cmdBar.rendersAsShipped && cmdBar.clippedByHidden,
+  JSON.stringify(cmdBar),
+);
+const cmdSample = await page.evaluate(() =>
+  [...document.querySelectorAll('pre code')]
+    .map((c) => c.textContent)
+    .filter((t) => t.includes('.cmd-palette {'))
+    .join('\n'),
+);
+/* Comments stripped FIRST. The sample's own comment explains what
+   overflow:hidden does, so a raw-text assertion is tripped by its own
+   explanation — CLAUDE.md's removal rule, and this check hit it on its first
+   run. Assert the DECLARATION, never the prose around it. */
+const cmdDecls = cmdSample.replace(/\/\*[\s\S]*?\*\//g, ' ');
+const cmdRule = cmdDecls.match(/\.cmd-palette\s*\{[^}]*\}/)?.[0] ?? '';
+check(
+  'command-bar: the copyable CSS carries the value the demo depends on',
+  /overflow:\s*visible/.test(cmdRule) && !/overflow:\s*hidden/.test(cmdRule),
+  cmdRule || '(no .cmd-palette rule found in any code sample)',
+);
+
 /* collapsible-card — the docs state the two-channel contract outright: the
    trigger's aria-expanded AND the panel's data-state. Drift to one channel is
    invisible, because the chevron and the height animation both keep working. */
