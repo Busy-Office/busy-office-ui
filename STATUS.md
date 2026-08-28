@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 23:45 UTC
+Generated at: 2026-08-28 23:52 UTC
 
 ## Open items by slice
 
@@ -21,7 +21,7 @@ Generated at: 2026-08-28 23:45 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1084 iterations logged)
+dispatch status — counter-triggered rules (1086 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-28 19:49   ok
   Objective     1 / 3 slice           since 2026-08-28 21:44   ok  [180]
 ```
@@ -38,8 +38,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 19:49 · Standardize · sweep · 178 — 169.3's split outran two instruments that classify loop files (report_loop_prose.py never measured ENVIRONMENT.md; generate_roundtable_index.py filed it as a dated snapshot), and the prose cadence's verdict for /concepts/scale found the page giving two different answers for scanning at ~10,000 rows. css-repeats delta 0, dead-style 0 · landed · e5edf61f
-- 2026-08-28 19:49 · Meta · refusal · a gate for 'two tables on one page disagree about the same decision' — semantic, not shape; 94.11's line, and the cadence is the mechanism that caught it · refused · e5edf61f
 - 2026-08-28 21:44 · Objective · grill · 179 — grill of 173/176/177/178: report_loop_prose reconciled in only one direction (the arm that has never failed; 9 of 15 commits red on the reverse, red-proved with the old script shown passing the same injection), and Slice 177's 'both readings agree' is a ratio and its denominator — regrowth per cycle 4,262->3,367->2,364 and peak 9,824->4,461->3,872 both FALL, so on rule 4's own cost the sweep is converging. css-repeats/wrong-choice/slice-refs re-derived, all held · landed · 74d8c2b8
 - 2026-08-28 21:44 · Meta · refusal · a gate for check:selftests' blind spot over scripts/loops/*.py — 2 of 9 carry a tag, both honest, zero defects behind the gap, so a gate would be ceremony (94.11) · refused · 74d8c2b8
 - 2026-08-28 22:41 · Roadmap · plan · Slice 180 triage — P0 found by the wake's own Step 0 build: main and the Pages deploy red since 21:46Z (CI run 33213989733, all 5 jobs), check:slice-refs reading the loop-name tally 'Continue 4 · Roadmap 2 · Polish 2' as a citation to a Slice 2 that never existed · triaged · 615eeb31
@@ -48,6 +46,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 07:43 · Meta · refusal · a status-vs-timeline shared-vocabulary rule — Partial/Modified are legitimate statuses that must not be workflow stages; the rule would force a wrong model onto 5 shipped pages · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · an enum-value truncation rule — badge.astro already says 'the tone word IS the text' and in-tree violations are zero · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · a bulk-action-bar treatment rule — .bo-data-table__bulk-actions already ships with role=group and real bo-btn variants · refused · b95d88a
+- 2026-08-28 23:52 · Polish · reconcile · 182.1/182.2 — state-patterns round 2: skeleton·colour cited the token pairing ef64c745 removed; cite repaired, score NOT re-taken, blind re-score owed · landed · 9cbd0d1c
+- 2026-08-28 23:52 · Meta · refusal · a gate asserting every token named in a DSA cite exists in that component's CSS — base rate 1 of 28, and the repair trips the detector (101.3 + assert-on-structure) · refused · 9cbd0d1c
 
 ## Sunset test
 

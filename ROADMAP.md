@@ -340,6 +340,28 @@ and the second in a row to merge cleanly** — the same evidence 175.4 is open o
        JSON is the only variable. The probe stayed in the scratchpad; its numbers
        are snapshots, so re-run it rather than quoting them.
 
+3. [x] **182.3 — two counter observations, recorded rather than acted on.**
+       Both came from 166.5's discipline — write the prediction down, then read
+       `dispatch_status.py` immediately after recording.
+
+       - **The prediction was wrong by one, for a knowable reason.** Predicted
+         1085 rows, actual **1086**. `record_iteration.py --also-refused` emits
+         its own `Meta · refusal` row, so one invocation carrying a refusal
+         writes **two** rows, not one. Rules 2 and 3 held exactly as predicted
+         (`1/4`, `1/3`). A wake predicting row counts must add one per
+         `--also-refused`.
+       - **161.4's premise is now false, and the rule is still right.** It
+         excluded `Polish` from the slice-closing set on the measured ground
+         that `Meta`/`Polish`/`Optimize` "have never named a slice at all".
+         This wake's Polish row names 182.1/182.2, so that is no longer true.
+         The counter behaved correctly anyway — rule 3 stayed at `1/3` — because
+         the exclusion is by loop name, not by whether a row happens to cite a
+         slice. **Recorded, not fixed**: 170 finding B already refuses adding a
+         sixth classifying regex to this rule, and changing the set would need
+         the same whole-log replay 161.4 ran (adding Explore and Objective moved
+         the crossing count 23 → 23). Flagged so the next wake that re-derives
+         161.4's premise finds this instead of re-measuring it.
+
 ## Slice 180 — P0: a loop-name tally is read as a slice citation, and `main` has been red since (2026-08-28)
 
 **Dispatcher rule 1, and the P0 was found by the wake rather than reported.**

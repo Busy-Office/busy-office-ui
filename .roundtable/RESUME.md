@@ -23,90 +23,84 @@ made but not yet written down.**
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 1 → Continue,
-bug mode, Slice 180**). Working tree clean at hand-off; the wake's commits went
-out as one push.
-
-No collision. `git branch --show-current` answered EMPTY at Step 0 (detached
-container, ENVIRONMENT.md trap 1), fixed with `git checkout -B main origin/main`
-before the first commit; `origin/main` arrived as a forced update
-(`17b3ba6...f7c2070`). The mandated pre-commit `git fetch origin main` found it
-unmoved at `f7c20708`, confirmed against `git ls-remote --heads origin`, which is
-the authority.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 6 → Polish,
+Slice 182**). Working tree clean at hand-off; the wake's commits went out as one
+push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
 goes stale between wakes. Trust the `N. [ ]` checkboxes, not this section.
 
-## ⚠ THE BRANCH WAS RED WHEN THIS WAKE STARTED, AND NOTHING HAD NOTICED
+## ⚠ A COLLISION HAPPENED, AND THE PRE-COMMIT FETCH IS THE ONLY THING THAT SAW IT
 
-**Rule 1 fired on a P0 the wake found itself.** There was no report and no open
-issue; `npm run docs:build` — run as ordinary Step 0 environment setup on a
-clean checkout of `origin/main` at `f7c2070` — exited 1. Then the API, not an
-assumption: CI run `33213989733` and Deploy-docs-to-Pages run `33213989703` were
-both `failure` on that same sha, created `21:46:17Z`, all **5** CI jobs dying in
-`docs build` → `check:repo`. **The docs site had not deployed for 47 minutes.**
+`origin/main` moved **`65139a8` → `fb25abf5` mid-wake** — the other dispatcher's
+PO-screenshot triage. It had already taken **Slice 181**, and this wake had
+written its own 181. Two sections under one number is exactly what
+`check:slice-refs` fails on, so `main` would have gone red on the push.
 
-`check:slice-refs` had read the loop-name tally `Meta 12 · Continue 4 ·
-Roadmap 2 · Polish 2 · Standardize 1` in Slice 179's own grill report as a
-citation to a `## Slice 2` that has never existed. Fixed in Slice 180, green,
-pushed.
+Nothing caught it except `LOOPS.md` Step 0c's mandated `git fetch origin main`
+**immediately before the first commit**. Nothing else could have: their diff is
+`ROADMAP.md` + `loop-log.md` + `STATUS.md`, this wake's work was
+`dsa-scores.json` + `polish-state.md`, and the ROADMAP hunks are ~1,600 lines
+apart, so the rebase was a **clean fast-forward with no conflict**. That is the
+**third collision and the second in a row to merge cleanly** — the evidence
+175.4 is open on, now with one more data point.
 
-**The lesson for the NEXT wake is procedural, and it is the one thing worth
-carrying forward from this:** the previous wake pushed prose it never built.
-Nothing in `.roundtable/` renders, so it *felt* unnecessary — and CI's
-`paths-ignore` excludes `.roundtable/**` from *triggering* a run, which reads
-like permission. It is not: the directory is still **scanned** by a gate that
-runs first in `check:repo`. **Run `npm run check:repo -w docs` before pushing a
-commit that touches `.roundtable/` at all.** It takes seconds and it is the
-whole failure mode.
+**Run that fetch. It is a process rule with nothing mechanical behind it.** Also
+note: the other dispatcher appended its slice at the END of `ROADMAP.md`
+(line ~1859), not at the top where 178/179/180 sit. Both orderings are in the
+file now; this wake followed the newest-first convention at the top.
 
-## What landed this wake (2026-08-28, cloud, rule 1 → Slice 180)
+## What landed this wake (2026-08-28, cloud, rule 6 → Slice 182)
 
-- **180.1 — the extractor no longer reads a loop-name tally as a citation**,
-  and the gate is retagged `@heuristic`, which the extraction arm always was;
-  only the `^## Slice N` resolution arm is exact. Skip predicate: a match with a
-  ` · `-joined `Word Number` neighbour on either side. **Base rate measured on
-  the unedited tree before shipping: 1 of 461 matches** — the one false
-  positive.
-- **Case was tried first and refused, measured**: of 461 matches, `roadmap` 434
-  · `ROADMAP` 15 · `Roadmap` 12, and **11 of those 12 Title-case matches are
-  genuine sentence-initial citations**. A case rule would have broken eleven
-  real citations to fix one tally.
-- **Red-proved in both directions**, injections confirmed to have landed first:
-  `roadmap 999.9` → new gate RED naming it; a differently-worded tally
-  (`Objective 3 · Roadmap 7 · Explore 1`) → new gate GREEN (exit 0) while the
-  **old** extractor, run from a probe copy in the same directory, goes RED
-  naming that tally's own number, exit 1. That second row is the discriminating
-  one. *(Written that way on purpose: spelling the failure line verbatim puts a
-  citation-shaped string pointing nowhere into a scanned file, and this gate
-  correctly fails on it — which is how this paragraph was caught. Describe the
-  number; do not spell it.)* The
-  10-case `--self-test` was itself red-proved by stubbing the classifier: 4 of
-  10 WRONG, exit 1.
-- **Three stale snapshots removed** from that gate: "148 slice numbers are
-  cited", twice, plus the reduced-build-context message that told a reader "the
-  148 slice citations were NOT verified here" — while the run line read 362. The
-  gate prints its own count; the header now names the property (177's rule).
-- **Two deliberate non-changes, both with the measurement behind them.** The
-  grill report's tally line is left exactly as written — rewording it restores
-  green and fixes nothing, and left in the tree it is a live fixture. And the
-  gate still scans `.roundtable/`, because **42** distinct refs are cited from
-  there and **16 from nowhere else**.
+- **182.1 — `skeleton · colour` cited the token pairing that was REMOVED.** The
+  cite read *"gradient built from bg-muted/bg-hover tokens"*; the shipped CSS
+  sweeps `--bo-color-bg-muted` to `--bo-color-skeleton-highlight`.
+  `bg-muted/bg-hover` is the pairing `ef64c745` deleted on 2026-08-25 because
+  the two tokens are byte-identical in both themes — the shimmer swept from a
+  colour to itself. Cite written `479cc6a9`, 2026-08-21. So the **evidence for
+  `colour: 3` described the bug**, published verbatim on
+  `/components/state-patterns` for three days.
+- **Surface picked on a measured discriminator, not a coin toss.** Nine surfaces
+  re-queued, all `content: 3` at `1/3` — 176.1's unbroken tie. `state-patterns`
+  is the **only page with two rubric entries** (`skeleton` + `state`; 39 pages,
+  40 entries), so every per-component arm gets two chances to disagree.
+- **The score was NOT re-taken; `scored` stays `2026-08-23`.** §3b step 4 needs a
+  blind re-score by a second agent and this wake could not run one. **`skeleton ·
+  colour` is owed a blind re-score** — the same debt `scan`'s three dimensions
+  carry. Do not read the repaired cite as a fresh score.
+- **182.2 — the obvious gate was measured and REFUSED.** 28 token references
+  across 240 cites, **1** absent from its component's CSS (this one); `money`'s
+  is adjudicated false (`.bo-input` is in `components/form/`, which `money.css`
+  composes). Three dead instruments came first — `--bo-*`-only could not see the
+  shorthand; token stems gave a **plain zero of 240** (stems are
+  `color-bg-muted`, cites write `bg-muted`); aliases gave 14, of which 13 were
+  the bare CSS property `font-size` inside negations.
+- **The repair tripped the detector, and that is the load-bearing half of the
+  refusal.** The first correction explained what `bg-hover` had been, and the
+  probe went red on the fix — CLAUDE.md's *assert on structure, never on raw
+  text* trap, hit live. It also decided the shipped wording: `DsaScore` renders
+  the cite **verbatim to readers**, so loop forensics belong in the ledger, not
+  in a published cite. Probe left in the scratchpad deliberately; it is not a
+  gate.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**Nothing in this wake renders, so nothing visual went unverified.**
-`git diff --stat` names `ROADMAP.md`, `.roundtable/`, and one docs *script*
-(`apps/docs/scripts/check-slice-refs.mjs`) — no `.css`, no `.astro`, nothing
-under `packages/core/src`. That is checkable from the diff rather than asserted.
+**This wake's change is one JSON string** rendered by `DsaScore` as running text
+inside an existing block — `git diff --stat` names only `apps/docs/src/data/
+dsa-scores.json`, `ROADMAP.md` and `.roundtable/`; no `.css`, no `.astro`,
+nothing under `packages/core/src`. That is an argument from the diff, **not a
+visual check, and it was not claimed as one.**
 
-Gates run, all green: core `build` + `test` (146), `docs:build`, `check:repo`
-(re-run after the last prose edit), `check:claims` (141 behaviours),
-`check:layout` (127 pages), `test:axe`.
+Gates run on the merged tree, all green: core `build` + `test` (146),
+`docs:build`, `check:repo` (slice-refs **368** citations, **164** slice numbers
+each heading one section), `check:dsa-scores` (**360** assertions, 40 of 40),
+`check:claims` (141), `check:layout` (127), `test:axe` (127 x 2). The fix was
+checked against the **rendered** page: built `state-patterns/index.html` carries
+`skeleton-highlight` once and `bg-muted/bg-hover` zero times.
 
-**The carried-forward visual items have now waited SEVEN wakes.** None is
+**The carried-forward visual items have now waited EIGHT wakes.** None is
 dispatchable here; all need a local wake with a browser:
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
@@ -124,35 +118,70 @@ dispatchable here; all need a local wake with a browser:
   tripping on prose about itself. Count `<DsaScore` files, or count built pages
   carrying "Design-system alignment": both read **39**.
 - `/components/scan`'s DSA table at 390px — new in 176.1, never seen.
+- **`/components/state-patterns`'s DSA table at 390px — new this wake.** The
+  repaired `colour` cite is longer than the one it replaced; it is running text
+  in a table cell, so wrapping is the only thing at risk, and it was not looked
+  at.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 - `/concepts/scale`'s first decision table — 178.3 changed one `<td>`'s text and
   could not look at it.
 
 **Traps exercised for real this wake:** 1 (detached HEAD — `git branch
---show-current` EMPTY, caught before the first commit), 1b, 1c, 2 (unshallowed:
-`--is-shallow-repository` read `true`, now 1,558 commits — load-bearing for the
-Direction derivation below), 3, 6 (a background build's empty output file read
-as "still running", not as done). Not exercised: 4, 5, 7.
-
-## Rule 1 fired this wake — what rules 2-8 read on the way past
-
-Dispatcher, in the order `LOOPS.md` states them. Rule 1 was reached *twice*: it
-was clear at Step 1 (no open P0 in `ROADMAP.md`; GitHub intake **0 open
-issues**, asked via the API, not assumed), and then the wake's own build
-produced one, which is what it was triaged and dispatched as.
-
-The counters were read before the P0 surfaced and are recorded because they cost
-nothing: rule 2 `Standardize 0 / 4 ok`, rule 3 `Objective 0 / 3 ok`. Rules 4-8
-were not reached. Had the P0 not existed, rule 4 would have found nothing (all
-six open items owner-blocked: `112.3`, `112.4`, `173.2`, `175.4`, `176.3`,
-`15.12`), rule 5 nothing (no metric with two consecutive readings; `rf-essentials`
-measured **36.4 kB against a 40 kB** budget this wake), and **rule 6 → Polish**
-would have taken the wake, with `polish_requeue.py --check` re-queueing the same
-ten `content: 3` surfaces at `1/3`.
+--show-current` EMPTY at Step 0, fixed before the first commit), 1b, 1c, 2
+(unshallowed: `--is-shallow-repository` read `true`, now 1,560 commits), 3, 5
+(`loops.db` absent on the fresh container — `record_iteration.py`'s guard
+handled it). Not exercised: 4, 6, 7.
 
 **`polish_requeue.py` needs `packages/core/dist/api.json`** and dies with a
 traceback on a fresh container before `npm run build -w @busy-office/ui`. Build
-core first; this is ordering, not a defect.
+core first; this is ordering, not a defect. Confirmed again this wake.
+
+## Rule 6 fired this wake — what rules 1-5 read on the way past
+
+Dispatcher, in the order `LOOPS.md` states them. Every reading re-derived, not
+copied from the previous handover.
+
+- **Rule 1 — no P0.** GitHub intake **0 open issues** (asked via the API, not
+  assumed), no open P0 in `ROADMAP.md`, and — the check that found last wake's
+  P0 — the full gate chain run on a clean checkout of `origin/main` at
+  `65139a8` came back **green on all seven**. The branch was healthy.
+- **Rule 2 — `Standardize 1 / 4 ok`.** Not armed.
+- **Rule 3 — `Objective 1 / 3 ok` [180]**. Not armed.
+- **Rule 4 — nothing dispatchable.** All six open items re-read this wake and
+  all owner-blocked: `112.3` (owner briefs), `112.4` (on 112.3's verdict),
+  `173.2` (owner to pick between two designs), `175.4`, `176.3` (both OWNER
+  CALL), `15.12` (needs owner hardware + a screen reader).
+- **Rule 5 — nothing.** No metric with two consecutive regressions:
+  `ci-wall-time` flat at **275s** over its last three readings, `rf-essentials`
+  **36.4 kB against a 40 kB** budget this wake.
+- **Rule 6 → Polish.** `polish_requeue.py --apply` re-queued **9** surfaces.
+
+## Counters after this wake
+
+Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
+`record_iteration.py`**, per 166.5's lesson.
+
+**Prediction written down first, then checked — and it was WRONG by one, which
+is the whole point of writing it down.** Before recording: `Standardize 1/4`,
+`Objective 1/3`, parser 1,084 against a raw `grep -c "^- "` of 1,084. Predicted
+**1,085** (one Polish row), rule 2 unchanged at `1/4` (a Polish row is not a
+Continue round), rule 3 unchanged at `1/3` (161.4 excludes Polish from the
+slice-closing set).
+
+After recording: `Standardize 1/4 ok`, `Objective 1/3 ok`, parser **1,086**
+against a raw `grep -c "^- "` of **1,086**. **Rules 2 and 3 exact; the row count
+off by one.**
+
+**Why, and it is knowable in advance: `--also-refused` emits its OWN `Meta ·
+refusal` row.** One `record_iteration.py` call carrying a refusal writes **two**
+rows. Add one per `--also-refused` when predicting. Recorded as roadmap 182.3.
+
+**Also 182.3: 161.4's premise is now false and its rule is still right.** It
+excluded `Polish` from slice-closing because `Meta`/`Polish`/`Optimize` "have
+never named a slice at all"; this wake's Polish row names 182.1/182.2. Rule 3
+still behaved correctly (stayed `1/3`) because the exclusion is by loop NAME,
+not by whether a row cites a slice. Recorded, not fixed — 170 finding B refuses
+a sixth classifying regex here.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -169,17 +198,17 @@ from the sources named — never by copying the answers above you.**
   ("Publishing remains owner-triggered"). Asked the registry this wake, which is
   the authority: **still E404**.
 - **Did this wake advance it?** **No.** The remaining step is owner-only, and no
-  cloud wake can run it. This wake ran rule 1 → Continue, bug mode, on Slice 180.
+  cloud wake can run it. This wake ran rule 6 → Polish on Slice 182.
 - **Work rows since the direction was decided that did not advance it:** derive
-  it, do not increment — a copied number is 169.1's exact failure mode. This
-  wake: **39** non-Meta work rows since `fb15cdc`, of which the needle matches
-  **2**; reading them, only **164.3** advances the direction and **168.1** merely
-  narrates it. So **38 of 39** did not. *(Measured at `615eeb31`, before this
-  wake's own log rows were committed — re-running it after this commit reads
-  higher. The point is that it is re-run: last wake's honest read was 37 of 38.)*
-
-  **⚠ The `grep create-ui` needle over-counts.** Read the matched rows; do not
-  `-c` them:
+  it, do not increment — a copied number is 169.1's exact failure mode. Re-run
+  the command below and READ the matched rows rather than `-c`-ing them; the
+  needle over-counts, because a row can mention `create-ui` while merely
+  narrating the blockage (168.1 does exactly that). **Derived this wake: 42
+  non-Meta work rows since `fb15cdc`; the needle matches 2; reading them, only
+  **164.3** advances the direction and **168.1** merely narrates it — so 41 of
+  42 did not.** *(Measured at `9cbd0d1c`, before this wake's own log rows were
+  committed — re-running it after the chore commit reads higher. The point is
+  that it is re-run: the last two honest reads were 37 of 38 and 38 of 39.)*
 
   ```
   git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' \
@@ -213,38 +242,32 @@ picks a direction that is not "publish the front door", the two `npm view` lines
 and the needle change with it — and `fb15cdc` becomes whichever commit carries
 the new decision. Rewrite them; do not reinterpret them.
 
-## Counters after this wake
-
-Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
-`record_iteration.py`**, per 166.5's lesson — that comparison has found two of
-the parser's five blindings and nothing else ever has.
-
-**Prediction written down first, then checked, which is the point of the
-exercise.** Before recording: `Standardize 0/4 ok`, `Objective 0/3 ok`, parser
-1,078 against a raw `grep -c "^- "` of 1,078. One Roadmap triage row plus one
-Continue row should read **1,080**; rule 2 should move to **1/4**, because a
-Continue row IS a Continue round; and rule 3 should move to **1/3**, because
-Continue closes a slice and Slice 180 is one.
-
-After recording: **`Standardize 1/4 ok`, `Objective 1/3 ok`**, parser **1,080**
-against a raw `grep -c "^- "` of **1,080**. **Prediction confirmed on all four
-numbers.**
-
 ## What the next wake should expect
 
 Rule 2 at 1/4 and rule 3 at 1/3 — neither armed. So the next wake falls to
-**rule 4**, which still has nothing to give: all six open items are the
-owner-blocked set above, and Slice 180 opened no new one. That routes it to
-**rule 5** (nothing — see above) and then **rule 6 → Polish**, which is where
-the last clear-backlog wake landed (176.1).
+**rule 4**, which still has nothing to give: the same six owner-blocked items,
+and Slices 181 and 182 opened no new one. That routes it to **rule 5** (nothing)
+and then **rule 6 → Polish** again.
 
 Run `python3 scripts/loops/polish_requeue.py --apply` first, per rule 6's own
-text, and build core before that or it dies on a missing `api.json`. Read §3b's
-guidance on what a round on a `content: 3` surface is for — it reconciles the
-published artefact against the ledger, and **a round that finds nothing is a
-no-op recorded in one line, not a manufactured fix**.
+text, and build core before that or it dies on a missing `api.json`.
+
+**`state-patterns` is now at 2/3 and its source moved this wake, so it will
+re-queue itself** — do not take it a third time while eight surfaces sit at 1/3.
+Prefer one of those. §3b's tie-break is "fewest rounds used", which now
+discriminates for the first time.
+
+**Two blind re-scores are owed and neither can be done in a cloud wake** (§3b
+step 4 needs a second agent): `scan`'s three fixed dimensions, and now
+`skeleton · colour`. A local wake that can run one should — without it the
+dry-round exit can never fire, which is the mechanism 176.3 is open about.
 
 **Do not re-raise Slice 179's refusal as a new finding.** A gate for
 `check:selftests`' blind spot over `scripts/loops/*.py` was refused, measured:
 2 of 9 scripts carry a tag, both are honest, and zero defects sit behind the gap,
 so a gate would be ceremony on a predicate nothing has broken.
+
+**Nor 182.2's.** A gate asserting every token named in a DSA cite exists in that
+component's CSS was refused on a measured base rate (1 of 28) *and* on the
+detector tripping on the repair's own prose. Re-measure before reopening it; do
+not re-derive the refusal.

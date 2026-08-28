@@ -1090,3 +1090,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 07:43 · Meta · refusal · a status-vs-timeline shared-vocabulary rule — Partial/Modified are legitimate statuses that must not be workflow stages; the rule would force a wrong model onto 5 shipped pages · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · an enum-value truncation rule — badge.astro already says 'the tone word IS the text' and in-tree violations are zero · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · a bulk-action-bar treatment rule — .bo-data-table__bulk-actions already ships with role=group and real bo-btn variants · refused · b95d88a
+- 2026-08-28 23:52 · Polish · reconcile · 182.1/182.2 — state-patterns round 2: skeleton·colour cited the token pairing ef64c745 removed; cite repaired, score NOT re-taken, blind re-score owed · landed · 9cbd0d1c
+- 2026-08-28 23:52 · Meta · refusal · a gate asserting every token named in a DSA cite exists in that component's CSS — base rate 1 of 28, and the repair trips the detector (101.3 + assert-on-structure) · refused · 9cbd0d1c
