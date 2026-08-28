@@ -1856,6 +1856,89 @@ verification.
        the choice would move out of rule 6's predicate, and how many recorded
        wakes would have dispatched differently. "Leave it" is a satisfying
        outcome and closes this item.
+## Slice 181 — Owner: a PO-list screenshot, grilled for framework gaps (2026-08-29)
+
+The owner showed a composed screenshot of a Purchase-orders screen — app shell,
+filter chips + saved view, bulk-action band, data table with status column,
+pagination, and a status timeline below — annotated with `.bo-app-shell`,
+`.bo-filter-bar`, `.bo-data-table`, `.bo-timeline`. The ask was explicitly
+**"don't just take it"**: extract what belongs in the FRAMEWORK, not what is
+wrong with the picture.
+
+**Outcome: refused in full. Nothing survived.** Six critiques were raised, three
+were promoted as candidates, and every one died to shipped source. Recorded at
+length because the failure mode is worth keeping: **a screenshot is a claim
+about the framework, and reading it as evidence of a gap skips the step where
+you check whether the framework already answers it.** Five of the six critiques
+were the mockup diverging from `/patterns/list-report`, which already does the
+thing correctly.
+
+| critique from the image | verdict |
+|---|---|
+| collapsed rail truncates to `Purch.`/`Inv.`/`Fin.` | **refuted** — icon-only collapse ships, `sidebar-nav.css:82` |
+| timeline's pending node shows `3`, not a state | **refuted, and backwards** — `stepper.css:160`: done (✓ glyph) vs pending (number) is chosen so the distinction *survives forced colors*. The number IS the two-channel cue. |
+| `Net` column lacks currency | **refuted** — `list-report.astro:116` puts `bo-amount` + `__currency` inside `bo-data-table__col--numeric` |
+| mixed currencies unhandled | **refuted** — `editable-grid.astro:611` renders `"mixed"` for divergent row currencies, and adds the FX-to-document-currency and JPY-precision notes |
+| no totals row | **refuted** — `tfoot` totals, `data-table.css:347` |
+| pagination cannot reach the last page | **refuted** — ellipsis ships, `pagination.astro:51` |
+
+The three promoted candidates and how they died:
+
+1. **"Status badges and timeline nodes should be one controlled vocabulary."**
+   **Refuted by counterexample, and the rule was wrong.** Measured on the
+   shipped pages with the components-used footer excluded:
+   ```
+   object-page   statuses {Partial, Pending approval}  steps {Budget check passed,
+                 Goods receipt, Vendor invoice}          -> zero overlap, correctly
+   record-detail statuses {Approved, Modified, Partial}  steps {Requested, Approved,
+                 Receiving, Invoiced}                    -> Approved in both, same meaning
+   ```
+   `Partial` and `Modified` are legitimate statuses that must **not** be
+   workflow stages — status and workflow position are genuinely different axes.
+   The proposed rule would have forced a wrong model onto five shipped pages.
+   The framework already distinguishes them and already reuses a word only
+   where it means the same thing.
+
+2. **"Enum VALUES need a truncation rule, since headers have one."**
+   **Refuted — the guidance exists and is stronger than the proposal.**
+   `badge.astro:56,62` already states *"The tone word IS the text"* and that
+   the two-channel rule means the word must be present regardless of colour.
+   Abbreviating `Approved`→`Appr.` violates documented guidance rather than
+   revealing its absence. Base rate of in-tree violation:
+   ```
+   grep -rhoE '>(?:[A-Z][a-z]{1,6})\.<' --include='*.astro' apps/docs/src examples
+   # only >Saved.< (a sentence period in a toast) — zero abbreviated statuses
+   ```
+   Writing it again would be a second section restating a neighbouring idea,
+   which is exactly what 158.2 has open.
+
+3. **"The bulk-action bar prescribes the count but not the actions."**
+   **Refuted** — `list-report.astro:89` ships
+   `.bo-data-table__bulk-actions` with `role="group"`,
+   `aria-label="Bulk actions"`, and both actions as real
+   `bo-btn--secondary` / `bo-btn--danger`; documented at line 205. The image's
+   chip-vs-link split is the mockup, not an unprescribed surface.
+
+**Not filed as a gate, and not filed as prose.** There is no repo-side artefact
+to check: `find` for hero/mockup/og-image assets returns nothing and `README.md`
+carries no image, so the screenshot is external and ungateable. Inventing a gate
+for an asset that does not exist in the tree is the 94.11 ceremony this file
+keeps refusing.
+
+**The one thing worth carrying forward**, stated as guidance rather than an
+item: every divergence ran in the same direction — the composed image makes the
+framework look **less** capable than it is, on six independent points. If a
+marketing or README hero is ever built, derive it from `/patterns/list-report`,
+which already ships all six correctly. Filed here so the next wake finds the
+measurement instead of re-deriving it from the picture.
+
+**Recorded because the grill's own instrument failed first**, which is the base
+rate confirming itself again: the vocabulary measurement's first run counted the
+pattern pages' **"Components used" footer badges** (`Amount`, `Badge`, `Kv`,
+`Pagination`, `Timeline`) as status values — the identical trap 39.2 recorded
+("counted Related-footer badges as results"). It reported "11 badge values, none
+appearing as a step", which would have made candidate 1 look strongly supported.
+Excluding the footer inverted the finding into the refutation above.
 
 ## Slice 175 — Objective grill of Slices 169, 170, 172 (2026-08-28)
 
