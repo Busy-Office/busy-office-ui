@@ -14,7 +14,7 @@ uncommitted work, and a decision made but not yet written down.
 ## In flight: nothing
 
 Last updated 2026-08-28 (cloud wake, scheduled routine). Working tree clean;
-three commits landed and were pushed as one batch.
+two commits landed and were pushed as one batch.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS, ALL MEASURED
 
@@ -99,7 +99,8 @@ Everything ran green this wake: `build -w @busy-office/ui`, `test -w
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
 dark.
 
-**From THIS wake — nothing visual exists to look at.** The only code change is
+**From THIS wake — nothing visual exists to look at, and this is the second
+consecutive wake for which that is true.** The only code change is again
 `scripts/loops/dispatch_status.py`, a Python script that prints to a terminal:
 it renders nothing, ships in no page, is imported by no component and is not
 part of the docs build. Everything else is markdown. `check:layout` and
@@ -120,14 +121,65 @@ visual debt was added.**
 
 ```
 python3 scripts/loops/dispatch_status.py
-  # rerun it — it now reads 991 rows, not 982 (see 164.1)
+  # Standardize 4 / 4 Continue rounds   OVERDUE
+  # Objective   1 / 3 slices      [161]      <- the widened parser, working
 ```
 
-Objective was reset by this wake's grill. **Rule 4's oldest still-open
-dispatchable item is 161.4**; 112.3/112.4 and the AT-runtime item are older but
-blocked on the owner or on hardware.
+**NEXT WAKE: rule 2 fires before rule 4.** Standardize crossed its threshold on
+this wake's own Continue row, so the next dispatch is **Standardize**, not
+162.1. Its playbook's three rot-guard sweeps are the point of the dispatch and
+none is a CI gate: `npm run scan:dead-style -w docs`, `npm run
+report:css-repeats -w @busy-office/ui` (the delta against LOOPS.md's table of
+eight is the finding, never the count), and `npm run report:prose -w docs` —
+where `/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/`
+are the three family-median outliers nobody has verdicted yet.
 
-## What landed this wake
+**The `[161]` is NOT evidence the 161.4 fix does anything, and the first draft
+of this note said it was.** Run in place against the identical log, the old
+parser reads `1 / 3 [161]` too — the 161 comes from this wake's own Continue
+row, which opens `161.4 …` in the bare form the old regex already matched. The
+difference that looked convincing came from `git stash` reverting
+`loop-log.md` **along with** the script, so the two parsers were compared
+against two different logs.
+
+Worth carrying forward as a trap, since it will recur: **`git stash` is not a
+way to A/B one file in a dirty tree.** Extract the old version to a probe file
+*in the same directory* — `_common.LOG` resolves relative to the script — run
+both against the one live log, and delete the probe. The fix's effect is real
+and is measured over the whole log's history (18 → 23 crossings); it is simply
+not visible in today's two-row window.
+
+Objective was reset by the 2026-08-28 grill and still reads 0/3.
+**Rule 4's oldest still-open dispatchable item is now 162.1** (161.4 closed);
+then 163.1, 164.2, and the newly filed 165. 112.3/112.4 and the AT-runtime item
+are older but blocked on the owner or on hardware.
+
+## What landed this wake (2026-08-28, cloud, Continue → 161.4)
+
+**161.4 CLOSED.** Which loops close a slice: **Continue + Standardize**.
+Roadmap/Explore/Objective excluded, the last two measured before being refused
+(adding both moves the log's crossing count 23 → 23). Decision, per-loop counts
+and the replayed cadence are in `LOOPS.md` rule 3 and `dispatch_status.py`'s
+comment — **do not re-derive them, the commands are there.**
+
+**The item's premise was right and was the smaller half.** The same run found a
+FOURTH instance of that counter's regex going quietly blind: the log uses two
+conventions, `164.1 …` and `Slice 84: …`, and the parser saw only the first —
+302 bare rows against **141 prose**, 99 distinct slices against a union of
+**144 of the 146** in ROADMAP.md. Replayed: the count crosses 3 **18** times
+before, **22** on the format fix alone, **23** with Standardize. `slice_of` now
+ships `--self-test`, red-proved both ways.
+
+**The counter still reads 0/3 and that is correct**, not a failed change — only
+two rows follow the last Objective round and neither names a slice.
+
+**Filed, not done: Slice 165 — the archive sweep is due again.** 2,488 of
+ROADMAP.md's 3,882 lines (64%) are 17 closed slices that were never moved; the
+file was at 1,094 on 2026-08-25. Rule 4 walks all of it every wake. The command
+is in the item. **Do it by hand** — the last case-collision on this exact pair
+of files destroyed 7,307 lines silently.
+
+## What landed in an earlier wake
 
 **Objective (rule 3, fired at 3/3), grill of Slices 158/159/160 — logged.**
 Report: `.roundtable/grill-objective-158-161-2026-08-28.md`. Roadmap entry:
@@ -170,8 +222,7 @@ four wakes. It is now fixed rather than counted.
   and the command are in the item; do not re-derive them.
 - **162.1** — how two dispatchers share one queue. "Accept collisions" is a
   valid outcome; what is not acceptable is leaving `LOOPS.md` silent.
-- **161.4** — which loops close a slice, for the Objective counter. Command and
-  counts are in the item; do not re-derive them.
+- **165** — the archive sweep. 17 closed slices, 2,488 lines, by hand.
 - **112.3** — the pattern-fit pilot. BLOCKED ON OWNER: needs 5–8 owner-written
   screen briefs with sealed picks; scaffold ready at `.roundtable/pilot-112/`.
 - **112.4** — Screen Contract layer, gated on 112.3's verdict.

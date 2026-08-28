@@ -1186,6 +1186,54 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 165 — the archive sweep is due again, and rule 4 is the thing paying for it (2026-08-28)
+
+**Not new input** — nothing was filed and nobody asked. Noticed while closing
+161.4: dispatcher rule 4 says outright *"if this rule is walking thousands of
+lines again, that is the signal"*, and it is walking 3,882.
+
+**Measured, with the command, so the next wake re-runs instead of re-deriving:**
+
+```
+python3 - <<'PY'
+import re
+H=re.compile(r"^## Slice (\d+)")
+def sections(p):
+    cur=None; d={}
+    for l in open(p):
+        m=H.match(l)
+        if m: cur=int(m.group(1)); d[cur]=d.get(cur,0)
+        elif cur is not None: d[cur]+=1
+    return d
+live=sections('ROADMAP.md'); arch=sections('ROADMAP-archive.md')
+OPEN={15,112,161,162,163,164,165}      # re-derive from the `N. [ ]` checkboxes
+big={s:n for s,n in live.items() if s not in OPEN and n>6}
+print(len(big),"closed slices carrying",sum(big.values()),"lines here;",
+      sum(1 for s in big if s in arch),"already in the archive")
+PY
+  # 17 closed slices · 2,488 lines · 1 already archived   (2026-08-28)
+```
+
+**2,488 of 3,882 lines — 64% of the file — is closed slices that have not been
+moved.** The live file was brought to 1,094 lines on 2026-08-25 and has grown
+2,788 lines in three days, which is a steeper regrowth than the one that
+triggered the second pass. The doctrine in CLAUDE.md already settles the
+question of whether this is allowed: the archive is still markdown, still
+reviewed, still diffed, and `check:slice-refs` keeps the citations resolvable
+(it currently checks 178 of 180, with a 2-row known-dangling baseline).
+
+**Do this as a hand-checked move, not a script.** CLAUDE.md's bulk-edit rule
+applies with force here: the last case-collision on this exact pair of files
+silently destroyed 7,307 lines of archived history, and the tell was only that
+`git status` showed the file as *modified* rather than *added*.
+
+*Accept*: every closed slice's text lives in `ROADMAP-archive.md` with a
+one-line pointer left in `ROADMAP.md`; `check:slice-refs` passes with its
+citation count reconciled against the source rather than against the mover; the
+line counts before and after are both recorded; and `git status` shows
+`ROADMAP-archive.md` as modified, with its line count having GROWN by
+approximately what `ROADMAP.md` lost — the property, not a predicted number.
+
 ## Slice 164 — Objective grill of Slices 158, 159, 160 (2026-08-28)
 
 Rule 3 at 3/3. Full report:

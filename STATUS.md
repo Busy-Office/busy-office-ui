@@ -2,15 +2,13 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 00:49
+Generated at: 2026-08-28 01:41
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS — protocol owner-confirmed 2026-08-23, scaffold ready.
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 161** (1 open)
-  - 161.4 — the Objective counter cannot see a slice that closes under any loop but Continue, and this wake is an instance.
 - **Slice 162** (1 open)
   - 162.1 — decide how two dispatchers share one queue.
 - **Slice 163** (1 open)
@@ -24,9 +22,10 @@ Generated at: 2026-08-28 00:49
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (996 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-27 22:53   ok
-  Objective     0 / 3 slices          since 2026-08-28 00:49   ok
+dispatch status — counter-triggered rules (999 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-27 22:53   OVERDUE
+  Objective     1 / 3 slice           since 2026-08-28 00:49   ok  [161]
+  -> a counter is at or past its threshold; the dispatcher should pick it
 ```
 
 ## Owner-blocked
@@ -40,16 +39,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 07:14 · Roadmap · plan · 162.1 triaged: the cloud routine and the local session both dispatched 157.3 within an hour — LOOPS.md mentions concurrency zero times because it was written when loops were session-scoped, and rule 4 is deterministic so two dispatchers always pick the same item · triaged · a38bcd6
-- 2026-08-27 23:44 · Continue · build · 159.1 — report-reach prints the verdict where one exists; five adjudicated zeros were printing bare · landed · cc6b69b
-- 2026-08-27 23:44 · Roadmap · plan · Slice 163 — 7 of 7 zero-reach blocks adjudicated, 0 of 10 at exactly one composition; one is the count principle 3 names · logged · cc6b69b
-- 2026-08-28 08:17 · Continue · build · 160.1 owner call: scrubbed the 8 UX-precedent mentions; kept design-system evidence, interop hazards (the product name is the reader's search term) and the MIT palette attribution — which turned out to be missing from NOTICE entirely · landed · f014635
-- 2026-08-28 08:17 · Meta · refusal · extending the denylist — gmail/notion turn the build red on the repo's own decision record, slack/excel are ordinary English · refused · f014635
-- 2026-08-28 00:48 · Continue · build · 164.1 — dispatch_status read 982 of 991 log rows and printed a confident number; the 9 it missed are all Continue rows with a hyphenated mode, which is exactly what both counters count. Fixed, plus a reconciliation against the raw bullet count that raises rather than prints. Cost measured by replaying both parsers over 703 revisions: 79 count differences, 1 verdict difference · landed · a0c5738
-- 2026-08-28 00:48 · Meta · refusal · a writer-side guard in record_iteration.py — base rate 9 in 991 from one convention, and the reader now fails loudly · refused · a0c5738
-- 2026-08-28 00:49 · Objective · grill · Objective grill 158/159/160: the instrument that DECIDES did not reconcile while the one that only mirrors did (1 verdict in 703 revisions — reported as nearly nothing); two clocks write one log, latent, all three ts consumers read; 159's write-the-command rule paid off next wake when 160's re-run found its FRAMING wrong, two populations were four; and every open item is now about the loop, not the product · logged · a0c5738
-- 2026-08-28 00:49 · Meta · refusal · an instrument for the product-vs-loop commit share — the verification-to-product ratio is already RETIRED in ROADMAP.md with 'not to be re-raised', and that retirement is correct · refused · a0c5738
-- 2026-08-28 00:49 · Meta · refusal · filing 'pick a direction' as a dispatchable item — it is structurally an owner call, so it goes to the owner as 164.3, not into rule 4's queue · refused · a0c5738
+- 2026-08-28 01:41 · Continue · build · 161.4 decided which loops close a slice: Continue+Standardize, with Roadmap/Explore/Objective measured before being refused (adding the last two moves the log's crossing count 23 to 23). The premise was the smaller half — the same run found a FOURTH blind regex, the prose 'Slice NN' convention the counter never saw: 141 of 996 rows, 45 extra slices, union 144 of ROADMAP.md's 146. Cadence replayed not predicted: crossings 18 to 22 on the format fix alone, 23 with Standardize; of 45 real Objective rounds those already past 3 goes 6 to 15. slice_of ships --self-test, red-proved both ways · landed · 537f561
+- 2026-08-28 01:41 · Roadmap · plan · 165 triaged: the archive sweep is due again — 2,488 of ROADMAP.md's 3,882 lines (64%) are 17 closed slices never moved, against 1,094 lines on 2026-08-25. Dispatcher rule 4 walks all of it every wake and names this exact signal itself. Filed with its command and an Accept that asserts the property, not a predicted line count; flagged do-by-hand because the last case-collision on this pair of files destroyed 7,307 lines silently · triaged · 537f561
+- 2026-08-28 01:41 · Meta · refusal · doing the sweep in this wake — a 2,488-line bulk move of the file the dispatcher reads, landed under a commit whose item was a counter fix, is exactly the scope creep the operating rules refuse · refused · 537f561
 
 ## Sunset test
 
