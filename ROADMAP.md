@@ -179,8 +179,26 @@ tiering.**
 
 ## Sequence — what runs next, and why in this order (owner, 2026-08-24)
 
+> **SUPERSEDED 2026-08-24, recorded 2026-08-28 (Slice 170.1). Every row below is
+> closed or was deliberately dropped; this section is kept as the record of the
+> reasoning, not as the plan.** It was written at 20:45 and the commit run that
+> closed 130.4 *without Inventory or Finance* — the owner's own call, on the
+> evidence — landed at 21:22, four commits later; 193 commits have passed over it
+> since without an edit. 140.3 and 130.5 are `[x]` in `ROADMAP-archive.md`;
+> 130.4a Production was built, 130.4b/c were not. The gated list below is stale
+> too: it says "precondition met (0.3.0 cut)" and the package is at **0.5.0**.
+> For what is open **now**, read the `N. [ ]` checkboxes or generated `STATUS.md`
+> — never a count written into prose.
+>
+> ```
+> git log -1 --format='%h %ai' d04b5557   # wrote this section
+> git log -1 --format='%h %ai' 45baaa12   # closed 130.4, 37 minutes later
+> grep -cE "^[0-9]+\. \[ \]" ROADMAP.md   # what is actually open
+> ```
+
 Eighteen items are open; **nine are dispatchable** and nine are gated on the
-owner or on a condition. The order below is the plan of record. It is derived
+owner or on a condition — *the count as it stood on 2026-08-24; see the note
+above.* The order below is the plan of record. It is derived
 from one finding rather than from item age: the instrument grill
 (`.roundtable/grill-erp-suite-instrument-2026-08-24.md`) showed that **every
 gap the ERP suite has found came from a new SHAPE or from STRESS, and none
@@ -870,6 +888,9 @@ on owner hardware (VoiceOver, NVDA, AT runtime evidence); the fourth (Turbo) is
 a conditional that has not fired. There is also no 1.0 definition anywhere in
 the plan.
 
+*(True on 2026-08-18, not now — 168.1 and 169.3 are both open and dispatchable.
+Read the `N. [ ]` checkboxes, not this line. Noted 2026-08-28, Slice 170.1.)*
+
 That is structural, not a lull: from here the dispatcher can only reach
 Standardize, Objective and Explore — all of which generate work *about the
 project*. It will keep producing self-referential improvement indefinitely and
@@ -935,6 +956,131 @@ worse — zero CSS growth is the charter working, and a ratio that reads "added 
 CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
+
+## Slice 170 — Objective grill of Slices 164, 167, 169 (2026-08-28)
+
+Dispatcher rule 3 at 3/3 `[164, 167, 169]`; rule 1 found no open P0 and GitHub
+intake is empty (0 open issues), rule 2 read `Standardize 0 / 4`. Full report:
+`.roundtable/grill-objective-164-167-169-2026-08-28.md`.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — the grill file, this entry,
+two annotations on narrative sections of this file, one corrected paragraph in
+`LOOPS.md`, and `.roundtable/RESUME.md`. `git diff --stat` names no file under
+`packages/core/src` or `apps/docs/src`, which is a stronger statement than a
+screenshot. `check:layout` and `test:axe` swept every page at both widths anyway
+and were green. **No visual debt was added; nothing visual was looked at.**
+
+**The prose cost is named and measured, not estimated** —
+`report_loop_prose.py`'s own `UNCOMMITTED` block reports this wake at **+147
+words to `LOOPS.md`**, +203 to `RESUME.md` and +1,379 to `ROADMAP.md`. The
+`LOOPS.md` spend is a wrong sentence replaced with a measured one, which is the
+category 167.1 verdicted HONEST; the file still reads 21 up / 1 down, so 167.1's
+watch condition ("`LOOPS.md` still at 0 down") stays discharged.
+
+Window shape: 13 rows · landed 5 · refused 6 · logged 1 · triaged 1; all six
+refusals are `Meta`. Refusal base rate since 2026-08-19 is **34.6%** (196 of
+566), against 34.2%, 33.9% and 33.5% in the three previous windows — unmoved.
+Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
+
+**Two findings were settled inside the grill and are not items.**
+
+- **B — the Objective counter is armed, in part, by the Objective loop's own
+  follow-up.** 161.4 excluded `Objective` from `CLOSES_A_SLICE` as *"circular"*,
+  but a grill files its items **in its own slice number** and those are built by
+  `Continue` rows, which do count. Whole log: **7 of 26** rule-3 dispatches would
+  not have crossed without a grill-derived slice. **This wake is the extreme
+  case and a first** — 2 of its 3 armed slices are grills (164, 167); without
+  them the counter reads **1 of 3**, rule 4 would have run, and the oldest
+  dispatchable item is **168.1**, the previous grill's own filed finding. So the
+  self-arm deferred the fix for the finding. **Recorded, not gated**: rule 3
+  sits above rule 4 precisely so it cannot starve, and a heading classifier in
+  the dispatcher would be the sixth regex — this grill's own first attempt
+  missed the older *"from the Objective grill, Slices 45-50"* convention (ten
+  slices) and reported 4 of 26. `LOOPS.md` rule 3's circularity sentence is
+  corrected in place with the command beside it.
+- **C — the cloud era has changed no shipped declaration in 61 commits.** The
+  last commit changing a declaration in `packages/core/src` is `c073c360` —
+  independently confirmed as the cloud routine's own **first** commit. Since
+  then `packages/core/src` moved 23 insertions / 2 deletions across 4 files and
+  **zero** changed lines are declarations; all four are comment prose. That is
+  blockage, not neglect — direction (a)'s remaining step is `npm publish`, which
+  is owner-triggered — but it is the **third consecutive grill** to reach it
+  (164.3, 168.C, this), and the filed answer, **168.1**, already exists.
+
+1. [x] **170.1 — DONE 2026-08-28. `ROADMAP.md`'s plan of record went stale 37
+       minutes after it was written, and 193 commits passed over it.**
+
+       `## Sequence — what runs next, and why in this order (owner, 2026-08-24)`
+       opens *"Eighteen items are open; nine are dispatchable"* and sequences
+       five rows. Measured, every part is false: **5 open, 2 dispatchable**
+       (`grep -cE "^[0-9]+\. \[ \]" ROADMAP.md`, and generated `STATUS.md`
+       agrees independently at 2+1+1+1); rows 1 and 5 (140.3, 130.5) are `[x]`
+       in the archive; row 2 (130.4a Production) was built and **130.4 closed
+       without Inventory or Finance** — rows 3 and 4 — on the owner's own call;
+       and the gated list still says *"precondition met (0.3.0 cut)"* while the
+       package is at **0.5.0** with tags through `v0.5.0`.
+
+       ```
+       git log -1 --format='%h %ai' d04b5557    # 2026-08-24 20:45:35  wrote the section
+       git log -1 --format='%h %ai' 45baaa12    # 2026-08-24 21:22:44  closed 130.4
+       git rev-list --count d04b5557..45baaa12  # 4
+       git rev-list --count d04b5557..HEAD      # 193
+       git log --format='%h %ad' -S"Eighteen items are open" -- ROADMAP.md
+       # d04b5557 was the ONLY hit when this was measured; from now on this
+       # wake's own annotation is the second, so the property to check is
+       # "nothing between d04b5557 and 2026-08-28 touched it", not the count.
+       ```
+
+       **Why nobody noticed for 193 commits**: rule 4 reads *checkboxes* and
+       jumps to the item. Nothing in the dispatcher's path ever reads the
+       narrative sections above the slice list, so a wrong plan there is
+       invisible by construction. **Third instance of one shape in two
+       consecutive slices** — 169.1 (`LOOPS.md`'s sweep instruction), 169.3
+       (`RESUME.md`'s durable content), this — the common mechanism being a
+       document written once and read by a path that does not verify it.
+
+       *Accept*: the section states its own supersession, naming which rows
+       closed and when, with the commands; the hardcoded open-item count is
+       replaced by a pointer to the generated one; **the owner's text is left
+       verbatim**, because 130.4's closure was itself an owner call and
+       recording a supersession is bookkeeping while choosing a new sequence is
+       not. **Done.** `## STATE — … (2026-08-18)` gained the same one-line
+       annotation, its *"every unchecked item is undispatchable"* being equally
+       untrue now. `## CI strategy` was checked and is sound — it claims nothing
+       forward-looking and none of its standing rules is falsified — so the
+       property is not "every narrative section rots": n=2 above the slice list,
+       one stale, one not.
+
+2. [ ] **170.2 — the generalized form of 170.1: nothing re-reads the narrative
+       sections of `ROADMAP.md`, and refusing this is a satisfying outcome.**
+       Noticed while grilling 170.1, not searched for.
+
+       The checkbox list is verified constantly — `STATUS.md` reconciles against
+       it, `check:slice-refs` keeps its citations resolvable, rule 4 walks it
+       every wake. The prose above it is verified by nothing. 170.1 is one
+       instance; the question is whether the class deserves a mechanism.
+
+       **The base rate must be measured before anything is built**, because
+       94.11 is the precedent: searching every tracked `.md` for `plan of record`
+       and `what runs next` finds exactly **one** such table (this file's
+       `## Sequence`, the header row `| # | Item | Why here |`), so a gate over
+       it would be n=1 ceremony. The one *exact* (non-heuristic) predicate is
+       promising and should be measured rather than assumed: a narrative row
+       naming an item id (`**130.4a**`, `**140.3**`) can have that item's
+       checkbox state looked up mechanically, so "a plan row points at a closed
+       item" is checkable by equality, not by recognition.
+
+       *Accept*: a recorded verdict that either (a) names the predicate, reports
+       how many rows in the repo it would examine today and how many it flags,
+       and ships a gate **only if that count distinguishes** — or (b) records
+       the measured base rate as the reason to refuse, with the number. A
+       finding that the base rate is too thin to gate satisfies this item
+       exactly as well as a gate does. **Do not accept a cadence bullet added to
+       `LOOPS.md` without measuring first** — 167.1 has that file's growth on
+       the record and 158.2's cadence rests on a signature (never shrinks) that
+       nobody has shown holds for a narrative section of `ROADMAP.md`, a file
+       measured at **-85.9%** over the same window.
 
 ## Slice 169 — Standardize sweep: the correction landed in the file that is rewritten every wake (2026-08-28)
 
