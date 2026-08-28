@@ -1157,14 +1157,24 @@ verification.
        (rule 7)" — describes a lane that has never been dispatched.**
 
        ```
-       grep -c ' · Research · ' .roundtable/loop-log.md    # 0, of 1065
+       grep -c ' · Research · ' .roundtable/loop-log.md    # 0, of 1067
        ls .roundtable/research-*.md | wc -l                # 6
        ```
 
-       Six research reports exist and `--loop Research` has never been used;
-       at least three were recorded under `Roadmap`, `Objective` and `Explore`
-       rows (`grep -i research .roundtable/loop-log.md`). So the alternative
-       arm (a) was weighed against is not a lane the log can show working.
+       Six research reports exist and `--loop Research` has never been used, so
+       the work has happened and no row carries this loop's name. Three rows
+       narrate research under `Roadmap`, `Objective` and `Explore`
+       (`grep -i research .roundtable/loop-log.md`). **The tempting next claim —
+       "each of the six was recorded under some other loop" — is NOT made, and
+       the instrument that would have made it was tried and refused**: grepping
+       each report's topic out of its own filename finds rows for **2 of 6**
+       (`app-frame`, `pattern-references`; `dense-numeric-ui`,
+       `erp-mobile-web-gaps`, `numeric-masking` and `pattern-tile-previews` all
+       read 0). That is a needle that misses rows naming a slice instead of a
+       topic, not evidence that four reports went unrecorded — and a 0 on four
+       of six inputs is the shape this repo's own doctrine says to distrust. So
+       the alternative arm (a) was weighed against is not a lane the log can
+       show working; how its work WAS recorded is left unmeasured.
 
        **What a Polish round on a `content: 3` surface is supposed to do** —
        arm (c)'s question, answered in `LOOPS.md` §3b this wake. Short form: it

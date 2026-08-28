@@ -445,10 +445,15 @@ match to its full playbook below:
 
    **This condition has never been true, so this rule has never fired** —
    `budget_spent = 0` and `marked_dry = 0` in 11 of 11 ledger revisions, and
-   `grep -c ' · Research · ' .roundtable/loop-log.md` reads **0** of 1065. Six
-   `research-*.md` reports exist; every one was recorded under some other loop.
-   Open as roadmap **176.3** (OWNER CALL) — do not fix it by rewording this
-   rule.
+   `grep -c ' · Research · ' .roundtable/loop-log.md` reads **0** of 1067.
+   Six `research-*.md` reports exist, so the work has happened; what has never
+   happened is a row carrying this loop's name. **Stated no more strongly than
+   that on purpose** — the obvious next claim, "each was recorded under some
+   other loop", was tried and the instrument is too weak to support it: grepping
+   each report's topic out of its filename finds rows for only **2 of 6**, which
+   says the needle misses rows that name a slice instead of a topic, not that
+   four reports went unrecorded. Open as roadmap **176.3** (OWNER CALL) — do not
+   fix it by rewording this rule.
 
 8. **Nothing above matched** → **say why, ONCE, and stop the loop.**
 
