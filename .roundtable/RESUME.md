@@ -13,36 +13,32 @@ uncommitted work, and a decision made but not yet written down.
 
 ## In flight: nothing
 
-Last updated 2026-08-28 05:45 UTC (cloud wake, scheduled routine — **rule 4 →
-164.2 decided**). Working tree clean at hand-off; the wake's commits were pushed
-as one batch.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 4 → 167.1
+closed**). Working tree clean at hand-off; the wake's commits were pushed as one
+batch.
 
-**Keep this file to pointers, not history** — the multi-wake "what landed"
-sections are pointers to the slices that hold them verbatim. Run the count
-rather than quoting one:
-`python3 -c "print(len(open('.roundtable/RESUME.md').read().split()))"`.
+**This file's own growth was verdicted this wake, and the verdict is that it is
+supposed to shrink.** 167.1 measured it at **27 up / 13 down** over 40
+transitions — it is rewritten each wake, not appended, min 314 and max 2,980.
+The 2,980 peak was the commit 167.1 quoted, and the next commit cut it 44%. So
+trimming this file is the rule, not a tidy: run
+`python3 scripts/loops/report_loop_prose.py` and keep the `down` column alive.
 
 **This file goes stale between wakes — reconcile it against `ROADMAP.md` before
-trusting its open set.** The handover it replaced was written at 04:41 UTC and
-named 163.1, 164.2 and 165.1 as open; by the time this wake read it, the local
-session had already closed 163.1, 165.1 and 164.3 (five commits, and
-`git fetch origin main` reported them as a **forced update** — a rebase, which
-is also what stales the shas in `loop-log.md`; see 164.2). Only 164.2 was still
-open. `ROADMAP.md` was right; this file was not.
+trusting its open set.** Live proof, and it happened again: the handover this
+one replaces named **163.1 as the oldest dispatchable open item**. `ROADMAP.md`
+showed it already closed. `ROADMAP.md` was right; this file was not. Trust the
+`N. [ ]` checkboxes, not this section.
 
-## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS, ALL MEASURED
+## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS
 
-**Two of the four were re-confirmed this wake (1 and 2); 3 and 4 were not
-exercised** — `dist` was removed pre-emptively rather than after observing a
-stale build, and no formatter was run. Said plainly rather than carried forward
-as "all four confirmed", which the previous handover claimed.
+**Re-confirmed this wake: 1, 1c, 2, 3.** Trap 4 was not exercised (no formatter
+was run). Said plainly rather than carried forward as "all confirmed".
 
 ### 1. `git checkout main` — the container starts DETACHED
 
-Confirmed on every cloud wake so far. This wake: `HEAD` detached at `a911143`
-— which happened to equal the new `origin/main`, while the local `main` branch
-ref was five commits stale at `17b3ba6`. So the detachment is not always visible
-as wrong history; check the BRANCH, not just what HEAD points at.
+Confirmed again. This wake `origin/main` came back as a **forced update**
+(`17b3ba6...787319c`) — a rebase — so the local ref was not merely behind.
 
 ```
 git fetch origin main && git checkout -B main origin/main
@@ -56,54 +52,64 @@ git fetch origin main && git checkout -B main origin/main
 **Anchor every command with an absolute `cd`, or none at all.** A `cd apps/docs`
 to run one gate leaves the NEXT command there.
 
-### 1c. `CHROME_PATH` DOES NOT PERSIST EITHER — AND THE FAILURE LOOKS LIKE A BUILD BUG
+### 1c. `CHROME_PATH` DOES NOT PERSIST EITHER
 
 ```
 export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome && npm run docs:build
 ```
 
-Export it in the SAME command as the build, every time. A previous wake lost a
-full `docs:build` to this: it ran 25 steps, built every page, then died at
-`check-boost.mjs` with *"No Chrome/Chromium found"* — and `npm error` printed the
-whole lifecycle script and nothing else. If a build dies in an unhelpful wall,
-redirect to a log and read the lines **above** it.
+Export it in the SAME command as the build, every time. Confirmed again this
+wake: it is needed by `docs:build` (`check-boost.mjs`), `check:layout` and
+`test:axe`.
 
 ### 2. THE CLONE IS SHALLOW — any history measurement is silently 50x wrong
 
 ```
 git rev-parse --is-shallow-repository     # -> true, on a fresh container
-git fetch --unshallow origin              # ~25s; brought this wake to 1,468 commits
+git fetch --unshallow origin              # ~25s; brought this wake to 1,481 commits
 ```
 
-The oldest commit a shallow clone holds has no parents and appears to ADD every
-file in the repo. **Unshallow before measuring anything from history.** This
-wake needed it: every prose-growth figure in 167.1 is `git show` at nine
-successive days' last commit.
+Needed again this wake — 167.1 is entirely history measurement.
+`report_loop_prose.py` now **refuses to report** on a shallow clone rather than
+printing wrong figures; that guard was red-proved against a real
+`git clone --depth 1`.
 
 ### 3. `astro build` does not clear `dist`
 
-An older source tree built over a newer `dist` leaves stale pages behind; the
-tell is an *identical* page count across different inputs. `rm -rf
-apps/docs/dist` first — this wake did.
+`rm -rf apps/docs/dist` first — this wake did. Exercised for real: `report:prose`
+died with `ENOENT … apps/docs/dist` before the build, which is the honest failure
+rather than a stale number.
 
 ### 4. `npx prettier` IS NOT THIS REPO'S FORMATTER
 
-No prettier config and no prettier dependency exists here; running it fetches
-prettier and applies **its** defaults (double quotes; the repo writes single). A
-previous wake turned a 125-line diff into 196 insertions that way. The style
-enforcers are `stylelint` and the gates in `check:repo`.
+No prettier config and no prettier dependency exists here. The style enforcers
+are `stylelint` and the gates in `check:repo`.
+
+### 5. NEW — A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
+
+No locale is set in this container, and GNU `wc` in the C locale swallows an em
+dash, which this repo's prose is full of:
+
+```
+printf 'alpha — beta\n' | wc -w                 # 2   ← wrong
+printf 'alpha — beta\n' | LC_ALL=C.UTF-8 wc -w  # 3
+```
+
+`LC_ALL=C.UTF-8 wc -w` and Python's `str.split()` agree exactly on all five
+loop-machinery files. Any ad-hoc word count taken here is low unless the locale
+is pinned. Full figures in ROADMAP 167.1.
 
 ## Cloud-wake toolchain — what works, in order
 
 ```
 npm ci                                                    # no node_modules at start
 export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
+rm -rf apps/docs/dist
 ```
 
 Green this wake: `build -w @busy-office/ui`, `test -w @busy-office/ui`,
-`docs:build`, `check:repo` (9 gates), `check:claims` (139), `check:layout` (127
-pages), `test:axe` (127 x 2, zero violations), `dispatch_status --self-test` (14
-cases).
+`docs:build`, `check:repo`, `check:claims` (139), `check:layout` (127 pages),
+`test:axe` (127 × 2).
 
 `sqlite3` is NOT installed in this container. Query the mirror with Python's
 `sqlite3` module — `python3 -c "import sqlite3; ..."`.
@@ -113,17 +119,15 @@ cases).
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
 dark.
 
-**From THIS wake — nothing visual exists to look at.** Every change is markdown
-plus two Python comment blocks and one `strftime` in a script that writes a
-markdown file. `git diff --stat` lists `LOOPS.md`, `ROADMAP.md`, `STATUS.md`,
-`RESUME.md`, `generate_status.py` and `record_iteration.py`. No page's markup
-changed at all, which is a stronger statement than a screenshot would have been.
-`check:layout` (127 pages) and `test:axe` (127 × 2) swept anyway and were green.
-**No visual debt was added; nothing visual was looked at.**
+**From THIS wake — nothing visual exists to look at.** `git diff --stat` lists
+`ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md` and one new Python script
+under `scripts/loops/`. No page's markup, CSS or component changed at all, which
+is a stronger statement than a screenshot would have been. `check:layout` (127
+pages) and `test:axe` (127 × 2) swept anyway and were green. **No visual debt was
+added; nothing visual was looked at.**
 
-**Non-visual wakes continue.** Not avoidance — rule 4's oldest open items
-genuinely are loop machinery — but the two carried-forward visual items have
-waited longer again:
+**The two carried-forward visual items have waited another wake** — both need a
+local wake with a browser, and neither is dispatchable here:
 
 - `DsaScore.astro` and `concepts/which-pattern.astro` each gained
   `<span class="bo-badge">generated</span>` inside an existing `<h2>`.
@@ -136,65 +140,45 @@ waited longer again:
 
 Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
-the parser's five blindings and nothing else ever has. This wake it agreed
-again: one Continue row took Standardize 0 → 1, and the row count moved by
-exactly the number of rows recorded.
+the parser's five blindings and nothing else ever has.
 
 **NEXT WAKE: rule 4 — Continue, build mode.** Rules 1-3 were all clear this wake
-(no open P0, GitHub intake empty at 0 issues, Standardize 0/4, Objective 0/3).
-The oldest still-open dispatchable item is now **167.1**, then 167.2, then
-168.1. 112.3/112.4 and the AT-runtime item are older but blocked on the owner or
-on hardware.
+(no open P0, GitHub intake empty at 0 open issues, Standardize 1/4, Objective
+1/3). Re-derive the queue from the `N. [ ]` checkboxes rather than trusting this
+line; as it stood at hand-off the oldest still-open dispatchable item is
+**167.2**, then **168.1**. 112.3/112.4 and the AT-runtime item are older but
+blocked on the owner or on hardware.
 
-## What landed this wake (2026-08-28, cloud, rule 4 → 164.2)
+**167.2 has a live datum waiting for it.** Re-running its own command this wake,
+rule 3 is now **1,171 words (181 rule / 990 history)**, up from the 1,026
+(181 / 845) it was filed at — it grew 145 words, all history, while the item to
+archive it sat open. Re-run, do not quote.
 
-**164.2 decided: the log row keeps its naive local timestamp.** The decision, its
-cost and the two refusals are in `LOOPS.md` Step 0c; every command and figure is
-in ROADMAP 164.2 — **do not re-derive them, re-run them.** In one line each:
+## What landed this wake (2026-08-28, cloud, rule 4 → 167.1)
 
-- **The premise held on re-check** — 3 inversions, unchanged across the 18 rows
-  added since the item was filed at 996.
-- **The offset would add an ordering the file already has.** Read each naive
-  stamp through the author-tz of the commit that introduced it and file order is
-  chronological at **1014 of 1014**. The zero is red-proved (inject one
-  backwards row → 1).
-- **162.1's "recorded exactly, one indirection away" was wrong at the margin,
-  and corrected in place.** The sha resolves for 1004 of 1014, never disagreeing
-  with blame — but **five rows cite a sha that no longer exists**, rebased away,
-  which is what the losing dispatcher does after a collision. `git blame` is the
-  exact mechanism, at 1014/1014.
-- **`%z` refused, measured by injection**: `dispatch_status.py`'s `ROW` rejects
-  such a row and 164.1's reconciliation hard-exits. Backfilling refused too.
-- **Fixed in passing**: `STATUS.md`'s `Generated at:` ran **backwards**
-  13:15 → 05:31 on this wake — the one naive `now()` that is not latent. It now
-  stamps UTC.
+**167.1 closed: 2 instrument, 3 honest, 0 removable that is not already filed.**
+Every figure and command is in ROADMAP 167.1 — **do not re-derive them, re-run
+them**, with `python3 scripts/loops/report_loop_prose.py`. In one line each:
 
-## Still open, and why
-
-- **163.1** — adjudicate the ten blocks at exactly one composition. Counts and
-  command are in the item; do not re-derive them. **Oldest dispatchable.**
-- **167.1** — the loop's own prose growth vs the 158.2 cadence. **Oldest
-  dispatchable.**
-- **167.2** — `LOOPS.md` rule 3 is 82% archaeology and the file has no archive.
-- **168.1** — let the dispatcher say when the chosen direction is blocked. Its
-  Accept names a line in THIS file; deliberately not written yet, so 168.1 is
-  still a real dispatch rather than a box ticked in passing.
-- **112.3** — the pattern-fit pilot. BLOCKED ON OWNER: needs 5–8 owner-written
-  screen briefs with sealed picks; scaffold ready at `.roundtable/pilot-112/`.
-- **112.4** — Screen Contract layer, gated on 112.3's verdict.
-- **AT runtime evidence** — needs a human listening to a screen reader.
-
-**One decision waiting, not a roadmap item.** `@busy-office/create-ui` is built,
-gated and committed but **NOT published**, so `npm create @busy-office/ui` works
-only from this repo. Publishing is owner-triggered, as every release is.
+- **Two of the entry's four headline figures did not survive re-running.**
+  `RESUME.md` is **+100.4%**, not the +256% filed; ROADMAP was quoted as
+  ROADMAP **+ archive**, and the file rule 4 actually reads went **-85.9%**.
+- **The load-bearing column is `accumulate`, not the delta.** 158.2's cadence
+  rests on docs pages never shrinking; 2 of these 5 shrink by design, so a
+  rising count means nothing for them.
+- **The cadence extends; 158.2's instrument does not.** n=5 has no usable median
+  (161.1 already recorded n=6 failing, and the spread here is 102x).
+- **Shipped:** `scripts/loops/report_loop_prose.py`, three guards red-proved end
+  to end, plus one bullet in `LOOPS.md`'s Standardize step 1 — **+73 words,
+  measured by the script itself**, to the file this item is about.
 
 ## Traps worth carrying forward (not slice history)
 
 - **`git stash` is not a way to A/B one file in a dirty tree.** It reverts the
   data along with the script, so two parsers get compared against two different
-  logs. Extract the old version to a probe file *in the same directory* —
-  `_common.LOG` resolves relative to the script — run both against the one live
-  log, then delete the probe.
+  logs. Extract the old version to a probe file *in the same directory*, run
+  both against the one live log, then delete the probe. Used again this wake to
+  red-prove `report_loop_prose.py`'s fatal path.
 - **Parse `git log --name-only` with `--format=%x00%H` and NUL-split records.**
   31 pathnames in this repo are exactly 40 characters, so "any 40-char line is a
   sha" overcounts commits by 8%.
@@ -204,9 +188,9 @@ only from this repo. Publishing is owner-triggered, as every release is.
 ## Standing owner instruction (2026-08-27, resolved 2026-08-28)
 
 **No external product is named in any document in this repo** — describe the
-mechanism instead, or cite the standard when a finding is normative. Slice 160
-asked where the line is and the owner answered: **scrub UX-precedent mentions
-only.** Design-system citations, interop hazards (the product name is the
-reader's search term) and licence attributions are KEPT, with the reasons in
-`check-vendor-names.mjs`'s header. The gate is a denylist and catches regrowth,
-not every conceivable name, so the judgement is still yours.
+mechanism instead, or cite the standard when a finding is normative. The owner's
+line: **scrub UX-precedent mentions only.** Design-system citations, interop
+hazards (the product name is the reader's search term) and licence attributions
+are KEPT, with the reasons in `check-vendor-names.mjs`'s header. The gate is a
+denylist and catches regrowth, not every conceivable name, so the judgement is
+still yours.

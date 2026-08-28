@@ -561,6 +561,12 @@ surfaced more:
    words are being written, when the answer is always yes. Reading the outliers
    on a cadence is the only step that ever asks the other question. ROADMAP
    158.2 carries the commands.
+   **And run `python3 scripts/loops/report_loop_prose.py`** — the same question
+   asked of the files the LOOP reads, which `report:prose` does not cover. Read
+   the `accumulate` column, not the delta: 158.2's cadence rests on docs pages
+   never shrinking, and two of these five shrink by design, so a rising count
+   means nothing for them. 167.1 carries a verdict per file; the finding is a
+   file changing accumulate class, or `LOOPS.md` still at 0 down after 167.2.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

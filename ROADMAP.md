@@ -1045,58 +1045,169 @@ the loop. That is stated rather than dodged: the two items below are the only
 ones filed, both findings A/B/D were closed in place rather than queued, and the
 net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
 
-1. [ ] **167.1 — the loop's own prose is the fastest-growing and the only
-       unmeasured prose in the repo. Decide whether the 158.2 cadence covers
-       it.**
+1. [x] **167.1 — DONE 2026-08-28. Five verdicts: 2 instrument, 3 honest, 0
+       removable that is not already filed. The cadence extends; 158.2's
+       INSTRUMENT does not.**
 
-       158.2 installed a cadence over `apps/docs` prose on the measurement that
-       it grew **+51%** in nine days with **zero pages shrinking**, and argued —
-       correctly — that a per-page justification test cannot produce a shrink
-       because it is applied while the words are being written. That cadence
-       covers the product's prose. **It does not cover the files the loop runs
-       on**, and over the identical window those grew faster:
+       *Accept was*: a recorded verdict for each of the five loop-machinery
+       files naming whether its growth is honest, instrument, or removable —
+       the 158.1 three-way split — **or** a recorded reason the cadence should
+       not extend here. Both halves are below.
 
        ```
-       # words at each day's last commit, 2026-08-20 -> 2026-08-28
-       python3 - <<'PY'
-       import subprocess
-       F=['LOOPS.md','CLAUDE.md','ROADMAP.md','ROADMAP-archive.md',
-          '.roundtable/RESUME.md','DESIGN.md']
-       for d in ['2026-08-20','2026-08-28']:
-           s=subprocess.run(['git','rev-list','-1',f'--before={d}T23:59:59','HEAD'],
-                            capture_output=True,text=True).stdout.strip()
-           for f in F:
-               r=subprocess.run(['git','show',f'{s}:{f}'],capture_output=True,text=True)
-               print(d,f,len(r.stdout.split()) if not r.returncode else 0)
-       PY
-         # RESUME.md          837 ->   2,980   +256.0%   read every wake, Step 0
-         # LOOPS.md         4,380 ->   9,706   +121.6%   read every wake, Steps 0b-2
-         # ROADMAP + archive 86,368 -> 179,597  +107.9%   read every wake, rule 4
-         # CLAUDE.md        2,966 ->   4,759    +60.5%
-         # docs pages (158.2) 51,051 -> 77,080   +51%     read by users
-         # DESIGN.md        3,119 ->   3,609    +15.7%   the product's architecture
+       python3 scripts/loops/report_loop_prose.py                  # 158.2's window
+       python3 scripts/loops/report_loop_prose.py --since 2026-08-19
+       npm run report:prose -w docs                                # the comparator
        ```
 
-       The prose describing the **loop** grew two to five times faster than the
-       prose describing the **product**, and is read far more often.
-       `RESUME.md`'s own text contains *"a handover that only grows stops being
-       read"*, written the day it tripled.
+       **Three of this entry's own five loop-machinery figures did not survive
+       being re-run**, which is why its Accept said re-run rather than quote:
 
-       **Counter-evidence, and it is why this is a decision and not a fix.**
-       Growth is not the defect — being unmeasured is. 158.1/161.1 found the
-       *instrument* at fault in 5 of 15 flagged pages, so a word count over
-       these files would likely flag `LOOPS.md` for containing decisions.
-       `ROADMAP.md`'s growth is already managed (165.1). And `DESIGN.md` is not
-       a like-for-like comparator: it is deliberately terse and delegates to
-       generated docs.
+       | | filed | re-run 08-20 -> HEAD 787319c3 |
+       |---|---|---|
+       | `RESUME.md` | +256.0% | **+100.4%** (837 -> 1,677) |
+       | `LOOPS.md` | +121.6% | **+126.3%** (4,380 -> 9,910) |
+       | ROADMAP **+ archive** | +107.9% | +112.5% (86,368 -> 183,496) |
+       | `ROADMAP.md` **alone** | not measured | **-85.9%** (86,368 -> 12,150) |
+       | `CLAUDE.md` | +60.5% | +60.5% |
+       | `DESIGN.md` | +15.7% | +15.7% |
 
-       *Accept*: a recorded verdict for each of the five loop-machinery files
-       naming whether its growth is honest, instrument, or removable — the same
-       three-way split 158.1 used — **or** a recorded reason the cadence should
-       not extend here. Either outcome satisfies this; finding the premise
-       uninteresting is a satisfying result. Whatever is decided carries the
-       command that produced its numbers, and the numbers are re-run rather than
-       quoted from this entry.
+       **The load-bearing number is not the delta, it is whether the file
+       accumulates.** 158.2's cadence rests on one measurement — of the 89 docs
+       pages present throughout, **not one ended shorter than it started**. That
+       is what makes a rising word count a signal there. Over every commit
+       touching each file since 2026-08-19:
+
+       ```
+       RESUME.md    27 up / 13 down     min 314 · max 2,980 · now 1,677
+       ROADMAP.md  376 up / 12 down     peak 110,061 -> 12,150
+       LOOPS.md     25 up /  0 down
+       CLAUDE.md    10 up /  0 down
+       DESIGN.md     6 up /  0 down / 1 flat
+       ```
+
+       Three files show 158.2's signature and two do not, so the predicate
+       distinguishes rather than being uniformly true (94.11's base-rate check).
+       That split IS the verdict:
+
+       1. **`.roundtable/RESUME.md` — INSTRUMENT.** It is rewritten each wake,
+          not appended: it ends shorter in **13 of 40** transitions. Its peak of
+          **2,980 is the exact commit this entry quoted** (`c4390c7d`), and the
+          very next commit to touch the file — `c432dbc0`, whose subject reads
+          *"cut this file by half"* — took it to 1,658, **-44.4% in one commit**;
+          it is 1,677 today. A word count over a sawtooth measures which wake
+          wrote the handover. The file's own *"a handover that only grows stops
+          being read"* is a rule it is visibly obeying.
+       2. **`ROADMAP.md` (+ archive) — INSTRUMENT.** The filed figure sums the
+          file rule 4 reads with the archive it is emptied into; rule 4's own
+          text says *"Read `ROADMAP.md` only"*. Measured alone over the identical
+          window the live file is the **largest shrink in the repo, -85.9%** —
+          376 up / 12 down, and the 12 downs (the archive sweeps, 165.1 the
+          latest) dominate the other 376 across 388 transitions. Growth here is
+          already managed, and the
+          combined number measures a quantity no wake reads.
+       3. **`LOOPS.md` — HONEST, with one removable region already filed as
+          167.2.** 25 up / 0 down — the only file that matches 158.2's signature
+          *and* is read every wake. Where the +5,530 words went, by section
+          (`git show 6ffdfd3f:LOOPS.md` vs HEAD, split on `##`/`###`):
+          Step 2 **+1,426** · Step 0c **+1,026** (new — the concurrency
+          decision) · Polish playbook +591 (new) · the css-repeats count +521
+          (new) · Standardize +435 · Ideas backlog +334 · Operating rules +272 ·
+          the two `Settled:` refusals +445 (new) · Research +181 (new) ·
+          Optimize +109 · `The eight loops` +214, replacing `The six loops`
+          (-160). Those entries are +5,394 of the +5,530; the remaining **+136**
+          is spread across smaller sections. So the growth is two loops that did
+          not exist on 08-20, a decision, and refusal records whose whole purpose
+          is that this file says they were re-raised twice before being written
+          down. The one
+          region that is archaeology is rule 3's, inside that +1,426 — and
+          **re-running 167.2's own command it is now 1,171 words (181 rule /
+          990 history), up from the 1,026 (181 / 845) it was filed at.** It grew
+          145 words, all of them history, while the item to archive it sat open.
+       4. **`CLAUDE.md` — HONEST.** 10 up / 0 down, +1,793 words, and every
+          section added names the measured failure that produced it (the Accept-
+          criterion rule +528, the storage doctrine's reconcile rule +426, base
+          rate +267, instrument first-output +153). **Watch, not a finding:** 7
+          of its 16 `##` sections — **1,893 of 4,600 section words, 41%** — are
+          all on one subject, whether a detector can fail (`##`-split word
+          counts; the 159 words of difference from the file's 4,759 are the
+          heading lines themselves). They are not duplicates (injection
+          validity, base rate, heuristic self-test, CI-only, structural
+          assertion, first output, reported number are seven distinct traps),
+          but a wake reading one gets no pointer to the other six. Reopen if an
+          eighth is added without folding.
+       5. **`DESIGN.md` — HONEST, and it is the control.** 6 up / 0 down / 1
+          flat, **+15.7%** — the slowest-growing file measured, under a third of
+          docs' +51% (158.2's figure over the 89 pages present throughout;
+          quoted, not re-run — the docs corpus total *was* re-run and is
+          104,419, unmoved from 166.1's run earlier the same day, while
+          `LOOPS.md` went 6,927 → 9,910 over those three days).
+          The entry called it "not a like-for-like comparator" and
+          that is right, but it is the useful comparator: it shows the repo can
+          hold a file near flat while everything around it grows, so the growth
+          elsewhere is a property of those files and not of the era.
+
+       **THE DECISION: the cadence extends to these files; 158.2's INSTRUMENT
+       does not.** The cadence is a periodic read with a verdict, and that is
+       worth having. What is refused is the median-outlier test, measured:
+
+       - **n=5 has no usable median.** 158.2 works on 118 comparable pages in 7
+          families. 161.1 already recorded `/base/`'s **n=6** family median
+          failing — a 6.5x internal spread let it flag a page for being
+          *average-length*. Here n=5, the spread is 1,677 to 171,346 (**102x**),
+          and the five documents have no common shape at all.
+       - **The premise is false for two of the five** — they shrink by design,
+          so the "a justification test cannot produce a shrink" argument that
+          justifies the cadence does not transfer to them.
+
+       So `report_loop_prose.py` ships instead: it prints the delta **and** the
+       accumulate signature, refuses to report on a shallow clone (RESUME.md's
+       trap 2 — every figure here is history, and a shallow clone makes history
+       silently wrong), and reconciles each count against the working tree
+       rather than only the object store. **Three guards, each red-proved end to
+       end, and the two reconciliation outcomes are deliberately different
+       severities:**
+
+       - a real `git clone --depth 1` of this repo → `REFUSING TO REPORT`, exit 1;
+       - a listed path that does not exist (`DESIGN-typo.md`, injected into a
+         probe copy in the same directory — not via `git stash`, per RESUME.md's
+         trap) → `RECONCILIATION FAILED`, exit **1**. Injection confirmed by the
+         `DESIGN.md` row disappearing from the table, not by the message alone.
+         Fatal because a missing path reports a plain `0` that reads exactly
+         like a real count;
+       - an uncommitted edit → a loud `UNCOMMITTED` block naming the delta, exit
+         **0**. Not fatal: the row is HEAD's and off by a known amount, both
+         numbers print, and every wake edits `ROADMAP.md`. A report that exits 1
+         on an ordinary dirty tree is one that gets `|| true`'d. This path was
+         exercised for real by this wake's own edits rather than by an
+         injection.
+
+       `LOOPS.md`'s Standardize step 1 gains one bullet, so the sweep that
+       already runs three rot-guard reports runs a fourth. **The cost is named
+       and measured, not estimated: that bullet is +73 words to the file this
+       item is about** (`report_loop_prose.py`'s own UNCOMMITTED line reported
+       it). It is the same trade `scan:dead-style` and `report:css-repeats`
+       already made — deliberately not a gate, because every current number is
+       correct and a gate would fail the build on five right answers; the
+       finding is the delta.
+
+       **Noticed in passing, and it is a trap for anyone re-running this.** A
+       bare `wc -w` in this container **undercounts these files by 2.4-4.5%**,
+       silently. No locale is set, and GNU wc in the C locale swallows an em
+       dash: `printf 'alpha — beta\n' | wc -w` prints **2**, not 3 — red-proved
+       on that 12-byte probe before being believed. `LC_ALL=C.UTF-8 wc -w` and
+       Python's `str.split()` agree with each other exactly on all five files
+       (9,910 · 4,759 · 3,609 · 12,150 · 1,677); the bare `wc` reports 9,660 ·
+       4,675 · 3,537 · 11,603 · 1,632. This repo's prose is em-dash-heavy, so
+       any ad-hoc word count taken here is low unless the locale is pinned. The
+       script counts in Python for this reason; `report:prose` is Node and
+       unaffected.
+
+       **What would reopen this:** `LOOPS.md` still 0-down after 167.2 lands —
+       that is the file where the premise holds and the growth is real, so an
+       archive sweep that does not shrink it means the sweep did not work.
+       Or `RESUME.md`/`ROADMAP.md` going 0-down over a window, which would move
+       them out of `instrument` and into the cadence for real.
 
 2. [ ] **167.2 — `LOOPS.md` rule 3 is 82% archaeology, and the file has no
        archive.**
