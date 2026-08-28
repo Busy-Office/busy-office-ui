@@ -164,6 +164,15 @@ item: 112.3/112.4 are owner-blocked and the AT-runtime item needs hardware, so
   halves red-proved after: drop the pointer → red; paste a durable heading back
   → red.
 
+- **CI went RED on the first push and is GREEN now.** Run **572 failed**
+  (`db4c0b8d`, docs container build, `Containerfile:33`); run **573 passed, all
+  six jobs, zero failures** (`5a5ea576`, 10:55:38Z). The cause and the fix are
+  in ROADMAP 169.3's third defect. **This wake therefore pushed TWICE**, against
+  the one-push-per-wake rule — stated plainly rather than glossed: the first
+  push was made early to watch CI per the standing rule, and the second was the
+  fix for what CI found. A red `main` is not something to leave for the batching
+  rule.
+
 **Re-run, do not quote** — every figure above has its command in ROADMAP 169.3.
 
 ## Counters after this wake
