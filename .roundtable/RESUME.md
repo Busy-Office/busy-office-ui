@@ -96,7 +96,32 @@ nine rows of history away, silently. `generate_status.py` now counts the raw row
 in `loop-log.md`, announces the disagreement and rebuilds. If you touch another
 mirror here, assert its count against the file first.
 
-### 6. NEW — A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
+### 6. NEW — THE GITHUB RUN-LEVEL ENDPOINTS SERVE A STALE SNAPSHOT
+
+**This cost ~20 minutes of dead polling this wake, and put a wrong claim in the
+owner's notification.** After pushing, `get_workflow_run` and
+`list_workflow_jobs` both reported run 565 `in_progress` with `updated_at`
+FROZEN at `06:50:54` across five polls over twenty minutes — so it read as a run
+hung at ~7x its ~3-minute norm. It was not. Querying each job by id with
+**`get_workflow_job`** returned live data: all six had finished, the last at
+**06:53:48**, every step `success`. A normal three-minute run.
+
+The tell is the one this repo already names — *a value identical across many
+polls is a defect in the instrument until proven otherwise*. A timestamp that
+does not move while a run is supposedly progressing is that value.
+
+```
+# stale:  actions_get   get_workflow_run   <run_id>
+# stale:  actions_list  list_workflow_jobs <run_id>
+# LIVE:   actions_get   get_workflow_job   <job_id>     ← use this
+```
+
+Get the job ids once from `list_workflow_jobs`, then poll the jobs individually.
+And note this was a *reported* number: the owner was told CI looked stuck. That
+is the failure mode CLAUDE.md's "a number you report is load-bearing" section is
+about, and it happened to a number about the tooling rather than the product.
+
+### 7. NEW — A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
 No locale is set in this container, and GNU `wc` in the C locale swallows an em
 dash, which this repo's prose is full of:
@@ -121,6 +146,9 @@ rm -rf apps/docs/dist
 Green this wake: `build -w @busy-office/ui`, `test -w @busy-office/ui`,
 `docs:build`, `check:repo`, `check:claims` (139), `check:layout` (127 pages),
 `test:axe` (127 × 2).
+
+**CI run 565 (`cd31930`) is GREEN** — all six jobs `success`, finished 06:53:48,
+confirmed per-job because the run-level endpoint was stale (trap 6).
 
 `sqlite3` is NOT installed in this container. Query the mirror with Python's
 `sqlite3` module — `python3 -c "import sqlite3; ..."`.
