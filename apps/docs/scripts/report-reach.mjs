@@ -167,6 +167,68 @@ for (const [name, meta] of Object.entries(api.components ?? {})) {
   }
 }
 
+/**
+ * Verdicts for blocks at EXACTLY ONE composition (roadmap 163.1).
+ *
+ * Principle 3 says a piece earns its place by surviving >=2 real, independent
+ * compositions, so this is the bucket the principle actually names — and it
+ * went unadjudicated while the zero bucket got all the attention.
+ *
+ * Reconciliation is stricter here than for the zero bucket, and deliberately:
+ * a verdict about a block "used once" is refuted if the count moves in EITHER
+ * direction. Reaching 2 vindicates the block; falling to 0 makes it a
+ * different question. Both are checked below.
+ *
+ * Most verdicts rest on the component's own gated wrong-choice clause rather
+ * than on a corpus proxy. That is exact — the clause is reviewed and
+ * `check:wrong-choice` enforces its presence — whereas the proxies tried first
+ * were not: counting pattern pages containing `<ol` returned 39 of 39, because
+ * the pattern recipe MANDATES an Anatomy ordered list on every page. That is
+ * docs chrome, not screen content, and it would have manufactured a finding.
+ */
+const ADJUDICATED_ONCE = new Map([
+  ['bo-composer', {
+    verdict: 'REAL MISS — screen-level, not the component',
+    why: '/patterns/approval renders the thread (`bo-audit`) and the chain (`bo-timeline`) and gives the reader no way to CONTRIBUTE to it. The composer ships in approval-workflow.css for exactly that thread. Command: `grep -c "bo-composer" apps/docs/src/pages/patterns/approval.astro` -> 0 on 2026-08-28. Same shape as bo-date: the screen changes, not the component.',
+  }],
+  ['bo-calendar', {
+    verdict: 'correct at one',
+    why: 'its own clause refuses the common case — "Not for a plain date field" — so it is for when a DAY IS SPECIAL. The corpus\'s two time-shaped screens are tabular by nature. Command: `grep -c bo-calendar apps/docs/src/pages/patterns/{schedule,timesheet}.astro` -> 0 and 0; both compose `bo-data-table` instead.',
+  }],
+  ['bo-tag-input', {
+    verdict: 'correct at one',
+    why: 'clause: "Not for a small fixed set — three or four known options". Most multi-value choices in the corpus are small and fixed, which is `bo-segmented` or `bo-choice` territory.',
+  }],
+  ['bo-richtext', {
+    verdict: 'correct at one',
+    why: 'clause: "Not for an ordinary note field — most ERP free-text" wants a plain textarea. A component whose own docs send the majority case elsewhere should be rare in a corpus of ordinary screens.',
+  }],
+  ['bo-toast', {
+    verdict: 'correct at one',
+    why: 'clause: "Not for a field that failed validation". A toast is for a completed background action, which is one screen shape here, not many.',
+  }],
+  ['bo-skeleton', {
+    verdict: 'correct at one',
+    why: 'clause: "Not for a failure inside an otherwise-working screen". Documented on /patterns/first-load, which is the pattern for the case it is for. The 16 pattern pages mentioning "loading" describe the STATE in a table; they are not screens that should render a skeleton.',
+  }],
+  ['bo-offcanvas', {
+    verdict: 'correct at one',
+    why: 'clause: "Not when the panel\'s content must stay visible beside the" list. Its one use is the documented answer to a measured failure — 156.1 measured master-detail\'s split collapsing to a 36px detail pane at 390px. A second use is a screen decision, not a component gap.',
+  }],
+  ['bo-prose', {
+    verdict: 'correct at one',
+    why: 'EXEMPT from the wrong-choice gate with the stated reason "renders whatever stored rich text a server sends; the choice is upstream of this class". A block whose use is decided by the server cannot be reached for by a static screen more often than the corpus happens to store rich text.',
+  }],
+  ['bo-radio', {
+    verdict: 'correct at one — and the obvious finding here was FALSE',
+    why: 'the tempting claim is "7 compositions render type=radio but only 1 uses bo-radio". Measured, 6 of those 7 carry `bo-segmented__input` — the segmented control IS a radio group, and it is the right component for a small exclusive choice. Only /patterns/comparison needs a bare radio. Command: for each file matching `type="radio"`, read the class on that input. Suitability beating reuse, same verdict shape as bo-tree.',
+  }],
+  ['bo-ordered-list', {
+    verdict: 'NOT EXAMINED — recorded as unexamined rather than guessed',
+    why: 'it carries no wrong-choice clause to reason from, and the corpus proxy tried (pattern pages containing `<ol`) returned 39 of 39 because the pattern recipe mandates an Anatomy list on every page. That proxy measures docs chrome. Rather than invent a verdict, this stays open: 163.1 Accept (a) allows "reads as unexamined".',
+  }],
+]);
+
 /* Independent compositions: real screens and pattern pages. Component docs
    pages are excluded ON PURPOSE — a component appearing on its own reference
    page is not a composition, and counting it would make every block look used,
@@ -222,7 +284,11 @@ const unknownExempt = [...CANNOT_APPEAR.keys(), ...DEPRECATED.keys()].filter((b)
    says "nobody composed this, and here is why that is right" is refuted the
    moment somebody composes it. */
 const staleVerdict = [...ADJUDICATED.keys()].filter((b) => (reach.get(b) ?? 0) > 0);
-const unknownVerdict = [...ADJUDICATED.keys()].filter((b) => !reach.has(b));
+const unknownVerdict = [...ADJUDICATED.keys(), ...ADJUDICATED_ONCE.keys()].filter((b) => !reach.has(b));
+/* A used-once verdict is refuted by movement in EITHER direction. */
+const staleOnce = [...ADJUDICATED_ONCE.keys()].filter(
+  (b) => reach.has(b) && reach.get(b) !== 1,
+);
 
 /* A tidy number is a defect until proven otherwise (CLAUDE.md). All-zero means
    the matcher broke; all-used means the corpus is wrong. Say so loudly in the
@@ -288,17 +354,31 @@ for (const b of staleVerdict) {
 for (const b of unknownVerdict) {
   console.log(`  !! ${b} carries a verdict here but is not a shipped block — renamed or removed?`);
 }
+/* Printed HERE, beside its siblings, because the first version computed
+   `staleOnce` and never printed it — a dead reconciliation that a later edit
+   in the same commit clobbered. It was caught by red-proving both directions
+   and getting silence, which is the only reason this line exists. */
+for (const b of staleOnce) {
+  console.log(
+    `  !! ${b} carries a "used once" verdict but now reaches ${reach.get(b)} composition(s) — ` +
+      'a used-once verdict is refuted by movement in EITHER direction; re-adjudicate it',
+  );
+}
 /* Which of these carry a verdict is COMPUTED, not asserted. The only verdicts
    that exist are about zero reach, so this is expected to read "none" — and the
    day it does not, the staleVerdict line above has already fired. Printing a
    hardcoded "none adjudicated" would be a sentence that cannot go wrong, which
    this repo counts as a defect. Roadmap 163.1 is the item to fill this in. */
+const oneUnverdicted = one.filter(([b]) => !ADJUDICATED_ONCE.has(b));
 console.log(
-  `  used once (${one.length}) — adjudicated: ` +
-    `${one.filter(([b]) => ADJUDICATED.has(b)).map(([b]) => b).join(', ') || 'none'}; ` +
-    `carrying no verdict: ` +
-    `${one.filter(([b]) => !ADJUDICATED.has(b)).map(([b]) => b).join(', ') || 'none'}`,
+  `  used once (${one.length}) — the bucket principle 3 actually names; ` +
+    `${one.length - oneUnverdicted.length} adjudicated, ${oneUnverdicted.length} carrying no verdict` +
+    `${oneUnverdicted.length ? `: ${oneUnverdicted.map(([b]) => b).join(', ')}` : ''}`,
 );
+for (const [b] of one) {
+  const v = ADJUDICATED_ONCE.get(b);
+  if (v) console.log(`    ${b} — ${v.verdict}: ${v.why}`);
+}
 console.log(
   '  zero reach is NOT automatically a defect — it can mean the component is ' +
     'correctly refused at the point of use, or that the suite has no screen of ' +

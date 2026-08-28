@@ -1838,7 +1838,7 @@ finding is that **nobody has written that down**, so the report cannot tell an
 examined one from an unexamined one — which is the same defect 159.1 just fixed
 one bucket up.
 
-1. [ ] **163.1 — adjudicate the ten blocks at exactly one composition.**
+1. [x] **163.1 — DONE 2026-08-28. Ten verdicts: 8 correct, 1 real miss, 1 unexamined.**
        Each gets a verdict, or an explicit "not examined", by the same rule
        159.1 installed: the verdict is a dated claim, it stays in the count, and
        it reconciles both ways.
@@ -1854,6 +1854,45 @@ one bucket up.
        **Do not re-derive the counts above** — the command is in this item and
        takes seconds. If it now disagrees with 61/75/7/10, that disagreement is
        the first thing to report, not something to quietly write over.
+
+       **Counts re-run first, as instructed: 61/75/7/10, no disagreement.**
+
+       **The one real miss is `bo-composer`, and it is screen-level.**
+       `/patterns/approval` renders the thread (`bo-audit`) and the chain
+       (`bo-timeline`) and gives the reader **no way to contribute to it** —
+       while the composer ships in `approval-workflow.css` for exactly that
+       thread. Command: `grep -c "bo-composer" apps/docs/src/pages/patterns/
+       approval.astro` → 0. Same shape as `bo-date`: the screen changes, not
+       the component. Not fixed here — that is a screen decision and a
+       separate item.
+
+       **Eight are correct at one**, each verdicted from the component's own
+       **gated wrong-choice clause** rather than a corpus proxy — exact,
+       because the clause is reviewed and `check:wrong-choice` enforces its
+       presence. `bo-ordered-list` is recorded **NOT EXAMINED**: it carries no
+       clause, and Accept (a) permits that rather than a guess.
+
+       **Two instrument failures, both mine, both caught before they became
+       findings:**
+
+       - **A false finding, nearly filed.** "7 compositions render
+         `type="radio"` but only 1 uses `bo-radio`" looked like a clear
+         principle-3 miss. Reading the class on each of those inputs shows **6
+         of 7 carry `bo-segmented__input`** — the segmented control IS a radio
+         group, and it is the right component for a small exclusive choice.
+         Suitability beating reuse, same verdict shape as `bo-tree`.
+       - **A corpus proxy that measured docs chrome.** Pattern pages containing
+         `<ol` returned **39 of 39** — because the pattern recipe MANDATES an
+         Anatomy ordered list on every page. A 100% reading is a defect until
+         proven otherwise, and this one was.
+
+       **And the reconciliation shipped DEAD on its first version.** A
+       used-once verdict is refuted by movement in either direction, so
+       `staleOnce` was computed — and never printed, because a later edit in
+       the same commit clobbered the loop. Red-proving both directions
+       returned **silence**, which is the only reason it was found. Now printed
+       beside its siblings and red-proved for real: injecting `bo-btn` (58
+       compositions) and `bo-tree` (0) each fire. Exit stays 0 throughout.
 
 ## Slice 162 — Two wakes took the same item, and nothing could have stopped them (2026-08-28)
 
