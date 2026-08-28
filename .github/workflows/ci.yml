@@ -13,6 +13,20 @@ on:
     # stamp-readme reads the READMEs), so a markdown edit can genuinely turn
     # CI red and none of those may be ignored.
     #
+    # `.roundtable/**` IS SAFE TO IGNORE, and that is now checked rather than
+    # assumed (roadmap 169.4). It was not safe when this comment last claimed
+    # it: `check:repo` ran check-resume-charter.mjs, which opens
+    # .roundtable/RESUME.md — so a commit touching only .roundtable/** could
+    # break check:repo and never be built. The charter check moved onto the
+    # loop's own path (record_iteration.py), where its input lives.
+    #
+    # check:ci-ignores could not see this. It skipped every entry containing
+    # '*', and this is the only glob — the gate written to catch exactly this
+    # was blind in the one slot that mattered. It now covers globs by directory
+    # prefix, and derives WHICH SCRIPTS CI RUNS from this file rather than
+    # scanning every script on disk. Verify with:
+    #     npm run check:ci-ignores -w docs
+    #
     # ROADMAP.md IS READ BY A GATE, and the route to that sentence is worth
     # keeping. The old comment here claimed two gate scripts read it and used
     # that to justify not ignoring it. Measured on 2026-08-25: zero did — four

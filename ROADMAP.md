@@ -1656,8 +1656,7 @@ nothing visual was looked at.**
        was touched, which is a stronger statement than a screenshot;
        `check:layout` and `test:axe` swept all 127 pages at both widths anyway.
 
-4. [ ] **169.4 — `check:repo` now reads a path CI ignores, and the gate that
-       exists to catch that cannot see it.** Caused by 169.3 and found in the
+4. [x] **169.4 — DONE 2026-08-28. The read moved off CI's path; the gate now sees globs.** Caused by 169.3 and found in the
        same wake, by noticing that its own last push created no CI run.
 
        Two facts, both measured rather than reasoned:
@@ -1687,6 +1686,31 @@ nothing visual was looked at.**
        which change caused it. The ratchet is delayed, not dead. But the
        invariant `paths-ignore` rests on is genuinely violated, and `ci.yml`'s
        comment asserted the opposite until this item corrected it.
+
+       **Resolved by removing the read, not by excusing it.**
+       `check-resume-charter.mjs` left `check:repo` and now runs from
+       `record_iteration.py` — the loop's own path, which is where its input
+       lives. `.roundtable/**` is the loop's workspace and is CI-ignored by
+       design; a CI gate reading it was the contradiction, not the ignore.
+
+       **The gate now covers globs**, by directory prefix, and — the bigger
+       change — **derives which scripts CI actually runs** from `ci.yml` rather
+       than scanning every script on disk. Its own claim is "read by nothing
+       THAT RUNS IN CI", and scanning the directory conflated the two.
+       Assertions went **24 → 128**.
+
+       **Its first three versions were wrong, and only the red-proof found
+       that.** (1) Reusing `readsFile`'s `NAME = path` heuristic for a glob:
+       a directory prefix starts with `.`, which is a regex wildcard, so it
+       flagged `examples/erp-suite/build.mjs` — whose only mention is inside a
+       `<code>` tag in generated HTML. (2) Flattening the workspace script maps:
+       the root `package.json` merged last, so its `build` overrode the docs
+       `build` and the chain stopped before `check:repo`. (3) Resolving a bare
+       `npm run X` against the root: inside a workspace script it means X in
+       THAT workspace, and `docs`'s `build` chains `npm run check:repo` with no
+       `-w`. **The red-proof stayed green twice** — putting the charter check
+       back into `check:repo` should turn it red, and did not, until the
+       workspace context was carried. It now goes red on exactly that.
 
        *Accept*: `check:ci-ignores` and `ci.yml` agree with what the scripts
        actually read — **either** the glob is covered (which requires resolving

@@ -40,6 +40,36 @@ const SCRIPT_DIRS = [
 ];
 
 /** Reads a NAME in a way that would break if the file changed. */
+/* Four scripts NAME these paths in prose, and a gate matching those could
+   never pass. One definition, used by both readers below — it was inlined in
+   readsFile and the glob reader needed the same thing. */
+function stripComments(source) {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/(^|[^:])\/\/.*$/gm, '$1 ');
+}
+
+/**
+ * Does this source OPEN something under a directory? Used for glob entries.
+ *
+ * Deliberately narrower than `readsFile`: only a real read/join call counts.
+ * `readsFile`'s third pattern — `NAME = '…/x.md'`, an identifier bound to the
+ * path — cannot be reused here, because a directory prefix starts with a dot
+ * and `.` is a regex wildcard, so `.ROUNDTABLE` matches almost anything. That
+ * was not reasoned about: the first version of this flagged
+ * `examples/erp-suite/build.mjs`, whose only mention is `.roundtable/…` inside
+ * a `<code>` tag in generated HTML. Two candidates, both false, before a line
+ * of it was believed.
+ */
+function opensPath(source, prefix) {
+  const esc = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const code = stripComments(source);
+  return (
+    new RegExp(`read[A-Za-z]*\\s*\\([^)]*['"\`][^'"\`]*${esc}`).test(code) ||
+    new RegExp(`join\\s*\\([^)]*['"\`][^'"\`]*${esc}`).test(code)
+  );
+}
+
 function readsFile(source, name) {
   const bare = name.replace(/\.[a-z]+$/i, '');
   const patterns = [
@@ -50,12 +80,7 @@ function readsFile(source, name) {
     // const ROADMAP = '…/ROADMAP.md'  (an identifier bound to the path)
     new RegExp(`${bare.toUpperCase()}\\s*=\\s*[^\\n]*['"\`][^'"\`]*${name}`),
   ];
-  // Strip comments first: four scripts NAME ROADMAP.md in prose, and a gate
-  // that matched those could never pass.
-  const code = source
-    .replace(/\/\*[\s\S]*?\*\//g, ' ')
-    .replace(/(^|[^:])\/\/.*$/gm, '$1 ');
-  return patterns.some((re) => re.test(code));
+  return patterns.some((re) => re.test(stripComments(source)));
 }
 
 /* The docs image copies apps/ and packages/ only, so `.github/` is legitimately
@@ -77,12 +102,77 @@ if (yml === null) {
 }
 const ignored = [...yml.matchAll(/^\s*-\s*'([^']+)'\s*$/gm)]
   .map((m) => m[1])
-  .filter((p) => !p.includes('*')) // directory globs have no single file to read
+  // Globs are KEPT (roadmap 169.4). They were filtered out with the comment
+  // "directory globs have no single file to read", and that was true of the
+  // reader but not of the risk: `.roundtable/**` was the only glob entry and
+  // it was the one carrying a live violation — check:repo ran a gate that
+  // opened .roundtable/RESUME.md. The gate written to catch exactly that was
+  // blind to it BY CONSTRUCTION, in the one slot it did not cover.
+  //
+  // A glob has no single filename, so it is matched by DIRECTORY PREFIX below
+  // instead of by name.
   .filter((v, i, a) => a.indexOf(v) === i);
 
 assertScanned(ignored.length, 'ignored file path(s) in ci.yml', 'paths-ignore moved or reformatted?');
 
 const g = gate('ci-ignores check', 'CI-ignored file(s)');
+/**
+ * The scripts CI actually runs, DERIVED from ci.yml rather than listed.
+ *
+ * Every `run:` line is expanded through both package.json script maps (one
+ * level of `npm run X` indirection, which is all this repo uses), and every
+ * `scripts/<file>.mjs` mentioned in the result is a script CI executes. A
+ * hand-kept list would rot; this is recomputed each run and `assertScanned`
+ * below refuses a suspicious zero.
+ */
+const ciYml = await readFile(join(ROOT, '.github', 'workflows', 'ci.yml'), 'utf8').catch(() => '');
+
+/* Keyed by WORKSPACE, never flattened. Flattening was the first version and it
+   was wrong in a way the red-proof caught: the root package.json is merged last
+   and its `build` overrides the docs `build`, so `npm run build -w docs` — the
+   line CI actually runs — resolved to the CORE build and the whole
+   check:repo chain below it disappeared. The gate then passed for the wrong
+   reason. `-w <name>` picks the map. */
+const WORKSPACES = {
+  docs: join(ROOT, 'apps', 'docs', 'package.json'),
+  '@busy-office/ui': join(ROOT, 'packages', 'core', 'package.json'),
+  '@busy-office/create-ui': join(ROOT, 'packages', 'create-ui', 'package.json'),
+  '': join(ROOT, 'package.json'),
+};
+const scriptsOf = {};
+for (const [ws, file] of Object.entries(WORKSPACES)) {
+  scriptsOf[ws] = (await readFile(file, 'utf8').then(JSON.parse).catch(() => ({}))).scripts ?? {};
+}
+
+/* Expand `npm run X [-w Y]` recursively, CARRYING THE WORKSPACE.
+   A bare `npm run X` inside a workspace script means X in THAT workspace, not
+   the root — `docs`'s own `build` chains `npm run check:repo` with no `-w`.
+   Resolving those against the root was the second wrong version of this: the
+   root has no `check:repo`, so the chain stopped one link short of every gate
+   it runs, and the red-proof stayed green twice before this was found. */
+const seen = new Set();
+function expand(cmd, ws) {
+  let out = cmd;
+  for (const m of cmd.matchAll(/npm run ([\w:-]+)(?:\s+-w\s+(\S+))?/g)) {
+    const target = m[2] ?? ws;
+    const key = `${target}::${m[1]}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const body = (scriptsOf[target] ?? {})[m[1]];
+    if (body) out += '\n' + expand(body, target);
+  }
+  return out;
+}
+const ciText = [...ciYml.matchAll(/^\s*run:\s*(.+)$/gm)]
+  .map((m) => expand(m[1], ''))
+  .join('\n');
+
+const ciRun = new Set();
+for (const m of ciText.matchAll(/scripts\/([\w-]+\.mjs)/g)) {
+  for (const dir of SCRIPT_DIRS) ciRun.add(join(dir, m[1]));
+}
+assertScanned(ciRun.size, 'script(s) CI runs, derived from ci.yml', 'ci.yml moved, or npm run indirection changed shape?');
+
 let scanned = 0;
 
 for (const dir of SCRIPT_DIRS) {
@@ -98,10 +188,21 @@ for (const dir of SCRIPT_DIRS) {
     if (!source) continue;
     scanned += 1;
     for (const path of ignored) {
-      const name = path.split('/').pop();
+      // A script that exists but CI never runs cannot make CI blind, and this
+      // gate's claim is specifically "read by nothing THAT RUNS IN CI"
+      // (roadmap 169.4). Scanning every file in the directory conflated the
+      // two: after the charter check moved off `check:repo` onto the loop's own
+      // path, the gate kept flagging it for a read that CI no longer performs.
+      if (!ciRun.has(join(dir, e))) continue;
+      const isGlob = path.includes('*');
+      // For a glob, any read of a file under that directory is a violation —
+      // there is no single name to look for, so the directory prefix is the
+      // signal. Same comment-stripping as readsFile, for the same reason: four
+      // scripts NAME these paths in prose.
+      const dirPrefix = path.replace(/\/?\*+$/, '');
       g.check(
         `${join(dir, e).replace(ROOT + '/', '')} does not read ${path}`,
-        !readsFile(source, name),
+        isGlob ? !opensPath(source, dirPrefix) : !readsFile(source, path.split('/').pop()),
         `A commit touching only ${path} is never built, so this script's ` +
           `dependency on it would be untested. Either stop reading it, or ` +
           `remove ${path} from paths-ignore in .github/workflows/ci.yml.`,

@@ -146,6 +146,25 @@ def main():
         except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
             print(f"  (warning: {label} regeneration failed: {exc})", file=sys.stderr)
 
+    # RESUME.md's charter check runs HERE, not in `check:repo` (roadmap 169.4).
+    # `.roundtable/**` is in CI's paths-ignore, so a commit touching only it is
+    # never built — which made a CI-run gate reading RESUME.md a silent hole:
+    # it could break and go unbuilt, surfacing on whatever landed next. The
+    # check is loop hygiene about the loop's own workspace, so it belongs on
+    # the loop's own path, which runs every time a wake records an iteration.
+    # Advisory here by the same rule as the generators above: it must not fail
+    # the recording, which is the operation that actually matters.
+    charter = os.path.join(
+        os.path.dirname(__file__), "..", "..", "apps", "docs", "scripts", "check-resume-charter.mjs"
+    )
+    try:
+        r = subprocess.run(["node", charter], capture_output=True, text=True)
+        if r.returncode != 0:
+            print("  (RESUME.md charter check FAILED — see below)", file=sys.stderr)
+            print((r.stdout or "") + (r.stderr or ""), file=sys.stderr)
+    except Exception as exc:  # noqa: BLE001 - same reason as above
+        print(f"  (warning: charter check could not run: {exc})", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()

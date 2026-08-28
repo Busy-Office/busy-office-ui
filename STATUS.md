@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-28 12:08 UTC
+Generated at: 2026-08-28 12:25 UTC
 
 ## Open items by slice
 
@@ -24,9 +24,9 @@ Generated at: 2026-08-28 12:08 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1042 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-28 20:08   ok
-  Objective     1 / 3 slice           since 2026-08-28 11:42   ok  [172]
+dispatch status — counter-triggered rules (1043 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-28 20:08   ok
+  Objective     2 / 3 slices          since 2026-08-28 11:42   ok  [169, 172]
 ```
 
 ## Owner-blocked
@@ -39,7 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 09:40 · Meta · refusal · a threshold on the 12-of-13 rate — that is the ratio 168.1's own Accept refuses, and it cannot tell maintenance that unblocks product from maintenance that displaces it · refused · f2506dfb
 - 2026-08-28 18:41 · Roadmap · plan · 171.1-171.3 triaged from the owner's scoring wishlist: performance and the recommendation surface already exist for screens, usability died by its own accept test at 5/5 on all 28, layout is unscored — and 4 of 6 DSA dimensions have exactly one value across 39 components, so the instrument driving Polish cannot rank · triaged · 1f7a2ee
 - 2026-08-28 18:41 · Meta · refusal · a new usability score — it died once on measurement and re-proposing it without answering the 5/5 result re-raises a settled refusal · refused · 1f7a2ee
 - 2026-08-28 10:42 · Continue · build · 169.3 — the durable traps and toolchain move out of RESUME.md into .roundtable/ENVIRONMENT.md; LOOPS.md Step 0 names both files and check:resume-charter holds both ends. Implemented not refused: the premise re-check found the item's own risk half false (9 trap probes over 53 revisions, ZERO dropped-then-restored, so the manual re-copy never lost anything) and the real cost is visibility, not survival — durable content was 214 of 372 lines and grew 3.2x faster than the per-wake half, inside a file rewritten at mean 111 lines per commit. Gate red-proved on the REAL pre-move tree, 6 of 6 rules, before either injection · landed · f95793e1
@@ -49,6 +48,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 11:43 · Continue · build · 172.1 — check-resume-charter retagged @heuristic and its fail-open fence hole closed: hasUnterminatedFence is now its own loud g.check and the --self-test the tag owes ships with six cases, red-proved both ways with the injections confirmed off disk; check-selftests now matches the tag at its declaration position, reconciled against the unchanged tree (43/12/31) which is what caught the fix's own first draft reporting eight gates untagged · landed · a2849e00
 - 2026-08-28 20:08 · Standardize · tidy · nine gates printed a bare failure count while 26 and the shared gate() helper name the noun; converged them on the house form, each noun taken from that gate's own pass line. Red-proved on the failure branch, since passing gates cannot exercise it · landed · ad0b77a
 - 2026-08-28 20:08 · Meta · refusal · a reportFailures() helper — it would need the noun passed in anyway, saving four lines and nothing else, while gate() already serves the assertion-shaped gates · refused · ad0b77a
+- 2026-08-28 20:25 · Continue · build · 169.4: check:repo no longer reads a CI-ignored path — the RESUME charter check moved onto record_iteration's path; check:ci-ignores now covers globs and derives which scripts CI runs, and its red-proof failed twice before the workspace-context bug was found · landed · 87e0c7f
 
 ## Sunset test
 
