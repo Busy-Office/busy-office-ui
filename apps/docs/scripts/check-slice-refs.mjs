@@ -51,6 +51,14 @@
  * reaction to the outage above — "stop scanning the notes directory". It would
  * drop those 16 and re-open exactly the silent rot this gate exists to catch.
  *
+ * AND IF YOU ARE WRITING ABOUT THIS GATE, DO NOT SPELL ITS FAILURE LINE. Prose
+ * quoting `FAIL roadmap <n>` verbatim puts a citation-shaped string pointing
+ * nowhere into a scanned file, and this gate correctly fails on it — an
+ * assertion tripped by its own explanation, which is a trap CLAUDE.md already
+ * names and which caught the hand-off note for this very slice. Describe the
+ * number; do not write it. (`ROADMAP.md` and its archive are exempt: they are
+ * the corpus, not scanned sources.)
+ *
  * A REGRESSION GATE, NOT A PURITY GATE. Two citations do not resolve today and
  * both predate the sweeps, so demanding every one would be red on its first run.
  * The baseline is frozen; the gate fires only when the set GROWS. Removing an
