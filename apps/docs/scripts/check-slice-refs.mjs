@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /**
- * Gate: a slice number cited from the code still resolves in the plan.
+ * Gate: a slice number cited from the code still resolves in the plan, and
+ * resolves to exactly ONE slice.
  *
- * @exact — set membership over strings found in two files. Nothing inferred.
+ * @exact — equality and set membership over strings matched at a fixed lexical
+ *   position (`^## Slice N`, and the citation form in the source). Nothing is
+ *   inferred about what a section says.
  *
  * WHY. `ROADMAP.md` is swept periodically: item 110.4 moved 83 closed slices
  * to `ROADMAP-archive.md` on 2026-08-22, the live file grew back from 5,562 to
@@ -27,6 +30,33 @@
  * in content that had been overwritten minutes earlier. A number that moves by
  * 28x when an unrelated mistake is undone was never a measurement of the thing
  * it claimed to measure.
+ *
+ * SECOND ASSERTION: NO SLICE NUMBER HEADS TWO SECTIONS (roadmap 175.1). The
+ * check above asks whether a citation resolves; it never asked whether it
+ * resolves *uniquely*, and on 2026-08-28 it stopped being able to tell. Two
+ * different slices were filed as `## Slice 172` about 80 minutes apart — an
+ * Objective grill and an owner bug report — so `roadmap 172.1` named two
+ * unrelated items and this gate stayed green on both.
+ *
+ * The cost is not only that a reader lands on the wrong section.
+ * `dispatch_status.py` collapses the slices closed since the last grill into a
+ * `set()`, so a collision subtracts exactly one from rule 3's arming count —
+ * red-proved by rewriting the colliding log row in a probe copy:
+ * `['169', '170', '172']` (3) becomes `['169', '170', '172', '174']` (4).
+ * Rule 3's threshold is three, so a collision flips OVERDUE to ok whenever the
+ * true count is exactly three — the silent-starvation failure `LOOPS.md`
+ * records five recurrences of.
+ *
+ * Base rate, so this is not ceremony (94.11): over all 710 revisions of
+ * `ROADMAP.md`, a duplicated slice number appears in **3** — the three commits
+ * carrying this one collision. The predicate is false of the other 707.
+ *
+ * Scoped to `ROADMAP.md` alone, and that is sufficient rather than a shortcut:
+ * every archived slice leaves a pointer stub behind here, and the two sets were
+ * checked equal — 144 stubs here, 144 real sections in `ROADMAP-archive.md`,
+ * the same numbers on both sides. A number in use anywhere is therefore visible
+ * in this one file. What would break that: deleting a stub instead of leaving
+ * one, which is exactly what the 110.4 sweep exists not to do.
  */
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
@@ -84,6 +114,24 @@ const resolves = (ref) =>
     : new RegExp(`^## Slice ${ref}\\b`, 'm').test(corpus);
 
 const g = gate('slice-refs check', 'slice citation(s)');
+
+/* Uniqueness first: every check below asks a citation to resolve, and a number
+   heading two sections makes "resolves" the wrong question. */
+const headings = [...live.matchAll(/^## Slice (\d+)\b/gm)].map((m) => m[1]);
+assertScanned(headings.length, 'slice heading(s) in ROADMAP.md', 'has the heading form changed?');
+const seen = new Map();
+for (const n of headings) seen.set(n, (seen.get(n) ?? 0) + 1);
+for (const [n, count] of seen) {
+  g.check(
+    `slice ${n} heads exactly one section`,
+    count === 1,
+    `"## Slice ${n}" heads ${count} sections in ROADMAP.md, so every "${n}.x" ` +
+      `names two items.\n     Renumber the one filed LATER to the next free ` +
+      `number and note the renumber in it; the loop log keeps the old id, ` +
+      `because historical rows are left alone (roadmap 175.1).`,
+  );
+}
+
 for (const [ref, where] of cites) {
   if (KNOWN_DANGLING.has(ref)) continue;
   g.check(
@@ -94,4 +142,7 @@ for (const [ref, where] of cites) {
       `slice back; the citation is what makes a rule's reason findable.`,
   );
 }
-g.report(`checked (${cites.size} cited, ${KNOWN_DANGLING.size} known-dangling baseline)`);
+g.report(
+  `checked (${cites.size} cited, ${KNOWN_DANGLING.size} known-dangling baseline) ` +
+    `and ${seen.size} slice number(s) each heading one section`,
+);

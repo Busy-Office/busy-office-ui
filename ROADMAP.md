@@ -957,6 +957,176 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 175 — Objective grill of Slices 169, 170, 172 (2026-08-28)
+
+Dispatcher rule 3 at 3/3 `[169, 170, 172]`; rule 1 found no open P0 and GitHub
+intake is empty (0 open issues, asked via the API), rule 2 read
+`Standardize 3 / 4 ok`. Full report:
+`.roundtable/grill-objective-169-170-172-2026-08-28.md`. `.roundtable/INDEX.md`
+checked first: the immediately preceding grill names 169 and 170, and this is not
+a repeated subject — it covered 169.1-169.3 and 170.2's *proposal*, while 169.4
+and 170.2's verdict both landed after it (169.4 at 12:26Z against that grill's
+11:45Z).
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — two gate scripts in
+`apps/docs/scripts`, the grill file, this entry, one renumbered heading,
+`LOOPS.md` and `.roundtable/RESUME.md`. `git diff --stat` names no file under
+`packages/core/src` or `apps/docs/src`, which is a stronger statement than a
+screenshot. `check:layout` and `test:axe` swept every page at both widths anyway
+and were green. **No visual debt was added; nothing visual was looked at.**
+
+Window shape: 10 rows · landed 4 · refused 5 · triaged 1; loops Meta 4 /
+Continue 4 / Standardize 1 / Roadmap ×1. Reconciled before quoting: 1,047 raw
+bullets, 1,047 parsed by `dispatch_status.rows()`, 1,047 by the independent
+outcome parser — whose first draft was wrong on 356 rows anyway (report §D).
+
+**A local wake was mid-flight while this one ran** — `5f21113` landed at 13:32Z,
+five minutes before Step 0, with no iteration row yet. `LOOPS.md` Step 0c accepts
+collisions; nothing here touches Slice 173, and `origin/main` was re-fetched
+before the first commit.
+
+1. [x] **175.1 — DONE 2026-08-28. `## Slice 172` headed two different slices,
+       and it is the first such collision in 710 revisions of `ROADMAP.md`.**
+
+       `## Slice 172 — Objective grill of Slices 168, 169, 170` (`c88a3217`,
+       11:44Z) and `## Slice 172 — Owner: /patterns/command-bar` (`be5beb9a`,
+       13:02Z). So `172.1` named both *"check-resume-charter retagged
+       @heuristic"* and *"the copyable CSS shipped `overflow: hidden`"*, with one
+       loop-log row for each, both spelled `172.1`.
+
+       ```
+       python3 - <<'PY'
+       import re, collections
+       seq=[m.group(1) for l in open('ROADMAP.md') if (m:=re.match(r'^## Slice (\d+)\b', l))]
+       c=collections.Counter(seq)
+       print(len(seq),'headings ·',len(c),'distinct ·',{k:v for k,v in c.items() if v>1})
+       PY
+       # before: 156 headings · 155 distinct · {'172': 2}
+       # after : 156 headings · 156 distinct · {}
+       ```
+
+       **Three instruments were wrong, and the third is the one that matters.**
+       `check:slice-refs` asks whether a citation resolves, never whether it
+       resolves uniquely, so it passed on both. The self-arm script the last two
+       grills used keys slices by their first heading, so the *owner bug report*
+       inherited `objective grill` and was excluded from the "would this have
+       crossed without a grill?" set — biasing that instrument toward the very
+       self-reference it was measuring (1 of 3 as reported; 2 of 4 honestly, same
+       verdict). And `dispatch_status.py` collapses the arming set with
+       `sorted({...})`, so a collision subtracts exactly one slice — red-proved on
+       a probe copy of the log with the colliding row rewritten, injection
+       confirmed as exactly one differing line:
+
+       ```
+       as committed (collision) : ['169','170','172']         -> 3
+       collision resolved       : ['169','170','172','174']   -> 4
+       ```
+
+       Rule 3's threshold is three, so a collision flips `OVERDUE` to `ok`
+       whenever the true count is exactly three — the silent-starvation shape
+       `LOOPS.md` rule 3 records five recurrences of, through a door none of
+       those five used. It did not fire this wake only because 4 > 3.
+
+       *Accept*: no slice number heads two sections, and something says so when
+       one does. **Done both ways.** The later-filed slice is renumbered **174**
+       (first claim wins) with the renumber recorded in it; `check:slice-refs`
+       gains a uniqueness assertion, red-proved by re-introducing the collision
+       with the injection confirmed (`## Slice 172` heads 2 sections → gate
+       exits 1 naming it). Base rate **3 of 710 revisions**, so the predicate
+       distinguishes rather than decorating (94.11). Scoped to `ROADMAP.md`
+       alone, which is sufficient because every archived slice leaves a pointer
+       stub there — checked, not assumed: **144 stubs, 144 real archived
+       sections, set-equal**.
+
+       **The residue is permanent and is the smaller wrong.** The two
+       command-bar rows keep saying `172.1/172.2`, because
+       `record_iteration.py`'s standing rule leaves historical rows alone, so
+       `dispatch_status.py` will attribute that work to 172 forever. The
+       renumber fixes the plan, not the log.
+
+2. [x] **175.2 — DONE 2026-08-28. `check-resume-charter`'s pointer assertion
+       could never detect the pointer's removal, and had over-claimed its own
+       red-proof since its first commit.**
+
+       It read `resume.includes('ENVIRONMENT.md')` while its failure text says
+       *"Restore the blockquote under the title"*. `RESUME.md` names the file
+       three times — once in the ⚠ blockquote Step 0 depends on, twice in
+       ordinary prose — so deleting the blockquote leaves two. Injection
+       confirmed by counting blockquote lines before each run:
+
+       ```
+                                              mentions  blockquote  exit
+       baseline (as committed)                    3         1         0
+       pointer BLOCKQUOTE deleted                 2         0         0   <- defect
+       every mention of the filename removed      0         0         1
+       ```
+
+       **Not rot — over-claimed from the start.** Every revision of `RESUME.md`
+       since 169.3 carries 3-5 mentions and exactly **one** blockquote, so there
+       has never been a revision on which deleting the pointer left zero
+       mentions. What the header recorded as *"deleting the pointer line goes
+       red"* was really *"deleting all three"*.
+
+       ```
+       for sha in $(git log --format=%H -- .roundtable/RESUME.md); do
+         echo "$(git show $sha:.roundtable/RESUME.md | grep -c 'ENVIRONMENT\.md') \
+               $(git show $sha:.roundtable/RESUME.md | grep -c '^>.*ENVIRONMENT\.md')"
+       done
+       ```
+
+       CLAUDE.md's *"verifying a removal: assert on structure, never on raw
+       text"*, landing on the gate whose whole job is to enforce a removal —
+       and the third instance in this gate family inside 24 hours (172.1's fence
+       fail-open, 172.1b's `src.includes('@exact')`, this).
+
+       *Accept*: the assertion distinguishes the pointer from a prose mention,
+       and the `--self-test` the `@heuristic` tag owes carries that pair.
+       **Done.** `pointsAtEnvironment` matches a blockquote line naming the
+       file, fences skipped for the reason `headingsIn` skips them. Red-proved
+       with the injection confirmed off disk (blockquote 1 → 0, exit 0 → 1), and
+       three self-test cases added: a blockquote pointer holds, a prose mention
+       does not, a `>` inside a fence does not. Stubbing `pointsAtEnvironment`
+       to `true` flips exactly those and exits 1. **Counter-evidence recorded**:
+       the new assertion is recognition, not membership — it does not become
+       `@exact` by being better.
+
+3. [x] **175.3 — DONE 2026-08-28. That same gate can no longer fail anything,
+       and two documents claimed the opposite.**
+
+       169.4 removed `check-resume-charter.mjs` from `check:repo` — the only
+       chain that ran it — and re-homed it in `record_iteration.py`, which
+       discards its exit code by design (*"it must not fail the recording"*).
+
+       ```
+       git show 33fb89e7 -- apps/docs/package.json
+       grep -rn 'resume-charter' --include=*.json --include=*.yml . | grep -v node_modules
+       ```
+
+       **The move is right and the demotion is defensible**: `.roundtable/**` is
+       CI-ignored, so a CI gate reading it was the contradiction 169.4 correctly
+       named, and the check still runs automatically every wake, which keeps it
+       clear of `LOOPS.md`'s "a gate that needs a human to start something is not
+       a gate". What was wrong is that `LOOPS.md` said it *"holds both ends"* and
+       `RESUME.md` said it *"fails the build"* — the second flatly false.
+
+       **The sequencing is the finding.** Hardened at **11:42:09Z** (`18791d5`,
+       172.1) and demoted at **12:26:17Z** (`33fb89e`, 169.4): **44 minutes, two
+       consecutive wakes, neither naming the other.** Nothing in the loop
+       connects "a gate was just hardened" to "a gate just left the build".
+
+       *Accept*: the two documents state what is true of the gate's force, and
+       either a mechanism is built or the refusal is recorded with its reason.
+       **Done — recorded as a refusal.** A gate asserting which scripts
+       `check:repo` runs would assert a preference, not a fact, and
+       `check:ci-ignores` already derives the CI-run set, so a second derivation
+       over the same data to enforce a taste is 94.11's ceremony. The gate's
+       force is left advisory: reversing 169.4's call 44 minutes after it was
+       made, from a grill, without the owner, is the scope creep the Objective
+       refuses. **What would reopen it:** a charter violation that actually lands
+       and survives a wake, which is now visible because `LOOPS.md` says where
+       the check reports.
+
 ## Slice 173 — Owner: two demos that do not demonstrate (2026-08-28)
 
 **Owner:** *"/concepts/scale — Windowed list — the scanning exception"* and
@@ -1169,13 +1339,23 @@ parsed — the *first* parser reconciled at 824 and was rewritten (finding C).
        recognition step, which is the property worth sweeping for and is not
        "does the file contain a regex".
 
-## Slice 172 — Owner: /patterns/command-bar (2026-08-28)
+## Slice 174 — Owner: /patterns/command-bar (2026-08-28)
 
 **Owner feedback**, a screenshot of the open palette. Investigated live rather
 than read off the crop, and it turned up two defects — the visible one and a
 worse one behind it.
 
-1. [x] **172.1 — DONE. The copyable CSS shipped `overflow: hidden`, which
+**RENUMBERED 172 → 174 by the Objective grill of 169/170/172 (roadmap 175.1).**
+This slice was filed as 172 while `## Slice 172 — Objective grill of Slices 168,
+169, 170` already existed, ~80 minutes older. First-claim wins, so the grill kept
+the number and this one took the next free. **The loop log still records these
+two items as `172.1/172.2`** (`2026-08-28 20:58`, `a060a5a`) and is left alone
+on `record_iteration.py`'s standing rule — historical rows record what was
+believed when written. So `dispatch_status.py` will attribute this work to slice
+172 forever; that is the residue of the collision, and it is smaller than
+rewriting the log.
+
+1. [x] **174.1 — DONE. The copyable CSS shipped `overflow: hidden`, which
        silently removes the results list.** The page devotes a whole section to
        *"The listbox is a popover — so nothing sits below it"*, and the block a
        reader pastes carried the one value that breaks it. **Measured, both
@@ -1186,7 +1366,7 @@ worse one behind it.
        Same shape as 154.2, on a different page. Both style blocks now agree,
        and the value carries its reason inline.
 
-2. [x] **172.2 — DONE. The hint strip had zero padding and read as a separate
+2. [x] **174.2 — DONE. The hint strip had zero padding and read as a separate
        floating bar** — which is what the owner's screenshot shows. Measured
        before: `hint width == dialog width == 512px`, `padding: 0`, on a dialog
        with `border-radius: 8px`, so the row sat flush in the corner and the
