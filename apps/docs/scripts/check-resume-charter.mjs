@@ -14,20 +14,25 @@
  *
  * Two assertions, and they fail in opposite directions:
  *
- *   1. `RESUME.md` names `ENVIRONMENT.md`. Without the pointer the traps are
- *      unreachable from the file Step 0 opens, which is worse than not having
- *      moved them.
+ *   1. `RESUME.md` carries the POINTER to `ENVIRONMENT.md` — a blockquote line
+ *      naming it, not merely the filename somewhere in the prose. Without the
+ *      pointer the traps are unreachable from the file Step 0 opens, which is
+ *      worse than not having moved them.
  *   2. None of the moved section HEADINGS is back in `RESUME.md`. Matching the
  *      heading (`^## …`) and not any mention means a wake can still write prose
  *      about the traps — it just cannot re-host them.
  *
- * @heuristic — and it was tagged `@exact` for one day, wrongly. Assertion 1 is
- *   string membership. Assertion 2 is membership over *the output of a parser*:
+ * @heuristic — and it was tagged `@exact` for one day, wrongly. BOTH assertions
+ *   recognise markdown structure: assertion 1 asks whether a line is a
+ *   blockquote, assertion 2 is membership over *the output of a parser* —
  *   `headingsIn` has to recognise which `#` lines are headings and which sit
  *   inside a fence. That is a recognition step, which is the definition
  *   `check:selftests` gives `@heuristic`, so a `--self-test` is owed and is
  *   below. The original tag's own justification — "both halves are string
- *   membership over two files" — was true of the first half only.
+ *   membership over two files" — was true of neither half in the end: it was
+ *   false of assertion 2 from the start (roadmap 172.1), and assertion 1 was
+ *   moved off raw membership because membership could not do its job
+ *   (roadmap 175.2, below).
  *
  *   Found by the Objective grill of Slices 168-170 (2026-08-28), by running the
  *   parser rather than reading it. The base rate decided the fix: **1 of 39
@@ -49,9 +54,30 @@
  * Red-proved 2026-08-28, and the useful way round: this gate was RED on the
  * real tree before the move — RESUME.md carried every heading and no pointer —
  * so it was watched failing on the actual defect rather than on an injection.
- * Confirmed both ways afterwards: deleting the pointer line goes red on
- * assertion 1, pasting `## Cloud-wake toolchain — what works, in order` back
- * goes red on assertion 2.
+ * Confirmed both ways afterwards: deleting the pointer goes red on assertion 1,
+ * pasting `## Cloud-wake toolchain — what works, in order` back goes red on
+ * assertion 2.
+ *
+ * ASSERTION 1's HALF OF THAT CLAIM WAS OVER-STATED FOR THE GATE'S WHOLE LIFE,
+ * and the Objective grill of Slices 169/170/172 measured it (roadmap 175.2).
+ * It read `resume.includes('ENVIRONMENT.md')`, so it fired only when EVERY
+ * mention of the filename was gone — while its own failure text says "Restore
+ * the blockquote under the title". Deleting the blockquote left the two prose
+ * mentions standing and the gate reported all 14 rules holding:
+ *
+ *     baseline (as committed)               mentions=3  exit=0
+ *     pointer BLOCKQUOTE deleted            mentions=2  exit=0   <- the defect
+ *     every mention of the filename removed mentions=0  exit=1
+ *
+ * It was never able to catch the real case: every revision of `RESUME.md` since
+ * the move carries 3-5 mentions and exactly ONE blockquote
+ * (`git log --format=%H -- .roundtable/RESUME.md`, then
+ * `grep -c 'ENVIRONMENT\.md'` vs `grep -c '^>.*ENVIRONMENT\.md'` per revision),
+ * so the "deleting the pointer line goes red" it recorded was really "deleting
+ * all three". CLAUDE.md's removal rule, on the gate that exists to enforce a
+ * removal: assert on structure, never on a substring of the raw file. The
+ * assertion is now the blockquote, and the two `--self-test` cases below are
+ * the pair that tells them apart.
  *
  * The fence assertion was red-proved the same way (2026-08-28): the stray-fence
  * paste that had been GREEN was appended to the real `RESUME.md`, the injection
@@ -139,6 +165,27 @@ export const headingsIn = (src) => {
 export const hasUnterminatedFence = (src) =>
   src.split('\n').filter((line) => FENCE.test(line)).length % 2 === 1;
 
+/**
+ * Assertion 1, as a structure rather than a substring: a BLOCKQUOTE line that
+ * names the durable file. `RESUME.md` legitimately mentions `ENVIRONMENT.md` in
+ * ordinary prose ("Environment knowledge lives in `ENVIRONMENT.md`"), and that
+ * sentence is a sibling of the pointer, not the pointer — a wake that deletes
+ * the blockquote and keeps the sentence has broken Step 0 while leaving the old
+ * substring test green. Fences are skipped for the same reason `headingsIn`
+ * skips them: a `>` inside a shell recipe is not a blockquote.
+ */
+export const pointsAtEnvironment = (src) => {
+  let fenced = false;
+  for (const line of src.split('\n')) {
+    if (FENCE.test(line)) {
+      fenced = !fenced;
+      continue;
+    }
+    if (!fenced && /^\s*>/.test(line) && line.includes('ENVIRONMENT.md')) return true;
+  }
+  return false;
+};
+
 /* Run the detector against inputs it must tell apart. This is what the
    `@heuristic` tag owes, and it is red-proved in both directions: case 2 is the
    original bash-comment bug (a `#` line inside a fence is not a heading), and
@@ -153,6 +200,20 @@ if (process.argv.includes('--self-test')) {
     ['an unterminated fence is caught, not skipped', hasUnterminatedFence(`\`\`\`\n${H}\n`)],
     ['a balanced document is not flagged', !hasUnterminatedFence('```\nx\n```\ntext')],
     ['a document with no fence at all is not flagged', !hasUnterminatedFence(`${H}\nbody`)],
+    /* The discriminating pair for assertion 1. The second case is the real
+       RESUME.md minus its blockquote: the old substring test passed on it. */
+    [
+      'a blockquote naming ENVIRONMENT.md is a pointer',
+      pointsAtEnvironment('# Resume\n\n> **ALSO READ `.roundtable/ENVIRONMENT.md`** — the traps.\n\nbody'),
+    ],
+    [
+      'a prose mention with no blockquote is NOT a pointer',
+      !pointsAtEnvironment('# Resume\n\nEnvironment knowledge lives in `ENVIRONMENT.md`. Only put\n'),
+    ],
+    [
+      'a `>` inside a fence is not a blockquote',
+      !pointsAtEnvironment('```\n> cat ENVIRONMENT.md\n```'),
+    ],
   ];
   const bad = cases.filter(([, ok]) => !ok);
   for (const [what, ok] of cases) console.log(`  ${ok ? 'ok  ' : 'FAIL'}  ${what}`);
@@ -205,10 +266,12 @@ g.check(
 );
 
 g.check(
-  'RESUME.md points at ENVIRONMENT.md',
-  resume.includes('ENVIRONMENT.md'),
+  'RESUME.md points at ENVIRONMENT.md, in a blockquote',
+  pointsAtEnvironment(resume),
   'The pointer is gone. Step 0 opens RESUME.md, so nothing reaches the traps.\n' +
-    '     Restore the blockquote under the title (roadmap 169.3).',
+    '     Restore the blockquote under the title (roadmap 169.3). A prose mention\n' +
+    '     of the filename is not the pointer and no longer satisfies this\n' +
+    '     (roadmap 175.2).',
 );
 
 /* Before assertion 2 can mean anything, the parser it rests on must have seen
