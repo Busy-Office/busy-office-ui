@@ -258,10 +258,41 @@ def report(all_rows, loop, threshold, unit):
         # "ok" while eighteen slices closed.
         build_rows = [r for r in after if r["loop"] in CLOSES_A_SLICE]
         if build_rows and not slices:
-            raise SystemExit(
-                f"dispatch_status: {len(build_rows)} Continue round(s) since the last "
-                f"{loop} round and NOT ONE names a slice. That is a parse failure, not "
-                f"a quiet backlog — check SLICE against what record_iteration.py writes."
+            # WARNS, never exits (roadmap 170.3). This guard reads a zero as
+            # proof the parser is blind, and that inference is unsound on a
+            # small window: 117 of 484 slice-closing rows legitimately name no
+            # slice, so a window of ONE trips it ~24% of the time with nothing
+            # wrong — which is how it fired on a real `Continue · fix` row and
+            # hard-exited Step 0b, leaving that wake no counters at all.
+            #
+            #   python3 - <<'PY'   # re-run; do not trust the pinned figure
+            #   import sys,re; sys.path.insert(0,'scripts/loops')
+            #   import dispatch_status as ds
+            #   R=re.compile(r"^- (\S+ \S+) · ([\w-]+) · ([\w-]+) · (.*?) · (\w+) · \S+$")
+            #   rows=[m.groups() for m in (R.match(l.rstrip()) for l in
+            #         open('.roundtable/loop-log.md')) if m]
+            #   cs=[r for r in rows if r[1] in ds.CLOSES_A_SLICE]
+            #   print(len(cs), sum(1 for r in cs if not ds.slice_of(r[3])))
+            #   PY
+            #   # 484 rows · 117 name no slice = 24.2% (2026-08-28)
+            #
+            # Fatality belongs to the PROVABLE check above — parsed rows vs raw
+            # bullets — which 164.1 installed and which cannot be wrong. This
+            # one is an inference, so it reports its own strength and lets the
+            # reader weigh it. Losing Step 0b entirely is the worse failure:
+            # a warning a wake can read beats a number it never sees.
+            p_fluke = NO_SLICE_RATE ** len(build_rows)
+            verdict = (
+                "PROBABLY A PARSE FAILURE — check SLICE against what "
+                "record_iteration.py writes"
+                if p_fluke < 0.01
+                else "not yet evidence of one; a slice-less row is ordinary here"
+            )
+            print(
+                f"  !! {len(build_rows)} {loop}-closing round(s) since the last {loop} "
+                f"round and none names a slice.\n"
+                f"     At the measured {NO_SLICE_RATE:.0%} slice-less rate that is "
+                f"p={p_fluke:.1%} if the parser is fine — {verdict}."
             )
         detail = f"  [{', '.join(slices)}]" if slices else ""
     overdue = count >= threshold
@@ -272,6 +303,11 @@ def report(all_rows, loop, threshold, unit):
     )
     return overdue
 
+
+# Measured share of slice-closing rows that legitimately name no slice. Used
+# ONLY to report how surprising a zero is, never to decide anything — the
+# command that produces it is beside the guard that reads it (roadmap 170.3).
+NO_SLICE_RATE = 0.242
 
 # @heuristic — `slice_of` RECOGNISES a slice reference in free prose, and that
 # recognition has now been wrong twice in this file's life (two digits only; the

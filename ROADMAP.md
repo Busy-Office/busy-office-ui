@@ -1544,8 +1544,7 @@ Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
        one of them already annotated, the cadence would re-derive a known answer
        on a schedule. 167.1 has `LOOPS.md`'s growth on the record.
 
-3. [ ] **170.3 — `dispatch_status.py`'s zero-slice guard hard-exits on a
-       legitimate row, and this wake tripped it live.** Found by triggering it,
+3. [x] **170.3 — DONE 2026-08-28. Verdict (a): the guard now rates its own inference and never exits.** Found by triggering it,
        not by reading the code.
 
        The guard raises when *"N Continue round(s) since the last Objective
@@ -1581,6 +1580,39 @@ Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
        read `170 — trap 1 corrected …`, which is accurate (the correction is
        Slice 170's work) and restored Step 0b immediately rather than leaving
        the next wake with a dead first step. The finding is filed regardless.
+
+       **Base rate re-run first, as this item's own pattern demands: 484 rows ·
+       117 name no slice = 24.2%**, against the pinned 24.5%. Small drift, no
+       change to the argument.
+
+       **Verdict (a).** The guard warns and never exits, and it *reports the
+       strength of its own inference* rather than asserting a conclusion:
+       `p = 0.242^N` for a window of N, printed beside the verdict, so a reader
+       can weigh it instead of trusting it.
+
+       **Fatality stays where the inference is provable.** The check 164.1
+       installed one slice earlier — parsed rows vs raw bullets — cannot be
+       wrong and keeps its `SystemExit`. This one is an inference, and the
+       failure it caused was the expensive kind: a hard exit of the script the
+       dispatcher reads at **Step 0b**, so the next wake got no counters at
+       all. A warning a wake can read beats a number it never sees.
+
+       **Red-proved in both directions, plus a sanity case**, which the Accept
+       criteria asked for:
+
+       | condition | result |
+       |---|---|
+       | parser fine, 4 slice-naming rows | silent |
+       | 1 legitimate slice-less row | warns, `p=24.2%` — "not yet evidence of one", **exit 0** |
+       | parser blind, same 4-row window | warns, `p=0.3%` — "PROBABLY A PARSE FAILURE" |
+
+       **The second red-proof failed first time, exactly as the grill one slice
+       earlier predicted it would.** Blinding the parser produced silence —
+       because the window was empty at that moment, so there was nothing for
+       the guard to evaluate. The injection had not created the condition. It
+       took appending four slice-naming rows first. That is the new doctrine
+       line working on its author within the hour: *a red-proof that comes back
+       green is a defect in the injection until proven otherwise.*
 
        *Accept*: a recorded verdict that either (a) makes the guard's severity
        match the strength of its inference — with the threshold chosen from the
