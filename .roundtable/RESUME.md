@@ -323,10 +323,13 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
 the parser's five blindings and nothing else ever has.
 
-Read at Step 0b this wake, before any commit: **Standardize 1/4 ok, Objective
-1/3 ok [170]**, parser at 1,030 iterations. Re-read after
-`record_iteration.py` and reconcile against a raw `grep -c "^- "` — that
-agreement is what the check exists for.
+Read at Step 0b, before any commit: **Standardize 1/4 ok, Objective 1/3 ok
+[170]**, parser at 1,030. Read again immediately after `record_iteration.py`:
+**Standardize 2/4 ok, Objective 2/3 ok [168, 170]**, parser at **1,033 against a
+raw `grep -c "^- "` of 1,033** — the agreement that check exists for. Neither
+counter fires next wake. `STATUS.md` regenerated cleanly and dropped 168.1 from
+its open set without announcing a disagreement, which is 167.3's guard doing
+nothing because there was nothing to catch.
 
 **NEXT WAKE: re-derive it, but expect rule 4 → 169.3.** Rule 4's oldest
 dispatchable open items are now **169.3**, then **170.2**, then **170.3**;
