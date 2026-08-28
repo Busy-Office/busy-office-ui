@@ -936,6 +936,108 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 169 — Standardize sweep: the correction landed in the file that is rewritten every wake (2026-08-28)
+
+Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
+Rule 1 found no open P0 and GitHub intake is empty (0 open issues), so nothing
+preempted it. Third run of the cadence 158.2 installed.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — one Node report script
+(`apps/docs/scripts/report-prose.mjs`, a console.log format), `LOOPS.md`, this
+file and `.roundtable/RESUME.md`. No CSS, Astro page or shipped JS was touched,
+which is a stronger statement than a screenshot: `git diff --stat` names no file
+under `packages/core/src` or `apps/docs/src`. `check:layout` (127 pages) and
+`test:axe` (127 × 2) swept anyway and were green. **No visual debt was added;
+nothing visual was looked at.**
+
+1. [x] **169.1 — three sweeps clean; the finding is that the playbook still
+       carried a claim two earlier rounds had already refuted.**
+
+       ```
+       npm run scan:dead-style -w docs                  # 0 dead of 1,428 live inline declarations
+       npm run report:css-repeats -w @busy-office/ui    # 74 files · 237 rules · 225 bodies · 8 repeats
+       npm run report:prose -w docs                     # 118 pages · median 739 · total 104,419
+       python3 scripts/loops/report_loop_prose.py       # LOOPS.md 20 up / 1 down
+       ```
+
+       **`scan:dead-style` — zero delta.** 0 dead of 1,428, identical to 161.1's
+       figure. **`report:css-repeats` — zero delta.** 8 bodies, and all eight
+       groups are the ones LOOPS.md's table already names; the joined-control x4
+       group is still two components, so its reopen trigger (a THIRD component)
+       is unmet. **`report_loop_prose.py`** — `LOOPS.md` reads **20 up / 1 down**,
+       which discharges the watch condition 167.1 left ("`LOOPS.md` still at 0
+       down after 167.2"). No file changed accumulate class.
+
+       **`report:prose` — zero unverdicted pages, for the second round running,
+       and LOOPS.md said otherwise the whole time.** Its Standardize step 1 named
+       `/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/`
+       as "the three the family split adds and nobody has read". **161.1
+       verdicted all three**, in the run that wrote that sentence. **166.1 found
+       exactly this**, and corrected `.roundtable/RESUME.md` — "Corrected in the
+       handover rather than counted again" — while leaving `LOOPS.md` untouched.
+       `RESUME.md` is rewritten every wake by its own charter, so the correction
+       was discarded and the wrong sentence persisted in the file the dispatcher
+       reads every wake.
+
+       **The cost is measured, not supposed: this wake paid it a third time.**
+       Before finding 161.1's entry, this round re-derived all three pages from
+       scratch with a throwaway probe against `proseParts`. The re-derivation
+       reconciles exactly, which is the one useful thing it produced:
+
+       | page | this wake | 161.1 | reconciles |
+       |---|---|---|---|
+       | `/base/motion/` | 718 (639a+79g) | 718 | exact |
+       | `/concepts/js-behaviors/` | 1,429 (375a+1,054g) | 1,429 / 1,054 / 375 | exact |
+       | `/concepts/design-language/` | 1,231 (1,231a+0g) | 1,230 | +1, accounted for |
+
+       The +1 is not instrument drift. Commit `6dff04bb` (161.2) landed after
+       161.1's verdict was written and changed one `Related` label on that page:
+       `'Invoice-list pattern'` → `'List report pattern'`. Under the counter's
+       own word regex that is 2 words → 3. **Exactly +1**, to the word.
+
+       ```
+       git show 6dff04bb -- apps/docs/src/pages/concepts/design-language.astro
+       ```
+
+       *Accept*: `LOOPS.md`'s prose-sweep instruction names the **property** —
+       any flagged page carrying no verdict in `ROADMAP.md` or
+       `ROADMAP-archive.md` — instead of a snapshot of page names, and points at
+       158.1 and 161.1 as where the verdicts live. **Done.** This is CLAUDE.md's
+       existing criterion rule ("name the property, never the value it will
+       have") applied one level up, to an instruction rather than an Accept. **No
+       new doctrine and no gate**: "is this claim in the playbook still true" is
+       semantic, and 94.11 already paid for that lesson.
+
+2. [x] **169.2 — the family half of `report:prose` hid the one number that
+       decides whether its own outliers are worth reading.**
+
+       Found while paying 169.1's cost. `report-prose.mjs`'s corpus list prints
+       `authored + generated` per outlier, and its header argues at length why:
+       *"judging an author by a number a quarter of which is machine-written is
+       the wrong instrument."* The **family** list printed a bare URL. So the
+       half of the report that LOOPS.md's step 1 actually sends a wake to read
+       was the half with no split.
+
+       That is not cosmetic, and 161.1's own verdicts are the proof: its ruling
+       on `/concepts/js-behaviors/` is **"the instrument, not the page"** — 1,054
+       of 1,429 words generated, 375 authored, which is **below its own family
+       median of 556**. None of that was visible from the family line, so the
+       only way to reach the verdict was the throwaway probe 169.1 describes.
+       `/concepts/which-pattern/` is the same shape at **310a+2,015g**: 2 of the
+       12 family-flagged pages are majority machine-written.
+
+       *Accept*: the family list prints the same `Na+Ng` split the corpus list
+       does, and the two agree. **Done, and reconciled three ways** — the new
+       family output matches the throwaway probe exactly on all three pages, it
+       matches the corpus half exactly on all **nine** pages that appear in both
+       lists, and the corpus total `104,419` is unmoved from 166.1's reading.
+       No threshold changed: what is flagged is identical before and after, so
+       this adds information and removes none.
+
+       **Not a gate, deliberately** — 158 refuses a word-count gate up front and
+       that reasoning is untouched here. This changes a `console.log` format.
+
 ## Slice 168 — Objective grill of Slices 163, 164, 165 (2026-08-28)
 
 Rule 3 at 3/3. Full report:

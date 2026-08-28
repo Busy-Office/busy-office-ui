@@ -484,11 +484,28 @@ surfaced more:
    would fail the build on eight right answers), which makes this step the only
    thing keeping it from rotting.
    **Also run `npm run report:prose -w docs`** and record a verdict for any page
-   over 2x its FAMILY median that has none yet — 158.1 verdicted the twelve over
-   the CORPUS median; `/base/motion/`, `/concepts/js-behaviors/` and
-   `/concepts/design-language/` are the three the family split adds and nobody
-   has read. Same reason as `scan:dead-style`: it is deliberately not a gate, so
-   this step is the only thing that keeps it from rotting.
+   the report flags — over 2x the CORPUS median, or over 2x its FAMILY median —
+   **that carries no verdict yet in `ROADMAP.md` or `ROADMAP-archive.md`**. Same
+   reason as `scan:dead-style`: it is deliberately not a gate, so this step is
+   the only thing that keeps it from rotting.
+
+   **The instruction names the PROPERTY, not a list of page names, and that is
+   a correction this file paid for three times.** It used to name
+   `/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/`
+   as "the three the family split adds and nobody has read". **161.1 verdicted
+   all three**, in the very run that wrote that sentence. 166.1 then re-derived
+   them, found the verdicts already existed, and corrected `.roundtable/RESUME.md`
+   — the file that is rewritten every wake — leaving the durable playbook
+   saying the wrong thing. Slice 169 re-derived them a third time, throwaway
+   probe and all, before finding 161.1's entry. A snapshot of names in a
+   playbook goes stale silently and is read as current; the property does not.
+   This is CLAUDE.md's own criterion rule ("name the property, never the value
+   it will have") applied one level up, to an instruction rather than an Accept.
+
+   Verdicts to date: **158.1** the twelve over the corpus median, **161.1** the
+   three the family split added. As of Slice 169 every flagged page in both
+   lists carries one, so a clean round here is the expected result and is worth
+   one line, not a re-derivation.
    **Why a cadence and not a budget** (158.2's decision, and it is measured, not
    asserted): across nine daily builds 2026-08-20→28, on the **89 pages present
    throughout**, prose went **51,051 → 77,080 words (+51%)** and **not one page

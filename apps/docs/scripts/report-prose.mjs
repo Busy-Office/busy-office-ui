@@ -198,13 +198,30 @@ const medianOf = (xs) => {
   const s = [...xs].sort((a, b) => a - b);
   return s.length % 2 ? s[(s.length - 1) / 2] : Math.round((s[s.length / 2 - 1] + s[s.length / 2]) / 2);
 };
-console.log('  by family — a family median, and what 2x it flags:');
+/* The family list prints the SAME authored+generated split the corpus list
+   above does, and it did not until 2026-08-28 (Slice 169.2). This file's own
+   header argues why the split matters — "judging an author by a number a
+   quarter of which is machine-written is the wrong instrument" — and then the
+   family half printed a bare URL, so the one thing a reader needs in order to
+   skip a page was the one thing missing.
+
+   That cost is measured, not supposed. 161.1's verdict on
+   `/concepts/js-behaviors/` is "the instrument, not the page": 1,054 of its
+   1,429 words are generated, leaving 375 authored, which is BELOW its own
+   family median. None of that is visible from the family line, so the wake
+   that reads it writes a throwaway probe to re-derive the split — which is
+   exactly what Slice 169's own Standardize round did before finding the
+   verdict already existed. Printing three numbers is cheaper than the probe. */
+console.log('  by family — a family median, and what 2x it flags  [Na = authored, Ng = generated]:');
 for (const [fam, rs] of [...byFamily].sort()) {
   const m = medianOf(rs.map((r) => r.words));
   const over = rs.filter((r) => r.words > m * 2);
+  const flagged = over
+    .map((r) => `${r.url} ${r.words - r.generated}a+${r.generated}g`)
+    .join('  ');
   console.log(
     `    ${fam.padEnd(16)} n=${String(rs.length).padStart(3)}  median ${String(m).padStart(5)}  ` +
-      `over 2x: ${over.length ? over.map((r) => r.url).join(' ') : '—'}`,
+      `over 2x: ${over.length ? flagged : '—'}`,
   );
 }
 console.log(
