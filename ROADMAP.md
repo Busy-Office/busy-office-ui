@@ -957,6 +957,128 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 177 — the archive sweep is due a FOURTH time, and the regrowth rate is rising (2026-08-28)
+
+**Not new input** — nothing was filed and nobody asked; GitHub intake is 0 open
+issues and there is no open P0. Noticed the way rule 4 says it will be noticed:
+this wake executed rule 4 by reading `ROADMAP.md` top-to-bottom, and the rule's
+own text says *"if this rule is walking thousands of lines again, that is the
+signal"*. It walked **3,750**.
+
+Slice 165 is the direct precedent — same signal, same wake-noticed origin, same
+"not new input" framing — and its sweep landed **twelve hours ago**.
+
+**Scope, measured. The instrument is 165.1's, with the defect 165.1 found already
+fixed**: attribute body lines to the nearest preceding H2 **of any kind**, not to
+the nearest `## Slice`, or the four non-slice sections are charged to whichever
+slice precedes them (that is how 165.1 first read Slice 29 as 78 lines when it is
+a correct 3-line pointer).
+
+```
+python3 - <<'PY'
+import re
+H=re.compile(r"^## (.*)$"); S=re.compile(r"^## Slice (\d+)\b")
+def sections(p):
+    cur=None; d={}
+    for l in open(p):
+        m=H.match(l)
+        if m:
+            s=S.match(l); cur=int(s.group(1)) if s else None
+            if cur is not None: d.setdefault(cur,0)
+        elif cur is not None: d[cur]+=1
+    return d
+live=sections('ROADMAP.md'); arch=sections('ROADMAP-archive.md')
+OPEN=set(); cur=None                   # DERIVED, never hardcoded — 165's own bug
+for l in open('ROADMAP.md'):
+    m=H.match(l)
+    if m:
+        s=S.match(l); cur=int(s.group(1)) if s else None
+    elif cur is not None and re.match(r'^\s*\d+\. \[ \]', l): OPEN.add(cur)
+print("OPEN:",sorted(OPEN))
+big={s:n for s,n in live.items() if s not in OPEN and n>6}
+print(len(big),"closed slices carrying",sum(big.values()),"lines here;",
+      sum(1 for s in big if s in arch),"already in the archive")
+PY
+  # OPEN: [15, 112, 173, 175, 176]
+  # 9 closed slices · 1,943 lines · 0 already archived   (2026-08-28, at 3,750 lines)
+```
+
+The nine: **164, 165, 167, 168, 169, 170, 171, 172, 174**. The four non-slice H2
+sections (`## Objective`, `## CI strategy`, `## Sequence`, `## STATE`) are out of
+scope for the same reason 165.1 gave.
+
+**The finding is not the sweep — it is that the sweep is a treadmill that is
+speeding up.** Found by measuring the line count at every one of the 722 commits
+that has touched `ROADMAP.md` and taking the drops, rather than by grepping
+subject lines. That matters: a subject-line grep for `archive sweep` finds only
+**two** of the three real sweeps — the 2026-08-25 one is titled *"tidy: sweep 44
+closed slices…"* — which is the position-filter shape CLAUDE.md warns about, a
+confident absence.
+
+```
+# sweeps found by the DROP, not by the subject line (drop > 300 lines)
+16ef2bb8  12,516 ->  5,562   08-22  110.4: archive 83 closed slices
+063211cc   9,824 ->  1,094   08-25  tidy: sweep 44 closed slices
+187ab92d   4,461 ->  1,508   08-28  archive sweep — 20 closed slices
+c5d21fb4  12,302 -> 11,983   08-22  109.7: grill the RF pattern family   <- FALSE POSITIVE
+```
+
+**The detector's fourth hit is not a sweep**, and it is recorded rather than
+quietly dropped: a 319-line net reduction inside a grill commit clears a
+`>300` threshold. 3 of 4 hits are real; the threshold is a heuristic and is
+labelled as one.
+
+Regrowth between consecutive real sweeps, measured per **ROADMAP-touching
+commit** rather than per hour — the log's stamps are naive local time and 164.2
+recorded that 3 of 1,013 adjacent pairs read backwards, so wall-clock would be
+the weaker instrument here:
+
+| cycle starts | lines | → | over N commits | rate |
+|---|---|---|---|---|
+| after `16ef2bb8` | 5,562 | 9,824 | 140 | **+30.4 / commit** |
+| after `063211cc` | 1,094 | 4,461 | 66 | **+51.0 / commit** |
+| after `187ab92d` | 1,508 | 3,750 | 33 *(open)* | **+67.9 / commit** |
+
+Cycle length in commits is **halving** (140 → 66 → 33) while the per-commit rate
+is **rising** (+30 → +51 → +68). Both readings agree, which is what makes this
+worth a line: the sweep is not converging on a steady state, and CLAUDE.md's
+"recurring sweep" wording describes it accurately but understates the trend.
+
+**What is generating it, measured, and deliberately NOT acted on.** Of the 1,943
+lines this sweep moves, **1,192 (61%) are the five Objective-grill slices**
+(164, 167, 168, 170, 172) — each of which ALSO has a full report in
+`.roundtable/`. Whether a grill's roadmap slice should be a summary pointing at
+its report, rather than a second copy of it, is a **direction call about how the
+loop records its own work**, and this loop does not take those. Recorded here as
+an observation with its number so a later wake or the owner can decide it; no
+item is opened for it.
+
+1. [ ] **177.1 — sweep the nine closed slices to `ROADMAP-archive.md`.**
+       Hand-checked move, one slice at a time — **not a script**. CLAUDE.md's
+       bulk-edit rule applies with force on this exact pair of files: the
+       case-collision that once destroyed 7,307 lines of archived history was on
+       `ROADMAP-archive.md`, and the only tell was `git status` showing it as
+       *modified* rather than *added*.
+
+       *Accept* — each is a property to verify, never a number to predict:
+       - Every one of the nine closed slices has its full text in
+         `ROADMAP-archive.md` and a pointer of the established shape
+         (`Closed — archived verbatim in \`ROADMAP-archive.md\`.`) left in
+         `ROADMAP.md`, with its heading unchanged.
+       - No slice carrying an open `N. [ ]` checkbox is moved, and no non-slice
+         H2 section is touched. Re-derive the OPEN set from the checkboxes; do
+         not read it off the table above.
+       - `check:slice-refs` passes, and its citation count is reconciled against
+         the source rather than against the mover — it read **354 citations /
+         198 cited / 158 slice numbers** before the move.
+       - Conservation reconciles: the archive's growth equals the live file's
+         loss plus the pointer stubs the move inserted, and the residual is
+         accounted for exactly rather than waved at.
+       - `git status` shows `ROADMAP-archive.md` as **M**, never as a new file.
+       - `STATUS.md`, regenerated, still finds the same number of open items as
+         a raw `grep -c` of the `N. [ ]` checkboxes in the source.
+       - The before and after line counts of both files are recorded.
+
 ## Slice 176 — Polish round 2 on `component/scan`: the score that was taken and never written down (2026-08-28)
 
 Dispatcher: rule 1 clear (no open P0; GitHub intake **0 open issues**, asked via
