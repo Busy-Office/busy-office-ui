@@ -96,30 +96,48 @@ nine rows of history away, silently. `generate_status.py` now counts the raw row
 in `loop-log.md`, announces the disagreement and rebuilds. If you touch another
 mirror here, assert its count against the file first.
 
-### 6. NEW — THE GITHUB RUN-LEVEL ENDPOINTS SERVE A STALE SNAPSHOT
+### 6. NEW — A BACKGROUND TASK'S OUTPUT FILE IS NOT A COMPLETION SIGNAL
 
-**This cost ~20 minutes of dead polling this wake, and put a wrong claim in the
-owner's notification.** After pushing, `get_workflow_run` and
-`list_workflow_jobs` both reported run 565 `in_progress` with `updated_at`
-FROZEN at `06:50:54` across five polls over twenty minutes — so it read as a run
-hung at ~7x its ~3-minute norm. It was not. Querying each job by id with
-**`get_workflow_job`** returned live data: all six had finished, the last at
-**06:53:48**, every step `success`. A normal three-minute run.
+**This wake's own worked example of "an instrument's first output is not
+evidence", and the wrong diagnosis got committed before the right one.** The
+first version of this trap accused the GitHub run-level endpoints of serving a
+stale snapshot. **That accusation is withdrawn — it was wrong**, and the real
+cause was the wake's own waiting.
 
-The tell is the one this repo already names — *a value identical across many
-polls is a defect in the instrument until proven otherwise*. A timestamp that
-does not move while a run is supposedly progressing is that value.
+To wait for CI, four `sleep 150`–`sleep 240` commands were launched with
+`run_in_background`, and after each the output file was read. It came back
+empty, the harness rendered that as *"(Bash completed with no output)"*, and
+that was read as **the task finished**. It means the opposite: the file is empty
+because the task is **still running**. So every "wait" was about three seconds.
+
+Measured, not reasoned — `date; sleep 20; date` launched at **06:56:55**:
 
 ```
-# stale:  actions_get   get_workflow_run   <run_id>
-# stale:  actions_list  list_workflow_jobs <run_id>
-# LIVE:   actions_get   get_workflow_job   <job_id>     ← use this
+06:56:58  file holds "start 06:56:55"          ← 3s in, reads as "no output"
+06:57:11  file holds "start 06:56:55"          ← 16s in, still nothing new
+06:57:29  file holds "start … / end 06:57:15 / [exited with code 0]"
 ```
 
-Get the job ids once from `list_workflow_jobs`, then poll the jobs individually.
-And note this was a *reported* number: the owner was told CI looked stuck. That
-is the failure mode CLAUDE.md's "a number you report is load-bearing" section is
-about, and it happened to a number about the tooling rather than the product.
+The sleep itself is fine and elapses correctly. **The completion marker is the
+literal `[exited with code 0]` line**, and it was absent from every mid-flight
+read. Wait for the task-completion notification, or use `Monitor` with an
+until-loop; foreground `sleep` is blocked in this environment. Never infer
+completion from an empty file.
+
+**What it cost, and why it is filed here rather than shrugged off.** Five CI
+polls fired inside ~4 minutes of wall clock while the wake believed ~20 minutes
+had passed, so a **normal three-minute run** (565: started 06:50:44, last job
+done 06:53:48, all six `success`) looked hung at 7x its norm. That false alarm
+was sent to the owner, then a second notification "corrected" it with a
+diagnosis that was also wrong. Two reported numbers, both the instrument's
+fault. Container wall clock is the check that settles it — `date -u` against
+`git log --format=%cd`; the whole wake spans 06:47→06:57.
+
+`get_workflow_job` on a specific job id **is** still the most direct route to a
+definite per-job answer, and job ids come from `list_workflow_jobs`. But the
+run-level readings were most likely correct when taken: `updated_at` on a run
+does not tick per step, so a frozen value there is normal and is not evidence
+of staleness.
 
 ### 7. NEW — A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
@@ -147,8 +165,9 @@ Green this wake: `build -w @busy-office/ui`, `test -w @busy-office/ui`,
 `docs:build`, `check:repo`, `check:claims` (139), `check:layout` (127 pages),
 `test:axe` (127 × 2).
 
-**CI run 565 (`cd31930`) is GREEN** — all six jobs `success`, finished 06:53:48,
-confirmed per-job because the run-level endpoint was stale (trap 6).
+**CI run 565 (`cd31930`) is GREEN** — all six jobs `success`, last finished
+06:53:48, confirmed per job id. Runs 566/567 (the two handover pushes) were not
+watched to completion; they are markdown-only and touch no gate.
 
 `sqlite3` is NOT installed in this container. Query the mirror with Python's
 `sqlite3` module — `python3 -c "import sqlite3; ..."`.
