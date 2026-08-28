@@ -957,6 +957,116 @@ CSS" as failure would push toward adding CSS for its own sake. What it was
 gesturing at is captured properly by the two owner calls above. Not to be
 re-raised as a new finding.
 
+## Slice 172 — Objective grill of Slices 168, 169, 170 (2026-08-28)
+
+Dispatcher rule 3 at 3/3 `[168, 169, 170]`; rule 1 found no open P0 and GitHub
+intake is empty (0 open issues, asked via the API), rule 2 read
+`Standardize 3 / 4`. Full report:
+`.roundtable/grill-objective-168-169-170-2026-08-28.md`. `.roundtable/INDEX.md`
+checked first — no prior grill covers 168 or 170; the one naming 169 covers it as
+an armer, and 169.3/169.4 both post-date it.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — two gate scripts in
+`apps/docs/scripts`, the grill file, this entry, one annotation on Slice 170 and
+`.roundtable/RESUME.md`. `git diff --stat` names no file under
+`packages/core/src` or `apps/docs/src`, which is a stronger statement than a
+screenshot. `check:layout` and `test:axe` swept every page at both widths anyway
+and were green. **No visual debt was added; nothing visual was looked at.**
+
+Window shape: 9 rows · landed 3 · refused 5 · triaged 1; loops Meta 5 /
+Continue 3 / Roadmap ×1. Reconciled before quoting: 1,036 raw bullets, 1,036
+parsed — the *first* parser reconciled at 824 and was rewritten (finding C).
+
+**Two findings were settled inside the grill and are not items.**
+
+- **A — the self-arm recurred back-to-back, and 170's "a first" is superseded.**
+  `[168, 169, 170]` excludes to `['169']` — 1 of 3, identical to last wake — and
+  only three arming sets in the whole log have ever held two grill slices, all
+  three dated 2026-08-28, the last two consecutive and both dependent. Whole log
+  now **8 of 27**. For the second wake running, the self-arm defers a filed
+  finding (169.4). **The decision does not change, and the corrected analysis is
+  why**: a first reading reported 17% → 56% grill-dependence by era, which is
+  confounded by arming-set size — rule 3's threshold is three, and a three-item
+  set is dependent on any single grill slice. Controlled to sets of exactly
+  three, it is **3 of 5 then, 5 of 6 now** — flat. What changed is that minimal
+  arming sets became normal (5 of 18 crossings → 6 of 9), not that the loop
+  became more self-referential. Commands in the report §A; Slice 170's entry is
+  annotated in place.
+- **C — the window's figures re-verify, and this wake produced three instrument
+  defects of its own.** 170.3's slice-less base rate re-runs at 24.2% against
+  24.5%; the refusal series continues 33.5 → 33.9 → 34.2 → 34.6 → **34.8%**
+  (201 of 577 decided), unmoved. 168's "3 of 3 slices contained an instrument
+  defect" **holds for a second consecutive window — 6 of 6**. This wake's own
+  three: a refusal rate computed on the wrong denominator (29.7%, one step from
+  a summary claiming the previous wake was wrong), the confounded era split in A,
+  and a window parser blind to 212 of 1,036 rows. All three were caught by
+  reconciling against an independent reading, and nothing else would have caught
+  any of them. No item and no gate — CLAUDE.md already carries this as a base
+  rate, and this is it behaving as documented.
+
+1. [x] **172.1 — DONE 2026-08-28. `check-resume-charter.mjs` was tagged
+       `@exact` while resting on a parser, and that parser FAILED OPEN.** Found
+       by running the parser, not by reading it.
+
+       169.3's gate declared *"both halves are string membership over two files.
+       There is no recognition step to fool"*. True of assertion 1; false of
+       assertion 2, which is membership over the output of `headingsIn` — a
+       state machine deciding which `#` lines are headings and which sit inside
+       a fence. The file's own comment anticipated exactly this and concluded
+       that skipping fences removed the recognition. It moved it.
+
+       **The consequence is fail-open, demonstrated on the real file.** Pasting
+       `## Cloud-wake toolchain — what works, in order` back into `RESUME.md`
+       goes red as it should; **the identical paste preceded by one stray
+       ` ``` ` line goes GREEN**, because the open fence makes every heading
+       below it invisible and the checks pass by not looking — while printing
+       "13 charter rules hold". `RESUME.md` is rewritten wholesale every wake and
+       is full of shell recipes, so it is the document here most likely to carry
+       an odd fence.
+
+       **The base rate decided the fix (94.11's precedent): 1 of 39 `@exact`
+       gates does markdown-structure recognition — this one.** A predicate true
+       of one file is not a class, so nothing was built over the taxonomy. The
+       tag is corrected to `@heuristic`, `hasUnterminatedFence` is asserted as
+       its own loud failure, and the `--self-test` the tag owes ships with six
+       cases. `check:selftests` already enforces that pairing, so the existing
+       ratchet does the work. The gate reports **14** rules where it reported 13.
+
+       **Red-proved both ways, injections confirmed off disk**: the stray-fence
+       paste that had been green goes red; stubbing `hasUnterminatedFence` to
+       `false` flips exactly one self-test case and exits 1.
+
+       **172.1b — fixing it exposed the same bug in the meta-gate, one line
+       above the comment warning about it.** `check-selftests.mjs` classified by
+       `src.includes('@exact')`, so a header *explaining* a retag was read as
+       claiming both tags — CLAUDE.md's "assert on structure, never on raw text",
+       and its neighbouring comment already records the identical lesson for
+       `--self-test`. Now matched at the declaration position, allowing both
+       comment styles in use. **Reconciled against the unchanged tree, which
+       caught the fix's own first draft** (a JSDoc-only regex reported eight
+       gates untagged): it reproduces `43 gates: 12 heuristic, 31 exact`
+       pre-change and shows only the one deliberate move after,
+       `43: 13 heuristic, 30 exact`. Fails closed either way, so no earlier
+       verdict was wrong.
+
+       **172.1c — a SECOND `@exact` gate recognises, found by it firing on this
+       grill's own report.** `check:slice-refs` rejected a draft over the
+       window's loop tally — which ends in the loop name `Roadmap` followed by a
+       bare count, a spelling this entry deliberately does not reproduce —
+       because its citation finder,
+       `/\broadmap\s+(\d{1,3}(?:\.\d+[a-z]?)?)/gi`, cannot tell a citation from
+       a loop name followed by a count. **B's measured claim is unchanged and
+       was correctly scoped**: it asked for *markdown-structure* recognition,
+       and 1 of 39 is right for that predicate. This is a different one.
+       **No action**: it fails **closed** — it flagged prose that was not a
+       citation rather than missing one that was — so every green it has printed
+       still stands, and the cost was rephrasing one sentence to `Roadmap ×1`.
+       n=2 is thin and a sweep for the general predicate is 94.11's ceremony.
+       **What would reopen it:** an `@exact` gate found to fail *open* on a
+       recognition step, which is the property worth sweeping for and is not
+       "does the file contain a regex".
+
 ## Slice 171 — Owner wishlist: score layout / usability / performance, then recommend (2026-08-28)
 
 **Owner:** *"Score the layout, usability, performance — after getting the score,
@@ -1082,7 +1192,14 @@ Reconciled before quoting: 666 raw bullets dated ≥ 2026-08-19, 666 parsed.
   case and a first** — 2 of its 3 armed slices are grills (164, 167); without
   them the counter reads **1 of 3**, rule 4 would have run, and the oldest
   dispatchable item is **168.1**, the previous grill's own filed finding. So the
-  self-arm deferred the fix for the finding. **Recorded, not gated**: rule 3
+  self-arm deferred the fix for the finding.
+
+  > **SUPERSEDED in part by Slice 172 (2026-08-28) — "a first" no longer holds.**
+  > The very next dispatch repeated it: `[168, 169, 170]` excludes to `['169']`,
+  > 1 of 3 again, and again deferred a filed finding (169.4). Whole log **8 of
+  > 27**. Re-run this section's own script; it is unchanged. The *verdict* is
+  > unchanged too, and 172 §A explains why the trajectory it looks like is an
+  > artefact of arming-set size rather than a trend. **Recorded, not gated**: rule 3
   sits above rule 4 precisely so it cannot starve, and a heading classifier in
   the dispatcher would be the sixth regex — this grill's own first attempt
   missed the older *"from the Objective grill, Slices 45-50"* convention (ten

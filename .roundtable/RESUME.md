@@ -21,9 +21,9 @@ made but not yet written down.**
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 4 → Continue,
-169.3**). Working tree clean at hand-off; the wake's commits were pushed as one
-batch.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 3 → Objective,
+grill of Slices 168/169/170**). Working tree clean at hand-off; the wake's
+commits were pushed as one batch.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
 goes stale between wakes. Trust the `N. [ ]` checkboxes, not this section.
@@ -31,11 +31,7 @@ goes stale between wakes. Trust the `N. [ ]` checkboxes, not this section.
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
 **Standing section, added by 168.1 (2026-08-28). Answer all four every wake,
-from the sources named — never by copying the answers above you.** Rule 4 always
-has an oldest open item, so the loop never stalls and never halts; a *direction*
-that nobody can advance is therefore invisible underneath maintenance that looks
-healthy. This block is the only place the loop says so out loud. Four answers,
-not a rule, not a gate and not a ratio — the three things 168.1 refused.
+from the sources named — never by copying the answers above you.**
 
 - **Direction:** (a) adoption/DX — finish it by publishing
   `@busy-office/create-ui`. Source: the `DECISION (owner, 2026-08-28)` block in
@@ -43,23 +39,18 @@ not a rule, not a gate and not a ratio — the three things 168.1 refused.
   pointer that disagrees with its source loses to the source.
 - **Remaining step, and who it waits on:** `npm publish -w
   @busy-office/create-ui` — **owner-only**, by CLAUDE.md's standing policy
-  ("Publishing remains owner-triggered"). Do not trust the previous wake's
-  answer here; ask the registry, which is the authority and this file is not.
+  ("Publishing remains owner-triggered"). Asked the registry this wake, which is
+  the authority: **still E404**.
 - **Did this wake advance it?** **No.** The remaining step is owner-only, and no
-  cloud wake can run it. This wake ran rule 4 → Continue on 169.3.
+  cloud wake can run it. This wake ran rule 3 → Objective.
 - **Work rows since the direction was decided that did not advance it:**
-  **13 of 14** as of 2026-08-28 (this wake) — the commands below printed `14`
-  and `2`. Re-derive rather than increment; a copied number is 169.1's exact
-  failure mode.
+  **15 of 16** as of this wake (was 13 of 14). Re-derive rather than increment;
+  a copied number is 169.1's exact failure mode.
 
-  **⚠ The `grep -c create-ui` needle over-counts, and it started this wake.** It
-  printed `2`, and only ONE of the two advances the direction: 164.3, which
-  fixed three publish blockers. The other is **168.1's own row**, which merely
-  *narrates* the direction — it says "create-ui is still E404" while advancing
-  nothing. So the needle now matches rows that TALK about the direction as well
-  as rows that MOVE it, and it acquired that fault one wake after being written,
-  because writing the Direction block is itself a thing you write `create-ui`
-  into. Read the two matched rows, do not trust the count:
+  **⚠ The `grep -c create-ui` needle over-counts.** It prints `2`, and only ONE
+  of the two advances the direction: 164.3, which fixed three publish blockers.
+  The other is 168.1's own row, which merely *narrates* the direction. Read the
+  two matched rows; do not trust the count:
 
   ```
   git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' \
@@ -71,13 +62,12 @@ not a rule, not a gate and not a ratio — the three things 168.1 refused.
   prose, which is the semantic-vs-shape line CLAUDE.md draws (94.11).
 - **Is that ratio a PROBLEM? No — the owner was shown it and decided otherwise
   (2026-08-28).** Asked directly whether to pause the hourly routine until the
-  publish, given a measured 16 machinery : 6 consumer-facing files over twelve
-  hours and a direction the loop structurally cannot advance, the owner chose
-  **keep it running hourly**. So a wake finding this block's answers unchanged
-  is looking at an **accepted state, not a fault**: do not re-triage it, do not
-  raise it as a new finding, and do not slow or pause the routine on your own
-  judgement. What WOULD be new information: the registry answering something
-  other than E404, or the owner picking a different direction.
+  publish, the owner chose **keep it running hourly**. So a wake finding this
+  block's answers unchanged is looking at an **accepted state, not a fault**: do
+  not re-triage it, do not raise it as a new finding, and do not slow or pause
+  the routine on your own judgement. What WOULD be new information: the registry
+  answering something other than E404, or the owner picking a different
+  direction.
 
 ```
 npm view @busy-office/create-ui version     # E404 → unpublished → still blocked
@@ -87,32 +77,25 @@ npm view @busy-office/ui version            # 0.5.0 on 2026-08-28
 # (ENVIRONMENT.md trap 2) or these resolve nothing and the rate is silently
 # missing, not wrong.
 git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' | grep -vc ' · Meta · '
-git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' | grep -v ' · Meta · ' | grep -c create-ui
 ```
-
-**When that number climbs and the registry still 404s, say so to the owner** —
-that is the whole finding, and on a scheduled routine the push notification is
-the only channel it has. No threshold is attached and no gate is proposed:
-168.1's Accept names a line in the handover, and a threshold here would be the
-ratio that item refused by name.
 
 **`create-ui` is the only name in these commands that will age.** When the owner
 picks a direction that is not "publish the front door", the two `npm view` lines
-and the `grep -c` needle change with it — and `fb15cdc` becomes whichever commit
-carries the new decision. Rewrite them; do not reinterpret them.
+and the needle change with it — and `fb15cdc` becomes whichever commit carries
+the new decision. Rewrite them; do not reinterpret them.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
 **Nothing visual exists to look at from this wake.** The changed files are
-`.roundtable/ENVIRONMENT.md` (new), `.roundtable/RESUME.md`, `LOOPS.md`,
-`ROADMAP.md`, `apps/docs/scripts/check-resume-charter.mjs` (new) and
-`apps/docs/package.json`. **No CSS, no Astro page and no rendered surface was
-touched** — nothing under `apps/docs/src` or `packages/core/src` — which is a
-stronger statement than a screenshot. `check:layout` (127 pages) and `test:axe`
-(127 × 2) swept every page at both widths anyway and were green. **No visual
-debt was added; nothing visual was looked at.**
+`apps/docs/scripts/check-resume-charter.mjs`,
+`apps/docs/scripts/check-selftests.mjs`, `ROADMAP.md`, this file and the grill
+report. **No CSS, no Astro page and no rendered surface was touched** — nothing
+under `apps/docs/src` or `packages/core/src` — which is a stronger statement
+than a screenshot. `check:layout` and `test:axe` swept every page at both widths
+anyway and were green. **No visual debt was added; nothing visual was looked
+at.**
 
 **The two carried-forward visual items have waited another wake** — both need a
 local wake with a browser, and neither is dispatchable here:
@@ -124,56 +107,41 @@ local wake with a browser, and neither is dispatchable here:
   alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 
-**Traps exercised for real this wake:** 1 (detached HEAD *and* no local `main` —
-`git branch --show-current` came back empty, fixed before the first commit), 2
-(shallow; `--unshallow` brought it to 1,497 commits, needed because this wake's
-finding is a history measurement), 1c and 3. Not exercised: 1b, 4, 5, 6, 7.
+**Traps exercised for real this wake:** 1 (no local `main` at all —
+`git branch --show-current` came back empty, fixed before the first commit), 1b
+(a persisted `cd apps/docs` made a restore-from-scratchpad `cp` fail with "No
+such file or directory" mid-red-proof; the injected file was left on disk for
+one command), 1c and 2. Not exercised: 3, 4, 5, 6, 7.
 
-## What landed this wake (2026-08-28, cloud, rule 4 → Continue 169.3)
+## What landed this wake (2026-08-28, cloud, rule 3 → Objective 168/169/170)
 
 Dispatcher: rule 1 clear (no open P0; GitHub intake **0 open issues**, asked via
-the API, not assumed), rule 2 read `Standardize 2 / 4 ok`, rule 3 read
-`Objective 2 / 3 ok [168, 170]` — neither fired. Rule 4 took the oldest still-open
-item: 112.3/112.4 are owner-blocked and the AT-runtime item needs hardware, so
-**169.3**, exactly as the previous handover predicted.
+the API, not assumed), rule 2 read `Standardize 3 / 4 ok`, rule 3 read
+`Objective 3 / 3 OVERDUE [168, 169, 170]` and fired. Full report:
+`.roundtable/grill-objective-168-169-170-2026-08-28.md`; slice entry is 172.
 
-- **169.3 closed — implemented, not refused.** The traps, the toolchain, the
-  carried-forward measurement discipline and the standing owner instruction now
-  live in `.roundtable/ENVIRONMENT.md`. This file keeps a pointer and only what
-  its own header allows.
-- **The premise was re-checked and one of its halves did not survive.** 169.3's
-  supporting evidence was "content that has survived sixteen manual re-copies is
-  durable by demonstration". True, and the continuity probe strengthens it — **9
-  probes across 53 revisions, 0 ever dropped and restored**. But that same
-  number is counter-evidence for the *stated* risk: the re-copy has never lost
-  anything, so loss was never the cost. The real cost is the one 169.1 paid, and
-  it is about **visibility, not survival**.
-- **Measured this wake, all commands in ROADMAP 169.3:** durable content was
-  **214 of 372 lines (57%)** — 169.3 read 63% of 261, and the fraction fell only
-  because 168.1 added per-wake answers. Over the 27 revisions since durable
-  content first appeared, durable went **9 → 214 lines** and per-wake **93 →
-  158**: the half this file is not for grew **3.2x faster** than the half it is
-  for. Mean churn over the last 20 commits: **111 lines added+removed per
-  commit**, in a file that was 57% content the wake did not change.
-- **The refusal argument was weighed and does not transfer.** "A pointer is read
-  less than a paragraph" is 167.2's line about splitting *narrative* into an
-  archive nobody is instructed to open. `LOOPS.md` Step 0 now names both files,
-  which makes this a step the dispatcher executes.
-- **`check:resume-charter` is the ratchet**, and it was red on the real tree
-  before the move rather than on an injection — the honest way round. Both
-  halves red-proved after: drop the pointer → red; paste a durable heading back
-  → red.
+- **172.1 — a gate shipped one wake ago was tagged `@exact` while resting on a
+  parser, and that parser FAILED OPEN.** `check-resume-charter.mjs`: pasting a
+  moved heading back into `RESUME.md` goes red as it should, but the identical
+  paste preceded by one stray fence line went **GREEN** — the open fence makes
+  every heading below it invisible and the checks pass by not looking. Tag
+  corrected to `@heuristic`, the fail-open condition asserted as its own loud
+  failure, and the `--self-test` the tag owes now ships. Base rate decided the
+  scope: **1 of 39** `@exact` gates does markdown-structure recognition, so no
+  new mechanism — `check:selftests` already enforces the pairing.
+- **172.1b — the meta-gate had the same bug one line above its own comment about
+  it.** `check-selftests.mjs` matched `@exact` as a substring, so a header
+  explaining a retag read as claiming both tags. Now matched at the declaration
+  position. Reconciled against the unchanged tree (`43: 12 heuristic, 31 exact`)
+  and the new one (`43: 13 / 30`).
+- **Two findings recorded, not itemised.** A: 170's "the self-arm is a first" is
+  superseded — it repeated on the very next dispatch, and Slice 170's entry is
+  annotated in place. The verdict does not change, and the reason is that the
+  17% → 56% trajectory a first reading produced is confounded by arming-set
+  size; controlled, it is flat. C: the window's figures re-verify, and this wake
+  produced **three** instrument defects of its own, all caught by reconciliation.
 
-- **CI went RED on the first push and is GREEN now.** Run **572 failed**
-  (`db4c0b8d`, docs container build, `Containerfile:33`); run **573 passed, all
-  six jobs, zero failures** (`5a5ea576`, 10:55:38Z). The cause and the fix are
-  in ROADMAP 169.3's third defect. **This wake therefore pushed TWICE**, against
-  the one-push-per-wake rule — stated plainly rather than glossed: the first
-  push was made early to watch CI per the standing rule, and the second was the
-  fix for what CI found. A red `main` is not something to leave for the batching
-  rule.
-
-**Re-run, do not quote** — every figure above has its command in ROADMAP 169.3.
+**Re-run, do not quote** — every figure above has its command in the report.
 
 ## Counters after this wake
 
@@ -181,62 +149,34 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
 the parser's five blindings and nothing else ever has.
 
-Read at Step 0b, before any commit: **Standardize 2/4 ok, Objective 2/3 ok
-[168, 170]**, parser at 1,033. Read again immediately after
-`record_iteration.py`: **Standardize 3/4 ok, Objective 3/3 OVERDUE
-[168, 169, 170]**, parser at **1,034 against a raw `grep -c "^- "` of 1,034**.
+Read at Step 0b, before any commit: **Standardize 3/4 ok, Objective 3/3 OVERDUE
+[168, 169, 170]**, parser at 1,036 against a raw `grep -c "^- "` of 1,036.
+Read again immediately after `record_iteration.py`: **Standardize 4/4 OVERDUE,
+Objective 1/3 ok [172]**, parser at **1,040 against a raw 1,040**.
 
-Read a THIRD time after rebasing onto the other dispatcher's Slice 171 triage:
-**unchanged verdicts, parser at 1,036 against a raw 1,036.** Worth the third
-read — the rebase added two rows this wake never saw, and a counter reconciled
-before a merge has been reconciled against the wrong file. The verdicts did not
-move because a `Roadmap · plan` row does not close a slice (161.4), which is the
-rule working rather than a coincidence.
+**That second read earned its place, and it caught a wrong sentence this file
+had already been given.** The paragraph below said *"expect rule 4 → Continue"*,
+reasoning that an `Objective` row resets rule 3. True, and irrelevant: the same
+wake's `Continue` row for 172.1 pushed **Standardize** over its own threshold,
+and rule 2 sits above rule 4. This is 166.5's lesson working exactly as written —
+the counter is only ever caught by a number disagreeing with something a human
+just wrote down.
 
-**Step 0c collided twice this wake, and both were absorbed as designed.**
-`origin/main` moved while the item was being built (`ca78e6a2`, the owner's
-"accepted state" bullet) and again before the push (`1f7a2eed`/`c6eeb667`,
-Slice 171's triage). Nothing was lost: the `RESUME.md` conflict kept the owner's
-bullet AND the newer figure, the `loop-log.md` conflict kept **both** rows per
-Step 0c's standing instruction, and `STATUS.md` was regenerated rather than
-hand-resolved after `rebuild_from_log.py` re-derived the mirror at 1,036.
+**NEXT WAKE: rule 2 fires → dispatch Standardize** (`Standardize 4/4 OVERDUE`).
+Rule 3 will not: an `Objective` row reset it to 1/3, and the `[172]` it already
+holds is this grill's own follow-up row — finding A happening again, one wake
+after being measured. Re-read `dispatch_status.py` at Step 0b rather than
+trusting this line.
 
-**NEXT WAKE: rule 3 fires — dispatch Objective, a grill of Slices 168, 169 and
-170.** It crossed on this wake's own row, which is why Step 0b is read again
-after recording. Rule 3 sits above rule 4, so it preempts the build queue; do
-not skip it for 170.2. Check `.roundtable/INDEX.md` first — no prior grill
-should cover these three, but that is the instruction, not an assumption.
+**When rule 4 is reached, its oldest dispatchable item is 169.4**, then
+**170.2**, **170.3**, then 171.1-171.3 — re-derive from `ROADMAP.md`'s `N. [ ]`
+checkboxes, do not carry this forward. 112.3/112.4 and the AT-runtime item are
+older but blocked on the owner or on hardware. 169.4, 170.2 and 170.3 need no
+browser and are dispatchable in a cloud wake.
 
-**A grill has material here.** Four candidates, offered as leads, not verdicts:
-`check:resume-charter` shipped with THREE instrument defects in one wake — the
-wrong-headings arrival check (caught pre-push), a `headingsIn` that read bash
-comments inside code fences as headings (caught post-push by its own output,
-which made the `@exact` tag wrong since recognition is exactly what that tag
-denies), and an ENOENT that **turned CI red** because `.roundtable/` is not in
-the docs container's `COPY` set — CLAUDE.md's "a gate that only runs in CI is
-not known to work" section, reproduced almost word for word one wake after being
-read. Two were caught by the gate's own output; the third needed CI, because it
-is the one defect invisible everywhere the author can see;
-this wake's `grep -c create-ui` needle acquiring a fault one wake after being
-written (168 wrote it, 169's wake tripped it); `check:resume-charter`'s own
-first version asserting the wrong headings against the destination, which is the
-same shape 168's grill already found 3-of-3 times; and whether moving durable
-content out of a rewritten file is a pattern with other instances, or one.
-
-**After the grill, rule 4's oldest dispatchable item is 169.4** (filed by this
-wake, see below), then **170.2**, **170.3**, then the newly triaged
-171.1-171.3 — **9 open items**, re-derived from `ROADMAP.md`, not carried
-forward.
-
-**169.4 is a defect this wake CAUSED, and it is the one thing here worth an
-owner's eye.** `check-resume-charter.mjs` runs inside `check:repo` and reads
-`.roundtable/RESUME.md`, but `.roundtable/**` is in CI's `paths-ignore` — so a
-commit touching only that path can break `check:repo` without being built.
-`check:ci-ignores` did not catch it because it filters glob entries by
-construction; its pass line reads "verified against 124 script(s): **STATUS.md**"
-— one of the two entries. `ci.yml`'s comment claimed `.roundtable/**` was read by
-nothing and has been corrected. The item is a cost/benefit call (un-ignore the
-path, move the check to the loop's tooling, or cover globs and accept red), so
-it is filed rather than decided by the wake that caused it. 112.3/112.4 and the
-AT-runtime item are older but blocked on the owner or on hardware. 170.2 and
-170.3 need no browser and are dispatchable in a cloud wake.
+**169.4 remains the one thing worth an owner's eye**, unchanged from last wake:
+`check:repo` reads `.roundtable/RESUME.md` while `.roundtable/**` is in CI's
+`paths-ignore`, so a commit touching only that path can break `check:repo`
+without being built. **This wake made that item strictly more valuable**: the
+charter gate now carries a `--self-test` and one more assertion, so there is
+more of it to break unbuilt.
