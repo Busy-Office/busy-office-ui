@@ -217,8 +217,12 @@ move rule 2 to `4/4` and arm Standardize; rule 3 counts slices *closed* by
 Continue or Standardize (161.4), and Slice 177 closes with this wake, so it
 should reach **3/3** and arm Objective too.
 
-*(Filled in below immediately after recording — if either counter disagrees with
-that prediction, the parser is the first suspect, not the prediction.)*
+After recording: **`Standardize 4/4 OVERDUE`, `Objective 3/3 OVERDUE
+[173, 176, 177]`**, parser **1,074** against a raw `grep -c "^- "` of **1,074**.
+The row count rose by exactly **4** — two iteration rows plus two
+`--also-refused` rows. **Prediction confirmed on all four numbers**, including
+both counters crossing in the same wake, which is the first time that has
+happened in this handover's records.
 
 ## What the next wake should expect
 
