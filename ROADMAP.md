@@ -1038,6 +1038,63 @@ nothing visual was looked at.**
        **Not a gate, deliberately** — 158 refuses a word-count gate up front and
        that reasoning is untouched here. This changes a `console.log` format.
 
+3. [ ] **169.3 — the generalized form of 169.1: `RESUME.md` is carrying durable
+       content, and its charter says it cannot.** Noticed in this round's
+       re-scan, not searched for — 169.1 is one instance and this is the shape.
+
+       `RESUME.md`'s own header states what belongs in it: *"Only put things
+       here that `ROADMAP.md` and `.roundtable/loop-log.md` cannot say:
+       uncommitted work, and a decision made but not yet written down."* It is
+       rewritten every wake by design (167.1 measured 26 up / 13 down over 40
+       transitions and concluded that shrinking it is the rule).
+
+       **Measured: 164 of its 261 lines (63%) are neither.** The cloud-wake trap
+       block (lines 33-155), the toolchain recipe (156-174), "Traps worth
+       carrying forward" (240-252) and the standing owner instruction (253-261)
+       are durable environment knowledge. They survive only because each wake
+       re-copies them by hand, and the count of successive rewrites they have
+       survived is the point:
+
+       ```
+       python3 - <<'PY'   # commits touching RESUME.md that still contain each probe
+       import subprocess
+       shas=[l.split()[0] for l in subprocess.run(['git','log','--format=%H %cs','--',
+             '.roundtable/RESUME.md'],capture_output=True,text=True).stdout.split('\n') if l.strip()]
+       for name,needle in {'shallow':'THE CLONE IS SHALLOW','CHROME_PATH':'CHROME_PATH',
+           'detached':'the container starts DETACHED','astro dist':'astro build` does not clear',
+           'prettier':"IS NOT THIS REPO'S FORMATTER",'cwd':'WORKING DIRECTORY PERSISTS'}.items():
+           n=sum(needle in subprocess.run(['git','show',f'{s}:.roundtable/RESUME.md'],
+                 capture_output=True,text=True).stdout for s in shas)
+           print(f'{name:12} {n:3d} of {len(shas)}')
+       PY
+       ```
+
+       48 commits touch the file; the six probes are present in **14-20** of
+       them, every one dating to 2026-08-27 — the day the cloud routine's first
+       commit (`c073c36`) landed. Content that has survived sixteen manual
+       re-copies is durable by demonstration.
+
+       **Why this is the same drift and not a tidy.** 169.1's wrong sentence
+       persisted precisely because 166.1 put its correction in this file. A
+       handover that is rewritten every wake is a place corrections go to die,
+       and the more durable content it accumulates, the more often that happens.
+
+       *Accept*: the cloud-wake traps and toolchain live in a file that is not
+       rewritten every wake, and `RESUME.md` retains a pointer plus only what
+       its own header allows. **Either that, or a recorded reason the handover
+       is the right home after all** — refusing is a valid outcome, and the
+       argument for refusing is real: the traps are read at Step 0 precisely
+       because `RESUME.md` is the file Step 0 opens, and a pointer is read less
+       than a paragraph (this file's own words, 167.2).
+
+       **Deliberately not decided by this wake.** The destination is a direction
+       call, not a mechanical move: 167.2 split `LOOPS.md` one wake ago
+       specifically to stop it growing, so appending 140 lines of environment
+       traps to it cuts against a decision made one wake earlier, and a new root
+       document is a new durable artefact. Per this project's operating rule, an
+       improvement bigger than the item becomes a roadmap entry rather than an
+       extra commit.
+
 ## Slice 168 — Objective grill of Slices 163, 164, 165 (2026-08-28)
 
 Rule 3 at 3/3. Full report:

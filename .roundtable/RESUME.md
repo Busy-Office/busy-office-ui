@@ -9,26 +9,23 @@ Ordinary state — what is queued, what is done — lives in `ROADMAP.md` and
 `.roundtable/loop-log.md`. Only put things here that those two cannot say:
 uncommitted work, and a decision made but not yet written down.
 
+**169.3 (OPEN) says this file is not honouring that header** — 164 of its 261
+lines were durable content, kept alive only by each wake re-copying it. The
+trap block below is exactly that content. It stays until 169.3 is decided;
+moving it is that item's job, not a passing tidy.
+
 ---
 
 ## In flight: nothing
 
-Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 4 → 167.1
-closed**). Working tree clean at hand-off; the wake's commits were pushed as one
-batch.
+Last updated 2026-08-28 (cloud wake, scheduled routine — **rule 2 → Standardize,
+Slice 169**). Working tree clean at hand-off; the wake's commits were pushed as
+one batch.
 
-**This file's own growth was verdicted this wake, and the verdict is that it is
-supposed to shrink.** 167.1 measured it at **27 up / 13 down** over 40
-transitions — it is rewritten each wake, not appended, min 314 and max 2,980.
-The 2,980 peak was the commit 167.1 quoted, and the next commit cut it 44%. So
-trimming this file is the rule, not a tidy: run
-`python3 scripts/loops/report_loop_prose.py` and keep the `down` column alive.
-
-**This file goes stale between wakes — reconcile it against `ROADMAP.md` before
-trusting its open set.** Live proof, and it happened again: the handover this
-one replaces named **163.1 as the oldest dispatchable open item**. `ROADMAP.md`
-showed it already closed. `ROADMAP.md` was right; this file was not. Trust the
-`N. [ ]` checkboxes, not this section.
+**Reconcile this file against `ROADMAP.md` before trusting its open set** — it
+goes stale between wakes, and it did again: the handover this one replaces named
+**167.2** as the oldest dispatchable open item, and `ROADMAP.md` showed it
+already closed (`3006da0`). Trust the `N. [ ]` checkboxes, not this section.
 
 ## ⚠ READ FIRST IF THIS IS A CLOUD WAKE — THE GIT/BUILD TRAPS
 
@@ -161,28 +158,26 @@ export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 rm -rf apps/docs/dist
 ```
 
-Green this wake: `build -w @busy-office/ui`, `test -w @busy-office/ui`,
-`docs:build`, `check:repo`, `check:claims` (139), `check:layout` (127 pages),
-`test:axe` (127 × 2).
-
-**CI run 565 (`cd31930`) is GREEN** — all six jobs `success`, last finished
-06:53:48, confirmed per job id. Runs 566/567 (the two handover pushes) were not
-watched to completion; they are markdown-only and touch no gate.
+Green again this wake (2026-08-28, Slice 169): `build -w @busy-office/ui`,
+`test -w @busy-office/ui` (137), `docs:build`, `check:claims` (139),
+`check:repo`, `check:layout` (127 pages), `test:axe` (127 × 2). Traps 1, 1b,
+1c, 2, 3 and **6** were all exercised for real — 6 bit again, on the
+`scan:dead-style` background task, and the empty output file was correctly read
+as *still running* rather than done.
 
 `sqlite3` is NOT installed in this container. Query the mirror with Python's
 `sqlite3` module — `python3 -c "import sqlite3; ..."`.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
-No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and
-dark.
+No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**From THIS wake — nothing visual exists to look at.** `git diff --stat` lists
-`ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md` and one new Python script
-under `scripts/loops/`. No page's markup, CSS or component changed at all, which
-is a stronger statement than a screenshot would have been. `check:layout` (127
-pages) and `test:axe` (127 × 2) swept anyway and were green. **No visual debt was
-added; nothing visual was looked at.**
+**Nothing visual exists to look at from this wake.** `git diff --stat` lists
+`ROADMAP.md`, `LOOPS.md`, `.roundtable/RESUME.md` and one `console.log` format
+in `apps/docs/scripts/report-prose.mjs`. No file under `packages/core/src` or
+`apps/docs/src` was touched, which is a stronger statement than a screenshot.
+`check:layout` (127 pages) and `test:axe` (127 × 2) swept anyway and were green.
+**No visual debt was added; nothing visual was looked at.**
 
 **The two carried-forward visual items have waited another wake** — both need a
 local wake with a browser, and neither is dispatchable here:
@@ -194,48 +189,42 @@ local wake with a browser, and neither is dispatchable here:
   alignment" heading at 390px.
 - The `#markers` table on `/components/data-table` at 390px, both themes.
 
+## What landed this wake (2026-08-28, cloud, rule 2 → Standardize 169)
+
+Dispatcher: rule 1 clear (no open P0, GitHub intake **0 open issues**), rule 2
+read `Standardize 4 / 4 OVERDUE` and won. Third run of 158.2's cadence.
+**Three of the four sweeps were zero-delta; the finding came from the fourth.**
+
+- **169.1 closed.** `LOOPS.md` still told every wake that `/base/motion/`,
+  `/concepts/js-behaviors/` and `/concepts/design-language/` were unread.
+  **161.1 verdicted all three**, and **166.1 already found this** — and put the
+  correction in THIS file, which is rewritten every wake, so it was discarded
+  while the durable playbook stayed wrong. This wake re-derived all three a
+  third time before finding 161.1's entry. The instruction now names the
+  **property** (any flagged page with no verdict in `ROADMAP.md` or the
+  archive), not a snapshot of names.
+- **169.2 closed.** `report-prose.mjs`'s family list printed a bare URL while
+  its corpus list printed `authored + generated`. The family half is the one
+  LOOPS.md sends a wake to read, so the split was missing exactly where it was
+  needed — 2 of the 12 family-flagged pages are majority machine-written
+  (`js-behaviors` 375a+1054g, `which-pattern` 310a+2015g). No threshold moved;
+  the flagged set is identical before and after.
+- **169.3 OPEN — the generalized form, and the next wake can execute it.**
+  63% of this file is durable content. Destination is a direction call, so it
+  was filed rather than decided. Full measurement and command in ROADMAP 169.3.
+
+**Re-run, do not quote** — every figure above has its command in ROADMAP 169.
+
 ## Counters after this wake
 
 Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — that comparison has found two of
 the parser's five blindings and nothing else ever has.
 
-**NEXT WAKE: rule 4 — Continue, build mode.** Rules 1-3 were all clear this wake
-(no open P0, GitHub intake empty at 0 open issues, Standardize 1/4, Objective
-1/3). Re-derive the queue from the `N. [ ]` checkboxes rather than trusting this
-line; as it stood at hand-off the oldest still-open dispatchable item is
-**167.2**, then **168.1**. 112.3/112.4 and the AT-runtime item are older but
-blocked on the owner or on hardware.
-
-**167.2 has a live datum waiting for it.** Re-running its own command this wake,
-rule 3 is now **1,171 words (181 rule / 990 history)**, up from the 1,026
-(181 / 845) it was filed at — it grew 145 words, all history, while the item to
-archive it sat open. Re-run, do not quote.
-
-## What landed this wake (2026-08-28, cloud, rule 4 → 167.1)
-
-**167.1 closed: 2 instrument, 3 honest, 0 removable that is not already filed.**
-Every figure and command is in ROADMAP 167.1 — **do not re-derive them, re-run
-them**, with `python3 scripts/loops/report_loop_prose.py`. In one line each:
-
-- **Two of the entry's four headline figures did not survive re-running.**
-  `RESUME.md` is **+100.4%**, not the +256% filed; ROADMAP was quoted as
-  ROADMAP **+ archive**, and the file rule 4 actually reads went **-85.9%**.
-- **The load-bearing column is `accumulate`, not the delta.** 158.2's cadence
-  rests on docs pages never shrinking; 2 of these 5 shrink by design, so a
-  rising count means nothing for them.
-- **The cadence extends; 158.2's instrument does not.** n=5 has no usable median
-  (161.1 already recorded n=6 failing, and the spread here is 102x).
-- **Shipped:** `scripts/loops/report_loop_prose.py`, three guards red-proved end
-  to end, plus one bullet in `LOOPS.md`'s Standardize step 1 — **+73 words,
-  measured by the script itself**, to the file this item is about.
-
-**167.3 closed, found in passing while committing 167.1.** `STATUS.md`'s history
-half had no reconciliation and this wake's own commit would have deleted nine
-committed iteration rows — see trap 5 above and ROADMAP 167.3. CLAUDE.md's
-storage doctrine was written for this generator and only its open-items half
-applied it; the iterations half in the same file had nothing. Four branches
-red-proved.
+**NEXT WAKE: re-derive it, but expect rule 3 (Objective).** Standardize
+discharged its counter this wake, and Objective stood at 2/3 before it. Rule 4's
+oldest dispatchable open items are **168.1** then **169.3**; 112.3/112.4 and the
+AT-runtime item are older but blocked on the owner or on hardware.
 
 ## Traps worth carrying forward (not slice history)
 
