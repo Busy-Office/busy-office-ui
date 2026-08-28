@@ -357,15 +357,32 @@ match to its full playbook below:
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.
 
-   **Read `ROADMAP.md` only, and it is short again.** A closed slice leaves a
-   one-line pointer here and its text moves to `ROADMAP-archive.md`. Item 110.4
-   did this for 83 slices on 2026-08-22; the live file grew back from 5,562 to
-   **9,824 lines in three days**, so a second pass on 2026-08-25 moved 44 more
-   and brought it to **1,094**. Treat it as a recurring sweep, not a one-off —
-   if this rule is walking thousands of lines again, that is the signal.
-   The archive is for looking a reason UP (`check:slice-refs` keeps its 148
-   citations resolvable); a dispatch decision never comes from it, because
-   nothing in it is open.
+   **Read `ROADMAP.md` only.** A closed slice leaves a one-line pointer here and
+   its text moves to `ROADMAP-archive.md`. **If this rule is walking thousands of
+   lines, that is the signal** — triage the sweep and run it; Slices 165 and 177
+   are the precedent for doing exactly that from inside a dispatch.
+
+   **This paragraph used to pin the sweep history in numbers, and by 2026-08-28
+   every one of them was stale** — it named two sweeps when there had been four,
+   and "148 citations" when `check:slice-refs` was reporting 355. That is this
+   file's own lesson from the Standardize playbook, arriving in the rule that
+   dispatches most wakes: **a snapshot in a playbook goes stale silently and is
+   read as current; the property does not.** So the numbers now live where they
+   are re-measured — ROADMAP 177 carries the scope command and the trend, and
+   `check:slice-refs` reports its own citation count on every run.
+
+   **It is a recurring sweep whose rate is RISING, which is the part worth
+   carrying here.** Measured across all 722 commits that have touched
+   `ROADMAP.md`, by the line-count drop rather than by grepping subject lines
+   (that grep finds only 2 of the 3 sweeps it should): regrowth per
+   ROADMAP-touching commit went **+30.4 → +51.0 → +67.9** while the gap between
+   sweeps halved, **140 → 66 → 33 commits**. Expect the next sweep sooner than
+   the last one, and re-run the command rather than trusting these three
+   figures — they are snapshots too, and saying so is the point.
+
+   The archive is for looking a reason UP (`check:slice-refs` keeps its
+   citations resolvable — it reports the count itself, so read it there); a
+   dispatch decision never comes from it, because nothing in it is open.
 
    **Oldest, not "current in-progress slice," as of 2026-08-19.** The old
    wording never defined "current," and in practice it meant "whichever
