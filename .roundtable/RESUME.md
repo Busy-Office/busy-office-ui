@@ -175,8 +175,22 @@ the parser's five blindings and nothing else ever has.
 Read at Step 0b, before any commit: **Standardize 2/4 ok, Objective 2/3 ok
 [168, 170]**, parser at 1,033. Read again immediately after
 `record_iteration.py`: **Standardize 3/4 ok, Objective 3/3 OVERDUE
-[168, 169, 170]**, parser at **1,034 against a raw `grep -c "^- "` of 1,034** —
-the agreement that check exists for.
+[168, 169, 170]**, parser at **1,034 against a raw `grep -c "^- "` of 1,034**.
+
+Read a THIRD time after rebasing onto the other dispatcher's Slice 171 triage:
+**unchanged verdicts, parser at 1,036 against a raw 1,036.** Worth the third
+read — the rebase added two rows this wake never saw, and a counter reconciled
+before a merge has been reconciled against the wrong file. The verdicts did not
+move because a `Roadmap · plan` row does not close a slice (161.4), which is the
+rule working rather than a coincidence.
+
+**Step 0c collided twice this wake, and both were absorbed as designed.**
+`origin/main` moved while the item was being built (`ca78e6a2`, the owner's
+"accepted state" bullet) and again before the push (`1f7a2eed`/`c6eeb667`,
+Slice 171's triage). Nothing was lost: the `RESUME.md` conflict kept the owner's
+bullet AND the newer figure, the `loop-log.md` conflict kept **both** rows per
+Step 0c's standing instruction, and `STATUS.md` was regenerated rather than
+hand-resolved after `rebuild_from_log.py` re-derived the mirror at 1,036.
 
 **NEXT WAKE: rule 3 fires — dispatch Objective, a grill of Slices 168, 169 and
 170.** It crossed on this wake's own row, which is why Step 0b is read again
@@ -191,6 +205,8 @@ first version asserting the wrong headings against the destination, which is the
 same shape 168's grill already found 3-of-3 times; and whether moving durable
 content out of a rewritten file is a pattern with other instances, or one.
 
-**After the grill, rule 4's oldest dispatchable items are 170.2, then 170.3.**
-112.3/112.4 and the AT-runtime item are older but blocked on the owner or on
-hardware. Both need no browser and are dispatchable in a cloud wake.
+**After the grill, rule 4's oldest dispatchable items are 170.2, then 170.3**,
+then the newly triaged 171.1-171.3 — **8 open items**, re-derived from
+`ROADMAP.md` after the rebase, not carried forward. 112.3/112.4 and the
+AT-runtime item are older but blocked on the owner or on hardware. 170.2 and
+170.3 need no browser and are dispatchable in a cloud wake.
