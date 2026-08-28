@@ -1718,8 +1718,7 @@ catches.
        second cost, and unlike the first it is silent and lands in the record
        itself.
 
-3. [ ] **164.3 — OWNER CALL: the direction chosen on 2026-08-26 is spent, and the
-       queue behind it is empty of product work.** Not a wake's decision, filed
+3. [x] **164.3 — OWNER CALL, DECIDED 2026-08-28: (a) is NOT spent. Finish it.** Not a wake's decision, filed
        here so it is visible rather than re-derived.
 
        **Measured, exactly, from the generated mirror** (`STATUS.md`,
@@ -1754,6 +1753,47 @@ catches.
        fine and is what the loop will do meanwhile; the finding is only that
        finishing them leaves the queue empty of product work and **no rule in
        `LOOPS.md` will notice**.
+
+       **DECISION (owner, 2026-08-28): the premise was wrong, and finishing (a)
+       is the direction.** This item says (a) *"became Slice 147 (the screen
+       kit, a real front door) and shipped"*. It shipped **into the repo, not
+       to users**:
+
+       ```
+       @busy-office/ui         0.5.0   live
+       @busy-office/create-ui  E404    never published
+       open GitHub issues      0
+       ```
+
+       `npm create @busy-office/ui` returns "package not found" for everyone on
+       earth. The front door is built, gated, committed — and locked. So (a)'s
+       last mile is unshipped, and *"keep waiting for adopter feedback"* was
+       never viable as a decision: **0 issues is consistent with 0 reachable
+       users**, not with indifference. You cannot measure adoption through a
+       door nobody can open.
+
+       **Three publish blockers found and fixed, one of which would have broken
+       the owner's publish outright:**
+
+       - **`publishConfig` was MISSING.** A scoped package defaults to
+         *restricted*; `npm publish` would have failed, or silently created a
+         **private** package nobody can install. `@busy-office/ui` has carried
+         `{"access":"public"}` since 0.1.0 and this package never did.
+       - **No README** — npm renders it as the package page, so the front door
+         would have published with a blank landing page.
+       - No `repository`/`homepage` metadata, so npm could not link back.
+
+       **The README's own claims were measured, and two were wrong** — caught by
+       scaffolding into a temp dir rather than trusting the draft: the dev
+       server is on **5173, not 3000**, and there is no `screen.html` (the
+       screen is inlined into `index.html`, and the scaffold writes its own
+       README). A fabricated file tree was one command away from being the
+       package's npm landing page.
+
+       **Remaining, and it is the owner's alone**: `npm publish -w
+       @busy-office/create-ui`. Everything else is done — `npm pack --dry-run`
+       shows 6 files, `check:quickstart` boots the scaffolded project in CI,
+       and the 155 freshness gate keeps the pin, template and NOTICE derived.
 
        **No metric, dashboard or gate is proposed**, deliberately: the
        verification-to-product ratio was raised and RETIRED above with "not to

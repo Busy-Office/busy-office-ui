@@ -19,5 +19,14 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Busy-Office/busy-office-ui.git",
+    "directory": "packages/create-ui"
+  },
+  "homepage": "https://busy-office.github.io/busy-office-ui/"
 }
