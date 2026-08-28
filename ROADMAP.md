@@ -231,6 +231,115 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 182 — Polish round on `state-patterns`: the rubric cited the bug, not the fix (2026-08-28)
+
+**Dispatcher rule 6, cloud wake.** Rules 1-5 gave nothing: no open P0 (all seven
+gates green on `origin/main` at `65139a8` — core `build`+`test` 146, `docs:build`,
+`check:repo`, `check:claims` 141, `check:layout` 127, `test:axe` 127x2), GitHub
+intake **0 open issues** (asked via the API), rule 2 `Standardize 1/4`, rule 3
+`Objective 1/3`, rule 4's six open items all owner-blocked (`112.3`, `112.4`,
+`173.2`, `175.4`, `176.3`, `15.12` — each re-read this wake, not copied from the
+handover), rule 5 no metric with two consecutive regressions (`ci-wall-time` flat
+at 275s; `rf-essentials` 36.4 kB against a 40 kB budget).
+
+`polish_requeue.py --apply` re-queued **9** surfaces, all `content: 3` at `1/3` —
+the same unbroken tie 176.1 faced.
+
+**Numbered 182, not 181: a collision, caught by the mandated pre-commit fetch.**
+Step 0c's `git fetch origin main` before the first commit found `origin/main` had
+moved `65139a8 → fb25abf5` mid-wake — the other dispatcher's PO-screenshot triage,
+which had already taken `181`. Two sections under one number is exactly what
+`check:slice-refs` fails on. Nothing else overlapped (their diff is `ROADMAP.md`,
+`loop-log.md`, `STATUS.md`; this wake's work is `dsa-scores.json` plus the polish
+ledger), so this rebased as a clean fast-forward. **That is the third collision,
+and the second in a row to merge cleanly** — the same evidence 175.4 is open on.
+
+1. [x] **182.1 — picked `state-patterns` on a measured discriminator, and
+       §3b's reconciliation found a real defect.** It is the **only** page
+       carrying two rubric entries, so every per-component arm has two chances
+       to disagree with a ledger row written as one:
+
+       ```
+       node -e "const api=require('./packages/core/dist/api.json');
+       const d=require('./apps/docs/src/data/dsa-scores.json').components; const bySlug={};
+       for (const n of Object.keys(d)){const s=api.pageSlug[n]||n;(bySlug[s]=bySlug[s]||[]).push(n);}
+       for (const [s,ns] of Object.entries(bySlug)) if (ns.length>1) console.log(s,ns);"
+       # state-patterns [ 'skeleton', 'state' ]   — 39 pages, 40 entries
+       ```
+
+       Arms 1, 2 and 4 clean (clause present; `Design-system alignment` renders
+       **2x** in the built page; the `content` cites quote the page clause
+       verbatim and it is present — 1 in source, 3 in the built HTML). **Arm 3
+       failed**: `skeleton · colour` cited *"gradient built from bg-muted/bg-hover
+       tokens"*. The shipped CSS sweeps `--bo-color-bg-muted` to
+       `--bo-color-skeleton-highlight`, and `bg-muted/bg-hover` is precisely the
+       pairing that was REMOVED, because those two tokens are byte-identical in
+       both themes — the shimmer swept from a colour to itself and nothing moved
+       on screen. Dated exactly, both with `git log -S`:
+
+       ```
+       cite written  479cc6a9  2026-08-21   Slice 94 batch 4
+       bug fixed     ef64c745  2026-08-25   fix(skeleton): the shimmer swept between a colour and itself
+       ```
+
+       So the rubric's **evidence for `colour: 3`** named the defect for three
+       days, published verbatim on `/components/state-patterns`, while
+       `dsa-scores.json`'s own `$comment` says *"Re-take a score when a
+       component's design changes"*. Same shape as 176.1's `scan` finding — the
+       published artefact disagreeing with the record — reached by a different
+       arm.
+
+       *Accept*: the `colour` cite names the tokens the shipped CSS actually
+       uses, and the probe below reports zero references absent from the
+       component's own CSS other than the adjudicated `money` one. **Met** —
+       verified against the RENDERED page, not the diff: the built
+       `/components/state-patterns/index.html` carries `skeleton-highlight` once
+       and `bg-muted/bg-hover` zero times.
+
+       **The score was NOT re-taken and `scored` stays `2026-08-23`.** §3b step 4
+       requires a blind re-score by a second agent; this wake could not run one,
+       so moving the date would claim an independent opinion that does not
+       exist. This is a citation repair. `colour` is owed a blind re-score and
+       the ledger now says so.
+
+2. [x] **182.2 — base rate measured before proposing a gate, and the gate is
+       REFUSED.** Across all 240 cites there are **28** token references (26 in
+       `--bo-*` form, 2 as prose shorthand). Exactly **1** was absent from that
+       component's shipped CSS — 182.1's. The one other hit is adjudicated a
+       false positive: `money · typography · --bo-density-font-size` says
+       *"(inherited from `.bo-input`)"*, and `.bo-input` lives in
+       `components/form/`, which `money.css` composes
+       (`.bo-money > .bo-combobox > .bo-input`).
+
+       **Three dead instruments before a live one, recorded because the sequence
+       is the finding.** (a) Matching only `--bo-*` found 1 miss — the `money`
+       false positive — and could not see 182.1 at all, because the cite writes
+       the shorthand. (b) Widening to token stems returned a **plain zero of
+       240**, the tell: stems parse as `color-bg-muted`, while cites write
+       `bg-muted`. (c) Adding trailing-segment aliases worked but reported **14**
+       misses, 13 of them the bare CSS property `font-size` matching an alias of
+       `--bo-density-font-size`, every one inside a negation (*"no raw
+       font-size"*). Dropping aliases that appear as real declarations in the
+       tree left the honest number.
+
+       **Refused as a gate, on two independent grounds.** First, roadmap 101.3's
+       stop rule forbids Polish adding gates. Second, and the one a later wake
+       should weigh: **the repair trips the detector.** The first correction
+       written here explained what `bg-hover` had been, and the probe went red on
+       the fix — CLAUDE.md's *"assert on structure, never on raw text; the
+       comment written by that same edit legitimately names the thing removed"*,
+       hit live. A gate in this shape would forbid a cite from ever explaining
+       its own history. That also decided the shipped wording: the forensic note
+       was moved out of the published cite into the ledger, where it belongs —
+       `DsaScore` renders the cite verbatim to readers.
+
+       **Red-proved by re-anchoring, not by watching it pass**: run against the
+       pre-fix JSON extracted to a probe file in the same directory, it reports
+       **2** misses and names `skeleton · colour · bg-hover`; against the fixed
+       tree, **1** — the adjudicated `money` one. Same CSS tree both runs, so the
+       JSON is the only variable. The probe stayed in the scratchpad; its numbers
+       are snapshots, so re-run it rather than quoting them.
+
 ## Slice 180 — P0: a loop-name tally is read as a slice citation, and `main` has been red since (2026-08-28)
 
 **Dispatcher rule 1, and the P0 was found by the wake rather than reported.**

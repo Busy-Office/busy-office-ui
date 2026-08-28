@@ -101,7 +101,7 @@ a no-op recorded in one line.
 | component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below |
 | component/sidebar-nav | content | **3** | 1/3 | 0 | 465e2954 | round 1 landed — blind 2→3, "not for navigating within one screen" · **RE-QUEUED — source changed**|
-| component/state-patterns | content | **3** | 1/3 | 0 | 7e137d03 | round 1 landed — blind 2→3 (clears skeleton AND state) · **RE-QUEUED — source changed**|
+| component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** |
 | component/stepper | content | **3** | 1/3 | 0 | 4b8a288e | round 1 landed — blind 2→3, "not for independent sections" · **RE-QUEUED — source changed**|
 | component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
 | component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table |
@@ -208,6 +208,40 @@ const re=/([a-z0-9-]+\.(?:css|astro|ts|mjs|json)):(\d+)/g; let n=0;
 for(const c of Object.values(d)) for(const v of Object.values(c.dimensions||{}))
   { re.lastIndex=0; while(re.exec(String(v.cite||''))) n++; } console.log(n)"
 ```
+
+## Round 2 on state-patterns (2026-08-28, cloud wake) — NOT a no-op (ROADMAP 182)
+
+Dispatcher rule 6, nine surfaces re-queued, all `content: 3` at `1/3` — the same
+unbroken tie 176.1 faced. Picked `state-patterns` on the one discriminator that
+is measurable rather than argued: it is the **only** page carrying two rubric
+entries (`skeleton` and `state` — 39 pages, 40 entries), so every per-component
+arm gets two chances to disagree with a ledger row written as one.
+
+Arms 1, 2 and 4 clean. **Arm 3 — "do the citations still hold against the
+shipped CSS?" — failed**, and it is the arm §3b names first:
+
+- `skeleton · colour` cited *"gradient built from bg-muted/bg-hover tokens"*.
+  The shipped CSS sweeps `--bo-color-bg-muted` to
+  `--bo-color-skeleton-highlight`. `bg-muted/bg-hover` is the pairing that was
+  **removed** on 2026-08-25 (`ef64c745`), because those two tokens are
+  byte-identical in both themes — the shimmer swept from a colour to itself and
+  nothing moved on screen. The cite dates to 2026-08-21 (`479cc6a9`).
+- So the evidence for `colour: 3` described the *bug*, published verbatim on
+  `/components/state-patterns` for three days, while this file and
+  `dsa-scores.json`'s own `$comment` both say a score is re-taken when the
+  design changes.
+
+**Stated exactly: the cite was repaired, the score was NOT re-taken, and
+`scored` stays `2026-08-23`.** §3b step 4 requires a blind re-score by a second
+agent and this wake could not run one; moving the date would claim an
+independent opinion that does not exist. **`skeleton · colour` is owed a blind
+re-score** — the same debt `scan`'s three dimensions carry, and for the same
+reason. `rounds` moved 1→2 because the round produced a measured change to the
+published artefact, not because a score moved.
+
+A gate for this predicate was measured and **refused** — base rate 1 of 28
+token references, and the first repair tripped the detector by explaining what
+the removed token had been. Full reasoning and the red-proof in ROADMAP 182.2.
 
 ## Not in the queue, with reasons
 

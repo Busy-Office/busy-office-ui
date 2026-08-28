@@ -703,7 +703,7 @@
         },
         "colour": {
           "score": 3,
-          "cite": "gradient built from bg-muted/bg-hover tokens; forced-colors adds a GrayText outline"
+          "cite": "gradient sweeps --bo-color-bg-muted to --bo-color-skeleton-highlight and back, zero raw colour; the highlight is its own token precisely so it cannot be byte-identical to the base in either theme. forced-colors adds a 1px GrayText border so the placeholder does not vanish when backgrounds are stripped"
         },
         "spacing": {
           "score": 3,
