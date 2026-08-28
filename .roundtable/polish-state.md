@@ -55,16 +55,34 @@ broken *ranking rule*, and `LOOPS.md` §3b already says so — **the queue is
 `check:wrong-choice`'s TODO set, and only that.** This file is where the
 sentence it retired was still being read from.
 
-**⚠ OPEN, and deliberately not resolved by the wake that found it:
-`polish_requeue.py` and §3b's queue definition now contradict each other.**
-The script re-queues a surface whenever its source blob SHAs move; §3b admits
-only the wrong-choice TODO. Every one of the 10 re-queued rows scores
-`content: 3` and is off the TODO, so rule 6 dispatches Polish onto surfaces
-with nothing a scored dimension can see. Both sides are deliberate, measured
-decisions three days apart — 2026-08-25 added the re-queue precisely so the
-loop would STOP falling through to Research, and 2026-08-28 narrowed the queue
-to the one instrument that can rank — and neither names the other. Raised as
-ROADMAP 176.2; do not resolve it by editing this file.
+**`polish_requeue.py` and §3b's queue definition contradict each other —
+CLOSED BENIGN 2026-08-28 (ROADMAP 176.2).** The script re-queues a surface
+whenever its source blob SHAs move; §3b admits only the wrong-choice TODO.
+Every one of the 10 re-queued rows scores `content: 3` and is off the TODO.
+Both sides are deliberate, measured decisions three days apart — 2026-08-25
+added the re-queue precisely so the loop would STOP falling through to
+Research, and 2026-08-28 narrowed the queue to the one instrument that can
+rank — and neither names the other.
+
+**It is benign because dispatcher rule 6 reads neither of them.** Rule 6's
+predicate is *"below its round budget and not marked dry"*, and `--apply`
+writes only into this table's `status` column — it moves neither `rounds` nor
+`dry`. §3b's TODO narrows which surface a round **picks**, not whether rule 6
+**fires**. So resolving the contradiction either way changes the firing rate by
+**zero**, by construction. Measured over the table's whole history, not just
+today: `budget_spent = 0` and `marked_dry = 0` in **11 of 11** revisions of
+this file, so every non-skipped row has always satisfied rule 6.
+
+**What is still open is different, and it is an OWNER CALL — ROADMAP 176.3.**
+§3b's Exit (*"every surface dry or budget-spent → hands to Research"*) has
+never been satisfiable for the same reason, so rule 7 has never been
+dispatched (**0** `Research` rows in 1065). Do not resolve THAT by editing
+this file either.
+
+**What a round on one of these `content: 3` rows is for** is written in
+`LOOPS.md` §3b: reconcile the surface's published artefact against this
+ledger's record of it (176.1's job), and if that finds nothing, the round is
+a no-op recorded in one line.
 
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|

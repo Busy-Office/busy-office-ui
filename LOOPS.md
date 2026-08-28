@@ -396,6 +396,36 @@ match to its full playbook below:
    Components get 3 rounds, patterns 10 — as CEILINGS, not quotas. The
    ledger is `.roundtable/polish-state.md`.
 
+   **This predicate is not a queue test, and reading it as one is what made
+   176.2 look like a contradiction** (measured 2026-08-28, roadmap 176.2).
+   Parsed across **all 11 revisions** of `.roundtable/polish-state.md`,
+   `budget_spent = 0` and `marked_dry = 0` in **11 of 11** — every row, every
+   revision. So the predicate is true of **19 of 19** non-skipped surfaces and
+   always has been. That 100% is structural rather than an instrument bug:
+   the dry exit needs **two consecutive** rounds that fail to move a blind
+   re-score, and every seeded surface landed its clause in **one** round, so
+   nothing ever got a second round to be dry in.
+
+   Two consequences, both measured rather than argued:
+
+   - **Neither `polish_requeue.py` nor §3b's TODO is an input here.** `--apply`
+     writes a `RE-QUEUED` marker into the ledger's `status` column; rule 6 reads
+     only `rounds` and `dry`. §3b's TODO narrows which surface a round **picks**
+     (step 1), not whether rule 6 **fires**. The one round rule 6 has actually
+     dispatched — 176.1 on `component/scan` — was authorised by neither: scan is
+     absent from `polish_requeue.py --check`'s ten and off
+     `check:wrong-choice`'s TODO (which is `{ date }`, and the ledger SKIPS
+     `date`). It qualified on `2/3 rounds, dry 0` and nothing else.
+   - **What governs the firing rate is rule 4 emptying**, not the queue
+     definition. `grep -c ' · Polish · ' .roundtable/loop-log.md` reads **10 of
+     1065 rows (0.94%)** over five wake-dates, and ROADMAP records rule 4
+     finding nothing dispatchable exactly once.
+
+   **§3b's Exit is a separate, still-open problem — see roadmap 176.3.** "Every
+   surface dry or budget-spent" has never been true of anything, so Polish has
+   no exit and rule 7 has never been dispatched (**0** `Research` rows in 1065).
+   That is an OWNER CALL; do not resolve it by editing this rule.
+
    **Run `python3 scripts/loops/polish_requeue.py --apply` BEFORE evaluating
    this rule.** The ledger has always said a surface re-enters "only when its
    SOURCE changes — never on a timer", and until 2026-08-25 nothing executed
@@ -412,6 +442,13 @@ match to its full playbook below:
    an open question from trusted sources, grill it, queue it in
    `ROADMAP.md` with Accept criteria. **It never builds** — findings wait
    for the owner.
+
+   **This condition has never been true, so this rule has never fired** —
+   `budget_spent = 0` and `marked_dry = 0` in 11 of 11 ledger revisions, and
+   `grep -c ' · Research · ' .roundtable/loop-log.md` reads **0** of 1065. Six
+   `research-*.md` reports exist; every one was recorded under some other loop.
+   Open as roadmap **176.3** (OWNER CALL) — do not fix it by rewording this
+   rule.
 
 8. **Nothing above matched** → **say why, ONCE, and stop the loop.**
 
@@ -688,6 +725,25 @@ remaining, per `.roundtable/polish-state.md`.
     (`npm run check:wrong-choice -w docs`, 2026-08-28 — it read 19 when this
     section was written), so this lane is nearly dry; re-run it rather than
     trusting either number.
+  - **What a round on a `content: 3` surface is supposed to do** — the question
+    roadmap 176.2 was closed on, answered here because a wake reaching rule 6
+    today will land on one: `polish_requeue.py` re-queues on source change, and
+    every surface it re-queues scores `content: 3` and is off the TODO.
+
+    It has **no scored weakness to fix** — 171.1 measured that no DSA dimension
+    can rank one — so do not go looking for a dimension to move. What it can do
+    is **reconcile the surface's published artefact against the ledger's own
+    record of it**: does `dsa-scores.json` carry the entry this ledger says was
+    scored, does the built page render it, do the citations still hold against
+    the shipped CSS? That is what 176.1 did, and it found `/components/scan`
+    publishing *"Not yet scored"* for five days — a defect no scored dimension
+    could see.
+
+    **Stated as n = 1, because that is the whole evidence base.** If the
+    reconciliation finds nothing, **the round is a no-op**: record it in one line
+    as a no-op and stop. Manufacturing a fix on a surface with no measured
+    weakness is the busywork this file's own operating rule refuses, and 176.1's
+    wake refused exactly that on all ten re-queued surfaces.
 - **Patterns** → the pattern-sweep bar in `.roundtable/pattern-sweep-*`.
 
 **The rubric's own stop rule (roadmap 101.3) binds this loop.** Polish is
@@ -698,6 +754,13 @@ with a genuine user-facing defect the six dimensions structurally cannot
 see. **A dead trigger on another loop is not that trigger** (see Optimize).
 
 **Exit:** every surface dry or budget-spent → hands to Research (rule 7).
+**⚠ This has never been true, and is an OWNER CALL — roadmap 176.3.** Measured
+across all 11 revisions of `.roundtable/polish-state.md`: `budget_spent = 0`
+and `marked_dry = 0` in **11 of 11**, so both halves of the disjunction have
+always been false and Polish has no exit. The log agrees — **0** `Research`
+rows in 1065, so rule 7 has never been dispatched and rule 8, which sits below
+it, is equally unreachable. Structural, not a bug: a surface that lands its fix
+in one round never gets the second round the dry exit needs.
 **Re-entry:** a surface's budget resets when its SOURCE changes — its CSS,
 its docs page, or its rubric definition. Never on a timer: work re-enters
 the queue because the thing actually changed.

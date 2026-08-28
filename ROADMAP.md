@@ -1032,8 +1032,11 @@ verification.
        blind one**, so it is not counted as §3b's independent second opinion —
        the blind re-score is still owed and now has a baseline. (d) below.
 
-2. [ ] **176.2 — `polish_requeue.py` and `LOOPS.md` §3b's queue definition
-       contradict each other, and rule 6 dispatches on the loser.** Found while
+2. [x] **176.2 — DONE 2026-08-28 (next wake), closed under Accept arm (c),
+       verdict BENIGN. Raised as: "`polish_requeue.py` and `LOOPS.md` §3b's
+       queue definition contradict each other, and rule 6 dispatches on the
+       loser."** The contradiction is real; the second half is wrong — rule 6
+       dispatches on neither, and the measurement is below. Raised while
        executing rule 6, recorded rather than resolved: both sides are
        deliberate, measured decisions three days apart, and neither names the
        other.
@@ -1069,6 +1072,148 @@ verification.
        do — **in each case naming the consequence for how often rule 6 fires,
        measured against the log rather than predicted.** Finding that the
        contradiction is benign is a satisfying outcome and closes this item.
+
+       ### Met, arm (c), verdict BENIGN — and the premise was half wrong
+
+       **Re-checking the premise was part of the criterion, and it paid.** This
+       item was raised as *"rule 6 dispatches on the loser"*. Rule 6 dispatches
+       on neither. Its literal text is a THIRD queue definition, wider than both
+       sides, and it is the only one the dispatcher actually evaluates:
+
+       > 6. **Any scored surface below its round budget and not marked dry?**
+
+       Neither `polish_requeue.py`'s source-change rule nor §3b's TODO
+       set appears in that predicate. `--apply` writes a `RE-QUEUED` marker into
+       the ledger's `status` column; it moves neither the `rounds` column nor the
+       `dry` column, which are the only two things rule 6 reads. §3b's TODO
+       narrows which surface a round **picks** (step 1), not whether rule 6
+       **fires**.
+
+       **1. Rule 6's predicate has never been false, for any row, in any
+       revision of the ledger.** Parsed every revision of
+       `.roundtable/polish-state.md`, not the current one:
+
+       ```
+       git log --format='%H %ad' --date=short -- .roundtable/polish-state.md   # 11 revisions
+       # per revision, parse the table and count rounds n/m and the dry column:
+       #   11 of 11 revisions:  budget_spent = 0   marked_dry = 0
+       #   below_budget = 19 (first three revisions, before `date` was SKIPPED)
+       #                  18 (2026-08-23 → 2026-08-25)
+       #                  19 (2026-08-28, scan added)
+       ```
+
+       So the predicate is true of **19 of 19** non-skipped surfaces today and
+       has been true of every non-skipped surface since the ledger's first
+       commit. A 100% base rate is a defect until proven otherwise — and here it
+       is *proven otherwise*, structurally rather than as an instrument bug:
+       budgets are ceilings, the dry exit needs **two consecutive** rounds that
+       fail to move a blind re-score, and every seeded surface landed its clause
+       in **one** round and passed. Nothing ever got a second round, so nothing
+       could ever accumulate a first dry one.
+
+       **2. The one Polish round that rule 6 has actually dispatched was
+       authorised by neither side of the contradiction.** 176.1 ran on
+       `component/scan`, and scan is in neither queue:
+
+       ```
+       python3 scripts/loops/polish_requeue.py --check | grep -c '^  component/'   # 10
+       python3 scripts/loops/polish_requeue.py --check | grep -c 'component/scan'  #  0
+       npm run check:wrong-choice -w docs
+       #   "components: 37 carry / 1 outstanding / 3 exempt"
+       grep -A3 'const TODO = new Set' apps/docs/scripts/check-wrong-choice.mjs
+       #   TODO = { 'date' }   — and the ledger SKIPS date as deprecated
+       ```
+
+       Scan is not re-queued (no `RE-QUEUED` marker, and absent from `--check`'s
+       ten) and it carries a wrong-choice clause, so it is off the TODO. It
+       qualified on `2/3 rounds, dry 0` — rule 6's own text — and nothing else.
+
+       **3. Consequence for how often rule 6 fires, measured against the log.**
+       **Zero**, under either resolution. Neither side of the contradiction is
+       an input to the predicate rule 6 evaluates, so changing either changes the
+       firing rate by construction, not by estimate. What the log shows about the
+       rate itself:
+
+       ```
+       grep -c '^- ' .roundtable/loop-log.md          # 1065 iteration rows
+       grep -c ' · Polish · ' .roundtable/loop-log.md #   10  (0.94%)
+       ```
+
+       Ten rows over five wake-dates: six on 2026-08-23 (the seeded queue,
+       drawn from `check:wrong-choice`'s TODO), three on 2026-08-26 (ERP-suite
+       *screen* scores — a different instrument, and not in this ledger's table
+       at all, which is 20 `component/` rows and no `pattern/` row), one on
+       2026-08-28 (176.1). Under arm (a), honouring the TODO strictly, **2 of
+       those 10 would not have been dispatched** — both `scan`, the 2026-08-23
+       re-entry and 176.1 — because scan is off the TODO. One of the two is the
+       round that found `/components/scan` publishing "Not yet scored" for five
+       days. The rate is governed by **rule 4 emptying**, which ROADMAP records
+       happening exactly once (Slice 176's own header). *(The three `rule 6`
+       citations in `ROADMAP-archive.md` at Slices 66/67/68 are **not** Polish
+       dispatches — they are 2026-08-20, before the Polish loop existed, when
+       rule 6 was the Explore-on-empty-backlog rule. The numbering moved.)*
+
+       **4. Arm (a)'s stated consequence — "hands every such wake to Research
+       (rule 7)" — describes a lane that has never been dispatched.**
+
+       ```
+       grep -c ' · Research · ' .roundtable/loop-log.md    # 0, of 1065
+       ls .roundtable/research-*.md | wc -l                # 6
+       ```
+
+       Six research reports exist and `--loop Research` has never been used;
+       at least three were recorded under `Roadmap`, `Objective` and `Explore`
+       rows (`grep -i research .roundtable/loop-log.md`). So the alternative
+       arm (a) was weighed against is not a lane the log can show working.
+
+       **What a Polish round on a `content: 3` surface is supposed to do** —
+       arm (c)'s question, answered in `LOOPS.md` §3b this wake. Short form: it
+       has no scored weakness to fix, because 171.1 measured that no DSA
+       dimension can rank one. What it *can* do is reconcile the surface's
+       **published artefact** against the ledger's own record of it — which is
+       what 176.1 did, and what found the five-day defect no scored dimension
+       could see. Stated as **n = 1**, because that is the entire evidence base.
+       If the reconciliation finds nothing, the round is a genuine no-op and is
+       recorded as one; it does not manufacture a fix.
+
+       **Not resolved here, and deliberately: the contradiction is benign, but
+       §3b's Exit is not.** See 176.3.
+
+3. [ ] **176.3 — OWNER CALL. §3b's Exit condition has never been satisfiable,
+       so rule 7 is unreachable and rule 8 cannot be reached either.** Found by
+       176.2's measurement and split out rather than decided, because it changes
+       what the dispatcher does.
+
+       §3b's Exit reads *"every surface dry or budget-spent → hands to Research
+       (rule 7)"*. 176.2 measured that across **11 of 11** revisions of
+       `.roundtable/polish-state.md`, `budget_spent = 0` and `marked_dry = 0`
+       — every row, every revision. Both halves of that disjunction have always
+       been false, so Polish has no exit, and the log agrees: **0 Research rows
+       in 1065**. Rule 8's halt sits below rule 7 and is equally unreachable.
+
+       This is not a broken instrument. It is the ceiling/dry design working as
+       specified: a surface that lands its fix in one round never gets a second,
+       so it can never accumulate the two consecutive non-moving rounds the dry
+       exit requires. The exit was written for a queue whose surfaces need
+       several rounds; the seeded queue did not behave that way.
+
+       Weighed and NOT taken, because each is a direction call:
+       - Make a single-round pass that lands its fix also mark the surface
+         budget-spent — closes the exit, but redefines "ceiling" as "quota",
+         which §3b's own header refuses in bold.
+       - Let rule 6 fall through when §3b's TODO is empty — the smallest change,
+         and it is what the ledger's header used to promise, but it makes rule 6
+         effectively dead and every clear-backlog wake a Research wake, which
+         finding 4 above shows is a lane with no track record.
+       - Leave it. Costs nothing while rule 4 keeps matching; the price is paid
+         only on a clear-backlog wake, of which there has been one.
+
+       *Accept*: a recorded owner decision naming which of the three (or a
+       fourth) is taken, **with the consequence measured against the ledger and
+       the log rather than predicted** — specifically, how many of the 19 rows
+       the choice would move out of rule 6's predicate, and how many recorded
+       wakes would have dispatched differently. "Leave it" is a satisfying
+       outcome and closes this item.
 
 ## Slice 175 — Objective grill of Slices 169, 170, 172 (2026-08-28)
 
