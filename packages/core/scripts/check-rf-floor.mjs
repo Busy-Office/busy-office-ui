@@ -22,6 +22,35 @@
  * Anything else exceeding 108, unguarded, fails the gate with the exact
  * selector/declaration and source line.
  *
+ * SCOPE, stated rather than implied (roadmap 205.1). This gate checks
+ * SELECTORS and VALUES against FEATURES below — it does not walk at-rules
+ * against BCD. That gap was real: `@starting-style` (Chrome 117, entered
+ * this profile via 200.4's bulk-actions entrance) is above TARGET and was
+ * invisible to this gate, which still printed "every use... is guarded".
+ * Measured before deciding what to do about it (94.11 — base rate first):
+ * this profile uses 6 distinct at-rules today (`@container` 105, `@keyframes`
+ * 1, `@layer` 99, `@media` 1, `@starting-style` 117, `@supports` 28) and
+ * exactly ONE is above 108. A generic per-at-rule BCD walk was refused —
+ * it would be the FEATURES hand-list by another name, added per feature
+ * rather than per shape, for a population this small and this stable.
+ *
+ * The real reason at-rules don't need the guard-shape treatment SELECTORS
+ * and VALUES do: CSS's forward-compatible parsing (CSS Syntax L3 §3.5)
+ * drops an at-rule a UA doesn't recognise, and everything nested inside it,
+ * WHOLESALE — never partially applied. A selector or a declared value can
+ * fail differently (an invalid value drops just that declaration; an
+ * unsupported selector can invalidate a whole rule unless forgiving-listed),
+ * which is exactly why those need active `@supports`/`:is()` guarding and
+ * at-rules structurally do not. `@starting-style` is a live instance: a UA
+ * that ignores it just never applies the FROM style, so the element renders
+ * its base state with no travel — degraded, not broken — matching
+ * `derive-floor.mjs`'s own `tier: 'degrades'` classification for it.
+ *
+ * `atRuleReport()` below is NOT a gate — it recomputes the base-rate numbers
+ * above LIVE, every run, so this comment's claim cannot go stale the way
+ * the pass message's overclaim did. It feeds the pass line so the count
+ * actually shipping is always current.
+ *
  * @heuristic — the verdict rests on recognizing guard SHAPES, not just
  * feature presence, so it can be fooled by a shape it doesn't know about.
  * Carries --self-test. `findViolations` is the ONE function both the real
@@ -45,13 +74,18 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const DIST = join(HERE, '..', 'dist');
 const TARGET = 108;
 
-/** Each probe: how the feature appears in CSS text, and where in BCD. */
+/** Each probe: how the feature appears in CSS text, and where in BCD.
+    Selectors and values ONLY — at-rules are handled separately below,
+    reported rather than guard-checked; see the header for why. (Two
+    at-rule-kind entries, `@container`/`@layer`, used to sit here; removed
+    2026-08-29 (roadmap 205.1) because `overLimitFeatures()` excluded
+    every `kind: 'atrule'` entry unconditionally, so they were dead —
+    declared but never evaluated, which is the same overclaim shape the
+    pass message had.) */
 const FEATURES = [
   { id: ':user-invalid', path: ['css', 'selectors', 'user-invalid'], kind: 'selector', pattern: () => /:user-invalid\b/g },
   { id: 'color-mix()', path: ['css', 'types', 'color', 'color-mix'], kind: 'value', pattern: () => /color-mix\(/g },
   { id: 'subgrid', path: ['css', 'properties', 'grid-template-columns', 'subgrid'], kind: 'value', pattern: () => /\bsubgrid\b/g },
-  { id: '@container', path: ['css', 'at-rules', 'container'], kind: 'atrule' },
-  { id: '@layer', path: ['css', 'at-rules', 'layer'], kind: 'atrule' },
   { id: ':has()', path: ['css', 'selectors', 'has'], kind: 'selector', pattern: () => /:has\(/g },
 ];
 
@@ -111,9 +145,28 @@ function insideForgivingList(selector) {
 
 function overLimitFeatures() {
   return FEATURES.filter((f) => {
-    if (f.kind === 'atrule') return false; // @layer/@container are within 108
     const v = earliestChrome(compatOf(f.path).chrome);
     return v !== null && v > TARGET;
+  });
+}
+
+/** NOT a gate — computes the header's base-rate claim live so it cannot go
+    stale the way the pass message's overclaim did. Every distinct at-rule
+    actually present, with its earliest Chrome version where BCD has an
+    entry (`null` if not, e.g. a vendor/nonstandard at-rule this repo would
+    want a human look at regardless of a version number). */
+function atRuleReport(root) {
+  const names = new Set();
+  root.walkAtRules((r) => names.add(r.name));
+  return [...names].sort().map((name) => {
+    let version = null;
+    try {
+      version = earliestChrome(compatOf(['css', 'at-rules', name]).chrome);
+    } catch {
+      /* No BCD entry under this path — reported as unknown, not silently
+         skipped; see the pass message. */
+    }
+    return { name: `@${name}`, version };
   });
 }
 
@@ -201,4 +254,13 @@ if (violations.length) {
   process.exit(1);
 }
 
-console.log(`rf-essentials floor check passed — every use of a feature above Chrome ${TARGET} is guarded (@supports or a forgiving :is()/:where() list)`);
+const atRules = atRuleReport(root);
+const atRulesOverTarget = atRules.filter((a) => a.version !== null && a.version > TARGET);
+const atRuleSummary = atRules.map((a) => `${a.name} ${a.version ?? 'unknown'}`).join(', ');
+
+console.log(
+  `rf-essentials floor check passed — every SELECTOR/VALUE use above Chrome ${TARGET} is guarded ` +
+    `(@supports or a forgiving :is()/:where() list). At-rules are reported, not guard-checked ` +
+    `(they degrade wholesale per CSS's forward-compatible parsing — see this file's header): ` +
+    `${atRules.length} present today (${atRuleSummary}), ${atRulesOverTarget.length} above ${TARGET}.`,
+);

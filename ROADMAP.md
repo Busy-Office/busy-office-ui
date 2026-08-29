@@ -404,7 +404,7 @@ precisely the documented degrade, and `derive-floor.mjs` already carries
 visible rule renders. Nothing is broken; the gate's SENTENCE is broader than the
 gate.
 
-1. [ ] **205.1 — close the gap between what `check:rf-floor` verifies and what
+1. [x] **205.1 — close the gap between what `check:rf-floor` verifies and what
        its pass line claims.**
        *Accept*: `check:rf-floor` either covers at-rules generically — any
        at-rule in the RF profile resolved against BCD rather than against a
@@ -419,6 +419,58 @@ gate.
        whichever form ships by injecting an at-rule above the floor and
        confirming the injection reached `rf-essentials.css` — grep the BUILT
        file, not the source — before believing the red.
+
+       **CLOSED 2026-08-29 — message fix, base rate measured first.**
+       `rf-essentials.css` (built, `packages/core/dist/css/rf-essentials.css`)
+       uses **6 distinct at-rules**: `@container` (Chrome 105), `@keyframes`
+       (1), `@layer` (99), `@media` (1), `@starting-style` (117), `@supports`
+       (28) — measured via a real `postcss.walkAtRules` over the built file,
+       versions from `@mdn/browser-compat-data`, not guessed. **Exactly one is
+       above 108**: `@starting-style`, already classified `tier: 'degrades'`
+       in `derive-floor.mjs`. The honest answer named in the item's own escape
+       clause held, so the message fix was preferred over a generic BCD walk —
+       a generic walk would be the `FEATURES` hand-list by another name, added
+       per feature rather than per shape, for a population this small.
+
+       **Why at-rules structurally don't need the guard-shape treatment
+       selectors/values do, which is the actual reason (not just the small
+       count) — recorded in the script's own header now**: CSS's
+       forward-compatible parsing (Syntax L3 §3.5) drops an at-rule a UA
+       doesn't recognise, and everything nested inside it, WHOLESALE — never
+       partially applied. A selector or declared value can fail differently
+       (an invalid value drops just that declaration; an unsupported selector
+       can invalidate a whole rule unless forgiving-listed), which is why
+       those need active guarding and at-rules do not.
+
+       **Two dead `FEATURES` entries removed** (`@container`/`@layer`,
+       `kind: 'atrule'`) — `overLimitFeatures()` excluded every `atrule`-kind
+       entry unconditionally, so they were declared but never evaluated. Same
+       overclaim shape as the pass message, one level down.
+
+       **`atRuleReport()` added — not a gate, a live recomputation** so the
+       pass message's own numbers can't go stale the way the old blanket
+       claim did. It walks the built CSS's at-rules fresh every run and
+       reports each against BCD (`unknown` if no BCD entry exists, surfaced
+       rather than silently dropped).
+
+       **Red-proved by injection, methodology matching the Accept's own
+       instruction — grepped the BUILT file, not the source.** Appended a
+       fake `@bo-fake-probe-205-1 { .bo-fake-injection-marker { color: red; } }`
+       to `button.css`, rebuilt from a wiped `dist`, confirmed it reached
+       `rf-essentials.css` and the live reporter picked it up: pass message
+       went from *"6 present today... 1 above 108"* to *"7 present today
+       (@bo-fake-probe-205-1 unknown, ...), 1 above 108"* — proving the count
+       is computed from the real artifact, not hand-typed, and that an
+       unrecognised at-rule is surfaced (`unknown`) rather than silently
+       invisible. The full build still passed with the injection present,
+       which is the DESIGN working as intended for this branch (deliberately
+       reporting, not failing, on an unlisted at-rule) rather than a red
+       result — restored and reconfirmed 6/1 after.
+
+       Verified: core build clean from a wiped `dist`, `check:rf-floor`
+       (including `--self-test`), core `npm run test` 146/146, `check:repo`
+       9/9, docs build, `check:claims` 154/154, `test:axe` 127 pages × 2
+       widths zero violations.
 
 ## Slice 204 — P0: `check:claims` turned CI red for three commits by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
 
