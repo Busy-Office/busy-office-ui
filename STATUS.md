@@ -2,29 +2,31 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 14:22 UTC
+Generated at: 2026-08-29 14:45 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 200** (4 open)
-  - 200.4 — data-table bulk-actions get an entrance transition instead of an instant `display` flip.
+- **Slice 200** (3 open)
   - 200.5 — toast gets an exit animation and a bounded stack-reflow, matching the entrance it already has.
   - 200.6 — row insert/delete and inline-validation entrance, composed from existing motion-module utilities, plus the usage guidance the already-shipped pulse/settle mechanisms are missing.
   - 200.7 — a lint check that a raw ms duration or literal easing function isn't hand-written in component CSS where a `--bo-motion-` prefixed token exists.
 - **Slice 201** (1 open)
   - 201.4 — 200.7's gate is largely already shipped as `check:motion`, and a naive version would fail the build on two right answers.
+- **Slice 205** (1 open)
+  - 205.1 — close the gap between what `check:rf-floor` verifies and what its pass line claims.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1163 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-29 21:04   ok
+dispatch status — counter-triggered rules (1166 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-29 21:04   OVERDUE
   Objective     2 / 3 slices          since 2026-08-29 21:09   ok  [200, 204]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -38,9 +40,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 12:56 · Continue · bug · 201 — P0: two undefined var(--bo-*) references silently dropped their declarations (scan flash invisible, combobox code not monospace); fixed both, added check:token-refs · landed · 0026066a
-- 2026-08-29 12:56 · Meta · refusal · a naive 200.7 literal-duration gate — its only two reds are scan's 600ms and skeleton's 1.8s, both deliberate and both already adjudicated by check:motion (filed as 201.4, left OPEN) · refused · 0026066a
-- 2026-08-29 21:04 · Standardize · sweep · Slice 202 — all three standing lanes clean at Slice 197 baseline; dialog/offcanvas motion reuse and check-token-refs scope both checked, neither duplicates · logged · c217250
 - 2026-08-29 21:09 · Objective · grill · Objective grill of 199-202 — 201's new gate re-verified by injection, two Slice 200 refusals confirmed against source · logged · 9e7b74a
 - 2026-08-29 21:26 · Continue · build · 200.2 — restrained button press feedback; the Accept's own hover/pointer selector let a real keyboard Space press get the same transform as a mouse click, fixed with :not(:focus-visible) · landed · a9403f4
 - 2026-08-29 22:00 · Roadmap · release · 185.2 closed + v0.6.0 released — create-ui@0.1.1 confirmed carrying SLSA provenance · released · 4ea551b
@@ -48,6 +47,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 14:22 · Meta · refusal · forcing a desktop pointer via --blink-settings / --touch-events — six launch variants measured, none moves headless Chrome off (pointer: none) · refused · 79f4ca3
 - 2026-08-29 14:22 · Continue · build · 200.3 — tab + segmented selection easing, colour only, token-driven; forced-colors zeroed · landed · 79f4ca3
 - 2026-08-29 14:22 · Meta · refusal · border-color in segmented's transition list — the Accept names it, but no rule there changes an option's border colour · refused · 79f4ca3
+- 2026-08-29 14:45 · Continue · build · 200.4 — data-table bulk-actions entrance transition (@starting-style, entrance-only by construction); all five Accept clauses measured live in headless Chrome · landed · 1c7875e4
+- 2026-08-29 14:45 · Meta · refusal · display … allow-discrete on the bulk bar — it buys holding the box through a fade-OUT, which this item's Accept excludes; adding it would have created the exit flourish the item rules out · refused · 1c7875e4
+- 2026-08-29 14:45 · Meta · refusal · fixing check:rf-floor inside this dispatch — the @starting-style coverage gap it exposed is about the gate, not the bulk bar, so it is filed as 205.1 rather than widening the item · refused · 1c7875e4
 
 ## Sunset test
 

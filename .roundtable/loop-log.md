@@ -1169,3 +1169,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 14:22 · Meta · refusal · forcing a desktop pointer via --blink-settings / --touch-events — six launch variants measured, none moves headless Chrome off (pointer: none) · refused · 79f4ca3
 - 2026-08-29 14:22 · Continue · build · 200.3 — tab + segmented selection easing, colour only, token-driven; forced-colors zeroed · landed · 79f4ca3
 - 2026-08-29 14:22 · Meta · refusal · border-color in segmented's transition list — the Accept names it, but no rule there changes an option's border colour · refused · 79f4ca3
+- 2026-08-29 14:45 · Continue · build · 200.4 — data-table bulk-actions entrance transition (@starting-style, entrance-only by construction); all five Accept clauses measured live in headless Chrome · landed · 1c7875e4
+- 2026-08-29 14:45 · Meta · refusal · display … allow-discrete on the bulk bar — it buys holding the box through a fade-OUT, which this item's Accept excludes; adding it would have created the exit flourish the item rules out · refused · 1c7875e4
+- 2026-08-29 14:45 · Meta · refusal · fixing check:rf-floor inside this dispatch — the @starting-style coverage gap it exposed is about the gate, not the bulk bar, so it is filed as 205.1 rather than widening the item · refused · 1c7875e4
