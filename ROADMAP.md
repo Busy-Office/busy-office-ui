@@ -1266,6 +1266,23 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        twitching is a design judgement no still frame settles either — a
        local wake should *watch* `/components/alerts/` while dismissing the
        middle of a stack of three.
+
+       **Watched, 2026-08-30 (local session).** Podman rebuilt from
+       `HEAD=b6c9f45` (`podman build -f apps/docs/Containerfile -t bo-docs .`),
+       served on :8081, and the shipped CSS confirmed live before trusting
+       any screenshot (`bo-toast-out … forwards` and its `@keyframes` block
+       both present in the served, non-cached asset — the CDN-skew trap this
+       repo's CLAUDE.md names). Built a real stack of three via
+       `/components/alerts/`'s "Show toast" trigger, dismissed the MIDDLE
+       one with a real click, screenshotted immediately after. Reads clean:
+       no twitch, no overlap, no leftover gap — the survivor toast sits
+       flush at the dismissed one's old position (DOM-read after: 2 toasts,
+       rects `top 575` / `top 635` with 0px between them, matching the
+       cloud's 68px-travel measurement). The 100ms fast-token exit is quick
+       enough that a single post-click screenshot already shows the settled
+       state rather than a mid-flight frame — which is itself an answer to
+       the judgement question: nothing about it reads as abrupt or as the
+       stack visibly jumping.
 6. [ ] **200.6 — row insert/delete and inline-validation entrance, composed
        from existing motion-module utilities, plus the usage guidance the
        already-shipped pulse/settle mechanisms are missing.** Bundled because
