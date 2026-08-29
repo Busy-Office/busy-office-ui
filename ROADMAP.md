@@ -231,6 +231,192 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 190 — Objective grill of Slices 173, 185, 187: the measured claims all held, the reasoned ones did not (2026-08-29)
+
+**Dispatcher rule 3, cloud wake.** `dispatch_status.py` read `Objective 3 / 3
+slices since 2026-08-29 01:46 OVERDUE [173, 185, 187]`; rule 1 found no open P0
+and GitHub intake **0 open issues** (asked via the API), rule 2 read
+`Standardize 2 / 4`. Full report:
+`.roundtable/grill-objective-173-185-187-2026-08-29.md`.
+
+**Cross-cut.** Each slice asserted facts about its own mechanism. Every
+assertion checked *against the mechanism* survived re-measurement — 173.2's row
+heights, sibling shift, accessible description and no-clip (4 of 4); 185/188's
+registry read, YAML step order and derived-pin check (3 of 3); 187.1's
+dead-style **0 of 1428**, css-repeats **8 groups**, byte-identical JSON (3 of 3).
+Every assertion reasoned out *beside* the mechanism failed: 173.2's specificity
+arithmetic (wrong twice) and its "3.5rem is the message's own box" (false for
+any message over ~2 lines). **Hypothesis**, n = 3 slices, one corpus.
+
+**185 and 187 are controls and are clean.** Nothing in either was established by
+argument, and both re-measure exactly. 173.2 did the hard part correctly too —
+what failed in it are the two numbers nobody could measure at the time, because
+they are arithmetic and a forecast.
+
+**Refused: a gate for "every constant in shipped CSS names what it is sized
+against".** The exact form of 94.11 — "a comment precedes this literal" is
+checkable and true of 155 of 155; "the constant tracks the box it reserves for"
+is semantic. One measured instance is fixed instead.
+
+**Three corrections landed in this wake rather than filed**, all to durable
+files, which is where a correction survives (169.3): `ENVIRONMENT.md`'s trap 1
+diagnostic (`git rev-parse --short main HEAD` exits 128 **whether or not `main`
+exists** — `--short` takes one revision, measured both ways on git 2.43.0, so
+the documented test reports a missing branch on every container); its cloud-wake
+section, which now splits *"evidence that is a rendered image"* from *"any
+measurement expressible as a DOM, computed-style, layout-geometry or
+accessibility-tree assertion"*; and the same clause in Slice 189's new
+`LOOPS.md` rule-4 bullet, amended from **"needs Podman, a real browser,
+screenshots"** to **"needs Podman and screenshots"** — a cloud wake has a real
+browser and drives it every wake. All three in §D of the report.
+
+**A COLLISION — and Step 0c's working half caught it before a single commit.**
+The local dispatcher took the **same rule-3 dispatch** concurrently and pushed
+first, as Slice **189** with its own report. The mandated `git fetch origin
+main` immediately before this wake's first commit saw `94cc5a3..00023f30`; this
+work was rebased and renumbered 189 → **190** rather than landing on a stale
+base. **Third recorded collision, and the first caught before any commit rather
+than at push rejection** — the "safe by construction" argument played no part,
+since `loop-log.md` was untouched here at the time, exactly as its own
+correction predicts.
+
+**Both grills are kept and neither is a duplicate**, per Step 0c's rule for a
+collision. Slice 189 covers **186** as well and reads the window for *process*
+findings; this one re-measures the *artefacts*. They meet in one place — the
+owner- vs browser-blocked distinction, reached independently from the dispatch
+record there and from the measurement here. **189's finding C has priority and
+is credited**; 190 only sharpens the clause it landed in.
+
+1. [ ] **190.1 — a grid cell's validation message is clipped for any message
+       longer than about two lines, because a constant reserves room for a
+       variable-height box.**
+
+       `data-table.css` reserves `padding-block-end: 3.5rem` on
+       `.bo-data-table-container` while a message is shown, and caps the message
+       at `max-inline-size: 18ch`. Both constants were chosen against the one
+       21-character string the one demo carries. Measured on the built page,
+       each mutation asserted to have landed before its result was believed:
+
+       | trial | msg box | reserve | past the container |
+       |---|---|---|---|
+       | as shipped (21 chars), 1440 | 46px | 56px | −19 fits |
+       | as shipped, 390 | 46px | 56px | −15 fits |
+       | 40-char message | 64px | 56px | **−1** fits, barely |
+       | 101-char message | 118px | 56px | **+53 clipped** |
+       | `spacious` + 101 chars | 118px | 56px | **+49 clipped** |
+
+       **Not a P0, and the severity was corrected by measurement after being
+       drafted as one.** The container is `overflow: auto`, so the clipped
+       region is scrollable: `scrollHeight 203, clientHeight 149, scrollable 54,
+       reachedByScrolling 54` against 53 needed. Nothing is unreachable, and
+       `aria-describedby` carries the full string to assistive tech either way.
+       **No shipped page is affected** — walking all **138** built pages, exactly
+       **1** nests a `.bo-form-field__message` inside a `.bo-data-table`, and its
+       message is 21 characters (the page-level `grep` says 9 of 138 and is the
+       weaker instrument; the DOM says one).
+
+       **It is still a regression, and the control says so.** Neutralising
+       exactly the three rules 173.2 added, and re-measuring the same 101-char
+       message: before, the box is **36px** on one line at cell width, the row
+       grows to 92.5px, and nothing is clipped (−9); after, the box is **118px**
+       over six lines at 18ch and is clipped by 53. **The `18ch` cap is the
+       bigger half of the cause** — it converts a one-line message into a
+       six-line box, which is what overruns the reserve. Readable-but-shifting
+       became stable-but-needs-a-scroll.
+
+       This re-opens the trade 173.2 settled, so it is a decision, not a tidy.
+       Options as measured, none pre-picked: widen or drop the `18ch` cap so the
+       box stays one or two lines; size the reserve to the worst realistic
+       message rather than to this one; or revisit the top-layer `popover`
+       refused in 173.2 for reasons that still stand (five popovers already on
+       this demo's combobox cells).
+
+       *Accept* — properties, not predicted values:
+       - **A message of at least six lines at the component's own wrap width is
+         fully visible without scrolling the table container**, at
+         `compact`/`comfortable`/`spacious`, at 1440 and 390 — asserted as
+         `msg.getBoundingClientRect().bottom <= container.getBoundingClientRect().bottom`,
+         not by eye.
+       - The row's height is **unchanged** by the message at every one of those
+         settings — 173.2's contract must survive the fix, and its own
+         measurement is the regression test.
+       - Whatever constant survives **states what it is sized against and the
+         measurement that fixed it**, so the next wake can re-derive it. If the
+         answer is that no constant works and the mechanism changes, that is a
+         satisfying outcome, not an off-plan one.
+       - Red-proved by injection, each injection confirmed to have landed before
+         its result is believed. **A green red-proof is a defect in the injection
+         until proven otherwise.**
+       - **Finding this premise false is a satisfying outcome**: if a re-run
+         shows the shipped page's own margin has moved, record it with the
+         command rather than working around it. Commands are in §A of the report.
+
+2. [ ] **190.2 — `/patterns/editable-grid`'s three new runtime claims are
+       executable.**
+
+       CLAUDE.md's recipe: *"If a page says the browser will do something … add
+       a case to `apps/docs/scripts/check-claims.mjs`."* 173.2 added three such
+       sentences — *"clicking into the Qty cell reveals why"*, *"a message that
+       sits in the row's flow grows the row and shifts every other cell in it
+       (measured: 53px → 75px, and the two untouched inputs moved 11px)"*, and
+       *"`aria-describedby` carries the reason to a screen reader continuously,
+       focused or not"*. `ed1da69` touched four files and `check-claims.mjs` is
+       not among them; the gate reads **141** before and after (`npm run
+       check:claims -w docs`, re-run this wake).
+
+       Not a new programme — the recipe's existing step, skipped once. The
+       precedent is in the file already: *"`data-loading=true` dims the table
+       and blocks interaction mid-swap"* is the identical shape, a States-table
+       sentence asserted against a computed style. Every assertion needed is
+       written as browser code in §A of the report.
+
+       *Accept*:
+       - The row's height is identical focused and unfocused, and the untouched
+         siblings do not move — the property, read from the live page.
+       - The accessible **description** is non-empty while the message is
+         `display: none` — the claim most likely to rot, since it depends on
+         accname's hidden-but-directly-referenced rule rather than on this
+         framework.
+       - The claim count moves by what was added and the gate stays green; a
+         count that does not move means the cases did not register.
+       - Red-proved by injection with the injection confirmed to have landed
+         (grep the BUILT output or assert the computed style — a claims case is
+         a detector, and this file's history is detectors that could not fail).
+
+3. [ ] **190.3 — `data-table.css`'s specificity comment states two wrong
+       numbers, one of which belongs to a different rule.**
+
+       Line 442 claims the new rule beats *"the `:is(:has([aria-invalid]), …)
+       .bo-form-field__message` rule in form-field.css on specificity (0,3,0 vs
+       0,2,0)"*. Measured — each selector raced against references of known
+       specificity placed **later** in the sheet, so a tie resolves to the
+       reference and "real wins" means strictly greater:
+
+       ```
+       .bo-data-table .bo-form-field:not(:focus-within) .bo-form-field__message
+         beats (0,3,1), loses to (0,4,0)   -> (0,4,0)   comment says (0,3,0)
+       :is(.bo-form-field:has([aria-invalid="true"]), …:user-invalid)) .bo-form-field__message
+         beats (0,3,0), loses to (0,3,1)   -> (0,3,1)   comment says (0,2,0)
+       ```
+
+       **(0,2,0) is a real specificity in that file — it is the *other* rule's.**
+       `[aria-invalid="true"] ~ .bo-form-field__message`, the no-`:has()`
+       fallback, is exactly (0,2,0). The comment names one rule and quotes its
+       neighbour's number.
+
+       The **conclusion is correct** — (0,4,0) beats both, so the reveal does not
+       depend on import order, confirmed independently by the live
+       `display: none` reading. This is an accuracy defect in a load-bearing
+       comment; CSS comments here carry the citations `check:slice-refs`
+       resolves.
+
+       *Accept*: the comment's numbers agree with what a cascade race reports for
+       those selectors, and it names which rule each number belongs to. **The
+       criterion is agreement with the measurement, not a particular triple** —
+       if the selectors change, the measurement is what the comment must match.
+       No gate: CSS specificity in a comment is prose about code, and 94.11 is
+       the record of what gating that costs.
+
 ## Slice 189 — Objective grill of Slices 173, 185, 186, 187 (2026-08-29)
 
 Rule 3 at 4/3 `[173, 185, 186, 187]`. Index checked first: no prior grill covers

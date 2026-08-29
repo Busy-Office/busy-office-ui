@@ -372,8 +372,18 @@ match to its full playbook below:
 
    - **owner-blocked** — needs a decision, a brief, or a publish only the owner
      can trigger. Nothing any wake can do.
-   - **browser-blocked** — needs Podman, a real browser, screenshots at 1440 and
-     390. **A cloud wake cannot take it; a LOCAL wake can.**
+   - **browser-blocked** — needs Podman and **screenshots** at 1440 and 390 in
+     both themes: evidence that is a *rendered image* a human compares.
+     **A cloud wake cannot take it; a LOCAL wake can.**
+
+     **Not "needs a real browser" — a cloud wake has one** (measured the same
+     day this bullet landed, roadmap 190 §D2). It drives the same headless
+     Chrome `check:claims`, `check:layout` and `test:axe` use, via
+     `browser-harness.mjs` + `serve-dist.mjs`, so element heights, overflow past
+     a container, computed styles, accessibility-tree readings and a red-proof
+     by injection are all takeable there. `ENVIRONMENT.md` carries the two
+     lists. **Name which one a declined item needs**, or this distinction
+     mis-sorts work the same way the undifferentiated "blocked" did.
    - **agent-blocked** — needs a second agent, which §3b step 4's blind
      re-score requires and some sessions are not permitted to spawn.
 

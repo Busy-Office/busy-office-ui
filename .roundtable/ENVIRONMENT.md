@@ -30,8 +30,23 @@ local ref is not merely behind: 2026-08-28 saw `17b3ba6...12e97c6`, and the tip
 the previous handover named no longer existed at all.
 
 A container may have **no local `main` whatsoever**, which is harder than the
-stale-ref case and shows up one command earlier: `git rev-parse --short main
-HEAD` exits **128** with `fatal: Needed a single revision`.
+stale-ref case. `git rev-parse main HEAD` is what answers it: a missing branch
+gives `fatal: ambiguous argument 'main'` / `unknown revision`.
+
+**Do NOT use `git rev-parse --short main HEAD` as that test — it exits 128 on
+every container, `main` present or not** (measured 2026-08-29, git 2.43.0;
+roadmap 189 §D1). `--short` takes a single revision, so two arguments always
+produce `fatal: Needed a single revision`, and this file used to attribute that
+message to the missing branch. A wake following it would "fix" a `main` that was
+never broken — the previous hand-off recorded exactly that as trap 1 "exercised
+for real".
+
+```
+git rev-parse --verify main       # main exists
+git rev-parse --short main HEAD   # fatal: Needed a single revision   rc=128
+git rev-parse --short=8 main HEAD # fatal: Needed a single revision   rc=128
+git rev-parse main HEAD           # both shas                         rc=0
+```
 
 **THE TRAP DOES NOT BITE AT STEP 0. IT BITES AT `git push`, and the usual Step 0
 check gives false comfort** (2026-08-28, Slice 170 — that wake's first push was
@@ -196,6 +211,28 @@ the live-verify step every other rule assumes — screenshots at 1440px and 390p
 in both themes — cannot run. An item that genuinely needs one is left OPEN with
 the reason recorded, per the standing instruction; it is never described as
 verified.
+
+**"No screenshots" is not "no browser", and reading it as one cost a dispatch**
+(roadmap 189 §D2, 2026-08-29). A cloud wake has a real headless Chrome —
+`browser-harness.mjs` + `serve-dist.mjs`, the same pair `check:claims`,
+`check:layout` and `test:axe` drive here every wake — and a throwaway probe can
+import both by absolute path from the scratchpad and drive the built site
+directly. So:
+
+- **Cannot run:** anything whose evidence is a *rendered image* a human
+  compares — theme and viewport screenshots, "does this look right".
+- **Can run:** any measurement expressible as a DOM, computed-style,
+  layout-geometry or accessibility-tree assertion — element heights, whether a
+  box overflows its container, whether the container can scroll to it, what
+  `page.accessibility.snapshot()` computes as an accessible description, and a
+  red-proof by injecting a rule and re-measuring.
+
+`173.2` was classified **browser-blocked, "no cloud wake can take it"**, on an
+Accept that asked for a row-height measurement red-proved by reverting the flow
+message. That is entirely the second list, and a cloud wake performed exactly it
+while grilling the slice afterwards. n = 1 dispatch declined on this reading —
+a wording correction with a small measured cost, not a claim the loop has been
+broadly wrong. When declining an item, say which of the two lists it needs.
 
 ---
 
