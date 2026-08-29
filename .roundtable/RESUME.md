@@ -17,110 +17,113 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (**cloud** wake — rule 2 → Standardize, two rounds:
-`208.1` and `208.2`, plus `208.3` filed OPEN). Working tree clean at hand-off;
-one push.
+Last updated 2026-08-29 (**cloud** wake — rule 3 → Objective, grill of Slices
+205 and 208: `209.1` landed, `209.2` filed OPEN). Working tree clean at
+hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 6 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 7 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `208.1` and `208.2` as closed ids named
-here — **historical references** (the "what landed" section), not claims that
-they are open. `208.3` genuinely is open.
+`check:resume-slice-ids` will report `205`, `208.1`, `208.2` and `209.1` as
+closed ids named here — **historical references** (this wake's subject matter),
+not claims that they are open. `209.2` and `208.3` genuinely are open.
 
-**No collision on this item.** `origin/main` was at `eceffbc` at Step 0 and
-still at `eceffbc` at the mandated re-fetch before the first commit.
+**No collision on this wake.** `origin/main` was at `6105054` at Step 0 and
+still at `6105054` at the mandated re-fetch before the first commit.
 
-**Trap 1 fired for real this wake.** The container started on a detached HEAD
-(`git branch --show-current` empty) with a *stale-by-force-update* `origin/main`
-(`+ 17b3ba6...eceffbc (forced update)`). Recovered at Step 0 with
-`git checkout -B main origin/main`, before any commit — which is the whole point
-of running the check there rather than at push time.
+**Trap 1 fired for real again.** Container started detached
+(`git branch --show-current` empty) with local `main` stale at `17b3ba6` and
+`origin/main` arriving as a forced update (`+ 17b3ba6...6105054`). Recovered at
+Step 0 with `git checkout -B main origin/main`, before any commit. Also
+unshallowed — this wake's findings are history measurements.
 
 ## What landed this wake
 
-**208.1 — Standardize sweep.** Lanes 1-3 clean for the fifth consecutive time
-(0 dead of 1,433 inline declarations; 8 css-repeat groups matching the standing
-table of eight exactly; 14 flagged prose pages, all already verdicted).
+**Scope narrowed first.** Rule 3's window was `[200, 205, 208]`;
+`grill-objective-199-202-2026-08-29.md` already covers 200 in full, so the
+honest scope was **205 and 208** — the same correction the 204/206 grill made.
+Report: `.roundtable/grill-objective-205-208-2026-08-29.md`.
 
-**Lane 4 — `report_loop_prose.py` — carried the finding, and no sweep since 191
-had read it.** Its ratchet block read `ROADMAP.md 66 up, last cut 2ae54a4a`, and
-the live file was **67.5% closed history**: 32 closed slices carrying 4,336 of
-6,424 lines.
+**Nine of 208's claims reproduce exactly**, re-derived rather than read off the
+file: lane 1 (`0 dead of 1,433`), lane 2 (`8 groups / 242 rules / 230 distinct
+bodies`, same eight shapes), lane 3 (`118 pages, median 748, 9 + 12`), the
+lane-coverage table under an independent per-section parser (4 of 6 come back
+NO, so it discriminates), the four prior sweeps' drop figures, and both
+substantive halves of the lossless-move proof. 205's base rate reproduces too:
+the same 6 at-rules in the built `rf-essentials.css`, exactly one above 108.
 
-**Fifth archive sweep executed:** `ROADMAP.md` **6,424 → 2,184**,
-`ROADMAP-archive.md` 21,264 → 25,633; 32 slices (173, 175-199, 202-207) moved
-verbatim behind the standing one-line pointer. Proved a **lossless move**, not
-an edit, against the `HEAD` blobs: archive old content is a byte-exact prefix
-(`True`), **0 of 4,272** lost live lines missing from the archive gain, and the
-live file gained *only* its 32 pointer lines. `check:slice-refs` reads an
-identical **415 citations / 228 cited / 189 headings** on both sides.
+**`209.1` — 208's sweep numbers describe a state that was never committed.**
+Reported `6,424 → 2,184` and *"gained exactly `{pointer: 32}`"*; the committed
+blob at `83192cd1` is **2,301** and gained **127** — the 32 pointers plus 95
+lines of Slice 208's own write-up, appended by the same commit
+(`2301 - 117 = 2184`, the 117 being that section). `4,272` is the same
+intermediate arithmetic; committed, it is `4,250`. The lossless conclusion
+holds; the assertion that exists to catch an edit riding along with the move
+does not reproduce. 208's text and proof table now carry the committed numbers.
 
-**The meta-finding, and the fix.** Every Standardize sweep since 191 — 194, 197,
-202, 206, the complete list — ran 3 of the playbook's 4 lanes; 206's own text
-says *"all three standing lanes"*. `LOOPS.md` step 1 now numbers them
-`Lane 1 of 4` … `Lane 4 of 4` and asks the write-up to say `n of 4`. A gate was
-**refused** on 94.11's base-rate ground (the property is semantic — naming the
-script while skipping it satisfies any text check).
+**`209.2` filed OPEN — `check-rf-floor.mjs` publishes a PREFIXED version.**
+`earliestChrome()` filters `flags` but not `prefix`, so the pass line reads
+`@keyframes 1` (the `-webkit-` entry) where the unprefixed at-rule is **43**.
+`derive-floor.mjs`, on the same BCD data across 6 shared feature paths, does
+filter. It understates the floor — the false-safe direction — and today's blast
+radius is **zero, measured**. `LOOPS.md`'s "divergence here is LOUD" section now
+says it covers the path column and not the helper beside it.
 
-**Measurement corrected mid-write, twice.** A first `awk` range parser bled
-across section boundaries and returned three different non-zero lane-4 counts;
-re-derived per-section in Python it is 0 of 4. And the `/concepts/scale/` prose
-verdict is **Slice 178**, not 196 as first written.
+**A third finding was wrong and is recorded in that order.** `check:ci-ignores`
+is in `ci.yml` and absent from `ENVIRONMENT.md`'s list, which reads exactly like
+the `check:formatting` failure 208.2 closed. It is the opposite: it is a
+sub-check of `check:repo`, which `docs:build` runs. Coverage is complete. The
+cost is that the file's own re-derivation instruction produces that false
+positive — entry points vs steps — and `ENVIRONMENT.md` now says so beside the
+list.
 
-**Round 2 — `208.2`, the same drift shape one level up.**
-`ENVIRONMENT.md`'s cloud-wake toolchain named **7** commands while `ci.yml`
-runs **19**, and the previous wake's own commit message records
-`check:formatting` reaching CI unrun *because that list did not name it*. Every
-unnamed command was RUN rather than assumed: **16 green**, and the list is now
-derived from `ci.yml` with the re-derivation command beside it. Two are not
-runnable here — `docker build` (the binary is at `/usr/bin/docker`, the daemon
-is absent, and `command -v` succeeding is not evidence) and `check:po-app`.
+**208.3 gained a second-container reading** — byte-identical payload, fourth
+run, different clone, later HEAD. Deterministic in this environment class, not
+contended. Still OPEN; a second instance of the same class is not the third
+environment its Accept asks for.
 
-**`208.3` filed OPEN — `check:po-app` is RED here on a commit CI reports
-green** (run 656 on `eceffbc`, `success`). One behaviour of 18, byte-identical
-payload across three runs: only `chunk0Evicted` is false. **The timing
-hypothesis is refuted** — a throwaway probe with the eviction loop at 40
-iterations instead of 10 gave a byte-identical payload. Which environment is
-right is NOT established, and the item says so; it is not a P0 (main is green,
-nothing shipped changed, and it is the reference app).
+**`ENVIRONMENT.md` §6b added**: `check:claims` reporting `3 NOT VERIFIED` is the
+container's pointer capability, not a regression — measured both ways within two
+days (154 live / 0 unverified at Chrome 151; **158 live / 3 unverified** here).
 
 **NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
 screenshots at 1440px or 390px in either theme**. It costs nothing here —
 **zero lines changed under `packages/` or `apps/docs/src/`**; the whole diff is
-markdown.
+markdown. Green in this container: core build, core `npm run test`, `lint:css`,
+`docs:build`, `check:repo` 9/9, `check:claims` 158 live, `test:axe` 127 pages ×
+2 widths zero violations, `check:layout` 127 pages, `check:formatting`,
+`check:slice-refs`, `check:rf-floor` incl. `--self-test`. `check:po-app` RED,
+per 208.3.
 
 ## Dispatcher state at hand-off
 
 Read **after** recording, which is the comparison `LOOPS.md` says has caught two
-of that counter's five historical failures:
+of that counter's five historical failures — re-run it rather than trusting this
+snapshot:
 
 ```
-Standardize   0 / 4 Continue rounds   ok        (reset by this wake's two rows)
-Objective     3 / 3 slices            OVERDUE   [200, 205, 208]
-Optimize      0 wake-date(s) newer    ok
+python3 scripts/loops/dispatch_status.py
 ```
 
-**So the next wake is rule 3 — Objective — not rule 4.** This wake's own two
-rows took the Objective counter from 2/3 to 3/3 by closing Slice 208; the
-previous hand-off predicted rule 4 and that prediction is now wrong. Re-run
-`dispatch_status.py` rather than trusting even this snapshot.
+This wake's row is an `Objective` row, which resets rule 3's counter and does
+**not** advance rule 2 (Objective rows are not Continue rounds). So the next
+wake should fall through to **rule 4**.
 
-**When rule 4 IS reached**, six open checkboxes across five slices:
+**When rule 4 is reached**, seven open checkboxes:
 
 | item | what | notes |
 |---|---|---|
 | `200.7` | lint check for hand-written durations outside the token scale | **oldest non-blocked — rule 4 would pick this**; read 201.4 first |
 | `201.4` | 200.7's proposed gate mostly duplicates `check:motion` already shipped | either outcome closes it |
-| `208.3` | `check:po-app` red in cloud, green on CI; cause unestablished | newest; **wants a LOCAL wake** — its Accept asks for a third environment |
+| `208.3` | `check:po-app` red in cloud, green on CI; now known deterministic across two cloud containers | **wants a LOCAL wake** — its Accept asks for a third environment |
+| `209.2` | `earliestChrome()` misses the prefix filter its sibling applies | **cloud-takeable**; needs the built CSS and the gate's pass line, no rendered image |
 
-200.7 and 201.4 are cloud-takeable (a script, and a measurement plus a written
-verdict); neither needs a rendered image. 208.3 is not blocked on the owner or
-on a screenshot — it is blocked on an environment this container is not.
+200.7, 201.4 and 209.2 are all cloud-takeable; none needs a rendered image.
+208.3 is blocked on an environment this container is not.
 
 Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
 112.3), **AT runtime evidence** (owner hardware).
@@ -130,11 +133,12 @@ Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
 Nothing blocked on the owner that a wake could advance; the three owner-blocked
 items above are the standing set and are unchanged by this wake.
 
-One judgement worth an owner's eye, not a blocker: the archive sweep is now on
-its **fifth** run in eight days, and the interval is not lengthening — the live
-file regrew from 2,030 lines (`2ae54a4a`, 2026-08-28 18:41:42Z) to 6,424 at this
-wake's HEAD (2026-08-29 17:17:16Z): **+4,394 lines in 22h35m**.
-This wake fixed the *detection* gap (lane 4 was going unread) but not the
-*regrowth rate*, which is a property of how much prose each slice writes into
-`ROADMAP.md`. If the owner would rather slices were terser, that is a writing
-rule for `CLAUDE.md`, not another sweep.
+One judgement worth an owner's eye, not a blocker, and it is the same one the
+last hand-off raised with a second data point behind it now. 209.1's finding is
+that a wake measured its own artefact **before** appending its write-up to it —
+and the write-up was 117 lines of a 2,301-line file, for a slice whose actual
+change was a file move. The previous hand-off asked whether the owner would
+rather slices were terser; this wake found the length is not only a storage
+question — the longer the write-up, the more it perturbs what the same wake is
+measuring. If a writing rule lands in `CLAUDE.md`, "re-read the committed blob
+before quoting a figure about it" belongs next to it.

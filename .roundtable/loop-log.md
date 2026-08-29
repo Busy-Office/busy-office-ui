@@ -1185,3 +1185,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 17:51 · Meta · refusal · a gate asserting that a sweep write-up names lane 4 — the property is semantic (94.11 base rate); naming the script while skipping it satisfies any text check · refused · d3835d17
 - 2026-08-29 17:51 · Standardize · sweep · Slice 208.2 — ENVIRONMENT.md's cloud-wake toolchain derived from ci.yml rather than curated: 7 named commands vs 19 CI runs; 16 executed green here, the two that are not runnable named with what was measured; 208.3 filed OPEN for check:po-app red-here/green-on-CI · landed · d3835d17
 - 2026-08-29 17:51 · Meta · refusal · changing check:po-app so it passes in this container — it passes on CI, and no evidence yet says which environment is right · refused · d3835d17
+- 2026-08-29 18:44 · Objective · grill · Objective grill of Slices 205, 208 — 209.1 corrects a lossless-move proof measured against an uncommitted state; 209.2 files earliestChrome()'s missing prefix filter · logged · a4a3ffb5
+- 2026-08-29 18:44 · Meta · refusal · a gate for 209.1 — 'the number quoted is the number in the commit' is not checkable without the intent · refused · a4a3ffb5
+- 2026-08-29 18:44 · Meta · refusal · fixing 209.2 inside the grill — a grill that rewrites the gate it is grilling marks its own homework · refused · a4a3ffb5
