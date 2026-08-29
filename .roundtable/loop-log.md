@@ -1158,3 +1158,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 20:27 · Meta · refusal · tree disclosure content-continuity work — chevron rotation and bo-motion-collapse already exist and already compose the proposed behavior · refused · 7036bfc
 - 2026-08-29 20:36 · Explore · research · royui.dibbayajyoti.com component docs researched — one real gap (Known Limits section), filed to Ideas backlog for a spike; distribution model doesn't transfer · logged · ccb2e54
 - 2026-08-29 20:36 · Meta · refusal · a per-component Theming section — ApiTable already generates the custom-property surface RoyUI hand-authors · refused · ccb2e54
+- 2026-08-29 20:46 · Continue · build · 200.1 — dialog gets exit motion, reusing offcanvas's allow-discrete recipe verbatim; caught and fixed a test-harness focus artifact along the way · landed · f0d7324
