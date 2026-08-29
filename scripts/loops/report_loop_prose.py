@@ -174,10 +174,51 @@ def git(*args):
     )
 
 
+_WORDS_CACHE = {}
+
+
 def words_at(rev, path):
     """Word count of `path` at `rev`, or None if the file is absent there."""
-    r = git("show", f"{rev}:{path}")
-    return None if r.returncode else len(r.stdout.split())
+    key = (rev, path)
+    if key not in _WORDS_CACHE:
+        r = git("show", f"{rev}:{path}")
+        _WORDS_CACHE[key] = None if r.returncode else len(r.stdout.split())
+    return _WORDS_CACHE[key]
+
+
+def ups_since_last_cut(path):
+    """(n, sha, day) — steps at the tip that did not shrink `path`, and the step
+    that last did. `sha` is None when the file has never been cut.
+
+    @exact — blob word counts and a `<` comparison; no recognition. It is
+    the `accumulate` column asked over FULL history instead of inside `--since`,
+    and that difference is the whole reason it exists (roadmap 191.1).
+
+    A WINDOW THAT CONTAINS A FILE'S CUT REPORTS `1 down` FOREVER, AND SAYS
+    NOTHING ABOUT WHETHER THE FILE HAS BEEN CUT SINCE. LOOPS.md's Standardize
+    step told the sweep to look for `LOOPS.md` "still at 0 down after 167.2" —
+    a value the default invocation cannot produce, because the default window
+    opens 2026-08-20 and 167.2's split (`3006da0a`, 2026-08-28) is the only
+    down LOOPS.md has ever had inside it. So the sweep read `1 down`, and the
+    condition it was told to look for — 18 up / 0 cuts since that split — was
+    invisible at exactly the moment it became true. Measured, not reasoned: the
+    handover written the same day recorded the file as "still 0 down" while the
+    report printed 1.
+
+    Reading it from the tip backwards is what makes it window-independent: no
+    `--since` can hide or manufacture a cut here.
+    """
+    out = git("log", "--format=%x00%H %ad", "--date=format:%Y-%m-%d", "--", path).stdout
+    recs = [r.strip().split()[:2] for r in out.split("\x00") if r.strip()]  # newest first
+    n = 0
+    for (sha, day), (prev_sha, _) in zip(recs, recs[1:]):
+        cur, prev = words_at(sha, path), words_at(prev_sha, path)
+        if cur is None or prev is None:
+            break
+        if cur < prev:
+            return n, sha, day
+        n += 1
+    return n, None, None
 
 
 def series(path, since):
@@ -265,6 +306,7 @@ def main():
 
     fatal = []   # the report cannot be trusted at all
     stale = []   # one row's `now` is HEAD's, and disk has moved on
+    ratchet = []  # (path, ups, cut-sha, cut-day) — see ups_since_last_cut
 
     for path, read_at in FILES:
         # RECONCILE against the working tree, not just the git object store —
@@ -295,6 +337,16 @@ def main():
         sig = f"{up:3} up /{dn:3} down" + (f" /{fl:2} flat" if fl else "")
         print(f"  {path:26}{(f'{was:,}' if was else '—'):>9}{now:>9,}{delta:>10}   "
               f"{sig:26}{read_at}")
+        ratchet.append((path, *ups_since_last_cut(path)))
+
+    # The same question over FULL history, because the column above is asked
+    # inside `--since` and a window containing a file's cut answers a different
+    # question than the one the sweep asks. See ups_since_last_cut.
+    print("\n  ratchet — steps at the tip that did NOT shrink each file, over "
+          "full history (window-independent):")
+    for path, ups, sha, day in ratchet:
+        where = f"last cut {sha[:8]} ({day})" if sha else "never cut"
+        print(f"    {path:26}{ups:4} up   {where}")
 
     # THE OTHER DIRECTION (179.1): a file the dispatcher is told to read that
     # this list does not measure. See the header for why this is the half that

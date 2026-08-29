@@ -774,10 +774,24 @@ surfaced more:
    158.2 carries the commands.
    **And run `python3 scripts/loops/report_loop_prose.py`** — the same question
    asked of the files the LOOP reads, which `report:prose` does not cover. Read
-   the `accumulate` column, not the delta: 158.2's cadence rests on docs pages
-   never shrinking, and two of these five shrink by design, so a rising count
-   means nothing for them. 167.1 carries a verdict per file; the finding is a
-   file changing accumulate class, or `LOOPS.md` still at 0 down after 167.2.
+   the **`ratchet` block first**, then the `accumulate` column; never the delta.
+   158.2's cadence rests on docs pages never shrinking, and two of these files
+   shrink by design, so a rising count means nothing for them. 167.1 carries a
+   verdict per file; the finding is **a file changing accumulate class, or a
+   file the loop reads every wake accumulating with no cut behind it**.
+
+   **This clause used to name a VALUE — "`LOOPS.md` still at 0 down after
+   167.2" — that the default invocation cannot produce** (roadmap 191.1). The
+   default window opens 2026-08-20 and *contains* 167.2's split (`3006da0a`,
+   2026-08-28), the only down `LOOPS.md` has ever had inside it, so the report
+   read `1 down` while the condition the clause names came true underneath it:
+   **18 up / 0 cuts since that split**. The hand-off written the same day said
+   "still `0 down`" — instruction and instrument disagreeing, with nothing in
+   the output to adjudicate them. The `ratchet` block is that clause made
+   readable: same question, full history, so no `--since` can hide or
+   manufacture a cut. CLAUDE.md's criterion rule ("name the property, never the
+   value it will have") landing in an instruction — the second time this
+   playbook has paid for it; the prose-page names above are the first.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

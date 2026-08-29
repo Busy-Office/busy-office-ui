@@ -231,6 +231,177 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 191 — Standardize sweep: three lanes clean, and the fourth was reading a number its own command cannot print (2026-08-29)
+
+**Dispatcher rule 2, cloud wake.** `dispatch_status.py` read `Standardize 4 / 4
+Continue rounds since 2026-08-29 10:21 OVERDUE`; rule 1 found no open P0
+(`grep -n 'P0' ROADMAP.md` returns only closed slice headings and 190.1's
+explicit *"Not a P0"*) and GitHub intake **0 open issues**, asked via the API.
+No new input, so Step 1 triaged nothing.
+
+**Three of the four rot-guard lanes are clean and are worth one line each**,
+per §3's own instruction that a clean round is the expected result:
+
+```
+npm run scan:dead-style -w docs          # 0 dead of 1,428 live inline decls
+npm run report:css-repeats -w @busy-office/ui
+  # 74 files · 238 rules · 226 distinct · 8 repeated
+npm run report:prose -w docs             # 118 pages · median 748 · total 104,912
+```
+
+- **`scan:dead-style` — zero delta.** 0 dead of 1,428, identical to 166.1's and
+  187.1's runs.
+- **`report:css-repeats` — zero delta in the finding, which is the group set.**
+  All eight groups match `LOOPS.md`'s table exactly, membership included; the
+  totals moved 237 → **238** rules and 225 → **226** distinct bodies, i.e. one
+  new rule with 3+ declarations that is not a repeat. The joined-control x4
+  group is still **two** components, so its reopen trigger (a third) is unmet.
+- **`report:prose` — zero unverdicted pages.** Fourteen pages are flagged (9
+  over the corpus median, 12 over a family median, union 14) and **all fourteen
+  carry a verdict**: 158.1's twelve, 161.1's three family-split adds, and
+  `/concepts/scale/` from **178.3**. Checked by extracting the page paths from
+  each verdict entry and differencing the sets, not by reading the reports.
+
+1. [x] **191.1 — the fourth lane's finding is unreadable at the invocation the
+       playbook prescribes, and the hand-off and the report disagreed about it
+       the same day.**
+
+       §3 told this sweep the finding is *"a file changing accumulate class, or
+       `LOOPS.md` still at 0 down after 167.2"*. `report_loop_prose.py`'s default
+       window opens **2026-08-20**, and 167.2's split (`3006da0a`, 2026-08-28)
+       is **the only down `LOOPS.md` has ever had inside it** — so the default
+       output reads `1 down` permanently, and the condition the clause names is
+       invisible. It came true underneath the clause: measured from the split,
+       `3006da0a..HEAD` is **18 up / 0 down / 0 flat**, 9,337 → 12,852 words.
+       The previous hand-off recorded the file as *"still `0 down`"* while the
+       report printed `1 down`; both sentences are about the same unchanged
+       history, and nothing in the output could adjudicate them.
+
+       This is CLAUDE.md's *"name the PROPERTY, never the value it will have"*
+       in an instruction rather than an Accept — the second time this playbook
+       has paid for it. The first was the three prose-page names, corrected
+       three times before the rule was written down.
+
+       **Fixed in the instrument, not only in the prose**, because a caveat
+       about a window boundary in a playbook is the same snapshot that rotted
+       the last one. `report_loop_prose.py` now prints a **`ratchet`** block:
+       per file, the steps at the tip that did NOT shrink it, and the commit
+       that last did — walked from HEAD backwards over **full history**, so no
+       `--since` can hide or manufacture a cut.
+
+       ```
+       LOOPS.md                    18 up   last cut 3006da0a (2026-08-28)
+       CLAUDE.md                   27 up   never cut
+       DESIGN.md                   20 up   never cut
+       ROADMAP.md                  23 up   last cut 2ae54a4a (2026-08-28)
+       .roundtable/RESUME.md        0 up   last cut aa7512f5 (2026-08-29)
+       ```
+
+       **Two files have never been cut in their entire history** — `CLAUDE.md`
+       (27 steps, 28 commits) and `DESIGN.md` (20 of 21). The windowed column
+       said `9 up / 0 down` and `6 up / 0 down / 1 flat`; the full-history
+       reading is the stronger statement and it is the one the sweep's question
+       actually asks.
+
+       **Red-proved three ways, each injection confirmed before its result was
+       believed** (a green red-proof is a defect in the injection until shown
+       otherwise):
+
+       - **Inverting the comparison** (`cur < prev` → `cur > prev`) in a probe
+         copy — injection confirmed by grepping the probe for its marker, one
+         match asserted before replacing — returns a **different** answer on the
+         same input: `(1, c4)` against the canonical `(2, c3)`. The comparison
+         is load-bearing.
+       - **A real cut moves it**: on a throwaway repo whose series is `10 · 20 ·
+         5 · 8 · 8` by construction, the canonical answer is `(2, c3)` — the
+         flat step and the up step are not cuts, `c3` is the only shrink — and
+         appending a 3-word commit takes it to **`(0, c6)`**. The first attempt
+         at that series silently produced FOUR commits, not five: an identical
+         8-word file is not a commit, so the flat step needed different words at
+         the same count. Caught by printing the built history rather than
+         assuming it.
+       - **Window independence**: the `ratchet` block is byte-identical
+         (`diff`) between `--since 2026-08-20` and `--since 2026-08-28`, while
+         the `accumulate` column moves `38 up / 1 down` → `19 up / 1 down` over
+         the same pair. The two columns are not the same number.
+
+       Reconciled against an independent walk before quoting: a separate script
+       reproduced all five rows — ups **and** the named cut sha — from raw
+       `git show`, agreeing 5 of 5.
+
+2. [x] **191.2 — the verdict the ratchet makes readable: `LOOPS.md` is HONEST
+       and it is recurring, and one number this entry nearly inferred was
+       wrong.**
+
+       Per §3, a file accumulating with no cut behind it wants a recorded
+       verdict. `LOOPS.md` since its own split: **+3,503 words by section**
+       (+3,515 raw; the 12-word difference is the heading lines themselves,
+       which the section splitter attributes differently — 167.1's entry has the
+       same discrepancy for the same reason).
+
+       **Both tables below are `3006da0a` against `aa7512f5`** — this wake's
+       base, not its HEAD, so they stay reproducible after this wake's own edit
+       to §3 lands in the Standardize row. Both come from one splitter run over
+       the two revisions (`git show <rev>:LOOPS.md`, split on `^#{2,3} ` for the
+       first table and on `^\d\. \*\*` inside Step 2 for the second), which is
+       what makes them comparable at all.
+
+       | region | at 167.2 | now | delta |
+       |---|---|---|---|
+       | Step 2 — the rules | 1,441 | 3,135 | **+1,694** |
+       | 3b. Polish | 591 | 1,091 | +500 |
+       | Step 0 — the handover | 78 | 563 | +485 |
+       | Step 0c — collisions | 1,026 | 1,378 | +352 |
+       | `Settled:` the BCD paths | 0 | 189 | +189 (new) |
+       | 3. Standardize | 678 | 858 | +180 |
+       | Step 0b — the counters | 108 | 211 | +103 |
+
+       **HONEST by 167.1's test** — every region added names a measured decision
+       or a refusal record, which is the thing this file exists to hold. What is
+       new is that the growth is concentrated in the region every wake evaluates
+       top to bottom. Inside Step 2, by rule:
+
+       | | at 167.2 | now |
+       |---|---|---|
+       | rule 4 (dispatches most wakes) | 274 | **1,012** |
+       | rule 3 | 525 | 672 |
+       | rule 6 | 164 | 531 |
+       | rule 5 | 111 | 361 |
+       | rule 7 | 34 | 226 |
+
+       **A claim this entry drafted and then measured away.** It read 167.1's
+       *"rule 3 is now 1,171 words (181 rule / 990 history)"* and was about to
+       state that rule 3 regrew **181 → 672** one day after 167.2 archived its
+       history — a 3.7x regrowth, and the headline. Measured with one splitter
+       across both revisions, rule 3 was **525** immediately after the split and
+       is 672 now: +147, the smallest growth of the five that moved. 167.1's 181
+       counts an inner region, not the rule. The real figure is **rule 4, 274 →
+       1,012**, which the drafted claim would have buried. Both numbers come
+       from the same command run on two revisions; the discarded one came from
+       quoting a neighbouring entry.
+
+3. [ ] **191.3 — decide whether rule 4's archaeology belongs in
+       `LOOPS-archive.md`, on the evidence 191.2 measured.**
+
+       Rule 4 is **1,012 words**, 32% of Step 2 and the rule dispatched on most
+       wakes. 167.2 established the precedent — rule 3's history moved out,
+       leaving the rule — and rule 4 now carries three candidate regions: the
+       archive-sweep cycle table with its regrowth-per-commit columns, the
+       ratio-versus-denominator correction, and the "oldest, not current-slice"
+       LIFO narrative from 2026-08-19.
+
+       *Accept*: a recorded decision naming, for each of those three regions,
+       whether it changes what a wake DOES at rule 4 or only explains how the
+       rule got here — and, if any move, the same commit leaves the pointer
+       167.2's split used and `report_loop_prose.py`'s `ratchet` names the new
+       cut. **Finding that all three are load-bearing and moving nothing is a
+       satisfying outcome** and closes this item: rule 4's own text says a
+       snapshot in a playbook is read as current, which is an argument for
+       keeping the re-measure instructions where the rule is.
+
+       Not started this wake: it is a judgement about the dispatcher's own
+       playbook, and 191.1/191.2 are what make the evidence for it readable.
+
 ## Slice 190 — Objective grill of Slices 173, 185, 187: the measured claims all held, the reasoned ones did not (2026-08-29)
 
 **Dispatcher rule 3, cloud wake.** `dispatch_status.py` read `Objective 3 / 3
