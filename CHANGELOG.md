@@ -9,6 +9,10 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+## 0.6.0 (2026-08-29)
+
 ### Fixed
 
 - **Two custom-property typos silently deleted the declaration that named
@@ -32,6 +36,32 @@ pin.
     `font-family`, losing the column alignment the tabular figures are for.
 
 ### Added
+
+- **Dialog exit motion.** `.bo-dialog` and its backdrop only ever animated
+  open; dismissal was an instant cut, disconnected from the entrance's own
+  fade/translate/scale. Now closes with the identical `@starting-style` +
+  `transition-behavior: allow-discrete` recipe `.bo-offcanvas` already
+  shipped (143.4) — same tokens, same shape, nothing new invented. Escape,
+  backdrop click, the close button, and a programmatic close all complete
+  synchronously regardless of whether the animation runs or finishes;
+  verified with real clicks (not synthetic DOM events) via
+  `check:claims`, which caught its own harness bug along the way — an
+  in-page `.click()` doesn't carry Chromium's click-to-focus activation, so
+  the first version of the focus-restore check failed on every run for a
+  reason that had nothing to do with the CSS.
+
+- **Restrained, pointer-only button press feedback.** `.bo-btn:active` now
+  gets a 1px `translateY` under `(hover: hover) and (pointer: fine)` — never
+  `scale`, which would open a seam in a joined `.bo-btn-group`. Keyboard
+  activation (Space/Enter) shows no artificial press transform, only the
+  existing focus feedback; `prefers-reduced-motion: reduce` removes the
+  displacement entirely rather than just skipping its animation. The
+  device-capability media query alone wasn't enough to tell mouse from
+  keyboard apart — a real keyboard Space press satisfied `(hover: hover)
+  and (pointer: fine)` on desktop exactly as a mouse click does, and
+  produced the identical transform until `:not(:focus-visible)` was added
+  to separate them (buttons don't get a focus ring from a mouse click, only
+  from keyboard/programmatic focus).
 
 - **`check:token-refs`** — a build gate asserting that every `var(--bo-…)` in
   the shipped CSS names a property something actually defines. It reads both
