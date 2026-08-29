@@ -315,6 +315,73 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 204 — P0: `check:claims` turned CI red for three commits by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
+
+**Found by a cloud wake dispatched onto 200.3, not reported to it.** The wake's
+first `check:claims` run came back red on a case in code its own diff does not
+touch, so the first move was to establish ownership rather than to fix: stashed
+the wake's changes, rebuilt clean, and reproduced **1 of 149 failing on an
+untouched `origin/main`**. Then read CI, which had been red since `36a95d4`
+(runs **642, 643, 644**; run **641** at `93b17a6` was the last green) with a
+**byte-identical** failure line — same case, same `{"active":true,
+"transform":"none","left":283,"right":319,…}`.
+
+**The shipped CSS is correct. The gate was not runnable in the environment that
+gates the build.** 200.2 wraps the button press nudge in
+`@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion:
+no-preference)` — deliberately, so a touch device gets no phantom press.
+Measured here: headless Chrome 141 reports `(pointer: none)` — **not coarse,
+none** — so `hover:false, fine:false, coarse:false, none:true`. The rule is
+never live, the assertion cannot come out any other way, and the gate reported
+that as *"a documented behaviour does not hold"*.
+
+Six launch variants were tried and **none moves it**, so the obvious fix does
+not exist: `--blink-settings=` with
+`primaryHoverType`/`availableHoverTypes`/`primaryPointerType`/
+`availablePointerTypes` set both to desktop values (2/2/4/4) and to touch
+values (1/1/2/2), `--touch-events=disabled`, both together, and the old
+headless shell. All six read identically to no flags at all. The base rate that
+sized the blast radius of changing shared launch args, taken before touching
+them: `@media` blocks in the shipped CSS keyed on hover or pointer capability
+number **exactly one** — this rule.
+
+**Why a FAIL was the worse of the two wrong answers.** A silent pass reports
+coverage never taken; a red gate accuses correct code and, repeated, teaches
+everyone to read red as noise. Neither is available honestly, so the gate
+needed a third answer it did not have. `check:rtl` already has this shape for
+its absent `DESIGN.md`.
+
+1. [x] **204.1 — `gate()` gains `notVerified(claim, why)`, and the button case
+       branches on the capability it needs.**
+       *Accept*: `check:claims` exits 0 on this tree while printing, on every
+       run, one loud `NOT VERIFIED` line per un-evaluable claim naming the
+       environment fact that makes it un-evaluable — and the **pass line itself
+       carries the count**, so a green summary cannot be read as full coverage;
+       the press contract is still asserted everywhere by a check that reads
+       the BUILT CSS structurally (postcss, not a substring — `button.css`'s own
+       comment names `translateY` and `:not(:focus-visible)` repeatedly, so a
+       text match would be trippable by the prose explaining the rule); that
+       structural check is red-proved by injection with the injection
+       confirmed; and the three live cases are **guarded, not deleted**, so a
+       headed run on a machine with a mouse still exercises them.
+
+       **CLOSED 2026-08-29.** `apps/docs/scripts/gate-report.mjs` +
+       `apps/docs/scripts/check-claims.mjs`. Reads
+       `claims check passed — 151 documented behaviours verified live · 3 NOT
+       VERIFIED in this environment (see above)`.
+
+       *Red-proof, injection verified first per CLAUDE.md.* `translateY(1px)` →
+       `translateY(3px)` in `packages/core/dist/css/components/button.css`,
+       confirmed as **1 → 0** occurrences of the original before the run was
+       believed: the structural case went red, and green again on restore.
+
+       **The keyboard and reduced-motion cases are marked un-evaluable too, and
+       that is the non-obvious half.** Both assert `transform: none`, so both
+       look robust — but with the rule inert they assert `none` against a rule
+       that could not have produced anything else. They would have passed here
+       while discriminating nothing, which is a detector that cannot fail
+       wearing a green tick.
+
 ## Slice 203 — Objective grill of Slices 199-202: the P0 fix's own gate re-verified by injection, two triage refusals confirmed against source (2026-08-29)
 
 Rule 3 at 4/3, OVERDUE. Index checked first: 0 of the window's four slices are

@@ -40,23 +40,58 @@ export function assertScanned(count, what, hint = '') {
 
 export function gate(label, noun) {
   const results = [];
+  const unevaluable = [];
   return {
     /** Record one assertion. `detail` is printed only when it fails. */
     check(claim, pass, detail) {
       results.push({ claim, pass, detail });
+    },
+    /**
+     * Record a claim THIS ENVIRONMENT cannot evaluate. Never a pass, never a
+     * failure — an honest third answer.
+     *
+     * Added after `check:claims` spent three commits telling CI that a correct
+     * piece of CSS "does not hold" (runs 642-644, 2026-08-29). The claim was
+     * about `.bo-btn`'s press feedback, which ships deliberately wrapped in
+     * `@media (hover: hover) and (pointer: fine)`; headless Chrome 141 reports
+     * `pointer: none`, so the rule was never live and the assertion could not
+     * come out any other way. The gate was not wrong about its measurement —
+     * it was wrong about what the measurement MEANT, because it had no way to
+     * say "the premise for this claim is absent here".
+     *
+     * Both wrong answers were available and both are bad: a FAIL accuses
+     * correct code and, worse, trains everyone to read a red gate as noise; a
+     * silent pass reports coverage that was never taken. So this is loud —
+     * printed on every run and named in the summary line — which is the shape
+     * `check:rtl` already uses for its absent DESIGN.md, and CLAUDE.md's
+     * standing rule that a gate which cannot run must fail loudly, never skip
+     * quietly.
+     *
+     * `why` must name the ENVIRONMENT fact that makes it unevaluable, so the
+     * line cannot be used to wave off a claim that is merely inconvenient.
+     */
+    notVerified(claim, why) {
+      unevaluable.push({ claim, why });
     },
     get results() {
       return results;
     },
     /** Print and exit. Never returns when something failed. */
     report(passSuffix = 'verified') {
+      for (const u of unevaluable) console.log(`NOT VERIFIED ${u.claim}\n     ${u.why}`);
       const failed = results.filter((r) => !r.pass);
       for (const r of failed) console.log(`FAIL ${r.claim}\n     ${r.detail}`);
       if (failed.length) {
         console.error(`${label} FAILED — ${failed.length} of ${results.length} ${noun} do not hold`);
         process.exit(1);
       }
-      console.log(`${label} passed — ${results.length} ${noun} ${passSuffix}`);
+      // The count of unevaluable claims rides in the PASS line, not only in the
+      // lines above it: a summary that reads clean while coverage was skipped
+      // is the exact fail-open this file exists to prevent.
+      const caveat = unevaluable.length
+        ? ` · ${unevaluable.length} NOT VERIFIED in this environment (see above)`
+        : '';
+      console.log(`${label} passed — ${results.length} ${noun} ${passSuffix}${caveat}`);
     },
   };
 }

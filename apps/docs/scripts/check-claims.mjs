@@ -50,6 +50,11 @@ import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
 import { readFile } from 'node:fs/promises';
+// Parsed, never grepped: the one claim below that reads shipped CSS is about a
+// rule this browser cannot exercise, and button.css's own comment names both
+// `translateY` and `:not(:focus-visible)` repeatedly — a substring assertion
+// there would be tripped by the prose explaining the rule.
+import postcss from 'postcss';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -2327,88 +2332,155 @@ check(
    That is the load-bearing distinction this case locks in: it does not just
    assert the transform exists, it asserts keyboard gets NONE. */
 await visit('/components/button/');
-const midRect0 = await page.evaluate(() => {
-  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
-  mid.focus();
-  const r = mid.getBoundingClientRect();
-  return { midBeforeTop: r.top, midBeforeLeft: r.left, midBeforeRight: r.right };
-});
-// Keyboard Space: real CDP key events (page.keyboard is CDP-backed), held
-// for one transition duration so a mid-transition frame isn't mistaken for
-// the settled state (the exact trap this case exists to catch — see above).
-await page.keyboard.down('Space');
-await new Promise((r) => setTimeout(r, 150));
-const duringSpace = await page.evaluate(() => {
-  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
-  return { active: mid.matches(':active'), transform: getComputedStyle(mid).transform };
-});
-await page.keyboard.up('Space');
-check(
-  'button: keyboard Space activation shows the existing focus feedback but NO artificial press transform',
-  duringSpace.active && duringSpace.transform === 'none',
-  JSON.stringify(duringSpace),
+
+/* The premise, measured before any of it: does THIS browser report a
+   desktop-class pointer? Headless Chrome 141 answers `pointer: none` — not
+   coarse, none — and no launch flag changes it (tried: `--blink-settings=`
+   primaryHoverType/availableHoverTypes/primaryPointerType/availablePointerTypes
+   in both directions, `--touch-events=disabled`, and the old headless shell;
+   all six variants still read hover:false, fine:false, coarse:false,
+   none:TRUE). So the press rule is not live here and the three live cases
+   below cannot come out any way but the one they came out. Without this
+   branch they reported the SHIPPED CSS as broken for three commits.
+
+   Note the keyboard and reduced-motion cases go with it. They look robust —
+   both assert `transform: none` — but when the rule is inert they assert none
+   against a rule that could not have produced anything else, which is a
+   detector that cannot fail rather than a claim that held. */
+const pointerIsFine = await page.evaluate(
+  () => matchMedia('(hover: hover) and (pointer: fine)').matches,
 );
 
-// Blur before the mouse test: the Space test above left this same button
-// keyboard-focused (:focus-visible), which the CSS deliberately excludes
-// from the press transform — leaving it focused would make the mouse press
-// below a false negative of the TEST, not a real regression (caught live:
-// the first version of this case did exactly that and read transform
-// "none" for a real mouse press, until this blur() was added).
-await page.evaluate(() => document.activeElement.blur());
-// Real mouse press-and-hold on the group's MIDDLE button — the one whose
-// pressed border must stay above its two neighbours (z-index) and whose
-// horizontal edges must not move (only translateY, never scale).
-await page.mouse.move(midRect0.midBeforeLeft + 5, midRect0.midBeforeTop + 8);
-await page.mouse.down();
-await new Promise((r) => setTimeout(r, 150));
-const duringMouse = await page.evaluate(() => {
-  const btns = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')];
-  const mid = btns[1];
-  const rect = mid.getBoundingClientRect();
-  return {
-    active: mid.matches(':active'),
-    transform: getComputedStyle(mid).transform,
-    left: rect.left,
-    right: rect.right,
-    zIndex: getComputedStyle(mid).zIndex,
-    neighborLeftEdge: btns[0].getBoundingClientRect().right,
-    neighborRightEdge: btns[2].getBoundingClientRect().left,
-  };
-});
-await page.mouse.up();
+/* Runs everywhere, and it is what actually guards the contract on a headless
+   runner: the CONTRACT is in the built CSS whether or not this browser can
+   exercise it. Structural (postcss walk of the shipped rule), not a substring
+   of the source — the source file's own comment names `translateY` and
+   `:not(:focus-visible)` several times over, so a text match would be trippable
+   by the prose explaining the rule. */
+const pressRule = await (async () => {
+  const css = await readFile(
+    new URL('../../../packages/core/dist/css/components/button.css', import.meta.url),
+    'utf8',
+  );
+  let found = null;
+  postcss.parse(css).walkAtRules('media', (at) => {
+    if (!/hover:\s*hover/.test(at.params) || !/pointer:\s*fine/.test(at.params)) return;
+    at.walkRules((rule) => {
+      rule.walkDecls('transform', (decl) => {
+        found = { params: at.params, selector: rule.selector, value: decl.value };
+      });
+    });
+  });
+  return found;
+})();
 check(
-  'button: a real mouse press on a joined .bo-btn-group member gets the 1px translateY, stays z-index above its neighbours, and opens no horizontal seam',
-  duringMouse.active &&
-    duringMouse.transform === 'matrix(1, 0, 0, 1, 0, 1)' &&
-    duringMouse.zIndex === '1' &&
-    duringMouse.left === midRect0.midBeforeLeft &&
-    duringMouse.right === midRect0.midBeforeRight &&
-    duringMouse.neighborLeftEdge === duringMouse.left + 1 &&
-    duringMouse.neighborRightEdge === duringMouse.right - 1,
-  JSON.stringify({ ...duringMouse, expectedLeft: midRect0.midBeforeLeft, expectedRight: midRect0.midBeforeRight }),
+  'button: the shipped CSS declares the 1px press nudge behind a fine-pointer guard that also excludes :focus-visible and reduced motion',
+  !!pressRule &&
+    pressRule.value === 'translateY(1px)' &&
+    pressRule.selector.includes(':not(:focus-visible)') &&
+    pressRule.selector.includes(':active') &&
+    /prefers-reduced-motion:\s*no-preference/.test(pressRule.params),
+  JSON.stringify(pressRule),
 );
 
-await visit('/components/button/', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-const btnReduced = await page.evaluate(async () => {
-  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
-  mid.scrollIntoView({ block: 'center' });
-  const r = mid.getBoundingClientRect();
-  return { top: r.top, left: r.left, width: r.width, height: r.height };
-});
-await page.mouse.move(btnReduced.left + btnReduced.width / 2, btnReduced.top + btnReduced.height / 2);
-await page.mouse.down();
-await new Promise((r) => setTimeout(r, 150));
-const reducedDuring = await page.evaluate(() => {
-  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
-  return { active: mid.matches(':active'), transform: getComputedStyle(mid).transform, top: mid.getBoundingClientRect().top };
-});
-await page.mouse.up();
-check(
-  'button: prefers-reduced-motion removes the press displacement entirely, not just its animation (position unchanged while still :active)',
-  reducedDuring.active && reducedDuring.transform === 'none' && reducedDuring.top === btnReduced.top,
-  JSON.stringify({ ...reducedDuring, expectedTop: btnReduced.top }),
-);
+if (!pointerIsFine) {
+  const why =
+    'this browser reports (hover: hover) and (pointer: fine) = false — headless Chrome has no ' +
+    'pointing device, so `.bo-btn`\'s press rule is not live and none of the three live cases ' +
+    'below can discriminate. The contract is asserted structurally against the built CSS above. ' +
+    'Run this gate in a headed browser on a machine with a mouse to exercise it for real.';
+  g.notVerified('button: a real mouse press gets the 1px translateY, keeps z-index, opens no seam', why);
+  g.notVerified('button: keyboard Space activation gets NO press transform', why);
+  g.notVerified('button: prefers-reduced-motion removes the press displacement entirely', why);
+}
+
+/* The three LIVE cases. Guarded, not deleted: on a machine with a mouse they
+   are the real evidence, and they are the reason the `:not(:focus-visible)`
+   distinction is trustworthy at all. */
+if (pointerIsFine) {
+  const midRect0 = await page.evaluate(() => {
+    const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+    mid.focus();
+    const r = mid.getBoundingClientRect();
+    return { midBeforeTop: r.top, midBeforeLeft: r.left, midBeforeRight: r.right };
+  });
+  // Keyboard Space: real CDP key events (page.keyboard is CDP-backed), held
+  // for one transition duration so a mid-transition frame isn't mistaken for
+  // the settled state (the exact trap this case exists to catch — see above).
+  await page.keyboard.down('Space');
+  await new Promise((r) => setTimeout(r, 150));
+  const duringSpace = await page.evaluate(() => {
+    const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+    return { active: mid.matches(':active'), transform: getComputedStyle(mid).transform };
+  });
+  await page.keyboard.up('Space');
+  check(
+    'button: keyboard Space activation shows the existing focus feedback but NO artificial press transform',
+    duringSpace.active && duringSpace.transform === 'none',
+    JSON.stringify(duringSpace),
+  );
+
+  // Blur before the mouse test: the Space test above left this same button
+  // keyboard-focused (:focus-visible), which the CSS deliberately excludes
+  // from the press transform — leaving it focused would make the mouse press
+  // below a false negative of the TEST, not a real regression (caught live:
+  // the first version of this case did exactly that and read transform
+  // "none" for a real mouse press, until this blur() was added).
+  await page.evaluate(() => document.activeElement.blur());
+  // Real mouse press-and-hold on the group's MIDDLE button — the one whose
+  // pressed border must stay above its two neighbours (z-index) and whose
+  // horizontal edges must not move (only translateY, never scale).
+  await page.mouse.move(midRect0.midBeforeLeft + 5, midRect0.midBeforeTop + 8);
+  await page.mouse.down();
+  await new Promise((r) => setTimeout(r, 150));
+  const duringMouse = await page.evaluate(() => {
+    const btns = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')];
+    const mid = btns[1];
+    const rect = mid.getBoundingClientRect();
+    return {
+      active: mid.matches(':active'),
+      transform: getComputedStyle(mid).transform,
+      left: rect.left,
+      right: rect.right,
+      zIndex: getComputedStyle(mid).zIndex,
+      neighborLeftEdge: btns[0].getBoundingClientRect().right,
+      neighborRightEdge: btns[2].getBoundingClientRect().left,
+    };
+  });
+  await page.mouse.up();
+  check(
+    'button: a real mouse press on a joined .bo-btn-group member gets the 1px translateY, stays z-index above its neighbours, and opens no horizontal seam',
+    duringMouse.active &&
+      duringMouse.transform === 'matrix(1, 0, 0, 1, 0, 1)' &&
+      duringMouse.zIndex === '1' &&
+      duringMouse.left === midRect0.midBeforeLeft &&
+      duringMouse.right === midRect0.midBeforeRight &&
+      duringMouse.neighborLeftEdge === duringMouse.left + 1 &&
+      duringMouse.neighborRightEdge === duringMouse.right - 1,
+    JSON.stringify({ ...duringMouse, expectedLeft: midRect0.midBeforeLeft, expectedRight: midRect0.midBeforeRight }),
+  );
+
+  await visit('/components/button/', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+  const btnReduced = await page.evaluate(async () => {
+    const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+    mid.scrollIntoView({ block: 'center' });
+    const r = mid.getBoundingClientRect();
+    return { top: r.top, left: r.left, width: r.width, height: r.height };
+  });
+  await page.mouse.move(btnReduced.left + btnReduced.width / 2, btnReduced.top + btnReduced.height / 2);
+  await page.mouse.down();
+  await new Promise((r) => setTimeout(r, 150));
+  const reducedDuring = await page.evaluate(() => {
+    const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+    return { active: mid.matches(':active'), transform: getComputedStyle(mid).transform, top: mid.getBoundingClientRect().top };
+  });
+  await page.mouse.up();
+  check(
+    'button: prefers-reduced-motion removes the press displacement entirely, not just its animation (position unchanged while still :active)',
+    reducedDuring.active && reducedDuring.transform === 'none' && reducedDuring.top === btnReduced.top,
+    JSON.stringify({ ...reducedDuring, expectedTop: btnReduced.top }),
+  );
+}
 
 /* /patterns/command-bar states two things the browser must actually do, and
    the second is the reason the page exists in the shape it does.
