@@ -231,6 +231,34 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 198 — Objective grill of Slices 193, 196, 197: a clean control, re-derived rather than re-copied (2026-08-29)
+
+**Dispatcher rule 3, OVERDUE at 3/3**, window `[193, 196, 197]`. Index checked
+first (`.roundtable/INDEX.md`) — no repeated subject in this window; 193 and
+196 already grilled 186-192, and 197 is a Standardize sweep, not a grill.
+Honest scope: re-verify what 193/196/197 asserted (fresh commands, not copied
+numbers) rather than re-grill 193/196's already-covered content. Full report:
+`.roundtable/grill-objective-193-196-197-2026-08-29.md`.
+
+**All three of 197's numbers reproduce exactly, including one non-obvious
+arithmetic step.** `scan:dead-style` 0/1428, `report:css-repeats` 8 groups —
+both direct reads. `report:prose`'s "14" is not printed as a total; it's the
+union of the global top-9 list and five per-family over-2x lists, counted by
+hand this pass and confirmed character-identical to 197's and 194's baseline.
+
+**196.1's "comment-only" claim holds exactly** — `git show dd2f3a1 --
+data-table.css` shows the entire diff inside the `/* */` block, both
+declaration lines byte-identical before/after. **193.2's still-open
+css-repeats condition re-checked and still hasn't fired** — the `joined-control`
+group is still 2 components (`money`, `quantity`).
+
+**Clean control, kept as counter-evidence to the last three grills' streak.**
+193, 196 and 193.2 each found one false-or-unreproducing claim in their own
+window. This pass ran every check for real rather than copying a pinned
+number, and found nothing false — worth recording precisely because it shows
+the discipline doesn't manufacture a finding when there isn't one. No rule
+change, nothing new queued, no gate proposed.
+
 ## Slice 197 — Standardize sweep: all three standing lanes clean, delta 0 (2026-08-29)
 
 **Dispatcher rule 2, local session.** `dispatch_status.py` read
