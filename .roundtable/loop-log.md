@@ -1147,3 +1147,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 19:02 · Roadmap · plan · 112.3 — owner agreed to all four roundtable recommendations (5 briefs, suite evidence excluded, burn-once tested) · triaged · b81131f
 - 2026-08-29 11:04 · Continue · build · 199.2 - the 558 denominator 193.2 could not reproduce, closed at a9470314; 199.1 filed: 104.4's reopen trigger fired the day it was written and went 7 days unasked · landed · 33dabdcd
 - 2026-08-29 11:04 · Meta · refusal · a mechanism for reopen conditions - 193.2's refusal stands, and naming the shipped script in a LOOPS.md cadence step was refused with it · refused · 33dabdcd
+- 2026-08-29 19:29 · Continue · build · 199.1 — 104.4's reopen trigger fired (max group 7 to 11); re-refused on live 1440px light/dark rendered evidence, premise corrected in ROADMAP-archive.md · landed · d3d76a2
