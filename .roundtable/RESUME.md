@@ -123,6 +123,30 @@ violations).
 --show-current` EMPTY at Step 0, fixed before any commit), 1b, 1c, 2
 (unshallowed: read `true`, now 1,571 commits), 3, 5.
 
+## Counters after this wake
+
+Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
+`record_iteration.py`**, per 166.5's lesson — that comparison has found two of the
+five recurrences.
+
+**Prediction written down first, then checked.** Before recording, with 1093 rows
+and the parser agreeing with a raw `grep -c "^- "` at 1093, for one `Objective`
+row carrying one `--also-refused` (182.3: +1 `Meta · refusal` row) plus one
+`axe-violations` sample: **1095** rows, `Standardize 3 / 4 ok`, `Objective 0 / 3
+ok` (reset by this row), and rule 5 `0 wake-date(s) newer … ok` at **101**
+samples.
+
+After recording: **1095** rows against a raw `grep -c` of **1095**;
+`Standardize 3 / 4 ok`; `Objective 0 / 3 ok`; `Optimize 0 wake-date(s) newer …
+ok [101 sample(s), 13 of 30 name(s) sampled twice]`. **Four of four exact** — and
+unlike last wake, the prediction's premise was not changed after it was written.
+
+`axe-violations` was recorded because it was genuinely measured live this wake
+(127 pages × 2 widths, zero violations) under a name whose earlier samples
+measured the same thing. **Refused, per 184's discipline:** inventing a new
+single-sample name for this grill's own figures — a name sampled once can never
+satisfy "two consecutive runs" and would pad the store rule 5 reads.
+
 ## What the next wake should expect
 
 **Rule 3 discharged this wake.** Re-run `dispatch_status.py` rather than trusting
