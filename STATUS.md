@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 07:00 UTC
+Generated at: 2026-08-29 07:08 UTC
 
 ## Open items by slice
 
@@ -22,10 +22,9 @@ Generated at: 2026-08-29 07:00 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1118 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-29 05:46   OVERDUE
+dispatch status — counter-triggered rules (1119 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-29 15:08   ok
   Objective     1 / 3 slice           since 2026-08-29 06:48   ok  [190]
-  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -39,7 +38,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 04:40 · Continue · build · 186.1 — check:resume-slice-ids reconciles RESUME.md's backticked slice ids against ROADMAP.md's checkboxes · landed · cfb53521
 - 2026-08-29 05:46 · Standardize · sweep · 191 — three lanes clean (dead-style 0, css-repeats delta 0 by group membership, prose 14/14 verdicted); the fourth read a value its own command cannot print — LOOPS.md "still 0 down after 167.2" is invisible in a window that contains 167.2's split, so report_loop_prose.py now prints a full-history ratchet block, red-proved three ways · landed · 3ea80243
 - 2026-08-29 14:04 · Continue · build · 189.1 — CLAUDE.md now names WHICH artefact when a third party renders it; escape hatch tested first and did not apply (every existing example is our own build), worked example is npm normalising bin and the read-vs-write path confusion · landed · d50c306
 - 2026-08-29 14:06 · Continue · build · 190.3 — corrected data-table.css's specificity comment; numbers re-derived by hand and agree with the grill: (0,4,0) and (0,3,1), while (0,2,0) belongs to the no-:has() fallback. Conclusion was right, arithmetic was not · landed · aa723d6
@@ -49,6 +47,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 06:48 · Objective · grill · 193 Objective grill of 186/189/190/191 — 167.1's reopen condition fired and was never read; rule 3 at 3-of-4 grill-armed · logged · 774558e5
 - 2026-08-29 06:48 · Meta · refusal · a reopen-condition register gate or report — the trigger is semantic for most of the 42, and a register nobody can adjudicate is 94.11's ceremony · refused · 774558e5
 - 2026-08-29 15:00 · Continue · build · 190.1 — the 18ch cap and 3.5rem reserve were both fits to one demo string; cap now min(48ch,100cqi) and reserve calc(6lh + space-4), so a 250-char message shows 6-7 lines fully visible at all three densities and both widths with the row height unchanged · landed · d61c6dc
+- 2026-08-29 15:08 · Standardize · tidy · Standardize sweep — three lanes clean; extracted patternGroups() so both generators share one walk, byte-identical output, duplicate blocks WIN=6 2->0; the signal was 187's own fix lengthening the duplicated run · landed · b02c3ce
 
 ## Sunset test
 
