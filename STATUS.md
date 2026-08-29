@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 14:45 UTC
+Generated at: 2026-08-29 14:59 UTC
 
 ## Open items by slice
 
@@ -23,9 +23,9 @@ Generated at: 2026-08-29 14:45 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1166 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-08-29 21:04   OVERDUE
-  Objective     2 / 3 slices          since 2026-08-29 21:09   ok  [200, 204]
+dispatch status — counter-triggered rules (1167 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-08-29 22:59   ok
+  Objective     3 / 3 slices          since 2026-08-29 21:09   OVERDUE  [200, 204, 206]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
@@ -40,7 +40,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 21:09 · Objective · grill · Objective grill of 199-202 — 201's new gate re-verified by injection, two Slice 200 refusals confirmed against source · logged · 9e7b74a
 - 2026-08-29 21:26 · Continue · build · 200.2 — restrained button press feedback; the Accept's own hover/pointer selector let a real keyboard Space press get the same transform as a mouse click, fixed with :not(:focus-visible) · landed · a9403f4
 - 2026-08-29 22:00 · Roadmap · release · 185.2 closed + v0.6.0 released — create-ui@0.1.1 confirmed carrying SLSA provenance · released · 4ea551b
 - 2026-08-29 14:22 · Continue · bug · 204.1 — P0: check:claims accused correct CSS for three commits (CI red 642-644); gate() gains notVerified() · landed · 79f4ca3
@@ -50,6 +49,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 14:45 · Continue · build · 200.4 — data-table bulk-actions entrance transition (@starting-style, entrance-only by construction); all five Accept clauses measured live in headless Chrome · landed · 1c7875e4
 - 2026-08-29 14:45 · Meta · refusal · display … allow-discrete on the bulk bar — it buys holding the box through a fade-OUT, which this item's Accept excludes; adding it would have created the exit flourish the item rules out · refused · 1c7875e4
 - 2026-08-29 14:45 · Meta · refusal · fixing check:rf-floor inside this dispatch — the @starting-style coverage gap it exposed is about the gate, not the bulk bar, so it is filed as 205.1 rather than widening the item · refused · 1c7875e4
+- 2026-08-29 22:59 · Standardize · sweep · Slice 206 — fourth clean sweep; motion @starting-style repetition checked and correctly left alone · landed · c97e893
 
 ## Sunset test
 
