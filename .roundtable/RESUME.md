@@ -18,8 +18,11 @@ it the moment the slice lands.**
 ## In flight: nothing
 
 Last updated 2026-08-29 (**cloud** wake — rule 4 → Continue, build mode,
-`200.6`). Working tree clean at hand-off; the wake's commits went out as one
-push.
+`200.6`). Working tree clean at hand-off. **Two pushes, not the usual one** —
+the first turned CI red and the second is the fix; the operating rule's
+"one push per wake" lost to not leaving `main` red. Stated rather than
+glossed, because the rule exists to bound Pages deploys and this wake spent
+two.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -54,11 +57,12 @@ exactly **1** rule in `packages/core/dist/css/motion.css` with a matching
 **0** — so "explicitly no shake" is a property of the artifact.
 
 **Three `check:claims` cases, 155 → 158, every sub-assertion red-proved by
-injection over two rounds, with the injection confirmed in the BUILT html
-before any red was believed.** The load-bearing one asserts that deletion does
-not depend on `animationend`: the check strips the exit class off the leaving
-row right after the click, which cancels the animation, and the row must still
-go. Injected `animationend` version →
+injection, with the injection confirmed in the BUILT html before any red was
+believed.** The load-bearing one asserts that deletion does not depend on
+`animationend`: the check kills the leaving row's animation outright
+(`style.animation = 'none'`, **not** by stripping the exit class — see below),
+so no animation of any name is left to end, and the row must still go.
+Injected `animationend`-gated version →
 `{"after":3,"ended":0,"stillAttached":true}` — the row never left.
 
 **The first draft shipped an accessibility defect and no gate could have caught
@@ -71,6 +75,20 @@ for it was measured and **refused** per 94.11 — 5 docs pages call
 `createElement`, the other four insert tags and rows, so there are **0**
 message-shaped insertions besides this one and a gate would have nothing to
 catch. The one instance is asserted live by the claims case instead.
+
+**This wake turned CI red once and fixed it.** Run 655's "Claims + formatting"
+job failed on one of the three new cases; the payload showed the page was
+correct and the assertion was not. Two defects, both this repo's own shapes: it
+counted the ENTRANCE animation's `animationend` (0 locally, 1 on CI — a number
+that differs between two runs of one commit is the instrument), and the fix for
+that made the check unable to fail, caught only by re-running the injection,
+which replayed GREEN. Stripping the exit class is not a cancel — the row still
+carries `bo-motion-fade-in`, so removing `fade-out` restarts the entrance.
+Cancelled with `animation: none` instead and re-proved red. **The rule worth
+carrying: re-red-prove after CHANGING a detector, not only after writing one.**
+Also: `check:formatting` was never run locally by this wake before CI ran it —
+`ENVIRONMENT.md`'s cloud-toolchain list does not name it, and that list is what
+the wake used.
 
 **NOT VERIFIED and named as such**, in the commit and in ROADMAP 200.6: no
 Podman, no `localhost:8081`, **no screenshots at 1440px or 390px in either

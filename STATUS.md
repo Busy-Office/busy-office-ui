@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 17:01 UTC
+Generated at: 2026-08-29 17:17 UTC
 
 ## Open items by slice
 
@@ -19,9 +19,10 @@ Generated at: 2026-08-29 17:01 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1174 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-08-29 22:59   ok
+dispatch status — counter-triggered rules (1175 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-08-29 22:59   OVERDUE
   Objective     2 / 3 slices          since 2026-08-29 23:06   ok  [200, 205]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -35,7 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 14:45 · Meta · refusal · display … allow-discrete on the bulk bar — it buys holding the box through a fade-OUT, which this item's Accept excludes; adding it would have created the exit flourish the item rules out · refused · 1c7875e4
 - 2026-08-29 14:45 · Meta · refusal · fixing check:rf-floor inside this dispatch — the @starting-style coverage gap it exposed is about the gate, not the bulk bar, so it is filed as 205.1 rather than widening the item · refused · 1c7875e4
 - 2026-08-29 22:59 · Standardize · sweep · Slice 206 — fourth clean sweep; motion @starting-style repetition checked and correctly left alone · landed · c97e893
 - 2026-08-29 23:06 · Objective · grill · Slices 204/206 grilled — an environment fact (headless Chrome's pointer capability) drifted mid-session; the self-healing gate absorbed it with no code change · logged · 31bec93
@@ -45,6 +45,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 16:04 · Meta · refusal · adding an auto-dismiss timer to satisfy two Accept clauses that presumed one — measured absent, and the framework's position is that it never removes a toast the reader did not dismiss · refused · a7dbf0b1
 - 2026-08-29 17:01 · Continue · build · 200.6 — row insert/delete + inline-validation entrance wired from the motion module into /getting-started/htmx; removal on a timer, never animationend · landed · e1be09a
 - 2026-08-29 17:01 · Meta · refusal · a gate for 'a message that ARRIVES with no live-region role' — check:live-regions reads built html and structurally cannot see it, but the base rate is 0 message-shaped insertions across the 5 docs pages that call createElement (94.11) · refused · e1be09a
+- 2026-08-29 17:17 · Continue · bug · P0 — the 200.6 claims case turned CI red (run 655): it counted the entrance animation's animationend, and the fix for that made the check unable to fail; cancel with animation:none and re-red-prove · landed · beb909f
 
 ## Sunset test
 

@@ -1387,6 +1387,39 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        catch today. The one instance is asserted live by the claims case above
        instead.
 
+       **The timer case as first pushed turned CI red, and the two defects in
+       it are both this file's own recorded shapes.** Run 655, "Claims +
+       formatting", five of six jobs green. The payload said the page was
+       fine — `{"after":2,"ended":1,"stillAttached":false}`: the row was
+       removed by the timer exactly as documented — so the failure was in the
+       assertion.
+
+       - **It counted the wrong animation.** The row under test is the one the
+         insert case appended, so its `bo-motion-fade-in` was still running and
+         its `animationend` was counted as the exit's. It read 0 locally and 1
+         on CI; nothing about the framework differed, only how much wall clock
+         passed between two `page.evaluate` round-trips. **A number that
+         differs between two runs of the same commit is the instrument**, and
+         this one had been believed after a single local reading.
+       - **The fix for that made the check unable to fail, and re-running the
+         injection is what caught it.** Round 1's injection replayed GREEN with
+         the injection confirmed present in the built html. The defect was in
+         the CANCEL, not the detector: stripping the exit class is not a
+         cancel, because the row still carries `bo-motion-fade-in`, so removing
+         `fade-out` **restarts the entrance**, whose `animationend` fires the
+         gated handler and removes the row. Cancelled with an inline
+         `animation: none` instead — no animation of any name left to end — and
+         re-proved red against the same injection:
+         `{"after":3,"ended":0,"stillAttached":true}`.
+
+       The generalisable part, which is the step between two rules this file
+       already has: **re-red-prove after CHANGING a detector, not only after
+       writing one.** Round 1 proved a version of this check that a later edit
+       invalidated, and the edit shipped unproved. Also recorded: `check:
+       formatting` was never run locally by this wake at all before CI ran it —
+       the wake's gate list was the cloud-toolchain list in `ENVIRONMENT.md`,
+       which does not name it.
+
        **NOT VERIFIED, named rather than implied:** cloud wake — no Podman, no
        `localhost:8081`, **no screenshots at 1440px or 390px in either theme**.
        Everything above is DOM, computed style or built-artifact text. Whether
