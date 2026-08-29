@@ -520,7 +520,69 @@ wake then writes that verdict into the plan as current.
        *Accept*: rule 5's text and §4's Trigger **agree on the set of conditions that
        dispatch Optimize**, verified by reading both in the same pass; and the
        disagreement is stated where it is fixed rather than silently patched over.
-## Slice 185 — `create-ui`'s E404 is not "the owner hasn't published it yet" (2026-08-29)
+## Slice 185 — `create-ui` is RELEASED, and two of this slice's own diagnoses were wrong (2026-08-29)
+
+**RESOLVED 2026-08-29. `@busy-office/create-ui@0.1.0` is live and works.**
+Verified as a consumer, not from the repo:
+
+```
+cd $(mktemp -d) && npm create @busy-office/ui -y
+#   Scaffolded my-erp   -> index.html, package.json, README.md, server.mjs
+#   deps: {"@busy-office/ui":"^0.5.0"}   <- resolves to the published core
+npm view @busy-office/create-ui@0.1.0 bin   # { 'create-ui': 'index.mjs' }
+```
+
+The direction 164.3 set — *(a) adoption/DX, finish it by publishing
+`create-ui`* — is **achieved**. It had been "one owner-only command away" for
+eight wakes.
+
+**Two diagnoses in this slice were wrong, and both are recorded rather than
+edited away, because each was confidently reasoned from real evidence.**
+
+1. **"The registry 404 means it was unpublished, so 0.1.0 is burned." FALSE.**
+   The owner's publish succeeded at `01:30:23Z`; `npm publish` refused mine at
+   `01:31:37Z` with *"cannot publish over the previously published versions:
+   0.1.0"* — which was **accurate**, not evidence of an unpublish. Meanwhile
+   `GET` returned 404 for several minutes. **A brand-new scoped package's write
+   path knows it before the read path serves it**, and a 404 there is
+   propagation, not absence. A published control (`@busy-office/ui` → 200) was
+   used and still did not settle it, because the control was an *old* package
+   and the lag is specific to *new* ones. On that false reading a version was
+   bumped to 0.1.1 and a commit message asserted a burned version; the version
+   is reset to 0.1.0 here, matching the registry and core's own convention.
+
+2. **"npm strips the `bin` entry, so the scaffolder would ship with no
+   executable." FALSE, and it is the more instructive one.** The warning
+   (*"`bin[create-ui]` script name index.mjs was invalid and removed"*) is real
+   and `npm pkg fix` does prescribe dropping the `./`. But the published
+   manifest reads `{ 'create-ui': 'index.mjs' }` — npm **normalised** the value
+   rather than deleting the key. The verification that would have caught this
+   was available and skipped: the tarball was unpacked (twice), which is one
+   step short of asking the REGISTRY what it stored. **`npm view <pkg> bin` was
+   the check, and it was only run afterwards.**
+
+   The source fix (`7aa59fc`) is kept — it silences the warning and makes the
+   source agree with what npm publishes — but it repaired nothing, and the
+   commit that landed it claims a fatal bug it did not have.
+
+**What WAS true, and remains open:** `.github/workflows/publish.yml` is 56 lines
+and its final step is `npm publish -w @busy-office/ui` — **core only**. This
+release was a hand publish; a GitHub Release still would not ship `create-ui`.
+
+1. [ ] **185.1 — wire `create-ui` into the release workflow.** Now that the
+       package exists, its npmjs.com Trusted Publisher can be configured (that
+       was the real chicken-and-egg, and it is resolved by 0.1.0 existing).
+       *Accept*: a release publishes both packages, with the version question
+       answered in the workflow's own comments — the tag gate asserts against
+       `packages/core/package.json` (0.5.0) and cannot also assert create-ui's
+       0.1.0, so either create-ui publishes without a tag assertion, gets its
+       own `create-ui-v*` trigger, or the two go lockstep. **Do not silently
+       drop the assertion for one package** — it is the only thing stopping a
+       mistagged release. Owner-triggered publishing is unchanged.
+
+*(original finding, kept — its central claim about publish.yml is correct)*
+
+### Original finding, kept verbatim — "`create-ui`'s E404 is not the owner hasn't published it yet"
 
 **Owner asked "what to do?" about the standing E404. Measured, and the premise
 in every handover since 164.3 is incomplete.** `RESUME.md`'s Direction block has
