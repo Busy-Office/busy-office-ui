@@ -432,6 +432,96 @@ listed on 208.1.
        206 called that "all three standing lanes"; a gate for it was refused on
        94.11's base-rate ground and the refusal is recorded above.**
 
+### Round 2 — the documented cloud toolchain had drifted from what CI runs
+
+Second Standardize round, and the same drift shape as lane 4: **two
+hand-maintained lists of "what a wake runs", one of which had silently fallen
+behind.** `.roundtable/ENVIRONMENT.md`'s cloud-wake toolchain named **7**
+commands; `ci.yml` runs **19**.
+
+That is not academic. The previous wake's own commit message records
+`check:formatting` reaching CI unrun and turning `main` red, with the reason
+stated exactly: *"`ENVIRONMENT.md`'s cloud-toolchain list does not name it and
+that list is what the wake used."* The fix landed as a sentence in a commit
+message; the list itself was never updated.
+
+**Every unnamed CI command was RUN here rather than assumed runnable** — this
+repo's own rule is that a gate verified only in CI is not known to work, and
+the mirror image applies: a gate *assumed* un-runnable in the cloud has not
+been tested either. Sixteen run green (the full list is now in
+`ENVIRONMENT.md`, derived from `ci.yml` rather than curated). Two do not:
+
+- **`docker build`** — the binary exists at `/usr/bin/docker`, which is the
+  trap; the daemon does not (`dial unix /var/run/docker.sock: no such file or
+  directory`). `command -v docker` succeeding is not evidence.
+- **`check:po-app`** — see 208.3.
+
+**One environment-fact correction fell out of it**: `npm run suite` needs
+`CHROME_PATH` exported in the same command (`suite:audit` drives a browser).
+Trap 1c caught this wake out in exactly the documented way on its first run.
+
+2. [x] **208.2 — DONE 2026-08-29 (cloud wake). `ENVIRONMENT.md`'s cloud-wake
+       toolchain rewritten from `ci.yml` rather than curated: 7 commands → 16
+       verified-green, each actually executed in this container on `eceffbc`
+       plus a markdown-only diff, with the re-derivation command written beside
+       the list so the next wake re-derives instead of trusting the snapshot.
+       The two CI commands that do NOT run here are named with what was
+       measured — no docker daemon (binary present, socket absent) and
+       `check:po-app` (208.3). Motivated by the previous wake's own record of
+       `check:formatting` reaching CI unrun because this list did not name
+       it.**
+
+3. [ ] **208.3 — `check:po-app` reproduces RED in a cloud container on a commit
+       CI reports GREEN, and the cause is not established.** Measured
+       2026-08-29 on `eceffbc` (CI run 656, conclusion `success`) plus a
+       markdown-only diff, so nothing in the diff can reach the reference app.
+
+       **Byte-identical payload across three runs** — two of the unmodified
+       gate and one of the 40-iteration probe below — failing one behaviour of
+       18:
+
+       ```
+       FAIL windowed list: deep scroll evicts to height-true spacers and keeps the DOM bounded
+       {"rowcount":"50001","chunk0Evicted":false,"spacerMatchesReal":false,
+        "renderedBounded":true,"hiddenInputSurvives":true,"chunk0Reloaded":true,
+        "anchorShift":0,"scrollShift":0,"checkboxRechecked":true,
+        "countAtEnd":"1 selected","midRowIndexOk":true}
+       ```
+
+       Only `chunk0Evicted` is false; `spacerMatchesReal` is downstream of it.
+       Everything else the windowed list promises holds here — the DOM stays
+       bounded, the chunk re-swaps, selection survives, and the anchor and
+       scroll shifts are both exactly 0.
+
+       **The obvious hypothesis was tested first and is REFUTED.** The probe
+       gives eviction a fixed budget — `for (let i = 0; i < 10; i++) { … await
+       sleep(350); }` — which is the shape that goes red under container
+       contention. A throwaway copy of the gate with that loop at **40**
+       iterations (injection confirmed present in the probe before running it)
+       produced a **byte-identical payload**. It is not a time budget, and this
+       is written down so the next wake does not spend the same round on it.
+
+       **Which environment is right is NOT established, and neither reading is
+       assumed here.** Either the container's headless Chrome does not fire the
+       eviction path (making the local red an artefact), or eviction is
+       genuinely broken and CI's environment masks it. Nothing measured so far
+       distinguishes them, and the gate's own header records four real bugs it
+       caught during development, so it is not a detector that cannot fail.
+
+       *Accept:* (a) the divergence is reproduced or refuted on a THIRD
+       environment — a local wake with Podman is the obvious one — and the
+       result recorded either way; (b) whichever side is wrong is named with
+       the measurement that names it, and if it is the app, a P0 is filed; (c)
+       if it turns out to be an environment artefact, `ENVIRONMENT.md`'s entry
+       for `check:po-app` says so with the mechanism, replacing today's
+       "unexplained". **Finding the premise false — that it passes elsewhere in
+       the cloud too — is a satisfying outcome**, not an off-plan one.
+
+       *Not a P0*: `main` is green on CI, nothing shipped changed, and the
+       failing assertion is in a reference app, not the framework. Filed rather
+       than fixed because "fix the gate so it passes here" would be changing a
+       gate that passes on CI, on no evidence about which side is correct.
+
 ## Slice 206 — Standardize sweep: fourth identical clean result, and one genuine candidate examined and correctly left alone (2026-08-29)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.

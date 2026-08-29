@@ -191,17 +191,47 @@ rm -rf apps/docs/dist
 ```
 
 Then, all runnable in a cloud wake without anything hand-started — they bring
-up their own server via `serve-dist.mjs`, which is why that exists:
+up their own server via `serve-dist.mjs` (or, for `check:po-app`, boot the app
+as a child process on a free port), which is why those exist.
+
+**This list is derived from `ci.yml`, not curated.** It used to name seven
+commands while CI ran nineteen, and the gap is not academic: `check:formatting`
+reached CI unrun on 2026-08-29 and turned `main` red, and the wake that did it
+recorded *"`ENVIRONMENT.md`'s cloud-toolchain list does not name it and that
+list is what the wake used"*. Re-derive rather than trust this snapshot —
+`grep -oE 'npm run [A-Za-z0-9:@/._-]+( -w [A-Za-z0-9@/._-]+)?' .github/workflows/ci.yml | sort -u`
+— and if a command appears there that is missing here, run it and add it.
 
 ```
 npm run build -w @busy-office/ui
-npm run test -w @busy-office/ui
-npm run docs:build
-npm run check:repo -w docs
+npm run test -w @busy-office/ui          # == CI's `npx vitest run --root packages/core`
+npm run lint:css -w @busy-office/ui
+npm run docs:build                       # == CI's `npm run build -w docs`; runs check:repo itself
 npm run check:claims -w docs
+npm run check:formatting -w docs
+npm run check:scroll -w docs
 npm run check:layout -w docs
+npm run check:forced-colors -w docs
 npm run test:axe -w docs
+npm run check:target-size -w docs
+npm run check:search -w docs
+npm run check:pseudo -w docs
+npm run check:quickstart -w docs
+npm run check -w @busy-office/create-ui
+npm run suite                            # needs CHROME_PATH — suite:audit drives a browser
 ```
+
+All sixteen were run green in this container on 2026-08-29 (`eceffbc` + a
+markdown-only diff). **Two CI commands are NOT in that list:**
+
+- **`docker build -f apps/docs/Containerfile`** — the `docker` *binary* exists
+  at `/usr/bin/docker`, which is a trap worth naming, but there is no daemon:
+  `docker info` returns *"dial unix /var/run/docker.sock: no such file or
+  directory"*. Finding the binary is not evidence the daemon runs.
+- **`npm run check:po-app -w docs`** — **reproduces RED here on a commit CI
+  reports green**, so a cloud wake must not read its red as a defect, and must
+  not "fix" it. See roadmap 208.3; the divergence is unexplained, and which
+  environment is right has not been established.
 
 `sqlite3` is NOT installed in this container. Query the `loops.db` mirror with
 Python's `sqlite3` module — `python3 -c "import sqlite3; ..."`.

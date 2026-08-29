@@ -17,19 +17,20 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (**cloud** wake — rule 2 → Standardize, `208.1`).
-Working tree clean at hand-off; one push.
+Last updated 2026-08-29 (**cloud** wake — rule 2 → Standardize, two rounds:
+`208.1` and `208.2`, plus `208.3` filed OPEN). Working tree clean at hand-off;
+one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 5 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 6 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `208.1` as a closed id named here — a
-**historical reference** (the "what landed" section), not a claim that it is
-open.
+`check:resume-slice-ids` will report `208.1` and `208.2` as closed ids named
+here — **historical references** (the "what landed" section), not claims that
+they are open. `208.3` genuinely is open.
 
 **No collision on this item.** `origin/main` was at `eceffbc` at Step 0 and
 still at `eceffbc` at the mandated re-fetch before the first commit.
@@ -71,26 +72,45 @@ across section boundaries and returned three different non-zero lane-4 counts;
 re-derived per-section in Python it is 0 of 4. And the `/concepts/scale/` prose
 verdict is **Slice 178**, not 196 as first written.
 
+**Round 2 — `208.2`, the same drift shape one level up.**
+`ENVIRONMENT.md`'s cloud-wake toolchain named **7** commands while `ci.yml`
+runs **19**, and the previous wake's own commit message records
+`check:formatting` reaching CI unrun *because that list did not name it*. Every
+unnamed command was RUN rather than assumed: **16 green**, and the list is now
+derived from `ci.yml` with the re-derivation command beside it. Two are not
+runnable here — `docker build` (the binary is at `/usr/bin/docker`, the daemon
+is absent, and `command -v` succeeding is not evidence) and `check:po-app`.
+
+**`208.3` filed OPEN — `check:po-app` is RED here on a commit CI reports
+green** (run 656 on `eceffbc`, `success`). One behaviour of 18, byte-identical
+payload across three runs: only `chunk0Evicted` is false. **The timing
+hypothesis is refuted** — a throwaway probe with the eviction loop at 40
+iterations instead of 10 gave a byte-identical payload. Which environment is
+right is NOT established, and the item says so; it is not a P0 (main is green,
+nothing shipped changed, and it is the reference app).
+
 **NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
 screenshots at 1440px or 390px in either theme**. It costs nothing here —
-**zero lines changed under `packages/` or `apps/docs/src/`**; the diff is three
-markdown files.
+**zero lines changed under `packages/` or `apps/docs/src/`**; the whole diff is
+markdown.
 
 ## Dispatcher state at hand-off
 
 Re-run `python3 scripts/loops/dispatch_status.py` rather than trusting a
 snapshot taken before this wake's row was recorded.
 
-**Next wake: rule 4, oldest open non-blocked item.** Five open checkboxes across
-four slices:
+**Next wake: rule 4, oldest open non-blocked item.** Six open checkboxes across
+five slices:
 
 | item | what | notes |
 |---|---|---|
-| `200.7` | lint check for hand-written durations outside the token scale | read 201.4 first |
+| `200.7` | lint check for hand-written durations outside the token scale | **oldest non-blocked — rule 4 picks this**; read 201.4 first |
 | `201.4` | 200.7's proposed gate mostly duplicates `check:motion` already shipped | either outcome closes it |
+| `208.3` | `check:po-app` red in cloud, green on CI; cause unestablished | newest; **wants a LOCAL wake** — its Accept asks for a third environment |
 
-Both are cloud-takeable — 200.7 is a script, 201.4 a measurement plus a written
-verdict. Neither needs a rendered image.
+200.7 and 201.4 are cloud-takeable (a script, and a measurement plus a written
+verdict); neither needs a rendered image. 208.3 is not blocked on the owner or
+on a screenshot — it is blocked on an environment this container is not.
 
 Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
 112.3), **AT runtime evidence** (owner hardware).
