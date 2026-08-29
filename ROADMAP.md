@@ -231,6 +231,53 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 202 — Standardize sweep: clean, and the two things this window's own new artefacts might have duplicated, checked directly (2026-08-29)
+
+**Dispatcher rule 2 at 5/4, OVERDUE.** All three standing lanes match the last
+sweep's baseline (Slice 197) exactly, delta 0:
+
+- `scan:dead-style -w apps/docs`: **0 dead** of **1,428** live inline
+  declarations — same count as Slice 197.
+- `report:css-repeats -w packages/core`: **8 groups**, same pairs
+  (breadcrumb/richtext, combobox/file-upload, dashboard/offcanvas,
+  form-input/richtext, sidebar-nav/tree, plus 3 more) — no new group, no
+  group grew.
+- `report:prose -w apps/docs`: **14 flagged pages** (the union of the
+  global-median list and the five per-family additions), the same set as
+  Slice 197 — no page crossed the line since.
+
+**Two specific checks this window's own new work invited, not left to the
+standing three.** Slices 200-201 landed dialog exit motion (200.1) and a new
+gate script (`check-token-refs.mjs`, 201.3) since the last sweep — both are
+exactly the shape of thing a Standardize pass exists to catch drift in.
+
+- **`dialog.css`'s new exit-motion block vs. `offcanvas.css`'s (143.4), the
+  recipe it was built to reuse verbatim.** Structurally identical shape
+  (`@keyframes`, `@supports (transition-behavior: allow-discrete)`, the same
+  `overlay`/`display` transition pair, `@starting-style`) — but not a
+  `report:css-repeats` hit, because the two components use different
+  duration tokens (`--bo-motion-duration-base` for dialog,
+  `-slow` for offcanvas) and different selectors, so no declaration body is
+  byte-identical. This is the case CLAUDE.md's own repeats report already
+  excuses: two components needing the same PATTERN must each carry it,
+  because plain CSS cannot share a rule body without sharing a selector.
+  Nothing to consolidate — the duplication is the intended, documented reuse
+  200.1 already recorded, not new drift.
+- **`check-token-refs.mjs`'s scope vs. `scan:dead-style` and
+  `report:css-repeats`.** Read in full: it verifies `var(--bo-…)` references
+  resolve to a defined custom property (from CSS or from the two runtime
+  `.ts` behaviors that set one). `scan:dead-style` checks whether an INLINE
+  declaration changes any computed value; `report:css-repeats` checks
+  duplicate declaration BODIES across selectors. Three different failure
+  modes — unresolved reference, dead declaration, duplicated block — with no
+  overlap in what triggers them. No consolidation warranted.
+
+**Nothing to consolidate.** A clean sweep across all five checks (three
+standing, two targeted at this window's own new artefacts) is a complete,
+valid outcome — the same conclusion Slices 194 and 197 reached, reproduced a
+third time on a materially different tree (Slices 198-201 landed between this
+sweep and the last one).
+
 ## Slice 201 — P0: two undefined token references silently deleted the declarations that named them (2026-08-29)
 
 **Dispatcher rule 1, and the P0 was found by the wake rather than reported** —
