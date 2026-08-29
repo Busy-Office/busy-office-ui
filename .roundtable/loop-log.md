@@ -1173,3 +1173,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 14:45 · Meta · refusal · display … allow-discrete on the bulk bar — it buys holding the box through a fade-OUT, which this item's Accept excludes; adding it would have created the exit flourish the item rules out · refused · 1c7875e4
 - 2026-08-29 14:45 · Meta · refusal · fixing check:rf-floor inside this dispatch — the @starting-style coverage gap it exposed is about the gate, not the bulk bar, so it is filed as 205.1 rather than widening the item · refused · 1c7875e4
 - 2026-08-29 22:59 · Standardize · sweep · Slice 206 — fourth clean sweep; motion @starting-style repetition checked and correctly left alone · landed · c97e893
+- 2026-08-29 23:06 · Objective · grill · Slices 204/206 grilled — an environment fact (headless Chrome's pointer capability) drifted mid-session; the self-healing gate absorbed it with no code change · logged · 31bec93
+- 2026-08-29 23:06 · Meta · refusal · a Chromium version-pin gate — would trade one kind of staleness for another this repo does not control · refused · 31bec93
