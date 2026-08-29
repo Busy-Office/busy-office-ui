@@ -231,6 +231,39 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 197 — Standardize sweep: all three standing lanes clean, delta 0 (2026-08-29)
+
+**Dispatcher rule 2, local session.** `dispatch_status.py` read
+`Standardize 4/4 OVERDUE` after 196.1 (rules 1 and 3 gave nothing: no open P0,
+Objective at 2/3). Since the last sweep (Slice 194), the only work in between
+was 193.2 (prose-only, ROADMAP.md) and 196.1 (a comment-only CSS edit) — so a
+clean result here is expected, not a coincidence, and it is checked against
+Slice 194's own numbers rather than trusted on its own.
+
+- **`scan:dead-style -w apps/docs`** — **0 dead** of **1,428** live inline
+  declarations. Identical to Slice 194's figure; expected, since no inline
+  style or token value changed between the two sweeps.
+- **`report:css-repeats -w packages/core`** — **8 groups**, matching Slice
+  194's settled table exactly (**delta 0**).
+- **`report:prose -w apps/docs`** — **14 pages flagged** (9 by the global
+  2x-median threshold, 5 more by family median), the same set as Slice 194,
+  every one already carrying a verdict; no new page crossed a threshold.
+
+**Checked for consolidation opportunities from this session's own recent
+work**, per the standing instruction that a sweep should look at what just
+landed, not only run the three standard checks: 193.2's reopen-condition
+parser was run ad hoc and never committed as a script (`git show --stat` on
+`1c111d7` and `dd2f3a1` shows only `ROADMAP.md` and, for 196.1, the CSS
+comment — no new file). Nothing to extract.
+
+**Nothing to consolidate this round.** A clean sweep immediately after a prior
+clean sweep, with no CSS/token-touching work in between, is the expected
+outcome rather than a suspicious one — the base-rate check is that this
+detector HAS found nonzero drift before (Slice 194 itself records dead-style's
+first-ever run at "29 dead, 25 of them…", and `report:css-repeats` names
+groups that grew historically), so a `0`/delta-`0` reading here is not a dead
+instrument, it is this instrument correctly reporting a quiet interval.
+
 ## Slice 196 — Objective grill of Slices 190, 191, 192 (the artefact half): twelve measured claims reproduce, and the thirteenth was reasoned out beside them (2026-08-29)
 
 **Dispatcher rule 3, cloud wake.** `dispatch_status.py` read `Objective 3 / 3
