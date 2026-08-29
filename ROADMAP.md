@@ -231,6 +231,113 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 199 — the two things 193.2 left open: a denominator it could not reproduce, and a refused decision whose trigger had already fired (2026-08-29)
+
+**Dispatcher rule 4, cloud wake — and a Step 0c collision, resolved as that
+section prescribes.** This wake and the local dispatcher both took `193.2`. The
+local one pushed first (`1c111d7f`); **its close stands as the record and was
+not re-done.** `git fetch origin main` immediately before the first commit is
+what caught it, which is the working half of Step 0c doing its job.
+
+What survived the rebase is only what that close explicitly left unanswered — it
+named both gaps in its own words: the 558 denominator *"left unresolved rather
+than forced"*, and `104.4` among those *"left unchecked this wake for lack of
+the right corpus on hand rather than guessed at"*. Redundant coverage finding
+what one pass missed is the Slice 162 mechanism Step 0c cites as the reason both
+dispatchers keep running. Report:
+`.roundtable/reopen-conditions-2026-08-29.md`.
+
+1. [ ] **199.1 — `104.4` refused the patterns-index complexity filter on a
+       premise that stopped holding the same day, and nothing re-checked it for
+       7 days.**
+
+       The refusal (2026-08-22) rested on a measured claim:
+       *"`pattern-groups.mjs`'s six job-family groups **top out at 7 tiles**
+       (enter & find) and run as low as 1 (RF) — every group is already small
+       enough to scan without filtering."* Its own trigger: *"Revisit if the
+       pattern count grows past a size where a 6-7-tile group stops being
+       scannable."*
+
+       ```
+       node --input-type=module -e "import {PATTERN_GROUPS as G} from
+         './apps/docs/src/data/pattern-groups.mjs';
+         const s=G.map(g=>g.items.length);
+         console.log('max',Math.max(...s),'total',s.reduce((a,b)=>a+b,0));"
+       # max 11  total 39      (2026-08-29)
+       ```
+
+       | date | commit | max group | total tiles |
+       |---|---|---|---|
+       | 2026-08-22 | `7aec7830` — the day `104.4` was refused | 7 | 27 |
+       | 2026-08-22 | `bb8b9ab4` | **8** | 30 |
+       | 2026-08-23 | `8c171414` | 10 | 32 |
+       | 2026-08-25 | `bdc2680e` | **11** | 39 |
+
+       **Both halves of the premise are now false**: the largest group is 11,
+       not 7 — 57% past the number the refusal rested on — and the smallest is
+       4, not 1. Reconciled independently: `patterns.json`'s own `count` field
+       reads **39**, agreeing with the tile sum. `grep -rn '104\.4'` over
+       tracked sources returns **four** lines — the proposal twice, the roadmap
+       entry, the loop-log row — so **zero re-checks**.
+
+       *Accept* — properties, not a predicted verdict:
+       - A recorded verdict on whether an 11-tile group is still scannable,
+         measured against the index as it renders today rather than against the
+         2026-08-22 numbers. **Re-refusing is a satisfying outcome** — the
+         original reasoning (our workflow-stage groups already ARE the
+         organizing axis a filter would duplicate) is untouched by group size
+         and may still carry it on its own.
+       - Either way `104.4`'s premise sentence is corrected or superseded in
+         place, so the next reader does not inherit "top out at 7 tiles".
+       - If refused again, the trigger is restated as a **property with its
+         command** (this item's `node` one-liner), never as a bare number that
+         goes stale silently.
+       - **Browser-blocked in part**: if the verdict turns on scannability, it
+         needs rendered images at 1440px and 390px in both themes — the
+         `ENVIRONMENT.md` list a cloud wake CANNOT take. The tile counts above
+         are the other list and are already taken. A cloud wake may settle the
+         counts and must leave the scannability judgement open, saying so.
+
+2. [x] **199.2 — DONE 2026-08-29: 193.2's "558 does not reproduce" gap is
+       closed, with 193.2's own parser and no change of method.** Its close
+       recorded a steady gap of 3 and left it open, having tested `774558e`
+       (the commit that FILED the item) and HEAD. The tree it never tested is
+       the one immediately before the filing:
+
+       ```
+       for c in a9470314 774558e5 4b4993df; do
+         n=$(git show $c:ROADMAP.md         | grep -cE '^[0-9]+\.\s+\[[ x]\]\s+\*\*')
+         a=$(git show $c:ROADMAP-archive.md | grep -cE '^[0-9]+\.\s+\[[ x]\]\s+\*\*')
+         echo "$c  $n + $a = $((n+a))"
+       done
+       # a9470314  43 + 515 = 558   <- exact, split and all
+       # 774558e5  46 + 515 = 561
+       # 4b4993df  48 + 515 = 563
+       ```
+
+       **The gap of 3 was the three items the filing commit itself added.**
+       193.2 measured its corpus and then wrote itself into it, so no tree at or
+       after the filing can show the number it recorded.
+
+       **Why it looked unresolvable is a trap already on the books, and it cost
+       a real conclusion.** `a9470314` is **13 minutes before** the filing but
+       reads **8 hours after** it: the two dispatchers commit in different
+       offsets (`+0800` local, `+0000` cloud), which `LOOPS.md` §0c records as
+       164.2 (*"a row is ambiguous by eight hours on its face"*, 3 of 1013
+       adjacent pairs reading backwards). A candidate commit that looks later
+       than the thing it precedes gets skipped. **`git merge-base --is-ancestor`
+       answers it; the face value does not.**
+
+       Shipped with it, because 193.2's Accept asked for a command and the item
+       carried a comment sketch:
+       `scripts/loops/report_reopen_conditions.py` (`--rev`, `--self-test`). It
+       reconciles its parse against a raw marker count per file and **refuses to
+       report** on disagreement rather than printing a number it cannot defend —
+       the discipline that surfaces exactly this gap. **Not a gate and named by
+       no playbook step**, per 193.2's refusal; that cost is stated in the
+       script's own header rather than left implicit.
+
+
 ## Slice 198 — Objective grill of Slices 193, 196, 197: a clean control, re-derived rather than re-copied (2026-08-29)
 
 **Dispatcher rule 3, OVERDUE at 3/3**, window `[193, 196, 197]`. Index checked
