@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 07:52 UTC
+Generated at: 2026-08-29 08:31 UTC
 
 ## Open items by slice
 
@@ -18,10 +18,9 @@ Generated at: 2026-08-29 07:52 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1124 iterations logged)
+dispatch status — counter-triggered rules (1126 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-29 15:23   ok
-  Objective     3 / 3 slices          since 2026-08-29 06:48   OVERDUE  [190, 191, 192]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-29 16:31   ok
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -35,8 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 14:41 · Meta · refusal · a gate for either finding — A's discipline is a writing rule with no mechanical form, B is the existing red-proof rule succeeding three times · refused · 6a426d6
-- 2026-08-29 06:48 · Objective · grill · 193 Objective grill of 186/189/190/191 — 167.1's reopen condition fired and was never read; rule 3 at 3-of-4 grill-armed · logged · 774558e5
 - 2026-08-29 06:48 · Meta · refusal · a reopen-condition register gate or report — the trigger is semantic for most of the 42, and a register nobody can adjudicate is 94.11's ceremony · refused · 774558e5
 - 2026-08-29 15:00 · Continue · build · 190.1 — the 18ch cap and 3.5rem reserve were both fits to one demo string; cap now min(48ch,100cqi) and reserve calc(6lh + space-4), so a 250-char message shows 6-7 lines fully visible at all three densities and both widths with the row height unchanged · landed · d61c6dc
 - 2026-08-29 15:08 · Standardize · tidy · Standardize sweep — three lanes clean; extracted patternGroups() so both generators share one walk, byte-identical output, duplicate blocks WIN=6 2->0; the signal was 187's own fix lengthening the duplicated run · landed · b02c3ce
@@ -45,6 +42,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 07:42 · Meta · refusal · a gate for the placement rule (a writing rule has no mechanical form) and a new ## section (193.1 has the fold question open) · refused · c75d721e
 - 2026-08-29 15:51 · Roadmap · triage · 192.1 closed by verification — a cloud wake had already written the placement rule into CLAUDE.md citing the item; its pinned 138 re-run and agrees, so nothing was written twice · logged · b00d3c5
 - 2026-08-29 15:52 · Meta · correction · correcting the row above: 192.1 was ALREADY [x] when this wake reached it, closed by a cloud wake — the previous row's 'closed by verification' overstates. What this wake actually did is re-run the passage's pinned command (find apps/docs/dist -name index.html | wc -l = 138) and confirm it. No ROADMAP edit was made; the commit was correctly empty · logged · fb418cb
+- 2026-08-29 16:31 · Objective · grill · Objective grill of 190/191/192 — index check cut the scope to 192 alone (a grill re-arms rule 3 with its own output); 192 quoted '1 of 138' unverified, the pattern it was documenting, and 138 is correct which licenses rather than corrects the habit · logged · ac40cf6
+- 2026-08-29 16:31 · Meta · refusal · a rule change so rule 3 skips already-grilled slices — the overlap costs one index read and a rule that re-offers material is safer than one that can skip it, the same trade 176.3 settled · refused · ac40cf6
 
 ## Sunset test
 
