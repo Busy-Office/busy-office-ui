@@ -510,8 +510,12 @@ checkable *shape*; whether a trigger has fired is semantic for most of the 42
 ("re-open only if a real screen needs it"), and a register listing 42 rows
 nobody can adjudicate is 94.11's ceremony with extra steps.
 
-1. [ ] **193.1 — execute 167.1's reopen condition on `CLAUDE.md`. It fired
-       6h49m after it was written and has never been read.**
+1. [x] **193.1 — DONE 2026-08-29 (cloud wake): 167.1's reopen condition on
+       `CLAUDE.md` was executed. Outcome — FOLD NOTHING, and the watch RETIRES
+       rather than re-arms: its premise is a navigation concern, and
+       `CLAUDE.md` is never navigated. Decision block below.**
+       *(As filed: execute 167.1's reopen condition on `CLAUDE.md`. It fired
+       6h49m after it was written and has never been read.)*
 
        167.1 recorded a watch, not a finding: *"7 of its 16 `##` sections —
        1,893 of 4,600 section words, 41% — are all on one subject, whether a
@@ -556,6 +560,115 @@ nobody can adjudicate is 94.11's ceremony with extra steps.
          commits, so this would be its first.
        - No gate is proposed and none should be: "eight sections on one subject"
          is a judgement about what prose MEANS, which is 94.11's line.
+
+       ---
+
+       **DECISION (193.1, executed 2026-08-29, cloud wake). Fold nothing; and
+       retire 167.1's watch instead of re-arming it.** Every figure below was
+       re-run this wake against the artefacts; each carries its command, because
+       the premise is itself a prior wake's measurement.
+
+       **(1) The premise reproduces exactly, and one of its figures has already
+       gone stale.** `seven = 1893` at `e3844c49` reproduces to the word, which
+       is what makes the seven identifiable at all:
+
+       ```
+       # split CLAUDE.md on ^## at a revision; body words by Python str.split()
+       # (ENVIRONMENT.md trap 7 — bare `wc -w` swallows this repo's em dashes)
+       python3 - <<'PY'
+       import subprocess,sys
+       rev=sys.argv[1] if len(sys.argv)>1 else 'HEAD'
+       txt=subprocess.run(['git','show',f'{rev}:CLAUDE.md'],capture_output=True,text=True,check=True).stdout
+       secs=[];cur=None
+       for ln in txt.split('\n'):
+           if ln.startswith('## '): cur={'h':ln[3:].strip(),'w':0}; secs.append(cur)
+           elif cur is not None: cur['w']+=len(ln.split())
+       print(rev,len(secs),'sections',sum(s['w'] for s in secs),'body words')
+       for i,s in enumerate(secs,1): print(f'  {i:2d} {s["w"]:5d}  {s["h"]}')
+       PY
+       #   e3844c49  16 sections · 4,570 body words · the seven (§§6,7,9,10,11,13,15) = 1893
+       #   0131ebc5  17 sections · 4,860 · the eighth is "A green red-proof …" (290 w), a new ##
+       #   a7c65f7c  17 sections · 5,248 · the eight = 2,385
+       ```
+
+       2,385 of 5,248 is **45.4%**, not the **43%** this item recorded. Both are
+       right at their own tip: §10 grew 306 → 508 and §13 386 → 572 after 193.1
+       was written. Re-measured rather than copied, which is why the drift is
+       visible at all.
+
+       **(2) `grep -rn 'without folding'` returns FIVE lines now, not one.**
+       167.1's own (`ROADMAP-archive.md:20625`), this item's restatement and its
+       recorded command (`ROADMAP.md:519`, `:527`), and two in Slice 195's grill
+       report. The watch *has* been read since — by the grill that filed this
+       item. The "exactly ONE line" figure was true when written; the property it
+       stood for (nothing outside 167.1's own text ACTS on it) held until this
+       wake and is what this decision discharges.
+
+       **(3) All eight prescribe an action a wake takes. None is pure
+       provenance** — which is the per-section answer the Accept asks for, and it
+       is why nothing folds:
+
+       | § at `a7c65f7c` | the action it adds that no sibling carries |
+       |---|---|
+       | 6 Red-proving a gate | confirm the injection landed before believing a green gate |
+       | 7 A green red-proof is a defect | **count the matches before replacing** (two copies is common), and prefer a loud assertion over a silent replace — neither is in §6 |
+       | 8 An instrument's first output | run the adversarial check *before* the number is used |
+       | 10 A number you report | apply that treatment to a claim bound for a summary; **name the instrument for every other claim the change carries** |
+       | 11 A heuristic gate | declare `@heuristic`/`@exact` and ship `--self-test` — the only one of the eight with a gate (`check:selftests`) behind it |
+       | 12 Measure a predicate's base rate | measure the base rate *first*; choose the shape or say you kept it in a rubric |
+       | 14 A gate that only runs in CI | verify in the narrowest context that must run it; fail loudly rather than skip |
+       | 16 Verifying a removal | assert on the parsed/structural form, never a raw substring |
+
+       **(4) The pointer question, answered by reading rather than asserted —
+       and 167.1's observation reproduces.** Of the 56 ordered pairs, **7 carry a
+       pointer, and 6 of the 7 land on §6**: 7→6 (quotes its title, L200), 7→8
+       (quotes its bullet verbatim, unattributed, L220), 7→11 (L226), 8→6 (by
+       concept, L271), 10→6 (L360), 11→6 (quotes its question, L383), 12→6
+       (L427). **Three of the eight — §6, §14, §16 — point at nothing.**
+
+       **(5) Why that answer does not license a fold, and retires the watch.**
+       167.1's wording is *"a wake reading one gets no pointer to the other
+       six"* — a **traversal** concern, and a correct one for `ROADMAP.md` and
+       `ROADMAP-archive.md`, the files it was written beside, which a wake walks.
+       `CLAUDE.md` is not walked: it is delivered **whole** in every wake's
+       instructions. Measured on this wake by reading its own delivered
+       instructions — **17 of 17 `##` headings present, in file order**, 5,450
+       words. A wake never reads one section of this file, so the traversal the
+       watch describes does not occur. n = 1 (this session) and the mechanism is
+       outside the repo, so it is stated as an observation about delivery, not a
+       repo invariant; the file is small enough that truncation is not near.
+
+       **(6) The one real duplication, measured and REFUSED.** §8 and §10 share
+       **7 of 7** probed worked examples — 5 verbatim (`class="demo"`,
+       `bo-app-shell__main`, "byte offset on all 18 pages", `bo-data-table`, "is
+       this signal present in things I am not counting?") and 2 near-verbatim
+       ("the *docs* shell's own menu button" vs "the shell's own menu button";
+       "16-of-16 pages flagged" vs "16 of 16 pattern pages") — and point at each
+       other **zero** times. Refused anyway: **re-narration in a different
+       grammar is this repo's recorded WORKING mechanism, not waste.** §7 exists
+       for precisely that reason and says so in its own opening; `LOOPS.md` has
+       twice refused turning a paragraph into a pointer on the ground that a
+       pointer is read less than a paragraph. Folding here trades a mechanism
+       with evidence for one with recorded counter-evidence. The 2-of-7
+       near-misses are also the probe's own defect surfacing — an exact-substring
+       needle undercounted the shared examples 5/7 before the wording was
+       checked.
+
+       **(7) The weakest member, recorded and not acted on.** §14's subject is
+       *where a gate runs*, not whether a detector can fail; it joins the group
+       only via its "fail loudly, never skip quietly" bullet. So 167.1's grouping
+       is looser than its own wording. Restructuring on that would be the
+       manufactured merge this Accept forbids.
+
+       **(8) Ratchet reading, recorded so the next wake compares rather than
+       re-derives:** `python3 scripts/loops/report_loop_prose.py` →
+       `CLAUDE.md  29 up  never cut` (**28** when 193.1 was written; 191.1
+       predicted 27→28 and it has since moved again). Nothing folds this wake, so
+       the Accept's conditional ratchet criterion is not engaged — stated rather
+       than reported as satisfied.
+
+       **(9) No gate.** Per the Accept, and per 94.11: "eight sections on one
+       subject" is a judgement about what prose MEANS.
 
 2. [ ] **193.2 — 42 reopen conditions live in item BODIES, where nothing
        re-reads them, and 186's "1 of 275" could not have seen any of them.**
