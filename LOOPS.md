@@ -494,10 +494,16 @@ match to its full playbook below:
      1065 rows (0.94%)** over five wake-dates, and ROADMAP records rule 4
      finding nothing dispatchable exactly once.
 
-   **§3b's Exit is a separate, still-open problem — see roadmap 176.3.** "Every
-   surface dry or budget-spent" has never been true of anything, so Polish has
-   no exit and rule 7 has never been dispatched (**0** `Research` rows in 1065).
-   That is an OWNER CALL; do not resolve it by editing this rule.
+   **§3b's Exit has never been satisfiable, and the owner CLOSED that as
+   no-change (2026-08-29, roadmap 176.3).** "Every surface dry or budget-spent"
+   has never been true of anything, so Polish has no exit and rule 7 has never
+   been dispatched (**0** `Research` rows). **That is accepted, not a defect** —
+   the owner had already chosen to keep the routine running hourly while the
+   backlog is owner-blocked, and the halt's real job (telling the owner what is
+   blocked) is done by `RESUME.md`'s Direction block instead. **Do not re-raise
+   it and do not "fix" rule 6 by narrowing it**: that was proposed and refused,
+   because the redundant-looking second rounds are 2-of-3 for finding real
+   defects and narrowing the rule would delete the lane that caught them.
 
    **Run `python3 scripts/loops/polish_requeue.py --apply` BEFORE evaluating
    this rule.** The ledger has always said a surface re-enters "only when its
@@ -525,8 +531,14 @@ match to its full playbook below:
    other loop", was tried and the instrument is too weak to support it: grepping
    each report's topic out of its filename finds rows for only **2 of 6**, which
    says the needle misses rows that name a slice instead of a topic, not that
-   four reports went unrecorded. Open as roadmap **176.3** (OWNER CALL) — do not
-   fix it by rewording this rule.
+   four reports went unrecorded.
+
+   **Two things were bundled here; only one is closed.** That this rule never
+   FIRES is roadmap **176.3**, **closed as no-change by the owner 2026-08-29** —
+   accepted, not a defect, and not to be re-raised. That six `research-*.md`
+   reports exist while **zero** rows carry this loop's name is a **separate,
+   still-unexplained logging gap**, and closing 176.3 does not answer it. Do not
+   fix either by rewording this rule.
 
 8. **Nothing above matched** → **say why, ONCE, and stop the loop.**
 
@@ -832,7 +844,8 @@ with a genuine user-facing defect the six dimensions structurally cannot
 see. **A dead trigger on another loop is not that trigger** (see Optimize).
 
 **Exit:** every surface dry or budget-spent → hands to Research (rule 7).
-**⚠ This has never been true, and is an OWNER CALL — roadmap 176.3.** Measured
+**⚠ This has never been true. CLOSED as no-change by the owner, 2026-08-29 —
+roadmap 176.3; accepted, not a defect. Do not re-raise.** Measured
 across all 11 revisions of `.roundtable/polish-state.md`: `budget_spent = 0`
 and `marked_dry = 0` in **11 of 11**, so both halves of the disjunction have
 always been false and Polish has no exit. The log agrees — **0** `Research`

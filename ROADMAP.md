@@ -2205,10 +2205,47 @@ verification.
        **Not resolved here, and deliberately: the contradiction is benign, but
        §3b's Exit is not.** See 176.3.
 
-3. [ ] **176.3 — OWNER CALL. §3b's Exit condition has never been satisfiable,
-       so rule 7 is unreachable and rule 8 cannot be reached either.** Found by
-       176.2's measurement and split out rather than decided, because it changes
-       what the dispatcher does.
+3. [x] **176.3 — OWNER CALL. §3b's Exit condition has never been satisfiable,
+       so rule 7 is unreachable and rule 8 cannot be reached either.**
+       **CLOSED 2026-08-29 — no change. The owner challenged whether the item
+       was needed at all ("does it sound logical? do we really need it?") and
+       the measurement says it is not.** Three reasons, in the order that
+       matters:
+
+       - **Its premise contradicts a decision the owner had already made.** The
+         item treats an unreachable halt as a defect. But on 2026-08-28 the
+         owner was asked directly whether to pause the hourly routine while the
+         direction is blocked and chose **keep it running hourly**; `RESUME.md`
+         records that as *"an accepted state, not a fault"*. A loop that cannot
+         halt is doing what was asked.
+       - **The claimed cost does not exist.** Rule 6 has produced **12 Polish
+         rounds in 1092 iterations (1.1%)**. And the rounds this item's framing
+         called redundant — second rounds on surfaces already at `3/3` — went
+         **2 of 3 finding real defects**: 176.1's round-1 score had never been
+         written to `dsa-scores.json` at all, and `skeleton · colour` cited a
+         token pairing deleted three days earlier and published verbatim on
+         `/components/state-patterns`. The always-true predicate is not
+         manufacturing busywork; it is the only thing re-reading finished work.
+       - **Halt's actual job is already done by something that works.** The
+         function rule 8 was meant to serve — tell the owner what is blocked —
+         is served by `RESUME.md`'s Direction block (168.1), which is how the
+         owner received the six-item blocking set on 2026-08-29. Rules 7 and 8
+         are dead code that nothing depends on.
+
+       **The assistant's own recommendation was wrong and is retracted.** It
+       proposed narrowing rule 6 to fire only for re-queued surfaces or known
+       weaknesses. That would have **deleted the lane that caught both
+       defects** above, to solve a problem the owner does not have. Recorded
+       because the reasoning was plausible and still wrong: *"rounds remaining
+       is not work remaining"* sounds like a tightening, and measurement showed
+       the loose predicate was earning its keep.
+
+       **Not to be re-raised.** The three options below were weighed and all
+       three are now moot; re-open only if the owner asks the loop to halt when
+       the backlog is owner-blocked, which is the decision that would change
+       the premise.
+
+       *(original finding, kept — the mechanism description is still accurate)*
 
        §3b's Exit reads *"every surface dry or budget-spent → hands to Research
        (rule 7)"*. 176.2 measured that across **11 of 11** revisions of
