@@ -386,6 +386,55 @@ wake then writes that verdict into the plan as current.
        *Accept*: rule 5's text and §4's Trigger **agree on the set of conditions that
        dispatch Optimize**, verified by reading both in the same pass; and the
        disagreement is stated where it is fixed rather than silently patched over.
+## Slice 185 — `create-ui`'s E404 is not "the owner hasn't published it yet" (2026-08-29)
+
+**Owner asked "what to do?" about the standing E404. Measured, and the premise
+in every handover since 164.3 is incomplete.** `RESUME.md`'s Direction block has
+said for eight wakes that the remaining step is *"`npm publish -w
+@busy-office/create-ui` — owner-only"*, as though the only missing thing were
+someone running it.
+
+**The release automation does not publish `create-ui` at all.**
+`.github/workflows/publish.yml` is 56 lines and its final step reads:
+
+```yaml
+      - name: Publish to npm (OIDC, with provenance)
+        run: npm publish -w @busy-office/ui        # <- core only, no create-ui
+```
+
+So publishing a GitHub Release — the documented, owner-triggered path — ships
+core and silently skips the scaffolder. Nobody was withholding a command; the
+command was never wired.
+
+**The package itself is ready**, which is why this went unnoticed:
+`npm run check -w @busy-office/create-ui` passes ("3 derived artefact(s) match
+their sources, pin `^0.5.0`"), and `publishConfig.access` is `public`, so it
+would not hit the scoped-package restricted default.
+
+**Two things must be decided before it can be wired**, both owner calls:
+
+1. **The version-match gate is single-package by construction.** The workflow
+   asserts the release tag equals `packages/core/package.json`'s version. Core
+   is **0.5.0**; create-ui is **0.1.0**. One tag cannot assert both, so adding
+   a second publish step to this workflow means choosing: publish create-ui
+   from the same release with its own version and no tag assertion; give it a
+   separate `create-ui-v*` trigger with its own gate; or move the two to
+   lockstep versions. Silently dropping the assertion for one package would
+   remove the only thing stopping a mistagged release.
+2. **Trusted Publishing is configured PER PACKAGE on npmjs.com**, under that
+   package's settings — and `@busy-office/create-ui` has no package page,
+   because it has never been published. **This needs confirming on npmjs.com
+   rather than assumed here**, but the likely consequence is a chicken-and-egg:
+   the first publish cannot use OIDC and must be done manually (token or 2FA),
+   after which the Trusted Publisher can be set and CI takes over. If so, the
+   first release genuinely is a hand operation and the workflow change only
+   covers releases *after* it.
+
+*Accept*: either the workflow publishes both packages on a release with the
+version question answered explicitly in its comments, or a recorded decision
+that create-ui ships on its own trigger — plus `RESUME.md`'s Direction block
+corrected, since its "remaining step" has been wrong for eight wakes. **Finding
+this false is the satisfying outcome**; the direction was never one command away.
 
 ## Slice 183 — the visual backlog that waited eight wakes, cleared (2026-08-29)
 
@@ -2457,10 +2506,31 @@ silently refreshed.
        and survives a wake, which is now visible because `LOOPS.md` says where
        the check reports.
 
-4. [ ] **175.4 — OWNER CALL. Step 0c's own reopen condition fired, so "accept
-       collisions" is due a re-decision.** The finding is recorded and the false
-       half is already corrected in `LOOPS.md`; what is open is the decision,
-       which has been the owner's in every slice so far.
+4. [x] **175.4 — OWNER CALL. Step 0c's own reopen condition fired, so "accept
+       collisions" is due a re-decision.** **DECIDED by the owner 2026-08-29:
+       "ok" — accept collisions STANDS.** No change to Step 0c's policy; the
+       `git fetch origin main` before the first commit remains the working half
+       and stays mandatory.
+
+       **Confirmed by use on the same day the decision was made.** Two further
+       collisions occurred in the 2026-08-29 local session, and the accepted
+       design handled both: the first rebased with conflicts in `loop-log.md`
+       and `STATUS.md` (resolved by keeping both sides and regenerating the
+       mirrors), the second surfaced a **slice-number collision** — the cloud
+       had already taken 176, and 177/178 as well — which `check:slice-refs`'
+       uniqueness assertion (added by 172.1) caught rather than letting `main`
+       go red. The loser renumbered to the next free number, 181. That is the
+       policy working as specified: collisions are noisy and visible, not
+       silent.
+
+       **Filed for the next re-decision, not raised now**: picking the next
+       slice number by reading `max(## Slice N) + 1` collides whenever two
+       wakes are open at once, and it did so twice in one session. A wake
+       should compute it *after* the mandated fetch, which this one eventually
+       did. Left as an observation because the owner has just accepted the
+       collision policy, and this is a cost that policy knowingly buys.
+
+       *(original finding, kept)*
 
        Step 0c accepts collisions on this argument: *"the loser's rebase
        conflicts, so it cannot land silently on top of work it never read"* —
@@ -2622,7 +2692,34 @@ add/remove lines — requires alignment"* (with a screenshot).
          with cell errors"*, which is persistent and can hit several rows at
          once.
 
-       **Two candidates remain, both keeping the row at 53px** — owner to pick:
+       **OWNER PICKED (b), 2026-08-29.** The message floats on FOCUS only. What
+       this commits the pattern to, stated before building so the cost is not
+       discovered later:
+
+       - **The row keeps its 53px** — the message never contributes to row
+         height, which is the principle this item exists to satisfy.
+       - **The fact is carried WITHOUT focus, on two channels already shipping**:
+         the row tint plus its 3px inset leading edge (157.2 settled that the
+         edge means "this row is in a state"). A sighted user scanning sees
+         WHICH cell is wrong.
+       - **The reason needs focus.** `aria-describedby` already carries it to a
+         screen reader continuously; the visible message appears in the field
+         you click into to fix. This is the accepted cost, restated from the
+         option text rather than softened.
+       - **The States contract changes.** The documented row currently reads
+         "the message inside that cell's form field"; it becomes "on focus".
+         `check:claims` has a case for this pattern's runtime behaviour, so the
+         claim must move with the implementation or the gate is asserting the
+         old contract.
+
+       *Accept*: with an error present and nothing focused, the row measures the
+       same height as with no error (the 53px/75px gap closes to zero) **and**
+       the erroring cell is still identifiable — assert the tint/edge, not the
+       message. On focus, the message is visible and reachable. Red-prove by
+       reverting to the flow-message and confirming the height assertion fails.
+
+       **Two candidates remained, both keeping the row at 53px** — owner picked
+       (b):
        - **(a) Row-level error row** — a `<tr>` beneath the data row. Shows
          every reason at once without interaction, scales to several errors per
          line, no occlusion. Costs a row.
