@@ -90,10 +90,18 @@ python3 scripts/loops/dispatch_status.py
 
 One line per counter-triggered rule: how far it has accumulated toward its
 threshold, and how long since it last fired. **Run it before Step 2**, because
-the two rules it covers are the two that have starved — a counter below an
+the rules it covers are the ones that have starved — a counter below an
 always-true condition is dead, and the failure is silent: nothing breaks, a loop
 simply never runs. Three rules starved that way and each was found by hand, the
 last after ten slices (roadmap 41.1).
+
+**It now covers rule 5 as well, and rule 5 is not a counter** (roadmap 184.1).
+It reads a different file — `loop-metrics.jsonl` — so it cannot be overdue, only
+STALE: the line reports how many wake-dates of loop activity are newer than the
+newest metric pair rule 5 could compare. That is a **fourth** instance of the
+same silent failure, found the same way as the others — by hand, after ten days
+— and it is the one this instrument was blind to while existing to catch exactly
+it. Rule 5's own text carries what to do when the line says STALE.
 
 Not a gate, deliberately. A stale counter is information for whoever is
 dispatching; failing a build over it would block the very work the loop exists
@@ -424,8 +432,30 @@ match to its full playbook below:
    oldest — but check whether it is actually current before trusting it; it
    has gone stale before.
 5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
-   coverage, a number from `record_metric.py` trending the wrong way)? →
-   dispatch **Optimize**.
+   coverage, a number from `record_metric.py` trending the wrong way), **or a
+   size budget breached outright**? → dispatch **Optimize**.
+
+   **The second clause was missing here for six days, and it is the one added to
+   revive this rule** (roadmap 184.2). §4 Optimize's Trigger has carried it since
+   2026-08-23, added because the trend-only trigger was "effectively dead" —
+   Optimize fired 3 times in 740 iterations. Step 2 is the text a dispatcher
+   actually evaluates, and it kept only the dead half. Same shape as
+   `check:resume-charter` being hardened and demoted 44 minutes apart with
+   neither document naming the other: the fix landed in the playbook and never
+   reached the rule. **Restated rather than silently patched**, so the next wake
+   can see that the rule changed and why.
+
+   **Read `dispatch_status.py`'s rule-5 line before answering this rule at all**
+   (roadmap 184.1). It reports how many wake-dates of loop activity are newer
+   than the newest metric pair rule 5 could compare. On 2026-08-29 that read
+   **10**, and had read stale on every one of the previous ten wake-dates: 96 of
+   99 samples predate 2026-08-20, and the 3 recorded since are each a name
+   sampled once, which can never be "two consecutive runs". Wakes went on
+   answering this rule from 2026-08-18 readings, and one of those answers —
+   `ci-wall-time` "flat at 275s" — was published into ROADMAP as current
+   evidence. **If the line says STALE, this rule has no input: say it could not
+   be evaluated rather than reporting it clear.** A rule answered from a dead
+   instrument reports "nothing to do" exactly as convincingly as a healthy one.
 
    Two, not one, and the wording is deliberate. CI wall time was declared
    regressed on a single 290s reading against a 288s budget, an Optimize item

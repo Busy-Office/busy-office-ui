@@ -290,8 +290,65 @@ on `main` at `ad77cc17` this wake — and no shipped artefact is wrong. What is 
 is that a dispatcher rule returns a verdict computed from ten-day-old data, and a
 wake then writes that verdict into the plan as current.
 
-1. [ ] **184.1 — `dispatch_status.py` reports rule 5's input, so a wake cannot quote
-       a stale metric without seeing that it is stale.** The process half — "record a
+1. [x] **184.1 — DONE 2026-08-29. `dispatch_status.py` reports rule 5's input, so a
+       wake cannot quote a stale metric without seeing that it is stale.**
+
+       ```
+       Optimize     10 wake-date(s) newer   since 2026-08-19 23:09   STALE
+                    [newest pair: framework_classes; 99 sample(s), 12 of 30 sampled twice]
+       -> rule 5's newest comparable pair predates 10 wake-date(s) of loop activity…
+       ```
+
+       **Red-proved by injection — all five branches exercised, each injection
+       confirmed to have landed before the script was run** (the file listed as
+       absent, the line counted, the appended row grepped), never by reading the
+       diff, with the file restored and checked against `git status` afterwards:
+       appending a second `ci-wall-time` sample dated on the newest log wake-date
+       flipped the line to `0 wake-date(s) newer … ok`; a non-JSON line and a
+       valid-JSON line missing the keys both made it **refuse to print a verdict**
+       and exit **1**, honouring the contract its own header already stated; the
+       file removed reads `NO INPUT`; a file of two singleton names reads
+       `2 sample(s) over 2 name(s), none sampled twice — NO LIVE INPUT`, which is
+       the branch that matters most, since three such samples are exactly what the
+       last ten days actually contain and "3 recent samples" is not the
+       reassurance it looks like.
+       Reconciliation is against the raw non-empty line count of the file itself,
+       not against anything the caller passed — the self-consistency trap CLAUDE.md
+       names. Independently cross-checked by `rebuild_from_log.py`, which reads the
+       same file through different code and reports **99 metrics**.
+
+       **Base rate, measured before shipping** and replayed over all 17 wake-dates
+       in the log with as-of-date semantics (only samples that existed on the day):
+       **live on 6, stale on 11, and stale on every one of the last 10.** The
+       predicate reads both ways, so it is not one already true of everything — the
+       failure mode this repo has hit repeatedly. The command is in the script,
+       beside the threshold it justifies.
+
+       **One design point was found by checking rather than reasoning.** The
+       comparison is by DATE, not timestamp, because the two dispatchers write naive
+       stamps at different offsets: this wake recorded at `00:37` while the log's
+       newest row, written by the other dispatcher, reads `08:21` **the same day**.
+       A timestamp comparison would have reported STALE on a wake that had just
+       recorded a metric. Noted in the code next to the comparison.
+
+       **Declared `@exact`** with the reason stated: the verdict rests on equality
+       and comparison of dates, names and counts, with no recognition step to fool.
+       `check:selftests` does not reach `scripts/loops`, so the rule is honoured by
+       hand here, as this file's `slice_of` heuristic already does with its own
+       `--self-test` (14 cases, still passing).
+
+       **What this does NOT do, said plainly: it does not make anyone record a
+       metric.** It makes the omission visible at the one moment every wake looks.
+       One metric was recorded this wake — `axe-violations 0 pages`, genuinely
+       measured live (`test:axe`, 127 pages × 2 widths, zero violations) — which
+       flipped the line to `ok` on real data rather than on an injection. **That is
+       one sample on one wake, not a restored criterion**; if the next wake records
+       nothing, the line reads stale again, which is the entire design. Refused:
+       recording `check:claims`' 141 under the existing `claims` name, whose earlier
+       samples (65 → 82) measured something else — the same discipline the log
+       records twice for removing a `ci-wall-time` reading taken from a FAILED run.
+
+       Original text: The process half — "record a
        metric every wake" — is what 28.1 already tried, and it is a process rule with
        nothing mechanical behind it; it lasted one day. This is the mechanical half,
        and it goes in the instrument Step 0b already runs every wake rather than in a
@@ -310,8 +367,14 @@ wake then writes that verdict into the plan as current.
        before shipping**, replayed over every wake-date in the log with as-of-date
        semantics, so it is known to be a predicate that can read both ways rather than
        one already true of everything. It declares its signal per the self-test rule.
-2. [ ] **184.2 — the dispatcher's rule 5 and the Optimize playbook state different
-       triggers, and the difference is the one added to revive the rule.** §4's
+2. [x] **184.2 — DONE 2026-08-29. Rule 5 now carries the budget-breach clause §4 has
+       had since 2026-08-23, restated where it was fixed rather than silently
+       patched**, and rule 5 additionally tells a wake to read the new line first and
+       to say the rule *could not be evaluated* when it reads STALE — because a rule
+       answered from a dead instrument reports "nothing to do" exactly as
+       convincingly as a healthy one. `LOOPS.md` Step 0b was corrected in the same
+       pass: it claimed the script covers "the two rules", which the same commit made
+       false. Original text: §4's
        Trigger reads "on demand, or when a tracked metric regresses on two consecutive
        runs, **or when a size budget is breached outright**", with the third clause
        dated 2026-08-23 and justified by Optimize having fired 3 times in 740

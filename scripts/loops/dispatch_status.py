@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Report how overdue each COUNTER-triggered dispatcher rule is.
+"""Report how overdue each COUNTER-triggered dispatcher rule is, and whether
+rule 5's input is fresh enough to be worth evaluating at all.
 
 Why this exists (roadmap 41.1). Three dispatcher rules have starved because a
 rule that is *always true* — "build item queued" — sat above a rule that fires
@@ -17,14 +18,21 @@ wrong lever entirely (it would block the very work the loop exists to do).
 
     python3 scripts/loops/dispatch_status.py
 
+Rule 5 is not a counter — it reads `loop-metrics.jsonl`, not the log — so it is
+reported separately and cannot be "overdue", only STALE. It is here because Step
+0b is the one moment every wake looks at dispatcher inputs, and because rule 5
+starved the same silent way with nobody watching: see the block above
+`metric_samples` for what that cost and how the threshold was chosen.
+
 The output is the product. Exit status is 0 on a clean read and NON-ZERO on a
 parse failure — a counter that cannot see its own input must say so rather than
 print a number, which is the whole reason this file exists.
 """
+import json
 import re
 import sys
 
-from _common import LOG
+from _common import LOG, METRICS
 
 ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) · (.*)$")
 # `[\w-]`, not `\w`, and the hyphen is not hypothetical: NINE rows carry a
@@ -304,6 +312,142 @@ def report(all_rows, loop, threshold, unit):
     return overdue
 
 
+# ---------------------------------------------------------------------------
+# RULE 5's input (roadmap 184.1). The two counters above read `loop-log.md`;
+# rule 5 reads `loop-metrics.jsonl`, and until 2026-08-29 NOTHING read it.
+#
+# What that cost, measured rather than argued. 96 of 99 metric samples predate
+# 2026-08-20; 652 iterations were logged after it against 3 samples, and each of
+# those three is a metric name recorded exactly once, so not one can satisfy
+# rule 5's "two consecutive runs". Every wake in that window still evaluated
+# rule 5 and reported it clear — from readings taken on 2026-08-18. Slice 183's
+# dispatch record published one: `ci-wall-time` "flat at 275s", whose 26 samples
+# all fall inside a single 17-hour window that day.
+#
+# It is the same starvation shape this file's header describes, one rule further
+# down, and it had already been found once: Slice 28.1 closed on 2026-08-18 with
+# the Accept criterion "`ci-wall-time` recorded every wake", against the finding
+# that the rule was "structurally blind to the one number that bounds every
+# future gate". THE FIX HELD FOR ONE DAY. A criterion satisfied by a burst and
+# never again is invisible to everything here, because nothing re-asks it.
+#
+# So the threshold below is NOT invented here — it is 28.1's own adopted
+# criterion, read as a property: if a whole wake-date of loop activity is newer
+# than the newest pair rule 5 could compare, that pair did not come from this
+# tree. Deliberately measured against the LOG's wake-dates and not `now()`:
+# roadmap 164.2 settled that the log's stamps are the record, and this
+# container's clock has run backwards once.
+#
+# DATE granularity, not timestamp, and that is load-bearing rather than lazy —
+# checked live on 2026-08-29 rather than reasoned about. Both dispatchers write
+# naive local stamps into these files at two different offsets (164.2 measured
+# 974 rows at +0800 against 40 at +0000, and refused to add `%z`), so a metric
+# recorded by the cloud wake at `00:37` sits BEFORE a log row the other
+# dispatcher wrote at `08:21` **on the same day**. Comparing timestamps would
+# read a sample taken minutes ago as older than the log and report STALE on a
+# wake that had just recorded one. Comparing dates is immune to the whole
+# eight-hour ambiguity, and a wake-date is also the unit 28.1's criterion is
+# written in.
+#
+# BASE RATE, measured before shipping, because a predicate already true (or
+# already false) of everything cannot fail and would look exactly like this one:
+# replayed over all 17 wake-dates in the log with as-of-date semantics — only
+# samples that existed on the day — it reads live on 6 and stale on 11, and
+# stale on every one of the last 10. It discriminates; it is not ceremony.
+#
+#   python3 - <<'PY'   # re-run; the figures are snapshots
+#   import json, re, collections
+#   ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ")
+#   dates = sorted({ROW.match(l).group(1)[:10]
+#                   for l in open('.roundtable/loop-log.md') if ROW.match(l)})
+#   mets = [json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()]
+#   live = 0
+#   for d in dates:
+#       asof = [m for m in mets if m['ts'][:10] <= d]
+#       c = collections.Counter(m['name'] for m in asof)
+#       live += any(c[m['name']] >= 2 for m in asof if m['ts'][:10] == d)
+#   print(live, 'of', len(dates))          # 6 of 17 (2026-08-29)
+#   PY
+#
+# @exact — the verdict rests on equality and comparison of timestamps, names and
+# counts, with no recognition step: a sample either carries a date newer than
+# another or it does not. Nothing here can be fooled by a shape it has not seen,
+# which is the property `--self-test` exists to check, so it is exempt per the
+# heuristic/exact rule rather than wrapped in ceremony. `slice_of` above is the
+# heuristic in this file and carries the self-test.
+
+
+def metric_samples():
+    """Every recorded metric sample, reconciled against the raw file.
+
+    Counting the raw thing in the source and refusing to write when fewer parse
+    is CLAUDE.md's mirror doctrine, and it is applied to the SOURCE rather than
+    to anything a caller passed in — a reconciliation that cannot see past its
+    own argument is self-consistent by construction and can never fail.
+    """
+    try:
+        with open(METRICS, encoding="utf-8") as fh:
+            raw = [ln for ln in fh if ln.strip()]
+    except FileNotFoundError:
+        return None
+    out = []
+    for ln in raw:
+        try:
+            row = json.loads(ln)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict) and "ts" in row and "name" in row:
+            out.append(row)
+    if len(out) != len(raw):
+        raise SystemExit(
+            f"dispatch_status: {len(raw)} non-empty line(s) in {METRICS} but only "
+            f"{len(out)} parsed as samples. Rule 5 reads this file and nothing else "
+            f"does, so an unparsed line makes its input look older or younger than "
+            f"it is — silently. Fix the parse; do not print a number."
+        )
+    return out
+
+
+def report_metrics(all_rows):
+    """Rule 5's input: how stale is the newest pair it could actually compare?"""
+    samples = metric_samples()
+    if samples is None:
+        print(f"  Optimize     no {METRICS} at all — rule 5 has no input to read   NO INPUT")
+        return True
+    counts = {}
+    for s in samples:
+        counts[s["name"]] = counts.get(s["name"], 0) + 1
+    # Rule 5 compares TWO consecutive readings, so a name sampled once is not an
+    # input to it however recent it is. All three samples recorded since
+    # 2026-08-20 are exactly that, which is why "3 recent samples" is not the
+    # reassurance it looks like.
+    pairs = [s for s in samples if counts[s["name"]] >= 2]
+    log_dates = sorted({r["at"][:10] for r in all_rows})
+    if not pairs:
+        print(
+            f"  Optimize     {len(samples)} sample(s) over {len(counts)} name(s), none "
+            f"sampled twice   NO LIVE INPUT"
+        )
+        return True
+    newest = max(pairs, key=lambda s: s["ts"])
+    stale = [d for d in log_dates if d > newest["ts"][:10]]
+    flag = "ok" if not stale else "STALE"
+    print(
+        f"  {'Optimize':<12} {len(stale):>2} wake-date(s) newer   "
+        f"since {newest['ts']}   {flag}   "
+        f"[newest pair: {newest['name']}; {len(samples)} sample(s), "
+        f"{sum(1 for n in counts if counts[n] >= 2)} of {len(counts)} name(s) sampled twice]"
+    )
+    if stale:
+        print(
+            f"  -> rule 5's newest comparable pair predates {len(stale)} wake-date(s) of "
+            f"loop activity. Any regression verdict quoted from it is about the tree as "
+            f"it was on {newest['ts'][:10]}, not this one — record a metric or say the "
+            f"rule could not be evaluated."
+        )
+    return bool(stale)
+
+
 # Measured share of slice-closing rows that legitimately name no slice. Used
 # ONLY to report how surprising a zero is, never to decide anything — the
 # command that produces it is beside the guard that reads it (roadmap 170.3).
@@ -371,6 +515,11 @@ def main():
         any_overdue |= report(all_rows, loop, threshold, unit)
     if any_overdue:
         print("  -> a counter is at or past its threshold; the dispatcher should pick it")
+    # Rule 5 is not a counter — it reads a different file and can be stale rather
+    # than overdue — so it prints after the two counters and does not feed the
+    # line above. It is reported here because Step 0b is the one moment every
+    # wake looks at dispatcher inputs (roadmap 184.1).
+    report_metrics(all_rows)
     return 0
 
 
