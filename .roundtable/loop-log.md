@@ -1151,3 +1151,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 11:48 · Continue · build · 199.3 - Step 0c collision lost on 199.1; filed the follow-on its close named unanswered: the 390px geometry (confirms its argument) and a mechanism refusing the complexity filter regardless of rendering · landed · 9fefeaef
 - 2026-08-29 11:48 · Meta · refusal · the patterns-index complexity filter, again — 21 of 39 tiles share one complexity value, so the filter's busiest setting returns more tiles than the largest group that exists · refused · 9fefeaef
 - 2026-08-29 11:48 · Meta · refusal · filing the 390px jump-nav gap as an item — measured shell-wide (97 of 127 pages) with /patterns/ only rank 5 of 127, so it is not this index's finding · refused · 9fefeaef
+- 2026-08-29 20:27 · Roadmap · plan · Slice 200 — triaged the external micro-motion UX proposal: 5 accepted, 1 gate candidate, 4 refused/rethought · triaged · 7036bfc
+- 2026-08-29 20:27 · Meta · refusal · live-table-pulse and pagination-transition items as new work — bo-motion-pulse-once and the htmx settle/swap fade already ship this · refused · 7036bfc
+- 2026-08-29 20:27 · Meta · refusal · save/submit four-state sequence as a component CSS slice — rerouted to a docs pattern page, it composes existing primitives across behavior+markup · refused · 7036bfc
+- 2026-08-29 20:27 · Meta · refusal · hand-authored motion spec matrix — must be generated from tokens/motion.css, never transcribed · refused · 7036bfc
+- 2026-08-29 20:27 · Meta · refusal · tree disclosure content-continuity work — chevron rotation and bo-motion-collapse already exist and already compose the proposed behavior · refused · 7036bfc
