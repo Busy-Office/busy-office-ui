@@ -1163,3 +1163,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 12:56 · Meta · refusal · a naive 200.7 literal-duration gate — its only two reds are scan's 600ms and skeleton's 1.8s, both deliberate and both already adjudicated by check:motion (filed as 201.4, left OPEN) · refused · 0026066a
 - 2026-08-29 21:04 · Standardize · sweep · Slice 202 — all three standing lanes clean at Slice 197 baseline; dialog/offcanvas motion reuse and check-token-refs scope both checked, neither duplicates · logged · c217250
 - 2026-08-29 21:09 · Objective · grill · Objective grill of 199-202 — 201's new gate re-verified by injection, two Slice 200 refusals confirmed against source · logged · 9e7b74a
+- 2026-08-29 21:26 · Continue · build · 200.2 — restrained button press feedback; the Accept's own hover/pointer selector let a real keyboard Space press get the same transform as a mouse click, fixed with :not(:focus-visible) · landed · a9403f4
