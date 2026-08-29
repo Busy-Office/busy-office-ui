@@ -102,6 +102,15 @@ FILES = [
     # .roundtable/INDEX.md and the loop log are written by scripts/loops/*.py,
     # so a word count over them measures a generator, not anyone's writing.
     (".roundtable/ENVIRONMENT.md", "Step 0 — the traps (split from RESUME.md, 169.3)"),
+    # 2026-08-29, roadmap 191.3: a THIRD relocation between these two rows —
+    # 260 words of rule 4 (the archive-sweep cycle table, its regrowth-per-commit
+    # reading, the endogeneity caveat and the ratio-versus-denominator
+    # correction) moved to LOOPS-archive.md, 1,012 -> 752. Same shape as 167.2
+    # and 169.3: LOOPS.md steps DOWN and the archive steps UP by roughly the
+    # same amount, so neither series is a shrink and reading either alone
+    # misreports it. The pattern is now regular enough to state as a rule —
+    # when these two move in opposite directions in one commit, it is a cut,
+    # not prose growth or restraint.
     ("LOOPS.md", "Steps 0b-2 — the rules themselves"),
     # Added with 167.2's split. WITHOUT this row the move would read as LOOPS.md
     # losing 717 words, which is a shrink that never happened — the prose was

@@ -621,7 +621,35 @@ npm run report:prose -w docs             # 118 pages · median 748 · total 104,
        from the same command run on two revisions; the discarded one came from
        quoting a neighbouring entry.
 
-3. [ ] **191.3 — decide whether rule 4's archaeology belongs in
+3. [x] **191.3 — decide whether rule 4's archaeology belongs in
+       `LOOPS-archive.md`.** **DECIDED 2026-08-29: two of the three move, one
+       stays.** Each region put to the item's own test — does it change what a
+       wake DOES at rule 4, or only explain how the rule got here?
+
+       - **The "oldest, not current-slice" narrative — LOAD-BEARING, stays.**
+         It defines what *oldest* means, and that word is rule 4's entire
+         predicate. A wake that reads it as "current slice" dispatches the
+         wrong item, so this is the rule, not its history.
+       - **The cycle table + its regrowth-per-commit reading + the endogeneity
+         caveat — archaeology, moved.** What a wake does here is unchanged by
+         them: read `ROADMAP.md`, and if the rule is walking thousands of
+         lines, triage the sweep and run it. The per-commit regrowth rate is
+         evidence FOR that instruction, not the instruction.
+       - **The ratio-versus-denominator correction — moved with them.** It is a
+         correction about the table's numbers; once the table is elsewhere it
+         has no referent to correct.
+
+       Rule 4 **1,012 → 752 words**. Following 167.2 exactly: the numbers moved,
+       the instruction stayed, and it stayed a *paragraph* rather than becoming
+       a pointer, because a pointer is read less. `report_loop_prose.py` names
+       the cut, and now states the general form — this is the **third**
+       relocation between those two rows (167.2, 169.3, this), and when
+       `LOOPS.md` steps down while `LOOPS-archive.md` steps up in one commit it
+       is a cut, not prose growth or restraint.
+
+       *(original item below)*
+
+       **Original — decide whether rule 4's archaeology belongs in
        `LOOPS-archive.md`, on the evidence 191.2 measured.**
 
        Rule 4 is **1,012 words**, 32% of Step 2 and the rule dispatched on most
