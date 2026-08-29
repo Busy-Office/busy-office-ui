@@ -1142,3 +1142,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 18:34 · Continue · build · 193.2 — re-measured 42 reopen conditions: 11 checkable (1 still not fired, 5 already fired/closed, 5 uncheckable without more corpus), 23 semantic, refused a register mechanism · landed · 1c111d7
 - 2026-08-29 18:34 · Meta · refusal · a 42-row reopen-condition register — 23 of 42 are semantic and unadjudicable by the register itself (94.11) · refused · 1c111d7
 - 2026-08-29 18:40 · Continue · build · 196.1 — data-table.css's horizontal-overflow claim was false; corrected the comment (Branch B), no layout change · landed · dd2f3a1
+- 2026-08-29 18:49 · Standardize · sweep · Slice 197 — all three standing lanes clean, delta 0 vs Slice 194 · logged · 777dacf
