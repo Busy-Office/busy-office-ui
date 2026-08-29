@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 13:26 UTC
+Generated at: 2026-08-29 14:00 UTC
 
 ## Open items by slice
 
@@ -23,7 +23,7 @@ Generated at: 2026-08-29 13:26 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1158 iterations logged)
+dispatch status — counter-triggered rules (1159 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-29 21:04   ok
   Objective     1 / 3 slice           since 2026-08-29 21:09   ok  [200]
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
@@ -39,7 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 20:27 · Meta · refusal · hand-authored motion spec matrix — must be generated from tokens/motion.css, never transcribed · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · tree disclosure content-continuity work — chevron rotation and bo-motion-collapse already exist and already compose the proposed behavior · refused · 7036bfc
 - 2026-08-29 20:36 · Explore · research · royui.dibbayajyoti.com component docs researched — one real gap (Known Limits section), filed to Ideas backlog for a spike; distribution model doesn't transfer · logged · ccb2e54
 - 2026-08-29 20:36 · Meta · refusal · a per-component Theming section — ApiTable already generates the custom-property surface RoyUI hand-authors · refused · ccb2e54
@@ -49,6 +48,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 21:04 · Standardize · sweep · Slice 202 — all three standing lanes clean at Slice 197 baseline; dialog/offcanvas motion reuse and check-token-refs scope both checked, neither duplicates · logged · c217250
 - 2026-08-29 21:09 · Objective · grill · Objective grill of 199-202 — 201's new gate re-verified by injection, two Slice 200 refusals confirmed against source · logged · 9e7b74a
 - 2026-08-29 21:26 · Continue · build · 200.2 — restrained button press feedback; the Accept's own hover/pointer selector let a real keyboard Space press get the same transform as a mouse click, fixed with :not(:focus-visible) · landed · a9403f4
+- 2026-08-29 22:00 · Roadmap · release · 185.2 closed + v0.6.0 released — create-ui@0.1.1 confirmed carrying SLSA provenance · released · 4ea551b
 
 ## Sunset test
 
