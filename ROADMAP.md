@@ -315,6 +315,72 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 213 — P0: a windowed-list spacer is sized from ONE sampled row that is not representative, so every evicted chunk is 49px short and re-loading it jumps the scroll (2026-08-30)
+
+**Found by 211.2's measurement, filed rather than built inside it** — Slice
+211's own preamble sets that precedent for the two items it filed out of 208.3,
+and widening 211.2 into a shipped-behaviour change would be the thing it
+refused. Rule 1 dispatches this next.
+
+`packages/core/src/js/behaviors/windowed-list.ts` — a **shipped** behaviour, not
+example-app code. `makeSpacer()` sizes an evicted chunk's spacer as
+`rowCount * chunkRowHeightPx(table)`, and `chunkRowHeightPx` samples exactly one
+row — the first `tbody[data-chunk-offset] tr[data-row-id]` in the table — and
+caches it per table. On `/movements` that sample is **32.5px** while **98 of the
+chunk's 100 rows are 33px**, so:
+
+```
+extrapolated spacer   100 x 32.5 = 3250px
+chunk renders at                   3299px      (sum of its own 100 row boxes)
+error                              +49px per chunk, 4 of 4 runs
+```
+
+Re-loading an evicted chunk therefore grows the content above the viewport by
+49px per chunk, which is a **visible scroll jump** — exactly the failure the
+spacer mechanism exists to prevent, and the second time this one number has
+shipped wrong (30.4b's token-derived spacers ran 250px short; the fix then was
+to measure a row instead of computing one, which is the sampling this item is
+about).
+
+**Why nothing caught it, which is the more useful half.** Both existing
+detectors re-use the bad sample as their own expectation, so neither can fail:
+
+- `check-po-app.mjs`'s `spacerMatchesReal` asserts
+  `|spacerH - realRowHeight * 100| <= realRowHeight`, where `realRowHeight` is
+  read from the same first row. It compares **3250 against 3250** and passes.
+- `packages/core/tests/windowed-list.test.ts` stubs a single `STUB_ROW_H` for
+  every row, so heterogeneous row heights are structurally outside what it can
+  express — its own header says the mechanism "has already shipped wrong once".
+
+CLAUDE.md's category exactly: a detector whose predicate is computed from the
+value under test cannot fail. The failure was only visible against an
+**independent** quantity — the tbody's own rendered height.
+
+1. [ ] **213.1 — size an evicted chunk's spacer from the chunk itself, and make
+       the assertion independent of the sample.** The tbody being evicted is in
+       the DOM and rendered at the moment `evict()` runs, so its height is
+       readable exactly rather than extrapolated; `rowCount * chunkRowHeightPx`
+       stays as the fallback for a chunk that measures 0 (detached, `display:
+       none`, no rendered row yet). Name the cost: this trades the cached-sample
+       path for one layout read per eviction, against a `replaceWith` on the
+       same element that already forces layout.
+
+       *Accept:* (a) an evicted chunk's spacer height **equals that chunk's own
+       rendered height** on `/movements`, measured in a browser, with the
+       before/after both recorded — finding the residual is not zero is a
+       satisfying outcome provided the number is stated; (b) a unit test in
+       `windowed-list.test.ts` covers a chunk whose rows are **not all the same
+       height**, and it is red-proved against the current code (injection
+       confirmed to have landed, per CLAUDE.md, not merely asserted red);
+       (c) `check-po-app.mjs`'s `spacerMatchesReal` compares the spacer against
+       something **not derived from the sampled row**, so it can fail on this
+       defect — red-prove that too; (d) the CHANGELOG entry matches the actual
+       compatibility, with the reasoning stated.
+
+       *Not in scope:* `check:po-app`'s 150ms anchor wait. 211.2 measured that
+       it is what decides whether a run exposes the jump; re-measure the anchor
+       assertion after this lands rather than tuning the sleep.
+
 ## Slice 212 — Objective grill of the 200/208/209 window: a refusal's own base rate missed the declaration its cited gate names in its header, and the arming set needed narrowing for the third grill running (2026-08-29)
 
 **Dispatcher trace, cloud wake.** Step 0: container **detached** again
@@ -471,7 +537,7 @@ and building either inside it would have been widening the item.
        that (a) makes it 19 of 19 here is a satisfying outcome, and so is
        finding it does not.**
 
-2. [ ] **211.2 — `check:po-app`'s scroll-anchor assertion has never run in a
+2. [x] **211.2 — `check:po-app`'s scroll-anchor assertion has never run in a
        cloud container, and the first four times it did, it read 98 / 49 / 0 / 0
        against a threshold of ≤ 2.** The assertion is *"windowed list: scrolling
        back re-loads the chunk with NO scroll jump and NO lost selection"*,
@@ -503,6 +569,66 @@ and building either inside it would have been widening the item.
        Re-runnable: the probe is the gate's own `page.evaluate` block copied
        verbatim with `page.setRequestInterception` fulfilling
        `https://unpkg.com/htmx.org*` from `node_modules/htmx.org/dist/htmx.min.js`.
+
+       **CLOSED 2026-08-30 (cloud wake). The premise is FALSE: the variance is
+       not the shim's, and the mechanism is a real defect in shipped code** —
+       filed as Slice 213. Both halves of the Accept were measured.
+
+       **The shipped path (CI, real CDN) holds.** Run 662 on `c60ee88`, job
+       *Pseudo-locale + reference app + ERP suite + scaffold freshness*, logs
+       `po-app smoke check passed — 19 behaviours verified end to end`. That is
+       **non-vacuous by the gate's own construction**: 208.3's htmx precondition
+       is one of those 19, so a green CI run entails htmx loaded AND
+       `anchorShift <= 2`. Across the last 30 `ci.yml` runs on `main`
+       (633-662), **23 concluded `success`**, each of which entails the po-app
+       job passed — a lower bound, since the 7 non-successes (642-646 are
+       ROADMAP 204's `check:claims` P0, plus 655 and one `cancelled`) were not
+       attributed per-job.
+
+       **The container disagrees, with htmx over a REAL HTTP round-trip and
+       NO request interception at all.** The confound in 208.3's evidence was
+       named and removed rather than argued away: interception delays *every*
+       request, including htmx's own chunk fetches, which is the timing under
+       test. The control instead repoints the app's one `<script src>` at a
+       local static server (injection asserted unique before replacing, copy
+       deleted on exit) and intercepts nothing:
+
+       ```
+       interception shim, 20 runs   anchorShift > 2 in 14   values {0, 49, 98}
+       CONTROL, no interception,
+                        20 runs     anchorShift > 2 in 12   values {0, 49, 98}
+       ```
+
+       So `anchorShift` exceeds 2 somewhere the shim is not involved. **The
+       item's own suggested close — "the variance is the shim's" — is refuted
+       by its own control.**
+
+       **What varies is quantized, and that is what named the defect.** Only
+       three values ever occur, and 98 = 2 x 49. The diagnostic that separates
+       pass from fail is *which row gets picked as the anchor*: every shifted
+       run picked `aria-rowindex` **902**, every clean run **106/107**, with no
+       overlap. `evictedCount` is **9 in 12 of 12** runs, so it is NOT "how far
+       the scroll loop got" — the first hypothesis, measured and discarded. The
+       split is whether the evicted chunks have re-loaded by the gate's fixed
+       150ms wait.
+
+       **Then the 49 was measured directly rather than inferred.** Parking at
+       the top and letting chunk 0 re-load, its spacer against what it actually
+       renders at, 4 of 4 runs:
+
+       ```
+       chunk 0 spacer 3250px   ·   chunk 0 renders 3299px   ·   err +49px
+       ```
+
+       and the row heights say why: chunk 0 holds **98 rows at 33px and 2 at
+       32.5px**, and `windowed-list.ts` samples the FIRST row — one of the two
+       outliers — then extrapolates it over all 100. That is Slice 213.
+
+       **Not filed as a defect: the gate.** Its 150ms wait is what decides
+       whether a given run exposes the 49px, so the assertion is timing-
+       sensitive — but it is timing-sensitive about a **real** scroll jump, and
+       the right fix is 213, not a longer sleep. Re-measure this assertion after
+       213 lands rather than tuning it now.
 
 ## Slice 210 — the motion-literal gate refuses itself: 0 of 23 under its own wording, and its only three reds under a wider one are three right answers (2026-08-29)
 
