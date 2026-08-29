@@ -464,6 +464,23 @@ code sample gaining two lines is a fine answer; not knowing why is not.
 When a file mixes live markup with samples, prefer editing by hand, one block at
 a time. It is slower than a regex and faster than a revert.
 
+**And when something DOWNSTREAM can rewrite the artefact, its output is the
+artefact — not what you handed it.** Everything above assumes we do the
+rendering, so our built output is the last word. A registry, CDN, bundler or
+minifier breaks that assumption, and the tell is that you are inspecting an
+*input* to the thing that decides. Verify at the last point the artefact passes
+through before a user sees it; asking that system is usually one command.
+Worked example (2026-08-29, roadmap 185): `npm publish` warned
+*"`bin[create-ui]` script name index.mjs was invalid and removed"*, so the
+scaffolder was reported as shipping with no executable. The tarball was
+unpacked **twice** to confirm it — but `npm pack` and `npm publish` normalise
+differently, and the published manifest read `{"create-ui":"index.mjs"}`: npm
+had *normalised* the `./`, not dropped the key. `npm view <pkg> bin` was the
+whole check. The same slice read the registry's **read** path twice and called
+a 404 an unpublish, while its **write** path had already answered
+`E403 cannot publish over the previously published versions` — a new scoped
+package is knowable before it is servable.
+
 ## A gate that only runs in CI is not known to work
 
 **CI's full checkout is the most permissive environment the build sees.**

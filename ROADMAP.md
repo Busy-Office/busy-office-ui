@@ -604,7 +604,21 @@ where following the forecast would have shipped a two-channel regression;
 browser-blocked, and the fix's own first attempt died in `RESUME.md` — 169.3's
 lesson arriving a second time.
 
-1. [ ] **189.1 — CLAUDE.md's "verify against the rendered artefact" needs to
+1. [x] **189.1 — CLAUDE.md's "verify against the rendered artefact" needs to
+       name WHICH artefact when a third party renders it.** **LANDED
+       2026-08-29.** The criterion's own escape hatch — "finding it already
+       covered is a satisfying outcome" — was tested first and does **not**
+       apply: every example in that section is a bulk edit to our own source,
+       verified against our own build (import specifiers, rewritten prose, an
+       Astro call inside a `<pre>`, page growth). None covers a third party
+       rewriting the artefact after we hand it over. One paragraph added (+17
+       lines), carrying the required worked example: the
+       `bin: "./index.mjs"` → `"index.mjs"` normalisation, and the read-vs-write
+       path confusion from the same slice.
+
+       *(original item below)*
+
+       **Original — CLAUDE.md's "verify against the rendered artefact" needs to
        name WHICH artefact when a third party renders it.** The rule is
        written and was followed in 187 (our generator, our output, byte-compared
        and red-proved) and misapplied twice in 185 (npm sat between the tarball
