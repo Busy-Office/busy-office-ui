@@ -315,6 +315,92 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 210 — the motion-literal gate refuses itself: 0 of 23 under its own wording, and its only three reds under a wider one are three right answers (2026-08-29)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake **0 open
+issues** (asked via the API, not inferred). Rule 2: `Standardize 0 / 4`. Rule 3:
+`Objective 0 / 3`. Rule 5 is below rule 4 and was not reached; for the record its
+line read `0 wake-date(s) newer … ok`, the first non-STALE reading since 184.1
+named it. **Rule 4 → Continue, build mode**, oldest non-blocked item: **200.7**,
+with **201.4** read first as the hand-off directs. Cloud-takeable in full: the
+whole item is a CSS parse and a gate's pass line, and **no claim below rests on a
+rendered image**.
+
+**The predicate has two readings and they give opposite answers, which is the
+finding.** 200.7 is worded as a literal *"where a `--bo-motion-` prefixed token
+exists"*. That qualifier is load-bearing and had not been measured separately:
+
+| predicate | base rate | verdict |
+|---|---|---|
+| **NARROW** — a literal whose value a token already carries | **0 of 23** | 94.11's no-op gate: ship nothing, say so |
+| **BROAD** — any literal duration or easing at all | **3 sites / 2 declarations** | all three correct; a gate would be red on right answers |
+
+The token scale is `100ms / 150ms / 300ms` and one easing,
+`cubic-bezier(0.4, 0, 0.2, 1)` — read from `tokens/motion.css` by the probe
+rather than transcribed. The three literals in the tree are `600ms` (scan),
+`1.8s` and `linear` (skeleton). **Not one of them has a token at its value**, so
+the NARROW predicate is uniformly true of the tree and distinguishes nothing —
+exactly 94.11's finding, where a precise detector scoring zero false positives
+across 43 stylesheets was still worthless because its predicate was already true
+of everything.
+
+**The zero is red-proved, in both directions, and the injection was asserted to
+have landed** — CLAUDE.md: a plain zero is a defect in the instrument until
+proven otherwise, and a green red-proof is a defect in the injection. The probe
+mutates a parsed token-driven declaration in memory, prints the before/after it
+actually produced, and **exits non-zero if the replacement changed nothing**:
+
+```
+--inject duration : bo-toast-in var(--bo-motion-duration-base) …  ->  bo-toast-in 150ms …
+                    NARROW 0 -> 1  (150ms duplicates --bo-motion-duration-base)
+--inject easing   : … var(--bo-motion-easing-standard)  ->  … cubic-bezier(0.4, 0, 0.2, 1)
+                    NARROW 0 -> 1  (duplicates --bo-motion-easing-standard)
+```
+
+**The BROAD reading is refused on the ground LOOPS.md §3 already states.** All
+three literals are deliberate: no token exists at `600ms` or `1.8s`, and `linear`
+is right for a continuous shimmer — a shimmer that eases is wrong. Both
+declarations are already adjudicated by `check:motion` via its route (b), and
+that was verified at the source rather than read off 201.4 — `scan.css:63` and
+`skeleton.css:81` each carry their own `animation: none` under
+`prefers-reduced-motion: reduce`. The gate's own pass line agrees:
+
+```
+npm run check:motion -w @busy-office/ui
+# motion check passed — animation: 17 token-driven, 6 explicit override ·
+#                       transition: 42 token-driven, 0 explicit override
+```
+
+So a BROAD gate's entire red set is three documented decisions, which is the
+*"would fail the build on eight right answers"* shape already refused for
+`report:css-repeats`. **`check:motion` covers 200.7's subject**, and covers it
+better: it runs on the *shipped dist* CSS, and it adjudicates rather than
+forbids.
+
+**201.4's conclusion re-derives exactly; its denominator does not, and that is
+worth one paragraph because it is 209.1's shape again.** Re-measured with an
+independent postcss parse: the two literal-duration declarations 201.4 names are
+the same two, at its commit (`0026066a`, in a throwaway worktree) and at HEAD.
+But its stated **23 = 5 `none` + 16 token-driven + 2 literal** does not reproduce
+under any scoping constructed for it. At its own commit the shorthand-only parse
+finds **26 = 6 `none` + 18 token-driven + 2 literal**; widening to
+`check:motion`'s own regexes gives 29. The `23` that *does* appear is at **HEAD**,
+under "shorthand, live, excluding `none`" — a different tree and a different
+scope from the one 201.4 was describing, so the agreement is a coincidence and is
+named as one rather than quoted as a confirmation. **No item is filed**: the
+conclusion the number was carrying is sound and independently re-derived, and the
+correction is that a declaration count is only meaningful beside the scope that
+produced it. That is the claim-inventory rule (192.1) landing on a premise —
+201.4 spent its red-proof on the multi-line parse, which was correct, and the
+breakdown beside it went out on that credibility.
+
+**What this wake did NOT verify, said plainly.** Cloud wake: no Podman, no
+`localhost:8081`, **no screenshots at 1440px or 390px in either theme**. It costs
+nothing here — **zero lines changed under `packages/` or `apps/docs/src/`**; the
+diff is markdown plus the loop log, and no claim above depends on how anything
+looks. The probe was a scratchpad throwaway and is deliberately not committed:
+shipping the script would be shipping the gate this item refuses.
+
 ## Slice 209 — Objective grill of Slices 205, 208: the sweep proved itself against a state it never committed, and the floor script publishes a prefixed version its sibling filters out (2026-08-29)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0, GitHub intake **0 open
@@ -765,7 +851,15 @@ names resolves.
        before. It now runs after `check:rf-floor`, verified against a
        `rm -rf packages/core/dist` rebuild rather than an incremental one.
 
-4. [ ] **201.4 — 200.7's gate is largely already shipped as `check:motion`, and
+4. [x] **201.4 — DONE 2026-08-29 (Slice 210), by the second of the two outcomes
+       its own Accept allows: 200.7 recorded that `check:motion` covers its
+       subject and closed as refused.** Its conclusion re-derived exactly — the
+       same two literal-duration declarations, both correct, both adjudicated by
+       `check:motion` route (b), verified at the source and against the gate's
+       own pass line. **Its denominator did not re-derive**, and that is recorded
+       in Slice 210 rather than left implicit. Original text follows.
+
+       **200.7's gate is largely already shipped as `check:motion`, and
        a naive version would fail the build on two right answers.** Recorded
        here rather than closing 200.7, which is another dispatcher's freshly
        triaged item.
@@ -1423,9 +1517,14 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        than as the table twitching, is a judgement a local wake should settle
        by watching `/getting-started/htmx` while removing a line — a still
        frame cannot settle it either.
-7. [ ] **200.7 — a lint check that a raw ms duration or literal easing
-       function isn't hand-written in component CSS where a `--bo-motion-`
-       prefixed token exists.** The one proposal item that's a genuinely mechanically
+7. [x] **200.7 — REFUSED 2026-08-29 (Slice 210). A lint check that a raw ms
+       duration or literal easing function isn't hand-written in component CSS
+       where a `--bo-motion-` prefixed token exists.** Its own Accept asked for
+       the base rate first and for the gate to *"say so rather than ship"* if the
+       tree is already clean. It is: **0 of 23**, red-proved by injection in both
+       directions. The measurement and the reasoning are in Slice 210; the
+       broadened predicate was measured too and refused separately, because its
+       only three reds are three right answers. Original text follows. The one proposal item that's a genuinely mechanically
        checkable property (unlike a hand-authored "spec matrix," refused
        below) — matches this repo's own gate discipline: measure the base
        rate before shipping it. *Accept*: a script (or stylelint rule) scans
