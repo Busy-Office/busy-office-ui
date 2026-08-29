@@ -2271,6 +2271,53 @@ check(
   JSON.stringify(mdClose),
 );
 
+/* 200.1 — dialog exit motion (offcanvas's 143.4 recipe applied verbatim).
+   The whole point of using a pure-CSS `allow-discrete` transition instead of
+   delaying JS `close()` on `animationend` is that dismissal never depends on
+   the animation actually finishing — this proves that property directly,
+   not just that the CSS rules exist. */
+await visit('/components/dialog/');
+// Real CDP clicks, not an in-page el.click() — a synthetic click fires the
+// click event (so the delegated open listener works) but does not reliably
+// carry Chromium's click-to-focus activation behaviour, which is what the
+// dialog's native focus-restore-on-close keys off. An earlier version of
+// this check used trigger.click() and reported focusBack: false on every
+// run — not a real regression, a test-harness artifact caught by trying
+// the same assertion with a genuine click before believing the failure.
+await page.click('[data-dialog-trigger="approve-dialog"]');
+await new Promise((r) => setTimeout(r, 250));
+const openedState = await page.evaluate(() => document.getElementById('approve-dialog').open);
+await page.click('#approve-dialog button[value="cancel"]');
+// No wait here on purpose: a close gated on animationend would still
+// report `open` (and the trigger unfocused) at this line.
+const immediate = await page.evaluate(() => {
+  const dialog = document.getElementById('approve-dialog');
+  const trigger = document.querySelector('[data-dialog-trigger="approve-dialog"]');
+  return { closedImmediately: !dialog.open, focusBack: document.activeElement === trigger };
+});
+await new Promise((r) => setTimeout(r, 250));
+const dlgExit = { opened: openedState, ...immediate };
+check(
+  'dialog: closing completes without waiting for the exit animation, and focus returns to the trigger',
+  dlgExit.opened && dlgExit.closedImmediately && dlgExit.focusBack,
+  JSON.stringify(dlgExit),
+);
+
+await visit('/components/dialog/', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+const dlgReduced = await page.evaluate(async () => {
+  const dialog = document.getElementById('approve-dialog');
+  document.querySelector('[data-dialog-trigger="approve-dialog"]').click();
+  // One paint tick, not a full transition wait — under reduced motion the
+  // duration tokens are 0ms, so the open state should already be showing.
+  await new Promise((r) => setTimeout(r, 50));
+  return { opened: dialog.open, opacity: getComputedStyle(dialog).opacity };
+});
+check(
+  'dialog: prefers-reduced-motion makes the open transition instant (opacity already 1 within one tick)',
+  dlgReduced.opened && dlgReduced.opacity === '1',
+  JSON.stringify(dlgReduced),
+);
+
 /* /patterns/command-bar states two things the browser must actually do, and
    the second is the reason the page exists in the shape it does.
 

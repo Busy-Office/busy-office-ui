@@ -307,8 +307,9 @@ which is never defined anywhere in `tokens/motion.css` or elsewhere — only
 `--bo-motion-easing-standard` exists. That's a pre-existing bug unrelated to
 this proposal; noted here so it isn't lost, not triaged as part of this slice.
 
-1. [ ] **200.1 — dialog exit motion, reusing offcanvas's `@starting-style` +
-       `allow-discrete` recipe verbatim rather than inventing a second one.**
+1. [x] **200.1 — DONE 2026-08-29. dialog exit motion, reusing offcanvas's
+       `@starting-style` + `allow-discrete` recipe verbatim rather than
+       inventing a second one.**
        *Accept*: the dialog and its backdrop animate closed in a browser
        supporting `transition-behavior: allow-discrete`, using the same
        token durations/easing as the entrance; a browser without support
@@ -318,6 +319,61 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        CPU-throttling + interrupting the animation mid-flight); focus
        returns to the trigger regardless of whether the animation ran; under
        `prefers-reduced-motion: reduce` open and close are both instant.
+
+       **Shipped.** `packages/core/src/css/components/dialog/dialog.css`
+       gained the `@supports (transition-behavior: allow-discrete)` block
+       143.4 already shipped for `.bo-offcanvas`, unchanged in shape: the
+       panel transitions `opacity`/`transform` (reusing the entrance
+       keyframe's own `translateY(0.5rem) scale(0.98)` travel), the backdrop
+       transitions `opacity`, both via `--bo-motion-duration-base` /
+       `--bo-motion-easing-standard` — the SAME tokens the entrance already
+       used, nothing new invented. The entrance `@keyframes` stands down
+       (`animation: none`) wherever the transition is supported, exactly as
+       offcanvas's own comment already documents for its own case.
+
+       **Each Accept clause, and how it was actually checked — not claimed:**
+       - *Closes without `animationend`*: `check:claims` (new case) drives a
+         REAL click (`page.click`, not `el.click()` in-page) to open, a real
+         click on Cancel to close, and asserts `dialog.open === false`
+         **synchronously**, with no wait — a close gated on the animation
+         event would still read `open` at that line. It doesn't.
+       - *Focus returns to the trigger*: same case, same synchronous read.
+         **First run reported `focusBack: false` on every attempt** — not a
+         regression, a test-harness artifact: an in-page `trigger.click()`
+         fires the click event (so the delegated open-listener runs) but
+         does not carry Chromium's click-to-focus activation behaviour,
+         which is what native `<dialog>` focus-restore-on-close keys off.
+         Confirmed by isolating the variable directly — `trigger.focus()`
+         before `.click()` made it pass, and a real CDP `page.click()`
+         alone made it pass with no manual focus call — so the check was
+         rewritten to drive real clicks throughout, matching this repo's
+         own "drive real events" rule (CLAUDE.md) rather than being
+         special-cased around.
+       - *Reduced motion is instant*: a second `check:claims` case opens
+         under `prefers-reduced-motion: reduce` and reads computed
+         `opacity` after one 50ms tick (not a full transition wait) — `1`,
+         confirming the `@starting-style` FROM state doesn't linger when
+         the duration tokens are zeroed.
+       - *Unsupported browser closes exactly as today*: not independently
+         testable in this harness (Chrome 151 supports `allow-discrete`
+         unconditionally) — same limitation offcanvas's own 143.4 already
+         carries, verified there by construction (`@supports` guard) rather
+         than by disabling the feature. No new gap opened.
+       - *CPU-throttling / interrupted mid-flight*: covered by the same
+         no-wait synchronous assertion above — the check never waits for
+         the animation to finish before asserting the close completed, so a
+         throttled or interrupted frame changes nothing it depends on.
+
+       **`check:composited` gained 4 new registry entries** for the dialog's
+       opacity-0 states (panel closed, panel `@starting-style` open, backdrop
+       closed, backdrop `@starting-style` open) — same exempt reasoning as
+       offcanvas's existing two entries: each is one end of a sub-300ms
+       transition, never a resting state anyone reads.
+
+       Verified: `check:claims` **146/146** (was 144; +2 new dialog cases),
+       `check:repo` 9/9, `test:axe` 127 pages × 2 widths zero violations,
+       core `npm run test` 146/146, `check:composited` 17 declarations all
+       registered.
 2. [ ] **200.2 — restrained button press feedback, pointer-only.**
        *Accept*: `.bo-btn:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]):active`
        under `@media (hover: hover) and (pointer: fine)` gets a 1px

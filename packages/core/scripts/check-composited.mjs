@@ -68,6 +68,36 @@ const REGISTRY = [
     why: 'The open end of the same transition — opacity 1, the scrim as shipped.',
   },
   {
+    match: 'bo-dialog[open]::backdrop',
+    decision: 'exempt',
+    why: 'The dialog\'s exit motion (200.1), the offcanvas 143.4 recipe applied '
+      + 'verbatim: this is the @starting-style FROM value of the open transition, '
+      + '0 while the dialog has just started opening — the same shape as '
+      + 'bo-offcanvas[open]::backdrop above. Nothing is read through it, because '
+      + 'the panel content itself is opacity 0 at the same instant.',
+  },
+  {
+    match: 'bo-dialog::backdrop',
+    decision: 'exempt',
+    why: 'The resting-closed end of the same transition — opacity 0 while the '
+      + 'dialog is closed, when there is no backdrop on screen at all.',
+  },
+  {
+    match: 'bo-dialog[open]',
+    decision: 'exempt',
+    why: 'The @starting-style FROM value for the dialog PANEL itself (opacity 0, '
+      + 'paired with the 0.5rem/0.98 scale travel the entrance keyframe already '
+      + 'used) — the open transition\'s starting point, not a resting state.',
+  },
+  {
+    match: 'bo-dialog',
+    decision: 'exempt',
+    why: 'The resting-closed panel — opacity 0 while `.bo-dialog` has no `[open]` '
+      + 'attribute, i.e. while it is not in the top layer at all. Same shape as '
+      + 'the offcanvas panel-closed states above; nothing is read through it '
+      + 'because the dialog is closed.',
+  },
+  {
     match: 'data-loading',
     decision: 'aa',
     why: 'A table mid-swap is aria-busy, NOT inactive — the user keeps reading it, so 1.4.3 applies in full. Asserted live in both themes by check:claims.',

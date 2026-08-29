@@ -45,6 +45,65 @@
     }
   }
 
+  /* EXIT motion (200.1) — the offcanvas recipe (143.4) applied verbatim, not
+     reinvented: the platform's own `allow-discrete` transition, no JS, so
+     dismissal never depends on an `animationend` that can fail to arrive.
+     Where the feature is unsupported the dialog closes exactly as it does
+     today — instantly — because motion is never this framework's only
+     channel. Reduced motion needs no rule here either: the durations are the
+     shared tokens tokens/motion.css already zeroes, and a zero-duration
+     discrete transition is an instant close. */
+  @supports (transition-behavior: allow-discrete) {
+    .bo-dialog {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+      transition:
+        opacity var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+        transform var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+        overlay var(--bo-motion-duration-base) allow-discrete,
+        display var(--bo-motion-duration-base) allow-discrete;
+    }
+
+    .bo-dialog[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    @starting-style {
+      .bo-dialog[open] {
+        opacity: 0;
+        transform: translateY(0.5rem) scale(0.98);
+      }
+    }
+
+    /* The entrance keyframes would now run alongside the transition and the
+       two would fight over the same properties — the transition covers both
+       directions, so the animation stands down where it is supported. */
+    .bo-dialog[data-state="open"] {
+      animation: none;
+    }
+
+    /* The scrim leaves with the panel; a backdrop that cuts out first is the
+       tell that made the old close read as a jump. */
+    .bo-dialog::backdrop {
+      opacity: 0;
+      transition:
+        opacity var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+        overlay var(--bo-motion-duration-base) allow-discrete,
+        display var(--bo-motion-duration-base) allow-discrete;
+    }
+
+    .bo-dialog[open]::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      .bo-dialog[open]::backdrop {
+        opacity: 0;
+      }
+    }
+  }
+
   .bo-dialog__header {
     display: flex;
     align-items: center;
