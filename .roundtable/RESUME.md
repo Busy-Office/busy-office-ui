@@ -123,25 +123,42 @@ Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
 `record_iteration.py`**, per 166.5's lesson — and note there is now a **third**
 line to read.
 
-**Prediction written down first.** Before recording: `Standardize 2/4`,
-`Objective 2/3`, parser 1,088 against a raw `grep -c "^- "` of 1,088. Predicted
-after two `record_iteration.py` calls carrying no `--also-refused`: **1,090**
-rows, `Standardize 2/4` (Continue rounds count, so **3/4**), `Objective`
-**3/3 OVERDUE** — 184 is a slice closed by a Continue row, and 180/183 are
-already banked. Rule 5's line predicted to read `0 wake-date(s) newer … ok`.
+**Prediction written down first, then checked.** Before recording:
+`Standardize 2/4`, `Objective 2/3`, parser 1,088 against a raw `grep -c "^- "`
+of 1,088. Predicted, for two `record_iteration.py` calls **carrying no
+`--also-refused`**: **1,090** rows, `Standardize 3/4`, `Objective 3/3 OVERDUE`
+(184 is a slice closed by a Continue row; 180 and 183 already banked), and rule
+5's new line reading `0 wake-date(s) newer … ok`.
 
-**Check it against the real output rather than assuming; 182.3's lesson is that
-the row count is the part that surprises** (`--also-refused` emits its own
-`Meta · refusal` row, so one call carrying a refusal writes two).
+After recording: **1,091** rows against a raw `grep -c "^- "` of **1,091**;
+`Standardize 3/4 ok`; `Objective 3/3 OVERDUE [180, 183, 184]`; rule 5
+`0 wake-date(s) newer … ok`. **Three of four exact. The row count was off by
+one, and the cause is not new: I then attached an `--also-refused` to the second
+call, which emits its own `Meta · refusal` row** — 182.3's rule (+1 per
+`--also-refused`) held perfectly; the prediction's own premise changed after it
+was written. Worth stating in that direction, because "the counter surprised me"
+and "I changed the input after predicting" are different faults and only the
+second one happened.
+
+**Rule 5's line was predicted and read exactly**, which is the first evidence it
+behaves on the real tree and not only under injection.
 
 ## What the next wake should expect
 
-**Rule 3 should be ARMED at 3/3** — verify, do not trust this line. If it is,
-the next wake is an **Objective grill** covering 180, 183 and 184, above rule 4.
+**Rule 3 is ARMED — `Objective 3 / 3 OVERDUE [180, 183, 184]`, read after
+recording.** Re-run `dispatch_status.py` and confirm rather than trusting this
+line, but expect the next wake to be an **Objective grill of Slices 180, 183 and
+184**, dispatched above rule 4.
 
-If it is not armed, rule 4 has nothing again: the same six owner-blocked items,
-and Slice 184 opened no new one. That routes to rule 5 — now genuinely
-readable — and then rule 6 → Polish.
+That grill has an obvious first question, and it is not this slice's own finding:
+**how many other closed Accept criteria stopped holding the day they were
+ticked?** 28.1's did, and nothing here re-asks a closed criterion. Slice 184
+fixed one instance by instrumenting one rule; whether that shape is general is
+exactly what a grill is for, and it should be measured before it is asserted.
+
+If rule 3 somehow reads unarmed, rule 4 has nothing again: the same six
+owner-blocked items, and Slice 184 opened no new one. That routes to rule 5 —
+now genuinely readable — and then rule 6 → Polish.
 
 **Read the rule-5 line before answering rule 5.** If it says STALE, rule 5 has no
 input: say it could not be evaluated rather than reporting it clear. That is the

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 00:21 UTC
+Generated at: 2026-08-29 00:43 UTC
 
 ## Open items by slice
 
@@ -21,9 +21,11 @@ Generated at: 2026-08-29 00:21 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1088 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-08-28 19:49   ok
-  Objective     2 / 3 slices          since 2026-08-28 21:44   ok  [180, 183]
+dispatch status — counter-triggered rules (1091 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-08-28 19:49   ok
+  Objective     3 / 3 slices          since 2026-08-28 21:44   OVERDUE  [180, 183, 184]
+  -> a counter is at or past its threshold; the dispatcher should pick it
+  Optimize      0 wake-date(s) newer   since 2026-08-29 00:37   ok   [newest pair: axe-violations; 100 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
 ## Owner-blocked
@@ -38,9 +40,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-28 22:41 · Roadmap · plan · Slice 180 triage — P0 found by the wake's own Step 0 build: main and the Pages deploy red since 21:46Z (CI run 33213989733, all 5 jobs), check:slice-refs reading the loop-name tally 'Continue 4 · Roadmap 2 · Polish 2' as a citation to a Slice 2 that never existed · triaged · 615eeb31
-- 2026-08-28 22:41 · Continue · bug · 180.1 — check:slice-refs no longer reads a loop-name tally as a slice citation; retagged @heuristic with a 10-case --self-test. Skip predicate base-rated 1 of 461 on the unedited tree; case refused because 11 of 12 Title-case matches are real citations. Red-proved both ways, the discriminating arm being that the OLD extractor fails on the same tally the new one passes. main green again · landed · 615eeb31
-- 2026-08-29 07:43 · Roadmap · triage · 181 — owner PO-list screenshot grilled for framework gaps: refused in full, all six critiques refuted by shipped source · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · a status-vs-timeline shared-vocabulary rule — Partial/Modified are legitimate statuses that must not be workflow stages; the rule would force a wrong model onto 5 shipped pages · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · an enum-value truncation rule — badge.astro already says 'the tone word IS the text' and in-tree violations are zero · refused · b95d88a
 - 2026-08-29 07:43 · Meta · refusal · a bulk-action-bar treatment rule — .bo-data-table__bulk-actions already ships with role=group and real bo-btn variants · refused · b95d88a
@@ -48,6 +47,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-28 23:52 · Meta · refusal · a gate asserting every token named in a DSA cite exists in that component's CSS — base rate 1 of 28, and the repair trips the detector (101.3 + assert-on-structure) · refused · 9cbd0d1c
 - 2026-08-29 08:21 · Continue · verify · 183 — visual backlog cleared: five items carried eight wakes measured at 390px, all clean (docOverflow 0 everywhere, generated badge 1.1 lines on 39 pages, state-patterns' longer cite wraps in-cell) · landed · 2c5f652
 - 2026-08-29 08:21 · Meta · refusal · a Polish round this wake — §3b step 4 needs a blind re-score by a second agent this session cannot spawn, and self-scoring spends budget while making the dry exit unreachable · refused · 2c5f652
+- 2026-08-29 00:43 · Roadmap · plan · 184 triaged from inside the dispatch: rule 5's only input is loop-metrics.jsonl and 96 of 99 samples predate 2026-08-20; 652 iterations since against 3 samples, each a name recorded once, so none can be two consecutive runs. ci-wall-time's 26 samples all sit in one 17-hour window on 2026-08-18, the day Slice 28.1 closed with the Accept criterion 'recorded every wake'. Slice 183 published the stale reading as current evidence · triaged · 07afdcd3
+- 2026-08-29 00:43 · Continue · build · 184.1/184.2 — dispatch_status.py now reads rule 5's input and reports how many wake-dates are newer than the newest comparable metric pair (STALE at 10); red-proved by injection across all five branches with each injection confirmed to have landed, base rate replayed at live-on-6-of-17 before shipping, compared by date not timestamp because the two dispatchers write naive stamps eight hours apart. Rule 5 gains the budget-breach clause the Optimize playbook has carried since 2026-08-23 · landed · 07afdcd3
+- 2026-08-29 00:43 · Meta · refusal · recording check:claims' 141 under the existing 'claims' metric name, whose earlier samples 65-82 measured something else — a poisoned trend is worse than a missing one · refused · 07afdcd3
 
 ## Sunset test
 
