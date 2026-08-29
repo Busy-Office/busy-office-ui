@@ -522,7 +522,32 @@ is credited**; 190 only sharpens the clause it landed in.
          shows the shipped page's own margin has moved, record it with the
          command rather than working around it. Commands are in §A of the report.
 
-2. [ ] **190.2 — `/patterns/editable-grid`'s three new runtime claims are
+2. [x] **190.2 — `/patterns/editable-grid`'s three new runtime claims are
+       executable.** **LANDED 2026-08-29** by the wake that skipped the step.
+       `check:claims` reads **144**, up from 141. The three:
+       focus reveals the message (asserting `none` while blurred *and* shown on
+       focus, driving a real `.focus()`); an in-flow message would grow the row
+       (the page states this as its REASON, so the case is the counterfactual —
+       inject `position: static` and require the row to grow); and
+       `aria-describedby` resolving to the message element **while blurred**,
+       which is the whole point of that sentence.
+
+       **Two instrument defects, both caught by assertions rather than review.**
+       The counterfactual first reported `injectionLanded: false` on a mutation
+       that plainly worked (`inFlow 103 > fixed 53`) — `getComputedStyle`
+       returns a **live** object and it was read *after* the style was removed,
+       so the snapshot reverted with it; now read into plain strings first. Then
+       the red-proof's own injection missed, because `ls dist/_astro/*.css |
+       head -1` picks the first file alphabetically and the rule lives in
+       another — the `assert count > 0` is what caught it, exactly the trap
+       CLAUDE.md records about minified output.
+
+       Red-proved on the correct file: neutralising the focus gate turns the
+       case **FAIL**, and it returns to green when restored.
+
+       *(original item below)*
+
+       **Original — `/patterns/editable-grid`'s three new runtime claims are
        executable.**
 
        CLAUDE.md's recipe: *"If a page says the browser will do something … add

@@ -139,6 +139,74 @@ const loading = await page.evaluate(() => {
 });
 check('data-loading blocks interaction', loading.pointerEvents === 'none', JSON.stringify(loading));
 
+// /patterns/editable-grid's three runtime claims from 173.2 (roadmap 190.2).
+// The recipe requires these; 173.2 wrote the sentences and skipped this step.
+await visit('/patterns/editable-grid/');
+
+// 1. "clicking into the Qty cell reveals why" — and, by construction, that it
+//    is NOT revealed before. Drive a real focus, not a synthetic event.
+const reveal = await page.evaluate(() => {
+  const bad = document.querySelector('.bo-data-table [aria-invalid="true"]');
+  if (!bad) return { missing: true };
+  const msg = bad.closest('.bo-form-field')?.querySelector('.bo-form-field__message');
+  if (!msg) return { missing: true };
+  const blurred = getComputedStyle(msg).display;
+  bad.focus();
+  const focused = getComputedStyle(msg).display;
+  const box = msg.getBoundingClientRect();
+  return { blurred, focused, visibleWhenFocused: box.height > 0 };
+});
+check('editable-grid: focus reveals the cell error message',
+  reveal.blurred === 'none' && reveal.focused !== 'none' && reveal.visibleWhenFocused,
+  JSON.stringify(reveal));
+
+// 2. "a message that sits in the row's FLOW grows the row and shifts every
+//    other cell in it (53px -> 75px, siblings moved 11px)". The page states
+//    this as the REASON for the design, so the claim is about the counter-
+//    factual: put the message back in flow and the row must grow. Asserting
+//    only the fixed state would leave the page's argument unverified.
+const flow = await page.evaluate(() => {
+  const bad = document.querySelector('.bo-data-table [aria-invalid="true"]');
+  const row = bad.closest('tr');
+  const fixed = Math.round(row.getBoundingClientRect().height);
+  const s = document.createElement('style');
+  s.textContent = `.bo-data-table .bo-form-field .bo-form-field__message
+                   { display: block !important; position: static !important; }`;
+  document.head.appendChild(s);
+  const msg = bad.closest('.bo-form-field').querySelector('.bo-form-field__message');
+  // getComputedStyle returns a LIVE object: read it into plain strings BEFORE
+  // removing the style, or the snapshot reverts with it and the injection
+  // check reports false on a mutation that plainly landed.
+  const cs = getComputedStyle(msg);
+  const seen = { display: cs.display, position: cs.position };
+  const inFlow = Math.round(row.getBoundingClientRect().height);
+  s.remove();
+  // assert the mutation LANDED before believing the comparison
+  return { fixed, inFlow, seen,
+           injectionLanded: seen.display === 'block' && seen.position === 'static' };
+});
+check('editable-grid: an in-flow message would grow the row (the stated reason)',
+  flow.injectionLanded && flow.inFlow > flow.fixed,
+  JSON.stringify(flow));
+
+// 3. "aria-describedby carries the reason to a screen reader continuously,
+//    focused or not" — the association must resolve to the message element
+//    and be present while blurred, which is the whole point of the sentence.
+const described = await page.evaluate(() => {
+  const bad = document.querySelector('.bo-data-table [aria-invalid="true"]');
+  bad.blur();
+  const id = bad.getAttribute('aria-describedby');
+  const target = id && document.getElementById(id);
+  return {
+    id, resolves: !!target,
+    isTheMessage: !!target?.classList.contains('bo-form-field__message'),
+    hasText: (target?.textContent ?? '').trim().length > 0,
+  };
+});
+check('editable-grid: aria-describedby resolves to the message while blurred',
+  described.resolves && described.isTheMessage && described.hasText,
+  JSON.stringify(described));
+
 // "Skip the swatch grid" — the 264-button bypass must land after the grid.
 await visit('/base/colors/');
 const skip = await page.evaluate(() => {
