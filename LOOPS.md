@@ -365,6 +365,30 @@ match to its full playbook below:
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.
 
+   **When you report this rule as finding nothing, say WHICH KIND of blocked**
+   (roadmap 186.2, and the reason it lives here rather than in `RESUME.md`).
+   "All open items are blocked" is three different situations and only one of
+   them is the owner's:
+
+   - **owner-blocked** — needs a decision, a brief, or a publish only the owner
+     can trigger. Nothing any wake can do.
+   - **browser-blocked** — needs Podman, a real browser, screenshots at 1440 and
+     390. **A cloud wake cannot take it; a LOCAL wake can.**
+   - **agent-blocked** — needs a second agent, which §3b step 4's blind
+     re-score requires and some sessions are not permitted to spawn.
+
+   **This distinction was written into `RESUME.md` and did not survive the next
+   rewrite** — grep found it gone within a day, which is 169.3's lesson landing
+   again: that file is rewritten wholesale every wake and is where corrections
+   go to die. So it is stated here, in the durable playbook, next to the rule it
+   governs.
+
+   It is not pedantry: four consecutive wakes reported rule 4 as "all open items
+   owner-blocked" while **173.2 was merely browser-blocked**, and the first
+   local wake to look at it built and landed it the same day. A cloud wake
+   reporting "nothing dispatchable" was telling the truth about itself and a
+   falsehood about the backlog.
+
    **Read `ROADMAP.md` only.** A closed slice leaves a one-line pointer here and
    its text moves to `ROADMAP-archive.md`. **If this rule is walking thousands of
    lines, that is the signal** — triage the sweep and run it; Slices 165 and 177

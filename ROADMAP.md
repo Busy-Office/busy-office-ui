@@ -499,7 +499,26 @@ One reconciliation, base rate measured first, is the whole proposal.
          reports 0 of N at ship time, that is recorded with the command, not
          worked around.
 
-2. [ ] **186.2 — `173.2` is browser-blocked, not owner-blocked, and rule 4's
+2. [x] **186.2 — `173.2` is browser-blocked, not owner-blocked, and rule 4's
+       halt reasoning should say which.** **CLOSED 2026-08-29, and the item's
+       own test settled it.** Its Accept asked whether the distinction
+       *"survives the next rewrite"*. It did not — `grep -i "browser-blocked"
+       .roundtable/RESUME.md` returned **nothing** within a day, because that
+       file is rewritten wholesale every wake. That is 169.3's lesson landing
+       a second time, so the fix moved to the durable playbook: `LOOPS.md`
+       rule 4 now names three kinds of blocked — **owner-blocked**,
+       **browser-blocked**, **agent-blocked** — beside the rule it governs.
+
+       **The item's thesis was confirmed empirically, not argued.** Four
+       consecutive wakes reported rule 4 as "all open items owner-blocked"
+       while 173.2 was merely browser-blocked; the first local wake to look at
+       it built and landed it the same day (option b, roadmap 173.2). A cloud
+       wake reporting "nothing dispatchable" was telling the truth about
+       itself and a falsehood about the backlog.
+
+       *(original item below)*
+
+       **Original item — `173.2` is browser-blocked, not owner-blocked, and rule 4's
        halt reasoning should say which.** The owner answered on 2026-08-29;
        `173.2`'s Accept needs a live measurement (row at 53px with an error
        present and nothing focused, then on focus, red-proved by reverting to
