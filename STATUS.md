@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 06:35 UTC
+Generated at: 2026-08-29 06:41 UTC
 
 ## Open items by slice
 
@@ -13,16 +13,17 @@ Generated at: 2026-08-29 06:35 UTC
   - 190.1 — a grid cell's validation message is clipped for any message longer than about two lines, because a constant reserves room for a variable-height box.
 - **Slice 191** (1 open)
   - 191.3 — decide whether rule 4's archaeology belongs in `LOOPS-archive.md`, on the evidence 191.2 measured.
+- **Slice 192** (1 open)
+  - 192.1 — record the PLACEMENT rule finding A names.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1113 iterations logged)
+dispatch status — counter-triggered rules (1115 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-08-29 05:46   ok
-  Objective     4 / 3 slices          since 2026-08-29 03:48   OVERDUE  [186, 189, 190, 191]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-29 14:41   ok
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -36,8 +37,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 11:27 · Continue · build · 186.2 closed — the owner/browser/agent-blocked distinction moved from RESUME.md (where it vanished within a day) into LOOPS.md rule 4; thesis confirmed by 173.2 landing in the first local wake after four wakes called it owner-blocked · landed · ef1df95
-- 2026-08-29 11:29 · Objective · grill · 189 — Objective grill of 173/185/186/187: the authority is what a transforming system SERVES not what you hand it (185 read the tarball twice while npm view was the answer); premise re-checks changed the work in 3 of 4 slices; four wakes called browser-blocked work owner-blocked · logged · 5eafae9
 - 2026-08-29 11:29 · Meta · refusal · a gate for the durable-vs-ephemeral rule (corrections written into RESUME.md) — two instances is not a base rate and 'is this sentence a rule?' is the semantic judgement 94.11 refuses · refused · 5eafae9
 - 2026-08-29 03:48 · Objective · grill · 190 — grill of 173/185/187: every assertion checked against its own mechanism reproduced (4 of 4, 3 of 3, 3 of 3), every one reasoned beside it did not — 173.2's specificity comment measures (0,4,0) vs (0,3,1) against a stated (0,3,0) vs (0,2,0), the latter being a different rule's, and its 3.5rem reserve is a constant for a text-dependent box (101-char message clipped 53px, scrollable so not a P0, 1 of 138 pages affected). 185 and 187 are clean controls, re-verified from this container. Filed 190.1/190.2/190.3; corrected ENVIRONMENT.md trap 1 (rev-parse --short takes one revision, so the documented missing-main test fails on every container) and the no-screenshots-is-not-no-browser clause in both ENVIRONMENT.md and Slice 189's new LOOPS.md bullet. Collided with the local dispatcher on the same rule-3 dispatch; caught by Step 0c's pre-commit fetch, renumbered 189 -> 190, both grills kept · logged · 1a808d2e
 - 2026-08-29 03:48 · Meta · refusal · a gate for 'every constant in shipped CSS names what it is sized against' — 94.11's exact shape: the checkable predicate is true of 155 of 155 and the useful one is semantic · refused · 1a808d2e
@@ -46,6 +45,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 14:04 · Continue · build · 189.1 — CLAUDE.md now names WHICH artefact when a third party renders it; escape hatch tested first and did not apply (every existing example is our own build), worked example is npm normalising bin and the read-vs-write path confusion · landed · d50c306
 - 2026-08-29 14:06 · Continue · build · 190.3 — corrected data-table.css's specificity comment; numbers re-derived by hand and agree with the grill: (0,4,0) and (0,3,1), while (0,2,0) belongs to the no-:has() fallback. Conclusion was right, arithmetic was not · landed · aa723d6
 - 2026-08-29 14:35 · Continue · build · 190.2 — editable-grid's three runtime claims now executable (check:claims 141->144), including the counterfactual; two instrument defects caught by assertions: a live getComputedStyle read after style removal, and a red-proof injecting into the wrong built CSS file · landed · 7152cfa
+- 2026-08-29 14:41 · Objective · grill · 192 — Objective grill of 186/189/190/191: every defect in 173.2 was in an ASSERTED claim and the one MEASURED claim was correct (3 of 3); two more instrument defects caught by injection assertions; retired product-vs-machinery ratio checked and deliberately not re-raised · logged · 6a426d6
+- 2026-08-29 14:41 · Meta · refusal · a gate for either finding — A's discipline is a writing rule with no mechanical form, B is the existing red-proof rule succeeding three times · refused · 6a426d6
 
 ## Sunset test
 
