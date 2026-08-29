@@ -17,172 +17,225 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 4 → Continue,
-build mode**, landed as **199.3**). Working tree clean at hand-off.
+Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 1, Continue bug
+mode**, landed as **201**). Working tree clean at hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 3 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 10 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-## ⚠ A COLLISION HAPPENED AGAIN, AND THIS WAKE WAS AGAIN THE LOSER
+## What landed this wake (201) — a P0 found while measuring, not while looking
 
-**Both dispatchers took `199.1`.** The local session pushed first (`d3d76a28`,
-then `0182b983`). Step 0c was followed exactly: **its close stands as the record
-and none of it was re-done** — this wake's own finished, fully-gated close of
-199.1 was discarded with `git reset --hard origin/main` rather than pushed over
-it. `git fetch origin main` immediately before the first commit is what caught
-it, the working half of Step 0c doing its job for the second consecutive wake.
+**The dispatch changed twice, both times because the queue moved under it.**
+Rules 1-3 were clear and rule 4 found all three open items owner-blocked, so
+this wake began a **rule 6 (Polish)** round. A collision reset it onto a tree
+where Slice 200 had just been triaged — **7 new open items** — so rule 4 now
+fired. While measuring **200.7's base rate BEFORE building it**, which is what
+200.7's own Accept demands, the measurement turned up a shipped defect and
+**rule 1 preempted**. Same shape as Slice 180: the P0 was found by the wake,
+not reported to it.
 
-**The cost this time was the shape Step 0c actually names** — *"up to one wake's
-work, discarded"* — rather than last wake's three renumber-and-reverify cycles.
-Both costs have now been paid once each; that is an observation, not a proposal,
-and 175.4 has the collision policy settled by owner call.
-
-**Filing a follow-on is not re-doing the loser's work, and the distinction is
-the close's own words.** `199.1`'s close names one thing it did not do:
-*"mobile 390px not captured this wake — a browser-tool viewport-resize
-limitation in this session, not a decision to skip"*. That, plus one finding
-neither pass carries, is what landed as `199.3`. Same precedent as Slice 199
-following on from `193.2`'s close.
-
-## What landed this wake (199.3)
-
-| what `199.1`'s close left open, verbatim | what this wake measured |
+| what was measured | verdict |
 |---|---|
-| *"mobile 390px **not captured** this wake"* | taken as layout geometry — and its argument **survives**: tallest tile is **326px at both 1440 and 390**, so growth lengthens the page and crowds no card |
-| — (carried by neither pass) | **the complexity axis cannot narrow this index**: 21 of 39 tiles share one value, the 11-tile group spans two, `monitor & output` is 7 tiles at one value |
+| `scan.css` names `var(--bo-motion-ease)` | **defined nowhere**, in src and in `dist` |
+| computed `animation-name` on `body[data-scan-result]::after` | **`none`**, `opacity 0` — the RF scan flash painted **nothing** |
+| `combobox.css` names `var(--bo-font-family-mono)` | **defined nowhere**; the token is `--bo-font-mono`, spelled right by 6 other components |
+| computed `font-family` of `.bo-combobox__option-code` | **byte-identical to `document.body`** — sans-serif, against a `.bo-kbd` control computing monospace |
 
-**Why B matters beside a close that already refused.** `199.1` argues the
-*problem* is absent (more tiles lengthen, they do not crowd). `199.3` argues the
-*remedy* is inert. The second survives if a later wake decides 16.4 screenfuls
-at 390px is a problem after all — at which point the fix is still not this
-filter.
+An unresolvable `var()` is neither a syntax error nor a no-op: the whole
+declaration is **invalid at computed-value time**, so the property inherits and
+nothing warns. stylelint sees valid syntax; `check:motion` asks whether a
+duration is token-driven, never whether the token *resolves*.
 
-**A tempting item was refused by measurement.** At 390px the index shows **0**
-visible in-page jump links, which looks like a finding. It is shell-wide: the
-"On this page" rail is `display:none` below 60rem, **97 of 127 pages** have zero
-visible jump links, and `/patterns/` is **rank 5 of 127** by length —
-`/components/data-table/` is twice as long at 32.1 screenfuls. Recorded in
-199.3 §D with its command; **not filed**, because nothing about it is this
-index's.
+Both fixed, both re-measured after the fix. **`check:token-refs` added** — every
+`var(--bo-…)` with no fallback must name a property something defines.
 
-**Three instrument defects, all caught before a number was used** — §8's
-ordering working rather than a clean run. `documentElement.scrollHeight`
-returned exactly the viewport height at both widths (the identical-value tell —
-the docs shell scrolls an inner `main`); the jump-link count was first taken
-from the DOM and reported 7 at 390px where the honest figure is 0 visible / 7 in
-DOM; and **the probe's red-proof came back GREEN on its first run**, because
-`evaluateOnNewDocument` appended a `<style>` to `document.documentElement`
-before that element existed. CLAUDE.md's rule hit exactly as written. Re-done as
-`addStyleTag` after navigation with an assertion that the computed value moved.
+## The three things worth carrying forward from 201
+
+1. **`check:token-refs` caught a real ordering bug in its own wiring.** Placed
+   after `check:motion` it ran *before* `build:rf-essentials` writes
+   `rf-essentials.css`, read a stale copy, and failed on a typo already fixed in
+   source — the `build:acr` stale-`dist` trap again. It now runs after
+   `check:rf-floor`, verified against `rm -rf packages/core/dist`, not an
+   incremental build.
+2. **The first instrument undercounted by 52%.** A line-scoped
+   `grep -oE '(transition|animation)…'` over the 44 component stylesheets found
+   **11** declarations; a multi-line-aware parse found **23**. Every wrapped
+   declaration was silently dropped. The base-rate claim in 201.4 rests on the
+   second number.
+3. **Siblings, re-verified rather than assumed.** 201.2 exists only because
+   CLAUDE.md's *"when one claim dies this way, re-verify its siblings"* was
+   executed as a command instead of read. The sweep found **9** undefined names;
+   **7 are consumer-override hooks carrying fallbacks and are correct**. Do not
+   re-file those seven.
+
+## 201.4 is OPEN and it constrains 200.7 — read it before building 200.7
+
+`grep -n '201.4' ROADMAP.md`. Measured: of the 23 transition/animation
+declarations in component CSS, 5 are `none`, 16 are token-driven, and **2 carry
+a literal duration — `scan`'s `600ms` and `skeleton`'s `1.8s linear`. Both are
+correct**, no token exists at either value, and `check:motion` already
+adjudicates both via its reduced-motion route (b). So a naive 200.7 gate's only
+two reds are two deliberate, documented decisions.
+
+**201.4's Accept is written so that finding its premise false is satisfying** —
+200.7 may ship against a predicate false of something today, *or* close as
+refused. It may not ship a gate red only on those two.
+
+## A Polish measurement this wake took and did NOT file — re-run it, don't re-derive it
+
+Before the collision, the rule-6 round reconciled `component/data-table` (the
+measured discriminator: the only one of 8 re-queued surfaces with commits in the
+last day). **All four arms clean.** The ledger change was discarded by
+`git reset --hard origin/main` and the wake re-dispatched, so **no Polish row
+was recorded and `polish-state.md` is untouched** — said plainly rather than
+counted as a round.
+
+The part worth keeping is the answer to a question `polish-state.md` explicitly
+deferred to *"a later wake"* — whether arm 4 deserves a gate:
+
+- **18 of 18** `content`-cite clause quotes are still present verbatim on their
+  page. A structural classifier (the quote introduced by `wrong-choice clause:`)
+  finds **17 of 40** and misses `scan`, which words the introduction with an
+  em-dash instead.
+- A naive classifier (any quoted string) checks 20 and produces **2 false
+  positives** — `byline`'s `"many rows"` (a quote of a *rejected first draft*)
+  and `button`'s `"use X instead of a button"` (a placeholder template on a
+  component EXEMPT from the clause gate).
+- **So a gate is refused, on 94.11's ground.** The predicate is uniformly true,
+  and the two candidate detectors trade a 10% false-positive rate against
+  silently under-counting. Telling a page-clause quote from a rejected draft is
+  semantic, not shape.
+
+Re-run rather than trusting the above — the classifier is eight lines over
+`dsa-scores.json` + `apps/docs/src/pages/components/*.astro`, and it was
+red-proved by perturbing a clause in the file the detector reads (1 miss under
+injection, 0 without).
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
-No Podman, no `localhost:8081`, **no screenshots at 1440px/390px in light and
+No Podman, no `localhost:8081`, **no screenshots at 1440px/390px in light or
 dark**. Nothing was visually verified and nothing is described as if it were.
 
-**The aesthetic reading at 390px is untaken by BOTH dispatchers** — `199.1`
-took 1440px in both themes and recorded 390px as not captured; this wake took
-390px as *geometry* (`browser-harness.mjs` + `serve-dist.mjs`, the CAN-run list)
-and cannot take it as an image. 199.3's §B and §C are constructed so they do not
-need one. `git diff --stat` for this wake names `ROADMAP.md` only — no `.css`,
-no `.astro`, no rendering change.
+**This matters more than usual this wake, because the diff touches shipped
+CSS.** Every figure in Slice 201 is a computed-style or `font-family` reading
+taken from headless Chrome (`browser-harness.mjs` + `serve-dist.mjs`). That the
+scan flash now animates, and to exactly what values, is measured. **How it looks
+— the wash's weight in peripheral vision, which is the whole design argument for
+it — is UNVERIFIED.** A local wake looking at `/components/scan/` is worth one
+minute.
 
-Gates green on the committed tree, re-run in full **after** the reset onto
-`origin/main` rather than trusted from the pre-collision build: core `build` +
-`test` (**146** passed), `docs:build`, `check:repo` (slice-refs **401**
-citations / **181** slice numbers, each heading one section), `check:claims`
-**144**, `check:layout` **127** pages, `test:axe` **127 pages × 2 widths, zero
-violations**.
+**A rendering item was declined on exactly this basis and the other dispatcher
+took it.** Rule 4's oldest dispatchable item was `200.1` (dialog exit motion);
+it was classified **browser-blocked** rather than taken, and a local wake landed
+it (`f0d7324b`) while this one worked. That is the cloud/local split working as
+LOOPS.md rule 4 describes it, with the cost visible: `200.2`–`200.6` are all
+shipped-CSS rendering changes and are the same kind of blocked.
 
 No `verifier` agent is available in this session, so the staged diff was read by
 hand — said plainly rather than logged as a verifier pass.
 
-**Traps exercised for real this wake:** 1 (container started **detached** —
-`git branch --show-current` empty; repaired with `git checkout -B main
-origin/main` before any commit, and `origin/main` arrived as a **forced
-update**), 2 (unshallowed before any history figure: **1,637** commits), and 1c
-(`CHROME_PATH` exported in the same command as every browser gate and every
-probe).
+Gates green on the committed tree, **re-run in full after the rebase onto
+`origin/main`** rather than trusted from the pre-collision build: core `build`
+(incl. the new `check:token-refs`) + `test` (**146** passed), `docs:build`,
+`check:repo` (slice-refs **404** citations / **183** slice numbers),
+`check:claims` **146**, `check:layout` **127** pages, `test:axe` **127 pages ×
+2 widths, zero violations**, `check:selftests` **46 gates / 30 exact** — the new
+gate registered and tagged.
+
+## ⚠ TWO COLLISIONS THIS WAKE, AND BOTH WERE CAUGHT BEFORE A COMMIT
+
+Step 0c's mandated `git fetch origin main` immediately before the first commit
+did its job **twice**:
+
+- `59b690dd → 28d8e8d5` (Slice 200 triage + a Research round). Caught before
+  any commit. **This one changed the dispatch** — 7 new open items moved rule 4
+  from "nothing dispatchable" to firing.
+- `28d8e8d5 → 0951e207` (`200.1` closed by the other dispatcher). Caught before
+  the second commit; **rebased cleanly**, no file overlap.
+
+**Neither cost a wake's work**, unlike the previous two collisions. The
+difference is that this wake's work had not yet been committed when the first
+one landed, so the reset was free. That is luck about timing, not a mechanism —
+Step 0c still says so.
 
 ## Counters after this wake
 
-Verified after recording: **1145** rows by the parser against a raw
-`grep -c "^- "` of **1145**, and the `loops.db` mirror at **1145**.
+Verified after recording: **1155** rows by the parser against a raw
+`grep -c "^- "` of **1155**, and the `loops.db` mirror at **1155**.
 
 ```
-Standardize   3 / 4 Continue rounds   ok
-Objective     1 / 3 slices            ok   [199]
+Standardize   5 / 4 Continue rounds   OVERDUE
+Objective     3 / 3 slices            OVERDUE  [199, 200, 201]
 Optimize      0 wake-date(s) newer    ok   [newest pair: axe-violations]
 ```
 
+**BOTH rules 2 and 3 are now past threshold**, which is the change from the last
+hand-off — rule 2 fires first (it sits above rule 3). Re-run
+`dispatch_status.py` rather than trusting this block; three of this wake's own
+rows moved it.
+
 **Rule 5's instrument is NOT stale** — `0 wake-date(s) newer`, so rule 5 was
-answerable and found nothing.
+answerable and found nothing: the only metric with a sample newer than
+2026-08-19 is `axe-violations` (0.0 → 0.0), and the one real size budget is
+gate-enforced in the build (`rf-essentials` **37.0 kB min against a 40 kB
+budget**). Both halves of rule 5 answered, neither triggered.
 
 **No metric recorded**, deliberately: every figure this wake characterises one
-page or one data module at one moment, not a repeatable sample under an existing
-name, and a single-sample name pads the store rule 5 reads (184's discipline).
+declaration or one token set at one moment, not a repeatable sample under an
+existing name, and a single-sample name pads the store rule 5 reads (184's
+discipline).
 
 ## What the next wake should expect
 
-**Rules 2 and 3 are below threshold, and rule 4 now finds NOTHING
-DISPATCHABLE** — this is the change from the last hand-off. Re-count rather
-than copying:
+**Rule 2 (Standardize) fires first — 5/4 and OVERDUE.** Run its three standing
+sweeps (`scan:dead-style`, `report:css-repeats`, `report:prose`, plus
+`report_loop_prose.py`, reading the `ratchet` block first). Rule 3 (Objective,
+3/3 on 199/200/201) is immediately behind it.
 
-```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 3
-```
+**Rule 4's set has grown and is no longer uniformly owner-blocked.** Re-count
+rather than copying:
 
 | item | blocked on | which kind (LOOPS.md rule 4) |
 |---|---|---|
-| `15.12` | owner hardware — a human listening to a screen reader | **owner-blocked** |
+| `200.2`–`200.6` (5 items) | shipped-CSS rendering changes needing 1440/390 × light/dark screenshots | **browser-blocked — a LOCAL wake can take these** |
+| `201.4` | nothing — it is a measurement + a decision | **dispatchable, cloud included** |
 | `112.3` | the owner writing 5 real ERP screen briefs with sealed picks | **owner-blocked** |
 | `112.4` | `112.3`'s verdict | **owner-blocked** |
+| `15.12` | owner hardware — a human listening to a screen reader | **owner-blocked** |
 
-**All three are owner-blocked — none is browser-blocked or agent-blocked**, so
-naming a cloud/local split would be wrong here: no wake of either kind can take
-them. `112.3`'s four questions were answered by owner decision on 2026-08-29
-(`b81131f3`, all four recommendations agreed, pilot is **5 briefs** not 8); what
-remains is the one input no wake supplies, and nothing is dispatchable until the
-first brief exists in `.roundtable/pilot-112/briefs.md`. **Re-read the items
-rather than trusting this table.**
+**Read the items rather than trusting this table**, and note the cloud/local
+split is now load-bearing: a cloud wake reporting "all blocked" here would be
+repeating the exact error LOOPS.md rule 4 records against four consecutive
+wakes.
 
-**So the next wake should land on rule 6 (Polish), and rule 6's step 0 is not
-optional:** run `python3 scripts/loops/polish_requeue.py --apply` BEFORE
-evaluating it. Rule 5 is answerable and clear, so it will not intercept. Read
-§3b's *"what a round on a `content: 3` surface is supposed to do"* first — if
-the reconciliation finds nothing, **the round is a no-op and says so in one
-line**; manufacturing a fix on a surface with no measured weakness is the
-busywork the operating rules refuse.
+**Do not re-raise Slice 179's or 182.2's refusals, 176.3, the retired
+product-vs-machinery ratio, Slice 195's finding A, 167.1's retired `CLAUDE.md`
+watch, or `199.1`/`104.4`'s thrice-refused complexity filter.** New to this
+list: **the seven fallback-carrying undefined tokens** (`--bo-grid-min` and
+friends) are consumer-override hooks and are correct — `check:token-refs`
+prints their count every run precisely so they are not re-discovered as a
+finding.
 
 **Two blind re-scores are still owed and neither can be done in a cloud wake**
 (§3b step 4 needs a second agent): `scan`'s three fixed dimensions, and
-`skeleton · colour`. Unchanged by this wake.
-
-**Do not re-raise Slice 179's or 182.2's refusals, 176.3, the retired
-product-vs-machinery ratio, Slice 195's finding A, or 167.1's retired
-`CLAUDE.md` watch.** And **do not re-open `199.1` or `104.4`** — the complexity
-filter has now been refused three times, twice on measurement, and 199.3 §C
-restates the reopen trigger as a *capability* property with its command
-(one value holding ≤ a third of the index **and** the largest group spanning 3+
-values; today 21 of 39 = 54% and a spread of 2, so neither half is met).
-Re-measure before reopening anything.
+`skeleton · colour`. Unchanged by this wake. Note that `scan`'s CSS changed this
+wake, so it will re-queue.
 
 **Adjudicated at hand-off, which is the step `check:resume-slice-ids` exists to
-prompt.** It reported 5 closed ids named here — **`199.1`, `199.3`, `193.2`,
-`199.2`, `196.1`** — plus 3 not in `ROADMAP.md` at all (**`104.4`, `167.1`,
-`164.3`**, archived). **Every one is a historical reference; none is a claim
-that any is open.** `199.3` is this wake's own closed item; `199.1` is the item
-the other dispatcher closed, described throughout in the past tense as the thing
-this wake lost and then followed on from; `104.4` is
-the closed refusal whose trigger fired, now re-refused twice more; `193.2` and
-`199.2` are prior closes named as precedent; `196.1`, `167.1` and `164.3` are
-named only to say what is retired or where the direction decision lives. The
-genuinely open ids — `15.12`, `112.3`, `112.4` — are in the table above and are
-**not** among the closed set, which is the check agreeing with the table.
+prompt.** Run against this rewrite it reports **12 named ids: 5 closed —
+`200.1`, `199.1`, `201.1`, `201.2`, `201.3` — and 1 archived (`104.4`)**.
+Every one is a historical reference or this wake's own work: `201.1`/`201.2`/
+`201.3` are what this wake closed; `200.1` is the rendering item this wake
+declined and the other dispatcher landed, named throughout in the past tense;
+`199.1` and `104.4` are prior refusals named only to say what must not be
+re-raised. **None is a claim that any is open.** The genuinely open ids —
+`200.2`–`200.6`, `201.4`, `112.3`, `112.4`, `15.12` — are in the table above and
+are **not** among the closed set, which is the check agreeing with the table.
+Re-run it after the next recording; the count moves with every rewrite.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -191,8 +244,8 @@ from the sources named — never by copying the answers above you.**
 
 - **Direction:** (a) adoption/DX — finish it by publishing
   `@busy-office/create-ui`. Source: the `DECISION (owner, 2026-08-28)` block in
-  Slice 164.3, which lives in **`ROADMAP-archive.md`** (line ~21217), not
-  `ROADMAP.md`. Read it there; a pointer that disagrees with its source loses.
+  Slice 164.3, which lives in **`ROADMAP-archive.md`**, not `ROADMAP.md`. Read
+  it there; a pointer that disagrees with its source loses.
 - **Remaining step, and who it waits on.** The publish is done (`npm view
   @busy-office/create-ui version` → **`0.1.0`**, re-asked this wake) and the
   release workflow ships it. What is left is **one thing this loop cannot check
@@ -202,14 +255,15 @@ from the sources named — never by copying the answers above you.**
   workflow's comments carry the recovery. A release cannot even be *attempted*
   today without a version bump — `check-publishable.mjs` exits 1 on both
   packages, by design.
-- **Did this wake advance it?** **No.** Rule 4 dispatched a docs-index refusal;
-  nothing in the diff touches either package.
+- **Did this wake advance it?** **No.** Rule 1 dispatched a P0 in the CSS
+  package; nothing in the diff touches `create-ui`.
 - **Work rows since the direction was decided that did not advance it:**
-  **74 of 80** (derived this wake, not incremented). Re-derive rather than
+  **78 of 84** (derived this wake, not incremented). Re-derive rather than
   copying — and read it as a **rate, not a state**: the owner was shown this
   ratio and decided to keep the routine running hourly anyway (2026-08-28).
-  *(Last honest reads: 74 of 80, 69 of 72, 68 of 71, 65 of 68, 61 of 64, 56 of
-  59, 55 of 58, 52 of 55, 49 of 52, 46 of 47, 43 of 44, 41 of 42, 38 of 39.)*
+  *(Last honest reads: 78 of 84, 74 of 80, 69 of 72, 68 of 71, 65 of 68, 61 of
+  64, 56 of 59, 55 of 58, 52 of 55, 49 of 52, 46 of 47, 43 of 44, 41 of 42, 38
+  of 39.)*
   **Snapshot caveat, and it is real:** both dispatchers append to this log, so
   a figure taken mid-wake moves under you. This one includes this wake's own
   row and was taken against the working tree.
@@ -240,8 +294,8 @@ node packages/core/scripts/check-publishable.mjs packages/core packages/create-u
 # missing, not wrong.
 ```
 
-**These commands are about to age, and the next owner decision is what ages
-them.** The `npm view` lines no longer test a blockage — they confirm a publish —
-and the direction's last open question is a setting on npmjs.com rather than
-anything in this tree. When the owner picks a direction beyond "wire the front
-door into the release", rewrite them; do not reinterpret them.
+**A release now has a user-visible reason to happen, which it did not last
+wake.** 201.1 and 201.2 are `Fixed` entries in the CHANGELOG's `Unreleased`
+block describing two defects live in **0.5.0** — one of them a shipped component
+whose primary visual feedback painted nothing. That is a fact for the owner to
+weigh, not a decision this loop takes: publishing remains owner-triggered.
