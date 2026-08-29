@@ -231,6 +231,99 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 184 — rule 5 has read ten-day-old numbers for ten wake-dates, and the Accept criterion that was supposed to prevent it stopped holding the day it was ticked (2026-08-29)
+
+Found while evaluating dispatcher rule 5 on a cloud wake, by opening
+`.roundtable/loop-metrics.jsonl` instead of copying the previous handover's answer
+— which is the only reason it was found at all. **The stale reading is already
+published**: Slice 183's own dispatch record in this file states *"rule 5 no metric
+with two consecutive regressions (`ci-wall-time` flat at 275s)"* as this-wake
+evidence, and every one of that metric's 26 samples was taken inside a single
+17-hour window on **2026-08-18**. By CLAUDE.md's own standard that is a
+load-bearing number, quoted into the plan, wrong.
+
+**Measured, with the commands, because a count about this repo is re-runnable in
+seconds and re-deriving is where the second mistake comes from.**
+
+```
+python3 -c "import json,collections; \
+  r=[json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()]; \
+  c=collections.Counter(x['ts'][:10] for x in r); print(sorted(c.items()), len(r))"
+# 08-13:3 08-15:7 08-16:12 08-17:21 08-18:31 08-19:22 08-26:1 08-27:2   — 99 total
+grep -c "^- 2026-08-2[0-9]" .roundtable/loop-log.md      # 652 iterations since 08-20
+```
+
+- **96 of 99 metric samples predate 2026-08-20.** Since then **652 iterations** have
+  been logged against **3** samples — and each of those three is a metric name
+  recorded exactly **once** (`suite-nodes-per-fact`, `docs-words-added-data-table`,
+  `css-repeat-bodies`), so not one of them can ever satisfy "two consecutive runs".
+- **The newest sample rule 5 could legitimately quote is `framework_classes` at
+  2026-08-19 23:09** — ten wake-dates ago.
+- **`ci-wall-time`: 26 samples, first `2026-08-18 02:48`, last `2026-08-18 19:54`,
+  none since.** Slice 28.1 (archived) closed on 2026-08-18 with the Accept criterion
+  ***"`ci-wall-time` recorded every wake"***, against its own finding that *"CI time
+  was never recorded through `record_metric.py`, so dispatcher rule 4 …was
+  structurally blind to the one number that bounds every future gate"* — that rule 4
+  is today's rule 5, renumbered. **The fix held for one day.** A criterion satisfied
+  by a burst and never again is the shape this file has no detector for.
+- **Nothing detects it.** `dispatch_status.py` — the Step 0b instrument that exists
+  *because* dispatcher rules starve silently (roadmap 41.1) — reads `loop-log.md`,
+  covers rules 2 and 3, and has never read the metric store at all. `loop-metrics.jsonl`
+  is named **zero** times in `ROADMAP.md`, `ROADMAP-archive.md`, `LOOPS.md` and every
+  `.roundtable/*.md`; `ci-wall-time` appears in no gate, script or workflow.
+
+  ```
+  grep -rn "loop-metrics" ROADMAP.md ROADMAP-archive.md LOOPS.md .roundtable/*.md   # 0
+  grep -rn "ci-wall-time" --include=*.mjs --include=*.py --include=*.yml .           # prose only
+  ```
+
+**Adversarially checked before being written down**, per the instrument doctrine —
+what would make this wrong is samples existing somewhere this count cannot see:
+`--no-log` (which inserts into the mirror and skips the file) appears only in the two
+recorders' own argparse, in no document and no workflow; `loops.db` is git-ignored and
+absent from this container, so the jsonl is the whole record; and
+`git log -- .roundtable/loop-metrics.jsonl` shows no uncommitted backlog — its three
+most recent touching commits are 2026-08-27, 2026-08-27 and 2026-08-19.
+
+**Not classified P0, deliberately.** Nothing is red — the full gate chain ran green
+on `main` at `ad77cc17` this wake — and no shipped artefact is wrong. What is wrong
+is that a dispatcher rule returns a verdict computed from ten-day-old data, and a
+wake then writes that verdict into the plan as current.
+
+1. [ ] **184.1 — `dispatch_status.py` reports rule 5's input, so a wake cannot quote
+       a stale metric without seeing that it is stale.** The process half — "record a
+       metric every wake" — is what 28.1 already tried, and it is a process rule with
+       nothing mechanical behind it; it lasted one day. This is the mechanical half,
+       and it goes in the instrument Step 0b already runs every wake rather than in a
+       new gate.
+       *Accept*: the rule-5 line names **the newest sample rule 5 could quote** (the
+       newest sample of a metric holding at least two) and **how many wake-dates are
+       newer than it**; its numbers **agree with a raw count taken from
+       `loop-metrics.jsonl` itself**, not with anything the caller passed in, and it
+       **refuses to print a verdict** when the file's raw line count and its parsed
+       sample count disagree — the guard `rows()` already applies to the log. The
+       live/stale threshold is **not invented here**: it is 28.1's own adopted
+       criterion, *recorded every wake*, so the line reads live only when a metric
+       completed a comparable pair on the wake-date reported. **Red-proved by
+       injection** — appending a second sample of a name flips the line, confirmed by
+       running the script, never by reading the diff — and its **base rate measured
+       before shipping**, replayed over every wake-date in the log with as-of-date
+       semantics, so it is known to be a predicate that can read both ways rather than
+       one already true of everything. It declares its signal per the self-test rule.
+2. [ ] **184.2 — the dispatcher's rule 5 and the Optimize playbook state different
+       triggers, and the difference is the one added to revive the rule.** §4's
+       Trigger reads "on demand, or when a tracked metric regresses on two consecutive
+       runs, **or when a size budget is breached outright**", with the third clause
+       dated 2026-08-23 and justified by Optimize having fired 3 times in 740
+       iterations. Step 2's rule 5 — the text a dispatcher actually evaluates — carries
+       only the trend clause. So the trigger added *because the trend trigger was dead*
+       was never added to the rule that dispatches, which is the same two-documents-
+       disagreeing shape LOOPS.md records about `check:resume-charter` being hardened
+       and demoted 44 minutes apart.
+       *Accept*: rule 5's text and §4's Trigger **agree on the set of conditions that
+       dispatch Optimize**, verified by reading both in the same pass; and the
+       disagreement is stated where it is fixed rather than silently patched over.
+
 ## Slice 183 — the visual backlog that waited eight wakes, cleared (2026-08-29)
 
 **Not new input, and not a dispatched rule.** Rules 1-3 were unarmed; rule 4 had
