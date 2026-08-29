@@ -315,6 +315,58 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 205 — `check:rf-floor` says "every use of a feature above Chrome 108 is guarded" while checking a fixed list of six (2026-08-29)
+
+**Found from inside the 200.4 dispatch, not reported to it**, and filed rather
+than fixed there — the finding is about the gate, not about the bulk bar.
+
+200.4 put an `@starting-style` block into `data-table.css`, which is one of the
+14 components `build-rf-essentials.mjs` compiles into `dist/css/rf-essentials.css`
+at **target chrome >= 108**. `@starting-style` is Chrome **117**. The gate whose
+whole job is that floor passed, and its pass line reads *"every use of a feature
+above Chrome 108 is guarded"*.
+
+Measured, not inferred:
+
+```
+grep -ln "starting-style" packages/core/src/css/components/*/*.css
+  # data-table, dialog, dropdown, offcanvas — only data-table is in the RF profile
+grep -c "@starting-style" packages/core/dist/css/rf-essentials.css      # 2
+grep -n -A3 "@starting-style" packages/core/dist/css/rf-essentials.css  # 1 comment + 1 real at-rule
+git show HEAD:packages/core/src/css/components/data-table/data-table.css \
+  | grep -c "starting-style"                                            # 0 -> this is the first
+```
+
+`FEATURES` in `check-rf-floor.mjs` is six probes — `:user-invalid`,
+`color-mix()`, `subgrid`, `@container`, `@layer`, `:has()` — and the at-rule arm
+short-circuits with `if (f.kind === 'atrule') return false; // @layer/@container
+are within 108`. Nothing enumerates at-rules the list does not name, so an
+unlisted one above the floor is invisible.
+
+**This is a claim-vs-coverage gap, NOT a shipped bug**, and the distinction is
+the whole item. An unknown at-rule is dropped whole by CSS error handling, so on
+Chrome 108 the block is skipped and the bar appears instantly — which is
+precisely the documented degrade, and `derive-floor.mjs` already carries
+`@starting-style` at the `degrades` tier. `translate` is Chrome 104, so the
+visible rule renders. Nothing is broken; the gate's SENTENCE is broader than the
+gate.
+
+1. [ ] **205.1 — close the gap between what `check:rf-floor` verifies and what
+       its pass line claims.**
+       *Accept*: `check:rf-floor` either covers at-rules generically — any
+       at-rule in the RF profile resolved against BCD rather than against a
+       hand-list — **or** its pass message is narrowed to say what it actually
+       verified, with its header recording why a generic walk was refused.
+       Whichever is chosen, the base rate is measured FIRST per 94.11: count
+       how many distinct at-rules the RF profile uses today and how many are
+       above 108, and record both numbers in this item. If the honest answer is
+       "one, and it degrades cleanly", say so and prefer the message fix — a
+       probe added per feature is the hand-list by another name, and this item
+       is satisfied by that outcome as much as by a new probe. Red-prove
+       whichever form ships by injecting an at-rule above the floor and
+       confirming the injection reached `rf-essentials.css` — grep the BUILT
+       file, not the source — before believing the red.
+
 ## Slice 204 — P0: `check:claims` turned CI red for three commits by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
 
 **Found by a cloud wake dispatched onto 200.3, not reported to it.** The wake's
@@ -883,7 +935,7 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        local wake looking at `/components/tabs/` and `/components/segmented/`
        is worth one minute. Note that a still screenshot could not settle it
        either: the resting pixels are unchanged by construction.
-4. [ ] **200.4 — data-table bulk-actions get an entrance transition instead
+4. [x] **200.4 — data-table bulk-actions get an entrance transition instead
        of an instant `display` flip.**
        *Accept*: `.bo-data-table__bulk-actions` becoming visible (first row
        selected) shows a short opacity+transform entrance
@@ -893,6 +945,65 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        existing mechanism does; at 390px the toolbar wraps exactly as it does
        today — this item does not touch the wrap/overflow behavior 173.2/190.1
        already fixed; RTL entrance direction verified, not assumed mirrored.
+
+       **Landed 2026-08-29 (cloud wake).** `@starting-style` on the existing
+       `[data-any-selected="true"]` / `:has(:checked)` selector pair, with the
+       `transition` on the VISIBLE rule only. Every figure below is a
+       computed-style or geometry reading taken in headless Chrome via
+       `browser-harness.mjs` + `serve-dist.mjs` on `/components/data-table/`,
+       the one built page carrying a bulk bar and 2+ row selects.
+
+       **Premise checked before any of it**, because a duration measurement is
+       meaningless under reduced motion and this container's media queries are
+       not desktop defaults (204.1): `(prefers-reduced-motion: reduce)` reads
+       **false**, `no-preference` **true**, `--bo-motion-duration-base` `.15s`,
+       root font-size 16px.
+
+       | Accept clause | measured |
+       |---|---|
+       | entrance on first selection, fast–base | at the click: `display` none→**flex**, `opacity` **0**, `translate` **`0px -4px`**, `getAnimations()` = **opacity@150ms + translate@150ms**; at 40 ms `opacity 0.1756` / `translate 0px -3.298px`; settled `opacity 1` / `translate 0px` |
+       | additional rows do not replay | second row-select click: `getAnimations()` **[]**, opacity stays `1` — the applied rules do not change, so no transition is generated |
+       | clearing the last selection: no exit flourish | at the clearing click `display` is **already `none`**, `getAnimations()` **[]** — the hide direction's after-change style is the base rule, which declares no transition |
+       | 390px wrap unchanged | settled bar `[41, 778, 177.67, 36]`, buttons `Approve [41,778,92.27,36]` / `Reject [141.27,778,77.41,36]`, **1 row, 0px spill** past the toolbar — **byte-identical** to the pre-change rendering (same page, same browser, the three new declarations neutralised by injection). Same at 1440px. |
+       | RTL entrance direction | `dir="ltr"` and `dir="rtl"` both read a start of **`0px -4px`** — travel is on the block axis, so there is nothing to mirror. Verified in both directions rather than reasoned from the axis. |
+
+       **The zero-JS path was measured too, not assumed from the shared
+       selector**: with `data-any-selected` removed and the checkbox set
+       without a change event, the `:has()` branch produces the same
+       `opacity 0` / `translate 0px -4px` / 150 ms pair.
+
+       *The first red-proof of the wrap comparator came back GREEN, and it was
+       a defect in the INJECTION* — CLAUDE.md's rule, executed. The injection
+       was `flex-wrap: nowrap`, which is inert here: the bar already occupies
+       **one** row at 390px, so forbidding a wrap it does not have changes
+       nothing. Replaced with `max-inline-size: 120px` against a 177.67px bar,
+       and the injection was confirmed to have landed by reading the computed
+       value (**`none` → `120px`**) before the red was believed: rows moved
+       **1 → 2** and the comparator reported the difference. Only then was its
+       "no change vs pre-change" verdict worth anything.
+
+       **Refused: `display … allow-discrete`**, which .bo-dialog, .bo-offcanvas
+       and .bo-dropdown all carry. What it buys is holding the box rendered
+       through a fade-*out*, and this Accept asks for no fade-out; adding it
+       would have produced exactly the exit flourish the item excludes. The
+       entrance-only property is therefore structural — a transition declared
+       on one rule and not the other — rather than a duration set to zero,
+       which is the form that survives someone later changing a token.
+
+       **`check:composited` caught it on the first build**, which is the gate
+       working: `@starting-style { … opacity: 0 }` is a dimming declaration in
+       the shipped CSS and now carries a registry entry. Narrower than the
+       `.bo-dropdown__menu` entry beside it — a one-direction transition, so
+       `opacity: 0` is never a close-transition end point either.
+
+       **NOT verified, said plainly.** Cloud wake: no Podman, no
+       `localhost:8081`, **no screenshots at 1440px or 390px in either theme**.
+       Whether a 150 ms lift *looks* right — the design argument for the change
+       — is unverified, and nothing above rests on it. As with 200.3, a still
+       screenshot could not settle it either: the resting pixels are unchanged
+       by construction (measured: identical rects). What a local wake should do
+       is *watch* `/components/data-table/` while ticking a row, not photograph
+       it.
 5. [ ] **200.5 — toast gets an exit animation and a bounded stack-reflow,
        matching the entrance it already has.**
        *Accept*: `.bo-toast` removal fades out over

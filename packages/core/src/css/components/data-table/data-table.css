@@ -72,10 +72,49 @@
     gap: var(--bo-space-2);
   }
 
+  /* Entrance motion (200.4). The bar arrives instead of snapping in, and it
+     is an ENTRANCE ONLY — the `transition` lives on the visible rule, never
+     on the hidden base rule, so the hide direction reads its after-change
+     style from a rule that declares no transition and stays exactly as
+     instant as it has always been. That is the item's Accept, and it is
+     structural rather than a duration set to zero.
+
+     No `display … allow-discrete` for the same reason. Holding the box
+     rendered through a fade-out is what allow-discrete buys, and there is no
+     fade-out here; on the show direction display flips at once either way.
+     This is the one place the recipe differs from .bo-dialog / .bo-dropdown,
+     which animate both directions and need it.
+
+     Travel is on the BLOCK axis, so nothing here mirrors under RTL — the
+     item's Accept asks for that to be verified rather than assumed, so it was
+     measured in both writing directions: `dir="ltr"` and `dir="rtl"` each read
+     an identical `0px -4px` start. (The measurement is of the START value
+     only. The settled rect mirrors in RTL exactly as the whole page does,
+     which is not what this clause is about.)
+
+     Reduced motion needs no rule: the duration is the shared token
+     tokens/motion.css already zeroes. Where `@starting-style` is unsupported
+     there is no before-change style to transition from, so the bar appears
+     exactly as it does today — the `degrades` tier derive-floor.mjs already
+     records for this at-rule, not a new floor entry. */
   .bo-data-table-container[data-any-selected="true"] .bo-data-table__bulk-actions,
   .bo-data-table-container:not([data-any-selected]):has(.bo-data-table__row-select:checked)
     .bo-data-table__bulk-actions {
     display: flex;
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity var(--bo-motion-duration-base) var(--bo-motion-easing-standard),
+      translate var(--bo-motion-duration-base) var(--bo-motion-easing-standard);
+  }
+
+  @starting-style {
+    .bo-data-table-container[data-any-selected="true"] .bo-data-table__bulk-actions,
+    .bo-data-table-container:not([data-any-selected]):has(.bo-data-table__row-select:checked)
+      .bo-data-table__bulk-actions {
+      opacity: 0;
+      translate: 0 -0.25rem;
+    }
   }
 
   /* Per-row dirty badge + Save/Cancel, revealed by initRowEdit() when the

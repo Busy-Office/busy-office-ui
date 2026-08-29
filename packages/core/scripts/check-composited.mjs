@@ -137,6 +137,18 @@ const REGISTRY = [
     decision: 'exempt',
     why: 'Transient, same shape as htmx-swapping: opacity 0 is the OPEN transition\'s starting point and the CLOSE transition\'s end point, both under 300ms. The genuine resting states are [popover] fully removed from paint (closed) or opacity 1 (open, at the AA background this same file already sets) — nobody reads text mid-fade. This is a transition + @starting-style, not @keyframes, so it needs the explicit entry the file header says keyframes get for free.',
   },
+  {
+    match: '.bo-data-table__bulk-actions',
+    decision: 'exempt',
+    why: 'The bulk-actions bar\'s ENTRANCE starting point only (200.4), and it is '
+      + 'narrower than the .bo-dropdown__menu entry above: this transition runs '
+      + 'in one direction, so opacity 0 is never a close-transition end point '
+      + 'either. It appears solely inside @starting-style — the before-change '
+      + 'style for the none -> flex reveal, under 150ms — and the hidden resting '
+      + 'state is display:none, painting nothing at all rather than dimming '
+      + 'anything. The visible resting state is opacity 1. Nothing is read '
+      + 'through it, because at 0 the bar has just begun to exist.',
+  },
 ];
 
 const files = ['index.css', 'htmx.css'];

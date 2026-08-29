@@ -11,6 +11,34 @@ pin.
 
 ### Changed
 
+- **The data-table bulk-actions bar now arrives instead of snapping in**
+  (roadmap 200.4). Selecting the first row fades and lifts
+  `.bo-data-table__bulk-actions` into place over `--bo-motion-duration-base`
+  with `--bo-motion-easing-standard`, via `@starting-style` on the same
+  `[data-any-selected="true"]` / `:has(:checked)` selector pair that already
+  revealed it — so both the JS-driven and the zero-JS reveal get it, verified
+  live on each.
+
+  **Entrance only, by construction rather than by a zeroed duration:** the
+  `transition` is declared on the visible rule, never on the hidden base rule,
+  so the hide direction reads an after-change style that declares no transition
+  and stays exactly as instant as before. There is deliberately no
+  `display … allow-discrete` here — what that buys is holding the box rendered
+  through a fade-out, and there is no fade-out.
+
+  **Not breaking**, with the reasoning rather than the assertion: it adds three
+  declarations to one existing rule, and the settled values are the identity
+  values (`opacity: 1`, `translate: 0 0`), so a consumer's resting rendering is
+  unchanged, no selector, custom property or markup contract moves, and any
+  `transition` a consumer declared themselves still wins by the same cascade.
+
+  Travel is on the block axis, so nothing mirrors under RTL — measured in both
+  writing directions rather than assumed, both reading an identical `0px -4px`
+  start. Wrap behaviour at 390px is unchanged: the settled geometry of the bar
+  and its buttons is identical to the pre-change rendering, and the comparator
+  that says so was red-proved by forcing a wrap it does not have today.
+  `prefers-reduced-motion` zeroes it for free through the shared token.
+
 - **Tab and segmented-control selection now eases instead of snapping**
   (roadmap 200.3). `.bo-tabs__tab` transitions `color`, `background-color` and
   `border-color`; `.bo-segmented__option` transitions `color`,
