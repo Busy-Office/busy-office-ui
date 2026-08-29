@@ -249,6 +249,12 @@ they were ticked?"* — **none of that shape exist. 1 of 275.**
 #   widened to 21 needles           -> 4 hits   (zero new; the space is saturated)
 ```
 
+Measured at `751959eb`. **Re-run on the tree this slice ships on** — after the
+rebase onto `a2d53a93` and after this slice's own two Accepts joined the corpus —
+it reads **276 criteria, the same 4 phrase-hits, 117 mechanical (42%)**. The
+commit is named because the corpus grew by this very filing; a figure quoted
+without its tree is what 180 found in `check-slice-refs`' own header.
+
 Hand-read, the four are: 184.1's own Accept (quotes 28.1, imposes nothing
 ongoing), 162.1 (incidental), 169.3 (a *description* of `ENVIRONMENT.md`, and it
 holds), and **28.1 — the one genuine recurring obligation, decayed in a day**.
@@ -301,6 +307,15 @@ One reconciliation, base rate measured first, is the whole proposal.
        `4be166be` (`177.1`) and `751959eb` (`175.4`, HEAD). **Not 0, not 100.**
        Noise is low: **83** backticked ids across all **80** revisions, ~1 per
        revision, and today all six are exactly the blocked-set claim.
+
+       **A third instance fired mid-wake, and it is deliberately NOT in the base
+       rate.** While this item was being written the local dispatcher landed
+       `0c1fe3d3`, closing `176.3`; the hand-off table drafted minutes earlier
+       already said `176.3` was owner-blocked, and was corrected by re-running
+       the raw `grep -c` (5 → 6), not by noticing. Excluded from the 2-of-58
+       because it never reached a commit — counting a defect the process caught
+       would inflate the number. It is recorded because it shows **the staleness
+       interval is shorter than a wake**, which the base rate alone understates.
 
        **The measuring parser under-reported first and was reconciled, not
        trusted:** `^\s*\d+\. \[ \] \*\*([\d.]+)` found **4** where a raw

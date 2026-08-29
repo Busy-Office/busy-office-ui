@@ -77,20 +77,32 @@ urgent:** `publish.yml` publishes core only, so the next release silently skips
 
 **2. `173.2` is BROWSER-blocked, not owner-blocked.** The last hand-off said "the
 six older items are still owner-blocked (`112.3`, `112.4`, `173.2`, `175.4`,
-`176.3`, `15.12`)". At HEAD **`175.4` is `[x]` closed** and **`173.2` has the
-owner's answer (b), 2026-08-29**, with a full Accept. Cause: `6c4cfae` wrote the
+`176.3`, `15.12`)". Measured at `751959eb`, the commit that wrote it:
+**`175.4` was already `[x]` closed** and **`173.2` already had the owner's
+answer (b), 2026-08-29**, with a full Accept. Cause: `6c4cfae` wrote the
 decisions into `ROADMAP.md` and `751959eb` never touched this file.
 
-**The corrected open set — five `N. [ ]` checkboxes, re-read in `ROADMAP.md` this
-wake, not copied:**
+**3. And it happened a THIRD time, during this wake, to the table below.** While
+this hand-off was being written the local dispatcher landed `0c1fe3d3` closing
+**`176.3`** as no-change on the owner's challenge. The draft of this table —
+written minutes earlier — listed `176.3` as owner-blocked. It was corrected by
+re-running the count, not by noticing. The rebase that brought those commits in
+**resolved with no conflict at all**, which is Step 0c's documented hazard: the
+`git fetch origin main` before the first commit is what caught it, and it is a
+process rule with nothing mechanical behind it.
+
+**The corrected open set — six `N. [ ]` checkboxes, counted in `ROADMAP.md` at
+`a2d53a93`+, not copied** (`grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md` → 6):
 
 | item | blocked on |
 |---|---|
 | `112.3`, `112.4` | **owner** (briefs; 112.4 waits on 112.3's verdict) |
-| `176.3` | **owner** (§3b's Exit has never been satisfiable) |
 | `15.12` (`12. [ ] AT runtime evidence`) | **owner hardware** |
 | `173.2` | **a browser** — owner-answered, Accept written, needs live row-height measurement. **A local wake can take this; a cloud wake cannot.** |
 | `186.1`, `186.2` | nothing — filed this wake, dispatchable |
+
+`176.3` is **closed, no-change, and must not be re-raised** — `LOOPS.md` rules 6
+and 7 and §3b all carry the owner's decision now.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
