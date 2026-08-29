@@ -2482,6 +2482,96 @@ if (pointerIsFine) {
   );
 }
 
+/* 200.3 — tab and segmented selection easing. Three cases, each locking a
+   thing that was measured to be different from what reading the CSS suggests.
+
+   1. Forced colours must zero it, and the FIRST attempt shipped an override
+      that did nothing: `@media (forced-colors: active) { .bo-tabs__tab {
+      transition: none } }` was written into the existing forced-colors block
+      near the top of tabs.css, which sits ABOVE `.bo-tabs__tab`. Same
+      specificity, so source order decided and the base rule won — the computed
+      `transition-duration` under emulated forced-colors still read
+      `0.1s, 0.1s, 0.1s`. Nothing in the build could see that: `check:motion`
+      asks about prefers-reduced-motion, not this. Only a computed-style read
+      caught it, so a computed-style read is what guards it.
+   2. The easing must not move the strip. Colour transitions cannot reflow in
+      principle; this asserts it at the transition's start frame and mid-flight
+      rather than only once settled, which is where a layout-affecting property
+      would show up.
+   3. `border-color` (a shorthand) has to actually cover the vertical rail's
+      `border-inline-end-color` (a logical longhand) — that is the reason one
+      declaration serves the horizontal strip, the vertical rail and the
+      narrow-container fallback instead of three. */
+await visit('/components/tabs/', { features: [{ name: 'forced-colors', value: 'active' }] });
+const tabsForced = await page.evaluate(() => ({
+  emulated: matchMedia('(forced-colors: active)').matches,
+  property: getComputedStyle(document.querySelector('.bo-tabs__tab')).transitionProperty,
+  duration: getComputedStyle(document.querySelector('.bo-tabs__tab')).transitionDuration,
+}));
+check(
+  'tabs: forced-colors zeroes the selection easing, so the underline — the only channel left saying which tab is current — is instant',
+  // The emulated flag is asserted too: without it this case would pass while
+  // measuring ordinary screen media, which is a detector that cannot fail.
+  tabsForced.emulated && tabsForced.property === 'none' && tabsForced.duration === '0s',
+  JSON.stringify(tabsForced),
+);
+
+await visit('/components/segmented/', { features: [{ name: 'forced-colors', value: 'active' }] });
+const segForced = await page.evaluate(() => {
+  const opt = document.querySelector('.bo-segmented__input:checked + .bo-segmented__option');
+  return {
+    emulated: matchMedia('(forced-colors: active)').matches,
+    property: getComputedStyle(opt).transitionProperty,
+    duration: getComputedStyle(opt).transitionDuration,
+  };
+});
+check(
+  'segmented: forced-colors zeroes the option easing, so the Highlight/HighlightText pair carrying "checked" is never mid-blend',
+  segForced.emulated && segForced.property === 'none' && segForced.duration === '0s',
+  JSON.stringify(segForced),
+);
+
+await visit('/components/tabs/');
+const tabsGeometry = await page.evaluate(async () => {
+  const list = [...document.querySelectorAll('.bo-tabs__list')].find(
+    (l) => l.querySelectorAll('[role="tab"]').length >= 5,
+  );
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  const before = list.getBoundingClientRect().height;
+  const selected = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+  tabs[(selected + 1) % tabs.length].click();
+  const startFrame = list.getBoundingClientRect().height; // same tick as the click
+  await new Promise((r) => setTimeout(r, 50)); // mid-transition (duration is 100ms)
+  const mid = list.getBoundingClientRect().height;
+  await new Promise((r) => setTimeout(r, 400)); // settled
+  return { tabCount: tabs.length, before, startFrame, mid, settled: list.getBoundingClientRect().height };
+});
+check(
+  'tabs: selecting a tab eases colour only — the strip block-size is identical before, at the transition start frame, mid-flight and settled',
+  tabsGeometry.tabCount >= 5 &&
+    tabsGeometry.before === tabsGeometry.startFrame &&
+    tabsGeometry.before === tabsGeometry.mid &&
+    tabsGeometry.before === tabsGeometry.settled,
+  JSON.stringify(tabsGeometry),
+);
+
+const railTransition = await page.evaluate(async () => {
+  const rail = document.querySelector('.bo-tabs--vertical > .bo-tabs__list');
+  if (!rail) return { found: false };
+  const tabs = [...rail.querySelectorAll('[role="tab"]')];
+  const to = tabs.find((t) => t.getAttribute('aria-selected') !== 'true');
+  to.click();
+  await new Promise((r) => setTimeout(r, 50)); // mid-transition
+  const mid = getComputedStyle(to).borderInlineEndColor;
+  await new Promise((r) => setTimeout(r, 400));
+  return { found: true, mid, settled: getComputedStyle(to).borderInlineEndColor };
+});
+check(
+  'tabs: the `border-color` shorthand does animate the vertical rail\'s logical `border-inline-end-color` — one declaration covers all three marker edges',
+  railTransition.found && railTransition.mid !== railTransition.settled,
+  JSON.stringify(railTransition),
+);
+
 /* /patterns/command-bar states two things the browser must actually do, and
    the second is the reason the page exists in the shape it does.
 

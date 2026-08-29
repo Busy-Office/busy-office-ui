@@ -70,6 +70,7 @@
     .bo-tabs__list[data-overflow] {
       mask-image: none;
     }
+
   }
 
   .bo-tabs__tab {
@@ -84,6 +85,24 @@
     font-size: var(--bo-density-font-size);
     font-weight: var(--bo-font-weight-medium);
     white-space: nowrap;
+    /* Selection and hover EASE, they do not move (200.3). Colour only — no
+       panel slide and no sliding-pill indicator, both refused on ERP grounds:
+       tab content is not spatially ordered, so a slide implies an adjacency
+       that isn't there, and a pill's geometry breaks under wrapped, RTL or
+       translated labels.
+
+       `border-color` rather than `border-block-end-color`, because the
+       vertical variant moves the marker to `border-inline-end` and the narrow
+       container query moves it back — one declaration covers all three, and
+       the shorthand expands to the physical longhands both logical properties
+       resolve to. Verified by measuring the computed value mid-transition on
+       the vertical rail, not by reading the spec.
+
+       Token-driven, so `prefers-reduced-motion` zeroes it for free via
+       tokens/motion.css — route (a) of `check:motion`. */
+    transition: color var(--bo-motion-duration-fast) var(--bo-motion-easing-standard),
+      background-color var(--bo-motion-duration-fast) var(--bo-motion-easing-standard),
+      border-color var(--bo-motion-duration-fast) var(--bo-motion-easing-standard);
   }
 
   .bo-tabs__tab:hover {
@@ -94,6 +113,29 @@
   .bo-tabs__tab[aria-selected="true"] {
     color: var(--bo-color-accent-text);
     border-block-end-color: var(--bo-color-accent);
+  }
+
+  /* Forced colours: the selection easing goes too, for the same reason the
+     overflow mask does above. In this mode the underline is the ONLY channel
+     saying which tab is current — the UA has flattened every other colour to a
+     system pair — so easing it leaves the sole state signal partly true for
+     100ms. Measured mid-transition on the vertical rail:
+     `rgba(15, 118, 110, 0.776)` against a settled `rgb(15, 118, 110)`.
+
+     NOT a reduced-motion proxy — those are different preferences, and
+     tokens/motion.css already zeroes the other one on its own.
+
+     **This block is here, below `.bo-tabs__tab`, and not merged into the
+     forced-colors block above, which is where it was first written.** Same
+     specificity, so source order decides, and up there the base rule wins: the
+     override shipped and the computed `transition-duration` under emulated
+     `forced-colors: active` still read `0.1s, 0.1s, 0.1s`. The injection landed
+     and did nothing — caught by measuring the computed style rather than
+     trusting the diff. */
+  @media (forced-colors: active) {
+    .bo-tabs__tab {
+      transition: none;
+    }
   }
 
   .bo-tabs__panel {

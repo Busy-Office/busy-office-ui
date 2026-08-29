@@ -797,7 +797,7 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
 
        Verified: `check:claims` **149/149** (was 146, +3), `check:repo`
        **9/9**, `test:axe` **127 pages × 2 widths, zero violations**.
-3. [ ] **200.3 — tab and segmented-control selection get a style transition,
+3. [x] **200.3 — tab and segmented-control selection get a style transition,
        no slide/pill.** Bundled as one item: same shape (color/background/
        border-color transition only, explicitly no panel slide and no
        sliding-pill indicator — both refused by the proposal itself on sound
@@ -811,6 +811,70 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        mode is unaffected (no color-only signal already relied on `transition`
        to be visible — verify the existing focus/selected indicators still
        render instantly and visibly there).
+
+       **CLOSED 2026-08-29** (cloud wake, rule 4 — oldest open item that is not
+       owner-blocked). `tabs.css` and `segmented.css`, no new tokens. Every
+       figure below is a computed-style or layout reading from headless Chrome
+       (`browser-harness.mjs` + `serve-dist.mjs`), taken on the built site
+       before and after the change.
+
+       | criterion | before | after |
+       |---|---|---|
+       | `.bo-tabs__tab` transition | `all` / `0s` | `color, background-color, border-color` / `0.1s ×3` / `cubic-bezier(0.4, 0, 0.2, 1) ×3` |
+       | `.bo-segmented__option` transition | `all` / `0s` | `color, background-color, box-shadow` / `0.1s ×3` |
+       | strip block-size (9-tab strip), 4 sample points | 39/39/39/39 | 39/39/39/39 |
+       | keydown → `aria-selected` flip, 40 presses | max **1.2 ms**, mean **0.59 ms** | max **1.4 ms**, mean **0.73 ms** |
+       | forced-colors, both components | `0s` | `0s` |
+       | reduced motion, both components | `0s` | `0s, 0s, 0s` |
+
+       **Three things measured that reading the CSS would have got wrong:**
+
+       - **The first forced-colors override shipped and did nothing.** It was
+         written into `tabs.css`'s existing `@media (forced-colors: active)`
+         block, which sits **above** `.bo-tabs__tab`. Same specificity, so
+         source order decided and the base rule won: the computed
+         `transition-duration` under emulated forced-colors still read
+         `0.1s, 0.1s, 0.1s` after the override was in the built CSS. Moved
+         below the rule it overrides; re-measured to `0s`. Nothing in the build
+         could have caught this — `check:motion` asks about
+         `prefers-reduced-motion`, not this — so it is now a `check:claims`
+         case, red-proved by having been red for real.
+       - **`border-color` (shorthand) does animate `border-inline-end-color`
+         (logical longhand).** That is why ONE declaration covers the
+         horizontal strip, the vertical rail and the narrow-container fallback
+         instead of three. Measured mid-transition on the rail:
+         `rgba(15, 118, 110, 0.776)` against a settled `rgb(15, 118, 110)`;
+         before the change, mid and settled were identical.
+       - **`box-shadow` is NOT dropped by the UA in forced colors here.** The
+         comment first written asserted it was. `forced-color-adjust: none` on
+         the checked option opts it out of that too, and it computes
+         `rgba(0, 0, 0, 0.05) 0px 1px 2px 0px`; an unchecked sibling reads
+         `none` only because it never had a shadow.
+
+       **One deliberate deviation from the Accept, measured before taking it:**
+       the Accept names `border-color` for BOTH components; `segmented.css` does
+       not get it. Across the 5 rules in that file whose selector names
+       `__option`, the only `border-*` declaration of any kind is one
+       `border-radius` — the border belongs to `.bo-segmented`, the track — so
+       listing it would ship a transition property that can never fire.
+
+       **The latency figure is reported with its noise floor, not as a delta.**
+       Five runs on the post-change build read means of 0.732, 0.755, 0.767,
+       0.810, 0.825 ms; the single pre-change run read 0.59, which sits below
+       that cluster, so a real increase of roughly 0.2 ms cannot be ruled out
+       and is not claimed to be noise. It does not matter either way: both are
+       ≈1 ms, two orders of magnitude below the ~100 ms at which input lag
+       becomes perceptible, and `aria-selected` tracked all 40 presses with
+       exactly one tab selected at the end.
+
+       **NOT VERIFIED, said plainly.** Cloud wake: no Podman, no
+       `localhost:8081`, **no screenshots at 1440px/390px in light or dark**.
+       Everything above is a computed-style or geometry reading. Whether a
+       100 ms colour settle *looks* right — which is the entire design argument
+       for the change — is **unverified**, and no claim here rests on it. A
+       local wake looking at `/components/tabs/` and `/components/segmented/`
+       is worth one minute. Note that a still screenshot could not settle it
+       either: the resting pixels are unchanged by construction.
 4. [ ] **200.4 — data-table bulk-actions get an entrance transition instead
        of an instant `display` flip.**
        *Accept*: `.bo-data-table__bulk-actions` becoming visible (first row

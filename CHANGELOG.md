@@ -9,7 +9,28 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+### Changed
+
+- **Tab and segmented-control selection now eases instead of snapping**
+  (roadmap 200.3). `.bo-tabs__tab` transitions `color`, `background-color` and
+  `border-color`; `.bo-segmented__option` transitions `color`,
+  `background-color` and `box-shadow` — both at the existing
+  `--bo-motion-duration-fast` / `--bo-motion-easing-standard`, so no new tokens
+  and `prefers-reduced-motion` zeroes them for free.
+
+  **Not breaking**, and the reasoning rather than the assertion: this adds a
+  `transition` to two rules and changes no resting value, no selector, no
+  custom property and no markup contract, so a consumer's settled rendering is
+  byte-identical and any `transition` they had declared themselves still wins
+  by the same cascade it won by before.
+
+  Colour only — deliberately no panel slide and no sliding-pill indicator: tab
+  content is not spatially ordered, so a slide implies an adjacency that isn't
+  there, and a pill's geometry breaks under wrapped, RTL or translated labels.
+  Verified live that the tab strip's block-size is unchanged at the transition's
+  start frame, mid-flight and settled, and that both components go instant under
+  `forced-colors: active`, where the selection indicator is the only channel
+  left.
 
 ## 0.6.0 (2026-08-29)
 

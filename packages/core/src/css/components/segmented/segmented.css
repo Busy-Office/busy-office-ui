@@ -65,6 +65,25 @@
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
+    /* Same easing as the tab strip (200.3): the checked option's three
+       channels — text colour, the raised surface, and the shadow that lifts it
+       — settle instead of snapping. No transform and no sliding thumb: the
+       group WRAPS at narrow widths (`flex-wrap` above), so a thumb animating
+       between two options on different lines would travel diagonally across
+       the control.
+
+       `border-color` is deliberately NOT in this list even though the sibling
+       item names it: nothing in this file changes an option's border colour —
+       the border belongs to `.bo-segmented`, the track — so listing it would
+       ship a transition property that can never fire. Measured, not assumed:
+       across the 5 rules in this file whose selector names `__option`, the
+       only `border-*` declaration of any kind is one `border-radius`, and a
+       radius is not a colour.
+
+       Token-driven, so reduced motion zeroes it via tokens/motion.css. */
+    transition: color var(--bo-motion-duration-fast) var(--bo-motion-easing-standard),
+      background-color var(--bo-motion-duration-fast) var(--bo-motion-easing-standard),
+      box-shadow var(--bo-motion-duration-fast) var(--bo-motion-easing-standard);
   }
 
   /* The checked option is the visible channel; aria-checked (native, free)
@@ -94,6 +113,23 @@
       forced-color-adjust: none;
       background: Highlight;
       color: HighlightText;
+    }
+
+    /* The checked rule above opts OUT of forced-colour flattening, so the
+       Highlight/HighlightText pair is what carries "checked" here, and easing
+       it would leave the state signal mid-blend for 100ms. Same trade the tab
+       strip makes; not a stand-in for prefers-reduced-motion, which the motion
+       tokens already zero on their own.
+
+       Measured rather than reasoned, because the obvious claim was wrong: the
+       shadow is NOT dropped by the UA in this mode. `forced-color-adjust: none`
+       opts the checked option out of that too, and it computes
+       `rgba(0, 0, 0, 0.05) 0px 1px 2px 0px` under emulated
+       `forced-colors: active` — while an unchecked sibling, still on
+       `forced-color-adjust: auto`, reads `none` simply because it never had a
+       shadow to lose. */
+    .bo-segmented__option {
+      transition: none;
     }
   }
 }
