@@ -160,6 +160,10 @@ Predicted for this wake's own recording: one `Objective` row carrying one
 `grep -c "^- " .roundtable/loop-log.md`; **if the parser and the raw count
 disagree, the parser loses** (they agreed at 1106/1106 after the rebase).
 
+**Verified after recording: the prediction held exactly.** `1108` by the parser
+against a raw `grep -c "^- "` of `1108`; `Objective 0 / 3 since 2026-08-29
+03:48`; `Standardize 3 / 4` unmoved, as an Objective row should leave it.
+
 **No metric was recorded**, deliberately. Nothing measured here is a repeatable
 sample under an existing name — the clip table is a one-off characterisation of
 one component, and inventing a single-sample name pads the store rule 5 reads
