@@ -495,6 +495,50 @@ its absent `DESIGN.md`.
        while discriminating nothing, which is a detector that cannot fail
        wearing a green tick.
 
+       > **CORRECTED 2026-08-29 by the Objective grill of 204/206** (full
+       > report `.roundtable/grill-objective-204-206-2026-08-29.md`). The
+       > "headless Chrome 141 reports `(pointer: none)`... none moves it"
+       > premise above is an environment SNAPSHOT, and it already drifted
+       > within the same day: this repo's bundled Chromium auto-updates, and
+       > a fresh measurement reads Chrome **151** reporting `pointer: fine`
+       > TRUE. `check:claims` now runs all three previously-skipped button
+       > cases live (154/154, zero `NOT VERIFIED` lines) with no code
+       > change — 204.1's fix branches on a LIVE capability read, never a
+       > hardcoded version fact, so it self-healed the moment the
+       > environment changed. **The fact is corrected; the fix needed no
+       > correction.** No gate proposed: pinning a Chromium version to
+       > prevent this class of drift would trade one staleness for another
+       > this repo does not otherwise control.
+
+## Slice 207 — Objective grill of Slices 204, 206: an environment fact went stale within the same day, and the self-healing gate absorbed it with no code change (2026-08-29)
+
+Rule 3 at 3/3, OVERDUE, window `[200, 204, 206]`. Index checked first: 200 is
+a repeated subject — the Slice 199-202 grill already covered it. Honest
+scope: **204 and 206 alone**, the same correction Slices 195/196/198 made.
+Full report: `.roundtable/grill-objective-204-206-2026-08-29.md`.
+
+**(A) 204's "headless Chrome 141 reports pointer:none, six variants tried,
+none moves it" premise is false today — because Chrome moved, not because a
+flag started working.** Re-measured fresh: `browser.version()` now reads
+**Chrome/151.0.7922.174**, and `matchMedia('(hover:hover) and
+(pointer:fine)').matches` reads **true**. `check:claims` runs
+**154/154 verified live, zero `NOT VERIFIED`** — the three button cases 204.1
+guarded rather than deleted are now exercising for real, automatically,
+because the fix branches on a LIVE read (`pointerIsFine`) rather than a
+hardcoded fact. The self-healing design absorbed a ten-version Chromium jump
+with zero code changes. Correction appended to 204's own record above rather
+than rewritten in place, per this repo's standing rule that historical rows
+are never edited.
+
+**(B) 206's own numbers re-verified independently, fresh, not trusted from
+adjacent memory.** `scan:dead-style` 0/1,428 and `report:css-repeats` 8
+groups both reproduce to the digit on a second, separate run.
+
+**No gate proposed for either.** (A)'s mechanism already self-verifies on
+every run via the pass line's own count; a version-pin gate would trade one
+kind of staleness for another this repo does not control. (B) needed no
+correction.
+
 ## Slice 203 — Objective grill of Slices 199-202: the P0 fix's own gate re-verified by injection, two triage refusals confirmed against source (2026-08-29)
 
 Rule 3 at 4/3, OVERDUE. Index checked first: 0 of the window's four slices are
