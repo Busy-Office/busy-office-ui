@@ -1,10 +1,44 @@
-# Publishes @busy-office/ui to npm via Trusted Publishing (OIDC) — no token,
-# no OTP. Owner-triggered: publishing a GitHub Release (tag v<version>) is the
-# trigger; CI builds from a clean checkout and the registry gets provenance.
+# Publishes @busy-office/ui AND @busy-office/create-ui to npm via Trusted
+# Publishing (OIDC) — no token, no OTP. Owner-triggered: publishing a GitHub
+# Release (tag v<version>) is the trigger; CI builds from a clean checkout and
+# the registry gets provenance.
 #
-# One-time setup on npmjs.com (package → Settings → Trusted Publisher):
+# One-time setup on npmjs.com (package → Settings → Trusted Publisher), REQUIRED
+# SEPARATELY FOR EACH PACKAGE — it is configured per package, not per org:
 #   org Busy-Office · repo busy-office-ui · workflow publish.yml
 # Renaming this file breaks publishing until that setting is updated.
+#
+# ── The version question, answered (roadmap 185.1) ───────────────────────────
+# The tag gate asserts the release tag against `packages/core/package.json`, and
+# ONE tag cannot also assert create-ui's own version — core is 0.5.0 while
+# create-ui is 0.1.0. Three answers were open: publish create-ui with no
+# assertion, give it its own `create-ui-v*` trigger, or move the two to lockstep
+# versions.
+#
+# Chosen: **create-ui ships on core's release, asserted by its own two gates
+# instead of by the tag.** The assertion is not dropped, it is replaced by a
+# stronger pair, because create-ui's content is DERIVED from core's version:
+#
+#   1. `npm run check -w @busy-office/create-ui` re-derives the scaffold's
+#      framework pin from `packages/core/package.json` (`^<core version>`) and
+#      fails if the committed `framework.json` disagrees. Since the tag already
+#      equals core's version, this transitively ties create-ui's shipped content
+#      to the tag being released.
+#   2. `check-publishable.mjs` refuses a release whose versions are already on
+#      the registry — so a core release cannot ship without a create-ui version
+#      bump, which is exactly the "the release silently skipped the scaffolder"
+#      failure 185 found. It runs BEFORE anything is published, because npm's own
+#      duplicate-version error arrives after the first package is already live.
+#
+# Refused: lockstep versions (create-ui 0.1.0 → 0.5.0 rewrites a published
+# package's version line to fix a workflow), and a separate `create-ui-v*`
+# trigger (it leaves the core release able to strand the scaffolder, which is
+# the defect being fixed). KNOWN LIMIT, stated rather than hidden: there is no
+# path to release create-ui ALONE — a scaffolder-only change ships with the next
+# core release. If create-ui's publish fails because its Trusted Publisher is
+# not yet configured on npmjs.com, core is already live: configure it and run
+# `npm publish -w @busy-office/create-ui` by hand. Re-running this job would
+# fail the publishable check, by design.
 name: Publish
 
 on:
@@ -39,10 +73,20 @@ jobs:
             exit 1
           fi
 
+      # Before any build, and before anything is published: both versions must
+      # be new to the registry. A version cannot be republished, and a release
+      # that ships two packages can otherwise half-publish.
+      - name: Both packages must be publishable
+        run: node packages/core/scripts/check-publishable.mjs packages/core packages/create-ui
+
       - run: npm ci
       # Same gates as ci.yml — a release must never publish what CI wouldn't pass.
       - name: Build core (CSS dist + TS + api/behaviors/contrast gates)
         run: npm run build -w @busy-office/ui
+      # The scaffold's pin, NOTICE and template screen are derived; this fails if
+      # the committed copies disagree with the core version being released.
+      - name: create-ui derived artefacts are current
+        run: npm run check -w @busy-office/create-ui
       - name: Stylelint (bo- naming conventions)
         run: npm run lint:css -w @busy-office/ui
       - name: Behavior tests (against compiled dist)
@@ -52,5 +96,10 @@ jobs:
         env:
           DOCS_BASE: /busy-office-ui
 
-      - name: Publish to npm (OIDC, with provenance)
+      - name: Publish core to npm (OIDC, with provenance)
         run: npm publish -w @busy-office/ui
+      # Second, and never conditionally: the scaffolder pins the core version
+      # this release just shipped, so a release that stops here leaves the front
+      # door pointing at the previous one.
+      - name: Publish create-ui to npm (OIDC, with provenance)
+        run: npm publish -w @busy-office/create-ui

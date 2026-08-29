@@ -231,6 +231,93 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 188 — the release now ships the front door, and the tag assertion is replaced rather than dropped (2026-08-29)
+
+**Dispatcher rule 4, cloud wake.** Rules 1-3 gave nothing: no open P0
+(`grep -niE '\bp0\b' ROADMAP.md` returns closed slice headings and narrative
+only), GitHub intake **0 open issues** (asked via the API), and
+`dispatch_status.py` read `Standardize 0 / 4`, `Objective 1 / 3 [187]`,
+`Optimize 0 wake-date(s) newer … ok`. Rule 4's oldest-first walk over the seven
+`N. [ ]` checkboxes: `15.12` owner hardware, `112.3`/`112.4` owner briefs,
+**`173.2` browser-blocked — a local wake can take it, this one cannot**, then
+**185.1**, which needs no browser at all.
+
+### 188.1 — `publish.yml` publishes both packages
+
+The defect 185 left open: a GitHub Release ran `npm publish -w @busy-office/ui`
+and nothing else, so the scaffolder — live since `2026-08-29T01:30:23Z` and
+pinning `^0.5.0` — would never be republished when core moved.
+
+**The version question, answered by measurement rather than by choosing a
+style.** 185.1's Accept named three options (no tag assertion for create-ui, its
+own `create-ui-v*` trigger, or lockstep versions) and forbade silently dropping
+an assertion. The answer taken is the first, and it is not a dropped assertion
+but a swap for two stronger ones, because **create-ui's content is derived from
+core's version**:
+
+- `packages/create-ui/build.mjs` writes `framework.json` as `^<core version>`.
+  Red-proved, not assumed: bumping `packages/core/package.json` to `0.6.0` and
+  re-running the check fails with
+  `✗ framework pin (^0.6.0, from @busy-office/ui) — differs from its source`.
+  Since the tag gate already asserts the tag equals core's version, this ties
+  create-ui's shipped content to the tag transitively.
+- A new release gate, `packages/core/scripts/check-publishable.mjs`, refuses a
+  release whose versions are already on the registry — **so a core release
+  cannot ship without a create-ui version bump**, which is exactly the silent
+  skip 185 found.
+
+**Refused, each with its reason in the workflow's own comments:** lockstep
+versions (rewriting a published package's version line to fix a workflow), and a
+separate `create-ui-v*` trigger (it leaves a core release able to strand the
+scaffolder — the defect being fixed). **Known limit, stated rather than
+hidden:** there is now no path to release create-ui alone; a scaffolder-only
+change ships with the next core release.
+
+### 188.2 — the new gate was red-proved on all six branches, before it ever ran in CI
+
+`check:published` and `check-package.mjs` are the precedents: a release-time
+gate that only ever runs during a release is a gate nobody has watched fail.
+This one is `@exact` (membership in the version list the registry serves) and
+was exercised by hand, against the real registry:
+
+| branch | input | result |
+|---|---|---|
+| already published | the real tree, `@busy-office/ui@0.5.0` + `create-ui@0.1.0` | **exit 1**, both named |
+| publishable | `create-ui@0.1.1` | exit 0 |
+| never published | `@busy-office/nonexistent-xyz@0.0.1` (real E404) | exit 0, "first publish" |
+| `"private": true` | fixture | **exit 1** |
+| registry unreachable | `npm_config_registry=http://127.0.0.1:9/` | **exit 1**, "the registry could not be asked, so nothing was verified" |
+| no arguments | — | **exit 1** with usage |
+
+The unreachable row is the one that matters: a registry that cannot answer is a
+gate that could not run, and this repo's rule is that such a gate fails loudly
+rather than reading as "nothing is already published".
+
+**The `@exact` tag was red-proved too, per "verify the injection".** The gate
+lives in `packages/core/scripts/`, which `check:selftests` scans, and removing
+the tag (`grep -c '@exact'` → **0**, confirmed) turns that meta-gate red naming
+the file. Restored: `self-test check passed — 44 gates classified` (was 43).
+
+**Why `packages/core/scripts/` and not `scripts/release/`.** `apps/docs`'s
+`build` runs `check:repo` → `check-selftests.mjs`, and the docs Containerfile
+copies `packages`, `apps/docs`, `examples/erp-suite` and `DESIGN.md` — **not
+root `scripts/`**. Teaching the meta-gate a new directory would have broken the
+container build in exactly the way `check:rtl`'s DESIGN.md assertion once broke
+the po-app image. Placing the gate inside a directory the meta-gate already
+scans costs nothing and keeps it classified.
+
+**NOT wired into `ci.yml`, deliberately:** on `main` the shipped versions are
+normally already published, so this gate is red by design between releases. It
+belongs to the release.
+
+**What a cloud wake could not verify, named rather than implied:** the workflow
+itself was not executed — cutting a release is owner-triggered and this wake has
+no way to run one. What was verified is every piece it calls: the YAML parses
+and its thirteen steps are in the intended order (`python3 -c "import yaml…"`),
+`npm run check -w @busy-office/create-ui` passes and fails for the right reason,
+and the new gate's six branches above. Nothing in the diff renders, so no
+screenshot was owed.
+
 ## Slice 187 — Standardize sweep: three clean lanes, and the one duplicate they cannot see (2026-08-29)
 
 Dispatcher rule 2 at **4/4 OVERDUE**, so this fired ahead of rule 4 (which had
@@ -629,7 +716,7 @@ edited away, because each was confidently reasoned from real evidence.**
 and its final step is `npm publish -w @busy-office/ui` — **core only**. This
 release was a hand publish; a GitHub Release still would not ship `create-ui`.
 
-1. [ ] **185.1 — wire `create-ui` into the release workflow.** Now that the
+1. [x] **185.1 — wire `create-ui` into the release workflow.** Now that the
        package exists, its npmjs.com Trusted Publisher can be configured (that
        was the real chicken-and-egg, and it is resolved by 0.1.0 existing).
        *Accept*: a release publishes both packages, with the version question
@@ -639,6 +726,11 @@ release was a hand publish; a GitHub Release still would not ship `create-ui`.
        own `create-ui-v*` trigger, or the two go lockstep. **Do not silently
        drop the assertion for one package** — it is the only thing stopping a
        mistagged release. Owner-triggered publishing is unchanged.
+
+       **CLOSED by Slice 188 (2026-08-29, cloud wake).** Both packages publish
+       from one release; the tag assertion is replaced for create-ui by its
+       derived-pin check plus a new `check-publishable.mjs`, both red-proved.
+       The workflow itself was NOT executed — a release is owner-triggered.
 
 *(original finding, kept — its central claim about publish.yml is correct)*
 
