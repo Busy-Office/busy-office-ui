@@ -3085,6 +3085,21 @@ per page, not two).
        and are briefs re-runnable (**test it with one brief before believing
        either way**).
 
+       **OWNER DECISION 2026-08-29: agree, all four recommendations.** Pilot
+       proceeds as 112.4's admission gate only; **5 briefs**, not 8; suite
+       evidence (GAP-17-style) does **not** count toward the bar; and the
+       burn-once assumption gets tested rather than believed — run the first
+       real brief, then re-run that same brief text in a fresh no-repo session
+       and compare the two agents' picks/answers before treating any brief as
+       spent. If they diverge, brief scarcity is confirmed and 5 stands; if
+       they agree, briefs are a re-runnable regression test and the "scarce
+       resource" framing that blocked this for weeks no longer applies.
+
+       **Still blocked on one input no wake can supply: the owner writing 5
+       real ERP screen briefs with sealed picks.** Nothing else in this item
+       is dispatchable until at least the first brief exists in
+       `.roundtable/pilot-112/briefs.md`.
+
        *(original item, unchanged below)*
 
        **Original item, kept verbatim — BLOCKED ON OWNER BRIEFS —
@@ -3109,10 +3124,12 @@ per page, not two).
        *(pre-registered protocol follows, unchanged)*
        32-style evidence before any contract surface exists. Protocol,
        pre-registered here so the verdict cannot be argued afterward:
-       - **Briefs**: the owner writes 5-8 screen briefs from real ERP
-         memory, unseen by the loop before the runs, each with the
-         owner's own pattern pick sealed in a file the pilot agent can
-         never see.
+       - **Briefs**: the owner writes **5** screen briefs from real ERP
+         memory (revised down from 5-8 by the 2026-08-29 owner decision
+         above — the bar is an absolute count, not a rate, so 8 only
+         raised the odds of hitting it at 60% more owner time), unseen
+         by the loop before the runs, each with the owner's own pattern
+         pick sealed in a file the pilot agent can never see.
        - **Agent context**: a fresh subagent gets the brief text plus the
          IMPROVED `llms.txt` (post-112.2) ONLY — no repo access. One
          control brief re-run with nothing but the npm README.
