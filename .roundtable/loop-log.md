@@ -1144,3 +1144,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 18:40 · Continue · build · 196.1 — data-table.css's horizontal-overflow claim was false; corrected the comment (Branch B), no layout change · landed · dd2f3a1
 - 2026-08-29 18:49 · Standardize · sweep · Slice 197 — all three standing lanes clean, delta 0 vs Slice 194 · logged · 777dacf
 - 2026-08-29 18:54 · Objective · grill · Objective grill of 193/196/197 — clean control, index checked first, no repeated subject · logged · 4746a93
+- 2026-08-29 19:02 · Roadmap · plan · 112.3 — owner agreed to all four roundtable recommendations (5 briefs, suite evidence excluded, burn-once tested) · triaged · b81131f
