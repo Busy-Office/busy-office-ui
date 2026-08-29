@@ -652,8 +652,98 @@ predicate was true of 19 of 19, and 94.11's comment predicate true of 155 of 155
 the blanket gate that distinguishes nothing is this repo's recorded failure mode.
 One reconciliation, base rate measured first, is the whole proposal.
 
-1. [ ] **186.1 — `RESUME.md`'s slice-id claims are reconciled against
-       `ROADMAP.md`'s checkboxes, and the disagreement is reported.**
+1. [x] **186.1 — DONE 2026-08-29 (cloud wake). `RESUME.md`'s slice-id claims are
+       reconciled against `ROADMAP.md`'s checkboxes, and the disagreement is
+       reported.**
+
+       Shipped as `apps/docs/scripts/check-resume-slice-ids.mjs`, wired as
+       `check:resume-slice-ids` and run **advisory** from `record_iteration.py`
+       beside `check:resume-charter` — the home this item named, for the reason
+       it gave. `record_iteration.py`'s single charter invocation became a loop
+       over the two, so the "must not fail the recording" contract is stated
+       once rather than copied.
+
+       **What it reports at ship time, and the command.** Not 0 of N, which the
+       Accept named as an equally satisfying outcome — it fires on HEAD:
+
+       ```
+       node apps/docs/scripts/check-resume-slice-ids.mjs
+       # ROADMAP.md has 8 open and 32 closed item(s) (both reconciled against a
+       # raw count of the file); RESUME.md names 13.
+       #   2 named id(s) are not in ROADMAP.md at all: 164.3, 168.1
+       #   3 named id(s) are recorded [x] CLOSED: 186.2, 185.1, 173.2
+       ```
+
+       All three of those are historical references, not stale claims, and the
+       check says outright that it **cannot tell the two apart**. That is
+       deliberate and is 94.11's line: a check enforces the shape that carries a
+       property, never what prose MEANS. Trying to separate "still blocked" from
+       "what the owner settled in" is guessing at intent from prose.
+
+       **The base rate moved, and the premise's figure is not restated as
+       this one.** 186.1 measured *2 of 58 wake-ends (3%)*. Re-measured here
+       over every revision of `RESUME.md` with a `ROADMAP.md` beside it:
+       **8 of 86 revisions (9%)** fire, distribution `{0: 78, 1: 3, 2: 3, 3: 2}`.
+       Different unit (revisions, not wake-ends) and a parser that derives an id
+       for the unnumbered items the premise's could not, so the two are not in
+       conflict — both say the same thing that matters: **neither dead nor
+       always-on.** 78 of 86 revisions report nothing, so a report is a signal.
+
+       ```
+       git log --format=%H -- .roundtable/RESUME.md   # then per revision:
+       git show <rev>:.roundtable/RESUME.md           # backticked ids
+       git show <rev>:ROADMAP.md                      # id + state, itemsIn()
+       ```
+
+       **Id derivation, measured before the rule was chosen.** The bold id wins;
+       position is the fallback that rescues the unnumbered items. On `ROADMAP.md`
+       today: 40 checkbox items, 36 carry a bold id, it agrees with the derived
+       id in **36 of 36**, and the 4 without one (`29.1`, `29.2`, `15.11`,
+       `15.12`) derive correctly. Position alone is **not** safe in general —
+       the same derivation disagrees with the bold id **30 times** in
+       `ROADMAP-archive.md`, where slices were merged and renumbered. That is the
+       measured reason this reads `ROADMAP.md` only, and the reason the fallback
+       may never override.
+
+       **Fences are deliberately NOT skipped, unlike the sibling charter gate.**
+       The reconciliation is against the raw command this Accept names, which
+       knows nothing about fences; a parser with a different scope would
+       disagree with it the first time a checkbox appeared in a shell recipe,
+       and the disagreement would read as a parse bug. Same scope, same answer,
+       or a loud refusal.
+
+       **Red-proved by injection, each injection confirmed by grepping the file
+       and the file restored byte-identical afterwards** (`md5sum` unchanged,
+       `git status` clean on the path):
+
+       | injection | landed (grep) | result |
+       |---|---|---|
+       | append a backticked `` `179.1` `` (closed) to `RESUME.md` | 1 occurrence | 3 → **4** reported, 13 → 14 named |
+       | strip the backticks off `173.2` | 1 → 0 occurrences | **2** reported |
+       | strip all three | 0 remaining | **quiet**, rc=0 |
+
+       And the two refusals, red-proved by stubbing a probe copy in the same
+       directory (`git stash` would have moved the data too) and confirming the
+       stub landed before believing the result:
+
+       | stub | result |
+       |---|---|
+       | `CHECKBOX` narrowed to one digit | REFUSED — parsed 7 open vs raw 8, 31 closed vs raw 32; no verdict printed |
+       | `SLICE_HEADING` made to never match | REFUSED — 4 items with no id to reconcile, by line number |
+       | `id: bold ?? derived` → `derived ?? bold` | the `--self-test` goes **FAIL** on exactly the discriminating case |
+
+       Tagged `@heuristic` because the verdict rests on recognition and one half
+       of it is **positional** — `15.12` is that id only because of where it sits
+       — and `check:selftests` now reads 45 gates, 16 heuristic, all self-tested.
+
+       **Not visually verified, and nothing here needs it**: a cloud wake, no
+       Podman, no screenshots. The change is one new `.mjs`, one `package.json`
+       script line and one `record_iteration.py` block — no CSS, no `.astro`.
+       Gates run green after it: core `build` + `test` (**146**), `docs:build`,
+       `check:repo`, `check:claims` (**141**), `check:layout` and `test:axe`
+       (**127 pages × 2 widths**).
+
+       *(original item below)*
 
        **The failure 184 diagnosed recurred one wake later and is live at
        HEAD.** `RESUME.md` states *"the six older items are still owner-blocked

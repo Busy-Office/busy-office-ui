@@ -146,24 +146,41 @@ def main():
         except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
             print(f"  (warning: {label} regeneration failed: {exc})", file=sys.stderr)
 
-    # RESUME.md's charter check runs HERE, not in `check:repo` (roadmap 169.4).
+    # RESUME.md's own checks run HERE, not in `check:repo` (roadmap 169.4).
     # `.roundtable/**` is in CI's paths-ignore, so a commit touching only it is
     # never built — which made a CI-run gate reading RESUME.md a silent hole:
-    # it could break and go unbuilt, surfacing on whatever landed next. The
-    # check is loop hygiene about the loop's own workspace, so it belongs on
-    # the loop's own path, which runs every time a wake records an iteration.
-    # Advisory here by the same rule as the generators above: it must not fail
-    # the recording, which is the operation that actually matters.
-    charter = os.path.join(
-        os.path.dirname(__file__), "..", "..", "apps", "docs", "scripts", "check-resume-charter.mjs"
-    )
-    try:
-        r = subprocess.run(["node", charter], capture_output=True, text=True)
-        if r.returncode != 0:
-            print("  (RESUME.md charter check FAILED — see below)", file=sys.stderr)
-            print((r.stdout or "") + (r.stderr or ""), file=sys.stderr)
-    except Exception as exc:  # noqa: BLE001 - same reason as above
-        print(f"  (warning: charter check could not run: {exc})", file=sys.stderr)
+    # it could break and go unbuilt, surfacing on whatever landed next. They are
+    # loop hygiene about the loop's own workspace, so they belong on the loop's
+    # own path, which runs every time a wake records an iteration. Advisory here
+    # by the same rule as the generators above: neither may fail the recording,
+    # which is the operation that actually matters.
+    #
+    # The trade both share, stated rather than implied: nothing rejects a commit
+    # that breaks the charter or leaves the hand-off's slice ids stale.
+    # The verb is per-check and is not cosmetic. The charter check FAILS: its
+    # assertions are rules that either hold or do not. The slice-id check
+    # REPORTS: a non-zero exit means it found ids worth re-reading, and it says
+    # outright it cannot tell a stale claim from a historical reference. Calling
+    # that a failure would train the reader to ignore it. LOOPS.md line 66 quotes
+    # the charter's string verbatim, so it is reproduced exactly here.
+    for script, name, verb in (
+        # Does RESUME.md stay inside its charter and keep pointing at the
+        # durable file? (roadmap 169.3/175.2)
+        ("check-resume-charter.mjs", "RESUME.md charter check", "FAILED"),
+        # Does RESUME.md name a slice id ROADMAP.md records as closed?
+        # (roadmap 186.1 — the stale blocked-set dispatcher rule 4 reads)
+        ("check-resume-slice-ids.mjs", "RESUME.md slice-id reconciliation", "REPORTED"),
+    ):
+        path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "apps", "docs", "scripts", script
+        )
+        try:
+            r = subprocess.run(["node", path], capture_output=True, text=True)
+            if r.returncode != 0:
+                print(f"  ({name} {verb} — see below)", file=sys.stderr)
+                print((r.stdout or "") + (r.stderr or ""), file=sys.stderr)
+        except Exception as exc:  # noqa: BLE001 - same reason as above
+            print(f"  (warning: {name} could not run: {exc})", file=sys.stderr)
 
 
 if __name__ == "__main__":

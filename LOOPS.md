@@ -71,6 +71,16 @@ hardened at **11:42:09Z** (`18791d5`, 172.1) and demoted at **12:26:17Z**
 (`33fb89e`, 169.4) — **44 minutes, two consecutive wakes, neither naming the
 other.**
 
+**A SECOND advisory check runs from the same place, so expect two stderr blocks**
+(roadmap 186.1, 2026-08-29). `check:resume-slice-ids` reports every slice id
+`RESUME.md` names in backticks that `ROADMAP.md` records `[x]` closed — the stale
+blocked-set rule 4 reads — and reconciles its own open/closed counts against a
+raw count of the file, refusing to print a verdict when they disagree. Its verb
+is **REPORTED**, not FAILED, and that is the whole distinction: it names ids
+worth re-reading and says outright it cannot tell a stale claim from a historical
+reference. On 2026-08-29 it fired on 8 of 86 revisions of `RESUME.md`, so a
+report is a signal rather than the normal state.
+
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
 empty `RESUME.md` when it lands.
