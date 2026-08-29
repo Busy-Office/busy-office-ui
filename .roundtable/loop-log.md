@@ -1191,3 +1191,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 19:46 · Continue · build · 200.7 — motion-literal lint gate: base rate 0 of 23 under its own wording, red-proved by injection both ways; refused per 94.11. 201.4 closed by its second allowed outcome · refused · 97b3da4b
 - 2026-08-29 19:46 · Meta · refusal · the broadened predicate (any literal duration/easing): its entire red set is 3 deliberate decisions already adjudicated by check:motion route (b) · refused · 97b3da4b
 - 2026-08-29 19:46 · Meta · refusal · filing an item for 201.4's non-reproducing denominator: its conclusion re-derives exactly and the correction is a scoping note, not a defect · refused · 97b3da4b
+- 2026-08-29 20:43 · Continue · build · 209.2 — check-rf-floor's earliestChrome() applies derive-floor's prefix filter; pass line now agrees with a fresh BCD read (@keyframes 43, not 1) · landed · 19baf15
+- 2026-08-29 20:43 · Meta · refusal · consolidating the two floor helpers — in scope as an option, refused on LOOPS.md's own 'not the same table' ground · refused · 19baf15
