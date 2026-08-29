@@ -231,6 +231,43 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 189 — Objective grill of Slices 173, 185, 186, 187 (2026-08-29)
+
+Rule 3 at 4/3 `[173, 185, 186, 187]`. Index checked first: no prior grill covers
+this window. Full report:
+`.roundtable/grill-objective-173-185-186-187-2026-08-29.md`.
+
+Findings, in the report's order: **(A)** when a system TRANSFORMS what you hand
+it, the authority is what the system serves — 185 verified the tarball twice
+while `npm view <pkg> bin` was the answer, and read the registry's *read* path
+while its *write* path had already spoken; **(B)** re-checking an item's stated
+premise changed the work in three of four slices, and 173.2 is the first case
+where following the forecast would have shipped a two-channel regression;
+**(C)** four consecutive wakes reported "nothing dispatchable" while 173.2 sat
+browser-blocked, and the fix's own first attempt died in `RESUME.md` — 169.3's
+lesson arriving a second time.
+
+1. [ ] **189.1 — CLAUDE.md's "verify against the rendered artefact" needs to
+       name WHICH artefact when a third party renders it.** The rule is
+       written and was followed in 187 (our generator, our output, byte-compared
+       and red-proved) and misapplied twice in 185 (npm sat between the tarball
+       and the truth, and normalised the manifest).
+       *Accept*: one paragraph in the existing section — verify at the **last
+       point the artefact passes through before a user sees it**; if something
+       downstream can rewrite it (registry, CDN, bundler, minifier), that
+       system's output is the artefact and asking it is usually one command.
+       **A worked example is required, not optional** — this file's rules are
+       acted on when they carry the instance that produced them, and the
+       `bin: "./index.mjs"` → `"index.mjs"` normalisation is the cleanest one
+       available. Finding it already covered by the existing wording is a
+       satisfying outcome; the section is long and a restatement is what 158.2
+       is open about.
+
+**Not proposed: a gate for finding C's durable-vs-ephemeral rule.** Two
+instances (169.3, 186.2) is not a base rate, and a detector for "is this
+sentence a rule rather than an observation?" is exactly the semantic judgement
+94.11 refuses. The `LOOPS.md` fix stands on its own.
+
 ## Slice 188 — the release now ships the front door, and the tag assertion is replaced rather than dropped (2026-08-29)
 
 **Dispatcher rule 4, cloud wake.** Rules 1-3 gave nothing: no open P0
