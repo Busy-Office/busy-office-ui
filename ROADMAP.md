@@ -231,6 +231,169 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 193 — Objective grill of Slices 186, 189, 190, 191: the window's artefact claims all hold, and the one obligation it left behind was never read (2026-08-29)
+
+**Dispatcher rule 3, cloud wake.** `dispatch_status.py` read `Objective 4 / 3
+slices since 2026-08-29 03:48 OVERDUE [186, 189, 190, 191]`; rule 1 found no open
+P0 and GitHub intake **0 open issues** (asked via the API), rule 2 read
+`Standardize 2 / 4`. Full report:
+`.roundtable/grill-objective-186-189-190-191-2026-08-29-b.md`.
+
+**Cross-cut.** Three of the four slices under grill are themselves Objective
+grills, and every *artefact* claim in the window re-measures correctly (3 of 3,
+§D). What failed is not a measurement — it is the loop re-reading a condition it
+wrote down. **Hypothesis**, n = 4 slices, one corpus.
+
+**TWO COLLISIONS, both caught before a single commit by the fetch Step 0c
+mandates.** `44611ba1..a9470314`: the other dispatcher took **rule 4** and closed
+**190.2** — different rule, different item, so both stand. Then
+`a9470314..44f8bb37`, taken immediately before committing the re-run, was **a
+duplicate dispatch**: the same rule-3 grill of the same four slices, filed as
+**Slice 192**, pushed first, with the same report filename. This work was
+rebased onto it and renumbered **192 -> 193**, Slice 190's precedent applied a
+second time; the report ships under a `-b` filename. **Fourth recorded
+collision, second caught before any commit, first where both dispatchers chose
+the same output filename.**
+
+**Both grills are kept and they share NO finding.** 192 reads the window for how
+each claim was *established* (asserted vs measured in 173.2; 190.2's own
+instrument defects); 193 reads it for what the window *left behind*, plus a
+control pass. Where they touch — 192 quotes 190.1's *"1 of 138"* — **192 has
+priority and is credited**; 193 only re-derives the denominator it inherited.
+192 checked for and correctly declined to re-raise the retired
+product-vs-machinery ratio; **finding A below is not that ratio** — it measures
+what arms rule 3, on the standing invitation in rule 3's own paragraph.
+
+Every figure below was re-run on `44f8bb37`. `ENVIRONMENT.md` trap 1 bit in the
+same minute: the fast-forward left `git branch --show-current` **empty**, found
+by running the mandated check rather than at push rejection.
+
+**Finding A — the Objective counter is at its most self-armed reading on record.**
+Rule 3's own re-run command, verbatim: **32 dispatches crossed, 10 (31%) would
+not have without a grill-derived slice**, up from 7 of 26. This wake's arming set
+is `['186','189','190','191']` (the landed `2026-08-29 14:41` row) and **3 of
+the 4 are grills** — excluding them it
+reads **1 of 4** and rule 3 would not fire. The previous maximum share in any
+arming set was 2 of 3. Reconciled (`ds.rows()` **1115** against a raw
+`grep -c '^- '` of 1115; the arming set character-identical to
+`dispatch_status.py`'s own print) and red-proved by injection (emptying `G` →
+`(32, 0)`; removing `'41'` → `(32, 9)`). **Recorded, not gated** — Slice 175
+already refused a heading classifier in the dispatcher and nothing here is new
+evidence against that refusal. The counter-evidence is that the deferred
+alternative was *also* grill-filed work, and the colliding wake landed it.
+
+**Finding D — the controls.** 191.1's `ratchet` predictions held exactly
+(`CLAUDE.md` 27 → **28 up**, `LOOPS.md` 18 → **19**, `DESIGN.md` **20**,
+unchanged). 190.1's DOM walk reproduces exactly — **1** page nests
+`.bo-form-field__message` inside a `.bo-data-table`, `/patterns/editable-grid/`,
+red-proved by injection — and its weaker page-level `grep` reproduces its **9**
+exactly; but **no enumeration of the built site returns its stated 138**
+(`distPages()` 127, with redirects 137, raw `find` 165), and the report printed
+the walk's output without its invocation, so it can only be re-derived. The
+finding is unaffected; the denominator is unreconciled by one. 190.3's
+specificity comment re-measures **correct, 2 of 2** — and cost this grill two
+dead instruments to confirm, both of them this file's own documented traps
+(a reference ladder that did not match the node, so every rung "won"; then
+racing ROADMAP's *ellipsed* quotation of the selector, which is one step lower
+than the shipped one). Settled by reading the selector out of
+`apps/docs/dist/_astro/*.css` — the artefact — rather than out of prose about it.
+
+**Refused: a "reopen-condition register" gate or report.** The phrase is a
+checkable *shape*; whether a trigger has fired is semantic for most of the 42
+("re-open only if a real screen needs it"), and a register listing 42 rows
+nobody can adjudicate is 94.11's ceremony with extra steps.
+
+1. [ ] **193.1 — execute 167.1's reopen condition on `CLAUDE.md`. It fired
+       6h49m after it was written and has never been read.**
+
+       167.1 recorded a watch, not a finding: *"7 of its 16 `##` sections —
+       1,893 of 4,600 section words, 41% — are all on one subject, whether a
+       detector can fail … a wake reading one gets no pointer to the other six.
+       **Reopen if an eighth is added without folding.**"* It lives in
+       `ROADMAP-archive.md:20625`, where nothing re-reads it.
+
+       ```
+       # split CLAUDE.md on ^## at each revision and sum the seven named sections
+       git show e3844c49:CLAUDE.md   # close(167.1)   16 sections · 4,759 words · seven = 1,893
+       git show 0131ebc5:CLAUDE.md   # slice 172      17 sections · 5,062 words · seven + 290
+       git show HEAD:CLAUDE.md       #                17 sections · 5,248 words · 8 of 17, 43%
+       grep -rn 'without folding' ROADMAP.md ROADMAP-archive.md .roundtable/*.md LOOPS.md CLAUDE.md
+       #   -> exactly ONE line, 167.1's own
+       ```
+
+       **1,893 reproduces exactly**, which is what makes the seven identifiable
+       and the watch checkable. `0131ebc5` — the very next Objective grill,
+       Slice 172, at 13:36:48Z against 167.1's close at 06:47:08Z — added an
+       eighth, **"A green red-proof is a defect in the INJECTION until proven
+       otherwise"** (290 words), as a new `##` rather than folded. Five
+       Objective grills have run since (175, 179, 186, 189, 190) and none names
+       it.
+
+       The eighth argues for its own fold in its opening sentence — it is a
+       restatement of section six in a different grammar, added because the
+       first form was being read and not acted on — and that is equally an
+       argument that folding would lose the thing that made it work.
+
+       *Accept* — properties, not a predicted outcome:
+       - A recorded decision naming, **for each of the eight sections**, whether
+         it changes what a wake DOES or only explains how the rule got here.
+       - Whether a wake reading one gets a pointer to the others, answered by
+         reading the file, not by assertion.
+       - **Deciding that all eight are load-bearing and folding nothing closes
+         this item** — 167.1's own text says they are seven (now eight) distinct
+         traps, and manufacturing a merge to satisfy a checkbox is the busywork
+         `LOOPS.md`'s operating rules refuse.
+       - If anything does fold, `report_loop_prose.py`'s `ratchet` names the cut
+         in the same commit — **the criterion is agreement with what the ratchet
+         reports, not a particular count.** `CLAUDE.md` has never been cut in 28
+         commits, so this would be its first.
+       - No gate is proposed and none should be: "eight sections on one subject"
+         is a judgement about what prose MEANS, which is 94.11's line.
+
+2. [ ] **193.2 — 42 reopen conditions live in item BODIES, where nothing
+       re-reads them, and 186's "1 of 275" could not have seen any of them.**
+
+       186 concluded recurring obligations are vanishingly rare — *"none of that
+       shape exist. n = 1, out of 275"* — and robustness-checked it by widening
+       the needle set from 11 phrases to 21 for **zero** new hits: *"the phrase
+       space is saturated, not under-sampled."* **The needle set was not the
+       binding limit; the corpus was.** 186 parsed only the Accept block
+       (*"bounded at the first blank line OR the next `N. [x]` item marker"*),
+       and 167.1's watch sits ~80 lines below its Accept. No needle width could
+       reach it. Widening the wrong dimension is what made the saturation check
+       look conclusive.
+
+       ```
+       # parse every item body in both files, bound at the next item marker or
+       # the next `## ` heading, with the Accept block 186 read removed, then
+       # search for  \b(reopen|re-open|re-raise|revisit)\b
+       #   items parsed: 558   (raw grep total: 43 + 515 = 558)
+       #   items with a body-level reopen condition: 42
+       ```
+
+       **The population is not uniformly rotting, which is the load-bearing
+       half.** The css-repeats *"joined-control x4 — reopen trigger is a THIRD
+       component"* condition has been re-checked and reported **four times**
+       (slices 166, 169, 178, 191) because `LOOPS.md` §3 names the report that
+       carries it; 167.1's, equally checkable in one command, has been read
+       **zero** times. So the working hypothesis is that **execution is
+       predicted by whether a playbook step names the thing, not by whether the
+       condition is checkable** — n = 2 on each side, so it is a hypothesis.
+
+       *Accept* — properties:
+       - The 42 re-measured **with the command recorded next to the number**, so
+         the next wake re-runs rather than re-derives.
+       - For the subset whose trigger is mechanically checkable, a recorded
+         answer to *has it fired?* — and the count of how many had never been
+         asked.
+       - A recorded decision on whether any mechanism is warranted. **Refusing
+         one is a satisfying outcome**, and is the expected one: the base rate
+         must be measured before any gate is proposed, and a predicate true of
+         everything is this repo's recorded failure mode (94.11).
+       - **Finding the hypothesis false is a satisfying outcome** — if the
+         playbook-names-it split does not hold once more of the 42 are read,
+         record that with the counts rather than working around it.
+
 ## Slice 192 — Objective grill of Slices 186, 189, 190, 191 (2026-08-29)
 
 Rule 3 at 4/3. Full report:
