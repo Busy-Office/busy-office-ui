@@ -18,35 +18,23 @@
  *
  * Same rule as api.json/rf-profile.json: never hand-edit the output.
  */
-import { readFile, writeFile } from 'node:fs/promises';
-import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
-import { opener as extractOpener } from './wrong-choice-rule.mjs';
-import { extractComplexity, extractComponents, stripTags } from './pattern-extract.mjs';
+import { writeFile } from 'node:fs/promises';
+import { extractComplexity, extractComponents, patternGroups } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
 
-const groups = [];
-for (const { label, items } of PATTERN_GROUPS) {
-  const tiles = [];
-  for (const { href, label: title } of items) {
-    const slug = href.replace('/patterns/', '');
-    const src = await readFile(new URL(`${slug}.astro`, patternsDir), 'utf8');
-
-    const opener = stripTags(extractOpener(src));
-    // The tile shows a truncation of the same text, at a sentence boundary
-    // where one exists within budget — never re-worded, so it stays
-    // extraction rather than a second, driftable summary.
-    const openerShort = opener.length <= 140
-      ? opener
-      : `${(opener.slice(0, 140).match(/^[\s\S]*[.!?](?=\s|$)/)?.[0] ?? opener.slice(0, 137).replace(/\s+\S*$/, '')).trim()}…`;
-    const complexity = extractComplexity(src, slug);
-    const components = extractComponents(src);
-
-    tiles.push({ href, title, opener, openerShort, complexity, components });
-  }
-  tiles.sort((a, b) => a.complexity - b.complexity);
-  groups.push({ label, tiles });
-}
+const groups = await patternGroups(patternsDir, ({ href, title, src, opener }) => {
+  // The tile shows a truncation of the same text, at a sentence boundary where
+  // one exists within budget — never re-worded, so it stays extraction rather
+  // than a second, driftable summary.
+  const openerShort = opener.length <= 140
+    ? opener
+    : `${(opener.slice(0, 140).match(/^[\s\S]*[.!?](?=\s|$)/)?.[0] ?? opener.slice(0, 137).replace(/\s+\S*$/, '')).trim()}…`;
+  return { href, title, opener, openerShort,
+           complexity: extractComplexity(src, href.replace('/patterns/', '')),
+           components: extractComponents(src) };
+});
+for (const g of groups) g.tiles.sort((a, b) => a.complexity - b.complexity);
 
 const count = groups.reduce((n, g) => n + g.tiles.length, 0);
 await writeFile(

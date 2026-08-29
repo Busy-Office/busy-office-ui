@@ -231,6 +231,43 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 194 — Standardize sweep: the previous sweep's own fix pointed at the next one (2026-08-29)
+
+Rule 2 at **4/4 OVERDUE**. All three standing lanes clean: `scan:dead-style`
+**0 dead** of 1428 live inline declarations; `report:css-repeats` **8 groups**,
+matching the settled table (**delta 0**); `report:prose` — **14 real pages**
+flagged, every one already carrying a verdict.
+
+**The prose lane's own instrument was fixed in passing.** Slice 187's run
+reported `/script/style/` as unadjudicated — the extractor matching the
+report's sentence *"with pre/script/style/svg/template removed"*. Filtering
+candidates to paths that exist as a built page drops it, which is why this run
+reads 14 real pages rather than 15 with one phantom.
+
+`/patterns/editable-grid/` grew 1,955 → 2,089 words this session, from 173.2's
+States row and "Try it" rewrite. It already carries a verdict, so no new one is
+owed; recorded because the growth is this session's own.
+
+1. [x] **194.1 — the pattern walk both generators share, extracted.**
+       187 consolidated `stripTags` out of two homes. That fix made the two
+       walks share one MORE identical line, taking the duplicate detector from
+       **one window to two over the same region** — and 187 recorded the count
+       going up while duplication went down. **That was the signal, read
+       correctly a sweep late: a fix that lengthens a duplicated run is a
+       signal to extract the run, not to stop at the line.**
+
+       `patternGroups(patternsDir, buildTile)` now owns the walk — every group,
+       every page, read and normalised once. The tile shape is the only thing
+       the two generators ever differed in, so it is the only thing they still
+       carry. Both shed their `PATTERN_GROUPS`, `readFile` and `extractOpener`
+       imports.
+
+       **Verified against the rendered artefact, and the metric moved the right
+       way this time**: `patterns.json` and `patterns-index.json` both
+       **byte-identical** to the pre-refactor baseline, with the index
+       generator verified on its own before the second was touched. Duplicate
+       blocks WIN=6 **2 → 0**, WIN=5 **5 → 1**.
+
 ## Slice 193 — Objective grill of Slices 186, 189, 190, 191: the window's artefact claims all hold, and the one obligation it left behind was never read (2026-08-29)
 
 **Dispatcher rule 3, cloud wake.** `dispatch_status.py` read `Objective 4 / 3

@@ -13,6 +13,10 @@
  * only holds the two regexes that had no home yet.
  */
 
+import { readFile } from 'node:fs/promises';
+import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
+import { opener as extractOpener } from './wrong-choice-rule.mjs';
+
 const COMPLEXITY_RE = /complexity (\d) of 4/;
 const BADGE_RE = /class="bo-badge bo-badge--type" href=\{base \+ '([^']+)'\}>([^<]+)</g;
 
@@ -44,4 +48,31 @@ export function extractComplexity(src, slug) {
 
 export function extractComponents(src) {
   return [...src.matchAll(BADGE_RE)].map(([, href, label]) => ({ href, label }));
+}
+
+/**
+ * The walk both generators do: every group, every pattern page in it, read and
+ * normalised the same way. `buildTile` receives the per-page context and
+ * returns whatever that generator's tile shape is — which is the ONLY thing
+ * the two differ in.
+ *
+ * Hoisted by the Standardize sweep of 2026-08-29, and the sweep before it is
+ * why: consolidating `stripTags` made the two walks share one MORE identical
+ * line, which took the duplicate detector from one window to two over the same
+ * region. A fix that lengthens a duplicated run is a signal to extract the run,
+ * not to stop at the line.
+ */
+export async function patternGroups(patternsDir, buildTile) {
+  const groups = [];
+  for (const { label, items } of PATTERN_GROUPS) {
+    const tiles = [];
+    for (const { href, label: title } of items) {
+      const slug = href.replace('/patterns/', '');
+      const src = await readFile(new URL(`${slug}.astro`, patternsDir), 'utf8');
+      tiles.push(buildTile({ href, title, group: label, slug, src,
+                             opener: stripTags(extractOpener(src)) }));
+    }
+    groups.push({ label, tiles });
+  }
+  return groups;
 }

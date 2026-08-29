@@ -22,10 +22,9 @@
  *
  * Never hand-edit the output — same rule as api.json/patterns-index.json.
  */
-import { readFile, writeFile } from 'node:fs/promises';
-import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
+import { writeFile } from 'node:fs/promises';
 import { opener as extractOpener } from './wrong-choice-rule.mjs';
-import { extractComplexity, extractComponents, stripTags } from './pattern-extract.mjs';
+import { extractComplexity, extractComponents, stripTags, patternGroups } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
 
@@ -91,28 +90,14 @@ if (process.argv.includes('--self-test')) {
   process.exit(0);
 }
 
-const groups = [];
-for (const { label, items } of PATTERN_GROUPS) {
-  const tiles = [];
-  for (const { href, label: title } of items) {
-    const slug = href.replace('/patterns/', '');
-    const src = await readFile(new URL(`${slug}.astro`, patternsDir), 'utf8');
-
-    const opener = stripTags(extractOpener(src));
-    const complexity = extractComplexity(src, slug);
-    const components = extractComponents(src);
-
-    const states = extractRows(src, 'States');
-    const dataContract = extractRows(src, 'Data contract');
-    const wrongChoice = extractWrongChoice(src);
-
-    tiles.push({
-      href, title, group: label, opener, complexity, components,
-      states, dataContract, wrongChoice,
-    });
-  }
-  groups.push({ label, tiles });
-}
+const groups = await patternGroups(patternsDir, ({ href, title, group, slug, src, opener }) => ({
+  href, title, group, opener,
+  complexity: extractComplexity(src, slug),
+  components: extractComponents(src),
+  states: extractRows(src, 'States'),
+  dataContract: extractRows(src, 'Data contract'),
+  wrongChoice: extractWrongChoice(src),
+}));
 
 const count = groups.reduce((n, g) => n + g.tiles.length, 0);
 const withStates = groups.reduce((n, g) => n + g.tiles.filter((t) => t.states).length, 0);
