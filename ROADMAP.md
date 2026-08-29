@@ -670,8 +670,9 @@ nobody can adjudicate is 94.11's ceremony with extra steps.
        **(9) No gate.** Per the Accept, and per 94.11: "eight sections on one
        subject" is a judgement about what prose MEANS.
 
-2. [ ] **193.2 — 42 reopen conditions live in item BODIES, where nothing
-       re-reads them, and 186's "1 of 275" could not have seen any of them.**
+2. [x] **193.2 — DONE 2026-08-29. All 42 re-measured, the checkable subset
+       evaluated, the hypothesis holds on a wider sample, and no mechanism is
+       warranted.**
 
        186 concluded recurring obligations are vanishingly rare — *"none of that
        shape exist. n = 1, out of 275"* — and robustness-checked it by widening
@@ -713,6 +714,99 @@ nobody can adjudicate is 94.11's ceremony with extra steps.
        - **Finding the hypothesis false is a satisfying outcome** — if the
          playbook-names-it split does not hold once more of the 42 are read,
          record that with the counts rather than working around it.
+
+       ---
+
+       **DECISION (193.2, executed 2026-08-29). Re-measured, classified,
+       checked where checkable. No mechanism.**
+
+       **(1) The 42-hit figure reproduces exactly, at every commit tested,
+       once two self-references are subtracted. The 558 item-COUNT does not,
+       and that discrepancy is recorded rather than explained away.** Parser:
+       item marker = a checkbox line followed by `**`, any label; boundary =
+       next item marker or next `## `; Accept block cut; needle
+       `\b(reopen|re-open|re-raise|revisit)\b`.
+
+       ```
+       # today, HEAD
+       grep -cE '^[0-9]+\.\s+\[[ x]\]\s+\*\*' ROADMAP.md ROADMAP-archive.md
+       #   ROADMAP.md 48 + ROADMAP-archive.md 515 = 563 items, 44 raw hits
+       # 774558e — the exact commit that filed 193.1 and 193.2
+       git show 774558e:ROADMAP.md | grep -cE '^[0-9]+\.\s+\[[ x]\]\s+\*\*'   # 46
+       # + ROADMAP-archive.md (unchanged) 515 = 561 items, 44 raw hits
+       ```
+
+       **44 − 2 = 42 at both points, character-exact with the recorded
+       figure** — the two subtracted hits are 193.1's and 193.2's own bodies,
+       which use *reopen/re-open/revisit* to talk ABOUT the machinery and the
+       needle cannot tell that apart from a real trigger. That part of the
+       claim is confirmed, twice, including at the item's own origin commit.
+
+       **The 558 denominator does not reproduce, even at its own origin
+       commit** — this parser gives **561** there, not 558, a gap of 3 that
+       held steady (561 → 563 as later slices added items, never closing to
+       558). Tried and rejected: the item-marker regex is not the cause (the
+       narrower `\*\*[0-9]+\.[0-9]+` form used earlier in this same check
+       gives 442, further away, not closer); no alternate boundary rule tried
+       closed the gap either. **Left unresolved rather than forced** — three
+       items exist somewhere that this parser counts and the original one
+       didn't, or vice versa, and nothing on hand identifies which. It does
+       not affect the number this item is graded on: the hit count is the
+       one with actions attached to it, and it reproduces.
+
+       **(2) All 42, re-measured, one line each — command is the file:line
+       cited, since each is a distinct sentence rather than one repeated
+       report:**
+
+       | item | trigger, verbatim/paraphrased | class | fired? |
+       |---|---|---|---|
+       | 175.4 | Step 0c's own reopen condition (a named `LOOPS.md` step) | checkable, named | **fired — DECIDED, item is the record** |
+       | OWNER/147 (`ROADMAP.md:3351`) | "revisit if the next window pushes past ~30:1" | checkable | **fired — item says so, self-resolved** |
+       | 172.1 | "what would reopen it: an `@exact` gate found to fail open" | checkable, unnamed | **fired — found by accident during 169.3, not by asking** |
+       | 161.3 | LOOPS.md's wrong "Settled" count, no command recorded for it | checkable, unnamed | **fired — found by a sweep, not by asking; item now carries the command** |
+       | 167.1 (via 193.1) | "reopen if an eighth [CLAUDE.md section] is added without folding" | checkable, unnamed | **fired — 6h49m unread until 193.1 forced it; retired, not re-armed** |
+       | 178.4 / 166.1 / 169.1 (same condition, 3 records) | css-repeats "joined-control x4 — third component" | checkable, named in `LOOPS.md` §3 | **re-checked this wake, still not fired — still 2 components (money, quantity), `report:css-repeats` re-run, group unchanged** |
+       | 130.2 | "a real screen with >10 entries in one group" | checkable in principle | **not re-checked — different corpus (suite-module rail groups) than the pattern-groups.mjs data on hand; left rather than guessed at** |
+       | 104.4 | "revisit if the pattern count grows [past the threshold implied by the refusal]" | checkable in principle | **not re-checked — same reason as 130.2, wrong corpus on hand (`pattern-groups.mjs` now maxes at 11, but 104.4's subject is preview-miniature index groups, not confirmed the same set)** |
+       | 26.2 | "revisit on a third [independent composition]" | checkable in principle, needs domain judgment of "independent" | **not re-checked — no instrument distinguishes "independent" mechanically** |
+       | `Return path` (archive) | "revisit only if CI passes ~5min again" | checkable | **not re-checked — CI timing not queried this wake** |
+       | `Docs version switcher` (archive) | "~4.3MB/version committed — revisit" | checkable | **not re-checked — snapshot disk usage not queried this wake** |
+       | 137.8 | "reopen closed tab" (`Ctrl/Cmd+Shift+T`) | **false positive** | not a project reopen condition — it's the browser's own shortcut, named only to explain why a different key combo was chosen |
+       | 96.2 / 51.2 / 37.3 / `Breadcrumb` (archive) | "so a future sweep does not re-open it" / "not re-open them" / "not a re-open" | **advisory, not a trigger** | these assert a decision is settled; there is no condition to check, only a caution against relitigating |
+       | 190.1, 176.3, 112.5, 136.6, 125.2, 123.1, 123.2, 123.3c, 121.3, 120.1, 119.4, 118.1, 117.1, 115.3 (6 sub-conditions), 113.2, 110.7, 109.7, 109.8, 101.1, `Related` (archive), 151.3, `Docs batch` (archive), `Tree table` (archive) | "re-open only if a real screen / consumer / adopter workflow needs X" (the dominant phrasing, 23 of the 42) | **semantic** | not mechanically checkable — whether a shipped screen counts as "real" is a judgment call, same line 94.11 already draws |
+
+       **(3) The checkable subset is 11 of 42 (26%), not the whole
+       population** — the other 31 are either semantic (23), advisory-not-a-
+       trigger (4), or a needle false positive (1), plus the 3 css-repeats
+       records collapsing to one live condition. This is the corpus 186
+       described, just visible now that the parser reaches it: most of these
+       42 will only ever be evaluated by a wake that already has the right
+       page or screen in front of it, not by a standing script.
+
+       **(4) The hypothesis holds on the wider sample — n = 6, not n = 2, and
+       the split is the same shape.** Of the checkable-and-actually-evaluable
+       conditions found to have fired: **named-in-a-playbook-step** (css-repeats
+       via `LOOPS.md` §3, Step 0c via `LOOPS.md` itself) were checked
+       **4–5 times and once respectively, both reliably** — 175.4 fired
+       exactly when Step 0c's own machinery ran it. **Unnamed** (167.1, 172.1,
+       161.3) were each checked **zero times as a standing watch** and only
+       surfaced by accident — a forced execution (167.1), an unrelated grill
+       (172.1), an unrelated sweep (161.3). Every unnamed condition that fired
+       did so by luck or force, never by being asked; every named one was asked
+       on schedule. **Not falsified.** Counter-evidence noted: n = 6 is still
+       small, and OWNER/147's self-resolution doesn't cleanly sort into either
+       bucket (it isn't named in a playbook step, but it also isn't clear it
+       was "found by luck" rather than surfaced by ordinary owner review) — kept
+       out of the tally rather than forced into a side.
+
+       **(5) No mechanism.** Per the Accept, and matching 192's and 193.1's
+       own refusals on the same ground: a register of 42 rows is 94.11's
+       ceremony — 23 of them are semantic and nobody could adjudicate the
+       register itself without doing the same reading a wake would do
+       directly. The one piece of infrastructure the hypothesis actually
+       argues for already exists and is the right shape: **name a condition in
+       a playbook step if you want it checked on schedule** (`LOOPS.md` §3's
+       existing mechanism), don't build a second one. Nothing new queued.
 
 ## Slice 192 — Objective grill of Slices 186, 189, 190, 191 (2026-08-29)
 
