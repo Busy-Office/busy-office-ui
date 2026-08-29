@@ -1247,6 +1247,15 @@ not one script importing another's internals. Compare them by extracting the
 `id:`/`path:` pairs from both files and diffing the shared ids; the sweep that
 raised this did exactly that and got "none disagree".
 
+**The "divergence is LOUD" argument covers the `path` column and NOT the helper
+beside it, which has already diverged silently** (roadmap 209.2, 2026-08-29).
+`derive-floor.mjs`'s `earliestUsableVersion()` filters prefixed BCD entries;
+`check-rf-floor.mjs`'s `earliestChrome()` does not, so the latter publishes
+`@keyframes 1` — the `-webkit-` version — where the unprefixed at-rule is 43.
+Nothing threw, because both keys resolve fine; only the *interpretation*
+differs. So when comparing these two scripts, diff how they READ a support
+array, not just which key they read.
+
 ## Operating rules (every loop obeys)
 
 - **Every wake leaves the thing it touched BETTER than the item required**

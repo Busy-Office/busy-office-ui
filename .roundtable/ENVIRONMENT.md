@@ -166,6 +166,22 @@ run-level readings were most likely correct when taken: `updated_at` on a run
 does not tick per step, so a frozen value there is normal and is not evidence
 of staleness.
 
+## 6b. `check:claims`'s "3 NOT VERIFIED" IS NOT A REGRESSION — IT IS THE CONTAINER
+
+The three `.bo-btn` press claims (mouse press, keyboard Space, reduced motion)
+run live only where the browser reports `(hover: hover) and (pointer: fine)`.
+That has now been measured **both ways within two days**, on the same repo:
+
+```
+2026-08-29, Chrome 151  ->  pointerIsFine true   -> 154 live, 0 NOT VERIFIED
+2026-08-29, this cont.  ->  pointerIsFine false  -> 158 live, 3 NOT VERIFIED
+```
+
+204.1's gate branches on the live read, so both are correct output and neither
+needs a fix. **Do not "restore" the zero** — an environment fact here is a
+property of the container, not of the date. Read the count beside it: the
+corpus grows, so 154 → 158 is prose landing, not claims being skipped.
+
 ## 7. A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
 No locale is set in this container, and GNU `wc` in the C locale swallows an em
@@ -201,6 +217,17 @@ recorded *"`ENVIRONMENT.md`'s cloud-toolchain list does not name it and that
 list is what the wake used"*. Re-derive rather than trust this snapshot —
 `grep -oE 'npm run [A-Za-z0-9:@/._-]+( -w [A-Za-z0-9@/._-]+)?' .github/workflows/ci.yml | sort -u`
 — and if a command appears there that is missing here, run it and add it.
+
+**But this list holds ENTRY POINTS and `ci.yml` holds STEPS, so the two do not
+match one-for-one** (roadmap 209, which cost a round finding this out). The
+re-derivation prints **17**; this list names 16. The difference is
+`check:ci-ignores`, which `ci.yml` invokes separately and which is a sub-check
+of **`check:repo`** — run here by `docs:build` — so it is covered, not missing.
+Before adding a command the grep turns up, check
+`node -e "console.log(require('./apps/docs/package.json').scripts['check:repo'])"`
+for it. `check:formatting`, the command that reached CI unrun on 2026-08-29, is
+NOT in `check:repo`, which is exactly why nothing caught it and why it is listed
+below in its own right.
 
 ```
 npm run build -w @busy-office/ui

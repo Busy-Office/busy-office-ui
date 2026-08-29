@@ -315,6 +315,112 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 209 — Objective grill of Slices 205, 208: the sweep proved itself against a state it never committed, and the floor script publishes a prefixed version its sibling filters out (2026-08-29)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, GitHub intake **0 open
+issues** (asked via the API). Rule 2: Standardize `0 / 4`. Rule 3:
+`Objective 3 / 3 slices OVERDUE [200, 205, 208]` → **Objective**. Scope narrowed
+to **205 and 208**: `grill-objective-199-202-2026-08-29.md` already covers 200
+in full, the same correction the 204/206 grill made. Full report:
+`.roundtable/grill-objective-205-208-2026-08-29.md`.
+
+**Nine of 208's measured claims reproduce exactly**, re-derived here rather than
+read off the file: lane 1 `0 dead of 1,433`; lane 2 `8 groups / 242 rules / 230
+distinct bodies` with the same eight shapes; lane 3 `118 pages, median 748, 9
+over corpus, 12 over family`; the lane-coverage table (191 and 208 read lane 4,
+194/197/202/206 did not — an independent per-section parser, discriminating 4 of
+6); the four prior sweeps' drop figures; and both substantive halves of the
+lossless-move proof (archive append-only prefix `True`; **0** lost lines missing
+from the archive's gain). 205's base rate reproduces too: the same 6 distinct
+at-rules in the built `rf-essentials.css`, exactly one above 108.
+
+**Two findings, and one finding that was wrong and is recorded as such.**
+
+1. [x] **209.1 — DONE 2026-08-29. 208's sweep numbers describe a state that was
+       never committed.** Reported `ROADMAP.md 6,424 → 2,184` and *"the live
+       file gained exactly `{pointer: 32}` and nothing else"*; the committed
+       blob at `83192cd1` is **2,301** lines and gained **127** — the 32
+       pointers plus 95 lines of Slice 208's own write-up, appended by the same
+       commit. It reconciles to the line: Slice 208's section there spans
+       117 lines, and `2301 - 117 = 2184`. `4,272` is the same intermediate
+       arithmetic (`6424 + 32 - 2184`); the committed multiset difference is
+       **4,250**. The conclusion is unaffected — the move was lossless, both
+       assertions that say so still hold — but the assertion whose job is to
+       catch an edit riding along with the move is false of the artefact, and
+       208's own comparison table quotes its four predecessors at their
+       committed values, so its own row is the only one on a different ruler.
+       **The rule, stated once here rather than gated**: a figure about a
+       commit is read back off the commit. CLAUDE.md already names the shape —
+       *when something downstream can rewrite the artefact, its output is the
+       artefact* — and the downstream rewriter is the wake's own write-up.
+
+2. [ ] **209.2 — `check-rf-floor.mjs` publishes the PREFIXED Chrome version for
+       `@keyframes`, where its sibling script filters prefixed entries out.**
+       The gate's pass line reads `@keyframes 1`; BCD's entry is
+       `[{"version_added":"43"},{"prefix":"-webkit-","version_added":"1"}]`, so
+       `1` is `@-webkit-keyframes` and the unprefixed at-rule the profile emits
+       is **43**. `earliestChrome()` (`check-rf-floor.mjs:99-107`) filters
+       `flags` but not `prefix`; `derive-floor.mjs:102-115`, resolving the same
+       BCD data across 6 shared feature paths, does:
+       `entries.filter((e) => !e.prefix || emitsPrefixed)`.
+       `LOOPS.md`'s *"Also settled: the BCD feature paths shared by two floor
+       scripts"* refused consolidation because *"divergence here is LOUD"* —
+       true of the path column, which throws; not true of the resolution helper
+       beside it, which diverged silently.
+
+       **Direction of error, which decides severity: it UNDERSTATES the floor**,
+       so this reporter can only produce a false "below 108" — the false-safe
+       direction, in the one script whose job is that floor.
+
+       **Blast radius today is zero, measured**: 43 and 1 are both below 108, so
+       no verdict moves, and none of the four `FEATURES` probes can hit it —
+       `:user-invalid` 119, `color-mix()` 111, `subgrid` 117, `:has()` 105 are
+       each a single unprefixed support object. Filed rather than fixed inside
+       the grill: 205 itself was filed rather than fixed from inside the 200.4
+       dispatch, and a grill that rewrites the gate it is grilling marks its own
+       homework.
+
+       *Accept*: `earliestChrome()` either applies the prefix filter its sibling
+       applies, **or** its header records why the two must differ. Whichever
+       ships, verify by reading the gate's own pass line against a fresh BCD
+       read of all six at-rules — the criterion is that the two agree, not that
+       any particular number appears. Re-measure the blast radius at that point
+       rather than trusting this item's: the `FEATURES` set and the profile's
+       at-rules both change. Consolidating the two helpers is **in scope as an
+       option and is not required** — the settled section's "divergence is loud"
+       argument survives for the path column either way, and a one-line filter
+       is a satisfying outcome.
+
+**A third finding was written up as a defect and is wrong.** `ci.yml` runs
+`npm run check:ci-ignores -w docs` and `ENVIRONMENT.md`'s toolchain list does
+not name it, which reads exactly like the `check:formatting` failure 208.2
+existed to close. It is the opposite: `check:ci-ignores` is a sub-check of
+`check:repo`, which `docs:build` runs — it went green here inside that build —
+whereas `check:formatting` is not in `check:repo`, which is why nothing caught
+it. Coverage is complete, and 208.2's `19` reconciles (17 `npm run` + `npx
+vitest` + `docker build`). The real cost is that the file's own re-derivation
+instruction produces this false positive for any wake that follows it, because
+the list holds **entry points** and `ci.yml` holds **steps**; `ENVIRONMENT.md`
+now says so beside the list. Recorded in this order because the correction is
+the part worth keeping.
+
+**NOT VERIFIED, and named as such**: cloud wake — no Podman, no
+`localhost:8081`, **no screenshots at 1440px or 390px in either theme**. Zero
+lines changed under `packages/` or `apps/docs/src/`; the diff is markdown only.
+Gates run green here: core build, core `npm run test`, `lint:css`, `docs:build`
+(incl. `check:repo` 9/9), `check:claims` (158 live, 3 NOT VERIFIED — see below),
+`test:axe` 127 pages × 2 widths zero violations, `check:layout` 127 pages,
+`check:slice-refs`, `check:rf-floor` incl. `--self-test`.
+
+**One environment fact moved again, in the other direction.** The 204/206 grill
+recorded that headless Chrome had reached 151, that `(hover: hover) and
+(pointer: fine)` read **true**, and that `check:claims` therefore ran 154
+behaviours with **zero** `NOT VERIFIED`. In this container it reads **false**
+and the gate reports `158 documented behaviours verified live · 3 NOT VERIFIED`.
+204.1's design absorbs both readings with no code change, which is the mechanism
+working; what is corrected is the reading — an environment fact is a property of
+the container, not of the date it was measured.
+
 ## Slice 208 — Standardize sweep: the fifth clean result came from three lanes, and the fourth lane — unread by all four prior sweeps — was carrying the finding (2026-08-29)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
@@ -354,9 +460,18 @@ OPEN: [15, 112, 200, 201]
   # 4,336 of 6,424 lines = 67.5% of the live file was closed history
 ```
 
-**Swept: `ROADMAP.md` 6,424 → 2,184 lines; `ROADMAP-archive.md` 21,264 →
+**Swept: `ROADMAP.md` 6,424 → 2,301 lines; `ROADMAP-archive.md` 21,264 →
 25,633.** Thirty-two slices — 173, 175-199, 202-207 — moved verbatim, each
 leaving the standing one-line pointer.
+
+> **Corrected by 209.1.** This paragraph and the table below originally read
+> **2,184**, **4,272** and *"gained exactly `{pointer: 32}`"*. Those are the
+> file after the move and **before this write-up was appended to it** — a state
+> that was never committed. The committed blob at `83192cd1` is **2,301** lines
+> and gained **127** (32 pointers + 95 lines of the text you are reading);
+> `2301 - 117 = 2184`, the 117 being this slice's own section. The two
+> assertions that carry the lossless conclusion are unchanged and still
+> reproduce.
 
 **This is the FIFTH sweep**, counted 177's way — by the DROP across all 790
 commits that have touched `ROADMAP.md`, never by grepping subject lines, since
@@ -375,8 +490,8 @@ all of which the script ran before writing and again after:
 | property | result |
 |---|---|
 | the archive's old content is a byte-exact **prefix** of the new one (append-only) | `True` |
-| every line the live file lost appears in what the archive gained | **0** of 4,272 missing |
-| what the live file **gained** | exactly `{pointer: 32}` and nothing else |
+| every line the live file lost appears in what the archive gained | **0** missing (of 4,272 as measured mid-wake; **4,250** by multiset difference on the committed blobs) |
+| what the live file **gained** | `{pointer: 32}` mid-wake; **127** on the committed blob, the extra 95 being this slice's own write-up — see 209.1 |
 
 **Citation-neutral, which is the property that matters** — `check:slice-refs`
 reads **415 citations (228 cited, 2 known-dangling baseline) and 189 slice
@@ -500,6 +615,14 @@ Trap 1c caught this wake out in exactly the documented way on its first run.
        iterations (injection confirmed present in the probe before running it)
        produced a **byte-identical payload**. It is not a time budget, and this
        is written down so the next wake does not spend the same round on it.
+
+       **Reproduced byte-identically in a SECOND cloud container** (Slice 209's
+       grill, 2026-08-29, on `6105054` — a different container, a different
+       clone, a later HEAD, the fourth run overall). The weakest remaining
+       hypothesis, that the red was one container's accident, is refuted: the
+       failure is deterministic in this environment class. This does **not**
+       settle which side is right — a second instance of the same class is not
+       the third environment (a) asks for.
 
        **Which environment is right is NOT established, and neither reading is
        assumed here.** Either the container's headless Chrome does not fire the
