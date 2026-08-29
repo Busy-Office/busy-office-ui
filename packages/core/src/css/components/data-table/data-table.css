@@ -473,11 +473,16 @@
      five of them on the combobox cells and an error sharing an anchor with
      an open listbox is a worse problem than a container that grows).
 
-     3.5rem is the message's own box at default density — one line of
-     `--bo-font-size-xs` plus its padding, border and a little slack for a
-     second line — not a round number picked for looks. */
+     The reserve is sized to SIX LINES of the message box, not to one (roadmap
+     190.1). The first version reserved 3.5rem — fitted, like the width cap
+     above, to the single 21-character string this framework's own demo
+     carries — and a longer message overran it at four of six
+     density/width combinations, by as little as 3px. Six is not arbitrary:
+     it is the line count 190.1's Accept names, and `lh` makes it the
+     message's OWN line box rather than a pixel guess that drifts when the
+     density tokens move. */
   .bo-data-table-container:has(.bo-form-field:focus-within .bo-form-field__message) {
-    padding-block-end: 3.5rem;
+    padding-block-end: calc(6lh + var(--bo-space-4));
   }
 
   .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
@@ -486,8 +491,16 @@
     inset-block-start: 100%;
     inset-inline-start: 0;
     z-index: 1;
+    /* Width, and the reason it is NOT a small character cap (roadmap 190.1).
+       `18ch` was fitted to the one 21-character string this framework's own
+       demo carries, and it is what turned a 101-character message into a
+       SIX-line 118px box that overran the reserve below. Measured control: the
+       same message is 36px on ONE line at natural width. So the box grows to
+       its content and is bounded by the TABLE's own width instead — wide
+       enough that realistic messages stay one or two lines, bounded so it can
+       never introduce horizontal overflow. */
     inline-size: max-content;
-    max-inline-size: 18ch;
+    max-inline-size: min(48ch, 100cqi);
     padding: var(--bo-space-1) var(--bo-space-2);
     background: var(--bo-color-bg-surface);
     border: var(--bo-border-width) solid var(--bo-state-error-color);

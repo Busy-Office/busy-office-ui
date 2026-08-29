@@ -662,7 +662,43 @@ owner- vs browser-blocked distinction, reached independently from the dispatch
 record there and from the measurement here. **189's finding C has priority and
 is credited**; 190 only sharpens the clause it landed in.
 
-1. [ ] **190.1 — a grid cell's validation message is clipped for any message
+1. [x] **190.1 — a grid cell's validation message is clipped for any message
+       longer than about two lines.** **FIXED 2026-08-29** by the wake that
+       shipped both constants. Taken as a build rather than held as a decision:
+       the Accept names a **property**, so it is satisfiable by measuring, and
+       the owner had passed over it twice.
+
+       **Both halves were fits to a sample of one, and the width cap was the
+       bigger half — as 190.1 measured.** `18ch` is replaced by
+       `min(48ch, 100cqi)`: bounded by the table's own container so it can
+       never introduce horizontal overflow, wide enough that realistic messages
+       stay short. That alone took the 101-char message from **118px/6 lines to
+       64px/4 lines**. The reserve is no longer a pixel constant but
+       `calc(6lh + var(--bo-space-4))` — six of the **message's own** line
+       boxes, so it tracks the density tokens instead of drifting when they
+       move, and six is the number this Accept names rather than a guess.
+
+       **Measured against the Accept verbatim**, six combinations
+       (compact/comfortable/spacious × 1440/390), with a 250-character message:
+
+       ```
+       1440  6 lines, 100px, clears the container by 47-55px, row unchanged
+       390   7 lines, 118px, clears by 29px,                  row unchanged
+       ```
+
+       All six pass; 173.2's contract survives (`rowBlur === rowFocus`
+       everywhere). **Red-proved by construction**: the immediately preceding
+       run held this same width cap with the old `3.5rem` reserve and **4 of 6
+       failed**, by as little as 3px — so the reserve change is doing real work
+       and the assertion can fail.
+
+       The top-layer `popover` was **not** needed and stays refused for the
+       reasons 173.2 gave. Gates: axe 127×2, layout, scroll, claims (144),
+       repo, 146 tests.
+
+       *(original item below)*
+
+       **Original — a grid cell's validation message is clipped for any message
        longer than about two lines, because a constant reserves room for a
        variable-height box.**
 
