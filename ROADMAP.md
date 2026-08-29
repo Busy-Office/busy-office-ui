@@ -231,6 +231,47 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 192 — Objective grill of Slices 186, 189, 190, 191 (2026-08-29)
+
+Rule 3 at 4/3. Full report:
+`.roundtable/grill-objective-186-189-190-191-2026-08-29.md`.
+
+**Checked before writing**: three of the four slices are grills or sweeps, which
+is exactly the shape that invites re-raising the product-vs-machinery ratio.
+That was retired with *"not to be re-raised as a new finding"* and **is not
+raised**.
+
+**(A) Every defect in 173.2 was in something ASSERTED; the one thing MEASURED
+was correct — 3 of 3.** Row height was measured live in both states and
+red-proved: no defect. The `18ch` cap and `3.5rem` reserve were asserted, both
+fitted to the single 21-character string the one demo carries: **190.1**. The
+runtime claims were skipped outright: **190.2**. The specificity numbers were
+asserted from reading the selectors: **190.3**. Defect rate among asserted
+claims 100%, among measured claims 0% — and the same wake that built a browser
+harness and red-proved the row height shipped three unmeasured claims beside it.
+
+**(B)** 190.2's own construction produced two instrument defects, both caught by
+assertions: a **live** `getComputedStyle` read after the injected style was
+removed, and a red-proof injecting into the first CSS file *alphabetically*
+rather than the one holding the rule. Third and fourth times this session an
+injection assertion paid for itself. No gate — that is the existing rule
+succeeding.
+
+1. [ ] **192.1 — record the PLACEMENT rule finding A names.** The disciplines
+       are all written already ("an instrument's first output is not evidence",
+       "a number you report is load-bearing"); what is not written is where the
+       defect lands when a single change ships measured and asserted claims
+       side by side. 173.2 is the worked example: the hard measurement was
+       done, correctly, and every defect was in the claims shipped beside it.
+       *Accept*: either one paragraph in CLAUDE.md's existing measurement
+       section carrying that example, or **a recorded finding that the existing
+       wording already covers it** — the sections are long and 158.2 has prose
+       growth open, so a restatement is a real cost and refusing is a
+       satisfying outcome.
+
+**Not proposed: a gate for either finding.** A's discipline is a writing rule
+with no mechanical form; B is the existing red-proof rule working three times.
+
 ## Slice 191 — Standardize sweep: three lanes clean, and the fourth was reading a number its own command cannot print (2026-08-29)
 
 **Dispatcher rule 2, cloud wake.** `dispatch_status.py` read `Standardize 4 / 4
