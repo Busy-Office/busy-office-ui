@@ -28,15 +28,33 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 8 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-## ⚠ THE THING THE NEXT WAKE MOST NEEDS: CI WAS RED ON `main` FOR THREE COMMITS
+## ⚠ THE THING THE NEXT WAKE MOST NEEDS: CI WAS RED ON `main` FOR FIVE COMMITS
 
-Runs **642, 643, 644** all failed; run **641** (`93b17a6`) was the last green.
-The break landed with `36a95d4`, and **v0.6.0 was released off that red main**
-by the other dispatcher while this wake was diagnosing it. Fixed here (`204.1`),
-but the operating fact is worth carrying: **nothing in the loop notices a red
-`main`.** No dispatcher rule reads CI, `RESUME.md` had no place to say it, and
-four wakes ran in that window without looking. This wake only found it because
-`check:claims` is in the pre-push list the cloud prompt mandates.
+Runs **642, 643, 644, 645, 646** all failed; run **641** (`93b17a6`) was the
+last green. The break landed with `36a95d4`. Fixed here (`204.1`).
+
+**⚠ FIRST THING TO CHECK NEXT WAKE: whether run 647 actually went green.** The
+fix is verified locally — `check:claims` exits 0 on the pushed tree and prints
+`151 verified · 3 NOT VERIFIED` — but **CI run 647 was still mid-flight when
+this hand-off was written, so its conclusion is UNKNOWN, not green.** Said this
+way deliberately: a wake that reports "fixed" about a CI failure without having
+seen CI pass is repeating the mistake that produced `204.1`. One call answers
+it — `mcp__github__actions_list`, `list_workflow_runs` on `ci.yml`, branch
+`main`. If 647 is red on a DIFFERENT check, that is new; if it is red on the
+same one, the postcss/notVerified branch did not take on the runner and the
+first thing to read is whether the runner's Chrome reports a fine pointer,
+which would make the three guarded live cases run there and fail for real.
+
+**The count is corrected, not copied: it read 3 when measured and 5 by the time
+the fix pushed**, because the other dispatcher pushed twice more in between —
+and one of those is **`645`, the `Release 0.6.0` commit itself, which ran red**.
+The release is fine (its own pre-publish run was green on a clean dist, and the
+failing check is the un-runnable claim, not the artefact). The fact worth
+carrying is not the tally: **nothing in the loop notices a red `main`.** No
+dispatcher rule reads CI, `RESUME.md` had no place to say so, and five wakes —
+including the one that cut a release — ran in that window without looking. This
+wake only found it because `check:claims` is in the pre-push list the cloud
+prompt mandates.
 
 **Not filed as an item, deliberately** — a "check CI every wake" rule is one
 `mcp__github__actions_list` call and would be the fifth process rule with

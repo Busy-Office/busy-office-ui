@@ -322,9 +322,17 @@ first `check:claims` run came back red on a case in code its own diff does not
 touch, so the first move was to establish ownership rather than to fix: stashed
 the wake's changes, rebuilt clean, and reproduced **1 of 149 failing on an
 untouched `origin/main`**. Then read CI, which had been red since `36a95d4`
-(runs **642, 643, 644**; run **641** at `93b17a6` was the last green) with a
-**byte-identical** failure line — same case, same `{"active":true,
-"transform":"none","left":283,"right":319,…}`.
+(run **641** at `93b17a6` was the last green) with a **byte-identical** failure
+line — same case, same `{"active":true,"transform":"none","left":283,
+"right":319,…}`.
+
+**The streak was 3 when measured and 5 by the time the fix pushed**, and the
+number is corrected here rather than left at the reading that was true for an
+hour: **642, 643, 644, 645, 646**. The two added are the other dispatcher's,
+and one of them is `645` — **the `Release 0.6.0` commit itself ran red**. That
+release is fine (its own pre-publish run was green on a clean dist, and the
+failing check is this un-runnable claim, not the artefact), but "we released
+off a red `main` and nobody noticed" is the fact worth keeping, not the tally.
 
 **The shipped CSS is correct. The gate was not runnable in the environment that
 gates the build.** 200.2 wraps the button press nudge in
