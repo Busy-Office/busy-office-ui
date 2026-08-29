@@ -231,6 +231,208 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 200 — triage: an external "micro-motion UX review" proposal, checked against the shipped CSS before anything was filed (2026-08-29)
+
+**LOOPS.md Step 1, user-submitted.** A 15-item proposal (dialog exit motion,
+button press feedback, tab/segmented transitions, bulk-action disclosure,
+async save/submit sequencing, live-table pulses, row insert/delete, pagination
+transitions, tree disclosure, toast lifecycle, inline validation, copy
+confirmation, plus a token/spec matrix and a11y/perf guidance) arrived as a
+feature request. Per Step 1 it is classified as a feature, tested against the
+Objective, and **every "current experience" claim was checked against the
+actual shipped CSS before anything was accepted** — CLAUDE.md's own doctrine
+("an asserted claim is a defect until measured") applies to input as much as
+to a wake's own work.
+
+**High-fidelity source.** The proposal's description of the existing motion
+system — token names/values, the intent vocabulary (entrance/exit/state
+transition/progress/attention), "motion is never the only channel" — matches
+`packages/core/src/css/motion/motion.css`'s own header comment almost
+verbatim. That is a strong prior that the specific claims below are worth
+checking rather than dismissing.
+
+**Verified exact — the token table.** `packages/core/src/css/tokens/motion.css`:
+`--bo-motion-duration-fast: 100ms`, `-base: 150ms`, `-slow: 300ms`,
+`--bo-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1)`, all three
+durations zeroed under `prefers-reduced-motion: reduce`. Matches the proposal's
+table exactly, including the reduced-motion behavior.
+
+**Verified TRUE — the gaps the P0/P1 items target:**
+- `dialog.css` has only an entrance `@keyframes bo-dialog-in`; no exit
+  animation, no `@starting-style`/`allow-discrete`. **And the exact recipe to
+  fix it already ships** in `offcanvas.css` (143.4, "collapse drawer motion on
+  close") — `transition-behavior: allow-discrete` + `@starting-style` +
+  `overlay`/`display` transitions, with a `@supports` fallback to instant
+  close. This is compose-the-existing-primitive, not invent-a-new-one.
+- `button.css` has a `:hover` background transition and zero `:active` state.
+- `tabs.css` and `segmented.css` have **no `transition` or `animation`
+  declarations at all** — greped clean.
+- `data-table.css`'s `.bo-data-table__bulk-actions` toggles
+  `display: none` → `display: flex` with no transition (line 67-78) — real,
+  and not already addressed by this session's own 173.2/190.1/196.1 data-table
+  work, which touched the form-field error message, not this toolbar.
+- `alert.css`'s `.bo-toast` has only `bo-toast-in`; no exit animation, no
+  stack-reflow motion.
+
+**Verified ALREADY SHIPPED — three of the proposal's items are asking for
+something that exists, and filing them as new work would be exactly the kind
+of un-reconciled claim CLAUDE.md keeps finding:**
+- **"Standardize async save/submit feedback" and "apply precise feedback to
+  live table updates"** — `.bo-motion-pulse-once` (the opt-in motion module)
+  and `.htmx-settling`/`bo-htmx-settle` (the htmx integration, "classic ERP
+  grid feedback after a row/cell refresh") already implement the exact
+  flash-on-update mechanism proposed. What's missing is USAGE GUIDANCE (when
+  to pulse, coalescing rapid updates), not CSS.
+- **"Improve pagination and filter transitions"** — `integrations/htmx.css`'s
+  `.htmx-indicator`/`.htmx-swapping` opacity-fade already covers exactly this
+  for the framework's supported async-swap story. A non-htmx consumer doesn't
+  get it for free, but the framework's documented integration story is
+  htmx-first, so this is coverage, not a gap.
+- **"Pair tree disclosure with content continuity"** — `tree.css`/
+  `tree-table.css` already transition the chevron `rotate`; `.bo-motion-collapse`
+  (grid-template-rows 0fr/1fr) already exists for wiring the expand. The
+  proposal's own recommended split (rotate-only for large/virtualized,
+  rotate+collapse for small groups) is buildable today from existing
+  primitives with zero new CSS.
+
+**Not fully verified — flagged rather than asserted:** row insert/delete,
+inline-validation entrance, and copy-confirmation claims were checked for
+existing primitives (`.bo-motion-fade-in`/`-out` and `.bo-motion-slide-in-block-start`
+already exist and would serve rows/validation directly) but not screenshotted
+against real markup in this pass — carried into the items below rather than
+decided blind.
+
+**Aside, out of scope, not filed:** `scan.css` references `var(--bo-motion-ease)`,
+which is never defined anywhere in `tokens/motion.css` or elsewhere — only
+`--bo-motion-easing-standard` exists. That's a pre-existing bug unrelated to
+this proposal; noted here so it isn't lost, not triaged as part of this slice.
+
+1. [ ] **200.1 — dialog exit motion, reusing offcanvas's `@starting-style` +
+       `allow-discrete` recipe verbatim rather than inventing a second one.**
+       *Accept*: the dialog and its backdrop animate closed in a browser
+       supporting `transition-behavior: allow-discrete`, using the same
+       token durations/easing as the entrance; a browser without support
+       closes exactly as it does today (instant, no regression); Escape,
+       backdrop click, close-button and programmatic close all complete
+       without depending on an `animationend` event (confirm by DevTools
+       CPU-throttling + interrupting the animation mid-flight); focus
+       returns to the trigger regardless of whether the animation ran; under
+       `prefers-reduced-motion: reduce` open and close are both instant.
+2. [ ] **200.2 — restrained button press feedback, pointer-only.**
+       *Accept*: `.bo-btn:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]):active`
+       under `@media (hover: hover) and (pointer: fine)` gets a 1px
+       `translateY` (not `scale`, to avoid gaps/misalignment in
+       `.bo-btn-group`-joined buttons — verify a joined group with 3+
+       buttons shows no visible seam when the middle button is pressed);
+       keyboard activation (Space/Enter) shows no artificial press transform,
+       only the existing focus/state feedback; reduced motion removes the
+       displacement entirely.
+3. [ ] **200.3 — tab and segmented-control selection get a style transition,
+       no slide/pill.** Bundled as one item: same shape (color/background/
+       border-color transition only, explicitly no panel slide and no
+       sliding-pill indicator — both refused by the proposal itself on sound
+       ERP grounds: tab content isn't spatially ordered, and a sliding pill's
+       geometry breaks under wrapped/RTL/translated labels).
+       *Accept*: `tabs.css` and `segmented.css` each gain a `transition` on
+       `color`/`background-color`/`border-color` (and `box-shadow` for
+       segmented) at `--bo-motion-duration-fast`; rapid arrow-key traversal
+       across 5+ tabs shows no perceptible input lag (measure, don't assume);
+       the tab strip's block-size is unchanged by the transition; forced-colors
+       mode is unaffected (no color-only signal already relied on `transition`
+       to be visible — verify the existing focus/selected indicators still
+       render instantly and visibly there).
+4. [ ] **200.4 — data-table bulk-actions get an entrance transition instead
+       of an instant `display` flip.**
+       *Accept*: `.bo-data-table__bulk-actions` becoming visible (first row
+       selected) shows a short opacity+transform entrance
+       (`--bo-motion-duration-fast`–`-base`); selecting additional rows does
+       not replay it (only the none→visible transition fires); clearing the
+       last selection hides it without an exit flourish beyond what the
+       existing mechanism does; at 390px the toolbar wraps exactly as it does
+       today — this item does not touch the wrap/overflow behavior 173.2/190.1
+       already fixed; RTL entrance direction verified, not assumed mirrored.
+5. [ ] **200.5 — toast gets an exit animation and a bounded stack-reflow,
+       matching the entrance it already has.**
+       *Accept*: `.bo-toast` removal fades out over
+       `--bo-motion-duration-fast`–`-base` rather than disappearing instantly;
+       remaining toasts in a stack of 3+ shift by a bounded translate (not an
+       uncapped reflow) when one is dismissed; auto-dismiss timers pause on
+       hover/focus (verify this exists in the current toast behavior —
+       CHECK, don't assume, before writing the Accept as "unchanged"); an
+       error toast requiring action is not auto-dismissed; reduced motion
+       makes both entrance and exit instant.
+6. [ ] **200.6 — row insert/delete and inline-validation entrance, composed
+       from existing motion-module utilities, plus the usage guidance the
+       already-shipped pulse/settle mechanisms are missing.** Bundled because
+       all three are "wire an existing primitive to a new spot + write down
+       when to use it," not new CSS:
+       - Row insert: `.bo-motion-fade-in` on the inserted `<tr>`.
+       - Row delete: `.bo-motion-fade-out`, with a non-animation-event
+         fallback timer for removal (never let deletion depend on
+         `animationend` firing) — no animated height/row-collapse in
+         virtualized or large tables, per the proposal's own stated reason
+         (moving many adjacent rows breaks tracking).
+       - Inline validation: `.bo-motion-fade-in` or
+         `.bo-motion-slide-in-block-start` on first appearance of a field
+         message; explicitly no shake.
+       - **Usage guidance, written down rather than left implicit** (the gap
+         identified above for pulse-once/htmx-settle applies here too): when
+         to pulse a cell vs. a row vs. a summary total; don't pulse while the
+         user is typing, on initial page load, or more than ~once/second per
+         region (coalesce rapid updates) — this is a docs/behavior-layer
+         note, not new CSS, and belongs wherever this framework's existing
+         data-table/htmx docs page already documents the settle flash.
+       *Accept*: each of the three visibly uses the named existing utility
+       class (verify by reading the built CSS, not by intent); the usage
+       guidance is a paragraph in an existing docs page (data-table or the
+       htmx integration guide), not a new page; virtualized-table row
+       delete/insert is explicitly exempted from the fade, stated in the
+       same paragraph.
+7. [ ] **200.7 — a lint check that a raw ms duration or literal easing
+       function isn't hand-written in component CSS where a `--bo-motion-*`
+       token exists.** The one proposal item that's a genuinely mechanically
+       checkable property (unlike a hand-authored "spec matrix," refused
+       below) — matches this repo's own gate discipline: measure the base
+       rate before shipping it. *Accept*: a script (or stylelint rule) scans
+       `packages/core/src/css/components/**/*.css` for `transition:`/
+       `animation:` declarations using a literal duration or a
+       non-token easing function; run it FIRST against the current tree and
+       record the base-rate count before deciding whether to gate on it —
+       per 94.11, if the base rate is already 100% clean this becomes a
+       no-op gate and should say so rather than ship; `scan.css`'s
+       `var(--bo-motion-ease)` (the undefined-token aside above) is exactly
+       the kind of thing this would NOT catch (it's a token reference, just
+       to a token that doesn't exist) — note that limitation in the script's
+       own header rather than let the gate imply broader coverage than it has.
+
+**Refused, each with the reason:**
+- **The four-state Save/Saving/Saved/Error sequence as a "standardize"
+  item.** Refuse the framing, not the idea. It composes existing primitives
+  (`.bo-motion-spin`, `.bo-btn[aria-busy]`, icon crossfade) into an
+  interaction PATTERN spanning behavior + markup, which is what this repo's
+  "How to document a PATTERN" recipe exists for — it is not a component CSS
+  change. **Rethink**: route it to a docs guide/pattern page (candidate:
+  wherever the object-page or list-report pattern documents its save flow
+  today) rather than a ROADMAP CSS slice.
+- **A hand-authored "motion specification matrix" published to docs.**
+  Refuse as literal. This repo generates API/token docs FROM the shipped
+  source (CLAUDE.md: "never hand-write API tables") — a transcribed matrix
+  drifts from `tokens/motion.css` the first time a duration changes. Rethink:
+  if a matrix page is wanted, it must be generated from the token file +
+  each component's `animation`/`transition` declarations, the same way
+  `ClassRef`/`ApiTable` are generated today.
+- **Copy-confirmation icon crossfade as its own item.** No existing
+  copy-button CSS was found in this pass and none was screenshotted — too
+  thin to file with a real Accept block. Left as a candidate for a future
+  pass rather than queued now; **finding nothing here is a valid outcome**,
+  not a gap in the triage.
+- **Live-table-pulse and pagination-transition "standardization" as NEW
+  work** (distinct from 200.6's guidance note) — refused because the
+  mechanisms already ship (`bo-motion-pulse-once`, `bo-htmx-settle`,
+  `.htmx-swapping`); filing them as gaps would repeat the exact
+  asserted-vs-measured pattern this repo's own CLAUDE.md keeps finding and
+  correcting.
+
 ## Slice 199 — the two things 193.2 left open: a denominator it could not reproduce, and a refused decision whose trigger had already fired (2026-08-29)
 
 **Dispatcher rule 4, cloud wake — and a Step 0c collision, resolved as that
