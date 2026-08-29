@@ -231,6 +231,66 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 187 — Standardize sweep: three clean lanes, and the one duplicate they cannot see (2026-08-29)
+
+Dispatcher rule 2 at **4/4 OVERDUE**, so this fired ahead of rule 4 (which had
+173.2 ready to build). All three standing lanes were clean:
+
+| lane | reading | verdict |
+|---|---|---|
+| `scan:dead-style` | **0 dead** of 1428 live inline declarations | clean |
+| `report:css-repeats` | **8 groups**, matching the settled table | **delta 0** |
+| `report:prose` | 15 pages flagged | **all already adjudicated** |
+
+The prose check is worth stating precisely, because this playbook has paid three
+times for re-deriving verdicts that already existed: every flagged page was
+matched against **both** `ROADMAP.md` and `ROADMAP-archive.md` by path, and all
+15 resolve — the four with a single mention (`combobox`, `form`, `money`,
+`list-report`) each carry a real "honest coverage" verdict with measurements in
+the archive. **The one page the check reported as unadjudicated was
+`/script/style/`, which does not exist**: the extractor matched the report's own
+explanatory text, *"with pre/script/style/svg/template removed"*. A detector
+tripping on prose about itself, one more time.
+
+### 187.1 — `stripTags` had two homes, both feeding published JSON
+
+The lanes cannot see duplicated *logic*, which step 1 also asks for. Scanning
+104 scripts for identical code blocks found exactly one:
+
+```js
+// gen-patterns.mjs:37 — a named local, used 3x, never exported
+const stripTags = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+// gen-patterns-index.mjs — the same three steps, written inline on the opener
+extractOpener(src).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
+```
+
+Byte-identical normalisation, two homes, both feeding text into JSON a reader
+sees — the exact "two generators reading a page differently" defect
+`pattern-extract.mjs` was created for (sweep #6, 2026-08-22). Hoisted there and
+exported; both call sites now import it.
+
+**`wrong-choice-rule.mjs:45` was deliberately NOT folded in.** It strips tags
+without collapsing or trimming, because it feeds a `/^\s*(Not|Never|…)/` test
+that needs the original leading whitespace. Consolidating it would have changed
+what the clause detector matches — a third occurrence of the idiom that is not
+the same operation.
+
+**Verified against the rendered artefact, not the diff.** Both generators were
+re-run and their outputs byte-compared with the pre-refactor copies:
+`patterns.json` and `patterns-index.json` **identical**. Red-proved by removing
+`.trim()` from the shared helper — both files then differ, and both return to
+identical when restored, which also confirms the one helper really does feed
+both generators.
+
+**Nothing further to consolidate, and the metric says the opposite.** Re-running
+at a tighter window leaves 5 cross-file matches and every one is an **import
+block** — identical `import` lines in files that share the same modules, which
+is evidence consolidation already happened, not a target. Note the count went
+**4 → 5 because of this fix**: the two generators' import lines now match. The
+duplication went down while the number went up, which is why the count is not
+the finding.
+
 ## Slice 186 — Objective grill of Slices 180, 183, 184: the loop's self-descriptions are the thinly-gated surface, and the hand-off is wrong at HEAD (2026-08-29)
 
 Dispatcher **rule 3**, `Objective 3 / 3 OVERDUE [180, 183, 184]`, read from

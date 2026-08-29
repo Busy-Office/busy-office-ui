@@ -25,7 +25,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
 import { opener as extractOpener } from './wrong-choice-rule.mjs';
-import { extractComplexity, extractComponents } from './pattern-extract.mjs';
+import { extractComplexity, extractComponents, stripTags } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
 
@@ -34,7 +34,6 @@ const LINK_RE = /href=\{base \+ '([^']+)'\}/;
 const SECTION_RE = (heading) => new RegExp(`<h2>${heading}<\\/h2>[\\s\\S]*?<tbody>([\\s\\S]*?)<\\/tbody>`);
 const ROW_RE = /<tr>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<\/tr>/g;
 
-const stripTags = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
 function extractRows(src, heading) {
   const m = SECTION_RE(heading).exec(src);

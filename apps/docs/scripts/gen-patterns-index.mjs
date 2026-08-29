@@ -21,7 +21,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { PATTERN_GROUPS } from '../src/data/pattern-groups.mjs';
 import { opener as extractOpener } from './wrong-choice-rule.mjs';
-import { extractComplexity, extractComponents } from './pattern-extract.mjs';
+import { extractComplexity, extractComponents, stripTags } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
 
@@ -32,10 +32,7 @@ for (const { label, items } of PATTERN_GROUPS) {
     const slug = href.replace('/patterns/', '');
     const src = await readFile(new URL(`${slug}.astro`, patternsDir), 'utf8');
 
-    const opener = extractOpener(src)
-      .replace(/<[^>]+>/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
+    const opener = stripTags(extractOpener(src));
     // The tile shows a truncation of the same text, at a sentence boundary
     // where one exists within budget — never re-worded, so it stays
     // extraction rather than a second, driftable summary.

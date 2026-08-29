@@ -16,6 +16,25 @@
 const COMPLEXITY_RE = /complexity (\d) of 4/;
 const BADGE_RE = /class="bo-badge bo-badge--type" href=\{base \+ '([^']+)'\}>([^<]+)</g;
 
+/**
+ * Strip markup, collapse runs of whitespace, trim — the normalisation both
+ * generators apply to text pulled out of a `.astro` page before it becomes
+ * JSON a reader sees.
+ *
+ * Hoisted here by the Standardize sweep of 2026-08-29, which is the same
+ * finding this file was created for: `gen-patterns.mjs` had it as a named
+ * local `stripTags`, and `gen-patterns-index.mjs` had the identical three
+ * steps written inline on the opener. Byte-identical logic, two homes, both
+ * feeding text into published JSON — exactly the "two generators reading a
+ * page differently" defect the header above warns about.
+ *
+ * NOT applied to `wrong-choice-rule.mjs`'s tag strip, which is deliberately
+ * only the first step: it feeds a `/^\s*(Not|Never|…)/` test that needs the
+ * ORIGINAL leading whitespace, so collapsing and trimming there would change
+ * what the clause detector matches.
+ */
+export const stripTags = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
 /** @throws if the page has no "complexity N of 4" badge — check-page-shape should have caught this first. */
 export function extractComplexity(src, slug) {
   const m = COMPLEXITY_RE.exec(src);
