@@ -231,6 +231,54 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 183 — the visual backlog that waited eight wakes, cleared (2026-08-29)
+
+**Not new input, and not a dispatched rule.** Rules 1-3 were unarmed; rule 4 had
+nothing (all six open items owner-blocked, re-read this wake and unchanged);
+rule 5 nothing. Rule 6 → Polish was reachable and was **not taken**: §3b step 4
+requires a blind re-score by a SECOND agent, this session is not permitted to
+spawn one, and running steps 1-3 then scoring my own change is precisely what
+that step forbids ("it would be marking its own homework"). A self-approved
+Polish round is worse than no round, because it consumes budget and cannot fire
+the dry exit.
+
+So this wake took the work `RESUME.md` says only a local wake can do. Five
+visual items had been carried **eight wakes** with the standing note *"None is
+dispatchable here; all need a local wake with a browser."* Cloud wakes have no
+Podman, no screenshots. This one has both.
+
+**All five measured at 390px, and all five are clean. No defect found.**
+
+| carried item | result |
+|---|---|
+| `DsaScore`'s `<span class="bo-badge">generated</span>` inside an `<h2>` — renders on **39** pages, so a bad wrap wraps 39 times | **1.1 lines**, `badgeRight` 192-321 against a 390 viewport, `badgeOverflows: false` on every heading |
+| `/components/scan` DSA table at 390px — new in 176.1, never seen | clean; three columns inside the 340px container |
+| `/components/state-patterns` DSA table — 182.1's repaired `colour` cite is **longer** than the one it replaced | wraps in-cell; table width 340 = container width, no spill |
+| `/components/data-table` `#markers` at 390px, **both themes** | `docOverflow: 0` in light and dark |
+| `/concepts/scale`'s first decision table (178.3 changed a `<td>`) | `docOverflow: 0` |
+
+**The measurement, not just the screenshot.** `docOverflow` read **0** on every
+page in every theme, and each table was checked against *its own scroll
+container* as well as the viewport — the wide tables report
+`spillsViewport: true` **with** `scrollable: true`, which is the designed
+behaviour (`.bo-data-table-container` is `overflow-x: auto`) and is what
+`check:scroll` already asserts across 804 containers. Reporting those as defects
+would have been measuring the wrong box.
+
+**Two incidental confirmations**, both of things `RESUME.md` warned a wake might
+get wrong:
+
+- `state-patterns` emitted the three badge headings **twice**, which is the
+  39-pages/40-entries distinction stated rather than assumed: the page renders
+  `<DsaScore` twice. The handover's "do NOT correct 39 to 40" holds.
+- `/components/scan` now reads **`Scored 2026-08-28`, 100% (18/18)** — 176.1's
+  round-1 score, which 182 discovered had never been written to
+  `dsa-scores.json`, is present.
+
+**Still owed, and still not doable here:** the two blind re-scores (`scan`'s
+three dimensions, `skeleton · colour`). They need a second agent. Until one
+runs, the dry-round exit cannot fire — the mechanism 176.3 is open about.
+
 ## Slice 182 — Polish round on `state-patterns`: the rubric cited the bug, not the fix (2026-08-28)
 
 **Dispatcher rule 6, cloud wake.** Rules 1-5 gave nothing: no open P0 (all seven

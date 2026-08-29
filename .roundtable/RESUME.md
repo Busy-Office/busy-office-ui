@@ -100,31 +100,20 @@ each heading one section), `check:dsa-scores` (**360** assertions, 40 of 40),
 checked against the **rendered** page: built `state-patterns/index.html` carries
 `skeleton-highlight` once and `bg-muted/bg-hover` zero times.
 
-**The carried-forward visual items have now waited EIGHT wakes.** None is
-dispatchable here; all need a local wake with a browser:
+**The carried-forward visual backlog is CLEARED (2026-08-29, local wake, Slice
+183).** All five items measured at 390px in a real browser; **all five clean, no
+defect found**. `docOverflow` read 0 on every page in every theme; the
+`generated` badge sits at **1.1 lines** with `badgeOverflows: false` on every
+heading, so the 39-page wrap risk is closed; `state-patterns`' longer repaired
+`colour` cite wraps in-cell with the table at exactly container width.
 
-- `DsaScore.astro` and `concepts/which-pattern.astro` each gained
-  `<span class="bo-badge">generated</span>` inside an existing `<h2>`.
-  `DsaScore` renders on **39** pages, so if the badge wraps badly it wraps in 39
-  places. First local wake: glance at one component page's "Design-system
-  alignment" heading at 390px — make it `/components/scan`, which also settles
-  the next item.
+Wide tables reporting `spillsViewport: true` **with** `scrollable: true` are the
+designed behaviour, not findings — `.bo-data-table-container` is `overflow-x:
+auto` and `check:scroll` already asserts it across 804 containers. Do not
+re-raise them.
 
-  **⚠ Do NOT "correct" that 39 to 40 from `check:dsa-scores`.** The gate reports
-  *"40 requested by a page"*, which counts component ENTRIES, not pages:
-  `state-patterns.astro` renders `<DsaScore` twice. 39 pages request 40 entries.
-  A `grep -rlE "<DsaScore|DsaScore "` also reads 40, and that second alternative
-  matches a *comment* in `concepts/which-pattern.astro:16` — an assertion
-  tripping on prose about itself. Count `<DsaScore` files, or count built pages
-  carrying "Design-system alignment": both read **39**.
-- `/components/scan`'s DSA table at 390px — new in 176.1, never seen.
-- **`/components/state-patterns`'s DSA table at 390px — new this wake.** The
-  repaired `colour` cite is longer than the one it replaced; it is running text
-  in a table cell, so wrapping is the only thing at risk, and it was not looked
-  at.
-- The `#markers` table on `/components/data-table` at 390px, both themes.
-- `/concepts/scale`'s first decision table — 178.3 changed one `<td>`'s text and
-  could not look at it.
+**Nothing visual is carried forward.** The next local wake does not owe this
+sweep; re-open only if a NEW page or a changed cite is added.
 
 **Traps exercised for real this wake:** 1 (detached HEAD — `git branch
 --show-current` EMPTY at Step 0, fixed before the first commit), 1b, 1c, 2
