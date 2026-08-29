@@ -1165,3 +1165,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 21:09 · Objective · grill · Objective grill of 199-202 — 201's new gate re-verified by injection, two Slice 200 refusals confirmed against source · logged · 9e7b74a
 - 2026-08-29 21:26 · Continue · build · 200.2 — restrained button press feedback; the Accept's own hover/pointer selector let a real keyboard Space press get the same transform as a mouse click, fixed with :not(:focus-visible) · landed · a9403f4
 - 2026-08-29 22:00 · Roadmap · release · 185.2 closed + v0.6.0 released — create-ui@0.1.1 confirmed carrying SLSA provenance · released · 4ea551b
+- 2026-08-29 14:22 · Continue · bug · 204.1 — P0: check:claims accused correct CSS for three commits (CI red 642-644); gate() gains notVerified() · landed · 79f4ca3
+- 2026-08-29 14:22 · Meta · refusal · forcing a desktop pointer via --blink-settings / --touch-events — six launch variants measured, none moves headless Chrome off (pointer: none) · refused · 79f4ca3
+- 2026-08-29 14:22 · Continue · build · 200.3 — tab + segmented selection easing, colour only, token-driven; forced-colors zeroed · landed · 79f4ca3
+- 2026-08-29 14:22 · Meta · refusal · border-color in segmented's transition list — the Accept names it, but no rule there changes an option's border colour · refused · 79f4ca3
