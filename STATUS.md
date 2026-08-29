@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 21:46 UTC
+Generated at: 2026-08-29 22:47 UTC
 
 ## Open items by slice
 
@@ -18,10 +18,9 @@ Generated at: 2026-08-29 21:46 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1189 iterations logged)
+dispatch status — counter-triggered rules (1192 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-08-29 17:51   ok
-  Objective     3 / 3 slices          since 2026-08-29 18:44   OVERDUE  [200, 208, 209]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-29 22:47   ok
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -35,9 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 18:44 · Objective · grill · Objective grill of Slices 205, 208 — 209.1 corrects a lossless-move proof measured against an uncommitted state; 209.2 files earliestChrome()'s missing prefix filter · logged · a4a3ffb5
-- 2026-08-29 18:44 · Meta · refusal · a gate for 209.1 — 'the number quoted is the number in the commit' is not checkable without the intent · refused · a4a3ffb5
-- 2026-08-29 18:44 · Meta · refusal · fixing 209.2 inside the grill — a grill that rewrites the gate it is grilling marks its own homework · refused · a4a3ffb5
 - 2026-08-29 19:46 · Continue · build · 200.7 — motion-literal lint gate: base rate 0 of 23 under its own wording, red-proved by injection both ways; refused per 94.11. 201.4 closed by its second allowed outcome · refused · 97b3da4b
 - 2026-08-29 19:46 · Meta · refusal · the broadened predicate (any literal duration/easing): its entire red set is 3 deliberate decisions already adjudicated by check:motion route (b) · refused · 97b3da4b
 - 2026-08-29 19:46 · Meta · refusal · filing an item for 201.4's non-reproducing denominator: its conclusion re-derives exactly and the correction is a scoping note, not a defect · refused · 97b3da4b
@@ -45,6 +41,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 20:43 · Meta · refusal · consolidating the two floor helpers — in scope as an option, refused on LOOPS.md's own 'not the same table' ground · refused · 19baf15
 - 2026-08-29 21:46 · Continue · build · 208.3 — check:po-app's cloud red root-caused to a blocked htmx CDN; gate now asserts the precondition · landed · 214d6b6
 - 2026-08-29 21:46 · Meta · refusal · vendoring htmx into examples/po-app to make this container green — changes what the example teaches; filed as 211.1 · refused · 214d6b6
+- 2026-08-29 22:47 · Objective · grill · Slices 200/208/209 grilled — 212.1 corrects Slice 210's BROAD base rate (5 literals / 3 declarations, the missed one red-proved through check:motion); 212.2 adds the arming-set narrowing step to LOOPS.md section 6 · logged · e721c20
+- 2026-08-29 22:47 · Meta · refusal · a gate for 212.1 — check:motion already covers the subject on shipped dist; 192.1's answer to a wrong count is to name the instrument, not add a gate · refused · e721c20
+- 2026-08-29 22:47 · Meta · refusal · a sixth regex in dispatch_status.py to count closed rather than named slices — rule 3 sits above rule 4, so over-arming costs a paragraph and under-arming starves a loop · refused · e721c20
 
 ## Sunset test
 

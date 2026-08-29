@@ -1195,3 +1195,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 20:43 · Meta · refusal · consolidating the two floor helpers — in scope as an option, refused on LOOPS.md's own 'not the same table' ground · refused · 19baf15
 - 2026-08-29 21:46 · Continue · build · 208.3 — check:po-app's cloud red root-caused to a blocked htmx CDN; gate now asserts the precondition · landed · 214d6b6
 - 2026-08-29 21:46 · Meta · refusal · vendoring htmx into examples/po-app to make this container green — changes what the example teaches; filed as 211.1 · refused · 214d6b6
+- 2026-08-29 22:47 · Objective · grill · Slices 200/208/209 grilled — 212.1 corrects Slice 210's BROAD base rate (5 literals / 3 declarations, the missed one red-proved through check:motion); 212.2 adds the arming-set narrowing step to LOOPS.md section 6 · logged · e721c20
+- 2026-08-29 22:47 · Meta · refusal · a gate for 212.1 — check:motion already covers the subject on shipped dist; 192.1's answer to a wrong count is to name the instrument, not add a gate · refused · e721c20
+- 2026-08-29 22:47 · Meta · refusal · a sixth regex in dispatch_status.py to count closed rather than named slices — rule 3 sits above rule 4, so over-arming costs a paragraph and under-arming starves a loop · refused · e721c20
