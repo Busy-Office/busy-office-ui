@@ -39,7 +39,7 @@
     /* 600ms explicit, not the 300ms token: a peripheral-vision cue for a user
        looking at the rack, not the screen — and this file carries its own
        reduced-motion override below. */
-    animation: bo-scan-flash 600ms var(--bo-motion-ease) forwards;
+    animation: bo-scan-flash 600ms var(--bo-motion-easing-standard) forwards;
   }
 
   body[data-scan-result="ok"]::after {

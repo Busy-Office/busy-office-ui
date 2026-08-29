@@ -95,7 +95,7 @@
 
   .bo-combobox__option-code {
     flex: none;
-    font-family: var(--bo-font-family-mono);
+    font-family: var(--bo-font-mono);
     font-variant-numeric: tabular-nums;
     color: var(--bo-color-text-secondary);
   }

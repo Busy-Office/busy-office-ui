@@ -11,6 +11,36 @@ pin.
 
 ### Fixed
 
+- **Two custom-property typos silently deleted the declaration that named
+  them.** An unresolvable `var()` is neither a syntax error nor a no-op — it
+  makes the whole declaration invalid at computed-value time, so the property
+  falls back to its inherited or initial value and nothing warns. Both were
+  measured in a real browser against the built site, not read off the source.
+  - **The RF scan flash painted nothing at all.** `scan.css` reached for
+    `var(--bo-motion-ease)`, which is defined nowhere; the defined token is
+    `--bo-motion-easing-standard`. Computed `animation-name` on
+    `body[data-scan-result]::after` read `none`, leaving the overlay at its
+    declared `opacity: 0` — so the component's entire visible verdict, the
+    accepted/rejected wash a picker sees in peripheral vision, was invisible
+    for every user *not* in reduced motion (the reduced-motion branch sets its
+    own static `opacity: 0.2` and was unaffected). Now `bo-scan-flash / 0.6s /
+    cubic-bezier(0.4, 0, 0.2, 1)`, with the deliberate 600ms literal unchanged.
+  - **A combobox's option code was not monospace.** `combobox.css` reached for
+    `var(--bo-font-family-mono)`; the defined token is `--bo-font-mono`, which
+    six other components spell correctly. `.bo-combobox__option-code` rendered
+    in the body sans-serif stack, byte-identical to `document.body`'s computed
+    `font-family`, losing the column alignment the tabular figures are for.
+
+### Added
+
+- **`check:token-refs`** — a build gate asserting that every `var(--bo-…)` in
+  the shipped CSS names a property something actually defines. It reads both
+  definition sites (CSS declarations *and* the three tokens shipped behaviours
+  set at runtime via `setProperty`), and deliberately does not fail a reference
+  carrying a fallback, since `var(--bo-grid-min, 16rem)` is a consumer-override
+  hook that is undefined by design. It was red on the untouched tree, which is
+  what makes it a gate rather than ceremony.
+
 - **The validation summary handed you a link that did nothing.** A `required`
   control inside a container the framework hides — an inactive
   `[role=tabpanel][hidden]`, a closed `<details>`, a collapsed
