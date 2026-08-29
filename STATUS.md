@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 02:21 UTC
+Generated at: 2026-08-29 02:44 UTC
 
 ## Open items by slice
 
@@ -11,8 +11,6 @@ Generated at: 2026-08-29 02:21 UTC
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
 - **Slice 173** (1 open)
   - 173.2 — editable-grid "Medium": the numeric columns need alignment.
-- **Slice 185** (1 open)
-  - 185.1 — wire `create-ui` into the release workflow.
 - **Slice 186** (2 open)
   - 186.1 — `RESUME.md`'s slice-id claims are reconciled against `ROADMAP.md`'s checkboxes, and the disagreement is reported.
   - 186.2 — `173.2` is browser-blocked, not owner-blocked, and rule 4's halt reasoning should say which.
@@ -22,9 +20,9 @@ Generated at: 2026-08-29 02:21 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1098 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-29 10:21   ok
-  Objective     1 / 3 slice           since 2026-08-29 01:46   ok  [187]
+dispatch status — counter-triggered rules (1100 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-29 10:21   ok
+  Objective     2 / 3 slices          since 2026-08-29 01:46   ok  [185, 187]
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -38,8 +36,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 00:43 · Roadmap · plan · 184 triaged from inside the dispatch: rule 5's only input is loop-metrics.jsonl and 96 of 99 samples predate 2026-08-20; 652 iterations since against 3 samples, each a name recorded once, so none can be two consecutive runs. ci-wall-time's 26 samples all sit in one 17-hour window on 2026-08-18, the day Slice 28.1 closed with the Accept criterion 'recorded every wake'. Slice 183 published the stale reading as current evidence · triaged · 07afdcd3
-- 2026-08-29 00:43 · Continue · build · 184.1/184.2 — dispatch_status.py now reads rule 5's input and reports how many wake-dates are newer than the newest comparable metric pair (STALE at 10); red-proved by injection across all five branches with each injection confirmed to have landed, base rate replayed at live-on-6-of-17 before shipping, compared by date not timestamp because the two dispatchers write naive stamps eight hours apart. Rule 5 gains the budget-breach clause the Optimize playbook has carried since 2026-08-23 · landed · 07afdcd3
 - 2026-08-29 00:43 · Meta · refusal · recording check:claims' 141 under the existing 'claims' metric name, whose earlier samples 65-82 measured something else — a poisoned trend is worse than a missing one · refused · 07afdcd3
 - 2026-08-29 09:16 · Roadmap · triage · 173.2 owner picked (b) floats-on-focus and 175.4 owner accepted collisions; 185 filed — create-ui's E404 is publish.yml never wiring it, not an unrun command · logged · 6c4cfae
 - 2026-08-29 09:38 · Roadmap · triage · 176.3 closed as no-change — owner challenge upheld by measurement: 12 Polish rounds in 1092 iterations and the 'redundant' second rounds are 2-of-3 for real defects; assistant's narrowing proposal retracted · refused · 0c1fe3d
@@ -48,6 +44,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 09:53 · Continue · release · @busy-office/create-ui 0.1.0 live and verified as a consumer (npm create @busy-office/ui scaffolds and pins the published core); direction (a) achieved after eight wakes. Two diagnoses in the slice were wrong and are recorded: the 404 was new-package propagation not an unpublish, and npm normalised the bin rather than dropping it · released · 043c741
 - 2026-08-29 10:21 · Standardize · tidy · 187 — sweep: all three standing lanes clean (dead-style 0, css-repeats delta 0, prose 15/15 adjudicated); 187.1 hoisted stripTags into pattern-extract.mjs from two homes, generated JSON byte-identical and red-proved · landed · ee461b8
 - 2026-08-29 10:21 · Meta · refusal · folding wrong-choice-rule.mjs's tag strip into the shared helper — it needs the original leading whitespace for its /^\s*(Not|Never)/ test, so it is the same idiom but not the same operation · refused · ee461b8
+- 2026-08-29 02:44 · Continue · build · 185.1 — publish.yml ships create-ui with core; new check-publishable release gate, red-proved on six branches · landed · 990cd2c
+- 2026-08-29 02:44 · Meta · refusal · lockstep versions and a separate create-ui-v* trigger — the latter leaves a core release able to strand the scaffolder · refused · 990cd2c
 
 ## Sunset test
 

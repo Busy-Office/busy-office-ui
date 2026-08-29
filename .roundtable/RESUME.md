@@ -23,152 +23,125 @@ made but not yet written down.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 3 → Objective
-grill of Slices 180, 183, 184**). Working tree clean at hand-off; the wake's
-commits went out as one push.
+Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 4 → 185.1,
+Slice 188**). Working tree clean at hand-off; the wake's commits went out as one
+push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set** — it
-goes stale between wakes, and **this wake proved that with a live instance**
-(186.1). Trust the `N. [ ]` checkboxes, not this section.
+goes stale between wakes, and it did again this wake: the previous hand-off's
+"corrected open set" listed **six** checkboxes and `grep -cE '^\s*[0-9]+\. \[ \]'
+ROADMAP.md` read **seven** at Step 0, because `185.1` was filed by the local
+dispatcher after that table was written. Trust the checkboxes, not this section.
 
-## What landed this wake (2026-08-29, cloud, rule 3 → Slice 186)
+## What landed this wake (2026-08-29, cloud, rule 4 → Slice 188)
 
-Report: `.roundtable/grill-objective-180-183-184-2026-08-29.md`.
+**`185.1` closed: a GitHub Release now publishes both packages.** The scaffolder
+has been live since `01:30:23Z` pinning `^0.5.0`, and `publish.yml` would never
+have republished it — quieter and worse than the E404 it replaced.
 
-- **The question the last hand-off proposed was answered, and its premise is
-  false — which is the satisfying outcome.** *"How many other closed Accept
-  criteria stopped holding the day they were ticked?"* → **1 of 275**. Only
-  28.1's *"`ci-wall-time` recorded every wake"* binds future behaviour at all;
-  the other three phrase-hits are a quote, an incidental, and a description.
-  Widening the needle set from 11 phrases to 21 added **zero** hits. From the
-  other side, **117 of 275 (43%)** name a gate/script/test and re-check
-  themselves. So **184.1 did not patch one leak in a leaky system** — it supplied
-  a mechanism for the one thing an Accept criterion structurally cannot express.
-- **My instrument was wrong twice on its first runs, both caught before the
-  number was quoted.** Block over-capture reported 19; and `each run` matched
-  inside **`each rung`**, verified with `grep -o` and the needle dropped.
-- **The cross-cut of 180/183/184: a self-description checked against the wrong
-  thing, or nothing.** 180 — `@exact` verified against the tag *text*, not the
-  code. 184 — rule 5's freshness verified by nothing for 10 wake-dates. 183 —
-  "needs a browser" verified by nothing for eight wakes. **183 is the control:
-  when finally checked, 5 of 5 were clean.** So the finding is *self-descriptions
-  are unverified*, **not** *they are wrong*. Filed as **Hypothesis**, n = 4.
-- **Refused: a general "gate every self-description" programme.** 176.2's rule-6
-  predicate was true of 19 of 19 and 94.11's of 155 of 155 — the blanket gate
-  that distinguishes nothing is this repo's recorded failure mode.
-
-## ⚠ TWO PREMISES IN THE PLAN WERE FALSE AT HEAD, AND BOTH ARE NOW CORRECTED
-
-**1. `create-ui` is PUBLISHED. The E404 is gone.** Asked the registry, not this
-file:
-
-```
-npm view @busy-office/create-ui version      # 0.1.0   (was E404)
-npm view @busy-office/create-ui time --json  # published 2026-08-29T01:30:23.790Z
-npm view @busy-office/ui version             # 0.5.0
-```
-
-Slice 185 was filed at `6c4cfae` **01:16:54Z** (offsets resolved to UTC first —
-local writes `+0800`, cloud `+0000`) and the publish landed **01:30:23Z, 13½
-minutes later**, exactly the manual first publish 185 predicted. ROADMAP 185 now
-carries the update with its two false sentences struck. **Still open and now more
-urgent:** `publish.yml` publishes core only, so the next release silently skips
-`create-ui` — which is live and pins `^0.5.0`. Owner call, unchanged.
-
-**2. `173.2` is BROWSER-blocked, not owner-blocked.** The last hand-off said "the
-six older items are still owner-blocked (`112.3`, `112.4`, `173.2`, `175.4`,
-`176.3`, `15.12`)". Measured at `751959eb`, the commit that wrote it:
-**`175.4` was already `[x]` closed** and **`173.2` already had the owner's
-answer (b), 2026-08-29**, with a full Accept. Cause: `6c4cfae` wrote the
-decisions into `ROADMAP.md` and `751959eb` never touched this file.
-
-**3. And it happened a THIRD time, during this wake, to the table below.** While
-this hand-off was being written the local dispatcher landed `0c1fe3d3` closing
-**`176.3`** as no-change on the owner's challenge. The draft of this table —
-written minutes earlier — listed `176.3` as owner-blocked. It was corrected by
-re-running the count, not by noticing. The rebase that brought those commits in
-**resolved with no conflict at all**, which is Step 0c's documented hazard: the
-`git fetch origin main` before the first commit is what caught it, and it is a
-process rule with nothing mechanical behind it.
-
-**The corrected open set — six `N. [ ]` checkboxes, counted in `ROADMAP.md` at
-`a2d53a93`+, not copied** (`grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md` → 6):
-
-| item | blocked on |
-|---|---|
-| `112.3`, `112.4` | **owner** (briefs; 112.4 waits on 112.3's verdict) |
-| `15.12` (`12. [ ] AT runtime evidence`) | **owner hardware** |
-| `173.2` | **a browser** — owner-answered, Accept written, needs live row-height measurement. **A local wake can take this; a cloud wake cannot.** |
-| `186.1`, `186.2` | nothing — filed this wake, dispatchable |
-
-`176.3` is **closed, no-change, and must not be re-raised** — `LOOPS.md` rules 6
-and 7 and §3b all carry the owner's decision now.
+- **The version question is answered in the workflow's own comments, as its
+  Accept required.** One tag cannot assert two versions, so create-ui ships on
+  core's release without a TAG assertion but with two others: its derived-pin
+  check (`framework.json` is `^<core version>`, so the tag's own assertion
+  reaches create-ui transitively) and a new `check-publishable.mjs` that refuses
+  a release whose versions are already on the registry — which makes a core
+  release impossible without a create-ui bump.
+- **Refused, with the reason in the workflow:** lockstep versions, and a
+  separate `create-ui-v*` trigger (it leaves a core release able to strand the
+  scaffolder — the defect being fixed). **Known limit, stated rather than
+  hidden:** there is now no path to release create-ui alone.
+- **Six branches red-proved against the real registry**, including the one that
+  matters — an unreachable registry exits 1 saying nothing was verified, rather
+  than reading as "nothing is already published". The `@exact` tag was
+  red-proved too (removing it turns `check:selftests` red naming the file;
+  `grep -c` confirmed the removal landed before believing the red).
+- **Placed in `packages/core/scripts/` on purpose.** `apps/docs`' `build` runs
+  `check:repo` → `check-selftests.mjs`, and the docs Containerfile does not copy
+  root `scripts/`; teaching that meta-gate a new directory would have broken the
+  container build the way `check:rtl`'s DESIGN.md assertion once broke po-app.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**Nothing this wake needed one.** `git diff --stat` names only `ROADMAP.md`,
-`.roundtable/` and the generated `STATUS.md` — no `.css`, no `.astro`, nothing
-under `packages/core/src`. That is an argument from the diff, **not a visual
-check, and it is not claimed as one.**
+**Nothing this wake needed one** — `git diff --stat` names `.github/workflows/`,
+`ROADMAP.md` and one new `packages/core/scripts/*.mjs`; no `.css`, no `.astro`.
+That is an argument from the diff, **not a visual check, and it is not claimed
+as one.**
 
-Gates run twice, before and after the change, all green: core `build` + `test`
-(146), `docs:build`, `check:repo` (slice-refs **373** citations, **168** slice
-numbers — up one heading and one citation, which is exactly what Slice 186 adds),
-`check:claims` (141), `check:layout` (127), `test:axe` (127 × 2, zero
-violations).
+**The workflow itself was never executed, and must not be read as verified.** A
+release is owner-triggered and a cloud wake cannot cut one. What WAS verified:
+the YAML parses with its 13 steps in the intended order; `npm run check -w
+@busy-office/create-ui` passes, and fails for the *right reason* when core is
+bumped to 0.6.0 (`✗ framework pin (^0.6.0 …) — differs from its source`); and
+the new gate's six branches. **The first real release is the first execution of
+this workflow — expect to read its log.**
 
-**Traps exercised for real this wake:** 1 (detached HEAD — `git branch
---show-current` EMPTY at Step 0, fixed before any commit), 1b, 1c, 2
-(unshallowed: read `true`, now 1,571 commits), 3, 5.
+Gates run after the change, all green: core `build` + `test` (146),
+`docs:build`, `check:repo` (slice-refs **377** citations, **170** slice numbers
+— up one heading and one citation, exactly what Slice 188 adds), `check:claims`
+(141), `check:layout` (127), `test:axe` (127 × 2, zero violations).
+
+**Traps exercised for real this wake:** 1 (**no local `main` at all** — `git
+rev-parse --short main HEAD` exited 128 with `fatal: Needed a single revision`,
+the harder variant `ENVIRONMENT.md` names; fixed with `git checkout -B main
+origin/main` before any commit), 1c (`CHROME_PATH` exported in the same command
+as every browser gate), 2 (unshallowed before the Direction measurement: 1,583
+commits), 3 (`rm -rf apps/docs/dist` before the build). 1b was obeyed rather
+than exercised — every command was anchored absolutely and none tripped.
 
 ## Counters after this wake
 
-Run `python3 scripts/loops/dispatch_status.py` and read it **immediately after
-`record_iteration.py`**, per 166.5's lesson — that comparison has found two of the
-five recurrences.
+**No prediction was written before recording this wake, so say that rather than
+dress the readings up as one** — the previous two hand-offs wrote one first, and
+that is the stronger practice; this wake read the counters at Step 0b and again
+immediately after `record_iteration.py`, which is the comparison 166.5 requires,
+but the arithmetic in between was not committed to paper in advance.
 
-**Prediction written down first, then checked.** Before recording, with 1093 rows
-and the parser agreeing with a raw `grep -c "^- "` at 1093, for one `Objective`
-row carrying one `--also-refused` (182.3: +1 `Meta · refusal` row) plus one
-`axe-violations` sample: **1095** rows, `Standardize 3 / 4 ok`, `Objective 0 / 3
-ok` (reset by this row), and rule 5 `0 wake-date(s) newer … ok` at **101**
-samples.
+At Step 0b: **1098 iterations logged**, `Standardize 0 / 4`, `Objective 1 / 3
+[187]`. After recording one `Continue` row carrying one `--also-refused` (+1
+`Meta · refusal` row): **1100** by the parser against a raw `grep -c "^- "` of
+**1100**; `Standardize 1 / 4 ok`; `Objective 2 / 3 ok [185, 187]`; `Optimize 0
+wake-date(s) newer … ok [101 sample(s)]`. The +2 is what two rows should do, and
+the parser and the raw count agree.
 
-After recording: **1095** rows against a raw `grep -c` of **1095**;
-`Standardize 3 / 4 ok`; `Objective 0 / 3 ok`; `Optimize 0 wake-date(s) newer …
-ok [101 sample(s), 13 of 30 name(s) sampled twice]`. **Four of four exact** — and
-unlike last wake, the prediction's premise was not changed after it was written.
+**Read `[185, 187]` before assuming rule 3 is one slice from firing.** The row
+this wake wrote names **`185.1`**, the item that closed, so `SLICE_TOP` attributes
+it to slice **185** — not to Slice 188, which is only the heading the work is
+written under. The count is right either way (two slices closed since the last
+grill); the *names* are the item's, not the heading's.
 
-`axe-violations` was recorded because it was genuinely measured live this wake
-(127 pages × 2 widths, zero violations) under a name whose earlier samples
-measured the same thing. **Refused, per 184's discipline:** inventing a new
-single-sample name for this grill's own figures — a name sampled once can never
-satisfy "two consecutive runs" and would pad the store rule 5 reads.
+**No metric was recorded**, deliberately: nothing this wake measured is a
+repeatable sample under an existing name. The gate's branch table is a one-off
+verification, and inventing a new single-sample name would pad the store rule 5
+reads (184's discipline).
 
 ## What the next wake should expect
 
-**Rule 3 discharged this wake.** Re-run `dispatch_status.py` rather than trusting
-this line, but expect rules 1-3 unarmed and **rule 4 to have real work for the
-first time in five wakes** — `186.1` and `186.2`, both filed here and neither
-owner- nor browser-blocked. `173.2` is older and dispatchable **only on a local
-wake**; a cloud wake should say so explicitly and take the next item rather than
-reporting rule 4 empty.
+**Rule 4 has one dispatchable item left, and it is not for a cloud wake.**
+Checkboxes at hand-off — re-count rather than copying:
 
-**186.1 is the mechanism for the defect this hand-off just demonstrated.** Base
-rates are already measured and are in the item: the sharp predicate fires at
-**2 of 58 wake-ends (3%)**, noise is ~1 backticked id per revision, and the first
-draft of the measuring parser **under-reported 4 of 5** open items because
-`15.12` carries no numeric id in its bold. Re-measure rather than copying those
-figures — they are snapshots.
+```
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 6 after 185.1 closed
+```
 
-**Do not re-raise Slice 179's or 182.2's refusals as new findings.** Both were
-refused on measured base rates; re-measure before reopening.
+| item | blocked on |
+|---|---|
+| `15.12` (`12. [ ] AT runtime evidence`) | **owner hardware** |
+| `112.3`, `112.4` | **owner** (briefs; 112.4 waits on 112.3's verdict) |
+| `173.2` | **a browser** — owner-answered, Accept written, needs live row-height measurement. **A local wake can take this; a cloud wake cannot.** |
+| `186.1`, `186.2` | nothing — dispatchable anywhere |
+
+So a **local** wake takes `173.2` (oldest dispatchable there); a **cloud** wake
+says so explicitly and takes `186.1`. Rule 2 is at 1/4 and rule 3 at 2/3, so one
+more Continue round and one more closed slice change that.
 
 **Two blind re-scores are still owed and neither can be done in a cloud wake**
 (§3b step 4 needs a second agent): `scan`'s three fixed dimensions, and
 `skeleton · colour`. Unchanged by this wake.
+
+**Do not re-raise Slice 179's or 182.2's refusals, or 176.3**, which the owner
+closed as no-change. Re-measure before reopening anything.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -179,27 +152,33 @@ from the sources named — never by copying the answers above you.**
   `@busy-office/create-ui`. Source: the `DECISION (owner, 2026-08-28)` block in
   Slice 164.3, which lives in **`ROADMAP-archive.md`** (line ~21190), not
   `ROADMAP.md`. Read it there; a pointer that disagrees with its source loses.
-- **Remaining step, and who it waits on: THE PUBLISH IS DONE.** The registry
-  answers `0.1.0`, published **2026-08-29T01:30:23Z** by the owner. What remains
-  is **not** the same step: `publish.yml` still publishes core only, so nothing
-  republishes `create-ui` when core moves. That needs the owner's answer on the
-  version-match gate (ROADMAP 185, item 1) — one release tag cannot assert both
-  `0.5.0` and `0.1.0`.
-- **Did this wake advance it?** **Not by publishing — the owner did that.** This
-  wake advanced it by *detecting* it: the direction block had said "still E404"
-  for eight wakes, and this wake asked the registry instead of copying, which is
-  the one thing this file named as new information.
+- **Remaining step, and who it waits on.** The publish is done (registry
+  answers `0.1.0`), and as of this wake the release workflow ships it too. What
+  is left is **one thing this loop cannot check from here: whether
+  `@busy-office/create-ui` has a Trusted Publisher configured on npmjs.com.**
+  It is configured per package, under that package's own settings, and the
+  package page has existed only since `01:30:23Z`. **Stated as unknown, not as
+  done** — nothing in this repo can observe it. If it is not set, the first
+  release publishes core and then fails on create-ui's publish step; the
+  workflow's comments carry the recovery (configure it, then
+  `npm publish -w @busy-office/create-ui` by hand — re-running the job would
+  fail the publishable check by design).
+- **Did this wake advance it?** **Yes** — the direction's own remaining defect
+  ("the next release silently skips create-ui") is closed in code, not narrated.
 - **Work rows since the direction was decided that did not advance it:** derive
   it, do not increment. Re-run the command and READ the matched rows rather than
   `-c`-ing them; the needle over-counts, because a row can mention `create-ui`
-  while merely narrating the blockage. **Derived this wake: 47 non-Meta work rows
-  since `fb15cdc`; the needle matches 3; reading them, `164.3` advances the
-  direction, `168.1` and `6c4cfae` narrate it — so 46 of 47 did not.**
-  *(Measured at `751959eb`, before this wake's own log rows were committed. The
-  last honest reads were 43 of 44, 41 of 42, 38 of 39 and 37 of 38.)*
+  while merely narrating the blockage. **Derived this wake, against the working
+  tree so this wake's own row is included: 52 non-Meta work rows since
+  `fb15cdc`; the needle matches 6; reading them, `164.3`, the `0.1.0` release
+  and this wake's Slice 188 advance the direction, while `6c4cfae`, `168.1` and
+  `186` narrate or detect it — so 49 of 52 did not.** *(Last honest reads: 46 of
+  47, 43 of 44, 41 of 42, 38 of 39, 37 of 38.)*
 
   ```
-  git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' \
+  # `git diff fb15cdc..HEAD` MISSES the current wake's rows until they are
+  # committed; drop the `..HEAD` to diff the working tree instead.
+  git diff fb15cdc -- .roundtable/loop-log.md | grep '^+- ' \
     | grep -v ' · Meta · ' | grep create-ui        # print them, don't -c them
   ```
 
@@ -207,24 +186,21 @@ from the sources named — never by copying the answers above you.**
   that tries to separate "advanced" from "mentioned" is guessing at intent from
   prose, which is the semantic-vs-shape line CLAUDE.md draws (94.11).
 - **Is that ratio a PROBLEM? No — the owner was shown it and decided otherwise
-  (2026-08-28).** Asked directly whether to pause the hourly routine until the
-  publish, the owner chose **keep it running hourly**. Do not re-triage it and do
-  not slow the routine on your own judgement. **The new information this block
-  was waiting for has now ARRIVED** — the registry answered something other than
-  E404 — so the next wake should re-read this block against ROADMAP 185 rather
-  than assuming it still describes a blockage.
+  (2026-08-28)**, choosing to keep the routine running hourly. Do not re-triage
+  it and do not slow the routine on your own judgement.
 
 ```
-npm view @busy-office/create-ui version     # 0.1.0 — PUBLISHED 2026-08-29T01:30:23Z
+npm view @busy-office/create-ui version     # 0.1.0 — published 2026-08-29T01:30:23Z
 npm view @busy-office/ui version            # 0.5.0
 
 # fb15cdc is the commit carrying the owner's decision. UNSHALLOW FIRST
 # (ENVIRONMENT.md trap 2) or these resolve nothing and the rate is silently
 # missing, not wrong.
-git diff fb15cdc..HEAD -- .roundtable/loop-log.md | grep '^+- ' | grep -vc ' · Meta · '
+git diff fb15cdc -- .roundtable/loop-log.md | grep '^+- ' | grep -vc ' · Meta · '
 ```
 
-**`create-ui` is the only name in these commands that will age, and it has now
-partly aged.** The `npm view` line no longer tests a blockage — it confirms a
-publish. When the owner picks a direction beyond "wire the front door into the
-release", rewrite these; do not reinterpret them.
+**These commands are about to age, and the next owner decision is what ages
+them.** The `npm view` lines no longer test a blockage — they confirm a publish
+— and the direction's last open question is now a setting on npmjs.com rather
+than anything in this tree. When the owner picks a direction beyond "wire the
+front door into the release", rewrite them; do not reinterpret them.
