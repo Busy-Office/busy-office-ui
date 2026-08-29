@@ -31,11 +31,38 @@
     white-space: nowrap;
     user-select: none;
     transition: background-color var(--bo-motion-duration-fast)
-      var(--bo-motion-easing-standard);
+        var(--bo-motion-easing-standard),
+      transform var(--bo-motion-duration-fast) var(--bo-motion-easing-standard);
   }
 
   .bo-btn:hover {
     background: var(--bo-btn-bg-hover);
+  }
+
+  /* Press feedback — pointer only. A 1px nudge, never `scale`: scale would
+     shrink a joined `.bo-btn-group` member off its shared border and open a
+     gap at the pressed edge (200.2).
+
+     `(hover: hover) and (pointer: fine)` is a DEVICE capability, not an
+     input-modality signal — on any desktop it is true for a keyboard
+     activation exactly as much as a mouse click, so :active alone here
+     measurably applied the same transform to a Space/Enter press
+     (confirmed live: getComputedStyle read `matrix(1,0,0,1,0,1)` during a
+     real `page.keyboard.down('Space')`, identical to a real mouse press).
+     `:not(:focus-visible)` is what actually excludes it: a mouse click on a
+     button does not set :focus-visible (browsers only show the focus ring
+     for keyboard/programmatic focus on a button), while Space/Enter
+     activation always does, since the button was already keyboard-focused
+     to receive the key. Re-verified live after adding it: Space press held
+     transform: none; a real mouse press still read the translated matrix.
+
+     `prefers-reduced-motion: no-preference` is folded into the query itself
+     rather than a separate override, so a reduced-motion user gets zero
+     displacement, not an unanimated jump. */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .bo-btn:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]):not(:focus-visible):active {
+      transform: translateY(1px);
+    }
   }
 
   .bo-btn:disabled,
@@ -158,7 +185,8 @@
      among static-position siblings in one group, the same idiom as any
      input-group border collapse. */
   .bo-btn-group > .bo-btn:hover,
-  .bo-btn-group > .bo-btn:focus-visible {
+  .bo-btn-group > .bo-btn:focus-visible,
+  .bo-btn-group > .bo-btn:active {
     z-index: 1;
   }
 

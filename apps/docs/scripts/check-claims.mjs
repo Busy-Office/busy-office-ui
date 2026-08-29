@@ -2318,6 +2318,98 @@ check(
   JSON.stringify(dlgReduced),
 );
 
+/* 200.2 — button press feedback. `(hover: hover) and (pointer: fine)` is a
+   DEVICE capability, not an input-modality signal: on a desktop it is true
+   for a keyboard activation exactly as much as a mouse click, so :active
+   alone applied the same 1px transform to a real `page.keyboard.down(
+   'Space')` press before `:not(:focus-visible)` was added — read live as
+   `matrix(1,0,0,1,0,1)` during the keydown, identical to a mouse press.
+   That is the load-bearing distinction this case locks in: it does not just
+   assert the transform exists, it asserts keyboard gets NONE. */
+await visit('/components/button/');
+const midRect0 = await page.evaluate(() => {
+  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+  mid.focus();
+  const r = mid.getBoundingClientRect();
+  return { midBeforeTop: r.top, midBeforeLeft: r.left, midBeforeRight: r.right };
+});
+// Keyboard Space: real CDP key events (page.keyboard is CDP-backed), held
+// for one transition duration so a mid-transition frame isn't mistaken for
+// the settled state (the exact trap this case exists to catch — see above).
+await page.keyboard.down('Space');
+await new Promise((r) => setTimeout(r, 150));
+const duringSpace = await page.evaluate(() => {
+  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+  return { active: mid.matches(':active'), transform: getComputedStyle(mid).transform };
+});
+await page.keyboard.up('Space');
+check(
+  'button: keyboard Space activation shows the existing focus feedback but NO artificial press transform',
+  duringSpace.active && duringSpace.transform === 'none',
+  JSON.stringify(duringSpace),
+);
+
+// Blur before the mouse test: the Space test above left this same button
+// keyboard-focused (:focus-visible), which the CSS deliberately excludes
+// from the press transform — leaving it focused would make the mouse press
+// below a false negative of the TEST, not a real regression (caught live:
+// the first version of this case did exactly that and read transform
+// "none" for a real mouse press, until this blur() was added).
+await page.evaluate(() => document.activeElement.blur());
+// Real mouse press-and-hold on the group's MIDDLE button — the one whose
+// pressed border must stay above its two neighbours (z-index) and whose
+// horizontal edges must not move (only translateY, never scale).
+await page.mouse.move(midRect0.midBeforeLeft + 5, midRect0.midBeforeTop + 8);
+await page.mouse.down();
+await new Promise((r) => setTimeout(r, 150));
+const duringMouse = await page.evaluate(() => {
+  const btns = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')];
+  const mid = btns[1];
+  const rect = mid.getBoundingClientRect();
+  return {
+    active: mid.matches(':active'),
+    transform: getComputedStyle(mid).transform,
+    left: rect.left,
+    right: rect.right,
+    zIndex: getComputedStyle(mid).zIndex,
+    neighborLeftEdge: btns[0].getBoundingClientRect().right,
+    neighborRightEdge: btns[2].getBoundingClientRect().left,
+  };
+});
+await page.mouse.up();
+check(
+  'button: a real mouse press on a joined .bo-btn-group member gets the 1px translateY, stays z-index above its neighbours, and opens no horizontal seam',
+  duringMouse.active &&
+    duringMouse.transform === 'matrix(1, 0, 0, 1, 0, 1)' &&
+    duringMouse.zIndex === '1' &&
+    duringMouse.left === midRect0.midBeforeLeft &&
+    duringMouse.right === midRect0.midBeforeRight &&
+    duringMouse.neighborLeftEdge === duringMouse.left + 1 &&
+    duringMouse.neighborRightEdge === duringMouse.right - 1,
+  JSON.stringify({ ...duringMouse, expectedLeft: midRect0.midBeforeLeft, expectedRight: midRect0.midBeforeRight }),
+);
+
+await visit('/components/button/', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+const btnReduced = await page.evaluate(async () => {
+  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+  mid.scrollIntoView({ block: 'center' });
+  const r = mid.getBoundingClientRect();
+  return { top: r.top, left: r.left, width: r.width, height: r.height };
+});
+await page.mouse.move(btnReduced.left + btnReduced.width / 2, btnReduced.top + btnReduced.height / 2);
+await page.mouse.down();
+await new Promise((r) => setTimeout(r, 150));
+const reducedDuring = await page.evaluate(() => {
+  const mid = [...document.querySelectorAll('.bo-btn-group')[0].querySelectorAll('.bo-btn')][1];
+  return { active: mid.matches(':active'), transform: getComputedStyle(mid).transform, top: mid.getBoundingClientRect().top };
+});
+await page.mouse.up();
+check(
+  'button: prefers-reduced-motion removes the press displacement entirely, not just its animation (position unchanged while still :active)',
+  reducedDuring.active && reducedDuring.transform === 'none' && reducedDuring.top === btnReduced.top,
+  JSON.stringify({ ...reducedDuring, expectedTop: btnReduced.top }),
+);
+
 /* /patterns/command-bar states two things the browser must actually do, and
    the second is the reason the page exists in the shape it does.
 

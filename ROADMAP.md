@@ -607,7 +607,7 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        `check:repo` 9/9, `test:axe` 127 pages × 2 widths zero violations,
        core `npm run test` 146/146, `check:composited` 17 declarations all
        registered.
-2. [ ] **200.2 — restrained button press feedback, pointer-only.**
+2. [x] **200.2 — restrained button press feedback, pointer-only.**
        *Accept*: `.bo-btn:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]):active`
        under `@media (hover: hover) and (pointer: fine)` gets a 1px
        `translateY` (not `scale`, to avoid gaps/misalignment in
@@ -616,6 +616,56 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        keyboard activation (Space/Enter) shows no artificial press transform,
        only the existing focus/state feedback; reduced motion removes the
        displacement entirely.
+
+       **CLOSED 2026-08-29.** `packages/core/src/css/components/button/button.css`:
+       `.bo-btn` gained `transform` to its existing `transition` (reusing
+       `--bo-motion-duration-fast` / `--bo-motion-easing-standard`, no new
+       tokens), plus the `:active` rule and `.bo-btn-group`'s `:active` added
+       to its existing `:hover, :focus-visible { z-index: 1 }` line.
+
+       **The Accept's own selector was insufficient, caught live rather than
+       assumed.** `(hover: hover) and (pointer: fine)` is a DEVICE capability,
+       not an input-modality signal — on any desktop it is true for a keyboard
+       activation exactly as much as a mouse click. A real
+       `page.keyboard.down('Space')` on a focused button, read via
+       `getComputedStyle` after the transition settled (not at the same tick —
+       an earlier read at t=0 caught the transition's start frame and falsely
+       showed `none`), returned `matrix(1,0,0,1,0,1)` — the SAME 1px offset a
+       mouse press gets. Fixed by adding `:not(:focus-visible)`: a mouse click
+       on a button does not set `:focus-visible` (browsers reserve the ring for
+       keyboard/programmatic focus on buttons), while Space/Enter activation
+       always does, since the button was already keyboard-focused to receive
+       the key. Re-verified live after the fix: Space held `transform: none`
+       while `:active` still correctly matched true; a real mouse press still
+       read the translated matrix.
+
+       **All four criteria verified live** (Chrome via CDP, real `page.mouse`/
+       `page.keyboard` events, not synthetic dispatch), against
+       `/components/button/`'s 3-button `.bo-btn-group`:
+       - Mouse press on the middle button: `transform: matrix(1,0,0,1,0,1)`,
+         `zIndex: '1'`, left/right edges **unchanged** (283/319, same as
+         unpressed — only `top` moves, by exactly 1px), neighbours' shared
+         edges still exactly overlapping (284/318, the existing 1px
+         border-collapse) — no seam opens.
+       - Keyboard Space: `:active` true, `transform: 'none'`.
+       - `prefers-reduced-motion: reduce`: mouse press still sets `:active`
+         true (real press registers), `transform: 'none'`, `top` **unchanged**
+         — zero displacement, not merely unanimated.
+
+       Locked in as three `check:claims` cases (`apps/docs/scripts/
+       check-claims.mjs`) rather than left as one-off manual verification —
+       the keyboard-vs-mouse distinction is exactly the kind of claim that
+       silently breaks if a future edit touches the selector. One test-harness
+       bug caught and fixed before trusting a red result: the mouse-press case
+       first read `transform: 'none'` for a REAL mouse press — not a CSS
+       regression, the harness had called `.focus()` on the same button for
+       the Space test moments earlier and never blurred it, so the mouse press
+       inherited a stale `:focus-visible` state from the harness's own setup,
+       not from the click. Fixed with an explicit `blur()` between the two
+       sub-tests.
+
+       Verified: `check:claims` **149/149** (was 146, +3), `check:repo`
+       **9/9**, `test:axe` **127 pages × 2 widths, zero violations**.
 3. [ ] **200.3 — tab and segmented-control selection get a style transition,
        no slide/pill.** Bundled as one item: same shape (color/background/
        border-color transition only, explicitly no panel slide and no
