@@ -692,7 +692,14 @@ surfaced more:
 1. Scan for divergence: inline styles that should be tokens/classes, duplicated
    token values or logic (e.g. the same lookup table hand-copied into multiple
    scripts), component pages that break the one-page skeleton, repeated CSS.
-   **Run `npm run scan:dead-style -w docs`** — inline declarations that change
+   **There are FOUR lanes here, numbered below because four consecutive sweeps
+   ran three.** 194, 197, 202 and 206 each recorded `dead-style`,
+   `css-repeats` and `report:prose` and none of them named lane 4; 206's own
+   text says *"all three standing lanes"*. Lane 4 is the one that carries the
+   roadmap-regrowth signal, and by the time 208 read it the live file was 67%
+   closed history. Say `n of 4` in the write-up.
+
+   **Lane 1 of 4 — run `npm run scan:dead-style -w docs`** — inline declarations that change
    no computed value at all. It is not a CI gate on purpose (the walk costs ~2
    min, and folding it into `check:layout` would mean mutating a trusted gate's
    page to catch cosmetic drift), so THIS step is what keeps it from rotting:
@@ -704,7 +711,7 @@ surfaced more:
    missing spacing utility is NOT the finding, because this framework refuses a
    utility system by design. The finding is either a dead declaration or a
    component that should own the value.
-   **Also run `npm run report:css-repeats -w @busy-office/ui`** — rule bodies in
+   **Lane 2 of 4 — run `npm run report:css-repeats -w @busy-office/ui`** — rule bodies in
    the shipped CSS that appear more than once, keyed by their sorted declaration
    list. The standing verdicts are in "Settled: the visually-hidden recipe"
    below, with the table of all eight; **the finding is the DELTA**, a new group
@@ -712,7 +719,7 @@ surfaced more:
    sweeps: deliberately not a gate (every current repeat is correct, so a gate
    would fail the build on eight right answers), which makes this step the only
    thing keeping it from rotting.
-   **Also run `npm run report:prose -w docs`** and record a verdict for any page
+   **Lane 3 of 4 — run `npm run report:prose -w docs`** and record a verdict for any page
    the report flags — over 2x the CORPUS median, or over 2x its FAMILY median —
    **that carries no verdict yet in `ROADMAP.md` or `ROADMAP-archive.md`**. Same
    reason as `scan:dead-style`: it is deliberately not a gate, so this step is
@@ -746,7 +753,7 @@ surfaced more:
    words are being written, when the answer is always yes. Reading the outliers
    on a cadence is the only step that ever asks the other question. ROADMAP
    158.2 carries the commands.
-   **And run `python3 scripts/loops/report_loop_prose.py`** — the same question
+   **Lane 4 of 4 — run `python3 scripts/loops/report_loop_prose.py`** — the same question
    asked of the files the LOOP reads, which `report:prose` does not cover. Read
    the **`ratchet` block first**, then the `accumulate` column; never the delta.
    158.2's cadence rests on docs pages never shrinking, and two of these files

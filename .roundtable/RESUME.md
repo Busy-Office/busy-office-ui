@@ -17,12 +17,8 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (**cloud** wake — rule 4 → Continue, build mode,
-`200.6`). Working tree clean at hand-off. **Two pushes, not the usual one** —
-the first turned CI red and the second is the fix; the operating rule's
-"one push per wake" lost to not leaving `main` red. Stated rather than
-glossed, because the rule exists to bound Pages deploys and this wake spent
-two.
+Last updated 2026-08-29 (**cloud** wake — rule 2 → Standardize, `208.1`).
+Working tree clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -31,108 +27,84 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 5 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `200.6` as a closed id named here. That is
-a **historical reference** — the "what landed" section below — not a claim that
-it is open.
+`check:resume-slice-ids` will report `208.1` as a closed id named here — a
+**historical reference** (the "what landed" section), not a claim that it is
+open.
 
-**No collision on this item.** `origin/main` was at `efa2d21` at Step 0 and
-still at `efa2d21` at the mandated re-fetch before the first commit
-(`git rev-list --left-right --count origin/main...HEAD` → `0 0`).
+**No collision on this item.** `origin/main` was at `eceffbc` at Step 0 and
+still at `eceffbc` at the mandated re-fetch before the first commit.
+
+**Trap 1 fired for real this wake.** The container started on a detached HEAD
+(`git branch --show-current` empty) with a *stale-by-force-update* `origin/main`
+(`+ 17b3ba6...eceffbc (forced update)`). Recovered at Step 0 with
+`git checkout -B main origin/main`, before any commit — which is the whole point
+of running the check there rather than at push time.
 
 ## What landed this wake
 
-**200.6** — row insert, row delete and inline-validation entrance, wired from
-the opt-in motion module into `/getting-started/htmx` as one new section, "5.
-Motion on swapped rows and messages" — the page that already documents the
-settle flash, which is where the item said the guidance belonged. **No new
-CSS: zero lines changed under `packages/`.** The guidance is one `<p>` (cell vs
-row vs summary total; never while typing, never on first paint, never more than
-~once/second per region) and it carries the windowed-table exemption in that
-same paragraph, as the Accept required.
+**208.1 — Standardize sweep.** Lanes 1-3 clean for the fifth consecutive time
+(0 dead of 1,433 inline declarations; 8 css-repeat groups matching the standing
+table of eight exactly; 14 flagged prose pages, all already verdicted).
 
-Accept clause 1 was read out of the BUILT CSS, not out of intent: each of
-`.bo-motion-fade-in` / `-fade-out` / `-slide-in-block-start` resolves to
-exactly **1** rule in `packages/core/dist/css/motion.css` with a matching
-`@keyframes` (8 total), and `grep -ric shake packages/core/dist/css/` reads
-**0** — so "explicitly no shake" is a property of the artifact.
+**Lane 4 — `report_loop_prose.py` — carried the finding, and no sweep since 191
+had read it.** Its ratchet block read `ROADMAP.md 66 up, last cut 2ae54a4a`, and
+the live file was **67.5% closed history**: 32 closed slices carrying 4,336 of
+6,424 lines.
 
-**Three `check:claims` cases, 155 → 158, every sub-assertion red-proved by
-injection, with the injection confirmed in the BUILT html before any red was
-believed.** The load-bearing one asserts that deletion does not depend on
-`animationend`: the check kills the leaving row's animation outright
-(`style.animation = 'none'`, **not** by stripping the exit class — see below),
-so no animation of any name is left to end, and the row must still go.
-Injected `animationend`-gated version →
-`{"after":3,"ended":0,"stillAttached":true}` — the row never left.
+**Fifth archive sweep executed:** `ROADMAP.md` **6,424 → 2,184**,
+`ROADMAP-archive.md` 21,264 → 25,633; 32 slices (173, 175-199, 202-207) moved
+verbatim behind the standing one-line pointer. Proved a **lossless move**, not
+an edit, against the `HEAD` blobs: archive old content is a byte-exact prefix
+(`True`), **0 of 4,272** lost live lines missing from the archive gain, and the
+live file gained *only* its 32 pointer lines. `check:slice-refs` reads an
+identical **415 citations / 228 cited / 189 headings** on both sides.
 
-**The first draft shipped an accessibility defect and no gate could have caught
-it.** The inline-validation message is inserted after load, so
-`/concepts/accessibility#live-regions` requires `role="alert"`; the draft had
-the `aria-invalid`/`aria-describedby` wiring and no role.
-`check:live-regions` reads the BUILT html, so it catches a static role on
-content that never arrives and structurally cannot catch the opposite. A gate
-for it was measured and **refused** per 94.11 — 5 docs pages call
-`createElement`, the other four insert tags and rows, so there are **0**
-message-shaped insertions besides this one and a gate would have nothing to
-catch. The one instance is asserted live by the claims case instead.
+**The meta-finding, and the fix.** Every Standardize sweep since 191 — 194, 197,
+202, 206, the complete list — ran 3 of the playbook's 4 lanes; 206's own text
+says *"all three standing lanes"*. `LOOPS.md` step 1 now numbers them
+`Lane 1 of 4` … `Lane 4 of 4` and asks the write-up to say `n of 4`. A gate was
+**refused** on 94.11's base-rate ground (the property is semantic — naming the
+script while skipping it satisfies any text check).
 
-**This wake turned CI red once and fixed it.** Run 655's "Claims + formatting"
-job failed on one of the three new cases; the payload showed the page was
-correct and the assertion was not. Two defects, both this repo's own shapes: it
-counted the ENTRANCE animation's `animationend` (0 locally, 1 on CI — a number
-that differs between two runs of one commit is the instrument), and the fix for
-that made the check unable to fail, caught only by re-running the injection,
-which replayed GREEN. Stripping the exit class is not a cancel — the row still
-carries `bo-motion-fade-in`, so removing `fade-out` restarts the entrance.
-Cancelled with `animation: none` instead and re-proved red. **The rule worth
-carrying: re-red-prove after CHANGING a detector, not only after writing one.**
-Also: `check:formatting` was never run locally by this wake before CI ran it —
-`ENVIRONMENT.md`'s cloud-toolchain list does not name it, and that list is what
-the wake used.
+**Measurement corrected mid-write, twice.** A first `awk` range parser bled
+across section boundaries and returned three different non-zero lane-4 counts;
+re-derived per-section in Python it is 0 of 4. And the `/concepts/scale/` prose
+verdict is **Slice 178**, not 196 as first written.
 
-**NOT VERIFIED and named as such**, in the commit and in ROADMAP 200.6: no
-Podman, no `localhost:8081`, **no screenshots at 1440px or 390px in either
-theme**. Every figure is DOM, computed style or built-artifact text. Whether a
-row fading out of a compact table *reads* as the line leaving rather than as
-the table twitching is a judgement a local wake should settle by watching
-`/getting-started/htmx` while removing a line.
+**NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
+screenshots at 1440px or 390px in either theme**. It costs nothing here —
+**zero lines changed under `packages/` or `apps/docs/src/`**; the diff is three
+markdown files.
 
 ## Dispatcher state at hand-off
 
-```
-Standardize   3 / 4 Continue rounds   ok
-Objective     2 / 3 slices            ok   [200, 205]
-Optimize      0 wake-date(s) newer    ok
-```
+Re-run `python3 scripts/loops/dispatch_status.py` rather than trusting a
+snapshot taken before this wake's row was recorded.
 
-Re-run `python3 scripts/loops/dispatch_status.py` rather than trusting those —
-they are a snapshot taken before this wake's row was recorded.
-
-**Next wake: rule 4, oldest open non-blocked item.** Five open items:
+**Next wake: rule 4, oldest open non-blocked item.** Five open checkboxes across
+four slices:
 
 | item | what | notes |
 |---|---|---|
-| `201.4` | 200.7's proposed lint gate mostly duplicates `check:motion` already shipped | read before building a redundant gate; either outcome closes it |
 | `200.7` | lint check for hand-written durations outside the token scale | read 201.4 first |
+| `201.4` | 200.7's proposed gate mostly duplicates `check:motion` already shipped | either outcome closes it |
 
-`200.7` is the oldest of the two and neither is browser-blocked — 200.7 is a
-script, and 201.4 is a measurement plus a written verdict. Both are
-cloud-takeable.
+Both are cloud-takeable — 200.7 is a script, 201.4 a measurement plus a written
+verdict. Neither needs a rendered image.
 
 Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
 112.3), **AT runtime evidence** (owner hardware).
 
 ## Direction
 
-Nothing blocked on the owner that a wake could advance. The three owner-blocked
+Nothing blocked on the owner that a wake could advance; the three owner-blocked
 items above are the standing set and are unchanged by this wake.
 
-One judgement worth an owner's eye, not a blocker: this wake put a **live
-demo with its own inline script** on a *getting-started* page for the first
-time — the pattern was previously confined to `/base/motion` and to component
-and pattern pages. It is defensible (the item asked for the three wirings to
-*visibly* use the classes, and a recipe nobody can run is what the claims gate
-exists to distrust), but it does grow a guide page that was five short static
-recipes. If the owner would rather guides stay copy-only, the demos move to
-`/base/motion`'s showcase section and the guide keeps the paragraph and the
-recipes; that is a small, reversible edit.
+One judgement worth an owner's eye, not a blocker: the archive sweep is now on
+its **fifth** run in eight days, and the interval is not lengthening — the live
+file regrew from 2,030 lines (`2ae54a4a`, 2026-08-28 18:41:42Z) to 6,424 at this
+wake's HEAD (2026-08-29 17:17:16Z): **+4,394 lines in 22h35m**.
+This wake fixed the *detection* gap (lane 4 was going unread) but not the
+*regrowth rate*, which is a property of how much prose each slice writes into
+`ROADMAP.md`. If the owner would rather slices were terser, that is a writing
+rule for `CLAUDE.md`, not another sweep.
