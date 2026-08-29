@@ -273,6 +273,26 @@ are ranked by the shapes they force, not by module order.
   don't try it as a substitute for a screenshot or the owner's own
   confirmation.
 
+  **RESOLVED 2026-08-29 — the browser block above was per-origin, not
+  absolute.** The owner added `npmjs.com` to the Claude-in-Chrome extension's
+  site permissions; `www.npmjs.com` (the redirect target) stayed blocked but
+  the bare `npmjs.com` origin worked, so navigation succeeded from there.
+  **Confirmed directly, not inferred**: the Trusted Publisher panel shows a
+  saved entry (`Busy-Office/busy-office-ui`, `publish.yml`, permissions `npm
+  publish` + `npm stage publish`); opening its Edit form (via a real
+  extension-driven click, not a synthetic DOM event — see 200.1/200.2's own
+  caught bugs about the difference) shows Organization `Busy-Office`,
+  Repository `busy-office-ui`, Workflow filename `publish.yml`, and
+  **Environment name genuinely empty** — the earlier mis-fill was corrected
+  before saving, exactly as flagged.
+
+  **What this does and does not prove, stated precisely rather than
+  overclaimed.** This confirms the *configuration* is now correct. It does
+  **not** prove OIDC actually authenticates — as recorded above, that has
+  exactly one proof and it is the next real release publishing
+  `create-ui` successfully. Configuration-correct and publish-correct are
+  different claims; only the first is closed here.
+
 **What would change this order.** If Production finds three or more gaps, the
 shape thesis is holding and Inventory/Finance stay as written. If Production
 finds **zero**, the thesis is wrong in an interesting way — the remaining
