@@ -3207,6 +3207,13 @@ const rowRemove = await page.evaluate(async () => {
   const body = document.getElementById('rm-body');
   const before = body.rows.length;
   const doomed = body.rows[body.rows.length - 1];
+  /* Let the ENTRANCE settle first. This row was inserted by the case above and
+     its bo-motion-fade-in is still running for 150ms; both the wait and the
+     animationName filter below exist because without them this case counted
+     that animation's end as the exit's. It read 0 locally and 1 on CI — the
+     row was being removed correctly the whole time, and the assertion, not
+     the page, was wrong. An instrument's first output is not evidence. */
+  await new Promise((r) => setTimeout(r, 400));
   let ended = 0;
   doomed.addEventListener('animationend', () => {
     ended++;
@@ -3214,9 +3221,14 @@ const rowRemove = await page.evaluate(async () => {
   document.getElementById('rm-remove').click();
   const ms = getComputedStyle(doomed).animationDuration;
   const exitClass = doomed.classList.contains('bo-motion-fade-out');
-  /* Cancel it. From here `animationend` can never fire for this row, so any
-     removal that arrives is the timer's. */
-  doomed.classList.remove('bo-motion-fade-out');
+  /* Cancel it — with an inline `animation: none`, NOT by stripping the exit
+     class. The row still carries bo-motion-fade-in from its insertion, so
+     removing fade-out RESTARTS the entrance and its animationend duly
+     arrives: the first version of this cancel let an animationend-gated
+     removal pass, i.e. it was a detector that could not fail. `animation:
+     none` leaves no animation of any name to end, so from here any removal
+     that arrives is the timer's and nothing else's. */
+  doomed.style.animation = 'none';
   await new Promise((r) => setTimeout(r, 700));
   return {
     before,
