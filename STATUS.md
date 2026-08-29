@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 13:04 UTC
+Generated at: 2026-08-29 13:09 UTC
 
 ## Open items by slice
 
@@ -24,10 +24,9 @@ Generated at: 2026-08-29 13:04 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1156 iterations logged)
+dispatch status — counter-triggered rules (1157 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-29 21:04   ok
-  Objective     4 / 3 slices          since 2026-08-29 18:54   OVERDUE  [199, 200, 201, 202]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-29 21:09   ok
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -41,7 +40,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 20:27 · Meta · refusal · live-table-pulse and pagination-transition items as new work — bo-motion-pulse-once and the htmx settle/swap fade already ship this · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · save/submit four-state sequence as a component CSS slice — rerouted to a docs pattern page, it composes existing primitives across behavior+markup · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · hand-authored motion spec matrix — must be generated from tokens/motion.css, never transcribed · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · tree disclosure content-continuity work — chevron rotation and bo-motion-collapse already exist and already compose the proposed behavior · refused · 7036bfc
@@ -51,6 +49,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 12:56 · Continue · bug · 201 — P0: two undefined var(--bo-*) references silently dropped their declarations (scan flash invisible, combobox code not monospace); fixed both, added check:token-refs · landed · 0026066a
 - 2026-08-29 12:56 · Meta · refusal · a naive 200.7 literal-duration gate — its only two reds are scan's 600ms and skeleton's 1.8s, both deliberate and both already adjudicated by check:motion (filed as 201.4, left OPEN) · refused · 0026066a
 - 2026-08-29 21:04 · Standardize · sweep · Slice 202 — all three standing lanes clean at Slice 197 baseline; dialog/offcanvas motion reuse and check-token-refs scope both checked, neither duplicates · logged · c217250
+- 2026-08-29 21:09 · Objective · grill · Objective grill of 199-202 — 201's new gate re-verified by injection, two Slice 200 refusals confirmed against source · logged · 9e7b74a
 
 ## Sunset test
 
