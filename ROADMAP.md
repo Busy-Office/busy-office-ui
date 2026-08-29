@@ -245,6 +245,34 @@ are ranked by the shapes they force, not by module order.
   here rather than assumed, since `domain-modeling`'s ADR support isn't
   wired into this project yet.)*
 
+  **In progress 2026-08-29 (owner, via the wizard).** The npmjs.com panel was
+  opened and the form was mostly filled correctly (Publisher GitHub Actions,
+  org `Busy-Office`, repo `busy-office-ui`, workflow `publish.yml`) — but a
+  screenshot showed **Environment name pre-filled with `@busy-office/ui`**,
+  which is wrong: `publish.yml` has no `environment:` key at all
+  (`grep -n 'environment:' .github/workflows/publish.yml` returns nothing),
+  so an OIDC token from this workflow never carries that claim and saving it
+  as-is would make every future publish fail. Flagged before save; owner was
+  told to clear that field and leave it blank, matching what `ui`'s own
+  config almost certainly has.
+
+  **No wake can verify the save happened, and neither can `npm view`.**
+  Browser automation to npmjs.com is blocked at the Claude-in-Chrome
+  extension's own site-permissions level (confirmed by two navigation
+  attempts, both refused before any page loaded) — not a login issue,
+  a hard stop, and account-settings changes like this belong to the owner
+  directly regardless. More load-bearing: **the registry has no field that
+  states "Trusted Publisher: configured."** It only ever shows *provenance
+  on an already-published version*, stamped at publish time — so
+  `create-ui@0.1.0` will read no-provenance permanently no matter what gets
+  configured now, and there is no query against the registry that proves
+  registration today. The only proof is the next `npm publish` actually
+  succeeding via OIDC (or failing loudly, if something is still
+  misconfigured) — which only happens at the next real, owner-triggered
+  release. `npm view @busy-office/create-ui` is not a valid check for this;
+  don't try it as a substitute for a screenshot or the owner's own
+  confirmation.
+
 **What would change this order.** If Production finds three or more gaps, the
 shape thesis is holding and Inventory/Finance stay as written. If Production
 finds **zero**, the thesis is wrong in an interesting way — the remaining
