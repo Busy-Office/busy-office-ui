@@ -1248,13 +1248,20 @@ not one script importing another's internals. Compare them by extracting the
 raised this did exactly that and got "none disagree".
 
 **The "divergence is LOUD" argument covers the `path` column and NOT the helper
-beside it, which has already diverged silently** (roadmap 209.2, 2026-08-29).
-`derive-floor.mjs`'s `earliestUsableVersion()` filters prefixed BCD entries;
-`check-rf-floor.mjs`'s `earliestChrome()` does not, so the latter publishes
-`@keyframes 1` — the `-webkit-` version — where the unprefixed at-rule is 43.
-Nothing threw, because both keys resolve fine; only the *interpretation*
-differs. So when comparing these two scripts, diff how they READ a support
-array, not just which key they read.
+beside it, which diverged silently** (roadmap 209.2, filed 2026-08-29, **fixed
+the same day**). `derive-floor.mjs`'s `earliestUsableVersion()` filters prefixed
+BCD entries; `check-rf-floor.mjs`'s `earliestChrome()` did not, so the latter
+published the `-webkit-` version of `@keyframes` where the unprefixed at-rule is
+43. Nothing threw, because both keys resolve fine; only the *interpretation*
+differed. `earliestChrome()` now applies the same filter, and its `--self-test`
+pins both directions on a synthetic prefixed support array — so the two helpers
+agreeing is now asserted rather than observed.
+
+**The lesson outlives the fix, which is why this paragraph stays:** when
+comparing these two scripts, diff how they READ a support array, not just which
+key they read. The `path` column throws on divergence; nothing else here does.
+The two helpers are still separate — consolidation was in scope as an option and
+was refused for the reason above, the tables not being the same table.
 
 ## Operating rules (every loop obeys)
 

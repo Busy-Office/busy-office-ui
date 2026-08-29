@@ -96,12 +96,33 @@ function compatOf(path) {
   return node.__compat.support;
 }
 
-function earliestChrome(support) {
+/** Earliest Chrome version supporting this feature in a form THIS PROFILE
+    ACTUALLY EMITS — the same rule `derive-floor.mjs`'s `earliestUsableVersion`
+    applies, and the reason for `emitsPrefixed` (roadmap 209.2).
+
+    Without the prefix filter this published the PREFIXED version: BCD records
+    `@keyframes` as `[{version_added:"43"}, {prefix:"-webkit-",version_added:"1"}]`,
+    so the pass line read `@keyframes 1` while the at-rule the profile emits is
+    the unprefixed one at 43. The direction of that error is what made it worth
+    fixing rather than documenting — it UNDERSTATES the floor, so this reporter
+    could only ever produce a false "below 108", in the one script whose job is
+    that floor.
+
+    `emitsPrefixed` is a predicate over an entry's `prefix`, not a bare boolean,
+    because one at-rule name can carry several prefixed entries; the sibling
+    resolves one property at a time and can take the boolean. Callers that pass
+    nothing get "we emit no prefixed form", which for SELECTOR/VALUE probes is
+    also the fail-safe direction: ignoring prefixed support can only overstate
+    what the CSS requires, and an overstatement here is a false violation a human
+    reads, never a missed one. */
+function earliestChrome(support, emitsPrefixed = () => false) {
   const entries = (Array.isArray(support) ? support : [support]).filter(
     (e) => !e.flags && typeof e.version_added === 'string',
   );
-  const live = entries.filter((e) => !e.version_removed);
-  const pool = live.length ? entries : [];
+  const usable = entries.filter((e) => !e.prefix || emitsPrefixed(e.prefix));
+  if (!usable.length) return null;
+  const live = usable.filter((e) => !e.version_removed);
+  const pool = live.length ? usable : [];
   if (!pool.length) return null;
   return parseFloat(pool.map((e) => e.version_added).sort((a, b) => parseFloat(a) - parseFloat(b))[0]);
 }
@@ -161,7 +182,13 @@ function atRuleReport(root) {
   return [...names].sort().map((name) => {
     let version = null;
     try {
-      version = earliestChrome(compatOf(['css', 'at-rules', name]).chrome);
+      /* Whether this profile emits a prefixed form is a fact about the built
+         artifact, and the parse already carries it: postcss names
+         `@-webkit-keyframes` as an at-rule of its own, so a prefixed BCD entry
+         counts only when that prefixed name is present here too. */
+      version = earliestChrome(compatOf(['css', 'at-rules', name]).chrome, (prefix) =>
+        names.has(`${prefix}${name}`),
+      );
     } catch {
       /* No BCD entry under this path — reported as unknown, not silently
          skipped; see the pass message. */
@@ -231,13 +258,26 @@ if (process.argv.includes('--self-test')) {
     unguardedResult.includes(':user-invalid') &&
     unguardedResult.includes('subgrid');
 
-  if (!guardedPasses || !unguardedCatchesAll) {
+  /* The prefix filter (roadmap 209.2), pinned in BOTH directions on the real
+     shape that exposed it — a support array whose only early entry is prefixed.
+     One direction alone cannot fail: dropping the filter keeps `emits` right,
+     and hard-coding "ignore every prefix" keeps `doesNot` right. */
+  const prefixedSupport = [{ version_added: '43' }, { prefix: '-webkit-', version_added: '1' }];
+  const doesNotEmit = earliestChrome(prefixedSupport);
+  const emits = earliestChrome(prefixedSupport, (p) => p === '-webkit-');
+  const prefixFilterWorks = doesNotEmit === 43 && emits === 1;
+
+  if (!guardedPasses || !unguardedCatchesAll || !prefixFilterWorks) {
     console.error('check-rf-floor --self-test FAILED');
     console.error('  guarded input violations (expect none):', guardedResult);
     console.error('  unguarded input violations (expect all 3):', unguardedResult);
+    console.error('  prefixed support resolves to (expect 43 unemitted / 1 emitted):', doesNotEmit, emits);
     process.exit(1);
   }
-  console.log('check-rf-floor --self-test passed — distinguishes guarded from unguarded use');
+  console.log(
+    'check-rf-floor --self-test passed — distinguishes guarded from unguarded use, ' +
+      'and counts a prefixed BCD entry only when the profile emits that prefix',
+  );
   process.exit(0);
 }
 

@@ -440,8 +440,9 @@ at-rules in the built `rf-essentials.css`, exactly one above 108.
        *when something downstream can rewrite the artefact, its output is the
        artefact* — and the downstream rewriter is the wake's own write-up.
 
-2. [ ] **209.2 — `check-rf-floor.mjs` publishes the PREFIXED Chrome version for
-       `@keyframes`, where its sibling script filters prefixed entries out.**
+2. [x] **209.2 — DONE 2026-08-29. `check-rf-floor.mjs` published the PREFIXED
+       Chrome version for `@keyframes`, where its sibling script filters
+       prefixed entries out.**
        The gate's pass line reads `@keyframes 1`; BCD's entry is
        `[{"version_added":"43"},{"prefix":"-webkit-","version_added":"1"}]`, so
        `1` is `@-webkit-keyframes` and the unprefixed at-rule the profile emits
@@ -476,6 +477,90 @@ at-rules in the built `rf-essentials.css`, exactly one above 108.
        option and is not required** — the settled section's "divergence is loud"
        argument survives for the path column either way, and a one-line filter
        is a satisfying outcome.
+
+       **Shipped: the filter, not the header note.** `earliestChrome()` now
+       takes an `emitsPrefixed` predicate and applies
+       `!e.prefix || emitsPrefixed(e.prefix)` — the sibling's rule. The two
+       helpers were left separate: consolidation was in scope as an option and
+       is refused on the settled section's own ground, that the tables are not
+       the same table.
+
+       **The premise re-checked first, because it is an earlier wake's
+       measurement** (CLAUDE.md's criterion rule). Fresh BCD read of all six
+       at-rules the profile uses, at this commit:
+
+       ```
+       node --input-type=module -e "import bcd from '@mdn/browser-compat-data' with { type: 'json' };
+       for (const n of ['container','keyframes','layer','media','starting-style','supports'])
+         console.log('@'+n, JSON.stringify(bcd.css['at-rules'][n].__compat.support.chrome));"
+       ```
+
+       `@keyframes` is the only one of the six carrying a `prefix` entry —
+       `[{version_added:"43"},{prefix:"-webkit-",version_added:"1"}]` — exactly
+       as filed. And the profile emits **no prefixed at-rule at all**:
+       `grep -oE '@-[a-z]+-[a-z-]+' packages/core/dist/css/rf-essentials.css`
+       returns nothing, so 43 is the version the artefact actually requires.
+
+       **The criterion is that the pass line and the BCD read agree, and they
+       now do.** Before: `@container 105, @keyframes 1, @layer 99, @media 1,
+       @starting-style 117, @supports 28`. After: the same line with
+       **`@keyframes 43`**, and no other number moved. `1 above 108` is
+       unchanged — `@starting-style` 117, as before.
+
+       **Red-proved in both directions, with the injection verified at the AST,
+       not the file.** Appending `@-webkit-keyframes bo-probe{…}` to the built
+       profile (confirmed by parsing it back: postcss reports an at-rule named
+       `-webkit-keyframes`) moves the line to `@keyframes 1` and lists a
+       seventh at-rule — the prefixed entry becomes usable precisely when the
+       artefact emits that prefix. Removing the injection restores 43.
+
+       **Blast radius re-measured rather than trusted from this item.** All four
+       `FEATURES` probes read as single unprefixed support objects at this
+       commit — `:user-invalid` 119, `color-mix()` 111, `subgrid` 117, `:has()`
+       105 — so no `prefix` key exists for the filter to act on and no verdict
+       can move. Both at-rule figures involved (43 and 1) are below `TARGET`
+       108, so the reported `n above 108` was and is 1. **The defect was in
+       what the gate PUBLISHES, and in nothing it decides.**
+
+       **A standing assertion replaces the one-off proof.** `--self-test` now
+       pins both directions on the real shape that exposed this — a support
+       array whose only early entry is prefixed — expecting `43` unemitted and
+       `1` emitted. Red-proved twice against verified injections, each replacing
+       exactly one line and asserting the count before replacing: dropping the
+       filter (`usable = entries`) reports `1 1` and exits 1; hard-coding
+       "ignore every prefix" (`entries.filter((e) => !e.prefix)`) reports
+       `43 43` and exits 1. Neither degenerate implementation satisfies it, so
+       this is not an assertion a single direction could carry.
+       `check:selftests` still classifies 46 gates, 16 heuristic all
+       self-tested.
+
+       **The first red-proof attempt came back green and the injection was the
+       defect**, as CLAUDE.md says to assume: a `sed` whose replacement text
+       contained `||` broke on the `s|…|…|` delimiter, wrote an empty probe
+       file, and the empty file exited 0. The pre-flight `grep -c` on the
+       replaced line read **0** and caught it before the result was believed.
+       Redone in Python with an explicit `assert count == 1`.
+
+       **`LOOPS.md`'s "Also settled" paragraph was rewritten, not left.** It
+       stated the divergence in the present tense, and this repo's own lesson is
+       that a snapshot in a playbook goes stale silently and is read as current.
+       The durable half — *diff how the two scripts READ a support array, not
+       just which key they read* — is what the paragraph now leads with.
+
+       **NOT VERIFIED, and named as such**: cloud wake — no Podman, no
+       `localhost:8081`, **no screenshots at 1440px or 390px in either theme**.
+       Nothing changed under `packages/core/src/` or `apps/docs/src/`; the diff
+       is one build script, one playbook paragraph and this entry, and no claim
+       above depends on how anything looks. Green here: core build (incl.
+       `check:rf-floor` and its `--self-test`), core `npm run test` 151/151,
+       `lint:css`, `docs:build` rc=0 (incl. `check:repo` and `check:slice-refs`
+       421 citations), `check:claims` 158 live + 3 NOT VERIFIED (the container's
+       pointer capability — `ENVIRONMENT.md` §6b, not a regression),
+       `check:formatting`, `check:scroll` 910 containers, `check:layout` 127
+       pages, `check:forced-colors`, `test:axe` 127 pages × 2 widths zero
+       violations, `check:target-size`, `check:search`, `check:pseudo`,
+       `check:quickstart`, `check:selftests`, `create-ui` check, `suite` audit
+       28 screens. `check:po-app` NOT run — known RED here per 208.3.
 
 **A third finding was written up as a defect and is wrong.** `ci.yml` runs
 `npm run check:ci-ignores -w docs` and `ENVIRONMENT.md`'s toolchain list does
