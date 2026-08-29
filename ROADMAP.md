@@ -224,6 +224,26 @@ are ranked by the shapes they force, not by module order.
   cannot drive.
 - **Turbo**: conditional, and its condition (workspace past ~2 packages) is
   not met.
+- **185.2 — register the npm Trusted Publisher for `@busy-office/create-ui`**:
+  needs the owner's npm account, wizard at hand
+  (`register-create-ui-trusted-publisher.sh`, walked through 2026-08-29,
+  not committed — one-off). `@busy-office/ui` already went through the exact
+  same sequence (`ROADMAP-archive.md`: manual `0.1.0` publish by the owner,
+  then Trusted Publisher registered, then `0.1.1` shipped with SLSA
+  provenance) — this is the same step for the second package, not a new
+  kind of gap. Two consequences of leaving it unregistered, as the owner
+  named them: (1) `create-ui@0.1.0` carries no attestation a consumer can
+  verify the build against, unlike `ui@0.5.0` — and that specific version
+  can never be retrofitted, since a published version can't be republished,
+  so every release skipped here is provenance lost permanently, not just
+  deferred; (2) the next real release strands the scaffolder again exactly
+  the way 185's original finding described, unless this is registered
+  first — `publish.yml` ships create-ui unconditionally after core, so an
+  unregistered Trusted Publisher fails that step outright rather than
+  silently skipping it. *(The owner referenced this as "ADR-06" — no ADR-06
+  or any `docs/adr/` file exists in this repo as of 2026-08-29; recorded
+  here rather than assumed, since `domain-modeling`'s ADR support isn't
+  wired into this project yet.)*
 
 **What would change this order.** If Production finds three or more gaps, the
 shape thesis is holding and Inventory/Finance stay as written. If Production
