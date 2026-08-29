@@ -11824,6 +11824,33 @@ framework itself ships the tile (`bo-widget` grid — the app-launch pattern).
        No code changed; `bo-segmented`'s composability for this was
        confirmed but not exercised.
 
+       **RE-VERIFIED 2026-08-29 (roadmap 199.1) — the trigger fired, and
+       the refusal stands anyway.** The "top out at 7, run as low as 1"
+       premise is stale: `pattern-groups.mjs` now maxes at **11** tiles
+       (enter & find) and runs as low as **4**, not 1 — both halves wrong.
+       Checkable going forward with:
+       ```
+       node --input-type=module -e "import {PATTERN_GROUPS as G} from
+         './apps/docs/src/data/pattern-groups.mjs';
+         const s=G.map(g=>g.items.length);
+         console.log('max',Math.max(...s),'total',s.reduce((a,b)=>a+b,0));"
+       ```
+       Screenshotted `/patterns/` live at 1440px, light and dark (mobile
+       390px not captured this wake — a browser-tool viewport-resize
+       limitation in this session, not a decision to skip; recorded rather
+       than silently claimed). The "enter & find" group's 11 cards render
+       as a two-column grid, each card full-size — title, complexity
+       badge, opener text, component-tag row, one carrying a live
+       miniature. Growing from 7 to 11 tiles only lengthened the page; it
+       did not shrink or crowd any individual card, unlike a thumbnail
+       grid where more items means smaller thumbnails. So the scannability
+       question the trigger asks about — does an item stay legible as the
+       group grows — is unaffected by count, because this layout scales
+       vertically, not by density. The original argument (workflow-stage
+       groups already ARE the organizing axis; a complexity filter would
+       duplicate it, not add coverage) is about IA structure and is
+       untouched by tile count. **Re-refused.**
+
        *Original text, retained for context:*
        Re-review finding (2026-08-21): namethatui's Newest/Popular/
        Surprise-me sort has a cheap, real analogue — `bo-segmented`

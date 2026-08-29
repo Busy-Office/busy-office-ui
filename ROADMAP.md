@@ -247,9 +247,10 @@ what one pass missed is the Slice 162 mechanism Step 0c cites as the reason both
 dispatchers keep running. Report:
 `.roundtable/reopen-conditions-2026-08-29.md`.
 
-1. [ ] **199.1 — `104.4` refused the patterns-index complexity filter on a
-       premise that stopped holding the same day, and nothing re-checked it for
-       7 days.**
+1. [x] **199.1 — DONE 2026-08-29 (local session) — `104.4` refused the
+       patterns-index complexity filter on a premise that stopped holding the
+       same day, and nothing re-checked it for 7 days. Re-refused, on live
+       rendered evidence this time.**
 
        The refusal (2026-08-22) rested on a measured claim:
        *"`pattern-groups.mjs`'s six job-family groups **top out at 7 tiles**
@@ -297,6 +298,35 @@ dispatchers keep running. Report:
          `ENVIRONMENT.md` list a cloud wake CANNOT take. The tile counts above
          are the other list and are already taken. A cloud wake may settle the
          counts and must leave the scannability judgement open, saying so.
+
+       ---
+
+       **DONE 2026-08-29, local session — the scannability judgement, taken.**
+       Podman-built `/patterns/` served live and screenshotted at 1440px in
+       both light and dark (mobile 390px not captured — a browser-tool
+       viewport-resize limitation this session hit, not a decision to skip;
+       said plainly rather than claimed).
+
+       **Verdict: re-refused.** The "enter & find" group's 11 cards render as
+       a two-column grid; each card is full-size regardless of group length —
+       title, complexity badge, opener text, a component-tag row, and (for
+       screens that read at this size) a live miniature. Growing the group
+       from 7 to 11 tiles lengthened the page; it did not shrink or crowd any
+       one card, which is the opposite of what a filter would be defending
+       against in a thumbnail grid. So the trigger's own question — does an
+       item stay legible as the group grows — is unaffected by count here,
+       because this layout scales vertically (more scroll) rather than by
+       density (smaller tiles). `104.4`'s original argument — the
+       workflow-stage groups already ARE the organizing axis a complexity
+       filter would duplicate — is about IA structure, not rendering density,
+       and nothing measured here touches it.
+
+       `104.4`'s stale premise sentence is corrected in place
+       (`ROADMAP-archive.md`, appended rather than rewritten per this repo's
+       own doctrine on historical rows), with the current true numbers and
+       the checkable `node` one-liner as its restated trigger — so the next
+       reader doesn't inherit "top out at 7 tiles" and the next reopen check
+       has a command to run rather than a number to eyeball.
 
 2. [x] **199.2 — DONE 2026-08-29: 193.2's "558 does not reproduce" gap is
        closed, with 193.2's own parser and no change of method.** Its close
