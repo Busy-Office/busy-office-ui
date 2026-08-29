@@ -412,6 +412,80 @@
     pointer-events: none;
   }
 
+  /* An error message inside a grid cell MAY NOT CHANGE THE ROW'S HEIGHT
+     (owner decision, roadmap 173.2, option b).
+
+     `.bo-form-field__message` is `display: block` when the field is invalid,
+     which is right in a FORM — a field owns a column of vertical space there.
+     In a grid row it is wrong: the row height is a density token, and the
+     erroring cell grew while every other cell in the row re-centred inside
+     it. Measured before the fix: row 53px -> 75px, and the two untouched
+     inputs beside it moved 11px. Numeric column alignment is precisely what
+     `--numeric` and tabular-nums exist to protect, so a validation message
+     must not be able to break it.
+
+     Out of flow, and revealed on focus — the field you have clicked into to
+     fix is the one whose reason you need. What carries the fact WITHOUT
+     focus is the row's own `data-row-state="error"` below: its tint plus the
+     3px leading edge, which is the non-color channel. `aria-describedby`
+     carries the reason to a screen reader continuously, focused or not, so
+     this hides nothing from assistive tech.
+
+     The cost, stated rather than discovered later: a sighted user scanning
+     sees WHICH row and cell are wrong, and must focus the cell to read WHY.
+     That was the accepted trade against a row-level message row, which
+     shows every reason at once but costs a row per error. */
+  .bo-data-table .bo-form-field {
+    position: relative;
+  }
+
+  /* Beats the `:is(:has([aria-invalid]), …) .bo-form-field__message` rule in
+     form-field.css on specificity (0,3,0 vs 0,2,0), so it does not depend on
+     which stylesheet is imported last. */
+  .bo-data-table .bo-form-field:not(:focus-within) .bo-form-field__message {
+    display: none;
+  }
+
+  /* Out of flow means the CONTAINER clips it — `.bo-data-table-container` is
+     `overflow: auto`, so a message under the last visible row is cut off.
+     Measured: on this framework's own editable-grid demo, whose error table
+     is a single row, the message overflowed the container by 37px and was
+     unreadable; with rows beneath it there was 122px to spare, so this is
+     the LAST-ROW case, not a general one.
+
+     Reserve the room only while a message is actually shown. Padding sits
+     after the table, so no row moves and the numeric columns stay aligned —
+     the whole point of 173.2. The container itself grows for as long as the
+     field has focus, which is the accepted cost of not putting this in the
+     top layer (a `popover` would escape the clip, but this demo already has
+     five of them on the combobox cells and an error sharing an anchor with
+     an open listbox is a worse problem than a container that grows).
+
+     3.5rem is the message's own box at default density — one line of
+     `--bo-font-size-xs` plus its padding, border and a little slack for a
+     second line — not a round number picked for looks. */
+  .bo-data-table-container:has(.bo-form-field:focus-within .bo-form-field__message) {
+    padding-block-end: 3.5rem;
+  }
+
+  .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
+    display: block;
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    z-index: 1;
+    inline-size: max-content;
+    max-inline-size: 18ch;
+    padding: var(--bo-space-1) var(--bo-space-2);
+    background: var(--bo-color-bg-surface);
+    border: var(--bo-border-width) solid var(--bo-state-error-color);
+    border-radius: var(--bo-radius-sm);
+    /* Out of flow means it can overlap the row beneath, so it needs its own
+       ground to stay readable — a bare floating string over table text is
+       not. */
+    box-shadow: var(--bo-shadow-sm);
+  }
+
   /* Row states for workflow screens. Error rows also get a start border so
      the state has a non-color channel; pair with a badge or message in the
      row for screen-reader users. Selector matches stripe/hover specificity

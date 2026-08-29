@@ -3065,7 +3065,43 @@ add/remove lines — requires alignment"* (with a screenshot).
        Verified by measuring the first data row's offset from the header, not
        by looking.
 
-2. [ ] **173.2 — editable-grid "Medium": the numeric columns need alignment.**
+2. [x] **173.2 — editable-grid "Medium": the numeric columns need alignment.**
+       **LANDED 2026-08-29, option (b).** Measured before/after on the live
+       page: error row **75px → 53px**, identical to a row with no error, and
+       the two untouched inputs beside it no longer shift. Red-proved as the
+       criterion required — injecting the flow-message back (assert the
+       computed style changed first) grows the row 53 → 75px again.
+
+       **The criterion's own premise was FALSE and re-checking it was the
+       finding.** It said the fact is "carried WITHOUT focus by the row tint
+       plus its 3px inset leading edge, both already shipping". Those ship in
+       the framework, but the demo row was `<tr data-row-id="LINE-1">` with
+       **no `data-row-state`** — so hiding the message would have left the
+       error signalled by a red input border alone. Colour only, no non-colour
+       channel: a two-channel regression. The row now carries
+       `data-row-state="error"`, whose leading edge `data-table.css` documents
+       as "the ONE non-color channel this state has", with a forced-colors
+       fallback already in place.
+
+       **The clip the grill predicted DID happen, and measurement placed it.**
+       Out of flow, the message was cut off 37px past
+       `.bo-data-table-container`'s edge. Cloning rows beneath it showed 122px
+       of room to spare — so it is the LAST-ROW case, not a general one, and
+       the page hits it because its only error demo is a **single-row** table.
+       Resolved by reserving room only while a message is shown
+       (`:has(.bo-form-field:focus-within …)`): padding sits after the table,
+       so no row moves. A top-layer `popover` would also escape the clip and
+       was refused — this demo already has five popovers on its combobox
+       cells, and an error sharing an anchor with an open listbox is worse
+       than a container that grows while focused.
+
+       Documented with the implementation: the States row now describes the
+       focus behaviour and names the cost, and the "Try it" prose said the
+       cell "starts invalid" when a reader would now see no message until
+       focusing. Gates: axe 127×2, layout, scroll, claims (141), repo, 146
+       behavior tests. Verified at 1440 and 390, light and dark.
+
+       *(original item, kept)*
        Measured: headers and cells agree at the box level (`Qty` and
        `Unit price` are both `text-align: end`, inputs inset by the 16px cell
        padding — 807/791 and 1087/1071). What the screenshot shows is that the

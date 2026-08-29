@@ -1301,7 +1301,7 @@
             ],
             [
               "Cell error",
-              "aria-invalid + the message inside that cell&rsquo;s form field, with the row tinted"
+              "aria-invalid on the input and data-row-state=\"error\" on the row &mdash; the row tint and its 3px leading edge carry the fact while nothing is focused, so the error is visible without colour alone. The message is out of flow and appears on focus: a validation message may not change a grid row&rsquo;s height, because every other cell in the row re-centres when it does. aria-describedby carries the reason to a screen reader continuously, focused or not. Cost: scanning shows you which cell is wrong; reading why needs focus"
             ],
             [
               "Conflict",

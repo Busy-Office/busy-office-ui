@@ -12,7 +12,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
     <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
   </tr></thead>
   <tbody>
-    <tr data-row-id="LINE-1">
+    <tr data-row-id="LINE-1" data-row-state="error">
       <td>
         <!-- Combobox in a cell: no special wiring, just the normal markup -->
         <div class="bo-combobox">
@@ -117,7 +117,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
           <th scope="col"><span class="bo-visually-hidden">Actions</span></th>
         </tr></thead>
         <tbody>
-          <tr data-row-id="LINE-1">
+          <tr data-row-id="LINE-1" data-row-state="error">
             <td>
               <div class="bo-combobox">
                 <input class="bo-input" role="combobox" id="line-1-item"
@@ -192,8 +192,13 @@ const markup = `<table class="bo-data-table" data-row-edit>
     section's own gap does the spacing. On a document entry screen this is the
     most-pressed control on the page, so it is worth being consistent about.</p>
     <p class="bo-u-text-muted">Try it: the Qty cell above starts invalid (exceeds
-    on-hand) — the message is a normal <code>.bo-form-field__message</code>, just
-    at cell granularity. Pick an option in the Item combobox: it marks the row
+    on-hand). The row says so without being touched — the tint <em>and</em> the
+    3px leading edge — and <strong>clicking into the Qty cell reveals why</strong>.
+    The message is a normal <code>.bo-form-field__message</code> at cell
+    granularity, but out of flow and shown on focus, because a message that sits
+    in the row&rsquo;s flow grows the row and shifts every other cell in it
+    (measured: 53px &rarr; 75px, and the two untouched inputs moved 11px).
+    Pick an option in the Item combobox: it marks the row
     dirty exactly like typing does (2026-08-15 fix — committing an option now
     fires a real <code>input</code> event, not just <code>bo:combobox-select</code>,
     so it composes with any generic field listener). Add a line: the new row's
@@ -806,7 +811,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
           <tr><td>Clean</td><td>no badge, no buttons — the row looks like a read-only row</td></tr>
           <tr><td>Dirty</td><td>the Unsaved badge plus Save/Cancel; Cancel restores last-saved values and re-fires input events so totals revert</td></tr>
           <tr><td>Saving (live mode)</td><td>saves are coalesced per row per tick; a row removed in the same tick is never saved</td></tr>
-          <tr><td>Cell error</td><td><code>aria-invalid</code> + the message inside that cell&rsquo;s form field, with the row tinted</td></tr>
+          <tr><td>Cell error</td><td><code>aria-invalid</code> on the input and <code>data-row-state="error"</code> on the row &mdash; the row tint <em>and</em> its 3px leading edge carry the fact while nothing is focused, so the error is visible without colour alone. The message is <strong>out of flow and appears on focus</strong>: a validation message may not change a grid row&rsquo;s height, because every other cell in the row re-centres when it does. <code>aria-describedby</code> carries the reason to a screen reader continuously, focused or not. Cost: scanning shows you <em>which</em> cell is wrong; reading <em>why</em> needs focus</td></tr>
           <tr><td>Conflict</td><td>409 → re-render that row with the server values and say who changed it; never merge silently</td></tr>
           <tr><td>Read-only line</td><td>render the value as text — an invoiced line that looks editable is a support call</td></tr>
           <tr><td>No JS</td><td>every field is a real, focusable, typable input — but <code>initRowEdit()</code> is what reveals Save/Cancel, so a row can be edited yet never submitted; a genuinely no-JS row needs a native <code>&lt;form&gt;</code> per row with its own submit button instead of this behavior</td></tr>
