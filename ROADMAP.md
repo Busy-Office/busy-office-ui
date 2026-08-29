@@ -231,6 +231,41 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 203 — Objective grill of Slices 199-202: the P0 fix's own gate re-verified by injection, two triage refusals confirmed against source (2026-08-29)
+
+Rule 3 at 4/3, OVERDUE. Index checked first: 0 of the window's four slices are
+a repeated subject. Full report:
+`.roundtable/grill-objective-199-202-2026-08-29.md`.
+
+**Shape check, done fresh.** This window is fix/triage/fix/sweep, not the
+grill/grill/sweep shape the retired product-vs-machinery ratio was about —
+checked, and correctly not re-raised either way.
+
+**(A)** 201's P0 fix (two typo'd `var()` names) re-verified: both now name
+tokens confirmed defined in `tokens/motion.css`/`tokens/typography.css`. Its
+new gate, `check-token-refs.mjs`, gave a **false positive mid-grill** against
+a stale `dist/` — its own header already documents this exact trap; a clean
+rebuild reproduced 202's own numbers exactly. **Red-proved by injection,
+twice** — the first attempt (renaming a token everywhere) was itself a dead
+red-proof, since the definition moved with every usage; the second (breaking
+one usage, leaving the definition alone) correctly failed.
+
+**(B)** Two of Slice 200's "already shipped" refusals spot-checked against
+source: `.bo-motion-pulse-once` (`motion/motion.css:85`) and
+`.htmx-settling`/`.htmx-swapping` (`integrations/htmx.css:19,31`) are both
+real and do what the triage said. Both hold.
+
+**(C)** 199.1's tile-count claim (max 11, min 4, total 39) reproduces exactly
+from its own pinned command.
+
+**(D)** 202's third identical clean sweep, checked rather than trusted:
+`scan:dead-style` and `report:css-repeats` both declare themselves `@exact`
+in their own headers, so a stable repeated result from them is the expected
+signal, not the suspicious one CLAUDE.md warns about for heuristic detectors.
+
+**Fed back to triage**: no rule change, nothing new queued — a clean-control
+grill arrived at by verification, like Slice 198. No gate proposed.
+
 ## Slice 202 — Standardize sweep: clean, and the two things this window's own new artefacts might have duplicated, checked directly (2026-08-29)
 
 **Dispatcher rule 2 at 5/4, OVERDUE.** All three standing lanes match the last
