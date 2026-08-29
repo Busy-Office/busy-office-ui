@@ -18,87 +18,103 @@ it the moment the slice lands.**
 ## In flight: nothing
 
 Last updated 2026-08-29 (**cloud** wake — rule 4 → Continue, build mode,
-`200.5`). Working tree clean at hand-off; the wake's commits went out as one
+`200.6`). Working tree clean at hand-off; the wake's commits went out as one
 push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 6 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 5 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `205.1` and `200.5` as closed ids named
-here. Both are **historical references** — the "what landed" section below —
-not claims that either is open.
+`check:resume-slice-ids` will report `200.6` as a closed id named here. That is
+a **historical reference** — the "what landed" section below — not a claim that
+it is open.
 
-**No collision on this item.** `origin/main` was at `828102d` at Step 0 and
-still at `828102d` at the mandated re-fetch before the first commit.
+**No collision on this item.** `origin/main` was at `efa2d21` at Step 0 and
+still at `efa2d21` at the mandated re-fetch before the first commit
+(`git rev-list --left-right --count origin/main...HEAD` → `0 0`).
 
 ## What landed this wake
 
-**200.5** — a dismissed `.bo-toast` now leaves instead of vanishing:
-`[data-state="closing"]` runs `bo-toast-out` on `--bo-motion-duration-fast`,
-fading it and collapsing `block-size`/`padding-block` to zero, and
-`initAlerts()` holds the node for the duration it reads back off the computed
-style before removing it. An inline `.bo-alert` is untouched — still
-synchronous. Measured live: survivors travel **68px** (60px toast + one 8px
-`row-gap`), read **0.4573** of the way at t=400 of 1200, and the removal itself
-moves **0.0625px**. Four `check:claims` cases and five behavior tests, both
-red-proved by injection.
+**200.6** — row insert, row delete and inline-validation entrance, wired from
+the opt-in motion module into `/getting-started/htmx` as one new section, "5.
+Motion on swapped rows and messages" — the page that already documents the
+settle flash, which is where the item said the guidance belonged. **No new
+CSS: zero lines changed under `packages/`.** The guidance is one `<p>` (cell vs
+row vs summary total; never while typing, never on first paint, never more than
+~once/second per region) and it carries the windowed-table exemption in that
+same paragraph, as the Accept required.
 
-**Two of the item's five Accept clauses presumed an auto-dismiss timer and
-told this wake to CHECK.** There is none — `setTimeout|setInterval|
-requestAnimationFrame` reads 0 in all three shipped behaviors that touch an
-alert or toast — so nothing pauses on hover/focus and nothing could
-auto-dismiss an error toast. Recorded as a satisfying outcome, not a gap; the
-docs now state the position (the framework never removes a toast the reader
-did not dismiss) and the absence is asserted live.
+Accept clause 1 was read out of the BUILT CSS, not out of intent: each of
+`.bo-motion-fade-in` / `-fade-out` / `-slide-in-block-start` resolves to
+exactly **1** rule in `packages/core/dist/css/motion.css` with a matching
+`@keyframes` (8 total), and `grep -ric shake packages/core/dist/css/` reads
+**0** — so "explicitly no shake" is a property of the artifact.
 
-**One instrument was wrong on its first output, as usual.** The reflow
-measurement sampled the survivor one `requestAnimationFrame` after injection —
-mid-`bo-toast-in` — and read that entrance's 8px `translateY` as a missing gap
-(60 travel against a predicted 68). Measure the RESTING box; the trap is now
-in the check's own comment.
+**Three `check:claims` cases, 155 → 158, every sub-assertion red-proved by
+injection over two rounds, with the injection confirmed in the BUILT html
+before any red was believed.** The load-bearing one asserts that deletion does
+not depend on `animationend`: the check strips the exit class off the leaving
+row right after the click, which cancels the animation, and the row must still
+go. Injected `animationend` version →
+`{"after":3,"ended":0,"stillAttached":true}` — the row never left.
 
-**NOT VERIFIED and named as such**, in the commit and in ROADMAP 200.5: no
+**The first draft shipped an accessibility defect and no gate could have caught
+it.** The inline-validation message is inserted after load, so
+`/concepts/accessibility#live-regions` requires `role="alert"`; the draft had
+the `aria-invalid`/`aria-describedby` wiring and no role.
+`check:live-regions` reads the BUILT html, so it catches a static role on
+content that never arrives and structurally cannot catch the opposite. A gate
+for it was measured and **refused** per 94.11 — 5 docs pages call
+`createElement`, the other four insert tags and rows, so there are **0**
+message-shaped insertions besides this one and a gate would have nothing to
+catch. The one instance is asserted live by the claims case instead.
+
+**NOT VERIFIED and named as such**, in the commit and in ROADMAP 200.6: no
 Podman, no `localhost:8081`, **no screenshots at 1440px or 390px in either
-theme**. Every figure is geometry or computed style. Whether a 100ms collapse
-*reads* as a toast leaving rather than as the stack twitching is a design
-judgement a local wake should settle by *watching* `/components/alerts/` while
-dismissing the middle of a stack of three — a still frame cannot settle it
-either.
+theme**. Every figure is DOM, computed style or built-artifact text. Whether a
+row fading out of a compact table *reads* as the line leaving rather than as
+the table twitching is a judgement a local wake should settle by watching
+`/getting-started/htmx` while removing a line.
 
 ## Dispatcher state at hand-off
 
 ```
-Standardize   2 / 4 Continue rounds   ok
+Standardize   3 / 4 Continue rounds   ok
 Objective     2 / 3 slices            ok   [200, 205]
 Optimize      0 wake-date(s) newer    ok
 ```
 
-**Next wake: rule 4, oldest open non-blocked item.** Six open items:
+Re-run `python3 scripts/loops/dispatch_status.py` rather than trusting those —
+they are a snapshot taken before this wake's row was recorded.
+
+**Next wake: rule 4, oldest open non-blocked item.** Five open items:
 
 | item | what | notes |
 |---|---|---|
-| `201.4` | 200.7's proposed lint gate mostly duplicates `check:motion` already shipped | check before building a redundant gate |
-| `200.6` | row insert/delete + inline-validation entrance | composes existing motion utilities; cloud-takeable |
+| `201.4` | 200.7's proposed lint gate mostly duplicates `check:motion` already shipped | read before building a redundant gate; either outcome closes it |
 | `200.7` | lint check for hand-written durations outside the token scale | read 201.4 first |
 
+`200.7` is the oldest of the two and neither is browser-blocked — 200.7 is a
+script, and 201.4 is a measurement plus a written verdict. Both are
+cloud-takeable.
+
 Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
-112.3), **AT runtime evidence** (owner hardware). None of the three
-dispatchable items is browser-blocked in the screenshot sense — 200.6's Accept
-asks for the class to be read out of the BUILT CSS, and 200.7 is a script.
+112.3), **AT runtime evidence** (owner hardware).
 
 ## Direction
 
 Nothing blocked on the owner that a wake could advance. The three owner-blocked
 items above are the standing set and are unchanged by this wake.
 
-One judgement worth an owner's eye, not a blocker: `initAlerts()`'s dismiss
-contract is now **asynchronous for toasts** (synchronous whenever the computed
-exit duration is 0, which covers reduced motion and CSS-less consumers). The
-CHANGELOG entry argues why that is not a Breaking entry and shows its
-reasoning rather than asserting it — that call is reversible before the next
-publish, and it is the kind of contract-shape question the freeze-audit
-correction says to name out loud.
+One judgement worth an owner's eye, not a blocker: this wake put a **live
+demo with its own inline script** on a *getting-started* page for the first
+time — the pattern was previously confined to `/base/motion` and to component
+and pattern pages. It is defensible (the item asked for the three wirings to
+*visibly* use the classes, and a recipe nobody can run is what the claims gate
+exists to distrust), but it does grow a guide page that was five short static
+recipes. If the owner would rather guides stay copy-only, the demos move to
+`/base/motion`'s showcase section and the guide keeps the paragraph and the
+recipes; that is a small, reversible edit.

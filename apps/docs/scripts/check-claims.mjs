@@ -3169,6 +3169,103 @@ check(
   JSON.stringify(motionCollapse),
 );
 
+/* /getting-started/htmx §5 (roadmap 200.6) — the page now claims three things
+   a browser can settle, and the middle one is the whole reason the item
+   exists:
+     1. an inserted row wears .bo-motion-fade-in and it RESOLVES (the opt-in
+        module reaches this page too, not only /base/motion);
+     2. removal runs on a timer, so it survives the animation never ending;
+     3. a first-appearance field message enters with slide-in-block-start,
+        and nothing shakes.
+   (2) is asserted the only way that can fail: the class is stripped off the
+   leaving row immediately after the click, which CANCELS the animation, so
+   `animationend` cannot fire for it. A version of this demo gated on that
+   event leaves the row in the table forever, and this check goes red. */
+await visit('/getting-started/htmx/', { width: DESKTOP_WIDTH, height: 1600 });
+const rowInsert = await page.evaluate(() => {
+  const body = document.getElementById('rm-body');
+  const before = body.rows.length;
+  document.getElementById('rm-add').click();
+  const row = body.rows[body.rows.length - 1];
+  return {
+    before,
+    after: body.rows.length,
+    cls: row.className,
+    anim: getComputedStyle(row).animationName,
+    ms: getComputedStyle(row).animationDuration,
+  };
+});
+check(
+  'htmx guide: an inserted row wears .bo-motion-fade-in AND the opt-in motion module resolves it here — not `none`',
+  rowInsert.after === rowInsert.before + 1 &&
+    rowInsert.cls.includes('bo-motion-fade-in') &&
+    rowInsert.anim === 'bo-motion-fade-in',
+  JSON.stringify(rowInsert),
+);
+
+const rowRemove = await page.evaluate(async () => {
+  const body = document.getElementById('rm-body');
+  const before = body.rows.length;
+  const doomed = body.rows[body.rows.length - 1];
+  let ended = 0;
+  doomed.addEventListener('animationend', () => {
+    ended++;
+  });
+  document.getElementById('rm-remove').click();
+  const ms = getComputedStyle(doomed).animationDuration;
+  const exitClass = doomed.classList.contains('bo-motion-fade-out');
+  /* Cancel it. From here `animationend` can never fire for this row, so any
+     removal that arrives is the timer's. */
+  doomed.classList.remove('bo-motion-fade-out');
+  await new Promise((r) => setTimeout(r, 700));
+  return {
+    before,
+    after: body.rows.length,
+    exitClass,
+    ms,
+    ended,
+    stillAttached: doomed.isConnected,
+  };
+});
+check(
+  'htmx guide: a removed row leaves on a TIMER — cancelling the exit animation (so animationend never fires) still removes it',
+  rowRemove.exitClass &&
+    rowRemove.ended === 0 &&
+    rowRemove.stillAttached === false &&
+    rowRemove.after === rowRemove.before - 1,
+  JSON.stringify(rowRemove),
+);
+
+const inlineMsg = await page.evaluate(() => {
+  document.getElementById('vm-check').click();
+  const msg = document.getElementById('vm-qty-err');
+  const input = document.getElementById('vm-qty');
+  if (!msg) return { missing: true };
+  /* Nothing on this page may shake: assert across every element, not just
+     this one, so a shake added elsewhere in the guide is caught too. */
+  const shaking = [...document.querySelectorAll('*')].filter((el) =>
+    /shake|wobble/i.test(getComputedStyle(el).animationName),
+  ).length;
+  return {
+    anim: getComputedStyle(msg).animationName,
+    cls: msg.className,
+    role: msg.getAttribute('role'),
+    invalid: input.getAttribute('aria-invalid'),
+    describedby: input.getAttribute('aria-describedby'),
+    shaking,
+  };
+});
+check(
+  'htmx guide: a first-appearance field message enters with slide-in-block-start, announces its arrival, is wired to its input, and nothing shakes',
+  inlineMsg.anim === 'bo-motion-slide-in-block-start' &&
+    inlineMsg.cls.includes('bo-form-field__message') &&
+    inlineMsg.role === 'alert' &&
+    inlineMsg.invalid === 'true' &&
+    inlineMsg.describedby === 'vm-qty-err' &&
+    inlineMsg.shaking === 0,
+  JSON.stringify(inlineMsg),
+);
+
 /* Joined fields (owner QA, 2026-08-24): .bo-money and .bo-quantity butt their
    segments edge to edge, so a focus ring drawn OUTSIDE one of them lands on
    its neighbour. Measured before the fix on "Currency after the amount": a

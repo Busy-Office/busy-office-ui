@@ -1283,7 +1283,7 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        state rather than a mid-flight frame — which is itself an answer to
        the judgement question: nothing about it reads as abrupt or as the
        stack visibly jumping.
-6. [ ] **200.6 — row insert/delete and inline-validation entrance, composed
+6. [x] **200.6 — row insert/delete and inline-validation entrance, composed
        from existing motion-module utilities, plus the usage guidance the
        already-shipped pulse/settle mechanisms are missing.** Bundled because
        all three are "wire an existing primitive to a new spot + write down
@@ -1310,6 +1310,90 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        htmx integration guide), not a new page; virtualized-table row
        delete/insert is explicitly exempted from the fade, stated in the
        same paragraph.
+
+       **LANDED 2026-08-29 (cloud wake, rule 4).** All three live on
+       `/getting-started/htmx` as one new section, "5. Motion on swapped rows
+       and messages" — the page that already documents the settle flash, which
+       is where the item said the guidance belonged. No new CSS: zero lines
+       changed under `packages/`.
+
+       *Accept clause 1, read out of the BUILT CSS rather than out of intent:*
+
+       ```
+       grep -c '\.bo-motion-fade-in\b'                packages/core/dist/css/motion.css   # 1
+       grep -c '\.bo-motion-fade-out\b'               packages/core/dist/css/motion.css   # 1
+       grep -c '\.bo-motion-slide-in-block-start\b'   packages/core/dist/css/motion.css   # 1
+       grep -oE '@keyframes [a-z-]+' packages/core/dist/css/motion.css | sort -u | wc -l  # 8
+       grep -ric shake packages/core/dist/css/                                            # 0
+       ```
+
+       Each of the three names resolves to exactly one shipped rule with a
+       matching `@keyframes`, and nothing in `dist/css` shakes — so "explicitly
+       no shake" is a property of the artifact, not a promise in prose.
+
+       *Accept clause 2 and 3:* the guidance is **one `<p>`** in an existing
+       page — cell vs. row vs. summary total, never while typing, never on
+       first paint, never more than ~once/second per region (coalesce) — and
+       the windowed-table exemption is stated in that same paragraph, linked
+       to `/concepts/scale#windowed-list`, with the item's own reason (moving
+       many adjacent rows is what breaks a reader's tracking).
+
+       **Three `check:claims` cases, 155 → 158, every sub-assertion red-proved
+       by injection with the injection confirmed in the BUILT html first.** The
+       middle one is the item's actual subject — deletion must not depend on
+       `animationend` — and it is asserted the only way that can fail: the
+       check strips `bo-motion-fade-out` off the leaving row immediately after
+       the click, which CANCELS the animation, so the event can never fire.
+
+       Round 1, three independent injections (built-output confirmations:
+       `bo-motion-fade-inn` ×1; `animationend",()=>t.remove())` present with
+       `setTimeout(…remove…)` gone; `animation-name: shake` ×1) — 3 of 158 red:
+
+       ```
+       insert   {"before":2,"after":3,"cls":"bo-motion-fade-inn","anim":"none","ms":"0s"}
+       timer    {"before":3,"after":3,"exitClass":true,"ms":"0.15s","ended":0,"stillAttached":true}
+       message  {"anim":"bo-motion-slide-in-block-start", …,"shaking":1}
+       ```
+
+       `ended: 0` with `stillAttached: true` is the whole point: no
+       `animationend` arrived AND the row never left, so what removes it in the
+       shipped version is the timer and nothing else.
+
+       Round 2 covered the two sub-assertions round 1 did not exercise
+       (built-output confirmed: `bo-form-field__message bo-motion-fade-in` ×1,
+       `removeAttribute("role")` ×1, `setAttribute("role","alert")` ×0) — 1 of
+       158 red, `{"anim":"bo-motion-fade-in","role":null,"shaking":0}`. The
+       `shaking` probe is the one at risk of being a detector that cannot fail
+       — its base rate in this corpus is 0 — so it was made to fire on purpose
+       rather than trusted for reading 0.
+
+       **The first draft of this item shipped an accessibility defect, and the
+       framework's own rule caught it, not a gate.** The inline-validation
+       message is inserted after load, and `/concepts/accessibility#live-regions`
+       says arrival decides: it must carry `role="alert"`. The draft had the
+       `aria-invalid`/`aria-describedby` wiring and no role. Both the demo and
+       the copyable recipe now carry it, and the recipe shows the
+       server-rendered twin *without* the role, because that one arrives as a
+       page load.
+
+       **A gate for that was measured and refused, per 94.11.**
+       `check:live-regions` reads the BUILT html, so it catches a static
+       `role="alert"` on content that never arrives and structurally cannot
+       catch the opposite. Base rate of the opposite in this corpus:
+       `grep -rln createElement apps/docs/src/pages/` returns **5** pages
+       (editable-grid, app-frame, pagination, tag-input, htmx); the other four
+       insert tags and table rows, which are not live-region material — **0**
+       message-shaped insertions besides this one. A gate would have nothing to
+       catch today. The one instance is asserted live by the claims case above
+       instead.
+
+       **NOT VERIFIED, named rather than implied:** cloud wake — no Podman, no
+       `localhost:8081`, **no screenshots at 1440px or 390px in either theme**.
+       Everything above is DOM, computed style or built-artifact text. Whether
+       a row fading out of a compact table *reads* as the line leaving, rather
+       than as the table twitching, is a judgement a local wake should settle
+       by watching `/getting-started/htmx` while removing a line — a still
+       frame cannot settle it either.
 7. [ ] **200.7 — a lint check that a raw ms duration or literal easing
        function isn't hand-written in component CSS where a `--bo-motion-`
        prefixed token exists.** The one proposal item that's a genuinely mechanically

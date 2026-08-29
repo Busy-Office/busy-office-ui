@@ -43,6 +43,55 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
 <table class="bo-data-table"
        hx-on::before-request="this.dataset.loading='true'"
        hx-on::after-request="this.dataset.loading='false'">`;
+/* Roadmap 200.6 — row insert/delete and inline validation, composed from the
+   opt-in motion module's existing utilities. No new CSS: these are the same
+   .bo-motion-* classes /base/motion documents, wired to the two places a swap
+   actually changes the row set. */
+const rowMotionRecipe = `import "@busy-office/ui/css/motion";   /* opt-in; never in the default bundle */
+
+<!-- Insert: the row the server swapped in wears the entrance class. -->
+<tr class="bo-motion-fade-in">
+  <th scope="row">30</th><td>Seal kit</td>
+  <td class="bo-data-table__col--numeric">96.00</td>
+</tr>
+
+/* Delete: animate the exit, then remove on a TIMER read back off the
+   animation's own computed duration — never on animationend. An event that
+   can fail to arrive (the row is re-swapped, hidden, or unmounted mid-flight)
+   leaves a row that never leaves. Same rule, same shape, as the toast exit in
+   the shipped initAlerts(). */
+function removeRow(row) {
+  row.classList.add("bo-motion-fade-out");
+  const ms = Math.max(
+    0,
+    ...getComputedStyle(row).animationDuration.split(",").map((d) => {
+      const n = Number.parseFloat(d.trim());
+      return Number.isFinite(n) ? (d.trim().endsWith("ms") ? n : n * 1000) : 0;
+    }),
+  );
+  if (ms <= 0) { row.remove(); return; }   /* reduced motion, or CSS not loaded */
+  setTimeout(() => row.remove(), ms);
+}`;
+const validationMotionRecipe = `/* First appearance of a field message: an Entrance, not an alarm.
+   No shake — a wobble decorates an error the reader already has to read,
+   and it would need its own reduced-motion special case. */
+function showFieldError(input, id, text) {
+  if (document.getElementById(id)) return;   /* already shown — don't replay */
+  const msg = document.createElement("span");
+  msg.className = "bo-form-field__message bo-motion-slide-in-block-start";
+  msg.id = id;
+  msg.setAttribute("role", "alert");   /* it ARRIVES, so it IS a live region */
+  msg.textContent = text;
+  input.setAttribute("aria-invalid", "true");
+  input.setAttribute("aria-describedby", id);
+  input.after(msg);
+}
+
+<!-- Server-rendered after a failed POST? Keep the class, DROP the role: that
+     message arrives as a page LOAD, not a mutation, so a live region would be
+     announcing something that never changed. Arrival decides. -->
+<span class="bo-form-field__message bo-motion-slide-in-block-start"
+      id="qty-err">Enter a whole number.</span>`;
 ---
 <Gallery title="Using with HTMX">
   <p class="demo-note">
@@ -79,6 +128,56 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
     <p class="bo-u-text-muted">Or rely on HTMX's own <code>aria-busy</code>/<code>.htmx-request</code> — both are styled.</p>
   </section>
   <section class="demo">
+    <h2>5. Motion on swapped rows and messages</h2>
+    <p class="bo-u-text-muted">Pulse the smallest region that actually changed:
+    a <strong>cell</strong> when one value moved, the <strong>row</strong> when
+    the server replaced the whole record, the <strong>summary total</strong>
+    only when the total is the number being watched — flashing all three for
+    one edit reads as the page flickering rather than as anything having
+    changed. Never pulse while the user is typing in that region, never on
+    first paint (everything is new then, so nothing is), and never more than
+    about once a second per region: coalesce rapid updates into one flash
+    instead of queueing them. And a windowed table is
+    <strong>exempt from the row fades below</strong> —
+    <a href={base + '/concepts/scale#windowed-list'}>
+    <code>initWindowedList()</code></a> inserts and evicts rows as the viewport
+    moves, so fading each one animates scrolling rather than change, and moving
+    many adjacent rows at once is what breaks a reader's tracking.</p>
+
+    <p>Rows that arrive and rows that leave, from the opt-in
+    <a href={base + '/base/motion'}>motion module</a> — no new classes.
+    <strong>Remove the node on a timer, never on <code>animationend</code></strong>.</p>
+    <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2)">
+      <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" id="rm-add">Add line</button>
+      <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" id="rm-remove">Remove last line</button>
+    </div>
+    <div class="bo-data-table-container" tabindex="0" style="margin-block-start: var(--bo-space-2)">
+      <table class="bo-data-table" data-density="compact">
+        <caption class="bo-visually-hidden">Purchase order lines — add and remove a line to see the entrance and the exit</caption>
+        <thead><tr><th scope="col">Line</th><th scope="col">Item</th><th scope="col" class="bo-data-table__col--numeric">Amount</th></tr></thead>
+        <tbody id="rm-body">
+          <tr><th scope="row">10</th><td>Bearing assembly</td><td class="bo-data-table__col--numeric">1,240.00</td></tr>
+          <tr><th scope="row">20</th><td>Anode kit</td><td class="bo-data-table__col--numeric">318.50</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code>{rowMotionRecipe}</code></pre>
+
+    <p>An inline validation message on its <strong>first</strong> appearance —
+    it slides in from the edge it is anchored to, the same entrance a toast
+    uses. Re-validating an already-invalid field does not replay it. Because
+    this one <em>arrives</em>, it carries <code>role="alert"</code>; the
+    server-rendered twin below does not — <a href={base + '/concepts/accessibility#live-regions'}>arrival
+    decides, severity only refines</a>.</p>
+    <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button" id="vm-check">Check quantity</button>
+    <div class="bo-form-field" style="margin-block-start: var(--bo-space-2)">
+      <label class="bo-form-field__label" for="vm-qty">Quantity</label>
+      <input class="bo-input bo-input--numeric" id="vm-qty" value="2,0" />
+    </div>
+    <pre><code>{validationMotionRecipe}</code></pre>
+  </section>
+
+  <section class="demo">
     <h2>Expected non-2xx responses</h2>
     <p>htmx swaps 2xx responses and discards everything else. That is the
     right default for a 500, and the wrong one for statuses your app uses
@@ -100,3 +199,72 @@ const stateRecipe = `<!-- The framework-agnostic loading convention: -->
 
   <Related links={[["/patterns/editable-grid", "Editable grid (htmx in anger)"], ["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>
+<script>
+  /* Roadmap 200.6. These demos run the recipe printed beside them, rather
+     than a simplified version of it — the removal in particular, because the
+     whole point of the guidance is the timer. */
+  const ITEMS = ['Seal kit', 'Coupling, 40mm', 'Gasket set', 'Filter cartridge'];
+
+  /** Longest computed animation-duration, in ms; 0 when there is no animation
+      to wait for (reduced motion zeroes the tokens, and a consumer may have
+      loaded the JS without motion.css at all). */
+  function exitMs(el: HTMLElement): number {
+    let max = 0;
+    for (const part of getComputedStyle(el).animationDuration.split(',')) {
+      const raw = part.trim();
+      const n = Number.parseFloat(raw);
+      if (!Number.isFinite(n)) continue;
+      const ms = raw.endsWith('ms') ? n : n * 1000;
+      if (ms > max) max = ms;
+    }
+    return max;
+  }
+
+  const body = document.getElementById('rm-body');
+  let nextLine = 30;
+  document.getElementById('rm-add')?.addEventListener('click', () => {
+    if (!body || body.rows.length >= 6) return;
+    const tr = document.createElement('tr');
+    tr.className = 'bo-motion-fade-in';
+    const amount = (nextLine * 3.2 + 12).toFixed(2);
+    tr.innerHTML =
+      `<th scope="row">${nextLine}</th>` +
+      `<td>${ITEMS[(nextLine / 10 - 3) % ITEMS.length]}</td>` +
+      `<td class="bo-data-table__col--numeric">${amount}</td>`;
+    body.append(tr);
+    nextLine += 10;
+  });
+
+  document.getElementById('rm-remove')?.addEventListener('click', () => {
+    const row = body?.rows[body.rows.length - 1] as HTMLElement | undefined;
+    if (!row || row.dataset.leaving === '1') return;
+    row.dataset.leaving = '1';
+    row.classList.add('bo-motion-fade-out');
+    /* Timer, not animationend: an event that can fail to arrive leaves a row
+       that never leaves. Cancel the animation mid-flight — which is what a
+       re-swap does — and this still removes the row; the check-claims case
+       for this page asserts exactly that. */
+    const ms = exitMs(row);
+    if (ms <= 0) {
+      row.remove();
+      return;
+    }
+    setTimeout(() => row.remove(), ms);
+  });
+
+  const qty = document.getElementById('vm-qty') as HTMLInputElement | null;
+  document.getElementById('vm-check')?.addEventListener('click', () => {
+    if (!qty || document.getElementById('vm-qty-err')) return; // already shown
+    const msg = document.createElement('span');
+    msg.className = 'bo-form-field__message bo-motion-slide-in-block-start';
+    msg.id = 'vm-qty-err';
+    /* It arrives after load, so it IS a live region — /concepts/accessibility
+       #live-regions: arrival decides, severity only refines. An error
+       interrupts, so assertive. */
+    msg.setAttribute('role', 'alert');
+    msg.textContent = 'Enter a whole number.';
+    qty.setAttribute('aria-invalid', 'true');
+    qty.setAttribute('aria-describedby', 'vm-qty-err');
+    qty.after(msg);
+  });
+</script>
