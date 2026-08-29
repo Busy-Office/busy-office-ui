@@ -440,8 +440,20 @@
   }
 
   /* Beats the `:is(:has([aria-invalid]), …) .bo-form-field__message` rule in
-     form-field.css on specificity (0,3,0 vs 0,2,0), so it does not depend on
-     which stylesheet is imported last. */
+     form-field.css on specificity, so the reveal does not depend on which
+     stylesheet is imported last.
+
+     Numbers measured by racing each selector against references of known
+     specificity placed LATER in the sheet — a tie resolves to the reference,
+     so "wins" means strictly greater (roadmap 190.3, which caught this comment
+     stating two wrong ones):
+       this rule                              (0,4,0)
+       form-field.css's :is(:has(…)) rule     (0,3,1)
+     The first draft said "(0,3,0 vs 0,2,0)". Both were wrong, and (0,2,0) is
+     not even this rule's neighbour — it is `[aria-invalid="true"] ~
+     .bo-form-field__message`, the no-:has() fallback further down that file.
+     A comment naming one rule and quoting a third rule's number is the kind of
+     citation `check:slice-refs` resolves, so it is worth being exact. */
   .bo-data-table .bo-form-field:not(:focus-within) .bo-form-field__message {
     display: none;
   }

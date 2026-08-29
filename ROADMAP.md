@@ -554,7 +554,21 @@ is credited**; 190 only sharpens the clause it landed in.
          (grep the BUILT output or assert the computed style — a claims case is
          a detector, and this file's history is detectors that could not fail).
 
-3. [ ] **190.3 — `data-table.css`'s specificity comment states two wrong
+3. [x] **190.3 — `data-table.css`'s specificity comment states two wrong
+       numbers, one of which belongs to a different rule.** **FIXED
+       2026-08-29** by the wake that wrote the wrong comment. The numbers were
+       re-derived by hand before being trusted, and agree with 190.3's cascade
+       race: this rule is **(0,4,0)** (three classes plus `:not(:focus-within)`,
+       which takes its argument's specificity); form-field.css's `:is(:has(…))`
+       rule resolves to its most specific arm at **(0,3,1)**; and **(0,2,0)** is
+       a third rule entirely — `[aria-invalid="true"] ~ .bo-form-field__message`,
+       the no-`:has()` fallback. The comment now carries the measured numbers
+       and names the method, and says outright which rule (0,2,0) belongs to so
+       the next reader is not sent looking for it in the wrong place.
+
+       *(original item below)*
+
+       **Original — `data-table.css`'s specificity comment states two wrong
        numbers, one of which belongs to a different rule.**
 
        Line 442 claims the new rule beats *"the `:is(:has([aria-invalid]), …)
