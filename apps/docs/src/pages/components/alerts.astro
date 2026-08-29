@@ -85,8 +85,18 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
     <div class="bo-toast-region" id="toast-demo-region" role="status" aria-live="polite"></div>
     <pre><code>{toastMarkup}</code></pre>
     <p class="bo-u-text-muted">Dismiss buttons work via <code>initAlerts()</code>
-    (document delegation — injected toasts covered automatically). If you auto-dismiss,
-    keep toasts visible ≥ 5s and pause the timer on hover/focus (WCAG 2.2.1). Toasts do
+    (document delegation — injected toasts covered automatically). A dismissed toast
+    fades and collapses over <code>--bo-motion-duration-fast</code> before it leaves the
+    DOM, and the toasts above it close the gap over that same window rather than
+    snapping — so dismissing the middle of a stack does not teleport the rest. An inline
+    alert is still removed instantly: it sits in the document flow, where a collapse
+    would move the page under you. Under <code>prefers-reduced-motion</code> the toast
+    goes instantly too.
+    <strong>There is no auto-dismiss timer here, by design</strong> — the framework
+    never removes a toast the reader did not dismiss, because it cannot know whether
+    they have read it. If you add one, keep toasts visible ≥ 5s, pause the timer on
+    hover/focus, and never auto-dismiss one that carries the only route to an action
+    (WCAG 2.2.1). Toasts do
     <strong>not</strong> float above an open modal dialog (the dialog owns the top
     layer) — render confirmations inside the dialog instead.</p>
   </section>
@@ -95,8 +105,11 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
     initAlerts();
     document.getElementById('toast-demo-trigger')?.addEventListener('click', () => {
       const region = document.getElementById('toast-demo-region')!;
-      // Two toasts per click so stacking order and spacing are visible —
-      // ERP reality is bursts (a save + a follow-on warning), not singles.
+      // Three toasts per click so stacking order, spacing AND the way the
+      // stack closes its own gap on dismiss are all visible — ERP reality is
+      // bursts (a save, a follow-on warning, the batch behind them), not
+      // singles, and a two-toast stack cannot show a dismissal from the
+      // MIDDLE, which is the case the exit collapse exists for.
       region.insertAdjacentHTML(
         'beforeend',
         `<div class="bo-alert bo-alert--success bo-toast">
@@ -106,13 +119,17 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
         <div class="bo-alert bo-alert--warning bo-toast">
           <div><span class="bo-alert__title">Budget at 92%.</span> CC-4021 nears its limit.</div>
           <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
+        </div>
+        <div class="bo-alert bo-toast">
+          <div><span class="bo-alert__title">3 more queued.</span> The overnight batch is still posting.</div>
+          <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
         </div>`,
       );
     });
   </script>
   <ClassRef component="alert" />
   <ApiTable component="alert"
-    js="Optional: initAlerts() — dismiss buttons remove their alert/toast (delegation covers injected toasts)."
+    js="Optional: initAlerts() — dismiss buttons remove their alert/toast (delegation covers injected toasts); a toast fades and collapses out first, an inline alert goes instantly."
     notes={[`Arrival decides the role, not severity — the <a href="${base}/concepts/accessibility#live-regions">live-region rule</a> is stated once there; short form: none at load, <code>role="alert"</code>/<code>role="status"</code> only when inserted after load.`,
             'The toast region must exist (with <code>aria-live</code>) BEFORE the first toast is injected.',
             'Toasts do not float above an open modal dialog (top layer).']} />

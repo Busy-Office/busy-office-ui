@@ -11,6 +11,42 @@ pin.
 
 ### Changed
 
+- **A dismissed toast now leaves instead of vanishing, and the stack closes
+  its own gap** (roadmap 200.5). `.bo-toast` gains a `[data-state="closing"]`
+  exit — `bo-toast-out`, `--bo-motion-duration-fast` on
+  `--bo-motion-easing-standard` — that fades the toast and collapses its
+  `block-size`/`padding-block` to zero, and `initAlerts()` holds the node for
+  exactly that long before removing it. The collapse is what bounds the
+  reflow: the toasts above travel by exactly the dismissed toast's own box
+  and one `row-gap` (measured live: 68px = 60 + 8), continuously, and the
+  removal itself moves nothing (0.06px). All of it inside
+  `.bo-toast-region`, which is `position: fixed`, so nothing behind it
+  re-lays out.
+
+  **`initAlerts()`'s contract changes for toasts only, and that is the
+  compatibility question worth naming rather than asserting.** An inline
+  `.bo-alert` is removed synchronously, exactly as before — it sits in the
+  document flow, where a collapse would move the page under the reader.
+  A `.bo-toast` is now removed on a timer, so code that clicks a dismiss
+  button and reads the DOM in the same tick will still find the toast,
+  carrying `data-state="closing"`. **Not listed as Breaking**, with the
+  reasoning: the hold is read back off the computed `animation-duration`, and
+  when that is 0 the removal stays synchronous — which is every case where a
+  consumer could have been relying on the old timing without also having
+  opted into the animation, including `prefers-reduced-motion` and loading
+  the JS without the CSS. No selector, custom property, markup or ARIA
+  contract moves.
+
+  There is deliberately **no auto-dismiss timer**, and the docs now say so as
+  a position rather than leaving it implicit: the framework never removes a
+  toast the reader did not dismiss, because it cannot know whether they have
+  read it. Consumers who add one still own WCAG 2.2.1 — ≥5s, pause on
+  hover/focus, never on a toast carrying the only route to an action.
+
+  `prefers-reduced-motion` zeroes both directions through the shared token
+  (entrance reads `0s`, dismissal is same-tick). Travel is on the block axis,
+  so nothing mirrors under RTL.
+
 - **The data-table bulk-actions bar now arrives instead of snapping in**
   (roadmap 200.4). Selecting the first row fades and lifts
   `.bo-data-table__bulk-actions` into place over `--bo-motion-duration-base`

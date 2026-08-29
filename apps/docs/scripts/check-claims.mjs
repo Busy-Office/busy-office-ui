@@ -3741,6 +3741,173 @@ check(
    the explained column at the far edge), which is /components/dropdown's job
    and is documented there. This page links to it rather than re-claiming it. */
 
+/* 200.5 — toast exit motion and the bounded stack reflow. /components/alerts
+   makes four runtime promises about a dismissed toast, and each is driven
+   here rather than described:
+
+     1. it fades and COLLAPSES over --bo-motion-duration-fast before it
+        leaves the DOM (it is not removed on the click);
+     2. the toasts above it close the gap over that same window instead of
+        snapping, and travel by exactly one toast — the bound;
+     3. prefers-reduced-motion removes it instantly;
+     4. there is no auto-dismiss timer — a toast nobody dismisses stays.
+
+   Case 2 is the one that needed care. Sampling a 100 ms animation midway is
+   a race, and a check that flakes gets disbelieved, so the token is
+   overridden to 1200 ms for that case ALONE. That is not a weaker test of
+   the shipped rule — the animation is token-driven by construction, which is
+   the property check:motion enforces — and case 1 asserts the unoverridden
+   duration is the fast token, so nothing about the real timing is taken on
+   trust. Overriding the token rather than the animation is also what keeps
+   the JS honest: the behavior reads its hold off the computed style, so if
+   it had hard-coded 100 ms instead, case 2's toast would vanish a second
+   early and the geometry would snap.
+
+   The dismiss clicks are synthetic el.click(), which is sufficient here for
+   the reason 200.1's dialog case is not: this behavior is a delegated click
+   listener and nothing in it reads focus or activation. If a synthetic click
+   did not reach it, no toast would ever enter data-state="closing" and every
+   case below goes red at once — a loud failure, not a quiet pass. */
+await visit('/components/alerts/', { width: DESKTOP_WIDTH });
+const toastExit = await page.evaluate(async () => {
+  document.getElementById('toast-demo-trigger').click();
+  await new Promise((r) => requestAnimationFrame(r));
+  const region = document.getElementById('toast-demo-region');
+  const stack = [...region.querySelectorAll('.bo-toast')];
+  const middle = stack[1];
+  middle.querySelector('.bo-alert__dismiss').click();
+  // Read in the SAME tick as the click: a toast removed on click would
+  // already be detached here, which is exactly what this distinguishes.
+  const held = region.contains(middle);
+  const state = middle.dataset.state;
+  const duration = getComputedStyle(middle).animationDuration;
+  const measuredHeight = middle.style.blockSize;
+  await new Promise((r) => setTimeout(r, 400));
+  return {
+    stacked: stack.length,
+    held,
+    state,
+    duration,
+    measuredHeight,
+    goneAfter: !region.contains(middle),
+    left: region.querySelectorAll('.bo-toast').length,
+  };
+});
+check(
+  'toast: a dismissed toast is held for the fast-token exit, not removed on the click',
+  toastExit.stacked === 3 && toastExit.held && toastExit.state === 'closing' &&
+    toastExit.duration === '0.1s' && /^\d+(\.\d+)?px$/.test(toastExit.measuredHeight) &&
+    toastExit.goneAfter && toastExit.left === 2,
+  JSON.stringify(toastExit),
+);
+
+/* 4. No auto-dismiss. Continues on the same page, so the two toasts case 1
+   left untouched are the sample — no second visit, and the only cost is the
+   wait itself. Bounded evidence for an absolute claim, and the bound is
+   stated in the check's own name rather than implied. */
+const toastPersist = await page.evaluate(async () => {
+  await new Promise((r) => setTimeout(r, 2000));
+  const region = document.getElementById('toast-demo-region');
+  const rest = [...region.querySelectorAll('.bo-toast')];
+  return { left: rest.length, anyClosing: rest.some((t) => t.dataset.state) };
+});
+check(
+  'toast: nothing auto-dismisses — two undismissed toasts are still there, unmarked, 2s on',
+  toastPersist.left === 2 && !toastPersist.anyClosing,
+  JSON.stringify(toastPersist),
+);
+
+/* 2. The stack closes the gap continuously, and by exactly one toast.
+
+   MEASURE THE RESTING BOX. The first version of this case took its `start`
+   one requestAnimationFrame after the toasts were injected and reported a
+   travel of 60px against an expected 68 — a real-looking 8px discrepancy
+   that was entirely the instrument: `bo-toast-in` is still running at that
+   point, and its `translateY(0.5rem)` is exactly 8px. The survivor was
+   measured mid-entrance and compared against a resting prediction. The
+   entrance is 150ms of --bo-motion-duration-base and is NOT slowed by the
+   override below (which moves only -fast), so the wait here has to clear it
+   on its own. */
+await visit('/components/alerts/', { width: DESKTOP_WIDTH });
+const toastReflow = await page.evaluate(async () => {
+  const slow = document.createElement('style');
+  // Unlayered, so it beats @layer bo-tokens without !important.
+  slow.textContent = ':root { --bo-motion-duration-fast: 1200ms; }';
+  document.head.append(slow);
+  document.getElementById('toast-demo-trigger').click();
+  await new Promise((r) => setTimeout(r, 300));
+  const region = document.getElementById('toast-demo-region');
+  const stack = [...region.querySelectorAll('.bo-toast')];
+  const [top, middle] = stack;
+  const gap = parseFloat(getComputedStyle(region).rowGap);
+  const collapsing = middle.getBoundingClientRect().height;
+  const start = top.getBoundingClientRect().top;
+  middle.querySelector('.bo-alert__dismiss').click();
+  // Sampled at a third of the way in, not halfway, and asserted against a
+  // deliberately wide band below: the property is "partway", and a snap can
+  // only ever read exactly 0 or exactly 1. Sampling near the middle of an
+  // eased curve puts the healthy reading at ~0.78 — close enough to a
+  // narrow upper bound that a loaded runner would fail a working animation.
+  await new Promise((r) => setTimeout(r, 400));
+  const midway = top.getBoundingClientRect().top;
+  // Just before the hold expires: the collapse has finished but the node is
+  // still there, which is what makes the next reading a test of the removal
+  // itself rather than of the animation.
+  await new Promise((r) => setTimeout(r, 750));
+  const settled = top.getBoundingClientRect().top;
+  await new Promise((r) => setTimeout(r, 500));
+  const end = top.getBoundingClientRect().top;
+  return {
+    stacked: stack.length,
+    gap,
+    // The region is bottom-anchored, so the survivors travel DOWN.
+    total: end - start,
+    expected: collapsing + gap,
+    progress: (midway - start) / (end - start),
+    // The node leaving must move nothing: the collapsed frame already holds
+    // the geometry its removal produces. That is what the negative margin
+    // buys, and without it this is a whole gap of snap.
+    snapOnRemoval: end - settled,
+    gone: !region.contains(middle),
+    left: region.querySelectorAll('.bo-toast').length,
+  };
+});
+check(
+  'toast: the stack closes the gap continuously, travels by exactly the dismissed toast, and does not snap when it leaves',
+  toastReflow.stacked === 3 && toastReflow.gone && toastReflow.left === 2 &&
+    Math.abs(toastReflow.total - toastReflow.expected) < 1 &&
+    Math.abs(toastReflow.snapOnRemoval) < 1 &&
+    toastReflow.progress > 0.05 && toastReflow.progress < 0.95,
+  JSON.stringify(toastReflow),
+);
+
+// 3. Reduced motion: gone in the same tick as the click, no closing state.
+await visit('/components/alerts/', {
+  width: DESKTOP_WIDTH,
+  features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+});
+const toastReduced = await page.evaluate(async () => {
+  document.getElementById('toast-demo-trigger').click();
+  await new Promise((r) => requestAnimationFrame(r));
+  const region = document.getElementById('toast-demo-region');
+  const middle = [...region.querySelectorAll('.bo-toast')][1];
+  // The ENTRANCE half of the same claim, read off a toast that is not
+  // closing: both directions are the shared duration tokens, which
+  // tokens/motion.css zeroes here.
+  const entrance = getComputedStyle(middle).animationDuration;
+  middle.querySelector('.bo-alert__dismiss').click();
+  return {
+    entrance,
+    goneImmediately: !region.contains(middle),
+    left: region.querySelectorAll('.bo-toast').length,
+  };
+});
+check(
+  'toast: prefers-reduced-motion makes entrance and exit instant — 0s in, removed in the same tick as the click',
+  toastReduced.entrance === '0s' && toastReduced.goneImmediately && toastReduced.left === 2,
+  JSON.stringify(toastReduced),
+);
+
 await browser.close();
 server.close();
 

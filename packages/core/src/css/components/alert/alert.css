@@ -101,6 +101,55 @@
     }
   }
 
+  /* EXIT (roadmap 200.5). A toast is REMOVED from the DOM, not toggled by an
+     attribute, so dialog's pure-CSS `allow-discrete` recipe (200.1) does not
+     transfer here: there is no after-change style for a node that no longer
+     exists. behaviors/alert.ts marks the toast closing, holds it for exactly
+     the duration this rule declares — read back off the computed style, so
+     the timer cannot drift from the animation — then removes it. The removal
+     is never gated on `animationend`, for 200.1's reason: a dismissal that
+     waits on an event that can fail to arrive is a toast that never leaves.
+
+     The COLLAPSE, not the fade, is what bounds the stack's reflow: the
+     remaining toasts travel by exactly this toast's own block-size,
+     continuously, instead of snapping that distance the instant the node
+     disappears. The travel is contained to .bo-toast-region, which is
+     position: fixed, so nothing behind it re-lays out.
+
+     block-size interpolates only from a definite length, which is why the
+     behavior writes the measured pixel height inline before setting the
+     state. `forwards` holds the collapsed frame so there is no flash back to
+     full height in the tick before removal, and padding-block has to
+     collapse with it — under border-box a 0 block-size still reserves the
+     padding, so the box would stop short of 0 without it.
+
+     The negative margin cancels one flex `gap`: a zero-height item still
+     sits between two gaps where its removal leaves one, and that difference
+     is the only part of the shift that would otherwise still snap. It
+     restates .bo-toast-region's own gap token deliberately — one value in
+     two places, both named, rather than a third token nobody would set.
+
+     Reduced motion needs no rule here: the duration is the shared token
+     tokens/motion.css already zeroes, and the behavior removes synchronously
+     when it reads 0. */
+  .bo-toast[data-state="closing"] {
+    overflow: hidden;
+    /* A collapsing toast must not still swallow the click aimed at the one
+       moving up into its place. */
+    pointer-events: none;
+    animation: bo-toast-out var(--bo-motion-duration-fast)
+      var(--bo-motion-easing-standard) forwards;
+  }
+
+  @keyframes bo-toast-out {
+    to {
+      opacity: 0;
+      block-size: 0;
+      padding-block: 0;
+      margin-block-start: calc(var(--bo-space-2) * -1);
+    }
+  }
+
   @media print {
     .bo-toast-region {
       display: none;

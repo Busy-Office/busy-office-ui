@@ -1153,7 +1153,7 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        by construction (measured: identical rects). What a local wake should do
        is *watch* `/components/data-table/` while ticking a row, not photograph
        it.
-5. [ ] **200.5 — toast gets an exit animation and a bounded stack-reflow,
+5. [x] **200.5 — toast gets an exit animation and a bounded stack-reflow,
        matching the entrance it already has.**
        *Accept*: `.bo-toast` removal fades out over
        `--bo-motion-duration-fast`–`-base` rather than disappearing instantly;
@@ -1163,6 +1163,109 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        CHECK, don't assume, before writing the Accept as "unchanged"); an
        error toast requiring action is not auto-dismissed; reduced motion
        makes both entrance and exit instant.
+
+       **Landed 2026-08-29 (cloud wake).** `alert.css` gains
+       `.bo-toast[data-state="closing"]` + `@keyframes bo-toast-out`;
+       `behaviors/alert.ts` marks a toast closing, holds it for the duration
+       it reads back off the computed style, then removes it. Inline
+       `.bo-alert` removal is untouched and still synchronous.
+
+       **Two of the five clauses asked about a mechanism that does not
+       exist, and the Accept said CHECK — so finding the premise false is the
+       result, not an off-plan outcome.** There is no auto-dismiss timer in
+       this framework, so there is nothing to pause on hover/focus and
+       nothing that could auto-dismiss an error toast. Measured rather than
+       read:
+
+       ```
+       git grep -lE "bo-toast|bo-alert" HEAD -- 'packages/core/src/js/**'
+         # alert.ts, tag-input.ts, validation-summary.ts
+       # setTimeout|setInterval|requestAnimationFrame in each of those three:
+         # 0, 0, 0
+       ```
+
+       `/components/alerts` had already framed auto-dismiss as the
+       consumer's job ("*If* you auto-dismiss, keep toasts visible ≥ 5s…"),
+       so the page was never wrong — but it stated the WCAG 2.2.1 guidance
+       without stating the position. It now says the position outright
+       (the framework never removes a toast the reader did not dismiss,
+       because it cannot know whether they have read it) and the absence is
+       asserted live: two undismissed toasts are still present and unmarked
+       2s on. Bounded evidence for an absolute claim, and the bound is in
+       the check's own name.
+
+       **"Bounded translate" read as: the survivors travel by exactly one
+       toast, continuously.** Stated because the clause admits a second
+       reading (cap how many toasts move) and the built thing answers the
+       first. The exit collapses `block-size`/`padding-block` to 0 rather
+       than only fading, so the distance is the dismissed toast's own box —
+       and the travel is contained to `.bo-toast-region`, which is
+       `position: fixed`, so nothing behind it re-lays out.
+
+       Measured live (headless Chrome via `browser-harness.mjs` +
+       `serve-dist.mjs`, `/components/alerts/` at 1440px, middle of a stack
+       of three, `--bo-motion-duration-fast` overridden to 1200ms for a
+       non-racy sample — the animation is token-driven, which is the
+       property `check:motion` enforces):
+
+       | reading | value |
+       |---|---|
+       | stack before | heights `[60, 60, 66]`, `row-gap` 8px, region 202px, survivor top **782** |
+       | a third of the way through the exit (t=400 of 1200) | survivor top **813.09**, `progress` **0.4573** — partway, not 0 and not 1, which is the only thing a snap cannot be. Identical on two consecutive runs. |
+       | just before removal | region **134.0625px**, closing toast `block-size` **0.047px**, `padding-block-start` **0.011px**, `margin-block-start` **−7.99px** |
+       | after removal | region **134px**, survivor top **850** |
+       | total travel | **68px** = 60 (dismissed toast) + 8 (one gap) |
+       | snap when the node leaves | **0.0625px** |
+
+       The band the check asserts on `progress` is a wide 0.05–0.95, and
+       that is deliberate: a first cut sampled at the halfway point and read
+       **0.746 / 0.776** on two runs — healthy, since `cubic-bezier(0.4, 0,
+       0.2, 1)` at t=0.5 is ≈0.8, but close enough to a 0.8 upper bound that
+       a loaded runner would have failed a working animation. The property
+       is "partway"; a snap reads exactly 0 or exactly 1, so the bound
+       carries no information and the tightness only buys flake.
+
+       The negative margin is what makes that last row a 0: a zero-height
+       item still sits between two gaps where its removal leaves one.
+       Red-proved by injection — dropping it from the BUILT CSS
+       (`margin-block-start:calc(var(--bo-space-2) * -1)` → `0`, confirmed
+       in the built file before believing the result) turns the removal into
+       an 8px jump and the check goes red.
+
+       **The first measurement was wrong, and it was the instrument.** The
+       reflow case originally sampled the survivor one `requestAnimationFrame`
+       after injection and reported 60px travel against a predicted 68 — an
+       8px discrepancy that looked like a missing gap and was
+       `bo-toast-in`'s `translateY(0.5rem)`, still mid-flight. The entrance
+       runs on `-base` and the override moves only `-fast`, so nothing about
+       the exit slowed it. Fixed by measuring the RESTING box; the trap is
+       recorded in the check's own comment.
+
+       **Red-proofs, both confirmed to have landed before the red was
+       believed:** (1) restoring instant removal in the built page's inlined
+       behavior (`grep`-confirmed, 1 of 1 built page carries it) fails the
+       hold case and the reflow case, 2 of 155; (2) the margin injection
+       above fails the reflow case, 1 of 155. The behavior tests were
+       red-proved the same way against the built `dist/js` artifact they
+       import: 2 of 6 fail.
+
+       **Why a timer and not `animationend`:** 200.1's reason, applied — a
+       dismissal gated on an event that can fail to arrive is a toast that
+       never leaves. The hold is read from the computed `animation-duration`
+       rather than hard-coded, so the token and the timer cannot drift; when
+       it reads 0 the removal is synchronous, which covers reduced motion
+       and a consumer who loaded the JS without the CSS in one branch.
+       Dialog's pure-CSS `allow-discrete` recipe does not transfer: a toast
+       is REMOVED, and there is no after-change style for a node that no
+       longer exists.
+
+       **NOT verified, said plainly.** Cloud wake: no Podman, no
+       `localhost:8081`, **no screenshots at 1440px or 390px in either
+       theme**. Every figure above is geometry or computed style; whether a
+       100ms collapse *reads* as a toast leaving rather than as the stack
+       twitching is a design judgement no still frame settles either — a
+       local wake should *watch* `/components/alerts/` while dismissing the
+       middle of a stack of three.
 6. [ ] **200.6 — row insert/delete and inline-validation entrance, composed
        from existing motion-module utilities, plus the usage guidance the
        already-shipped pulse/settle mechanisms are missing.** Bundled because
