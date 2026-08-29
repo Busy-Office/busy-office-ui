@@ -1145,3 +1145,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 18:49 · Standardize · sweep · Slice 197 — all three standing lanes clean, delta 0 vs Slice 194 · logged · 777dacf
 - 2026-08-29 18:54 · Objective · grill · Objective grill of 193/196/197 — clean control, index checked first, no repeated subject · logged · 4746a93
 - 2026-08-29 19:02 · Roadmap · plan · 112.3 — owner agreed to all four roundtable recommendations (5 briefs, suite evidence excluded, burn-once tested) · triaged · b81131f
+- 2026-08-29 11:04 · Continue · build · 199.2 - the 558 denominator 193.2 could not reproduce, closed at a9470314; 199.1 filed: 104.4's reopen trigger fired the day it was written and went 7 days unasked · landed · 33dabdcd
+- 2026-08-29 11:04 · Meta · refusal · a mechanism for reopen conditions - 193.2's refusal stands, and naming the shipped script in a LOOPS.md cadence step was refused with it · refused · 33dabdcd
