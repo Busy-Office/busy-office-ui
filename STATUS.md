@@ -2,17 +2,16 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 06:04 UTC
+Generated at: 2026-08-29 06:06 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 190** (3 open)
+- **Slice 190** (2 open)
   - 190.1 — a grid cell's validation message is clipped for any message longer than about two lines, because a constant reserves room for a variable-height box.
   - 190.2 — `/patterns/editable-grid`'s three new runtime claims are executable.
-  - 190.3 — `data-table.css`'s specificity comment states two wrong numbers, one of which belongs to a different rule.
 - **Slice 191** (1 open)
   - 191.3 — decide whether rule 4's archaeology belongs in `LOOPS-archive.md`, on the evidence 191.2 measured.
 - **Slice —** (1 open)
@@ -21,9 +20,9 @@ Generated at: 2026-08-29 06:04 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1111 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-29 05:46   ok
-  Objective     3 / 3 slices          since 2026-08-29 03:48   OVERDUE  [186, 189, 191]
+dispatch status — counter-triggered rules (1112 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-29 05:46   ok
+  Objective     4 / 3 slices          since 2026-08-29 03:48   OVERDUE  [186, 189, 190, 191]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
@@ -38,7 +37,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 10:57 · Meta · refusal · a top-layer popover for the error message — it escapes the container clip but this demo already has five popovers on its combobox cells, and an error sharing an anchor with an open listbox is worse than a container that grows while focused · refused · 1f115ec
 - 2026-08-29 11:24 · Roadmap · grill · 112.3 grilled at owner request — every self-imposed precondition is met (substrate 39/39, llms.txt 83 refs, wrong-choice debt 1), so the block is now briefs plus four decisions; part of the superstructure shipped without the verdict, and 'briefs are burn-once' is unestablished · logged · 06a0ec1
 - 2026-08-29 11:27 · Continue · build · 186.2 closed — the owner/browser/agent-blocked distinction moved from RESUME.md (where it vanished within a day) into LOOPS.md rule 4; thesis confirmed by 173.2 landing in the first local wake after four wakes called it owner-blocked · landed · ef1df95
 - 2026-08-29 11:29 · Objective · grill · 189 — Objective grill of 173/185/186/187: the authority is what a transforming system SERVES not what you hand it (185 read the tarball twice while npm view was the answer); premise re-checks changed the work in 3 of 4 slices; four wakes called browser-blocked work owner-blocked · logged · 5eafae9
@@ -48,6 +46,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 04:40 · Continue · build · 186.1 — check:resume-slice-ids reconciles RESUME.md's backticked slice ids against ROADMAP.md's checkboxes · landed · cfb53521
 - 2026-08-29 05:46 · Standardize · sweep · 191 — three lanes clean (dead-style 0, css-repeats delta 0 by group membership, prose 14/14 verdicted); the fourth read a value its own command cannot print — LOOPS.md "still 0 down after 167.2" is invisible in a window that contains 167.2's split, so report_loop_prose.py now prints a full-history ratchet block, red-proved three ways · landed · 3ea80243
 - 2026-08-29 14:04 · Continue · build · 189.1 — CLAUDE.md now names WHICH artefact when a third party renders it; escape hatch tested first and did not apply (every existing example is our own build), worked example is npm normalising bin and the read-vs-write path confusion · landed · d50c306
+- 2026-08-29 14:06 · Continue · build · 190.3 — corrected data-table.css's specificity comment; numbers re-derived by hand and agree with the grill: (0,4,0) and (0,3,1), while (0,2,0) belongs to the no-:has() fallback. Conclusion was right, arithmetic was not · landed · aa723d6
 
 ## Sunset test
 
