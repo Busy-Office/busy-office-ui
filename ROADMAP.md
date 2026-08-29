@@ -293,6 +293,22 @@ are ranked by the shapes they force, not by module order.
   `create-ui` successfully. Configuration-correct and publish-correct are
   different claims; only the first is closed here.
 
+  **CLOSED 2026-08-29 — the second proof landed.** `v0.6.0` was cut (owner
+  confirmed, release created via `gh release create v0.6.0`), `publish.yml`
+  ran green end to end, and `Publish create-ui to npm (OIDC, with
+  provenance)` — the step that only passes if the Trusted Publisher
+  actually authenticates — succeeded. Confirmed against the registry
+  directly, not inferred from the green run:
+
+  ```
+  npm view @busy-office/create-ui version               # 0.1.1
+  npm view @busy-office/create-ui dist.attestations      # predicateType: slsa.dev/provenance/v1
+  ```
+
+  `create-ui@0.1.1` carries SLSA provenance — the trust-surface hole named
+  at the top of this item is closed for every version from here forward;
+  `0.1.0` stays permanently unattested, as already established.
+
 **What would change this order.** If Production finds three or more gaps, the
 shape thesis is holding and Inventory/Finance stay as written. If Production
 finds **zero**, the thesis is wrong in an interesting way — the remaining
