@@ -361,6 +361,23 @@ None of this applies to a number a gate already asserts — that one has been
 red-proved by construction. It applies to the ad-hoc measurement written to
 answer a question, which is exactly the kind that ends up in a summary.
 
+**And the defect lands in what shipped BESIDE the number, not in the number**
+(roadmap 192.1). This treatment is expensive, so it gets spent on the one claim
+that motivated the work — and every other claim in the same change goes out on
+its credibility having earned none. Twice, the second inside the write-up of
+the first. 173.2 measured a row height live and red-proved it: correct. The
+three defects later filed against it (190.1, 190.2, 190.3) are every one of
+them in something it asserted beside that — `18ch` and `3.5rem` fitted to the
+single 21-character string the demo carries, which `data-table.css` now says in
+its own comment. Then the grill recording *that* re-measured the DOM walk with
+a red-proof by injection — correct — and asserted beside it that "no
+enumeration of the built site returns its stated 138". The plainest walk there
+is — `find apps/docs/dist -name 'index.html' | wc -l` — returns exactly **138**
+(`distPages({ skipRedirects: false })` 137 + the excluded `suite/` app, by set
+difference). So **list the other claims a change is carrying and name the
+instrument for each.** *"None — I read it off the code"* is the answer that
+predicts the defect.
+
 ## A heuristic gate must be able to demonstrate it can fail
 
 Red-proving asks "does this gate go red on the bug?". This asks the question

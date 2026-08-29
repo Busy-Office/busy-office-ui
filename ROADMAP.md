@@ -327,9 +327,32 @@ red-proved by injection — and its weaker page-level `grep` reproduces its **9*
 exactly; but **no enumeration of the built site returns its stated 138**
 (`distPages()` 127, with redirects 137, raw `find` 165), and the report printed
 the walk's output without its invocation, so it can only be re-derived. The
-finding is unaffected; the denominator is unreconciled by one. 190.3's
-specificity comment re-measures **correct, 2 of 2** — and cost this grill two
-dead instruments to confirm, both of them this file's own documented traps
+finding is unaffected; the denominator is unreconciled by one.
+
+> **CORRECTED 2026-08-29 by 192.1, and the correction is the worked example
+> that item was looking for.** *"No enumeration of the built site returns its
+> stated 138"* is **false**. `find apps/docs/dist -name 'index.html' | wc -l`
+> returns exactly **138** — the plainest walk there is, and the one D did not
+> try. It is `distPages({ skipRedirects: false })` **137** plus
+> `dist/suite/index.html`, established by set difference on the file lists, one
+> element, not by comparing totals. D's own three figures (127 / 137 / 165)
+> reproduce here character-for-character, so it was working from an identical
+> build and the disagreement is entirely in which enumerations it tried.
+> **The defect is D's, not 190.1's**, and it is the shape CLAUDE.md already
+> calls worse than a dead detector: a confident ABSENCE reported from a search
+> that stopped early. What survives of D is narrower and still true — 190.1
+> printed the walk's output without its invocation, so 138 is now
+> *reconcilable* rather than *reconciled*: whether 190.1's walk was this one is
+> unrecoverable.
+>
+> **Counter-evidence, kept, because the tempting stronger claim is wrong.** "The
+> reproduced numerator 9 already pinned the denominator to 138" — it does not.
+> Measured: 9 pages contain both classes under **all three** of the 127-, 137-
+> and 138-page corpora, so the numerator discriminates between none of them.
+> The reconciliation rests on the set difference alone.
+
+190.3's specificity comment re-measures **correct, 2 of 2** — and cost this
+grill two dead instruments to confirm, both of them this file's own documented traps
 (a reference ladder that did not match the node, so every rung "won"; then
 racing ROADMAP's *ellipsed* quotation of the selector, which is one step lower
 than the shipped one). Settled by reading the selector out of
@@ -457,7 +480,7 @@ rather than the one holding the rule. Third and fourth times this session an
 injection assertion paid for itself. No gate — that is the existing rule
 succeeding.
 
-1. [ ] **192.1 — record the PLACEMENT rule finding A names.** The disciplines
+1. [x] **192.1 — record the PLACEMENT rule finding A names.** The disciplines
        are all written already ("an instrument's first output is not evidence",
        "a number you report is load-bearing"); what is not written is where the
        defect lands when a single change ships measured and asserted claims
@@ -468,6 +491,56 @@ succeeding.
        wording already covers it** — the sections are long and 158.2 has prose
        growth open, so a restatement is a real cost and refusing is a
        satisfying outcome.
+
+       **CLOSED 2026-08-29 (cloud wake, rule 4) — Accept branch (a), one
+       paragraph, into the existing `## A number you report is load-bearing`
+       section. Branch (b) was tested first and FAILED**, which is why (a) was
+       taken rather than by preference. Each candidate rule's own stated
+       trigger was applied to the 173.2 facts:
+
+       | existing wording | its trigger | fires on 173.2? |
+       |---|---|---|
+       | *"re-verify its siblings"* | "when one claim from a session **dies**" | **no** — nothing died; the measured claim was correct |
+       | *"write the command next to the claim"* | the item's "**PREMISE** is a measurement from an earlier wake" | **no** — these were new claims in the same change |
+       | *"a number you report is load-bearing"* | its own scope line: "the **ad-hoc measurement** written to answer a question" | **no** — `18ch`/`3.5rem` were never measured by anything |
+       | *"claims that assert runtime behavior must be executable"* | a page asserts runtime behaviour | **yes** — covers 190.2 |
+       | *"an instrument's first output is not evidence"* | a new detector/script/query | **no** — the wrong claims had no instrument |
+
+       So **1 of the 3 defects** was covered by an existing rule and the
+       placement observation by none. Needles were plain fixed strings, counted
+       before reading (`grep -Fic` on `CLAUDE.md` **as it stood at `12711a8`**,
+       before this paragraph landed — re-running them today hits the paragraph
+       itself): `beside` 0, `alongside` 0, `side by side` 0, `unmeasured` 0,
+       `same change` 0, `vouch` 0; `sibling` 3 and `asserted` 3, all read, none
+       of them this.
+
+       **n = 2 instances, and the second was found by re-checking this item's
+       own premise** — which is the rule arriving before it was written. 173.2
+       is confirmed from the shipped artefact rather than from prose about it:
+       `data-table.css` lines 477 and 495 now record in their own comments that
+       `3.5rem` and `18ch` were *"fitted to the single 21-character string this
+       framework's own demo carries"*. The second instance is **Slice 193
+       finding D**, corrected in place above. **Counter-evidence kept:** 190's
+       cross-cut records 185/188 and 187.1 as clean controls — neither shipped
+       an asserted claim beside its mechanism — so this fires only on a change
+       carrying both kinds, and is not a claim that every change rots.
+
+       **No gate, and not a new `##` section.** The paragraph went into an
+       existing section deliberately: 193.1 has *"should CLAUDE.md's eight
+       detector sections fold"* open, so adding a ninth to answer this would
+       have argued against that item while it is unresolved. Cost, named:
+       `## A number you report is load-bearing` grows **306 → 508** words and
+       the file **5,248 → 5,450**, measured against `12711a8` with
+       `re.split(r'(?m)^(## .*)$')` + `str.split()` (`ENVIRONMENT.md` trap 7:
+       a bare `wc -w` undercounts this prose by 2.4-4.5%).
+
+       *(This one figure was wrong twice before it was right, in the write-up
+       of the rule about it, and both are kept rather than patched away. First
+       "306 → 461", asserted from drafting beside a paragraph whose every other
+       figure was measured — wrong by 47. Then "501", measured but taken before
+       the last edit to the paragraph, which reflowed two clauses onto em
+       dashes — wrong by 7. The second is the sharper one: measuring is not
+       enough if the measurement predates the final edit.)*
 
 **Not proposed: a gate for either finding.** A's discipline is a writing rule
 with no mechanical form; B is the existing red-proof rule working three times.
