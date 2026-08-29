@@ -315,6 +315,59 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 206 — Standardize sweep: fourth identical clean result, and one genuine candidate examined and correctly left alone (2026-08-29)
+
+Rule 2 at **4/4 OVERDUE**. All three standing lanes matched the baseline three
+prior sweeps (194, 197, 202) already established, exactly:
+
+- `scan:dead-style` — **0 dead** of **1,428** live inline declarations.
+- `report:css-repeats -w @busy-office/ui` — **8 groups**, same pairs.
+- `report:prose` — **14** flagged pages (9 over-2x-median overall + 5
+  additional at the per-family threshold), every one already carrying a
+  verdict from an earlier sweep.
+
+Both detectors are `@exact` (declared in their own headers, self-test-exempt),
+so a fourth identical result is the expected signal for this class of check,
+not a suspicious one — this was already established and is not re-argued here
+(Objective grill, Slices 199-202).
+
+**One real candidate for consolidation, checked and left alone.** This
+session's motion work (200.1 dialog, 200.4 data-table bulk-actions,
+pre-existing offcanvas/143.4 and dropdown) now has FOUR separate
+`@starting-style` + `allow-discrete`-family blocks, each with its own
+multi-paragraph comment re-explaining the same tradeoff (why allow-discrete,
+what happens where it's unsupported, how reduced motion is handled for free
+by the token). That reads like exactly the kind of repeated-narration pattern
+CLAUDE.md's own doctrine says to check. It is not: `report:css-repeats`
+correctly does NOT flag it, because the four blocks are not byte-identical —
+durations differ (`--bo-motion-duration-base` for dialog/dropdown,
+`--bo-motion-duration-slow` for offcanvas), and 200.4's is structurally
+asymmetric (transition declared on the visible rule only, no
+`display … allow-discrete` at all — deliberately entrance-only, unlike the
+other three which animate both directions). Plain CSS has no mixin/`@apply`
+mechanism to share a *pattern* without sharing a *rule body*, and forcing one
+here (a custom property recipe, a shared class) would work against this
+repo's own preference for composing from tokens over inventing abstraction
+for a four-instance pattern with three different concrete shapes. Left as
+four components each carrying their own correctly-differentiated rule, per
+the standing verdict `report:css-repeats`'s own doctrine already states for
+exactly this case: "a UTILITY and a component PART that need the same
+declarations must each carry them."
+
+**205.1 checked, not duplicated.** Filed cleanly by 200.4's close, a single
+instance, real Accept block with a base-rate-first instruction (94.11) — nothing
+to correct.
+
+No gate proposed. Nothing to consolidate.
+
+1. [x] **206.1 — DONE. Standardize sweep, fourth clean result on all three
+       lanes; the one repeated-narration pattern found (motion `@starting-style`
+       comments) checked against `report:css-repeats` and correctly not
+       flagged — three different duration tokens and one structurally
+       asymmetric rule (200.4) mean the four blocks are not the same
+       declaration body, so nothing is left unconsolidated by this being
+       skipped.**
+
 ## Slice 205 — `check:rf-floor` says "every use of a feature above Chrome 108 is guarded" while checking a fixed list of six (2026-08-29)
 
 **Found from inside the 200.4 dispatch, not reported to it**, and filed rather
