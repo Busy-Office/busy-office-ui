@@ -231,6 +231,125 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 186 — Objective grill of Slices 180, 183, 184: the loop's self-descriptions are the thinly-gated surface, and the hand-off is wrong at HEAD (2026-08-29)
+
+Dispatcher **rule 3**, `Objective 3 / 3 OVERDUE [180, 183, 184]`, read from
+`dispatch_status.py`. Full report:
+`.roundtable/grill-objective-180-183-184-2026-08-29.md`.
+
+**The question the hand-off proposed was answered, and its premise is false.**
+`RESUME.md` asked *"how many other closed Accept criteria stopped holding the day
+they were ticked?"* — **none of that shape exist. 1 of 275.**
+
+```
+# 275 Accept criteria parsed from ROADMAP.md + ROADMAP-archive.md
+# marker /\*{0,2}Accept\*{0,2}\s*:/i (all four written forms occur); criterion
+# bounded at the first blank line OR the next `N. [x]` item marker
+#   11 recurring-obligation needles -> 5 hits
+#   widened to 21 needles           -> 4 hits   (zero new; the space is saturated)
+```
+
+Hand-read, the four are: 184.1's own Accept (quotes 28.1, imposes nothing
+ongoing), 162.1 (incidental), 169.3 (a *description* of `ENVIRONMENT.md`, and it
+holds), and **28.1 — the one genuine recurring obligation, decayed in a day**.
+From the other side, **117 of 275 (43%)** name a gate, script or test and so
+re-check themselves. The criterion form here is artefact-based by construction,
+which is what CLAUDE.md's own rule pushes it toward. **So 184.1 did not patch one
+leak in a leaky system — it supplied a mechanism for the one thing an Accept
+criterion structurally cannot express.**
+
+**The instrument was wrong twice on its first runs, both caught before quoting:**
+block over-capture reported 19 (`on every` landing in narrative like *"prints on
+every docs build"*), and `each run` matched inside **`each rung`** — verified with
+`grep -o 'each run.'` → `each rung`, needle dropped.
+
+**What the three slices share: a self-description checked against the wrong thing,
+or nothing.** 180 — `@exact` verified against the tag *text*, not the code. 184 —
+rule 5's freshness verified by nothing, for 10 wake-dates. 183 — `RESUME.md`'s
+"needs a browser" verified by nothing, for eight wakes. **183 is the control that
+keeps this honest: when finally checked, 5 of 5 were clean.** So the finding is
+*self-descriptions are unverified*, **not** *they are wrong*. Recorded as
+**Hypothesis** (n = 4 slices, one corpus, no independent source).
+
+**Refused: a general "gate every self-description" programme.** 176.2's rule-6
+predicate was true of 19 of 19, and 94.11's comment predicate true of 155 of 155;
+the blanket gate that distinguishes nothing is this repo's recorded failure mode.
+One reconciliation, base rate measured first, is the whole proposal.
+
+1. [ ] **186.1 — `RESUME.md`'s slice-id claims are reconciled against
+       `ROADMAP.md`'s checkboxes, and the disagreement is reported.**
+
+       **The failure 184 diagnosed recurred one wake later and is live at
+       HEAD.** `RESUME.md` states *"the six older items are still owner-blocked
+       (`112.3`, `112.4`, `173.2`, `175.4`, `176.3`, `15.12`)"*. At `751959eb`,
+       **`175.4` is `[x]` closed**, and **`173.2` is open but the owner picked
+       (b) on 2026-08-29**. Cause, from the commit record: `6c4cfae` (09:16)
+       wrote the decisions into `ROADMAP.md`; `751959eb` (09:17) touched two
+       files and `RESUME.md` was not among them.
+
+       ```
+       grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                              # 5
+       grep -o '`[0-9]\{1,3\}\.[0-9]\{1,2\}`' .roundtable/RESUME.md | sort -u # 6
+       ```
+
+       **Base rates, measured before proposing.** The weak proxy — wakes
+       changing the open-checkbox set without touching `RESUME.md` — is **22 of
+       42 (52%)**, reported as an exposure bound, not as a defect count (a wake
+       closing an item the hand-off never names leaves nothing stale). The sharp
+       predicate — at a wake-end, does `RESUME.md` backtick a slice id that
+       `ROADMAP.md` records `[x]`? — fires at **2 of 58 wake-ends (3%)**:
+       `4be166be` (`177.1`) and `751959eb` (`175.4`, HEAD). **Not 0, not 100.**
+       Noise is low: **83** backticked ids across all **80** revisions, ~1 per
+       revision, and today all six are exactly the blocked-set claim.
+
+       **The measuring parser under-reported first and was reconciled, not
+       trusted:** `^\s*\d+\. \[ \] \*\*([\d.]+)` found **4** where a raw
+       `grep -c` gives **5** — `15.12` is written `12. [ ] **AT runtime
+       evidence**`, no numeric id in the bold. CLAUDE.md's `STATUS.md` failure
+       (7 of 9), reproduced inside the instrument written to measure a mirror.
+
+       **Home: `record_iteration.py`, advisory, beside `check:resume-charter`** —
+       not `check:repo`. `.roundtable/**` is in CI's `paths-ignore`, so a CI gate
+       reading it is the contradiction 169.4/175.3 already resolved once; and
+       failing a build over a stale hand-off would block the work the loop
+       exists to do. Same trade, stated: nothing rejects a commit that leaves the
+       hand-off stale.
+
+       *Accept* — properties, not predicted values:
+       - The check reports every slice id `RESUME.md` names in backticks that
+         `ROADMAP.md` records as `[x]` closed, and its open-item count **agrees
+         with a raw `grep -c` of `N. [ ]` taken from `ROADMAP.md` itself** —
+         refusing to print a verdict when the two disagree, the guard
+         `rows()` and `generate_status.py` already apply. Reconciled against the
+         **file**, never against anything the caller passed.
+       - Unnumbered open items (`12. [ ] **AT runtime evidence**`) are carried,
+         not silently dropped — the defect that made the first draft read 4 of 5.
+       - Red-proved by **injection**, each injection confirmed to have landed
+         before its result is believed (grep the file, not the diff), and the
+         file restored and checked byte-identical after: adding a backticked
+         closed id makes it report; removing today's `175.4` makes it quiet.
+         **A green red-proof is a defect in the injection until proven
+         otherwise.**
+       - It declares its signal per the self-test rule. `@heuristic` vs `@exact`
+         is decided by what the shipped code does, not by what is convenient —
+         180.1's whole finding was a tag that disagreed with its own arm.
+       - **Finding the base rate has moved is a satisfying outcome**: if a re-run
+         reports 0 of N at ship time, that is recorded with the command, not
+         worked around.
+
+2. [ ] **186.2 — `173.2` is browser-blocked, not owner-blocked, and rule 4's
+       halt reasoning should say which.** The owner answered on 2026-08-29;
+       `173.2`'s Accept needs a live measurement (row at 53px with an error
+       present and nothing focused, then on focus, red-proved by reverting to
+       the flow message), so **no cloud wake can take it** and a local wake can.
+       Four wakes have now reported rule 4 as "all open items owner-blocked";
+       that sentence is what went stale.
+       *Accept*: the hand-off distinguishes **owner-blocked** from
+       **browser-blocked** when it reports rule 4's input, so a local wake can
+       see at Step 0 that there is dispatchable work a cloud wake could not take.
+       Corrected in this wake's hand-off already; the item is whether the
+       distinction survives the next rewrite.
+
 ## Slice 184 — rule 5 has read ten-day-old numbers for ten wake-dates, and the Accept criterion that was supposed to prevent it stopped holding the day it was ticked (2026-08-29)
 
 Found while evaluating dispatcher rule 5 on a cloud wake, by opening
@@ -429,6 +548,41 @@ would not hit the scoped-package restricted default.
    after which the Trusted Publisher can be set and CI takes over. If so, the
    first release genuinely is a hand operation and the workflow change only
    covers releases *after* it.
+
+**UPDATE 2026-08-29T01:37Z (cloud wake, Slice 186's grill) — THE E404 IS GONE,
+AND THIS SLICE'S CHICKEN-AND-EGG HYPOTHESIS WAS CONFIRMED BY EVENTS.** Asked the
+registry, which is the authority, rather than copying this slice's own text:
+
+```
+npm view @busy-office/create-ui version                 # 0.1.0   (was E404)
+npm view @busy-office/create-ui time --json             # 0.1.0 published 2026-08-29T01:30:23.790Z
+npm view @busy-office/create-ui name dist-tags maintainers
+#   name = '@busy-office/create-ui'  dist-tags = { latest: '0.1.0' }
+#   maintainers = 'thepfmind <thepfmind@gmail.com>'
+node -p "require('./packages/create-ui/package.json').version"   # 0.1.0 — agrees
+```
+
+**The timing pins the causation, and both dispatchers' clock offsets were resolved
+to UTC before claiming it** (`ENVIRONMENT.md`: local writes `+0800`, cloud `+0000`):
+this slice was filed at `6c4cfae` **01:16:54Z**, and the publish landed
+**01:30:23Z — 13½ minutes later**. So item 2's prediction — *"the first publish
+cannot use OIDC and must be done manually, after which the Trusted Publisher can
+be set"* — is what actually happened. The finding was acted on, by hand, at once.
+
+**Two sentences in this slice are now false and are struck rather than
+overwritten** (the strike-don't-overwrite rule): *"it has never been published"*
+and *"`@busy-office/create-ui` has no package page"*. It has one, since 01:30Z.
+
+**What this does NOT close, and it is now more urgent, not less.** The workflow
+still publishes core only, so **the next release silently skips `create-ui`** —
+and the package is now LIVE, pinning `^0.5.0` against a core that will move. The
+failure mode has changed from *"the front door 404s"* to *"the front door ships a
+stale pin and nothing republishes it"*, which is quieter and worse. Item 1's
+version-match question is unchanged and is still an owner call.
+
+**The direction moved: `RESUME.md`'s Direction block named exactly this as the one
+thing that would be new information** (*"the registry answering something other
+than E404"*). It is answered.
 
 *Accept*: either the workflow publishes both packages on a release with the
 version question answered explicitly in its comments, or a recorded decision
