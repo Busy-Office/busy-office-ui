@@ -255,10 +255,30 @@ markdown-only diff). **Two CI commands are NOT in that list:**
   at `/usr/bin/docker`, which is a trap worth naming, but there is no daemon:
   `docker info` returns *"dial unix /var/run/docker.sock: no such file or
   directory"*. Finding the binary is not evidence the daemon runs.
-- **`npm run check:po-app -w docs`** — **reproduces RED here on a commit CI
-  reports green**, so a cloud wake must not read its red as a defect, and must
-  not "fix" it. See roadmap 208.3; the divergence is unexplained, and which
-  environment is right has not been established.
+- **`npm run check:po-app -w docs`** — **red here, green on CI, and the
+  mechanism is now known: the container cannot fetch htmx.** The reference app
+  loads it from a CDN (`examples/po-app/server.mjs:125`,
+  `https://unpkg.com/htmx.org@2.0.4`); the agent proxy refuses that host with
+  `net::ERR_TUNNEL_CONNECTION_FAILED`, the page then throws `htmx is not
+  defined`, and every windowed-list assertion is downstream of htmx — chunks
+  past the first two arrive via `htmx.ajax`. So the list stays at 2 tbodies /
+  200 rows for the whole scroll loop, never exceeds the 3-chunk resident
+  budget, and evicts nothing. **`chunk0Evicted: false` here means "htmx never
+  loaded", not "eviction is broken"** (roadmap 208.3, which established this by
+  serving htmx from `node_modules` through request interception and watching
+  the same assertion pass, 4 of 4, in this container).
+
+  The gate now says so itself — its first windowed-list check reports
+  `typeof window.htmx` — so the expected reading here is **2 of 19**, with the
+  precondition named first. Do not "fix" either failure; both are this
+  container. Whether the app should vendor htmx at all is roadmap **211.1**, an
+  open product call.
+
+  **The general shape, worth carrying:** a browser-driven gate whose subject
+  loads anything from the public internet reports a *downstream* symptom in an
+  egress-restricted environment. Read the page console before believing the
+  assertion's own diagnosis — `page.on('console')` and `page.on('pageerror')`
+  cost one line each and were what four prior runs were missing.
 
 `sqlite3` is NOT installed in this container. Query the `loops.db` mirror with
 Python's `sqlite3` module — `python3 -c "import sqlite3; ..."`.

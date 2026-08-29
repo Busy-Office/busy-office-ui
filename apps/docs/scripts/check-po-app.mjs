@@ -308,6 +308,29 @@ try {
   const page = await browser.newPage();
   await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
   await page.goto(`${base}/movements`, { waitUntil: 'networkidle0', timeout: 20000 });
+  /* PRECONDITION, and it is the whole reason this block reads a `check()`
+     rather than an assumption. Every windowed-list assertion below is
+     downstream of htmx: chunks past the first two arrive through
+     `htmx.ajax`, so with htmx absent the list never grows past its two
+     initial chunks, never exceeds the 3-chunk resident budget, and never
+     evicts anything. The gate then reports `chunk0Evicted: false` — which
+     reads as "eviction is broken" and is not what happened.
+     That is not hypothetical: roadmap 208.3 spent four runs across two
+     cloud containers on exactly that misreading. The app loads htmx from a
+     CDN (`server.mjs`'s `<script src="https://unpkg.com/...">`), an
+     egress-restricted container refuses the host with
+     `ERR_TUNNEL_CONNECTION_FAILED`, and the payload was byte-identical
+     every time. Naming the missing input is this repo's own rule — a gate
+     that cannot run must fail loudly, never skip quietly, and a derived
+     artefact may not decide on its own what it failed to see. */
+  check(
+    'windowed list: htmx loaded, so the assertions below are testing the app and not a blocked CDN',
+    (await page.evaluate(() => typeof window.htmx)) !== 'undefined',
+    JSON.stringify({
+      htmx: await page.evaluate(() => typeof window.htmx),
+      hint: 'the app loads htmx from a CDN; an egress-restricted environment blocks it, and every windowed-list result below is then vacuous',
+    }),
+  );
   const win = await page.evaluate(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const main = document.querySelector('.bo-app-shell__main');

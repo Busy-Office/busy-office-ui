@@ -315,6 +315,71 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 211 — two things 208.3's root-cause turned up: a reference app that cannot run without the public internet, and a scroll-anchor assertion nobody had ever exercised in a container (2026-08-29)
+
+**Filed by the cloud wake that closed 208.3, not built by it.** Both are real
+measurements from that investigation; neither is what 208.3's Accept asked for,
+and building either inside it would have been widening the item.
+
+1. [ ] **211.1 — `examples/po-app` cannot run without reaching a CDN, and the
+       cost of that landed on a gate rather than on a user.** `server.mjs:125`
+       is `<script src="https://unpkg.com/htmx.org@2.0.4"></script>`, while the
+       same shell already serves `/assets/css/htmx.min.css` locally — so the app
+       is half-vendored today. In an egress-restricted container the script
+       404s at the proxy and the app silently loses every htmx behaviour;
+       `check:po-app` spent four runs across two containers reading that as an
+       eviction bug (208.3).
+
+       **The refusal that filed this is recorded rather than assumed away:**
+       vendoring changes what the reference app *teaches* — a real consumer
+       wiring htmx from a CDN, which is what `/getting-started/htmx` documents —
+       so it is a product call, not a diagnostic side effect. `htmx.org` is
+       already a dependency in `node_modules`, so the mechanism costs nothing;
+       the question is entirely whether the example should stop demonstrating
+       the CDN wiring.
+
+       *Accept:* one of — (a) htmx is served locally by the app and
+       `/getting-started/htmx` still shows the CDN form as the thing a consumer
+       writes, with the divergence stated on the example's own page; or (b) the
+       CDN stays and this item records the reason it is worth an app that cannot
+       run offline. Either way, `check:po-app`'s own result in an
+       egress-restricted container is re-measured and written down — **finding
+       that (a) makes it 19 of 19 here is a satisfying outcome, and so is
+       finding it does not.**
+
+2. [ ] **211.2 — `check:po-app`'s scroll-anchor assertion has never run in a
+       cloud container, and the first four times it did, it read 98 / 49 / 0 / 0
+       against a threshold of ≤ 2.** The assertion is *"windowed list: scrolling
+       back re-loads the chunk with NO scroll jump and NO lost selection"*,
+       which requires `anchorShift <= 2`. Until 208.3 it passed here **only
+       vacuously** — with htmx blocked nothing ever moved, so `anchorShift` was
+       0 by construction. Served htmx locally, it moved.
+
+       ```
+       run 1  anchorShift 98      run 3  anchorShift 0
+       run 2  anchorShift 49      run 4  anchorShift 0
+       ```
+
+       Every other field in the payload held in all four (`chunk0Reloaded`,
+       `scrollShift 0`, `checkboxRechecked`, `countAtEnd "1 selected"`,
+       `midRowIndexOk`). **Stated no more strongly than the instrument
+       supports:** the measurement was taken through a request-interception
+       shim that serves htmx from memory, which is *not* how any real
+       environment loads it, so the timing is not the shipped timing. It is
+       filed because 2-of-4 red on a shipped correctness property is not a
+       thing to leave unrecorded, not because the framework is accused.
+
+       *Accept:* the anchor property is measured where htmx loads the way it
+       actually ships — CI, or a local wake — over enough runs to say whether
+       `anchorShift` exceeds 2 there at all; then either a defect is named with
+       the measurement that names it, or this item records that the variance is
+       the shim's and closes. **Finding the premise false — that it is stable
+       everywhere htmx loads normally — is a satisfying outcome.**
+
+       Re-runnable: the probe is the gate's own `page.evaluate` block copied
+       verbatim with `page.setRequestInterception` fulfilling
+       `https://unpkg.com/htmx.org*` from `node_modules/htmx.org/dist/htmx.min.js`.
+
 ## Slice 210 — the motion-literal gate refuses itself: 0 of 23 under its own wording, and its only three reds under a wider one are three right answers (2026-08-29)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake **0 open
@@ -757,64 +822,72 @@ Trap 1c caught this wake out in exactly the documented way on its first run.
        `check:formatting` reaching CI unrun because this list did not name
        it.**
 
-3. [ ] **208.3 — `check:po-app` reproduces RED in a cloud container on a commit
-       CI reports GREEN, and the cause is not established.** Measured
-       2026-08-29 on `eceffbc` (CI run 656, conclusion `success`) plus a
-       markdown-only diff, so nothing in the diff can reach the reference app.
+3. [x] **208.3 — DONE 2026-08-29 (cloud wake). CAUSE ESTABLISHED, and it is
+       an ENVIRONMENT ARTEFACT: the reference app loads htmx from a CDN, an
+       egress-restricted container refuses the host, and every windowed-list
+       assertion is downstream of htmx.** The container's console says it in
+       one line — `net::ERR_TUNNEL_CONNECTION_FAILED` on
+       `https://unpkg.com/htmx.org@2.0.4` (`examples/po-app/server.mjs:125`),
+       then `htmx is not defined`. Chunks past the first two arrive through
+       `htmx.ajax`, so with htmx absent the list stays at **2 tbodies / 200
+       rows / `data-next-offset="200"` for all ten scroll iterations**, never
+       exceeds the 3-chunk resident budget (`DEFAULT_RESIDENT_CHUNKS = 3`),
+       and evicts nothing. `renderedBounded` then passes *vacuously* — 200 is
+       under 400 because the DOM never grew.
 
-       **Byte-identical payload across three runs** — two of the unmodified
-       gate and one of the 40-iteration probe below — failing one behaviour of
-       18:
+       **The app is not at fault, and that is measured rather than argued.**
+       One variable changed: htmx served from `node_modules/htmx.org` via
+       request interception, the gate's windowed-list `page.evaluate` block
+       copied VERBATIM, same container, same clone, same commit.
 
        ```
-       FAIL windowed list: deep scroll evicts to height-true spacers and keeps the DOM bounded
-       {"rowcount":"50001","chunk0Evicted":false,"spacerMatchesReal":false,
-        "renderedBounded":true,"hiddenInputSurvives":true,"chunk0Reloaded":true,
-        "anchorShift":0,"scrollShift":0,"checkboxRechecked":true,
-        "countAtEnd":"1 selected","midRowIndexOk":true}
+       A  no intercept   htmx undefined   chunk0Evicted false  spacerMatchesReal false  FAIL
+       B  htmx served    htmx object      chunk0Evicted true   spacerMatchesReal true   PASS
        ```
 
-       Only `chunk0Evicted` is false; `spacerMatchesReal` is downstream of it.
-       Everything else the windowed list promises holds here — the DOM stays
-       bounded, the chunk re-swaps, selection survives, and the anchor and
-       scroll shifts are both exactly 0.
+       A reproduced the payload recorded above **byte-identically** (the
+       fifth run of the class). B passed in **4 of 4** runs. So eviction
+       works exactly as documented *in this very container* the moment its
+       precondition is met.
 
-       **The obvious hypothesis was tested first and is REFUTED.** The probe
-       gives eviction a fixed budget — `for (let i = 0; i < 10; i++) { … await
-       sleep(350); }` — which is the shape that goes red under container
-       contention. A throwaway copy of the gate with that loop at **40**
-       iterations (injection confirmed present in the probe before running it)
-       produced a **byte-identical payload**. It is not a time budget, and this
-       is written down so the next wake does not spend the same round on it.
+       **Accept (a) is answered without a third environment**, which is the
+       "finding the premise false is a satisfying outcome" clause landing:
+       (a) exists to distinguish which side is right, and the mechanism
+       distinguishes them directly — neither the app nor CI is wrong, the
+       container cannot fetch a script the app needs. A local wake with
+       Podman would now only re-confirm a cause already named.
 
-       **Reproduced byte-identically in a SECOND cloud container** (Slice 209's
-       grill, 2026-08-29, on `6105054` — a different container, a different
-       clone, a later HEAD, the fourth run overall). The weakest remaining
-       hypothesis, that the red was one container's accident, is refuted: the
-       failure is deterministic in this environment class. This does **not**
-       settle which side is right — a second instance of the same class is not
-       the third environment (a) asks for.
+       **(b) the side that is wrong is the measurement, not the app.** No P0
+       filed: nothing shipped is broken. **(c) `ENVIRONMENT.md`'s
+       `check:po-app` entry now carries the mechanism**, replacing
+       "unexplained".
 
-       **Which environment is right is NOT established, and neither reading is
-       assumed here.** Either the container's headless Chrome does not fire the
-       eviction path (making the local red an artefact), or eviction is
-       genuinely broken and CI's environment masks it. Nothing measured so far
-       distinguishes them, and the gate's own header records four real bugs it
-       caught during development, so it is not a detector that cannot fail.
+       **Fixed beside it — the gate stated the wrong thing, and that is the
+       defect worth spending code on.** `check-po-app.mjs` now asserts the
+       precondition first: *"windowed list: htmx loaded, so the assertions
+       below are testing the app and not a blocked CDN"*. It reports
+       `typeof window.htmx` and names the blocked-CDN mechanism in its
+       payload. This is not "fix the gate so it passes here" — it still
+       fails here, and should; it fails *saying the true thing*. Red-proved
+       both directions on the predicate itself: htmx blocked → `undefined`
+       → RED; htmx served → `object` → GREEN. The real gate now reports
+       **2 of 19** with the precondition named first. On CI, where the CDN
+       resolves, it is a 19th passing check.
 
-       *Accept:* (a) the divergence is reproduced or refuted on a THIRD
-       environment — a local wake with Podman is the obvious one — and the
-       result recorded either way; (b) whichever side is wrong is named with
-       the measurement that names it, and if it is the app, a P0 is filed; (c)
-       if it turns out to be an environment artefact, `ENVIRONMENT.md`'s entry
-       for `check:po-app` says so with the mechanism, replacing today's
-       "unexplained". **Finding the premise false — that it passes elsewhere in
-       the cloud too — is a satisfying outcome**, not an off-plan one.
+       *Refused inside this item, with the reason:* vendoring htmx into
+       `examples/po-app` so the reference app runs offline. It would make
+       this container green, but it changes what the example *teaches* — a
+       real consumer wiring htmx from a CDN — which is a product call for
+       the owner, not a side effect of diagnosing a gate. Filed as Slice 211
+       rather than done here.
 
-       *Not a P0*: `main` is green on CI, nothing shipped changed, and the
-       failing assertion is in a reference app, not the framework. Filed rather
-       than fixed because "fix the gate so it passes here" would be changing a
-       gate that passes on CI, on no evidence about which side is correct.
+       *Superseded — kept because it is the hypothesis space a future wake
+       would otherwise re-walk:* the time-budget hypothesis was tested and
+       refuted (a 40-iteration copy of the 10-iteration eviction loop gave a
+       byte-identical payload) — correctly, because iterations were never
+       the constraint. Two prior cloud containers reproduced it identically,
+       which established determinism but not cause; the console error was
+       the thing nobody had read.
 
 ## Slice 206 — Standardize sweep: fourth identical clean result, and one genuine candidate examined and correctly left alone (2026-08-29)
 
