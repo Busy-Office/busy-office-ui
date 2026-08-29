@@ -1139,3 +1139,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 09:43 · Meta · refusal · folding sections 8 and 10, which share 7 of 7 probed worked examples and point at each other zero times — re-narration in a different grammar is this repo's recorded working mechanism · refused · 4ea2cd7f
 - 2026-08-29 09:43 · Meta · refusal · restructuring on section 14's looser fit (its subject is where a gate runs, not whether a detector can fail) — that would be the manufactured merge the Accept forbids · refused · 4ea2cd7f
 - 2026-08-29 09:43 · Meta · refusal · any gate for 'eight sections on one subject', per the Accept and 94.11 — it is a judgement about what prose MEANS · refused · 4ea2cd7f
+- 2026-08-29 18:34 · Continue · build · 193.2 — re-measured 42 reopen conditions: 11 checkable (1 still not fired, 5 already fired/closed, 5 uncheckable without more corpus), 23 semantic, refused a register mechanism · landed · 1c111d7
+- 2026-08-29 18:34 · Meta · refusal · a 42-row reopen-condition register — 23 of 42 are semantic and unadjudicable by the register itself (94.11) · refused · 1c111d7
