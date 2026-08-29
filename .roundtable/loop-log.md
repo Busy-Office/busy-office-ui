@@ -1135,3 +1135,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 08:49 · Objective · grill · Objective grill of Slices 190, 191, 192 (artefact half) — 12 of 13 measured claims reproduce; the false one is the horizontal-boundedness sentence 190.1 shipped beside them (196.1 filed) · logged · a07d5830
 - 2026-08-29 08:49 · Meta · refusal · a gate for 196.1 (94.11: one candidate element in the whole corpus) · refused · a07d5830
 - 2026-08-29 08:49 · Meta · refusal · an item for 192.1's 13-word section-count difference — it is the heading line, recorded twice already · refused · a07d5830
+- 2026-08-29 09:43 · Continue · build · 193.1 — execute 167.1's reopen watch on CLAUDE.md: fold nothing, retire the watch (its premise is a traversal concern; CLAUDE.md is delivered whole) · landed · 4ea2cd7f
+- 2026-08-29 09:43 · Meta · refusal · folding sections 8 and 10, which share 7 of 7 probed worked examples and point at each other zero times — re-narration in a different grammar is this repo's recorded working mechanism · refused · 4ea2cd7f
+- 2026-08-29 09:43 · Meta · refusal · restructuring on section 14's looser fit (its subject is where a gate runs, not whether a detector can fail) — that would be the manufactured merge the Accept forbids · refused · 4ea2cd7f
+- 2026-08-29 09:43 · Meta · refusal · any gate for 'eight sections on one subject', per the Accept and 94.11 — it is a judgement about what prose MEANS · refused · 4ea2cd7f

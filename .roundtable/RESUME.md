@@ -17,177 +17,170 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 3 → Objective,
-grill of [190, 191, 192], landed as Slice 196**). Working tree clean at
-hand-off; the wake's commits went out as one push.
+Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 4 → Continue,
+build mode, `193.1`**). Working tree clean at hand-off; the wake's commits went
+out as one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 6 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 5 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-## ⚠ A COLLISION — and this time the other dispatcher's report landed at the SAME FILENAME
+**No collision this wake.** `git fetch origin main` at Step 0 and again
+immediately before the first commit both read `a7c65f7c` unchanged.
 
-**Fourth recorded collision, second caught before any commit.** `git fetch
-origin main` immediately before the first commit read `05809097..50d73b07`: the
-local dispatcher had taken **the same rule-3 dispatch**, grilled the same
-window, and pushed first as **Slice 195**, with its report at
-`.roundtable/grill-objective-190-191-192-2026-08-29.md` — the exact path this
-wake had already written.
+## What landed this wake (2026-08-29, cloud, rule 4 → `193.1`)
 
-Resolved per Step 0c (keep BOTH, neither is a duplicate) and the 189/190
-precedent: this work was rebased onto `50d73b07`, renumbered **195 → 196**, and
-its report renamed to the **`-b`** suffix. 195's findings have priority and are
-credited in the report.
+**167.1's reopen watch on `CLAUDE.md` was executed — the first thing to act on
+it since it was written. Outcome: fold nothing, and RETIRE the watch rather than
+re-arm it.**
 
-**Worth carrying forward as a mechanic, not just an incident.** Step 0c's
-guaranteed collision points are `loop-log.md`'s append point and a ticked
-`ROADMAP.md` box, and it already records that both can fail. **A third point
-exists that it does not name: two grills of one window derive the same report
-filename from the window itself**, so a `git mv`-shaped conflict is available on
-a wake that has committed nothing. Here the fetch caught it first, so nothing
-was lost; had this wake committed before fetching, the file would have collided
-on content rather than on path. Not filed as an item — Step 0c's decision is
-that collisions are accepted and its working half is the fetch, which worked.
-
-## What landed this wake (2026-08-29, cloud, rule 3 → Slice 196)
-
-**Thirteen claims from the window re-measured from the ARTEFACTS rather than
-from the prose about them. Twelve reproduce; the thirteenth is not a number.**
-
-| claim | verdict |
+| what was asked | what the measurement returned |
 |---|---|
-| `190.1`'s six-combination Accept | 6 of 6, −47/−51/−55 @1440, −29/−33/−37 @390 |
-| `190.1`'s corpus instrument | 1 page of 137 nests the message |
-| `190.2`'s `check:claims` | 144 |
-| `190.3`'s three specificities | (0,4,0) (0,3,1) (0,2,0), 3 of 3 |
-| `191.1`'s ratchet block | names `191.3`'s own cut at `9198e43f` |
-| `191.3`'s rule 4 after the move | 752 words |
-| `192.1`'s `CLAUDE.md` figures | 5,450 total, +202 on the section |
+| does the premise reproduce? | `seven = 1893` at `e3844c49`, **to the word** |
+| the eighth section | `0131ebc5` adds "A green red-proof …" (290 w) as a new `##`, unfolded |
+| the group at `a7c65f7c` | 8 of 17 sections, **2,385 of 5,248 body words = 45.4%** (the item said 43%; two of the eight grew after it was written) |
+| `grep -rn 'without folding'` | **5 lines**, not the item's 1 — Slice 195's grill report added two |
+| does each section change what a wake DOES? | **8 of 8 yes**; none is pure provenance |
+| does a wake reading one get a pointer to the others? | **7 of 56 ordered pairs**, and **6 of the 7 land on one section**; three of the eight point at nothing |
 
-**The one that fails is `data-table.css`'s sentence that the cell error message
-is "bounded so it can never introduce horizontal overflow".** At 390px it
-introduces **83px** of it in a container that had none, in all three densities.
-The cap bounds the message's WIDTH, not its RIGHT EDGE. Filed as **196.1**, open.
+**The decision, and why it is not obedience to the checkbox.** 167.1's wording —
+*"a wake reading one gets no pointer to the other six"* — is a **traversal**
+concern. It is correct for `ROADMAP.md` and `ROADMAP-archive.md`, the files it
+was written beside, which a wake walks. `CLAUDE.md` is not walked: it is
+delivered **whole** in every wake's instructions (17 of 17 `##` headings
+present, measured on this wake's own delivered text). The traversal the watch
+describes does not occur, so the watch is retired instead of re-armed.
 
-**n = 3 for `192.1`'s placement rule**, and instance 3 sits inside the fix for
-instance 1. `191` and `192` are clean controls — recorded, so the rule is not
-read as "every change rots".
+**Three things this wake refused**, each with the measurement recorded rather
+than acted on: folding sections 8 and 10, which share **7 of 7** probed worked
+examples and point at each other **zero** times (re-narration in a different
+grammar is this repo's recorded WORKING mechanism — section 7 exists for that
+reason and says so, and `LOOPS.md` has twice refused turning a paragraph into a
+pointer); restructuring on section 14's looser fit with the group's stated
+subject; and any gate, per the Accept and 94.11.
 
-**Two things this wake refused**, both recorded rather than done: a gate for
-196.1 (94.11 — the base rate over the corpus is one candidate element), and an
-item for the 13-word difference in `192.1`'s section word count (it is the
-heading line; `191.2` recorded the same cause for its own 12).
-
-**The probe that checked `190.3` was wrong twice before it was right** — three
-reference selectors matched nothing, and the subject selector was *paraphrased*
-(`:has(:user-invalid)` for the shipped `:has(input:user-invalid, …)`), which
-differs by exactly the (0,0,1) that decides the question. **Copy a selector from
-the sheet; never retype it from memory of what it says.**
+**The probe was wrong before it was right, twice.** The first cross-pointer scan
+gave two spurious HITs because a needle for one section was that section's
+neighbour's own vocabulary (`base rate`) — a detector reporting a pointer where
+there was only shared subject matter. The second, exact-substring, undercounted
+the shared examples at **5 of 7** until the two near-misses were read (*"the
+**docs** shell's own menu button"*, *"16-of-16 pages flagged"*). Both were caught
+before the number was used, which is the ordering section 8 asks for.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, **no screenshots at 1440px/390px in light and
 dark**. Nothing was visually verified and nothing is described as if it were.
 
-**Nothing this wake needed one.** `git diff --stat` names `ROADMAP.md` and one
-`.roundtable` report — no `.css`, no `.astro`. Every figure above is a DOM,
-computed-style or layout-geometry reading, which `ENVIRONMENT.md`'s cloud-wake
-section lists as takeable here. `ROADMAP.md` **is** read by the docs build
-(`gen-llms.mjs`), which is why the whole chain was re-run after the edit rather
-than trusted from the pre-edit build.
+**Nothing this wake needed one.** `git diff --stat` names `ROADMAP.md` alone —
+no `.css`, no `.astro`, no rendering change. The item is a recorded decision
+about prose; every figure in it is a git/word-count reading or a read of the
+file, none of which is on `ENVIRONMENT.md`'s cannot-run list.
 
-Gates green on the merged tree (`a07d5830`): core `build` + `test` (**146**
-passed), `docs:build`, `check:repo` (selftests **45 gates, 16 heuristic all
-self-tested**; slice-refs **396** citations / **178** slice numbers; dist-walkers
-63 scripts), `check:claims` **144**, `check:layout` **127** pages, `test:axe`
-**127 pages × 2 widths, zero violations**.
+Gates green on the committed tree: core `build` + `test` (**146** passed),
+`docs:build`, `check:repo` (selftests **45 gates, 16 heuristic all
+self-tested**; slice-refs **396** citations / **178** slice numbers),
+`check:claims` **144**, `check:layout` **127** pages, `test:axe` **127 pages ×
+2 widths, zero violations**. The whole chain was re-run after the final edit
+rather than trusted from the earlier build, because `check:slice-refs` reads
+`ROADMAP.md`.
 
 No `verifier` agent is available in this session, so the staged diff was read by
 hand — said plainly rather than logged as a verifier pass.
 
 **Traps exercised for real this wake:** 1 (the container started **detached** —
-`git branch --show-current` empty, local `main` stale at the pre-rebase
-`17b3ba67`; repaired with `git checkout -B main origin/main` before any commit),
-2 (unshallowed before any history figure: **1,618** commits), 1c (`CHROME_PATH`
-exported in the same command as every browser gate).
+`git branch --show-current` empty; repaired with `git checkout -B main
+origin/main` before any commit), 2 (unshallowed before any history figure:
+**1,622** commits), 1c (`CHROME_PATH` exported in the same command as every
+browser gate), 7 (word counts taken with Python `str.split()`, never bare
+`wc -w`).
 
 ## Counters after this wake
 
-Verified after recording: **1129** iterations by the parser against a raw
-`grep -c "^- "` of **1129**.
+Verified after recording: **1133** rows by the parser against a raw
+`grep -c "^- "` of **1133**.
 
 ```
-Standardize   1 / 4 Continue round   ok
-Objective     0 / 3 slices           ok   (reset by this wake's row)
-Optimize      0 wake-date(s) newer   ok   [newest pair: axe-violations]
+Standardize   2 / 4 Continue rounds   ok
+Objective     1 / 3 slices            ok   [193]
+Optimize      0 wake-date(s) newer    ok   [newest pair: axe-violations]
 ```
 
 **Rule 5's instrument is NOT stale** — `0 wake-date(s) newer`, so rule 5 was
 answerable and found nothing.
 
-**No metric recorded**, deliberately: every figure this wake is a one-off
-characterisation of someone else's claim, not a repeatable sample under an
-existing name, and a single-sample name pads the store rule 5 reads (184's
-discipline).
+**No metric recorded**, deliberately: every figure this wake characterises one
+prior claim about one file, not a repeatable sample under an existing name, and
+a single-sample name pads the store rule 5 reads (184's discipline).
 
 ## What the next wake should expect
 
-**Rule 3 is discharged (0/3), rule 2 reads 1/4, so rule 4 is where the next wake
+**Rule 2 reads 2/4 and rule 3 reads 1/3, so rule 4 is where the next wake
 lands.** Checkboxes at hand-off — re-count rather than copying:
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 6
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 5
 ```
 
 | item | blocked on | which list does it need? |
 |---|---|---|
 | `15.12` | **owner-blocked** (owner hardware, AT runtime) | neither; no wake can take it |
 | `112.3`, `112.4` | **owner-blocked** (briefs; `112.4` waits on `112.3`) | neither |
-| `193.1` | nothing | cloud-takeable — execute 167.1's reopen on `CLAUDE.md`; **folding nothing closes it** |
 | `193.2` | nothing | cloud-takeable — one measurement and a decision; **refusing a mechanism is the expected outcome** |
 | `196.1` | nothing | **split by branch** — see below |
 
 Oldest still-open is `15.12`, then `112.3`/`112.4`, all owner-blocked — so the
-oldest *dispatchable* one is still **`193.1`**. Say **which kind** of blocked
-when reporting rule 4 as finding nothing (`LOOPS.md` rule 4: owner-blocked /
+oldest *dispatchable* one is **`193.2`**. Say **which kind** of blocked when
+reporting rule 4 as finding nothing (`LOOPS.md` rule 4: owner-blocked /
 browser-blocked / agent-blocked), and for a browser-blocked one name which of
 `ENVIRONMENT.md`'s two lists it needs.
+
+**`193.2` inherits a live input from this wake, which is the point of doing it
+next.** It is about the 42 reopen conditions sitting in item bodies where
+nothing re-reads them. This wake executed one of the 42 — 167.1's — and the
+answer was that the condition had fired, gone unread for a day, and then turned
+out to rest on a premise that does not hold for the file it governs. That is a
+**second data point for 193.2's own hypothesis** (execution is predicted by
+whether a playbook step names the thing), and it cuts against a mechanism: what
+this one needed was not a register but a wake reading it. Record it; do not let
+it decide the item on its own.
 
 **`196.1` is split by branch, and the split is the honest part.** Its Accept
 allows either bounding the right edge (changes rendering) or correcting the
 comment (does not). **Branch (b) is fully cloud-takeable** — it is prose about
-code, and every measurement it needs is in §B of the report. **Branch (a)
+code, and every measurement it needs is in §B of
+`.roundtable/grill-objective-186-189-190-191-2026-08-29-b.md`. **Branch (a)
 changes what a user sees**, so a cloud wake taking it must name the screenshots
-as not taken; a local wake can close it outright. The geometry evidence itself
-is *not* the blocker: this wake took all of it here.
+as not taken; a local wake can close it outright.
 
 **Two blind re-scores are still owed and neither can be done in a cloud wake**
 (§3b step 4 needs a second agent): `scan`'s three fixed dimensions, and
 `skeleton · colour`. Unchanged by this wake.
 
 **Do not re-raise Slice 179's or 182.2's refusals, 176.3, the retired
-product-vs-machinery ratio, or Slice 195's finding A** (a grill re-arming rule 3
-with its own output — 195 measured it, refused a rule change, and this wake's
-own result is the counter-evidence: re-grilling the "already covered" slices is
-where the window's only defect was found). Re-measure before reopening anything.
+product-vs-machinery ratio, or Slice 195's finding A.** And **do not re-arm
+167.1's watch on `CLAUDE.md`** — it was executed and retired this wake, with the
+reason recorded in `ROADMAP.md`'s 193.1 decision block; reopening it needs new
+evidence that `CLAUDE.md` is navigated rather than delivered whole. Re-measure
+before reopening anything.
 
 **Adjudicated at hand-off, which is the step `check:resume-slice-ids` exists to
 prompt.** The ids this file names in backticks that `ROADMAP.md` records `[x]`
-closed are **nine** — `190.1`, `190.2`, `190.3`, `191.1`, `191.2`, `191.3`,
-`192.1`, `173.2`, `185.1` — and every one is a **historical reference**, none a
-claim that any is open: the first seven are the claims this grill re-measured,
-listed with what each measurement returned; `173.2` is named as instance 1 of
-the placement rule; `185.1` is quoted in the Direction read. (`164.3` and
-`168.1` are named too and are archived, which the check reports separately and
-does not treat as a finding.) **This paragraph first said "seven" and was
-corrected by running the check** — the two it missed are the two that sit
-outside the table, which is the shape the check exists to catch. The genuinely
-open ids — `15.12`, `112.3`, `112.4`, `193.1`, `193.2`,
-`196.1` — are in the table above and are **not** among them, which is the check
-agreeing with the table.
+closed are **three** — `193.1`, `185.1`, `173.2` — and every one is a
+**historical reference**, none a claim that any is open: `193.1` is the item
+this wake closed and is described throughout in the past tense; `185.1` is named
+in the Direction read as one of the rows that *advanced* the direction; `173.2`
+is named there as one that narrates it. (`167.1`, `164.3` and `168.1` are
+archived, which the check reports separately and does not treat as a finding —
+167.1 is named only to say its watch is retired.) **This paragraph first named
+two and was corrected by running the check**, which is the second consecutive
+hand-off where the ids it missed were the ones outside its own summary table —
+the shape the check exists to catch. The genuinely open ids —
+`15.12`, `112.3`, `112.4`, `193.2`, `196.1` — are in the table above and are
+**not** among the closed set, which is the check agreeing with the table.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -207,15 +200,15 @@ from the sources named — never by copying the answers above you.**
   workflow's comments carry the recovery. A release cannot even be *attempted*
   today without a version bump — `check-publishable.mjs` exits 1 on both
   packages, by design.
-- **Did this wake advance it?** **No.** Rule 3 dispatched a grill; nothing in the
-  diff touches either package.
+- **Did this wake advance it?** **No.** Rule 4 dispatched a recorded decision
+  about `CLAUDE.md`'s structure; nothing in the diff touches either package.
 - **Work rows since the direction was decided that did not advance it:** derive
   it, do not increment. **Derived this wake, after this wake's row was
-  committed: 71 non-Meta work rows since `fb15cdc`; the needle matches 6;
+  committed: 72 non-Meta work rows since `fb15cdc`; the needle matches 6;
   reading them, `164.3`, the `0.1.0` release and `185.1` advance the direction,
   while `168.1`, the `173.2`/`185` triage and `186` narrate or detect it — so
-  68 of 71 did not.** *(Last honest reads: 65 of 68, 61 of 64, 56 of 59, 55 of
-  58, 52 of 55, 49 of 52, 46 of 47, 43 of 44, 41 of 42, 38 of 39.)*
+  69 of 72 did not.** *(Last honest reads: 68 of 71, 65 of 68, 61 of 64, 56 of
+  59, 55 of 58, 52 of 55, 49 of 52, 46 of 47, 43 of 44, 41 of 42, 38 of 39.)*
 
   ```
   # `git diff fb15cdc..HEAD` MISSES the current wake's rows until they are
