@@ -389,8 +389,8 @@ this proposal; noted here so it isn't lost, not triaged as part of this slice.
        delete/insert is explicitly exempted from the fade, stated in the
        same paragraph.
 7. [ ] **200.7 — a lint check that a raw ms duration or literal easing
-       function isn't hand-written in component CSS where a `--bo-motion-*`
-       token exists.** The one proposal item that's a genuinely mechanically
+       function isn't hand-written in component CSS where a `--bo-motion-`
+       prefixed token exists.** The one proposal item that's a genuinely mechanically
        checkable property (unlike a hand-authored "spec matrix," refused
        below) — matches this repo's own gate discipline: measure the base
        rate before shipping it. *Accept*: a script (or stylelint rule) scans
