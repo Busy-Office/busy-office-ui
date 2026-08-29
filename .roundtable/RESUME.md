@@ -96,15 +96,25 @@ markdown.
 
 ## Dispatcher state at hand-off
 
-Re-run `python3 scripts/loops/dispatch_status.py` rather than trusting a
-snapshot taken before this wake's row was recorded.
+Read **after** recording, which is the comparison `LOOPS.md` says has caught two
+of that counter's five historical failures:
 
-**Next wake: rule 4, oldest open non-blocked item.** Six open checkboxes across
-five slices:
+```
+Standardize   0 / 4 Continue rounds   ok        (reset by this wake's two rows)
+Objective     3 / 3 slices            OVERDUE   [200, 205, 208]
+Optimize      0 wake-date(s) newer    ok
+```
+
+**So the next wake is rule 3 — Objective — not rule 4.** This wake's own two
+rows took the Objective counter from 2/3 to 3/3 by closing Slice 208; the
+previous hand-off predicted rule 4 and that prediction is now wrong. Re-run
+`dispatch_status.py` rather than trusting even this snapshot.
+
+**When rule 4 IS reached**, six open checkboxes across five slices:
 
 | item | what | notes |
 |---|---|---|
-| `200.7` | lint check for hand-written durations outside the token scale | **oldest non-blocked — rule 4 picks this**; read 201.4 first |
+| `200.7` | lint check for hand-written durations outside the token scale | **oldest non-blocked — rule 4 would pick this**; read 201.4 first |
 | `201.4` | 200.7's proposed gate mostly duplicates `check:motion` already shipped | either outcome closes it |
 | `208.3` | `check:po-app` red in cloud, green on CI; cause unestablished | newest; **wants a LOCAL wake** — its Accept asks for a third environment |
 
