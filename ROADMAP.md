@@ -231,6 +231,38 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 195 — Objective grill of Slices 190, 191, 192 (2026-08-29)
+
+Rule 3 at 3/3. **The index check changed what this grill is**: slice 192 is
+itself an Objective grill whose window was `[186, 189, 190, 191]`, so **two of
+the three slices handed over were grilled hours earlier, by the same wake**.
+Honest scope: 192 alone. Report:
+`.roundtable/grill-objective-190-191-192-2026-08-29.md`.
+
+**(A) Rule 3 counts SLICES, not un-grilled slices, so a grill re-arms it with
+its own output.** Following the dispatcher correctly produces the "repeated
+subject" the index check exists to flag. **No rule change proposed** — the
+overlap is caught in one read, and a rule that occasionally re-offers material
+is safer than one that can skip it, which is the same trade 176.3 settled. The
+mitigation is that a grill names its already-covered slices in its first line,
+as this one does.
+
+**(B) Slice 192 asserted a number beside its measurement — the exact pattern it
+was written to document.** Its finding A is *"every defect in 173.2 was in
+something ASSERTED"*; its own report then quotes **"1 of 138 built pages"**,
+lifted from 190 and never re-run. CLAUDE.md separately records that a grill in
+this window disputed that same 138. So the figure was **disputed by one grill
+and repeated unverified by another**, and one command settles it:
+
+```
+find apps/docs/dist -name 'index.html' | wc -l      # 138
+```
+
+138 is correct — **which is the least useful way for it to end**: a wrong repeat
+gets caught, a right one teaches nothing and licenses the habit. Nothing new
+queued; CLAUDE.md already carries the rule, and this is a second instance
+recorded against it.
+
 ## Slice 194 — Standardize sweep: the previous sweep's own fix pointed at the next one (2026-08-29)
 
 Rule 2 at **4/4 OVERDUE**. All three standing lanes clean: `scan:dead-style`
