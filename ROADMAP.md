@@ -277,9 +277,10 @@ here or there.
 **Checked before writing**: the window is grill / sweep / grill, the shape that
 invites re-raising the product-vs-machinery ratio. Retired, and **not raised**.
 
-1. [ ] **196.1 — `data-table.css` says the cell error message is "bounded so it
-       can never introduce horizontal overflow". It introduces 83px of it at
-       390px, in a container that had none.**
+1. [x] **196.1 — CLOSED 2026-08-29, Branch B. `data-table.css` said the cell
+       error message is "bounded so it can never introduce horizontal
+       overflow". It introduces 83px of it at 390px, in a container that had
+       none.**
 
        `max-inline-size: min(48ch, 100cqi)` caps the message's **width** at the
        container's inline size, but the message is `position: absolute;
@@ -345,6 +346,63 @@ invites re-raising the product-vs-machinery ratio. Retired, and **not raised**.
          chosen branch leaves a measurable runtime property, a `check:claims`
          case is the right home for it — that is the recipe's existing step, not
          a new programme.
+
+       ---
+
+       **DECISION (196.1, executed 2026-08-29, dispatcher rule 4). Branch B —
+       the comment is rewritten to state the true bound and accept the
+       residual; the layout itself is unchanged.**
+
+       **Why not Branch A.** The message is `position: absolute;
+       inset-inline-start: 0` inside `.bo-form-field`, which is `position:
+       relative` on the CELL, not on the container. A width cap — `cqi`,
+       `%`, or a fixed value — bounds the box's own size, never its position,
+       and the box's right edge is *cell offset + width*. Closing that gap
+       exactly needs the field's own distance from the container's trailing
+       edge, and CSS has no container-query primitive for "distance to my
+       ancestor's far edge" on an absolutely-positioned descendant. The two
+       real alternatives both cost more than the bug: switching the message's
+       containing block to the container itself would keep it correctly
+       bounded but relocate it away from `inset-block-start: 100%` of the
+       FIELD — breaking "the box appears directly under the cell you focused",
+       which is the whole reason it's `position: absolute` on the field in the
+       first place; hand-computing a per-column offset as a custom property
+       would need updating every time a column is added, removed, or
+       reordered, for a bug with exactly one page in the corpus and zero
+       messages long enough to trigger it. Not worth engineering a general
+       solution for n = 1.
+
+       **The fix applied: none to the geometry, only to the claim.** Diff is
+       comment-only —
+       `git diff --stat -- packages/core/src/css/components/data-table/data-table.css`
+       reads `1 file changed, 21 insertions(+), 2 deletions(-)`, entirely
+       inside the `/* … */` block; no declaration value changed. The rewritten
+       comment states what the cap actually bounds (width, not edge position),
+       carries the +83px/390px/compact measurement from this item's own filing
+       as the residual, and names the accepted trade already argued above:
+       `.bo-data-table-container` is `overflow: auto` so the residual is
+       reachable by scrolling rather than clipped, `aria-describedby` carries
+       the full string to assistive tech regardless of layout, and the
+       137-page DOM walk that filed this item found exactly one page nesting
+       the pattern with a 21-character demo message — `swGrew 0`.
+
+       **190.1's contract survives by construction, not by re-measurement.**
+       Since no declaration value changed (confirmed by the diff above), the
+       six-combination vertical-visibility and row-height results 190.1
+       already measured are unaffected — there is nothing in this commit that
+       could move `msg.bottom`, `container.bottom`, or row height. Re-running
+       the browser harness would reproduce the same six numbers already on
+       record and add no information; skipped for that reason, stated rather
+       than silently assumed.
+
+       **No new gate.** Per the Accept's own branch-B path — the chosen branch
+       leaves no new measurable runtime property (the overflow is accepted,
+       not closed to zero), so there is nothing for `check:claims` to assert
+       that isn't already true of the shipped behaviour. Verified via
+       `npm run check:repo` (apps/docs) — 9 of 9 sub-checks pass, including
+       `check:slice-refs` resolving the new `roadmap 196.1` citation this
+       comment adds (397 citations checked, 178 slice numbers each heading one
+       section).
 
 ## Slice 195 — Objective grill of Slices 190, 191, 192 (2026-08-29)
 

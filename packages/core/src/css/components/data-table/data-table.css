@@ -497,8 +497,27 @@
        SIX-line 118px box that overran the reserve below. Measured control: the
        same message is 36px on ONE line at natural width. So the box grows to
        its content and is bounded by the TABLE's own width instead — wide
-       enough that realistic messages stay one or two lines, bounded so it can
-       never introduce horizontal overflow. */
+       enough that realistic messages stay one or two lines.
+
+       This bounds the message's WIDTH, not its right EDGE (roadmap 196.1).
+       The box is `inset-inline-start: 0` inside `.bo-form-field`, so its
+       right edge is *cell offset + width* — `100cqi` is measured against the
+       whole container regardless of where the field sits, so a message that
+       wants the full cap can still push past the container's right edge by
+       the cell's own offset. Measured at 390px/compact with a 247-char
+       message: container.scrollWidth grew 310px -> 393px (+83), vs 0 growth
+       at 1440px where the cap is never reached. Accepted rather than chased
+       further: `.bo-data-table-container` is `overflow: auto`, so the
+       residual is reachable by scrolling, not clipped or lost; and
+       `aria-describedby` carries the full message to assistive tech
+       regardless of layout. No shipped page hits it — the one page nesting
+       this pattern (`/patterns/editable-grid/`) carries a 21-char demo
+       message, well under the cap. A tighter fix would need the field's own
+       offset from the container's trailing edge, which CSS has no container-
+       query primitive for without either breaking the below-field anchor
+       this rule depends on or hand-computing a per-column offset that would
+       drift the moment a column is added or reordered — not worth it for a
+       corpus of one. */
     inline-size: max-content;
     max-inline-size: min(48ch, 100cqi);
     padding: var(--bo-space-1) var(--bo-space-2);
