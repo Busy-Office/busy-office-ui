@@ -1640,7 +1640,47 @@ per page, not two).
        53 → 81 URLs verified. Full suite green (13 docs gates incl. the
        URL-resolution check on all 29 new pattern links; `check:claims`
        90/90).
-3. [ ] **112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS —
+3. [ ] **112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR
+       ANSWERS (grilled 2026-08-29 at the owner's request; full report
+       `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).** The
+       block is now *precise*: every precondition the pilot set for itself has
+       landed, so briefs are the only remaining input, and four questions
+       decide whether they are worth spending.
+
+       - **All four self-imposed gates are met.** Substrate complete
+         (`patterns.json`: 39 patterns, **39/39** carrying states, data
+         contract and wrong-choice); llms.txt coverage present (83
+         `patterns/` refs for 39 pages); 110.4/109.3 landed; wrong-choice debt
+         down to 1, and that one is the deprecated `date`.
+       - **Part of the superstructure already shipped without the verdict.**
+         Q7 said the "Which pattern should I use?" page comes *after* the
+         verdict; it shipped as 112.5, generated from `patterns.json`. Half of
+         Q7 honoured (canonical source), half not (no verdict). **Recorded,
+         not actioned** — the decision with teeth gated only 112.4, and
+         un-shipping a generated docs page to satisfy a sequencing clause
+         would be ceremony. What it does establish: the verdict no longer
+         gates anything a wake can build, only 112.4, which is itself blocked
+         on 112.3. A closed loop with the owner on both ends.
+       - **The suite answers a NEIGHBOURING question for free** — whether a
+         correctly-picked pattern's anatomy suffices (GAP-17, 6 of 7 list
+         screens). It must NOT count toward the bar: it measures completeness
+         rather than discovery, and it was produced by an agent with repo
+         access, so counting it is self-approval.
+       - **"Briefs are burn-once" is asserted, not established** — the pilot
+         agent is specified llms.txt-only with no repo access, so a fresh
+         session arguably cannot see a brief that lives in the repo. Marked
+         Hypothesis: the isolation is unverified.
+
+       *Owner decisions needed (recommendations in the report):* is the pilot
+       still worth the briefs (**yes, as 112.4's admission gate only**); how
+       many (**five, not eight — the bar is an absolute count, so eight raise
+       the hit-rate, not the standard**); does suite evidence count (**no**);
+       and are briefs re-runnable (**test it with one brief before believing
+       either way**).
+
+       *(original item, unchanged below)*
+
+       **Original item, kept verbatim — BLOCKED ON OWNER BRIEFS —
        protocol owner-confirmed 2026-08-23, scaffold ready.** The owner
        agreed to the protocol (after stress-testing the loop's format
        example — the duplicate-check-vs-reconciliation challenge, which
