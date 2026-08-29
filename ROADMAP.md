@@ -367,6 +367,151 @@ dispatchers keep running. Report:
        no playbook step**, per 193.2's refusal; that cost is stated in the
        script's own header rather than left implicit.
 
+3. [x] **199.3 — DONE 2026-08-29 (cloud wake): the 390px reading `199.1`'s
+       close names as not captured, and a mechanism that refuses the filter
+       independently of how it renders.**
+
+       **A second Step 0c collision, and this wake was again the loser.** Both
+       dispatchers took `199.1`; the local one pushed first (`d3d76a28`).
+       **Its close stands as the record and none of it was re-done** — this
+       wake's own duplicate close was discarded with `git reset --hard`, not
+       pushed over it. `git fetch origin main` immediately before the first
+       commit is what caught it, the working half of Step 0c doing its job for
+       the second wake running.
+
+       What follows is only what that close explicitly names as unanswered, in
+       its own words — *"mobile 390px not captured this wake — a browser-tool
+       viewport-resize limitation in this session, not a decision to skip"* —
+       plus one finding neither pass carries. Redundant coverage finding what
+       one pass missed is the Slice 162 mechanism Step 0c cites as the reason
+       both dispatchers keep running.
+
+       **A. The 390px reading, taken — and `199.1`'s argument SURVIVES it.**
+       Measured live in headless Chrome over `apps/docs/dist` via
+       `browser-harness.mjs` + `serve-dist.mjs`. This is layout geometry,
+       `ENVIRONMENT.md`'s CAN-run list, **not** the rendered-image list:
+
+       | | 1440x900 | 390x844 |
+       |---|---|---|
+       | scroll box (`main.bo-app-shell__main`) | 5572px in 845px = **6.6 screenfuls** | 11202px in 685px = **16.4 screenfuls** |
+       | columns | 3 | 1 |
+       | largest group (`enter & find`, 11 tiles) | 4 rows, 1231px = **1.5 screenfuls** | 11 rows, 2856px = **4.2 screenfuls** |
+       | tallest tile | **326px** | **326px** |
+       | visible in-page jump links | 7 | **0** |
+
+       `199.1`'s close argued the layout *"scales vertically, not by density"*
+       from the 1440px capture. At 390px that holds and holds harder: the
+       tallest tile is **326px at both widths**, so growth lengthens the page
+       and crowds no card. **A confirmation, not a correction** — said plainly,
+       because a second dispatcher re-deriving a claim is only worth the tokens
+       if it reports agreement as readily as disagreement.
+
+       **B. The complexity axis provably cannot narrow this index — a refusal
+       that does not depend on how the page renders.** Neither the 2026-08-22
+       refusal nor `199.1`'s close carries this; both argue about the index,
+       this argues about the *remedy*.
+
+       ```
+       node -e "const p=require('./apps/docs/src/data/patterns-index.json');
+         const all={}; for (const g of p.groups){const d={};
+           for (const t of g.tiles){d[t.complexity]=(d[t.complexity]||0)+1;
+             all[t.complexity]=(all[t.complexity]||0)+1;}
+           console.log(g.label.padEnd(30),'n='+g.tiles.length,JSON.stringify(d));}
+         console.log('WHOLE INDEX n=39', JSON.stringify(all));"
+       ```
+
+       | group | tiles | complexity spread |
+       |---|---|---|
+       | enter & find | **11** | `{1:5, 2:6}` — **two values** |
+       | work one record | 4 | `{1:1, 2:2, 3:1}` |
+       | enter & correct data | 7 | `{2:2, 3:4, 4:1}` |
+       | decide & clear queues | 4 | `{2:1, 3:3}` |
+       | monitor & output | 7 | `{2:7}` — **one value** |
+       | RF / rugged devices | 6 | `{1:2, 2:3, 3:1}` |
+       | **whole index** | **39** | `{1:8, 2:21, 3:9, 4:1}` |
+
+       - **The filter's busiest setting scans worse than the grouping it would
+         sit on.** 21 of 39 tiles are complexity 2, so "show me complexity 2"
+         returns **21 tiles** — nearly double the largest group that exists
+         (11). At the other end, complexity 4 selects exactly **one** pattern.
+       - **It cannot fix the group that fired the trigger.** `enter & find`
+         spans two complexity values, so filtering 11 tiles yields 6 at best.
+       - **On one group it does nothing at all.** `monitor & output` is 7 tiles
+         all at complexity 2: every setting returns 7 or 0.
+
+       Why this matters beside a close that already refused: `199.1` argues the
+       *problem* is absent (more tiles lengthen, they do not crowd). This
+       argues the *remedy* is inert. The second survives if a later wake
+       decides 16.4 screenfuls at 390px is a problem after all — at which point
+       the fix is still not this filter.
+
+       Also read off the built page: tiles are **already ordered simplest-first
+       within each group** (`gen-patterns-index.mjs` sorts by complexity) and
+       all **39 of 39** carry a complexity badge. The ordering a filter would
+       impose already exists as an ordering.
+
+       **C. The trigger, restated as a CAPABILITY property.** `199.1`'s close
+       restated it as the tile-count one-liner, which is a command and satisfies
+       the Accept. This sharpens what the command should be asked *for*, since a
+       tile count is what went stale silently the first time: reopen when the
+       complexity axis becomes *capable* of narrowing — when no single
+       complexity value holds more than about a third of the index **and** the
+       largest group spans 3 or more values. Both halves come from B's command.
+       Reading 2026-08-29: one value holds **21 of 39 (54%)** and the largest
+       group spans **2** — neither half met. Real usage evidence of readers
+       hunting for a way to narrow the index reopens it independently.
+
+       **D. RECORDED, NOT FILED — and measurement is what refused it.** The
+       390px row above looks like a finding: 16.4 screenfuls with **0** visible
+       in-page jump links. It is not this index's and not caused by the growth
+       from 27 tiles to 39. Measured over every built page at 390x844 (127 of
+       127, the same `distPages` walker the standing gates use):
+
+       ```
+       # screenfuls of main.scrollHeight / main.clientHeight, top of ranking
+       # 32.1  /components/data-table/   5 visible jump links
+       # 24.8  /components/richtext/     2
+       # 20.0  /concepts/which-pattern/  0
+       # 20.0  /components/form/         0
+       # 16.4  /patterns/                0     <- rank 5 of 127
+       # median 6.0 screenfuls; 97 of 127 pages have ZERO visible jump links
+       ```
+
+       The "On this page" rail is `display:none` below 60rem for the **whole
+       docs shell**, so this is a shell-wide design choice affecting **97 of
+       127 pages**, and `/patterns/` is not its worst case —
+       `/components/data-table/` is twice as long. Not filed: nothing is
+       specific to this index, no usage evidence asks for it, and whether a
+       long page should gain a jump affordance at 390px is a rendered judgement
+       this wake cannot take. The numbers and the command are here so a later
+       wake argues it rather than re-deriving it.
+
+       **E. Three instrument defects, all caught before any number was used** —
+       §8's ordering working, not a clean run:
+       - `document.documentElement.scrollHeight` returned **exactly the
+         viewport height at both widths** — the identical-value tell. The docs
+         shell scrolls an inner `main`; every figure above is that box.
+       - The jump-link count was first taken from the DOM and reported **7 at
+         390px**. The rail is `display:none` there, so the honest count is
+         **0 visible / 7 in DOM**. A DOM count would have credited the page
+         with a jump nav no reader there can reach.
+       - **The probe's red-proof came back GREEN on its first run.**
+         `evaluateOnNewDocument` appended a `<style>` to
+         `document.documentElement` before that element existed, so the
+         injection never landed — CLAUDE.md's rule, hit exactly as written.
+         Re-done as `addStyleTag` after navigation **with an assertion that the
+         computed value moved**: `grid-template-columns 293.656px 293.672px
+         293.656px -> 913px`, and every figure moved with it (6.6 -> 9.9
+         screenfuls; `enter & find` 4 rows/1231px -> 11 rows/2226px). At 390px
+         the same assertion correctly **refuses**: the grid is already one
+         column, so the injection is a no-op there rather than a landed one.
+
+       **What was NOT done, said plainly.** No screenshots at any width or in
+       either theme — this cloud wake has no Podman and no `localhost:8081`.
+       The aesthetic reading at 390px remains untaken by **either** dispatcher;
+       `199.1` took it at 1440px in both themes. Nothing above is described as
+       a visual verification, and B and C do not need one.
+
 
 ## Slice 198 — Objective grill of Slices 193, 196, 197: a clean control, re-derived rather than re-copied (2026-08-29)
 
