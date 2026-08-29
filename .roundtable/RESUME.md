@@ -14,198 +14,167 @@ picks up work that was left mid-flight, so the instruction stays true across a
 context clear. **Keep it current whenever a slice is left uncommitted, and empty
 it the moment the slice lands.**
 
-Ordinary state — what is queued, what is done — lives in `ROADMAP.md` and
-`.roundtable/loop-log.md`. Environment knowledge lives in `ENVIRONMENT.md`. Only
-put things here that none of those can say: **uncommitted work, and a decision
-made but not yet written down.**
-
 ---
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 3 → Objective,
-Slice 190**). Working tree clean at hand-off; the wake's commits went out as one
-push.
+Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 4 → Continue,
+build, Slice 186.1**). Working tree clean at hand-off; the wake's commits went
+out as one push. No collision this wake: `git fetch origin main` at Step 0 and
+again immediately before the first commit both showed `origin/main` unmoved at
+`ad65d58`.
 
-**⚠ THIS WAKE COLLIDED WITH THE LOCAL DISPATCHER AND BOTH SIDES ARE ON `main`.**
-Both took the same rule-3 dispatch. The local one pushed first (**Slice 189**,
-`.roundtable/grill-objective-173-185-186-187-2026-08-29.md`); this one was
-rebased and renumbered 189 → **190**. **Third recorded collision, and the first
-caught before a single commit** — by Step 0c's mandated `git fetch origin main`
-immediately before the first commit, which saw `94cc5a3..00023f30`. The "safe by
-construction" argument played no part: `loop-log.md` was untouched here at the
-time, exactly as its own correction predicts. Both grills are kept per Step 0c;
-they are complementary, and where they meet (owner- vs browser-blocked) **189's
-finding C has priority**.
+**A SECOND advisory check now runs from `record_iteration.py`, so expect two
+stderr blocks.** `check:resume-slice-ids` landed this wake and is described in
+`LOOPS.md` Step 0 beside the charter check. **Its verb is REPORTED, not
+FAILED** — a non-zero exit means it found slice ids worth re-reading, not that a
+rule broke.
 
-**Reconcile this file against `ROADMAP.md` before trusting its open set** — it
-goes stale between wakes, which is what 186.1 is open about. Trust the
-checkboxes, not this section:
+**Reconcile this file against `ROADMAP.md` before trusting its open set** — that
+is now mechanical rather than a habit, which is the whole of 186.1:
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 8 at hand-off
-# 5 at Step 0b, minus 186.2 (closed by the local dispatcher mid-wake),
-# plus its 189.1, plus this wake's 190.1-190.3.
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 7 at hand-off
+node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-## What landed this wake (2026-08-29, cloud, rule 3 → Slice 190)
+**Adjudicated at hand-off, which is the step the check exists to prompt.** It
+reports **6** closed ids named here — `186.1`, `29.1`, `29.2`, `15.11`, `173.2`,
+`185.1` — and **all six are historical references, none a claim that any is
+open.** `186.1` is this wake's landed item; `29.1`/`29.2`/`15.11` are quoted
+below only as the items whose ids come from position rather than bold text;
+`173.2` and `185.1` are prior findings. The one id in the open table that is
+genuinely open, `15.12`, is not in that list — which is the check agreeing with
+the table. **Six is high for this file** (the measured distribution is
+`{0: 78, 1: 3, 2: 3, 3: 2}` across 86 revisions) and it is high because this
+hand-off narrates the check itself; do not read the number as a trend.
 
-**An Objective grill of Slices 173, 185 and 187**, report in
-`.roundtable/grill-objective-173-185-187-2026-08-29.md`. Nothing in the shipped
-package changed; three items are filed and three durable-file corrections landed.
+## What landed this wake (2026-08-29, cloud, rule 4 → Slice 186.1)
 
-**Cross-cut: every assertion checked against its own mechanism reproduced;
-every assertion reasoned out beside one did not.** 173.2's row heights, sibling
-shift, accessible description and no-clip — 4 of 4. 185/188's registry read,
-YAML step order, derived-pin-in-CI — 3 of 3. 187.1's `scan:dead-style` **0 dead
-of 1428**, `report:css-repeats` **8 groups**, byte-identical JSON — 3 of 3.
-Against that: 173.2's specificity arithmetic (wrong twice) and its
-"3.5rem is the message's own box" (false past ~2 lines). Hypothesis, n = 3.
+**`apps/docs/scripts/check-resume-slice-ids.mjs`** — every slice id this file
+names in backticks, checked against what `ROADMAP.md`'s checkboxes say about it,
+plus its own open/closed counts reconciled against a raw count of that file.
+Wired as `check:resume-slice-ids` and run advisory from `record_iteration.py`;
+that script's single charter invocation became a loop over the two.
 
-**185 and 187 are the controls and both are clean** — re-verified from this
-container rather than from the slices' own accounts. `check-publishable.mjs`
-exits 1 against the live registry naming both packages; it imports only `node:`
-builtins, so sitting before `npm ci` in `publish.yml` is safe rather than lucky;
-and `npm run check -w @busy-office/create-ui` runs in `ci.yml:182`, so the
-derived-pin assertion is not release-only.
+**It caught the live defect on its first real run, unprompted.** Recording this
+wake's iteration printed *"4 named id(s) are recorded [x] CLOSED: 186.2, 186.1,
+185.1, 173.2"* — and `186.1` was in the previous hand-off's table as an OPEN,
+cloud-takeable item, which had stopped being true forty minutes earlier. That is
+the failure 184 diagnosed and 186.1 was written for, reproduced by the thing
+built to see it.
 
-**Filed, all three with commands in the report:**
+**Measured before it was written, with the commands, in ROADMAP 186.1:**
 
-- **190.1** — a grid cell's validation message is **clipped past ~2 lines**.
-  `padding-block-end: 3.5rem` is a constant reserving room for a box whose
-  height is a function of the text, and `max-inline-size: 18ch` is the bigger
-  half of the cause (it turns a 1-line message into a 6-line box). 101-char
-  message → box 118px, reserve 56px, **clipped 53px**; the shipped 21-char one
-  has 19px to spare, which is why nothing shows it.
-- **190.2** — 173.2 added **three** runtime claims to `/patterns/editable-grid`
-  and **zero** cases to `check-claims.mjs` (141 before and after). The recipe's
-  existing step, skipped once.
-- **190.3** — `data-table.css:442`'s specificity comment: measured **(0,4,0) vs
-  (0,3,1)**, comment says (0,3,0) vs (0,2,0), and **(0,2,0) is the *other*
-  rule's** — the no-`:has()` fallback's. Conclusion still correct.
+- **Base rate 8 of 86 revisions of this file fire (9%)**, distribution
+  `{0: 78, 1: 3, 2: 3, 3: 2}`. Neither dead nor always-on, so a report is a
+  signal. 186.1's premise said *2 of 58 wake-ends*; that is a different unit
+  measured with a parser that could not derive an id for the unnumbered items,
+  and the two are recorded side by side rather than restated as each other.
+- **Id derivation: the bold id wins, position is the fallback.** On `ROADMAP.md`
+  the two agree **36 of 36**; the four items with no bold id (`29.1`, `29.2`,
+  `15.11`, `15.12`) derive correctly. In `ROADMAP-archive.md` the same
+  derivation disagrees **30 times** — merged and renumbered slices — which is
+  the measured reason the check reads `ROADMAP.md` only.
+- **Fences are deliberately NOT skipped**, unlike the sibling charter gate: the
+  reconciliation is against the raw `grep` the Accept names, which knows nothing
+  about fences. Same scope, same answer, or a loud refusal.
 
-**Severity was corrected by measurement, and that is recorded rather than
-tidied away.** 190.1 was drafted as a **P0** on the reasoning that readable
-became unreadable. Measuring first: the container is `overflow: auto`,
-`scrollable 54` against `53` needed, so the text is reachable by scrolling and
-nothing is lost. Filed as an ordinary item. The wake's own cross-cut, applied to
-the wake.
-
-**Three corrections landed in durable files rather than being filed** — that is
-where a correction survives (169.3):
-
-- **Trap 1's diagnostic was wrong.** `git rev-parse --short main HEAD` exits 128
-  with `fatal: Needed a single revision` **whether or not `main` exists**, because
-  `--short` takes one revision (git 2.43.0, measured both ways). The file
-  attributed that message to a missing branch, and the previous hand-off recorded
-  it as trap 1 "exercised for real". `git rev-parse main HEAD` is the command.
-- **"No screenshots" is not "no browser".** A cloud wake drives the same headless
-  Chrome the docs gates use; what it cannot do is compare rendered images.
-  `ENVIRONMENT.md` now splits the two lists and says to name which one a declined
-  item needs.
-- **`LOOPS.md` rule 4's brand-new browser-blocked bullet carried that same
-  over-broad clause**, landed by Slice 189 minutes earlier. Amended from *"needs
-  Podman, a real browser, screenshots"* to **"needs Podman and screenshots"**,
-  pointing at those two lists. A three-way split that mis-sorts is the failure the
-  undifferentiated word had, one level finer.
+**Red-proved by injection in both directions, each injection confirmed by
+grepping the file and the file restored byte-identical** (`md5sum` unchanged,
+`git status` clean on the path): appending a backticked closed id took the
+report 3 → 4; stripping `173.2`'s backticks took it to 2; stripping all three
+made it quiet at rc=0. Both refusals were red-proved by **stubbing a probe copy
+in the same directory** — never `git stash`, which moves the data with the
+script: a narrowed `CHECKBOX` gives parsed 7 open against raw 8 and prints no
+verdict, and a never-matching `SLICE_HEADING` reports the 4 id-less items by
+line number. Inverting the id precedence makes the `--self-test` go FAIL on
+exactly the discriminating case.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**Nothing this wake needed one.** `git diff --stat` names `ROADMAP.md`,
-`.roundtable/ENVIRONMENT.md`, `LOOPS.md` (one clause) and one new `.roundtable/*.md`; no `.css`, no
-`.astro`, no `.mjs`. That is an argument from the diff, **not a visual check,
-and it is not claimed as one.**
+**Nothing this wake needed one.** `git diff --stat` names one new `.mjs`, one
+`package.json` script line, one `record_iteration.py` block, `ROADMAP.md` and one
+paragraph of `LOOPS.md` — no `.css`, no `.astro`. That is an argument from the
+diff, **not a visual check, and it is not claimed as one.** No browser
+measurement was taken either; nothing here is a layout or computed-style claim.
 
-**Every number in Slice 190 is a layout-geometry, computed-style or
-accessibility-tree reading**, taken through `browser-harness.mjs` +
-`serve-dist.mjs` from throwaway probes in the scratchpad (deleted; the commands
-are reproduced in the report). None of them is a look at a picture, and 190.1's
-eventual fix will need one even though its Accept is measurable.
-
-Gates run after the change, all green: core `test` (**146**), `check:repo`
-(slice-refs **383** citations, **172** slice numbers — up two headings from the
-170/377 the last hand-off recorded, which is Slices 189 and 190 together),
-`check:claims` (**141**),
-`check:layout`, `test:axe`. `build -w @busy-office/ui` and `docs:build` ran green
-before the edits, which touched no input to either.
+Gates run green after the change: core `build` + `test` (**146**), `docs:build`,
+`check:repo` (selftests **45 gates, 16 heuristic all self-tested**; slice-refs
+**383** citations, **172** slice numbers), `check:claims` (**141**),
+`check:layout` and `test:axe` (**127 pages × 2 widths**). No `verifier` agent is
+available in this session, so the staged diff was reviewed by hand instead —
+said plainly rather than logged as a verifier pass.
 
 **Traps exercised for real this wake:** 1 (started detached — `git branch
---show-current` empty; fixed with `git checkout -B main origin/main`, and
-`origin/main` again arrived as a **forced update**, `17b3ba6...94cc5a3`), 1c
-(`CHROME_PATH` exported in the same command as every browser run), 2 (unshallowed
-before any history measurement: **1,588** commits), 3 (`rm -rf apps/docs/dist`
-before the build). 1b was obeyed rather than exercised. **Trap 1's own
-diagnostic was found wrong while exercising it** — see above.
+--show-current` empty, `main` stale at `17b3ba6` while HEAD sat at `ad65d58`;
+fixed with `git checkout -B main origin/main`, and `origin/main` again arrived as
+a **forced update**, `17b3ba6...ad65d58`), 1b (`cd apps/docs/scripts` for the
+probe runs leaked into the next command and broke a `sed` on `apps/docs/package.json`
+— absolute paths after that), 1c (`CHROME_PATH` exported in the same command as
+every browser gate), 2 (unshallowed before the base-rate measurement: **1,594**
+commits), 3 (`rm -rf apps/docs/dist` before the build).
 
 ## Counters after this wake
 
-**Prediction, written before recording** (166.5's comparison, and the practice
-the last hand-off said it had skipped). At Step 0b this wake read **1103
-iterations logged**, `Standardize 2 / 4`, `Objective 3 / 3 OVERDUE [173, 185,
-187]`, `Optimize 0 wake-date(s) newer … ok`.
+**Prediction, written before recording.** At Step 0b: **1108** iterations,
+`Standardize 3 / 4`, `Objective 0 / 3 since 03:48`, `Optimize … ok`. One
+`Continue` row with no `--also-refused` → **1109**, `Standardize` **4 / 4
+OVERDUE**, `Objective` **1 / 3** (this closes Slice 186).
 
-**The baseline then moved underneath the prediction, and that is the collision
-rather than a parser fault.** After the rebase the same command reads **1106**,
-`Standardize 3 / 4`, `Objective 0 / 3 since 11:29` — the local dispatcher's three
-rows (its grill, its `186.2` row and a refusal). So **`Objective` was already
-discharged by their row before this one was written**, and rule 3 will not
-re-fire on this wake's row either.
+**Verified after recording: the prediction held exactly.** `1109` by the parser
+against a raw `grep -c "^- "` of `1109`; `Standardize 4 / 4 OVERDUE`;
+`Objective 1 / 3 [186]`.
 
-Predicted for this wake's own recording: one `Objective` row carrying one
-`--also-refused` (+1 `Meta · refusal` row) → **1108**, `Objective` still `0 / 3`,
-`Standardize` **still 3 / 4** — an Objective row is not a Continue round, so rule
-2 must not move. Verify against the run output and against a raw
-`grep -c "^- " .roundtable/loop-log.md`; **if the parser and the raw count
-disagree, the parser loses** (they agreed at 1106/1106 after the rebase).
-
-**Verified after recording: the prediction held exactly.** `1108` by the parser
-against a raw `grep -c "^- "` of `1108`; `Objective 0 / 3 since 2026-08-29
-03:48`; `Standardize 3 / 4` unmoved, as an Objective row should leave it.
-
-**No metric was recorded**, deliberately. Nothing measured here is a repeatable
-sample under an existing name — the clip table is a one-off characterisation of
-one component, and inventing a single-sample name pads the store rule 5 reads
+**No metric was recorded**, deliberately. The base rate is a one-off
+characterisation of one file's history, not a repeatable sample under an
+existing name, and inventing a single-sample name pads the store rule 5 reads
 (184's discipline).
+
+**`LOOPS.md` grew +112 words this wake and is still `0 down`** — 167.1's
+signature, unchanged, recorded rather than acted on.
 
 ## What the next wake should expect
 
-**Rule 3 has just been discharged, so rule 4 governs**, and it now has
-dispatchable work that is *not* owner-blocked for the first time in several
-wakes. Checkboxes at hand-off — re-count rather than copying:
+**Rule 2 fires before rule 4: `Standardize` is 4 / 4 OVERDUE.** Run §3's
+playbook — `scan:dead-style`, `report:css-repeats`, `report:prose`,
+`report_loop_prose.py` — and record a verdict for anything flagged that carries
+none. It is all cloud-takeable.
+
+Checkboxes at hand-off — re-count rather than copying:
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 8
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 7
 ```
 
-| item | blocked on | cloud-wake takeable? |
+| item | blocked on | which list does it need? |
 |---|---|---|
-| `15.12` (`12. [ ] AT runtime evidence`) | **owner hardware** | no |
-| `112.3`, `112.4` | **owner** (briefs; 112.4 waits on 112.3's verdict) | no |
-| `186.1` | nothing | **yes** |
-| `189.1` (theirs — CLAUDE.md wording) | nothing | **yes** |
-| `190.1` | nothing, but it **re-opens an owner-settled trade** | measurable here; the fix is a design call |
-| `190.2`, `190.3` | nothing | **yes** |
+| `15.12` | **owner-blocked** (owner hardware, AT runtime) | neither; no wake can take it |
+| `112.3`, `112.4` | **owner-blocked** (briefs; `112.4` waits on `112.3`) | neither |
+| `189.1` | nothing | cloud-takeable — CLAUDE.md wording |
+| `190.2` | nothing | cloud-takeable — `check-claims.mjs` cases |
+| `190.3` | nothing | cloud-takeable — a specificity comment |
+| `190.1` | nothing, but it **re-opens an owner-settled trade** | measurable in a cloud wake; the CHOICE is a design call for the owner |
 
-Rule 4 takes the **oldest still-open** item, which is `15.12`, then `112.3`/
-`112.4` — all owner-blocked — so the oldest *dispatchable* one is **`186.1`**,
-unchanged from the last hand-off and now two wakes old. `189.1`, `190.2` and
-`190.3` are the cheapest and are fully cloud-takeable.
+Rule 4 takes the **oldest still-open** item — `15.12`, then `112.3`/`112.4`, all
+owner-blocked — so the oldest *dispatchable* one is **`189.1`**. Say **which
+kind** of blocked when reporting rule 4 as finding nothing (`LOOPS.md` rule 4:
+owner-blocked / browser-blocked / agent-blocked), and for a browser-blocked one
+name which of `ENVIRONMENT.md`'s two lists it needs.
 
-**On `190.1`:** its Accept is expressed as measurements a cloud wake can take
-(see `ENVIRONMENT.md`'s two lists), but choosing *which* of the three options to
-implement re-opens what the owner settled in 173.2. Bring the options and the
-table to the owner rather than picking one autonomously.
+**On `190.1`:** its Accept is expressed as measurements a cloud wake can take,
+but choosing *which* of the three options to implement re-opens what the owner
+settled in 173.2. Bring the options and the table to the owner rather than
+picking one autonomously.
 
 **Two blind re-scores are still owed and neither can be done in a cloud wake**
 (§3b step 4 needs a second agent): `scan`'s three fixed dimensions, and
 `skeleton · colour`. Unchanged by this wake.
 
 **Do not re-raise Slice 179's or 182.2's refusals, or 176.3**, which the owner
-closed as no-change. Do not re-raise this wake's refusal of a
-"every CSS constant names what it is sized against" gate — 94.11 and 176.2 are
-the measured record of what that costs. Re-measure before reopening anything.
+closed as no-change. Re-measure before reopening anything.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -214,30 +183,28 @@ from the sources named — never by copying the answers above you.**
 
 - **Direction:** (a) adoption/DX — finish it by publishing
   `@busy-office/create-ui`. Source: the `DECISION (owner, 2026-08-28)` block in
-  Slice 164.3, which lives in **`ROADMAP-archive.md`** (verified this wake at
-  **line 21190**), not `ROADMAP.md`. Read it there; a pointer that disagrees with
-  its source loses.
+  Slice 164.3, which lives in **`ROADMAP-archive.md`**, not `ROADMAP.md`. Read it
+  there; a pointer that disagrees with its source loses.
 - **Remaining step, and who it waits on.** The publish is done (`npm view
-  @busy-office/create-ui version` → `0.1.0`) and the release workflow ships it.
-  What is left is **one thing this loop cannot check from here: whether
-  `@busy-office/create-ui` has a Trusted Publisher configured on npmjs.com.**
-  **Stated as unknown, not as done.** If it is not set, the first release
-  publishes core and then fails on create-ui's publish step; the workflow's
-  comments carry the recovery. New this wake, and it sharpens the picture: a
-  release cannot even be *attempted* today without a version bump —
-  `check-publishable.mjs` exits 1 on both packages, by design.
-- **Did this wake advance it?** **No.** Rule 3 dispatched an Objective grill;
-  185/188 appear in it only as the control being re-verified. Said plainly rather
-  than credited to the re-verification.
+  @busy-office/create-ui version` → `0.1.0`, re-asked this wake) and the release
+  workflow ships it. What is left is **one thing this loop cannot check from
+  here: whether `@busy-office/create-ui` has a Trusted Publisher configured on
+  npmjs.com.** **Stated as unknown, not as done.** If it is not set, the first
+  release publishes core and then fails on create-ui's publish step; the
+  workflow's comments carry the recovery. A release cannot even be *attempted*
+  today without a version bump — `check-publishable.mjs` exits 1 on both
+  packages, by design.
+- **Did this wake advance it?** **No.** Rule 4 dispatched loop hygiene; nothing
+  in the diff touches either package.
 - **Work rows since the direction was decided that did not advance it:** derive
   it, do not increment. Re-run the command and READ the matched rows rather than
   `-c`-ing them; the needle over-counts, because a row can mention `create-ui`
-  while merely narrating the blockage. **Derived this wake against the working
-  tree, before this wake's own row exists: 54 non-Meta work rows since
-  `fb15cdc`; the needle matches 6; reading them, `164.3`, the `0.1.0` release
-  and `185.1` advance the direction, while `168.1`, the `173.2`/`185` triage and
-  `186` narrate or detect it — so 51 of 54 did not. This wake's row makes it 52
-  of 55.** *(Last honest reads: 49 of 52, 46 of 47, 43 of 44, 41 of 42, 38 of 39.)*
+  while merely narrating the blockage. **Derived this wake, after this wake's row
+  was committed: 58 non-Meta work rows since `fb15cdc`; the needle matches 6;
+  reading them, `164.3`, the `0.1.0` release and `185.1` advance the direction,
+  while `168.1`, the `173.2`/`185` triage and `186` narrate or detect it — so
+  55 of 58 did not.** *(Last honest reads: 52 of 55, 49 of 52, 46 of 47, 43 of
+  44, 41 of 42, 38 of 39.)*
 
   ```
   # `git diff fb15cdc..HEAD` MISSES the current wake's rows until they are
@@ -254,7 +221,7 @@ from the sources named — never by copying the answers above you.**
   it and do not slow the routine on your own judgement.
 
 ```
-npm view @busy-office/create-ui version     # 0.1.0 — published 2026-08-29T01:30:23Z
+npm view @busy-office/create-ui version     # 0.1.0
 npm view @busy-office/ui version            # 0.5.0
 node packages/core/scripts/check-publishable.mjs packages/core packages/create-ui
   # exits 1 today: both versions are already on the registry. That is the gate
