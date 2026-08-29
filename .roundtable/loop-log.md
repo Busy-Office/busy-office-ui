@@ -1156,3 +1156,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 20:27 · Meta · refusal · save/submit four-state sequence as a component CSS slice — rerouted to a docs pattern page, it composes existing primitives across behavior+markup · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · hand-authored motion spec matrix — must be generated from tokens/motion.css, never transcribed · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · tree disclosure content-continuity work — chevron rotation and bo-motion-collapse already exist and already compose the proposed behavior · refused · 7036bfc
+- 2026-08-29 20:36 · Explore · research · royui.dibbayajyoti.com component docs researched — one real gap (Known Limits section), filed to Ideas backlog for a spike; distribution model doesn't transfer · logged · ccb2e54
+- 2026-08-29 20:36 · Meta · refusal · a per-component Theming section — ApiTable already generates the custom-property surface RoyUI hand-authors · refused · ccb2e54

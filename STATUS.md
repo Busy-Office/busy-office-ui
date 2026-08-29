@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 12:28 UTC
+Generated at: 2026-08-29 12:36 UTC
 
 ## Open items by slice
 
@@ -23,7 +23,7 @@ Generated at: 2026-08-29 12:28 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1150 iterations logged)
+dispatch status — counter-triggered rules (1152 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-08-29 18:49   ok
   Objective     1 / 3 slice           since 2026-08-29 18:54   ok  [199]
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
@@ -39,8 +39,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 11:04 · Meta · refusal · a mechanism for reopen conditions - 193.2's refusal stands, and naming the shipped script in a LOOPS.md cadence step was refused with it · refused · 33dabdcd
-- 2026-08-29 19:29 · Continue · build · 199.1 — 104.4's reopen trigger fired (max group 7 to 11); re-refused on live 1440px light/dark rendered evidence, premise corrected in ROADMAP-archive.md · landed · d3d76a2
 - 2026-08-29 11:48 · Continue · build · 199.3 - Step 0c collision lost on 199.1; filed the follow-on its close named unanswered: the 390px geometry (confirms its argument) and a mechanism refusing the complexity filter regardless of rendering · landed · 9fefeaef
 - 2026-08-29 11:48 · Meta · refusal · the patterns-index complexity filter, again — 21 of 39 tiles share one complexity value, so the filter's busiest setting returns more tiles than the largest group that exists · refused · 9fefeaef
 - 2026-08-29 11:48 · Meta · refusal · filing the 390px jump-nav gap as an item — measured shell-wide (97 of 127 pages) with /patterns/ only rank 5 of 127, so it is not this index's finding · refused · 9fefeaef
@@ -49,6 +47,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 20:27 · Meta · refusal · save/submit four-state sequence as a component CSS slice — rerouted to a docs pattern page, it composes existing primitives across behavior+markup · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · hand-authored motion spec matrix — must be generated from tokens/motion.css, never transcribed · refused · 7036bfc
 - 2026-08-29 20:27 · Meta · refusal · tree disclosure content-continuity work — chevron rotation and bo-motion-collapse already exist and already compose the proposed behavior · refused · 7036bfc
+- 2026-08-29 20:36 · Explore · research · royui.dibbayajyoti.com component docs researched — one real gap (Known Limits section), filed to Ideas backlog for a spike; distribution model doesn't transfer · logged · ccb2e54
+- 2026-08-29 20:36 · Meta · refusal · a per-component Theming section — ApiTable already generates the custom-property surface RoyUI hand-authors · refused · ccb2e54
 
 ## Sunset test
 
