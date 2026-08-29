@@ -231,6 +231,137 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 201 — P0: two undefined token references silently deleted the declarations that named them (2026-08-29)
+
+**Dispatcher rule 1, and the P0 was found by the wake rather than reported** —
+the same shape as Slice 180. This wake dispatched to rule 6 (Polish), was reset
+by a collision onto a tree where Slice 200 had just been triaged, re-evaluated
+and landed on rule 4; while measuring **200.7's** base rate *before* building
+it — which is what 200.7's own Accept demands — the measurement turned up a
+shipped defect, and rule 1 preempts.
+
+**The mechanism, stated because it is the reason nothing caught these.** An
+unresolvable `var()` is neither a syntax error nor a no-op: it makes the whole
+declaration **invalid at computed-value time**, so the property falls back to
+its inherited or initial value and nothing warns. stylelint sees valid syntax.
+The build sees valid CSS. `check:motion` asks whether a duration is
+token-driven or carries a reduced-motion override — never whether the token it
+names resolves.
+
+1. [x] **201.1 — `scan.css` reached for a token that does not exist, and the RF
+       scan flash painted nothing at all.** `animation: bo-scan-flash 600ms
+       var(--bo-motion-ease) forwards` — the defined token is
+       `--bo-motion-easing-standard`; `--bo-motion-ease` is referenced once and
+       defined nowhere, in src and in the built `dist`.
+
+       **Measured in a real browser against the BUILT site, not reasoned about**
+       (`browser-harness.mjs` + `serve-dist.mjs`, the pair ENVIRONMENT.md names
+       as takeable in a cloud wake). On `/components/scan/`, with
+       `body[data-scan-result="ok"]` set:
+
+       | | `animation-name` | `animation-duration` | `opacity` |
+       |---|---|---|---|
+       | as shipped | `none` | `0s` | `0` |
+       | with the token defined (red-proof) | `bo-scan-flash` | `0.6s` | `0.3` |
+       | after the fix | `bo-scan-flash` | `0.6s` | `0.3` |
+
+       So the `::after` stayed at its declared `opacity: 0` and the overlay —
+       the component's **entire visible accepted/rejected verdict**, the wash a
+       picker reads in peripheral vision — was invisible. Scoped honestly: only
+       for users **not** in reduced motion, because that branch sets its own
+       static `opacity: 0.2` and never touches `animation-name`.
+
+       The 600ms literal is **deliberate and stays** — `scan.css`'s own comment
+       explains it is a peripheral-vision cue rather than the 300ms token.
+
+2. [x] **201.2 — `combobox.css` had the same typo shape, found by re-verifying
+       the sibling rather than by a second report.** CLAUDE.md's *"when one
+       claim from a session dies this way, re-verify its siblings"*, executed:
+       `font-family: var(--bo-font-family-mono)` against a defined
+       `--bo-font-mono` that six other components spell correctly.
+
+       `.bo-combobox__option-code` computed to
+       `system-ui, -apple-system, "Segoe UI", Roboto, sans-serif` — **byte-identical
+       to `getComputedStyle(document.body).fontFamily`** — against a `.bo-kbd`
+       control on the same page computing `ui-monospace, "SF Mono", …`. After the
+       fix the two agree exactly. The tabular alignment the code column exists
+       for was simply absent.
+
+3. [x] **201.3 — `check:token-refs`, a gate for the class, red on the untouched
+       tree.** Every `var(--bo-…)` with no fallback must name a property
+       something defines.
+
+       *The base rate, and which artifact each figure came from* — they are
+       different sets, and quoting one for the other is how a wrong number gets
+       published:
+
+       - `dist/css/index.css` alone: **152** distinct names referenced, **219**
+         defined, **9** referenced-but-undefined.
+       - every file the gate walks (index + per-component + `rf-essentials`):
+         **2451** references, **189** distinct names, **387** definitions.
+
+       **7 of those 9 are not defects** — `var(--bo-grid-min, 16rem)` and
+       friends are consumer-override hooks, undefined by design with the default
+       written right there. So the rule is *no fallback AND never defined*, and
+       the hook count is printed every run so the exemption cannot quietly grow
+       into cover for a real typo.
+
+       **CSS is not the only definition site, and a CSS-only gate would have
+       false-positived on three tokens.** `sticky-cols.ts` sets
+       `--bo-sticky-w-1`/`-2` and `anchor-nav.ts` sets
+       `--bo-anchor-landing-offset` at runtime. The gate reads both sites rather
+       than being taught one exemption at a time.
+
+       *Red-proofs, plural, and the injection verified each time.* It was red on
+       the untouched tree — its red-proof by construction. It was then red-proved
+       **again deliberately** by restoring the `--bo-motion-ease` typo, and the
+       injection was confirmed to have reached the BUILT output
+       (`grep -c 'var(--bo-motion-ease)' packages/core/dist/css/index.css` → 1)
+       *before* the red was believed, per CLAUDE.md's standing rule.
+
+       **The gate caught a real ordering bug in its own wiring**, which is worth
+       more than the assertion that it works: placed after `check:motion` it ran
+       *before* `build:rf-essentials` writes `rf-essentials.css`, read a stale
+       copy from the previous build, and failed on a typo already fixed in
+       source. Exactly the stale-`dist` ordering trap `build:acr` shipped once
+       before. It now runs after `check:rf-floor`, verified against a
+       `rm -rf packages/core/dist` rebuild rather than an incremental one.
+
+4. [ ] **201.4 — 200.7's gate is largely already shipped as `check:motion`, and
+       a naive version would fail the build on two right answers.** Recorded
+       here rather than closing 200.7, which is another dispatcher's freshly
+       triaged item.
+
+       Measured, and **the first instrument was wrong**: a line-scoped
+       `grep -oE '(transition|animation)…'` over the 44 component stylesheets
+       found **11** declarations; a multi-line-aware parse of the same files
+       found **23**. The line-scoped version silently drops every declaration
+       that wraps — a 52% undercount, and the same position-filter family
+       CLAUDE.md already records.
+
+       Of those 23: **5** are `none`, **16** are token-driven, and **2** carry a
+       literal duration — `scan`'s `600ms` and `skeleton`'s `1.8s linear`.
+       **Both are correct.** No motion token exists at either value (the scale is
+       100/150/300ms), `linear` is right for a continuous shimmer, and
+       `check:motion` already adjudicates both via its route (b): each carries
+       its own `animation: none` under `prefers-reduced-motion`. A gate that
+       flags a literal duration therefore fails on two deliberate, documented
+       decisions — the *"would fail the build on eight right answers"* shape
+       LOOPS.md §3 already refuses for `report:css-repeats`.
+
+       *Accept*: 200.7 either ships against a predicate that is false of
+       something today, or records that `check:motion` covers its subject and
+       closes as refused — **either outcome satisfies this item**; what it may
+       not do is ship a gate whose only red is on `scan` and `skeleton`. Note
+       that the undefined-token case 200.7's own text names as *"exactly the kind
+       of thing this would NOT catch"* is now caught, by 201.3.
+
+**What this wake did NOT verify, said plainly.** Cloud wake: no Podman, no
+`localhost:8081`, **no screenshots at 1440px/390px in light or dark**. Every
+figure above is a computed-style or font-family reading from headless Chrome.
+That the scan flash now animates, and to exactly what values, is measured; **how
+it LOOKS is unverified** and no claim here depends on it.
+
 ## Slice 200 — triage: an external "micro-motion UX review" proposal, checked against the shipped CSS before anything was filed (2026-08-29)
 
 **LOOPS.md Step 1, user-submitted.** A 15-item proposal (dialog exit motion,
