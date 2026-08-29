@@ -17,87 +17,76 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (**cloud** wake — rule 3 → Objective, grill of Slices
-205 and 208: `209.1` landed, `209.2` filed OPEN). Working tree clean at
-hand-off; one push.
+Last updated 2026-08-29 (**cloud** wake — rule 4 → Continue, build mode:
+**Slice 210**, closing `200.7` as refused and `201.4` with it). Working tree
+clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 7 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 5 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `205`, `208.1`, `208.2` and `209.1` as
-closed ids named here — **historical references** (this wake's subject matter),
-not claims that they are open. `209.2` and `208.3` genuinely are open.
+`check:resume-slice-ids` will report `200.7`, `201.4`, `209.1`, `208.1` and
+`208.2` as closed ids named here — **historical references** (this wake's subject
+matter and the last one's), not claims that they are open. `209.2` and `208.3`
+genuinely are open.
 
-**No collision on this wake.** `origin/main` was at `6105054` at Step 0 and
-still at `6105054` at the mandated re-fetch before the first commit.
+**No collision on this wake.** `origin/main` was at `aacb356` at Step 0 and still
+at `aacb356` at the mandated re-fetch before the first commit.
 
-**Trap 1 fired for real again.** Container started detached
+**Trap 1 fired for real again**, third wake running. Container started detached
 (`git branch --show-current` empty) with local `main` stale at `17b3ba6` and
-`origin/main` arriving as a forced update (`+ 17b3ba6...6105054`). Recovered at
+`origin/main` arriving as a forced update (`+ 17b3ba6...aacb356`). Recovered at
 Step 0 with `git checkout -B main origin/main`, before any commit. Also
-unshallowed — this wake's findings are history measurements.
+unshallowed — one finding needed a worktree at an older commit.
 
 ## What landed this wake
 
-**Scope narrowed first.** Rule 3's window was `[200, 205, 208]`;
-`grill-objective-199-202-2026-08-29.md` already covers 200 in full, so the
-honest scope was **205 and 208** — the same correction the 204/206 grill made.
-Report: `.roundtable/grill-objective-205-208-2026-08-29.md`.
+**`200.7` REFUSED, and the qualifier in its own wording is what decided it.**
+The item asks for a gate on a literal duration/easing *"where a `--bo-motion-`
+prefixed token exists"*. That clause had never been measured on its own, and it
+is the whole answer: the token scale is `100/150/300ms` plus one easing, and the
+three literals in the tree are `600ms` (scan), `1.8s` and `linear` (skeleton) —
+**not one at a token's value**. Base rate **0 of 23**, which is 94.11's no-op
+gate exactly, and 200.7's own Accept says to say so rather than ship.
 
-**Nine of 208's claims reproduce exactly**, re-derived rather than read off the
-file: lane 1 (`0 dead of 1,433`), lane 2 (`8 groups / 242 rules / 230 distinct
-bodies`, same eight shapes), lane 3 (`118 pages, median 748, 9 + 12`), the
-lane-coverage table under an independent per-section parser (4 of 6 come back
-NO, so it discriminates), the four prior sweeps' drop figures, and both
-substantive halves of the lossless-move proof. 205's base rate reproduces too:
-the same 6 at-rules in the built `rf-essentials.css`, exactly one above 108.
+**The zero is red-proved by injection in both directions**, and the probe exits
+non-zero if the replacement changed nothing — so a green red-proof could not be
+misread as a clean tree. Injecting `150ms` moved it 0 → 1 against
+`--bo-motion-duration-base`; injecting `cubic-bezier(0.4, 0, 0.2, 1)` moved it
+0 → 1 against `--bo-motion-easing-standard`.
 
-**`209.1` — 208's sweep numbers describe a state that was never committed.**
-Reported `6,424 → 2,184` and *"gained exactly `{pointer: 32}`"*; the committed
-blob at `83192cd1` is **2,301** and gained **127** — the 32 pointers plus 95
-lines of Slice 208's own write-up, appended by the same commit
-(`2301 - 117 = 2184`, the 117 being that section). `4,272` is the same
-intermediate arithmetic; committed, it is `4,250`. The lossless conclusion
-holds; the assertion that exists to catch an edit riding along with the move
-does not reproduce. 208's text and proof table now carry the committed numbers.
+**The broadened predicate was measured too, and refused separately.** Its entire
+red set is three deliberate decisions, and both declarations are already
+adjudicated by `check:motion` route (b) — verified at `scan.css:63` and
+`skeleton.css:81` and against the gate's own pass line, not read off 201.4.
 
-**`209.2` filed OPEN — `check-rf-floor.mjs` publishes a PREFIXED version.**
-`earliestChrome()` filters `flags` but not `prefix`, so the pass line reads
-`@keyframes 1` (the `-webkit-` entry) where the unprefixed at-rule is **43**.
-`derive-floor.mjs`, on the same BCD data across 6 shared feature paths, does
-filter. It understates the floor — the false-safe direction — and today's blast
-radius is **zero, measured**. `LOOPS.md`'s "divergence here is LOUD" section now
-says it covers the path column and not the helper beside it.
+**`201.4` closed by the second outcome its own Accept allows.** Its conclusion
+re-derives exactly (same two declarations, at its commit and at HEAD). **Its
+denominator does not** — `23 = 5 none + 16 token + 2 literal` reproduces under no
+scoping constructed for it; at its own commit the honest figure is
+`26 = 6 + 18 + 2`. The `23` that does appear is at HEAD under a different scope,
+so that agreement is a coincidence and is named as one. **No item filed** — the
+conclusion is sound; the correction is that a declaration count means nothing
+without the scope beside it.
 
-**A third finding was wrong and is recorded in that order.** `check:ci-ignores`
-is in `ci.yml` and absent from `ENVIRONMENT.md`'s list, which reads exactly like
-the `check:formatting` failure 208.2 closed. It is the opposite: it is a
-sub-check of `check:repo`, which `docs:build` runs. Coverage is complete. The
-cost is that the file's own re-derivation instruction produces that false
-positive — entry points vs steps — and `ENVIRONMENT.md` now says so beside the
-list.
-
-**208.3 gained a second-container reading** — byte-identical payload, fourth
-run, different clone, later HEAD. Deterministic in this environment class, not
-contended. Still OPEN; a second instance of the same class is not the third
-environment its Accept asks for.
-
-**`ENVIRONMENT.md` §6b added**: `check:claims` reporting `3 NOT VERIFIED` is the
-container's pointer capability, not a regression — measured both ways within two
-days (154 live / 0 unverified at Chrome 151; **158 live / 3 unverified** here).
+**The probe is deliberately NOT committed** — shipping the script would be
+shipping the gate this item refuses.
 
 **NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
 screenshots at 1440px or 390px in either theme**. It costs nothing here —
 **zero lines changed under `packages/` or `apps/docs/src/`**; the whole diff is
-markdown. Green in this container: core build, core `npm run test`, `lint:css`,
-`docs:build`, `check:repo` 9/9, `check:claims` 158 live, `test:axe` 127 pages ×
-2 widths zero violations, `check:layout` 127 pages, `check:formatting`,
-`check:slice-refs`, `check:rf-floor` incl. `--self-test`. `check:po-app` RED,
-per 208.3.
+markdown. Green in this container: core build, core `npm run test` 151/151,
+`lint:css`, `docs:build` (runs `check:repo`), `check:motion`, `check:claims` 158
+live + 3 NOT VERIFIED (ENVIRONMENT.md §6b — the container's pointer capability,
+not a regression), `test:axe` 127 pages × 2 widths zero violations,
+`check:layout` 127 pages, `check:scroll` 910 containers, `check:formatting`,
+`check:forced-colors`, `check:target-size`, `check:search`, `check:pseudo`,
+`check:quickstart`, `check:slice-refs` 421 citations, `check:rf-floor`,
+`create-ui` check, `suite` audit 28 screens. `check:po-app` NOT run — known RED
+here per 208.3.
 
 ## Dispatcher state at hand-off
 
@@ -109,21 +98,21 @@ snapshot:
 python3 scripts/loops/dispatch_status.py
 ```
 
-This wake's row is an `Objective` row, which resets rule 3's counter and does
-**not** advance rule 2 (Objective rows are not Continue rounds). So the next
-wake should fall through to **rule 4**.
+This wake's row is a `Continue` row, so it **advances rule 2 to `1 / 4`** and
+credits rule 3 with `1 / 3 [200]`. Neither fires next wake, so the next wake
+should again fall through to **rule 4**.
 
-**When rule 4 is reached**, seven open checkboxes:
+**When rule 4 is reached**, five open checkboxes:
 
 | item | what | notes |
 |---|---|---|
-| `200.7` | lint check for hand-written durations outside the token scale | **oldest non-blocked — rule 4 would pick this**; read 201.4 first |
-| `201.4` | 200.7's proposed gate mostly duplicates `check:motion` already shipped | either outcome closes it |
-| `208.3` | `check:po-app` red in cloud, green on CI; now known deterministic across two cloud containers | **wants a LOCAL wake** — its Accept asks for a third environment |
-| `209.2` | `earliestChrome()` misses the prefix filter its sibling applies | **cloud-takeable**; needs the built CSS and the gate's pass line, no rendered image |
+| `208.3` | `check:po-app` red in cloud, green on CI; known deterministic across two cloud containers | **oldest non-blocked, but wants a LOCAL wake** — its Accept asks for a third environment, and this container is a second instance of the same class |
+| `209.2` | `earliestChrome()` misses the prefix filter its sibling applies | **the oldest CLOUD-takeable item — rule 4 would pick this on a cloud wake**; needs the built CSS and the gate's pass line, no rendered image |
 
-200.7, 201.4 and 209.2 are all cloud-takeable; none needs a rendered image.
-208.3 is blocked on an environment this container is not.
+Per `LOOPS.md` rule 4, name which kind of blocked: `208.3` is
+**browser-blocked** only in the narrow sense of needing a *different
+environment*, not a rendered image — a local wake takes it. `209.2` needs
+neither.
 
 Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
 112.3), **AT runtime evidence** (owner hardware).
@@ -133,12 +122,14 @@ Owner-blocked, unchanged: **112.3** (pilot briefs), **112.4** (blocked on
 Nothing blocked on the owner that a wake could advance; the three owner-blocked
 items above are the standing set and are unchanged by this wake.
 
-One judgement worth an owner's eye, not a blocker, and it is the same one the
-last hand-off raised with a second data point behind it now. 209.1's finding is
-that a wake measured its own artefact **before** appending its write-up to it —
-and the write-up was 117 lines of a 2,301-line file, for a slice whose actual
-change was a file move. The previous hand-off asked whether the owner would
-rather slices were terser; this wake found the length is not only a storage
-question — the longer the write-up, the more it perturbs what the same wake is
-measuring. If a writing rule lands in `CLAUDE.md`, "re-read the committed blob
-before quoting a figure about it" belongs next to it.
+One judgement for an owner's eye, and it is the third consecutive hand-off to
+raise the same thing with a new data point. 209.1 found a wake quoting a figure
+about an artefact it had since rewritten. This wake found the sibling case:
+**201.4's conclusion was red-proved and correct, and the breakdown printed beside
+it went out on that credibility and does not reproduce.** That is 192.1's rule
+("the defect lands in what shipped BESIDE the number") firing for the second time
+in three wakes. The cheap fix is a writing habit, not a gate — *state the scope
+next to any count, and re-read the committed blob before quoting a figure about
+it* — and if a rule lands in `CLAUDE.md`, those two belong together. **Refused as
+a gate here**: the property is "the count is meaningful under the scope claimed",
+which needs the intent to check.

@@ -1188,3 +1188,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 18:44 · Objective · grill · Objective grill of Slices 205, 208 — 209.1 corrects a lossless-move proof measured against an uncommitted state; 209.2 files earliestChrome()'s missing prefix filter · logged · a4a3ffb5
 - 2026-08-29 18:44 · Meta · refusal · a gate for 209.1 — 'the number quoted is the number in the commit' is not checkable without the intent · refused · a4a3ffb5
 - 2026-08-29 18:44 · Meta · refusal · fixing 209.2 inside the grill — a grill that rewrites the gate it is grilling marks its own homework · refused · a4a3ffb5
+- 2026-08-29 19:46 · Continue · build · 200.7 — motion-literal lint gate: base rate 0 of 23 under its own wording, red-proved by injection both ways; refused per 94.11. 201.4 closed by its second allowed outcome · refused · 97b3da4b
+- 2026-08-29 19:46 · Meta · refusal · the broadened predicate (any literal duration/easing): its entire red set is 3 deliberate decisions already adjudicated by check:motion route (b) · refused · 97b3da4b
+- 2026-08-29 19:46 · Meta · refusal · filing an item for 201.4's non-reproducing denominator: its conclusion re-derives exactly and the correction is a scoping note, not a defect · refused · 97b3da4b
