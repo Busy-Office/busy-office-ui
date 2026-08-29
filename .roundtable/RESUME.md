@@ -18,87 +18,78 @@ it the moment the slice lands.**
 ## In flight: nothing
 
 Last updated 2026-08-29 (**cloud** wake — rule 4 → Continue, build mode:
-**209.2**, which closed the last open item in Slice 209). Working tree clean at
-hand-off; one push.
+**208.3**, which closed Slice 208). Working tree clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 4 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 5 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `209.2`, `209.1`, `208.1`, `208.2` and
-`201.4` as closed ids named here — **historical references** (this wake's
-subject matter and its neighbours), not claims that they are open. `208.3` is
-the only id named here that genuinely is open.
+`check:resume-slice-ids` will report `208.3`, `208.1`, `208.2`, `209.1`,
+`209.2` and `201.4` as closed ids named here — **historical references** (this
+wake's subject and its neighbours), not claims that they are open. The ids
+named here that genuinely ARE open are `211.1`, `211.2`, `112.3`, `112.4`.
 
-**No collision on this wake.** `origin/main` was at `6ca2327` at Step 0 and
-still at `6ca2327` at the mandated re-fetch before the first commit.
+**No collision on this wake.** `origin/main` was at `ca4f04f` at Step 0 and
+still at `ca4f04f` at the mandated re-fetch before the first commit.
 
-**Trap 1 fired for real again**, fourth wake running. Container started detached
+**Trap 1 fired for real again**, fifth wake running. Container started detached
 (`git branch --show-current` empty) with local `main` stale at `17b3ba6` and
-`origin/main` arriving as a forced update (`+ 17b3ba6...6ca2327`). Recovered at
+`origin/main` arriving as a forced update (`+ 17b3ba6...ca4f04f`). Recovered at
 Step 0 with `git checkout -B main origin/main`, before any commit. The clone is
 shallow and was left shallow — no finding this wake was a history measurement.
 
 ## What landed this wake
 
-**`209.2` FIXED by shipping the filter**, which is the first of the two outcomes
-its Accept allows. `check-rf-floor.mjs`'s `earliestChrome()` now applies
-`!e.prefix || emitsPrefixed(e.prefix)` — `derive-floor.mjs`'s rule — and takes
-the predicate rather than the sibling's bare boolean, because one at-rule name
-can carry several prefixed entries. Whether the profile emits a prefixed form is
-read **off the parse**: postcss names `@-webkit-keyframes` as an at-rule of its
-own, so the presence of the prefixed name in the same walk is the answer.
+**`208.3` CLOSED — the cloud/CI divergence is an environment artefact, and the
+mechanism is named.** The reference app loads htmx from
+`https://unpkg.com/htmx.org@2.0.4` (`examples/po-app/server.mjs:125`); this
+container's proxy refuses the host (`net::ERR_TUNNEL_CONNECTION_FAILED`), the
+page throws `htmx is not defined`, and every windowed-list assertion is
+downstream of htmx. The list stays at **2 tbodies / 200 rows / `next-offset
+200` for all ten scroll iterations**, never passes the 3-chunk resident budget,
+evicts nothing — and `renderedBounded` passes *vacuously*.
 
-**The premise was re-checked, not taken from the item**, and it reproduced
-exactly: `@keyframes` is the only one of the six at-rules carrying a `prefix`
-entry, and the built profile emits **no prefixed at-rule at all**. The Accept's
-criterion — pass line agrees with a fresh BCD read — is met: `@container 105,
-@keyframes 43, @layer 99, @media 1, @starting-style 117, @supports 28`, `1 above
-108`, with `@keyframes` the only number that moved.
+**One variable, both directions, same container and commit.** htmx served from
+`node_modules` via request interception, gate `page.evaluate` block copied
+verbatim: without it `chunk0Evicted false` (reproducing the recorded payload
+byte-identically, the fifth run of the class); with it `chunk0Evicted true` and
+the assertion **passes 4 of 4**. Neither the app nor CI is wrong.
 
-**Blast radius re-measured rather than trusted.** All four `FEATURES` probes are
-single unprefixed support objects (`:user-invalid` 119, `color-mix()` 111,
-`subgrid` 117, `:has()` 105), so the filter has no `prefix` key to act on there
-and no verdict moves. The defect was in what the gate **publishes**, and in
-nothing it decides.
+**Accept (a)'s third environment is not needed and that is argued, not
+assumed:** (a) exists to distinguish which side is right, and the mechanism
+distinguishes them directly. (b) the wrong side was the measurement. (c)
+`ENVIRONMENT.md`'s `check:po-app` entry now carries the mechanism.
 
-**Red-proved both ways, and `--self-test` now carries it standing** — a
-synthetic prefixed support array expecting `43` unemitted and `1` emitted,
-itself red-proved against two degenerate implementations (`usable = entries`
-reports `1 1`; `entries.filter((e) => !e.prefix)` reports `43 43`), so no single
-direction can satisfy it alone.
+**The gate was fixed to say the true thing, not to pass.** `check-po-app.mjs`
+asserts the precondition first — *"windowed list: htmx loaded…"*, reporting
+`typeof window.htmx`. Red-proved on the predicate in both directions (blocked →
+`undefined` → RED; served → `object` → GREEN). It now reads **2 of 19** here,
+precondition first, and is a 19th passing check on CI. **Do not "fix" either
+failure here.**
 
-**The first red-proof came back green and the injection was the defect**, which
-is the base rate CLAUDE.md names: a `sed` whose replacement contained `||` broke
-on the `s|…|…|` delimiter, wrote an empty probe, and the empty file exited 0.
-The pre-flight `grep -c` on the replaced line read **0** and caught it. Redone
-in Python with an explicit `assert count == 1`.
-
-**`LOOPS.md`'s "Also settled" paragraph was rewritten, not left**, because it
-stated the divergence in the present tense and would have read as current.
-Refused inside this item: consolidating the two helpers — in scope as an option,
-refused on that section's own "not the same table" ground.
+**Two things filed rather than built — Slice 211**, because both are outside
+208.3's Accept: `211.1` vendoring htmx into the example (a product call — it
+changes what the example teaches), and `211.2` the scroll-anchor assertion,
+which has only ever passed *vacuously* in a container and read **98 / 49 / 0 /
+0** against its `<= 2` threshold once htmx was present. 211.2 is stated as an
+observation, not an accusation: the shim serves htmx from memory, which is not
+how it ships.
 
 **NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
 screenshots at 1440px or 390px in either theme**. It costs nothing here — zero
 lines changed under `packages/core/src/` or `apps/docs/src/`; the diff is one
-build script plus markdown. Green in this container: core build (incl.
-`check:rf-floor` + `--self-test`), core `npm run test` 151/151, `lint:css`,
-`docs:build` rc=0 (incl. `check:repo` 9/9 and `check:slice-refs` 421 citations),
-`check:claims` 158 live + 3 NOT VERIFIED (ENVIRONMENT.md §6b — the container's
-pointer capability, not a regression), `check:formatting`, `check:scroll` 910
-containers, `check:layout` 127 pages, `check:forced-colors`, `test:axe` 127
-pages × 2 widths zero violations, `check:target-size`, `check:search`,
-`check:pseudo`, `check:quickstart`, `check:selftests` 46 gates / 16 heuristic,
-`create-ui` check, `suite` audit 28 screens. `check:po-app` NOT run — known RED
-here per 208.3.
-
-**`ci.yml` re-derived rather than trusted** (ENVIRONMENT.md says to): 17 entry
-points, unchanged, and the one not in the cloud list is still `check:ci-ignores`
-inside `check:repo`. Nothing to add.
+gate script plus markdown. Green in this container: core build, core `npm run
+test` 151/151, `lint:css`, `docs:build` rc=0, `check:claims` 158 live + 3 NOT
+VERIFIED (ENVIRONMENT.md §6b — the container's pointer capability, not a
+regression), `check:formatting`, `check:scroll` 910 containers, `check:layout`
+127 pages, `check:forced-colors`, `test:axe` 127 pages × 2 widths zero
+violations, `check:target-size`, `check:search`, `check:pseudo`,
+`check:quickstart`, `check:selftests` 46 gates / 16 heuristic, `create-ui`
+check, `suite` audit 28 screens. `check:po-app` **red here by design** — see
+above.
 
 ## Dispatcher state at hand-off
 
@@ -110,50 +101,45 @@ snapshot:
 python3 scripts/loops/dispatch_status.py
 ```
 
-This wake's row is a `Continue` row and it closed Slice 209, so rule 2 advances
-to `2 / 4` and rule 3 to `2 / 3 [200, 209]`. Neither fires next wake. Rule 5's
-line reads `ok`, not STALE, so that rule is evaluable and reports nothing
-regressed.
+**Rule 3 is OVERDUE — `Objective 3 / 3 [200, 208, 209]`.** This wake's row
+closed Slice 208, which armed it. Rule 3 sits above rule 4, so **next wake
+dispatches Objective**, a grill of Slices 200, 208 and 209 — not a build item,
+whatever the backlog says. Rule 2 stands at `3 / 4`; rule 5's line reads `ok`,
+not STALE, and reports nothing regressed.
 
-**When rule 4 is reached, four open checkboxes — and NONE is cloud-takeable.**
-That is a change from the last three hand-offs, so say the kind of blocked
-rather than "all blocked":
+**If Objective has already run and rule 4 is reached, five open checkboxes.**
+Say the kind of blocked rather than "all blocked":
 
 | item | what | kind of blocked |
 |---|---|---|
-| `208.3` | `check:po-app` red in cloud, green on CI; deterministic across two cloud containers | **browser-blocked in the narrow sense: a DIFFERENT ENVIRONMENT, not a rendered image.** Its Accept asks for a third environment, and a cloud container is another instance of the class that is already red. **A local wake takes this; it is the oldest such item.** |
+| `211.2` | scroll-anchor `anchorShift` where htmx loads as it ships | **cloud-takeable in part** — a cloud wake can re-measure through the shim, but the Accept asks for htmx loading *the way it ships*, which here it cannot. CI is the other route. |
+| `211.1` | vendor htmx into `examples/po-app`? | **owner-blocked** — a product call about what the example teaches, not a defect |
 | `112.3` | pattern-fit pilot | owner-blocked (briefs) |
 | `112.4` | Screen Contract layer | owner-blocked (on 112.3) |
 | AT runtime evidence | combobox behaviour on real AT | owner-blocked (owner hardware) |
 
-**So a cloud wake next falls THROUGH rule 4** — report it as "one item is
-environment-blocked and wants a local wake, three are owner-blocked", not as an
-empty backlog — then rule 5 (`ok`, no dispatch) to **rule 6, Polish**.
-`python3 scripts/loops/polish_requeue.py --check` reads **10 surfaces** whose
-source moved — `alerts`, `calendar`, `dashboard`, `data-table`, `icon`,
-`inline-editing`, `scan`, `sidebar-nav`, `stepper`, `tree-table` (`date` is
-SKIPPED and correctly not re-queued) — so rule 6 has real input. The COUNT
-matches the ten 176.1 refused a fix on; whether it is the same ten was not
-checked, so do not read it as unchanged. Re-run it rather than trusting this
-snapshot. Run `--apply` first, per the rule. **Read §3b's
-`content: 3` paragraph before starting**: every re-queued surface scores 3 and
-has no rankable weakness, so the round is a reconciliation of the published
-artefact against the ledger — and **a no-op is a legitimate outcome, recorded in
-one line**, not a licence to manufacture a fix.
+**`208.3` is gone from that table, and it was the item the last hand-off said
+wanted a local wake.** That prediction was wrong in an instructive way: it
+classified 208.3 as needing a third *environment*, when what it needed was
+reading the page console — one line of `page.on('pageerror')` in the
+environment already reproducing the failure. Root-causing is best done where
+the failure reproduces, which was here all along. Worth carrying into the next
+"browser-blocked" classification.
 
 ## Direction
 
-Nothing blocked on the owner that a wake could advance; the three owner-blocked
-items above are the standing set and are unchanged by this wake.
+Nothing blocked on the owner that a wake could advance beyond the standing
+three, and one new one worth a moment's eye:
 
-**One thing for an owner's eye, and it is a change of state rather than another
-instance of the last three hand-offs' theme.** The cloud lane has now run out of
-build work: `208.3` is the only open non-owner item, and it is precisely the one
-a cloud container cannot settle, because the container IS the environment under
-suspicion. Cloud wakes from here will be Polish rounds on `content: 3` surfaces
-— which §3b itself says are often no-ops. That is the loop working as specified,
-not a fault, but it is the point at which **a local wake is worth more than
-another cloud wake**: one local run takes `208.3` and answers a divergence that
-has been open across two containers. Nothing to decide, and no gate proposed —
-recorded so the asymmetry is visible rather than inferred from a run of quiet
-hand-offs.
+**`211.1` is a genuine product question, not maintenance.** `examples/po-app`
+is the "Devi test" consumer four docs pages cite, and it cannot run without
+reaching the public internet — while the same shell already serves
+`/assets/css/htmx.min.css` locally, so it is half-vendored today. Vendoring the
+script would make the example runnable offline and would have saved four gate
+runs across two containers; it would also stop the example demonstrating the
+CDN wiring that `/getting-started/htmx` documents. That trade is the owner's,
+which is why it was refused inside 208.3 and filed rather than done.
+
+**The cloud lane is NOT out of build work, which reverses the last hand-off.**
+That claim rested on 208.3 being uncloudable; it was not. Next wake is an
+Objective grill regardless, by rule 3.

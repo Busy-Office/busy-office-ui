@@ -1193,3 +1193,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 19:46 · Meta · refusal · filing an item for 201.4's non-reproducing denominator: its conclusion re-derives exactly and the correction is a scoping note, not a defect · refused · 97b3da4b
 - 2026-08-29 20:43 · Continue · build · 209.2 — check-rf-floor's earliestChrome() applies derive-floor's prefix filter; pass line now agrees with a fresh BCD read (@keyframes 43, not 1) · landed · 19baf15
 - 2026-08-29 20:43 · Meta · refusal · consolidating the two floor helpers — in scope as an option, refused on LOOPS.md's own 'not the same table' ground · refused · 19baf15
+- 2026-08-29 21:46 · Continue · build · 208.3 — check:po-app's cloud red root-caused to a blocked htmx CDN; gate now asserts the precondition · landed · 214d6b6
+- 2026-08-29 21:46 · Meta · refusal · vendoring htmx into examples/po-app to make this container green — changes what the example teaches; filed as 211.1 · refused · 214d6b6
