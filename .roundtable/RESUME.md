@@ -4,10 +4,9 @@
 > toolchain that works.** It used to live in this file. It does not any more
 > (roadmap 169.3, 2026-08-28), because this file is rewritten wholesale every
 > wake and that is where corrections go to die. `LOOPS.md` Step 0 names both
-> files, and `check:resume-charter` REPORTS — on stderr, from
-> `record_iteration.py`, advisory by design since 169.4 — if this pointer goes
-> missing or if the durable sections grow back here. It does not fail a build;
-> it left `check:repo` because `.roundtable/**` is CI-ignored (roadmap 175.3).
+> files, and two advisory checks run from `record_iteration.py` — the charter
+> check and `check:resume-slice-ids`. Both REPORT on stderr; neither fails a
+> build (roadmap 175.3).
 
 The wake prompt says *"don't assume prior-turn state"*. This file is how a wake
 picks up work that was left mid-flight, so the instruction stays true across a
@@ -18,135 +17,105 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 4 → Continue,
-build, Slice 186.1**). Working tree clean at hand-off; the wake's commits went
-out as one push. No collision this wake: `git fetch origin main` at Step 0 and
-again immediately before the first commit both showed `origin/main` unmoved at
-`ad65d58`.
+Last updated 2026-08-29 (cloud wake, scheduled routine — **rule 2 → Standardize,
+sweep, Slice 191**). Working tree clean at hand-off; the wake's commits went out
+as one push. **No collision:** `git fetch origin main` at Step 0 and again
+immediately before the first commit both showed `origin/main` unmoved at
+`aa7512f5`.
 
-**A SECOND advisory check now runs from `record_iteration.py`, so expect two
-stderr blocks.** `check:resume-slice-ids` landed this wake and is described in
-`LOOPS.md` Step 0 beside the charter check. **Its verb is REPORTED, not
-FAILED** — a non-zero exit means it found slice ids worth re-reading, not that a
-rule broke.
-
-**Reconcile this file against `ROADMAP.md` before trusting its open set** — that
-is now mechanical rather than a habit, which is the whole of 186.1:
+**Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 7 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 8 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-**Adjudicated at hand-off, which is the step the check exists to prompt.** It
-reports **6** closed ids named here — `186.1`, `29.1`, `29.2`, `15.11`, `173.2`,
-`185.1` — and **all six are historical references, none a claim that any is
-open.** `186.1` is this wake's landed item; `29.1`/`29.2`/`15.11` are quoted
-below only as the items whose ids come from position rather than bold text;
-`173.2` and `185.1` are prior findings. The one id in the open table that is
-genuinely open, `15.12`, is not in that list — which is the check agreeing with
-the table. **Six is high for this file** (the measured distribution is
-`{0: 78, 1: 3, 2: 3, 3: 2}` across 86 revisions) and it is high because this
-hand-off narrates the check itself; do not read the number as a trend.
+## What landed this wake (2026-08-29, cloud, rule 2 → Slice 191)
 
-## What landed this wake (2026-08-29, cloud, rule 4 → Slice 186.1)
+**Three rot-guard lanes clean, one line each** — `scan:dead-style` 0 dead of
+1,428; `report:css-repeats` 8 groups matching `LOOPS.md`'s table by membership,
+totals 237→238 rules and 225→226 distinct (one new rule that is not a repeat);
+`report:prose` 14 flagged pages and all 14 carrying a verdict, checked by
+differencing the page sets rather than by reading the reports.
 
-**`apps/docs/scripts/check-resume-slice-ids.mjs`** — every slice id this file
-names in backticks, checked against what `ROADMAP.md`'s checkboxes say about it,
-plus its own open/closed counts reconciled against a raw count of that file.
-Wired as `check:resume-slice-ids` and run advisory from `record_iteration.py`;
-that script's single charter invocation became a loop over the two.
+**The fourth lane was reading a value its own command cannot print.** `LOOPS.md`
+§3 asked for *"`LOOPS.md` still at 0 down after 167.2"*; the default window opens
+2026-08-20 and *contains* 167.2's split (`3006da0a`), the only down that file has
+ever had inside it. So the report printed `1 down` permanently while the
+condition came true underneath it — **18 up / 0 down since the split, 9,337 →
+12,852 words** — and the previous hand-off said *"still `0 down`"* with nothing
+in the output to adjudicate the two.
 
-**It caught the live defect on its first real run, unprompted.** Recording this
-wake's iteration printed *"4 named id(s) are recorded [x] CLOSED: 186.2, 186.1,
-185.1, 173.2"* — and `186.1` was in the previous hand-off's table as an OPEN,
-cloud-takeable item, which had stopped being true forty minutes earlier. That is
-the failure 184 diagnosed and 186.1 was written for, reproduced by the thing
-built to see it.
+**`report_loop_prose.py` now prints a `ratchet` block**: per file, the steps at
+the tip that did NOT shrink it and the commit that last did, walked from HEAD
+over full history, so no `--since` can hide or manufacture a cut. It shows
+`CLAUDE.md` and `DESIGN.md` have **never been cut**, in 28 and 21 commits.
 
-**Measured before it was written, with the commands, in ROADMAP 186.1:**
+Red-proved three ways, each injection confirmed before its result was believed:
+inverting `<` to `>` in a probe copy gives `(1, c4)` against the canonical
+`(2, c3)`; a real cut appended to a synthetic `10·20·5·8·8` history takes it to
+`(0, c6)` (the first attempt at that series produced FOUR commits — an identical
+8-word file is not a commit — caught by printing the built history); and the
+block is `diff`-identical across `--since 2026-08-20` and `--since 2026-08-28`
+while the `accumulate` column moves `38 up / 1 down` → `19 up / 1 down`.
+Reconciled against an independent walk on all five rows, ups **and** cut sha,
+5 of 5.
 
-- **Base rate 8 of 86 revisions of this file fire (9%)**, distribution
-  `{0: 78, 1: 3, 2: 3, 3: 2}`. Neither dead nor always-on, so a report is a
-  signal. 186.1's premise said *2 of 58 wake-ends*; that is a different unit
-  measured with a parser that could not derive an id for the unnumbered items,
-  and the two are recorded side by side rather than restated as each other.
-- **Id derivation: the bold id wins, position is the fallback.** On `ROADMAP.md`
-  the two agree **36 of 36**; the four items with no bold id (`29.1`, `29.2`,
-  `15.11`, `15.12`) derive correctly. In `ROADMAP-archive.md` the same
-  derivation disagrees **30 times** — merged and renumbered slices — which is
-  the measured reason the check reads `ROADMAP.md` only.
-- **Fences are deliberately NOT skipped**, unlike the sibling charter gate: the
-  reconciliation is against the raw `grep` the Accept names, which knows nothing
-  about fences. Same scope, same answer, or a loud refusal.
+**191.2 is the verdict the block makes readable** — `LOOPS.md` HONEST and
+recurring, +3,503 words by section since its split, concentrated in Step 2
+(1,441 → 3,135) and inside it **rule 4 (274 → 1,012)**. One drafted claim was
+measured away before it shipped: rule 3 regrowing *181 → 672* (quoted from a
+neighbouring entry) is wrong — one splitter across both revisions says **525 →
+672**, the smallest of the five that moved.
 
-**Red-proved by injection in both directions, each injection confirmed by
-grepping the file and the file restored byte-identical** (`md5sum` unchanged,
-`git status` clean on the path): appending a backticked closed id took the
-report 3 → 4; stripping `173.2`'s backticks took it to 2; stripping all three
-made it quiet at rc=0. Both refusals were red-proved by **stubbing a probe copy
-in the same directory** — never `git stash`, which moves the data with the
-script: a narrowed `CHECKBOX` gives parsed 7 open against raw 8 and prints no
-verdict, and a never-matching `SLICE_HEADING` reports the 4 id-less items by
-line number. Inverting the id precedence makes the `--self-test` go FAIL on
-exactly the discriminating case.
+**This wake's own commit added +156 words to `LOOPS.md`** (12,852 → 13,008), so
+the ratchet now reads **19 up**. That is the accumulation 191.3 is about, and it
+is named rather than left for the next sweep to notice.
 
 ## ⚠ THIS WAS A CLOUD WAKE — WHAT WAS NOT LOOKED AT
 
 No Podman, no `localhost:8081`, no screenshots at 1440px/390px in light and dark.
 
-**Nothing this wake needed one.** `git diff --stat` names one new `.mjs`, one
-`package.json` script line, one `record_iteration.py` block, `ROADMAP.md` and one
-paragraph of `LOOPS.md` — no `.css`, no `.astro`. That is an argument from the
-diff, **not a visual check, and it is not claimed as one.** No browser
-measurement was taken either; nothing here is a layout or computed-style claim.
+**Nothing this wake needed one.** `git diff --stat` names one `.py`, one
+`LOOPS.md` paragraph and one `ROADMAP.md` slice — no `.css`, no `.astro`. That is
+an argument from the diff, **not a visual check, and it is not claimed as one.**
 
-Gates run green after the change: core `build` + `test` (**146**), `docs:build`,
+Gates green after the change: core `build` + `test` (**146**), `docs:build`,
 `check:repo` (selftests **45 gates, 16 heuristic all self-tested**; slice-refs
-**383** citations, **172** slice numbers), `check:claims` (**141**),
+**386** citations, **173** slice numbers), `check:claims` (**141**),
 `check:layout` and `test:axe` (**127 pages × 2 widths**). No `verifier` agent is
 available in this session, so the staged diff was reviewed by hand instead —
 said plainly rather than logged as a verifier pass.
 
 **Traps exercised for real this wake:** 1 (started detached — `git branch
---show-current` empty, `main` stale at `17b3ba6` while HEAD sat at `ad65d58`;
-fixed with `git checkout -B main origin/main`, and `origin/main` again arrived as
-a **forced update**, `17b3ba6...ad65d58`), 1b (`cd apps/docs/scripts` for the
-probe runs leaked into the next command and broke a `sed` on `apps/docs/package.json`
-— absolute paths after that), 1c (`CHROME_PATH` exported in the same command as
-every browser gate), 2 (unshallowed before the base-rate measurement: **1,594**
-commits), 3 (`rm -rf apps/docs/dist` before the build).
+--show-current` empty; `git checkout -B main origin/main`, and `origin/main`
+again arrived as a **forced update**, `17b3ba6...aa7512f`), 1c (`CHROME_PATH`
+exported in the same command as every browser gate — `scan:dead-style` needs it
+too and fails loudly without it), 2 (unshallowed before any history figure:
+**1,596** commits).
 
 ## Counters after this wake
 
-**Prediction, written before recording.** At Step 0b: **1108** iterations,
-`Standardize 3 / 4`, `Objective 0 / 3 since 03:48`, `Optimize … ok`. One
-`Continue` row with no `--also-refused` → **1109**, `Standardize` **4 / 4
-OVERDUE**, `Objective` **1 / 3** (this closes Slice 186).
+**Prediction, written before running `dispatch_status.py`.** One `Standardize`
+row naming Slice 191 → **1110** iterations, `Standardize` **0 / 4** (reset),
+`Objective` **2 / 3** — Standardize closes a slice per rule 3's decided list.
 
-**Verified after recording: the prediction held exactly.** `1109` by the parser
-against a raw `grep -c "^- "` of `1109`; `Standardize 4 / 4 OVERDUE`;
-`Objective 1 / 3 [186]`.
+**Verified: the prediction held exactly.** `1110` by the parser against a raw
+`grep -c "^- "` of `1110`; `Standardize 0 / 4`; `Objective 2 / 3 [186, 191]`.
 
-**No metric was recorded**, deliberately. The base rate is a one-off
-characterisation of one file's history, not a repeatable sample under an
-existing name, and inventing a single-sample name pads the store rule 5 reads
-(184's discipline).
-
-**`LOOPS.md` grew +112 words this wake and is still `0 down`** — 167.1's
-signature, unchanged, recorded rather than acted on.
+**No metric recorded**, deliberately: the ratchet figures are a one-off
+characterisation of eight files' histories, not a repeatable sample under an
+existing name, and a single-sample name pads the store rule 5 reads (184's
+discipline).
 
 ## What the next wake should expect
 
-**Rule 2 fires before rule 4: `Standardize` is 4 / 4 OVERDUE.** Run §3's
-playbook — `scan:dead-style`, `report:css-repeats`, `report:prose`,
-`report_loop_prose.py` — and record a verdict for anything flagged that carries
-none. It is all cloud-takeable.
+Rules 2 and 3 are both `ok`, so **rule 4 fires**: the OLDEST still-open item.
 
 Checkboxes at hand-off — re-count rather than copying:
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 7
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 8
 ```
 
 | item | blocked on | which list does it need? |
@@ -156,13 +125,14 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 7
 | `189.1` | nothing | cloud-takeable — CLAUDE.md wording |
 | `190.2` | nothing | cloud-takeable — `check-claims.mjs` cases |
 | `190.3` | nothing | cloud-takeable — a specificity comment |
+| `191.3` | nothing | cloud-takeable — a judgement about `LOOPS.md` rule 4 |
 | `190.1` | nothing, but it **re-opens an owner-settled trade** | measurable in a cloud wake; the CHOICE is a design call for the owner |
 
-Rule 4 takes the **oldest still-open** item — `15.12`, then `112.3`/`112.4`, all
-owner-blocked — so the oldest *dispatchable* one is **`189.1`**. Say **which
-kind** of blocked when reporting rule 4 as finding nothing (`LOOPS.md` rule 4:
-owner-blocked / browser-blocked / agent-blocked), and for a browser-blocked one
-name which of `ENVIRONMENT.md`'s two lists it needs.
+Oldest still-open is `15.12`, then `112.3`/`112.4`, all owner-blocked — so the
+oldest *dispatchable* one is **`189.1`**, unchanged from the last hand-off. Say
+**which kind** of blocked when reporting rule 4 as finding nothing (`LOOPS.md`
+rule 4: owner-blocked / browser-blocked / agent-blocked), and for a
+browser-blocked one name which of `ENVIRONMENT.md`'s two lists it needs.
 
 **On `190.1`:** its Accept is expressed as measurements a cloud wake can take,
 but choosing *which* of the three options to implement re-opens what the owner
@@ -175,6 +145,20 @@ picking one autonomously.
 
 **Do not re-raise Slice 179's or 182.2's refusals, or 176.3**, which the owner
 closed as no-change. Re-measure before reopening anything.
+
+**Adjudicated at hand-off, which is the step `check:resume-slice-ids` exists to
+prompt.** It reports **7** closed ids named here — `191.1`, `191.2`, `173.2`,
+`175.3`, `176.3`, `182.2`, `185.1` — and **all seven are historical references,
+none a claim that any is open.** `191.1`/`191.2` are this wake's landed items;
+`173.2` is named only as the owner call `190.1` would re-open; `175.3`, `176.3`
+and `182.2` are prior decisions this file says not to re-raise; `185.1` is
+quoted in the Direction read. The genuinely open ids — `15.12`, `112.3`,
+`112.4`, `189.1`, `190.1`-`190.3`, `191.3` — are in the table above and are not
+in that list, which is the check agreeing with the table. **Seven is the highest
+this file has recorded** (the measured distribution over 86 revisions was
+`{0: 78, 1: 3, 2: 3, 3: 2}` before yesterday's 6); it is high because this
+hand-off carries both a do-not-re-raise list and a direction history, not
+because anything is stale. Do not read the number as a trend.
 
 ## Direction — the owner's pick, and whether THIS wake advanced it
 
@@ -194,17 +178,15 @@ from the sources named — never by copying the answers above you.**
   workflow's comments carry the recovery. A release cannot even be *attempted*
   today without a version bump — `check-publishable.mjs` exits 1 on both
   packages, by design.
-- **Did this wake advance it?** **No.** Rule 4 dispatched loop hygiene; nothing
-  in the diff touches either package.
+- **Did this wake advance it?** **No.** Rule 2 dispatched a sweep of the loop's
+  own rot guards; nothing in the diff touches either package.
 - **Work rows since the direction was decided that did not advance it:** derive
-  it, do not increment. Re-run the command and READ the matched rows rather than
-  `-c`-ing them; the needle over-counts, because a row can mention `create-ui`
-  while merely narrating the blockage. **Derived this wake, after this wake's row
-  was committed: 58 non-Meta work rows since `fb15cdc`; the needle matches 6;
+  it, do not increment. **Derived this wake, after this wake's row was
+  committed: 59 non-Meta work rows since `fb15cdc`; the needle matches 6;
   reading them, `164.3`, the `0.1.0` release and `185.1` advance the direction,
   while `168.1`, the `173.2`/`185` triage and `186` narrate or detect it — so
-  55 of 58 did not.** *(Last honest reads: 52 of 55, 49 of 52, 46 of 47, 43 of
-  44, 41 of 42, 38 of 39.)*
+  56 of 59 did not.** *(Last honest reads: 55 of 58, 52 of 55, 49 of 52, 46 of
+  47, 43 of 44, 41 of 42, 38 of 39.)*
 
   ```
   # `git diff fb15cdc..HEAD` MISSES the current wake's rows until they are
