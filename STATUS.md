@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 10:49 UTC
+Generated at: 2026-08-29 10:54 UTC
 
 ## Open items by slice
 
@@ -15,10 +15,9 @@ Generated at: 2026-08-29 10:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1137 iterations logged)
+dispatch status — counter-triggered rules (1138 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-29 18:49   ok
-  Objective     3 / 3 slices          since 2026-08-29 08:49   OVERDUE  [193, 196, 197]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-08-29 18:54   ok
   Optimize      0 wake-date(s) newer   since 2026-08-29 01:46   ok   [newest pair: axe-violations; 101 sample(s), 13 of 30 name(s) sampled twice]
 ```
 
@@ -32,7 +31,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 08:49 · Meta · refusal · a gate for 196.1 (94.11: one candidate element in the whole corpus) · refused · a07d5830
 - 2026-08-29 08:49 · Meta · refusal · an item for 192.1's 13-word section-count difference — it is the heading line, recorded twice already · refused · a07d5830
 - 2026-08-29 09:43 · Continue · build · 193.1 — execute 167.1's reopen watch on CLAUDE.md: fold nothing, retire the watch (its premise is a traversal concern; CLAUDE.md is delivered whole) · landed · 4ea2cd7f
 - 2026-08-29 09:43 · Meta · refusal · folding sections 8 and 10, which share 7 of 7 probed worked examples and point at each other zero times — re-narration in a different grammar is this repo's recorded working mechanism · refused · 4ea2cd7f
@@ -42,6 +40,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 18:34 · Meta · refusal · a 42-row reopen-condition register — 23 of 42 are semantic and unadjudicable by the register itself (94.11) · refused · 1c111d7
 - 2026-08-29 18:40 · Continue · build · 196.1 — data-table.css's horizontal-overflow claim was false; corrected the comment (Branch B), no layout change · landed · dd2f3a1
 - 2026-08-29 18:49 · Standardize · sweep · Slice 197 — all three standing lanes clean, delta 0 vs Slice 194 · logged · 777dacf
+- 2026-08-29 18:54 · Objective · grill · Objective grill of 193/196/197 — clean control, index checked first, no repeated subject · logged · 4746a93
 
 ## Sunset test
 
