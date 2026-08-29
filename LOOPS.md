@@ -997,6 +997,27 @@ Seed list — Explore pulls from here or adds to it:
   by measuring against the bar's own bottom edge. Full report:
   `.roundtable/explore-object-page-2026-08-19.md`.
 
+- **A "Known Limits" section on component pages** — found by a user-requested
+  comparison against royui.dibbayajyoti.com (2026-08-29,
+  `.roundtable/research-royui-comparison-2026-08-29.md`). Distinct from the
+  required wrong-choice clause: wrong-choice answers *"should I use this
+  component at all"* (routing, answered once, up front); Known Limits would
+  answer *"what will this NOT do for me, once I've chosen it"* — RoyUI states
+  these plainly on its `popover` page (no portal, click-only, no auto-flip).
+  This repo already has that information but it lives inside implementation
+  comments and prose a docs reader never sees (196.1's overflow-bound comment
+  in `data-table.css` is exactly a known-limit statement; 26.1 documents
+  `.bo-command-palette` has no fuzzy-match, in prose only). Needs an Explore
+  spike, not a blind roadmap item: which components actually have a limit
+  worth surfacing (a small, real set — not every component has one, and a
+  section required on all of them regardless would be 94.11 ceremony), and
+  whether the content can be sourced from existing CSS comments/prose rather
+  than hand-authored per page. A parallel "Theming" section (RoyUI shows a
+  worked CSS-variable override per component) was checked and NOT added here:
+  this repo's `ApiTable` already generates the custom-property surface each
+  component exposes, so the gap is a worked example on top of existing data,
+  not missing documentation — lower value, not filed.
+
 **Seed list is now exhausted** (2026-08-14) — every idea above has been
 spiked/shipped/discarded. Per this playbook's own fallback ("or generate
 one from ERP gaps"), the next Explore dispatch generated one from the
