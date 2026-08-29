@@ -315,6 +315,130 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 212 — Objective grill of the 200/208/209 window: a refusal's own base rate missed the declaration its cited gate names in its header, and the arming set needed narrowing for the third grill running (2026-08-29)
+
+**Dispatcher trace, cloud wake.** Step 0: container **detached** again
+(`git branch --show-current` empty), local `main` stale at `17b3ba6`,
+`origin/main` a forced update `+ 17b3ba6...723e1f0`; recovered with
+`git checkout -B main origin/main` before any commit — `ENVIRONMENT.md` trap 1,
+sixth wake running. Rule 1: no open P0, GitHub intake **0 open issues** (asked
+via the API). Rule 2: `Standardize 3 / 4 ok`. Rule 3:
+`Objective 3 / 3 slices OVERDUE [200, 208, 209]` → **Objective**. Full report:
+`.roundtable/grill-objective-200-208-209-2026-08-29.md`.
+
+**Honest scope: the three Continue rounds since the last Objective row** —
+200.7 (written up as Slice 210), 209.2, and 208.3 (which filed Slice 211). 200
+had already been grilled twice and 208 in full by 209 last wake; see 212.2,
+which is about that narrowing having to be done by hand.
+
+**Every claim in 209.2 and 208.3 reproduces**, re-derived rather than read off
+the file: `check:rf-floor`'s pass line to the digit (`@container 105,
+@keyframes 43, @layer 99, @media 1, @starting-style 117, @supports 28`, 1 above
+108); a fresh BCD read of all six at-rules, with `@keyframes` the only one
+carrying a `prefix` entry; no prefixed at-rule emitted by the profile;
+`--self-test` green and **red-proved fresh** by an asserted-unique injection
+(filter dropped → `1 1`, rc=1; restored → green); `check:selftests` 46 gates /
+16 heuristic; and `check:po-app` at **2 of 19** with the precondition named
+first and `htmx: "undefined"`.
+
+1. [x] **212.1 — DONE 2026-08-29. Slice 210's BROAD base rate is wrong: 5
+       literal occurrences across 3 declarations, not "3 sites / 2
+       declarations".** 210 enumerated *"the three literals in the tree"* as
+       `600ms` (scan), `1.8s` and `linear` (skeleton). An independent postcss
+       walk of all of `packages/core/src/css` finds a third declaration —
+       `motion/motion.css:96`, `.bo-motion-spin { animation: bo-motion-spin 1s
+       linear infinite }` — carrying `1s` and `linear`. A second, looser
+       line-based sweep returns the same three declarations plus two hits that
+       are prose inside comments, which the parse correctly excludes; the two
+       instruments agree.
+
+       **Where it ships, stated exactly, because the first reading of this was
+       overstated and corrected before publishing.** `grep -rl` finds the string
+       in `dist/css/index.css` and `dist/css/components/skeleton.css` too, but
+       there it is **comment text**. The declaration ships in
+       `dist/css/motion.css` alone: `motion/motion.css` is deliberately opt-in
+       and never imported by `index.css` (`richtext.css:148`; the entry point is
+       built by `build-component-css.mjs:92`). It is in the source tree, it is a
+       shipped artefact, and it is **not under `components/`** — the most likely
+       reason a components-scoped probe missed it.
+
+       **The gate 210 quoted already counted it, and that is red-proved, not
+       reasoned.** Removing spin's reduce override from the generated
+       `dist/css/motion.css` — injection asserted unique (`count == 1`) before
+       replacing — turns `check:motion` red naming exactly that declaration, and
+       restoring it returns green. 210 quoted that gate's pass line in the same
+       paragraph (*"animation: 17 token-driven, **6 explicit override**"*), and
+       `check-motion.mjs`'s own header reads *"both literal-duration animations
+       (**spin**, skeleton shimmer) carry their own `animation: none`
+       override"*. Closer still: `skeleton.css`'s own comment, in a file 210 did
+       read, explains its override as *"same reasoning as `.bo-motion-spin`"*.
+
+       **The conclusion is unaffected and better supported.** NARROW re-derives
+       as **0** — the scale is `100ms / 150ms / 300ms` plus
+       `cubic-bezier(0.4, 0, 0.2, 1)`, and neither `1s` nor `linear` is a token
+       value — so 210's 94.11 refusal stands untouched. And BROAD's refusal
+       strengthens: the red set is 3 documented decisions, the missed one being
+       the most explicitly documented of them (`motion.css:92-94` states why it
+       is not token-driven; `:102-106` gives it `animation: none` under reduce).
+
+       **No gate is proposed and none is needed.** `check:motion` already covers
+       this subject on the shipped dist, adjudicating rather than forbidding —
+       210's own conclusion. What was wrong was a count, and 192.1's answer to a
+       wrong count is to name the instrument, not to add a gate.
+
+       **Shape: 192.1, third instance running.** *The defect lands in what
+       shipped BESIDE the number.* 210 spent its red-proof on the NARROW zero —
+       correct, and re-derived as correct here — and the BROAD enumeration went
+       out on that credibility having earned none. Same shape as 209.1, and same
+       shape as 210's own paragraph about 201.4's denominator: 210 wrote that
+       paragraph and then did it. **Correction appended to Slice 210's own
+       record rather than rewritten in place**, per the standing rule that
+       historical rows are never edited.
+
+2. [x] **212.2 — DONE 2026-08-29. `LOOPS.md` §6 now says to narrow the arming
+       set; three consecutive grills had to work it out for themselves.**
+       Rule 3's text says *"THREE OR MORE slices **closed** since the last
+       Objective"*, while the instrument counts **distinct slice numbers named
+       by Continue/Standardize rows** since the last Objective row. A
+       many-round slice therefore re-arms after each grill: **Slice 200 alone
+       has armed three consecutive grills** (207 `[200, 204, 206]`, 209
+       `[200, 205, 208]`, this one `[200, 208, 209]`), and each narrowed it out
+       by hand while calling it *"the same correction"* someone else had made.
+
+       Measured across `ROADMAP.md` + `ROADMAP-archive.md` by parsing the
+       `## Slice N — Objective grill of Slices …` headings, deduped by grill
+       slice: **21 grills, 9 covering at least one already-grilled slice**. Some
+       are deliberate `-a`/`-b` halves of one wake's grill (196's heading says
+       *"the artefact half"*); the last three are re-arms.
+
+       **The step existed in the wrong file.** CLAUDE.md says *"Before grilling
+       something, check `.roundtable/INDEX.md`"*, and the index reports its
+       repeated-subject count on every run — **4** today, against the **3**
+       CLAUDE.md records as its reading when written. `LOOPS.md` §6, the
+       playbook a dispatched wake actually executes, said nothing about it. That
+       is the signature of an instruction living somewhere the executing wake
+       does not read, which is 169.3's lesson in a new place.
+
+       **Written as a property, not a snapshot** — §6 names the check and the
+       command, never which slices are stale. `LOOPS.md` has paid for that
+       distinction three times with the prose-page names and once with the
+       `0 down` clause (191.1).
+
+       **Refused: a sixth regex in the dispatcher.** Counting *closed* slices
+       means classifying slices by heading inside `dispatch_status.py`, which
+       that script's header refuses on measured grounds and 170 finding B
+       refuses again by name. The asymmetry decides it — rule 3 sits above rule
+       4 precisely so it cannot starve, so **over-arming costs one paragraph of
+       scope-setting and under-arming costs a starved loop.**
+
+**NOT VERIFIED, and named as such**: cloud wake — no Podman, no
+`localhost:8081`, **no screenshots at 1440px or 390px in either theme**. Zero
+lines changed under `packages/core/src/` or `apps/docs/src/`; the diff is
+`ROADMAP.md`, `LOOPS.md`, the grill report and the loop log, and no claim above
+depends on how anything looks. Both dist mutations used as red-proofs were
+reverted and the gates re-run green afterwards. `check:po-app` is red here **by
+design** (2 of 19) per 208.3 — not a regression.
+
 ## Slice 211 — two things 208.3's root-cause turned up: a reference app that cannot run without the public internet, and a scroll-anchor assertion nobody had ever exercised in a container (2026-08-29)
 
 **Filed by the cloud wake that closed 208.3, not built by it.** Both are real
@@ -465,6 +589,21 @@ nothing here — **zero lines changed under `packages/` or `apps/docs/src/`**; t
 diff is markdown plus the loop log, and no claim above depends on how anything
 looks. The probe was a scratchpad throwaway and is deliberately not committed:
 shipping the script would be shipping the gate this item refuses.
+
+**CORRECTION appended 2026-08-29 (roadmap 212.1), not rewritten in place.** The
+BROAD row above reads **"3 sites / 2 declarations"** and the enumeration below
+it names *"the three literals in the tree"* as `600ms` (scan), `1.8s` and
+`linear` (skeleton). Both are wrong: there are **5 literal occurrences across 3
+declarations**, the third being `motion/motion.css:96` —
+`.bo-motion-spin { animation: bo-motion-spin 1s linear infinite }`, which ships
+as the opt-in `dist/css/motion.css` entry point and is not under `components/`.
+`check:motion` counts it (red-proved by an asserted-unique injection), its own
+header names *"both literal-duration animations (**spin**, skeleton
+shimmer)"*, and `skeleton.css`'s comment cross-references it by name. **Neither
+conclusion moves**: NARROW re-derives as 0 because no token carries `1s` or
+`linear`, and BROAD's refusal strengthens — the third declaration is the most
+explicitly documented of the three (`motion.css:92-94` and `:102-106`). See
+212.1 for the commands.
 
 ## Slice 209 — Objective grill of Slices 205, 208: the sweep proved itself against a state it never committed, and the floor script publishes a prefixed version its sibling filters out (2026-08-29)
 

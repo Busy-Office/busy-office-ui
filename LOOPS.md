@@ -953,6 +953,36 @@ never dirties main.
 ### 6. Objective (grill the vision)
 **Trigger:** dispatched at a milestone (e.g. pre-1.0), or on demand.
 **Heavy — not every wake.**
+
+0. **Narrow the arming set before grilling it.** Rule 3's text says *"slices
+   **closed** since the last Objective"*; `dispatch_status.py` counts distinct
+   slice numbers **named by Continue/Standardize rows** since the last Objective
+   row, so a slice with many rounds re-arms after each grill and the set can
+   name a slice an earlier grill already covered in full. Check
+   `.roundtable/INDEX.md` first — it is generated, it lists every finding, and
+   it reports its own **repeated subject** count — then state the honest scope
+   in the write-up, naming what you dropped and why.
+
+   ```
+   python3 scripts/loops/dispatch_status.py            # the armed set
+   grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' \
+       ROADMAP.md ROADMAP-archive.md                   # what each grill covered
+   ```
+
+   **The property, not a list of stale slices** — this playbook has paid three
+   times for naming values that go stale silently (the prose-page names, the
+   `LOOPS.md 0 down` clause, 191.1). Measured when this step was added (roadmap
+   212.2): **21 grills, 9 covering at least one already-grilled slice**, and
+   Slice 200 alone armed three consecutive grills (207, 209, 212), each
+   narrowing it out by hand and each calling it *"the same correction"* someone
+   else had made. Re-run the commands; the figures are snapshots.
+
+   **Refused, so a later wake does not re-propose it:** making the counter count
+   *closed* slices means classifying slices by heading inside
+   `dispatch_status.py` — the sixth regex that script's own header refuses on
+   measurement, and 170 finding B refuses by name. The asymmetry decides it:
+   rule 3 sits above rule 4 so it cannot starve, so **over-arming costs one
+   paragraph of scope-setting and under-arming costs a starved loop.**
 1. Run `round-table` on the product thesis: *is a CSS-first ERP framework the right
    bet, for whom, versus what?*
 2. Evidence gate: a conclusion needs ≥2 independent sources to be `Evidence`, else
