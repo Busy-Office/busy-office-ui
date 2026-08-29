@@ -231,6 +231,121 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 196 — Objective grill of Slices 190, 191, 192 (the artefact half): twelve measured claims reproduce, and the thirteenth was reasoned out beside them (2026-08-29)
+
+**Dispatcher rule 3, cloud wake.** `dispatch_status.py` read `Objective 3 / 3
+slices since 2026-08-29 06:48 OVERDUE [190, 191, 192]`; rule 1 found no open P0
+(`grep -n 'P0' ROADMAP.md` returns only closed slice headings and 190.1's
+explicit *"Not a P0"*) and GitHub intake **0 open issues**, asked via the API;
+rule 2 read `Standardize 1 / 4`. Full report:
+`.roundtable/grill-objective-190-191-192-2026-08-29-b.md`.
+
+**Cross-cut.** Thirteen claims re-measured from the artefacts rather than from
+the prose about them. **Twelve reproduce** — 190.1's six-combination Accept to
+the pixel (−47/−51/−55 at 1440, −29/−33/−37 at 390, `rowBlur === rowFocus` 6 of
+6), its corpus instrument (1 page of 137), 190.2's `check:claims` **144**,
+190.3's three corrected specificities (3 of 3), 191.1's ratchet naming 191.3's
+own cut (`9198e43f`), 191.3's rule-4 **752 words**, and 192.1's `CLAUDE.md`
+**5,450** and **+202**. The thirteenth is not a number: it is the sentence
+reasoned out beside them in the comment 190.1 shipped, and it is false —
+**196.1**.
+
+**n = 3 for 192.1's placement rule**, and instance 3 is inside the fix for
+instance 1. The rule was written yesterday from 173.2 and Slice 193 finding D,
+both found by looking backwards; this is the first found by applying it forward.
+
+**Counter-evidence kept: 191 and 192 are clean controls.** Every figure either
+slice reported reproduces, and nothing either asserted beside its measurements
+failed. So the rule fires on a change carrying both kinds of claim — it is not a
+claim that every change rots.
+
+**A COLLISION — the local dispatcher took the same rule-3 dispatch and pushed
+first.** Fourth recorded collision, and the second caught by the mandated
+`git fetch origin main` immediately before the first commit rather than at push
+rejection: `05809097..50d73b07`, the other wake's report landing at the **same
+filename**. Per Step 0c both are kept and neither is a duplicate — **Slice 195**
+reads the window for *process* findings, this one re-measures the *artefacts*,
+and they overlap nowhere. 195's findings have priority and are credited. Its
+finding A proposes that the honest scope here is 192 alone, since 190 and 191
+were grilled hours earlier; recorded as **measured counter-evidence rather than
+a disagreement** — this grill re-grilled them anyway and the window's one defect
+is in **190**, in shipped CSS that the earlier grill did not reach because it
+re-read the claims rather than re-measuring the artefact. A repeated subject and
+a repeated measurement are not the same thing. **No rule change proposed**,
+here or there.
+
+**Checked before writing**: the window is grill / sweep / grill, the shape that
+invites re-raising the product-vs-machinery ratio. Retired, and **not raised**.
+
+1. [ ] **196.1 — `data-table.css` says the cell error message is "bounded so it
+       can never introduce horizontal overflow". It introduces 83px of it at
+       390px, in a container that had none.**
+
+       `max-inline-size: min(48ch, 100cqi)` caps the message's **width** at the
+       container's inline size, but the message is `position: absolute;
+       inset-inline-start: 0` inside the cell's `.bo-form-field`. Its right edge
+       is *cell offset + width*, and at 390px `100cqi` is the whole container —
+       so a message that wants the full cap overflows by exactly the cell's
+       offset. A cap on width cannot bound an edge that starts at a non-zero
+       offset.
+
+       Measured on a build of `0580909`, reading `container.scrollWidth`
+       blurred and focused with a 247-character message (the container is
+       `overflow: auto`, so its `scrollWidth` growing **is** the overflow):
+
+       | w | density | clientW | swBlur | swFocus | grew | msgRight − containerRight |
+       |---|---|---|---|---|---|---|
+       | 1440 | compact | 896 | 896 | 896 | 0 | −261 |
+       | 1440 | comfortable | 896 | 896 | 896 | 0 | −257 |
+       | 1440 | spacious | 896 | 896 | 896 | 0 | −251 |
+       | 390 | compact | 310 | 310 | 393 | **+83** | **+67** |
+       | 390 | comfortable | 310 | 310 | 394 | **+84** | **+68** |
+       | 390 | spacious | 310 | 370 | 416 | **+46** | **+90** |
+       | 390 | compact | 310 | 310 | 310 | 0 | −86 (21-char control) |
+
+       At 390 compact and comfortable the container had **no horizontal scroll
+       at all** before the message was shown.
+
+       **Red-proved both directions**, each injection confirmed to have landed
+       by reading the computed `max-inline-size` into a plain string first (the
+       live-`getComputedStyle` trap 190.2 recorded): `6ch` → `swGrew 0` (and
+       +601 vertically instead); `max-content` → `swGrew +1264`; re-injecting
+       the shipped `min(48ch, 100cqi)` reproduces +83 with `injectionLanded:
+       false` correctly reported for that identity case.
+
+       **Not a P0, on the same grounds 190.1 used, checked rather than
+       assumed.** The overflow is inside an `overflow: auto` container so it is
+       reachable by scrolling, and `aria-describedby` carries the full string to
+       assistive tech either way. **No shipped page is affected**: the 137-page
+       DOM walk finds exactly one page nesting a message in a data table, its
+       message is 21 characters, and that row reads `swGrew 0`.
+
+       **Filed rather than fixed, and the reason is that the fix depends on the
+       branch.** Rewriting the comment now would pre-pick the branch this item
+       exists to decide; the two are not the same edit.
+
+       *Accept* — properties, not predicted values, and either branch closes it:
+       - **Either** showing the message leaves `container.scrollWidth` unchanged
+         and `msg.getBoundingClientRect().right <= container.getBoundingClientRect().right`
+         at `compact`/`comfortable`/`spacious` × 1440/390 for a message that
+         wants the full cap — **or** the comment states what the cap actually
+         bounds, names the residual overflow with the measurement that
+         establishes it, and says why that is the accepted trade.
+       - **190.1's contract survives whichever branch is taken**: the message is
+         still fully visible vertically (`msg.bottom <= container.bottom`) and
+         the row's height is unchanged by it (`rowBlur === rowFocus`), in all
+         six combinations. 190.1's own measurement is the regression test.
+       - Red-proved by injection, with the injection confirmed to have landed
+         before its result is believed.
+       - **Finding this premise false is a satisfying outcome** — if a re-run
+         shows no growth, record it with the command rather than working around
+         it. The probe and every command are in §B of the report.
+       - **No new gate is expected.** One is refused in the report on 94.11's
+         grounds (base rate: one candidate element in the whole corpus). If the
+         chosen branch leaves a measurable runtime property, a `check:claims`
+         case is the right home for it — that is the recipe's existing step, not
+         a new programme.
+
 ## Slice 195 — Objective grill of Slices 190, 191, 192 (2026-08-29)
 
 Rule 3 at 3/3. **The index check changed what this grill is**: slice 192 is
