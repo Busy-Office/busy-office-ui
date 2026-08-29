@@ -45,6 +45,19 @@ same one, the postcss/notVerified branch did not take on the runner and the
 first thing to read is whether the runner's Chrome reports a fine pointer,
 which would make the three guarded live cases run there and fail for real.
 
+**ANSWERED BEFORE THE WAKE ENDED — `main` IS GREEN.** Left the paragraph above
+standing rather than rewriting it, because what it told the next wake to do is
+exactly what this wake then did, and the instruction is worth keeping for the
+next CI failure. The result: **run 648 on `3d35a79e`, all 6 jobs `success`,
+`Claims + formatting` among them.** The streak 642-646 is over.
+
+**Run 647 reads `cancelled`, and that is NOT a signal** — this wake's own
+second push superseded it under the workflow's concurrency group. A wake
+reading the run list will see `cancelled` sitting directly above five
+`failure`s and should not add it to the tally; 648 is the run for the current
+head. (Worth knowing generally: pushing twice in a wake cancels the first
+run, so "one push per wake" has a second reason behind it beyond Pages churn.)
+
 **The count is corrected, not copied: it read 3 when measured and 5 by the time
 the fix pushed**, because the other dispatcher pushed twice more in between —
 and one of those is **`645`, the `Release 0.6.0` commit itself, which ran red**.
