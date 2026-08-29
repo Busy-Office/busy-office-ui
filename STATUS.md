@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-29 07:51 UTC
+Generated at: 2026-08-29 07:52 UTC
 
 ## Open items by slice
 
@@ -18,7 +18,7 @@ Generated at: 2026-08-29 07:51 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1123 iterations logged)
+dispatch status — counter-triggered rules (1124 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-08-29 15:23   ok
   Objective     3 / 3 slices          since 2026-08-29 06:48   OVERDUE  [190, 191, 192]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -35,7 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 14:41 · Objective · grill · 192 — Objective grill of 186/189/190/191: every defect in 173.2 was in an ASSERTED claim and the one MEASURED claim was correct (3 of 3); two more instrument defects caught by injection assertions; retired product-vs-machinery ratio checked and deliberately not re-raised · logged · 6a426d6
 - 2026-08-29 14:41 · Meta · refusal · a gate for either finding — A's discipline is a writing rule with no mechanical form, B is the existing red-proof rule succeeding three times · refused · 6a426d6
 - 2026-08-29 06:48 · Objective · grill · 193 Objective grill of 186/189/190/191 — 167.1's reopen condition fired and was never read; rule 3 at 3-of-4 grill-armed · logged · 774558e5
 - 2026-08-29 06:48 · Meta · refusal · a reopen-condition register gate or report — the trigger is semantic for most of the 42, and a register nobody can adjudicate is 94.11's ceremony · refused · 774558e5
@@ -45,6 +44,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-29 07:42 · Continue · build · 192.1 — the placement rule: the defect lands in what shipped BESIDE the measurement, not in it. Accept branch (b) tested first and failed (1 of 3 defects covered by an existing rule, the placement observation by none; the siblings rule needs a claim to have DIED and none did), so branch (a): one paragraph into CLAUDE.md's existing 'a number you report is load-bearing'. n=2, and instance 2 was found by re-checking this item's own premise — Slice 193 finding D's 'no enumeration returns its stated 138' is false, find -name index.html returns exactly 138 (= distPages skipRedirects:false 137 + suite/, by set difference); corrected in place, counter-evidence kept that the numerator 9 pins nothing · landed · c75d721e
 - 2026-08-29 07:42 · Meta · refusal · a gate for the placement rule (a writing rule has no mechanical form) and a new ## section (193.1 has the fold question open) · refused · c75d721e
 - 2026-08-29 15:51 · Roadmap · triage · 192.1 closed by verification — a cloud wake had already written the placement rule into CLAUDE.md citing the item; its pinned 138 re-run and agrees, so nothing was written twice · logged · b00d3c5
+- 2026-08-29 15:52 · Meta · correction · correcting the row above: 192.1 was ALREADY [x] when this wake reached it, closed by a cloud wake — the previous row's 'closed by verification' overstates. What this wake actually did is re-run the passage's pinned command (find apps/docs/dist -name index.html | wc -l = 138) and confirm it. No ROADMAP edit was made; the commit was correctly empty · logged · fb418cb
 
 ## Sunset test
 
