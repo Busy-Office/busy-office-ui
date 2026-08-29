@@ -1175,3 +1175,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 22:59 · Standardize · sweep · Slice 206 — fourth clean sweep; motion @starting-style repetition checked and correctly left alone · landed · c97e893
 - 2026-08-29 23:06 · Objective · grill · Slices 204/206 grilled — an environment fact (headless Chrome's pointer capability) drifted mid-session; the self-healing gate absorbed it with no code change · logged · 31bec93
 - 2026-08-29 23:06 · Meta · refusal · a Chromium version-pin gate — would trade one kind of staleness for another this repo does not control · refused · 31bec93
+- 2026-08-29 23:15 · Continue · build · 205.1 — check:rf-floor's pass message narrowed to what it actually checks; base rate 6 at-rules, 1 above 108, at-rules degrade wholesale by CSS spec so no guard needed · landed · 39a6fa2
