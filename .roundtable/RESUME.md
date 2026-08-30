@@ -17,158 +17,143 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**cloud** wake — rule 3 → **Objective**, the dispatch
-the previous hand-off predicted). Working tree clean at hand-off; one push.
+Last updated 2026-08-30 (**cloud** wake — rule 6 → **Polish**, the dispatch the
+previous hand-off predicted). Working tree clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 4 at hand-off
-node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, unchanged
+node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `215.1`, `215.2`, `215.3` and `213.1` as
-closed ids named here — **historical references** to this wake's own work and to
-what it grilled, not claims they are open. The only ids named here that
-genuinely ARE open are `211.1`, `112.3`, `112.4`.
+Ids named below that are **closed** — `216.1`, `216.2`, `216.3`, `179`, `94.3`,
+`182.1`, `176.1` — are historical references to this wake's work and to what it
+cites, not claims they are open. The four genuinely open are **`112.3`,
+`112.4`, `211.1`, AT runtime**. This wake changed none of them.
 
-**No collision on this wake.** `origin/main` was at `aba7c3cc` at Step 0, still
-`aba7c3cc` at the mandated re-fetch before the first commit, and still
-`aba7c3cc` at the final fetch before the commit landed.
+## ⚠ THIS WAKE WAS LAPPED. READ THIS BEFORE TRUSTING ANY LONG WAKE'S PLAN.
 
-**Trap 1 fired for real again, ninth wake running.** Container started detached
-(`git branch --show-current` empty) with `origin/main` arriving as a forced
-update (`+ 17b3ba6...aba7c3c`). Recovered at Step 0 with
-`git checkout -B main origin/main`, before any commit. The clone was
-**unshallowed** (50 → 1,703 commits) because two claims under grill are history
-measurements.
+**A collision landed, of a kind Step 0c does not model, and only the mandated
+pre-commit fetch caught it.**
+
+```
+Step 0 fetch            origin/main = 52a50b58   19:50:33Z   highest slice 178
+pre-commit re-fetch     origin/main = 724dc587   01:40:39Z   highest slice 215
+git rev-list --count 52a50b58..724dc587          # 151 commits, 37 slices
+```
+
+The **first** of those 151 commits (`74d8c2b8`, 21:44Z) is
+**`Slice 179 — Objective grill of 173/176/177/178`** — precisely the rule-3
+dispatch this wake had taken at Step 0 and had carried to a finished report, two
+landed fixes and a red-proof. All of it was **discarded and never pushed**, as
+Step 0c instructs the loser to do.
+
+**This is new evidence for the OPEN `175.4`, and it is recorded in ROADMAP 216's
+opener rather than only here.** Step 0c bounds the cost at *"up to one wake's
+work, discarded"* and models two wakes racing for the same item at the same
+time. This was a **slow wake outrun**: it planned, measured and wrote against a
+`ROADMAP.md` that was 37 slices out of date for its whole duration, so every
+figure it produced described a tree nobody was on. Do not read 175.4's decision
+as being only about simultaneity.
+
+**Practical consequence for the next long cloud wake: re-fetch mid-wake, not
+only before the first commit.** Nothing mandates that today and nothing here
+changes the rule — it is a suggestion, not a decision this loop may take.
+
+Part of the wall clock that made this wake lappable is now fixed: three failed
+`git fetch --unshallow` attempts, ~10 minutes, all one stale lock file — see
+**ENVIRONMENT.md trap 2b**, added by 216.3 this wake.
 
 ## What landed this wake
 
-**Slice 215 — Objective grill of 211, 213, 214.** Full report:
-`.roundtable/grill-objective-211-213-214-2026-08-30.md`. Scope was the **whole
-armed set with no narrowing needed** — the first grill since 212 whose set
-contains no already-grilled slice, so the hand-narrowing 207/209/212 each had to
-do did not recur.
+**Slice 216 — Polish round 2 on `component/data-table`. NOT a no-op.**
 
-**The finding that matters, because it sits under an OPEN owner decision:
-`211.1`'s refusal premise is measurably FALSE.** That item declines to vendor
-htmx because doing so *"changes what the reference app teaches — a real consumer
-wiring htmx from a CDN, which is what `/getting-started/htmx` documents"*. That
-page carries **0** each of `unpkg`, `cdn`, `jsdelivr`, `script src`, `install`;
-across **all of `apps/docs/src/`, 0 files** contain `unpkg` or `cdn`. What the
-page actually documents is the *integration* — the opt-in
-`@busy-office/ui/css/htmx` stylesheet and the `initDialogs`/`initDataTables`
-wiring — never how to load htmx by any route. Repo-wide `unpkg` survives in one
-piece of live code (`server.mjs:125`) plus one comment about it. The second half
-fails too: *"the mechanism costs nothing"* rests on **`apps/docs`**'s dependency
-— `examples/po-app` is not a workspace, declares only `@busy-office/ui`, and has
-no `node_modules`; the version it would resolve to (**2.0.10**) is not the one it
-pins (**2.0.4**). The correction is recorded **inside 211.1**, and the item stays
-OPEN because the product call is the owner's.
+- **216.1 — the `spacing` DSA cite was already stale on the day it was scored.**
+  It read *"the **1.75rem** compaction heights … reconciliation **queued** as
+  94.3"*. `grep -c '1\.75rem'` on `data-table.css` reads **0**; walking all 40
+  revisions, `79f7fec9` (*"94.3: the fourth density gets a name and a reason"*,
+  2026-08-21) removed both literals into `--bo-density-auto-{row,control}-height`
+  in `tokens/density.css`. The entry is stamped `"scored": "2026-08-23"` — two
+  days later — and `/components/data-table` has published it since. The CSS
+  file's own comment says the opposite, in the same block.
 
-**213's one self-declared unverifiable claim is now verified and it holds.** It
-closed saying *"this could not be verified on CI from here"*. 213.1 landed as
-`926bd36e` and was pushed with `dd76ee84` on top, so **CI run 663 ran ON the
-fix** (`git show dd76ee84:…/windowed-list.ts | grep -c measuredChunkHeight` → 3).
-6 of 6 jobs green; the reference-app job logs `po-app smoke check passed — 19
-behaviours verified end to end`, non-vacuous because 208.3's htmx precondition is
-one of the 19. The residual risk 213 named did not materialise. **n = 2**
-post-fix CI runs (663, 664) — which is what this supports and no more.
+  **The score does not move and no blind re-score is owed:** `spacing` is a debt
+  marker, not a quality signal, so naming the heights is *less* debt and 3 stays
+  right. This corrects the evidence record — 176.1's and 182.1's shape.
 
-**A confound neither 211.2 nor 213 named:** every container measurement ran htmx
-**2.0.10** (`node_modules` holds the only `htmx.min.js` here) against an app
-pinning **2.0.4**. 213's *defect diagnosis* is untouched — `3250 vs 3299` is
-arithmetic over row heights — but the **timing** figures beside it race a fixed
-150ms wait. 211.2 reasoned about a timing confound and 213 wrote that it *"was
-named and removed"*; it was removed for **interception**, not for version.
+  Every literal the replacement names was verified present in the file FIRST
+  (`390px` ×4, `68px`, `87px`, `28px`, `30px`), so the fix does not re-commit the
+  error. Verified in the BUILT html, not the diff: `1.75rem compaction heights`
+  → **0**, `reconciliation queued as` → **0**, new sentence renders. The other
+  five cites reconciled clean.
 
-**Slice 214 reproduces to the digit and nothing in it is corrected.** All four
-lanes (0 dead of 1,433 · 74 files/242 rules/230 distinct/8 repeats · 9 corpus +
-12 family = 14 distinct · ratchet `ROADMAP.md` 0 up, last cut `e29c7c18`);
-conservation verified structurally from git (`--numstat` `1575 0` on the archive,
-`--name-status` **M / M never A**, appended block walks to 7 headings + 1,568
-body, byte-exact prefix **True**); `check:slice-refs` **427/233/196/2**.
+- **The pick has a stated reason, because the score cannot rank.** All 10
+  re-queued surfaces are `content: 3`; nine sit at 1/3 rounds. Picked by which
+  surface's SOURCE moved: `data-table` **5 commits +157/-0**, `alerts` 1 commit
+  +71/-5, the other seven **0/0**. **The first draft of that instrument read
+  `244 commits` for all nine** — an identical value across every input, i.e. a
+  defect until proven otherwise. It was: a stray `"*"` pathspec. Caught before
+  the pick, not after.
 
-**214's falsification of 179.2 also reproduces** over 801 `ROADMAP.md`-touching
-commits — all four closed cycles match to the digit. **What this grill adds is
-the interval, not the rate:** commits a cycle survives now read **140 → 66 → 34
-→ 66 → 9**, so the sweep is due roughly every nine such commits. The fifth cycle
-has since closed at 9 commits / 896 lines / 99.6 per commit.
+- **216.2 — refused a gate for the class, and the refusal is the interesting
+  half.** Base rate says it WOULD distinguish: across all 40 components, **74**
+  cites name a CSS length literal, **73** find it in that component's own CSS,
+  **1** does not — this defect. That is the opposite of 94.11's dead predicate.
+  Refused anyway on 101.3 (Polish may not add gates), **and** because the
+  obvious widening kills it: also searching `tokens/` would have **passed** on
+  this defect, since `1.75rem` is in `density.css`. Commands in ROADMAP 216.2.
 
-**One refusal recorded:** gating "a roadmap claim about a docs page is true" —
-the semantic class roadmap 94.11 refuses; the shape is checkable, the meaning is
-not.
-
-**NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
-screenshots at 1440px or 390px in either theme**. Nothing this wake claims rests
-on a rendered image — the change is markdown-only in two files no page renders,
-and every figure is a grep count, a git line count or a gate's own output.
-
-Green in this container: core build, `npm run test` **152/152** (27 files),
-`lint:css`, `docs:build` rc=0, `check:repo`, `check:claims` 158 live + 3 NOT
-VERIFIED (ENVIRONMENT §6b — a container property, not a regression),
-`check:formatting`, `check:layout` 127 pages, `test:axe` 127 pages × 2 widths
-zero violations, `check:slice-refs` **428/233/197/2** after the edit (the +1s are
-Slice 215's own heading, the mechanism 214 documented).
+- **216.3 — ENVIRONMENT.md trap 2b** (above).
 
 ## Dispatcher state at hand-off
 
 Read **after** recording, which is the comparison `LOOPS.md` says has caught two
-of that counter's five historical failures:
+of that counter's five historical failures.
 
 ```
 python3 scripts/loops/dispatch_status.py
 ```
 
-At hand-off: **`Standardize 0 / 4 ok`**, **`Objective 0 / 3 ok`** (reset by this
-wake's row), `Optimize` **STALE**. So no counter is armed and **the next wake
-falls through to rule 4 — Continue, oldest open item.** Log reconciles: parser
-**1200** against a raw `grep -c "^- "` of **1200**.
+Rules as this wake read them, each from its own source rather than from the
+previous hand-off: rule 1 clear (no open P0; GitHub intake **0 open issues**,
+asked via the API twice), rule 2 `Standardize 0 / 4 ok`, rule 3
+`Objective 0 / 3 ok`, **rule 4 nothing dispatchable**, **rule 5 STALE —
+reported as un-evaluable, not as clear**, **rule 6 fired**.
 
-**Rule 5 still reads STALE**, one wake-date newer than its newest comparable
-pair. Per rule 5's own text, say it could not be evaluated rather than reporting
-it clear. This wake recorded no metric, so it did not improve that.
+**Rule 4's four items, with the KIND of blocked per 186.2** — re-read from each
+item's own text this wake, not copied:
 
-**Rule 4 will find every remaining item blocked. The KIND, per rule 4's own
-instruction:**
+| item | kind of blocked |
+|---|---|
+| `112.3` pattern-fit pilot (oldest open) | owner-blocked — briefs + four answers |
+| `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
+| `211.1` vendor htmx into `examples/po-app` | owner-blocked — a product call |
+| AT runtime evidence | hardware-blocked — owner hardware |
 
-| item | what | kind of blocked |
-|---|---|---|
-| `112.3` | pattern-fit pilot (oldest open) | owner-blocked (briefs) |
-| `112.4` | Screen Contract layer | owner-blocked (on 112.3) |
-| `211.1` | vendor htmx into `examples/po-app`? | owner-blocked — **but its inputs changed this wake**, see below |
-| AT runtime evidence | combobox behaviour on real AT | owner-blocked (owner hardware) |
+**A Polish round is still the likely next dispatch**, and nine re-queued
+surfaces remain at 1/3. But note what this wake found: the round that looked
+like a no-op was not. **The productive arm is the citation reconciliation**, and
+it has now found a real defect on **3 of 4** surfaces where it has been run
+(`scan` 176.1, `state-patterns` 182.1, `data-table` 216.1; `badge` was the clean
+one). That is the arm to run first, not last.
 
-Rule 4 finding nothing dispatchable then falls to rule 5 (STALE, cannot be
-evaluated) and **rule 6 — Polish**, whose predicate is true of 19 of 19
-non-skipped surfaces (176.2). Run `polish_requeue.py --apply` first.
+**Rule 5 is still STALE and this wake did not improve it** — it recorded no
+metric. A wake that records one un-stales it.
 
 ## Direction
 
-**`211.1` is still the owner's call, but it is no longer the same call.** The
-previous three hand-offs framed it as a trade: vendoring buys an offline example
-and costs the CDN wiring the docs teach. **Measured this wake, the docs teach no
-CDN wiring at all** — 0 files under `apps/docs/src/` mention `unpkg` or `cdn` —
-so option (a) does not remove a lesson from anything a reader is directed to.
-What it costs instead is a dependency declaration or a vendored file for a
-package that deliberately declares only `@busy-office/ui`. The question the owner
-is actually being asked is therefore **whether to ADD teaching the docs do not
-yet carry**, not whether to preserve teaching that exists. Commands are in ROADMAP
-211.1's correction block and in the grill report.
+**`211.1` remains the owner's call and this wake did not touch it.** The
+previous hand-off's correction stands: the docs teach no CDN wiring at all
+(0 files under `apps/docs/src/` mention `unpkg` or `cdn`), so the question is
+whether to ADD teaching, not to preserve it.
 
-**The archive sweep's cadence is the measurement worth carrying forward.** 177's
-"is the sweep converging" question now has four closed cycles and a fifth: the
-commits a cycle survives have gone **140 → 66 → 34 → 66 → 9**. 214 falsified
-179.2's monotone claim on regrowth; this wake reproduces that and adds that the
-*interval* is what has collapsed. Nothing is proposed — the sweep runs from
-inside rule 4 when the file is walked, and that mechanism is working.
+**`175.4` gained real evidence this wake** — see the lapping section above. It
+is the one open decision whose inputs actually changed today.
 
-**Still unacted, and now one wake older:** 177's observation that **61% of one
-sweep's moved lines were Objective-grill slices that ALSO have a full report in
-`.roundtable/`**. This wake is a fresh instance — Slice 215 is ~120 roadmap lines
-alongside a full report. Whether a grill's roadmap slice should be a pointer
-rather than a second copy is a direction call about how the loop records its own
-work, and this loop does not take those.
+**Still unacted, now two wakes older:** 177's observation that a grill's roadmap
+slice pays for its text twice. Slice 216 is deliberately shorter than its
+material and says so in its own closing line; that is one author's choice not to
+pad, not a convention change, which stays the owner's.
 
 **Standing three unchanged** (112.3, 112.4, AT runtime).

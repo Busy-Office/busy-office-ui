@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-30 01:39 UTC
+Generated at: 2026-08-30 02:06 UTC
 
 ## Open items by slice
 
@@ -17,7 +17,7 @@ Generated at: 2026-08-30 01:39 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1200 iterations logged)
+dispatch status — counter-triggered rules (1202 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-08-30 00:49   ok
   Objective     0 / 3 slices          since 2026-08-30 01:39   ok
   Optimize      1 wake-date(s) newer   since 2026-08-29 01:46   STALE   [newest pair: axe-violations; 103 sample(s), 13 of 32 name(s) sampled twice]
@@ -34,8 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-29 22:47 · Meta · refusal · a gate for 212.1 — check:motion already covers the subject on shipped dist; 192.1's answer to a wrong count is to name the instrument, not add a gate · refused · e721c20
-- 2026-08-29 22:47 · Meta · refusal · a sixth regex in dispatch_status.py to count closed rather than named slices — rule 3 sits above rule 4, so over-arming costs a paragraph and under-arming starves a loop · refused · e721c20
 - 2026-08-30 00:05 · Continue · build · 211.2 — anchor property measured where htmx loads normally: premise false, variance is not the shim's · landed · 926bd36e
 - 2026-08-30 00:05 · Meta · refusal · tuning check:po-app's 150ms anchor wait — the timing sensitivity is about a real jump; fix the jump (213), not the sleep · refused · 926bd36e
 - 2026-08-30 00:05 · Continue · bug · 213.1 — P0: windowed-list spacer sized from one unrepresentative sampled row, 49px short per chunk · landed · 926bd36e
@@ -44,6 +42,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-30 00:49 · Meta · refusal · sweeping Slice 214 itself — the slice describing the sweep stays resident this round, as 177.1 and 208.1 left theirs; it is next round's only target · refused · e29c7c18
 - 2026-08-30 01:39 · Objective · grill · Objective grill of Slices 211, 213, 214 — 211.1's refusal premise refuted, htmx version confound found, 213's CI claim verified · logged · 702a6408
 - 2026-08-30 01:39 · Meta · refusal · gating 'a roadmap claim about a docs page is true' — the semantic class 94.11 refuses · refused · 702a6408
+- 2026-08-30 02:06 · Polish · tidy · rule 6 → Polish round 2 on component/data-table, and it is NOT a no-op: the spacing DSA cite named 'the 1.75rem compaction heights' and called 94.3 queued, but 79f7fec9 (94.3) removed both literals into --bo-density-auto-* in tokens/density.css on 2026-08-21 and the entry is stamped scored 2026-08-23 — stale on the day it was written, published on /components/data-table since. Score unmoved (spacing is a debt marker; naming beats hard-coding) so no blind re-score is owed; the evidence record was wrong, 176.1/182.1's shape. Every literal the replacement names verified present first; checked in the BUILT html, stale string 0. Other five cites clean. Picked by source movement because the score cannot rank (data-table 5 commits +157/-0, the other seven 0/0) — and that instrument's first draft read an identical 244 for all nine, a stray pathspec, caught before the pick. Also 216.3: ENVIRONMENT.md trap 2b, a timed-out --unshallow leaves .git/shallow.lock and every later fetch refuses while --is-shallow-repository still reads true. THIS WAKE WAS LAPPED — Step 0 read origin/main at slice 178, the mandated pre-commit fetch found slice 215, 151 commits later, the first being Slice 179 which is exactly the rule-3 dispatch this wake had finished; discarded unpushed per Step 0c, recorded as evidence for the open 175.4 · landed · c1dfe973
+- 2026-08-30 02:06 · Meta · refusal · a gate for the stale-citation class — base rate says it would distinguish (74 cites name a CSS length literal, 73 present in that component's own CSS, 1 not, and that 1 is this defect) but 101.3 forbids Polish adding gates, and the obvious widening to also search tokens/ would have PASSED on this defect because 1.75rem is in density.css · refused · c1dfe973
 
 ## Sunset test
 
