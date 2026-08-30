@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-30 12:25 UTC
+Generated at: 2026-08-30 12:29 UTC
 
 ## Open items by slice
 
@@ -17,8 +17,8 @@ Generated at: 2026-08-30 12:25 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1218 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-08-30 20:25   ok
+dispatch status — counter-triggered rules (1219 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-08-30 20:25   ok
   Objective     5 / 3 slices          since 2026-08-30 01:39   OVERDUE  [211, 218, 219, 223, 224]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-08-30 03:45   ok   [newest pair: axe-violations; 105 sample(s), 13 of 33 name(s) sampled twice]
@@ -34,7 +34,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-30 07:45 · Continue · build · 219.1 — extend the .bo-timeline__step current / aria-current=step pairing assertion to the built ERP suite; red-proved 3x including against the real 577c572 defect · landed · bb25876
 - 2026-08-30 07:45 · Meta · refusal · the aria-hidden/inert exemption in the suite gate — it needs a DOM parser, hence jsdom, which examples/erp-suite has no package.json to declare; 0 inert and 265 decorative aria-hidden measured first · refused · bb25876
 - 2026-08-30 07:45 · Meta · refusal · putting the same rule in packages/core/scripts/check-markup.mjs — it ships as the bo-check-markup bin, so a new assertion there is a contract change to a published tool, not a gate extension · refused · bb25876
 - 2026-08-30 19:34 · Continue · build · 211.1 — vendored htmx locally in examples/po-app (owner call), verified offline via podman --network none · landed · 5e5ede6
@@ -44,6 +43,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-30 20:10 · Continue · build · 223 — owner call: htmx.org 2.x -> 4.0.0 across shipped behaviors, po-app, and docs; dropped apps/docs's hx-boost (no v4 head-support replacement exists); reconciled a numbering collision with cloud Slice 220-222 covering the same direction · landed · 086c73d
 - 2026-08-30 20:10 · Meta · refusal · hand-write a custom head-merge replacement for htmx-ext-head-support under htmx 4 — owner chose dropping hx-boost from apps/docs instead · refused · 086c73d
 - 2026-08-30 20:25 · Standardize · tidy · 224 — Standardize sweep: lanes 1-3 clean against standing verdicts, lane 4 verdicted ENVIRONMENT.md (HONEST) and LOOPS-archive.md (archive), found+fixed a stale check:po-app trap description in ENVIRONMENT.md · landed · 9af4c3d
+- 2026-08-30 20:29 · Continue · release · v0.7.0 released — @busy-office/ui 0.7.0 (Breaking: htmx 4 migration), @busy-office/create-ui 0.1.2 (mechanical, framework pin). Verified live on npm with SLSA provenance. · released · d338755
 
 ## Sunset test
 
