@@ -1204,3 +1204,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-30 00:05 · Meta · refusal · widening 211.2 to carry the shipped-behaviour fix — Slice 211's own preamble set the file-it-separately precedent · refused · 926bd36e
 - 2026-08-30 00:49 · Standardize · sweep · Slice 214 — Standardize sweep 4 of 4 lanes; lanes 1-3 clean, lane 4 found the archive sweep due a sixth time; 214.1 moved 7 closed slices, ROADMAP.md 3,197 -> 1,650 · landed · e29c7c18
 - 2026-08-30 00:49 · Meta · refusal · sweeping Slice 214 itself — the slice describing the sweep stays resident this round, as 177.1 and 208.1 left theirs; it is next round's only target · refused · e29c7c18
+- 2026-08-30 01:39 · Objective · grill · Objective grill of Slices 211, 213, 214 — 211.1's refusal premise refuted, htmx version confound found, 213's CI claim verified · logged · 702a6408
+- 2026-08-30 01:39 · Meta · refusal · gating 'a roadmap claim about a docs page is true' — the semantic class 94.11 refuses · refused · 702a6408
