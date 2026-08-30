@@ -315,6 +315,88 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 218 — Owner-forwarded review: `data-state`/`data-status` conflation, scoped to two components not the framework (2026-08-30)
+
+Owner forwarded an external "Adversarial Review & Improvement Proposal"
+(compares this repo against FlyonUI and Radix). Reviewed against the repo
+before acting on any of it, per this file's own discipline against treating
+an external claim as true unmeasured: most of the document's substance is
+**convergent, not new** — its central recommendation (phase Screen
+Contract/validator/MCP work behind an evidence-gated pilot rather than
+build speculatively) is the plan this repo already committed to on
+2026-08-22 (Slice 112), against a near-identical earlier proposal, and the
+pilot it names (§35, "benchmark before MCP") is `112.3`, still blocked on
+the same owner-authored briefs it always was. Nothing filed for that
+material; it would be re-raising a settled decision (176.3's shape).
+
+**One claim was genuinely new and checked out — narrower than as proposed.**
+§25 argues `data-state` (UI/interaction state: open, selected, expanded) and
+business/domain status (draft, approved, rejected) get conflated under one
+attribute, and recommends splitting them framework-wide. Measured before
+filing anything, because "91 uses of `data-state`" was the first, wrong
+draft of this finding:
+
+```
+grep -rn 'data-status=' packages/core/src apps/docs/src        # 0
+grep -rhoE 'data-state="[a-z-]+"' packages/core/src apps/docs/src examples | sort -u
+  # closed closing current done open pending rejected resolved
+grep -n 'data-state' packages/core/src/css/components/approval-workflow/approval-workflow.css
+  # .bo-timeline__step[data-state="done|current|pending|rejected"]
+  # .bo-audit__entry[data-state="resolved"]
+```
+
+**91 total uses, and exactly two components' CSS carry a business-shaped
+value**: `.bo-timeline__step` (an approval-chain step: done/current/
+pending/rejected) and `.bo-audit__entry` (a discussion thread: resolved).
+Every other `data-state` use in the framework — dialog, offcanvas, dropdown,
+collapsible-card, validation-summary, value-help, nav, motion — is genuine
+UI state (open/closed/closing). A framework-wide split, as the source
+document proposes, would be solving a problem that exists in 2 of the
+component library's ~60 components; the base-rate discipline this repo
+already applies to gates (94.11) applies here to a design change too.
+
+**A second, smaller finding inside the same file**: `.bo-timeline__step`'s
+`data-state="current"` duplicates `aria-current="step"`, already present on
+the same element per the file's own header comment — the CSS hook and the
+accessible-state hook name the same fact twice, one of them redundant.
+
+1. [ ] **218.1 — decide `.bo-timeline`/`.bo-audit`'s `data-state` values: keep
+       as documented precedent, or split to `data-status` for these two
+       components only.**
+
+       This is a real accept/refuse/rethink call against the Objective
+       (simplicity — does splitting reduce or add a concept a reader must
+       track?), not a default "yes, split it": a timeline step's business
+       status IS what the component visually renders, so `data-state`
+       carrying it is arguably not a conflation but the correct name for
+       what the attribute does in THIS component, unlike a dialog's
+       open/closed which is purely interaction state. The source document's
+       argument (`data-state` for UI, `data-status` for domain) is a
+       plausible convention, not a proven necessity here — argue it on
+       these two components specifically, not on the general principle.
+
+       *Accept* — properties, not a predicted verdict:
+       - A recorded decision, with reasoning, on whether `.bo-timeline` and
+         `.bo-audit` should rename their business-shaped `data-state` values
+         to `data-status` (a real breaking change: `CHANGELOG.md` gets a
+         **Breaking** entry with a migration note, since these are shipped,
+         documented, `0.6.0`-live attribute contracts) or keep `data-state`
+         with the reasoning for why it is not a conflation written into the
+         component's own header comment, next to the existing state
+         documentation line.
+       - **Refusing the split is a satisfying, complete outcome** if the
+         reasoning holds up — this item is not pre-committed to renaming
+         anything.
+       - Whichever branch, the `current`/`aria-current="step"` duplication
+         gets its own explicit line in the decision: is the CSS hook
+         redundant with the ARIA one, and if so, does `[aria-current="step"]`
+         replace `[data-state="current"]` as the selector, or do they stay
+         parallel on purpose (e.g. `data-state` covers non-interactive
+         render contexts `aria-current` doesn't reach)?
+       - No gate proposed — "is this a conflation" is a judgement about what
+         an attribute MEANS, 94.11's line, same as the wrong-choice clause's
+         content is human-judged while its presence is gated.
+
 ## Slice 217 — Polish round on `sidebar-nav`: a cite that was EXACT when written and decayed two days later, and the count-bearing class measured at 6 of 240 (2026-08-30)
 
 Dispatcher, top-to-bottom, each rule read from its own source rather than
