@@ -1412,7 +1412,7 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 measurements from that investigation; neither is what 208.3's Accept asked for,
 and building either inside it would have been widening the item.
 
-1. [ ] **211.1 — `examples/po-app` cannot run without reaching a CDN, and the
+1. [x] **211.1 — `examples/po-app` cannot run without reaching a CDN, and the
        cost of that landed on a gate rather than on a user.** `server.mjs:125`
        is `<script src="https://unpkg.com/htmx.org@2.0.4"></script>`, while the
        same shell already serves `/assets/css/htmx.min.css` locally — so the app
@@ -1491,6 +1491,31 @@ and building either inside it would have been widening the item.
 
        **Finding the premise false is what this item's own Accept calls a
        satisfying outcome.** Recorded; the decision remains the owner's.
+
+       **CLOSED 2026-08-30 (owner call, option (a)).** `examples/po-app`
+       vendors htmx locally rather than staying CDN-wired.
+       `server.mjs` resolves `htmx.org/dist/htmx.min.js` via
+       `require.resolve` (the same pattern already used for
+       `@busy-office/ui`'s dist) and serves it at `/vendor/htmx.min.js`;
+       the `<script src="https://unpkg.com/...">` tag is gone. `htmx.org`
+       is now `examples/po-app/package.json`'s own declared dependency,
+       pinned `^2.0.10` — matching what `apps/docs` already pins, not a
+       third version — rather than borrowing a sibling workspace's
+       `node_modules` as (ii)'s correction warned against; the previous
+       script tag pinned 2.0.4, so the shipped version moves to 2.0.10.
+
+       `check:po-app` passes **19 of 19** (a stale local `busy-office-ui.tgz`
+       + gitignored `package-lock.json` briefly hid the fix from 213.1 —
+       reinstalling from a fresh pack + no lockfile resolved it, and is a
+       fresh instance of the "stale image serves the old build" trap this
+       file already warns about). The Accept's egress-restricted measurement
+       was taken directly rather than assumed: `podman build -f
+       examples/po-app/Dockerfile` (the real tarball-consumer path, not the
+       dev shortcut) then `podman run --network none` — zero egress, no DNS
+       — and from inside that container `/vendor/htmx.min.js` returns
+       `200 OK` and the page's only `<script src>` is the local route. **19
+       of 19 here, offline, is the satisfying outcome the item's own Accept
+       named.**
 
 2. [x] **211.2 — `check:po-app`'s scroll-anchor assertion has never run in a
        cloud container, and the first four times it did, it read 98 / 49 / 0 / 0

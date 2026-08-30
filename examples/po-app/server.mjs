@@ -14,6 +14,7 @@ const uiDist = join(
   dirname(require.resolve('@busy-office/ui/package.json')),
   'dist',
 );
+const htmxMinJs = require.resolve('htmx.org/dist/htmx.min.js');
 
 // ---------- in-memory data ----------
 const pos = [
@@ -122,7 +123,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
     }
   });
 </script>
-<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<script src="/vendor/htmx.min.js"></script>
 </head>
 <body>
 <div class="bo-app-shell">
@@ -1339,6 +1340,10 @@ const server = createServer(async (req, res) => {
           : 'application/octet-stream';
       res.writeHead(200, { 'content-type': type });
       return res.end(body);
+    }
+    if (path === '/vendor/htmx.min.js') {
+      res.writeHead(200, { 'content-type': 'text/javascript' });
+      return res.end(await readFile(htmxMinJs));
     }
     if (path === '/' ) {
       res.writeHead(200, { 'content-type': 'text/html' });

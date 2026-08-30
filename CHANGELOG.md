@@ -11,6 +11,22 @@ pin.
 
 ### Fixed
 
+- **`examples/po-app` no longer requires reaching a CDN to run** (roadmap
+  211.1). It loaded htmx from `https://unpkg.com`, so it 404'd wholesale in
+  any egress-restricted environment while `@busy-office/ui`'s own assets were
+  already served locally — a half-vendored app. `server.mjs` now resolves and
+  serves `htmx.org` the same way it already does `@busy-office/ui`'s dist
+  (`require.resolve`, a `/vendor/htmx.min.js` route); `htmx.org` is
+  `examples/po-app/package.json`'s own declared dependency, pinned `^2.0.10`
+  to match `apps/docs`'s existing pin rather than adding a third version — the
+  script tag previously pinned `2.0.4`. Verified with the app's real
+  tarball-consumer Docker path (`examples/po-app/Dockerfile`) run under
+  `podman run --network none`: zero egress, and `/vendor/htmx.min.js` still
+  returns `200`.
+
+  **Not a Breaking entry**: `examples/po-app` is not a published package —
+  nothing outside this repo depends on its `<script src>`.
+
 - **A windowed list no longer jumps when an evicted chunk re-loads** (roadmap
   213). `initWindowedList()` sized an evicted chunk's placeholder as
   `rowCount x one sampled row`, sampling the first row in the table. Where rows
