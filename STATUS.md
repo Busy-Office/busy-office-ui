@@ -2,24 +2,22 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-30 12:40 UTC
+Generated at: 2026-08-30 12:59 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 222** (1 open)
-  - 222.1 — characterise the residual `chunk0Reloaded: false`, or record that it is environmental and give `ENVIRONMENT.md` the honest number.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1220 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-08-30 20:25   ok
-  Objective     0 / 3 slices          since 2026-08-30 20:40   ok
+dispatch status — counter-triggered rules (1221 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-08-30 20:25   ok
+  Objective     1 / 3 slice           since 2026-08-30 20:40   ok  [222]
   Optimize      0 wake-date(s) newer   since 2026-08-30 03:45   ok   [newest pair: axe-violations; 105 sample(s), 13 of 33 name(s) sampled twice]
 ```
 
@@ -33,7 +31,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-30 07:45 · Meta · refusal · putting the same rule in packages/core/scripts/check-markup.mjs — it ships as the bo-check-markup bin, so a new assertion there is a contract change to a published tool, not a gate extension · refused · bb25876
 - 2026-08-30 19:34 · Continue · build · 211.1 — vendored htmx locally in examples/po-app (owner call), verified offline via podman --network none · landed · 5e5ede6
 - 2026-08-30 11:51 · Polish · reconcile · 220.1 — breadcrumb fit cite: "2 of 19 pattern screens" against a corpus of 39; quantity replaced with two verified properties (shared crumbs() helper, create-ui starter screen) · landed · 13f0cbc
 - 2026-08-30 11:51 · Meta · refusal · a gate for the count-bearing cite class, second refusal: the two stale cites failed against DIFFERENT trees, so each cite would need to carry its own command — a rubric change, not the ratchet maintenance 101.3 confines Polish to · refused · 13f0cbc
@@ -43,6 +40,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-30 20:25 · Standardize · tidy · 224 — Standardize sweep: lanes 1-3 clean against standing verdicts, lane 4 verdicted ENVIRONMENT.md (HONEST) and LOOPS-archive.md (archive), found+fixed a stale check:po-app trap description in ENVIRONMENT.md · landed · 9af4c3d
 - 2026-08-30 20:29 · Continue · release · v0.7.0 released — @busy-office/ui 0.7.0 (Breaking: htmx 4 migration), @busy-office/create-ui 0.1.2 (mechanical, framework pin). Verified live on npm with SLSA provenance. · released · d338755
 - 2026-08-30 20:40 · Objective · grill · 225 — grill of Slices 218, 219, 223, 224 (211 dropped, already grilled by 215): every load-bearing count re-derived and held; found+fixed a self-invalidating citation in 218.1's own comment · landed · bb16f8d
+- 2026-08-30 20:59 · Continue · fix · 222.1/P0 — check:po-app crashed on a fresh install (main's CI red since Release prep): htmx.org never hoisted to root, load-bearing since 223 removed the CDN fallback. Fixed the gate to do a real tarball-consumer install instead of relying on hoisting; also resolves 222.1's residual (environmental, gone with a deterministic install). · landed · bcd1d49
 
 ## Sunset test
 
