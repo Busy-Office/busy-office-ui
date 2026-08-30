@@ -458,6 +458,20 @@ wake is part of the criterion.
        instruments — a throwaway walk of the dist written before the gate
        existed, and the gate itself.
 
+       **A postscript that is `LOOPS.md`'s prescribed comparison working, and
+       the defect was the ROW, not the parser.** Rule 3's counter did not move
+       after this item's Continue row was recorded, while a slice had visibly
+       just closed — the disagreement `LOOPS.md` says to look for right after
+       recording. Cause: the row's item text began `Roadmap 219.1 — …`, and all
+       three slice patterns in `dispatch_status.py` anchor the number at
+       position 0, so it landed in the measured 24.2% slice-less bucket. **Not
+       a sixth recurrence.** The row was corrected to `219.1 — …` before the
+       commit and the mirrors rebuilt, with the raw `grep -c '^- '` asserted
+       unchanged at **1211** either side (ENVIRONMENT.md trap 5's rule applied
+       to a hand edit); the counter then read `2 / 3 slices [218, 219]`. The
+       carryable instruction is one line: **start a Continue row with the bare
+       slice id.**
+
        **NOT VERIFIED, said plainly:** no screenshot at 1440px or 390px in
        either theme was taken, because this container has no Podman and no
        `localhost:8081`. Nothing rendered should move — the diff is one gate
