@@ -9,6 +9,11 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+
+## 0.7.0 (2026-08-30)
+
 ### Breaking
 
 - **The shipped htmx integration now targets htmx 4, not htmx 2.x.** Every
