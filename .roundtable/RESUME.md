@@ -17,8 +17,7 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**cloud** wake). Working tree clean at hand-off; one
-push, two commits (`96bd852a` the round, plus the loop-log row).
+Last updated 2026-08-30 (**cloud** wake). Working tree clean at hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -27,81 +26,75 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 3 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-`227.1`, `227.2` and `227.3` are named below as **what landed**, not as open
-work. **The open set is 3, and every one of them is blocked** — the backlog
-carries nothing any wake can build. That is a change from the last hand-off,
-which had exactly one dispatchable item; this wake took it.
+`228.1` is named below as **what landed**, not as open work. **The open set is
+3, unchanged from the last two hand-offs, and every one of them is blocked** —
+the backlog carries nothing any wake can build.
 
 ## What landed this wake
 
-**Slice 227.2 / 227.3 — Continue, build mode, dispatcher rule 4.** Rules 1-3
-were each answered by measurement; the readings are in "Dispatcher state" below.
+**Slice 228 — Standardize, sweep mode, dispatcher rule 2.** Rules 1 and 3 were
+answered by measurement; the readings are in "Dispatcher state" below.
 
-- **227.2 REFUSED, and the refusal is the item being satisfied.** The item asked
-  for a gate on the "hand-typed literal in arithmetic with a live read" class
-  **and named its own refusal condition**: measure the base rate first, and if
-  the class is 1-of-1 it is 94.11 ceremony. So this is the criterion rule
-  working — the entry was written so that finding the premise thin was a
-  satisfying outcome rather than an off-plan one.
-- **The base rate: 0 live instances.** 30 files perform a live read of a
-  generated or shipped artifact; restricted to build-time code they hold **50**
-  numeric literals in an arithmetic or comparison context. All 50 are unit
-  conversions, loud floor assertions, scoring bands, stated hypotheses, or a
-  scale with no live counterpart. The probe deliberately over-reports — the
-  unrestricted form returns **308**, mostly CSS values and prose — because the
-  question being asked is *is this signal present in things I am not counting?*
-- **The predicate cannot be written.** It would have to separate a hand-typed
-  fact that mirrors a live source from a unit constant, a hypothesis and a
-  scoring band, all sitting in identical syntax. 94.11 one level up: *"a literal
-  is an operand" is checkable; "a literal duplicates a fact something else can
-  read" is not.* Fourth refusal in the 216.2/217.2/220.2 family.
-- **The largest kind is the one that already works.** 12 sites hand-type a
-  literal against a live read **as an assertion that fails loudly** —
-  `primitives.astro:24`, `tokens.astro:81`, `ai-assistants.astro:30`,
-  `palettes.astro`, `semantic-css.ts`. A gate would have to not-fire on all of
-  them.
-- **227.3 — the sweep found a real defect, and it is 227.1's own shape one step
-  on.** 227.1 changed the divisor from a hand-typed `12` to a live read and left
-  it **unasserted**: `iconCss.match(...) ?? []` yields an empty Set if the glyph
-  selectors are ever renamed, so `iconBytes / 0` publishes **"Infinity kB"** to
-  `/components/icon` with nothing failing. 227.1's own text names the pattern it
-  then repeated — the earlier fix "made the numerator live and left the
-  denominator hand-typed".
-- **Measured, not reasoned.** The expression was run against a stylesheet
-  carrying no modifiers: `glyphCount 0`, `catalogueKb Infinity`, and `iconShare`
-  stays plausible at 3.3% — so the page looks half-right.
-- **`icon.astro` was the only such site.** 5 of 8 build-time parse pages throw
-  on a bad parse; of the three that do not, `scale.astro` divides *into* a live
-  value (a zero is impossible) and `cascade.astro` renders an empty table rather
-  than a wrong number.
-- **The guard introduces no hand-typed count, deliberately** — a literal floor
-  would be the very decaying constant 227.1 removed. It reconciles against
-  `api.json`, which `extract-api.mjs` derives from the **source** CSS where this
-  regex reads the **shipped min** CSS: two independent derivations of one fact,
-  so a partial parse is caught as well as an empty one. They agree exactly today
-  — 26 and 26, identical sets.
-- **Red-proved by injection, injection confirmed BEFORE the build.** The regex
-  was edited to `\.bo-iconZZZ--`, its presence confirmed (**1** occurrence), and
-  `docs:build` exited **1** on `/components/icon/index.html` naming *"parsed 0
-  glyph modifiers … but api.json declares 26"*. Reverted; `ZZZ` appears **0**
-  times in the source and **0** in either dist.
-- **Verified against the RENDERED artefact, not the diff.** The built
-  `/components/icon/index.html` is **byte-identical** before and after — 96,462
-  bytes both, empty diff — which is the claim a render-neutral change owes. The
-  page still publishes **68 kB** and **26 glyphs**.
+**Lanes 1-3 clean an eighth time; lane 4 carried the finding, as it has every
+time since 208.** Reported `n of 4`, per the playbook.
 
-**All 17 CI entry points were run green in this container**, plus a
-`DOCS_BASE=/busy-office-ui` build. `check:claims` reported **3 NOT VERIFIED** —
-that is `ENVIRONMENT.md` §6b, this container's pointer capability, **not** a
-regression; do not "restore" the zero. Read the count beside it: 158 verified
-live.
+**The two ordinals differ deliberately: lanes-1-3 clean = 8, archive sweep = 7**
+(224's lane-4 finding was in `ENVIRONMENT.md`, not the roadmap's length). Taken
+from the slice headings, not incremented from the last write-up — 214 says
+"clean for the sixth time" and 224 states no ordinal, which is how an off-by-one
+gets inherited. This one was caught in the writing.
 
-**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
-1440/390 light-and-dark screenshot lane could not run. **Nothing in this wake
-rests on a rendered image** — the change is a build-time assertion plus a
-comment, and the rendered page is byte-unchanged. `check:layout` (127 pages,
-390 + 150% zoom) and `test:axe` (127 × 2 widths) are the whole-tree evidence
-that nothing broke.
+- **Lane 1** `scan:dead-style`: **0 dead** of **1,433** live inline
+  declarations — identical to 224.1.
+- **Lane 2** `report:css-repeats`: 74 files, 242 rules, 230 distinct bodies,
+  **still exactly 8 repeat groups**, same shapes as `LOOPS.md`'s standing
+  table. The finding is the delta; there is none.
+- **Lane 3** `report:prose`: 118 pages, median 748, union of 14 flagged pages —
+  every one already verdicted. **Checked by SET MEMBERSHIP against 158.1's
+  twelve / 161.1's three / 178.3's `/concepts/scale/`, not by a cite count**:
+  grepping each page path out of `ROADMAP.md` + the archive returns 1-11 hits
+  for all fourteen, so that instrument reports 14-of-14 covered whatever the
+  truth is. A dead detector, caught before it was quoted.
+- **Lane 4** `report_loop_prose.py`: `ratchet` read first — `ROADMAP.md 9 up,
+  last cut f1be2485`. Rule 4 was walking **3,794 lines to find 3 open items**.
+
+**228.1 — the seventh archive sweep. `ROADMAP.md` 3,794 → 1,473 lines
+(→ 1,626 with this slice's own write-up appended).** Fifteen slices — 211,
+214-227 — moved verbatim, each leaving the standing one-line pointer;
+`ROADMAP-archive.md` 27,208 → 29,589.
+
+- **62.4% of the live file was closed history** — 2,366 of 3,794 lines, on
+  177's instrument unchanged. It is now **152 lines of 1,626 (9.3%)**, and
+  that residue is Slice 228 itself, which the eighth sweep will move. Both
+  post-write-up figures were re-measured after the LAST edit to this slice
+  rather than carried from the move — they moved three times while it was
+  being written, which is the 209.1 shape in miniature.
+- **The instrument was red-proved by injection before its output was used.**
+  An open checkbox was injected into Slice 224 on a scratch copy, its presence
+  confirmed (**1** occurrence) *before* the parse; the pass moved
+  `OPEN [15, 112] → [15, 112, 224]`, targets **15 → 14**, lines
+  **2,366 → 2,309**. It can tell an open slice from a closed one.
+- **Lossless, verified against the git blob by an independently written
+  parser** — never against the dict the sweep script built, which is
+  self-consistent by construction: **15/15** moved sections byte-identical to
+  `HEAD:ROADMAP.md`, **194** untouched live sections with **0** changed,
+  **192** pre-existing archive sections with **0** changed, 3 open checkboxes
+  before and after.
+- **The line accounting reconciles in both directions**, which is what a move
+  owes over a rewrite: live loses 2,366 body lines and gains 15×3 pointer
+  lines = **−2,321**; archive gains 15 headings + the same 2,366 = **+2,381**.
+  `git diff --stat`'s own net (129 insertions − 2,328 deletions = −2,199)
+  matches 3,794 → 1,595 to the line.
+- **Citation-neutral, measured rather than asserted.** `check:slice-refs` was
+  run against `HEAD`'s two files and then the swept pair: **453 citations, 246
+  cited, 2 known-dangling, 209 slice numbers — identical both sides.** After
+  the write-up landed it reads 454 / 246 / 2 / 210, the +1 being Slice 228's
+  own heading.
+
+**Not verified, said plainly:** markdown-only change; no rendered surface
+moves. No Podman and no `localhost:8081` here, so the 1440/390
+light-and-dark screenshot lane could not run — and **nothing in this wake
+rests on a rendered image**.
 
 ## Dispatcher state at hand-off
 
@@ -109,41 +102,27 @@ that nothing broke.
 python3 scripts/loops/dispatch_status.py
 ```
 
-```
-Standardize   4 / 4 Continue rounds   OVERDUE
-Objective     3 / 3 slices            OVERDUE   [222, 226, 227]
-Optimize      0 wake-date(s) newer    ok
-```
+**Read the counter yourself — this is the Step 0b comparison, and the whole
+value of it is that a number disagrees with what a human just wrote down.**
+The expected movement: rule 2's Continue-round counter RESETS (a Standardize
+just fired), and rule 3's slice counter ADVANCES, because 161.4 counts slices
+closed by Continue **and Standardize** and Slice 228 is a Standardize row.
 
-**BOTH counters crossed on this wake's row, and that is the expected result of a
-Continue round, not a surprise.** This was the Step 0b comparison — read the
-counter right after recording — and it moved as predicted: rule 2 counts
-Continue rounds (3 → 4) and rule 3 counts slices closed by Continue/Standardize
-(2 → 3).
-
-**The next wake dispatches `Standardize`, not `Objective`** — rule 2 sits above
-rule 3 in `LOOPS.md` Step 2, and both are now OVERDUE. Objective stays armed
-behind it. Do not read `[222, 226, 227]` as a reason to jump to the grill.
-
-**Standardize has FOUR lanes and the playbook says to say `n of 4`** — four
-consecutive sweeps (194, 197, 202, 206) each ran three and none named lane 4,
-which is the one carrying the roadmap-regrowth signal. Lane 4 is
-`python3 scripts/loops/report_loop_prose.py`; read its **`ratchet` block first**,
-never the delta. Worth knowing before that sweep starts: **`ROADMAP.md` grew
-this wake** — 227.2's refusal and 227.3 together add ~110 lines to the live
-file, and 177's standing observation about a grill paying for its text twice is
-still unacted (below).
+**So the next wake most likely dispatches `Objective`** — it stood at 3/3
+OVERDUE this wake and was only skipped because rule 2 sits above it in
+`LOOPS.md` Step 2. Verify against the counter rather than trusting this
+sentence.
 
 **How rules 1-3 were answered, so the next wake need not re-derive them:**
 
 | rule | reading |
 |---|---|
 | 1 P0 | none open; no open GitHub issues (`list_issues` OPEN → `totalCount: 0`) |
-| 2 Standardize | 3/4 at dispatch time, not met — **4/4 now** |
-| 3 Objective | 2/3 at dispatch time, not met — **3/3 now** |
-| 4 build item | took `227.2`, the one dispatchable item; the other three are blocked (below) |
+| 2 Standardize | **4/4 OVERDUE — dispatched.** Rules 3 and 4 not reached |
+| 3 Objective | 3/3, also OVERDUE, armed behind rule 2 `[222, 226, 227]` |
+| 4 build item | not reached; the open set is unchanged and still wholly blocked |
 
-**The open set is now 3, and NOTHING in it is dispatchable** (rule 4's
+**The open set is 3 and NOTHING in it is dispatchable** (rule 4's
 kind-of-blocked distinction, which `LOOPS.md` keeps in the durable playbook
 precisely because it did not survive a rewrite of this file):
 
@@ -153,35 +132,59 @@ precisely because it did not survive a rewrite of this file):
 | `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
 | AT runtime evidence | hardware-blocked — owner hardware |
 
-**So rule 4 will find nothing next wake.** That is not a halt: rules 2 and 3 are
-both OVERDUE and sit above it, so the dispatcher has work regardless. Rule 8's
-idle spiral is not in play.
-
 ## Direction
 
 **This block is genuinely empty of new asks.** No new input arrived: no open
-GitHub issues, and no owner message since the last wake.
+GitHub issues, and no owner message since the last wake. Step 1 had nothing to
+triage, so no `Roadmap · plan` row was recorded.
 
 **Standing three unchanged** (112.3, 112.4, AT runtime). All three need the
-owner; no wake of any kind can advance them. With 227.2 decided, these are the
-*entire* open backlog — the loop is now running on counters alone.
+owner; no wake of any kind can advance them. The loop is running on counters
+alone, and has been for three wakes.
 
-**Still unacted, now thirteen wakes older:** 177's observation that a grill's
+**Still unacted, now fourteen wakes older:** 177's observation that a grill's
 roadmap slice pays for its text twice — 1,192 of 1,943 swept lines were five
 Objective-grill slices that each also have a full report in `.roundtable/`.
 **Deliberately not filed as an item**, and re-checked this wake rather than
 repeated: 177's own text calls it *"a direction call about how the loop records
 its own work, and this loop does not take those"*, recorded so the owner can
-decide it. It is a standing owner question, not a dropped follow-up. It is
-newly relevant: Objective is armed, so the next grill will add another such
-slice.
+decide it. **This wake is direct evidence for it**: of the 15 slices swept, 215
+and 225 are Objective grills that each also have a standalone `.roundtable/`
+report, and rule 3 is armed to add another next wake.
 
-**One measured observation this wake, named rather than filed.**
-`cascade.astro` parses `Z_TOKENS` from the shipped z-index tokens and renders
-them as a table with **no parse assertion** — a zero-parse would render an empty
-stacking section rather than a wrong number. That is the same doctrine
-(*a mirror must fail loudly when it cannot see its source*) in a strictly
-milder form: silence, not a false figure. Left unfixed on purpose — 227.3's
-scope was the divisor that publishes a number, and widening a slice to every
-adjacent site is what this loop's own operating rule refuses. A Standardize
-sweep is the right home for it if anyone wants it.
+**One measured observation, named rather than filed — the sweep is not
+converging.** 179.2 once claimed regrowth per cycle was falling monotonically;
+214's write-up recorded that the fourth cycle broke it, and this cycle does not
+restore it either.
+
+```
+git show --format='%H %cI' -s e29c7c18   # 214.1's sweep   2026-08-30T00:46:02+00:00
+git show e29c7c18:ROADMAP.md | wc -l     # 1721
+git rev-list --count e29c7c18..HEAD -- ROADMAP.md   # 22
+```
+
+**+2,073 lines over 22 ROADMAP-touching commits in 16h03m = 94.2 lines per
+commit** — against 177's recorded cycle rates of 30.4 / 51.0 / 69.5 / 66.6.
+**Two sweeps inside one calendar day, for the second time** (165.1 and 177 were
+twelve hours apart).
+
+**A figure was corrected in the writing of this, and it is the same shape
+209.1 already named.** The sixth sweep's own log row and write-up say
+`3,197 → 1,650`; the file **as committed at `e29c7c18` is 1,721 lines**,
+because 1,650 is the state after the move and *before* the write-up was
+appended to it. Taking the log row at face value would have published a
+regrowth of 2,144 over "~34 hours" — both wrong, and neither re-derivable
+from the log. Measure the cycle from `git show <sweep>:ROADMAP.md | wc -l`,
+never from the sweep's own stated after-figure.
+
+Left as an observation and not an item, deliberately: the cadence is doing its
+job, and `LOOPS.md` already refuses to pin sweep numbers in the playbook
+because they go stale silently. ROADMAP 177's per-commit table is the
+instrument — re-run it, the figures are snapshots.
+
+**`cascade.astro`'s missing parse assertion is still open as an observation**
+(carried from the last hand-off, unchanged and not re-derived): it parses
+`Z_TOKENS` from the shipped z-index tokens with no assertion, so a zero-parse
+renders an empty stacking section rather than a wrong number. Milder than
+227.3's — silence, not a false figure. A Standardize sweep is the right home
+for it; this one's lane 4 finding outranked it.

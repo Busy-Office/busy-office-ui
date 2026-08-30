@@ -372,6 +372,15 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   sha" overcounts commits by 8%.
 - **A parser change that reports MORE is not self-evidently a fix.** 166.5's
   first draft would have read `4-tick sweep` as slice 4 across 18 rows.
+- **An archive sweep's stated after-figure is the file BEFORE its own write-up
+  landed, so it is never a cycle's starting line count.** 214.1 says
+  `3,197 → 1,650`; `git show e29c7c18:ROADMAP.md | wc -l` is **1,721**. Taking
+  the log row at face value published this cycle's regrowth as 2,144 lines over
+  "~34 hours" when it is **+2,073 over 22 commits in 16h03m**. 209.1 corrected
+  the same shape inside Slice 208 and it recurred at the next measurement, so
+  it is here rather than in a slice: **measure a regrowth cycle from
+  `git show <sweep-commit>:ROADMAP.md | wc -l`**, never from the sweep's own
+  prose (roadmap 228.1).
 - **A presence probe is not a fidelity probe.** Asking whether a heading still
   appears in 53 revisions answers whether it was deleted, not whether what sits
   under it decayed. 169.3's first pass read "zero shrinks" off a subset of
