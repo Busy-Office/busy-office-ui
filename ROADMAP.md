@@ -315,13 +315,23 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 220 — owner call: move the shipped htmx integration and both example apps to htmx 4, dropping `apps/docs`'s boosted navigation in the process (2026-08-30)
+## Slice 223 — owner call: move the shipped htmx integration and both example apps to htmx 4, dropping `apps/docs`'s boosted navigation in the process (2026-08-30)
 
 **Owner-directed, decided over chat — not dispatcher-picked.** Recorded here
 per the loop doctrine (every change gets a slice trail) rather than because
 rule order selected it.
 
-1. [x] **220.1 — pin htmx.org to 4.0.0 across the repo, including the shipped
+**A concurrent cloud wake reached the identical owner direction independently
+and filed it as Slices 220-222 (breadcrumb Polish, this direction as a plan,
+and a po-app measurement) — a real Step 0c numbering collision, resolved by
+renumbering this session's work above theirs rather than discarding either
+side.** Slice 221 is that wake's plan for the same instruction; it verified
+the same facts against htmx 4's shipped dist independently (matching results)
+but could not execute in its container. This slice is the executed and
+verified version — see 221's own closure note for the cross-reference, and
+222.1 for a third-environment data point on its still-open residual.
+
+1. [x] **223.1 — pin htmx.org to 4.0.0 across the repo, including the shipped
        `@busy-office/ui` behaviors' own event listeners.** htmx.org's npm
        `dist-tags` read `latest: 2.0.10`, `next: 4.0.0` at decision time — the
        htmx project itself says 4.0.0 stays `next` into 2027 specifically so
@@ -363,9 +373,9 @@ rule order selected it.
 
        *Accept:* `@busy-office/ui`'s own vitest suite, `check:claims`,
        `check:po-app` and `test:axe` all pass against the renamed events and
-       the new default — met, see 220.2's verification block.
+       the new default — met, see 223.2's verification block.
 
-2. [x] **220.2 — `apps/docs` drops boosted navigation rather than migrating
+2. [x] **223.2 — `apps/docs` drops boosted navigation rather than migrating
        it; htmx 4 removed what it depended on.** `apps/docs` used
        `hx-boost="true"` on `<body>` plus `htmx-ext-head-support` (pinned
        `^2.0.5`, npm has no version past that) to merge a boosted response's
@@ -426,7 +436,7 @@ rule order selected it.
        for bulk edits: verify against the artefact the platform that
        matters actually consumes, not the one doing the editing.
 
-3. [x] **220.3 — version and CHANGELOG.** `@busy-office/ui` 0.6.0 → 0.7.0
+3. [x] **223.3 — version and CHANGELOG.** `@busy-office/ui` 0.6.0 → 0.7.0
        (Breaking, pre-1.0 minor per the versioning policy);
        `packages/create-ui/framework.json`'s pin regenerated to `^0.7.0`.
        CHANGELOG's `Unreleased` gained a `### Breaking` entry ahead of
@@ -434,6 +444,450 @@ rule order selected it.
        211.1 (same day) corrected in place — it had recorded the `^2.0.10`
        pin this slice superseded hours later, which would have been a wrong
        claim shipping in the same release.
+## Slice 222 — `check:po-app` after 211.1: the previous wake's open question, answered by measurement — 2 of 19 becomes 1 of 19 here, and 19 of 19 on CI (2026-08-30)
+
+The previous hand-off's `## Direction` block left this explicitly open:
+*"Whether the gate itself now passes clean in such a container, not just the one
+route this wake checked, is open."* This wake could answer it for free, because
+it IS an egress-restricted container and it had already run the gate once —
+**before** rebasing onto 211.1, i.e. against the CDN version. Running it again
+after the rebase is a controlled before/after on one machine.
+
+**The reading moved, and the precondition is what moved.**
+
+```
+# same container, same command, two trees
+before 211.1:  po-app smoke check FAILED — 2 of 19
+               FAIL windowed list: htmx loaded, so the assertions below are testing
+                    the app and not a blocked CDN   {"htmx":"undefined"}
+after  211.1:  po-app smoke check FAILED — 1 of 19
+               (no htmx precondition failure — htmx now loads from /vendor/htmx.min.js)
+```
+
+So **17 assertions that were previously vacuous now genuinely run and pass**.
+208.3's standing warning — *"`chunk0Evicted: false` here means htmx never
+loaded, not that eviction is broken"* — is now spent: this container reads
+`chunk0Evicted: **true**`.
+
+**The one residual, with its full payload rather than its headline:**
+
+```
+FAIL windowed list: scrolling back re-loads the chunk with NO scroll jump and NO lost selection
+{"rowcount":"50001","sampledRowH":32.5,"chunk0RenderedH":3299,"chunk0Evicted":true,
+ "spacerH":3299,"spacerMatchesReal":true,"renderedBounded":true,"hiddenInputSurvives":true,
+ "chunk0Reloaded":false,"anchorShift":0,"scrollShift":0,"checkboxRechecked":false,
+ "countAtEnd":"1 selected","midRowIndexOk":true}
+```
+
+**Read the payload, not the assertion name.** Everything the name promises is
+green: `anchorShift: 0`, `scrollShift: 0` (no scroll jump — Slice 213's P0 fix
+holding), `hiddenInputSurvives: true`, `countAtEnd: "1 selected"` (no lost
+selection), `spacerMatchesReal: true`. The single false sub-condition is
+**`chunk0Reloaded`**, with `checkboxRechecked` false as its direct consequence:
+the chunk evicted and did not come back within the check's window.
+
+**This is NOT filed as a P0, and the reason is measured rather than cautious.**
+CI on the very same commit (`5e5ede6`, run 672) concluded **success**, so
+`check:po-app` passes 19 of 19 there; 211.1's own commit message records 19/19
+under `podman run --network none` as well. Two independent green readings of the
+same code means the divergence is **this container**, not the app. Calling it a
+regression on one reading would be the "first output is not evidence" failure
+this repo has paid for repeatedly.
+
+1. [ ] **222.1 — characterise the residual `chunk0Reloaded: false`, or record
+       that it is environmental and give `ENVIRONMENT.md` the honest number.**
+
+       **Not closed here, but a relevant data point from a third environment
+       (Slice 223, same day, htmx now 4.0.0 not just locally-vendored 2.0.10):
+       `check:po-app` read a clean 19 of 19 on that run, no residual, no
+       `chunk0Reloaded` failure.** That is a third data point alongside this
+       item's own two (CI 19/19, this container 1/19-with-residual) and does
+       not resolve which of (a)/(b) applies — different environment, same
+       script — but it is one more result consistent with (b), environmental,
+       since a real app defect in `windowed-list.ts` itself would be expected
+       to reproduce everywhere the same shipped `dist/` runs.
+
+       *Accept:* one of — (a) a cause is identified and the gate or the app is
+       fixed; or (b) it is demonstrated environmental (e.g. the scroll-back
+       `htmx.ajax` does not settle inside the check's wait window in this
+       container), and `ENVIRONMENT.md`'s po-app entry is updated from its
+       current *"expected reading here is 2 of 19"* to the measured post-211.1
+       figure with the mechanism named. **(b) is a satisfying outcome** — it is
+       the same shape as the entry it would replace.
+
+       **`ENVIRONMENT.md` is stale either way and that is the concrete debt.**
+       It still says *"the expected reading here is 2 of 19, with the
+       precondition named first"* and attributes it to a blocked htmx CDN. After
+       211.1 there is no CDN, the precondition passes, and the figure is 1 of
+       19. A wake reading that entry today would treat a changed reading as
+       normal, which is exactly the "documented failure hides a new one" trap.
+
+       **Do not start by re-running it more times.** The distinguishing variable
+       between the green readings and this one is the harness, not the count:
+       CI and the podman probe both ran the **tarball-consumer** path, this ran
+       the raw workspace. Compare those two before touching timing.
+
+## Slice 221 — Owner direction: pin htmx to 4, and plan the framework update. Slice 114's refusal is SUPERSEDED, and its own reopen condition is half-met (2026-08-30)
+
+**CLOSED 2026-08-30 (same owner direction, executed rather than planned — see
+Slice 223).** This item and Slice 223 are two dispatchers reaching the same
+owner instruction concurrently: this wake triaged it into a plan
+(221.1/221.2/221.3, all `[ ]`) because it could not verify a browser in this
+container; a parallel session had the owner directly in chat and built +
+verified the whole thing, including resolving 221.3's blocker. Every fact
+measured here reproduces there — same `noSwap: [204, 304]`, same `hx-ext`
+removal, same "114 was wrong about `hx-vals`" correction, independently
+re-derived. **221.3 resolved as a fourth option this item's Accept did not
+enumerate**: not (a) a v4 head-merge replacement, not (b) accept degraded
+head-merging, not (c) run two htmx majors — the owner instead dropped
+`hx-boost` from `apps/docs` entirely, so there is no head to merge. 221.1 and
+221.2 are subsumed by 223.1/223.2 (po-app re-derived to 19/19 under v4;
+every "discards non-2xx" claim across the repo rewritten, re-measured at 0
+remaining hits). Leaving this item's own text and measurements in place
+rather than deleting them — the independent re-derivation is itself the
+useful record.
+
+Owner, mid-wake, two messages: *"pls pin htmx to version 4"* and *"plan to
+update framework accordingly"*. Triaged under `LOOPS.md` Step 1, which says an
+out-of-band requirement does not wait for the next tick. Classified as a
+**requirement/direction change**, not a bug — so it is written here with Accept
+criteria before any code moves, which is the whole point of the step.
+
+**This supersedes Slice 114 (2026-08-22), which refused exactly this ask**, and
+114 wrote its own reopen condition: *"Re-open when: htmx 4 ships stable, AND
+someone runs a scoped audit of every 'discards non-2xx' claim this framework
+documents … before any adoption."* **The first half is now met**, the second
+half is what 221.2 is. The owner's direction settles the "no demonstrated gap"
+ground 114 also cited — a direction IS the reason, and it is recorded as such
+rather than re-litigated.
+
+**Every fact below was measured this wake against the shipped 4.0.0 tarball,
+not inherited from 114's WebFetch** — the rule that a premise from an earlier
+wake is part of the criterion. That re-check immediately paid: **114's claim
+that `hx-vals` is removed in htmx 4 is WRONG.**
+
+```
+npm view htmx.org dist-tags        # latest: 2.0.10   next: 4.0.0
+npm pack htmx.org@4.0.0 && tar xzf htmx.org-4.0.0.tgz
+grep -c 'hx-ext'  package/dist/htmx.js     # 0   <- REMOVED, confirmed
+grep -n  'hx-vals' package/dist/htmx.js    # 487: a live #getAttributeObject path  <- 114 was wrong
+grep -n  '204\|304' package/dist/htmx.js   # 202:   noSwap: [204, 304]
+```
+
+**`noSwap: [204, 304]` is the doctrine inversion, now verified in the artefact
+rather than in a changelog.** htmx 4 swaps every response except 204 and 304.
+This framework teaches the opposite as load-bearing fact.
+
+**htmx 4.0.0 is stable but is NOT the `latest` tag** — `latest` is 2.0.10 and
+4.0.0 ships behind `next`. Stated because 114 refused partly on "beta, not
+stable", and the honest reading today is "released, but not what `npm i
+htmx.org` gives you". That is a materially different risk from a beta, and a
+smaller one; it is the owner's call to accept, and the direction accepts it.
+
+**The blast radius, measured — it is three surfaces, not the one the ask names:**
+
+| surface | htmx today | what htmx 4 does to it |
+|---|---|---|
+| `apps/docs` (the docs site's OWN runtime) | `htmx.org ^2.0.10` + `htmx-ext-head-support ^2.0.5`; `hx-ext="head-support"` at `Gallery.astro:208`, 10 `hx-boost`, `htmx.process()` for Pagefind; gated by `check:boost` | **HARD BLOCKED** — see 221.3 |
+| `examples/po-app` | `htmx.org ^2.0.10`, vendored locally by 211.1 earlier this same wake; 8 attribute kinds, **zero** `hx-ext` | mechanically clear; **behaviourally changed** — see 221.2 |
+| the documented doctrine | 7 pages assert "discards"; **30** pattern pages carry a 4xx/409/422 Data-contract row; 6 htmx references in `check-claims.mjs` | every one of those rows is restated by `noSwap: [204, 304]` |
+
+**211.1 closed mid-wake and it helps.** The other dispatcher landed
+`5e5ede6` while this wake was running, replacing po-app's
+`unpkg.com/htmx.org@2.0.4` CDN literal with a locally-vendored
+`/vendor/htmx.min.js`. **There is now no CDN version literal anywhere in the
+repo** (`grep -rn 'unpkg\|cdn.jsdelivr\|htmx.org@'` over `apps/docs/src`,
+`examples`, `packages` → 0), so "pin htmx to 4" is now exactly **two dependency
+ranges in two `package.json` files**, which is a far cleaner change than it
+would have been an hour earlier.
+
+**Nothing was pinned this wake, and that is a sequencing decision with a
+measured reason, not a refusal of the direction.** 221.3 is a blocker with no
+published fix, and pinning `apps/docs` into it would break the docs shell's head
+merging with nothing to restore it. The owner asked for a plan in the same
+breath; this is it, and 221.1 is ready to execute the moment 221.3 is answered.
+
+1. [x] **221.1 — pin htmx to 4 where it can actually run: `examples/po-app`
+       first, `apps/docs` behind 221.3.**
+
+       *Accept:* `examples/po-app/package.json` reads a 4.x range, the app
+       boots, and `check:po-app`'s 19 behaviour assertions are **re-derived
+       against htmx 4's swap semantics rather than re-run against htmx 2's** —
+       with the count it reaches recorded either way. **Finding that assertions
+       must CHANGE is a satisfying outcome**, not a failure of the pin; finding
+       they hold unchanged is equally satisfying and is the stronger result.
+       `apps/docs` is pinned in the same item only if 221.3 resolves; otherwise
+       this item lands po-app alone and says so.
+
+       **Why po-app is separable, measured:** it uses `hx-target`, `hx-swap`,
+       `hx-swap-oob`, `hx-post`, `hx-trigger`, `hx-get`, `hx-vals`,
+       `hx-include` — all eight present in htmx 4's shipped dist — and **zero**
+       `hx-ext`, so the 221.3 blocker does not touch it.
+
+       **What genuinely changes there, and it is not cosmetic:** po-app returns
+       **422** at `server.mjs:1374`, `1550`, `1636`, `1705` and **409** at
+       `1691`. Under htmx 2 those are discarded; under htmx 4 they swap. The
+       reference app's error behaviour therefore changes even though not one
+       attribute does — which is the doctrine change arriving in the one place
+       this repo can actually execute it.
+
+       **This container cannot finish this item honestly.** `check:po-app`
+       needs the app driven in a browser, and it currently reads the documented
+       **2 of 19** here for an unrelated reason (measured this wake). A wake
+       that can run it green is the one that should land this.
+
+2. [x] **221.2 — the scoped audit Slice 114 made a precondition, now with its
+       surface counted.**
+
+       *Accept:* every claim this framework publishes about htmx discarding
+       non-2xx responses is enumerated, and each one is marked *still true under
+       4*, *false under 4*, or *never version-specific*. The enumeration is
+       reconciled against a raw count of the source so it cannot under-report
+       (the storage doctrine's mirror rule). **A claim that turns out never to
+       have been version-specific is a satisfying outcome** — the audit's job is
+       the classification, not a predetermined number of edits.
+
+       Surface, measured this wake, with the commands beside the claims so the
+       next wake re-runs rather than re-derives:
+
+       ```
+       grep -rl 'discards' --include='*.astro' apps/docs/src | wc -l          # 7
+       grep -rlE '\b(409|422|4xx)\b' --include='*.astro' \
+            apps/docs/src/pages/patterns | wc -l                              # 30
+       grep -c 'htmx' apps/docs/scripts/check-claims.mjs                      # 6
+       ```
+
+       `getting-started/htmx.astro:83` is the origin of the doctrine — 114
+       recorded it stating outright that htmx swaps 2xx and discards the rest —
+       and the pattern Data-contract rows repeat it. **Re-read that line before
+       trusting this sentence**; it is 114's reading, and 114 was already wrong
+       once about `hx-vals`.
+
+       **`check:claims` is the reason this cannot be a prose sweep.** This
+       repo's own rule is that a claim asserting runtime behaviour must be
+       executable, and a 2026-08-17 dogfood spike proved a confident, reviewed
+       page flatly wrong on exactly this topic. Any row this audit reclassifies
+       needs its executable case reclassified with it.
+
+3. [x] **221.3 — BLOCKER, and it needs an owner call: htmx 4 removes `hx-ext`,
+       and the docs shell's head-support extension has no htmx-4 release.**
+
+       *Accept:* one of — (a) an htmx-4 path for merging `<head>` on boosted
+       navigation is identified and demonstrated on the docs shell; (b) the
+       docs site accepts losing head merging beyond the title, with what
+       actually degrades measured on the built site rather than assumed; or
+       (c) the docs site stays on htmx 2 while `examples/po-app` moves to 4,
+       and this repo documents that it deliberately runs two majors. **Any of
+       the three closes this item** — (c) is not a failure, it is a legitimate
+       answer that 221.1 is already shaped for.
+
+       The measurements that make this a blocker rather than a worry:
+
+       ```
+       grep -c 'hx-ext' package/dist/htmx.js                    # 0  — removed in htmx 4
+       grep -c 'hx-ext' apps/docs/src/layouts/Gallery.astro     # 1  — Gallery.astro:208
+       npm view htmx-ext-head-support versions                  # tops out at 2.0.5
+       npm view htmx-ext-head-support dist-tags                 # latest: 2.0.5
+       grep -in 'head-support' package/dist/htmx.js             # 0  — not native either
+       grep -n  '<head'       package/dist/htmx.js
+       #  1049: strips <head>…</head> and keeps ONLY the title
+       ```
+
+       So the mechanism is removed, the extension that provided it has no
+       htmx-4 release, and htmx 4's own head handling discards the head and
+       preserves the title alone. **There is no published upgrade path for this
+       specific dependency today** — which is a fact about the ecosystem, not a
+       cost this repo can absorb by trying harder.
+
+       **What is NOT yet measured, and is deliberately left open rather than
+       guessed:** what the docs shell actually loses in practice. `check:boost`
+       gates boosted navigation and would be the instrument. That measurement
+       needs the built site driven in a browser — takeable in a cloud wake per
+       `ENVIRONMENT.md`'s "no screenshots is not no browser" — and this wake
+       spent its rounds elsewhere.
+
+## Slice 220 — Polish round on `breadcrumb`: the count-bearing cite class pays out a second time, and the pick was a filed defect rather than a tie-break (2026-08-30)
+
+Dispatcher, top-to-bottom, each rule read from its own source rather than
+inherited from the hand-off. **Rule 1 clear** — no open P0 (`grep -inE 'P0'
+ROADMAP.md` returns only closed slice headings), GitHub intake **0 open issues**
+(`list_issues` `state: OPEN` → `totalCount: 0`). Step 1 therefore had nothing to
+triage. **Rule 2** `Standardize 2 / 4 ok`, **rule 3** `Objective 2 / 3 ok
+[218, 219]` — one more closed slice arms a grill. **Rule 4 found nothing
+dispatchable**: the same four open items, each re-read by its own text this
+wake, with the KIND of blocked named per 186.2 — `112.3` owner-blocked (briefs +
+four answers), `112.4` owner-blocked (on 112.3's verdict), `211.1` owner-blocked
+(a product call), AT runtime hardware-blocked (owner hardware). **None of the
+four is browser-blocked**, so this is not the mis-sort 186.2 warns about.
+**That reading of `211.1` was true when taken at Step 0 and was overtaken
+mid-wake** — the other dispatcher landed `5e5ede6` closing it, so the open set
+is now three. Left as read rather than back-edited into a tidier claim: the
+rule-4 report says what this dispatcher saw when it evaluated the rule, and
+Slice 221 records the change.
+**Rule 5 evaluated and clear, not stale** — `dispatch_status.py` reads
+`0 wake-date(s) newer`, newest comparable pair `axe-violations` 0 → 0 (no
+regression), and the one declared size budget in the repo (`RF_BUDGET_KB = 40`,
+`build-rf-essentials.mjs`) is gated by the build, which passed. **Rule 6
+fired**; `polish_requeue.py --apply` re-queued **8** surfaces.
+
+**Not lapped this wake, and that was checked rather than assumed.** Step 0
+fetched `origin/main` at `89bb937` — exactly the sha the previous hand-off
+named. The container started **detached** (`git branch --show-current` empty),
+fixed with `git checkout -B main origin/main` per ENVIRONMENT.md trap 1, and
+`git rev-parse --short main HEAD` reproduced the documented `fatal: Needed a
+single revision` that trap warns is NOT evidence of a missing branch. The clone
+is still **shallow** and was left that way: nothing this wake measured is a
+history measurement.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px or 390px
+in either theme.** One rendered change ships — the `fit` row of
+`/components/breadcrumb`'s "Design-system alignment" table carries different
+text. No element, class, style or CSS file changed; the entire diff under
+`apps/docs/src` is one JSON string. `check:layout` (127 pages), `test:axe`
+(127 × 2, zero) and `check:claims` swept green, and the corrected cite was
+verified in the BUILT html rather than in the diff. **That is what ran; it is
+not the same as having looked at the page.**
+
+1. [x] **220.1 — `breadcrumb`'s `fit` cite published "2 of 19 pattern screens"
+       against a corpus of 39. The numerator held; the denominator had
+       doubled.**
+
+       *Accept* (§3b, the reconciliation a `content: 3` re-queued surface gets):
+       the surface's published artefact agrees with the ledger's record of it —
+       the entry exists, the page renders it, and each citation still holds
+       against the shipped artifacts. **Finding every citation clean is a
+       satisfying outcome**; 176.1's wake recorded exactly that on ten surfaces.
+
+       **The pick needed no tie-break, and that is new.** Every round since
+       176.1 has faced an unbroken tie — all re-queued surfaces score
+       `content: 3`, and 171.1 measured that no DSA dimension can rank one — so
+       216.1 and 217.1 each invented a discriminator (source movement since the
+       surface's own `scored` date). This round had a **filed** defect instead:
+       217.2 measured the count-bearing cite class at **6 of 240**, found 4
+       exact and 2 stale, fixed `sidebar-nav` and wrote `breadcrumb` down as
+       *"filed, not fixed — one round, one surface"*. `breadcrumb` is not a row
+       in the ledger table and rule 6 reads only `rounds`/`dry`, so this is a
+       **re-entry**, the same shape `scan` and `data-table` took.
+
+       **The premise was re-measured before it was acted on**, per this file's
+       own rule that a premise inherited from an earlier wake is part of the
+       criterion — 217.2 recorded no command beside its claim:
+
+       ```
+       node -e "console.log(require('./apps/docs/src/data/dsa-scores.json')
+         .components.breadcrumb.dimensions.fit.cite)"
+       #  deep ERP hierarchies (cost center -> PO -> line); used in 2 of 19 pattern screens
+
+       grep -l 'bo-breadcrumb' apps/docs/src/pages/patterns/*.astro | wc -l   # 2  <- numerator holds
+       grep -rl 'bo-breadcrumb' apps/docs/src/pages/patterns/ | wc -l         # 2  (recursive, same)
+       ```
+
+       **The denominator was reconciled against four independent sources before
+       being called wrong**, because a count is exactly the kind of number
+       CLAUDE.md says to reconcile before quoting:
+
+       | source | reading |
+       |---|---|
+       | `ls apps/docs/src/pages/patterns/*.astro` minus `index.astro` | **39** |
+       | `patterns.json`'s own `count` field (generated by `docs:build`) | **39** |
+       | `gen-patterns-index.mjs` report line | **39** pattern(s) |
+       | `check:wrong-choice` report line | patterns: **39** carry |
+
+       Four agree; `19` was right in the neighbourhood of 2026-08-21 and is not
+       right now. Note the recursive glob returns **47** `.astro` files under
+       `patterns/` — the `rf/` and `schedule/` subdirectories hold sub-screens
+       that `patterns.json` does not count as patterns. A wake that had used
+       that number as the denominator would have "corrected" one wrong figure
+       into another.
+
+       **The fix removes the quantity rather than refreshing it**, which is
+       217.2's precedent and this item is its second confirmation: a refreshed
+       denominator decays on the next pattern page, and the corpus grew 19 → 39
+       in nine days. The replacement states two properties of the code, both
+       verified present first:
+
+       ```
+       grep -rc 'bo-breadcrumb' examples/erp-suite --include='*.mjs'
+       #  examples/erp-suite/_shell.mjs:1   <- the ONLY literal in the suite;
+       #                                       crumbs() at _shell.mjs:125, called by page()
+       grep -c 'bo-breadcrumb' packages/create-ui/template/screen.html    # 1
+       ```
+
+       So: *"deep ERP hierarchies (cost center -> PO -> line item); the ERP
+       suite emits every trail from ONE shared `crumbs()` helper in
+       `_shell.mjs`, never hand-written markup, and create-ui's starter screen
+       ships one."* **No line number** — the ledger records line-number cites as
+       the most decay-prone shape there is and only 1 of 40 components carries
+       one; adding a second, in the round whose entire finding is decay, would
+       be the wrong lesson.
+
+       **The score does not move and no blind re-score is owed.** A component
+       whose trail is emitted from one shared helper and shipped in the
+       scaffolder's starter screen has *stronger* placement evidence than a raw
+       count of demo pages, so `fit: 3` was and remains right; the sentence
+       reporting it went wrong while the thing it reported got better. `scored`
+       stays **2026-08-21** — moving it would claim the independent second
+       opinion §3b step 4 requires, which this wake cannot run. `rounds` is
+       recorded as 1/3 on a **new** ledger row, because this is the surface's
+       first Polish round.
+
+       **The other five cites reconciled clean**, arm by arm, against
+       `breadcrumb.css` as shipped:
+
+       | dimension | cite | check |
+       |---|---|---|
+       | typography | `--bo-font-size-sm` only, no raw `font-size` | `grep -c font-size` → **1**, and it is the `var()` |
+       | colour | zero raw colour; current page carries weight + primary ink | `grep -cE '#[0-9a-f]{3,8}\b\|rgba?\(\|hsla?\('` → **0**; `[aria-current="page"]` sets `color` **and** `font-weight` |
+       | spacing | zero raw dimension literals | `grep -oE '[0-9.]+(px\|rem\|em\|ch\|%)'` → **0 matches** |
+       | interaction | `na` — plain links, no behavior ships for it | 0 of **33** `behaviors.json` names match `/crumb/i` |
+       | content | separator is `content: "/" / ""`, empty accessible name | present verbatim in the shipped CSS |
+
+       Arm 1 (wrong-choice clause) present — *"Not for progress through a
+       flow"*, and `check:wrong-choice` ratchets it. Arm 2 (entry rendered by
+       its page) gated per name by `check:dsa-scores` assertion 7 — **360
+       assertions across 40 scored components, all rendered**.
+
+       **One instrument was wrong on its first output, which is the base rate
+       holding.** The behaviors check first read `0 of 4` — it had counted
+       `Object.keys(behaviors.json)`, whose top level is
+       `generated`/`initCount`/`exports`/`behaviors`. The real array holds
+       **33** names. A "0 of 4" that happened to support the cite was caught by
+       the tidiness of the denominator, not by the answer being wrong.
+
+       **Verified against the RENDERED artefact, not the diff**: `used in 2 of
+       19 pattern screens` → **0 files across all of `apps/docs/dist`**, and the
+       replacement renders on `/components/breadcrumb`. The only surviving
+       source copy of the old string is `polish-state.md`'s own record of
+       217.2 filing it, which is a quotation and correct.
+
+2. [x] **220.2 — refused: a gate for the count-bearing cite class, for the
+       second time, and the reason is now stronger than when 217.2 refused
+       it.**
+
+       *Accept:* the refusal names what a gate would have to do and why this
+       loop may not build it, or the gate ships. **Refusing is a satisfying
+       outcome** — the Objective's own accept/refuse test.
+
+       217.2 refused it on two grounds: 101.3's stop rule forbids Polish adding
+       gates, and the class is not writable in the form the existing
+       cite-checkers take (*is this string in that file*) because it needs *does
+       this number still equal a count over a different tree*. This round adds a
+       third, measured here: the two stale cites in the class of six failed
+       **against different trees** — `sidebar-nav`'s numerator counted
+       `examples/po-app`, `breadcrumb`'s denominator counted
+       `apps/docs/src/pages/patterns`. A gate would need each cite to carry its
+       own command, which is a **rubric change** (a new field in
+       `dsa-scores.json`), not maintenance of the existing ratchet.
+
+       **And the class is now shrinking by construction rather than by
+       enforcement**: both repairs replaced the count with a property, so 6 of
+       240 is down to **4 of 240**, all four re-verified exact by 217.2
+       (`navbar · fit` 3, `dialog · fit` 13, `offcanvas · fit` 1, `tabs · fit`
+       2). A gate whose population is being retired as it is found is ceremony
+       for a different reason than 94.11's — not a uniformly-true predicate, but
+       a vanishing one. Recorded for whoever may decide; not filed as an item.
+
+## Slice 219 — the `aria-current` pairing gate stops at the docs dist, and the one violation it would have caught lived outside it (2026-08-30)
 
 Triaged from the hand-off `218.1` wrote and deliberately did not act on: it
 named the gap as *"worth a line of owner direction, or a triage row on a later
