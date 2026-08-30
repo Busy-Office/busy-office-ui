@@ -89,6 +89,7 @@ a no-op recorded in one line.
 | component/alerts | content | **3** | 1/3 | 0 | 20c2fe2c | round 1 landed — blind re-score 2→3, off the gate's TODO · **RE-QUEUED — source changed** |
 | component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
+| component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
 | component/calendar | content | **3** | 1/3 | 0 | e1dec38b | round 1 landed — blind 2→3, "not for a plain date field" · **RE-QUEUED — source changed**|
 | component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
@@ -385,3 +386,81 @@ ROADMAP 217.2.
 next round the thing no round since 176.1 has had: a pick with a measured reason
 rather than a tie. It is not a queue entry; it is not in this table, and rule 6
 reads only `rounds` and `dry`.
+
+## Re-entry: breadcrumb — round 1 (2026-08-30, cloud wake) — NOT a no-op (ROADMAP 220)
+
+**The first round since 176.1 that needed no invented tie-break.** Rule 6
+re-queued **8** surfaces, all `content: 3`, so neither the score (171.1) nor the
+ledger's "fewest rounds" tie-break discriminates — the same wall 176.1, 182.1,
+216.1 and 217.1 each hit. 217.2 had already broken it in advance by *filing* a
+defect it did not fix: `breadcrumb · fit`, one of the 2 stale cites in the class
+of 6 it measured at 6 of 240. So the pick was a measured, pre-existing finding
+rather than a discriminator invented for the occasion.
+
+`breadcrumb` was not a row in this table; rule 6 reads only `rounds` and `dry`,
+so this is a **re-entry**, the shape `scan` and `data-table` took.
+
+**The premise was re-measured before it was acted on** — 217.2 recorded no
+command beside its claim, which is the gap CLAUDE.md's criterion rule names:
+
+```
+grep -l  'bo-breadcrumb' apps/docs/src/pages/patterns/*.astro | wc -l   # 2  numerator holds
+grep -rl 'bo-breadcrumb' apps/docs/src/pages/patterns/       | wc -l    # 2  recursive, agrees
+```
+
+**The denominator was reconciled against four independent sources** before being
+called wrong: top-level `.astro` minus `index.astro` → 39; `patterns.json`'s
+generated `count` → 39; `gen-patterns-index.mjs`'s report line → 39; and
+`check:wrong-choice`'s → "patterns: 39 carry". A **recursive** glob returns
+**47**, because `rf/` and `schedule/` hold sub-screens `patterns.json` does not
+count as patterns — a wake reaching for the obvious recursive count would have
+replaced one wrong figure with another.
+
+**The fix removes the quantity rather than refreshing it**, which is 217.2's
+precedent and now has two confirmations rather than one: the corpus went 19 → 39
+in nine days, so any refreshed denominator is already decaying. The replacement
+states two properties of the code, both verified present first — the ERP suite
+emits every trail from ONE shared `crumbs()` helper (`grep -rc bo-breadcrumb
+examples/erp-suite` → `_shell.mjs:1`, the only literal in the suite), and
+create-ui's starter screen ships one (`template/screen.html`, 1). **No line
+number**: this table records line-number cites as the most decay-prone shape
+there is, at 1 of 40 components, and adding a second in the round whose finding
+IS decay would be the wrong lesson.
+
+**The score does not move and no blind re-score is owed.** One shared helper
+plus the scaffolder's starter screen is *stronger* placement evidence than a
+count of demo pages, so `fit: 3` was and remains right — the sentence reporting
+it went wrong while the thing it reported got better. `scored` stays
+**2026-08-21**; moving it would claim the independent second opinion §3b step 4
+requires, which this wake could not run.
+
+**The other five cites reconciled clean** against `breadcrumb.css` as shipped:
+`font-size` occurs once and is the `var()`; zero raw colour literals, and
+`[aria-current="page"]` sets `color` **and** `font-weight`, so the two-channel
+claim holds; zero raw dimension literals; `content: "/" / ""` present verbatim;
+and `interaction: na` holds — **0 of 33** names in `behaviors.json` match
+`/crumb/i`. Arm 1 (clause present, *"Not for progress through a flow"*) and arm
+2 (entry rendered by its page, 360 assertions over 40 components) are both
+gate-ratcheted.
+
+**One instrument was wrong on its first output, which is the base rate holding
+rather than an anecdote.** The behaviors check first read `0 of 4` — it had
+counted `Object.keys(behaviors.json)`, whose top level is
+`generated`/`initCount`/`exports`/`behaviors`. The real array holds **33**. The
+answer it gave was *correct* (no breadcrumb behavior), which is what makes it
+worth recording: a right conclusion from a broken instrument, caught only
+because a denominator of 4 was too tidy to be true.
+
+**Verified against the RENDERED artefact, not the diff:** `used in 2 of 19
+pattern screens` → **0 files across all of `apps/docs/dist`**; the replacement
+renders on `/components/breadcrumb`. The one surviving source copy of the old
+string is this file's record of 217.2 filing it — a quotation, and correct.
+
+**A gate for the class is refused a second time (ROADMAP 220.2)**, with a third
+reason 217.2 did not have: the two stale cites failed against **different
+trees** — `sidebar-nav`'s numerator counted `examples/po-app`, `breadcrumb`'s
+denominator counted `apps/docs/src/pages/patterns`. A gate would need each cite
+to carry its own command, which is a rubric change, not maintenance of the
+ratchet 101.3 confines Polish to. And the class is now **shrinking by
+construction**: both repairs replaced a count with a property, so 6 of 240 is
+down to **4 of 240**, all four re-verified exact by 217.2.
