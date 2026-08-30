@@ -17,138 +17,100 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**cloud** wake — rule 6 → **Polish**, round 2 on
-`component/sidebar-nav`). Working tree clean at hand-off; one push.
+Last updated 2026-08-30 (**cloud** wake — rule 4 → **Continue**, build mode on
+`218.1`). Working tree clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, unchanged
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off (was 5; 218.1 closed)
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-Ids named below that are **closed** — `217.1`, `217.2`, `217.3`, `216.1`,
-`182.1`, `176.1`, `176.2`, `171.1`, `101.3`, `94.11`, `184.1`, `186.2` — are
-historical references to this wake's work and to what it cites, not claims they
-are open. The four genuinely open are **`112.3`, `112.4`, `211.1`, AT runtime**.
-This wake changed none of them.
+Ids named below that are **closed or archived** — `218.1`, `217.2`, `176.1`,
+`154.1`, `94.11`, `186.2`, `211.1`'s neighbours — are historical references to
+this wake's work and to what it cites, not claims they are open. The four
+genuinely open are **`112.3`, `112.4`, `211.1`, AT runtime**. This wake changed
+none of them.
 
 ## NOT lapped this wake, and that was checked rather than assumed
 
-Step 0 fetched `origin/main` at `913dfbf` — the previous wake's own tip — and the
-re-fetch Step 0c mandates before the first commit returned the same sha. The
-previous hand-off's lapping (37 slices, a whole dispatch discarded) did not
-recur. **Its suggestion still stands and is still only a suggestion:** a long
-cloud wake should re-fetch mid-wake, not only before the first commit. Nothing
-mandates it, and this loop may not decide that.
+Step 0 fetched `origin/main` at `577c572` — one commit newer than the previous
+hand-off described, because that hand-off was written before Slice 218's triage
+commit landed. The re-fetch Step 0c mandates before the first commit returned
+the same `577c572`. No collision.
+
+The container started **detached** and the local `main` ref was stale at
+`17b3ba6`; `git checkout -B main origin/main` at Step 0, and
+`git branch --show-current` verified non-empty before the first commit —
+ENVIRONMENT.md trap 1, exercised exactly as written.
 
 ## What landed this wake
 
-**Slice 217 — Polish round 2 on `component/sidebar-nav`. NOT a no-op.**
+**Slice 218.1 — the `data-status` split REFUSED; the `aria-current` pair kept
+and gated.** Full reasoning and every command are in ROADMAP 218.1.
 
-- **217.1 — a cite that was EXACT when written and decayed two days later.**
-  `fit` read *"the shell rail; po-app uses it at **6 sites** …"*.
+- **Two of the item's own premises were wrong, and re-checking them is what
+  changed the answer.** `grep -rn 'data-status=' … → 0` is true of that command
+  and reports a **false absence** — the trailing `=` is a position filter, and
+  `/patterns/job-monitor` writes it as `<code>data-status</code>`. The plain
+  fixed string finds 2. So the proposed convention already ships here, which
+  turns the question from "adopt a foreign name?" into "where is the boundary?".
+  Also `~60 components` → **40**.
+- **Decision: `data-state` is what the shipped CSS SELECTS ON; `data-status` is
+  payload no stylesheet touches.** One rule, already holding framework-wide.
+  No CHANGELOG entry — nothing in `packages/core` changed but comments, and
+  writing a **Breaking** entry because the Accept forecast one would be 154.1
+  repeated.
+- **The `current`/`aria-current` half went the OTHER way from the way it was
+  filed.** Not redundant: `PatternPreview.astro:110` draws thumbnails inside
+  `<div class="tile-preview" inert aria-hidden="true">`, where the step must be
+  visible and `aria-current` reaches nobody. But the pair had already drifted —
+  6 rendered in the built docs, 4 paired, 2 not, one of them a real defect on
+  `/patterns/object-page`. Two markup sites fixed; new `@exact` gate
+  **`check:timeline-current`** in the `docs:build` chain.
 
-  ```
-  git log -S 'po-app uses it at 6 sites' -- apps/docs/src/data/dsa-scores.json
-  #  37a1143a  2026-08-21T06:16:30+08:00
-  git show 37a1143a:examples/po-app/server.mjs | grep -c 'bo-sidebar-nav'   # 6  <- EXACT when written
-  grep -c 'bo-sidebar-nav' examples/po-app/server.mjs                       # 8  <- today
-  ```
-
-  po-app grew two screens on 2026-08-22 (`40a18f1e` /inbox 6→7, `b5a3081b`
-  movements 7→8). Published stale for **eight days**; the entry is stamped
-  `"scored": "2026-08-23"`, the day after it stopped being true.
-
-  **This is a different defect class from 216.1, and that is the point.** 216.1's
-  cite was wrong on the day it was written, so re-reading the file it describes
-  catches it. This one was right when written and was falsified by a change
-  **somewhere else entirely** — a new screen in the reference app, which nobody
-  reviewing `sidebar-nav` would think to open. No wrong moment to catch, only an
-  expiry nobody watches.
-
-  **Score does not move, no blind re-score owed** — six usages becoming eight is
-  *more* placement, so `fit: 3` was and stays right; `scored` stays 2026-08-23.
-  Same call as 216.1. **The fix removes the quantity rather than refreshing it**,
-  because a refreshed count decays on the next dogfooded screen. Every element of
-  the replacement verified present FIRST (1 `<nav class="bo-sidebar-nav`,
-  `page()` at server.mjs:105, the nesting at offcanvas.astro:20), then verified in
-  the BUILT html: `uses it at 6 sites` → **0** across all of `apps/docs/dist`, new
-  sentence renders **1**.
-
-  The surface's other five cites reconciled clean, each against the shipped
-  artifact. One caveat recorded rather than promoted to a defect: `typography`'s
-  *"same basis as combobox/form"* holds as a BASIS claim (`combobox.css:124` is
-  0.05em, `form-section.css:19` is 0.03em, both uppercase micro-headings) and not
-  as a value claim; rewriting a defensible sentence to pre-empt a misreading is
-  the busywork §3b refuses.
-
-- **217.2 — the class measured, and the gate refused for a second reason.**
-  6 of **240** cites carry a bare count. Four exact (`navbar` 3→3, `dialog`
-  13→13, `offcanvas` 1→1, `tabs` 2→2), `sidebar-nav` stale, and
-  `breadcrumb · fit`'s denominator says "2 of **19** pattern screens" against
-  **39** today (numerator still 2). **Not** a uniform predicate, so unlike 94.11
-  a detector here would distinguish — refused anyway on 101.3, **and** because
-  the class is not writable in the shape the other cite-checkers take: they ask
-  *is this string in that file*, this needs *does this number still equal a count
-  over a different tree*, which would require the cite to carry its own command.
-  That is a rubric change, not ratchet maintenance.
-
-  **`breadcrumb` is filed, not fixed** — one round, one surface. It is NOT a
-  queue entry (not in `polish-state.md`; rule 6 reads only `rounds` and `dry`),
-  but it gives the next Polish round the thing no round since 176.1 has had: **a
-  pick with a measured reason instead of an unbroken `content: 3` tie.**
-
-- **217.3 — rule 5 un-staled.** It read `STALE` at Step 0b for a second
-  consecutive wake; the previous hand-off named recording a metric as the fix and
-  then recorded none. `axe-violations` measured from this wake's own `test:axe`
-  run and recorded.
-
-**Instrument correction worth carrying:** the pick measurement's first reading
-used `--before=2026-08-23T23:59:59` with **no offset**, read in the container's
-UTC against `+0800` commits, so it cut eight hours late — `icon` read 3 commits
-+43 (truly 4/+113) and `calendar` read **0/0**, i.e. "did not move at all", when it
-had moved twice. The tell was not a tidy number: the base commit it resolved to
-was stamped a day AFTER the boundary asked for. Pin the offset on any
-`--before`/`--since` in this repo.
+**Instrument correction worth carrying:** the refactor that made the gate assert
+**per page** — so a clean tree cannot report a pass over zero checks — built the
+failure-detail string eagerly and crashed with a `TypeError` on every clean page.
+All three "red" results in that round were **crashes, not verdicts**, and they
+looked like a working red-proof. Retake a red-proof after any change to the
+detector, and read the failure text, not just the exit code.
 
 ## Cloud-wake limits, stated rather than implied
 
 No Podman, no `localhost:8081`, **no screenshots at 1440px or 390px in either
-theme**. One rendered change ships — the `fit` row of `/components/sidebar-nav`'s
-alignment table carries different text. No element, class, style or CSS file
-changed; the whole diff under `apps/docs/src` is one JSON string. `check:layout`,
-`test:axe`, `check:claims` and the rest of the cloud list swept green and the
-corrected cite was verified in the BUILT html. **That is what ran; it is not the
-same as having looked at the page.**
+theme**. `packages/core` changed by comments only (verified: the new comment is
+absent from the built dist CSS, and the README size stat still matches), and the
+two markup fixes add one ARIA attribute no framework selector reads — so nothing
+rendered should move. **That is an argument, not a look at the page.**
 
-**`polish_requeue.py` cannot run on a fresh container before a build** — it dies
-with `FileNotFoundError: packages/core/dist/api.json`. Recorded as a shape, not
-filed: the traceback names the missing file, so it fails loudly rather than
-skipping quietly. `npm run build -w @busy-office/ui` first is the whole fix.
+Gates green in this container: core build/test/`lint:css`, `docs:build`,
+`check:claims` (158 live + the documented 3 NOT VERIFIED for this container's
+`pointer: none`), `check:formatting`, `check:scroll`, `check:forced-colors`,
+`check:layout`, `test:axe` (127 × 2, zero), `check:target-size`, `check:search`,
+`check:pseudo`, `check:quickstart`, `check -w @busy-office/create-ui`,
+`check:repo`, `npm run suite`. **`check:po-app` is the documented 2 of 19** with
+`htmx: undefined` named first — this container cannot fetch the CDN.
 
 ## Dispatcher state at hand-off
 
 Read **after** recording, which is the comparison `LOOPS.md` says has caught two
-of that counter's five historical failures.
+of that counter's five historical failures — and it agreed with what the wake
+had just done: `Standardize 0 → 1`, `Objective 0 → 1 [218]`.
 
 ```
 python3 scripts/loops/dispatch_status.py
 ```
 
-Rules as this wake read them, each from its own source: rule 1 clear (no open P0;
-GitHub intake **0 open issues**, `totalCount: 0`), rule 2 `Standardize 0 / 4 ok`,
-rule 3 `Objective 0 / 3 ok`, **rule 4 nothing dispatchable**, **rule 5 STALE at
-Step 0b — reported as un-evaluable, then un-staled by 217.3**, **rule 6 fired**.
+Rules as this wake read them, each from its own source: rule 1 clear (no open
+P0; GitHub intake **0 open issues**, `totalCount: 0`), rule 2
+`Standardize 0 / 4 ok`, rule 3 `Objective 0 / 3 ok`, rule 5 **`ok`, not STALE**
+(newest pair `axe-violations`, 0 → 0 — no regression, no budget breach), **rule
+4 fired** on `218.1`.
 
-Rule 5 re-read after recording, which is the comparison `LOOPS.md` says has
-caught two of that counter's five historical failures. It now reads
-`Optimize 0 wake-date(s) newer … ok [newest pair: axe-violations; 104 samples]`,
-and the pair is **0 → 0**: no regression, no budget breach. Verified by running
-`dispatch_status.py` again, not by assuming the recording worked.
-
-**Rule 4's four items, with the KIND of blocked per 186.2** — re-read from each
-item's own text this wake:
+**Rule 4's remaining four, with the KIND of blocked per 186.2** — re-read from
+each item's own text this wake:
 
 | item | kind of blocked |
 |---|---|
@@ -158,26 +120,32 @@ item's own text this wake:
 | AT runtime evidence | hardware-blocked — owner hardware |
 
 **None of the four is browser-blocked**, so this is not the mis-sort 186.2 warns
-about.
-
-**A Polish round is again the likely next dispatch**, and for the first time
-since 176.1 it has a stated pick: **`breadcrumb · fit`'s stale denominator**
-(217.2). Note also that the productive arm continues to earn its place — the
-citation reconciliation has now found a real defect on **4 of 5** surfaces where
-it has been run (`scan` 176.1, `state-patterns` 182.1, `data-table` 216.1,
-`sidebar-nav` 217.1; `badge` remains the clean one). Run that arm first.
+about. With 218.1 closed, rule 4 has nothing dispatchable again and **a Polish
+round is the likely next dispatch** — its stated pick is still `breadcrumb ·
+fit`'s stale denominator (217.2: "2 of **19** pattern screens" against **39**
+today, numerator still 2). Run the citation-reconciliation arm first; it has
+found a real defect on 4 of 5 surfaces where it has been run.
 
 ## Direction
+
+**A NEW OWNER DECISION IS AVAILABLE AND WAS DELIBERATELY NOT TAKEN.** 218.1's
+gate covers the **built docs pages only**. `examples/erp-suite` and
+`examples/po-app` render timelines it never sees, and neither `npm run suite`
+nor `check:po-app` asserts the pairing — the erp-suite defect this wake fixed
+was found by a source grep, not by any gate, and the next one would not be.
+Extending the pairing assertion into `suite:check` is a small, exact change; it
+was left alone because widening a just-shipped gate on the same wake is scope
+the item did not ask for. **Worth a line of owner direction, or a triage row on
+a later wake — not a defect.**
 
 **`211.1` remains the owner's call and this wake did not touch it.** The standing
 correction holds: the docs teach no CDN wiring at all, so the question is whether
 to ADD teaching, not to preserve it.
 
-**`175.4` gained no new evidence this wake** — no collision occurred. Its inputs
-are unchanged since the previous hand-off, which is itself worth knowing: the
-lapping there was one observation, not a rate.
+**`175.4` gained no new evidence this wake** — no collision occurred, and
+`origin/main` did not move between Step 0 and the first commit.
 
-**Still unacted, now three wakes older:** 177's observation that a grill's roadmap
+**Still unacted, now four wakes older:** 177's observation that a grill's roadmap
 slice pays for its text twice.
 
 **Standing three unchanged** (112.3, 112.4, AT runtime).
