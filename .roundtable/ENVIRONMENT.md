@@ -94,13 +94,45 @@ Export it in the SAME command as the build, every time. It is needed by
 
 ```
 git rev-parse --is-shallow-repository     # -> true, on a fresh container
-git fetch --unshallow origin              # ~25s; ~1,500 commits
+git fetch --unshallow origin              # usually ~25s — but see 2b
+git rev-parse --is-shallow-repository     # -> the ONLY check that it worked
 ```
 
 `report_loop_prose.py` **refuses to report** on a shallow clone rather than
 printing wrong figures; that guard was red-proved against a real
 `git clone --depth 1`. Nothing else refuses, so any wake whose finding is a
 history measurement must unshallow first.
+
+## 2b. A TIMED-OUT UNSHALLOW LEAVES `.git/shallow.lock`, AND EVERY LATER FETCH THEN FAILS QUIETLY
+
+Bit for real on 2026-08-30 (Slice 216, cloud wake) and cost three attempts. The
+"~25s" above is not a floor: that wake's first `git fetch --unshallow origin`
+was **killed by a 300s tool timeout** — long enough to have created the lock,
+not long enough to finish.
+
+```
+ls -la .git/shallow.lock       # 0 bytes, timestamped at the moment of the timeout
+```
+
+From then on **every** deepening fetch — `--unshallow` and `--deepen=1500`
+alike — refused, and `git rev-parse --is-shallow-repository` kept reading
+`true` at **50 commits**. The recovery is one line:
+
+```
+rm -f .git/shallow.lock && git fetch --unshallow origin    # -> 1,554 commits
+```
+
+**What made it take three attempts is this file's own recipe.** Git's refusal
+names the lock file in its FIRST line; the tail of the message is only
+*"…may have crashed in this repository earlier: / remove the file manually to
+continue."*, which names nothing. Running the fetch through `| tail -2` — the
+obvious way to keep its output short — cuts off exactly the line that says what
+to delete, and what survives reads like an unrelated warning scrolling past a
+command that appeared to succeed.
+
+So: **the fetch's own output is not the check.** Run `git rev-parse
+--is-shallow-repository` after it every time, and if it still reads `true`,
+re-run the fetch with no `tail` and read the FIRST line.
 
 ## 3. `astro build` does not clear `dist`
 

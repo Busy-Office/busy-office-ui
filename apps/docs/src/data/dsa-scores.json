@@ -123,7 +123,7 @@
         },
         "spacing": {
           "score": 3,
-          "cite": "the 1.75rem compaction heights now state why they are literals and how they diverge from compact (94.2); reconciliation queued as 94.3"
+          "cite": "94.3 moved the two auto-compaction heights OUT of this file — row and control height are set from --bo-density-auto-* in tokens/density.css, beside the tiers they relate to — so data-table.css carries no height literal at all. What it carries is the reason (94.2): raising cell-padding-x at 390px grows a real detail-form row 68px to 87px while simple tables go 28px to 30px, so the tighter padding buys horizontal room, the scarce resource at phone width."
         },
         "interaction": {
           "score": 3,

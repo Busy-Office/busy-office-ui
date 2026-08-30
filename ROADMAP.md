@@ -315,6 +315,187 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 216 — Polish round on `data-table`: a DSA cite that was already stale on the day it was scored, and a cloud wake lapped by 37 slices (2026-08-30)
+
+Dispatcher, top-to-bottom, each rule read rather than inherited from the
+hand-off. Rule 1 clear — no open P0 (`grep -niE '\bp0\b' ROADMAP.md` returns only
+closed slice headings and prose) and GitHub intake **0 open issues**, asked via
+the API twice, at Step 0 and after the re-fetch below. Rule 2 `Standardize 0 / 4
+ok`, rule 3 `Objective 0 / 3 ok`. **Rule 4 found nothing dispatchable**: all four
+open items re-read by their own text, and the KIND of blocked named per 186.2 —
+`112.3` owner-blocked (briefs + four answers), `112.4` owner-blocked (on 112.3's
+verdict), `211.1` owner-blocked (a product call, its inputs corrected by 215.3),
+AT runtime hardware-blocked (owner hardware). **Rule 5 could not be evaluated** —
+`dispatch_status.py` reads `STALE`, one wake-date newer than its newest
+comparable pair, and per rule 5's own text that is reported as un-evaluable
+rather than as clear. **Rule 6 fired**; `polish_requeue.py --apply` re-queued 10
+surfaces.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px or 390px
+in either theme.** One rendered change ships — the `spacing` row of
+`/components/data-table`'s "Design-system alignment" table now carries different
+text. No element, class, style or CSS file changed; `git diff --stat` names
+nothing under `packages/core/src`. `check:layout` (127 pages), `test:axe` (127 ×
+2 widths) and `check:claims` swept green, and the corrected cite was verified in
+the BUILT html rather than in the diff. **That is what ran; it is not the same
+as having looked at the page.**
+
+**⚠ THIS WAKE WAS LAPPED, AND THE PRE-COMMIT FETCH IS THE ONLY REASON IT NOTICED
+— evidence for the still-open `175.4`.** Step 0 fetched `origin/main` and got
+`52a50b58` (authored 19:50:33Z, highest slice **178**). By the `git fetch origin
+main` Step 0c mandates before the first commit, `origin/main` was `724dc587`
+(01:40:39Z, highest slice **215**): **151 commits and 37 slices** had landed in
+between. The first of them — `74d8c2b8`, 21:44Z — is `Slice 179 — Objective grill
+of 173/176/177/178`, which is **exactly the dispatch this wake had taken** from
+rule 3 and had already carried to a finished report, two landed fixes and a
+red-proof.
+
+All of that was discarded, as Step 0c instructs the loser to do; nothing was
+pushed. What this adds to `175.4` is that **Step 0c's stated cost — *"up to one
+wake's work, discarded"* — understates this case.** The collision it models is
+two wakes racing for the same item at roughly the same time. Here a slow cloud
+wake was simply outrun: it planned, measured and wrote against a `ROADMAP.md`
+that was 37 slices out of date for its entire duration, and every figure it
+produced was about a tree nobody was on any more. The mechanism that caught it is
+the process rule with nothing mechanical behind it, which is the half Step 0c
+already calls the working one.
+
+Part of the wall clock that made it lappable is measured and is fixed below:
+three failed `git fetch --unshallow` attempts, ~10 minutes, all one stale lock
+file (216.3).
+
+1. [x] **216.1 — the Polish round is NOT a no-op: `data-table`'s `spacing` cite
+       names a literal that 94.3 had removed from the file two days before the
+       score was taken.**
+
+       *Accept* (§3b, the reconciliation a `content: 3` re-queued surface gets):
+       the surface's published artefact agrees with the ledger's record of it —
+       the entry exists, the page renders it, and each citation still holds
+       against the shipped CSS.
+
+       **Pick, with its reason, because the score cannot rank.** All 10 re-queued
+       surfaces are `content: 3` and 171.1 measured that no DSA dimension can
+       order them; nine sit at 1/3 rounds and `scan` at 2/3, so the ledger's
+       tie-break has no discriminator either. Picked by which surface's SOURCE
+       actually moved, since that is the property that makes a citation go stale
+       — and 182.1 is the precedent that exactly this happens:
+
+       ```
+       BASE=$(git rev-list -1 --before=2026-08-28T21:00:00 HEAD)   # 52a50b58
+       git diff --numstat $BASE HEAD -- <surface paths>
+       #  data-table  5 commits  +157/-0      <- picked
+       #  alerts      1 commit    +71/-5
+       #  the other seven          0/0
+       ```
+
+       **The first version of that instrument read `244 commits` for all nine**
+       — an identical value across every input, which CLAUDE.md says is a defect
+       until proven otherwise. It was: a stray `"*"` pathspec. Caught before the
+       pick, not after.
+
+       **The defect.** The `spacing` cite read *"the **1.75rem** compaction
+       heights now state why they are literals and how they diverge from compact
+       (94.2); reconciliation **queued** as 94.3"*. Both halves are false:
+
+       ```
+       grep -c '1\.75rem' packages/core/src/css/components/data-table/data-table.css
+       #  0
+       # walked back through all 40 revisions of that file:
+       #  bafdb41f  2026-08-21  3 occurrences
+       #  79f7fec9  2026-08-21  0   <- "94.3: the fourth density gets a name and a reason"
+       ```
+
+       94.3 did not stay queued — it **landed on 2026-08-21** and moved both
+       heights out of the component into `--bo-density-auto-{row,control}-height`
+       in `tokens/density.css`, which `data-table.css` then reads through
+       `var()`. The entry is stamped `"scored": "2026-08-23"`, so the cite was
+       **already two days stale when it was written**, and `/components/data-table`
+       has published it to readers ever since. The CSS file's own comment says the
+       opposite of the cite, in the same block.
+
+       **The score does not move and no blind re-score is owed.** `spacing` is
+       defined as a debt marker, not a quality signal; naming the heights instead
+       of hard-coding them is *less* debt, so 3 was and remains right. What was
+       wrong is the evidence record — 176.1's shape exactly.
+
+       Corrected to what is true, and **every literal the new cite names was
+       checked to be present in the file first**, so the replacement does not
+       trip the same class of error: `390px` ×4, `68px`, `87px`, `28px`, `30px`.
+       Verified on the rebuilt artefact, not the diff — in
+       `dist/components/data-table/index.html` the stale string
+       `1.75rem compaction heights` and the phrase `reconciliation queued as`
+       both return **0**, and the new sentence renders.
+
+       The other five cites were reconciled in the same pass and **all hold**:
+       `--bo-font-size-mono-inline` ×1 and `__col--code` ×1 and `0.03em` ×1
+       (typography); 3 hex literals, each confirmed inside the `@media print`
+       block by brace-depth rather than by eye (colour); `:has(` ×9 and one
+       native `popover` (interaction); the clause *"Not for laying out a page"*
+       present on the page (content); the split-column rule present (fit).
+
+2. [x] **216.2 — REFUSED: a gate for that class, even though its base rate says
+       it would distinguish. `101.3` forbids Polish adding one, and the obvious
+       widening kills the detector.**
+
+       Measured before proposing it, which is the part worth keeping:
+
+       ```
+       # across all 40 components' DSA cites, every cite naming a CSS length
+       # literal, checked against that component's own CSS directory
+       cites naming a literal ............ 74
+       literal present in that CSS ....... 73
+       missing ............................ 1   <- data-table · spacing · 1.75rem
+       ```
+
+       That is the *opposite* of 94.11's dead predicate (155 of 155 already
+       true): here it is false for exactly the one real defect, so it
+       distinguishes and it is `@exact` — substring membership, not recognition.
+
+       **It is still refused, for two reasons and neither is taste.** First,
+       `LOOPS.md` §3b: *"Polish is maintenance of the existing ratchet only… It
+       may NOT add dimensions, definitions or gates."* 176 refused a gate on the
+       verbatim-clause arm for the same rule, and reversing it from inside a
+       Polish round is the scope creep the Objective refuses.
+
+       Second, and this is the measurement a later wake needs: **the widening
+       that looks obviously correct destroys the signal.** Also searching
+       `packages/core/src/css/tokens/` would make the check "is this literal
+       anywhere in the shipped CSS", and `1.75rem` **is** in `density.css` — the
+       gate would have passed on the defect it was written for. The scope to the
+       component's own directory is what carries the signal, and its false-positive
+       mode is a cite that deliberately names a token-file value. That mode has a
+       base rate of **0 of 74** today and is not hypothetical for long.
+
+       Recorded with its commands so whoever may add gates can decide without
+       re-deriving it.
+
+3. [x] **216.3 — `ENVIRONMENT.md` trap **2b**: a timed-out `--unshallow` leaves
+       `.git/shallow.lock`, and the file's own recipe hides the recovery.**
+       Bit for real this wake, three attempts, ~10 minutes.
+
+       The first `git fetch --unshallow origin` was killed by a 300s timeout —
+       long enough to create the lock, not long enough to finish. Every later
+       deepening fetch (`--unshallow` and `--deepen=1500` alike) then refused
+       while `git rev-parse --is-shallow-repository` kept reading `true` at 50
+       commits. `rm -f .git/shallow.lock` and one more fetch gave **1,554**.
+
+       **The reason it took three attempts is the recipe, not the lock.** Git
+       names the lock file in the FIRST line of its refusal; the tail is only
+       *"…may have crashed in this repository earlier: / remove the file manually
+       to continue."*, which names nothing — and trap 2's command was written to
+       be run through `| tail -2`. Trap 2 now ends with
+       `git rev-parse --is-shallow-repository`, because **the fetch's own output
+       is not the check**; 2b carries the lock and the recovery.
+
+       Load-bearing rather than cosmetic: at 50 commits every history figure the
+       discarded grill produced would have been silently wrong, which is trap 2's
+       stated cost arriving on cue.
+
+*(This entry is deliberately shorter than its material. 177's observation —
+that a slice which also has a full write-up elsewhere pays for the text twice —
+is still unacted and still the owner's call; not padding one entry is not a
+convention change.)*
+
 ## Slice 215 — Objective grill of Slices 211, 213, 214: the open item's refusal cites a page that does not say it, and every container htmx measurement ran a version the app does not ship (2026-08-30)
 
 **Not new input** — nothing was filed, nobody asked, GitHub intake is **0 open

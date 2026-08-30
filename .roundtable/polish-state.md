@@ -86,20 +86,20 @@ a no-op recorded in one line.
 
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|
-| component/alerts | content | **3** | 1/3 | 0 | 20c2fe2c | round 1 landed — blind re-score 2→3, off the gate's TODO |
+| component/alerts | content | **3** | 1/3 | 0 | 20c2fe2c | round 1 landed — blind re-score 2→3, off the gate's TODO · **RE-QUEUED — source changed** |
 | component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
 | component/calendar | content | **3** | 1/3 | 0 | e1dec38b | round 1 landed — blind 2→3, "not for a plain date field" · **RE-QUEUED — source changed**|
 | component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
-| component/data-table | content | **3** | 1/3 | 0 | 42b426c7 | round 1 landed — blind 2→3, "not for laying out a page" · **RE-QUEUED — source changed**|
+| component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 1/3 | 0 | 75de0dee | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed · **RE-QUEUED — source changed**|
 | component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
 | component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" |
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" |
 | component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" |
-| component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below |
+| component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
 | component/sidebar-nav | content | **3** | 1/3 | 0 | 465e2954 | round 1 landed — blind 2→3, "not for navigating within one screen" · **RE-QUEUED — source changed**|
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** |
 | component/stepper | content | **3** | 1/3 | 0 | 4b8a288e | round 1 landed — blind 2→3, "not for independent sections" · **RE-QUEUED — source changed**|
@@ -262,3 +262,59 @@ the removed token had been. Full reasoning and the red-proof in ROADMAP 182.2.
   pages, which the CSS-design rubric correctly does not score — the same
   reason `/concepts/js-behaviors` is unscored. No rubric change needed,
   which also keeps roadmap 101.3's stop rule intact. Do not re-raise.
+
+## Re-entry: data-table — round 2 (2026-08-30), and it is NOT a no-op
+
+Rule 6 re-queued **10** surfaces, all `content: 3`, nine at 1/3 rounds and
+`scan` at 2/3 — so neither the score (171.1: no DSA dimension can rank) nor the
+ledger's tie-break discriminates. Picked by which surface's SOURCE actually
+moved, since that is the property that makes a cited artefact go stale, and
+182.1 is the precedent that exactly this happens:
+
+```
+BASE=$(git rev-list -1 --before=2026-08-28T21:00:00 HEAD)   # 52a50b58
+git diff --numstat $BASE HEAD -- <each surface's paths>
+#  data-table  5 commits  +157/-0     <- picked (200.4, 196.1, 190.1, 190.3, 173.2b)
+#  alerts      1 commit    +71/-5
+#  the other seven          0/0
+```
+
+**The first draft of that instrument reported `244 commits` for all nine** — an
+identical value across every input, which is a defect until proven otherwise. It
+was: a stray `"*"` pathspec. Caught before the pick.
+
+**The finding.** The `spacing` cite read *"the 1.75rem compaction heights now
+state why they are literals … reconciliation queued as 94.3"*. `1.75rem` occurs
+**0 times** in `data-table.css`, and 94.3 was not queued — it landed:
+
+```
+grep -c '1\.75rem' packages/core/src/css/components/data-table/data-table.css   # 0
+#  walked all 40 revisions of that file:
+#   bafdb41f  2026-08-21  3      79f7fec9  2026-08-21  0
+#   79f7fec9 = "94.3: the fourth density gets a name and a reason"
+```
+
+94.3 moved both heights into `--bo-density-auto-{row,control}-height` in
+`tokens/density.css`; `data-table.css` reads them through `var()` and its own
+comment says so, in the same block the cite describes. The entry is stamped
+`"scored": "2026-08-23"` — **the cite was already two days stale when written**,
+and the page has published it since.
+
+**The score does not move, so no blind re-score is owed.** `spacing` is a debt
+marker, not a quality signal, and naming the heights is less debt than
+hard-coding them: 3 was and remains right. The evidence record was wrong, which
+is 176.1's shape. Corrected, with every literal the replacement names verified
+present first (`390px` ×4, `68px`, `87px`, `28px`, `30px`), and checked in the
+BUILT html: `1.75rem compaction heights` → **0**, new sentence renders.
+
+The other five cites reconciled clean — mono-inline/`__col--code`/`0.03em` ×1
+each; 3 hex literals all inside `@media print`, confirmed by brace depth rather
+than by eye; `:has(` ×9 and one native `popover`; the wrong-choice clause on the
+page; the split-column rule present.
+
+**Refused: a gate for the class** (roadmap 216.2). Base rate says it would
+distinguish — 74 cites name a CSS length literal, 73 find it in that component's
+own CSS, 1 does not, and that 1 is this defect — but 101.3 forbids Polish adding
+gates, and the obvious widening (also search `tokens/`) would have PASSED on this
+defect, because `1.75rem` is in `density.css`. Measurement recorded there for
+whoever may decide.
