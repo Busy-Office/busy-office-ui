@@ -141,6 +141,12 @@ GitHub intake **0 open issues**, `totalCount: 0`), rule 2 `Standardize 0 / 4 ok`
 rule 3 `Objective 0 / 3 ok`, **rule 4 nothing dispatchable**, **rule 5 STALE at
 Step 0b — reported as un-evaluable, then un-staled by 217.3**, **rule 6 fired**.
 
+Rule 5 re-read after recording, which is the comparison `LOOPS.md` says has
+caught two of that counter's five historical failures. It now reads
+`Optimize 0 wake-date(s) newer … ok [newest pair: axe-violations; 104 samples]`,
+and the pair is **0 → 0**: no regression, no budget breach. Verified by running
+`dispatch_status.py` again, not by assuming the recording worked.
+
 **Rule 4's four items, with the KIND of blocked per 186.2** — re-read from each
 item's own text this wake:
 
