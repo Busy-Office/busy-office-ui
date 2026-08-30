@@ -356,7 +356,7 @@ CLAUDE.md's category exactly: a detector whose predicate is computed from the
 value under test cannot fail. The failure was only visible against an
 **independent** quantity — the tbody's own rendered height.
 
-1. [ ] **213.1 — size an evicted chunk's spacer from the chunk itself, and make
+1. [x] **213.1 — size an evicted chunk's spacer from the chunk itself, and make
        the assertion independent of the sample.** The tbody being evicted is in
        the DOM and rendered at the moment `evict()` runs, so its height is
        readable exactly rather than extrapolated; `rowCount * chunkRowHeightPx`
@@ -380,6 +380,55 @@ value under test cannot fail. The failure was only visible against an
        *Not in scope:* `check:po-app`'s 150ms anchor wait. 211.2 measured that
        it is what decides whether a run exposes the jump; re-measure the anchor
        assertion after this lands rather than tuning the sleep.
+
+       **LANDED 2026-08-30 (`926bd36e`), all four criteria measured.**
+
+       **(a)** `makeSpacer` reads the evicted tbody's own height, falling back
+       to `rowCount * chunkRowHeightPx` when that measures 0 — which is also why
+       every pre-213 unit test still exercises the extrapolation unchanged. The
+       residual is genuinely zero, not merely smaller:
+
+       ```
+       before   chunk 0 spacer 3250px · renders 3299px · err +49   (4 of 4)
+       after    chunk 0 spacer 3299px · renders 3299px · err   0   (4 of 4)
+       downstream anchorShift   > 2 in 12 of 20   ->   0 in 40 of 40
+       ```
+
+       **(b)** `windowed-list.test.ts` gains a chunk whose rows are 33 and 40
+       against a 32.5 sample. Red-proved against the pre-fix `dist/` — the tests
+       import the built artifact, so running before the rebuild tested the old
+       code directly — failing `expected 65 to be 73`, which is
+       `2 x 32.5` exactly. The other 9 cases passed unchanged in that same run,
+       so the added stub disturbed nothing.
+
+       **(c)** `spacerMatchesReal` now compares the spacer against chunk 0's own
+       rendered height, captured before anything evicts it, at 1px. Red-proved
+       **both ways** in a browser, with the dist injection asserted unique before
+       replacing and confirmed by grepping the built file:
+
+       | dist | spacerH | OLD form | NEW form |
+       |---|---|---|---|
+       | fixed | 3299 | **FAILS** | passes |
+       | defect injected back | 3250 | passes | **FAILS** |
+
+       The old form is exactly inverted — it passes on the bug and fails on the
+       fix — so **shipping the behaviour fix alone would have turned CI red.**
+       That is the load-bearing result here and it was not predicted; it came
+       out of running the red-proof in the direction that looked redundant.
+
+       **(d)** CHANGELOG entry is **Fixed**, not Breaking, with the reasoning
+       rather than the verdict: no class, `data-*`, ARIA or event contract
+       moves and consumer markup is untouched; what does move is the pixel value
+       of an inline `block-size` the behaviour writes on its own generated row.
+
+       **One risk stated rather than hidden:** (c) compares two reads of the same
+       element taken at different moments, so a layout change between them (late
+       font swap, column widths settling) would show up as a small non-zero
+       delta. Both reads matched exactly in every run here, and the payload now
+       carries `sampledRowH`, `chunk0RenderedH` and `spacerH`, so if CI ever
+       reports a sub-pixel gap the tolerance is what to revisit — not the fix.
+       **This could not be verified on CI from here**; it is verified on the
+       same code path CI runs, with htmx served over a real HTTP round-trip.
 
 ## Slice 212 — Objective grill of the 200/208/209 window: a refusal's own base rate missed the declaration its cited gate names in its header, and the arming set needed narrowing for the third grill running (2026-08-29)
 

@@ -99,3 +99,4 @@
 {"ts": "2026-08-27 22:53", "name": "css-repeat-bodies", "value": 8.0, "unit": "bodies"}
 {"ts": "2026-08-29 00:37", "name": "axe-violations", "value": 0.0, "unit": "pages"}
 {"ts": "2026-08-29 01:46", "name": "axe-violations", "value": 0.0, "unit": "pages"}
+{"ts": "2026-08-30 00:05", "name": "windowed-list-spacer-err-px", "value": 0.0, "unit": "px"}

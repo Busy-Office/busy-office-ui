@@ -1198,3 +1198,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-29 22:47 · Objective · grill · Slices 200/208/209 grilled — 212.1 corrects Slice 210's BROAD base rate (5 literals / 3 declarations, the missed one red-proved through check:motion); 212.2 adds the arming-set narrowing step to LOOPS.md section 6 · logged · e721c20
 - 2026-08-29 22:47 · Meta · refusal · a gate for 212.1 — check:motion already covers the subject on shipped dist; 192.1's answer to a wrong count is to name the instrument, not add a gate · refused · e721c20
 - 2026-08-29 22:47 · Meta · refusal · a sixth regex in dispatch_status.py to count closed rather than named slices — rule 3 sits above rule 4, so over-arming costs a paragraph and under-arming starves a loop · refused · e721c20
+- 2026-08-30 00:05 · Continue · build · 211.2 — anchor property measured where htmx loads normally: premise false, variance is not the shim's · landed · 926bd36e
+- 2026-08-30 00:05 · Meta · refusal · tuning check:po-app's 150ms anchor wait — the timing sensitivity is about a real jump; fix the jump (213), not the sleep · refused · 926bd36e
+- 2026-08-30 00:05 · Continue · bug · 213.1 — P0: windowed-list spacer sized from one unrepresentative sampled row, 49px short per chunk · landed · 926bd36e
+- 2026-08-30 00:05 · Meta · refusal · widening 211.2 to carry the shipped-behaviour fix — Slice 211's own preamble set the file-it-separately precedent · refused · 926bd36e
