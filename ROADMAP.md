@@ -315,6 +315,79 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 222 — `check:po-app` after 211.1: the previous wake's open question, answered by measurement — 2 of 19 becomes 1 of 19 here, and 19 of 19 on CI (2026-08-30)
+
+The previous hand-off's `## Direction` block left this explicitly open:
+*"Whether the gate itself now passes clean in such a container, not just the one
+route this wake checked, is open."* This wake could answer it for free, because
+it IS an egress-restricted container and it had already run the gate once —
+**before** rebasing onto 211.1, i.e. against the CDN version. Running it again
+after the rebase is a controlled before/after on one machine.
+
+**The reading moved, and the precondition is what moved.**
+
+```
+# same container, same command, two trees
+before 211.1:  po-app smoke check FAILED — 2 of 19
+               FAIL windowed list: htmx loaded, so the assertions below are testing
+                    the app and not a blocked CDN   {"htmx":"undefined"}
+after  211.1:  po-app smoke check FAILED — 1 of 19
+               (no htmx precondition failure — htmx now loads from /vendor/htmx.min.js)
+```
+
+So **17 assertions that were previously vacuous now genuinely run and pass**.
+208.3's standing warning — *"`chunk0Evicted: false` here means htmx never
+loaded, not that eviction is broken"* — is now spent: this container reads
+`chunk0Evicted: **true**`.
+
+**The one residual, with its full payload rather than its headline:**
+
+```
+FAIL windowed list: scrolling back re-loads the chunk with NO scroll jump and NO lost selection
+{"rowcount":"50001","sampledRowH":32.5,"chunk0RenderedH":3299,"chunk0Evicted":true,
+ "spacerH":3299,"spacerMatchesReal":true,"renderedBounded":true,"hiddenInputSurvives":true,
+ "chunk0Reloaded":false,"anchorShift":0,"scrollShift":0,"checkboxRechecked":false,
+ "countAtEnd":"1 selected","midRowIndexOk":true}
+```
+
+**Read the payload, not the assertion name.** Everything the name promises is
+green: `anchorShift: 0`, `scrollShift: 0` (no scroll jump — Slice 213's P0 fix
+holding), `hiddenInputSurvives: true`, `countAtEnd: "1 selected"` (no lost
+selection), `spacerMatchesReal: true`. The single false sub-condition is
+**`chunk0Reloaded`**, with `checkboxRechecked` false as its direct consequence:
+the chunk evicted and did not come back within the check's window.
+
+**This is NOT filed as a P0, and the reason is measured rather than cautious.**
+CI on the very same commit (`5e5ede6`, run 672) concluded **success**, so
+`check:po-app` passes 19 of 19 there; 211.1's own commit message records 19/19
+under `podman run --network none` as well. Two independent green readings of the
+same code means the divergence is **this container**, not the app. Calling it a
+regression on one reading would be the "first output is not evidence" failure
+this repo has paid for repeatedly.
+
+1. [ ] **222.1 — characterise the residual `chunk0Reloaded: false`, or record
+       that it is environmental and give `ENVIRONMENT.md` the honest number.**
+
+       *Accept:* one of — (a) a cause is identified and the gate or the app is
+       fixed; or (b) it is demonstrated environmental (e.g. the scroll-back
+       `htmx.ajax` does not settle inside the check's wait window in this
+       container), and `ENVIRONMENT.md`'s po-app entry is updated from its
+       current *"expected reading here is 2 of 19"* to the measured post-211.1
+       figure with the mechanism named. **(b) is a satisfying outcome** — it is
+       the same shape as the entry it would replace.
+
+       **`ENVIRONMENT.md` is stale either way and that is the concrete debt.**
+       It still says *"the expected reading here is 2 of 19, with the
+       precondition named first"* and attributes it to a blocked htmx CDN. After
+       211.1 there is no CDN, the precondition passes, and the figure is 1 of
+       19. A wake reading that entry today would treat a changed reading as
+       normal, which is exactly the "documented failure hides a new one" trap.
+
+       **Do not start by re-running it more times.** The distinguishing variable
+       between the green readings and this one is the harness, not the count:
+       CI and the podman probe both ran the **tarball-consumer** path, this ran
+       the raw workspace. Compare those two before touching timing.
+
 ## Slice 221 — Owner direction: pin htmx to 4, and plan the framework update. Slice 114's refusal is SUPERSEDED, and its own reopen condition is half-met (2026-08-30)
 
 Owner, mid-wake, two messages: *"pls pin htmx to version 4"* and *"plan to
