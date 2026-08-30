@@ -100,7 +100,7 @@ a no-op recorded in one line.
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" |
 | component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
-| component/sidebar-nav | content | **3** | 1/3 | 0 | 465e2954 | round 1 landed — blind 2→3, "not for navigating within one screen" · **RE-QUEUED — source changed**|
+| component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** |
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** |
 | component/stepper | content | **3** | 1/3 | 0 | 4b8a288e | round 1 landed — blind 2→3, "not for independent sections" · **RE-QUEUED — source changed**|
 | component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
@@ -318,3 +318,70 @@ own CSS, 1 does not, and that 1 is this defect — but 101.3 forbids Polish addi
 gates, and the obvious widening (also search `tokens/`) would have PASSED on this
 defect, because `1.75rem` is in `density.css`. Measurement recorded there for
 whoever may decide.
+
+## Re-entry: sidebar-nav — round 2 (2026-08-30, cloud wake) — NOT a no-op (ROADMAP 217)
+
+Rule 6 re-queued **9** surfaces. Eight at 1/3 rounds, `scan` at 2/3, all
+`content: 3` in this table — the same unbroken tie 176.1, 182.1 and 216.1 each
+faced. `inline-editing` drops out of the eight for a stated reason: it has no
+`dsa-scores.json` entry at all (176.2's false gap — a behaviour-documentation
+page with no CSS component under it), so the reconciliation arms have nothing to
+disagree with. Picked from the remaining seven by source movement since each
+surface's own `scored` date, 216.1's discriminator: `sidebar-nav` **4 commits
++120/-2**, tied with `icon` on commits and ahead on lines, and broken on the
+property — its `fit` cite carries a **bare count of usages**, the most
+decay-prone claim shape in the rubric.
+
+**The instrument's first reading was wrong and the defect was the day
+boundary.** `--before=2026-08-23T23:59:59` with no offset is read in the
+container's UTC while every commit here is authored `+0800`, so it cut eight
+hours late and reported `icon` at 3 commits +43 and `calendar` at 0/0 — the
+latter being "did not move at all", which is exactly what a pick would have
+turned on. The tell was not a tidy number: the base commit it resolved to was
+stamped a day *after* the boundary asked for.
+
+**The finding.** `fit` read *"po-app uses it at 6 sites"*. `6` was **exact** on
+the day it was written (`37a1143a`, 2026-08-21) — one `<nav class="bo-sidebar-nav">`
+plus five links. po-app then grew two screens on 2026-08-22 (`40a18f1e` /inbox,
+`b5a3081b` movements) and the same command now reads **8**. Published stale for
+eight days, and the entry is stamped `"scored": "2026-08-23"` — the day after it
+stopped being true.
+
+**A different class from 216.1, which is why it is recorded rather than just
+fixed.** 216.1's cite was wrong on the day it was written, so re-reading the
+file it describes catches it. This one was right when written and was falsified
+by a change **somewhere else entirely** — a new screen in the reference app,
+which nobody reviewing `sidebar-nav` would think to open. It has no wrong moment
+to catch, only an expiry nobody is watching.
+
+**The score does not move and no blind re-score is owed.** Six usages becoming
+eight is *more* placement, not less, so `fit: 3` was and remains right; the
+evidence got stronger while the sentence reporting it went wrong. `scored` stays
+`2026-08-23` — moving it would claim the independent second opinion §3b step 4
+requires, and this wake cannot run one. `rounds` moved 1→2 because the round
+produced a measured change to the published artefact, per 182.1's precedent.
+
+**The fix removes the quantity rather than refreshing it** — a refreshed count
+decays on the next dogfooded screen, and this item is the proof. The replacement
+states two properties of the code, both verified present first: po-app renders
+the rail from ONE shared shell (`page()`, server.mjs:105; exactly 1
+`<nav class="bo-sidebar-nav` in the file), and it composes inside `.bo-offcanvas`
+(offcanvas.astro:20). Verified in the BUILT html — `uses it at 6 sites` → 0
+across all of `apps/docs/dist`, new sentence renders 1.
+
+**Base rate for the class: 6 of 240 cites carry a bare count; 4 are exact, 2 are
+stale.** `navbar · fit` 3→3, `dialog · fit` 13→13, `offcanvas · fit` 1→1,
+`tabs · fit` 2→2 all hold; `breadcrumb · fit`'s denominator says "2 of 19
+pattern screens" against **39** today (its numerator, 2, still holds). Not a
+uniform predicate — a detector here would distinguish, unlike 94.11's. **A gate
+is still refused**: 101.3 forbids Polish adding gates, and this class is not
+writable in the form the other cite-checkers take — they ask *is this string in
+that file*, this needs *does this number still equal a count over a different
+tree*, which would require the cite to carry its own command. That is a rubric
+change, not maintenance of the existing ratchet. Full table and commands in
+ROADMAP 217.2.
+
+`breadcrumb` is **filed, not fixed** — one round, one surface — and it gives the
+next round the thing no round since 176.1 has had: a pick with a measured reason
+rather than a tie. It is not a queue entry; it is not in this table, and rule 6
+reads only `rounds` and `dry`.

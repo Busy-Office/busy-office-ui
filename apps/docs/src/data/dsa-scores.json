@@ -516,7 +516,7 @@
         },
         "fit": {
           "score": 3,
-          "cite": "the shell rail; po-app uses it at 6 sites, and it composes inside .bo-offcanvas for the drawer pattern"
+          "cite": "the shell rail; po-app renders it from ONE shared shell, so every screen carries it, and it composes inside .bo-offcanvas for the drawer pattern"
         }
       }
     },

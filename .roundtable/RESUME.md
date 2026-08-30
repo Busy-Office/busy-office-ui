@@ -17,8 +17,8 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**cloud** wake — rule 6 → **Polish**, the dispatch the
-previous hand-off predicted). Working tree clean at hand-off; one push.
+Last updated 2026-08-30 (**cloud** wake — rule 6 → **Polish**, round 2 on
+`component/sidebar-nav`). Working tree clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -27,84 +27,105 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, unchanged
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-Ids named below that are **closed** — `216.1`, `216.2`, `216.3`, `179`, `94.3`,
-`182.1`, `176.1` — are historical references to this wake's work and to what it
-cites, not claims they are open. The four genuinely open are **`112.3`,
-`112.4`, `211.1`, AT runtime**. This wake changed none of them.
+Ids named below that are **closed** — `217.1`, `217.2`, `217.3`, `216.1`,
+`182.1`, `176.1`, `176.2`, `171.1`, `101.3`, `94.11`, `184.1`, `186.2` — are
+historical references to this wake's work and to what it cites, not claims they
+are open. The four genuinely open are **`112.3`, `112.4`, `211.1`, AT runtime**.
+This wake changed none of them.
 
-## ⚠ THIS WAKE WAS LAPPED. READ THIS BEFORE TRUSTING ANY LONG WAKE'S PLAN.
+## NOT lapped this wake, and that was checked rather than assumed
 
-**A collision landed, of a kind Step 0c does not model, and only the mandated
-pre-commit fetch caught it.**
-
-```
-Step 0 fetch            origin/main = 52a50b58   19:50:33Z   highest slice 178
-pre-commit re-fetch     origin/main = 724dc587   01:40:39Z   highest slice 215
-git rev-list --count 52a50b58..724dc587          # 151 commits, 37 slices
-```
-
-The **first** of those 151 commits (`74d8c2b8`, 21:44Z) is
-**`Slice 179 — Objective grill of 173/176/177/178`** — precisely the rule-3
-dispatch this wake had taken at Step 0 and had carried to a finished report, two
-landed fixes and a red-proof. All of it was **discarded and never pushed**, as
-Step 0c instructs the loser to do.
-
-**This is new evidence for the OPEN `175.4`, and it is recorded in ROADMAP 216's
-opener rather than only here.** Step 0c bounds the cost at *"up to one wake's
-work, discarded"* and models two wakes racing for the same item at the same
-time. This was a **slow wake outrun**: it planned, measured and wrote against a
-`ROADMAP.md` that was 37 slices out of date for its whole duration, so every
-figure it produced described a tree nobody was on. Do not read 175.4's decision
-as being only about simultaneity.
-
-**Practical consequence for the next long cloud wake: re-fetch mid-wake, not
-only before the first commit.** Nothing mandates that today and nothing here
-changes the rule — it is a suggestion, not a decision this loop may take.
-
-Part of the wall clock that made this wake lappable is now fixed: three failed
-`git fetch --unshallow` attempts, ~10 minutes, all one stale lock file — see
-**ENVIRONMENT.md trap 2b**, added by 216.3 this wake.
+Step 0 fetched `origin/main` at `913dfbf` — the previous wake's own tip — and the
+re-fetch Step 0c mandates before the first commit returned the same sha. The
+previous hand-off's lapping (37 slices, a whole dispatch discarded) did not
+recur. **Its suggestion still stands and is still only a suggestion:** a long
+cloud wake should re-fetch mid-wake, not only before the first commit. Nothing
+mandates it, and this loop may not decide that.
 
 ## What landed this wake
 
-**Slice 216 — Polish round 2 on `component/data-table`. NOT a no-op.**
+**Slice 217 — Polish round 2 on `component/sidebar-nav`. NOT a no-op.**
 
-- **216.1 — the `spacing` DSA cite was already stale on the day it was scored.**
-  It read *"the **1.75rem** compaction heights … reconciliation **queued** as
-  94.3"*. `grep -c '1\.75rem'` on `data-table.css` reads **0**; walking all 40
-  revisions, `79f7fec9` (*"94.3: the fourth density gets a name and a reason"*,
-  2026-08-21) removed both literals into `--bo-density-auto-{row,control}-height`
-  in `tokens/density.css`. The entry is stamped `"scored": "2026-08-23"` — two
-  days later — and `/components/data-table` has published it since. The CSS
-  file's own comment says the opposite, in the same block.
+- **217.1 — a cite that was EXACT when written and decayed two days later.**
+  `fit` read *"the shell rail; po-app uses it at **6 sites** …"*.
 
-  **The score does not move and no blind re-score is owed:** `spacing` is a debt
-  marker, not a quality signal, so naming the heights is *less* debt and 3 stays
-  right. This corrects the evidence record — 176.1's and 182.1's shape.
+  ```
+  git log -S 'po-app uses it at 6 sites' -- apps/docs/src/data/dsa-scores.json
+  #  37a1143a  2026-08-21T06:16:30+08:00
+  git show 37a1143a:examples/po-app/server.mjs | grep -c 'bo-sidebar-nav'   # 6  <- EXACT when written
+  grep -c 'bo-sidebar-nav' examples/po-app/server.mjs                       # 8  <- today
+  ```
 
-  Every literal the replacement names was verified present in the file FIRST
-  (`390px` ×4, `68px`, `87px`, `28px`, `30px`), so the fix does not re-commit the
-  error. Verified in the BUILT html, not the diff: `1.75rem compaction heights`
-  → **0**, `reconciliation queued as` → **0**, new sentence renders. The other
-  five cites reconciled clean.
+  po-app grew two screens on 2026-08-22 (`40a18f1e` /inbox 6→7, `b5a3081b`
+  movements 7→8). Published stale for **eight days**; the entry is stamped
+  `"scored": "2026-08-23"`, the day after it stopped being true.
 
-- **The pick has a stated reason, because the score cannot rank.** All 10
-  re-queued surfaces are `content: 3`; nine sit at 1/3 rounds. Picked by which
-  surface's SOURCE moved: `data-table` **5 commits +157/-0**, `alerts` 1 commit
-  +71/-5, the other seven **0/0**. **The first draft of that instrument read
-  `244 commits` for all nine** — an identical value across every input, i.e. a
-  defect until proven otherwise. It was: a stray `"*"` pathspec. Caught before
-  the pick, not after.
+  **This is a different defect class from 216.1, and that is the point.** 216.1's
+  cite was wrong on the day it was written, so re-reading the file it describes
+  catches it. This one was right when written and was falsified by a change
+  **somewhere else entirely** — a new screen in the reference app, which nobody
+  reviewing `sidebar-nav` would think to open. No wrong moment to catch, only an
+  expiry nobody watches.
 
-- **216.2 — refused a gate for the class, and the refusal is the interesting
-  half.** Base rate says it WOULD distinguish: across all 40 components, **74**
-  cites name a CSS length literal, **73** find it in that component's own CSS,
-  **1** does not — this defect. That is the opposite of 94.11's dead predicate.
-  Refused anyway on 101.3 (Polish may not add gates), **and** because the
-  obvious widening kills it: also searching `tokens/` would have **passed** on
-  this defect, since `1.75rem` is in `density.css`. Commands in ROADMAP 216.2.
+  **Score does not move, no blind re-score owed** — six usages becoming eight is
+  *more* placement, so `fit: 3` was and stays right; `scored` stays 2026-08-23.
+  Same call as 216.1. **The fix removes the quantity rather than refreshing it**,
+  because a refreshed count decays on the next dogfooded screen. Every element of
+  the replacement verified present FIRST (1 `<nav class="bo-sidebar-nav`,
+  `page()` at server.mjs:105, the nesting at offcanvas.astro:20), then verified in
+  the BUILT html: `uses it at 6 sites` → **0** across all of `apps/docs/dist`, new
+  sentence renders **1**.
 
-- **216.3 — ENVIRONMENT.md trap 2b** (above).
+  The surface's other five cites reconciled clean, each against the shipped
+  artifact. One caveat recorded rather than promoted to a defect: `typography`'s
+  *"same basis as combobox/form"* holds as a BASIS claim (`combobox.css:124` is
+  0.05em, `form-section.css:19` is 0.03em, both uppercase micro-headings) and not
+  as a value claim; rewriting a defensible sentence to pre-empt a misreading is
+  the busywork §3b refuses.
+
+- **217.2 — the class measured, and the gate refused for a second reason.**
+  6 of **240** cites carry a bare count. Four exact (`navbar` 3→3, `dialog`
+  13→13, `offcanvas` 1→1, `tabs` 2→2), `sidebar-nav` stale, and
+  `breadcrumb · fit`'s denominator says "2 of **19** pattern screens" against
+  **39** today (numerator still 2). **Not** a uniform predicate, so unlike 94.11
+  a detector here would distinguish — refused anyway on 101.3, **and** because
+  the class is not writable in the shape the other cite-checkers take: they ask
+  *is this string in that file*, this needs *does this number still equal a count
+  over a different tree*, which would require the cite to carry its own command.
+  That is a rubric change, not ratchet maintenance.
+
+  **`breadcrumb` is filed, not fixed** — one round, one surface. It is NOT a
+  queue entry (not in `polish-state.md`; rule 6 reads only `rounds` and `dry`),
+  but it gives the next Polish round the thing no round since 176.1 has had: **a
+  pick with a measured reason instead of an unbroken `content: 3` tie.**
+
+- **217.3 — rule 5 un-staled.** It read `STALE` at Step 0b for a second
+  consecutive wake; the previous hand-off named recording a metric as the fix and
+  then recorded none. `axe-violations` measured from this wake's own `test:axe`
+  run and recorded.
+
+**Instrument correction worth carrying:** the pick measurement's first reading
+used `--before=2026-08-23T23:59:59` with **no offset**, read in the container's
+UTC against `+0800` commits, so it cut eight hours late — `icon` read 3 commits
++43 (truly 4/+113) and `calendar` read **0/0**, i.e. "did not move at all", when it
+had moved twice. The tell was not a tidy number: the base commit it resolved to
+was stamped a day AFTER the boundary asked for. Pin the offset on any
+`--before`/`--since` in this repo.
+
+## Cloud-wake limits, stated rather than implied
+
+No Podman, no `localhost:8081`, **no screenshots at 1440px or 390px in either
+theme**. One rendered change ships — the `fit` row of `/components/sidebar-nav`'s
+alignment table carries different text. No element, class, style or CSS file
+changed; the whole diff under `apps/docs/src` is one JSON string. `check:layout`,
+`test:axe`, `check:claims` and the rest of the cloud list swept green and the
+corrected cite was verified in the BUILT html. **That is what ran; it is not the
+same as having looked at the page.**
+
+**`polish_requeue.py` cannot run on a fresh container before a build** — it dies
+with `FileNotFoundError: packages/core/dist/api.json`. Recorded as a shape, not
+filed: the traceback names the missing file, so it fails loudly rather than
+skipping quietly. `npm run build -w @busy-office/ui` first is the whole fix.
 
 ## Dispatcher state at hand-off
 
@@ -115,14 +136,13 @@ of that counter's five historical failures.
 python3 scripts/loops/dispatch_status.py
 ```
 
-Rules as this wake read them, each from its own source rather than from the
-previous hand-off: rule 1 clear (no open P0; GitHub intake **0 open issues**,
-asked via the API twice), rule 2 `Standardize 0 / 4 ok`, rule 3
-`Objective 0 / 3 ok`, **rule 4 nothing dispatchable**, **rule 5 STALE —
-reported as un-evaluable, not as clear**, **rule 6 fired**.
+Rules as this wake read them, each from its own source: rule 1 clear (no open P0;
+GitHub intake **0 open issues**, `totalCount: 0`), rule 2 `Standardize 0 / 4 ok`,
+rule 3 `Objective 0 / 3 ok`, **rule 4 nothing dispatchable**, **rule 5 STALE at
+Step 0b — reported as un-evaluable, then un-staled by 217.3**, **rule 6 fired**.
 
 **Rule 4's four items, with the KIND of blocked per 186.2** — re-read from each
-item's own text this wake, not copied:
+item's own text this wake:
 
 | item | kind of blocked |
 |---|---|
@@ -131,29 +151,27 @@ item's own text this wake, not copied:
 | `211.1` vendor htmx into `examples/po-app` | owner-blocked — a product call |
 | AT runtime evidence | hardware-blocked — owner hardware |
 
-**A Polish round is still the likely next dispatch**, and nine re-queued
-surfaces remain at 1/3. But note what this wake found: the round that looked
-like a no-op was not. **The productive arm is the citation reconciliation**, and
-it has now found a real defect on **3 of 4** surfaces where it has been run
-(`scan` 176.1, `state-patterns` 182.1, `data-table` 216.1; `badge` was the clean
-one). That is the arm to run first, not last.
+**None of the four is browser-blocked**, so this is not the mis-sort 186.2 warns
+about.
 
-**Rule 5 is still STALE and this wake did not improve it** — it recorded no
-metric. A wake that records one un-stales it.
+**A Polish round is again the likely next dispatch**, and for the first time
+since 176.1 it has a stated pick: **`breadcrumb · fit`'s stale denominator**
+(217.2). Note also that the productive arm continues to earn its place — the
+citation reconciliation has now found a real defect on **4 of 5** surfaces where
+it has been run (`scan` 176.1, `state-patterns` 182.1, `data-table` 216.1,
+`sidebar-nav` 217.1; `badge` remains the clean one). Run that arm first.
 
 ## Direction
 
-**`211.1` remains the owner's call and this wake did not touch it.** The
-previous hand-off's correction stands: the docs teach no CDN wiring at all
-(0 files under `apps/docs/src/` mention `unpkg` or `cdn`), so the question is
-whether to ADD teaching, not to preserve it.
+**`211.1` remains the owner's call and this wake did not touch it.** The standing
+correction holds: the docs teach no CDN wiring at all, so the question is whether
+to ADD teaching, not to preserve it.
 
-**`175.4` gained real evidence this wake** — see the lapping section above. It
-is the one open decision whose inputs actually changed today.
+**`175.4` gained no new evidence this wake** — no collision occurred. Its inputs
+are unchanged since the previous hand-off, which is itself worth knowing: the
+lapping there was one observation, not a rate.
 
-**Still unacted, now two wakes older:** 177's observation that a grill's roadmap
-slice pays for its text twice. Slice 216 is deliberately shorter than its
-material and says so in its own closing line; that is one author's choice not to
-pad, not a convention change, which stays the owner's.
+**Still unacted, now three wakes older:** 177's observation that a grill's roadmap
+slice pays for its text twice.
 
 **Standing three unchanged** (112.3, 112.4, AT runtime).

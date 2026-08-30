@@ -315,6 +315,253 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 217 — Polish round on `sidebar-nav`: a cite that was EXACT when written and decayed two days later, and the count-bearing class measured at 6 of 240 (2026-08-30)
+
+Dispatcher, top-to-bottom, each rule read from its own source rather than
+inherited from the hand-off. Rule 1 clear — no open P0, and GitHub intake **0
+open issues** (`list_issues` `state: OPEN` → `totalCount: 0`). Rule 2
+`Standardize 0 / 4 ok`, rule 3 `Objective 0 / 3 ok`. **Rule 4 found nothing
+dispatchable**: the same four open items, each re-read by its own text, with the
+KIND of blocked named per 186.2 — `112.3` owner-blocked (briefs + four answers),
+`112.4` owner-blocked (on 112.3's verdict), `211.1` owner-blocked (a product
+call, its inputs corrected by 215.3), AT runtime hardware-blocked (owner
+hardware). **None of the four is browser-blocked**, so this is not the mis-sort
+186.2 warns about. **Rule 5 could not be evaluated** — `dispatch_status.py`
+reads `STALE`, one wake-date newer than its newest comparable pair, and rule 5's
+own text says that is reported as un-evaluable rather than as clear; 217.3
+un-stales it. **Rule 6 fired**; `polish_requeue.py --apply` re-queued 9
+surfaces.
+
+**Not lapped this wake, and that was checked rather than assumed.** Step 0
+fetched `origin/main` at `913dfbf`; the re-fetch Step 0c mandates before the
+first commit returned the same sha.
+
+**`polish_requeue.py` cannot run on a fresh container before a build** — it dies
+with `FileNotFoundError: packages/core/dist/api.json` reading the slug map.
+Recorded as a shape, not filed: the traceback names the missing file, so it
+fails loudly rather than skipping quietly, which is the property this repo's
+rule actually asks for. `npm run build -w @busy-office/ui` first is the whole
+fix.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px or 390px
+in either theme.** One rendered change ships — the `fit` row of
+`/components/sidebar-nav`'s "Design-system alignment" table carries different
+text. No element, class, style or CSS file changed; the entire diff under
+`apps/docs/src` is one JSON string. `check:layout`, `test:axe` and
+`check:claims` swept green, and the corrected cite was verified in the BUILT
+html rather than in the diff. **That is what ran; it is not the same as having
+looked at the page.**
+
+1. [x] **217.1 — `sidebar-nav`'s `fit` cite counted 6 and the tree now counts 8.
+       Unlike 216.1, the number was EXACT when it was written — it decayed.**
+
+       *Accept* (§3b, the reconciliation a `content: 3` re-queued surface gets):
+       the surface's published artefact agrees with the ledger's record of it —
+       the entry exists, the page renders it, and each citation still holds
+       against the shipped artifacts. **Finding every citation clean is a
+       satisfying outcome**; 176.1's wake recorded exactly that on ten surfaces.
+
+       **Pick, with its reason, because the score cannot rank.** All nine
+       re-queued surfaces score `content: 3` in the ledger (171.1: no DSA
+       dimension can rank), eight sit at 1/3 rounds and `scan` at 2/3, so §3b's
+       "fewest rounds used" tie-break leaves eight. `inline-editing` drops out
+       of those eight for a stated reason rather than silently: it has **no
+       `dsa-scores.json` entry at all** — the false gap 176.2 resolved, a
+       behaviour-documentation page with no CSS component under it — so the
+       reconciliation arms have nothing to disagree with. Seven remain, picked,
+       as 216.1 did, by which surface's
+       SOURCE actually moved since its own `scored` date, that being the
+       property that makes a cited artefact go stale:
+
+       ```
+       BASE=$(git rev-list -1 --before=2026-08-23T23:59:59+08:00 origin/main)   # a9ba5c7e
+       git rev-list --count $BASE..origin/main -- <each surface's paths>
+       #  sidebar-nav  4 commits  +120/-2   <- picked
+       #  icon         4 commits  +113/-2
+       #  alerts       1 commit    +71/-5     stepper 2 +42/-0
+       #  calendar     2 commits   +18/-2     tree-table 1 +20/-12
+       #  dashboard    0 commits    +0/-0
+       ```
+
+       **The first reading of that instrument was wrong, and the defect was the
+       DAY BOUNDARY.** `--before=2026-08-23T23:59:59` with no offset is read in
+       the container's UTC while every commit here is authored `+0800`, so it
+       cut eight hours late: `icon` read **3 commits +43/-3** and `calendar`
+       read **0/0**. Both change under the correct boundary (4/+113 and 2/+18),
+       and `calendar` moves from "did not move at all" to "moved twice" — the
+       exact reading a pick would have been made on. An instrument's first
+       output is not evidence, and the tell here was not a tidy number: it was
+       that the base commit it resolved to (`12f95a67`, `2026-08-24T07:31+08:00`)
+       was stamped a day AFTER the boundary asked for.
+
+       `sidebar-nav` and `icon` tie at 4 commits. Broken on a stated property
+       rather than the line count: `sidebar-nav`'s `fit` cite carries a **bare
+       count of usages**, which is the most decay-prone claim shape in the file —
+       the same reasoning that picked `badge` on its line-number cite (176.1),
+       and a count is strictly worse than a line number because nothing in the
+       repo has to change *near* it for it to go wrong.
+
+       **The finding.** The cite read *"the shell rail; po-app uses it at **6
+       sites**, and it composes inside `.bo-offcanvas` for the drawer pattern"*.
+
+       ```
+       git log -S 'po-app uses it at 6 sites' -- apps/docs/src/data/dsa-scores.json
+       #  37a1143a  2026-08-21T06:16:30+08:00  "Slice 94 batch 3: Navigation & layout scored"
+       git show 37a1143a:examples/po-app/server.mjs | grep -c 'bo-sidebar-nav'   # 6   <- EXACT when written
+       grep -c 'bo-sidebar-nav' examples/po-app/server.mjs                       # 8   <- today
+       ```
+
+       The instrument the cite used is recoverable and it is the plain line
+       count: 6 = one `<nav class="bo-sidebar-nav">` plus five links. Walking
+       every revision of that file, it went stale twice in one evening, both
+       times because po-app grew a screen:
+
+       ```
+       40a18f1e  2026-08-22T20:22:36+08:00  "116.2: /inbox dogfooded into po-app"    6 -> 7
+       b5a3081b  2026-08-22T22:22:58+08:00  "30.4b: movements dogfood"               7 -> 8
+       ```
+
+       So `/components/sidebar-nav` has published `6` for **eight days**, and
+       the entry is stamped `"scored": "2026-08-23"` — the day AFTER it stopped
+       being true.
+
+       **This is a different defect class from 216.1 and the difference is what
+       makes it worth recording.** 216.1's cite named a literal that had been
+       removed two days *before* the score was taken: wrong on the day it was
+       written, catchable by re-reading the file it describes. This one was
+       right on the day it was written and was falsified later by a change
+       **somewhere else entirely** — a new screen in the reference app, which no
+       reviewer of `sidebar-nav` would think to look at. A cite of this shape
+       has no wrong moment to catch; it has an expiry nobody is watching.
+
+       **The score does not move, so no blind re-score is owed.** `fit: 3` asks
+       whether the docs place the component in the contexts the field matrix
+       assigns it. Six usages becoming eight is *more* placement, not less — the
+       evidence got stronger while the sentence reporting it got wrong. Same
+       call as 216.1, and `scored` stays `2026-08-23`; moving it would claim the
+       independent second opinion §3b step 4 requires and this wake cannot run
+       one.
+
+       **The fix removes the quantity rather than refreshing it**, because a
+       refreshed count decays again on the next dogfooded screen and this item
+       is the proof. CLAUDE.md's criterion rule — name the PROPERTY, never the
+       value it will have — applied to an evidence cite. Every element of the
+       replacement was verified present FIRST, which is the discipline 216.1
+       set:
+
+       ```
+       grep -c '<nav class="bo-sidebar-nav' examples/po-app/server.mjs   # 1   — ONE rail in the file
+       grep -n 'const page = ' examples/po-app/server.mjs                # 105 — page(title, current, main, density)
+       sed -n '20p' apps/docs/src/pages/components/offcanvas.astro       # <nav class="bo-sidebar-nav"> INSIDE <dialog class="bo-offcanvas">
+       ```
+
+       New cite: *"the shell rail; po-app renders it from ONE shared shell, so
+       every screen carries it, and it composes inside `.bo-offcanvas` for the
+       drawer pattern."* Both halves are properties of the code, not readings of
+       it. Verified in the BUILT html, not the diff — `uses it at 6 sites` → **0**
+       across every page in `apps/docs/dist`, the new sentence renders **1** on
+       `/components/sidebar-nav`.
+
+       **The surface's other five cites reconciled clean**, each checked against
+       the shipped artifact rather than read: `--bo-density-font-size` on the
+       link (`sidebar-nav.css:45`); zero raw colour (`grep -nE
+       '#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(|oklch\('` → no match); `14rem` (line 8)
+       and `3.25rem` (line 92) with the derivation stated in the comment above
+       each; the visually-hidden `1px` box named as the idiom (lines 112-132);
+       `@container bo-shell` collapse hiding labels by `clip-path: inset(50%)`
+       (line 129) and not `display: none` — the one `display: none` in the file
+       is `@media print` on the rail itself (line 137), which the cite does not
+       contradict.
+
+       **One caveat recorded rather than promoted to a defect.** The
+       `typography` cite calls the `0.05em` tracking *"intrinsic (same basis as
+       combobox/form)"*. `combobox.css:124` is `0.05em` on an uppercase
+       semibold `__group` heading — same basis and same value. `form-section.css:19`
+       is `0.03em` on an uppercase semibold `__legend` — same basis, **different
+       value** — and `badge.css:105` carries an unnamed third `0.05em`. Read as
+       a claim about the *basis* (uppercase micro-headings need tracking) it
+       holds exactly; read as a claim about the value it does not. Left alone:
+       the cite says "basis", and rewriting a defensible sentence to pre-empt a
+       misreading is the busywork §3b refuses.
+
+       **Arm 4 holds too.** The `content` cite's *"both demos verified to use
+       aria-current on genuine destinations"* is a count of the sections that
+       carry `aria-current`, and it reads **2 then and 2 now** ("Grouped
+       sections in an embedded shell" and "Markup") — the page gained a fourth
+       demo section since scoring and it carries none, so the claim is
+       untouched. Checked because it is the same shape as the defect above and
+       the page is what moved; it survived.
+
+2. [x] **217.2 — the count-bearing class measured across the whole rubric: 6 of
+       240 cites, 4 exact, 2 stale. A gate is REFUSED, and the reason is not
+       101.3 alone.**
+
+       *Accept:* the base rate is measured before anything is proposed, and the
+       proposal is decided on what it says. **Finding the class uniform, or
+       uniformly clean, is a satisfying outcome** — 94.11 is the precedent where
+       exactly that killed a carefully-written gate.
+
+       ```
+       node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components;
+       const re=/\b(\d+)\s+(sites?|uses?|callers?|places?|instances?|copies|pages?|components?|screens?|glyphs?|consumers?|demos?|patterns?)\b/gi;
+       ..."   # 240 cites total, 6 carrying a bare count
+       ```
+
+       All six, re-measured against the tree today:
+
+       | cite | claims | measures | verdict |
+       |---|---|---|---|
+       | `navbar · fit` | po-app at 3 sites | `grep -c bo-navbar` = **3** | exact |
+       | `dialog · fit` | po-app at 13 sites | `grep -c bo-dialog` = **13** | exact |
+       | `offcanvas · fit` | 1 pattern screen | **1** | exact |
+       | `tabs · fit` | 2 pattern screens | **2** | exact |
+       | `breadcrumb · fit` | 2 of **19** pattern screens | 2 of **39** | denominator stale |
+       | `sidebar-nav · fit` | po-app at 6 sites | **8** | stale — 217.1 |
+
+       **Not a uniform predicate, which is the thing 94.11 requires checking
+       before proposing a gate**: 4 of 6 are exactly right and 2 are wrong, so a
+       detector here would distinguish. It would also be small — 6 of 240 is
+       **2.5%**.
+
+       **Refused anyway, on two grounds and the second is the interesting one.**
+       101.3 forbids Polish adding gates, which settles it procedurally. But the
+       gate is also not writable in the form the other cite-checkers take: every
+       existing one asks *is this string present in that file*, and this class
+       needs *does this number still equal a count taken over a different
+       tree*. To check it, the cite would have to carry its own command — which
+       is CLAUDE.md's "write the command next to the claim" arriving as a data
+       format, not a gate, and that is a rubric change rather than maintenance
+       of the existing ratchet. Recorded here for whoever may decide.
+
+       **`breadcrumb · fit` is filed, not fixed — one round, one surface.** Its
+       numerator is right and its denominator has doubled:
+
+       ```
+       ls apps/docs/src/pages/patterns/*.astro | grep -v /index.astro | wc -l                    # 39
+       git ls-tree -r --name-only 37a1143a apps/docs/src/pages/patterns/ | grep .astro | wc -l    # 20 (cite said 19)
+       git grep -l bo-breadcrumb 37a1143a -- 'apps/docs/src/pages/patterns/*.astro' | wc -l       # 2, then and now
+       ```
+
+       Same commit, same batch, same decay — and it gives the NEXT Polish round
+       something no round since 176.1 has had: a pick with a measured reason
+       instead of an unbroken `content: 3` tie. **Do not read this as a queue
+       entry**; `breadcrumb` is not in `polish-state.md`, and rule 6 reads only
+       `rounds` and `dry`.
+
+3. [x] **217.3 — rule 5 was STALE for a second consecutive wake; this wake
+       records a metric, which is what its own text says un-stales it.**
+
+       *Accept:* `dispatch_status.py`'s rule-5 line no longer reports wake-dates
+       of loop activity newer than its newest comparable pair — verified by
+       running it after `record_metric.py`, not by assuming.
+
+       184.1's whole finding was that this rule went on being answered from dead
+       readings for ten wake-dates. It read `STALE` at Step 0b here with one
+       wake-date newer, and the previous hand-off named recording a metric as
+       the fix and then did not record one. `axe-violations` is the series its
+       newest pair already uses and `test:axe` genuinely ran this wake, so the
+       value is measured rather than manufactured.
+
 ## Slice 216 — Polish round on `data-table`: a DSA cite that was already stale on the day it was scored, and a cloud wake lapped by 37 slices (2026-08-30)
 
 Dispatcher, top-to-bottom, each rule read rather than inherited from the
