@@ -315,6 +315,167 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 221 — Owner direction: pin htmx to 4, and plan the framework update. Slice 114's refusal is SUPERSEDED, and its own reopen condition is half-met (2026-08-30)
+
+Owner, mid-wake, two messages: *"pls pin htmx to version 4"* and *"plan to
+update framework accordingly"*. Triaged under `LOOPS.md` Step 1, which says an
+out-of-band requirement does not wait for the next tick. Classified as a
+**requirement/direction change**, not a bug — so it is written here with Accept
+criteria before any code moves, which is the whole point of the step.
+
+**This supersedes Slice 114 (2026-08-22), which refused exactly this ask**, and
+114 wrote its own reopen condition: *"Re-open when: htmx 4 ships stable, AND
+someone runs a scoped audit of every 'discards non-2xx' claim this framework
+documents … before any adoption."* **The first half is now met**, the second
+half is what 221.2 is. The owner's direction settles the "no demonstrated gap"
+ground 114 also cited — a direction IS the reason, and it is recorded as such
+rather than re-litigated.
+
+**Every fact below was measured this wake against the shipped 4.0.0 tarball,
+not inherited from 114's WebFetch** — the rule that a premise from an earlier
+wake is part of the criterion. That re-check immediately paid: **114's claim
+that `hx-vals` is removed in htmx 4 is WRONG.**
+
+```
+npm view htmx.org dist-tags        # latest: 2.0.10   next: 4.0.0
+npm pack htmx.org@4.0.0 && tar xzf htmx.org-4.0.0.tgz
+grep -c 'hx-ext'  package/dist/htmx.js     # 0   <- REMOVED, confirmed
+grep -n  'hx-vals' package/dist/htmx.js    # 487: a live #getAttributeObject path  <- 114 was wrong
+grep -n  '204\|304' package/dist/htmx.js   # 202:   noSwap: [204, 304]
+```
+
+**`noSwap: [204, 304]` is the doctrine inversion, now verified in the artefact
+rather than in a changelog.** htmx 4 swaps every response except 204 and 304.
+This framework teaches the opposite as load-bearing fact.
+
+**htmx 4.0.0 is stable but is NOT the `latest` tag** — `latest` is 2.0.10 and
+4.0.0 ships behind `next`. Stated because 114 refused partly on "beta, not
+stable", and the honest reading today is "released, but not what `npm i
+htmx.org` gives you". That is a materially different risk from a beta, and a
+smaller one; it is the owner's call to accept, and the direction accepts it.
+
+**The blast radius, measured — it is three surfaces, not the one the ask names:**
+
+| surface | htmx today | what htmx 4 does to it |
+|---|---|---|
+| `apps/docs` (the docs site's OWN runtime) | `htmx.org ^2.0.10` + `htmx-ext-head-support ^2.0.5`; `hx-ext="head-support"` at `Gallery.astro:208`, 10 `hx-boost`, `htmx.process()` for Pagefind; gated by `check:boost` | **HARD BLOCKED** — see 221.3 |
+| `examples/po-app` | `htmx.org ^2.0.10`, vendored locally by 211.1 earlier this same wake; 8 attribute kinds, **zero** `hx-ext` | mechanically clear; **behaviourally changed** — see 221.2 |
+| the documented doctrine | 7 pages assert "discards"; **30** pattern pages carry a 4xx/409/422 Data-contract row; 6 htmx references in `check-claims.mjs` | every one of those rows is restated by `noSwap: [204, 304]` |
+
+**211.1 closed mid-wake and it helps.** The other dispatcher landed
+`5e5ede6` while this wake was running, replacing po-app's
+`unpkg.com/htmx.org@2.0.4` CDN literal with a locally-vendored
+`/vendor/htmx.min.js`. **There is now no CDN version literal anywhere in the
+repo** (`grep -rn 'unpkg\|cdn.jsdelivr\|htmx.org@'` over `apps/docs/src`,
+`examples`, `packages` → 0), so "pin htmx to 4" is now exactly **two dependency
+ranges in two `package.json` files**, which is a far cleaner change than it
+would have been an hour earlier.
+
+**Nothing was pinned this wake, and that is a sequencing decision with a
+measured reason, not a refusal of the direction.** 221.3 is a blocker with no
+published fix, and pinning `apps/docs` into it would break the docs shell's head
+merging with nothing to restore it. The owner asked for a plan in the same
+breath; this is it, and 221.1 is ready to execute the moment 221.3 is answered.
+
+1. [ ] **221.1 — pin htmx to 4 where it can actually run: `examples/po-app`
+       first, `apps/docs` behind 221.3.**
+
+       *Accept:* `examples/po-app/package.json` reads a 4.x range, the app
+       boots, and `check:po-app`'s 19 behaviour assertions are **re-derived
+       against htmx 4's swap semantics rather than re-run against htmx 2's** —
+       with the count it reaches recorded either way. **Finding that assertions
+       must CHANGE is a satisfying outcome**, not a failure of the pin; finding
+       they hold unchanged is equally satisfying and is the stronger result.
+       `apps/docs` is pinned in the same item only if 221.3 resolves; otherwise
+       this item lands po-app alone and says so.
+
+       **Why po-app is separable, measured:** it uses `hx-target`, `hx-swap`,
+       `hx-swap-oob`, `hx-post`, `hx-trigger`, `hx-get`, `hx-vals`,
+       `hx-include` — all eight present in htmx 4's shipped dist — and **zero**
+       `hx-ext`, so the 221.3 blocker does not touch it.
+
+       **What genuinely changes there, and it is not cosmetic:** po-app returns
+       **422** at `server.mjs:1374`, `1550`, `1636`, `1705` and **409** at
+       `1691`. Under htmx 2 those are discarded; under htmx 4 they swap. The
+       reference app's error behaviour therefore changes even though not one
+       attribute does — which is the doctrine change arriving in the one place
+       this repo can actually execute it.
+
+       **This container cannot finish this item honestly.** `check:po-app`
+       needs the app driven in a browser, and it currently reads the documented
+       **2 of 19** here for an unrelated reason (measured this wake). A wake
+       that can run it green is the one that should land this.
+
+2. [ ] **221.2 — the scoped audit Slice 114 made a precondition, now with its
+       surface counted.**
+
+       *Accept:* every claim this framework publishes about htmx discarding
+       non-2xx responses is enumerated, and each one is marked *still true under
+       4*, *false under 4*, or *never version-specific*. The enumeration is
+       reconciled against a raw count of the source so it cannot under-report
+       (the storage doctrine's mirror rule). **A claim that turns out never to
+       have been version-specific is a satisfying outcome** — the audit's job is
+       the classification, not a predetermined number of edits.
+
+       Surface, measured this wake, with the commands beside the claims so the
+       next wake re-runs rather than re-derives:
+
+       ```
+       grep -rl 'discards' --include='*.astro' apps/docs/src | wc -l          # 7
+       grep -rlE '\b(409|422|4xx)\b' --include='*.astro' \
+            apps/docs/src/pages/patterns | wc -l                              # 30
+       grep -c 'htmx' apps/docs/scripts/check-claims.mjs                      # 6
+       ```
+
+       `getting-started/htmx.astro:83` is the origin of the doctrine — 114
+       recorded it stating outright that htmx swaps 2xx and discards the rest —
+       and the pattern Data-contract rows repeat it. **Re-read that line before
+       trusting this sentence**; it is 114's reading, and 114 was already wrong
+       once about `hx-vals`.
+
+       **`check:claims` is the reason this cannot be a prose sweep.** This
+       repo's own rule is that a claim asserting runtime behaviour must be
+       executable, and a 2026-08-17 dogfood spike proved a confident, reviewed
+       page flatly wrong on exactly this topic. Any row this audit reclassifies
+       needs its executable case reclassified with it.
+
+3. [ ] **221.3 — BLOCKER, and it needs an owner call: htmx 4 removes `hx-ext`,
+       and the docs shell's head-support extension has no htmx-4 release.**
+
+       *Accept:* one of — (a) an htmx-4 path for merging `<head>` on boosted
+       navigation is identified and demonstrated on the docs shell; (b) the
+       docs site accepts losing head merging beyond the title, with what
+       actually degrades measured on the built site rather than assumed; or
+       (c) the docs site stays on htmx 2 while `examples/po-app` moves to 4,
+       and this repo documents that it deliberately runs two majors. **Any of
+       the three closes this item** — (c) is not a failure, it is a legitimate
+       answer that 221.1 is already shaped for.
+
+       The measurements that make this a blocker rather than a worry:
+
+       ```
+       grep -c 'hx-ext' package/dist/htmx.js                    # 0  — removed in htmx 4
+       grep -c 'hx-ext' apps/docs/src/layouts/Gallery.astro     # 1  — Gallery.astro:208
+       npm view htmx-ext-head-support versions                  # tops out at 2.0.5
+       npm view htmx-ext-head-support dist-tags                 # latest: 2.0.5
+       grep -in 'head-support' package/dist/htmx.js             # 0  — not native either
+       grep -n  '<head'       package/dist/htmx.js
+       #  1049: strips <head>…</head> and keeps ONLY the title
+       ```
+
+       So the mechanism is removed, the extension that provided it has no
+       htmx-4 release, and htmx 4's own head handling discards the head and
+       preserves the title alone. **There is no published upgrade path for this
+       specific dependency today** — which is a fact about the ecosystem, not a
+       cost this repo can absorb by trying harder.
+
+       **What is NOT yet measured, and is deliberately left open rather than
+       guessed:** what the docs shell actually loses in practice. `check:boost`
+       gates boosted navigation and would be the instrument. That measurement
+       needs the built site driven in a browser — takeable in a cloud wake per
+       `ENVIRONMENT.md`'s "no screenshots is not no browser" — and this wake
+       spent its rounds elsewhere.
+
 ## Slice 220 — Polish round on `breadcrumb`: the count-bearing cite class pays out a second time, and the pick was a filed defect rather than a tie-break (2026-08-30)
 
 Dispatcher, top-to-bottom, each rule read from its own source rather than
@@ -328,6 +489,11 @@ wake, with the KIND of blocked named per 186.2 — `112.3` owner-blocked (briefs
 four answers), `112.4` owner-blocked (on 112.3's verdict), `211.1` owner-blocked
 (a product call), AT runtime hardware-blocked (owner hardware). **None of the
 four is browser-blocked**, so this is not the mis-sort 186.2 warns about.
+**That reading of `211.1` was true when taken at Step 0 and was overtaken
+mid-wake** — the other dispatcher landed `5e5ede6` closing it, so the open set
+is now three. Left as read rather than back-edited into a tidier claim: the
+rule-4 report says what this dispatcher saw when it evaluated the rule, and
+Slice 221 records the change.
 **Rule 5 evaluated and clear, not stale** — `dispatch_status.py` reads
 `0 wake-date(s) newer`, newest comparable pair `axe-violations` 0 → 0 (no
 regression), and the one declared size budget in the repo (`RF_BUDGET_KB = 40`,
