@@ -37,8 +37,15 @@
  *
  * COVERAGE, stated rather than implied: this walks the BUILT DOCS pages only.
  * `examples/erp-suite` and `examples/po-app` render timelines that this gate
- * never sees — their markup is checked by `npm run suite` / `check:po-app`,
- * neither of which asserts this pairing. A regression there is not caught here.
+ * never sees. **The erp-suite half is now covered elsewhere** (roadmap 219.1):
+ * `examples/erp-suite/check-erp-suite.mjs`, run by `npm run suite:check`,
+ * asserts the same pairing over the built suite dist — 8 rendered current steps
+ * at the time it landed — with no aria-hidden/inert exemption, because the
+ * suite has no decorative-thumbnail render context and the strict rule costs
+ * nothing to satisfy. `examples/po-app` remains UNCOVERED: it has no built dist
+ * to walk, its timeline is a template literal in `server.mjs`, and
+ * `check:po-app` cannot run green in an egress-restricted container at all. A
+ * regression THERE is still not caught anywhere.
  *
  * Reads the built html, not the Astro source, for the reason check-notes.mjs
  * gives: the source is not HTML, so the question is only well posed on the

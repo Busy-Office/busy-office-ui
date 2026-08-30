@@ -324,8 +324,9 @@ breath, so the premise below is re-measured on the tree the build will actually
 run against, per this file's own rule that a premise inherited from an earlier
 wake is part of the criterion.
 
-1. [ ] **219.1 — extend the `.bo-timeline__step[data-state="current"]` /
-       `aria-current="step"` pairing assertion to the built ERP suite.**
+1. [x] **219.1 — DONE 2026-08-30 (cloud wake). Extend the
+       `.bo-timeline__step[data-state="current"]` / `aria-current="step"`
+       pairing assertion to the built ERP suite.**
        `check:timeline-current` (shipped by 218.1) says so in its own header:
        *"this walks the BUILT DOCS pages only. `examples/erp-suite` and
        `examples/po-app` render timelines that this gate never sees … A
@@ -393,6 +394,76 @@ wake is part of the criterion.
        to walk, its timeline is a template literal in `server.mjs`, and
        `check:po-app` cannot run green in a cloud container at all
        (ENVIRONMENT.md's documented 2 of 19).
+
+       ---
+
+       **RESULT — landed as a fourth assertion inside the gate the suite
+       already has**, `examples/erp-suite/check-erp-suite.mjs`, not as a new
+       script. It was already `@exact` and already walked the built dist, so
+       the change is one matcher, one loop and a scan floor; `suite:check` was
+       not re-wired.
+
+       **Three red-proofs, each with the injection confirmed BEFORE the verdict
+       was believed** — this repo's standing rule that a green red-proof is a
+       defect in the injection until proven otherwise, and 218.1's own
+       correction that a "red" can be a crash rather than a verdict, so the
+       failure TEXT was read every time, not the exit code:
+
+       | # | injection | confirmed how | verdict |
+       |---|---|---|---|
+       | 1 | strip `aria-current="step"` from one built step in `dist/p2p/purchase-order.html` | the built file's paired count went **2 → 1** and the unpaired spelling appeared **1** time | red, naming the file and the tag, `rc=1` |
+       | 2 | rename `bo-timeline__step` → `…__stepX` throughout the built dist (**32** occurrences) | `grep -rho 'bo-timeline__step\b' dist \| wc -l` → **0** | red: *"scanned 0 … Verdict withheld"* |
+       | 3 | `git checkout 577c572 -- examples/erp-suite/p2p/purchase-order.screen.mjs`, then rebuild | the source diff shows the attribute removed, and the rebuilt HTML carries the unpaired tag **1** time | red on the **real historical defect**, `rc=1` |
+
+       Red-proof 3 is the one the Accept named and it is the one that matters:
+       the gate is not merely sensitive to a mutation invented for it — it goes
+       red on the exact markup that actually shipped and that no gate caught.
+       218.1 found that by a source grep.
+
+       **The exemption was REFUSED rather than ported, and the reason is a
+       dependency, not a shortcut.** The docs gate exempts a current step inside
+       an `aria-hidden`/`inert` subtree because `PatternPreview.astro` renders
+       decorative thumbnails. Answering that question needs an ancestor walk,
+       which needs a DOM parser, which means `jsdom` — declared by `apps/docs`,
+       reachable from `examples/erp-suite` only by root hoisting, and this
+       directory has no `package.json` to declare it in. Measured before
+       deciding: the built suite contains **0** `inert` and **265**
+       `aria-hidden="true"`, all decorative icons, so the exemption has nothing
+       to exempt today. The strict rule costs nothing to satisfy — an
+       `aria-current` inside an aria-hidden subtree reaches nobody either way —
+       and if a screen ever needs a decorative timeline the gate fails and the
+       exemption gets added deliberately. Recorded in the gate's header.
+
+       **`<pre>` is blanked before matching although the suite contains 0
+       `<pre>` and 0 `<code>`** — insurance, stated as insurance, so the gate
+       does not silently depend on that staying true.
+
+       **Verified green in this container** (16 cloud-runnable commands, the
+       list re-derived from `ci.yml` per ENVIRONMENT.md): core build/test/
+       `lint:css`, `docs:build` (which runs `check:repo`, so `check:selftests`
+       ran and the edited header still declares `@exact`), `check:claims`
+       (158 live + the documented 3 NOT VERIFIED for this container's
+       `pointer: none`), `check:formatting`, `check:scroll`,
+       `check:forced-colors`, `check:layout` (127 pages), `test:axe`
+       (127 × 2, zero), `check:target-size`, `check:search`, `check:pseudo`,
+       `check:quickstart`, `check -w @busy-office/create-ui`, `npm run suite`
+       (28 screens, audit zero violations). `check:po-app` is the documented
+       **2 of 19** — this container cannot fetch the htmx CDN, unchanged by
+       this item.
+
+       **Two independent counts reconcile.** `check:timeline-current` reports
+       **6** rendered current steps across 127 built docs pages (1 exempt);
+       `check-erp-suite` reports **8** across 28 built suite screens. Those two
+       populations are disjoint, and the 8 was arrived at twice by different
+       instruments — a throwaway walk of the dist written before the gate
+       existed, and the gate itself.
+
+       **NOT VERIFIED, said plainly:** no screenshot at 1440px or 390px in
+       either theme was taken, because this container has no Podman and no
+       `localhost:8081`. Nothing rendered should move — the diff is one gate
+       script, one docs-script comment, and this file; `packages/core` and every
+       `.astro` page are untouched. **That is an argument, not a look at the
+       page.**
 
 ## Slice 218 — Owner-forwarded review: `data-state`/`data-status` conflation, scoped to two components not the framework (2026-08-30)
 
