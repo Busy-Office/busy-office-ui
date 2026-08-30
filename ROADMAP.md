@@ -315,6 +315,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 227 — Polish round 1 on `component/icon`: a stale count that was also a DIVISOR (2026-08-30)
+
+Dispatcher rule 6, cloud wake. Rules 1-5 were each answered by measurement and
+none matched — the readings are in the write-up below. Rule 6 re-queued **8**
+surfaces; `inline-editing` drops out for 217.1's stated reason (no
+`dsa-scores.json` entry — 176.2's false gap), leaving seven, all `content: 3`,
+so neither the score (171.1) nor the ledger's "fewest rounds" tie-break
+discriminates. Picked on 216.1's discriminator, source movement since each
+surface's own `scored` date, with 217.1's `+08:00` day boundary applied:
+
+```
+# scored dates read from dsa-scores.json, NOT assumed
+alert       1 commit   +71/-5      calendar   2  +18/-2     dashboard  0  +0/-0
+icon        4 commits +113/-2  <-  scan       1   +1/-1     stepper    2  +42/-0
+tree-table  1 commit  +20/-12
+```
+
+**`dashboard` reading 0/0 was checked before the pick, not after** — a zero is a
+defect until proven otherwise, and `polish_requeue.py` had just said its source
+moved. Both are right: its last touch is `e034a6eb` (2026-08-23), *earlier the
+same day* than the boundary commit, while the ledger's recorded `src` predates
+it. `git log` on its two paths since the base returns empty.
+
+1. [x] **227.1 — DONE. `icon · fit` cited "12 ERP glyphs"; the framework ships
+       26, and the same 12 was hard-coded as the DIVISOR of a published size
+       projection.**
+
+       *Accept* — properties, never predicted values:
+       - The `fit` cite agrees with what the shipped stylesheet contains, and
+         states a property rather than a count that can decay.
+       - Any glyph count the docs publish is derived from the shipped artifact
+         at build time and demonstrably tracks it.
+       - Every claim standing beside a corrected number is re-checked against
+         the corrected number, not carried over.
+       - Verified in the BUILT html; the other five cites reconciled or the
+         disagreement recorded.
+
+       **The finding, and it is a class this ledger had not seen.** `fit` read
+       *"12 ERP glyphs proving a mechanism, not a catalogue; 4 are deprecated"*.
+       Walking all ten revisions of `icon.css` dates the decay exactly:
+
+       ```
+       a05ac84c 2026-08-15  12      43ea922a 2026-08-24  23   <- 137.1 toolbar set
+       7845c78e 2026-08-21  12      27f6d8c6 2026-08-24  24
+                                    97980615 2026-08-24  24
+       "scored": "2026-08-23"       9d1ecbe2 2026-08-27  26   <- row-edit
+       ```
+
+       So `12` was **exact on the day it was scored** and wrong the next day —
+       217.2's class, not 216.1's. What makes it a third class: sidebar-nav and
+       breadcrumb were falsified by changes in a *different* tree (po-app, the
+       pattern corpus), and this one was falsified **inside the very file the
+       cite describes**. It is the catchable one, and nobody caught it for six
+       days. `4 are deprecated` still holds (4 `DEPRECATED` blocks, 4 of 4
+       naming the replacement).
+
+       **What the cite was concealing is the real defect.** The same stale 12
+       sat in `icon.astro`'s frontmatter as `const glyphCount = 12`, dividing a
+       byte count read live from the shipped stylesheet:
+
+       ```
+       iconBytes 9109 (26 glyphs)   totalBytes 95046
+       catalogueKb = round(iconBytes / glyphCount * 200 / 1024)
+         /12  -> 148 kB   <- PUBLISHED
+         /26  ->  68 kB   <- the shipped per-glyph rate
+       marginal rate (glyph rules only, 8514 B / 26) -> 64 kB; fixed overhead 595 B
+       ```
+
+       The page told readers a 200-icon catalogue would cost **148 kB**. The
+       shipped rate says **68**. It is not a stray figure: it is the published
+       arithmetic behind roadmap 40.1's refusal of an icon catalogue, so the
+       framework was **overstating the case for its own decision by 2.17x**.
+
+       **The comment three lines above it is what makes this worth recording.**
+       It already said the size argument is *"computed from the shipped artifact
+       — the hand-typed 10.3% had drifted to a real 6.0% before anyone noticed
+       (2026-08-21 sweep). Same projection, live numbers."* That fix made the
+       **numerator** live and left the **denominator** hand-typed. A block whose
+       own comment warns about this exact decay decayed the same way, one line
+       down, and the surviving hand-typed number was the more dangerous of the
+       two — a wrong share misinforms, a wrong divisor scales.
+
+       **The claim standing BESIDE the number failed too, which is 192.1's rule
+       arriving on cue.** The sentence read *"roughly 148 kB — more than
+       everything else we ship"*. Everything-but-icons is 85,937 B = **83.9 kB**,
+       so the comparison was true at 148 and **false at the corrected 68**.
+       Correcting the number alone would have shipped a fresh falsehood. It now
+       states two live quantities and draws no adjective from them: *"two hundred
+       would add roughly {catalogueKb} kB, against a whole framework that is
+       {totalKb} kB"*.
+
+       **The fix derives the denominator from the SAME READ as the numerator**,
+       so the two cannot drift apart again — `new Set(iconCss.match(...))`,
+       reconciled against three independent sources that all say 26 (regex over
+       the min CSS, `grep -cE '^\s*\.bo-icon--'` on source, `api.json`'s
+       `components.icon.variants`).
+
+       **Red-proved by injection, and the injection was confirmed twice.**
+       Appending a 27th glyph rule to the min CSS the page resolves, then
+       rebuilding: the file showed the rule, and the **rendered** page moved
+       `26 -> 27` and `9.6% -> 9.7%`. The hard-coded `12` could not have moved
+       at all. Reverted by rebuilding core; `grep -rc redproof` over both dists
+       returns nothing.
+
+       **Verified against the RENDERED artefact.** In `apps/docs/dist`:
+       `these twelve`, `The twelve glyphs`, `twelve ERP glyphs`,
+       `Deliberately 12 glyphs`, `12 ERP glyphs`, `right twelve glyphs` and
+       `any of these four` → **0 files each**; the corrected sentence renders
+       *"the 26 glyphs shipped today are 9.6% … roughly 68 kB, against a whole
+       framework that is 93 kB"*. `12 glyphs here` survives in **4 dist files**,
+       all of them the unminified shipped CSS carrying **this slice's own
+       quotation** of what it removed — checked structurally (it sits inside the
+       `NO FIGURES HERE` paragraph), which is exactly the "assertion tripped on
+       its own explanation" trap CLAUDE.md names.
+
+       **Every live copy fixed, per the 217.2/220.1 rule — remove the quantity,
+       do not refresh it.** `icon.css` ×2 (shipped to consumers in the npm
+       package), `icon.astro` ×4 plus the hard-coded deprecated badge, the
+       deprecated caption's "these four", `DESIGN.md`'s refusal row, and
+       `app-launch.astro`'s rhetorical "the right twelve glyphs". Historical
+       records — `ROADMAP-archive.md`, `.roundtable/` reports, `loop-log.md` —
+       are left untouched: they are quotations of what was true when written.
+
+       **The other five cites reconciled**, four clean and one corrected:
+       `typography` (`inline-size`/`block-size: 1em`, 1 each), `spacing`
+       (`vertical-align: -0.125em`, 1, with its own explanation), `interaction:
+       na` (**0 of 33** names in `behaviors.json` match `/icon/i` — the
+       denominator re-derived rather than read off `Object.keys`, 220.1's
+       instrument trap), and `content` (the clause is on the page verbatim,
+       matched newline-tolerantly to avoid the position-filter trap). `colour`
+       was **narrowed**: it said the `%23000` is "SVG stroke", and `--settings`
+       also uses `fill='%23000'` (29 occurrences over 26 glyphs). The
+       load-bearing half — never painted, it is under a mask — holds; zero raw
+       hex literals outside the data URIs.
+
+       **The score does not move and no blind re-score is owed.** `fit: 3` was
+       and remains right — one custom property carrying every glyph is *stronger*
+       mechanism evidence than a count of how many shipped. `scored` stays
+       **2026-08-23**; moving it would claim the independent second opinion §3b
+       step 4 requires, which this wake could not run (no second agent).
+       `rounds` moves 1→2 because the round changed the published artefact,
+       per 182.1's precedent.
+
+       **Not verified, said plainly:** this wake is a cloud wake — no Podman, no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not
+       run. Nothing here rests on a rendered image: every change is prose or a
+       computed number, and the numbers were read out of the built HTML and out
+       of the DOM after injection. `check:layout` (127 pages, 390 + 150% zoom)
+       and `test:axe` (127 × 2 widths) are the whole-tree evidence that the page
+       did not break.
+
+2. [ ] **227.2 — a gate for the hard-coded-divisor class. NOT opened by this
+       round; recorded for whoever decides.** 101.3's stop rule forbids Polish
+       adding gates, and this is a *third* refusal in the same family (216.2,
+       217.2, 220.2) — but it is a different predicate from those, and the
+       measurement is worth keeping rather than re-deriving.
+
+       Those three were about a **cite** decaying. This is about a **literal
+       used in arithmetic whose operands come from a live read** — checkable in
+       a way a cite is not, because the failure has a shape: a hand-typed
+       constant combined with a value read from `dist/`. Base rate not measured;
+       measuring it is step one, and if it is 1-of-1 this is 94.11 ceremony and
+       should be refused a fourth time. Left OPEN with no owner block: any wake
+       can take it, and the honest first outcome is a base-rate count that
+       refuses it.
+
 ## Slice 226 — the fixed `check:po-app`, run in a cloud container for the first time (2026-08-30)
 
 Triaged from `.roundtable/RESUME.md`'s `## Direction` block, which named this as

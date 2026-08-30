@@ -95,7 +95,7 @@ a no-op recorded in one line.
 | component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
 | component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
-| component/icon | content | **3** | 1/3 | 0 | 75de0dee | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed · **RE-QUEUED — source changed**|
+| component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** |
 | component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
 | component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" |
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" |
@@ -464,3 +464,65 @@ to carry its own command, which is a rubric change, not maintenance of the
 ratchet 101.3 confines Polish to. And the class is now **shrinking by
 construction**: both repairs replaced a count with a property, so 6 of 240 is
 down to **4 of 240**, all four re-verified exact by 217.2.
+
+## Re-entry: icon — round 2 (2026-08-30, cloud wake) — NOT a no-op (ROADMAP 227)
+
+Rule 6 re-queued **8** surfaces. `inline-editing` drops out for 217.1's stated
+reason (no `dsa-scores.json` entry — 176.2's false gap), leaving seven, all
+`content: 3` — the same unbroken tie 176.1, 182.1, 216.1, 217.1 and 220.1 each
+faced. Picked on 216.1's discriminator, source movement since each surface's own
+`scored` date, with 217.1's `+08:00` boundary: `icon` **4 commits +113/-2**,
+ahead of every other candidate on both measures.
+
+**`dashboard`'s 0/0 was checked before the pick, not after.** A zero is a defect
+until proven otherwise, and `polish_requeue.py` had just reported its source
+moved. Both readings are right: its last touch (`e034a6eb`) is *earlier the same
+day* than the boundary commit, while the ledger's recorded `src` predates it.
+
+**The finding — a third class, and the first that was catchable by re-reading
+the cite's own subject.** `fit` read *"12 ERP glyphs"*. Walking all ten
+revisions of `icon.css`: 12 held 2026-08-15 → 08-21, became **23** on 08-24
+(137.1's toolbar set), then 24, then **26** on 08-27. The entry is stamped
+`"scored": "2026-08-23"`, so the count was exact on the day it was taken and
+wrong the next — 217.2's shape. But sidebar-nav and breadcrumb were falsified by
+a *different* tree (po-app; the pattern corpus), and this one was falsified
+**inside the very file the cite describes**. Published stale six days.
+
+**The cite was concealing a live defect.** `icon.astro` carried
+`const glyphCount = 12` as the **divisor** of a byte count read fresh from the
+shipped stylesheet, so the page published a 200-icon catalogue at **148 kB**
+against a shipped per-glyph rate of **68**. That figure is the published
+arithmetic behind roadmap 40.1's refusal of an icon catalogue — the framework
+was overstating the case for its own decision by **2.17x**. The comment three
+lines above it already warned about exactly this decay ("the hand-typed 10.3%
+had drifted to a real 6.0% … Same projection, live numbers"): that fix made the
+numerator live and left the denominator hand-typed, and the denominator is the
+worse one to get wrong, because it *scales*.
+
+**192.1 arrived on cue: the claim beside the number failed too.** *"more than
+everything else we ship"* was true at 148 kB and **false** at 68 (everything but
+icons is 83.9 kB), so correcting the number alone would have shipped a fresh
+falsehood. It now states two live quantities and draws no adjective from them.
+
+**Red-proved by injection, injection confirmed twice** — a 27th glyph rule
+appended to the min CSS the page resolves showed in the file *and* moved the
+**rendered** page `26 → 27` / `9.6% → 9.7%`. The hard-coded 12 could not have
+moved. Reverted; `redproof` appears nowhere in either dist.
+
+**The score does not move and no blind re-score is owed.** One custom property
+carrying every glyph is *stronger* mechanism evidence than a count of how many
+shipped, so `fit: 3` was and remains right. `scored` stays **2026-08-23** —
+moving it would claim the independent second opinion §3b step 4 requires, which
+this wake could not run. `rounds` moved 1→2 because the round changed the
+published artefact, per 182.1.
+
+**The other five cites reconciled**, four clean and `colour` narrowed (it said
+the `%23000` is "SVG stroke"; `--settings` also uses `fill`). `interaction: na`
+holds at **0 of 33** behaviours — the denominator re-derived rather than read off
+`Object.keys`, which is 220.1's instrument trap reproducing here.
+
+**A gate is refused a fourth time, but on a NEW predicate** (ROADMAP 227.2, left
+open). 216.2/217.2/220.2 all refused gating a decaying *cite*. This is a
+hand-typed literal used in arithmetic whose other operands come from a live read
+— a shape a detector can actually see. Its base rate is unmeasured, and if it is
+1-of-1 it is 94.11 ceremony and should be refused again.

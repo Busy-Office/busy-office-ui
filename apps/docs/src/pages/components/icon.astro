@@ -11,12 +11,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /* The size argument below is computed from the shipped artifact — the
    hand-typed "10.3%" had drifted to a real 6.0% before anyone noticed
-   (2026-08-21 sweep). Same projection, live numbers. */
+   (2026-08-21 sweep). Same projection, live numbers.
+
+   The DENOMINATOR is derived from the same read as the numerator, and that
+   is the whole point of this block. It was a hand-typed `12` while this
+   stylesheet grew to 26 glyphs (137.1's toolbar set on 2026-08-24, then
+   row-edit's two on 2026-08-27), so the projection divided 26 glyphs' worth
+   of bytes by 12 and published a 200-icon set at 148 kB against a true 68.
+   One read, so the two cannot drift apart again. */
 const require = createRequire(import.meta.url);
-const iconBytes = readFileSync(require.resolve('@busy-office/ui/css/components/icon.min'), 'utf8').length;
+const iconCss = readFileSync(require.resolve('@busy-office/ui/css/components/icon.min'), 'utf8');
+const iconBytes = iconCss.length;
 const totalBytes = readFileSync(require.resolve('@busy-office/ui/css/min'), 'utf8').length;
 const iconShare = ((iconBytes / totalBytes) * 100).toFixed(1);
-const glyphCount = 12;
+const glyphCount = new Set(iconCss.match(/\.bo-icon--[a-z0-9-]+/g) ?? []).size;
+const totalKb = Math.round(totalBytes / 1024);
 const catalogueKb = Math.round((iconBytes / glyphCount) * 200 / 1024);
 
 const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'grid'];
@@ -51,9 +60,9 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     <code>currentColor</code> — real, <strong>themable</strong> glyphs with zero
     JS, zero font files, no network requests. Sized <code>1em</code>, so they track
     the surrounding font size (and density) automatically. The set is deliberately
-    small: twelve ERP glyphs prove the mechanism; adding your own is one line of
-    CSS — or paste inline SVG with <code>fill="currentColor"</code>, which is an
-    equally first-class answer.
+    small — enough ERP glyphs to prove the mechanism, never a catalogue; adding
+    your own is one line of CSS — or paste inline SVG with
+    <code>fill="currentColor"</code>, which is an equally first-class answer.
     <strong>Not as the only label for a meaning the reader has to
     learn</strong> — an icon-only control works when the glyph is already a
     convention (close, search, settings) and space is genuinely tight, and
@@ -82,7 +91,7 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
   </section>
 
   <section class="demo">
-    <h2>Deprecated <span class="bo-badge bo-badge--warning">4</span></h2>
+    <h2>Deprecated <span class="bo-badge bo-badge--warning">{deprecatedGlyphs.length}</span></h2>
     <div class="bo-cluster bo-u-text-muted" style="--bo-cluster-gap: var(--bo-space-4); font-size: 1.5rem">
       {deprecatedGlyphs.map((g) => (
         <span style="display: inline-flex; flex-direction: column; align-items: center; gap: var(--bo-space-1)">
@@ -92,7 +101,7 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
       ))}
     </div>
     <p class="bo-u-text-muted">No pattern screen in these docs renders any of
-    these four — only this showcase did. Kept shipping (removing published
+    these — only this showcase did. Kept shipping (removing published
     classes is a next-major change, not a tidy-up) but no longer recommended:
     point <code>--bo-icon-src</code> at your own SVG instead (next section).</p>
   </section>
@@ -148,7 +157,7 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
 
   <section class="demo">
     <h2>Any icon you like — one custom property</h2>
-    <p>The twelve glyphs above are not a privileged list: each one is just a value of
+    <p>The glyphs above are not a privileged list: each one is just a value of
     <code>--bo-icon-src</code>. Point that property at any SVG and the element gets the
     framework's sizing, <code>currentColor</code> painting, density tracking and
     forced-colors handling with <strong>no new class from us</strong>.</p>
@@ -160,11 +169,12 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     the SVG's own colours and paints with yours.</p>
     <p class="bo-u-text-muted">
       <strong>Why there is no 200-icon catalogue here</strong>, since that is the obvious
-      thing to ask for: these twelve are <strong>{iconShare}% of the whole framework</strong> by
-      size, because every glyph is an inlined SVG. Two hundred of them would add roughly
-      <strong>{catalogueKb}&nbsp;kB</strong> — more than everything else we ship — to compete with
-      icon sets that are better maintained and free. One property is the smaller answer
-      and the more general one.
+      thing to ask for: the <strong>{glyphCount}</strong> glyphs shipped today are
+      <strong>{iconShare}% of the whole framework</strong> by size, because every glyph is
+      an inlined SVG. At that rate two hundred would add roughly
+      <strong>{catalogueKb}&nbsp;kB</strong>, against a whole framework that is
+      <strong>{totalKb}&nbsp;kB</strong> — to compete with icon sets that are better
+      maintained and free. One property is the smaller answer and the more general one.
     </p>
   </section>
 
@@ -223,7 +233,7 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     notes={[
       'Painted by <code>currentColor</code> via <code>mask-image</code> — themes, dark mode, and brand presets apply with zero icon-specific wiring; no new contrast pairs needed (an icon inherits the already-gated color of its text context).',
       'Decorative icons (next to a visible label) are <code>aria-hidden="true"</code>; icon-only controls label THEMSELVES (<code>aria-label</code> on the button/link).',
-      'Deliberately 12 glyphs, not a library — add your own with one <code>mask-image</code> line, or paste inline SVG with <code>fill="currentColor"</code>; both are first-class.',
+      'Deliberately a small set, not a library — add your own with one <code>mask-image</code> line, or paste inline SVG with <code>fill="currentColor"</code>; both are first-class.',
       'Forced-colors: mask icons vanish by default (the paint is a background-color, which forced colors override) — the shipped opt-out repaints them in <code>CanvasText</code>.',
     ]}
   />

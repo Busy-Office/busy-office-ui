@@ -7,8 +7,8 @@
 
      Decorative icons (next to a visible label) carry aria-hidden="true";
      an icon-only control labels ITSELF (aria-label on the button/link),
-     never the icon. The set is deliberately small — 12 ERP glyphs prove
-     the mechanism; add your own in one line:
+     never the icon. The set is deliberately small — enough ERP glyphs to
+     prove the mechanism, never a catalogue; add your own in one line:
        .my-icon { mask-image: url("data:image/svg+xml,…"); }
      or skip this component entirely and paste inline SVG with
      fill="currentColor" — both are first-class answers. */
@@ -36,11 +36,18 @@
          .my-icon { --bo-icon-src: url("data:image/svg+xml,…"); }
          <span class="bo-icon my-icon" aria-hidden="true"></span>
 
-       Why this rather than shipping a catalogue: the 12 glyphs here are 7,898
-       bytes minified, 10.3% of the whole framework, because each is an inlined
-       SVG. A 200-icon set would add ~129 kB — roughly twice everything else we
-       ship — to compete with Lucide and Heroicons, which are better maintained
-       and free. One property beats a catalogue (roadmap 40.1). */
+       Why this rather than shipping a catalogue: every glyph here is an inlined
+       SVG, so the set's cost grows strictly with its size, and a 200-icon
+       catalogue would cost most of what the rest of the framework costs — to
+       compete with Lucide and Heroicons, which are better maintained and free.
+       One property beats a catalogue (roadmap 40.1).
+
+       NO FIGURES HERE, deliberately. The two this comment used to carry ("the
+       12 glyphs here are 7,898 bytes minified, 10.3% of the whole framework")
+       were both exact when written on 2026-08-19 and both wrong by 2026-08-24,
+       when 137.1's toolbar glyphs took the set from 12 to 23. /components/icon
+       computes the live equivalents from this stylesheet at build time, which
+       is where a number that has to stay true belongs. */
     mask-image: var(--bo-icon-src);
   }
 

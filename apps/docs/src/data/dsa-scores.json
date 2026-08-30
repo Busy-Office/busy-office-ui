@@ -645,7 +645,7 @@
         },
         "colour": {
           "score": 3,
-          "cite": "painted by background-color: currentcolor; the %23000 inside the data URIs is SVG stroke under a MASK and is never painted"
+          "cite": "painted by background-color: currentcolor; the %23000 inside the data URIs is SVG stroke (and fill, on --settings) under a MASK and is never painted"
         },
         "spacing": {
           "score": 3,
@@ -661,7 +661,7 @@
         },
         "fit": {
           "score": 3,
-          "cite": "12 ERP glyphs proving a mechanism, not a catalogue; 4 are deprecated with the data-URI replacement documented"
+          "cite": "every shipped glyph is a value of one custom property (--bo-icon-src), so the set is an example of the mechanism rather than a catalogue and a consumer's own SVG is a first-class member with no new class; deprecated glyphs are shown apart from the active set and each carries its data-URI replacement in its own comment"
         }
       }
     },
