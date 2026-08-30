@@ -315,6 +315,110 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 215 — Objective grill of Slices 211, 213, 214: the open item's refusal cites a page that does not say it, and every container htmx measurement ran a version the app does not ship (2026-08-30)
+
+**Not new input** — nothing was filed, nobody asked, GitHub intake is **0 open
+issues** (asked via the API, not inferred). Dispatched by rule 3:
+`dispatch_status.py` read `Objective 3 / 3 slices OVERDUE [211, 213, 214]`,
+which is the dispatch the previous hand-off predicted. Full report:
+`.roundtable/grill-objective-211-213-214-2026-08-30.md`.
+
+**Honest scope: the whole armed set, no narrowing needed.** The playbook's step
+0 check was run rather than assumed — `grep -hoE '^## Slice [0-9]+ — Objective
+grill of [^(]*' ROADMAP.md ROADMAP-archive.md` shows the newest grill is Slice
+212, covering 200/208/209, and **no prior grill names 211, 213 or 214**. This is
+the first grill since 212 whose armed set contains no already-grilled slice, so
+the hand-narrowing 207, 209 and 212 each had to do did not recur.
+
+**Slice 214 reproduces to the digit and nothing in it is corrected.** All four
+lanes re-run here (0 dead of **1,433**; 74 files / **242** rules / **230**
+distinct / **8** repeats; **9** corpus + **12** family = **14** distinct, all
+verdicted; ratchet `ROADMAP.md` **0 up, last cut `e29c7c18`**). 214.1's
+conservation verified structurally from git rather than from its write-up:
+`--numstat` reads `1575 0` on the archive (pure append) against `73 1549` on the
+live file, `--name-status` reads **M / M never A**, the appended block walks to
+**7 headings + 1,568 body = 1,575**, its headings are exactly the seven claimed,
+and the archive's prior content is a **byte-exact prefix** (1,606,855 →
+1,706,575 bytes). `check:slice-refs` re-run here reads **427 / 233 / 196 / 2**,
+identical to 214's before-and-after.
+
+**214's falsification of 179.2 also reproduces**, re-derived over every
+`ROADMAP.md`-touching commit (801 now, 799 then): all four closed cycles match to
+the digit, so the fourth cycle's regrowth (4,394 > 4,262) and peak (6,424) do
+break 179.2's monotone claim. **What this grill adds is the interval, not the
+rate** — the fifth cycle has since closed at 9 commits / 896 lines / 99.6 per
+commit, and the commits a cycle survives now read **140 → 66 → 34 → 66 → 9**.
+The sweep is due roughly every nine `ROADMAP.md`-touching commits, which is why
+it has fired on consecutive days.
+
+**The three findings all land in what shipped BESIDE a red-proved number**, which
+is roadmap 192.1's shape. 213's own load-bearing measurement was red-proved in
+three directions and is correct; its neighbours are where the defects are.
+
+1. [x] **215.1 — DONE 2026-08-30 (cloud wake). 213's one self-declared
+       unverifiable claim is now verified, and it holds.** 213.1 closed with
+       *"this could not be verified on CI from here"*, and named a residual risk:
+       criterion (c) compares two reads of the same element at different moments,
+       so a layout change between them would show as a non-zero delta.
+
+       213.1 landed as `926bd36e` and was pushed with `dd76ee84` on top (one push
+       per wake), so **CI ran on `dd76ee8`, which carries the fix** —
+       `git show dd76ee84:packages/core/src/js/behaviors/windowed-list.ts | grep
+       -c measuredChunkHeight` → **3**. CI run **663** is `success` on **6 of 6**
+       jobs, and *Pseudo-locale + reference app + ERP suite + scaffold freshness*
+       logs `po-app smoke check passed — 19 behaviours verified end to end`.
+
+       **Non-vacuous by the gate's own construction** — 211.2's argument reused
+       rather than restated: 208.3's htmx precondition is one of those 19, so a
+       green run entails htmx loaded from the real CDN AND the new
+       `spacerMatchesReal` AND `anchorShift <= 2`. Run **664** is a second green
+       on the same code. The residual risk did not materialise. **n = 2 post-fix
+       CI runs**, which is what this supports and no more.
+
+2. [x] **215.2 — DONE 2026-08-30 (cloud wake). Every container measurement
+       behind 211.2 and 213 ran htmx 2.0.10 against an app that pins 2.0.4, and
+       neither slice says so.**
+
+       ```
+       grep -n 'unpkg.com/htmx' examples/po-app/server.mjs   # 2.0.4
+       node -p "require('./node_modules/htmx.org/package.json').version"  # 2.0.10
+       find . -name 'htmx.min.js'   # node_modules/htmx.org/... — the ONLY one
+       ```
+
+       211.2 states its shim served `node_modules`. 213's control — whose whole
+       purpose was removing the shim's confound — **does not record which htmx it
+       served at all**, and there is exactly one local candidate.
+
+       **What this does and does not touch, stated separately.** 213's *defect
+       diagnosis* is untouched: `3250 vs 3299` is arithmetic over rendered row
+       heights and no htmx version moves it. What it touches is the **timing**
+       figures either side of it (`anchorShift > 2` in 14/20 and 12/20; `0 in 40
+       of 40`), which are races against a fixed 150ms wait. That matters because
+       211.2 reasoned explicitly about a timing confound and 213 then wrote that
+       the confound *"was named and removed"* — it was removed for
+       **interception**; the version divergence is a second one, unnamed.
+       **215.1 is the mitigation**: CI runs the real 2.0.4 and is green.
+
+3. [x] **215.3 — DONE 2026-08-30 (cloud wake). 211.1's refusal premise is
+       measurably FALSE, and its cost estimate rests on another workspace.**
+       Both halves of the argument holding that open item were checked against
+       the artefacts they name, not against the sentences naming them. See the
+       correction now recorded inside 211.1 itself. The item stays **OPEN** —
+       refuting the premise does not make the product call, which is the owner's.
+
+**The gate question, asked and answered NO — with the reason, not silently.**
+LOOPS.md's operating rules ask whether the gate that should have caught this
+exists and can fail. For 215.3 it would have to check that *a roadmap item's
+prose claim about a docs page is true of that page*, and for 215.2 that *a
+recorded measurement names the version of the dependency it served*. Both are
+the semantic class roadmap **94.11** paid for: the shape is checkable, the
+meaning is not, and a detector for "this sentence describes that file" would be
+the ceremony that item refuses. `check:slice-refs` already covers the one
+mechanical half — that a cited slice resolves — and it does not and should not
+judge what the citation says. **Recorded as no-gate, deliberately.** What
+generalises instead is the method note in the report: read the artefact a claim
+describes, not the sentence describing it. Both defects died to that one check.
+
 ## Slice 214 — Standardize sweep: lanes 1-3 clean for the sixth time, and lane 4 carries the finding again — the archive sweep is due a SIXTH time, one day after the fifth (2026-08-30)
 
 **Not new input** — nothing was filed, nobody asked, and GitHub intake is **0
@@ -537,6 +641,60 @@ and building either inside it would have been widening the item.
        egress-restricted container is re-measured and written down — **finding
        that (a) makes it 19 of 19 here is a satisfying outcome, and so is
        finding it does not.**
+
+       ---
+
+       **CORRECTION 2026-08-30 (Objective grill, Slice 215.3). Both halves of
+       the argument above are wrong as measured. The item stays OPEN — this
+       corrects the inputs, it does not make the call.**
+
+       **(i) The refusal premise is FALSE: no docs page teaches the CDN
+       wiring.** The reason recorded above for not vendoring is that it changes
+       what the app teaches — *"a real consumer wiring htmx from a CDN, which is
+       what `/getting-started/htmx` documents"*. Plain fixed strings, counted
+       before any context (CLAUDE.md's rule, after the position-filter incident):
+
+       ```
+       p=apps/docs/src/pages/getting-started/htmx.astro     # 270 lines
+       grep -c unpkg $p       # 0     grep -ci cdn $p         # 0
+       grep -c jsdelivr $p    # 0     grep -c 'script src' $p # 0
+       grep -c install $p     # 0     grep -c 'npm i' $p      # 0
+       grep -rl unpkg apps/docs/src/ | wc -l   # 0 files
+       grep -rli cdn  apps/docs/src/ | wc -l   # 0 files
+       ```
+
+       That page's single `<script>` (line 202) is its own behaviour block, not a
+       consumer snippet. What it documents is the **integration** — the opt-in
+       `@busy-office/ui/css/htmx` stylesheet, the swap recipes, and the
+       `initDialogs`/`initDataTables` wiring. It never says how to load htmx by
+       any route. Repo-wide, `unpkg` survives in exactly one piece of live code
+       (`examples/po-app/server.mjs:125`) plus one comment *about* that line
+       (`check-po-app.mjs:320`); every other hit is `ROADMAP*`/`ENVIRONMENT.md`
+       bookkeeping. **So the CDN form is not a documented contract that
+       vendoring would break** — it is an implementation detail of one example,
+       referenced by nothing that teaches. The question is now whether to **add**
+       teaching the docs do not yet carry, not whether to preserve it.
+
+       **(ii) "The mechanism costs nothing" rests on a DIFFERENT workspace's
+       dependency.**
+
+       ```
+       node -p "require('./package.json').workspaces"  # ['packages/*','apps/*'] — no examples/*
+       cat examples/po-app/package.json                # dependencies: @busy-office/ui ONLY
+       ls -d examples/po-app/node_modules              # No such file or directory
+       grep -n '"htmx' apps/docs/package.json          # 51: "htmx.org": "^2.0.10"
+       ```
+
+       `node_modules/htmx.org` exists only because **`apps/docs`** declares it.
+       `examples/po-app` is not a workspace, declares no htmx, and has no
+       `node_modules` — and its own `package.json` calls it a *"reference
+       consumer … uses ONLY documented APIs"*, which is exactly the property
+       borrowing a sibling workspace's dependency would break. Option (a) costs a
+       declaration or a vendored file, and the version it resolves to today
+       (**2.0.10**) is not the version this page pins (**2.0.4**).
+
+       **Finding the premise false is what this item's own Accept calls a
+       satisfying outcome.** Recorded; the decision remains the owner's.
 
 2. [x] **211.2 — `check:po-app`'s scroll-anchor assertion has never run in a
        cloud container, and the first four times it did, it read 98 / 49 / 0 / 0
