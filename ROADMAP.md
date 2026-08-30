@@ -360,9 +360,131 @@ already applies to gates (94.11) applies here to a design change too.
 the same element per the file's own header comment — the CSS hook and the
 accessible-state hook name the same fact twice, one of them redundant.
 
-1. [ ] **218.1 — decide `.bo-timeline`/`.bo-audit`'s `data-state` values: keep
+1. [x] **218.1 — decide `.bo-timeline`/`.bo-audit`'s `data-state` values: keep
        as documented precedent, or split to `data-status` for these two
-       components only.**
+       components only.** — **REFUSED the split; KEPT `data-state`, with the
+       reasoning written into `approval-workflow.css`'s header. The
+       `current`/`aria-current` half went the other way from the way it was
+       filed: the duplication is real and is DELIBERATE, and it had already
+       drifted.** (2026-08-30, cloud wake)
+
+       **Two of the triage's own premises were wrong, and re-checking them is
+       what changed the answer** — the item's premise was a measurement from an
+       earlier wake, which CLAUDE.md makes part of the criterion.
+
+       - *"`grep -rn 'data-status=' packages/core/src apps/docs/src` → 0"* is
+         true of that command and reports a **false absence**. The `=` is a
+         position filter: `/patterns/job-monitor` writes it as
+         `<code>data-status</code>`, so the plain fixed string finds it.
+
+         ```
+         grep -rn 'data-status=' packages/core/src apps/docs/src | wc -l   # 0
+         grep -rn 'data-status'  packages/core/src apps/docs/src | wc -l   # 2
+         # job-monitor.astro:173 + its generated mirror in patterns.json:2503
+         ```
+
+         This is the exact shape CLAUDE.md records under *"a context-window
+         regex is secretly a POSITION filter, and it fails silently"* — worse
+         than a dead detector, because it reported a confident absence. And it
+         inverts the item's framing: the proposed convention is not foreign to
+         this repo, it is **already shipped** — which is what makes refusing it
+         a decision about a boundary rather than about a name.
+       - *"~60 components"*: `ls packages/core/src/css/components | wc -l` → **40**.
+
+       **The decision, and the boundary it rests on.** `data-state` is the
+       attribute the **shipped CSS selects on**; `data-status` is **payload** a
+       server sets and an agent reads, which no stylesheet touches
+       (`grep -rn data-status packages/core/src` → 0). That is one rule, it
+       already holds across the whole framework, and renaming these two
+       components would make `data-status` a styled hook for the first time and
+       delete the only distinction the two names carry. Against the Objective's
+       simplicity test, the split ADDS a concept: today a reader asks "does the
+       CSS style it?"; afterwards they would also have to ask "is this value
+       domain-shaped?", to describe two components.
+
+       Base rate, 94.11's rule applied to a design change rather than a gate:
+       `grep -rl data-state packages/core/src/css/components/` → **7** files;
+       only `approval-workflow` carries business-shaped values. The nearest
+       other case, `.bo-stepper`'s `data-state="done"`, is a wizard's own
+       progress, not a record's status. Every other use — dialog, offcanvas,
+       dashboard widget, toast — is `open`/`closed`/`closing`.
+
+       **No CHANGELOG entry, and that is the criterion being satisfied rather
+       than dodged.** The Accept named a **Breaking** entry *for the rename
+       branch*. Nothing in `packages/core` changed except comments; the shipped
+       selectors, values and attribute contract are byte-identical. Writing a
+       Breaking entry here would be 154.1's error repeated — a criterion's
+       forecast followed past the measurement.
+
+       **The `current`/`aria-current` line, which the triage called redundant.**
+       It is not, and the counter-example is in this repo:
+       `apps/docs/src/components/PatternPreview.astro:110` draws every pattern
+       thumbnail inside `<div class="tile-preview" inert aria-hidden="true">`,
+       verified in the BUILT html (10 such tiles on `patterns/index.html`). The
+       current step must be **visible** there and `aria-current` reaches nobody.
+       So `data-state` is the render channel and `aria-current` the programmatic
+       one — this framework's own two-channel rule, not one fact written twice.
+       `.bo-stepper` styling current off `aria-current` alone, and
+       `richtext.css` refusing a parallel `data-state`, are real precedents that
+       do **not** transfer, because neither has a decorative render context.
+
+       **And the parallel scheme had already drifted, which is why it needed a
+       gate rather than a paragraph.** Measured on the built docs: **6** rendered
+       `.bo-timeline__step[data-state="current"]`, **4** paired, **2** not — one
+       the legitimate decorative tile, one a real defect on
+       `/patterns/object-page`, a visible current step with no programmatic
+       counterpart at all. A third, `examples/erp-suite/p2p/purchase-order`, is
+       outside the docs dist and was found by the source sweep. Both fixed.
+
+       New gate **`check:timeline-current`** (`@exact`), in the `docs:build`
+       chain: every rendered current step carries `aria-current="step"` unless
+       `closest('[aria-hidden="true"], [inert]')` says it is decorative — a real
+       ancestor walk (jsdom, on unpaired pages only), not a page allowlist.
+       **Red-proved on BOTH branches, injection verified each time, and re-run
+       against the FINAL code** — the first round of proofs was against an
+       earlier draft, and the refactor that followed it broke the gate, so the
+       proofs were retaken rather than inherited:
+
+       - it went red on the unfixed tree, naming `/patterns/object-page` and
+         exiting 1 while correctly exempting `patterns/index.html`;
+       - removing `aria-current="step"` from the built object-page (paired tags
+         **2 → 0**, counted before and after) → `FAIL … 2 of 2 … exit=1`;
+       - stripping `inert aria-hidden="true"` from the built
+         `patterns/index.html` (**10 → 0**) turned the *decorative* branch red
+         too → `FAIL … 1 of 1`. Without this second proof the exemption could
+         have been passing by never firing.
+
+       Both files were restored and the clean tree re-run green each time:
+       `5 page(s) rendering a current step checked across 127 built pages
+       (6 rendered, 1 exempt)`.
+
+       **The refactor's own defect is worth recording**, since it is this
+       repo's standing base rate landing again: making the assertion per-page
+       (so a clean tree cannot report a pass over **zero** checks) built the
+       failure-detail string eagerly, and the gate crashed with a `TypeError`
+       on every page with nothing wrong. All three "red" results in that round
+       were **crashes, not verdicts** — an instrument's first output is not
+       evidence, including when the instrument is a red-proof.
+
+       Base rate before shipping it: the predicate was false of **2 of 6**, so
+       it distinguishes rather than passing by construction — unlike 94.11's
+       155-of-155.
+
+       **What it does NOT cover, stated rather than implied:** the built docs
+       pages only. `examples/erp-suite` and `examples/po-app` render timelines
+       this gate never sees; `npm run suite` and `check:po-app` do not assert
+       the pairing. The erp-suite fix above was verified by source grep and by
+       `npm run suite`, not by this gate.
+
+       **Not verified: no screenshot.** Cloud wake — no Podman, no
+       `localhost:8081`, so nothing was checked at 1440px or 390px in either
+       theme. Nothing rendered should move: `packages/core` changed by comments
+       only, and the two markup fixes add one ARIA attribute that no selector in
+       the framework reads. That is an argument, not a look at the page.
+
+       **The item as filed, kept verbatim below** — its framing is what the
+       measurements above answer, and the Accept is what they are scored
+       against.
 
        This is a real accept/refuse/rethink call against the Objective
        (simplicity — does splitting reduce or add a concept a reader must

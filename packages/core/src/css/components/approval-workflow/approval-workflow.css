@@ -3,6 +3,56 @@
      data-state="done|current|pending|rejected" on the <li>; the current step
      also carries aria-current="step". The marker glyph (✓ ✕ ●) is REAL
      MARKUP inside .bo-timeline__marker, so state is never color-alone. */
+
+  /* WHY data-state AND NOT data-status — decided 2026-08-30, roadmap 218.1;
+     a split was proposed and is REFUSED. The argument was that UI state
+     (open/closed) and a record's business status (done/approved/rejected) are
+     conflated under one attribute name here, and should be split framework-
+     wide. Two measured grounds against it.
+
+     One: this repo already draws a line between the two names, and it is a
+     better line than the proposed one. `data-state` is the attribute the
+     SHIPPED CSS SELECTS ON. `data-status` is payload — a server sets it, an
+     agent reads it, no stylesheet touches it — and it exists here already, in
+     /patterns/job-monitor's data contract. Renaming these two components would
+     make `data-status` a styled hook for the first time and delete the only
+     distinction the two names currently carry. Re-run before arguing with it:
+       grep -rn data-status packages/core/src apps/docs/src
+     — the hits are the job-monitor contract and its generated mirror; adding
+     `=` to that needle reports a false zero, because the docs page writes it
+     as <code>data-status</code>.
+
+     Two: base rate, 94.11's rule applied to a design change. Seven component
+     stylesheets mention data-state; only these two carry values naming a
+     record's business outcome. The nearest other case, .bo-stepper's
+     data-state="done", is a wizard's own progress rather than a record's
+     status. A framework-wide convention for two components is a concept every
+     reader must then track to describe two of them.
+       grep -rl data-state packages/core/src/css/components/
+
+     And a timeline step's status IS the thing this component renders. Naming
+     it `data-state` is not a conflation; it is what the attribute does HERE,
+     unlike a dialog's open/closed. Same for .bo-audit__entry's `resolved`. */
+
+  /* WHY data-state="current" AND aria-current="step" ARE BOTH REQUIRED, and
+     are not one fact written twice (roadmap 218.1, same decision).
+
+     The obvious call is that the CSS hook is redundant: .bo-stepper styles its
+     current step off [aria-current="step"] alone, and richtext.css refuses a
+     parallel data-state outright — "one source of truth and no JS keeping two
+     attributes in step". Neither precedent transfers, and the counter-example
+     is in this repo: PatternPreview.astro draws its tile thumbnails inside
+     <div class="tile-preview" inert aria-hidden="true">, where the current step
+     must still be VISIBLE and aria-current reaches nobody. So `data-state` is
+     the render channel and `aria-current` the programmatic one — the two
+     channels this framework requires, not a duplication.
+
+     That only holds while the two stay in step, and when this was decided they
+     had already drifted: /patterns/object-page shipped a visible current step
+     carrying no aria-current at all, 1 of the 6 rendered in the built docs.
+     `check:timeline-current` now holds the pair together and exempts an
+     aria-hidden/inert subtree by walking ancestors, which is what buys this
+     component its exemption from richtext's refusal. */
   .bo-timeline {
     list-style: none;
     margin: 0;

@@ -190,7 +190,7 @@ export const render = () =>
         <p class="bo-timeline__title">Budget check passed</p>
         <p class="bo-timeline__meta">2026-08-21 09:14 · automatic</p>
       </li>
-      <li class="bo-timeline__step" data-state="current">
+      <li class="bo-timeline__step" data-state="current" aria-current="step">
         <span class="bo-timeline__marker" aria-hidden="true">●</span>
         <p class="bo-timeline__title">Cost-center approval — R. Meyer</p>
         <p class="bo-timeline__meta">waiting 2 days</p>
