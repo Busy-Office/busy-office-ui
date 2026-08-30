@@ -17,8 +17,8 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**local** wake). Working tree clean at hand-off; two
-pushes (`086c73d` a merge, `f1be248` the slice itself).
+Last updated 2026-08-30 (**local** wake). Working tree clean at hand-off; one
+push (`9af4c3d`).
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -27,63 +27,33 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-Ids named below that are **closed or archived** — `211.1`, `213`, `218.1`,
-`219.1`, `220.1`, `220.2`, `221.1`, `221.2`, `221.3` — are historical
-references to what landed and to what this hand-off cites, not claims they are
-open. The four genuinely open are **`222.1`, `112.3`, `112.4`, AT runtime**.
-
-## A Step 0c collision, resolved rather than either side winning by force
-
-**A cloud wake reached the identical owner direction ("pin htmx to 4") this
-session was executing, independently and concurrently.** It triaged the
-instruction into a plan — Slice 221, all three sub-items `[ ]` — because it
-had no browser in its container to verify with; it filed Slice 220 for an
-unrelated Polish round on `breadcrumb`, and Slice 222 for a po-app
-measurement. This session had the owner directly in chat and built the whole
-thing, including resolving 221.3's head-merge blocker.
-
-`git fetch` before the first commit found origin **had already moved**
-(`d857a51`). Rather than force-push over it or discard either side: renumbered
-this session's slice from the number it was drafted under (which collided) to
-**223** — the next free number after the cloud's 220/221/222 — merged with
-`git merge origin/main`, resolved the one real conflict (both sides inserted
-at the same point in `ROADMAP.md`), and cross-referenced in both directions:
-221's own text now says it is closed and points to 223; 221.1/221.2/221.3 are
-marked `[x]`; 222.1's still-open residual (`chunk0Reloaded: false`) gained a
-third-environment data point (clean 19/19) without being closed, since a
-different environment reading doesn't resolve which of its own two Accept
-options applies. Full detail: ROADMAP 223's own preamble and 221's closure
-note.
+Ids named below that are **closed or archived** — `211.1`, `218.1`, `219.1`,
+`220.1`, `220.2`, `221.1`, `221.2`, `221.3`, `223.1`, `223.2`, `223.3`,
+`224.1`, `224.2` — are historical references to what landed and to what this
+hand-off cites, not claims they are open. The four genuinely open are
+**`222.1`, `112.3`, `112.4`, AT runtime**.
 
 ## What landed this wake
 
-**Slice 223 — htmx.org 2.x → 4.0.0, repo-wide, plus dropping `apps/docs`'s
-`hx-boost`.** Full reasoning, every command, and the verification block are
-in ROADMAP 223.
+**Slice 224 — Standardize sweep, all four lanes run.** Full reasoning and
+every command are in ROADMAP 224.
 
-- Renamed every shipped behavior's htmx event listener (`data-grid.ts`,
-  `tabs.ts`, `windowed-list.ts`, `data-table.ts`, both their tests):
-  `htmx:afterSwap` → `htmx:after:swap`, confirmed against htmx 4.0.0's real
-  dist (no `defineExtension`/`hx-ext` at all; `noSwap: [204, 304]` default).
-- Rewrote every "htmx discards non-2xx" doc claim for v4's flipped default —
-  `grep -rl discards --include=*.astro apps/docs/src` now returns 0 htmx hits.
-- `apps/docs`'s own `hx-boost` navigation is **removed, not migrated**: htmx
-  4 dropped its extension API, `htmx-ext-head-support` (which merged
-  boosted-swap `<head>` content) has no v4 release. `check-boost.mjs`
-  (156 lines) deleted as a result. `hx-boost` itself is untouched as a
-  documented consumer-facing feature.
-- `@busy-office/ui` 0.6.0 → 0.7.0 (Breaking); `create-ui`'s framework pin
-  regenerated to `^0.7.0`.
-- **A real regression caught by the container step, not any gate**:
-  `rm -f package-lock.json && npm install` on macOS silently dropped the
-  lockfile's `@rollup/rollup-linux-x64-gnu` optional-platform entry. Fixed
-  by restoring the original lockfile and doing a normal merge-install
-  instead of delete-then-regenerate — diff went from ~11,660 lines to 34.
-- Verified: `vitest` 152/152, `check:claims` 161/161 (158 before),
-  `check:po-app` 19/19, `test:axe` 127×2 zero violations, full `docs:build`
-  exit 0, `podman build --no-cache` clean on Linux, and a real browser
-  session against the rebuilt container — zero console errors on load and
-  on an internal navigation, `<body>` confirmed boost-free.
+- **Lanes 1-3 clean, no delta from standing verdicts.** `scan:dead-style`: 0
+  dead. `report:css-repeats`: still exactly 8 repeat groups, same membership
+  LOOPS.md's table names (rule/file counts grew, group count and membership
+  did not). `report:prose`: 14 flagged pages, all already carry a verdict
+  (158.1's twelve, 161.1's three, 178.3's `/concepts/scale`).
+- **Lane 4 found a real defect.** Two loop-machinery files postdate 167.1's
+  five-file verdict set and had never individually been verdicted:
+  `ENVIRONMENT.md` (born 169.3) and `LOOPS-archive.md` (born 167.2), both
+  2026-08-28. Reading `ENVIRONMENT.md` in full to give it a verdict is what
+  surfaced the actual finding: its `check:po-app` entry still described the
+  pre-211.1 CDN-blocked failure mode as current — *"expected reading here is
+  2 of 19"* — when the actual current figure (post-211.1, post-223) is
+  **1 of 19** (roadmap 222). **Fixed in place**, per the file's own charter.
+  Verdicts given: `ENVIRONMENT.md` HONEST (5 up/0 down, every section traces
+  to a real incident), `LOOPS-archive.md` same category as
+  `ROADMAP-archive.md` — an archive, not a sixth working file.
 
 ## Dispatcher state at hand-off
 
@@ -92,15 +62,15 @@ python3 scripts/loops/dispatch_status.py
 ```
 
 ```
-Standardize   4 / 4 Continue rounds   OVERDUE
-Objective     4 / 3 slices            OVERDUE  [211, 218, 219, 223]
+Standardize   0 / 4 Continue rounds   ok     (just reset by this wake)
+Objective     5 / 3 slices            OVERDUE  [211, 218, 219, 223, 224]
 Optimize      0 wake-date(s) newer    ok
 ```
 
-**Both counter-triggered rules are now overdue simultaneously.** Rule order
-(`LOOPS.md`: P0 > Standardize > Objective > rule 4 > …) means next wake fires
-**Standardize** first, not Objective — even though Objective's arming set is
-larger and includes this wake's own slice.
+**Objective fires next wake** — 5 slices armed since the last grill, two more
+than the 3-slice threshold. `223` (the htmx v4 migration, including the
+Step 0c collision with a concurrent cloud wake's own Slice 220-222) and `224`
+(this sweep) are both new material a grill has not yet covered.
 
 **Rule 4's remaining, still blocked:**
 
@@ -110,18 +80,16 @@ larger and includes this wake's own slice.
 | `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
 | AT runtime evidence | hardware-blocked — owner hardware |
 
-**Not owner-blocked, but not rule 4 either — a genuine open measurement:**
-`222.1` (the `chunk0Reloaded: false` residual on `check:po-app`, environment
-still undetermined between (a) app defect / (b) environmental). Worth a
-Continue round if Standardize/Objective don't absorb it first.
+**Not owner-blocked, not rule 4 either — a genuine open measurement:**
+`222.1` (the `chunk0Reloaded: false` residual on `check:po-app` in a specific
+container, still undetermined between app defect and environmental timing).
 
 ## Direction
 
-**Nothing else queued from this wake.** The owner direction that drove this
-session (htmx v4) is fully executed, not partially — no follow-up item filed
-for "finish the migration," because there is nothing left un-migrated.
+**Nothing else queued.** Both htmx-v4 migration (223) and this Standardize
+sweep (224) are complete, not partial.
 
 **Standing three unchanged** (112.3, 112.4, AT runtime).
 
-**Still unacted, now seven wakes older:** 177's observation that a grill's
+**Still unacted, now eight wakes older:** 177's observation that a grill's
 roadmap slice pays for its text twice.
