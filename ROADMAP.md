@@ -481,6 +481,106 @@ it. `git log` on its two paths since the base returns empty.
        can take it, and the honest first outcome is a base-rate count that
        refuses it.
 
+       **REFUSED, fourth in the family — the base rate is 0 live instances, and
+       the predicate cannot be written without semantics (2026-08-30, cloud
+       wake).** The item asked for exactly this measurement, so a refusal here
+       is the item being satisfied, not abandoned.
+
+       *The sweep.* Every file performing a live read of a generated or shipped
+       artifact — `readFileSync` / `statSync` / `gzipSync` / `require.resolve` /
+       `import.meta.glob` / an import of a generated `*.json` — is **30 files**.
+       Restricted to build-time code (Astro frontmatter between the `---`
+       fences; whole file for `.mjs`/`.ts`) on lines that also carry a
+       live-derived identifier, they hold **50** numeric literals in an
+       arithmetic or comparison context. The probe is in the wake's scratchpad;
+       it deliberately over-reports (the unrestricted form returns 308, mostly
+       CSS values and prose) because the question being asked is *is this signal
+       present in things I am not counting?*
+
+       *The classification.* All 50 fall into five kinds, and **none of them is
+       the defect class**:
+
+       | kind | example | can it decay? |
+       |---|---|---|
+       | unit conversion | `/ 1024`, `* 100` | no — definitional |
+       | loud assertion / floor | `if (knobs.length < 4) throw` | no — it FAILS the build |
+       | scoring band | `bytes>3000?3 : bytes>1500?2` | no — it defines the scale, mirrors nothing |
+       | stated hypothesis | `* 200` ("a 200-icon catalogue") | no — a premise, not a fact |
+       | scale with no live counterpart | `possible += 3` (rubric max) | nothing to drift from |
+
+       The largest kind that matters is the **second**: 12 sites already
+       hand-type a literal against a live read *as an assertion that fails
+       loudly*. That is the correct handling of this class and the repo already
+       does it — `primitives.astro:24`, `tokens.astro:81`,
+       `ai-assistants.astro:30`, `palettes.astro`, `semantic-css.ts`. A gate
+       would have to not-fire on all of them.
+
+       *Why no gate can be written.* The predicate would have to separate a
+       hand-typed **fact that mirrors a live source** from a unit constant, a
+       hypothesis, and a scoring band — sitting in identical syntax. That is
+       94.11's exact finding one level up: *"a comment precedes this literal" is
+       checkable; "a comment explains this literal" is semantic.* Here: "a
+       literal is an operand" is checkable; "a literal duplicates a fact
+       something else can read" is not. And the one instance the class has ever
+       had — `icon.astro`'s `12` — is **fixed**, so a gate ships firing on zero
+       things, which is the ceremony 94.11 refuses. The **family** is real and
+       recurring (4 in-tree comments record a hand-typed number that drifted:
+       `icon.astro` 10.3%, `palettes.astro` 35, `stamp-readme.mjs` 55%,
+       `scale.astro` 70 kB/11 kB) — but its standing answer, *make it live*, is
+       already applied at every current site.
+
+3. [x] **227.3 — the defect the base-rate sweep found: 227.1 made the divisor
+       LIVE and left it UNASSERTED, and a parse failure publishes
+       "Infinity kB".** Filed and fixed inside 227.2's measurement, because it
+       is the same published number and the same page.
+
+       `icon.astro` computes `catalogueKb` by dividing by `glyphCount`, which
+       227.1 correctly changed from a hand-typed `12` to
+       `new Set(iconCss.match(/\.bo-icon--[a-z0-9-]+/g) ?? []).size`. The `?? []`
+       makes a total parse failure **silent**: rename the glyph selectors and
+       the Set is empty, `iconBytes / 0` is `Infinity`, and the page publishes
+       *"Infinity kB"* with nothing failing. **Measured, not reasoned** — the
+       expression was run against a stylesheet carrying no modifiers:
+       `glyphCount = 0`, `catalogueKb = Infinity`, and `iconShare` stays
+       plausible at 3.3%, so the page looks half-right.
+
+       This is the *same shape one step on* from what 227.1 fixed, and 227.1's
+       own text names the pattern it then repeated: the earlier fix "made the
+       numerator live and left the denominator hand-typed"; this one made the
+       denominator live and left it unasserted. It is also the one site that
+       breaks the repo's own precedent — **5 of 8** build-time parse pages throw
+       on a bad parse, and of the three that do not, `scale.astro` divides *into*
+       a live value (a zero is impossible) and `cascade.astro` renders an empty
+       table rather than a wrong number. `icon.astro` was the only site dividing
+       BY a live-parsed count with no assertion.
+
+       *Accept*: (a) a bad parse of the glyph set fails the build instead of
+       publishing a number, red-proved by injection with the injection confirmed
+       to have landed; (b) the guard introduces **no** hand-typed count — a
+       literal floor would be the very decaying constant 227.1 removed.
+
+       *Accept (a)* — met. The count is reconciled against `api.json`, which
+       `extract-api.mjs` derives from the **source** CSS while this regex reads
+       the **shipped min** CSS: two independent derivations of one fact, so a
+       partial parse is caught as well as an empty one. They agree exactly today
+       — 26 and 26, identical sets, `only-in-parsed: []`, `only-in-api: []`.
+       Red-proof: the regex was edited to `\.bo-iconZZZ--`, the injection
+       confirmed present in the file (**1** occurrence) *before* the build, and
+       `npm run docs:build` exited **1** on `/components/icon/index.html` with
+       `icon: parsed 0 glyph modifiers from the shipped min CSS, but api.json
+       declares 26`. Reverted; `ZZZ` appears **0** times in the source.
+
+       *Accept (b)* — met. The guard is `glyphCount !== api.components.icon.
+       variants.length`. No numeric literal is introduced, so there is nothing
+       here for a later wake to have to re-verify.
+
+       **Not verified, said plainly:** cloud wake — no Podman, no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. Nothing here rests on a rendered image: the change is a
+       build-time assertion plus a comment, the rendered page is byte-unchanged
+       when the parse succeeds, and that was confirmed by diffing the built
+       `/components/icon/index.html` against its pre-change build.
+
 ## Slice 226 — the fixed `check:po-app`, run in a cloud container for the first time (2026-08-30)
 
 Triaged from `.roundtable/RESUME.md`'s `## Direction` block, which named this as

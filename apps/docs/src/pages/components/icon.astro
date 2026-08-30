@@ -5,6 +5,7 @@ import Demo from '../../components/Demo.astro';
 import Related from '../../components/Related.astro';
 import ApiTable from '../../components/ApiTable.astro';
 import DsaScore from '../../components/DsaScore.astro';
+import api from '@busy-office/ui/api';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -18,13 +19,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    stylesheet grew to 26 glyphs (137.1's toolbar set on 2026-08-24, then
    row-edit's two on 2026-08-27), so the projection divided 26 glyphs' worth
    of bytes by 12 and published a 200-icon set at 148 kB against a true 68.
-   One read, so the two cannot drift apart again. */
+   One read, so the two cannot drift apart again.
+
+   That fix made the denominator LIVE and left it UNASSERTED, which is the
+   same shape one step on: `iconCss.match(...) ?? []` yields a Set of size 0
+   when the glyph selectors are ever renamed, and `iconBytes / 0` publishes
+   "Infinity kB" to this page with nothing failing the build. Measured, not
+   reasoned — the regex was run against a stylesheet carrying no modifiers.
+   So the count is RECONCILED below against `api.json`, which extract-api.mjs
+   derives from the SOURCE css while this regex reads the SHIPPED MIN css:
+   two independent derivations of one fact, which catches a partial parse as
+   well as an empty one. Deliberately no hand-typed floor — a literal minimum
+   would be the very decaying constant this block exists to have removed. */
 const require = createRequire(import.meta.url);
 const iconCss = readFileSync(require.resolve('@busy-office/ui/css/components/icon.min'), 'utf8');
 const iconBytes = iconCss.length;
 const totalBytes = readFileSync(require.resolve('@busy-office/ui/css/min'), 'utf8').length;
 const iconShare = ((iconBytes / totalBytes) * 100).toFixed(1);
 const glyphCount = new Set(iconCss.match(/\.bo-icon--[a-z0-9-]+/g) ?? []).size;
+const apiGlyphCount = api.components.icon.variants.length;
+if (glyphCount !== apiGlyphCount)
+  throw new Error(
+    `icon: parsed ${glyphCount} glyph modifiers from the shipped min CSS, but api.json declares ${apiGlyphCount}. ` +
+      'The size projection below DIVIDES by this count, so a bad parse ships a wrong or Infinite kB figure ' +
+      'rather than failing — and that figure is the published arithmetic behind roadmap 40.1.',
+  );
 const totalKb = Math.round(totalBytes / 1024);
 const catalogueKb = Math.round((iconBytes / glyphCount) * 200 / 1024);
 
