@@ -315,6 +315,182 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 220 — Polish round on `breadcrumb`: the count-bearing cite class pays out a second time, and the pick was a filed defect rather than a tie-break (2026-08-30)
+
+Dispatcher, top-to-bottom, each rule read from its own source rather than
+inherited from the hand-off. **Rule 1 clear** — no open P0 (`grep -inE 'P0'
+ROADMAP.md` returns only closed slice headings), GitHub intake **0 open issues**
+(`list_issues` `state: OPEN` → `totalCount: 0`). Step 1 therefore had nothing to
+triage. **Rule 2** `Standardize 2 / 4 ok`, **rule 3** `Objective 2 / 3 ok
+[218, 219]` — one more closed slice arms a grill. **Rule 4 found nothing
+dispatchable**: the same four open items, each re-read by its own text this
+wake, with the KIND of blocked named per 186.2 — `112.3` owner-blocked (briefs +
+four answers), `112.4` owner-blocked (on 112.3's verdict), `211.1` owner-blocked
+(a product call), AT runtime hardware-blocked (owner hardware). **None of the
+four is browser-blocked**, so this is not the mis-sort 186.2 warns about.
+**Rule 5 evaluated and clear, not stale** — `dispatch_status.py` reads
+`0 wake-date(s) newer`, newest comparable pair `axe-violations` 0 → 0 (no
+regression), and the one declared size budget in the repo (`RF_BUDGET_KB = 40`,
+`build-rf-essentials.mjs`) is gated by the build, which passed. **Rule 6
+fired**; `polish_requeue.py --apply` re-queued **8** surfaces.
+
+**Not lapped this wake, and that was checked rather than assumed.** Step 0
+fetched `origin/main` at `89bb937` — exactly the sha the previous hand-off
+named. The container started **detached** (`git branch --show-current` empty),
+fixed with `git checkout -B main origin/main` per ENVIRONMENT.md trap 1, and
+`git rev-parse --short main HEAD` reproduced the documented `fatal: Needed a
+single revision` that trap warns is NOT evidence of a missing branch. The clone
+is still **shallow** and was left that way: nothing this wake measured is a
+history measurement.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px or 390px
+in either theme.** One rendered change ships — the `fit` row of
+`/components/breadcrumb`'s "Design-system alignment" table carries different
+text. No element, class, style or CSS file changed; the entire diff under
+`apps/docs/src` is one JSON string. `check:layout` (127 pages), `test:axe`
+(127 × 2, zero) and `check:claims` swept green, and the corrected cite was
+verified in the BUILT html rather than in the diff. **That is what ran; it is
+not the same as having looked at the page.**
+
+1. [x] **220.1 — `breadcrumb`'s `fit` cite published "2 of 19 pattern screens"
+       against a corpus of 39. The numerator held; the denominator had
+       doubled.**
+
+       *Accept* (§3b, the reconciliation a `content: 3` re-queued surface gets):
+       the surface's published artefact agrees with the ledger's record of it —
+       the entry exists, the page renders it, and each citation still holds
+       against the shipped artifacts. **Finding every citation clean is a
+       satisfying outcome**; 176.1's wake recorded exactly that on ten surfaces.
+
+       **The pick needed no tie-break, and that is new.** Every round since
+       176.1 has faced an unbroken tie — all re-queued surfaces score
+       `content: 3`, and 171.1 measured that no DSA dimension can rank one — so
+       216.1 and 217.1 each invented a discriminator (source movement since the
+       surface's own `scored` date). This round had a **filed** defect instead:
+       217.2 measured the count-bearing cite class at **6 of 240**, found 4
+       exact and 2 stale, fixed `sidebar-nav` and wrote `breadcrumb` down as
+       *"filed, not fixed — one round, one surface"*. `breadcrumb` is not a row
+       in the ledger table and rule 6 reads only `rounds`/`dry`, so this is a
+       **re-entry**, the same shape `scan` and `data-table` took.
+
+       **The premise was re-measured before it was acted on**, per this file's
+       own rule that a premise inherited from an earlier wake is part of the
+       criterion — 217.2 recorded no command beside its claim:
+
+       ```
+       node -e "console.log(require('./apps/docs/src/data/dsa-scores.json')
+         .components.breadcrumb.dimensions.fit.cite)"
+       #  deep ERP hierarchies (cost center -> PO -> line); used in 2 of 19 pattern screens
+
+       grep -l 'bo-breadcrumb' apps/docs/src/pages/patterns/*.astro | wc -l   # 2  <- numerator holds
+       grep -rl 'bo-breadcrumb' apps/docs/src/pages/patterns/ | wc -l         # 2  (recursive, same)
+       ```
+
+       **The denominator was reconciled against four independent sources before
+       being called wrong**, because a count is exactly the kind of number
+       CLAUDE.md says to reconcile before quoting:
+
+       | source | reading |
+       |---|---|
+       | `ls apps/docs/src/pages/patterns/*.astro` minus `index.astro` | **39** |
+       | `patterns.json`'s own `count` field (generated by `docs:build`) | **39** |
+       | `gen-patterns-index.mjs` report line | **39** pattern(s) |
+       | `check:wrong-choice` report line | patterns: **39** carry |
+
+       Four agree; `19` was right in the neighbourhood of 2026-08-21 and is not
+       right now. Note the recursive glob returns **47** `.astro` files under
+       `patterns/` — the `rf/` and `schedule/` subdirectories hold sub-screens
+       that `patterns.json` does not count as patterns. A wake that had used
+       that number as the denominator would have "corrected" one wrong figure
+       into another.
+
+       **The fix removes the quantity rather than refreshing it**, which is
+       217.2's precedent and this item is its second confirmation: a refreshed
+       denominator decays on the next pattern page, and the corpus grew 19 → 39
+       in nine days. The replacement states two properties of the code, both
+       verified present first:
+
+       ```
+       grep -rc 'bo-breadcrumb' examples/erp-suite --include='*.mjs'
+       #  examples/erp-suite/_shell.mjs:1   <- the ONLY literal in the suite;
+       #                                       crumbs() at _shell.mjs:125, called by page()
+       grep -c 'bo-breadcrumb' packages/create-ui/template/screen.html    # 1
+       ```
+
+       So: *"deep ERP hierarchies (cost center -> PO -> line item); the ERP
+       suite emits every trail from ONE shared `crumbs()` helper in
+       `_shell.mjs`, never hand-written markup, and create-ui's starter screen
+       ships one."* **No line number** — the ledger records line-number cites as
+       the most decay-prone shape there is and only 1 of 40 components carries
+       one; adding a second, in the round whose entire finding is decay, would
+       be the wrong lesson.
+
+       **The score does not move and no blind re-score is owed.** A component
+       whose trail is emitted from one shared helper and shipped in the
+       scaffolder's starter screen has *stronger* placement evidence than a raw
+       count of demo pages, so `fit: 3` was and remains right; the sentence
+       reporting it went wrong while the thing it reported got better. `scored`
+       stays **2026-08-21** — moving it would claim the independent second
+       opinion §3b step 4 requires, which this wake cannot run. `rounds` is
+       recorded as 1/3 on a **new** ledger row, because this is the surface's
+       first Polish round.
+
+       **The other five cites reconciled clean**, arm by arm, against
+       `breadcrumb.css` as shipped:
+
+       | dimension | cite | check |
+       |---|---|---|
+       | typography | `--bo-font-size-sm` only, no raw `font-size` | `grep -c font-size` → **1**, and it is the `var()` |
+       | colour | zero raw colour; current page carries weight + primary ink | `grep -cE '#[0-9a-f]{3,8}\b\|rgba?\(\|hsla?\('` → **0**; `[aria-current="page"]` sets `color` **and** `font-weight` |
+       | spacing | zero raw dimension literals | `grep -oE '[0-9.]+(px\|rem\|em\|ch\|%)'` → **0 matches** |
+       | interaction | `na` — plain links, no behavior ships for it | 0 of **33** `behaviors.json` names match `/crumb/i` |
+       | content | separator is `content: "/" / ""`, empty accessible name | present verbatim in the shipped CSS |
+
+       Arm 1 (wrong-choice clause) present — *"Not for progress through a
+       flow"*, and `check:wrong-choice` ratchets it. Arm 2 (entry rendered by
+       its page) gated per name by `check:dsa-scores` assertion 7 — **360
+       assertions across 40 scored components, all rendered**.
+
+       **One instrument was wrong on its first output, which is the base rate
+       holding.** The behaviors check first read `0 of 4` — it had counted
+       `Object.keys(behaviors.json)`, whose top level is
+       `generated`/`initCount`/`exports`/`behaviors`. The real array holds
+       **33** names. A "0 of 4" that happened to support the cite was caught by
+       the tidiness of the denominator, not by the answer being wrong.
+
+       **Verified against the RENDERED artefact, not the diff**: `used in 2 of
+       19 pattern screens` → **0 files across all of `apps/docs/dist`**, and the
+       replacement renders on `/components/breadcrumb`. The only surviving
+       source copy of the old string is `polish-state.md`'s own record of
+       217.2 filing it, which is a quotation and correct.
+
+2. [x] **220.2 — refused: a gate for the count-bearing cite class, for the
+       second time, and the reason is now stronger than when 217.2 refused
+       it.**
+
+       *Accept:* the refusal names what a gate would have to do and why this
+       loop may not build it, or the gate ships. **Refusing is a satisfying
+       outcome** — the Objective's own accept/refuse test.
+
+       217.2 refused it on two grounds: 101.3's stop rule forbids Polish adding
+       gates, and the class is not writable in the form the existing
+       cite-checkers take (*is this string in that file*) because it needs *does
+       this number still equal a count over a different tree*. This round adds a
+       third, measured here: the two stale cites in the class of six failed
+       **against different trees** — `sidebar-nav`'s numerator counted
+       `examples/po-app`, `breadcrumb`'s denominator counted
+       `apps/docs/src/pages/patterns`. A gate would need each cite to carry its
+       own command, which is a **rubric change** (a new field in
+       `dsa-scores.json`), not maintenance of the existing ratchet.
+
+       **And the class is now shrinking by construction rather than by
+       enforcement**: both repairs replaced the count with a property, so 6 of
+       240 is down to **4 of 240**, all four re-verified exact by 217.2
+       (`navbar · fit` 3, `dialog · fit` 13, `offcanvas · fit` 1, `tabs · fit`
+       2). A gate whose population is being retired as it is found is ceremony
+       for a different reason than 94.11's — not a uniformly-true predicate, but
+       a vanishing one. Recorded for whoever may decide; not filed as an item.
+
 ## Slice 219 — the `aria-current` pairing gate stops at the docs dist, and the one violation it would have caught lived outside it (2026-08-30)
 
 Triaged from the hand-off `218.1` wrote and deliberately did not act on: it
