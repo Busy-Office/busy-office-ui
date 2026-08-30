@@ -91,10 +91,27 @@ gets inherited. This one was caught in the writing.
   the write-up landed it reads 454 / 246 / 2 / 210, the +1 being Slice 228's
   own heading.
 
+**Gates run green in this container**: 152 tests, `lint:css`, `docs:build`
+(which runs `check:repo`), `check:slice-refs`, `check:claims`,
+`check:formatting`, `check:scroll` (910 containers × 118 pages × 2 widths),
+`check:layout` (127 pages, 390 + 150% zoom), `check:forced-colors`,
+`test:axe` (**127 pages × 2 widths, zero violations**), `check:target-size`,
+`check:search`, and both advisory resume checks.
+
+`check:claims` reported **3 NOT VERIFIED** — that is `ENVIRONMENT.md` §6b,
+this container's pointer capability, **not** a regression; do not "restore"
+the zero. Read the count beside it: **158 verified live**.
+
+**The `check:resume-slice-ids` advisory names `228.1` as closed-and-mentioned.**
+That is the historical-reference case the check says outright it cannot
+distinguish: this file names 228.1 under *what landed*, never as open, blocked
+or queued. Nothing to fix.
+
 **Not verified, said plainly:** markdown-only change; no rendered surface
 moves. No Podman and no `localhost:8081` here, so the 1440/390
 light-and-dark screenshot lane could not run — and **nothing in this wake
-rests on a rendered image**.
+rests on a rendered image**. The whole-tree browser gates above are the
+evidence that nothing broke.
 
 ## Dispatcher state at hand-off
 
@@ -102,16 +119,28 @@ rests on a rendered image**.
 python3 scripts/loops/dispatch_status.py
 ```
 
-**Read the counter yourself — this is the Step 0b comparison, and the whole
-value of it is that a number disagrees with what a human just wrote down.**
-The expected movement: rule 2's Continue-round counter RESETS (a Standardize
-just fired), and rule 3's slice counter ADVANCES, because 161.4 counts slices
-closed by Continue **and Standardize** and Slice 228 is a Standardize row.
+```
+Standardize   0 / 4 Continue rounds since 2026-08-30 18:45   ok
+Objective     4 / 3 slices          since 2026-08-30 20:40   OVERDUE  [222, 226, 227, 228]
+Optimize      0 wake-date(s) newer   since 2026-08-30 03:45   ok
+```
 
-**So the next wake most likely dispatches `Objective`** — it stood at 3/3
-OVERDUE this wake and was only skipped because rule 2 sits above it in
-`LOOPS.md` Step 2. Verify against the counter rather than trusting this
-sentence.
+**This is the Step 0b comparison — the counter read immediately after
+recording — and it moved as predicted**, which is the check that has found two
+of the five starved-counter bugs. Rule 2's Continue-round counter RESET (a
+Standardize just fired) and rule 3's slice counter ADVANCED, because 161.4
+counts slices closed by Continue **and Standardize** and Slice 228 is a
+Standardize row.
+
+**So the next wake dispatches `Objective`** — it stood at 3/3 OVERDUE this wake
+and was skipped only because rule 2 sits above it in `LOOPS.md` Step 2. It is
+now 4/3 with `[222, 226, 227, 228]` armed. Re-run the counter rather than
+trusting this sentence; it is a snapshot.
+
+**Worth knowing before that grill starts:** 228 is itself one of the four armed
+slices, so the grill will be partly grilling the sweep above — and 177's
+standing observation (below) says a grill's roadmap slice pays for its text
+twice, which the eighth archive sweep will then have to move.
 
 **How rules 1-3 were answered, so the next wake need not re-derive them:**
 
