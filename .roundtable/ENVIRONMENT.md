@@ -287,30 +287,34 @@ markdown-only diff). **Two CI commands are NOT in that list:**
   at `/usr/bin/docker`, which is a trap worth naming, but there is no daemon:
   `docker info` returns *"dial unix /var/run/docker.sock: no such file or
   directory"*. Finding the binary is not evidence the daemon runs.
-- **`npm run check:po-app -w docs`** — **red here, green on CI, and the
-  mechanism is now known: the container cannot fetch htmx.** The reference app
-  loads it from a CDN (`examples/po-app/server.mjs:125`,
-  `https://unpkg.com/htmx.org@2.0.4`); the agent proxy refuses that host with
-  `net::ERR_TUNNEL_CONNECTION_FAILED`, the page then throws `htmx is not
-  defined`, and every windowed-list assertion is downstream of htmx — chunks
-  past the first two arrive via `htmx.ajax`. So the list stays at 2 tbodies /
-  200 rows for the whole scroll loop, never exceeds the 3-chunk resident
-  budget, and evicts nothing. **`chunk0Evicted: false` here means "htmx never
-  loaded", not "eviction is broken"** (roadmap 208.3, which established this by
-  serving htmx from `node_modules` through request interception and watching
-  the same assertion pass, 4 of 4, in this container).
+- **`npm run check:po-app -w docs`** — **the CDN mechanism below is HISTORY,
+  not the current trap** (roadmap 211.1, closed 2026-08-30; superseded again
+  by 223 the same day). The reference app no longer loads htmx from anywhere
+  external — `server.mjs` resolves `htmx.org` from its own `node_modules` via
+  `require.resolve` (same pattern as `@busy-office/ui`'s dist) and serves it
+  at `/vendor/htmx.min.js`, now htmx **4.0.0**. An egress-restricted
+  container that can `npm install` po-app's own dependencies once (which
+  needs the registry at install time, not at browser-test runtime) no longer
+  has the htmx precondition fail at all.
 
-  The gate now says so itself — its first windowed-list check reports
-  `typeof window.htmx` — so the expected reading here is **2 of 19**, with the
-  precondition named first. Do not "fix" either failure; both are this
-  container. Whether the app should vendor htmx at all is roadmap **211.1**, an
-  open product call.
+  **Current expected reading, measured independently twice on 2026-08-30
+  (roadmap 222): 1 of 19, not 2 of 19.** The htmx-load precondition now
+  passes; the one residual is `chunk0Reloaded: false` in the deep-scroll
+  windowed-list assertion — evicted chunk 0 does not visibly reload within
+  the check's wait window in this specific container, while CI and a
+  `podman run --network none` probe both read 19 of 19 on the identical
+  code. **Still open as roadmap 222.1** — not yet resolved which of (a) a
+  real defect or (b) this container's timing it is. Do not assume either;
+  re-read 222.1 before touching the gate or the app over it.
 
-  **The general shape, worth carrying:** a browser-driven gate whose subject
-  loads anything from the public internet reports a *downstream* symptom in an
-  egress-restricted environment. Read the page console before believing the
-  assertion's own diagnosis — `page.on('console')` and `page.on('pageerror')`
-  cost one line each and were what four prior runs were missing.
+  **The general shape, worth carrying regardless of which specific trap is
+  live today:** a browser-driven gate whose subject loads anything from the
+  public internet reports a *downstream* symptom in an egress-restricted
+  environment, and that symptom can look identical to an app defect. Read
+  the page console before believing the assertion's own diagnosis —
+  `page.on('console')` and `page.on('pageerror')` cost one line each and
+  were what four prior runs (208.3) were missing before this was understood
+  the first time.
 
 `sqlite3` is NOT installed in this container. Query the `loops.db` mirror with
 Python's `sqlite3` module — `python3 -c "import sqlite3; ..."`.

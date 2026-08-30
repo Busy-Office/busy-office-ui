@@ -315,6 +315,64 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 224 — Standardize sweep: three of four lanes clean, and the fourth found a stale trap in the file Step 0 reads every wake (2026-08-30)
+
+`dispatch_status.py` read `Standardize 4/4 OVERDUE` at Step 0, ahead of
+Objective (`4/3 OVERDUE [211, 218, 219, 223]`) per rule order — a counter
+above a counter, oldest-armed-first is not the tiebreak here, rule 2 simply
+sits above rule 3.
+
+1. [x] **224.1 — lanes 1-3, clean, no delta from the standing verdicts.**
+       Lane 1 (`scan:dead-style`): 0 dead declarations, 1,433 live. Lane 2
+       (`report:css-repeats`): 74 source files, 242 rules (was 237), 230
+       distinct bodies (was 225), **still exactly 8 repeat groups**, same
+       eight members LOOPS.md's standing table names — file/rule counts grew,
+       the repeat-group count and membership did not. Lane 3
+       (`report:prose`): 9 pages over 2x the corpus median, 5 more over their
+       family median — every one of the 14 already carries a verdict (158.1's
+       twelve, 161.1's three family-split additions, 178.3's `/concepts/scale`
+       verdict). A clean round on all three is the documented expected
+       result, not a null finding.
+
+2. [x] **224.2 — lane 4 found two loop-machinery files with no individual
+       HONEST/INSTRUMENT verdict, and one of them was carrying a stale trap
+       description.** `report_loop_prose.py` names 8 dispatcher-region files;
+       167.1 (2026-08-28) verdicted five of them. `.roundtable/ENVIRONMENT.md`
+       (born 169.3, same day) and `LOOPS-archive.md` (born 167.2, same day)
+       postdate that verdict set and had never individually received one.
+
+       **`ENVIRONMENT.md` — HONEST, and reading it in full to give that
+       verdict is what surfaced the actual finding.** Its `check:po-app`
+       section (the cloud-toolchain entry-point list) still described the
+       CDN-blocked failure mode from before 211.1 landed — *"the container
+       cannot fetch htmx… expected reading here is 2 of 19"* — as if current,
+       when 211.1 (closed same day, this file) then 223 (closed same day)
+       both superseded it: htmx is vendored locally now, then moved to 4.0.0,
+       and the actual current expected reading is **1 of 19** (roadmap 222's
+       independent measurement) with a still-open residual (222.1). **Fixed
+       in place**, per this file's own charter — "edit it when a trap
+       changes; do not re-copy it" — with both superseding roadmap items
+       cited so a future reader can verify the current number rather than
+       trust this sentence. 5 up / 0 down otherwise traces cleanly to real
+       incidents (detached HEAD, shallow-clone unshallow lock, the `wc -w`
+       locale undercounting, the background-task false-completion trap) —
+       the same pattern 167.1 called HONEST for `LOOPS.md`/`CLAUDE.md`.
+
+       **`LOOPS-archive.md` — same category as `ROADMAP-archive.md`, which
+       167.1 already covers.** 1 up / 0 down, and its own row in this file's
+       report reads *"looked up, never dispatched from"* — a narrative dump a
+       wake reads only when it touches the rule-3 parser, not a working file
+       consulted for decisions. 167.1's reasoning for `ROADMAP.md`+archive
+       ("growth here is already managed… measures a quantity no wake reads,"
+       when read alone) transfers directly: this is an archive, not a
+       sixth working file needing its own growth discipline.
+
+       *Accept was implicit in lane 4's own instruction* — "the finding is a
+       file changing accumulate class, or a file the loop reads every wake
+       accumulating with no cut behind it" — **met**: `ENVIRONMENT.md` is
+       exactly that file, and the cut it needed was to its content, not its
+       length.
+
 ## Slice 223 — owner call: move the shipped htmx integration and both example apps to htmx 4, dropping `apps/docs`'s boosted navigation in the process (2026-08-30)
 
 **Owner-directed, decided over chat — not dispatcher-picked.** Recorded here
