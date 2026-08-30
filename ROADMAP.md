@@ -466,8 +466,9 @@ it. `git log` on its two paths since the base returns empty.
        and `test:axe` (127 × 2 widths) are the whole-tree evidence that the page
        did not break.
 
-2. [ ] **227.2 — a gate for the hard-coded-divisor class. NOT opened by this
-       round; recorded for whoever decides.** 101.3's stop rule forbids Polish
+2. [x] **227.2 — REFUSED: a gate for the hard-coded-divisor class, on the
+       base-rate measurement the item itself asked for.** Opened by 227.1's
+       round and recorded for whoever decides; decided here. 101.3's stop rule forbids Polish
        adding gates, and this is a *third* refusal in the same family (216.2,
        217.2, 220.2) — but it is a different predicate from those, and the
        measurement is worth keeping rather than re-deriving.
