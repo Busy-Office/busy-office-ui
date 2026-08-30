@@ -17,142 +17,93 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**cloud** wake — Step 1 triage → **Slice 219**, then
-rule 4 → **Continue**, build mode on `219.1`). Working tree clean at hand-off;
-one push.
+Last updated 2026-08-30 (**local** wake). Working tree clean at hand-off; one
+push (`5e5ede6`).
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off (219.1 opened and closed in-wake)
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 3 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-Ids named below that are **closed or archived** — `219.1`, `218.1`, `127b9e5`'s
-slice, `94.11`, `186.2` — are historical references to this wake's work and to
-what it cites, not claims they are open. The four genuinely open are **`112.3`,
-`112.4`, `211.1`, AT runtime**. This wake changed none of them.
-
-## NOT lapped this wake, and that was checked rather than assumed
-
-Step 0 fetched `origin/main` at `4713084` — **one commit newer than the previous
-hand-off described**, and that commit is not a loop row: `4713084`, *"DESIGN.md
-— add a Non-goals section"*, authored `ThePFMind`, with no
-`record_iteration.py` row behind it. Treated as owner-authored content, not as
-a dispatch to reconcile. The re-fetch Step 0c mandates before the first commit,
-and again before the second, both returned `4713084`. No collision.
-
-The container started **detached**; `git checkout -B main origin/main` at Step 0,
-`git branch --show-current` non-empty before each commit — ENVIRONMENT.md trap 1.
-The clone is still **shallow** and was left that way: nothing this wake measured
-was a history measurement, so trap 2's unshallow was not needed and not run.
+Ids named below that are **closed or archived** — `211.1`, `213`, `218.1`,
+`219.1` — are historical references to what landed and to what this hand-off
+cites, not claims they are open. The three genuinely open, all owner- or
+hardware-blocked, are **`112.3`, `112.4`, AT runtime**.
 
 ## What landed this wake
 
-**Slice 219 — triage, then 219.1 built and closed.** Full reasoning, the
-red-proof table and every command are in ROADMAP 219.
+**Slice 211.1 closed — `examples/po-app` no longer needs a CDN to run.** Owner
+call, taken over chat (not decided by the loop): vendor htmx locally rather
+than keep the `unpkg.com` script tag. `server.mjs` now resolves
+`htmx.org/dist/htmx.min.js` via `require.resolve` — the same pattern already
+used for `@busy-office/ui`'s dist — and serves it at `/vendor/htmx.min.js`;
+`htmx.org` is `examples/po-app/package.json`'s own declared dependency, pinned
+`^2.0.10` to match `apps/docs`'s existing pin rather than adding a third
+version. Full reasoning and the accept-criterion measurement are in ROADMAP
+211.1.
 
-- **The triage exists because the previous hand-off said it should.** 218.1
-  named its gate's coverage gap and left it as *"worth a line of owner
-  direction, or a triage row on a later wake"*. Filing it into `ROADMAP.md`
-  rather than re-copying it here is 169.3's lesson applied on purpose.
-- **`examples/erp-suite/check-erp-suite.mjs` gained a fourth assertion**: every
-  rendered `.bo-timeline__step[data-state="current"]` carries
-  `aria-current="step"`. Not a new script — that file was already `@exact` and
-  already walked the built dist.
-- **Red-proved three times, injection confirmed each time**, including once
-  against the **real historical defect** (`git checkout 577c572 --
-  examples/erp-suite/p2p/purchase-order.screen.mjs`, rebuild → red). The 100%
-  base rate today (8 of 8) is stated as the weakness 94.11 says it is; what
-  earns the ratchet is that the population held a violation one day earlier,
-  found by a source grep and by no gate.
-- **Two refusals recorded**: the aria-hidden/inert exemption (needs a DOM
-  parser → `jsdom`, which this directory has no `package.json` to declare;
-  0 `inert` and 265 decorative `aria-hidden` measured first), and putting the
-  rule in `packages/core/scripts/check-markup.mjs`, which ships as the
-  `bo-check-markup` bin — a contract change to a published tool, not a gate
-  extension.
+**Verified two ways, not just asserted:**
+- `check:po-app` → **19 of 19**, including the htmx-loaded precondition.
+- The item's own accept criterion — *"re-measured in an egress-restricted
+  container"* — taken directly: `podman build -f examples/po-app/Dockerfile`
+  (the real tarball-consumer path, not the dev shortcut) then
+  `podman run --network none` (zero egress, no DNS). `/vendor/htmx.min.js`
+  still returns `200` from inside that container.
 
-**Instrument correction worth carrying, and it is `LOOPS.md`'s own prescribed
-comparison working.** Rule 3's counter did **not** move after the Continue row
-was recorded, while a slice had visibly just closed. That is the disagreement
-`LOOPS.md` says to look for right after recording — and the defect was **mine,
-not the parser's**: the row's item text began `Roadmap 219.1 — …`, and all three
-patterns anchor the slice number at position 0, so it fell into the measured
-24.2% slice-less bucket. The row was corrected to `219.1 — …` before commit and
-the mirrors rebuilt (`rebuild_from_log.py`, `generate_status.py`,
-`generate_roundtable_index.py`), with the raw `grep -c '^- '` asserted unchanged
-at **1211** either side. The counter then read `2 / 3 slices [218, 219]`.
-**Not a sixth recurrence — start a Continue row with the bare slice id.**
-
-## Cloud-wake limits, stated rather than implied
-
-No Podman, no `localhost:8081`, **no screenshots at 1440px or 390px in either
-theme**. The diff is one gate script, one docs-script comment and `ROADMAP.md`
-— `packages/core` and every `.astro` page are untouched — so nothing rendered
-should move. **That is an argument, not a look at the page.**
-
-Gates green in this container (16, the list re-derived from `ci.yml`): core
-build/test/`lint:css`, `docs:build` (runs `check:repo`, so `check:selftests`
-ran), `check:claims` (158 live + the documented 3 NOT VERIFIED for this
-container's `pointer: none`), `check:formatting`, `check:scroll`,
-`check:forced-colors`, `check:layout` (127 pages), `test:axe` (127 × 2, zero),
-`check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
-`check -w @busy-office/create-ui`, `npm run suite` (28 screens; audit zero
-violations). **`check:po-app` is the documented 2 of 19** — this container
-cannot fetch the htmx CDN.
+**A stale-build trap this file already warns about, hit fresh mid-verification
+and worth naming so the next wake recognises it faster.** The first
+`check:po-app` run after the code change still showed the pre-213.1 defect
+(`spacerH 3250` vs `chunk0RenderedH 3299`) — not a regression, a **stale local
+`examples/po-app/busy-office-ui.tgz`** packed before 213.1 landed. Repacking
+with `npm pack -w @busy-office/ui` (from repo root, `-w` — a bare
+`npm pack @busy-office/ui` from inside `examples/po-app` pulls the **published
+registry version**, not the local workspace build, and silently installed
+`0.3.0`) still showed the old version, because a **gitignored local
+`package-lock.json`** was pinning the previous tarball's resolution. Deleting
+both `node_modules` and the lockfile before reinstalling is what actually
+picked up the fix. Neither artefact is tracked in git, so this cannot recur
+from a fresh clone — only from a dev machine with prior local installs, same
+class of trap as ENVIRONMENT.md's "stale podman image" one.
 
 ## Dispatcher state at hand-off
-
-Read **after** recording, which is the comparison that just paid for itself
-(above).
 
 ```
 python3 scripts/loops/dispatch_status.py
 ```
 
-Rules as this wake read them, each from its own source: rule 1 clear (no open
-P0; GitHub intake **0 open issues**, `totalCount: 0`), rule 2
-`Standardize 2 / 4 ok`, rule 3 `Objective 2 / 3 ok [218, 219]` — **one more
-closed slice arms an Objective grill**, rule 5 **`ok`, not STALE** (newest pair
-`axe-violations`; no regression, no budget breach), **rule 4 fired** on `219.1`.
+```
+Standardize   3 / 4 Continue rounds   ok
+Objective     3 / 3 slices            OVERDUE  [211, 218, 219]
+Optimize      0 wake-date(s) newer    ok
+```
 
-**Rule 4's remaining four, with the KIND of blocked per 186.2** — re-read from
-each item's own text this wake:
+**Rule 3 fires next wake — Objective grill of Slices 211, 218, 219.** This
+wake's own close of 211.1 is itself something that grill should re-verify
+rather than take on faith, per this file's own standing rule (an item's
+premise is part of what a grill re-checks, not a courtesy).
+
+**Rule 4's remaining three, all blocked:**
 
 | item | kind of blocked |
 |---|---|
 | `112.3` pattern-fit pilot (oldest open) | owner-blocked — briefs + four answers |
 | `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
-| `211.1` vendor htmx into `examples/po-app` | owner-blocked — a product call |
 | AT runtime evidence | hardware-blocked — owner hardware |
-
-**None of the four is browser-blocked**, so this is not the mis-sort 186.2 warns
-about. With 219.1 closed, rule 4 has nothing dispatchable again; the next wake
-most likely reaches **rule 6, Polish** (run `polish_requeue.py --apply` first,
-then the citation-reconciliation arm — it has found a real defect on 4 of 5
-surfaces where it has been run), or **rule 3** if it closes one more slice.
 
 ## Direction
 
-**`examples/po-app` is now the ONLY uncovered timeline, and that is recorded in
-both gates rather than left implied.** 218.1's hand-off offered the suite half
-as owner direction; this wake took it as a triage row and built it. What is
-left is genuinely harder and is not a defect: po-app has no built dist to walk,
-its timeline is a template literal in `server.mjs`, and `check:po-app` cannot
-run green in an egress-restricted container at all. **Covering it is arguably
-downstream of `211.1`** — an app that could load htmx locally would also be an
-app whose gate runs here. Worth a line of owner direction; not filed, because
-filing it before `211.1` is decided would be planning against an unknown.
-
-**`211.1` remains the owner's call and this wake did not touch it.** The
-standing correction holds: the docs teach no CDN wiring at all, so the question
-is whether to ADD teaching, not to preserve it.
-
-**`175.4` gained no new evidence this wake** — no collision occurred, and
-`origin/main` did not move between Step 0 and either commit.
-
-**Still unacted, now five wakes older:** 177's observation that a grill's
-roadmap slice pays for its text twice.
+**The previous hand-off's speculation — "covering `examples/po-app` in
+`check:po-app` is arguably downstream of 211.1" — is now testable and not yet
+tested.** `check:po-app` has never run green inside an actual egress-restricted
+*CI-style* container (only the ad-hoc `podman --network none` probe this wake
+ran by hand, which passed). Whether the gate itself now passes clean in such a
+container, not just the one route this wake checked, is open — a natural
+Continue-round follow-up, not urgent enough to jump the queue ahead of the
+overdue Objective grill.
 
 **Standing three unchanged** (112.3, 112.4, AT runtime).
+
+**Still unacted, now six wakes older:** 177's observation that a grill's
+roadmap slice pays for its text twice.
