@@ -9,6 +9,31 @@ pin.
 
 ## Unreleased
 
+### Fixed
+
+- **A windowed list no longer jumps when an evicted chunk re-loads** (roadmap
+  213). `initWindowedList()` sized an evicted chunk's placeholder as
+  `rowCount x one sampled row`, sampling the first row in the table. Where rows
+  are not all identical that sample is not representative: on the reference
+  app's 100-row chunks, 98 rows render at 33px and 2 at 32.5px, the sample is
+  one of the two outliers, and the placeholder came out **49px short per
+  chunk** — so scrolling back to a chunk moved the content above the viewport
+  by exactly that. The placeholder is now measured from the chunk itself
+  immediately before it is replaced, which cannot be unrepresentative;
+  `rowCount x sampled row` remains the fallback when that measures 0 (detached,
+  `display: none`, or an environment that lays nothing out). Verified in a
+  browser: placeholder 3250px against a chunk rendering 3299px before, both
+  3299px after, 4 of 4 runs; the downstream scroll shift went from >2px in 12
+  of 20 runs to 0px in 40 of 40.
+
+  **Not a Breaking entry, and the reasoning rather than the verdict:** no class,
+  `data-*`, ARIA or event contract changes, no option is added or removed, and
+  consumer markup is untouched — the only difference is the pixel value of an
+  inline `block-size` the behaviour writes on its own generated placeholder row.
+  What does move is that number, so a consumer asserting it equals
+  `rowCount x rowHeight` in their own tests will now read the chunk's true
+  height instead.
+
 ### Changed
 
 - **A dismissed toast now leaves instead of vanishing, and the stack closes

@@ -26,6 +26,17 @@ let rowRectReads = 0;
 let stubRowHeight = STUB_ROW_H;
 let rectSpy: ReturnType<typeof vi.spyOn>;
 
+/* Per-row heights for the ONE case that needs rows to differ (roadmap 213).
+   Default null, so every other test keeps the single-stub behaviour it was
+   written against and its numbers do not move. */
+let stubRowHeightById: Record<string, number> | null = null;
+/* Whether a <tbody> reports a height at all. jsdom lays nothing out, so a
+   tbody's real rect is 0 — which is exactly the fallback path makeSpacer takes,
+   and why every pre-213 test in this file still exercises the extrapolation.
+   Turning this on models what a browser does: the chunk's height is the sum of
+   its rows' boxes. */
+let stubTbodyHeights = false;
+
 /** A controllable IntersectionObserver — jsdom has none, and without one
  *  bindTable returns at its no-op floor and nothing ever evicts. */
 class FakeIO {
@@ -98,6 +109,8 @@ beforeEach(() => {
   document.body.innerHTML = '';
   rowRectReads = 0;
   stubRowHeight = STUB_ROW_H;
+  stubRowHeightById = null;
+  stubTbodyHeights = false;
   (globalThis as { IntersectionObserver?: unknown }).IntersectionObserver =
     FakeIO as unknown as typeof IntersectionObserver;
   const original = Element.prototype.getBoundingClientRect;
@@ -107,7 +120,17 @@ beforeEach(() => {
       if (this instanceof HTMLTableRowElement && this.dataset.rowId) {
         rowRectReads++;
         // jsdom's rect is a plain object with no toJSON; only `height` is read.
-        return { ...original.call(this), height: stubRowHeight } as DOMRect;
+        const own = stubRowHeightById?.[this.dataset.rowId ?? ''];
+        return { ...original.call(this), height: own ?? stubRowHeight } as DOMRect;
+      }
+      if (stubTbodyHeights && this instanceof HTMLTableSectionElement) {
+        // A real chunk's height is the sum of its own row boxes — NOT rowCount
+        // times any one of them, which is the whole point of roadmap 213.
+        const sum = Array.from(this.rows).reduce((acc, tr) => {
+          const id = (tr as HTMLTableRowElement).dataset.rowId ?? '';
+          return acc + (stubRowHeightById?.[id] ?? (id ? stubRowHeight : 0));
+        }, 0);
+        return { ...original.call(this), height: sum } as DOMRect;
       }
       return original.call(this);
     });
@@ -180,6 +203,30 @@ describe('initWindowedList — spacer height', () => {
     FakeIO.last!.fire([[t.querySelector('tbody[data-chunk-id="c0"]')!, true]]);
 
     expect(spacerHeight(t, 'c4')).toBe(CHUNK_ROWS * 50);
+  });
+
+  it('a chunk whose rows are NOT all the same height gets a spacer of its own rendered height', () => {
+    /* roadmap 213, the case this file structurally could not express before:
+       every row shared one stubbed height, so "rowCount x the sample" and "the
+       chunk's real height" were the same number and no assertion could tell
+       them apart. Here they differ on purpose.
+
+       CHUNK_ROWS is 2. c3 holds R-7 and R-8; the sampled row (the FIRST
+       data-row-id in the TABLE, R-1) is 32.5 while c3's own rows are 33 and 40,
+       so the two candidate answers are 65 and 73. That mirrors /movements,
+       where the sample is one of two 32.5px outliers among 98 rows at 33px. */
+    stubTbodyHeights = true;
+    stubRowHeightById = { 'R-1': 32.5, 'R-7': 33, 'R-8': 40 };
+    const t = table(4, 3);
+    ui.initWindowedList();
+    FakeIO.last!.fire([[t.querySelector('tbody[data-chunk-id="c0"]')!, true]]);
+
+    expect(evicted(t, 'c3')).toBe(true);
+    // The chunk's own box: 33 + 40.
+    expect(spacerHeight(t, 'c3')).toBe(73);
+    // The pre-213 answer, named so a regression reads as "it went back to
+    // extrapolating from one sampled row", not merely "73 changed".
+    expect(spacerHeight(t, 'c3')).not.toBe(CHUNK_ROWS * 32.5);
   });
 
   it('falls back to the density token when no real row has rendered yet', () => {

@@ -337,7 +337,19 @@ try {
     const table = document.getElementById('mv-table');
     const out = {};
     out.rowcount = table.getAttribute('aria-rowcount');
-    const realRowHeight = table.querySelector('tr[data-row-id]').getBoundingClientRect().height;
+    /* The row the shipped fallback samples. No longer the basis of any
+       assertion — kept in the payload because when the spacer check fails, the
+       gap between this x 100 and the chunk's real height is the diagnosis. */
+    out.sampledRowH = table.querySelector('tr[data-row-id]').getBoundingClientRect().height;
+    /* Chunk 0's OWN rendered height, taken before anything evicts it.
+       roadmap 213: the old spacer assertion compared the spacer against
+       `realRowHeight * 100`, and the shipped code computed the spacer from that
+       same sampled row — so it compared 3250 against 3250 and passed while
+       every chunk was 49px short. An assertion whose expectation is derived
+       from the value under test cannot fail. This is the independent quantity:
+       what the chunk actually occupies, which no sampling can misrepresent. */
+    out.chunk0RenderedH = +table
+      .querySelector('tbody[data-chunk-offset="0"]').getBoundingClientRect().height.toFixed(2);
     const firstBox = table.querySelector('tbody[data-chunk-offset="0"] .bo-data-table__row-select');
     const rowId = firstBox.closest('[data-row-id]').dataset.rowId;
     firstBox.click();
@@ -345,7 +357,11 @@ try {
     const c0 = table.querySelector('tbody[data-chunk-offset="0"]');
     out.chunk0Evicted = c0?.dataset.evicted === 'true';
     const spacerH = parseFloat(c0?.querySelector('.bo-data-table__spacer')?.style.blockSize ?? '0');
-    out.spacerMatchesReal = Math.abs(spacerH - realRowHeight * 100) <= realRowHeight;
+    out.spacerH = spacerH;
+    /* Sub-pixel tolerance only. The spacer stands in for the chunk, so any
+       slack here is a scroll jump the user sees: at the old one-row tolerance
+       (32.5px) a real 49px error passed. */
+    out.spacerMatchesReal = Math.abs(spacerH - out.chunk0RenderedH) <= 1;
     out.renderedBounded = table.querySelectorAll('tr[data-row-id]').length <= 400;
     out.hiddenInputSurvives = !!document.querySelector(
       `[data-windowed-selection-host] input[value="${rowId}"]`,

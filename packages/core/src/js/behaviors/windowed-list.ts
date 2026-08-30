@@ -106,6 +106,11 @@ function scrollParent(el: Element): Element | null {
 }
 
 /* Spacer row height: measured from ONE real rendered row, cached per table.
+   SINCE roadmap 213 THIS IS THE FALLBACK, not the primary path — `makeSpacer`
+   measures the evicted chunk itself and only extrapolates from this sample when
+   that comes back 0. The sampling defect that demoted it, and the cost of the
+   replacement, are documented at `measuredChunkHeight` below. Everything from
+   here down still describes what the fallback does and why it is not the token.
    The grill's original call was "compute from the density token, never
    measure" — the red-proof amended it: real rows render taller than the
    token (32.5px vs compact's 30px — border-box extras), so token-derived
@@ -188,9 +193,36 @@ function reindexChunk(tbody: HTMLTableSectionElement, table: HTMLTableElement): 
   });
 }
 
+/* THE CHUNK'S OWN RENDERED HEIGHT, and why extrapolating from a sampled row
+   was not good enough (roadmap 213, 2026-08-30 — the SECOND time this number
+   has shipped wrong).
+
+   `rowCount * chunkRowHeightPx(table)` assumes the one sampled row is
+   representative of the chunk. On po-app's /movements it is not: chunk 0 holds
+   98 rows at 33px and 2 at 32.5px, and the sample is the FIRST row — one of the
+   two outliers. 100 x 32.5 = 3250 against a chunk that renders 3299, so every
+   evicted chunk was 49px short and re-loading one moved the content above the
+   viewport by exactly that. Measured in a browser, 4 of 4 runs.
+
+   The tbody being evicted is in the DOM and laid out at this moment, so its
+   height is readable EXACTLY rather than extrapolated, and no sample can be
+   unrepresentative of itself.
+
+   THE COST, named rather than buried: this is one layout read per eviction,
+   where the cached sample was one per table. It sits immediately before
+   `tbody.replaceWith(spacer)`, which forces layout on the same element anyway,
+   so the read is on an already-hot box. The cached path stays as the FALLBACK
+   for a chunk that measures 0 — detached, `display: none`, or a jsdom-style
+   environment that lays nothing out — which is also why this file's unit tests
+   still exercise the extrapolation. */
+function measuredChunkHeight(tbody: HTMLTableSectionElement): number {
+  const h = tbody.getBoundingClientRect().height;
+  return Number.isFinite(h) && h > 0 ? h : 0;
+}
+
 function makeSpacer(tbody: HTMLTableSectionElement, table: HTMLTableElement): HTMLTableSectionElement {
   const rowCount = tbody.rows.length;
-  const height = rowCount * chunkRowHeightPx(table);
+  const height = measuredChunkHeight(tbody) || rowCount * chunkRowHeightPx(table);
   const spacer = document.createElement('tbody');
   spacer.dataset.chunkId = tbody.dataset.chunkId ?? '';
   spacer.dataset.chunkOffset = tbody.dataset.chunkOffset ?? '0';
