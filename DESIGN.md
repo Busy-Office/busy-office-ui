@@ -22,6 +22,42 @@ ERP screens.
 5. **Density is a first-class dimension.** ERP users live in dense grids; density is a
    cascading token remap, adjustable globally or per-region with one attribute.
 
+## Non-goals
+
+Written down because the absence was implicit for a long time and an
+external review (2026-08-30, `.roundtable/` — the same review that
+produced roadmap 218) is what finally asked for it in words. Each line
+traces to a real decision, not an aspiration — either a Principle above
+that already implies the opposite, or an item this repo actually refused
+and can be cited.
+
+- **Not a utility-first system (Tailwind-shaped).** Principle 2 —
+  `.bo-data-table`, not forty classes per cell — is the opposite bet,
+  deliberately: a `.bo-u-*` utility set exists only as a small, curated
+  escape hatch, never the primary authoring model.
+- **Not a JS component framework (React/Vue-shaped).** Principle 1 and 3 —
+  CSS-first, native elements first. Small optional behaviors exist where
+  the platform has a genuine gap (dialog focus-loop, live selection
+  counts); there is no virtual DOM, no component runtime, and Principle 4
+  (dependency-free core) forbids one arriving as a transitive dependency.
+- **Not a general-purpose component library.** ERP density and semantics
+  are the bet (Principle 5); breadth for its own sake is refused on sight
+  — see "Deliberately absent" below for the specific things (a grid
+  engine, an icon catalogue, an illustration set) turned down because a
+  narrower answer already covers the real need.
+- **Not an AI governance/tooling platform.** A near-identical proposal to
+  build a Quality Index, a waiver/SARIF system, a second fitness rubric,
+  and a consumer-facing conformance web tool was reviewed and refused
+  twice on the same grounds (roadmap Slice 112, 2026-08-22; roadmap 218,
+  2026-08-30) — each is governance machinery for human review teams that
+  don't exist yet, not infrastructure an AI agent building a screen
+  actually needs. What ships instead: `llms.txt` as machine-readable
+  context, and a pattern-fit pilot (112.3) gated on real evidence before
+  anything heavier (a validator, an MCP server) gets built.
+- **Not MCP-first.** Same 112.3 gate — prove a plain coding agent can
+  produce consistent screens from repository-local documentation before
+  building a protocol server around it, not instead of it.
+
 ## Package layout
 
 npm workspaces monorepo:
