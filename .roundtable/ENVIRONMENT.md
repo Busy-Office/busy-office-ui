@@ -251,10 +251,15 @@ list is what the wake used"*. Re-derive rather than trust this snapshot —
 — and if a command appears there that is missing here, run it and add it.
 
 **But this list holds ENTRY POINTS and `ci.yml` holds STEPS, so the two do not
-match one-for-one** (roadmap 209, which cost a round finding this out). The
-re-derivation prints **17**; this list names 16. The difference is
-`check:ci-ignores`, which `ci.yml` invokes separately and which is a sub-check
-of **`check:repo`** — run here by `docs:build` — so it is covered, not missing.
+match one-for-one** (roadmap 209, which cost a round finding this out). Since
+226.1 moved `check:po-app` into the list below, the re-derivation and this list
+both read **17** — and that agreement is a coincidence, not a correspondence.
+Two entries differ in opposite directions and happen to cancel:
+`check:ci-ignores` is in `ci.yml` and not here, because it is a sub-check of
+**`check:repo`** — run here by `docs:build` — so it is covered rather than
+missing; and `npm run test -w @busy-office/ui` is here and not in the grep,
+because `ci.yml` spells that step `npx vitest run --root packages/core`.
+**Do not read the two 17s as a match** — compare the sets, not the counts.
 Before adding a command the grep turns up, check
 `node -e "console.log(require('./apps/docs/package.json').scripts['check:repo'])"`
 for it. `check:formatting`, the command that reached CI unrun on 2026-08-29, is
@@ -276,61 +281,44 @@ npm run check:target-size -w docs
 npm run check:search -w docs
 npm run check:pseudo -w docs
 npm run check:quickstart -w docs
+npm run check:po-app -w docs             # does its OWN tarball-consumer install; needs the registry at gate-run time
 npm run check -w @busy-office/create-ui
 npm run suite                            # needs CHROME_PATH — suite:audit drives a browser
 ```
 
-All sixteen were run green in this container on 2026-08-29 (`eceffbc` + a
-markdown-only diff). **Two CI commands are NOT in that list:**
+Sixteen of the seventeen were run green in this container on 2026-08-29
+(`eceffbc` + a markdown-only diff); `check:po-app` — the seventeenth, and until
+2026-08-30 the second entry in the exceptions block below — was run green here
+on 2026-08-30, which is why it now sits in the list above. **One CI command is
+NOT in that list:**
 
 - **`docker build -f apps/docs/Containerfile`** — the `docker` *binary* exists
   at `/usr/bin/docker`, which is a trap worth naming, but there is no daemon:
   `docker info` returns *"dial unix /var/run/docker.sock: no such file or
   directory"*. Finding the binary is not evidence the daemon runs.
-- **`npm run check:po-app -w docs`** — **may no longer belong in this
-  exceptions list at all; a cloud wake should re-check.** Three stacked
-  histories, oldest first: it loaded htmx from `https://unpkg.com` (blocked
-  outright in an egress-restricted container, roadmap 208.3); 211.1 vendored
-  htmx locally, which fixed the browser-level CDN block but introduced an
-  **eager** `require.resolve('htmx.org/…')` in `server.mjs` that depended on
-  monorepo hoisting nobody had verified; 223's htmx-4 migration made that
-  dependency load-bearing (no more CDN fallback path at all) and it broke —
-  **`main`'s CI was red on this exact error for several commits, 2026-08-30**
-  (`Cannot find module 'htmx.org/dist/htmx.min.js'`), caught by roadmap
-  222.1. Root cause: a fresh `npm ci` (this repo's own root install,
-  identical to what CI runs) never hoists `htmx.org` to root `node_modules`
-  — it stays nested under `apps/docs/node_modules`, unreachable from
-  `examples/po-app`'s own `require.resolve` walk, which only climbs its own
-  ancestor directories.
 
-  **Fixed at the gate**: `check-po-app.mjs` now does the real
-  tarball-consumer install itself before spawning the app — wipes any
-  leftover `node_modules`/`package-lock.json`/`busy-office-ui.tgz`, `npm
-  pack -w @busy-office/ui`, `npm install --omit=dev` — matching
-  `examples/po-app/Dockerfile`'s own flow, so neither dependency depends on
-  hoisting luck any more. Verified **19 of 19 across 3 consecutive runs**
-  in this container after the fix, with no `chunk0Reloaded` residual
-  reappearing (222.1's own open question, now answered: environmental,
-  tied to the install's prior non-determinism, not an app defect).
+**`check:po-app` cleared this block on 2026-08-30 (roadmap 226.1), by
+measurement rather than by the inference that had stood in for one.** Two
+consecutive runs in a cloud container, both `po-app smoke check passed — 19
+behaviours verified end to end`, exit 0. What makes that more than a green tick:
+**the precondition that broke it still reproduces here.**
 
-  **What is NOT yet re-verified: an actual CLOUD container running the
-  fixed gate.** The `npm install` step needs the public npm registry at
-  gate-run time (not just at container-start `npm ci`) — a different
-  network path than the browser-level CDN block that started this whole
-  history, and one this repo's own cloud wakes already exercise
-  successfully every time they run `npm ci`, but that is an inference, not
-  a direct measurement of THIS gate in a cloud container post-fix. Next
-  cloud wake to touch this: run it, and if 19/19 holds, move this bullet
-  out of the exceptions list entirely — it would no longer need one.
+```
+ls -d node_modules/htmx.org            # No such file or directory
+ls -d apps/docs/node_modules/htmx.org  # exists — still nested, never hoisted
+ls examples/po-app/node_modules        # @busy-office  htmx.org   ← the gate's own install
+node -e "console.log(require('./examples/po-app/node_modules/htmx.org/package.json').version)"  # 4.0.0
+```
 
-  **The general shape, worth carrying regardless of which specific trap is
-  live today:** a browser-driven gate whose subject loads anything from the
-  public internet reports a *downstream* symptom in an egress-restricted
-  environment, and that symptom can look identical to an app defect. Read
-  the page console before believing the assertion's own diagnosis —
-  `page.on('console')` and `page.on('pageerror')` cost one line each and
-  were what four prior runs (208.3) were missing before this was understood
-  the first time.
+So the hoisting the old gate relied on is as absent in a cloud container as it
+was on CI, and the gate passes anyway because 222.1's `npm pack -w
+@busy-office/ui` + `npm install --omit=dev` fetched both dependencies from the
+registry **at gate-run time** — the exact network path that was inferred to work
+and had never been measured. Three stacked histories preceded this (unpkg CDN
+block, 208.3 → 211.1's local vendoring introducing an eager
+`require.resolve` → 223's htmx-4 migration making it load-bearing and turning
+`main` red for several commits); ROADMAP 222.1 and 226.1 carry them, and this
+entry no longer needs to.
 
 `sqlite3` is NOT installed in this container. Query the `loops.db` mirror with
 Python's `sqlite3` module — `python3 -c "import sqlite3; ..."`.
@@ -367,6 +355,14 @@ broadly wrong. When declining an item, say which of the two lists it needs.
 
 ## Traps worth carrying forward (measurement discipline, not slice history)
 
+- **A browser-driven gate whose subject loads anything from the public internet
+  reports a DOWNSTREAM symptom in an egress-restricted container, and that
+  symptom looks identical to an app defect.** Read the page console before
+  believing the assertion's own diagnosis — `page.on('console')` and
+  `page.on('pageerror')` cost one line each, and were what four runs (208.3)
+  were missing before this was understood the first time. Carried up here when
+  226.1 cleared `check:po-app` out of the exceptions block: the shape outlives
+  the specific trap that taught it.
 - **`git stash` is not a way to A/B one file in a dirty tree.** It reverts the
   data along with the script, so two parsers get compared against two different
   logs. Extract the old version to a probe file *in the same directory*, run

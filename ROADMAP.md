@@ -323,7 +323,7 @@ makes it dispatchable**: rule 4 reads `ROADMAP.md`, so a follow-up living only i
 the hand-off is invisible to the dispatcher — and the hand-off is rewritten
 wholesale every wake, which is 169.3's whole finding.
 
-1. [ ] **226.1 — run `npm run check:po-app -w docs` in a cloud container, and
+1. [x] **226.1 — run `npm run check:po-app -w docs` in a cloud container, and
        make `ENVIRONMENT.md`'s entry agree with what that run reports.**
        222.1 rewrote `check-po-app.mjs` to perform the real tarball-consumer
        install itself (wipe `node_modules`/lockfile/tgz + `npm pack -w
@@ -343,6 +343,66 @@ wholesale every wake, which is 169.3's whole finding.
        listed with the reason. **Finding the gate broken here satisfies this
        item**, it does not derail it: the deliverable is a file that agrees
        with a measurement, not a confirmation that it passes.
+
+       **Result: it passes here, and the interesting part is WHY it passes.**
+       Two consecutive runs, verbatim output both times:
+
+       ```
+       export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
+       npm run check:po-app -w docs
+       # > node scripts/check-po-app.mjs
+       # po-app smoke check passed — 19 behaviours verified end to end
+       # EXIT=0
+       ```
+
+       A green gate on its own would be weak evidence: it is consistent both
+       with "the new install works" and with "this container happened to hoist
+       `htmx.org` to root, so the OLD path would have worked too" — the second
+       being exactly the hoisting luck 222.1 removed. **The precondition was
+       measured rather than assumed, and it still reproduces here:**
+
+       | probe | reading |
+       |---|---|
+       | `ls -d node_modules/htmx.org` | `No such file or directory` |
+       | `ls -d apps/docs/node_modules/htmx.org` | exists — still nested, never hoisted |
+       | `ls examples/po-app/node_modules` | `@busy-office` `htmx.org` — the gate's own install |
+       | `node -e "…examples/po-app/node_modules/htmx.org/package.json').version"` | `4.0.0` |
+
+       So the missing hoist that turned `main` red is as absent in a cloud
+       container as it was on CI, and the gate passes anyway because its own
+       `npm pack -w @busy-office/ui` + `npm install --omit=dev` reached the
+       public registry **at gate-run time**. That was the whole open inference;
+       it is now a direct reading. `chunk0Reloaded` did not reappear on either
+       run, consistent with 222.1's answer that the residual was environmental.
+
+       *Accept (a)* — met: exit status and the 19-behaviour count are recorded
+       verbatim above, from this container.
+       *Accept (b)* — met: `ENVIRONMENT.md`'s po-app bullet is gone from the
+       "**One** CI command is NOT in that list" block (it read "Two"), and
+       `npm run check:po-app -w docs` now sits in the runnable cloud-toolchain
+       list with the reason it works. The general lesson the old bullet carried
+       — a browser-driven gate reporting a *downstream* symptom of egress
+       restriction, indistinguishable from an app defect without reading the
+       page console — was **moved, not deleted**, into that file's "Traps worth
+       carrying forward" section, because it outlives this specific trap.
+
+       **One number that changed underneath this edit, flagged because it is
+       the tidy-number trap.** `ENVIRONMENT.md` carried *"the re-derivation
+       prints 17; this list names 16"*. Adding `check:po-app` makes the list
+       17 as well — and the two 17s do **not** mean the sets now match. Two
+       entries differ in opposite directions and cancel: `check:ci-ignores` is
+       in `ci.yml` and not in the list (it is a sub-check of `check:repo`, run
+       by `docs:build`), and `npm run test -w @busy-office/ui` is in the list
+       and not in the grep (`ci.yml` spells it `npx vitest run --root
+       packages/core`). Re-derived today, not quoted:
+       `grep -oE 'npm run [A-Za-z0-9:@/._-]+( -w [A-Za-z0-9@/._-]+)?' .github/workflows/ci.yml | sort -u | wc -l`
+       → **17**. The file now says outright not to read the two as a match.
+
+       **What this item did NOT verify**, since a green run invites the wider
+       claim: it is one gate in one container on one date. It says nothing
+       about whether the registry is reachable at gate-run time under a
+       *different* network policy, and nothing about the Podman/screenshot
+       lane, which remains unavailable to a cloud wake and untouched here.
 
 ## Slice 225 — Objective grill of Slices 218, 219, 223, 224: a citation that quoted its own re-run command into permanence, and everything else held (2026-08-30)
 
