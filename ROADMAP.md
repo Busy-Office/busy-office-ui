@@ -315,6 +315,118 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 214 — Standardize sweep: lanes 1-3 clean for the sixth time, and lane 4 carries the finding again — the archive sweep is due a SIXTH time, one day after the fifth (2026-08-30)
+
+**Not new input** — nothing was filed, nobody asked, and GitHub intake is **0
+open issues** (asked via the API, not inferred). Dispatched by rule 2:
+`dispatch_status.py` read `Standardize 5 / 4 OVERDUE`, which is the counter the
+previous hand-off predicted would fire.
+
+**All four lanes ran; say `n of 4`.** This is 4 of 4, and it is recorded that way
+because 194, 197, 202 and 206 each ran three and 208 was the slice that found
+them doing it.
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of 1,433 live inline declarations (161.1 read 0 of 1,428) |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, LOOPS.md's table exactly; 237→242 rules, 225→230 distinct, repeats unchanged |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted pages** — 9 over corpus, 12 over a family median, 14 distinct, all carrying a verdict |
+| **4 loop-prose** | `python3 scripts/loops/report_loop_prose.py` | **the finding, below** |
+
+**Lane 2's delta is zero and that is the whole reading.** All eight groups match
+the table in `LOOPS.md` byte for byte; the joined-control `x4` group is still
+**two** components (money, quantity), so its stated reopen trigger — a THIRD
+component — is unmet. The +5 rules and +5 distinct bodies produced no new repeat.
+
+**Lane 3's flagged set is 14 pages and every one is verdicted**, checked against
+the source rather than assumed: **158.1**'s twelve (`/components/` data-table,
+richtext, form, calendar, money, combobox, tabs; `/concepts/` which-pattern,
+layouts, design-language, js-behaviors; `/base/motion/`; `/patterns/`
+editable-grid, list-report, output-form), **161.1**'s three family-split adds,
+and **178.3** for `/concepts/scale/` — which is the one a naive check misses,
+because it is flagged on the FAMILY axis only and is absent from 158.1's list.
+
+**Lane 4 — the finding. The live file is 50.8% closed history one day after the
+fifth sweep.** Two independent instruments agree on the scope:
+
+```
+python3 scripts/loops/report_loop_prose.py     # ratchet: ROADMAP.md 8 up, last cut 83192cd1
+# and 177's scope instrument, verbatim from ROADMAP-archive.md Slice 177:
+#   OPEN: [15, 112, 211]
+#   7 closed slices carrying 1568 lines here; 0 already in the archive
+#   targets: 213, 212, 210, 209, 208, 201, 200
+```
+
+A second, independently-written pass over the same file classifies every `## `
+section by span and reconciles to the line: **3,085 lines = 740 pointer stubs
+(185 sections) + 1,653 resident-closed spans (8) + 375 open-carrying (3) + 310
+doctrine (3) + 7 preamble**, with open/closed item counts of **4 / 26** matching
+a raw `grep -c` of the checkboxes. The two differ by exactly the 7 heading lines
+plus the 78-line `## STATE` section, which is a non-slice H2 and out of scope for
+165.1's reason. **50.8%** is 208's own definition (body lines ÷ live lines), so
+it is comparable to its 67.5%.
+
+**Both of this instrument's first outputs were wrong and were caught before
+use**, per CLAUDE.md's base rate: the span pass reconciled to 3,086 against a
+3,085-line file (an off-by-one on the trailing newline), and it classified
+**Slice 210 as doctrine** because that slice carries no `N. [x]` checkbox at all
+— a narrative slice recording a refusal. The second defect is the one that
+mattered: it under-reported resident closed history by 101 lines and would have
+put a closed slice out of scope.
+
+**179.2's correction is itself now falsified, by the two cycles that have closed
+since it was written.** It corrected 177's "the sweep is not converging" by
+observing that regrowth-per-cycle and the peak a wake walks were both falling
+monotonically (4,262 → 3,367 → 2,364; 9,824 → 4,461 → 3,872). Re-measured over
+all 799 `ROADMAP.md`-touching commits, both terms reversed on the very next
+cycle:
+
+| cycle starts | after | peak | commits | regrowth | per-commit |
+|---|---|---|---|---|---|
+| `16ef2bb8` | 5,562 | 9,824 | 140 | 4,262 | 30.4 |
+| `063211cc` | 1,094 | 4,461 | 66 | 3,367 | 51.0 |
+| `187ab92d` | 1,508 | 3,872 | 34 | 2,364 | 69.5 |
+| `2ae54a4a` | 2,030 | 6,424 | 66 | **4,394** | 66.6 |
+| `83192cd1` | 2,301 | 3,085 | **8** | 784 | **98.0** *(open)* |
+
+The fourth cycle's regrowth (4,394) exceeds the first (4,262) and its peak
+(6,424) exceeds every cycle but the first. The open fifth is at **98.0
+lines/commit**, the highest per-commit rate in the record — but over **8 commits
+only**, so it is reported as a rate with its n and nothing is concluded from it
+alone. What IS concluded, on the closed cycles only: 179.2's monotone claim
+described three cycles and does not survive the fourth. The falsifier is the
+same detector 177 used — drops found by line count, not by subject line — which
+finds **6** hits, 5 real sweeps plus the `c5d21fb4` false positive 177 already
+recorded.
+
+1. [ ] **214.1 — sweep the seven closed slices to `ROADMAP-archive.md`.**
+       Targets re-derived from the checkboxes at move time, never read off the
+       table above. Hand-checked move, not a script that rewrites prose:
+       CLAUDE.md's bulk-edit rule applies with force on this exact pair of
+       files, where a case-collision once destroyed 7,307 lines and the only
+       tell was `git status` showing **modified** rather than **added**.
+
+       *Accept* — each names a property to verify, never a value it will have:
+       - Every moved slice is **byte-identical** in `ROADMAP-archive.md` and
+         leaves a pointer of the established shape in `ROADMAP.md` with its
+         heading unchanged.
+       - The moved set is **disjoint from the OPEN set re-derived from the
+         `N. [ ]` checkboxes**, and no non-slice H2 section is touched.
+       - Conservation reconciles exactly on both sides — the archive's growth
+         equals the live file's loss plus the inserted pointer stubs — with the
+         residual accounted for, not waved at.
+       - The archive's prior content is a **byte-exact prefix** of the new one.
+       - `git status` shows `ROADMAP-archive.md` as **M**, never **A**.
+       - `check:slice-refs` passes and its counts are reconciled against the
+         source; the baseline before the move is **426 citations / 233 cited /
+         195 slice numbers / 2 known-dangling**.
+       - Regenerated `STATUS.md` finds the same number of open items as a raw
+         `grep -c` of the `N. [ ]` checkboxes in the source.
+       - Before and after line counts of both files are recorded.
+       - **Finding the premise false is a satisfying outcome**: if the
+         re-derived target set at move time is empty or differs from the seven,
+         that is recorded as the result rather than forced to match.
+
 ## Slice 213 — P0: a windowed-list spacer is sized from ONE sampled row that is not representative, so every evicted chunk is 49px short and re-loading it jumps the scroll (2026-08-30)
 
 **Found by 211.2's measurement, filed rather than built inside it** — Slice
