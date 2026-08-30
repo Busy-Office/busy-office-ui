@@ -315,6 +315,35 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 226 — the fixed `check:po-app`, run in a cloud container for the first time (2026-08-30)
+
+Triaged from `.roundtable/RESUME.md`'s `## Direction` block, which named this as
+*"one real follow-up, not urgent, named rather than filed"*. **Filing it is what
+makes it dispatchable**: rule 4 reads `ROADMAP.md`, so a follow-up living only in
+the hand-off is invisible to the dispatcher — and the hand-off is rewritten
+wholesale every wake, which is 169.3's whole finding.
+
+1. [ ] **226.1 — run `npm run check:po-app -w docs` in a cloud container, and
+       make `ENVIRONMENT.md`'s entry agree with what that run reports.**
+       222.1 rewrote `check-po-app.mjs` to perform the real tarball-consumer
+       install itself (wipe `node_modules`/lockfile/tgz + `npm pack -w
+       @busy-office/ui` + `npm install --omit=dev`) instead of relying on
+       monorepo hoisting. That install needs the **public npm registry at
+       gate-run time**, not merely at container-start `npm ci` — a network
+       path no cloud wake has exercised for this gate. Both `ENVIRONMENT.md`
+       and the hand-off say outright that this is an inference, not a
+       measurement, and ask the next cloud wake to take it.
+
+       *Accept*: (a) the gate is run in this container and its exit status
+       plus assertion count are recorded here verbatim, not paraphrased;
+       (b) `ENVIRONMENT.md`'s po-app bullet states what that run actually
+       reported — passing, the bullet leaves the "two CI commands are NOT in
+       that list" exceptions block and stops carrying a caveat it no longer
+       needs; failing, the bullet names the failure mode and the gate stays
+       listed with the reason. **Finding the gate broken here satisfies this
+       item**, it does not derail it: the deliverable is a file that agrees
+       with a measurement, not a confirmation that it passes.
+
 ## Slice 225 — Objective grill of Slices 218, 219, 223, 224: a citation that quoted its own re-run command into permanence, and everything else held (2026-08-30)
 
 `dispatch_status.py` read `Objective 5/3 OVERDUE [211, 218, 219, 223, 224]` at
