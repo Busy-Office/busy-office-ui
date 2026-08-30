@@ -315,6 +315,60 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 225 — Objective grill of Slices 218, 219, 223, 224: a citation that quoted its own re-run command into permanence, and everything else held (2026-08-30)
+
+`dispatch_status.py` read `Objective 5/3 OVERDUE [211, 218, 219, 223, 224]` at
+Step 0. **Arming set narrowed before grilling it**, per this playbook's own
+step 0: `grep -hoE '^## Slice [0-9]+ — Objective grill of Slices …'` shows
+Slice 215 already grilled 211 (with 213, 214). Genuinely un-grilled: **218,
+219, 223, 224** — the four this entry covers.
+
+1. [x] **225.1 — re-derive every load-bearing count in 218, 219, 223 and 224
+       independently, not read off the page.** Every command re-run fresh on
+       today's tree, not quoted from the item that first ran it.
+
+       **One real finding, in 218.1's own citation.** Its refusal argument
+       cites `grep -rn data-status packages/core/src apps/docs/src` → 0 as
+       what a reader should re-run "before arguing with it." Re-run today:
+       **7**, not 2. Not a regression in the decision — a self-inflicted trap
+       in how the decision was recorded. 218.1's own comment, committed into
+       `approval-workflow.css` (which lives in `packages/core/src`), mentions
+       the bare string `data-status` five times while explaining why it is
+       refused as a styled hook — so the citation started quoting a command
+       that matches its own explanation the moment it was written, the exact
+       shape CLAUDE.md's *"verify a removal against the parsed form, never
+       raw text"* rule already names, landing here as *"verify an absence
+       against a selector, never raw text that can quote itself."*
+
+       **The substantive claim survives**: no CSS rule anywhere in
+       `packages/core/src` selects on `[data-status`, confirmed today with
+       the anchored form (`grep -rn '\[data-status' packages/core/src` → 0,
+       comments included in the scan and still zero — the comment writes the
+       bare word, never the bracket). **Fixed**: the citation now asserts the
+       selector form, which cannot self-match by construction — the comment
+       arguing against a `data-status` selector cannot itself contain one.
+
+       **Everything else re-derived clean, no counter-evidence found**:
+
+       | slice | claim | re-run today | held? |
+       |---|---|---|---|
+       | 218.1 | 40 component dirs (not "~60") | `find packages/core/src/css/components -mindepth 1 -maxdepth 1 -type d \| wc -l` → 40 | yes |
+       | 218.1 | 7 files mention `data-state` | `grep -rl data-state packages/core/src/css/components/` → 7 | yes |
+       | 219.1 | 8 rendered current steps, all paired | `npm run suite:build` → *"8 rendered current timeline step(s) all paired"* | yes |
+       | 223 | 0 remaining "discards non-2xx" htmx claims | `grep -rl discards apps/docs/src --include=*.astro` → 2 hits, both unrelated (icon mask, palette dedup) | yes |
+       | 224.1 | still exactly 8 css-repeats groups | `report:css-repeats` → *"242 rule(s)… 8 body(ies) appearing more than once"* | yes, unchanged by this grill's own edit to `approval-workflow.css` (comment-only) |
+       | all | `vitest` still 152/152 after this grill's edit | re-run | yes |
+
+       **Evidence gate**: every row above is now attested by ≥2 independent
+       readings — the original item's own measurement plus this grill's
+       fresh re-run — so each is `Evidence`, not `Hypothesis`. No
+       counter-evidence surfaced against any claim except the one named
+       above, which is a citation defect, not a wrong decision.
+
+       *Accept was implicit in the playbook's own step 2* — a conclusion
+       needs ≥2 independent sources, every claim carries counter-evidence —
+       **met**, table above.
+
 ## Slice 224 — Standardize sweep: three of four lanes clean, and the fourth found a stale trap in the file Step 0 reads every wake (2026-08-30)
 
 `dispatch_status.py` read `Standardize 4/4 OVERDUE` at Step 0, ahead of

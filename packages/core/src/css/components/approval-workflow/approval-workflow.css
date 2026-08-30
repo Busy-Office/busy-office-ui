@@ -16,11 +16,12 @@
      agent reads it, no stylesheet touches it — and it exists here already, in
      /patterns/job-monitor's data contract. Renaming these two components would
      make `data-status` a styled hook for the first time and delete the only
-     distinction the two names currently carry. Re-run before arguing with it:
-       grep -rn data-status packages/core/src apps/docs/src
-     — the hits are the job-monitor contract and its generated mirror; adding
-     `=` to that needle reports a false zero, because the docs page writes it
-     as <code>data-status</code>.
+     distinction the two names currently carry. Re-run before arguing with it —
+     as a SELECTOR, not raw text, because this very comment mentions the bare
+     string "data-status" and a plain grep for it now matches itself:
+       grep -rn '\[data-status' packages/core/src
+     — zero, today and by construction: this file cannot cite a working
+     selector for a hook it argues against adding.
 
      Two: base rate, 94.11's rule applied to a design change. Seven component
      stylesheets mention data-state; only these two carry values naming a
