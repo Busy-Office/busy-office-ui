@@ -315,6 +315,85 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 219 — the `aria-current` pairing gate stops at the docs dist, and the one violation it would have caught lived outside it (2026-08-30)
+
+Triaged from the hand-off `218.1` wrote and deliberately did not act on: it
+named the gap as *"worth a line of owner direction, or a triage row on a later
+wake — not a defect"*. This is that row. Filed rather than built in the same
+breath, so the premise below is re-measured on the tree the build will actually
+run against, per this file's own rule that a premise inherited from an earlier
+wake is part of the criterion.
+
+1. [ ] **219.1 — extend the `.bo-timeline__step[data-state="current"]` /
+       `aria-current="step"` pairing assertion to the built ERP suite.**
+       `check:timeline-current` (shipped by 218.1) says so in its own header:
+       *"this walks the BUILT DOCS pages only. `examples/erp-suite` and
+       `examples/po-app` render timelines that this gate never sees … A
+       regression there is not caught here."* So the coverage claim is the
+       gate's, not an inference.
+
+       **Measured on the tree this item was filed against**, commands beside
+       the claims because a count about this repo is re-runnable in seconds:
+
+       ```
+       npm run build -w @busy-office/ui && npm run suite:build
+       # walk examples/erp-suite/dist for <li class="…bo-timeline__step…"> tags
+       #   carrying data-state="current":
+       #   28 html files · 6 pages render one · 8 rendered current steps · 0 unpaired
+       grep -rn 'data-state="current"' examples/     # 10 source sites: 8 suite
+       #   timelines (= the 8 built), 1 .bo-stepper, 1 po-app template literal
+       ```
+
+       **The 100% is real and is stated as the weakness it is, not argued
+       away.** 94.11's rule says a predicate already true of the whole tree is
+       ceremony. Two things distinguish this one, and both are checkable rather
+       than asserted:
+
+       - **The population held a violation one day ago.** `git show 127b9e5 --
+         examples/` is a one-line fix to
+         `examples/erp-suite/p2p/purchase-order.screen.mjs` — an unpaired
+         current step, so the pre-fix base rate was **7 of 8**, not 8 of 8. It
+         was found by a source grep during 218.1, by no gate at all, which is
+         the whole argument for a ratchet here.
+       - **`577c572` is a real red-proof target.** That is the commit before
+         218.1's fix, so the detector can be run against a tree that genuinely
+         fails it rather than only against an injected one.
+
+       *Accept* — every criterion names a property to verify, never a value it
+       will have:
+
+       - `npm run suite:check` fails when a built suite screen renders a
+         `.bo-timeline__step[data-state="current"]` with no `aria-current="step"`
+         outside an `aria-hidden`/`inert` subtree, and the failure text names
+         the file and the tag.
+       - The assertion is **red-proved twice, and the injection is confirmed to
+         have landed before either result is believed**: once by injecting into
+         the built dist and re-reading the built HTML for the mutation, and once
+         against the `577c572` tree, where the expected verdict is whatever it
+         actually reports — finding that tree already clean for some other
+         reason is a satisfying outcome and gets written down.
+       - The gate reports how many current steps it scanned, and refuses to
+         report a pass over **zero** of them — the fail-open shape
+         `gate-report.mjs` exists to prevent, restated because
+         `check-erp-suite.mjs` has no `gate()` helper and must assert the count
+         itself.
+       - Its header records the same coverage sentence in the other direction:
+         what it still does NOT cover, with the reason.
+       - `check:timeline-current`'s COVERAGE paragraph agrees with what actually
+         runs after this item — not "is updated", but *agrees*.
+
+       **Scope refused in advance, with the reason** — the same pairing rule
+       could go into `packages/core/scripts/check-markup.mjs`, which already
+       runs over `examples/erp-suite/dist` and would then cover every consumer
+       for free. Refused: that file **ships as the `bo-check-markup` bin**, so a
+       new assertion there is a new failure mode in a published tool, on markup
+       a consumer wrote before the rule existed. That is a contract change to a
+       stable surface and belongs in a CHANGELOG-bearing item, not in a gate
+       extension. `examples/po-app` is also out of scope: it has no built dist
+       to walk, its timeline is a template literal in `server.mjs`, and
+       `check:po-app` cannot run green in a cloud container at all
+       (ENVIRONMENT.md's documented 2 of 19).
+
 ## Slice 218 — Owner-forwarded review: `data-state`/`data-status` conflation, scoped to two components not the framework (2026-08-30)
 
 Owner forwarded an external "Adversarial Review & Improvement Proposal"
