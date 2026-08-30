@@ -287,25 +287,41 @@ markdown-only diff). **Two CI commands are NOT in that list:**
   at `/usr/bin/docker`, which is a trap worth naming, but there is no daemon:
   `docker info` returns *"dial unix /var/run/docker.sock: no such file or
   directory"*. Finding the binary is not evidence the daemon runs.
-- **`npm run check:po-app -w docs`** — **the CDN mechanism below is HISTORY,
-  not the current trap** (roadmap 211.1, closed 2026-08-30; superseded again
-  by 223 the same day). The reference app no longer loads htmx from anywhere
-  external — `server.mjs` resolves `htmx.org` from its own `node_modules` via
-  `require.resolve` (same pattern as `@busy-office/ui`'s dist) and serves it
-  at `/vendor/htmx.min.js`, now htmx **4.0.0**. An egress-restricted
-  container that can `npm install` po-app's own dependencies once (which
-  needs the registry at install time, not at browser-test runtime) no longer
-  has the htmx precondition fail at all.
+- **`npm run check:po-app -w docs`** — **may no longer belong in this
+  exceptions list at all; a cloud wake should re-check.** Three stacked
+  histories, oldest first: it loaded htmx from `https://unpkg.com` (blocked
+  outright in an egress-restricted container, roadmap 208.3); 211.1 vendored
+  htmx locally, which fixed the browser-level CDN block but introduced an
+  **eager** `require.resolve('htmx.org/…')` in `server.mjs` that depended on
+  monorepo hoisting nobody had verified; 223's htmx-4 migration made that
+  dependency load-bearing (no more CDN fallback path at all) and it broke —
+  **`main`'s CI was red on this exact error for several commits, 2026-08-30**
+  (`Cannot find module 'htmx.org/dist/htmx.min.js'`), caught by roadmap
+  222.1. Root cause: a fresh `npm ci` (this repo's own root install,
+  identical to what CI runs) never hoists `htmx.org` to root `node_modules`
+  — it stays nested under `apps/docs/node_modules`, unreachable from
+  `examples/po-app`'s own `require.resolve` walk, which only climbs its own
+  ancestor directories.
 
-  **Current expected reading, measured independently twice on 2026-08-30
-  (roadmap 222): 1 of 19, not 2 of 19.** The htmx-load precondition now
-  passes; the one residual is `chunk0Reloaded: false` in the deep-scroll
-  windowed-list assertion — evicted chunk 0 does not visibly reload within
-  the check's wait window in this specific container, while CI and a
-  `podman run --network none` probe both read 19 of 19 on the identical
-  code. **Still open as roadmap 222.1** — not yet resolved which of (a) a
-  real defect or (b) this container's timing it is. Do not assume either;
-  re-read 222.1 before touching the gate or the app over it.
+  **Fixed at the gate**: `check-po-app.mjs` now does the real
+  tarball-consumer install itself before spawning the app — wipes any
+  leftover `node_modules`/`package-lock.json`/`busy-office-ui.tgz`, `npm
+  pack -w @busy-office/ui`, `npm install --omit=dev` — matching
+  `examples/po-app/Dockerfile`'s own flow, so neither dependency depends on
+  hoisting luck any more. Verified **19 of 19 across 3 consecutive runs**
+  in this container after the fix, with no `chunk0Reloaded` residual
+  reappearing (222.1's own open question, now answered: environmental,
+  tied to the install's prior non-determinism, not an app defect).
+
+  **What is NOT yet re-verified: an actual CLOUD container running the
+  fixed gate.** The `npm install` step needs the public npm registry at
+  gate-run time (not just at container-start `npm ci`) — a different
+  network path than the browser-level CDN block that started this whole
+  history, and one this repo's own cloud wakes already exercise
+  successfully every time they run `npm ci`, but that is an inference, not
+  a direct measurement of THIS gate in a cloud container post-fix. Next
+  cloud wake to touch this: run it, and if 19/19 holds, move this bullet
+  out of the exceptions list entirely — it would no longer need one.
 
   **The general shape, worth carrying regardless of which specific trap is
   live today:** a browser-driven gate whose subject loads anything from the

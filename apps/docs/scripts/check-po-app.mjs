@@ -17,8 +17,8 @@
  * @exact — boots the reference app and asserts responses. Exempt from --self-test: there is no
  * judgement to get wrong, and ceremony around a lookup is noise.
 */
-import { spawn } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { readFileSync, renameSync, rmSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -29,6 +29,41 @@ import { REPO_ROOT } from './paths.mjs';
 
 const repoRoot = REPO_ROOT;
 const AXE = readFileSync(join(repoRoot, 'node_modules/axe-core/axe.min.js'), 'utf8');
+
+/* po-app is not an npm workspace (its own package.json calls it a "reference
+   consumer … installs @busy-office/ui FROM THE TARBALL"), so a root `npm ci`
+   never installs its dependencies — this gate used to just spawn server.mjs
+   and trust that @busy-office/ui and htmx.org would BOTH happen to be
+   reachable via require.resolve walking up into root node_modules (the
+   workspace symlink). That held for @busy-office/ui by luck; it never held
+   for htmx.org, which npm leaves nested under apps/docs/node_modules with a
+   single declaring workspace — confirmed on a genuinely fresh `npm ci`, and
+   confirmed as the exact cause of a real CI break (2026-08-30, htmx 4
+   migration, roadmap 222.1's investigation). Doing the REAL tarball-consumer
+   install here — matching examples/po-app/Dockerfile's own flow — removes
+   the dependency on hoisting entirely, which is also the more honest test:
+   this gate exists to verify what a real consumer experiences.
+   A stale local busy-office-ui.tgz/package-lock.json/node_modules from a
+   previous manual run can pin an OLD tarball's resolution even after a
+   fresh `npm pack` (hit once this session) — wiping all three first is what
+   makes this install actually fresh rather than merely re-run. */
+const poAppDir = join(repoRoot, 'examples/po-app');
+for (const p of ['node_modules', 'package-lock.json', 'busy-office-ui.tgz']) {
+  rmSync(join(poAppDir, p), { recursive: true, force: true });
+}
+const pack = spawnSync(
+  'npm',
+  ['pack', '-w', '@busy-office/ui', '--pack-destination', poAppDir],
+  { cwd: repoRoot, encoding: 'utf8' },
+);
+if (pack.status !== 0) throw new Error(`npm pack -w @busy-office/ui failed:\n${pack.stderr}`);
+const tgzName = pack.stdout.trim().split('\n').filter(Boolean).pop();
+renameSync(join(poAppDir, tgzName), join(poAppDir, 'busy-office-ui.tgz'));
+const install = spawnSync('npm', ['install', '--omit=dev', '--no-audit', '--no-fund'], {
+  cwd: poAppDir,
+  encoding: 'utf8',
+});
+if (install.status !== 0) throw new Error(`npm install (examples/po-app) failed:\n${install.stderr}`);
 
 const freePort = () =>
   new Promise((res) => {
@@ -315,20 +350,23 @@ try {
      initial chunks, never exceeds the 3-chunk resident budget, and never
      evicts anything. The gate then reports `chunk0Evicted: false` — which
      reads as "eviction is broken" and is not what happened.
-     That is not hypothetical: roadmap 208.3 spent four runs across two
-     cloud containers on exactly that misreading. The app loads htmx from a
-     CDN (`server.mjs`'s `<script src="https://unpkg.com/...">`), an
-     egress-restricted container refuses the host with
-     `ERR_TUNNEL_CONNECTION_FAILED`, and the payload was byte-identical
-     every time. Naming the missing input is this repo's own rule — a gate
-     that cannot run must fail loudly, never skip quietly, and a derived
-     artefact may not decide on its own what it failed to see. */
+     That is not hypothetical, twice over. Roadmap 208.3 (2026-08-29) spent
+     four runs across two cloud containers on exactly that misreading, back
+     when the app loaded htmx from `https://unpkg.com` and an egress-
+     restricted container refused the host outright. Roadmap 211.1
+     (2026-08-30) vendored htmx locally to fix that — but this file's own
+     install (above) is what actually guarantees the precondition today;
+     without it, htmx.org was reachable only by monorepo-hoisting luck that
+     broke CI the same day (roadmap 222.1). Naming the missing input is this
+     repo's own rule regardless — a gate that cannot run must fail loudly,
+     never skip quietly, and a derived artefact may not decide on its own
+     what it failed to see. */
   check(
-    'windowed list: htmx loaded, so the assertions below are testing the app and not a blocked CDN',
+    'windowed list: htmx loaded, so the assertions below are testing the app and not a missing dependency',
     (await page.evaluate(() => typeof window.htmx)) !== 'undefined',
     JSON.stringify({
       htmx: await page.evaluate(() => typeof window.htmx),
-      hint: 'the app loads htmx from a CDN; an egress-restricted environment blocks it, and every windowed-list result below is then vacuous',
+      hint: 'htmx failed to load — every windowed-list result below is then vacuous',
     }),
   );
   const win = await page.evaluate(async () => {

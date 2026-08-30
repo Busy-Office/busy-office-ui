@@ -606,8 +606,62 @@ same code means the divergence is **this container**, not the app. Calling it a
 regression on one reading would be the "first output is not evidence" failure
 this repo has paid for repeatedly.
 
-1. [ ] **222.1 — characterise the residual `chunk0Reloaded: false`, or record
+1. [x] **222.1 — characterise the residual `chunk0Reloaded: false`, or record
        that it is environmental and give `ENVIRONMENT.md` the honest number.**
+
+       **CLOSED 2026-08-30, option (a), and it surfaced a live P0 in the
+       process — `main`'s CI was actually red at the moment this item was
+       picked up.** This item's own hint said *"the distinguishing variable
+       is the harness — tarball-consumer vs. raw workspace"* and named the
+       comparison to make before touching timing. Making it found the real
+       cause, and it was worse than a residual: `check-po-app.mjs` had
+       **never** actually run the tarball-consumer path in CI. It spawned
+       `server.mjs` directly and relied on `require.resolve` walking up into
+       root `node_modules` for BOTH `@busy-office/ui` (workspace symlink,
+       held by luck) and `htmx.org` (never hoisted to root at all — a fresh
+       `npm ci`, matching CI exactly, puts it only in
+       `apps/docs/node_modules`, unreachable from `examples/po-app`'s own
+       directory walk). That gap existed since 211.1 vendored htmx with an
+       eager `require.resolve` at module load, but only started crashing the
+       whole app — not degrading one assertion — once 223 removed the
+       CDN fallback path entirely and made the eager resolve load-bearing.
+
+       **Confirmed against real CI, not inferred**: `gh run list` showed
+       `main` failing since the "Release prep" commit, and `gh run view
+       --log-failed` on the grill's own CI run (`33312122267`) shows the
+       identical `Cannot find module 'htmx.org/dist/htmx.min.js'` this
+       session's local `rm -rf node_modules && npm ci` reproduced. **The
+       earlier verification recorded in Slice 223 was itself contaminated**
+       — it ran against a working tree carrying stale manual installs from
+       earlier session testing, not a genuinely fresh one; the base rate
+       this repo already names ("an instrument's first output is not
+       evidence") landing on the verification step itself, not just the
+       code.
+
+       **Fixed at the gate, not the app**: `check-po-app.mjs` now performs
+       the real tarball-consumer install before spawning the app — wipes
+       `node_modules`/`package-lock.json`/`busy-office-ui.tgz` (the exact
+       stale-lockfile trap 211.1 hit once already this session), `npm pack
+       -w @busy-office/ui`, `npm install --omit=dev` — matching
+       `examples/po-app/Dockerfile`'s own flow exactly, rather than leaning
+       on monorepo-hoisting luck for either dependency. This is also the
+       more honest gate: `examples/po-app/package.json` already describes
+       itself as a tarball-only consumer, and the gate had silently never
+       tested that.
+
+       **Also answers this item's own original question**: with the install
+       now deterministic, `chunk0Reloaded: false` does not reproduce — 3
+       consecutive real runs, 19 of 19 each time. Consistent with hypothesis
+       (b), environmental, and now moot rather than merely suspected — the
+       source of the non-determinism (an install state that could silently
+       differ run to run) is gone, not just avoided.
+
+       Verified: `check:po-app` 19/19 x3, `check:repo`, `vitest` 152/152.
+       `ENVIRONMENT.md`'s po-app entry (corrected once already in Slice 224)
+       is corrected again in place, with what remains genuinely open: a
+       cloud wake has not yet re-run the fixed gate itself, only the
+       inference that its new `npm install` step needs the same network
+       path `npm ci` already uses successfully there.
 
        **Not closed here, but a relevant data point from a third environment
        (Slice 223, same day, htmx now 4.0.0 not just locally-vendored 2.0.10):
