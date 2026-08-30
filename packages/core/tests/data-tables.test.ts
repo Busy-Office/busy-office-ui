@@ -66,7 +66,7 @@ describe('initDataTables', () => {
     expect(rows(c)[0].checked).toBe(true);
   });
 
-  it('re-derives after a row swap via htmx:afterSwap and refreshDataTable (grill finding N1)', () => {
+  it('re-derives after a row swap via htmx:after:swap and refreshDataTable (grill finding N1)', () => {
     const c = table();
     rows(c).forEach((r) => (r.checked = true));
     change(rows(c)[0]);
@@ -75,7 +75,7 @@ describe('initDataTables', () => {
     // Simulate an HTMX tbody swap to fresh, unchecked rows.
     c.querySelector('tbody')!.innerHTML =
       '<tr><td><input type="checkbox" class="bo-data-table__row-select" aria-label="n1" /></td></tr>';
-    c.dispatchEvent(new Event('htmx:afterSwap', { bubbles: true }));
+    c.dispatchEvent(new Event('htmx:after:swap', { bubbles: true }));
     expect((c as HTMLElement).dataset.anySelected).toBe('false');
     expect(c.querySelector('.bo-data-table__selection-count')!.textContent).toBe('');
 

@@ -110,7 +110,7 @@ function bindGrid(table: HTMLTableElement): void {
   });
   table
     .closest('.bo-data-table-container')
-    ?.addEventListener('htmx:afterSwap', () => refreshDataGrid(table));
+    ?.addEventListener('htmx:after:swap', () => refreshDataGrid(table));
 
   table.addEventListener('keydown', (e) => {
     const cell = (e.target as Element | null)?.closest<HTMLElement>('td, th');

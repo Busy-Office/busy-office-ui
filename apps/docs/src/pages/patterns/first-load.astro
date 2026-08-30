@@ -136,7 +136,7 @@ const spinner = `<!-- A REFETCH keeps the rows the user was reading and dims the
         <tbody>
           <tr><td>Request sent</td><td>The client renders the frame and the placeholders <em>immediately</em> — it does not wait to be told to.</td></tr>
           <tr><td><code>200</code></td><td>The full region's markup, swapped into the busy region in one replacement. The response should include enough to remove <code>aria-busy</code> in the same swap.</td></tr>
-          <tr><td><code>4xx</code> / <code>5xx</code></td><td>An error region that REPLACES the placeholders — see <a href={base + '/components/state-patterns'}>error state</a>. HTMX discards non-2xx by default, so this needs explicit handling or the skeleton stays forever.</td></tr>
+          <tr><td><code>4xx</code> / <code>5xx</code></td><td>An error region that REPLACES the placeholders — see <a href={base + '/components/state-patterns'}>error state</a>. htmx 4 swaps non-2xx by default, so this happens with no app code; excluding a status via <code>htmx.config.noSwap</code> is what would leave the skeleton forever.</td></tr>
           <tr><td>Timeout</td><td>The client's problem, not the server's: decide a ceiling and fail to the error state at it. "Still loading" after a minute is a bug that looks like patience.</td></tr>
         </tbody>
       </table>

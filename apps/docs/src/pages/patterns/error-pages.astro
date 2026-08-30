@@ -136,7 +136,7 @@ const SERVER_ERROR = {
           <tr><td class="bo-data-table__col--code">GET /pos/:id (missing)</td><td>a <strong>real 404</strong>, full HTML page — never a 200 with "not found" text; a search engine, a monitoring probe and a browser's own error handling all key off the status line, not the copy</td></tr>
           <tr><td class="bo-data-table__col--code">GET /pos/:id (no access)</td><td>a <strong>real 403</strong>, same page shape, the permission-specific copy</td></tr>
           <tr><td class="bo-data-table__col--code">any request, server fault</td><td>a <strong>real 500</strong>; the copy never guesses at a cause the server doesn't actually know</td></tr>
-          <tr><td class="bo-data-table__col--code">an htmx fragment request that 404s/403s/500s</td><td>the SAME <code>.bo-state--error</code> markup, sized for the swap target rather than the whole viewport — the shape doesn't change, only its container does. htmx discards non-2xx by default; the swap target must opt in via <code>htmx:beforeSwap</code> the same way any other 4xx/5xx content this framework documents does</td></tr>
+          <tr><td class="bo-data-table__col--code">an htmx fragment request that 404s/403s/500s</td><td>the SAME <code>.bo-state--error</code> markup, sized for the swap target rather than the whole viewport — the shape doesn't change, only its container does. htmx 4 swaps non-2xx responses by default; exclude a status explicitly via <code>htmx.config.noSwap</code> if the swap target should NOT show it</td></tr>
         </tbody>
       </table>
     </div>

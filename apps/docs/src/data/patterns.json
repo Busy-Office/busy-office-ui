@@ -127,7 +127,7 @@
             ],
             [
               "an htmx fragment request that 404s/403s/500s",
-              "the SAME .bo-state--error markup, sized for the swap target rather than the whole viewport — the shape doesn't change, only its container does. htmx discards non-2xx by default; the swap target must opt in via htmx:beforeSwap the same way any other 4xx/5xx content this framework documents does"
+              "the SAME .bo-state--error markup, sized for the swap target rather than the whole viewport — the shape doesn't change, only its container does. htmx 4 swaps non-2xx responses by default; exclude a status explicitly via htmx.config.noSwap if the swap target should NOT show it"
             ]
           ],
           "wrongChoice": {
@@ -192,7 +192,7 @@
             ],
             [
               "4xx / 5xx",
-              "An error region that REPLACES the placeholders — see error state. HTMX discards non-2xx by default, so this needs explicit handling or the skeleton stays forever."
+              "An error region that REPLACES the placeholders — see error state. htmx 4 swaps non-2xx by default, so this happens with no app code; excluding a status via htmx.config.noSwap is what would leave the skeleton forever."
             ],
             [
               "Timeout",

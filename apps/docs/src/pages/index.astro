@@ -56,7 +56,7 @@ const utilitySide = `<table class="w-full text-sm text-left rtl:text-right
 const htmxSnippet = `<tbody hx-get="/invoices" hx-trigger="every 30s"
        hx-swap="outerHTML settle:300ms">
 <!-- .htmx-settling rows flash on update; selection state
-     re-derives automatically on htmx:afterSwap -->`;
+     re-derives automatically on htmx:after:swap -->`;
 const pilotKb = (
   gzipSync(
     Buffer.from(

@@ -110,7 +110,7 @@ export function initTabs(): void {
   /* Strips swapped in later (htmx, or any other mechanism) get watched on the
      first interaction that reaches them — same delegation model as the rest of
      this behavior, so there is nothing to re-initialise. */
-  document.addEventListener('htmx:afterSwap', () => {
+  document.addEventListener('htmx:after:swap', () => {
     document.querySelectorAll<HTMLElement>('.bo-tabs__list').forEach(watchOverflow);
   });
 

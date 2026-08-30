@@ -19,10 +19,10 @@ const jsRecipe = `import { initDialogs, initDataTables } from "@busy-office/ui/j
 initDialogs();      // once, ever — event delegation survives ALL swap patterns
 initDataTables();   // binds existing containers; row/tbody swaps INSIDE a bound
                     // container re-derive selection state automatically
-                    // (the container listens for htmx:afterSwap)
+                    // (the container listens for htmx:after:swap)
 
 // only NEW .bo-data-table-container elements swapped in later need a call:
-document.body.addEventListener("htmx:afterSwap", (e) =>
+document.body.addEventListener("htmx:after:swap", (e) =>
   initDataTables(e.target)
 );
 
@@ -179,22 +179,20 @@ function showFieldError(input, id, text) {
 
   <section class="demo">
     <h2>Expected non-2xx responses</h2>
-    <p>htmx swaps 2xx responses and discards everything else. That is the
-    right default for a 500, and the wrong one for statuses your app uses
-    deliberately — a <code>409</code> carrying the current record after a
+    <p>htmx 4 swaps every response except <code>204</code>/<code>304</code>
+    by default — the opposite of 2.x, which discarded everything but 2xx.
+    That is the right default for statuses your app uses deliberately — a
+    <code>409</code> carrying the current record after a
     <a href={base + '/concepts/concurrency'}>conflict</a>, or a
-    <code>422</code> carrying a form with validation errors. Without the
-    opt-in below the user sees nothing at all and only the console
-    records it:</p>
-    <pre><code>{`document.body.addEventListener("htmx:beforeSwap", (e) => {
-  if ([409, 422].includes(e.detail.xhr.status)) {
-    e.detail.shouldSwap = true;
-    e.detail.isError = false;
-  }
-});`}</code></pre>
+    <code>422</code> carrying a form with validation errors — and the wrong
+    one for a bare error response with no fragment to show, like a 500 with
+    no body. Opt those OUT with <code>htmx.config.noSwap</code>:</p>
+    <pre><code>{`htmx.config.noSwap = [204, 304, 500];`}</code></pre>
     <p class="bo-u-text-muted">Found by dogfooding the reference app
-    (2026-08-17): the concurrency guidance rendered a conflict banner the
-    browser then threw away.</p>
+    (2026-08-17, under htmx 2.x): the concurrency guidance rendered a
+    conflict banner the browser then threw away — the opt-in this page used
+    to teach for exactly that case. htmx 4 (2026-08-30) removed the need for
+    it.</p>
   </section>
 
   <Related links={[["/patterns/editable-grid", "Editable grid (htmx in anger)"], ["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />

@@ -199,13 +199,14 @@ const current =
     <title>{title} · busy-office-ui</title>
     <PrefBootstrap />
   </head>
-  <!-- hx-select selects the incoming main's CHILDREN, not the main
-       itself: selecting "#main-content" with innerHTML nested a second
-       <main id="main-content"> inside the first on every boosted swap —
-       duplicate id, doubled landmark, and doubled 24px padding (owner
-       tokens review, 2026-08-16). -->
-  <body hx-boost="true" hx-target="#main-content" hx-select="#main-content > *" hx-swap="innerHTML"
-        hx-ext="head-support">
+  <!-- The docs site navigates with plain full-page loads, not hx-boost
+       (removed 2026-08-30 alongside the move to htmx 4: htmx 4 dropped its
+       extension API entirely, and htmx-ext-head-support — the only reason
+       boosted navigation could carry page-scoped <head> content — has no
+       v4-compatible release. See ROADMAP for the decision). htmx itself is
+       still loaded, for the hx-* demos on individual pattern/component
+       pages. -->
+  <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <style>
       /* First focusable element in the DOM, visually hidden until focused —
@@ -237,15 +238,7 @@ const current =
             data-cmdk-open aria-label="Search the docs">
           <span class="bo-icon bo-icon--doc" aria-hidden="true"></span>
         </button>
-        {/* hx-boost="false": this points at the landing page, which does NOT
-            use this layout — no #main-content, no sidebar, its own navbar.
-            Boosted, htmx's hx-select="#main-content > *" finds nothing in
-            the response to swap, so the URL/title update but the docs shell
-            stays on screen with stale content — reproduced live, 2026-08-22.
-            Same precedent as #toc-nav below: opt OUT of boost for a link
-            that leaves this shell entirely, don't rely on the destination
-            page adopting our target id. */}
-        <a class="bo-navbar__brand" href={base + '/'} hx-boost="false"><Logo />busy-office-ui</a>
+        <a class="bo-navbar__brand" href={base + '/'}><Logo />busy-office-ui</a>
         <label class="bo-choice" for="version"><span class="bo-visually-hidden">Docs version</span>
           <select class="bo-select" id="version" aria-label="Docs version">
             <option value={siteRoot + '/'} selected={currentSnapshot === null}>v{pkg.version} · latest</option>
@@ -258,7 +251,7 @@ const current =
         {currentSnapshot && (
           <p class="version-banner" role="note">
             You're reading the <strong>v{currentSnapshot}</strong> snapshot —
-            it does not update. <a href={siteRoot + '/'} hx-boost="false">Switch to the latest docs</a>.
+            it does not update. <a href={siteRoot + '/'}>Switch to the latest docs</a>.
           </p>
         )}
         {/* A 3-way segmented group, not a cycle (owner feedback, roadmap
@@ -351,7 +344,7 @@ const current =
           </div>
           <aside class="toc" aria-label="On this page" hidden data-pagefind-ignore>
             <div class="toc__heading">On this page</div>
-            <nav id="toc-nav" hx-boost="false"></nav>
+            <nav id="toc-nav"></nav>
           </aside>
         </div>
       </main>
@@ -400,19 +393,6 @@ const current =
       document.head.append(css);
       const s = document.createElement('script');
       s.src = `${base}/pagefind/pagefind-ui.js`;
-      // Pagefind re-renders its result links on every keystroke. htmx.process()
-      // re-scans a subtree for hx-* attributes but does NOT retroactively
-      // re-derive an ANCESTOR's hx-boost for newly-added descendants (that
-      // inheritance is only computed at the initial page-load scan, confirmed
-      // empirically) — so each fresh link needs hx-boost set explicitly, or
-      // clicking a search result falls through to a full page reload.
-      function keepBoosted(container) {
-        if (!window.htmx) return;
-        new MutationObserver(() => {
-          container.querySelectorAll('a[href]:not([hx-boost])').forEach((a) => a.setAttribute('hx-boost', 'true'));
-          htmx.process(container);
-        }).observe(container, { childList: true, subtree: true });
-      }
       s.onload = () => {
         // ONE instance, constructed below inside the dialog. Pagefind's input
         // ships title/placeholder only — no accessible name (axe
@@ -440,7 +420,6 @@ const current =
             // resulting zero-results message into a "keep typing…" prompt.
             processTerm: (term) => (term.trim().length < MIN_QUERY_LENGTH ? '' : term),
           });
-          keepBoosted(document.getElementById('cmdk-search'));
           // Swap Pagefind's "Clear" text label for the same ✕ glyph this
           // framework's other dismiss controls use (see .bo-alert__dismiss
           // on /components/alerts) — bo-icon has no close glyph in its
@@ -617,37 +596,18 @@ const current =
     </script>
     <script>
       // SIDE-EFFECT import, deliberately: a bound-but-unused default import
-      // (import htmx from …) gets TREE-SHAKEN by the bundler and htmx silently
-      // never loads — caught by the boost gate's "navigation was NOT boosted"
-      // assertion while building it.
+      // (import htmx from …) gets TREE-SHAKEN by the bundler and htmx
+      // silently never loads.
       //
-      // head-support now comes from htmx-ext-head-support, NOT from
-      // htmx.org/dist/ext/. htmx.org 2.0.10 still ships an htmx-1-era dist/ext/
-      // directory, so the old import made every page log "You are using an
-      // htmx 1 extension with htmx 2.0.10"; htmx 2 moved extensions into their
-      // own packages (2026-08-18).
-      //
-      // It is NOT optional, which I established by deleting it: the boost gate
-      // immediately failed with .scale-grid and .pal-cards rendering
-      // display:block on /base/colors/ and /base/palettes/. The static check
-      // only guarantees no page ships layout in an INLINE head <style>;
-      // page-scoped CSS still arrives as its own <link>, and without the head
-      // merge a boosted swap never adds it.
-      //
-      // Order matters and is enforced by module dependency, not statement
-      // position: htmx-setup sets window.htmx during ITS evaluation, then
-      // head-support evaluates against that global — synchronous, no race
-      // window for a fast boosted click (owner root-cause doc, 2026-08-16).
-      //
-      // SIDE-EFFECT imports, both of them: a bound-but-unused default import
-      // (import htmx from …) gets TREE-SHAKEN by the bundler and htmx silently
-      // never loads — caught by the boost gate while building it.
+      // htmx-ext-head-support is gone (2026-08-30, alongside the move to
+      // htmx 4 — see the <body> comment above): htmx 4 removed the
+      // extension API it registered against, and no v4-compatible
+      // replacement exists. It only mattered for boosted navigation, which
+      // is gone too, so nothing replaces it.
       import '../lib/htmx-setup';
-      import 'htmx-ext-head-support';
       import { initDialogs } from '@busy-office/ui/js';
       initDialogs(); // the mobile nav drawer (off-canvas dialog) — document
-                      // delegation, so it keeps working across boosted swaps
-                      // with no re-init needed.
+                      // delegation, so one call is enough for the page's life.
 
       // Demo code folds (roadmap 118): a closed <details> prints EMPTY and
       // CSS cannot force one open, so print opens every fold and restores
@@ -673,83 +633,52 @@ const current =
       // before navigation) — then there is no change event to catch.
       if (printMq.matches) setPrintFolds(true);
     </script>
-    <script is:inline define:vars={{ base }}>
-      // hx-boost (2026-08-14): only #main-content swaps on an internal link
-      // click — header/sidebar/scripts persist, closing the "whole screen
-      // refresh instead of just the main area" gap the color-scheme fix
-      // (also 2026-08-14) didn't touch. Everything below re-derives the
-      // per-page state that used to come free from a full document reload.
-      function onPageReady() {
-        // Sidebar aria-current: server-rendered per page on a full load;
-        // after a boosted swap the sidebar itself never re-renders, so it
-        // has to be corrected by hand from the URL that's now current.
-        const path = (location.pathname.slice(base.length) || '/').replace(/\/$/, '') || '/';
-        document.querySelectorAll('.bo-sidebar-nav__link').forEach((a) => {
-          const href = (a.getAttribute('href') || '').slice(base.length).replace(/\/$/, '') || '/';
-          if (href === path) a.setAttribute('aria-current', 'page');
-          else a.removeAttribute('aria-current');
-        });
-
-        // On-this-page: slugify every content h2, make it an anchor target,
-        // and build the right-rail TOC. Hidden when a page has fewer than 2
-        // sections. Re-run every time #main-content is replaced — the toc
-        // nav itself is INSIDE the swapped region, so it's already empty.
-        const content = document.querySelector('.docs-content');
-        const headings = content ? [...content.querySelectorAll('h2')] : [];
-        const toc = document.querySelector('.toc');
-        const nav = document.getElementById('toc-nav');
-        if (toc && nav && headings.length >= 2) {
-          for (const h of headings) {
-            if (!h.id) {
-              h.id = (h.textContent || '')
-                .toLowerCase()
-                .replace(/[^\w]+/g, '-')
-                .replace(/^-+|-+$/g, '');
-            }
-            const a = document.createElement('a');
-            a.href = '#' + h.id;
-            a.textContent = h.textContent;
-            nav.append(a);
+    <script is:inline>
+      // Sidebar aria-current comes from the server on every page — plain
+      // full-page navigation, no boost — so there is nothing to correct here.
+      // On-this-page: slugify every content h2, make it an anchor target,
+      // and build the right-rail TOC. Hidden when a page has fewer than 2
+      // sections.
+      const content = document.querySelector('.docs-content');
+      const headings = content ? [...content.querySelectorAll('h2')] : [];
+      const toc = document.querySelector('.toc');
+      const nav = document.getElementById('toc-nav');
+      if (toc && nav && headings.length >= 2) {
+        for (const h of headings) {
+          if (!h.id) {
+            h.id = (h.textContent || '')
+              .toLowerCase()
+              .replace(/[^\w]+/g, '-')
+              .replace(/^-+|-+$/g, '');
           }
-          toc.hidden = false;
+          const a = document.createElement('a');
+          a.href = '#' + h.id;
+          a.textContent = h.textContent;
+          nav.append(a);
         }
-
-        // Copy button on every code block — zero per-page work.
-        for (const pre of content ? content.querySelectorAll('pre') : []) {
-          const code = pre.querySelector('code');
-          if (!code) continue;
-          pre.classList.add('has-copy');
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'copy-btn bo-btn bo-btn--sm bo-btn--secondary';
-          btn.textContent = 'Copy';
-          btn.addEventListener('click', async () => {
-            try {
-              await navigator.clipboard.writeText(code.textContent || '');
-              btn.textContent = 'Copied';
-              setTimeout(() => (btn.textContent = 'Copy'), 1200);
-            } catch {
-              btn.textContent = 'Press ⌘C';
-            }
-          });
-          pre.append(btn);
-        }
+        toc.hidden = false;
       }
-      onPageReady();
-      document.body.addEventListener('htmx:afterSwap', (e) => {
-        if (e.target && e.target.id === 'main-content') {
-          onPageReady();
-          document.querySelector('.bo-app-shell__main')?.scrollTo(0, 0);
-          // The mobile drawer and cmd-k palette live OUTSIDE #main-content,
-          // so unlike everything else they now persist across a swap where
-          // a full reload used to reset them for free — close both so
-          // navigating from inside either doesn't leave it hanging open.
-          const drawer = document.getElementById('nav-drawer');
-          if (drawer && drawer.open) { drawer.close(); drawer.dataset.state = 'closed'; }
-          const cmdk = document.getElementById('cmdk');
-          if (cmdk && cmdk.open) cmdk.close();
-        }
-      });
+
+      // Copy button on every code block.
+      for (const pre of content ? content.querySelectorAll('pre') : []) {
+        const code = pre.querySelector('code');
+        if (!code) continue;
+        pre.classList.add('has-copy');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'copy-btn bo-btn bo-btn--sm bo-btn--secondary';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(code.textContent || '');
+            btn.textContent = 'Copied';
+            setTimeout(() => (btn.textContent = 'Copy'), 1200);
+          } catch {
+            btn.textContent = 'Press ⌘C';
+          }
+        });
+        pre.append(btn);
+      }
     </script>
     <script>
       // Density segmented group (roadmap 119): a real radio group, each

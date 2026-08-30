@@ -9,6 +9,43 @@ pin.
 
 ## Unreleased
 
+### Breaking
+
+- **The shipped htmx integration now targets htmx 4, not htmx 2.x.** Every
+  behavior that listens for an htmx swap event (`data-grid.ts`, `tabs.ts`,
+  `windowed-list.ts`, `data-table.ts`) is wired to htmx 4's renamed events —
+  `htmx:afterSwap` → `htmx:after:swap`. **A consumer still on htmx 2.x whose
+  own code dispatches `htmx:afterSwap` to trigger `refreshDataTable()` (the
+  documented non-htmx-swap path) needs to dispatch `htmx:after:swap`
+  instead, or move to htmx 4.** htmx itself is not a dependency of
+  `@busy-office/ui` (core CSS/JS ships zero htmx references — the
+  integration is an opt-in stylesheet), so this is a documentation and
+  event-name change, not a dependency bump on this package's own manifest.
+
+  Decided over chat, owner call: htmx 4.0.0 is npm's `next` tag, not
+  `latest` (2.0.10 still is, and the htmx project says it stays that way
+  into 2027) — moving ahead of that is a deliberate choice, not a routine
+  upgrade. `/getting-started/htmx` and `/concepts/concurrency` are rewritten
+  for htmx 4's flipped non-2xx default (it now swaps every response except
+  `204`/`304`, the opposite of 2.x) rather than the old
+  `htmx:beforeSwap`/`shouldSwap` opt-in, which htmx 4 does not support (no
+  `event.detail.shouldSwap`/`isError` on its swap event).
+
+  **`apps/docs`'s own boosted navigation (`hx-boost`) is removed**, not
+  migrated: htmx 4 dropped its extension API entirely, and
+  `htmx-ext-head-support` (which merged per-page `<head>` content into a
+  boosted swap) has no v4-compatible release. The docs site now navigates
+  with plain full-page loads; `check-boost.mjs` (the gate that verified
+  boosted navigation) is deleted as a result. `hx-boost` itself is
+  unaffected as a documented htmx attribute for consumers — only the docs
+  site's own use of it is gone.
+
+  Verified: `check:claims` 161/161 (up from 158 — the new `noSwap` demo
+  snippets are executable claims too), `check:po-app` 19/19, `test:axe`
+  127 pages × 2 widths zero violations, `vitest` 152/152, and the docs
+  container rebuilt `--no-cache` and screenshotted live with zero console
+  errors on page load and on an internal navigation.
+
 ### Fixed
 
 - **`examples/po-app` no longer requires reaching a CDN to run** (roadmap
@@ -17,12 +54,13 @@ pin.
   already served locally — a half-vendored app. `server.mjs` now resolves and
   serves `htmx.org` the same way it already does `@busy-office/ui`'s dist
   (`require.resolve`, a `/vendor/htmx.min.js` route); `htmx.org` is
-  `examples/po-app/package.json`'s own declared dependency, pinned `^2.0.10`
-  to match `apps/docs`'s existing pin rather than adding a third version — the
-  script tag previously pinned `2.0.4`. Verified with the app's real
-  tarball-consumer Docker path (`examples/po-app/Dockerfile`) run under
-  `podman run --network none`: zero egress, and `/vendor/htmx.min.js` still
-  returns `200`.
+  `examples/po-app/package.json`'s own declared dependency, pinned `^4.0.0`
+  to match `apps/docs`'s pin (moved from `^2.0.10` in the same change that
+  moved the framework's own htmx integration, above) rather than carrying a
+  second htmx major across the repo — the script tag originally pinned
+  `2.0.4`. Verified with the app's real tarball-consumer Docker path
+  (`examples/po-app/Dockerfile`) run under `podman run --network none`: zero
+  egress, and `/vendor/htmx.min.js` still returns `200`.
 
   **Not a Breaking entry**: `examples/po-app` is not a published package —
   nothing outside this repo depends on its `<script src>`.

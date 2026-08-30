@@ -60,7 +60,7 @@ function update(container: Element): void {
 
 /**
  * Re-derive selection state after content inside the container was replaced
- * (row/tbody swaps). Called automatically on htmx:afterSwap bubbling through
+ * (row/tbody swaps). Called automatically on htmx:after:swap bubbling through
  * the container — that is an event-NAME string only, no HTMX dependency —
  * and exported for non-HTMX swap mechanisms.
  */
@@ -71,7 +71,7 @@ export function refreshDataTable(container: Element): void {
 function bindContainer(container: Element): void {
   if (boundContainers.has(container)) return;
   boundContainers.add(container);
-  container.addEventListener('htmx:afterSwap', () => update(container));
+  container.addEventListener('htmx:after:swap', () => update(container));
   container.addEventListener('change', (e) => {
     const target = e.target as HTMLElement;
     if (target.matches('.bo-data-table__select-all')) {

@@ -9,13 +9,12 @@ const base = (process.env.DOCS_BASE ?? '').replace(/\/$/, '');
 export default defineConfig({
   base: process.env.DOCS_BASE ?? '/',
   build: {
-    // NEVER inline page styles (owner root-cause doc, 2026-08-16): the
-    // shell navigates with hx-boost, which swaps #main-content and
-    // leaves <head> alone — an inlined page <style> only arrives when
-    // the head-support merge RUNS, and the owner captured a broken
-    // state where it silently didn't (registration race). Linked
-    // stylesheets in the shared bundles survive boosted swaps by
-    // construction; check-boost.mjs guards the whole class.
+    // NEVER inline page styles (owner root-cause doc, 2026-08-16, kept as
+    // history after hx-boost was removed 2026-08-30 alongside the move to
+    // htmx 4): the original reason was boosted navigation losing an inlined
+    // page <style> when the head-merge silently didn't run. The shell now
+    // navigates with plain full-page loads, so that failure mode is gone —
+    // this setting is left as-is rather than revisited in the same change.
     inlineStylesheets: 'never',
   },
   redirects: {

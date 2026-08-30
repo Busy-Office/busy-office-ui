@@ -187,10 +187,9 @@ const oobMarkup = `<!-- The button posts and swaps the FORM area -->
     <p class="bo-u-text-muted">Verified by dogfooding the reference app
     (2026-08-17): without the out-of-band swap the success response
     replaced the dialog body with a timeline and the real timeline never
-    changed — the action appeared to do nothing. And remember htmx
-    discards non-2xx by default, so a 422 needs the
-    <a href={base + '/getting-started/htmx'}>beforeSwap opt-in</a> or the
-    user never sees the error at all.</p>
+    changed — the action appeared to do nothing. A 422 reaches the user
+    with no app code either — htmx 4 swaps non-2xx responses by default
+    (see <a href={base + '/getting-started/htmx'}>using with htmx</a>).</p>
   </section>
 
   <section class="demo">

@@ -111,19 +111,16 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 <link rel="stylesheet" href="/assets/css/index.min.css">
 <link rel="stylesheet" href="/assets/css/htmx.min.css">
 <link rel="stylesheet" href="/assets/css/brand-cobalt.min.css">
-<script>
-  // htmx DISCARDS non-2xx responses by default — a 422 carrying a
-  // re-rendered form, or a 409 carrying the current record, would never
-  // reach the user (docs: /concepts/concurrency, /getting-started/htmx).
-  // Opt the statuses this app uses deliberately back in.
-  document.addEventListener("htmx:beforeSwap", (e) => {
-    if ([409, 422].includes(e.detail.xhr.status)) {
-      e.detail.shouldSwap = true;
-      e.detail.isError = false;
-    }
-  });
-</script>
 <script src="/vendor/htmx.min.js"></script>
+<script>
+  // htmx 4's default is the opposite of 2.x: it SWAPS every non-2xx
+  // response except 204/304 (docs: /concepts/concurrency,
+  // /getting-started/htmx) — so a 422 carrying a re-rendered form, or a
+  // 409 carrying the current record, reaches the user with no app code at
+  // all. What this app deliberately opts OUT of swapping is the pair with
+  // no re-rendered fragment to show: a bare 404 and a bare 500.
+  htmx.config.noSwap = [204, 304, 404, 500];
+</script>
 </head>
 <body>
 <div class="bo-app-shell">
@@ -155,7 +152,7 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
   import { initDialogs, initDataTables, initAlerts, initDropdowns, initGroupedNumber } from '/assets/js/index.js';
   initDialogs();
   initGroupedNumber(); // grouped amounts (0.4.0), dogfooded 2026-08-23 initDataTables(); initAlerts(); initDropdowns();
-  document.body.addEventListener('htmx:afterSwap', (e) => { initDataTables(e.target); window.__btt?.(); });
+  document.body.addEventListener('htmx:after:swap', (e) => { initDataTables(e.target); window.__btt?.(); });
   document.getElementById('density-switch').addEventListener('change', (e) => {
     const d = e.target.value;
     document.documentElement.dataset.density = d;

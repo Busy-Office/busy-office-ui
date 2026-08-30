@@ -321,7 +321,7 @@ const fieldMarkup = `<div class="bo-form-field">
     to react to one change. <a href={base + '/getting-started/htmx'}>OOB
     swaps</a> update several dependent selects from one response when a
     single field drives more than one of them at once. Reach for a small
-    <code>htmx:afterSwap</code>/<code>htmx.ajax()</code> handler only for
+    <code>htmx:after:swap</code>/<code>htmx.ajax()</code> handler only for
     real conditional branching a declarative trigger can't express, and
     sparingly — it is the one strategy here that adds JS.</p>
     <p class="bo-u-text-muted"><strong>Not swapping the whole

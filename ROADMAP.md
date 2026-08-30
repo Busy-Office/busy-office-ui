@@ -315,7 +315,125 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 219 — the `aria-current` pairing gate stops at the docs dist, and the one violation it would have caught lived outside it (2026-08-30)
+## Slice 220 — owner call: move the shipped htmx integration and both example apps to htmx 4, dropping `apps/docs`'s boosted navigation in the process (2026-08-30)
+
+**Owner-directed, decided over chat — not dispatcher-picked.** Recorded here
+per the loop doctrine (every change gets a slice trail) rather than because
+rule order selected it.
+
+1. [x] **220.1 — pin htmx.org to 4.0.0 across the repo, including the shipped
+       `@busy-office/ui` behaviors' own event listeners.** htmx.org's npm
+       `dist-tags` read `latest: 2.0.10`, `next: 4.0.0` at decision time — the
+       htmx project itself says 4.0.0 stays `next` into 2027 specifically so
+       nobody is force-upgraded off 2.x. Moving ahead of that is a deliberate
+       choice, confirmed with the owner before touching code (this repo's own
+       rule: irreversible-ish decisions get a check-in, not a guess).
+
+       **Verified against htmx 4.0.0's real dist, not secondhand research**
+       (`npm pack htmx.org@4.0.0`, grepped the built file): the classic
+       extension API (`defineExtension`, `hx-ext` processing) is gone
+       entirely — zero matches. Events are renamed
+       (`htmx:beforeSwap`→`htmx:before:swap`,
+       `htmx:afterSwap`→`htmx:after:swap`). The non-2xx swap default flips:
+       `noSwap` defaults to `[204, 304]` only, so v4 swaps everything 2.x used
+       to discard — `#handleStatusCodes` matches exact codes, two-digit `x`
+       patterns and one-digit `xx` patterns against `htmx.config.noSwap`.
+       `htmx.ajax(verb, path, options)` is unchanged.
+
+       Renamed the event in every shipped behavior that listens for it —
+       `data-grid.ts`, `tabs.ts`, `windowed-list.ts`, `data-table.ts` (all
+       `htmx:afterSwap`→`htmx:after:swap`), their two test files, and every
+       docs page that names the event or teaches the old `htmx:beforeSwap` /
+       `shouldSwap` / `isError` opt-in pattern (`/getting-started/htmx`,
+       `/concepts/concurrency`, `/patterns/error-pages`, `/patterns/object-page`,
+       `/patterns/first-load`, `/patterns/validation-summary`,
+       `/components/form`, `/getting-started/troubleshooting`,
+       `/concepts/js-behaviors`, `Gallery.astro`, `gen-llms.mjs`). The old
+       pattern (opt specific statuses back INTO swapping) is now backwards —
+       v4 swaps by default, so the teaching is "opt bare-error statuses OUT
+       via `htmx.config.noSwap`," demonstrated live on
+       `/getting-started/htmx`.
+
+       **`examples/po-app` moved with it** (superseding 211.1's `^2.0.10`
+       pin from the same day): `htmx.config.noSwap = [204, 304, 404, 500]`
+       replaces the old `htmx:beforeSwap` opt-in listener — 409/422 (the
+       statuses this app deliberately re-renders) now swap by default with
+       no app code, and only the two bare, fragment-less responses (404,
+       500) are excluded. `check:po-app` still 19/19.
+
+       *Accept:* `@busy-office/ui`'s own vitest suite, `check:claims`,
+       `check:po-app` and `test:axe` all pass against the renamed events and
+       the new default — met, see 220.2's verification block.
+
+2. [x] **220.2 — `apps/docs` drops boosted navigation rather than migrating
+       it; htmx 4 removed what it depended on.** `apps/docs` used
+       `hx-boost="true"` on `<body>` plus `htmx-ext-head-support` (pinned
+       `^2.0.5`, npm has no version past that) to merge a boosted response's
+       `<head>` into the page — needed because some pages ship page-scoped
+       `<link>` stylesheets that a plain `hx-select="#main-content > *"`
+       swap never sees. htmx 4 has no extension system for a v4-compatible
+       replacement to register against, confirmed in its dist (above) — so
+       there is nothing to migrate `htmx-ext-head-support` TO.
+
+       **Owner call, asked rather than assumed:** keep `apps/docs` on 2.x,
+       hand-write a head-merge replacement, or drop boost. Chose drop —
+       `hx-boost` itself is untouched as a documented htmx feature for
+       consumers (confirmed still in htmx 4's core, just without automatic
+       head-merging); only this site's own use of it is gone.
+
+       Removed: `hx-boost`/`hx-target`/`hx-select`/`hx-ext` from `<body>`,
+       every `hx-boost="false"` opt-out and its now-moot comment, the
+       `keepBoosted()` MutationObserver that kept Pagefind's dynamically
+       inserted result links boosted, the `htmx-ext-head-support` import and
+       its whole "NOT optional" comment block, and the
+       `htmx:after:swap`-driven `onPageReady()` re-derivation (sidebar
+       `aria-current` is server-rendered on every full load already — the
+       correction code was dead the moment boost left; TOC-building and the
+       code-block copy button still run once per page load, just
+       unconditionally now instead of gated behind a swap event).
+       `check-boost.mjs` (156 lines, the gate that asserted boosted
+       navigation worked) is deleted — nothing left to check.
+       `htmx-ext-head-support` dropped from `apps/docs/package.json`.
+
+       *Accept:* the docs site navigates correctly with zero `hx-boost`
+       left on the live shell (teaching content on pattern pages that
+       demonstrate `hx-boost` to consumers is unaffected and correctly
+       untouched) — met. Verified: full `npm run build -w docs` exit 0 (all
+       27 build-chain gates, including `check:links` 14,458 internal links
+       and `check:page-shape`); `check:claims` 161/161 (158 before — the new
+       `noSwap` demo snippets are executable claims); `check:po-app` 19/19;
+       `test:axe` 127 pages × 2 widths, zero violations; `vitest` 152/152.
+       Live: `podman build --no-cache` succeeded from a clean Linux
+       container (catching a real regression along the way — see below),
+       `podman run`, and a real browser session against it: zero console
+       errors on page load and on an internal full-page navigation,
+       `<body>` confirmed to carry no `hx-boost`, the rewritten
+       "Expected non-2xx responses" section screenshotted rendering
+       correctly.
+
+       **A real regression caught by the container step, not by any gate**:
+       `rm -f package-lock.json && npm install` on macOS (arm64) to pick up
+       the `htmx.org` version bump silently dropped the lockfile's
+       `@rollup/rollup-linux-x64-gnu` optional-platform entry — present in
+       the original lockfile, absent from one regenerated fresh on a
+       different platform. `npm ci` inside the Linux container then failed
+       on a missing native binary. Fixed by restoring the original lockfile
+       (`git checkout -- package-lock.json`) and running a normal
+       `npm install` (merge, not replace) to apply just the version bump —
+       diff shrank from ~11,660 changed lines to 34. **Deleting and
+       regenerating a lockfile on one platform is not equivalent to
+       updating it** — the same class of trap this file already documents
+       for bulk edits: verify against the artefact the platform that
+       matters actually consumes, not the one doing the editing.
+
+3. [x] **220.3 — version and CHANGELOG.** `@busy-office/ui` 0.6.0 → 0.7.0
+       (Breaking, pre-1.0 minor per the versioning policy);
+       `packages/create-ui/framework.json`'s pin regenerated to `^0.7.0`.
+       CHANGELOG's `Unreleased` gained a `### Breaking` entry ahead of
+       `### Fixed`, and the existing `examples/po-app` Fixed entry from
+       211.1 (same day) corrected in place — it had recorded the `^2.0.10`
+       pin this slice superseded hours later, which would have been a wrong
+       claim shipping in the same release.
 
 Triaged from the hand-off `218.1` wrote and deliberately did not act on: it
 named the gap as *"worth a line of owner direction, or a triage row on a later

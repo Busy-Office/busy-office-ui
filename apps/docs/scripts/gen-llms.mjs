@@ -40,7 +40,7 @@ import { initDialogs, initDataTables, initTabs, initDropdowns, initAlerts,
          refreshDataTable, trapFocus } from "@busy-office/ui/js";
 - initDialogs(): REQUIRED for <dialog class="bo-dialog"> + [data-dialog-trigger].
 - initDataTables(): select-all, live "n selected" count, O(1) toolbar reveal;
-  re-derives on htmx:afterSwap; refreshDataTable(container) for other swaps.
+  re-derives on htmx:after:swap; refreshDataTable(container) for other swaps.
 - initTabs(): REQUIRED for tabs (roving tabindex, RTL-aware arrows).
 - initDropdowns(): anchors [popover] menus to their invoker; close-on-select.
 - initAlerts(): .bo-alert__dismiss removes its alert/toast.

@@ -198,7 +198,7 @@ describe('initWindowedList — spacer height', () => {
     stubRowHeight = 50;
     t.insertAdjacentHTML('beforeend', chunk('c4', 8));
     t.closest('.bo-data-table-container')!.dispatchEvent(
-      new Event('htmx:afterSwap', { bubbles: true }),
+      new Event('htmx:after:swap', { bubbles: true }),
     );
     FakeIO.last!.fire([[t.querySelector('tbody[data-chunk-id="c0"]')!, true]]);
 
@@ -294,7 +294,7 @@ describe('initWindowedList — selection survives eviction', () => {
     // The chunk comes back: the swap reconcile re-applies the saved selection.
     t.querySelector('tbody[data-chunk-id="c3"]')!.outerHTML = chunk('c3', 6);
     t.closest('.bo-data-table-container')!.dispatchEvent(
-      new Event('htmx:afterSwap', { bubbles: true }),
+      new Event('htmx:after:swap', { bubbles: true }),
     );
     expect(
       t.querySelector<HTMLInputElement>(`[data-row-id="${rowId}"] .bo-data-table__row-select`)

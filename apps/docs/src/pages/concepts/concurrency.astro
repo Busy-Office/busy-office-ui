@@ -3,13 +3,9 @@ import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const beforeSwap = `// Without this, a 409 body is never swapped and the conflict is invisible.
-document.body.addEventListener("htmx:beforeSwap", (e) => {
-  if (e.detail.xhr.status === 409) {
-    e.detail.shouldSwap = true;   // swap the server's current state in
-    e.detail.isError = false;     // it is an expected outcome, not a failure
-  }
-});`;
+const beforeSwap = `// htmx 4 swaps a 409 by default — nothing to opt in. If a global
+// noSwap config excludes it elsewhere, name the exception here:
+// htmx.config.noSwap = htmx.config.noSwap.filter((s) => s + "" !== "409");`;
 
 const conflictMarkup = `<!-- Send what you think you're changing FROM. The server compares and
      refuses if the record moved underneath you. -->
@@ -47,12 +43,12 @@ const conflictMarkup = `<!-- Send what you think you're changing FROM. The serve
     the collision at save:</p>
     <pre><code>{conflictMarkup}</code></pre>
     <div class="bo-alert bo-alert--warning" role="note" style="margin-block: var(--bo-space-4)">
-      <p><strong>htmx drops non-2xx responses by default.</strong> Return a
-      409 with a re-rendered record and htmx will discard it — the user
-      sees <em>nothing</em>, the record silently stays unapproved, and the
-      only trace is a console error. Opt the status in (verified in the
-      reference app, 2026-08-17 — the guidance above was a silent no-op
-      without it):</p>
+      <p><strong>htmx 4 swaps non-2xx responses by default</strong> — the
+      opposite of 2.x, which dropped everything but 2xx and required the
+      opt-in this page used to teach. Return a 409 with a re-rendered
+      record and it reaches the user with no app code at all, unless a
+      global <code>htmx.config.noSwap</code> excludes that status
+      elsewhere:</p>
     </div>
     <pre><code>{beforeSwap}</code></pre>
     <p class="bo-u-text-muted">The version can be a row version, an

@@ -12,12 +12,12 @@ const fmt = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    .replace(/`([^`]+)`/g, '<code>$1</code>');
 const refresh = `// Bound table containers re-derive selection state automatically when an
-// htmx:afterSwap bubbles through them. Any OTHER swap mechanism calls:
+// htmx:after:swap bubbles through them. Any OTHER swap mechanism calls:
 import { refreshDataTable } from "@busy-office/ui/js";
 refreshDataTable(container);
 
 // Only NEW containers swapped in later need re-binding:
-document.body.addEventListener("htmx:afterSwap", (e) => initDataTables(e.target));`;
+document.body.addEventListener("htmx:after:swap", (e) => initDataTables(e.target));`;
 const inits = Object.entries(manifest.behaviors)
   .filter(([name]) => name.startsWith('init'))
   .map(([name, b]: [string, any]) => [name, b.summary, b.hooks]);
@@ -81,7 +81,7 @@ const inits = Object.entries(manifest.behaviors)
       <li>Clone / morph swaps can't strand stale state.</li>
     </ul>
     <p><strong>Event wiring is swap-proof; derived state is re-computed.</strong> The
-    one HTMX-aware line in core JS is the <code>htmx:afterSwap</code> event
+    one HTMX-aware line in core JS is the <code>htmx:after:swap</code> event
     <em>name</em> a table container listens for:</p>
     <pre><code>{refresh}</code></pre>
   </section>

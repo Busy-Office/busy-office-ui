@@ -321,7 +321,7 @@ function bindTable(table: HTMLTableElement): void {
   // reconciles every chunk: reindex + reapply selection on resident ones,
   // (re)observe all — observe is idempotent per the IntersectionObserver
   // spec, so double-observing costs nothing.
-  table.closest('.bo-data-table-container')?.addEventListener('htmx:afterSwap', () => {
+  table.closest('.bo-data-table-container')?.addEventListener('htmx:after:swap', () => {
     const observer = observers.get(table);
     // Refresh the cached row height while layout is already hot — a real
     // row is guaranteed present right after a chunk swap, and this keeps
