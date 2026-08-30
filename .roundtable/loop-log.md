@@ -1202,3 +1202,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-30 00:05 · Meta · refusal · tuning check:po-app's 150ms anchor wait — the timing sensitivity is about a real jump; fix the jump (213), not the sleep · refused · 926bd36e
 - 2026-08-30 00:05 · Continue · bug · 213.1 — P0: windowed-list spacer sized from one unrepresentative sampled row, 49px short per chunk · landed · 926bd36e
 - 2026-08-30 00:05 · Meta · refusal · widening 211.2 to carry the shipped-behaviour fix — Slice 211's own preamble set the file-it-separately precedent · refused · 926bd36e
+- 2026-08-30 00:49 · Standardize · sweep · Slice 214 — Standardize sweep 4 of 4 lanes; lanes 1-3 clean, lane 4 found the archive sweep due a sixth time; 214.1 moved 7 closed slices, ROADMAP.md 3,197 -> 1,650 · landed · e29c7c18
+- 2026-08-30 00:49 · Meta · refusal · sweeping Slice 214 itself — the slice describing the sweep stays resident this round, as 177.1 and 208.1 left theirs; it is next round's only target · refused · e29c7c18

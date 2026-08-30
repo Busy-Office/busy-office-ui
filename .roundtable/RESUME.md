@@ -17,9 +17,8 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-08-30 (**cloud** wake — rule 4 → **Continue/build** on
-`211.2`, which found a P0 that rule 1 then dispatched as **Slice 213**). Working
-tree clean at hand-off; one push.
+Last updated 2026-08-30 (**cloud** wake — rule 2 → **Standardize**, the dispatch
+the previous hand-off predicted). Working tree clean at hand-off; one push.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -28,67 +27,76 @@ grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md                # 4 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs       # names the closed ids
 ```
 
-`check:resume-slice-ids` will report `211.2`, `213.1`, `208.3`, `209.2`, `201.4`,
-`212.1` and `212.2` as closed ids named here — **historical references** (this
-wake's own work and the prior wake's findings), not claims that they are open.
-The only ids named here that genuinely ARE open are `211.1`, `112.3`, `112.4`.
+`check:resume-slice-ids` will report `214.1` as a closed id named here — a
+**historical reference** to this wake's own work, not a claim it is open. The
+only ids named here that genuinely ARE open are `211.1`, `112.3`, `112.4`.
 
-**No collision on this wake.** `origin/main` was at `c60ee88` at Step 0 and still
-at `c60ee88` at the mandated re-fetch before the first commit.
+**No collision on this wake.** `origin/main` was at `dd76ee8` at Step 0, still
+`dd76ee8` at the mandated re-fetch before the first commit, and still `dd76ee8`
+at the second commit.
 
-**Trap 1 fired for real again, seventh wake running.** Container started detached
-(`git branch --show-current` empty) with local `main` stale at `17b3ba6` and
-`origin/main` arriving as a forced update (`+ 17b3ba6...c60ee88`). Recovered at
-Step 0 with `git checkout -B main origin/main`, before any commit. The clone was
-**unshallowed** this wake (`git fetch --unshallow`, 1,697 commits) because a
-finding needed the date a gate assertion first shipped.
+**Trap 1 fired for real again, eighth wake running.** Container started detached
+(`git branch --show-current` empty) with `origin/main` arriving as a forced
+update (`+ 17b3ba6...dd76ee8`). Recovered at Step 0 with
+`git checkout -B main origin/main`, before any commit. The clone was
+**unshallowed** (1,700 commits) because lane 4's finding is a history
+measurement and `report_loop_prose.py` refuses to report on a shallow clone.
 
 ## What landed this wake
 
-**`211.2` — the premise was false, and its own control is what refuted it.**
-The item invited the close *"the variance is the shim's"*. Measured both halves:
-CI (real CDN) logs `po-app smoke check passed — 19 behaviours verified end to
-end` on run 662, non-vacuous by construction because 208.3's htmx precondition is
-one of those 19; and this container still exceeds the threshold in **12 of 20**
-runs with **no request interception at all** — the app's one `<script src>`
-repointed at a local static server instead. The confound in 208.3's evidence was
-that interception delays htmx's own chunk fetches, which is the timing under
-test; removing it did not remove the failure.
+**Slice 214 — the Standardize sweep ran 4 of 4 lanes.** Said as `n of 4`
+because that is what 208 asked for: 194, 197, 202 and 206 each ran three.
 
-**`213.1` — P0, found by that measurement and filed rather than built inside it**
-(Slice 211's own preamble set that precedent). `windowed-list.ts` sized an
-evicted chunk's spacer as `rowCount * one sampled row`; on `/movements` 98 of 100
-rows are 33px, 2 are 32.5px, and the sample is one of the outliers — so every
-chunk was **49px short** and re-loading one jumped the scroll by exactly that.
-Now measured from the chunk itself. `3250/3299 err +49` → `3299/3299 err 0`,
-4 of 4; downstream `anchorShift` `>2 in 12 of 20` → `0 in 40 of 40`.
+- **Lane 1** `scan:dead-style` — 0 dead of **1,433** live inline declarations.
+- **Lane 2** `report:css-repeats` — **8** repeated bodies, `LOOPS.md`'s table
+  exactly, **zero delta**. 237→242 rules and 225→230 distinct bodies produced no
+  new repeat; the joined-control `x4` group is still **two** components, so its
+  reopen trigger (a THIRD) is unmet.
+- **Lane 3** `report:prose` — **0 unverdicted pages** of the 14 flagged (9 over
+  corpus, 12 over a family median). The one a naive check misses is
+  `/concepts/scale/`: flagged on the FAMILY axis only, absent from 158.1's
+  twelve, and verdicted by **178.3**.
+- **Lane 4** `report_loop_prose.py` — **the finding.**
 
-**The result worth carrying: the old gate assertion was INVERTED.** Red-proving
-`spacerMatchesReal` in the direction that looked redundant showed it **fails on
-the fixed code and passes on the bug** — both detectors derived their expectation
-from the value under test, so shipping the behaviour fix alone would have turned
-CI red. That was not predicted.
+**`214.1` — the sixth archive sweep, one day after the fifth.** The live file
+was **50.8% closed history** (7 slices, 1,568 body lines of 3,085). Moved 213,
+212, 210, 209, 208, 201, 200. Conservation reconciles exactly on both sides:
+`ROADMAP.md` 3,197 → 1,650 (−1,547 = 1,568 body − 21 stubs) and
+`ROADMAP-archive.md` 25,633 → 27,208 (+1,575 = 1,568 body + 7 headings).
+`git status` **M / M, never A** — the case-collision guard that once cost 7,307
+lines.
 
-**Two refusals, both recorded:** tuning `check:po-app`'s 150ms anchor wait (the
-timing sensitivity is about a real jump — fix the jump, not the sleep), and
-widening 211.2 to carry the shipped-behaviour change.
+**The result worth carrying: `check:slice-refs` did NOT move, and that is
+correct rather than a missing signal.** 427 citations / 233 cited / 196 slice
+numbers / 2 known-dangling, identical before and after. The gate resolves
+against `live + archived` as ONE corpus and excludes `ROADMAP*` from citation
+extraction, so a sweep moves text *within* what it reads. 177 saw +1s only
+because it filed a new slice in the same commit; here those same +1s appeared in
+the **preceding** commit, and were reconciled there — both are Slice 214's own
+heading, because the gate's "citations checked" tally counts one uniqueness
+check per heading.
+
+**Two instrument defects caught before use, per CLAUDE.md's base rate.** The
+span-classifier's first run reconciled to 3,086 against a 3,085-line file
+(off-by-one on the trailing newline), and classified **Slice 210 as doctrine**
+because it carries no `N. [x]` checkbox at all — a narrative slice recording a
+refusal. The second under-reported closed history by 101 lines and would have
+left a closed slice out of scope.
+
+**One refusal recorded:** sweeping Slice 214 itself. It is now closed and
+resident at 182 lines and is next round's only target; 177.1 and 208.1 left
+theirs the same way.
 
 **NOT VERIFIED and named as such:** no Podman, no `localhost:8081`, **no
 screenshots at 1440px or 390px in either theme**. Nothing this wake claims rests
-on a rendered image — every number is a DOM, geometry or computed-style
-measurement. The dist mutation used as a red-proof was reverted by a rebuild and
-`grep INJECTED` on the built file returns 0. **`213.1`'s criterion (c) could not
-be exercised on CI from here**; it is verified on the same code path CI runs,
-with htmx over a real HTTP round-trip.
+on a rendered image — the change is markdown-only in two files no page renders,
+and every figure is a line count, a byte comparison or a gate's own output.
 
-Green in this container: core build, `npm run test` **152/152**, `lint:css`,
-`docs:build` rc=0, `check:claims` 158 live + 3 NOT VERIFIED (ENVIRONMENT §6b —
-container property, not a regression), `check:formatting`, `check:scroll` 910
-containers, `check:layout` 127 pages, `check:forced-colors`, `test:axe` 127 pages
-× 2 widths zero violations, `check:target-size`, `check:search`, `check:pseudo`,
-`check:quickstart`, `create-ui` check, `suite` 28 screens. `check:po-app` **red
-here by design** (2 of 19, htmx blocked) per 208.3, shape unchanged — do not
-"fix" it.
+Green in this container: core build, `npm run test` **152/152** (27 files),
+`lint:css`, `docs:build` rc=0, `check:repo`, `check:claims` 158 live + 3 NOT
+VERIFIED (ENVIRONMENT §6b — a container property, not a regression),
+`check:formatting`, `check:layout` 127 pages, `test:axe` 127 pages × 2 widths
+zero violations, `check:slice-refs`.
 
 ## Dispatcher state at hand-off
 
@@ -99,15 +107,17 @@ of that counter's five historical failures — and it changed the answer again:
 python3 scripts/loops/dispatch_status.py
 ```
 
-At hand-off: **`Standardize 5 / 4` OVERDUE** (this wake's own two Continue rows
-pushed it past), `Objective 2 / 3 [211, 213]`, `Optimize` **STALE**. So the
-**next wake dispatches rule 2, Standardize — not rule 4.** Log reconciles:
-parser 1196 against a raw `grep -c "^- "` of 1196.
+At hand-off: `Standardize 0 / 4` (reset by this wake's row), **`Objective 3 / 3`
+OVERDUE `[211, 213, 214]`**, `Optimize` **STALE**. So the **next wake dispatches
+rule 3, Objective — not rule 4.** Slice 214 is what armed it: rule 3 counts
+slices closed by Continue **and Standardize** (161.4). Log reconciles: parser
+1198 against a raw `grep -c "^- "` of 1198.
 
-**Rule 5 now reads STALE and that is this wake's doing:** the metric recorded
-(`windowed-list-spacer-err-px`) is a name sampled once, which can never be "two
+**Rule 5 still reads STALE.** The metric recorded this wake
+(`roadmap-closed-history-pct`) is a name sampled once, which can never be "two
 consecutive runs". Per rule 5's own text, say it could not be evaluated rather
-than reporting it clear.
+than reporting it clear. A second sample of that name on any later wake makes it
+comparable for the first time.
 
 If a later wake reaches rule 4, every remaining item is blocked; the KIND, per
 rule 4's own instruction:
@@ -116,26 +126,33 @@ rule 4's own instruction:
 |---|---|---|
 | `112.3` | pattern-fit pilot (oldest open) | owner-blocked (briefs) |
 | `112.4` | Screen Contract layer | owner-blocked (on 112.3) |
-| `211.1` | vendor htmx into `examples/po-app`? | **owner-blocked** — a product call about what the example teaches |
+| `211.1` | vendor htmx into `examples/po-app`? | owner-blocked — a product call about what the example teaches |
 | AT runtime evidence | combobox behaviour on real AT | owner-blocked (owner hardware) |
-
-`211.2` has left that table: it is closed, and the **egress-blocked** label the
-previous hand-off gave it was wrong in a useful way — repointing the app's script
-tag at a local server needs no public egress at all, and that route is what found
-the P0.
 
 ## Direction
 
-**`211.1` is now better-informed and still the owner's call.** This wake showed
-the example runs correctly offline the moment htmx is served locally — the
-mechanism costs nothing and `htmx.org` is already in `node_modules`. What has not
-changed is the trade: vendoring stops the example demonstrating the CDN wiring
-that `/getting-started/htmx` documents. **One thing the owner did not have
-before:** the CDN dependency has now cost two investigations (208.3's four
-misread runs, and this wake's confound-removal) because it makes
-`check:po-app` report a *downstream* symptom in any egress-restricted
-environment. That is an argument about maintenance cost, not about what the
-example teaches, and both belong in the decision.
+**A measured correction the owner may want, and it is not an item.** 179.2
+corrected 177's "the sweep is not converging" by observing that regrowth-per-
+cycle and the peak a wake walks were both falling monotonically. Re-measured
+this wake over all **799** `ROADMAP.md`-touching commits, both terms reversed on
+the very next cycle: regrowth **4,262 → 3,367 → 2,364 → 4,394** and peak walked
+**9,824 → 4,461 → 3,872 → 6,424**. The open cycle ran at **98.0 lines/commit**,
+the highest rate in the record — over **8 commits only**, so that rate is
+reported with its n and nothing is concluded from it alone. On the closed cycles
+the conclusion is safe: 179.2's monotone claim described three cycles and does
+not survive the fourth. Full table and commands in ROADMAP Slice 214.
 
-**Standing three unchanged** (112.3, 112.4, AT runtime). The cloud lane is not
-out of work: rule 2 is overdue and dispatches next.
+What this does NOT decide is 177's own observation, still unacted: **61% of one
+sweep's moved lines were Objective-grill slices that ALSO have a full report in
+`.roundtable/`**. Whether a grill's roadmap slice should be a pointer rather than
+a second copy is a direction call about how the loop records its own work, and
+this loop does not take those. With rule 3 now OVERDUE and the next wake
+dispatching a grill, it is about to become load-bearing again.
+
+**`211.1` unchanged and still the owner's call** — the previous hand-off's
+framing stands: the example runs correctly offline the moment htmx is served
+locally, and the trade is that vendoring stops it demonstrating the CDN wiring
+`/getting-started/htmx` documents, against a maintenance cost that has now paid
+for two investigations.
+
+**Standing three unchanged** (112.3, 112.4, AT runtime).
