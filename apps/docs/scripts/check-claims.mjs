@@ -4017,6 +4017,88 @@ check(
   JSON.stringify(toastReduced),
 );
 
+/* 233.1 — /components/alerts' Elevated section states facts a browser can check
+   and nothing executed them. Three cases, because writing them found that one of
+   the two sentences is only HALF true and the page had to be corrected to match.
+
+   The page said "the card look and the accent colour are independent settings".
+   The accent colour is independent; the FILL is not. `.bo-alert` sets
+   `background: var(--bo-alert-bg)` and the severities set that custom property,
+   but `.bo-alert--elevated` sets `background` DIRECTLY and wins on source order
+   at equal specificity — so combining the two silently drops the severity tint,
+   which the page invited without saying. Case 3 is that fact, and the clause it
+   now carries was written FROM this measurement rather than from reading the CSS
+   (a first draft, read off the stylesheet, got the direction wrong).
+
+   Read in both themes: a token-level regression could move one and not the
+   other, and the light-theme raised surface is plain white, which is exactly the
+   value most likely to coincide with something else by accident. */
+await visit('/components/alerts/', { width: DESKTOP_WIDTH });
+const elevated = await page.evaluate(async () => {
+  const read = (el) => {
+    const cs = getComputedStyle(el);
+    return { bg: cs.backgroundColor, accent: cs.borderInlineStartColor,
+      shadow: cs.boxShadow, radius: cs.borderRadius };
+  };
+  // The toast only exists once injected, which is the point of the region.
+  document.getElementById('toast-demo-trigger').click();
+  await new Promise((r) => requestAnimationFrame(r));
+  const out = {};
+  for (const theme of ['light', 'dark']) {
+    document.documentElement.setAttribute('data-theme', theme);
+    out[theme] = {
+      plainWarn: read(document.querySelector('.bo-alert--warning:not(.bo-alert--elevated):not(.bo-toast)')),
+      elev: read(document.querySelector('.bo-alert--elevated:not(.bo-alert--warning)')),
+      elevWarn: read(document.querySelector('.bo-alert--elevated.bo-alert--warning')),
+      toast: read(document.querySelector('#toast-demo-region .bo-toast')),
+    };
+  }
+  document.documentElement.removeAttribute('data-theme');
+  return out;
+});
+/* THE HOLE IN AN EQUALITY, STATED AND CLOSED (233.1's own Accept asked for
+   this). Every case below compares two computed colours for equality, and two
+   TRANSPARENT boxes are equal — so a rule that removed both backgrounds would
+   leave these agreeing about nothing, which is the "identical value across many
+   inputs" defect CLAUDE.md names. `opaque` refuses `rgba(…, 0)` and any missing
+   read, and every equality is conjoined with it rather than asserted alone. */
+const opaque = (c) => typeof c === 'string' && c !== '' && !/,\s*0\s*\)$/.test(c)
+  && c !== 'transparent';
+const bothThemes = (fn) => ['light', 'dark'].every((t) => fn(elevated[t]));
+/* This case is what corrected the page, and the first version of it went RED.
+   The page said the elevated and toast surfaces "match". Executed, the RAISED
+   BACKGROUND matches exactly in both themes — both resolve
+   `--bo-color-bg-surface-raised` — but the shadow and the radius do not:
+   `--bo-shadow-md` (0 4px 6px -1px) against `--bo-shadow-lg` (0 10px 15px -3px),
+   and 6px against 4px, because `.bo-toast` never sets a radius and inherits
+   `.bo-alert`'s.
+
+   The divergence is CORRECT and is now what the case asserts: a toast floats
+   over the page and an elevated alert sits in it, so the toast being visually
+   higher is the design, not drift. Asserting "same background AND deliberately
+   heavier toast shadow" keeps the property 231.2's keep-decision actually rests
+   on (you get the raised card without the arrival animation) while pinning the
+   difference so a token change cannot quietly collapse the two. */
+check(
+  'alerts: elevated and toast share the raised background, and the toast deliberately sits higher',
+  bothThemes((t) => opaque(t.elev.bg) && t.elev.bg === t.toast.bg && t.elev.shadow !== t.toast.shadow),
+  JSON.stringify({ light: { elev: elevated.light.elev, toast: elevated.light.toast },
+    dark: { elev: elevated.dark.elev, toast: elevated.dark.toast } }),
+);
+check(
+  'alerts: the card look and the accent COLOUR are independent — an elevated warning keeps the plain warning accent',
+  bothThemes((t) => opaque(t.elevWarn.accent) && t.elevWarn.accent === t.plainWarn.accent
+    && t.elevWarn.accent !== t.elev.accent),
+  JSON.stringify({ light: { elevWarn: elevated.light.elevWarn.accent, plainWarn: elevated.light.plainWarn.accent, elev: elevated.light.elev.accent },
+    dark: { elevWarn: elevated.dark.elevWarn.accent, plainWarn: elevated.dark.plainWarn.accent, elev: elevated.dark.elev.accent } }),
+);
+check(
+  'alerts: the raised surface REPLACES the severity tint — severity reads through the accent bar, not the fill',
+  bothThemes((t) => opaque(t.elevWarn.bg) && t.elevWarn.bg === t.elev.bg && t.elevWarn.bg !== t.plainWarn.bg),
+  JSON.stringify({ light: { elevWarn: elevated.light.elevWarn.bg, elev: elevated.light.elev.bg, plainWarn: elevated.light.plainWarn.bg },
+    dark: { elevWarn: elevated.dark.elevWarn.bg, elev: elevated.dark.elev.bg, plainWarn: elevated.dark.plainWarn.bg } }),
+);
+
 await browser.close();
 server.close();
 

@@ -91,12 +91,16 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
     </div>
     <p class="bo-u-text-muted">Combine it with a severity variant or leave it
     plain — the card look and the accent colour are independent settings.
+    <strong>The raised surface does replace the severity tint</strong>, so on an
+    elevated card severity reads through the 3px accent bar alone, not the fill —
+    which is the channel that survives forced-colors anyway.
     <strong>Not for a single message inside a form or a page section</strong>:
     there the flat inline alert is correct, because a shadow makes one message
     look like it floated in from somewhere else.
-    <strong>And not the same as a toast</strong>, though the surface matches —
-    <code>.bo-toast</code> adds an entrance animation, which says
-    <em>this just arrived</em>. An elevated alert is for entries already on the
+    <strong>And not the same as a toast</strong>, though they share the raised
+    background — a toast sits <em>higher</em> (a larger shadow, because it floats
+    over the page rather than sitting in it) and <code>.bo-toast</code> adds an
+    entrance animation, which says <em>this just arrived</em>. An elevated alert is for entries already on the
     page at load, so animating them in would announce arrivals that never
     happened. Rule of thumb: a toast interrupts, an elevated alert is
     scanned. Used together on

@@ -337,10 +337,74 @@ winner missed is precisely the mechanism Step 0c names in exchange for the
 collision cost; the ledger for the day is now **two** such catches (232.1 and
 this), against at least four discarded wakes.
 
-1. [ ] **233.1 — `/components/alerts`'s Elevated section states two facts a
-       browser can check — that the elevated surface and the toast surface
-       MATCH, and that the card look and the accent colour are INDEPENDENT —
-       and `check:claims` covers neither.**
+1. [x] **233.1 — DONE, and executing the first claim proved it WRONG: the two
+       surfaces do not match, they share a background and deliberately differ in
+       height. Three cases added (158 → 161 live), each red-proved.** (Continue,
+       build mode, cloud wake 2026-08-31 — the fourth dispatcher to touch this
+       page today and the first whose diff was not discarded.)
+
+       The item asked for the claims to be made executable. Doing so is what
+       found that **one of the two sentences was false and the other was only
+       half true** — neither was visible to review, and both had shipped.
+
+       **Claim 1 — "though the surface matches" — FALSE, and the first run of
+       the case is what said so.** Measured on the built page, both themes:
+
+       | | `--elevated` | `.bo-toast` |
+       |---|---|---|
+       | background | `255,255,255` / `34,38,46` | **identical** |
+       | box-shadow | `0 4px 6px -1px` (md) | `0 10px 15px -3px` (**lg**) |
+       | border-radius | `6px` | `4px` (never set; inherits `.bo-alert`) |
+
+       **The divergence is correct, so the page was corrected rather than the
+       CSS.** A toast floats *over* the page and an elevated alert sits *in* it,
+       so the toast being visually higher is the design. The case now asserts
+       the property 231.2's keep-decision actually rests on — *same raised
+       background, deliberately different height* — which also pins the
+       difference so a token change cannot quietly collapse the two.
+       `alert.css`'s own comment carried the same overstatement (*"already
+       carries this exact look"*) and is corrected in the same commit, since
+       leaving a measured-false sentence in the source is what 229.2 was about.
+
+       **Claim 2 — "the card look and the accent colour are independent" — TRUE
+       as written, and INCOMPLETE in the way a reader acts on.** The accent
+       colour is independent (`245,158,11` on the elevated warning, identical to
+       the plain warning). But `.bo-alert` sets `background: var(--bo-alert-bg)`
+       while `.bo-alert--elevated` sets `background` **directly** and wins on
+       source order at equal specificity — so *"combine it with a severity
+       variant"* invited a combination whose tint silently vanishes. A third
+       case now asserts that, and the page gained a clause saying severity reads
+       through the 3px accent bar, not the fill — the channel that survives
+       forced-colors, which is why `alert.css` chose a border over a stripe.
+       **The clause was written FROM the measurement**; a first draft, read off
+       the stylesheet, got the direction wrong.
+
+       **Every Accept bullet, answered:**
+
+       - **The equality hole was stated and closed in the same assertion.** Two
+         transparent boxes are equal, so all three equalities are conjoined with
+         an `opaque()` predicate refusing `rgba(…, 0)`. **Red-proved:** appending
+         `.bo-alert--elevated,.bo-toast{background:transparent}` to the built
+         stylesheet — the exact case that would otherwise agree about nothing —
+         turns the gate **red**, and its own failure detail prints
+         `"elev":{"bg":"rgba(0, 0, 0, 0)"`. That is the injection confirmed in
+         the **DOM** via the computed reading, not in the file.
+       - **Red-proved by targeted injection, each hitting a different subset**,
+         which is what shows the three discriminate rather than moving together:
+         adding `border-inline-start-color` to `.bo-alert--elevated` reddens
+         **case 2 only**; deleting its `background` reddens **cases 1 and 3**;
+         the transparency injection reddens **1 and 3**. Case 1 additionally
+         went red on a **real defect** before any injection existed.
+       - **Counts move exactly as required**: live claims **158 → 161**, +3 for
+         3 cases, and `NOT VERIFIED` **unchanged at 3** — ENVIRONMENT trap 6b's
+         container property, not restored to zero.
+
+       **What this is evidence for, stated narrowly.** Not that the winning
+       diff was careless — the section was reviewed and every gate was green.
+       It is that a prose claim about computed style is invisible to every gate
+       until someone writes the assertion, and writing it took one function and
+       found two wrong sentences. That is `check:claims`'s own thesis, and this
+       is the second time in two days it has paid on this page.
 
        CLAUDE.md: *"If a page says the browser will do something … add a case to
        `apps/docs/scripts/check-claims.mjs`."* Both sentences below are computed
