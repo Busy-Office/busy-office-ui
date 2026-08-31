@@ -1243,3 +1243,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 08:41 · Meta · refusal · a gate for the hard-coded-divisor class, a fifth time — the semantic leg stands and every reading is higher than 30 · refused · 8382f70
 - 2026-08-31 08:41 · Meta · refusal · committing the reconstruction probe — it is the throwaway 227.2 describes; only the half that reduces to shell lines is recorded · refused · 8382f70
 - 2026-08-31 10:38 · Continue · build · 229.5 — ENVIRONMENT.md's git-blob bullet generalised to 'a figure describing a commit is read from that commit'; the commit that added the narrow form broke it in its own subject (d701e61: 3,794 -> 1,473 stated, 1,626 held) · landed · d557d56d
+- 2026-08-31 13:03 · Standardize · sweep · 230.1 cascade.astro z-index parse reconciled against the shipped tokens; lanes 4 of 4 clean · landed · ff2b623d
+- 2026-08-31 13:03 · Meta · refusal · a gate over 'a parsing page asserts its parse' — the population is 6 of 6 after this fix, so it is uniformly true and distinguishes nothing (roadmap 94.11) · refused · ff2b623d
