@@ -1245,3 +1245,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 10:38 · Continue · build · 229.5 — ENVIRONMENT.md's git-blob bullet generalised to 'a figure describing a commit is read from that commit'; the commit that added the narrow form broke it in its own subject (d701e61: 3,794 -> 1,473 stated, 1,626 held) · landed · d557d56d
 - 2026-08-31 13:03 · Standardize · sweep · 230.1 cascade.astro z-index parse reconciled against the shipped tokens; lanes 4 of 4 clean · landed · ff2b623d
 - 2026-08-31 13:03 · Meta · refusal · a gate over 'a parsing page asserts its parse' — the population is 6 of 6 after this fix, so it is uniformly true and distinguishes nothing (roadmap 94.11) · refused · ff2b623d
+- 2026-08-31 13:50 · Polish · reconcile · 231.1 component/alerts round 2 — reconciliation clean on all four arms, recorded as a NO-OP · logged · 4beb4b86
+- 2026-08-31 13:50 · Meta · refusal · a gate over 'a shipped variant is demoed on its own page' — residual base rate 1 of 89 after 16 of 17 were found to carry a recorded reason, so 94.11 ceremony · refused · 4beb4b86
+- 2026-08-31 13:50 · Roadmap · plan · 231.2 filed — bo-alert--elevated published in the API tables and explained nowhere; three call sites are one screen, so Objective §3 is the question · triaged · 4beb4b86

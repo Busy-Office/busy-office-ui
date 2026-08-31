@@ -22,70 +22,60 @@ Last updated 2026-08-31 (**cloud** wake). Working tree clean at hand-off.
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 3 at hand-off, unchanged
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, was 3
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-The open set is **unchanged at 3** — this wake closed a *new* slice rather than
-one of them. All three remain undispatchable; the table is below.
+**The open set moved 3 → 4, and the new one is the first dispatchable build
+item in the backlog since 112.5 closed.** That is the headline for the next
+wake: rule 4 is no longer empty.
 
 ## What landed this wake
 
-**Slice 230.1 — LANDED**, dispatcher rule 2 (Standardize), on the **"or drift
-flagged"** trigger rather than the counter. The diff is
-`apps/docs/src/pages/concepts/cascade.astro` (**41 / 0**) and `ROADMAP.md`
-(**136 / 0**), read from the index rather than the working tree.
+**Dispatched Polish (rule 6)** — rules 1-5 all found nothing, and rule 5 was
+answered from its instrument rather than from the file (see below).
 
-`concepts/cascade.astro` regex-parsed the z-index scale out of
-`tokens/z-index.css` into a `<tbody>` with no assertion, so a zero-match parse
-renders an **empty table** — silence, not a wrong figure, which is why three
-wakes read past it.
+**Slice 231.1 — LANDED, a NO-OP, and recorded as one.** §3b's reconciliation of
+`component/alerts` came back clean on all four arms, so no fix was manufactured.
+`badge`'s round-2 precedent: `rounds` 1→2, `dry` stays 0, `scored` stays
+2026-08-23, no blind re-score owed because nothing in the published artefact
+changed.
 
-- **The base rate is what classified it.** Of the 6 docs pages that regex-parse
-  a source file at build time, **5 already throw** on a bad parse
-  (`palettes`, `primitives`, `icon`, `ai-assistants`, `tokens`). `cascade` was
-  the sole one-off — a consolidation, not a new idea. `scale.astro` and
-  `index.astro` match the `readFileSync` needle but take only a byte/gzip
-  length, so they are outside the population.
-- **Reconciled against the shipped `tokens.min`, not a hand-typed floor** — two
-  independent derivations of one fact, `icon.astro`'s shape. `z-index.css`'s
-  rationale comment NAMES four of the five tokens in prose, so a raw source
-  count would trip on its own explanation; `tokens.min.css` carries **0**
-  comment openers (measured), so no stripping step was invented.
-- **Red-proved twice, injection confirmed present each time.** Zero-match
-  (prefix renamed in source only; 5 renamed, 0 remaining) → exit 1. **Value
-  drift** (`--bo-z-toast` 1600 → 1700, source only) → exit 1 **at 5 against
-  5** — the discriminating case, which a `length < 5` floor would have passed.
-- **Refused, measured:** a gate over "a parsing page asserts its parse". The
-  re-scan found `lib/semantic-css.ts` already carries a *"parsed zero"* throw,
-  so the population is now **6 of 6** — uniformly true, and therefore ceremony
-  on roadmap 94.11's own test.
+- All **40** `dsa-scores.json` entries render on a built page (40 entries → 39
+  pages; `alert`→`alerts`, `skeleton`+`state`→`state-patterns`). **Zero**
+  `Not yet scored` — 176.1's defect has not recurred — and zero `NaN`.
+- **17 of 17** cited literals present across the seven re-queued surfaces with
+  DSA entries. `dashboard`'s `3rem` "exactly one caller" holds at **exactly 1**
+  comment-stripped, against 2 raw occurrences.
+- **6 of 6** rubric dimensions on **40 of 40** entries — `DsaScore.astro` would
+  publish `NaN%` for a missing key with nothing throwing, so that path was
+  reconciled rather than assumed.
 
-**The four standing lanes — `4 of 4`, all clean:** `scan:dead-style` 0 dead /
-1,433 live; `report:css-repeats` **8** groups, the standing eight with no delta;
-`report:prose` union of **8** outliers, every one resolving against 158.1's
-twelve and 161.1's three **by set membership** (228.1 already recorded the cite
-grep as a dead detector); `report_loop_prose.py` with no file changing
-accumulate class. Lane 4 needed `git fetch --unshallow origin` first — the
-script **refused to report** while shallow, exactly as ENVIRONMENT trap 2 says.
-No `.git/shallow.lock` was present, and `is-shallow-repository` read `false`
-afterwards, which is the only check that it worked.
+**Slice 231.2 — FILED OPEN, not fixed.** `bo-alert--elevated` is published twice
+on `/components/alerts`, both times inside the generated `ClassRef`/`ApiTable`,
+and explained nowhere on any page; its three call sites are all the notification
+screen, so Objective §3's "≥2 real, independent compositions" is the real
+question. Left to a Continue round because 101.3's stop rule confines Polish to
+the existing ratchet.
 
-**All gates green, exit 0 each**, against the final tree: core `build`, core
-`test` (152 in 27 files), `lint:css`, `docs:build`, `check:claims`,
-`check:formatting`, `check:layout` (**127** pages), `test:axe` (**127** × 2
-widths, zero violations), `check:repo` (`check:slice-refs` **457** citations,
-**212** slice numbers).
+- **Red-proved by discrimination inside one page**: `--success` 5, `--warning` 5,
+  `--danger` 3, `--elevated` 2. The demoed variants separate from the undemoed
+  one under the same instrument, in the same document.
+- **Base rate 17 of 89 variants across 4 of 40 components** — neither 0 nor
+  100%, so not 94.11 ceremony. **16 of the 17 carry a recorded reason** and that
+  is what took the work: 14 icon glyphs are covered by icon's own `fit` cite
+  (*"an example of the mechanism rather than a catalogue"*), and the two
+  `--seamless` are scoped in prose on `/patterns/editable-grid`.
+- **No gate proposed** — the residual predicate is 1 of 89.
 
-`check:claims` reads **158 verified live · 3 NOT VERIFIED** — `ENVIRONMENT.md`
-§6b, this container's `(pointer: fine) = false`. **Not** a regression; do not
-"restore" the zero.
-
-**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
-1440/390 light-and-dark screenshot lane could not run. The change adds a
-build-time assertion and emits no new markup — the rendered table still carries
-all five rows, asserted by re-reading the built HTML — so nothing in it rests on
-a rendered image.
+**An instrument error was caught mid-round and it had inverted a verdict.** The
+variant sweep first ran against page *source* and dismissed icon's glyphs as a
+false positive, reasoning that `icon.astro:39` builds the classes by regex. Run
+against the **built** page it is not a false positive: the page renders **12 of
+26**. That 12 reproduces, independently and from a different artefact, the same
+12 that icon's Polish round 2 caught hard-coded as a divisor (ROADMAP 227) —
+two instruments, one number. Believing the source grep would have thrown away
+the finding's entire base rate.
 
 ## Dispatcher state at hand-off
 
@@ -94,84 +84,74 @@ python3 scripts/loops/dispatch_status.py
 ```
 
 ```
-Standardize   0 / 4 Continue rounds  since 2026-08-31 13:03   ok
-Objective     2 / 3 slices           since 2026-08-31 02:50   ok  [229, 230]
-Optimize      0 wake-date(s) newer   since 2026-08-31 08:41   ok  [newest pair: axe-violations]
+Standardize   0 / 4 Continue rounds   since 2026-08-31 13:03   ok
+Objective     2 / 3 slices            since 2026-08-31 02:50   ok  [229, 230]
+Optimize      0 wake-date(s) newer    since 2026-08-31 08:41   ok
 ```
 
-**This is the Step 0b comparison — the counter read immediately after recording
-— and both moved as predicted.** Rule 2 reset **3 → 0** because a `Standardize`
-row discharges it. Rule 3 went **1 → 2 `[229, 230]`** because Standardize closes
-a slice (161.4's decision, and this is that rule paying out). No starved
-counter; re-run it rather than trusting this snapshot.
+**Re-run it rather than trusting this snapshot** — it was read at Step 0b, and a
+`Polish` row moves none of the three counters (Polish closes no slice, per
+161.4, and feeds no Continue count).
 
-**How rules 1-4 were answered, so the next wake need not re-derive them:**
+**How rules 1-6 were answered, so the next wake need not re-derive them:**
 
 | rule | reading |
 |---|---|
-| 1 P0 | none open — the 3 open items are owner- or hardware-blocked; GitHub intake `list_issues` OPEN → `totalCount: 0` |
-| 2 Standardize | counter **3 / 4 — did not fire**; **dispatched on "or drift flagged"** |
-| 3 Objective | **1 / 3 — ok**, `[229]` at Step 0b |
-| 4 build item | not reached |
+| 1 P0 | none open; GitHub intake `list_issues` OPEN → `totalCount: 0` |
+| 2 Standardize | counter **0 / 4**, and **no drift flagged** — last wake spent that trigger |
+| 3 Objective | **2 / 3**, `[229, 230]` — one more closed slice arms a grill |
+| 4 build item | **nothing dispatchable at the time**; 231.2 was filed later in the wake and IS dispatchable next time |
+| 5 Optimize | **not evaluable** — see below; reported as such, not as clear |
+| 6 Polish | **fired** |
 
-**The open set is 3, and NONE is dispatchable** (rule 4's kind-of-blocked
-distinction, which `LOOPS.md` keeps in the durable playbook precisely because it
-did not survive a rewrite of this file):
+## ⚠ Rule 5 has one live metric and twelve stale ones — do not read `bundle-gz-kb`
 
-| item | kind of blocked |
-|---|---|
-| `112.3` pattern-fit pilot (oldest open) | owner-blocked — briefs + four answers |
-| `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
-| AT runtime evidence | hardware-blocked — owner hardware |
+`dispatch_status.py`'s rule-5 line says `ok` (not STALE), and that is correct but
+narrow: it reflects `axe-violations`, the only name with a comparable pair newer
+than 2026-08-20 — `0.0@08-29`, `0.0@08-30`, `0.0@08-31`, flat.
 
-**None is browser-blocked**, so this is not the mis-sort `LOOPS.md` rule 4 warns
-about: a local wake has nothing here a cloud wake lacks.
-
-## ⚠ The drift flag that unblocked this wake is now SPENT — read before dispatching
-
-The previous hand-off recorded that rule 2 can no longer advance on its own:
-`dispatch_status.py:249` counts it with
-`sum(1 for r in after if r["loop"] == "Continue")`, Continue is reachable only
-through rule 1 or rule 4, and **rule 4's dispatchable set is empty**. That is
-still true, and the counter has just reset to **0 / 4**.
-
-**What changed is that the escape is used up.** Rule 2's other trigger — "or
-drift flagged" — fired this wake on the `cascade.astro` drift that had been
-carried unactioned for three wakes. That drift is now fixed, the re-scan for its
-shape came back clean, and **no drift is flagged at hand-off**. So unless a wake
-spots a new one, rules 1-4 are all unreachable and the next wake falls through
-to **rule 6, Polish** — whose predicate is true of 19 of 19 surfaces and always
-has been (176.2). Run `python3 scripts/loops/polish_requeue.py --apply` before
-evaluating it, per the playbook.
-
-Rule 3 sits at **2 / 3**: one more closed slice arms an Objective grill, and
-only Continue or Standardize can close one.
+**The other 12 multi-sample names' newest pairs are all 2026-08-16→19.** In
+particular `bundle-gz-kb` reads `10.8 → 11.6 → 11.7`, which *looks* exactly like
+rule 5's "regressed on two consecutive runs" trigger and is **12+ days stale**.
+That is the dead-instrument answer `LOOPS.md` rule 5 warns about, and it is
+written here because the shape is genuinely tempting. Recorded as **not
+evaluable**; do not quote it as current.
 
 ## Direction
 
-**No new input arrived**: no open GitHub issues (`list_issues` OPEN →
-`totalCount: 0`), and no owner message since the last wake. Step 1 had nothing
-to triage, so no `Roadmap · plan` row exists.
+**No new input arrived** — no open GitHub issues, no owner message since the last
+wake. Step 1 had nothing to triage, so no `Roadmap · plan` row exists.
 
-**The loop is still out of work no human is blocking, and this wake does not
-change that** — it found one more piece of self-maintenance, which is what
-Standardize is for. All three open items need the owner (112.3's briefs and four
-answers, 112.4's dependency on that verdict) or the owner's hardware (AT runtime
-evidence). This is the second consecutive wake where the *whole* open set is
-owner- or hardware-blocked.
+**The three-wake run of "every open item is owner- or hardware-blocked" ends
+here, from inside the loop rather than from the owner.** 231.2 is a real,
+measured, dispatchable build item, and it is explicitly **neither owner-blocked
+nor browser-blocked**: the elevated rendering already ships on
+`/patterns/notification`, so the options (demo it / refuse it / record it as a
+named exception) are markup and prose, verifiable in a cloud wake through
+`docs:build`, `check:claims`, `check:layout`, `test:axe` and `check:repo`. A
+screenshot would be a nice-to-have, not the evidence. **Rule 4 will pick it
+next wake** — it is the newest item, but every older open item is blocked, so
+"oldest still-open" resolves to it as the oldest *dispatchable* one; if a future
+wake reads rule 4 strictly as oldest-regardless, it will land on 112.3 and stop
+again.
 
-**No sweep is due, and the share was NOT re-measured this wake.** `ROADMAP.md` is
-at **2,291** lines, up from 2,155 — the growth is Slice 230 itself. The previous
-hand-off measured the closed-history share at **31.6%** against the 62.4% that
-triggered the seventh sweep, and noted that **529 of its 682** resident-closed
-lines were Slice 229 alone, with the live file otherwise almost all pointer
-stubs. Adding one open-then-closed slice does not move that structure toward a
-sweep, so re-deriving it here would spend a round to confirm the same answer.
+The three pre-existing items are unchanged and still not ours:
 
-**That is a deferral, not a measurement — say so rather than quoting 31.6% as
-current.** The previous hand-off already flagged that its probe was a scratchpad
-throwaway and was not committed, which is the failure 229.4 filed against 227.2,
-and it named the trigger: **if a wake needs this share a third time, that is the
-signal to commit the script** rather than re-derive it from the four
-classification rules a fourth time. This wake is the second pass on that
-counter.
+| item | kind of blocked |
+|---|---|
+| `112.3` pattern-fit pilot (oldest open) | owner-blocked — 5 briefs; `.roundtable/pilot-112/` holds README + SEALED-PICKS.md and **no `briefs.md`** |
+| `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
+| AT runtime evidence | hardware-blocked — owner hardware |
+
+**No sweep is due and the closed-history share was NOT re-measured** — third
+consecutive deferral, and the previous hand-off named the trigger: *if a wake
+needs this share a third time, that is the signal to commit the script.* This
+wake did not need it (rule 4 walked 4 open items, not thousands of lines), so it
+is deferred rather than measured. `ROADMAP.md` is at **2,448** lines, up from
+2,291; the growth is Slice 231 itself. **Say "deferred", not "31.6%"** — that
+figure is from two wakes ago.
+
+**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
+1440/390 light-and-dark screenshot lane could not run. This wake changed only
+`ROADMAP.md` and `.roundtable/polish-state.md` — no CSS, no markup, no rendered
+output — so nothing in it rests on a rendered image.
