@@ -390,9 +390,10 @@ print({n:[(x['value'],x['ts'][:10]) for x in v[-3:]] for n,v in by.items() if le
        and a set of assertions over artefacts already built — so nothing in it
        rests on a rendered image.
 
-2. [ ] **231.2 — `bo-alert--elevated` is published in the API tables of
+2. [x] **231.2 — `bo-alert--elevated` is published in the API tables of
        `/components/alerts` and explained nowhere, and its three call sites are
-       one screen.** Found by the sweep around 231.1, filed rather than fixed:
+       one screen.** DONE 2026-08-31 — documented, and the §3 "should it exist"
+       question answered KEEP on a reason that is general rather than screen-shaped. Found by the sweep around 231.1, filed rather than fixed:
        §3b's stop rule (101.3) confines Polish to the existing ratchet, and
        no DSA dimension flags this.
 
@@ -471,6 +472,75 @@ print({n:[(x['value'],x['ts'][:10]) for x in v[-3:]] for n,v in by.items() if le
        markup and prose. A cloud wake can verify all of it through `docs:build`,
        `check:claims`, `check:layout`, `test:axe` and `check:repo`. A screenshot
        would be a nice-to-have, not the evidence.
+
+       **Outcome (2026-08-31, cloud wake, dispatcher rule 4).** Taken as the
+       oldest *dispatchable* item — 112.3 and 112.4 are owner-blocked and the AT
+       item is hardware-blocked, so the oldest open item is not the oldest
+       actionable one.
+
+       **Both premises re-derived first, as the Accept requires, and both hold.**
+       17 low pairs across 4 of 40 components; the non-glyph members are exactly
+       `bo-alert--elevated`, `bo-select--seamless`, `bo-tag-input--seamless`; the
+       within-page discrimination on `/components/alerts` reproduces exactly at
+       `--success` 5, `--warning` 5, `--danger` 3, `--elevated` 2. The call-site
+       grep returns the same eight lines: `patterns/notification.astro` (5),
+       `PatternPreview.astro` (2), `examples/po-app/server.mjs` (1), plus the CSS
+       definition. **No second independent composition has landed**, so the §3
+       question was live and had to be answered rather than assumed away.
+
+       **One correction to the premise's arithmetic, which changes nothing.**
+       The item says "17 of **89** shipped variants" and re-running it reads
+       **88**. Both are right and the gap is exact: there are 89
+       *(component, variant)* pairs and 88 distinct *names*, because
+       `bo-badge--type` is declared by two components (`badge` and `dashboard`),
+       so a dict keyed on the name collapses it. The `17` is unaffected — it is
+       counted over pairs either way.
+
+       **Decision: KEEP and document** — option 1 of the three, and the §3
+       question is answered on the merits rather than deferred. `alert.css`'s own
+       comment already carries a reason that is **not** screen-shaped: `.bo-toast`
+       ships this same raised surface *plus* `bo-toast-in`, an entrance animation
+       that asserts the content just arrived, which is wrong for a list already
+       in the page at load. That is a general distinction — *arrival vs.
+       presence* — and it is the same axis this component's top comment already
+       uses to decide `role="alert"`. A modifier that exists to separate two
+       genuinely different announcements is not 231.2's "modifier that serves
+       exactly one scenario"; the single call site is a docs gap, not evidence of
+       a one-off. **Removal was the live alternative and is refused**: it would
+       force the notification list to either adopt toast semantics it should not
+       claim, or hand-roll the shadow outside the component.
+
+       **What shipped:** one demo section on `/components/alerts`, placed before
+       the Toast recipe so the contrast reads in order. Its caption names both
+       comparisons the Accept asked for — against a plain inline alert
+       (*"not for a single message inside a form or a page section"*) and against
+       a toast (*"a toast interrupts, an elevated alert is scanned"*) — and links
+       the pattern that composes them.
+
+       **Verified by re-running the count, not by predicting it**, which is the
+       Accept's own wording: `bo-alert--elevated` moves **2 → 5** on the built
+       page and the low set drops **17 → 16**, leaving only the two `--seamless`
+       variants.
+
+       **Verdict on those two, recorded in the same pass as required: no change
+       needed.** They already carry the recorded reason the item credits them
+       with — `/patterns/editable-grid` names both in prose with an explicit
+       `Scope` clause (*"a checkbox already reads as a control"*) saying which
+       cell types stay chromed and why. They are correctly at 2 occurrences on
+       their own component pages because their explanation lives on the pattern
+       that composes them, which is the `--seamless` precedent this item cites.
+
+       **Not verified, said plainly:** no Podman and no `localhost:8081` here, so
+       the 1440/390 light-and-dark screenshot lane could not run. **The change is
+       prose plus two `<div>`s using a variant that already ships and is already
+       rendered on `/patterns/notification`** — no CSS changed, so no new visual
+       state exists to look at. The whole-tree browser gates are the evidence
+       that nothing broke: all 17 cloud entry points exit 0, including
+       `check:layout` (127 pages, no overflow at 390 or 150% zoom), `test:axe`
+       (127 pages x 2 widths, zero violations), `check:pseudo` (≥41% expansion,
+       nothing clipped) and the `DOCS_BASE=/busy-office-ui` parity build, which
+       is what proves the added `<a href={base + '/patterns/notification'}>`
+       resolves on Pages.
 
 ## Slice 230 — Standardize sweep: lanes 1-4 clean a ninth time, and the drift carried for three wakes was a genuine one-off — 5 of 6 parsing pages already asserted (2026-08-31)
 
