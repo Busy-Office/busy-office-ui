@@ -22,101 +22,129 @@ Last updated 2026-08-31 (**cloud** wake). Working tree clean at hand-off.
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 6 at hand-off, was 5
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 5 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-The open set went **5 → 6**: this wake filed `232.3` and closed nothing.
-`112.3`, `112.4` and the AT item are the same three as always.
+**The open set is 5 and it did NOT fall, which is worth stating because the
+obvious sentence is wrong.** This wake closed `233.1` and filed nothing, but the
+other dispatcher opened `232.1`/`232.2`/`232.3` and closed `232.1` while this
+wake was working — so the count went 5 → 5 by two independent movements, not by
+standing still. The first draft of this line said "5 → 4" from arithmetic on a
+stale reading and `check:resume-slice-ids` caught it; **re-run the grep, do not
+subtract.**
 
-## ⚠ Read this first: THIS WAKE LOST TWO COLLISIONS, and one finding survived anyway
+| open item | kind of blocked |
+|---|---|
+| `232.2` recurrence history behind 229.3 | **NOT blocked — and largely already measured, see below** |
+| `232.3` does 230.1's refusal misapply 94.11 | **NOT blocked** |
+| `112.3` pattern-fit pilot | owner-blocked — briefs + four answers |
+| `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
+| AT runtime evidence | hardware-blocked — owner hardware |
 
-**The whole contribution of this wake comes from its second loss.** Both losses
-were caught by the pre-commit `git fetch origin main` that Step 0c mandates, and
-neither by a push rejection.
-
-1. From `e995891`, it dispatched **rule 2** on the flagged `cascade.astro` drift,
-   built its own fix, red-proved both clauses, ran every gate green — then the
-   fetch showed `e995891..d32b758c`: **230.1 and all of 231** already landed.
-   Discarded.
-2. Re-dispatching, `dispatch_status.py` read
-   `Objective 3 / 3 OVERDUE [229, 230, 231]` → **rule 3**. It grilled the armed
-   set independently; the next fetch showed `d32b758c..dbc41ae2` — **Slice 232,
-   the same grill, the same filename**, already landed. Then a third fetch, before
-   the final commit, showed `dbc41ae2..8a3ee7e5` (232.1 + the 233.1 triage);
-   rebased onto it, cleanly.
-
-**So the day's collision ledger grows again.** The previous hand-off recorded
-**four** discarded wakes' work (229.3 built 3×, 231.2 built 3×). This wake adds
-its fully-discarded **230.1** build, and a grill that was largely duplicated. A
-fair count for 2026-08-31 is **at least five wakes' work discarded**, against
-Step 0c's stated accepted cost of *"up to one wake's work"*.
-
-**Do not read that as a reason to reopen Step 0c.** The decision is *accept
-collisions*, taken with the cost named, and the mechanism paid a **third** time
-today: `232.3` exists only because a third derivation looked at Slice 230 after
-two others had signed it off — the landed grill's §B had already written *"no
-finding against 230"*. Slice 162's postscript again. The day's ledger is now
-**three** such catches (232.1, 233.1, 232.3) against ≥5 discarded wakes.
-
-**The discarded 230.1 build was NOT recorded as a log row, deliberately** — same
-choice the two previous losers made. It closed no slice and produced no commit,
-and a `Continue` row would feed rule 2's counter for work that never landed.
+**Two are dispatchable, not one.** And `232.2` has a head start: this wake
+measured exactly its question independently (below), so a wake taking it should
+read that first rather than re-deriving a 316-commit walk.
 
 ## What landed this wake
 
-**`232.3` — FILED (Objective, grill mode), outcome `logged`.** The diff is
-`ROADMAP.md` and an addendum (§E) to
-`.roundtable/grill-objective-229-230-231-2026-08-31.md`. **No code changed and no
-gate was added** — this is a finding, filed for a later Continue round to build.
+**`233.1` only — and it took four dispatches to land one item.** Read the
+collision section below before anything else here: **three of this wake's four
+dispatches were discarded.** That is context, not an excuse — the one item that
+landed is a direct product of having kept measuring after the third loss.
 
-**The finding.** 230.1 fixed `cascade.astro`'s unasserted parse and then *declined
-a gate* over the pattern, on the grounds that *"the population is now 6 of 6, so a
-gate would be uniformly true — ceremony, not a detector (94.11)"*.
+**233.1 — making two prose claims executable proved one of them FALSE.** The
+Elevated section on `/components/alerts` said the elevated and toast surfaces
+*match*. Executed in both themes, on the built page:
 
-**94.11's test is about DISCRIMINATION, not today's headcount.** Its predicate was
-refused because it stayed true *under injection* — `letter-spacing: 7px` was
-injected and the detector still reported 0 unexplained. Applied properly the same
-test **passes** here, and needs no synthetic injection because the defect is in the
-history: `parses > 0 && throws == 0` over the frontmatter of every page matching
-`readFileSync|import\.meta\.glob` flags **exactly 1** file at `ff2b623d^`
-(`concepts/cascade.astro`) and **0** at `HEAD`. **Zero false positives, no
-exemption map** — `scale.astro` and `index.astro`, the two pages 230.1 excluded
-*by hand* as byte-length-only, exclude themselves at `parses=0`.
+| | `--elevated` | `.bo-toast` |
+|---|---|---|
+| background | `255,255,255` / `34,38,46` | **identical** |
+| box-shadow | `0 4px 6px -1px` (md) | `0 10px 15px -3px` (**lg**) |
+| border-radius | `6px` | `4px` (never set; inherits `.bo-alert`) |
 
-**The counter-evidence is carried in the item rather than omitted**, and it is what
-keeps 232.3 off the P0 lane: the loop found this defect *without* a gate (227.1
-spotted it, 230.1 fixed it), and the population has been **static at 8 for 9 days**
-after growing 1 → 8 in ten. The gate's value is about the **9th page**. What it is
-not, is ceremony — `cascade.astro` gained its parse on 2026-08-22 and shipped
-unasserted for those same 9 days, read past by three wakes.
+The divergence is **correct** — a toast floats over the page, an elevated alert
+sits in it — so the page was corrected rather than the CSS, and the case asserts
+*same raised background, deliberately different height*, which is the property
+231.2's keep-decision actually rests on. `alert.css` carried the same
+overstatement (*"already carries this exact look"*) and was corrected too.
 
-**A second finding was DROPPED as a duplicate**, recorded as `--also-refused`: the
-89-vs-88 variant denominator (`bo-badge--type` declared by both `badge` and
-`dashboard`, collapsing a name-keyed dict). The landed grill's §C already carries
-it from two dispatchers.
+The second claim — *"the card look and the accent colour are independent"* — is
+**true as written and incomplete where it matters**. The accent colour is
+independent; the **fill** is not, because `.bo-alert--elevated` sets
+`background` directly and beats `--bo-alert-bg` on source order. The page gained
+a clause; **it was written from the measurement, and a first draft read off the
+stylesheet got the direction wrong.**
 
-**Where this wake's own build was WEAKER than what landed, said plainly:** its
-independently-built `cascade.astro` guard checked source declarations ⊆ `var()`
-usages in the shipped bundle, which would have **missed the value-drift case** the
-landed version catches by comparing name *and* value against `tokens.min`. The
-landed guard is the better of the two. 232.3 is against the refusal recorded
-beside it, not against the guard.
+**Three cases, each red-proved by a targeted injection hitting a different
+subset** — which is what shows they discriminate rather than moving together:
+`border-inline-start-color` reddens **case 2 only**; deleting the `background`
+reddens **1 and 3**; the transparency injection reddens **1 and 3**. Case 1 had
+already gone red on the real defect before any injection existed. The equality
+hole 233.1's Accept named is closed with an `opaque()` predicate and red-proved
+by appending `.bo-alert--elevated,.bo-toast{background:transparent}` to the built
+stylesheet: the gate goes red and prints `"elev":{"bg":"rgba(0, 0, 0, 0)"` —
+**the injection confirmed in the DOM via the computed reading, not in the file.**
 
-## Gates run this wake
+`check:claims` reads **161 live · 3 NOT VERIFIED** (was 158 · 3). The +3 is
+exactly the cases added. **The 3 is ENVIRONMENT.md §6b — this container reports
+`(pointer: fine) = false` — not a regression. Do not "restore" the zero.**
 
-**All green, exit 0 each**, re-run in full **after** the rebase onto `8a3ee7e5`
-(the figures below are the post-rebase run, not carried forward): core `build`,
-core `test` (**152** in 27 files), `docs:build` (which runs `check:repo`;
-`check:slice-refs` **462** citations / **215** slice numbers), `check:claims`,
-`check:formatting`, `check:layout` (**127** pages), `test:axe` (**127** × 2
-widths, zero violations), `lint:css`. `check:scroll` was green pre-rebase and the
-rebase touched no page source.
+**All 17 cloud-toolchain entry points run green here, exit 0 each**, list taken
+from `ENVIRONMENT.md` rather than curated: core `build`, `test` (152 in 27
+files), `lint:css`, `docs:build` (`check:slice-refs` 462 / 249 / 2),
+`check:claims`, `check:formatting`, `check:scroll`, `check:layout`,
+`check:forced-colors`, `test:axe` (127 × 2, zero violations),
+`check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
+`check:po-app` (**19/19**), `check -w @busy-office/create-ui`, and `suite`
+(28 screens × 2). Re-run after the rebase: `docs:build` and `check:claims` both
+still green.
 
-`check:claims` reads **158 verified live · 3 NOT VERIFIED**. That is
-`ENVIRONMENT.md` §6b — this container reports `(pointer: fine) = false`, so the
-three `.bo-btn` press claims cannot discriminate — **not** a regression. Do not
-"restore" the zero.
+**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
+1440/390 light-and-dark screenshot lane could not run. **Nothing in this wake
+rests on a rendered image** — every claim is a computed-style reading taken in
+headless Chrome and red-proved by injection, which is exactly `ENVIRONMENT.md`'s
+"can run" list.
+
+## ⚠ THIS WAKE LOST THREE Step 0c COLLISIONS
+
+Recorded in full because the next cloud wake will hit the same thing, and because
+the roadmap's own ledger (Slices 232, 232.3, 233) was written by the **other**
+dispatcher and does not contain this wake's three.
+
+| # | dispatch | built to completion | found at the pre-commit fetch |
+|---|---|---|---|
+| 1 | rule 4 → **229.3** | refusal + 316-commit history walk, gates green | `origin/main` **10 commits ahead**; 229.3/4/5, 230, 231 all landed |
+| 2 | rule 4 → **231.2** | KEEP verdict + browser measurement, gates green | **2 more commits**; 231.2 landed |
+| 3 | rule 3 → **Objective grill of 229/230/231** | full grill + report written | **Slice 232** landed, same arming set |
+| 4 | rule 4 → **233.1** | this one | **pushed** |
+
+**Every discard was caught by the mandated `git fetch origin main` immediately
+before the first commit.** That step is the working half of Step 0c and it earned
+its place three times in one wake — **do not skip it, and do not "fix" it.** No
+wrong push happened and no rebase was needed for any of the three.
+
+**Two things this wake independently reproduced without having seen the winner**,
+which is Step 0c's credited compensation actually firing:
+
+- **229.3's refusal**, by a different instrument — a 316-commit walk measuring
+  **regrowth at 0 of 8** (eight new heuristic gates were written while six
+  sibling headers carried the stale sentence; none copied it). The other
+  dispatcher filed the same finding independently as `232.2`.
+- **231.2's KEEP verdict and the 89-pairs / 88-distinct denominator
+  correction**, reached identically and separately.
+
+**What nobody else reproduced is what became 233.1**, and it only surfaced
+because this wake kept measuring after losing. Worth stating for the next wake
+tempted to stop after a loss: **the losing diff carried a `check:claims` case the
+winner's did not**, and that case caught a false sentence on a shipped page.
+
+**One instrument trap, new, worth carrying:** `git cat-file --batch` sizes are
+**bytes**, and this repo's prose is full of em dashes, so a text-mode parser
+desyncs the blob stream. It crashed loudly here; a quieter one would have
+attributed bodies to neighbouring files. `ENVIRONMENT.md` §7 already records the
+em dash breaking `wc -w` — same character, different instrument, so the trap
+belongs to the character rather than to `wc`.
 
 ## Dispatcher state at hand-off
 
@@ -124,89 +152,70 @@ three `.bo-btn` press claims cannot discriminate — **not** a regression. Do no
 python3 scripts/loops/dispatch_status.py
 ```
 
-```
-Standardize   2 / 4 Continue rounds  since 2026-08-31 13:03   ok
-Objective     0 / 3 slices           since 2026-08-31 14:58   ok
-Optimize      0 wake-date(s) newer   since 2026-08-31 08:41   ok  [newest pair: axe-violations]
-```
+**Read it fresh — it moved four times during this wake**, and rule 3 both fired
+and reset inside it. Run it rather than trusting any paragraph here; the Step 0b
+comparison — the counter read immediately after recording — is what has found two
+of the five starved-counter bugs.
 
-**This is the Step 0b comparison — read immediately after recording — and rule 3
-moved as predicted**, `1 / 3 [232]` → **0 / 3**, because an `Objective` row resets
-it. Rule 2 did not move: an `Objective` row is not a Continue round. Re-run it
-rather than trusting this snapshot.
-
-**How rules 1-6 were answered, so the next wake need not re-derive them:**
+**How the rules were answered, each time this wake re-dispatched:**
 
 | rule | reading |
 |---|---|
-| 1 P0 | none open; GitHub intake `list_issues` OPEN → `totalCount: 0` |
-| 2 Standardize | **2 / 4**, and **no drift flagged** — 230 spent that trigger |
-| 3 Objective | **3 / 3 OVERDUE `[229, 230, 231]` → DISPATCHED**; now 0 / 3 |
-| 4 build item | not reached — rule 3 preempted |
-| 5 Optimize | not reached; see the standing warning below |
-| 6 Polish | not reached |
+| 1 P0 | none open; GitHub intake **0 open issues** (`list_issues` OPEN → `totalCount: 0`) |
+| 2 Standardize | `0 / 4` then `1 / 4` — ok, no drift flagged |
+| 3 Objective | fired mid-wake at `3 / 3 [229, 230, 231]`; **lost to Slice 232** |
+| 4 build item | took the oldest **dispatchable** item each time |
 
-**The open set is 6, and THREE are dispatchable** (rule 4's kind-of-blocked
-distinction, which `LOOPS.md` keeps in the durable playbook precisely because it
-did not survive a rewrite of this file):
-
-| item | kind of blocked |
-|---|---|
-| `112.3` pattern-fit pilot (oldest open) | owner-blocked — 5 briefs; `.roundtable/pilot-112/` holds README + SEALED-PICKS.md and **no `briefs.md`** |
-| `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
-| AT runtime evidence | hardware-blocked — owner hardware |
-| `232.2` the recurrence history 229.3 never measured | **dispatchable** — needs an unshallowed clone, nothing else |
-| `232.3` the gate refusal misapplying 94.11 | **dispatchable** — a script + a `--self-test`; no browser, no owner |
-| `233.1` two `/components/alerts` claims nothing executes | **dispatchable** — ENVIRONMENT.md's SECOND list (computed style + injection), which a cloud wake takes |
-
-**None is browser-blocked**, so this is not the mis-sort `LOOPS.md` rule 4 warns
-about: a local wake has nothing here a cloud wake lacks. **Rule 4's next pick by
-"oldest still-open" is `112.3`, which is owner-blocked** — walk past the three
-blocked items to `232.2`, and do not report the backlog as blocked.
-
-## ⚠ Rule 5 has one live metric and twelve stale ones — do not read `bundle-gz-kb`
-
-Carried forward from the previous hand-off, unchanged and still true. 13 of 33
-metric names have more than one sample; **12 of those 13 have their newest sample
-in 2026-08-16→19**. Only `axe-violations` is current — `0.0, 0.0, 0.0`, flat —
-which is why `dispatch_status.py`'s rule-5 line says `ok` rather than STALE, and
-that `ok` is correct but narrow.
-
-`bundle-gz-kb` reads `10.8 → 11.6 → 11.7`, which *looks* exactly like rule 5's
-"regressed on two consecutive runs" trigger and is **14 days stale**. Recorded as
-**not evaluable**; do not quote it as current.
+**Rule 4's kind-of-blocked distinction, restated because it is what makes this
+wake legible:** the oldest *open* item is not the oldest *actionable* one.
+`112.3` and `112.4` are **owner-blocked**, the AT item is **hardware-blocked**,
+and every item this wake took was the oldest genuinely dispatchable one. Say
+which kind when reporting rule 4 as finding nothing.
 
 ## Direction
 
-**No new input arrived from outside the loop** — no open GitHub issues
-(`list_issues` OPEN → `totalCount: 0`), no owner message. Step 1 had nothing to
-triage, so this wake carries no `Roadmap · plan` row.
+**No new input**: no open GitHub issues, and no owner message since the last
+wake. Step 1 had nothing to triage, so no `Roadmap · plan` row exists.
 
-**The loop is not out of work.** Three items are dispatchable by any wake, cloud
-or local. The three standing items remain the owner's: `112.3` needs 5
-owner-authored briefs plus four answers, `112.4` waits on its verdict, and AT
-runtime evidence needs the owner's hardware. Publishing remains owner-triggered.
+**The standing three are unchanged** (112.3, 112.4, AT runtime) and still need
+the owner; no wake of any kind can advance them.
 
-**`ROADMAP.md` is at 3,014 lines** (`wc -l`, measured at hand-off, up from 2,944).
-No sweep was triggered and **the closed-history share was NOT re-measured** —
-fifth consecutive deferral. Rule 4 was not even reached this wake, so the sweep's
-own trigger ("if this rule is walking thousands of lines") did not fire; say
-"deferred", not a percentage. Measure the cycle from the blob, never from a
-sweep's prose (ENVIRONMENT.md):
+**The one thing genuinely worth the owner's attention is the collision rate, and
+it is reported rather than acted on.** Slice 232 records the day's ledger and
+explicitly declines to file it as an item, on the grounds that Step 0c already
+accepted collisions with the cost named. **That decision is not reopened here.**
+What this wake adds is the measured shape: on 2026-08-31 the two dispatchers
+between them built **229.3 three times, 231.2 three times, and the 229/230/231
+grill twice**, landing one of each. Step 0c's stated cost is *"up to one wake's
+work, discarded"*; the day's figure is **five-plus wakes**.
+
+**The counter-evidence is equally real, which is why this is a direction question
+and not a defect report.** The duplication paid three times in one day — `232.1`,
+`232.2` and `233.1` each came from a *losing* dispatcher re-deriving something
+independently, and `233.1` caught a false sentence that had shipped through
+review with every gate green. A wake that stopped at its first loss would have
+produced none of them.
+
+**`232.2` is answerable from this wake's own measurement.** Its question is *"how
+often has the defect actually appeared?"* — measured here as **one introduction,
+zero recurrences**: the sentence entered in `84eb14ca` (42.1, the commit that
+introduced the tagging scheme, where 5 of 6 instances were **true when written**),
+went false the next commit the same day in `443348e2` (42.3, which paid the debt),
+and **regrowth is 0 of 8** — eight new heuristic gate files were written during
+the twelve stale days and none copied it. `check-boost.mjs` leaving the set on
+2026-08-30 was a **file deletion** in the htmx-4 migration, not a fix; the 6→5
+step reads like a correction and is not one. Commands:
 
 ```
-git show d701e61:ROADMAP.md | wc -l                 # 1626, the seventh sweep
-git rev-list --count d701e61..HEAD -- ROADMAP.md
+grep -rl 'OWES a --self-test' apps/docs/scripts packages/core/scripts | wc -l   # 0
+git log --format='%h %ad' --date=short -S'OWES a --self-test' \
+    -- apps/docs/scripts packages/core/scripts                    # 3 commits, ever
 ```
 
-**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
-1440/390 light-and-dark screenshot lane could not run. **This wake's commit is not
-a code change** — the diff is `ROADMAP.md`, the grill report and the loop-log
-files; no shipped artefact, CSS, markup or rendered output moved, so nothing in it
-rests on a rendered image.
-
-**One visual gap is inherited, not created here, and a local wake should glance at
-it:** 231.2 landed a new demo section on `/components/alerts` in the same
-cloud-only conditions. Its properties are gated (`check:layout` at 390 and 150%
-zoom, `test:axe` at both widths, `check:pseudo`), but nobody has looked at it at
-1440 and 390 in both themes.
+**`232.3` is the other dispatchable item**, and it is a live disagreement
+between the two dispatchers about whether 230.1's gate refusal misapplies 94.11.
+Worth reading before taking, because this wake independently red-proved 230.1's
+assertion from the other direction: renaming `--bo-z-toast` → `--bo-z-toastzz` in
+the source tokens, with `tokens.min.css` still carrying the old name, makes
+`astro build` exit **1** — and it fires on a **rename at equal count, 5 vs 5**,
+precisely the failure mode 229.1 found in 227.3's count-based guard.
