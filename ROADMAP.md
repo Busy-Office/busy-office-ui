@@ -692,7 +692,8 @@ correction. No finding against it.
        the loop-log files only, and no shipped artefact, CSS, markup or rendered
        output moved. Nothing in this item rests on a rendered image.
 
-2. [ ] **232.2 — the recurrence history 229.3 never measured: the defect was
+2. [x] **232.2 — DONE 2026-08-31 (cloud wake). The recurrence history 229.3
+       never measured: the defect was
        introduced BY the commit that paid the debt, and has recurred zero times
        since.**
 
@@ -743,6 +744,33 @@ correction. No finding against it.
        **Requires an unshallowed clone** (`git fetch --unshallow origin`) — every
        figure here is a history measurement, and ENVIRONMENT.md §2 says they are
        silently 50x wrong without it.
+
+       ---
+
+       **CLOSED by the first arm.** The history now sits inside 229.3 itself,
+       under **RECURRENCE HISTORY**, with both instruments and their commands
+       beside it — as a paragraph, not a pointer, for 167.2's reason.
+
+       **Every figure re-derived on an unshallowed clone rather than carried
+       across**, per this item's own closing warning:
+       `git rev-parse --is-shallow-repository` → **false**; the pickaxe returns
+       exactly the three commits claimed, and **`443348e2` is confirmed absent
+       from that list**, which is the entire point of needing a second
+       instrument; `check-floor.mjs`'s branch count reads **0** at `84eb14ca`
+       and **1** at `443348e2`. Nothing moved, so the item's own measurements
+       are confirmed rather than merely quoted.
+
+       **The refusal is untouched and better supported**, which is the outcome
+       this Accept was written to allow: a ratchet guards recurrence, measured
+       recurrence is zero, and the one introduction was a same-day side effect
+       of the commit that paid the debt.
+
+       **Its sibling reading is recorded too, because it is a different
+       instrument reaching the same verdict.** A third dispatcher's 316-commit
+       walk measured **regrowth at 0 of 8** — eight new heuristic gates were
+       authored while six sibling headers still carried the stale sentence, and
+       none copied it. Recurrence and regrowth are not the same question; both
+       read zero, which is why no wake has needed to reopen 229.3.
 
 3. [ ] **232.3 — 230.1's refusal to gate its predicate misapplies 94.11, and
        94.11's own test is what refutes it. Filed by a THIRD dispatcher on the
@@ -1502,6 +1530,51 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        grep -rn 'OWES a --self-test' apps/docs/scripts packages/core/scripts       # 0
        node apps/docs/scripts/check-selftests.mjs   # 15 heuristic (all self-tested)
        ```
+
+       **RECURRENCE HISTORY — added by 232.2 (2026-08-31), because a ratchet
+       guards RECURRENCE and this refusal was argued from today's base rate
+       alone.** Recorded here, in 229.3's own text, rather than left as a
+       cross-reference: a pointer is read less than a paragraph, and this is the
+       paragraph that changes what the refusal rests on.
+
+       ```
+       git rev-parse --is-shallow-repository    # must be false, or ENVIRONMENT §2 applies
+       git log -S'OWES a --self-test' --format='%h %cs %s' \
+           -- apps/docs/scripts packages/core/scripts
+       ```
+
+       | commit | date | what it did | seen by |
+       |---|---|---|---|
+       | `84eb14ca` 42.1 | 2026-08-19 | wrote the sentence into 6 files | pickaxe |
+       | `443348e2` 42.3 | 2026-08-19 | added the branches — **the claim becomes false** | second instrument ONLY |
+       | `f1be2485` 220 | 2026-08-30 | deleted `check-boost.mjs`, the sixth file | pickaxe |
+       | `5754ea02` 229.2 | 2026-08-31 | corrected the remaining five | pickaxe |
+
+       **At 42.1 the sentence was TRUE, and the pickaxe structurally cannot see
+       the moment it stopped being true** — it finds where the SENTENCE changed,
+       and `443348e2` changed only the branch. Re-derived rather than copied:
+       the pickaxe returns exactly three commits and **`443348e2` is confirmed
+       absent from them**. The instrument that does see it tests sentence and
+       branch together:
+
+       ```
+       git show 84eb14ca:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 0
+       git show 443348e2:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 1
+       ```
+
+       **So the defect was introduced by the commit that PAID the debt** —
+       `443348e2`, titled *"42.3: all seven heuristic gates now prove they can
+       fail"*, shipped the self-tests and left five sentences saying they were
+       owed. **One introduction, zero recurrences in the twelve days to 229.2**;
+       the sixth file left the defective state by deletion (Slice 220), not by
+       correction, which is why 229.2 corrected five.
+
+       **This answers the ratchet argument on its own terms and does NOT
+       overturn the refusal.** A ratchet guards recurrence; measured recurrence
+       over the whole history is **zero**, and the single introduction was a
+       same-day side effect of a fix — which a forbidden-phrasing gate would
+       have caught only by also firing on the correct wording, the seven false
+       positives 232.1 measured.
 
        **Not verified, said plainly:** cloud wake — no Podman and no
        `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could

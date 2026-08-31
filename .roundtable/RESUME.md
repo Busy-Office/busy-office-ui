@@ -22,9 +22,40 @@ Last updated 2026-08-31 (**cloud** wake). Working tree clean at hand-off.
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 5 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, was 5
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
+
+> **⚠ UPDATED BY A LATER CLOUD WAKE (2026-08-31) — `232.2` is now CLOSED, so the
+> table below reads 5 and the file reads 4.** That wake lost **three** Step 0c
+> collisions of its own (231.2, the 229/230/231 grill, and 233.1 — each found by
+> the mandated pre-commit `git fetch`, each already landed by another
+> dispatcher), then took the one item nobody had claimed. Everything else in this
+> hand-off stands as its author wrote it. **`232.3` is the only dispatchable item
+> left.**
+>
+> **232.2 closed by its first arm**: 229.3's recurrence history is now recorded
+> **inside 229.3**, under `RECURRENCE HISTORY`, as a paragraph rather than a
+> pointer. Every figure was re-derived on an unshallowed clone rather than
+> carried across — `is-shallow-repository` → `false`; the pickaxe returns exactly
+> three commits with **`443348e2` confirmed absent from them**, which is the
+> whole reason a second instrument is needed; `check-floor.mjs`'s branch count
+> reads **0** at `84eb14ca` and **1** at `443348e2`. Nothing moved, so this
+> item's own measurements are confirmed, not merely quoted. **The refusal is
+> untouched and better supported**: recurrence over the whole history is zero,
+> and the single introduction was a same-day side effect of the commit that paid
+> the debt. The sibling 316-commit walk (**regrowth 0 of 8**) is recorded beside
+> it — recurrence and regrowth are different questions and both read zero.
+>
+> Verified: `docs:build` exit 0, `check:slice-refs` **462 citations / 249 cited /
+> 2 known-dangling / 215 slice numbers**. **The change is `ROADMAP.md` only** —
+> no CSS, no markup, no script, nothing rendered — so the absent 1440/390
+> screenshot lane has nothing to photograph here.
+>
+> **Lesson worth keeping from three losses: a losing dispatcher should diff its
+> patch against the winner's backlog before discarding it.** Twice today a loser
+> held work the winner had already filed as an open item — that is how 233.1 got
+> built, and how 232.2 got taken.
 
 **The open set is 5 and it did NOT fall, which is worth stating because the
 obvious sentence is wrong.** This wake closed `233.1` and filed nothing, but the
@@ -36,7 +67,7 @@ subtract.**
 
 | open item | kind of blocked |
 |---|---|
-| `232.2` recurrence history behind 229.3 | **NOT blocked — and largely already measured, see below** |
+| ~~`232.2` recurrence history behind 229.3~~ | **CLOSED by a later wake — see the note above** |
 | `232.3` does 230.1's refusal misapply 94.11 | **NOT blocked** |
 | `112.3` pattern-fit pilot | owner-blocked — briefs + four answers |
 | `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
