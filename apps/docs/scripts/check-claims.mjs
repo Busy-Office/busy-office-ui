@@ -4099,6 +4099,47 @@ check(
     dark: { elevWarn: elevated.dark.elevWarn.bg, elev: elevated.dark.elev.bg, plainWarn: elevated.dark.plainWarn.bg } }),
 );
 
+/* 233.2 — the sentence the three cases above leave unexecuted, and it is the one
+   231.2's KEEP decision rests on: "`.bo-toast` adds an entrance animation, which
+   says this just arrived. An elevated alert is for entries already on the page at
+   load, so animating them in would announce arrivals that never happened."
+
+   The cases above pin the two apart on SHADOW. That is a real difference and not
+   this one: `--elevated` exists because `.bo-toast`'s entrance animation is wrong
+   for a static list, so if the animation ever landed on the modifier, the variant
+   would have no reason to exist and the page's rule of thumb ("a toast interrupts,
+   an elevated alert is scanned") would be false — while every shadow, background
+   and accent assertion above stayed green. Checked at their tip before adding:
+   nothing asserted `bo-toast-in` against an elevated alert; the four standing
+   toast cases (200.5) are about dismissal, auto-dismiss, stack collapse and
+   reduced motion.
+
+   Read from the page's own elements. Reduced motion zeroes the DURATION token,
+   not the name, so `animationName` is the stable reading here — and it is
+   asserted in both directions, since "elevated has no animation" alone would
+   still pass if the toast quietly lost its entrance too. */
+const elevatedMotion = await page.evaluate(() => {
+  const elev = document.querySelector('.bo-alert--elevated:not(.bo-toast)');
+  if (!document.querySelector('#toast-demo-region .bo-toast')) {
+    document.getElementById('toast-demo-trigger')?.click();
+  }
+  const toast = document.querySelector('#toast-demo-region .bo-toast');
+  return {
+    elevAnimation: elev ? getComputedStyle(elev).animationName : 'NO ELEVATED ALERT',
+    toastAnimation: toast ? getComputedStyle(toast).animationName : 'NO TOAST',
+    elevShadow: elev ? getComputedStyle(elev).boxShadow : 'NO ELEVATED ALERT',
+  };
+});
+check(
+  'alerts: the elevated card does NOT animate in, and the toast does — the split the variant exists for',
+  elevatedMotion.elevAnimation === 'none' &&
+    elevatedMotion.toastAnimation === 'bo-toast-in' &&
+    // and elevation is still doing something, so "no animation" cannot be
+    // satisfied by the modifier having gone inert altogether.
+    elevatedMotion.elevShadow !== 'none',
+  JSON.stringify(elevatedMotion),
+);
+
 await browser.close();
 server.close();
 

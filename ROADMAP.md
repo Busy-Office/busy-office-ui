@@ -554,6 +554,107 @@ this), against at least four discarded wakes.
        the same pair `check:claims` already drives every wake. No screenshot is
        evidence for any part of it.
 
+2. [x] **233.2 — DONE 2026-08-31 (cloud wake). 233.1's three cases pin the
+       elevated card and the toast apart on SHADOW and leave the ANIMATION —
+       the difference the variant exists for — unexecuted. One case added
+       (161 → 162 live), red-proved, and the red-proof is what shows it is not
+       redundant.**
+
+       **This is the FIFTH independent build of this page in one day and the
+       fourth to lose a Step 0c collision** — the same wake that built 231.2 in
+       full (discarded), then rebased its delta onto 233.1's triage, then found
+       that landed too. Each time the pre-commit `git fetch origin main` caught
+       it before a commit existed, so the cost was rework and never a bad merge.
+       What survived four losses is this one assertion, and it survived because
+       re-deriving independently kept finding something the previous derivation
+       had not.
+
+       **The gap, stated precisely.** 233.1's page still says: *"`.bo-toast`
+       adds an entrance animation, which says this just arrived. An elevated
+       alert is for entries already on the page at load, so animating them in
+       would announce arrivals that never happened."* That sentence is the whole
+       reason `--elevated` is a separate modifier — `alert.css`'s own comment
+       makes the same argument — and 231.2's keep-decision rests on it. Checked
+       at `0c546516` before adding anything, plain fixed string first:
+
+       ```
+       git show origin/main:apps/docs/scripts/check-claims.mjs | grep -n 'animationName'
+       # 7 hits: skeleton, row-edit, validation shake — none an alert
+       git show origin/main:apps/docs/scripts/check-claims.mjs | grep -n 'bo-toast-in'
+       # 1 hit, line 3934 — inside a COMMENT in the 200.5 exit case
+       ```
+
+       The four standing toast cases (200.5) cover dismissal, auto-dismiss,
+       stack collapse and reduced motion. None asserts that an elevated alert
+       carries no entrance.
+
+       **The red-proof is the argument for the case existing, not just evidence
+       that it works.** Injecting
+       `animation: bo-toast-in var(--bo-motion-duration-base) …` into
+       `.bo-alert--elevated`, confirmed present in the BUILT, comment-stripped
+       CSS first (`bo-alert--elevated{animation:bo-toast-in …}` — the rule body,
+       never the source spelling, since `alert.css`'s comment names
+       `bo-toast-in` three times):
+
+       ```
+       claims check FAILED — 1 of 162
+       FAIL alerts: the elevated card does NOT animate in, and the toast does
+            {"elevAnimation":"bo-toast-in","toastAnimation":"bo-toast-in",
+             "elevShadow":"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px"}
+       ```
+
+       **One of 162 — 233.1's three cases stayed GREEN.** That is the finding:
+       an entrance animation landing on `--elevated` collapses the variant's
+       entire reason to exist, and every background, accent and shadow assertion
+       on the page reads clean through it. The failure detail carries the moved
+       computed value (`elevAnimation` `none` → `bo-toast-in`), which is the
+       form 233.1's own Accept asks for. Injection reverted; `git diff` on
+       `alert.css` empty.
+
+       **Asserted in both directions on purpose.** "Elevated has no animation"
+       alone would stay green if the toast quietly lost its entrance too, so the
+       toast's `bo-toast-in` is asserted beside it; and the shadow is asserted
+       so "no animation" cannot be satisfied by the modifier having gone inert.
+       `animationName` rather than duration, because reduced motion zeroes the
+       DURATION token and leaves the name — the reading stays stable under the
+       media query the 200.5 case already exercises.
+
+       *Accept — met as a property:* the page's entrance-animation sentence has
+       a `check:claims` case; it has been shown to fail on a real defect with
+       the injection confirmed in the built artefact and the computed reading
+       shown to move; and it fails on a defect **no existing case detects**.
+       `check:claims` **161 → 162** verified live, `NOT VERIFIED` unchanged at
+       **3** (ENVIRONMENT trap 6b — `(pointer: fine) = false` in this container;
+       **not a regression, not to be "restored" to zero**).
+
+       **All 16 CI entry points green, exit 0 each**, against the final tree,
+       each written to its own log and tailed only on failure: core `build`,
+       core `test` (**152** in 27 files), `lint:css`, `docs:build`,
+       `check:claims`, `check:formatting`, `check:scroll`, `check:layout`
+       (**127** pages), `check:forced-colors`, `test:axe` (**127** × 2 widths,
+       zero violations), `check:target-size`, `check:search`, `check:pseudo`,
+       `check:quickstart`, `check:repo`, `check:po-app`, `create-ui check`,
+       `suite`.
+
+       **A gate run that fails must keep its output, and this wake paid to
+       learn it.** Earlier, one `check:claims` exited 1 inside a 12-gate loop
+       and never reproduced — five standalone runs, a re-run of the exact
+       command sequence, and a re-run of the whole loop all came back green at
+       the same live count, with `git diff` on `alert.css` clean at the time so it
+       was not a stale injection. **The cause is unknown and is recorded as
+       unknown**, because the loop piped every gate through
+       `grep -iE 'check passed|FAILED'` and the only surviving line was
+       `npm error command failed`, which names nothing. Same shape as
+       `ENVIRONMENT.md` trap 2b, where `| tail -2` cut off the line naming the
+       lock file. Write each gate's full output to a log; tail it only on
+       failure.
+
+       **Not verified, said plainly:** no Podman and no `localhost:8081` here,
+       so the 1440/390 light-and-dark screenshot lane could not run. This item
+       **changed no markup, no CSS and no prose** — the diff is one
+       `check:claims` case plus this entry — so nothing in it rests on a
+       rendered image.
+
 ## Slice 232 — Objective grill of Slices 229, 230, 231: 230 and 231 survive entirely, and both findings are against how 229's refusal RECORDED its numbers, not against the refusal (2026-08-31)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open
