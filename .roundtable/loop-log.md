@@ -1263,3 +1263,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 15:46 · Continue · build · 234.1 — filed: the OWES-a-self-test defect was introduced by 42.1, not the 42.3 both dispatchers confirmed; the confirming probe reads one file of six. Dispatched 232.2, lost the Step 0c race to 606edf88 · logged · 258856b4
 - 2026-08-31 15:46 · Meta · refusal · reopening 232.2 after losing its race — the item is closed and only the refuted attribution is re-filed · refused · 258856b4
 - 2026-08-31 15:46 · Meta · refusal · reopening 229.3's refusal on the strength of the history — measured recurrence of zero supports the refusal rather than overturning it · refused · 258856b4
+- 2026-08-31 16:15 · Continue · build · 233.2 — execute /components/alerts' entrance-animation claim; 233.1's three cases stay green on the injected defect · landed · efab3c13
