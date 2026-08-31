@@ -1258,3 +1258,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 14:58 · Meta · refusal · re-filing the 89-vs-88 denominator finding — duplicates what the landed grill records from two dispatchers · refused · 577a2ab4
 - 2026-08-31 15:29 · Continue · build · 233.1 — made /components/alerts' two Elevated prose claims executable; one shipped FALSE (elevated vs toast surface) and one half true (severity fill), both corrected, 3 cases red-proved, 158->161 live · landed · 255ceb8f
 - 2026-08-31 15:29 · Meta · refusal · changing alert.css's shadow/radius to make the two surfaces actually match — the divergence is the design (a toast floats over the page), so the prose was corrected instead · refused · 255ceb8f
+- 2026-08-31 15:34 · Continue · build · 232.2 — 229.3's recurrence history recorded in 229.3 itself, re-derived on an unshallowed clone; refusal untouched · landed · 606edf88
+- 2026-08-31 15:34 · Meta · refusal · no gate proposed for the stale-self-test phrasing: recurrence 0 and regrowth 0 of 8 both say a ratchet has nothing to guard · refused · 606edf88

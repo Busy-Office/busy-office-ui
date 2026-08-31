@@ -77,6 +77,13 @@ subtract.**
 measured exactly its question independently (below), so a wake taking it should
 read that first rather than re-deriving a 316-commit walk.
 
+> **⚠ SUPERSEDED — `232.2` was closed by the later wake noted at the top of this
+> file, using exactly that head start. `232.3` is the only dispatchable item
+> left, and it is very likely NOT what the next wake runs: recording the 232.2
+> row moved rule 2's counter to `Standardize 4 / 4 OVERDUE`, and rule 2 sits
+> ABOVE rule 4. Re-run `dispatch_status.py` — that reading is the Step 0b
+> comparison, taken immediately after recording, and it moved as predicted.**
+
 ## What landed this wake
 
 **`233.1` only — and it took four dispatches to land one item.** Read the
