@@ -134,12 +134,26 @@ browser gates are the evidence that nothing broke.
 python3 scripts/loops/dispatch_status.py
 ```
 
-**This is the Step 0b comparison — the counter read immediately after
-recording.** Rule 3's slice counter must RESET (an `Objective` row resets it by
-161.4's exclusion list); rule 2's Continue-round counter must be **unchanged at
-0/4**, because an Objective row is neither a Continue nor a Standardize row.
-Re-run it rather than trusting this sentence — that comparison has found two of
-the five starved-counter bugs.
+```
+Standardize   0 / 4 Continue rounds since 2026-08-30 18:45   ok
+Objective     0 / 3 slices          since 2026-08-31 02:50   ok
+Optimize      1 wake-date(s) newer   since 2026-08-30 03:45   STALE
+```
+
+**This is the Step 0b comparison — the counter read immediately after recording
+— and it moved as predicted.** Rule 3's slice counter RESET (an `Objective` row
+resets it, 161.4's exclusion list) and rule 2's Continue-round counter is
+**unchanged at 0/4**, because an Objective row is neither a Continue nor a
+Standardize row. That comparison has found two of the five starved-counter bugs;
+re-run it rather than trusting this snapshot.
+
+**Rule 5 flipped to STALE this wake, and it is this wake that made it stale.**
+It read `0 wake-date(s) newer  ok` at Step 0b and reads **1 STALE** now, because
+this wake logged loop activity and recorded no metric. Per rule 5's own text:
+**say it could not be evaluated, do not report it clear.** No metric was
+recorded deliberately — a grill produces no tracked quantity, and inventing one
+would be a name sampled once, which can never satisfy "two consecutive runs" and
+is precisely the defect 184.1 describes.
 
 **How rules 1-3 were answered, so the next wake need not re-derive them:**
 
