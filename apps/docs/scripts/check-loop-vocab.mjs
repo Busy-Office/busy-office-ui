@@ -15,7 +15,9 @@
  * round: the code is the thing that enforces, so the code is the authority.
   *
  * @heuristic — extracts the vocabulary from a prose line with a bare word regex.
- *   OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+ *   Self-tested (roadmap 42.3 — the debt is PAID, and this line used to say it was owed): run
+ *   with `--self-test`. `check:selftests` enforces the `process.argv` branch itself, never the
+ *   tag text, which is how it once passed on all of them at once.
 */
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';

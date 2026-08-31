@@ -315,6 +315,260 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 229 — Objective grill of Slices 222, 226, 227, 228: every decision survives, the best candidate finding was already gated, and the one mirror no gate can see is fixed (2026-08-31)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open
+issues** (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to triage
+and no `Roadmap · plan` row was recorded. Rule 2: `dispatch_status.py` read
+`Standardize 0 / 4 Continue rounds ok` — the counter reset when 228 fired. Rule
+3: `Objective 4 / 3 slices OVERDUE [222, 226, 227, 228]` → **Objective**. Rules
+4-8 were not reached.
+
+**The open set was 3 at dispatch time and wholly blocked — for the fourth wake
+running.** This slice files three more (229.3, 229.4, 229.5), and unlike the
+standing three **none of them needs the owner, hardware or a second agent**, so
+rule 4 has ordinary buildable work again. Read the rule carefully next wake: the
+oldest open item is still `112.3` and still owner-blocked; the oldest
+*dispatchable* one is 229.3.
+
+**Arming set not narrowed, and that is a reading rather than an omission**
+(playbook §6 step 0). The most recent grill (225) covered 218, 219, 223, 224,
+and **none of the 23 prior grills names 222, 226, 227 or 228** — all four are
+genuinely un-grilled. 222 is armed because its Continue row landed 19 minutes
+*after* the 225 grill row — the re-arming shape step 0 warns about — but it had
+not in fact been grilled, so it stays in scope.
+
+**Measured off the HEAD blobs, and the working-tree form is a detector that
+cannot fail** — caught inside this slice, which is why it is written down rather
+than quietly fixed. Run against the working tree, `grep -cE '\b(222|226|227|228)\b'`
+over the grill headings returns **1**: this slice's own heading, *"Objective
+grill of Slices 222, 226, 227, 228"*, matches the search for prior coverage of
+those slices. The distinct-grill count is inflated the same way — **24** in the
+tree, **23** at HEAD. That is CLAUDE.md's *"an assertion tripped on its own
+explanation"* and 225.1's finding in 218.1, arriving in the scope-setting step of
+the grill that re-derived them:
+
+```
+git show HEAD:ROADMAP.md > /tmp/r.md; git show HEAD:ROADMAP-archive.md > /tmp/a.md
+grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' /tmp/r.md /tmp/a.md \
+  | sed -E 's/^## Slice ([0-9]+) .*/\1/' | sort -n -u | wc -l          # 23
+grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' /tmp/r.md /tmp/a.md \
+  | grep -cE '\b(222|226|227|228)\b'                                   # 0
+```
+
+**A scope check for a NEW slice is read from the commit that predates it**, not
+from the tree that already contains it.
+
+Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
+
+1. [x] **229.1 — DONE. `icon.astro`'s deprecated-glyph set was a hand-typed
+       mirror that no gate can see, and it is now derived.**
+
+       *Accept* — properties, never predicted values:
+       - Every load-bearing count in the four slices is re-derived
+         independently, and each either holds or the disagreement is recorded.
+       - Any candidate finding is red-proved by injection, with the injection
+         confirmed to have landed, **before** it is written up — and finding it
+         already gated is a satisfying outcome, not an off-plan one.
+       - The rendered artefact is compared, not the diff that made it.
+
+       **Everything the four slices decided survives.** 227's numbers re-derive
+       exactly — 9,109 / 95,046 / 26 (by three independent derivations) / 9.6% /
+       93 kB / 68 kB at `/26` and 148 at `/12` / 85,937 B = 83.9 kB, so 227.1's
+       point that *"more than everything else we ship"* was true at 148 and false
+       at 68 is confirmed. 226.1's probes all reproduce in a **second** cloud
+       container a day later, including `check:po-app` 19/19 exit 0 with the
+       missing root hoist still absent — so its one open inference is now two
+       readings on two dates. 228.1's sweep is lossless at **15/15 byte-identical
+       moved sections**, verified with a parser written here rather than the
+       sweep's own, and its `+2,381` archive delta matches the git blobs exactly.
+
+       **The grill's best candidate finding was REFUTED, and recording that is
+       the useful part.** 227.3's guard compares a *count*, so a glyph **rename**
+       passes it. Renaming `.bo-icon--doc` → `.bo-icon--doczz` in the source CSS:
+       core exits **0**, `api.json` still declares 26 variants, and the guard is
+       silent — exactly as predicted. But `npm run docs:build` exits **1**:
+       `check-markup FAILED — 116 problem(s) across 165 file(s): unknown class
+       "bo-icon--doc"`. `packages/core/scripts/check-markup.mjs dist` reconciles
+       every rendered `bo-*` class against `api.json` and runs in the docs build
+       chain, so glyph names are guarded one layer up by a gate written for a
+       different reason (32.2). Hypothesis dead.
+
+       Two injection notes, both this repo's own base rate landing again: the
+       first attempt used `docZZ` and went red on **stylelint's naming pattern**
+       — a red for the wrong reason, the mirror image of the green red-proof
+       trap; and the refutation then reproduced *by accident* when a later build
+       failed identically because core's `dist/` still carried the injected
+       `api.json` after the source was reverted. Two firings, one unplanned.
+
+       **What `check:markup` structurally CANNOT see is which glyphs are
+       deprecated**, because a wrongly-listed glyph is still a class the
+       framework ships. `deprecatedGlyphs = ['settings','barcode','building',
+       'user']` was hand-typed against four `/* DEPRECATED` blocks in the same
+       stylesheet. Deprecating a fifth would have left the page showing it among
+       the eight that "earned their place", under a badge still reading 4, with
+       nothing failing — and that set is the page's published answer to *which
+       glyphs should I stop using*. Same page, same class, one step on from
+       227.1's divisor and 227.3's unasserted denominator.
+
+       **Fixed by derivation, not by refreshing the list** (217.2/220.1's rule).
+       Read from the **unminified** shipped css — minification drops the comments
+       that carry the deprecation — and reconciled against an independent count
+       of the markers themselves, so a partial parse fails as well as an empty
+       one. **No hand-typed floor**, for 227.3's stated reason: a literal minimum
+       would be the very decaying constant 227.1 removed from this block.
+
+       **Red-proved in both directions, through the built page**, with each
+       injection confirmed present before the build:
+
+       ```
+       A  stray "DEPRECATED", no glyph selector after it
+          markers=5 derived=4   ->  docs:build EXIT=1
+          "icon: parsed 4 deprecated glyph(s) … but it carries 5 DEPRECATED marker(s)"
+       B  a real DEPRECATED block above .bo-icon--close (not one of the eight)
+          markers=5 derived=5   ->  docs:build EXIT=0
+          rendered badge 4 -> 5, "close" enters the deprecated cluster
+          (baseline page: badge 4, no "close" anywhere in that region)
+       ```
+
+       **Verified against the RENDERED artefact, not the diff**: with the
+       stylesheet untouched, `/components/icon/index.html` is **byte-identical**
+       before and after — two full clean builds, diffed. The derivation
+       reproduces the hand-typed list exactly; what it removes is the silence.
+
+       **Not verified, said plainly:** cloud wake — no Podman, no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not
+       run. Nothing here rests on a rendered image: the change is build-time only
+       and the rendered page is byte-unchanged, which was measured rather than
+       assumed. The whole-tree browser gates are the evidence that nothing broke.
+
+2. [x] **229.2 — the improvement question, asked of what 229.1 touched, found a
+       stale claim on FIVE gate headers — including the one that refuted 229.1's
+       hypothesis. Base rate measured before fixing: 5 of 5.**
+
+       `check-markup.mjs`'s header — the gate that caught the renamed glyph —
+       reads *"OWES a --self-test (roadmap 42.3): a detector this easy to fool
+       must prove it can fail."* It does not owe one. It carries a real
+       `process.argv.includes('--self-test')` branch with four cases, and
+
+       ```
+       node packages/core/scripts/check-markup.mjs --self-test
+       # self-test passed — the detector can fail                       EXIT=0
+       node apps/docs/scripts/check-selftests.mjs
+       # 46 gates classified: 15 heuristic (all self-tested), 31 exact
+       ```
+
+       **Measured before touching anything, because a 1-of-1 is 94.11 ceremony
+       and a class is not.** Five files carry that line — `check-markup`,
+       `check-forced-colors`, `check-notes`, `check-loop-vocab`, `check-floor` —
+       and **5 of 5** have the branch. The meta-gate says every one of the 15
+       heuristic gates is self-tested, so the sentence is false everywhere it
+       appears, and the gate that would notice is the one whose passing proves
+       the debt paid.
+
+       Fixed in place — five comment headers, no behaviour — because it is
+       smaller than explaining, which is the operating rule's own test. Each
+       `--self-test` re-run green afterwards, and `check:selftests` still reports
+       15 of 15.
+
+       **This is the exact INVERSE of the class 227.2 refused, which is why it is
+       fixed rather than argued.** 227.2 refused a gate for *"a literal
+       duplicating a fact something else can read"* — semantic, base rate 0.
+       This is a *stated debt contradicted by a gate that already runs*: exact
+       (does the file contain the branch?), and base rate 5.
+
+3. [ ] **229.3 — should `check:selftests` also reject a header that CLAIMS to
+       owe a self-test it has? Base rate 5, now 0 — decide, and refusing is a
+       satisfying outcome.**
+
+       Raised by 229.2 rather than acted on, because adding a gate is a decision
+       and 229.2 was a comment fix. The predicate is exact and one line from data
+       `check-selftests.mjs` already holds: it classifies each gate as heuristic
+       or exact and already knows whether the branch exists, so "and its header
+       does not say it owes one" is a string test over the same file it just
+       read — not the semantic predicate 94.11, 216.2, 217.2, 220.2 and 227.2
+       each refused.
+
+       **The argument against, stated so it is not re-derived:** after 229.2 the
+       base rate is **0**, and 94.11's finding is that a gate shipping to fire on
+       zero things is ceremony however cheap. The counter is that this one
+       *ratchets* — `check:wrong-choice` is the precedent for an executable
+       ratchet whose base rate the fixing pass drove to near-zero.
+
+       *Accept* — a property, not a prediction:
+       - Either `check:selftests` gains the assertion **and is red-proved by
+         injecting the old sentence back into one gate, with the injection
+         confirmed present before the run**, or the refusal is recorded with the
+         base rate that decided it. **Both close this item.**
+       - If it is added, it must not fire on the five files this slice corrected
+         — verified by running it, not by reading the regex.
+
+4. [ ] **229.4 — 227.2's base rate is not re-derivable, and the base rate IS
+       the refusal. Record the command; do NOT add a gate.**
+
+       227.2 refused a gate on *"30 files … 50 numeric literals … the
+       unrestricted form returns 308"*, and its own text says the probe lives in
+       that wake's scratchpad. `git log --name-only 96bd852a` shows the commit
+       carried only `ROADMAP.md` and `icon.astro`, so the instrument is gone.
+       Reconstructing it from the predicate the write-up describes gives a
+       different answer for every defensible scope — **18**, **23** or **34**
+       files — and the claimed 30 sits inside that spread without being
+       reproducible from anything committed.
+
+       This is not a claim that 30 is wrong. It is that **it cannot be checked**,
+       and here that matters more than usual: 227.2's own reopen condition is a
+       *re-measurement* (*"if it is 1-of-1 this is 94.11 ceremony and should be
+       refused a fourth time"*). A refusal whose reopen path is a number nobody
+       can re-run is closed by accident rather than on the merits.
+
+       **The refusal still stands on its other leg**, verified independently
+       here: *"a literal is an operand" is checkable; "a literal duplicates a
+       fact something else can read" is not* — 94.11 exactly. That leg needs no
+       base rate.
+
+       *Accept* — properties, not values:
+       - The commands that produce 227.2's base rate are recorded somewhere a
+         later wake can run them, **or** the claim is restated as the
+         unreproducible reading it is, with the reconstruction spread named.
+       - Whatever the re-measurement says, a **gate is not added** unless the
+         semantic leg above is first shown to be wrong. Finding the base rate
+         higher than 30 is therefore a satisfying outcome that still refuses.
+
+       **Left OPEN, not owner-blocked** — any wake can take it, and the honest
+       first outcome is a paragraph, not a gate.
+
+5. [ ] **229.5 — `ENVIRONMENT.md`'s "measure from the git blob" bullet covers
+       the after-figure form and not the diff-stat form, and the wake that wrote
+       it made the uncovered error in the same document.**
+
+       The 228 hand-off asserted *"`git diff --stat`'s own net (129 insertions −
+       2,328 deletions = −2,199) matches 3,794 → 1,595 to the line."*
+
+       ```
+       git show --numstat --format='' d701e61 -- ROADMAP.md   # 158  2326
+       ```
+
+       158 − 2,326 = **−2,168** → **1,626**, the committed file. All four figures
+       are working-tree readings taken mid-write-up, and the sentence claims they
+       "match to the line" when they match nothing. **`ROADMAP.md`'s durable
+       Slice 228 text is unaffected and correct** — it states `−2,321` / `+2,381`
+       for the move and says outright that its after-figure predates its own
+       write-up. The defect is confined to the ephemeral hand-off, which is why
+       it is filed rather than fixed in place.
+
+       Worth naming for *which* wake wrote it: the same one promoted "measure a
+       regrowth cycle from `git show <sweep>:ROADMAP.md | wc -l`, never from the
+       sweep's own prose" into `ENVIRONMENT.md`. That bullet names the
+       **after-figure**; the error made beside it is the **diff-stat**. 192.1's
+       shape again — the defect lands in what shipped beside the carefully-proved
+       claim.
+
+       *Accept* — a property: `ENVIRONMENT.md`'s bullet states the general form
+       (**a figure describing a commit is read from the commit**) rather than the
+       one instance, **or** it is recorded that the generalisation was weighed and
+       refused as prose growth, with the reason. Both are satisfying; 158.2's
+       cadence argument makes the second a real option rather than a cop-out.
+
 ## Slice 228 — Standardize sweep: lanes 1-3 clean an eighth time, and lane 4 carries the finding again — the archive sweep is due a SEVENTH time (2026-08-30)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`

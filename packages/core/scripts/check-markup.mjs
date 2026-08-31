@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 //
 // @heuristic — parses HTML with regex; the bare-text rule once caught 5 of 6 injected cases because it consumed the trailing "<".
-// OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+// Self-tested (roadmap 42.3 — the debt is PAID, and this line used to say it was owed): run
+// with `--self-test`. `check:selftests` enforces the `process.argv` branch itself, never the
+// tag text, which is how it once passed on all of them at once.
 /**
  * Validate HTML against the framework's GENERATED surface.
  *

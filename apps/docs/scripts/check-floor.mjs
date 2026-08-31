@@ -12,7 +12,9 @@
  * literal that will rot the moment a feature is added or dropped.
   *
  * @heuristic — greps prose for a hand-typed version literal, with an allow-list and stat-block stripping.
- *   OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+ *   Self-tested (roadmap 42.3 — the debt is PAID, and this line used to say it was owed): run
+ *   with `--self-test`. `check:selftests` enforces the `process.argv` branch itself, never the
+ *   tag text, which is how it once passed on all of them at once.
 */
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';

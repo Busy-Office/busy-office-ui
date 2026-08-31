@@ -47,12 +47,58 @@ if (glyphCount !== apiGlyphCount)
 const totalKb = Math.round(totalBytes / 1024);
 const catalogueKb = Math.round((iconBytes / glyphCount) * 200 / 1024);
 
+/* The showcase eight are an EDITORIAL list, not a mirror — they are the glyphs
+   judged to have earned a place, which no artifact records. `check:markup`
+   already reconciles each rendered `bo-icon--*` class against api.json, so a
+   renamed or deleted glyph fails the build here (red-proved 2026-08-31, Slice
+   229: renaming `.bo-icon--doc` in the source CSS left core green and api.json
+   at 26 variants — 227.3's count guard cannot see a rename — and `check-markup`
+   exited 1 with 116 problems). */
 const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'grid'];
+
 /* DEPRECATED (roadmap 53.2): zero pattern screens in these docs render these —
    only this page's own showcase did. Kept for the deprecation window (next
    major), shown separately so the showcase stops implying they earned their
-   place the way the eight above did. */
-const deprecatedGlyphs = ['settings', 'barcode', 'building', 'user'];
+   place the way the eight above did.
+
+   DERIVED, not hand-typed — the one mirror on this page that `check:markup`
+   structurally cannot see, because a wrongly-listed glyph is still a class the
+   framework ships (Slice 229). It was `['settings','barcode','building','user']`
+   against four `/* DEPRECATED` blocks in the same stylesheet, so deprecating a
+   fifth glyph would have left this page showing it among the eight that earned
+   their place, under a badge still reading 4, with nothing failing.
+
+   Read from the UNMINIFIED shipped css, since minification drops the comments
+   that carry the deprecation. Reconciled against a second, independent count of
+   the markers themselves, so a partial parse is caught as well as an empty one —
+   and deliberately no hand-typed floor, which would be the decaying constant
+   227.1 removed from this same block.
+
+   The trade, named rather than discovered: the marker count is a raw text
+   count, so prose in `icon.css` that merely NAMES the word DEPRECATED breaks
+   this build. That is the assertion-trips-on-its-own-explanation shape CLAUDE.md
+   warns about — but it fails LOUDLY with the counts in the message, which is the
+   safe direction of that trap, and the alternative (matching only the structural
+   form) is what would silently under-report. Accepted deliberately. */
+const iconSrcCss = readFileSync(require.resolve('@busy-office/ui/css/components/icon'), 'utf8');
+const deprecatedGlyphs = [...iconSrcCss.matchAll(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\/\s*\.bo-icon--([a-z0-9-]+)/g)]
+  .filter((m) => m[0].includes('DEPRECATED'))
+  .map((m) => m[1]);
+const deprecationMarkers = (iconSrcCss.match(/DEPRECATED/g) ?? []).length;
+if (deprecatedGlyphs.length !== deprecationMarkers)
+  throw new Error(
+    `icon: parsed ${deprecatedGlyphs.length} deprecated glyph(s) from the shipped css, but it carries ` +
+      `${deprecationMarkers} DEPRECATED marker(s). This page publishes that set as the answer to "which ` +
+      'glyphs should I stop using", so a partial parse must fail rather than under-report.',
+  );
+const undeclared = deprecatedGlyphs.filter((g) => !api.components.icon.variants.includes(`bo-icon--${g}`));
+if (undeclared.length) throw new Error(`icon: deprecated glyph(s) not shipped: ${undeclared.join(', ')}`);
+const bothLists = glyphs.filter((g) => deprecatedGlyphs.includes(g));
+if (bothLists.length)
+  throw new Error(
+    `icon: glyph(s) in BOTH the showcase and the deprecated list: ${bothLists.join(', ')}. ` +
+      'Deprecating a showcased glyph means removing it from the editorial eight above.',
+  );
 
 const markup = `<!-- Decorative (label carries the meaning): -->
 <a class="bo-sidebar-nav__link" href="/invoices">

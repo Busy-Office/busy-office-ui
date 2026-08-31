@@ -19,7 +19,9 @@
  * deliberately small because CI budget is tracked (see ROADMAP).
   *
  * @heuristic — matches rules to pages by string-matching class names — its own header says so.
- *   OWES a --self-test (roadmap 42.3): a detector this easy to fool must prove it can fail.
+ *   Self-tested (roadmap 42.3 — the debt is PAID, and this line used to say it was owed): run
+ *   with `--self-test`. `check:selftests` enforces the `process.argv` branch itself, never the
+ *   tag text, which is how it once passed on all of them at once.
 */
 import { readFile, readdir } from 'node:fs/promises';
 import { assertScanned, selfTest } from './gate-report.mjs';
