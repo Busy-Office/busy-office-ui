@@ -1239,3 +1239,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 02:50 · Objective · grill · 229.2 — five gate headers claimed to OWE a --self-test they already have; base rate 5 of 5 measured before fixing, each --self-test re-run green, check:selftests still 15 of 15 · landed · 5754ea0
 - 2026-08-31 07:38 · Continue · build · 229.3 — check:selftests rejecting a stale 'owes a --self-test' header: both candidate predicates go blind on a reworded instance; refused · refused · 87fd742f
 - 2026-08-31 07:38 · Meta · refusal · the BROAD 'owes ~ --self-test' predicate — base rate 2, both false positives, and blind to the same rewording as NARROW · refused · 87fd742f
+- 2026-08-31 08:41 · Continue · build · 229.4 — 227.2's base rate: the file half made re-runnable (7 scopes, 18-36, none is 30), the literal half restated as unreproducible · landed · 8382f70
+- 2026-08-31 08:41 · Meta · refusal · a gate for the hard-coded-divisor class, a fifth time — the semantic leg stands and every reading is higher than 30 · refused · 8382f70
+- 2026-08-31 08:41 · Meta · refusal · committing the reconstruction probe — it is the throwaway 227.2 describes; only the half that reduces to shell lines is recorded · refused · 8382f70

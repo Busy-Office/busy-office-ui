@@ -22,73 +22,91 @@ Last updated 2026-08-31 (**cloud** wake). Working tree clean at hand-off.
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 5 at hand-off
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 ```
 
-**The open set went 6 → 5.** Two of the three dispatchable items remain
-(`229.4`, `229.5`); the third (`229.3`) closed this wake as a refusal.
+**The open set went 5 → 4.** One of the two dispatchable items remains
+(`229.5`); the other (`229.4`) closed this wake as a landed finding.
 
 ## What landed this wake
 
-**Slice 229.3 — REFUSED**, dispatcher rule 4 (Continue, build mode). Rules 1-3
-were answered by measurement; the readings are in "Dispatcher state" below.
-The diff is **`ROADMAP.md` alone** — no code changed.
+**Slice 229.4 — LANDED**, dispatcher rule 4 (Continue, build mode). The diff is
+**`ROADMAP.md` alone** — no code changed, and no gate was added.
 
 **Rule 4 was reported the way `LOOPS.md` demands, naming which kind of
 blocked.** The OLDEST open item is `112.3` and it is **owner-blocked**; `112.4`
-is owner-blocked on 112.3's verdict and AT runtime evidence is
-**hardware-blocked**. The oldest **dispatchable** item was `229.3`. Saying which
-one was taken and why is the thing that cost four wakes on 173.2.
+is owner-blocked on 112.3's verdict; AT runtime evidence is
+**hardware-blocked**. The oldest **dispatchable** item was `229.4`.
 
-**229.3 asked whether `check:selftests` should reject a header claiming to owe a
-`--self-test` it has. The item framed this as ceremony (94.11, base rate 0)
-versus a ratchet (`check:wrong-choice`). Building both candidates answers a
-question neither horn asks: can the predicate go red on the defect at all?**
+**229.4 asked whether 227.2's base rate — "30 files … 50 numeric literals … the
+unrestricted form returns 308" — can be re-derived, since the probe that
+produced it lived in a scratchpad and was never committed. The answer splits,
+and both halves of the Accept were taken.**
 
-Measured over the **15** heuristic gates carrying a `--self-test` branch, with a
-throwaway probe kept out of the tree:
+- **The file half reduces to a command, and it refutes the 30.** Run against
+  **`96bd852a` itself** (the commit that published the number), seven
+  defensible scopes span **18 · 23 · 25 · 32 · 33 · 34 · 36** and **none is
+  30**. The seven shell lines are recorded in ROADMAP 229.4 and read
+  identically at `HEAD`. The three choices the prose leaves open are named
+  there: prose files that merely *name* `readFileSync` (32 vs 25 — seven
+  markdown files match, `ROADMAP.md` among them), whether a generated `*.json`
+  import is a sixth signal or a gloss on the five, and whether `examples/` and
+  `packages/core/tests/` are in scope. **229.4's own premise named 18, 23 and
+  34 with no command; all three are reachable** and are the 1st, 2nd and 6th
+  lines, so its spread holds and now has its commands.
+- **The literal half cannot be reduced to a command at all**, which is a deeper
+  finding than a lost probe: it needs a **taint implementation** and prose
+  cannot pin one. Three defensible versions give **22 / 33 / 61** on one file
+  set at one commit; the operator definition and the file set move it over
+  **22 … 173** restricted and **324 … 785** unrestricted. **50 is produced by
+  none of them, and 308 is below every unrestricted reading taken here.**
+- **Which of the three taint versions is right is not a judgement call**, and
+  that is what makes the spread evidence rather than hand-waving: 227.2 names
+  `primitives.astro:24`, `tokens.astro:81` and `ai-assistants.astro:30` as
+  sites of the pattern, and the first two versions score all three **zero** —
+  the chain is `readFileSync` → `src` → `primitivesCss` → `KNOBS` →
+  `knobs.length < 4`, three hops with the read on a **continuation line**.
+- **One driver of the spread is concrete, not mysterious:**
+  `examples/po-app/server.mjs` alone contributes **112 of 167** in the widest
+  scope — one demo server whose whole body is taint-reachable.
+
+**The sharpest thing this wake produced, and it belongs in the next wake's
+hands: a reconstruction that reproduces the target number is a defect in the
+reconstruction until proven otherwise.** An early scope here returned **exactly
+30**. It was wrong: the generated-json arm used `[^\n]*` in an **ERE**, where a
+bracket expression makes that *"any character except backslash or the letter
+n"*. `import patterns from '…/patterns.json'` contains an `n` in `patterns`, so
+three real importers (`Gallery.astro`, `which-pattern.astro`,
+`patterns/index.astro`) were silently dropped and the count landed on the number
+being sought. Believing it would have closed this item as "reproduced" on a
+broken instrument. **The tell was not the number — it was that the three
+missing files were nameable.**
+
+**The probe was red-proved twice by injection before any figure above was
+quoted**, both confirmed present by `grep` before the run and reverted after,
+with `git status` clean:
 
 ```
-baseline                              NARROW 0   BROAD 2
-verbatim 229.2 sentence injected      NARROW 1   BROAD 3   <- both live
-a REWORDED stale claim injected       NARROW 0   BROAD 0   <- both blind
+const probeRatio = iconBytes / 7;      in icon.astro FRONTMATTER (line 41)
+   -> restricted 7 -> 8, whole-file 7 -> 8            (the detector is live)
+<!-- probe {iconBytes / 7} -->         in the TEMPLATE half (line 122; fence 121)
+   -> restricted stayed 7, whole-file 7 -> 8          (the restriction discriminates)
 ```
 
-- **Every injection was confirmed present in the file before the run**
-  (`grep -n` on the injected line, which landed at line 16 of
-  `check-floor.mjs` both times), and the denominator stayed **15** throughout,
-  so nothing was silently reclassified. Middle row proves the probe is not dead.
-- **The third row is the refusal.** The reworded sentence — *"This gate still
-  needs a --self-test (roadmap 42.3) before it can be trusted."* — is a genuine
-  instance of the defect on a gate that has the branch, and **both detectors
-  report clean**. One synonym from the wording they were written against, the
-  gate is green on exactly what it exists to catch.
-- **BROAD is strictly worse than NARROW**: its base rate of 2 is two **false
-  positives** (`check-resume-charter.mjs`, `check-resume-slice-ids.mjs`), both
-  correct prose explaining what the `@heuristic` tag obliges — and it is blind
-  to the same rewording.
-- **The ratchet precedent was checked, not waved off, and does not transfer.**
-  `check:wrong-choice` walks every page and asserts a `<strong>Not …</strong>`
-  clause is **PRESENT**, so each new page fires it. This would forbid **one
-  phrasing** that now appears nowhere. Presence-over-a-corpus and
-  absence-of-one-string are not the same instrument.
-
-**Base rate 0 was NOT what decided it**, and the write-up says so — that reading
-is the weakest of the three, and quoting it alone would have made this the sixth
-refusal argued from precedent rather than measured.
-
-**Nothing here rests on a rendered image, and nothing is a code change.** The
-probe was deleted and both injections reverted; `git status` was confirmed clean
-before the commit.
+**No gate added — a fifth refusal in this family.** The semantic leg was not
+shown wrong and is untouched: *"a literal is an operand" is checkable; "a
+literal duplicates a fact something else can read" is not.* Every reading here
+is **higher** than 30, which 229.4 named in advance as a satisfying outcome that
+still refuses. The probe was deliberately **not committed** — it is the
+throwaway 227.2 describes, and committing it would add the machinery this item
+exists to refuse.
 
 **All required gates green, exit 0 each**, run against the final tree: core
 `build`, core `test` (152 in 27 files), `docs:build` (which runs `check:repo` →
-`check:selftests` **46 gates / 15 heuristic all self-tested**, `check:slice-refs`
-**456** citations, `check-markup`), `check:claims`, `check:formatting`,
-`check:layout` (**127** pages), `test:axe` (**127** pages × 2 widths, zero
-violations), `check:repo`. Both advisory resume checks pass — charter **14 rules
-hold**, and `check:resume-slice-ids` reports **no** named id closed.
+`check:slice-refs` **456** citations, `check-markup` 165 files, `check-ci-ignores`),
+`check:claims`, `check:formatting`, `check:layout` (**127** pages), `test:axe`
+(**127** pages × 2 widths, zero violations), `check:repo`.
 
 `check:claims` reads **158 verified live · 3 NOT VERIFIED**. That is
 `ENVIRONMENT.md` §6b — this container reports `(pointer: fine) = false`, so the
@@ -97,7 +115,8 @@ three `.bo-btn` press claims cannot discriminate — **not** a regression. Do no
 
 **Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
 1440/390 light-and-dark screenshot lane could not run. The item needed neither
-list — it is a decision, and the evidence is a build-time injection measurement.
+— nothing in it rests on a rendered image, and the diff is `ROADMAP.md` plus
+the loop-log files.
 
 ## Dispatcher state at hand-off
 
@@ -106,33 +125,35 @@ python3 scripts/loops/dispatch_status.py
 ```
 
 ```
-Standardize   1 / 4 Continue round   since 2026-08-30 18:45   ok
+Standardize   2 / 4 Continue rounds  since 2026-08-30 18:45   ok
 Objective     1 / 3 slice            since 2026-08-31 02:50   ok  [229]
-Optimize      1 wake-date(s) newer   since 2026-08-30 03:45   STALE
+Optimize      0 wake-date(s) newer   since 2026-08-31 08:41   ok  [newest pair: axe-violations]
 ```
 
 **This is the Step 0b comparison — the counter read immediately after recording
-— and both moved as predicted.** Rule 2 went **0 → 1** because a `Continue` row
-is a Continue round, and rule 3 went **0 → 1 slice `[229]`** because 161.4 counts
-`Continue` and `Standardize` rows as closing a slice. No starved counter;
-re-run it rather than trusting this snapshot.
+— and both moved as predicted.** Rule 2 went **1 → 2** because a `Continue` row
+is a Continue round. Rule 3 stayed **1 / 3 `[229]`** because 229.4 sits in slice
+229, which the counter had already counted — a same-slice item does not re-arm
+it. No starved counter; re-run it rather than trusting this snapshot.
 
-**Rule 5 is STALE and therefore COULD NOT BE EVALUATED — do not report it
-clear.** Per rule 5's own text. No metric was recorded, deliberately: a refusal
-produces no tracked quantity, and inventing one would be a name sampled once,
-which can never satisfy "two consecutive runs" — precisely the defect 184.1
-describes. This is the second consecutive wake in that position.
+**Rule 5 is no longer STALE, and the pair is real rather than manufactured.**
+`test:axe` ran here and reported zero violations, so `axe-violations = 0` was
+recorded from a gate that actually executed — pairing with 2026-08-30's `0`.
+**No regression: 0 → 0.** This is the first wake in three that could evaluate
+rule 5 at all. Note the shape for next time: the way out of STALE was to record
+a name **already sampled**, not to invent one — a name sampled once can never
+satisfy "two consecutive runs", which is 184.1's defect exactly.
 
 **How rules 1-4 were answered, so the next wake need not re-derive them:**
 
 | rule | reading |
 |---|---|
 | 1 P0 | none open — `grep -n 'P0' ROADMAP.md` returns only closed slice headings; GitHub intake `list_issues` OPEN → `totalCount: 0` |
-| 2 Standardize | **0 / 4 — ok** at Step 0b; no drift flagged |
-| 3 Objective | **0 / 3 — ok** at Step 0b |
-| 4 build item | **dispatched — `229.3`**, the oldest *dispatchable* item |
+| 2 Standardize | **1 / 4 — ok** at Step 0b; no drift flagged |
+| 3 Objective | **1 / 3 — ok** at Step 0b, `[229]` |
+| 4 build item | **dispatched — `229.4`**, the oldest *dispatchable* item |
 
-**The open set is 5, and TWO are dispatchable** (rule 4's kind-of-blocked
+**The open set is 4, and ONE is dispatchable** (rule 4's kind-of-blocked
 distinction, which `LOOPS.md` keeps in the durable playbook precisely because it
 did not survive a rewrite of this file):
 
@@ -141,57 +162,45 @@ did not survive a rewrite of this file):
 | `112.3` pattern-fit pilot (oldest open) | owner-blocked — briefs + four answers |
 | `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
 | AT runtime evidence | hardware-blocked — owner hardware |
-| **229.4** 227.2's base rate is unreproducible | **NOT blocked** — a paragraph and three greps; a cloud wake can take it in full |
 | **229.5** the diff-stat form of the git-blob rule | **NOT blocked** — one `ENVIRONMENT.md` edit, or a recorded refusal |
 
-**Next wake's rule 4 target is `229.4`**, unless a counter fires above it. Both
-remaining items are written so that **refusing is a satisfying outcome** — 229.4's
-honest first result may be that the number cannot be recovered, and 229.5 may be
-refused as prose growth on 158.2's argument. Neither should be built just
-because it is open.
+**Next wake's rule 4 target is `229.5`**, unless a counter fires above it. It is
+written so that **refusing is a satisfying outcome** — it may be refused as
+prose growth on 158.2's argument, and should not be built just because it is
+open.
 
-**229.3 is a live data point for how those two should be taken**: its stated
-decision procedure (weigh base rate 0 against the ratchet precedent) would have
-produced a *worse-argued* refusal than building the thing and measuring it. If
-229.4 or 229.5 can be settled by construction rather than by argument, build the
-throwaway and measure.
+**229.3 and 229.4 are now two live data points for how 229.5 should be taken,
+and they point the same way**: both stated decision procedures (weigh base rate
+against precedent) would have produced worse-argued outcomes than building the
+throwaway and measuring. 229.4 additionally shows the failure mode to watch for
+while doing it — the reconstruction that agrees with the claim.
+
+**After 229.5 the dispatchable set is empty**, and rule 4 will report all three
+remaining items owner- or hardware-blocked. That is worth knowing one wake
+ahead: rules 2 and 3 are the counters that will carry the loop, and rule 2 is at
+2/4.
 
 ## Direction
 
-**No new input arrived**: no open GitHub issues, and no owner message since the
-last wake. Step 1 had nothing to triage, so no `Roadmap · plan` row exists.
+**No new input arrived**: no open GitHub issues (`list_issues` OPEN →
+`totalCount: 0`), and no owner message since the last wake. Step 1 had nothing
+to triage, so no `Roadmap · plan` row exists.
 
 **The standing three are unchanged** (112.3, 112.4, AT runtime) and still need
-the owner; no wake of any kind can advance them. The loop is still not running
-on counters alone — 229.4 and 229.5 are ordinary buildable items.
+the owner; no wake of any kind can advance them. With 229.4 closed, the loop is
+**one item away** from running on counters alone.
 
 **No sweep is due, and this was measured rather than inferred from the line
-count.** `ROADMAP.md` is at **1,964** lines, up from 1,880 at the last hand-off,
+count.** `ROADMAP.md` is at **2,079** lines, up from 1,964 at the last hand-off,
 but the figure that decides a sweep is the **closed-history share**, which the
-seventh sweep triggered on at **62.4%**. 177's scope instrument, run verbatim
-this wake:
-
-```
-# 177's scope instrument — verbatim in ROADMAP-archive.md, Slice 177
-# OPEN: [15, 112, 229]
-# 1 closed slice carrying 152 lines here; 0 already archived
-# closed-history share of sliced lines: 11.2%   (1,358 sliced of 1,964 file lines)
-```
-
-**11.2% against 62.4%** — nowhere near. Re-run the instrument rather than
-carrying this number forward; it is a snapshot, and 228's post-sweep 9.3% was
-already stale by the wake that quoted it.
-
-**177's observation about grill cost does not apply to this wake, which is worth
-recording because it is the counter-example.** A grill's slice pays for its text
-twice — Slice 229's grill was 254 roadmap lines plus a 313-line standalone
-report. This wake's Continue dispatch added **84 lines** to `ROADMAP.md`
-(1,880 → 1,964) and no report, while closing an item. The cost 177 names is a
-property of the *grill*, not of the loop.
+seventh sweep triggered on at **62.4%**. Re-run 177's scope instrument verbatim
+(it is in `ROADMAP-archive.md`, Slice 177) rather than carrying a number
+forward; the previous hand-off read **11.2%**, and this wake added 116 lines to
+one OPEN slice, which moves the share *down*, not up. Nowhere near.
 
 **`cascade.astro`'s missing parse assertion is still open as an observation**
 (carried unchanged, not re-derived this wake): it parses `Z_TOKENS` from the
 shipped z-index tokens with no assertion, so a zero-parse renders an empty
 stacking section rather than a wrong number. Milder than 227.3's — silence, not
 a false figure. A Standardize sweep is the right home for it, and rule 2 is at
-1/4.
+2/4.
