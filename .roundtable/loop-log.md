@@ -1250,3 +1250,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 13:50 · Roadmap · plan · 231.2 filed — bo-alert--elevated published in the API tables and explained nowhere; three call sites are one screen, so Objective §3 is the question · triaged · 4beb4b86
 - 2026-08-31 14:32 · Continue · build · 231.2 — bo-alert--elevated documented on /components/alerts; KEEP decided on the arrival-vs-presence distinction, removal refused · landed · c870a4f2
 - 2026-08-31 14:32 · Meta · refusal · removing bo-alert--elevated — .bo-toast's entrance animation makes the raised surface alone insufficient for a static list · refused · c870a4f2
+- 2026-08-31 14:43 · Objective · grill · Objective grill of Slices 229, 230, 231 — 230 and 231 survive; two findings against how 229.3 recorded its numbers (232.1 BROAD base rate excludes past tense, 7 not 2; 232.2 recurrence history, defect introduced by the commit that paid the debt) · logged · fd46c495
+- 2026-08-31 14:43 · Meta · refusal · filing the two-collision cost as an item — Step 0c accepts collisions with the cost already named; recorded for the owner instead · refused · fd46c495
