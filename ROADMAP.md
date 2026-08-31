@@ -315,6 +315,93 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 234 — 232.2's closing measurement is wrong about its own headline: the defect was introduced by 42.1, the commit that WROTE the sentence, and both dispatchers confirmed the opposite from the same single-file probe (2026-08-31)
+
+**Provenance, because it is what makes this admissible rather than a
+re-litigation.** A fourth cloud wake dispatched rule 4 on `232.2` — the oldest
+dispatchable item, the three older ones being owner- or hardware-blocked — and
+lost the Step 0c race to `606edf88`. Its pre-push `git fetch origin main` showed
+`0c3fd9ea..84aa5b93` with 232.2 already closed. **The item is not reopened.** What
+is filed is the one thing its independent derivation holds that the landed text
+does not, and it is a refutation of a sentence the landed text asserts twice.
+
+**Both dispatchers re-derived the premise and both confirmed it. The premise is
+false.** That is the finding: not that anyone was careless, but that the
+confirming instrument was the same one in both cases, and it cannot see the
+counterexample.
+
+1. [ ] **234.1 — the introducing commit is `84eb14ca` (42.1), not `443348e2`
+       (42.3). 42.1 gave `check-notes.mjs` its `--self-test` branch in the SAME
+       commit as the header claiming it owed one, so 1 of 6 files was defective
+       before "the commit that paid the debt" existed.**
+
+       229.3's landed `RECURRENCE HISTORY` says *"At 42.1 the sentence was
+       TRUE"*, its table row reads *"wrote the sentence into 6 files"*, and it
+       concludes *"the defect was introduced by the commit that PAID the debt"*.
+       232.2's own text says the same. **Five of six files behave that way. The
+       sixth does not**, and it is the earliest.
+
+       **Why two independent re-derivations both confirmed it.** Both ran the
+       second instrument against **`check-floor.mjs` alone** — the landed text
+       publishes exactly that pair of commands — and generalised the result to
+       six files. `check-floor.mjs` is one of the five. Run per file:
+
+       ```
+       git fetch --unshallow origin     # ENVIRONMENT.md §2 — every figure here is history
+       for r in 84eb14ca 443348e2 f1be2485 5754ea02; do
+         for f in apps/docs/scripts/check-{boost,floor,forced-colors,loop-vocab,notes}.mjs \
+                  packages/core/scripts/check-markup.mjs; do
+           printf '%s %-42s sentence=%s branch=%s\n' "$r" "$f" \
+             "$(git show $r:$f 2>/dev/null | grep -c 'OWES a --self-test')" \
+             "$(git show $r:$f 2>/dev/null | grep -cF "argv.includes('--self-test')")"
+         done; echo
+       done
+       git show 84eb14ca -- apps/docs/scripts/check-notes.mjs | grep -E '^\+.*argv\.includes'
+       ```
+
+       At `84eb14ca` five files read `sentence=1 branch=0` and **`check-notes.mjs`
+       reads `sentence=1 branch=1`**; the diff confirms 42.1 itself adds
+       `if (process.argv.includes('--self-test')) {` to that file. Widening the
+       branch predicate to **any** `--self-test` mention confirms the other five
+       carried none at 42.1, so this is not a narrow-regex artefact.
+
+       **What does NOT change, said first so the correction is not over-read.**
+       The aggregate is unaffected: walking all **1,749** first-parent commits of
+       `main` and counting files in the defective state gives
+       `0 → 1` (42.1) `→ 6` (42.3) `→ 5` (220, by deletion) `→ 0` (229.2) —
+       **one entry, zero recurrences**, exactly as 232.2 reported. Regrowth is
+       **0 of 24** by this scope (every `check-*.mjs` created between 42.3 and
+       229.2), against the sibling walk's `0 of 8` over heuristic gates — different
+       denominators, same zero. **229.3's refusal stands and is not reopened.**
+
+       **What changes is a sentence the refusal leans on rhetorically**: *"the
+       single introduction was a same-day side effect of a fix"*. It was not a
+       side effect of the fix. The debt was **false from the moment it was
+       written**, in 1 of 6 files, twenty minutes and two commits earlier.
+
+       **This correction was reached a third time and died twice before this.**
+       The `233.1` hand-off says the sentence entered at 42.1 *"where **5 of 6**
+       instances were true when written"* — the same reading, from a 316-commit
+       walk, hours earlier. `grep -n '5 of 6' ROADMAP.md` finds nothing about this
+       defect: it lived only in `.roundtable/RESUME.md`, which is rewritten
+       wholesale every wake, and the durable record went on asserting the
+       opposite. **169.3's lesson on live data** — a correction written into the
+       handover is a correction that dies there.
+
+       *Accept* — properties, not predicted values:
+       - (a) 229.3's `RECURRENCE HISTORY` and 232.2's closing text each agree with
+         what the per-file command above actually prints, **or** record why the
+         six-file generalisation is preferred anyway. Both close this.
+       - (b) The aggregate figures (one entry, zero recurrences) are stated
+         separately from the attribution, so a reader can see which part the
+         correction touches. Finding the distinction not worth drawing is a
+         satisfying outcome, recorded with its reason.
+       - (c) Whatever is decided, the per-file command sits beside the claim —
+         this item exists because a one-file probe was quoted over six.
+
+       **Requires an unshallowed clone** (`git fetch --unshallow origin`); no
+       browser, no owner. Dispatchable by any wake.
+
 ## Slice 233 — 231.2's new prose asserts two computed facts and nothing executes either; found by the THIRD independent build of 231.2 (2026-08-31)
 
 **Where this came from, because the provenance is the interesting part.** This
@@ -1568,6 +1655,26 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        owed. **One introduction, zero recurrences in the twelve days to 229.2**;
        the sixth file left the defective state by deletion (Slice 220), not by
        correction, which is why 229.2 corrected five.
+
+       > **CORRECTED 2026-08-31 by slice 234.1 — the attribution above is wrong
+       > for 1 of the 6 files, and the probe printed just above is why both
+       > dispatchers confirmed it.** That probe reads `check-floor.mjs` alone,
+       > which is one of the five files that behave as described. Run per file,
+       > `84eb14ca` gives five files `sentence=1 branch=0` and
+       > **`check-notes.mjs` `sentence=1 branch=1`** — 42.1's own diff adds
+       > `if (process.argv.includes('--self-test')) {` to that one file beside
+       > the header it was writing. **So the defect was introduced by `84eb14ca`
+       > (42.1), the commit that WROTE the sentence**, two commits and twenty
+       > minutes before 42.3; *"at 42.1 the sentence was TRUE"* holds for 5 of 6.
+       >
+       > **The aggregate is untouched and so is the refusal.** Walking all 1,749
+       > first-parent commits and counting files in the defective state still
+       > gives one entry and zero recurrences; regrowth reads zero at both
+       > scopes measured (0 of 8 heuristic gates, 0 of 24 `check-*.mjs`). What
+       > the correction reaches is the clause below — *"a same-day side effect
+       > of a fix"* — which describes five instances and not the first. The
+       > per-file command is in **234.1**, beside the claim, because this item
+       > exists precisely because a one-file probe was quoted over six.
 
        **This answers the ratchet argument on its own terms and does NOT
        overturn the refusal.** A ratchet guards recurrence; measured recurrence
