@@ -1260,3 +1260,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 15:29 · Meta · refusal · changing alert.css's shadow/radius to make the two surfaces actually match — the divergence is the design (a toast floats over the page), so the prose was corrected instead · refused · 255ceb8f
 - 2026-08-31 15:34 · Continue · build · 232.2 — 229.3's recurrence history recorded in 229.3 itself, re-derived on an unshallowed clone; refusal untouched · landed · 606edf88
 - 2026-08-31 15:34 · Meta · refusal · no gate proposed for the stale-self-test phrasing: recurrence 0 and regrowth 0 of 8 both say a ratchet has nothing to guard · refused · 606edf88
+- 2026-08-31 15:46 · Continue · build · 234.1 — filed: the OWES-a-self-test defect was introduced by 42.1, not the 42.3 both dispatchers confirmed; the confirming probe reads one file of six. Dispatched 232.2, lost the Step 0c race to 606edf88 · logged · 258856b4
+- 2026-08-31 15:46 · Meta · refusal · reopening 232.2 after losing its race — the item is closed and only the refuted attribution is re-filed · refused · 258856b4
+- 2026-08-31 15:46 · Meta · refusal · reopening 229.3's refusal on the strength of the history — measured recurrence of zero supports the refusal rather than overturning it · refused · 258856b4
