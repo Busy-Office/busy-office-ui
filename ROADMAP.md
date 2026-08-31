@@ -477,9 +477,9 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        This is a *stated debt contradicted by a gate that already runs*: exact
        (does the file contain the branch?), and base rate 5.
 
-3. [ ] **229.3 — should `check:selftests` also reject a header that CLAIMS to
-       owe a self-test it has? Base rate 5, now 0 — decide, and refusing is a
-       satisfying outcome.**
+3. [x] **229.3 — REFUSED, and not on the base rate the item expected to decide
+       it. Both candidate predicates were built and red-proved, and both are
+       GREEN on a reworded instance of the exact defect they exist to catch.**
 
        Raised by 229.2 rather than acted on, because adding a gate is a decision
        and 229.2 was a comment fix. The predicate is exact and one line from data
@@ -502,6 +502,90 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
          base rate that decided it. **Both close this item.**
        - If it is added, it must not fire on the five files this slice corrected
          — verified by running it, not by reading the regex.
+
+       **Closed on the second branch — refused. The base rate is 0 as predicted,
+       but that is the WEAKEST of the three readings below and it is not what
+       decided this.** The item framed the choice as "ceremony (94.11) versus a
+       ratchet (`check:wrong-choice`)". Building both candidates answers a
+       question neither horn asks: *can this predicate go red on the defect at
+       all?* Probe kept out of the tree deliberately (a throwaway, per 134.3's
+       rule), the readings reproduced with the commands below.
+
+       Two candidates, over the **15** heuristic gates that carry a
+       `--self-test` branch:
+
+       - **NARROW** — the exact sentence 229.2 removed, both comment styles:
+         `/^\s*(?:\*|\/\/)\s*OWES a --self-test\b/m`. Base rate **0**.
+       - **BROAD** — `owes` within 120 chars of `--self-test` or `@heuristic`,
+         either order. Base rate **2**, and **both are FALSE POSITIVES**:
+         `check-resume-charter.mjs` (*"This is what the `@heuristic` tag
+         owes"*) and `check-resume-slice-ids.mjs` (*"The `--self-test` below is
+         what that tag owes"*). Both files have the branch; both sentences are
+         correct prose explaining what the tag obliges.
+
+       **Red-proved in three directions, each injection confirmed present in the
+       file before the run** (`grep -n` on the injected line; the denominator
+       stayed 15 throughout, so nothing was silently reclassified):
+
+       ```
+       baseline                                   NARROW 0   BROAD 2
+       inject the verbatim 229.2 sentence
+         into check-floor.mjs (line 16)           NARROW 1   BROAD 3   <- both live
+       inject a REWORDED stale claim instead:
+         "This gate still needs a --self-test
+          (roadmap 42.3) before it can be
+          trusted."          (line 16)            NARROW 0   BROAD 0   <- both BLIND
+       ```
+
+       The third row is the refusal. That injected sentence is a genuine
+       instance of the defect — a gate that has a `--self-test` branch, with a
+       header stating it does not — and **both detectors report clean**. One
+       synonym away from the wording it was written against, the gate is green
+       on exactly what it exists to catch. BROAD is strictly worse than NARROW:
+       it buys two false positives and is blind to the same rewording.
+
+       **The general form, which is why no third regex was attempted.** What
+       separates *"the `--self-test` below is what that tag owes"* (correct)
+       from *"this gate still needs a --self-test"* (stale) is what the sentence
+       MEANS, not its shape. That is 94.11's line exactly — *"a comment precedes
+       this literal" is checkable; "a comment explains this literal" is
+       semantic* — and it is the same class refused by 216.2, 217.2, 220.2 and
+       227.2. Five prior refusals of this shape, and the sixth was measured
+       rather than argued from them.
+
+       **The ratchet counter-argument does not transfer, and that was checked
+       rather than waved off.** `check:wrong-choice` ratchets because its
+       predicate is a **required shape on every page** — it walks
+       `src/pages/components/` and `src/pages/patterns/` and asserts a
+       `<strong>Not …</strong>` clause is PRESENT, so every new page that omits
+       one fires it. This proposal's predicate is a **forbidden phrasing**,
+       which can only fire on a verbatim recurrence of a sentence that now
+       appears nowhere. A presence-over-the-corpus gate and an
+       absence-of-one-string gate are not the same instrument; the precedent
+       covers the first.
+
+       **What is NOT claimed:** that the underlying defect does not matter. It
+       is real — 229.2 measured it at 5 of 5, and it misled the wake that found
+       it. The finding is that this defect has no exact textual signal, so the
+       thing that catches it is a wake reading the header, which is what
+       happened.
+
+       ```
+       # base rates (both predicates, over the 15 heuristic gates with a branch)
+       grep -rlE "process\.argv\.includes\(['\"]--self-test['\"]\)" \
+         apps/docs/scripts packages/core/scripts --include='check-*.mjs' | wc -l   # 15
+       grep -rniE 'owes?\b' apps/docs/scripts packages/core/scripts \
+         --include='check-*.mjs'                    # 2, both correct prose
+       grep -rn 'OWES a --self-test' apps/docs/scripts packages/core/scripts       # 0
+       node apps/docs/scripts/check-selftests.mjs   # 15 heuristic (all self-tested)
+       ```
+
+       **Not verified, said plainly:** cloud wake — no Podman and no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. **Nothing here rests on a rendered image, and nothing here is a
+       code change at all** — the outcome is a recorded refusal; the working
+       tree carries only `ROADMAP.md` and the loop-log files. The injections
+       were reverted and `git status` was confirmed clean before committing.
 
 4. [ ] **229.4 — 227.2's base rate is not re-derivable, and the base rate IS
        the refusal. Record the command; do NOT add a gate.**
