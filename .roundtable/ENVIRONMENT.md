@@ -372,15 +372,22 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   sha" overcounts commits by 8%.
 - **A parser change that reports MORE is not self-evidently a fix.** 166.5's
   first draft would have read `4-tick sweep` as slice 4 across 18 rows.
-- **An archive sweep's stated after-figure is the file BEFORE its own write-up
-  landed, so it is never a cycle's starting line count.** 214.1 says
-  `3,197 → 1,650`; `git show e29c7c18:ROADMAP.md | wc -l` is **1,721**. Taking
-  the log row at face value published this cycle's regrowth as 2,144 lines over
-  "~34 hours" when it is **+2,073 over 22 commits in 16h03m**. 209.1 corrected
-  the same shape inside Slice 208 and it recurred at the next measurement, so
-  it is here rather than in a slice: **measure a regrowth cycle from
-  `git show <sweep-commit>:ROADMAP.md | wc -l`**, never from the sweep's own
-  prose (roadmap 228.1).
+- **A figure describing a commit is read from THAT COMMIT, never from the
+  working tree or the prose beside it.** Size `git show <sha>:<file> | wc -l`;
+  delta `git show --numstat --format='' <sha> -- <file>`; for a figure going
+  into the message of a commit that does not exist yet, the index —
+  `git show :<file> | wc -l`, which tracks what is staged, not the tree
+  (red-proved by discrimination: index 3 while the tree read 5). **This bullet
+  named only the after-figure form until 229.5, and the commit that ADDED it
+  broke it in its own subject** — `d701e61` says `3,794 -> 1,473` where the
+  commit holds **1,626** — while the hand-off beside it made the uncovered
+  delta form: *"129 insertions − 2,328 deletions = −2,199 matches 3,794 → 1,595
+  to the line"*, against a numstat of **158 / 2,326 = −2,168 → 1,626**. The
+  tell is never arithmetic — those four numbers are self-consistent
+  (3,794 − 2,199 = 1,595), which is exactly why a working-tree reading survives
+  review. A commit's own numbers always reconcile: 3,197 − 1,476 = **1,721** at
+  `e29c7c18` too, against 214.1's stated `3,197 → 1,650` (roadmap 208, 228.1,
+  229.5).
 - **A presence probe is not a fidelity probe.** Asking whether a heading still
   appears in 53 revisions answers whether it was deleted, not whether what sits
   under it decayed. 169.3's first pass read "zero shrinks" off a subset of

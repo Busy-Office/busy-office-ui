@@ -736,7 +736,7 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        exists to refuse; what is committed instead is the half that reduces to
        seven shell lines.
 
-5. [ ] **229.5 — `ENVIRONMENT.md`'s "measure from the git blob" bullet covers
+5. [x] **229.5 — `ENVIRONMENT.md`'s "measure from the git blob" bullet covers
        the after-figure form and not the diff-stat form, and the wake that wrote
        it made the uncovered error in the same document.**
 
@@ -767,6 +767,82 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        one instance, **or** it is recorded that the generalisation was weighed and
        refused as prose growth, with the reason. Both are satisfying; 158.2's
        cadence argument makes the second a real option rather than a cop-out.
+
+       ---
+
+       **LANDED 2026-08-31 (cloud wake, rule 4). The first arm was taken — the
+       bullet now states the general form — and the deciding evidence is
+       something this item did not know: the premise's own "confined to the
+       ephemeral hand-off" is FALSE.**
+
+       **The premise re-checks exactly, which is why the rest is worth
+       believing** (CLAUDE.md: when the premise is itself an earlier wake's
+       measurement, re-checking it is part of the criterion):
+
+       ```
+       git show --numstat --format='' d701e61 -- ROADMAP.md   # 158  2326
+       git show d701e61^:ROADMAP.md | wc -l                   # 3794
+       git show d701e61:ROADMAP.md   | wc -l                  # 1626
+       ```
+
+       158 − 2,326 = −2,168; 3,794 − 2,168 = **1,626**, the committed file. The
+       quoted sentence was located verbatim rather than paraphrased — it is
+       `d701e61:.roundtable/RESUME.md` line 87, surviving into `7be5e4ae` — and
+       the hand-off's four figures are **internally self-consistent**
+       (129 − 2,328 = −2,199; 3,794 − 2,199 = 1,595). That is the finding this
+       item was missing and the reason the error survived review: it is not an
+       arithmetic slip that a re-add would catch, it is a *provenance* error in
+       which every number agrees with every other and none describes the commit.
+
+       **The defect is NOT confined to the ephemeral hand-off.** `d701e61` is
+       the commit that ADDED the bullet (`git show d701e61 -- .roundtable/ENVIRONMENT.md`
+       → `9  0`), and its own **subject line** reads
+       *"ROADMAP.md 3,794 -> 1,473 lines"* where the commit holds **1,626** — a
+       153-line gap, and an instance of the *after-figure* form the bullet was
+       being written to name, in the durable commit message, in the same commit.
+       So the narrow form did not prevent the error it describes even at zero
+       distance. That is the base rate a generalisation is supposed to move, and
+       it is why the refusal arm was not taken: refusing would have left an
+       instruction with a measured failure at n = 1 of 1 opportunities.
+
+       **Third repo-wide instance of an instruction naming an instance rather
+       than the property, and the first in `ENVIRONMENT.md`.**
+       `grep -n "name the property" LOOPS.md CLAUDE.md .roundtable/ENVIRONMENT.md`
+       returns `LOOPS.md:738` and `LOOPS.md:773` (the prose-page names, then the
+       ratchet clause) and **0** in `ENVIRONMENT.md`; LOOPS.md:773 calls itself
+       "the second time this playbook has paid for it".
+
+       **A limit of the general form was found while writing it, and is carried
+       rather than papered over:** a figure going into the *message* of a commit
+       cannot be read from that commit, because it does not exist yet — which is
+       exactly the case `d701e61`'s subject got wrong. The bullet therefore names
+       the index as the third reading, `git show :<file> | wc -l`, **red-proved
+       by discrimination** rather than asserted: staged a 3-line file, grew the
+       working tree to 5, and the index kept reading **3** while the tree read
+       **5**; re-adding moved it to 5. The probe file was removed and
+       `git status --short` was empty afterwards.
+
+       **Growth, stated rather than hidden:** the bullet goes **9 → 16 lines
+       (+7)** (`git diff --cached --numstat` → `16  9`), covering three readings
+       (size, delta, index) where it covered one. 158.2's cadence argument is the
+       reason that number is quoted here instead of being left for lane 4 to
+       find. **Three lines of it are a cut**, which is what held the delta to +7:
+       the one-cycle regrowth consequence — "2,144 lines over ~34 hours" against
+       a measured "+2,073 over 22 commits in 16h03m" — is the *effect* of the
+       error, not the rule, and it survives one grep away at `ROADMAP.md:975-977`
+       under Slice 228, which the bullet still cites.
+
+       *Accept, against the properties as written:* **first arm met** — the
+       bullet states the general form, keeps `e29c7c18`/214.1 as the original
+       worked instance (re-verified: 73 − 1,549 = −1,476; 3,197 − 1,476 =
+       **1,721** against its stated `3,197 → 1,650`), and adds `d701e61` as the
+       second. The refusal arm was weighed and lost on the measurement above,
+       not on preference.
+
+       **Not verified, said plainly:** cloud wake — no Podman and no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not
+       run. The diff is `.roundtable/ENVIRONMENT.md`, `ROADMAP.md` and the
+       loop-log files; nothing here renders, and no code changed.
 
 ## Slice 228 — Standardize sweep: lanes 1-3 clean an eighth time, and lane 4 carries the finding again — the archive sweep is due a SEVENTH time (2026-08-30)
 
