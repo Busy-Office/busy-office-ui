@@ -315,6 +315,142 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 230 — Standardize sweep: lanes 1-4 clean a ninth time, and the drift carried for three wakes was a genuine one-off — 5 of 6 parsing pages already asserted (2026-08-31)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are
+`112.3`, `112.4` (owner-blocked) and AT runtime evidence (hardware-blocked) —
+and GitHub intake **0 open issues** (`list_issues` OPEN → `totalCount: 0`), so
+Step 1 had nothing to triage and no `Roadmap · plan` row was recorded. Rule 2:
+`dispatch_status.py` read `Standardize 3 / 4 Continue rounds`, so the **counter**
+did not fire — but rule 2's *other* trigger, **"or drift flagged"**, was loaded,
+and the previous hand-off had recorded that it was being left implicit for a
+third wake. **Dispatched Standardize on the flagged drift.**
+
+**Why this wake could not defer it again.** Rule 2's counter is fed by `Continue`
+rows only, Continue is reachable only through rules 1 and 4, and rule 4's
+dispatchable set is empty — so the counter can no longer advance on its own. The
+drift trigger is the only remaining path to this lane, which is the same silent
+starvation shape `LOOPS.md` Step 0b records three times.
+
+1. [x] **230.1 — DONE 2026-08-31 (cloud wake). `cascade.astro`'s `Z_TOKENS`
+       parse now reconciles against the shipped tokens, and the sweep's four
+       standing lanes came back clean.**
+
+       **The flagged drift, confirmed rather than assumed.**
+       `apps/docs/src/pages/concepts/cascade.astro` parsed the z-index scale out
+       of `tokens/z-index.css` with a regex and rendered it straight into a
+       `<tbody>` with no assertion. A zero-match parse renders an **empty
+       table** — silence, not a wrong number, which is why three wakes read past
+       it. The page's own prose beside that table tells every `position: sticky`
+       element to "reach for a token from this table", and the table is the
+       framework's only published statement of the scale.
+
+       **The base rate is what made this a Standardize finding rather than a new
+       gate.** Population = docs pages whose frontmatter reads a source file at
+       build time and derives rendered content from it by regex:
+
+       ```
+       grep -rlE "readFileSync|import\.meta\.glob" apps/docs/src/pages --include=*.astro
+       ```
+
+       → 8 files; `scale.astro` and `index.astro` take only a **byte/gzip
+       length** and parse nothing, so the population is **6**. Of those,
+       `palettes`, `primitives`, `icon`, `ai-assistants` and `tokens` all throw
+       on a bad parse. **5 of 6 already asserted** — `cascade` was the sole
+       one-off, which is exactly what this loop exists to consolidate.
+
+       **Reconciled against the shipped artifact, not a hand-typed floor.**
+       `if (Z_TOKENS.length < 5)` is the decaying constant `icon.astro` refuses
+       in its own block, and it cannot see a partial parse that clears the
+       floor. Instead the source parse is compared against
+       `@busy-office/ui/css/tokens.min` — two independent derivations of one
+       fact, the same shape `icon.astro` uses (source css vs `api.json`).
+
+       **The minified file is also the only comment-free reading available, and
+       that is measured, not assumed:** `z-index.css`'s rationale comment NAMES
+       four of the five tokens in prose, so counting raw `--bo-z-` occurrences
+       in the source would trip on its own explanation — CLAUDE.md's named trap.
+       `(tokens.min.css.match(/\/\*/g)||[]).length` → **0**, so no
+       comment-stripping step was invented.
+
+       *Accept* — properties, not predicted values:
+       - The assertion's verdict agrees with what the shipped tokens carry —
+         **met**: control build exit 0, and the rendered table still carries all
+         five rows (`grep -o 'col--code">--bo-z-[a-z-]*' dist/concepts/cascade/index.html`
+         → 5, unchanged from before the edit).
+       - Each red-proof's **injection is confirmed present** before its result is
+         believed, per CLAUDE.md's "a green red-proof is a defect in the
+         injection until proven otherwise" — **met**, both below.
+       - The check discriminates something a count floor cannot — **met**, and
+         this is the load-bearing one.
+
+       **Red-proofs, injection confirmed each time:**
+
+       - **A — zero-match parse.** Renamed the declared prefix in the source
+         only (`--bo-z-` → `--bo-zed-`). Injection confirmed: `grep -cE '^    --bo-zed-'`
+         → **5**, `grep -cE '^    --bo-z-[a-z]'` → **0**. Build **exit 1**:
+         *"parsed 0 z-index token(s) from the source css [] but the shipped
+         tokens.min.css carries 5"*.
+       - **C — value drift, the discriminating case.** Changed
+         `--bo-z-toast: 1600` → `1700` in the source only. Injection confirmed
+         present, and **the count stayed 5**, so a `length < 5` floor would have
+         **passed**. Build **exit 1**, reporting 5 against 5 with the differing
+         member visible in both lists.
+
+       Source restored from a byte copy afterwards; `git status --short` shows
+       `cascade.astro` as the only modified file.
+
+       **The re-scan the playbook requires found nothing further.** Same drift
+       shape outside `pages/` — `lib/`, `components/`, `layouts/` — returns one
+       file, `lib/semantic-css.ts`, and it already carries both guards including
+       an explicit *"parsed zero palette references"* throw. The population is
+       now **6 of 6**, so a gate over this predicate would be uniformly true and
+       is **refused** on roadmap 94.11's own test: ceremony, not a detector.
+
+       **The four standing lanes — `4 of 4`, all clean:**
+
+       | lane | reading | verdict |
+       |---|---|---|
+       | 1 `scan:dead-style` | 0 dead on 0 pages; 1,433 live inline decls | clean |
+       | 2 `report:css-repeats` | **8** groups — the standing eight, no delta | clean |
+       | 3 `report:prose` | 7 over corpus median + family outliers, **union 8** | all verdicted |
+       | 4 `report_loop_prose.py` | no file changed accumulate class | clean |
+
+       **Lane 3 checked by SET MEMBERSHIP, not by a cite count** — 228.1 already
+       recorded that grepping a page's path out of `ROADMAP.md` +
+       `ROADMAP-archive.md` returns hits for everything and reports full
+       coverage whatever the truth is. Today's union (data-table, richtext,
+       form, calendar, money, combobox, tabs, motion) resolves entirely against
+       **158.1's twelve** and **161.1's three**; nothing is flagged outside those
+       lists. `tabs` is flagged again after 228.1 recorded it as no longer
+       flagged — it still carries 158.1's verdict, so it needs no new one.
+
+       **Lane 4 needed the clone unshallowed first** —
+       `report_loop_prose.py` refused to report, exactly as ENVIRONMENT trap 2
+       says it should, rather than printing wrong history figures. No
+       `.git/shallow.lock` was present and `git rev-parse --is-shallow-repository`
+       read **false** afterwards, which is the only check that it worked.
+       `CLAUDE.md` (29 up, never cut) and `DESIGN.md` (22 up, never cut) are
+       227-era standing HONEST verdicts — 193.1 decided *fold nothing, retire the
+       watch* — and `ROADMAP.md` reads `4 up, last cut d701e619`, so the signal
+       lane 4 carried in 228.1 is discharged and has not returned.
+
+       **Gates, run against the final tree, exit 0 each**: core `build`, core
+       `test` (152 in 27 files), `lint:css`, `docs:build` (which runs
+       `check:repo`), `check:claims`, `check:formatting`, `check:layout` (**127**
+       pages), `test:axe` (**127** pages × 2 widths, zero violations),
+       `check:repo` (`check:slice-refs` **456** citations).
+
+       `check:claims` reads **158 verified live · 3 NOT VERIFIED**. That is
+       `ENVIRONMENT.md` §6b — this container reports `(pointer: fine) = false` —
+       **not** a regression. Do not "restore" the zero.
+
+       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
+       the 1440/390 light-and-dark screenshot lane could not run. The change is a
+       build-time assertion that renders nothing new — the emitted table is
+       byte-identical, asserted above by re-reading the built HTML — so nothing
+       in this item rests on a rendered image.
+
 ## Slice 229 — Objective grill of Slices 222, 226, 227, 228: every decision survives, the best candidate finding was already gated, and the one mirror no gate can see is fixed (2026-08-31)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open

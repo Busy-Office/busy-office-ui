@@ -1,4 +1,6 @@
 ---
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -23,6 +25,45 @@ const zIndexFile = Object.values(zIndexFiles)[0];
 const Z_TOKENS = [...zIndexFile.matchAll(/--(bo-z-[\w-]+):\s*(\d+);/g)]
   .map(([, name, value]) => ({ name, value: Number(value) }))
   .sort((a, b) => a.value - b.value);
+
+/* RECONCILED, because a parse that renders a collection must fail loudly rather
+   than render short (CLAUDE.md: "a mirror must reconcile against its source and
+   fail loudly when it cannot" — assert the count, not just the content). Left
+   unasserted, a renamed token or a changed declaration shape drops rows from the
+   <tbody> below and the page still builds: the prose keeps saying "reaches for a
+   token from this table" while the table under-reports the scale it is the only
+   published statement of, and a zero-match parse renders an EMPTY table with
+   nothing failing. Silence, not a wrong number — which is why review does not
+   catch it.
+
+   Reconciled against the SHIPPED minified tokens, not a hand-typed floor.
+   `if (Z_TOKENS.length < 5)` would be the decaying constant this repo removes on
+   sight (icon.astro says so in its own block), and it cannot see a partial parse
+   that still clears the floor. Two independent derivations of one fact instead:
+   this regex reads the SOURCE css, the check below reads what `npm run build`
+   emitted, so a token defined but never shipped, a value that drifted between the
+   two, and a partial or empty parse all fail here.
+
+   The minified file is also the only comment-free reading available: z-index.css's
+   own rationale comment NAMES four of the five tokens in prose, so counting raw
+   `--bo-z-` occurrences in the source would trip on its own explanation — the
+   trap CLAUDE.md names and palettes.astro strips comments to avoid. Minification
+   removes comments, so no stripping step is needed and none is invented. */
+const require = createRequire(import.meta.url);
+const shippedZ = [...readFileSync(require.resolve('@busy-office/ui/css/tokens.min'), 'utf8')
+  .matchAll(/--(bo-z-[\w-]+):\s*(\d+)/g)]
+  .map(([, name, value]) => `${name}=${value}`)
+  .sort();
+const parsedZ = Z_TOKENS.map((t) => `${t.name}=${t.value}`).sort();
+if (parsedZ.join() !== shippedZ.join())
+  throw new Error(
+    `cascade: parsed ${parsedZ.length} z-index token(s) from the source css ` +
+      `[${parsedZ.join(' ')}] but the shipped tokens.min.css carries ${shippedZ.length} ` +
+      `[${shippedZ.join(' ')}]. The stacking table below is the framework's only ` +
+      'published statement of this scale, and the rule beside it tells every sticky ' +
+      'element to pick from it — so a short or empty parse must fail the build ' +
+      'rather than quietly publish a scale with rows missing.',
+  );
 ---
 <Gallery title="The cascade contract">
   <p class="demo-note">
