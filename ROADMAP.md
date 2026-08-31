@@ -315,6 +315,163 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 231 — Polish round on `component/alerts`: the reconciliation is a NO-OP, and the sweep that surrounded it found one shipped variant with no recorded reason anywhere (2026-08-31)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are
+`112.3` and `112.4` (owner-blocked: 5 owner-authored briefs, and a verdict that
+depends on them; `.roundtable/pilot-112/` holds a README and SEALED-PICKS.md and
+**no `briefs.md`**) and AT runtime evidence (hardware-blocked), and GitHub intake
+**0 open issues** (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing
+to triage. Rule 2: `dispatch_status.py` read `Standardize 0 / 4`, and **no drift
+was flagged** — the previous wake spent that trigger. Rule 3: `Objective 2 / 3`.
+Rule 4: **nothing dispatchable, and none of the three is browser-blocked** — a
+local wake has nothing here this wake lacked. Rule 5: see below. **Rule 6 fired
+→ Polish.**
+
+**Rule 5 was answered from the instrument, not from the file.** Only
+`axe-violations` has a comparable pair newer than 2026-08-20 — `0.0@2026-08-29`,
+`0.0@2026-08-30`, `0.0@2026-08-31`, flat — and the other 12 multi-sample names'
+newest pairs are all 2026-08-16→19, i.e. **12+ days stale**. `bundle-gz-kb` reads
+`10.8 → 11.6 → 11.7`, which is two consecutive moves the wrong way and is
+**exactly the dead-instrument answer `LOOPS.md` rule 5 warns about**: those three
+samples are 2026-08-16/17. Recorded as *not evaluable* rather than quoted as
+current. The command:
+
+```
+python3 -c "import json,collections;rows=[json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()];\
+by=collections.defaultdict(list);[by[r['name']].append(r) for r in rows];\
+print({n:[(x['value'],x['ts'][:10]) for x in v[-3:]] for n,v in by.items() if len(v)>=2})"
+```
+
+1. [x] **231.1 — DONE 2026-08-31 (cloud wake). Polish round 2 on
+       `component/alerts`: reconciliation clean on all four arms, recorded as a
+       NO-OP.** §3b's rule for a `content: 3` re-queued surface, following
+       `badge`'s round-2 precedent — reconcile the published artefact against the
+       ledger's record of it, and if that finds nothing, say so in one line
+       rather than manufacture a fix.
+
+       `polish_requeue.py --check` re-queued **8** surfaces on source-blob
+       movement; all six of the 1/3 rows tie on the ledger's stated tie-break
+       (lowest score, then fewest rounds), so the tie was broken by where a
+       defect might actually be.
+
+       - **Arm 1 — the entry exists.** `dsa-scores.json` carries `alert` with
+         `content: 3`, `scored: 2026-08-23`, matching the ledger's round-1 row.
+       - **Arm 2 — it is published.** All **40** entries render on a built page
+         (40 entries → 39 pages: `alert`→`alerts`, and `skeleton`+`state` both
+         →`state-patterns`). **Zero** pages publish `Not yet scored` — 176.1's
+         defect has not recurred — and zero publish `NaN` or `undefined / 3`.
+         Three built component pages carry no `DsaScore` section at all:
+         `inline-editing` and `table-toolbar`, both of which the ledger already
+         annotates *"(unscored in DSA)"*, and `nav`, which was never seeded into
+         the ledger (it is off `check:wrong-choice`'s original TODO set).
+       - **Arm 3 — the citations hold against the shipped CSS.** All **17**
+         literals cited across the 7 re-queued surfaces with DSA entries are
+         present in their component stylesheets (0 absent). `dashboard`'s
+         `typography` cite makes the only *countable* claim — `3rem` "has exactly
+         one caller; a second is the trigger to promote it (94.13)" — and
+         comment-stripped it reads **exactly 1** caller against 2 raw
+         occurrences, the second being the comment that explains it.
+       - **Arm 4 — no silent NaN path.** `DsaScore.astro` spreads
+         `entry.dimensions[d]` for every `d` in `rubric.dimensions`, so a missing
+         key would publish `NaN%` with nothing throwing. Reconciled: **6 of 6**
+         rubric dimensions present on **40 of 40** entries, zero extra keys, zero
+         non-integer non-`na` scores.
+
+       **A history measurement was taken only after `git fetch --unshallow`** —
+       the container opened at **55** commits and a `git log --since` over the
+       alert sources was silently wrong until it read **1,753**
+       (`is-shallow-repository` → `false`, which is the only check that it
+       worked). ENVIRONMENT trap 2, exercised for real.
+
+       **Not verified, said plainly:** no Podman and no `localhost:8081` here, so
+       the 1440/390 light-and-dark screenshot lane could not run. This item
+       changed no CSS, no markup and no rendered output — it is a ledger entry
+       and a set of assertions over artefacts already built — so nothing in it
+       rests on a rendered image.
+
+2. [ ] **231.2 — `bo-alert--elevated` is published in the API tables of
+       `/components/alerts` and explained nowhere, and its three call sites are
+       one screen.** Found by the sweep around 231.1, filed rather than fixed:
+       §3b's stop rule (101.3) confines Polish to the existing ratchet, and
+       no DSA dimension flags this.
+
+       **The measurement.** Counting each shipped variant's occurrences in its
+       own BUILT page — the artefact, not the source:
+
+       ```
+       python3 -c "import json,os;api=json.load(open('packages/core/dist/api.json'));\
+       slug=api.get('pageSlug',{});\
+       print({v:open('apps/docs/dist/components/%s/index.html'%slug.get(n,n)).read().count(v) \
+       for n,c in api['components'].items() for v in c.get('variants',[]) \
+       if os.path.exists('apps/docs/dist/components/%s/index.html'%slug.get(n,n))})"
+       ```
+
+       **17 of 89** shipped variants, across **4 of 40** components, occur `<=2`
+       times — twice being exactly the two generated tables (`ClassRef` row +
+       `ApiTable` Variants list) and nowhere else on the page. That is a real
+       base rate, not a uniformly-true predicate: it is neither 0 nor 100%.
+
+       **Red-proved by discrimination inside one page**, which is what makes the
+       count a signal rather than an artefact of counting: on `/components/alerts`,
+       `--success` reads **5**, `--warning` **5**, `--danger` **3**, and
+       `--elevated` **2**. The three demoed variants separate from the one that
+       is not, in the same document, under the same instrument.
+
+       **16 of the 17 carry a recorded reason; one does not.** This is the part
+       that took the work, and it is why the finding is one variant rather than
+       seventeen:
+
+       - **14 `bo-icon--*` glyphs** — the icon page renders **12 of 26**, and
+         icon's own `fit` cite states the position outright: *"the set is an
+         example of the mechanism rather than a catalogue"*. Coherent by record.
+         (Note the 12: it reproduces, from the built HTML and independently, the
+         same 12 that icon's Polish round 2 caught hard-coded as a divisor —
+         ROADMAP 227. Two instruments, one number.)
+       - **`bo-select--seamless` and `bo-tag-input--seamless`** — both named in
+         prose on `/patterns/editable-grid`, with an explicit `Scope` clause
+         saying which cell types stay chromed and why.
+       - **`bo-alert--elevated`** — nothing, on any page.
+
+       **And it has survived one composition, not two.** Every use in the repo is
+       the notification screen: `patterns/notification.astro` (5),
+       `PatternPreview.astro` (2 — which is the *thumbnail of that same pattern*),
+       and `examples/po-app/server.mjs` (1). Objective §3 says a piece earns its
+       place by surviving **≥2 real, independent compositions**; §2 refuses "a
+       modifier that serves exactly one scenario". So this is not merely a docs
+       gap — it is an open question about whether the variant should exist.
+
+       ```
+       grep -rn 'bo-alert--elevated' apps/docs/src examples packages/core/src | grep -v node_modules
+       ```
+
+       **Accept** — written so that finding the premise false is a satisfying
+       outcome, not an off-plan one:
+
+       - **Re-run both measurements first** (the occurrence count and the call-site
+         grep above); the premise is a measurement from this wake and re-checking
+         it is part of the criterion. If a second independent composition has
+         landed since, that is the answer to the §3 question and the item says so.
+       - **Then either**: `/components/alerts` gains a demo section whose caption
+         names when `--elevated` applies against a plain inline alert and against
+         a toast — **or** the variant is refused and removed, with the notification
+         pattern absorbing the look another way — **or** it is kept as a named
+         deliberate exception, recorded the way `/patterns/editable-grid` records
+         `--seamless`. Any of the three closes this; which one is a judgement.
+       - **In every case**, the built page's treatment of `bo-alert--elevated`
+         agrees with what this item records, verified by re-running the count
+         rather than by predicting what it will read.
+       - The two `--seamless` variants get a one-line verdict in the same pass, or
+         a recorded reason they are out of scope — they are the only other
+         non-glyph members of the flagged set.
+
+       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked
+       and not owner-blocked.** The elevated rendering already ships and is
+       already built on `/patterns/notification`; the options above add or remove
+       markup and prose. A cloud wake can verify all of it through `docs:build`,
+       `check:claims`, `check:layout`, `test:axe` and `check:repo`. A screenshot
+       would be a nice-to-have, not the evidence.
+
 ## Slice 230 — Standardize sweep: lanes 1-4 clean a ninth time, and the drift carried for three wakes was a genuine one-off — 5 of 6 parsing pages already asserted (2026-08-31)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are

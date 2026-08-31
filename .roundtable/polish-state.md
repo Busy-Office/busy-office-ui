@@ -86,7 +86,7 @@ a no-op recorded in one line.
 
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|
-| component/alerts | content | **3** | 1/3 | 0 | 20c2fe2c | round 1 landed — blind re-score 2→3, off the gate's TODO · **RE-QUEUED — source changed** |
+| component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** |
 | component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
 | component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** |
@@ -95,7 +95,7 @@ a no-op recorded in one line.
 | component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
 | component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
-| component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** |
+| component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
 | component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" |
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" |
@@ -526,3 +526,65 @@ open). 216.2/217.2/220.2 all refused gating a decaying *cite*. This is a
 hand-typed literal used in arithmetic whose other operands come from a live read
 — a shape a detector can actually see. Its base rate is unmeasured, and if it is
 1-of-1 it is 94.11 ceremony and should be refused again.
+
+## Round 2 on alerts (2026-08-31, cloud wake) — NO-OP, and the sweep beside it found one thing (ROADMAP 231)
+
+Dispatcher rule 6; `polish_requeue.py --check` re-queued **eight** surfaces, six
+of them `content: 3` at `1/3` — the same unbroken tie §3b's "lowest score, then
+fewest rounds" cannot break, for the fourth time. Broken the way `badge`'s round
+did: by asking where a defect could actually be, given that the last four
+non-no-op rounds (breadcrumb, data-table, icon, sidebar-nav) all found **the same
+shape** — a cite naming a literal or a count that the source had since moved.
+
+§3b's reconciliation, four arms, all clean:
+
+1. **The entry exists** — `alert`, `content: 3`, `scored: 2026-08-23`, matching
+   the ledger's round-1 row.
+2. **It is published** — all **40** entries render on a built page (40 → 39
+   pages; `alert`→`alerts`, `skeleton`+`state`→`state-patterns`). **Zero**
+   `Not yet scored`, zero `NaN`/`undefined / 3`. Redundant with assertion 7's
+   per-name gate since 176.1, but taken independently off the built HTML rather
+   than read off the gate's own verdict. Three component pages carry no
+   `DsaScore` section at all — `inline-editing` and `table-toolbar`, both already
+   annotated *"(unscored in DSA)"* in this table, and `nav`, never seeded here.
+3. **The cited literals hold** — **17 of 17** present across the seven re-queued
+   surfaces that have DSA entries, 0 absent. The only *countable* cite,
+   `dashboard · typography` (`3rem` "has exactly one caller"), reads **exactly 1**
+   comment-stripped against 2 raw occurrences — the second being its own
+   explanation, which is CLAUDE.md's "assertion tripped by its own explanation"
+   trap avoided rather than hit.
+4. **No silent NaN path** — `DsaScore.astro` spreads `entry.dimensions[d]` for
+   every `d` in `rubric.dimensions`, so a missing key publishes `NaN%` with
+   nothing throwing. **6 of 6** dimensions on **40 of 40** entries, zero extra
+   keys, zero non-integer non-`na` scores.
+
+**So the round is a NO-OP and no blind re-score is owed** — nothing in the
+published artefact changed, `scored` stays **2026-08-23**, and `dry` stays **0**
+because there was no re-score to fail. `rounds` moved 1→2 on `badge`'s
+precedent, not 182.1's: this round changed no artefact.
+
+**One instrument error, caught and corrected mid-round, worth recording because
+it inverted a verdict.** The variant sweep was first run against page *source*
+and reported icon's 19 glyph classes as a false positive, on the reasoning that
+`icon.astro:39` builds glyph classes by regex over the CSS and a source grep
+cannot see them. Re-run against the **built** page — the artefact, per CLAUDE.md's
+bulk-edit rule — it is not a false positive at all: the page renders **12 of 26**,
+and the 14 missing ones genuinely appear only in the generated tables. The
+source-grep reading was the wrong instrument, and believing it would have thrown
+away the one real finding's whole base rate.
+
+**What the sweep found is filed as ROADMAP 231.2, not fixed here** — 101.3's stop
+rule confines Polish to the existing ratchet and no DSA dimension flags it.
+`bo-alert--elevated` is published twice on `/components/alerts` (both inside the
+generated `ClassRef`/`ApiTable`) and explained nowhere, while `--success` reads 5,
+`--warning` 5 and `--danger` 3 on the same page — the discrimination that makes
+the count a signal. It is **1 of 17** such variants and the only one with no
+recorded reason: 14 are icon glyphs, covered by icon's own `fit` cite (*"the set
+is an example of the mechanism rather than a catalogue"*), and the two
+`--seamless` are scoped in prose on `/patterns/editable-grid`. Its three call
+sites are all the notification screen, so Objective §3's "≥2 real, independent
+compositions" is the actual question.
+
+**No gate proposed.** That would be the fifth refusal in this ledger and the
+predicate's base rate here is **1 of 89** — 94.11 ceremony by the same test
+227.2 named.
