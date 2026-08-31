@@ -1242,3 +1242,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 08:41 · Continue · build · 229.4 — 227.2's base rate: the file half made re-runnable (7 scopes, 18-36, none is 30), the literal half restated as unreproducible · landed · 8382f70
 - 2026-08-31 08:41 · Meta · refusal · a gate for the hard-coded-divisor class, a fifth time — the semantic leg stands and every reading is higher than 30 · refused · 8382f70
 - 2026-08-31 08:41 · Meta · refusal · committing the reconstruction probe — it is the throwaway 227.2 describes; only the half that reduces to shell lines is recorded · refused · 8382f70
+- 2026-08-31 10:38 · Continue · build · 229.5 — ENVIRONMENT.md's git-blob bullet generalised to 'a figure describing a commit is read from that commit'; the commit that added the narrow form broke it in its own subject (d701e61: 3,794 -> 1,473 stated, 1,626 held) · landed · d557d56d
