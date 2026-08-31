@@ -1248,3 +1248,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-08-31 13:50 · Polish · reconcile · 231.1 component/alerts round 2 — reconciliation clean on all four arms, recorded as a NO-OP · logged · 4beb4b86
 - 2026-08-31 13:50 · Meta · refusal · a gate over 'a shipped variant is demoed on its own page' — residual base rate 1 of 89 after 16 of 17 were found to carry a recorded reason, so 94.11 ceremony · refused · 4beb4b86
 - 2026-08-31 13:50 · Roadmap · plan · 231.2 filed — bo-alert--elevated published in the API tables and explained nowhere; three call sites are one screen, so Objective §3 is the question · triaged · 4beb4b86
+- 2026-08-31 14:32 · Continue · build · 231.2 — bo-alert--elevated documented on /components/alerts; KEEP decided on the arrival-vs-presence distinction, removal refused · landed · c870a4f2
+- 2026-08-31 14:32 · Meta · refusal · removing bo-alert--elevated — .bo-toast's entrance animation makes the raised surface alone insufficient for a static list · refused · c870a4f2
