@@ -482,7 +482,12 @@ wake built 231.2 in full without having read the winner's version and reached th
 same decision on the same evidence, including the same 89-vs-88 denominator
 correction. No finding against it.
 
-1. [ ] **232.1 — 229.3's BROAD base rate of 2 is an artefact of `owes?\b` not
+1. [x] **232.1 — DONE 2026-08-31 (cloud wake). Every published figure
+       reproduced exactly; 229.3 now carries the tense-inclusive count, the
+       command that produces it, and a correction to its red-proof table that
+       the replay turned up. The refusal stands and is strengthened. The record
+       is at the end of this item.** The finding as filed:
+       **229.3's BROAD base rate of 2 is an artefact of `owes?\b` not
        matching `owed`. The tense-inclusive count is 7, and the 5 extra firings
        are exactly the five files 229.2 corrected — the set 229.3's own Accept
        names as the ones it must not fire on.**
@@ -552,6 +557,76 @@ correction. No finding against it.
          close this.**
        - The refusal itself is left standing. A change that reopens it does not
          satisfy this item — the third injection row is untouched by any of it.
+
+       ---
+
+       **RESOLUTION (2026-08-31, cloud wake). Both Accept bullets are satisfied
+       by the same edit: 229.3 now carries the tense-inclusive count AND says
+       the published 2 was measured with a regex blind to `owed`.**
+
+       **Every figure this item published was re-run before anything was
+       edited** — the premise is a prior wake's measurement, so re-checking it
+       is part of the criterion, not a courtesy. All reproduce:
+
+       | claim | re-run |
+       |---|---|
+       | NARROW/published count is 2, both correct prose | **2** — `check-resume-charter`, `check-resume-slice-ids` |
+       | `owes?\b` cannot match `owed` | `0` vs `1` for `owe[sd]?\b`, on the same line |
+       | tense-inclusive whole-word count | **7** |
+       | the 5 extra are 229.2's corrected files | **5** headers carry *"used to say it was owed"* |
+       | BROAD's multiline test fires on all five | **true** on all five |
+       | 15 heuristic gates carry a `--self-test` branch | **15**, re-derived from the branch test |
+
+       **Reconciled against an independent instrument before being quoted.**
+       The 7 was produced twice by different means — `grep -rlwE` over the
+       filenames, and a Node pass applying BROAD's actual 120-char proximity
+       predicate to the 15 branch-carrying files. Both return the same seven,
+       and all seven are inside the 15, so the false-positive set is not
+       inflated by files the proposal would never have walked.
+
+       **One published figure did NOT reproduce as written, and the difference
+       is a missing exclusion.** This item states that unanchored `owe[sd]?\b`
+       returns 17 files. Run as written it returns **18**; it returns 17 with
+       the `grep -v check-selftests.mjs` the 7-count command carries and the
+       17-count sentence does not. The excluded file is the meta-gate, which
+       names this vocabulary by definition. Recorded rather than quietly
+       adjusted — it is the same class of defect this item exists to fix.
+
+       **The replay found a SECOND defect in the same table, which is why this
+       took a replay rather than an edit.** 229.3's red-proof reads
+       `NARROW 0 BROAD 0` on its third row. Rows 1 and 2 are counts over the 15;
+       row 3 is *"did it fire on the injection"*. As a count it is **2** — the
+       reworded sentence contains no `owe` word, so BROAD's two standing false
+       positives are still there and cannot go anywhere. The `<- both BLIND`
+       annotation carries the meaning, so the refusal is unaffected, but the
+       number as printed is wrong in the same way the base rate was.
+
+       **And the correction sharpens the refusal rather than weakening it.**
+       Under the tense-inclusive predicate the BROAD column reads **7 / 7 / 7**
+       — flat across the baseline and both injections — because the red-proof's
+       chosen injection site, `check-floor.mjs`, is itself one of the seven
+       false positives. So the corrected BROAD not only costs 3.5x the false
+       positives; on this test it discriminates nothing at all. 229.3's
+       decisive third row is untouched by any of this, and **the refusal is
+       explicitly left standing.**
+
+       **Method note, since the replay is itself an instrument.** The injections
+       were done in memory — the file is read, the sentence spliced into the
+       string, the predicate applied to the string — so no revert could be
+       missed. Each mutated string was asserted to CONTAIN the injected sentence
+       before it was measured (a green red-proof is a defect in the injection
+       until proven otherwise), and the file on disk was asserted byte-identical
+       afterwards. The replay is also case-INsensitive, as 229.3 measured it: a
+       case-sensitive run reads row 2 as `BROAD 2`, not 3, because the injected
+       sentence says `OWES`. That discrepancy was chased down rather than
+       averaged over — it is the difference between reproducing a measurement
+       and merely getting a similar number.
+
+       **Not verified, said plainly:** cloud wake — no Podman and no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. **Nothing here is a code change**: the diff is `ROADMAP.md` and
+       the loop-log files only, and no shipped artefact, CSS, markup or rendered
+       output moved. Nothing in this item rests on a rendered image.
 
 2. [ ] **232.2 — the recurrence history 229.3 never measured: the defect was
        introduced BY the commit that paid the debt, and has recurred zero times
@@ -1176,6 +1251,33 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
          what that tag owes"*). Both files have the branch; both sentences are
          correct prose explaining what the tag obliges.
 
+         > **CORRECTED 2026-08-31 by slice 232.1 — the base rate is 7, not 2,
+         > and the 2 was measured with a regex blind to the past tense.**
+         > `owes?\b` is `owe` + optional `s` + a word boundary, so it cannot
+         > match `owed` — and `owed` is the wording 229.2's own fix used, in all
+         > five headers it corrected (*"the debt is PAID, and this line used to
+         > say it was owed"*). Re-measured over the same 15 branch-carrying
+         > gates, whole-word and tense-inclusive:
+         >
+         > ```
+         > grep -rlwE 'owes|owed' apps/docs/scripts packages/core/scripts \
+         >   --include='check-*.mjs' | grep -v check-selftests.mjs | wc -l    # 7
+         > ```
+         >
+         > The complete false-positive set is `check-resume-charter`,
+         > `check-resume-slice-ids` **plus** `check-floor`, `check-forced-colors`,
+         > `check-loop-vocab`, `check-notes` and `check-markup` — and those five
+         > are exactly the files 229.2 corrected, which this item's own Accept
+         > names as the set it must not fire on. **The refusal is not
+         > overturned; it is strengthened** — BROAD costs seven false positives,
+         > not two, and is blind to the same rewording either way.
+         >
+         > The `grep -v check-selftests.mjs` is load-bearing and 232.1 published
+         > its 17-file widening figure without it visible: unanchored
+         > `owe[sd]?\b` returns **18** files as written and **17** with that
+         > exclusion. The excluded file is the meta-gate itself, which names the
+         > vocabulary by definition.
+
        **Red-proved in three directions, each injection confirmed present in the
        file before the run** (`grep -n` on the injected line; the denominator
        stayed 15 throughout, so nothing was silently reclassified):
@@ -1189,6 +1291,38 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
           (roadmap 42.3) before it can be
           trusted."          (line 16)            NARROW 0   BROAD 0   <- both BLIND
        ```
+
+       > **CORRECTED 2026-08-31 by slice 232.1, replaying every row.** Two
+       > things are wrong in that table and neither touches the conclusion.
+       >
+       > **The third row's `BROAD 0` is not a count.** Rows 1 and 2 report how
+       > many of the 15 files the predicate matches; row 3 reports whether it
+       > fired *on the injection*. As a count it is **2** — the injected
+       > sentence contains no `owe` word, so the two standing false positives
+       > are still there. The `<- both BLIND` annotation carries the real
+       > meaning, which is why the argument survives the mixed units, but the
+       > number as printed is wrong. Same shape as the base rate above: a defect
+       > in what shipped BESIDE a correct claim.
+       >
+       > **And under the corrected predicate the red-proof's own injection site
+       > cannot discriminate at all.** `check-floor.mjs` is already one of
+       > BROAD's seven tense-inclusive false positives, so that column reads
+       > 7 / 7 / 7 — flat across the baseline and both injections. Replayed in
+       > memory (the file is read, never written; the tree was asserted
+       > unchanged afterwards, and each mutated string was asserted to contain
+       > the injected sentence before being measured):
+       >
+       > ```
+       >                                NARROW   BROAD-as-published   BROAD-tense
+       > baseline                          0             2                 7
+       > inject verbatim 229.2 sentence    1             3                 7
+       > inject REWORDED stale claim       0             2                 7
+       > ```
+       >
+       > Read case-insensitively, as 229.3 measured it — the injected sentence
+       > says `OWES`, and a case-sensitive replay reads row 2 as 2, not 3.
+       > Denominator 15 throughout, re-derived from the branch test rather than
+       > carried.
 
        The third row is the refusal. That injected sentence is a genuine
        instance of the defect — a gate that has a `--self-test` branch, with a
@@ -1228,7 +1362,9 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        grep -rlE "process\.argv\.includes\(['\"]--self-test['\"]\)" \
          apps/docs/scripts packages/core/scripts --include='check-*.mjs' | wc -l   # 15
        grep -rniE 'owes?\b' apps/docs/scripts packages/core/scripts \
-         --include='check-*.mjs'                    # 2, both correct prose
+         --include='check-*.mjs'                    # 2 — BLIND TO `owed`; see 232.1
+       grep -rlwE 'owes|owed' apps/docs/scripts packages/core/scripts \
+         --include='check-*.mjs' | grep -v check-selftests.mjs | wc -l   # 7, the honest count
        grep -rn 'OWES a --self-test' apps/docs/scripts packages/core/scripts       # 0
        node apps/docs/scripts/check-selftests.mjs   # 15 heuristic (all self-tested)
        ```
