@@ -315,6 +315,94 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 233 — 231.2's new prose asserts two computed facts and nothing executes either; found by the THIRD independent build of 231.2 (2026-08-31)
+
+**Where this came from, because the provenance is the interesting part.** This
+wake was the **third** dispatcher to build 231.2 to completion on 2026-08-31 and
+the second to lose the push. Slice 232 records the second ("this wake built
+231.2 in full without having read the winner's version and reached the same
+decision on the same evidence, including the same 89-vs-88 denominator
+correction"); this is the third, and it reached the same decision again — keep
+and demo — on the same re-measured premise (17 of 89 pairs, 4 of 40 components,
+`--success` 5 / `--warning` 5 / `--danger` 3 / `--elevated` 2, call sites
+unchanged at 5 + 2 + 1). **So the correction to `RESUME.md`'s collision ledger
+is one line: 231.2 was built three times and landed once, not twice**, and the
+day's discarded total is at least four wakes' work, not three.
+
+**Step 0c's credited compensation fired a second time, and this item IS it.**
+The losing diff was not identical to the winner's: it also carried a
+`check:claims` case, and the winner's page — the one that shipped — makes the
+same assertion with nothing executing it. Redundant coverage catching what the
+winner missed is precisely the mechanism Step 0c names in exchange for the
+collision cost; the ledger for the day is now **two** such catches (232.1 and
+this), against at least four discarded wakes.
+
+1. [ ] **233.1 — `/components/alerts`'s Elevated section states two facts a
+       browser can check — that the elevated surface and the toast surface
+       MATCH, and that the card look and the accent colour are INDEPENDENT —
+       and `check:claims` covers neither.**
+
+       CLAUDE.md: *"If a page says the browser will do something … add a case to
+       `apps/docs/scripts/check-claims.mjs`."* Both sentences below are computed
+       style, which is the cheapest possible thing to execute, and both are
+       load-bearing: the first is the entire reason the variant was kept rather
+       than removed (Slice 231.2's decision rests on `--elevated` being the
+       toast surface *without* `bo-toast-in`), and the second licenses the
+       `bo-alert--elevated bo-alert--warning` composition the page itself ships
+       in that section's second demo.
+
+       The two claims, quoted from the shipped page:
+
+       - *"And not the same as a toast, though the surface matches —
+         `.bo-toast` adds an entrance animation"*
+       - *"Combine it with a severity variant or leave it plain — the card look
+         and the accent colour are independent settings"*
+
+       The absence, measured rather than asserted — a plain fixed string first,
+       per the context-window-regex lesson:
+
+       ```
+       grep -c 'elevated' apps/docs/scripts/check-claims.mjs        # 0
+       grep -c 'bo-alert--elevated' apps/docs/dist/components/alerts/index.html
+       ```
+
+       **Not a gap in the winner's work so much as a gap the recipe predicts.**
+       `check:claims`'s own header says *"Add a case whenever a page claims
+       something a browser can check"*, and a new demo section is exactly when
+       that step is easy to skip — the section was reviewed, the gates were run,
+       and every gate that ran was one the new prose does not reach.
+
+       *Accept* — properties, not predictions:
+
+       - `check:claims` gains coverage of **both** sentences, read off the built
+         `/components/alerts/` page as computed style: the elevated alert and an
+         injected toast agree on `background-color` while only the toast carries
+         an `animation-name`; and the page's own
+         `bo-alert--elevated bo-alert--warning` element carries both the raised
+         treatment and the warning accent, so "independent settings" is executed
+         rather than described.
+       - **The equality is not asserted alone.** Two transparent boxes are
+         equal, which is the one way this pair could agree while measuring
+         nothing, so the check must also fail when the shared colour is
+         `rgba(0, 0, 0, 0)`. State the hole and close it in the same assertion.
+       - **Red-proved by an injection confirmed in the DOM, not in the file** —
+         append a rule to the built stylesheet the alerts page actually loads
+         (it loads three), re-run, and require that the gate's own failure
+         detail shows the *computed* reading moved, not merely that the gate
+         went red. A red-proof that comes back green is a defect in the
+         injection until proven otherwise.
+       - The gate's reported live-claim count rises by exactly the number of
+         cases added, and the `NOT VERIFIED` count is unchanged — it is
+         ENVIRONMENT trap 6b's container property, not a regression, and must
+         not be "restored" to zero.
+
+       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked
+       and NOT owner-blocked.** It is entirely the second of ENVIRONMENT.md's
+       two lists — a computed-style assertion plus a red-proof by injection —
+       which a cloud wake takes with `browser-harness.mjs` + `serve-dist.mjs`,
+       the same pair `check:claims` already drives every wake. No screenshot is
+       evidence for any part of it.
+
 ## Slice 232 — Objective grill of Slices 229, 230, 231: 230 and 231 survive entirely, and both findings are against how 229's refusal RECORDED its numbers, not against the refusal (2026-08-31)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open
