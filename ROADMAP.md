@@ -680,6 +680,76 @@ correction. No finding against it.
        figure here is a history measurement, and ENVIRONMENT.md §2 says they are
        silently 50x wrong without it.
 
+3. [ ] **232.3 — 230.1's refusal to gate its predicate misapplies 94.11, and
+       94.11's own test is what refutes it. Filed by a THIRD dispatcher on the
+       same armed set; this grill's §B records "no finding against 230".**
+
+       Provenance first, because it is what makes this admissible rather than a
+       re-litigation: a third cloud wake dispatched rule 2 on the same flagged
+       drift from `e995891`, built its own `cascade.astro` fix, and lost the Step
+       0c race to `d32b758c`; re-dispatching, it drew rule 3 and independently
+       grilled the same armed set, losing a **second** race to `dbc41ae2`. Its
+       other finding — the 89-vs-88 denominator — **duplicates** what this grill's
+       §C already records from two dispatchers, and is dropped rather than
+       re-filed. This one does not appear in any landed document.
+
+       **The refusal.** 230.1 fixed the unasserted parse and then declined a gate:
+       *"the population is now 6 of 6, so a gate over this predicate would be
+       uniformly true and is refused on roadmap 94.11's own test: ceremony, not a
+       detector."*
+
+       **94.11's test is about DISCRIMINATION, not today's headcount.** Its
+       predicate was refused because it stayed true *under injection* — the
+       red-proof injected `letter-spacing: 7px` and the detector still reported
+       **0 unexplained**. A detector handed the defect and still reporting clean is
+       ceremony. Applied properly here the same test **passes**, and no synthetic
+       injection is needed because the defect is in this repo's history:
+
+       ```
+       git checkout -q ff2b623d^ -- apps/docs/src/pages
+       for f in $(grep -rlE "readFileSync|import\.meta\.glob" apps/docs/src/pages --include=*.astro | sort); do
+         fm=$(awk '/^---$/{c++} c==1' "$f")
+         echo "throws=$(echo "$fm" | grep -c 'throw new Error') parses=$(echo "$fm" | grep -cE 'matchAll|\.match\(|\.split\(') $f"
+       done
+       git checkout -q HEAD -- apps/docs/src/pages
+       ```
+
+       | tree | flagged by `parses > 0 && throws == 0` |
+       |---|---|
+       | `ff2b623d^` (pre-fix) | **exactly 1** — `concepts/cascade.astro` |
+       | current `HEAD` | **0** |
+
+       **Zero false positives, and no exemption map needed.** `scale.astro` and
+       `index.astro` — the two pages 230.1 excluded *by hand* as byte-length-only —
+       exclude themselves at `parses=0`. The distinction 230.1 reached by reading
+       eight files and reconciling a disputed denominator, the detector reaches
+       mechanically.
+
+       **The counter-evidence, carried rather than omitted.** The loop found this
+       without a gate (227.1 spotted it, 230.1 fixed it), and the population has
+       been **static at 8 for 9 days** after growing 1 → 8 in ten
+       (`git log -S'readFileSync'` / `-S'import.meta.glob'`, first appearance per
+       page, on an unshallowed clone). A gate's value is about the **9th page**, so
+       this is **not urgent and not a P0**. What it is not, is ceremony:
+       `cascade.astro` gained its parse on 2026-08-22 and shipped unasserted for
+       those same 9 days, read past by three wakes.
+
+       *Accept* — properties, not predicted values:
+       - (a) The gate's verdict on the CURRENT tree agrees with what the tree
+         carries, measured rather than assumed.
+       - (b) Red-proved against the REAL pre-fix tree (`ff2b623d^`), not only a
+         synthetic injection, with the checkout confirmed to have taken effect
+         before the result is believed.
+       - (c) It carries `@heuristic` and a working `--self-test` with a
+         `process.argv` branch. Recognising "derives rendered content from a parse"
+         is a recognition problem, and this population was read as **6** and as
+         **8** by careful passes on the same day.
+       - (d) The byte-length-only exclusion is MECHANICAL, not an exemption list.
+         Any page exempted by name carries a reason, per `check:wrong-choice`.
+       - (e) **Finding the premise false is a satisfying outcome**: if the detector
+         cannot be written without an exemption map naming more files than it
+         catches, record that and refuse the gate on the measurement.
+
 ## Slice 231 — Polish round on `component/alerts`: the reconciliation is a NO-OP, and the sweep that surrounded it found one shipped variant with no recorded reason anywhere (2026-08-31)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are
