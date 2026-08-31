@@ -587,7 +587,7 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        tree carries only `ROADMAP.md` and the loop-log files. The injections
        were reverted and `git status` was confirmed clean before committing.
 
-4. [ ] **229.4 — 227.2's base rate is not re-derivable, and the base rate IS
+4. [x] **229.4 — 227.2's base rate is not re-derivable, and the base rate IS
        the refusal. Record the command; do NOT add a gate.**
 
        227.2 refused a gate on *"30 files … 50 numeric literals … the
@@ -620,6 +620,121 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
 
        **Left OPEN, not owner-blocked** — any wake can take it, and the honest
        first outcome is a paragraph, not a gate.
+
+       **DONE — the file half is now re-runnable and 30 is not among its seven
+       readings; the literal half is restated as unreproducible, with the
+       spread named. No gate added (2026-08-31, cloud wake).** Both branches of
+       Accept bullet 1 are taken, because the claim splits cleanly into a half
+       that reduces to a command and a half that cannot.
+
+       *The file half — recorded, and it refutes the 30.* Run against
+       **`96bd852a` itself**, the commit that published the number, so this is a
+       reproduction attempt rather than a re-measurement of a moved tree. It
+       reads identically at `HEAD`:
+
+       ```
+       REV=96bd852a
+       CODE='\.(mjs|js|ts|tsx|astro|cjs)$'
+       SIG='readFileSync|statSync|gzipSync|require\.resolve|import\.meta\.glob'
+       GEN='(api|behaviors|contrast|floor|keymap|events|acr|scales|dsa-scores'
+       GEN=$GEN'|patterns-index|patterns|rf-profile|versions|suite|framework|build-id)\.json'
+       sig() { git grep -lE "$SIG" $REV -- | sed 's/^[^:]*://'; }
+       gen() { git grep -lE "(import|require).*['\"][^'\"]*$GEN['\"]" $REV -- | sed 's/^[^:]*://'; }
+
+       git grep -lE 'readFileSync' $REV -- | wc -l                       # 18
+       sig | grep -E "$CODE" | grep -vE '/tests?/|^examples/' | wc -l    # 23
+       sig | grep -cE "$CODE"                                            # 25
+       sig | wc -l                                                       # 32
+       { sig; gen; } | grep -E "$CODE" | sort -u | grep -vE '/tests?/|^examples/' | wc -l   # 33
+       { sig; gen; } | grep -E "$CODE" | sort -u | grep -v '^examples/' | wc -l             # 34
+       { sig; gen; } | grep -E "$CODE" | sort -u | wc -l                                    # 36
+       ```
+
+       **Seven defensible scopes span 18-36 and none of them is 30.** The
+       differences are the three choices 227.2's prose leaves open: whether
+       prose files that merely *name* `readFileSync` count (32 vs 25 — seven
+       markdown files match, this roadmap among them), whether "an import of a
+       generated `*.json`" is a sixth signal or a gloss on the five, and whether
+       `examples/` and `packages/core/tests/` are in scope. 229.4's own premise
+       named **18, 23 and 34**; all three are reachable and are the 1st, 2nd and
+       6th lines above, so its spread holds — it simply carried no command, and
+       these are it.
+
+       *The literal half — unreproducible, and for a deeper reason than a
+       missing command.* "Numeric literals … on lines that also carry a
+       live-derived identifier" needs a **taint implementation**, and prose
+       cannot pin one. Three successive versions were built here, each
+       defensible, on the same 33-file set at the same commit:
+
+       | how far liveness propagates | restricted | unrestricted |
+       |---|---|---|
+       | one hop, right-hand side bounded to its own line | 22 | 574 |
+       | fixpoint, right-hand side bounded to its own line | 33 | 574 |
+       | fixpoint, right-hand side running to the next declaration | 61 | 574 |
+
+       The third is the correct one and the first two are undercounts, provable
+       without any judgement: 227.2 names `primitives.astro:24`,
+       `tokens.astro:81` and `ai-assistants.astro:30` as sites of the pattern,
+       and the first two versions score all three **zero** — the chain there is
+       `readFileSync` → `src` → `primitivesCss` → `KNOBS` → `knobs.length < 4`,
+       three hops with the read on a **continuation line**. A second axis moves
+       it again: counting a bare `=` as a comparison is the difference between
+       **61 and 58**, and the file set between **61** (33 files) and **167** (the
+       25-file scope), of which **112 come from `examples/po-app/server.mjs`
+       alone** — one demo server whose whole body is taint-reachable.
+
+       So the restricted count ranges over **22 · 33 · 58 · 61 · 152 · 155 ·
+       167 · 173** and the unrestricted over **324 … 785** across the same
+       choices. **227.2's 50 is produced by none of them, and its 308 is below
+       every unrestricted reading taken here.** That is the honest verdict: not
+       "30 and 50 are wrong", but that no stated predicate yields them, so the
+       reopen condition 227.2 wrote for itself cannot be executed.
+
+       *The instrument was red-proved twice by injection before any number above
+       was quoted*, both confirmed present by `grep` before the run and reverted
+       after, with `git status` clean:
+
+       - one hand-typed literal against a live identifier added to
+         `icon.astro`'s frontmatter (`const probeRatio = iconBytes / 7;`,
+         landing at line 41) → restricted **7 → 8**, whole-file **7 → 8**.
+       - the same expression injected into the TEMPLATE half instead
+         (`<!-- probe {iconBytes / 7} -->` at line 122, closing fence at 121) →
+         restricted stayed **7** while whole-file went **7 → 8**, so the
+         build-time restriction discriminates rather than passing everything.
+
+       **A reconstruction that reproduces the target number is a defect in the
+       reconstruction until proven otherwise** — the sharpest thing this item
+       produced, and it is not a restatement of the green-red-proof rule, it is
+       that rule pointed at a *measurement* rather than a gate. An early scope
+       here returned **exactly 30**, and it was wrong: the generated-json arm
+       used `[^\n]*` in an **ERE**, where a bracket expression makes that "any
+       character except backslash or the letter n". `import patterns from
+       '…/patterns.json'` contains an `n` in `patterns`, so three real importers
+       (`Gallery.astro`, `which-pattern.astro`, `patterns/index.astro`) were
+       silently dropped and the count landed on the number being sought. Had it
+       been believed, this item would have closed as "reproduced" on a broken
+       instrument. The tell was not the number — it was that the three missing
+       files were nameable.
+
+       *Accept, against the properties as written:*
+       - **Bullet 1 — met.** The file-level commands are recorded above and run
+         from a clean checkout; the literal-level claim is restated as the
+         unreproducible reading it is, with the spread named.
+       - **Bullet 2 — met, and a gate is NOT added.** The semantic leg was not
+         shown wrong and is not touched: *"a literal is an operand" is
+         checkable; "a literal duplicates a fact something else can read" is
+         not.* Every reading here is **higher** than 30, which 229.4 named in
+         advance as a satisfying outcome that still refuses — and it is, because
+         the base rate was never the leg the refusal stood on.
+
+       **Not verified, said plainly:** cloud wake — no Podman and no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. Nothing here rests on a rendered image and nothing here is a
+       code change: the diff is `ROADMAP.md` and the loop-log files. The probe
+       was deliberately **not** committed — it is the throwaway 227.2's own
+       write-up describes, and committing it would add the machinery this item
+       exists to refuse; what is committed instead is the half that reduces to
+       seven shell lines.
 
 5. [ ] **229.5 — `ENVIRONMENT.md`'s "measure from the git blob" bullet covers
        the after-figure form and not the diff-stat form, and the wake that wrote
