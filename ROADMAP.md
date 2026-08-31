@@ -315,6 +315,208 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 232 — Objective grill of Slices 229, 230, 231: 230 and 231 survive entirely, and both findings are against how 229's refusal RECORDED its numbers, not against the refusal (2026-08-31)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open
+issues** (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to triage.
+Rule 2: `Standardize 1 / 4`, no drift flagged. Rule 3:
+**`Objective 3 / 3 slices OVERDUE [229, 230, 231]` — dispatched.** Full report:
+`.roundtable/grill-objective-229-230-231-2026-08-31.md`.
+
+**Arming set NOT narrowed.** **40** prior grill reports, read **from the HEAD
+blobs**; none names 229, 230 or 231. All three genuinely un-grilled. Read from
+the blob rather than the tree for 229's own stated reason — the working-tree form
+matches this grill's own heading.
+
+**This wake was the LOSING dispatcher of two Step 0c collisions, and that is
+recorded because it is the evidence, not an excuse.** It dispatched rule 4 onto
+**229.3**, built the refusal and ran the gates green; the mandated pre-commit
+`git fetch origin main` found **origin/main 10 commits ahead** with 229.3, 229.4,
+229.5, 230 and 231 all landed. It re-dispatched onto **231.2**, built that and
+ran the gates green; the next pre-commit fetch found **2 more commits** — 231.2
+taken as well. Both discarded per Step 0c, then rule 3 was OVERDUE and this grill
+is the third dispatch.
+
+**Both times the loser reached the same substantive answer as the winner**, which
+is the first direct *measurement* of Step 0c's central claim rather than an
+argument for it:
+
+| item | winner | loser, independently | agreed? |
+|---|---|---|---|
+| 229.3 | refuse the assertion | refuse the assertion | **yes** |
+| 231.2 | keep `--elevated`, document it | keep `--elevated`, document it | **yes** |
+| 231.2 numbers | `2 → 5`, low set `17 → 16` | `2 → 5`, low set `17 → 16` | **yes** |
+| 231.2 denominator | 89 pairs vs 88 names | 89 pairs vs 88 names | **yes** |
+
+**And it is worse than two, because the PREVIOUS hand-off records the same
+loss.** `.roundtable/RESUME.md` at `d32b758c` says that wake dispatched rule 4 on
+229.3 and *"did the whole item — measured the base rate, built both candidate
+predicates as a throwaway probe, red-proved them by injection"* before its own
+pre-commit fetch showed 229.3 already landed. So on 2026-08-31, **229.3 was built
+to completion three times by three wakes and landed once**, and 231.2 twice and
+landed once. That is not inferred from the log; it is written in three hand-offs,
+this one included.
+
+**So redundant coverage paid once and cost at least three times over, in one
+day.** It paid in finding 232.1, a defect in a number 229.3 published that only
+an independent derivation was ever going to surface. Step 0c's refusal of *"the
+local session stops dispatching"* rested on one prior instance; this is the
+second time the mechanism has paid, and the first time its cost has been counted
+on the same day.
+
+**Not filed as an item** — Step 0c's decision is *accept collisions*, taken with
+the cost named, and the decision is the owner's. What is new is only that the
+cost is no longer hypothetical: the accepted figure is *"up to one wake's work,
+discarded"* and the measured figure for one day is **at least three wakes' work**.
+Recorded for the owner in `RESUME.md`'s Direction block, which is the one place
+the loop can say so; no fourth option is proposed here, because Step 0c already
+records three refusals with a measured reason each and inventing a fourth to fill
+the gap is the ceremony 94.11 refuses.
+
+**Slice 230 survives entirely, including a red-proof re-run by this grill.** The
+population claim verifies from the blobs — 8 pages read a source file, `scale`
+and `index` parse nothing, so the population is **6** and `cascade` threw **0**
+before `ff2b623d` and **1** after, making it the sole one-off. `tokens.min.css`
+carries **0** comments, so no stripping step was needed. The built table still
+renders **5** rows. And case C, the discriminating red-proof, was re-run
+independently: injecting `--bo-z-toast: 1600 → 1700` in the source only, with the
+injection confirmed present first, fails the build at **exit 1** with **count 5
+on both sides** — so a `length < 5` floor would have passed, which is exactly the
+claim. Injection reverted, `git status` confirmed empty.
+
+**It also reconciles a figure that reads like a contradiction.** The previous
+hand-off recorded *"6 of 8 throw"* while 230 says *"5 of 6"*. Both are right and
+count different denominators: 6 of the 8 readers throw (cascade now among them),
+and 5 of the 6 *parsers* threw before the fix.
+
+**Slice 231 survives and is corroborated by an independent derivation** — this
+wake built 231.2 in full without having read the winner's version and reached the
+same decision on the same evidence, including the same 89-vs-88 denominator
+correction. No finding against it.
+
+1. [ ] **232.1 — 229.3's BROAD base rate of 2 is an artefact of `owes?\b` not
+       matching `owed`. The tense-inclusive count is 7, and the 5 extra firings
+       are exactly the five files 229.2 corrected — the set 229.3's own Accept
+       names as the ones it must not fire on.**
+
+       **The refusal is NOT overturned, and that is stated first so this is not
+       read as a reopen.** 229.3's decisive argument is its third injection row —
+       a *reworded* stale claim leaves both predicates green — and that argument
+       is independent of any base rate. Refusing was right. What is wrong is a
+       published number beside it, which CLAUDE.md's "a number you report is
+       load-bearing" makes worth a slice on its own; 192.1's shape again, the
+       defect landing in what shipped BESIDE the carefully-proved claim.
+
+       229.3 publishes this as its reproduction command:
+
+       ```
+       grep -rniE 'owes?\b' apps/docs/scripts packages/core/scripts \
+         --include='check-*.mjs'                    # 2, both correct prose
+       ```
+
+       `owes?\b` is `owe` + optional `s` + a word boundary, so it **cannot match
+       the past tense** — the boundary fails against the `d`:
+
+       ```
+       printf 'this line used to say it was owed\n' | grep -cE 'owes?\b'      # 0
+       printf 'this line used to say it was owed\n' | grep -cE 'owe[sd]?\b'   # 1
+       ```
+
+       Past tense is not an edge case here — **it is the wording 229.2's own fix
+       used.** All five corrected headers read *"the debt is PAID, and this line
+       used to say it was owed"*. So the whole-word count is **7**, not 2:
+
+       ```
+       grep -rlwE 'owes|owed' apps/docs/scripts packages/core/scripts \
+         --include='check-*.mjs' | grep -v check-selftests.mjs | wc -l    # 7
+       ```
+
+       **BROAD as 229.3 defines it — "`owes` within 120 chars of `--self-test`
+       or `@heuristic`, either order" — fires on all five once the tense is
+       included.** The gap is **18 characters**; they sit on adjacent lines,
+       which is also why a line-based `grep` reports nothing and a multiline test
+       reports five:
+
+       ```
+       node -e "const s=require('fs').readFileSync(process.argv[1],'utf8');
+         console.log(/owed[\s\S]{0,120}--self-test|--self-test[\s\S]{0,120}owed/.test(s))" \
+         apps/docs/scripts/check-floor.mjs      # true, and true for all five
+       ```
+
+       So BROAD's complete false-positive set is **7, not 2** — and the five it
+       gains are precisely the ones 229.3's Accept forbids it firing on. The
+       reason is the sharper form of the same lesson: **a gate reading prose
+       about self-tests trips on the correction that fixed the thing it exists to
+       catch**, because explaining a paid debt requires naming the debt. That is
+       CLAUDE.md's *"verifying a removal: assert on structure, never on raw
+       text"*, recorded three times about a removal ASSERTION and here killing a
+       proposed GATE.
+
+       **Widening the word is worse, and that was measured too.** `owe[sd]?\b`
+       unanchored returns **17** files, because it matches inside *allowed* (9),
+       *windowed* (7), *showed* (3), *followed*, *swallowed*, *overflowed*,
+       *narrowest*, *slowest*, *lowest*. Only `-w` gives the honest 7.
+
+       *Accept* — properties, not predictions:
+       - 229.3's BROAD figure either carries the tense-inclusive count with the
+         command that produces it, or records that the published 2 was measured
+         with a regex blind to `owed` and says what the complete set is. **Both
+         close this.**
+       - The refusal itself is left standing. A change that reopens it does not
+         satisfy this item — the third injection row is untouched by any of it.
+
+2. [ ] **232.2 — the recurrence history 229.3 never measured: the defect was
+       introduced BY the commit that paid the debt, and has recurred zero times
+       since.**
+
+       229.3 rests its ratchet refusal on a base rate of 0 *today*. It never asks
+       how often the defect has actually appeared, which is the question a
+       ratchet is for. Measured by the losing dispatcher, two independent
+       instruments, on an unshallowed clone:
+
+       ```
+       git log -S'OWES a --self-test' --format='%h %cs %s' --name-only \
+           -- apps/docs/scripts packages/core/scripts        # exactly 3 commits
+       ```
+
+       | commit | date | what it did | seen by |
+       |---|---|---|---|
+       | `84eb14ca` 42.1 | 2026-08-19 | wrote the sentence into **6** files | pickaxe |
+       | `443348e2` 42.3 | 2026-08-19 | added the branches — **the claim becomes false** | second instrument only |
+       | `f1be2485` 220 | 2026-08-30 | deleted `check-boost.mjs`, the sixth file | pickaxe |
+       | `5754ea02` 229.2 | 2026-08-31 | corrected the remaining five | pickaxe |
+
+       **At 42.1 the sentence was TRUE**, which the pickaxe structurally cannot
+       see — it finds where the SENTENCE changed, and `443348e2` changed only the
+       branch. The instrument that sees it tests sentence AND branch together:
+
+       ```
+       git show 84eb14ca:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 0
+       git show 443348e2:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 1
+       ```
+
+       **So the defect was introduced by `443348e2`, titled *"42.3: all seven
+       heuristic gates now prove they can fail"* — the commit that paid the
+       debt.** It shipped the self-tests and left five sentences saying they were
+       owed. One introduction, zero recurrences in the twelve days to 229.2.
+
+       That is the ratchet argument answered on its own terms rather than by
+       today's base rate: a ratchet guards recurrence, and the measured
+       recurrence rate over the whole history is zero.
+
+       **`check-boost.mjs` is the sixth file and is resolved, not filed** — it
+       left the defective state by deletion in Slice 220's htmx-4 migration, not
+       by correction, which is why 229.2 corrected five.
+
+       *Accept* — a property: the recurrence history is recorded in 229.3's
+       vicinity with the commands above, **or** it is recorded that the loop
+       prefers the today-base-rate framing and why. Both close this; finding the
+       history irrelevant to the decision is a satisfying outcome.
+
+       **Requires an unshallowed clone** (`git fetch --unshallow origin`) — every
+       figure here is a history measurement, and ENVIRONMENT.md §2 says they are
+       silently 50x wrong without it.
+
 ## Slice 231 — Polish round on `component/alerts`: the reconciliation is a NO-OP, and the sweep that surrounded it found one shipped variant with no recorded reason anywhere (2026-08-31)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are
